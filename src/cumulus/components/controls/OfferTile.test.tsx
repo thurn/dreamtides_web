@@ -63,6 +63,11 @@ const MODEL: OfferTileModel = {
   cards: CARDS,
 };
 
+const PRESENTATION = {
+  headline: { kind: "text", text: "Choose a Card" },
+  subtitle: { kind: "text", text: "Choose a card to add to your deck." },
+} as const;
+
 describe("OfferTile", () => {
   it("preserves standard geometry and uniformly scales the compact composition", () => {
     const container = document.createElement("div");
@@ -71,8 +76,8 @@ describe("OfferTile", () => {
     act(() => {
       root.render(
         <CumulusRoot>
-          <OfferTile model={MODEL} onPress={() => {}} testId="standard" />
-          <OfferTile
+          <OfferTile presentation={PRESENTATION} model={MODEL} onPress={() => {}} testId="standard" />
+          <OfferTile presentation={PRESENTATION}
             model={{ ...MODEL, id: "compact" }}
             size="compact"
             onPress={() => {}}
@@ -130,7 +135,7 @@ describe("OfferTile", () => {
       root.render(
         <CumulusRoot>
           {models.map(([testId, model]) => (
-            <OfferTile
+            <OfferTile presentation={PRESENTATION}
               key={testId}
               model={model}
               onPress={() => {}}
@@ -257,7 +262,7 @@ describe("OfferTile", () => {
     act(() => {
       root.render(
         <CumulusRoot>
-          <OfferTile model={trade} onPress={() => {}} testId="trade" />
+          <OfferTile presentation={PRESENTATION} model={trade} onPress={() => {}} testId="trade" />
         </CumulusRoot>,
       );
     });
@@ -331,7 +336,7 @@ describe("OfferTile", () => {
       root.render(
         <CumulusRoot>
           {models.map(([testId, model]) => (
-            <OfferTile
+            <OfferTile presentation={PRESENTATION}
               key={testId}
               model={model}
               onPress={() => {}}
@@ -368,7 +373,7 @@ describe("OfferTile", () => {
     act(() => {
       root.render(
         <CumulusRoot>
-          <OfferTile model={MODEL} onPress={activate} />
+          <OfferTile presentation={PRESENTATION} model={MODEL} onPress={activate} />
         </CumulusRoot>,
       );
     });
@@ -441,15 +446,15 @@ describe("OfferTile", () => {
     act(() => {
       root.render(
         <CumulusRoot>
-          <OfferTile model={gift} onPress={() => {}} testId="gift" />
-          <OfferTile model={draftTwo} onPress={() => {}} testId="draft-two" />
-          <OfferTile
+          <OfferTile presentation={PRESENTATION} model={gift} onPress={() => {}} testId="gift" />
+          <OfferTile presentation={PRESENTATION} model={draftTwo} onPress={() => {}} testId="draft-two" />
+          <OfferTile presentation={PRESENTATION}
             model={draftThree}
             onPress={() => {}}
             testId="draft-three"
           />
-          <OfferTile model={draftFour} onPress={() => {}} testId="draft-four" />
-          <OfferTile model={addSite} onPress={() => {}} testId="site" />
+          <OfferTile presentation={PRESENTATION} model={draftFour} onPress={() => {}} testId="draft-four" />
+          <OfferTile presentation={PRESENTATION} model={addSite} onPress={() => {}} testId="site" />
         </CumulusRoot>,
       );
     });
@@ -579,8 +584,8 @@ describe("OfferTile", () => {
     act(() => {
       root.render(
         <CumulusRoot>
-          <OfferTile model={keyword} onPress={() => {}} testId="keyword" />
-          <OfferTile
+          <OfferTile presentation={PRESENTATION} model={keyword} onPress={() => {}} testId="keyword" />
+          <OfferTile presentation={PRESENTATION}
             model={characterType}
             onPress={() => {}}
             testId="character-type"

@@ -17,17 +17,20 @@ describe("generated game configuration trust boundaries", () => {
     })).toThrow(/malformed reward-selection-data/u);
   });
 
-  it("keeps Augury authoring metadata and omits player presentation templates", () => {
+  it("keeps Augury authoring metadata and player presentation", () => {
     expect(auguryJson).not.toHaveProperty("dialogue");
     expect(auguryJson.archetypes.every((entry) => !("copy" in entry))).toBe(true);
     expect(auguryJson.archetypes.every((entry) =>
-      entry.name.trim() !== "" && entry.description.trim() !== ""
+      entry.name.trim() !== "" && entry.presentation.headline.kind !== ""
     )).toBe(true);
   });
 
   it("rejects missing Augury authoring metadata at the runtime boundary", () => {
     const malformed = structuredClone(auguryJson);
-    malformed.archetypes[0].description = "";
+    malformed.archetypes[0].presentation = {
+      headline: { kind: "text", text: "" },
+      subtitle: { kind: "text", text: "Fixture" },
+    };
     expect(() => parseAuguryData(malformed)).toThrow(/malformed augury-data/u);
   });
 });

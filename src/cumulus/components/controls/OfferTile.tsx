@@ -12,8 +12,8 @@ import { identiconsForced } from "../../../runtime/identicon-mode";
 import type { CardId } from "../../../types/card-identity";
 import type { FrozenCardData } from "../../../types/cards";
 import type { TransfigurationType } from "../../../types/journey";
+import type { AuguryArchetypeData } from "../../../types/augury-data";
 import { useRevealSource } from "../../internal/reveal/context";
-import { useMessages } from "../../hooks/use-messages";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import type { ArtRef } from "../../primitives/art";
@@ -204,6 +204,8 @@ export type OfferTileModel =
 export interface OfferTileProps {
   /** The offer's strict symbolic view model. */
   model: OfferTileModel;
+  /** Archetype-authored copy for the surfaced reward. */
+  presentation: AuguryArchetypeData["presentation"];
   /** Activates the offer, reporting the stable `model.id`. */
   onPress: (offerId: string) => void;
   /** Complete tile composition size. Defaults to the 300px standard tile. */
@@ -224,12 +226,12 @@ export interface OfferTileProps {
  */
 export function OfferTile({
   model,
+  presentation,
   onPress,
   size = "standard",
   testId = "offer-tile",
 }: OfferTileProps): ReactElement {
-  const t = useMessages();
-  const description = offerTileDescription(model, t);
+  const description = offerTileDescription(model, presentation);
   const binding = useRevealSource({
     identity: {
       entityType: "offer",
@@ -240,7 +242,7 @@ export function OfferTile({
         kind: "infoCard",
         card: {
           variant: "text",
-          body: offerTileRichDescription(model, t),
+          body: offerTileRichDescription(model, presentation),
         },
       },
       secondaries: [],

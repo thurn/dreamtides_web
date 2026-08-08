@@ -14,9 +14,10 @@ AuguryCatalog(
   archetypes: [
     ArchetypeDefinition(
       id: "77ad1a09-aba0-4875-b462-e6efe94bdc3d",
-      // Debug label and concise behavior description carried into Augury data.
+      // Internal label used by debugging and authoring tools.
       name: "Grant: Fit card (gift)",
-      description: "Gain one card selected to fit the current deck.",
+      // Player-facing offer copy. Placeholders resolve from the surfaced reward.
+      presentation: (headline: Text("Gain a Card"), subtitle: Text("Gain {cardName}")),
       // Effect of this reward offer. A `selection_policy` ranks eligible
       // targets for the ability.
       ability: FitCardGrant(selection_policy: CardFit, granted_copies: 1),
@@ -27,7 +28,10 @@ AuguryCatalog(
     ArchetypeDefinition(
       id: "8f8db592-b62c-414e-9195-68641722cf50",
       name: "Grant: Fit card draft",
-      description: "Choose one of four cards selected to fit the current deck.",
+      presentation: (
+        headline: Text("Choose a Card"),
+        subtitle: Text("Choose a card to add to your deck."),
+      ),
       ability: FitCardDraft(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
       weight: 10,
     ),
@@ -35,7 +39,13 @@ AuguryCatalog(
     ArchetypeDefinition(
       id: "b4ccca83-2a1d-4474-ba6d-4b95aefeed9b",
       name: "Grant: Copies draft",
-      description: "Choose one of four high-quality fitting cards and gain two copies.",
+      presentation: (
+        headline: Text("Choose a Card"),
+        subtitle: Count(
+          one: "Choose a card and add {count} copy of it to your deck.",
+          other: "Choose a card and add {count} copies of it to your deck.",
+        ),
+      ),
       ability: CopiesDraft(selection_policy: CardFitQuality, chooser_size: 4, granted_copies: 2),
       weight: 6,
     ),
@@ -43,7 +53,7 @@ AuguryCatalog(
     ArchetypeDefinition(
       id: "c4ac3d68-e814-43ea-9be3-ced3fd1bbe89",
       name: "Grant: Strong card",
-      description: "Gain one high-quality card selected to fit the current deck.",
+      presentation: (headline: Text("Gain a Card"), subtitle: Text("Gain {cardName}")),
       ability: StrongCard(selection_policy: CardFitQuality, granted_copies: 1),
       weight: 8,
     ),
@@ -51,7 +61,19 @@ AuguryCatalog(
     ArchetypeDefinition(
       id: "beecc1d9-9546-4ca2-858c-214527c7e530",
       name: "Grant: Category draft",
-      description: "Choose one of four fitting cards from a single deck-relevant category.",
+      presentation: (
+        headline: Text("Choose a Card"),
+        subtitle: Category(
+          character: "Choose a Character card to add to your deck.",
+          event: "Choose an Event Card to add to your deck.",
+          cheap: "Choose a cheap card to add to your deck.",
+          mid_cost: "Choose a mid-cost card to add to your deck.",
+          expensive: "Choose an expensive card to add to your deck.",
+          fast: "Choose a fast card to add to your deck.",
+          subtype: "Choose one {categoryName} card to add to your deck.",
+          package: "Choose one card from the {categoryName} to add to your deck.",
+        ),
+      ),
       ability: CategoryDraftKnown(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
       weight: 10,
     ),
@@ -59,7 +81,13 @@ AuguryCatalog(
     ArchetypeDefinition(
       id: "dfd3976a-b1dc-44fe-9aab-c13bd2c195e4",
       name: "Grant: Card bundle",
-      description: "Gain a synergistic three-card bundle, or the best available two-card bundle.",
+      presentation: (
+        headline: Count(one: "Gain {count} Card", other: "Gain {count} Cards"),
+        subtitle: Count(
+          one: "Add {count} Card to your deck.",
+          other: "Add {count} Cards to your deck.",
+        ),
+      ),
       ability: CardBundle(bundle_size: 3, minimum_bundle_size: 2),
       weight: 8,
     ),
@@ -67,7 +95,10 @@ AuguryCatalog(
     ArchetypeDefinition(
       id: "a5ac636d-9269-4379-9c61-567583fe9926",
       name: "Grant: Transfigured draft",
-      description: "Choose one of four fitting cards that arrives already transfigured.",
+      presentation: (
+        headline: Text("Choose a Transfigured Card"),
+        subtitle: Text("Choose a transfigured card to add to your deck."),
+      ),
       ability: TransfiguredDraft(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
       weight: 6,
     ),
@@ -75,7 +106,10 @@ AuguryCatalog(
     ArchetypeDefinition(
       id: "ec872e81-b7b4-4d81-9c69-1ca5317f6144",
       name: "Improve: Transfigure",
-      description: "Permanently transfigure one valuable eligible card in the current deck.",
+      presentation: (
+        headline: Text("Transfigure a Card"),
+        subtitle: Text("Transfigure {cardName}"),
+      ),
       ability: Transfigure(selection_policy: TransfigurationValue),
       weight: 10,
     ),
@@ -83,7 +117,13 @@ AuguryCatalog(
     ArchetypeDefinition(
       id: "65a59007-6618-4f82-82ae-7da3bc6a205a",
       name: "Improve: Starter transfigure",
-      description: "Permanently transfigure up to two eligible starter cards.",
+      presentation: (
+        headline: Text("Transfigure Your Starters"),
+        subtitle: Count(
+          one: "Transfigure {cardName}",
+          other: "Transfigure {firstCardName} and {secondCardName}",
+        ),
+      ),
       ability: StarterTransfigure(selection_policy: TransfigurationValue, maximum_targets: 2),
       weight: 6,
     ),
@@ -91,7 +131,7 @@ AuguryCatalog(
     ArchetypeDefinition(
       id: "df34c427-5e27-42d1-b903-c1d6d6dddd78",
       name: "Remove: Purge",
-      description: "Permanently remove one poorly fitting card from the current deck.",
+      presentation: (headline: Text("Purge a Card"), subtitle: Text("Purge {cardName}")),
       ability: Purge(selection_policy: PurgeMisfit),
       weight: 8,
     ),
@@ -99,7 +139,13 @@ AuguryCatalog(
     ArchetypeDefinition(
       id: "521bd487-0b3e-429e-a2f6-56010dd029c4",
       name: "Duplicate: Duplicate card",
-      description: "Choose one of up to three valuable deck cards and gain another copy.",
+      presentation: (
+        headline: Count(one: "Duplicate a Card", other: "Choose a Card"),
+        subtitle: Count(
+          one: "Duplicate {cardName}",
+          other: "Choose one of {count} cards in your deck to duplicate.",
+        ),
+      ),
       ability: Duplicate(selection_policy: DuplicateValue, chooser_size: 3, granted_copies: 1),
       weight: 8,
     ),
@@ -107,7 +153,7 @@ AuguryCatalog(
     ArchetypeDefinition(
       id: "432102c0-91c0-4954-acd0-3404d2148a25",
       name: "Dreamsign: Grant dreamsign",
-      description: "Gain one Dreamsign selected to complement the current deck.",
+      presentation: (headline: Text("Gain a Dreamsign"), subtitle: Text("Gain {dreamsignName}")),
       ability: Dreamsign(selection_policy: DreamsignMatch),
       weight: 8,
     ),
@@ -115,7 +161,7 @@ AuguryCatalog(
     ArchetypeDefinition(
       id: "1003a54d-1659-490b-aa48-b88b9da5df68",
       name: "Site: Add a site",
-      description: "Add one uniformly selected site to the current Dreamscape.",
+      presentation: (headline: Text("Add a Site"), subtitle: Text("Add the {siteName} site.")),
       ability: AddSite,
       weight: 6,
     ),

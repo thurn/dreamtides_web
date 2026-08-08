@@ -9,7 +9,16 @@
     {
       "id": "fit_card_grant",
       "name": "Grant: Fit card (gift)",
-      "description": "Gain one card selected to fit the current deck.",
+      "presentation": {
+        "headline": {
+          "kind": "text",
+          "text": "Gain a Card"
+        },
+        "subtitle": {
+          "kind": "text",
+          "text": "Gain {cardName}"
+        }
+      },
       "enabled": true,
       "family": "grant",
       "weight": 10,
@@ -21,7 +30,16 @@
     {
       "id": "fit_card_draft",
       "name": "Grant: Fit card draft",
-      "description": "Choose one of four cards selected to fit the current deck.",
+      "presentation": {
+        "headline": {
+          "kind": "text",
+          "text": "Choose a Card"
+        },
+        "subtitle": {
+          "kind": "text",
+          "text": "Choose a card to add to your deck."
+        }
+      },
       "enabled": true,
       "family": "grant",
       "weight": 10,
@@ -34,7 +52,17 @@
     {
       "id": "copies_draft",
       "name": "Grant: Copies draft",
-      "description": "Choose one of four high-quality fitting cards and gain two copies.",
+      "presentation": {
+        "headline": {
+          "kind": "text",
+          "text": "Choose a Card"
+        },
+        "subtitle": {
+          "kind": "count",
+          "one": "Choose a card and add {count} copy of it to your deck.",
+          "other": "Choose a card and add {count} copies of it to your deck."
+        }
+      },
       "enabled": true,
       "family": "grant",
       "weight": 6,
@@ -47,7 +75,16 @@
     {
       "id": "strong_card",
       "name": "Grant: Strong card",
-      "description": "Gain one high-quality card selected to fit the current deck.",
+      "presentation": {
+        "headline": {
+          "kind": "text",
+          "text": "Gain a Card"
+        },
+        "subtitle": {
+          "kind": "text",
+          "text": "Gain {cardName}"
+        }
+      },
       "enabled": true,
       "family": "grant",
       "weight": 8,
@@ -59,7 +96,23 @@
     {
       "id": "category_draft_known",
       "name": "Grant: Category draft",
-      "description": "Choose one of four fitting cards from a single deck-relevant category.",
+      "presentation": {
+        "headline": {
+          "kind": "text",
+          "text": "Choose a Card"
+        },
+        "subtitle": {
+          "kind": "category",
+          "character": "Choose a Character card to add to your deck.",
+          "event": "Choose an Event Card to add to your deck.",
+          "cheap": "Choose a cheap card to add to your deck.",
+          "midCost": "Choose a mid-cost card to add to your deck.",
+          "expensive": "Choose an expensive card to add to your deck.",
+          "fast": "Choose a fast card to add to your deck.",
+          "subtype": "Choose one {categoryName} card to add to your deck.",
+          "package": "Choose one card from the {categoryName} to add to your deck."
+        }
+      },
       "enabled": true,
       "family": "grant",
       "weight": 10,
@@ -72,7 +125,18 @@
     {
       "id": "card_bundle",
       "name": "Grant: Card bundle",
-      "description": "Gain a synergistic three-card bundle, or the best available two-card bundle.",
+      "presentation": {
+        "headline": {
+          "kind": "count",
+          "one": "Gain {count} Card",
+          "other": "Gain {count} Cards"
+        },
+        "subtitle": {
+          "kind": "count",
+          "one": "Add {count} Card to your deck.",
+          "other": "Add {count} Cards to your deck."
+        }
+      },
       "enabled": true,
       "family": "grant",
       "weight": 8,
@@ -85,7 +149,16 @@
     {
       "id": "transfigured_draft",
       "name": "Grant: Transfigured draft",
-      "description": "Choose one of four fitting cards that arrives already transfigured.",
+      "presentation": {
+        "headline": {
+          "kind": "text",
+          "text": "Choose a Transfigured Card"
+        },
+        "subtitle": {
+          "kind": "text",
+          "text": "Choose a transfigured card to add to your deck."
+        }
+      },
       "enabled": true,
       "family": "grant",
       "weight": 6,
@@ -98,7 +171,16 @@
     {
       "id": "transfigure",
       "name": "Improve: Transfigure",
-      "description": "Permanently transfigure one valuable eligible card in the current deck.",
+      "presentation": {
+        "headline": {
+          "kind": "text",
+          "text": "Transfigure a Card"
+        },
+        "subtitle": {
+          "kind": "text",
+          "text": "Transfigure {cardName}"
+        }
+      },
       "enabled": true,
       "family": "improve",
       "weight": 10,
@@ -108,7 +190,17 @@
     {
       "id": "starter_transfigure",
       "name": "Improve: Starter transfigure",
-      "description": "Permanently transfigure up to two eligible starter cards.",
+      "presentation": {
+        "headline": {
+          "kind": "text",
+          "text": "Transfigure Your Starters"
+        },
+        "subtitle": {
+          "kind": "count",
+          "one": "Transfigure {cardName}",
+          "other": "Transfigure {firstCardName} and {secondCardName}"
+        }
+      },
       "enabled": true,
       "family": "improve",
       "weight": 6,
@@ -120,7 +212,16 @@
     {
       "id": "keyword_mod",
       "name": "Improve: Keyword modifier",
-      "description": "Reduce the Reclaim cost of one central eligible card in the current deck.",
+      "presentation": {
+        "headline": {
+          "kind": "text",
+          "text": "Reduce Reclaim"
+        },
+        "subtitle": {
+          "kind": "text",
+          "text": "Reduce Reclaim for {cardName}"
+        }
+      },
       "enabled": false,
       "family": "improve",
       "weight": 8,
@@ -130,7 +231,16 @@
     {
       "id": "tribal_change",
       "name": "Improve: Tribal change",
-      "description": "Change one central Character to a different subtype represented in the current deck.",
+      "presentation": {
+        "headline": {
+          "kind": "text",
+          "text": "Change a Character Type"
+        },
+        "subtitle": {
+          "kind": "text",
+          "text": "Change the subtype of {cardName} to {subtypeName}."
+        }
+      },
       "enabled": false,
       "family": "improve",
       "weight": 6,
@@ -140,7 +250,16 @@
     {
       "id": "purge",
       "name": "Remove: Purge",
-      "description": "Permanently remove one poorly fitting card from the current deck.",
+      "presentation": {
+        "headline": {
+          "kind": "text",
+          "text": "Purge a Card"
+        },
+        "subtitle": {
+          "kind": "text",
+          "text": "Purge {cardName}"
+        }
+      },
       "enabled": true,
       "family": "remove",
       "weight": 8,
@@ -150,7 +269,16 @@
     {
       "id": "purge_replace",
       "name": "Remove: Purge & replace",
-      "description": "Purge one deck card, then choose one of four high-quality replacements.",
+      "presentation": {
+        "headline": {
+          "kind": "text",
+          "text": "Trade a Card"
+        },
+        "subtitle": {
+          "kind": "text",
+          "text": "Purge {cardName} and choose a replacement card."
+        }
+      },
       "enabled": false,
       "family": "remove",
       "weight": 8,
@@ -162,7 +290,18 @@
     {
       "id": "duplicate",
       "name": "Duplicate: Duplicate card",
-      "description": "Choose one of up to three valuable deck cards and gain another copy.",
+      "presentation": {
+        "headline": {
+          "kind": "count",
+          "one": "Duplicate a Card",
+          "other": "Choose a Card"
+        },
+        "subtitle": {
+          "kind": "count",
+          "one": "Duplicate {cardName}",
+          "other": "Choose one of {count} cards in your deck to duplicate."
+        }
+      },
       "enabled": true,
       "family": "duplicate",
       "weight": 8,
@@ -175,7 +314,16 @@
     {
       "id": "dreamsign",
       "name": "Dreamsign: Grant dreamsign",
-      "description": "Gain one Dreamsign selected to complement the current deck.",
+      "presentation": {
+        "headline": {
+          "kind": "text",
+          "text": "Gain a Dreamsign"
+        },
+        "subtitle": {
+          "kind": "text",
+          "text": "Gain {dreamsignName}"
+        }
+      },
       "enabled": true,
       "family": "dreamsign",
       "weight": 8,
@@ -185,7 +333,16 @@
     {
       "id": "dreamsign_draft",
       "name": "Dreamsign: Dreamsign draft",
-      "description": "Choose one Dreamsign from two to four candidates selected for the current deck.",
+      "presentation": {
+        "headline": {
+          "kind": "text",
+          "text": "Choose a Dreamsign"
+        },
+        "subtitle": {
+          "kind": "text",
+          "text": "Choose a dreamsign to gain."
+        }
+      },
       "enabled": false,
       "family": "dreamsign",
       "weight": 6,
@@ -198,7 +355,16 @@
     {
       "id": "add_site",
       "name": "Site: Add a site",
-      "description": "Add one uniformly selected site to the current Dreamscape.",
+      "presentation": {
+        "headline": {
+          "kind": "text",
+          "text": "Add a Site"
+        },
+        "subtitle": {
+          "kind": "text",
+          "text": "Add the {siteName} site."
+        }
+      },
       "enabled": true,
       "family": "site",
       "weight": 6,
@@ -206,6 +372,6 @@
       "quantities": {}
     }
   ],
-  "contentHash": "de216abe8fa822a9be3d9590d3aa7904fc0f4ca925a55cfcbf38c0b38e97f467",
-  "foldHash": "de216abe8fa822a9be3d9590d3aa7904fc0f4ca925a55cfcbf38c0b38e97f467"
+  "contentHash": "48bef7dd096898932024e90fd335595ba0c45c74c6eb156cc7068d6e3a4b0535",
+  "foldHash": "48bef7dd096898932024e90fd335595ba0c45c74c6eb156cc7068d6e3a4b0535"
 }

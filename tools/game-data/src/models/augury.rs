@@ -1,10 +1,21 @@
 use std::collections::BTreeSet;
 use std::fmt;
 
-use anyhow::{Result, bail};
+use anyhow::{bail, Result};
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
+
+const PRESENTATION_SLOTS: [&str; 8] = [
+    "cardName",
+    "categoryName",
+    "count",
+    "dreamsignName",
+    "firstCardName",
+    "secondCardName",
+    "siteName",
+    "subtypeName",
+];
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -26,9 +37,35 @@ pub struct EncounterRules {
 pub struct ArchetypeDefinition {
     pub id: AuguryId,
     pub name: String,
-    pub description: String,
+    pub presentation: ArchetypePresentation,
     pub ability: ArchetypeAbility,
     pub weight: u32,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ArchetypePresentation {
+    pub headline: PresentationText,
+    pub subtitle: PresentationText,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+pub enum PresentationText {
+    Text(String),
+    Count {
+        one: String,
+        other: String,
+    },
+    Category {
+        character: String,
+        event: String,
+        cheap: String,
+        mid_cost: String,
+        expensive: String,
+        fast: String,
+        subtype: String,
+        package: String,
+    },
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -512,7 +549,19 @@ fn lower_archetype(source: ArchetypeDefinition) -> toml::Value {
     let mut output = toml::map::Map::new();
     output.insert("id".into(), kind.as_compat().into());
     output.insert("name".into(), source.name.into());
-    output.insert("description".into(), source.description.into());
+    output.insert(
+        "presentation".into(),
+        toml::Value::Table(toml::map::Map::from_iter([
+            (
+                "headline".into(),
+                lower_presentation_text(source.presentation.headline),
+            ),
+            (
+                "subtitle".into(),
+                lower_presentation_text(source.presentation.subtitle),
+            ),
+        ])),
+    );
     output.insert("enabled".into(), true.into());
     output.insert("family".into(), source.ability.family().as_compat().into());
     output.insert("weight".into(), i64::from(source.weight).into());
@@ -524,6 +573,42 @@ fn lower_archetype(source: ArchetypeDefinition) -> toml::Value {
         "quantities".into(),
         toml::Value::Table(source.ability.quantities()),
     );
+    toml::Value::Table(output)
+}
+
+fn lower_presentation_text(source: PresentationText) -> toml::Value {
+    let mut output = toml::map::Map::new();
+    match source {
+        PresentationText::Text(text) => {
+            output.insert("kind".into(), "text".into());
+            output.insert("text".into(), text.into());
+        }
+        PresentationText::Count { one, other } => {
+            output.insert("kind".into(), "count".into());
+            output.insert("one".into(), one.into());
+            output.insert("other".into(), other.into());
+        }
+        PresentationText::Category {
+            character,
+            event,
+            cheap,
+            mid_cost,
+            expensive,
+            fast,
+            subtype,
+            package,
+        } => {
+            output.insert("kind".into(), "category".into());
+            output.insert("character".into(), character.into());
+            output.insert("event".into(), event.into());
+            output.insert("cheap".into(), cheap.into());
+            output.insert("mid-cost".into(), mid_cost.into());
+            output.insert("expensive".into(), expensive.into());
+            output.insert("fast".into(), fast.into());
+            output.insert("subtype".into(), subtype.into());
+            output.insert("package".into(), package.into());
+        }
+    }
     toml::Value::Table(output)
 }
 
@@ -559,9 +644,7 @@ fn validate(source: &AuguryCatalog) -> Result<()> {
         if archetype.name.trim().is_empty() {
             bail!("{path}.name must be non-empty");
         }
-        if archetype.description.trim().is_empty() {
-            bail!("{path}.description must be non-empty");
-        }
+        validate_presentation(&path, &archetype.presentation)?;
         validate_ability(&path, &archetype.ability)?;
         families.insert(archetype.ability.family());
     }
@@ -570,6 +653,62 @@ fn validate(source: &AuguryCatalog) -> Result<()> {
     }
     if families.len() < 2 {
         bail!("archetypes must span at least two families");
+    }
+    Ok(())
+}
+
+fn validate_presentation(path: &str, presentation: &ArchetypePresentation) -> Result<()> {
+    validate_presentation_text(
+        &format!("{path}.presentation.headline"),
+        &presentation.headline,
+    )?;
+    validate_presentation_text(
+        &format!("{path}.presentation.subtitle"),
+        &presentation.subtitle,
+    )
+}
+
+fn validate_presentation_text(path: &str, text: &PresentationText) -> Result<()> {
+    let values: Vec<&str> = match text {
+        PresentationText::Text(value) => vec![value],
+        PresentationText::Count { one, other } => vec![one, other],
+        PresentationText::Category {
+            character,
+            event,
+            cheap,
+            mid_cost,
+            expensive,
+            fast,
+            subtype,
+            package,
+        } => vec![
+            character, event, cheap, mid_cost, expensive, fast, subtype, package,
+        ],
+    };
+    for value in values {
+        if value.trim().is_empty() {
+            bail!("{path} strings must be non-empty");
+        }
+        validate_template_slots(path, value)?;
+    }
+    Ok(())
+}
+
+fn validate_template_slots(path: &str, value: &str) -> Result<()> {
+    let mut remaining = value;
+    while let Some(start) = remaining.find('{') {
+        let after_open = &remaining[start + 1..];
+        let Some(end) = after_open.find('}') else {
+            bail!("{path} has an unterminated presentation slot");
+        };
+        let slot = &after_open[..end];
+        if !PRESENTATION_SLOTS.contains(&slot) {
+            bail!("{path} uses unknown presentation slot {{{slot}}}");
+        }
+        remaining = &after_open[end + 1..];
+    }
+    if remaining.contains('}') {
+        bail!("{path} has an unmatched closing brace");
     }
     Ok(())
 }
@@ -669,7 +808,10 @@ mod tests {
         ArchetypeDefinition {
             id,
             name: format!("Synthetic {}", ability.kind().as_compat()),
-            description: format!("Synthetic description for {}.", ability.kind().as_compat()),
+            presentation: ArchetypePresentation {
+                headline: PresentationText::Text("Synthetic headline".into()),
+                subtitle: PresentationText::Text("Synthetic subtitle".into()),
+            },
             ability,
             weight: 3,
         }
@@ -767,17 +909,13 @@ mod tests {
         let archetypes = output["archetype"].as_array().unwrap();
         assert_eq!(archetypes.len(), 17);
         assert_eq!(archetypes[0]["id"].as_str(), Some("fit_card_grant"));
-        assert!(
-            archetypes[0]["name"]
-                .as_str()
-                .unwrap()
-                .starts_with("Synthetic ")
-        );
-        assert!(
-            archetypes[0]["description"]
-                .as_str()
-                .unwrap()
-                .ends_with('.')
+        assert!(archetypes[0]["name"]
+            .as_str()
+            .unwrap()
+            .starts_with("Synthetic "));
+        assert_eq!(
+            archetypes[0]["presentation"]["headline"]["kind"].as_str(),
+            Some("text")
         );
         assert_eq!(
             archetypes[0]["selection-policy-id"].as_str(),
@@ -792,6 +930,30 @@ mod tests {
     }
 
     #[test]
+    fn lowers_every_presentation_variant() {
+        let count = lower_presentation_text(PresentationText::Count {
+            one: "One {count}".into(),
+            other: "Other {count}".into(),
+        });
+        assert_eq!(count["kind"].as_str(), Some("count"));
+        assert_eq!(count["one"].as_str(), Some("One {count}"));
+
+        let category = lower_presentation_text(PresentationText::Category {
+            character: "Character".into(),
+            event: "Event".into(),
+            cheap: "Cheap".into(),
+            mid_cost: "Mid-cost".into(),
+            expensive: "Expensive".into(),
+            fast: "Fast".into(),
+            subtype: "Subtype {categoryName}".into(),
+            package: "Package {categoryName}".into(),
+        });
+        assert_eq!(category["kind"].as_str(), Some("category"));
+        assert_eq!(category["mid-cost"].as_str(), Some("Mid-cost"));
+        assert_eq!(category["package"].as_str(), Some("Package {categoryName}"));
+    }
+
+    #[test]
     fn rejects_unknown_fields_and_unknown_enum_variants() {
         let source = r#"AuguryCatalog(
           encounter: (offer_count: 2, distinct_families: true, allow_decline: true, surprise: true),
@@ -799,12 +961,10 @@ mod tests {
         )"#;
         assert!(ron::from_str::<AuguryCatalog>(source).is_err());
         assert!(ron::from_str::<CardSelectionPolicy>("Unknown").is_err());
-        assert!(
-            ron::from_str::<ArchetypeAbility>(
-                "FitCardGrant(selection_policy: CardFit, granted_copies: 1, surprise: true)",
-            )
-            .is_err()
-        );
+        assert!(ron::from_str::<ArchetypeAbility>(
+            "FitCardGrant(selection_policy: CardFit, granted_copies: 1, surprise: true)",
+        )
+        .is_err());
     }
 
     #[test]
@@ -820,22 +980,18 @@ mod tests {
 
         let mut duplicate = catalog();
         duplicate.archetypes[1].id = duplicate.archetypes[0].id;
-        assert!(
-            lower(duplicate)
-                .unwrap_err()
-                .to_string()
-                .contains("id duplicates")
-        );
+        assert!(lower(duplicate)
+            .unwrap_err()
+            .to_string()
+            .contains("id duplicates"));
 
         let mut mismatched = catalog();
         mismatched.archetypes[0].id =
             AuguryId::parse(ArchetypeKind::FitCardDraft.canonical_id()).unwrap();
-        assert!(
-            lower(mismatched)
-                .unwrap_err()
-                .to_string()
-                .contains("for ability fit_card_grant")
-        );
+        assert!(lower(mismatched)
+            .unwrap_err()
+            .to_string()
+            .contains("for ability fit_card_grant"));
     }
 
     #[test]
@@ -886,94 +1042,84 @@ mod tests {
         omitted.archetypes.pop();
         let lowered = lower(omitted).unwrap();
         assert_eq!(lowered["archetype"].as_array().unwrap().len(), 16);
-        assert!(
-            lowered["archetype"]
-                .as_array()
-                .unwrap()
-                .iter()
-                .all(|entry| entry["enabled"].as_bool() == Some(true))
-        );
+        assert!(lowered["archetype"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .all(|entry| entry["enabled"].as_bool() == Some(true)));
 
         let mut duplicate = catalog();
         duplicate.archetypes[1].ability = duplicate.archetypes[0].ability.clone();
-        assert!(
-            lower(duplicate)
-                .unwrap_err()
-                .to_string()
-                .contains("duplicates")
-        );
+        assert!(lower(duplicate)
+            .unwrap_err()
+            .to_string()
+            .contains("duplicates"));
 
         let mut bad_range = catalog();
         bad_range.archetypes[5].ability = ArchetypeAbility::CardBundle {
             bundle_size: 2,
             minimum_bundle_size: 3,
         };
-        assert!(
-            lower(bad_range)
-                .unwrap_err()
-                .to_string()
-                .contains("must not exceed")
-        );
+        assert!(lower(bad_range)
+            .unwrap_err()
+            .to_string()
+            .contains("must not exceed"));
 
         let mut zero_weight = catalog();
         zero_weight.archetypes[0].weight = 0;
-        assert!(
-            lower(zero_weight)
-                .unwrap_err()
-                .to_string()
-                .contains("weight must be positive")
-        );
+        assert!(lower(zero_weight)
+            .unwrap_err()
+            .to_string()
+            .contains("weight must be positive"));
 
         let mut empty_name = catalog();
         empty_name.archetypes[0].name = "  ".into();
-        assert!(
-            lower(empty_name)
-                .unwrap_err()
-                .to_string()
-                .contains("name must be non-empty")
-        );
+        assert!(lower(empty_name)
+            .unwrap_err()
+            .to_string()
+            .contains("name must be non-empty"));
 
-        let mut empty_description = catalog();
-        empty_description.archetypes[0].description.clear();
-        assert!(
-            lower(empty_description)
-                .unwrap_err()
-                .to_string()
-                .contains("description must be non-empty")
-        );
+        let mut empty_subtitle = catalog();
+        empty_subtitle.archetypes[0].presentation.subtitle = PresentationText::Text(String::new());
+        assert!(lower(empty_subtitle)
+            .unwrap_err()
+            .to_string()
+            .contains("presentation.subtitle strings must be non-empty"));
+
+        let mut unknown_slot = catalog();
+        unknown_slot.archetypes[0].presentation.subtitle =
+            PresentationText::Text("Unknown {mystery}".into());
+        assert!(lower(unknown_slot)
+            .unwrap_err()
+            .to_string()
+            .contains("unknown presentation slot {mystery}"));
 
         let mut out_of_range = catalog();
         out_of_range.archetypes[0].ability = ArchetypeAbility::FitCardGrant {
             selection_policy: CardSelectionPolicy::CardFit,
             granted_copies: 5,
         };
-        assert!(
-            lower(out_of_range)
-                .unwrap_err()
-                .to_string()
-                .contains("granted_copies must be in [1, 4]")
-        );
+        assert!(lower(out_of_range)
+            .unwrap_err()
+            .to_string()
+            .contains("granted_copies must be in [1, 4]"));
     }
 
     #[test]
     fn rejects_unsupported_encounter_rules() {
         let mut offer_count = catalog();
         offer_count.encounter.offer_count = 3;
-        assert!(
-            lower(offer_count)
-                .unwrap_err()
-                .to_string()
-                .contains("offer_count must be 2")
-        );
+        assert!(lower(offer_count)
+            .unwrap_err()
+            .to_string()
+            .contains("offer_count must be 2"));
 
         let mut repeated_families = catalog();
         repeated_families.encounter.distinct_families = false;
-        assert!(
-            lower(repeated_families)
-                .unwrap_err()
-                .to_string()
-                .contains("distinct_families must be true")
-        );
+        assert!(lower(repeated_families)
+            .unwrap_err()
+            .to_string()
+            .contains("distinct_families must be true"));
     }
 
     #[test]
@@ -982,12 +1128,10 @@ mod tests {
         one_family
             .archetypes
             .retain(|archetype| archetype.ability.family() == OfferFamily::Grant);
-        assert!(
-            lower(one_family)
-                .unwrap_err()
-                .to_string()
-                .contains("at least two families")
-        );
+        assert!(lower(one_family)
+            .unwrap_err()
+            .to_string()
+            .contains("at least two families"));
     }
 
     #[test]

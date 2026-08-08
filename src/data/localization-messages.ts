@@ -300,40 +300,6 @@ export const FLUENT_MESSAGE_IDS = [
   "transfiguration-change-perfected",
   "transfiguration-change-unavailable",
   "augury-card-choice-copy-count",
-  "augury-offer-card-gift-title",
-  "augury-offer-card-gift-description",
-  "augury-offer-card-draft-title",
-  "augury-offer-card-draft-description",
-  "augury-offer-copies-draft-title",
-  "augury-offer-copies-draft-description",
-  "augury-offer-category-draft-title",
-  "augury-offer-category-draft-description",
-  "augury-offer-transfigured-draft-title",
-  "augury-offer-transfigured-draft-description",
-  "augury-offer-card-bundle-title",
-  "augury-offer-card-bundle-description",
-  "augury-offer-transfigure-card-title",
-  "augury-offer-transfigure-card-description",
-  "augury-offer-transfigure-starters-title",
-  "augury-offer-transfigure-one-starter-description",
-  "augury-offer-transfigure-two-starters-description",
-  "augury-offer-reclaim-reduction-title",
-  "augury-offer-reclaim-reduction-description",
-  "augury-offer-subtype-change-title",
-  "augury-offer-subtype-change-description",
-  "augury-offer-purge-card-title",
-  "augury-offer-purge-card-description",
-  "augury-offer-trade-card-title",
-  "augury-offer-trade-card-description",
-  "augury-offer-duplicate-card-title",
-  "augury-offer-duplicate-one-card-description",
-  "augury-offer-duplicate-card-choice-description",
-  "augury-offer-dreamsign-gift-title",
-  "augury-offer-dreamsign-gift-description",
-  "augury-offer-dreamsign-draft-title",
-  "augury-offer-dreamsign-draft-description",
-  "augury-offer-add-site-title",
-  "augury-offer-add-site-description",
   "gamble-wager-prize-title",
   "gamble-wager-prize-description",
   "gamble-wager-prize-accessible-name",
@@ -1053,75 +1019,6 @@ export interface FluentMessageArgumentsById {
   readonly "transfiguration-change-perfected": never;
   readonly "transfiguration-change-unavailable": never;
   readonly "augury-card-choice-copy-count": { readonly count: FluentVariable };
-  readonly "augury-offer-card-gift-title": never;
-  readonly "augury-offer-card-gift-description": {
-    readonly cardName: FluentVariable;
-  };
-  readonly "augury-offer-card-draft-title": never;
-  readonly "augury-offer-card-draft-description": never;
-  readonly "augury-offer-copies-draft-title": never;
-  readonly "augury-offer-copies-draft-description": {
-    readonly copyCount: FluentVariable;
-  };
-  readonly "augury-offer-category-draft-title": never;
-  readonly "augury-offer-category-draft-description": {
-    readonly category: FluentVariable;
-    readonly categoryName: FluentVariable;
-  };
-  readonly "augury-offer-transfigured-draft-title": never;
-  readonly "augury-offer-transfigured-draft-description": never;
-  readonly "augury-offer-card-bundle-title": { readonly count: FluentVariable };
-  readonly "augury-offer-card-bundle-description": {
-    readonly count: FluentVariable;
-  };
-  readonly "augury-offer-transfigure-card-title": never;
-  readonly "augury-offer-transfigure-card-description": {
-    readonly cardName: FluentVariable;
-  };
-  readonly "augury-offer-transfigure-starters-title": never;
-  readonly "augury-offer-transfigure-one-starter-description": {
-    readonly cardName: FluentVariable;
-  };
-  readonly "augury-offer-transfigure-two-starters-description": {
-    readonly firstCardName: FluentVariable;
-    readonly secondCardName: FluentVariable;
-  };
-  readonly "augury-offer-reclaim-reduction-title": never;
-  readonly "augury-offer-reclaim-reduction-description": {
-    readonly cardName: FluentVariable;
-  };
-  readonly "augury-offer-subtype-change-title": never;
-  readonly "augury-offer-subtype-change-description": {
-    readonly cardName: FluentVariable;
-    readonly subtypeName: FluentVariable;
-  };
-  readonly "augury-offer-purge-card-title": never;
-  readonly "augury-offer-purge-card-description": {
-    readonly cardName: FluentVariable;
-  };
-  readonly "augury-offer-trade-card-title": never;
-  readonly "augury-offer-trade-card-description": {
-    readonly cardName: FluentVariable;
-  };
-  readonly "augury-offer-duplicate-card-title": {
-    readonly candidateCount: FluentVariable;
-  };
-  readonly "augury-offer-duplicate-one-card-description": {
-    readonly cardName: FluentVariable;
-  };
-  readonly "augury-offer-duplicate-card-choice-description": {
-    readonly candidateCount: FluentVariable;
-  };
-  readonly "augury-offer-dreamsign-gift-title": never;
-  readonly "augury-offer-dreamsign-gift-description": {
-    readonly dreamsignName: FluentVariable;
-  };
-  readonly "augury-offer-dreamsign-draft-title": never;
-  readonly "augury-offer-dreamsign-draft-description": never;
-  readonly "augury-offer-add-site-title": never;
-  readonly "augury-offer-add-site-description": {
-    readonly siteName: FluentVariable;
-  };
   readonly "gamble-wager-prize-title": { readonly targetLabel: FluentVariable };
   readonly "gamble-wager-prize-description": {
     readonly dreamsignName: FluentVariable;
@@ -1902,49 +1799,6 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "transfiguration-change-perfected": [] as const,
   "transfiguration-change-unavailable": [] as const,
   "augury-card-choice-copy-count": ["count"] as const,
-  "augury-offer-card-gift-title": [] as const,
-  "augury-offer-card-gift-description": ["cardName"] as const,
-  "augury-offer-card-draft-title": [] as const,
-  "augury-offer-card-draft-description": [] as const,
-  "augury-offer-copies-draft-title": [] as const,
-  "augury-offer-copies-draft-description": ["copyCount"] as const,
-  "augury-offer-category-draft-title": [] as const,
-  "augury-offer-category-draft-description": [
-    "category",
-    "categoryName",
-  ] as const,
-  "augury-offer-transfigured-draft-title": [] as const,
-  "augury-offer-transfigured-draft-description": [] as const,
-  "augury-offer-card-bundle-title": ["count"] as const,
-  "augury-offer-card-bundle-description": ["count"] as const,
-  "augury-offer-transfigure-card-title": [] as const,
-  "augury-offer-transfigure-card-description": ["cardName"] as const,
-  "augury-offer-transfigure-starters-title": [] as const,
-  "augury-offer-transfigure-one-starter-description": ["cardName"] as const,
-  "augury-offer-transfigure-two-starters-description": [
-    "firstCardName",
-    "secondCardName",
-  ] as const,
-  "augury-offer-reclaim-reduction-title": [] as const,
-  "augury-offer-reclaim-reduction-description": ["cardName"] as const,
-  "augury-offer-subtype-change-title": [] as const,
-  "augury-offer-subtype-change-description": [
-    "cardName",
-    "subtypeName",
-  ] as const,
-  "augury-offer-purge-card-title": [] as const,
-  "augury-offer-purge-card-description": ["cardName"] as const,
-  "augury-offer-trade-card-title": [] as const,
-  "augury-offer-trade-card-description": ["cardName"] as const,
-  "augury-offer-duplicate-card-title": ["candidateCount"] as const,
-  "augury-offer-duplicate-one-card-description": ["cardName"] as const,
-  "augury-offer-duplicate-card-choice-description": ["candidateCount"] as const,
-  "augury-offer-dreamsign-gift-title": [] as const,
-  "augury-offer-dreamsign-gift-description": ["dreamsignName"] as const,
-  "augury-offer-dreamsign-draft-title": [] as const,
-  "augury-offer-dreamsign-draft-description": [] as const,
-  "augury-offer-add-site-title": [] as const,
-  "augury-offer-add-site-description": ["siteName"] as const,
   "gamble-wager-prize-title": ["targetLabel"] as const,
   "gamble-wager-prize-description": [
     "dreamsignName",
@@ -2484,23 +2338,6 @@ export type FluentMessageIdsWithoutVariables = [
   "transfiguration-change-resonant",
   "transfiguration-change-perfected",
   "transfiguration-change-unavailable",
-  "augury-offer-card-gift-title",
-  "augury-offer-card-draft-title",
-  "augury-offer-card-draft-description",
-  "augury-offer-copies-draft-title",
-  "augury-offer-category-draft-title",
-  "augury-offer-transfigured-draft-title",
-  "augury-offer-transfigured-draft-description",
-  "augury-offer-transfigure-card-title",
-  "augury-offer-transfigure-starters-title",
-  "augury-offer-reclaim-reduction-title",
-  "augury-offer-subtype-change-title",
-  "augury-offer-purge-card-title",
-  "augury-offer-trade-card-title",
-  "augury-offer-dreamsign-gift-title",
-  "augury-offer-dreamsign-draft-title",
-  "augury-offer-dreamsign-draft-description",
-  "augury-offer-add-site-title",
   "gamble-starway-tier-group-accessible-name",
   "journey-failed-summary-missing",
   "journey-failed-new-journey-action",
@@ -2779,23 +2616,6 @@ export type FluentMessageIdsWithVariables = [
   "transfiguration-change-amplified",
   "transfiguration-change-attuned",
   "augury-card-choice-copy-count",
-  "augury-offer-card-gift-description",
-  "augury-offer-copies-draft-description",
-  "augury-offer-category-draft-description",
-  "augury-offer-card-bundle-title",
-  "augury-offer-card-bundle-description",
-  "augury-offer-transfigure-card-description",
-  "augury-offer-transfigure-one-starter-description",
-  "augury-offer-transfigure-two-starters-description",
-  "augury-offer-reclaim-reduction-description",
-  "augury-offer-subtype-change-description",
-  "augury-offer-purge-card-description",
-  "augury-offer-trade-card-description",
-  "augury-offer-duplicate-card-title",
-  "augury-offer-duplicate-one-card-description",
-  "augury-offer-duplicate-card-choice-description",
-  "augury-offer-dreamsign-gift-description",
-  "augury-offer-add-site-description",
   "gamble-wager-prize-title",
   "gamble-wager-prize-description",
   "gamble-wager-prize-accessible-name",

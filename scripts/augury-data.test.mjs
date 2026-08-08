@@ -24,14 +24,30 @@ describe("compileAuguryData", () => {
     expect(() => compileAuguryData(invalid)).toThrow(/copy.*unknown key/u);
   });
 
-  it("requires authored archetype names and descriptions", () => {
+  it("requires authored archetype names and presentation copy", () => {
     const missingName = source();
     delete missingName.archetype[0].name;
     expect(() => compileAuguryData(missingName)).toThrow(/missing key name/u);
 
-    const emptyDescription = source();
-    emptyDescription.archetype[0].description = "  ";
-    expect(() => compileAuguryData(emptyDescription)).toThrow(/description.*non-empty string/u);
+    const emptySubtitle = source();
+    emptySubtitle.archetype[0].presentation.subtitle.text = "  ";
+    expect(() => compileAuguryData(emptySubtitle)).toThrow(/subtitle.*non-empty string/u);
+
+    const unknownSlot = source();
+    unknownSlot.archetype[0].presentation.subtitle.text = "Gain {unknown}";
+    expect(() => compileAuguryData(unknownSlot)).toThrow(/unknown presentation slot/u);
+
+    const unavailableSlot = source();
+    unavailableSlot.archetype[1].presentation.subtitle.text = "Gain {cardName}";
+    expect(() => compileAuguryData(unavailableSlot)).toThrow(/slot \{cardName\}.*unavailable/u);
+
+    const wrongVariant = source();
+    wrongVariant.archetype[0].presentation.subtitle = {
+      kind: "count",
+      one: "One",
+      other: "Other",
+    };
+    expect(() => compileAuguryData(wrongVariant)).toThrow(/subtitle.kind.*must be text/u);
   });
 
   it("rejects policies that the archetype mechanic cannot execute", () => {

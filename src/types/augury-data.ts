@@ -8,14 +8,32 @@ export interface AuguryArchetypeData {
   id: MerchantArchetypeId;
   /** Internal label used by debugging and authoring tools. */
   name: string;
-  /** Concise internal explanation of the reward's complete behavior. */
-  description: string;
+  /** Player-facing copy resolved from the concrete offer model. */
+  presentation: Readonly<{
+    headline: AuguryPresentationText;
+    subtitle: AuguryPresentationText;
+  }>;
   enabled: boolean;
   family: MerchantOfferFamily;
   weight: number;
   selectionPolicyId: RewardSelectionPolicyId;
   quantities: Readonly<Record<string, number>>;
 }
+
+export type AuguryPresentationText =
+  | Readonly<{ kind: "text"; text: string }>
+  | Readonly<{ kind: "count"; one: string; other: string }>
+  | Readonly<{
+      kind: "category";
+      character: string;
+      event: string;
+      cheap: string;
+      midCost: string;
+      expensive: string;
+      fast: string;
+      subtype: string;
+      package: string;
+    }>;
 
 /** Validated browser data compiled from data/augury.toml. */
 export interface AuguryData {

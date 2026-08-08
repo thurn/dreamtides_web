@@ -13,12 +13,15 @@ import { artRef, resolveArtRef } from "../cumulus/primitives/art";
 import { glyph } from "../cumulus/primitives/glyph";
 import { token } from "../cumulus/primitives/tokens";
 import { useIsDesktop } from "../cumulus/screens/use-is-desktop";
-import { useMessages } from "../cumulus/hooks/use-messages";
+import auguryJson from "../generated/config/augury-data.json";
+import { auguryArchetype, parseAuguryData } from "../data/augury-data";
 import { MERCHANT_ARCHETYPE_BUILDERS } from "../journey_v2/archetypes/registry";
 import type { MerchantArchetypeId } from "../journey_v2/archetypes/types";
 import { asCardId, asCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { SitesData } from "../types/sites-data";
+
+const AUGURY_DATA = parseAuguryData(auguryJson);
 
 const fixtureCard = (cardId: string, imageNumber: number): OfferTileCard => {
   const id = asCardId(cardId);
@@ -290,7 +293,6 @@ function hydrateOfferCards(
 }
 
 export default function OffersDebugApp(): ReactElement {
-  const t = useMessages();
   const isDesktop = useIsDesktop();
   const [lastPressed, setLastPressed] = useState<string | null>(null);
   const [cardsById, setCardsById] = useState<ReadonlyMap<
@@ -352,6 +354,9 @@ export default function OffersDebugApp(): ReactElement {
     lastPressed === null
       ? null
       : (models.find((model) => model.id === lastPressed) ?? null);
+  const selectedArchetypeId = selected === null
+    ? null
+    : OFFER_TILE_DEBUG_ARCHETYPE_IDS[models.indexOf(selected)] ?? null;
   return (
     <div
       className="cumulus"
@@ -424,7 +429,12 @@ export default function OffersDebugApp(): ReactElement {
             aria-live="polite"
             style={{ margin: 0, minHeight: 20, font: token("--t-caption") }}
           >
-            {selected === null ? "" : offerTileDescription(selected, t)}
+            {selected === null || selectedArchetypeId === null
+              ? ""
+              : offerTileDescription(
+                  selected,
+                  auguryArchetype(AUGURY_DATA, selectedArchetypeId).presentation,
+                )}
           </p>
         </header>
 
@@ -457,6 +467,7 @@ export default function OffersDebugApp(): ReactElement {
               >
                 <OfferTile
                   model={model}
+                  presentation={auguryArchetype(AUGURY_DATA, archetypeId).presentation}
                   size={isDesktop ? "standard" : "compact"}
                   onPress={setLastPressed}
                 />

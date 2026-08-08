@@ -36,6 +36,7 @@ import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
 import type { FluentMessageDescriptor } from "../../data/localization-messages";
+import type { AuguryArchetypeData } from "../../types/augury-data";
 import { formatMessageDescriptor } from "../hooks/use-messages";
 import { GuideGallerySiteLayout } from "./GuideGallerySiteLayout";
 import { debugRerollCornerStyle } from "./chrome-geometry";
@@ -80,6 +81,7 @@ export interface AuguryOfferView {
   id: string;
   requiresSelection: boolean;
   tile: OfferTileModel;
+  presentation: AuguryArchetypeData["presentation"];
   visual: AuguryOfferVisualView;
 }
 
@@ -290,6 +292,7 @@ export function AugurySiteScreen({
                     >
                       <OfferTile
                         model={offer.tile}
+                        presentation={offer.presentation}
                         size={layout === "desktop" ? "standard" : "compact"}
                         onPress={() => inspectOffer(offer)}
                         testId={`cumulus-augury-offer-${offer.id}`}
@@ -367,8 +370,8 @@ function OfferDetailPanel({
       style={{ width: "100%", height: "100%", minWidth: 0, minHeight: 0, pointerEvents: "auto" }}
     >
       <GlassPanel
-        title={auguryOfferHeadline(offer.tile, t)}
-        subtitle={offerTileDescription(offer.tile, t)}
+        title={auguryOfferHeadline(offer.tile, offer.presentation)}
+        subtitle={offerTileDescription(offer.tile, offer.presentation)}
         headerSpacing="medium"
         footer={
           <div

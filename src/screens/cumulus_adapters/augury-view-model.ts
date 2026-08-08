@@ -4,6 +4,7 @@ import {
   siteTypeName,
 } from "../../data/sites-data";
 import { buildCardSourceDebugState } from "../../debug/card-source-debug";
+import { auguryArchetype } from "../../data/augury-data";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import type { JourneyContent } from "../../data/journey-content";
 import {
@@ -674,6 +675,10 @@ export function buildAuguryOfferViews(
       id: offer.offerId,
       requiresSelection: (offer.choiceRequest?.candidates.length ?? 0) > 0,
       tile,
+      presentation: auguryArchetype(
+        context.rewardSelection.content.auguryData,
+        offer.archetypeId,
+      ).presentation,
       visual: buildOfferVisual(offer, context, context.sitesData),
     };
   });

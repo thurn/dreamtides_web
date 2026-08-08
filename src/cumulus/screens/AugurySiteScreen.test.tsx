@@ -75,6 +75,11 @@ function card(index: number): CardData {
   };
 }
 
+const PRESENTATION = {
+  headline: { kind: "text", text: "Fixture headline" },
+  subtitle: { kind: "text", text: "Fixture subtitle" },
+} as const;
+
 function view(): AugurySiteView {
   const choices = [card(1), card(2), card(3), card(4)];
   const direct = card(5);
@@ -92,6 +97,7 @@ function view(): AugurySiteView {
       {
         id: "A",
         requiresSelection: true,
+        presentation: PRESENTATION,
         tile: {
           id: "encounter-fixture:A",
           kind: "card-draft",
@@ -112,6 +118,7 @@ function view(): AugurySiteView {
       {
         id: "B",
         requiresSelection: false,
+        presentation: PRESENTATION,
         tile: {
           id: "encounter-fixture:B",
           kind: "card-gift",
@@ -406,6 +413,7 @@ describe("AugurySiteScreen", () => {
         {
           ...first,
           requiresSelection: false,
+          presentation: PRESENTATION,
           visual: {
             kind: "site",
             model: {
@@ -458,6 +466,7 @@ describe("AugurySiteScreen", () => {
         {
           ...first,
           requiresSelection: true,
+          presentation: PRESENTATION,
           visual: {
             kind: "dreamsignChoices",
             choices: [
@@ -520,6 +529,7 @@ describe("AugurySiteScreen", () => {
         {
           ...first,
           requiresSelection: false,
+          presentation: PRESENTATION,
           visual: {
             kind: "beforeAfter",
             pairs: [{ id: "entry-1", before, after }],

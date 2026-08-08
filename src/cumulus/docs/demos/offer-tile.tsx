@@ -38,11 +38,16 @@ const MODEL: OfferTileModel = {
   ],
 };
 
+const PRESENTATION = {
+  headline: { kind: "text", text: "Choose a Card" },
+  subtitle: { kind: "text", text: "Choose a card to add to your deck." },
+} as const;
+
 function OfferTileDemo() {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-      <OfferTile model={MODEL} onPress={() => {}} />
-      <OfferTile model={{ ...MODEL, id: `${MODEL.id}:compact` }} size="compact" onPress={() => {}} />
+      <OfferTile model={MODEL} presentation={PRESENTATION} onPress={() => {}} />
+      <OfferTile model={{ ...MODEL, id: `${MODEL.id}:compact` }} presentation={PRESENTATION} size="compact" onPress={() => {}} />
     </div>
   );
 }
@@ -68,12 +73,13 @@ export const offerTileDemo: CumulusComponent = {
     kind: "card-draft",
     cards: offeredCards.map((card) => ({ cardId: card.id, displaySnapshot: card })),
   }}
+  presentation={offerPresentation}
   onPress={chooseOffer}
 />`,
     },
     {
       note: "Use the compact named size where a narrow stage must keep two complete tiles side by side; it uniformly scales the same authored composition.",
-      code: `<OfferTile model={offerTileModel} size="compact" onPress={chooseOffer} />`,
+      code: `<OfferTile model={offerTileModel} presentation={offerPresentation} size="compact" onPress={chooseOffer} />`,
     },
   ],
   demo: { defaultArgs: {} },

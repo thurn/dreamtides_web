@@ -22,7 +22,7 @@ export function parseAuguryData(value: unknown): AuguryData {
     if (
       !isRecord(entry) || typeof entry.id !== "string" || ids.has(entry.id) ||
       typeof entry.name !== "string" || entry.name.trim() === "" ||
-      typeof entry.description !== "string" || entry.description.trim() === "" ||
+      !isPresentation(entry.presentation) ||
       typeof entry.enabled !== "boolean" || typeof entry.family !== "string" ||
       typeof entry.weight !== "number" || !Number.isFinite(entry.weight) || entry.weight <= 0 ||
       typeof entry.selectionPolicyId !== "string" || !isRecord(entry.quantities) ||
@@ -31,6 +31,23 @@ export function parseAuguryData(value: unknown): AuguryData {
     ids.add(entry.id);
   }
   return value as unknown as AuguryData;
+}
+
+function isNonemptyString(value: unknown): value is string {
+  return typeof value === "string" && value.trim() !== "";
+}
+
+function isPresentationText(value: unknown): boolean {
+  if (!isRecord(value)) return false;
+  if (value.kind === "text") return isNonemptyString(value.text);
+  if (value.kind === "count") return isNonemptyString(value.one) && isNonemptyString(value.other);
+  return value.kind === "category" &&
+    ["character", "event", "cheap", "midCost", "expensive", "fast", "subtype", "package"]
+      .every((key) => isNonemptyString(value[key]));
+}
+
+function isPresentation(value: unknown): boolean {
+  return isRecord(value) && isPresentationText(value.headline) && isPresentationText(value.subtitle);
 }
 
 export async function loadAuguryData(): Promise<AuguryData> {

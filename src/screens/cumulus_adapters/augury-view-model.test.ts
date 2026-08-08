@@ -27,16 +27,7 @@ import {
   auguryOfferHeadline,
   offerTileDescription,
 } from "../../cumulus/components/controls/offer-tile-descriptions";
-import { appLocalization } from "../../data/localization";
-import type { MessageFormatter } from "../../cumulus/hooks/use-messages";
-import type { OfferTileModel } from "../../cumulus/components/controls/OfferTile";
-
-const t = ((id, variables) =>
-  appLocalization.getString(id, variables)) as MessageFormatter;
-const buildAuguryOfferHeadline = (model: OfferTileModel) =>
-  auguryOfferHeadline(model, t);
-const buildAuguryOfferSubtitle = (model: OfferTileModel) =>
-  offerTileDescription(model, t);
+import { auguryArchetype } from "../../data/augury-data";
 
 const card = makeMerchantTestCard({
   id: asCardId("81000000-0000-4000-8000-000000000012"),
@@ -161,7 +152,10 @@ const mappingContext = {
   cardByUuid: new Map(mappingCards.map((value) => [value.id, value])),
   draftPoolCardUuids: new Set(mappingCards.map((value) => value.id)),
   merchantCorpus: undefined,
-  rewardSelection: { tuning: CONFIG_DATA_FIXTURE.rewardSelectionData.tuning },
+  rewardSelection: {
+    tuning: CONFIG_DATA_FIXTURE.rewardSelectionData.tuning,
+    content: { auguryData: CONFIG_DATA_FIXTURE.auguryData },
+  },
 } as unknown as MerchantContext;
 
 function fourCandidates(payloadCopies = 1): MerchantChoiceCandidate[] {
@@ -229,7 +223,10 @@ describe("augury view model", () => {
   const context = {
     deckEntryById: new Map(),
     sitesData: MINIMAL_SITES_DATA,
-    rewardSelection: { tuning: CONFIG_DATA_FIXTURE.rewardSelectionData.tuning },
+    rewardSelection: {
+      tuning: CONFIG_DATA_FIXTURE.rewardSelectionData.tuning,
+      content: { auguryData: CONFIG_DATA_FIXTURE.auguryData },
+    },
   } as unknown as MerchantContext;
 
   it("maps both offers to short object-first views without production summaries", () => {
@@ -540,7 +537,13 @@ describe("augury view model", () => {
       const model = buildAuguryOfferTileModel(offer, mappingContext);
       expect(model.kind, offer.archetypeId).toBe(expectedKind);
       expect(model.id).toBe(`mapping-encounter:${offer.offerId}`);
-      expect(buildAuguryOfferHeadline(model), offer.archetypeId).not.toBe("");
+      expect(
+        auguryOfferHeadline(
+          model,
+          auguryArchetype(CONFIG_DATA_FIXTURE.auguryData, offer.archetypeId).presentation,
+        ),
+        offer.archetypeId,
+      ).not.toBe("");
     }
   });
 
@@ -549,7 +552,10 @@ describe("augury view model", () => {
       mappedOffer("purge", { gameObjects: [deckObject] }),
       mappingContext,
     );
-    const formatted = buildAuguryOfferSubtitle(purge);
+    const formatted = offerTileDescription(
+      purge,
+      auguryArchetype(CONFIG_DATA_FIXTURE.auguryData, "purge").presentation,
+    );
 
     expect(formatted).not.toBe("");
     expect(formatted).toContain(deckObject.displayName);

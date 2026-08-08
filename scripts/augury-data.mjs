@@ -2,25 +2,37 @@ import { createHash } from "node:crypto";
 import { mechanicSupportsPolicy } from "./reward-selection-contracts.mjs";
 
 const quantity = (minimum, maximum) => ({ minimum, maximum });
+const text = (...slots) => ({ kind: "text", slots });
+const count = (one, other) => ({ kind: "count", one, other });
+const category = {
+  kind: "category",
+  character: [], event: [], cheap: [], "mid-cost": [], expensive: [], fast: [],
+  subtype: ["categoryName"], package: ["categoryName"],
+};
+const presentation = (headline, subtitle) => ({ headline, subtitle });
 const ARCHETYPE_CONTRACTS = new Map(Object.entries({
-  fit_card_grant: { family: "grant", mechanicId: "gain-card", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "granted-copies": quantity(1, 4) } },
-  fit_card_draft: { family: "grant", mechanicId: "catalog-card-chooser", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "chooser-size": quantity(2, 4), "granted-copies": quantity(1, 4) } },
-  copies_draft: { family: "grant", mechanicId: "catalog-card-chooser", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "chooser-size": quantity(2, 4), "granted-copies": quantity(1, 4) } },
-  strong_card: { family: "grant", mechanicId: "gain-card", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "granted-copies": quantity(1, 4) } },
-  category_draft_known: { family: "grant", mechanicId: "catalog-card-chooser", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "chooser-size": quantity(2, 4), "granted-copies": quantity(1, 4) } },
-  card_bundle: { family: "grant", mechanicId: "gain-card", policies: ["card-bundle"], quantities: { "bundle-size": quantity(2, 3), "minimum-bundle-size": quantity(2, 3) } },
-  transfigured_draft: { family: "grant", mechanicId: "transfigured-card-chooser", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "chooser-size": quantity(2, 4), "granted-copies": quantity(1, 4) } },
-  transfigure: { family: "improve", mechanicId: "transfigure-deck-entry", policies: ["uniform", "transfiguration-value"], quantities: {} },
-  starter_transfigure: { family: "improve", mechanicId: "transfigure-deck-entry", policies: ["uniform", "transfiguration-value"], quantities: { "maximum-targets": quantity(1, 2) } },
-  keyword_mod: { family: "improve", mechanicId: "change-entry-subtype", policies: ["uniform", "deck-entry-centrality"], quantities: {} },
-  tribal_change: { family: "improve", mechanicId: "change-entry-subtype", policies: ["uniform", "deck-entry-centrality"], quantities: {} },
-  purge: { family: "remove", mechanicId: "purge-deck-entry", policies: ["uniform", "purge-misfit"], quantities: {} },
-  purge_replace: { family: "remove", mechanicId: "catalog-card-chooser", policies: ["uniform", "card-fit-quality"], quantities: { "chooser-size": quantity(2, 4) } },
-  duplicate: { family: "duplicate", mechanicId: "duplicate-deck-entry", policies: ["uniform", "duplicate-value"], quantities: { "chooser-size": quantity(1, 3), "granted-copies": quantity(1, 4) } },
-  dreamsign: { family: "dreamsign", mechanicId: "gain-dreamsign", policies: ["uniform", "dreamsign-match"], quantities: {} },
-  dreamsign_draft: { family: "dreamsign", mechanicId: "gain-dreamsign", policies: ["uniform", "dreamsign-match"], quantities: { "minimum-chooser-size": quantity(2, 4), "maximum-chooser-size": quantity(2, 4) } },
-  add_site: { family: "site", mechanicId: "add-site", policies: ["site-uniform"], quantities: {} },
+  fit_card_grant: { family: "grant", mechanicId: "gain-card", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "granted-copies": quantity(1, 4) }, presentation: presentation(text(), text("cardName")) },
+  fit_card_draft: { family: "grant", mechanicId: "catalog-card-chooser", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "chooser-size": quantity(2, 4), "granted-copies": quantity(1, 4) }, presentation: presentation(text(), text()) },
+  copies_draft: { family: "grant", mechanicId: "catalog-card-chooser", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "chooser-size": quantity(2, 4), "granted-copies": quantity(1, 4) }, presentation: presentation(text(), count(["count"], ["count"])) },
+  strong_card: { family: "grant", mechanicId: "gain-card", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "granted-copies": quantity(1, 4) }, presentation: presentation(text(), text("cardName")) },
+  category_draft_known: { family: "grant", mechanicId: "catalog-card-chooser", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "chooser-size": quantity(2, 4), "granted-copies": quantity(1, 4) }, presentation: presentation(text(), category) },
+  card_bundle: { family: "grant", mechanicId: "gain-card", policies: ["card-bundle"], quantities: { "bundle-size": quantity(2, 3), "minimum-bundle-size": quantity(2, 3) }, presentation: presentation(count(["count"], ["count"]), count(["count"], ["count"])) },
+  transfigured_draft: { family: "grant", mechanicId: "transfigured-card-chooser", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "chooser-size": quantity(2, 4), "granted-copies": quantity(1, 4) }, presentation: presentation(text(), text()) },
+  transfigure: { family: "improve", mechanicId: "transfigure-deck-entry", policies: ["uniform", "transfiguration-value"], quantities: {}, presentation: presentation(text(), text("cardName")) },
+  starter_transfigure: { family: "improve", mechanicId: "transfigure-deck-entry", policies: ["uniform", "transfiguration-value"], quantities: { "maximum-targets": quantity(1, 2) }, presentation: presentation(text(), count(["count", "cardName"], ["count", "firstCardName", "secondCardName"])) },
+  keyword_mod: { family: "improve", mechanicId: "change-entry-subtype", policies: ["uniform", "deck-entry-centrality"], quantities: {}, presentation: presentation(text(), text("cardName")) },
+  tribal_change: { family: "improve", mechanicId: "change-entry-subtype", policies: ["uniform", "deck-entry-centrality"], quantities: {}, presentation: presentation(text(), text("cardName", "subtypeName")) },
+  purge: { family: "remove", mechanicId: "purge-deck-entry", policies: ["uniform", "purge-misfit"], quantities: {}, presentation: presentation(text(), text("cardName")) },
+  purge_replace: { family: "remove", mechanicId: "catalog-card-chooser", policies: ["uniform", "card-fit-quality"], quantities: { "chooser-size": quantity(2, 4) }, presentation: presentation(text(), text("cardName")) },
+  duplicate: { family: "duplicate", mechanicId: "duplicate-deck-entry", policies: ["uniform", "duplicate-value"], quantities: { "chooser-size": quantity(1, 3), "granted-copies": quantity(1, 4) }, presentation: presentation(count(["count"], ["count"]), count(["count", "cardName"], ["count", "cardName"])) },
+  dreamsign: { family: "dreamsign", mechanicId: "gain-dreamsign", policies: ["uniform", "dreamsign-match"], quantities: {}, presentation: presentation(text(), text("dreamsignName")) },
+  dreamsign_draft: { family: "dreamsign", mechanicId: "gain-dreamsign", policies: ["uniform", "dreamsign-match"], quantities: { "minimum-chooser-size": quantity(2, 4), "maximum-chooser-size": quantity(2, 4) }, presentation: presentation(text(), text()) },
+  add_site: { family: "site", mechanicId: "add-site", policies: ["site-uniform"], quantities: {}, presentation: presentation(text(), text("siteName")) },
 }));
+const PRESENTATION_SLOTS = new Set([
+  "cardName", "categoryName", "count", "dreamsignName", "firstCardName",
+  "secondCardName", "siteName", "subtypeName",
+]);
 function fail(path, message) {
   throw new Error(`augury.toml ${path}: ${message}`);
 }
@@ -69,6 +81,50 @@ function camel(key) {
   return key.replace(/-([a-z])/gu, (_, letter) => letter.toUpperCase());
 }
 
+function template(value, path, availableSlots) {
+  const result = nonempty(value, path);
+  for (const match of result.matchAll(/\{([^{}]+)\}/gu)) {
+    if (!PRESENTATION_SLOTS.has(match[1])) fail(path, `unknown presentation slot {${match[1]}}`);
+    if (!availableSlots.includes(match[1])) fail(path, `presentation slot {${match[1]}} is unavailable for this archetype`);
+  }
+  return result;
+}
+
+function presentationText(value, path, contract) {
+  const source = table(value, path);
+  if (source.kind !== contract.kind) fail(`${path}.kind`, `must be ${contract.kind}`);
+  if (source.kind === "text") {
+    const text = exact(source, path, ["kind", "text"]);
+    return { kind: "text", text: template(text.text, `${path}.text`, contract.slots) };
+  }
+  if (source.kind === "count") {
+    const count = exact(source, path, ["kind", "one", "other"]);
+    return {
+      kind: "count",
+      one: template(count.one, `${path}.one`, contract.one),
+      other: template(count.other, `${path}.other`, contract.other),
+    };
+  }
+  if (source.kind === "category") {
+    const category = exact(source, path, [
+      "kind", "character", "event", "cheap", "mid-cost", "expensive",
+      "fast", "subtype", "package",
+    ]);
+    return {
+      kind: "category",
+      character: template(category.character, `${path}.character`, contract.character),
+      event: template(category.event, `${path}.event`, contract.event),
+      cheap: template(category.cheap, `${path}.cheap`, contract.cheap),
+      midCost: template(category["mid-cost"], `${path}.mid-cost`, contract["mid-cost"]),
+      expensive: template(category.expensive, `${path}.expensive`, contract.expensive),
+      fast: template(category.fast, `${path}.fast`, contract.fast),
+      subtype: template(category.subtype, `${path}.subtype`, contract.subtype),
+      package: template(category.package, `${path}.package`, contract.package),
+    };
+  }
+  fail(`${path}.kind`, "expected text, count, or category");
+}
+
 /** Compile and strictly validate the parsed augury.toml document. */
 export function compileAuguryData(sourceValue) {
   const root = exact(sourceValue, "root", ["schema-version", "encounter", "archetype"]);
@@ -81,7 +137,7 @@ export function compileAuguryData(sourceValue) {
   const seen = new Set();
   const archetypes = root.archetype.map((raw, index) => {
     const path = `archetype[${String(index)}]`;
-    const source = exact(raw, path, ["id", "name", "description", "enabled", "family", "weight", "selection-policy-id", "quantities"]);
+    const source = exact(raw, path, ["id", "name", "presentation", "enabled", "family", "weight", "selection-policy-id", "quantities"]);
     const id = nonempty(source.id, `${path}.id`);
     const contract = ARCHETYPE_CONTRACTS.get(id);
     if (contract === undefined) fail(`${path}.id`, "unknown archetype id");
@@ -106,10 +162,14 @@ export function compileAuguryData(sourceValue) {
     if (id === "dreamsign_draft" && quantities.minimumChooserSize > quantities.maximumChooserSize) {
       fail(`${path}.quantities.minimum-chooser-size`, "must not exceed maximum-chooser-size");
     }
+    const presentation = exact(source.presentation, `${path}.presentation`, ["headline", "subtitle"]);
     return {
       id,
       name: nonempty(source.name, `${path}.name`),
-      description: nonempty(source.description, `${path}.description`),
+      presentation: {
+        headline: presentationText(presentation.headline, `${path}.presentation.headline`, contract.presentation.headline),
+        subtitle: presentationText(presentation.subtitle, `${path}.presentation.subtitle`, contract.presentation.subtitle),
+      },
       enabled: source.enabled,
       family: source.family,
       weight: positive(source.weight, `${path}.weight`),
