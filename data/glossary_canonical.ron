@@ -1,0 +1,679 @@
+// Explanatory terms and contextual definitions used by Dreamtides rules and journey surfaces.
+
+#![enable(implicit_some)]
+[
+  GlossaryDefinition(
+    id: "7ece2571-4681-4be3-aad6-76503bd77523",
+    category: CardTypes,
+    term: "Figment",
+    definition: "A created token character. Multiple figments of the same type can be merged into one character.",
+    // Higher values place this entry earlier when one rules source reveals several definitions.
+    priority: 60,
+    // Include the term and variants in automatic rules-text recognition.
+    matches_rules_text: true,
+    // Additional inflections recognized as this term when automatic matching is enabled.
+    variants: ["figments"],
+  ),
+
+  GlossaryDefinition(
+    id: "a70ebef7-797a-491b-a888-382a0d7a7656",
+    category: TriggersAndTiming,
+    term: "▸Materialized",
+    definition: "Triggers when this character enters play.",
+    priority: 5,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "c8a29383-b5bd-4971-98e7-e89e9edae648",
+    category: TriggersAndTiming,
+    term: "▸Dawn",
+    definition: "Triggers at the start of controller's turn.",
+    priority: 40,
+    matches_rules_text: true,
+    variants: ["dawn"],
+  ),
+
+  GlossaryDefinition(
+    id: "3411c9fa-6606-4d69-ba30-d52637957cf7",
+    category: TriggersAndTiming,
+    term: "▸Challenge",
+    definition: "Triggers when this character is declared as a challenger.",
+    priority: 40,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "12789839-a665-4195-925a-3229b857cf48",
+    category: TriggersAndTiming,
+    term: "▸Night",
+    definition: "Triggers at the end of your turn.",
+    priority: 40,
+    // Exact tokenizer forms replace the term-and-variants forms for rules-text recognition.
+    rules_text_forms: ["▸Night"],
+  ),
+
+  GlossaryDefinition(
+    id: "9183292b-112f-43c7-88ac-a41c4dd358c3",
+    category: TriggersAndTiming,
+    term: "Day",
+    definition: "The turn phase when the active player plays standard cards.",
+    priority: 10,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "cf383187-e594-41ee-98c5-039a9402b2f8",
+    category: TriggersAndTiming,
+    term: "Rematerialize",
+    definition: "Trigger an in-play character's materialization again.",
+    priority: 75,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "abef45fb-8c3f-4d63-9408-0eed1b7283bb",
+    category: TriggersAndTiming,
+    term: "▸Dissolved",
+    definition: "Triggers when this character is sent to the void from play.",
+    priority: 40,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "3b83d2c9-5fc4-4d75-8b61-3518eebdc39e",
+    category: TriggersAndTiming,
+    term: "Dissolve",
+    definition: "Destroy a character, sending it to the void.",
+    priority: 60,
+    matches_rules_text: true,
+    variants: ["dissolves", "dissolved"],
+  ),
+
+  GlossaryDefinition(
+    id: "f7b481e7-5130-45fe-9a34-a9b54a620d44",
+    category: TriggersAndTiming,
+    term: "Banish",
+    definition: "Remove a card from the game.",
+    priority: 60,
+    matches_rules_text: true,
+    variants: ["banished", "banishes"],
+  ),
+
+  GlossaryDefinition(
+    id: "6efaf17e-7838-484e-9f29-cf7c249c9b5e",
+    category: TriggersAndTiming,
+    term: "Abandon",
+    definition: "Dissolve a character you control.",
+    priority: 75,
+    matches_rules_text: true,
+    variants: ["abandoned", "abandons"],
+  ),
+
+  GlossaryDefinition(
+    id: "f7e1f058-74fe-46db-bb12-f5f887e6a298",
+    category: Resources,
+    term: "Points",
+    definition: "Scoring points (⍟)  allows you to win a dream battle. Each battle has a different target points threshold to win.",
+    priority: 60,
+    rules_text_forms: ["⍟"],
+    // Render inline rules glyphs in this definition even though the entry is not an automatic word match.
+    definition_uses_rules_text: true,
+    // Definition-only entries omit their term heading from combined definition surfaces.
+    term_presentation: DefinitionOnly,
+  ),
+
+  GlossaryDefinition(
+    id: "0dd0f69f-3879-40dd-82b8-6be0274f763d",
+    category: Resources,
+    term: "Memory",
+    definition: "Memory Counters (⧗) are stored by cards to use later for effects.",
+    priority: 60,
+    rules_text_forms: ["⧗"],
+    definition_uses_rules_text: true,
+    term_presentation: DefinitionOnly,
+  ),
+
+  GlossaryDefinition(
+    id: "374c29e9-deb1-4e3d-8410-b81bacc8588b",
+    category: Keywords,
+    term: "Reclaim",
+    definition: "You may play this card from your void, then banish it when it leaves play.",
+    priority: 100,
+    matches_rules_text: true,
+    variants: ["reclaimed"],
+    // Ordered projections specialize the displayed term or definition for a matching source sentence.
+    contexts: [
+      GlossaryContext(
+        // Case-insensitive Unicode regular expression evaluated against the complete source text.
+        pattern: "\\b(?:gain|gains|gained)\\s+reclaim\\s+(\\d+)\\s*●",
+        // Templates may expand {term} and numbered regular-expression captures.
+        term: "{term} {1}●",
+        definition: "You may play that card from your void for {1}●, then banish it when it leaves play.",
+      ),
+
+      GlossaryContext(
+        pattern: "\\breclaim\\s+(\\d+)\\s*●",
+        term: "{term} {1}●",
+        definition: "You may play this card from your void for {1}●, then banish it when it leaves play.",
+      ),
+
+      GlossaryContext(
+        pattern: "\\b(?:gain|gains|gained)\\s+reclaim\\b",
+        definition: "You may play that card from your void, then banish it when it leaves play.",
+      ),
+    ],
+  ),
+
+  GlossaryDefinition(
+    id: "21e9a392-3983-49ba-8072-aa950c63ebad",
+    category: Keywords,
+    term: "Foresee",
+    definition: "Look at the top N cards of your deck, put any number into your void, and put the rest back on top in any order.",
+    priority: 95,
+    matches_rules_text: true,
+    contexts: [
+      GlossaryContext(
+        pattern: "\\bforesee\\s+(\\d+)\\b",
+        term: "{term} {1}",
+        definition: "Look at the top {1} cards of your deck, then put any number of them into your void and the rest on top in any order.",
+        // Use this definition when the selected numeric capture equals one.
+        singular: SingularProjection(
+          capture: 1,
+          definition: "Look at the top card of your deck. You may put it into your void.",
+        ),
+      ),
+    ],
+  ),
+
+  GlossaryDefinition(
+    id: "5bda4696-32f9-4df2-a784-80120d76578b",
+    category: Keywords,
+    term: "Discover",
+    definition: "Reveal three matching cards from your deck and choose one to draw.",
+    priority: 95,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "23526f6e-f17e-4496-bf96-1875858d023d",
+    category: Keywords,
+    term: "Erode",
+    definition: "Put cards from the top of a player’s deck into their void. For each card they can’t, their opponent scores 3⍟.",
+    priority: 95,
+    matches_rules_text: true,
+    variants: ["eroded", "erodes"],
+    contexts: [
+      GlossaryContext(
+        pattern: "\\berode\\s+(\\d+)\\b",
+        term: "{term} {1}",
+        definition: "Put the top {1} cards of a player's deck into their void. If the deck is empty, their opponent scores 3⍟ instead.",
+        singular: SingularProjection(
+          capture: 1,
+          definition: "Put the top card of a player's deck into their void. If the deck is empty, their opponent scores 3⍟ instead.",
+        ),
+      ),
+    ],
+  ),
+
+  GlossaryDefinition(
+    id: "63a9d425-f7f2-4acf-a7ff-57fd58ad34fc",
+    category: Keywords,
+    term: "Fast",
+    definition: "A fast (❖) card may be played at the end of either player's turn.",
+    priority: 95,
+    rules_text_forms: ["❖"],
+    definition_uses_rules_text: true,
+    term_presentation: DefinitionOnly,
+    contexts: [
+      GlossaryContext(
+        pattern: "(?:^|\\n)\\s*❖\\s*[–-]",
+        definition: "A fast (❖) ability may be activated at the end of either player's turn.",
+      ),
+    ],
+  ),
+
+  GlossaryDefinition(
+    id: "c7ec2870-5c8b-43ad-bcb0-d603bba12dea",
+    category: Keywords,
+    term: "Interrupt",
+    definition: "An interrupt (❖❖) card may be played in response to an opponent action, or at the end of either player's turn.",
+    priority: 95,
+    rules_text_forms: ["❖❖"],
+    definition_uses_rules_text: true,
+    term_presentation: DefinitionOnly,
+    contexts: [
+      GlossaryContext(
+        pattern: "(?:^|\\n)\\s*❖❖\\s*[–-]",
+        definition: "An interrupt (❖❖) ability may be activated in response to an opponent action, or at the end of either player's turn.",
+      ),
+    ],
+  ),
+
+  GlossaryDefinition(
+    id: "a5fe9cb8-1162-44f3-9634-99839eecbb1a",
+    category: Keywords,
+    term: "Exhaust Cost",
+    definition: "A back-rank character may exhaust (☾) once per turn to use an ability instead of challenging.",
+    priority: 95,
+    rules_text_forms: ["☾"],
+    definition_uses_rules_text: true,
+    term_presentation: DefinitionOnly,
+    contexts: [
+      GlossaryContext(
+        // Limit this projection to rules text owned by the selected entity type.
+        owner: DreamAvatar,
+        definition: "You may exhaust (☾) this avatar to activate this ability once per turn.",
+      ),
+    ],
+  ),
+
+  GlossaryDefinition(
+    id: "75aae855-4ddc-41f3-9732-dd5922b897b8",
+    category: Keywords,
+    term: "Awakened",
+    definition: "Can challenge and activate ☾ abilities on the same turn in which it is materialized.",
+    priority: 90,
+    matches_rules_text: true,
+    variants: ["awaken", "awakens"],
+  ),
+
+  GlossaryDefinition(
+    id: "10e82210-de89-4266-8f98-d9764ab3807e",
+    category: BattleStatus,
+    term: "Exhausted",
+    definition: "This character cannot challenge or use ☾ abilities until next turn.",
+    priority: 30,
+    matches_rules_text: true,
+    // Optional glyph shown beside the entry in combined definition surfaces.
+    definition_symbol: Exhaust,
+  ),
+
+  GlossaryDefinition(
+    id: "c5c7ca5b-03ed-4665-8a3b-405ec6eed011",
+    category: Keywords,
+    term: "Veil",
+    definition: "If this character would be dissolved by an effect the opponent controls, instead it loses Veil.",
+    priority: 90,
+    matches_rules_text: true,
+    variants: ["veiled"],
+  ),
+
+  GlossaryDefinition(
+    id: "ee732697-b9fc-4a89-942a-2778442810dd",
+    category: Keywords,
+    term: "Vengeful",
+    definition: "When this character loses a challenge, it dissolves the opposing character.",
+    priority: 90,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "59f426ac-b9cb-47af-a00a-8cbab941c6c4",
+    category: Keywords,
+    term: "Support",
+    definition: "A back-rank character supports the front-rank characters ahead of it.",
+    priority: 70,
+    matches_rules_text: true,
+    variants: ["supported", "supports", "supporting"],
+  ),
+
+  GlossaryDefinition(
+    id: "1ea8f8f0-fadf-499a-9fe9-91d8e79a1d2e",
+    category: Keywords,
+    term: "Challenger",
+    definition: "A front-rank ally during your Night phase.",
+    priority: 70,
+    matches_rules_text: true,
+    variants: ["challengers"],
+  ),
+
+  GlossaryDefinition(
+    id: "dead0ce0-353c-475b-aa8f-dcaf727bf920",
+    category: Keywords,
+    term: "Blocker",
+    definition: "A front-rank ally opposite a challenger during the opponent's Night phase.",
+    priority: 70,
+    matches_rules_text: true,
+    variants: ["blockers", "block", "blocks", "blocking"],
+  ),
+
+  GlossaryDefinition(
+    id: "7c5416d7-5933-4c45-b8c8-7d403f0fdf7d",
+    category: Keywords,
+    term: "Unpaired",
+    definition: "A challenger with no blocker opposite it.",
+    priority: 70,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "4244a386-8cd0-4e90-b80b-c3ae98a7df6b",
+    category: Keywords,
+    term: "Prevent",
+    definition: "Counter a card on the stack and send it to the void.",
+    priority: 95,
+    matches_rules_text: true,
+    variants: ["prevented"],
+  ),
+
+  GlossaryDefinition(
+    id: "04ffd85d-956e-4194-bdae-3d61ce3c584d",
+    category: Keywords,
+    term: "Offering",
+    definition: "You may play this card for 0● by banishing a card from your hand. If you do, banish this card at end of turn.",
+    priority: 95,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "ab7a9b1e-3603-4321-88e7-d79619435ef7",
+    category: Keywords,
+    term: "Phasing",
+    definition: "When you play this character, you may return a character you control to your hand and materialize this character in its position.",
+    priority: 95,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "d455fe46-9ddb-4241-addd-52d40db4a4ac",
+    category: Keywords,
+    term: "Ephemeral",
+    definition: "If an ephemeral card is in your hand at end of turn, banish it.",
+    priority: 95,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "9c2606e6-1b15-45ce-b737-281b9dbe729b",
+    category: Verbs,
+    term: "Transfigure",
+    definition: "Permanently upgrade a card in your deck.",
+    priority: 80,
+    matches_rules_text: true,
+    variants: ["transfigured", "transfigures"],
+  ),
+
+  GlossaryDefinition(
+    id: "4587769f-e718-485e-833b-0ef5803a30e0",
+    category: Verbs,
+    term: "Purge",
+    definition: "Permanently remove a card from your deck for the run.",
+    priority: 80,
+    matches_rules_text: true,
+    variants: ["purged", "purges"],
+  ),
+
+  GlossaryDefinition(
+    id: "978999b1-37af-4187-b568-92af6a1e0ab5",
+    category: Verbs,
+    term: "Duplicate",
+    definition: "Add an exact copy of a card to your deck.",
+    priority: 80,
+    matches_rules_text: true,
+    variants: ["duplicated", "duplicates"],
+  ),
+
+  GlossaryDefinition(
+    id: "a9799416-d2d4-4f1b-a3b5-fec790119fae",
+    category: JourneyTerms,
+    term: "Bane",
+    definition: "The Nightmare card, a penalty card forced into your deck.",
+    priority: 65,
+    matches_rules_text: true,
+    variants: ["banes"],
+  ),
+
+  GlossaryDefinition(
+    id: "3d708c8b-2153-47b8-821e-284f36e1ec9e",
+    category: JourneyTerms,
+    term: "Essence",
+    definition: "Currency you gain and spend over the course of a run.",
+    priority: 10,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "affc1dd5-706d-4d60-a85f-cec2a1cd8a98",
+    category: JourneyTerms,
+    term: "Enhanced",
+    definition: "An improved site that offers better or additional rewards.",
+    priority: 65,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "9dd3fbac-7aac-478b-bd95-e3a277c76a12",
+    category: Transfigurations,
+    term: "Transfiguration",
+    definition: "A permanent modification to a card.",
+    priority: 85,
+    matches_rules_text: true,
+    variants: ["transfigurations"],
+  ),
+
+  GlossaryDefinition(
+    id: "a66c513e-500b-4891-8c09-9641ae300ba4",
+    category: Transfigurations,
+    term: "Empowered",
+    definition: "Transfiguration: reduces this card's energy cost by 50%, rounded to the nearest whole number.",
+    priority: 85,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "a2c070ca-eacd-4cca-b69d-3d48f0787a16",
+    category: Transfigurations,
+    term: "Amplified",
+    definition: "Transfiguration: replaces this card's ability with its authored stronger form.",
+    priority: 85,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "f40df441-0e44-4122-b4d4-cdc4085a9ffb",
+    category: Transfigurations,
+    term: "Kindled",
+    definition: "Transfiguration: doubles a character's base spark, or sets it to 1 if zero.",
+    priority: 85,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "c3fa83af-ee3b-47cd-8112-5e5cc38821de",
+    category: Transfigurations,
+    term: "Resonant",
+    definition: "Transfiguration: increases the frequency of named triggers on this card.",
+    priority: 85,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "f0ff63b4-424b-4ae9-81d5-a4f6546afa3f",
+    category: Transfigurations,
+    term: "Inspired",
+    definition: "Transfiguration: appends \"draw a card\" to this event card's text.",
+    priority: 85,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "eb4cfc5f-237a-47cd-9215-7cce3f15583f",
+    category: Transfigurations,
+    term: "Enduring",
+    definition: "Transfiguration: adds \"reclaim\" to this event card's text.",
+    priority: 85,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "980d283a-9558-4b66-84a0-fcb91fdf4ceb",
+    category: Transfigurations,
+    term: "Attuned",
+    definition: "Transfiguration: reduces an activated ability's energy cost by 1.",
+    priority: 85,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "22adf539-d2c9-4f33-9416-159d03a220ad",
+    category: Transfigurations,
+    term: "Perfected",
+    definition: "Transfiguration: applies every other eligible transfiguration to a card.",
+    priority: 85,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "4c7b92d2-31f5-4e74-aa00-88525e242afc",
+    category: Resources,
+    term: "Energy Cost",
+    definition: "Spend this much energy to play the card.",
+    priority: 0,
+  ),
+
+  GlossaryDefinition(
+    id: "bf95777e-d1a3-4c08-b027-3407e380eb00",
+    category: Resources,
+    term: "Spark",
+    definition: "A character's power during a challenge; higher spark wins.",
+    priority: 10,
+    matches_rules_text: true,
+  ),
+
+  GlossaryDefinition(
+    id: "bdae3633-0f98-4cbf-829e-89d557c24e83",
+    category: Resources,
+    term: "Starting Essence",
+    definition: "The essence this avatar begins the journey with, spent at sites this run.",
+    priority: 0,
+  ),
+
+  GlossaryDefinition(
+    id: "62bfc165-306b-4ebd-9aac-a1a51f9bc75c",
+    category: JourneyTerms,
+    term: "Tides",
+    definition: "Pools of cards you will see during the journey. Different tides are used every time you play.",
+    priority: 0,
+  ),
+
+  GlossaryDefinition(
+    id: "85ffab8d-f972-4340-9b45-99f6aff6ccec",
+    category: Sites,
+    term: "Battle",
+    definition: "A battle against this dream's guardian.",
+    priority: 0,
+  ),
+
+  GlossaryDefinition(
+    id: "1ee13681-1ff5-431c-94a1-3390d45e1717",
+    category: Sites,
+    term: "Draft",
+    definition: "Pick 5 cards to add to your deck.",
+    priority: 0,
+  ),
+
+  GlossaryDefinition(
+    id: "25f28ed1-5729-4240-a352-80f92fce530c",
+    category: Sites,
+    term: "Card Shop",
+    definition: "Spend essence to buy cards.",
+    priority: 0,
+  ),
+
+  GlossaryDefinition(
+    id: "4873bddf-7bf5-41e8-979e-36eb193db5a6",
+    category: Sites,
+    term: "Purge",
+    definition: "Remove any number of cards from your deck",
+    priority: 0,
+  ),
+
+  GlossaryDefinition(
+    id: "ba8ea132-f636-4fed-be27-e8eff0c9cb07",
+    category: Sites,
+    term: "Essence",
+    definition: "Collect a trove of essence.",
+    priority: 0,
+  ),
+
+  GlossaryDefinition(
+    id: "7ae25c1a-76c5-4aed-9e1c-a2d5ec160bd7",
+    category: Sites,
+    term: "Transfiguration",
+    definition: "Modify and upgrade a card in your deck.",
+    priority: 0,
+  ),
+
+  GlossaryDefinition(
+    id: "8222c5e2-a3ce-4caf-bd13-5c77ff15d7cf",
+    category: Sites,
+    term: "Duplication",
+    definition: "Make a copy of a card in your deck.",
+    priority: 0,
+  ),
+
+  GlossaryDefinition(
+    id: "28925242-3799-4faa-b4bd-b8aac52ca442",
+    category: Sites,
+    term: "Reward",
+    definition: "Claim a reward.",
+    priority: 0,
+  ),
+
+  GlossaryDefinition(
+    id: "ffd3977a-a463-4326-bdf2-5b1b8c3d9160",
+    category: Sites,
+    term: "Augury",
+    definition: "Choose one of two foreseen rewards.",
+    priority: 0,
+  ),
+
+  GlossaryDefinition(
+    id: "5b5b47d6-c858-4b42-af96-a520c84666eb",
+    category: Sites,
+    term: "Dreamsign Market",
+    definition: "Purchase dreamsigns from a rotating selection.",
+    priority: 0,
+  ),
+
+  GlossaryDefinition(
+    id: "ac70fd6b-a91a-407f-b7b7-255668cd6bec",
+    category: Sites,
+    term: "Dreamsign Revelation",
+    definition: "Receive a dreamsign.",
+    priority: 0,
+  ),
+
+  GlossaryDefinition(
+    id: "1aeb05bc-53e1-4ea4-9e73-9239160799dc",
+    category: Sites,
+    term: "Random Site",
+    definition: "Enter a random enhanced site hosted by the presenting Dream Guide.",
+    priority: 0,
+  ),
+
+  GlossaryDefinition(
+    id: "f1ff2fb5-3d77-4eb8-b492-78cbe11fd265",
+    category: Sites,
+    term: "Gamble",
+    definition: "Take a risk for an uncertain reward.",
+    priority: 0,
+  ),
+
+  GlossaryDefinition(
+    id: "46059d35-cb9e-4c4b-8635-087b6239f308",
+    category: Sites,
+    term: "Exploration",
+    definition: "Draw a card from your deck, then delve into the dream within it.",
+    priority: 0,
+  ),
+
+  GlossaryDefinition(
+    id: "a213b7b2-1e9d-4e6e-b599-19f858ba898d",
+    category: Actions,
+    term: "Restock Offers",
+    definition: "Replace the current offers with three new Dreamsigns. You may restock once per visit.",
+    priority: 0,
+  ),
+]
