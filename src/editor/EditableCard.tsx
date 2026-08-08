@@ -412,6 +412,25 @@ export default function EditableCard({
   const shouldShowGlossaryInfoOnHover =
     showGlossaryInfoOnHover &&
     extractGlossaryTerms(visibleRulesText).length > 0;
+  const originalRulesCaption = showAmplifiedText ? (
+    <div
+      data-editor-original-rules-text="true"
+      style={{
+        marginTop: "6px",
+        color: "rgba(217, 225, 221, 0.78)",
+        fontSize: "0.72rem",
+        fontWeight: 600,
+        lineHeight: 1.35,
+        display: "-webkit-box",
+        WebkitBoxOrient: "vertical",
+        WebkitLineClamp: 3,
+        overflow: "hidden",
+      }}
+    >
+      <strong style={{ color: "#8edbd1" }}>Original:</strong>{" "}
+      {card["rendered-text"]}
+    </div>
+  ) : null;
 
   // Common props for an editable region. EditableField is a `display: contents`
   // wrapper, so the rendered card geometry is exactly CardView's; the editor
@@ -574,6 +593,7 @@ export default function EditableCard({
           glossaryInfoOnHover={shouldShowGlossaryInfoOnHover}
         />
         {fontSizeOverlay}
+        {originalRulesCaption}
         {checkboxControl}
         {hovering && mtgName !== "" ? (
           <MtgNameTooltip anchorRef={cardRef} mtgName={mtgName} />
@@ -602,6 +622,7 @@ export default function EditableCard({
         glossaryInfoOnHover={shouldShowGlossaryInfoOnHover}
       />
       {fontSizeOverlay}
+      {originalRulesCaption}
       {/* Checkbox tagging hides the tag and tide chip editors so only the one
           selected tag is in play. */}
       {!checkboxActive && tagEditing ? (

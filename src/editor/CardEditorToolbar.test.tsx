@@ -172,20 +172,32 @@ describe("CardEditorToolbar", () => {
     act(() => root.unmount());
   });
 
-  it("toggles amplified previews and amplified-only filtering", () => {
+  it("toggles amplified previews and filters through the Filters panel", () => {
     const onChange = vi.fn();
     const { container, root } = mount(<StatefulToolbar onChange={onChange} />);
-    const filter = container.querySelector<HTMLInputElement>(
-      '[aria-label="Show only cards with amplified text"]',
+    const filtersButton = Array.from(container.querySelectorAll("button")).find(
+      (button) => button.textContent?.includes("Filters"),
     );
     const preview = Array.from(container.querySelectorAll("button")).find(
       (button) => button.textContent?.includes("Amplified"),
     );
-    if (filter === null || preview === undefined) {
+    if (filtersButton === undefined || preview === undefined) {
       throw new Error("Missing amplified controls");
     }
 
-    act(() => filter.click());
+    const filterPanel = container.querySelector<HTMLElement>(
+      ".card-browser-toolbar-panel",
+    );
+    expect(filterPanel?.hidden).toBe(true);
+    act(() => filtersButton.click());
+    expect(filterPanel?.hidden).toBe(false);
+    const filter = container.querySelector<HTMLSelectElement>(
+      '[aria-label="Amplified text filter"]',
+    );
+    if (filter === null) {
+      throw new Error("Missing amplified text filter");
+    }
+    act(() => setSelectValue(filter, "present"));
     expect(onChange).toHaveBeenLastCalledWith({
       ...DEFAULT_EDITOR_DISPLAY_STATE,
       amplifiedOnly: true,

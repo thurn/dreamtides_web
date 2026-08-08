@@ -2321,7 +2321,11 @@ describe("CardEditorApp", () => {
       "amplified",
     );
     expect(amplifiedField?.textContent).toContain(amplifiedText);
-    expect(editorCard?.textContent).not.toContain("Draw a card.");
+    const originalCaption = editorCard?.querySelector<HTMLElement>(
+      '[data-editor-original-rules-text="true"]',
+    );
+    expect(originalCaption?.textContent).toContain("Original:");
+    expect(originalCaption?.textContent).toContain("Draw a card.");
     if (amplifiedField === null || amplifiedField === undefined) {
       throw new Error("Missing amplified text field");
     }
