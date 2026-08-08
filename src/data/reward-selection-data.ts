@@ -25,9 +25,8 @@ export function parseRewardSelectionData(value: unknown): RewardSelectionData {
   const tuning = value.tuning;
   const numericKeys = [
     "bandFraction", "bandMinimum", "strongBandFraction", "strongBandMinimum",
-    "dreamsignBandFraction", "dreamsignBandMinimum", "tribalBandFraction",
-    "tribalBandMinimum", "minDeckForFit", "minDeckForPurge",
-    "purgeMisfitFraction", "starterPurgeBonus", "tribalThreshold",
+    "dreamsignBandFraction", "dreamsignBandMinimum", "minDeckForFit",
+    "minDeckForPurge", "purgeMisfitFraction", "starterPurgeBonus",
     "subtypeMinPoolCards", "bundleGrowthBandSize", "categoryAffineWeight",
     "categoryDeckAffineMinimum", "categoryClusterAffineMinimum",
   ];
@@ -43,8 +42,7 @@ export function parseRewardSelectionData(value: unknown): RewardSelectionData {
     !isRecord(tuning.costBands) || Object.values(tuning.costBands).some((entry) => !finite(entry)) ||
     !Array.isArray(tuning.allowedTransfigurations) || tuning.allowedTransfigurations.some((entry) => typeof entry !== "string") ||
     !isRecord(tuning.transfigurationBenefit) || !finite(tuning.transfigurationBenefit.empoweredCostDivisor) || !finite(tuning.transfigurationBenefit.kindledSparkDivisor) || !isRecord(tuning.transfigurationBenefit.flat) || Object.values(tuning.transfigurationBenefit.flat).some((entry) => !finite(entry)) ||
-    !Array.isArray(tuning.placeableSiteTypes) || tuning.placeableSiteTypes.some((entry) => typeof entry !== "string") ||
-    !Array.isArray(tuning.tribes) || tuning.tribes.some((entry) => typeof entry !== "string")
+    !Array.isArray(tuning.placeableSiteTypes) || tuning.placeableSiteTypes.some((entry) => typeof entry !== "string")
   ) throw new Error("Failed to load reward-selection data: malformed reward-selection-data.json");
   return value as unknown as RewardSelectionData;
 }

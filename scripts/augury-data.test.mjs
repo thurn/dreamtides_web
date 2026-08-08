@@ -10,10 +10,10 @@ const source = () => parse(readFileSync(
 ));
 
 describe("compileAuguryData", () => {
-  it("compiles every archetype, including TOML-disabled builders", () => {
+  it("compiles every registered archetype", () => {
     const result = compileAuguryData(source());
-    expect(result.archetypes).toHaveLength(17);
-    expect(result.archetypes.filter((entry) => entry.enabled)).toHaveLength(13);
+    expect(result.archetypes).toHaveLength(13);
+    expect(result.archetypes.every((entry) => entry.enabled)).toBe(true);
     expect(result.foldHash).toBe(result.contentHash);
     expect(result.contentHash).toMatch(/^[0-9a-f]{64}$/u);
   });

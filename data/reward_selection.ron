@@ -6,14 +6,12 @@ CompatDocument(
       "default": {"fraction": 0.25, "minimum": 5},
       "strong-card": {"fraction": 0.15, "minimum": 5},
       "dreamsign": {"fraction": 0.4, "minimum": 5},
-      "tribal-change": {"fraction": 0.25, "minimum": 2},
     },
     "eligibility": {
       "min-deck-for-fit": 6,
       "min-deck-for-purge": 8,
       "purge-misfit-fraction": 0.2,
       "starter-purge-bonus": 0.25,
-      "tribal-threshold": 4,
       "subtype-min-pool-cards": 12,
     },
     "bundle": {"growth-band-size": 5},
@@ -85,18 +83,6 @@ CompatDocument(
         "Transfiguration",
         /*[3]*/
         "Duplication",
-      ],
-    },
-    "tribes": {
-      "values": [
-        /*[0]*/
-        "Spirit Animal",
-        /*[1]*/
-        "Survivor",
-        /*[2]*/
-        "Warrior",
-        /*[3]*/
-        "Outsider",
       ],
     },
   },

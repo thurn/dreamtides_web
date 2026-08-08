@@ -1,5 +1,5 @@
 import { fitLooByEntry } from "../signals/fit";
-import { bandSample, type MerchantRng } from "../signals/rng";
+import type { MerchantRng } from "../signals/rng";
 import {
   assembleOfferTrace,
   deckEntryTraceCandidates,
@@ -10,33 +10,15 @@ import type {
   MerchantContext,
   MerchantDeckCard,
 } from "../types";
-import { grantCandidatePool } from "./grant";
-import type { MerchantArchetypeBuilder, MerchantChoiceCandidateDraft, MerchantOfferDraft } from "./types";
+import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
 import { augurySelectionPolicy, selectionMetadata, selectMerchantReward } from "./sharedSelection";
-import { auguryArchetype } from "../../data/augury-data";
-
-/** Returns the band size for a pool under a band fraction. */
-function bandSizeFor(
-  poolSize: number,
-  bandFraction: number,
-  bandMinimum: number,
-): number {
-  if (poolSize === 0) return 0;
-  return Math.min(
-    poolSize,
-    Math.max(
-      Math.ceil(bandFraction * poolSize),
-      Math.min(bandMinimum, poolSize),
-    ),
-  );
-}
 
 // ---------------------------------------------------------------------------
 // Shared purge-target selection
 // ---------------------------------------------------------------------------
 
 /**
- * One candidate for purge/purge_replace: a deck card with its misfit score.
+ * One candidate for purge: a deck card with its misfit score.
  *
  * Misfit score is higher for worse-fitting or starter cards. Starters get
  * `starterPurgeBonus` added so they rank near the bottom of the band even
@@ -236,133 +218,6 @@ export const purgeBuilder: MerchantArchetypeBuilder = {
       applyPayload: removeDeckEntryPayload(target),
       targetKey: target.entryId,
       ...selectionMetadata(selection),
-    };
-  },
-};
-
-// ---------------------------------------------------------------------------
-// purge_replace
-// ---------------------------------------------------------------------------
-
-/**
- * Eligibility for the replacement half: the grant pool must have a band of
- * >= 4 cards (mirrors `fitCardDraftBuilder`'s size check).
- */
-function replacementHalfEligible(context: MerchantContext): boolean {
-  const pool = grantCandidatePool(context);
-  const chooserSize = auguryArchetype(
-    context.rewardSelection.content.auguryData,
-    "purge_replace",
-  ).quantities.chooserSize;
-  return bandSizeFor(
-    pool.length,
-    context.rewardSelection.tuning.bandFraction,
-    context.rewardSelection.tuning.bandMinimum,
-  ) >= chooserSize;
-}
-
-/**
- * `purge_replace` — *Remove a weak card and draft 1 of 4 replacements.*
- *
- * Removal target selected exactly as `purge`. Replacements are a face-up
- * fit-band sample of 4 unowned non-starter pool cards (same logic as
- * `fit_card_draft`). Each chooser candidate's payload is a composite
- * [remove_deck_entry, add_catalog_card]. Both halves must be individually
- * eligible.
- */
-export const purgeReplaceBuilder: MerchantArchetypeBuilder = {
-  archetypeId: "purge_replace",
-  family: "remove",
-
-  eligible(context: MerchantContext): boolean {
-    return purgeBuilder.eligible(context) && replacementHalfEligible(context);
-  },
-
-  build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
-    const chooserSize = auguryArchetype(
-      context.rewardSelection.content.auguryData,
-      "purge_replace",
-    ).quantities.chooserSize;
-    // Select the removal target (same as purge).
-    const purgeSel = purgeSelection(context);
-    const purgeCands = purgeSel.candidates;
-    if (purgeCands.length === 0) return null;
-
-    const purgeSampled = bandSample(
-      purgeCands,
-      (entry) => entry.misfitScore,
-      1,
-      rng,
-    );
-    const purgeTarget = purgeSampled[0];
-    if (purgeTarget === undefined) return null;
-
-    // Select the configured number of replacements from the grant pool.
-    const pool = grantCandidatePool(context);
-    if (pool.length === 0) return null;
-    const replacementSelection = selectMerchantReward({
-      context,
-      archetypeId: "purge_replace",
-      mechanicId: "catalog-card-chooser",
-      policyId: augurySelectionPolicy(context, "purge_replace"),
-      request: {
-        count: chooserSize,
-        constraints: { excludeOwned: true },
-      },
-    });
-    const replacementByUuid = new Map(pool.map((card) => [card.cardUuid, card]));
-    const replacements = (replacementSelection?.bindings.cardUuids ?? []).flatMap(
-      (cardUuid) => {
-        const card = replacementByUuid.get(cardUuid);
-        return card === undefined ? [] : [card];
-      },
-    );
-    if (
-      replacementSelection === null ||
-      replacements.length < chooserSize
-    ) return null;
-
-    const remove = removeDeckEntryPayload(purgeTarget.deckCard);
-
-    const candidates: MerchantChoiceCandidateDraft[] = replacements.map((card) => ({
-      choiceId: card.cardUuid,
-      gameObjects: [card],
-      applyPayload: {
-        kind: "composite",
-        children: [
-          remove,
-          {
-            kind: "add_catalog_card",
-            cardUuid: card.cardUuid,
-            cardNumber: card.cardNumber,
-          },
-        ],
-      } satisfies MerchantApplyPayload,
-      cardUuid: card.cardUuid,
-      cardNumber: card.cardNumber,
-    }));
-
-    return {
-      archetypeId: "purge_replace",
-      family: "remove",
-      gameObjects: [
-        {
-          objectType: "deckCard",
-          entryId: purgeTarget.entryId,
-          cardUuid: purgeTarget.deckCard.cardUuid,
-          cardNumber: purgeTarget.deckCard.cardNumber,
-          deckEntry: purgeTarget.deckCard.deckEntry,
-          card: purgeTarget.deckCard.card,
-          displayName: purgeTarget.deckCard.displayName,
-          badge: { label: "Removed" },
-        },
-      ],
-      choiceRequest: {
-        choiceType: "replacementCard",
-        candidates,
-      },
-      targetKey: `${purgeTarget.entryId}:${replacements.map((c) => c.cardUuid).join(",")}`,
-      ...selectionMetadata(replacementSelection),
     };
   },
 };

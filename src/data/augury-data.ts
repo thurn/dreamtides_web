@@ -15,7 +15,7 @@ export function parseAuguryData(value: unknown): AuguryData {
     !isRecord(value) || value.schemaVersion !== 1 ||
     typeof value.contentHash !== "string" || !SHA256_HEX.test(value.contentHash) || value.foldHash !== value.contentHash ||
     !isRecord(value.encounter) || value.encounter.offerCount !== 2 || value.encounter.distinctFamilies !== true || typeof value.encounter.allowDecline !== "boolean" ||
-    !Array.isArray(value.archetypes) || value.archetypes.length !== 17
+    !Array.isArray(value.archetypes) || value.archetypes.length !== 13
   ) throw new Error("Failed to load Augury data: malformed augury-data.json");
   const ids = new Set<string>();
   for (const entry of value.archetypes) {

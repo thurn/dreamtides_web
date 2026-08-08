@@ -59,21 +59,14 @@ export interface AuguryCardChoiceView {
   card: AuguryCardView;
 }
 
-export interface AuguryDreamsignChoiceView {
-  id: string;
-  dreamsign: DreamsignData;
-}
-
 export type AuguryOfferVisualView =
   | { kind: "cards"; cards: readonly AuguryCardView[] }
   | { kind: "cardChoices"; choices: readonly AuguryCardChoiceView[]; doubled: boolean }
   | { kind: "beforeAfter"; pairs: readonly { id: string; before: AuguryCardView; after: AuguryCardView }[] }
   | { kind: "purge"; card: AuguryCardView }
-  | { kind: "purgeReplace"; removed: AuguryCardView; choices: readonly AuguryCardChoiceView[] }
   | { kind: "duplicate"; card: AuguryCardView }
   | { kind: "duplicateChoices"; choices: readonly AuguryCardChoiceView[] }
   | { kind: "dreamsigns"; dreamsigns: readonly DreamsignData[] }
-  | { kind: "dreamsignChoices"; choices: readonly AuguryDreamsignChoiceView[] }
   | { kind: "site"; model: DreamscapeSiteModel }
   | { kind: "mixed"; cards: readonly AuguryCardView[]; dreamsigns: readonly DreamsignData[] };
 
@@ -117,8 +110,6 @@ function requiresWideDesktopDetail(
       return visual.choices.length > 2;
     case "beforeAfter":
       return visual.pairs.length * 2 > 2;
-    case "purgeReplace":
-      return true;
     case "duplicateChoices":
       return visual.choices.length > 2;
     case "mixed":
@@ -126,7 +117,6 @@ function requiresWideDesktopDetail(
     case "purge":
     case "duplicate":
     case "dreamsigns":
-    case "dreamsignChoices":
     case "site":
       return false;
   }
@@ -462,42 +452,12 @@ function OfferDetailVisual({
       );
     case "purge":
       return <CardRow cards={[visual.card]} layout={layout} tone="danger" />;
-    case "purgeReplace":
-      return (
-        <TradeCards
-          offerId={offerId}
-          removed={visual.removed}
-          choices={visual.choices}
-          layout={layout}
-          selectedChoiceId={selectedChoiceId}
-          onSelect={onSelect}
-        />
-      );
     case "duplicate":
       return <DuplicateCards card={visual.card} layout={layout} />;
     case "duplicateChoices":
       return choices(visual.choices);
     case "dreamsigns":
       return <DreamsignRow dreamsigns={visual.dreamsigns} layout={layout} />;
-    case "dreamsignChoices":
-      return (
-        <DreamsignChoiceGrid count={visual.choices.length} layout={layout}>
-          {visual.choices.map((choice) => {
-            const selected = selectedChoiceId === choice.id;
-            const size = dreamsignSize(visual.choices.length, layout);
-            return (
-              <div key={choice.id} data-augury-dreamsign-choice="" data-selected={selected ? "true" : "false"} style={{ position: "relative", padding: token("--space-xs"), borderRadius: token("--radius-panel"), border: `4px solid ${selected ? token("--accent-bright") : "transparent"}`, boxShadow: selected ? token("--glow-accent-soft") : undefined }}>
-                <div style={{ width: size, height: size }}><Dreamsign dreamsign={choice.dreamsign} onPress={() => onSelect(offerId, choice.id)} testid={`cumulus-augury-choice-${choice.id}`} /></div>
-                {selected && (
-                  <span aria-hidden="true" data-augury-dreamsign-selection-marker="" style={{ position: "absolute", top: token("--space-xs"), right: token("--space-xs"), width: 36, height: 36, borderRadius: token("--radius-pill"), display: "grid", placeItems: "center", color: token("--text-on-accent"), background: token("--accent-bright"), boxShadow: token("--shadow-md"), pointerEvents: "none", fontSize: 24 }}>
-                    <StandaloneGlyph glyph={GLYPHS.check} color="white" />
-                  </span>
-                )}
-              </div>
-            );
-          })}
-        </DreamsignChoiceGrid>
-      );
     case "site":
       return <SiteRewardVisual model={visual.model} />;
     case "mixed":
@@ -578,17 +538,6 @@ function TransitionArrow({ layout }: { layout: "mobile" | "desktop" }) {
 function Transition({ before, after, layout }: { before: AuguryCardView; after: AuguryCardView; layout: "mobile" | "desktop" }) {
   const width = layout === "desktop" ? "min(240px, 40cqw, 64cqh)" : "min(124px, 38cqw, 58cqh)";
   return <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: token("--space-s") }}><CardTile card={before} width={width} muted /><TransitionArrow layout={layout} /><CardTile card={after} width={width} selected /></div>;
-}
-
-function TradeCards({ offerId, removed, choices, layout, selectedChoiceId, onSelect }: { offerId: string; removed: AuguryCardView; choices: readonly AuguryCardChoiceView[]; layout: "mobile" | "desktop"; selectedChoiceId?: string; onSelect: (offerId: string, choiceId: string) => void }) {
-  const removedWidth = layout === "desktop" ? "min(190px, 18cqw, 55cqh)" : "min(96px, 23cqw, 58cqh)";
-  return (
-    <div data-augury-trade-layout={layout} style={{ display: "grid", gridTemplateColumns: "auto auto minmax(0, 1fr)", alignItems: "center", justifyContent: "center", gap: layout === "desktop" ? token("--space-m") : token("--space-xs"), minWidth: 0 }}>
-      <CardTile card={removed} width={removedWidth} danger />
-      <TransitionArrow layout={layout} />
-      <CardChoices offerId={offerId} choices={choices} layout={layout} fit="compact-choice" columns={cardGridColumns(choices.length, layout)} selectedChoiceId={selectedChoiceId} onSelect={onSelect} />
-    </div>
-  );
 }
 
 function DuplicateCards({ card, layout }: { card: AuguryCardView; layout: "mobile" | "desktop" }) {

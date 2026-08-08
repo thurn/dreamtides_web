@@ -34,7 +34,6 @@ import type { CardData } from "../../types/cards";
 import type { FluentMessageDescriptor } from "../../data/localization-messages";
 import { createMessageDescriptor } from "../../data/localization-descriptors";
 import { asCardId } from "../../types/card-identity";
-import { resolveDeckEntryCard } from "../../card-type-change";
 import type { DreamGuideContent } from "../../types/content";
 import type { SitesData } from "../../types/sites-data";
 import type {
@@ -51,8 +50,6 @@ import type {
   OfferTileBundleCards,
   OfferTileCardChoices,
   OfferTileCategory,
-  OfferTileCharacterSubtype,
-  OfferTileDreamsignChoices,
   OfferTileDreamsign,
   OfferTileDuplicateCards,
   OfferTileModel,
@@ -62,7 +59,6 @@ import type { DreamscapeSiteModel } from "../../cumulus/components/dreamscape/Si
 import type {
   AuguryCardChoiceView,
   AuguryCardView,
-  AuguryDreamsignChoiceView,
   AuguryGuideView,
   AuguryOfferView,
   AuguryOfferVisualView,
@@ -246,18 +242,6 @@ function duplicateCards(
   return unavailable("duplicate requires 1 to 3 cards");
 }
 
-function dreamsignTuple(
-  dreamsigns: readonly OfferTileDreamsign[],
-): OfferTileDreamsignChoices {
-  if (dreamsigns.length === 2) return [dreamsigns[0], dreamsigns[1]];
-  if (dreamsigns.length === 3)
-    return [dreamsigns[0], dreamsigns[1], dreamsigns[2]];
-  if (dreamsigns.length === 4) {
-    return [dreamsigns[0], dreamsigns[1], dreamsigns[2], dreamsigns[3]];
-  }
-  return unavailable("dreamsign_draft requires 2 to 4 candidates");
-}
-
 function tileDreamsign(
   object: Extract<MerchantGameObject, { objectType: "dreamsign" }>,
 ): OfferTileDreamsign {
@@ -409,59 +393,11 @@ export function buildAuguryOfferTileModel(
       );
       return { id, kind: "transfigure-starters", cards: starterCards(cards) };
     }
-    case "keyword_mod": {
-      const payload = offer.applyPayload;
-      if (
-        payload?.kind !== "change_deck_entry_keywords" ||
-        payload.keywords.setReclaim === undefined
-      ) {
-        unavailable("keyword_mod has malformed payload");
-      }
-      const deckCard = context.deckEntryById.get(payload.entryId);
-      if (deckCard === undefined)
-        unavailable("keyword_mod targets an unknown deck entry");
-      const original =
-        resolveDeckEntryCard(deckCard.card, deckCard.deckEntry).reclaimCost ??
-        0;
-      const reclaimReduction = original - payload.keywords.setReclaim;
-      if (reclaimReduction < 1)
-        unavailable("keyword_mod does not reduce Reclaim");
-      return {
-        id,
-        kind: "keyword-modification",
-        card: requiredCard(offer.gameObjects, "keyword_mod", true),
-        reclaimReduction,
-      };
-    }
-    case "tribal_change": {
-      const payload = offer.applyPayload;
-      if (payload?.kind !== "change_deck_entry_type")
-        unavailable("tribal_change has malformed payload");
-      const subtype = payload.typeChange.subtype as OfferTileCharacterSubtype;
-      if (
-        !["Warrior", "Spirit Animal", "Survivor", "Outsider"].includes(subtype)
-      ) {
-        unavailable("tribal_change targets an unsupported subtype");
-      }
-      return {
-        id,
-        kind: "tribal-change",
-        card: requiredCard(offer.gameObjects, "tribal_change", true),
-        newCharacterSubtype: subtype,
-      };
-    }
     case "purge":
       return {
         id,
         kind: "purge-card",
         card: requiredCard(offer.gameObjects, "purge"),
-      };
-    case "purge_replace":
-      return {
-        id,
-        kind: "trade-card",
-        outgoing: requiredCard(offer.gameObjects, "purge_replace"),
-        incoming: fourCards(candidateCards(offer, [2, 3, 4])),
       };
     case "duplicate": {
       const cards =
@@ -476,28 +412,6 @@ export function buildAuguryOfferTileModel(
         kind: "dreamsign-gift",
         dreamsign: requiredDreamsign(offer.gameObjects, "dreamsign"),
       };
-    case "dreamsign_draft": {
-      const candidates = offer.choiceRequest?.candidates;
-      if (
-        candidates === undefined ||
-        candidates.length < 2 ||
-        candidates.length > 4
-      ) {
-        unavailable("dreamsign_draft requires 2 to 4 candidates");
-      }
-      return {
-        id,
-        kind: "dreamsign-draft",
-        dreamsigns: dreamsignTuple(
-          candidates.map((candidate) =>
-            requiredDreamsign(
-              candidate.gameObjects,
-              "dreamsign_draft candidate",
-            ),
-          ),
-        ),
-      };
-    }
     case "add_site": {
       const payload = offer.applyPayload;
       if (payload?.kind !== "add_site")
@@ -533,24 +447,6 @@ function cardChoices(
       id: candidate.choiceId,
       card: toCardView(object, `:${candidate.choiceId}`, card),
     });
-  }
-  return choices;
-}
-
-function dreamsignChoices(
-  candidates: NonNullable<MerchantOffer["choiceRequest"]>["candidates"],
-): AuguryDreamsignChoiceView[] {
-  const choices: AuguryDreamsignChoiceView[] = [];
-  for (const candidate of candidates) {
-    const object = candidate.gameObjects.find(
-      (
-        value,
-      ): value is Extract<MerchantGameObject, { objectType: "dreamsign" }> =>
-        value.objectType === "dreamsign",
-    );
-    if (object !== undefined) {
-      choices.push({ id: candidate.choiceId, dreamsign: toDreamsign(object) });
-    }
   }
   return choices;
 }
@@ -614,12 +510,6 @@ function buildOfferVisual(
     }
     case "purge":
       return { kind: "purge", card: toCardView(presentation.object) };
-    case "purgeReplace":
-      return {
-        kind: "purgeReplace",
-        removed: toCardView(presentation.removed, ":removed"),
-        choices: cardChoices(presentation.candidates, false),
-      };
     case "duplicateSingle":
       return { kind: "duplicate", card: toCardView(presentation.object) };
     case "duplicateChoose":
@@ -631,11 +521,6 @@ function buildOfferVisual(
       return {
         kind: "dreamsigns",
         dreamsigns: [toDreamsign(presentation.object)],
-      };
-    case "dreamsignGrid":
-      return {
-        kind: "dreamsignChoices",
-        choices: dreamsignChoices(presentation.candidates),
       };
     case "addSite":
       return {

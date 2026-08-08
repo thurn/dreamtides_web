@@ -82,22 +82,21 @@ export function compileRewardSelectionData(sourceValue) {
   const root = exact(sourceValue, "root", [
     "schema-version", "rules-version", "bands", "eligibility", "bundle",
     "blends", "categories", "centrality", "dreamsign", "cost-bands",
-    "transfiguration", "site", "tribes",
+    "transfiguration", "site",
   ]);
   if (number(root["schema-version"], "schema-version", { minimum: 1, integer: true }) !== 1) {
     fail("schema-version", "only schema version 1 is supported");
   }
   if (root["rules-version"] !== "1") fail("rules-version", 'only rules version "1" is supported');
 
-  const bands = exact(root.bands, "bands", ["default", "strong-card", "dreamsign", "tribal-change"]);
+  const bands = exact(root.bands, "bands", ["default", "strong-card", "dreamsign"]);
   const defaultBand = band(bands.default, "bands.default");
   const strongBand = band(bands["strong-card"], "bands.strong-card");
   const dreamsignBand = band(bands.dreamsign, "bands.dreamsign");
-  const tribalBand = band(bands["tribal-change"], "bands.tribal-change");
 
   const eligibility = exact(root.eligibility, "eligibility", [
     "min-deck-for-fit", "min-deck-for-purge", "purge-misfit-fraction",
-    "starter-purge-bonus", "tribal-threshold", "subtype-min-pool-cards",
+    "starter-purge-bonus", "subtype-min-pool-cards",
   ]);
   const bundle = exact(root.bundle, "bundle", ["growth-band-size"]);
   const blends = exact(root.blends, "blends", ["strong-card", "copies-draft", "duplicate", "transfiguration", "bundle"]);
@@ -110,7 +109,6 @@ export function compileRewardSelectionData(sourceValue) {
   const transfiguration = exact(root.transfiguration, "transfiguration", ["allowed-forms", "empowered-cost-divisor", "kindled-spark-divisor", "flat-benefit"]);
   const flatBenefit = exact(transfiguration["flat-benefit"], "transfiguration.flat-benefit", ["Amplified", "Inspired", "Enduring", "Hastened", "Resonant", "Attuned", "Perfected"]);
   const site = exact(root.site, "site", ["placeable-types"]);
-  const tribes = exact(root.tribes, "tribes", ["values"]);
 
   const tuning = {
     bandFraction: defaultBand.fraction,
@@ -119,13 +117,10 @@ export function compileRewardSelectionData(sourceValue) {
     strongBandMinimum: strongBand.minimum,
     dreamsignBandFraction: dreamsignBand.fraction,
     dreamsignBandMinimum: dreamsignBand.minimum,
-    tribalBandFraction: tribalBand.fraction,
-    tribalBandMinimum: tribalBand.minimum,
     minDeckForFit: number(eligibility["min-deck-for-fit"], "eligibility.min-deck-for-fit", { minimum: 1, integer: true }),
     minDeckForPurge: number(eligibility["min-deck-for-purge"], "eligibility.min-deck-for-purge", { minimum: 1, integer: true }),
     purgeMisfitFraction: number(eligibility["purge-misfit-fraction"], "eligibility.purge-misfit-fraction", { minimum: 0, maximum: 1 }),
     starterPurgeBonus: number(eligibility["starter-purge-bonus"], "eligibility.starter-purge-bonus", { minimum: 0 }),
-    tribalThreshold: number(eligibility["tribal-threshold"], "eligibility.tribal-threshold", { minimum: 1, integer: true }),
     subtypeMinPoolCards: number(eligibility["subtype-min-pool-cards"], "eligibility.subtype-min-pool-cards", { minimum: 1, integer: true }),
     bundleGrowthBandSize: number(bundle["growth-band-size"], "bundle.growth-band-size", { minimum: 1, integer: true }),
     strongBlend: blend(blends["strong-card"], "blends.strong-card", ["fit", "quality"]),
@@ -166,7 +161,6 @@ export function compileRewardSelectionData(sourceValue) {
       flat: Object.fromEntries(Object.entries(flatBenefit).map(([key, value]) => [key, number(value, `transfiguration.flat-benefit.${key}`, { minimum: 0 })])),
     },
     placeableSiteTypes: stringList(site["placeable-types"], "site.placeable-types", SITE_TYPES),
-    tribes: stringList(tribes.values, "tribes.values"),
   };
   if (!(
     tuning.costBands.cheapMaximum + 1 === tuning.costBands.midMinimum &&

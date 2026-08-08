@@ -4,7 +4,6 @@ import { loadSitesData, siteTypeIcon } from "../data/sites-data";
 import {
   OfferTile,
   type OfferTileCard,
-  type OfferTileDreamsignChoices,
   type OfferTileFourCards,
   type OfferTileModel,
 } from "../cumulus/components/controls/OfferTile";
@@ -66,12 +65,6 @@ const CATEGORY_DRAFT: OfferTileFourCards = [
   fixtureCard("c8579b20-95ff-4b1d-b4c6-6bd049fc4760", 2127752129),
 ];
 
-// This Event has Reclaim 2 and is therefore a real keyword_mod target.
-const KEYWORD_TARGET = fixtureCard(
-  "2931e20b-1a80-4ddd-8944-20e68d182886",
-  776481901,
-);
-
 const PURGE_TARGET = fixtureCard(
   "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
   2654359867,
@@ -82,28 +75,11 @@ const STARTER_TARGETS = [
   fixtureCard("647f5150-b2e0-424b-9480-27557642524e", 1016596168),
 ] as const;
 
-const DREAMSIGNS: OfferTileDreamsignChoices = [
-  {
-    id: "1A524712-EF7E-43D9-BD79-5DEA5250BF08",
-    name: "Rainbow Horn",
-    art: artRef.dreamsign("horn_rainbow .png"),
-  },
-  {
-    id: "278EC1AB-F532-4862-84AE-63DF5E49548C",
-    name: "Pyramid Relic",
-    art: artRef.dreamsign("aertfact.png"),
-  },
-  {
-    id: "6E20E6C7-295A-48B1-B252-B8B00D6902C9",
-    name: "Amanita",
-    art: artRef.dreamsign("amanita.png"),
-  },
-  {
-    id: "49990864-1DB0-4C08-91AE-40A1F04223E4",
-    name: "Algae",
-    art: artRef.dreamsign("algae.png"),
-  },
-];
+const DREAMSIGN = {
+  id: "1A524712-EF7E-43D9-BD79-5DEA5250BF08",
+  name: "Rainbow Horn",
+  art: artRef.dreamsign("horn_rainbow .png"),
+} as const;
 
 /** One maximal, production-shaped UUID-backed specimen per canonical archetype. */
 export function buildOfferTileDebugModels(
@@ -158,28 +134,10 @@ export function buildOfferTileDebugModels(
       kind: "transfigure-starters",
       cards: STARTER_TARGETS,
     },
-    keyword_mod: {
-      id: "debug:keyword_mod",
-      kind: "keyword-modification",
-      card: KEYWORD_TARGET,
-      reclaimReduction: 1,
-    },
-    tribal_change: {
-      id: "debug:tribal_change",
-      kind: "tribal-change",
-      card: GENERAL_DRAFT_A[0],
-      newCharacterSubtype: "Warrior",
-    },
     purge: {
       id: "debug:purge",
       kind: "purge-card",
       card: PURGE_TARGET,
-    },
-    purge_replace: {
-      id: "debug:purge_replace",
-      kind: "trade-card",
-      outgoing: GENERAL_DRAFT_A[3],
-      incoming: GENERAL_DRAFT_B,
     },
     duplicate: {
       id: "debug:duplicate",
@@ -189,12 +147,7 @@ export function buildOfferTileDebugModels(
     dreamsign: {
       id: "debug:dreamsign",
       kind: "dreamsign-gift",
-      dreamsign: DREAMSIGNS[0],
-    },
-    dreamsign_draft: {
-      id: "debug:dreamsign_draft",
-      kind: "dreamsign-draft",
-      dreamsigns: DREAMSIGNS,
+      dreamsign: DREAMSIGN,
     },
     add_site: {
       id: "debug:add_site",
@@ -221,13 +174,9 @@ export const OFFER_TILE_DEBUG_NOTES: Readonly<
   transfigured_draft: "4 choices · all shown",
   transfigure: "1 preselected card",
   starter_transfigure: "2 preselected starters",
-  keyword_mod: "1 preselected eligible card",
-  tribal_change: "1 preselected eligible card",
   purge: "1 preselected card",
-  purge_replace: "1 purge target · 4 choices",
   duplicate: "3 choices · all shown",
   dreamsign: "1 preselected dreamsign",
-  dreamsign_draft: "4 choices · all shown",
   add_site: "1 preselected site",
 };
 
@@ -275,15 +224,7 @@ function hydrateOfferCards(
       return { ...model, cards: hydrateCards(model.cards, cardsById) };
     case "duplicate-card":
       return { ...model, cards: hydrateCards(model.cards, cardsById) };
-    case "trade-card":
-      return {
-        ...model,
-        outgoing: hydrateCard(model.outgoing, cardsById),
-        incoming: hydrateCards(model.incoming, cardsById),
-      };
     case "transfigure-card":
-    case "keyword-modification":
-    case "tribal-change":
     case "purge-card": {
       return { ...model, card: hydrateCard(model.card, cardsById) };
     }

@@ -687,8 +687,8 @@ describe("ScreenRouter Augury routing", () => {
     // Use a fixture with a strong corpus quality signal so at least one
     // grant offer (strong_card or similar) appears in the encounter.
     const site = makeSite("Augury");
-    // Build content with no dreamsigns so dreamsign_draft is ineligible and
-    // the generator falls back to grant/improve/etc. families that yield cards.
+    // Build content with no dreamsigns so the generator uses families that
+    // yield cards.
     const cards = fixtureCards();
     const corpus: Record<string, { quality: number }> = {};
     for (const [index, c] of cards.entries()) {

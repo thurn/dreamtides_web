@@ -210,44 +210,6 @@
       }
     },
     {
-      "id": "keyword_mod",
-      "name": "Improve: Keyword modifier",
-      "presentation": {
-        "headline": {
-          "kind": "text",
-          "text": "Reduce Reclaim"
-        },
-        "subtitle": {
-          "kind": "text",
-          "text": "Reduce Reclaim for {cardName}"
-        }
-      },
-      "enabled": false,
-      "family": "improve",
-      "weight": 8,
-      "selectionPolicyId": "deck-entry-centrality",
-      "quantities": {}
-    },
-    {
-      "id": "tribal_change",
-      "name": "Improve: Tribal change",
-      "presentation": {
-        "headline": {
-          "kind": "text",
-          "text": "Change a Character Type"
-        },
-        "subtitle": {
-          "kind": "text",
-          "text": "Change the subtype of {cardName} to {subtypeName}."
-        }
-      },
-      "enabled": false,
-      "family": "improve",
-      "weight": 6,
-      "selectionPolicyId": "deck-entry-centrality",
-      "quantities": {}
-    },
-    {
       "id": "purge",
       "name": "Remove: Purge",
       "presentation": {
@@ -265,27 +227,6 @@
       "weight": 8,
       "selectionPolicyId": "purge-misfit",
       "quantities": {}
-    },
-    {
-      "id": "purge_replace",
-      "name": "Remove: Purge & replace",
-      "presentation": {
-        "headline": {
-          "kind": "text",
-          "text": "Trade a Card"
-        },
-        "subtitle": {
-          "kind": "text",
-          "text": "Purge {cardName} and choose a replacement card."
-        }
-      },
-      "enabled": false,
-      "family": "remove",
-      "weight": 8,
-      "selectionPolicyId": "card-fit-quality",
-      "quantities": {
-        "chooserSize": 4
-      }
     },
     {
       "id": "duplicate",
@@ -331,28 +272,6 @@
       "quantities": {}
     },
     {
-      "id": "dreamsign_draft",
-      "name": "Dreamsign: Dreamsign draft",
-      "presentation": {
-        "headline": {
-          "kind": "text",
-          "text": "Choose a Dreamsign"
-        },
-        "subtitle": {
-          "kind": "text",
-          "text": "Choose a dreamsign to gain."
-        }
-      },
-      "enabled": false,
-      "family": "dreamsign",
-      "weight": 6,
-      "selectionPolicyId": "dreamsign-match",
-      "quantities": {
-        "minimumChooserSize": 2,
-        "maximumChooserSize": 4
-      }
-    },
-    {
       "id": "add_site",
       "name": "Site: Add a site",
       "presentation": {
@@ -372,6 +291,6 @@
       "quantities": {}
     }
   ],
-  "contentHash": "48bef7dd096898932024e90fd335595ba0c45c74c6eb156cc7068d6e3a4b0535",
-  "foldHash": "48bef7dd096898932024e90fd335595ba0c45c74c6eb156cc7068d6e3a4b0535"
+  "contentHash": "1056f2abd78978b639d81f02c604904e52ff149bf313e7477905304e2fa919ee",
+  "foldHash": "1056f2abd78978b639d81f02c604904e52ff149bf313e7477905304e2fa919ee"
 }

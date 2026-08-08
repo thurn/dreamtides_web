@@ -101,21 +101,6 @@ export type OfferTileDuplicateCards =
   | readonly [OfferTileCard, OfferTileCard]
   | readonly [OfferTileCard, OfferTileCard, OfferTileCard];
 
-/** Character subtypes that an Augury offer can apply to a card. */
-export type OfferTileCharacterSubtype =
-  "Warrior" | "Spirit Animal" | "Survivor" | "Outsider";
-
-/** The two to four surfaced choices in a dreamsign-draft offer. */
-export type OfferTileDreamsignChoices =
-  | readonly [OfferTileDreamsign, OfferTileDreamsign]
-  | readonly [OfferTileDreamsign, OfferTileDreamsign, OfferTileDreamsign]
-  | readonly [
-      OfferTileDreamsign,
-      OfferTileDreamsign,
-      OfferTileDreamsign,
-      OfferTileDreamsign,
-    ];
-
 interface OfferTileBase {
   /**
    * Stable identity for this visible offer. Production callers should combine
@@ -166,27 +151,10 @@ export type OfferTileModel =
       transfiguration: TransfigurationType;
     })
   | (OfferTileBase & {
-      kind: "keyword-modification";
-      card: OfferTileCard;
-      /** Exact amount removed from the card's Reclaim cost. */
-      reclaimReduction: number;
-    })
-  | (OfferTileBase & {
-      kind: "tribal-change";
-      card: OfferTileCard;
-      /** Character subtype applied to the card by this offer. */
-      newCharacterSubtype: OfferTileCharacterSubtype;
-    })
-  | (OfferTileBase & {
       kind: "transfigure-starters";
       cards: OfferTileStarterCards;
     })
   | (OfferTileBase & { kind: "purge-card"; card: OfferTileCard })
-  | (OfferTileBase & {
-      kind: "trade-card";
-      outgoing: OfferTileCard;
-      incoming: OfferTileCardChoices;
-    })
   | (OfferTileBase & {
       kind: "duplicate-card";
       cards: OfferTileDuplicateCards;
@@ -194,10 +162,6 @@ export type OfferTileModel =
   | (OfferTileBase & {
       kind: "dreamsign-gift";
       dreamsign: OfferTileDreamsign;
-    })
-  | (OfferTileBase & {
-      kind: "dreamsign-draft";
-      dreamsigns: OfferTileDreamsignChoices;
     })
   | (OfferTileBase & { kind: "add-site"; site: OfferTileSite });
 
@@ -357,19 +321,6 @@ function offerTileMotionDelay(offerId: string): string {
 const OFFER_ART_STAGE_SIZE = 208;
 const OFFER_ART_OVERLAY_SIZE = 84;
 
-type DreamsignDraftCount = OfferTileDreamsignChoices["length"];
-
-const DREAMSIGN_DRAFT_LAYOUTS: Readonly<
-  Record<
-    DreamsignDraftCount,
-    { readonly spread: number; readonly scale: number }
-  >
-> = {
-  2: { spread: 20, scale: 35 },
-  3: { spread: 25, scale: 35 },
-  4: { spread: 18, scale: 30 },
-};
-
 function offerStagePercentage(percentage: number): number {
   return Math.round(OFFER_ART_STAGE_SIZE * percentage) / 100;
 }
@@ -377,45 +328,6 @@ function offerStagePercentage(percentage: number): number {
 interface DreamsignPosition {
   readonly left: number;
   readonly top: number;
-}
-
-function dreamsignDraftPositions(
-  count: DreamsignDraftCount,
-  spread: number,
-  scale: number,
-): readonly DreamsignPosition[] {
-  const halfScale = scale / 2;
-  const center = 50 - halfScale;
-  const low = 50 - spread - halfScale;
-  const high = 50 + spread - halfScale;
-
-  if (count === 2) {
-    return [
-      { left: low, top: center },
-      { left: high, top: center },
-    ];
-  }
-  if (count === 3) {
-    const triangleSpread = Math.max(spread, scale * 0.72);
-    const horizontalOffset = triangleSpread * (Math.sqrt(3) / 2);
-    return [
-      { left: center, top: 50 - triangleSpread - halfScale },
-      {
-        left: 50 - horizontalOffset - halfScale,
-        top: 50 + triangleSpread / 2 - halfScale,
-      },
-      {
-        left: 50 + horizontalOffset - halfScale,
-        top: 50 + triangleSpread / 2 - halfScale,
-      },
-    ];
-  }
-  return [
-    { left: low, top: low },
-    { left: high, top: low },
-    { left: low, top: high },
-    { left: high, top: high },
-  ];
 }
 
 function DreamsignArtPiece({
@@ -530,42 +442,6 @@ function DreamsignGiftComposition({
         dreamsign={dreamsign}
         edge={offerStagePercentage(54)}
       />
-    </span>
-  );
-}
-
-function DreamsignDraftComposition({
-  dreamsigns,
-}: {
-  readonly dreamsigns: OfferTileDreamsignChoices;
-}): ReactElement {
-  const count = dreamsigns.length;
-  const layout = DREAMSIGN_DRAFT_LAYOUTS[count];
-  const positions = dreamsignDraftPositions(count, layout.spread, layout.scale);
-  const edge = offerStagePercentage(layout.scale);
-  return (
-    <span
-      data-offer-tile-dreamsign-layout={`draft-${String(count)}`}
-      data-offer-tile-dreamsign-spread={layout.spread}
-      data-offer-tile-dreamsign-scale={layout.scale}
-      style={{
-        position: "relative",
-        display: "block",
-        width: OFFER_ART_STAGE_SIZE,
-        height: OFFER_ART_STAGE_SIZE,
-        overflow: "visible",
-        pointerEvents: "none",
-      }}
-    >
-      <OfferFullArtBackground kind="dreamsign-draft" />
-      {dreamsigns.map((dreamsign, index) => (
-        <DreamsignArtPiece
-          key={dreamsign.id}
-          dreamsign={dreamsign}
-          edge={edge}
-          position={positions[index]}
-        />
-      ))}
     </span>
   );
 }
@@ -826,43 +702,6 @@ function CardArtOperation({
   );
 }
 
-function TradeComposition({
-  outgoing,
-  incoming,
-}: {
-  readonly outgoing: OfferTileCard;
-  readonly incoming: OfferTileCardChoices;
-}): ReactElement {
-  return (
-    <span
-      data-offer-tile-trade=""
-      style={{
-        position: "relative",
-        display: "grid",
-        placeItems: "center",
-        width: OFFER_ART_STAGE_SIZE,
-        height: OFFER_ART_STAGE_SIZE,
-        pointerEvents: "none",
-      }}
-    >
-      <CardArtMosaic cards={incoming} />
-      <span
-        data-offer-tile-fifth-card=""
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-          zIndex: 2,
-          translate: "-50% -50%",
-          pointerEvents: "none",
-        }}
-      >
-        <CardArtPiece card={outgoing} treatment="purged" overlay />
-      </span>
-    </span>
-  );
-}
-
 function OfferVisual({
   model,
 }: {
@@ -909,22 +748,6 @@ function OfferVisual({
           tone="accent"
         />
       );
-    case "keyword-modification":
-      return (
-        <CardArtOperation
-          cards={[model.card]}
-          glyph={GLYPHS.pencilSquare}
-          tone="accent"
-        />
-      );
-    case "tribal-change":
-      return (
-        <CardArtOperation
-          cards={[model.card]}
-          glyph={GLYPHS.refreshCcw}
-          tone="accent"
-        />
-      );
     case "purge-card":
       return (
         <CardArtOperation
@@ -932,10 +755,6 @@ function OfferVisual({
           glyph={GLYPHS.closeFilled}
           tone="danger"
         />
-      );
-    case "trade-card":
-      return (
-        <TradeComposition outgoing={model.outgoing} incoming={model.incoming} />
       );
     case "duplicate-card":
       return (
@@ -947,8 +766,6 @@ function OfferVisual({
       );
     case "dreamsign-gift":
       return <DreamsignGiftComposition dreamsign={model.dreamsign} />;
-    case "dreamsign-draft":
-      return <DreamsignDraftComposition dreamsigns={model.dreamsigns} />;
     case "add-site":
       return <AddSiteComposition site={model.site} />;
   }

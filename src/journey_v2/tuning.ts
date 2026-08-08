@@ -13,9 +13,6 @@ export const MERCHANT_TUNING = {
   categoryDraftSize: parseAuguryData(auguryJson).archetypes.find(
     (entry) => entry.id === "category_draft_known",
   )?.quantities.chooserSize ?? 4,
-  dreamsignDraftSize: parseAuguryData(auguryJson).archetypes.find(
-    (entry) => entry.id === "dreamsign_draft",
-  )?.quantities.maximumChooserSize ?? 4,
   duplicateChooserSize: parseAuguryData(auguryJson).archetypes.find(
     (entry) => entry.id === "duplicate",
   )?.quantities.chooserSize ?? 3,

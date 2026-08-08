@@ -3245,7 +3245,7 @@
           },
           {
             "name": "kind",
-            "tsType": "\"card-gift\" | \"card-draft\" | \"transfigured-draft\" | \"category-draft\" | \"copies-draft\" | \"card-bundle\" | \"transfigure-card\" | \"keyword-modification\" | \"tribal-change\" | \"transfigure-starters\" | \"purge-card\" | \"trade-card\" | \"duplicate-card\" | \"dreamsign-gift\" | \"dreamsign-draft\" | \"add-site\"",
+            "tsType": "\"card-gift\" | \"card-draft\" | \"transfigured-draft\" | \"category-draft\" | \"copies-draft\" | \"card-bundle\" | \"transfigure-card\" | \"transfigure-starters\" | \"purge-card\" | \"duplicate-card\" | \"dreamsign-gift\" | \"add-site\"",
             "optional": false,
             "description": ""
           }

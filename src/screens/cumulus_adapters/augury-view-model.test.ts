@@ -442,55 +442,9 @@ describe("augury view model", () => {
         "Transfigure Your Starters",
       ],
       [
-        mappedOffer("keyword_mod", {
-          gameObjects: [
-            {
-              ...deckObject,
-              previewCard: { ...mappingCards[0], reclaimCost: 2 },
-            },
-          ],
-          applyPayload: {
-            kind: "change_deck_entry_keywords",
-            entryId: deckObject.entryId,
-            cardUuid: deckObject.cardUuid,
-            cardNumber: deckObject.cardNumber,
-            keywords: { setReclaim: 2 },
-          },
-        }),
-        "keyword-modification",
-        "Reduce Reclaim",
-      ],
-      [
-        mappedOffer("tribal_change", {
-          gameObjects: [deckObject],
-          applyPayload: {
-            kind: "change_deck_entry_type",
-            entryId: deckObject.entryId,
-            cardUuid: deckObject.cardUuid,
-            cardNumber: deckObject.cardNumber,
-            typeChange: {
-              predicateId: "fixture",
-              cardType: "Character",
-              subtype: "Survivor",
-              label: "Fixture",
-            },
-          },
-        }),
-        "tribal-change",
-        "Change a Character Type",
-      ],
-      [
         mappedOffer("purge", { gameObjects: [deckObject] }),
         "purge-card",
         "Purge a Card",
-      ],
-      [
-        mappedOffer("purge_replace", {
-          gameObjects: [deckObject],
-          choiceRequest: choiceRequest(drafts, "replacementCard"),
-        }),
-        "trade-card",
-        "Trade a Card",
       ],
       [
         mappedOffer("duplicate", {
@@ -503,24 +457,6 @@ describe("augury view model", () => {
         mappedOffer("dreamsign", { gameObjects: [dreamsigns[0]] }),
         "dreamsign-gift",
         "Gain a Dreamsign",
-      ],
-      [
-        mappedOffer("dreamsign_draft", {
-          choiceRequest: choiceRequest(
-            dreamsigns.map((object, index) => ({
-              choiceId: `sign-choice-${String(index)}`,
-              gameObjects: [object],
-              applyPayload: {
-                kind: "add_dreamsign",
-                dreamsignId: object.dreamsignId,
-                dreamsignTemplate: object.dreamsignTemplate,
-              },
-            })),
-            "dreamsign",
-          ),
-        }),
-        "dreamsign-draft",
-        "Choose a Dreamsign",
       ],
       [
         mappedOffer("add_site", {
@@ -593,27 +529,6 @@ describe("augury view model", () => {
       expect(model.kind).toBe("card-draft");
       if (model.kind === "card-draft") expect(model.cards).toHaveLength(count);
     }
-    expect(() =>
-      buildAuguryOfferTileModel(
-        mappedOffer("dreamsign_draft", {
-          choiceRequest: choiceRequest(
-            [
-              {
-                choiceId: "one",
-                gameObjects: [dreamsignObject("one")],
-                applyPayload: {
-                  kind: "add_dreamsign",
-                  dreamsignId: "one",
-                  dreamsignTemplate: dreamsignObject("one").dreamsignTemplate,
-                },
-              },
-            ],
-            "dreamsign",
-          ),
-        }),
-        mappingContext,
-      ),
-    ).toThrow(/requires 2 to 4 candidates/);
   });
 
   it("projects every generated category family to a semantic localization variant", () => {

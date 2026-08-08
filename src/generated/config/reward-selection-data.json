@@ -8,13 +8,10 @@
     "strongBandMinimum": 5,
     "dreamsignBandFraction": 0.4,
     "dreamsignBandMinimum": 5,
-    "tribalBandFraction": 0.25,
-    "tribalBandMinimum": 2,
     "minDeckForFit": 6,
     "minDeckForPurge": 8,
     "purgeMisfitFraction": 0.2,
     "starterPurgeBonus": 0.25,
-    "tribalThreshold": 4,
     "subtypeMinPoolCards": 12,
     "bundleGrowthBandSize": 5,
     "strongBlend": {
@@ -92,14 +89,8 @@
       "Purge",
       "Transfiguration",
       "Duplication"
-    ],
-    "tribes": [
-      "Spirit Animal",
-      "Survivor",
-      "Warrior",
-      "Outsider"
     ]
   },
-  "contentHash": "2b7204a3e6e4e2f1d12326eafbe79c715d12242cdca8ac088254d677c3ba889b",
-  "foldHash": "2b7204a3e6e4e2f1d12326eafbe79c715d12242cdca8ac088254d677c3ba889b"
+  "contentHash": "506d0423a87751dc9b5835e8e86d52f77f08ac44a447b7ed988b5a32b80dd623",
+  "foldHash": "506d0423a87751dc9b5835e8e86d52f77f08ac44a447b7ed988b5a32b80dd623"
 }

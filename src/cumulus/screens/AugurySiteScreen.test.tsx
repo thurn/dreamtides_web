@@ -456,62 +456,6 @@ describe("AugurySiteScreen", () => {
     expect(siteNode?.style.height).toBe("160px");
   });
 
-  it("marks a selected Dreamsign with the bright-purple selection ring and check", () => {
-    const base = view();
-    const first = base.offers[0];
-    if (first === undefined) throw new Error("missing fixture offer");
-    const dreamsignView: AugurySiteView = {
-      ...base,
-      offers: [
-        {
-          ...first,
-          requiresSelection: true,
-          presentation: PRESENTATION,
-          visual: {
-            kind: "dreamsignChoices",
-            choices: [
-              {
-                id: "sign-1",
-                dreamsign: {
-                  id: "00000000-0000-4000-8000-000000000091",
-                  name: "Fixture Sign One",
-                  effectDescription: "Fixture effect one.",
-                  imageName: "fixture-one.png",
-                },
-              },
-              {
-                id: "sign-2",
-                dreamsign: {
-                  id: "00000000-0000-4000-8000-000000000092",
-                  name: "Fixture Sign Two",
-                  effectDescription: "Fixture effect two.",
-                  imageName: "fixture-two.png",
-                },
-              },
-            ],
-          },
-        },
-        base.offers[1],
-      ],
-    };
-    const container = mount(
-      <AugurySiteScreen view={dreamsignView} onChoose={() => ({ ok: true })} onClose={() => undefined} />,
-    );
-
-    click(container.querySelector('[data-testid="cumulus-augury-offer-A"]'));
-    click(container.querySelector('[data-testid="cumulus-augury-choice-sign-1"]'));
-
-    const selected = container.querySelector<HTMLElement>(
-      '[data-augury-dreamsign-choice][data-selected="true"]',
-    );
-    expect(selected?.style.border).toBe("4px solid var(--accent-bright)");
-    const marker = selected?.querySelector<HTMLElement>(
-      "[data-augury-dreamsign-selection-marker]",
-    );
-    expect(marker).not.toBeNull();
-    expect(marker?.style.background).toBe("var(--accent-bright)");
-  });
-
   it("uses a white filled right arrow between distinct transfiguration states", () => {
     const base = view();
     const first = base.offers[0];

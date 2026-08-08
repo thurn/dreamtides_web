@@ -42,8 +42,7 @@ export type MerchantTraceKeyKind =
  * - `scored_cards` — the grant family blends quality/fit over the shared grant
  *   pool of unowned cards. Components: `quality`, `fit` (and the cold-start
  *   fallback flag). Used by `strong_card`, `fit_card_grant`, `fit_card_draft`,
- *   `copies_draft`, `category_draft_known`, `card_bundle`, `transfigured_draft`,
- *   and the replacement half of `purge_replace`.
+ *   `copies_draft`, `category_draft_known`, `card_bundle`, and `transfigured_draft`.
  * - `dreamsign_match` — the dreamsign family ranks a tiered coverage pool by
  *   `meanCoverage * qualityWeight`. Components: `meanCoverage`, `featureCount`,
  *   `qualityWeight`; the chosen tier is in {@link MerchantOfferTrace.dreamsignTier}.
@@ -51,8 +50,8 @@ export type MerchantTraceKeyKind =
  *   `duplicate` blends `quality`/`fitLoo`; `purge` ranks by `misfit` (with a
  *   starter bonus and a leave-one-out threshold).
  * - `entry_modification` — the improve family picks an (entry, modification)
- *   pair. `transfigure` blends `benefit`/`centrality`; `tribal_change` ranks by
- *   `centrality`; `keyword_mod` and `starter_transfigure` sample uniformly.
+ *   pair. `transfigure` blends `benefit`/`centrality`; `starter_transfigure`
+ *   samples uniformly.
  * - `uniform` — `add_site` samples a site type with equal weight.
  */
 export type MerchantTraceDecision =

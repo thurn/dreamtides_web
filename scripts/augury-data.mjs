@@ -20,13 +20,9 @@ const ARCHETYPE_CONTRACTS = new Map(Object.entries({
   transfigured_draft: { family: "grant", mechanicId: "transfigured-card-chooser", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "chooser-size": quantity(2, 4), "granted-copies": quantity(1, 4) }, presentation: presentation(text(), text()) },
   transfigure: { family: "improve", mechanicId: "transfigure-deck-entry", policies: ["uniform", "transfiguration-value"], quantities: {}, presentation: presentation(text(), text("cardName")) },
   starter_transfigure: { family: "improve", mechanicId: "transfigure-deck-entry", policies: ["uniform", "transfiguration-value"], quantities: { "maximum-targets": quantity(1, 2) }, presentation: presentation(text(), count(["count", "cardName"], ["count", "firstCardName", "secondCardName"])) },
-  keyword_mod: { family: "improve", mechanicId: "change-entry-subtype", policies: ["uniform", "deck-entry-centrality"], quantities: {}, presentation: presentation(text(), text("cardName")) },
-  tribal_change: { family: "improve", mechanicId: "change-entry-subtype", policies: ["uniform", "deck-entry-centrality"], quantities: {}, presentation: presentation(text(), text("cardName", "subtypeName")) },
   purge: { family: "remove", mechanicId: "purge-deck-entry", policies: ["uniform", "purge-misfit"], quantities: {}, presentation: presentation(text(), text("cardName")) },
-  purge_replace: { family: "remove", mechanicId: "catalog-card-chooser", policies: ["uniform", "card-fit-quality"], quantities: { "chooser-size": quantity(2, 4) }, presentation: presentation(text(), text("cardName")) },
   duplicate: { family: "duplicate", mechanicId: "duplicate-deck-entry", policies: ["uniform", "duplicate-value"], quantities: { "chooser-size": quantity(1, 3), "granted-copies": quantity(1, 4) }, presentation: presentation(count(["count"], ["count"]), count(["count", "cardName"], ["count", "cardName"])) },
   dreamsign: { family: "dreamsign", mechanicId: "gain-dreamsign", policies: ["uniform", "dreamsign-match"], quantities: {}, presentation: presentation(text(), text("dreamsignName")) },
-  dreamsign_draft: { family: "dreamsign", mechanicId: "gain-dreamsign", policies: ["uniform", "dreamsign-match"], quantities: { "minimum-chooser-size": quantity(2, 4), "maximum-chooser-size": quantity(2, 4) }, presentation: presentation(text(), text()) },
   add_site: { family: "site", mechanicId: "add-site", policies: ["site-uniform"], quantities: {}, presentation: presentation(text(), text("siteName")) },
 }));
 const PRESENTATION_SLOTS = new Set([
@@ -158,9 +154,6 @@ export function compileAuguryData(sourceValue) {
     ]));
     if (id === "card_bundle" && quantities.minimumBundleSize > quantities.bundleSize) {
       fail(`${path}.quantities.minimum-bundle-size`, "must not exceed bundle-size");
-    }
-    if (id === "dreamsign_draft" && quantities.minimumChooserSize > quantities.maximumChooserSize) {
-      fail(`${path}.quantities.minimum-chooser-size`, "must not exceed maximum-chooser-size");
     }
     const presentation = exact(source.presentation, `${path}.presentation`, ["headline", "subtitle"]);
     return {

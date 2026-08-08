@@ -23,8 +23,7 @@ property of the system.
   dreamscapes).
 - Essence or omens as merchant currency or merchant rewards (no prices, no
   locked offers, no essence/omen grants, no shop or reroll modifiers).
-- Card type conversion (character/event conversion rewards). Subtype changes
-  within the Character type are in scope (see `tribal_change`).
+- Card type conversion rewards.
 - Future-scoped site rewards: adding sites to the *next* dreamscape, replacing
   site types, or boosting site appearance chances. Adding a site to the
   current dreamscape is in scope (see `add_site`).
@@ -113,10 +112,10 @@ pull in materially different directions:
 | Family | Archetypes |
 |---|---|
 | `grant` | fit_card_grant, fit_card_draft, copies_draft, strong_card, premium_draft, category_draft_known, card_bundle, transfigured_draft |
-| `improve` | transfigure, starter_transfigure, keyword_mod, tribal_change |
-| `remove` | purge, purge_replace |
+| `improve` | transfigure, starter_transfigure |
+| `remove` | purge |
 | `duplicate` | duplicate |
-| `dreamsign` | dreamsign, dreamsign_draft |
+| `dreamsign` | dreamsign |
 | `site` | add_site |
 
 18 archetypes across 6 families give several hundred valid ordered (A, B)
@@ -206,27 +205,6 @@ previews. Eligible when >= 1 such starter exists. Rationale: starters are
 otherwise dead weight; polishing them is a distinct, fun outcome that the
 non-starter preference of `transfigure` would never produce.
 
-**`keyword_mod`** (w=8) — *Add Reclaim to an event / make an event fast /
-reduce a Reclaim cost.* Build the flat candidate list of (entry, variant)
-pairs: every deck Event without base or modified Reclaim pairs with
-`add_reclaim`; every non-fast deck Event pairs with `add_fast`; every deck
-Event with Reclaim cost > 1 pairs with `reduce_reclaim`. Seeded-sample 1 pair
-uniformly — no Legendary/cost argmax. Face-up with preview. Eligible when >= 1
-pair exists.
-
-**`tribal_change`** (w=6) — *Change a character's subtype to your tribe.* The
-four main tribes are the Warrior, Spirit Animal, Survivor, and Outsider
-subtypes. A tribe is **active** when the deck holds >= 4 Characters of that
-subtype (hard data only). Candidates: (entry, tribe) pairs where the tribe is
-active, the entry is a Character whose effective subtype differs from the
-tribe, and the entry has no prior type change. Signal: the entry's centrality
-(as defined for `transfigure`) — converting your better off-tribe characters
-matters more. Band-sample 1 pair. Face-up with a preview ("<name> becomes a
-Warrior"). Applied via the `change_deck_entry_type` payload, keeping the
-Character card type and changing only the subtype. Eligible when >= 1 pair
-exists, i.e. only when the deck is actually committed to one of the four
-tribes.
-
 ### Remove family
 
 **`purge`** (w=8) — *Remove a weak card from your deck.* Candidate set:
@@ -237,11 +215,6 @@ is excluded (Nightmare removal belongs to Cleanse sites, which `add_site` can pl
 Signal for ranking: misfit (worst first), starters
 get +0.25. Band-sample 1 from the worst band. Face-up. Eligible when deck size
 >= 8 and >= 1 candidate exists.
-
-**`purge_replace`** (w=8) — *Remove a weak card and draft 1 of 4 replacements.*
-Removal target selected exactly as `purge`; replacements are a face-up
-`fit_card_draft`-style band sample of 4. Both halves apply on accept. Eligible
-when both halves are individually eligible.
 
 ### Duplicate family
 
@@ -259,10 +232,6 @@ direct offer. Eligible whenever the deck holds >= 1 non-starter entry.
 unheld dreamsigns. Signal: profile match score (below). Band-sample 1, with
 `bandFraction = 0.4` (small population). Face-up. Eligible while >= 1 unheld
 dreamsign exists.
-
-**`dreamsign_draft`** (w=6) — *Pick 1 of 2–4 dreamsigns.* Same candidates and
-signal; band-sample up to 4 (minimum 2). Face-up chooser. Eligible while >= 2
-unheld dreamsigns exist.
 
 ### Site family
 
@@ -450,7 +419,7 @@ at that stage), so measurements reflect real deck states.
    measured against the *whole deck's* misfit ranking (worst fit = high
    desirability), since the purge candidate set is the already-filtered worst
    band; a card tied at the maximum misfit (a starter, or the worst-fitting
-   card) reads ~100. The `dreamsign` / `dreamsign_draft` archetypes carry a
+   card) reads ~100. The `dreamsign` archetype carries a
    relaxed target of **median >= 65th percentile, floor >= 40th**: their match
    signal is intentionally flat (154 profiles, 54 featureless and
    deck-independent, graded in three quality tiers) and the band is deliberately
@@ -495,7 +464,7 @@ at that stage), so measurements reflect real deck states.
      grant/draft archetype. Target: >= 90%, with the never-offered remainder
      listed by name in the report (no silent gaps).
    - *Deck-target diversity*: for offers targeting deck cards (`purge`,
-     `duplicate`, `transfigure`, `keyword_mod`, `tribal_change`), the
+     `duplicate`, `transfigure`), the
      distribution of chosen target cards — reported per archetype as the
      count of distinct targets and the effective target count (perplexity),
      both globally and across seeds within a fixed deck state. A fixed deck
@@ -538,8 +507,7 @@ Deleted:
   curve_problem, weak_card, dreamsign_gap detection and the role regexes).
 - `catalog/pricing.ts` and every essence cost, locked-offer, and payment path.
 - `gain_essence` and `raise_essence_cap` reward builders.
-- The `convert_event_to_role` reward builder. The `change_deck_entry_type`
-  payload kind is retained for `tribal_change` (subtype-only changes).
+- The `convert_event_to_role` reward builder.
 - The seven-beat dialogue grammar and its template banks.
 
 ## Testing
@@ -558,9 +526,6 @@ Deleted:
   pick against regenerated candidates, stale signatures are rejected without
   mutation.
 - Family distinctness: slots A and B always come from different families.
-- Tribal change: ineligible until a tribe reaches 4 Characters; candidates
-  exclude in-tribe Characters, non-Characters, and entries with a prior type
-  change; the applied change preserves the Character card type.
 - Add site: the placed site appears on the current dreamscape and the offer
   names the site type.
 - Browser QA through the normal player workflow on a non-5173 Vite port, per

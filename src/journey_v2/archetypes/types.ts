@@ -12,7 +12,7 @@ import type {
   RewardSelectionTrace,
 } from "../../reward-selection/types";
 
-/** The 17 offer archetypes across the 6 families. */
+/** The 13 offer archetypes across the 6 families. */
 export type MerchantArchetypeId =
   | "fit_card_grant"
   | "fit_card_draft"
@@ -23,13 +23,9 @@ export type MerchantArchetypeId =
   | "transfigured_draft"
   | "transfigure"
   | "starter_transfigure"
-  | "keyword_mod"
-  | "tribal_change"
   | "purge"
-  | "purge_replace"
   | "duplicate"
   | "dreamsign"
-  | "dreamsign_draft"
   | "add_site";
 
 const TRANSFIGURATION_MERCHANT_ARCHETYPE_IDS: ReadonlySet<MerchantArchetypeId> =
@@ -71,13 +67,9 @@ export const MERCHANT_ARCHETYPE_FAMILIES: Readonly<
   transfigured_draft: "grant",
   transfigure: "improve",
   starter_transfigure: "improve",
-  keyword_mod: "improve",
-  tribal_change: "improve",
   purge: "remove",
-  purge_replace: "remove",
   duplicate: "duplicate",
   dreamsign: "dreamsign",
-  dreamsign_draft: "dreamsign",
   add_site: "site",
 };
 

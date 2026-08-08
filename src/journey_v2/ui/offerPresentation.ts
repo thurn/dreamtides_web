@@ -46,20 +46,12 @@ export type OfferPresentation =
   | { kind: "beforeAfterMulti"; objects: readonly MerchantDeckCard[] }
   /** Purge — one pre-targeted card under a red seal. */
   | { kind: "purge"; object: MerchantDeckCard }
-  /** Purge & Replace — the banished card, an arrow, then a replacement chooser. */
-  | {
-      kind: "purgeReplace";
-      removed: MerchantDeckCard;
-      candidates: readonly MerchantChoiceCandidate[];
-    }
   /** Duplicate (chooser) — pick one of up to three; the pick renders as two copies. */
   | { kind: "duplicateChoose"; candidates: readonly MerchantChoiceCandidate[] }
   /** Duplicate (single) — one pre-targeted card shown as two copies. */
   | { kind: "duplicateSingle"; object: MerchantDeckCard }
   /** Dreamsign Gift — a pre-targeted dreamsign icon with rules on hover. */
   | { kind: "dreamsign"; object: JourneyDreamsignObject }
-  /** Dreamsign Draft — pick one of several dreamsign icons. */
-  | { kind: "dreamsignGrid"; candidates: readonly MerchantChoiceCandidate[] }
   /** Add Site — a slice of the dreamscape map with the new node inserted. */
   | { kind: "addSite"; siteType: SiteType }
   /** Anything unrecognized renders its raw objects so nothing ever blanks out. */
@@ -133,14 +125,6 @@ export function resolveOfferPresentation(offer: MerchantOffer): OfferPresentatio
         : { kind: "purge", object };
     }
 
-    case "purge_replace": {
-      const removed = firstDeckCard(offer.gameObjects);
-      if (removed === undefined || candidates === undefined) {
-        return { kind: "fallback", objects: offer.gameObjects };
-      }
-      return { kind: "purgeReplace", removed, candidates };
-    }
-
     case "duplicate": {
       if (isChooser) {
         return { kind: "duplicateChoose", candidates };
@@ -158,20 +142,14 @@ export function resolveOfferPresentation(offer: MerchantOffer): OfferPresentatio
         : { kind: "beforeAfterMulti", objects };
     }
 
-    case "transfigure":
-    case "keyword_mod":
-    case "tribal_change": {
+    case "transfigure": {
       const object = firstDeckCard(offer.gameObjects);
       return object === undefined
         ? { kind: "fallback", objects: offer.gameObjects }
         : { kind: "beforeAfter", object };
     }
 
-    case "dreamsign":
-    case "dreamsign_draft": {
-      if (isChooser) {
-        return { kind: "dreamsignGrid", candidates };
-      }
+    case "dreamsign": {
       const object = firstDreamsign(offer.gameObjects);
       return object === undefined
         ? { kind: "fallback", objects: offer.gameObjects }
@@ -224,9 +202,7 @@ export function presentationRequiresSelection(
 ): boolean {
   return (
     presentation.kind === "cardGrid" ||
-    presentation.kind === "purgeReplace" ||
-    presentation.kind === "duplicateChoose" ||
-    presentation.kind === "dreamsignGrid"
+    presentation.kind === "duplicateChoose"
   );
 }
 
@@ -237,9 +213,6 @@ export function presentationCandidates(
   switch (presentation.kind) {
     case "cardGrid":
     case "duplicateChoose":
-    case "dreamsignGrid":
-      return presentation.candidates;
-    case "purgeReplace":
       return presentation.candidates;
     default:
       return [];

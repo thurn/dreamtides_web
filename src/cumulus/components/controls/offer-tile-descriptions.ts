@@ -29,7 +29,6 @@ function variablesFor(model: OfferTileModel): Readonly<Record<string, string | n
   switch (model.kind) {
     case "card-gift":
     case "transfigure-card":
-    case "keyword-modification":
     case "purge-card":
       return { cardName: cardName(model.card) };
     case "category-draft":
@@ -46,13 +45,6 @@ function variablesFor(model: OfferTileModel): Readonly<Record<string, string | n
             firstCardName: cardName(model.cards[0]),
             secondCardName: cardName(model.cards[1]),
           };
-    case "tribal-change":
-      return {
-        cardName: cardName(model.card),
-        subtypeName: model.newCharacterSubtype,
-      };
-    case "trade-card":
-      return { cardName: cardName(model.outgoing) };
     case "duplicate-card":
       return { count: model.cards.length, cardName: cardName(model.cards[0]) };
     case "dreamsign-gift":
@@ -61,7 +53,6 @@ function variablesFor(model: OfferTileModel): Readonly<Record<string, string | n
       return { siteName: model.site.name };
     case "card-draft":
     case "transfigured-draft":
-    case "dreamsign-draft":
       return {};
   }
 }

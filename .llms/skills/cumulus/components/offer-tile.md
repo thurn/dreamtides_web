@@ -27,7 +27,7 @@ The circular symbolic Augury offer button in named 300×300 desktop and 240×240
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `id` | `string` | no | Stable identity for this visible offer. Production callers should combine the encounter signature and offer id so simultaneous offers never collide. |
-| `kind` | `"card-gift" \| "card-draft" \| "transfigured-draft" \| "category-draft" \| "copies-draft" \| "card-bundle" \| "transfigure-card" \| "keyword-modification" \| "tribal-change" \| "transfigure-starters" \| "purge-card" \| "trade-card" \| "duplicate-card" \| "dreamsign-gift" \| "dreamsign-draft" \| "add-site"` | no |  |
+| `kind` | `"card-gift" \| "card-draft" \| "transfigured-draft" \| "category-draft" \| "copies-draft" \| "card-bundle" \| "transfigure-card" \| "transfigure-starters" \| "purge-card" \| "duplicate-card" \| "dreamsign-gift" \| "add-site"` | no |  |
 
 ## Usage
 

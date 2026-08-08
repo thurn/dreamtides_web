@@ -1,1 +1,3 @@
 npm audit reports GHSA-2v37-7h3g-55p8 in the transitive development dependency nanoid (<3.3.17). Production dependencies are unaffected (`npm audit --omit=dev` reports zero vulnerabilities), and npm reports that an update is available.
+
+`cargo fmt --manifest-path tools/game-data/Cargo.toml --check` reports pre-existing formatting drift in `tools/game-data/src/models/cards.rs:173`; the Augury activation does not modify that file.

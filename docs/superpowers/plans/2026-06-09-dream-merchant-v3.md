@@ -436,8 +436,7 @@ export const MERCHANT_TUNING = {
     fit_card_grant: 10, fit_card_draft: 10, copies_draft: 6, strong_card: 8,
     premium_draft: 6, category_draft_known: 10, card_bundle: 8,
     transfigured_draft: 6, transfigure: 10, starter_transfigure: 6,
-    keyword_mod: 8, tribal_change: 6, purge: 8, purge_replace: 8,
-    duplicate: 8, dreamsign: 8, dreamsign_draft: 6, add_site: 6,
+    purge: 8, duplicate: 8, dreamsign: 8, add_site: 6,
   },
   bandFraction: 0.25, bandMinimum: 5,
   strongBandFraction: 0.15, premiumBandFraction: 0.10,
@@ -450,7 +449,6 @@ export const MERCHANT_TUNING = {
   minDeckForFit: 6, minDeckForPurge: 8,
   purgeMisfitFraction: 0.2, starterPurgeBonus: 0.25,
   copiesMultiplicityMin: 0.15, duplicateMultiplicityMin: 0.1,
-  tribalThreshold: 4,
   categoryMinPoolCards: 8, subtypeMinPoolCards: 12,
 } as const;
 ```
@@ -461,8 +459,7 @@ export type MerchantArchetypeId =
   | "fit_card_grant" | "fit_card_draft" | "copies_draft" | "strong_card"
   | "premium_draft" | "category_draft_known" | "card_bundle"
   | "transfigured_draft" | "transfigure" | "starter_transfigure"
-  | "keyword_mod" | "tribal_change" | "purge" | "purge_replace"
-  | "duplicate" | "dreamsign" | "dreamsign_draft" | "add_site";
+  | "purge" | "duplicate" | "dreamsign" | "add_site";
 
 export type MerchantOfferFamily =
   | "grant" | "improve" | "remove" | "duplicate" | "dreamsign" | "site";
@@ -683,34 +680,7 @@ Tests by bug class:
 - Already-transfigured entries never appear (bug: double transfiguration,
   which `DeckEntry` cannot represent).
 
-### Task 12: Improve family — keyword_mod, tribal_change
-
-**Files:** Modify `src/journey_v2/archetypes/improve.ts` + test.
-
-`keyword_mod`: flat (entry, variant) pairs per spec — add_reclaim for Events
-with no base or modified Reclaim, add_fast for non-fast Events, reduce_reclaim
-for Events with effective Reclaim cost > 1 (account for
-`keywordModification` already on the entry via the effective card). Uniform
-seeded sample; payload `change_deck_entry_keywords`
-(`{ reclaim: 1 }` / `{ fast: true }` / `{ setReclaim: cost - 1 }`).
-`tribal_change`: tribes `["Warrior", "Spirit Animal", "Survivor", "Outsider"]`
-as a constant in `improve.ts`; active at >= `tribalThreshold` Characters of
-that effective subtype; candidates (off-tribe Character entry with no prior
-`typeChange`, active tribe) ranked by `centrality`, band-sample 1; payload
-`change_deck_entry_type` with
-`{ predicateId: "merchant:tribal:" + tribe, cardType: "Character", subtype: tribe, label: "Becomes a " + tribe }`.
-
-Tests by bug class:
-- keyword_mod respects existing modifications: an Event whose entry already
-  has `keywordModification.reclaim` set does not pair with add_reclaim (bug:
-  stacking Reclaim 1 onto modified entries).
-- tribal threshold boundary: 3 in-tribe Characters -> ineligible, 4 ->
-  eligible (boundary bug).
-- tribal candidates exclude in-tribe Characters, Events, and entries with a
-  prior typeChange; applied state preserves cardType "Character" (contract
-  through apply).
-
-### Task 13: Remove + duplicate families — purge, purge_replace, duplicate
+### Task 13: Remove + duplicate families — purge, duplicate
 
 **Files:** Create `src/journey_v2/archetypes/remove.ts`,
 `src/journey_v2/archetypes/duplicate.ts` + tests.
@@ -719,9 +689,7 @@ Tests by bug class:
 bottom `purgeMisfitFraction` of `fitLooByEntry` (which already excludes
 no-signal cards); Nightmare excluded; rank by misfit with `starterPurgeBonus`;
 band-sample 1 from the worst band; payload `remove_deck_entry`; eligible at
-deck >= `minDeckForPurge` with >= 1 candidate. `purge_replace`: purge target
-selected identically; chooser of 4 fit-band replacements; each chooser
-candidate's payload = composite [remove, add]; eligible when both halves are.
+deck >= `minDeckForPurge` with >= 1 candidate.
 `duplicate`: non-starter entries with `multiplicityOf >=
 duplicateMultiplicityMin`, signal `duplicateBlend` over (multiplicity,
 fitLoo); band-sample up to 3 as chooser (1 candidate renders as direct
@@ -733,23 +701,18 @@ Tests by bug class:
 - Purge target diversity over 30 seeds on a fixture deck with 1 starter + 3
   bottom-band misfits: >= 2 distinct targets offered (bug: argmax on worst
   card).
-- purge_replace accept removes exactly one entry and adds exactly one, net
-  deck size unchanged (contract through apply).
 - duplicate chooser candidates are deck entries, not pool cards, and the
   applied state gains one entry with the same cardNumber (bug: duplicating
   into the wrong identity space).
 
-### Task 14: Dreamsign draft + add_site
+### Task 14: Add site
 
-**Files:** Modify `src/journey_v2/archetypes/dreamsign.ts`, create
-`src/journey_v2/archetypes/site.ts`, modify
+**Files:** Create `src/journey_v2/archetypes/site.ts`, modify
 `src/state/journey-state-actions.ts`, `src/types/journey.ts` (only if SiteState
 creation needs a helper), `src/journey_v2/encounter/resolveMerchantOffer.ts`
 + tests.
 
-`dreamsign_draft`: band-sample 2–4 unheld dreamsigns (count seeded, capped by
-band size; eligible at >= 2 unheld) as a face-up chooser. `add_site`: the
-placeable list constant `MERCHANT_PLACEABLE_SITE_TYPES: SiteType[]` =
+The placeable list constant `MERCHANT_PLACEABLE_SITE_TYPES: SiteType[]` =
 `["Shop", "SpecialtyShop", "Purge", "Essence", "Transfiguration",
 "DreamsignOffering", "DreamsignDraft", "Duplication", "Reward", "Cleanse"]`;
 uniform seeded sample; payload `{ kind: "add_site", siteType }`; title names
@@ -774,8 +737,6 @@ Tests by bug class:
 - v1 path still works: the existing journeyMutations test suite stays green
   after the extraction (refactor-safety; run the existing tests, do not
   write new v1 tests).
-- dreamsign_draft chooser: 2–4 distinct unheld dreamsigns; a held dreamsign
-  id never appears (bug: offering what the player has).
 
 ---
 

@@ -57,8 +57,6 @@ import { grantCandidatePool } from "../src/journey_v2/archetypes/grant";
 import { buildCategoryUniverse } from "../src/journey_v2/archetypes/categories";
 import {
   transfigureCandidatePairs,
-  keywordModCandidatePairs,
-  tribalChangeCandidatePairs,
   transfigurationBenefit,
 } from "../src/journey_v2/archetypes/improve";
 import { purgeCandidates } from "../src/journey_v2/archetypes/remove";
@@ -354,7 +352,7 @@ export function outcomeKey(encounter: MerchantEncounter): string {
  * the entire population lands at 50.
  *
  * Mid-rank (rather than strict-less-than) matters for archetypes whose candidate
- * population has a large tied cluster. `purge`/`purge_replace` rank starters at a
+ * population has a large tied cluster. `purge` ranks starters at a
  * fixed maximum misfit score, so a purge target tied at that maximum is the
  * worst-fitting card in the deck and must read as a HIGH misfit percentile.
  * Strict-less-than would count only the (few) non-tied candidates below it and
@@ -464,7 +462,7 @@ export const DEFAULT_DESIRABILITY_TARGET: DesirabilityTarget = { median: 75, flo
 /**
  * Per-archetype desirability target overrides, with their justification.
  *
- * `dreamsign` / `dreamsign_draft`: the dreamsign match signal is intentionally
+ * `dreamsign`: the dreamsign match signal is intentionally
  * flat and tie-heavy — 154 profiles, 54 of them featureless (deck-independent
  * constant scores), graded in only three quality tiers — and the band is
  * deliberately loose (`dreamsignBandFraction = 0.4`) so generic dreamsigns "stay
@@ -481,7 +479,6 @@ export const DESIRABILITY_TARGETS: Partial<
   Record<MerchantArchetypeId, DesirabilityTarget>
 > = {
   dreamsign: { median: 65, floor: 40 },
-  dreamsign_draft: { median: 65, floor: 40 },
 };
 
 /** Card-grant archetypes scored by fit; strong by a fit-led blend, premium by quality. */
@@ -544,7 +541,7 @@ function grantSignalByUuid(
  * Computes the desirability percentile for one offer: the percentile of its
  * representative target's signal within the archetype's full candidate-signal
  * population. Returns null for archetypes with no card/deck-target signal
- * (`add_site`, `starter_transfigure`, `keyword_mod` — uniform-sampled, no
+ * (`add_site` and `starter_transfigure` — uniform-sampled, no
  * meaningful percentile), so they are excluded from the metric.
  */
 export function desirabilityPercentile(
@@ -619,17 +616,7 @@ export function desirabilityPercentile(
     return percentileOf(score(match.benefit, match.deckCard.card), population);
   }
 
-  if (a === "tribal_change") {
-    const pairs = tribalChangeCandidatePairs(context);
-    if (pairs.length === 0) return null;
-    const population = pairs.map((p) => centrality(p.deckCard.card, deck, context.fitModel));
-    const [entryId, tribe] = offer.targetKey.split(":");
-    const match = pairs.find((p) => p.entryId === entryId && p.tribe === tribe);
-    if (match === undefined) return null;
-    return percentileOf(centrality(match.deckCard.card, deck, context.fitModel), population);
-  }
-
-  if (a === "purge" || a === "purge_replace") {
+  if (a === "purge") {
     // Spec: "for purges, the target's misfit percentile." The population is the
     // WHOLE deck's misfit ranking, not the pre-filtered purge candidate set:
     // purge intentionally targets the worst-fitting cards, so the desirability
@@ -659,7 +646,7 @@ export function desirabilityPercentile(
     return percentileOf(Math.max(...offered), population);
   }
 
-  if (a === "dreamsign" || a === "dreamsign_draft") {
+  if (a === "dreamsign") {
     const profiles = context.dreamsignProfiles;
     const population = context.candidateDreamsigns.map((t) =>
       dreamsignMatchScore(profiles?.get(t.id), deck),
@@ -671,7 +658,7 @@ export function desirabilityPercentile(
     return percentileOf(Math.max(...offered), population);
   }
 
-  // add_site / starter_transfigure / keyword_mod: uniform sampling, no percentile.
+  // add_site / starter_transfigure: uniform sampling, no percentile.
   return null;
 }
 
@@ -1011,15 +998,12 @@ const GRANT_DRAFT_ARCHETYPES = new Set<MerchantArchetypeId>([
   "category_draft_known",
   "card_bundle",
   "transfigured_draft",
-  "purge_replace",
 ]);
 
 const DECK_TARGET_ARCHETYPES: readonly MerchantArchetypeId[] = [
   "purge",
   "duplicate",
   "transfigure",
-  "keyword_mod",
-  "tribal_change",
 ];
 
 export interface ContentCoverageReport {
@@ -1091,9 +1075,6 @@ function deckTargetKey(offer: MerchantOffer): string | null {
     case "duplicate":
       return offer.targetKey.split(",")[0]; // first/representative entryId
     case "transfigure":
-    case "keyword_mod":
-      return offer.targetKey.split(":")[0]; // entryId
-    case "tribal_change":
       return offer.targetKey.split(":")[0]; // entryId
     default:
       return null;
@@ -1238,7 +1219,7 @@ export function computeContentCoverage(
         transfigCounts.set(t, (transfigCounts.get(t) ?? 0) + 1);
         transfigTotal += 1;
       }
-      if (offer.archetypeId === "dreamsign" || offer.archetypeId === "dreamsign_draft") {
+      if (offer.archetypeId === "dreamsign") {
         for (const id of offer.targetKey.split(",")) {
           if (id.length > 0) dreamsignOffered.add(id);
         }

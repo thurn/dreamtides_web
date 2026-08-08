@@ -7,7 +7,7 @@ import { parseRewardSelectionData } from "./reward-selection-data";
 describe("generated game configuration trust boundaries", () => {
   it("accepts the generated Reward Selection and Augury artifacts", () => {
     expect(parseRewardSelectionData(rewardSelectionJson).schemaVersion).toBe(1);
-    expect(parseAuguryData(auguryJson).archetypes).toHaveLength(17);
+    expect(parseAuguryData(auguryJson).archetypes).toHaveLength(13);
   });
 
   it("rejects a mismatched fold hash", () => {

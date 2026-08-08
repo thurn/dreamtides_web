@@ -12,13 +12,10 @@ export interface RewardSelectionTuning {
   strongBandMinimum: number;
   dreamsignBandFraction: number;
   dreamsignBandMinimum: number;
-  tribalBandFraction: number;
-  tribalBandMinimum: number;
   minDeckForFit: number;
   minDeckForPurge: number;
   purgeMisfitFraction: number;
   starterPurgeBonus: number;
-  tribalThreshold: number;
   subtypeMinPoolCards: number;
   bundleGrowthBandSize: number;
   strongBlend: Readonly<{ fit: number; quality: number }>;
@@ -55,7 +52,6 @@ export interface RewardSelectionTuning {
     flat: Readonly<Partial<Record<TransfigurationType, number>>>;
   }>;
   placeableSiteTypes: readonly SiteType[];
-  tribes: readonly string[];
 }
 
 /** Validated browser data compiled from data/reward_selection.toml. */

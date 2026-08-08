@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { applyMerchantPayloadToState } from "../encounter/resolveMerchantOffer";
 import { fitLooByEntry } from "../signals/fit";
 import { merchantRng } from "../signals/rng";
 import { buildMerchantContext } from "../context/buildMerchantContext";
@@ -15,7 +14,7 @@ import type { CardData } from "../../types/cards";
 import type { DeckEntry } from "../../types/journey";
 import type { FitModel } from "../../draft/replay/fit-model";
 import type { MerchantContext } from "../types";
-import { purgeBuilder, purgeReplaceBuilder } from "./remove";
+import { purgeBuilder } from "./remove";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardId } from "../../types/card-identity";
 import { NIGHTMARE_CARD_ID, NIGHTMARE_CARD_NAME } from "../../data/nightmare";
@@ -383,108 +382,5 @@ describe("purge — eligibility", () => {
       corpusCards,
     });
     expect(purgeBuilder.eligible(context)).toBe(true);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// Bug-class: purge_replace net deck size unchanged (via applyMerchantPayloadToState)
-// ---------------------------------------------------------------------------
-
-describe("purge_replace — accept removes exactly one entry and adds exactly one", () => {
-  it("net deck size is unchanged after accepting a purge_replace offer", () => {
-    // Need 8 deck cards + a pool for replacements.
-    const starterCard = makeMerchantTestCard({
-      id: uuid(700),
-      cardNumber: 700,
-      isStarter: true,
-    });
-    const deckOtherCards = Array.from({ length: 7 }, (_, i) =>
-      makeMerchantTestCard({ id: uuid(701 + i), cardNumber: 701 + i }),
-    );
-    // Pool cards for replacement (non-starter, not in deck)
-    const poolCards = Array.from({ length: 20 }, (_, i) =>
-      makeMerchantTestCard({ id: uuid(800 + i), cardNumber: 800 + i }),
-    );
-
-    const allCards = [starterCard, ...deckOtherCards, ...poolCards];
-    const deckEntries = [
-      makeMerchantTestDeckEntry({ entryId: "starter-e", cardNumber: 700 }),
-      ...deckOtherCards.map((c, i) =>
-        makeMerchantTestDeckEntry({ entryId: `de${String(i)}`, cardNumber: c.cardNumber }),
-      ),
-    ];
-
-    const corpusCards: Record<string, { quality: number; df: number }> = {};
-    [starterCard, ...deckOtherCards, ...poolCards].forEach((c) => {
-      corpusCards[c.id] = { quality: 0.5, df: 10 };
-    });
-
-    const journeyContent = makeMerchantTestContent({
-      cards: allCards,
-      merchantCorpus: makeMerchantTestCorpus({ cards: corpusCards }),
-    });
-    const journeyState = makeMerchantTestJourneyState({ deck: [...deckEntries] });
-
-    const context = buildMerchantContext({
-      journeyState,
-      journeyContent,
-      site: makeMerchantTestSite(),
-    });
-
-    expect(purgeReplaceBuilder.eligible(context)).toBe(true);
-
-    const initialDeckSize = journeyState.deck.length;
-
-    // Find a seed that builds a valid offer
-    let foundOffer = false;
-    for (let seed = 0; seed < 10; seed += 1) {
-      const rng = merchantRng("purge-replace-apply-test", String(seed));
-      const offer = purgeReplaceBuilder.build(context, rng);
-      if (offer === null) continue;
-
-      // For a direct offer (applyPayload): pick the first candidate
-      let payload = offer.applyPayload;
-      if (payload === undefined && offer.choiceRequest !== undefined) {
-        payload = offer.choiceRequest.candidates[0]?.applyPayload;
-      }
-      if (payload === undefined) continue;
-
-      const resultState = applyMerchantPayloadToState({
-        state: journeyState,
-        journeyContent,
-        payload,
-      });
-
-      expect(resultState).not.toBeNull();
-      if (resultState !== null) {
-        expect(resultState.deck.length).toBe(initialDeckSize);
-        foundOffer = true;
-      }
-      break;
-    }
-
-    expect(foundOffer).toBe(true);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// Bug-class: purge_replace eligibility — both halves must be eligible
-// ---------------------------------------------------------------------------
-
-describe("purge_replace — eligibility requires both halves", () => {
-  it("is ineligible when deck is too small for purge (< 8)", () => {
-    // 7 starters
-    const cards = Array.from({ length: 7 }, (_, i) =>
-      makeMerchantTestCard({ id: uuid(900 + i), cardNumber: 900 + i, isStarter: true }),
-    );
-    const entries = cards.map((c, i) =>
-      makeMerchantTestDeckEntry({ entryId: `e${String(i)}`, cardNumber: c.cardNumber }),
-    );
-    const corpusCards: Record<string, { quality: number; df: number }> = {};
-    cards.forEach((c) => {
-      corpusCards[c.id] = { quality: 0.5, df: 10 };
-    });
-    const context = makeContext({ cards, deckEntries: entries, corpusCards });
-    expect(purgeReplaceBuilder.eligible(context)).toBe(false);
   });
 });
