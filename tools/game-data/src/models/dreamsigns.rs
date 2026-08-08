@@ -141,8 +141,8 @@ fn validate_definitions(definitions: &[DreamsignDefinition]) -> Result<()> {
                 bail!("Dreamsign {} has an empty {field}", definition.id);
             }
         }
-        for (index, paragraph) in definition.ability_text.iter().enumerate() {
-            if paragraph.trim().is_empty() {
+        for (index, ability) in definition.ability_text.iter().enumerate() {
+            if ability.trim().is_empty() {
                 bail!(
                     "Dreamsign {} ability_text[{index}] must be non-empty",
                     definition.id
@@ -230,7 +230,7 @@ mod tests {
     }
 
     #[test]
-    fn lowers_ordered_definitions_paragraphs_and_internal_metadata() {
+    fn lowers_ordered_definitions_abilities_and_internal_metadata() {
         let (definitions, metadata) = fixture();
         let output = lower(definitions, metadata).unwrap();
         let records = output["dreamsign"].as_array().unwrap();
@@ -963,6 +963,17 @@ mod tests {
         ),
     ];
 
+    const LEGACY_ABILITY_TEXT_MIGRATIONS: &[(&str, &str)] = &[
+        (
+            "6B95D6BD-C970-4465-9536-4F21E7630D0A",
+            "When drafting cards, see 1 fewer choice.\n\n▸Dawn: Gain 1●.",
+        ),
+        (
+            "B8590328-CA72-4869-A795-C7F4B6802BED",
+            "Draw two additional cards during your Draw phase.\n\nAt the end of each turn, discard your hand.",
+        ),
+    ];
+
     #[test]
     #[ignore = "real-catalog parity probe for canonical Dreamsign review"]
     fn real_catalog_candidate_preserves_complete_compatibility_semantics() {
@@ -985,8 +996,13 @@ mod tests {
         let identity_map: IndexMap<_, _> = LEGACY_IDENTITY_MAP.iter().copied().collect();
         assert_eq!(identity_map.len(), LEGACY_IDENTITY_MAP.len());
         assert_eq!(identity_map.len(), legacy.dreamsign.len());
+        let ability_text_migrations: IndexMap<_, _> =
+            LEGACY_ABILITY_TEXT_MIGRATIONS.iter().copied().collect();
         let mut normalized = legacy.clone();
         for record in &mut normalized.dreamsign {
+            if let Some(rendered_text) = ability_text_migrations.get(record.id.as_str()) {
+                record.rendered_text = (*rendered_text).to_string();
+            }
             record.id = identity_map
                 .get(record.id.as_str())
                 .unwrap_or_else(|| panic!("missing legacy Dreamsign identity {}", record.id))

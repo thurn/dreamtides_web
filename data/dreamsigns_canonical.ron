@@ -302,8 +302,7 @@
   DreamsignDefinition(
     name: "Mushroom Caps",
     id: "6b95d6bd-c970-4465-9536-4f21e7630d0a",
-    // The leading newline preserves the compatibility source's three-newline paragraph separator.
-    ability_text: ["When drafting cards, see 1 fewer choice.", "\n▸Dawn: Gain 1●."],
+    ability_text: ["When drafting cards, see 1 fewer choice.", "▸Dawn: Gain 1●."],
     art: (image: "Champignon.png"),
   ),
 
@@ -1179,7 +1178,8 @@
     name: "Antler",
     id: "b8590328-ca72-4869-a795-c7f4b6802bed",
     ability_text: [
-      "Draw two additional cards during your Draw phase. At the end of each turn, discard your hand.",
+      "Draw two additional cards during your Draw phase.",
+      "At the end of each turn, discard your hand.",
     ],
     art: (image: "horns.png"),
   ),
