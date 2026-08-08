@@ -29,6 +29,7 @@ export interface CardEditorGridProps {
   checkboxTag: string;
   showFontSize: boolean;
   showGlossaryInfoOnHover: boolean;
+  showAmplifiedText: boolean;
   eagerRulesFit: boolean;
   availableTags: EditorTag[];
   availableTides: EditorTag[];
@@ -83,6 +84,7 @@ export default function CardEditorGrid({
   checkboxTag,
   showFontSize,
   showGlossaryInfoOnHover,
+  showAmplifiedText,
   eagerRulesFit,
   availableTags,
   availableTides,
@@ -151,12 +153,17 @@ export default function CardEditorGrid({
         cardId: card.id,
         field: "rendered-text",
       })}
+      amplifiedTextSaveEntry={fieldSaveEntry(saveState, {
+        cardId: card.id,
+        field: "amplified-text",
+      })}
       tagEditing={tagEditing}
       tideEditing={tideEditing}
       artEditing={artEditing}
       checkboxTag={checkboxTag}
       showFontSize={showFontSize}
       showGlossaryInfoOnHover={showGlossaryInfoOnHover}
+      showAmplifiedText={showAmplifiedText}
       eagerRulesFit={eagerRulesFit}
       availableTags={availableTags}
       availableTides={availableTides}

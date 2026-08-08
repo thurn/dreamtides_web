@@ -6,7 +6,8 @@ export type EditableCardField =
   | "subtype"
   | "name"
   | "spark"
-  | "rendered-text";
+  | "rendered-text"
+  | "amplified-text";
 
 /** The card types a card may be retyped between in the focused editor. */
 export const CARD_TYPE_OPTIONS: readonly CardType[] = ["Character", "Event"];
@@ -36,6 +37,7 @@ export interface EditorCardRecord {
   name: string;
   spark: EditorFieldValue;
   "rendered-text": string;
+  "amplified-text": string;
   tags: string[];
   tides: string[];
   /**
@@ -151,6 +153,10 @@ export interface EditorDisplayState {
    * explanatory Info Cards.
    */
   showGlossaryInfoOnHover: boolean;
+  /** Render amplified rules text in each card preview instead of base rules text. */
+  showAmplifiedText: boolean;
+  /** Keep only cards whose canonical source defines non-blank amplified text. */
+  amplifiedOnly: boolean;
   sort: EditorSortField;
   dir: EditorSortDirection;
   size: EditorCardSize;

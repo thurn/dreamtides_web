@@ -13,6 +13,7 @@ function card(id: string, name: string, cardNumber: number): EditorCardRecord {
     name,
     spark: 1,
     "rendered-text": "",
+    "amplified-text": "",
     tags: [],
     tides: [],
     mtgName: "",

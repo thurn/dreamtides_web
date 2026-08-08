@@ -71,6 +71,8 @@ describe("editor URL display state", () => {
       checkboxTag: "",
       showFontSize: false,
       showGlossaryInfoOnHover: false,
+      showAmplifiedText: false,
+      amplifiedOnly: false,
       sort: "cost",
       dir: "desc",
       size: "small",
@@ -214,6 +216,22 @@ describe("editor URL display state", () => {
     expect(params.get("glossaryhover")).toBe("1");
     expect(parseEditorDisplayState(params).showGlossaryInfoOnHover).toBe(true);
     expect(parseEditorDisplayState("").showGlossaryInfoOnHover).toBe(false);
+  });
+
+  it("round-trips amplified preview and filtering", () => {
+    const state = {
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      showAmplifiedText: true,
+      amplifiedOnly: true,
+    };
+    const params = serializeEditorDisplayState(state);
+
+    expect(params.get("amplified")).toBe("1");
+    expect(params.get("amplifiedonly")).toBe("1");
+    expect(parseEditorDisplayState(params)).toEqual(state);
+    expect(parseEditorDisplayState("?amplified=0&amplifiedonly=0")).toEqual(
+      DEFAULT_EDITOR_DISPLAY_STATE,
+    );
   });
 
   it("round-trips the font-size overlay toggle", () => {

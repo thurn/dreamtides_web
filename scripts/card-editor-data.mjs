@@ -25,6 +25,7 @@ export const EDITABLE_CARD_FIELDS = new Set([
   "name",
   "spark",
   "rendered-text",
+  "amplified-text",
   "tags",
   "tides",
   "art",
@@ -147,6 +148,7 @@ function editorRecordFromCard(card, popularityCounts) {
     name: card.name,
     spark: card.spark ?? "",
     "rendered-text": card["rendered-text"] ?? "",
+    "amplified-text": card["amplified-text"] ?? "",
     tags: normalizeTagList(card.tags),
     tides: normalizeTagList(card.tides),
     mtgName: typeof card["mtg-name"] === "string" ? card["mtg-name"] : "",
@@ -373,9 +375,15 @@ export function validateCardEdit(field, rawValue) {
     return validationSuccess(field, rawValue);
   }
 
-  if (field === "rendered-text") {
+  if (field === "rendered-text" || field === "amplified-text") {
     if (typeof rawValue !== "string") {
-      return validationFailure(field, "Rules text must be text.", rawValue);
+      return validationFailure(
+        field,
+        field === "amplified-text"
+          ? "Amplified text must be text."
+          : "Rules text must be text.",
+        rawValue,
+      );
     }
 
     return validationSuccess(field, rawValue);
@@ -799,7 +807,7 @@ export function patchRenderedCardsToml(source, { cardId, field, value }) {
     validateEdit: validateCardEdit,
     field,
     value,
-    optionalFields: new Set(["art"]),
+    optionalFields: new Set(["art", "amplified-text"]),
     notFoundNoun: "Card",
   });
 }

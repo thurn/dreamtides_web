@@ -109,6 +109,8 @@ function displayStateDataAttributes(displayState: EditorDisplayState) {
     "data-editor-show-glossary-info-on-hover": String(
       displayState.showGlossaryInfoOnHover,
     ),
+    "data-editor-show-amplified-text": String(displayState.showAmplifiedText),
+    "data-editor-amplified-only": String(displayState.amplifiedOnly),
     "data-editor-sort": displayState.sort,
     "data-editor-dir": displayState.dir,
     "data-editor-size": displayState.size,
@@ -120,7 +122,7 @@ function cardSearchText(
   scope: EditorDisplayState["searchScope"],
 ): string {
   if (scope === "all") {
-    return `${card.name} ${card["rendered-text"]} ${card.preview.name} ${card.preview.renderedText}`;
+    return `${card.name} ${card["rendered-text"]} ${card["amplified-text"]} ${card.preview.name} ${card.preview.renderedText} ${card.preview.amplifiedText ?? ""}`;
   }
 
   if (scope === "mtg") {
@@ -251,6 +253,13 @@ function filteredAndSortedCards(
         return false;
       }
 
+      if (
+        displayState.amplifiedOnly &&
+        card["amplified-text"].trim() === ""
+      ) {
+        return false;
+      }
+
       // Tag filters use AND semantics: a card must carry every selected tag.
       if (
         displayState.tagFilters.length > 0 &&
@@ -361,6 +370,8 @@ function confirmedFieldValue(
       return card.spark;
     case "rendered-text":
       return card["rendered-text"];
+    case "amplified-text":
+      return card["amplified-text"];
     case "subtype":
       return card.subtype;
   }
@@ -388,7 +399,7 @@ function validateFieldSave(
     return { ok: true, value: String(value) };
   }
 
-  if (field === "rendered-text") {
+  if (field === "rendered-text" || field === "amplified-text") {
     return { ok: true, value: String(value) };
   }
 
@@ -423,6 +434,7 @@ function validateFieldSave(
 function cardPreviewWithDrafts(
   preview: CardData,
   drafts: Record<string, EditableFieldValue>,
+  showAmplifiedText: boolean,
 ): CardData {
   const next: CardData = { ...preview };
   const name = drafts.name;
@@ -437,9 +449,13 @@ function cardPreviewWithDrafts(
   if (typeof subtype === "string") {
     next.subtype = subtype;
   }
-  const renderedText = drafts["rendered-text"];
+  const renderedText = showAmplifiedText
+    ? drafts["amplified-text"]
+    : drafts["rendered-text"];
   if (typeof renderedText === "string") {
     next.renderedText = renderedText;
+  } else if (showAmplifiedText) {
+    next.renderedText = preview.amplifiedText ?? "";
   }
   return next;
 }
@@ -676,6 +692,16 @@ export default function CardEditorApp({
     ) {
       logEvent("card_editor_glossary_hover_changed", {
         enabled: nextState.showGlossaryInfoOnHover,
+      });
+    }
+    if (nextState.showAmplifiedText !== displayState.showAmplifiedText) {
+      logEvent("card_editor_amplified_preview_changed", {
+        enabled: nextState.showAmplifiedText,
+      });
+    }
+    if (nextState.amplifiedOnly !== displayState.amplifiedOnly) {
+      logEvent("card_editor_amplified_filter_changed", {
+        enabled: nextState.amplifiedOnly,
       });
     }
     setDisplayState(nextState);
@@ -1211,6 +1237,7 @@ export default function CardEditorApp({
                 checkboxTag={displayState.checkboxTag}
                 showFontSize={displayState.showFontSize}
                 showGlossaryInfoOnHover={displayState.showGlossaryInfoOnHover}
+                showAmplifiedText={displayState.showAmplifiedText}
                 eagerRulesFit={sortByFontSize}
                 availableTags={tags}
                 availableTides={tides}
@@ -1349,6 +1376,18 @@ export default function CardEditorApp({
               onCommit: (value) =>
                 handleFieldCommit(artEditorCard, "rendered-text", value),
             },
+            {
+              field: "amplified-text",
+              label: "Amplified text",
+              kind: "multiline",
+              value: artEditorCard["amplified-text"],
+              saveEntry: fieldSaveEntry(saveState, {
+                cardId: artEditorCard.id,
+                field: "amplified-text",
+              }),
+              onCommit: (value) =>
+                handleFieldCommit(artEditorCard, "amplified-text", value),
+            },
           ]}
           tagSections={[
             {
@@ -1392,7 +1431,11 @@ export default function CardEditorApp({
           renderPreview={(live) => (
             <CardView
               card={{
-                ...cardPreviewWithDrafts(artEditorCard.preview, live.fieldDrafts),
+                ...cardPreviewWithDrafts(
+                  artEditorCard.preview,
+                  live.fieldDrafts,
+                  displayState.showAmplifiedText,
+                ),
                 art: live.art,
                 imageNumber: live.imageNumber,
               }}

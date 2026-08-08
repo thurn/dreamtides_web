@@ -264,6 +264,10 @@ current history entry.
   direction is omitted.
 - `size=small`, `size=medium`, or `size=large` selects the card preview size.
   The default `medium` size is omitted.
+- `amplified=1` renders each card's amplified rules text in its card face and
+  makes that text available for inline editing. The default base-rules view is
+  omitted.
+- `amplifiedonly=1` filters the grid to cards with non-blank amplified text.
 
 Example:
 

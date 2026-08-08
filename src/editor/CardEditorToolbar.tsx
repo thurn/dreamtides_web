@@ -177,6 +177,7 @@ export default function CardEditorToolbar({
       tagFilters: [],
       excludedTagFilters: [],
       tideFilters: [],
+      amplifiedOnly: false,
       sort: DEFAULT_EDITOR_DISPLAY_STATE.sort,
       dir: DEFAULT_EDITOR_DISPLAY_STATE.dir,
     });
@@ -184,6 +185,40 @@ export default function CardEditorToolbar({
 
   const barExtras = (
     <>
+      <label
+        title="Show only cards with amplified text"
+        style={{
+          ...inputStyle,
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "6px",
+          cursor: "pointer",
+          fontSize: "0.78rem",
+          fontWeight: 700,
+          whiteSpace: "nowrap",
+        }}
+      >
+        <input
+          type="checkbox"
+          aria-label="Show only cards with amplified text"
+          checked={displayState.amplifiedOnly}
+          onChange={(event) =>
+            updateDisplayState({ amplifiedOnly: event.target.checked })
+          }
+        />
+        Only amplified
+      </label>
+
+      <ModeToggle
+        active={displayState.showAmplifiedText}
+        icon="✦"
+        label="Amplified"
+        title="Show amplified text on card previews"
+        onToggle={() =>
+          updateDisplayState({ showAmplifiedText: !displayState.showAmplifiedText })
+        }
+      />
+
       <label
         title="Show glossary definitions in Info Cards when hovering cards"
         style={{

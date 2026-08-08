@@ -28,6 +28,7 @@ name = "First Card"
 id = "${FIRST_ID}"
 tides = ["event_chain"]
 rendered-text = "Draw a card."
+amplified-text = "Draw two cards."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -133,11 +134,13 @@ describe("readEditorCards", () => {
       name: "First Card",
       spark: "",
       "rendered-text": "Draw a card.",
+      "amplified-text": "Draw two cards.",
       preview: transformCard(cards[0].source),
     });
     expect(cards[1]).toMatchObject({
       id: SECOND_ID,
       cardNumber: 7,
+      "amplified-text": "",
     });
   });
 
@@ -254,11 +257,22 @@ describe("validateCardEdit", () => {
   });
 
   it("rejects non-string values for text fields", () => {
-    for (const field of ["name", "subtype", "rendered-text"]) {
+    for (const field of ["name", "subtype", "rendered-text", "amplified-text"]) {
       expect(validateCardEdit(field, null)).toMatchObject({ ok: false, field });
       expect(validateCardEdit(field, ["text"]).ok).toBe(false);
       expect(validateCardEdit(field, { text: "value" }).ok).toBe(false);
     }
+  });
+
+  it("accepts blank and multiline amplified text", () => {
+    expect(validateCardEdit("amplified-text", "")).toMatchObject({
+      ok: true,
+      value: "",
+    });
+    expect(validateCardEdit("amplified-text", "First.\n\nSecond.")).toMatchObject({
+      ok: true,
+      value: "First.\n\nSecond.",
+    });
   });
 
   it("normalizes and clamps art crop values", () => {

@@ -3,7 +3,8 @@ export type EditableCardField =
   | "subtype"
   | "name"
   | "spark"
-  | "rendered-text";
+  | "rendered-text"
+  | "amplified-text";
 
 export const EDITABLE_CARD_FIELDS: ReadonlySet<EditableCardField>;
 
@@ -17,6 +18,7 @@ export interface CardEditorRecord {
   name: string;
   spark: number | string;
   "rendered-text": string;
+  "amplified-text": string;
   source: Record<string, unknown>;
   preview: Record<string, unknown>;
 }

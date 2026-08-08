@@ -26,6 +26,7 @@ export interface EditableCardProps {
   sparkSaveEntry: EditableFieldSaveEntry | null;
   subtypeSaveEntry: EditableFieldSaveEntry | null;
   rulesTextSaveEntry: EditableFieldSaveEntry | null;
+  amplifiedTextSaveEntry: EditableFieldSaveEntry | null;
   tagEditing: boolean;
   tideEditing: boolean;
   artEditing: boolean;
@@ -42,6 +43,8 @@ export interface EditableCardProps {
   showFontSize: boolean;
   /** Whether cards with glossary terms reveal their Info Cards on hover. */
   showGlossaryInfoOnHover: boolean;
+  /** Show and inline-edit amplified rules text in the card face. */
+  showAmplifiedText: boolean;
   /**
    * Measure the rules-text fit immediately rather than on scroll. Set while the
    * grid sorts by font size so every card contributes a stable sort key.
@@ -250,12 +253,14 @@ export default function EditableCard({
   sparkSaveEntry,
   subtypeSaveEntry,
   rulesTextSaveEntry,
+  amplifiedTextSaveEntry,
   tagEditing,
   tideEditing,
   artEditing,
   checkboxTag,
   showFontSize,
   showGlossaryInfoOnHover,
+  showAmplifiedText,
   eagerRulesFit,
   availableTags,
   availableTides,
@@ -371,7 +376,16 @@ export default function EditableCard({
   // While the rules-text field is open, grow the card's text box so the inline
   // editing textarea has room to show several lines instead of the three-line
   // display cap.
-  const rulesTextEditing = rulesTextSaveEntry?.status === "editing";
+  const visibleRulesSaveEntry = showAmplifiedText
+    ? amplifiedTextSaveEntry
+    : rulesTextSaveEntry;
+  const visibleRulesField: EditableCardField = showAmplifiedText
+    ? "amplified-text"
+    : "rendered-text";
+  const confirmedVisibleRulesText = showAmplifiedText
+    ? card["amplified-text"]
+    : card["rendered-text"];
+  const rulesTextEditing = visibleRulesSaveEntry?.status === "editing";
   const visibleName = String(nameSaveEntry?.draftValue ?? card.name);
   const visibleEnergy = energyPreviewValue(
     energySaveEntry?.draftValue ?? card["energy-cost"],
@@ -383,7 +397,7 @@ export default function EditableCard({
   const visibleSparkVariable = isVariableSparkValue(sparkDraftValue);
   const visibleSubtype = String(subtypeSaveEntry?.draftValue ?? card.subtype);
   const visibleRulesText = String(
-    rulesTextSaveEntry?.draftValue ?? card["rendered-text"],
+    visibleRulesSaveEntry?.draftValue ?? confirmedVisibleRulesText,
   );
   const visibleCard = {
     ...card.preview,
@@ -491,7 +505,11 @@ export default function EditableCard({
     },
     rulesText: (_context, defaultNode) => (
       <EditableField
-        {...fieldProps("rendered-text", card["rendered-text"], rulesTextSaveEntry)}
+        {...fieldProps(
+          visibleRulesField,
+          confirmedVisibleRulesText,
+          visibleRulesSaveEntry,
+        )}
         mode="multiline"
       >
         {defaultNode}
@@ -530,6 +548,7 @@ export default function EditableCard({
         ref={cardRef}
         aria-label={visibleName}
         data-editor-card-id={card.id}
+        data-editor-rules-variant={showAmplifiedText ? "amplified" : "base"}
         onMouseEnter={() => setHovering(true)}
         onMouseLeave={() => setHovering(false)}
         style={{ display: "block", position: "relative" }}
@@ -568,6 +587,7 @@ export default function EditableCard({
       ref={cardRef}
       aria-label={visibleName}
       data-editor-card-id={card.id}
+      data-editor-rules-variant={showAmplifiedText ? "amplified" : "base"}
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
       style={{ display: "block", position: "relative" }}

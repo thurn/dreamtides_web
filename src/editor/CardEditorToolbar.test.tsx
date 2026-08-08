@@ -172,6 +172,35 @@ describe("CardEditorToolbar", () => {
     act(() => root.unmount());
   });
 
+  it("toggles amplified previews and amplified-only filtering", () => {
+    const onChange = vi.fn();
+    const { container, root } = mount(<StatefulToolbar onChange={onChange} />);
+    const filter = container.querySelector<HTMLInputElement>(
+      '[aria-label="Show only cards with amplified text"]',
+    );
+    const preview = Array.from(container.querySelectorAll("button")).find(
+      (button) => button.textContent?.includes("Amplified"),
+    );
+    if (filter === null || preview === undefined) {
+      throw new Error("Missing amplified controls");
+    }
+
+    act(() => filter.click());
+    expect(onChange).toHaveBeenLastCalledWith({
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      amplifiedOnly: true,
+    });
+
+    act(() => preview.click());
+    expect(onChange).toHaveBeenLastCalledWith({
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      amplifiedOnly: true,
+      showAmplifiedText: true,
+    });
+
+    act(() => root.unmount());
+  });
+
   it("updates segmented, select, and direction controls", () => {
     const onChange = vi.fn();
     const { container, root } = mount(<StatefulToolbar onChange={onChange} />);

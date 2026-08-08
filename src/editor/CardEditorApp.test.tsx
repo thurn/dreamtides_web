@@ -62,6 +62,7 @@ function makeEditorCard(overrides: Partial<EditorCardRecord> = {}): EditorCardRe
     name: preview.name,
     spark: 1,
     "rendered-text": preview.renderedText,
+    "amplified-text": preview.amplifiedText ?? "",
     tags: [],
     tides: [],
     mtgName: "",
@@ -2259,6 +2260,96 @@ describe("CardEditorApp", () => {
     act(() => {
       root.unmount();
     });
+  });
+
+  it("filters, previews, and edits canonical amplified text on card faces", async () => {
+    window.history.pushState(
+      null,
+      "",
+      "/editor?amplified=1&amplifiedonly=1",
+    );
+    const amplifiedText = "Draw two cards.";
+    const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
+      (request) =>
+        Promise.resolve({
+          card: makeEditorCard({
+            id: request.id,
+            "amplified-text": String(request.value),
+            preview: makePreview({
+              id: request.id,
+              renderedText: "Draw a card.",
+              amplifiedText: String(request.value),
+            }),
+          }),
+          clientRevision: request.clientRevision,
+          timing: makeSaveTiming(),
+        }),
+    );
+    const { container, root } = mount(
+      <CardEditorApp
+        apiClient={makeApiClient(
+          () =>
+            Promise.resolve([
+              makeEditorCard({ id: "base-only-card" }),
+              makeEditorCard({
+                id: "amplified-card",
+                "amplified-text": amplifiedText,
+                preview: makePreview({
+                  id: "amplified-card",
+                  renderedText: "Draw a card.",
+                  amplifiedText,
+                }),
+              }),
+            ]),
+          saveEditorCardField,
+        )}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(editorCardIds(container)).toEqual(["amplified-card"]);
+    const editorCard = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="amplified-card"]',
+    );
+    const amplifiedField = editorCard?.querySelector<HTMLElement>(
+      '[data-editor-field="amplified-text"]',
+    );
+    expect(editorCard?.getAttribute("data-editor-rules-variant")).toBe(
+      "amplified",
+    );
+    expect(amplifiedField?.textContent).toContain(amplifiedText);
+    expect(editorCard?.textContent).not.toContain("Draw a card.");
+    if (amplifiedField === null || amplifiedField === undefined) {
+      throw new Error("Missing amplified text field");
+    }
+
+    act(() => {
+      amplifiedField.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    });
+    const textarea = container.querySelector<HTMLTextAreaElement>(
+      '[data-editor-input-field="amplified-text"]',
+    );
+    if (textarea === null) {
+      throw new Error("Missing amplified text textarea");
+    }
+
+    await act(async () => {
+      setTextareaValue(textarea, "Draw three cards.");
+      pressKey(textarea, "Enter");
+      await flushAsyncWork();
+    });
+
+    expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
+      id: "amplified-card",
+      field: "amplified-text",
+      value: "Draw three cards.",
+    });
+    expect(amplifiedField.textContent).toContain("Draw three cards.");
+
+    act(() => root.unmount());
   });
 
   it("cancels rules text edits with Escape and does not save on blur", async () => {

@@ -23,6 +23,8 @@ export const DEFAULT_EDITOR_DISPLAY_STATE: EditorDisplayState = {
   checkboxTag: "",
   showFontSize: false,
   showGlossaryInfoOnHover: false,
+  showAmplifiedText: false,
+  amplifiedOnly: false,
   sort: "name",
   dir: "asc",
   size: "large",
@@ -160,6 +162,8 @@ export function parseEditorDisplayState(
     checkboxTag: (params.get("checkboxtag") ?? DEFAULT_EDITOR_DISPLAY_STATE.checkboxTag).trim(),
     showFontSize: params.get("showfontsize") === "1",
     showGlossaryInfoOnHover: params.get("glossaryhover") === "1",
+    showAmplifiedText: params.get("amplified") === "1",
+    amplifiedOnly: params.get("amplifiedonly") === "1",
     sort: parseSort(params.get("sort")),
     dir: parseDir(params.get("dir")),
     size: parseSize(params.get("size")),
@@ -212,6 +216,12 @@ export function serializeEditorDisplayState(
   }
   if (state.showGlossaryInfoOnHover) {
     params.set("glossaryhover", "1");
+  }
+  if (state.showAmplifiedText) {
+    params.set("amplified", "1");
+  }
+  if (state.amplifiedOnly) {
+    params.set("amplifiedonly", "1");
   }
   if (state.sort !== DEFAULT_EDITOR_DISPLAY_STATE.sort) {
     params.set("sort", SORT_FIELD_TO_PARAM[state.sort]);
