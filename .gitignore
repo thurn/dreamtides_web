@@ -55,4 +55,4 @@ cumulus/Assets/ThirdParty/
 
 # Generated compatibility data. Canonical game data is authored in the paired
 # manifest-declared RON files.
-data/*.toml
+data/**/*.toml

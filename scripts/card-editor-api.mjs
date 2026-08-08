@@ -67,10 +67,14 @@ const CARD_TOML_PATH = DEFAULT_CARD_TOML_PATH;
 const CARD_TOML_DIR = join("data");
 const CARD_JSON_PATH = join("public", "card-data.json");
 const CARD_RON_PATH = join("data", "cards.ron");
+const INTERNAL_CARD_METADATA_RON_PATH = join(
+  "data",
+  "internal",
+  "internal_card_metadata.ron",
+);
 const CARD_SOURCE_PATHS = [
   CARD_RON_PATH,
-  join("data", "cards.tags.ron"),
-  join("data", "cards.tides.ron"),
+  INTERNAL_CARD_METADATA_RON_PATH,
 ];
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
 

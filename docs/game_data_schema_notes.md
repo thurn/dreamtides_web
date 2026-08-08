@@ -174,15 +174,13 @@ Under `copy`, title/summary describe the offer tile, prompt describes a chooser,
 candidate-title/candidate-summary describe one chooser entry, and
 detail-headline/detail-subtitle describe the expanded offer panel.
 
-## `data/cards.tags.ron`
+## `data/internal/internal_card_metadata.ron`
 
 ### `[[tags]]`
 
 Tag registry for cards.toml.
 Each [[tags]] entry defines an available card tag and its display color.
 Managed by the card editor's "Manage tags" panel.
-
-## `data/cards.tides.ron`
 
 ### `[[tides]]`
 

@@ -29,7 +29,7 @@ const SECOND_ID = "22222222-2222-4222-8222-222222222222";
 const THIRD_ID = "33333333-3333-4333-8333-333333333333";
 
 const CARDS_REL_PATH = join("data", "cards.toml");
-const REGISTRY_REL_PATH = join("data", "cards.tides.toml");
+const REGISTRY_REL_PATH = join("data", "internal", "internal_card_metadata.toml");
 
 const servers = [];
 
@@ -83,7 +83,7 @@ card-number = 3
 
 function writeFixtureRoot({ withRegistry = false } = {}) {
   const rootDir = mkdtempSync(join(tmpdir(), "journey-card-editor-tides-"));
-  mkdirSync(join(rootDir, "data"), { recursive: true });
+  mkdirSync(join(rootDir, "data", "internal"), { recursive: true });
   // cards.toml is the canonical card file, so editing it through the API
   // regenerates public/card-data.json; the directory must exist for the write.
   mkdirSync(join(rootDir, "public"), { recursive: true });

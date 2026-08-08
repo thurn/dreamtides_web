@@ -184,9 +184,9 @@ fn validate_relative_data_path(path: &str, extension: &str) -> Result<()> {
     {
         bail!("invalid manifest data path: {}", path.display());
     }
-    if path.parent() != Some(Path::new("data")) {
+    if !path.starts_with("data") {
         bail!(
-            "manifest target is outside approved data roots: {}",
+            "manifest target is outside the approved data root: {}",
             path.display()
         );
     }
@@ -262,6 +262,20 @@ mod tests {
             .to_string()
             .contains("unknown adapter")
         );
+    }
+
+    #[test]
+    fn accepts_nested_paths_within_data() {
+        let root = tempfile::tempdir().unwrap();
+        let manifest = Manifest {
+            datasets: vec![dataset(
+                "nested",
+                "data/internal/source.ron",
+                "data/internal/output.toml",
+            )],
+        };
+
+        manifest.validate(root.path()).unwrap();
     }
 
     #[test]

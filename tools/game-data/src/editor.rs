@@ -159,10 +159,8 @@ fn edit_cards(
     reject_duplicate_cards(&original)?;
     let mut cards = original.clone();
     let mut cards_text = original_text;
-    let mut tags = read_compat(manifest, staging_root, "card-tags")?;
-    let mut tides = read_compat(manifest, staging_root, "card-tides")?;
-    let original_tags = tags.clone();
-    let original_tides = tides.clone();
+    let mut metadata = read_compat(manifest, staging_root, "internal-card-metadata")?;
+    let original_metadata = metadata.clone();
 
     for operation in operations {
         match operation {
@@ -180,25 +178,10 @@ fn edit_cards(
             }
             EditOperation::UpsertFacet { facet, name, color } => {
                 validate_facet(&name, &color)?;
-                upsert_facet(
-                    match facet {
-                        Facet::Tags => &mut tags,
-                        Facet::Tides => &mut tides,
-                    },
-                    facet,
-                    name,
-                    color,
-                )?;
+                upsert_facet(&mut metadata, facet, name, color)?;
             }
             EditOperation::DeleteFacet { facet, name } => {
-                delete_facet(
-                    match facet {
-                        Facet::Tags => &mut tags,
-                        Facet::Tides => &mut tides,
-                    },
-                    facet,
-                    &name,
-                )?;
+                delete_facet(&mut metadata, facet, &name)?;
                 if matches!(facet, Facet::Tags) {
                     for card in &mut cards {
                         let before = card.tags.len();
@@ -215,25 +198,17 @@ fn edit_cards(
     reject_duplicate_cards(&cards)?;
 
     verify_round_trip::<Vec<CardDefinition>>(&cards_text, &cards)?;
-    let tags_text = serialize_ron(&tags, false)?;
-    verify_round_trip::<CompatDocument>(&tags_text, &tags)?;
-    let tides_text = serialize_ron(&tides, false)?;
-    verify_round_trip::<CompatDocument>(&tides_text, &tides)?;
-    let changed = cards != original || tags != original_tags || tides != original_tides;
+    let metadata_text = serialize_ron(&metadata, false)?;
+    verify_round_trip::<CompatDocument>(&metadata_text, &metadata)?;
+    let changed = cards != original || metadata != original_metadata;
     if changed {
         if cards != original {
             atomic_write(&cards_path, cards_text.as_bytes())?;
         }
-        if tags != original_tags {
+        if metadata != original_metadata {
             atomic_write(
-                &staging_root.join(&manifest.dataset("card-tags")?.source),
-                tags_text.as_bytes(),
-            )?;
-        }
-        if tides != original_tides {
-            atomic_write(
-                &staging_root.join(&manifest.dataset("card-tides")?.source),
-                tides_text.as_bytes(),
+                &staging_root.join(&manifest.dataset("internal-card-metadata")?.source),
+                metadata_text.as_bytes(),
             )?;
         }
     }
@@ -241,11 +216,7 @@ fn edit_cards(
         ok: true,
         changed,
         dataset_id: "cards".into(),
-        source_revision: revision(
-            staging_root,
-            manifest,
-            &["cards", "card-tags", "card-tides"],
-        )?,
+        source_revision: revision(staging_root, manifest, &["cards", "internal-card-metadata"])?,
     })
 }
 

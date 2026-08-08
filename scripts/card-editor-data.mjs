@@ -11,6 +11,11 @@ import { transformCard } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 export const DEFAULT_CARD_TOML_PATH = join("data", "cards.toml");
+export const DEFAULT_INTERNAL_CARD_METADATA_TOML_PATH = join(
+  "data",
+  "internal",
+  "internal_card_metadata.toml",
+);
 const CARD_JSON_PATH = join("public", "card-data.json");
 
 export const EDITABLE_CARD_FIELDS = new Set([
@@ -33,8 +38,9 @@ export const CARD_TYPE_VALUES = ["Character", "Event"];
  * A "facet" is a card-level taxonomy stored as an inline string array on each
  * card and backed by a registry sidecar that pairs each name with a display
  * color. Tags and tides are the two facets; they share every code path, differing
- * only in the card field they live on, the registry sidecar suffix, and labels.
- * The registry sidecar reuses the card field name as its `[[field]]` array key.
+ * only in the card field they live on and their labels. The canonical card
+ * catalog keeps both registries in one internal metadata document; auxiliary
+ * card catalogs use sidecars that reuse the card field name as `[[field]]`.
  */
 export const TAG_FACET = {
   field: "tags",
@@ -103,10 +109,10 @@ export function defaultTagColor(name) {
   return DEFAULT_TAG_COLORS[index];
 }
 
-// A facet registry lives in a sidecar TOML next to the card file it annotates:
-// `data/cards.toml` -> `data/cards.tags.toml` (tags) or
-// `data/cards.tides.toml` (tides).
 function facetRegistryPathFor(cardTomlPath, facet) {
+  if (cardTomlPath === DEFAULT_CARD_TOML_PATH) {
+    return DEFAULT_INTERNAL_CARD_METADATA_TOML_PATH;
+  }
   return cardTomlPath.replace(/\.toml$/iu, facet.registrySuffix);
 }
 

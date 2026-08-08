@@ -92,7 +92,10 @@ describe("card references resolve to real cards", () => {
     expect(taggedCardIds).toEqual(poolCardIds);
 
     const tagRegistry = parseToml(
-      readFileSync(join(DATA_DIR, "cards.tags.toml"), "utf8"),
+      readFileSync(
+        join(DATA_DIR, "internal", "internal_card_metadata.toml"),
+        "utf8",
+      ),
     ) as { tags?: Array<{ name?: string }> };
     expect(tagRegistry.tags?.some((tag) => tag.name === "tutorial")).toBe(true);
   });
