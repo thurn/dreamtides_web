@@ -13,3 +13,4 @@ pub mod dreamwell;
 pub mod economy;
 pub mod exploration;
 pub mod figments;
+pub mod opponents;
