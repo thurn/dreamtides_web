@@ -1,26 +1,14 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
-import { patchTomlRecord } from "./card-editor-data.mjs";
-import {
-  compileDreamGuidesData,
-  deriveDreamscapesData,
-} from "./guide-sites-data.mjs";
 import { SITE_TYPES } from "../src/types/site-type.ts";
 
 export { SITE_TYPES };
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-export const DEFAULT_DREAMSCAPE_TOML_PATH = join(
-  "data",
-  "dreamscapes.toml",
-);
-const DREAMSCAPE_JSON_PATH = join("public", "dreamscapes-data.json");
-export const DREAM_GUIDES_TOML_PATH = join(
-  "data",
-  "dream_guides.toml",
-);
+export const DEFAULT_DREAMSCAPE_TOML_PATH = join("data", "dreamscapes.toml");
+export const DREAM_GUIDES_TOML_PATH = join("data", "dream_guides.toml");
 const AFFILIATIONS_TOML_PATH = join("data", "affiliations.toml");
 const DREAM_AVATARS_TOML_PATH = join("data", "dream_avatars.toml");
 
@@ -29,7 +17,7 @@ const DREAM_AVATARS_TOML_PATH = join("data", "dream_avatars.toml");
  * DreamAvatar belongs to at most one region (see `validateDreamAvatarMapping` in
  * setup-assets, which is fatal on a duplicate assignment or an out-of-range
  * count). The editor enforces these same bounds on every reassignment so a save
- * can never write a build-breaking dreamscapes.toml.
+ * is rejected before the canonical RON transaction can publish.
  */
 export const MIN_DREAM_AVATARS_PER_REGION = 3;
 export const MAX_DREAM_AVATARS_PER_REGION = 4;
@@ -46,11 +34,6 @@ export const EDITABLE_DREAMSCAPE_FIELDS = new Set([
   "guide-id",
   "affiliation-id",
 ]);
-
-// `guide-id` and `affiliation-id` are absent on the starter dreamscape, so the
-// patcher appends them to the record block on first save rather than replacing
-// an existing line in place.
-const OPTIONAL_DREAMSCAPE_FIELDS = new Set(["guide-id", "affiliation-id"]);
 
 function validationFailure(field, message, value) {
   return { ok: false, field, value, message };
@@ -227,200 +210,6 @@ export function makeValidateDreamscapeEdit({ guideIds, affiliationIds }) {
   };
 }
 
-export function patchDreamscapesToml(
-  source,
-  { dreamscapeId, field, value, validateEdit },
-) {
-  return patchTomlRecord(source, {
-    id: dreamscapeId,
-    tableName: "dreamscapes",
-    editableFields: EDITABLE_DREAMSCAPE_FIELDS,
-    validateEdit,
-    field,
-    value,
-    optionalFields: OPTIONAL_DREAMSCAPE_FIELDS,
-    notFoundNoun: "Dreamscape",
-  });
-}
-
-const EDITABLE_GUIDE_ASSIGNMENT_FIELDS = new Set([
-  "home-dreamscape-id",
-  "site-type",
-  "home-specialty",
-]);
-
-/** Patch one or more canonical guide assignments while preserving TOML layout. */
-export function patchDreamGuideAssignments(source, changes) {
-  let next = source;
-  for (const change of changes) {
-    next = patchTomlRecord(next, {
-      id: change.guideId,
-      tableName: "guides",
-      editableFields: EDITABLE_GUIDE_ASSIGNMENT_FIELDS,
-      validateEdit: (field, value) => ({ ok: true, field, value }),
-      field: change.field,
-      value: change.value,
-      optionalFields: new Set(),
-      notFoundNoun: "Dream Guide",
-    }).source;
-  }
-  parse(next);
-  return next;
-}
-
-const SPECIALIZED_DIALOGUE_CONTEXTS = [
-  "random-site",
-  "gamble-three-gate",
-  "gamble-ladder-climb",
-  "gamble-starway-stairs",
-  "gamble-four-suit-reprise",
-  "gamble-blackjack",
-];
-
-function guideBlockRange(source, guideId) {
-  const header = "[[guides]]";
-  const headers = [];
-  for (
-    let index = source.indexOf(header);
-    index !== -1;
-    index = source.indexOf(header, index + header.length)
-  ) {
-    headers.push(index);
-  }
-  const idPattern = new RegExp(
-    `(^|\\n)[ \\t]*id[ \\t]*=[ \\t]*"${escapeRegExp(guideId)}"[ \\t]*(?:#.*)?(?=\\n|$)`,
-    "u",
-  );
-  for (let index = 0; index < headers.length; index += 1) {
-    const start = headers[index];
-    const end = headers[index + 1] ?? source.length;
-    if (idPattern.test(source.slice(start, end))) return { start, end };
-  }
-  return null;
-}
-
-function serializeDialogue(dialogue) {
-  const orderedContexts = ["site", ...SPECIALIZED_DIALOGUE_CONTEXTS];
-  const fields = orderedContexts.flatMap((context) => {
-    const lines = dialogue[context];
-    if (!Array.isArray(lines)) return [];
-    return [
-      `${context} = [\n${lines.map((line) => `  ${JSON.stringify(line)},`).join("\n")}\n]`,
-    ];
-  });
-  return `[guides.dialogue]\n${fields.join("\n")}\n`;
-}
-
-function rewriteGuideDialogue(source, guideId, dialogue) {
-  const block = guideBlockRange(source, guideId);
-  if (block === null) throw new Error(`Dream Guide ${guideId} was not found`);
-  const text = source.slice(block.start, block.end);
-  const headerIndex = text.indexOf("[guides.dialogue]");
-  if (headerIndex < 0)
-    throw new Error(`Dream Guide ${guideId} has no dialogue table`);
-  const replacement = serializeDialogue(dialogue);
-  return (
-    source.slice(0, block.start + headerIndex) +
-    replacement +
-    "\n" +
-    source.slice(block.end)
-  );
-}
-
-/** Move site-specific dialogue contexts with a specialty swap. */
-export function swapDreamGuideSpecializedDialogue(
-  source,
-  firstGuideId,
-  secondGuideId,
-) {
-  const parsed = parse(source);
-  const first = parsed.guides.find((guide) => guide.id === firstGuideId);
-  const second = parsed.guides.find((guide) => guide.id === secondGuideId);
-  if (first === undefined || second === undefined)
-    throw new Error("Dream Guide dialogue swap target was not found");
-  const firstDialogue = { ...first.dialogue };
-  const secondDialogue = { ...second.dialogue };
-  let hasSpecializedDialogue = false;
-  for (const context of SPECIALIZED_DIALOGUE_CONTEXTS) {
-    const firstLines = first.dialogue?.[context];
-    const secondLines = second.dialogue?.[context];
-    hasSpecializedDialogue ||=
-      firstLines !== undefined || secondLines !== undefined;
-    delete firstDialogue[context];
-    delete secondDialogue[context];
-    if (secondLines !== undefined) firstDialogue[context] = secondLines;
-    if (firstLines !== undefined) secondDialogue[context] = firstLines;
-  }
-  if (!hasSpecializedDialogue) return source;
-  let next = rewriteGuideDialogue(source, firstGuideId, firstDialogue);
-  next = rewriteGuideDialogue(next, secondGuideId, secondDialogue);
-  parse(next);
-  return next;
-}
-
-/** Atomically swap the canonical specialty, its player-facing copy, and dialogue. */
-export function swapDreamGuideSpecialties(source, firstGuideId, secondGuideId) {
-  const parsed = parse(source);
-  const first = parsed.guides.find((guide) => guide.id === firstGuideId);
-  const second = parsed.guides.find((guide) => guide.id === secondGuideId);
-  if (first === undefined || second === undefined)
-    throw new Error("Dream Guide specialty swap target was not found");
-  const patched = patchDreamGuideAssignments(source, [
-    {
-      guideId: firstGuideId,
-      field: "site-type",
-      value: second["site-type"],
-    },
-    {
-      guideId: firstGuideId,
-      field: "home-specialty",
-      value: second["home-specialty"],
-    },
-    {
-      guideId: secondGuideId,
-      field: "site-type",
-      value: first["site-type"],
-    },
-    {
-      guideId: secondGuideId,
-      field: "home-specialty",
-      value: first["home-specialty"],
-    },
-  ]);
-  return swapDreamGuideSpecializedDialogue(
-    patched,
-    firstGuideId,
-    secondGuideId,
-  );
-}
-
-export function refreshDreamscapesDataJson({
-  rootDir = ROOT,
-  dreamscapeTomlPath = DEFAULT_DREAMSCAPE_TOML_PATH,
-} = {}) {
-  const sourceDreamscapes = readSourceDreamscapes(rootDir, dreamscapeTomlPath);
-  const guides = compileDreamGuidesData(
-    parse(readFileSync(join(rootDir, DREAM_GUIDES_TOML_PATH), "utf8")),
-    { dreamscapes: sourceDreamscapes },
-  );
-  const dreamscapes = deriveDreamscapesData(sourceDreamscapes, guides);
-  const dreamscapesJsonPath = join(rootDir, DREAMSCAPE_JSON_PATH);
-  const guidesJsonPath = join(rootDir, "public", "dream-guides-data.json");
-
-  mkdirSync(join(rootDir, "public"), { recursive: true });
-  writeFileSync(
-    dreamscapesJsonPath,
-    JSON.stringify(dreamscapes, null, 2) + "\n",
-  );
-  writeFileSync(guidesJsonPath, JSON.stringify(guides, null, 2) + "\n");
-
-  return {
-    count: dreamscapes.length,
-    path: dreamscapesJsonPath,
-    guidesPath: guidesJsonPath,
-  };
-}
-
 /**
  * Read the DreamAvatar catalog as `{ id, name, title, imageNumber, renderedText }`
  * options for the editor's resident-DreamAvatar picker, portraits, and ability
@@ -452,103 +241,6 @@ export function readDreamAvatarOptions({ rootDir = ROOT } = {}) {
           ? dreamAvatar["rendered-text"]
           : "",
     }));
-}
-
-function escapeRegExp(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
-}
-
-/**
- * Locate the `[[dreamscapes]]` block whose `id` equals `dreamscapeId`, returning
- * its `[start, end)` offsets within `source` (end is the next block header or
- * EOF). Returns null when no such block exists.
- */
-function dreamscapeBlockRange(source, dreamscapeId) {
-  const header = "[[dreamscapes]]";
-  const headers = [];
-  for (
-    let idx = source.indexOf(header);
-    idx !== -1;
-    idx = source.indexOf(header, idx + header.length)
-  ) {
-    headers.push(idx);
-  }
-
-  const idPattern = new RegExp(
-    `(^|\\n)[ \\t]*id[ \\t]*=[ \\t]*"${escapeRegExp(dreamscapeId)}"[ \\t]*(?:#.*)?(?=\\n|$)`,
-    "u",
-  );
-
-  for (let i = 0; i < headers.length; i += 1) {
-    const start = headers[i];
-    const end = i + 1 < headers.length ? headers[i + 1] : source.length;
-    if (idPattern.test(source.slice(start, end))) {
-      return { start, end };
-    }
-  }
-
-  return null;
-}
-
-/**
- * Serialize a `dream-avatar-ids` array in the authored multiline style — one
- * UUID per line with a trailing `# Display Name` comment for human readers — so
- * a save preserves the format of `dreamscapes.toml`. An empty list collapses to
- * the inline `dream-avatar-ids = []`.
- */
-function serializeDreamAvatarIdsField(ids, nameById) {
-  if (ids.length === 0) {
-    return "dream-avatar-ids = []";
-  }
-  const lines = ids.map((id) => {
-    const name = nameById.get(id.toLowerCase());
-    return `  "${id}",${name !== undefined && name !== "" ? ` # ${name}` : ""}`;
-  });
-  return `dream-avatar-ids = [\n${lines.join("\n")}\n]`;
-}
-
-/**
- * Replace (or, when absent, append) the `dream-avatar-ids` array of a single
- * dreamscape block in `source`. The rest of the file — comments, field order,
- * and every other record — is left byte-for-byte unchanged.
- */
-export function rewriteDreamAvatarIds(source, { dreamscapeId, ids, nameById }) {
-  const block = dreamscapeBlockRange(source, dreamscapeId);
-  if (block === null) {
-    throw new Error(`Dreamscape ${dreamscapeId} was not found`);
-  }
-
-  const blockText = source.slice(block.start, block.end);
-  const fieldMatch = /(^|\n)([ \t]*)dream-avatar-ids[ \t]*=[ \t]*\[/u.exec(
-    blockText,
-  );
-  const serialized = serializeDreamAvatarIdsField(ids, nameById);
-
-  let patched;
-  if (fieldMatch === null) {
-    // The block has no array yet (e.g. a region that just gained its first
-    // resident). Append it to the end of the block, trimming trailing blank
-    // lines so the field sits flush against the record.
-    const trimmed = blockText.replace(/\s*$/u, "");
-    const rebuiltBlock = `${trimmed}\n${serialized}\n`;
-    patched =
-      source.slice(0, block.start) + rebuiltBlock + source.slice(block.end);
-  } else {
-    const fieldStartInBlock = fieldMatch.index + fieldMatch[1].length;
-    const openBracketInBlock = fieldMatch.index + fieldMatch[0].length - 1;
-    const closeBracketInBlock = blockText.indexOf("]", openBracketInBlock);
-    if (closeBracketInBlock === -1) {
-      throw new Error(
-        `Dreamscape ${dreamscapeId} has an unterminated dream-avatar-ids array`,
-      );
-    }
-    const absStart = block.start + fieldStartInBlock;
-    const absEnd = block.start + closeBracketInBlock + 1;
-    patched = source.slice(0, absStart) + serialized + source.slice(absEnd);
-  }
-
-  parse(patched);
-  return patched;
 }
 
 function regionForDreamAvatar(dreamscapes, dreamAvatarId) {
@@ -709,20 +401,4 @@ export function planDreamAvatarAssignment(dreamscapes, catalogIds, request) {
   }
 
   return planFailure(`Unknown action ${String(action)}.`);
-}
-
-/**
- * Apply a list of `{ id, ids }` region changes to the raw dreamscapes.toml
- * source, rewriting each affected `dream-avatar-ids` array in place.
- */
-export function applyDreamAvatarChanges(source, changes, nameById) {
-  let next = source;
-  for (const change of changes) {
-    next = rewriteDreamAvatarIds(next, {
-      dreamscapeId: change.id,
-      ids: change.ids,
-      nameById,
-    });
-  }
-  return next;
 }

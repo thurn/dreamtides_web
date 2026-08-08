@@ -1,21 +1,16 @@
 // @vitest-environment node
 
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { parse } from "smol-toml";
 import { describe, expect, it } from "vitest";
 import {
   EDITABLE_DREAMSCAPE_FIELDS,
   SITE_TYPES,
   makeValidateDreamscapeEdit,
-  patchDreamscapesToml,
-  patchDreamGuideAssignments,
   readAffiliationOptions,
   readDreamGuideOptions,
   readEditorDreamscapes,
-  refreshDreamscapesDataJson,
-  swapDreamGuideSpecialties,
 } from "./dreamscape-editor-data.mjs";
 
 // Self-contained fixtures so these assertions never depend on (and never break
@@ -86,10 +81,7 @@ ${specialDialogue}`;
 function writeFixture() {
   const rootDir = mkdtempSync(join(tmpdir(), "dreamscape-editor-data-test-"));
   mkdirSync(join(rootDir, "data"), { recursive: true });
-  writeFileSync(
-    join(rootDir, "data", "dreamscapes.toml"),
-    fixtureToml(),
-  );
+  writeFileSync(join(rootDir, "data", "dreamscapes.toml"), fixtureToml());
   writeFileSync(
     join(rootDir, "data", "dream_guides.toml"),
     fixtureGuidesToml(),
@@ -139,112 +131,6 @@ describe("makeValidateDreamscapeEdit", () => {
     expect(validateEdit("id", "anything").ok).toBe(false);
     expect(EDITABLE_DREAMSCAPE_FIELDS.has("name")).toBe(true);
     expect(EDITABLE_DREAMSCAPE_FIELDS.has("id")).toBe(false);
-  });
-});
-
-describe("patchDreamscapesToml", () => {
-  it("replaces an existing field in place", () => {
-    const patched = patchDreamscapesToml(fixtureToml(), {
-      dreamscapeId: "second_realm",
-      field: "name",
-      value: "Renamed Realm",
-      validateEdit,
-    });
-    const second = parse(patched.source).dreamscapes.find(
-      (entry) => entry.id === "second_realm",
-    );
-    expect(second.name).toBe("Renamed Realm");
-  });
-
-  it("inserts an optional affiliation-id onto a record that lacks it", () => {
-    const patched = patchDreamscapesToml(fixtureToml(), {
-      dreamscapeId: "starter_field",
-      field: "affiliation-id",
-      value: "affil_two",
-      validateEdit,
-    });
-    const starter = parse(patched.source).dreamscapes.find(
-      (entry) => entry.id === "starter_field",
-    );
-    expect(starter["affiliation-id"]).toBe("affil_two");
-    // The unrelated record keeps its original affiliation.
-    const second = parse(patched.source).dreamscapes.find(
-      (entry) => entry.id === "second_realm",
-    );
-    expect(second["affiliation-id"]).toBe("affil_one");
-  });
-});
-
-describe("canonical guide swaps", () => {
-  it("swaps homes and moves specialized dialogue with site specialties", () => {
-    const homes = patchDreamGuideAssignments(fixtureGuidesToml(), [
-      { guideId: "guide_one", field: "home-dreamscape-id", value: "realm_1" },
-      {
-        guideId: "guide_two",
-        field: "home-dreamscape-id",
-        value: "second_realm",
-      },
-    ]);
-    const parsedHomes = parse(homes).guides;
-    expect(
-      parsedHomes.find((guide) => guide.id === "guide_one")[
-        "home-dreamscape-id"
-      ],
-    ).toBe("realm_1");
-    expect(
-      parsedHomes.find((guide) => guide.id === "guide_two")[
-        "home-dreamscape-id"
-      ],
-    ).toBe("second_realm");
-
-    const source = fixtureGuidesToml();
-    const randomGuide = parse(source).guides.find(
-      (guide) => guide["site-type"] === "RandomSite",
-    );
-    const gambleGuide = parse(source).guides.find(
-      (guide) => guide["site-type"] === "Gamble",
-    );
-    const swapped = swapDreamGuideSpecialties(
-      source,
-      randomGuide.id,
-      gambleGuide.id,
-    );
-    const parsed = parse(swapped).guides;
-    const updatedRandomGuide = parsed.find(
-      (guide) => guide.id === randomGuide.id,
-    );
-    const updatedGambleGuide = parsed.find(
-      (guide) => guide.id === gambleGuide.id,
-    );
-    expect(updatedRandomGuide["site-type"]).toBe("Gamble");
-    expect(updatedRandomGuide["home-specialty"]).toBe(
-      gambleGuide["home-specialty"],
-    );
-    expect(updatedGambleGuide["site-type"]).toBe("RandomSite");
-    expect(updatedGambleGuide["home-specialty"]).toBe(
-      randomGuide["home-specialty"],
-    );
-    expect(updatedRandomGuide.dialogue["gamble-three-gate"]).toEqual([
-      "Fixture gates.",
-    ]);
-    expect(updatedGambleGuide.dialogue["random-site"]).toEqual([
-      "Fixture roads.",
-    ]);
-  });
-});
-
-describe("refreshDreamscapesDataJson", () => {
-  it("writes camelCased runtime JSON with explicit null guide/affiliation", () => {
-    const rootDir = writeFixture();
-    const result = refreshDreamscapesDataJson({ rootDir });
-    expect(result.count).toBe(11);
-
-    const json = JSON.parse(readFileSync(result.path, "utf8"));
-    const starter = json.find((entry) => entry.id === "starter_field");
-    expect(starter.guideId).toBeNull();
-    expect(starter.affiliationId).toBeNull();
-    expect(starter.isStarter).toBe(true);
-    expect(starter.signatureSite).toBe("Draft");
   });
 });
 

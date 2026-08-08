@@ -16,6 +16,10 @@ use crate::models::cards::{CardDefinition, CardKind, Crop, OrbValue};
 use crate::models::compat::CompatDocument;
 use crate::models::dream_avatars::{self, AvatarDefinition, DreamAvatarId};
 use crate::models::dream_guides::{self, GuideDefinition, GuideId};
+use crate::models::dreamscapes::{
+    self, AffiliationId, DreamAvatarId as DreamscapeAvatarId, DreamscapeDefinition, DreamscapeId,
+    DreamscapeKind,
+};
 use crate::models::exploration::{
     ActionDefinition, ActionEffect, DynamicValue, EffectKind, ExplorationCatalog, Predicate,
     TemplateInvocation,
@@ -62,6 +66,15 @@ enum EditOperation {
         first_guide_id: String,
         second_guide_id: String,
     },
+    SetDreamscapeField {
+        dreamscape_id: String,
+        field: String,
+        value: JsonValue,
+    },
+    SetDreamscapeOpponents {
+        dreamscape_id: String,
+        opponent_ids: Vec<String>,
+    },
     ReplaceAction {
         card_id: String,
         slot: usize,
@@ -106,9 +119,202 @@ pub fn stage_edit(
         "cards" => edit_cards(manifest, staging_root, request.operations),
         "dream-avatars" => edit_dream_avatars(manifest, staging_root, request.operations),
         "dream-guides" => edit_dream_guides(manifest, staging_root, request.operations),
+        "dreamscapes" => edit_dreamscapes(manifest, staging_root, request.operations),
         "exploration" => edit_exploration(manifest, staging_root, request.operations),
         dataset => edit_compat(manifest, staging_root, dataset, request.operations),
     }
+}
+
+fn edit_dreamscapes(
+    manifest: &Manifest,
+    staging_root: &Path,
+    operations: Vec<EditOperation>,
+) -> Result<EditReport> {
+    let dataset = manifest.dataset("dreamscapes")?;
+    if dataset.adapter != "dreamscapes_v1"
+        || dataset.editor != crate::manifest::EditorCapability::Semantic
+    {
+        bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for dreamscapes");
+    }
+    let source_path = staging_root.join(&dataset.source);
+    let original_text = fs::read_to_string(&source_path)
+        .with_context(|| format!("read staged Dreamscape source {}", source_path.display()))?;
+    let original: Vec<DreamscapeDefinition> = ron::from_str(&original_text)
+        .context("MALFORMED_SOURCE: staged Dreamscape RON is invalid")?;
+    dreamscapes::validate(&original)
+        .context("MALFORMED_SOURCE: staged Dreamscape catalog is invalid")?;
+    let mut dreamscapes = original.clone();
+    let mut source_text = original_text;
+
+    for operation in operations {
+        match operation {
+            EditOperation::SetDreamscapeField {
+                dreamscape_id,
+                field,
+                value,
+            } => {
+                let index = unique_dreamscape_index(&dreamscapes, &dreamscape_id)?;
+                set_dreamscape_field(&mut dreamscapes[index], &field, value)?;
+                source_text =
+                    patch_dreamscape_source_field(&source_text, &dreamscapes[index], &field)?;
+            }
+            EditOperation::SetDreamscapeOpponents {
+                dreamscape_id,
+                opponent_ids,
+            } => {
+                let index = unique_dreamscape_index(&dreamscapes, &dreamscape_id)?;
+                set_dreamscape_opponents(&mut dreamscapes[index], opponent_ids)?;
+                source_text = patch_dreamscape_source_field(
+                    &source_text,
+                    &dreamscapes[index],
+                    "opponent_dream_avatar_ids",
+                )?;
+            }
+            _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to Dreamscapes"),
+        }
+    }
+
+    dreamscapes::validate(&dreamscapes)
+        .context("INVALID_EDIT: Dreamscape edit violates the catalog contract")?;
+    verify_round_trip::<Vec<DreamscapeDefinition>>(&source_text, &dreamscapes)?;
+    let changed = dreamscapes != original;
+    if changed {
+        atomic_write(&source_path, source_text.as_bytes())?;
+    }
+    Ok(EditReport {
+        ok: true,
+        changed,
+        dataset_id: "dreamscapes".into(),
+        source_revision: revision(staging_root, manifest, &["dreamscapes"])?,
+    })
+}
+
+fn unique_dreamscape_index(dreamscapes: &[DreamscapeDefinition], id: &str) -> Result<usize> {
+    let literal = ron::to_string(id)?;
+    let requested = match ron::from_str::<DreamscapeId>(&literal) {
+        Ok(id) => id,
+        Err(_) => dreamscapes::canonical_id(id).context(
+            "INVALID_EDIT: Dreamscape identity must be a canonical UUIDv4 or registered compatibility key",
+        )?,
+    };
+    let matches = dreamscapes
+        .iter()
+        .enumerate()
+        .filter(|(_, dreamscape)| dreamscape.id == requested)
+        .map(|(index, _)| index)
+        .collect::<Vec<_>>();
+    match matches.as_slice() {
+        [] => bail!("RECORD_NOT_FOUND: Dreamscape identity {id}"),
+        [index] => Ok(*index),
+        _ => bail!("MALFORMED_SOURCE: duplicate Dreamscape identity {id}"),
+    }
+}
+
+fn set_dreamscape_field(
+    dreamscape: &mut DreamscapeDefinition,
+    field: &str,
+    value: JsonValue,
+) -> Result<()> {
+    match field {
+        "name" => {
+            let name = json_string(value, field)?;
+            if name.trim().is_empty() {
+                bail!("INVALID_EDIT: Dreamscape name must not be blank");
+            }
+            dreamscape.name = name;
+        }
+        "affiliation-id" | "affiliation_id" => {
+            let value = json_string(value, field)?;
+            let affiliation_id: AffiliationId = ron::from_str(&ron::to_string(&value)?)
+                .context("INVALID_EDIT: affiliation-id must be a canonical UUIDv4")?;
+            match &mut dreamscape.kind {
+                DreamscapeKind::Standard {
+                    affiliation_id: current,
+                    ..
+                } => {
+                    *current = affiliation_id;
+                }
+                _ => bail!(
+                    "FIELD_NOT_APPLICABLE: affiliation-id applies only to Standard Dreamscapes"
+                ),
+            }
+        }
+        _ => bail!("INVALID_EDIT: unsupported Dreamscape field {field}"),
+    }
+    Ok(())
+}
+
+fn set_dreamscape_opponents(
+    dreamscape: &mut DreamscapeDefinition,
+    opponent_ids: Vec<String>,
+) -> Result<()> {
+    let opponent_ids = opponent_ids
+        .into_iter()
+        .map(|id| {
+            ron::from_str::<DreamscapeAvatarId>(&ron::to_string(&id)?)
+                .context("INVALID_EDIT: opponent identity must be a canonical UUIDv4")
+        })
+        .collect::<Result<Vec<_>>>()?;
+    match &mut dreamscape.kind {
+        DreamscapeKind::Standard {
+            opponent_dream_avatar_ids,
+            ..
+        } => *opponent_dream_avatar_ids = opponent_ids,
+        _ => bail!("FIELD_NOT_APPLICABLE: opponent assignments apply only to Standard Dreamscapes"),
+    }
+    Ok(())
+}
+
+fn patch_dreamscape_source_field(
+    source: &str,
+    dreamscape: &DreamscapeDefinition,
+    field: &str,
+) -> Result<String> {
+    let record = typed_record_range(
+        source,
+        "DreamscapeDefinition",
+        "id",
+        &dreamscape.id.to_string(),
+    )?;
+    let (source_field, replacement, nested) = match field {
+        "name" => ("name", ron::to_string(&dreamscape.name)?, false),
+        "affiliation-id" | "affiliation_id" => match &dreamscape.kind {
+            DreamscapeKind::Standard { affiliation_id, .. } => (
+                "affiliation_id",
+                ron::to_string(&affiliation_id.to_string())?,
+                true,
+            ),
+            _ => bail!("FIELD_NOT_APPLICABLE: affiliation-id applies only to Standard Dreamscapes"),
+        },
+        "opponent_dream_avatar_ids" => match &dreamscape.kind {
+            DreamscapeKind::Standard {
+                opponent_dream_avatar_ids,
+                ..
+            } => (
+                "opponent_dream_avatar_ids",
+                ron::to_string(
+                    &opponent_dream_avatar_ids
+                        .iter()
+                        .map(ToString::to_string)
+                        .collect::<Vec<_>>(),
+                )?,
+                true,
+            ),
+            _ => bail!("FIELD_NOT_APPLICABLE: opponents apply only to Standard Dreamscapes"),
+        },
+        _ => bail!("INVALID_EDIT: unsupported Dreamscape source field {field}"),
+    };
+    let range = if nested {
+        let kind = top_level_field_value_range(source, record, "kind")?
+            .context("MALFORMED_SOURCE: Dreamscape is missing kind")?;
+        top_level_field_value_range(source, kind, source_field)?.with_context(|| {
+            format!("MALFORMED_SOURCE: Dreamscape kind is missing {source_field}")
+        })?
+    } else {
+        top_level_field_value_range(source, record, source_field)?
+            .with_context(|| format!("MALFORMED_SOURCE: Dreamscape is missing {source_field}"))?
+    };
+    replace_source_ranges(source, vec![(range, replacement)])
 }
 
 fn edit_dream_guides(
@@ -1932,6 +2138,49 @@ mod tests {
 ]
 "###;
 
+    const DREAMSCAPE_EDITOR_SOURCE: &str = r###"// Stable catalog guidance.
+
+#![enable(implicit_some)]
+[
+  DreamscapeDefinition(
+    id: "0217b10e-bf48-4e27-95f0-846fd802b730",
+    name: r#"Raw Starter"#,
+    art: (
+      scene: (key: "firstlight_meadow", source: "firstlight_meadow.png"),
+      atlas_node: (key: "firstlight_meadow", source: "firstlight_meadow_icon.png"),
+    ),
+    kind: Starter(signature_site: Draft, fixed_sites: [Draft, Battle]),
+  ),
+  // Editable nested fields.
+  DreamscapeDefinition(
+    id: "08e11635-9f04-48fd-a9c8-5a9f68c80958",
+    name: "Region",
+    art: (
+      scene: (key: "tumbleleaf_village", source: "tumbleleaf_village.png"),
+      atlas_node: (key: "tumbleleaf_village", source: "tumbleleaf_village_icon.png"),
+    ),
+    kind: Standard(
+      affiliation_id: "4b715cd0-8b41-4b82-9cef-c47b15e8992b",
+      opponent_dream_avatar_ids: [
+        "94e7c651-25e9-4a62-9de4-eaf5ba20542c",
+        "3ebaba62-9000-429d-b203-2a5a9724389a",
+        "2c53b1b9-9291-4bba-8d3a-f40b545c8f3c",
+      ],
+    ),
+  ),
+  /* Unrelated record comment. */
+  DreamscapeDefinition(
+    id: "f31e1199-70bc-4110-85f9-505afebb02c4",
+    name: "Final Dream",
+    art: (
+      scene: (key: "limbo", source: "limbo.png"),
+      atlas_node: (key: "limbo", source: "limbo_icon.png"),
+    ),
+    kind: Boss,
+  ),
+]
+"###;
+
     #[test]
     fn dream_avatar_scalar_patch_changes_one_line_and_preserves_unrelated_source() {
         let mut avatars: Vec<AvatarDefinition> = ron::from_str(DREAM_AVATAR_SOURCE).unwrap();
@@ -2026,6 +2275,106 @@ mod tests {
                 .unwrap_err()
                 .to_string()
                 .contains("registered compatibility key")
+        );
+    }
+
+    #[test]
+    fn dreamscape_scalar_patch_changes_one_line_and_preserves_unrelated_source() {
+        let source = DREAMSCAPE_EDITOR_SOURCE;
+        let mut dreamscapes: Vec<DreamscapeDefinition> = ron::from_str(source).unwrap();
+        let index = unique_dreamscape_index(&dreamscapes, "firstlight_meadow").unwrap();
+        let unrelated_before = typed_record_range(
+            source,
+            "DreamscapeDefinition",
+            "id",
+            "f31e1199-70bc-4110-85f9-505afebb02c4",
+        )
+        .unwrap();
+        set_dreamscape_field(&mut dreamscapes[index], "name", json!("Edited Starter")).unwrap();
+        let patched = patch_dreamscape_source_field(source, &dreamscapes[index], "name").unwrap();
+
+        assert_eq!(
+            source
+                .lines()
+                .zip(patched.lines())
+                .filter(|(before, after)| before != after)
+                .count(),
+            1
+        );
+        assert!(patched.starts_with("// Stable catalog guidance.\n"));
+        assert!(patched.contains("// Editable nested fields."));
+        let unrelated_after = typed_record_range(
+            &patched,
+            "DreamscapeDefinition",
+            "id",
+            "f31e1199-70bc-4110-85f9-505afebb02c4",
+        )
+        .unwrap();
+        assert_eq!(&source[unrelated_before], &patched[unrelated_after]);
+        assert_eq!(
+            ron::from_str::<Vec<DreamscapeDefinition>>(&patched).unwrap(),
+            dreamscapes
+        );
+    }
+
+    #[test]
+    fn dreamscape_editor_round_trips_nested_affiliation_and_opponent_fields() {
+        let mut source = DREAMSCAPE_EDITOR_SOURCE.to_owned();
+        let mut dreamscapes: Vec<DreamscapeDefinition> = ron::from_str(&source).unwrap();
+        let index = unique_dreamscape_index(&dreamscapes, "tumbleleaf_village").unwrap();
+
+        set_dreamscape_field(
+            &mut dreamscapes[index],
+            "affiliation-id",
+            json!("c3815562-e80d-4afc-8ba6-91bd60ad323e"),
+        )
+        .unwrap();
+        source =
+            patch_dreamscape_source_field(&source, &dreamscapes[index], "affiliation-id").unwrap();
+        set_dreamscape_opponents(
+            &mut dreamscapes[index],
+            vec![
+                "c72cfd7b-408b-47f6-adf1-1e486a7e20d3".into(),
+                "6488452d-4e9e-466c-96df-716d4ec646b1".into(),
+                "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab".into(),
+            ],
+        )
+        .unwrap();
+        source = patch_dreamscape_source_field(
+            &source,
+            &dreamscapes[index],
+            "opponent_dream_avatar_ids",
+        )
+        .unwrap();
+
+        dreamscapes::validate(&dreamscapes).unwrap();
+        assert!(source.contains("/* Unrelated record comment. */"));
+        assert_eq!(
+            ron::from_str::<Vec<DreamscapeDefinition>>(&source).unwrap(),
+            dreamscapes
+        );
+    }
+
+    #[test]
+    fn dreamscape_editor_rejects_invalid_identities_and_inapplicable_fields() {
+        let mut dreamscapes: Vec<DreamscapeDefinition> =
+            ron::from_str(DREAMSCAPE_EDITOR_SOURCE).unwrap();
+        assert!(
+            unique_dreamscape_index(&dreamscapes, "not-a-dreamscape")
+                .unwrap_err()
+                .to_string()
+                .contains("canonical UUIDv4 or registered compatibility key")
+        );
+        let starter = unique_dreamscape_index(&dreamscapes, "firstlight_meadow").unwrap();
+        assert!(
+            set_dreamscape_field(
+                &mut dreamscapes[starter],
+                "affiliation-id",
+                json!("4b715cd0-8b41-4b82-9cef-c47b15e8992b"),
+            )
+            .unwrap_err()
+            .to_string()
+            .contains("Standard Dreamscapes")
         );
     }
 

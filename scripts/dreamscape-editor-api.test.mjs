@@ -1,119 +1,295 @@
+// @vitest-environment node
+
 import { EventEmitter } from "node:events";
-import { describe, expect, it, vi } from "vitest";
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { join } from "node:path";
+import { describe, expect, it, vi } from "vitest";
 import {
-  commitFiles,
+  DREAMSCAPE_EDITOR_SOURCE_PATHS,
   createDreamscapeEditorApiMiddleware,
-  generateCatalogArtifacts,
 } from "./dreamscape-editor-api.mjs";
 
-const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
+const AVATARS = [
+  "00000000-0000-4000-8000-000000000011",
+  "00000000-0000-4000-8000-000000000012",
+  "00000000-0000-4000-8000-000000000013",
+  "00000000-0000-4000-8000-000000000014",
+  "00000000-0000-4000-8000-000000000015",
+  "00000000-0000-4000-8000-000000000016",
+];
 
-async function invokePatch(middleware, body) {
-  const req = new EventEmitter();
-  req.method = "PATCH";
-  req.url = `/api/editor/dreamscapes/${body.id}`;
-  req.setEncoding = vi.fn();
-  const result = new Promise((resolveResult) => {
-    const res = {
-      writeHead(status) {
-        this.status = status;
-      },
-      end(text) {
-        this.body = JSON.parse(text);
-        resolveResult(this);
-      },
-    };
-    void middleware(req, res, vi.fn());
-  });
-  queueMicrotask(() => {
-    req.emit("data", JSON.stringify(body));
-    req.emit("end");
-  });
-  return result;
+function fixtureRoot() {
+  const root = mkdtempSync(join(tmpdir(), "dreamscape-editor-api-"));
+  mkdirSync(join(root, "data"));
+  writeFileSync(join(root, "data", "dreamscapes.ron"), "canonical dreamscapes");
+  writeFileSync(join(root, "data", "dream_guides.ron"), "canonical guides");
+  writeFileSync(
+    join(root, "data", "dreamscapes.toml"),
+    `
+[[dreamscapes]]
+id = "starter"
+name = "Starter"
+signature-site = "Draft"
+is-starter = true
+fixed-sites = ["Draft", "Battle"]
+
+[[dreamscapes]]
+id = "realm_one"
+name = "Realm One"
+affiliation-id = "affiliation_one"
+dream-avatar-ids = ["${AVATARS[0]}", "${AVATARS[1]}", "${AVATARS[2]}"]
+
+[[dreamscapes]]
+id = "realm_two"
+name = "Realm Two"
+affiliation-id = "affiliation_two"
+dream-avatar-ids = ["${AVATARS[3]}", "${AVATARS[4]}", "${AVATARS[5]}"]
+`,
+  );
+  writeFileSync(
+    join(root, "data", "dream_guides.toml"),
+    `
+[[guides]]
+id = "guide_one"
+name = "Guide One"
+home-dreamscape-id = "realm_one"
+site-type = "Shop"
+
+[[guides]]
+id = "guide_two"
+name = "Guide Two"
+home-dreamscape-id = "realm_two"
+site-type = "Purge"
+`,
+  );
+  writeFileSync(
+    join(root, "data", "affiliations.toml"),
+    `
+[[affiliations]]
+id = "affiliation_one"
+name = "One"
+
+[[affiliations]]
+id = "affiliation_two"
+name = "Two"
+`,
+  );
+  writeFileSync(
+    join(root, "data", "dream_avatars.toml"),
+    AVATARS.map(
+      (id, index) => `
+[[dreamAvatar]]
+id = "${id}"
+name = "Avatar ${String(index)}"
+title = "Title"
+image-number = "00${String(index)}"
+rendered-text = "Ability"
+`,
+    ).join(""),
+  );
+  return root;
 }
 
-describe("dreamscape editor atomic catalog writes", () => {
-  it.each(["guide-id", "signature-site"])(
-    "rejects %s writes routed to the legacy Dreamscape endpoint",
-    async (field) => {
-      const rootDir = mkdtempSync(resolve(tmpdir(), "dreamscape-editor-api-"));
-      mkdirSync(resolve(rootDir, "data"));
-      const sourcePath = resolve(rootDir, "data/dreamscapes.toml");
-      writeFileSync(sourcePath, "fixture source\n");
-      const middleware = createDreamscapeEditorApiMiddleware({ rootDir });
+function request(method, url, body) {
+  const req = new EventEmitter();
+  req.method = method;
+  req.url = url;
+  req.setEncoding = vi.fn();
+  queueMicrotask(() => {
+    if (body !== undefined) req.emit("data", JSON.stringify(body));
+    req.emit("end");
+  });
+  return req;
+}
 
-      const result = await invokePatch(middleware, {
-        id: "realm_one",
-        field,
-        value: "anything",
+function response() {
+  let finish;
+  const done = new Promise((resolve) => {
+    finish = resolve;
+  });
+  return {
+    done,
+    writeHead(status) {
+      this.status = status;
+    },
+    end(text) {
+      this.body = JSON.parse(text);
+      finish(this);
+    },
+  };
+}
+
+async function invoke(middleware, method, url, body) {
+  const res = response();
+  await middleware(request(method, url, body), res, vi.fn());
+  return res.done;
+}
+
+describe("typed Dreamscape editor API", () => {
+  it("returns the shared canonical source revision on load", async () => {
+    const rootDir = fixtureRoot();
+    const middleware = createDreamscapeEditorApiMiddleware({
+      rootDir,
+      revision: () => "confirmed-revision",
+    });
+    const result = await invoke(middleware, "GET", "/api/editor/dreamscapes");
+
+    expect(result.status).toBe(200);
+    expect(result.body.sourceRevision).toBe("confirmed-revision");
+    expect(result.body.dreamscapes).toHaveLength(3);
+  });
+
+  it.each([
+    ["name", "Renamed Realm"],
+    ["affiliation-id", "affiliation_two"],
+  ])(
+    "publishes %s through a closed semantic operation",
+    async (field, value) => {
+      const rootDir = fixtureRoot();
+      const publishEdit = vi.fn().mockResolvedValue({ sourceRevision: "next" });
+      const middleware = createDreamscapeEditorApiMiddleware({
+        rootDir,
+        publishEdit,
+        revision: () => "current",
       });
+      const result = await invoke(
+        middleware,
+        "PATCH",
+        "/api/editor/dreamscapes/realm_one",
+        {
+          id: "realm_one",
+          field,
+          value,
+          expectedSourceRevision: "current",
+        },
+      );
 
-      expect(result.status).toBe(400);
-      expect(result.body.error).toMatchObject({ code: "INVALID_EDIT" });
-      expect(readFileSync(sourcePath, "utf8")).toBe("fixture source\n");
+      expect(result.status).toBe(200);
+      expect(result.body.sourceRevision).toBe("next");
+      const expectedOperations = [
+        {
+          operation: "set_dreamscape_field",
+          dreamscape_id: "realm_one",
+          field,
+          value,
+        },
+        ...(field === "affiliation-id"
+          ? [
+              {
+                operation: "set_dreamscape_field",
+                dreamscape_id: "realm_two",
+                field,
+                value: "affiliation_one",
+              },
+            ]
+          : []),
+      ];
+      expect(publishEdit).toHaveBeenCalledWith({
+        rootDir,
+        dataset: "dreamscapes",
+        operations: expectedOperations,
+        sourcePaths: DREAMSCAPE_EDITOR_SOURCE_PATHS,
+        expectedSourceRevision: "current",
+      });
     },
   );
 
-  it("recompiles the real guide, Dreamscape, Site, and Economy contracts together", () => {
-    const artifacts = generateCatalogArtifacts(
-      ROOT,
-      readFileSync(resolve(ROOT, "data/dreamscapes.toml"), "utf8"),
-      readFileSync(resolve(ROOT, "data/dream_guides.toml"), "utf8"),
-      { readFileSync },
+  it("publishes a resident swap as one validated multi-record transaction", async () => {
+    const rootDir = fixtureRoot();
+    const publishEdit = vi.fn().mockResolvedValue({ sourceRevision: "next" });
+    const middleware = createDreamscapeEditorApiMiddleware({
+      rootDir,
+      publishEdit,
+      revision: () => "current",
+    });
+    const result = await invoke(
+      middleware,
+      "POST",
+      "/api/editor/dreamscapes/realm_one/dream-avatars",
+      {
+        action: "replace",
+        inId: AVATARS[3],
+        outId: AVATARS[0],
+        expectedSourceRevision: "current",
+      },
     );
 
-    expect(JSON.parse(artifacts.dreamscapes)).toHaveLength(11);
-    expect(JSON.parse(artifacts.guides).guides).toHaveLength(10);
-    expect(JSON.parse(artifacts.sites).foldHash).toMatch(/^[0-9a-f]{64}$/u);
+    expect(result.status).toBe(200);
+    expect(publishEdit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        dataset: "dreamscapes",
+        expectedSourceRevision: "current",
+        operations: [
+          {
+            operation: "set_dreamscape_opponents",
+            dreamscape_id: "realm_one",
+            opponent_ids: [AVATARS[3], AVATARS[1], AVATARS[2]],
+          },
+          {
+            operation: "set_dreamscape_opponents",
+            dreamscape_id: "realm_two",
+            opponent_ids: [AVATARS[0], AVATARS[4], AVATARS[5]],
+          },
+        ],
+      }),
+    );
   });
 
-  it("restores every destination when a multi-file promotion fails", () => {
-    const files = new Map([
-      ["/fixture/dream_guides.toml", "old guides"],
-      ["/fixture/dreamscapes-data.json", "old dreamscapes"],
-    ]);
-    const fileSystem = {
-      existsSync: (path) => files.has(path),
-      writeFileSync: (path, content) => files.set(path, content),
-      renameSync: (from, to) => {
-        if (from === "/fixture/dreamscapes-data.json.tmp") {
-          throw new Error("synthetic promotion failure");
-        }
-        const content = files.get(from);
-        if (content === undefined) throw new Error(`missing ${from}`);
-        files.delete(from);
-        files.set(to, content);
-      },
-      rmSync: (path) => files.delete(path),
-    };
-    const writes = [
+  it("returns confirmed data and pauses stale saves at the revision boundary", async () => {
+    const rootDir = fixtureRoot();
+    const stale = Object.assign(new Error("STALE_SOURCE: changed"), {
+      code: "STALE_SOURCE",
+      currentSourceRevision: "current",
+    });
+    const middleware = createDreamscapeEditorApiMiddleware({
+      rootDir,
+      publishEdit: vi.fn().mockRejectedValue(stale),
+      revision: () => "current",
+    });
+    const result = await invoke(
+      middleware,
+      "PATCH",
+      "/api/editor/dreamscapes/realm_one",
       {
-        destination: "/fixture/dream_guides.toml",
-        temp: "/fixture/dream_guides.toml.tmp",
-        backup: "/fixture/dream_guides.toml.bak",
-        content: "new guides",
+        id: "realm_one",
+        field: "name",
+        value: "Renamed Realm",
+        expectedSourceRevision: "stale",
       },
-      {
-        destination: "/fixture/dreamscapes-data.json",
-        temp: "/fixture/dreamscapes-data.json.tmp",
-        backup: "/fixture/dreamscapes-data.json.bak",
-        content: "new dreamscapes",
-      },
-    ];
-
-    expect(() => commitFiles(writes, fileSystem)).toThrow(
-      /synthetic promotion failure/u,
     );
-    expect(files.get("/fixture/dream_guides.toml")).toBe("old guides");
-    expect(files.get("/fixture/dreamscapes-data.json")).toBe("old dreamscapes");
-    expect(
-      [...files.keys()].some(
-        (path) => path.endsWith(".tmp") || path.endsWith(".bak"),
-      ),
-    ).toBe(false);
+
+    expect(result.status).toBe(409);
+    expect(result.body.error).toMatchObject({
+      code: "STALE_SOURCE",
+      details: {
+        currentSourceRevision: "current",
+        confirmed: { sourceRevision: "current" },
+      },
+    });
+  });
+
+  it("rejects invalid edits before publication", async () => {
+    const rootDir = fixtureRoot();
+    const publishEdit = vi.fn();
+    const middleware = createDreamscapeEditorApiMiddleware({
+      rootDir,
+      publishEdit,
+    });
+    const result = await invoke(
+      middleware,
+      "PATCH",
+      "/api/editor/dreamscapes/realm_one",
+      {
+        id: "realm_one",
+        field: "name",
+        value: "   ",
+        expectedSourceRevision: "current",
+      },
+    );
+
+    expect(result.status).toBe(400);
+    expect(result.body.error.code).toBe("INVALID_EDIT");
+    expect(publishEdit).not.toHaveBeenCalled();
   });
 });

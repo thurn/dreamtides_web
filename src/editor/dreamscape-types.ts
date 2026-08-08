@@ -2,8 +2,8 @@ import type { SiteType } from "../types/journey";
 
 /**
  * One dreamscape as the editor sees it. The kebab-case keys mirror the
- * `dreamscapes.toml` field names so they double as the editable-field
- * identifiers passed to the save-state machine and the PATCH endpoint. The
+ * generated Dreamscape compatibility fields so they double as the editable
+ * operation identifiers passed to the save-state machine and PATCH endpoint. The
  * starter dreamscape has no resident guide or affiliation, so `guide-id` and
  * `affiliation-id` are `null` there.
  */

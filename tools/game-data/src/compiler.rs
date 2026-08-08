@@ -11,7 +11,7 @@ use sha2::{Digest, Sha256};
 use crate::manifest::{Dataset, Manifest, MigrationState};
 use crate::models::{
     affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft, dream_avatars,
-    dream_guides, exploration,
+    dream_guides, dreamscapes, exploration,
 };
 
 pub const BUILD_VERSION: &str = env!("GAME_DATA_BUILD_VERSION");
@@ -160,6 +160,7 @@ fn adapt(
             dream_avatars::lower(avatars)
         }
         "dream_guides_v1" => dream_guides::lower(parse_ron(source, dataset)?),
+        "dreamscapes_v1" => dreamscapes::lower(parse_ron(source, dataset)?),
         "cards_v2" => {
             let metadata_dataset = manifest.dataset("internal-card-metadata")?;
             let metadata_source = fs::read_to_string(root.join(&metadata_dataset.source))
@@ -436,6 +437,9 @@ mod tests {
                 }
                 "dream_guides_v1" => {
                     canonical::<Vec<dream_guides::GuideDefinition>>(&source, true);
+                }
+                "dreamscapes_v1" => {
+                    canonical::<Vec<dreamscapes::DreamscapeDefinition>>(&source, true);
                 }
                 "exploration_v1" => {
                     canonical::<ExplorationCatalog>(&source, true);

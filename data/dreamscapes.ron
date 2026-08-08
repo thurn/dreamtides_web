@@ -1,169 +1,205 @@
-CompatDocument(
-  data: {
-    "dreamscapes": [
-      /*[0]*/
-      {
-        "id": "firstlight_meadow",
-        "name": "Firstlight Meadow",
-        "signature-site": "Draft",
-        "is-starter": true,
-        "fixed-sites": [
-          /*[0]*/
-          "Draft",
-          /*[1]*/
-          "Draft",
-          /*[2]*/
-          "DreamsignRevelation",
-          /*[3]*/
-          "Purge",
-          /*[4]*/
-          "Battle",
-        ],
-      },
-      /*[1]*/
-      {
-        "id": "tumbleleaf_village",
-        "name": "Tumbleleaf Village",
-        "affiliation-id": "4b715cd0-8b41-4b82-9cef-c47b15e8992b",
-        "dream-avatar-ids": [
-          /*[0]*/
-          "94e7c651-25e9-4a62-9de4-eaf5ba20542c",
-          /*[1]*/
-          "3ebaba62-9000-429d-b203-2a5a9724389a",
-          /*[2]*/
-          "2c53b1b9-9291-4bba-8d3a-f40b545c8f3c",
-        ],
-      },
-      /*[2]*/
-      {
-        "id": "pharaohs_gate",
-        "name": "Pharaoh\'s Gate",
-        "affiliation-id": "c3815562-e80d-4afc-8ba6-91bd60ad323e",
-        "dream-avatar-ids": [
-          /*[0]*/
-          "c72cfd7b-408b-47f6-adf1-1e486a7e20d3",
-          /*[1]*/
-          "6488452d-4e9e-466c-96df-716d4ec646b1",
-          /*[2]*/
-          "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
-          /*[3]*/
-          "f0f5449e-01c2-4635-bce1-76b179fc2108",
-        ],
-      },
-      /*[3]*/
-      {
-        "id": "winterwake_fjords",
-        "name": "Winterwake Fjords",
-        "affiliation-id": "a544314c-2e90-42b1-ba04-06c7f2f0a6f9",
-        "dream-avatar-ids": [
-          /*[0]*/
-          "fe2510d9-bfee-4c35-97f9-30e0cd2e2851",
-          /*[1]*/
-          "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
-          /*[2]*/
-          "5e28154d-770a-4b84-8aac-9de44f5d7d02",
-        ],
-      },
-      /*[4]*/
-      {
-        "id": "frostforge",
-        "name": "Frostforge",
-        "affiliation-id": "04103386-ca4e-42a0-9a90-150297a20e91",
-        "dream-avatar-ids": [
-          /*[0]*/
-          "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
-          /*[1]*/
-          "84e7020c-7384-4cc3-a20f-ab05f03cc375",
-          /*[2]*/
-          "f6208407-c4e9-42ac-b533-346704f5e39e",
-        ],
-      },
-      /*[5]*/
-      {
-        "id": "hopes_end",
-        "name": "Hope\'s End",
-        "affiliation-id": "8b30f0bf-6b9d-47c0-92ba-80f62ae8899d",
-        "dream-avatar-ids": [
-          /*[0]*/
-          "6029be40-75b9-4c07-912f-9718b6c5c747",
-          /*[1]*/
-          "3c4773e4-f8e1-4686-86cb-b407a42489d4",
-          /*[2]*/
-          "1cc5a88a-134f-42f7-a0ae-95ace44b3745",
-        ],
-      },
-      /*[6]*/
-      {
-        "id": "tsukiren",
-        "name": "Tsukiren",
-        "affiliation-id": "33dee3b4-19d2-4788-9cef-b69057385844",
-        "dream-avatar-ids": [
-          /*[0]*/
-          "bf72adff-7d74-4be8-9b93-1db7ba13a1db",
-          /*[1]*/
-          "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
-          /*[2]*/
-          "91d4c3b5-fd63-480b-9ed5-979109a227bb",
-        ],
-      },
-      /*[7]*/
-      {
-        "id": "wilderveil",
-        "name": "Wilderveil",
-        "affiliation-id": "c674a92f-3860-4851-8357-dd4f3e469674",
-        "dream-avatar-ids": [
-          /*[0]*/
-          "b9bf6d4b-907c-4750-b51c-811aff29de59",
-          /*[1]*/
-          "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4",
-          /*[2]*/
-          "16b579fe-c15b-4df6-8262-d45ce44732ae",
-        ],
-      },
-      /*[8]*/
-      {
-        "id": "rust_expanse",
-        "name": "The Rust Expanse",
-        "affiliation-id": "d1a8f46d-0efe-4ae6-bda3-0866d5d20633",
-        "dream-avatar-ids": [
-          /*[0]*/
-          "133e22dd-f81b-406d-b4e3-98c346d7fd4e",
-          /*[1]*/
-          "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
-          /*[2]*/
-          "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
-        ],
-      },
-      /*[9]*/
-      {
-        "id": "farpoint_station",
-        "name": "Farpoint Station",
-        "affiliation-id": "96258dfd-33c9-44a7-96a5-6747eb42cc60",
-        "dream-avatar-ids": [
-          /*[0]*/
-          "9e19b3d1-12f2-43c1-9cb1-08de7cd32e32",
-          /*[1]*/
-          "8a2fcd65-bba7-459c-a6b0-f0391b9293fd",
-          /*[2]*/
-          "b99936ca-97f9-4930-af5a-fa9ef92557ef",
-        ],
-      },
-      /*[10]*/
-      {
-        "id": "grid_city",
-        "name": "Grid City",
-        "affiliation-id": "0f09352d-3a1d-44db-a58e-229ab834cdc3",
-        "dream-avatar-ids": [
-          /*[0]*/
-          "86026206-1b11-4f38-a24e-fd3c697f5353",
-          /*[1]*/
-          "b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e",
-          /*[2]*/
-          "ba973428-6d90-4847-b779-cb7e25a5ac84",
-          /*[3]*/
-          "4d5e3933-7dd6-406b-922d-dd78acfa044a",
-        ],
-      },
-    ],
-  },
-)
+// Defines the Dream Atlas regions, their stable identities, and their journey-specific composition.
+
+#![enable(implicit_some)]
+[
+  DreamscapeDefinition(
+    id: "0217b10e-bf48-4e27-95f0-846fd802b730",
+    name: "Firstlight Meadow",
+    // Each asset pairs its stable runtime lookup key with its authoring filename.
+    art: (
+      scene: (key: "firstlight_meadow", source: "firstlight_meadow.png"),
+      atlas_node: (key: "firstlight_meadow", source: "firstlight_meadow_icon.png"),
+    ),
+    kind: Starter(
+      // The starter has no resident guide, so its signature site is defined here.
+      signature_site: Draft,
+      // Fixed sites are presented in this order; repeated Draft entries are intentional.
+      fixed_sites: [Draft, Draft, DreamsignRevelation, Purge, Battle],
+    ),
+  ),
+
+  DreamscapeDefinition(
+    id: "08e11635-9f04-48fd-a9c8-5a9f68c80958",
+    name: "Tumbleleaf Village",
+    art: (
+      scene: (key: "tumbleleaf_village", source: "tumbleleaf_village.png"),
+      atlas_node: (key: "tumbleleaf_village", source: "tumbleleaf_village_icon.png"),
+    ),
+    kind: Standard(
+      // Shapes card selection and opponent construction in this region.
+      affiliation_id: "4b715cd0-8b41-4b82-9cef-c47b15e8992b",
+      // Restricts opponent selection to these DreamAvatars when using the corpus algorithm.
+      opponent_dream_avatar_ids: [
+        "94e7c651-25e9-4a62-9de4-eaf5ba20542c",
+        "3ebaba62-9000-429d-b203-2a5a9724389a",
+        "2c53b1b9-9291-4bba-8d3a-f40b545c8f3c",
+      ],
+    ),
+  ),
+
+  DreamscapeDefinition(
+    id: "b25b9906-8380-45bf-9435-678ce18316ea",
+    name: "Pharaoh's Gate",
+    art: (
+      scene: (key: "pharaohs_gate", source: "pharaohs_gate.png"),
+      atlas_node: (key: "pharaohs_gate", source: "pharaohs_gate_icon.png"),
+    ),
+    kind: Standard(
+      affiliation_id: "c3815562-e80d-4afc-8ba6-91bd60ad323e",
+      opponent_dream_avatar_ids: [
+        "c72cfd7b-408b-47f6-adf1-1e486a7e20d3",
+        "6488452d-4e9e-466c-96df-716d4ec646b1",
+        "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
+        "f0f5449e-01c2-4635-bce1-76b179fc2108",
+      ],
+    ),
+  ),
+
+  DreamscapeDefinition(
+    id: "7d793d30-8a0f-4f84-a446-cdde502710e8",
+    name: "Winterwake Fjords",
+    art: (
+      scene: (key: "winterwake_fjords", source: "winterwake_fjords.png"),
+      atlas_node: (key: "winterwake_fjords", source: "winterwake_fjords_icon.png"),
+    ),
+    kind: Standard(
+      affiliation_id: "a544314c-2e90-42b1-ba04-06c7f2f0a6f9",
+      opponent_dream_avatar_ids: [
+        "fe2510d9-bfee-4c35-97f9-30e0cd2e2851",
+        "bdd3a3a7-242c-4d2b-8071-ebe56891a340",
+        "5e28154d-770a-4b84-8aac-9de44f5d7d02",
+      ],
+    ),
+  ),
+
+  DreamscapeDefinition(
+    id: "8e7d0818-ba6a-4dc9-8b3d-a12c62aefa44",
+    name: "Frostforge",
+    art: (
+      scene: (key: "frostforge", source: "frostforge.png"),
+      atlas_node: (key: "frostforge", source: "frostforge_icon.png"),
+    ),
+    kind: Standard(
+      affiliation_id: "04103386-ca4e-42a0-9a90-150297a20e91",
+      opponent_dream_avatar_ids: [
+        "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+        "84e7020c-7384-4cc3-a20f-ab05f03cc375",
+        "f6208407-c4e9-42ac-b533-346704f5e39e",
+      ],
+    ),
+  ),
+
+  DreamscapeDefinition(
+    id: "562f9d1f-5bbf-4dc5-9edd-7e8d538a1651",
+    name: "Hope's End",
+    art: (
+      scene: (key: "hopes_end", source: "hopes_end.png"),
+      atlas_node: (key: "hopes_end", source: "hopes_end_icon.png"),
+    ),
+    kind: Standard(
+      affiliation_id: "8b30f0bf-6b9d-47c0-92ba-80f62ae8899d",
+      opponent_dream_avatar_ids: [
+        "6029be40-75b9-4c07-912f-9718b6c5c747",
+        "3c4773e4-f8e1-4686-86cb-b407a42489d4",
+        "1cc5a88a-134f-42f7-a0ae-95ace44b3745",
+      ],
+    ),
+  ),
+
+  DreamscapeDefinition(
+    id: "823dc726-db0f-4367-8442-70600a20ad2e",
+    name: "Tsukiren",
+    art: (
+      scene: (key: "tsukiren", source: "tsukiren.png"),
+      atlas_node: (key: "tsukiren", source: "tsukiren_icon.png"),
+    ),
+    kind: Standard(
+      affiliation_id: "33dee3b4-19d2-4788-9cef-b69057385844",
+      opponent_dream_avatar_ids: [
+        "bf72adff-7d74-4be8-9b93-1db7ba13a1db",
+        "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+        "91d4c3b5-fd63-480b-9ed5-979109a227bb",
+      ],
+    ),
+  ),
+
+  DreamscapeDefinition(
+    id: "f52bdeb1-0db6-44ee-80ea-b99bd18dff7d",
+    name: "Wilderveil",
+    art: (
+      scene: (key: "wilderveil", source: "wilderveil.png"),
+      atlas_node: (key: "wilderveil", source: "wilderveil_icon.png"),
+    ),
+    kind: Standard(
+      affiliation_id: "c674a92f-3860-4851-8357-dd4f3e469674",
+      opponent_dream_avatar_ids: [
+        "b9bf6d4b-907c-4750-b51c-811aff29de59",
+        "9d64a4a2-3dc7-456e-9eb2-5fe3a48883c4",
+        "16b579fe-c15b-4df6-8262-d45ce44732ae",
+      ],
+    ),
+  ),
+
+  DreamscapeDefinition(
+    id: "6f16a1c9-c2fa-494d-9d9d-4da00e011491",
+    name: "The Rust Expanse",
+    art: (
+      scene: (key: "rust_expanse", source: "rust_expanse.png"),
+      atlas_node: (key: "rust_expanse", source: "rust_expanse_icon.png"),
+    ),
+    kind: Standard(
+      affiliation_id: "d1a8f46d-0efe-4ae6-bda3-0866d5d20633",
+      opponent_dream_avatar_ids: [
+        "133e22dd-f81b-406d-b4e3-98c346d7fd4e",
+        "9e4862fd-e18c-463e-9d5f-e5d73c29a66f",
+        "81954ca0-da36-49dd-915c-1ccb1b2d7b05",
+      ],
+    ),
+  ),
+
+  DreamscapeDefinition(
+    id: "138eff95-3301-4f76-aeb1-31bf0dc8963d",
+    name: "Farpoint Station",
+    art: (
+      scene: (key: "farpoint_station", source: "farpoint_station.png"),
+      atlas_node: (key: "farpoint_station", source: "farpoint_station_icon.png"),
+    ),
+    kind: Standard(
+      affiliation_id: "96258dfd-33c9-44a7-96a5-6747eb42cc60",
+      opponent_dream_avatar_ids: [
+        "9e19b3d1-12f2-43c1-9cb1-08de7cd32e32",
+        "8a2fcd65-bba7-459c-a6b0-f0391b9293fd",
+        "b99936ca-97f9-4930-af5a-fa9ef92557ef",
+      ],
+    ),
+  ),
+
+  DreamscapeDefinition(
+    id: "6c03e9d1-21fe-4c13-b940-2325d308cb14",
+    name: "Grid City",
+    art: (
+      scene: (key: "grid_city", source: "grid_city.png"),
+      atlas_node: (key: "grid_city", source: "grid_city_icon.png"),
+    ),
+    kind: Standard(
+      affiliation_id: "0f09352d-3a1d-44db-a58e-229ab834cdc3",
+      opponent_dream_avatar_ids: [
+        "86026206-1b11-4f38-a24e-fd3c697f5353",
+        "b8c1b0ab-0fe6-47d6-b576-0c2231aeb81e",
+        "ba973428-6d90-4847-b779-cb7e25a5ac84",
+        "4d5e3933-7dd6-406b-922d-dd78acfa044a",
+      ],
+    ),
+  ),
+
+  DreamscapeDefinition(
+    id: "f31e1199-70bc-4110-85f9-505afebb02c4",
+    name: "Limbo",
+    art: (
+      scene: (key: "limbo", source: "limbo.png"),
+      atlas_node: (key: "limbo", source: "limbo_icon.png"),
+    ),
+    // Boss composition and presentation are defined by the Atlas catalog.
+    kind: Boss,
+  ),
+]

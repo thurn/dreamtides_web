@@ -1,7 +1,7 @@
 use std::collections::BTreeSet;
 use std::fmt;
 
-use anyhow::{Result, ensure};
+use anyhow::{Context, Result, ensure};
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
@@ -191,7 +191,7 @@ pub fn lower(source: Vec<DreamscapeDefinition>) -> Result<toml::Value> {
     Ok(toml::Value::try_from(CompatibilityCatalog { dreamscapes })?)
 }
 
-fn validate(source: &[DreamscapeDefinition]) -> Result<()> {
+pub(crate) fn validate(source: &[DreamscapeDefinition]) -> Result<()> {
     ensure!(!source.is_empty(), "Dreamscape catalog must not be empty");
     let mut dreamscape_ids = BTreeSet::new();
     let mut affiliation_ids = BTreeSet::new();
@@ -341,6 +341,14 @@ fn compatibility_key(id: DreamscapeId) -> Result<&'static str> {
         .ok_or_else(|| anyhow::anyhow!("Dreamscape {id} has no legacy compatibility mapping"))
 }
 
+pub(crate) fn canonical_id(compatibility_id: &str) -> Result<DreamscapeId> {
+    LEGACY_ID_MAP
+        .iter()
+        .find_map(|(legacy, canonical)| (*legacy == compatibility_id).then_some(*canonical))
+        .with_context(|| format!("Dreamscape compatibility identity {compatibility_id} is unknown"))
+        .and_then(|canonical| DreamscapeId::parse(canonical).map_err(anyhow::Error::msg))
+}
+
 fn site_type_compatibility_name(site_type: SiteType) -> &'static str {
     match site_type {
         SiteType::Battle => "Battle",
@@ -362,13 +370,8 @@ fn site_type_compatibility_name(site_type: SiteType) -> &'static str {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::{BTreeMap, BTreeSet};
-    use std::fs;
-    use std::path::Path;
-
     use pretty_assertions::assert_eq;
 
-    use super::super::compat::CompatDocument;
     use super::*;
 
     const STARTER_ID: &str = "0217b10e-bf48-4e27-95f0-846fd802b730";
@@ -560,177 +563,6 @@ mod tests {
         assert!(
             lower(parsed).unwrap_err().to_string().contains(expected),
             "error did not contain {expected}"
-        );
-    }
-
-    #[test]
-    #[ignore = "real-catalog parity probe retained for canonical Dreamscape review"]
-    fn canonical_candidate_matches_current_compatibility_sources() {
-        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-        let current_ron: CompatDocument =
-            ron::from_str(&fs::read_to_string(root.join("data/dreamscapes.ron")).unwrap()).unwrap();
-        let current_toml: toml::Value =
-            toml::from_str(&fs::read_to_string(root.join("data/dreamscapes.toml")).unwrap())
-                .unwrap();
-        assert_eq!(current_ron.data, current_toml);
-
-        let canonical: Vec<DreamscapeDefinition> = ron::from_str(
-            &fs::read_to_string(root.join("data/dreamscapes_canonical.ron")).unwrap(),
-        )
-        .unwrap();
-        let normalized = current_ron.data.clone();
-        assert_eq!(lower(canonical.clone()).unwrap(), normalized);
-
-        let legacy_to_canonical: BTreeMap<_, _> = LEGACY_ID_MAP.into_iter().collect();
-        assert_eq!(legacy_to_canonical.len(), canonical.len());
-        let canonical_ids: BTreeSet<_> = canonical
-            .iter()
-            .map(|dreamscape| dreamscape.id.to_string())
-            .collect();
-        assert_eq!(
-            canonical_ids,
-            legacy_to_canonical
-                .values()
-                .copied()
-                .map(str::to_owned)
-                .collect()
-        );
-
-        let compatibility_ids: BTreeSet<_> = normalized["dreamscapes"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|dreamscape| dreamscape["id"].as_str().unwrap())
-            .collect();
-        assert_eq!(
-            compatibility_ids,
-            legacy_to_canonical
-                .keys()
-                .copied()
-                .filter(|id| *id != "limbo")
-                .collect()
-        );
-
-        verify_canonical_uuids(&canonical);
-        verify_foreign_keys(&root, &canonical, &compatibility_ids);
-    }
-
-    fn verify_canonical_uuids(canonical: &[DreamscapeDefinition]) {
-        for dreamscape in canonical {
-            assert_canonical_uuid(&dreamscape.id.to_string());
-            if let DreamscapeKind::Standard {
-                affiliation_id,
-                opponent_dream_avatar_ids,
-            } = &dreamscape.kind
-            {
-                assert_canonical_uuid(&affiliation_id.to_string());
-                for avatar_id in opponent_dream_avatar_ids {
-                    assert_canonical_uuid(&avatar_id.to_string());
-                }
-            }
-        }
-    }
-
-    fn assert_canonical_uuid(value: &str) {
-        let parsed = Uuid::parse_str(value).unwrap();
-        assert_eq!(parsed.get_version(), Some(Version::Random));
-        assert_eq!(parsed.get_variant(), Variant::RFC4122);
-        assert_eq!(parsed.hyphenated().to_string(), value);
-    }
-
-    fn verify_foreign_keys(
-        root: &Path,
-        canonical: &[DreamscapeDefinition],
-        compatibility_ids: &BTreeSet<&str>,
-    ) {
-        let affiliations: toml::Value =
-            toml::from_str(&fs::read_to_string(root.join("data/affiliations.toml")).unwrap())
-                .unwrap();
-        let known_affiliations: BTreeSet<_> = affiliations["affiliations"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|entry| entry["id"].as_str().unwrap())
-            .collect();
-
-        let avatars: toml::Value =
-            toml::from_str(&fs::read_to_string(root.join("data/dream_avatars.toml")).unwrap())
-                .unwrap();
-        let known_avatars: BTreeSet<_> = avatars["dreamAvatar"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|entry| entry["id"].as_str().unwrap().to_ascii_lowercase())
-            .collect();
-
-        let mut referenced_avatars = BTreeSet::new();
-        for dreamscape in canonical {
-            let legacy_id = compatibility_key(dreamscape.id).unwrap();
-            if !matches!(dreamscape.kind, DreamscapeKind::Boss) {
-                assert_eq!(dreamscape.art.scene.key, legacy_id);
-                assert_eq!(dreamscape.art.scene.source, format!("{legacy_id}.png"));
-                assert_eq!(dreamscape.art.atlas_node.key, legacy_id);
-                assert_eq!(
-                    dreamscape.art.atlas_node.source,
-                    format!("{legacy_id}_icon.png")
-                );
-            }
-            if let DreamscapeKind::Standard {
-                affiliation_id,
-                opponent_dream_avatar_ids,
-            } = &dreamscape.kind
-            {
-                assert!(known_affiliations.contains(affiliation_id.to_string().as_str()));
-                referenced_avatars
-                    .extend(opponent_dream_avatar_ids.iter().map(ToString::to_string));
-            }
-        }
-        assert_eq!(referenced_avatars, known_avatars);
-
-        let guides: toml::Value =
-            toml::from_str(&fs::read_to_string(root.join("data/dream_guides.toml")).unwrap())
-                .unwrap();
-        let guide_homes: BTreeSet<_> = guides["guides"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|guide| guide["home-dreamscape-id"].as_str().unwrap())
-            .collect();
-        let starter_key = compatibility_key(
-            canonical
-                .iter()
-                .find(|dreamscape| matches!(dreamscape.kind, DreamscapeKind::Starter { .. }))
-                .unwrap()
-                .id,
-        )
-        .unwrap();
-        assert_eq!(
-            guide_homes,
-            compatibility_ids
-                .iter()
-                .copied()
-                .filter(|id| *id != starter_key)
-                .collect()
-        );
-
-        let boss = canonical
-            .iter()
-            .find(|dreamscape| matches!(dreamscape.kind, DreamscapeKind::Boss))
-            .unwrap();
-        let atlas_source: super::super::atlas::AtlasCatalog =
-            ron::from_str(&fs::read_to_string(root.join("data/atlas.ron")).unwrap()).unwrap();
-        assert_eq!(boss.name, atlas_source.boss.place);
-        assert_eq!(boss.art.scene.key, atlas_source.boss.art.scene.key);
-        assert_eq!(boss.art.scene.source, atlas_source.boss.art.scene.source);
-        assert_eq!(boss.art.atlas_node.key, atlas_source.boss.art.icon.key);
-        assert_eq!(
-            boss.art.atlas_node.source,
-            atlas_source.boss.art.icon.source
-        );
-        let atlas_compatibility = super::super::atlas::lower(atlas_source).unwrap();
-        assert_eq!(
-            atlas_compatibility["boss"]["dreamscape-id"].as_str(),
-            Some(compatibility_key(boss.id).unwrap())
         );
     }
 }

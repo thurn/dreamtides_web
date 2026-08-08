@@ -13,10 +13,7 @@ import { createDreamsignEditorApiMiddleware } from "./scripts/dreamsign-editor-a
 import { createDreamAvatarEditorApiMiddleware } from "./scripts/dream-avatar-editor-api.mjs";
 import { createTidesEditorApiMiddleware } from "./scripts/tides-editor-api.mjs";
 import { createDreamscapeEditorApiMiddleware } from "./scripts/dreamscape-editor-api.mjs";
-import {
-  createDreamGuideEditorApiMiddleware,
-  DREAM_GUIDE_EDITOR_SOURCE_PATHS,
-} from "./scripts/dream-guide-editor-api.mjs";
+import { createDreamGuideEditorApiMiddleware } from "./scripts/dream-guide-editor-api.mjs";
 import { createFigmentEditorApiMiddleware } from "./scripts/figment-editor-api.mjs";
 import { refreshFigmentDataJson } from "./scripts/figment-editor-data.mjs";
 import { createDreamwellEditorApiMiddleware } from "./scripts/dreamwell-editor-api.mjs";
@@ -395,17 +392,7 @@ function dreamscapeEditorApiPlugin(): Plugin {
       const rootDir =
         editorRoot === undefined ? __dirname : path.resolve(editorRoot);
       server.middlewares.use(createDreamGuideEditorApiMiddleware({ rootDir }));
-      server.middlewares.use(
-        createRonEditorBridge({
-          rootDir,
-          basePaths: ["/api/editor/dreamscapes"],
-          collectionPath: "/api/editor/dreamscapes",
-          datasets: ["dreamscapes"],
-          sourcePaths: DREAM_GUIDE_EDITOR_SOURCE_PATHS,
-          createLegacy: (rootDir) =>
-            createDreamscapeEditorApiMiddleware({ rootDir }),
-        }),
-      );
+      server.middlewares.use(createDreamscapeEditorApiMiddleware({ rootDir }));
     },
   };
 }

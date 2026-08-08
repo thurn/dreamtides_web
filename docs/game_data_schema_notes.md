@@ -246,33 +246,27 @@ Fields:
 
 ## `data/dreamscapes.ron`
 
-### `[[dreamscapes]]`
-
-Dreamscape definitions for the Dream Atlas. Each entry is a themed region the
-player can travel to. The starter dreamscape (Firstlight Meadow) opens every
-run with a fixed sequence of sites and carries no guide or affiliation; every
-other dreamscape has a resident Dream Guide and a thematic affiliation that
-steers its draft and battle content.
+Dreamscape definitions for the Dream Atlas. The source is an ordered list of
+typed `DreamscapeDefinition` records. `data/dreamscapes.toml` is the generated
+compatibility boundary consumed by the journey prototype.
 
 Fields:
-  id              Stable identifier referenced by guides and atlas generation.
-  name            Player-facing dreamscape name.
-  Guide residency and signature sites are derived from `dream_guides.ron`.
-  signature-site  Authored only for the starter's fixed Draft identity.
-  affiliation-id  Thematic affiliation id steering content (omitted for starter).
-  is-starter      Present and true only on the run's opening dreamscape.
-  fixed-sites     Ordered SiteType list the starter always presents.
-  dream-avatar-ids The 3-4 resident DreamAvatars of this region, by id (omitted
-                  for the starter). Every non-starter DreamAvatar belongs to
-                  exactly one dreamscape, so these lists partition
-                  dream_avatars.ron: each id appears under exactly one
-                  dreamscape, and the build fails if that invariant breaks.
-                  Assignments are affiliation-driven where a DreamAvatar's
-                  ability names the region's theme (the warriors live in
-                  Tsukiren, the event-payoff avatars in Frostforge, and so on);
-                  the remainder are placed by closest thematic fit. The trailing
-                  comment on each id is the DreamAvatar display name, kept only
-                  for human readers — the id is the source of truth.
+  id    Lowercase UUIDv4 identity referenced by authored catalogs.
+  name  Player-facing dreamscape name.
+  art   Scene and atlas-node asset references, each pairing a stable runtime
+        key with its authoring filename.
+  kind  Closed `Starter`, `Standard`, or `Boss` role variant.
+
+`Starter` defines the signature site and ordered fixed-site sequence.
+`Standard` defines one affiliation UUID and an ordered roster of three or four
+DreamAvatar UUIDs. `Boss` carries the Limbo identity and art while the Atlas
+catalog owns its encounter configuration. Guide residency and signature sites
+are derived from `data/dream_guides.ron`.
+
+The Dreamscape editor publishes typed semantic operations against this RON
+source. Name and affiliation edits patch one value span; resident changes patch
+the affected roster spans in one revisioned transaction. Every save validates
+the typed catalog and generated artifacts before atomic publication.
 
 ### `dream-avatar-ids = [`
 
