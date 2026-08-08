@@ -9,7 +9,9 @@ use serde::Serialize;
 use sha2::{Digest, Sha256};
 
 use crate::manifest::{Dataset, Manifest, MigrationState};
-use crate::models::{affiliations, apollyon_incarnations, cards, compat, draft, exploration};
+use crate::models::{
+    affiliations, apollyon_incarnations, atlas, cards, compat, draft, exploration,
+};
 
 pub const BUILD_VERSION: &str = env!("GAME_DATA_BUILD_VERSION");
 
@@ -119,6 +121,7 @@ fn adapt(dataset: &Dataset, source: &[u8]) -> Result<toml::Value> {
     match dataset.adapter.as_str() {
         "affiliations_v1" => affiliations::lower(parse_ron(source, dataset)?),
         "apollyon_incarnations_v1" => apollyon_incarnations::lower(parse_ron(source, dataset)?),
+        "atlas_v1" => atlas::lower(parse_ron(source, dataset)?),
         "draft_v1" => draft::lower(parse_ron(source, dataset)?),
         "cards_v1" => cards::lower(parse_ron(source, dataset)?),
         "exploration_v1" => exploration::lower(parse_ron(source, dataset)?),
@@ -335,6 +338,9 @@ mod tests {
                 }
                 "apollyon_incarnations_v1" => {
                     canonical::<Vec<apollyon_incarnations::ApollyonIncarnation>>(&source, true);
+                }
+                "atlas_v1" => {
+                    canonical::<atlas::AtlasCatalog>(&source, true);
                 }
                 "cards_v1" => {
                     canonical::<Vec<CardDefinition>>(&source, true);

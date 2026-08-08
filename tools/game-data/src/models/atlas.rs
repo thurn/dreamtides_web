@@ -1,5 +1,3 @@
-#![allow(dead_code)] // Activated by the reviewed Atlas adapter cutover.
-
 use std::collections::HashSet;
 
 use anyhow::{Result, bail, ensure};
@@ -728,10 +726,7 @@ fn lower_assets(
 
 #[cfg(test)]
 mod tests {
-    use std::{fs, path::Path};
-
     use super::*;
-    use crate::models::compat::CompatDocument;
 
     fn catalog() -> AtlasCatalog {
         let layers = LayerPosition::ALL
@@ -959,59 +954,5 @@ mod tests {
                 .to_string()
                 .contains("repeats a layer")
         );
-    }
-
-    #[test]
-    #[ignore = "real-catalog parity probe retained for canonical Atlas review"]
-    fn canonical_candidate_matches_current_compatibility_sources() {
-        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-        let current_ron: CompatDocument =
-            ron::from_str(&fs::read_to_string(root.join("data/atlas.ron")).unwrap()).unwrap();
-        let current_toml: toml::Value =
-            toml::from_str(&fs::read_to_string(root.join("data/atlas.toml")).unwrap()).unwrap();
-        assert_eq!(current_ron.data, current_toml);
-
-        let canonical: AtlasCatalog =
-            ron::from_str(&fs::read_to_string(root.join("data/atlas_canonical.ron")).unwrap())
-                .unwrap();
-        assert_eq!(canonical.layers.len(), 7);
-        assert_eq!(canonical.fill_profiles.len(), 2);
-        assert_eq!(lower(canonical).unwrap(), current_ron.data);
-
-        const LEGACY_LAYERS: [(&str, LayerPosition); 7] = [
-            ("one", LayerPosition::One),
-            ("two", LayerPosition::Two),
-            ("three", LayerPosition::Three),
-            ("four", LayerPosition::Four),
-            ("five", LayerPosition::Five),
-            ("six", LayerPosition::Six),
-            ("seven", LayerPosition::Seven),
-        ];
-        for (layer, (legacy, typed)) in current_ron.data["layers"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .zip(LEGACY_LAYERS)
-        {
-            assert_eq!(layer["name"].as_str(), Some(legacy));
-            assert_eq!(typed.as_compat(), legacy);
-        }
-        assert_eq!(
-            current_ron.data["fill-profiles"]
-                .as_array()
-                .unwrap()
-                .iter()
-                .map(|profile| profile["id"].as_str().unwrap())
-                .collect::<Vec<_>>(),
-            [FillTiming::Early.as_compat(), FillTiming::Late.as_compat()]
-        );
-        assert_eq!(
-            current_ron.data["boss"]["dreamscape-id"].as_str(),
-            Some("limbo")
-        );
-        let parsed = Uuid::parse_str(LIMBO_UUID).unwrap();
-        assert_eq!(parsed.get_version(), Some(Version::Random));
-        assert_eq!(parsed.get_variant(), Variant::RFC4122);
-        assert_eq!(parsed.hyphenated().to_string(), LIMBO_UUID);
     }
 }

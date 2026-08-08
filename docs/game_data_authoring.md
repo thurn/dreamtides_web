@@ -11,8 +11,8 @@ the established compatibility paths. TypeScript tools and browser code consume
 that generated TOML or the JSON artifacts built from it.
 
 Datasets with representation changes use bespoke Rust source models and
-adapters. Cards, Draft, and Exploration are in this category: their adapters
-exhaustively map enums, variants, defaults, and compatibility field names.
+adapters. Atlas, Cards, Draft, and Exploration are in this category: their
+adapters exhaustively map enums, variants, defaults, and compatibility field names.
 Shape-preserving catalogs use the manifest-declared compatibility-document
 adapter. That adapter retains the parsed ordered TOML value exactly, avoiding a
 second hand-maintained schema beside the production TypeScript compiler. The

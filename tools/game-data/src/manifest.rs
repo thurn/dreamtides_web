@@ -77,6 +77,7 @@ impl Manifest {
         let adapters = [
             "affiliations_v1",
             "apollyon_incarnations_v1",
+            "atlas_v1",
             "draft_v1",
             "cards_v1",
             "exploration_v1",
