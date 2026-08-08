@@ -1,0 +1,652 @@
+// Complete tutorial guidance, scripted battle setup, and supplemental teaching triggers.
+
+#![enable(implicit_some)]
+TutorialCatalog(
+  journey_guidance: JourneyGuidance(
+    journey_start: PersistentSpeechBubble(
+      // Seconds after the owning tutorial surface becomes active before this guidance appears.
+      delay_seconds: 1,
+      // Signed pixels added to the computed horizontal dialogue position.
+      horizontal_offset_pixels: 40,
+      // Desktop maximum width of the speech bubble, in pixels.
+      maximum_width_pixels: 550,
+      text: "For each journey, you must choose a [purple]Dream Avatar[/purple] who provides a permanent ability.",
+    ),
+    dreamscape: PersistentSpeechBubble(
+      delay_seconds: 1,
+      maximum_width_pixels: 700,
+      text: "In each dream, you will visit [purple]sites[/purple] to build your deck and prepare for a [purple]dream battle[/purple].",
+    ),
+    atlas: PersistentSpeechBubble(
+      delay_seconds: 1,
+      maximum_width_pixels: 700,
+      text: "On the [purple]Atlas[/purple] screen, you will pick which dream to enter next.",
+    ),
+    draft: PersistentSpeechBubble(
+      delay_seconds: 1,
+      maximum_width_pixels: 600,
+      text: "At a [purple]Draft[/purple] site you build your deck by repeatedly selecting one of four cards to add.",
+    ),
+    purge: PersistentSpeechBubble(
+      delay_seconds: 1,
+      maximum_width_pixels: 600,
+      text: "You can [yellow]purge[/yellow] cards here, removing them from your deck for an ◆ essence cost.",
+    ),
+    dreamsign_revelation: PersistentSpeechBubble(
+      delay_seconds: 1,
+      maximum_width_pixels: 600,
+      text: "A [purple]Dreamsign[/purple] is a persistent artifact of the dream that gives ongoing benefits.",
+    ),
+    first_battle: PersistentSpeechBubble(
+      delay_seconds: 1,
+      maximum_width_pixels: 700,
+      text: "Before each dream battle, you can view cards from your opponent's deck and see the ⍟ required to win",
+    ),
+    second_battle: PersistentSpeechBubble(
+      delay_seconds: 1,
+      maximum_width_pixels: 700,
+      text: "For this battle, the opponent's avatar ability is active and you must score 25⍟ to win",
+    ),
+  ),
+
+  battle: BattleConfiguration(
+    player_dream_avatar_id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+    enemy_dream_avatar_id: "b99936ca-97f9-4930-af5a-fa9ef92557ef",
+    starting_energy: 4,
+    score_to_win: 10,
+    starter_deck: [
+      StarterDeckEntry(card_id: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8", copies: 3),
+
+      StarterDeckEntry(card_id: "647f5150-b2e0-424b-9480-27557642524e", copies: 3),
+
+      StarterDeckEntry(card_id: "e83014d3-9d35-4e80-a1b3-9b25360ad2af", copies: 3),
+
+      StarterDeckEntry(card_id: "a28ad36d-fa74-4190-a463-7efd3a6233d0", copies: 3),
+
+      StarterDeckEntry(card_id: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", copies: 3),
+
+      StarterDeckEntry(card_id: "5ab11bef-5dcd-49f5-be49-ae2ccde76e70", copies: 3),
+
+      StarterDeckEntry(card_id: "4408b942-09a0-4f4e-a403-10c708c6e3c5", copies: 3),
+
+      StarterDeckEntry(card_id: "2162742c-09d0-4e62-ae49-0f8f79b45adc", copies: 3),
+
+      StarterDeckEntry(card_id: "910b4cf9-dec7-4e03-af4f-7d5ae342eeba", copies: 3),
+
+      StarterDeckEntry(card_id: "944e15d2-d680-4ebe-8d18-36826f4b1535", copies: 3),
+    ],
+    player_draws: [
+      "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+      "647f5150-b2e0-424b-9480-27557642524e",
+      "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
+      "944e15d2-d680-4ebe-8d18-36826f4b1535",
+      "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
+    ],
+    enemy_draws: [
+      "944e15d2-d680-4ebe-8d18-36826f4b1535",
+      "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
+      "647f5150-b2e0-424b-9480-27557642524e",
+      "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+      "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
+    ],
+    // Complete shared deck prefix, including the two pre-handoff scripted draws.
+    dreamwell_draws: [
+      "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+      "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+      "51caf26d-83bf-45a9-bc80-010d353277db",
+      "5ec17498-9028-4a01-80a0-67c91b03d505",
+      "03e4e701-4720-4278-8198-9b7e0514d4cf",
+      "de98477c-e216-4618-bff1-0e24bd982fdb",
+      "662b7393-751c-4aa9-8150-5f20b4d176a4",
+      "120ec4c2-aa7b-48f4-be9f-f39820e565ca",
+      "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
+      "a57f1276-3fb6-4527-b538-953fbace35cf",
+      "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
+    ],
+    featured_cards: FeaturedCards(
+      player_card_id: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+      opponent_card_id: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+      enemy_starter_card_id: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+      loading_event_card_id: "944e15d2-d680-4ebe-8d18-36826f4b1535",
+      dreamwell_card_id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+    ),
+    scripted_board: ScriptedBoard(player_back_rank_index: 0, player_front_rank_index: 0),
+    handoff: BattleHandoff(
+      active_side: Player,
+      turn_number: 4,
+      phase: Dawn,
+      dreamwell_deck_index: 2,
+      player: HandoffSide(
+        current_energy: 5,
+        maximum_energy: 5,
+        score: 0,
+        dreamwell_card_index: 1,
+        dreamwell_drawn_turn: 3,
+      ),
+      enemy: HandoffSide(
+        current_energy: 0,
+        maximum_energy: 5,
+        score: 2,
+        dreamwell_card_index: 0,
+        dreamwell_drawn_turn: 2,
+      ),
+      placements: [
+        Rank(card: Player, side: Player, source: Deck, rank: Front, slot_id: "F4"),
+
+        Rank(card: EnemyStarter, side: Enemy, source: Deck, rank: Back, slot_id: "B5"),
+
+        Void(card: Opponent, side: Enemy, source: Created),
+      ],
+    ),
+    ai_action_overrides: [
+      AiActionOverride(
+        id: "2fd657e4-02d2-412e-acad-4b063504a188",
+        trigger: AfterEnemyDreamwell(card_id: "51caf26d-83bf-45a9-bc80-010d353277db"),
+        action: PlayCard(card_id: "229ab3a1-3720-41a2-924c-8fe112188f8e"),
+      ),
+    ],
+  ),
+
+  actions: [
+    ActionDefinition(
+      id: "3f7f1086-8a50-4bc9-a7d2-6bf68fde992f",
+      // Seconds to wait before the sequence advances from this action.
+      wait_seconds: 0,
+      behavior: DisplaySpeechBubble(
+        speech_bubble: SpeechBubble(
+          duration_seconds: 3,
+          maximum_width_pixels: 700,
+          text: "Welcome, Dreamer.",
+        ),
+      ),
+    ),
+
+    ActionDefinition(
+      id: "c06dbc13-a48c-499e-83b3-b24e555ed008",
+      wait_seconds: 0,
+      behavior: AnimateDreamAvatarPortrait(owner: Player, pause_seconds: 1, duration_seconds: 0.6),
+    ),
+
+    ActionDefinition(
+      id: "8bae0625-6f94-472b-8752-1719166d0fb4",
+      wait_seconds: 0,
+      behavior: DisplaySpeechBubble(
+        speech_bubble: SpeechBubble(
+          duration_seconds: 3,
+          vertical_offset_pixels: 100,
+          maximum_width_pixels: 700,
+          text: "You are called to stand against\nthe power of Nightmare.",
+        ),
+      ),
+    ),
+
+    ActionDefinition(
+      id: "548ef8f2-44d2-4af8-ae92-b13f089a42e1",
+      wait_seconds: 0,
+      behavior: AnimateDreamAvatarPortrait(owner: Enemy, pause_seconds: 1, duration_seconds: 0.6),
+    ),
+
+    ActionDefinition(
+      id: "54325d07-bf55-4709-bb4a-fbfe098c81f5",
+      wait_seconds: 0,
+      behavior: DisplaySpeechBubble(
+        speech_bubble: SpeechBubble(
+          speaker: Enemy,
+          duration_seconds: 3,
+          maximum_width_pixels: 300,
+          text: "For the Abyss!",
+        ),
+      ),
+    ),
+
+    ActionDefinition(
+      id: "f94ec9e9-c558-45b8-a6ba-69a8d9bb3c71",
+      wait_seconds: 0,
+      behavior: DrawOpponentCard(card_id: "229ab3a1-3720-41a2-924c-8fe112188f8e"),
+    ),
+
+    ActionDefinition(
+      id: "d641f65f-8d2d-4d3c-a572-b12dbf5d1490",
+      wait_seconds: 0,
+      behavior: RevealAndPlayOpponentCard(
+        card_id: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        reveal_duration_seconds: 2,
+      ),
+    ),
+
+    ActionDefinition(
+      id: "08519d56-96a5-49f9-a508-4a604fe11fe0",
+      wait_seconds: 0,
+      behavior: DisplayHowToPlay(
+        trigger: PlayerTurnAnnouncementComplete,
+        text: "You can [yellow]materialize[/yellow] characters and then [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦).\n\nScore 10⍟ to win this dream battle.",
+      ),
+    ),
+
+    ActionDefinition(
+      id: "0afd72f6-ec5f-4ebb-a5c7-5975af025576",
+      wait_seconds: 0,
+      behavior: EndTurn(),
+    ),
+
+    ActionDefinition(
+      id: "35292d09-7eac-4f14-8777-48787d217405",
+      wait_seconds: 0,
+      behavior: DrawDreamwellCard(owner: Enemy, card_id: "02e8ea92-1218-413c-9f0b-4c865a3921d3"),
+    ),
+
+    ActionDefinition(
+      id: "597d8b4e-a424-4ea7-8919-a8194b82fcaa",
+      wait_seconds: 0,
+      behavior: DisplayHowToPlay(
+        trigger: Immediate,
+        companion: DreamwellCard,
+        card_width_pixels: 500,
+        text: "From turn 2, players draw [yellow]dreamwell[/yellow] cards that increase their energy (●) production and have special effects.",
+      ),
+    ),
+
+    ActionDefinition(
+      id: "64f80a9f-9eaa-4247-ab2c-2bc278c292d0",
+      wait_seconds: 0,
+      behavior: DrawOpponentCard(card_id: "a28ad36d-fa74-4190-a463-7efd3a6233d0"),
+    ),
+
+    ActionDefinition(
+      id: "fbf90344-247a-4d8f-81cd-9324c3761fcd",
+      wait_seconds: 0,
+      behavior: RevealAndPlayOpponentCard(
+        card_id: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+        reveal_duration_seconds: 5,
+        speech_bubble: SpeechBubble(
+          duration_seconds: 4,
+          maximum_width_pixels: 500,
+          text: "This card has a ▸Dawn ability which triggers at the start of turn.",
+        ),
+      ),
+    ),
+
+    ActionDefinition(
+      id: "c2953e09-b017-486f-a315-a8fce33c38f3",
+      wait_seconds: 0,
+      behavior: DisplaySpeechBubble(
+        speech_bubble: SpeechBubble(
+          speaker: Enemy,
+          duration_seconds: 3,
+          maximum_width_pixels: 300,
+          text: "My character [yellow]challenges[/yellow] you! Prove your worth!",
+        ),
+      ),
+    ),
+
+    ActionDefinition(
+      id: "42bf48ce-4fa8-48ed-8458-dfd83df03679",
+      wait_seconds: 1.5,
+      behavior: RepositionOpponentCharacter(card_id: "229ab3a1-3720-41a2-924c-8fe112188f8e"),
+    ),
+
+    ActionDefinition(
+      id: "eca0ebe7-208a-4c7b-9153-d051418b29d6",
+      wait_seconds: 0,
+      behavior: DisplayHowToPlay(
+        trigger: Immediate,
+        text: "Characters in the front rank [yellow]challenge[/yellow] during their turn and [yellow]block[/yellow] challengers during the opponent's turn.",
+      ),
+    ),
+
+    ActionDefinition(
+      id: "876b59d1-cc76-4086-bdaf-3fb106c283c5",
+      wait_seconds: 0,
+      behavior: RepositionPlayerCharacter(
+        card_id: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        opposing_card_id: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+      ),
+    ),
+
+    ActionDefinition(
+      id: "c9ead9e0-bef7-41e2-aef6-206be4b9971e",
+      wait_seconds: 1,
+      behavior: ResolveChallenge(
+        challenger_card_id: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        blocker_card_id: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+      ),
+    ),
+
+    ActionDefinition(
+      id: "01109c14-02cb-449c-86e0-0915d6119c10",
+      wait_seconds: 0,
+      behavior: DisplaySpeechBubble(
+        speech_bubble: SpeechBubble(
+          duration_seconds: 10,
+          vertical_offset_pixels: -30,
+          maximum_width_pixels: 500,
+          text: "The lowest spark (✦) character in the challenge is [yellow]dissolved[/yellow] and sent to the void.",
+        ),
+      ),
+    ),
+
+    ActionDefinition(
+      id: "37a8690c-08f8-4aac-8285-f3e7c6c66740",
+      wait_seconds: 0,
+      behavior: DisplaySpeechBubble(
+        speech_bubble: SpeechBubble(
+          duration_seconds: 10,
+          vertical_offset_pixels: 30,
+          maximum_width_pixels: 500,
+          text: "A [yellow]blocked[/yellow] character that isn't dissolved scores fewer points (⍟), reduced by the enemy's spark (✦).",
+        ),
+      ),
+    ),
+
+    ActionDefinition(
+      id: "a5abd23e-f92e-4dd7-80bb-fcb760eacba5",
+      wait_seconds: 0,
+      behavior: DrawDreamwellCard(
+        owner: Player,
+        card_id: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+        reveal_duration_seconds: 3,
+      ),
+    ),
+
+    ActionDefinition(
+      id: "d36e30f6-59e6-46a7-a214-3cfa3668d5e0",
+      wait_seconds: 0,
+      behavior: DrawCard(
+        owner: Player,
+        card_id: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+        reason: DreamwellEffect,
+      ),
+    ),
+
+    ActionDefinition(
+      id: "04d04c5e-89d8-4544-a806-1231895000b8",
+      wait_seconds: 0,
+      behavior: DrawCard(
+        owner: Player,
+        card_id: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+        reason: DreamwellEffect,
+      ),
+    ),
+
+    ActionDefinition(
+      id: "8dd10d24-4723-4630-919c-c4a6c97d50fc",
+      wait_seconds: 0,
+      behavior: DrawCard(
+        owner: Enemy,
+        card_id: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        reason: DreamwellEffect,
+      ),
+    ),
+
+    ActionDefinition(
+      id: "4773ed9a-44d3-41c7-970b-7a40766d7360",
+      wait_seconds: 0,
+      behavior: DrawCard(
+        owner: Enemy,
+        card_id: "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+        reason: DreamwellEffect,
+      ),
+    ),
+
+    ActionDefinition(
+      id: "c41035f0-4bd1-4835-bc0e-25fc0d01fba4",
+      wait_seconds: 0,
+      behavior: DrawCard(
+        owner: Player,
+        card_id: "2162742c-09d0-4e62-ae49-0f8f79b45adc",
+        reason: TurnDraw,
+      ),
+    ),
+
+    ActionDefinition(
+      id: "b42ce692-bcc4-41a7-bc86-da62000ab350",
+      wait_seconds: 0,
+      behavior: DisplaySpeechBubble(
+        speech_bubble: SpeechBubble(
+          duration_seconds: 5,
+          maximum_width_pixels: 500,
+          text: "An [purple]event[purple] card has a one-time effect, and then is sent the void.",
+        ),
+      ),
+    ),
+  ],
+
+  triggers: [
+    TriggerDefinition(
+      id: "9a5b5f0b-8e0b-437e-b04c-d12ab6e6071c",
+      on: [OpponentRepositionOpportunity],
+      priority: 10,
+      duration_seconds: 5,
+      maximum_width_pixels: 500,
+      matcher: Any,
+      text: "During your [purple]Dusk[/purple] phase, the opposing player may reposition their characters.",
+    ),
+
+    TriggerDefinition(
+      id: "abe76c76-63ad-481e-9f22-559f33f845b8",
+      on: [PlayerNightPhase],
+      priority: 10,
+      duration_seconds: 6,
+      maximum_width_pixels: 500,
+      matcher: Any,
+      text: "During your [purple]Night[/purple] phase, you can play ❖ fast cards and activate ❖ fast abilities",
+    ),
+
+    TriggerDefinition(
+      id: "277d95c1-e7a7-4d5a-9ee7-a5d26869bf75",
+      on: [CardNoValidTargets],
+      priority: 10,
+      duration_seconds: 4,
+      maximum_width_pixels: 500,
+      matcher: Card(card_id: "4408b942-09a0-4f4e-a403-10c708c6e3c5"),
+      text: "There are no valid targets for this card",
+    ),
+
+    TriggerDefinition(
+      id: "a0d61b83-d347-41ab-87ac-34842b3562d6",
+      on: [ChallengeResolved],
+      priority: 10,
+      duration_seconds: 5,
+      maximum_width_pixels: 500,
+      matcher: Any,
+      text: "If there is a tie in spark (✦) values, both characters in the challenge are dissolved",
+    ),
+
+    TriggerDefinition(
+      id: "bdbcfb47-8a5d-4649-b2fd-1f1c4ca74fe5",
+      on: [TransfigurationSeen],
+      priority: 100,
+      delay_seconds: {TransfigurationSeen: 1},
+      duration_seconds: 5,
+      maximum_width_pixels: 500,
+      matcher: Any,
+      text: "Cards can be [yellow]transfigured[/yellow] to change their cost, spark, or abilities",
+    ),
+
+    TriggerDefinition(
+      id: "8dccf13b-3883-4a30-acda-80743a9b6f94",
+      on: [CardSeen, CardPlay, DreamwellResolve],
+      priority: 100,
+      delay_seconds: {CardSeen: 1},
+      duration_seconds: 5,
+      maximum_width_pixels: 500,
+      matcher: Glossary(glossary_id: "59f426ac-b9cb-47af-a00a-8cbab941c6c4"),
+      text: "A character with [yellow]support[/yellow] gives a bonus to the two characters in front of it.",
+    ),
+
+    TriggerDefinition(
+      id: "1acc7803-e2a8-4628-a1b7-2b530d4faf89",
+      on: [CardSeen, CardPlay, DreamwellResolve],
+      priority: 100,
+      delay_seconds: {CardSeen: 1},
+      duration_seconds: 5,
+      maximum_width_pixels: 500,
+      matcher: Glossary(glossary_id: "21e9a392-3983-49ba-8072-aa950c63ebad"),
+      text: "To [yellow]foresee[/yellow] 1, look at the top card of your deck. You may put it into your void.",
+    ),
+
+    TriggerDefinition(
+      id: "d6867701-d59d-448e-9b3e-93851861c53b",
+      on: [CardSeen, CardPlay],
+      priority: 100,
+      delay_seconds: {CardSeen: 1},
+      duration_seconds: 3,
+      maximum_width_pixels: 500,
+      matcher: Glossary(glossary_id: "abef45fb-8c3f-4d63-9408-0eed1b7283bb"),
+      text: "A ▸Dissolved ability triggers when the character is sent to the void.",
+    ),
+
+    TriggerDefinition(
+      id: "85df10e7-cf05-4c7a-aa7a-cb29f9f072b8",
+      on: [CardSeen, CardPlay, DreamwellResolve],
+      priority: 100,
+      delay_seconds: {CardSeen: 1},
+      duration_seconds: 3,
+      maximum_width_pixels: 500,
+      matcher: Glossary(glossary_id: "5bda4696-32f9-4df2-a784-80120d76578b"),
+      text: "To [yellow]discover[/yellow] a card, reveal 3 matching cards from your deck and pick one to draw.",
+    ),
+
+    TriggerDefinition(
+      id: "93327f3c-8c77-4947-8fca-6b4f4e51e528",
+      on: [CardSeen, CardPlay, DreamwellResolve],
+      priority: 100,
+      delay_seconds: {CardSeen: 1},
+      duration_seconds: 10,
+      maximum_width_pixels: 500,
+      matcher: Glossary(glossary_id: "23526f6e-f17e-4496-bf96-1875858d023d"),
+      text: "[yellow]Erode[/yellow] means to put cards from a deck into the void.",
+    ),
+
+    TriggerDefinition(
+      id: "243537f6-acf7-4446-8599-87b1bb1789a5",
+      on: [FigmentCreated],
+      priority: 100,
+      duration_seconds: 8,
+      maximum_width_pixels: 500,
+      matcher: Any,
+      text: "Figments are token representations of characters which can be merged together.",
+    ),
+
+    TriggerDefinition(
+      id: "57b57322-62e5-48db-9de9-e2bca9e5600d",
+      on: [CardSeen, CardPlay, DreamwellResolve],
+      priority: 100,
+      delay_seconds: {CardSeen: 1},
+      duration_seconds: 3,
+      maximum_width_pixels: 500,
+      matcher: Glossary(glossary_id: "f7b481e7-5130-45fe-9a34-a9b54a620d44"),
+      text: "To [yellow]banish[/yellow] a card, remove it from the game. It does not go to the void.",
+    ),
+
+    TriggerDefinition(
+      id: "2f67b4c7-9edd-49e9-8e26-c310eca409fe",
+      on: [CardSeen, CardPlay, DreamwellResolve],
+      priority: 100,
+      delay_seconds: {CardSeen: 1},
+      duration_seconds: 3,
+      maximum_width_pixels: 500,
+      matcher: Glossary(glossary_id: "3b83d2c9-5fc4-4d75-8b61-3518eebdc39e"),
+      text: "To [yellow]dissolve[/yellow] a character, send it to its controller’s void.",
+    ),
+
+    TriggerDefinition(
+      id: "5d43c5d4-c8e0-4492-9ae8-743e7f381161",
+      on: [CardSeen, CardPlay, DreamwellResolve],
+      priority: 100,
+      delay_seconds: {CardSeen: 1},
+      duration_seconds: 3,
+      maximum_width_pixels: 500,
+      matcher: Glossary(glossary_id: "4244a386-8cd0-4e90-b80b-c3ae98a7df6b"),
+      text: "[yellow]Prevent[/yellow] stops a card on the stack before it resolves, then sends it to the void.",
+    ),
+
+    TriggerDefinition(
+      id: "cd804ef3-924f-4564-bd1e-48ca7261273e",
+      on: [CardSeen, CardPlay, DreamwellResolve],
+      priority: 100,
+      delay_seconds: {CardSeen: 1},
+      duration_seconds: 3,
+      maximum_width_pixels: 500,
+      matcher: Glossary(glossary_id: "cf383187-e594-41ee-98c5-039a9402b2f8"),
+      text: "To [yellow]rematerialize[/yellow] a character, trigger its ▸Materialized ability again while it stays in play.",
+    ),
+
+    TriggerDefinition(
+      id: "53a5e9fc-2b77-47f3-b5f3-83767cd53f05",
+      on: [CardSeen, CardPlay, DreamwellResolve],
+      priority: 100,
+      delay_seconds: {CardSeen: 1},
+      duration_seconds: 3,
+      maximum_width_pixels: 500,
+      matcher: Glossary(glossary_id: "d455fe46-9ddb-4241-addd-52d40db4a4ac"),
+      text: "An [yellow]ephemeral[/yellow] card left in your hand at end of turn is banished.",
+    ),
+
+    TriggerDefinition(
+      id: "8274a79d-0688-4d48-80a0-c1da28f63c01",
+      on: [CardSeen, CardPlay, DreamwellResolve],
+      priority: 100,
+      delay_seconds: {CardSeen: 1},
+      duration_seconds: 3,
+      maximum_width_pixels: 500,
+      matcher: Glossary(glossary_id: "75aae855-4ddc-41f3-9732-dd5922b897b8"),
+      text: "An [yellow]awakened[/yellow] character can challenge and use ☾ abilities on the turn it enters play.",
+    ),
+
+    TriggerDefinition(
+      id: "c45d78e2-3e5b-43e0-bd2a-8b99ae3e75b3",
+      on: [CardSeen, CardPlay, DreamwellResolve],
+      priority: 100,
+      delay_seconds: {CardSeen: 1},
+      duration_seconds: 3,
+      maximum_width_pixels: 500,
+      matcher: Glossary(glossary_id: "ab7a9b1e-3603-4321-88e7-d79619435ef7"),
+      text: "When a [yellow]phasing[/yellow] character is played, you may return one of your characters to your hand and put this one in its position.",
+    ),
+
+    TriggerDefinition(
+      id: "f6e80279-f1ea-495b-a2b9-55b5fa83e669",
+      on: [CardSeen, CardPlay, DreamwellResolve],
+      priority: 100,
+      delay_seconds: {CardSeen: 1},
+      duration_seconds: 3,
+      maximum_width_pixels: 500,
+      matcher: Glossary(glossary_id: "c5c7ca5b-03ed-4665-8a3b-405ec6eed011"),
+      text: "If an opposing effect would dissolve a character with [yellow]veil[/yellow], remove its veil instead.",
+    ),
+
+    TriggerDefinition(
+      id: "0a6ac735-0711-4137-9974-100d9b5c6e02",
+      on: [CardSeen, CardPlay, DreamwellResolve],
+      priority: 100,
+      delay_seconds: {CardSeen: 1},
+      duration_seconds: 3,
+      maximum_width_pixels: 500,
+      matcher: Glossary(glossary_id: "374c29e9-deb1-4e3d-8410-b81bacc8588b"),
+      text: "[yellow]Reclaim[/yellow] lets you play this card from your void for its Reclaim cost, and then banish it when it leaves play.",
+    ),
+
+    TriggerDefinition(
+      id: "f6f4623a-9dde-45ba-b829-91df183fc07d",
+      on: [CardSeen, CardPlay, DreamwellResolve],
+      priority: 100,
+      delay_seconds: {CardSeen: 1},
+      duration_seconds: 3,
+      maximum_width_pixels: 500,
+      matcher: Glossary(glossary_id: "04ffd85d-956e-4194-bdae-3d61ce3c584d"),
+      text: "[yellow]Offering[/yellow] lets you play this card for 0● by banishing a card from your hand. If you do, banish it at end of turn.",
+    ),
+
+    TriggerDefinition(
+      id: "9393955c-f726-4ba3-9c70-bb0d61298bc2",
+      on: [CardSeen, CardPlay, DreamwellResolve],
+      priority: 100,
+      delay_seconds: {CardSeen: 1},
+      duration_seconds: 3,
+      maximum_width_pixels: 500,
+      matcher: Glossary(glossary_id: "ee732697-b9fc-4a89-942a-2778442810dd"),
+      text: "When a [yellow]vengeful[/yellow] character loses a challenge, it dissolves the opposing character too.",
+    ),
+  ],
+)

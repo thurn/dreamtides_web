@@ -17,4 +17,5 @@ pub mod glossary;
 pub mod opponents;
 pub mod reward_selection;
 pub mod sites;
+pub mod tutorial;
 pub mod tutorial_journey_pool;
