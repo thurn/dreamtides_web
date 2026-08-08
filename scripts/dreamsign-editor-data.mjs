@@ -1,23 +1,22 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
 import {
   normalizeTagList,
-  patchTomlRecord,
   readFacetRegistry,
-  serializeFacetRegistry,
   TAG_FACET,
-  tagRegistryPathFor,
   validateTagRegistry,
 } from "./card-editor-data.mjs";
-import { transformDreamsign } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 export const DEFAULT_DREAMSIGN_TOML_PATH = join("data", "dreamsigns.toml");
-const DREAMSIGN_JSON_PATH = join("public", "dreamsign-data.json");
 
 export const EDITABLE_DREAMSIGN_FIELDS = new Set(["name", "rendered-text", "tags"]);
+
+// Generated compatibility TOML supplies the editor's display records. Saves
+// target typed Dreamsign definitions, internal metadata, and the tag registry
+// through the canonical RON transaction in dreamsign-editor-api.mjs.
 
 function validationFailure(field, message, value) {
   return {
@@ -118,63 +117,6 @@ export function validateDreamsignEdit(field, rawValue) {
   return validationFailure(field, "This field is not editable.", rawValue);
 }
 
-export function patchDreamsignsToml(source, { dreamsignId, field, value }) {
-  return patchTomlRecord(source, {
-    id: dreamsignId,
-    tableName: "dreamsign",
-    editableFields: EDITABLE_DREAMSIGN_FIELDS,
-    validateEdit: validateDreamsignEdit,
-    field,
-    value,
-    optionalFields: new Set(["tags"]),
-    notFoundNoun: "Dreamsign",
-  });
-}
-
-export function refreshDreamsignDataJson({
-  rootDir = ROOT,
-  dreamsignTomlPath = DEFAULT_DREAMSIGN_TOML_PATH,
-} = {}) {
-  const dreamsigns = readSourceDreamsigns(rootDir, dreamsignTomlPath).map((dreamsign) =>
-    transformDreamsign(dreamsign),
-  );
-  const dreamsignJsonPath = join(rootDir, DREAMSIGN_JSON_PATH);
-
-  mkdirSync(join(rootDir, "public"), { recursive: true });
-  writeFileSync(dreamsignJsonPath, JSON.stringify(dreamsigns, null, 2) + "\n");
-
-  return {
-    count: dreamsigns.length,
-    path: dreamsignJsonPath,
-  };
-}
-
-export function removeTagsFromDreamsigns(source, removedNames) {
-  if (removedNames.length === 0) {
-    return source;
-  }
-
-  const removed = new Set(removedNames);
-  const parsed = parse(source);
-  const dreamsigns = Array.isArray(parsed.dreamsign) ? parsed.dreamsign : [];
-
-  let next = source;
-  for (const dreamsign of dreamsigns) {
-    const values = normalizeTagList(dreamsign.tags);
-    if (!values.some((value) => removed.has(value))) {
-      continue;
-    }
-    const filtered = values.filter((value) => !removed.has(value));
-    next = patchDreamsignsToml(next, {
-      dreamsignId: dreamsign.id,
-      field: "tags",
-      value: filtered,
-    }).source;
-  }
-
-  return next;
-}
-
 export function readDreamsignTagRegistry({
   rootDir = ROOT,
   dreamsignTomlPath = DEFAULT_DREAMSIGN_TOML_PATH,
@@ -185,19 +127,6 @@ export function readDreamsignTagRegistry({
     facet: TAG_FACET,
     sourceArrayKey: "dreamsign",
   });
-}
-
-export function serializeDreamsignTagRegistry(tags, { dreamsignTomlBasename } = {}) {
-  return serializeFacetRegistry(tags, {
-    cardTomlBasename: dreamsignTomlBasename,
-    facet: TAG_FACET,
-    resourceNoun: "dreamsign",
-    editorName: "dreamsign editor",
-  });
-}
-
-export function dreamsignTagRegistryPathFor(dreamsignTomlPath) {
-  return tagRegistryPathFor(dreamsignTomlPath);
 }
 
 export { validateTagRegistry };

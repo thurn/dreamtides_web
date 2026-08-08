@@ -115,13 +115,13 @@ describe("Dreamsign", () => {
 
   it.each([
     {
-      id: "553D2317-32F9-47BC-BAE0-5018CA26D56A",
+      id: "553d2317-32f9-47bc-bae0-5018ca26d56a",
       effect:
         "The first ❖ card you play during the opponent's turn costs 1● less.",
       glossaryId: GLOSSARY_IDS.fast,
     },
     {
-      id: "D2A916C1-321A-4AE3-9A50-0B7F13C5EFF6",
+      id: "d2a916c1-321a-4ae3-9a50-0b7f13c5eff6",
       effect: "You may play ❖❖ events for 1●.",
       glossaryId: GLOSSARY_IDS.interrupt,
     },

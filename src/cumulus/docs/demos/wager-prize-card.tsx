@@ -3,7 +3,7 @@ import { WagerPrizeCard } from "../../components/card/PlayingCard";
 import type { CumulusComponent } from "../registry";
 
 const SAMPLE_DREAMSIGN: DreamsignData = {
-  id: "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
+  id: "c706d0ba-2f41-4b14-95d8-db168ac6246c",
   name: "Amplified Acorn",
   imageName: "acorn_gold.png",
   imageAlt: "Golden fruit-like charm with a mesh-patterned orb.",

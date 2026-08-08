@@ -238,7 +238,7 @@
             "template_id": 27,
             "variables": {
               "dreamsign_name": {
-                "id": "1ECE0E16-08DE-4C99-8552-2D1D3A2BD517",
+                "id": "1ece0e16-08de-4c99-8552-2d1d3a2bd517",
                 "display_name": "Shadow Droplet"
               }
             }
@@ -767,7 +767,7 @@
             "variables": {
               "count": 2,
               "dreamsign": {
-                "id": "4E51F321-9089-4872-A0E2-AB909E242B33",
+                "id": "4e51f321-9089-4872-a0e2-ab909e242b33",
                 "display_name": "Hair Lock"
               }
             }
@@ -1265,7 +1265,7 @@
             "template_id": 27,
             "variables": {
               "dreamsign_name": {
-                "id": "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5",
+                "id": "d1fdbe21-56f6-43c0-aaac-1e4683964da5",
                 "display_name": "Bell"
               }
             }
@@ -1385,7 +1385,7 @@
             "variables": {
               "count": 2,
               "dreamsign": {
-                "id": "9F34B5F6-4766-4A7E-A841-D7B945CAD504",
+                "id": "9f34b5f6-4766-4a7e-a841-d7b945cad504",
                 "display_name": "Brown Acorn"
               }
             }

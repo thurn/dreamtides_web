@@ -1050,12 +1050,12 @@
           "templateId": 27,
           "templateVariables": {
             "dreamsign_name": {
-              "id": "2D4EB3EE-0931-45ED-8365-69F18096EAD5",
+              "id": "2d4eb3ee-0931-45ed-8365-69f18096ead5",
               "display_name": "Charm Pouch"
             }
           },
           "effectKind": "gain-dreamsign",
-          "dreamsignId": "2D4EB3EE-0931-45ED-8365-69F18096EAD5",
+          "dreamsignId": "2d4eb3ee-0931-45ed-8365-69f18096ead5",
           "canonicalMechanicId": "gain-dreamsign",
           "selectionPolicyId": "fixed"
         },
@@ -1378,12 +1378,12 @@
           "templateId": 27,
           "templateVariables": {
             "dreamsign_name": {
-              "id": "EB55B141-82F8-4BA4-B319-420F762E9EE4",
+              "id": "eb55b141-82f8-4ba4-b319-420f762e9ee4",
               "display_name": "Mortal Skull"
             }
           },
           "effectKind": "gain-dreamsign",
-          "dreamsignId": "EB55B141-82F8-4BA4-B319-420F762E9EE4",
+          "dreamsignId": "eb55b141-82f8-4ba4-b319-420f762e9ee4",
           "canonicalMechanicId": "gain-dreamsign",
           "selectionPolicyId": "fixed"
         },
@@ -1792,6 +1792,6 @@
       ]
     }
   ],
-  "contentHash": "4aca1b1f1dbad9f114d9190dfb2c979db9017092e4e42e8834a3fa0a7f9eb603",
-  "foldHash": "4aca1b1f1dbad9f114d9190dfb2c979db9017092e4e42e8834a3fa0a7f9eb603"
+  "contentHash": "83a9887a416681c50f229b429962b84c589cf67bbbcd7c43b48782545416367c",
+  "foldHash": "83a9887a416681c50f229b429962b84c589cf67bbbcd7c43b48782545416367c"
 }

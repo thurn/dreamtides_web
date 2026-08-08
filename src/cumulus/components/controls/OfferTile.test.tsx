@@ -366,7 +366,7 @@ describe("OfferTile", () => {
       id: "dreamsign-gift",
       kind: "dreamsign-gift",
       dreamsign: {
-        id: "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
+        id: "c706d0ba-2f41-4b14-95d8-db168ac6246c",
         name: "Amplified Acorn",
         art: { kind: "dreamsign", imageName: "acorn_gold.png" },
       },

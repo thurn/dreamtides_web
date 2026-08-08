@@ -76,7 +76,7 @@ const STARTER_TARGETS = [
 ] as const;
 
 const DREAMSIGN = {
-  id: "1A524712-EF7E-43D9-BD79-5DEA5250BF08",
+  id: "1a524712-ef7e-43d9-bd79-5dea5250bf08",
   name: "Rainbow Horn",
   art: artRef.dreamsign("horn_rainbow .png"),
 } as const;

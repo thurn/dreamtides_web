@@ -27,7 +27,7 @@ import {
 import { createSiteContentProvider } from "./site-provider";
 
 const SOURCE_CARD_ID = asCardId("161482b6-af07-4d9e-822d-8c738672beb9");
-const CHARM_POUCH_ID = "2D4EB3EE-0931-45ED-8365-69F18096EAD5";
+const CHARM_POUCH_ID = "2d4eb3ee-0931-45ed-8365-69f18096ead5";
 const NIGHTMARE_ID = NIGHTMARE_CARD_ID;
 
 function card(

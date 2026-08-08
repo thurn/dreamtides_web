@@ -852,12 +852,12 @@ ExplorationCatalog(
           label: "Reach toward the tusks",
           id: "46783333-78f9-4146-a8ec-0d1b81e1bf2f:pair-1:template-27",
           effect_text: "Gain Charm Pouch",
-          effect: GainDreamsign(dreamsign_id: "2D4EB3EE-0931-45ED-8365-69F18096EAD5"),
+          effect: GainDreamsign(dreamsign_id: "2d4eb3ee-0931-45ed-8365-69f18096ead5"),
           template: TemplateInvocation(
             id: 27,
             variables: {
               "dreamsign_name": {
-                "id": "2D4EB3EE-0931-45ED-8365-69F18096EAD5",
+                "id": "2d4eb3ee-0931-45ed-8365-69f18096ead5",
                 "display_name": "Charm Pouch",
               },
             },
@@ -1092,12 +1092,12 @@ ExplorationCatalog(
           label: "Study the bare crown",
           id: "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034:pair-1:template-27",
           effect_text: "Gain Mortal Skull",
-          effect: GainDreamsign(dreamsign_id: "EB55B141-82F8-4BA4-B319-420F762E9EE4"),
+          effect: GainDreamsign(dreamsign_id: "eb55b141-82f8-4ba4-b319-420f762e9ee4"),
           template: TemplateInvocation(
             id: 27,
             variables: {
               "dreamsign_name": {
-                "id": "EB55B141-82F8-4BA4-B319-420F762E9EE4",
+                "id": "eb55b141-82f8-4ba4-b319-420f762e9ee4",
                 "display_name": "Mortal Skull",
               },
             },

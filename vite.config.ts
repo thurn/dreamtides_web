@@ -249,15 +249,11 @@ function dreamsignEditorApiPlugin(): Plugin {
     name: "dreamsign-editor-api",
     apply: "serve",
     configureServer(server) {
+      const editorRoot = process.env.DREAMTIDES_EDITOR_DATA_ROOT;
       server.middlewares.use(
-        createRonEditorBridge({
-          rootDir: __dirname,
-          basePaths: ["/api/editor/dreamsigns", "/api/editor/dreamsign-tags"],
-          collectionPath: "/api/editor/dreamsigns",
-          datasets: ["dreamsigns", "dreamsign-tags"],
-          sourcePaths: ["data/dreamsigns.ron", "data/dreamsigns.tags.ron"],
-          createLegacy: (rootDir) =>
-            createDreamsignEditorApiMiddleware({ rootDir }),
+        createDreamsignEditorApiMiddleware({
+          rootDir:
+            editorRoot === undefined ? __dirname : path.resolve(editorRoot),
         }),
       );
     },

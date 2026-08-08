@@ -6,7 +6,7 @@ import { GLOSSARY_IDS } from "../../../data/glossary";
 
 const DEMO_DREAMSIGNS: DreamsignData[] = [
   {
-    id: "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
+    id: "c706d0ba-2f41-4b14-95d8-db168ac6246c",
     name: "Amplified Acorn",
     imageName: "acorn_gold.png",
     imageAlt: "Golden fruit-like charm with a mesh-patterned orb.",
@@ -14,14 +14,14 @@ const DEMO_DREAMSIGNS: DreamsignData[] = [
       "Once per turn, when you discard a card, your next card this turn costs 2● less.",
   },
   {
-    id: "278EC1AB-F532-4862-84AE-63DF5E49548C",
+    id: "278ec1ab-f532-4862-84ae-63df5e49548c",
     name: "Pyramid Relic",
     imageName: "aertfact.png",
     imageAlt: "Blue-gray panel with bright red-orange branching nodes.",
     effectDescription: "The second character you play each turn costs 1● less.",
   },
   {
-    id: "6E20E6C7-295A-48B1-B252-B8B00D6902C9",
+    id: "6e20e6c7-295a-48b1-b252-b8b00d6902c9",
     name: "Amanita",
     imageName: "amanita.png",
     imageAlt: "Red spotted mushroom with white flecks.",

@@ -92,21 +92,21 @@ const stageRef = useRef<HTMLDivElement>(null);
       },
       dreamsigns: [
         {
-          id: "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
+          id: "c706d0ba-2f41-4b14-95d8-db168ac6246c",
           name: "Amplified Acorn",
           imageName: "acorn_gold.png",
           effectDescription:
             "Once per turn, when you discard a card, your next card this turn costs 2● less.",
         },
         {
-          id: "278EC1AB-F532-4862-84AE-63DF5E49548C",
+          id: "278ec1ab-f532-4862-84ae-63df5e49548c",
           name: "Pyramid Relic",
           imageName: "aertfact.png",
           effectDescription:
             "The second character you play each turn costs 1● less.",
         },
         {
-          id: "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5",
+          id: "d1fdbe21-56f6-43c0-aaac-1e4683964da5",
           name: "Bell",
           imageName: "bell.png",
           effectDescription:

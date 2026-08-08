@@ -40,6 +40,7 @@ export interface DreamsignDisplayState {
 
 export interface LoadEditorDreamsignsResponse {
   dreamsigns: EditorDreamsignRecord[];
+  sourceRevision: string;
 }
 
 export interface SaveEditorDreamsignFieldRequest {
@@ -59,12 +60,14 @@ export interface EditorSaveTiming {
 
 export interface SaveEditorDreamsignFieldResponse {
   dreamsign: EditorDreamsignRecord;
+  sourceRevision: string;
   clientRevision?: number;
   timing: EditorSaveTiming;
 }
 
 export interface LoadEditorDreamsignTagsResponse {
   tags: EditorTag[];
+  sourceRevision: string;
 }
 
 export interface SaveEditorDreamsignTagsRequest {
@@ -79,6 +82,7 @@ export interface SaveEditorDreamsignTagRegistryRequest {
 export interface SaveEditorDreamsignTagRegistryResponse {
   tags: EditorTag[];
   dreamsigns: EditorDreamsignRecord[];
+  sourceRevision: string;
 }
 
 export interface DreamsignEditorApiClient {

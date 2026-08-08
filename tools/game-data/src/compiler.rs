@@ -11,7 +11,7 @@ use sha2::{Digest, Sha256};
 use crate::manifest::{Dataset, Manifest, MigrationState};
 use crate::models::{
     affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft, dream_avatars,
-    dream_guides, dreamscapes, exploration,
+    dream_guides, dreamscapes, dreamsigns, exploration,
 };
 
 pub const BUILD_VERSION: &str = env!("GAME_DATA_BUILD_VERSION");
@@ -161,6 +161,23 @@ fn adapt(
         }
         "dream_guides_v1" => dream_guides::lower(parse_ron(source, dataset)?),
         "dreamscapes_v1" => dreamscapes::lower(parse_ron(source, dataset)?),
+        "dreamsign_metadata_v1" => dreamsigns::lower_metadata(parse_ron(source, dataset)?),
+        "dreamsign_tags_v1" => dreamsigns::lower_tags(parse_ron(source, dataset)?),
+        "dreamsigns_v1" => {
+            let definitions: Vec<dreamsigns::DreamsignDefinition> = parse_ron(source, dataset)?;
+            let metadata_dataset = manifest.dataset("internal-dreamsign-metadata")?;
+            let metadata_path = root.join(&metadata_dataset.source);
+            let metadata: dreamsigns::DreamsignMetadataCatalog = parse_ron(
+                &fs::read_to_string(&metadata_path).with_context(|| {
+                    format!(
+                        "read internal Dreamsign metadata source {}",
+                        metadata_path.display()
+                    )
+                })?,
+                metadata_dataset,
+            )?;
+            dreamsigns::lower(definitions, metadata)
+        }
         "cards_v2" => {
             let metadata_dataset = manifest.dataset("internal-card-metadata")?;
             let metadata_source = fs::read_to_string(root.join(&metadata_dataset.source))
@@ -440,6 +457,15 @@ mod tests {
                 }
                 "dreamscapes_v1" => {
                     canonical::<Vec<dreamscapes::DreamscapeDefinition>>(&source, true);
+                }
+                "dreamsign_metadata_v1" => {
+                    canonical::<dreamsigns::DreamsignMetadataCatalog>(&source, true);
+                }
+                "dreamsign_tags_v1" => {
+                    canonical::<dreamsigns::DreamsignTagCatalog>(&source, true);
+                }
+                "dreamsigns_v1" => {
+                    canonical::<Vec<dreamsigns::DreamsignDefinition>>(&source, true);
                 }
                 "exploration_v1" => {
                     canonical::<ExplorationCatalog>(&source, true);

@@ -199,7 +199,7 @@
           "template_id": 27,
           "variables": {
             "dreamsign_name": {
-              "id": "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5",
+              "id": "d1fdbe21-56f6-43c0-aaac-1e4683964da5",
               "display_name": "Bell"
             }
           }
@@ -821,7 +821,7 @@
           "template_id": 27,
           "variables": {
             "dreamsign_name": {
-              "id": "39260DD5-CB43-47D5-A007-EFFBE13D6417",
+              "id": "39260dd5-cb43-47d5-a007-effbe13d6417",
               "display_name": "Ginger Root"
             }
           }
@@ -1095,7 +1095,7 @@
           "template_id": 27,
           "variables": {
             "dreamsign_name": {
-              "id": "2D4EB3EE-0931-45ED-8365-69F18096EAD5",
+              "id": "2d4eb3ee-0931-45ed-8365-69f18096ead5",
               "display_name": "Charm Pouch"
             }
           }
@@ -2579,7 +2579,7 @@
           "template_id": 27,
           "variables": {
             "dreamsign_name": {
-              "id": "EB55B141-82F8-4BA4-B319-420F762E9EE4",
+              "id": "eb55b141-82f8-4ba4-b319-420f762e9ee4",
               "display_name": "Mortal Skull"
             }
           }

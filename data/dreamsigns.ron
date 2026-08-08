@@ -1,3059 +1,1186 @@
-CompatDocument(
-  data: {
-    "dreamsign": [
-      /*[0]*/
-      {
-        "id": "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
-        "name": "Amplified Acorn",
-        "image_name": "acorn_gold.png",
-        "tides": [
-          /*[0]*/
-          "discard_velocity",
-          /*[1]*/
-          "hand_cycling",
-          /*[2]*/
-          "cost_reduction",
-          /*[3]*/
-          "resource_burst",
-          /*[4]*/
-          "discard_outlets",
-        ],
-        "rendered-text": "Once per turn, when you discard a card, your next card this turn costs 2● less.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[1]*/
-      {
-        "id": "278EC1AB-F532-4862-84AE-63DF5E49548C",
-        "name": "Pyramid Relic",
-        "image_name": "aertfact.png",
-        "tides": [
-          /*[0]*/
-          "character_chain",
-          /*[1]*/
-          "character_curve",
-          /*[2]*/
-          "cost_reduction",
-          /*[3]*/
-          "big_energy",
-        ],
-        "rendered-text": "The second character you play each turn costs 1● less.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[2]*/
-      {
-        "id": "6E20E6C7-295A-48B1-B252-B8B00D6902C9",
-        "name": "Amanita",
-        "image_name": "amanita.png",
-        "tides": [
-          /*[0]*/
-          "leave_play_enablers",
-          /*[1]*/
-          "cost_reduction",
-          /*[2]*/
-          "big_energy",
-          /*[3]*/
-          "finishers",
-        ],
-        "rendered-text": "Once per turn, when a character you control leaves play, your next character this turn costs 2● less.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-          /*[1]*/
-          "Ally Audit",
-        ],
-      },
-      /*[3]*/
-      {
-        "id": "49990864-1DB0-4C08-91AE-40A1F04223E4",
-        "name": "Algae",
-        "image_name": "algae.png",
-        "rendered-text": "Once per turn, when you draw a character, reduce its cost by 1● until end of turn.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[4]*/
-      {
-        "id": "3DD05E97-1AF8-4AE9-8E1F-954EAA63E112",
-        "name": "Flash Powder",
-        "image_name": "Alchemical_Powder.png",
-        "rendered-text": "The first character you play each turn costs 2● less and has 0✦.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[5]*/
-      {
-        "id": "A42C99B2-F480-4F63-91A0-BD556120427D",
-        "name": "Green Amulet",
-        "image_name": "amulet_2.png",
-        "rendered-text": "The second card you draw each turn costs 2● less.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[6]*/
-      {
-        "id": "3FD8861D-FC4C-4097-9E28-89CC37F5B3F4",
-        "name": "Cloud Lens",
-        "image_name": "amulet_3.png",
-        "tides": [
-          /*[0]*/
-          "event_chain",
-          /*[1]*/
-          "cost_reduction",
-          /*[2]*/
-          "event_setup",
-          /*[3]*/
-          "resource_burst",
-        ],
-        "rendered-text": "The second event you play each turn costs 1● less.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[7]*/
-      {
-        "id": "8778BF17-4E0A-4CE7-B23C-4DAF49A782A7",
-        "name": "Serpent Tome",
-        "image_name": "book_6.png",
-        "tides": [
-          /*[0]*/
-          "discard_velocity",
-          /*[1]*/
-          "hand_cycling",
-          /*[2]*/
-          "cost_reduction",
-          /*[3]*/
-          "resource_burst",
-        ],
-        "rendered-text": "Reclaim abilities cost you 1● less.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[8]*/
-      {
-        "id": "12EC9625-CBFB-4056-9C3E-98ED8C8BEA70",
-        "name": "Charm Bracelet",
-        "image_name": "necklace.png",
-        "tides": [
-          /*[0]*/
-          "materialize_tempo",
-          /*[1]*/
-          "bounce_blink_tools",
-          /*[2]*/
-          "leave_play_enablers",
-          /*[3]*/
-          "materialized_staples",
-          /*[4]*/
-          "cost_reduction",
-        ],
-        "rendered-text": "Once per turn, when you return a character you control to hand, your next character this turn costs 1● less.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-          /*[1]*/
-          "Ally Audit",
-        ],
-      },
-      /*[9]*/
-      {
-        "id": "95F0F483-9A76-47C6-A839-01A1D9122945",
-        "name": "Oak Leaf",
-        "image_name": "oak_leaf.png",
-        "tides": [
-          /*[0]*/
-          "materialize_tempo",
-          /*[1]*/
-          "bounce_blink_tools",
-          /*[2]*/
-          "cost_reduction",
-        ],
-        "rendered-text": "When you return a character you control to hand, it gains +2✦.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-          /*[1]*/
-          "Ally Audit",
-        ],
-      },
-      /*[10]*/
-      {
-        "id": "553D2317-32F9-47BC-BAE0-5018CA26D56A",
-        "name": "Egg Nest",
-        "image_name": "nest.png",
-        "tides": [
-          /*[0]*/
-          "fast_tempo",
-          /*[1]*/
-          "fast_interaction",
-          /*[2]*/
-          "fast_setup",
-          /*[3]*/
-          "cost_reduction",
-        ],
-        "rendered-text": "The first ❖ card you play during the opponent\'s turn costs 1● less.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[11]*/
-      {
-        "id": "0D668E16-1729-4289-AD1D-0FB3C1374EE9",
-        "name": "Skull Pendant",
-        "image_name": "amulet_8.png",
-        "tides": [
-          /*[0]*/
-          "materialize_value",
-          /*[1]*/
-          "materialize_tempo",
-          /*[2]*/
-          "materialized_staples",
-          /*[3]*/
-          "cost_reduction",
-          /*[4]*/
-          "big_energy",
-        ],
-        "rendered-text": "Characters with ▸Materialized abilities cost you 1● less.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[12]*/
-      {
-        "id": "EDE46F71-AA77-4B12-9824-0D3706DA6A22",
-        "name": "Crystal Orb",
-        "image_name": "magic_ball_2.png",
-        "tides": [
-          /*[0]*/
-          "materialize_value",
-          /*[1]*/
-          "materialize_tempo",
-          /*[2]*/
-          "materialized_staples",
-          /*[3]*/
-          "big_energy",
-        ],
-        "rendered-text": "The first character you materialize each turn has awakened.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[13]*/
-      {
-        "id": "3380C657-79CA-400B-ABB7-4B56FBB92AF4",
-        "name": "Leather Satchel",
-        "image_name": "bag_2.png",
-        "tides": [
-          /*[0]*/
-          "abandon_value",
-          /*[1]*/
-          "materialize_value",
-          /*[2]*/
-          "trigger_reuse",
-          /*[3]*/
-          "leave_play_enablers",
-          /*[4]*/
-          "materialized_staples",
-        ],
-        "rendered-text": "When you abandon a character, trigger its ▸Materialized and ▸Dawn abilities.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-          /*[1]*/
-          "Ally Audit",
-        ],
-      },
-      /*[14]*/
-      {
-        "id": "2EBF0BBB-440C-4DBA-8E48-228DAADC0A1E",
-        "name": "Attuned Petals",
-        "image_name": "rose_petals.png",
-        "tides": [
-          /*[0]*/
-          "abandon_value",
-          /*[1]*/
-          "materialize_value",
-          /*[2]*/
-          "copy_effects",
-          /*[3]*/
-          "leave_play_enablers",
-        ],
-        "rendered-text": "Once per turn, when you abandon a character, materialize a 0✦ figment copy of it.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-          /*[1]*/
-          "Ally Audit",
-        ],
-      },
-      /*[15]*/
-      {
-        "id": "2D4EB3EE-0931-45ED-8365-69F18096EAD5",
-        "name": "Charm Pouch",
-        "image_name": "bag_4.png",
-        "tides": [
-          /*[0]*/
-          "materialize_tempo",
-          /*[1]*/
-          "bounce_blink_tools",
-          /*[2]*/
-          "trigger_reuse",
-          /*[3]*/
-          "materialize_value",
-        ],
-        "rendered-text": "The first time each turn you trigger a ▸Materialized ability, trigger that ability again.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[16]*/
-      {
-        "id": "A98F468B-5E76-4041-83EE-69C0871A6BF0",
-        "name": "Bat Wing",
-        "image_name": "bat_wings.png",
-        "tides": [
-          /*[0]*/
-          "materialize_tempo",
-          /*[1]*/
-          "materialize_value",
-          /*[2]*/
-          "bounce_blink_tools",
-          /*[3]*/
-          "card_flow",
-        ],
-        "rendered-text": "Once per turn, when you dissolve or banish an enemy, draw a card.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[17]*/
-      {
-        "id": "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5",
-        "name": "Bell",
-        "image_name": "bell.png",
-        "tides": [
-          /*[0]*/
-          "void_recursion",
-          /*[1]*/
-          "reclaim_characters",
-          /*[2]*/
-          "materialize_value",
-          /*[3]*/
-          "trigger_reuse",
-        ],
-        "rendered-text": "When you play a character from your void, rematerialize it.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[18]*/
-      {
-        "id": "D76684C3-797E-44AE-A2BA-333E77D46A4D",
-        "name": "Belladonna",
-        "image_name": "belladonna.png",
-        "tides": [
-          /*[0]*/
-          "materialize_value",
-          /*[1]*/
-          "trigger_reuse",
-          /*[2]*/
-          "character_chain",
-          /*[3]*/
-          "materialized_staples",
-        ],
-        "rendered-text": "At the end of your turn, if you materialized 2 characters this turn, rematerialize the last one.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-          /*[1]*/
-          "Ally Audit",
-        ],
-      },
-      /*[19]*/
-      {
-        "id": "00CC7E7F-4245-4447-B9DC-F647DC6241A2",
-        "name": "Berries",
-        "image_name": "berries.png",
-        "tides": [
-          /*[0]*/
-          "materialize_value",
-          /*[1]*/
-          "trigger_reuse",
-          /*[2]*/
-          "spark_growth",
-          /*[3]*/
-          "materialized_staples",
-        ],
-        "rendered-text": "Characters in your deck with cost ≤2● have +1✦.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[20]*/
-      {
-        "id": "47081BDE-F35D-4B5C-BA17-53E5DBF5B419",
-        "name": "Green Beetle",
-        "image_name": "bettle.png",
-        "tides": [
-          /*[0]*/
-          "big_energy",
-          /*[1]*/
-          "finishers",
-          /*[2]*/
-          "spark_tall",
-          /*[3]*/
-          "character_curve",
-        ],
-        "rendered-text": "Characters in your deck with cost ≥4● have awakened.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[21]*/
-      {
-        "id": "3ED05D9A-DAE0-4260-9B99-AD22D02FC583",
-        "name": "Bezoar",
-        "image_name": "bezoar.png",
-        "tides": [
-          /*[0]*/
-          "abandon_value",
-          /*[1]*/
-          "materialize_value",
-          /*[2]*/
-          "materialized_staples",
-          /*[3]*/
-          "leave_play_enablers",
-        ],
-        "rendered-text": "When you abandon a character, characters you materialize this turn have awakened.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[22]*/
-      {
-        "id": "9F34B5F6-4766-4A7E-A841-D7B945CAD504",
-        "name": "Brown Acorn",
-        "image_name": "black-acorn.png",
-        "tides": [
-          /*[0]*/
-          "warrior_pressure",
-          /*[1]*/
-          "warrior_bastion",
-          /*[2]*/
-          "spark_growth",
-        ],
-        "rendered-text": "When you add a warrior card to your deck, that card gains +1✦.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[23]*/
-      {
-        "id": "94E5683D-A24C-4F89-8AFA-652D7C6C79AA",
-        "name": "Black Attuned",
-        "image_name": "black_rose.png",
-        "tides": [
-          /*[0]*/
-          "warrior_pressure",
-          /*[1]*/
-          "warrior_bastion",
-          /*[2]*/
-          "event_chain",
-          /*[3]*/
-          "copy_effects",
-        ],
-        "rendered-text": "When you play an event while you control 3 or more warriors, copy it.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-          /*[1]*/
-          "Ally Audit",
-        ],
-      },
-      /*[24]*/
-      {
-        "id": "4409A691-49B4-4FB0-82F6-4F45AE86D8C2",
-        "name": "Spider Jar",
-        "image_name": "black_widow.png",
-        "tides": [
-          /*[0]*/
-          "character_chain",
-          /*[1]*/
-          "figment_swarm",
-          /*[2]*/
-          "warrior_pressure",
-          /*[3]*/
-          "ally_wide",
-          /*[4]*/
-          "materialize_value",
-        ],
-        "rendered-text": "When you play your second character each turn, materialize a 1✦ warrior figment.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[25]*/
-      {
-        "id": "1DFA4D90-8270-4B7C-87BE-D95AB6201E00",
-        "name": "Blue Feather",
-        "image_name": "blue_feather.png",
-        "tides": [
-          /*[0]*/
-          "warrior_pressure",
-          /*[1]*/
-          "warrior_bastion",
-          /*[2]*/
-          "topdeck_setup",
-          /*[3]*/
-          "judgment_engines",
-        ],
-        "rendered-text": "If the first card you draw during your turn is a warrior, reduce its cost by 1● and it gains +2✦.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[26]*/
-      {
-        "id": "DBBADE86-9FB6-4283-B2DC-9C1EF66FD531",
-        "name": "Skull Drum",
-        "image_name": "drum.png",
-        "tides": [
-          /*[0]*/
-          "warrior_pressure",
-          /*[1]*/
-          "warrior_bastion",
-          /*[2]*/
-          "event_chain",
-          /*[3]*/
-          "cost_reduction",
-          /*[4]*/
-          "resource_burst",
-        ],
-        "rendered-text": "When you play an event while you control 3 or more spirit animals, it costs 1● less.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-          /*[1]*/
-          "Ally Audit",
-        ],
-      },
-      /*[27]*/
-      {
-        "id": "21AE8473-AFA7-4384-B7D4-AFBF1D84E691",
-        "name": "Ivory Claw",
-        "image_name": "claw.png",
-        "tides": [
-          /*[0]*/
-          "warrior_pressure",
-          /*[1]*/
-          "warrior_bastion",
-          /*[2]*/
-          "judgment_engines",
-          /*[3]*/
-          "card_flow",
-        ],
-        "rendered-text": "▸Dawn: If you control 3 or more warriors, draw a card.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-          /*[1]*/
-          "Ally Audit",
-        ],
-      },
-      /*[28]*/
-      {
-        "id": "6B5C0F18-198C-44E7-92E8-D639298B8CF6",
-        "name": "Sealed Scroll",
-        "image_name": "scroll_3.png",
-        "tides": [
-          /*[0]*/
-          "warrior_bastion",
-          /*[1]*/
-          "spark_growth",
-          /*[2]*/
-          "warrior_pressure",
-          /*[3]*/
-          "character_curve",
-        ],
-        "rendered-text": "Once per turn, when a spirit animal you control is dissolved, draw a card.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-          /*[1]*/
-          "Ally Audit",
-        ],
-      },
-      /*[29]*/
-      {
-        "id": "246AC924-74DD-4387-9FD6-5BC8E563907A",
-        "name": "Curved Blade",
-        "image_name": "knife.png",
-        "tides": [
-          /*[0]*/
-          "warrior_pressure",
-          /*[1]*/
-          "warrior_bastion",
-          /*[2]*/
-          "cost_reduction",
-          /*[3]*/
-          "spark_growth",
-        ],
-        "rendered-text": "Warriors you control cost 1● less.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-          /*[1]*/
-          "Ally Audit",
-        ],
-      },
-      /*[30]*/
-      {
-        "id": "1ECE0E16-08DE-4C99-8552-2D1D3A2BD517",
-        "name": "Shadow Droplet",
-        "image_name": "dark-essense.png",
-        "tides": [
-          /*[0]*/
-          "void_recursion",
-          /*[1]*/
-          "reclaim_characters",
-          /*[2]*/
-          "warrior_bastion",
-          /*[3]*/
-          "warrior_pressure",
-        ],
-        "rendered-text": "Survivors in your void have reclaim.",
-        "tags": [
-          /*[0]*/
-          "Tag OK",
-        ],
-      },
-      /*[31]*/
-      {
-        "id": "3D86F8CE-42AC-43DC-96D5-121E6D1A6167",
-        "name": "Theater Mask",
-        "image_name": "mask_2.png",
-        "tides": [
-          /*[0]*/
-          "figment_swarm",
-          /*[1]*/
-          "warrior_pressure",
-          /*[2]*/
-          "warrior_bastion",
-          /*[3]*/
-          "spark_growth",
-        ],
-        "rendered-text": "When you gain this dreamsign, pick a character type. All cards in your deck that mention character types in their text now refer to that character type.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[32]*/
-      {
-        "id": "DEC81FA2-7865-448C-95BC-622B884CEA9E",
-        "name": "Rune Stone",
-        "image_name": "rune.png",
-        "tides": [
-          /*[0]*/
-          "figment_swarm",
-          /*[1]*/
-          "judgment_engines",
-          /*[2]*/
-          "spark_growth",
-          /*[3]*/
-          "ally_wide",
-        ],
-        "rendered-text": "Figments you control have +1✦.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[33]*/
-      {
-        "id": "4DC47625-73BD-4518-A4EF-29DDA2171594",
-        "name": "Rune Sack",
-        "image_name": "runes.png",
-        "tides": [
-          /*[0]*/
-          "figment_swarm",
-          /*[1]*/
-          "judgment_engines",
-          /*[2]*/
-          "big_energy",
-          /*[3]*/
-          "ally_wide",
-        ],
-        "rendered-text": "▸Dawn: If you control 3 or more figments, gain 2●.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[34]*/
-      {
-        "id": "4A91C56C-D828-482A-A46C-1299D69FA011",
-        "name": "Bestiary",
-        "image_name": "book_10.png",
-        "tides": [
-          /*[0]*/
-          "discard_velocity",
-          /*[1]*/
-          "figment_swarm",
-          /*[2]*/
-          "materialize_value",
-          /*[3]*/
-          "hand_cycling",
-        ],
-        "rendered-text": "When you discard a card, materialize a 2✦ radiant figment.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[35]*/
-      {
-        "id": "26786698-FDF2-493D-905B-4273A20586C9",
-        "name": "Potion Mortar",
-        "image_name": "bowl.png",
-        "rendered-text": "▸Dawn: A random card in your hand costs 1● this turn.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[36]*/
-      {
-        "id": "B7F8A4EA-C067-47ED-B251-2876B609108C",
-        "name": "Broomstick",
-        "image_name": "broomstick.png",
-        "rendered-text": "▸Dawn: Lose 1●. Draw a card.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[37]*/
-      {
-        "id": "253A106D-F64E-4A60-9471-446A18EE8959",
-        "name": "Ice Crystals",
-        "image_name": "ice.png",
-        "tides": [
-          /*[0]*/
-          "void_setup",
-          /*[1]*/
-          "recursion_fuel",
-          /*[2]*/
-          "judgment_engines",
-          /*[3]*/
-          "void_recursion",
-        ],
-        "rendered-text": "▸Dawn: Erode 1.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[38]*/
-      {
-        "id": "5A22F358-BC84-44B1-A201-5F9F57940C51",
-        "name": "Tarot Card",
-        "image_name": "card.png",
-        "rendered-text": "When you challenge with 2 or more characters, draw a card.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[39]*/
-      {
-        "id": "6B95D6BD-C970-4465-9536-4F21E7630D0A",
-        "name": "Mushroom Caps",
-        "image_name": "Champignon.png",
-        "rendered-text": "When drafting cards, see 1 fewer choice.\n\n\n▸Dawn: Gain 1●.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[40]*/
-      {
-        "id": "1A524712-EF7E-43D9-BD79-5DEA5250BF08",
-        "name": "Rainbow Horn",
-        "image_name": "horn_rainbow .png",
-        "tides": [
-          /*[0]*/
-          "fast_setup",
-          /*[1]*/
-          "fast_tempo",
-          /*[2]*/
-          "card_flow",
-          /*[3]*/
-          "judgment_engines",
-        ],
-        "rendered-text": "▸Dawn: Add a random ≤2● cost event from the card pool to your hand.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[41]*/
-      {
-        "id": "6F4E2D9F-38A4-4F6A-8FDE-7D942977A6DF",
-        "name": "Hourglass",
-        "image_name": "hourglass.png",
-        "tides": [
-          /*[0]*/
-          "judgment_engines",
-          /*[1]*/
-          "judgment_repeaters",
-          /*[2]*/
-          "trigger_reuse",
-          /*[3]*/
-          "judgment_bodies",
-        ],
-        "rendered-text": "If 3 or more ▸Dawn abilities trigger during your Dawn phase, draw a card.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[42]*/
-      {
-        "id": "C75CD943-5E8B-4A56-8C09-D975571570D4",
-        "name": "Butterfly Wings",
-        "image_name": "butterfly_wings.png",
-        "tides": [
-          /*[0]*/
-          "judgment_engines",
-          /*[1]*/
-          "judgment_repeaters",
-          /*[2]*/
-          "trigger_reuse",
-          /*[3]*/
-          "judgment_bodies",
-        ],
-        "rendered-text": "The ▸Dawn ability of a random character you control triggers an additional time each turn.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[43]*/
-      {
-        "id": "7EC00DA2-2B2D-4613-9A2A-8611D38199CA",
-        "name": "Dreamcatcher",
-        "image_name": "dreamcatcher.png",
-        "tides": [
-          /*[0]*/
-          "copy_effects",
-          /*[1]*/
-          "event_chain",
-          /*[2]*/
-          "event_setup",
-          /*[3]*/
-          "judgment_engines",
-        ],
-        "rendered-text": "▸Dawn: Add an ethereal copy of the first event you played last turn to your hand.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[44]*/
-      {
-        "id": "064CFB53-FCB4-4471-80DE-27ECCD23D3C0",
-        "name": "Carved Relic",
-        "image_name": "idol.png",
-        "tides": [
-          /*[0]*/
-          "event_chain",
-          /*[1]*/
-          "reclaim_events",
-          /*[2]*/
-          "void_recursion",
-          /*[3]*/
-          "event_setup",
-        ],
-        "rendered-text": "▸Dawn: Return a random event from your void to your hand.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[45]*/
-      {
-        "id": "A7CDC8FD-5827-4D73-AE0C-AA594A69FA8A",
-        "name": "Rope Doll",
-        "image_name": "doll.png",
-        "tides": [
-          /*[0]*/
-          "reclaim_characters",
-          /*[1]*/
-          "survivor_dissolve",
-          /*[2]*/
-          "void_recursion",
-          /*[3]*/
-          "judgment_engines",
-        ],
-        "rendered-text": "▸Dawn: Return a random survivor from your void to your hand.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[46]*/
-      {
-        "id": "BFEC4F5D-9B0D-4ED2-B470-DB73D852448F",
-        "name": "Dead Rat",
-        "image_name": "dead_rat.png",
-        "tides": [
-          /*[0]*/
-          "abandon_value",
-          /*[1]*/
-          "leave_play_enablers",
-          /*[2]*/
-          "card_flow",
-          /*[3]*/
-          "judgment_engines",
-        ],
-        "rendered-text": "▸Dawn: You may abandon a character to draw a card.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[47]*/
-      {
-        "id": "FB7316C9-EF29-42FD-993E-D3337CB06921",
-        "name": "Gem Codex",
-        "image_name": "book_9.png",
-        "tides": [
-          /*[0]*/
-          "copy_effects",
-          /*[1]*/
-          "event_chain",
-          /*[2]*/
-          "event_setup",
-        ],
-        "rendered-text": "When you copy an event, copy it an additional time.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[48]*/
-      {
-        "id": "257C160F-7D70-4EBD-BB0F-F83E61907310",
-        "name": "Black Cat",
-        "image_name": "cat.png",
-        "tides": [
-          /*[0]*/
-          "copy_effects",
-          /*[1]*/
-          "event_chain",
-          /*[2]*/
-          "event_setup",
-        ],
-        "rendered-text": "Copy the second event you play each turn.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[49]*/
-      {
-        "id": "49F216A2-0596-4124-BB40-60AC9AFE6E0B",
-        "name": "Storm Tome",
-        "image_name": "book_2.png",
-        "tides": [
-          /*[0]*/
-          "copy_effects",
-          /*[1]*/
-          "event_chain",
-          /*[2]*/
-          "event_setup",
-          /*[3]*/
-          "cost_reduction",
-          /*[4]*/
-          "finishers",
-        ],
-        "rendered-text": "Once per turn, when you play a ≤2● cost event, copy it.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[50]*/
-      {
-        "id": "56523397-6C48-4DF6-846B-9E4F15D7FDEE",
-        "name": "Clover",
-        "image_name": "clover.png",
-        "tides": [
-          /*[0]*/
-          "event_chain",
-          /*[1]*/
-          "copy_effects",
-          /*[2]*/
-          "finishers",
-          /*[3]*/
-          "event_setup",
-        ],
-        "rendered-text": "Once per turn, when you play an event while you control no characters, copy it.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[51]*/
-      {
-        "id": "6DAC6BFF-AF3A-4749-8547-01FDED1C81C9",
-        "name": "Flaming Button",
-        "image_name": "damned_button.png",
-        "tides": [
-          /*[0]*/
-          "copy_effects",
-          /*[1]*/
-          "event_chain",
-          /*[2]*/
-          "resource_burst",
-          /*[3]*/
-          "event_setup",
-        ],
-        "rendered-text": "Once per turn, when you copy an event, gain 1●.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[52]*/
-      {
-        "id": "396DA354-9F4D-4AE7-A9DC-02D1330A2678",
-        "name": "Crow",
-        "image_name": "crow.png",
-        "tides": [
-          /*[0]*/
-          "event_chain",
-          /*[1]*/
-          "spark_growth",
-          /*[2]*/
-          "point_pressure",
-          /*[3]*/
-          "event_setup",
-        ],
-        "rendered-text": "When you play an event, a random character gains +1✦ until end of turn.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[53]*/
-      {
-        "id": "A09F60DF-EC9F-4608-873C-1372AF18DAA2",
-        "name": "Cauldron",
-        "image_name": "cauldron.png",
-        "tides": [
-          /*[0]*/
-          "event_chain",
-          /*[1]*/
-          "reclaim_events",
-          /*[2]*/
-          "void_recursion",
-          /*[3]*/
-          "recursion_fuel",
-        ],
-        "rendered-text": "When you play an event, a random event in your void gains reclaim until end of turn.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[54]*/
-      {
-        "id": "044F856B-C08B-4B82-81E3-5417962BF868",
-        "name": "Skull Dagger",
-        "image_name": "dark_knife.png",
-        "tides": [
-          /*[0]*/
-          "cost_reduction",
-          /*[1]*/
-          "event_chain",
-          /*[2]*/
-          "reclaim_events",
-          /*[3]*/
-          "void_recursion",
-        ],
-        "rendered-text": "The first event you play from your void each turn costs 0●.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[55]*/
-      {
-        "id": "B6333EBA-5573-441C-B286-1CD7F7CB6916",
-        "name": "Eye Grimoire",
-        "image_name": "book_3.png",
-        "tides": [
-          /*[0]*/
-          "copy_effects",
-          /*[1]*/
-          "event_chain",
-          /*[2]*/
-          "reclaim_events",
-          /*[3]*/
-          "void_recursion",
-          /*[4]*/
-          "trigger_reuse",
-        ],
-        "rendered-text": "Once per turn, when you play an event from your void, copy it.",
-        "tags": [
-          /*[0]*/
-          "J10",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[56]*/
-      {
-        "id": "B2626645-827C-46EC-8204-017862D1A398",
-        "name": "Eyeball Plant",
-        "image_name": "creepy_plant.png",
-        "tides": [
-          /*[0]*/
-          "reclaim_characters",
-          /*[1]*/
-          "void_recursion",
-          /*[2]*/
-          "void_threshold",
-          /*[3]*/
-          "big_energy",
-        ],
-        "rendered-text": "Characters in your void with ≥3● cost have reclaim.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[57]*/
-      {
-        "id": "2059AA74-8897-4C76-833F-DDEF7D34346C",
-        "name": "Skull Codex",
-        "image_name": "book_5.png",
-        "tides": [
-          /*[0]*/
-          "cost_reduction",
-          /*[1]*/
-          "reclaim_characters",
-          /*[2]*/
-          "reclaim_events",
-          /*[3]*/
-          "void_recursion",
-        ],
-        "rendered-text": "Reclaim abilities cost you 0●.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[58]*/
-      {
-        "id": "8340CCE5-8E27-4940-AB79-34E09FDBCAE1",
-        "name": "Dragon Egg",
-        "image_name": "egg_dragon.png",
-        "tides": [
-          /*[0]*/
-          "card_flow",
-          /*[1]*/
-          "void_recursion",
-          /*[2]*/
-          "reclaim_characters",
-          /*[3]*/
-          "reclaim_events",
-        ],
-        "rendered-text": "Once per turn, when you play a card from your void, draw a card.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[59]*/
-      {
-        "id": "2CBCBEBB-FB79-4833-A770-2216873147C4",
-        "name": "Spotted Egg",
-        "image_name": "eggs_2.png",
-        "tides": [
-          /*[0]*/
-          "event_chain",
-          /*[1]*/
-          "reclaim_events",
-          /*[2]*/
-          "event_setup",
-          /*[3]*/
-          "void_recursion",
-        ],
-        "rendered-text": "When you play your second event each turn, it gains reclaim 0●.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[60]*/
-      {
-        "id": "D2A916C1-321A-4AE3-9A50-0B7F13C5EFF6",
-        "name": "Worm Apple",
-        "image_name": "apple.png",
-        "tides": [
-          /*[0]*/
-          "fast_setup",
-          /*[1]*/
-          "fast_tempo",
-          /*[2]*/
-          "cost_reduction",
-          /*[3]*/
-          "event_chain",
-        ],
-        "rendered-text": "You may play ❖ and ❖❖ events for 1●.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[61]*/
-      {
-        "id": "10F27800-99F8-4504-9D94-26BCB3C32788",
-        "name": "Essence Vial",
-        "image_name": "essence.png",
-        "tides": [
-          /*[0]*/
-          "abandon_value",
-          /*[1]*/
-          "reclaim_characters",
-          /*[2]*/
-          "void_recursion",
-          /*[3]*/
-          "leave_play_enablers",
-        ],
-        "rendered-text": "Once per turn, when you abandon a character or discard a character, that card gains reclaim.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[62]*/
-      {
-        "id": "946DBB36-0A90-495A-BF0F-17351C93D74B",
-        "name": "Green Fly",
-        "image_name": "fly.png",
-        "tides": [
-          /*[0]*/
-          "void_setup",
-          /*[1]*/
-          "void_recursion",
-          /*[2]*/
-          "reclaim_characters",
-          /*[3]*/
-          "recursion_fuel",
-        ],
-        "rendered-text": "The first card you erode each turn gains reclaim.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[63]*/
-      {
-        "id": "89C83D7E-5617-49B4-B6CD-214680FE0627",
-        "name": "Candle",
-        "image_name": "candle.png",
-        "tides": [
-          /*[0]*/
-          "event_chain",
-          /*[1]*/
-          "spark_growth",
-          /*[2]*/
-          "event_setup",
-          /*[3]*/
-          "card_flow",
-        ],
-        "rendered-text": "When you play an event, the character you control with the highest ✦ gains +1✦.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[64]*/
-      {
-        "id": "8B87B0C7-E7D5-4C53-B99B-B1E2407CB519",
-        "name": "Red Heart",
-        "image_name": "heart.png",
-        "tides": [
-          /*[0]*/
-          "void_setup",
-          /*[1]*/
-          "spark_growth",
-          /*[2]*/
-          "recursion_fuel",
-          /*[3]*/
-          "void_threshold",
-        ],
-        "rendered-text": "When you erode a card, a random character you control gains +1✦.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[65]*/
-      {
-        "id": "73EFD845-6009-4686-860C-01C7F5B1C074",
-        "name": "Black Feather",
-        "image_name": "feather.png",
-        "tides": [
-          /*[0]*/
-          "abandon_value",
-          /*[1]*/
-          "spark_tall",
-          /*[2]*/
-          "leave_play_enablers",
-          /*[3]*/
-          "spark_growth",
-        ],
-        "rendered-text": "When you abandon a character, a random character you control gains +X✦ where X is the abandoned character\'s ✦.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[66]*/
-      {
-        "id": "ADC23870-55F8-4F23-B973-A358FC257414",
-        "name": "Gold Feather",
-        "image_name": "feather_gold.png",
-        "tides": [
-          /*[0]*/
-          "abandon_value",
-          /*[1]*/
-          "leave_play_enablers",
-          /*[2]*/
-          "spark_growth",
-          /*[3]*/
-          "point_pressure",
-        ],
-        "rendered-text": "When you abandon a character, a random character you control gains +1✦.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[67]*/
-      {
-        "id": "1A21186C-CAFD-4E0F-9304-1AC0EF55340A",
-        "name": "Gray Feather",
-        "image_name": "feathers.png",
-        "tides": [
-          /*[0]*/
-          "spark_tall",
-          /*[1]*/
-          "spark_growth",
-          /*[2]*/
-          "point_pressure",
-          /*[3]*/
-          "finishers",
-        ],
-        "rendered-text": "When a character you control gains ✦, it gains 1 additional ✦.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[68]*/
-      {
-        "id": "FF8D8D4A-FE7B-4511-8192-E6E2E7712DAF",
-        "name": "Amber Eye",
-        "image_name": "eye_3.png",
-        "tides": [
-          /*[0]*/
-          "void_threshold",
-          /*[1]*/
-          "event_chain",
-          /*[2]*/
-          "card_flow",
-          /*[3]*/
-          "void_recursion",
-          /*[4]*/
-          "void_setup",
-        ],
-        "rendered-text": "When you play an event, if you have ≥8 cards in your void, draw a card.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[69]*/
-      {
-        "id": "A92D2B95-C63D-4C1C-831B-902C44DEEE57",
-        "name": "Garlic Bulb",
-        "image_name": "garlic.png",
-        "tides": [
-          /*[0]*/
-          "event_setup",
-          /*[1]*/
-          "foresee_selection",
-          /*[2]*/
-          "event_chain",
-          /*[3]*/
-          "topdeck_setup",
-        ],
-        "rendered-text": "Once per turn, when you play an event, foresee 1.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[70]*/
-      {
-        "id": "39260DD5-CB43-47D5-A007-EFFBE13D6417",
-        "name": "Ginger Root",
-        "image_name": "ginger .png",
-        "tides": [
-          /*[0]*/
-          "foresee_selection",
-          /*[1]*/
-          "card_flow",
-          /*[2]*/
-          "topdeck_setup",
-          /*[3]*/
-          "event_setup",
-        ],
-        "rendered-text": "Once per turn, when you foresee, draw a card.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[71]*/
-      {
-        "id": "4E51F321-9089-4872-A0E2-AB909E242B33",
-        "name": "Hair Lock",
-        "image_name": "hair.png",
-        "tides": [
-          /*[0]*/
-          "foresee_selection",
-          /*[1]*/
-          "topdeck_setup",
-          /*[2]*/
-          "cost_reduction",
-          /*[3]*/
-          "card_flow",
-        ],
-        "rendered-text": "At the start of each battle, foresee 3.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[72]*/
-      {
-        "id": "268341C7-BB5B-49FB-AD8D-A792B7D631A0",
-        "name": "Witch Hat",
-        "image_name": "hat.png",
-        "tides": [
-          /*[0]*/
-          "event_chain",
-          /*[1]*/
-          "card_flow",
-          /*[2]*/
-          "event_setup",
-          /*[3]*/
-          "hand_cycling",
-        ],
-        "rendered-text": "When you play your second event each turn, draw a card.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[73]*/
-      {
-        "id": "9AAED05A-2223-42F2-9B9D-81A53EAB811C",
-        "name": "Honeycombs",
-        "image_name": "honeycombs.png",
-        "tides": [
-          /*[0]*/
-          "discard_velocity",
-          /*[1]*/
-          "resource_burst",
-          /*[2]*/
-          "hand_cycling",
-          /*[3]*/
-          "discard_outlets",
-        ],
-        "rendered-text": "Once per turn, when you discard a card, gain 1●.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[74]*/
-      {
-        "id": "5190A8B8-25A0-4C60-A4DE-2E2C5A73AF77",
-        "name": "Cactus",
-        "image_name": "cactus .png",
-        "tides": [
-          /*[0]*/
-          "discard_velocity",
-          /*[1]*/
-          "void_recursion",
-          /*[2]*/
-          "cost_reduction",
-          /*[3]*/
-          "hand_cycling",
-        ],
-        "rendered-text": "If you have discarded a card this turn, the first card you play from your void costs 1● less.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[75]*/
-      {
-        "id": "86F64A29-7338-4759-81DA-4C7656E543D2",
-        "name": "Spice Blossoms",
-        "image_name": "cinnamon.png",
-        "tides": [
-          /*[0]*/
-          "discard_velocity",
-          /*[1]*/
-          "event_chain",
-          /*[2]*/
-          "cost_reduction",
-          /*[3]*/
-          "hand_cycling",
-        ],
-        "rendered-text": "When you play an event, it costs 1● less for each card you have discarded this turn.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[76]*/
-      {
-        "id": "9D134DFC-4643-47F3-A7EC-EA770587CEA1",
-        "name": "Leaf Bundle",
-        "image_name": "bunch_of_leaves.png",
-        "tides": [
-          /*[0]*/
-          "discard_velocity",
-          /*[1]*/
-          "hand_cycling",
-          /*[2]*/
-          "card_flow",
-          /*[3]*/
-          "discard_outlets",
-          /*[4]*/
-          "resource_burst",
-        ],
-        "rendered-text": "Once per turn, when you discard a card, draw a card.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[77]*/
-      {
-        "id": "3A22A33F-5682-4D00-B0EC-86E43B6ED9DF",
-        "name": "Magic Fish",
-        "image_name": "magic_fish.png",
-        "tides": [
-          /*[0]*/
-          "spirit_growth",
-          /*[1]*/
-          "card_flow",
-          /*[2]*/
-          "character_curve",
-          /*[3]*/
-          "materialize_value",
-        ],
-        "rendered-text": "Once per turn, when you play a spirit animal, draw a card.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[78]*/
-      {
-        "id": "B3403800-7004-4775-915B-A19840E416B0",
-        "name": "Sea Tome",
-        "image_name": "book_11.png",
-        "tides": [
-          /*[0]*/
-          "judgment_engines",
-          /*[1]*/
-          "judgment_bodies",
-          /*[2]*/
-          "spark_growth",
-          /*[3]*/
-          "spark_tall",
-          /*[4]*/
-          "judgment_repeaters",
-        ],
-        "rendered-text": "Characters you control with ▸Dawn abilities have +1✦.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[79]*/
-      {
-        "id": "989B55BD-139F-40DC-B1FD-EB2F7B1C091A",
-        "name": "Trinket Necklace",
-        "image_name": "amulet_5.png",
-        "tides": [
-          /*[0]*/
-          "ally_formation",
-          /*[1]*/
-          "spark_growth",
-          /*[2]*/
-          "point_pressure",
-          /*[3]*/
-          "ally_wide",
-        ],
-        "rendered-text": "Challengers you control have +1✦.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[80]*/
-      {
-        "id": "6103508C-4991-4B80-9DC1-F30122957296",
-        "name": "Pig Nose",
-        "image_name": "pig_nouse.png",
-        "tides": [
-          /*[0]*/
-          "survivor_dissolve",
-          /*[1]*/
-          "spark_growth",
-          /*[2]*/
-          "defensive_curve",
-          /*[3]*/
-          "character_curve",
-        ],
-        "rendered-text": "Survivors you control have +2✦.",
-        "tags": [
-          /*[0]*/
-          "J11",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[81]*/
-      {
-        "id": "7A37386D-6E7C-4F08-B07F-E92A1FD69893",
-        "name": "Bead Charm",
-        "image_name": "amulet_6.png",
-        "tides": [
-          /*[0]*/
-          "ally_formation",
-          /*[1]*/
-          "spark_growth",
-          /*[2]*/
-          "point_pressure",
-          /*[3]*/
-          "ally_wide",
-        ],
-        "rendered-text": "Challengers you control that share a character type with another challenger you control have +2✦.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[82]*/
-      {
-        "id": "15FD5A22-A786-48E3-99B0-919E810B3EBA",
-        "name": "Opal",
-        "image_name": "opal.png",
-        "tides": [
-          /*[0]*/
-          "spark_tall",
-          /*[1]*/
-          "spark_growth",
-          /*[2]*/
-          "big_energy",
-          /*[3]*/
-          "finishers",
-        ],
-        "rendered-text": "You may pay Offering costs by discarding a card instead of banishing a card from your hand.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[83]*/
-      {
-        "id": "08A3983A-1B95-4D2E-A445-9D8DC2B8FCA7",
-        "name": "Spider Medallion",
-        "image_name": "amulet_9.png",
-        "rendered-text": "When you have 3 or more challengers, they have +2✦.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[84]*/
-      {
-        "id": "EB6A5C19-26A6-41EF-AC7A-CE1152557B5C",
-        "name": "Eye Amulet",
-        "image_name": "amulet_7.png",
-        "rendered-text": "When all characters you control are challengers, they have +2✦.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[85]*/
-      {
-        "id": "87239E3F-04F7-45BD-9B73-944EF36AD445",
-        "name": "Eyeball Slime",
-        "image_name": "monster_jelly.png",
-        "tides": [
-          /*[0]*/
-          "ally_formation",
-          /*[1]*/
-          "spark_growth",
-          /*[2]*/
-          "point_pressure",
-          /*[3]*/
-          "ally_wide",
-        ],
-        "rendered-text": "Cards in your hand with ephemeral are not banished at the end of your turn.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[86]*/
-      {
-        "id": "11018E32-F47E-45FD-A8CF-3A9E3F3BE71B",
-        "name": "Silver Key",
-        "image_name": "key_2.png",
-        "rendered-text": "The first character you play each turn materializes with +1✦.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[87]*/
-      {
-        "id": "D4B18CC4-CAEB-40B3-B0E2-F1C8B1C8354C",
-        "name": "Larva",
-        "image_name": "larva.png",
-        "tides": [
-          /*[0]*/
-          "materialize_value",
-          /*[1]*/
-          "character_chain",
-          /*[2]*/
-          "materialized_staples",
-          /*[3]*/
-          "spark_growth",
-        ],
-        "rendered-text": "When you play a character, it gains +1✦ for each other character you have played this turn.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[88]*/
-      {
-        "id": "2788CDAD-2735-4CDF-89A8-DCECACA87369",
-        "name": "Phoenix Feather",
-        "image_name": "phoenix_feather.png",
-        "tides": [
-          /*[0]*/
-          "leave_play_enablers",
-          /*[1]*/
-          "materialize_tempo",
-          /*[2]*/
-          "materialize_value",
-          /*[3]*/
-          "spark_growth",
-        ],
-        "rendered-text": "When you play a character, it gains +1✦ for each character you control that left play this turn.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[89]*/
-      {
-        "id": "4F5BDCAC-64CB-4A45-8121-E37F5E4D3074",
-        "name": "Notes",
-        "image_name": "note_2.png",
-        "tides": [
-          /*[0]*/
-          "bounce_blink_tools",
-          /*[1]*/
-          "materialize_tempo",
-          /*[2]*/
-          "spark_growth",
-          /*[3]*/
-          "leave_play_enablers",
-          /*[4]*/
-          "materialize_value",
-        ],
-        "rendered-text": "Spirit animals you control have +1✦.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[90]*/
-      {
-        "id": "1CCD8D69-E14C-4788-BE1D-CB6A1B703225",
-        "name": "Wolf Sigil",
-        "image_name": "amulet_4.png",
-        "tides": [
-          /*[0]*/
-          "warrior_bastion",
-          /*[1]*/
-          "judgment_engines",
-          /*[2]*/
-          "spark_growth",
-          /*[3]*/
-          "spark_tall",
-        ],
-        "rendered-text": "When a character you control dissolves an enemy in a challenge, it gains +2✦.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[91]*/
-      {
-        "id": "6B51E477-352C-489B-8D5F-049BC378FDE9",
-        "name": "Piranha",
-        "image_name": "piranha.png",
-        "tides": [
-          /*[0]*/
-          "point_pressure",
-          /*[1]*/
-          "finishers",
-          /*[2]*/
-          "fast_tempo",
-        ],
-        "rendered-text": "When a character you control scores ⍟ in a challenge, it scores 1 additional ⍟.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[92]*/
-      {
-        "id": "4D762FAE-AE9F-4C35-A03B-051D7ECC3532",
-        "name": "Blazing Orb",
-        "image_name": "magic_ball.png",
-        "tides": [],
-        "rendered-text": "",
-        "tags": [],
-      },
-      /*[93]*/
-      {
-        "id": "C92438FC-8E1F-4F97-9DCF-8CA0EDAA8607",
-        "name": "Black Horn",
-        "image_name": "leech.png",
-        "tides": [
-          /*[0]*/
-          "cheap_removal",
-          /*[1]*/
-          "premium_removal",
-          /*[2]*/
-          "resource_burst",
-          /*[3]*/
-          "card_flow",
-        ],
-        "rendered-text": "When you dissolve or banish an enemy character, gain 2●.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[94]*/
-      {
-        "id": "9DD7D53F-D4DB-4EEC-919D-D701774AF359",
-        "name": "Poison Bottle",
-        "image_name": "poison.png",
-        "tides": [
-          /*[0]*/
-          "leave_play_enablers",
-          /*[1]*/
-          "resource_burst",
-          /*[2]*/
-          "premium_removal",
-        ],
-        "rendered-text": "When you return a character to a player\'s hand, gain 2●.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[95]*/
-      {
-        "id": "BB8BB233-7CB1-43B3-AF30-E71AB9E832C5",
-        "name": "Sealed Letter",
-        "image_name": "letter_2.png",
-        "tides": [
-          /*[0]*/
-          "abandon_value",
-          /*[1]*/
-          "trigger_reuse",
-          /*[2]*/
-          "survivor_dissolve",
-          /*[3]*/
-          "leave_play_enablers",
-        ],
-        "rendered-text": "When you abandon a character, its ▸Dissolved ability triggers an additional time.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[96]*/
-      {
-        "id": "FDFBD522-C2BE-4B77-A63F-E9A64CA3DE3B",
-        "name": "Parchment",
-        "image_name": "parchment.png",
-        "tides": [
-          /*[0]*/
-          "survivor_dissolve",
-          /*[1]*/
-          "attrition_trade",
-          /*[2]*/
-          "card_flow",
-          /*[3]*/
-          "defensive_curve",
-        ],
-        "rendered-text": "Once per turn, when a character you control is dissolved, draw a card.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[97]*/
-      {
-        "id": "293A610D-EA75-4974-88DA-13E4C86F248F",
-        "name": "Mandrake Root",
-        "image_name": "mandragora.png",
-        "tides": [
-          /*[0]*/
-          "survivor_dissolve",
-          /*[1]*/
-          "void_recursion",
-          /*[2]*/
-          "reclaim_characters",
-          /*[3]*/
-          "attrition_trade",
-        ],
-        "rendered-text": "Once per turn, when a character you control is dissolved, return a random character with lower cost from your void to hand.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[98]*/
-      {
-        "id": "4A9F95D5-B72D-4EE8-8D29-B05646EDC23D",
-        "name": "Herb Mortar",
-        "image_name": "mortar_pestle.png",
-        "tides": [
-          /*[0]*/
-          "survivor_dissolve",
-          /*[1]*/
-          "void_recursion",
-          /*[2]*/
-          "materialize_value",
-          /*[3]*/
-          "attrition_trade",
-        ],
-        "rendered-text": "Once per turn, when a character you control is dissolved, materialize a random character with lower cost from your void.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[99]*/
-      {
-        "id": "B765F6BB-0B8A-4847-ADA4-477B9493E3AD",
-        "name": "Flower Petals",
-        "image_name": "petals.png",
-        "tides": [
-          /*[0]*/
-          "abandon_value",
-          /*[1]*/
-          "materialize_value",
-          /*[2]*/
-          "leave_play_enablers",
-          /*[3]*/
-          "character_chain",
-        ],
-        "rendered-text": "At the end of your turn, materialize a random character in your void which you abandoned this turn. It has 0✦.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[100]*/
-      {
-        "id": "72EF4B11-5366-4798-AAB0-09E5FFBB1ED8",
-        "name": "Wing",
-        "image_name": "wing.png",
-        "tides": [
-          /*[0]*/
-          "big_energy",
-          /*[1]*/
-          "hand_cycling",
-          /*[2]*/
-          "card_flow",
-          /*[3]*/
-          "resource_burst",
-        ],
-        "rendered-text": "When you draw your second card each turn, gain 1 maximum ●.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[101]*/
-      {
-        "id": "05F69D01-F8A3-4044-B7CD-0BFD9ED980CD",
-        "name": "Philosopher\'s Stone",
-        "image_name": "philosopher\'s_Stone.png",
-        "tides": [
-          /*[0]*/
-          "big_energy",
-          /*[1]*/
-          "resource_burst",
-          /*[2]*/
-          "event_chain",
-          /*[3]*/
-          "finishers",
-        ],
-        "rendered-text": "Your unspent ● carries over between turns.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[102]*/
-      {
-        "id": "64A28F37-54A4-4152-8C72-2EBC61E19AAC",
-        "name": "Steel Wand",
-        "image_name": "Magicwand.png",
-        "tides": [
-          /*[0]*/
-          "fast_tempo",
-          /*[1]*/
-          "fast_interaction",
-          /*[2]*/
-          "card_flow",
-          /*[3]*/
-          "fast_setup",
-        ],
-        "rendered-text": "Once per turn, when you play a ❖ card, draw a card.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[103]*/
-      {
-        "id": "206049AE-9F28-4A90-9F75-63D9EE5F4A27",
-        "name": "Gold Key",
-        "image_name": "key_3.png",
-        "tides": [
-          /*[0]*/
-          "character_chain",
-          /*[1]*/
-          "character_curve",
-          /*[2]*/
-          "big_energy",
-          /*[3]*/
-          "cost_reduction",
-          /*[4]*/
-          "resource_burst",
-        ],
-        "rendered-text": "When you play your third character each turn, gain 2●.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[104]*/
-      {
-        "id": "9204FBC8-BA40-4E33-9FBC-F62CCC4A43D1",
-        "name": "Powder Bowl",
-        "image_name": "powder_magic.png",
-        "tides": [
-          /*[0]*/
-          "point_pressure",
-          /*[1]*/
-          "cost_rfeduction",
-          /*[2]*/
-          "character_curve",
-          /*[3]*/
-          "finishers",
-        ],
-        "rendered-text": "The first character you play each turn costs 2● less if a character you control scored ⍟ last turn.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[105]*/
-      {
-        "id": "FB87262C-5BDE-409E-92F1-58CC7A4E5491",
-        "name": "Purple Potion",
-        "image_name": "potion.png",
-        "tides": [
-          /*[0]*/
-          "big_energy",
-          /*[1]*/
-          "cost_reduction",
-          /*[2]*/
-          "resource_burst",
-          /*[3]*/
-          "finishers",
-          /*[4]*/
-          "spark_tall",
-        ],
-        "rendered-text": "3● cost characters cost you 2●.",
-        "tags": [
-          /*[0]*/
-          "J12",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[106]*/
-      {
-        "id": "62E1A588-F719-415C-9434-80AA08CE2E6A",
-        "name": "Red Pin",
-        "image_name": "pin.png",
-        "tides": [
-          /*[0]*/
-          "big_energy",
-          /*[1]*/
-          "card_flow",
-          /*[2]*/
-          "resource_burst",
-          /*[3]*/
-          "finishers",
-        ],
-        "rendered-text": "Once per turn, when you play a 2● cost character, draw a card.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[107]*/
-      {
-        "id": "4BB408A8-7941-42DC-9FF6-DBC1400C99ED",
-        "name": "Crystal Wand",
-        "image_name": "magic_stick_2.png",
-        "tides": [
-          /*[0]*/
-          "point_pressure",
-          /*[1]*/
-          "judgment_engines",
-          /*[2]*/
-          "card_flow",
-          /*[3]*/
-          "finishers",
-        ],
-        "rendered-text": "When one or more characters you control score ⍟, draw a card.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[108]*/
-      {
-        "id": "FDD2FFE4-40F4-49CF-BC2E-2496E1042F76",
-        "name": "Poppy Flower",
-        "image_name": "maquis.png",
-        "rendered-text": "▸Night: If you have played no cards this turn, gain 2●.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[109]*/
-      {
-        "id": "56CAA78B-021D-4B27-ACAB-C77FB0146CED",
-        "name": "Rabbit Tail",
-        "image_name": "rabbit_tail.png",
-        "rendered-text": "▸Night: If you have played no characters this turn, draw a card.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[110]*/
-      {
-        "id": "EF25FBA0-58A0-4B69-BE06-3668679FCDC7",
-        "name": "Green Cauldron",
-        "image_name": "pot.png",
-        "tides": [
-          /*[0]*/
-          "discard_velocity",
-          /*[1]*/
-          "hand_cycling",
-          /*[2]*/
-          "card_flow",
-          /*[3]*/
-          "discard_outlets",
-        ],
-        "rendered-text": "The first time each turn your hand becomes empty, draw a card.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[111]*/
-      {
-        "id": "055F211D-AA51-49EB-9162-190A946B1614",
-        "name": "Root Staff",
-        "image_name": "magic_stick_3.png",
-        "tides": [
-          /*[0]*/
-          "ally_wide",
-          /*[1]*/
-          "point_pressure",
-          /*[2]*/
-          "hand_cycling",
-          /*[3]*/
-          "card_flow",
-        ],
-        "rendered-text": "When 2 or more characters you control score ⍟, draw a card, then discard a card.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[112]*/
-      {
-        "id": "CD4BB1F4-66BB-45EA-ABFE-CE0C66E4EC4F",
-        "name": "Purple Crystal",
-        "image_name": "crystal.png",
-        "rendered-text": "The first card you purchase at each dream bazaar site costs 25% less and gains a random transfiguration.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[113]*/
-      {
-        "id": "1CF06F9B-D698-434B-8E36-8A47206F4C0C",
-        "name": "Cracked Mirror",
-        "image_name": "mirror.png",
-        "rendered-text": "The first card you purchase from each shop site is duplicated.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[114]*/
-      {
-        "id": "8408B8C2-5A3F-40DD-BAC4-98F2736C4176",
-        "name": "Cracked Orb",
-        "image_name": "magic-ball.png",
-        "rendered-text": "Each shop site provides 2 additional options.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[115]*/
-      {
-        "id": "10BD78DE-87EC-44E4-9B16-E755DA2A9717",
-        "name": "Red Shard",
-        "image_name": "stone-red.png",
-        "rendered-text": "Cards you purchase from dream bazaar sites gain a random transfiguration.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[116]*/
-      {
-        "id": "8A2C7B32-26EA-40E2-845A-689DA5673B4D",
-        "name": "Witch Coin",
-        "image_name": "witch_coin.png",
-        "rendered-text": "The first Restock at each shop site costs 0.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[117]*/
-      {
-        "id": "883F88FB-AC50-419A-8382-C22EDEE29755",
-        "name": "Charm Staff",
-        "image_name": "magic_stick_6.png",
-        "rendered-text": "After you buy an item at a shop site, replace it immediately with another item for purchase.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[118]*/
-      {
-        "id": "C2AF5460-E61F-409B-9B86-6AC7DB34D748",
-        "name": "Blue Crystal",
-        "image_name": "stone.png",
-        "rendered-text": "If your deck has 30 or more cards, cards you add to it gain a random transfiguration.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[119]*/
-      {
-        "id": "E7D23BF7-4D60-4B43-94C4-14A06C0F9116",
-        "name": "Rainbow Jellyfish",
-        "image_name": "rainbow_jellyfish.png",
-        "rendered-text": "When you gain this dreamsign, apply the Perfected Transfiguration to each starter card in your deck.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[120]*/
-      {
-        "id": "4F21A4AB-E4AA-4718-8563-9AFB72D140C0",
-        "name": "Star Anise",
-        "image_name": "star_anise.png",
-        "rendered-text": "At each draft site, the first event card you add to your deck gains the Amplified Transfiguration.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[121]*/
-      {
-        "id": "0C52E8C3-A792-4EEA-955F-A0C61463C066",
-        "name": "Spell Tome",
-        "image_name": "book.png",
-        "tides": [
-          /*[0]*/
-          "event_chain",
-          /*[1]*/
-          "copy_effects",
-          /*[2]*/
-          "event_setup",
-        ],
-        "rendered-text": "When you transfigure an event, add a copy of it to your deck.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[122]*/
-      {
-        "id": "8B69DE8A-835D-4F0C-AC25-DC0E700E2983",
-        "name": "Glowing Crystal",
-        "image_name": "stone_2.png",
-        "rendered-text": "When you add a character card to your deck, it has a 50% chance to gain a random transfiguration.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[123]*/
-      {
-        "id": "AB1DA9D3-376A-460A-A9DC-4737E59E558B",
-        "name": "White Rat",
-        "image_name": "white_rat.png",
-        "rendered-text": "When you gain this dreamsign, apply random transfigurations to half the cards in your deck.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[124]*/
-      {
-        "id": "34CE9428-DDA9-4EFA-BACD-5EC2698561C1",
-        "name": "Glow Pouch",
-        "image_name": "bag_3.png",
-        "rendered-text": "When you apply a transfiguration to a card, apply an additional random transfiguration to it.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[125]*/
-      {
-        "id": "D9F0F7FF-63C0-4247-8831-054D7FED931D",
-        "name": "Leaf Ledger",
-        "image_name": "book_8.png",
-        "rendered-text": "At each transfiguration site you visit, transfigure 2 cards instead of 1.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[126]*/
-      {
-        "id": "BE59C0BA-6286-49E3-A88D-86B0977CC30A",
-        "name": "Pearl Shell",
-        "image_name": "shell.png",
-        "rendered-text": "At each essence site you visit, you are instead offered a Dreamsign.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[127]*/
-      {
-        "id": "AF92858A-0C50-4ABF-A622-04C024CA32B3",
-        "name": "Star Badge",
-        "image_name": "Ring_2.png",
-        "rendered-text": "Double the essence you gain from essence sites.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[128]*/
-      {
-        "id": "488BF436-C6D5-4E38-8A19-E50041F53766",
-        "name": "Sickle",
-        "image_name": "sickle.png",
-        "rendered-text": "At each essence site, you may forgo the essence to purge 2 cards.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[129]*/
-      {
-        "id": "F4DF5A74-7822-4552-A3AB-F50B00758593",
-        "name": "Strange Fruit",
-        "image_name": "strange_fruit.png",
-        "rendered-text": "When you purge a card, gain 50 essence.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[130]*/
-      {
-        "id": "95A162C1-5FB0-4966-B631-EEC1E8EC96EF",
-        "name": "Banded Worm",
-        "image_name": "worm.png",
-        "rendered-text": "When you enter a new dreamscape, gain essence equal to 20% of your current essence.",
-        "tags": [
-          /*[0]*/
-          "J15",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[131]*/
-      {
-        "id": "1C505034-E405-495D-8418-6E3C06D974F0",
-        "name": "Sea Urchin",
-        "image_name": "sea_urchin.png",
-        "rendered-text": "While you have at least 300 essence, draft site choices show an additional card.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[132]*/
-      {
-        "id": "427C71E3-178F-4352-8D6F-F0789CB13C2D",
-        "name": "Carved Bone",
-        "image_name": "bone.png",
-        "rendered-text": "When you dissolve or banish an enemy character outside of a challenge, gain 10 essence.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[133]*/
-      {
-        "id": "2DCF92BF-93B3-400C-AB97-69D3098F8868",
-        "name": "Clam Shell",
-        "image_name": "mollusk.png",
-        "rendered-text": "Draft site choices show an additional card.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[134]*/
-      {
-        "id": "E377C3ED-16F5-4424-A9F1-73F9750ACE9F",
-        "name": "Tortoise Shell",
-        "image_name": "White tortoise shell.png",
-        "rendered-text": "Cards in your deck cannot be purged.\n\nDraft site choices show an additional card.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[135]*/
-      {
-        "id": "71F77DD5-3BB5-4987-80F4-13DC69F74E6B",
-        "name": "Scorpion",
-        "image_name": "scorpion.png",
-        "rendered-text": "Before each battle, if you have more than 30 cards in your deck, you may purge cards of your choice while remaining at or above 30 cards.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[136]*/
-      {
-        "id": "D78864DA-EB31-4F25-9D51-94FCA7ECF810",
-        "name": "Tongue",
-        "image_name": "tongue.png",
-        "rendered-text": "After you draw your opening hand, you may discard any number of cards, then draw that many cards.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[137]*/
-      {
-        "id": "1328E611-FA2F-426F-87E2-97F26C061866",
-        "name": "Paired Teeth",
-        "image_name": "teeaths.png",
-        "rendered-text": "When you gain this dreamsign, you may purge up to 4 starter cards from your deck.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[138]*/
-      {
-        "id": "069C6E8F-4F41-4F13-9EC9-2009B4186E3B",
-        "name": "Spotted Mug",
-        "image_name": "tea.png",
-        "tides": [
-          /*[0]*/
-          "event_chain",
-          /*[1]*/
-          "event_setup",
-          /*[2]*/
-          "card_flow",
-          /*[3]*/
-          "finishers",
-        ],
-        "rendered-text": "When you gain this dreamsign, pick an event card in your deck.\n\nThat card is always in your opening hand.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[139]*/
-      {
-        "id": "8E2D26A8-FF39-48A4-A30E-434479C4675F",
-        "name": "Toad",
-        "image_name": "toad.png",
-        "tides": [
-          /*[0]*/
-          "survivor_dissolve",
-          /*[1]*/
-          "character_curve",
-          /*[2]*/
-          "defensive_curve",
-        ],
-        "rendered-text": "When you gain this dreamsign, pick a character type.\n\nCharacter cards in your deck are that character type.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[140]*/
-      {
-        "id": "108841CE-4FEB-4C73-972E-0277C727C63E",
-        "name": "Slug",
-        "image_name": "slug.png",
-        "rendered-text": "After each battle, you may purge up to 2 cards.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[141]*/
-      {
-        "id": "025CE7F1-066B-480A-8A2F-364379890ABD",
-        "name": "Spider",
-        "image_name": "spider.png",
-        "rendered-text": "After each battle, you may duplicate a card.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[142]*/
-      {
-        "id": "452B7CD6-9DC3-48A8-B9AA-412CA6DD5F19",
-        "name": "Green Slime",
-        "image_name": "speaces.png",
-        "rendered-text": "After each battle, you may apply random transfigurations to up to 3 cards.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[143]*/
-      {
-        "id": "DA7E4B45-9106-4116-BC1C-3AEC8885396B",
-        "name": "Spiral Shell",
-        "image_name": "shell 2.png",
-        "rendered-text": "At duplication sites, you always gain 4 copies of the selected card.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[144]*/
-      {
-        "id": "7E8C86CC-788F-4648-BE84-E0935C40C31E",
-        "name": "Red Cheese",
-        "image_name": "red_cheese.png",
-        "rendered-text": "After each battle, pick 1 of 3 dreamsigns to gain.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[145]*/
-      {
-        "id": "CD81A49D-DF58-4E0E-B1B2-33A82B386052",
-        "name": "Rosemary",
-        "image_name": "rosemary.png",
-        "rendered-text": "Dreamsign and dreamsign draft sites are enhanced.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[146]*/
-      {
-        "id": "58472AD2-88B1-4DC7-A161-C6DEA7D8C43D",
-        "name": "Rainbow Mushroom",
-        "image_name": "rainbow mushroom.png",
-        "rendered-text": "In each dreamscape, 1 additional site is enhanced.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[147]*/
-      {
-        "id": "3C0CED1A-7A2A-4F18-9AB4-5D6055D1DC59",
-        "name": "Curled Tail",
-        "image_name": "tall.png",
-        "rendered-text": "You may reroll dream journey sites once to present new options.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[148]*/
-      {
-        "id": "0DF9D72C-58EA-42A0-A72A-CBC540A1836A",
-        "name": "Voodoo Doll",
-        "image_name": "vudu_doll.png",
-        "rendered-text": "When you gain this dreamsign, choose another dreamsign you own. This dreamsign becomes a copy of it.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[149]*/
-      {
-        "id": "31DF4C62-6AB2-47F2-A4FF-C32B8E554B3B",
-        "name": "Raven Skull",
-        "image_name": "raven_skull.png",
-        "rendered-text": "Nightmare cards cannot be added to your deck.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
-      /*[150]*/
-      {
-        "id": "EB55B141-82F8-4BA4-B319-420F762E9EE4",
-        "name": "Mortal Skull",
-        "image_name": "skull_2.png",
-        "rendered-text": "When a character you control dissolves an enemy during a challenge, gain 10 essence.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[151]*/
-      {
-        "id": "1CD25B9A-B176-4C51-8349-BB4DF35CBF05",
-        "name": "Twisted Herbs",
-        "image_name": "twisting_herbs.png",
-        "tides": [
-          /*[0]*/
-          "big_energy",
-          /*[1]*/
-          "cost_reduction",
-          /*[2]*/
-          "finishers",
-        ],
-        "rendered-text": "When you gain this dreamsign, add 5 Nightmare cards to your deck.\n\nCharacters you control have +1✦.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-          /*[2]*/
-          "Ally Audit",
-        ],
-      },
-      /*[152]*/
-      {
-        "id": "B8590328-CA72-4869-A795-C7F4B6802BED",
-        "name": "Antler",
-        "image_name": "horns.png",
-        "tides": [
-          /*[0]*/
-          "discard_velocity",
-          /*[1]*/
-          "hand_cycling",
-          /*[2]*/
-          "card_flow",
-          /*[3]*/
-          "discard_outlets",
-          /*[4]*/
-          "event_chain",
-        ],
-        "rendered-text": "Draw two additional cards during your Draw phase. At the end of each turn, discard your hand.",
-        "tags": [
-          /*[0]*/
-          "J16",
-          /*[1]*/
-          "Tag OK",
-        ],
-      },
+// All Dreamtides Dreamsign definitions.
+
+#![enable(implicit_some)]
+[
+  DreamsignDefinition(
+    name: "Amplified Acorn",
+    id: "c706d0ba-2f41-4b14-95d8-db168ac6246c",
+    ability_text: [
+      "Once per turn, when you discard a card, your next card this turn costs 2● less.",
     ],
-  },
-)
+    art: (image: "acorn_gold.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Pyramid Relic",
+    id: "278ec1ab-f532-4862-84ae-63df5e49548c",
+    ability_text: ["The second character you play each turn costs 1● less."],
+    art: (image: "aertfact.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Amanita",
+    id: "6e20e6c7-295a-48b1-b252-b8b00d6902c9",
+    ability_text: [
+      "Once per turn, when a character you control leaves play, your next character this turn costs 2● less.",
+    ],
+    art: (image: "amanita.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Algae",
+    id: "49990864-1db0-4c08-91ae-40a1f04223e4",
+    ability_text: [
+      "Once per turn, when you draw a character, reduce its cost by 1● until end of turn.",
+    ],
+    art: (image: "algae.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Flash Powder",
+    id: "3dd05e97-1af8-4ae9-8e1f-954eaa63e112",
+    ability_text: ["The first character you play each turn costs 2● less and has 0✦."],
+    art: (image: "Alchemical_Powder.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Green Amulet",
+    id: "a42c99b2-f480-4f63-91a0-bd556120427d",
+    ability_text: ["The second card you draw each turn costs 2● less."],
+    art: (image: "amulet_2.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Cloud Lens",
+    id: "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4",
+    ability_text: ["The second event you play each turn costs 1● less."],
+    art: (image: "amulet_3.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Serpent Tome",
+    id: "8778bf17-4e0a-4ce7-b23c-4daf49a782a7",
+    ability_text: ["Reclaim abilities cost you 1● less."],
+    art: (image: "book_6.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Charm Bracelet",
+    id: "12ec9625-cbfb-4056-9c3e-98ed8c8bea70",
+    ability_text: [
+      "Once per turn, when you return a character you control to hand, your next character this turn costs 1● less.",
+    ],
+    art: (image: "necklace.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Oak Leaf",
+    id: "95f0f483-9a76-47c6-a839-01a1d9122945",
+    ability_text: ["When you return a character you control to hand, it gains +2✦."],
+    art: (image: "oak_leaf.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Egg Nest",
+    id: "553d2317-32f9-47bc-bae0-5018ca26d56a",
+    ability_text: ["The first ❖ card you play during the opponent's turn costs 1● less."],
+    art: (image: "nest.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Skull Pendant",
+    id: "0d668e16-1729-4289-ad1d-0fb3c1374ee9",
+    ability_text: ["Characters with ▸Materialized abilities cost you 1● less."],
+    art: (image: "amulet_8.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Crystal Orb",
+    id: "ede46f71-aa77-4b12-9824-0d3706da6a22",
+    ability_text: ["The first character you materialize each turn has awakened."],
+    art: (image: "magic_ball_2.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Leather Satchel",
+    id: "3380c657-79ca-400b-abb7-4b56fbb92af4",
+    ability_text: ["When you abandon a character, trigger its ▸Materialized and ▸Dawn abilities."],
+    art: (image: "bag_2.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Attuned Petals",
+    id: "2ebf0bbb-440c-4dba-8e48-228daadc0a1e",
+    ability_text: [
+      "Once per turn, when you abandon a character, materialize a 0✦ figment copy of it.",
+    ],
+    art: (image: "rose_petals.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Charm Pouch",
+    id: "2d4eb3ee-0931-45ed-8365-69f18096ead5",
+    ability_text: [
+      "The first time each turn you trigger a ▸Materialized ability, trigger that ability again.",
+    ],
+    art: (image: "bag_4.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Bat Wing",
+    id: "a98f468b-5e76-4041-83ee-69c0871a6bf0",
+    ability_text: ["Once per turn, when you dissolve or banish an enemy, draw a card."],
+    art: (image: "bat_wings.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Bell",
+    id: "d1fdbe21-56f6-43c0-aaac-1e4683964da5",
+    ability_text: ["When you play a character from your void, rematerialize it."],
+    art: (image: "bell.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Belladonna",
+    id: "d76684c3-797e-44ae-a2ba-333e77d46a4d",
+    ability_text: [
+      "At the end of your turn, if you materialized 2 characters this turn, rematerialize the last one.",
+    ],
+    art: (image: "belladonna.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Berries",
+    id: "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+    ability_text: ["Characters in your deck with cost ≤2● have +1✦."],
+    art: (image: "berries.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Green Beetle",
+    id: "47081bde-f35d-4b5c-ba17-53e5dbf5b419",
+    ability_text: ["Characters in your deck with cost ≥4● have awakened."],
+    art: (image: "bettle.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Bezoar",
+    id: "3ed05d9a-dae0-4260-9b99-ad22d02fc583",
+    ability_text: [
+      "When you abandon a character, characters you materialize this turn have awakened.",
+    ],
+    art: (image: "bezoar.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Brown Acorn",
+    id: "9f34b5f6-4766-4a7e-a841-d7b945cad504",
+    ability_text: ["When you add a warrior card to your deck, that card gains +1✦."],
+    art: (image: "black-acorn.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Black Attuned",
+    id: "94e5683d-a24c-4f89-8afa-652d7c6c79aa",
+    ability_text: ["When you play an event while you control 3 or more warriors, copy it."],
+    art: (image: "black_rose.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Spider Jar",
+    id: "4409a691-49b4-4fb0-82f6-4f45ae86d8c2",
+    ability_text: [
+      "When you play your second character each turn, materialize a 1✦ warrior figment.",
+    ],
+    art: (image: "black_widow.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Blue Feather",
+    id: "1dfa4d90-8270-4b7c-87be-d95ab6201e00",
+    ability_text: [
+      "If the first card you draw during your turn is a warrior, reduce its cost by 1● and it gains +2✦.",
+    ],
+    art: (image: "blue_feather.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Skull Drum",
+    id: "dbbade86-9fb6-4283-b2dc-9c1ef66fd531",
+    ability_text: [
+      "When you play an event while you control 3 or more spirit animals, it costs 1● less.",
+    ],
+    art: (image: "drum.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Ivory Claw",
+    id: "21ae8473-afa7-4384-b7d4-afbf1d84e691",
+    ability_text: ["▸Dawn: If you control 3 or more warriors, draw a card."],
+    art: (image: "claw.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Sealed Scroll",
+    id: "6b5c0f18-198c-44e7-92e8-d639298b8cf6",
+    ability_text: ["Once per turn, when a spirit animal you control is dissolved, draw a card."],
+    art: (image: "scroll_3.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Curved Blade",
+    id: "246ac924-74dd-4387-9fd6-5bc8e563907a",
+    ability_text: ["Warriors you control cost 1● less."],
+    art: (image: "knife.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Shadow Droplet",
+    id: "1ece0e16-08de-4c99-8552-2d1d3a2bd517",
+    ability_text: ["Survivors in your void have reclaim."],
+    art: (image: "dark-essense.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Theater Mask",
+    id: "3d86f8ce-42ac-43dc-96d5-121e6d1a6167",
+    ability_text: [
+      "When you gain this dreamsign, pick a character type. All cards in your deck that mention character types in their text now refer to that character type.",
+    ],
+    art: (image: "mask_2.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Rune Stone",
+    id: "dec81fa2-7865-448c-95bc-622b884cea9e",
+    ability_text: ["Figments you control have +1✦."],
+    art: (image: "rune.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Rune Sack",
+    id: "4dc47625-73bd-4518-a4ef-29dda2171594",
+    ability_text: ["▸Dawn: If you control 3 or more figments, gain 2●."],
+    art: (image: "runes.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Bestiary",
+    id: "4a91c56c-d828-482a-a46c-1299d69fa011",
+    ability_text: ["When you discard a card, materialize a 2✦ radiant figment."],
+    art: (image: "book_10.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Potion Mortar",
+    id: "26786698-fdf2-493d-905b-4273a20586c9",
+    ability_text: ["▸Dawn: A random card in your hand costs 1● this turn."],
+    art: (image: "bowl.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Broomstick",
+    id: "b7f8a4ea-c067-47ed-b251-2876b609108c",
+    ability_text: ["▸Dawn: Lose 1●. Draw a card."],
+    art: (image: "broomstick.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Ice Crystals",
+    id: "253a106d-f64e-4a60-9471-446a18ee8959",
+    ability_text: ["▸Dawn: Erode 1."],
+    art: (image: "ice.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Tarot Card",
+    id: "5a22f358-bc84-44b1-a201-5f9f57940c51",
+    ability_text: ["When you challenge with 2 or more characters, draw a card."],
+    art: (image: "card.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Mushroom Caps",
+    id: "6b95d6bd-c970-4465-9536-4f21e7630d0a",
+    ability_text: ["When drafting cards, see 1 fewer choice.", "▸Dawn: Gain 1●."],
+    art: (image: "Champignon.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Rainbow Horn",
+    id: "1a524712-ef7e-43d9-bd79-5dea5250bf08",
+    ability_text: ["▸Dawn: Add a random ≤2● cost event from the card pool to your hand."],
+    art: (image: "horn_rainbow .png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Hourglass",
+    id: "6f4e2d9f-38a4-4f6a-8fde-7d942977a6df",
+    ability_text: ["If 3 or more ▸Dawn abilities trigger during your Dawn phase, draw a card."],
+    art: (image: "hourglass.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Butterfly Wings",
+    id: "c75cd943-5e8b-4a56-8c09-d975571570d4",
+    ability_text: [
+      "The ▸Dawn ability of a random character you control triggers an additional time each turn.",
+    ],
+    art: (image: "butterfly_wings.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Dreamcatcher",
+    id: "7ec00da2-2b2d-4613-9a2a-8611d38199ca",
+    ability_text: [
+      "▸Dawn: Add an ethereal copy of the first event you played last turn to your hand.",
+    ],
+    art: (image: "dreamcatcher.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Carved Relic",
+    id: "064cfb53-fcb4-4471-80de-27eccd23d3c0",
+    ability_text: ["▸Dawn: Return a random event from your void to your hand."],
+    art: (image: "idol.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Rope Doll",
+    id: "a7cdc8fd-5827-4d73-ae0c-aa594a69fa8a",
+    ability_text: ["▸Dawn: Return a random survivor from your void to your hand."],
+    art: (image: "doll.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Dead Rat",
+    id: "bfec4f5d-9b0d-4ed2-b470-db73d852448f",
+    ability_text: ["▸Dawn: You may abandon a character to draw a card."],
+    art: (image: "dead_rat.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Gem Codex",
+    id: "fb7316c9-ef29-42fd-993e-d3337cb06921",
+    ability_text: ["When you copy an event, copy it an additional time."],
+    art: (image: "book_9.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Black Cat",
+    id: "257c160f-7d70-4ebd-bb0f-f83e61907310",
+    ability_text: ["Copy the second event you play each turn."],
+    art: (image: "cat.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Storm Tome",
+    id: "49f216a2-0596-4124-bb40-60ac9afe6e0b",
+    ability_text: ["Once per turn, when you play a ≤2● cost event, copy it."],
+    art: (image: "book_2.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Clover",
+    id: "56523397-6c48-4df6-846b-9e4f15d7fdee",
+    ability_text: [
+      "Once per turn, when you play an event while you control no characters, copy it.",
+    ],
+    art: (image: "clover.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Flaming Button",
+    id: "6dac6bff-af3a-4749-8547-01fded1c81c9",
+    ability_text: ["Once per turn, when you copy an event, gain 1●."],
+    art: (image: "damned_button.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Crow",
+    id: "396da354-9f4d-4ae7-a9dc-02d1330a2678",
+    ability_text: ["When you play an event, a random character gains +1✦ until end of turn."],
+    art: (image: "crow.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Cauldron",
+    id: "a09f60df-ec9f-4608-873c-1372af18daa2",
+    ability_text: [
+      "When you play an event, a random event in your void gains reclaim until end of turn.",
+    ],
+    art: (image: "cauldron.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Skull Dagger",
+    id: "044f856b-c08b-4b82-81e3-5417962bf868",
+    ability_text: ["The first event you play from your void each turn costs 0●."],
+    art: (image: "dark_knife.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Eye Grimoire",
+    id: "b6333eba-5573-441c-b286-1cd7f7cb6916",
+    ability_text: ["Once per turn, when you play an event from your void, copy it."],
+    art: (image: "book_3.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Eyeball Plant",
+    id: "b2626645-827c-46ec-8204-017862d1a398",
+    ability_text: ["Characters in your void with ≥3● cost have reclaim."],
+    art: (image: "creepy_plant.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Skull Codex",
+    id: "2059aa74-8897-4c76-833f-ddef7d34346c",
+    ability_text: ["Reclaim abilities cost you 0●."],
+    art: (image: "book_5.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Dragon Egg",
+    id: "8340cce5-8e27-4940-ab79-34e09fdbcae1",
+    ability_text: ["Once per turn, when you play a card from your void, draw a card."],
+    art: (image: "egg_dragon.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Spotted Egg",
+    id: "2cbcbebb-fb79-4833-a770-2216873147c4",
+    ability_text: ["When you play your second event each turn, it gains reclaim 0●."],
+    art: (image: "eggs_2.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Worm Apple",
+    id: "d2a916c1-321a-4ae3-9a50-0b7f13c5eff6",
+    ability_text: ["You may play ❖ and ❖❖ events for 1●."],
+    art: (image: "apple.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Essence Vial",
+    id: "10f27800-99f8-4504-9d94-26bcb3c32788",
+    ability_text: [
+      "Once per turn, when you abandon a character or discard a character, that card gains reclaim.",
+    ],
+    art: (image: "essence.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Green Fly",
+    id: "946dbb36-0a90-495a-bf0f-17351c93d74b",
+    ability_text: ["The first card you erode each turn gains reclaim."],
+    art: (image: "fly.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Candle",
+    id: "89c83d7e-5617-49b4-b6cd-214680fe0627",
+    ability_text: [
+      "When you play an event, the character you control with the highest ✦ gains +1✦.",
+    ],
+    art: (image: "candle.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Red Heart",
+    id: "8b87b0c7-e7d5-4c53-b99b-b1e2407cb519",
+    ability_text: ["When you erode a card, a random character you control gains +1✦."],
+    art: (image: "heart.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Black Feather",
+    id: "73efd845-6009-4686-860c-01c7f5b1c074",
+    ability_text: [
+      "When you abandon a character, a random character you control gains +X✦ where X is the abandoned character's ✦.",
+    ],
+    art: (image: "feather.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Gold Feather",
+    id: "adc23870-55f8-4f23-b973-a358fc257414",
+    ability_text: ["When you abandon a character, a random character you control gains +1✦."],
+    art: (image: "feather_gold.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Gray Feather",
+    id: "1a21186c-cafd-4e0f-9304-1ac0ef55340a",
+    ability_text: ["When a character you control gains ✦, it gains 1 additional ✦."],
+    art: (image: "feathers.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Amber Eye",
+    id: "ff8d8d4a-fe7b-4511-8192-e6e2e7712daf",
+    ability_text: ["When you play an event, if you have ≥8 cards in your void, draw a card."],
+    art: (image: "eye_3.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Garlic Bulb",
+    id: "a92d2b95-c63d-4c1c-831b-902c44deee57",
+    ability_text: ["Once per turn, when you play an event, foresee 1."],
+    art: (image: "garlic.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Ginger Root",
+    id: "39260dd5-cb43-47d5-a007-effbe13d6417",
+    ability_text: ["Once per turn, when you foresee, draw a card."],
+    art: (image: "ginger .png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Hair Lock",
+    id: "4e51f321-9089-4872-a0e2-ab909e242b33",
+    ability_text: ["At the start of each battle, foresee 3."],
+    art: (image: "hair.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Witch Hat",
+    id: "268341c7-bb5b-49fb-ad8d-a792b7d631a0",
+    ability_text: ["When you play your second event each turn, draw a card."],
+    art: (image: "hat.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Honeycombs",
+    id: "9aaed05a-2223-42f2-9b9d-81a53eab811c",
+    ability_text: ["Once per turn, when you discard a card, gain 1●."],
+    art: (image: "honeycombs.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Cactus",
+    id: "5190a8b8-25a0-4c60-a4de-2e2c5a73af77",
+    ability_text: [
+      "If you have discarded a card this turn, the first card you play from your void costs 1● less.",
+    ],
+    art: (image: "cactus .png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Spice Blossoms",
+    id: "86f64a29-7338-4759-81da-4c7656e543d2",
+    ability_text: [
+      "When you play an event, it costs 1● less for each card you have discarded this turn.",
+    ],
+    art: (image: "cinnamon.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Leaf Bundle",
+    id: "9d134dfc-4643-47f3-a7ec-ea770587cea1",
+    ability_text: ["Once per turn, when you discard a card, draw a card."],
+    art: (image: "bunch_of_leaves.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Magic Fish",
+    id: "3a22a33f-5682-4d00-b0ec-86e43b6ed9df",
+    ability_text: ["Once per turn, when you play a spirit animal, draw a card."],
+    art: (image: "magic_fish.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Sea Tome",
+    id: "b3403800-7004-4775-915b-a19840e416b0",
+    ability_text: ["Characters you control with ▸Dawn abilities have +1✦."],
+    art: (image: "book_11.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Trinket Necklace",
+    id: "989b55bd-139f-40dc-b1fd-eb2f7b1c091a",
+    ability_text: ["Challengers you control have +1✦."],
+    art: (image: "amulet_5.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Pig Nose",
+    id: "6103508c-4991-4b80-9dc1-f30122957296",
+    ability_text: ["Survivors you control have +2✦."],
+    art: (image: "pig_nouse.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Bead Charm",
+    id: "7a37386d-6e7c-4f08-b07f-e92a1fd69893",
+    ability_text: [
+      "Challengers you control that share a character type with another challenger you control have +2✦.",
+    ],
+    art: (image: "amulet_6.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Opal",
+    id: "15fd5a22-a786-48e3-99b0-919e810b3eba",
+    ability_text: [
+      "You may pay Offering costs by discarding a card instead of banishing a card from your hand.",
+    ],
+    art: (image: "opal.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Spider Medallion",
+    id: "08a3983a-1b95-4d2e-a445-9d8dc2b8fca7",
+    ability_text: ["When you have 3 or more challengers, they have +2✦."],
+    art: (image: "amulet_9.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Eye Amulet",
+    id: "eb6a5c19-26a6-41ef-ac7a-ce1152557b5c",
+    ability_text: ["When all characters you control are challengers, they have +2✦."],
+    art: (image: "amulet_7.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Eyeball Slime",
+    id: "87239e3f-04f7-45bd-9b73-944ef36ad445",
+    ability_text: ["Cards in your hand with ephemeral are not banished at the end of your turn."],
+    art: (image: "monster_jelly.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Silver Key",
+    id: "11018e32-f47e-45fd-a8cf-3a9e3f3be71b",
+    ability_text: ["The first character you play each turn materializes with +1✦."],
+    art: (image: "key_2.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Larva",
+    id: "d4b18cc4-caeb-40b3-b0e2-f1c8b1c8354c",
+    ability_text: [
+      "When you play a character, it gains +1✦ for each other character you have played this turn.",
+    ],
+    art: (image: "larva.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Phoenix Feather",
+    id: "2788cdad-2735-4cdf-89a8-dcecaca87369",
+    ability_text: [
+      "When you play a character, it gains +1✦ for each character you control that left play this turn.",
+    ],
+    art: (image: "phoenix_feather.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Notes",
+    id: "4f5bdcac-64cb-4a45-8121-e37f5e4d3074",
+    ability_text: ["Spirit animals you control have +1✦."],
+    art: (image: "note_2.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Wolf Sigil",
+    id: "1ccd8d69-e14c-4788-be1d-cb6a1b703225",
+    ability_text: ["When a character you control dissolves an enemy in a challenge, it gains +2✦."],
+    art: (image: "amulet_4.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Piranha",
+    id: "6b51e477-352c-489b-8d5f-049bc378fde9",
+    ability_text: [
+      "When a character you control scores ⍟ in a challenge, it scores 1 additional ⍟.",
+    ],
+    art: (image: "piranha.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Blazing Orb",
+    id: "4d762fae-ae9f-4c35-a03b-051d7ecc3532",
+    ability_text: [],
+    art: (image: "magic_ball.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Black Horn",
+    id: "c92438fc-8e1f-4f97-9dcf-8ca0edaa8607",
+    ability_text: ["When you dissolve or banish an enemy character, gain 2●."],
+    art: (image: "leech.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Poison Bottle",
+    id: "9dd7d53f-d4db-4eec-919d-d701774af359",
+    ability_text: ["When you return a character to a player's hand, gain 2●."],
+    art: (image: "poison.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Sealed Letter",
+    id: "bb8bb233-7cb1-43b3-af30-e71ab9e832c5",
+    ability_text: [
+      "When you abandon a character, its ▸Dissolved ability triggers an additional time.",
+    ],
+    art: (image: "letter_2.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Parchment",
+    id: "fdfbd522-c2be-4b77-a63f-e9a64ca3de3b",
+    ability_text: ["Once per turn, when a character you control is dissolved, draw a card."],
+    art: (image: "parchment.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Mandrake Root",
+    id: "293a610d-ea75-4974-88da-13e4c86f248f",
+    ability_text: [
+      "Once per turn, when a character you control is dissolved, return a random character with lower cost from your void to hand.",
+    ],
+    art: (image: "mandragora.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Herb Mortar",
+    id: "4a9f95d5-b72d-4ee8-8d29-b05646edc23d",
+    ability_text: [
+      "Once per turn, when a character you control is dissolved, materialize a random character with lower cost from your void.",
+    ],
+    art: (image: "mortar_pestle.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Flower Petals",
+    id: "b765f6bb-0b8a-4847-ada4-477b9493e3ad",
+    ability_text: [
+      "At the end of your turn, materialize a random character in your void which you abandoned this turn. It has 0✦.",
+    ],
+    art: (image: "petals.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Wing",
+    id: "72ef4b11-5366-4798-aab0-09e5ffbb1ed8",
+    ability_text: ["When you draw your second card each turn, gain 1 maximum ●."],
+    art: (image: "wing.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Philosopher's Stone",
+    id: "05f69d01-f8a3-4044-b7cd-0bfd9ed980cd",
+    ability_text: ["Your unspent ● carries over between turns."],
+    art: (image: "philosopher's_Stone.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Steel Wand",
+    id: "64a28f37-54a4-4152-8c72-2ebc61e19aac",
+    ability_text: ["Once per turn, when you play a ❖ card, draw a card."],
+    art: (image: "Magicwand.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Gold Key",
+    id: "206049ae-9f28-4a90-9f75-63d9ee5f4a27",
+    ability_text: ["When you play your third character each turn, gain 2●."],
+    art: (image: "key_3.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Powder Bowl",
+    id: "9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1",
+    ability_text: [
+      "The first character you play each turn costs 2● less if a character you control scored ⍟ last turn.",
+    ],
+    art: (image: "powder_magic.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Purple Potion",
+    id: "fb87262c-5bde-409e-92f1-58cc7a4e5491",
+    ability_text: ["3● cost characters cost you 2●."],
+    art: (image: "potion.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Red Pin",
+    id: "62e1a588-f719-415c-9434-80aa08ce2e6a",
+    ability_text: ["Once per turn, when you play a 2● cost character, draw a card."],
+    art: (image: "pin.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Crystal Wand",
+    id: "4bb408a8-7941-42dc-9ff6-dbc1400c99ed",
+    ability_text: ["When one or more characters you control score ⍟, draw a card."],
+    art: (image: "magic_stick_2.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Poppy Flower",
+    id: "fdd2ffe4-40f4-49cf-bc2e-2496e1042f76",
+    ability_text: ["▸Night: If you have played no cards this turn, gain 2●."],
+    art: (image: "maquis.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Rabbit Tail",
+    id: "56caa78b-021d-4b27-acab-c77fb0146ced",
+    ability_text: ["▸Night: If you have played no characters this turn, draw a card."],
+    art: (image: "rabbit_tail.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Green Cauldron",
+    id: "ef25fba0-58a0-4b69-be06-3668679fcdc7",
+    ability_text: ["The first time each turn your hand becomes empty, draw a card."],
+    art: (image: "pot.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Root Staff",
+    id: "055f211d-aa51-49eb-9162-190a946b1614",
+    ability_text: [
+      "When 2 or more characters you control score ⍟, draw a card, then discard a card.",
+    ],
+    art: (image: "magic_stick_3.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Purple Crystal",
+    id: "cd4bb1f4-66bb-45ea-abfe-ce0c66e4ec4f",
+    ability_text: [
+      "The first card you purchase at each dream bazaar site costs 25% less and gains a random transfiguration.",
+    ],
+    art: (image: "crystal.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Cracked Mirror",
+    id: "1cf06f9b-d698-434b-8e36-8a47206f4c0c",
+    ability_text: ["The first card you purchase from each shop site is duplicated."],
+    art: (image: "mirror.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Cracked Orb",
+    id: "8408b8c2-5a3f-40dd-bac4-98f2736c4176",
+    ability_text: ["Each shop site provides 2 additional options."],
+    art: (image: "magic-ball.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Red Shard",
+    id: "10bd78de-87ec-44e4-9b16-e755da2a9717",
+    ability_text: ["Cards you purchase from dream bazaar sites gain a random transfiguration."],
+    art: (image: "stone-red.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Witch Coin",
+    id: "8a2c7b32-26ea-40e2-845a-689da5673b4d",
+    ability_text: ["The first Restock at each shop site costs 0."],
+    art: (image: "witch_coin.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Charm Staff",
+    id: "883f88fb-ac50-419a-8382-c22edee29755",
+    ability_text: [
+      "After you buy an item at a shop site, replace it immediately with another item for purchase.",
+    ],
+    art: (image: "magic_stick_6.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Blue Crystal",
+    id: "c2af5460-e61f-409b-9b86-6ac7db34d748",
+    ability_text: [
+      "If your deck has 30 or more cards, cards you add to it gain a random transfiguration.",
+    ],
+    art: (image: "stone.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Rainbow Jellyfish",
+    id: "e7d23bf7-4d60-4b43-94c4-14a06c0f9116",
+    ability_text: [
+      "When you gain this dreamsign, apply the Perfected Transfiguration to each starter card in your deck.",
+    ],
+    art: (image: "rainbow_jellyfish.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Star Anise",
+    id: "4f21a4ab-e4aa-4718-8563-9afb72d140c0",
+    ability_text: [
+      "At each draft site, the first event card you add to your deck gains the Amplified Transfiguration.",
+    ],
+    art: (image: "star_anise.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Spell Tome",
+    id: "0c52e8c3-a792-4eea-955f-a0c61463c066",
+    ability_text: ["When you transfigure an event, add a copy of it to your deck."],
+    art: (image: "book.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Glowing Crystal",
+    id: "8b69de8a-835d-4f0c-ac25-dc0e700e2983",
+    ability_text: [
+      "When you add a character card to your deck, it has a 50% chance to gain a random transfiguration.",
+    ],
+    art: (image: "stone_2.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "White Rat",
+    id: "ab1da9d3-376a-460a-a9dc-4737e59e558b",
+    ability_text: [
+      "When you gain this dreamsign, apply random transfigurations to half the cards in your deck.",
+    ],
+    art: (image: "white_rat.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Glow Pouch",
+    id: "34ce9428-dda9-4efa-bacd-5ec2698561c1",
+    ability_text: [
+      "When you apply a transfiguration to a card, apply an additional random transfiguration to it.",
+    ],
+    art: (image: "bag_3.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Leaf Ledger",
+    id: "d9f0f7ff-63c0-4247-8831-054d7fed931d",
+    ability_text: ["At each transfiguration site you visit, transfigure 2 cards instead of 1."],
+    art: (image: "book_8.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Pearl Shell",
+    id: "be59c0ba-6286-49e3-a88d-86b0977cc30a",
+    ability_text: ["At each essence site you visit, you are instead offered a Dreamsign."],
+    art: (image: "shell.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Star Badge",
+    id: "af92858a-0c50-4abf-a622-04c024ca32b3",
+    ability_text: ["Double the essence you gain from essence sites."],
+    art: (image: "Ring_2.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Sickle",
+    id: "488bf436-c6d5-4e38-8a19-e50041f53766",
+    ability_text: ["At each essence site, you may forgo the essence to purge 2 cards."],
+    art: (image: "sickle.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Strange Fruit",
+    id: "f4df5a74-7822-4552-a3ab-f50b00758593",
+    ability_text: ["When you purge a card, gain 50 essence."],
+    art: (image: "strange_fruit.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Banded Worm",
+    id: "95a162c1-5fb0-4966-b631-eec1e8ec96ef",
+    ability_text: [
+      "When you enter a new dreamscape, gain essence equal to 20% of your current essence.",
+    ],
+    art: (image: "worm.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Sea Urchin",
+    id: "1c505034-e405-495d-8418-6e3c06d974f0",
+    ability_text: [
+      "While you have at least 300 essence, draft site choices show an additional card.",
+    ],
+    art: (image: "sea_urchin.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Carved Bone",
+    id: "427c71e3-178f-4352-8d6f-f0789cb13c2d",
+    ability_text: [
+      "When you dissolve or banish an enemy character outside of a challenge, gain 10 essence.",
+    ],
+    art: (image: "bone.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Clam Shell",
+    id: "2dcf92bf-93b3-400c-ab97-69d3098f8868",
+    ability_text: ["Draft site choices show an additional card."],
+    art: (image: "mollusk.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Tortoise Shell",
+    id: "e377c3ed-16f5-4424-a9f1-73f9750ace9f",
+    ability_text: [
+      "Cards in your deck cannot be purged.",
+      "Draft site choices show an additional card.",
+    ],
+    art: (image: "White tortoise shell.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Scorpion",
+    id: "71f77dd5-3bb5-4987-80f4-13dc69f74e6b",
+    ability_text: [
+      "Before each battle, if you have more than 30 cards in your deck, you may purge cards of your choice while remaining at or above 30 cards.",
+    ],
+    art: (image: "scorpion.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Tongue",
+    id: "d78864da-eb31-4f25-9d51-94fca7ecf810",
+    ability_text: [
+      "After you draw your opening hand, you may discard any number of cards, then draw that many cards.",
+    ],
+    art: (image: "tongue.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Paired Teeth",
+    id: "1328e611-fa2f-426f-87e2-97f26c061866",
+    ability_text: [
+      "When you gain this dreamsign, you may purge up to 4 starter cards from your deck.",
+    ],
+    art: (image: "teeaths.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Spotted Mug",
+    id: "069c6e8f-4f41-4f13-9ec9-2009b4186e3b",
+    ability_text: [
+      "When you gain this dreamsign, pick an event card in your deck.",
+      "That card is always in your opening hand.",
+    ],
+    art: (image: "tea.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Toad",
+    id: "8e2d26a8-ff39-48a4-a30e-434479c4675f",
+    ability_text: [
+      "When you gain this dreamsign, pick a character type.",
+      "Character cards in your deck are that character type.",
+    ],
+    art: (image: "toad.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Slug",
+    id: "108841ce-4feb-4c73-972e-0277c727c63e",
+    ability_text: ["After each battle, you may purge up to 2 cards."],
+    art: (image: "slug.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Spider",
+    id: "025ce7f1-066b-480a-8a2f-364379890abd",
+    ability_text: ["After each battle, you may duplicate a card."],
+    art: (image: "spider.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Green Slime",
+    id: "452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19",
+    ability_text: ["After each battle, you may apply random transfigurations to up to 3 cards."],
+    art: (image: "speaces.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Spiral Shell",
+    id: "da7e4b45-9106-4116-bc1c-3aec8885396b",
+    ability_text: ["At duplication sites, you always gain 4 copies of the selected card."],
+    art: (image: "shell 2.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Red Cheese",
+    id: "7e8c86cc-788f-4648-be84-e0935c40c31e",
+    ability_text: ["After each battle, pick 1 of 3 dreamsigns to gain."],
+    art: (image: "red_cheese.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Rosemary",
+    id: "cd81a49d-df58-4e0e-b1b2-33a82b386052",
+    ability_text: ["Dreamsign and dreamsign draft sites are enhanced."],
+    art: (image: "rosemary.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Rainbow Mushroom",
+    id: "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
+    ability_text: ["In each dreamscape, 1 additional site is enhanced."],
+    art: (image: "rainbow mushroom.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Curled Tail",
+    id: "3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59",
+    ability_text: ["You may reroll dream journey sites once to present new options."],
+    art: (image: "tall.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Voodoo Doll",
+    id: "0df9d72c-58ea-42a0-a72a-cbc540a1836a",
+    ability_text: [
+      "When you gain this dreamsign, choose another dreamsign you own. This dreamsign becomes a copy of it.",
+    ],
+    art: (image: "vudu_doll.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Raven Skull",
+    id: "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
+    ability_text: ["Nightmare cards cannot be added to your deck."],
+    art: (image: "raven_skull.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Mortal Skull",
+    id: "eb55b141-82f8-4ba4-b319-420f762e9ee4",
+    ability_text: [
+      "When a character you control dissolves an enemy during a challenge, gain 10 essence.",
+    ],
+    art: (image: "skull_2.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Twisted Herbs",
+    id: "1cd25b9a-b176-4c51-8349-bb4df35cbf05",
+    ability_text: [
+      "When you gain this dreamsign, add 5 Nightmare cards to your deck.",
+      "Characters you control have +1✦.",
+    ],
+    art: (image: "twisting_herbs.png"),
+  ),
+
+  DreamsignDefinition(
+    name: "Antler",
+    id: "b8590328-ca72-4869-a795-c7f4b6802bed",
+    ability_text: [
+      "Draw two additional cards during your Draw phase.",
+      "At the end of each turn, discard your hand.",
+    ],
+    art: (image: "horns.png"),
+  ),
+]

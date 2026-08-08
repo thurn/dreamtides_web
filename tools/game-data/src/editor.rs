@@ -20,6 +20,10 @@ use crate::models::dreamscapes::{
     self, AffiliationId, DreamAvatarId as DreamscapeAvatarId, DreamscapeDefinition, DreamscapeId,
     DreamscapeKind,
 };
+use crate::models::dreamsigns::{
+    self, DreamsignDefinition, DreamsignId, DreamsignMetadataCatalog, DreamsignTag,
+    DreamsignTagCatalog,
+};
 use crate::models::exploration::{
     ActionDefinition, ActionEffect, DynamicValue, EffectKind, ExplorationCatalog, Predicate,
     TemplateInvocation,
@@ -57,6 +61,14 @@ enum EditOperation {
         avatar_id: String,
         field: String,
         value: JsonValue,
+    },
+    SetDreamsignField {
+        dreamsign_id: String,
+        field: String,
+        value: JsonValue,
+    },
+    ReplaceDreamsignTags {
+        tags: Vec<DreamsignTag>,
     },
     SwapDreamGuideHomes {
         first_guide_id: String,
@@ -120,6 +132,7 @@ pub fn stage_edit(
         "dream-avatars" => edit_dream_avatars(manifest, staging_root, request.operations),
         "dream-guides" => edit_dream_guides(manifest, staging_root, request.operations),
         "dreamscapes" => edit_dreamscapes(manifest, staging_root, request.operations),
+        "dreamsigns" => edit_dreamsigns(manifest, staging_root, request.operations),
         "exploration" => edit_exploration(manifest, staging_root, request.operations),
         dataset => edit_compat(manifest, staging_root, dataset, request.operations),
     }
@@ -315,6 +328,264 @@ fn patch_dreamscape_source_field(
             .with_context(|| format!("MALFORMED_SOURCE: Dreamscape is missing {source_field}"))?
     };
     replace_source_ranges(source, vec![(range, replacement)])
+}
+
+fn edit_dreamsigns(
+    manifest: &Manifest,
+    staging_root: &Path,
+    operations: Vec<EditOperation>,
+) -> Result<EditReport> {
+    let dataset = manifest.dataset("dreamsigns")?;
+    if dataset.adapter != "dreamsigns_v1"
+        || dataset.editor != crate::manifest::EditorCapability::Semantic
+    {
+        bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for dreamsigns");
+    }
+    let source_path = staging_root.join(&dataset.source);
+    let metadata_dataset = manifest.dataset("internal-dreamsign-metadata")?;
+    let metadata_path = staging_root.join(&metadata_dataset.source);
+    let tags_dataset = manifest.dataset("dreamsign-tags")?;
+    let tags_path = staging_root.join(&tags_dataset.source);
+
+    let original_source_text = fs::read_to_string(&source_path)?;
+    let original_metadata_text = fs::read_to_string(&metadata_path)?;
+    let original_tags_text = fs::read_to_string(&tags_path)?;
+    let original: Vec<DreamsignDefinition> = ron::from_str(&original_source_text)
+        .context("MALFORMED_SOURCE: staged Dreamsign RON is invalid")?;
+    let original_metadata: DreamsignMetadataCatalog = ron::from_str(&original_metadata_text)
+        .context("MALFORMED_SOURCE: staged internal Dreamsign metadata RON is invalid")?;
+    let original_tags: DreamsignTagCatalog = ron::from_str(&original_tags_text)
+        .context("MALFORMED_SOURCE: staged Dreamsign tag registry RON is invalid")?;
+    dreamsigns::validate_definitions(&original)?;
+    dreamsigns::validate_metadata(&original_metadata)?;
+    dreamsigns::validate_tags(&original_tags)?;
+
+    let mut definitions = original.clone();
+    let mut metadata = original_metadata.clone();
+    let mut tags = original_tags.clone();
+    let mut source_text = original_source_text;
+    let mut metadata_text = original_metadata_text;
+    let mut tags_text = original_tags_text;
+
+    for operation in operations {
+        match operation {
+            EditOperation::SetDreamsignField {
+                dreamsign_id,
+                field,
+                value,
+            } => {
+                let index = unique_dreamsign_index(&definitions, &dreamsign_id)?;
+                match field.as_str() {
+                    "name" | "rendered-text" | "ability_text" => {
+                        let before = definitions[index].clone();
+                        set_dreamsign_definition_field(&mut definitions[index], &field, value)?;
+                        dreamsigns::validate_definitions(&definitions).context(
+                            "INVALID_EDIT: Dreamsign edit violates the catalog contract",
+                        )?;
+                        if definitions[index] != before {
+                            source_text = patch_dreamsign_definition_field(
+                                &source_text,
+                                &definitions[index],
+                                &field,
+                            )?;
+                        }
+                    }
+                    "tags" => {
+                        let values: Vec<String> = serde_json::from_value(value)
+                            .context("INVALID_EDIT: Dreamsign tags must be an array of strings")?;
+                        let known = tags
+                            .tags
+                            .iter()
+                            .map(|tag| tag.name.as_str())
+                            .collect::<BTreeSet<_>>();
+                        if values.iter().any(|value| !known.contains(value.as_str())) {
+                            bail!("INVALID_EDIT: Dreamsign tags must use the canonical registry");
+                        }
+                        let id = definitions[index].id;
+                        let replacement = {
+                            let entry = metadata
+                                .dreamsigns
+                                .get_mut(&id)
+                                .context("MALFORMED_SOURCE: Dreamsign metadata entry is missing")?;
+                            if entry.tags == values {
+                                None
+                            } else {
+                                entry.tags = values;
+                                Some(entry.tags.clone())
+                            }
+                        };
+                        if let Some(replacement) = replacement {
+                            dreamsigns::validate_metadata(&metadata)?;
+                            metadata_text =
+                                patch_dreamsign_metadata_tags(&metadata_text, id, &replacement)?;
+                        }
+                    }
+                    _ => bail!("INVALID_EDIT: unsupported Dreamsign field {field}"),
+                }
+            }
+            EditOperation::ReplaceDreamsignTags { tags: replacement } => {
+                let replacement = DreamsignTagCatalog { tags: replacement };
+                dreamsigns::validate_tags(&replacement)
+                    .context("INVALID_EDIT: Dreamsign tag registry is invalid")?;
+                let known = replacement
+                    .tags
+                    .iter()
+                    .map(|tag| tag.name.as_str())
+                    .collect::<BTreeSet<_>>();
+                for (id, entry) in &mut metadata.dreamsigns {
+                    let retained = entry
+                        .tags
+                        .iter()
+                        .filter(|tag| known.contains(tag.as_str()))
+                        .cloned()
+                        .collect::<Vec<_>>();
+                    if retained != entry.tags {
+                        entry.tags = retained;
+                        metadata_text =
+                            patch_dreamsign_metadata_tags(&metadata_text, *id, &entry.tags)?;
+                    }
+                }
+                if replacement != tags {
+                    tags = replacement;
+                    tags_text = patch_dreamsign_tag_catalog(&tags_text, &tags)?;
+                }
+            }
+            _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to Dreamsigns"),
+        }
+    }
+
+    dreamsigns::validate_definitions(&definitions)?;
+    dreamsigns::validate_metadata(&metadata)?;
+    dreamsigns::validate_tags(&tags)?;
+    verify_round_trip::<Vec<DreamsignDefinition>>(&source_text, &definitions)?;
+    verify_round_trip::<DreamsignMetadataCatalog>(&metadata_text, &metadata)?;
+    verify_round_trip::<DreamsignTagCatalog>(&tags_text, &tags)?;
+    let changed = definitions != original || metadata != original_metadata || tags != original_tags;
+    if definitions != original {
+        atomic_write(&source_path, source_text.as_bytes())?;
+    }
+    if metadata != original_metadata {
+        atomic_write(&metadata_path, metadata_text.as_bytes())?;
+    }
+    if tags != original_tags {
+        atomic_write(&tags_path, tags_text.as_bytes())?;
+    }
+    Ok(EditReport {
+        ok: true,
+        changed,
+        dataset_id: "dreamsigns".into(),
+        source_revision: revision(
+            staging_root,
+            manifest,
+            &[
+                "dreamsigns",
+                "internal-dreamsign-metadata",
+                "dreamsign-tags",
+            ],
+        )?,
+    })
+}
+
+fn unique_dreamsign_index(definitions: &[DreamsignDefinition], id: &str) -> Result<usize> {
+    let literal = ron::to_string(id)?;
+    let requested: DreamsignId = ron::from_str(&literal)
+        .context("INVALID_EDIT: Dreamsign identity must be a canonical UUIDv4")?;
+    definitions
+        .iter()
+        .position(|definition| definition.id == requested)
+        .with_context(|| format!("RECORD_NOT_FOUND: Dreamsign UUID {id}"))
+}
+
+fn set_dreamsign_definition_field(
+    definition: &mut DreamsignDefinition,
+    field: &str,
+    value: JsonValue,
+) -> Result<()> {
+    match field {
+        "name" => {
+            let value = json_string(value, field)?.trim().to_owned();
+            if value.is_empty() {
+                bail!("INVALID_EDIT: Dreamsign name cannot be blank");
+            }
+            definition.name = value;
+        }
+        "rendered-text" | "ability_text" => {
+            let value = json_string(value, field)?;
+            let paragraphs = value.split("\n\n").map(str::to_owned).collect::<Vec<_>>();
+            if paragraphs.is_empty()
+                || paragraphs
+                    .iter()
+                    .any(|paragraph| paragraph.trim().is_empty())
+            {
+                bail!("INVALID_EDIT: Dreamsign ability text must contain non-empty paragraphs");
+            }
+            definition.ability_text = paragraphs;
+        }
+        _ => bail!("INVALID_EDIT: unsupported Dreamsign field {field}"),
+    }
+    Ok(())
+}
+
+fn patch_dreamsign_definition_field(
+    source: &str,
+    definition: &DreamsignDefinition,
+    field: &str,
+) -> Result<String> {
+    let source_field = match field {
+        "name" => "name",
+        "rendered-text" | "ability_text" => "ability_text",
+        _ => bail!("INVALID_EDIT: unsupported Dreamsign field {field}"),
+    };
+    let record = typed_record_range(
+        source,
+        "DreamsignDefinition",
+        "id",
+        &definition.id.to_string(),
+    )?;
+    let range = top_level_field_value_range(source, record, source_field)?
+        .with_context(|| format!("MALFORMED_SOURCE: Dreamsign is missing {source_field}"))?;
+    let replacement = match source_field {
+        "name" => ron::to_string(&definition.name)?,
+        "ability_text" => ron::to_string(&definition.ability_text)?,
+        _ => unreachable!(),
+    };
+    replace_source_ranges(source, vec![(range, replacement)])
+}
+
+fn dreamsign_metadata_record_range(source: &str, id: DreamsignId) -> Result<Range<usize>> {
+    let marker = format!("\n    {}: ", ron::to_string(&id.to_string())?);
+    let matches = source.match_indices(&marker).collect::<Vec<_>>();
+    if matches.is_empty() {
+        bail!("RECORD_NOT_FOUND: internal Dreamsign metadata UUID {id}");
+    }
+    if matches.len() > 1 {
+        bail!("MALFORMED_SOURCE: duplicate internal Dreamsign metadata UUID {id}");
+    }
+    let value_start = matches[0].0 + marker.len();
+    let opening = source[value_start..]
+        .find('(')
+        .map(|offset| value_start + offset)
+        .context("MALFORMED_SOURCE: Dreamsign metadata entry is not a record")?;
+    let closing = matching_delimiter(source, opening)?;
+    Ok(opening..closing + 1)
+}
+
+fn patch_dreamsign_metadata_tags(source: &str, id: DreamsignId, tags: &[String]) -> Result<String> {
+    let record = dreamsign_metadata_record_range(source, id)?;
+    let range = top_level_field_value_range(source, record.clone(), "tags")?
+        .context("MALFORMED_SOURCE: Dreamsign metadata entry is missing tags")?;
+    replace_source_ranges(source, vec![(range, ron::to_string(tags)?)])
+}
+
+fn patch_dreamsign_tag_catalog(source: &str, catalog: &DreamsignTagCatalog) -> Result<String> {
+    let start = source
+        .find("\n(\n")
+        .map(|offset| offset + 1)
+        .context("MALFORMED_SOURCE: Dreamsign tag registry has no root record")?;
+    let record = start..matching_delimiter(source, start)? + 1;
+    let range = top_level_field_value_range(source, record, "tags")?
+        .context("MALFORMED_SOURCE: Dreamsign tag registry is missing tags")?;
+    replace_source_ranges(source, vec![(range, ron::to_string(&catalog.tags)?)])
 }
 
 fn edit_dream_guides(
@@ -2180,6 +2451,153 @@ mod tests {
   ),
 ]
 "###;
+
+    const DREAMSIGN_ID: &str = "00000000-0000-4000-8000-000000000021";
+    const DREAMSIGN_SOURCE: &str = r###"// Stable Dreamsign guidance.
+
+#![enable(implicit_some)]
+[
+  // Edited record comment.
+  DreamsignDefinition(
+    name: r#"Raw Sign"#,
+    id: "00000000-0000-4000-8000-000000000021",
+    ability_text: ["First paragraph", "Nested text: tags: [\"not metadata\"]"],
+    art: (image: "first.png"),
+  ),
+
+  /* Unrelated record comment. */
+  DreamsignDefinition(
+    name: "Unrelated Sign",
+    id: "00000000-0000-4000-8000-000000000022",
+    ability_text: ["Unrelated ability."],
+    art: (image: "second.png"),
+  ),
+]
+"###;
+
+    const DREAMSIGN_METADATA_SOURCE: &str = r###"// Internal labels.
+
+#![enable(implicit_some)]
+(
+  dreamsigns: {
+    "00000000-0000-4000-8000-000000000021": (
+      tides: ["one"],
+      // Preserve this field comment.
+      tags: ["first", "second"],
+    ),
+    "00000000-0000-4000-8000-000000000022": (tags: ["unrelated"]),
+  },
+)
+"###;
+
+    const DREAMSIGN_TAG_SOURCE: &str = r###"// Registry guidance.
+
+#![enable(implicit_some)]
+(
+  tags: [
+    DreamsignTag(name: "first", color: "#112233"),
+    DreamsignTag(name: "second", color: "#445566"),
+  ],
+)
+"###;
+
+    #[test]
+    fn dreamsign_scalar_patch_changes_one_line_and_preserves_unrelated_source() {
+        let mut definitions: Vec<DreamsignDefinition> = ron::from_str(DREAMSIGN_SOURCE).unwrap();
+        let index = unique_dreamsign_index(&definitions, DREAMSIGN_ID).unwrap();
+        set_dreamsign_definition_field(&mut definitions[index], "name", json!("Edited Sign"))
+            .unwrap();
+        let patched =
+            patch_dreamsign_definition_field(DREAMSIGN_SOURCE, &definitions[index], "name")
+                .unwrap();
+        let changed_lines = DREAMSIGN_SOURCE
+            .lines()
+            .zip(patched.lines())
+            .filter(|(before, after)| before != after)
+            .count();
+        assert_eq!(changed_lines, 1);
+        assert!(patched.contains("/* Unrelated record comment. */"));
+        assert!(patched.contains("name: \"Unrelated Sign\""));
+        assert!(patched.contains("Nested text: tags:"));
+        assert_eq!(
+            ron::from_str::<Vec<DreamsignDefinition>>(&patched).unwrap(),
+            definitions
+        );
+    }
+
+    #[test]
+    fn dreamsign_editor_patches_ability_and_metadata_tags_as_typed_values() {
+        let mut definitions: Vec<DreamsignDefinition> = ron::from_str(DREAMSIGN_SOURCE).unwrap();
+        let index = unique_dreamsign_index(&definitions, DREAMSIGN_ID).unwrap();
+        set_dreamsign_definition_field(
+            &mut definitions[index],
+            "rendered-text",
+            json!("One paragraph\n\nAnother paragraph"),
+        )
+        .unwrap();
+        let patched_definitions = patch_dreamsign_definition_field(
+            DREAMSIGN_SOURCE,
+            &definitions[index],
+            "rendered-text",
+        )
+        .unwrap();
+        assert_eq!(
+            ron::from_str::<Vec<DreamsignDefinition>>(&patched_definitions).unwrap(),
+            definitions
+        );
+
+        let metadata: DreamsignMetadataCatalog = ron::from_str(DREAMSIGN_METADATA_SOURCE).unwrap();
+        let id = definitions[index].id;
+        let patched_metadata =
+            patch_dreamsign_metadata_tags(DREAMSIGN_METADATA_SOURCE, id, &["second".into()])
+                .unwrap();
+        let parsed: DreamsignMetadataCatalog = ron::from_str(&patched_metadata).unwrap();
+        assert_eq!(parsed.dreamsigns[&id].tags, ["second"]);
+        assert!(patched_metadata.contains("// Preserve this field comment."));
+        assert!(patched_metadata.contains("(tags: [\"unrelated\"])"));
+        assert_eq!(
+            metadata.dreamsigns.keys().collect::<Vec<_>>(),
+            parsed.dreamsigns.keys().collect::<Vec<_>>()
+        );
+    }
+
+    #[test]
+    fn dreamsign_tag_registry_replacement_preserves_root_comments_and_round_trips() {
+        let catalog = DreamsignTagCatalog {
+            tags: vec![
+                DreamsignTag {
+                    name: "second".into(),
+                    color: "#445566".into(),
+                },
+                DreamsignTag {
+                    name: "third".into(),
+                    color: "#778899".into(),
+                },
+            ],
+        };
+        let patched = patch_dreamsign_tag_catalog(DREAMSIGN_TAG_SOURCE, &catalog).unwrap();
+        assert!(patched.starts_with("// Registry guidance."));
+        assert_eq!(
+            ron::from_str::<DreamsignTagCatalog>(&patched).unwrap(),
+            catalog
+        );
+        assert!(
+            unique_dreamsign_index(
+                &ron::from_str::<Vec<DreamsignDefinition>>(DREAMSIGN_SOURCE).unwrap(),
+                "not-a-uuid"
+            )
+            .is_err()
+        );
+        assert!(
+            dreamsigns::validate_tags(&DreamsignTagCatalog {
+                tags: vec![DreamsignTag {
+                    name: "bad".into(),
+                    color: "red".into()
+                }],
+            })
+            .is_err()
+        );
+    }
 
     #[test]
     fn dream_avatar_scalar_patch_changes_one_line_and_preserves_unrelated_source() {

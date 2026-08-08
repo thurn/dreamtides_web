@@ -15,7 +15,7 @@ import { sceneRoot } from "./scene";
 /** A gallery of real dreamsign art assets (by id), with authored-style effects. */
 const GALLERY: DreamsignData[] = [
   {
-    id: "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
+    id: "c706d0ba-2f41-4b14-95d8-db168ac6246c",
     name: "Amplified Acorn",
     imageName: "acorn_gold.png",
     imageAlt: "Golden fruit-like charm with a mesh-patterned orb.",
@@ -23,14 +23,14 @@ const GALLERY: DreamsignData[] = [
       "Once per turn, when you discard a card, your next card this turn costs 2● less.",
   },
   {
-    id: "278EC1AB-F532-4862-84AE-63DF5E49548C",
+    id: "278ec1ab-f532-4862-84ae-63df5e49548c",
     name: "Pyramid Relic",
     imageName: "aertfact.png",
     imageAlt: "Blue-gray panel with bright red-orange branching nodes.",
     effectDescription: "The second character you play each turn costs 1● less.",
   },
   {
-    id: "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5",
+    id: "d1fdbe21-56f6-43c0-aaac-1e4683964da5",
     name: "Bell",
     imageName: "bell.png",
     imageAlt: "A brass bell.",
@@ -38,7 +38,7 @@ const GALLERY: DreamsignData[] = [
       "When you play a character from your void, rematerialize it.",
   },
   {
-    id: "49990864-1DB0-4C08-91AE-40A1F04223E4",
+    id: "49990864-1db0-4c08-91ae-40a1f04223e4",
     name: "Algae",
     imageName: "algae.png",
     imageAlt: "Green tangled algae fronds.",
@@ -46,14 +46,14 @@ const GALLERY: DreamsignData[] = [
       "Once per turn, when you draw a character, reduce its cost by 1● until end of turn.",
   },
   {
-    id: "D2A916C1-321A-4AE3-9A50-0B7F13C5EFF6",
+    id: "d2a916c1-321a-4ae3-9a50-0b7f13c5eff6",
     name: "Worm Apple",
     imageName: "apple.png",
     imageAlt: "A polished red apple.",
     effectDescription: "You may play ❖ and ❖❖ events for 1●.",
   },
   {
-    id: "6E20E6C7-295A-48B1-B252-B8B00D6902C9",
+    id: "6e20e6c7-295a-48b1-b252-b8b00d6902c9",
     name: "Amanita",
     imageName: "amanita.png",
     imageAlt: "Red spotted mushroom with white flecks.",
