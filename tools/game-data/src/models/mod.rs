@@ -9,6 +9,7 @@ pub mod dream_avatars;
 pub mod dream_guides;
 pub mod dreamscapes;
 pub mod dreamsigns;
+pub mod dreamwell;
 pub mod economy;
 pub mod exploration;
 pub mod figments;
