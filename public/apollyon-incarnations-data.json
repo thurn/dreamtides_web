@@ -1,60 +1,60 @@
 [
   {
-    "id": "howl_at_worlds_end",
+    "id": "1380edc9-09ed-44df-ad09-ab4cbfc081b5",
     "title": "Apollyon, the World's End",
     "description": "Apollyon has the Aspect of Ravening: Spirit animals multiply, then rise as one devouring chorus.",
     "deckType": "Spirit Animal Flood"
   },
   {
-    "id": "last_causality",
+    "id": "3fe26475-8023-46d3-b13b-86673b92e3d0",
     "title": "Apollyon, the End of Causality",
     "description": "Apollyon has the Aspect of Catastrophe: Each event births another, portents of the coming storm.",
     "deckType": "Event Chain/Storm"
   },
   {
-    "id": "marshal_of_the_final_host",
+    "id": "80b6296d-840e-4ed7-b684-5aadc0981bf4",
     "title": "Apollyon, the Doom of Humanity",
     "description": "Apollyon has the Aspect of Slaughter: Warriors gather in ranks and strike before mercy.",
     "deckType": "Warrior Support Aggro"
   },
   {
-    "id": "butcher_of_the_unfallen",
+    "id": "ac116276-5569-491b-85c9-e192823bddae",
     "title": "Apollyon, the Butcher",
     "description": "Apollyon has the Aspect of Hunger: Every sacrifice feeds the survivors.",
     "deckType": "Abandon/Survivor Replenishment"
   },
   {
-    "id": "crawling_return",
+    "id": "57c65dfd-a125-440e-a410-c8c4a314b1d1",
     "title": "Apollyon, the Last Word",
     "description": "Apollyon has the Aspect of Haunting: An ethereal host returns endlessly.",
     "deckType": "Cheap-Character Recursion"
   },
   {
-    "id": "closed_grave",
+    "id": "e70d2d02-9ba6-434b-94d3-73ad29d3e9f4",
     "title": "Apollyon, the Broken Cycle",
     "description": "Apollyon has the Aspect of Damnation: Broken souls wind through death's river.",
     "deckType": "Reclaim Loop"
   },
   {
-    "id": "keeper_of_cast_off_names",
+    "id": "9ae35d68-a432-45f6-ab8c-07572a25ad6b",
     "title": "Apollyon, the Keeper of Names",
     "description": "Apollyon has the Aspect of Suffering: The discarded become omens of the coming calamity.",
     "deckType": "Discard/Reclaim"
   },
   {
-    "id": "sovereign_of_the_full_void",
+    "id": "8890b892-0634-4b8a-bfc0-018adfa979a7",
     "title": "Apollyon, Sovereign of the Void",
     "description": "Apollyon has the Aspect of Oblivion: The onrushing void swells to infinity.",
     "deckType": "Void-Density Recursion"
   },
   {
-    "id": "the_unplaceable",
+    "id": "ccc0385e-ff00-4be3-a807-99e4def47d2d",
     "title": "Apollyon, the Unplaceable",
     "description": "Apollyon has the Aspect of Violation: Striking with precision dissolves every blocker.",
     "deckType": "Outsider Tempo"
   },
   {
-    "id": "herald_of_the_roused_blade",
+    "id": "9a1bf275-2763-4db9-ad10-86d8f7e7efdf",
     "title": "Apollyon, the Herald of Revelation",
     "description": "Apollyon has the Aspect of Frenzy: Warriors awaken into the final rapture.",
     "deckType": "Event/Awaken Warriors"

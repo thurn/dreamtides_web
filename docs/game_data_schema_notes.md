@@ -108,11 +108,12 @@ generation one incarnation is chosen to present Apollyon, swapping in that
 guise's title and short deck description.
 
 Fields:
-  id           Stable identifier for the incarnation.
+  id           Lowercase RFC 4122 UUIDv4 identifier for the incarnation.
   title        Player-facing epithet shown as Apollyon's title.
   description  Short, surfaced description of the incarnation's deck.
-  deck-type    Internal deck-archetype label. Recorded for design reference
-               only; never shown in the UI.
+  deck_archetype
+               Internal deck-archetype label. Generated compatibility TOML
+               publishes this as `deck-type`; it is never shown in the UI.
 
 ## `data/atlas.ron`
 

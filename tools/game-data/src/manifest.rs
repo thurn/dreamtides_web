@@ -76,6 +76,7 @@ impl Manifest {
         let mut outputs = BTreeSet::new();
         let adapters = [
             "affiliations_v1",
+            "apollyon_incarnations_v1",
             "draft_v1",
             "cards_v1",
             "exploration_v1",
