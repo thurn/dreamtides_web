@@ -1,7 +1,7 @@
 import glossarySource from "../../data/glossary.toml?raw";
 import { parseGlossarySource } from "../../scripts/glossary-source.mjs";
 
-/** A TOML-authored explanatory Info Card entry. */
+/** A RON-authored explanatory Info Card entry. */
 export interface GlossaryEntry {
   /** Canonical heading displayed on the Info Card. */
   readonly term: string;
@@ -13,7 +13,7 @@ export interface GlossaryEntry {
   readonly termPresentation?: "symbolOnly" | "definitionOnly";
 }
 
-/** A TOML-authored contextual projection of one canonical entry. */
+/** A RON-authored contextual projection of one canonical entry. */
 export interface GlossaryContext {
   /** Limit this projection to rules text owned by this entity type. */
   readonly owner?: "card" | "dreamAvatar";
@@ -29,7 +29,7 @@ export interface GlossaryContext {
   readonly singularDefinition?: string;
 }
 
-/** Fully identified record loaded from glossary.toml and shown in the editor. */
+/** Fully identified record compiled to glossary.toml and shown in the editor. */
 export interface GlossaryCatalogEntry extends GlossaryEntry {
   /** Stable key used by semantic Info Card callsites. */
   readonly id: string;
@@ -51,7 +51,7 @@ export interface GlossaryCatalogEntry extends GlossaryEntry {
   readonly contexts?: readonly GlossaryContext[];
 }
 
-/** Every editable Info Card definition, in TOML source order. */
+/** Every editable Info Card definition, in canonical RON source order. */
 export const INFO_CARD_GLOSSARY: readonly GlossaryCatalogEntry[] =
   parseGlossarySource(glossarySource);
 
@@ -69,39 +69,40 @@ const ENTRY_BY_ID = new Map(
 
 /** Stable ids used by reusable explanatory Info Card sources. */
 export const GLOSSARY_IDS = {
-  energyCost: "energy-cost",
-  spark: "spark",
-  points: "points",
-  memory: "memory",
-  exhausted: "exhausted",
-  figment: "figment",
-  fast: "fast",
-  interrupt: "interrupt",
-  exhaustCost: "exhaust-cost",
-  foresee: "foresee",
-  reclaim: "reclaim",
-  materialize: "materialize",
-  void: "void",
-  nightTrigger: "night-trigger",
-  essence: "essence",
-  startingEssence: "starting-essence",
-  tides: "tides",
-  dreamsignRestock: "dreamsign-restock",
+  energyCost: "4c7b92d2-31f5-4e74-aa00-88525e242afc",
+  spark: "bf95777e-d1a3-4c08-b027-3407e380eb00",
+  points: "f7e1f058-74fe-46db-bb12-f5f887e6a298",
+  memory: "0dd0f69f-3879-40dd-82b8-6be0274f763d",
+  exhausted: "10e82210-de89-4266-8f98-d9764ab3807e",
+  figment: "7ece2571-4681-4be3-aad6-76503bd77523",
+  fast: "63a9d425-f7f2-4acf-a7ff-57fd58ad34fc",
+  interrupt: "c7ec2870-5c8b-43ad-bcb0-d603bba12dea",
+  exhaustCost: "a5fe9cb8-1162-44f3-9634-99839eecbb1a",
+  support: "59f426ac-b9cb-47af-a00a-8cbab941c6c4",
+  erode: "23526f6e-f17e-4496-bf96-1875858d023d",
+  foresee: "21e9a392-3983-49ba-8072-aa950c63ebad",
+  reclaim: "374c29e9-deb1-4e3d-8410-b81bacc8588b",
+  dissolvedTrigger: "abef45fb-8c3f-4d63-9408-0eed1b7283bb",
+  nightTrigger: "12789839-a665-4195-925a-3229b857cf48",
+  essence: "3d708c8b-2153-47b8-821e-284f36e1ec9e",
+  startingEssence: "bdae3633-0f98-4cbf-829e-89d557c24e83",
+  tides: "62bfc165-306b-4ebd-9aac-a1a51f9bc75c",
+  dreamsignRestock: "a213b7b2-1e9d-4e6e-b599-19f858ba898d",
   sites: {
-    Battle: "site-battle",
-    Draft: "site-draft",
-    Shop: "site-shop",
-    Purge: "site-purge",
-    Essence: "site-essence",
-    Transfiguration: "site-transfiguration",
-    Duplication: "site-duplication",
-    Reward: "site-reward",
-    Augury: "site-augury",
-    DreamsignMarket: "site-dreamsign-market",
-    DreamsignRevelation: "site-dreamsign-revelation",
-    RandomSite: "site-random-site",
-    Gamble: "site-gamble",
-    Exploration: "site-exploration",
+    Battle: "85ffab8d-f972-4340-9b45-99f6aff6ccec",
+    Draft: "1ee13681-1ff5-431c-94a1-3390d45e1717",
+    Shop: "25f28ed1-5729-4240-a352-80f92fce530c",
+    Purge: "4873bddf-7bf5-41e8-979e-36eb193db5a6",
+    Essence: "ba8ea132-f636-4fed-be27-e8eff0c9cb07",
+    Transfiguration: "7ae25c1a-76c5-4aed-9e1c-a2d5ec160bd7",
+    Duplication: "8222c5e2-a3ce-4caf-bd13-5c77ff15d7cf",
+    Reward: "28925242-3799-4faa-b4bd-b8aac52ca442",
+    Augury: "ffd3977a-a463-4326-bdf2-5b1b8c3d9160",
+    DreamsignMarket: "5b5b47d6-c858-4b42-af96-a520c84666eb",
+    DreamsignRevelation: "ac70fd6b-a91a-407f-b7b7-255668cd6bec",
+    RandomSite: "1aeb05bc-53e1-4ea4-9e73-9239160799dc",
+    Gamble: "f1ff2fb5-3d77-4eb8-b492-78cbe11fd265",
+    Exploration: "46059d35-cb9e-4c4b-8635-087b6239f308",
   },
 } as const;
 
@@ -114,9 +115,7 @@ export function glossaryEntry(id: string): GlossaryCatalogEntry | undefined {
 export function requireGlossaryEntry(id: string): GlossaryCatalogEntry {
   const entry = glossaryEntry(id);
   if (entry === undefined) {
-    throw new Error(
-      `Missing glossary entry "${id}" in data/glossary.toml.`,
-    );
+    throw new Error(`Missing glossary entry "${id}" in data/glossary.toml.`);
   }
   return entry;
 }

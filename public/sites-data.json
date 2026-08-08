@@ -3,59 +3,59 @@
   "siteTypes": {
     "Battle": {
       "icon": "bxf bx-sword-alt",
-      "glossaryId": "site-battle"
+      "glossaryId": "85ffab8d-f972-4340-9b45-99f6aff6ccec"
     },
     "Draft": {
       "icon": "bxf bx-rectangle-vertical",
-      "glossaryId": "site-draft"
+      "glossaryId": "1ee13681-1ff5-431c-94a1-3390d45e1717"
     },
     "Shop": {
       "icon": "bxf bx-store-alt-2",
-      "glossaryId": "site-shop"
+      "glossaryId": "25f28ed1-5729-4240-a352-80f92fce530c"
     },
     "Purge": {
       "icon": "bxf bx-hot",
-      "glossaryId": "site-purge"
+      "glossaryId": "4873bddf-7bf5-41e8-979e-36eb193db5a6"
     },
     "Essence": {
       "icon": "bxf bx-diamond-alt",
-      "glossaryId": "site-essence"
+      "glossaryId": "ba8ea132-f636-4fed-be27-e8eff0c9cb07"
     },
     "Transfiguration": {
       "icon": "fa-solid fa-hammer",
-      "glossaryId": "site-transfiguration"
+      "glossaryId": "7ae25c1a-76c5-4aed-9e1c-a2d5ec160bd7"
     },
     "Duplication": {
       "icon": "bxf bx-copy",
-      "glossaryId": "site-duplication"
+      "glossaryId": "8222c5e2-a3ce-4caf-bd13-5c77ff15d7cf"
     },
     "Reward": {
       "icon": "bxf bx-treasure-chest",
-      "glossaryId": "site-reward"
+      "glossaryId": "28925242-3799-4faa-b4bd-b8aac52ca442"
     },
     "Augury": {
       "icon": "bxf bx-eye",
-      "glossaryId": "site-augury"
+      "glossaryId": "ffd3977a-a463-4326-bdf2-5b1b8c3d9160"
     },
     "DreamsignMarket": {
       "icon": "bxf bx-pyramid",
-      "glossaryId": "site-dreamsign-market"
+      "glossaryId": "5b5b47d6-c858-4b42-af96-a520c84666eb"
     },
     "DreamsignRevelation": {
       "icon": "bxf bx-meteor",
-      "glossaryId": "site-dreamsign-revelation"
+      "glossaryId": "ac70fd6b-a91a-407f-b7b7-255668cd6bec"
     },
     "RandomSite": {
       "icon": "fa-solid fa-question",
-      "glossaryId": "site-random-site"
+      "glossaryId": "1aeb05bc-53e1-4ea4-9e73-9239160799dc"
     },
     "Gamble": {
       "icon": "bxf bx-coin",
-      "glossaryId": "site-gamble"
+      "glossaryId": "f1ff2fb5-3d77-4eb8-b492-78cbe11fd265"
     },
     "Exploration": {
       "icon": "bxf bx-compass",
-      "glossaryId": "site-exploration"
+      "glossaryId": "46059d35-cb9e-4c4b-8635-087b6239f308"
     }
   },
   "fallbackSiteType": {
@@ -267,6 +267,6 @@
       "homeDreamscapeId": "grid_city"
     }
   },
-  "contentHash": "2e67f090fbd23087c726d300f55ce0c526f894f1f2057f856a1ab05f7504ac32",
+  "contentHash": "5244694cd2bcb6daae0e71b01294ad8397902fdb587762dc02c644dcf3633ea6",
   "foldHash": "fe3e1e05552bdc7c6169fd90a322f30bb94e3ef0bfeae5858da52e78ba8098e5"
 }

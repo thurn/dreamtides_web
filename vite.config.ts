@@ -260,21 +260,17 @@ function dreamsignEditorApiPlugin(): Plugin {
   };
 }
 
-/** Vite plugin that serves the TOML-backed Info Card glossary editor. */
+/** Vite plugin that serves the canonical RON-backed Info Card glossary editor. */
 function glossaryEditorApiPlugin(): Plugin {
   return {
     name: "glossary-editor-api",
     apply: "serve",
     configureServer(server) {
+      const editorRoot = process.env.DREAMTIDES_EDITOR_DATA_ROOT;
       server.middlewares.use(
-        createRonEditorBridge({
-          rootDir: __dirname,
-          basePaths: ["/api/editor/glossary"],
-          collectionPath: "/api/editor/glossary",
-          datasets: ["glossary"],
-          sourcePaths: ["data/glossary.ron"],
-          createLegacy: (rootDir) =>
-            createGlossaryEditorApiMiddleware({ rootDir }),
+        createGlossaryEditorApiMiddleware({
+          rootDir:
+            editorRoot === undefined ? __dirname : path.resolve(editorRoot),
         }),
       );
     },
@@ -282,7 +278,7 @@ function glossaryEditorApiPlugin(): Plugin {
 }
 
 /**
- * Notify every non-glossary page when glossary.toml changes. The tracked TOML
+ * Notify every non-glossary page when generated glossary.toml changes. The data
  * directory is outside Vite's watcher, so this small direct watcher lets open
  * gameplay/card surfaces reload their bundled explanatory copy while the
  * glossary editor keeps its local draft and save state.

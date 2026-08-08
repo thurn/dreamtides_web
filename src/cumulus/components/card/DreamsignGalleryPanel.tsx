@@ -36,7 +36,7 @@ export interface DreamsignGalleryActionView {
   glyph: Glyph;
   /** Visible and accessible action label. */
   label: string;
-  /** Stable TOML glossary id for the action's explanatory Info Card. */
+  /** Stable Glossary UUID for the action's explanatory Info Card. */
   glossaryId: string;
   /** Essence price, or null for a free/spent text caption. */
   price: number | null;

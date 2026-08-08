@@ -25,30 +25,63 @@ const SITE_TYPES: [SiteType; 14] = [
     SiteType::Exploration,
 ];
 
-const LEGACY_GLOSSARY_ID_MAP: [(&str, &str); 14] = [
-    ("site-battle", "6827ba8b-a226-4c01-9a22-1b72a4d7767c"),
-    ("site-draft", "1fb39b08-bcb7-4e5d-a831-9ed64f56dd9c"),
-    ("site-shop", "4b691029-0cf2-4dbe-a0e2-6f6b112e52c4"),
-    ("site-purge", "c617c6de-bd1b-43bb-bf8a-7f7acbb15979"),
-    ("site-essence", "ea9cb1b4-853a-4eec-aeb8-9c0215ec7edf"),
+const GLOSSARY_ID_MAP: [(&str, &str); 14] = [
     (
-        "site-transfiguration",
-        "d7587a2f-e72f-41d3-92cd-f14280b87509",
-    ),
-    ("site-duplication", "3da7fde7-66c7-4af9-ae62-0598ce94050a"),
-    ("site-reward", "b9ae4351-e23e-47d4-aec8-03b942dafd54"),
-    ("site-augury", "3447ccd7-60c8-4770-8bcd-7f67e7b5bbef"),
-    (
-        "site-dreamsign-market",
-        "49bb5066-5403-4ae0-a911-84a377e7c9ce",
+        "85ffab8d-f972-4340-9b45-99f6aff6ccec",
+        "85ffab8d-f972-4340-9b45-99f6aff6ccec",
     ),
     (
-        "site-dreamsign-revelation",
-        "b685e2a2-66ee-49cb-830a-f43c20268470",
+        "1ee13681-1ff5-431c-94a1-3390d45e1717",
+        "1ee13681-1ff5-431c-94a1-3390d45e1717",
     ),
-    ("site-random-site", "3fc1d43a-151e-4acc-b3be-44bdb015f9bb"),
-    ("site-gamble", "85d54d2c-86d9-495b-8698-59123f3bfe08"),
-    ("site-exploration", "fa6c9553-2485-48ef-9fac-1514688c3a34"),
+    (
+        "25f28ed1-5729-4240-a352-80f92fce530c",
+        "25f28ed1-5729-4240-a352-80f92fce530c",
+    ),
+    (
+        "4873bddf-7bf5-41e8-979e-36eb193db5a6",
+        "4873bddf-7bf5-41e8-979e-36eb193db5a6",
+    ),
+    (
+        "ba8ea132-f636-4fed-be27-e8eff0c9cb07",
+        "ba8ea132-f636-4fed-be27-e8eff0c9cb07",
+    ),
+    (
+        "7ae25c1a-76c5-4aed-9e1c-a2d5ec160bd7",
+        "7ae25c1a-76c5-4aed-9e1c-a2d5ec160bd7",
+    ),
+    (
+        "8222c5e2-a3ce-4caf-bd13-5c77ff15d7cf",
+        "8222c5e2-a3ce-4caf-bd13-5c77ff15d7cf",
+    ),
+    (
+        "28925242-3799-4faa-b4bd-b8aac52ca442",
+        "28925242-3799-4faa-b4bd-b8aac52ca442",
+    ),
+    (
+        "ffd3977a-a463-4326-bdf2-5b1b8c3d9160",
+        "ffd3977a-a463-4326-bdf2-5b1b8c3d9160",
+    ),
+    (
+        "5b5b47d6-c858-4b42-af96-a520c84666eb",
+        "5b5b47d6-c858-4b42-af96-a520c84666eb",
+    ),
+    (
+        "ac70fd6b-a91a-407f-b7b7-255668cd6bec",
+        "ac70fd6b-a91a-407f-b7b7-255668cd6bec",
+    ),
+    (
+        "1aeb05bc-53e1-4ea4-9e73-9239160799dc",
+        "1aeb05bc-53e1-4ea4-9e73-9239160799dc",
+    ),
+    (
+        "f1ff2fb5-3d77-4eb8-b492-78cbe11fd265",
+        "f1ff2fb5-3d77-4eb8-b492-78cbe11fd265",
+    ),
+    (
+        "46059d35-cb9e-4c4b-8635-087b6239f308",
+        "46059d35-cb9e-4c4b-8635-087b6239f308",
+    ),
 ];
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -584,7 +617,7 @@ struct CompatibilitySuitOutcome {
 }
 
 pub fn lower(source: SitesCatalog) -> Result<toml::Value> {
-    lower_with_glossary_map(source, &LEGACY_GLOSSARY_ID_MAP)
+    lower_with_glossary_map(source, &GLOSSARY_ID_MAP)
 }
 
 fn lower_with_glossary_map(

@@ -4,4 +4,6 @@ npm audit reports GHSA-2v37-7h3g-55p8 in the transitive development dependency n
 
 `cargo fmt --manifest-path tools/game-data/Cargo.toml --check` also reports pre-existing formatting drift at the end of `tools/game-data/src/models/figments.rs`; the Sites activation does not modify that file.
 
+The same Rust formatting check reports pre-existing trailing-whitespace drift at the end of `tools/game-data/src/models/figments.rs`; the Glossary activation does not modify that file.
+
 `scripts/regenerate-assets.sh` updates `.llms/skills/cumulus/components/info-card.md` and `src/cumulus/metadata/cumulus-metadata.json` from the current source tree even though this Dreamwell activation does not change Cumulus component APIs, indicating that the tracked generated Cumulus references were stale on `master`.

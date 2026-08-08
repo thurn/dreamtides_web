@@ -297,7 +297,9 @@ The standalone `/glossary` route edits the reusable explanatory Info Cards
 shown for rules terms, resources, tides, sites, and other shared game concepts.
 It provides a searchable catalog and an interactive Info Card whose rendered
 title and description edit in place. Saved copy and rules-text variants write
-to `data/glossary.toml` through the local Vite development server.
+revision-checked semantic operations to `data/glossary.ron`; the game-data
+pipeline validates the canonical source and regenerates `data/glossary.toml`
+through the local Vite development server.
 
 ## Examples
 

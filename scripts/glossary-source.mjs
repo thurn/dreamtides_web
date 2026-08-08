@@ -215,7 +215,7 @@ export function validateGlossaryEntries(input) {
   });
 }
 
-/** Parse the tracked TOML source into runtime/editor glossary records. */
+/** Parse generated compatibility TOML into runtime/editor glossary records. */
 export function parseGlossarySource(source) {
   if (typeof source !== "string") {
     throw invalid("Glossary source must be text.");
@@ -269,7 +269,7 @@ function replaceSourceAssignment(source, key, value) {
 
 /**
  * Replace only explicitly edited fields in one glossary entry while retaining
- * every other authored byte in glossary.toml.
+ * every other authored byte in a compatibility-TOML fixture.
  */
 export function updateGlossaryEntrySource(source, id, changes) {
   const entries = parseGlossarySource(source);
@@ -298,7 +298,7 @@ export function updateGlossaryEntrySource(source, id, changes) {
   return updated;
 }
 
-/** Serialize validated glossary records back to the tracked TOML source. */
+/** Serialize validated glossary records as compatibility TOML for fixtures. */
 export function serializeGlossarySource(entries) {
   const normalized = validateGlossaryEntries(entries);
   return `${stringify({

@@ -787,7 +787,7 @@ describe("tutorial data", () => {
         duration: 5,
         verticalOffset: 30,
         bubbleWidth: 300,
-        match: { kind: "glossary", id: "support" },
+        match: { kind: "glossary", id: "59f426ac-b9cb-47af-a00a-8cbab941c6c4" },
         text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
       },
     ]);
@@ -821,7 +821,7 @@ describe("tutorial data", () => {
           on: ["card-play"],
           delay: { "card-seen": 1 },
           duration: 3,
-          match: { kind: "glossary", id: "support" },
+          match: { kind: "glossary", id: "59f426ac-b9cb-47af-a00a-8cbab941c6c4" },
           text: "No.",
         },
       ]),

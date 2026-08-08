@@ -1,39 +1,33 @@
-import {
-  mkdirSync,
-  readFileSync,
-  renameSync,
-  unlinkSync,
-  writeFileSync,
-} from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { readFileSync } from "node:fs";
+import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { parseGlossarySource, validateGlossaryEntries } from "./glossary-source.mjs";
 import {
-  parseGlossarySource,
-  updateGlossaryEntrySource,
-  validateGlossaryEntries,
-} from "./glossary-source.mjs";
+  sourceRevision,
+  stageAndPublishGameDataEdit,
+} from "./game-data-pipeline.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const GLOSSARY_PATH = join("data", "glossary.toml");
 const BASE_PATH = "/api/editor/glossary";
+export const GLOSSARY_SOURCE_PATH = join("data", "glossary.ron");
+export const GLOSSARY_OUTPUT_PATH = join("data", "glossary.toml");
+export const GLOSSARY_EDITOR_SOURCE_PATHS = [GLOSSARY_SOURCE_PATH];
 const MAX_BODY_BYTES = 1024 * 1024;
-let writeSerial = 0;
+const UUID_V4_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u;
 
-const defaultFileSystem = {
-  mkdirSync,
-  readFileSync,
-  renameSync,
-  unlinkSync,
-  writeFileSync,
-};
-
-function jsonResponse(res, statusCode, body) {
-  res.writeHead(statusCode, { "Content-Type": "application/json; charset=utf-8" });
+function jsonResponse(res, statusCode, body, headers = {}) {
+  res.writeHead(statusCode, {
+    "Content-Type": "application/json; charset=utf-8",
+    ...headers,
+  });
   res.end(JSON.stringify(body));
 }
 
-function errorResponse(res, statusCode, code, message) {
-  jsonResponse(res, statusCode, { error: { code, message } });
+function errorResponse(res, statusCode, code, message, details) {
+  jsonResponse(res, statusCode, {
+    error: { code, message, ...(details === undefined ? {} : { details }) },
+  });
 }
 
 function requestPath(url) {
@@ -50,7 +44,11 @@ function readJsonBody(req) {
       body += chunk;
       if (Buffer.byteLength(body, "utf8") > MAX_BODY_BYTES) {
         tooLarge = true;
-        reject(Object.assign(new Error("Request body is too large."), { code: "BODY_TOO_LARGE" }));
+        reject(
+          Object.assign(new Error("Request body is too large."), {
+            code: "BODY_TOO_LARGE",
+          }),
+        );
       }
     });
     req.on("end", () => {
@@ -58,48 +56,55 @@ function readJsonBody(req) {
       try {
         resolveBody(JSON.parse(body));
       } catch {
-        reject(Object.assign(new Error("Request body must be valid JSON."), { code: "INVALID_JSON" }));
+        reject(
+          Object.assign(new Error("Request body must be valid JSON."), {
+            code: "INVALID_JSON",
+          }),
+        );
       }
     });
     req.on("error", reject);
   });
 }
 
-function atomicWrite(fileSystem, destination, content) {
-  writeSerial += 1;
-  const temporary = `${destination}.glossary-editor-${String(process.pid)}-${String(writeSerial)}.tmp`;
-  fileSystem.mkdirSync(dirname(destination), { recursive: true });
-  try {
-    fileSystem.writeFileSync(temporary, content);
-    fileSystem.renameSync(temporary, destination);
-  } catch (error) {
-    try {
-      fileSystem.unlinkSync(temporary);
-    } catch {
-      // The temporary file may not have been created.
-    }
-    throw error;
-  }
+function readEntries(rootDir) {
+  return parseGlossarySource(
+    readFileSync(join(rootDir, GLOSSARY_OUTPUT_PATH), "utf8"),
+  );
 }
 
-function readEntries(fileSystem, rootDir) {
-  return parseGlossarySource(
-    fileSystem.readFileSync(join(rootDir, GLOSSARY_PATH), "utf8"),
-  );
+function collectionResponse(rootDir, revision, loadEntries) {
+  return {
+    entries: loadEntries(rootDir),
+    sourceRevision: revision(rootDir, GLOSSARY_EDITOR_SOURCE_PATHS),
+  };
 }
 
 function validatedEdit(body, id, current) {
   if (body === null || typeof body !== "object" || Array.isArray(body)) {
-    throw Object.assign(new Error("Request body must be an object."), { code: "INVALID_GLOSSARY" });
+    throw Object.assign(new Error("Request body must be an object."), {
+      code: "INVALID_EDIT",
+    });
   }
   if (body.id !== undefined && body.id !== id) {
-    throw Object.assign(new Error("Request id must match the glossary URL."), { code: "INVALID_GLOSSARY" });
+    throw Object.assign(
+      new Error("Request id must match the glossary URL."),
+      { code: "INVALID_EDIT" },
+    );
+  }
+  if (typeof body.expectedSourceRevision !== "string") {
+    throw Object.assign(
+      new Error("Every save requires expectedSourceRevision."),
+      { code: "INVALID_EDIT" },
+    );
   }
   return {
     ...current,
     term: typeof body.term === "string" ? body.term : current.term,
     definition:
-      typeof body.definition === "string" ? body.definition : current.definition,
+      typeof body.definition === "string"
+        ? body.definition
+        : current.definition,
     priority: body.priority === undefined ? current.priority : body.priority,
     variants: body.variants === undefined ? current.variants : body.variants,
     termPresentation:
@@ -111,10 +116,54 @@ function validatedEdit(body, id, current) {
   };
 }
 
-/** Vite dev middleware for loading and atomically editing glossary.toml. */
+function semanticOperations(body, normalized) {
+  const fields = [
+    ["term", "term"],
+    ["definition", "definition"],
+    ["priority", "priority"],
+    ["variants", "variants"],
+    ["termPresentation", "term-presentation"],
+  ];
+  return fields
+    .filter(([requestField]) => Object.hasOwn(body, requestField))
+    .map(([requestField, field]) => ({
+      operation: "set_glossary_field",
+      glossary_id: normalized.id,
+      field,
+      value:
+        requestField === "termPresentation"
+          ? (normalized.termPresentation ?? null)
+          : normalized[requestField],
+    }));
+}
+
+function statusFor(error) {
+  if (error.code === "STALE_SOURCE") return 409;
+  if (error.code === "RECORD_NOT_FOUND") return 404;
+  if (
+    ["INVALID_EDIT", "INVALID_GLOSSARY", "FIELD_NOT_APPLICABLE"].includes(
+      error.code,
+    )
+  )
+    return 400;
+  if (
+    ["MALFORMED_SOURCE", "COMPATIBILITY_VALIDATION_FAILED"].includes(
+      error.code,
+    )
+  )
+    return 422;
+  if (error.code === "BODY_TOO_LARGE") return 413;
+  if (error.code === "INVALID_JSON") return 400;
+  return error.statusCode ?? 500;
+}
+
+/** Vite dev middleware for revisioned semantic edits to canonical glossary.ron. */
 export function createGlossaryEditorApiMiddleware({
   rootDir = ROOT,
-  fileSystem = defaultFileSystem,
+  loadEntries = readEntries,
+  revision = sourceRevision,
+  publishEdit = stageAndPublishGameDataEdit,
+  onChanged = () => {},
 } = {}) {
   return async function glossaryEditorApi(req, res, next) {
     const pathname = requestPath(req.url);
@@ -123,68 +172,93 @@ export function createGlossaryEditorApiMiddleware({
       return;
     }
 
-    if (pathname === BASE_PATH && req.method === "GET") {
-      try {
-        jsonResponse(res, 200, { entries: readEntries(fileSystem, rootDir) });
-      } catch (error) {
+    try {
+      if (pathname === BASE_PATH && req.method === "GET") {
+        jsonResponse(
+          res,
+          200,
+          collectionResponse(rootDir, revision, loadEntries),
+        );
+        return;
+      }
+
+      if (req.method !== "PATCH" || pathname === BASE_PATH) {
+        jsonResponse(
+          res,
+          405,
+          {
+            error: {
+              code: "METHOD_NOT_ALLOWED",
+              message: "Use GET to load or PATCH to edit glossary entries.",
+            },
+          },
+          { Allow: pathname === BASE_PATH ? "GET" : "PATCH" },
+        );
+        return;
+      }
+
+      const id = decodeURIComponent(pathname.slice(BASE_PATH.length + 1));
+      if (!UUID_V4_PATTERN.test(id)) {
         errorResponse(
           res,
-          500,
-          "GLOSSARY_LOAD_FAILED",
-          error instanceof Error ? error.message : "Failed to load glossary entries.",
+          400,
+          "INVALID_GLOSSARY_ID",
+          "Route Glossary id must be a canonical UUIDv4.",
+          { id },
         );
+        return;
       }
-      return;
-    }
-
-    if (req.method !== "PATCH" || pathname === BASE_PATH) {
-      res.setHeader("Allow", pathname === BASE_PATH ? "GET" : "PATCH");
-      errorResponse(res, 405, "METHOD_NOT_ALLOWED", "Use GET to load or PATCH to edit glossary entries.");
-      return;
-    }
-
-    try {
-      const id = decodeURIComponent(pathname.slice(BASE_PATH.length + 1));
-      const glossaryPath = join(rootDir, GLOSSARY_PATH);
-      const source = fileSystem.readFileSync(glossaryPath, "utf8");
-      const entries = parseGlossarySource(source);
+      const entries = loadEntries(rootDir);
       const index = entries.findIndex((entry) => entry.id === id);
       if (index < 0) {
-        errorResponse(res, 404, "GLOSSARY_ENTRY_NOT_FOUND", `No glossary entry has id "${id}".`);
+        errorResponse(
+          res,
+          404,
+          "GLOSSARY_ENTRY_NOT_FOUND",
+          `No glossary entry has id "${id}".`,
+        );
         return;
       }
       const body = await readJsonBody(req);
       const nextEntry = validatedEdit(body, id, entries[index]);
-      const nextEntries = entries.map((entry, entryIndex) =>
-        entryIndex === index ? nextEntry : entry,
+      const normalized = validateGlossaryEntries(
+        entries.map((entry, entryIndex) =>
+          entryIndex === index ? nextEntry : entry,
+        ),
       );
-      const normalized = validateGlossaryEntries(nextEntries);
-      const changes = Object.fromEntries(
-        ["term", "definition", "priority", "variants", "termPresentation"]
-          .filter((field) => Object.hasOwn(body, field))
-          .map((field) => [field, normalized[index][field]]),
-      );
-      atomicWrite(
-        fileSystem,
-        glossaryPath,
-        updateGlossaryEntrySource(source, id, changes),
-      );
-      jsonResponse(res, 200, { entry: normalized[index] });
+      const operations = semanticOperations(body, normalized[index]);
+      const result = await publishEdit({
+        rootDir,
+        dataset: "glossary",
+        operations,
+        sourcePaths: GLOSSARY_EDITOR_SOURCE_PATHS,
+        expectedSourceRevision: body.expectedSourceRevision,
+      });
+      jsonResponse(res, 200, {
+        entry: normalized[index],
+        sourceRevision: result.sourceRevision,
+      });
+      if (result.changed.length > 0) onChanged();
     } catch (error) {
-      const code = error?.code;
-      if (code === "BODY_TOO_LARGE") {
-        errorResponse(res, 413, code, error.message);
-        return;
-      }
-      if (code === "INVALID_JSON" || code === "INVALID_GLOSSARY") {
-        errorResponse(res, 400, code, error.message);
-        return;
+      let confirmed;
+      if (error.code === "STALE_SOURCE") {
+        confirmed = collectionResponse(rootDir, revision, loadEntries);
       }
       errorResponse(
         res,
-        500,
-        "GLOSSARY_SAVE_FAILED",
-        error instanceof Error ? error.message : "Failed to save glossary entry.",
+        statusFor(error),
+        error.code ?? "PUBLICATION_FAILED",
+        error instanceof Error
+          ? error.message
+          : "Glossary editor transaction failed.",
+        {
+          datasetId: "glossary",
+          source: GLOSSARY_SOURCE_PATH,
+          ...(error.currentSourceRevision === undefined
+            ? {}
+            : { currentSourceRevision: error.currentSourceRevision }),
+          ...(confirmed === undefined ? {} : { confirmed }),
+        },
       );
     }
   };

@@ -1,14 +1,16 @@
 export type GlossaryEditorApiNext = () => void;
 
-export interface GlossaryEditorApiFileSystem {
-  mkdirSync(path: string, options?: { recursive?: boolean }): unknown;
-  readFileSync(path: string, encoding: "utf8"): string;
-  renameSync(oldPath: string, newPath: string): void;
-  unlinkSync(path: string): void;
-  writeFileSync(path: string, data: string): void;
-}
+export const GLOSSARY_SOURCE_PATH: string;
+export const GLOSSARY_OUTPUT_PATH: string;
+export const GLOSSARY_EDITOR_SOURCE_PATHS: readonly string[];
 
 export function createGlossaryEditorApiMiddleware(options?: {
   rootDir?: string;
-  fileSystem?: GlossaryEditorApiFileSystem;
+  loadEntries?: (rootDir: string) => unknown[];
+  revision?: (rootDir: string, sourcePaths: readonly string[]) => string;
+  publishEdit?: (request: unknown) => Promise<{
+    changed: readonly string[];
+    sourceRevision: string;
+  }>;
+  onChanged?: () => void;
 }): (req: unknown, res: unknown, next: GlossaryEditorApiNext) => Promise<void>;

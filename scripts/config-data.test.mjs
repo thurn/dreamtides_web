@@ -132,14 +132,14 @@ describe("regenerateConfigData Atlas dependencies", () => {
     const glossaryPath = join(rootDir, "data", "glossary.toml");
     const glossary = readFileSync(glossaryPath, "utf8");
     const changed = glossary.replace(
-      'id = "site-battle"',
+      'id = "85ffab8d-f972-4340-9b45-99f6aff6ccec"',
       'id = "removed-site-battle"',
     );
     expect(changed).not.toBe(glossary);
     writeFileSync(glossaryPath, changed);
 
     expect(() => regenerateConfigData("glossary.toml", { rootDir })).toThrow(
-      /unresolved glossary id site-battle/,
+      /unresolved glossary id 85ffab8d-f972-4340-9b45-99f6aff6ccec/,
     );
   });
 });

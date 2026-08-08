@@ -6,7 +6,7 @@ import dreamAvatarsSource from "../../../data/dream_avatars.toml?raw";
 import figmentsSource from "../../../data/figments.toml?raw";
 import tutorialSource from "../../../data/tutorial.toml?raw";
 import { isHighlightedRulesTextTerm } from "../../cumulus/components/card/RulesText";
-import { lookupGlossaryTerm } from "../../data/glossary";
+import { GLOSSARY_IDS, lookupGlossaryTerm } from "../../data/glossary";
 import { parseTutorialTriggers } from "../../data/tutorial-actions";
 import type { TutorialTriggerDefinition } from "../../types/tutorial";
 import { matchTutorialGuidance } from "./tutorial-guidance";
@@ -24,7 +24,15 @@ function glossaryTrigger(
     horizontalOffset: 0,
     verticalOffset: 0,
     bubbleWidth: 700,
-    match: { kind: "glossary", id },
+    match: {
+      kind: "glossary",
+      id:
+        {
+          support: GLOSSARY_IDS.support,
+          foresee: GLOSSARY_IDS.foresee,
+          erode: GLOSSARY_IDS.erode,
+        }[id] ?? id,
+    },
     text: id,
   };
 }
@@ -82,11 +90,11 @@ describe("matchTutorialGuidance", () => {
       glossaryTrigger("erode", 100),
     ];
     const input = {
-        event: "card-play",
-        renderedText: "Erode 3.",
-        cardKind: "event",
-        seenTriggerIds: new Set<string>(),
-      } as const;
+      event: "card-play",
+      renderedText: "Erode 3.",
+      cardKind: "event",
+      seenTriggerIds: new Set<string>(),
+    } as const;
 
     const firstMatches = matchTutorialGuidance(triggers, input);
     expect(firstMatches.map((match) => match.id)).toEqual(["event-card"]);
@@ -101,18 +109,20 @@ describe("matchTutorialGuidance", () => {
   it("matches a card-specific trigger by UUID", () => {
     const cardId = "4408b942-09a0-4f4e-a403-10c708c6e3c5";
     const matches = matchTutorialGuidance(
-      [{
-        id: "flashpoint-no-valid-targets",
-        on: ["card-no-valid-targets"],
-        priority: 10,
-        speaker: "mira",
-        duration: 4,
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 500,
-        match: { kind: "card-id", cardId },
-        text: "There are no valid targets for this card",
-      }],
+      [
+        {
+          id: "flashpoint-no-valid-targets",
+          on: ["card-no-valid-targets"],
+          priority: 10,
+          speaker: "mira",
+          duration: 4,
+          horizontalOffset: 0,
+          verticalOffset: 0,
+          bubbleWidth: 500,
+          match: { kind: "card-id", cardId },
+          text: "There are no valid targets for this card",
+        },
+      ],
       {
         event: "card-no-valid-targets",
         cardId,
@@ -133,7 +143,9 @@ describe("tutorial trigger coverage", () => {
     const sources = [
       ...(parse(cardsSource).cards as Array<Record<string, unknown>>),
       ...(parse(dreamwellSource).dreamwell as Array<Record<string, unknown>>),
-      ...(parse(dreamAvatarsSource).dreamAvatar as Array<Record<string, unknown>>),
+      ...(parse(dreamAvatarsSource).dreamAvatar as Array<
+        Record<string, unknown>
+      >),
       ...(parse(figmentsSource).figments as Array<Record<string, unknown>>),
     ];
     const highlightedGlossaryIds = new Set<string>();
@@ -153,7 +165,9 @@ describe("tutorial trigger coverage", () => {
       ),
     );
     expect([...highlightedGlossaryIds].sort()).toEqual(
-      [...triggerGlossaryIds].filter((id) => id !== "dissolved-trigger").sort(),
+      [...triggerGlossaryIds]
+        .filter((id) => id !== GLOSSARY_IDS.dissolvedTrigger)
+        .sort(),
     );
   });
 });

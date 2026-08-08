@@ -1655,7 +1655,7 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
         horizontalOffset: 0,
         verticalOffset: 0,
         bubbleWidth: 700,
-        match: { kind: "glossary", id: "erode" },
+        match: { kind: "glossary", id: "23526f6e-f17e-4496-bf96-1875858d023d" },
         text: "[yellow]Erode[/yellow] sends cards from a deck to the void.",
       }],
     });

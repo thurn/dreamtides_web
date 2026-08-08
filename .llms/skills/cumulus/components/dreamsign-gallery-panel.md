@@ -35,7 +35,7 @@ The panel preserves the chrome-free Dreamsign material and shared InfoCard revea
 | `entryId` | `string` | no | Stable action id. |
 | `glyph` | `Glyph` | no | Glyph that identifies the action. |
 | `label` | `string` | no | Visible and accessible action label. |
-| `glossaryId` | `string` | no | Stable TOML glossary id for the action's explanatory Info Card. |
+| `glossaryId` | `string` | no | Stable Glossary UUID for the action's explanatory Info Card. |
 | `price` | `number \| null` | no | Essence price, or null for a free/spent text caption. |
 | `text` | `string \| null` | no | Caption used when the action is free or already spent. |
 | `disabled` | `boolean` | no | Whether the action can currently be triggered. |

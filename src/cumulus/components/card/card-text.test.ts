@@ -6,6 +6,7 @@ import {
 } from "./card-text";
 import {
   GLOSSARY,
+  GLOSSARY_IDS,
   glossaryRulesTextForms,
 } from "../../../data/glossary";
 
@@ -216,7 +217,7 @@ describe("tokenizeRulesText", () => {
       symbol: "points",
       char: "⍟",
     });
-    expect(points?.entry?.id).toBe("points");
+    expect(points?.entry?.id).toBe(GLOSSARY_IDS.points);
     expect(reconstructText(result)).toBe("Gain 2⍟.");
   });
 
@@ -230,7 +231,7 @@ describe("tokenizeRulesText", () => {
       symbol: "lunar",
       char: "☾",
     });
-    expect(lunar?.entry?.id).toBe("exhaust-cost");
+    expect(lunar?.entry?.id).toBe(GLOSSARY_IDS.exhaustCost);
   });
 
   it("identifies the store symbol ⧗", () => {
@@ -243,7 +244,7 @@ describe("tokenizeRulesText", () => {
       symbol: "store",
       char: "⧗",
     });
-    expect(memory?.entry?.id).toBe("memory");
+    expect(memory?.entry?.id).toBe(GLOSSARY_IDS.memory);
     expect(reconstructText(result)).toBe("Store 1⧗.");
   });
 

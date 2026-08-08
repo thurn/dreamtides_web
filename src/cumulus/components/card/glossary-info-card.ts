@@ -15,7 +15,7 @@ type GlossaryCardPresentation =
   | { readonly variant: "icon"; readonly glyph: Glyph }
   | { readonly variant: "tide"; readonly tide: Tide };
 
-/** Build a strict Info Card from one stable TOML glossary id. */
+/** Build a strict Info Card from one stable Glossary UUID. */
 export function glossaryInfoCard(
   id: string,
   presentation: GlossaryCardPresentation = { variant: "text" },

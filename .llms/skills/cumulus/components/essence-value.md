@@ -28,7 +28,7 @@ The reward badge is reserved for an Essence gain attached directly to reward art
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `id` | `string` | no | Stable identity of the Essence source. |
-| `glossaryId` | `string` | no | Stable TOML glossary entry used for the explanatory Info Card. |
+| `glossaryId` | `string` | no | Stable Glossary UUID used for the explanatory Info Card. |
 
 ## Usage
 

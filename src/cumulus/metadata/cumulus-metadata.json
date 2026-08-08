@@ -1679,7 +1679,7 @@
             "name": "glossaryId",
             "tsType": "string",
             "optional": false,
-            "description": "Stable TOML glossary id for the action's explanatory Info Card."
+            "description": "Stable Glossary UUID for the action's explanatory Info Card."
           },
           {
             "name": "price",
@@ -1988,7 +1988,7 @@
             "name": "glossaryId",
             "tsType": "string",
             "optional": false,
-            "description": "Stable TOML glossary entry used for the explanatory Info Card."
+            "description": "Stable Glossary UUID used for the explanatory Info Card."
           }
         ]
       }

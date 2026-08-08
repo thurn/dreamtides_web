@@ -5,6 +5,7 @@ import type { PoolDraftState } from "../types/draft";
 import type { SiteType } from "../types/journey";
 import { LayerName } from "../types/layer-name";
 import type { TutorialTriggerDefinition } from "../types/tutorial";
+import { GLOSSARY_IDS } from "../data/glossary";
 import { genesisFoldState, type FoldState } from "./fold-state";
 import {
   completeCardTutorialGuidance,
@@ -16,11 +17,7 @@ import {
   type CardTutorialGuidanceContentProvider,
 } from "./card-tutorial-guidance";
 
-function card(
-  id: string,
-  cardNumber: number,
-  renderedText: string,
-): CardData {
+function card(id: string, cardNumber: number, renderedText: string): CardData {
   return {
     id: asCardId(id),
     name: asCardName(`Fixture ${id}`),
@@ -37,10 +34,7 @@ function card(
   };
 }
 
-function trigger(
-  id: string,
-  priority: number,
-): TutorialTriggerDefinition {
+function trigger(id: string, priority: number): TutorialTriggerDefinition {
   return {
     id,
     on: ["card-seen", "card-play"],
@@ -50,7 +44,15 @@ function trigger(
     horizontalOffset: 30,
     verticalOffset: 20,
     bubbleWidth: 500,
-    match: { kind: "glossary", id },
+    match: {
+      kind: "glossary",
+      id:
+        {
+          support: GLOSSARY_IDS.support,
+          foresee: GLOSSARY_IDS.foresee,
+          erode: GLOSSARY_IDS.erode,
+        }[id] ?? id,
+    },
     text: `${id} explained.`,
   };
 }
@@ -93,10 +95,7 @@ function transfigurationTrigger(): TutorialTriggerDefinition {
   };
 }
 
-function siteState(
-  siteId = "site-a",
-  siteType: SiteType = "Shop",
-): FoldState {
+function siteState(siteId = "site-a", siteType: SiteType = "Shop"): FoldState {
   const base = genesisFoldState({
     seed: "card-tutorial-test",
     reducerVersion: "test",
@@ -339,9 +338,7 @@ describe("card tutorial guidance fold", () => {
 
   it("allows glossary guidance after the first Draft pick", () => {
     expect(
-      currentCardTutorialScreenKey(
-        draftOfferState(2, [1, 2, 3, 4], true),
-      ),
+      currentCardTutorialScreenKey(draftOfferState(2, [1, 2, 3, 4], true)),
     ).not.toBeNull();
   });
 

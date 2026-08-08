@@ -41,7 +41,7 @@ export type EssenceValueVariant = "inline" | "rewardBadge";
 export interface EssenceEntity {
   /** Stable identity of the Essence source. */
   id: string;
-  /** Stable TOML glossary entry used for the explanatory Info Card. */
+  /** Stable Glossary UUID used for the explanatory Info Card. */
   glossaryId: string;
 }
 

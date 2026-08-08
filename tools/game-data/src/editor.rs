@@ -33,6 +33,7 @@ use crate::models::figments::{
     ArtCrop as FigmentArtCrop, CharacterType as FigmentCharacterType, FigmentBehavior,
     FigmentDefinition,
 };
+use crate::models::glossary::{self, GlossaryDefinition, GlossaryId, TermPresentation};
 
 #[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -102,6 +103,11 @@ enum EditOperation {
         field: String,
         value: JsonValue,
     },
+    SetGlossaryField {
+        glossary_id: String,
+        field: String,
+        value: JsonValue,
+    },
     ReplaceAction {
         card_id: String,
         slot: usize,
@@ -151,6 +157,7 @@ pub fn stage_edit(
         "dreamwell" => edit_dreamwell(manifest, staging_root, request.operations),
         "exploration" => edit_exploration(manifest, staging_root, request.operations),
         "figments" => edit_figments(manifest, staging_root, request.operations),
+        "glossary" => edit_glossary(manifest, staging_root, request.operations),
         dataset => edit_compat(manifest, staging_root, dataset, request.operations),
     }
 }
@@ -1180,6 +1187,220 @@ fn edit_compat(
         dataset_id: dataset_id.into(),
         source_revision: revision(staging_root, manifest, &[dataset_id])?,
     })
+}
+
+fn edit_glossary(
+    manifest: &Manifest,
+    staging_root: &Path,
+    operations: Vec<EditOperation>,
+) -> Result<EditReport> {
+    let dataset = manifest.dataset("glossary")?;
+    if dataset.adapter != "glossary_v1" {
+        bail!("FIELD_NOT_APPLICABLE: Glossary editor requires glossary_v1");
+    }
+    let source_path = staging_root.join(&dataset.source);
+    let original_text = fs::read_to_string(&source_path)
+        .with_context(|| format!("read staged Glossary source {}", source_path.display()))?;
+    let original: Vec<GlossaryDefinition> = ron::from_str(&original_text)
+        .context("MALFORMED_SOURCE: staged Glossary RON is invalid")?;
+    glossary::lower(original.clone())
+        .context("MALFORMED_SOURCE: staged Glossary catalog is invalid")?;
+    let mut definitions = original.clone();
+    let mut source_text = original_text;
+
+    for operation in operations {
+        match operation {
+            EditOperation::SetGlossaryField {
+                glossary_id,
+                field,
+                value,
+            } => {
+                let index = unique_glossary_index(&definitions, &glossary_id)?;
+                let before = definitions[index].clone();
+                set_glossary_field(&mut definitions[index], &field, value)?;
+                glossary::lower(definitions.clone())
+                    .context("INVALID_EDIT: Glossary edit violates the catalog contract")?;
+                if definitions[index] != before {
+                    source_text =
+                        patch_glossary_source_field(&source_text, &definitions[index], &field)?;
+                }
+            }
+            _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to Glossary"),
+        }
+    }
+
+    verify_round_trip::<Vec<GlossaryDefinition>>(&source_text, &definitions)?;
+    let changed = definitions != original;
+    if changed {
+        atomic_write(&source_path, source_text.as_bytes())?;
+    }
+    Ok(EditReport {
+        ok: true,
+        changed,
+        dataset_id: "glossary".into(),
+        source_revision: revision(staging_root, manifest, &["glossary"])?,
+    })
+}
+
+fn unique_glossary_index(definitions: &[GlossaryDefinition], id: &str) -> Result<usize> {
+    let requested = GlossaryId::parse(id).map_err(|error| {
+        anyhow::anyhow!("INVALID_EDIT: Glossary route identity must be a canonical UUIDv4: {error}")
+    })?;
+    let matches = definitions
+        .iter()
+        .enumerate()
+        .filter(|(_, definition)| definition.id == requested)
+        .map(|(index, _)| index)
+        .collect::<Vec<_>>();
+    if matches.is_empty() {
+        bail!("RECORD_NOT_FOUND: Glossary UUID {id}");
+    }
+    if matches.len() > 1 {
+        bail!("MALFORMED_SOURCE: duplicate Glossary UUID {id}");
+    }
+    Ok(matches[0])
+}
+
+fn set_glossary_field(
+    definition: &mut GlossaryDefinition,
+    field: &str,
+    value: JsonValue,
+) -> Result<()> {
+    match field {
+        "term" => {
+            let value = json_string(value, field)?.trim().to_owned();
+            if value.is_empty() {
+                bail!("INVALID_EDIT: Glossary term cannot be blank");
+            }
+            definition.term = value;
+        }
+        "definition" => {
+            let value = json_string(value, field)?.trim().to_owned();
+            if value.is_empty() {
+                bail!("INVALID_EDIT: Glossary definition cannot be blank");
+            }
+            definition.definition = value;
+        }
+        "priority" => {
+            definition.priority = value
+                .as_i64()
+                .with_context(|| "INVALID_EDIT: Glossary priority must be an integer")?;
+        }
+        "variants" => {
+            let values = value
+                .as_array()
+                .with_context(|| "INVALID_EDIT: Glossary variants must be an array")?;
+            let mut variants = Vec::with_capacity(values.len());
+            for value in values {
+                let variant = value
+                    .as_str()
+                    .with_context(|| "INVALID_EDIT: every Glossary variant must be a string")?
+                    .trim()
+                    .to_owned();
+                if !variant.is_empty() {
+                    variants.push(variant);
+                }
+            }
+            definition.variants = variants;
+        }
+        "term-presentation" | "term_presentation" | "termPresentation" => {
+            definition.term_presentation = if value.is_null() {
+                None
+            } else {
+                Some(match json_string(value, field)?.as_str() {
+                    "symbolOnly" | "symbol-only" => TermPresentation::SymbolOnly,
+                    "definitionOnly" | "definition-only" => TermPresentation::DefinitionOnly,
+                    other => bail!("INVALID_EDIT: unsupported Glossary term presentation {other}"),
+                })
+            };
+        }
+        _ => bail!("INVALID_EDIT: unsupported Glossary field {field}"),
+    }
+    Ok(())
+}
+
+fn patch_glossary_source_field(
+    source: &str,
+    definition: &GlossaryDefinition,
+    field: &str,
+) -> Result<String> {
+    let source_field = match field {
+        "term" => "term",
+        "definition" => "definition",
+        "priority" => "priority",
+        "variants" => "variants",
+        "term-presentation" | "term_presentation" | "termPresentation" => "term_presentation",
+        _ => bail!("INVALID_EDIT: unsupported Glossary field {field}"),
+    };
+    let record = typed_record_range(
+        source,
+        "GlossaryDefinition",
+        "id",
+        &definition.id.to_string(),
+    )?;
+    if let Some(value) = top_level_field_value_range(source, record.clone(), source_field)? {
+        if source_field == "term_presentation" && definition.term_presentation.is_none() {
+            let line_start = source[..value.start]
+                .rfind('\n')
+                .context("MALFORMED_SOURCE: term_presentation must occupy its own line")?
+                + 1;
+            let line_end = value.end
+                + source[value.end..]
+                    .find('\n')
+                    .context("MALFORMED_SOURCE: term_presentation line is unterminated")?
+                + 1;
+            return Ok(format!("{}{}", &source[..line_start], &source[line_end..]));
+        }
+        let replacement = render_glossary_source_field(definition, source_field)?;
+        return Ok(format!(
+            "{}{}{}",
+            &source[..value.start],
+            replacement,
+            &source[value.end..]
+        ));
+    }
+    if source_field == "term_presentation" {
+        let Some(_) = definition.term_presentation else {
+            return Ok(source.to_owned());
+        };
+        let definition_value =
+            top_level_field_value_range(source, record.clone(), "definition")?
+                .context("MALFORMED_SOURCE: Glossary record is missing definition")?;
+        let comma_offset = source[definition_value.end..record.end]
+            .find(',')
+            .context("MALFORMED_SOURCE: Glossary definition is missing its trailing comma")?;
+        let insertion = definition_value.end + comma_offset + 1;
+        let replacement = render_glossary_source_field(definition, source_field)?;
+        return Ok(format!(
+            "{}\n    term_presentation: {},{}",
+            &source[..insertion],
+            replacement,
+            &source[insertion..]
+        ));
+    }
+    bail!(
+        "MALFORMED_SOURCE: missing field {source_field} on Glossary {}",
+        definition.id
+    )
+}
+
+fn render_glossary_source_field(definition: &GlossaryDefinition, field: &str) -> Result<String> {
+    match field {
+        "term" => Ok(ron::to_string(&definition.term)?),
+        "definition" => Ok(ron::to_string(&definition.definition)?),
+        "priority" => Ok(definition.priority.to_string()),
+        "variants" => Ok(ron::to_string(&definition.variants)?),
+        "term_presentation" => Ok(
+            match definition
+                .term_presentation
+                .context("term_presentation must be present when rendering")?
+            {
+                TermPresentation::SymbolOnly => "SymbolOnly".into(),
+                TermPresentation::DefinitionOnly => "DefinitionOnly".into(),
+            },
+        ),
+        _ => bail!("INVALID_EDIT: unsupported Glossary source field {field}"),
+    }
 }
 
 fn edit_cards(
@@ -2716,6 +2937,7 @@ mod tests {
 
     const CARD_ID: &str = "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5";
     const AVATAR_ID: &str = "00000000-0000-4000-8000-000000000011";
+    const GLOSSARY_ID: &str = "00000000-0000-4000-8000-000000000021";
 
     const CARD_SOURCE: &str = r##"// Stable catalog guidance.
 #![enable(implicit_some)]
@@ -2760,6 +2982,40 @@ mod tests {
     ability_text: ["Unrelated ability."],
     title: "Unrelated Title",
     portrait: (image: 8, focus: (x: 0.5, y: 0.5)),
+  ),
+]
+"###;
+
+    const GLOSSARY_SOURCE: &str = r###"// Stable Glossary guidance.
+#![enable(implicit_some)]
+[
+  // Edited record comment.
+  GlossaryDefinition(
+    id: "00000000-0000-4000-8000-000000000021",
+    category: Keywords,
+    term: r#"Echo"#,
+    definition: "Create an echo.",
+    priority: 17,
+    matches_rules_text: true,
+    variants: ["echoes"],
+    contexts: [
+      GlossaryContext(
+        pattern: r#"\\becho\\s+(\\d+)\\b"#,
+        term: "{term} {1}",
+        definition: "Create {1} echoes.",
+        singular: SingularProjection(capture: 1, definition: "Create one echo."),
+      ),
+    ],
+  ),
+  /* Unrelated record comment. */
+  GlossaryDefinition(
+    id: "00000000-0000-4000-8000-000000000022",
+    category: Actions,
+    term: "Moon",
+    definition: "Unrelated definition.",
+    priority: -3,
+    variants: [],
+    term_presentation: SymbolOnly,
   ),
 ]
 "###;
@@ -3236,6 +3492,124 @@ mod tests {
         assert_eq!(
             ron::from_str::<Vec<AvatarDefinition>>(&patched).unwrap(),
             avatars
+        );
+    }
+
+    #[test]
+    fn glossary_scalar_patch_changes_one_line_and_preserves_unrelated_source() {
+        let mut definitions: Vec<GlossaryDefinition> = ron::from_str(GLOSSARY_SOURCE).unwrap();
+        let index = unique_glossary_index(&definitions, GLOSSARY_ID).unwrap();
+        let unrelated_before = typed_record_range(
+            GLOSSARY_SOURCE,
+            "GlossaryDefinition",
+            "id",
+            "00000000-0000-4000-8000-000000000022",
+        )
+        .unwrap();
+        set_glossary_field(
+            &mut definitions[index],
+            "definition",
+            json!("Edited definition."),
+        )
+        .unwrap();
+        let patched =
+            patch_glossary_source_field(GLOSSARY_SOURCE, &definitions[index], "definition")
+                .unwrap();
+
+        assert_eq!(
+            GLOSSARY_SOURCE
+                .lines()
+                .zip(patched.lines())
+                .filter(|(before, after)| before != after)
+                .count(),
+            1
+        );
+        assert!(patched.contains("term: r#\"Echo\"#"));
+        assert!(patched.contains("/* Unrelated record comment. */"));
+        let unrelated_after = typed_record_range(
+            &patched,
+            "GlossaryDefinition",
+            "id",
+            "00000000-0000-4000-8000-000000000022",
+        )
+        .unwrap();
+        assert_eq!(
+            &GLOSSARY_SOURCE[unrelated_before],
+            &patched[unrelated_after]
+        );
+        assert_eq!(
+            ron::from_str::<Vec<GlossaryDefinition>>(&patched).unwrap(),
+            definitions
+        );
+    }
+
+    #[test]
+    fn glossary_editor_round_trips_every_field_shape_and_optional_presentation() {
+        let mut source = GLOSSARY_SOURCE.to_owned();
+        let mut definitions: Vec<GlossaryDefinition> = ron::from_str(&source).unwrap();
+        let index = unique_glossary_index(&definitions, GLOSSARY_ID).unwrap();
+        for (field, value) in [
+            ("term", json!("Resonance")),
+            ("priority", json!(-12)),
+            ("variants", json!(["resonances", "resonant"])),
+            ("term-presentation", json!("definitionOnly")),
+        ] {
+            set_glossary_field(&mut definitions[index], field, value).unwrap();
+            glossary::lower(definitions.clone()).unwrap();
+            source = patch_glossary_source_field(&source, &definitions[index], field).unwrap();
+            assert_eq!(
+                ron::from_str::<Vec<GlossaryDefinition>>(&source).unwrap(),
+                definitions
+            );
+        }
+        assert_eq!(source.matches("term_presentation:").count(), 2);
+        assert!(source.contains("pattern: r#\"\\\\becho"));
+
+        set_glossary_field(
+            &mut definitions[index],
+            "term-presentation",
+            JsonValue::Null,
+        )
+        .unwrap();
+        source =
+            patch_glossary_source_field(&source, &definitions[index], "term-presentation").unwrap();
+        assert_eq!(source.matches("term_presentation:").count(), 1);
+        assert_eq!(
+            ron::from_str::<Vec<GlossaryDefinition>>(&source).unwrap(),
+            definitions
+        );
+        assert_eq!(
+            definitions
+                .iter()
+                .map(|definition| definition.id.to_string())
+                .collect::<Vec<_>>(),
+            [
+                "00000000-0000-4000-8000-000000000021",
+                "00000000-0000-4000-8000-000000000022",
+            ]
+        );
+    }
+
+    #[test]
+    fn glossary_editor_rejects_invalid_fields_values_and_identities() {
+        let mut definitions: Vec<GlossaryDefinition> = ron::from_str(GLOSSARY_SOURCE).unwrap();
+        let index = unique_glossary_index(&definitions, GLOSSARY_ID).unwrap();
+        for (field, value) in [
+            ("term", json!("   ")),
+            ("definition", json!("")),
+            ("priority", json!(1.5)),
+            ("variants", json!([17])),
+            ("term-presentation", json!("titleAndDefinition")),
+            ("id", json!(GLOSSARY_ID)),
+        ] {
+            assert!(set_glossary_field(&mut definitions[index], field, value).is_err());
+        }
+        assert!(unique_glossary_index(&definitions, "not-a-uuid").is_err());
+        assert!(
+            unique_glossary_index(&definitions, "00000000-0000-4000-8000-000000000099",)
+                .unwrap_err()
+                .to_string()
+                .contains("RECORD_NOT_FOUND")
         );
     }
 

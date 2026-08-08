@@ -130,7 +130,8 @@ describe("GameCard reveal contract", () => {
     expect(description).not.toContain("Put a character into play");
     expect(description).not.toContain("Your discard pile");
     expect(description).toContain(
-      glossary.requireGlossaryEntry("materialized-trigger").definition,
+      glossary.requireGlossaryEntry("a70ebef7-797a-491b-a888-382a0d7a7656")
+        .definition,
     );
 
     act(() => root.unmount());
@@ -153,15 +154,18 @@ describe("GameCard reveal contract", () => {
     const description = document.getElementById(
       source?.getAttribute("aria-describedby") ?? "",
     )?.textContent ?? "";
+    const numericGlossaryIds: readonly string[] = [
+      glossary.GLOSSARY_IDS.erode,
+      glossary.GLOSSARY_IDS.foresee,
+      glossary.GLOSSARY_IDS.reclaim,
+    ];
     const numericEntries = extractContextualGlossaryTerms(renderedText).filter(
-      (entry) => ["erode", "foresee", "reclaim"].includes(entry.id),
+      (entry) => numericGlossaryIds.includes(entry.id),
     );
 
-    expect(numericEntries.map((entry) => entry.id)).toEqual([
-      "erode",
-      "foresee",
-      "reclaim",
-    ]);
+    expect(numericEntries.map((entry) => entry.id)).toEqual(
+      numericGlossaryIds,
+    );
     for (const entry of numericEntries) {
       expect(description).toContain(entry.term);
       expect(description).toContain(entry.definition);
@@ -188,7 +192,10 @@ describe("GameCard reveal contract", () => {
       glossary.requireGlossaryEntry(glossary.GLOSSARY_IDS.exhausted).definition,
     );
     expect(description.indexOf("Exhausted")).toBeLessThan(
-      description.indexOf(glossary.requireGlossaryEntry("bane").definition),
+      description.indexOf(
+        glossary.requireGlossaryEntry("a9799416-d2d4-4f1b-a3b5-fec790119fae")
+          .definition,
+      ),
     );
 
     act(() => {
@@ -235,7 +242,10 @@ describe("GameCard reveal contract", () => {
       glossary.requireGlossaryEntry(glossary.GLOSSARY_IDS.figment).definition,
     );
     expect(description.indexOf("Figment")).toBeLessThan(
-      description.indexOf(glossary.requireGlossaryEntry("bane").definition),
+      description.indexOf(
+        glossary.requireGlossaryEntry("a9799416-d2d4-4f1b-a3b5-fec790119fae")
+          .definition,
+      ),
     );
 
     act(() => {

@@ -1,5 +1,7 @@
 import type { GlossaryCatalogEntry } from "../data/glossary";
+import { EditorApiRequestError } from "./editor-api";
 import { confirmSourceRevision, queueSourceSave, withExpectedSourceRevision } from "./source-revision";
+import type { EditorApiErrorBody } from "./types";
 
 const SOURCE = "glossary";
 
@@ -11,17 +13,32 @@ export interface GlossaryEntryEdit {
   readonly termPresentation?: GlossaryCatalogEntry["termPresentation"] | null;
 }
 
-interface GlossaryApiErrorBody {
-  readonly error?: { readonly message?: string };
+function readApiError(body: unknown): EditorApiErrorBody["error"] | undefined {
+  if (
+    body !== null &&
+    typeof body === "object" &&
+    "error" in body &&
+    body.error !== null &&
+    typeof body.error === "object"
+  ) {
+    return body.error;
+  }
+  return undefined;
 }
 
 async function readResponse<T>(response: Response): Promise<T> {
-  const body = (await response.json()) as T & GlossaryApiErrorBody;
+  const body = (await response.json()) as T;
   if (!response.ok) {
-    throw new Error(
-      body.error?.message ??
-        `Glossary editor request failed with ${String(response.status)}.`,
-    );
+    const apiError = readApiError(body);
+    throw new EditorApiRequestError({
+      code: apiError?.code,
+      details: apiError?.details,
+      message:
+        typeof apiError?.message === "string"
+          ? apiError.message
+          : `Glossary editor request failed with ${String(response.status)}.`,
+      status: response.status,
+    });
   }
   return body;
 }

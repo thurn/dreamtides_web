@@ -14,6 +14,7 @@ import type {
 import { LayerName } from "../types/layer-name";
 import { SITE_TYPES } from "../types/site-type";
 import type { SitesData } from "../types/sites-data";
+import { GLOSSARY_IDS } from "../data/glossary";
 
 /**
  * Shared synthetic Atlas fixtures plus explicit production-bundle loaders for
@@ -69,22 +70,7 @@ const SYNTHETIC_SITE_TYPES = Object.fromEntries(
     type,
     {
       icon: `fixture-icon-${type}`,
-      glossaryId: {
-        Battle: "site-battle",
-        Draft: "site-draft",
-        Shop: "site-shop",
-        Purge: "site-purge",
-        Essence: "site-essence",
-        Transfiguration: "site-transfiguration",
-        Duplication: "site-duplication",
-        Reward: "site-reward",
-        Augury: "site-augury",
-        DreamsignMarket: "site-dreamsign-market",
-        DreamsignRevelation: "site-dreamsign-revelation",
-        RandomSite: "site-random-site",
-        Gamble: "site-gamble",
-        Exploration: "site-exploration",
-      }[type],
+      glossaryId: GLOSSARY_IDS.sites[type],
     },
   ]),
 ) as SitesData["siteTypes"];
