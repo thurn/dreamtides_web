@@ -381,7 +381,11 @@ AuguryCatalog(
 
     ArchetypeDefinition(
       id: "71ec2bb5-b0d7-481f-9233-6b3e4052bade",
-      behavior: DreamsignDraft(selection_policy: DreamsignMatch, minimum_chooser_size: 2, maximum_chooser_size: 4),
+      behavior: DreamsignDraft(
+        selection_policy: DreamsignMatch,
+        minimum_chooser_size: 2,
+        maximum_chooser_size: 4,
+      ),
       enabled: false,
       weight: 6,
       dialogue_lines: [
