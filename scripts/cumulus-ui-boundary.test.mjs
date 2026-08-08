@@ -8,7 +8,9 @@ import ts from "typescript";
 import {
   OUTER_UI_FILE_ROLES,
   OUTER_UI_ROLE_VALUES,
+  LOCALIZATION_NON_REACT_PRODUCER_FILES,
   isStrictCompositionFile,
+  isPlayerLocalizationFile,
   isUniversalUiFile,
 } from "../eslint-rules/ui-boundary-roles.js";
 
@@ -152,6 +154,14 @@ describe("Cumulus UI boundary", () => {
     expect(isStrictCompositionFile("src/editor/CardEditorApp.tsx", [])).toBe(false);
     expect(isUniversalUiFile("src/editor/CardEditorApp.tsx")).toBe(true);
     expect(isUniversalUiFile("src/vendor/boxicons/boxicons.css")).toBe(false);
+  });
+
+  it("protects the normal Journey utility chrome from localization escapes", () => {
+    expect(LOCALIZATION_NON_REACT_PRODUCER_FILES).toContain(
+      "src/components/JourneyUtilityMenuController.ts",
+    );
+    expect(isPlayerLocalizationFile("src/components/DreamscapeJourneyMenu.tsx")).toBe(true);
+    expect(isPlayerLocalizationFile("src/components/JourneyUtilityMenuController.ts")).toBe(true);
   });
 
   it("keeps deleted player UI out of gameplay routing", () => {

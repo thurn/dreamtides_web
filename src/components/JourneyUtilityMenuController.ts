@@ -3,6 +3,8 @@
 // Cumulus owns every rendered menu surface and interaction detail.
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useMessages } from "../cumulus/hooks/use-messages";
+import type { FluentMessageDescriptor } from "../data/localization-messages";
 import { downloadLog, logEvent } from "../logging";
 import { BUILD_GIT_SHA } from "../runtime/build-info";
 import {
@@ -12,6 +14,7 @@ import {
 import { useJourney } from "../state/journey-context";
 import type {
   CommandMenuAction,
+  CommandMenuCopy,
   CommandMenuGroup,
   CommandMenuItem,
 } from "../cumulus/components/overlay/CommandMenu";
@@ -32,7 +35,7 @@ export interface JourneyUtilityMenuViewModel {
   /** Root commands and groups, with named glyphs and semantic callbacks. */
   actions: readonly CommandMenuItem[];
   /** A transient result Cumulus presents beneath the trigger. */
-  status: string | null;
+  status: CommandMenuCopy | null;
 }
 
 /** Inputs that wire journey-specific effects into the pure utility-menu model. */
@@ -40,7 +43,7 @@ export interface BuildJourneyUtilityMenuViewModelInput {
   actions: readonly JourneyUtilityMenuAction[];
   builtIns: readonly JourneyUtilityMenuBuiltIn[];
   canLoadJourney: boolean;
-  status: string | null;
+  status: CommandMenuCopy | null;
   onSaveJourney: () => void;
   onLoadJourney: () => void;
   onDownloadLog: () => void;
@@ -64,15 +67,15 @@ export function buildJourneyUtilityMenuViewModel({
   const builtInActions = builtIns.flatMap((builtIn): readonly CommandMenuItem[] => {
     switch (builtIn) {
       case "saveJourney":
-        return [{ kind: "action", id: "saveJourney", label: "Save Journey", glyph: GLYPHS.save, onCommand: onSaveJourney }];
+        return [{ kind: "action", id: "saveJourney", label: { id: "journey-menu-save-action" }, glyph: GLYPHS.save, onCommand: onSaveJourney }];
       case "loadJourney":
         return canLoadJourney
-          ? [{ kind: "action", id: "loadJourney", label: "Load Journey", glyph: GLYPHS.folderOpen, onCommand: onLoadJourney }]
+          ? [{ kind: "action", id: "loadJourney", label: { id: "journey-menu-load-action" }, glyph: GLYPHS.folderOpen, onCommand: onLoadJourney }]
           : [];
       case "downloadLog":
-        return [{ kind: "action", id: "downloadLog", label: "Download Log", glyph: GLYPHS.download, onCommand: onDownloadLog }];
+        return [{ kind: "action", id: "downloadLog", label: { id: "journey-menu-download-log-action" }, glyph: GLYPHS.download, onCommand: onDownloadLog }];
       case "buildSha":
-        return [{ kind: "action", id: "buildSha", label: "Build SHA", glyph: GLYPHS.code, onCommand: onViewBuildSha }];
+        return [{ kind: "action", id: "buildSha", label: { id: "journey-menu-build-sha-action" }, glyph: GLYPHS.code, onCommand: onViewBuildSha }];
     }
   });
 
@@ -101,15 +104,16 @@ export function useJourneyUtilityMenuController({
   loadSource,
 }: JourneyUtilityMenuControllerOptions): JourneyUtilityMenuViewModel {
   const { state } = useJourney();
-  const [status, setStatus] = useState<string | null>(null);
+  const t = useMessages();
+  const [status, setStatus] = useState<FluentMessageDescriptor | null>(null);
   const statusTimerRef = useRef<number | null>(null);
 
   useEffect(() => () => {
     if (statusTimerRef.current !== null) clearTimeout(statusTimerRef.current);
   }, []);
 
-  function flashStatus(text: string): void {
-    setStatus(text);
+  function flashStatus(descriptor: FluentMessageDescriptor): void {
+    setStatus(descriptor);
     if (statusTimerRef.current !== null) clearTimeout(statusTimerRef.current);
     statusTimerRef.current = window.setTimeout(() => {
       setStatus(null);
@@ -118,11 +122,11 @@ export function useJourneyUtilityMenuController({
   }
 
   function handleSaveJourney(): void {
-    const entered = window.prompt("Save current journey as:");
+    const entered = window.prompt(t("journey-menu-save-prompt"));
     if (entered === null) return;
     const trimmed = entered.trim();
     if (trimmed === "") {
-      flashStatus("Save cancelled: a name is required.");
+      flashStatus({ id: "journey-menu-save-cancelled" });
       return;
     }
     try {
@@ -134,15 +138,22 @@ export function useJourneyUtilityMenuController({
         fileName,
         formatVersion: save.version,
       });
-      flashStatus(`Downloaded "${fileName}".`);
+      flashStatus({ id: "journey-menu-save-downloaded", variables: { fileName } });
     } catch (error) {
-      flashStatus(error instanceof Error ? error.message : "Failed to save journey.");
+      flashStatus({
+        id: "journey-menu-save-error",
+        variables: {
+          detail: error instanceof Error && error.message !== ""
+            ? error.message
+            : t("journey-menu-save-generic-error"),
+        },
+      });
     }
   }
 
   async function handleLoadJourney(): Promise<void> {
     if (onLoadJourneyState === undefined) {
-      flashStatus("Loading is unavailable in this context.");
+      flashStatus({ id: "journey-menu-load-unavailable" });
       return;
     }
     try {
@@ -156,9 +167,16 @@ export function useJourneyUtilityMenuController({
         buildGitSha: loaded.buildGitSha,
       });
       onLoadJourneyState(loaded.journeyState, loadSource);
-      flashStatus(`Loaded "${loaded.name}".`);
+      flashStatus({ id: "journey-menu-load-loaded", variables: { name: loaded.name } });
     } catch (error) {
-      flashStatus(error instanceof Error ? error.message : "Failed to load journey.");
+      flashStatus({
+        id: "journey-menu-load-error",
+        variables: {
+          detail: error instanceof Error && error.message !== ""
+            ? error.message
+            : t("journey-menu-load-generic-error"),
+        },
+      });
     }
   }
 
@@ -172,7 +190,7 @@ export function useJourneyUtilityMenuController({
     onDownloadLog: downloadLog,
     onViewBuildSha: () => {
       logEvent("build_sha_viewed", { source: "dreamscape_menu", gitSha: BUILD_GIT_SHA });
-      flashStatus(`Build Git SHA: ${BUILD_GIT_SHA}`);
+      flashStatus({ id: "journey-menu-build-sha-status", variables: { gitSha: BUILD_GIT_SHA } });
     },
-  }), [actions, builtIns, onLoadJourneyState, status]);
+  }), [actions, builtIns, onLoadJourneyState, status, t]);
 }

@@ -110,32 +110,22 @@ function describeConfig(
   const defaultValue = (): ConfigDisplayValue =>
     createMessageDescriptor("coop-config-default");
   if (config === undefined) {
+    const unavailableRows = [
+      { kind: "pool", label: createMessageDescriptor("coop-config-pool-label") },
+      { kind: "draft", label: createMessageDescriptor("coop-config-draft-label") },
+      { kind: "pack-size", label: createMessageDescriptor("coop-config-pack-size-label") },
+      { kind: "atlas", label: createMessageDescriptor("coop-config-atlas-rules-label") },
+      { kind: "site", label: createMessageDescriptor("coop-config-site-rules-label") },
+      { kind: "draft-rules", label: createMessageDescriptor("coop-config-draft-rules-label") },
+      { kind: "economy", label: createMessageDescriptor("coop-config-economy-rules-label") },
+      { kind: "opponent", label: createMessageDescriptor("coop-config-opponent-rules-label") },
+      { kind: "tutorial", label: createMessageDescriptor("coop-config-tutorial-rules-label") },
+    ] as const;
     return [
-      ...[
-        "pool",
-        "draft",
-        "pack-size",
-        "atlas",
-        "site",
-        "draft-rules",
-        "economy",
-        "opponent",
-        "tutorial",
-      ].map((kind) => ({
-        label: createMessageDescriptor(
-          `coop-config-${kind}-label` as
-            | "coop-config-pool-label"
-            | "coop-config-draft-label"
-            | "coop-config-pack-size-label"
-            | "coop-config-atlas-rules-label"
-            | "coop-config-site-rules-label"
-            | "coop-config-draft-rules-label"
-            | "coop-config-economy-rules-label"
-            | "coop-config-opponent-rules-label"
-            | "coop-config-tutorial-rules-label",
-        ),
+      ...unavailableRows.map(({ kind, label }) => ({
+        label,
         value: unavailable(),
-        comparisonKey: "unavailable",
+        comparisonKey: kind,
       })),
     ];
   }

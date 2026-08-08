@@ -52,7 +52,70 @@ afterAll(() => {
 });
 
 describe("replay fixtures", () => {
-  it("round-trips a descriptor-bearing pending prompt through compaction", () => {
+  it.each([
+    {
+      name: "pick-cards",
+      prompt: {
+        promptId: 17,
+        run: { scriptRef: { table: "battle", id: "synthetic-picker" }, cursor: [3, 1], side: "player" },
+        kind: "pick-cards",
+        options: {
+          kind: "pick-cards",
+          label: createMessageDescriptor("battle-prompt-discard-cards", { count: 2 }),
+          subtitle: createMessageDescriptor("battle-prompt-choose-void-card-reclaim-subtitle"),
+          candidateIds: ["card-a", "card-b", "card-c"],
+          count: 2,
+          optional: true,
+          highlightCardIds: ["card-c"],
+        },
+      },
+    },
+    {
+      name: "choice",
+      prompt: {
+        promptId: 18,
+        run: { scriptRef: { table: "battle", id: "synthetic-choice" }, cursor: [2], side: "enemy" },
+        kind: "choice",
+        options: {
+          kind: "choice",
+          label: createMessageDescriptor("battle-prompt-choose-one"),
+          options: [
+            { label: createMessageDescriptor("battle-prompt-draw-card") },
+            { label: createMessageDescriptor("battle-prompt-gain-energy", { amount: 2 }) },
+          ],
+        },
+      },
+    },
+    {
+      name: "confirm-materialized-choice",
+      prompt: {
+        promptId: 19,
+        run: { scriptRef: { table: "dreamwell", id: "synthetic-confirm" }, cursor: [0, 4], side: "player" },
+        kind: "confirm",
+        options: {
+          kind: "choice",
+          label: createMessageDescriptor("battle-prompt-discard-hand-redraw"),
+          options: [
+            { label: createMessageDescriptor("battle-prompt-confirm-yes") },
+            { label: createMessageDescriptor("battle-prompt-confirm-skip") },
+          ],
+        },
+      },
+    },
+    {
+      name: "foresee",
+      prompt: {
+        promptId: 20,
+        run: { scriptRef: { table: "dreamwell", id: "synthetic-foresee" }, cursor: [5], side: "player" },
+        kind: "foresee",
+        options: {
+          kind: "foresee",
+          count: 3,
+          cardIds: ["card-d", "card-e", "card-f"],
+        },
+      },
+    },
+  ] as const)("$name preserves every prompt field through compaction", ({ prompt }) => {
     const base = GAME_ENGINE_CONFIG.genesisState(journeyOnly.genesis);
     const state: FoldState = {
       ...base,
@@ -60,21 +123,14 @@ describe("replay fixtures", () => {
         init: {} as never,
         board: {} as never,
         effectQueue: [],
-        pendingPrompt: {
-          promptId: 17,
-          run: { scriptRef: { table: "battle", id: "synthetic" }, cursor: [0], side: "player" },
-          kind: "choice",
-          options: {
-            kind: "choice",
-            label: createMessageDescriptor("battle-prompt-choose-one"),
-            options: [{ label: createMessageDescriptor("battle-prompt-confirm-yes") }],
-          },
-        },
+        pendingPrompt: prompt as never,
         dawnFired: {} as never,
       },
     };
     const decoded = GAME_ENGINE_CONFIG.decode(GAME_ENGINE_CONFIG.encode(state));
-    expect(decoded.battle?.pendingPrompt).toEqual(state.battle?.pendingPrompt);
+    expect(decoded.battle?.pendingPrompt).toEqual(prompt);
+    expect(decoded.battle?.pendingPrompt?.run.cursor).toEqual(prompt.run.cursor);
+    expect(decoded.battle?.pendingPrompt?.options).toEqual(prompt.options);
   });
 
   it("normalizes every compacted Bane reference to Nightmare", () => {

@@ -55,7 +55,7 @@ describe("appLocalization", () => {
         ).not.toBe("");
       }
     }
-    for (const form of [
+    const forms = [
       "Empowered",
       "Amplified",
       "Kindled",
@@ -65,13 +65,24 @@ describe("appLocalization", () => {
       "Resonant",
       "Attuned",
       "Perfected",
-    ]) {
-      expect(
-        appLocalization.getString("exploration-card-transfiguring", {
+    ] as const;
+    const formMessages = [
+      "exploration-card-transfiguring",
+      "card-transfiguration-badge",
+      "card-rules-transfiguration-changed",
+      "transfiguration-form-choice",
+      "transfiguration-form-name",
+    ] as const;
+    for (const id of formMessages) {
+      for (const form of forms) {
+        const formatted = appLocalization.getString(id, {
           cardName: "Fixture",
+          essenceCost: 0,
           form,
-        }),
-      ).not.toBe("");
+        });
+        expect(formatted).not.toBe("");
+        expect(formatted).not.toContain(id);
+      }
     }
   });
 

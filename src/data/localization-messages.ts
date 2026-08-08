@@ -70,6 +70,27 @@ export const FLUENT_MESSAGE_IDS = [
   "command-menu-back-action",
   "command-menu-empty-state",
   "command-menu-invalid-integer",
+  "journey-menu-view-deck-action",
+  "journey-menu-pool-viewer-action",
+  "journey-menu-package-debug-action",
+  "journey-menu-card-sources-action",
+  "journey-menu-edit-state-action",
+  "journey-menu-regenerate-atlas-action",
+  "journey-menu-open-action",
+  "journey-menu-save-action",
+  "journey-menu-load-action",
+  "journey-menu-download-log-action",
+  "journey-menu-build-sha-action",
+  "journey-menu-save-prompt",
+  "journey-menu-save-cancelled",
+  "journey-menu-save-downloaded",
+  "journey-menu-save-error",
+  "journey-menu-save-generic-error",
+  "journey-menu-load-unavailable",
+  "journey-menu-load-loaded",
+  "journey-menu-load-error",
+  "journey-menu-load-generic-error",
+  "journey-menu-build-sha-status",
   "tutorial-region-battle",
   "tutorial-region-card",
   "tutorial-region-site",
@@ -169,6 +190,12 @@ export const FLUENT_MESSAGE_IDS = [
   "battle-zone-browser-close",
   "battle-zone-browser-empty",
   "battle-zone-browser-no-filter-matches",
+  "exploration-deck-modification-spark",
+  "exploration-deck-modification-fast",
+  "exploration-deck-modification-energy-cost",
+  "exploration-deck-modification-subtype",
+  "exploration-deck-modification-subtype-unavailable",
+  "exploration-deck-modification-reclaim",
   "exploration-outcome-rewards-gained",
   "exploration-outcome-cards-purging",
   "exploration-outcome-purge-and-gain",
@@ -651,6 +678,29 @@ export interface FluentMessageArgumentsById {
   readonly "command-menu-back-action": never;
   readonly "command-menu-empty-state": never;
   readonly "command-menu-invalid-integer": never;
+  readonly "journey-menu-view-deck-action": never;
+  readonly "journey-menu-pool-viewer-action": never;
+  readonly "journey-menu-package-debug-action": never;
+  readonly "journey-menu-card-sources-action": never;
+  readonly "journey-menu-edit-state-action": never;
+  readonly "journey-menu-regenerate-atlas-action": never;
+  readonly "journey-menu-open-action": never;
+  readonly "journey-menu-save-action": never;
+  readonly "journey-menu-load-action": never;
+  readonly "journey-menu-download-log-action": never;
+  readonly "journey-menu-build-sha-action": never;
+  readonly "journey-menu-save-prompt": never;
+  readonly "journey-menu-save-cancelled": never;
+  readonly "journey-menu-save-downloaded": {
+    readonly fileName: FluentVariable;
+  };
+  readonly "journey-menu-save-error": { readonly detail: FluentVariable };
+  readonly "journey-menu-save-generic-error": never;
+  readonly "journey-menu-load-unavailable": never;
+  readonly "journey-menu-load-loaded": { readonly name: FluentVariable };
+  readonly "journey-menu-load-error": { readonly detail: FluentVariable };
+  readonly "journey-menu-load-generic-error": never;
+  readonly "journey-menu-build-sha-status": { readonly gitSha: FluentVariable };
   readonly "tutorial-region-battle": never;
   readonly "tutorial-region-card": never;
   readonly "tutorial-region-site": never;
@@ -771,6 +821,18 @@ export interface FluentMessageArgumentsById {
   readonly "battle-zone-browser-close": { readonly zone: FluentVariable };
   readonly "battle-zone-browser-empty": never;
   readonly "battle-zone-browser-no-filter-matches": never;
+  readonly "exploration-deck-modification-spark": {
+    readonly amount: FluentVariable;
+  };
+  readonly "exploration-deck-modification-fast": never;
+  readonly "exploration-deck-modification-energy-cost": {
+    readonly amount: FluentVariable;
+  };
+  readonly "exploration-deck-modification-subtype": {
+    readonly subtype: FluentVariable;
+  };
+  readonly "exploration-deck-modification-subtype-unavailable": never;
+  readonly "exploration-deck-modification-reclaim": never;
   readonly "exploration-outcome-rewards-gained": {
     readonly rewardCount: FluentVariable;
   };
@@ -1576,6 +1638,27 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "command-menu-back-action": [] as const,
   "command-menu-empty-state": [] as const,
   "command-menu-invalid-integer": [] as const,
+  "journey-menu-view-deck-action": [] as const,
+  "journey-menu-pool-viewer-action": [] as const,
+  "journey-menu-package-debug-action": [] as const,
+  "journey-menu-card-sources-action": [] as const,
+  "journey-menu-edit-state-action": [] as const,
+  "journey-menu-regenerate-atlas-action": [] as const,
+  "journey-menu-open-action": [] as const,
+  "journey-menu-save-action": [] as const,
+  "journey-menu-load-action": [] as const,
+  "journey-menu-download-log-action": [] as const,
+  "journey-menu-build-sha-action": [] as const,
+  "journey-menu-save-prompt": [] as const,
+  "journey-menu-save-cancelled": [] as const,
+  "journey-menu-save-downloaded": ["fileName"] as const,
+  "journey-menu-save-error": ["detail"] as const,
+  "journey-menu-save-generic-error": [] as const,
+  "journey-menu-load-unavailable": [] as const,
+  "journey-menu-load-loaded": ["name"] as const,
+  "journey-menu-load-error": ["detail"] as const,
+  "journey-menu-load-generic-error": [] as const,
+  "journey-menu-build-sha-status": ["gitSha"] as const,
   "tutorial-region-battle": [] as const,
   "tutorial-region-card": [] as const,
   "tutorial-region-site": [] as const,
@@ -1675,6 +1758,12 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "battle-zone-browser-close": ["zone"] as const,
   "battle-zone-browser-empty": [] as const,
   "battle-zone-browser-no-filter-matches": [] as const,
+  "exploration-deck-modification-spark": ["amount"] as const,
+  "exploration-deck-modification-fast": [] as const,
+  "exploration-deck-modification-energy-cost": ["amount"] as const,
+  "exploration-deck-modification-subtype": ["subtype"] as const,
+  "exploration-deck-modification-subtype-unavailable": [] as const,
+  "exploration-deck-modification-reclaim": [] as const,
   "exploration-outcome-rewards-gained": ["rewardCount"] as const,
   "exploration-outcome-cards-purging": ["purgedCardCount"] as const,
   "exploration-outcome-purge-and-gain": [
@@ -2258,6 +2347,22 @@ export type FluentMessageIdsWithoutVariables = [
   "command-menu-back-action",
   "command-menu-empty-state",
   "command-menu-invalid-integer",
+  "journey-menu-view-deck-action",
+  "journey-menu-pool-viewer-action",
+  "journey-menu-package-debug-action",
+  "journey-menu-card-sources-action",
+  "journey-menu-edit-state-action",
+  "journey-menu-regenerate-atlas-action",
+  "journey-menu-open-action",
+  "journey-menu-save-action",
+  "journey-menu-load-action",
+  "journey-menu-download-log-action",
+  "journey-menu-build-sha-action",
+  "journey-menu-save-prompt",
+  "journey-menu-save-cancelled",
+  "journey-menu-save-generic-error",
+  "journey-menu-load-unavailable",
+  "journey-menu-load-generic-error",
   "tutorial-region-battle",
   "tutorial-region-card",
   "tutorial-region-site",
@@ -2337,6 +2442,9 @@ export type FluentMessageIdsWithoutVariables = [
   "battle-zone-browser-shared-banished-title",
   "battle-zone-browser-empty",
   "battle-zone-browser-no-filter-matches",
+  "exploration-deck-modification-fast",
+  "exploration-deck-modification-subtype-unavailable",
+  "exploration-deck-modification-reclaim",
   "battle-prompt-discover-character",
   "battle-prompt-rematerialize-ally",
   "battle-prompt-choose-void-card-reclaim",
@@ -2578,6 +2686,11 @@ export type FluentMessageIdsWithoutVariables = [
 ][number];
 export type FluentMessageIdsWithVariables = [
   "application-loading-saved-journey-message",
+  "journey-menu-save-downloaded",
+  "journey-menu-save-error",
+  "journey-menu-load-loaded",
+  "journey-menu-load-error",
+  "journey-menu-build-sha-status",
   "dreamscape-draft-label",
   "coop-joining-game-message",
   "coop-loading-game-message",
@@ -2598,6 +2711,9 @@ export type FluentMessageIdsWithVariables = [
   "battle-zone-browser-viewer-option",
   "battle-zone-browser-opponent-option",
   "battle-zone-browser-close",
+  "exploration-deck-modification-spark",
+  "exploration-deck-modification-energy-cost",
+  "exploration-deck-modification-subtype",
   "exploration-outcome-rewards-gained",
   "exploration-outcome-cards-purging",
   "exploration-outcome-purge-and-gain",

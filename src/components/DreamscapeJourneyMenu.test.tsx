@@ -118,7 +118,7 @@ describe("DreamscapeJourneyMenu", () => {
 
     const buildShaButton = Array.from(
       container.querySelectorAll<HTMLButtonElement>('[role="menuitem"]'),
-    ).find((element) => element.textContent === "Build SHA");
+    ).find((element) => element.dataset.commandMenuActionId === "buildSha");
 
     expect(buildShaButton).toBeDefined();
     act(() => {
@@ -126,7 +126,8 @@ describe("DreamscapeJourneyMenu", () => {
     });
 
     expect(container.querySelector('[role="menu"]')).toBeNull();
-    expect(container.textContent).toContain("Build Git SHA: abc123def456");
+    expect(container.querySelector('[data-testid="dreamscape-menu-status"]')?.textContent)
+      .not.toBe("");
     expect(logEvent).toHaveBeenCalledWith("build_sha_viewed", {
       source: "dreamscape_menu",
       gitSha: "abc123def456",

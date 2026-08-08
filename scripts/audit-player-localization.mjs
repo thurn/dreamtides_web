@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import { isPlayerLocalizationFile } from "../eslint-rules/ui-boundary-roles.js";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const COPY_SHAPE = /(?:label|title|subtitle|message|description|detail|placeholder|alt|emptyLabel|busyLabel|effectText|aria-label|ariaLabel)\s*[:=]\s*(["'`][^"'`\n]*["'`])/u;
+const COPY_SHAPE = /(?:label|title|subtitle|message|description|detail|placeholder|alt|emptyLabel|busyLabel|effectText|headline|aria-label|ariaLabel)\s*[:=]\s*(["'`][^"'`\n]*["'`])/u;
 
 const EXCLUDED_PREFIXES = [
   "src/cumulus/docs/",
@@ -17,8 +17,6 @@ const EXCLUDED_PREFIXES = [
   "src/battle/components/BattleContextMenu.tsx",
   "src/battle/test-support.ts",
   "src/components/AuguryJourneyMenu.ts",
-  "src/components/DreamscapeJourneyMenu.tsx",
-  "src/components/JourneyUtilityMenuController.ts",
   "src/coop/EventLogViewer.tsx",
   "src/cumulus/components/overlay/DeveloperRail.tsx",
   "src/cumulus/internal/reveal/test-utils.tsx",

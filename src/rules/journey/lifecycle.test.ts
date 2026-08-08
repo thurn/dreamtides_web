@@ -674,6 +674,51 @@ describe("LOAD_STATE", () => {
     ]);
   });
 
+  it("preserves the known Reclaim subtitle when importing a legacy battle through LOAD_STATE", () => {
+    const start = genesis();
+    const snapshot: JourneyState = { ...start.journey };
+    const battle = {
+      ...emptyBattle,
+      pendingPrompt: {
+        promptId: 12,
+        kind: "pick-cards",
+        run: {
+          scriptRef: {
+            table: "dreamwell",
+            id: "14dec460-3ec6-40c1-978f-67e70cb0b227",
+          },
+          cursor: [0],
+          side: "player",
+        },
+        options: {
+          kind: "pick-cards",
+          label: "Choose a void card to gain Reclaim",
+          subtitle: "You may play it from your void this turn, then banish it.",
+          candidateIds: ["void-card-a", "void-card-b"],
+          count: 1,
+          optional: false,
+          highlightCardIds: ["void-card-b"],
+        },
+      },
+    };
+
+    const loaded = apply(start, "LOAD_STATE", { snapshot, battle });
+    expect(loaded.battle?.pendingPrompt).toMatchObject({
+      promptId: 12,
+      kind: "pick-cards",
+      run: battle.pendingPrompt.run,
+      options: {
+        kind: "pick-cards",
+        label: { id: "battle-prompt-choose-void-card-reclaim" },
+        subtitle: { id: "battle-prompt-choose-void-card-reclaim-subtitle" },
+        candidateIds: ["void-card-a", "void-card-b"],
+        count: 1,
+        optional: false,
+        highlightCardIds: ["void-card-b"],
+      },
+    });
+  });
+
   it("replaces journey state with a valid snapshot and sets a well-formed battle", () => {
     const start = genesis();
     const snapshot: JourneyState = {

@@ -3,6 +3,7 @@
 // renders its root actions here as app-shell corner chrome.
 
 import type { JourneyState } from "../types/journey";
+import { createMessageDescriptor } from "../data/localization-descriptors";
 import { GLYPHS } from "../cumulus/primitives/glyph";
 import { useIsDesktop } from "../cumulus/screens/use-is-desktop";
 import { MENU_BUTTON_PX } from "../cumulus/screens/chrome-geometry";
@@ -77,14 +78,14 @@ export function DreamscapeJourneyMenu({
       id: "deck",
       kind: "action",
       glyph: GLYPHS.affiliationRow,
-      label: "View Deck",
+      label: createMessageDescriptor("journey-menu-view-deck-action"),
       onCommand: onOpenDeckViewer,
     },
     {
       id: "pool",
       kind: "action",
       glyph: GLYPHS.grid,
-      label: "Pool Viewer",
+      label: createMessageDescriptor("journey-menu-pool-viewer-action"),
       onCommand: onOpenPoolViewer,
     },
     ...(hasDraftData
@@ -93,7 +94,7 @@ export function DreamscapeJourneyMenu({
             id: "package",
             kind: "action" as const,
             glyph: GLYPHS.package,
-            label: "Package Debug",
+            label: createMessageDescriptor("journey-menu-package-debug-action"),
             onCommand: onOpenDebugScreen,
           },
         ]
@@ -104,7 +105,7 @@ export function DreamscapeJourneyMenu({
             id: "cardSource",
             kind: "action" as const,
             glyph: GLYPHS.list,
-            label: "Card Sources",
+            label: createMessageDescriptor("journey-menu-card-sources-action"),
             active: isCardSourceOverlayOpen,
             onCommand: onToggleCardSourceOverlay,
           },
@@ -115,7 +116,7 @@ export function DreamscapeJourneyMenu({
       id: "editor",
       kind: "action",
       glyph: GLYPHS.edit,
-      label: "Edit Journey State",
+      label: createMessageDescriptor("journey-menu-edit-state-action"),
       onCommand: onOpenJourneyEditor,
     },
     ...(onRegenerateAtlas !== undefined
@@ -124,7 +125,7 @@ export function DreamscapeJourneyMenu({
             id: "regenerateAtlas",
             kind: "action" as const,
             glyph: GLYPHS.refresh,
-            label: "Regenerate Atlas",
+            label: createMessageDescriptor("journey-menu-regenerate-atlas-action"),
             onCommand: onRegenerateAtlas,
           },
         ]
@@ -145,7 +146,7 @@ export function DreamscapeJourneyMenu({
         kind: "appChrome",
         trigger: {
           glyph: isDesktop ? GLYPHS.gear : GLYPHS.menu,
-          label: "Open menu",
+          label: createMessageDescriptor("journey-menu-open-action"),
           corner: isDesktop ? "topEnd" : "topStart",
         },
         actions: model.actions,

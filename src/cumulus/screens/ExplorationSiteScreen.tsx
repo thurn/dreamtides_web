@@ -204,11 +204,7 @@ export type ExplorationRewardView =
       readonly sourceActionId: string;
     };
 
-export interface ExplorationDeckModificationView {
-  /** Semantic modifier used for the announcement and QA contract. */
-  readonly kind: "spark" | "fast" | "energy-cost" | "subtype" | "reclaim";
-  /** Compact center copy for the radial announcement. */
-  readonly headline: string;
+interface ExplorationDeckModificationViewBase {
   /** Complete authored effect copy exposed to assistive technology. */
   readonly announcement: string;
   /** Safe complete fallback when the resolved action cannot be reconstructed. */
@@ -218,6 +214,29 @@ export interface ExplorationDeckModificationView {
   /** Exact Reclaim cost by deck-entry UUID for the Reclaim outcome. */
   readonly reclaimCostByEntryId?: Readonly<Record<string, number>>;
 }
+
+export type ExplorationDeckModificationView =
+  | (ExplorationDeckModificationViewBase & {
+      /** Spark amount added to each affected card. */
+      readonly kind: "spark";
+      readonly amount: number;
+    })
+  | (ExplorationDeckModificationViewBase & {
+      readonly kind: "fast";
+    })
+  | (ExplorationDeckModificationViewBase & {
+      /** Energy amount removed from each affected card's cost. */
+      readonly kind: "energy-cost";
+      readonly amount: number;
+    })
+  | (ExplorationDeckModificationViewBase & {
+      /** Authored subtype selected for the affected cards, when available. */
+      readonly kind: "subtype";
+      readonly subtype: string | null;
+    })
+  | (ExplorationDeckModificationViewBase & {
+      readonly kind: "reclaim";
+    });
 
 export interface ExplorationCardChoiceView {
   /** Deck-entry UUID for deck cards, card UUID for catalog offers. */
@@ -460,6 +479,26 @@ function explorationChoiceStyle(
     textAlign: "left",
     opacity: available ? 1 : 0.46,
   };
+}
+
+function explorationDeckModificationHeadline(
+  t: ReturnType<typeof useMessages>,
+  modification: ExplorationDeckModificationView,
+): string {
+  switch (modification.kind) {
+    case "spark":
+      return t("exploration-deck-modification-spark", { amount: modification.amount });
+    case "fast":
+      return t("exploration-deck-modification-fast");
+    case "energy-cost":
+      return t("exploration-deck-modification-energy-cost", { amount: modification.amount });
+    case "subtype":
+      return modification.subtype === null
+        ? t("exploration-deck-modification-subtype-unavailable")
+        : t("exploration-deck-modification-subtype", { subtype: modification.subtype });
+    case "reclaim":
+      return t("exploration-deck-modification-reclaim");
+  }
 }
 
 function ExplorationChoiceContents({
@@ -3499,7 +3538,7 @@ export function ExplorationSiteScreen({
               );
             })}
             <RadialAnnouncement
-              headline={deckModification.headline}
+              headline={explorationDeckModificationHeadline(t, deckModification)}
               headlineGlyph={
                 deckModification.kind === "fast" ? GLYPHS.bolt : undefined
               }

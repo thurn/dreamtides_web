@@ -728,11 +728,32 @@ const LEGACY_PROMPT_DESCRIPTORS: ReadonlyMap<string, FluentMessageDescriptor> =
     ],
   ]);
 
+const LEGACY_RECLAIM_PROMPT_SCRIPT_ID =
+  "14dec460-3ec6-40c1-978f-67e70cb0b227";
+const LEGACY_RECLAIM_PROMPT_SUBTITLE =
+  "You may play it from your void this turn, then banish it.";
+
 function legacyPromptDescriptor(value: unknown): FluentMessageDescriptor {
   return typeof value === "string"
     ? (LEGACY_PROMPT_DESCRIPTORS.get(value) ??
         createMessageDescriptor("battle-prompt-generic"))
     : createMessageDescriptor("battle-prompt-generic");
+}
+
+function isLegacyReclaimPrompt(
+  pendingPrompt: Record<string, unknown>,
+  options: Record<string, unknown>,
+): boolean {
+  if (pendingPrompt.kind !== "pick-cards" || options.kind !== "pick-cards") {
+    return false;
+  }
+  if (!isRecord(pendingPrompt.run) || !isRecord(pendingPrompt.run.scriptRef)) {
+    return false;
+  }
+  return (
+    pendingPrompt.run.scriptRef.table === "dreamwell" &&
+    pendingPrompt.run.scriptRef.id === LEGACY_RECLAIM_PROMPT_SCRIPT_ID
+  );
 }
 
 export function normalizeLegacyPendingPrompt(
@@ -742,12 +763,17 @@ export function normalizeLegacyPendingPrompt(
     return value;
   }
   if (!isRecord(value.pendingPrompt.options)) return value;
+  const pendingPrompt = value.pendingPrompt;
   const options = { ...value.pendingPrompt.options };
   if (typeof options.label === "string") {
     options.label = legacyPromptDescriptor(options.label);
   }
   if (typeof options.subtitle === "string") {
-    options.subtitle = createMessageDescriptor("battle-prompt-generic-subtitle");
+    options.subtitle =
+      options.subtitle === LEGACY_RECLAIM_PROMPT_SUBTITLE ||
+        isLegacyReclaimPrompt(pendingPrompt, options)
+        ? createMessageDescriptor("battle-prompt-choose-void-card-reclaim-subtitle")
+        : createMessageDescriptor("battle-prompt-generic-subtitle");
   }
   if (Array.isArray(options.options)) {
     const legacyOptions: unknown[] = options.options;

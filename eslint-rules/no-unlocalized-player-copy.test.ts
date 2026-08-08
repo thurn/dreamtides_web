@@ -23,6 +23,10 @@ tester.run("no-unlocalized-player-copy", rule, {
     },
     {
       filename: "src/cumulus/screens/FixtureScreen.tsx",
+      code: `const view = { headline: t("fixture-headline") };`,
+    },
+    {
+      filename: "src/cumulus/screens/FixtureScreen.tsx",
       code: `<Button label={t("fixture-action")} title={createMessageDescriptor("fixture-title")} />`,
     },
     {
@@ -84,6 +88,11 @@ tester.run("no-unlocalized-player-copy", rule, {
     {
       filename: "src/cumulus/screens/FixtureScreen.tsx",
       code: `const option = { label: count === 1 ? "Card" : "Cards" };`,
+      errors: [{ messageId: "unlocalized" }],
+    },
+    {
+      filename: "src/cumulus/screens/FixtureScreen.tsx",
+      code: `const reward = { headline: "Fast" };`,
       errors: [{ messageId: "unlocalized" }],
     },
   ],

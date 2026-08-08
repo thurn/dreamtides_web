@@ -28,13 +28,19 @@ import {
   MENU_EDGE_INSET_DESKTOP_PX,
   MENU_EDGE_INSET_MOBILE_PX,
 } from "../../screens/chrome-geometry";
-import { useMessages } from "../../hooks/use-messages";
+import {
+  formatMessageDescriptor,
+  useMessages,
+} from "../../hooks/use-messages";
+import type { FluentMessageDescriptor } from "../../../data/localization-messages";
+
+export type CommandMenuCopy = string | FluentMessageDescriptor;
 
 /** A single command row. `id` is stable domain identity, never display copy. */
 export interface CommandMenuAction {
   kind: "action";
   id: string;
-  label: string;
+  label: CommandMenuCopy;
   glyph: Glyph;
   active?: boolean;
   onCommand: () => void;
@@ -44,7 +50,7 @@ export interface CommandMenuAction {
 export interface CommandMenuGroup {
   kind: "group";
   id: string;
-  label: string;
+  label: CommandMenuCopy;
   glyph: Glyph;
   active?: boolean;
   /** Runs when Cumulus opens this group, before its nested commands are shown. */
@@ -85,14 +91,14 @@ type CommandMenuInteractiveItem = CommandMenuAction | CommandMenuGroup;
 /** The fixed trigger rendered by an app-chrome command menu. */
 export interface CommandMenuTriggerModel {
   glyph: Glyph;
-  label: string;
+  label: CommandMenuCopy;
   corner: "topStart" | "topEnd";
 }
 
 /** A short command result presented beneath an app-chrome trigger. */
 export interface CommandMenuStatusModel {
   /** Player-facing status copy. */
-  text: string;
+  text: CommandMenuCopy;
   /** Optional test selector for the status announcement. */
   testId?: string;
 }
@@ -154,6 +160,13 @@ export function CommandMenu({ model }: CommandMenuProps): ReactElement {
     : <ContextCommandMenu model={model} />;
 }
 
+function formatCommandMenuCopy(
+  t: ReturnType<typeof useMessages>,
+  copy: CommandMenuCopy,
+): string {
+  return typeof copy === "string" ? copy : formatMessageDescriptor(t, copy);
+}
+
 function AppChromeCommandMenu({ model }: { model: CommandMenuAppChromeModel }): ReactElement {
   const {
     trigger,
@@ -165,6 +178,7 @@ function AppChromeCommandMenu({ model }: { model: CommandMenuAppChromeModel }): 
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const hostRef = useRef<HTMLDivElement>(null);
+  const t = useMessages();
   const isDesktop = useIsDesktop();
   const edgeInset = isDesktop
     ? MENU_EDGE_INSET_DESKTOP_PX
@@ -201,7 +215,7 @@ function AppChromeCommandMenu({ model }: { model: CommandMenuAppChromeModel }): 
     >
       <IconButton
         glyph={trigger.glyph}
-        label={trigger.label}
+        label={formatCommandMenuCopy(t, trigger.label)}
         ariaExpanded={open}
         ariaControls={menuId}
         testId={testId}
@@ -231,7 +245,7 @@ function AppChromeCommandMenu({ model }: { model: CommandMenuAppChromeModel }): 
             font: token("--t-caption"),
           }}
         >
-          {status.text}
+          {formatCommandMenuCopy(t, status.text)}
         </div>
       )}
     </div>
@@ -421,6 +435,7 @@ function HierarchicalMenu({
             glyph: GLYPHS.arrowLeft,
             actions: [],
           }}
+          label={t("command-menu-back-action")}
           active
           mobile={mobile}
           onActivate={() => setPath((previous) => previous.slice(0, -1))}
@@ -442,6 +457,7 @@ function HierarchicalMenu({
           <CommandRow
             key={item.id}
             item={item}
+            label={formatCommandMenuCopy(t, item.label)}
             active={index === activeIndex}
             mobile={mobile}
             onActivate={() => choose(item)}
@@ -524,11 +540,13 @@ function SignedIntegerCommand({
 
 function CommandRow({
   item,
+  label,
   active,
   mobile,
   onActivate,
 }: {
   item: CommandMenuInteractiveItem;
+  label: string;
   active: boolean;
   mobile: boolean;
   onActivate: () => void;
@@ -540,6 +558,7 @@ function CommandRow({
     <Pressable
       as="button"
       role="menuitem"
+      data-command-menu-action-id={item.id}
       aria-haspopup={item.kind === "group" ? "menu" : undefined}
       onClick={onActivate}
       style={{
@@ -560,7 +579,7 @@ function CommandRow({
       }}
     >
       <StandaloneGlyph glyph={item.glyph} color="text-primary" />
-      <span>{item.label}</span>
+      <span>{label}</span>
       {item.kind === "group" && <StandaloneGlyph glyph={GLYPHS.chevronRight} color="text-primary" />}
     </Pressable>
   );

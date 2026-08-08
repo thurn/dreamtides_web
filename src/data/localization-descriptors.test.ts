@@ -85,4 +85,12 @@ describe("localization descriptors", () => {
     expect(fallback).not.toContain("not-a-real-message");
     expect(fallback).not.toContain(invalidValue);
   });
+
+  it("rejects non-finite constructor variables before they can cross a boundary", () => {
+    for (const value of [Number.NaN, Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY]) {
+      expect(() =>
+        createMessageDescriptor("journey-complete-stat-battles", { count: value }),
+      ).toThrow(TypeError);
+    }
+  });
 });

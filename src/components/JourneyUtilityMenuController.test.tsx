@@ -133,9 +133,10 @@ describe("useJourneyUtilityMenuController", () => {
         formatVersion: 1,
       }),
     );
-    expect(latest?.status).toBe(
-      'Downloaded "dreamtides-journey-before-atlas.json".',
-    );
+    expect(latest?.status).toEqual({
+      id: "journey-menu-save-downloaded",
+      variables: { fileName: "dreamtides-journey-before-atlas.json" },
+    });
     act(() => root.unmount());
   });
 
@@ -169,7 +170,10 @@ describe("useJourneyUtilityMenuController", () => {
         fileName: "before-atlas.json",
       }),
     );
-    expect(latest?.status).toBe('Loaded "before atlas".');
+    expect(latest?.status).toEqual({
+      id: "journey-menu-load-loaded",
+      variables: { name: "before atlas" },
+    });
     act(() => root.unmount());
   });
 
@@ -185,7 +189,10 @@ describe("useJourneyUtilityMenuController", () => {
       source: "dreamscape_menu",
       gitSha: "abc123def456",
     });
-    expect(latest?.status).toBe("Build Git SHA: abc123def456");
+    expect(latest?.status).toEqual({
+      id: "journey-menu-build-sha-status",
+      variables: { gitSha: "abc123def456" },
+    });
     act(() => root.unmount());
   });
 });

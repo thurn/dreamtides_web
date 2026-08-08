@@ -38,10 +38,11 @@ export function createMessageDescriptor(
   id: FluentMessageId,
   variables?: Readonly<Record<string, PersistedFluentVariable>>,
 ): FluentMessageDescriptor {
-  if (variables === undefined) {
-    return { id } as FluentMessageDescriptor;
+  const descriptor = variables === undefined ? { id } : { id, variables };
+  if (!isFluentMessageDescriptor(descriptor)) {
+    throw new TypeError("Invalid Fluent message descriptor");
   }
-  return { id, variables } as FluentMessageDescriptor;
+  return descriptor;
 }
 
 export function isPersistedFluentVariable(

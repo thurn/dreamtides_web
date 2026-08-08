@@ -15,6 +15,7 @@ const COPY_PROPERTIES = new Set([
   "emptyLabel",
   "busyLabel",
   "effectText",
+  "headline",
   "aria-label",
   "ariaLabel",
   "closeLabel",

@@ -1235,7 +1235,7 @@ function rewardForResolution(
       case "increase-spark-all":
         return {
           kind: "spark" as const,
-          headline: `+${String(resolvedAction.sparkBonus ?? 1)} ✦`,
+          amount: resolvedAction.sparkBonus ?? 1,
           announcement: resolvedEffectText,
           ...(resolvedEffectDescriptor === undefined
             ? {}
@@ -1245,7 +1245,6 @@ function rewardForResolution(
       case "make-fast-all":
         return {
           kind: "fast" as const,
-          headline: "Fast",
           announcement: resolvedEffectText,
           ...(resolvedEffectDescriptor === undefined
             ? {}
@@ -1255,7 +1254,7 @@ function rewardForResolution(
       case "reduce-cost-all-and-gain-nightmares":
         return {
           kind: "energy-cost" as const,
-          headline: `−${String(resolvedAction.energyCostReduction ?? 0)} ●`,
+          amount: resolvedAction.energyCostReduction ?? 0,
           announcement: resolvedEffectText,
           ...(resolvedEffectDescriptor === undefined
             ? {}
@@ -1266,7 +1265,7 @@ function rewardForResolution(
       case "change-subtype-selected":
         return {
           kind: "subtype" as const,
-          headline: resolution.chosenSubtype ?? "Subtype",
+          subtype: resolution.chosenSubtype ?? null,
           announcement: resolvedEffectText,
           ...(resolvedEffectDescriptor === undefined
             ? {}
@@ -1276,7 +1275,6 @@ function rewardForResolution(
       case "purge-duplicates-and-grant-reclaim":
         return {
           kind: "reclaim" as const,
-          headline: "Reclaim",
           announcement: resolvedEffectText,
           ...(resolvedEffectDescriptor === undefined
             ? {}

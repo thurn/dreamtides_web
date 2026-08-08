@@ -15,6 +15,7 @@ import { artRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import {
   ExplorationSiteScreen,
+  type ExplorationDeckModificationView,
   type ExplorationSiteView,
 } from "./ExplorationSiteScreen";
 
@@ -250,22 +251,24 @@ function deckModificationRewardView(
       imageNumber: 18,
     },
   };
+  const common = {
+    announcement:
+      kind === "spark"
+        ? "All characters in your deck gain +1✦"
+        : "All cards in your deck become ❖ (fast)",
+    cards: [
+      { entryId: "deck-entry-a", model: first, isBane: false },
+      { entryId: "deck-entry-b", model: second, isBane: false },
+    ],
+  };
+  const deckModification: ExplorationDeckModificationView = kind === "spark"
+    ? { ...common, kind: "spark", amount: 1 }
+    : { ...common, kind: "fast" };
   return {
     ...base,
     reward: {
       objects: { cards: [], purgedCards: [], dreamsigns: [] },
-      deckModification: {
-        kind,
-        headline: kind === "spark" ? "+1 ✦" : "Fast",
-        announcement:
-          kind === "spark"
-            ? "All characters in your deck gain +1✦"
-            : "All cards in your deck become ❖ (fast)",
-        cards: [
-          { entryId: "deck-entry-a", model: first, isBane: false },
-          { entryId: "deck-entry-b", model: second, isBane: false },
-        ],
-      },
+      deckModification,
     },
   };
 }
@@ -2201,8 +2204,9 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(reward?.dataset.explorationDeckModificationKind).toBe("spark");
     expect(reward?.dataset.explorationDeckModificationCount).toBe("2");
-    expect(reward?.getAttribute("aria-label")).toBe(
-      "All characters in your deck gain +1✦",
+    expect(reward?.getAttribute("aria-label")).not.toBe("");
+    expect(reward?.getAttribute("aria-label")).not.toContain(
+      "exploration-deck-modification",
     );
     expect(
       [...(cards ?? [])].map(
@@ -2215,8 +2219,7 @@ describe("ExplorationSiteScreen", () => {
     const sparkGlyph = sparkAnnouncement?.querySelector<HTMLElement>(
       '[data-inline-glyph][aria-label="spark"]',
     );
-    expect(sparkAnnouncement?.textContent).toContain("+1");
-    expect(sparkAnnouncement?.textContent).not.toContain("✦");
+    expect(sparkAnnouncement?.textContent).not.toBe("");
     expect(sparkGlyph?.querySelector("i")?.className).toContain("bx-sparkle");
     expect(sparkGlyph?.parentElement?.style.color).toContain(SPARK_ICON_COLOR);
     expect(
@@ -2318,7 +2321,7 @@ describe("ExplorationSiteScreen", () => {
     const deckModification = {
       ...baseDeckModification,
       kind: "energy-cost" as const,
-      headline: "−1 ●",
+      amount: 1,
     };
     const composite: ExplorationSiteView = {
       ...modified,
@@ -2344,8 +2347,8 @@ describe("ExplorationSiteScreen", () => {
     const energyGlyph = modification?.querySelector<HTMLElement>(
       '[data-inline-glyph][aria-label="energy"]',
     );
-    expect(modification?.textContent).toContain("−1");
-    expect(modification?.textContent).not.toContain("●");
+    expect(modification?.querySelector('[data-radial-announcement-headline]')?.textContent)
+      .not.toBe("");
     expect(energyGlyph?.querySelector("i")?.className).toContain("bx-fire-alt");
     expect(energyGlyph?.parentElement?.style.color).toContain(ENERGY_ICON_COLOR);
     expect(
@@ -2394,7 +2397,6 @@ describe("ExplorationSiteScreen", () => {
         },
         deckModification: {
           kind: "reclaim",
-          headline: "Reclaim",
           announcement:
             "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
           cards: survivorCards,

@@ -264,6 +264,48 @@ command-menu-close-actions = Close actions
 command-menu-back-action = Back
 command-menu-empty-state = No actions available.
 command-menu-invalid-integer = Enter a non-zero whole number.
+# Normal Journey utility-menu actions. These labels are visible in the shared
+# app chrome; debug-labelled actions remain in the same menu only when their
+# route supplies the corresponding developer capability.
+journey-menu-view-deck-action = View Deck
+journey-menu-pool-viewer-action = Pool Viewer
+journey-menu-package-debug-action = Package Debug
+journey-menu-card-sources-action = Card Sources
+journey-menu-edit-state-action = Edit Journey State
+journey-menu-regenerate-atlas-action = Regenerate Atlas
+journey-menu-open-action = Open menu
+journey-menu-save-action = Save Journey
+journey-menu-load-action = Load Journey
+journey-menu-download-log-action = Download Log
+journey-menu-build-sha-action = Build SHA
+# Native browser prompt text for naming a downloaded Journey save. The prompt is
+# visible before the file is created and asks for the player's authored name.
+journey-menu-save-prompt = Save current journey as:
+# Transient status after the player submits an empty Journey save name.
+journey-menu-save-cancelled = Save cancelled: a name is required.
+# Transient status after a Journey save download. $fileName is a generated
+# filename and remains an opaque technical value.
+journey-menu-save-downloaded = Downloaded "{ $fileName }".
+# Technical detail shown when saving a Journey fails. $detail is an opaque
+# exception or file-system detail, displayed as a complete status value.
+journey-menu-save-error = { $detail }
+# Fallback technical detail when a save failure does not provide an exception
+# message.
+journey-menu-save-generic-error = Failed to save journey.
+# Transient status when loading is not available in the current route context.
+journey-menu-load-unavailable = Loading is unavailable in this context.
+# Transient status after a Journey save is imported. $name is the player's
+# authored save name and remains opaque.
+journey-menu-load-loaded = Loaded "{ $name }".
+# Technical detail shown when loading a Journey fails. $detail is an opaque
+# exception or file-system detail, displayed as a complete status value.
+journey-menu-load-error = { $detail }
+# Fallback technical detail when a load failure does not provide an exception
+# message.
+journey-menu-load-generic-error = Failed to load journey.
+# Transient status after the player opens the build identifier from Journey
+# chrome. $gitSha is an opaque technical build identifier.
+journey-menu-build-sha-status = Build Git SHA: { $gitSha }
 # Tutorial region accessible names.
 tutorial-region-battle = Battle tutorial
 tutorial-region-card = Card tutorial
@@ -503,6 +545,25 @@ battle-zone-browser-no-filter-matches = No Matching Cards.
 
 ### Exploration outcomes
 
+# Compact headline in the radial announcement for an Exploration deck-wide
+# Spark increase. $amount is a finite positive integer displayed with the Spark
+# glyph; the sign and glyph stay part of this complete visible message.
+exploration-deck-modification-spark = +{ $amount } ✦
+# Compact headline in the radial announcement for an Exploration deck-wide
+# Fast keyword grant. This visible message is paired with the bolt glyph.
+exploration-deck-modification-fast = Fast
+# Compact headline in the radial announcement for an Exploration deck-wide
+# Energy-cost reduction. $amount is a finite non-negative integer displayed with
+# the Energy glyph and a genuine minus sign.
+exploration-deck-modification-energy-cost = −{ $amount } ●
+# Compact headline for an Exploration deck subtype change. $subtype is an
+# opaque authored subtype name and is shown exactly as supplied.
+exploration-deck-modification-subtype = { $subtype }
+# Compact fallback headline when an imported Exploration subtype result has no
+# authored subtype value.
+exploration-deck-modification-subtype-unavailable = Subtype
+# Compact headline in the radial announcement for an Exploration Reclaim grant.
+exploration-deck-modification-reclaim = Reclaim
 # Accessible announcement after an Exploration choice grants reward objects and
 # purges no cards. $rewardCount is a non-negative count and can be zero.
 exploration-outcome-rewards-gained =
@@ -586,6 +647,7 @@ exploration-card-transfiguring =
         [Inspired] Transfiguring { $cardName } into its Inspired form
         [Enduring] Transfiguring { $cardName } into its Enduring form
         [Hastened] Transfiguring { $cardName } into its Hastened form
+        [Attuned] Transfiguring { $cardName } into its Attuned form
         [Perfected] Transfiguring { $cardName } into its Perfected form
        *[Resonant] Transfiguring { $cardName } into its Resonant form
     }
@@ -976,6 +1038,7 @@ card-transfiguration-badge =
         [Inspired] Inspired Transfiguration
         [Enduring] Enduring Transfiguration
         [Hastened] Hastened Transfiguration
+        [Attuned] Attuned Transfiguration
         [Perfected] Perfected Transfiguration
        *[Resonant] Resonant Transfiguration
     }
@@ -989,6 +1052,7 @@ card-rules-transfiguration-changed =
         [Inspired] Rules text changed by Inspired Transfiguration
         [Enduring] Rules text changed by Enduring Transfiguration
         [Hastened] Rules text changed by Hastened Transfiguration
+        [Attuned] Rules text changed by Attuned Transfiguration
         [Perfected] Rules text changed by Perfected Transfiguration
        *[Resonant] Rules text changed by Resonant Transfiguration
     }
@@ -1003,12 +1067,16 @@ transfiguration-form-choice =
         [Inspired] Inspired
         [Enduring] Enduring
         [Hastened] Hastened
+        [Attuned] Attuned
         [Perfected] Perfected
        *[Resonant] Resonant
     }{ $essenceCost ->
         [0] , free
        *[other] , { $essenceCost } { -essence }
     }
+# Accessible short label for a Transfiguration form in detail and picker
+# surfaces. $form is one of the nine finite TransfigurationType identifiers;
+# the value is a semantic selector, not authored prose.
 transfiguration-form-name =
     { $form ->
         [Empowered] Empowered
@@ -1021,15 +1089,37 @@ transfiguration-form-name =
         [Perfected] Perfected
        *[Attuned] Attuned
     }
+# Accessibility-only change summary for a Transfiguration detail panel. The
+# numeric $from and $to values are finite non-negative costs and Spark totals;
+# the values are presented as semantic numbers rather than preformatted text.
 transfiguration-change-energy = Energy cost: { $from } → { $to }
+# Accessibility-only change summary for a Transfiguration detail panel. The
+# numeric $from and $to values are finite non-negative Spark totals.
 transfiguration-change-spark = Spark: { $from } → { $to }
+# Accessibility-only change summary for a Transfiguration detail panel. This
+# complete message describes the player consequence of adding Draw.
 transfiguration-change-draw = Adds: Draw a card.
+# Accessibility-only change summary for a Transfiguration detail panel. This
+# complete message describes the player consequence of adding Reclaim.
 transfiguration-change-reclaim = Adds: Reclaim.
+# Accessibility-only change summary for a Transfiguration detail panel. This
+# complete message describes the player consequence of adding Fast.
 transfiguration-change-fast = Adds: Fast.
+# Accessibility-only change summary for an Amplified Transfiguration. $rulesText
+# is opaque authored card rules text; it may contain rule symbols and must be
+# inserted without parsing or rewording.
 transfiguration-change-amplified = “{ $rulesText }”
+# Accessibility-only change summary for a Resonant Transfiguration. It explains
+# the trigger consequence in a complete sentence.
 transfiguration-change-resonant = Widens a named trigger to fire more often.
+# Accessibility-only change summary for an Attuned Transfiguration. $amount is
+# a finite non-negative activated-ability cost reduction, including zero when
+# the authored change permits it.
 transfiguration-change-attuned = Activated ability costs { $amount } less.
+# Accessibility-only change summary for a Perfected Transfiguration. It states
+# the complete player consequence without variables.
 transfiguration-change-perfected = Applies every available transfiguration.
+# Accessibility-only fallback when a Transfiguration change cannot be resolved.
 transfiguration-change-unavailable = Transfiguration change unavailable.
 # Accessible label on a selected Augury card showing how many copies the offer
 # grants. $count is a positive integer; the numeral is visible in the badge and

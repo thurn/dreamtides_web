@@ -141,6 +141,7 @@ export const LOCALIZATION_NON_REACT_PRODUCER_FILES = Object.freeze([
   "src/screens/cumulus_adapters/dreamscape-view-model.ts",
   "src/screens/cumulus_adapters/exploration-view-model.ts",
   "src/screens/cumulus_adapters/mobile-battle-view-model.ts",
+  "src/components/JourneyUtilityMenuController.ts",
   "src/transfiguration/transfiguration-logic.ts",
   "src/rules/battle/effect-step.ts",
   "src/rules/battle/effect-runner-core.ts",
@@ -166,7 +167,6 @@ const LOCALIZATION_EXCLUDED_FILES = new Set([
   "src/cumulus/screens/PackageDebugDialog.tsx",
   "src/cumulus/screens/battle-overlays/BattleFigmentCreatorOverlay.tsx",
   "src/cumulus/screens/battle-overlays/BattleLogOverlay.tsx",
-  "src/components/DreamscapeJourneyMenu.tsx",
   "src/screens/cumulus_adapters/card-source-view-model.ts",
   "src/screens/cumulus_adapters/journey-debug-view-model.ts",
 ]);

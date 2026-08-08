@@ -285,7 +285,7 @@ describe("exploration-view-model", () => {
       objects: { cards: [], purgedCards: [], dreamsigns: [] },
       deckModification: {
         kind: "spark",
-        headline: "+1 ✦",
+        amount: 1,
         announcement: "All characters in your deck gain +1✦",
         cards: [
           {
@@ -396,7 +396,6 @@ describe("exploration-view-model", () => {
       objects: { cards: [], purgedCards: [], dreamsigns: [] },
       deckModification: {
         kind: "fast",
-        headline: "Fast",
         cards: [
           {
             entryId: "entry-character",
@@ -451,7 +450,7 @@ describe("exploration-view-model", () => {
       },
       deckModification: {
         kind: "energy-cost",
-        headline: "−1 ●",
+        amount: 1,
         cards: [
           {
             entryId: "entry-character",
