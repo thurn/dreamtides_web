@@ -11,10 +11,12 @@ import {
   scoreTidemarkLadderClimbDreamsignCandidates,
   tidemarkLadderClimbAttemptCost,
 } from "./tidemark-ladder-climb";
-import { MINIMAL_SITES_DATA } from "../__test-helpers__/atlas-fixtures";
+import { gambleGameByRulesKind } from "./gamble-data";
+import { gambleFixture } from "../testing/gamble-fixture";
 
 describe("Tidemark Ladder Climb rules", () => {
   const economy = {
+    kind: "ladderClimb" as const,
     winEssence: 37,
     attempts: [2, 7, 13, 23].map((standardCost, index) => ({
       attempt: (index + 1) as 1 | 2 | 3 | 4,
@@ -23,7 +25,7 @@ describe("Tidemark Ladder Climb rules", () => {
     })),
   };
   it("uses the four inclusive thresholds and Farpoint-only cost schedule", () => {
-    const rules = MINIMAL_SITES_DATA.gamble.ladderClimb;
+    const rules = gambleGameByRulesKind(gambleFixture(), "ladderClimb").rules;
     expect(economy.winEssence).toBe(37);
     expect(rankWinsTidemarkLadderClimbAttempt(rules, "Q", 1)).toBe(true);
     expect(rankWinsTidemarkLadderClimbAttempt(rules, "J", 1)).toBe(false);
@@ -50,7 +52,7 @@ describe("Tidemark Ladder Climb rules", () => {
   });
 
   it("owns the shared next-attempt eligibility contract", () => {
-    const rules = MINIMAL_SITES_DATA.gamble.ladderClimb;
+    const rules = gambleGameByRulesKind(gambleFixture(), "ladderClimb").rules;
     const card = { rank: "2", suit: "clubs" } as const;
     const settledMiss = {
       attemptNumber: 1,

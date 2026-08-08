@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { createDefaultState } from "../../state/journey-context";
-import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
-import { economyFixture } from "../../testing/economy-fixture";
+import { gambleGameByRulesKind } from "../../data/gamble-data";
+import { gambleFixture } from "../../testing/gamble-fixture";
 import type { DreamGuideContent } from "../../types/content";
 import type {
   FourSuitRepriseSiteRuntime,
@@ -26,15 +26,11 @@ import {
 } from "./gamble-site-view-model";
 
 const buildGambleSiteView = (
-  params: Omit<
-    Parameters<typeof buildGambleSiteViewImpl>[0],
-    "sitesData" | "economyData"
-  >,
+  params: Omit<Parameters<typeof buildGambleSiteViewImpl>[0], "gambleData">,
 ) =>
   buildGambleSiteViewImpl({
     ...params,
-    sitesData: MINIMAL_SITES_DATA,
-    economyData: economyFixture(),
+    gambleData: gambleFixture(),
   });
 
 const GUIDE_LINE = "Fixture game line.";
@@ -84,7 +80,7 @@ function expectGravokView(
 
 describe("gamble-site-view-model", () => {
   it("uses the next non-selected gate as the stable reveal object", () => {
-    const rules = MINIMAL_SITES_DATA.gamble.threeGate;
+    const rules = gambleGameByRulesKind(gambleFixture(), "threeGate").rules;
     expect(gravokRevealGateId(rules, "six")).toBe("nine");
     expect(gravokRevealGateId(rules, "nine")).toBe("jack");
     expect(gravokRevealGateId(rules, "jack")).toBe("six");
@@ -92,8 +88,7 @@ describe("gamble-site-view-model", () => {
 
   it("maps all exact gate targets, odds, rewards, and the locked jackpot", () => {
     const gates = buildGambleGateViews(
-      economyFixture().gamble.threeGate,
-      MINIMAL_SITES_DATA.gamble.threeGate,
+      gambleGameByRulesKind(gambleFixture(), "threeGate"),
       RUNTIME,
       12,
     );
@@ -1007,5 +1002,4 @@ describe("gamble-site-view-model — Blackjack", () => {
       expect(finalAttemptView.canPlayAgain).toBe(false);
     }
   });
-
 });

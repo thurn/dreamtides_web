@@ -1,11 +1,12 @@
 import type { StandardPlayingCardSuit } from "../types/gamble";
-import type { EconomyData } from "../types/economy-data";
-import type { SitesData, FourSuitRepriseOutcome } from "../types/sites-data";
+import type {
+  FourSuitRepriseGame,
+  FourSuitRepriseOutcome,
+} from "../types/gamble-data";
 
-export const FOUR_SUIT_REPRISE_RULES_VERSION = "four-suit-reprise-v1";
-export type { FourSuitRepriseOutcome } from "../types/sites-data";
+export type { FourSuitRepriseOutcome } from "../types/gamble-data";
 export type FourSuitRepriseOutcomeRule =
-  SitesData["gamble"]["fourSuitReprise"]["outcomes"][number];
+  FourSuitRepriseGame["rules"]["outcomes"][number];
 
 interface FourSuitRepriseTargetIdentity {
   entryId: string;
@@ -22,7 +23,7 @@ interface FourSuitRepriseDeckEntryState {
 
 /** Essence paid for each one-shot round. */
 export function fourSuitRepriseDrawCost(
-  config: EconomyData["gamble"]["fourSuitReprise"],
+  config: FourSuitRepriseGame["economy"],
   isFarpoint: boolean,
 ): number {
   return isFarpoint ? config.enhancedDrawPrice : config.standardDrawPrice;
@@ -30,7 +31,7 @@ export function fourSuitRepriseDrawCost(
 
 /** Resolve a playing-card suit into the deck effect it commits. */
 export function fourSuitRepriseOutcomeForSuit(
-  config: SitesData["gamble"]["fourSuitReprise"],
+  config: FourSuitRepriseGame["rules"],
   suit: StandardPlayingCardSuit,
 ): FourSuitRepriseOutcome {
   const rule = config.outcomes.find((candidate) => candidate.suit === suit);

@@ -181,6 +181,7 @@ export function createBattleCompletionProvider(
           dreamscapes: content.dreamscapes,
           atlasData: content.atlasData,
           sitesData: content.sitesData,
+          gambleData: content.gambleData,
           dreamsignPoolIds: journey.remainingDreamsignPool,
           apollyonIncarnations: content.apollyonIncarnations,
         },

@@ -72,44 +72,5 @@ EconomyCatalog(
 
   battle_reward: (base_essence: 100, essence_per_completion_level: 50, minimum_essence: 0),
 
-  gamble: (
-    three_gate: (
-      standard_wager: 50,
-      enhanced_wager: 45,
-      rewards: [
-        GateReward(gate: Six, essence: 100),
-
-        GateReward(gate: Nine, essence: 150),
-
-        GateReward(gate: Jack, essence: 200),
-      ],
-    ),
-    ladder_climb: (
-      win_essence: 25,
-      attempts: [
-        LadderAttempt(attempt: One, standard_cost: 0, enhanced_cost: 0),
-
-        LadderAttempt(attempt: Two, standard_cost: 5, enhanced_cost: 0),
-
-        LadderAttempt(attempt: Three, standard_cost: 10, enhanced_cost: 0),
-
-        LadderAttempt(attempt: Four, standard_cost: 15, enhanced_cost: 0),
-      ],
-    ),
-    starway_stairs: (
-      standard_wager: 30,
-      enhanced_wager: 20,
-      tiers: [
-        StarwayTier(tier: One, essence_reward: 60),
-
-        StarwayTier(tier: Two, essence_reward: 140),
-
-        StarwayTier(tier: Three, essence_reward: 300),
-      ],
-    ),
-    four_suit_reprise: (standard_draw_price: 25, enhanced_draw_price: 15, essence_reward: 100),
-    blackjack: (standard_wager: 90, enhanced_wager: 40, prize_essence: 300),
-  ),
-
   exploration: (default_essence_per_spark: 40),
 )

@@ -1,8 +1,5 @@
-import type { EconomyData } from "../types/economy-data";
 import type { StandardPlayingCard } from "../types/gamble";
-
-export const BLACKJACK_RULES_VERSION = "blackjack-v4";
-export const BLACKJACK_MAX_ATTEMPTS = 3;
+import type { BlackjackGame } from "../types/gamble-data";
 
 export type BlackjackOutcome = "player-win" | "dealer-win" | "push";
 
@@ -22,6 +19,7 @@ export interface BlackjackDealerResolution {
 /** Best blackjack value, with enough Aces demoted from 11 to 1 to avoid busting. */
 export function blackjackHandValue(
   cards: readonly StandardPlayingCard[],
+  target: number,
 ): BlackjackHandValue {
   let total = 0;
   let highAces = 0;
@@ -35,27 +33,28 @@ export function blackjackHandValue(
       total += Number(card.rank);
     }
   }
-  while (total > 21 && highAces > 0) {
+  while (total > target && highAces > 0) {
     total -= 10;
     highAces -= 1;
   }
   return {
     total,
     isSoft: highAces > 0,
-    isBlackjack: cards.length === 2 && total === 21,
-    isBust: total > 21,
+    isBlackjack: cards.length === 2 && total === target,
+    isBust: total > target,
   };
 }
 
 export function blackjackHandTotal(
   cards: readonly StandardPlayingCard[],
+  target: number,
 ): number {
-  return blackjackHandValue(cards).total;
+  return blackjackHandValue(cards, target).total;
 }
 
 /** Enhanced Gamble sites discount the one up-front wager. */
 export function blackjackWagerCost(
-  config: EconomyData["gamble"]["blackjack"],
+  config: BlackjackGame["economy"],
   isFarpoint: boolean,
 ): number {
   return isFarpoint ? config.enhancedWager : config.standardWager;
@@ -65,9 +64,10 @@ export function blackjackWagerCost(
 export function blackjackOpeningOutcome(
   playerCards: readonly StandardPlayingCard[],
   dealerCards: readonly StandardPlayingCard[],
+  target: number,
 ): BlackjackOutcome | null {
-  const playerBlackjack = blackjackHandValue(playerCards).isBlackjack;
-  const dealerBlackjack = blackjackHandValue(dealerCards).isBlackjack;
+  const playerBlackjack = blackjackHandValue(playerCards, target).isBlackjack;
+  const dealerBlackjack = blackjackHandValue(dealerCards, target).isBlackjack;
   if (playerBlackjack && dealerBlackjack) return "push";
   if (playerBlackjack) return "player-win";
   if (dealerBlackjack) return "dealer-win";
@@ -80,8 +80,9 @@ export function resolveBlackjackDealer(
   initialDealerCards: readonly StandardPlayingCard[],
   committedDeck: readonly StandardPlayingCard[],
   initialDeckCursor: number,
+  rules: Pick<BlackjackGame["rules"], "target" | "dealerStandThreshold">,
 ): BlackjackDealerResolution | null {
-  const playerValue = blackjackHandValue(playerCards);
+  const playerValue = blackjackHandValue(playerCards, rules.target);
   if (playerValue.isBust) {
     return {
       dealerCards: [...initialDealerCards],
@@ -92,19 +93,23 @@ export function resolveBlackjackDealer(
 
   const dealerCards = [...initialDealerCards];
   let deckCursor = initialDeckCursor;
-  while (blackjackHandValue(dealerCards).total < 17) {
+  while (
+    blackjackHandValue(dealerCards, rules.target).total <
+    rules.dealerStandThreshold
+  ) {
     const card = committedDeck[deckCursor];
     if (card === undefined) return null;
     dealerCards.push(card);
     deckCursor += 1;
   }
 
-  const dealerValue = blackjackHandValue(dealerCards);
-  const outcome = dealerValue.isBust || playerValue.total > dealerValue.total
-    ? "player-win"
-    : playerValue.total < dealerValue.total
-      ? "dealer-win"
-      : "push";
+  const dealerValue = blackjackHandValue(dealerCards, rules.target);
+  const outcome =
+    dealerValue.isBust || playerValue.total > dealerValue.total
+      ? "player-win"
+      : playerValue.total < dealerValue.total
+        ? "dealer-win"
+        : "push";
   return { dealerCards, deckCursor, outcome };
 }
 

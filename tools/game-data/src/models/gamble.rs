@@ -148,6 +148,7 @@ pub enum GambleGameRules {
 #[serde(deny_unknown_fields)]
 pub struct GateDefinition {
     pub gate: GateId,
+    pub label: String,
     pub threshold: CardRank,
     pub winning_card_count: u32,
     pub awards_dreamsign: bool,
@@ -311,10 +312,17 @@ fn validate_text_records(path: &str, field: &str, records: &[AuthoredText]) -> R
 fn expected_outcome_keys(id: GambleGameId) -> &'static [&'static str] {
     match id {
         GambleGameId::GravokThreeGateWager => &["won", "bust"],
-        GambleGameId::TidemarkLadderClimb => &["won", "lost"],
-        GambleGameId::StarwayStairs => &["safe", "bust"],
+        GambleGameId::TidemarkLadderClimb => &["won", "miss"],
+        GambleGameId::StarwayStairs => &["safe", "bust", "prize-at-stake"],
         GambleGameId::FourSuitReprise => &["transfiguration", "essence", "duplication", "purge"],
-        GambleGameId::Blackjack => &["player-win", "dealer-win", "push"],
+        GambleGameId::Blackjack => &[
+            "player-win",
+            "dealer-win",
+            "push",
+            "bust",
+            "wager-returned",
+            "wins",
+        ],
     }
 }
 
@@ -365,6 +373,10 @@ fn validate_rules(path: &str, rules: &GambleGameRules) -> Result<()> {
                 gates.iter().map(|gate| gate.gate).collect::<Vec<_>>()
                     == [GateId::Six, GateId::Nine, GateId::Jack],
                 "{path}.rules.gates must contain six, nine, and jack in order"
+            );
+            ensure!(
+                gates.iter().all(|gate| !gate.label.trim().is_empty()),
+                "{path}.rules.gates labels must not be blank"
             );
             let counts = gates
                 .iter()
@@ -550,18 +562,21 @@ mod tests {
                     gates: vec![
                         GateDefinition {
                             gate: GateId::Six,
+                            label: "Six Gate".into(),
                             threshold: CardRank::Six,
                             winning_card_count: 36,
                             awards_dreamsign: false,
                         },
                         GateDefinition {
                             gate: GateId::Nine,
+                            label: "Nine Gate".into(),
                             threshold: CardRank::Nine,
                             winning_card_count: 24,
                             awards_dreamsign: false,
                         },
                         GateDefinition {
                             gate: GateId::Jack,
+                            label: "Jack Gate".into(),
                             threshold: CardRank::Jack,
                             winning_card_count: 16,
                             awards_dreamsign: true,

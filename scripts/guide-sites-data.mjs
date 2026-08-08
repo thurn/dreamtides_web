@@ -19,36 +19,6 @@ const GUIDE_DIALOGUE_CONTEXTS = new Set([
   "gamble-four-suit-reprise",
   "gamble-blackjack",
 ]);
-const GAMBLE_GAME_IDS = [
-  "gravok-three-gate-wager",
-  "tidemark-ladder-climb",
-  "starway-stairs",
-  "four-suit-reprise",
-  "blackjack",
-];
-const RANKS = [
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-  "10",
-  "J",
-  "Q",
-  "K",
-  "A",
-];
-const GATE_IDS = ["six", "nine", "jack"];
-const SUITS = ["spades", "diamonds", "hearts", "clubs"];
-const FOUR_SUIT_OUTCOMES = [
-  "transfiguration",
-  "essence",
-  "duplication",
-  "purge",
-];
 
 function fail(file, path, message) {
   throw new Error(`${file} ${path}: ${message}`);
@@ -376,12 +346,6 @@ function compileChoiceLimit(value, file, path) {
   return number(value, file, path, { min: 1 });
 }
 
-function rank(value, file, path) {
-  const result = string(value, file, path);
-  if (!RANKS.includes(result)) fail(file, path, `unknown rank ${result}`);
-  return result;
-}
-
 /** Strictly compile sites.toml and cross-validate linked catalogs. */
 export function compileSitesData(sourceValue, catalogs = {}) {
   const file = "sites.toml";
@@ -391,7 +355,6 @@ export function compileSitesData(sourceValue, catalogs = {}) {
     "fallback-site-type",
     "random-site",
     "card-choices",
-    "gamble",
   ]);
   if (number(root["schema-version"], file, "schema-version") !== 1) {
     fail(file, "schema-version", "only schema version 1 is supported");
@@ -539,274 +502,6 @@ export function compileSitesData(sourceValue, catalogs = {}) {
     }),
   );
 
-  const gamble = keys(root.gamble, file, "gamble", [
-    "selection",
-    "three-gate",
-    "ladder-climb",
-    "starway-stairs",
-    "four-suit-reprise",
-  ]);
-  const selectionSource = keys(gamble.selection, file, "gamble.selection", [
-    "fallback-game",
-    "games",
-  ]);
-  const games = array(
-    selectionSource.games,
-    file,
-    "gamble.selection.games",
-  ).map((raw, index) => {
-    const path = `gamble.selection.games[${String(index)}]`;
-    const game = keys(raw, file, path, ["id", "weight"]);
-    return {
-      id: exactIdentity(game.id, GAMBLE_GAME_IDS[index], file, `${path}.id`),
-      weight: number(game.weight, file, `${path}.weight`, {
-        min: Number.MIN_VALUE,
-        integer: false,
-      }),
-    };
-  });
-  if (games.length !== GAMBLE_GAME_IDS.length)
-    fail(
-      file,
-      "gamble.selection.games",
-      "must cover every game id in structural order",
-    );
-  const selection = {
-    fallbackGame: string(
-      selectionSource["fallback-game"],
-      file,
-      "gamble.selection.fallback-game",
-    ),
-    games,
-  };
-  if (!GAMBLE_GAME_IDS.includes(selection.fallbackGame))
-    fail(file, "gamble.selection.fallback-game", "unknown game id");
-  if (
-    !["gravok-three-gate-wager", "starway-stairs"].includes(
-      selection.fallbackGame,
-    )
-  ) {
-    fail(
-      file,
-      "gamble.selection.fallback-game",
-      "fallback game must be available without deck or Dreamsign candidates",
-    );
-  }
-
-  const threeSource = keys(gamble["three-gate"], file, "gamble.three-gate", [
-    "max-retries",
-    "gates",
-  ]);
-  const gates = array(threeSource.gates, file, "gamble.three-gate.gates").map(
-    (raw, index) => {
-      const path = `gamble.three-gate.gates[${String(index)}]`;
-      const gate = keys(raw, file, path, [
-        "id",
-        "name",
-        "threshold",
-        "odds-numerator",
-        "odds-denominator",
-        "awards-dreamsign",
-      ]);
-      return {
-        id: exactIdentity(gate.id, GATE_IDS[index], file, `${path}.id`),
-        name: string(gate.name, file, `${path}.name`),
-        threshold: rank(gate.threshold, file, `${path}.threshold`),
-        oddsNumerator: number(
-          gate["odds-numerator"],
-          file,
-          `${path}.odds-numerator`,
-        ),
-        oddsDenominator: number(
-          gate["odds-denominator"],
-          file,
-          `${path}.odds-denominator`,
-          { min: 1 },
-        ),
-        awardsDreamsign: boolean(
-          gate["awards-dreamsign"],
-          file,
-          `${path}.awards-dreamsign`,
-        ),
-      };
-    },
-  );
-  if (gates.length !== GATE_IDS.length)
-    fail(file, "gamble.three-gate.gates", "must define all three gates");
-  const threeGate = {
-    maxRetries: number(
-      threeSource["max-retries"],
-      file,
-      "gamble.three-gate.max-retries",
-    ),
-    gates,
-  };
-
-  const ladderSource = keys(
-    gamble["ladder-climb"],
-    file,
-    "gamble.ladder-climb",
-    ["strong-pool-limit", "attempts"],
-  );
-  const attempts = array(
-    ladderSource.attempts,
-    file,
-    "gamble.ladder-climb.attempts",
-  ).map((raw, index) => {
-    const path = `gamble.ladder-climb.attempts[${String(index)}]`;
-    const attempt = keys(raw, file, path, [
-      "attempt",
-      "threshold",
-      "odds-numerator",
-      "odds-denominator",
-    ]);
-    const numberValue = number(attempt.attempt, file, `${path}.attempt`, {
-      min: 1,
-    });
-    if (numberValue !== index + 1)
-      fail(file, `${path}.attempt`, `expected ${String(index + 1)}`);
-    return {
-      attempt: numberValue,
-      threshold: rank(attempt.threshold, file, `${path}.threshold`),
-      oddsNumerator: number(
-        attempt["odds-numerator"],
-        file,
-        `${path}.odds-numerator`,
-      ),
-      oddsDenominator: number(
-        attempt["odds-denominator"],
-        file,
-        `${path}.odds-denominator`,
-        { min: 1 },
-      ),
-    };
-  });
-  if (attempts.length !== 4)
-    fail(
-      file,
-      "gamble.ladder-climb.attempts",
-      "must define attempts 1 through 4",
-    );
-  const ladderClimb = {
-    strongPoolLimit: number(
-      ladderSource["strong-pool-limit"],
-      file,
-      "gamble.ladder-climb.strong-pool-limit",
-      { min: 1 },
-    ),
-    attempts,
-  };
-
-  const starwaySource = keys(
-    gamble["starway-stairs"],
-    file,
-    "gamble.starway-stairs",
-    ["max-retries", "tiers"],
-  );
-  const tiers = array(
-    starwaySource.tiers,
-    file,
-    "gamble.starway-stairs.tiers",
-  ).map((raw, index) => {
-    const path = `gamble.starway-stairs.tiers[${String(index)}]`;
-    const tier = keys(raw, file, path, [
-      "tier",
-      "highest-bust-rank",
-      "bust-odds-numerator",
-      "odds-denominator",
-    ]);
-    const tierNumber = number(tier.tier, file, `${path}.tier`, { min: 1 });
-    if (tierNumber !== index + 1)
-      fail(file, `${path}.tier`, `expected ${String(index + 1)}`);
-    return {
-      tier: tierNumber,
-      highestBustRank: rank(
-        tier["highest-bust-rank"],
-        file,
-        `${path}.highest-bust-rank`,
-      ),
-      bustOddsNumerator: number(
-        tier["bust-odds-numerator"],
-        file,
-        `${path}.bust-odds-numerator`,
-      ),
-      oddsDenominator: number(
-        tier["odds-denominator"],
-        file,
-        `${path}.odds-denominator`,
-        { min: 1 },
-      ),
-    };
-  });
-  if (tiers.length !== 3)
-    fail(file, "gamble.starway-stairs.tiers", "must define tiers 1 through 3");
-  const starwayStairs = {
-    maxRetries: number(
-      starwaySource["max-retries"],
-      file,
-      "gamble.starway-stairs.max-retries",
-    ),
-    tiers,
-  };
-
-  const fourSource = keys(
-    gamble["four-suit-reprise"],
-    file,
-    "gamble.four-suit-reprise",
-    ["max-rounds", "odds-numerator", "odds-denominator", "outcomes"],
-  );
-  const outcomes = array(
-    fourSource.outcomes,
-    file,
-    "gamble.four-suit-reprise.outcomes",
-  ).map((raw, index) => {
-    const path = `gamble.four-suit-reprise.outcomes[${String(index)}]`;
-    const outcome = keys(raw, file, path, ["suit", "outcome", "label"]);
-    return {
-      suit: exactIdentity(outcome.suit, SUITS[index], file, `${path}.suit`),
-      outcome: exactIdentity(
-        outcome.outcome,
-        FOUR_SUIT_OUTCOMES[index],
-        file,
-        `${path}.outcome`,
-      ),
-      label: string(outcome.label, file, `${path}.label`),
-    };
-  });
-  if (outcomes.length !== SUITS.length)
-    fail(
-      file,
-      "gamble.four-suit-reprise.outcomes",
-      "must define all four suits",
-    );
-  const fourSuitReprise = {
-    maxRounds: number(
-      fourSource["max-rounds"],
-      file,
-      "gamble.four-suit-reprise.max-rounds",
-      { min: 1, max: 3 },
-    ),
-    oddsNumerator: number(
-      fourSource["odds-numerator"],
-      file,
-      "gamble.four-suit-reprise.odds-numerator",
-    ),
-    oddsDenominator: number(
-      fourSource["odds-denominator"],
-      file,
-      "gamble.four-suit-reprise.odds-denominator",
-      { min: 1 },
-    ),
-    outcomes,
-  };
-  const gambleRules = {
-    selection,
-    threeGate,
-    ladderClimb,
-    starwayStairs,
-    fourSuitReprise,
-  };
-
   const guides = catalogs.guides?.guides ?? catalogs.guides ?? [];
   const guideAssignments = Object.fromEntries(
     guides.map((guide) => [
@@ -820,34 +515,12 @@ export function compileSitesData(sourceValue, catalogs = {}) {
   const gambleGuideId = guideAssignments.Gamble?.guideId;
   if (typeof gambleGuideId !== "string")
     fail(file, "gamble", "requires exactly one Gamble guide");
-  if (catalogs.economy !== undefined) {
-    const economy = catalogs.economy;
-    if (economy.gamble?.ladderClimb?.attempts?.length !== attempts.length)
-      fail(
-        file,
-        "gamble.ladder-climb.attempts",
-        "must align with economy schedule",
-      );
-    if (economy.gamble?.starwayStairs?.tiers?.length !== tiers.length)
-      fail(
-        file,
-        "gamble.starway-stairs.tiers",
-        "must align with economy schedule",
-      );
-    if (economy.gamble?.fourSuitReprise === undefined)
-      fail(
-        file,
-        "gamble.four-suit-reprise",
-        "requires economy prices and reward",
-      );
-  }
   const normalized = {
     schemaVersion: 1,
     siteTypes,
     fallbackSiteType,
     randomSite: { ...randomSite, guideId: randomSiteGuideId },
     cardChoices,
-    gamble: gambleRules,
     guideAssignments,
   };
   const behavior = {
@@ -855,19 +528,6 @@ export function compileSitesData(sourceValue, catalogs = {}) {
     randomSite: normalized.randomSite,
     cardChoices,
     guideAssignments,
-    gamble: {
-      selection,
-      threeGate: {
-        maxRetries: threeGate.maxRetries,
-        gates: gates.map(({ name: _name, ...gate }) => gate),
-      },
-      ladderClimb,
-      starwayStairs,
-      fourSuitReprise: {
-        ...fourSuitReprise,
-        outcomes: outcomes.map(({ label: _label, ...outcome }) => outcome),
-      },
-    },
   };
   return {
     ...normalized,

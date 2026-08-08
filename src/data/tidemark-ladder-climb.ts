@@ -11,22 +11,19 @@ import type {
   TidemarkLadderClimbSiteRuntime,
 } from "../types/journey";
 import { STANDARD_PLAYING_CARD_RANKS } from "./gravok-wager";
-import type { EconomyData } from "../types/economy-data";
-import type { SitesData } from "../types/sites-data";
-
-export const TIDEMARK_LADDER_CLIMB_RULES_VERSION = "tidemark-ladder-climb-v2";
+import type { LadderClimbGame } from "../types/gamble-data";
 export type TidemarkLadderClimbAttemptRule =
-  SitesData["gamble"]["ladderClimb"]["attempts"][number];
+  LadderClimbGame["rules"]["attempts"][number];
 
 export function tidemarkLadderClimbAttemptRule(
-  config: SitesData["gamble"]["ladderClimb"],
+  config: LadderClimbGame["rules"],
   attemptNumber: TidemarkLadderClimbAttemptNumber,
 ): TidemarkLadderClimbAttemptRule {
   return config.attempts[attemptNumber - 1];
 }
 
 export function tidemarkLadderClimbAttemptCost(
-  config: EconomyData["gamble"]["ladderClimb"],
+  config: LadderClimbGame["economy"],
   attemptNumber: TidemarkLadderClimbAttemptNumber,
   isFarpoint: boolean,
 ): number {
@@ -36,7 +33,7 @@ export function tidemarkLadderClimbAttemptCost(
 
 /** The next attempt the current result state permits, if play may continue. */
 export function nextTidemarkLadderClimbAttemptNumber(
-  config: SitesData["gamble"]["ladderClimb"],
+  config: LadderClimbGame["rules"],
   runtime: Pick<TidemarkLadderClimbSiteRuntime, "result" | "revealedCards">,
 ): TidemarkLadderClimbAttemptNumber | null {
   if (
@@ -52,7 +49,7 @@ export function nextTidemarkLadderClimbAttemptNumber(
 
 /** Whether a rank crosses the current attempt's inclusive threshold. */
 export function rankWinsTidemarkLadderClimbAttempt(
-  config: SitesData["gamble"]["ladderClimb"],
+  config: LadderClimbGame["rules"],
   rank: StandardPlayingCardRank,
   attemptNumber: TidemarkLadderClimbAttemptNumber,
 ): boolean {

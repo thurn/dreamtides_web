@@ -69,39 +69,6 @@ export function economyFixture(): EconomyData {
       essencePerCompletionLevel: 50,
       minimumEssence: 0,
     },
-    gamble: {
-      threeGate: {
-        standardWager: 50,
-        enhancedWager: 45,
-        rewards: { six: 100, nine: 150, jack: 200 },
-      },
-      ladderClimb: {
-        winEssence: 25,
-        attempts: [0, 5, 10, 15].map((standardCost, index) => ({
-          attempt: (index + 1) as 1 | 2 | 3 | 4,
-          standardCost,
-          enhancedCost: 0,
-        })),
-      },
-      starwayStairs: {
-        standardWager: 30,
-        enhancedWager: 20,
-        tiers: [60, 140, 300].map((essenceReward, index) => ({
-          tier: (index + 1) as 1 | 2 | 3,
-          essenceReward,
-        })),
-      },
-      fourSuitReprise: {
-        standardDrawPrice: 10,
-        enhancedDrawPrice: 0,
-        essenceReward: 100,
-      },
-      blackjack: {
-        standardWager: 90,
-        enhancedWager: 40,
-        prizeEssence: 300,
-      },
-    },
     exploration: { defaultEssencePerSpark: 40 },
   };
 }

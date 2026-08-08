@@ -20,12 +20,13 @@ import {
   fourSuitRepriseOutcomeForSuit,
 } from "../../data/four-suit-reprise";
 import {
-  BLACKJACK_MAX_ATTEMPTS,
   blackjackEssenceAward,
   blackjackHandValue,
   blackjackOpeningOutcome,
   resolveBlackjackDealer,
 } from "../../data/blackjack";
+import { gambleGameByRulesKind } from "../../data/gamble-data";
+import type { GambleRulesKind } from "../../types/gamble-data";
 import type { GravokGateId } from "../../types/gamble";
 import type {
   DeckEntry,
@@ -44,6 +45,11 @@ import { mintEntryId } from "./deck";
 import { findSite, getSiteContentProvider } from "./sites";
 
 const GATE_IDS: ReadonlySet<string> = new Set(["six", "nine", "jack"]);
+
+function configuredGame<Kind extends GambleRulesKind>(kind: Kind) {
+  const data = getSiteContentProvider()?.gambleData;
+  return data === undefined ? null : gambleGameByRulesKind(data, kind);
+}
 
 function asString(value: unknown): string | null {
   return typeof value === "string" ? value : null;
@@ -154,12 +160,21 @@ export function dealBlackjack(
   }
   const playerCards = [runtime.committedDeck[0], runtime.committedDeck[2]];
   const dealerCards = [runtime.committedDeck[1], runtime.committedDeck[3]];
-  if (playerCards.some((card) => card === undefined) || dealerCards.some((card) => card === undefined)) {
+  if (
+    playerCards.some((card) => card === undefined) ||
+    dealerCards.some((card) => card === undefined)
+  ) {
     return null;
   }
   const safePlayerCards = playerCards;
   const safeDealerCards = dealerCards;
-  const outcome = blackjackOpeningOutcome(safePlayerCards, safeDealerCards);
+  const game = configuredGame("blackjack");
+  if (game === null) return null;
+  const outcome = blackjackOpeningOutcome(
+    safePlayerCards,
+    safeDealerCards,
+    game.rules.target,
+  );
   return withRuntime(
     { ...journey, essence: journey.essence - runtime.wagerCost },
     siteId,
@@ -184,42 +199,41 @@ export function hitBlackjack(
   const siteId = asString(payload.siteId);
   if (siteId === null) return null;
   const runtime = blackjackRuntimeFor(journey, siteId);
-  if (
-    runtime === null ||
-    !runtime.wagerPaid ||
-    runtime.outcome !== null
-  ) {
+  if (runtime === null || !runtime.wagerPaid || runtime.outcome !== null) {
     return null;
   }
   const card = runtime.committedDeck[runtime.deckCursor];
   if (card === undefined) return null;
   const playerCards = [...runtime.playerCards, card];
-  const playerValue = blackjackHandValue(playerCards);
+  const game = configuredGame("blackjack");
+  if (game === null) return null;
+  const playerValue = blackjackHandValue(playerCards, game.rules.target);
   const deckCursor = runtime.deckCursor + 1;
-  const dealerResolution = playerValue.total === 21 || playerValue.isBust
-    ? resolveBlackjackDealer(
-        playerCards,
-        runtime.dealerCards,
-        runtime.committedDeck,
-        deckCursor,
-      )
-    : null;
-  if ((playerValue.total === 21 || playerValue.isBust) && dealerResolution === null) {
+  const dealerResolution =
+    playerValue.total === 21 || playerValue.isBust
+      ? resolveBlackjackDealer(
+          playerCards,
+          runtime.dealerCards,
+          runtime.committedDeck,
+          deckCursor,
+          game.rules,
+        )
+      : null;
+  if (
+    (playerValue.total === 21 || playerValue.isBust) &&
+    dealerResolution === null
+  ) {
     return null;
   }
-  return withRuntime(
-    journey,
-    siteId,
-    {
-      ...runtime,
-      deckCursor: dealerResolution?.deckCursor ?? deckCursor,
-      playerCards,
-      dealerCards: dealerResolution?.dealerCards ?? runtime.dealerCards,
-      dealerRevealed: dealerResolution !== null,
-      playerDecision: "hit",
-      outcome: dealerResolution?.outcome ?? null,
-    },
-  );
+  return withRuntime(journey, siteId, {
+    ...runtime,
+    deckCursor: dealerResolution?.deckCursor ?? deckCursor,
+    playerCards,
+    dealerCards: dealerResolution?.dealerCards ?? runtime.dealerCards,
+    dealerRevealed: dealerResolution !== null,
+    playerDecision: "hit",
+    outcome: dealerResolution?.outcome ?? null,
+  });
 }
 
 /** End the player turn, reveal the hole card, and resolve the dealer's draws. */
@@ -230,8 +244,10 @@ export function standBlackjack(
   const siteId = asString(payload.siteId);
   if (siteId === null) return null;
   const runtime = blackjackRuntimeFor(journey, siteId);
+  const game = configuredGame("blackjack");
   if (
     runtime === null ||
+    game === null ||
     !runtime.wagerPaid ||
     runtime.outcome !== null
   ) {
@@ -242,6 +258,7 @@ export function standBlackjack(
     runtime.dealerCards,
     runtime.committedDeck,
     runtime.deckCursor,
+    game.rules,
   );
   if (resolution === null) return null;
   return withRuntime(journey, siteId, {
@@ -298,21 +315,24 @@ export function playAgainBlackjack(
   ctx: EventContext,
 ): JourneyState | null {
   const siteId = asString(payload.siteId);
-  const previousShuffleCommitment = asString(
-    payload.previousShuffleCommitment,
-  );
+  const previousShuffleCommitment = asString(payload.previousShuffleCommitment);
   if (siteId === null || previousShuffleCommitment === null) return null;
 
   const runtime = blackjackRuntimeFor(journey, siteId);
   const site = findSite(journey, siteId);
   const provider = getSiteContentProvider();
+  const game = configuredGame("blackjack");
   const consumesAttempt = runtime?.outcome === "dealer-win";
-  const replayEligible = runtime?.outcome === "push" ||
-    (consumesAttempt && runtime.attemptNumber < BLACKJACK_MAX_ATTEMPTS);
+  const replayEligible =
+    runtime?.outcome === "push" ||
+    (consumesAttempt &&
+      game !== null &&
+      runtime.attemptNumber < game.rules.maxAttempts);
   if (
     runtime === null ||
     site?.type !== "Gamble" ||
     provider === null ||
+    game === null ||
     runtime.shuffleCommitment !== previousShuffleCommitment ||
     !replayEligible ||
     !runtime.resultSettled
@@ -339,10 +359,7 @@ export function playAgainBlackjack(
       ? runtime.attemptNumber + 1
       : runtime.attemptNumber,
   };
-  return dealBlackjack(
-    withRuntime(journey, siteId, nextRuntime),
-    { siteId },
-  );
+  return dealBlackjack(withRuntime(journey, siteId, nextRuntime), { siteId });
 }
 
 /**
@@ -362,13 +379,11 @@ export function placeGravokWager(
   const gateId = rawGateId as GravokGateId;
   const runtime = gravokRuntimeFor(journey, siteId);
   if (runtime === null || runtime.result !== null) return null;
-  const provider = getSiteContentProvider();
-  const economy = provider?.economyData?.gamble.threeGate;
-  const rules = provider?.sitesData?.gamble.threeGate;
-  if (economy === undefined || rules === undefined) return null;
+  const game = configuredGame("threeGate");
+  if (game === null) return null;
   if (journey.essence < runtime.wagerCost) return null;
 
-  const gate = gravokGateRule(rules, gateId);
+  const gate = gravokGateRule(game.rules, gateId);
   if (
     gate.awardsDreamsign &&
     (runtime.rewardDreamsign === null || journey.maxDreamsigns === 0)
@@ -376,8 +391,12 @@ export function placeGravokWager(
     return null;
   }
 
-  const won = rankWinsGravokGate(rules, runtime.committedCard.rank, gateId);
-  const essenceGained = won ? gravokGateEssenceReward(economy, gateId) : 0;
+  const won = rankWinsGravokGate(
+    game.rules,
+    runtime.committedCard.rank,
+    gateId,
+  );
+  const essenceGained = won ? gravokGateEssenceReward(game.economy, gateId) : 0;
   const winsDreamsign = won && gate.awardsDreamsign;
   const needsReplacement =
     winsDreamsign && journey.dreamsigns.length >= journey.maxDreamsigns;
@@ -468,17 +487,18 @@ export function playAgainGravokWager(
   const runtime = gravokRuntimeFor(journey, siteId);
   const site = findSite(journey, siteId);
   const provider = getSiteContentProvider();
+  const game = configuredGame("threeGate");
   const roundNumber = runtime?.roundNumber ?? 1;
   if (
     runtime === null ||
     site?.type !== "Gamble" ||
     provider === null ||
+    game === null ||
     runtime.shuffleCommitment !== previousShuffleCommitment ||
     runtime.result === null ||
     runtime.result.essenceSettled !== true ||
     runtime.result.pendingDreamsignReplacement ||
-    provider.sitesData === undefined ||
-    roundNumber > provider.sitesData.gamble.threeGate.maxRetries
+    roundNumber > game.rules.maxRetries
   ) {
     return null;
   }
@@ -554,27 +574,28 @@ export function drawTidemarkLadderClimb(
 
   const runtime = tidemarkRuntimeFor(journey, siteId);
   if (runtime === null) return null;
-  const provider = getSiteContentProvider();
-  const economy = provider?.economyData?.gamble.ladderClimb;
-  const rules = provider?.sitesData?.gamble.ladderClimb;
-  if (economy === undefined || rules === undefined) return null;
+  const game = configuredGame("ladderClimb");
+  if (game === null) return null;
   if (journey.maxDreamsigns === 0) return null;
 
-  const attemptNumber = nextTidemarkLadderClimbAttemptNumber(rules, runtime);
+  const attemptNumber = nextTidemarkLadderClimbAttemptNumber(
+    game.rules,
+    runtime,
+  );
   if (attemptNumber === null) return null;
   const card = runtime.committedCards[attemptNumber - 1];
   const shuffleCommitment = runtime.shuffleCommitments[attemptNumber - 1];
   if (card === undefined || shuffleCommitment === undefined) return null;
 
   const costPaid = tidemarkLadderClimbAttemptCost(
-    economy,
+    game.economy,
     attemptNumber,
     runtime.isFarpoint,
   );
   if (journey.essence < costPaid) return null;
   const cumulativeCost = runtime.cumulativeCost + costPaid;
   const won = rankWinsTidemarkLadderClimbAttempt(
-    rules,
+    game.rules,
     card.rank,
     attemptNumber,
   );
@@ -614,10 +635,10 @@ export function settleTidemarkLadderClimb(
 
   const runtime = tidemarkRuntimeFor(journey, siteId);
   const result = runtime?.result ?? null;
-  const economy = getSiteContentProvider()?.economyData?.gamble.ladderClimb;
+  const game = configuredGame("ladderClimb");
   if (
     runtime === null ||
-    economy === undefined ||
+    game === null ||
     result === null ||
     result.resultSettled ||
     runtime.shuffleCommitments[result.attemptNumber - 1] !== shuffleCommitment
@@ -645,7 +666,7 @@ export function settleTidemarkLadderClimb(
   return withRuntime(
     {
       ...journey,
-      essence: journey.essence + economy.winEssence,
+      essence: journey.essence + game.economy.winEssence,
       dreamsigns,
       remainingDreamsignPool,
     },
@@ -709,17 +730,17 @@ export function drawStarwayStairs(
   const siteId = asString(payload.siteId);
   if (siteId === null) return null;
   const runtime = starwayRuntimeFor(journey, siteId);
-  const rules = getSiteContentProvider()?.sitesData?.gamble.starwayStairs;
-  if (runtime === null || rules === undefined) return null;
+  const game = configuredGame("starwayStairs");
+  if (runtime === null || game === null) return null;
 
-  const tierNumber = nextStarwayStairsTierNumber(rules, runtime);
+  const tierNumber = nextStarwayStairsTierNumber(game.rules, runtime);
   if (tierNumber === null) return null;
   const card = runtime.committedCards[tierNumber - 1];
   const commitment = runtime.shuffleCommitments[tierNumber - 1];
   if (card === undefined || commitment === undefined) return null;
 
   if (journey.essence < runtime.wagerAmount) return null;
-  const busted = rankBustsStarwayStairsTier(rules, card.rank, tierNumber);
+  const busted = rankBustsStarwayStairsTier(game.rules, card.rank, tierNumber);
   return withRuntime(
     { ...journey, essence: journey.essence - runtime.wagerAmount },
     siteId,
@@ -743,13 +764,10 @@ export function settleStarwayStairs(
   if (siteId === null || shuffleCommitment === null) return null;
   const runtime = starwayRuntimeFor(journey, siteId);
   const result = runtime?.results[runtime.results.length - 1];
-  const provider = getSiteContentProvider();
-  const economy = provider?.economyData?.gamble.starwayStairs;
-  const rules = provider?.sitesData?.gamble.starwayStairs;
+  const game = configuredGame("starwayStairs");
   if (
     runtime === null ||
-    economy === undefined ||
-    rules === undefined ||
+    game === null ||
     result === undefined ||
     result.resultSettled ||
     runtime.shuffleCommitments[result.tierNumber - 1] !== shuffleCommitment
@@ -757,9 +775,10 @@ export function settleStarwayStairs(
     return null;
   }
 
-  const reachedTop = !result.busted && result.tierNumber === rules.tiers.length;
+  const reachedTop =
+    !result.busted && result.tierNumber === game.rules.tiers.length;
   const prizeAwarded = reachedTop
-    ? starwayStairsEssenceReward(economy, result.tierNumber)
+    ? starwayStairsEssenceReward(game.economy, result.tierNumber)
     : 0;
   const nextResults = runtime.results.map((entry, index) =>
     index === runtime.results.length - 1
@@ -788,23 +807,23 @@ export function cashOutStarwayStairs(
   if (siteId === null || shuffleCommitment === null) return null;
   const runtime = starwayRuntimeFor(journey, siteId);
   const result = runtime?.results[runtime.results.length - 1];
-  const provider = getSiteContentProvider();
-  const economy = provider?.economyData?.gamble.starwayStairs;
-  const rules = provider?.sitesData?.gamble.starwayStairs;
+  const game = configuredGame("starwayStairs");
   if (
     runtime === null ||
-    economy === undefined ||
-    rules === undefined ||
+    game === null ||
     result === undefined ||
     result.busted ||
     !result.resultSettled ||
-    result.tierNumber >= rules.tiers.length ||
+    result.tierNumber >= game.rules.tiers.length ||
     runtime.terminalReason !== null ||
     runtime.shuffleCommitments[result.tierNumber - 1] !== shuffleCommitment
   ) {
     return null;
   }
-  const prizeAwarded = starwayStairsEssenceReward(economy, result.tierNumber);
+  const prizeAwarded = starwayStairsEssenceReward(
+    game.economy,
+    result.tierNumber,
+  );
   return withRuntime(
     { ...journey, essence: journey.essence + prizeAwarded },
     siteId,
@@ -825,17 +844,18 @@ export function playAgainStarwayStairs(
   const runtime = starwayRuntimeFor(journey, siteId);
   const site = findSite(journey, siteId);
   const provider = getSiteContentProvider();
+  const game = configuredGame("starwayStairs");
   const latestResult = runtime?.results[runtime.results.length - 1];
   if (
     runtime === null ||
     site?.type !== "Gamble" ||
     provider === null ||
+    game === null ||
     runtime.shuffleCommitments[0] !== previousShuffleCommitment ||
     runtime.terminalReason === null ||
     latestResult === undefined ||
     !latestResult.resultSettled ||
-    provider.sitesData === undefined ||
-    runtime.roundNumber > provider.sitesData.gamble.starwayStairs.maxRetries
+    runtime.roundNumber > game.rules.maxRetries
   ) {
     return null;
   }
@@ -869,12 +889,12 @@ export function drawFourSuitReprise(
   if (siteId === null || entryId === null) return null;
 
   const runtime = fourSuitRuntimeFor(journey, siteId);
-  const rules = getSiteContentProvider()?.sitesData?.gamble.fourSuitReprise;
+  const game = configuredGame("fourSuitReprise");
   if (
     runtime === null ||
-    rules === undefined ||
+    game === null ||
     runtime.phase !== "choose" ||
-    runtime.rounds.length >= rules.maxRounds ||
+    runtime.rounds.length >= game.rules.maxRounds ||
     journey.essence < runtime.drawCost
   ) {
     return null;
@@ -915,7 +935,7 @@ export function drawFourSuitReprise(
           targetEntryId: target.entryId,
           targetCardId: target.cardId,
           costPaid: runtime.drawCost,
-          outcome: fourSuitRepriseOutcomeForSuit(rules, card.suit),
+          outcome: fourSuitRepriseOutcomeForSuit(game.rules, card.suit),
           resultRevealed: false,
           resultSettled: false,
           essenceGained: 0,
@@ -936,11 +956,11 @@ export function settleFourSuitReprise(
   if (siteId === null || shuffleCommitment === null) return null;
 
   const runtime = fourSuitRuntimeFor(journey, siteId);
-  const economy = getSiteContentProvider()?.economyData?.gamble.fourSuitReprise;
+  const game = configuredGame("fourSuitReprise");
   const round = runtime === null ? null : latestFourSuitRound(runtime);
   if (
     runtime === null ||
-    economy === undefined ||
+    game === null ||
     runtime.phase !== "result" ||
     round === null ||
     round.shuffleCommitment !== shuffleCommitment ||
@@ -968,12 +988,12 @@ export function settleFourSuitReprise(
   if (round.outcome === "essence") {
     nextJourney = {
       ...journey,
-      essence: journey.essence + economy.essenceReward,
+      essence: journey.essence + game.economy.essenceReward,
     };
     nextRound = {
       ...nextRound,
       resultSettled: true,
-      essenceGained: economy.essenceReward,
+      essenceGained: game.economy.essenceReward,
     };
   } else if (round.outcome === "duplication") {
     const duplicatedEntryId = mintEntryId(journey.deck, ctx.seq, 0);
@@ -1016,11 +1036,11 @@ export function chooseFourSuitRepriseTransfiguration(
   }
 
   const runtime = fourSuitRuntimeFor(journey, siteId);
-  const rules = getSiteContentProvider()?.sitesData?.gamble.fourSuitReprise;
+  const game = configuredGame("fourSuitReprise");
   const round = runtime === null ? null : latestFourSuitRound(runtime);
   if (
     runtime === null ||
-    rules === undefined ||
+    game === null ||
     runtime.phase !== "result" ||
     round === null ||
     round.shuffleCommitment !== shuffleCommitment ||
@@ -1086,16 +1106,16 @@ export function playAgainFourSuitReprise(
   if (siteId === null || previousShuffleCommitment === null) return null;
 
   const runtime = fourSuitRuntimeFor(journey, siteId);
-  const rules = getSiteContentProvider()?.sitesData?.gamble.fourSuitReprise;
+  const game = configuredGame("fourSuitReprise");
   const round = runtime === null ? null : latestFourSuitRound(runtime);
   if (
     runtime === null ||
-    rules === undefined ||
+    game === null ||
     runtime.phase !== "result" ||
     round === null ||
     round.shuffleCommitment !== previousShuffleCommitment ||
     !round.resultSettled ||
-    runtime.rounds.length >= rules.maxRounds ||
+    runtime.rounds.length >= game.rules.maxRounds ||
     remainingFourSuitTargets(journey, runtime).length === 0
   ) {
     return null;

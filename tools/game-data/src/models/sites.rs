@@ -91,7 +91,6 @@ pub struct SitesCatalog {
     pub fallback_site_type: FallbackSiteType,
     pub random_site: RandomSiteRules,
     pub card_choices: CardChoiceRules,
-    pub gamble: GambleRules,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -142,282 +141,6 @@ pub struct CardChoiceLimits {
 pub enum ChoiceLimit {
     Count(u32),
     All,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct GambleRules {
-    pub standard_deck_size: u32,
-    pub selection: GambleSelection,
-    pub three_gate: ThreeGateRules,
-    pub ladder_climb: LadderClimbRules,
-    pub starway_stairs: StarwayStairsRules,
-    pub four_suit_reprise: FourSuitRepriseRules,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct GambleSelection {
-    pub fallback_game: GambleGame,
-    pub games: Vec<WeightedGame>,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(untagged)]
-pub enum RelativeWeight {
-    Integer(u32),
-    Float(f64),
-}
-
-impl RelativeWeight {
-    fn is_positive_finite(self) -> bool {
-        match self {
-            Self::Integer(value) => value > 0,
-            Self::Float(value) => value.is_finite() && value > 0.0,
-        }
-    }
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct WeightedGame {
-    pub game: GambleGame,
-    pub weight: RelativeWeight,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Ord, PartialOrd)]
-pub enum GambleGame {
-    GravokThreeGateWager,
-    TidemarkLadderClimb,
-    StarwayStairs,
-    FourSuitReprise,
-    Blackjack,
-}
-
-impl GambleGame {
-    const ALL: [Self; 5] = [
-        Self::GravokThreeGateWager,
-        Self::TidemarkLadderClimb,
-        Self::StarwayStairs,
-        Self::FourSuitReprise,
-        Self::Blackjack,
-    ];
-
-    fn as_compat(self) -> &'static str {
-        match self {
-            Self::GravokThreeGateWager => "gravok-three-gate-wager",
-            Self::TidemarkLadderClimb => "tidemark-ladder-climb",
-            Self::StarwayStairs => "starway-stairs",
-            Self::FourSuitReprise => "four-suit-reprise",
-            Self::Blackjack => "blackjack",
-        }
-    }
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct ThreeGateRules {
-    pub max_retries: u32,
-    pub gates: Vec<GateDefinition>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct GateDefinition {
-    pub gate: Gate,
-    pub name: String,
-    pub threshold: PlayingCardRank,
-    pub winning_card_count: u32,
-    pub awards_dreamsign: bool,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum Gate {
-    Six,
-    Nine,
-    Jack,
-}
-
-impl Gate {
-    const ALL: [Self; 3] = [Self::Six, Self::Nine, Self::Jack];
-
-    fn as_compat(self) -> &'static str {
-        match self {
-            Self::Six => "six",
-            Self::Nine => "nine",
-            Self::Jack => "jack",
-        }
-    }
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct LadderClimbRules {
-    pub strong_pool_limit: u32,
-    pub attempts: Vec<LadderAttempt>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct LadderAttempt {
-    pub attempt: Attempt,
-    pub threshold: PlayingCardRank,
-    pub winning_card_count: u32,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum Attempt {
-    One,
-    Two,
-    Three,
-    Four,
-}
-
-impl Attempt {
-    const ALL: [Self; 4] = [Self::One, Self::Two, Self::Three, Self::Four];
-
-    fn number(self) -> u32 {
-        match self {
-            Self::One => 1,
-            Self::Two => 2,
-            Self::Three => 3,
-            Self::Four => 4,
-        }
-    }
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct StarwayStairsRules {
-    pub max_retries: u32,
-    pub tiers: Vec<StarwayTier>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct StarwayTier {
-    pub tier: Tier,
-    pub highest_bust_rank: PlayingCardRank,
-    pub bust_card_count: u32,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum Tier {
-    One,
-    Two,
-    Three,
-}
-
-impl Tier {
-    const ALL: [Self; 3] = [Self::One, Self::Two, Self::Three];
-
-    fn number(self) -> u32 {
-        match self {
-            Self::One => 1,
-            Self::Two => 2,
-            Self::Three => 3,
-        }
-    }
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct FourSuitRepriseRules {
-    pub max_rounds: u32,
-    pub matching_suit_card_count: u32,
-    pub outcomes: Vec<SuitOutcome>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct SuitOutcome {
-    pub suit: PlayingCardSuit,
-    pub outcome: FourSuitOutcome,
-    pub label: String,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum PlayingCardSuit {
-    Spades,
-    Diamonds,
-    Hearts,
-    Clubs,
-}
-
-impl PlayingCardSuit {
-    const ALL: [Self; 4] = [Self::Spades, Self::Diamonds, Self::Hearts, Self::Clubs];
-
-    fn as_compat(self) -> &'static str {
-        match self {
-            Self::Spades => "spades",
-            Self::Diamonds => "diamonds",
-            Self::Hearts => "hearts",
-            Self::Clubs => "clubs",
-        }
-    }
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum FourSuitOutcome {
-    Transfiguration,
-    Essence,
-    Duplication,
-    Purge,
-}
-
-impl FourSuitOutcome {
-    const ALL: [Self; 4] = [
-        Self::Transfiguration,
-        Self::Essence,
-        Self::Duplication,
-        Self::Purge,
-    ];
-
-    fn as_compat(self) -> &'static str {
-        match self {
-            Self::Transfiguration => "transfiguration",
-            Self::Essence => "essence",
-            Self::Duplication => "duplication",
-            Self::Purge => "purge",
-        }
-    }
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum PlayingCardRank {
-    Ace,
-    Two,
-    Three,
-    Four,
-    Five,
-    Six,
-    Seven,
-    Eight,
-    Nine,
-    Ten,
-    Jack,
-    Queen,
-    King,
-}
-
-impl PlayingCardRank {
-    fn as_compat(self) -> &'static str {
-        match self {
-            Self::Ace => "A",
-            Self::Two => "2",
-            Self::Three => "3",
-            Self::Four => "4",
-            Self::Five => "5",
-            Self::Six => "6",
-            Self::Seven => "7",
-            Self::Eight => "8",
-            Self::Nine => "9",
-            Self::Ten => "10",
-            Self::Jack => "J",
-            Self::Queen => "Q",
-            Self::King => "K",
-        }
-    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -473,7 +196,6 @@ struct CompatibilityCatalog {
     random_site: CompatibilityRandomSiteRules,
     #[serde(rename = "card-choices")]
     card_choices: CompatibilityCardChoiceRules,
-    gamble: CompatibilityGambleRules,
 }
 
 #[derive(Serialize)]
@@ -517,105 +239,6 @@ enum CompatibilityChoiceLimit {
     All(&'static str),
 }
 
-#[derive(Serialize)]
-struct CompatibilityGambleRules {
-    selection: CompatibilityGambleSelection,
-    #[serde(rename = "three-gate")]
-    three_gate: CompatibilityThreeGateRules,
-    #[serde(rename = "ladder-climb")]
-    ladder_climb: CompatibilityLadderClimbRules,
-    #[serde(rename = "starway-stairs")]
-    starway_stairs: CompatibilityStarwayStairsRules,
-    #[serde(rename = "four-suit-reprise")]
-    four_suit_reprise: CompatibilityFourSuitRepriseRules,
-}
-
-#[derive(Serialize)]
-struct CompatibilityGambleSelection {
-    #[serde(rename = "fallback-game")]
-    fallback_game: &'static str,
-    games: Vec<CompatibilityWeightedGame>,
-}
-
-#[derive(Serialize)]
-struct CompatibilityWeightedGame {
-    id: &'static str,
-    weight: RelativeWeight,
-}
-
-#[derive(Serialize)]
-struct CompatibilityThreeGateRules {
-    #[serde(rename = "max-retries")]
-    max_retries: u32,
-    gates: Vec<CompatibilityGateDefinition>,
-}
-
-#[derive(Serialize)]
-struct CompatibilityGateDefinition {
-    id: &'static str,
-    name: String,
-    threshold: &'static str,
-    #[serde(rename = "odds-numerator")]
-    odds_numerator: u32,
-    #[serde(rename = "odds-denominator")]
-    odds_denominator: u32,
-    #[serde(rename = "awards-dreamsign")]
-    awards_dreamsign: bool,
-}
-
-#[derive(Serialize)]
-struct CompatibilityLadderClimbRules {
-    #[serde(rename = "strong-pool-limit")]
-    strong_pool_limit: u32,
-    attempts: Vec<CompatibilityLadderAttempt>,
-}
-
-#[derive(Serialize)]
-struct CompatibilityLadderAttempt {
-    attempt: u32,
-    threshold: &'static str,
-    #[serde(rename = "odds-numerator")]
-    odds_numerator: u32,
-    #[serde(rename = "odds-denominator")]
-    odds_denominator: u32,
-}
-
-#[derive(Serialize)]
-struct CompatibilityStarwayStairsRules {
-    #[serde(rename = "max-retries")]
-    max_retries: u32,
-    tiers: Vec<CompatibilityStarwayTier>,
-}
-
-#[derive(Serialize)]
-struct CompatibilityStarwayTier {
-    tier: u32,
-    #[serde(rename = "highest-bust-rank")]
-    highest_bust_rank: &'static str,
-    #[serde(rename = "bust-odds-numerator")]
-    bust_odds_numerator: u32,
-    #[serde(rename = "odds-denominator")]
-    odds_denominator: u32,
-}
-
-#[derive(Serialize)]
-struct CompatibilityFourSuitRepriseRules {
-    #[serde(rename = "max-rounds")]
-    max_rounds: u32,
-    #[serde(rename = "odds-numerator")]
-    odds_numerator: u32,
-    #[serde(rename = "odds-denominator")]
-    odds_denominator: u32,
-    outcomes: Vec<CompatibilitySuitOutcome>,
-}
-
-#[derive(Serialize)]
-struct CompatibilitySuitOutcome {
-    suit: &'static str,
-    outcome: &'static str,
-    label: String,
-}
-
 pub fn lower(source: SitesCatalog) -> Result<toml::Value> {
     lower_with_glossary_map(source, &GLOSSARY_ID_MAP)
 }
@@ -625,7 +248,6 @@ fn lower_with_glossary_map(
     glossary_ids: &[(&'static str, &'static str)],
 ) -> Result<toml::Value> {
     validate(&source)?;
-    let deck_size = source.gamble.standard_deck_size;
     let site_types = source
         .site_types
         .into_iter()
@@ -654,91 +276,12 @@ fn lower_with_glossary_map(
         transfiguration: lower_choice_limits(source.card_choices.transfiguration),
         duplication: lower_choice_limits(source.card_choices.duplication),
     };
-    let gamble = source.gamble;
-    let selection = CompatibilityGambleSelection {
-        fallback_game: gamble.selection.fallback_game.as_compat(),
-        games: gamble
-            .selection
-            .games
-            .into_iter()
-            .map(|game| CompatibilityWeightedGame {
-                id: game.game.as_compat(),
-                weight: game.weight,
-            })
-            .collect(),
-    };
-    let three_gate = CompatibilityThreeGateRules {
-        max_retries: gamble.three_gate.max_retries,
-        gates: gamble
-            .three_gate
-            .gates
-            .into_iter()
-            .map(|gate| CompatibilityGateDefinition {
-                id: gate.gate.as_compat(),
-                name: gate.name,
-                threshold: gate.threshold.as_compat(),
-                odds_numerator: gate.winning_card_count,
-                odds_denominator: deck_size,
-                awards_dreamsign: gate.awards_dreamsign,
-            })
-            .collect(),
-    };
-    let ladder_climb = CompatibilityLadderClimbRules {
-        strong_pool_limit: gamble.ladder_climb.strong_pool_limit,
-        attempts: gamble
-            .ladder_climb
-            .attempts
-            .into_iter()
-            .map(|attempt| CompatibilityLadderAttempt {
-                attempt: attempt.attempt.number(),
-                threshold: attempt.threshold.as_compat(),
-                odds_numerator: attempt.winning_card_count,
-                odds_denominator: deck_size,
-            })
-            .collect(),
-    };
-    let starway_stairs = CompatibilityStarwayStairsRules {
-        max_retries: gamble.starway_stairs.max_retries,
-        tiers: gamble
-            .starway_stairs
-            .tiers
-            .into_iter()
-            .map(|tier| CompatibilityStarwayTier {
-                tier: tier.tier.number(),
-                highest_bust_rank: tier.highest_bust_rank.as_compat(),
-                bust_odds_numerator: tier.bust_card_count,
-                odds_denominator: deck_size,
-            })
-            .collect(),
-    };
-    let four_suit_reprise = CompatibilityFourSuitRepriseRules {
-        max_rounds: gamble.four_suit_reprise.max_rounds,
-        odds_numerator: gamble.four_suit_reprise.matching_suit_card_count,
-        odds_denominator: deck_size,
-        outcomes: gamble
-            .four_suit_reprise
-            .outcomes
-            .into_iter()
-            .map(|outcome| CompatibilitySuitOutcome {
-                suit: outcome.suit.as_compat(),
-                outcome: outcome.outcome.as_compat(),
-                label: outcome.label,
-            })
-            .collect(),
-    };
     Ok(toml::Value::try_from(CompatibilityCatalog {
         schema_version: 1,
         site_types,
         fallback_site_type: source.fallback_site_type,
         random_site,
         card_choices,
-        gamble: CompatibilityGambleRules {
-            selection,
-            three_gate,
-            ladder_climb,
-            starway_stairs,
-            four_suit_reprise,
-        },
     })?)
 }
 
@@ -831,117 +374,6 @@ fn validate(source: &SitesCatalog) -> Result<()> {
     );
     validate_choice_limits(&source.card_choices.transfiguration)?;
     validate_choice_limits(&source.card_choices.duplication)?;
-
-    let gamble = &source.gamble;
-    ensure!(
-        gamble.standard_deck_size > 0,
-        "standard deck size must be positive"
-    );
-    ensure!(
-        matches!(
-            gamble.selection.fallback_game,
-            GambleGame::GravokThreeGateWager | GambleGame::StarwayStairs
-        ),
-        "fallback Gamble game must be available without deck or Dreamsign candidates"
-    );
-    let observed_games: Vec<_> = gamble
-        .selection
-        .games
-        .iter()
-        .map(|game| game.game)
-        .collect();
-    ensure!(
-        observed_games == GambleGame::ALL,
-        "Gamble selection must cover every game in structural order"
-    );
-    for game in &gamble.selection.games {
-        ensure!(
-            game.weight.is_positive_finite(),
-            "Gamble weights must be positive and finite"
-        );
-    }
-    let observed_gates: Vec<_> = gamble
-        .three_gate
-        .gates
-        .iter()
-        .map(|gate| gate.gate)
-        .collect();
-    ensure!(
-        observed_gates == Gate::ALL,
-        "Three Gate definitions must be in structural order"
-    );
-    for gate in &gamble.three_gate.gates {
-        validate_text("Three Gate name", &gate.name)?;
-        validate_card_count(
-            "Three Gate winning card count",
-            gate.winning_card_count,
-            gamble.standard_deck_size,
-        )?;
-    }
-    ensure!(
-        gamble.ladder_climb.strong_pool_limit > 0,
-        "Ladder Climb strong pool limit must be positive"
-    );
-    let observed_attempts: Vec<_> = gamble
-        .ladder_climb
-        .attempts
-        .iter()
-        .map(|attempt| attempt.attempt)
-        .collect();
-    ensure!(
-        observed_attempts == Attempt::ALL,
-        "Ladder Climb attempts must be in structural order"
-    );
-    for attempt in &gamble.ladder_climb.attempts {
-        validate_card_count(
-            "Ladder Climb winning card count",
-            attempt.winning_card_count,
-            gamble.standard_deck_size,
-        )?;
-    }
-    let observed_tiers: Vec<_> = gamble
-        .starway_stairs
-        .tiers
-        .iter()
-        .map(|tier| tier.tier)
-        .collect();
-    ensure!(
-        observed_tiers == Tier::ALL,
-        "Starway Stairs tiers must be in structural order"
-    );
-    for tier in &gamble.starway_stairs.tiers {
-        validate_card_count(
-            "Starway Stairs bust card count",
-            tier.bust_card_count,
-            gamble.standard_deck_size,
-        )?;
-    }
-    ensure!(
-        (1..=3).contains(&gamble.four_suit_reprise.max_rounds),
-        "Four Suit Reprise max rounds must be between 1 and 3"
-    );
-    validate_card_count(
-        "Four Suit Reprise matching suit card count",
-        gamble.four_suit_reprise.matching_suit_card_count,
-        gamble.standard_deck_size,
-    )?;
-    let observed_outcomes: Vec<_> = gamble
-        .four_suit_reprise
-        .outcomes
-        .iter()
-        .map(|outcome| (outcome.suit, outcome.outcome))
-        .collect();
-    let expected_outcomes: Vec<_> = PlayingCardSuit::ALL
-        .into_iter()
-        .zip(FourSuitOutcome::ALL)
-        .collect();
-    ensure!(
-        observed_outcomes == expected_outcomes,
-        "Four Suit Reprise outcomes must match every suit in structural order"
-    );
-    for outcome in &gamble.four_suit_reprise.outcomes {
-        validate_text("Four Suit Reprise outcome label", &outcome.label)?;
-    }
     Ok(())
 }
 
@@ -951,14 +383,6 @@ fn validate_choice_limits(limits: &CardChoiceLimits) -> Result<()> {
             ensure!(value > 0, "card choice count must be positive");
         }
     }
-    Ok(())
-}
-
-fn validate_card_count(label: &str, count: u32, deck_size: u32) -> Result<()> {
-    ensure!(
-        count <= deck_size,
-        "{label} cannot exceed the standard deck size"
-    );
     Ok(())
 }
 
@@ -1051,97 +475,6 @@ mod tests {
                     enhanced: ChoiceLimit::Count(7),
                 },
             },
-            gamble: GambleRules {
-                standard_deck_size: 99,
-                selection: GambleSelection {
-                    fallback_game: GambleGame::StarwayStairs,
-                    games: GambleGame::ALL
-                        .into_iter()
-                        .enumerate()
-                        .map(|(index, game)| WeightedGame {
-                            game,
-                            weight: if index == 1 {
-                                RelativeWeight::Float(1.5)
-                            } else {
-                                RelativeWeight::Integer(index as u32 + 1)
-                            },
-                        })
-                        .collect(),
-                },
-                three_gate: ThreeGateRules {
-                    max_retries: 5,
-                    gates: vec![
-                        GateDefinition {
-                            gate: Gate::Six,
-                            name: "Six".into(),
-                            threshold: PlayingCardRank::Ace,
-                            winning_card_count: 11,
-                            awards_dreamsign: false,
-                        },
-                        GateDefinition {
-                            gate: Gate::Nine,
-                            name: "Nine".into(),
-                            threshold: PlayingCardRank::Nine,
-                            winning_card_count: 22,
-                            awards_dreamsign: false,
-                        },
-                        GateDefinition {
-                            gate: Gate::Jack,
-                            name: "Jack".into(),
-                            threshold: PlayingCardRank::King,
-                            winning_card_count: 33,
-                            awards_dreamsign: true,
-                        },
-                    ],
-                },
-                ladder_climb: LadderClimbRules {
-                    strong_pool_limit: 77,
-                    attempts: Attempt::ALL
-                        .into_iter()
-                        .enumerate()
-                        .map(|(index, attempt)| LadderAttempt {
-                            attempt,
-                            threshold: [
-                                PlayingCardRank::Queen,
-                                PlayingCardRank::Ten,
-                                PlayingCardRank::Eight,
-                                PlayingCardRank::Six,
-                            ][index],
-                            winning_card_count: 10 + index as u32,
-                        })
-                        .collect(),
-                },
-                starway_stairs: StarwayStairsRules {
-                    max_retries: 6,
-                    tiers: Tier::ALL
-                        .into_iter()
-                        .enumerate()
-                        .map(|(index, tier)| StarwayTier {
-                            tier,
-                            highest_bust_rank: [
-                                PlayingCardRank::Two,
-                                PlayingCardRank::Four,
-                                PlayingCardRank::Seven,
-                            ][index],
-                            bust_card_count: 20 + index as u32,
-                        })
-                        .collect(),
-                },
-                four_suit_reprise: FourSuitRepriseRules {
-                    max_rounds: 2,
-                    matching_suit_card_count: 25,
-                    outcomes: PlayingCardSuit::ALL
-                        .into_iter()
-                        .zip(FourSuitOutcome::ALL)
-                        .enumerate()
-                        .map(|(index, (suit, outcome))| SuitOutcome {
-                            suit,
-                            outcome,
-                            label: format!("Outcome {index}"),
-                        })
-                        .collect(),
-                },
-            },
         }
     }
 
@@ -1175,77 +508,6 @@ mod tests {
             lowered["card-choices"]["duplication"]["enhanced-limit"].as_integer(),
             Some(7)
         );
-        let games = lowered["gamble"]["selection"]["games"].as_array().unwrap();
-        assert_eq!(games[0]["id"].as_str(), Some("gravok-three-gate-wager"));
-        assert_eq!(games[1]["weight"].as_float(), Some(1.5));
-        assert_eq!(games[2]["weight"].as_integer(), Some(3));
-        assert_eq!(
-            lowered["gamble"]["three-gate"]["gates"][0]["id"].as_str(),
-            Some("six")
-        );
-        assert_eq!(
-            lowered["gamble"]["ladder-climb"]["attempts"][3]["attempt"].as_integer(),
-            Some(4)
-        );
-        assert_eq!(
-            lowered["gamble"]["starway-stairs"]["tiers"][2]["tier"].as_integer(),
-            Some(3)
-        );
-        assert_eq!(
-            lowered["gamble"]["four-suit-reprise"]["outcomes"][3]["suit"].as_str(),
-            Some("clubs")
-        );
-    }
-
-    #[test]
-    fn expands_the_authored_deck_size_into_every_compatibility_denominator() {
-        let lowered =
-            lower_with_glossary_map(synthetic_catalog(), &SYNTHETIC_GLOSSARY_ID_MAP).unwrap();
-        for gate in lowered["gamble"]["three-gate"]["gates"].as_array().unwrap() {
-            assert_eq!(gate["odds-denominator"].as_integer(), Some(99));
-        }
-        for attempt in lowered["gamble"]["ladder-climb"]["attempts"]
-            .as_array()
-            .unwrap()
-        {
-            assert_eq!(attempt["odds-denominator"].as_integer(), Some(99));
-        }
-        for tier in lowered["gamble"]["starway-stairs"]["tiers"]
-            .as_array()
-            .unwrap()
-        {
-            assert_eq!(tier["odds-denominator"].as_integer(), Some(99));
-        }
-        assert_eq!(
-            lowered["gamble"]["four-suit-reprise"]["odds-denominator"].as_integer(),
-            Some(99)
-        );
-    }
-
-    #[test]
-    fn lowers_every_playing_card_rank_exactly() {
-        let ranks = [
-            PlayingCardRank::Ace,
-            PlayingCardRank::Two,
-            PlayingCardRank::Three,
-            PlayingCardRank::Four,
-            PlayingCardRank::Five,
-            PlayingCardRank::Six,
-            PlayingCardRank::Seven,
-            PlayingCardRank::Eight,
-            PlayingCardRank::Nine,
-            PlayingCardRank::Ten,
-            PlayingCardRank::Jack,
-            PlayingCardRank::Queen,
-            PlayingCardRank::King,
-        ]
-        .map(PlayingCardRank::as_compat);
-        assert_eq!(
-            ranks,
-            [
-                "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"
-            ]
-        );
     }
 
     #[test]
@@ -1255,6 +517,8 @@ mod tests {
         assert!(ron::from_str::<SitesCatalog>(&unknown).is_err());
         let nested_unknown = serialized.replacen("(site:", "(surprise:true,site:", 1);
         assert!(ron::from_str::<SitesCatalog>(&nested_unknown).is_err());
+        let obsolete_gamble = serialized.replacen("(site_types:", "(gamble:(),site_types:", 1);
+        assert!(ron::from_str::<SitesCatalog>(&obsolete_gamble).is_err());
 
         for invalid in [
             "legacy_slug",
@@ -1283,29 +547,6 @@ mod tests {
         let mut invalid_choice_count = synthetic_catalog();
         invalid_choice_count.card_choices.transfiguration.standard = ChoiceLimit::Count(0);
         assert_error_contains(invalid_choice_count, "card choice count must be positive");
-
-        let mut invalid_weight = synthetic_catalog();
-        invalid_weight.gamble.selection.games[0].weight = RelativeWeight::Float(f64::NAN);
-        assert_error_contains(invalid_weight, "weights must be positive and finite");
-
-        let mut reordered_games = synthetic_catalog();
-        reordered_games.gamble.selection.games.swap(0, 1);
-        assert_error_contains(reordered_games, "structural order");
-
-        let mut excessive_probability = synthetic_catalog();
-        excessive_probability.gamble.three_gate.gates[0].winning_card_count = 100;
-        assert_error_contains(
-            excessive_probability,
-            "cannot exceed the standard deck size",
-        );
-
-        let mut invalid_rounds = synthetic_catalog();
-        invalid_rounds.gamble.four_suit_reprise.max_rounds = 4;
-        assert_error_contains(invalid_rounds, "max rounds must be between 1 and 3");
-
-        let mut mismatched_outcome = synthetic_catalog();
-        mismatched_outcome.gamble.four_suit_reprise.outcomes[0].outcome = FourSuitOutcome::Purge;
-        assert_error_contains(mismatched_outcome, "match every suit in structural order");
 
         let mut unmapped = synthetic_catalog();
         unmapped.site_types[0].glossary_id =

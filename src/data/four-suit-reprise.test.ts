@@ -4,12 +4,15 @@ import {
   fourSuitRepriseDrawCost,
   fourSuitRepriseOutcomeForSuit,
 } from "./four-suit-reprise";
-import { MINIMAL_SITES_DATA } from "../__test-helpers__/atlas-fixtures";
-import { economyFixture } from "../testing/economy-fixture";
+import { gambleGameByRulesKind } from "./gamble-data";
+import { gambleFixture } from "../testing/gamble-fixture";
 
 describe("Four-Suit Reprise rules", () => {
   it("maps every suit to exactly one deck effect", () => {
-    const rules = MINIMAL_SITES_DATA.gamble.fourSuitReprise;
+    const rules = gambleGameByRulesKind(
+      gambleFixture(),
+      "fourSuitReprise",
+    ).rules;
     expect(rules.outcomes.map((rule) => rule.suit)).toEqual([
       "spades",
       "diamonds",
@@ -25,7 +28,12 @@ describe("Four-Suit Reprise rules", () => {
   });
 
   it("applies the Farpoint price", () => {
-    const economy = economyFixture().gamble.fourSuitReprise;
+    const economy = {
+      kind: "fourSuitReprise" as const,
+      standardDrawPrice: 10,
+      enhancedDrawPrice: 0,
+      essenceReward: 100,
+    };
     expect(fourSuitRepriseDrawCost(economy, false)).toBe(10);
     expect(fourSuitRepriseDrawCost(economy, true)).toBe(0);
   });

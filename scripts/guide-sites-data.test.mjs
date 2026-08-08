@@ -9,13 +9,6 @@ import {
 const GUIDE_SITE_TYPES = SITE_TYPES.filter(
   (siteType) => !["Battle", "Draft", "Essence", "Reward"].includes(siteType),
 );
-const GAME_IDS = [
-  "gravok-three-gate-wager",
-  "tidemark-ladder-climb",
-  "starway-stairs",
-  "four-suit-reprise",
-  "blackjack",
-];
 
 function dreamscapesFixture() {
   return [
@@ -86,90 +79,6 @@ function sitesFixture() {
       transfiguration: { "standard-limit": 3, "enhanced-limit": "all" },
       duplication: { "standard-limit": 3, "enhanced-limit": "all" },
     },
-    gamble: {
-      selection: {
-        "fallback-game": GAME_IDS[0],
-        games: GAME_IDS.map((id) => ({ id, weight: 1 })),
-      },
-      "three-gate": {
-        "max-retries": 2,
-        gates: [
-          {
-            id: "six",
-            name: "Six",
-            threshold: "6",
-            "odds-numerator": 36,
-            "odds-denominator": 52,
-            "awards-dreamsign": false,
-          },
-          {
-            id: "nine",
-            name: "Nine",
-            threshold: "9",
-            "odds-numerator": 24,
-            "odds-denominator": 52,
-            "awards-dreamsign": false,
-          },
-          {
-            id: "jack",
-            name: "Jack",
-            threshold: "J",
-            "odds-numerator": 16,
-            "odds-denominator": 52,
-            "awards-dreamsign": true,
-          },
-        ],
-      },
-      "ladder-climb": {
-        "strong-pool-limit": 20,
-        attempts: ["Q", "10", "8", "6"].map((threshold, index) => ({
-          attempt: index + 1,
-          threshold,
-          "odds-numerator": 12 + index * 8,
-          "odds-denominator": 52,
-        })),
-      },
-      "starway-stairs": {
-        "max-retries": 2,
-        tiers: ["2", "4", "7"].map((rank, index) => ({
-          tier: index + 1,
-          "highest-bust-rank": rank,
-          "bust-odds-numerator": 4 + index * 8,
-          "odds-denominator": 52,
-        })),
-      },
-      "four-suit-reprise": {
-        "max-rounds": 3,
-        "odds-numerator": 13,
-        "odds-denominator": 52,
-        outcomes: [
-          { suit: "spades", outcome: "transfiguration", label: "Transfigure" },
-          { suit: "diamonds", outcome: "essence", label: "Essence" },
-          { suit: "hearts", outcome: "duplication", label: "Duplicate" },
-          { suit: "clubs", outcome: "purge", label: "Purge" },
-        ],
-      },
-    },
-  };
-}
-
-function economyFixture() {
-  return {
-    gamble: {
-      ladderClimb: {
-        attempts: Array.from({ length: 4 }, (_, index) => ({
-          attempt: index + 1,
-        })),
-      },
-      starwayStairs: {
-        tiers: Array.from({ length: 3 }, (_, index) => ({ tier: index + 1 })),
-      },
-      fourSuitReprise: {
-        standardDrawPrice: 25,
-        enhancedDrawPrice: 15,
-        essenceReward: 100,
-      },
-    },
   };
 }
 
@@ -186,7 +95,6 @@ function compileFixture() {
   const sites = compileSitesData(sitesFixture(), {
     guides,
     dreamscapes,
-    economy: economyFixture(),
     glossaryIds: SITE_TYPES.map((type) => `fixture-glossary-${type}`),
   });
   return { guides, dreamscapes, sites };
@@ -211,15 +119,12 @@ describe("canonical Dream Guide and Sites compilers", () => {
     }
   });
 
-  it("partitions presentation and dialogue from fold-relevant assignments and rules", () => {
+  it("partitions presentation and dialogue from fold-relevant assignments", () => {
     const baseline = compileFixture();
     const presentation = sitesFixture();
     presentation["site-types"][0].icon = "changed-icon";
-    presentation.gamble["four-suit-reprise"].outcomes[0].label =
-      "Changed label";
     const changedPresentation = compileSitesData(presentation, {
       guides: baseline.guides,
-      economy: economyFixture(),
       glossaryIds: SITE_TYPES.map((type) => `fixture-glossary-${type}`),
     });
     expect(changedPresentation.contentHash).not.toBe(
@@ -244,7 +149,6 @@ describe("canonical Dream Guide and Sites compilers", () => {
     });
     const reassignedSites = compileSitesData(sitesFixture(), {
       guides: reassignedGuides,
-      economy: economyFixture(),
       glossaryIds: SITE_TYPES.map((type) => `fixture-glossary-${type}`),
     });
     expect(reassignedSites.foldHash).not.toBe(baseline.sites.foldHash);
@@ -282,11 +186,10 @@ describe("canonical Dream Guide and Sites compilers", () => {
     ).toThrow(/unresolved portrait source/u);
   });
 
-  it("rejects incomplete metadata, glossary links, Random Site rules, Gamble coverage, and economy drift", () => {
+  it("rejects incomplete metadata, glossary links, Random Site rules, and obsolete Gamble data", () => {
     const compiledGuides = compileDreamGuidesData(guidesFixture());
     const catalogs = {
       guides: compiledGuides,
-      economy: economyFixture(),
       glossaryIds: SITE_TYPES.map((type) => `fixture-glossary-${type}`),
     };
     const missingMetadata = sitesFixture();
@@ -314,34 +217,9 @@ describe("canonical Dream Guide and Sites compilers", () => {
       /requires exactly 3/u,
     );
 
-    const tooManyFourSuitRounds = sitesFixture();
-    tooManyFourSuitRounds.gamble["four-suit-reprise"]["max-rounds"] = 4;
-    expect(() => compileSitesData(tooManyFourSuitRounds, catalogs)).toThrow(
-      /between 1 and 3/u,
+    const obsoleteGamble = { ...sitesFixture(), gamble: {} };
+    expect(() => compileSitesData(obsoleteGamble, catalogs)).toThrow(
+      /root.gamble: unknown key/u,
     );
-    expect(
-      compileSitesData(sitesFixture(), catalogs).gamble.fourSuitReprise,
-    ).toMatchObject({ maxRounds: 3 });
-
-    const missingGame = sitesFixture();
-    missingGame.gamble.selection.games.pop();
-    expect(() => compileSitesData(missingGame, catalogs)).toThrow(
-      /every game id in structural order/u,
-    );
-
-    expect(() =>
-      compileSitesData(sitesFixture(), {
-        ...catalogs,
-        economy: {
-          ...catalogs.economy,
-          gamble: {
-            ...catalogs.economy.gamble,
-            ladderClimb: {
-              attempts: catalogs.economy.gamble.ladderClimb.attempts.slice(1),
-            },
-          },
-        },
-      }),
-    ).toThrow(/align with economy schedule/u);
   });
 });

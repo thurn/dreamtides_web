@@ -9,16 +9,23 @@ const SHA256_HEX = /^[0-9a-f]{64}$/u;
 export async function loadEconomyData(): Promise<EconomyData> {
   const response = await fetch(ECONOMY_DATA_JSON_PATH);
   if (!response.ok) {
-    throw new Error(`Failed to load economy data: ${String(response.status)} ${response.statusText}`);
+    throw new Error(
+      `Failed to load economy data: ${String(response.status)} ${response.statusText}`,
+    );
   }
   const value: unknown = await response.json();
   const candidate = value as Partial<EconomyData>;
   if (
-    typeof value !== "object" || value === null || candidate.schemaVersion !== 1 ||
+    typeof value !== "object" ||
+    value === null ||
+    candidate.schemaVersion !== 1 ||
     !SHA256_HEX.test(candidate.contentHash ?? "") ||
     !SHA256_HEX.test(candidate.foldHash ?? "") ||
-    candidate.journey === undefined || candidate.shop === undefined ||
-    candidate.transfiguration === undefined || candidate.gamble === undefined
+    candidate.journey === undefined ||
+    candidate.shop === undefined ||
+    candidate.transfiguration === undefined ||
+    candidate.exploration === undefined ||
+    "gamble" in candidate
   ) {
     throw new Error("Failed to load economy data: malformed economy-data.json");
   }

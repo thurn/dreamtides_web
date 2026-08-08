@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { economyFixture } from "../../testing/economy-fixture";
+import { gambleFixture } from "../../testing/gamble-fixture";
 import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
 import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
 import type {
@@ -43,6 +44,7 @@ const REWARD_DREAMSIGN: Dreamsign = {
   effectDescription: "Fixture effect.",
 };
 const ECONOMY = economyFixture();
+const GAMBLE = gambleFixture();
 
 function runtime(
   rank: StandardPlayingCardRank,
@@ -164,6 +166,7 @@ beforeEach(() => {
   registerSiteContentProvider({
     sitesData: MINIMAL_SITES_DATA,
     economyData: ECONOMY,
+    gambleData: GAMBLE,
     openSite: () => null,
   });
 });
@@ -344,6 +347,7 @@ describe("Gravok's Three-Gate Wager", () => {
     const provider: SiteContentProvider = {
       sitesData: MINIMAL_SITES_DATA,
       economyData: ECONOMY,
+      gambleData: GAMBLE,
       openSite: () => ({
         runtime: runtime("K", {
           shuffleCommitment: "next-commitment",
@@ -386,6 +390,7 @@ describe("Gravok's Three-Gate Wager", () => {
     const provider: SiteContentProvider = {
       sitesData: MINIMAL_SITES_DATA,
       economyData: ECONOMY,
+      gambleData: GAMBLE,
       openSite: () => ({
         runtime: runtime("K", {
           shuffleCommitment: "final-commitment",
@@ -808,6 +813,7 @@ describe("Starway Stairs", () => {
     registerSiteContentProvider({
       sitesData: MINIMAL_SITES_DATA,
       economyData: ECONOMY,
+      gambleData: GAMBLE,
       openSite: () => ({
         runtime: starwayRuntime(safeCards, {
           shuffleCommitments: ["next-1", "next-2", "next-3"],
@@ -852,6 +858,7 @@ describe("Starway Stairs", () => {
     registerSiteContentProvider({
       sitesData: MINIMAL_SITES_DATA,
       economyData: ECONOMY,
+      gambleData: GAMBLE,
       openSite: () => ({
         runtime: starwayRuntime(
           [{ rank: "2", suit: "diamonds" }, safeCards[1], safeCards[2]],
@@ -1286,15 +1293,13 @@ describe("Blackjack", () => {
 
   it("reveals the dealer and resolves a player bust without drawing", () => {
     const dealt = apply(
-      blackjackStateWith(
-        [
-          { rank: "K", suit: "clubs" },
-          { rank: "10", suit: "spades" },
-          { rank: "9", suit: "hearts" },
-          { rank: "6", suit: "clubs" },
-          { rank: "5", suit: "diamonds" },
-        ],
-      ),
+      blackjackStateWith([
+        { rank: "K", suit: "clubs" },
+        { rank: "10", suit: "spades" },
+        { rank: "9", suit: "hearts" },
+        { rank: "6", suit: "clubs" },
+        { rank: "5", suit: "diamonds" },
+      ]),
       "DEAL_BLACKJACK",
       { siteId: SITE_ID },
     );
@@ -1315,6 +1320,7 @@ describe("Blackjack", () => {
     registerSiteContentProvider({
       sitesData: MINIMAL_SITES_DATA,
       economyData: ECONOMY,
+      gambleData: GAMBLE,
       openSite: () => ({
         runtime: blackjackRuntime(
           [
@@ -1358,6 +1364,7 @@ describe("Blackjack", () => {
     registerSiteContentProvider({
       sitesData: MINIMAL_SITES_DATA,
       economyData: ECONOMY,
+      gambleData: GAMBLE,
       openSite: () => ({
         runtime: blackjackRuntime(
           [
@@ -1464,6 +1471,7 @@ describe("Blackjack", () => {
     registerSiteContentProvider({
       sitesData: MINIMAL_SITES_DATA,
       economyData: ECONOMY,
+      gambleData: GAMBLE,
       openSite: () => ({
         runtime: blackjackRuntime(
           [

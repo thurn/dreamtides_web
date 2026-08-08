@@ -56,7 +56,7 @@ describe("compiled guide and site artifact loaders", () => {
     await expect(loadSitesData()).resolves.toEqual(MINIMAL_SITES_DATA);
   });
 
-  it("rejects malformed guide dialogue and incomplete site rule tables", async () => {
+  it("rejects malformed guide dialogue and obsolete Gamble site data", async () => {
     const guides = structuredClone(GUIDE_CATALOG);
     guides.guides[0].dialogue.site = [];
     vi.stubGlobal(
@@ -67,9 +67,10 @@ describe("compiled guide and site artifact loaders", () => {
       /malformed dream-guides-data/u,
     );
 
-    const sites = structuredClone(MINIMAL_SITES_DATA);
-    sites.gamble.ladderClimb.attempts =
-      sites.gamble.ladderClimb.attempts.slice(1);
+    const sites = {
+      ...structuredClone(MINIMAL_SITES_DATA),
+      gamble: { obsolete: true },
+    };
     vi.stubGlobal(
       "fetch",
       vi.fn(() => Promise.resolve(response(sites))),
@@ -90,21 +91,6 @@ describe("compiled guide and site artifact loaders", () => {
       },
       (sites) => {
         sites.cardChoices.transfiguration.standardLimit = Number.NaN;
-      },
-      (sites) => {
-        sites.gamble.selection.games[0].weight = 0;
-      },
-      (sites) => {
-        sites.gamble.threeGate.gates[0].threshold = "invalid" as never;
-      },
-      (sites) => {
-        sites.gamble.ladderClimb.attempts[0].attempt = 2;
-      },
-      (sites) => {
-        sites.gamble.starwayStairs.tiers[0].tier = 2;
-      },
-      (sites) => {
-        sites.gamble.fourSuitReprise.maxRounds = 4;
       },
       (sites) => {
         sites.guideAssignments.RandomSite = {

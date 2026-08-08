@@ -10,55 +10,126 @@
         "blackjack"
       ],
       "targetOwner": "data/gamble.ron",
-      "currentSources": [
-        { "path": "data/sites.ron", "fields": ["gamble", "selection", "three_gate", "ladder_climb", "starway_stairs", "four_suit_reprise"] },
-        { "path": "data/economy.ron", "fields": ["gamble", "three_gate", "ladder_climb", "starway_stairs", "four_suit_reprise", "blackjack"] },
-        { "path": "src/data/blackjack.ts", "fields": ["BLACKJACK_RULES_VERSION", "BLACKJACK_MAX_ATTEMPTS"] },
-        { "path": "src/data/gravok-wager.ts", "fields": ["GRAVOK_WAGER_RULES_VERSION"] },
-        { "path": "src/data/tidemark-ladder-climb.ts", "fields": ["TIDEMARK_LADDER_CLIMB_RULES_VERSION"] },
-        { "path": "src/data/starway-stairs.ts", "fields": ["STARWAY_STAIRS_RULES_VERSION"] },
-        { "path": "src/data/four-suit-reprise.ts", "fields": ["FOUR_SUIT_REPRISE_RULES_VERSION"] }
+      "currentSources": [],
+      "consumers": [
+        "src/rules/journey/gamble.ts",
+        "src/rules/journey/sites.ts",
+        "src/screens/cumulus_adapters/GambleSiteScreenAdapter.tsx",
+        "src/cumulus/screens/GambleSiteScreen.tsx"
       ],
-      "consumers": ["src/rules/journey/gamble.ts", "src/rules/journey/sites.ts", "src/screens/cumulus_adapters/GambleSiteScreenAdapter.tsx", "src/cumulus/screens/GambleSiteScreen.tsx"],
       "persisted": ["src/types/journey.ts", "src/rules/events.ts"],
-      "logging": ["src/screens/cumulus_adapters/gamble-site-logging-view-model.ts"]
+      "logging": [
+        "src/screens/cumulus_adapters/gamble-site-logging-view-model.ts"
+      ]
     },
     "transfiguration": {
-      "identities": ["Empowered", "Amplified", "Kindled", "Inspired", "Enduring", "Hastened", "Resonant", "Attuned", "Perfected"],
+      "identities": [
+        "Empowered",
+        "Amplified",
+        "Kindled",
+        "Inspired",
+        "Enduring",
+        "Hastened",
+        "Resonant",
+        "Attuned",
+        "Perfected"
+      ],
       "targetOwner": "data/transfiguration.ron",
       "currentSources": [
-        { "path": "data/economy.ron", "fields": ["transfiguration", "form_bands", "stat_delta_bands"] },
-        { "path": "data/sites.ron", "fields": ["transfiguration", "standard", "enhanced"] },
-        { "path": "data/reward_selection.ron", "fields": ["transfiguration", "allowed_forms", "flat_benefits"] },
-        { "path": "src/runtime/transfiguration-display.ts", "fields": ["TRANSFIGURATION_COLORS", "TRANSFIGURATION_TINT_COLORS", "TRANSFIGURATION_ICONS"] },
-        { "path": "src/transfiguration/transfiguration-logic.ts", "fields": ["NON_PERFECTED_CHECKS", "eligibleTransfigurations", "applyTransfigurationToCard"] }
+        {
+          "path": "data/economy.ron",
+          "fields": ["transfiguration", "form_bands", "stat_delta_bands"]
+        },
+        {
+          "path": "data/sites.ron",
+          "fields": ["transfiguration", "standard", "enhanced"]
+        },
+        {
+          "path": "data/reward_selection.ron",
+          "fields": ["transfiguration", "allowed_forms", "flat_benefits"]
+        },
+        {
+          "path": "src/runtime/transfiguration-display.ts",
+          "fields": [
+            "TRANSFIGURATION_COLORS",
+            "TRANSFIGURATION_TINT_COLORS",
+            "TRANSFIGURATION_ICONS"
+          ]
+        },
+        {
+          "path": "src/transfiguration/transfiguration-logic.ts",
+          "fields": [
+            "NON_PERFECTED_CHECKS",
+            "eligibleTransfigurations",
+            "applyTransfigurationToCard"
+          ]
+        }
       ],
-      "consumers": ["src/reward-selection/selectReward.ts", "src/rules/journey/sites.ts", "src/cumulus/components/controls/TransfigurationButton.tsx", "src/cumulus/screens/TransfigurationSiteScreen.tsx"],
+      "consumers": [
+        "src/reward-selection/selectReward.ts",
+        "src/rules/journey/sites.ts",
+        "src/cumulus/components/controls/TransfigurationButton.tsx",
+        "src/cumulus/screens/TransfigurationSiteScreen.tsx"
+      ],
       "persisted": ["src/types/journey.ts", "src/rules/events.ts"],
       "logging": ["src/transfiguration/transfiguration-logic.ts"]
     },
     "dreamwellPrompts": {
-      "identities": ["battle-prompt-discover-character", "battle-prompt-rematerialize-ally", "battle-prompt-choose-void-card-reclaim"],
+      "identities": [
+        "battle-prompt-discover-character",
+        "battle-prompt-rematerialize-ally",
+        "battle-prompt-choose-void-card-reclaim"
+      ],
       "targetOwner": "data/dreamwell.ron",
       "currentSources": [
-        { "path": "data/locales/en-US/battle-prompts.ftl", "fields": ["battle-prompt-"] },
-        { "path": "src/rules/battle/dreamwell-effects-table.ts", "fields": ["createMessageDescriptor"] },
-        { "path": "src/rules/journey/lifecycle.ts", "fields": ["createMessageDescriptor"] }
+        {
+          "path": "data/locales/en-US/battle-prompts.ftl",
+          "fields": ["battle-prompt-"]
+        },
+        {
+          "path": "src/rules/battle/dreamwell-effects-table.ts",
+          "fields": ["createMessageDescriptor"]
+        },
+        {
+          "path": "src/rules/journey/lifecycle.ts",
+          "fields": ["createMessageDescriptor"]
+        }
       ],
-      "consumers": ["src/rules/battle/effect-runner-core.ts", "src/battle/components/PlayableBattleScreen.tsx"],
-      "persisted": ["src/rules/battle/effect-step.ts", "src/rules/journey/lifecycle.ts"],
+      "consumers": [
+        "src/rules/battle/effect-runner-core.ts",
+        "src/battle/components/PlayableBattleScreen.tsx"
+      ],
+      "persisted": [
+        "src/rules/battle/effect-step.ts",
+        "src/rules/journey/lifecycle.ts"
+      ],
       "logging": ["src/battle/components/battle-prompt-logging.ts"]
     },
     "tides": {
       "identities": ["ember", "valor", "vision", "wild", "shadow"],
       "targetOwner": "data/tide_alignments.ron",
       "currentSources": [
-        { "path": "src/cumulus/components/hud/tide-spec.ts", "fields": ["TIDES", "tideAlignmentLabel"] },
-        { "path": "src/editor/tide-visuals.ts", "fields": ["TIDE_COLOR_CHIP", "TIDE_ACCENT_COLOR"] },
-        { "path": "data/locales/en-US/cards.ftl", "fields": ["tide-alignment-name"] },
-        { "path": "data/locales/en-US/accessibility.ftl", "fields": ["reveal-tide-alignment"] }
+        {
+          "path": "src/cumulus/components/hud/tide-spec.ts",
+          "fields": ["TIDES", "tideAlignmentLabel"]
+        },
+        {
+          "path": "src/editor/tide-visuals.ts",
+          "fields": ["TIDE_COLOR_CHIP", "TIDE_ACCENT_COLOR"]
+        },
+        {
+          "path": "data/locales/en-US/cards.ftl",
+          "fields": ["tide-alignment-name"]
+        },
+        {
+          "path": "data/locales/en-US/accessibility.ftl",
+          "fields": ["reveal-tide-alignment"]
+        }
       ],
-      "consumers": ["src/cumulus/components/hud/TideDisc.tsx", "src/editor/TidePoolModal.tsx"],
+      "consumers": [
+        "src/cumulus/components/hud/TideDisc.tsx",
+        "src/editor/TidePoolModal.tsx"
+      ],
       "persisted": ["src/editor/tides-types.ts"],
       "logging": []
     },
@@ -66,8 +137,14 @@
       "identities": ["essence", "points", "lunar", "store", "energy", "spark"],
       "targetOwner": "data/glossary.ron",
       "currentSources": [
-        { "path": "src/cumulus/components/card/RulesText.tsx", "fields": ["SYMBOL_ICON_CLASSES"] },
-        { "path": "data/locales/en-US/cards.ftl", "fields": ["rules-text-symbol-"] }
+        {
+          "path": "src/cumulus/components/card/RulesText.tsx",
+          "fields": ["SYMBOL_ICON_CLASSES"]
+        },
+        {
+          "path": "data/locales/en-US/cards.ftl",
+          "fields": ["rules-text-symbol-"]
+        }
       ],
       "consumers": ["src/cumulus/components/card/RulesText.tsx"],
       "persisted": [],
@@ -75,43 +152,161 @@
     }
   },
   "typescriptTableAllowlist": [
-    { "id": "src/cumulus/components/card/CardStatOrb.tsx#ICON_BY_VARIANT#rulesSymbols", "classification": "unrelated-closed-renderer", "rationale": "Corner stat variants are not rules-text tokens." },
-    { "id": "src/cumulus/components/card/CardView.tsx#GAME_CARD_SELECTION_COLORS#rulesSymbols", "classification": "unrelated-closed-renderer", "rationale": "Selection states happen to reuse resource words." },
-    { "id": "src/cumulus/components/card/RulesText.tsx#SYMBOL_ICON_CLASSES#rulesSymbols", "classification": "migration-debt", "rationale": "Parallel rules-symbol icon and label registry." },
-    { "id": "src/cumulus/components/card/card-text.ts#SYMBOL_MAP#rulesSymbols", "classification": "closed-syntax", "rationale": "The parser retains the supported token syntax after metadata cutover." },
-    { "id": "src/cumulus/components/controls/TransfigurationButton.tsx#TRANSFIGURATION_FORM_GLYPHS#transfiguration", "classification": "migration-debt", "rationale": "Per-form presentation table." },
-    { "id": "src/cumulus/components/hud/tide-spec.ts#TIDES#tides", "classification": "migration-debt", "rationale": "Per-alignment presentation table." },
-    { "id": "src/cumulus/components/overlay/TutorialFeatureCallout.tsx#CARD_FEATURES#rulesSymbols", "classification": "unrelated-closed-renderer", "rationale": "Tutorial card features are not rules-text token metadata." },
-    { "id": "src/cumulus/primitives/color.ts#COLOR_ROLE_TOKENS#rulesSymbols", "classification": "unrelated-design-system", "rationale": "Design-system roles happen to include resource names." },
-    { "id": "src/cumulus/primitives/glyph.ts#GLYPHS#rulesSymbols", "classification": "unrelated-design-system", "rationale": "The generic glyph vocabulary remains closed in TypeScript." },
-    { "id": "src/cumulus/screens/JourneyDebugEditorScreen.tsx#TRANSFIGURATIONS#transfiguration", "classification": "migration-debt", "rationale": "Debug form choices must consume the generated catalog." },
-    { "id": "src/data/glossary.ts#GLOSSARY_IDS#rulesSymbols", "classification": "migration-debt", "rationale": "Rules-symbol concepts must resolve through generated glossary metadata." },
-    { "id": "src/data/sites-data.ts#FALLBACK_GAME_IDS#gamble", "classification": "migration-debt", "rationale": "Catalog fallback participation must come from gamble.ron." },
-    { "id": "src/data/sites-data.ts#GAME_IDS#gamble", "classification": "closed-identity", "rationale": "Runtime validation retains exact stable ID coverage." },
-    { "id": "src/rules/battle/dreamwell-effects-table.ts#DREAMWELL_EFFECTS#dreamwellPrompts", "classification": "migration-debt", "rationale": "Effect behavior stays here while card-specific prompt content moves." },
-    { "id": "src/rules/journey/deck.ts#TRANSFIGURATION_TYPES#transfiguration", "classification": "migration-debt", "rationale": "Persisted form validation must consume the catalog's stable identities." },
-    { "id": "src/rules/journey/lifecycle.ts#LEGACY_PROMPT_DESCRIPTORS#dreamwellPrompts", "classification": "persisted-compatibility", "rationale": "Legacy descriptors remain readable under a synthetic compatibility fixture." },
-    { "id": "src/rules/journey/sites.ts#TRANSFIGURATION_TYPES#transfiguration", "classification": "migration-debt", "rationale": "Site form selection must consume the catalog." },
-    { "id": "src/runtime/transfiguration-display.ts#TRANSFIGURATION_COLORS#transfiguration", "classification": "migration-debt", "rationale": "Per-form accent table." },
-    { "id": "src/runtime/transfiguration-display.ts#TRANSFIGURATION_ICONS#transfiguration", "classification": "migration-debt", "rationale": "Per-form glyph table." },
-    { "id": "src/runtime/transfiguration-display.ts#TRANSFIGURATION_TINT_COLORS#transfiguration", "classification": "migration-debt", "rationale": "Per-form tint table." },
-    { "id": "src/screens/cumulus_adapters/journey-start-view-model.ts#TIDE_BY_COLOR#tides", "classification": "migration-debt", "rationale": "Per-alignment mapping must resolve generated tide metadata." },
-    { "id": "src/transfiguration/transfiguration-logic.ts#NON_PERFECTED_CHECKS#transfiguration", "classification": "migration-debt", "rationale": "Eligibility must dispatch on predicate kind instead of form identity." }
+    {
+      "id": "src/cumulus/components/card/CardStatOrb.tsx#ICON_BY_VARIANT#rulesSymbols",
+      "classification": "unrelated-closed-renderer",
+      "rationale": "Corner stat variants are not rules-text tokens."
+    },
+    {
+      "id": "src/cumulus/components/card/CardView.tsx#GAME_CARD_SELECTION_COLORS#rulesSymbols",
+      "classification": "unrelated-closed-renderer",
+      "rationale": "Selection states happen to reuse resource words."
+    },
+    {
+      "id": "src/cumulus/components/card/RulesText.tsx#SYMBOL_ICON_CLASSES#rulesSymbols",
+      "classification": "migration-debt",
+      "rationale": "Parallel rules-symbol icon and label registry."
+    },
+    {
+      "id": "src/cumulus/components/card/card-text.ts#SYMBOL_MAP#rulesSymbols",
+      "classification": "closed-syntax",
+      "rationale": "The parser retains the supported token syntax after metadata cutover."
+    },
+    {
+      "id": "src/cumulus/components/controls/TransfigurationButton.tsx#TRANSFIGURATION_FORM_GLYPHS#transfiguration",
+      "classification": "migration-debt",
+      "rationale": "Per-form presentation table."
+    },
+    {
+      "id": "src/cumulus/components/hud/tide-spec.ts#TIDES#tides",
+      "classification": "migration-debt",
+      "rationale": "Per-alignment presentation table."
+    },
+    {
+      "id": "src/cumulus/components/overlay/TutorialFeatureCallout.tsx#CARD_FEATURES#rulesSymbols",
+      "classification": "unrelated-closed-renderer",
+      "rationale": "Tutorial card features are not rules-text token metadata."
+    },
+    {
+      "id": "src/cumulus/primitives/color.ts#COLOR_ROLE_TOKENS#rulesSymbols",
+      "classification": "unrelated-design-system",
+      "rationale": "Design-system roles happen to include resource names."
+    },
+    {
+      "id": "src/cumulus/primitives/glyph.ts#GLYPHS#rulesSymbols",
+      "classification": "unrelated-design-system",
+      "rationale": "The generic glyph vocabulary remains closed in TypeScript."
+    },
+    {
+      "id": "src/cumulus/screens/JourneyDebugEditorScreen.tsx#TRANSFIGURATIONS#transfiguration",
+      "classification": "migration-debt",
+      "rationale": "Debug form choices must consume the generated catalog."
+    },
+    {
+      "id": "src/data/glossary.ts#GLOSSARY_IDS#rulesSymbols",
+      "classification": "migration-debt",
+      "rationale": "Rules-symbol concepts must resolve through generated glossary metadata."
+    },
+    {
+      "id": "src/rules/battle/dreamwell-effects-table.ts#DREAMWELL_EFFECTS#dreamwellPrompts",
+      "classification": "migration-debt",
+      "rationale": "Effect behavior stays here while card-specific prompt content moves."
+    },
+    {
+      "id": "src/rules/journey/deck.ts#TRANSFIGURATION_TYPES#transfiguration",
+      "classification": "migration-debt",
+      "rationale": "Persisted form validation must consume the catalog's stable identities."
+    },
+    {
+      "id": "src/rules/journey/lifecycle.ts#LEGACY_PROMPT_DESCRIPTORS#dreamwellPrompts",
+      "classification": "persisted-compatibility",
+      "rationale": "Legacy descriptors remain readable under a synthetic compatibility fixture."
+    },
+    {
+      "id": "src/rules/journey/sites.ts#TRANSFIGURATION_TYPES#transfiguration",
+      "classification": "migration-debt",
+      "rationale": "Site form selection must consume the catalog."
+    },
+    {
+      "id": "src/runtime/transfiguration-display.ts#TRANSFIGURATION_COLORS#transfiguration",
+      "classification": "migration-debt",
+      "rationale": "Per-form accent table."
+    },
+    {
+      "id": "src/runtime/transfiguration-display.ts#TRANSFIGURATION_ICONS#transfiguration",
+      "classification": "migration-debt",
+      "rationale": "Per-form glyph table."
+    },
+    {
+      "id": "src/runtime/transfiguration-display.ts#TRANSFIGURATION_TINT_COLORS#transfiguration",
+      "classification": "migration-debt",
+      "rationale": "Per-form tint table."
+    },
+    {
+      "id": "src/screens/cumulus_adapters/journey-start-view-model.ts#TIDE_BY_COLOR#tides",
+      "classification": "migration-debt",
+      "rationale": "Per-alignment mapping must resolve generated tide metadata."
+    },
+    {
+      "id": "src/transfiguration/transfiguration-logic.ts#NON_PERFECTED_CHECKS#transfiguration",
+      "classification": "migration-debt",
+      "rationale": "Eligibility must dispatch on predicate kind instead of form identity."
+    }
   ],
   "legacyFluentMessages": {
-    "gamble": [
-      "gamble-blackjack-deal-action", "gamble-blackjack-hand-accessible-name", "gamble-blackjack-hit-action", "gamble-blackjack-outcome-headline", "gamble-blackjack-prize", "gamble-blackjack-rule", "gamble-blackjack-stand-action", "gamble-blackjack-wager-returned", "gamble-blackjack-wins",
-      "gamble-four-suit-choose-another-card-action", "gamble-four-suit-draw-accessible-name", "gamble-four-suit-essence-outcome", "gamble-four-suit-outcome-accessible-name", "gamble-four-suit-picker-empty-state", "gamble-four-suit-picker-instruction", "gamble-four-suit-picker-title", "gamble-four-suit-result-headline", "gamble-four-suit-stage-accessible-name",
-      "gamble-gravok-bet-accessible-name", "gamble-gravok-bet-action", "gamble-gravok-gates-accessible-name", "gamble-gravok-outcome-headline",
-      "gamble-starway-cash-out-accessible-name", "gamble-starway-outcome-headline", "gamble-starway-prize-at-stake", "gamble-starway-tier-action", "gamble-starway-tier-action-accessible-name", "gamble-starway-tier-group-accessible-name"
-    ],
+    "gamble": [],
     "transfiguration": [
-      "transfiguration-change-amplified", "transfiguration-change-attuned", "transfiguration-change-draw", "transfiguration-change-energy", "transfiguration-change-fast", "transfiguration-change-perfected", "transfiguration-change-reclaim", "transfiguration-change-resonant", "transfiguration-change-spark", "transfiguration-change-unavailable", "transfiguration-form-name"
+      "transfiguration-change-amplified",
+      "transfiguration-change-attuned",
+      "transfiguration-change-draw",
+      "transfiguration-change-energy",
+      "transfiguration-change-fast",
+      "transfiguration-change-perfected",
+      "transfiguration-change-reclaim",
+      "transfiguration-change-resonant",
+      "transfiguration-change-spark",
+      "transfiguration-change-unavailable",
+      "transfiguration-form-name"
     ],
     "dreamwellPrompts": [
-      "battle-prompt-banish-enemy-character", "battle-prompt-choose-card-discard", "battle-prompt-choose-character-abandon", "battle-prompt-choose-character-to-play", "battle-prompt-choose-one", "battle-prompt-choose-void-card-reclaim", "battle-prompt-choose-void-card-reclaim-subtitle", "battle-prompt-choose-void-for-top", "battle-prompt-confirm-abandon-draw", "battle-prompt-confirm-discard-draw", "battle-prompt-confirm-put-void-on-top", "battle-prompt-confirm-skip", "battle-prompt-confirm-yes", "battle-prompt-discard-card", "battle-prompt-discard-cards", "battle-prompt-discard-hand-redraw", "battle-prompt-discover-card-max-cost", "battle-prompt-discover-character", "battle-prompt-draw-card", "battle-prompt-gain-energy", "battle-prompt-generic", "battle-prompt-generic-option", "battle-prompt-generic-subtitle", "battle-prompt-pick-card-for-hand", "battle-prompt-play-character-from-void", "battle-prompt-rematerialize-ally", "battle-prompt-return-event-from-void", "battle-prompt-return-void-card", "battle-prompt-switch-side"
+      "battle-prompt-banish-enemy-character",
+      "battle-prompt-choose-card-discard",
+      "battle-prompt-choose-character-abandon",
+      "battle-prompt-choose-character-to-play",
+      "battle-prompt-choose-one",
+      "battle-prompt-choose-void-card-reclaim",
+      "battle-prompt-choose-void-card-reclaim-subtitle",
+      "battle-prompt-choose-void-for-top",
+      "battle-prompt-confirm-abandon-draw",
+      "battle-prompt-confirm-discard-draw",
+      "battle-prompt-confirm-put-void-on-top",
+      "battle-prompt-confirm-skip",
+      "battle-prompt-confirm-yes",
+      "battle-prompt-discard-card",
+      "battle-prompt-discard-cards",
+      "battle-prompt-discard-hand-redraw",
+      "battle-prompt-discover-card-max-cost",
+      "battle-prompt-discover-character",
+      "battle-prompt-draw-card",
+      "battle-prompt-gain-energy",
+      "battle-prompt-generic",
+      "battle-prompt-generic-option",
+      "battle-prompt-generic-subtitle",
+      "battle-prompt-pick-card-for-hand",
+      "battle-prompt-play-character-from-void",
+      "battle-prompt-rematerialize-ally",
+      "battle-prompt-return-event-from-void",
+      "battle-prompt-return-void-card",
+      "battle-prompt-switch-side"
     ],
     "tides": ["reveal-tide-alignment", "tide-alignment-name"],
-    "rulesSymbols": ["rules-text-symbol-energy", "rules-text-symbol-essence", "rules-text-symbol-lunar", "rules-text-symbol-points", "rules-text-symbol-spark", "rules-text-symbol-store"]
+    "rulesSymbols": [
+      "rules-text-symbol-energy",
+      "rules-text-symbol-essence",
+      "rules-text-symbol-lunar",
+      "rules-text-symbol-points",
+      "rules-text-symbol-spark",
+      "rules-text-symbol-store"
+    ]
   }
 }

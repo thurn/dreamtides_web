@@ -352,17 +352,15 @@ gamble-wager-prize-accessible-name =
 # Accessible command for choosing one Gravok wager gate. $gateName is the
 # authored gate display name with unknown grammar; $essenceCost is the positive
 # integer Essence paid by the current player.
-gamble-gravok-bet-accessible-name = Bet on { $gateName } for { $essenceCost } { -essence }
+gamble-gate-bet-accessible-name = Bet on { $gateName } for { $essenceCost } { -essence }
 # Accessible command for purchasing the next Tidemark Ladder draw.
 # $attemptNumber is the one-based attempt number from 1 through 4 and
 # $essenceCost is the non-negative Essence price paid by the current player.
-gamble-ladder-draw-accessible-name = Draw attempt { $attemptNumber } for { $essenceCost } { -essence }
-# Accessible name for the group of three prize tiers in Starway Stairs.
-gamble-starway-tier-group-accessible-name = Starway Stairs tiers
+gamble-draw-attempt-accessible-name = Draw attempt { $attemptNumber } for { $essenceCost } { -essence }
 # Accessible command for the same Starway Stairs wager. $stage is "initial" or
 # "climb"; $tierNumber is the one-based tier from 1 through 3; and $essenceCost
 # is the non-negative Essence price paid by the current player.
-gamble-starway-tier-action-accessible-name =
+gamble-tier-action-accessible-name =
     { $stage ->
         [initial] Bet { $essenceCost } { -essence } on Starway Stairs
        *[climb] Climb to tier { $tierNumber } for { $essenceCost } { -essence }
@@ -370,11 +368,11 @@ gamble-starway-tier-action-accessible-name =
 # Accessible command for ending a Starway Stairs run and taking the accumulated
 # payout. $essenceAmount is the positive integer Essence granted to the current
 # player; the same amount is also visible beside the button label.
-gamble-starway-cash-out-accessible-name = Take { $essenceAmount } { -essence }
+gamble-cash-out-accessible-name = Take { $essenceAmount } { -essence }
 # Accessible command for paying to draw in Four-Suit Reprise. $essenceCost is
 # the non-negative Essence price paid by the current player and is also rendered
 # separately on the button.
-gamble-four-suit-draw-accessible-name = Draw for { $essenceCost } { -essence }
+gamble-draw-accessible-name = Draw for { $essenceCost } { -essence }
 # Accessible name for Dream Avatar artwork. $avatarName is the canonical avatar
 # display name and $avatarTitle is its authored epithet; neither has modeled
 # grammatical gender. $hasTitle is "yes" when the epithet is present and "no"
@@ -446,7 +444,7 @@ exploration-pack-choose-accessible-name = Choose Pack { $packNumber }
 # Accessible name for one Four-Suit Reprise outcome row. $suit is the canonical
 # playing-card suit name and $outcomeLabel is the authored complete outcome
 # label associated with that suit.
-gamble-four-suit-outcome-accessible-name = { $suit }: { $outcomeLabel }
+gamble-suit-outcome-accessible-name = { $suit }: { $outcomeLabel }
 # Accessible command that dismisses one tutorial dialogue. $speakerName is the
 # displayed name of the character speaking and has unknown grammatical gender.
 battle-tutorial-dismiss-action = Dismiss { $speakerName } tutorial
@@ -509,23 +507,13 @@ exploration-site-offer-modifier-accessible-name = Your next Draft or Shop will c
 # Accessible completed-event summary shown when the current player deliberately
 # resolves a card-acquisition Exploration outcome without taking any cards.
 exploration-no-cards-taken = No Cards Taken
-# Accessible name for the group containing the three Gravok wager gates.
-gamble-gravok-gates-accessible-name = Three wager gates
-# Accessible name for the Tidemark Ladder play area containing the concealed
-# prize card and the current player's draw controls.
-gamble-ladder-stage-accessible-name = Ladder climb
-# Accessible name for the Four-Suit Reprise wager stage after a card is selected.
-gamble-four-suit-stage-accessible-name = Four-Suit Reprise wager
-gamble-blackjack-hand-accessible-name =
+gamble-playing-card-hand-accessible-name =
     { $owner ->
         [dealer] Dealer hand
        *[player] Player hand
     }
 # Accessible command that closes the Gamble Dreamsign replacement picker.
 gamble-replacement-close-action = Close replacement choice
-# Accessible command that returns from a selected Four-Suit Reprise card to its
-# card picker so the current player can choose a different card.
-gamble-four-suit-choose-another-card-action = Choose another card
 # Accessible status on a battle card whose actions are unavailable until it is
 # readied by the game rules.
 battle-card-exhausted-accessible-name = Exhausted

@@ -4,14 +4,11 @@ import {
   starwayStairsEssenceReward,
   starwayStairsTierRule,
 } from "../../data/starway-stairs";
-import {
-  BLACKJACK_MAX_ATTEMPTS,
-  blackjackHandTotal,
-} from "../../data/blackjack";
+import { blackjackHandTotal } from "../../data/blackjack";
+import { gambleGame, gambleGameByRulesKind } from "../../data/gamble-data";
 import { logEventOnce } from "../../logging";
 import type { GambleSiteRuntime, SiteState } from "../../types/journey";
-import type { EconomyData } from "../../types/economy-data";
-import type { SitesData } from "../../types/sites-data";
+import type { GambleData } from "../../types/gamble-data";
 
 /** Record one Gamble visit without coupling logging payloads to the adapter. */
 export function logGambleSiteEntered(
@@ -28,9 +25,9 @@ export function logGamblePrepared(
   siteId: string,
   runtime: GambleSiteRuntime,
   view: GambleSiteView,
-  economyData: EconomyData,
-  sitesData: SitesData,
+  gambleData: GambleData,
 ): void {
+  const game = gambleGame(gambleData, runtime.gameId);
   if (runtime.gameId === "blackjack" && view.gameId === "blackjack") {
     logEventOnce(
       `Gamble:${siteId}:blackjack-prepared:${runtime.shuffleCommitment}`,
@@ -39,16 +36,18 @@ export function logGamblePrepared(
         siteId,
         gameId: runtime.gameId,
         rulesVersion: runtime.rulesVersion,
-        sitesFoldHash: sitesData.foldHash,
+        gambleFoldHash: gambleData.foldHash,
         isFarpoint: runtime.isFarpoint,
         wagerCost: runtime.wagerCost,
         prizeEssence: runtime.prizeEssence,
         attemptNumber: runtime.attemptNumber,
-        maxAttempts: BLACKJACK_MAX_ATTEMPTS,
+        maxAttempts:
+          game.rules.kind === "blackjack" ? game.rules.maxAttempts : null,
         shuffleCommitment: runtime.shuffleCommitment,
         openingDealOrder: ["player", "dealer", "player", "dealer"],
         dealerRule: "stand-soft-17",
-        winReward: economyData.gamble.blackjack.prizeEssence,
+        winReward:
+          game.economy.kind === "blackjack" ? game.economy.prizeEssence : null,
         pushReward: runtime.wagerCost,
       },
     );
@@ -65,7 +64,7 @@ export function logGamblePrepared(
         siteId,
         gameId: runtime.gameId,
         rulesVersion: runtime.rulesVersion,
-        sitesFoldHash: sitesData.foldHash,
+        gambleFoldHash: gambleData.foldHash,
         isFarpoint: runtime.isFarpoint,
         drawCost: runtime.drawCost,
         maxRounds: runtime.shuffleCommitments.length,
@@ -77,12 +76,18 @@ export function logGamblePrepared(
             (offer) => offer.type,
           ),
         })),
-        outcomes: sitesData.gamble.fourSuitReprise.outcomes.map((rule) => ({
-          suit: rule.suit,
-          outcome: rule.outcome,
-        })),
-        oddsNumerator: sitesData.gamble.fourSuitReprise.oddsNumerator,
-        oddsDenominator: sitesData.gamble.fourSuitReprise.oddsDenominator,
+        outcomes:
+          game.rules.kind === "fourSuitReprise"
+            ? game.rules.outcomes.map((rule) => ({
+                suit: rule.suit,
+                outcome: rule.outcome,
+              }))
+            : [],
+        matchingSuitCardCount:
+          game.rules.kind === "fourSuitReprise"
+            ? game.rules.matchingSuitCardCount
+            : null,
+        standardDeckSize: game.rules.standardDeckSize,
       },
     );
     if (runtime.phase === "choose" && runtime.rounds.length > 0) {
@@ -112,7 +117,7 @@ export function logGamblePrepared(
         siteId,
         gameId: runtime.gameId,
         rulesVersion: runtime.rulesVersion,
-        sitesFoldHash: sitesData.foldHash,
+        gambleFoldHash: gambleData.foldHash,
         roundNumber: runtime.roundNumber ?? 1,
         playerDecision:
           (runtime.roundNumber ?? 1) === 1 ? "initial" : "play_again",
@@ -141,22 +146,28 @@ export function logGamblePrepared(
         siteId,
         gameId: runtime.gameId,
         rulesVersion: runtime.rulesVersion,
-        sitesFoldHash: sitesData.foldHash,
+        gambleFoldHash: gambleData.foldHash,
         roundNumber: runtime.roundNumber,
         playerDecision: runtime.roundNumber === 1 ? "initial" : "play_again",
         isFarpoint: runtime.isFarpoint,
         wagerAmount: runtime.wagerAmount,
         shuffleCommitments: runtime.shuffleCommitments,
-        tiers: sitesData.gamble.starwayStairs.tiers.map((tier) => ({
-          tierNumber: tier.tier,
-          bustOddsNumerator: tier.bustOddsNumerator,
-          oddsDenominator: tier.oddsDenominator,
-          highestBustRank: tier.highestBustRank,
-          rewardEssence: starwayStairsEssenceReward(
-            economyData.gamble.starwayStairs,
-            tier.tier,
-          ),
-        })),
+        tiers:
+          game.rules.kind === "starwayStairs"
+            ? game.rules.tiers.map((tier) => ({
+                tierNumber: tier.tier,
+                bustCardCount: tier.bustCardCount,
+                standardDeckSize: game.rules.standardDeckSize,
+                highestBustRank: tier.highestBustRank,
+                rewardEssence: starwayStairsEssenceReward(
+                  game.economy.kind === "starwayStairs"
+                    ? game.economy
+                    : gambleGameByRulesKind(gambleData, "starwayStairs")
+                        .economy,
+                  tier.tier,
+                ),
+              }))
+            : [],
       },
     );
     return;
@@ -175,25 +186,31 @@ export function logGamblePrepared(
       siteId,
       gameId: runtime.gameId,
       rulesVersion: runtime.rulesVersion,
-      sitesFoldHash: sitesData.foldHash,
+      gambleFoldHash: gambleData.foldHash,
       isFarpoint: runtime.isFarpoint,
       shuffleCommitments: runtime.shuffleCommitments,
       dreamsignCandidates: runtime.dreamsignCandidateScores,
       strongPoolSize: runtime.strongPoolSize,
       strongPoolCutoffScore: runtime.strongPoolCutoffScore,
       selectedDreamsignId: runtime.rewardDreamsign?.id ?? null,
-      rewardEssence: economyData.gamble.ladderClimb.winEssence,
-      attempts: sitesData.gamble.ladderClimb.attempts.map((attempt) => ({
-        attemptNumber: attempt.attempt,
-        cost: tidemarkLadderClimbAttemptCost(
-          economyData.gamble.ladderClimb,
-          attempt.attempt,
-          runtime.isFarpoint,
-        ),
-        oddsNumerator: attempt.oddsNumerator,
-        oddsDenominator: attempt.oddsDenominator,
-        threshold: attempt.threshold,
-      })),
+      rewardEssence:
+        game.economy.kind === "ladderClimb" ? game.economy.winEssence : null,
+      attempts:
+        game.rules.kind === "ladderClimb"
+          ? game.rules.attempts.map((attempt) => ({
+              attemptNumber: attempt.attempt,
+              cost: tidemarkLadderClimbAttemptCost(
+                game.economy.kind === "ladderClimb"
+                  ? game.economy
+                  : gambleGameByRulesKind(gambleData, "ladderClimb").economy,
+                attempt.attempt,
+                runtime.isFarpoint,
+              ),
+              winningCardCount: attempt.winningCardCount,
+              standardDeckSize: game.rules.standardDeckSize,
+              threshold: attempt.threshold,
+            }))
+          : [],
     },
   );
 }
@@ -203,10 +220,11 @@ export function logGambleResolved(
   siteId: string,
   runtime: GambleSiteRuntime,
   view: GambleSiteView,
-  economyData: EconomyData,
-  sitesData: SitesData,
+  gambleData: GambleData,
 ): void {
+  const game = gambleGame(gambleData, runtime.gameId);
   if (runtime.gameId === "blackjack" && view.gameId === "blackjack") {
+    const blackjackGame = gambleGameByRulesKind(gambleData, "blackjack");
     if (!runtime.wagerPaid || runtime.playerDecision === null) return;
     const visibleDealerCards = runtime.dealerRevealed
       ? runtime.dealerCards
@@ -218,14 +236,20 @@ export function logGambleResolved(
         siteId,
         gameId: runtime.gameId,
         rulesVersion: runtime.rulesVersion,
-        sitesFoldHash: sitesData.foldHash,
+        gambleFoldHash: gambleData.foldHash,
         attemptNumber: runtime.attemptNumber,
         playerDecision: runtime.playerDecision,
         payment: runtime.playerDecision === "deal" ? runtime.wagerCost : 0,
         playerCards: runtime.playerCards,
-        playerTotal: blackjackHandTotal(runtime.playerCards),
+        playerTotal: blackjackHandTotal(
+          runtime.playerCards,
+          blackjackGame.rules.target,
+        ),
         dealerCards: visibleDealerCards,
-        dealerTotal: blackjackHandTotal(visibleDealerCards),
+        dealerTotal: blackjackHandTotal(
+          visibleDealerCards,
+          blackjackGame.rules.target,
+        ),
         dealerRevealed: runtime.dealerRevealed,
         deckCursor: runtime.deckCursor,
         outcome: runtime.outcome,
@@ -249,9 +273,12 @@ export function logGambleResolved(
         selectedCardId: result.targetCardId,
         revealedCard: result.card,
         resolvedSuitOutcome: result.outcome,
-        sitesFoldHash: sitesData.foldHash,
-        oddsNumerator: sitesData.gamble.fourSuitReprise.oddsNumerator,
-        oddsDenominator: sitesData.gamble.fourSuitReprise.oddsDenominator,
+        gambleFoldHash: gambleData.foldHash,
+        matchingSuitCardCount:
+          game.rules.kind === "fourSuitReprise"
+            ? game.rules.matchingSuitCardCount
+            : null,
+        standardDeckSize: game.rules.standardDeckSize,
       },
     );
     return;
@@ -290,7 +317,7 @@ export function logGambleResolved(
     const result = runtime.results[runtime.results.length - 1];
     if (result === undefined) return;
     const tier = starwayStairsTierRule(
-      sitesData.gamble.starwayStairs,
+      gambleGameByRulesKind(gambleData, "starwayStairs").rules,
       result.tierNumber,
     );
     logEventOnce(
@@ -301,14 +328,14 @@ export function logGambleResolved(
         gameId: runtime.gameId,
         roundNumber: runtime.roundNumber,
         tierNumber: result.tierNumber,
-        bustOddsNumerator: tier.bustOddsNumerator,
-        oddsDenominator: tier.oddsDenominator,
+        bustCardCount: tier.bustCardCount,
+        standardDeckSize: game.rules.standardDeckSize,
         highestBustRank: tier.highestBustRank,
         payment: runtime.wagerAmount,
         revealedCard: result.card,
         busted: result.busted,
         prizeAtRisk: starwayStairsEssenceReward(
-          economyData.gamble.starwayStairs,
+          gambleGameByRulesKind(gambleData, "starwayStairs").economy,
           result.tierNumber,
         ),
       },
@@ -319,8 +346,8 @@ export function logGambleResolved(
   if (runtime.gameId !== "tidemark-ladder-climb") return;
   const result = runtime.result;
   if (result === null) return;
-  const attempt =
-    sitesData.gamble.ladderClimb.attempts[result.attemptNumber - 1];
+  const attempt = gambleGameByRulesKind(gambleData, "ladderClimb").rules
+    .attempts[result.attemptNumber - 1];
   logEventOnce(
     `Gamble:${siteId}:ladder-result:${runtime.shuffleCommitments[result.attemptNumber - 1] ?? "unknown"}`,
     "gamble_wager_resolved",
@@ -328,14 +355,17 @@ export function logGambleResolved(
       siteId,
       gameId: runtime.gameId,
       attemptNumber: result.attemptNumber,
-      oddsNumerator: attempt?.oddsNumerator ?? null,
-      oddsDenominator: attempt?.oddsDenominator ?? null,
+      winningCardCount: attempt?.winningCardCount ?? null,
+      standardDeckSize: game.rules.standardDeckSize,
       threshold: attempt?.threshold ?? null,
       payment: result.costPaid,
       cumulativeCost: result.cumulativeCost,
       revealedCard: result.card,
       won: result.won,
-      essenceGained: result.won ? economyData.gamble.ladderClimb.winEssence : 0,
+      essenceGained:
+        result.won && game.economy.kind === "ladderClimb"
+          ? game.economy.winEssence
+          : 0,
       terminalReason: result.won
         ? "won"
         : result.attemptNumber === 4
@@ -350,11 +380,12 @@ export function logGambleSettled(
   siteId: string,
   runtime: GambleSiteRuntime,
   view: GambleSiteView,
-  economyData: EconomyData,
-  sitesData: SitesData,
+  gambleData: GambleData,
 ): void {
+  const game = gambleGame(gambleData, runtime.gameId);
   if (runtime.gameId === "blackjack") {
     if (!runtime.resultSettled) return;
+    const blackjackGame = gambleGameByRulesKind(gambleData, "blackjack");
     logEventOnce(
       `Gamble:${siteId}:blackjack-settled:${runtime.shuffleCommitment}`,
       "gamble_wager_settled",
@@ -362,10 +393,16 @@ export function logGambleSettled(
         siteId,
         gameId: runtime.gameId,
         rulesVersion: runtime.rulesVersion,
-        sitesFoldHash: sitesData.foldHash,
+        gambleFoldHash: gambleData.foldHash,
         attemptNumber: runtime.attemptNumber,
-        playerTotal: blackjackHandTotal(runtime.playerCards),
-        dealerTotal: blackjackHandTotal(runtime.dealerCards),
+        playerTotal: blackjackHandTotal(
+          runtime.playerCards,
+          blackjackGame.rules.target,
+        ),
+        dealerTotal: blackjackHandTotal(
+          runtime.dealerCards,
+          blackjackGame.rules.target,
+        ),
         outcome: runtime.outcome,
         wagerPayment: runtime.wagerCost,
         essenceGained: runtime.essenceAwarded,
@@ -383,7 +420,7 @@ export function logGambleSettled(
       {
         siteId,
         gameId: runtime.gameId,
-        sitesFoldHash: sitesData.foldHash,
+        gambleFoldHash: gambleData.foldHash,
         roundNumber: result.roundNumber,
         payment: result.costPaid,
         selectedEntryId: result.targetEntryId,
@@ -436,7 +473,7 @@ export function logGambleSettled(
         busted: result.busted,
         terminalReason: runtime.terminalReason,
         prizeAtRisk: starwayStairsEssenceReward(
-          economyData.gamble.starwayStairs,
+          gambleGameByRulesKind(gambleData, "starwayStairs").economy,
           result.tierNumber,
         ),
         prizeAwarded: runtime.prizeAwarded,
@@ -459,15 +496,18 @@ export function logGambleSettled(
       gameId: runtime.gameId,
       attemptNumber: runtime.result.attemptNumber,
       cumulativeCost: runtime.result.cumulativeCost,
-      essenceGained: runtime.result.won
-        ? economyData.gamble.ladderClimb.winEssence
-        : 0,
-      essenceChangeAtSettlement: runtime.result.won
-        ? economyData.gamble.ladderClimb.winEssence
-        : 0,
+      essenceGained:
+        runtime.result.won && game.economy.kind === "ladderClimb"
+          ? game.economy.winEssence
+          : 0,
+      essenceChangeAtSettlement:
+        runtime.result.won && game.economy.kind === "ladderClimb"
+          ? game.economy.winEssence
+          : 0,
       netEssenceChange:
-        (runtime.result.won ? economyData.gamble.ladderClimb.winEssence : 0) -
-        runtime.result.cumulativeCost,
+        (runtime.result.won && game.economy.kind === "ladderClimb"
+          ? game.economy.winEssence
+          : 0) - runtime.result.cumulativeCost,
       dreamsignId: runtime.result.won
         ? (runtime.rewardDreamsign?.id ?? null)
         : null,

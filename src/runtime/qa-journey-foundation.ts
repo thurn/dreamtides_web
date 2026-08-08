@@ -60,6 +60,7 @@ export function createQaJourneyFoundation(
       dreamscapes: journeyContent.dreamscapes,
       atlasData: journeyContent.atlasData,
       sitesData: journeyContent.sitesData,
+      gambleData: journeyContent.gambleData,
       dreamsignPoolIds: resolvedPackage.dreamsignPoolIds,
       apollyonIncarnations: journeyContent.apollyonIncarnations,
     },

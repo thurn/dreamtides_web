@@ -22,6 +22,7 @@ import { logEvent } from "../logging";
 import type { RandomSiteDestinationType } from "../types/journey";
 import { atlasLayerData } from "../types/atlas-data";
 import type { SitesData } from "../types/sites-data";
+import type { GambleData } from "../types/gamble-data";
 
 /** Parameters for site generation that require external data. */
 export interface SiteGenerationContext {
@@ -46,6 +47,7 @@ export interface AtlasBuildContext {
   dreamscapes: readonly DreamscapeContent[];
   atlasData: AtlasData;
   sitesData: SitesData;
+  gambleData: GambleData;
   /** Dreamsign ids eligible to be granted as pre-revealed known dreamsigns. */
   dreamsignPoolIds: readonly string[];
   /**
@@ -1221,7 +1223,15 @@ function generateInitialAtlasInternal(
       sitesData: {
         foldHash: build.sitesData.foldHash,
         randomSite: build.sitesData.randomSite,
-        gambleSelection: build.sitesData.gamble.selection,
+        gambleSelection: {
+          fallbackGame: build.gambleData.games.find(
+            (game) => game.selection.fallback,
+          )?.id,
+          games: build.gambleData.games.map((game) => ({
+            id: game.id,
+            weight: game.selection.weight,
+          })),
+        },
         cardChoices: build.sitesData.cardChoices,
       },
     });

@@ -4,33 +4,32 @@ import type {
 } from "../types/gamble";
 import type { StarwayStairsSiteRuntime } from "../types/journey";
 import { STANDARD_PLAYING_CARD_RANKS } from "./gravok-wager";
-import type { EconomyData } from "../types/economy-data";
-import type { SitesData } from "../types/sites-data";
-
-export const STARWAY_STAIRS_RULES_VERSION = "starway-stairs-v4";
+import type { StarwayStairsGame } from "../types/gamble-data";
 
 export function starwayStairsWagerAmount(
-  config: EconomyData["gamble"]["starwayStairs"],
+  config: StarwayStairsGame["economy"],
   isFarpoint: boolean,
 ): number {
   return isFarpoint ? config.enhancedWager : config.standardWager;
 }
 
-export type StarwayStairsTierRule =
-  SitesData["gamble"]["starwayStairs"]["tiers"][number];
+export type StarwayStairsTierRule = StarwayStairsGame["rules"]["tiers"][number];
 
 export function starwayStairsTierRule(
-  config: SitesData["gamble"]["starwayStairs"],
+  config: StarwayStairsGame["rules"],
   tierNumber: StarwayStairsTierNumber,
 ): StarwayStairsTierRule {
   return config.tiers[tierNumber - 1];
 }
 
 export function starwayStairsEssenceReward(
-  config: EconomyData["gamble"]["starwayStairs"],
+  config: StarwayStairsGame["economy"],
   tierNumber: StarwayStairsTierNumber,
 ): number {
-  return config.tiers[tierNumber - 1].essenceReward;
+  const reward = config.rewards[tierNumber - 1];
+  if (reward?.tier !== tierNumber)
+    throw new Error(`Missing Starway reward tier ${String(tierNumber)}`);
+  return reward.essence;
 }
 
 /** Format the inclusive low-rank bust range shown on a Starway tier. */
@@ -54,7 +53,7 @@ export function starwayStairsDrawTargetLabel(
 
 /** Whether the drawn rank busts the specified tier. */
 export function rankBustsStarwayStairsTier(
-  config: SitesData["gamble"]["starwayStairs"],
+  config: StarwayStairsGame["rules"],
   rank: StandardPlayingCardRank,
   tierNumber: StarwayStairsTierNumber,
 ): boolean {
@@ -68,7 +67,7 @@ export function rankBustsStarwayStairsTier(
 
 /** The next tier that can be drawn from the persisted game state. */
 export function nextStarwayStairsTierNumber(
-  config: SitesData["gamble"]["starwayStairs"],
+  config: StarwayStairsGame["rules"],
   runtime: Pick<StarwayStairsSiteRuntime, "results" | "terminalReason">,
 ): StarwayStairsTierNumber | null {
   if (runtime.terminalReason !== null) return null;

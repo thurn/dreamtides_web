@@ -23,28 +23,24 @@ import type {
   RuntimeShopSlot,
 } from "../../types/journey";
 import type { GambleGameId } from "../../types/gamble";
+import type {
+  BlackjackGame,
+  FourSuitRepriseGame,
+  GambleGameDefinition,
+  LadderClimbGame,
+  StarwayStairsGame,
+  ThreeGateGame,
+} from "../../types/gamble-data";
 import type { CardData } from "../../types/cards";
 import {
-  GRAVOK_WAGER_RULES_VERSION,
   STANDARD_PLAYING_CARD_DECK,
   gravokWagerCost,
 } from "../../data/gravok-wager";
-import {
-  scoreTidemarkLadderClimbDreamsignCandidates,
-  TIDEMARK_LADDER_CLIMB_RULES_VERSION,
-} from "../../data/tidemark-ladder-climb";
-import {
-  STARWAY_STAIRS_RULES_VERSION,
-  starwayStairsWagerAmount,
-} from "../../data/starway-stairs";
-import {
-  FOUR_SUIT_REPRISE_RULES_VERSION,
-  fourSuitRepriseDrawCost,
-} from "../../data/four-suit-reprise";
-import {
-  BLACKJACK_RULES_VERSION,
-  blackjackWagerCost,
-} from "../../data/blackjack";
+import { scoreTidemarkLadderClimbDreamsignCandidates } from "../../data/tidemark-ladder-climb";
+import { starwayStairsWagerAmount } from "../../data/starway-stairs";
+import { fourSuitRepriseDrawCost } from "../../data/four-suit-reprise";
+import { blackjackWagerCost } from "../../data/blackjack";
+import { gambleGame } from "../../data/gamble-data";
 import { createDreamsign } from "../../data/dreamsigns";
 import { generateRewardSiteData } from "../../rewards/reward-generator";
 import { drawDreamsignOptions } from "../../dreamsign/dreamsign-pool";
@@ -180,6 +176,7 @@ function buildGravokWagerRuntime(
   journey: JourneyState,
   site: SiteState,
   content: JourneyContent,
+  game: ThreeGateGame,
   rng: () => number,
 ): GambleSiteRuntime {
   const shuffleCommitment = gambleShuffleCommitment(rng);
@@ -200,13 +197,10 @@ function buildGravokWagerRuntime(
   return {
     kind: "gamble",
     gameId: "gravok-three-gate-wager",
-    rulesVersion: GRAVOK_WAGER_RULES_VERSION,
+    rulesVersion: game.rulesVersion,
     roundNumber: 1,
     isFarpoint: site.isEnhanced,
-    wagerCost: gravokWagerCost(
-      content.economyData.gamble.threeGate,
-      site.isEnhanced,
-    ),
+    wagerCost: gravokWagerCost(game.economy, site.isEnhanced),
     shuffleCommitment,
     committedCard,
     dreamsignCandidateIds,
@@ -220,6 +214,7 @@ function buildTidemarkLadderClimbRuntime(
   journey: JourneyState,
   site: SiteState,
   content: JourneyContent,
+  game: LadderClimbGame,
   rng: () => number,
 ): TidemarkLadderClimbSiteRuntime | null {
   const { templates } = eligibleGambleDreamsigns(journey, content);
@@ -239,7 +234,7 @@ function buildTidemarkLadderClimbRuntime(
   });
   const strongPool = dreamsignCandidateScores.slice(
     0,
-    content.sitesData.gamble.ladderClimb.strongPoolLimit,
+    game.rules.strongPoolLimit,
   );
   const selectedCandidate =
     strongPool.length === 0
@@ -256,7 +251,7 @@ function buildTidemarkLadderClimbRuntime(
   return {
     kind: "gamble",
     gameId: "tidemark-ladder-climb",
-    rulesVersion: TIDEMARK_LADDER_CLIMB_RULES_VERSION,
+    rulesVersion: game.rulesVersion,
     isFarpoint: site.isEnhanced,
     shuffleCommitments: commitments.map((entry) => entry.shuffleCommitment),
     committedCards: commitments.map((entry) => entry.card),
@@ -272,23 +267,20 @@ function buildTidemarkLadderClimbRuntime(
 
 function buildStarwayStairsRuntime(
   site: SiteState,
-  content: JourneyContent,
+  game: StarwayStairsGame,
   rng: () => number,
 ): StarwayStairsSiteRuntime {
-  const commitments = content.sitesData.gamble.starwayStairs.tiers.map(() => ({
+  const commitments = game.rules.tiers.map(() => ({
     shuffleCommitment: gambleShuffleCommitment(rng),
     card: gambleCommittedCard(rng),
   }));
   return {
     kind: "gamble",
     gameId: "starway-stairs",
-    rulesVersion: STARWAY_STAIRS_RULES_VERSION,
+    rulesVersion: game.rulesVersion,
     roundNumber: 1,
     isFarpoint: site.isEnhanced,
-    wagerAmount: starwayStairsWagerAmount(
-      content.economyData.gamble.starwayStairs,
-      site.isEnhanced,
-    ),
+    wagerAmount: starwayStairsWagerAmount(game.economy, site.isEnhanced),
     shuffleCommitments: commitments.map((entry) => entry.shuffleCommitment),
     committedCards: commitments.map((entry) => entry.card),
     results: [],
@@ -301,6 +293,7 @@ function buildFourSuitRepriseRuntime(
   journey: JourneyState,
   site: SiteState,
   content: JourneyContent,
+  game: FourSuitRepriseGame,
   rng: () => number,
 ): FourSuitRepriseSiteRuntime | null {
   const targets = journey.deck.flatMap((entry) => {
@@ -329,22 +322,16 @@ function buildFourSuitRepriseRuntime(
   });
   if (targets.length === 0) return null;
 
-  const commitments = Array.from(
-    { length: content.sitesData.gamble.fourSuitReprise.maxRounds },
-    () => ({
-      shuffleCommitment: gambleShuffleCommitment(rng),
-      card: gambleCommittedCard(rng),
-    }),
-  );
+  const commitments = Array.from({ length: game.rules.maxRounds }, () => ({
+    shuffleCommitment: gambleShuffleCommitment(rng),
+    card: gambleCommittedCard(rng),
+  }));
   return {
     kind: "gamble",
     gameId: "four-suit-reprise",
-    rulesVersion: FOUR_SUIT_REPRISE_RULES_VERSION,
+    rulesVersion: game.rulesVersion,
     isFarpoint: site.isEnhanced,
-    drawCost: fourSuitRepriseDrawCost(
-      content.economyData.gamble.fourSuitReprise,
-      site.isEnhanced,
-    ),
+    drawCost: fourSuitRepriseDrawCost(game.economy, site.isEnhanced),
     shuffleCommitments: commitments.map((entry) => entry.shuffleCommitment),
     committedCards: commitments.map((entry) => entry.card),
     targets,
@@ -355,14 +342,14 @@ function buildFourSuitRepriseRuntime(
 
 function buildBlackjackRuntime(
   site: SiteState,
-  content: JourneyContent,
+  game: BlackjackGame,
   rng: () => number,
 ): BlackjackSiteRuntime {
-  const economy = content.economyData.gamble.blackjack;
+  const economy = game.economy;
   return {
     kind: "gamble",
     gameId: "blackjack",
-    rulesVersion: BLACKJACK_RULES_VERSION,
+    rulesVersion: game.rulesVersion,
     isFarpoint: site.isEnhanced,
     wagerCost: blackjackWagerCost(economy, site.isEnhanced),
     prizeEssence: economy.prizeEssence,
@@ -388,49 +375,93 @@ function buildGambleRuntime(
   rng: () => number,
   requestedGameId: GambleGameId | undefined,
 ): GambleSiteRuntime {
-  const configuredGames = content.sitesData.gamble.selection.games;
+  const gambleData = content.gambleData;
+  if (gambleData === undefined)
+    throw new Error("Journey content is missing Gamble data");
+  const configuredGames = gambleData.games;
   const totalWeight = configuredGames.reduce(
-    (sum, game) => sum + game.weight,
+    (sum, game) => sum + game.selection.weight,
     0,
   );
   let roll = rng() * totalWeight;
-  let selectedGameId = content.sitesData.gamble.selection.fallbackGame;
+  let selectedGameId = configuredGames.find(
+    (game) => game.selection.fallback,
+  )?.id;
+  if (selectedGameId === undefined)
+    throw new Error("Gamble catalog has no fallback game");
   for (const game of configuredGames) {
-    roll -= game.weight;
+    roll -= game.selection.weight;
     if (roll <= 0) {
       selectedGameId = game.id;
       break;
     }
   }
-  const gameId = requestedGameId ?? selectedGameId;
-  let runtime: GambleSiteRuntime;
-  if (gameId === "tidemark-ladder-climb") {
+  const definition = gambleGame(gambleData, requestedGameId ?? selectedGameId);
+  return buildGambleRuntimeFromDefinition(
+    journey,
+    site,
+    content,
+    rng,
+    definition,
+  );
+}
+
+function buildGambleRuntimeFromDefinition(
+  journey: JourneyState,
+  site: SiteState,
+  content: JourneyContent,
+  rng: () => number,
+  game: GambleGameDefinition,
+): GambleSiteRuntime {
+  if (
+    game.rules.kind === "ladderClimb" &&
+    game.economy.kind === "ladderClimb"
+  ) {
     const ladderRuntime = buildTidemarkLadderClimbRuntime(
       journey,
       site,
       content,
+      game as LadderClimbGame,
       rng,
     );
-    runtime =
-      ladderRuntime ?? buildGambleFallbackRuntime(journey, site, content, rng);
-  } else if (gameId === "starway-stairs") {
-    runtime = buildStarwayStairsRuntime(site, content, rng);
-  } else if (gameId === "four-suit-reprise") {
+    return (
+      ladderRuntime ?? buildGambleFallbackRuntime(journey, site, content, rng)
+    );
+  }
+  if (
+    game.rules.kind === "starwayStairs" &&
+    game.economy.kind === "starwayStairs"
+  ) {
+    return buildStarwayStairsRuntime(site, game as StarwayStairsGame, rng);
+  }
+  if (
+    game.rules.kind === "fourSuitReprise" &&
+    game.economy.kind === "fourSuitReprise"
+  ) {
     const fourSuitRuntime = buildFourSuitRepriseRuntime(
       journey,
       site,
       content,
+      game as FourSuitRepriseGame,
       rng,
     );
-    runtime =
-      fourSuitRuntime ??
-      buildGambleFallbackRuntime(journey, site, content, rng);
-  } else if (gameId === "blackjack") {
-    runtime = buildBlackjackRuntime(site, content, rng);
-  } else {
-    runtime = buildGravokWagerRuntime(journey, site, content, rng);
+    return (
+      fourSuitRuntime ?? buildGambleFallbackRuntime(journey, site, content, rng)
+    );
   }
-  return runtime;
+  if (game.rules.kind === "blackjack" && game.economy.kind === "blackjack") {
+    return buildBlackjackRuntime(site, game as BlackjackGame, rng);
+  }
+  if (game.rules.kind === "threeGate" && game.economy.kind === "threeGate") {
+    return buildGravokWagerRuntime(
+      journey,
+      site,
+      content,
+      game as ThreeGateGame,
+      rng,
+    );
+  }
+  throw new Error(`Mismatched Gamble catalog variants for ${game.id}`);
 }
 
 function buildGambleFallbackRuntime(
@@ -439,14 +470,17 @@ function buildGambleFallbackRuntime(
   content: JourneyContent,
   rng: () => number,
 ): GambleSiteRuntime {
-  const fallback = content.sitesData.gamble.selection.fallbackGame;
-  if (fallback === "gravok-three-gate-wager") {
-    return buildGravokWagerRuntime(journey, site, content, rng);
-  }
-  if (fallback === "starway-stairs") {
-    return buildStarwayStairsRuntime(site, content, rng);
-  }
-  throw new Error(`Unsupported unavailable-game fallback ${fallback}`);
+  const gambleData = content.gambleData;
+  const fallback = gambleData?.games.find((game) => game.selection.fallback);
+  if (fallback === undefined)
+    throw new Error("Gamble catalog has no fallback game");
+  return buildGambleRuntimeFromDefinition(
+    journey,
+    site,
+    content,
+    rng,
+    fallback,
+  );
 }
 
 /**
@@ -573,6 +607,7 @@ export function createSiteContentProvider(
   return {
     sitesData: content.sitesData,
     economyData: content.economyData,
+    gambleData: content.gambleData,
     openSite: ({
       journey,
       site,

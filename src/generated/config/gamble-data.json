@@ -44,11 +44,11 @@
         "outcomeLabels": [
           {
             "key": "won",
-            "text": "Won"
+            "text": "Won!"
           },
           {
             "key": "bust",
-            "text": "Bust"
+            "text": "Bust!"
           }
         ]
       },
@@ -59,19 +59,22 @@
         "gates": [
           {
             "gate": "six",
-            "threshold": "Six",
+            "label": "Six Gate",
+            "threshold": "6",
             "winningCardCount": 36,
             "awardsDreamsign": false
           },
           {
             "gate": "nine",
-            "threshold": "Nine",
+            "label": "Nine Gate",
+            "threshold": "9",
             "winningCardCount": 24,
             "awardsDreamsign": false
           },
           {
             "gate": "jack",
-            "threshold": "Jack",
+            "label": "Jack Gate",
+            "threshold": "J",
             "winningCardCount": 16,
             "awardsDreamsign": true
           }
@@ -131,8 +134,8 @@
             "text": "Won"
           },
           {
-            "key": "lost",
-            "text": "Lost"
+            "key": "miss",
+            "text": "Miss"
           }
         ]
       },
@@ -143,22 +146,22 @@
         "attempts": [
           {
             "attempt": 1,
-            "threshold": "Queen",
+            "threshold": "Q",
             "winningCardCount": 12
           },
           {
             "attempt": 2,
-            "threshold": "Ten",
+            "threshold": "10",
             "winningCardCount": 20
           },
           {
             "attempt": 3,
-            "threshold": "Eight",
+            "threshold": "8",
             "winningCardCount": 28
           },
           {
             "attempt": 4,
-            "threshold": "Six",
+            "threshold": "6",
             "winningCardCount": 36
           }
         ]
@@ -196,6 +199,10 @@
         "accessibilityDescription": "Choose whether to climb for a larger prize or take the current prize.",
         "actionLabels": [
           {
+            "key": "bet",
+            "text": "Bet"
+          },
+          {
             "key": "climb",
             "text": "Climb"
           },
@@ -207,11 +214,15 @@
         "outcomeLabels": [
           {
             "key": "safe",
-            "text": "Safe"
+            "text": "Safe!"
           },
           {
             "key": "bust",
-            "text": "Bust"
+            "text": "Bust!"
+          },
+          {
+            "key": "prize-at-stake",
+            "text": "Prize at stake"
           }
         ]
       },
@@ -222,17 +233,17 @@
         "tiers": [
           {
             "tier": 1,
-            "highestBustRank": "Two",
+            "highestBustRank": "2",
             "bustCardCount": 4
           },
           {
             "tier": 2,
-            "highestBustRank": "Four",
+            "highestBustRank": "4",
             "bustCardCount": 12
           },
           {
             "tier": 3,
-            "highestBustRank": "Seven",
+            "highestBustRank": "7",
             "bustCardCount": 24
           }
         ]
@@ -253,7 +264,7 @@
       },
       "presentation": {
         "title": "Four-Suit Reprise",
-        "rulesDisclosure": "Wager a card, then draw a suit to determine its fate.",
+        "rulesDisclosure": "Choose a card to wager",
         "accessibilityDescription": "Choose a card to wager, then draw one of four suit outcomes.",
         "actionLabels": [
           {
@@ -272,15 +283,15 @@
           },
           {
             "key": "essence",
-            "text": "Unchanged + 100 Essence"
+            "text": "Gained"
           },
           {
             "key": "duplication",
-            "text": "Duplicate"
+            "text": "Duplicated"
           },
           {
             "key": "purge",
-            "text": "Purge"
+            "text": "Purged"
           }
         ]
       },
@@ -343,7 +354,7 @@
         "outcomeLabels": [
           {
             "key": "player-win",
-            "text": "You Win"
+            "text": "You Win!"
           },
           {
             "key": "dealer-win",
@@ -351,7 +362,19 @@
           },
           {
             "key": "push",
+            "text": "Push"
+          },
+          {
+            "key": "bust",
+            "text": "Bust!"
+          },
+          {
+            "key": "wager-returned",
             "text": "Wager Returned"
+          },
+          {
+            "key": "wins",
+            "text": "Wins"
           }
         ]
       },
@@ -364,6 +387,6 @@
       }
     }
   ],
-  "contentHash": "b85e66f4346bd4a9dc62da6b25fc53e57e1afac472f3c856da824a88ebe74690",
-  "foldHash": "b85e66f4346bd4a9dc62da6b25fc53e57e1afac472f3c856da824a88ebe74690"
+  "contentHash": "8f5ff116b3ba18e75f6aeeadaa59994bfa6293e7af606d3b728c03ea5d7e3dc6",
+  "foldHash": "8f5ff116b3ba18e75f6aeeadaa59994bfa6293e7af606d3b728c03ea5d7e3dc6"
 }

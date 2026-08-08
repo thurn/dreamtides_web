@@ -246,7 +246,6 @@ export const FLUENT_MESSAGE_IDS = [
   "augury-card-choice-copy-count",
   "gamble-wager-prize-title",
   "gamble-wager-prize-description",
-  "gamble-starway-tier-action",
   "exploration-pack-title",
   "exploration-pack-choose-action",
   "exploration-battle-modifier-announcement",
@@ -266,30 +265,12 @@ export const FLUENT_MESSAGE_IDS = [
   "exploration-next-battle-card-cost-reduction",
   "exploration-site-offer-modifier-title",
   "exploration-site-offer-modifier-detail",
-  "gamble-gravok-bet-action",
-  "gamble-gravok-outcome-headline",
-  "gamble-ladder-outcome-headline",
-  "gamble-starway-outcome-headline",
-  "gamble-starway-prize-at-stake",
-  "gamble-four-suit-picker-title",
-  "gamble-four-suit-picker-instruction",
-  "gamble-four-suit-picker-empty-state",
-  "gamble-four-suit-essence-outcome",
-  "gamble-four-suit-result-headline",
+  "gamble-card-picker-empty-state",
+  "gamble-essence-outcome",
   "gamble-play-again-action",
   "gamble-leave-action",
-  "gamble-blackjack-rule",
-  "gamble-blackjack-prize",
-  "gamble-blackjack-wins",
-  "gamble-blackjack-outcome-headline",
-  "gamble-blackjack-wager-returned",
-  "gamble-blackjack-deal-action",
-  "gamble-blackjack-hit-action",
-  "gamble-blackjack-stand-action",
   "gamble-choose-replacement-action",
   "gamble-replacement-not-yet-action",
-  "gamble-draw-action",
-  "gamble-take-prize-action",
   "transfiguration-picker-title",
   "transfiguration-picker-instruction",
   "transfiguration-reforged-card-caption",
@@ -517,19 +498,18 @@ export const FLUENT_MESSAGE_IDS = [
   "transfiguration-change-perfected",
   "transfiguration-change-unavailable",
   "gamble-wager-prize-accessible-name",
-  "gamble-gravok-bet-accessible-name",
-  "gamble-ladder-draw-accessible-name",
-  "gamble-starway-tier-group-accessible-name",
-  "gamble-starway-tier-action-accessible-name",
-  "gamble-starway-cash-out-accessible-name",
-  "gamble-four-suit-draw-accessible-name",
+  "gamble-gate-bet-accessible-name",
+  "gamble-draw-attempt-accessible-name",
+  "gamble-tier-action-accessible-name",
+  "gamble-cash-out-accessible-name",
+  "gamble-draw-accessible-name",
   "dream-avatar-art-accessible-name",
   "atlas-node-accessible-name",
   "card-stat-accessible-name",
   "card-stat-custom-accessible-name",
   "battle-control-group-accessible-name",
   "exploration-pack-choose-accessible-name",
-  "gamble-four-suit-outcome-accessible-name",
+  "gamble-suit-outcome-accessible-name",
   "battle-tutorial-dismiss-action",
   "rules-text-bolt-accessible-name",
   "card-attribute-interrupt-accessible-name",
@@ -543,12 +523,8 @@ export const FLUENT_MESSAGE_IDS = [
   "exploration-smaller-hand-cost-accessible-name",
   "exploration-site-offer-modifier-accessible-name",
   "exploration-no-cards-taken",
-  "gamble-gravok-gates-accessible-name",
-  "gamble-ladder-stage-accessible-name",
-  "gamble-four-suit-stage-accessible-name",
-  "gamble-blackjack-hand-accessible-name",
+  "gamble-playing-card-hand-accessible-name",
   "gamble-replacement-close-action",
-  "gamble-four-suit-choose-another-card-action",
   "battle-card-exhausted-accessible-name",
   "battle-targeting-card-accessible-name",
   "journey-start-carousel-navigation-action",
@@ -878,7 +854,6 @@ export interface FluentMessageArgumentsById {
     readonly essenceAmount: FluentVariable;
     readonly hasDreamsign: FluentVariable;
   };
-  readonly "gamble-starway-tier-action": { readonly stage: FluentVariable };
   readonly "exploration-pack-title": { readonly packNumber: FluentVariable };
   readonly "exploration-pack-choose-action": never;
   readonly "exploration-battle-modifier-announcement": {
@@ -911,42 +886,12 @@ export interface FluentMessageArgumentsById {
   };
   readonly "exploration-site-offer-modifier-title": never;
   readonly "exploration-site-offer-modifier-detail": never;
-  readonly "gamble-gravok-bet-action": never;
-  readonly "gamble-gravok-outcome-headline": {
-    readonly outcome: FluentVariable;
-  };
-  readonly "gamble-ladder-outcome-headline": {
-    readonly outcome: FluentVariable;
-  };
-  readonly "gamble-starway-outcome-headline": {
-    readonly outcome: FluentVariable;
-  };
-  readonly "gamble-starway-prize-at-stake": never;
-  readonly "gamble-four-suit-picker-title": never;
-  readonly "gamble-four-suit-picker-instruction": never;
-  readonly "gamble-four-suit-picker-empty-state": never;
-  readonly "gamble-four-suit-essence-outcome": {
-    readonly essenceAmount: FluentVariable;
-  };
-  readonly "gamble-four-suit-result-headline": {
-    readonly outcome: FluentVariable;
-  };
+  readonly "gamble-card-picker-empty-state": never;
+  readonly "gamble-essence-outcome": { readonly essenceAmount: FluentVariable };
   readonly "gamble-play-again-action": never;
   readonly "gamble-leave-action": never;
-  readonly "gamble-blackjack-rule": never;
-  readonly "gamble-blackjack-prize": { readonly amount: FluentVariable };
-  readonly "gamble-blackjack-wins": never;
-  readonly "gamble-blackjack-outcome-headline": {
-    readonly outcome: FluentVariable;
-  };
-  readonly "gamble-blackjack-wager-returned": never;
-  readonly "gamble-blackjack-deal-action": never;
-  readonly "gamble-blackjack-hit-action": never;
-  readonly "gamble-blackjack-stand-action": never;
   readonly "gamble-choose-replacement-action": never;
   readonly "gamble-replacement-not-yet-action": never;
-  readonly "gamble-draw-action": never;
-  readonly "gamble-take-prize-action": never;
   readonly "transfiguration-picker-title": never;
   readonly "transfiguration-picker-instruction": {
     readonly state: FluentVariable;
@@ -1335,24 +1280,23 @@ export interface FluentMessageArgumentsById {
     readonly hasDreamsign: FluentVariable;
     readonly targetLabel: FluentVariable;
   };
-  readonly "gamble-gravok-bet-accessible-name": {
+  readonly "gamble-gate-bet-accessible-name": {
     readonly essenceCost: FluentVariable;
     readonly gateName: FluentVariable;
   };
-  readonly "gamble-ladder-draw-accessible-name": {
+  readonly "gamble-draw-attempt-accessible-name": {
     readonly attemptNumber: FluentVariable;
     readonly essenceCost: FluentVariable;
   };
-  readonly "gamble-starway-tier-group-accessible-name": never;
-  readonly "gamble-starway-tier-action-accessible-name": {
+  readonly "gamble-tier-action-accessible-name": {
     readonly essenceCost: FluentVariable;
     readonly stage: FluentVariable;
     readonly tierNumber: FluentVariable;
   };
-  readonly "gamble-starway-cash-out-accessible-name": {
+  readonly "gamble-cash-out-accessible-name": {
     readonly essenceAmount: FluentVariable;
   };
-  readonly "gamble-four-suit-draw-accessible-name": {
+  readonly "gamble-draw-accessible-name": {
     readonly essenceCost: FluentVariable;
   };
   readonly "dream-avatar-art-accessible-name": {
@@ -1379,7 +1323,7 @@ export interface FluentMessageArgumentsById {
   readonly "exploration-pack-choose-accessible-name": {
     readonly packNumber: FluentVariable;
   };
-  readonly "gamble-four-suit-outcome-accessible-name": {
+  readonly "gamble-suit-outcome-accessible-name": {
     readonly outcomeLabel: FluentVariable;
     readonly suit: FluentVariable;
   };
@@ -1412,14 +1356,10 @@ export interface FluentMessageArgumentsById {
   };
   readonly "exploration-site-offer-modifier-accessible-name": never;
   readonly "exploration-no-cards-taken": never;
-  readonly "gamble-gravok-gates-accessible-name": never;
-  readonly "gamble-ladder-stage-accessible-name": never;
-  readonly "gamble-four-suit-stage-accessible-name": never;
-  readonly "gamble-blackjack-hand-accessible-name": {
+  readonly "gamble-playing-card-hand-accessible-name": {
     readonly owner: FluentVariable;
   };
   readonly "gamble-replacement-close-action": never;
-  readonly "gamble-four-suit-choose-another-card-action": never;
   readonly "battle-card-exhausted-accessible-name": never;
   readonly "battle-targeting-card-accessible-name": never;
   readonly "journey-start-carousel-navigation-action": {
@@ -1730,7 +1670,6 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
     "essenceAmount",
     "hasDreamsign",
   ] as const,
-  "gamble-starway-tier-action": ["stage"] as const,
   "exploration-pack-title": ["packNumber"] as const,
   "exploration-pack-choose-action": [] as const,
   "exploration-battle-modifier-announcement": ["amount", "modifier"] as const,
@@ -1758,30 +1697,12 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   ] as const,
   "exploration-site-offer-modifier-title": [] as const,
   "exploration-site-offer-modifier-detail": [] as const,
-  "gamble-gravok-bet-action": [] as const,
-  "gamble-gravok-outcome-headline": ["outcome"] as const,
-  "gamble-ladder-outcome-headline": ["outcome"] as const,
-  "gamble-starway-outcome-headline": ["outcome"] as const,
-  "gamble-starway-prize-at-stake": [] as const,
-  "gamble-four-suit-picker-title": [] as const,
-  "gamble-four-suit-picker-instruction": [] as const,
-  "gamble-four-suit-picker-empty-state": [] as const,
-  "gamble-four-suit-essence-outcome": ["essenceAmount"] as const,
-  "gamble-four-suit-result-headline": ["outcome"] as const,
+  "gamble-card-picker-empty-state": [] as const,
+  "gamble-essence-outcome": ["essenceAmount"] as const,
   "gamble-play-again-action": [] as const,
   "gamble-leave-action": [] as const,
-  "gamble-blackjack-rule": [] as const,
-  "gamble-blackjack-prize": ["amount"] as const,
-  "gamble-blackjack-wins": [] as const,
-  "gamble-blackjack-outcome-headline": ["outcome"] as const,
-  "gamble-blackjack-wager-returned": [] as const,
-  "gamble-blackjack-deal-action": [] as const,
-  "gamble-blackjack-hit-action": [] as const,
-  "gamble-blackjack-stand-action": [] as const,
   "gamble-choose-replacement-action": [] as const,
   "gamble-replacement-not-yet-action": [] as const,
-  "gamble-draw-action": [] as const,
-  "gamble-take-prize-action": [] as const,
   "transfiguration-picker-title": [] as const,
   "transfiguration-picker-instruction": ["state"] as const,
   "transfiguration-reforged-card-caption": ["form"] as const,
@@ -2051,19 +1972,18 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
     "hasDreamsign",
     "targetLabel",
   ] as const,
-  "gamble-gravok-bet-accessible-name": ["essenceCost", "gateName"] as const,
-  "gamble-ladder-draw-accessible-name": [
+  "gamble-gate-bet-accessible-name": ["essenceCost", "gateName"] as const,
+  "gamble-draw-attempt-accessible-name": [
     "attemptNumber",
     "essenceCost",
   ] as const,
-  "gamble-starway-tier-group-accessible-name": [] as const,
-  "gamble-starway-tier-action-accessible-name": [
+  "gamble-tier-action-accessible-name": [
     "essenceCost",
     "stage",
     "tierNumber",
   ] as const,
-  "gamble-starway-cash-out-accessible-name": ["essenceAmount"] as const,
-  "gamble-four-suit-draw-accessible-name": ["essenceCost"] as const,
+  "gamble-cash-out-accessible-name": ["essenceAmount"] as const,
+  "gamble-draw-accessible-name": ["essenceCost"] as const,
   "dream-avatar-art-accessible-name": [
     "avatarName",
     "avatarTitle",
@@ -2080,7 +2000,7 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "card-stat-custom-accessible-name": ["baseName", "change"] as const,
   "battle-control-group-accessible-name": [] as const,
   "exploration-pack-choose-accessible-name": ["packNumber"] as const,
-  "gamble-four-suit-outcome-accessible-name": ["outcomeLabel", "suit"] as const,
+  "gamble-suit-outcome-accessible-name": ["outcomeLabel", "suit"] as const,
   "battle-tutorial-dismiss-action": ["speakerName"] as const,
   "rules-text-bolt-accessible-name": ["kind"] as const,
   "card-attribute-interrupt-accessible-name": [] as const,
@@ -2101,12 +2021,8 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   ] as const,
   "exploration-site-offer-modifier-accessible-name": [] as const,
   "exploration-no-cards-taken": [] as const,
-  "gamble-gravok-gates-accessible-name": [] as const,
-  "gamble-ladder-stage-accessible-name": [] as const,
-  "gamble-four-suit-stage-accessible-name": [] as const,
-  "gamble-blackjack-hand-accessible-name": ["owner"] as const,
+  "gamble-playing-card-hand-accessible-name": ["owner"] as const,
   "gamble-replacement-close-action": [] as const,
-  "gamble-four-suit-choose-another-card-action": [] as const,
   "battle-card-exhausted-accessible-name": [] as const,
   "battle-targeting-card-accessible-name": [] as const,
   "journey-start-carousel-navigation-action": ["direction"] as const,
@@ -2343,23 +2259,11 @@ export type FluentMessageIdsWithoutVariables = [
   "exploration-site-eyebrow",
   "exploration-site-offer-modifier-title",
   "exploration-site-offer-modifier-detail",
-  "gamble-gravok-bet-action",
-  "gamble-starway-prize-at-stake",
-  "gamble-four-suit-picker-title",
-  "gamble-four-suit-picker-instruction",
-  "gamble-four-suit-picker-empty-state",
+  "gamble-card-picker-empty-state",
   "gamble-play-again-action",
   "gamble-leave-action",
-  "gamble-blackjack-rule",
-  "gamble-blackjack-wins",
-  "gamble-blackjack-wager-returned",
-  "gamble-blackjack-deal-action",
-  "gamble-blackjack-hit-action",
-  "gamble-blackjack-stand-action",
   "gamble-choose-replacement-action",
   "gamble-replacement-not-yet-action",
-  "gamble-draw-action",
-  "gamble-take-prize-action",
   "transfiguration-picker-title",
   "transfiguration-form-picker-title",
   "transfiguration-choose-again-action",
@@ -2496,7 +2400,6 @@ export type FluentMessageIdsWithoutVariables = [
   "transfiguration-change-resonant",
   "transfiguration-change-perfected",
   "transfiguration-change-unavailable",
-  "gamble-starway-tier-group-accessible-name",
   "battle-control-group-accessible-name",
   "card-attribute-interrupt-accessible-name",
   "card-attribute-fast-accessible-name",
@@ -2504,11 +2407,7 @@ export type FluentMessageIdsWithoutVariables = [
   "exploration-return-action",
   "exploration-site-offer-modifier-accessible-name",
   "exploration-no-cards-taken",
-  "gamble-gravok-gates-accessible-name",
-  "gamble-ladder-stage-accessible-name",
-  "gamble-four-suit-stage-accessible-name",
   "gamble-replacement-close-action",
-  "gamble-four-suit-choose-another-card-action",
   "battle-card-exhausted-accessible-name",
   "battle-targeting-card-accessible-name",
   "reveal-card-energy-variable",
@@ -2570,20 +2469,13 @@ export type FluentMessageIdsWithVariables = [
   "augury-card-choice-copy-count",
   "gamble-wager-prize-title",
   "gamble-wager-prize-description",
-  "gamble-starway-tier-action",
   "exploration-pack-title",
   "exploration-battle-modifier-announcement",
   "exploration-purge-essence-calculation",
   "exploration-spirit-animal-essence-calculation",
   "exploration-opening-hand-change-announcement",
   "exploration-next-battle-card-cost-reduction",
-  "gamble-gravok-outcome-headline",
-  "gamble-ladder-outcome-headline",
-  "gamble-starway-outcome-headline",
-  "gamble-four-suit-essence-outcome",
-  "gamble-four-suit-result-headline",
-  "gamble-blackjack-prize",
-  "gamble-blackjack-outcome-headline",
+  "gamble-essence-outcome",
   "transfiguration-picker-instruction",
   "transfiguration-reforged-card-caption",
   "transfiguration-form-name",
@@ -2675,17 +2567,17 @@ export type FluentMessageIdsWithVariables = [
   "transfiguration-change-amplified",
   "transfiguration-change-attuned",
   "gamble-wager-prize-accessible-name",
-  "gamble-gravok-bet-accessible-name",
-  "gamble-ladder-draw-accessible-name",
-  "gamble-starway-tier-action-accessible-name",
-  "gamble-starway-cash-out-accessible-name",
-  "gamble-four-suit-draw-accessible-name",
+  "gamble-gate-bet-accessible-name",
+  "gamble-draw-attempt-accessible-name",
+  "gamble-tier-action-accessible-name",
+  "gamble-cash-out-accessible-name",
+  "gamble-draw-accessible-name",
   "dream-avatar-art-accessible-name",
   "atlas-node-accessible-name",
   "card-stat-accessible-name",
   "card-stat-custom-accessible-name",
   "exploration-pack-choose-accessible-name",
-  "gamble-four-suit-outcome-accessible-name",
+  "gamble-suit-outcome-accessible-name",
   "battle-tutorial-dismiss-action",
   "rules-text-bolt-accessible-name",
   "card-identicon-alt",
@@ -2693,7 +2585,7 @@ export type FluentMessageIdsWithVariables = [
   "battle-dreamwell-reveal-description",
   "playing-card-accessible-name",
   "exploration-smaller-hand-cost-accessible-name",
-  "gamble-blackjack-hand-accessible-name",
+  "gamble-playing-card-hand-accessible-name",
   "journey-start-carousel-navigation-action",
   "reveal-description-join",
   "reveal-definition-entry",

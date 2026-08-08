@@ -16,7 +16,10 @@ import type {
 } from "../../types/journey";
 import type { FourSuitRepriseOutcome } from "../../data/four-suit-reprise";
 import { blackjackHandTotal } from "../../data/blackjack";
-import type { SitesData } from "../../types/sites-data";
+import type {
+  FourSuitRepriseGame,
+  GamblePresentation,
+} from "../../types/gamble-data";
 import {
   PlayingCard,
   PLAYING_CARD_DESIGN,
@@ -94,6 +97,7 @@ export interface GambleResultView {
 
 export interface GravokWagerSiteView {
   gameId: "gravok-three-gate-wager";
+  presentation: GamblePresentation;
   /** Stable journey site id. */
   siteId: string;
   /** Current dreamscape scene art behind the site, if resolved. */
@@ -142,6 +146,7 @@ export interface LadderClimbResultView {
 
 export interface LadderClimbSiteView {
   gameId: "tidemark-ladder-climb";
+  presentation: GamblePresentation;
   siteId: string;
   scene: ArtRef | null;
   isFarpoint: boolean;
@@ -181,6 +186,7 @@ export interface StarwayStairsResultView {
 
 export interface StarwayStairsSiteView {
   gameId: "starway-stairs";
+  presentation: GamblePresentation;
   siteId: string;
   scene: ArtRef | null;
   isFarpoint: boolean;
@@ -219,6 +225,7 @@ export interface FourSuitRepriseResultView {
 
 export interface FourSuitRepriseSiteView {
   gameId: "four-suit-reprise";
+  presentation: GamblePresentation;
   siteId: string;
   scene: ArtRef | null;
   isFarpoint: boolean;
@@ -228,7 +235,9 @@ export interface FourSuitRepriseSiteView {
   roundNumber: 1 | 2 | 3;
   maxRounds: number;
   essenceReward: number;
-  outcomes: SitesData["gamble"]["fourSuitReprise"]["outcomes"];
+  outcomes: readonly (FourSuitRepriseGame["rules"]["outcomes"][number] & {
+    label: string;
+  })[];
   phase: "choose" | "result";
   cards: readonly FourSuitRepriseCardView[];
   guide: GuideGalleryGuideView;
@@ -238,6 +247,7 @@ export interface FourSuitRepriseSiteView {
 
 export interface BlackjackSiteView {
   gameId: "blackjack";
+  presentation: GamblePresentation;
   siteId: string;
   /** Stable committed-shoe identity for one animated hand. */
   handId: string;
@@ -248,6 +258,7 @@ export interface BlackjackSiteView {
   prizeEssence: number;
   attemptNumber: number;
   maxAttempts: number;
+  target: number;
   canAffordWager: boolean;
   playerCards: readonly { rank: PlayingCardRank; suit: PlayingCardSuit }[];
   playerTotal: number | null;
@@ -315,6 +326,25 @@ export interface GambleSiteScreenProps {
   onReplaceDreamsign: (dreamsignId: string) => void;
 }
 
+function gamblePresentationLabel(
+  labels: readonly { key: string; text: string }[],
+  key: string,
+): string {
+  const label = labels.find((candidate) => candidate.key === key)?.text;
+  if (label === undefined) {
+    throw new Error(`Missing Gamble presentation label: ${key}`);
+  }
+  return label;
+}
+
+function gambleActionLabel(view: GambleSiteView, key: string): string {
+  return gamblePresentationLabel(view.presentation.actionLabels, key);
+}
+
+function gambleOutcomeLabel(view: GambleSiteView, key: string): string {
+  return gamblePresentationLabel(view.presentation.outcomeLabels, key);
+}
+
 const DESKTOP_GAMBLE_REGION_MAX_WIDTH = 650;
 const BET_SETTLE_DELAY_MS = 250;
 const REDUCED_MOTION_DELAY_MS = 80;
@@ -334,8 +364,7 @@ const FOUR_SUIT_CARD_OUTCOME_MS = FOUR_SUIT_CARD_OUTCOME_SECONDS * 1_000;
 // remaining measured height so the complete panel matches the 5:7 GameCard.
 const FOUR_SUIT_PANEL_RIM_HEIGHT = 2;
 const BLACKJACK_CARD_ARRIVAL_SECONDS = FADE_DURATION_SECONDS * 1.5;
-const BLACKJACK_CARD_ARRIVAL_MS =
-  BLACKJACK_CARD_ARRIVAL_SECONDS * 1_000;
+const BLACKJACK_CARD_ARRIVAL_MS = BLACKJACK_CARD_ARRIVAL_SECONDS * 1_000;
 const BLACKJACK_DEPARTURE_FADE_MS = FADE_DURATION_SECONDS * 1_000;
 const BLACKJACK_CARD_READING_MS = PLAYING_CARD_FLIP_DURATION_MS * 0.75;
 const BLACKJACK_CONCEALED_READING_MS = PLAYING_CARD_FLIP_DURATION_MS;
@@ -889,8 +918,8 @@ function GambleBetButton({
   const t = useMessages();
   const button = (
     <GlassButton
-      label={t("gamble-gravok-bet-action")}
-      accessibilityLabel={t("gamble-gravok-bet-accessible-name", {
+      label={gambleActionLabel(view, "bet")}
+      accessibilityLabel={t("gamble-gate-bet-accessible-name", {
         gateName: gate.name,
         essenceCost: view.wagerCost,
       })}
@@ -935,19 +964,18 @@ function GambleBetButton({
 }
 
 function GambleOutcome({
+  view,
   result,
   layout,
 }: {
+  view: GravokWagerSiteView;
   result: GambleResultView;
   layout: "mobile" | "desktop";
 }) {
-  const t = useMessages();
   return (
     <RadialAnnouncement
       announcementId={result.id}
-      headline={t("gamble-gravok-outcome-headline", {
-        outcome: result.won ? "won" : "bust",
-      })}
+      headline={gambleOutcomeLabel(view, result.won ? "won" : "bust")}
       detail={result.won ? result.rewardDreamsign?.name : undefined}
       essenceGained={result.won ? result.essenceGained : undefined}
       tone={result.won ? "reward" : "danger"}
@@ -1192,7 +1220,7 @@ function GravokWagerScreen({
             }}
           >
             <section
-              aria-label={t("gamble-gravok-gates-accessible-name")}
+              aria-label={view.presentation.accessibilityDescription}
               data-gamble-gates=""
               style={{
                 position: "relative",
@@ -1246,6 +1274,7 @@ function GravokWagerScreen({
                   >
                     <GambleOutcome
                       key={view.result.id}
+                      view={view}
                       result={view.result}
                       layout={layout}
                     />
@@ -1518,7 +1547,7 @@ function LadderClimbScreen({
             }}
           >
             <section
-              aria-label={t("gamble-ladder-stage-accessible-name")}
+              aria-label={view.presentation.accessibilityDescription}
               data-ladder-climb-stage=""
               style={{
                 position: "relative",
@@ -1547,9 +1576,10 @@ function LadderClimbScreen({
                 >
                   <RadialAnnouncement
                     announcementId={result.id}
-                    headline={t("gamble-ladder-outcome-headline", {
-                      outcome: result.won ? "won" : "miss",
-                    })}
+                    headline={gambleOutcomeLabel(
+                      view,
+                      result.won ? "won" : "miss",
+                    )}
                     tone={result.won ? "reward" : "danger"}
                     size={layout === "mobile" ? "mini" : "wager"}
                     duration="extended"
@@ -1621,9 +1651,9 @@ function LadderClimbScreen({
               >
                 {view.nextDraw !== null && (
                   <GlassButton
-                    label={t("gamble-draw-action")}
+                    label={gambleActionLabel(view, "draw")}
                     accessibilityLabel={t(
-                      "gamble-ladder-draw-accessible-name",
+                      "gamble-draw-attempt-accessible-name",
                       {
                         attemptNumber: view.nextDraw.attemptNumber,
                         essenceCost: view.nextDraw.cost,
@@ -1817,7 +1847,7 @@ function StarwayStairsScreen({
             }}
           >
             <section
-              aria-label={t("gamble-starway-tier-group-accessible-name")}
+              aria-label={view.presentation.accessibilityDescription}
               data-starway-stairs-tiers=""
               style={{
                 position: "relative",
@@ -1891,13 +1921,14 @@ function StarwayStairsScreen({
                         >
                           <RadialAnnouncement
                             announcementId={view.result.id}
-                            headline={t("gamble-starway-outcome-headline", {
-                              outcome: view.result.busted ? "bust" : "safe",
-                            })}
+                            headline={gambleOutcomeLabel(
+                              view,
+                              view.result.busted ? "bust" : "safe",
+                            )}
                             detail={
                               view.result.busted
                                 ? undefined
-                                : t("gamble-starway-prize-at-stake")
+                                : gambleOutcomeLabel(view, "prize-at-stake")
                             }
                             essenceGained={
                               !view.result.busted &&
@@ -1933,12 +1964,12 @@ function StarwayStairsScreen({
               {currentTier !== null && (
                 <div data-starway-tier-button={currentTier.tierNumber}>
                   <GlassButton
-                    label={t("gamble-starway-tier-action", {
-                      stage:
-                        currentTier.tierNumber === 1 ? "initial" : "climb",
-                    })}
+                    label={gambleActionLabel(
+                      view,
+                      currentTier.tierNumber === 1 ? "bet" : "climb",
+                    )}
                     accessibilityLabel={t(
-                      "gamble-starway-tier-action-accessible-name",
+                      "gamble-tier-action-accessible-name",
                       {
                         stage:
                           currentTier.tierNumber === 1 ? "initial" : "climb",
@@ -1964,11 +1995,10 @@ function StarwayStairsScreen({
               )}
               {view.cashOutReward !== null && (
                 <GlassButton
-                  label={t("gamble-take-prize-action")}
-                  accessibilityLabel={t(
-                    "gamble-starway-cash-out-accessible-name",
-                    { essenceAmount: view.cashOutReward },
-                  )}
+                  label={gambleActionLabel(view, "take")}
+                  accessibilityLabel={t("gamble-cash-out-accessible-name", {
+                    essenceAmount: view.cashOutReward,
+                  })}
                   essenceValue={view.cashOutReward}
                   size={layout === "mobile" ? "compact" : "standard"}
                   disabled={decisionPending}
@@ -2091,23 +2121,23 @@ function BlackjackScreen({
   const onOutcomeShownRef = useRef(onOutcomeShown);
   const playAgainTimeoutsRef = useRef<number[]>([]);
 
-  const commitPresentation = useCallback(
-    (next: BlackjackPresentationState) => {
-      presentationRef.current = next;
-      setPresentation(next);
-    },
-    [],
-  );
+  const commitPresentation = useCallback((next: BlackjackPresentationState) => {
+    presentationRef.current = next;
+    setPresentation(next);
+  }, []);
 
   useEffect(() => {
     onOutcomeShownRef.current = onOutcomeShown;
   }, [onOutcomeShown]);
 
-  useEffect(() => () => {
-    for (const timeout of playAgainTimeoutsRef.current) {
-      window.clearTimeout(timeout);
-    }
-  }, []);
+  useEffect(
+    () => () => {
+      for (const timeout of playAgainTimeoutsRef.current) {
+        window.clearTimeout(timeout);
+      }
+    },
+    [],
+  );
 
   const playerCardSignature = view.playerCards
     .map((card) => `${card.rank}:${card.suit}`)
@@ -2135,9 +2165,7 @@ function BlackjackScreen({
     const schedule = (delay: number, callback: () => void) => {
       timers.push(window.setTimeout(callback, delay));
     };
-    const patchPresentation = (
-      patch: Partial<BlackjackPresentationState>,
-    ) => {
+    const patchPresentation = (patch: Partial<BlackjackPresentationState>) => {
       commitPresentation({ ...presentationRef.current, ...patch });
     };
     const arrivalMs = reduceMotion
@@ -2189,10 +2217,9 @@ function BlackjackScreen({
         plannedRevealedKeys.add(key);
         schedule(cursor, () => {
           patchPresentation({
-            revealedCardKeys: [...new Set([
-              ...presentationRef.current.revealedCardKeys,
-              key,
-            ])],
+            revealedCardKeys: [
+              ...new Set([...presentationRef.current.revealedCardKeys, key]),
+            ],
           });
         });
         cursor += flipMs + cardReadingMs;
@@ -2208,9 +2235,8 @@ function BlackjackScreen({
       ["dealer", 1, false],
     ] as const;
     for (const [owner, index, revealAfterArrival] of openingOrder) {
-      const count = owner === "player"
-        ? plannedPlayerCount
-        : plannedDealerCount;
+      const count =
+        owner === "player" ? plannedPlayerCount : plannedDealerCount;
       if (count <= index) planCardArrival(owner, index, revealAfterArrival);
     }
     while (plannedPlayerCount < view.playerCards.length) {
@@ -2225,10 +2251,12 @@ function BlackjackScreen({
         plannedRevealedKeys.add(holeCardKey);
         schedule(cursor, () => {
           patchPresentation({
-            revealedCardKeys: [...new Set([
-              ...presentationRef.current.revealedCardKeys,
-              holeCardKey,
-            ])],
+            revealedCardKeys: [
+              ...new Set([
+                ...presentationRef.current.revealedCardKeys,
+                holeCardKey,
+              ]),
+            ],
           });
         });
         cursor += flipMs + cardReadingMs;
@@ -2255,10 +2283,7 @@ function BlackjackScreen({
           outcomeResultId: resultId,
         });
         setDecisionPending(false);
-        if (
-          !view.resultSettled &&
-          settledResultIdRef.current !== resultId
-        ) {
+        if (!view.resultSettled && settledResultIdRef.current !== resultId) {
           settledResultIdRef.current = resultId;
           onOutcomeShownRef.current();
         }
@@ -2348,17 +2373,19 @@ function BlackjackScreen({
     owner: BlackjackHandOwner,
     layout: "desktop" | "mobile",
   ) => {
-    const visibleCardCount = owner === "player"
-      ? presentation.playerCardCount
-      : presentation.dealerCardCount;
+    const visibleCardCount =
+      owner === "player"
+        ? presentation.playerCardCount
+        : presentation.dealerCardCount;
     const visibleCards = cards.slice(0, visibleCardCount);
     const revealedKeys = new Set(presentation.revealedCardKeys);
     const faceUpCards = visibleCards.filter((card, index) =>
-      revealedKeys.has(blackjackCardKey(owner, index, card))
+      revealedKeys.has(blackjackCardKey(owner, index, card)),
     );
-    const total = faceUpCards.length === 0
-      ? null
-      : blackjackHandTotal(faceUpCards);
+    const total =
+      faceUpCards.length === 0
+        ? null
+        : blackjackHandTotal(faceUpCards, view.target);
     const visibleTotal = total;
     const cardDisplaySize = blackjackCardDisplaySize(
       visibleCards.length,
@@ -2368,7 +2395,7 @@ function BlackjackScreen({
       cardDisplaySize / PLAYING_CARD_DESIGN.sizes.wagerCompact.square;
     return (
       <section
-        aria-label={t("gamble-blackjack-hand-accessible-name", {
+        aria-label={t("gamble-playing-card-hand-accessible-name", {
           owner,
         })}
         data-blackjack-side={owner}
@@ -2410,8 +2437,8 @@ function BlackjackScreen({
         >
           {visibleCards.map((card, index) => {
             const key = blackjackCardKey(owner, index, card);
-            const revealed = revealedKeys.has(key) &&
-              presentation.departurePhase === "idle";
+            const revealed =
+              revealedKeys.has(key) && presentation.departurePhase === "idle";
             return (
               <motion.div
                 key={key}
@@ -2435,9 +2462,7 @@ function BlackjackScreen({
                   duration: reduceMotion ? 0 : BLACKJACK_CARD_ARRIVAL_SECONDS,
                   ease: DREAM_EASE,
                   layout: {
-                    duration: reduceMotion
-                      ? 0
-                      : BLACKJACK_CARD_ARRIVAL_SECONDS,
+                    duration: reduceMotion ? 0 : BLACKJACK_CARD_ARRIVAL_SECONDS,
                     ease: DREAM_EASE,
                   },
                 }}
@@ -2452,9 +2477,7 @@ function BlackjackScreen({
                   initial={false}
                   animate={{ scale: cardScale }}
                   transition={{
-                    duration: reduceMotion
-                      ? 0
-                      : BLACKJACK_CARD_ARRIVAL_SECONDS,
+                    duration: reduceMotion ? 0 : BLACKJACK_CARD_ARRIVAL_SECONDS,
                     ease: DREAM_EASE,
                   }}
                   style={{
@@ -2482,9 +2505,7 @@ function BlackjackScreen({
             data-blackjack-total={owner}
             data-blackjack-total-value={visibleTotal ?? undefined}
             data-blackjack-total-slot={owner}
-            data-blackjack-total-departure-phase={
-              presentation.departurePhase
-            }
+            data-blackjack-total-departure-phase={presentation.departurePhase}
             style={{
               width: BLACKJACK_TOTAL_SIZE[layout],
               height: BLACKJACK_TOTAL_SIZE[layout],
@@ -2535,7 +2556,9 @@ function BlackjackScreen({
             zIndex: 10,
             width: "100%",
             maxWidth:
-              layout === "desktop" ? DESKTOP_GAMBLE_REGION_MAX_WIDTH : undefined,
+              layout === "desktop"
+                ? DESKTOP_GAMBLE_REGION_MAX_WIDTH
+                : undefined,
             height: "100%",
             minHeight: 0,
             justifySelf: "center",
@@ -2544,9 +2567,11 @@ function BlackjackScreen({
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            gap: layout === "desktop" ? token("--space-s") : token("--space-xs"),
+            gap:
+              layout === "desktop" ? token("--space-s") : token("--space-xs"),
             boxSizing: "border-box",
-            padding: layout === "desktop" ? token("--space-l") : token("--space-xs"),
+            padding:
+              layout === "desktop" ? token("--space-l") : token("--space-xs"),
             pointerEvents: "auto",
           }}
         >
@@ -2582,13 +2607,11 @@ function BlackjackScreen({
                     textAlign: "center",
                   }}
                 >
-                  <h2
-                    style={{ margin: 0, font: token("--t-title-sm") }}
-                  >
-                    {t("gamble-blackjack-rule")}
+                  <h2 style={{ margin: 0, font: token("--t-title-sm") }}>
+                    {view.presentation.rulesDisclosure}
                   </h2>
                   <p style={{ margin: 0, font: token("--t-body-sm") }}>
-                    {t("gamble-blackjack-wins")} {" "}
+                    {gambleOutcomeLabel(view, "wins")}{" "}
                     <EssenceValue amount={view.prizeEssence} tone="inherit" />
                   </p>
                 </div>
@@ -2602,53 +2625,55 @@ function BlackjackScreen({
           >
             {view.resultId !== null &&
               presentation.outcomeResultId === view.resultId && (
-              <div
-                data-blackjack-outcome=""
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  display: "grid",
-                  placeItems: "center",
-                  pointerEvents: "none",
-                  zIndex: 2,
-                }}
-              >
-                <RadialAnnouncement
-                  announcementId={view.resultId}
-                  headline={
-                    t("gamble-blackjack-outcome-headline", {
-                      outcome:
-                        view.outcome === "player-win"
-                          ? "player-win"
-                          : view.outcome === "push"
-                            ? "push"
-                            : (view.playerTotal ?? 0) > 21
-                              ? "bust"
-                              : "dealer-win",
-                    })
-                  }
-                  detail={
-                    view.outcome === "push"
-                      ? t("gamble-blackjack-wager-returned")
-                      : undefined
-                  }
-                  essenceGained={view.essenceAwarded > 0 ? view.essenceAwarded : undefined}
-                  tone={
-                    view.outcome === "player-win"
-                      ? "reward"
-                      : view.outcome === "push"
-                        ? "accent"
-                        : "danger"
-                  }
-                  size={layout === "mobile" ? "mini" : "wager"}
-                  duration="extended"
-                />
-              </div>
-            )}
+                <div
+                  data-blackjack-outcome=""
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    display: "grid",
+                    placeItems: "center",
+                    pointerEvents: "none",
+                    zIndex: 2,
+                  }}
+                >
+                  <RadialAnnouncement
+                    announcementId={view.resultId}
+                    headline={gambleOutcomeLabel(
+                      view,
+                      view.outcome === "player-win"
+                        ? "player-win"
+                        : view.outcome === "push"
+                          ? "push"
+                          : (view.playerTotal ?? 0) > 21
+                            ? "bust"
+                            : "dealer-win",
+                    )}
+                    detail={
+                      view.outcome === "push"
+                        ? gambleOutcomeLabel(view, "wager-returned")
+                        : undefined
+                    }
+                    essenceGained={
+                      view.essenceAwarded > 0 ? view.essenceAwarded : undefined
+                    }
+                    tone={
+                      view.outcome === "player-win"
+                        ? "reward"
+                        : view.outcome === "push"
+                          ? "accent"
+                          : "danger"
+                    }
+                    size={layout === "mobile" ? "mini" : "wager"}
+                    duration="extended"
+                  />
+                </div>
+              )}
           </div>
           <motion.div
             data-blackjack-actions=""
-            data-blackjack-actions-visible={presentation.actionsVisible ? "true" : "false"}
+            data-blackjack-actions-visible={
+              presentation.actionsVisible ? "true" : "false"
+            }
             aria-hidden={!presentation.actionsVisible || undefined}
             initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: presentation.actionsVisible ? 1 : 0 }}
@@ -2669,22 +2694,30 @@ function BlackjackScreen({
             {!view.playerCards.length ? (
               <>
                 <GlassButton
-                  label={t("gamble-blackjack-deal-action")}
+                  label={gambleActionLabel(view, "deal")}
                   essenceCost={view.wagerCost}
                   variant="accent"
-                  disabled={decisionPending || !view.runtimeReady || !view.canAffordWager}
+                  disabled={
+                    decisionPending ||
+                    !view.runtimeReady ||
+                    !view.canAffordWager
+                  }
                   testId="gamble-blackjack-deal"
                   onPress={() => {
                     setDecisionPending(true);
                     onDeal();
                   }}
                 />
-                <GlassButton label={t("gamble-leave-action")} testId="gamble-blackjack-leave" onPress={onLeave} />
+                <GlassButton
+                  label={t("gamble-leave-action")}
+                  testId="gamble-blackjack-leave"
+                  onPress={onLeave}
+                />
               </>
             ) : view.outcome === null ? (
               <>
                 <GlassButton
-                  label={t("gamble-blackjack-hit-action")}
+                  label={gambleActionLabel(view, "hit")}
                   variant="accent"
                   disabled={decisionPending}
                   testId="gamble-blackjack-hit"
@@ -2694,7 +2727,7 @@ function BlackjackScreen({
                   }}
                 />
                 <GlassButton
-                  label={t("gamble-blackjack-stand-action")}
+                  label={gambleActionLabel(view, "stand")}
                   testId="gamble-blackjack-stand"
                   disabled={decisionPending}
                   onPress={() => {
@@ -2901,8 +2934,8 @@ function FourSuitRepriseScreen({
               }}
             >
               <CardPickerPanel
-                title={t("gamble-four-suit-picker-title")}
-                subtitle={t("gamble-four-suit-picker-instruction")}
+                title={view.presentation.title}
+                subtitle={view.presentation.rulesDisclosure}
                 footerActions={[
                   {
                     label: t("gamble-leave-action"),
@@ -2915,7 +2948,7 @@ function FourSuitRepriseScreen({
                   model: card.model,
                   testId: `gamble-four-suit-card-${card.entryId}`,
                 }))}
-                emptyLabel={t("gamble-four-suit-picker-empty-state")}
+                emptyLabel={t("gamble-card-picker-empty-state")}
                 testId="gamble-four-suit-card-gallery"
                 onCardPress={setSelectedEntryId}
               />
@@ -3006,7 +3039,7 @@ function FourSuitRepriseScreen({
             }}
           >
             <section
-              aria-label={t("gamble-four-suit-stage-accessible-name")}
+              aria-label={view.presentation.accessibilityDescription}
               data-four-suit-stage=""
               style={{
                 position: "relative",
@@ -3097,13 +3130,10 @@ function FourSuitRepriseScreen({
                       <div
                         key={outcome.suit}
                         data-four-suit-outcome={outcome.suit}
-                        aria-label={t(
-                          "gamble-four-suit-outcome-accessible-name",
-                          {
-                            suit: outcome.suit,
-                            outcomeLabel: outcome.label,
-                          },
-                        )}
+                        aria-label={t("gamble-suit-outcome-accessible-name", {
+                          suit: outcome.suit,
+                          outcomeLabel: outcome.label,
+                        })}
                         style={{
                           display: "grid",
                           gridTemplateColumns:
@@ -3129,11 +3159,9 @@ function FourSuitRepriseScreen({
                         />
                         <span>
                           {outcome.outcome === "transfiguration"
-                            ? t("gamble-four-suit-result-headline", {
-                                outcome: "transfiguration",
-                              })
+                            ? gambleOutcomeLabel(view, "transfiguration")
                             : outcome.outcome === "essence"
-                              ? t("gamble-four-suit-essence-outcome", {
+                              ? t("gamble-essence-outcome", {
                                   essenceAmount: view.essenceReward,
                                 })
                               : outcome.label}
@@ -3157,9 +3185,7 @@ function FourSuitRepriseScreen({
                 >
                   <RadialAnnouncement
                     announcementId={activeResult.id}
-                    headline={t("gamble-four-suit-result-headline", {
-                      outcome: activeResult.outcome,
-                    })}
+                    headline={gambleOutcomeLabel(view, activeResult.outcome)}
                     essenceGained={
                       activeResult.essenceGained > 0
                         ? activeResult.essenceGained
@@ -3199,7 +3225,7 @@ function FourSuitRepriseScreen({
                 >
                   <IconButton
                     glyph={GLYPHS.refreshCcw}
-                    label={t("gamble-four-suit-choose-another-card-action")}
+                    label={gambleActionLabel(view, "choose-another")}
                     size="sm"
                     disabled={decisionPending}
                     testId="gamble-four-suit-choose-again"
@@ -3220,11 +3246,10 @@ function FourSuitRepriseScreen({
                 {view.phase === "choose" && selectedCard !== null ? (
                   <>
                     <GlassButton
-                      label={t("gamble-draw-action")}
-                      accessibilityLabel={t(
-                        "gamble-four-suit-draw-accessible-name",
-                        { essenceCost: view.drawCost },
-                      )}
+                      label={gambleActionLabel(view, "draw")}
+                      accessibilityLabel={t("gamble-draw-accessible-name", {
+                        essenceCost: view.drawCost,
+                      })}
                       essenceCost={view.drawCost}
                       size={layout === "mobile" ? "compact" : "standard"}
                       variant="accent"

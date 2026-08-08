@@ -17,6 +17,7 @@ import {
   MINIMAL_SITES_DATA,
   SYNTHETIC_ATLAS_DREAMSCAPES,
 } from "../__test-helpers__/atlas-fixtures";
+import { gambleFixture } from "../testing/gamble-fixture";
 import type {
   AtlasNodeState,
   DreamAtlas,
@@ -58,6 +59,7 @@ function buildContext(
     dreamscapes: TEST_DREAMSCAPES,
     atlasData: TEST_ATLAS_DATA,
     sitesData: MINIMAL_SITES_DATA,
+    gambleData: gambleFixture(),
     dreamsignPoolIds: TEST_DREAMSIGN_POOL,
     ...overrides,
   };

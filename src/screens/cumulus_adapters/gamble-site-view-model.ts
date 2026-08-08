@@ -26,14 +26,21 @@ import {
 } from "../../data/starway-stairs";
 import { eligibleFourSuitRepriseTargets } from "../../data/four-suit-reprise";
 import {
-  BLACKJACK_MAX_ATTEMPTS,
   blackjackEssenceAward,
   blackjackHandTotal,
 } from "../../data/blackjack";
+import { gambleGameByRulesKind } from "../../data/gamble-data";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
-import type { SitesData } from "../../types/sites-data";
+import type {
+  BlackjackGame,
+  FourSuitRepriseGame,
+  GambleData,
+  LadderClimbGame,
+  StarwayStairsGame,
+  ThreeGateGame,
+} from "../../types/gamble-data";
 import type {
   DreamscapeNode,
   FourSuitRepriseSiteRuntime,
@@ -47,19 +54,18 @@ import type {
   BlackjackSiteRuntime,
 } from "../../types/journey";
 import type { GravokGateId } from "../../types/gamble";
-import type { EconomyData } from "../../types/economy-data";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
 
 /** The next gate in display order supplies the non-selected reveal object. */
 export function gravokRevealGateId(
-  rules: SitesData["gamble"]["threeGate"],
+  rules: ThreeGateGame["rules"],
   selectedGateId: GravokGateId,
 ): GravokGateId {
   const selectedIndex = rules.gates.findIndex(
-    (gate) => gate.id === selectedGateId,
+    (gate) => gate.gate === selectedGateId,
   );
-  return rules.gates[(selectedIndex + 1) % rules.gates.length].id;
+  return rules.gates[(selectedIndex + 1) % rules.gates.length].gate;
 }
 
 /** Resolve the resident Dream Guide for Gamble. */
@@ -72,19 +78,18 @@ export function resolveGambleGuide(
 
 /** Map the authoritative rules table and locked jackpot into three choices. */
 export function buildGambleGateViews(
-  economy: EconomyData["gamble"]["threeGate"],
-  rules: SitesData["gamble"]["threeGate"],
+  game: ThreeGateGame,
   runtime: GravokWagerSiteRuntime | null,
   maxDreamsigns: number,
 ): readonly GambleGateView[] {
-  return rules.gates.map((gate) => ({
-    id: gate.id,
-    name: gate.name,
+  return game.rules.gates.map((gate) => ({
+    id: gate.gate,
+    name: gate.label,
     targetLabel: `${gate.threshold}-A`,
-    chanceLabel: gravokGateChanceLabel(gate),
-    oddsNumerator: gate.oddsNumerator,
-    oddsDenominator: gate.oddsDenominator,
-    essenceReward: gravokGateEssenceReward(economy, gate.id),
+    chanceLabel: gravokGateChanceLabel(game, gate),
+    oddsNumerator: gate.winningCardCount,
+    oddsDenominator: game.rules.standardDeckSize,
+    essenceReward: gravokGateEssenceReward(game.economy, gate.gate),
     rewardDreamsign: gate.awardsDreamsign
       ? (runtime?.rewardDreamsign ?? null)
       : null,
@@ -114,9 +119,8 @@ function buildGravokWagerSiteView(params: {
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent;
   guideLine: string;
-  sitesData: SitesData;
+  game: ThreeGateGame;
   runtime: GravokWagerSiteRuntime;
-  economyData: EconomyData;
 }): GravokWagerSiteView {
   const { runtime } = params;
   const result = runtime.result;
@@ -127,10 +131,11 @@ function buildGravokWagerSiteView(params: {
   const wonLargestPrize =
     result?.won === true &&
     result.essenceGained ===
-      Math.max(...Object.values(params.economyData.gamble.threeGate.rewards));
+      Math.max(...params.game.economy.rewards.map((reward) => reward.essence));
 
   return {
     gameId: "gravok-three-gate-wager",
+    presentation: params.game.presentation,
     siteId: params.site.id,
     ...commonGambleView({
       sceneNode: params.sceneNode,
@@ -144,15 +149,13 @@ function buildGravokWagerSiteView(params: {
     canPlayAgain:
       result !== null &&
       !wonLargestPrize &&
-      (runtime.roundNumber ?? 1) <=
-        params.sitesData.gamble.threeGate.maxRetries,
+      (runtime.roundNumber ?? 1) <= params.game.rules.maxRetries,
     card: {
       rank: result?.card.rank ?? "A",
       suit: result?.card.suit ?? "spades",
     },
     gates: buildGambleGateViews(
-      params.economyData.gamble.threeGate,
-      params.sitesData.gamble.threeGate,
+      params.game,
       runtime,
       params.state.maxDreamsigns,
     ),
@@ -162,10 +165,7 @@ function buildGravokWagerSiteView(params: {
         : {
             id: `${params.site.id}:${runtime.shuffleCommitment}:${result.gateId}:${result.card.rank}-${result.card.suit}`,
             gateId: result.gateId,
-            revealGateId: gravokRevealGateId(
-              params.sitesData.gamble.threeGate,
-              result.gateId,
-            ),
+            revealGateId: gravokRevealGateId(params.game.rules, result.gateId),
             won: result.won,
             essenceGained: result.essenceGained,
             essenceSettled: result.essenceSettled !== false,
@@ -190,27 +190,27 @@ function buildLadderClimbSiteView(params: {
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent;
   guideLine: string;
-  sitesData: SitesData;
+  game: LadderClimbGame;
   runtime: TidemarkLadderClimbSiteRuntime;
-  economyData: EconomyData;
 }): LadderClimbSiteView {
   const { runtime } = params;
   const result = runtime.result;
   const nextAttempt = nextTidemarkLadderClimbAttemptNumber(
-    params.sitesData.gamble.ladderClimb,
+    params.game.rules,
     runtime,
   );
   const nextCost =
     nextAttempt === null
       ? null
       : tidemarkLadderClimbAttemptCost(
-          params.economyData.gamble.ladderClimb,
+          params.game.economy,
           nextAttempt,
           runtime.isFarpoint,
         );
 
   return {
     gameId: "tidemark-ladder-climb",
+    presentation: params.game.presentation,
     siteId: params.site.id,
     ...commonGambleView({
       sceneNode: params.sceneNode,
@@ -219,7 +219,7 @@ function buildLadderClimbSiteView(params: {
     }),
     isFarpoint: runtime.isFarpoint,
     runtimeReady: true,
-    essenceReward: params.economyData.gamble.ladderClimb.winEssence,
+    essenceReward: params.game.economy.winEssence,
     rewardDreamsign: runtime.rewardDreamsign,
     nextDraw:
       nextAttempt === null || nextCost === null
@@ -227,7 +227,7 @@ function buildLadderClimbSiteView(params: {
         : {
             attemptNumber: nextAttempt,
             targetRank: tidemarkLadderClimbAttemptRule(
-              params.sitesData.gamble.ladderClimb,
+              params.game.rules,
               nextAttempt,
             ).threshold,
             cost: nextCost,
@@ -241,7 +241,7 @@ function buildLadderClimbSiteView(params: {
             id: `${params.site.id}:${runtime.shuffleCommitments[result.attemptNumber - 1] ?? "unprepared"}:${String(result.attemptNumber)}`,
             attemptNumber: result.attemptNumber,
             targetRank: tidemarkLadderClimbAttemptRule(
-              params.sitesData.gamble.ladderClimb,
+              params.game.rules,
               result.attemptNumber,
             ).threshold,
             card: result.card,
@@ -267,31 +267,27 @@ function buildStarwayStairsSiteView(params: {
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent;
   guideLine: string;
-  sitesData: SitesData;
+  game: StarwayStairsGame;
   runtime: StarwayStairsSiteRuntime;
-  economyData: EconomyData;
 }): StarwayStairsSiteView {
   const { runtime } = params;
   const latestResult = runtime.results[runtime.results.length - 1] ?? null;
   const currentTierNumber = nextStarwayStairsTierNumber(
-    params.sitesData.gamble.starwayStairs,
+    params.game.rules,
     runtime,
   );
   const cashOutReward =
     latestResult !== null &&
     latestResult.resultSettled &&
     !latestResult.busted &&
-    latestResult.tierNumber <
-      params.sitesData.gamble.starwayStairs.tiers.length &&
+    latestResult.tierNumber < params.game.rules.tiers.length &&
     runtime.terminalReason === null
-      ? starwayStairsEssenceReward(
-          params.economyData.gamble.starwayStairs,
-          latestResult.tierNumber,
-        )
+      ? starwayStairsEssenceReward(params.game.economy, latestResult.tierNumber)
       : null;
 
   return {
     gameId: "starway-stairs",
+    presentation: params.game.presentation,
     siteId: params.site.id,
     ...commonGambleView({
       sceneNode: params.sceneNode,
@@ -304,8 +300,8 @@ function buildStarwayStairsSiteView(params: {
     canAffordWager: params.state.essence >= runtime.wagerAmount,
     canPlayAgain:
       runtime.terminalReason === "bust" &&
-      runtime.roundNumber <= params.sitesData.gamble.starwayStairs.maxRetries,
-    tiers: params.sitesData.gamble.starwayStairs.tiers.map((tier) => {
+      runtime.roundNumber <= params.game.rules.maxRetries,
+    tiers: params.game.rules.tiers.map((tier) => {
       const result = runtime.results.find(
         (entry) => entry.tierNumber === tier.tier,
       );
@@ -313,7 +309,7 @@ function buildStarwayStairsSiteView(params: {
         tierNumber: tier.tier,
         drawTargetLabel: starwayStairsDrawTargetLabel(tier),
         essenceReward: starwayStairsEssenceReward(
-          params.economyData.gamble.starwayStairs,
+          params.game.economy,
           tier.tier,
         ),
         state:
@@ -337,7 +333,7 @@ function buildStarwayStairsSiteView(params: {
             busted: latestResult.busted,
             resultSettled: latestResult.resultSettled,
             prizeAtRisk: starwayStairsEssenceReward(
-              params.economyData.gamble.starwayStairs,
+              params.game.economy,
               latestResult.tierNumber,
             ),
           },
@@ -354,27 +350,31 @@ function buildBlackjackSiteView(params: {
   guide: DreamGuideContent;
   guideLine: string;
   runtime: BlackjackSiteRuntime;
-  economyData: EconomyData;
+  game: BlackjackGame;
 }): BlackjackSiteView {
   const { runtime } = params;
-  const playerTotal = runtime.playerCards.length === 0
-    ? null
-    : blackjackHandTotal(runtime.playerCards);
+  const playerTotal =
+    runtime.playerCards.length === 0
+      ? null
+      : blackjackHandTotal(runtime.playerCards, params.game.rules.target);
   const visibleDealerCards = runtime.dealerRevealed
     ? runtime.dealerCards
     : runtime.dealerCards.slice(0, 1);
-  const dealerTotal = visibleDealerCards.length === 0
-    ? null
-    : blackjackHandTotal(visibleDealerCards);
-  const essenceAwarded = runtime.outcome === null
-    ? 0
-    : blackjackEssenceAward(
-        runtime.wagerCost,
-        runtime.prizeEssence,
-        runtime.outcome,
-      );
+  const dealerTotal =
+    visibleDealerCards.length === 0
+      ? null
+      : blackjackHandTotal(visibleDealerCards, params.game.rules.target);
+  const essenceAwarded =
+    runtime.outcome === null
+      ? 0
+      : blackjackEssenceAward(
+          runtime.wagerCost,
+          runtime.prizeEssence,
+          runtime.outcome,
+        );
   return {
     gameId: "blackjack",
+    presentation: params.game.presentation,
     siteId: params.site.id,
     handId: runtime.shuffleCommitment,
     ...commonGambleView({
@@ -387,7 +387,8 @@ function buildBlackjackSiteView(params: {
     wagerCost: runtime.wagerCost,
     prizeEssence: runtime.prizeEssence,
     attemptNumber: runtime.attemptNumber,
-    maxAttempts: BLACKJACK_MAX_ATTEMPTS,
+    maxAttempts: params.game.rules.maxAttempts,
+    target: params.game.rules.target,
     canAffordWager: params.state.essence >= runtime.wagerCost,
     playerCards: runtime.playerCards,
     playerTotal,
@@ -404,7 +405,7 @@ function buildBlackjackSiteView(params: {
     canPlayAgain:
       (runtime.outcome === "push" ||
         (runtime.outcome === "dealer-win" &&
-          runtime.attemptNumber < BLACKJACK_MAX_ATTEMPTS)) &&
+          runtime.attemptNumber < params.game.rules.maxAttempts)) &&
       runtime.resultSettled &&
       params.state.essence >= runtime.wagerCost,
   };
@@ -461,8 +462,7 @@ function buildFourSuitRepriseSiteView(params: {
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent;
   guideLine: string;
-  sitesData: SitesData;
-  economyData: EconomyData;
+  game: FourSuitRepriseGame;
   runtime: FourSuitRepriseSiteRuntime;
 }): FourSuitRepriseSiteView {
   const { runtime } = params;
@@ -502,15 +502,13 @@ function buildFourSuitRepriseSiteView(params: {
   const cards = availableTargets.map(fourSuitCardView);
   const roundNumber = (
     runtime.phase === "choose"
-      ? Math.min(
-          runtime.rounds.length + 1,
-          params.sitesData.gamble.fourSuitReprise.maxRounds,
-        )
+      ? Math.min(runtime.rounds.length + 1, params.game.rules.maxRounds)
       : (latestRound?.roundNumber ?? 1)
   ) as 1 | 2 | 3;
 
   return {
     gameId: "four-suit-reprise",
+    presentation: params.game.presentation,
     siteId: params.site.id,
     ...commonGambleView({
       sceneNode: params.sceneNode,
@@ -522,9 +520,15 @@ function buildFourSuitRepriseSiteView(params: {
     drawCost: runtime.drawCost,
     canAffordDraw: params.state.essence >= runtime.drawCost,
     roundNumber,
-    maxRounds: params.sitesData.gamble.fourSuitReprise.maxRounds,
-    essenceReward: params.economyData.gamble.fourSuitReprise.essenceReward,
-    outcomes: params.sitesData.gamble.fourSuitReprise.outcomes,
+    maxRounds: params.game.rules.maxRounds,
+    essenceReward: params.game.economy.essenceReward,
+    outcomes: params.game.rules.outcomes.map((outcome) => ({
+      ...outcome,
+      label:
+        params.game.presentation.outcomeLabels.find(
+          (label) => label.key === outcome.outcome,
+        )?.text ?? outcome.outcome,
+    })),
     phase: runtime.phase,
     cards,
     result:
@@ -549,8 +553,7 @@ function buildFourSuitRepriseSiteView(params: {
     canPlayAgain:
       runtime.phase === "result" &&
       latestRound?.resultSettled === true &&
-      runtime.rounds.length <
-        params.sitesData.gamble.fourSuitReprise.maxRounds &&
+      runtime.rounds.length < params.game.rules.maxRounds &&
       cards.length > 0 &&
       params.state.essence >= runtime.drawCost,
   };
@@ -563,24 +566,43 @@ export function buildGambleSiteView(params: {
   site: SiteState & { type: "Gamble" };
   guide: DreamGuideContent;
   guideLine: string;
-  sitesData: SitesData;
-  economyData: EconomyData;
+  gambleData: GambleData;
 }): GambleSiteView | null {
   const runtimeCandidate = params.state.siteRuntime[params.site.id];
   const runtime: GambleSiteRuntime | null =
     runtimeCandidate?.kind === "gamble" ? runtimeCandidate : null;
   if (runtime === null) return null;
   if (runtime.gameId === "tidemark-ladder-climb") {
-    return buildLadderClimbSiteView({ ...params, runtime });
+    return buildLadderClimbSiteView({
+      ...params,
+      runtime,
+      game: gambleGameByRulesKind(params.gambleData, "ladderClimb"),
+    });
   }
   if (runtime.gameId === "starway-stairs") {
-    return buildStarwayStairsSiteView({ ...params, runtime });
+    return buildStarwayStairsSiteView({
+      ...params,
+      runtime,
+      game: gambleGameByRulesKind(params.gambleData, "starwayStairs"),
+    });
   }
   if (runtime.gameId === "four-suit-reprise") {
-    return buildFourSuitRepriseSiteView({ ...params, runtime });
+    return buildFourSuitRepriseSiteView({
+      ...params,
+      runtime,
+      game: gambleGameByRulesKind(params.gambleData, "fourSuitReprise"),
+    });
   }
   if (runtime.gameId === "blackjack") {
-    return buildBlackjackSiteView({ ...params, runtime });
+    return buildBlackjackSiteView({
+      ...params,
+      runtime,
+      game: gambleGameByRulesKind(params.gambleData, "blackjack"),
+    });
   }
-  return buildGravokWagerSiteView({ ...params, runtime });
+  return buildGravokWagerSiteView({
+    ...params,
+    runtime,
+    game: gambleGameByRulesKind(params.gambleData, "threeGate"),
+  });
 }

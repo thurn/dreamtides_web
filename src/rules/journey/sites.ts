@@ -27,6 +27,7 @@
 
 import type { EventContext } from "../../eventlog/types";
 import type { EconomyData } from "../../types/economy-data";
+import type { GambleData } from "../../types/gamble-data";
 import type { SitesData } from "../../types/sites-data";
 import type { DraftState } from "../../types/draft";
 import type { GambleGameId } from "../../types/gamble";
@@ -86,6 +87,8 @@ export interface SiteContentProvider {
   sitesData: SitesData;
   /** Immutable validated economy data captured with the provider registration. */
   economyData?: EconomyData;
+  /** Immutable validated Gamble catalog captured with provider registration. */
+  gambleData?: GambleData;
   /**
    * Generate the runtime for `site` (of a content-coupled type) deterministically
    * from `(journey, site, rng)`, or `null` to bounce. Must not mutate `journey`.

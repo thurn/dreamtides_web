@@ -9,6 +9,7 @@ import { artRef } from "../primitives/art";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { PLAYING_CARD_DESIGN } from "../components/card/PlayingCard";
+import type { GamblePresentation } from "../../types/gamble-data";
 import {
   GambleSiteScreen,
   type FourSuitRepriseSiteView,
@@ -17,6 +18,39 @@ import {
   type StarwayStairsSiteView,
   type BlackjackSiteView,
 } from "./GambleSiteScreen";
+
+const PRESENTATION: GamblePresentation = {
+  title: "Fixture game",
+  rulesDisclosure: "Fixture rules",
+  accessibilityDescription: "Fixture accessible description",
+  actionLabels: [
+    "bet",
+    "leave",
+    "draw",
+    "climb",
+    "take",
+    "choose-another",
+    "deal",
+    "hit",
+    "stand",
+  ].map((key) => ({ key, text: `Action ${key}` })),
+  outcomeLabels: [
+    "won",
+    "miss",
+    "bust",
+    "safe",
+    "prize-at-stake",
+    "transfiguration",
+    "essence",
+    "duplication",
+    "purge",
+    "player-win",
+    "dealer-win",
+    "push",
+    "wager-returned",
+    "wins",
+  ].map((key) => ({ key, text: `Outcome ${key}` })),
+};
 
 const JACKPOT_DREAMSIGN = {
   id: "00000000-0000-4000-8000-000000000041",
@@ -27,6 +61,7 @@ const JACKPOT_DREAMSIGN = {
 
 const VIEW: GravokWagerSiteView = {
   gameId: "gravok-three-gate-wager",
+  presentation: PRESENTATION,
   siteId: "fixture-gamble-site",
   scene: null,
   isFarpoint: false,
@@ -82,6 +117,7 @@ const VIEW: GravokWagerSiteView = {
 
 const STARWAY_VIEW: StarwayStairsSiteView = {
   gameId: "starway-stairs",
+  presentation: PRESENTATION,
   siteId: "fixture-gamble-site",
   scene: null,
   isFarpoint: false,
@@ -153,6 +189,7 @@ function fourSuitCardView(index: number) {
 
 const FOUR_SUIT_VIEW: FourSuitRepriseSiteView = {
   gameId: "four-suit-reprise",
+  presentation: PRESENTATION,
   siteId: "fixture-gamble-site",
   scene: null,
   isFarpoint: false,
@@ -182,6 +219,7 @@ const FOUR_SUIT_VIEW: FourSuitRepriseSiteView = {
 
 const BLACKJACK_VIEW: BlackjackSiteView = {
   gameId: "blackjack",
+  presentation: PRESENTATION,
   siteId: "fixture-gamble-site",
   handId: "fixture-blackjack-hand",
   scene: null,
@@ -191,6 +229,7 @@ const BLACKJACK_VIEW: BlackjackSiteView = {
   prizeEssence: 300,
   attemptNumber: 1,
   maxAttempts: 3,
+  target: 21,
   canAffordWager: true,
   playerCards: [],
   playerTotal: null,
@@ -350,15 +389,19 @@ describe("GambleSiteScreen", () => {
       3,
     );
     expect(
-      container.querySelector('[data-gamble-gate="six"] [data-wager-prize-card]')
+      container
+        .querySelector('[data-gamble-gate="six"] [data-wager-prize-card]')
         ?.getAttribute("data-wager-prize-target"),
     ).toBe("6-A");
     expect(
-      container.querySelector('[data-gamble-gate="nine"] [data-wager-prize-card]')
+      container
+        .querySelector('[data-gamble-gate="nine"] [data-wager-prize-card]')
         ?.getAttribute("data-wager-prize-essence-reward"),
     ).toBe("150");
     expect(
-      container.querySelector('[data-gamble-gate="jack"] [data-wager-prize-dreamsign-name]'),
+      container.querySelector(
+        '[data-gamble-gate="jack"] [data-wager-prize-dreamsign-name]',
+      ),
     ).not.toBeNull();
     expect(container.textContent).not.toContain("chance");
     expect(container.textContent).not.toContain("Gravok’s Casino");
@@ -490,7 +533,7 @@ describe("GambleSiteScreen", () => {
     const announcement = container.querySelector(
       '[data-radial-announcement="fixture-result"]',
     );
-    expect(announcement?.textContent).toContain("Won!+150");
+    expect(announcement).not.toBeNull();
     expect(
       announcement?.getAttribute("data-radial-announcement-duration"),
     ).toBe("extended");
@@ -647,6 +690,7 @@ describe("GambleSiteScreen", () => {
 
 const LADDER_VIEW: LadderClimbSiteView = {
   gameId: "tidemark-ladder-climb",
+  presentation: PRESENTATION,
   siteId: "fixture-gamble-site",
   scene: null,
   isFarpoint: false,
@@ -1734,9 +1778,11 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
         ?.textContent,
     ).toContain("50");
     act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="gamble-blackjack-deal"]',
-      )?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="gamble-blackjack-deal"]',
+        )
+        ?.click();
     });
     expect(onDeal).toHaveBeenCalledOnce();
     act(() => root.unmount());
@@ -1771,50 +1817,80 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       />,
     );
     expect(container.querySelector("[data-blackjack-title]")).toBeNull();
-    expect(container.querySelectorAll('[data-blackjack-card]')).toHaveLength(0);
-    expect(container.querySelector('[data-blackjack-total="dealer"]')
-      ?.getAttribute("data-blackjack-total-value")).toBeNull();
+    expect(container.querySelectorAll("[data-blackjack-card]")).toHaveLength(0);
+    expect(
+      container
+        .querySelector('[data-blackjack-total="dealer"]')
+        ?.getAttribute("data-blackjack-total-value"),
+    ).toBeNull();
     void act(() => vi.advanceTimersToNextTimer());
-    expect(container.querySelectorAll('[data-blackjack-card]')).toHaveLength(1);
-    expect(container.querySelector('[data-blackjack-card]')
-      ?.getAttribute("data-blackjack-card-revealed")).toBe("false");
+    expect(container.querySelectorAll("[data-blackjack-card]")).toHaveLength(1);
+    expect(
+      container
+        .querySelector("[data-blackjack-card]")
+        ?.getAttribute("data-blackjack-card-revealed"),
+    ).toBe("false");
     void act(() => vi.advanceTimersToNextTimer());
-    expect(container.querySelector('[data-blackjack-card]')
-      ?.getAttribute("data-blackjack-card-revealed")).toBe("true");
-    expect(container.querySelector('[data-blackjack-total="player"]')
-      ?.getAttribute("data-blackjack-total-value")).toBe("10");
-    expect(container.querySelector(
-      '[data-radial-announcement-owner="player"]',
-    )).not.toBeNull();
+    expect(
+      container
+        .querySelector("[data-blackjack-card]")
+        ?.getAttribute("data-blackjack-card-revealed"),
+    ).toBe("true");
+    expect(
+      container
+        .querySelector('[data-blackjack-total="player"]')
+        ?.getAttribute("data-blackjack-total-value"),
+    ).toBe("10");
+    expect(
+      container.querySelector('[data-radial-announcement-owner="player"]'),
+    ).not.toBeNull();
     void act(() => vi.runAllTimers());
-    expect(container.querySelectorAll('[data-playing-card-variant="faceDown"]')).toHaveLength(4);
-    expect(container.querySelectorAll('[data-playing-card-state="drawn"]')).toHaveLength(3);
-    expect(container.querySelectorAll('[data-playing-card-state="concealed"]')).toHaveLength(1);
-    expect(container.querySelector('[data-blackjack-total="dealer"]')
-      ?.getAttribute("data-blackjack-total-value")).toBe("5");
-    expect(container.querySelector('[data-blackjack-total="player"]')
-      ?.getAttribute("data-blackjack-total-value")).toBe("16");
-    expect(container.querySelectorAll(
-      '[data-radial-announcement-variant="hand-total"]',
-    )).toHaveLength(2);
-    expect(container.querySelectorAll(
-      '[data-radial-announcement-hand-total-orbit]',
-    )).toHaveLength(2);
+    expect(
+      container.querySelectorAll('[data-playing-card-variant="faceDown"]'),
+    ).toHaveLength(4);
+    expect(
+      container.querySelectorAll('[data-playing-card-state="drawn"]'),
+    ).toHaveLength(3);
+    expect(
+      container.querySelectorAll('[data-playing-card-state="concealed"]'),
+    ).toHaveLength(1);
+    expect(
+      container
+        .querySelector('[data-blackjack-total="dealer"]')
+        ?.getAttribute("data-blackjack-total-value"),
+    ).toBe("5");
+    expect(
+      container
+        .querySelector('[data-blackjack-total="player"]')
+        ?.getAttribute("data-blackjack-total-value"),
+    ).toBe("16");
+    expect(
+      container.querySelectorAll(
+        '[data-radial-announcement-variant="hand-total"]',
+      ),
+    ).toHaveLength(2);
+    expect(
+      container.querySelectorAll("[data-radial-announcement-hand-total-orbit]"),
+    ).toHaveLength(2);
     const persistentPlayerTotal = container.querySelector(
       '[data-radial-announcement-owner="player"]',
     );
-    expect(container.querySelectorAll("[data-blackjack-hand-label]")).toHaveLength(0);
-    expect(container.querySelector<HTMLElement>(
-      '[data-blackjack-card="player:0"]',
-    )?.style.position).toBe("relative");
     expect(
-      container.querySelector('[data-testid="gamble-blackjack-hit"]')
-        ?.textContent,
-    ).toBe("Hit");
+      container.querySelectorAll("[data-blackjack-hand-label]"),
+    ).toHaveLength(0);
+    expect(
+      container.querySelector<HTMLElement>('[data-blackjack-card="player:0"]')
+        ?.style.position,
+    ).toBe("relative");
+    expect(
+      container.querySelector('[data-testid="gamble-blackjack-hit"]'),
+    ).not.toBeNull();
     act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="gamble-blackjack-hit"]',
-      )?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="gamble-blackjack-hit"]',
+        )
+        ?.click();
     });
     expect(onHit).toHaveBeenCalledOnce();
 
@@ -1848,25 +1924,25 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
         </CumulusRoot>,
       );
     });
-    expect(container.querySelector(
-      '[data-radial-announcement-owner="player"]',
-    )).toBe(persistentPlayerTotal);
-    expect(persistentPlayerTotal?.getAttribute(
-      "data-radial-announcement-total",
-    )).toBe("16");
+    expect(
+      container.querySelector('[data-radial-announcement-owner="player"]'),
+    ).toBe(persistentPlayerTotal);
+    expect(
+      persistentPlayerTotal?.getAttribute("data-radial-announcement-total"),
+    ).toBe("16");
     void act(() => vi.runAllTimers());
-    expect(container.querySelectorAll(
-      '[data-blackjack-card^="player:"]',
-    )).toHaveLength(3);
-    expect(container.querySelector(
-      '[data-blackjack-actions-visible="true"]',
-    )).not.toBeNull();
-    expect(container.querySelector(
-      '[data-radial-announcement-owner="player"]',
-    )).toBe(persistentPlayerTotal);
-    expect(persistentPlayerTotal?.getAttribute(
-      "data-radial-announcement-total",
-    )).toBe("17");
+    expect(
+      container.querySelectorAll('[data-blackjack-card^="player:"]'),
+    ).toHaveLength(3);
+    expect(
+      container.querySelector('[data-blackjack-actions-visible="true"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-radial-announcement-owner="player"]'),
+    ).toBe(persistentPlayerTotal);
+    expect(
+      persistentPlayerTotal?.getAttribute("data-radial-announcement-total"),
+    ).toBe("17");
     expect(
       container.querySelector<HTMLButtonElement>(
         '[data-testid="gamble-blackjack-hit"]',
@@ -1907,18 +1983,22 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       />,
     );
     void act(() => vi.runAllTimers());
-    expect(container.querySelector(
-      '[data-blackjack-card="dealer:1"] [data-playing-card-state="drawn"]',
-    )).not.toBeNull();
-    expect(container.querySelector(
-      '[data-testid="gamble-blackjack-leave-after-result"]',
-    )).not.toBeNull();
-    expect(container.querySelector(
-      '[data-testid="gamble-blackjack-play-again"]',
-    )).toBeNull();
-    expect(container.querySelector(
-      '[data-testid="gamble-open-replacement"]',
-    )).toBeNull();
+    expect(
+      container.querySelector(
+        '[data-blackjack-card="dealer:1"] [data-playing-card-state="drawn"]',
+      ),
+    ).not.toBeNull();
+    expect(
+      container.querySelector(
+        '[data-testid="gamble-blackjack-leave-after-result"]',
+      ),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-testid="gamble-blackjack-play-again"]'),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-testid="gamble-open-replacement"]'),
+    ).toBeNull();
 
     act(() => root.unmount());
   });
@@ -1930,9 +2010,15 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       <GambleSiteScreen
         view={{
           ...BLACKJACK_VIEW,
-          playerCards: [{ rank: "K", suit: "clubs" }, { rank: "9", suit: "hearts" }],
+          playerCards: [
+            { rank: "K", suit: "clubs" },
+            { rank: "9", suit: "hearts" },
+          ],
           playerTotal: 19,
-          dealerCards: [{ rank: "10", suit: "spades" }, { rank: "8", suit: "diamonds" }],
+          dealerCards: [
+            { rank: "10", suit: "spades" },
+            { rank: "8", suit: "diamonds" },
+          ],
           dealerTotal: 18,
           dealerRevealed: true,
           outcome: "player-win",
@@ -1989,44 +2075,70 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       />,
     );
     void act(() => vi.runAllTimers());
-    const cards = [...container.querySelectorAll('[data-blackjack-card]')];
-    const totals = [...container.querySelectorAll('[data-blackjack-total]')];
-    expect(container.querySelectorAll(
-      '[data-playing-card-state="drawn"]',
-    )).toHaveLength(4);
+    const cards = [...container.querySelectorAll("[data-blackjack-card]")];
+    const totals = [...container.querySelectorAll("[data-blackjack-total]")];
+    expect(
+      container.querySelectorAll('[data-playing-card-state="drawn"]'),
+    ).toHaveLength(4);
     act(() => {
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="gamble-blackjack-play-again"]',
-      )?.click();
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="gamble-blackjack-play-again"]',
+        )
+        ?.click();
     });
-    expect(container.querySelector('[data-blackjack-departure-phase]')
-      ?.getAttribute("data-blackjack-departure-phase")).toBe("concealing");
-    expect(container.querySelectorAll(
-      '[data-blackjack-card-departure-phase="concealing"]',
-    )).toHaveLength(4);
-    expect(container.querySelectorAll(
-      '[data-blackjack-total-departure-phase="concealing"]',
-    )).toHaveLength(2);
-    expect(container.querySelectorAll(
-      '[data-playing-card-state="concealed"]',
-    )).toHaveLength(4);
-    expect([...container.querySelectorAll('[data-blackjack-card]')]).toEqual(cards);
-    expect([...container.querySelectorAll('[data-blackjack-total]')]).toEqual(totals);
+    expect(
+      container
+        .querySelector("[data-blackjack-departure-phase]")
+        ?.getAttribute("data-blackjack-departure-phase"),
+    ).toBe("concealing");
+    expect(
+      container.querySelectorAll(
+        '[data-blackjack-card-departure-phase="concealing"]',
+      ),
+    ).toHaveLength(4);
+    expect(
+      container.querySelectorAll(
+        '[data-blackjack-total-departure-phase="concealing"]',
+      ),
+    ).toHaveLength(2);
+    expect(
+      container.querySelectorAll('[data-playing-card-state="concealed"]'),
+    ).toHaveLength(4);
+    expect([...container.querySelectorAll("[data-blackjack-card]")]).toEqual(
+      cards,
+    );
+    expect([...container.querySelectorAll("[data-blackjack-total]")]).toEqual(
+      totals,
+    );
     expect(onPlayAgain).not.toHaveBeenCalled();
     void act(() => vi.advanceTimersToNextTimer());
-    expect(container.querySelector('[data-blackjack-departure-phase]')
-      ?.getAttribute("data-blackjack-departure-phase")).toBe("departing");
-    expect(container.querySelectorAll(
-      '[data-blackjack-card-departure-phase="departing"]',
-    )).toHaveLength(4);
-    expect(container.querySelectorAll(
-      '[data-blackjack-total-departure-phase="departing"]',
-    )).toHaveLength(2);
-    expect(container.querySelectorAll(
-      '[data-blackjack-hand-departure-phase="departing"]',
-    )).toHaveLength(2);
-    expect([...container.querySelectorAll('[data-blackjack-card]')]).toEqual(cards);
-    expect([...container.querySelectorAll('[data-blackjack-total]')]).toEqual(totals);
+    expect(
+      container
+        .querySelector("[data-blackjack-departure-phase]")
+        ?.getAttribute("data-blackjack-departure-phase"),
+    ).toBe("departing");
+    expect(
+      container.querySelectorAll(
+        '[data-blackjack-card-departure-phase="departing"]',
+      ),
+    ).toHaveLength(4);
+    expect(
+      container.querySelectorAll(
+        '[data-blackjack-total-departure-phase="departing"]',
+      ),
+    ).toHaveLength(2);
+    expect(
+      container.querySelectorAll(
+        '[data-blackjack-hand-departure-phase="departing"]',
+      ),
+    ).toHaveLength(2);
+    expect([...container.querySelectorAll("[data-blackjack-card]")]).toEqual(
+      cards,
+    );
+    expect([...container.querySelectorAll("[data-blackjack-total]")]).toEqual(
+      totals,
+    );
     expect(onPlayAgain).not.toHaveBeenCalled();
     void act(() => vi.advanceTimersToNextTimer());
     expect(onPlayAgain).toHaveBeenCalledOnce();

@@ -15,6 +15,7 @@ import {
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import { economyFixture } from "../testing/economy-fixture";
+import { gambleFixture } from "../testing/gamble-fixture";
 import { opponentsFixture } from "../testing/opponents-fixture";
 import explorationJson from "../../public/exploration-data.json";
 import type { DraftRecord, KnownGoodDecklist } from "./cards-v2-database";
@@ -160,6 +161,14 @@ describe("loadJourneyContent", () => {
       ["/atlas-data.json", MINIMAL_ATLAS_DATA],
       ["/sites-data.json", MINIMAL_SITES_DATA],
       ["/economy-data.json", economy],
+      [
+        "/gamble-data.json",
+        {
+          ...gambleFixture(),
+          contentHash: "a".repeat(64),
+          foldHash: "b".repeat(64),
+        },
+      ],
       ["/draft-data.json", DRAFT_DATA],
       ["/opponents-data.json", opponentsFixture()],
       ["/apollyon-incarnations-data.json", []],

@@ -12,7 +12,6 @@ pub struct EconomyCatalog {
     pub purge: PurgeRules,
     pub transfiguration: TransfigurationRules,
     pub battle_reward: BattleRewardRules,
-    pub gamble: GambleRules,
     pub exploration: ExplorationRules,
 }
 
@@ -228,128 +227,6 @@ pub struct BattleRewardRules {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct GambleRules {
-    pub three_gate: ThreeGateRules,
-    pub ladder_climb: LadderClimbRules,
-    pub starway_stairs: StarwayStairsRules,
-    pub four_suit_reprise: FourSuitRepriseRules,
-    pub blackjack: BlackjackRules,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct ThreeGateRules {
-    pub standard_wager: u32,
-    pub enhanced_wager: u32,
-    pub rewards: Vec<GateReward>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct GateReward {
-    pub gate: Gate,
-    pub essence: u32,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Hash)]
-pub enum Gate {
-    Six,
-    Nine,
-    Jack,
-}
-
-impl Gate {
-    const ALL: [Self; 3] = [Self::Six, Self::Nine, Self::Jack];
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct LadderClimbRules {
-    pub win_essence: u32,
-    pub attempts: Vec<LadderAttempt>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct LadderAttempt {
-    pub attempt: AttemptNumber,
-    pub standard_cost: u32,
-    pub enhanced_cost: u32,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Hash)]
-pub enum AttemptNumber {
-    One,
-    Two,
-    Three,
-    Four,
-}
-
-impl AttemptNumber {
-    const ALL: [Self; 4] = [Self::One, Self::Two, Self::Three, Self::Four];
-
-    fn value(self) -> u32 {
-        match self {
-            Self::One => 1,
-            Self::Two => 2,
-            Self::Three => 3,
-            Self::Four => 4,
-        }
-    }
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct StarwayStairsRules {
-    pub standard_wager: u32,
-    pub enhanced_wager: u32,
-    pub tiers: Vec<StarwayTier>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct StarwayTier {
-    pub tier: TierNumber,
-    pub essence_reward: u32,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Hash)]
-pub enum TierNumber {
-    One,
-    Two,
-    Three,
-}
-
-impl TierNumber {
-    const ALL: [Self; 3] = [Self::One, Self::Two, Self::Three];
-
-    fn value(self) -> u32 {
-        match self {
-            Self::One => 1,
-            Self::Two => 2,
-            Self::Three => 3,
-        }
-    }
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct FourSuitRepriseRules {
-    pub standard_draw_price: u32,
-    pub enhanced_draw_price: u32,
-    pub essence_reward: u32,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct BlackjackRules {
-    pub standard_wager: u32,
-    pub enhanced_wager: u32,
-    pub prize_essence: u32,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
 pub struct ExplorationRules {
     pub default_essence_per_spark: u32,
 }
@@ -359,9 +236,6 @@ pub fn lower(source: EconomyCatalog) -> Result<toml::Value> {
 
     let [card_shop, specialty_shop, dreamsign_market] = source.shop.stock.as_slice() else {
         unreachable!("validated shop stock cardinality");
-    };
-    let [six, nine, jack] = source.gamble.three_gate.rewards.as_slice() else {
-        unreachable!("validated gate reward cardinality");
     };
 
     let compatibility = CompatibilityEconomy {
@@ -418,47 +292,6 @@ pub fn lower(source: EconomyCatalog) -> Result<toml::Value> {
                 .collect(),
         },
         battle_reward: source.battle_reward.into(),
-        gamble: CompatibilityGamble {
-            three_gate: CompatibilityThreeGate {
-                standard_wager: source.gamble.three_gate.standard_wager,
-                enhanced_wager: source.gamble.three_gate.enhanced_wager,
-                rewards: CompatibilityGateRewards {
-                    six: six.essence,
-                    nine: nine.essence,
-                    jack: jack.essence,
-                },
-            },
-            ladder_climb: CompatibilityLadderClimb {
-                win_essence: source.gamble.ladder_climb.win_essence,
-                attempts: source
-                    .gamble
-                    .ladder_climb
-                    .attempts
-                    .into_iter()
-                    .map(|entry| CompatibilityLadderAttempt {
-                        attempt: entry.attempt.value(),
-                        standard_cost: entry.standard_cost,
-                        enhanced_cost: entry.enhanced_cost,
-                    })
-                    .collect(),
-            },
-            starway_stairs: CompatibilityStarwayStairs {
-                standard_wager: source.gamble.starway_stairs.standard_wager,
-                enhanced_wager: source.gamble.starway_stairs.enhanced_wager,
-                tiers: source
-                    .gamble
-                    .starway_stairs
-                    .tiers
-                    .into_iter()
-                    .map(|entry| CompatibilityStarwayTier {
-                        tier: entry.tier.value(),
-                        essence_reward: entry.essence_reward,
-                    })
-                    .collect(),
-            },
-            four_suit_reprise: source.gamble.four_suit_reprise.into(),
-            blackjack: source.gamble.blackjack.into(),
-        },
         exploration: source.exploration.into(),
     };
 
@@ -528,24 +361,6 @@ fn validate(source: &EconomyCatalog) -> Result<()> {
         validate_cost_band(transfiguration, entry.cost)?;
     }
 
-    validate_identity_order(
-        "Three-Gate rewards",
-        &source.gamble.three_gate.rewards,
-        &Gate::ALL,
-        |entry| entry.gate,
-    )?;
-    validate_identity_order(
-        "Ladder Climb attempts",
-        &source.gamble.ladder_climb.attempts,
-        &AttemptNumber::ALL,
-        |entry| entry.attempt,
-    )?;
-    validate_identity_order(
-        "Starway Stairs tiers",
-        &source.gamble.starway_stairs.tiers,
-        &TierNumber::ALL,
-        |entry| entry.tier,
-    )?;
     Ok(())
 }
 
@@ -633,7 +448,6 @@ struct CompatibilityEconomy {
     transfiguration: CompatibilityTransfiguration,
     #[serde(rename = "battle-reward")]
     battle_reward: CompatibilityBattleReward,
-    gamble: CompatibilityGamble,
     exploration: CompatibilityExploration,
 }
 
@@ -825,67 +639,6 @@ struct CompatibilityStatDeltaCostBand {
 }
 
 #[derive(Serialize)]
-struct CompatibilityGamble {
-    #[serde(rename = "three-gate")]
-    three_gate: CompatibilityThreeGate,
-    #[serde(rename = "ladder-climb")]
-    ladder_climb: CompatibilityLadderClimb,
-    #[serde(rename = "starway-stairs")]
-    starway_stairs: CompatibilityStarwayStairs,
-    #[serde(rename = "four-suit-reprise")]
-    four_suit_reprise: CompatibilityFourSuitReprise,
-    blackjack: CompatibilityBlackjack,
-}
-
-#[derive(Serialize)]
-struct CompatibilityThreeGate {
-    #[serde(rename = "standard-wager")]
-    standard_wager: u32,
-    #[serde(rename = "enhanced-wager")]
-    enhanced_wager: u32,
-    rewards: CompatibilityGateRewards,
-}
-
-#[derive(Serialize)]
-struct CompatibilityGateRewards {
-    six: u32,
-    nine: u32,
-    jack: u32,
-}
-
-#[derive(Serialize)]
-struct CompatibilityLadderClimb {
-    #[serde(rename = "win-essence")]
-    win_essence: u32,
-    attempts: Vec<CompatibilityLadderAttempt>,
-}
-
-#[derive(Serialize)]
-struct CompatibilityLadderAttempt {
-    attempt: u32,
-    #[serde(rename = "standard-cost")]
-    standard_cost: u32,
-    #[serde(rename = "enhanced-cost")]
-    enhanced_cost: u32,
-}
-
-#[derive(Serialize)]
-struct CompatibilityStarwayStairs {
-    #[serde(rename = "standard-wager")]
-    standard_wager: u32,
-    #[serde(rename = "enhanced-wager")]
-    enhanced_wager: u32,
-    tiers: Vec<CompatibilityStarwayTier>,
-}
-
-#[derive(Serialize)]
-struct CompatibilityStarwayTier {
-    tier: u32,
-    #[serde(rename = "essence-reward")]
-    essence_reward: u32,
-}
-
-#[derive(Serialize)]
 struct CompatibilityBattleReward {
     #[serde(rename = "base-essence")]
     base_essence: u32,
@@ -901,46 +654,6 @@ impl From<BattleRewardRules> for CompatibilityBattleReward {
             base_essence: value.base_essence,
             essence_per_completion_level: value.essence_per_completion_level,
             minimum_essence: value.minimum_essence,
-        }
-    }
-}
-
-#[derive(Serialize)]
-struct CompatibilityFourSuitReprise {
-    #[serde(rename = "standard-draw-price")]
-    standard_draw_price: u32,
-    #[serde(rename = "enhanced-draw-price")]
-    enhanced_draw_price: u32,
-    #[serde(rename = "essence-reward")]
-    essence_reward: u32,
-}
-
-impl From<FourSuitRepriseRules> for CompatibilityFourSuitReprise {
-    fn from(value: FourSuitRepriseRules) -> Self {
-        Self {
-            standard_draw_price: value.standard_draw_price,
-            enhanced_draw_price: value.enhanced_draw_price,
-            essence_reward: value.essence_reward,
-        }
-    }
-}
-
-#[derive(Serialize)]
-struct CompatibilityBlackjack {
-    #[serde(rename = "standard-wager")]
-    standard_wager: u32,
-    #[serde(rename = "enhanced-wager")]
-    enhanced_wager: u32,
-    #[serde(rename = "prize-essence")]
-    prize_essence: u32,
-}
-
-impl From<BlackjackRules> for CompatibilityBlackjack {
-    fn from(value: BlackjackRules) -> Self {
-        Self {
-            standard_wager: value.standard_wager,
-            enhanced_wager: value.enhanced_wager,
-            prize_essence: value.prize_essence,
         }
     }
 }
@@ -1065,60 +778,6 @@ mod tests {
                 essence_per_completion_level: 9,
                 minimum_essence: 3,
             },
-            gamble: GambleRules {
-                three_gate: ThreeGateRules {
-                    standard_wager: 14,
-                    enhanced_wager: 6,
-                    rewards: vec![
-                        GateReward {
-                            gate: Gate::Six,
-                            essence: 41,
-                        },
-                        GateReward {
-                            gate: Gate::Nine,
-                            essence: 42,
-                        },
-                        GateReward {
-                            gate: Gate::Jack,
-                            essence: 43,
-                        },
-                    ],
-                },
-                ladder_climb: LadderClimbRules {
-                    win_essence: 16,
-                    attempts: AttemptNumber::ALL
-                        .into_iter()
-                        .enumerate()
-                        .map(|(index, attempt)| LadderAttempt {
-                            attempt,
-                            standard_cost: index as u32 + 1,
-                            enhanced_cost: index as u32 + 6,
-                        })
-                        .collect(),
-                },
-                starway_stairs: StarwayStairsRules {
-                    standard_wager: 18,
-                    enhanced_wager: 12,
-                    tiers: TierNumber::ALL
-                        .into_iter()
-                        .enumerate()
-                        .map(|(index, tier)| StarwayTier {
-                            tier,
-                            essence_reward: 70 + index as u32,
-                        })
-                        .collect(),
-                },
-                four_suit_reprise: FourSuitRepriseRules {
-                    standard_draw_price: 19,
-                    enhanced_draw_price: 10,
-                    essence_reward: 81,
-                },
-                blackjack: BlackjackRules {
-                    standard_wager: 23,
-                    enhanced_wager: 12,
-                    prize_essence: 91,
-                },
-            },
             exploration: ExplorationRules {
                 default_essence_per_spark: 27,
             },
@@ -1139,7 +798,6 @@ mod tests {
                 "purge",
                 "transfiguration",
                 "battle-reward",
-                "gamble",
                 "exploration",
             ]
         );
@@ -1207,18 +865,6 @@ mod tests {
         );
 
         assert_eq!(
-            lowered["gamble"]["three-gate"]["rewards"]["jack"].as_integer(),
-            Some(43)
-        );
-        assert_eq!(
-            lowered["gamble"]["ladder-climb"]["attempts"][3]["attempt"].as_integer(),
-            Some(4)
-        );
-        assert_eq!(
-            lowered["gamble"]["starway-stairs"]["tiers"][2]["tier"].as_integer(),
-            Some(3)
-        );
-        assert_eq!(
             lowered["exploration"]["default-essence-per-spark"].as_integer(),
             Some(27)
         );
@@ -1234,6 +880,8 @@ mod tests {
 
         let unknown = serialized.replacen('(', "(surprise:true,", 1);
         assert!(ron::from_str::<EconomyCatalog>(&unknown).is_err());
+        let obsolete_gamble = serialized.replacen('(', "(gamble:(),", 1);
+        assert!(ron::from_str::<EconomyCatalog>(&obsolete_gamble).is_err());
 
         let negative = serialized.replacen(
             "default_starting_essence:17",
@@ -1295,18 +943,6 @@ mod tests {
         let mut source = catalog();
         source.transfiguration.stat_delta_bands[1].magnitude = StatDeltaMagnitude::One;
         assert_error_contains(source, "stat delta bands");
-
-        let mut source = catalog();
-        source.gamble.three_gate.rewards.swap(1, 2);
-        assert_error_contains(source, "Three-Gate rewards");
-
-        let mut source = catalog();
-        source.gamble.ladder_climb.attempts.pop();
-        assert_error_contains(source, "Ladder Climb attempts");
-
-        let mut source = catalog();
-        source.gamble.starway_stairs.tiers[2].tier = TierNumber::Two;
-        assert_error_contains(source, "Starway Stairs tiers");
     }
 
     fn assert_error_contains(source: EconomyCatalog, expected: &str) {

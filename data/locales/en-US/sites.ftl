@@ -40,14 +40,6 @@ gamble-wager-prize-description =
         [yes] Win { $essenceAmount } { -essence } and { $dreamsignName }.
        *[no] Win { $essenceAmount } { -essence }.
     }
-# Visible command for wagering on a Starway Stairs tier. $stage is "initial"
-# for the first wager and "climb" for later tiers; each branch is a command to
-# the current player. The Essence price is rendered separately on the button.
-gamble-starway-tier-action =
-    { $stage ->
-        [initial] Bet
-       *[climb] Climb
-    }
 # Title above one numbered Exploration card pack. $packNumber is a positive
 # one-based display number.
 exploration-pack-title = Pack { $packNumber }
@@ -105,82 +97,23 @@ exploration-next-battle-card-cost-reduction = Next Battle · Cards cost { $energ
 exploration-site-offer-modifier-title = Transfigured Cards
 # Compact detail naming where that reward takes effect.
 exploration-site-offer-modifier-detail = Next Draft or Shop
-# Visible command used to place a wager on a Gravok gate.
-gamble-gravok-bet-action = Bet
-# Outcome headline after a Gravok wager. $outcome is "won" when the current
-# player receives the displayed prize or "bust" when the wager pays nothing.
-gamble-gravok-outcome-headline =
-    { $outcome ->
-        [won] Won!
-       *[bust] Bust!
-    }
-# Outcome headline after a Tidemark Ladder draw. $outcome is "won" when the
-# current player drew within the winning range or "miss" otherwise.
-gamble-ladder-outcome-headline =
-    { $outcome ->
-        [won] Won
-       *[miss] Miss
-    }
-# Outcome headline after a Starway Stairs draw. $outcome is "safe" when the
-# current player's accumulated prize remains available or "bust" when it is lost.
-gamble-starway-outcome-headline =
-    { $outcome ->
-        [safe] Safe!
-       *[bust] Bust!
-    }
-# Detail beneath a safe Starway Stairs outcome, indicating that the accumulated
-# prize remains exposed to loss if the current player continues climbing.
-gamble-starway-prize-at-stake = Prize at stake
-# Title of the Four-Suit Reprise card picker.
-gamble-four-suit-picker-title = Four-Suit Reprise
-# Instruction below that picker title; the current player chooses one owned card
-# that will be affected by the subsequent wager outcome.
-gamble-four-suit-picker-instruction = Choose a card to wager
 # Empty state in that picker when the current player owns no cards eligible for
 # the wager.
-gamble-four-suit-picker-empty-state = No eligible cards remain.
+gamble-card-picker-empty-state = No eligible cards remain.
 # Complete visible Four-Suit Reprise reward row when the selected suit grants
 # Essence. $essenceAmount is the positive integer Essence gained by the current
 # player.
-gamble-four-suit-essence-outcome = Gain { $essenceAmount } { -essence }
-# Outcome headline after a Four-Suit Reprise draw. $outcome is
-# "transfiguration", "essence", "duplication", or "purge" and names the effect
-# that will be applied to the current player's selected card.
-gamble-four-suit-result-headline =
-    { $outcome ->
-        [transfiguration] Transfigure
-        [essence] Gained
-        [duplication] Duplicated
-       *[purge] Purged
-    }
+gamble-essence-outcome = Gain { $essenceAmount } { -essence }
 # Visible command that immediately starts another round of the current Gamble
 # game after the previous outcome settles.
 gamble-play-again-action = Play Again
 # Visible command that exits the current Gamble site.
 gamble-leave-action = Leave
-gamble-blackjack-rule = Closest to 21 Without Going Over
-gamble-blackjack-prize = Wins { $amount } { -essence }
-gamble-blackjack-wins = Wins
-gamble-blackjack-outcome-headline =
-    { $outcome ->
-        [player-win] You Win!
-        [push] Push
-        [bust] Bust!
-       *[dealer-win] Dealer Wins
-    }
-gamble-blackjack-wager-returned = Wager Returned
-gamble-blackjack-deal-action = Deal
-gamble-blackjack-hit-action = Hit
-gamble-blackjack-stand-action = Stand
 # Visible command that opens the required Dreamsign replacement picker after a
 # Gamble reward would exceed the current player's capacity.
 gamble-choose-replacement-action = Choose Replacement
 # Visible command that postpones choosing a Dreamsign replacement.
 gamble-replacement-not-yet-action = Not Yet
-# Visible command that draws from the current Gamble game's playing-card deck.
-gamble-draw-action = Draw
-# Visible command that claims the accumulated Starway Stairs prize.
-gamble-take-prize-action = Take
 # Title of the card picker at a Transfiguration site.
 transfiguration-picker-title = Transfiguration
 # Picker instruction or loading status. $state is "standard" for the normal

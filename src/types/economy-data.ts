@@ -72,35 +72,5 @@ export interface EconomyData {
     essencePerCompletionLevel: number;
     minimumEssence: number;
   };
-  gamble: {
-    threeGate: {
-      standardWager: number;
-      enhancedWager: number;
-      rewards: Record<"six" | "nine" | "jack", number>;
-    };
-    ladderClimb: {
-      winEssence: number;
-      attempts: Array<{
-        attempt: 1 | 2 | 3 | 4;
-        standardCost: number;
-        enhancedCost: number;
-      }>;
-    };
-    starwayStairs: {
-      standardWager: number;
-      enhancedWager: number;
-      tiers: Array<{ tier: 1 | 2 | 3; essenceReward: number }>;
-    };
-    fourSuitReprise: {
-      standardDrawPrice: number;
-      enhancedDrawPrice: number;
-      essenceReward: number;
-    };
-    blackjack: {
-      standardWager: number;
-      enhancedWager: number;
-      prizeEssence: number;
-    };
-  };
   exploration: { defaultEssencePerSpark: number };
 }

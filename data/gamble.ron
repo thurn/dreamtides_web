@@ -24,9 +24,9 @@ GambleCatalog(
           AuthoredText(key: "leave", text: "Leave"),
         ],
         outcome_labels: [
-          AuthoredText(key: "won", text: "Won"),
+          AuthoredText(key: "won", text: "Won!"),
 
-          AuthoredText(key: "bust", text: "Bust"),
+          AuthoredText(key: "bust", text: "Bust!"),
         ],
         accessibility_description: "Choose one of three gates and draw a card to resolve the wager.",
       ),
@@ -36,6 +36,7 @@ GambleCatalog(
         gates: [
           GateDefinition(
             gate: six,
+            label: "Six Gate",
             threshold: Six,
             winning_card_count: 36,
             awards_dreamsign: false,
@@ -43,6 +44,7 @@ GambleCatalog(
 
           GateDefinition(
             gate: nine,
+            label: "Nine Gate",
             threshold: Nine,
             winning_card_count: 24,
             awards_dreamsign: false,
@@ -50,6 +52,7 @@ GambleCatalog(
 
           GateDefinition(
             gate: jack,
+            label: "Jack Gate",
             threshold: Jack,
             winning_card_count: 16,
             awards_dreamsign: true,
@@ -85,7 +88,7 @@ GambleCatalog(
         outcome_labels: [
           AuthoredText(key: "won", text: "Won"),
 
-          AuthoredText(key: "lost", text: "Lost"),
+          AuthoredText(key: "miss", text: "Miss"),
         ],
         accessibility_description: "Draw a card on each rung of a four-step ladder.",
       ),
@@ -123,14 +126,18 @@ GambleCatalog(
         title: "Starway Stairs",
         rules_disclosure: "Climb for a larger prize, but a low draw loses the wager.",
         action_labels: [
+          AuthoredText(key: "bet", text: "Bet"),
+
           AuthoredText(key: "climb", text: "Climb"),
 
           AuthoredText(key: "take", text: "Take"),
         ],
         outcome_labels: [
-          AuthoredText(key: "safe", text: "Safe"),
+          AuthoredText(key: "safe", text: "Safe!"),
 
-          AuthoredText(key: "bust", text: "Bust"),
+          AuthoredText(key: "bust", text: "Bust!"),
+
+          AuthoredText(key: "prize-at-stake", text: "Prize at stake"),
         ],
         accessibility_description: "Choose whether to climb for a larger prize or take the current prize.",
       ),
@@ -158,7 +165,7 @@ GambleCatalog(
       ),
       presentation: GamblePresentation(
         title: "Four-Suit Reprise",
-        rules_disclosure: "Wager a card, then draw a suit to determine its fate.",
+        rules_disclosure: "Choose a card to wager",
         action_labels: [
           AuthoredText(key: "draw", text: "Draw"),
 
@@ -167,11 +174,11 @@ GambleCatalog(
         outcome_labels: [
           AuthoredText(key: "transfiguration", text: "Transfigure"),
 
-          AuthoredText(key: "essence", text: "Unchanged + 100 Essence"),
+          AuthoredText(key: "essence", text: "Gained"),
 
-          AuthoredText(key: "duplication", text: "Duplicate"),
+          AuthoredText(key: "duplication", text: "Duplicated"),
 
-          AuthoredText(key: "purge", text: "Purge"),
+          AuthoredText(key: "purge", text: "Purged"),
         ],
         accessibility_description: "Choose a card to wager, then draw one of four suit outcomes.",
       ),
@@ -207,11 +214,17 @@ GambleCatalog(
           AuthoredText(key: "stand", text: "Stand"),
         ],
         outcome_labels: [
-          AuthoredText(key: "player-win", text: "You Win"),
+          AuthoredText(key: "player-win", text: "You Win!"),
 
           AuthoredText(key: "dealer-win", text: "Dealer Wins"),
 
-          AuthoredText(key: "push", text: "Wager Returned"),
+          AuthoredText(key: "push", text: "Push"),
+
+          AuthoredText(key: "bust", text: "Bust!"),
+
+          AuthoredText(key: "wager-returned", text: "Wager Returned"),
+
+          AuthoredText(key: "wins", text: "Wins"),
         ],
         accessibility_description: "Deal, hit, or stand against the dealer without going over 21.",
       ),

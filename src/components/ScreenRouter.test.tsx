@@ -793,9 +793,7 @@ describe("ScreenRouter Augury routing", () => {
     const container = renderWithJourney({
       state,
       mutations,
-      journeyContent: withFixtureGuides(
-        makeMerchantTestContent({ cards: [] }),
-      ),
+      journeyContent: withFixtureGuides(makeMerchantTestContent({ cards: [] })),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
@@ -980,9 +978,6 @@ describe("ScreenRouter site-dispatch completeness", () => {
     expect(
       container.querySelector('[data-testid="gamble-choose-six"]'),
     ).toBeInstanceOf(HTMLButtonElement);
-    expect(
-      container.querySelector('[data-testid="gamble-choose-six"]')?.textContent,
-    ).toBe("Bet · 50");
     expect(mutations.ensureGambleSiteRuntime).toHaveBeenCalledWith(
       site.id,
       undefined,

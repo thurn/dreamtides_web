@@ -13,40 +13,6 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-const GAME_IDS = [
-  "gravok-three-gate-wager",
-  "tidemark-ladder-climb",
-  "starway-stairs",
-  "four-suit-reprise",
-  "blackjack",
-] as const;
-const FALLBACK_GAME_IDS = [
-  "gravok-three-gate-wager",
-  "starway-stairs",
-] as const;
-const GATE_IDS = ["six", "nine", "jack"] as const;
-const RANKS = [
-  "A",
-  "2",
-  "3",
-  "4",
-  "5",
-  "6",
-  "7",
-  "8",
-  "9",
-  "10",
-  "J",
-  "Q",
-  "K",
-] as const;
-const SUITS = ["spades", "diamonds", "hearts", "clubs"] as const;
-const FOUR_SUIT_OUTCOMES = [
-  "transfiguration",
-  "essence",
-  "duplication",
-  "purge",
-] as const;
 const GUIDE_SITE_TYPES = SITE_TYPES.filter(
   (siteType) =>
     !(["Battle", "Draft", "Essence", "Reward"] as const).includes(
@@ -81,10 +47,6 @@ function isInteger(
   );
 }
 
-function isOdds(numerator: unknown, denominator: unknown): numerator is number {
-  return isInteger(numerator, { min: 0 }) && isInteger(denominator, { min: 1 });
-}
-
 function isChoiceLimit(value: unknown): value is number | null {
   return value === null || isInteger(value, { min: 1 });
 }
@@ -92,6 +54,16 @@ function isChoiceLimit(value: unknown): value is number | null {
 function isSitesData(value: unknown): value is SitesData {
   if (!isRecord(value)) return false;
   if (
+    !hasExactKeys(value, [
+      "schemaVersion",
+      "contentHash",
+      "foldHash",
+      "siteTypes",
+      "fallbackSiteType",
+      "randomSite",
+      "cardChoices",
+      "guideAssignments",
+    ]) ||
     value.schemaVersion !== 1 ||
     typeof value.contentHash !== "string" ||
     !SHA256_HEX.test(value.contentHash) ||
@@ -101,7 +73,6 @@ function isSitesData(value: unknown): value is SitesData {
     !isRecord(value.fallbackSiteType) ||
     !isRecord(value.randomSite) ||
     !isRecord(value.cardChoices) ||
-    !isRecord(value.gamble) ||
     !isRecord(value.guideAssignments)
   )
     return false;
@@ -116,13 +87,6 @@ function isSitesData(value: unknown): value is SitesData {
       "guideId",
     ]) ||
     !hasExactKeys(value.cardChoices, ["transfiguration", "duplication"]) ||
-    !hasExactKeys(value.gamble, [
-      "selection",
-      "threeGate",
-      "ladderClimb",
-      "starwayStairs",
-      "fourSuitReprise",
-    ]) ||
     !hasExactKeys(value.guideAssignments, GUIDE_SITE_TYPES)
   ) {
     return false;
@@ -174,135 +138,6 @@ function isSitesData(value: unknown): value is SitesData {
     ) {
       return false;
     }
-  }
-
-  const gamble = value.gamble;
-  if (
-    !isRecord(gamble.selection) ||
-    !hasExactKeys(gamble.selection, ["fallbackGame", "games"]) ||
-    !Array.isArray(gamble.selection.games) ||
-    gamble.selection.games.length !== GAME_IDS.length ||
-    !isRecord(gamble.threeGate) ||
-    !hasExactKeys(gamble.threeGate, ["maxRetries", "gates"]) ||
-    !Array.isArray(gamble.threeGate.gates) ||
-    gamble.threeGate.gates.length !== 3 ||
-    !isRecord(gamble.ladderClimb) ||
-    !hasExactKeys(gamble.ladderClimb, ["strongPoolLimit", "attempts"]) ||
-    !Array.isArray(gamble.ladderClimb.attempts) ||
-    gamble.ladderClimb.attempts.length !== 4 ||
-    !isRecord(gamble.starwayStairs) ||
-    !hasExactKeys(gamble.starwayStairs, ["maxRetries", "tiers"]) ||
-    !Array.isArray(gamble.starwayStairs.tiers) ||
-    gamble.starwayStairs.tiers.length !== 3 ||
-    !isRecord(gamble.fourSuitReprise) ||
-    !hasExactKeys(gamble.fourSuitReprise, [
-      "maxRounds",
-      "oddsNumerator",
-      "oddsDenominator",
-      "outcomes",
-    ]) ||
-    !Array.isArray(gamble.fourSuitReprise.outcomes) ||
-    gamble.fourSuitReprise.outcomes.length !== 4
-  )
-    return false;
-
-  if (
-    !FALLBACK_GAME_IDS.includes(
-      gamble.selection.fallbackGame as (typeof FALLBACK_GAME_IDS)[number],
-    ) ||
-    !gamble.selection.games.every((game, index) => {
-      return (
-        isRecord(game) &&
-        hasExactKeys(game, ["id", "weight"]) &&
-        game.id === GAME_IDS[index] &&
-        isInteger(game.weight, { min: 1 })
-      );
-    })
-  ) {
-    return false;
-  }
-
-  if (
-    !isInteger(gamble.threeGate.maxRetries, { min: 0 }) ||
-    !gamble.threeGate.gates.every((gate, index) => {
-      return (
-        isRecord(gate) &&
-        hasExactKeys(gate, [
-          "id",
-          "name",
-          "threshold",
-          "oddsNumerator",
-          "oddsDenominator",
-          "awardsDreamsign",
-        ]) &&
-        gate.id === GATE_IDS[index] &&
-        isNonEmptyString(gate.name) &&
-        RANKS.includes(gate.threshold as (typeof RANKS)[number]) &&
-        isOdds(gate.oddsNumerator, gate.oddsDenominator) &&
-        typeof gate.awardsDreamsign === "boolean"
-      );
-    })
-  ) {
-    return false;
-  }
-
-  if (
-    !isInteger(gamble.ladderClimb.strongPoolLimit, { min: 1 }) ||
-    !gamble.ladderClimb.attempts.every((attempt, index) => {
-      return (
-        isRecord(attempt) &&
-        hasExactKeys(attempt, [
-          "attempt",
-          "threshold",
-          "oddsNumerator",
-          "oddsDenominator",
-        ]) &&
-        attempt.attempt === index + 1 &&
-        RANKS.includes(attempt.threshold as (typeof RANKS)[number]) &&
-        isOdds(attempt.oddsNumerator, attempt.oddsDenominator)
-      );
-    })
-  ) {
-    return false;
-  }
-
-  if (
-    !isInteger(gamble.starwayStairs.maxRetries, { min: 0 }) ||
-    !gamble.starwayStairs.tiers.every((tier, index) => {
-      return (
-        isRecord(tier) &&
-        hasExactKeys(tier, [
-          "tier",
-          "highestBustRank",
-          "bustOddsNumerator",
-          "oddsDenominator",
-        ]) &&
-        tier.tier === index + 1 &&
-        RANKS.includes(tier.highestBustRank as (typeof RANKS)[number]) &&
-        isOdds(tier.bustOddsNumerator, tier.oddsDenominator)
-      );
-    })
-  ) {
-    return false;
-  }
-
-  if (
-    !isInteger(gamble.fourSuitReprise.maxRounds, { min: 1, max: 3 }) ||
-    !isOdds(
-      gamble.fourSuitReprise.oddsNumerator,
-      gamble.fourSuitReprise.oddsDenominator,
-    ) ||
-    !gamble.fourSuitReprise.outcomes.every((outcome, index) => {
-      return (
-        isRecord(outcome) &&
-        hasExactKeys(outcome, ["suit", "outcome", "label"]) &&
-        outcome.suit === SUITS[index] &&
-        outcome.outcome === FOUR_SUIT_OUTCOMES[index] &&
-        isNonEmptyString(outcome.label)
-      );
-    })
-  ) {
-    return false;
   }
 
   const guideIds = new Set<string>();

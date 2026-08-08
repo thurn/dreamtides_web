@@ -9,6 +9,7 @@ import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
 import { loadTestSitesData } from "../../__test-helpers__/atlas-fixtures";
+import { gambleGameByRulesKind } from "../../data/gamble-data";
 //
 //   START_JOURNEY -> SELECT_DREAM_AVATAR -> OPEN_SITE (every content-coupled site
 //   type) -> REROLL_SHOP -> BEGIN_BATTLE
@@ -824,6 +825,11 @@ describe("createSiteContentProvider — Gamble", () => {
       ),
     ).toHaveLength(0);
 
+    const fourSuitEconomy = gambleGameByRulesKind(
+      fixture.content.gambleData,
+      "fourSuitReprise",
+    ).economy;
+
     expect(randomThreeGate?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "gravok-three-gate-wager",
@@ -840,8 +846,7 @@ describe("createSiteContentProvider — Gamble", () => {
     expect(randomFourSuit?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "four-suit-reprise",
-      drawCost:
-        fixture.content.economyData.gamble.fourSuitReprise.standardDrawPrice,
+      drawCost: fourSuitEconomy.standardDrawPrice,
     });
     expect(randomBlackjack?.runtime).toMatchObject({
       kind: "gamble",
@@ -866,8 +871,7 @@ describe("createSiteContentProvider — Gamble", () => {
     expect(forcedFourSuit?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "four-suit-reprise",
-      drawCost:
-        fixture.content.economyData.gamble.fourSuitReprise.standardDrawPrice,
+      drawCost: fourSuitEconomy.standardDrawPrice,
       phase: "choose",
     });
     expect(forcedBlackjack?.runtime).toMatchObject({
@@ -889,8 +893,7 @@ describe("createSiteContentProvider — Gamble", () => {
     expect(farpointFourSuit?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "four-suit-reprise",
-      drawCost:
-        fixture.content.economyData.gamble.fourSuitReprise.enhancedDrawPrice,
+      drawCost: fourSuitEconomy.enhancedDrawPrice,
     });
     expect(farpointBlackjack?.runtime).toMatchObject({
       kind: "gamble",

@@ -121,7 +121,6 @@ export function compileEconomyData(sourceValue) {
     "purge",
     "transfiguration",
     "battle-reward",
-    "gamble",
     "exploration",
   ]);
   if (number(root["schema-version"], "schema-version") !== 1)
@@ -278,91 +277,6 @@ export function compileEconomyData(sourceValue) {
     "essence-per-completion-level",
     "minimum-essence",
   ]);
-  const gamble = keys(root.gamble, "gamble", [
-    "three-gate",
-    "ladder-climb",
-    "starway-stairs",
-    "four-suit-reprise",
-    "blackjack",
-  ]);
-  const threeGate = keys(gamble["three-gate"], "gamble.three-gate", [
-    "standard-wager",
-    "enhanced-wager",
-    "rewards",
-  ]);
-  const gateRewards = keys(threeGate.rewards, "gamble.three-gate.rewards", [
-    "six",
-    "nine",
-    "jack",
-  ]);
-  const ladder = keys(gamble["ladder-climb"], "gamble.ladder-climb", [
-    "win-essence",
-    "attempts",
-  ]);
-  const attempts = list(ladder.attempts, "gamble.ladder-climb.attempts").map(
-    (raw, index) => {
-      const path = `gamble.ladder-climb.attempts[${String(index)}]`;
-      const source = keys(raw, path, [
-        "attempt",
-        "standard-cost",
-        "enhanced-cost",
-      ]);
-      const attempt = number(source.attempt, `${path}.attempt`, {
-        min: 1,
-        max: 4,
-      });
-      return {
-        attempt,
-        standardCost: count(source["standard-cost"], `${path}.standard-cost`),
-        enhancedCost: count(source["enhanced-cost"], `${path}.enhanced-cost`),
-      };
-    },
-  );
-  if (
-    attempts.length !== 4 ||
-    attempts.some((entry, index) => entry.attempt !== index + 1)
-  )
-    fail(
-      "gamble.ladder-climb.attempts",
-      "must define attempts 1 through 4 in order",
-    );
-  const starway = keys(gamble["starway-stairs"], "gamble.starway-stairs", [
-    "standard-wager",
-    "enhanced-wager",
-    "tiers",
-  ]);
-  const tiers = list(starway.tiers, "gamble.starway-stairs.tiers").map(
-    (raw, index) => {
-      const path = `gamble.starway-stairs.tiers[${String(index)}]`;
-      const source = keys(raw, path, ["tier", "essence-reward"]);
-      const tier = number(source.tier, `${path}.tier`, { min: 1, max: 3 });
-      return {
-        tier,
-        essenceReward: count(
-          source["essence-reward"],
-          `${path}.essence-reward`,
-        ),
-      };
-    },
-  );
-  if (
-    tiers.length !== 3 ||
-    tiers.some((entry, index) => entry.tier !== index + 1)
-  )
-    fail(
-      "gamble.starway-stairs.tiers",
-      "must define tiers 1 through 3 in order",
-    );
-  const fourSuit = keys(
-    gamble["four-suit-reprise"],
-    "gamble.four-suit-reprise",
-    ["standard-draw-price", "enhanced-draw-price", "essence-reward"],
-  );
-  const blackjack = keys(gamble.blackjack, "gamble.blackjack", [
-    "standard-wager",
-    "enhanced-wager",
-    "prize-essence",
-  ]);
   const exploration = keys(root.exploration, "exploration", [
     "default-essence-per-spark",
   ]);
@@ -478,69 +392,6 @@ export function compileEconomyData(sourceValue) {
         battle["minimum-essence"],
         "battle-reward.minimum-essence",
       ),
-    },
-    gamble: {
-      threeGate: {
-        standardWager: count(
-          threeGate["standard-wager"],
-          "gamble.three-gate.standard-wager",
-        ),
-        enhancedWager: count(
-          threeGate["enhanced-wager"],
-          "gamble.three-gate.enhanced-wager",
-        ),
-        rewards: {
-          six: count(gateRewards.six, "gamble.three-gate.rewards.six"),
-          nine: count(gateRewards.nine, "gamble.three-gate.rewards.nine"),
-          jack: count(gateRewards.jack, "gamble.three-gate.rewards.jack"),
-        },
-      },
-      ladderClimb: {
-        winEssence: count(
-          ladder["win-essence"],
-          "gamble.ladder-climb.win-essence",
-        ),
-        attempts,
-      },
-      starwayStairs: {
-        standardWager: count(
-          starway["standard-wager"],
-          "gamble.starway-stairs.standard-wager",
-        ),
-        enhancedWager: count(
-          starway["enhanced-wager"],
-          "gamble.starway-stairs.enhanced-wager",
-        ),
-        tiers,
-      },
-      fourSuitReprise: {
-        standardDrawPrice: count(
-          fourSuit["standard-draw-price"],
-          "gamble.four-suit-reprise.standard-draw-price",
-        ),
-        enhancedDrawPrice: count(
-          fourSuit["enhanced-draw-price"],
-          "gamble.four-suit-reprise.enhanced-draw-price",
-        ),
-        essenceReward: count(
-          fourSuit["essence-reward"],
-          "gamble.four-suit-reprise.essence-reward",
-        ),
-      },
-      blackjack: {
-        standardWager: count(
-          blackjack["standard-wager"],
-          "gamble.blackjack.standard-wager",
-        ),
-        enhancedWager: count(
-          blackjack["enhanced-wager"],
-          "gamble.blackjack.enhanced-wager",
-        ),
-        prizeEssence: count(
-          blackjack["prize-essence"],
-          "gamble.blackjack.prize-essence",
-        ),
-      },
     },
     exploration: {
       defaultEssencePerSpark: count(
