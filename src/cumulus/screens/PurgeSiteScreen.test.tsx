@@ -115,10 +115,10 @@ afterEach(() => {
 describe("PurgeSiteScreen", () => {
   it("derives every reachable action-label footprint from selection limits", () => {
     expect(purgeActionWidthReservations(1, 2, [0, 40, 100])).toEqual([
-      { label: "Decline", essenceCost: null },
-      { label: "Purge 1", essenceCost: 100 },
-      { label: "Purge 2", essenceCost: 100 },
-      { label: "Purge 3", essenceCost: 100 },
+      { label: { kind: "decline" }, essenceCost: null },
+      { label: { kind: "purge", count: 1 }, essenceCost: 100 },
+      { label: { kind: "purge", count: 2 }, essenceCost: 100 },
+      { label: { kind: "purge", count: 3 }, essenceCost: 100 },
     ]);
   });
 

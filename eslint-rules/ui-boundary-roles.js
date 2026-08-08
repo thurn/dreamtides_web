@@ -1,3 +1,5 @@
+import path from "node:path";
+
 /**
  * Checked ownership inventory for shipped UI that lives outside `src/cumulus/`.
  *
@@ -37,6 +39,7 @@ const fileRoles = {
   "src/components/CumulusJourneyChrome.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/components/DreamscapeJourneyMenu.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/components/ErrorBoundary.tsx": OUTER_UI_ROLES.EMERGENCY_FALLBACK,
+  "src/components/LocalizedErrorBoundaryFallback.tsx": OUTER_UI_ROLES.EMERGENCY_FALLBACK,
   "src/components/FrontDoorRouter.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/components/JourneyCardTutorialController.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/components/ScreenRouter.tsx": OUTER_UI_ROLES.APP_SHELL,
@@ -124,8 +127,83 @@ export const OUTER_UI_FILE_ROLES = Object.freeze(fileRoles);
 
 export const OUTER_UI_ROLE_VALUES = Object.freeze(Object.values(OUTER_UI_ROLES));
 
+/** Convert an ESLint filename to a repository-relative POSIX path. */
+export function toRepoRelativePosix(absolutePath, cwd) {
+  if (!path.isAbsolute(absolutePath)) return absolutePath.split(path.sep).join("/");
+  return path.relative(cwd, absolutePath).split(path.sep).join("/");
+}
+
+/** Exact pure producers whose output is rendered in the player runtime. */
+export const LOCALIZATION_NON_REACT_PRODUCER_FILES = Object.freeze([
+  "src/cumulus/screens/mobile-deck-filter.ts",
+  "src/cumulus/screens/desktop-deck-filter.ts",
+  "src/screens/cumulus_adapters/main-menu-view-model.ts",
+  "src/screens/cumulus_adapters/dreamscape-view-model.ts",
+  "src/screens/cumulus_adapters/exploration-view-model.ts",
+  "src/screens/cumulus_adapters/mobile-battle-view-model.ts",
+  "src/transfiguration/transfiguration-logic.ts",
+  "src/rules/battle/effect-step.ts",
+  "src/rules/battle/effect-runner-core.ts",
+  "src/rules/battle/dreamwell-effects-table.ts",
+  "src/rules/battle/battle-card-effects-table.ts",
+]);
+
+const LOCALIZATION_EXCLUDED_PREFIXES = Object.freeze([
+  "src/cumulus/docs/",
+  "src/cumulus/screens/devtools/",
+  "src/debug/",
+  "src/editor/",
+  "src/image_viewer/",
+]);
+
+const LOCALIZATION_EXCLUDED_FILES = new Set([
+  "src/cumulus/screens/JourneyDebugEditorScreen.tsx",
+  "src/cumulus/screens/TutorialEditorRail.tsx",
+  "src/battle/components/BattleContextMenu.tsx",
+  "src/battle/components/BattleFigmentCreator.tsx",
+  "src/cumulus/components/overlay/DeveloperRail.tsx",
+  "src/cumulus/internal/reveal/test-utils.tsx",
+  "src/cumulus/screens/PackageDebugDialog.tsx",
+  "src/cumulus/screens/battle-overlays/BattleFigmentCreatorOverlay.tsx",
+  "src/cumulus/screens/battle-overlays/BattleLogOverlay.tsx",
+  "src/components/DreamscapeJourneyMenu.tsx",
+  "src/screens/cumulus_adapters/card-source-view-model.ts",
+  "src/screens/cumulus_adapters/journey-debug-view-model.ts",
+]);
+
 export function outerUiRole(fileRelative) {
   return OUTER_UI_FILE_ROLES[fileRelative] ?? null;
+}
+
+/** True when player-facing static-copy lint owns this repository path. */
+export function isPlayerLocalizationFile(fileRelative) {
+  if (
+    /(?:^|\/)(?:__tests__|__test-helpers__|testing|fixtures)(?:\/|$)/u.test(fileRelative) ||
+    /\.(?:test|spec)\.tsx?$/u.test(fileRelative)
+  ) {
+    return false;
+  }
+  if (LOCALIZATION_EXCLUDED_FILES.has(fileRelative)) return false;
+  if (LOCALIZATION_EXCLUDED_PREFIXES.some((prefix) => fileRelative.startsWith(prefix))) {
+    return false;
+  }
+  if (LOCALIZATION_NON_REACT_PRODUCER_FILES.includes(fileRelative)) return true;
+  const role = outerUiRole(fileRelative);
+  if (
+    role === OUTER_UI_ROLES.OPERATOR_TOOL ||
+    role === OUTER_UI_ROLES.DEVTOOL ||
+    role === OUTER_UI_ROLES.VENDOR_ASSET
+  ) {
+    return false;
+  }
+  return (
+    fileRelative.startsWith("src/cumulus/") ||
+    fileRelative.startsWith("src/screens/cumulus_adapters/") ||
+    role === OUTER_UI_ROLES.APP_SHELL ||
+    role === OUTER_UI_ROLES.STATE_ADAPTER ||
+    role === OUTER_UI_ROLES.EMERGENCY_FALLBACK ||
+    role === OUTER_UI_ROLES.PENDING_PRESENTATION
+  );
 }
 
 export function isOuterUiFile(fileRelative) {

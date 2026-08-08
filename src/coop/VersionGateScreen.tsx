@@ -3,6 +3,7 @@ import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScree
 import type { Database } from "firebase/database";
 import type { PinnedContentConfig } from "../eventlog/types";
 import { createAndNavigateToRoom } from "./RoomGate";
+import { createMessageDescriptor } from "../data/localization-descriptors";
 
 interface VersionGateScreenProps {
   db: Database;
@@ -33,13 +34,15 @@ export function VersionGateScreen({
     <ApplicationStateScreen
       view={{
         kind: "versionGate",
-        title: "A New Version Was Deployed",
-        message:
-          "This game was started on an earlier build. Start a fresh game on the current version.",
+        title: createMessageDescriptor("coop-version-gate-title"),
+        message: createMessageDescriptor("coop-version-gate-message"),
         ...(message === null ? {} : { detail: message }),
         actions: [{
           id: "primary",
-          label: status === "creating" ? "Starting…" : "Start a New Game",
+          label:
+            status === "creating"
+              ? createMessageDescriptor("coop-starting-new-game-action")
+              : createMessageDescriptor("coop-create-new-game-action"),
           disabled: status === "creating",
           onPress: handleStartNewGame,
         }],

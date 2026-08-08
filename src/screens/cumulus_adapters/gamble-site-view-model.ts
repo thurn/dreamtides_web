@@ -428,7 +428,7 @@ function buildFourSuitTransfigurationCandidate(
       );
       return {
         type: offer.type,
-        description: offer.effectDescription,
+        change: offer.change,
         effectDetails: offer.effectDetails,
         essenceCost: 0,
         affordable: true,

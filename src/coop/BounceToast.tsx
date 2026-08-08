@@ -1,33 +1,43 @@
 import type { ReactNode } from "react";
 import { TransientStatusToast } from "../cumulus/components/status/TransientStatusToast";
 import type { BounceReason } from "../eventlog/types";
+import { createMessageDescriptor } from "../data/localization-descriptors";
+import type { FluentMessageDescriptor } from "../data/localization-messages";
+import { formatMessageDescriptor, useMessages } from "../cumulus/hooks/use-messages";
 
 /** Copy for a confirmed cross-client compare-and-swap conflict. */
-export const PARTNER_CONFLICT_MESSAGE =
-  "Action not applied: your partner changed the game first.";
+export const PARTNER_CONFLICT_MESSAGE: FluentMessageDescriptor = createMessageDescriptor(
+  "coop-bounce-partner-conflict",
+);
 /** Copy for an action rejected by its domain rules in the current state. */
-export const INVALID_ACTION_MESSAGE =
-  "Action not applied: it is not valid for the current game state.";
+export const INVALID_ACTION_MESSAGE: FluentMessageDescriptor = createMessageDescriptor(
+  "coop-bounce-invalid-action",
+);
 /** Copy for an intent whose append never reached the log. */
-export const APPEND_FAILED_MESSAGE = "Action failed to send — try again.";
+export const APPEND_FAILED_MESSAGE: FluentMessageDescriptor = createMessageDescriptor(
+  "coop-bounce-append-failed",
+);
 /** Copy for a reconnect that discarded unconfirmed intents on a full refold. */
-export const PENDING_DROPPED_MESSAGE =
-  "Connection recovered — unconfirmed actions were discarded.";
+export const PENDING_DROPPED_MESSAGE: FluentMessageDescriptor = createMessageDescriptor(
+  "coop-bounce-pending-dropped",
+);
 
 /** Select player-facing copy from the reducer's machine-readable bounce cause. */
-export function bounceMessageForReason(reason: BounceReason | undefined): string {
+export function bounceMessageForReason(
+  reason: BounceReason | undefined,
+): FluentMessageDescriptor {
   switch (reason) {
     case "partner_conflict":
       return PARTNER_CONFLICT_MESSAGE;
     case "prompt_pending":
-      return "Action not applied: finish the current choice first.";
+      return createMessageDescriptor("coop-bounce-prompt-pending");
     case "unknown_conflict":
-      return "Action not applied: the game changed before it was received. Try again.";
+      return createMessageDescriptor("coop-bounce-unknown-conflict");
     case "observer_read_only":
-      return "Action not applied: this playtest is controlled from another browser.";
+      return createMessageDescriptor("coop-bounce-observer-read-only");
     case "fold_error":
     case "malformed_event":
-      return "Action not applied because of an internal error. Please try again.";
+      return createMessageDescriptor("coop-bounce-internal-error");
     case "invalid_action":
     default:
       return INVALID_ACTION_MESSAGE;
@@ -40,11 +50,12 @@ export function BounceToast({
   message = INVALID_ACTION_MESSAGE,
 }: {
   onDismiss?: () => void;
-  message?: string;
+  message?: FluentMessageDescriptor;
 }): ReactNode {
+  const t = useMessages();
   return (
     <TransientStatusToast
-      copy={{ message }}
+      copy={{ message: formatMessageDescriptor(t, message) }}
       onDismiss={onDismiss}
     />
   );

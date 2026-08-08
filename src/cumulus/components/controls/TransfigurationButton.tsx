@@ -1,11 +1,19 @@
 // TransfigurationButton — the canonical forge-form choice.
 
 import { TRANSFIGURATION_COLORS } from "../../../runtime/transfiguration-display";
-import type { TransfigurationType } from "../../../types/journey";
+import type {
+  TransfigurationChange,
+  TransfigurationType,
+} from "../../../types/journey";
+import { createMessageDescriptor } from "../../../data/localization-descriptors";
+import type { FluentMessageDescriptor } from "../../../data/localization-messages";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
-import { useMessages } from "../../hooks/use-messages";
+import {
+  formatMessageDescriptor,
+  useMessages,
+} from "../../hooks/use-messages";
 import { EssenceValue } from "../hud/EssenceValue";
 import { StandaloneGlyph } from "./StandaloneGlyph";
 
@@ -28,12 +36,53 @@ const TRANSFIGURATION_FORM_GLYPHS: Readonly<
 export interface TransfigurationButtonModel {
   /** Named transfiguration form, which determines the canonical glyph. */
   type: TransfigurationType;
-  /** Player-facing rules change announced as the option's accessible description. */
-  description: string;
+  /** Locale-neutral rules change announced as the option's accessible description. */
+  change?: TransfigurationChange;
+  /** Compatibility fixture field; production views provide `change`. */
+  description?: string;
   /** Quoted essence cost announced in the accessible label. */
   essenceCost: number;
   /** Whether the player can currently pay the quoted cost. */
   affordable: boolean;
+}
+
+/** Selects the complete localized message for one semantic forge change. */
+export function transfigurationChangeDescriptor(
+  change: TransfigurationChange | undefined,
+): FluentMessageDescriptor {
+  if (change === undefined) {
+    return createMessageDescriptor("transfiguration-change-unavailable");
+  }
+  switch (change.kind) {
+    case "energy-delta":
+      return createMessageDescriptor("transfiguration-change-energy", {
+        from: change.from,
+        to: change.to,
+      });
+    case "spark-delta":
+      return createMessageDescriptor("transfiguration-change-spark", {
+        from: change.from,
+        to: change.to,
+      });
+    case "added-draw":
+      return createMessageDescriptor("transfiguration-change-draw");
+    case "added-reclaim":
+      return createMessageDescriptor("transfiguration-change-reclaim");
+    case "added-fast":
+      return createMessageDescriptor("transfiguration-change-fast");
+    case "amplified-rules":
+      return createMessageDescriptor("transfiguration-change-amplified", {
+        rulesText: change.rulesText,
+      });
+    case "widened-trigger":
+      return createMessageDescriptor("transfiguration-change-resonant");
+    case "reduced-activated-cost":
+      return createMessageDescriptor("transfiguration-change-attuned", {
+        amount: change.amount,
+      });
+    case "all-available":
+      return createMessageDescriptor("transfiguration-change-perfected");
+  }
 }
 
 /** Strict visual treatments for compact and optionally priced form lists. */
@@ -79,7 +128,10 @@ export function TransfigurationButton({
       data-transfiguration-button-variant={variant}
       role="radio"
       aria-checked={selected}
-      aria-description={form.description}
+      aria-description={formatMessageDescriptor(
+        t,
+        transfigurationChangeDescriptor(form.change),
+      )}
       aria-label={t("transfiguration-form-choice", {
         form: form.type,
         essenceCost: form.essenceCost,
@@ -137,7 +189,7 @@ export function TransfigurationButton({
           whiteSpace: "nowrap",
         }}
       >
-        {form.type}
+        {t("transfiguration-form-name", { form: form.type })}
       </strong>
       {showPrice && (
         <span

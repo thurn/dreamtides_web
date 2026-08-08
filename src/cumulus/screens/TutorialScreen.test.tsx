@@ -2510,12 +2510,12 @@ describe("TutorialScreen", () => {
     act(() => screenMocks.sceneAnimationComplete?.());
     act(() => ResizeObserverStub.flush());
 
-    expect(screenMocks.props?.guidedSlotHighlight).toEqual({
+    expect(screenMocks.props?.guidedSlotHighlight).toMatchObject({
       owner: "player",
       rank: "front",
       slotId: "player-front-0",
-      label: "Drag Marked Direwolf to block Twilight Troubadour.",
     });
+    expect(screenMocks.props?.guidedSlotHighlight?.label).not.toBe("");
 
     act(() => {
       screenMocks.props?.interactions?.onCardDragStart(

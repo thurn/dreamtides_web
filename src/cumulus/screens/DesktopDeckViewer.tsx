@@ -56,6 +56,7 @@ import { DeckViewerBackdrop, GridPlaceholder } from "./deck-viewer-shared";
 import {
   type DesktopDeckFilterSort,
   type DeckCardSize,
+  type DeckControlOption,
   DECK_CARD_SIZE_OPTIONS,
   DECK_CARD_SIZE_PX,
   DECK_SORT_OPTIONS,
@@ -351,6 +352,7 @@ function DreamAvatarBlock({
 }: {
   dreamAvatar: DeckDreamAvatarView;
 }) {
+  const t = useMessages();
   return (
     <section
       style={{
@@ -359,7 +361,7 @@ function DreamAvatarBlock({
         gap: token("--space-l"),
       }}
     >
-      <SidebarSectionHeader label="Avatar" />
+      <SidebarSectionHeader label={t("deck-viewer-avatar-label")} />
       <div style={{ display: "flex", justifyContent: "flex-start" }}>
         {/* The portrait itself is the reveal trigger: Pressable owns the one
             shared press/hover scale, while the reveal coordinator (its pointer handlers
@@ -393,6 +395,7 @@ function DreamAvatarBlock({
 
 /** The collected dreamsigns as hoverable art tiles. */
 function DreamsignsBlock({ dreamsigns }: { dreamsigns: DreamsignData[] }) {
+  const t = useMessages();
   return (
     <section
       style={{
@@ -401,12 +404,12 @@ function DreamsignsBlock({ dreamsigns }: { dreamsigns: DreamsignData[] }) {
         gap: token("--space-l"),
       }}
     >
-      <SidebarSectionHeader label="Dreamsigns" />
+      <SidebarSectionHeader label={t("deck-viewer-dreamsigns-label")} />
       {dreamsigns.length === 0 ? (
         <div
           style={{ font: token("--t-body-sm"), color: token("--text-muted") }}
         >
-          None collected yet.
+          {t("deck-viewer-no-dreamsigns")}
         </div>
       ) : (
         <div
@@ -434,6 +437,7 @@ function DreamsignsBlock({ dreamsigns }: { dreamsigns: DreamsignData[] }) {
 
 /** The run's selected tides, using the journey-start discs and reveal behavior. */
 function TidesBlock({ tides }: { tides: DreamAvatarTideView[] }) {
+  const t = useMessages();
   if (tides.length === 0) return null;
   return (
     <section
@@ -444,7 +448,7 @@ function TidesBlock({ tides }: { tides: DreamAvatarTideView[] }) {
         gap: token("--space-l"),
       }}
     >
-      <SidebarSectionHeader label="Tides" />
+      <SidebarSectionHeader label={t("deck-viewer-tides-label")} />
       <div
         data-deck-tides-grid=""
         style={{
@@ -477,10 +481,45 @@ function ControlBar({
   onChange,
 }: {
   filterSort: DesktopDeckFilterSort;
-  subtypeOptions: { value: string; label: string }[];
+  subtypeOptions: DeckControlOption<string>[];
   onChange: (patch: Partial<DesktopDeckFilterSort>) => void;
 }) {
+  const t = useMessages();
   const showSubtypeFilter = filterSort.type !== "Event";
+  const typeLabel = (value: DesktopDeckFilterSort["type"]): string => {
+    switch (value) {
+      case "all":
+        return t("deck-filter-all");
+      case "Character":
+        return t("deck-filter-characters");
+      case "Event":
+        return t("deck-filter-events");
+    }
+  };
+  const sortLabel = (value: DesktopDeckFilterSort["sort"]): string => {
+    switch (value) {
+      case "name":
+        return t("deck-sort-name");
+      case "drafted":
+        return t("deck-sort-acquired");
+      case "cost":
+        return t("deck-sort-cost");
+      case "spark":
+        return t("deck-sort-spark");
+      case "subtype":
+        return t("deck-sort-subtype");
+    }
+  };
+  const sizeLabel = (value: DeckCardSize): string => {
+    switch (value) {
+      case "small":
+        return t("deck-size-small");
+      case "medium":
+        return t("deck-size-medium");
+      case "large":
+        return t("deck-size-large");
+    }
+  };
 
   return (
     <div
@@ -499,7 +538,7 @@ function ControlBar({
         size="sm"
         options={DECK_TYPE_TOGGLE_OPTIONS.map((option) => ({
           value: option.value,
-          label: option.label,
+          label: typeLabel(option.value),
         }))}
         value={filterSort.type}
         onChange={(value) => {
@@ -515,8 +554,11 @@ function ControlBar({
           size="sm"
           leadingGlyph={GLYPHS.filter}
           align="start"
-          ariaLabel="Filter by subtype"
-          options={subtypeOptions}
+          ariaLabel={t("deck-filter-subtype-accessible-name")}
+          options={subtypeOptions.map((option) => ({
+            value: option.value,
+            label: option.authoredLabel ?? t("deck-filter-all-subtypes"),
+          }))}
           value={filterSort.subtype}
           onChange={(value) => onChange({ subtype: value })}
         />
@@ -525,11 +567,10 @@ function ControlBar({
         size="sm"
         leadingGlyph={GLYPHS.sort}
         align="start"
-        ariaLabel="Sort order"
+          ariaLabel={t("deck-sort-accessible-name")}
         options={DECK_SORT_OPTIONS.map((option) => ({
           value: option.value,
-          label: option.label,
-          triggerLabel: option.triggerLabel,
+          label: sortLabel(option.value),
         }))}
         value={filterSort.sort}
         onChange={(value) =>
@@ -539,8 +580,16 @@ function ControlBar({
       <SegmentedControl
         size="sm"
         options={[
-          { value: "asc", label: "↑", ariaLabel: "Sort ascending" },
-          { value: "desc", label: "↓", ariaLabel: "Sort descending" },
+          {
+            value: "asc",
+            label: "↑",
+            ariaLabel: t("deck-sort-ascending-accessible-name"),
+          },
+          {
+            value: "desc",
+            label: "↓",
+            ariaLabel: t("deck-sort-descending-accessible-name"),
+          },
         ]}
         value={filterSort.direction}
         onChange={(value) =>
@@ -554,7 +603,7 @@ function ControlBar({
           size="sm"
           options={DECK_CARD_SIZE_OPTIONS.map((option) => ({
             value: option.value,
-            label: option.label,
+            label: sizeLabel(option.value),
           }))}
           value={filterSort.size}
           onChange={(value) => onChange({ size: value as DeckCardSize })}

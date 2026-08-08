@@ -435,7 +435,7 @@ export function BattleTutorialGuidance({
   return (
     <section
       ref={journeyRef}
-      aria-label="Battle tutorial"
+      aria-label={t("tutorial-region-battle")}
       aria-live={active ? "polite" : "off"}
       aria-hidden={active ? undefined : "true"}
       data-battle-tutorial-guidance=""

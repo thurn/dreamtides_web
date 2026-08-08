@@ -3,6 +3,7 @@ import {
   glossaryEntryDisplayTitle,
   glossaryEntry,
 } from "../../../data/glossary";
+import { createMessageDescriptor } from "../../../data/localization-descriptors";
 import { logEventOnce } from "../../../logging";
 import type { Glyph } from "../../primitives/glyph";
 import type { Tide } from "../hud/tide-spec";
@@ -27,14 +28,12 @@ export function glossaryInfoCard(
   }
   const body =
     entry === undefined
-      ? richText.plain("This rule's definition is temporarily unavailable.")
+      ? undefined
       : glossaryDefinitionUsesRulesText(entry)
         ? richText.rules(entry.definition)
         : richText.plain(entry.definition);
   const titleText =
-    entry === undefined
-      ? "Rule definition unavailable"
-      : glossaryEntryDisplayTitle(entry);
+    entry === undefined ? undefined : glossaryEntryDisplayTitle(entry);
   const title =
     titleText === undefined || entry?.definitionSymbol === undefined
       ? titleText
@@ -43,21 +42,45 @@ export function glossaryInfoCard(
     return {
       variant: "icon",
       glyph: presentation.glyph,
-      title,
-      body,
+      ...(entry === undefined
+        ? {
+            titleDescriptor: createMessageDescriptor(
+              "glossary-definition-unavailable-title",
+            ),
+            bodyDescriptor: createMessageDescriptor(
+              "glossary-definition-unavailable-body",
+            ),
+          }
+        : { title, body }),
     };
   }
   if (presentation.variant === "tide") {
     return {
       variant: "tide",
       tide: presentation.tide,
-      title,
-      body,
+      ...(entry === undefined
+        ? {
+            titleDescriptor: createMessageDescriptor(
+              "glossary-definition-unavailable-title",
+            ),
+            bodyDescriptor: createMessageDescriptor(
+              "glossary-definition-unavailable-body",
+            ),
+          }
+        : { title, body }),
     };
   }
   return {
     variant: "text",
-    title,
-    body,
+    ...(entry === undefined
+      ? {
+          titleDescriptor: createMessageDescriptor(
+            "glossary-definition-unavailable-title",
+          ),
+          bodyDescriptor: createMessageDescriptor(
+            "glossary-definition-unavailable-body",
+          ),
+        }
+      : { title, body }),
   };
 }

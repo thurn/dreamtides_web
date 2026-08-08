@@ -319,7 +319,7 @@ function buildFourSuitRepriseRuntime(
         transfigurationOffers: forms.map((offer) => ({
           entryId: entry.entryId,
           type: offer.type,
-          effectDescription: offer.description,
+          change: offer.change,
           effectDetails: transfigurationEffectDetails(offer, cardSnapshot),
           previewCard: offer.previewCard,
           essenceCost: 0,
@@ -528,7 +528,7 @@ function buildCardChoiceRuntime(
       transfigurationOffers.push({
         entryId,
         type: offer.type,
-        effectDescription: offer.description,
+        change: offer.change,
         effectDetails: transfigurationEffectDetails(offer, card),
         previewCard: offer.previewCard,
         essenceCost: transfigurationEssenceCost(

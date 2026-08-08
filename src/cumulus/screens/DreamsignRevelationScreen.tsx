@@ -22,6 +22,7 @@ import {
 } from "./DreamsignReplacementDialog";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
+import { useMessages } from "../hooks/use-messages";
 
 /** The guide who speaks over the Revelation offer. */
 export interface DreamsignRevelationGuideView {
@@ -91,6 +92,7 @@ export function DreamsignRevelationScreen({
   claimedIndex,
   onTutorialShown,
 }: DreamsignRevelationScreenProps) {
+  const t = useMessages();
   const isDesktop = useIsDesktop();
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const guideUrl = resolveArtRef(view.guide.art);
@@ -164,8 +166,8 @@ export function DreamsignRevelationScreen({
           view={view.purge}
           onReplace={onPurge}
           onCancel={onCancelPurge}
-          cancelLabel="Cancel"
-          closeLabel="Cancel replacement"
+          cancelLabel={t("dreamsign-revelation-cancel-action")}
+          closeLabel={t("dreamsign-revelation-cancel-replacement-action")}
         />
       )}
     </div>
@@ -412,11 +414,12 @@ function OfferStack({
   readonly onSkip: () => void;
   readonly desktop?: boolean;
 }) {
+  const t = useMessages();
   if (!view.offerReady) {
-    return <StatusLine text="Revealing Dreamsigns..." />;
+    return <StatusLine text={t("dreamsign-revelation-loading")} />;
   }
   if (view.offer.length === 0) {
-    return <StatusLine text="The Dreamsign pool is exhausted." />;
+    return <StatusLine text={t("dreamsign-revelation-exhausted")} />;
   }
 
   const enhanced = view.offer.length > 3;
@@ -487,7 +490,7 @@ function OfferStack({
         }
       >
         <GlassButton
-          label="Decline Offer"
+          label={t("site-decline-offer")}
           onPress={onSkip}
           disabled={disabled}
         />

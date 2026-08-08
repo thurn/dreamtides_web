@@ -84,6 +84,7 @@ export function tutorialActionLogDetails(
       ...(action.cardWidth === undefined
         ? {}
         : { cardWidthPx: action.cardWidth }),
+      // localization-ignore: tutorial title is replay/log metadata, not rendered copy.
       title: "How to Play",
       messageText,
       ...(messageText === action.text ? {} : { messageMarkup: action.text }),

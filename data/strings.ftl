@@ -140,6 +140,241 @@
 -essence = Essence
 -energy = Energy
 -spark = Spark
+
+## Localization diagnostics
+
+# Player-safe fallback for a malformed or unknown message descriptor. This is
+# used when persisted or imported localization data cannot be trusted; it must
+# not expose an internal message ID or the invalid value.
+localization-invalid-message-fallback = This message could not be displayed.
+
+## Application and cooperative state
+
+# Eyebrow in the bootstrap and cooperative state panel for the loading states.
+application-eyebrow-dreamtides = Dreamtides
+# Eyebrow for recoverable Journey state failures.
+application-eyebrow-journey-status = Journey Status
+# Eyebrow for Firebase or local runtime configuration failures.
+application-eyebrow-configuration = Configuration
+# Eyebrow for an incompatible reducer protocol.
+application-eyebrow-game-version = Game Version
+# Eyebrow for a content-settings comparison gate.
+application-eyebrow-game-settings = Game Settings
+# Eyebrow for a room whose persisted data cannot be decoded.
+application-eyebrow-game-data = Game Data
+# Eyebrow for a room connection failure.
+application-eyebrow-game-connection = Game Connection
+# Application loading title while a requested QA scene is prepared.
+application-opening-qa-scene-title = Opening QA Scene
+# Application loading message while a requested QA scene is prepared.
+application-opening-qa-scene-message = Preparing this journey state.
+# Application loading title while a saved Journey is fetched.
+application-loading-saved-journey-title = Loading Saved Journey
+# Application loading message for a saved Journey. $journeyName is the requested
+# saved-run name, or the player-safe fallback “saved journey”.
+application-loading-saved-journey-message = Loading { $journeyName }.
+# Recoverable error title when a saved Journey cannot be opened.
+application-loading-saved-journey-error-title = Could Not Load Saved Journey
+# Recoverable error explanation when a saved Journey cannot be opened.
+application-loading-saved-journey-error-message = The saved journey could not be opened.
+# Loading title while Journey content is fetched.
+application-loading-journey-content-title = Loading Journey Content
+# Loading message while Journey content is fetched.
+application-loading-journey-content-message = Gathering the dream’s cards and paths.
+# Recoverable error title when Journey content fails to load.
+application-content-load-error-title = Journey Content Failed to Load
+# Recoverable error explanation when Journey content fails to load.
+application-content-load-error-message = The journey content could not be prepared.
+# Primary retry action for a recoverable content-loading error.
+application-retry-action = Retry
+# Secondary action that copies technical details for support or debugging.
+application-copy-details-action = Copy Details
+# Configuration-error title when Firebase cannot be initialized.
+application-firebase-setup-title = Firebase Setup Issue
+# Configuration instructions for the local emulator mode.
+application-firebase-setup-emulator-message = Run npm start to launch the Firebase Realtime Database emulator with Vite.
+# Configuration instructions for a deployed Firebase mode.
+application-firebase-setup-production-message = Required env: VITE_FIREBASE_API_KEY, VITE_FIREBASE_AUTH_DOMAIN, VITE_FIREBASE_DATABASE_URL, VITE_FIREBASE_PROJECT_ID, VITE_FIREBASE_APP_ID.
+# Loading title while the shared game service is connected.
+application-connecting-game-service-title = Connecting to Game Service
+# Loading message while the shared game service is connected.
+application-connecting-game-service-message = Preparing your shared game.
+# Recoverable error title for an unprepared battle preview.
+application-battle-preview-error-title = Unable to Prepare Battle
+# Recoverable error explanation for an unprepared battle preview.
+application-battle-preview-error-message = The battle preview could not be prepared from this game state.
+# Error-boundary fallback heading for an unexpected render failure.
+error-boundary-title = Something went wrong
+# Error-boundary fallback explanation. The technical error detail remains in a
+# separate diagnostic region when a boundary chooses to expose it.
+error-boundary-message = This part of the screen hit an unexpected error. The rest of the app is still working. Try again, or close this and return to where you were.
+# Error-boundary retry action.
+error-boundary-retry-action = Retry
+# Error-boundary close action.
+error-boundary-close-action = Close
+
+## Main menu
+
+# Product title at the front door.
+main-menu-title = Dreamtides
+# Accessible name for the primary front-door navigation landmark.
+main-menu-navigation-label = Main menu
+# Main-menu action labels, kept separate because each command has a distinct
+# navigation consequence.
+main-menu-new-journey-action = New Journey
+main-menu-dream-codex-action = Dream Codex
+main-menu-settings-action = Settings
+main-menu-about-action = About
+main-menu-quit-action = Quit
+# Accessible group name for external community links.
+main-menu-community-label = Dreamtides community
+main-menu-github-action = GitHub
+main-menu-discord-action = Discord
+main-menu-reddit-action = Reddit
+# Card-anatomy loading title and labels.
+loading-card-types-title = Dreamtides Cards:
+loading-card-anatomy-label = Card anatomy
+loading-card-character-label = Character
+loading-card-event-label = Event
+loading-begin-action = Begin
+loading-progress-label = Loading
+# Journey-start title, action, and reroll control.
+journey-start-title = Choose Your Avatar
+journey-start-choose-action = Choose
+journey-start-reroll-action = Reroll Avatars
+# Tides information reveal trigger.
+tides-information-accessible-name = Tides information
+tides-information-label = Tides:
+# Loading-screen resource glyph accessible names.
+tutorial-feature-energy-glyph = energy
+tutorial-feature-spark-glyph = spark
+# Loading-screen card feature labels.
+tutorial-feature-cost = Cost
+tutorial-feature-spark = Spark
+tutorial-feature-ability = Ability
+tutorial-feature-card-type = Card Type
+# Shared journey-status labels and controls.
+journey-status-avatar-accessible-name = Avatar
+journey-status-essence-accessible-name = Essence Total
+journey-status-dreamsigns-title = Dreamsigns
+journey-status-close-action = Close
+journey-status-no-avatar = No avatar is active.
+# Shared command-menu chrome and validation copy.
+command-menu-close-actions = Close actions
+command-menu-back-action = Back
+command-menu-empty-state = No actions available.
+command-menu-invalid-integer = Enter a non-zero whole number.
+# Tutorial region accessible names.
+tutorial-region-battle = Battle tutorial
+tutorial-region-card = Card tutorial
+tutorial-region-site = Site tutorial
+# Deck filter, sort, and size labels.
+deck-filter-all = All
+deck-filter-characters = Characters
+deck-filter-events = Events
+deck-filter-all-subtypes = All Subtypes
+deck-sort-name = Name
+deck-sort-acquired = Acquired
+deck-sort-cost = Cost
+deck-sort-spark = Spark
+deck-sort-subtype = Subtype
+deck-size-small = S
+deck-size-medium = M
+deck-size-large = L
+deck-filter-subtype-accessible-name = Filter by subtype
+deck-sort-accessible-name = Sort order
+deck-sort-ascending-accessible-name = Sort ascending
+deck-sort-descending-accessible-name = Sort descending
+# Dreamscape site labels and lock guidance.
+dreamscape-battle-label = Battle
+dreamscape-final-boss-label = Final Boss
+dreamscape-draft-label = Draft { $pickCount }x
+dreamscape-locked-site-guidance = You must visit the other sites in this dreamscape first.
+# Loading title while a client joins an existing room.
+coop-joining-game-title = Joining Game
+# Loading message while an existing room is prepared. $roomId is an opaque room
+# identifier shown as a value, not interpreted by the translator.
+coop-joining-game-message = Preparing { $roomId }.
+# Busy status while a client joins an existing room.
+coop-joining-game-busy = Joining Game
+# Room-creation title and message.
+coop-creating-game-title = Creating Game
+coop-creating-game-message = We are preparing a shared dream.
+coop-creating-game-busy = Creating Game
+# Loading message while a room record is fetched. $roomId is an opaque room ID.
+coop-loading-game-message = Loading { $roomId }.
+# Unreachable-room title and explanation. $roomId is an opaque room ID.
+coop-game-not-found-title = Game Not Found
+coop-game-not-found-message = Could not load { $roomId }. The game may not exist, or the database is unreachable.
+# Action that creates a fresh room after a connection failure.
+coop-create-new-game-action = Create New Game
+# Generic room-setup failure title and explanation.
+coop-room-setup-error-title = Something Went Wrong
+coop-room-setup-error-message = The game could not finish its room setup.
+# Action that retries room creation or setup.
+coop-try-again-action = Try Again
+# Version-gate title and explanation.
+coop-version-gate-title = A New Version Was Deployed
+coop-version-gate-message = This game was started on an earlier build. Start a fresh game on the current version.
+# Unreadable-room title and explanation.
+coop-unreadable-room-title = This Game Could Not Be Read
+coop-unreadable-room-message = This game’s data cannot be loaded safely. Start a fresh game to keep playing.
+# Action used while creating a replacement room.
+coop-starting-new-game-action = Starting…
+# Transient status when a partner wins the compare-and-swap race.
+coop-bounce-partner-conflict = Action not applied: your partner changed the game first.
+# Transient status for a domain-invalid action.
+coop-bounce-invalid-action = Action not applied: it is not valid for the current game state.
+# Transient status when an intent could not be appended.
+coop-bounce-append-failed = Action failed to send — try again.
+# Transient status after a reconnect drops unconfirmed intents.
+coop-bounce-pending-dropped = Connection recovered — unconfirmed actions were discarded.
+# Transient status while another choice must be resolved first.
+coop-bounce-prompt-pending = Action not applied: finish the current choice first.
+# Transient status for an unknown compare-and-swap conflict.
+coop-bounce-unknown-conflict = Action not applied: the game changed before it was received. Try again.
+# Transient status when a read-only playtest rejects an action.
+coop-bounce-observer-read-only = Action not applied: this playtest is controlled from another browser.
+# Transient status for an internal fold or malformed-event failure.
+coop-bounce-internal-error = Action not applied because of an internal error. Please try again.
+# Presence status while the room connection is unresolved.
+coop-presence-connecting = Connecting…
+coop-create-game-error = Failed to create game.
+coop-presence-write-error = Failed to write presence.
+# Presence status after the room connection resolves. $count is the finite
+# number of connected clients and can be zero.
+coop-presence-connected-count =
+    { $count ->
+        [one] 1 Connected
+       *[other] { $count } Connected
+    }
+# Content-settings gate title and explanation.
+coop-content-settings-title = This Game Uses Different Settings
+coop-content-settings-message = Both players use the same content settings to play together.
+coop-use-game-settings-action = Use This Game’s Settings
+coop-unadoptable-settings-detail = This game needs settings this build cannot adopt.
+coop-player-disconnected-title = Player Disconnected
+coop-playtest-paused-message = The playtest is paused. Take control when you are ready to continue.
+coop-take-control-action = Take Control
+# Comparison-table heading for the room's expected configuration.
+application-comparison-this-game = This Game
+# Comparison-table heading for this client's local configuration.
+application-comparison-yours = Yours
+# Config comparison row labels.
+coop-config-pool-label = Pool
+coop-config-draft-label = Draft
+coop-config-pack-size-label = Pack Size
+coop-config-atlas-rules-label = Atlas Rules
+coop-config-site-rules-label = Site Rules
+coop-config-draft-rules-label = Draft Rules
+coop-config-economy-rules-label = Economy Rules
+coop-config-opponent-rules-label = Opponent Rules
+coop-config-tutorial-rules-label = Tutorial Rules
+coop-config-unavailable = Unavailable
+coop-config-default = Default
+
+# Battle-preview route failure title and explanation.
+
 journey-complete-title = { -journey } Complete
 journey-complete-new-journey = New { -journey }
 journey-complete-stat-battles =
@@ -342,7 +577,7 @@ exploration-purge-and-copy-complete =
     }
 # Accessible announcement while an Exploration outcome transfigures one card.
 # $cardName is the canonical display name with unknown grammatical gender;
-# $form is one of the seven stable Transfiguration form identifiers.
+# $form is one of the nine stable Transfiguration form identifiers.
 exploration-card-transfiguring =
     { $form ->
         [Empowered] Transfiguring { $cardName } into its Empowered form
@@ -351,6 +586,7 @@ exploration-card-transfiguring =
         [Inspired] Transfiguring { $cardName } into its Inspired form
         [Enduring] Transfiguring { $cardName } into its Enduring form
         [Hastened] Transfiguring { $cardName } into its Hastened form
+        [Perfected] Transfiguring { $cardName } into its Perfected form
        *[Resonant] Transfiguring { $cardName } into its Resonant form
     }
 # Accessible announcement during the first phase of a compound Exploration
@@ -367,6 +603,70 @@ exploration-dreamsign-purging = Purging { $dreamsignName }
 
 ### Battle status and results
 
+
+## Battle prompts
+
+# Prompt title in a battle picker. $maxCost is the non-negative Energy-cost
+# ceiling for eligible cards; the production Dreamwell effect supplies 2.
+battle-prompt-discover-card-max-cost = Discover a ≤{ $maxCost }● cost card
+# Prompt title for discovering one Character card from the available choices.
+battle-prompt-discover-character = Discover a character
+# Prompt title for returning one allied Character from the Void to play.
+battle-prompt-rematerialize-ally = Rematerialize an ally
+# Prompt title for granting a selected Void card temporary Reclaim.
+battle-prompt-choose-void-card-reclaim = Choose a void card to gain Reclaim
+# Subtitle explaining the temporary play permission and its later consequence.
+battle-prompt-choose-void-card-reclaim-subtitle = You may play it from your void this turn, then banish it.
+# Prompt title for choosing one card to discard.
+battle-prompt-choose-card-discard = Choose a card to discard
+# Prompt title for discarding one card.
+battle-prompt-discard-card = Discard a card
+# Confirmation title for discarding and drawing the same number of cards. $count
+# is a positive integer; the production effect supplies 2.
+battle-prompt-confirm-discard-draw = Discard { $count } cards, then draw { $count }?
+# Picker title for the discard phase of a discard-and-draw effect. $count is a
+# positive integer and matches the subsequent draw count.
+battle-prompt-discard-cards = Discard { $count } cards
+# Prompt title for returning one card from the Void to the player's hand.
+battle-prompt-return-void-card = Return a void card to hand
+# Prompt title for returning an Event card from the player's Void to hand.
+battle-prompt-return-event-from-void = Return an event from your void to hand
+# Prompt title for banishing one opposing Character card.
+battle-prompt-banish-enemy-character = Banish an enemy character
+# Prompt title for choosing one card to add to the player's hand.
+battle-prompt-pick-card-for-hand = Pick a card for your hand
+# Confirmation title for putting a selected Void card on top of the deck.
+battle-prompt-confirm-put-void-on-top = Put a void card on top of your deck?
+# Picker title for choosing the Void card used by the top-of-deck effect.
+battle-prompt-choose-void-for-top = Choose a void card to put on top
+# Confirmation title for abandoning a Character and drawing cards. $count is a
+# positive integer; the production effect supplies 2.
+battle-prompt-confirm-abandon-draw = Abandon a character to draw { $count }?
+# Picker title for choosing the Character to abandon.
+battle-prompt-choose-character-abandon = Choose a character to abandon
+# Choice title between two battle effects.
+battle-prompt-choose-one = Choose one
+# Affirmative option in a battle confirmation prompt.
+battle-prompt-confirm-yes = Yes
+# Skip option in a battle confirmation prompt.
+battle-prompt-confirm-skip = Skip
+# Choice option that draws one card.
+battle-prompt-draw-card = Draw a card
+# Choice option that grants Energy. $amount is a positive integer; the
+# production effect supplies 2.
+battle-prompt-gain-energy = Gain { $amount }●
+# Confirmation title for discarding the hand and drawing a replacement hand.
+battle-prompt-discard-hand-redraw = Discard your hand and redraw?
+# Confirmation title for playing a Character from the Void.
+battle-prompt-play-character-from-void = Play a character from your void?
+# Picker title for choosing the Character played from the Void.
+battle-prompt-choose-character-to-play = Choose a character to play
+# Safe fallback for an imported legacy battle prompt whose title is unknown.
+battle-prompt-generic = Choose an option
+# Safe fallback subtitle for an imported legacy battle prompt.
+battle-prompt-generic-subtitle = Choose an available option to continue.
+# Safe fallback for an imported legacy battle option whose meaning is unknown.
+battle-prompt-generic-option = Choose this option
 # Primary action that creates one or more configured Figments in the battle
 # developer creation dialog. $count is an integer from 1 through the dialog's
 # configured maximum; activating the control creates exactly that many.
@@ -667,7 +967,7 @@ character-dialogue-accessible-name = { $speakerName } speaks
 # displayed card label; activating arrow-key commands moves that physical entry.
 card-order-reorder-action = Reorder { $itemLabel }
 # Accessible description and tooltip for a card's Transfiguration badge. $form
-# is one of the seven stable Transfiguration form identifiers.
+# is one of the nine stable Transfiguration form identifiers.
 card-transfiguration-badge =
     { $form ->
         [Empowered] Empowered Transfiguration
@@ -676,10 +976,11 @@ card-transfiguration-badge =
         [Inspired] Inspired Transfiguration
         [Enduring] Enduring Transfiguration
         [Hastened] Hastened Transfiguration
+        [Perfected] Perfected Transfiguration
        *[Resonant] Resonant Transfiguration
     }
 # Tooltip explaining why a card's rules text differs from its base rules.
-# $form is one of the seven stable Transfiguration form identifiers.
+# $form is one of the nine stable Transfiguration form identifiers.
 card-rules-transfiguration-changed =
     { $form ->
         [Empowered] Rules text changed by Empowered Transfiguration
@@ -688,10 +989,11 @@ card-rules-transfiguration-changed =
         [Inspired] Rules text changed by Inspired Transfiguration
         [Enduring] Rules text changed by Enduring Transfiguration
         [Hastened] Rules text changed by Hastened Transfiguration
+        [Perfected] Rules text changed by Perfected Transfiguration
        *[Resonant] Rules text changed by Resonant Transfiguration
     }
 # Accessible name for a selectable Transfiguration form and its price. $form is
-# one of the seven stable form identifiers; $essenceCost is a non-negative
+# one of the nine stable form identifiers; $essenceCost is a non-negative
 # integer, where exact zero means the choice is free.
 transfiguration-form-choice =
     { $form ->
@@ -701,11 +1003,34 @@ transfiguration-form-choice =
         [Inspired] Inspired
         [Enduring] Enduring
         [Hastened] Hastened
+        [Perfected] Perfected
        *[Resonant] Resonant
     }{ $essenceCost ->
         [0] , free
        *[other] , { $essenceCost } { -essence }
     }
+transfiguration-form-name =
+    { $form ->
+        [Empowered] Empowered
+        [Amplified] Amplified
+        [Kindled] Kindled
+        [Inspired] Inspired
+        [Enduring] Enduring
+        [Hastened] Hastened
+        [Resonant] Resonant
+        [Perfected] Perfected
+       *[Attuned] Attuned
+    }
+transfiguration-change-energy = Energy cost: { $from } → { $to }
+transfiguration-change-spark = Spark: { $from } → { $to }
+transfiguration-change-draw = Adds: Draw a card.
+transfiguration-change-reclaim = Adds: Reclaim.
+transfiguration-change-fast = Adds: Fast.
+transfiguration-change-amplified = “{ $rulesText }”
+transfiguration-change-resonant = Widens a named trigger to fire more often.
+transfiguration-change-attuned = Activated ability costs { $amount } less.
+transfiguration-change-perfected = Applies every available transfiguration.
+transfiguration-change-unavailable = Transfiguration change unavailable.
 # Accessible label on a selected Augury card showing how many copies the offer
 # grants. $count is a positive integer; the numeral is visible in the badge and
 # is repeated here because this message is exposed only to assistive technology.
@@ -1137,6 +1462,32 @@ rules-text-bolt-accessible-name =
         [interrupt] Interrupt
        *[fast] Fast
     }
+rules-text-symbol-essence = essence
+rules-text-symbol-points = points
+rules-text-symbol-lunar = lunar
+rules-text-symbol-store = memory
+rules-text-symbol-energy = energy
+rules-text-symbol-spark = spark
+card-attribute-interrupt-accessible-name = Interrupt
+card-attribute-fast-accessible-name = Fast
+card-identicon-alt = { $cardName } identicon
+atlas-final-boss-title = Final boss
+atlas-known-dreamsign-title = Known dreamsign
+transient-status-dismiss-action = Dismiss status
+dreamscape-reward-status =
+    { $kind ->
+        [dreamsign]
+            { $state ->
+                [found] Found dreamsign: { $dreamsignName }
+               *[gained] Gained dreamsign: { $dreamsignName }
+            }
+       *[essence] Gained { $amount } essence
+    }
+dreamscape-reward-dreamsign-label =
+    { $state ->
+        [found] Dreamsign found
+       *[gained] Dreamsign gained
+    }
 # Accessible name for interactive authored rules text. $owner is "card",
 # "dreamAvatar", or "dreamsign" and identifies whose ability is described.
 # $rulesText is the complete authored rules text displayed inside the same
@@ -1224,6 +1575,14 @@ exploration-choices-accessible-name = Exploration choices
 # Accessible command on the full-screen Exploration artwork that collapses the
 # expanded site and returns the current player to its choice view.
 exploration-return-action = Return to Exploration
+exploration-delve-action = Delve
+exploration-card-face-down = Exploration card, face down
+exploration-card-returning-face-down = Exploration card returning face down
+exploration-confirm-choice-action = Confirm Choice
+exploration-followup-choice-purge = Choose a card to purge
+exploration-followup-choice-copy = Choose a card to copy
+exploration-empty-card-state = No eligible cards are available.
+exploration-site-eyebrow = Exploration
 # Complete accessible summary for the Exploration reward that reduces both the
 # current player's next opening hand and card Energy costs. $openingHandDelta is
 # a negative integer card-count change, $energyCostReduction is a positive
@@ -1313,6 +1672,25 @@ gamble-four-suit-result-headline =
 gamble-play-again-action = Play Again
 # Visible command that exits the current Gamble site.
 gamble-leave-action = Leave
+gamble-blackjack-rule = Closest to 21 Without Going Over
+gamble-blackjack-prize = Wins { $amount } { -essence }
+gamble-blackjack-wins = Wins
+gamble-blackjack-hand-accessible-name =
+    { $owner ->
+        [dealer] Dealer hand
+       *[player] Player hand
+    }
+gamble-blackjack-outcome-headline =
+    { $outcome ->
+        [player-win] You Win!
+        [push] Push
+        [bust] Bust!
+       *[dealer-win] Dealer Wins
+    }
+gamble-blackjack-wager-returned = Wager Returned
+gamble-blackjack-deal-action = Deal
+gamble-blackjack-hit-action = Hit
+gamble-blackjack-stand-action = Stand
 # Visible command that opens the required Dreamsign replacement picker after a
 # Gamble reward would exceed the current player's capacity.
 gamble-choose-replacement-action = Choose Replacement
@@ -1456,3 +1834,185 @@ tide-alignment-name =
         [wild] Wild
        *[shadow] Shadow
     }
+
+### Reveal accessibility descriptions
+
+# Joins two complete hidden-description clauses. Punctuation and spacing belong
+# to the locale so the coordinator never assembles sentence grammar.
+reveal-description-join = { $left }. { $right }
+# One glossary definition entry in a hidden reveal description.
+reveal-definition-entry = { $term }. { $definition }
+# A tide's alignment clause in a hidden reveal description. $tide is one of the
+# five semantic tide ids; the title-cased alignment is player-visible copy.
+reveal-tide-alignment =
+    { $tide ->
+        [ember] Ember tide alignment
+        [valor] Valor tide alignment
+        [vision] Vision tide alignment
+        [wild] Wild tide alignment
+       *[shadow] Shadow tide alignment
+    }
+# Connects two or more authored energy-cost labels in a hidden card
+# description. $left may already contain a connected prefix; both variables are
+# opaque cost labels and the conjunction stays in Fluent.
+reveal-list-and = { $left } and { $right }
+# Game-card stat and trait clauses. Card names, types, rules, and authored text
+# remain variables; Fluent owns the surrounding grammar.
+reveal-card-energy = Energy { $value }
+reveal-card-energy-variable = Energy X
+reveal-card-energy-alternatives = Energy { $values }
+reveal-card-spark = Spark { $value }
+reveal-card-spark-variable = Spark X
+reveal-card-reclaim = Reclaim { $value }
+reveal-card-fast = Fast
+reveal-card-interrupt = Interrupt
+# Shared card-gallery and battle-zone controls.
+card-gallery-empty-default = No cards.
+card-choice-purge-operation = This card will be purged
+card-choice-copy-operation = This card will be copied
+card-choice-transfigure-operation = This card will be transfigured
+card-choice-change-operation = This card will be changed
+battle-zone-browser-sort-accessible-name = Sort zone cards
+battle-zone-browser-search-label = Search Cards
+battle-zone-browser-search-placeholder = Search by name…
+battle-zone-browser-filter-accessible-name = Filter zone cards by type
+battle-status-avatar-loading = Avatar portrait loading
+
+### Remaining site and battle-surface controls
+
+site-decline-offer = Decline Offer
+site-walk-on = Walk On
+site-choose-again = Choose Again
+site-confirm = Confirm
+augury-reroll-offers = Reroll Augury offers
+augury-unavailable-guide-line = The visions are clouded. Walk on for now.
+augury-error-clouded = The augury is clouded.
+augury-error-choose-vision = Choose a vision first.
+augury-error-visions-shifted = The visions shifted. Choose again.
+augury-error-path-closed = That path is closed. Choose again.
+battle-start-ability-label = Ability
+battle-start-title = Battle vs. { $avatarName }
+battle-start-inactive-ability = Opponent avatar ability is not active.
+battle-start-signature-cards-and-dreamsigns-label = Signature Cards & Dreamsigns
+battle-start-signature-cards-label = Signature Cards
+battle-start-dreamsigns-label = Dreamsigns
+battle-start-to-win-label = To Win
+battle-start-reward-label = Reward
+battle-start-action = Begin Battle
+battle-foresee-less-action = Foresee 1 fewer
+battle-foresee-more-action = Foresee 1 more
+battle-foresee-triggered-by = Triggered By
+battle-foresee-deck-destination = Deck
+battle-foresee-void-destination = Void
+card-shop-title = Dream Market
+card-shop-leave-action = Leave card shop
+site-restocked = Restocked
+site-restock-offers-action = Restock Offers
+site-restock-action = Restock
+site-free-price = Free
+dreamsign-bazaar-title = Dreamsign Bazaar
+dreamsign-bazaar-leave-action = Leave Dreamsign Bazaar
+dreamsign-replacement-title = Choose a Dreamsign to Replace
+dreamsign-replacement-new-label = New Dreamsign
+dreamsign-replacement-pending-label = Cumulus Dreamsign replacement pending reward
+dreamsign-replacement-collection-label = Cumulus Dreamsign replacement collection
+dreamsign-replace-action = Replace
+dreamsign-replacement-keep-current-action = Keep Current Dreamsigns
+dreamsign-replacement-decline-reward-action = Decline Dreamsign reward
+dreamsign-revelation-cancel-action = Cancel
+dreamsign-revelation-cancel-replacement-action = Cancel replacement
+dreamsign-revelation-loading = Revealing Dreamsigns...
+dreamsign-revelation-exhausted = The Dreamsign pool is exhausted.
+purge-site-title = Purge Cards
+purge-site-subtitle = Choose any number of cards to remove from your deck for an essence cost
+purge-site-decline-action = Decline
+purge-site-action = Purge { $count }
+starting-deck-title = Starting Deck
+starting-deck-subtitle = These are the cards you begin the journey with.
+starting-deck-empty = No cards in starting deck.
+starting-deck-begin-action = Begin Journey
+random-site-title = Choose a Site
+draft-reroll-offer = Reroll draft offer
+deck-viewer-avatar-label = Avatar
+deck-viewer-dreamsigns-label = Dreamsigns
+deck-viewer-no-dreamsigns = None collected yet.
+deck-viewer-tides-label = Tides
+dreamsign-bazaar-replacement-title = Choose a Dreamsign to Replace
+dreamsign-bazaar-replacement-full = Your collection is full at { $count } Dreamsigns.
+dreamsign-bazaar-replacement-cancel = Cancel
+transfiguration-options-accessible-name = Transfiguration options
+battle-card-note-subtitle = Notes appear on the card and in the inspector.
+battle-card-note-cancel = Cancel note
+battle-card-note-text-label = Note Text
+battle-card-note-placeholder = Short reminder
+battle-card-note-character-count = { $count }/200 characters
+battle-card-note-error = A note needs text.
+battle-card-note-expiry-label = Expiry
+battle-card-note-expiry-accessible-name = Note expiry
+battle-card-note-expiry-next-turn = End of Next Turn
+battle-card-note-expiry-this-turn = End of This Turn
+battle-card-note-expiry-numbered = After a Number of Turns
+battle-card-note-expiry-manual = Manual Dismissal
+battle-card-note-turns-label = Turns Before Expiry
+battle-card-note-fewer-turn = Use one fewer turn
+battle-card-note-more-turn = Use one more turn
+battle-card-note-cancel-action = Cancel
+battle-card-note-add-action = Add Note
+battle-deck-order-subtitle = Top to bottom. Confirm commits one battle command.
+battle-deck-order-close-action = Cancel deck ordering
+battle-deck-order-cancel-action = Cancel
+battle-deck-order-confirm-action = Confirm Order
+battle-deck-order-title =
+    { $scope ->
+        [full] Reorder { $side } Deck
+       *[top] Reorder Revealed Cards of { $side } Deck
+    }
+battle-deck-order-label = { $side } deck order
+battle-missing-card-instance = Missing card instance
+battle-card-order-spark-summary = { $subtype } · Spark { $spark }
+battle-dreamwell-history-title = Dreamwell History
+battle-dreamwell-history-subtitle = Shared draws, most recent first.
+battle-dreamwell-history-close-action = Close Dreamwell history
+battle-dreamwell-history-empty = No Dreamwell cards drawn yet.
+card-editor-field-accessible-name = { $field } editor
+radial-hand-total-accessible-name = { $owner } total { $total }
+tutorial-how-to-play-title = How to Play
+tutorial-how-to-play-close = Close how to play
+tutorial-battle-complete = Tutorial complete
+tutorial-new-journey-action = New Journey
+tutorial-opponent-card-flipping = Opponent card flipping face up
+tutorial-drag-to-block = Drag { $sourceCardName } to block { $opposingCardName }.
+battle-victory-headline = Victory
+battle-opponent-card-accessible-name = Opponent card
+battle-ai-reject-action = Reject AI action
+# Missing glossary copy shown in the player reveal card when a requested
+# authored glossary entry cannot be resolved. This visible fallback contains no
+# variables and must not expose the glossary id.
+glossary-definition-unavailable-title = Rule definition unavailable
+glossary-definition-unavailable-body = This rule's definition is temporarily unavailable.
+# Exploration effect fallback that replaces the special $DECK_CARD token when
+# the persisted offer has no resolvable target. $before and $after are opaque
+# authored effect-text fragments; the complete sentence and inserted noun stay
+# together here so the adapter never supplies English grammar.
+exploration-effect-missing-deck-card = { $before }an eligible card{ $after }
+# Complete disclosure appended after an authored Exploration effect when a
+# fixed transfiguration form is offered. $transfiguration is a finite semantic
+# form id, and the parenthesized disclosure is visible player copy.
+exploration-fixed-transfiguration-disclosure =
+    ({ $transfiguration ->
+        [Empowered] Halve its ● cost, rounded down
+        [Kindled] Double its ✦, or set it to 1 if it is 0
+        [Inspired] Add "Draw a card" to its rules text
+        [Enduring] Add "Reclaim" to its rules text
+        [Hastened] Make it Fast
+        [Amplified] Increase the first number in its rules text by 1
+        [Resonant] Widen a named trigger to fire more often
+        [Attuned] Reduce an activated ability's cost by 1●
+       *[Perfected] Apply every available transfiguration
+    })
+# Complete site disclosure appended after an authored Exploration effect.
+# $siteType is an opaque configured site-type name.
+exploration-offered-site-disclosure = { $siteType }.
+# Generic player-safe Exploration outcome fallback when the resolved action is
+# unavailable to the presentation model. It takes no variables.
+exploration-effect-resolved-fallback = Exploration effect resolved

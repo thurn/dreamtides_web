@@ -73,7 +73,7 @@ export function buildTransfigurationCandidates(
     const preview = buildTransfigurationDisplay(card, offer.type);
     candidate.forms.push({
       type: offer.type,
-      description: offer.effectDescription,
+      change: offer.change,
       effectDetails: offer.effectDetails,
       essenceCost: offer.essenceCost,
       affordable: offer.essenceCost <= state.essence,

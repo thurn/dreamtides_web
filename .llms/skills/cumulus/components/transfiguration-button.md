@@ -28,7 +28,8 @@ The canonical forge-form choice: compact and optionally priced controls with sha
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `type` | `TransfigurationType` | no | Named transfiguration form, which determines the canonical glyph. |
-| `description` | `string` | no | Player-facing rules change announced as the option's accessible description. |
+| `change` | `TransfigurationChange` | yes | Locale-neutral rules change announced as the option's accessible description. |
+| `description` | `string` | yes | Compatibility fixture field; production views provide `change`. |
 | `essenceCost` | `number` | no | Quoted essence cost announced in the accessible label. |
 | `affordable` | `boolean` | no | Whether the player can currently pay the quoted cost. |
 

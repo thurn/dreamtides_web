@@ -4,6 +4,9 @@ import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import type { CumulusColor } from "../../primitives/color";
 import { token } from "../../primitives/tokens";
 import { InlineGlyph } from "../typography/InlineGlyph";
+import { createMessageDescriptor } from "../../../data/localization-descriptors";
+import type { FluentMessageDescriptor } from "../../../data/localization-messages";
+import { formatMessageDescriptor, useMessages } from "../../hooks/use-messages";
 
 /** The four authored card regions taught by the loading-screen anatomy scene. */
 export type TutorialFeatureCalloutKind =
@@ -13,29 +16,29 @@ export type TutorialFeatureCalloutKind =
   | "cardType";
 
 interface CardFeatureSpec {
-  readonly label: string;
+  readonly label: FluentMessageDescriptor;
   readonly glyph?: Glyph;
   readonly color?: CumulusColor;
-  readonly glyphLabel?: string;
+  readonly glyphLabel?: FluentMessageDescriptor;
 }
 
 const CARD_FEATURES: Readonly<
   Record<TutorialFeatureCalloutKind, CardFeatureSpec>
 > = {
     cost: {
-      label: "Cost",
+      label: createMessageDescriptor("tutorial-feature-cost"),
       glyph: GLYPHS.energy,
       color: "energy",
-      glyphLabel: "energy",
+      glyphLabel: createMessageDescriptor("tutorial-feature-energy-glyph"),
     },
     spark: {
-      label: "Spark",
+      label: createMessageDescriptor("tutorial-feature-spark"),
       glyph: GLYPHS.sparkInline,
       color: "spark",
-      glyphLabel: "spark",
+      glyphLabel: createMessageDescriptor("tutorial-feature-spark-glyph"),
     },
-    ability: { label: "Ability" },
-    cardType: { label: "Card Type" },
+    ability: { label: createMessageDescriptor("tutorial-feature-ability") },
+    cardType: { label: createMessageDescriptor("tutorial-feature-card-type") },
   };
 
 export interface TutorialFeatureCalloutProps {
@@ -55,6 +58,7 @@ export function TutorialFeatureCallout({
   testId,
 }: TutorialFeatureCalloutProps): ReactElement {
   const spec = CARD_FEATURES[feature];
+  const t = useMessages();
 
   return (
     <aside
@@ -79,10 +83,14 @@ export function TutorialFeatureCallout({
         <InlineGlyph
           glyph={spec.glyph}
           color={spec.color}
-          label={spec.glyphLabel}
+          label={
+            spec.glyphLabel === undefined
+              ? undefined
+              : formatMessageDescriptor(t, spec.glyphLabel)
+          }
         />
       )}
-      <span>{spec.label}</span>
+      <span>{formatMessageDescriptor(t, spec.label)}</span>
     </aside>
   );
 }

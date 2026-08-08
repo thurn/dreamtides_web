@@ -279,13 +279,13 @@ export function AtlasNode({
       )}
 
       {isBoss && (
-        <div className="cumulus-atlas-boss-badge" title="Final boss">
+        <div className="cumulus-atlas-boss-badge" title={t("atlas-final-boss-title")}>
           <i className="fa-solid fa-skull" aria-hidden="true" />
         </div>
       )}
 
       {model.knownDreamsignRef !== null && (
-        <div className="cumulus-atlas-known-badge" title="Known dreamsign">
+        <div className="cumulus-atlas-known-badge" title={t("atlas-known-dreamsign-title")}>
           <img
             src={resolveArtRef(model.knownDreamsignRef)}
             alt=""

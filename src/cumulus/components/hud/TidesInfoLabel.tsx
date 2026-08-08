@@ -13,6 +13,7 @@ import { Pressable } from "../../primitives/Pressable";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { InlineGlyph } from "../typography/InlineGlyph";
+import { useMessages } from "../../hooks/use-messages";
 
 const TIDES_INFO_CARD = glossaryInfoCard(GLOSSARY_IDS.tides);
 
@@ -23,6 +24,7 @@ const TIDES_INFO_CARD = glossaryInfoCard(GLOSSARY_IDS.tides);
  * Hover, keyboard focus, and touch-hold reveal the canonical Tides InfoCard.
  */
 export function TidesInfoLabel() {
+  const t = useMessages();
   const binding = useRevealSource({
     identity: {
       entityType: "glossary-term",
@@ -43,7 +45,7 @@ export function TidesInfoLabel() {
       pressFeedback="stationary"
       hoverFeedback="stationary"
       tabIndex={0}
-      aria-label="Tides information"
+      aria-label={t("tides-information-accessible-name")}
       data-tides-info-label=""
       style={{
         ...binding.sourceProps.style,
@@ -63,7 +65,7 @@ export function TidesInfoLabel() {
       >
         <InlineGlyph glyph={GLYPHS.infoFilled} />
       </span>
-      Tides:
+      {t("tides-information-label")}
     </Pressable>
   );
 }

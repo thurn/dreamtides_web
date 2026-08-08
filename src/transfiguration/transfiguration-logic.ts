@@ -1,5 +1,8 @@
 import type { CardData } from "../types/cards";
-import type { TransfigurationType } from "../types/journey";
+import type {
+  TransfigurationChange,
+  TransfigurationType,
+} from "../types/journey";
 import {
   TRANSFIGURE_MARK_END,
   TRANSFIGURE_MARK_START,
@@ -110,10 +113,10 @@ export function buildTransfigurationDisplay(
   };
 }
 
-/** A prepared transfiguration offer with pre-computed preview and description. */
+/** A prepared transfiguration offer with a pre-computed semantic change. */
 export interface TransfigurationOffer {
   type: TransfigurationType;
-  description: string;
+  change: TransfigurationChange;
   previewCard: CardData;
 }
 
@@ -410,44 +413,52 @@ function buildOffer(
     case "Empowered":
       return {
         type,
-        description: `Energy cost: ${String(card.energyCost ?? 0)} → ${String(previewCard.energyCost ?? 0)}`,
+        change: {
+          kind: "energy-delta",
+          from: card.energyCost ?? 0,
+          to: previewCard.energyCost ?? 0,
+        },
         previewCard,
       };
     case "Kindled":
       return {
         type,
-        description: `Spark: ${String(card.spark ?? 0)} → ${String(previewCard.spark ?? 0)}`,
+        change: {
+          kind: "spark-delta",
+          from: card.spark ?? 0,
+          to: previewCard.spark ?? 0,
+        },
         previewCard,
       };
     case "Inspired":
-      return { type, description: "Adds: Draw a card.", previewCard };
+      return { type, change: { kind: "added-draw" }, previewCard };
     case "Enduring":
-      return { type, description: "Adds: Reclaim.", previewCard };
+      return { type, change: { kind: "added-reclaim" }, previewCard };
     case "Hastened":
-      return { type, description: "Adds: Fast.", previewCard };
+      return { type, change: { kind: "added-fast" }, previewCard };
     case "Amplified": {
       return {
         type,
-        description: `“${previewCard.renderedText}”`,
+        change: { kind: "amplified-rules", rulesText: previewCard.renderedText },
         previewCard,
       };
     }
     case "Resonant":
       return {
         type,
-        description: "Widens a named trigger to fire more often.",
+        change: { kind: "widened-trigger" },
         previewCard,
       };
     case "Attuned":
       return {
         type,
-        description: "Activated ability costs 1 less.",
+        change: { kind: "reduced-activated-cost", amount: 1 },
         previewCard,
       };
     case "Perfected":
       return {
         type,
-        description: "Applies every available transfiguration.",
+        change: { kind: "all-available" },
         previewCard,
       };
   }
@@ -476,7 +487,7 @@ export function offeredTransfigurationForms(
 
 /**
  * Assigns a random eligible transfiguration to a card and returns
- * the complete offer with pre-computed preview and description.
+ * the complete offer with pre-computed preview and semantic change.
  * Returns null if the card already has a transfiguration or no types
  * are eligible.
  */
@@ -495,12 +506,12 @@ export function assignTransfiguration(
   return buildOffer(card, chosen);
 }
 
-/** Returns a human-readable description of what a transfiguration does to a card. */
+/** Returns the semantic change produced by a transfiguration. */
 export function describeTransfiguration(
   card: CardData,
   type: TransfigurationType,
-): string {
-  return buildOffer(card, type).description;
+): TransfigurationChange {
+  return buildOffer(card, type).change;
 }
 
 /** Returns a record of the specific fields modified by a transfiguration offer. */

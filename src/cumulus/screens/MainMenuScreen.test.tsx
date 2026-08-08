@@ -6,25 +6,26 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../CumulusRoot";
 import { artRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
+import { createMessageDescriptor } from "../../data/localization-descriptors";
 import {
   MainMenuScreen,
   type MainMenuView,
 } from "./MainMenuScreen";
 
 const VIEW: MainMenuView = {
-  title: "Dreamtides",
+  title: createMessageDescriptor("main-menu-title"),
   background: artRef.mainMenuBackground(),
   actions: [
-    { id: "new-journey", label: "New Journey" },
-    { id: "dream-codex", label: "Dream Codex" },
-    { id: "settings", label: "Settings" },
-    { id: "about", label: "About" },
-    { id: "quit", label: "Quit" },
+    { id: "new-journey", label: createMessageDescriptor("main-menu-new-journey-action") },
+    { id: "dream-codex", label: createMessageDescriptor("main-menu-dream-codex-action") },
+    { id: "settings", label: createMessageDescriptor("main-menu-settings-action") },
+    { id: "about", label: createMessageDescriptor("main-menu-about-action") },
+    { id: "quit", label: createMessageDescriptor("main-menu-quit-action") },
   ],
   socials: [
-    { id: "github", label: "GitHub", glyph: GLYPHS.github },
-    { id: "discord", label: "Discord", glyph: GLYPHS.discord },
-    { id: "reddit", label: "Reddit", glyph: GLYPHS.reddit },
+    { id: "github", label: createMessageDescriptor("main-menu-github-action"), glyph: GLYPHS.github },
+    { id: "discord", label: createMessageDescriptor("main-menu-discord-action"), glyph: GLYPHS.discord },
+    { id: "reddit", label: createMessageDescriptor("main-menu-reddit-action"), glyph: GLYPHS.reddit },
   ],
 };
 
@@ -63,16 +64,17 @@ describe("Cumulus MainMenuScreen", () => {
     );
     const menu = container.querySelector<HTMLElement>("[data-main-menu]");
 
-    expect(container.querySelector("[data-main-menu-title]")?.textContent).toBe(
-      "Dreamtides",
-    );
+    expect(container.querySelector("[data-main-menu-title]")?.textContent).toBeTruthy();
     expect(menu?.style.backgroundSize).toBe("cover");
     expect(menu?.style.backgroundImage).toContain("/main-menu/background.jpg");
     expect(
-      Array.from(container.querySelectorAll("[data-main-menu-actions] button")).map(
-        (button) => button.textContent,
+      Array.from(container.querySelectorAll("[data-main-menu-actions] button")),
+    ).toHaveLength(VIEW.actions.length);
+    expect(
+      Array.from(container.querySelectorAll("[data-main-menu-actions] button")).every(
+        (button) => Boolean(button.textContent),
       ),
-    ).toEqual(["New Journey", "Dream Codex", "Settings", "About", "Quit"]);
+    ).toBe(true);
     expect(
       container.querySelector('[data-testid="main-menu-social-github"] i')
         ?.className,

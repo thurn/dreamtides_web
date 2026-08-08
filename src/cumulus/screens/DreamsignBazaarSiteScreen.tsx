@@ -15,6 +15,7 @@ import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
+import { useMessages } from "../hooks/use-messages";
 
 // Four 126px items, three 16px gaps, and the panel's 64px horizontal padding
 // occupy 616px; this cap keeps a deliberate 32px breathing edge per side.
@@ -138,6 +139,7 @@ function DreamsignBazaarGallery({
   readonly onClose: () => void;
 }) {
   const desktop = layout === "desktop";
+  const t = useMessages();
   const [locallyPurchasedEntryIds, setLocallyPurchasedEntryIds] = useState(
     () => new Set<string>(),
   );
@@ -214,7 +216,7 @@ function DreamsignBazaarGallery({
       }}
     >
       <DreamsignGalleryPanel
-        title="Dreamsign Bazaar"
+        title={t("dreamsign-bazaar-title")}
         entries={offers.map((offer) => ({
           entryId: offer.entryId,
           dreamsign: offer.dreamsign,
@@ -227,17 +229,17 @@ function DreamsignBazaarGallery({
           glyph: GLYPHS.refresh,
           label:
             restock.state === "used"
-              ? "Restocked"
+              ? t("site-restocked")
               : desktop
-                ? "Restock Offers"
-                : "Restock",
+                ? t("site-restock-offers-action")
+                : t("site-restock-action"),
           glossaryId: GLOSSARY_IDS.dreamsignRestock,
           price: restock.state === "used" || restock.price === 0 ? null : restock.price,
-          text: restock.state === "used" ? "Restocked" : restock.price === 0 ? "Free" : null,
+          text: restock.state === "used" ? t("site-restocked") : restock.price === 0 ? t("site-free-price") : null,
           disabled: restock.state !== "available",
         }}
         size={desktop ? "standard" : "compact"}
-        closeLabel="Leave Dreamsign Bazaar"
+        closeLabel={t("dreamsign-bazaar-leave-action")}
         testId="cumulus-dreamsign-bazaar-gallery"
         onClose={onClose}
         onEntryPress={buyOffer}
@@ -310,6 +312,7 @@ function DreamsignReplacementDialog({
   readonly onPurge: (index: number) => void;
   readonly onCancel: () => void;
 }) {
+  const t = useMessages();
   return (
     <div
       role="dialog"
@@ -343,10 +346,10 @@ function DreamsignReplacementDialog({
           id="dreamsign-bazaar-purge-title"
           style={{ margin: 0, font: token("--t-title-sm"), color: token("--text-primary") }}
         >
-          Choose a Dreamsign to Replace
+          {t("dreamsign-bazaar-replacement-title")}
         </h2>
         <p style={{ font: token("--t-body"), color: token("--text-secondary") }}>
-          Your collection is full at {String(purge.maxDreamsigns)} Dreamsigns.
+          {t("dreamsign-bazaar-replacement-full", { count: purge.maxDreamsigns })}
         </p>
         <div
           style={{
@@ -377,7 +380,7 @@ function DreamsignReplacementDialog({
               color: token("--text-secondary"),
             }}
           >
-            Cancel
+            {t("dreamsign-bazaar-replacement-cancel")}
           </Pressable>
         </div>
       </div>

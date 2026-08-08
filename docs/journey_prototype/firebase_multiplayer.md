@@ -85,8 +85,16 @@ An incompatible reducer protocol opens the version gate; a content mismatch
 opens the configuration gate. Draft URL settings can be adopted when the Atlas,
 Sites, economy, and opponent hashes agree. A catalog hash mismatch offers a new
 room using the local content. Room genesis documents without a Sites hash are
-readable and enter this configuration gate. Tutorial and opponent rules require
-reducer protocol `dreamtides-coop-v17`.
+readable and enter this configuration gate. The current reducer protocol is
+`dreamtides-coop-v23`; rooms with an incompatible protocol, including
+`dreamtides-coop-v22`, open the Version Gate before folding or appending. The
+compatible legacy-version set is empty.
+
+Battle pending prompts are JSON-safe Fluent descriptors. The room fold stores
+message IDs and finite semantic variables; clients format prompt labels,
+subtitles, and options at the Cumulus presentation boundary. Prompt resolution
+continues to use the option index and persisted prompt cursor, so locale output
+does not affect deterministic folding.
 
 ### Event log
 

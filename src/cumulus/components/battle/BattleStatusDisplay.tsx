@@ -105,7 +105,7 @@ export function BattleStatusDisplay({
         {dreamAvatar === null ? (
           <div
             role="img"
-            aria-label="Avatar portrait loading"
+            aria-label={t("battle-status-avatar-loading")}
             data-battle-status-dream-avatar-placeholder=""
             style={{
               width: "100%",

@@ -16,6 +16,7 @@ import {
   topOfDeck,
 } from "./effect-step";
 import type { DreamwellEffectScript } from "../../battle/automation/dreamwell-effects";
+import { createMessageDescriptor } from "../../data/localization-descriptors";
 
 // ---------------------------------------------------------------------------
 // Deterministic dreamwell effect table
@@ -134,7 +135,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
       kind: "prompt",
       prompt: {
         kind: "pick-cards",
-        label: "Discover a ≤2● cost card",
+        label: createMessageDescriptor("battle-prompt-discover-card-max-cost", { maxCost: 2 }),
         count: 1,
         optional: false,
         candidates: (ctx) => sampledDiscoverCandidates(ctx, (id) => (ctx.state.cardInstances[id]?.definition.energyCost ?? Infinity) <= 2),
@@ -150,7 +151,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
       kind: "prompt",
       prompt: {
         kind: "pick-cards",
-        label: "Discover a character",
+        label: createMessageDescriptor("battle-prompt-discover-character"),
         count: 1,
         optional: false,
         candidates: (ctx) => sampledDiscoverCandidates(ctx, (id) => ctx.state.cardInstances[id]?.definition.battleCardKind === "character"),
@@ -166,7 +167,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
       kind: "prompt",
       prompt: {
         kind: "pick-cards",
-        label: "Rematerialize an ally",
+        label: createMessageDescriptor("battle-prompt-rematerialize-ally"),
         count: 1,
         optional: false,
         candidates: (ctx) => alliesInPlay(ctx.state, ctx.side),
@@ -183,8 +184,8 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
       kind: "prompt",
       prompt: {
         kind: "pick-cards",
-        label: "Choose a void card to gain Reclaim",
-        subtitle: "You may play it from your void this turn, then banish it.",
+        label: createMessageDescriptor("battle-prompt-choose-void-card-reclaim"),
+        subtitle: createMessageDescriptor("battle-prompt-choose-void-card-reclaim-subtitle"),
         count: 1,
         optional: false,
         candidates: (ctx) => ctx.state.sides[ctx.side].void,
@@ -395,7 +396,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: "Choose a card to discard",
+          label: createMessageDescriptor("battle-prompt-choose-card-discard"),
           count: 1,
           optional: false,
           candidates: (ctx) => ctx.state.sides[ctx.side].hand,
@@ -422,7 +423,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: "Discard a card",
+          label: createMessageDescriptor("battle-prompt-discard-card"),
           count: 1,
           optional: false,
           candidates: (ctx) => ctx.state.sides[ctx.side].hand,
@@ -440,13 +441,13 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "confirm",
-          label: "Discard 2 cards, then draw 2?",
+          label: createMessageDescriptor("battle-prompt-confirm-discard-draw", { count: 2 }),
           onYes: [
             {
               kind: "prompt",
               prompt: {
                 kind: "pick-cards",
-                label: "Discard 2 cards",
+                label: createMessageDescriptor("battle-prompt-discard-cards", { count: 2 }),
                 count: 2,
                 optional: false,
                 candidates: (ctx) => ctx.state.sides[ctx.side].hand,
@@ -468,7 +469,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: "Return a void card to hand",
+          label: createMessageDescriptor("battle-prompt-return-void-card"),
           count: 1,
           optional: false,
           candidates: (ctx) => ctx.state.sides[ctx.side].void,
@@ -489,7 +490,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: "Return an event from your void to hand",
+          label: createMessageDescriptor("battle-prompt-return-event-from-void"),
           count: 1,
           optional: false,
           candidates: (ctx) => eventsInVoid(ctx.state, ctx.side),
@@ -511,7 +512,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: "Banish an enemy character",
+          label: createMessageDescriptor("battle-prompt-banish-enemy-character"),
           count: 1,
           optional: false,
           candidates: (ctx) => enemyCharactersInPlay(ctx.state, ctx.side),
@@ -553,7 +554,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: "Pick a card for your hand",
+          label: createMessageDescriptor("battle-prompt-pick-card-for-hand"),
           count: 1,
           optional: false,
           candidates: (ctx) => topOfDeck(ctx.state, ctx.side, 2),
@@ -587,13 +588,13 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "confirm",
-          label: "Put a void card on top of your deck?",
+          label: createMessageDescriptor("battle-prompt-confirm-put-void-on-top"),
           onYes: [
             {
               kind: "prompt",
               prompt: {
                 kind: "pick-cards",
-                label: "Choose a void card to put on top",
+                label: createMessageDescriptor("battle-prompt-choose-void-for-top"),
                 count: 1,
                 optional: false,
                 candidates: (ctx) => ctx.state.sides[ctx.side].void,
@@ -623,13 +624,13 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "confirm",
-          label: "Abandon a character to draw 2?",
+          label: createMessageDescriptor("battle-prompt-confirm-abandon-draw", { count: 2 }),
           onYes: [
             {
               kind: "prompt",
               prompt: {
                 kind: "pick-cards",
-                label: "Choose a character to abandon",
+                label: createMessageDescriptor("battle-prompt-choose-character-abandon"),
                 count: 1,
                 optional: false,
                 candidates: (ctx) => alliesInPlay(ctx.state, ctx.side),
@@ -651,10 +652,10 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "choice",
-          label: "Choose one",
+          label: createMessageDescriptor("battle-prompt-choose-one"),
           options: [
-            { label: "Draw a card", build: (ctx) => drawEdits(ctx.side, 1) },
-            { label: "Gain 2●", build: (ctx) => gainEnergyEdits(ctx.side, 2) },
+            { label: createMessageDescriptor("battle-prompt-draw-card"), build: (ctx) => drawEdits(ctx.side, 1) },
+            { label: createMessageDescriptor("battle-prompt-gain-energy", { amount: 2 }), build: (ctx) => gainEnergyEdits(ctx.side, 2) },
           ],
         },
       },
@@ -669,7 +670,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "confirm",
-          label: "Discard your hand and redraw?",
+          label: createMessageDescriptor("battle-prompt-discard-hand-redraw"),
           onYes: [
             {
               kind: "edits",
@@ -705,13 +706,13 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "confirm",
-          label: "Play a character from your void?",
+          label: createMessageDescriptor("battle-prompt-play-character-from-void"),
           onYes: [
             {
               kind: "prompt",
               prompt: {
                 kind: "pick-cards",
-                label: "Choose a character to play",
+                label: createMessageDescriptor("battle-prompt-choose-character-to-play"),
                 count: 1,
                 optional: false,
                 candidates: (ctx) => charactersInVoid(ctx.state, ctx.side, 2),

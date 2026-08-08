@@ -1,4 +1,6 @@
 import { useMemo } from "react";
+import { useMessages } from "../../cumulus/hooks/use-messages";
+import { createMessageDescriptor } from "../../data/localization-descriptors";
 import { BattleDeckOrderOverlay } from "../../cumulus/screens/battle-overlays/BattleDeckOrderOverlay";
 import type { BattleMutableState, BattleSide } from "../types";
 import { formatSideLabel } from "../ui/format";
@@ -20,15 +22,19 @@ export function BattleDeckOrderPicker({
   side: BattleSide;
   state: BattleMutableState;
 }) {
+  const t = useMessages();
   const itemsById = useMemo(
     () => Object.fromEntries(initialOrder.map((id) => {
       const instance = state.cardInstances[id];
       return [id, {
         id,
-        label: instance?.definition.name ?? "Missing card instance",
+        label: instance?.definition.name ?? t("battle-missing-card-instance"),
         summary: instance === undefined
           ? id
-          : `${instance.definition.subtype} · Spark ${String(instance.definition.printedSpark ?? 0)}`,
+          : t("battle-card-order-spark-summary", {
+              subtype: instance.definition.subtype,
+              spark: instance.definition.printedSpark ?? 0,
+            }),
       }] as const;
     })),
     [initialOrder, state.cardInstances],
@@ -36,10 +42,13 @@ export function BattleDeckOrderPicker({
 
   return (
     <BattleDeckOrderOverlay
-      title={scopeLabel === "full"
-        ? `Reorder ${formatSideLabel(side)} Deck`
-        : `Reorder Revealed Cards of ${formatSideLabel(side)} Deck`}
-      label={`${formatSideLabel(side)} deck order`}
+      title={createMessageDescriptor("battle-deck-order-title", {
+        scope: scopeLabel === "full" ? "full" : "top",
+        side: formatSideLabel(side),
+      })}
+      label={createMessageDescriptor("battle-deck-order-label", {
+        side: formatSideLabel(side),
+      })}
       scope={scopeLabel}
       side={side}
       initialOrder={initialOrder}

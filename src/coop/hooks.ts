@@ -62,6 +62,7 @@ import {
 } from "./BounceToast";
 import { UnreadableRoomScreen } from "./UnreadableRoomScreen";
 import { CURRENT_REDUCER_VERSION } from "./reducer-version";
+import type { FluentMessageDescriptor } from "../data/localization-messages";
 
 /** A confirmed event's outcome, delivered to `useEventOutcomes` subscribers. */
 export type OutcomeListener = (
@@ -139,7 +140,7 @@ export function CoopProvider({
   // The copy for the toast the next `bounceToken` bump shows. Set by whichever
   // callback triggers it (own bounce / append failure / pending drop); read at
   // render time. A ref (not state) because the token bump already re-renders.
-  const bounceMessageRef = useRef<string>(INVALID_ACTION_MESSAGE);
+  const bounceMessageRef = useRef<FluentMessageDescriptor>(INVALID_ACTION_MESSAGE);
 
   const confirmedSeqRef = useRef(0);
   const clientRef = useRef<LogClient | null>(null);

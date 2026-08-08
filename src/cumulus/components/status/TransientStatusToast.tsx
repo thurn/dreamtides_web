@@ -3,6 +3,7 @@ import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { Pressable } from "../../primitives/Pressable";
 import { SAFE_AREA_INSET_PROPERTIES } from "../../primitives/safe-area";
 import { token } from "../../primitives/tokens";
+import { useMessages } from "../../hooks/use-messages";
 
 /** Structured text for a transient status; presentation owns its layout. */
 export interface TransientStatusCopy {
@@ -26,13 +27,18 @@ export function TransientStatusToast({
   copy,
   onDismiss,
 }: TransientStatusToastProps): ReactElement {
+  const t = useMessages();
   return (
     <Pressable
       as="button"
       data-transient-status-toast="warning"
       data-coop-bounce-toast=""
       aria-live="assertive"
-      aria-label={onDismiss === undefined ? undefined : "Dismiss status"}
+      aria-label={
+        onDismiss === undefined
+          ? undefined
+          : t("transient-status-dismiss-action")
+      }
       disabled={onDismiss === undefined}
       onClick={onDismiss}
       style={{

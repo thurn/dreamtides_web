@@ -29,7 +29,8 @@ import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { controlChrome } from "../../internal/control-treatment";
 import { applySymbolReplacements } from "../../primitives/symbol-replacements";
 import { tideVisual, type Tide } from "../hud/tide-spec";
-import { useMessages } from "../../hooks/use-messages";
+import { formatMessageDescriptor, useMessages } from "../../hooks/use-messages";
+import type { FluentMessageDescriptor } from "../../../data/localization-messages";
 
 /* ---- authored component geometry ---- */
 const CARD_W = 248; // every info card is this wide
@@ -239,11 +240,15 @@ interface InfoCardCommonProps {
    * render as their inline icons.
    */
   title?: string;
+  /** Complete localized fallback headline selected by a non-React builder. */
+  titleDescriptor?: FluentMessageDescriptor;
   /**
    * The reveal copy, as a structured {@link RichText} value. Canonical rules
    * symbols and explicit glyph parts render as cap-height-aligned inline icons.
    */
   body?: RichText;
+  /** Complete localized fallback body selected by a non-React builder. */
+  bodyDescriptor?: FluentMessageDescriptor;
 }
 
 /**
@@ -393,20 +398,27 @@ function InfoCardBody(
   contentOverride?: InfoCardContentOverride,
 ): React.ReactElement {
   const { title, body } = props;
+  const t = useMessages();
   // `variant` is optional only on the text member; resolve the default once for
   // the shared body/title styling. The per-variant branches below narrow on the
   // discriminant directly so each reads only the media its interface carries.
   const variant: InfoCardVariant = props.variant ?? "text";
   const renderedTitle =
-    title === undefined ? undefined : renderRulesSymbolsInline(title);
+    props.titleDescriptor !== undefined
+      ? formatMessageDescriptor(t, props.titleDescriptor)
+      : title === undefined
+        ? undefined
+        : renderRulesSymbolsInline(title);
   const titleContent = contentOverride?.title ?? renderedTitle;
   const bodyContent =
-    body == null
-      ? null
-      : (contentOverride?.body ??
-        renderRichText(body, 0, { substituteRulesSymbols: true }));
+    props.bodyDescriptor !== undefined
+      ? formatMessageDescriptor(t, props.bodyDescriptor)
+      : body == null
+        ? null
+        : (contentOverride?.body ??
+          renderRichText(body, 0, { substituteRulesSymbols: true }));
   const Body =
-    body == null ? null : (
+    body == null && props.bodyDescriptor === undefined ? null : (
       <div
         style={{
           ...tBody,
@@ -897,6 +909,7 @@ function EditableInfoCardCopy({
   readonly children: React.ReactNode;
   readonly value: EditableInfoCardField;
 }): React.ReactElement {
+  const t = useMessages();
   const editorRef = React.useRef<HTMLInputElement | HTMLTextAreaElement | null>(
     null,
   );
@@ -971,7 +984,7 @@ function EditableInfoCardCopy({
         ref={(element) => {
           editorRef.current = element;
         }}
-        aria-label={`${field} editor`}
+        aria-label={t("card-editor-field-accessible-name", { field })}
         aria-invalid={value.error === undefined ? undefined : true}
         data-editor-input-field={field}
         rows={4}
@@ -986,7 +999,7 @@ function EditableInfoCardCopy({
         ref={(element) => {
           editorRef.current = element;
         }}
-        aria-label={`${field} editor`}
+        aria-label={t("card-editor-field-accessible-name", { field })}
         aria-invalid={value.error === undefined ? undefined : true}
         data-editor-input-field={field}
         type="text"

@@ -5,6 +5,7 @@ import {
   applyPromptResolution,
   planNextEffectStep,
 } from "./effect-runner-core";
+import { createMessageDescriptor } from "../../data/localization-descriptors";
 
 // ---------------------------------------------------------------------------
 // Minimal fixture helpers
@@ -12,6 +13,7 @@ import {
 
 const SENTINEL_EDIT = { kind: "DRAW_CARD" as const, side: "player" as const };
 const SENTINEL_EDIT_2 = { kind: "ADJUST_SCORE" as const, side: "player" as const, amount: 1 };
+const FIXTURE_PROMPT = createMessageDescriptor("battle-prompt-generic");
 
 function makeCtx(): StepContext {
   return {
@@ -92,8 +94,8 @@ describe("planNextEffectStep — pick-cards prompt head", () => {
 
     const pickPrompt: EffectPrompt = {
       kind: "pick-cards",
-      label: "Choose a card",
-      subtitle: "Choose carefully.",
+      label: FIXTURE_PROMPT,
+      subtitle: FIXTURE_PROMPT,
       count: 1,
       optional: false,
       candidates: (ctx) => {
@@ -123,8 +125,9 @@ describe("planNextEffectStep — pick-cards prompt head", () => {
     expect(result.active.optional).toBe(false);
 
     // Bug class: label not mirrored
-    expect(result.active.label).toBe("Choose a card");
-    expect(result.active.subtitle).toBe("Choose carefully.");
+    expect(result.active.label).toEqual(FIXTURE_PROMPT);
+    expect(result.active.subtitle).toEqual(FIXTURE_PROMPT);
+    expect(result.active.subtitle).toEqual(FIXTURE_PROMPT);
 
     // Bug class: original prompt not carried through
     expect(result.prompt).toBe(pickPrompt);
@@ -137,7 +140,7 @@ describe("planNextEffectStep — pick-cards prompt head", () => {
   it("optional=true is mirrored correctly", () => {
     const prompt: EffectPrompt = {
       kind: "pick-cards",
-      label: "Optional pick",
+      label: FIXTURE_PROMPT,
       count: 2,
       optional: true,
       candidates: () => ["x", "y"],
@@ -160,10 +163,10 @@ describe("planNextEffectStep — choice prompt head", () => {
   it("maps options to label-only objects and carries prompt and rest", () => {
     const choicePrompt: EffectPrompt = {
       kind: "choice",
-      label: "Pick one",
+      label: FIXTURE_PROMPT,
       options: [
-        { label: "Draw a card", build: () => [SENTINEL_EDIT] },
-        { label: "Gain energy", build: () => [SENTINEL_EDIT_2] },
+        { label: FIXTURE_PROMPT, build: () => [SENTINEL_EDIT] },
+        { label: FIXTURE_PROMPT, build: () => [SENTINEL_EDIT_2] },
       ],
     };
     const promptStep: EffectStep = { kind: "prompt", prompt: choicePrompt };
@@ -173,8 +176,8 @@ describe("planNextEffectStep — choice prompt head", () => {
     if (result.type !== "prompt") throw new Error();
     expect(result.active.kind).toBe("choice");
     if (result.active.kind !== "choice") throw new Error();
-    expect(result.active.label).toBe("Pick one");
-    expect(result.active.options).toEqual([{ label: "Draw a card" }, { label: "Gain energy" }]);
+    expect(result.active.label).toEqual(FIXTURE_PROMPT);
+    expect(result.active.options).toEqual([{ label: FIXTURE_PROMPT }, { label: FIXTURE_PROMPT }]);
     expect(result.prompt).toBe(choicePrompt);
     expect(result.rest).toHaveLength(0);
   });
@@ -188,7 +191,7 @@ describe("planNextEffectStep — confirm prompt head", () => {
   it('presents confirm as a choice with "Yes" and "Skip" options', () => {
     const confirmPrompt: EffectPrompt = {
       kind: "confirm",
-      label: "Abandon an ally?",
+      label: FIXTURE_PROMPT,
       onYes: [{ kind: "edits", build: () => [SENTINEL_EDIT] }],
     };
     const promptStep: EffectStep = { kind: "prompt", prompt: confirmPrompt };
@@ -198,10 +201,10 @@ describe("planNextEffectStep — confirm prompt head", () => {
     if (result.type !== "prompt") throw new Error();
     expect(result.active.kind).toBe("choice");
     if (result.active.kind !== "choice") throw new Error();
-    expect(result.active.label).toBe("Abandon an ally?");
+    expect(result.active.label).toEqual(FIXTURE_PROMPT);
     expect(result.active.options).toHaveLength(2);
-    expect(result.active.options[0]?.label).toBe("Yes");
-    expect(result.active.options[1]?.label).toBe("Skip");
+    expect(result.active.options[0]?.label).toEqual({ id: "battle-prompt-confirm-yes" });
+    expect(result.active.options[1]?.label).toEqual({ id: "battle-prompt-confirm-skip" });
     expect(result.prompt).toBe(confirmPrompt);
   });
 });
@@ -248,7 +251,7 @@ describe("applyPromptResolution — pick-cards", () => {
 
     const prompt: EffectPrompt = {
       kind: "pick-cards",
-      label: "Pick",
+      label: FIXTURE_PROMPT,
       count: 2,
       optional: false,
       candidates: () => [],
@@ -289,10 +292,10 @@ describe("applyPromptResolution — choice", () => {
   it("edits === options[optionIndex].build(ctx) — index 0 picks first option", () => {
     const prompt: EffectPrompt = {
       kind: "choice",
-      label: "Choose",
+      label: FIXTURE_PROMPT,
       options: [
-        { label: "A", build: () => [SENTINEL_EDIT] },
-        { label: "B", build: () => [SENTINEL_EDIT_2] },
+        { label: FIXTURE_PROMPT, build: () => [SENTINEL_EDIT] },
+        { label: FIXTURE_PROMPT, build: () => [SENTINEL_EDIT_2] },
       ],
     };
     const { edits, rest } = applyPromptResolution(
@@ -309,10 +312,10 @@ describe("applyPromptResolution — choice", () => {
   it("edits === options[1].build(ctx) — index 1 picks second option", () => {
     const prompt: EffectPrompt = {
       kind: "choice",
-      label: "Choose",
+      label: FIXTURE_PROMPT,
       options: [
-        { label: "A", build: () => [SENTINEL_EDIT] },
-        { label: "B", build: () => [SENTINEL_EDIT_2] },
+        { label: FIXTURE_PROMPT, build: () => [SENTINEL_EDIT] },
+        { label: FIXTURE_PROMPT, build: () => [SENTINEL_EDIT_2] },
       ],
     };
     const { edits } = applyPromptResolution(
@@ -337,7 +340,7 @@ describe("applyPromptResolution — confirm (CRITICAL)", () => {
 
   const confirmPrompt: EffectPrompt = {
     kind: "confirm",
-    label: "Are you sure?",
+    label: FIXTURE_PROMPT,
     onYes: [onYesStep],
   };
 
@@ -387,7 +390,7 @@ describe("applyPromptResolution — confirm (CRITICAL)", () => {
     const onYes2: EffectStep = { kind: "edits", build: () => [] };
     const prompt: EffectPrompt = {
       kind: "confirm",
-      label: "Multi-step",
+      label: FIXTURE_PROMPT,
       onYes: [onYes1, onYes2],
     };
     const tail1: EffectStep = { kind: "edits", build: () => [] };

@@ -9,6 +9,36 @@ Fluent terms begin with `-` and are private to the localization resource. React
 code requests complete message IDs through `useMessages()`; messages reference
 terms when they need canonical game vocabulary.
 
+## Typed runtime contract
+
+`scripts/generate-localization-types.mjs` generates
+`src/data/localization-messages.ts` from `data/strings.ftl`. The generated
+module contains the message-ID union, exact variable contracts, and the
+JSON-safe `FluentMessageDescriptor` union. Descriptors contain a known message
+ID and finite string/number variables, so they can cross view-model, replay,
+and cooperative state boundaries without carrying locale output.
+
+`createMessageDescriptor()` in
+`src/data/localization-descriptors.ts` constructs descriptors with exact
+variable keys. `isFluentMessageDescriptor()` validates data arriving from a
+serialized boundary. `formatMessageDescriptor()` in
+`src/cumulus/hooks/use-messages.ts` is the presentation formatter and returns
+the localized invalid-descriptor fallback for malformed data. Run
+`npm run localization-types` after changing the catalog.
+
+Battle pending prompts persist these descriptors rather than rendered labels.
+Transfiguration offers carry a discriminated `TransfigurationChange`, and
+Exploration view models preserve authored content as opaque values while
+React formats code-authored connective messages.
+
+The player-runtime ownership inventory is shared by
+`eslint-rules/ui-boundary-roles.js`, the `cumulus/no-unlocalized-player-copy`
+rule, and `scripts/audit-player-localization.mjs`. Use
+`npm run audit:player-localization` to inspect the classified source inventory;
+the check mode requires every candidate to be a protected player file, an
+authored-data source, a machine/diagnostic value, or an explicit developer or
+fixture surface.
+
 ## Term Groups
 
 The vocabulary covers:

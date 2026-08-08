@@ -6,10 +6,13 @@ import {
 import { GlassButton } from "../../components/controls/GlassButton";
 import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { token } from "../../primitives/tokens";
+import { useMessages } from "../../hooks/use-messages";
+import type { FluentMessageDescriptor } from "../../../data/localization-messages";
+import { formatMessageDescriptor } from "../../hooks/use-messages";
 
 export interface BattleDeckOrderOverlayProps {
-  readonly title: string;
-  readonly label: string;
+  readonly title: string | FluentMessageDescriptor;
+  readonly label: string | FluentMessageDescriptor;
   readonly scope: "top-N" | "full";
   readonly side: string;
   readonly initialOrder: readonly string[];
@@ -29,9 +32,12 @@ export function BattleDeckOrderOverlay({
   onCancel,
   onConfirm,
 }: BattleDeckOrderOverlayProps): ReactElement {
+  const t = useMessages();
   const [draftOrder, setDraftOrder] = useState<readonly string[]>(() => [
     ...initialOrder,
   ]);
+  const titleText = typeof title === "string" ? title : formatMessageDescriptor(t, title);
+  const labelText = typeof label === "string" ? label : formatMessageDescriptor(t, label);
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const items = draftOrder.flatMap((id) => {
     const item = itemsById[id];
@@ -59,9 +65,9 @@ export function BattleDeckOrderOverlay({
 
   return (
     <GlassDialog
-      title={title}
-      subtitle="Top to bottom. Confirm commits one battle command."
-      closeLabel="Cancel deck ordering"
+      title={titleText}
+      subtitle={t("battle-deck-order-subtitle")}
+      closeLabel={t("battle-deck-order-close-action")}
       onClose={onCancel}
     >
       <div
@@ -71,7 +77,7 @@ export function BattleDeckOrderOverlay({
         style={{ display: "grid", gap: token("--space-m") }}
       >
         <CardOrderEditor
-          label={label}
+          label={labelText}
           items={items}
           placement="onGlass"
           onOrderChange={setDraftOrder}
@@ -84,13 +90,13 @@ export function BattleDeckOrderOverlay({
           }}
         >
           <GlassButton
-            label="Cancel"
+            label={t("battle-deck-order-cancel-action")}
             placement="onGlass"
             testId="battle-deck-order-cancel"
             onPress={onCancel}
           />
           <GlassButton
-            label="Confirm Order"
+            label={t("battle-deck-order-confirm-action")}
             placement="onGlass"
             variant="accent"
             testId="battle-deck-order-confirm"

@@ -5,6 +5,7 @@ import {
 } from "../../components/battle/DreamwellCard";
 import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { token } from "../../primitives/tokens";
+import { useMessages } from "../../hooks/use-messages";
 
 export interface BattleDreamwellHistoryEntryView {
   readonly entryId: string;
@@ -22,11 +23,12 @@ export function BattleDreamwellHistoryOverlay({
   entries,
   onClose,
 }: BattleDreamwellHistoryOverlayProps): ReactElement {
+  const t = useMessages();
   return (
     <GlassDialog
-      title="Dreamwell History"
-      subtitle="Shared draws, most recent first."
-      closeLabel="Close Dreamwell history"
+      title={t("battle-dreamwell-history-title")}
+      subtitle={t("battle-dreamwell-history-subtitle")}
+      closeLabel={t("battle-dreamwell-history-close-action")}
       onClose={onClose}
       desktopCenterTarget="battlefield"
     >
@@ -48,7 +50,7 @@ export function BattleDreamwellHistoryOverlay({
               font: token("--t-body"),
             }}
           >
-            No Dreamwell cards drawn yet.
+            {t("battle-dreamwell-history-empty")}
           </p>
         ) : (
           entries.map((entry) => (

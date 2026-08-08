@@ -6,19 +6,19 @@ describe("buildMainMenuView", () => {
   it("builds the authored menu order and typed social glyphs", () => {
     const view = buildMainMenuView();
 
-    expect(view.title).toBe("Dreamtides");
+    expect(view.title.id).toBe("main-menu-title");
     expect(resolveArtRef(view.background)).toBe("/main-menu/background.jpg");
-    expect(view.actions.map(({ id, label }) => [id, label])).toEqual([
-      ["new-journey", "New Journey"],
-      ["dream-codex", "Dream Codex"],
-      ["settings", "Settings"],
-      ["about", "About"],
-      ["quit", "Quit"],
+    expect(view.actions.map(({ id, label }) => [id, label.id])).toEqual([
+      ["new-journey", "main-menu-new-journey-action"],
+      ["dream-codex", "main-menu-dream-codex-action"],
+      ["settings", "main-menu-settings-action"],
+      ["about", "main-menu-about-action"],
+      ["quit", "main-menu-quit-action"],
     ]);
-    expect(view.socials.map(({ id, label }) => [id, label])).toEqual([
-      ["github", "GitHub"],
-      ["discord", "Discord"],
-      ["reddit", "Reddit"],
+    expect(view.socials.map(({ id, label }) => [id, label.id])).toEqual([
+      ["github", "main-menu-github-action"],
+      ["discord", "main-menu-discord-action"],
+      ["reddit", "main-menu-reddit-action"],
     ]);
     expect(view.socials[0]?.glyph).toContain("bxl-github");
     expect(view.socials[1]?.glyph).toContain("bxl-discord-alt");

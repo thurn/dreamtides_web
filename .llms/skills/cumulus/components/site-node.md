@@ -29,7 +29,7 @@ The dreamscape site disc: a floating circular node carrying a glyph and accent r
 | `isBattle` | `boolean` | no | This site is the dreamscape's guardian battle. |
 | `isLocked` | `boolean` | no | A battle gated behind the dreamscape's other, unvisited sites. |
 | `isInteractive` | `boolean` | no | Clickable: not visited and not locked. |
-| `label` | `string` | no | Display label (battle tier / `Draft Nx` / site type name). |
+| `label` | `string \| DreamscapeSiteLabel` | no | Display label (battle tier / `Draft Nx` / site type name). |
 | `blurb` | `string` | no | One-line mechanic blurb shown in the reveal. |
 | `icon` | `Glyph` | no | The site {@link Glyph}. |
 

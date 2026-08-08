@@ -1,6 +1,7 @@
 import type { ReactElement } from "react";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { token } from "../../primitives/tokens";
+import { useMessages } from "../../hooks/use-messages";
 
 export interface CoopPresenceStatusProps {
   /** Presence-derived connected client count, or null while it resolves. */
@@ -14,6 +15,7 @@ export function CoopPresenceStatus({
   count,
   visible,
 }: CoopPresenceStatusProps): ReactElement | null {
+  const t = useMessages();
   if (!visible) return null;
   return (
     <output
@@ -34,7 +36,9 @@ export function CoopPresenceStatus({
         transform: "translateX(-50%)",
       }}
     >
-      {count === null ? "Connecting…" : `${String(count)} Connected`}
+      {count === null
+        ? t("coop-presence-connecting")
+        : t("coop-presence-connected-count", { count })}
     </output>
   );
 }

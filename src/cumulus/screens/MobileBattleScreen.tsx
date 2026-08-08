@@ -74,6 +74,8 @@ import {
 } from "./mobile-battle-layout";
 import { useIsDesktop } from "./use-is-desktop";
 import { useMessages } from "../hooks/use-messages";
+import { formatMessageDescriptor } from "../hooks/use-messages";
+import type { FluentMessageDescriptor } from "../../data/localization-messages";
 import {
   BattleResultSurface,
   type MobileBattleResultAction,
@@ -189,8 +191,8 @@ export interface MobileBattleView {
 /** A UUID-safe card decision owned by the authoritative battle prompt. */
 export interface MobileBattleCardPickerView {
   readonly key: string;
-  readonly label: string;
-  readonly subtitle?: string;
+  readonly label: FluentMessageDescriptor;
+  readonly subtitle?: FluentMessageDescriptor;
   readonly side: MobileBattleOwner;
   readonly candidateOwner?: MobileBattleOwner | null;
   readonly candidates: readonly MobileBattleCardPickerCandidateView[];
@@ -215,8 +217,8 @@ export interface MobileBattleCardPickerCandidateView {
 /** An in-place option decision owned by the authoritative battle prompt. */
 export interface MobileBattleChoicePromptView {
   readonly key: string;
-  readonly label: string;
-  readonly options: readonly { readonly label: string }[];
+  readonly label: FluentMessageDescriptor;
+  readonly options: readonly { readonly label: FluentMessageDescriptor }[];
   readonly canResolve: boolean;
 }
 
@@ -953,6 +955,7 @@ function FarHand({
   readonly selectedPickerCardIds: readonly string[];
   readonly onPickerCardToggle: (cardId: string) => void;
 }) {
+  const t = useMessages();
   const farHandCandidates =
     cardPicker?.candidates.filter(
       (candidate) => candidate.owner === owner && candidate.zone === "hand",
@@ -1061,7 +1064,7 @@ function FarHand({
                 data-battle-card-motion=""
                 style={{ width: "100%", height: "100%" }}
               >
-                <CardBack label="Opponent card" />
+                <CardBack label={t("battle-opponent-card-accessible-name")} />
               </motion.div>
             )}
           </div>
@@ -3453,6 +3456,14 @@ function CardPickerGallery({
     cardPicker.count,
     cardPicker.candidates.length,
   );
+  const promptLabel = formatMessageDescriptor(t, cardPicker.label);
+  const promptSubtitle =
+    cardPicker.subtitle === undefined
+      ? t("battle-card-picker-selected-count", {
+          selectedCount: selectedPickerCardIds.length,
+          requiredCount,
+        })
+      : formatMessageDescriptor(t, cardPicker.subtitle);
   const canSubmit =
     cardPicker.canResolve &&
     selectedPickerCardIds.length === requiredCount &&
@@ -3479,7 +3490,7 @@ function CardPickerGallery({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={cardPicker.label}
+      aria-label={promptLabel}
       data-battle-card-picker-gallery=""
       style={{
         position: "fixed",
@@ -3503,14 +3514,8 @@ function CardPickerGallery({
         }}
       >
         <CardPickerPanel
-          title={cardPicker.label}
-          subtitle={
-            cardPicker.subtitle ??
-            t("battle-card-picker-selected-count", {
-              selectedCount: selectedPickerCardIds.length,
-              requiredCount,
-            })
-          }
+          title={promptLabel}
+          subtitle={promptSubtitle}
           cards={cardPicker.candidates.map((candidate) => {
             const selected = selectedPickerCardIds.includes(
               candidate.instanceId,
@@ -3571,6 +3576,10 @@ function ControlRow({
   readonly tutorialNextAction: "endTurn" | "startChallenge";
 }) {
   const t = useMessages();
+  const choiceLabel =
+    choicePrompt === null
+      ? undefined
+      : formatMessageDescriptor(t, choicePrompt.label);
   const disabled = interactions?.canInteract !== true;
   const hasAlternateNextControls = aiApproval !== null || choicePrompt !== null;
   const requiredPickerCount =
@@ -3638,7 +3647,7 @@ function ControlRow({
             }}
           >
             {t("battle-card-picker-progress", {
-              promptLabel: cardPicker.label,
+              promptLabel: formatMessageDescriptor(t, cardPicker.label),
               owner:
                 (cardPicker.candidateOwner ?? cardPicker.side) === perspective
                   ? "viewer"
@@ -3709,7 +3718,7 @@ function ControlRow({
             data-battle-choice-prompt-controls={
               choicePrompt === null ? undefined : ""
             }
-            aria-label={choicePrompt?.label}
+            aria-label={choiceLabel}
             style={{
               width: hasAlternateNextControls ? undefined : "max-content",
               minWidth: hasAlternateNextControls
@@ -3725,7 +3734,7 @@ function ControlRow({
               choicePrompt.options.map((option, index) => (
                 <GlassButton
                   key={`${choicePrompt.key}:${String(index)}`}
-                  label={option.label}
+                  label={formatMessageDescriptor(t, option.label)}
                   variant={index === 0 ? "accent" : "default"}
                   disabled={
                     !choicePrompt.canResolve ||
@@ -3761,13 +3770,13 @@ function ControlRow({
                   <IconButton
                     glyph={GLYPHS.close}
                     size="sm"
-                    label="Reject AI action"
+                    label={t("battle-ai-reject-action")}
                     disabled={interactions?.onRejectAiProposal === undefined}
                     onPress={() => interactions?.onRejectAiProposal?.()}
                   />
                 ) : null}
                 <GlassButton
-                  label="Continue"
+                  label={t("battle-continue-action")}
                   variant="accent"
                   disabled={interactions?.onApproveAiProposal === undefined}
                   onPress={() => interactions?.onApproveAiProposal?.()}
@@ -3791,11 +3800,15 @@ function BattleControlMessage({
   readonly promptNotice: MobileBattlePromptNoticeView | null;
 }) {
   const t = useMessages();
+  const choiceLabel =
+    choicePrompt === null
+      ? undefined
+      : formatMessageDescriptor(t, choicePrompt.label);
   const message =
     (promptNotice === null
       ? undefined
       : t("battle-prompt-switch-side", { side: promptNotice.promptSide })) ??
-    choicePrompt?.label ??
+    choiceLabel ??
     aiApproval?.description;
   if (message === undefined) return null;
   return (
@@ -3830,6 +3843,7 @@ function BattleDebugMenu({
   readonly onFillAsymmetricBattlefieldPreview?: () => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  // localization-ignore: developer-only battle debug controls are outside the player path.
   return (
     <div
       data-battle-debug="menu"
@@ -4011,6 +4025,7 @@ function BattleInspectorContent({
     gap: token("--space-s"),
   };
 
+  // localization-ignore: developer-only battle inspector controls are outside the player path.
   return (
     <div
       style={{
@@ -4525,6 +4540,7 @@ function BattleInspectorRail({
   readonly onPerspectiveToggle?: () => void;
   readonly onAction?: (action: MobileBattleInspectorAction) => void;
 }) {
+  // localization-ignore: developer-only battle inspector controls are outside the player path.
   return (
     <div
       data-battle-inspector="docked"
@@ -5228,7 +5244,7 @@ export function MobileBattleScreen({
             <IconButton
               glyph={GLYPHS.sidebarRight}
               size="sm"
-              label={
+              label={/* localization-ignore: developer-only battle inspector control. */
                 isInspectorOpen
                   ? "Close battle inspector"
                   : "Open battle inspector"
@@ -5315,6 +5331,7 @@ export function MobileBattleScreen({
           onDismiss={() => setMergeNotice(null)}
         />
       ) : null}
+      {/* localization-ignore: developer-only battle inspector controls are outside the player path. */}
       {mergeConfirmation !== null ? (
         <GlassDialog
           title={t("battle-figment-merge-confirmation-title", {
@@ -5369,13 +5386,14 @@ export function MobileBattleScreen({
           </div>
         </GlassDialog>
       ) : null}
+      {/* localization-ignore: developer-only battle inspector controls are outside the player path. */}
       {inspectorVisibility === "available" &&
       !isDockLayout &&
       isInspectorOpen ? (
         <GlassDialog
-          title="Battle Inspector"
-          subtitle={`Developer Tools · Opponent: ${view.inspector.opponentName}`}
-          closeLabel="Close battle inspector"
+          title={/* localization-ignore: developer-only battle inspector control. */ "Battle Inspector"}
+          subtitle={/* localization-ignore: developer-only battle inspector control. */ `Developer Tools · Opponent: ${view.inspector.opponentName}`}
+          closeLabel={/* localization-ignore: developer-only battle inspector control. */ "Close battle inspector"}
           cutoutAwareClose
           fullScreen
           onClose={closeInspector}

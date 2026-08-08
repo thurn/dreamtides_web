@@ -18,6 +18,7 @@ function LocalizedTransfigurationButton(
 
 const empowered = {
   type: "Empowered" as const,
+  change: { kind: "energy-delta" as const, from: 2, to: 1 },
   description: "Reduce this card's energy cost.",
   essenceCost: 40,
   affordable: true,

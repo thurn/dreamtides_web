@@ -5,6 +5,7 @@ import { selectCurrentSite } from "../../state/journey-selectors";
 import { AugurySiteScreen } from "../../cumulus/screens/AugurySiteScreen";
 import { buildAuguryAcceptRequest, buildAuguryDeclineRequest, buildAuguryLogEntries, buildAugurySiteModel, auguryChoiceResult, resolveAuguryGuide } from "./augury-view-model";
 import { useGuideDialogue } from "./guide-dialogue-view-model";
+import { createMessageDescriptor } from "../../data/localization-descriptors";
 
 export function AugurySiteScreenAdapter({ siteId }: { siteId: string }) {
   const { state, mutations, journeyContent } = useJourney();
@@ -60,11 +61,11 @@ export function AugurySiteScreenAdapter({ siteId }: { siteId: string }) {
   const handleChoose = useCallback(
     (offerId: string, choiceId: string | null) => {
       if (site === null || result?.encounter === null || result?.encounter === undefined) {
-        return { ok: false as const, message: "The augury is clouded." };
+        return { ok: false as const, message: createMessageDescriptor("augury-error-clouded") };
       }
       const request = buildAuguryAcceptRequest(result.encounter, offerId, choiceId);
       if (request === null) {
-        return { ok: false as const, message: "Choose a vision first." };
+        return { ok: false as const, message: createMessageDescriptor("augury-error-choose-vision") };
       }
       return auguryChoiceResult(mutations.acceptDreamMerchantOffer(site.id, request));
     },

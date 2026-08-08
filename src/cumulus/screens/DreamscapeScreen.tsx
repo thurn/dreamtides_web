@@ -28,6 +28,7 @@ import {
 } from "./DreamsignReplacementDialog";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
+import { useMessages } from "../hooks/use-messages";
 
 /** A generated site reward ready to animate and grant on the dreamscape. */
 export type InlineRewardView =
@@ -90,6 +91,7 @@ export function DreamscapeScreen({
   onDeclineReward,
   onGuideDialogueShown,
 }: DreamscapeScreenProps) {
+  const t = useMessages();
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const [collectingSiteId, setCollectingSiteId] = useState<
     string | null
@@ -296,10 +298,18 @@ export function DreamscapeScreen({
           aria-live="polite"
           aria-label={
             collectingReward.kind === "dreamsign"
-              ? collectingReward.requiresReplacement
-                ? `Found dreamsign: ${collectingReward.dreamsign.name}`
-                : `Gained dreamsign: ${collectingReward.dreamsign.name}`
-              : `Gained ${String(collectingReward.amount)} essence`
+              ? t("dreamscape-reward-status", {
+                  kind: "dreamsign",
+                  state: collectingReward.requiresReplacement ? "found" : "gained",
+                  dreamsignName: collectingReward.dreamsign.name,
+                  amount: 0,
+                })
+              : t("dreamscape-reward-status", {
+                  kind: "essence",
+                  state: "gained",
+                  dreamsignName: "",
+                  amount: collectingReward.amount,
+                })
           }
           data-essence-collection={
             collectingModel.site.type === "Essence"
@@ -387,9 +397,9 @@ export function DreamscapeScreen({
                   whiteSpace: "nowrap",
                 }}
               >
-                {collectingReward.requiresReplacement
-                  ? "Dreamsign found"
-                  : "Dreamsign gained"}
+                {t("dreamscape-reward-dreamsign-label", {
+                  state: collectingReward.requiresReplacement ? "found" : "gained",
+                })}
               </motion.div>
             </>
           ) : (
@@ -416,8 +426,8 @@ export function DreamscapeScreen({
           view={view.replacement}
           onReplace={onReplaceDreamsign}
           onCancel={onDeclineReward}
-          cancelLabel="Keep Current Dreamsigns"
-          closeLabel="Decline Dreamsign reward"
+          cancelLabel={t("dreamsign-replacement-keep-current-action")}
+          closeLabel={t("dreamsign-replacement-decline-reward-action")}
         />
       )}
     </div>

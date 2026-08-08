@@ -112,7 +112,7 @@ describe("buildDeckTypeFilterOptions — smart subtype options", () => {
     const options = buildDeckTypeFilterOptions(deck);
     expect(values(options)).toContain("subtype:Warrior");
     const warrior = options.find((o) => o.value === "subtype:Warrior");
-    expect(warrior?.label).toBeTruthy();
+    expect(warrior?.authoredLabel).toBeTruthy();
   });
 
   it("orders subtype options by count, most-represented first", () => {
@@ -238,9 +238,9 @@ describe("filterAndSortDeckCards — sorting", () => {
 });
 
 describe("deckSortLabel", () => {
-  it("returns the display label for each known sort", () => {
+  it("returns the semantic sort value for each known sort", () => {
     for (const option of DECK_SORT_OPTIONS) {
-      expect(deckSortLabel(option.value)).toBe(option.label);
+      expect(deckSortLabel(option.value)).toBe(option.value);
     }
   });
 });

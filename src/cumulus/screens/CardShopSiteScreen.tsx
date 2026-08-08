@@ -14,6 +14,7 @@ import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
+import { useMessages } from "../hooks/use-messages";
 
 export interface CardShopOfferView {
   /** Stable UUID-derived tile id. */
@@ -106,6 +107,7 @@ function CardShopGallery({
   readonly onClose: () => void;
 }) {
   const desktop = layout === "desktop";
+  const t = useMessages();
   const [locallyPurchasedEntryIds, setLocallyPurchasedEntryIds] = useState(
     () => new Set<string>(),
   );
@@ -191,12 +193,12 @@ function CardShopGallery({
       }}
     >
       <CardPickerPanel
-        title="Dream Market"
+        title={t("card-shop-title")}
         rightAccessory={{
           kind: "iconButton",
           button: {
             glyph: GLYPHS.close,
-            label: "Leave card shop",
+            label: t("card-shop-leave-action"),
             onPress: onClose,
             testId: "cumulus-card-shop-leave",
           },
@@ -221,15 +223,15 @@ function CardShopGallery({
           glyph: GLYPHS.refresh,
           label:
             restock.state === "used"
-              ? "Restocked"
+              ? t("site-restocked")
               : desktop
-                ? "Restock Offers"
-                : "Restock",
+                ? t("site-restock-offers-action")
+                : t("site-restock-action"),
           caption:
             restock.state === "used"
-              ? { kind: "text", text: "Restocked" }
+              ? { kind: "text", text: t("site-restocked") }
               : restock.price === 0
-                ? { kind: "text", text: "Free" }
+                ? { kind: "text", text: t("site-free-price") }
                 : { kind: "essence", amount: restock.price },
           disabled: restock.state !== "available",
           testId: "cumulus-card-shop-restock",

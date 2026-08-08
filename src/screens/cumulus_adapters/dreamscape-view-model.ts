@@ -15,7 +15,10 @@ import {
   scatterSites,
   seedFromString,
 } from "../../cumulus/components/dreamscape/dreamscape-scatter";
-import type { DreamscapeSiteModel } from "../../cumulus/components/dreamscape/SiteNode";
+import type {
+  DreamscapeSiteLabel,
+  DreamscapeSiteModel,
+} from "../../cumulus/components/dreamscape/SiteNode";
 import type {
   QsbDreamAvatar,
   QsbDreamsign,
@@ -102,10 +105,11 @@ export function resolveDreamscapeSiteSelection(
 }
 
 /** Battle label by completion level: the final boss or a plain battle. */
-export function battleLabel(completionLevel: number): string {
-  return completionLevel === FINAL_BOSS_COMPLETION_LEVEL
-    ? "Final Boss"
-    : "Battle";
+export function battleLabel(completionLevel: number): DreamscapeSiteLabel {
+  return {
+    kind: "battle",
+    isFinalBoss: completionLevel === FINAL_BOSS_COMPLETION_LEVEL,
+  };
 }
 
 /**
@@ -127,11 +131,14 @@ export function buildSiteModels(
     const isBattle = site.type === "Battle";
     const isLocked = isBattle && !allNonBattleVisited;
     const isInteractive = !site.isVisited && !isLocked;
-    const label = isBattle
+    const label: DreamscapeSiteLabel = isBattle
       ? battleLabel(completionLevel)
       : site.type === "Draft"
-        ? `Draft ${String(draftSitePickCount(site, defaultDraftPickCount))}x`
-        : siteTypeName(sitesData, site.type);
+        ? {
+            kind: "draft",
+            pickCount: draftSitePickCount(site, defaultDraftPickCount),
+          }
+        : { kind: "authored", name: siteTypeName(sitesData, site.type) };
     return {
       site,
       pos: positions[index] ?? FALLBACK_POS,

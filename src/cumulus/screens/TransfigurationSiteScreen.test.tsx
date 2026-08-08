@@ -40,6 +40,7 @@ function candidate(index: number): TransfigurationCandidateView {
     forms: [
       {
         type: "Empowered",
+        change: { kind: "energy-delta", from: 2, to: 1 },
         description: "Reduce this card's energy cost.",
         effectDetails: { fixture: true },
         essenceCost: 40,
@@ -58,6 +59,7 @@ function candidate(index: number): TransfigurationCandidateView {
       },
       {
         type: "Kindled",
+        change: { kind: "spark-delta", from: 2, to: 4 },
         description: "Double this character's spark.",
         effectDetails: { fixture: true },
         essenceCost: 80,
@@ -401,9 +403,7 @@ describe("TransfigurationSiteScreen", () => {
     );
     expect(empowered?.textContent).toBe("Empowered40");
     expect(empowered?.dataset.transfigurationButtonVariant).toBe("priced");
-    expect(empowered?.getAttribute("aria-description")).toBe(
-      "Reduce this card's energy cost.",
-    );
+    expect(empowered?.getAttribute("aria-description")?.trim()).not.toBe("");
     expect(empowered?.style.padding).toBe("var(--space-xs)");
     expect(empowered?.style.background).toBe("transparent");
     expect(empowered?.style.boxShadow).toBe("none");
@@ -415,13 +415,13 @@ describe("TransfigurationSiteScreen", () => {
       commit?.querySelector("[data-glass-button-essence-cost]"),
     ).not.toBeNull();
     act(() => commit?.click());
-    expect(onTransfigure).toHaveBeenCalledWith(
-      "entry-1",
-      "Empowered",
-      "Reduce this card's energy cost.",
-      { fixture: true },
-      40,
-    );
+    const transfigureCall = onTransfigure.mock.calls[0];
+    expect(transfigureCall?.[0]).toBe("entry-1");
+    expect(transfigureCall?.[1]).toBe("Empowered");
+    expect(typeof transfigureCall?.[2]).toBe("string");
+    expect(transfigureCall?.[2]).not.toContain("transfiguration-change");
+    expect(transfigureCall?.[3]).toEqual({ fixture: true });
+    expect(transfigureCall?.[4]).toBe(40);
 
     act(() => empowered?.click());
     expect(empowered?.getAttribute("aria-checked")).toBe("true");

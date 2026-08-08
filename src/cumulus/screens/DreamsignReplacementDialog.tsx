@@ -32,7 +32,7 @@ export function DreamsignReplacementDialog({
   const t = useMessages();
   return (
     <GlassDialog
-      title="Choose a Dreamsign to Replace"
+      title={t("dreamsign-replacement-title")}
       subtitle={t("dreamsign-replacement-capacity", {
         count: view.maxDreamsigns,
       })}
@@ -43,7 +43,7 @@ export function DreamsignReplacementDialog({
         data-dreamsign-replacement-dialog=""
         data-pending-dreamsign-id={requireDreamsignId(
           view.pendingDreamsign,
-          "Cumulus Dreamsign replacement pending reward",
+              t("dreamsign-replacement-pending-label"),
         )}
         style={{
           width: "min(100%, 420px)",
@@ -66,7 +66,7 @@ export function DreamsignReplacementDialog({
               color: token("--text-on-glass-muted"),
             }}
           >
-            New Dreamsign
+            {t("dreamsign-replacement-new-label")}
           </p>
           <div style={{ width: 88, height: 88 }}>
             <Dreamsign
@@ -87,7 +87,7 @@ export function DreamsignReplacementDialog({
           {view.currentDreamsigns.map((dreamsign) => {
             const dreamsignId = requireDreamsignId(
               dreamsign,
-              "Cumulus Dreamsign replacement collection",
+              t("dreamsign-replacement-collection-label"),
             );
             return (
               <div
@@ -108,7 +108,7 @@ export function DreamsignReplacementDialog({
                   />
                 </div>
                 <GlassButton
-                  label="Replace"
+                  label={t("dreamsign-replace-action")}
                   variant="accent"
                   placement="onGlass"
                   testId={`replace-dreamsign-${dreamsignId}`}

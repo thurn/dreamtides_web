@@ -2,6 +2,7 @@ import type { BattleDebugEdit } from "../../battle/debug/commands";
 import type { BattleMutableState, BattleSide } from "../../battle/types";
 import { rankSlotIds } from "../../battle/types";
 import type { EffectBindings } from "./fold";
+import type { FluentMessageDescriptor } from "../../data/localization-messages";
 
 // ---------------------------------------------------------------------------
 // Core types
@@ -37,8 +38,8 @@ export interface StepContext {
 export type EffectPrompt =
   | {
       kind: "pick-cards";
-      label: string;
-      subtitle?: string;
+      label: FluentMessageDescriptor;
+      subtitle?: FluentMessageDescriptor;
       count: number;
       optional: boolean;
       candidates: (ctx: StepContext) => string[];
@@ -53,10 +54,13 @@ export type EffectPrompt =
     }
   | {
       kind: "choice";
-      label: string;
-      options: { label: string; build: (ctx: StepContext) => BattleDebugEdit[] }[];
+      label: FluentMessageDescriptor;
+      options: {
+        label: FluentMessageDescriptor;
+        build: (ctx: StepContext) => BattleDebugEdit[];
+      }[];
     }
-  | { kind: "confirm"; label: string; onYes: EffectStep[] }
+  | { kind: "confirm"; label: FluentMessageDescriptor; onYes: EffectStep[] }
   | { kind: "foresee"; count: number };
 
 export type EffectStep =

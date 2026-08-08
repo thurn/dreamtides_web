@@ -289,6 +289,40 @@ function DeckControls({
   onFilterSortChange: (next: DeckFilterSort) => void;
 }) {
   const t = useMessages();
+  const optionLabel = (option: DeckControlOption<DeckTypeFilter>): string => {
+    if (option.authoredLabel !== undefined) return option.authoredLabel;
+    switch (option.value) {
+      case "all":
+        return t("deck-filter-all");
+      case "type:Character":
+        return t("deck-filter-characters");
+      case "type:Event":
+        return t("deck-filter-events");
+      default:
+        return option.value;
+    }
+  };
+  const sortOptionLabel = (sort: DeckSortId): string => {
+    switch (sort) {
+      case "name":
+        return t("deck-sort-name");
+      case "drafted":
+        return t("deck-sort-acquired");
+      case "cost":
+        return t("deck-sort-cost");
+      case "spark":
+        return t("deck-sort-spark");
+      case "subtype":
+        return t("deck-sort-subtype");
+    }
+  };
+  const selectedFilter = deckTypeFilterLabel(
+    filterSort.typeFilter,
+    typeFilterOptions,
+  );
+  const selectedFilterLabel = selectedFilter.startsWith("subtype:")
+    ? selectedFilter.slice("subtype:".length)
+    : optionLabel({ value: selectedFilter as DeckTypeFilter });
   return (
     <div
       style={{
@@ -304,14 +338,11 @@ function DeckControls({
         leadingGlyph={GLYPHS.filter}
         align="start"
         ariaLabel={t("deck-browser-filter-accessible-name", {
-          selection: deckTypeFilterLabel(
-            filterSort.typeFilter,
-            typeFilterOptions,
-          ),
+          selection: selectedFilterLabel,
         })}
         options={typeFilterOptions.map((option) => ({
           value: option.value,
-          label: option.label,
+          label: optionLabel(option),
         }))}
         value={filterSort.typeFilter}
         onChange={(value) =>
@@ -326,12 +357,11 @@ function DeckControls({
         leadingGlyph={GLYPHS.sort}
         align="end"
         ariaLabel={t("deck-browser-sort-accessible-name", {
-          selection: deckSortLabel(filterSort.sort),
+          selection: sortOptionLabel(deckSortLabel(filterSort.sort)),
         })}
         options={DECK_SORT_OPTIONS.map((option) => ({
           value: option.value,
-          label: option.label,
-          triggerLabel: option.triggerLabel,
+          label: sortOptionLabel(option.value),
         }))}
         value={filterSort.sort}
         onChange={(value) =>

@@ -544,9 +544,19 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
         promptId: pendingPrompt.promptId,
         perspectiveSide,
         promptSide: pendingPrompt.run.side,
-        promptLabel: pendingPrompt.options.label,
+        promptMessageId: pendingPrompt.options.label.id,
+        promptMessageArguments:
+          "variables" in pendingPrompt.options.label
+            ? pendingPrompt.options.label.variables
+            : null,
         optionIndex,
-        optionLabel: pendingPrompt.options.options[optionIndex]?.label ?? null,
+        optionMessageId:
+          pendingPrompt.options.options[optionIndex]?.label.id ?? null,
+        optionMessageArguments:
+          pendingPrompt.options.options[optionIndex] === undefined ||
+          !("variables" in pendingPrompt.options.options[optionIndex].label)
+            ? null
+            : pendingPrompt.options.options[optionIndex].label.variables,
       });
       resolvePendingPrompt({ kind: "choice", optionIndex });
     },
@@ -1572,7 +1582,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
         onClose={() => setIsPoolViewerOpen(false)}
         onPoolCardDragEnd={handleCardDragEnd}
         onPoolCardDragStart={handlePoolCardDragStart}
-        title="battle"
+        title={/* localization-ignore: semantic pool-viewer context value. */ "battle"}
         variant="floating"
       />
       <MobileBattleScreenAdapter

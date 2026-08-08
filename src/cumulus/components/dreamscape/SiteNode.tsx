@@ -29,6 +29,7 @@ import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import "./site-node.css";
+import { useMessages } from "../../hooks/use-messages";
 
 /** Compact diameter for site nodes placed over a dreamscape scene. */
 const SCENE_NODE_SIZE = 60;
@@ -39,6 +40,11 @@ const REWARD_NODE_SIZE = 160;
 /** The node's fixed accent — the system's violet, not a per-node color. The ring
  * and reveal disc derive their alpha from it via {@link withAlpha}. */
 const NODE_ACCENT: CumulusColor = "accent";
+
+export type DreamscapeSiteLabel =
+  | { readonly kind: "battle"; readonly isFinalBoss: boolean }
+  | { readonly kind: "draft"; readonly pickCount: number }
+  | { readonly kind: "authored"; readonly name: string };
 
 /**
  * One site placed in the dreamscape scene. The screen builds these models from
@@ -56,7 +62,7 @@ export interface DreamscapeSiteModel {
   /** Clickable: not visited and not locked. */
   isInteractive: boolean;
   /** Display label (battle tier / `Draft Nx` / site type name). */
-  label: string;
+  label: DreamscapeSiteLabel | string;
   /** One-line mechanic blurb shown in the reveal. */
   blurb: string;
   /** The site {@link Glyph}. */
@@ -64,17 +70,23 @@ export interface DreamscapeSiteModel {
 }
 
 /** The status note (the lock note) shown under the blurb in the reveal. */
-function siteRevealNote(model: DreamscapeSiteModel): string | null {
+function siteRevealNote(
+  model: DreamscapeSiteModel,
+  lockedGuidance: string,
+): string | null {
   if (model.isLocked) {
-    return "You must visit the other sites in this dreamscape first.";
+    return lockedGuidance;
   }
   return null;
 }
 
 /** The InfoCard body for a site reveal: the mechanic blurb plus, when locked, a
  * muted lock note under it. */
-function siteRevealBody(model: DreamscapeSiteModel): RichText {
-  const note = siteRevealNote(model);
+function siteRevealBody(
+  model: DreamscapeSiteModel,
+  lockedGuidance: string,
+): RichText {
+  const note = siteRevealNote(model, lockedGuidance);
   const blurb = richText.plain(model.blurb);
   return note === null ? blurb : richText.stack(blurb, richText.note(note));
 }
@@ -100,12 +112,30 @@ export function SiteNode({
   presentation = "scene",
   onSelect,
 }: SiteNodeProps): React.ReactElement {
+  const t = useMessages();
   const { site, pos, index, isBattle, isLocked, isInteractive } = model;
+  const label = typeof model.label === "string"
+    ? model.label
+    : model.label.kind === "authored"
+      ? model.label.name
+      : model.label.kind === "draft"
+        ? t("dreamscape-draft-label", { pickCount: model.label.pickCount })
+        : model.label.isFinalBoss
+          ? t("dreamscape-final-boss-label")
+          : t("dreamscape-battle-label");
 
   const binding = useRevealSource({
     identity: { entityType: "site", entityId: revealEntityId("site", site.id) },
     spec: {
-      primary: { kind: "infoCard", card: { variant: "icon", glyph: model.icon, title: model.label, body: siteRevealBody(model) } },
+      primary: {
+        kind: "infoCard",
+        card: {
+          variant: "icon",
+          glyph: model.icon,
+          title: label,
+          body: siteRevealBody(model, t("dreamscape-locked-site-guidance")),
+        },
+      },
       secondaries: [],
     },
     onActivate: isInteractive ? () => onSelect(site.id) : undefined,
@@ -158,7 +188,7 @@ export function SiteNode({
           event.preventDefault(); onSelect(site.id);
         }
       }}
-      aria-label={model.label}
+      aria-label={label}
       aria-disabled={!isInteractive}
       data-site-id={site.id}
       data-site-type={site.type}

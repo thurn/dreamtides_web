@@ -5,7 +5,6 @@ import {
 } from "react";
 import { logEvent } from "../../../logging";
 import type { RichText } from "../../components/card/rich-text";
-import { tideAlignmentLabel } from "../../components/hud/tide-spec";
 import { infoCardVariant, type RevealCoordinatorSource, type RevealDismissalReason, type RevealGameCard, type RevealInfoCardModel, type RevealPlacementException, type RevealSourceIdentity, type RevealSpec } from "./model";
 import {
   activationOutcomeForTouch, initialRevealCoordinatorState, reduceRevealState,
@@ -14,6 +13,11 @@ import {
 import { logRevealClosed, logRevealOpened } from "./logging";
 import { RevealOverlay, type RevealOverlayActive } from "./RevealOverlay";
 import { feedbackForRect, type RevealFeedback } from "./feedback";
+import {
+  formatMessageDescriptor,
+  useMessages,
+  type MessageFormatter,
+} from "../../hooks/use-messages";
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -24,57 +28,97 @@ function sameSource(state: ReturnType<typeof reduceRevealState>, source: RevealC
     && state.activeRegistrationId === source.registrationId;
 }
 
-function richTextDescription(value: RichText | undefined): string {
+function joinDescriptionParts(parts: readonly string[], t: MessageFormatter): string {
+  return parts
+    .filter((part) => part.trim().length > 0)
+    .reduce((left, right) => t("reveal-description-join", { left, right }), "");
+}
+
+function richTextDescription(value: RichText | undefined, t: MessageFormatter): string {
   if (value === undefined) return "";
   if (value.kind === "definitions") {
     return value.entries
-      .map((entry) => `${entry.term}. ${entry.definition}`)
-      .join(" ");
+      .map((entry) => t("reveal-definition-entry", {
+        term: entry.term,
+        definition: entry.definition,
+      }))
+      .reduce((left, right) => joinDescriptionParts([left, right], t), "");
   }
   if (value.kind === "stack") {
-    return value.parts.map(richTextDescription).filter(Boolean).join(" ");
+    return joinDescriptionParts(
+      value.parts.map((part) => richTextDescription(part, t)),
+      t,
+    );
   }
   return value.text;
 }
 
-function infoCardDescription(card: RevealInfoCardModel): string {
-  return [
-    card.title,
+function infoCardDescription(card: RevealInfoCardModel, t: MessageFormatter): string {
+  const parts = [
+    card.titleDescriptor === undefined
+      ? card.title
+      : formatMessageDescriptor(t, card.titleDescriptor),
     "subtitle" in card ? card.subtitle : undefined,
-    card.variant === "tide" ? `${tideAlignmentLabel(card.tide)} tide alignment` : undefined,
-    richTextDescription(card.body),
-  ]
-    .filter((part): part is string => typeof part === "string" && part.trim().length > 0)
-    .join(". ");
+    card.variant === "tide"
+      ? t("reveal-tide-alignment", {
+          tide: card.tide,
+        })
+      : undefined,
+    card.bodyDescriptor === undefined
+      ? richTextDescription(card.body, t)
+      : formatMessageDescriptor(t, card.bodyDescriptor),
+  ].filter((part): part is string => typeof part === "string");
+  return joinDescriptionParts(parts, t);
 }
 
-function gameCardDescription(card: NonNullable<Extract<RevealSpec["primary"], { kind: "gameCard" }>["displaySnapshot"]>): string {
+function gameCardDescription(
+  card: NonNullable<Extract<RevealSpec["primary"], { kind: "gameCard" }>["displaySnapshot"]>,
+  t: MessageFormatter,
+): string {
   const energy = card.energyCosts !== undefined && card.energyCosts.length > 0
-    ? `Energy ${card.energyCosts.join(" and ")}`
-    : `Energy ${card.energyCost === null ? "X" : String(card.energyCost)}`;
+    ? t("reveal-card-energy-alternatives", {
+        values: card.energyCosts.reduce(
+          (left, right, index) =>
+            index === 0
+              ? right
+              : t("reveal-list-and", { left, right }),
+          "",
+        ),
+      })
+    : card.energyCost === null
+      ? t("reveal-card-energy-variable")
+      : t("reveal-card-energy", { value: card.energyCost });
   const spark = card.sparkVariable === true
-    ? "Spark X"
-    : card.spark === null ? undefined : `Spark ${String(card.spark)}`;
-  return [
+    ? t("reveal-card-spark-variable")
+    : card.spark === null
+      ? undefined
+      : t("reveal-card-spark", { value: card.spark });
+  const reclaim = card.reclaimCost == null
+    ? undefined
+    : t("reveal-card-reclaim", { value: card.reclaimCost });
+  return joinDescriptionParts([
     card.name, card.rarity, card.cardType, card.subtype || undefined, energy, spark,
-    card.isFast ? "Fast" : undefined,
-    card.isInterrupt === true ? "Interrupt" : undefined,
-    card.reclaimCost == null ? undefined : `Reclaim ${String(card.reclaimCost)}`,
+    card.isFast ? t("reveal-card-fast") : undefined,
+    card.isInterrupt === true ? t("reveal-card-interrupt") : undefined,
+    reclaim,
     card.renderedText,
-  ].filter((part): part is string => typeof part === "string" && part.trim().length > 0).join(". ");
+  ].filter((part): part is string => typeof part === "string"), t);
 }
 
-function revealDescription(spec: RevealSpec): string {
+function revealDescription(spec: RevealSpec, t: MessageFormatter): string {
   const primary = spec.primary.kind === "source"
     ? spec.primary.description
     : spec.primary.kind === "infoCard"
-      ? infoCardDescription(spec.primary.card)
+      ? infoCardDescription(spec.primary.card, t)
     : spec.primary.kind === "galleryAction"
       ? spec.primary.action.label
     : spec.primary.displaySnapshot === undefined
       ? ""
-      : gameCardDescription(spec.primary.displaySnapshot);
-  return [primary, ...spec.secondaries.map(infoCardDescription)].filter(Boolean).join(". ");
+      : gameCardDescription(spec.primary.displaySnapshot, t);
+  return joinDescriptionParts(
+    [primary, ...spec.secondaries.map((card) => infoCardDescription(card, t))],
+    t,
+  );
 }
 
 function isValidGameCard(card: RevealGameCard): boolean {
@@ -83,11 +127,15 @@ function isValidGameCard(card: RevealGameCard): boolean {
     && card.displaySnapshot.id.toLowerCase() === card.cardId.toLowerCase();
 }
 
-function isValidRegistration(identity: RevealSourceIdentity, spec: RevealSpec): boolean {
+function isValidRegistration(
+  identity: RevealSourceIdentity,
+  spec: RevealSpec,
+  t: MessageFormatter,
+): boolean {
   if (identity.entityType.trim() === "" || !UUID_PATTERN.test(identity.entityId)) return false;
   if (spec.primary.kind === "gameCard" && !isValidGameCard(spec.primary)) return false;
   if (!(spec.adjacentCards ?? []).every(isValidGameCard)) return false;
-  return revealDescription(spec).trim().length > 0;
+  return revealDescription(spec, t).trim().length > 0;
 }
 
 interface SourceRegistration {
@@ -364,15 +412,16 @@ export interface RevealSourceBinding {
 export function useRevealSource(registration: RevealSourceRegistration): RevealSourceBinding {
   const coordinator = useContext(RevealCoordinatorContext);
   if (coordinator === null) throw new Error("Semantic Cumulus reveal sources require one mounted CumulusRoot.");
+  const t = useMessages();
   const reactId = useId();
   const descriptionId = `cumulus-reveal-description-${reactId.replace(/:/g, "")}`;
-  const valid = isValidRegistration(registration.identity, registration.spec);
+  const valid = isValidRegistration(registration.identity, registration.spec, t);
   const identity = registration.identity;
   const registrationKey = `cumulus-reveal-source-${reactId.replace(/:/g, "")}`;
   const mountedSource: RevealCoordinatorSource = { identity, registrationId: registrationKey };
   const spec = registration.spec;
   const specFingerprint = JSON.stringify(spec);
-  const descriptionText = revealDescription(spec);
+  const descriptionText = revealDescription(spec, t);
   const placementException = registration.placementException;
   const activate = registration.onActivate;
   const feedbackVariant = registration.feedback ?? "scale";

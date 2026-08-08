@@ -31,6 +31,7 @@ import {
   planSupportRecompute,
 } from "./battle-card-effects-table";
 import { DREAMWELL_EFFECTS } from "./dreamwell-effects-table";
+import { createMessageDescriptor } from "../../data/localization-descriptors";
 import type { StepContext } from "./effect-step";
 import type {
   BattleModifier,
@@ -3244,7 +3245,7 @@ describe("RESOLVE_PROMPT pick-cards candidate validation", () => {
         kind: "pick-cards",
         options: {
           kind: "pick-cards",
-          label: "pick one",
+          label: createMessageDescriptor("battle-prompt-generic"),
           candidateIds: ["card-a", "card-b"],
           count: 1,
           optional: false,
@@ -3309,8 +3310,11 @@ describe("RESOLVE_PROMPT choice validation", () => {
           kind: "choice",
           options: {
             kind: "choice",
-            label: "choose",
-            options: [{ label: "A" }, { label: "B" }],
+            label: createMessageDescriptor("battle-prompt-generic"),
+            options: [
+              { label: createMessageDescriptor("battle-prompt-generic-option") },
+              { label: createMessageDescriptor("battle-prompt-generic-option") },
+            ],
           },
         },
       }),
@@ -3346,8 +3350,11 @@ describe("RESOLVE_PROMPT confirm validation", () => {
           kind: "confirm",
           options: {
             kind: "choice",
-            label: "confirm",
-            options: [{ label: "Yes" }, { label: "Skip" }],
+            label: createMessageDescriptor("battle-prompt-generic"),
+            options: [
+              { label: createMessageDescriptor("battle-prompt-confirm-yes") },
+              { label: createMessageDescriptor("battle-prompt-confirm-skip") },
+            ],
           },
         },
       }),

@@ -33,6 +33,11 @@ import {
   materializeRandomSite,
 } from "../../random-site/random-site";
 import { SITE_TYPES } from "../../types/site-type";
+import {
+  createMessageDescriptor,
+  isFluentMessageDescriptor,
+} from "../../data/localization-descriptors";
+import type { FluentMessageDescriptor } from "../../data/localization-messages";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (SELECT_DREAM_AVATAR / START_JOURNEY)
@@ -642,11 +647,12 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
   for (const run of value.effectQueue) {
     if (!isResolvableRun(run)) return null;
   }
-  const pendingPrompt = value.pendingPrompt;
+  const normalizedValue = normalizeLegacyPendingPrompt(value);
+  const pendingPrompt = normalizedValue.pendingPrompt;
   if (pendingPrompt !== null) {
     if (!isValidPendingPrompt(pendingPrompt)) return null;
   }
-  const loaded = value as unknown as BattleFoldState;
+  const loaded = normalizedValue as unknown as BattleFoldState;
   const board = loaded.board as unknown as Record<string, unknown>;
   const canNormalizeCards =
     isRecord(board.cardInstances) && isRecord(board.sides);
@@ -657,6 +663,112 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
     board: canNormalizeCards
       ? cloneBattleMutableState(loaded.board)
       : loaded.board,
+  };
+}
+
+const LEGACY_PROMPT_DESCRIPTORS: ReadonlyMap<string, FluentMessageDescriptor> =
+  new Map<string, FluentMessageDescriptor>([
+    [
+      "Discover a ≤2● cost card",
+      createMessageDescriptor("battle-prompt-discover-card-max-cost", { maxCost: 2 }),
+    ],
+    ["Discover a character", createMessageDescriptor("battle-prompt-discover-character")],
+    ["Rematerialize an ally", createMessageDescriptor("battle-prompt-rematerialize-ally")],
+    [
+      "Choose a void card to gain Reclaim",
+      createMessageDescriptor("battle-prompt-choose-void-card-reclaim"),
+    ],
+    ["Choose a card to discard", createMessageDescriptor("battle-prompt-choose-card-discard")],
+    ["Discard a card", createMessageDescriptor("battle-prompt-discard-card")],
+    [
+      "Discard 2 cards, then draw 2?",
+      createMessageDescriptor("battle-prompt-confirm-discard-draw", { count: 2 }),
+    ],
+    ["Discard 2 cards", createMessageDescriptor("battle-prompt-discard-cards", { count: 2 })],
+    ["Return a void card to hand", createMessageDescriptor("battle-prompt-return-void-card")],
+    [
+      "Return an event from your void to hand",
+      createMessageDescriptor("battle-prompt-return-event-from-void"),
+    ],
+    [
+      "Banish an enemy character",
+      createMessageDescriptor("battle-prompt-banish-enemy-character"),
+    ],
+    ["Pick a card for your hand", createMessageDescriptor("battle-prompt-pick-card-for-hand")],
+    [
+      "Put a void card on top of your deck?",
+      createMessageDescriptor("battle-prompt-confirm-put-void-on-top"),
+    ],
+    [
+      "Choose a void card to put on top",
+      createMessageDescriptor("battle-prompt-choose-void-for-top"),
+    ],
+    [
+      "Abandon a character to draw 2?",
+      createMessageDescriptor("battle-prompt-confirm-abandon-draw", { count: 2 }),
+    ],
+    [
+      "Choose a character to abandon",
+      createMessageDescriptor("battle-prompt-choose-character-abandon"),
+    ],
+    ["Choose one", createMessageDescriptor("battle-prompt-choose-one")],
+    ["Draw a card", createMessageDescriptor("battle-prompt-draw-card")],
+    ["Gain 2●", createMessageDescriptor("battle-prompt-gain-energy", { amount: 2 })],
+    [
+      "Discard your hand and redraw?",
+      createMessageDescriptor("battle-prompt-discard-hand-redraw"),
+    ],
+    [
+      "Play a character from your void?",
+      createMessageDescriptor("battle-prompt-play-character-from-void"),
+    ],
+    [
+      "Choose a character to play",
+      createMessageDescriptor("battle-prompt-choose-character-to-play"),
+    ],
+  ]);
+
+function legacyPromptDescriptor(value: unknown): FluentMessageDescriptor {
+  return typeof value === "string"
+    ? (LEGACY_PROMPT_DESCRIPTORS.get(value) ??
+        createMessageDescriptor("battle-prompt-generic"))
+    : createMessageDescriptor("battle-prompt-generic");
+}
+
+export function normalizeLegacyPendingPrompt(
+  value: Record<string, unknown>,
+): Record<string, unknown> {
+  if (value.pendingPrompt === null || !isRecord(value.pendingPrompt)) {
+    return value;
+  }
+  if (!isRecord(value.pendingPrompt.options)) return value;
+  const options = { ...value.pendingPrompt.options };
+  if (typeof options.label === "string") {
+    options.label = legacyPromptDescriptor(options.label);
+  }
+  if (typeof options.subtitle === "string") {
+    options.subtitle = createMessageDescriptor("battle-prompt-generic-subtitle");
+  }
+  if (Array.isArray(options.options)) {
+    const legacyOptions: unknown[] = options.options;
+    options.options = legacyOptions.map((option: unknown) => {
+      if (!isRecord(option)) return option;
+      if (isFluentMessageDescriptor(option.label)) return option;
+      if (option.label === "Yes") {
+        return { ...option, label: createMessageDescriptor("battle-prompt-confirm-yes") };
+      }
+      if (option.label === "Skip") {
+        return { ...option, label: createMessageDescriptor("battle-prompt-confirm-skip") };
+      }
+      return {
+        ...option,
+        label: createMessageDescriptor("battle-prompt-generic-option"),
+      };
+    });
+  }
+  return {
+    ...value,
+    pendingPrompt: { ...value.pendingPrompt, options },
   };
 }
 
@@ -717,12 +829,16 @@ function isActivePromptShape(
   } else if (value.kind !== pendingKind) {
     return false;
   }
-  if (typeof value.label !== "string" && value.kind !== "foresee") return false;
+  if (value.kind !== "foresee" && !isFluentMessageDescriptor(value.label)) {
+    return false;
+  }
   switch (value.kind) {
     case "pick-cards":
       return (
         Array.isArray(value.candidateIds) &&
         value.candidateIds.every((id) => typeof id === "string") &&
+        (value.subtitle === undefined ||
+          isFluentMessageDescriptor(value.subtitle)) &&
         typeof value.count === "number" &&
         Number.isInteger(value.count) &&
         typeof value.optional === "boolean" &&
@@ -733,7 +849,8 @@ function isActivePromptShape(
       return (
         Array.isArray(value.options) &&
         value.options.every(
-          (option) => isRecord(option) && typeof option.label === "string",
+          (option) =>
+            isRecord(option) && isFluentMessageDescriptor(option.label),
         )
       );
     case "foresee":

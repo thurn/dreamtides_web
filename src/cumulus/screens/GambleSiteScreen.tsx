@@ -2075,6 +2075,7 @@ function BlackjackScreen({
   onPlayAgain: () => void;
 }) {
   const reduceMotion = useReducedMotion() === true;
+  const t = useMessages();
   const [presentation, setPresentation] = useState<BlackjackPresentationState>({
     playerCardCount: 0,
     dealerCardCount: 0,
@@ -2367,7 +2368,9 @@ function BlackjackScreen({
       cardDisplaySize / PLAYING_CARD_DESIGN.sizes.wagerCompact.square;
     return (
       <section
-        aria-label={owner === "dealer" ? "Dealer hand" : "Player hand"}
+        aria-label={t("gamble-blackjack-hand-accessible-name", {
+          owner,
+        })}
         data-blackjack-side={owner}
         style={{
           position: "absolute",
@@ -2582,10 +2585,11 @@ function BlackjackScreen({
                   <h2
                     style={{ margin: 0, font: token("--t-title-sm") }}
                   >
-                    Closest to 21 Without Going Over
+                    {t("gamble-blackjack-rule")}
                   </h2>
                   <p style={{ margin: 0, font: token("--t-body-sm") }}>
-                    Wins <EssenceValue amount={view.prizeEssence} tone="inherit" />
+                    {t("gamble-blackjack-wins")} {" "}
+                    <EssenceValue amount={view.prizeEssence} tone="inherit" />
                   </p>
                 </div>
               </GlassPanel>
@@ -2612,15 +2616,22 @@ function BlackjackScreen({
                 <RadialAnnouncement
                   announcementId={view.resultId}
                   headline={
-                    view.outcome === "player-win"
-                      ? "You Win!"
-                      : view.outcome === "push"
-                        ? "Push"
-                        : (view.playerTotal ?? 0) > 21
-                          ? "Bust!"
-                          : "Dealer Wins"
+                    t("gamble-blackjack-outcome-headline", {
+                      outcome:
+                        view.outcome === "player-win"
+                          ? "player-win"
+                          : view.outcome === "push"
+                            ? "push"
+                            : (view.playerTotal ?? 0) > 21
+                              ? "bust"
+                              : "dealer-win",
+                    })
                   }
-                  detail={view.outcome === "push" ? "Wager Returned" : undefined}
+                  detail={
+                    view.outcome === "push"
+                      ? t("gamble-blackjack-wager-returned")
+                      : undefined
+                  }
                   essenceGained={view.essenceAwarded > 0 ? view.essenceAwarded : undefined}
                   tone={
                     view.outcome === "player-win"
@@ -2658,7 +2669,7 @@ function BlackjackScreen({
             {!view.playerCards.length ? (
               <>
                 <GlassButton
-                  label="Deal"
+                  label={t("gamble-blackjack-deal-action")}
                   essenceCost={view.wagerCost}
                   variant="accent"
                   disabled={decisionPending || !view.runtimeReady || !view.canAffordWager}
@@ -2668,12 +2679,12 @@ function BlackjackScreen({
                     onDeal();
                   }}
                 />
-                <GlassButton label="Leave" testId="gamble-blackjack-leave" onPress={onLeave} />
+                <GlassButton label={t("gamble-leave-action")} testId="gamble-blackjack-leave" onPress={onLeave} />
               </>
             ) : view.outcome === null ? (
               <>
                 <GlassButton
-                  label="Hit"
+                  label={t("gamble-blackjack-hit-action")}
                   variant="accent"
                   disabled={decisionPending}
                   testId="gamble-blackjack-hit"
@@ -2683,7 +2694,7 @@ function BlackjackScreen({
                   }}
                 />
                 <GlassButton
-                  label="Stand"
+                  label={t("gamble-blackjack-stand-action")}
                   testId="gamble-blackjack-stand"
                   disabled={decisionPending}
                   onPress={() => {
@@ -2696,7 +2707,7 @@ function BlackjackScreen({
               <>
                 {view.canPlayAgain && (
                   <GlassButton
-                    label="Play Again"
+                    label={t("gamble-play-again-action")}
                     variant="accent"
                     disabled={decisionPending || !view.canPlayAgain}
                     testId="gamble-blackjack-play-again"
@@ -2704,7 +2715,7 @@ function BlackjackScreen({
                   />
                 )}
                 <GlassButton
-                  label="Leave"
+                  label={t("gamble-leave-action")}
                   disabled={decisionPending}
                   testId="gamble-blackjack-leave-after-result"
                   onPress={onLeave}

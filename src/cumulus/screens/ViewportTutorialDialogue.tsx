@@ -14,6 +14,7 @@ import {
   placeTutorialDialogueAboveAnchor,
 } from "./card-tutorial-dialogue-placement";
 import { useIsDesktop } from "./use-is-desktop";
+import { useMessages } from "../hooks/use-messages";
 
 export interface ViewportTutorialDialogueView {
   readonly id: string;
@@ -52,6 +53,7 @@ export function ViewportTutorialDialogue({
   triggerId,
   messageIndex,
 }: ViewportTutorialDialogueProps): ReactElement {
+  const t = useMessages();
   const desktop = useIsDesktop();
   const layoutRef = useRef<HTMLDivElement | null>(null);
   const [position, setPosition] = useState<{
@@ -166,10 +168,10 @@ export function ViewportTutorialDialogue({
     <section
       aria-label={
         kind === "battle"
-          ? "Battle tutorial"
+          ? t("tutorial-region-battle")
           : kind === "card"
-            ? "Card tutorial"
-            : "Site tutorial"
+            ? t("tutorial-region-card")
+            : t("tutorial-region-site")
       }
       aria-live={visible ? "polite" : "off"}
       aria-hidden={visible ? undefined : "true"}

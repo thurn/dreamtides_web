@@ -48,6 +48,8 @@ import { ConfigGateScreen } from "./ConfigGateScreen";
 import { UnreadableRoomScreen } from "./UnreadableRoomScreen";
 import { VersionGateScreen } from "./VersionGateScreen";
 import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScreen";
+import { createMessageDescriptor } from "../data/localization-descriptors";
+import { useMessages } from "../cumulus/hooks/use-messages";
 
 // How long to wait for the first log snapshot before treating the room as
 // unreachable/missing. Firebase emits its initial value within a couple of
@@ -277,6 +279,7 @@ export function RoomGate({
   frontDoorEntry,
   children,
 }: RoomGateProps): ReactNode {
+  const t = useMessages();
   const clientId = useMemo(() => roomScopedClientId(gameId), [gameId]);
   const localContentConfig = useMemo(
     () =>
@@ -356,7 +359,9 @@ export function RoomGate({
       setGateState({
         status: "error",
         message:
-          error instanceof Error ? error.message : "Failed to create game.",
+          error instanceof Error
+            ? /* localization-ignore: raw room diagnostic is rendered in the dedicated technical detail region. */ error.message
+            : t("coop-create-game-error"),
       });
     }
   }, [db, frontDoorEntry, localContentConfig]);
@@ -444,7 +449,9 @@ export function RoomGate({
       setGateState({
         status: "error",
         message:
-          error instanceof Error ? error.message : "Failed to write presence.",
+          error instanceof Error
+            ? /* localization-ignore: raw room diagnostic is rendered in the dedicated technical detail region. */ error.message
+            : t("coop-presence-write-error"),
       });
     };
     try {
@@ -536,9 +543,11 @@ export function RoomGate({
         <ApplicationStateScreen
           view={{
             kind: "loading",
-            title: "Joining Game",
-            message: `Preparing ${gateState.roomId}.`,
-            busyLabel: "Joining Game",
+            title: createMessageDescriptor("coop-joining-game-title"),
+            message: createMessageDescriptor("coop-joining-game-message", {
+              roomId: gateState.roomId,
+            }),
+            busyLabel: createMessageDescriptor("coop-joining-game-busy"),
           }}
         />
       );
@@ -557,9 +566,9 @@ export function RoomGate({
       <ApplicationStateScreen
         view={{
           kind: "roomCreation",
-          title: "Creating Game",
-          message: "We are preparing a shared dream.",
-          busyLabel: "Creating Game",
+          title: createMessageDescriptor("coop-creating-game-title"),
+          message: createMessageDescriptor("coop-creating-game-message"),
+          busyLabel: createMessageDescriptor("coop-creating-game-busy"),
         }}
       />
     );
@@ -570,9 +579,11 @@ export function RoomGate({
       <ApplicationStateScreen
         view={{
           kind: "loading",
-          title: "Joining Game",
-          message: `Loading ${gateState.roomId}.`,
-          busyLabel: "Joining Game",
+          title: createMessageDescriptor("coop-joining-game-title"),
+          message: createMessageDescriptor("coop-loading-game-message", {
+            roomId: gateState.roomId,
+          }),
+          busyLabel: createMessageDescriptor("coop-joining-game-busy"),
         }}
       />
     );
@@ -583,12 +594,14 @@ export function RoomGate({
       <ApplicationStateScreen
         view={{
           kind: "unreachableRoom",
-          title: "Game Not Found",
-          message: `Could not load ${gateState.roomId}. The game may not exist, or the database is unreachable.`,
+          title: createMessageDescriptor("coop-game-not-found-title"),
+          message: createMessageDescriptor("coop-game-not-found-message", {
+            roomId: gateState.roomId,
+          }),
           actions: [
             {
               id: "primary",
-              label: "Create New Game",
+              label: createMessageDescriptor("coop-create-new-game-action"),
               onPress: () => void handleCreateGame(),
             },
           ],
@@ -601,13 +614,13 @@ export function RoomGate({
     <ApplicationStateScreen
       view={{
         kind: "recoverableError",
-        title: "Something Went Wrong",
-        message: "The game could not finish its room setup.",
+        title: createMessageDescriptor("coop-room-setup-error-title"),
+        message: createMessageDescriptor("coop-room-setup-error-message"),
         detail: gateState.message,
         actions: [
           {
             id: "primary",
-            label: "Try Again",
+            label: createMessageDescriptor("coop-try-again-action"),
             onPress: () => void handleCreateGame(),
           },
         ],

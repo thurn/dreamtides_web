@@ -8,6 +8,7 @@ import { GlassPanel } from "../components/overlay/GlassPanel";
 import { SiteNode, type DreamscapeSiteModel } from "../components/dreamscape/SiteNode";
 import { GuideGallerySiteLayout, type GuideGalleryGuideView } from "./GuideGallerySiteLayout";
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
+import { useMessages } from "../hooks/use-messages";
 
 export interface RandomSiteChoiceView {
   siteType: RandomSiteDestinationType;
@@ -31,6 +32,7 @@ export function RandomSiteScreen({
   onChoose: (siteType: RandomSiteDestinationType) => void;
 }) {
   const reduceMotion = useReducedMotion();
+  const t = useMessages();
   const [selected, setSelected] = useState<RandomSiteDestinationType | null>(null);
   const committed = useRef(false);
   const choose = useCallback((siteType: RandomSiteDestinationType) => {
@@ -70,7 +72,7 @@ export function RandomSiteScreen({
             justifySelf: "center",
           }}
         >
-          <GlassPanel title="Choose a Site" headerDivider={false} testId="cumulus-random-site-panel">
+          <GlassPanel title={t("random-site-title")} headerDivider={false} testId="cumulus-random-site-panel">
             <div
               style={{
                 minHeight: 260,

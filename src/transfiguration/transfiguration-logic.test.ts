@@ -214,14 +214,13 @@ describe("assignTransfiguration", () => {
     expect(eligibleTransfigurations(card)).toContain(result!.type);
   });
 
-  it("returns a valid offer with type, description, and previewCard", () => {
+  it("returns a valid offer with type, semantic change, and previewCard", () => {
     vi.spyOn(Math, "random").mockReturnValue(0); // pick first eligible
     const card = makeCard({ energyCost: 6 });
     const offer = assignTransfiguration(card, null);
     expect(offer).not.toBeNull();
     expect(offer!.type).toBeDefined();
-    expect(offer!.description).toBeDefined();
-    expect(typeof offer!.description).toBe("string");
+    expect(offer!.change).toBeDefined();
     expect(offer!.previewCard).toBeDefined();
   });
 
@@ -232,8 +231,7 @@ describe("assignTransfiguration", () => {
     expect(offer).not.toBeNull();
     expect(offer!.type).toBe("Empowered");
     expect(offer!.previewCard.energyCost).toBe(3);
-    expect(offer!.description).toContain("6");
-    expect(offer!.description).toContain("3");
+    expect(offer!.change).toEqual({ kind: "energy-delta", from: 6, to: 3 });
   });
 
   it("returns a Kindled offer that doubles spark", () => {
@@ -249,8 +247,7 @@ describe("assignTransfiguration", () => {
     expect(offer).not.toBeNull();
     expect(offer!.type).toBe("Kindled");
     expect(offer!.previewCard.spark).toBe(6);
-    expect(offer!.description).toContain("3");
-    expect(offer!.description).toContain("6");
+    expect(offer!.change).toEqual({ kind: "spark-delta", from: 3, to: 6 });
   });
 
   it("Kindled sets spark to 1 when spark is 0", () => {
@@ -313,9 +310,10 @@ describe("assignTransfiguration", () => {
     expect(offer).not.toBeNull();
     expect(offer!.type).toBe("Amplified");
     expect(offer!.previewCard.renderedText).toMatch(/Deal [46] damage\./);
-    expect(offer!.description).toBe(
-      `“${offer!.previewCard.renderedText}”`,
-    );
+    expect(offer!.change).toEqual({
+      kind: "amplified-rules",
+      rulesText: offer!.previewCard.renderedText,
+    });
   });
 
   it("Empowered halves the energy cost rounding down for odd numbers", () => {
@@ -340,24 +338,22 @@ describe("assignTransfiguration", () => {
 });
 
 describe("describeTransfiguration", () => {
-  it("returns a description string for Empowered", () => {
+  it("returns a semantic change for Empowered", () => {
     const card = makeCard({ energyCost: 6 });
     const desc = describeTransfiguration(card, "Empowered");
-    expect(desc).toContain("6");
-    expect(desc).toContain("3");
+    expect(desc).toEqual({ kind: "energy-delta", from: 6, to: 3 });
   });
 
-  it("returns a description string for Kindled", () => {
+  it("returns a semantic change for Kindled", () => {
     const card = makeCard({ cardType: "Character", spark: 3 });
     const desc = describeTransfiguration(card, "Kindled");
-    expect(desc).toContain("3");
-    expect(desc).toContain("6");
+    expect(desc).toEqual({ kind: "spark-delta", from: 3, to: 6 });
   });
 
-  it("returns a description string for Inspired", () => {
+  it("returns a semantic change for Inspired", () => {
     const card = makeCard({ cardType: "Event", renderedText: "Foresee." });
     const desc = describeTransfiguration(card, "Inspired");
-    expect(desc).toContain("Draw a card.");
+    expect(desc).toEqual({ kind: "added-draw" });
   });
 });
 

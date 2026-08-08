@@ -30,6 +30,8 @@ import type {
 } from "../../journey_v2";
 import type { MerchantDeckSnapshot } from "../../journey_v2/trace/deckSnapshot";
 import type { CardData } from "../../types/cards";
+import type { FluentMessageDescriptor } from "../../data/localization-messages";
+import { createMessageDescriptor } from "../../data/localization-descriptors";
 import { asCardId } from "../../types/card-identity";
 import { resolveDeckEntryCard } from "../../card-type-change";
 import type { DreamGuideContent } from "../../types/content";
@@ -898,14 +900,14 @@ export function buildAuguryLogEntries(
 
 export function auguryChoiceResult(
   result: MerchantOfferActionResult | void,
-): { ok: true } | { ok: false; message: string } {
+): { ok: true } | { ok: false; message: FluentMessageDescriptor } {
   if (result?.ok !== false) return { ok: true };
   if (
     result.reason === "stale_encounter" ||
     result.reason === "archetype_mismatch" ||
     result.reason === "offer_not_found"
   ) {
-    return { ok: false, message: "The visions shifted. Choose again." };
+    return { ok: false, message: createMessageDescriptor("augury-error-visions-shifted") };
   }
-  return { ok: false, message: "That path is closed. Choose again." };
+  return { ok: false, message: createMessageDescriptor("augury-error-path-closed") };
 }

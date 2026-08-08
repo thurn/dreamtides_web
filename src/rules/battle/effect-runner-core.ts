@@ -1,5 +1,6 @@
 import type { BattleDebugEdit } from "../../battle/debug/commands";
 import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
+import type { FluentMessageDescriptor } from "../../data/localization-messages";
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -10,15 +11,19 @@ import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
 export type ActivePrompt =
   | {
       kind: "pick-cards";
-      label: string;
-      subtitle?: string;
+      label: FluentMessageDescriptor;
+      subtitle?: FluentMessageDescriptor;
       candidateIds: string[];
       count: number;
       optional: boolean;
       /** Candidate ids to flag in the picker (e.g. a just-drawn card). */
       highlightCardIds: string[];
     }
-  | { kind: "choice"; label: string; options: { label: string }[] }
+  | {
+      kind: "choice";
+      label: FluentMessageDescriptor;
+      options: { label: FluentMessageDescriptor }[];
+    }
   | { kind: "foresee"; count: number; cardIds: string[] };
 
 export type PromptResolution =
@@ -96,7 +101,10 @@ function buildActivePrompt(prompt: EffectPrompt, ctx: StepContext): ActivePrompt
       return {
         kind: "choice",
         label: prompt.label,
-        options: [{ label: "Yes" }, { label: "Skip" }],
+        options: [
+          { label: { id: "battle-prompt-confirm-yes" } },
+          { label: { id: "battle-prompt-confirm-skip" } },
+        ],
       };
     case "foresee":
       return {

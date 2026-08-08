@@ -9,6 +9,7 @@ import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
 import { GlassButton } from "../components/controls/GlassButton";
 import {
   TransfigurationButton,
+  transfigurationChangeDescriptor,
   type TransfigurationButtonModel,
 } from "../components/controls/TransfigurationButton";
 import { GlassPanel } from "../components/overlay/GlassPanel";
@@ -19,7 +20,10 @@ import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
-import { useMessages } from "../hooks/use-messages";
+import {
+  formatMessageDescriptor,
+  useMessages,
+} from "../hooks/use-messages";
 
 export type TransfigurationGuideView = GuideGalleryGuideView;
 
@@ -91,6 +95,7 @@ export function TransfigurationSiteScreen({
   onClose,
   onTransfigure,
 }: TransfigurationSiteScreenProps) {
+  const t = useMessages();
   const reduceMotion =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -275,7 +280,10 @@ export function TransfigurationSiteScreen({
                   onTransfigure(
                     picked.entryId,
                     form.type,
-                    form.description,
+                    formatMessageDescriptor(
+                      t,
+                      transfigurationChangeDescriptor(form.change),
+                    ),
                     form.effectDetails,
                     form.essenceCost,
                   );
@@ -531,8 +539,14 @@ export function TransfigurationDetailPanel({
                     ]),
                   ]
                 : [
-                    { label: "Transfigure", essenceCost: null },
-                    { label: "Reforging…", essenceCost: null },
+                    {
+                      label: t("transfiguration-confirm-action", { state: "ready" }),
+                      essenceCost: null,
+                    },
+                    {
+                      label: t("transfiguration-confirm-action", { state: "pending" }),
+                      essenceCost: null,
+                    },
                   ]}
               disabled={disabled}
               onPress={() => {
@@ -596,7 +610,7 @@ export function TransfigurationDetailPanel({
           >
             <div
               role="radiogroup"
-              aria-label="Transfiguration options"
+              aria-label={t("transfiguration-options-accessible-name")}
               data-transfiguration-options=""
               data-transfiguration-option-layout={mobile ? "compact" : "priced"}
               style={{

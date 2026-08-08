@@ -570,8 +570,12 @@ describe("exploration-view-model", () => {
       cards: [{ entryId: "entry-eligible" }],
     });
     expect(view.actions[0].effectText).toBe(
-      "Apply Empowered to a chosen card. (Halve its ● cost, rounded down)",
+      "Apply Empowered to a chosen card.",
     );
+    expect(view.actions[0].effectDisclosure).toEqual({
+      kind: "fixed-transfiguration",
+      transfiguration: "Empowered",
+    });
   });
 
   it("resolves a deck-card placeholder to one UUID-keyed transfigured preview", () => {
@@ -676,9 +680,7 @@ describe("exploration-view-model", () => {
     if (view === null) throw new Error("Expected Exploration view");
 
     expect(view.actions[0]).toMatchObject({
-      effectText:
-        `Apply Inspired to ${target.name}` +
-        ' (Add "Draw a card" to its rules text)',
+      effectText: `Apply Inspired to ${target.name}`,
       effectParts: [
         { kind: "text", text: "Apply Inspired to " },
         {
@@ -692,11 +694,11 @@ describe("exploration-view-model", () => {
             transfiguration: { type: "Inspired" },
           },
         },
-        {
-          kind: "text",
-          text: ' (Add "Draw a card" to its rules text)',
-        },
       ],
+      effectDisclosure: {
+        kind: "fixed-transfiguration",
+        transfiguration: "Inspired",
+      },
       followup: { kind: "none" },
       automaticSelection: { entryIds: ["entry-target"] },
       available: true,

@@ -57,6 +57,7 @@ const GENERIC_COMPONENT_SOURCES = [
   "src/components/FrontDoorRouter.tsx",
   "src/components/JourneyCardTutorialController.tsx",
   "src/components/JourneyUtilityMenuController.ts",
+  "src/components/LocalizedErrorBoundaryFallback.tsx",
   "src/components/ScreenRouter.tsx",
 ];
 

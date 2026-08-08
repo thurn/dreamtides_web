@@ -24,6 +24,7 @@ import {
   type DreamAvatarOfferView,
   type JourneyStartScreenProps,
 } from "./journey-start-shared";
+import { useMessages } from "../hooks/use-messages";
 
 /** Desktop column metrics. Box measures are content-driven layout, so these are
  * caller numbers. Each column is a fixed-width figure stage with a narrower,
@@ -96,6 +97,7 @@ function AlignedAbilityBox({ children }: { readonly children: ReactNode }) {
 /** The desktop screen's small purple eyebrow title, pinned near the top of the
  * screen — the mobile ScreenHeader's uppercase accent treatment, in flow. */
 function DesktopTitle() {
+  const t = useMessages();
   return (
     <div
       style={{
@@ -109,7 +111,7 @@ function DesktopTitle() {
         textAlign: "center",
       }}
     >
-      Choose Your Avatar
+      {t("journey-start-title")}
     </div>
   );
 }
@@ -167,6 +169,7 @@ function DreamAvatarCard({
   dreamAvatar: DreamAvatarOfferView;
   onChoose: () => void;
 }) {
+  const t = useMessages();
   return (
     <div
       data-dream-avatar-column={dreamAvatar.id}
@@ -209,7 +212,7 @@ function DreamAvatarCard({
             style={{ marginTop: token("--space-l"), display: "grid" }}
           >
             <GlassButton
-              label="Choose"
+              label={t("journey-start-choose-action")}
               variant="accent"
               placement="onGlass"
               onPress={onChoose}

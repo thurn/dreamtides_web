@@ -31,29 +31,33 @@ export type CardChoiceOperation = "purge" | "copy" | "transfigure" | "change";
 
 const OPERATION_PRESENTATION = {
   purge: {
-    label: "This card will be purged",
+    messageId: "card-choice-purge-operation",
     glyph: GLYPHS.trash,
     tone: "danger",
   },
   copy: {
-    label: "This card will be copied",
+    messageId: "card-choice-copy-operation",
     glyph: GLYPHS.copy,
     tone: "selected",
   },
   transfigure: {
-    label: "This card will be transfigured",
+    messageId: "card-choice-transfigure-operation",
     glyph: GLYPHS.transfigurationSite,
     tone: "selected",
   },
   change: {
-    label: "This card will be changed",
+    messageId: "card-choice-change-operation",
     glyph: GLYPHS.refreshCcw,
     tone: "selected",
   },
 } as const satisfies Record<
   CardChoiceOperation,
   {
-    readonly label: string;
+    readonly messageId:
+      | "card-choice-purge-operation"
+      | "card-choice-copy-operation"
+      | "card-choice-transfigure-operation"
+      | "card-choice-change-operation";
     readonly glyph: Glyph;
     readonly tone: "danger" | "selected";
   }
@@ -310,6 +314,7 @@ function CardChoiceGridItem({
   onCardDragEnd,
   onCardContextMenu,
 }: CardChoiceGridItemProps): ReactElement {
+  const t = useMessages();
   const reserved = card.reserved === true;
   const disabled = card.disabled === true || reserved;
   const draggable = !disabled && card.draggable === true;
@@ -402,7 +407,7 @@ function CardChoiceGridItem({
           )}
           {operationPresentation !== null && (
             <span
-              aria-label={operationPresentation.label}
+              aria-label={t(operationPresentation.messageId)}
               data-card-choice-operation={card.operation}
               style={{
                 position: "absolute",

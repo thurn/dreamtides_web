@@ -55,7 +55,8 @@ import { motionTimeSeconds } from "../primitives/motion-time";
 import { Pressable } from "../primitives/Pressable";
 import { safeAreaInsetAtLeast } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
-import { useMessages } from "../hooks/use-messages";
+import { formatMessageDescriptor, useMessages } from "../hooks/use-messages";
+import type { FluentMessageDescriptor } from "../../data/localization-messages";
 import {
   MENU_BUTTON_PX,
   MENU_EDGE_INSET_DESKTOP_PX,
@@ -210,6 +211,8 @@ export interface ExplorationDeckModificationView {
   readonly headline: string;
   /** Complete authored effect copy exposed to assistive technology. */
   readonly announcement: string;
+  /** Safe complete fallback when the resolved action cannot be reconstructed. */
+  readonly announcementDescriptor?: FluentMessageDescriptor;
   /** Exact post-resolution snapshots of the affected deck entries. */
   readonly cards: readonly ExplorationCardChoiceView[];
   /** Exact Reclaim cost by deck-entry UUID for the Reclaim outcome. */
@@ -281,6 +284,10 @@ export interface ExplorationActionView {
   readonly label: string;
   readonly effectText: string;
   readonly effectParts?: readonly ExplorationActionEffectPart[];
+  /** Code-authored disclosure rendered as a separate complete Fluent unit. */
+  readonly effectDisclosure?: ExplorationEffectDisclosure;
+  /** Complete fallback message inputs when a special deck-card target is absent. */
+  readonly effectFallback?: ExplorationEffectFallback;
   readonly followup: ExplorationFollowupView;
   /** Reducer selection supplied directly when the effect needs no player choice. */
   readonly automaticSelection?: Readonly<Record<string, unknown>>;
@@ -303,6 +310,19 @@ export type ExplorationEntityView =
 export type ExplorationActionEffectPart =
   | { readonly kind: "text"; readonly text: string }
   | { readonly kind: "entity"; readonly entity: ExplorationEntityView };
+
+export type ExplorationEffectDisclosure =
+  | {
+      readonly kind: "fixed-transfiguration";
+      readonly transfiguration: TransfigurationType;
+    }
+  | { readonly kind: "offered-site"; readonly siteType: string };
+
+export interface ExplorationEffectFallback {
+  readonly kind: "missing-deck-card";
+  readonly before: string;
+  readonly after: string;
+}
 
 export interface ExplorationSiteScreenProps {
   /** Complete presentation view-model. */
@@ -449,6 +469,43 @@ function ExplorationChoiceContents({
   readonly action: ExplorationActionView;
   readonly index: number;
 }) {
+  const t = useMessages();
+  const effectDescription = action.effectFallback === undefined
+    ? action.effectParts === undefined
+      ? renderRulesSymbolsInline(action.effectText)
+      : action.effectParts.map((part, partIndex) =>
+          part.kind === "text" ? (
+            <span key={`text-${String(partIndex)}`}>
+              {renderRulesSymbolsInline(part.text)}
+            </span>
+          ) : (
+            <ExplorationEntityLabel
+              key={`entity-${String(partIndex)}`}
+              entity={part.entity}
+              data-testid={`cumulus-exploration-choice-${String(index)}-entity-${String(partIndex)}`}
+            />
+          ),
+        )
+    : renderRulesSymbolsInline(
+        formatMessageDescriptor(t, {
+          id: "exploration-effect-missing-deck-card",
+          variables: {
+            before: action.effectFallback.before,
+            after: action.effectFallback.after,
+          },
+        }),
+      );
+  const disclosure = action.effectDisclosure === undefined
+    ? null
+    : action.effectDisclosure.kind === "fixed-transfiguration"
+      ? formatMessageDescriptor(t, {
+          id: "exploration-fixed-transfiguration-disclosure",
+          variables: { transfiguration: action.effectDisclosure.transfiguration },
+        })
+      : formatMessageDescriptor(t, {
+          id: "exploration-offered-site-disclosure",
+          variables: { siteType: action.effectDisclosure.siteType },
+        });
   return (
     <>
       <span style={{ minWidth: 0, display: "grid", gap: token("--space-xxs") }}>
@@ -459,21 +516,8 @@ function ExplorationChoiceContents({
           id={`exploration-effect-${String(index)}`}
           style={{ font: token("--t-caption"), color: token("--text-muted") }}
         >
-          {action.effectParts === undefined
-            ? renderRulesSymbolsInline(action.effectText)
-            : action.effectParts.map((part, partIndex) =>
-                part.kind === "text" ? (
-                  <span key={`text-${String(partIndex)}`}>
-                    {renderRulesSymbolsInline(part.text)}
-                  </span>
-                ) : (
-                  <ExplorationEntityLabel
-                    key={`entity-${String(partIndex)}`}
-                    entity={part.entity}
-                    data-testid={`cumulus-exploration-choice-${String(index)}-entity-${String(partIndex)}`}
-                  />
-                ),
-              )}
+          {effectDescription}
+          {disclosure === null ? null : <span> {disclosure}</span>}
         </span>
       </span>
       <span aria-hidden="true" style={{ font: token("--t-title") }}>
@@ -2290,7 +2334,7 @@ export function ExplorationSiteScreen({
                   }}
                 >
                   <GlassButton
-                    label="Delve"
+                    label={t("exploration-delve-action")}
                     variant="accent"
                     placement="onMedia"
                     onPress={startFrameBreak}
@@ -2360,7 +2404,7 @@ export function ExplorationSiteScreen({
                 backfaceVisibility: "hidden",
               }}
             >
-              <CardBack label="Exploration card, face down" />
+              <CardBack label={t("exploration-card-face-down")} />
             </div>
             <div
               style={{
@@ -2429,7 +2473,7 @@ export function ExplorationSiteScreen({
                 backfaceVisibility: "hidden",
               }}
             >
-              <CardBack label="Exploration card returning face down" />
+              <CardBack label={t("exploration-card-returning-face-down")} />
             </div>
             <div
               style={{
@@ -3359,7 +3403,14 @@ export function ExplorationSiteScreen({
             data-exploration-deck-modification-kind={deckModification.kind}
             data-exploration-deck-modification-count={deckModification.cards.length}
             role="status"
-            aria-label={deckModification.announcement}
+            aria-label={
+              deckModification.announcementDescriptor === undefined
+                ? deckModification.announcement
+                : formatMessageDescriptor(
+                    t,
+                    deckModification.announcementDescriptor,
+                  )
+            }
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{
@@ -3984,7 +4035,7 @@ export function ExplorationSiteScreen({
                     }}
                   >
                     <GlassButton
-                      label="Confirm Choice"
+                      label={t("exploration-confirm-choice-action")}
                       variant="accent"
                       placement="onGlass"
                       disabled={!canCommitFollowup}
@@ -4043,12 +4094,12 @@ export function ExplorationSiteScreen({
               subtitle={activeAction.followup.subtitle}
               footerActions={[
                 {
-                  label:
-                    activeAction.followup.mode === "purge-and-copy" && purgeEntryId === null
-                      ? "Choose a card to purge"
+                    label:
+                      activeAction.followup.mode === "purge-and-copy" && purgeEntryId === null
+                      ? t("exploration-followup-choice-purge")
                       : activeAction.followup.mode === "purge-and-copy" && selectedIds.length === 0
-                        ? "Choose a card to copy"
-                        : "Confirm Choice",
+                        ? t("exploration-followup-choice-copy")
+                        : t("exploration-confirm-choice-action"),
                   onPress: commitFollowup,
                   disabled: !canCommitFollowup,
                   variant: "accent",
@@ -4073,7 +4124,7 @@ export function ExplorationSiteScreen({
                 ),
                 testId: `cumulus-exploration-card-${card.entryId}`,
               }))}
-              emptyLabel="No eligible cards are available."
+              emptyLabel={t("exploration-empty-card-state")}
               testId="cumulus-exploration-card-followup"
               onCardPress={toggleCard}
             />
@@ -4152,13 +4203,13 @@ export function ExplorationSiteScreen({
           )}
           {activeAction.followup.kind === "subtypes" && (
             <GlassPanel
-              eyebrow="Exploration"
+              eyebrow={t("exploration-site-eyebrow")}
               title={activeAction.followup.title}
               subtitle={activeAction.followup.subtitle}
               headingLevel="h1"
               footer={
                 <div style={{ display: "flex", justifyContent: "flex-end", padding: token("--space-m") }}>
-                  <GlassButton label="Confirm Choice" variant="accent" placement="onGlass" disabled={!canCommitFollowup} onPress={commitFollowup} testId="cumulus-exploration-followup-confirm" />
+                  <GlassButton label={t("exploration-confirm-choice-action")} variant="accent" placement="onGlass" disabled={!canCommitFollowup} onPress={commitFollowup} testId="cumulus-exploration-followup-confirm" />
                 </div>
               }
             >
@@ -4300,9 +4351,9 @@ export function ExplorationSiteScreen({
             zIndex: FRAME_BREAK_EXIT_LAYER,
           }}
         >
-          <IconButton
-            glyph={GLYPHS.close}
-            label="Return to Exploration"
+            <IconButton
+              glyph={GLYPHS.close}
+            label={t("exploration-return-action")}
             onPress={collapseFrameBreak}
             testId="cumulus-exploration-exit"
           />

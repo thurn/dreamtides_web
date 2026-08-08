@@ -22,6 +22,7 @@ import {
 } from "./mobile-deck-filter";
 
 export type { DeckSortId };
+export type { DeckControlOption } from "./mobile-deck-filter";
 export { DECK_SORT_OPTIONS };
 
 /** The card-type toggle: everything, or one card type. */
@@ -62,17 +63,17 @@ export const DEFAULT_DESKTOP_DECK_FILTER_SORT: DesktopDeckFilterSort = {
 /** The card-type toggle segments, in display order. */
 export const DECK_TYPE_TOGGLE_OPTIONS: readonly DeckControlOption<DeckTypeToggle>[] =
   [
-    { value: "all", label: "All" },
-    { value: "Character", label: "Characters" },
-    { value: "Event", label: "Events" },
+    { value: "all" },
+    { value: "Character" },
+    { value: "Event" },
   ] as const;
 
 /** The card-size segments — the S / M / L display-size control. */
 export const DECK_CARD_SIZE_OPTIONS: readonly DeckControlOption<DeckCardSize>[] =
   [
-    { value: "small", label: "S" },
-    { value: "medium", label: "M" },
-    { value: "large", label: "L" },
+    { value: "small" },
+    { value: "medium" },
+    { value: "large" },
   ] as const;
 
 /**
@@ -107,10 +108,10 @@ export function buildSubtypeFilterOptions(
     .map(
       (subtype): DeckControlOption<SubtypeFilter> => ({
         value: subtype,
-        label: subtype,
+        authoredLabel: subtype,
       }),
     );
-  return [{ value: "all", label: "All Subtypes" }, ...options];
+  return [{ value: "all" }, ...options];
 }
 
 /** Whether a card passes the active card-type toggle. */

@@ -1,6 +1,7 @@
 // Pure view-model construction for the Exploration encounter.
 
 import { resolveDeckEntryCard } from "../../card-type-change";
+import { createMessageDescriptor } from "../../data/localization-descriptors";
 import type { GameCardModel } from "../../cumulus/components/card/CardView";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import type {
@@ -8,6 +9,7 @@ import type {
   ExplorationActionView,
   ExplorationCardSelectionOperation,
   ExplorationCardChoiceView,
+  ExplorationEffectDisclosure,
   ExplorationFollowupView,
   ExplorationEntityView,
   ExplorationSiteView,
@@ -170,7 +172,7 @@ function freeTransfigurationCandidates(
       const preview = buildTransfigurationDisplay(card, offer.type);
       return {
         type: offer.type,
-        description: offer.description,
+        change: offer.change,
         effectDetails: transfigurationEffectDetails(offer, card),
         essenceCost: 0,
         affordable: true,
@@ -669,52 +671,18 @@ interface DeckCardVariableTarget {
   readonly entity: Extract<ExplorationEntityView, { readonly kind: "card" }>;
 }
 
-function fixedTransfigurationEffect(
-  transfiguration: TransfigurationType,
-): string {
-  switch (transfiguration) {
-    case "Empowered":
-      return "Halve its ● cost, rounded down";
-    case "Kindled":
-      return "Double its ✦, or set it to 1 if it is 0";
-    case "Inspired":
-      return 'Add "Draw a card" to its rules text';
-    case "Enduring":
-      return 'Add "Reclaim" to its rules text';
-    case "Hastened":
-      return "Make it Fast";
-    case "Amplified":
-      return "Increase the first number in its rules text by 1";
-    case "Resonant":
-      return "Widen a named trigger to fire more often";
-    case "Attuned":
-      return "Reduce an activated ability's cost by 1●";
-    case "Perfected":
-      return "Apply every available transfiguration";
-  }
-}
-
-function appendFixedTransfigurationEffect(
-  effect: Pick<ExplorationActionView, "effectText" | "effectParts">,
+function fixedTransfigurationDisclosure(
   action: ExplorationActionContent,
-): Pick<ExplorationActionView, "effectText" | "effectParts"> {
+): ExplorationEffectDisclosure | undefined {
   if (
     action.effectKind !== "transfigure-fixed-selected" ||
     action.transfiguration === undefined
   ) {
-    return effect;
+    return undefined;
   }
-  const suffix = ` (${fixedTransfigurationEffect(action.transfiguration)})`;
   return {
-    effectText: `${effect.effectText}${suffix}`,
-    ...(effect.effectParts === undefined
-      ? {}
-      : {
-          effectParts: [
-            ...effect.effectParts,
-            { kind: "text" as const, text: suffix },
-          ],
-        }),
+    kind: "fixed-transfiguration",
+    transfiguration: action.transfiguration,
   };
 }
 
@@ -828,7 +796,10 @@ export function buildExplorationActionEffect(
   offer: ExplorationActionOfferRuntime,
   content: JourneyContent,
   deckCardEntity?: DeckCardVariableTarget["entity"],
-): Pick<ExplorationActionView, "effectText" | "effectParts"> {
+): Pick<
+  ExplorationActionView,
+  "effectText" | "effectParts" | "effectFallback"
+> {
   const references = effectReferencesForAction(
     action,
     offer,
@@ -858,10 +829,19 @@ export function buildExplorationActionEffect(
     cursor = next.index + next.reference.needle.length;
   }
   if (!parts.some((part) => part.kind === "entity")) {
+    const deckCardIndex = action.effectText.indexOf("$DECK_CARD");
+    if (deckCardIndex >= 0) {
+      return {
+        effectText: action.effectText,
+        effectFallback: {
+          kind: "missing-deck-card",
+          before: action.effectText.slice(0, deckCardIndex),
+          after: action.effectText.slice(deckCardIndex + "$DECK_CARD".length),
+        },
+      };
+    }
     return {
-      effectText: action.effectText
-        .split("$DECK_CARD")
-        .join("an eligible card"),
+      effectText: action.effectText,
     };
   }
   if (cursor < action.effectText.length) {
@@ -916,19 +896,17 @@ function actionView(
       (followup.kind === "subtypes" && followup.options.length > 0) ||
       (followup.kind === "dreamsigns" && followup.dreamsigns.length > 0) ||
       (followup.kind === "dreamAvatars" && followup.dreamAvatars.length > 0));
-  const effect = appendFixedTransfigurationEffect(
-    buildExplorationActionEffect(
-      action,
-      offer,
-      content,
-      deckCardTarget?.entity,
-    ),
+  const effect = buildExplorationActionEffect(
     action,
+    offer,
+    content,
+    deckCardTarget?.entity,
   );
-  const disclosedEffect =
-    action.effectKind === "add-site" && offer.offeredSiteType !== undefined
-      ? { effectText: `${effect.effectText} ${offer.offeredSiteType}.` }
-      : effect;
+  const effectDisclosure =
+    fixedTransfigurationDisclosure(action) ??
+    (action.effectKind === "add-site" && offer.offeredSiteType !== undefined
+      ? { kind: "offered-site" as const, siteType: offer.offeredSiteType }
+      : undefined);
   return {
     id: action.id,
     effectKind: action.effectKind,
@@ -977,7 +955,8 @@ function actionView(
         : { transfiguration: action.transfiguration }),
     },
     label: action.label,
-    ...disclosedEffect,
+    ...effect,
+    ...(effectDisclosure === undefined ? {} : { effectDisclosure }),
     followup,
     ...(action.effectKind === "gain-offered-card" &&
     offer.offeredCardIds[0] !== undefined
@@ -1004,11 +983,15 @@ function rewardForResolution(
   const resolvedAction = actions.find(
     (action) => action.id === resolution.actionId,
   );
+  const resolvedActionView = actionViews.find(
+    (action) => action.id === resolution.actionId,
+  );
   const resolvedEffectText =
-    actionViews.find((action) => action.id === resolution.actionId)
-      ?.effectText ??
-    resolvedAction?.effectText.split("$DECK_CARD").join("the affected card") ??
-    "Exploration effect resolved";
+    resolvedActionView?.effectText ?? resolvedAction?.effectText ?? "";
+  const resolvedEffectDescriptor =
+    resolvedActionView === undefined && resolvedAction === undefined
+      ? createMessageDescriptor("exploration-effect-resolved-fallback")
+      : undefined;
   if (resolvedAction?.effectKind === "purge-and-copy") {
     const purgedEntry = resolution.purgedEntrySnapshots?.[0];
     const purgedCard =
@@ -1254,6 +1237,9 @@ function rewardForResolution(
           kind: "spark" as const,
           headline: `+${String(resolvedAction.sparkBonus ?? 1)} ✦`,
           announcement: resolvedEffectText,
+          ...(resolvedEffectDescriptor === undefined
+            ? {}
+            : { announcementDescriptor: resolvedEffectDescriptor }),
           cards,
         };
       case "make-fast-all":
@@ -1261,6 +1247,9 @@ function rewardForResolution(
           kind: "fast" as const,
           headline: "Fast",
           announcement: resolvedEffectText,
+          ...(resolvedEffectDescriptor === undefined
+            ? {}
+            : { announcementDescriptor: resolvedEffectDescriptor }),
           cards,
         };
       case "reduce-cost-all-and-gain-nightmares":
@@ -1268,6 +1257,9 @@ function rewardForResolution(
           kind: "energy-cost" as const,
           headline: `−${String(resolvedAction.energyCostReduction ?? 0)} ●`,
           announcement: resolvedEffectText,
+          ...(resolvedEffectDescriptor === undefined
+            ? {}
+            : { announcementDescriptor: resolvedEffectDescriptor }),
           cards,
         };
       case "change-subtype-all":
@@ -1276,6 +1268,9 @@ function rewardForResolution(
           kind: "subtype" as const,
           headline: resolution.chosenSubtype ?? "Subtype",
           announcement: resolvedEffectText,
+          ...(resolvedEffectDescriptor === undefined
+            ? {}
+            : { announcementDescriptor: resolvedEffectDescriptor }),
           cards,
         };
       case "purge-duplicates-and-grant-reclaim":
@@ -1283,6 +1278,9 @@ function rewardForResolution(
           kind: "reclaim" as const,
           headline: "Reclaim",
           announcement: resolvedEffectText,
+          ...(resolvedEffectDescriptor === undefined
+            ? {}
+            : { announcementDescriptor: resolvedEffectDescriptor }),
           cards,
           reclaimCostByEntryId: resolution.reclaimCostByEntryId ?? {},
         };

@@ -63,6 +63,8 @@ describe("appLocalization", () => {
       "Enduring",
       "Hastened",
       "Resonant",
+      "Attuned",
+      "Perfected",
     ]) {
       expect(
         appLocalization.getString("exploration-card-transfiguring", {

@@ -36,6 +36,18 @@ export type TransfigurationType =
   | "Attuned"
   | "Perfected";
 
+/** The locale-neutral change shown by a transfiguration offer. */
+export type TransfigurationChange =
+  | { kind: "energy-delta"; from: number; to: number }
+  | { kind: "spark-delta"; from: number; to: number }
+  | { kind: "added-draw" }
+  | { kind: "added-reclaim" }
+  | { kind: "added-fast" }
+  | { kind: "amplified-rules"; rulesText: string }
+  | { kind: "widened-trigger" }
+  | { kind: "reduced-activated-cost"; amount: number }
+  | { kind: "all-available" };
+
 /** Persistent card type/subtype override applied to one concrete deck entry. */
 export interface CardTypeChange {
   predicateId: string;
@@ -338,7 +350,10 @@ export interface EssenceSiteRuntime {
 export interface CardChoiceTransfigurationOffer {
   entryId: string;
   type: TransfigurationType;
-  effectDescription: string;
+  /** Structured change used by player presentation. */
+  change?: TransfigurationChange;
+  /** Legacy analytics/debug payload retained for imported runtime compatibility. */
+  effectDescription?: string;
   effectDetails: Record<string, unknown>;
   previewCard: CardData;
   /**

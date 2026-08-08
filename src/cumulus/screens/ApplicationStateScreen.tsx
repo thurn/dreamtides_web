@@ -3,26 +3,29 @@ import { GlassButton } from "../components/controls/GlassButton";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
+import { useMessages, formatMessageDescriptor } from "../hooks/use-messages";
+import type { FluentMessageDescriptor } from "../../data/localization-messages";
 
 /** One labelled value in an application-state comparison. */
 export interface ApplicationStateComparisonRow {
-  readonly label: string;
-  readonly expected: string;
-  readonly actual: string;
+  readonly label: FluentMessageDescriptor;
+  readonly expected: string | FluentMessageDescriptor;
+  readonly actual: string | FluentMessageDescriptor;
   readonly differs: boolean;
 }
 
 /** One explicit action offered by an application-state screen. */
 export interface ApplicationStateAction {
   readonly id: "primary" | "secondary";
-  readonly label: string;
+  readonly label: FluentMessageDescriptor;
   readonly onPress: () => void;
   readonly disabled?: boolean;
 }
 
 interface ApplicationStateBase {
-  readonly title: string;
-  readonly message: string;
+  readonly title: FluentMessageDescriptor;
+  readonly message: FluentMessageDescriptor;
+  readonly detailMessage?: FluentMessageDescriptor;
   readonly detail?: string;
   readonly actions?: readonly ApplicationStateAction[];
 }
@@ -35,11 +38,11 @@ interface ApplicationStateBase {
 export type ApplicationStateView =
   | (ApplicationStateBase & {
       readonly kind: "loading";
-      readonly busyLabel: string;
+      readonly busyLabel: FluentMessageDescriptor;
     })
   | (ApplicationStateBase & {
       readonly kind: "roomCreation";
-      readonly busyLabel: string;
+      readonly busyLabel: FluentMessageDescriptor;
     })
   | (ApplicationStateBase & { readonly kind: "recoverableError" })
   | (ApplicationStateBase & { readonly kind: "fatalConfiguration" })
@@ -56,21 +59,25 @@ export interface ApplicationStateScreenProps {
   readonly view: ApplicationStateView;
 }
 
-const EYEBROW_FOR_KIND: Record<ApplicationStateView["kind"], string> = {
-  loading: "Dreamtides",
-  roomCreation: "Dreamtides",
-  recoverableError: "Journey Status",
-  fatalConfiguration: "Configuration",
-  versionGate: "Game Version",
-  contentConfigGate: "Game Settings",
-  unreadableRoom: "Game Data",
-  unreachableRoom: "Game Connection",
+const EYEBROW_FOR_KIND: Record<
+  ApplicationStateView["kind"],
+  FluentMessageDescriptor
+> = {
+  loading: { id: "application-eyebrow-dreamtides" },
+  roomCreation: { id: "application-eyebrow-dreamtides" },
+  recoverableError: { id: "application-eyebrow-journey-status" },
+  fatalConfiguration: { id: "application-eyebrow-configuration" },
+  versionGate: { id: "application-eyebrow-game-version" },
+  contentConfigGate: { id: "application-eyebrow-game-settings" },
+  unreadableRoom: { id: "application-eyebrow-game-data" },
+  unreachableRoom: { id: "application-eyebrow-game-connection" },
 };
 
 /** Pure Cumulus presentation for bootstrap, room, and compatibility states. */
 export function ApplicationStateScreen({
   view,
 }: ApplicationStateScreenProps): ReactElement {
+  const t = useMessages();
   const busy = view.kind === "loading" || view.kind === "roomCreation";
   return (
     <main
@@ -94,9 +101,9 @@ export function ApplicationStateScreen({
     >
       <div style={{ width: "min(100%, 640px)" }}>
         <GlassPanel
-          eyebrow={EYEBROW_FOR_KIND[view.kind]}
-          title={view.title}
-          subtitle={view.message}
+          eyebrow={formatMessageDescriptor(t, EYEBROW_FOR_KIND[view.kind])}
+          title={formatMessageDescriptor(t, view.title)}
+          subtitle={formatMessageDescriptor(t, view.message)}
           headingLevel="h1"
           titleVoice="hero"
           headerSpacing="spacious"
@@ -111,11 +118,11 @@ export function ApplicationStateScreen({
               font: token("--t-body"),
             }}
           >
-            {busy && <BusyIndicator label={view.busyLabel} />}
+            {busy && <BusyIndicator label={formatMessageDescriptor(t, view.busyLabel)} />}
             {view.kind === "contentConfigGate" && (
               <ComparisonTable rows={view.comparison} />
             )}
-            {view.detail !== undefined && (
+            {(view.detailMessage !== undefined || view.detail !== undefined) && (
               <p
                 role={view.kind === "recoverableError" || view.kind === "fatalConfiguration" ? "alert" : undefined}
                 data-application-state-detail
@@ -126,7 +133,9 @@ export function ApplicationStateScreen({
                   overflowWrap: "anywhere",
                 }}
               >
-                {view.detail}
+                {view.detailMessage === undefined
+                  ? view.detail
+                  : formatMessageDescriptor(t, view.detailMessage)}
               </p>
             )}
             {view.actions !== undefined && view.actions.length > 0 && (
@@ -141,7 +150,7 @@ export function ApplicationStateScreen({
                 {view.actions.map((action) => (
                   <GlassButton
                     key={action.id}
-                    label={action.label}
+                    label={formatMessageDescriptor(t, action.label)}
                     onPress={action.onPress}
                     disabled={action.disabled}
                     variant={action.id === "primary" ? "accent" : "default"}
@@ -180,6 +189,7 @@ function ComparisonTable({
 }: {
   readonly rows: readonly ApplicationStateComparisonRow[];
 }): ReactElement {
+  const t = useMessages();
   return (
     <dl
       data-application-state-comparison
@@ -192,10 +202,14 @@ function ComparisonTable({
       }}
     >
       <span aria-hidden="true" />
-      <dt style={{ color: token("--text-on-glass-muted") }}>This Game</dt>
-      <dt style={{ color: token("--text-on-glass-muted") }}>Yours</dt>
+      <dt style={{ color: token("--text-on-glass-muted") }}>
+        {formatMessageDescriptor(t, { id: "application-comparison-this-game" })}
+      </dt>
+      <dt style={{ color: token("--text-on-glass-muted") }}>
+        {formatMessageDescriptor(t, { id: "application-comparison-yours" })}
+      </dt>
       {rows.map((row) => (
-        <ComparisonRow key={row.label} row={row} />
+        <ComparisonRow key={row.label.id} row={row} />
       ))}
     </dl>
   );
@@ -206,12 +220,23 @@ function ComparisonRow({
 }: {
   readonly row: ApplicationStateComparisonRow;
 }): ReactElement {
+  const t = useMessages();
   const valueColor = row.differs ? token("--danger") : token("--text-on-glass");
   return (
     <>
-      <dt style={{ color: token("--text-on-glass-muted") }}>{row.label}</dt>
-      <dd style={{ margin: 0, color: valueColor }}>{row.expected}</dd>
-      <dd style={{ margin: 0, color: valueColor }}>{row.actual}</dd>
+      <dt style={{ color: token("--text-on-glass-muted") }}>
+        {formatMessageDescriptor(t, row.label)}
+      </dt>
+      <dd style={{ margin: 0, color: valueColor }}>
+        {typeof row.expected === "string"
+          ? row.expected
+          : formatMessageDescriptor(t, row.expected)}
+      </dd>
+      <dd style={{ margin: 0, color: valueColor }}>
+        {typeof row.actual === "string"
+          ? row.actual
+          : formatMessageDescriptor(t, row.actual)}
+      </dd>
     </>
   );
 }

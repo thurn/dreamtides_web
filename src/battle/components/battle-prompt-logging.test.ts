@@ -3,6 +3,7 @@ import { emptyBackRankSlots, emptyFrontRankSlots } from "../test-support";
 import type { BattleMutableState, BattleSide } from "../types";
 import type { PendingPrompt } from "../../rules/battle/fold";
 import { createBattlePromptResolutionLogFields } from "./battle-prompt-logging";
+import { createMessageDescriptor } from "../../data/localization-descriptors";
 
 function side(): BattleMutableState["sides"][BattleSide] {
   return {
@@ -63,7 +64,7 @@ describe("createBattlePromptResolutionLogFields", () => {
       kind: "pick-cards",
       options: {
         kind: "pick-cards",
-        label: "Choose a card",
+        label: createMessageDescriptor("battle-prompt-generic"),
         candidateIds: ["void-instance", "battlefield-instance"],
         count: 1,
         optional: false,
@@ -78,7 +79,8 @@ describe("createBattlePromptResolutionLogFields", () => {
       dreamwellCardUuid: "2b23a60c-209c-4c75-b63c-b7f73b2e1a56",
       promptId: 81,
       promptKind: "pick-cards",
-      promptLabel: "Choose a card",
+      promptMessageId: "battle-prompt-generic",
+      promptMessageArguments: null,
       candidateBattleCardInstanceIds: ["void-instance", "battlefield-instance"],
       candidateBackingCardUuids: [
         "11111111-1111-4111-8111-111111111111",

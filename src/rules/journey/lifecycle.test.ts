@@ -13,6 +13,7 @@ import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
 import {
   registerJourneyLifecycleContentProvider,
+  normalizeLegacyPendingPrompt,
   type JourneyLifecycleContentProvider,
 } from "./lifecycle";
 
@@ -649,6 +650,29 @@ describe("LOAD_STATE", () => {
     pendingPrompt: null,
     dawnFired: {},
   };
+
+  it("normalizes legacy prompt copy while preserving the resolution shape", () => {
+    const normalized = normalizeLegacyPendingPrompt({
+      pendingPrompt: {
+        promptId: 12,
+        kind: "choice",
+        run: { scriptRef: { table: "battle", id: "card" }, cursor: [0], side: "player" },
+        options: {
+          kind: "choice",
+          label: "Choose one",
+          options: [{ label: "unrecognized legacy option" }, { label: "Yes" }],
+        },
+      },
+    });
+    const pending = normalized.pendingPrompt as {
+      options: { label: { id: string }; options: Array<{ label: { id: string } }> };
+    };
+    expect(pending.options.label.id).toBe("battle-prompt-choose-one");
+    expect(pending.options.options.map((option) => option.label.id)).toEqual([
+      "battle-prompt-generic-option",
+      "battle-prompt-confirm-yes",
+    ]);
+  });
 
   it("replaces journey state with a valid snapshot and sets a well-formed battle", () => {
     const start = genesis();

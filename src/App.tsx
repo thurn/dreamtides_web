@@ -51,6 +51,8 @@ import {
 } from "./runtime/qa-scenes";
 import { useJourneyUrlSync } from "./runtime/use-journey-url-sync";
 import type { JourneyState, SiteState } from "./types/journey";
+import { createMessageDescriptor } from "./data/localization-descriptors";
+import type { FluentMessageDescriptor } from "./data/localization-messages";
 
 /** Inner component that renders the gameplay router and retained app overlays. */
 export function JourneyApp({
@@ -344,9 +346,9 @@ export function JourneyApp({
       <ApplicationStateScreen
         view={{
           kind: "loading",
-          title: "Opening QA Scene",
-          message: "Preparing this journey state.",
-          busyLabel: "Opening QA Scene",
+          title: createMessageDescriptor("application-opening-qa-scene-title"),
+          message: createMessageDescriptor("application-opening-qa-scene-message"),
+          busyLabel: createMessageDescriptor("application-opening-qa-scene-title"),
         }}
       />
     );
@@ -360,9 +362,11 @@ export function JourneyApp({
       <ApplicationStateScreen
         view={{
           kind: "loading",
-          title: "Loading Saved Journey",
-          message: `Loading ${loadJourneyName ?? "saved journey"}.`,
-          busyLabel: "Loading Saved Journey",
+          title: createMessageDescriptor("application-loading-saved-journey-title"),
+          message: createMessageDescriptor("application-loading-saved-journey-message", {
+            journeyName: loadJourneyName ?? "saved journey",
+          }),
+          busyLabel: createMessageDescriptor("application-loading-saved-journey-title"),
         }}
       />
     );
@@ -373,8 +377,8 @@ export function JourneyApp({
       <ApplicationStateScreen
         view={{
           kind: "recoverableError",
-          title: "Could Not Load Saved Journey",
-          message: "The saved journey could not be opened.",
+          title: createMessageDescriptor("application-loading-saved-journey-error-title"),
+          message: createMessageDescriptor("application-loading-saved-journey-error-message"),
           detail: loadJourneyError ?? "Failed to load saved journey.",
         }}
       />
@@ -634,18 +638,18 @@ export default function App({
       <ApplicationStateScreen
         view={{
           kind: "recoverableError",
-          title: "Journey Content Failed to Load",
-          message: "The journey content could not be prepared.",
+          title: createMessageDescriptor("application-content-load-error-title"),
+          message: createMessageDescriptor("application-content-load-error-message"),
           detail: loadError,
           actions: [
             {
               id: "primary",
-              label: "Retry",
+              label: createMessageDescriptor("application-retry-action"),
               onPress: () => window.location.reload(),
             },
             {
               id: "secondary",
-              label: "Copy Details",
+              label: createMessageDescriptor("application-copy-details-action"),
               onPress: () => void navigator.clipboard?.writeText(loadError),
             },
           ],
@@ -659,9 +663,9 @@ export default function App({
       <ApplicationStateScreen
         view={{
           kind: "loading",
-          title: "Loading Journey Content",
-          message: "Gathering the dream’s cards and paths.",
-          busyLabel: "Loading Journey Content",
+          title: createMessageDescriptor("application-loading-journey-content-title"),
+          message: createMessageDescriptor("application-loading-journey-content-message"),
+          busyLabel: createMessageDescriptor("application-loading-journey-content-title"),
         }}
       />
     );
@@ -676,7 +680,7 @@ export default function App({
       <ApplicationStateScreen
         view={{
           kind: "fatalConfiguration",
-          title: "Firebase Setup Issue",
+          title: createMessageDescriptor("application-firebase-setup-title"),
           message: firebaseSetupHelp(runtimeConfig.databaseMode),
           detail: firebaseError,
         }}
@@ -689,9 +693,9 @@ export default function App({
       <ApplicationStateScreen
         view={{
           kind: "loading",
-          title: "Connecting to Game Service",
-          message: "Preparing your shared game.",
-          busyLabel: "Connecting to Game Service",
+          title: createMessageDescriptor("application-connecting-game-service-title"),
+          message: createMessageDescriptor("application-connecting-game-service-message"),
+          busyLabel: createMessageDescriptor("application-connecting-game-service-title"),
         }}
       />
     );
@@ -753,10 +757,10 @@ export default function App({
 
 function firebaseSetupHelp(
   databaseMode: RuntimeConfig["databaseMode"],
-): string {
+): FluentMessageDescriptor {
   if (databaseMode === "emulator") {
-    return "Run npm start to launch the Firebase Realtime Database emulator with Vite.";
+    return createMessageDescriptor("application-firebase-setup-emulator-message");
   }
 
-  return "Required env: VITE_FIREBASE_API_KEY, VITE_FIREBASE_AUTH_DOMAIN, VITE_FIREBASE_DATABASE_URL, VITE_FIREBASE_PROJECT_ID, VITE_FIREBASE_APP_ID.";
+  return createMessageDescriptor("application-firebase-setup-production-message");
 }

@@ -21,6 +21,7 @@
 import type { ReactElement } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { DeckGalleryOverlay } from "./DeckGalleryOverlay";
+import { useMessages } from "../hooks/use-messages";
 
 /**
  * One starting-deck card, resolved to the card the player actually holds
@@ -61,14 +62,15 @@ export function StartingDeckOverlay({
   view,
   onClose,
 }: StartingDeckOverlayProps): ReactElement {
+  const t = useMessages();
   return (
     <DeckGalleryOverlay
       isOpen={isOpen}
-      title="Starting Deck"
-      subtitle="These are the cards you begin the journey with."
+      title={t("starting-deck-title")}
+      subtitle={t("starting-deck-subtitle")}
       cards={view.cards}
-      emptyLabel="No cards in starting deck."
-      actionLabel="Begin Journey"
+      emptyLabel={t("starting-deck-empty")}
+      actionLabel={t("starting-deck-begin-action")}
       onClose={onClose}
     />
   );

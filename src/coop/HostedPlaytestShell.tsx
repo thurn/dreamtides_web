@@ -9,6 +9,7 @@ import {
   useGameState,
 } from "./hooks";
 import "./hosted-playtest-shell.css";
+import { useMessages } from "../cumulus/hooks/use-messages";
 
 /** Applies the hosted-room controller policy without hiding shared content. */
 export function HostedPlaytestShell({
@@ -23,6 +24,7 @@ export function HostedPlaytestShell({
   const clientId = useClientId();
   const connectedClientIds = useConnectedClientIds();
   const control = state.playtestControl;
+  const t = useMessages();
   const claimRequestedRef = useRef(false);
 
   useEffect(() => {
@@ -93,11 +95,11 @@ export function HostedPlaytestShell({
       {canTakeControl ? (
         <div className="cumulus hosted-playtest-shell__status">
           <GlassPanel
-            title="Player Disconnected"
+            title={t("coop-player-disconnected-title")}
             headerSpacing="compact"
             footer={
               <GlassButton
-                label="Take Control"
+                label={t("coop-take-control-action")}
                 variant="accent"
                 placement="onGlass"
                 onPress={takeControl}
@@ -106,7 +108,7 @@ export function HostedPlaytestShell({
             testId="hosted-playtest-status"
           >
             <p className="hosted-playtest-shell__message">
-              The playtest is paused. Take control when you are ready to continue.
+              {t("coop-playtest-paused-message")}
             </p>
           </GlassPanel>
         </div>

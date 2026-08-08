@@ -479,12 +479,13 @@ function TutorialVictorySurface({
 }: {
   readonly onNewJourney: () => void;
 }): ReactElement {
+  const t = useMessages();
   const [actionSettled, setActionSettled] = useState(false);
   return (
     <section
       role="dialog"
       aria-modal="true"
-      aria-label="Tutorial complete"
+      aria-label={t("tutorial-battle-complete")}
       data-tutorial-victory-screen=""
       style={{
         position: "fixed",
@@ -512,7 +513,7 @@ function TutorialVictorySurface({
       <Motes on tint="warm" count={12} seed={243} zIndex={1} />
       <RadialAnnouncement
         variant="victory"
-        headline="Victory"
+        headline={t("battle-victory-headline")}
         announcementId="tutorial-victory"
       />
       <div
@@ -537,7 +538,7 @@ function TutorialVictorySurface({
         }}
       >
         <GlassButton
-          label="New Journey"
+          label={t("tutorial-new-journey-action")}
           variant="accent"
           testId="tutorial-battle-new-journey"
           onPress={onNewJourney}

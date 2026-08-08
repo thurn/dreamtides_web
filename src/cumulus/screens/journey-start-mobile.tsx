@@ -40,6 +40,7 @@ function DreamAvatarConsole({
   dreamAvatar: DreamAvatarOfferView;
   onChoose: () => void;
 }) {
+  const t = useMessages();
   return (
     <GlassPanel testId={`dream-avatar-glass-panel-${dreamAvatar.id}`}>
       <div
@@ -69,7 +70,7 @@ function DreamAvatarConsole({
           style={{ marginTop: token("--space-l"), display: "grid" }}
         >
           <GlassButton
-            label="Choose"
+            label={t("journey-start-choose-action")}
             variant="accent"
             placement="onGlass"
             onPress={onChoose}
@@ -129,6 +130,7 @@ function DreamAvatarTitle({
 /** The screen's uppercase eyebrow, painted on the portrait at top-center. It
  * does not swipe on mobile and spans the full width on desktop. */
 function ScreenHeader() {
+  const t = useMessages();
   return (
     <div
       style={{
@@ -142,7 +144,7 @@ function ScreenHeader() {
         pointerEvents: "none",
       }}
     >
-      <OnMediaEyebrow label="Choose Your Avatar" />
+      <OnMediaEyebrow label={t("journey-start-title")} />
     </div>
   );
 }

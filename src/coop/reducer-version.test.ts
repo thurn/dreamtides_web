@@ -12,10 +12,10 @@ describe("reducer compatibility", () => {
     expect(isReducerVersionCompatible(CURRENT_REDUCER_VERSION)).toBe(true);
   });
 
-  it("requires rooms to use v17", () => {
+  it("requires rooms to use the current descriptor protocol", () => {
     expect(COMPATIBLE_LEGACY_REDUCER_VERSIONS.size).toBe(0);
-    expect(classifyReducerVersion("dreamtides-coop-v18")).toBe("incompatible");
-    expect(isReducerVersionCompatible("dreamtides-coop-v18")).toBe(false);
+    expect(classifyReducerVersion("dreamtides-coop-v22")).toBe("incompatible");
+    expect(isReducerVersionCompatible("dreamtides-coop-v22")).toBe(false);
   });
 
   it("rejects an unreviewed reducer identity", () => {

@@ -25,6 +25,7 @@ import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import { appLocalization } from "../../../data/localization";
 import type { MessageFormatter } from "../../hooks/use-messages";
+import type { FluentMessageId } from "../../../data/localization-messages";
 
 const formatRulesTextMessage = ((id, variables) =>
   appLocalization.getString(id, variables)) as MessageFormatter;
@@ -85,16 +86,16 @@ const SITE_NAME_COLOR = "#60a5fa";
  * inherits the rules-text font and color.
  */
 const SYMBOL_ICON_CLASSES: Readonly<
-  Record<string, { className: Glyph; color?: string; label: string }>
+  Record<string, { className: Glyph; color?: string; labelId: FluentMessageId }>
 > = {
   essence: {
     className: GLYPHS.essence,
     color: ESSENCE_TEXT_COLOR,
-    label: "essence",
+    labelId: "rules-text-symbol-essence",
   },
-  points: { className: GLYPHS.points, label: "points" },
-  lunar: { className: GLYPHS.exhaust, label: "lunar" },
-  store: { className: GLYPHS.memory, label: "memory" },
+  points: { className: GLYPHS.points, labelId: "rules-text-symbol-points" },
+  lunar: { className: GLYPHS.exhaust, labelId: "rules-text-symbol-lunar" },
+  store: { className: GLYPHS.memory, labelId: "rules-text-symbol-store" },
 };
 
 /**
@@ -268,7 +269,10 @@ function renderSegment(
         style={{ color: ESSENCE_TEXT_COLOR, whiteSpace: "nowrap" }}
       >
         {segment.amount !== null ? segment.amount : null}
-        <InlineGlyph glyph={ESSENCE_ICON_CLASS} label="essence" />
+        <InlineGlyph
+          glyph={ESSENCE_ICON_CLASS}
+          label={formatRulesTextMessage("rules-text-symbol-essence")}
+        />
       </span>
     );
   }
@@ -346,7 +350,10 @@ function renderSegment(
           color: `var(--cv-rules-energy-color, ${ENERGY_ICON_COLOR})`,
         }}
       >
-        <InlineGlyph glyph={ENERGY_ICON_CLASS} label="energy" />
+        <InlineGlyph
+          glyph={ENERGY_ICON_CLASS}
+          label={formatRulesTextMessage("rules-text-symbol-energy")}
+        />
       </span>
     );
   }
@@ -365,7 +372,10 @@ function renderSegment(
           color: `var(--cv-rules-spark-color, ${SPARK_ICON_COLOR})`,
         }}
       >
-        <InlineGlyph glyph={SPARK_INLINE_ICON_CLASS} label="spark" />
+        <InlineGlyph
+          glyph={SPARK_INLINE_ICON_CLASS}
+          label={formatRulesTextMessage("rules-text-symbol-spark")}
+        />
       </span>
     );
   }
@@ -373,7 +383,10 @@ function renderSegment(
   if (iconSpec !== undefined) {
     return (
       <span key={key} style={{ color: iconSpec.color }}>
-        <InlineGlyph glyph={iconSpec.className} label={iconSpec.label} />
+        <InlineGlyph
+          glyph={iconSpec.className}
+          label={formatRulesTextMessage(iconSpec.labelId)}
+        />
       </span>
     );
   }

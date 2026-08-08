@@ -28,6 +28,7 @@ import {
 import { useIsDesktop } from "./use-is-desktop";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
+import { useMessages } from "../hooks/use-messages";
 
 export interface BattleStartDreamAvatarView {
   id: string;
@@ -237,6 +238,7 @@ function BattleStartPanel({
   onBegin,
   density,
 }: BattleStartScreenProps & { readonly density: PanelDensity }) {
+  const t = useMessages();
   const compact = density === "compact";
   const cardWidth = compact
     ? COMPACT_SIGNATURE_CARD_WIDTH
@@ -312,7 +314,7 @@ function BattleStartPanel({
                 font: compact ? token("--t-title-sm") : token("--t-hero"),
               }}
             >
-              Battle vs. {view.dreamAvatar.name}
+              {t("battle-start-title", { avatarName: view.dreamAvatar.name })}
             </h1>
             {view.dreamAvatar.title !== "" && (
               <p
@@ -329,7 +331,7 @@ function BattleStartPanel({
           </header>
 
           {view.dreamAvatar.ability !== "" && (
-            <PanelSection label="Ability" density={density}>
+            <PanelSection label={t("battle-start-ability-label")} density={density}>
               <div style={{ font: token("--t-rules") }}>
                 {view.dreamAvatar.abilityActive ? (
                   <RulesText
@@ -338,7 +340,7 @@ function BattleStartPanel({
                   />
                 ) : (
                   <span style={{ color: token("--text-on-glass-muted") }}>
-                    Opponent avatar ability is not active.
+                    {t("battle-start-inactive-ability")}
                   </span>
                 )}
               </div>
@@ -350,8 +352,8 @@ function BattleStartPanel({
               <PanelSection
                 label={
                   view.dreamsigns.length > 0
-                    ? "Signature Cards & Dreamsigns"
-                    : "Signature Cards"
+                    ? t("battle-start-signature-cards-and-dreamsigns-label")
+                    : t("battle-start-signature-cards-label")
                 }
                 density={density}
               >
@@ -370,7 +372,7 @@ function BattleStartPanel({
             )}
 
           {!compact && view.signatureCards.length > 0 && (
-            <PanelSection label="Signature Cards" density={density}>
+            <PanelSection label={t("battle-start-signature-cards-label")} density={density}>
               <div
                 data-battle-start-signature-cards=""
                 style={{
@@ -385,7 +387,7 @@ function BattleStartPanel({
           )}
 
           {!compact && view.dreamsigns.length > 0 && (
-            <PanelSection label="Dreamsigns" density={density}>
+            <PanelSection label={t("battle-start-dreamsigns-label")} density={density}>
               <div
                 style={{
                   display: "flex",
@@ -415,16 +417,16 @@ function BattleStartPanel({
                 gap: compact ? token("--space-m") : token("--space-2xl"),
               }}
             >
-              <Stake label="To Win" density={density}>
+              <Stake label={t("battle-start-to-win-label")} density={density}>
                 <span>{view.pointsToWin}</span>
                 <InlineGlyph glyph={GLYPHS.points} color="white" />
               </Stake>
-              <Stake label="Reward" density={density}>
+              <Stake label={t("battle-start-reward-label")} density={density}>
                 <EssenceValue amount={view.essenceReward} tone="inherit" />
               </Stake>
             </div>
             <GlassButton
-              label="Begin Battle"
+              label={t("battle-start-action")}
               variant="accent"
               placement="onGlass"
               onPress={onBegin}

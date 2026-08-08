@@ -67,16 +67,16 @@ export interface CardZoneBrowserOverlayProps {
 }
 
 const SORT_OPTIONS = [
-  { value: "current", label: "Current Order" },
-  { value: "cost", label: "Energy Cost" },
-  { value: "spark", label: "Spark" },
-  { value: "name", label: "Name" },
+  { value: "current" },
+  { value: "cost" },
+  { value: "spark" },
+  { value: "name" },
 ];
 
 const FILTER_OPTIONS = [
-  { value: "all", label: "All Types" },
-  { value: "character", label: "Characters" },
-  { value: "event", label: "Events" },
+  { value: "all" },
+  { value: "character" },
+  { value: "event" },
 ];
 
 const DESKTOP_BROWSER_MAX_WIDTH_PX = 1180;
@@ -146,6 +146,26 @@ export function CardZoneBrowserOverlay({
     () => filteredCards(cards, query, sort, filter),
     [cards, filter, query, sort],
   );
+  const sortOptions = SORT_OPTIONS.map((option) => ({
+    value: option.value,
+    label:
+      option.value === "current"
+        ? t("deck-sort-acquired")
+        : option.value === "cost"
+          ? t("deck-sort-cost")
+          : option.value === "spark"
+            ? t("deck-sort-spark")
+            : t("deck-sort-name"),
+  }));
+  const filterOptions = FILTER_OPTIONS.map((option) => ({
+    value: option.value,
+    label:
+      option.value === "all"
+        ? t("deck-filter-all")
+        : option.value === "character"
+          ? t("deck-filter-characters")
+          : t("deck-filter-events"),
+  }));
 
   useEffect(() => {
     searchInputRef.current?.focus();
@@ -223,8 +243,8 @@ export function CardZoneBrowserOverlay({
     ? {
         segmented,
         sort: {
-          ariaLabel: "Sort zone cards",
-          options: SORT_OPTIONS,
+          ariaLabel: t("battle-zone-browser-sort-accessible-name"),
+          options: sortOptions,
           value: sort,
           onChange: (value) => setSort(value as CardZoneBrowserSort),
         },
@@ -232,22 +252,22 @@ export function CardZoneBrowserOverlay({
     : {
         segmented,
         search: {
-          label: "Search Cards",
+          label: t("battle-zone-browser-search-label"),
           value: query,
           onChange: setQuery,
-          placeholder: "Search by name…",
+          placeholder: t("battle-zone-browser-search-placeholder"),
           testId: "card-zone-browser-search",
           inputRef: searchInputRef,
         },
         sort: {
-          ariaLabel: "Sort zone cards",
-          options: SORT_OPTIONS,
+          ariaLabel: t("battle-zone-browser-sort-accessible-name"),
+          options: sortOptions,
           value: sort,
           onChange: (value) => setSort(value as CardZoneBrowserSort),
         },
         filter: {
-          ariaLabel: "Filter zone cards by type",
-          options: FILTER_OPTIONS,
+          ariaLabel: t("battle-zone-browser-filter-accessible-name"),
+          options: filterOptions,
           value: filter,
           onChange: (value) => setFilter(value as CardZoneBrowserFilter),
         },

@@ -10,13 +10,12 @@ describe("glossaryInfoCard", () => {
   it("keeps rendering when the requested glossary entry is unavailable", () => {
     const card = glossaryInfoCard("missing-glossary-entry");
 
-    expect(card).toMatchObject({
-      variant: "text",
-      title: "Rule definition unavailable",
-      body: {
-        kind: "plain",
-        text: "This rule's definition is temporarily unavailable.",
-      },
+    expect(card.variant).toBe("text");
+    expect(card.titleDescriptor).toEqual({
+      id: "glossary-definition-unavailable-title",
+    });
+    expect(card.bodyDescriptor).toEqual({
+      id: "glossary-definition-unavailable-body",
     });
     expect(getLogEntries()).toContainEqual(
       expect.objectContaining({

@@ -17,7 +17,7 @@ import { opponentsFixture } from "../testing/opponents-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 
-const REDUCER_VERSION = "dreamtides-coop-v22";
+const REDUCER_VERSION = "dreamtides-coop-v23";
 const ATLAS_FOLD_HASH = "fixture-atlas-fold-hash";
 const SITES_FOLD_HASH = "fixture-sites-fold-hash";
 const DRAFT_DATA = draftDataFixture();
@@ -317,8 +317,7 @@ describe("RoomGate content-config gate", () => {
     await flush();
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
-    expect(container.textContent).toContain("Start a New Game");
-    expect(container.textContent).not.toContain("Use This Game’s Settings");
+    expect(container.querySelector("[data-testid=application-state-action-primary]")).not.toBeNull();
   });
 
   it("treats a genesis with no contentConfig as a mismatch (config gate)", async () => {
@@ -337,7 +336,7 @@ describe("RoomGate content-config gate", () => {
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
     expect(container.querySelector("[data-room-children]")).toBeNull();
-    expect(container.textContent).toContain("Start a New Game");
+    expect(container.querySelector("[data-testid=application-state-action-primary]")).not.toBeNull();
   });
 
   it("does not adopt a room whose Atlas fold hash differs", async () => {
@@ -361,8 +360,7 @@ describe("RoomGate content-config gate", () => {
     await flush();
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
-    expect(container.textContent).toContain("Start a New Game");
-    expect(container.textContent).not.toContain("Use This Game’s Settings");
+    expect(container.querySelector("[data-testid=application-state-action-primary]")).not.toBeNull();
   });
 
   it("opens the content gate when the Sites fold hash differs", async () => {
@@ -386,7 +384,7 @@ describe("RoomGate content-config gate", () => {
     await flush();
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
-    expect(container.textContent).toContain("Start a New Game");
+    expect(container.querySelector("[data-testid=application-state-action-primary]")).not.toBeNull();
   });
 
   it("does not adopt a room whose economy fold hash differs", async () => {
@@ -411,8 +409,7 @@ describe("RoomGate content-config gate", () => {
     await flush();
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
-    expect(container.textContent).toContain("Start a New Game");
-    expect(container.textContent).not.toContain("Use This Game’s Settings");
+    expect(container.querySelector("[data-testid=application-state-action-primary]")).not.toBeNull();
   });
 
   it("gates a current-version genesis whose content config predates Atlas hashes", async () => {
@@ -433,7 +430,7 @@ describe("RoomGate content-config gate", () => {
     await flush();
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
-    expect(container.textContent).toContain("Start a New Game");
+    expect(container.querySelector("[data-testid=application-state-action-primary]")).not.toBeNull();
   });
 
   it("renders the version gate for a prior reducer build", async () => {

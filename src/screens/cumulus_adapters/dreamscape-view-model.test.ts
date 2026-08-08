@@ -71,10 +71,10 @@ function node(overrides: Partial<DreamscapeNode> = {}): DreamscapeNode {
 }
 
 describe("battleLabel", () => {
-  it("names the final boss at the last completion level and a plain battle otherwise", () => {
-    expect(battleLabel(6)).toBe("Final Boss");
-    expect(battleLabel(0)).toBe("Battle");
-    expect(battleLabel(3)).toBe("Battle");
+  it("identifies the final boss at the last completion level", () => {
+    expect(battleLabel(6)).toEqual({ kind: "battle", isFinalBoss: true });
+    expect(battleLabel(0)).toEqual({ kind: "battle", isFinalBoss: false });
+    expect(battleLabel(3)).toEqual({ kind: "battle", isFinalBoss: false });
   });
 });
 
@@ -109,12 +109,13 @@ describe("buildSiteModels", () => {
     expect(unlocked?.isInteractive).toBe(true);
   });
 
-  it("labels the guardian by tier and the draft site with its pick count", () => {
+  it("carries guardian tier and draft pick count as semantic values", () => {
     const models = buildSiteModels(node(), 6);
     const battle = models.find((m) => m.isBattle);
     const draft = models.find((m) => m.site.type === "Draft");
-    expect(battle?.label).toBe("Final Boss");
-    expect(draft?.label).toMatch(/^Draft \d+x$/);
+    expect(battle?.label).toEqual({ kind: "battle", isFinalBoss: true });
+    expect(draft?.label).toMatchObject({ kind: "draft" });
+    expect(draft?.label).toMatchObject({ kind: "draft", pickCount: 5 });
   });
 });
 

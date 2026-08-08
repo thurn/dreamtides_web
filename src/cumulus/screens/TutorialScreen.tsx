@@ -377,6 +377,7 @@ function TutorialHowToPlayDialog({
   readonly onClose: () => void;
 }): ReactElement {
   const desktop = useIsDesktop();
+  const t = useMessages();
   const paragraphStyle = {
     margin: 0,
     color: token("--text-on-glass"),
@@ -392,8 +393,8 @@ function TutorialHowToPlayDialog({
       style={{ visibility: staged ? "hidden" : "visible" }}
     >
       <GlassDialog
-        title="How to Play"
-        closeLabel="Close how to play"
+        title={t("tutorial-how-to-play-title")}
+        closeLabel={t("tutorial-how-to-play-close")}
         presentation="popup"
         chrome="flowing-close"
         companion={
@@ -916,6 +917,7 @@ function TutorialOpponentCardPlay({
   readonly playbackSpeed: number;
   readonly onComplete: () => void;
 }): ReactElement | null {
+  const t = useMessages();
   const [trajectory, setTrajectory] = useState<TutorialCardTrajectory | null>(
     null,
   );
@@ -1134,7 +1136,7 @@ function TutorialOpponentCardPlay({
                   backfaceVisibility: "hidden",
                 }}
               >
-                <CardBack label="Opponent card flipping face up" />
+                <CardBack label={t("tutorial-opponent-card-flipping")} />
               </div>
               <div
                 style={{
@@ -1664,6 +1666,7 @@ export function TutorialScreen({
   onReplay,
   onPlayFromAction,
 }: TutorialScreenProps): ReactElement {
+  const t = useMessages();
   const desktop = useIsDesktop();
   const dockEditor = useIsDesktop(TUTORIAL_EDITOR_DOCK_MIN_WIDTH);
   const reduceMotion = useReducedMotion() === true;
@@ -2951,7 +2954,10 @@ export function TutorialScreen({
                       owner: "player",
                       rank: "front",
                       slotId: repositionTargetSlotId,
-                      label: `Drag ${repositionSourceCard.model.displaySnapshot.name} to block ${repositionOpposingCard.model.displaySnapshot.name}.`,
+                      label: t("tutorial-drag-to-block", {
+                        sourceCardName: repositionSourceCard.model.displaySnapshot.name,
+                        opposingCardName: repositionOpposingCard.model.displaySnapshot.name,
+                      }),
                     }
               }
               viewport="contained"
@@ -3054,10 +3060,11 @@ export function TutorialScreen({
               zIndex: 20,
             }}
           >
+            {/* localization-ignore: developer-only tutorial editor entry point. */}
             <IconButton
               glyph={GLYPHS.sidebarLeft}
               size="sm"
-              label="Open tutorial editor"
+              label={/* localization-ignore: developer-only tutorial editor control. */ "Open tutorial editor"}
               ariaExpanded={false}
               ariaControls="cumulus-tutorial-editor"
               testId="tutorial-editor-trigger"

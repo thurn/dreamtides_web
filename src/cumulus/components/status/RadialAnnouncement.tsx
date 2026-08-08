@@ -379,12 +379,16 @@ function HandTotalAnnouncement({
   announcementId,
 }: RadialAnnouncementHandTotalProps): ReactElement {
   const reduceMotion = useReducedMotion() === true;
+  const t = useMessages();
   const diameter = size === "mini" ? 52 : 60;
   return (
     <motion.div
       role="status"
       aria-live="polite"
-      aria-label={`${owner === "dealer" ? "Dealer" : "Player"} total ${String(total)}`}
+      aria-label={t("radial-hand-total-accessible-name", {
+        owner: owner === "dealer" ? "Dealer" : "Player",
+        total,
+      })}
       data-radial-announcement={announcementId ?? ""}
       data-radial-announcement-variant="hand-total"
       data-radial-announcement-owner={owner}

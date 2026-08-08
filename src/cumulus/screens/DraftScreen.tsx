@@ -239,7 +239,7 @@ export function DraftScreen({
       >
         <IconButton
           glyph={GLYPHS.refresh}
-          label="Reroll draft offer"
+          label={t("draft-reroll-offer")}
           onPress={onReroll}
           testId="reroll-draft-offer"
         />

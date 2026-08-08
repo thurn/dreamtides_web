@@ -1,7 +1,19 @@
 import type { BattleMutableState } from "../types";
 import type { PromptResolution } from "../../rules/battle/effect-runner-core";
 import type { PendingPrompt } from "../../rules/battle/fold";
+import type { FluentMessageDescriptor } from "../../data/localization-messages";
 import { selectBattleCardLocation } from "../state/selectors";
+
+function descriptorLogFields(
+  prefix: string,
+  descriptor: FluentMessageDescriptor,
+): Record<string, unknown> {
+  return {
+    [`${prefix}MessageId`]: descriptor.id,
+    [`${prefix}MessageArguments`]:
+      "variables" in descriptor ? descriptor.variables : null,
+  };
+}
 
 function backingCardUuid(
   board: BattleMutableState,
@@ -29,6 +41,10 @@ export function createBattlePromptResolutionLogFields(
           ...(resolution.voidCardIds ?? []),
         ]
       : [];
+  const promptDescriptor =
+    pendingPrompt.options.kind === "foresee"
+      ? ({ id: "battle-foresee-title", variables: { count: pendingPrompt.options.count } } satisfies FluentMessageDescriptor)
+      : pendingPrompt.options.label;
   return {
     dreamwellCardUuid:
       pendingPrompt.run.scriptRef.table === "dreamwell"
@@ -36,10 +52,7 @@ export function createBattlePromptResolutionLogFields(
         : null,
     promptId: pendingPrompt.promptId,
     promptKind: pendingPrompt.kind,
-    promptLabel:
-      pendingPrompt.options.kind === "foresee"
-        ? `Foresee ${String(pendingPrompt.options.count)}`
-        : pendingPrompt.options.label,
+    ...descriptorLogFields("prompt", promptDescriptor),
     candidateBattleCardInstanceIds: candidateInstanceIds,
     candidateBackingCardUuids: candidateInstanceIds.map((instanceId) =>
       backingCardUuid(board, instanceId)

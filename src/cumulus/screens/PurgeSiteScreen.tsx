@@ -13,8 +13,18 @@ import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
+import { useMessages } from "../hooks/use-messages";
 
 export type PurgeGuideView = GuideGalleryGuideView;
+
+export type PurgeActionWidthLabel =
+  | { readonly kind: "decline" }
+  | { readonly kind: "purge"; readonly count: number };
+
+export interface PurgeActionWidthReservation {
+  readonly label: PurgeActionWidthLabel;
+  readonly essenceCost: number | null;
+}
 
 export interface PurgeCardView extends DeckCardView {
   /** Whether this card purges without spending essence. */
@@ -55,6 +65,7 @@ export function PurgeSiteScreen({
   onPurge,
   onTutorialShown,
 }: PurgeSiteScreenProps) {
+  const t = useMessages();
   const [selectedEntryIds, setSelectedEntryIds] = useState<readonly string[]>(
     [],
   );
@@ -79,8 +90,13 @@ export function PurgeSiteScreen({
         freeEntryIds.size,
         view.maxPaidSelections,
         view.visitCosts,
-      ),
-    [freeEntryIds, view.maxPaidSelections, view.visitCosts],
+      ).map((reservation) => ({
+        label: reservation.label.kind === "decline"
+          ? t("purge-site-decline-action")
+          : t("purge-site-action", { count: reservation.label.count }),
+        essenceCost: reservation.essenceCost,
+      })),
+    [freeEntryIds, t, view.maxPaidSelections, view.visitCosts],
   );
   const tutorialVisible = useDelayedTutorialSpeechBubbleVisibility(
     view.tutorial?.id ?? view.tutorial?.model.text,
@@ -178,6 +194,7 @@ function PurgeGallery({
   readonly onToggle: (entryId: string) => void;
 }) {
   const desktop = layout === "desktop";
+  const t = useMessages();
   return (
     <section
       data-purge-card-grid=""
@@ -198,15 +215,15 @@ function PurgeGallery({
       }}
     >
       <CardPickerPanel
-        title="Purge Cards"
-        subtitle="Choose any number of cards to remove from your deck for an essence cost"
+        title={t("purge-site-title")}
+        subtitle={t("purge-site-subtitle")}
         rightAccessory={{
           kind: "glassButton",
           button: {
             label:
               selectedCount === 0
-                ? "Decline"
-                : `Purge ${String(selectedCount)}`,
+                ? t("purge-site-decline-action")
+                : t("purge-site-action", { count: selectedCount }),
             essenceCost: selectedCount === 0 ? null : totalCost,
             widthReservations: actionWidthReservations,
             variant: selectedCount === 0 ? "default" : "danger",
@@ -239,13 +256,13 @@ export function purgeActionWidthReservations(
   freeCardCount: number,
   maxPaidSelections: number,
   visitCosts: readonly number[],
-): readonly GlassButtonWidthReservation[] {
+): readonly PurgeActionWidthReservation[] {
   const maxSelectionCount = freeCardCount + maxPaidSelections;
   const maxCost = Math.max(0, ...visitCosts.slice(0, maxPaidSelections + 1));
   return [
-    { label: "Decline", essenceCost: null },
+    { label: { kind: "decline" }, essenceCost: null },
     ...Array.from({ length: maxSelectionCount }, (_, index) => ({
-      label: `Purge ${String(index + 1)}`,
+      label: { kind: "purge" as const, count: index + 1 },
       essenceCost: maxCost,
     })),
   ];

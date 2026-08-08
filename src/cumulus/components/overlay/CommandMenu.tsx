@@ -28,6 +28,7 @@ import {
   MENU_EDGE_INSET_DESKTOP_PX,
   MENU_EDGE_INSET_MOBILE_PX,
 } from "../../screens/chrome-geometry";
+import { useMessages } from "../../hooks/use-messages";
 
 /** A single command row. `id` is stable domain identity, never display copy. */
 export interface CommandMenuAction {
@@ -243,6 +244,7 @@ function AppChromeCommandMenu({ model }: { model: CommandMenuAppChromeModel }): 
 
 function ContextCommandMenu({ model }: { model: CommandMenuContextModel }): ReactElement {
   const { title, subtitle, actions, anchor, onDismiss, testId } = model;
+  const t = useMessages();
   const isDesktop = useIsDesktop();
   const menuRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState<{ left: number; top: number } | null>(null);
@@ -280,7 +282,12 @@ function ContextCommandMenu({ model }: { model: CommandMenuContextModel }): Reac
 
   if (!isDesktop) {
     return createPortal(
-      <GlassDialog title={title} subtitle={subtitle} closeLabel="Close actions" onClose={onDismiss}>
+      <GlassDialog
+        title={title}
+        subtitle={subtitle}
+        closeLabel={t("command-menu-close-actions")}
+        onClose={onDismiss}
+      >
         <HierarchicalMenu items={actions} mobile onDismiss={onDismiss} />
       </GlassDialog>,
       document.body,
@@ -324,6 +331,7 @@ function HierarchicalMenu({
   onDismiss: () => void;
   mobile?: boolean;
 }): ReactElement {
+  const t = useMessages();
   const [path, setPath] = useState<readonly string[]>([]);
   const menuRef = useRef<HTMLDivElement>(null);
   const leafItems = items.filter((item) => item.kind !== "divider");
@@ -406,7 +414,13 @@ function HierarchicalMenu({
     >
       {path.length > 0 && (
         <CommandRow
-          item={{ kind: "group", id: "back", label: "Back", glyph: GLYPHS.arrowLeft, actions: [] }}
+          item={{
+            kind: "group",
+            id: "back",
+            label: t("command-menu-back-action"),
+            glyph: GLYPHS.arrowLeft,
+            actions: [],
+          }}
           active
           mobile={mobile}
           onActivate={() => setPath((previous) => previous.slice(0, -1))}
@@ -434,7 +448,11 @@ function HierarchicalMenu({
           />
         );
       })}
-      {leafItems.length === 0 && <span style={{ font: token("--t-body-sm"), color: token("--text-on-glass-muted") }}>No actions available.</span>}
+      {leafItems.length === 0 && (
+        <span style={{ font: token("--t-body-sm"), color: token("--text-on-glass-muted") }}>
+          {t("command-menu-empty-state")}
+        </span>
+      )}
     </div>
   );
 }
@@ -446,18 +464,19 @@ function SignedIntegerCommand({
   item: CommandMenuSignedInteger;
   onDismiss: () => void;
 }): ReactElement {
+  const t = useMessages();
   const [draft, setDraft] = useState("");
   const [error, setError] = useState<string>();
 
   function commit(): void {
     const trimmed = draft.trim();
     if (!/^[+-]?\d+$/.test(trimmed)) {
-      setError("Enter a non-zero whole number.");
+      setError(t("command-menu-invalid-integer"));
       return;
     }
     const value = Number(trimmed);
     if (!Number.isSafeInteger(value) || value === 0) {
-      setError("Enter a non-zero whole number.");
+      setError(t("command-menu-invalid-integer"));
       return;
     }
     item.onCommand(value);

@@ -9,6 +9,8 @@ import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "./use-is-desktop";
 import "../primitives/cumulus-base.css";
+import { useMessages, formatMessageDescriptor } from "../hooks/use-messages";
+import type { FluentMessageDescriptor } from "../../data/localization-messages";
 
 export type MainMenuActionId =
   | "new-journey"
@@ -21,17 +23,17 @@ export type MainMenuSocialId = "github" | "discord" | "reddit";
 
 export interface MainMenuActionView {
   readonly id: MainMenuActionId;
-  readonly label: string;
+  readonly label: FluentMessageDescriptor;
 }
 
 export interface MainMenuSocialView {
   readonly id: MainMenuSocialId;
-  readonly label: string;
+  readonly label: FluentMessageDescriptor;
   readonly glyph: Glyph;
 }
 
 export interface MainMenuView {
-  readonly title: string;
+  readonly title: FluentMessageDescriptor;
   readonly background: ArtRef;
   readonly actions: readonly MainMenuActionView[];
   readonly socials: readonly MainMenuSocialView[];
@@ -65,6 +67,7 @@ export function MainMenuScreen({
   onExitComplete,
   playbackSpeed = 1,
 }: MainMenuScreenProps): ReactElement {
+  const t = useMessages();
   const isDesktop = useIsDesktop();
   const reduceMotion = useReducedMotion() === true;
   const mobileEdgeInline = `max(${token(SAFE_AREA_INSET_PROPERTIES.left)}, ${token("--space-l")})`;
@@ -118,11 +121,11 @@ export function MainMenuScreen({
           whiteSpace: "nowrap",
         }}
       >
-        {view.title}
+        {formatMessageDescriptor(t, view.title)}
       </h1>
 
       <nav
-        aria-label="Main menu"
+        aria-label={t("main-menu-navigation-label")}
         data-main-menu-actions
         style={{
           position: "absolute",
@@ -154,7 +157,7 @@ export function MainMenuScreen({
               }}
             >
               <MainMenuButton
-                label={action.label}
+                label={formatMessageDescriptor(t, action.label)}
                 testId={`main-menu-action-${action.id}`}
                 onPress={() => onAction(action.id)}
               />
@@ -165,7 +168,7 @@ export function MainMenuScreen({
 
       <div
         role="group"
-        aria-label="Dreamtides community"
+        aria-label={t("main-menu-community-label")}
         data-main-menu-socials
         style={{
           position: "absolute",
@@ -180,7 +183,7 @@ export function MainMenuScreen({
           <IconButton
             key={social.id}
             glyph={social.glyph}
-            label={social.label}
+            label={formatMessageDescriptor(t, social.label)}
             testId={`main-menu-social-${social.id}`}
             onPress={() => onSocial(social.id)}
           />

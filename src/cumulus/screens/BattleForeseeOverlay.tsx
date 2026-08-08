@@ -368,7 +368,7 @@ export function BattleForeseeOverlay({
                 textTransform: "uppercase",
               }}
             >
-              Triggered By
+              {t("battle-foresee-triggered-by")}
             </span>
             <div style={{ width: sourceCardWidthPx, maxWidth: "100%" }}>
               <DreamwellCard model={view.sourceDreamwellCard} />
@@ -387,7 +387,7 @@ export function BattleForeseeOverlay({
           <IconButton
             glyph={GLYPHS.minus}
             size="sm"
-            label="Foresee 1 fewer"
+            label={t("battle-foresee-less-action")}
             placement="onGlass"
             disabled={count <= minimumCount}
             onPress={decrementCount}
@@ -395,7 +395,7 @@ export function BattleForeseeOverlay({
           <IconButton
             glyph={GLYPHS.plus}
             size="sm"
-            label="Foresee 1 more"
+            label={t("battle-foresee-more-action")}
             placement="onGlass"
             disabled={count >= allCardIds.length}
             onPress={incrementCount}
@@ -418,7 +418,7 @@ export function BattleForeseeOverlay({
               data-foresee-indicator="deck"
               style={indicatorStyle}
             >
-              Deck
+              {t("battle-foresee-deck-destination")}
             </div>
 
             <div
@@ -454,14 +454,14 @@ export function BattleForeseeOverlay({
               data-foresee-zone="void"
               style={indicatorStyle}
             >
-              Void
+              {t("battle-foresee-void-destination")}
             </div>
           </div>
         </div>
 
         <div style={{ display: "flex", justifyContent: "center" }}>
           <GlassButton
-            label="Confirm"
+            label={t("site-confirm")}
             placement="onGlass"
             variant="accent"
             testId="battle-foresee-confirm"

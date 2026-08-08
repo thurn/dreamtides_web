@@ -22,6 +22,7 @@ import {
   type LoadingCalloutLeaderLine,
 } from "./loading-callout-geometry";
 import { useIsDesktop } from "./use-is-desktop";
+import { useMessages } from "../hooks/use-messages";
 
 export interface LoadingView {
   readonly runeboundChampion: GameCardModel;
@@ -179,17 +180,18 @@ function calloutPosition(
 
 function AnnotatedLoadingCard({
   groupId,
-  cardTypeLabel,
+  cardType,
   model,
   annotations,
   isDesktop,
 }: {
   readonly groupId: "runeboundChampion" | "worldsAwait";
-  readonly cardTypeLabel: "Character" | "Event";
+  readonly cardType: "character" | "event";
   readonly model: GameCardModel;
   readonly annotations: readonly AnnotationSpec[];
   readonly isDesktop: boolean;
 }): ReactElement {
+  const t = useMessages();
   const groupRef = useRef<HTMLDivElement | null>(null);
   const calloutRefs = useRef<
     Partial<Record<TutorialFeatureCalloutKind, HTMLDivElement | null>>
@@ -305,7 +307,11 @@ function AnnotatedLoadingCard({
           pointerEvents: "none",
         }}
       >
-        {cardTypeLabel}
+        {t(
+          cardType === "character"
+            ? "loading-card-character-label"
+            : "loading-card-event-label",
+        )}
       </p>
 
       <svg
@@ -361,6 +367,7 @@ export function LoadingScreen({
   playbackSpeed = 1,
   onBegin,
 }: LoadingScreenProps): ReactElement {
+  const t = useMessages();
   const isDesktop = useIsDesktop();
   const reduceMotion = useReducedMotion() === true;
   const [ready, setReady] = useState(false);
@@ -476,10 +483,10 @@ export function LoadingScreen({
           textAlign: "center",
         }}
       >
-        Dreamtides Cards:
+        {t("loading-card-types-title")}
       </h1>
       <section
-        aria-label="Card anatomy"
+        aria-label={t("loading-card-anatomy-label")}
         data-loading-card-stage
         style={{
           width: "100%",
@@ -500,14 +507,14 @@ export function LoadingScreen({
       >
         <AnnotatedLoadingCard
           groupId="runeboundChampion"
-          cardTypeLabel="Character"
+          cardType="character"
           model={view.runeboundChampion}
           annotations={RUNEBOUND_ANNOTATIONS}
           isDesktop={isDesktop}
         />
         <AnnotatedLoadingCard
           groupId="worldsAwait"
-          cardTypeLabel="Event"
+          cardType="event"
           model={view.worldsAwait}
           annotations={WORLDS_AWAIT_ANNOTATIONS}
           isDesktop={isDesktop}
@@ -543,7 +550,7 @@ export function LoadingScreen({
             }}
           >
             <GlassButton
-              label="Begin"
+              label={t("loading-begin-action")}
               onPress={onBegin}
               size="prominent"
               variant="accent"
@@ -566,7 +573,7 @@ export function LoadingScreen({
               playbackSpeed={playbackSpeed}
               reduceMotion={reduceMotion}
             />
-            <span>Loading</span>
+            <span>{t("loading-progress-label")}</span>
           </div>
         )}
       </footer>

@@ -85,42 +85,35 @@ dimensions, equality checks, or parsers. Cards continue to use UUID identity.
 - CSS uppercase styling is retained for intentional visual typography. It does
   not slice or mutate localized strings in application code.
 
-## Deferred architecture work
+## Current authored-data boundaries
 
 ### Exploration authored prose
 
-`data/exploration.toml` stores English action labels, effects, follow-up
+`data/exploration.toml` stores authored action labels, effects, follow-up
 titles, and follow-up subtitles. `configuredFollowupCopy()` in
 `src/screens/cumulus_adapters/exploration-view-model.ts` substitutes semantic
-values into those templates; `appendFixedTransfigurationEffect()` and the
-add-site disclosure path append English clauses to `effectText`.
-`src/cumulus/screens/ExplorationSiteScreen.tsx` renders the resulting
-`followup.title`, `followup.subtitle`, and `action.effectText` values.
+values into those templates. Authored action prose remains opaque at the React
+boundary; code-authored disclosures use typed Fluent messages from
+`data/strings.ftl`. `src/cumulus/screens/ExplorationSiteScreen.tsx` renders
+the resulting authored values and semantic disclosures without parsing card or
+site names.
 
 This catalog is a mixed content-and-structure interface: effect behavior is
-modeled by `effectKind`, while a variable set and free-form English template
-define each presentation. A safe migration needs a structured copy descriptor
-per effect kind and typed semantic variables at the adapter boundary, followed
-by catalog migration. Passing Fluent output into the current substitution or
-effect parsing paths would let locale text influence structural behavior. The
-complete outcome and accessibility messages that can be derived from existing
-semantic state are localized; the authored narrative catalog remains the source
-for these follow-up and effect descriptions.
+modeled by `effectKind`, while a variable set and authored template define each
+presentation. Structural behavior consumes `effectKind` and UUIDs; localized
+messages are formatted after that work. The authored narrative catalog remains
+the source for follow-up and effect prose.
 
 ### Augury generated catalog copy
 
-`src/journey_v2/archetypes/grant.ts` and
-`src/journey_v2/archetypes/duplicate.ts` populate `copies-word` and
-`copies-label`; `src/journey_v2/archetypes/improve.ts` also constructs authored
-card/form and subtype-change descriptions. The generator in
+`src/journey_v2/archetypes/grant.ts`,
+`src/journey_v2/archetypes/duplicate.ts`, and
+`src/journey_v2/archetypes/improve.ts` populate authored card, form, subtype,
+and count vocabulary. The generator in
 `src/journey_v2/encounter/generateMerchantEncounter.ts` expands those fields
-through English templates from `data/augury.toml` into persisted
-`MerchantOffer` title, summary, prompt, and detail fields. The production
-Cumulus Augury adapter derives its display from semantic offer objects and does
-not read those formatted fields. They are deterministic catalog/debug data. A
-future surface must use the semantic Offer Tile model or a typed message
-descriptor rather than displaying these fields. Localizing the stored fields
-would mix locale output with replayable Journey data.
+into deterministic encounter data. The production Cumulus Augury adapter uses
+semantic offer objects and formats titles, summaries, prompts, and details at
+the React boundary. Locale output does not enter replayable Journey data.
 
 ### English rules-text and glossary parsing
 
@@ -128,20 +121,19 @@ would mix locale output with replayable Journey data.
 word forms, evaluates English regular-expression contexts, and renders catalog
 templates from `data/glossary.toml`. Card, Dream Avatar, and Dreamsign
 rules text is also authored English. The parser's consumers build glossary
-reveal cards from those matches. `src/cumulus/internal/reveal/context.tsx` then
-assembles hidden accessibility descriptions by joining authored rules,
-glossary definitions, Energy-cost lists, and status fragments with English
-punctuation and conjunctions. Translating before semantic extraction would
-change which game terms are recognized, while translating only the joined
-fragments would preserve unsafe English sentence structure. This pipeline needs
-structured glossary term references and a semantic reveal-description model,
-with locale rendering after term resolution.
+reveal cards from those matches. `src/cumulus/internal/reveal/context.tsx`
+carries semantic entity variants and formats complete hidden accessibility
+messages after glossary and rules-text resolution. Authored card rules, names,
+and glossary definitions remain opaque variables; locale rendering does not
+change the English tokenization used to recognize terms.
 
 ## Prevention
 
-`eslint-rules/no-manual-count-copy.js` is enabled for production Cumulus
-components, screens, and adapters. It rejects representative singular/plural
-ternaries, suffix pluralization, and count-conditioned English copy while
-allowing numeric game logic and layout conditions. Developer/editor paths are
-explicitly excluded. `eslint-rules/no-manual-count-copy.test.ts` uses synthetic
-fixtures to verify accepted semantic/Fluent patterns and rejected regressions.
+`eslint-rules/no-unlocalized-player-copy.js` is enabled for the protected
+player-runtime files. It rejects static player grammar, accessible copy, and
+English assembled branches unless they cross `t()`/`createMessageDescriptor()`
+or carry a documented developer-only suppression. Its tests cover literals,
+attributes, conditionals, concatenation, descriptors, authored variables, and
+suppression comments. `scripts/audit-player-localization.mjs` provides the
+repository-wide classified inventory, and `npm run review` runs the focused
+diff-aware enforcement.

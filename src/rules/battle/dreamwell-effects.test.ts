@@ -617,7 +617,7 @@ describe("new prompt-driven Dreamwell UUIDs", () => {
   it("records the temporary Reclaim eligibility separately from reclaimed", () => {
     const prompt = getFirstPromptStep("14dec460-3ec6-40c1-978f-67e70cb0b227");
     if (prompt.kind !== "pick-cards") throw new Error("expected picker");
-    expect(prompt.subtitle).toBe("You may play it from your void this turn, then banish it.");
+    expect(prompt.subtitle?.id).toBe("battle-prompt-choose-void-card-reclaim-subtitle");
     const state = makeState({ playerVoid: ["void-card"], cardInstances: { "void-card": makeCharacter("void-card", "player", 2) } });
     const [edit] = prompt.resolve(["void-card"], makeCtx(state));
     expect(edit).toMatchObject({ kind: "SET_CARD_STATUS", battleCardId: "void-card", status: { temporaryReclaimUntilEnding: { activeSide: "player", turnNumber: 1 } } });
@@ -992,8 +992,8 @@ describe("The Crossroads (af2ef62f) — choice draw / gain energy", () => {
     const opt0 = prompt.options[0];
     const opt1 = prompt.options[1];
     if (opt0 === undefined || opt1 === undefined) throw new Error("missing options");
-    expect(opt0.label.toLowerCase()).toContain("draw");
-    expect(opt1.label.toLowerCase()).toMatch(/energy|●/);
+    expect(opt0.label.id).toBe("battle-prompt-draw-card");
+    expect(opt1.label.id).toBe("battle-prompt-gain-energy");
   });
 
   it("options[0].build → DRAW_CARD", () => {

@@ -36,6 +36,7 @@ import {
   type GlassPanelIconButtonAccessory,
 } from "../overlay/GlassPanel";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
+import { useMessages } from "../../hooks/use-messages";
 import {
   CardChoiceGrid,
   type CardChoiceGridActionView,
@@ -497,7 +498,7 @@ function CardGallerySurface({
   footerActions,
   toolbar,
   cards,
-  emptyLabel = "No cards.",
+  emptyLabel,
   columns,
   cardSize,
   frame,
@@ -513,6 +514,8 @@ function CardGallerySurface({
   endAction,
   onEndActionPress,
 }: CardGallerySurfaceProps): ReactElement {
+  const t = useMessages();
+  const resolvedEmptyLabel = emptyLabel ?? t("card-gallery-empty-default");
   const pendingCardTapsRef = useRef(new Map<string, number>());
   const cancelPendingCardTap = (entryId: string): void => {
     const timer = pendingCardTapsRef.current.get(entryId);
@@ -769,7 +772,7 @@ function CardGallerySurface({
                   color: token("--text-on-glass"),
                 }}
               >
-                {emptyLabel}
+                {resolvedEmptyLabel}
               </p>
             </div>
           ) : (

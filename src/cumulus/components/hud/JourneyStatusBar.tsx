@@ -313,6 +313,7 @@ function QsbDreamsignWindow({
   signs: QsbDreamsign[];
   onClose: () => void;
 }): ReactElement {
+  const t = useMessages();
   return (
     <div
       onClick={onClose}
@@ -354,12 +355,12 @@ function QsbDreamsignWindow({
               color: token("--text-primary"),
             }}
           >
-            Dreamsigns
+            {t("journey-status-dreamsigns-title")}
           </h2>
           <IconButton
             glyph={GLYPHS.close}
             size="sm"
-            label="Close"
+            label={t("journey-status-close-action")}
             onPress={onClose}
           />
         </div>
@@ -392,10 +393,21 @@ function QsbDreamAvatarBust({
   /** The docked DreamAvatar, or undefined for the empty placeholder frame. */
   dreamAvatar?: QsbDreamAvatar;
 }): ReactElement {
+  const t = useMessages();
   const binding = useRevealSource({
     identity: { entityType: "dreamAvatar", entityId: revealEntityId("dreamAvatar", dreamAvatar?.id ?? "empty") },
     spec: dreamAvatar === undefined
-      ? { primary: { kind: "infoCard", card: { variant: "text", title: "Avatar", body: richText.plain("No avatar is active.") } }, secondaries: [] }
+      ? {
+          primary: {
+            kind: "infoCard",
+            card: {
+              variant: "text",
+              title: t("journey-status-avatar-accessible-name"),
+              body: richText.plain(t("journey-status-no-avatar")),
+            },
+          },
+          secondaries: [],
+        }
       : dreamAvatarRevealSpec({ imageNumber: "", name: dreamAvatar.name, title: dreamAvatar.epithet ?? "" }, dreamAvatar.ability ?? "", dreamAvatar.portrait),
   });
   const focus =
@@ -411,7 +423,7 @@ function QsbDreamAvatarBust({
       as="button"
       ref={binding.ref}
       {...binding.sourceProps}
-      aria-label="Avatar"
+      aria-label={t("journey-status-avatar-accessible-name")}
       tabIndex={0}
       style={{
         // width/height are fixed by journey-status-bar.css (var(--qsb-dc-size),
@@ -463,6 +475,7 @@ function QsbEssence({
   essence?: number;
   scale?: number;
 }): ReactElement {
+  const t = useMessages();
   const binding = useRevealSource({
     identity: { entityType: "resource-essence", entityId: revealEntityId("resource-essence", "journey-total") },
     spec: { primary: { kind: "infoCard", card: glossaryInfoCard(GLOSSARY_IDS.essence, { variant: "icon", glyph: GLYPHS.essence }) }, secondaries: [] },
@@ -474,7 +487,7 @@ function QsbEssence({
       {...binding.sourceProps}
       role="button"
       tabIndex={0}
-      aria-label="Essence Total"
+      aria-label={t("journey-status-essence-accessible-name")}
       style={{
         ...binding.sourceProps.style,
         display: "inline-flex",

@@ -3,6 +3,7 @@ import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScree
 import type { Database } from "firebase/database";
 import type { PinnedContentConfig } from "../eventlog/types";
 import { createAndNavigateToRoom } from "./RoomGate";
+import { createMessageDescriptor } from "../data/localization-descriptors";
 
 interface UnreadableRoomScreenProps {
   db: Database;
@@ -33,13 +34,15 @@ export function UnreadableRoomScreen({
     <ApplicationStateScreen
       view={{
         kind: "unreadableRoom",
-        title: "This Game Could Not Be Read",
-        message:
-          "This game’s data cannot be loaded safely. Start a fresh game to keep playing.",
+        title: createMessageDescriptor("coop-unreadable-room-title"),
+        message: createMessageDescriptor("coop-unreadable-room-message"),
         ...(message === null ? {} : { detail: message }),
         actions: [{
           id: "primary",
-          label: status === "creating" ? "Starting…" : "Start a New Game",
+          label:
+            status === "creating"
+              ? createMessageDescriptor("coop-starting-new-game-action")
+              : createMessageDescriptor("coop-create-new-game-action"),
           disabled: status === "creating",
           onPress: handleStartNewGame,
         }],

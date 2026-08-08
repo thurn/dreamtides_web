@@ -8,6 +8,7 @@ import type { CardData } from "../../types/cards";
 import { artRef } from "../primitives/art";
 import { resolveColor } from "../primitives/color";
 import { GLYPHS } from "../primitives/glyph";
+import { createMessageDescriptor } from "../../data/localization-descriptors";
 import { CumulusRoot } from "../CumulusRoot";
 import {
   AugurySiteScreen,
@@ -594,7 +595,7 @@ describe("AugurySiteScreen", () => {
     const container = mount(
       <AugurySiteScreen
         view={view()}
-        onChoose={() => ({ ok: false, message: "The visions shifted. Choose again." })}
+        onChoose={() => ({ ok: false, message: createMessageDescriptor("augury-error-visions-shifted") })}
         onClose={() => undefined}
       />,
     );

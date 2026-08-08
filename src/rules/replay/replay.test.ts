@@ -18,6 +18,8 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import type { Genesis } from "../../eventlog/types";
 import { NIGHTMARE_CARD_NUMBER } from "../../data/nightmare";
+import { createMessageDescriptor } from "../../data/localization-descriptors";
+import type { FoldState } from "../fold-state";
 import { GAME_ENGINE_CONFIG, replayLog, type SeqEvent } from "./replay";
 import {
   FIXTURE_PROVIDER_SET,
@@ -50,6 +52,31 @@ afterAll(() => {
 });
 
 describe("replay fixtures", () => {
+  it("round-trips a descriptor-bearing pending prompt through compaction", () => {
+    const base = GAME_ENGINE_CONFIG.genesisState(journeyOnly.genesis);
+    const state: FoldState = {
+      ...base,
+      battle: {
+        init: {} as never,
+        board: {} as never,
+        effectQueue: [],
+        pendingPrompt: {
+          promptId: 17,
+          run: { scriptRef: { table: "battle", id: "synthetic" }, cursor: [0], side: "player" },
+          kind: "choice",
+          options: {
+            kind: "choice",
+            label: createMessageDescriptor("battle-prompt-choose-one"),
+            options: [{ label: createMessageDescriptor("battle-prompt-confirm-yes") }],
+          },
+        },
+        dawnFired: {} as never,
+      },
+    };
+    const decoded = GAME_ENGINE_CONFIG.decode(GAME_ENGINE_CONFIG.encode(state));
+    expect(decoded.battle?.pendingPrompt).toEqual(state.battle?.pendingPrompt);
+  });
+
   it("normalizes every compacted Bane reference to Nightmare", () => {
     const state = GAME_ENGINE_CONFIG.genesisState(journeyOnly.genesis);
     const decoded = GAME_ENGINE_CONFIG.decode(

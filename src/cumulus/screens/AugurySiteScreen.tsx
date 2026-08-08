@@ -35,6 +35,8 @@ import type { ArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
+import type { FluentMessageDescriptor } from "../../data/localization-messages";
+import { formatMessageDescriptor } from "../hooks/use-messages";
 import { GuideGallerySiteLayout } from "./GuideGallerySiteLayout";
 import { debugRerollCornerStyle } from "./chrome-geometry";
 import { useIsDesktop } from "./use-is-desktop";
@@ -92,7 +94,7 @@ export interface AugurySiteView {
   allowDecline?: boolean;
 }
 
-export type AuguryChoiceResult = { ok: true } | { ok: false; message: string };
+export type AuguryChoiceResult = { ok: true } | { ok: false; message: FluentMessageDescriptor };
 
 export interface AugurySiteScreenProps {
   view: AugurySiteView;
@@ -137,10 +139,11 @@ export function AugurySiteScreen({
 }: AugurySiteScreenProps) {
   const reduceMotion = useReducedMotion();
   const isDesktop = useIsDesktop();
+  const t = useMessages();
   const [selectedChoices, setSelectedChoices] = useState<ReadonlyMap<string, string>>(new Map());
   const [inspectedOfferId, setInspectedOfferId] = useState<string | null>(null);
   const [committingOfferId, setCommittingOfferId] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<FluentMessageDescriptor | null>(null);
   const inspectedOffer = view.offers.find((offer) => offer.id === inspectedOfferId) ?? null;
   const wideDesktopDetail = inspectedOffer !== null
     && requiresWideDesktopDetail(inspectedOffer.visual);
@@ -149,7 +152,7 @@ export function AugurySiteScreen({
     ? view.guide
     : {
         ...view.guide,
-        line: view.unavailableMessage ?? "The visions are clouded. Walk on for now.",
+        line: view.unavailableMessage ?? t("augury-unavailable-guide-line"),
       };
 
   const selectChoice = useCallback((offerId: string, choiceId: string) => {
@@ -296,7 +299,7 @@ export function AugurySiteScreen({
                 </div>
                 {view.allowDecline !== false ? (
                   <GlassButton
-                    label="Decline Offer"
+                    label={t("site-decline-offer")}
                     disabled={committingOfferId !== null}
                     onPress={onClose}
                     testId="cumulus-augury-decline"
@@ -305,7 +308,7 @@ export function AugurySiteScreen({
               </motion.div>
             ) : (
               <motion.div key="unavailable" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={transition} style={{ pointerEvents: "auto" }}>
-                <GlassButton label="Walk On" onPress={onClose} testId="cumulus-augury-unavailable-exit" />
+                <GlassButton label={t("site-walk-on")} onPress={onClose} testId="cumulus-augury-unavailable-exit" />
               </motion.div>
             )}
         </section>
@@ -326,7 +329,7 @@ export function AugurySiteScreen({
           <IconButton
             glyph={GLYPHS.refresh}
             overlayGlyph={GLYPHS.bug}
-            label="Reroll Augury offers"
+            label={t("augury-reroll-offers")}
             onPress={onReroll}
             testId="reroll-augury-offers"
           />
@@ -350,7 +353,7 @@ function OfferDetailPanel({
   layout: "mobile" | "desktop";
   selectedChoiceId?: string;
   disabled: boolean;
-  errorMessage: string | null;
+  errorMessage: FluentMessageDescriptor | null;
   onSelect: (offerId: string, choiceId: string) => void;
   onChooseAgain: () => void;
   onConfirm: (offer: AuguryOfferView) => void;
@@ -380,8 +383,8 @@ function OfferDetailPanel({
                 : `0 ${token("--space-2xl")} ${token("--space-l")}`,
             }}
           >
-            <GlassButton label="Choose Again" placement="onGlass" disabled={disabled} onPress={onChooseAgain} testId="cumulus-augury-choose-again" />
-            <GlassButton label="Confirm" variant="accent" placement="onGlass" disabled={confirmDisabled} onPress={() => onConfirm(offer)} testId={`cumulus-augury-confirm-${offer.id}`} />
+            <GlassButton label={t("site-choose-again")} placement="onGlass" disabled={disabled} onPress={onChooseAgain} testId="cumulus-augury-choose-again" />
+            <GlassButton label={t("site-confirm")} variant="accent" placement="onGlass" disabled={confirmDisabled} onPress={() => onConfirm(offer)} testId={`cumulus-augury-confirm-${offer.id}`} />
           </div>
         }
       >
@@ -406,7 +409,7 @@ function OfferDetailPanel({
           <OfferDetailVisual offerId={offer.id} visual={offer.visual} layout={layout} selectedChoiceId={selectedChoiceId} onSelect={onSelect} />
           {errorMessage !== null && (
             <p role="status" data-testid="cumulus-augury-error" style={{ margin: 0, color: token("--danger"), font: token("--t-body"), textAlign: "center" }}>
-              {errorMessage}
+              {formatMessageDescriptor(t, errorMessage)}
             </p>
           )}
         </div>

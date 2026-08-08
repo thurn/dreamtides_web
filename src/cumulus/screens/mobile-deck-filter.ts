@@ -54,9 +54,8 @@ export const DEFAULT_DECK_FILTER_SORT: DeckFilterSort = {
 /** A labelled option, shared shape for both the type filter and the sort menu. */
 export interface DeckControlOption<T extends string> {
   value: T;
-  label: string;
-  /** Compact form for the collapsed dropdown button; falls back to `label`. */
-  triggerLabel?: string;
+  /** Authored subtype text, present only for subtype options. */
+  authoredLabel?: string;
 }
 
 /**
@@ -65,9 +64,9 @@ export interface DeckControlOption<T extends string> {
  */
 export const BASE_DECK_TYPE_FILTER_OPTIONS: readonly DeckControlOption<DeckTypeFilter>[] =
   [
-    { value: "all", label: "All" },
-    { value: "type:Character", label: "Characters" },
-    { value: "type:Event", label: "Events" },
+    { value: "all" },
+    { value: "type:Character" },
+    { value: "type:Event" },
   ] as const;
 
 /**
@@ -100,7 +99,7 @@ export function buildDeckTypeFilterOptions(
         value: `subtype:${subtype}`,
         // Subtype names are authored display values. Keep the semantic name
         // intact; English suffix rules cannot safely produce localized labels.
-        label: subtype,
+        authoredLabel: subtype,
       }),
     );
   return [...BASE_DECK_TYPE_FILTER_OPTIONS, ...subtypeOptions];
@@ -111,24 +110,24 @@ export function buildDeckTypeFilterOptions(
  * label names only its key with no direction marker.
  */
 export const DECK_SORT_OPTIONS: readonly DeckControlOption<DeckSortId>[] = [
-  { value: "name", label: "Name" },
-  { value: "drafted", label: "Acquired" },
-  { value: "cost", label: "Cost" },
-  { value: "spark", label: "Spark" },
-  { value: "subtype", label: "Subtype" },
+  { value: "name" },
+  { value: "drafted" },
+  { value: "cost" },
+  { value: "spark" },
+  { value: "subtype" },
 ] as const;
 
-/** The full label for the currently-selected sort (for an accessible name). */
-export function deckSortLabel(sort: DeckSortId): string {
-  return DECK_SORT_OPTIONS.find((option) => option.value === sort)?.label ?? "";
+/** The semantic selected sort value for an accessible name. */
+export function deckSortLabel(sort: DeckSortId): DeckSortId {
+  return sort;
 }
 
-/** The display label for the currently-selected type filter (accessible name). */
+/** The semantic selected type-filter value or authored subtype name. */
 export function deckTypeFilterLabel(
   filter: DeckTypeFilter,
   options: readonly DeckControlOption<DeckTypeFilter>[],
 ): string {
-  return options.find((option) => option.value === filter)?.label ?? "";
+  return options.find((option) => option.value === filter)?.authoredLabel ?? filter;
 }
 
 /**

@@ -578,7 +578,7 @@ function rarityStyleFor(card: { rarity?: Rarity }): RarityStyle | null {
 interface AttributeChip {
   key: string;
   boltCount: number;
-  ariaLabel: string;
+  ariaLabelId: "card-attribute-interrupt-accessible-name" | "card-attribute-fast-accessible-name";
 }
 
 /**
@@ -590,10 +590,10 @@ function buildAttributeChips(
   card: Pick<CardData, "isFast" | "isInterrupt">,
 ): AttributeChip[] {
   if (card.isInterrupt === true) {
-    return [{ key: "interrupt", boltCount: 2, ariaLabel: "interrupt" }];
+    return [{ key: "interrupt", boltCount: 2, ariaLabelId: "card-attribute-interrupt-accessible-name" }];
   }
   if (card.isFast) {
-    return [{ key: "fast", boltCount: 1, ariaLabel: "fast" }];
+    return [{ key: "fast", boltCount: 1, ariaLabelId: "card-attribute-fast-accessible-name" }];
   }
   return [];
 }
@@ -978,7 +978,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
     <span
       key={chip.key}
       data-attribute-chip={chip.key}
-      aria-label={chip.ariaLabel}
+      aria-label={t(chip.ariaLabelId)}
       style={{
         color:
           transfiguration?.fastChanged === true
@@ -1323,7 +1323,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
       {identiconUri !== null ? (
         <img
           src={identiconUri}
-          alt={`${card.name} identicon`}
+          alt={t("card-identicon-alt", { cardName: card.name })}
           className="absolute inset-0 h-full w-full object-contain"
           draggable={false}
           loading="lazy"

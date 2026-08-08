@@ -39,6 +39,7 @@
     "cumulus-metadata": "node scripts/generate-cumulus-metadata.mjs",
     "cumulus-docs": "node scripts/generate-cumulus-docs.mjs",
     "localization-types": "node scripts/generate-localization-types.mjs",
+    "audit:player-localization": "node scripts/audit-player-localization.mjs --check",
     "upload-assets": "node scripts/upload-assets-to-storage.mjs",
     "publish-dda-image": "node .llms/skills/dda/scripts/publish-image.mjs",
     "send-screenshots": "node scripts/send-screenshots-to-discord.mjs",

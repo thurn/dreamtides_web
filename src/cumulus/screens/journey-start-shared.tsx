@@ -19,6 +19,7 @@ import { GLOSSARY_IDS } from "../../data/glossary";
 import { DEBUG_REROLL_TOP } from "./chrome-geometry";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
+import { useMessages } from "../hooks/use-messages";
 
 /** Canonical rules copy in the Journey Start console's inherited type voice. */
 export function JourneyStartAbilityCopy({
@@ -260,6 +261,7 @@ export function JourneyStartRerollControl({
 }: {
   readonly onReroll: () => void;
 }) {
+  const t = useMessages();
   return (
     <div
       data-dream-avatar-reroll-control
@@ -275,7 +277,7 @@ export function JourneyStartRerollControl({
     >
       <IconButton
         glyph={GLYPHS.refresh}
-        label="Reroll Avatars"
+        label={t("journey-start-reroll-action")}
         onPress={onReroll}
         testId="reroll-dream-avatars"
       />

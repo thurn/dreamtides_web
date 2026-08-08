@@ -50,8 +50,8 @@ export function BattleCardNoteOverlay({
   return (
     <GlassDialog
       title={t("battle-card-note-title", { cardName })}
-      subtitle="Notes appear on the card and in the inspector."
-      closeLabel="Cancel note"
+      subtitle={t("battle-card-note-subtitle")}
+      closeLabel={t("battle-card-note-cancel")}
       onClose={onCancel}
       desktopCenterTarget="battlefield"
     >
@@ -63,12 +63,12 @@ export function BattleCardNoteOverlay({
       >
         <div data-battle-note-field="text">
           <TextField
-            label="Note Text"
+            label={t("battle-card-note-text-label")}
             value={text}
             onChange={(value) => onTextChange(value.slice(0, 200))}
-            placeholder="Short reminder"
-            supportingText={`${String(text.length)}/200 characters`}
-            error={hasText ? undefined : "A note needs text."}
+            placeholder={t("battle-card-note-placeholder")}
+            supportingText={t("battle-card-note-character-count", { count: text.length })}
+            error={hasText ? undefined : t("battle-card-note-error")}
           />
         </div>
         <div
@@ -81,17 +81,17 @@ export function BattleCardNoteOverlay({
               font: token("--t-caption"),
             }}
           >
-            Expiry
+            {t("battle-card-note-expiry-label")}
           </span>
           <Select
-            ariaLabel="Note expiry"
+            ariaLabel={t("battle-card-note-expiry-accessible-name")}
             leadingGlyph={GLYPHS.duration}
             full
             options={[
-              { value: "end-of-next-turn", label: "End of Next Turn" },
-              { value: "end-of-this-turn", label: "End of This Turn" },
-              { value: "after-n-turns", label: "After a Number of Turns" },
-              { value: "manual", label: "Manual Dismissal" },
+              { value: "end-of-next-turn", label: t("battle-card-note-expiry-next-turn") },
+              { value: "end-of-this-turn", label: t("battle-card-note-expiry-this-turn") },
+              { value: "after-n-turns", label: t("battle-card-note-expiry-numbered") },
+              { value: "manual", label: t("battle-card-note-expiry-manual") },
             ]}
             value={expiryOption}
             onChange={(value) =>
@@ -102,10 +102,10 @@ export function BattleCardNoteOverlay({
         {expiryOption === "after-n-turns" ? (
           <div data-battle-note-field="after-n-turns">
             <NumberStepper
-              label="Turns Before Expiry"
+              label={t("battle-card-note-turns-label")}
               value={afterNTurns}
-              decrementLabel="Use one fewer turn"
-              incrementLabel="Use one more turn"
+              decrementLabel={t("battle-card-note-fewer-turn")}
+              incrementLabel={t("battle-card-note-more-turn")}
               decrementDisabled={afterNTurns <= minimumTurns}
               incrementDisabled={afterNTurns >= maximumTurns}
               onDecrement={() =>
@@ -125,13 +125,13 @@ export function BattleCardNoteOverlay({
           }}
         >
           <GlassButton
-            label="Cancel"
+            label={t("battle-card-note-cancel-action")}
             placement="onGlass"
             testId="battle-note-cancel"
             onPress={onCancel}
           />
           <GlassButton
-            label="Add Note"
+            label={t("battle-card-note-add-action")}
             placement="onGlass"
             variant="accent"
             disabled={!hasText}
