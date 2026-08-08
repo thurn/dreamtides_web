@@ -74,6 +74,8 @@ export interface CardData {
   isInterrupt?: boolean;
   reclaimCost?: number | null;
   renderedText: string;
+  /** Authored stronger ability used by the Amplified transfiguration. */
+  amplifiedText?: string;
   /**
    * Name of the Magic: The Gathering card this card is derived from, sourced
    * from a TOML `mtg-name` and carried through the setup-assets transform.

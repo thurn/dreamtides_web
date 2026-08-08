@@ -65,7 +65,7 @@ export function buildTransfigurationDisplay(
 ): TransfiguredCard {
   const steps: Exclude<TransfigurationType, "Perfected">[] =
     type === "Perfected"
-      ? eligibleNonPerfectedTransfigurations(original)
+      ? perfectedSteps(original)
       : [type];
 
   let card = original;
@@ -87,6 +87,13 @@ export function buildTransfigurationDisplay(
         card = { ...card, isFast: true };
         fastChanged = true;
       }
+      continue;
+    }
+    if (step === "Amplified") {
+      const transform = amplifiedTransform(card);
+      if (transform === null) continue;
+      markedText = transform.marked(markedText);
+      card = { ...card, renderedText: transform.plain(card.renderedText) };
       continue;
     }
     // The transform is decided from the current plain text, then applied both
@@ -125,9 +132,13 @@ export function isEmpoweredEligible(card: CardData): boolean {
   return card.energyCost !== null && card.energyCost > 0;
 }
 
-/** Returns true if the card's rules text contains at least one digit. */
+/** Returns true when the card has a distinct, non-empty authored Amplified form. */
 export function isAmplifiedEligible(card: CardData): boolean {
-  return /\d/.test(card.renderedText);
+  return (
+    card.amplifiedText !== undefined &&
+    card.amplifiedText.trim().length > 0 &&
+    card.amplifiedText !== card.renderedText
+  );
 }
 
 /** Returns true if the card is a Character (eligible for Kindled). */
@@ -198,6 +209,21 @@ function eligibleNonPerfectedTransfigurations(
   );
 }
 
+/**
+ * A full-text authored replacement must precede every incremental text edit so
+ * it cannot erase an Inspired, Enduring, Resonant, or Attuned change. Runtime
+ * data generation separately requires the replacement to retain the patterns
+ * those later transforms consume.
+ */
+function perfectedSteps(
+  card: CardData,
+): Exclude<TransfigurationType, "Perfected">[] {
+  const eligible = eligibleNonPerfectedTransfigurations(card);
+  return eligible.includes("Amplified")
+    ? ["Amplified", ...eligible.filter((type) => type !== "Amplified")]
+    : eligible;
+}
+
 /** Returns the list of transfiguration types the card is eligible for. */
 export function eligibleTransfigurations(
   card: CardData,
@@ -222,7 +248,7 @@ export function applyTransfigurationToCard(
 ): CardData {
   if (type === "Perfected") {
     let result = card;
-    for (const step of eligibleNonPerfectedTransfigurations(card)) {
+    for (const step of perfectedSteps(card)) {
       result = applyTransfigurationToCard(result, step);
     }
     return result;
@@ -232,6 +258,11 @@ export function applyTransfigurationToCard(
   }
   if (type === "Hastened") {
     return card.isFast ? card : { ...card, isFast: true };
+  }
+  if (type === "Amplified") {
+    return isAmplifiedEligible(card)
+      ? { ...card, renderedText: card.amplifiedText! }
+      : card;
   }
   const transform = textTransformFor(card.renderedText, type);
   if (transform === null) {
@@ -299,7 +330,7 @@ function textTransformFor(
   text: string,
   step: Exclude<
     TransfigurationType,
-    "Perfected" | "Empowered" | "Kindled" | "Hastened"
+    "Perfected" | "Empowered" | "Amplified" | "Kindled" | "Hastened"
   >,
 ): TextTransform | null {
   switch (step) {
@@ -307,8 +338,6 @@ function textTransformFor(
       return appendTransform("Draw a card.");
     case "Enduring":
       return appendTransform("Reclaim.");
-    case "Amplified":
-      return amplifiedTransform(text);
     case "Resonant":
       return resonantTransform(text);
     case "Attuned":
@@ -328,21 +357,63 @@ function appendTransform(clause: string): TextTransform {
   };
 }
 
-/**
- * Amplified bumps the first number in the rules text up by one; only the bumped
- * number is tinted, so a neighboring resource glyph (e.g. the `●` of `2●`)
- * keeps its resource hue.
- */
-function amplifiedTransform(text: string): TextTransform | null {
-  const match = /\d+/.exec(text);
-  if (match === null) {
-    return null;
+/** Splits rules text into stable diff units while retaining all whitespace. */
+function diffTokens(text: string): string[] {
+  return text.match(/\s+|[\p{L}\p{N}]+|[^\s\p{L}\p{N}]/gu) ?? [];
+}
+
+/** Marks every token introduced by an authored replacement. */
+function markAuthoredReplacement(original: string, replacement: string): string {
+  const before = diffTokens(original);
+  const after = diffTokens(replacement);
+  const lengths = Array.from({ length: before.length + 1 }, () =>
+    Array<number>(after.length + 1).fill(0),
+  );
+  for (let i = before.length - 1; i >= 0; i -= 1) {
+    for (let j = after.length - 1; j >= 0; j -= 1) {
+      lengths[i][j] =
+        before[i] === after[j]
+          ? lengths[i + 1][j + 1] + 1
+          : Math.max(lengths[i + 1][j], lengths[i][j + 1]);
+    }
   }
-  const oldNum = match[0];
-  const newNum = String(parseInt(oldNum, 10) + 1);
+
+  const output: string[] = [];
+  let added = "";
+  const flushAdded = (): void => {
+    if (added.length > 0) {
+      output.push(mark(added));
+      added = "";
+    }
+  };
+  let i = 0;
+  let j = 0;
+  while (i < before.length || j < after.length) {
+    if (i < before.length && j < after.length && before[i] === after[j]) {
+      flushAdded();
+      output.push(after[j]);
+      i += 1;
+      j += 1;
+    } else if (
+      i < before.length &&
+      (j >= after.length || lengths[i + 1][j] >= lengths[i][j + 1])
+    ) {
+      i += 1;
+    } else {
+      added += after[j];
+      j += 1;
+    }
+  }
+  flushAdded();
+  return output.join("");
+}
+
+function amplifiedTransform(card: CardData): TextTransform | null {
+  if (!isAmplifiedEligible(card)) return null;
+  const replacement = card.amplifiedText!;
   return {
-    plain: (t) => t.replace(oldNum, newNum),
-    marked: (t) => t.replace(oldNum, mark(newNum)),
+    plain: () => replacement,
+    marked: () => markAuthoredReplacement(card.renderedText, replacement),
   };
 }
 
@@ -519,7 +590,7 @@ export function transfigurationEffectDetails(
   offer: TransfigurationOffer,
   originalCard: CardData,
 ): Record<string, unknown> {
-  const details: Record<string, unknown> = {};
+  const details: Record<string, unknown> = { cardId: originalCard.id };
   if (offer.previewCard.energyCost !== originalCard.energyCost) {
     details.energyCost = {
       from: originalCard.energyCost,

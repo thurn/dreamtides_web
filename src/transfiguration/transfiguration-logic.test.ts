@@ -80,15 +80,32 @@ describe("isEmpoweredEligible", () => {
 });
 
 describe("isAmplifiedEligible", () => {
-  it("returns true if renderedText contains a digit", () => {
-    expect(isAmplifiedEligible(makeCard({ renderedText: "Deal 3 damage." }))).toBe(
-      true,
-    );
+  it("returns true for a distinct authored Amplified form", () => {
+    expect(
+      isAmplifiedEligible(
+        makeCard({
+          renderedText: "Deal damage.",
+          amplifiedText: "Deal damage to two enemies.",
+        }),
+      ),
+    ).toBe(true);
   });
 
-  it("returns false if renderedText has no digits", () => {
+  it("returns false for numeric text without an authored form", () => {
     expect(
-      isAmplifiedEligible(makeCard({ renderedText: "Draw a card." })),
+      isAmplifiedEligible(makeCard({ renderedText: "Deal 3 damage." })),
+    ).toBe(false);
+  });
+
+  it("returns false for an empty or unchanged authored form", () => {
+    expect(isAmplifiedEligible(makeCard({ amplifiedText: "" }))).toBe(false);
+    expect(
+      isAmplifiedEligible(
+        makeCard({
+          renderedText: "Deal 3 damage.",
+          amplifiedText: "Deal 3 damage.",
+        }),
+      ),
     ).toBe(false);
   });
 });
@@ -124,11 +141,12 @@ describe("isEnduringEligible", () => {
 });
 
 describe("eligibleTransfigurations", () => {
-  it("returns Empowered, Amplified, Kindled for a Character with cost and number in text", () => {
+  it("returns Empowered, Amplified, Kindled for a Character with an authored form", () => {
     const card = makeCard({
       cardType: "Character",
       energyCost: 4,
       renderedText: "Deal 3 damage.",
+      amplifiedText: "Deal 4 damage.",
     });
     const eligible = eligibleTransfigurations(card);
     expect(eligible).toContain("Empowered");
@@ -138,11 +156,12 @@ describe("eligibleTransfigurations", () => {
     expect(eligible).not.toContain("Enduring");
   });
 
-  it("returns Inspired, Enduring, Amplified for an Event with cost and number in text", () => {
+  it("returns Inspired, Enduring, Amplified for an Event with an authored form", () => {
     const card = makeCard({
       cardType: "Event",
       energyCost: 3,
       renderedText: "Deal 5 damage.",
+      amplifiedText: "Deal 6 damage.",
     });
     const eligible = eligibleTransfigurations(card);
     expect(eligible).toContain("Empowered");
@@ -295,21 +314,19 @@ describe("assignTransfiguration", () => {
     expect(offer!.previewCard.renderedText).toContain("Reclaim.");
   });
 
-  it("returns a Amplified offer that modifies a number in text", () => {
-    // A card where Amplified is the eligible type we'll hit
-    vi.spyOn(Math, "random")
-      .mockReturnValueOnce(0.3) // picks Amplified (index 1 of eligible)
-      .mockReturnValueOnce(0.8); // Amplified delta: >= 0.5 means +1
+  it("returns an Amplified offer with the exact authored text", () => {
+    vi.spyOn(Math, "random").mockReturnValue(0.3);
     const card = makeCard({
       cardType: "Character",
       energyCost: 0,
       renderedText: "Deal 5 damage.",
+      amplifiedText: "Deal 7 damage to an enemy.",
     });
     // Eligible: Amplified, Kindled. random=0.3 => floor(0.3*2) = 0 => Amplified
     const offer = assignTransfiguration(card, null);
     expect(offer).not.toBeNull();
     expect(offer!.type).toBe("Amplified");
-    expect(offer!.previewCard.renderedText).toMatch(/Deal [46] damage\./);
+    expect(offer!.previewCard.renderedText).toBe("Deal 7 damage to an enemy.");
     expect(offer!.change).toEqual({
       kind: "amplified-rules",
       rulesText: offer!.previewCard.renderedText,
@@ -363,6 +380,7 @@ describe("transfigurationEffectDetails", () => {
     const card = makeCard({ energyCost: 6 });
     const offer = assignTransfiguration(card, null)!;
     const details = transfigurationEffectDetails(offer, card);
+    expect(details.cardId).toBe(card.id);
     expect(details.energyCost).toEqual({ from: 6, to: 3 });
   });
 
@@ -451,6 +469,23 @@ describe("buildTransfigurationDisplay", () => {
     );
   });
 
+  it("composes authored Amplified text with later Perfected transforms", () => {
+    const card = makeCard({
+      cardType: "Event",
+      energyCost: 2,
+      spark: null,
+      renderedText: "▸Dawn: Gain 1●.",
+      amplifiedText: "▸Dawn: Gain 2●.",
+    });
+    const built = buildTransfigurationDisplay(card, "Perfected");
+    expect(built.card.renderedText).toContain("▸Materialized, Dawn: Gain 2●.");
+    expect(built.card.renderedText).toContain("Draw a card.");
+    expect(built.card.renderedText).toContain("Reclaim.");
+    expect(stripMarkers(built.display.markedText)).toBe(
+      built.card.renderedText,
+    );
+  });
+
   it("wraps an appended Inspired clause in transfigure markers", () => {
     const card = makeCard({
       cardType: "Event",
@@ -492,18 +527,24 @@ describe("buildTransfigurationDisplay", () => {
     expect(built.card.energyCost).toBe(2);
   });
 
-  it("wraps only the bumped Amplified number, leaving a leading resource glyph untinted", () => {
+  it("marks each authored Amplified change while preserving unchanged glyphs", () => {
     const card = makeCard({
       cardType: "Character",
       energyCost: 0,
       spark: 1,
-      renderedText: "Gain ✦2 this turn.",
+      renderedText: "Gain ✦2 this turn. An ally gains veil.",
+      amplifiedText: "Gain ✦3 this turn. Two allies gain veil.",
     });
     const built = buildTransfigurationDisplay(card, "Amplified");
-    expect(built.card.renderedText).toContain("✦3");
-    // The number is wrapped; the ✦ glyph stays outside the markers.
+    expect(built.card.renderedText).toBe(card.amplifiedText);
     expect(built.display.markedText).toContain(
       `✦${TRANSFIGURE_MARK_START}3${TRANSFIGURE_MARK_END}`,
+    );
+    expect(built.display.markedText).toContain(
+      `${TRANSFIGURE_MARK_START}Two${TRANSFIGURE_MARK_END}`,
+    );
+    expect(built.display.markedText).toContain(
+      `${TRANSFIGURE_MARK_START}allies${TRANSFIGURE_MARK_END}`,
     );
   });
 

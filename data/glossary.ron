@@ -581,7 +581,7 @@ CompatDocument(
         "id": "amplified",
         "category": "Transfigurations",
         "term": "Amplified",
-        "definition": "Transfiguration: increases or decreases a number in this card\'s rules text by 1.",
+        "definition": "Transfiguration: replaces this card\'s ability with its authored stronger form.",
         "priority": 85,
         "matches-rules-text": true,
         "variants": [],

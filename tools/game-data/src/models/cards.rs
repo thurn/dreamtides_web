@@ -9,6 +9,8 @@ pub struct CardDefinition {
     pub name: String,
     pub id: String,
     pub ability_text: Vec<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub amplified_text: Option<Vec<String>>,
     pub energy_cost: OrbValue,
     pub kind: CardKind,
     #[serde(default, skip_serializing_if = "speed_is_normal")]
@@ -170,6 +172,12 @@ pub fn lower(
             "rendered-text".into(),
             card.ability_text.join("\n\n").into(),
         );
+        if let Some(amplified_text) = card.amplified_text {
+            record.insert(
+                "amplified-text".into(),
+                amplified_text.join("\n\n").into(),
+            );
+        }
         record.insert("energy-cost".into(), card.energy_cost.compatibility_value());
         record.insert("card-type".into(), card_type.into());
         record.insert("subtype".into(), subtype.into());
@@ -218,6 +226,7 @@ mod tests {
             name: "Unicode ✦ card".into(),
             id: "00000000-0000-4000-8000-000000000001".into(),
             ability_text: vec!["quoted \"text\"".into(), "multiline {value}".into()],
+            amplified_text: Some(vec!["stronger quoted \"text\"".into()]),
             energy_cost,
             kind,
             speed: Speed::Interrupt,
@@ -267,10 +276,17 @@ mod tests {
             record["rendered-text"].as_str(),
             Some("quoted \"text\"\n\nmultiline {value}")
         );
+        assert_eq!(
+            record["amplified-text"].as_str(),
+            Some("stronger quoted \"text\"")
+        );
 
-        let event = lower(vec![card(OrbValue::Variable, CardKind::Event)], metadata(1)).unwrap();
+        let mut event_card = card(OrbValue::Variable, CardKind::Event);
+        event_card.amplified_text = None;
+        let event = lower(vec![event_card], metadata(1)).unwrap();
         assert_eq!(event["cards"][0]["card-type"].as_str(), Some("Event"));
         assert_eq!(event["cards"][0]["subtype"].as_str(), Some(""));
+        assert!(event["cards"][0].get("amplified-text").is_none());
     }
 
     #[test]

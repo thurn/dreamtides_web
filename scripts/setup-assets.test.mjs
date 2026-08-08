@@ -851,6 +851,58 @@ describe("transformCard energy cost", () => {
   });
 });
 
+describe("transformCard Amplified text", () => {
+  it("carries an authored Amplified form into the runtime shape", () => {
+    const result = transformCard({
+      name: "Amplified fixture",
+      id: "amplified-fixture",
+      "card-number": 1,
+      "card-type": "Event",
+      "energy-cost": 2,
+      "is-fast": false,
+      "rendered-text": "Gain 2●.",
+      "amplified-text": "Gain 3●.",
+      "image-number": 1,
+      "art-owned": false,
+    });
+    expect(result.amplifiedText).toBe("Gain 3●.");
+  });
+
+  it("rejects authored text that changes activated costs", () => {
+    expect(() =>
+      transformCard({
+        name: "Amplified fixture",
+        id: "amplified-fixture",
+        "card-number": 1,
+        "card-type": "Character",
+        "energy-cost": 2,
+        "is-fast": false,
+        "rendered-text": "3●: Store 1⧗.",
+        "amplified-text": "2●: Store 1⧗.",
+        "image-number": 1,
+        "art-owned": false,
+      }),
+    ).toThrow(/changes an activated ability cost/u);
+  });
+
+  it("rejects authored text that breaks later Perfected transforms", () => {
+    expect(() =>
+      transformCard({
+        name: "Amplified fixture",
+        id: "amplified-fixture",
+        "card-number": 1,
+        "card-type": "Character",
+        "energy-cost": 2,
+        "is-fast": false,
+        "rendered-text": "▸Dawn: Gain 1●.\n\n2●, ☾: Gain 1✦.",
+        "amplified-text": "Gain 2●.\n\nGain 2✦.",
+        "image-number": 1,
+        "art-owned": false,
+      }),
+    ).toThrow(/changes (?:a named trigger|an activated ability cost)/u);
+  });
+});
+
 describe("parseSpark", () => {
   it("preserves a numeric spark", () => {
     expect(parseSpark(3)).toEqual({ spark: 3, variable: false });

@@ -2095,7 +2095,7 @@ exploration-fixed-transfiguration-disclosure =
         [Inspired] Add "Draw a card" to its rules text
         [Enduring] Add "Reclaim" to its rules text
         [Hastened] Make it Fast
-        [Amplified] Increase the first number in its rules text by 1
+        [Amplified] Replace its ability with its authored stronger form
         [Resonant] Widen a named trigger to fire more often
         [Attuned] Reduce an activated ability's cost by 1●
        *[Perfected] Apply every available transfiguration

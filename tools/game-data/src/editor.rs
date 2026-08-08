@@ -728,19 +728,50 @@ fn patch_card_source_field(source: &str, card: &CardDefinition, field: &str) -> 
     let source_field = match field {
         "name" => "name",
         "ability_text" | "rules" | "rendered-text" => "ability_text",
+        "amplified_text" | "amplified-text" => "amplified_text",
         "energy_cost" | "energy-cost" => "energy_cost",
         "card_type" | "card-type" | "subtype" | "spark" => "kind",
         "image_number" | "image-number" | "art_crop" | "art" => "art",
         _ => bail!("INVALID_EDIT: unsupported Cards field {field}"),
     };
-    let replacement = render_card_source_field(card, source_field)?;
     let record = card_record_range(source, &card.id)?;
     if let Some(value) = top_level_field_value_range(source, record.clone(), source_field)? {
+        if source_field == "amplified_text" && card.amplified_text.is_none() {
+            let line_start = source[..value.start]
+                .rfind('\n')
+                .context("MALFORMED_SOURCE: amplified_text must occupy its own line")?
+                + 1;
+            let line_end = value.end
+                + source[value.end..]
+                    .find('\n')
+                    .context("MALFORMED_SOURCE: amplified_text line is unterminated")?
+                + 1;
+            return Ok(format!("{}{}", &source[..line_start], &source[line_end..]));
+        }
+        let replacement = render_card_source_field(card, source_field)?;
         return Ok(format!(
             "{}{}{}",
             &source[..value.start],
             replacement,
             &source[value.end..]
+        ));
+    }
+    if source_field == "amplified_text" {
+        let Some(_) = card.amplified_text else {
+            return Ok(source.to_owned());
+        };
+        let replacement = render_card_source_field(card, source_field)?;
+        let ability = top_level_field_value_range(source, record.clone(), "ability_text")?
+            .with_context(|| format!("missing ability_text on card {}", card.id))?;
+        let comma_offset = source[ability.end..record.end]
+            .find(',')
+            .context("MALFORMED_SOURCE: ability_text field is missing its trailing comma")?;
+        let insertion = ability.end + comma_offset + 1;
+        return Ok(format!(
+            "{}\n    amplified_text: {},{}",
+            &source[..insertion],
+            replacement,
+            &source[insertion..]
         ));
     }
     bail!(
@@ -755,6 +786,16 @@ fn render_card_source_field(card: &CardDefinition, field: &str) -> Result<String
         "ability_text" => {
             let clauses = card
                 .ability_text
+                .iter()
+                .map(ron::to_string)
+                .collect::<Result<Vec<_>, _>>()?;
+            Ok(format!("[{}]", clauses.join(", ")))
+        }
+        "amplified_text" => {
+            let clauses = card
+                .amplified_text
+                .as_ref()
+                .context("amplified_text must be present when rendering")?
                 .iter()
                 .map(ron::to_string)
                 .collect::<Result<Vec<_>, _>>()?;
@@ -1048,6 +1089,14 @@ fn set_card_field(card: &mut CardDefinition, field: &str, value: JsonValue) -> R
                 Vec::new()
             } else {
                 rendered_text.split("\n\n").map(str::to_owned).collect()
+            };
+        }
+        "amplified_text" | "amplified-text" => {
+            let rendered_text = json_string(value, field)?;
+            card.amplified_text = if rendered_text.is_empty() {
+                None
+            } else {
+                Some(rendered_text.split("\n\n").map(str::to_owned).collect())
             };
         }
         "energy_cost" | "energy-cost" => card.energy_cost = parse_orb(value, false)?,
@@ -1605,6 +1654,48 @@ mod tests {
     }
 
     #[test]
+    fn card_amplified_text_edit_inserts_and_updates_one_source_field() {
+        let mut cards: Vec<CardDefinition> = ron::from_str(CARD_SOURCE).unwrap();
+        let index = unique_card_index(&cards, CARD_ID).unwrap();
+        set_card_field(
+            &mut cards[index],
+            "amplified-text",
+            json!("Offering\n\n▸Materialized: Dissolve up to two enemies."),
+        )
+        .unwrap();
+
+        let inserted =
+            patch_card_source_field(CARD_SOURCE, &cards[index], "amplified-text").unwrap();
+        assert!(inserted.contains(
+            "amplified_text: [\"Offering\", \"▸Materialized: Dissolve up to two enemies.\"],"
+        ));
+        assert_eq!(
+            ron::from_str::<Vec<CardDefinition>>(&inserted).unwrap(),
+            cards
+        );
+
+        set_card_field(
+            &mut cards[index],
+            "amplified-text",
+            json!("Offering\n\n▸Materialized: Dissolve an enemy. Gain 1⍟."),
+        )
+        .unwrap();
+        let updated =
+            patch_card_source_field(&inserted, &cards[index], "amplified-text").unwrap();
+        assert_eq!(updated.matches("amplified_text:").count(), 1);
+        assert_eq!(
+            ron::from_str::<Vec<CardDefinition>>(&updated).unwrap(),
+            cards
+        );
+
+        set_card_field(&mut cards[index], "amplified-text", json!("")).unwrap();
+        let removed =
+            patch_card_source_field(&updated, &cards[index], "amplified-text").unwrap();
+        assert!(!removed.contains("amplified_text:"));
+        assert_eq!(ron::from_str::<Vec<CardDefinition>>(&removed).unwrap(), cards);
+    }
+
+    #[test]
     fn card_source_patch_round_trips_every_editable_shape() {
         let edits = [
             ("name", json!("Quoted \"Name\"")),
@@ -1641,6 +1732,7 @@ mod tests {
             name: "Fixture".into(),
             id: "00000000-0000-4000-8000-000000000001".into(),
             ability_text: Vec::new(),
+            amplified_text: None,
             energy_cost: OrbValue::Fixed(1),
             kind: CardKind::Event,
             speed: crate::models::cards::Speed::Normal,

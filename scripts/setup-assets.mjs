@@ -40,6 +40,7 @@ import {
 import {
   buildExplorationEffectDefinitions,
 } from "./exploration-effect-definitions.mjs";
+import { amplifiedStructuralErrors } from "./lib/amplified-validation.mjs";
 
 // Re-exported for `setup-assets.test.mjs`, which exercises the JSONC comment
 // stripper alongside the asset-build helpers defined here.
@@ -307,6 +308,17 @@ export function parseSpark(value) {
  * emit an `energyCosts` array of orb labels.
  */
 export function transformCard(card) {
+  if (card["amplified-text"] !== undefined) {
+    const structuralErrors = amplifiedStructuralErrors(
+      card["rendered-text"] ?? "",
+      card["amplified-text"],
+    );
+    if (structuralErrors.length > 0) {
+      throw new Error(
+        `Card ${String(card.id)} has invalid amplified-text: ${structuralErrors.join(", ")}`,
+      );
+    }
+  }
   const result = {};
   for (const [key, value] of Object.entries(card)) {
     const camelKey = kebabToCamel(key);
