@@ -60,7 +60,7 @@ This task is **additive**: it adds new TOML, loaders, types, and `SiteType` memb
 - [ ] **Step 1: Author the four TOML files.**
 
 Author placeholder-but-real content:
-- `dreamscapes.toml`: 11 `[[dreamscapes]]` entries from the doc's dreamscape list (Firstlight Meadow + the 10 named ones). Fields per the spec §5: `id`, `name`, `aesthetic`, `guide-id` (omit/empty for Firstlight), `signature-site`, `affiliation-id` (omit/empty for Firstlight). Firstlight carries `is-starter = true` and a `fixed-sites` list (`["Draft","Draft","DreamsignRevelation","Purge","Battle"]`).
+- `dreamscapes.toml`: 11 `[[dreamscapes]]` entries from the doc's dreamscape list (Firstlight Meadow + the 10 named ones). Fields per the spec §5: `id`, `name`, `guide-id` (omit/empty for Firstlight), `signature-site`, `affiliation-id` (omit/empty for Firstlight). Firstlight carries `is-starter = true` and a `fixed-sites` list (`["Draft","Draft","DreamsignRevelation","Purge","Battle"]`).
 - `dream_guides.toml`: 10 `[[guides]]` from the doc's Home Specialties table — `id`, `name`, `home-dreamscape-id`, `site-type`, `dialog` (one or two placeholder lines), `home-specialty` (a free-form description string sourced from the doc's enhancement column).
 - `affiliations.toml`: one `[[affiliations]]` per distinct affiliation in the doc — `id`, `name`, `signature-cards` (a small curated list of 3–8 real card UUIDs from `data/cards.toml` that fit the affiliation theme), `weight-strength` (default e.g. `2.0`), `opponent-bias-strength` (default e.g. `2.0`).
 - `atlas.toml`: `layer-specs` (array of 7 entries, each `{min, max}` width: `1,2,3,{3,4},{3,5},{3,5},1`), `connection-average = 2.0`, `bonus-reveal = {min=0, max=2, mode=1}`, `repeat-discourage-strength`, and `[known-dreamsign] max-per-atlas = 2, eligible-layers = [3,4,5,6], placement-probability, early-reveal-bias`.
@@ -108,7 +108,6 @@ export type AtlasNodeState =
 export interface DreamscapeContent {
   id: string;
   name: string;
-  aesthetic: string;
   guideId: string | null;
   signatureSite: SiteType;
   affiliationId: string | null;
@@ -174,7 +173,7 @@ This task owns the `DreamAtlas`/`DreamscapeNode` reshape. It updates the generat
 - Rewrite: `src/atlas/atlas-generator.ts` (generation)
 - Modify: `src/state/journey-state-actions.ts` (`startJourneyFromDreamAvatar`, `updateJourneyAtlas`, `completeJourneySite`, `canVisitSite` — atlas advance/reveal logic)
 - Modify: `src/screens/AtlasScreen.tsx`, `src/components/AtlasNode.tsx` (compile-fix only)
-- Modify: `src/data/biomes.ts` (demote to aesthetic flavor or remove usage)
+- Modify: `src/data/biomes.ts` (remove usage)
 - Test: `src/atlas/atlas-generator.test.ts` (rewrite invariants)
 
 - [ ] **Step 1: Reshape the atlas types.**
@@ -232,7 +231,7 @@ Rewrite `src/atlas/atlas-generator.ts`:
 - Reconstruction logging via `logEvent` (spec §8): layer widths, each node assignment with the draw weights, connection set, reveal events, known-dreamsign placement.
 - Keep `siteTypeIcon`/`siteTypeName`/`siteTypeDescription`/`enhancedSiteDescription` (extend their maps for new site types) and `previewSiteTypes`/`revealedAtlasSite` adapted to the new node shape.
 
-`assignBiome` becomes aesthetic-only flavor or is removed; the visible dreamscape name now comes from `DreamscapeContent.name`.
+Remove `assignBiome`; the visible dreamscape name comes from `DreamscapeContent.name`.
 
 - [ ] **Step 5: Update non-UI consumers.**
 

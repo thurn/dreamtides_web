@@ -228,7 +228,6 @@ function makeAffiliationContent(db: ReadonlyMap<number, CardData>): {
     {
       id: "affiliated_scape",
       name: "Affiliated Scape",
-      aesthetic: "",
       guideId: null,
       signatureSite: "Battle",
       affiliationId: "alpha_affiliation",

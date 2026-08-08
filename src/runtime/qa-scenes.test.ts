@@ -202,7 +202,6 @@ describe('the "random-site-atlas" QA scene', () => {
       {
         id: "rust-expanse-test",
         name: "The Rust Expanse",
-        aesthetic: "A test wasteland.",
         guideId: "maddox",
         signatureSite: "RandomSite",
         affiliationId: null,

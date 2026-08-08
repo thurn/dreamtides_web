@@ -70,7 +70,7 @@ Major gaps this spec closes:
 | System | Current | Target |
 | --- | --- | --- |
 | Atlas | radial binary tree, procedural biomes, 3 node states | fixed 7-layer columns, non-crossing connections, 5 node states, reveal-by-layer |
-| Dreamscapes | procedural biome names | 11 named dreamscapes w/ aesthetic, guide, affiliation |
+| Dreamscapes | procedural biome names | 11 named dreamscapes with guide and affiliation |
 | Dream Guides | none | 10 named NPCs + dialog + home specialties |
 | Affiliations | none | IDF similarity reweighting on all draws + opponent bias |
 | Sites | DreamJourney/Cleanse/Omens | Augury rename, Dreamsign Market, Nightmare→Purge, single currency, 3 stubs |
@@ -100,7 +100,7 @@ All new files compile to JSON via `scripts/setup-assets.mjs` (kebab→camel) and
 load through `fetch()` like existing assets.
 
 - `data/dreamscapes.toml` — 11 dreamscapes. Fields: `id`, `name`,
-  `aesthetic`, `guide-id` (null for Firstlight), `signature-site`,
+  `guide-id` (null for Firstlight), `signature-site`,
   `affiliation-id` (null for Firstlight). Firstlight Meadow is
   flagged as the fixed starter with an explicit fixed-site list.
 - `data/dream_guides.toml` — 10 guides. Fields: `id`, `name`,
@@ -163,7 +163,7 @@ acceptance criteria.
   3–6, biased toward an early-revealed node).
 - Reconstruction-grade logging: log layer widths, every node assignment with
   weights, connection set, reveal events, known-dreamsign placement.
-- Retire `src/data/biomes.ts` usage (or repurpose as aesthetic flavor only).
+- Retire `src/data/biomes.ts` usage.
 - **Manual QA:** generate an atlas; verify 7 columns, boss node visible at start,
   0–2 bonus reveals, connections do not cross, no node assigned adjacent to a
   copy of itself across several regenerations (use the existing "Regenerate

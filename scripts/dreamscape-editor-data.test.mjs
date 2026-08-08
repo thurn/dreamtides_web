@@ -39,7 +39,6 @@ function fixtureToml() {
   return `[[dreamscapes]]
 id = "starter_field"
 name = "Starter Field"
-aesthetic = "A calm opening."
 signature-site = "Draft"
 is-starter = true
 fixed-sites = ["Draft", "Battle"]
@@ -48,7 +47,6 @@ ${GUIDE_SITE_TYPES.map(
   (siteType, index) => `[[dreamscapes]]
 id = "${index === 0 ? "second_realm" : `realm_${String(index)}`}"
 name = "Realm ${String(index)}"
-aesthetic = "Synthetic region ${String(index)}."
 affiliation-id = "affil_one"
 `,
 ).join("\n")}`;

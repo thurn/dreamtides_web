@@ -66,8 +66,8 @@ to the final boss.
 ## Dreamscapes and Dream Guides
 
 A journey takes place on the Dream Atlas, an interconnected web of dreamscapes.
-Each dreamscape is a named, themed location with a fixed aesthetic and a
-collection of sites. Every dreamscape between the start and the final boss also
+Each dreamscape is a named, themed location with a collection of sites. Every
+dreamscape between the start and the final boss also
 has a **Dream Guide** and an **affiliation**; the two fixed endpoints —
 Firstlight Meadow at the start and Limbo at the final boss — have neither.
 
@@ -102,13 +102,10 @@ Revelation](#dreamsign-revelation) offering a choice of 3 dreamsigns, a
 [Purge](#purge) site, and a [Battle](#battle) site fought to 10 points. No fill
 sites appear and no site is enhanced.
 
-- **Aesthetic:** A tranquil meadow at sunrise.
-
 ### Tumbleleaf Village
 
 - **Dream Guide:** Tobias Tanglefur
 - **Signature Site:** [Card Shop](#card-shop)
-- **Aesthetic:** A fantasy village with anthropomorphic animals.
 - **Affiliation:** Spirit Animals
 - **Site Icon:** `boxicons3/store-alt-2`
 
@@ -116,7 +113,6 @@ sites appear and no site is enhanced.
 
 - **Dream Guide:** Amunet, the Tomb-Keeper
 - **Signature Site:** [Dreamsign Market](#dreamsign-market)
-- **Aesthetic:** An ancient Egyptian realm.
 - **Affiliation:** Erode, Void matters
 - **Site Icon:** `boxicons3/pyramid`
 
@@ -124,7 +120,6 @@ sites appear and no site is enhanced.
 
 - **Dream Guide:** Sigrún
 - **Signature Site:** [Dreamsign Revelation](#dreamsign-revelation)
-- **Aesthetic:** A snowy viking village.
 - **Affiliation:** Removal, Dissolve / Banish effects
 - **Site Icon:** `boxicons3/meteor`
 
@@ -132,7 +127,6 @@ sites appear and no site is enhanced.
 
 - **Dream Guide:** Durgan Forgehammer
 - **Signature Site:** [Transfiguration](#transfiguration)
-- **Aesthetic:** A dwarven fortress.
 - **Affiliation:** Storm / Events matter
 - **Site Icon:** `fontawesome/hammer`
 
@@ -140,7 +134,6 @@ sites appear and no site is enhanced.
 
 - **Dream Guide:** Deacon Holt
 - **Signature Site:** [Duplication](#duplication)
-- **Aesthetic:** A rural town experiencing a zombie apocalypse.
 - **Affiliation:** Inexpensive Characters
 - **Site Icon:** `boxicons3/copy`
 
@@ -148,7 +141,6 @@ sites appear and no site is enhanced.
 
 - **Dream Guide:** Master Takeshi
 - **Signature Site:** [Purge](#purge)
-- **Aesthetic:** A samurai-era Japanese kingdom.
 - **Affiliation:** Warriors
 - **Site Icon:** `boxicons3/hot`
 
@@ -156,7 +148,6 @@ sites appear and no site is enhanced.
 
 - **Dream Guide:** Aldric, the Seer
 - **Signature Site:** [Augury](#augury)
-- **Aesthetic:** An enchanted forest.
 - **Affiliation:** Abandon / Sacrifice
 - **Site Icon:** `boxicons3/eye`
 
@@ -164,7 +155,6 @@ sites appear and no site is enhanced.
 
 - **Dream Guide:** Maddox
 - **Signature Site:** [Random Site](#random-site)
-- **Aesthetic:** A "Mad Max" post-apocalyptic wasteland.
 - **Affiliation:** Survivors
 - **Site Icon:** `?`
 
@@ -172,8 +162,6 @@ sites appear and no site is enhanced.
 
 - **Dream Guide:** Gravok
 - **Signature Site:** [Gamble](#gamble)
-- **Aesthetic:** A sci-fi outpost on a distant planet, populated by humans and
-  aliens (such as Gravok, a crystal/rock creature).
 - **Affiliation:** Figments
 - **Site Icon:** `boxicons3/coin`
 
@@ -181,7 +169,6 @@ sites appear and no site is enhanced.
 
 - **Dream Guide:** "Layaway"
 - **Signature Site:** [Exploration](#exploration)
-- **Aesthetic:** A cyberpunk city.
 - **Affiliation:** Discard
 - **Site Icon:** `boxicons3/compass` (filled)
 
@@ -197,8 +184,6 @@ random collection of [sites](#dreamscape-generation) drawn from the fill pool,
 culminating in the final [Battle](#battle) against Apollyon, which is visited
 last. Because Limbo has no home guide, none of its sites are enhanced, and
 because it has no affiliation, no affiliation nudge applies to its draws.
-
-- **Aesthetic:** A dark fantasy void at the end of all dreams.
 
 ## Affiliations
 

@@ -25,7 +25,6 @@ export const MINIMAL_DREAMSCAPES: DreamscapeContent[] = [
   {
     id: "fixture-starter-dreamscape",
     name: "Fixture Starter Dreamscape",
-    aesthetic: "A synthetic test region.",
     guideId: null,
     signatureSite: "Draft",
     affiliationId: null,
@@ -54,7 +53,6 @@ export const SYNTHETIC_ATLAS_DREAMSCAPES: DreamscapeContent[] = [
   ).map((signatureSite, index) => ({
     id: `fixture-dreamscape-${String(index)}`,
     name: `Fixture Dreamscape ${String(index)}`,
-    aesthetic: "A synthetic test region.",
     guideId:
       signatureSite === "RandomSite"
         ? "fixture-random-guide"

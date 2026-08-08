@@ -283,7 +283,6 @@ steers its draft and battle content.
 Fields:
   id              Stable identifier referenced by guides and atlas generation.
   name            Player-facing dreamscape name.
-  aesthetic       Art-direction / mood description for the region.
   Guide residency and signature sites are derived from dream_guides.toml.
   signature-site  Authored only for the starter's fixed Draft identity.
   affiliation-id  Thematic affiliation id steering content (omitted for starter).

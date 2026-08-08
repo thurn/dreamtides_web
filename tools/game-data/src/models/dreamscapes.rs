@@ -578,16 +578,7 @@ mod tests {
             &fs::read_to_string(root.join("data/dreamscapes_canonical.ron")).unwrap(),
         )
         .unwrap();
-        let mut normalized = current_ron.data.clone();
-        for dreamscape in normalized["dreamscapes"].as_array_mut().unwrap() {
-            assert!(
-                dreamscape
-                    .as_table_mut()
-                    .unwrap()
-                    .remove("aesthetic")
-                    .is_some()
-            );
-        }
+        let normalized = current_ron.data.clone();
         assert_eq!(lower(canonical.clone()).unwrap(), normalized);
 
         let legacy_to_canonical: BTreeMap<_, _> = LEGACY_ID_MAP.into_iter().collect();

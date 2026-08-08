@@ -71,8 +71,6 @@ function confirmedFieldValue(
   switch (field) {
     case "name":
       return record.name;
-    case "aesthetic":
-      return record.aesthetic;
     case "signature-site":
       return record["signature-site"];
     case "guide-id":
@@ -89,9 +87,6 @@ function validateFieldSave(
   const text = String(value).trim();
   if (field === "name" && text.length === 0) {
     return { ok: false, message: "Name cannot be blank." };
-  }
-  if (field === "aesthetic" && text.length === 0) {
-    return { ok: false, message: "Aesthetic cannot be blank." };
   }
   if (
     (field === "signature-site" ||
@@ -114,7 +109,7 @@ function filteredDreamscapes(
   }
   return dreamscapes.filter((record) => {
     const haystack =
-      `${record.name} ${record.aesthetic} ${record.id} ${record["signature-site"]} ` +
+      `${record.name} ${record.id} ${record["signature-site"]} ` +
       `${record["guide-id"] ?? ""} ${record["affiliation-id"] ?? ""}`.toLowerCase();
     return haystack.includes(searchText);
   });
@@ -502,8 +497,8 @@ export default function DreamscapeEditorApp({
         <span
           style={{ color: "#6f7a76", fontSize: "0.76rem", marginLeft: "6px" }}
         >
-          Double-click the name, aesthetic, or site icon to edit. Pick a site,
-          guide, or affiliation from its dropdown.
+          Double-click the name or site icon to edit. Pick a site, guide, or
+          affiliation from its dropdown.
         </span>
       </header>
 

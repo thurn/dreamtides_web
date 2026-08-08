@@ -60,7 +60,6 @@ export interface DreamsignTemplate {
 export interface DreamscapeContent {
   id: string;
   name: string;
-  aesthetic: string;
   guideId: string | null;
   signatureSite: SiteType;
   affiliationId: string | null;

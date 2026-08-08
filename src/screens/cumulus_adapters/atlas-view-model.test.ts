@@ -433,7 +433,6 @@ describe("buildAtlasMapNodes", () => {
         {
           id: "wilderveil",
           name: "Wilderveil",
-          aesthetic: "Moonlit forest",
           guideId: "aldric",
           signatureSite: "Augury",
           affiliationId: "figments",

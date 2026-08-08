@@ -10,7 +10,6 @@ import type { SiteType } from "../types/journey";
 export interface EditorDreamscapeRecord {
   id: string;
   name: string;
-  aesthetic: string;
   "signature-site": string;
   "guide-id": string | null;
   "affiliation-id": string | null;
@@ -79,7 +78,7 @@ export interface DreamAvatarAssignmentResponse {
 }
 
 export type EditableDreamscapeField =
-  "name" | "aesthetic" | "signature-site" | "guide-id" | "affiliation-id";
+  "name" | "signature-site" | "guide-id" | "affiliation-id";
 
 export interface SaveEditorDreamscapeFieldRequest {
   id: string;

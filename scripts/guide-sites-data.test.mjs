@@ -22,7 +22,6 @@ function dreamscapesFixture() {
     {
       id: "fixture-starter",
       name: "Fixture Starter",
-      aesthetic: "A synthetic opening.",
       "signature-site": "Draft",
       "is-starter": true,
       "fixed-sites": ["Draft", "Battle"],
@@ -30,7 +29,6 @@ function dreamscapesFixture() {
     ...GUIDE_SITE_TYPES.map((siteType, index) => ({
       id: `fixture-home-${String(index)}`,
       name: `Fixture Home ${String(index)}`,
-      aesthetic: "A synthetic guide home.",
       "affiliation-id": `fixture-affiliation-${String(index)}`,
     })),
   ];

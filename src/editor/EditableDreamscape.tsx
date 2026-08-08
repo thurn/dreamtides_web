@@ -179,8 +179,8 @@ function MetaSelect({
 /**
  * One dreamscape in the editor grid. The scene art and circular node icon are
  * the same assets the Dream Atlas renders, resolved from the dreamscape id. The
- * name and aesthetic are inline {@link EditableField} editors (double-click to
- * edit); the signature site, resident Dream Guide, and
+ * name is an inline {@link EditableField} editor (double-click to edit); the
+ * signature site, resident Dream Guide, and
  * affiliation are catalog dropdowns that save the moment a new value is picked.
  */
 export default function EditableDreamscape({
@@ -206,10 +206,8 @@ export default function EditableDreamscape({
   const [guideFailed, setGuideFailed] = useState(false);
 
   const nameEntry = saveEntryFor("name");
-  const aestheticEntry = saveEntryFor("aesthetic");
 
   const visibleName = String(nameEntry?.draftValue ?? record.name);
-  const visibleAesthetic = String(aestheticEntry?.draftValue ?? record.aesthetic);
 
   const guideId = record["guide-id"];
   const guide = guideId === null ? null : guides.find((entry) => entry.id === guideId) ?? null;
@@ -283,7 +281,7 @@ export default function EditableDreamscape({
               color: "rgba(231, 240, 236, 0.72)",
             }}
           >
-            {visibleAesthetic}
+            {visibleName}
           </span>
         )}
 
@@ -360,25 +358,6 @@ export default function EditableDreamscape({
           >
             {visibleName}
           </h2>
-        </EditableField>
-
-        <EditableField
-          {...fieldProps("aesthetic", record.aesthetic, aestheticEntry)}
-          mode="multiline"
-        >
-          <p
-            title="Double-click to edit the aesthetic"
-            style={{
-              margin: 0,
-              fontSize: "0.82rem",
-              fontStyle: "italic",
-              lineHeight: 1.35,
-              color: "#b8c4bf",
-              cursor: "text",
-            }}
-          >
-            {visibleAesthetic}
-          </p>
         </EditableField>
 
         <MetaSelect

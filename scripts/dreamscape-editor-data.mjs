@@ -35,15 +35,13 @@ export const MIN_DREAM_AVATARS_PER_REGION = 3;
 export const MAX_DREAM_AVATARS_PER_REGION = 4;
 
 /**
- * Dreamscape fields the editor can save. `name` and `aesthetic` are free text;
- * `signature-site` is a SiteType; `guide-id` and `affiliation-id` reference the
- * Dream Guide and affiliation catalogs. Identity (`id`) and the starter-only
- * `is-starter` / `fixed-sites`
- * are left untouched.
+ * Dreamscape fields the editor can save. `name` is free text; `signature-site`
+ * is a SiteType; `guide-id` and `affiliation-id` reference the Dream Guide and
+ * affiliation catalogs. Identity (`id`) and the starter-only `is-starter` /
+ * `fixed-sites` are left untouched.
  */
 export const EDITABLE_DREAMSCAPE_FIELDS = new Set([
   "name",
-  "aesthetic",
   "signature-site",
   "guide-id",
   "affiliation-id",
@@ -83,8 +81,6 @@ function editorRecordFromDreamscape(dreamscape, index, guideByHome) {
   return {
     id: dreamscape.id,
     name: typeof dreamscape.name === "string" ? dreamscape.name : "",
-    aesthetic:
-      typeof dreamscape.aesthetic === "string" ? dreamscape.aesthetic : "",
     "signature-site": isStarter
       ? dreamscape["signature-site"]
       : (guide?.siteType ?? ""),
@@ -191,16 +187,6 @@ export function makeValidateDreamscapeEdit({ guideIds, affiliationIds }) {
       const value = rawValue.trim();
       return value.length === 0
         ? validationFailure(field, "Name cannot be blank.", rawValue)
-        : validationSuccess(field, value);
-    }
-
-    if (field === "aesthetic") {
-      if (typeof rawValue !== "string") {
-        return validationFailure(field, "Aesthetic must be text.", rawValue);
-      }
-      const value = rawValue.trim();
-      return value.length === 0
-        ? validationFailure(field, "Aesthetic cannot be blank.", rawValue)
         : validationSuccess(field, value);
     }
 
