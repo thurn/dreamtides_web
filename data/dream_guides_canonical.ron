@@ -5,7 +5,7 @@
   GuideDefinition(
     id: "4e5067ec-265d-4dba-8fa8-2afbd4fde9ab",
     name: "Tobias Tanglefur",
-    home_dreamscape_id: "48ffbb3a-b9a4-4693-a24a-f6e7e516a408",
+    home_dreamscape_id: "08e11635-9f04-48fd-a9c8-5a9f68c80958",
     portrait_source: "tobias.png",
     site_dialogue: ["Welcome, friend! Browse a while.", "I've set aside something just for you."],
     specialty: Shop(description: "Tobias offers strong cards at a steep discount."),
@@ -14,7 +14,7 @@
   GuideDefinition(
     id: "113cb023-12df-4b9c-982c-f0c8bba30377",
     name: "Amunet, the Tomb-Keeper",
-    home_dreamscape_id: "bb80eae2-df13-42ee-b58a-b21022a7e193",
+    home_dreamscape_id: "b25b9906-8380-45bf-9435-678ce18316ea",
     portrait_source: "amunet.png",
     site_dialogue: ["The sands remember all dreams.", "Choose, and I shall show you another."],
     specialty: DreamsignMarket(
@@ -25,7 +25,7 @@
   GuideDefinition(
     id: "706a4443-2826-4459-8127-040632cb93fd",
     name: "Sigrún",
-    home_dreamscape_id: "11c5cadb-123c-4fcf-8871-28fc69ab39e0",
+    home_dreamscape_id: "7d793d30-8a0f-4f84-a446-cdde502710e8",
     portrait_source: "sigrun.png",
     site_dialogue: [
       "The frost reveals what is hidden. Pick one sign to claim.",
@@ -39,7 +39,7 @@
   GuideDefinition(
     id: "9890b3c2-74f7-4b4a-bb39-61c2c6d53cbb",
     name: "Durgan Forgehammer",
-    home_dreamscape_id: "4be83951-e0f3-46ec-8a28-6e57299125be",
+    home_dreamscape_id: "8e7d0818-ba6a-4dc9-8b3d-a12c62aefa44",
     portrait_source: "durgan.png",
     site_dialogue: ["Stoke the forge — let's reshape it.", "Any card, any temper you like."],
     specialty: Transfiguration(description: "Durgan can transfigure any card in your deck."),
@@ -48,7 +48,7 @@
   GuideDefinition(
     id: "e0aaa9a6-9038-48b9-8847-63681426190e",
     name: "Deacon Holt",
-    home_dreamscape_id: "19d9a162-4c77-426e-88f0-2b06b5bf0b52",
+    home_dreamscape_id: "562f9d1f-5bbf-4dc5-9edd-7e8d538a1651",
     portrait_source: "holt.png",
     site_dialogue: ["We endure together, don't we?", "Pick one, and I'll make another."],
     specialty: Duplication(description: "Deacon Holt can pick any card to duplicate."),
@@ -57,7 +57,7 @@
   GuideDefinition(
     id: "87e9ae46-57c6-407a-af96-bd5f5323dabc",
     name: "Master Takeshi",
-    home_dreamscape_id: "b6468878-b519-43e6-8b23-c2947ca61c64",
+    home_dreamscape_id: "823dc726-db0f-4367-8442-70600a20ad2e",
     portrait_source: "takeshi.png",
     site_dialogue: ["Let go of what weighs you down.", "A cleaner blade cuts truer."],
     specialty: Purge(description: "Master Takeshi will purge cards from your deck at no cost."),
@@ -66,7 +66,7 @@
   GuideDefinition(
     id: "232e7de1-b7b9-4631-b6a3-1ab178c7ff9a",
     name: "Aldric, the Seer",
-    home_dreamscape_id: "887c5f2a-5994-4311-9704-ee4d7246c924",
+    home_dreamscape_id: "f52bdeb1-0db6-44ee-80ea-b99bd18dff7d",
     portrait_source: "aldric.png",
     site_dialogue: [
       "Two paths unfold before you. Choose one to shape your dream.",
@@ -81,7 +81,7 @@
   GuideDefinition(
     id: "869a07ae-5532-4a65-abfa-26a89713a82b",
     name: "Maddox",
-    home_dreamscape_id: "316a3d41-47c3-4850-8c13-d8d2c9de4a0b",
+    home_dreamscape_id: "6f16a1c9-c2fa-494d-9d9d-4da00e011491",
     portrait_source: "maddox.png",
     site_dialogue: ["Let’s see where this road takes us."],
     specialty: RandomSite(
@@ -93,7 +93,7 @@
   GuideDefinition(
     id: "579eaf53-0643-4cba-9c0c-da04b9c52822",
     name: "Gravok",
-    home_dreamscape_id: "535cb467-c35a-4663-8d17-36530673d75b",
+    home_dreamscape_id: "138eff95-3301-4f76-aeb1-31bf0dc8963d",
     portrait_source: "gravok.png",
     site_dialogue: ["Fortune favors the bold, traveler.", "No fee tonight. Big stakes, though."],
     specialty: Gamble(
@@ -115,7 +115,7 @@
   GuideDefinition(
     id: "078e102a-f235-4794-9bb5-a5c42262782a",
     name: "\"Layaway\"",
-    home_dreamscape_id: "d609c490-5a05-4c48-8c28-6f46590eb21a",
+    home_dreamscape_id: "6c03e9d1-21fe-4c13-b940-2325d308cb14",
     portrait_source: "layaway.png",
     site_dialogue: [
       "Every card dreams, friend. Draw one, and we'll step inside.",

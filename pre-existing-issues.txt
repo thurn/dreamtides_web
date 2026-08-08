@@ -1,3 +1,0 @@
-npm audit reports GHSA-2v37-7h3g-55p8 in the transitive development dependency nanoid (<3.3.17). Production dependencies are unaffected (`npm audit --omit=dev` reports zero vulnerabilities), and npm reports that an update is available.
-
-The ignored `models::dreamscapes::tests::canonical_candidate_matches_current_compatibility_sources` parity probe fails because `DreamscapeDefinition::lower` uppercases `dream-avatar-ids` while the probe compares against lowercase UUIDs from the current compatibility catalog without normalizing case. This is independent of the Dream Guides activation blocker.

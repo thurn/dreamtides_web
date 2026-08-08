@@ -168,7 +168,7 @@ pub fn lower(source: Vec<DreamscapeDefinition>) -> Result<toml::Value> {
                         Some(
                             opponent_dream_avatar_ids
                                 .into_iter()
-                                .map(|avatar_id| avatar_id.to_string().to_ascii_uppercase())
+                                .map(|avatar_id| avatar_id.to_string())
                                 .collect(),
                         ),
                     ),
@@ -444,7 +444,7 @@ mod tests {
         assert_eq!(dreamscapes[1]["name"].as_str(), Some("Région"));
         assert_eq!(
             dreamscapes[1]["dream-avatar-ids"].as_array().unwrap()[0].as_str(),
-            Some("94E7C651-25E9-4A62-9DE4-EAF5BA20542C")
+            Some("94e7c651-25e9-4a62-9de4-eaf5ba20542c")
         );
         assert!(
             !dreamscapes[1]

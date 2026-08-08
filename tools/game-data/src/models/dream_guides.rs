@@ -441,6 +441,7 @@ mod tests {
 
     use super::*;
     use crate::models::compat::CompatDocument;
+    use crate::models::dreamscapes::{DreamscapeDefinition, DreamscapeKind};
 
     const FIRST_GUIDE_ID: &str = "00000000-0000-4000-8000-000000000001";
     const FIRST_HOME_ID: &str = "00000000-0000-4000-8000-000000000101";
@@ -651,6 +652,16 @@ mod tests {
             canonical_home_ids,
             dreamscape_ids.values().map(|id| (*id).to_owned()).collect()
         );
+        let canonical_dreamscapes: Vec<DreamscapeDefinition> = ron::from_str(
+            &fs::read_to_string(root.join("data/dreamscapes_canonical.ron")).unwrap(),
+        )
+        .unwrap();
+        let canonical_nonstarter_ids: BTreeSet<_> = canonical_dreamscapes
+            .iter()
+            .filter(|dreamscape| matches!(dreamscape.kind, DreamscapeKind::Standard { .. }))
+            .map(|dreamscape| dreamscape.id.to_string())
+            .collect();
+        assert_eq!(canonical_home_ids, canonical_nonstarter_ids);
 
         let mut normalized = current_ron.data.clone();
         for guide in normalized["guides"].as_array_mut().unwrap() {
@@ -716,16 +727,16 @@ mod tests {
 
     fn legacy_dreamscape_id_map() -> BTreeMap<&'static str, &'static str> {
         BTreeMap::from([
-            ("tumbleleaf_village", "48ffbb3a-b9a4-4693-a24a-f6e7e516a408"),
-            ("pharaohs_gate", "bb80eae2-df13-42ee-b58a-b21022a7e193"),
-            ("winterwake_fjords", "11c5cadb-123c-4fcf-8871-28fc69ab39e0"),
-            ("frostforge", "4be83951-e0f3-46ec-8a28-6e57299125be"),
-            ("hopes_end", "19d9a162-4c77-426e-88f0-2b06b5bf0b52"),
-            ("tsukiren", "b6468878-b519-43e6-8b23-c2947ca61c64"),
-            ("wilderveil", "887c5f2a-5994-4311-9704-ee4d7246c924"),
-            ("rust_expanse", "316a3d41-47c3-4850-8c13-d8d2c9de4a0b"),
-            ("farpoint_station", "535cb467-c35a-4663-8d17-36530673d75b"),
-            ("grid_city", "d609c490-5a05-4c48-8c28-6f46590eb21a"),
+            ("tumbleleaf_village", "08e11635-9f04-48fd-a9c8-5a9f68c80958"),
+            ("pharaohs_gate", "b25b9906-8380-45bf-9435-678ce18316ea"),
+            ("winterwake_fjords", "7d793d30-8a0f-4f84-a446-cdde502710e8"),
+            ("frostforge", "8e7d0818-ba6a-4dc9-8b3d-a12c62aefa44"),
+            ("hopes_end", "562f9d1f-5bbf-4dc5-9edd-7e8d538a1651"),
+            ("tsukiren", "823dc726-db0f-4367-8442-70600a20ad2e"),
+            ("wilderveil", "f52bdeb1-0db6-44ee-80ea-b99bd18dff7d"),
+            ("rust_expanse", "6f16a1c9-c2fa-494d-9d9d-4da00e011491"),
+            ("farpoint_station", "138eff95-3301-4f76-aeb1-31bf0dc8963d"),
+            ("grid_city", "6c03e9d1-21fe-4c13-b940-2325d308cb14"),
         ])
     }
 }
