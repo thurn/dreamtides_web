@@ -5,12 +5,14 @@ import {
   GLOSSARY,
   GLOSSARY_IDS,
   GLOSSARY_INDEX,
+  RULES_SYMBOL_GLOSSARY,
   glossaryDefinitionUsesRulesText,
   glossaryEntryDisplayTitle,
   glossaryRulesTextForms,
   hasGlossaryTerm,
   lookupGlossaryTerm,
   requireGlossaryEntry,
+  rulesSymbolGlossaryEntry,
 } from "./glossary";
 import { tokenizeRulesText } from "../cumulus/components/card/card-text";
 
@@ -29,6 +31,23 @@ describe("glossary", () => {
 
   it("has a non-empty list of entries", () => {
     expect(GLOSSARY.length).toBeGreaterThan(0);
+  });
+
+  it("owns every supported rules symbol exactly once", () => {
+    const expectedTokens = [
+      "essence",
+      "points",
+      "lunar",
+      "store",
+      "energy",
+      "spark",
+    ] as const;
+    expect(
+      RULES_SYMBOL_GLOSSARY.map((entry) => entry.rulesSymbol?.token).sort(),
+    ).toEqual([...expectedTokens].sort());
+    for (const token of expectedTokens) {
+      expect(rulesSymbolGlossaryEntry(token).rulesSymbol?.token).toBe(token);
+    }
   });
 
   it("resolves every stable explanatory Info Card id", () => {

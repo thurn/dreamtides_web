@@ -119,6 +119,7 @@
     rules_text_forms: ["⍟"],
     // Render inline rules glyphs in this definition even though the entry is not an automatic word match.
     definition_uses_rules_text: true,
+    rules_symbol: RulesSymbol(token: points, glyph: Points, accessible_label: "points"),
     // Definition-only entries omit their term heading from combined definition surfaces.
     term_presentation: DefinitionOnly,
   ),
@@ -131,6 +132,7 @@
     priority: 60,
     rules_text_forms: ["⧗"],
     definition_uses_rules_text: true,
+    rules_symbol: RulesSymbol(token: store, glyph: Memory, accessible_label: "memory"),
     term_presentation: DefinitionOnly,
   ),
 
@@ -258,6 +260,7 @@
     priority: 95,
     rules_text_forms: ["☾"],
     definition_uses_rules_text: true,
+    rules_symbol: RulesSymbol(token: lunar, glyph: Exhaust, accessible_label: "lunar"),
     term_presentation: DefinitionOnly,
     contexts: [
       GlossaryContext(
@@ -431,6 +434,12 @@
     definition: "Currency you gain and spend over the course of a run.",
     priority: 10,
     matches_rules_text: true,
+    rules_symbol: RulesSymbol(
+      token: essence,
+      glyph: Essence,
+      accessible_label: "essence",
+      semantic_color_role: Essence,
+    ),
   ),
 
   GlossaryDefinition(
@@ -530,6 +539,12 @@
     term: "Energy Cost",
     definition: "Spend this much energy to play the card.",
     priority: 0,
+    rules_symbol: RulesSymbol(
+      token: energy,
+      glyph: Energy,
+      accessible_label: "energy",
+      semantic_color_role: Energy,
+    ),
   ),
 
   GlossaryDefinition(
@@ -539,6 +554,12 @@
     definition: "A character's power during a challenge; higher spark wins.",
     priority: 10,
     matches_rules_text: true,
+    rules_symbol: RulesSymbol(
+      token: spark,
+      glyph: Spark,
+      accessible_label: "spark",
+      semantic_color_role: Spark,
+    ),
   ),
 
   GlossaryDefinition(

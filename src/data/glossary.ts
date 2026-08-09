@@ -49,6 +49,14 @@ export interface GlossaryCatalogEntry extends GlossaryEntry {
   /** Optional term treatment in a combined definition card. */
   /** Ordered sentence/owner-specific projections. */
   readonly contexts?: readonly GlossaryContext[];
+  readonly rulesSymbol?: {
+    readonly token:
+      "essence" | "points" | "lunar" | "store" | "energy" | "spark";
+    readonly glyph:
+      "essence" | "points" | "exhaust" | "memory" | "energy" | "sparkInline";
+    readonly accessibleLabel: string;
+    readonly semanticColorRole?: "essence" | "energy" | "spark";
+  };
 }
 
 /** Every editable Info Card definition, in canonical RON source order. */
@@ -62,6 +70,20 @@ export const GLOSSARY: readonly GlossaryCatalogEntry[] =
       entry.matchesRulesText ||
       (entry.rulesTextForms !== undefined && entry.rulesTextForms.length > 0),
   );
+
+export const RULES_SYMBOL_GLOSSARY: readonly GlossaryCatalogEntry[] =
+  INFO_CARD_GLOSSARY.filter((entry) => entry.rulesSymbol !== undefined);
+
+export function rulesSymbolGlossaryEntry(
+  token: NonNullable<GlossaryCatalogEntry["rulesSymbol"]>["token"],
+): GlossaryCatalogEntry {
+  const entry = RULES_SYMBOL_GLOSSARY.find(
+    (candidate) => candidate.rulesSymbol?.token === token,
+  );
+  if (entry === undefined)
+    throw new Error(`Missing glossary rules symbol ${token}`);
+  return entry;
+}
 
 const ENTRY_BY_ID = new Map(
   INFO_CARD_GLOSSARY.map((entry) => [entry.id, entry]),

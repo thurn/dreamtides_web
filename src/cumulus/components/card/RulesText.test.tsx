@@ -6,7 +6,8 @@ import { createRoot, type Root } from "react-dom/client";
 import { CumulusRoot } from "../../CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { ENERGY_ICON_COLOR } from "../controls/StandaloneGlyph";
-import { RulesText } from "./RulesText";
+import type { GlossaryCatalogEntry } from "../../../data/glossary";
+import { renderRulesSymbolsInline, RulesText } from "./RulesText";
 
 const CARD_OWNER = {
   kind: "card",
@@ -39,6 +40,38 @@ afterEach(() => {
 });
 
 describe("RulesText", () => {
+  it("renders a symbol's accessible name from injected glossary metadata", () => {
+    const entry: GlossaryCatalogEntry = {
+      id: "fixture-symbol",
+      category: "Resources",
+      term: "Fixture",
+      definition: "Fixture definition.",
+      priority: 0,
+      matchesRulesText: false,
+      variants: [],
+      contexts: [],
+      rulesSymbol: {
+        token: "points",
+        glyph: "points",
+        accessibleLabel: "Synthetic accessible symbol",
+      },
+    };
+    const { container, root } = mount(
+      <div>
+        {renderRulesSymbolsInline("⍟", {
+          rulesSymbolResolver: () => entry,
+        })}
+      </div>,
+    );
+
+    expect(
+      container
+        .querySelector("[data-inline-glyph]")
+        ?.getAttribute("aria-label"),
+    ).toBe(entry.rulesSymbol?.accessibleLabel);
+    act(() => root.unmount());
+  });
+
   it("renders recognized glossary terms as plain text without an underline", () => {
     const { container, root } = mount(
       <RulesText text="Reclaim this card." owner={CARD_OWNER} />,
@@ -129,10 +162,7 @@ describe("RulesText", () => {
   // double-bolt interrupt chip in the title bar.
   it("renders the interrupt marker ❖❖ as two bolt icons", () => {
     const { container, root } = mount(
-      <RulesText
-        text="❖❖ – Abandon an ally: Effect."
-        owner={CARD_OWNER}
-      />,
+      <RulesText text="❖❖ – Abandon an ally: Effect." owner={CARD_OWNER} />,
     );
 
     const bolts = container.querySelectorAll("i.bxf.bx-bolt");
@@ -290,10 +320,7 @@ describe("RulesText", () => {
   // Single-ability cards keep one paragraph and no inter-ability gap.
   it("renders a single ability as one paragraph with no extra spacing", () => {
     const { container, root } = mount(
-      <RulesText
-        text="▸ Materialized: Foresee 1."
-        owner={CARD_OWNER}
-      />,
+      <RulesText text="▸ Materialized: Foresee 1." owner={CARD_OWNER} />,
     );
 
     const paragraphs = container.querySelectorAll(

@@ -129,6 +129,17 @@ vi.mock("../../../data/glossary", () => ({
   },
   glossaryEntry: () => undefined,
   glossaryEntryDisplayTitle: (entry: typeof FIXTURE) => entry.term,
+  rulesSymbolGlossaryEntry: (token: string) => ({
+    rulesSymbol: {
+      token,
+      glyph: token === "spark" ? "sparkInline" : token,
+      accessibleLabel: token,
+      semanticColorRole:
+        token === "essence" || token === "energy" || token === "spark"
+          ? token
+          : undefined,
+    },
+  }),
   lookupGlossaryTerm: (term: string) =>
     term.toLocaleLowerCase() === FIXTURE.term.toLocaleLowerCase()
       ? FIXTURE

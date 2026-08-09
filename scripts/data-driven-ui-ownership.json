@@ -48,7 +48,9 @@
         "src/cumulus/screens/TransfigurationSiteScreen.tsx"
       ],
       "persisted": ["src/types/journey.ts", "src/rules/events.ts"],
-      "logging": ["src/screens/cumulus_adapters/TransfigurationSiteScreenAdapter.tsx"]
+      "logging": [
+        "src/screens/cumulus_adapters/TransfigurationSiteScreenAdapter.tsx"
+      ]
     },
     "dreamwellPrompts": {
       "identities": [
@@ -87,7 +89,12 @@
       "currentSources": [
         {
           "path": "data/tide_alignments.ron",
-          "fields": ["display_name", "glyph", "accent_color", "accessibility_name"]
+          "fields": [
+            "display_name",
+            "glyph",
+            "accent_color",
+            "accessibility_name"
+          ]
         }
       ],
       "consumers": [
@@ -102,12 +109,8 @@
       "targetOwner": "data/glossary.ron",
       "currentSources": [
         {
-          "path": "src/cumulus/components/card/RulesText.tsx",
-          "fields": ["SYMBOL_ICON_CLASSES"]
-        },
-        {
-          "path": "data/locales/en-US/cards.ftl",
-          "fields": ["rules-text-symbol-"]
+          "path": "data/glossary.ron",
+          "fields": ["rules_symbol", "accessible_label", "semantic_color_role"]
         }
       ],
       "consumers": ["src/cumulus/components/card/RulesText.tsx"],
@@ -125,11 +128,6 @@
       "id": "src/cumulus/components/card/CardView.tsx#GAME_CARD_SELECTION_COLORS#rulesSymbols",
       "classification": "unrelated-closed-renderer",
       "rationale": "Selection states happen to reuse resource words."
-    },
-    {
-      "id": "src/cumulus/components/card/RulesText.tsx#SYMBOL_ICON_CLASSES#rulesSymbols",
-      "classification": "migration-debt",
-      "rationale": "Parallel rules-symbol icon and label registry."
     },
     {
       "id": "src/cumulus/components/card/card-text.ts#SYMBOL_MAP#rulesSymbols",
@@ -153,8 +151,8 @@
     },
     {
       "id": "src/data/glossary.ts#GLOSSARY_IDS#rulesSymbols",
-      "classification": "migration-debt",
-      "rationale": "Rules-symbol concepts must resolve through generated glossary metadata."
+      "classification": "closed-identity",
+      "rationale": "The broader glossary semantic-ID registry supports non-symbol information cards."
     },
     {
       "id": "src/rules/battle/dreamwell-effects-table.ts#DREAMWELL_EFFECTS#dreamwellPrompts",
@@ -212,13 +210,6 @@
       "battle-prompt-switch-side"
     ],
     "tides": [],
-    "rulesSymbols": [
-      "rules-text-symbol-energy",
-      "rules-text-symbol-essence",
-      "rules-text-symbol-lunar",
-      "rules-text-symbol-points",
-      "rules-text-symbol-spark",
-      "rules-text-symbol-store"
-    ]
+    "rulesSymbols": []
   }
 }

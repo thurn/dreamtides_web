@@ -156,12 +156,6 @@ card-rules-transfiguration-changed = Rules text changed by { $formName } Transfi
 # Accessible description and tooltip for a card's Transfiguration badge. $form
 # $formName is the authored Transfiguration form name.
 card-transfiguration-badge = { $formName } Transfiguration
-rules-text-symbol-essence = essence
-rules-text-symbol-points = points
-rules-text-symbol-lunar = lunar
-rules-text-symbol-store = memory
-rules-text-symbol-energy = energy
-rules-text-symbol-spark = spark
 # Type line printed on a game card. $cardType and $subtype are canonical authored
 # taxonomy labels. $presentation is "character" when Character cards display
 # only their subtype and "other" when the type remains visible. $hasSubtype is

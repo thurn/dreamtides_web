@@ -220,12 +220,6 @@ export const FLUENT_MESSAGE_IDS = [
   "card-pool-replay-card-label",
   "card-rules-transfiguration-changed",
   "card-transfiguration-badge",
-  "rules-text-symbol-essence",
-  "rules-text-symbol-points",
-  "rules-text-symbol-lunar",
-  "rules-text-symbol-store",
-  "rules-text-symbol-energy",
-  "rules-text-symbol-spark",
   "card-type-line",
   "card-gallery-empty-default",
   "card-choice-purge-operation",
@@ -801,12 +795,6 @@ export interface FluentMessageArgumentsById {
     readonly formName: FluentVariable;
   };
   readonly "card-transfiguration-badge": { readonly formName: FluentVariable };
-  readonly "rules-text-symbol-essence": never;
-  readonly "rules-text-symbol-points": never;
-  readonly "rules-text-symbol-lunar": never;
-  readonly "rules-text-symbol-store": never;
-  readonly "rules-text-symbol-energy": never;
-  readonly "rules-text-symbol-spark": never;
   readonly "card-type-line": {
     readonly cardType: FluentVariable;
     readonly hasSubtype: FluentVariable;
@@ -1599,12 +1587,6 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "card-pool-replay-card-label": ["cardName", "picked"] as const,
   "card-rules-transfiguration-changed": ["formName"] as const,
   "card-transfiguration-badge": ["formName"] as const,
-  "rules-text-symbol-essence": [] as const,
-  "rules-text-symbol-points": [] as const,
-  "rules-text-symbol-lunar": [] as const,
-  "rules-text-symbol-store": [] as const,
-  "rules-text-symbol-energy": [] as const,
-  "rules-text-symbol-spark": [] as const,
   "card-type-line": [
     "cardType",
     "hasSubtype",
@@ -2180,12 +2162,6 @@ export type FluentMessageIdsWithoutVariables = [
   "card-pool-replay-record-title",
   "card-pool-construction-title",
   "card-pool-construction-description",
-  "rules-text-symbol-essence",
-  "rules-text-symbol-points",
-  "rules-text-symbol-lunar",
-  "rules-text-symbol-store",
-  "rules-text-symbol-energy",
-  "rules-text-symbol-spark",
   "card-gallery-empty-default",
   "card-choice-purge-operation",
   "card-choice-copy-operation",

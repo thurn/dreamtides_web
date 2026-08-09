@@ -10,22 +10,23 @@ import {
 } from "../../../runtime/transfigure-markers";
 import {
   BOLT_ICON_CLASS,
-  ENERGY_ICON_CLASS,
   ENERGY_ICON_COLOR,
   SPARK_ICON_COLOR,
-  SPARK_INLINE_ICON_CLASS,
 } from "../controls/StandaloneGlyph";
 import { InlineGlyph } from "../typography/InlineGlyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
-import { GLYPHS, type Glyph } from "../../primitives/glyph";
+import { GLYPHS } from "../../primitives/glyph";
 import type { RulesTextGlossaryOwner } from "../../../data/glossary-terms";
+import {
+  rulesSymbolGlossaryEntry,
+  type GlossaryCatalogEntry,
+} from "../../../data/glossary";
 import { rulesTextDefinitionCards } from "./rules-text-reveal";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import { appLocalization } from "../../../data/localization";
 import type { MessageFormatter } from "../../hooks/use-messages";
-import type { FluentMessageId } from "../../../data/localization-messages";
 
 const formatRulesTextMessage = ((id, variables) =>
   appLocalization.getString(id, variables)) as MessageFormatter;
@@ -67,7 +68,6 @@ const BOLT_ICON_COLOR = "#ffffff";
  * matches the purple used for glossary headings and the boon-dreamsign accent.
  */
 const ESSENCE_TEXT_COLOR = "#c4b5fd";
-const ESSENCE_ICON_CLASS = GLYPHS.essence;
 
 /**
  * Journey site names ("draft", "shop", "dream journey", …) are tinted this blue
@@ -85,18 +85,31 @@ const SITE_NAME_COLOR = "#60a5fa";
  * swapped for a filled icon. The trigger marker stays as authored Unicode and
  * inherits the rules-text font and color.
  */
-const SYMBOL_ICON_CLASSES: Readonly<
-  Record<string, { className: Glyph; color?: string; labelId: FluentMessageId }>
-> = {
-  essence: {
-    className: GLYPHS.essence,
-    color: ESSENCE_TEXT_COLOR,
-    labelId: "rules-text-symbol-essence",
-  },
-  points: { className: GLYPHS.points, labelId: "rules-text-symbol-points" },
-  lunar: { className: GLYPHS.exhaust, labelId: "rules-text-symbol-lunar" },
-  store: { className: GLYPHS.memory, labelId: "rules-text-symbol-store" },
-};
+type RulesSymbolToken = NonNullable<
+  ReturnType<typeof rulesSymbolGlossaryEntry>["rulesSymbol"]
+>["token"];
+
+function rulesSymbolSpec(
+  token: RulesSymbolToken,
+  resolver: (token: RulesSymbolToken) => GlossaryCatalogEntry,
+) {
+  const symbol = resolver(token).rulesSymbol;
+  if (symbol === undefined)
+    throw new Error(`Missing rules symbol metadata ${token}`);
+  const color = (() => {
+    switch (symbol.semanticColorRole) {
+      case "essence":
+        return ESSENCE_TEXT_COLOR;
+      case "energy":
+        return ENERGY_ICON_COLOR;
+      case "spark":
+        return SPARK_ICON_COLOR;
+      case undefined:
+        return undefined;
+    }
+  })();
+  return { glyph: GLYPHS[symbol.glyph], label: symbol.accessibleLabel, color };
+}
 
 /**
  * Glossary terms emphasized in the spark amber color wherever they appear in
@@ -198,6 +211,7 @@ interface RenderRulesTextOptions {
    * card's rules text is tinted. Text outside the markers renders normally.
    */
   highlightColor?: CumulusColor;
+  rulesSymbolResolver?: (token: RulesSymbolToken) => GlossaryCatalogEntry;
 }
 
 /** One run of a paragraph, flagged for whether it is a transfigured span. */
@@ -259,20 +273,18 @@ function renderSegment(
     );
   }
   if (segment.kind === "essence") {
+    const symbol = rulesSymbolSpec(
+      "essence",
+      options.rulesSymbolResolver ?? rulesSymbolGlossaryEntry,
+    );
     // Essence renders as a currency value: the amount in violet glued directly
     // to the filled crypto glyph with no space (`50◆`), the way `2●` reads as an
     // energy value. A bare reference (no amount) shows just the glyph. The unit
     // stays on one line.
     return (
-      <span
-        key={key}
-        style={{ color: ESSENCE_TEXT_COLOR, whiteSpace: "nowrap" }}
-      >
+      <span key={key} style={{ color: symbol.color, whiteSpace: "nowrap" }}>
         {segment.amount !== null ? segment.amount : null}
-        <InlineGlyph
-          glyph={ESSENCE_ICON_CLASS}
-          label={formatRulesTextMessage("rules-text-symbol-essence")}
-        />
+        <InlineGlyph glyph={symbol.glyph} label={symbol.label} />
       </span>
     );
   }
@@ -336,6 +348,10 @@ function renderSegment(
     return <span key={key}>{segment.char}</span>;
   }
   if (segment.symbol === "energy") {
+    const symbol = rulesSymbolSpec(
+      "energy",
+      options.rulesSymbolResolver ?? rulesSymbolGlossaryEntry,
+    );
     // The inline energy glyph renders as the blue flame mark, so a `●3` reads as
     // the same resource as the corner energy stat. Its one-em inline box flows
     // like a character and follows the current font's capital height.
@@ -347,17 +363,18 @@ function renderSegment(
           // resource glyph in its own text color instead of the bright resource
           // hue, which is hard to read on a pale fill. Defaults to the resource
           // color everywhere else.
-          color: `var(--cv-rules-energy-color, ${ENERGY_ICON_COLOR})`,
+          color: `var(--cv-rules-energy-color, ${symbol.color})`,
         }}
       >
-        <InlineGlyph
-          glyph={ENERGY_ICON_CLASS}
-          label={formatRulesTextMessage("rules-text-symbol-energy")}
-        />
+        <InlineGlyph glyph={symbol.glyph} label={symbol.label} />
       </span>
     );
   }
   if (segment.symbol === "spark") {
+    const symbol = rulesSymbolSpec(
+      "spark",
+      options.rulesSymbolResolver ?? rulesSymbolGlossaryEntry,
+    );
     // The inline spark glyph renders as the amber-gold single-sparkle mark, so a
     // `1✦` reads as the same resource as the corner spark stat (which uses the
     // busier multi-star glyph at its larger size). Its one-em inline box follows
@@ -369,24 +386,26 @@ function renderSegment(
           // See the energy glyph above: a var so the figment's light box can
           // render the spark in its black text color rather than the gold
           // resource hue, which is hard to read on the pale fill.
-          color: `var(--cv-rules-spark-color, ${SPARK_ICON_COLOR})`,
+          color: `var(--cv-rules-spark-color, ${symbol.color})`,
         }}
       >
-        <InlineGlyph
-          glyph={SPARK_INLINE_ICON_CLASS}
-          label={formatRulesTextMessage("rules-text-symbol-spark")}
-        />
+        <InlineGlyph glyph={symbol.glyph} label={symbol.label} />
       </span>
     );
   }
-  const iconSpec = SYMBOL_ICON_CLASSES[segment.symbol];
-  if (iconSpec !== undefined) {
+  if (
+    segment.symbol === "essence" ||
+    segment.symbol === "points" ||
+    segment.symbol === "lunar" ||
+    segment.symbol === "store"
+  ) {
+    const symbol = rulesSymbolSpec(
+      segment.symbol,
+      options.rulesSymbolResolver ?? rulesSymbolGlossaryEntry,
+    );
     return (
-      <span key={key} style={{ color: iconSpec.color }}>
-        <InlineGlyph
-          glyph={iconSpec.className}
-          label={formatRulesTextMessage(iconSpec.labelId)}
-        />
+      <span key={key} style={{ color: symbol.color }}>
+        <InlineGlyph glyph={symbol.glyph} label={symbol.label} />
       </span>
     );
   }
@@ -510,9 +529,12 @@ export function renderRulesTextInline(text: string): ReactNode[] {
  * Renders canonical rules symbols inline while preserving surrounding prose.
  * Trigger markers normalize to the compact authored form (`▸Dawn`).
  */
-export function renderRulesSymbolsInline(text: string): ReactNode[] {
+export function renderRulesSymbolsInline(
+  text: string,
+  options: Pick<RenderRulesTextOptions, "rulesSymbolResolver"> = {},
+): ReactNode[] {
   return tokenizeRulesSymbols(stripMarkers(text)).map((segment, segmentIndex) =>
-    renderSegment(segment, segmentIndex, {}),
+    renderSegment(segment, segmentIndex, options),
   );
 }
 

@@ -10,15 +10,22 @@ function invalid(message) {
 
 function requiredString(value, field, index) {
   if (typeof value !== "string" || value.trim() === "") {
-    throw invalid(`Glossary entry ${String(index + 1)} requires a non-blank ${field}.`);
+    throw invalid(
+      `Glossary entry ${String(index + 1)} requires a non-blank ${field}.`,
+    );
   }
   return value.trim();
 }
 
 function stringArray(value, field, index) {
   if (value === undefined) return [];
-  if (!Array.isArray(value) || value.some((entry) => typeof entry !== "string")) {
-    throw invalid(`Glossary entry ${String(index + 1)} ${field} must be an array of strings.`);
+  if (
+    !Array.isArray(value) ||
+    value.some((entry) => typeof entry !== "string")
+  ) {
+    throw invalid(
+      `Glossary entry ${String(index + 1)} ${field} must be an array of strings.`,
+    );
   }
   return value.map((entry) => entry.trim()).filter((entry) => entry !== "");
 }
@@ -26,7 +33,9 @@ function stringArray(value, field, index) {
 function integer(value, field, index) {
   if (value === undefined) return 0;
   if (!Number.isSafeInteger(value)) {
-    throw invalid(`Glossary entry ${String(index + 1)} ${field} must be an integer.`);
+    throw invalid(
+      `Glossary entry ${String(index + 1)} ${field} must be an integer.`,
+    );
   }
   return value;
 }
@@ -49,10 +58,16 @@ function optionalEnum(value, field, index, allowed) {
 function contextArray(value, index) {
   if (value === undefined) return [];
   if (!Array.isArray(value)) {
-    throw invalid(`Glossary entry ${String(index + 1)} contexts must be an array of tables.`);
+    throw invalid(
+      `Glossary entry ${String(index + 1)} contexts must be an array of tables.`,
+    );
   }
   return value.map((context, contextIndex) => {
-    if (context === null || typeof context !== "object" || Array.isArray(context)) {
+    if (
+      context === null ||
+      typeof context !== "object" ||
+      Array.isArray(context)
+    ) {
       throw invalid(
         `Glossary entry ${String(index + 1)} context ${String(contextIndex + 1)} must be a table.`,
       );
@@ -95,7 +110,8 @@ function contextArray(value, index) {
       );
     }
     if (
-      (singularCapture === undefined) !== (singularDefinition === undefined)
+      (singularCapture === undefined) !==
+      (singularDefinition === undefined)
     ) {
       throw invalid(
         `Glossary entry ${String(index + 1)} context ${String(contextIndex + 1)} singular-capture and singular-definition must be provided together.`,
@@ -121,6 +137,48 @@ function contextArray(value, index) {
   });
 }
 
+const RULES_SYMBOL_GLYPHS = {
+  essence: "essence",
+  points: "points",
+  lunar: "exhaust",
+  store: "memory",
+  energy: "energy",
+  spark: "sparkInline",
+};
+
+function rulesSymbol(value, index) {
+  if (value === undefined) return undefined;
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    throw invalid(
+      `Glossary entry ${String(index + 1)} rules-symbol must be a table.`,
+    );
+  }
+  const token = requiredString(value.token, "rules-symbol token", index);
+  const glyph = requiredString(value.glyph, "rules-symbol glyph", index);
+  if (RULES_SYMBOL_GLYPHS[token] !== glyph) {
+    throw invalid(
+      `Glossary entry ${String(index + 1)} rules-symbol has an unsupported token/glyph pairing.`,
+    );
+  }
+  const accessibleLabel = requiredString(
+    value["accessible-label"] ?? value.accessibleLabel,
+    "rules-symbol accessible-label",
+    index,
+  );
+  const semanticColorRole = optionalEnum(
+    value["semantic-color-role"] ?? value.semanticColorRole,
+    "rules-symbol semantic-color-role",
+    index,
+    ["essence", "energy", "spark"],
+  );
+  return {
+    token,
+    glyph,
+    accessibleLabel,
+    ...(semanticColorRole === undefined ? {} : { semanticColorRole }),
+  };
+}
+
 /** Validate and normalize parsed glossary records. */
 export function validateGlossaryEntries(input) {
   if (!Array.isArray(input)) {
@@ -129,7 +187,8 @@ export function validateGlossaryEntries(input) {
 
   const ids = new Set();
   const matchedForms = new Map();
-  return input.map((value, index) => {
+  const rulesSymbolTokens = new Set();
+  const entries = input.map((value, index) => {
     if (value === null || typeof value !== "object" || Array.isArray(value)) {
       throw invalid(`Glossary entry ${String(index + 1)} must be a table.`);
     }
@@ -147,7 +206,8 @@ export function validateGlossaryEntries(input) {
     const definition = requiredString(value.definition, "definition", index);
     const priority = integer(value.priority, "priority", index);
     const variants = stringArray(value.variants, "variants", index);
-    const matchesRulesText = value["matches-rules-text"] === true || value.matchesRulesText === true;
+    const matchesRulesText =
+      value["matches-rules-text"] === true || value.matchesRulesText === true;
     const rulesTextFormsValue =
       value["rules-text-forms"] ?? value.rulesTextForms;
     const rulesTextForms =
@@ -155,6 +215,16 @@ export function validateGlossaryEntries(input) {
         ? undefined
         : stringArray(rulesTextFormsValue, "rules-text-forms", index);
     const contexts = contextArray(value.contexts, index);
+    const symbol = rulesSymbol(
+      value["rules-symbol"] ?? value.rulesSymbol,
+      index,
+    );
+    if (symbol !== undefined && rulesSymbolTokens.has(symbol.token)) {
+      throw invalid(
+        `Rules-symbol token "${symbol.token}" has more than one glossary owner.`,
+      );
+    }
+    if (symbol !== undefined) rulesSymbolTokens.add(symbol.token);
     const definitionUsesRulesTextValue =
       value["definition-uses-rules-text"] ?? value.definitionUsesRulesText;
     if (
@@ -178,20 +248,20 @@ export function validateGlossaryEntries(input) {
         ? "symbolOnly"
         : termPresentationSource === "definition-only"
           ? "definitionOnly"
-        : optionalEnum(
-            termPresentationSource,
-            "term-presentation",
-            index,
-            ["symbolOnly", "definitionOnly"],
-          );
+          : optionalEnum(termPresentationSource, "term-presentation", index, [
+              "symbolOnly",
+              "definitionOnly",
+            ]);
 
-    const matchedEntryForms = rulesTextForms ??
-      (matchesRulesText ? [term, ...variants] : []);
+    const matchedEntryForms =
+      rulesTextForms ?? (matchesRulesText ? [term, ...variants] : []);
     for (const form of matchedEntryForms) {
       const key = form.toLocaleLowerCase();
       const owner = matchedForms.get(key);
       if (owner !== undefined) {
-        throw invalid(`Rules-text form "${form}" is claimed by both "${owner}" and "${id}".`);
+        throw invalid(
+          `Rules-text form "${form}" is claimed by both "${owner}" and "${id}".`,
+        );
       }
       matchedForms.set(key, id);
     }
@@ -210,9 +280,21 @@ export function validateGlossaryEntries(input) {
         : { definitionUsesRulesText: definitionUsesRulesTextValue }),
       ...(definitionSymbol === undefined ? {} : { definitionSymbol }),
       ...(termPresentation === undefined ? {} : { termPresentation }),
+      ...(symbol === undefined ? {} : { rulesSymbol: symbol }),
       contexts,
     };
   });
+  if (
+    rulesSymbolTokens.size > 0 &&
+    Object.keys(RULES_SYMBOL_GLYPHS).some(
+      (token) => !rulesSymbolTokens.has(token),
+    )
+  ) {
+    throw invalid(
+      "Glossary rules symbols must cover every supported token exactly once.",
+    );
+  }
+  return entries;
 }
 
 /** Parse generated compatibility TOML into runtime/editor glossary records. */
@@ -330,6 +412,20 @@ export function serializeGlossarySource(entries) {
                 : entry.termPresentation === "definitionOnly"
                   ? "definition-only"
                   : entry.termPresentation,
+          }),
+      ...(entry.rulesSymbol === undefined
+        ? {}
+        : {
+            "rules-symbol": {
+              token: entry.rulesSymbol.token,
+              glyph: entry.rulesSymbol.glyph,
+              "accessible-label": entry.rulesSymbol.accessibleLabel,
+              ...(entry.rulesSymbol.semanticColorRole === undefined
+                ? {}
+                : {
+                    "semantic-color-role": entry.rulesSymbol.semanticColorRole,
+                  }),
+            },
           }),
       ...(entry.contexts.length === 0
         ? {}
