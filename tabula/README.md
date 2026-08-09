@@ -2,7 +2,7 @@
 
 Tabula is a Tauri v2 developer tool for editing canonical Dreamtides RON catalogs. The proof of concept supports `data/affiliations.ron` with staged, revision-checked semantic saves, inline validation, and undo/redo.
 
-Run `npm install` in this directory, then `npm run tauri dev`. The app discovers the enclosing Dreamtides repository; **Open repository** can select a different checkout. `npm run dev -- --port 5185` runs browser UI review. `http://localhost:5185/?real=1` loads the current generated affiliation and card catalogs while keeping edits in memory, and `http://localhost:5185/?demo=1` provides a deterministic synthetic fixture for component development. The native Tauri app reads and writes the canonical RON source through semantic edit operations.
+From the repository root, run `npm run tabula`. This one-step launcher installs Tabula's dependencies and starts the native Tauri app. The app discovers the enclosing Dreamtides repository; **Open repository** can select a different checkout. `npm run dev -- --port 5185` from this directory runs browser UI review. `http://localhost:5185/?real=1` loads the current generated affiliation and card catalogs while keeping edits in memory, and `http://localhost:5185/?demo=1` provides a deterministic synthetic fixture for component development. The native Tauri app reads and writes the canonical RON source through semantic edit operations.
 
 ## Editor architecture
 
