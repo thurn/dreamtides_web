@@ -6,9 +6,9 @@ description: Design a random or UUID-selected batch of Dreamtides Exploration en
 # Design and implement Exploration encounters
 
 Run one pipeline from card selection through staged production implementation. Each
-selected card gets one encounter with two actions. The live catalog accepts one to
-four actions per encounter; two is the design policy for encounters created by this
-skill.
+selected card gets one encounter with two actions. The default batch is five cards.
+The live catalog accepts one to four actions per encounter; two is the design policy
+for encounters created by this skill.
 
 ## Required references
 
@@ -48,13 +48,13 @@ Run:
 
 ```bash
 python3 .llms/skills/design-and-implement-exploration-encounters/scripts/select_batch.py \
-  --run-dir "$RUN_DIR" \
-  --batch-size 5 \
-  --seed 12345
+  --run-dir "$RUN_DIR"
 ```
 
-For explicit cards, repeat `--card-id <canonical-card-uuid>`. Card names are
-display-only; all selection and identity use UUIDs.
+The default selection is five random cards absent from live Exploration. Use
+`--batch-size <positive-count>` or `--seed <integer>` when requested. For explicit
+cards, repeat `--card-id <canonical-card-uuid>`; explicit UUIDs replace random
+selection. Card names are display-only; all selection and identity use UUIDs.
 
 The selector:
 

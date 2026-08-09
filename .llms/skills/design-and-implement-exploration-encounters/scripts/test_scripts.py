@@ -11,7 +11,7 @@ from pathlib import Path
 
 from assemble_designs import AssemblyError, assemble
 from mechanic_ideas import action_effect_schema, load_mechanic_catalog, render_markdown
-from select_batch import SOURCE_KEYS, SelectionError, create_batch
+from select_batch import SOURCE_KEYS, SelectionError, create_batch, parse_args
 from verify_live import VerificationError, verify
 
 
@@ -313,6 +313,13 @@ card-id = "{LIVE_CARD_ID}"
 
 
 class OnePassPipelineTests(unittest.TestCase):
+    def test_selector_defaults_to_five_random_cards(self) -> None:
+        args = parse_args(["--run-dir", "/tmp/synthetic-exploration-run"])
+
+        self.assertEqual(args.batch_size, 5)
+        self.assertIsNone(args.seed)
+        self.assertEqual(args.card_id, [])
+
     def test_selects_only_absent_cards_and_mints_two_action_uuidv4s(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             fixture = PipelineFixture(Path(temporary))
