@@ -9,3 +9,5 @@ The same Rust formatting check reports pre-existing trailing-whitespace drift at
 `cargo fmt --manifest-path tools/game-data/Cargo.toml --check` reports additional pre-existing blank-line formatting drift at the end of `tools/game-data/src/models/glossary.rs`; the remaining CompatDocument conversion does not modify that file.
 
 `scripts/regenerate-assets.sh` updates `.llms/skills/cumulus/components/info-card.md` and `src/cumulus/metadata/cumulus-metadata.json` from the current source tree even though this Dreamwell activation does not change Cumulus component APIs, indicating that the tracked generated Cumulus references were stale on `master`.
+
+The Tides4 generator header and schema comments describe a signatureless Dream Avatar as drawing from the complete facet library recorded in `tidePoolByDreamAvatar`, while `src/draft/pool/variant-tides4.ts` instead chooses a random signatured Dream Avatar and borrows that Avatar's starter and facets. The generated artifact is internally consistent, but the comments do not describe how production consumes its signatureless entries.
