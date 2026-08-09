@@ -1,7 +1,51 @@
 use std::collections::{BTreeMap, BTreeSet};
+use std::fmt;
 
 use anyhow::{Context, Result, bail};
-use serde::{Deserialize, Serialize};
+use serde::de::Error as _;
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use uuid::{Uuid, Variant, Version};
+
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub struct CardId(Uuid);
+
+impl CardId {
+    pub(crate) fn parse(value: &str) -> std::result::Result<Self, String> {
+        let uuid = Uuid::parse_str(value).map_err(|error| error.to_string())?;
+        if uuid.get_version() != Some(Version::Random) || uuid.get_variant() != Variant::RFC4122 {
+            return Err("Card identifier must be an RFC 4122 UUIDv4".into());
+        }
+        if uuid.hyphenated().to_string() != value {
+            return Err("Card identifier must use lowercase hyphenated UUID formatting".into());
+        }
+        Ok(Self(uuid))
+    }
+}
+
+impl fmt::Display for CardId {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.0.hyphenated().fmt(formatter)
+    }
+}
+
+impl Serialize for CardId {
+    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.serialize_str(&self.to_string())
+    }
+}
+
+impl<'de> Deserialize<'de> for CardId {
+    fn deserialize<D>(deserializer: D) -> std::result::Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let value = String::deserialize(deserializer)?;
+        Self::parse(&value).map_err(D::Error::custom)
+    }
+}
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -173,10 +217,7 @@ pub fn lower(
             card.ability_text.join("\n\n").into(),
         );
         if let Some(amplified_text) = card.amplified_text {
-            record.insert(
-                "amplified-text".into(),
-                amplified_text.join("\n\n").into(),
-            );
+            record.insert("amplified-text".into(), amplified_text.join("\n\n").into());
         }
         record.insert("energy-cost".into(), card.energy_cost.compatibility_value());
         record.insert("card-type".into(), card_type.into());

@@ -1,0 +1,740 @@
+// Curated Dreamsign features and quality ratings used to evaluate card fit.
+
+#![enable(implicit_some)]
+[
+  DreamsignProfileDefinition(
+    id: "c706d0ba-2f41-4b14-95d8-db168ac6246c",
+    // Ordinal quality from 1 (low) through 3 (high).
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "278ec1ab-f532-4862-84ae-63df5e49548c",
+    cost_bands: [Cheap],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "6e20e6c7-295a-48b1-b252-b8b00d6902c9",
+    card_types: [Character],
+    cost_bands: [Cheap],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "49990864-1db0-4c08-91ae-40a1f04223e4",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "3dd05e97-1af8-4ae9-8e1f-954eaa63e112",
+    card_types: [Character],
+    cost_bands: [Cheap],
+    quality: 3,
+  ),
+
+  DreamsignProfileDefinition(id: "a42c99b2-f480-4f63-91a0-bd556120427d", quality: 2),
+
+  DreamsignProfileDefinition(
+    id: "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4",
+    card_types: [Event],
+    cost_bands: [Cheap],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "8778bf17-4e0a-4ce7-b23c-4daf49a782a7",
+    keywords: [Reclaim],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "12ec9625-cbfb-4056-9c3e-98ed8c8bea70",
+    card_types: [Character],
+    cost_bands: [Cheap],
+    quality: 3,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "95f0f483-9a76-47c6-a839-01a1d9122945",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "553d2317-32f9-47bc-bae0-5018ca26d56a",
+    keywords: [Fast],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "0d668e16-1729-4289-ad1d-0fb3c1374ee9",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "ede46f71-aa77-4b12-9824-0d3706da6a22",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "3380c657-79ca-400b-abb7-4b56fbb92af4",
+    card_types: [Character],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "2ebf0bbb-440c-4dba-8e48-228daadc0a1e",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "2d4eb3ee-0931-45ed-8365-69f18096ead5",
+    card_types: [Character],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(id: "a98f468b-5e76-4041-83ee-69c0871a6bf0", quality: 2),
+
+  DreamsignProfileDefinition(
+    id: "d1fdbe21-56f6-43c0-aaac-1e4683964da5",
+    card_types: [Character],
+    keywords: [Reclaim],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "d76684c3-797e-44ae-a2ba-333e77d46a4d",
+    card_types: [Character],
+    cost_bands: [Cheap],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
+    card_types: [Character],
+    cost_bands: [Cheap],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "47081bde-f35d-4b5c-ba17-53e5dbf5b419",
+    card_types: [Character],
+    cost_bands: [Big],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "3ed05d9a-dae0-4260-9b99-ad22d02fc583",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "9f34b5f6-4766-4a7e-a841-d7b945cad504",
+    subtypes: [Warrior],
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "94e5683d-a24c-4f89-8afa-652d7c6c79aa",
+    subtypes: [Warrior],
+    card_types: [Event],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "4409a691-49b4-4fb0-82f6-4f45ae86d8c2",
+    subtypes: [Warrior],
+    card_types: [Character],
+    cost_bands: [Cheap],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "1dfa4d90-8270-4b7c-87be-d95ab6201e00",
+    subtypes: [Warrior],
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "dbbade86-9fb6-4283-b2dc-9c1ef66fd531",
+    subtypes: [SpiritAnimal],
+    card_types: [Event],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "21ae8473-afa7-4384-b7d4-afbf1d84e691",
+    subtypes: [Warrior],
+    card_types: [Character],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "6b5c0f18-198c-44e7-92e8-d639298b8cf6",
+    subtypes: [SpiritAnimal],
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "246ac924-74dd-4387-9fd6-5bc8e563907a",
+    subtypes: [Warrior],
+    card_types: [Character],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "1ece0e16-08de-4c99-8552-2d1d3a2bd517",
+    subtypes: [Survivor],
+    card_types: [Character],
+    keywords: [Reclaim],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "3d86f8ce-42ac-43dc-96d5-121e6d1a6167",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "dec81fa2-7865-448c-95bc-622b884cea9e",
+    card_types: [Character],
+    cost_bands: [Cheap],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "4dc47625-73bd-4518-a4ef-29dda2171594",
+    card_types: [Character],
+    cost_bands: [Cheap],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(id: "4a91c56c-d828-482a-a46c-1299d69fa011", quality: 1),
+
+  DreamsignProfileDefinition(id: "26786698-fdf2-493d-905b-4273a20586c9", quality: 3),
+
+  DreamsignProfileDefinition(id: "b7f8a4ea-c067-47ed-b251-2876b609108c", quality: 2),
+
+  DreamsignProfileDefinition(
+    id: "253a106d-f64e-4a60-9471-446a18ee8959",
+    keywords: [Reclaim],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "5a22f358-bc84-44b1-a201-5f9f57940c51",
+    card_types: [Character],
+    cost_bands: [Cheap],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(id: "6b95d6bd-c970-4465-9536-4f21e7630d0a", quality: 3),
+
+  DreamsignProfileDefinition(
+    id: "1a524712-ef7e-43d9-bd79-5dea5250bf08",
+    card_types: [Event],
+    cost_bands: [Cheap],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "6f4e2d9f-38a4-4f6a-8fde-7d942977a6df",
+    card_types: [Character],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "c75cd943-5e8b-4a56-8c09-d975571570d4",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "7ec00da2-2b2d-4613-9a2a-8611d38199ca",
+    card_types: [Event],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "064cfb53-fcb4-4471-80de-27eccd23d3c0",
+    card_types: [Event],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "a7cdc8fd-5827-4d73-ae0c-aa594a69fa8a",
+    subtypes: [Survivor],
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "bfec4f5d-9b0d-4ed2-b470-db73d852448f",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "fb7316c9-ef29-42fd-993e-d3337cb06921",
+    card_types: [Event],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "257c160f-7d70-4ebd-bb0f-f83e61907310",
+    card_types: [Event],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "49f216a2-0596-4124-bb40-60ac9afe6e0b",
+    card_types: [Event],
+    cost_bands: [Cheap],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "56523397-6c48-4df6-846b-9e4f15d7fdee",
+    card_types: [Event],
+    quality: 3,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "6dac6bff-af3a-4749-8547-01fded1c81c9",
+    card_types: [Event],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "396da354-9f4d-4ae7-a9dc-02d1330a2678",
+    card_types: [Event, Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "a09f60df-ec9f-4608-873c-1372af18daa2",
+    card_types: [Event],
+    keywords: [Reclaim],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "044f856b-c08b-4b82-81e3-5417962bf868",
+    card_types: [Event],
+    keywords: [Reclaim],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "b6333eba-5573-441c-b286-1cd7f7cb6916",
+    card_types: [Event],
+    keywords: [Reclaim],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "b2626645-827c-46ec-8204-017862d1a398",
+    card_types: [Character],
+    cost_bands: [Big],
+    keywords: [Reclaim],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "2059aa74-8897-4c76-833f-ddef7d34346c",
+    keywords: [Reclaim],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "8340cce5-8e27-4940-ab79-34e09fdbcae1",
+    keywords: [Reclaim],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "2cbcbebb-fb79-4833-a770-2216873147c4",
+    card_types: [Event],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "d2a916c1-321a-4ae3-9a50-0b7f13c5eff6",
+    card_types: [Event],
+    keywords: [Fast],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "10f27800-99f8-4504-9d94-26bcb3c32788",
+    card_types: [Character],
+    keywords: [Reclaim],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "946dbb36-0a90-495a-bf0f-17351c93d74b",
+    keywords: [Reclaim],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "89c83d7e-5617-49b4-b6cd-214680fe0627",
+    card_types: [Event, Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(id: "8b87b0c7-e7d5-4c53-b99b-b1e2407cb519", quality: 2),
+
+  DreamsignProfileDefinition(
+    id: "73efd845-6009-4686-860c-01c7f5b1c074",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "adc23870-55f8-4f23-b973-a358fc257414",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(id: "1a21186c-cafd-4e0f-9304-1ac0ef55340a", quality: 2),
+
+  DreamsignProfileDefinition(
+    id: "ff8d8d4a-fe7b-4511-8192-e6e2e7712daf",
+    card_types: [Event],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "a92d2b95-c63d-4c1c-831b-902c44deee57",
+    card_types: [Event],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(id: "39260dd5-cb43-47d5-a007-effbe13d6417", quality: 2),
+
+  DreamsignProfileDefinition(id: "4e51f321-9089-4872-a0e2-ab909e242b33", quality: 1),
+
+  DreamsignProfileDefinition(
+    id: "268341c7-bb5b-49fb-ad8d-a792b7d631a0",
+    card_types: [Event],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(id: "9aaed05a-2223-42f2-9b9d-81a53eab811c", quality: 2),
+
+  DreamsignProfileDefinition(
+    id: "5190a8b8-25a0-4c60-a4de-2e2c5a73af77",
+    keywords: [Reclaim],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "86f64a29-7338-4759-81da-4c7656e543d2",
+    card_types: [Event],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(id: "9d134dfc-4643-47f3-a7ec-ea770587cea1", quality: 1),
+
+  DreamsignProfileDefinition(
+    id: "3a22a33f-5682-4d00-b0ec-86e43b6ed9df",
+    subtypes: [SpiritAnimal],
+    card_types: [Character],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "b3403800-7004-4775-915b-a19840e416b0",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "989b55bd-139f-40dc-b1fd-eb2f7b1c091a",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "6103508c-4991-4b80-9dc1-f30122957296",
+    subtypes: [Survivor],
+    card_types: [Character],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "7a37386d-6e7c-4f08-b07f-e92a1fd69893",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(id: "15fd5a22-a786-48e3-99b0-919e810b3eba", quality: 2),
+
+  DreamsignProfileDefinition(
+    id: "08a3983a-1b95-4d2e-a445-9d8dc2b8fca7",
+    card_types: [Character],
+    cost_bands: [Cheap],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "eb6a5c19-26a6-41ef-ac7a-ce1152557b5c",
+    card_types: [Character],
+    quality: 3,
+  ),
+
+  DreamsignProfileDefinition(id: "87239e3f-04f7-45bd-9b73-944ef36ad445", quality: 2),
+
+  DreamsignProfileDefinition(
+    id: "11018e32-f47e-45fd-a8cf-3a9e3f3be71b",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "d4b18cc4-caeb-40b3-b0e2-f1c8b1c8354c",
+    card_types: [Character],
+    cost_bands: [Cheap],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "2788cdad-2735-4cdf-89a8-dcecaca87369",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "4f5bdcac-64cb-4a45-8121-e37f5e4d3074",
+    subtypes: [SpiritAnimal],
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "1ccd8d69-e14c-4788-be1d-cb6a1b703225",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(id: "6b51e477-352c-489b-8d5f-049bc378fde9", quality: 2),
+
+  DreamsignProfileDefinition(
+    id: "4d762fae-ae9f-4c35-a03b-051d7ecc3532",
+    card_types: [Character],
+    quality: 3,
+  ),
+
+  DreamsignProfileDefinition(id: "c92438fc-8e1f-4f97-9dcf-8ca0edaa8607", quality: 1),
+
+  DreamsignProfileDefinition(id: "9dd7d53f-d4db-4eec-919d-d701774af359", quality: 2),
+
+  DreamsignProfileDefinition(
+    id: "bb8bb233-7cb1-43b3-af30-e71ab9e832c5",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "fdfbd522-c2be-4b77-a63f-e9a64ca3de3b",
+    card_types: [Character],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "293a610d-ea75-4974-88da-13e4c86f248f",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "4a9f95d5-b72d-4ee8-8d29-b05646edc23d",
+    card_types: [Character],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "b765f6bb-0b8a-4847-ada4-477b9493e3ad",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(id: "72ef4b11-5366-4798-aab0-09e5ffbb1ed8", quality: 1),
+
+  DreamsignProfileDefinition(
+    id: "05f69d01-f8a3-4044-b7cd-0bfd9ed980cd",
+    cost_bands: [Big],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "64a28f37-54a4-4152-8c72-2ebc61e19aac",
+    keywords: [Fast],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "206049ae-9f28-4a90-9f75-63d9ee5f4a27",
+    card_types: [Character],
+    cost_bands: [Cheap],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "9204fbc8-ba40-4e33-9fbc-f62ccc4a43d1",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "fb87262c-5bde-409e-92f1-58cc7a4e5491",
+    card_types: [Character],
+    cost_bands: [Mid],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "62e1a588-f719-415c-9434-80aa08ce2e6a",
+    card_types: [Character],
+    cost_bands: [Mid],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(id: "4bb408a8-7941-42dc-9ff6-dbc1400c99ed", quality: 2),
+
+  DreamsignProfileDefinition(id: "fdd2ffe4-40f4-49cf-bc2e-2496e1042f76", quality: 3),
+
+  DreamsignProfileDefinition(
+    id: "56caa78b-021d-4b27-acab-c77fb0146ced",
+    card_types: [Event],
+    quality: 3,
+  ),
+
+  DreamsignProfileDefinition(id: "ef25fba0-58a0-4b69-be06-3668679fcdc7", quality: 2),
+
+  DreamsignProfileDefinition(
+    id: "055f211d-aa51-49eb-9162-190a946b1614",
+    card_types: [Character],
+    cost_bands: [Cheap],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(id: "cd4bb1f4-66bb-45ea-abfe-ce0c66e4ec4f", quality: 2),
+
+  DreamsignProfileDefinition(id: "1cf06f9b-d698-434b-8e36-8a47206f4c0c", quality: 2),
+
+  DreamsignProfileDefinition(id: "8408b8c2-5a3f-40dd-bac4-98f2736c4176", quality: 1),
+
+  DreamsignProfileDefinition(id: "10bd78de-87ec-44e4-9b16-e755da2a9717", quality: 2),
+
+  DreamsignProfileDefinition(id: "8a2c7b32-26ea-40e2-845a-689da5673b4d", quality: 2),
+
+  DreamsignProfileDefinition(id: "883f88fb-ac50-419a-8382-c22edee29755", quality: 2),
+
+  DreamsignProfileDefinition(id: "c2af5460-e61f-409b-9b86-6ac7db34d748", quality: 3),
+
+  DreamsignProfileDefinition(id: "e7d23bf7-4d60-4b43-94c4-14a06c0f9116", quality: 2),
+
+  DreamsignProfileDefinition(
+    id: "4f21a4ab-e4aa-4718-8563-9afb72d140c0",
+    card_types: [Event],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "0c52e8c3-a792-4eea-955f-a0c61463c066",
+    card_types: [Event],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "8b69de8a-835d-4f0c-ac25-dc0e700e2983",
+    card_types: [Character],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(id: "ab1da9d3-376a-460a-a9dc-4737e59e558b", quality: 2),
+
+  DreamsignProfileDefinition(id: "34ce9428-dda9-4efa-bacd-5ec2698561c1", quality: 2),
+
+  DreamsignProfileDefinition(id: "d9f0f7ff-63c0-4247-8831-054d7fed931d", quality: 2),
+
+  DreamsignProfileDefinition(id: "be59c0ba-6286-49e3-a88d-86b0977cc30a", quality: 2),
+
+  DreamsignProfileDefinition(id: "af92858a-0c50-4abf-a622-04c024ca32b3", quality: 2),
+
+  DreamsignProfileDefinition(id: "488bf436-c6d5-4e38-8a19-e50041f53766", quality: 2),
+
+  DreamsignProfileDefinition(id: "f4df5a74-7822-4552-a3ab-f50b00758593", quality: 2),
+
+  DreamsignProfileDefinition(id: "95a162c1-5fb0-4966-b631-eec1e8ec96ef", quality: 2),
+
+  DreamsignProfileDefinition(id: "1c505034-e405-495d-8418-6e3c06d974f0", quality: 2),
+
+  DreamsignProfileDefinition(id: "427c71e3-178f-4352-8d6f-f0789cb13c2d", quality: 2),
+
+  DreamsignProfileDefinition(id: "2dcf92bf-93b3-400c-ab97-69d3098f8868", quality: 1),
+
+  DreamsignProfileDefinition(id: "e377c3ed-16f5-4424-a9f1-73f9750ace9f", quality: 2),
+
+  DreamsignProfileDefinition(id: "71f77dd5-3bb5-4987-80f4-13dc69f74e6b", quality: 2),
+
+  DreamsignProfileDefinition(id: "d78864da-eb31-4f25-9d51-94fca7ecf810", quality: 1),
+
+  DreamsignProfileDefinition(id: "1328e611-fa2f-426f-87e2-97f26c061866", quality: 2),
+
+  DreamsignProfileDefinition(
+    id: "069c6e8f-4f41-4f13-9ec9-2009b4186e3b",
+    card_types: [Event],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(
+    id: "8e2d26a8-ff39-48a4-a30e-434479c4675f",
+    subtypes: [Survivor],
+    card_types: [Character],
+    quality: 1,
+  ),
+
+  DreamsignProfileDefinition(id: "108841ce-4feb-4c73-972e-0277c727c63e", quality: 2),
+
+  DreamsignProfileDefinition(id: "025ce7f1-066b-480a-8a2f-364379890abd", quality: 2),
+
+  DreamsignProfileDefinition(id: "452b7cd6-9dc3-48a8-b9aa-412ca6dd5f19", quality: 2),
+
+  DreamsignProfileDefinition(id: "da7e4b45-9106-4116-bc1c-3aec8885396b", quality: 3),
+
+  DreamsignProfileDefinition(id: "7e8c86cc-788f-4648-be84-e0935c40c31e", quality: 3),
+
+  DreamsignProfileDefinition(id: "cd81a49d-df58-4e0e-b1b2-33a82b386052", quality: 3),
+
+  DreamsignProfileDefinition(id: "58472ad2-88b1-4dc7-a161-c6dea7d8c43d", quality: 2),
+
+  DreamsignProfileDefinition(id: "3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59", quality: 2),
+
+  DreamsignProfileDefinition(id: "0df9d72c-58ea-42a0-a72a-cbc540a1836a", quality: 3),
+
+  DreamsignProfileDefinition(id: "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b", quality: 3),
+
+  DreamsignProfileDefinition(id: "eb55b141-82f8-4ba4-b319-420f762e9ee4", quality: 3),
+
+  DreamsignProfileDefinition(
+    id: "1cd25b9a-b176-4c51-8349-bb4df35cbf05",
+    cost_bands: [Big],
+    quality: 2,
+  ),
+
+  DreamsignProfileDefinition(id: "b8590328-ca72-4869-a795-c7f4b6802bed", quality: 2),
+]
