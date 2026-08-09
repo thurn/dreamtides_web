@@ -27,8 +27,8 @@ use crate::models::dreamsigns::{
 };
 use crate::models::dreamwell::{self, ArtCrop, DeckTier, DreamwellCardDefinition};
 use crate::models::exploration::{
-    ActionDefinition, ActionEffect, ActionPresentation, DeckTarget, EffectKind, ExplorationCatalog,
-    Followup, Predicate,
+    ActionDefinition, ActionEffect, ActionId, ActionPresentation, DeckTarget, EffectKind,
+    ExplorationCatalog, Followup, Predicate,
 };
 use crate::models::figments::{
     ArtCrop as FigmentArtCrop, CharacterType as FigmentCharacterType, FigmentBehavior,
@@ -2145,7 +2145,7 @@ fn replace_action(
     action: JsonValue,
 ) -> Result<ActionDefinition> {
     let replacement = action_from_compat(action)?;
-    if replacement.id != expected_action_id {
+    if replacement.id.to_string() != expected_action_id {
         bail!("FIELD_NOT_APPLICABLE: Exploration action IDs cannot be changed");
     }
     let encounter = unique_encounter_mut(catalog, &card_id)?;
@@ -2153,7 +2153,7 @@ fn replace_action(
         .actions
         .get(slot)
         .context("RECORD_NOT_FOUND: Exploration action slot is missing")?;
-    if current.id != expected_action_id {
+    if current.id.to_string() != expected_action_id {
         bail!("RECORD_NOT_FOUND: expected action id does not match the selected slot");
     }
     encounter.actions[slot] = replacement.clone();
@@ -2162,7 +2162,7 @@ fn replace_action(
 
 fn patch_exploration_prose(source: &str, card_id: &str, prose: &str) -> Result<String> {
     let record =
-        typed_record_range_at_indent(source, "EncounterDefinition", "card_id", card_id, 4)?;
+        typed_record_range_at_indent(source, "EncounterDefinition", "card_id", card_id, 2)?;
     let value = top_level_field_value_range(source, record, "prose")?
         .context("MALFORMED_SOURCE: Exploration encounter has no prose field")?;
     Ok(format!(
@@ -2174,7 +2174,8 @@ fn patch_exploration_prose(source: &str, card_id: &str, prose: &str) -> Result<S
 }
 
 fn patch_exploration_action(source: &str, action: &ActionDefinition) -> Result<String> {
-    let record = typed_record_range_at_indent(source, "ActionDefinition", "id", &action.id, 8)?;
+    let action_id = action.id.to_string();
+    let record = typed_record_range_at_indent(source, "ActionDefinition", "id", &action_id, 6)?;
     let existing_source = format!("#![enable(implicit_some)]\n{}", &source[record.clone()]);
     let existing: ActionDefinition = ron::from_str(&existing_source)
         .context("MALFORMED_SOURCE: Exploration action record is invalid")?;
@@ -2183,7 +2184,7 @@ fn patch_exploration_action(source: &str, action: &ActionDefinition) -> Result<S
     if existing.label != action.label {
         patched = patch_exploration_action_field(
             &patched,
-            &action.id,
+            &action_id,
             "label",
             &ron::to_string(&action.label)?,
         )?;
@@ -2192,7 +2193,7 @@ fn patch_exploration_action(source: &str, action: &ActionDefinition) -> Result<S
         && existing.presentation.followup == action.presentation.followup
     {
         let action_record =
-            typed_record_range_at_indent(&patched, "ActionDefinition", "id", &action.id, 8)?;
+            typed_record_range_at_indent(&patched, "ActionDefinition", "id", &action_id, 6)?;
         let presentation = top_level_field_value_range(&patched, action_record, "presentation")?
             .context("MALFORMED_SOURCE: Exploration action has no presentation field")?;
         let effect_text = top_level_field_value_range(&patched, presentation, "effect_text")?
@@ -2206,7 +2207,7 @@ fn patch_exploration_action(source: &str, action: &ActionDefinition) -> Result<S
     } else if existing.presentation != action.presentation {
         patched = patch_exploration_action_field(
             &patched,
-            &action.id,
+            &action_id,
             "presentation",
             &render_ron_value(&action.presentation, true)?,
         )?;
@@ -2214,7 +2215,7 @@ fn patch_exploration_action(source: &str, action: &ActionDefinition) -> Result<S
     if existing.effect != action.effect {
         patched = patch_exploration_action_field(
             &patched,
-            &action.id,
+            &action_id,
             "effect",
             &render_ron_value(&action.effect, true)?,
         )?;
@@ -2228,7 +2229,7 @@ fn patch_exploration_action_field(
     field: &str,
     replacement: &str,
 ) -> Result<String> {
-    let record = typed_record_range_at_indent(source, "ActionDefinition", "id", action_id, 8)?;
+    let record = typed_record_range_at_indent(source, "ActionDefinition", "id", action_id, 6)?;
     let value = top_level_field_value_range(source, record, field)?
         .with_context(|| format!("MALFORMED_SOURCE: Exploration action has no {field} field"))?;
     Ok(format!(
@@ -2244,7 +2245,6 @@ fn unique_encounter_mut<'a>(
     card_id: &str,
 ) -> Result<&'a mut crate::models::exploration::EncounterDefinition> {
     let matches = catalog
-        .encounters
         .iter()
         .filter(|encounter| encounter.card_id.eq_ignore_ascii_case(card_id))
         .count();
@@ -2255,7 +2255,6 @@ fn unique_encounter_mut<'a>(
         bail!("MALFORMED_SOURCE: duplicate Exploration encounter UUID {card_id}");
     }
     Ok(catalog
-        .encounters
         .iter_mut()
         .find(|encounter| encounter.card_id.eq_ignore_ascii_case(card_id))
         .unwrap())
@@ -2264,7 +2263,7 @@ fn unique_encounter_mut<'a>(
 fn reject_duplicate_exploration_ids(catalog: &ExplorationCatalog) -> Result<()> {
     let mut encounters = BTreeSet::new();
     let mut actions = BTreeSet::new();
-    for encounter in &catalog.encounters {
+    for encounter in catalog {
         if !encounters.insert(encounter.card_id.to_ascii_lowercase()) {
             bail!(
                 "MALFORMED_SOURCE: duplicate Exploration encounter UUID {}",
@@ -2305,7 +2304,7 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
         }
     }
     let effect = match kind {
-        EffectKind::GainOfferedCard => ActionEffect::GainOfferedCard {
+        EffectKind::GainOfferedCard => ActionEffect::GainGeneratedCard {
             predicate: json_predicate(object, "predicate")?,
             count: optional_positive_int(object, "count")?,
         },
@@ -2333,7 +2332,7 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
         EffectKind::ChangeSubtypeAll => ActionEffect::ChangeSubtypeAll {
             subtype_options: string_array(object, "subtypeOptions")?,
         },
-        EffectKind::GainCard => ActionEffect::GainCard {
+        EffectKind::GainCard => ActionEffect::GainNamedCard {
             card_id: required_json_string(object, "cardId")?,
         },
         EffectKind::GainDreamsign => ActionEffect::GainDreamsign {
@@ -2423,7 +2422,8 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
     }
     Ok(ActionDefinition {
         label: required_json_string(object, "label")?,
-        id: required_json_string(object, "id")?,
+        id: ActionId::parse(&required_json_string(object, "id")?)
+            .map_err(|error| anyhow::anyhow!("INVALID_EDIT: {error}"))?,
         presentation: ActionPresentation {
             effect_text: required_json_string(object, "effectText")?,
             followup: followup_title
@@ -3419,48 +3419,46 @@ mod tests {
 
     const EXPLORATION_SOURCE: &str = r###"// Stable Exploration guidance.
 #![enable(implicit_some)]
-ExplorationCatalog(
-  encounters: [
-    EncounterDefinition(
-      card_id: "00000000-0000-4000-8000-000000000031",
-      prose: "First scene",
-      actions: [
-        // Edited action comment.
-        ActionDefinition(
-          label: "First",
-          id: "first-action",
-          presentation: ActionPresentation(effect_text: "First effect", followup: None),
-          effect: MakeFastAll,
-        ),
-        ActionDefinition(
-          label: "Second",
-          id: "second-action",
-          presentation: ActionPresentation(effect_text: "Second effect", followup: None),
-          effect: AddSite,
-        ),
-      ],
-    ),
-    /* Unrelated encounter comment. */
-    EncounterDefinition(
-      card_id: "00000000-0000-4000-8000-000000000032",
-      prose: "Unrelated scene",
-      actions: [
-        ActionDefinition(
-          label: "Third",
-          id: "third-action",
-          presentation: ActionPresentation(effect_text: "Third effect", followup: None),
-          effect: MakeFastAll,
-        ),
-        ActionDefinition(
-          label: "Fourth",
-          id: "fourth-action",
-          presentation: ActionPresentation(effect_text: "Fourth effect", followup: None),
-          effect: AddSite,
-        ),
-      ],
-    ),
-  ],
-)
+[
+  EncounterDefinition(
+    card_id: "00000000-0000-4000-8000-000000000031",
+    prose: "First scene",
+    actions: [
+      // Edited action comment.
+      ActionDefinition(
+        label: "First",
+        id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+        presentation: ActionPresentation(effect_text: "First effect", followup: None),
+        effect: MakeFastAll,
+      ),
+      ActionDefinition(
+        label: "Second",
+        id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        presentation: ActionPresentation(effect_text: "Second effect", followup: None),
+        effect: AddSite,
+      ),
+    ],
+  ),
+  /* Unrelated encounter comment. */
+  EncounterDefinition(
+    card_id: "00000000-0000-4000-8000-000000000032",
+    prose: "Unrelated scene",
+    actions: [
+      ActionDefinition(
+        label: "Third",
+        id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+        presentation: ActionPresentation(effect_text: "Third effect", followup: None),
+        effect: MakeFastAll,
+      ),
+      ActionDefinition(
+        label: "Fourth",
+        id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+        presentation: ActionPresentation(effect_text: "Fourth effect", followup: None),
+        effect: AddSite,
+      ),
+    ],
+  ),
+]
 "###;
 
     const CARD_SOURCE: &str = r##"// Stable catalog guidance.
@@ -4443,7 +4441,7 @@ CardMetadataCatalog(
 
     fn action(kind: EffectKind) -> JsonValue {
         let mut value = Map::from_iter([
-            ("id".into(), json!("fixture-action")),
+            ("id".into(), json!("eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee")),
             ("label".into(), json!("Choose")),
             ("effectText".into(), json!("Effect")),
             ("effectKind".into(), json!(kind.as_compat())),
@@ -4557,18 +4555,16 @@ CardMetadataCatalog(
     #[test]
     fn exploration_presentation_edit_preserves_unrelated_source() {
         let mut catalog: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
-        catalog.encounters[0].actions[0].presentation.effect_text = "Edited effect".into();
-        let patched =
-            patch_exploration_action(EXPLORATION_SOURCE, &catalog.encounters[0].actions[0])
-                .unwrap();
+        catalog[0].actions[0].presentation.effect_text = "Edited effect".into();
+        let patched = patch_exploration_action(EXPLORATION_SOURCE, &catalog[0].actions[0]).unwrap();
 
         assert!(patched.starts_with("// Stable Exploration guidance."));
         assert!(patched.contains("// Edited action comment."));
         let unrelated = EXPLORATION_SOURCE
-            .find("    /* Unrelated encounter comment. */")
+            .find("  /* Unrelated encounter comment. */")
             .unwrap();
         let patched_unrelated = patched
-            .find("    /* Unrelated encounter comment. */")
+            .find("  /* Unrelated encounter comment. */")
             .unwrap();
         assert_eq!(
             &EXPLORATION_SOURCE[unrelated..],
@@ -4581,13 +4577,11 @@ CardMetadataCatalog(
     #[test]
     fn exploration_effect_edit_preserves_implicit_some_notation() {
         let mut catalog: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
-        catalog.encounters[0].actions[0].effect = ActionEffect::PurgeSelected {
+        catalog[0].actions[0].effect = ActionEffect::PurgeSelected {
             predicate: Some(Predicate::Event),
             count: Some(2),
         };
-        let patched =
-            patch_exploration_action(EXPLORATION_SOURCE, &catalog.encounters[0].actions[0])
-                .unwrap();
+        let patched = patch_exploration_action(EXPLORATION_SOURCE, &catalog[0].actions[0]).unwrap();
 
         assert!(patched.contains("effect: PurgeSelected("));
         assert!(patched.contains("predicate: Event"));

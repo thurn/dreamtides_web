@@ -1,7 +1,10 @@
 use std::collections::BTreeSet;
+use std::fmt;
 
 use anyhow::{Result, bail};
-use serde::{Deserialize, Serialize};
+use serde::de::Error as _;
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use uuid::{Uuid, Variant, Version};
 
 macro_rules! string_enum {
     ($name:ident { $($variant:ident => $value:literal),+ $(,)? }) => {
@@ -176,14 +179,14 @@ impl EffectKind {
 impl ActionEffect {
     pub(crate) fn kind(&self) -> EffectKind {
         match self {
-            Self::GainOfferedCard { .. } => EffectKind::GainOfferedCard,
+            Self::GainGeneratedCard { .. } => EffectKind::GainOfferedCard,
             Self::TransfigureSelected { .. } => EffectKind::TransfigureSelected,
             Self::PurgeSelected { .. } => EffectKind::PurgeSelected,
             Self::GainRandomCards { .. } => EffectKind::GainRandomCards,
             Self::DraftCard { .. } => EffectKind::DraftCard,
             Self::ChangeSubtypeSelected { .. } => EffectKind::ChangeSubtypeSelected,
             Self::ChangeSubtypeAll { .. } => EffectKind::ChangeSubtypeAll,
-            Self::GainCard { .. } => EffectKind::GainCard,
+            Self::GainNamedCard { .. } => EffectKind::GainCard,
             Self::GainDreamsign { .. } => EffectKind::GainDreamsign,
             Self::GainEssencePerCard { .. } => EffectKind::GainEssencePerCard,
             Self::ChoosePack { .. } => EffectKind::ChoosePack,
@@ -218,10 +221,51 @@ impl ActionEffect {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct ExplorationCatalog {
-    pub encounters: Vec<EncounterDefinition>,
+pub type ExplorationCatalog = Vec<EncounterDefinition>;
+
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
+pub struct ActionId(Uuid);
+
+impl ActionId {
+    pub(crate) fn parse(value: &str) -> std::result::Result<Self, String> {
+        let uuid = Uuid::parse_str(value)
+            .map_err(|_| "Exploration action identifier must be an RFC 4122 UUIDv4".to_owned())?;
+        if uuid.get_version() != Some(Version::Random) || uuid.get_variant() != Variant::RFC4122 {
+            return Err("Exploration action identifier must be an RFC 4122 UUIDv4".into());
+        }
+        if uuid.hyphenated().to_string() != value {
+            return Err(
+                "Exploration action identifier must use lowercase hyphenated UUID formatting"
+                    .into(),
+            );
+        }
+        Ok(Self(uuid))
+    }
+}
+
+impl fmt::Display for ActionId {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.0.hyphenated().fmt(formatter)
+    }
+}
+
+impl Serialize for ActionId {
+    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.serialize_str(&self.to_string())
+    }
+}
+
+impl<'de> Deserialize<'de> for ActionId {
+    fn deserialize<D>(deserializer: D) -> std::result::Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let value = String::deserialize(deserializer)?;
+        Self::parse(&value).map_err(D::Error::custom)
+    }
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -251,14 +295,14 @@ pub struct EncounterDefinition {
 #[serde(deny_unknown_fields)]
 pub struct ActionDefinition {
     pub label: String,
-    pub id: String,
+    pub id: ActionId,
     pub presentation: ActionPresentation,
     pub effect: ActionEffect,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub enum ActionEffect {
-    GainOfferedCard {
+    GainGeneratedCard {
         predicate: Predicate,
         count: Option<i64>,
     },
@@ -286,7 +330,7 @@ pub enum ActionEffect {
     ChangeSubtypeAll {
         subtype_options: Vec<String>,
     },
-    GainCard {
+    GainNamedCard {
         card_id: String,
     },
     GainDreamsign {
@@ -370,7 +414,6 @@ pub fn lower(catalog: ExplorationCatalog) -> Result<toml::Value> {
     let mut encounter_ids = BTreeSet::new();
     let mut action_ids = BTreeSet::new();
     let encounters = catalog
-        .encounters
         .into_iter()
         .map(|encounter| {
             if !(1..=4).contains(&encounter.actions.len()) {
@@ -420,7 +463,7 @@ pub fn lower(catalog: ExplorationCatalog) -> Result<toml::Value> {
 
 fn lower_action(action: ActionDefinition) -> toml::map::Map<String, toml::Value> {
     let mut output = toml::map::Map::new();
-    output.insert("id".into(), action.id.into());
+    output.insert("id".into(), action.id.to_string().into());
     output.insert("label".into(), action.label.into());
     output.insert("effect-text".into(), action.presentation.effect_text.into());
     if let Some(followup) = action.presentation.followup {
@@ -461,7 +504,7 @@ fn lower_action_effect(effect: ActionEffect, output: &mut toml::map::Map<String,
         };
     }
     match effect {
-        ActionEffect::GainOfferedCard {
+        ActionEffect::GainGeneratedCard {
             predicate: value,
             count,
         } => {
@@ -524,7 +567,7 @@ fn lower_action_effect(effect: ActionEffect, output: &mut toml::map::Map<String,
                 toml::Value::Array(subtype_options.into_iter().map(Into::into).collect()),
             );
         }
-        ActionEffect::GainCard { card_id } => {
+        ActionEffect::GainNamedCard { card_id } => {
             kind!(GainCard);
             text!("card-id", card_id);
         }
@@ -667,5 +710,75 @@ fn lower_action_effect(effect: ActionEffect, output: &mut toml::map::Map<String,
         ActionEffect::AddSite => {
             kind!(AddSite);
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const FLAT_SOURCE: &str = r###"#![enable(implicit_some)]
+[
+  EncounterDefinition(
+    card_id: "11111111-1111-4111-8111-111111111111",
+    prose: "A synthetic encounter.",
+    actions: [
+      ActionDefinition(
+        label: "Take the named card",
+        id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+        presentation: ActionPresentation(effect_text: "Gain {fixed_card}", followup: None),
+        effect: GainNamedCard(card_id: "22222222-2222-4222-8222-222222222222"),
+      ),
+      ActionDefinition(
+        label: "Take the generated card",
+        id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        presentation: ActionPresentation(effect_text: "Gain {offered_card}", followup: None),
+        effect: GainGeneratedCard(predicate: Character, count: None),
+      ),
+    ],
+  ),
+]
+"###;
+
+    #[test]
+    fn parses_a_flat_encounter_list_with_uuid_action_ids() {
+        let catalog: ExplorationCatalog = ron::from_str(FLAT_SOURCE).unwrap();
+
+        assert_eq!(catalog.len(), 1);
+        assert!(matches!(
+            catalog[0].actions[0].effect,
+            ActionEffect::GainNamedCard { .. }
+        ));
+        assert!(matches!(
+            catalog[0].actions[1].effect,
+            ActionEffect::GainGeneratedCard { .. }
+        ));
+    }
+
+    #[test]
+    fn rejects_wrapped_catalogs_and_non_uuid_action_ids() {
+        assert!(ron::from_str::<ExplorationCatalog>("ExplorationCatalog(encounters: [])").is_err());
+
+        let malformed = FLAT_SOURCE.replace(
+            "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            "source-card:pair-1:template-1",
+        );
+        let error = ron::from_str::<ExplorationCatalog>(&malformed)
+            .unwrap_err()
+            .to_string();
+        assert!(error.contains("UUID"), "unexpected error: {error}");
+    }
+
+    #[test]
+    fn lowers_named_and_generated_cards_to_the_runtime_contract() {
+        let catalog: ExplorationCatalog = ron::from_str(FLAT_SOURCE).unwrap();
+        let lowered = lower(catalog).unwrap();
+        let actions = lowered["encounter"][0]["action"].as_array().unwrap();
+
+        assert_eq!(actions[0]["effect-kind"].as_str(), Some("gain-card"));
+        assert_eq!(
+            actions[1]["effect-kind"].as_str(),
+            Some("gain-offered-card")
+        );
     }
 }

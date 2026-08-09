@@ -51,7 +51,7 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
   },
   {
     "kind": "gain-card",
-    "label": "Gain card",
+    "label": "Gain named card",
     "canonicalMechanicId": "gain-card",
     "defaultSelectionPolicyId": "fixed",
     "allowedSelectionPolicyIds": [
@@ -384,7 +384,7 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
   },
   {
     "kind": "gain-offered-card",
-    "label": "Gain an offered card",
+    "label": "Gain generated card",
     "canonicalMechanicId": "gain-card",
     "defaultSelectionPolicyId": "card-fit-quality",
     "allowedSelectionPolicyIds": [

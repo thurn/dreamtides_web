@@ -1,822 +1,817 @@
 // Canonical Exploration encounters and their player-facing presentation.
 
 #![enable(implicit_some)]
-ExplorationCatalog(
-  encounters: [
-    EncounterDefinition(
-      card_id: "161482b6-af07-4d9e-822d-8c738672beb9",
-      prose: "A young lantern bearer approaches a towering window of stars.",
-      actions: [
-        ActionDefinition(
-          label: "Invite someone through",
-          id: "161482b6-af07-4d9e-822d-8c738672beb9:pair-5:template-11",
-          presentation: ActionPresentation(effect_text: "Gain {offered_card}", followup: None),
-          effect: GainOfferedCard(predicate: CheapCharacter, count: None),
-        ),
+[
+  EncounterDefinition(
+    card_id: "161482b6-af07-4d9e-822d-8c738672beb9",
+    prose: "A young lantern bearer approaches a towering window of stars.",
+    actions: [
+      ActionDefinition(
+        label: "Invite someone through",
+        id: "6662e7ce-9ea7-49bf-85fe-4bbe6728f282",
+        presentation: ActionPresentation(effect_text: "Gain {offered_card}", followup: None),
+        effect: GainGeneratedCard(predicate: CheapCharacter, count: None),
+      ),
 
-        ActionDefinition(
-          label: "Send a possession through",
-          id: "161482b6-af07-4d9e-822d-8c738672beb9:pair-5:template-17",
-          presentation: ActionPresentation(
-            effect_text: "Apply a transfiguration to a chosen card",
-            followup: None,
-          ),
-          effect: TransfigureSelected(count: 1),
+      ActionDefinition(
+        label: "Send a possession through",
+        id: "3db8188a-e2f8-4b86-a6fa-a19bed59e0b1",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: None,
         ),
-      ],
-    ),
+        effect: TransfigureSelected(count: 1),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "738a5af0-f848-4d48-bceb-9a43c9b11066",
-      prose: "An armored traveler hunches beside a doorway veiled in luminous grids.",
-      actions: [
-        ActionDefinition(
-          label: "Open the Passage",
-          id: "738a5af0-f848-4d48-bceb-9a43c9b11066:pair-1:template-13",
-          presentation: ActionPresentation(
-            effect_text: "Gain 2 random Survivor cards",
-            followup: None,
-          ),
-          effect: GainRandomCards(predicate: Survivor, count: 2),
+  EncounterDefinition(
+    card_id: "738a5af0-f848-4d48-bceb-9a43c9b11066",
+    prose: "An armored traveler hunches beside a doorway veiled in luminous grids.",
+    actions: [
+      ActionDefinition(
+        label: "Open the Passage",
+        id: "337483ee-b294-4a32-9922-093cd4becaca",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 random Survivor cards",
+          followup: None,
         ),
+        effect: GainRandomCards(predicate: Survivor, count: 2),
+      ),
 
-        ActionDefinition(
-          label: "Choose a Guide",
-          id: "738a5af0-f848-4d48-bceb-9a43c9b11066:pair-1:template-14",
-          presentation: ActionPresentation(
-            effect_text: "Draft a Survivor from 4 choices",
-            followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
-          ),
-          effect: DraftCard(predicate: Survivor, count: 1, offer_count: 4),
+      ActionDefinition(
+        label: "Choose a Guide",
+        id: "8636782c-0481-4809-80e1-2a0d8f747614",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Survivor from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
         ),
-      ],
-    ),
+        effect: DraftCard(predicate: Survivor, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "401bb341-8385-41e9-8f6f-7b48e9ce174d",
-      prose: "A heavy-furred wolf prowls low through blazing grass, its eyes shining.",
-      actions: [
-        ActionDefinition(
-          label: "Call Across the Fire",
-          id: "401bb341-8385-41e9-8f6f-7b48e9ce174d:pair-1:template-14",
-          presentation: ActionPresentation(
-            effect_text: "Draft a Spirit Animal from 4 choices",
-            followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
-          ),
-          effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
+  EncounterDefinition(
+    card_id: "401bb341-8385-41e9-8f6f-7b48e9ce174d",
+    prose: "A heavy-furred wolf prowls low through blazing grass, its eyes shining.",
+    actions: [
+      ActionDefinition(
+        label: "Call Across the Fire",
+        id: "e246cda0-c07b-4940-8f9c-06b2d8ac0a31",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Spirit Animal from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
         ),
+        effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
+      ),
 
-        ActionDefinition(
-          label: "Invite Another to Follow",
-          id: "401bb341-8385-41e9-8f6f-7b48e9ce174d:pair-1:template-58",
-          presentation: ActionPresentation(
-            effect_text: "Change a chosen character card to be a Spirit Animal",
-            followup: Followup(
-              title: "{action-label}",
-              subtitle: "Choose a Character to become {subtype}.",
-            ),
-          ),
-          effect: ChangeSubtypeSelected(
-            predicate: Character,
-            subtype: "Spirit Animal",
-            target: Chosen,
+      ActionDefinition(
+        label: "Invite Another to Follow",
+        id: "4ec18326-6968-40ee-91b0-de6c00440ddc",
+        presentation: ActionPresentation(
+          effect_text: "Change a chosen character card to be a Spirit Animal",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to become {subtype}.",
           ),
         ),
-      ],
-    ),
+        effect: ChangeSubtypeSelected(
+          predicate: Character,
+          subtype: "Spirit Animal",
+          target: Chosen,
+        ),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "8b5eb29c-146f-46fb-9407-55004128fba7",
-      prose: "A skull-faced guardian extends a lantern ablaze with drifting motes.",
-      actions: [
-        ActionDefinition(
-          label: "Accept the Lantern",
-          id: "8b5eb29c-146f-46fb-9407-55004128fba7:pair-1:template-10",
-          presentation: ActionPresentation(effect_text: "Gain {fixed_card}", followup: None),
-          effect: GainCard(card_id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586"),
-        ),
+  EncounterDefinition(
+    card_id: "8b5eb29c-146f-46fb-9407-55004128fba7",
+    prose: "A skull-faced guardian extends a lantern ablaze with drifting motes.",
+    actions: [
+      ActionDefinition(
+        label: "Accept the Lantern",
+        id: "12d443ce-6c82-4ec8-80d6-7fc32a6c22cc",
+        presentation: ActionPresentation(effect_text: "Gain {fixed_card}", followup: None),
+        effect: GainNamedCard(card_id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586"),
+      ),
 
-        ActionDefinition(
-          label: "Study the Motes",
-          id: "8b5eb29c-146f-46fb-9407-55004128fba7:pair-1:template-14",
-          presentation: ActionPresentation(
-            effect_text: "Draft a ≤2● cost Character from 4 choices",
-            followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
-          ),
-          effect: DraftCard(predicate: CheapCharacter, count: 1, offer_count: 4),
+      ActionDefinition(
+        label: "Study the Motes",
+        id: "582d98d1-7fe5-4bd7-9076-0d52186ea088",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
         ),
-      ],
-    ),
+        effect: DraftCard(predicate: CheapCharacter, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "954e8d50-d494-4fb2-b4c7-74979083b774",
-      prose: "A gunman stands braced as cables of shadow stream from him.",
-      actions: [
-        ActionDefinition(
-          label: "Answer His Signal",
-          id: "954e8d50-d494-4fb2-b4c7-74979083b774:pair-1:template-10",
-          presentation: ActionPresentation(effect_text: "Gain {fixed_card}", followup: None),
-          effect: GainCard(card_id: "87aba308-00b4-40d8-a46f-4e6f58a664a8"),
-        ),
+  EncounterDefinition(
+    card_id: "954e8d50-d494-4fb2-b4c7-74979083b774",
+    prose: "A gunman stands braced as cables of shadow stream from him.",
+    actions: [
+      ActionDefinition(
+        label: "Answer His Signal",
+        id: "60194d2f-a2bd-42c6-bbdc-ba84359f86d8",
+        presentation: ActionPresentation(effect_text: "Gain {fixed_card}", followup: None),
+        effect: GainNamedCard(card_id: "87aba308-00b4-40d8-a46f-4e6f58a664a8"),
+      ),
 
-        ActionDefinition(
-          label: "Accept His Commission",
-          id: "954e8d50-d494-4fb2-b4c7-74979083b774:pair-1:template-58",
-          presentation: ActionPresentation(
-            effect_text: "Change a chosen character card to be an Outsider",
-            followup: Followup(
-              title: "{action-label}",
-              subtitle: "Choose a Character to become {subtype}.",
-            ),
+      ActionDefinition(
+        label: "Accept His Commission",
+        id: "252c81f8-0a07-4899-8ab2-a2e19bf89de6",
+        presentation: ActionPresentation(
+          effect_text: "Change a chosen character card to be an Outsider",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to become {subtype}.",
           ),
-          effect: ChangeSubtypeSelected(predicate: Character, subtype: "Outsider", target: Chosen),
         ),
-      ],
-    ),
+        effect: ChangeSubtypeSelected(predicate: Character, subtype: "Outsider", target: Chosen),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "b8ecc46d-bd92-4826-a416-7ce177e69cbf",
-      prose: "An owl perches heavily on a branch, dense plumage backlit.",
-      actions: [
-        ActionDefinition(
-          label: "Follow the owl\'s focus",
-          id: "b8ecc46d-bd92-4826-a416-7ce177e69cbf:pair-1:template-14",
-          presentation: ActionPresentation(
-            effect_text: "Draft a Spirit Animal from 4 choices",
-            followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
-          ),
-          effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
+  EncounterDefinition(
+    card_id: "b8ecc46d-bd92-4826-a416-7ce177e69cbf",
+    prose: "An owl perches heavily on a branch, dense plumage backlit.",
+    actions: [
+      ActionDefinition(
+        label: "Follow the owl\'s focus",
+        id: "0a83d76f-82a3-4288-9e74-c0290d5b319d",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Spirit Animal from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
         ),
+        effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
+      ),
 
-        ActionDefinition(
-          label: "Answer its low call",
-          id: "b8ecc46d-bd92-4826-a416-7ce177e69cbf:pair-1:template-13",
-          presentation: ActionPresentation(
-            effect_text: "Gain 2 random Spirit Animal cards",
-            followup: None,
-          ),
-          effect: GainRandomCards(predicate: SpiritAnimal, count: 2),
+      ActionDefinition(
+        label: "Answer its low call",
+        id: "447c22d5-36e7-4d09-ac2e-faaa2e69c3bf",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 random Spirit Animal cards",
+          followup: None,
         ),
-      ],
-    ),
+        effect: GainRandomCards(predicate: SpiritAnimal, count: 2),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "e2f542eb-090f-4a22-a42c-a120eb6caaa3",
-      prose: "Beneath a starry haze, a dark whale banks with fins extended.",
-      actions: [
-        ActionDefinition(
-          label: "Call Across the Sky",
-          id: "e2f542eb-090f-4a22-a42c-a120eb6caaa3:pair-1:template-10",
-          presentation: ActionPresentation(effect_text: "Gain {fixed_card}", followup: None),
-          effect: GainCard(card_id: "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5"),
-        ),
+  EncounterDefinition(
+    card_id: "e2f542eb-090f-4a22-a42c-a120eb6caaa3",
+    prose: "Beneath a starry haze, a dark whale banks with fins extended.",
+    actions: [
+      ActionDefinition(
+        label: "Call Across the Sky",
+        id: "cc494e27-5aa0-4fd0-b05c-7a3361b99083",
+        presentation: ActionPresentation(effect_text: "Gain {fixed_card}", followup: None),
+        effect: GainNamedCard(card_id: "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5"),
+      ),
 
-        ActionDefinition(
-          label: "Follow Its Crossing",
-          id: "e2f542eb-090f-4a22-a42c-a120eb6caaa3:pair-1:template-14",
-          presentation: ActionPresentation(
-            effect_text: "Draft a Spirit Animal from 4 choices",
-            followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
-          ),
-          effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
+      ActionDefinition(
+        label: "Follow Its Crossing",
+        id: "0f65ec97-601c-4696-9856-e7ff38b5116f",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Spirit Animal from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
         ),
-      ],
-    ),
+        effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
-      prose: "An elephant looms through starry haze, bright tusks sharply curved.",
-      actions: [
-        ActionDefinition(
-          label: "Reach toward the tusks",
-          id: "46783333-78f9-4146-a8ec-0d1b81e1bf2f:pair-1:template-27",
-          presentation: ActionPresentation(
-            effect_text: "Gain Charm Pouch",
-            followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
-          ),
-          effect: GainDreamsign(dreamsign_id: "2d4eb3ee-0931-45ed-8365-69f18096ead5"),
+  EncounterDefinition(
+    card_id: "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
+    prose: "An elephant looms through starry haze, bright tusks sharply curved.",
+    actions: [
+      ActionDefinition(
+        label: "Reach toward the tusks",
+        id: "edc68109-5022-4f01-8f92-c72169bd361c",
+        presentation: ActionPresentation(
+          effect_text: "Gain Charm Pouch",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
         ),
+        effect: GainDreamsign(dreamsign_id: "2d4eb3ee-0931-45ed-8365-69f18096ead5"),
+      ),
 
-        ActionDefinition(
-          label: "Sound a gathering call",
-          id: "46783333-78f9-4146-a8ec-0d1b81e1bf2f:pair-1:template-59",
-          presentation: ActionPresentation(
-            effect_text: "Gain 15 essence for each Spirit Animal card in your deck",
-            followup: None,
-          ),
-          effect: GainEssencePerCard(predicate: SpiritAnimal, essence_per_card: 15),
+      ActionDefinition(
+        label: "Sound a gathering call",
+        id: "eeeb8b4f-1750-43c0-8d43-9e6a50f0354b",
+        presentation: ActionPresentation(
+          effect_text: "Gain 15 essence for each Spirit Animal card in your deck",
+          followup: None,
         ),
-      ],
-    ),
+        effect: GainEssencePerCard(predicate: SpiritAnimal, essence_per_card: 15),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "886c9d49-b25f-4ddd-97f0-2ec4b42eda89",
-      prose: "A colossal rider looms through star-filled haze, long hair streaming.",
-      actions: [
-        ActionDefinition(
-          label: "Answer Their Muster",
-          id: "886c9d49-b25f-4ddd-97f0-2ec4b42eda89:pair-5:template-36",
-          presentation: ActionPresentation(
-            effect_text: "Choose one of 2 packs of 3 Warrior cards to add to your deck",
-            followup: Followup(
-              title: "{action-label}",
-              subtitle: "Choose one pack to add to your deck.",
-            ),
+  EncounterDefinition(
+    card_id: "886c9d49-b25f-4ddd-97f0-2ec4b42eda89",
+    prose: "A colossal rider looms through star-filled haze, long hair streaming.",
+    actions: [
+      ActionDefinition(
+        label: "Answer Their Muster",
+        id: "c9219d8a-e669-49ba-996a-379a06502a80",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 2 packs of 3 Warrior cards to add to your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one pack to add to your deck.",
           ),
-          effect: ChoosePack(predicate: Warrior, pack_count: 2, pack_size: 3),
         ),
+        effect: ChoosePack(predicate: Warrior, pack_count: 2, pack_size: 3),
+      ),
 
-        ActionDefinition(
-          label: "Receive Their Blessing",
-          id: "886c9d49-b25f-4ddd-97f0-2ec4b42eda89:pair-5:template-64",
-          presentation: ActionPresentation(
-            effect_text: "All characters in your deck gain +1✦",
-            followup: None,
-          ),
-          effect: IncreaseSparkAll(spark_bonus: 1),
+      ActionDefinition(
+        label: "Receive Their Blessing",
+        id: "fbd22f73-9eb7-458a-bd2c-6a65ac5cdd6d",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
         ),
-      ],
-    ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "15b63630-d9f8-473b-9717-15ad91ff2f16",
-      prose: "Branching currents surround a figure kneeling inside a ruptured chamber.",
-      actions: [
-        ActionDefinition(
-          label: "Accept the charge",
-          id: "15b63630-d9f8-473b-9717-15ad91ff2f16:pair-1:template-66",
-          presentation: ActionPresentation(
-            effect_text: "All cards in your deck become ❖ (fast)",
-            followup: None,
-          ),
-          effect: MakeFastAll,
+  EncounterDefinition(
+    card_id: "15b63630-d9f8-473b-9717-15ad91ff2f16",
+    prose: "Branching currents surround a figure kneeling inside a ruptured chamber.",
+    actions: [
+      ActionDefinition(
+        label: "Accept the charge",
+        id: "cb4a0eae-a464-4888-a2e4-390c3e986899",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
         ),
+        effect: MakeFastAll,
+      ),
 
-        ActionDefinition(
-          label: "Overload the aperture",
-          id: "15b63630-d9f8-473b-9717-15ad91ff2f16:pair-1:template-65",
-          presentation: ActionPresentation(
-            effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
-            followup: None,
-          ),
-          effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ActionDefinition(
+        label: "Overload the aperture",
+        id: "b8e30996-eb1b-48b6-95b7-484a2be31d64",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
         ),
-      ],
-    ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "764b62f6-6af9-40ad-8d1f-653cc1a11030",
-      prose: "A cloaked warrior leans forward, raising a bright-emblemed standard through smoke.",
-      actions: [
-        ActionDefinition(
-          label: "Rally at the Crest",
-          id: "764b62f6-6af9-40ad-8d1f-653cc1a11030:pair-5:template-36",
-          presentation: ActionPresentation(
-            effect_text: "Choose one of 2 packs of 3 Warrior cards to add to your deck",
-            followup: Followup(
-              title: "{action-label}",
-              subtitle: "Choose one pack to add to your deck.",
-            ),
+  EncounterDefinition(
+    card_id: "764b62f6-6af9-40ad-8d1f-653cc1a11030",
+    prose: "A cloaked warrior leans forward, raising a bright-emblemed standard through smoke.",
+    actions: [
+      ActionDefinition(
+        label: "Rally at the Crest",
+        id: "55e630a7-0dde-4845-892f-c0c9da6490e7",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 2 packs of 3 Warrior cards to add to your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one pack to add to your deck.",
           ),
-          effect: ChoosePack(predicate: Warrior, pack_count: 2, pack_size: 3),
         ),
+        effect: ChoosePack(predicate: Warrior, pack_count: 2, pack_size: 3),
+      ),
 
-        ActionDefinition(
-          label: "Charge Through the Smoke",
-          id: "764b62f6-6af9-40ad-8d1f-653cc1a11030:pair-5:template-65",
-          presentation: ActionPresentation(
-            effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
-            followup: None,
-          ),
-          effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ActionDefinition(
+        label: "Charge Through the Smoke",
+        id: "d134b0e1-68d5-4edb-925c-e24f77ec4b74",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
         ),
-      ],
-    ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
-      prose: "A solitary man pauses on a gnarled bough beneath suspended lanterns.",
-      actions: [
-        ActionDefinition(
-          label: "Offer Him an Exchange",
-          id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586:pair-1:template-61",
-          presentation: ActionPresentation(
-            effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
-            followup: Followup(
-              title: "Exchange Familiar Forms",
-              subtitle: "First choose a card to purge, then choose a different card to copy.",
-            ),
+  EncounterDefinition(
+    card_id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
+    prose: "A solitary man pauses on a gnarled bough beneath suspended lanterns.",
+    actions: [
+      ActionDefinition(
+        label: "Offer Him an Exchange",
+        id: "366ef198-a585-4416-b297-bfa23ea7d29b",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "Exchange Familiar Forms",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
           ),
-          effect: PurgeAndCopy,
         ),
+        effect: PurgeAndCopy,
+      ),
 
-        ActionDefinition(
-          label: "Present a Written Charm",
-          id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586:pair-1:template-19",
-          presentation: ActionPresentation(
-            effect_text: "Apply Inspired to {deck_card}",
-            followup: Followup(
-              title: "{action-label}",
-              subtitle: "Choose a card to become {transfiguration}.",
-            ),
-          ),
-          effect: TransfigureFixedSelected(
-            predicate: Event,
-            transfiguration: "Inspired",
-            target: Offered,
+      ActionDefinition(
+        label: "Present a Written Charm",
+        id: "256aa43c-dafb-4ae9-abfc-265a8c38d549",
+        presentation: ActionPresentation(
+          effect_text: "Apply Inspired to {deck_card}",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to become {transfiguration}.",
           ),
         ),
-      ],
-    ),
+        effect: TransfigureFixedSelected(
+          predicate: Event,
+          transfiguration: "Inspired",
+          target: Offered,
+        ),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "123baf70-305a-4583-bdba-a10b5153fbeb",
-      prose: "A masked soldier braces a long rifle amid smoke-darkened wreckage.",
-      actions: [
-        ActionDefinition(
-          label: "Call for Reinforcements",
-          id: "123baf70-305a-4583-bdba-a10b5153fbeb:pair-1:template-15",
-          presentation: ActionPresentation(
-            effect_text: "Draft a Survivor from 4 choices and gain 2 copies of it",
-            followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
-          ),
-          effect: DraftCard(predicate: Survivor, count: 2, offer_count: 4),
+  EncounterDefinition(
+    card_id: "123baf70-305a-4583-bdba-a10b5153fbeb",
+    prose: "A masked soldier braces a long rifle amid smoke-darkened wreckage.",
+    actions: [
+      ActionDefinition(
+        label: "Call for Reinforcements",
+        id: "9c82a1ef-fed7-498b-ab85-456a51152c93",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Survivor from 4 choices and gain 2 copies of it",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
         ),
+        effect: DraftCard(predicate: Survivor, count: 2, offer_count: 4),
+      ),
 
-        ActionDefinition(
-          label: "Request Field Training",
-          id: "123baf70-305a-4583-bdba-a10b5153fbeb:pair-1:template-19",
-          presentation: ActionPresentation(
-            effect_text: "Apply Kindled to {deck_card}",
-            followup: Followup(
-              title: "{action-label}",
-              subtitle: "Choose a card to become {transfiguration}.",
-            ),
-          ),
-          effect: TransfigureFixedSelected(
-            predicate: Survivor,
-            transfiguration: "Kindled",
-            target: Offered,
+      ActionDefinition(
+        label: "Request Field Training",
+        id: "8fc73cd9-b477-492c-bb4d-5b5fa5a2b861",
+        presentation: ActionPresentation(
+          effect_text: "Apply Kindled to {deck_card}",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to become {transfiguration}.",
           ),
         ),
-      ],
-    ),
+        effect: TransfigureFixedSelected(
+          predicate: Survivor,
+          transfiguration: "Kindled",
+          target: Offered,
+        ),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "e455225f-c444-44a2-8796-805cae2b755f",
-      prose: "A witch extends both hands as stones hover around her.",
-      actions: [
-        ActionDefinition(
-          label: "Read the suspended pattern",
-          id: "e455225f-c444-44a2-8796-805cae2b755f:pair-3:template-28",
-          presentation: ActionPresentation(
-            effect_text: "Gain a random dreamsign",
-            followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
-          ),
-          effect: GainRandomDreamsign,
+  EncounterDefinition(
+    card_id: "e455225f-c444-44a2-8796-805cae2b755f",
+    prose: "A witch extends both hands as stones hover around her.",
+    actions: [
+      ActionDefinition(
+        label: "Read the suspended pattern",
+        id: "acac5afe-0ead-4ffa-b128-cd61e4a38375",
+        presentation: ActionPresentation(
+          effect_text: "Gain a random dreamsign",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
         ),
+        effect: GainRandomDreamsign,
+      ),
 
-        ActionDefinition(
-          label: "Break the suspended pattern",
-          id: "e455225f-c444-44a2-8796-805cae2b755f:pair-3:template-62",
-          presentation: ActionPresentation(
-            effect_text: "Purge a chosen dreamsign and gain 50 essence",
-            followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to purge."),
-          ),
-          effect: PurgeDreamsignForEssence(essence: 50),
+      ActionDefinition(
+        label: "Break the suspended pattern",
+        id: "0bb515d9-a067-493b-9002-e35e05acc260",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen dreamsign and gain 50 essence",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to purge."),
         ),
-      ],
-    ),
+        effect: PurgeDreamsignForEssence(essence: 50),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6",
-      prose: "Three sealed figures press through billowing haze, opaque visors hidden beneath hoods.",
-      actions: [
-        ActionDefinition(
-          label: "Learn their ways",
-          id: "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6:pair-5:template-53",
-          presentation: ActionPresentation(
-            effect_text: "Change {deck_card} to become a Survivor",
-            followup: Followup(
-              title: "{action-label}",
-              subtitle: "Choose a Character to become {subtype}.",
-            ),
-          ),
-          effect: ChangeSubtypeSelected(
-            predicate: CheapCharacter,
-            subtype: "Survivor",
-            target: Offered,
+  EncounterDefinition(
+    card_id: "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6",
+    prose: "Three sealed figures press through billowing haze, opaque visors hidden beneath hoods.",
+    actions: [
+      ActionDefinition(
+        label: "Learn their ways",
+        id: "1856ae77-4bf6-4d99-88ae-aee46b2f647b",
+        presentation: ActionPresentation(
+          effect_text: "Change {deck_card} to become a Survivor",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to become {subtype}.",
           ),
         ),
+        effect: ChangeSubtypeSelected(
+          predicate: CheapCharacter,
+          subtype: "Survivor",
+          target: Offered,
+        ),
+      ),
 
-        ActionDefinition(
-          label: "Recruit an Ally",
-          id: "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6:pair-5:template-9",
-          presentation: ActionPresentation(
-            effect_text: "Gain a random Survivor card",
-            followup: None,
-          ),
-          effect: GainRandomCards(predicate: Survivor, count: 1),
+      ActionDefinition(
+        label: "Recruit an Ally",
+        id: "5de47930-0cf8-4d02-acea-9c938308fbb2",
+        presentation: ActionPresentation(
+          effect_text: "Gain a random Survivor card",
+          followup: None,
         ),
-      ],
-    ),
+        effect: GainRandomCards(predicate: Survivor, count: 1),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "f9a65b32-537b-457c-9eaf-b512cf1f3791",
-      prose: "Luminous seams thread a heavy thorax; articulated legs fold above a branch beneath spread wings.",
-      actions: [
-        ActionDefinition(
-          label: "Copy the linked armor pattern",
-          id: "f9a65b32-537b-457c-9eaf-b512cf1f3791:pair-2:template-49",
-          presentation: ActionPresentation(
-            effect_text: "Gain 2 copies of {deck_card}",
-            followup: Followup(
-              title: "{action-label}",
-              subtitle: "Choose a card to gain {count} copies of.",
-            ),
+  EncounterDefinition(
+    card_id: "f9a65b32-537b-457c-9eaf-b512cf1f3791",
+    prose: "Luminous seams thread a heavy thorax; articulated legs fold above a branch beneath spread wings.",
+    actions: [
+      ActionDefinition(
+        label: "Copy the linked armor pattern",
+        id: "d6809ab1-5995-4e95-972d-f13bb8b9ffde",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 copies of {deck_card}",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to gain {count} copies of.",
           ),
-          effect: CopySelectedCard(predicate: CheapCharacter, count: 2, target: Offered),
         ),
+        effect: CopySelectedCard(predicate: CheapCharacter, count: 2, target: Offered),
+      ),
 
-        ActionDefinition(
-          label: "Compare the repeating plates",
-          id: "f9a65b32-537b-457c-9eaf-b512cf1f3791:pair-2:template-55",
-          presentation: ActionPresentation(
-            effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
-            followup: Followup(
-              title: "{action-label}",
-              subtitle: "Choose one offered card to copy.",
-            ),
-          ),
-          effect: CopyOfferedDeckCard(offer_count: 4),
+      ActionDefinition(
+        label: "Compare the repeating plates",
+        id: "c3d5e70d-ac93-4041-bab8-c2b8ffd1d722",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card to copy."),
         ),
-      ],
-    ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034",
-      prose: "A skeletal giant reaches across water, its shape repeating in broken reflections.",
-      actions: [
-        ActionDefinition(
-          label: "Study the bare crown",
-          id: "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034:pair-1:template-27",
-          presentation: ActionPresentation(
-            effect_text: "Gain Mortal Skull",
-            followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
-          ),
-          effect: GainDreamsign(dreamsign_id: "eb55b141-82f8-4ba4-b319-420f762e9ee4"),
+  EncounterDefinition(
+    card_id: "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034",
+    prose: "A skeletal giant reaches across water, its shape repeating in broken reflections.",
+    actions: [
+      ActionDefinition(
+        label: "Study the bare crown",
+        id: "57910c13-a5d3-4f86-b449-2c6a5cf60252",
+        presentation: ActionPresentation(
+          effect_text: "Gain Mortal Skull",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
         ),
+        effect: GainDreamsign(dreamsign_id: "eb55b141-82f8-4ba4-b319-420f762e9ee4"),
+      ),
 
-        ActionDefinition(
-          label: "Hold the hollow gaze",
-          id: "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034:pair-1:template-38",
-          presentation: ActionPresentation(
-            effect_text: "Draw 2 additional cards at the start of your next battle",
-            followup: None,
-          ),
-          effect: NextBattleOpeningHand(count: 2),
+      ActionDefinition(
+        label: "Hold the hollow gaze",
+        id: "326062b2-aef4-47ab-b835-149bb6f7f8fd",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
         ),
-      ],
-    ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "86fd585b-e9d0-4dc1-bce9-488014b9316d",
-      prose: "A luminous jellyfish glides among stars, its flowing tendrils brightly lit.",
-      actions: [
-        ActionDefinition(
-          label: "Study its measured pulse",
-          id: "86fd585b-e9d0-4dc1-bce9-488014b9316d:pair-1:template-38",
-          presentation: ActionPresentation(
-            effect_text: "Draw 2 additional cards at the start of your next battle",
-            followup: None,
-          ),
-          effect: NextBattleOpeningHand(count: 2),
+  EncounterDefinition(
+    card_id: "86fd585b-e9d0-4dc1-bce9-488014b9316d",
+    prose: "A luminous jellyfish glides among stars, its flowing tendrils brightly lit.",
+    actions: [
+      ActionDefinition(
+        label: "Study its measured pulse",
+        id: "82510dd1-0824-447d-a780-c8fb37bd5864",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
         ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
 
-        ActionDefinition(
-          label: "Follow its radiant wake",
-          id: "86fd585b-e9d0-4dc1-bce9-488014b9316d:pair-1:template-39",
-          presentation: ActionPresentation(
-            effect_text: "Gain 2 additional energy at the start of your next battle",
-            followup: None,
-          ),
-          effect: NextBattleStartingEnergy(count: 2),
+      ActionDefinition(
+        label: "Follow its radiant wake",
+        id: "581e129b-3b9b-4a7b-9dbd-b358f9fa5d8b",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
         ),
-      ],
-    ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "b1d36337-5668-4f1d-b155-2d07fc00f872",
-      prose: "A lone astronaut stands rigid where luminous steps meet a vast black aperture.",
-      actions: [
-        ActionDefinition(
-          label: "Follow the astronaut",
-          id: "b1d36337-5668-4f1d-b155-2d07fc00f872:pair-1:template-57",
-          presentation: ActionPresentation(
-            effect_text: "Pick a new Dream Avatar from 3 choices",
-            followup: Followup(title: "{action-label}", subtitle: "Choose your new Dream Avatar."),
-          ),
-          effect: ChooseDreamAvatar(offer_count: 3),
+  EncounterDefinition(
+    card_id: "b1d36337-5668-4f1d-b155-2d07fc00f872",
+    prose: "A lone astronaut stands rigid where luminous steps meet a vast black aperture.",
+    actions: [
+      ActionDefinition(
+        label: "Follow the astronaut",
+        id: "4b837e9e-fefb-435c-8de1-4539fb4a5566",
+        presentation: ActionPresentation(
+          effect_text: "Pick a new Dream Avatar from 3 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose your new Dream Avatar."),
         ),
+        effect: ChooseDreamAvatar(offer_count: 3),
+      ),
 
-        ActionDefinition(
-          label: "Enter the aperture alone",
-          id: "b1d36337-5668-4f1d-b155-2d07fc00f872:pair-1:template-79",
-          presentation: ActionPresentation(
-            effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
-            followup: None,
-          ),
-          effect: PurgeDuplicatesAndGrantReclaim,
+      ActionDefinition(
+        label: "Enter the aperture alone",
+        id: "2df93add-1e2a-4b89-b543-4bbf9df54aa1",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
         ),
-      ],
-    ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "edb479be-68a5-45bc-bd19-2602156edb57",
-      prose: "A colossal eagle beats broad wings through canyon haze, dark feathers edged with glare.",
-      actions: [
-        ActionDefinition(
-          label: "Echo its wingbeats",
-          id: "edb479be-68a5-45bc-bd19-2602156edb57:pair-1:template-12",
-          presentation: ActionPresentation(
-            effect_text: "Gain 3 copies of {offered_card}",
-            followup: None,
-          ),
-          effect: GainOfferedCard(predicate: SpiritAnimal, count: 3),
+  EncounterDefinition(
+    card_id: "edb479be-68a5-45bc-bd19-2602156edb57",
+    prose: "A colossal eagle beats broad wings through canyon haze, dark feathers edged with glare.",
+    actions: [
+      ActionDefinition(
+        label: "Echo its wingbeats",
+        id: "a5a86b6b-7f5d-4dc8-8228-7a45e0584a68",
+        presentation: ActionPresentation(
+          effect_text: "Gain 3 copies of {offered_card}",
+          followup: None,
         ),
+        effect: GainGeneratedCard(predicate: SpiritAnimal, count: 3),
+      ),
 
-        ActionDefinition(
-          label: "Join its flight",
-          id: "edb479be-68a5-45bc-bd19-2602156edb57:pair-1:template-16",
-          presentation: ActionPresentation(
-            effect_text: "Take any number of Spirit Animal cards from 4 choices",
-            followup: Followup(
-              title: "{action-label}",
-              subtitle: "Choose any number of offered cards.",
-            ),
+      ActionDefinition(
+        label: "Join its flight",
+        id: "1ea1d934-f980-4ca2-8a28-81eb68a36dab",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Spirit Animal cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered cards.",
           ),
-          effect: TakeCards(predicate: SpiritAnimal, offer_count: 4),
         ),
-      ],
-    ),
+        effect: TakeCards(predicate: SpiritAnimal, offer_count: 4),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e",
-      prose: "A lone fisher casts a slender line across misty, light-speckled water.",
-      actions: [
-        ActionDefinition(
-          label: "Haul his line",
-          id: "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e:pair-1:template-15",
-          presentation: ActionPresentation(
-            effect_text: "Draft a ≤2● cost Character from 4 choices and gain 2 copies of it",
-            followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
-          ),
-          effect: DraftCard(predicate: CheapCharacter, count: 2, offer_count: 4),
+  EncounterDefinition(
+    card_id: "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e",
+    prose: "A lone fisher casts a slender line across misty, light-speckled water.",
+    actions: [
+      ActionDefinition(
+        label: "Haul his line",
+        id: "831219b9-e543-4459-b97a-1e9b4c683c52",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices and gain 2 copies of it",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
         ),
+        effect: DraftCard(predicate: CheapCharacter, count: 2, offer_count: 4),
+      ),
 
-        ActionDefinition(
-          label: "Guide his cast",
-          id: "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e:pair-1:template-16",
-          presentation: ActionPresentation(
-            effect_text: "Take any number of ≤2● cost Character cards from 4 choices",
-            followup: Followup(
-              title: "{action-label}",
-              subtitle: "Choose any number of offered cards.",
-            ),
+      ActionDefinition(
+        label: "Guide his cast",
+        id: "2748b1dd-7e6d-4498-8752-415b7b974b02",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of ≤2● cost Character cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered cards.",
           ),
-          effect: TakeCards(predicate: CheapCharacter, offer_count: 4),
         ),
-      ],
-    ),
+        effect: TakeCards(predicate: CheapCharacter, offer_count: 4),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "2ce84a16-1295-4738-9e2d-1f57590b2269",
-      prose: "A hooded warrior stands rigid as marked slabs orbit a luminous sword.",
-      actions: [
-        ActionDefinition(
-          label: "Join His Vigil",
-          id: "2ce84a16-1295-4738-9e2d-1f57590b2269:pair-3:template-16",
-          presentation: ActionPresentation(
-            effect_text: "Take any number of ≤2● cost Character cards from 4 choices",
-            followup: Followup(
-              title: "{action-label}",
-              subtitle: "Choose any number of offered cards.",
-            ),
+  EncounterDefinition(
+    card_id: "2ce84a16-1295-4738-9e2d-1f57590b2269",
+    prose: "A hooded warrior stands rigid as marked slabs orbit a luminous sword.",
+    actions: [
+      ActionDefinition(
+        label: "Join His Vigil",
+        id: "d09fc4d7-73b7-4c62-90df-25d364c3c7ac",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of ≤2● cost Character cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered cards.",
           ),
-          effect: TakeCards(predicate: CheapCharacter, offer_count: 4),
         ),
+        effect: TakeCards(predicate: CheapCharacter, offer_count: 4),
+      ),
 
-        ActionDefinition(
-          label: "Answer His Summons",
-          id: "2ce84a16-1295-4738-9e2d-1f57590b2269:pair-3:template-12",
-          presentation: ActionPresentation(
-            effect_text: "Gain 2 copies of {offered_card}",
-            followup: None,
-          ),
-          effect: GainOfferedCard(predicate: CheapCharacter, count: 2),
+      ActionDefinition(
+        label: "Answer His Summons",
+        id: "fbb03232-7415-46a7-b7cf-af003f99fca6",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 copies of {offered_card}",
+          followup: None,
         ),
-      ],
-    ),
+        effect: GainGeneratedCard(predicate: CheapCharacter, count: 2),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "9d14885c-a757-40cc-b43e-87dbec7ec379",
-      prose: "A tentacled colossus surges through a furnace-bright rupture.",
-      actions: [
-        ActionDefinition(
-          label: "Feed it, then gaze",
-          id: "9d14885c-a757-40cc-b43e-87dbec7ec379:pair-1:template-47",
-          presentation: ActionPresentation(
-            effect_text: "Choose a card to purge and replace it with {fixed_card}",
-            followup: Followup(title: "{action-label}", subtitle: "Choose a card to replace."),
-          ),
-          effect: ReplaceSelectedWithCard(card_id: "1658d9a0-c3b0-4eb7-babc-4933acf362c4"),
+  EncounterDefinition(
+    card_id: "9d14885c-a757-40cc-b43e-87dbec7ec379",
+    prose: "A tentacled colossus surges through a furnace-bright rupture.",
+    actions: [
+      ActionDefinition(
+        label: "Feed it, then gaze",
+        id: "ee082238-ab27-48f9-acd2-282a653efa94",
+        presentation: ActionPresentation(
+          effect_text: "Choose a card to purge and replace it with {fixed_card}",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a card to replace."),
         ),
+        effect: ReplaceSelectedWithCard(card_id: "1658d9a0-c3b0-4eb7-babc-4933acf362c4"),
+      ),
 
-        ActionDefinition(
-          label: "Witness its emergence",
-          id: "9d14885c-a757-40cc-b43e-87dbec7ec379:pair-1:template-16",
-          presentation: ActionPresentation(
-            effect_text: "Take any number of Event cards from 4 choices",
-            followup: Followup(
-              title: "{action-label}",
-              subtitle: "Choose any number of offered cards.",
-            ),
+      ActionDefinition(
+        label: "Witness its emergence",
+        id: "a3e32269-d63c-4c38-a762-8664a87996b4",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Event cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered cards.",
           ),
-          effect: TakeCards(predicate: Event, offer_count: 4),
         ),
-      ],
-    ),
+        effect: TakeCards(predicate: Event, offer_count: 4),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2",
-      prose: "An immense creature crouches between slender trunks, rough limbs glowing with narrow lines.",
-      actions: [
-        ActionDefinition(
-          label: "Touch a luminous seam",
-          id: "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2:pair-4:template-18",
-          presentation: ActionPresentation(
-            effect_text: "Apply Empowered to a chosen card",
-            followup: Followup(
-              title: "{action-label}",
-              subtitle: "Choose a card to become {transfiguration}.",
-            ),
-          ),
-          effect: TransfigureFixedSelected(
-            predicate: None,
-            transfiguration: "Empowered",
-            target: Chosen,
+  EncounterDefinition(
+    card_id: "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2",
+    prose: "An immense creature crouches between slender trunks, rough limbs glowing with narrow lines.",
+    actions: [
+      ActionDefinition(
+        label: "Touch a luminous seam",
+        id: "dbad4bb7-e8ee-4f54-8038-896c2ee4cad4",
+        presentation: ActionPresentation(
+          effect_text: "Apply Empowered to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to become {transfiguration}.",
           ),
         ),
+        effect: TransfigureFixedSelected(
+          predicate: None,
+          transfiguration: "Empowered",
+          target: Chosen,
+        ),
+      ),
 
-        ActionDefinition(
-          label: "Follow its lowered gaze",
-          id: "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2:pair-4:template-37",
-          presentation: ActionPresentation(
-            effect_text: "The next draft or shop site you visit will contain transfigured cards",
-            followup: None,
-          ),
-          effect: TransfigureNextDraftOrShop,
+      ActionDefinition(
+        label: "Follow its lowered gaze",
+        id: "eb5b2a0b-d637-4552-92b6-3d33ce68ccd4",
+        presentation: ActionPresentation(
+          effect_text: "The next draft or shop site you visit will contain transfigured cards",
+          followup: None,
         ),
-      ],
-    ),
+        effect: TransfigureNextDraftOrShop,
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "1dc8f23e-58bd-47e5-9510-b48315fba1df",
-      prose: "A dark-coated explorer holds a bright lantern as wind whips his hair.",
-      actions: [
-        ActionDefinition(
-          label: "Touch the lantern",
-          id: "1dc8f23e-58bd-47e5-9510-b48315fba1df:pair-3:template-17",
-          presentation: ActionPresentation(
-            effect_text: "Apply a transfiguration to a chosen card",
-            followup: None,
-          ),
-          effect: TransfigureSelected(count: 1),
+  EncounterDefinition(
+    card_id: "1dc8f23e-58bd-47e5-9510-b48315fba1df",
+    prose: "A dark-coated explorer holds a bright lantern as wind whips his hair.",
+    actions: [
+      ActionDefinition(
+        label: "Touch the lantern",
+        id: "80ff3d62-89e0-4d8c-adb4-3242bad7daad",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: None,
         ),
+        effect: TransfigureSelected(count: 1),
+      ),
 
-        ActionDefinition(
-          label: "Follow his light onward",
-          id: "1dc8f23e-58bd-47e5-9510-b48315fba1df:pair-3:template-37",
-          presentation: ActionPresentation(
-            effect_text: "The next draft or shop site you visit will contain transfigured cards",
-            followup: None,
-          ),
-          effect: TransfigureNextDraftOrShop,
+      ActionDefinition(
+        label: "Follow his light onward",
+        id: "ff1d5ae7-8023-48f0-8cbd-744e5298507b",
+        presentation: ActionPresentation(
+          effect_text: "The next draft or shop site you visit will contain transfigured cards",
+          followup: None,
         ),
-      ],
-    ),
+        effect: TransfigureNextDraftOrShop,
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "7ad10754-690c-45fa-abe6-28944da6eef6",
-      prose: "A rigid figure fractures into dark pieces beside a molten fissure.",
-      actions: [
-        ActionDefinition(
-          label: "Separate the drifting fragments",
-          id: "7ad10754-690c-45fa-abe6-28944da6eef6:pair-1:template-51",
-          presentation: ActionPresentation(
-            effect_text: "Gain one copy of each of 2 chosen cards",
-            followup: Followup(title: "{action-label}", subtitle: "Choose {count} cards to copy."),
-          ),
-          effect: CopySelectedCards(count: 2),
+  EncounterDefinition(
+    card_id: "7ad10754-690c-45fa-abe6-28944da6eef6",
+    prose: "A rigid figure fractures into dark pieces beside a molten fissure.",
+    actions: [
+      ActionDefinition(
+        label: "Separate the drifting fragments",
+        id: "eb3a33ce-7303-48cc-97e4-f49b87babe8c",
+        presentation: ActionPresentation(
+          effect_text: "Gain one copy of each of 2 chosen cards",
+          followup: Followup(title: "{action-label}", subtitle: "Choose {count} cards to copy."),
         ),
+        effect: CopySelectedCards(count: 2),
+      ),
 
-        ActionDefinition(
-          label: "Fuse the glowing fragments",
-          id: "7ad10754-690c-45fa-abe6-28944da6eef6:pair-1:template-50",
-          presentation: ActionPresentation(
-            effect_text: "Gain 2 copies of a chosen card",
-            followup: Followup(
-              title: "{action-label}",
-              subtitle: "Choose a card to gain {count} copies of.",
-            ),
+      ActionDefinition(
+        label: "Fuse the glowing fragments",
+        id: "46ce072b-ff07-47f0-9559-2cbbf23bb2fa",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 copies of a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to gain {count} copies of.",
           ),
-          effect: CopySelectedCard(predicate: None, count: 2, target: Chosen),
         ),
-      ],
-    ),
+        effect: CopySelectedCard(predicate: None, count: 2, target: Chosen),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "7dd2214f-8d16-453a-9f28-62712e64eae1",
-      prose: "A black firefly hovers, amber abdomen blazing.",
-      actions: [
-        ActionDefinition(
-          label: "Rest in its radiance",
-          id: "7dd2214f-8d16-453a-9f28-62712e64eae1:pair-4:template-39",
-          presentation: ActionPresentation(
-            effect_text: "Gain 2 additional energy at the start of your next battle",
-            followup: None,
-          ),
-          effect: NextBattleStartingEnergy(count: 2),
+  EncounterDefinition(
+    card_id: "7dd2214f-8d16-453a-9f28-62712e64eae1",
+    prose: "A black firefly hovers, amber abdomen blazing.",
+    actions: [
+      ActionDefinition(
+        label: "Rest in its radiance",
+        id: "945dcf24-a548-4391-9cbf-785a584c76d8",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
         ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
 
-        ActionDefinition(
-          label: "Gather its amber light",
-          id: "7dd2214f-8d16-453a-9f28-62712e64eae1:pair-4:template-59",
-          presentation: ActionPresentation(
-            effect_text: "Gain 15 essence for each Spirit Animal card in your deck",
-            followup: None,
-          ),
-          effect: GainEssencePerCard(predicate: SpiritAnimal, essence_per_card: 15),
+      ActionDefinition(
+        label: "Gather its amber light",
+        id: "a167548d-2cc1-44ad-8f80-f2108ce8dffb",
+        presentation: ActionPresentation(
+          effect_text: "Gain 15 essence for each Spirit Animal card in your deck",
+          followup: None,
         ),
-      ],
-    ),
+        effect: GainEssencePerCard(predicate: SpiritAnimal, essence_per_card: 15),
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "5b2b2188-b9f0-4b3b-9185-26a820d343c7",
-      prose: "A suited astronaut crosses glassy water as blue canyon light spills ahead.",
-      actions: [
-        ActionDefinition(
-          label: "Follow the canyon light",
-          id: "5b2b2188-b9f0-4b3b-9185-26a820d343c7:pair-2:template-39",
-          presentation: ActionPresentation(
-            effect_text: "Gain 2 additional energy at the start of your next battle",
-            followup: None,
-          ),
-          effect: NextBattleStartingEnergy(count: 2),
+  EncounterDefinition(
+    card_id: "5b2b2188-b9f0-4b3b-9185-26a820d343c7",
+    prose: "A suited astronaut crosses glassy water as blue canyon light spills ahead.",
+    actions: [
+      ActionDefinition(
+        label: "Follow the canyon light",
+        id: "009e949f-2c69-4d72-b444-efb972ffb37f",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
         ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
 
-        ActionDefinition(
-          label: "Enter the blue radiance",
-          id: "5b2b2188-b9f0-4b3b-9185-26a820d343c7:pair-2:template-81",
-          presentation: ActionPresentation(
-            effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
-            followup: None,
-          ),
-          effect: NextBattleSmallerHandAndCostDiscount,
+      ActionDefinition(
+        label: "Enter the blue radiance",
+        id: "a5042cfa-d3dd-4a62-b4e2-5d86d3cc2874",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
         ),
-      ],
-    ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
 
-    EncounterDefinition(
-      card_id: "77f31db4-0397-49a7-8886-f5459ee960e9",
-      prose: "An armored warrior sweeps a glowing scythe through wind-driven sand.",
-      actions: [
-        ActionDefinition(
-          label: "Yield",
-          id: "77f31db4-0397-49a7-8886-f5459ee960e9:pair-1:template-60",
-          presentation: ActionPresentation(
-            effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
-            followup: Followup(
-              title: "Trade Away a Figure",
-              subtitle: "Choose a card to purge for {essence-per-spark} essence per ✦.",
-            ),
+  EncounterDefinition(
+    card_id: "77f31db4-0397-49a7-8886-f5459ee960e9",
+    prose: "An armored warrior sweeps a glowing scythe through wind-driven sand.",
+    actions: [
+      ActionDefinition(
+        label: "Yield",
+        id: "0137438c-3ab3-4563-84a7-d0bc09aa0aac",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "Trade Away a Figure",
+            subtitle: "Choose a card to purge for {essence-per-spark} essence per ✦.",
           ),
-          effect: PurgeForEssence(essence_per_spark: 20),
         ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
 
-        ActionDefinition(
-          label: "Barter",
-          id: "77f31db4-0397-49a7-8886-f5459ee960e9:pair-1:template-61",
-          presentation: ActionPresentation(
-            effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
-            followup: Followup(
-              title: "Exchange Familiar Forms",
-              subtitle: "First choose a card to purge, then choose a different card to copy.",
-            ),
+      ActionDefinition(
+        label: "Barter",
+        id: "cc302660-88ce-4c01-b8f7-6aff1f8d5bbe",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "Exchange Familiar Forms",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
           ),
-          effect: PurgeAndCopy,
         ),
-      ],
-    ),
-  ],
-)
+        effect: PurgeAndCopy,
+      ),
+    ],
+  ),
+]

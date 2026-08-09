@@ -9,29 +9,38 @@ Every production encounter is authored in
 its player-facing presentation with one closed typed gameplay effect:
 
 ```ron
-(
-  label: "Invite someone through",
-  id: "161482b6-af07-4d9e-822d-8c738672beb9:pair-5:template-11",
-  presentation: (
-    effect_text: "Gain {offered_card}",
+[
+  EncounterDefinition(
+    card_id: "161482b6-af07-4d9e-822d-8c738672beb9",
+    prose: "A young lantern bearer approaches a towering window of stars.",
+    actions: [
+      ActionDefinition(
+        label: "Invite someone through",
+        id: "6662e7ce-9ea7-49bf-85fe-4bbe6728f282",
+        presentation: ActionPresentation(
+          effect_text: "Gain {offered_card}",
+        ),
+        effect: GainGeneratedCard(
+          predicate: Character,
+          count: None,
+        ),
+      ),
+    ],
   ),
-  effect: GainOfferedCard(
-    predicate: Character,
-    count: None,
-  ),
-)
+]
 ```
 
 The `presentation` record owns text shown to the player. `effect` owns all
 gameplay semantics. Changing presentation text cannot change which cards are
 eligible, whether a target is chosen, or how the effect resolves.
+Each action has its own lowercase UUIDv4 identity.
 
 ## Presentation slots
 
 Effect text supports typed card-reference slots where a runtime-selected card
 must be shown inline:
 
-- `{offered_card}` displays the card produced by `GainOfferedCard`.
+- `{offered_card}` displays the card produced by `GainGeneratedCard`.
 - `{deck_card}` displays the deck entry automatically offered by an effect whose
   `target` is `Offered`.
 
