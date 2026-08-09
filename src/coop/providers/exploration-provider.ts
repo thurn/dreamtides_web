@@ -874,7 +874,9 @@ export function resolveExplorationChoice(input: {
   if (runtime.selectionRulesVersion !== undefined) {
     result.selectionRulesVersion = runtime.selectionRulesVersion;
     result.encounterSignature = runtime.encounterSignature;
-    result.selectionSignature = offer.selectionSignature;
+    if (offer.selectionSignature !== undefined) {
+      result.selectionSignature = offer.selectionSignature;
+    }
   }
   let next = journey;
   let mintIndex = 0;

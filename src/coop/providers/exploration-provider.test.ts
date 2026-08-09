@@ -15,6 +15,7 @@ import type {
 } from "../../data/exploration";
 import type { JourneyContent } from "../../data/journey-content";
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
+import { assertJsonSafe } from "../../eventlog/hash";
 import { createDefaultState } from "../../state/journey-context";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
@@ -1512,5 +1513,30 @@ describe("Exploration provider", () => {
       kind: "exploration",
       resolution: { siteOfferModifier: modifier },
     });
+  });
+
+  it("keeps versioned resolutions JSON-safe when an action has no selection signature", () => {
+    const futureAction: ExplorationActionContent = {
+      id: "transfigure-next-site",
+      label: "Follow its lowered gaze",
+      effectText: "The next draft or shop site will contain transfigured cards",
+      effectKind: "transfigure-next-draft-or-shop",
+    };
+    const fallbackAction: ExplorationActionContent = {
+      id: "fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([futureAction, fallbackAction]);
+    const state = buildState(content);
+    const result = resolve(content, state.journey, futureAction.id);
+    const runtime = result.siteRuntime[site.id];
+
+    expect(runtime?.kind).toBe("exploration");
+    expect(runtime?.kind === "exploration" ? runtime.resolution : null)
+      .not.toHaveProperty("selectionSignature");
+    expect(() => assertJsonSafe(result, "journey")).not.toThrow();
   });
 });
