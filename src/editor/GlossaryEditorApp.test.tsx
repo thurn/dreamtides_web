@@ -13,7 +13,7 @@ const ENTRIES: readonly GlossaryCatalogEntry[] = [
     term: "Spark",
     definition: "A character's challenge power.",
     priority: 10,
-    matchesRulesText: true,
+    matchesTermInRulesText: true,
     variants: [],
   },
   {
@@ -22,7 +22,7 @@ const ENTRIES: readonly GlossaryCatalogEntry[] = [
     term: "Draft",
     definition: "Choose cards for your deck.",
     priority: 0,
-    matchesRulesText: false,
+    matchesTermInRulesText: false,
     variants: [],
   },
 ];

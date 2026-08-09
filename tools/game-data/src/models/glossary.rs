@@ -16,19 +16,15 @@ pub struct GlossaryDefinition {
     pub definition: String,
     pub priority: i64,
     #[serde(default, skip_serializing_if = "is_false")]
-    pub matches_rules_text: bool,
+    pub matches_term_in_rules_text: bool,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub variants: Vec<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub rules_text_forms: Option<Vec<String>>,
-    #[serde(default, skip_serializing_if = "is_false")]
-    pub definition_uses_rules_text: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub definition_symbol: Option<DefinitionSymbol>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub term_presentation: Option<TermPresentation>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub contexts: Vec<GlossaryContext>,
+    pub projections: Vec<GlossaryProjection>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub rules_symbol: Option<RulesSymbol>,
 }
@@ -153,33 +149,24 @@ impl GlossaryCategory {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct GlossaryContext {
+pub struct GlossaryProjection {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub owner: Option<ContextOwner>,
+    pub owner: Option<ProjectionOwner>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub pattern: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub term: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub definition: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub singular: Option<SingularProjection>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct SingularProjection {
-    pub capture: u32,
-    pub definition: String,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Hash, Ord, PartialOrd)]
-pub enum ContextOwner {
+pub enum ProjectionOwner {
     Card,
     DreamAvatar,
 }
 
-impl ContextOwner {
+impl ProjectionOwner {
     fn compatibility_name(self) -> &'static str {
         match self {
             Self::Card => "card",
@@ -275,22 +262,15 @@ struct CompatibilityEntry {
     term: String,
     definition: String,
     priority: i64,
-    #[serde(rename = "matches-rules-text")]
-    matches_rules_text: bool,
+    #[serde(rename = "matches-term-in-rules-text")]
+    matches_term_in_rules_text: bool,
     variants: Vec<String>,
-    #[serde(rename = "rules-text-forms", skip_serializing_if = "Option::is_none")]
-    rules_text_forms: Option<Vec<String>>,
-    #[serde(
-        rename = "definition-uses-rules-text",
-        skip_serializing_if = "is_false"
-    )]
-    definition_uses_rules_text: bool,
     #[serde(rename = "definition-symbol", skip_serializing_if = "Option::is_none")]
     definition_symbol: Option<&'static str>,
     #[serde(rename = "term-presentation", skip_serializing_if = "Option::is_none")]
     term_presentation: Option<&'static str>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    contexts: Vec<CompatibilityContext>,
+    projections: Vec<CompatibilityProjection>,
     #[serde(rename = "rules-symbol", skip_serializing_if = "Option::is_none")]
     rules_symbol: Option<CompatibilityRulesSymbol>,
 }
@@ -309,7 +289,7 @@ struct CompatibilityRulesSymbol {
 }
 
 #[derive(Serialize)]
-struct CompatibilityContext {
+struct CompatibilityProjection {
     #[serde(skip_serializing_if = "Option::is_none")]
     owner: Option<&'static str>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -318,13 +298,6 @@ struct CompatibilityContext {
     term: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     definition: Option<String>,
-    #[serde(rename = "singular-capture", skip_serializing_if = "Option::is_none")]
-    singular_capture: Option<u32>,
-    #[serde(
-        rename = "singular-definition",
-        skip_serializing_if = "Option::is_none"
-    )]
-    singular_definition: Option<String>,
 }
 
 pub fn lower(source: Vec<GlossaryDefinition>) -> Result<toml::Value> {
@@ -337,32 +310,22 @@ pub fn lower(source: Vec<GlossaryDefinition>) -> Result<toml::Value> {
             term: entry.term,
             definition: entry.definition,
             priority: entry.priority,
-            matches_rules_text: entry.matches_rules_text,
+            matches_term_in_rules_text: entry.matches_term_in_rules_text,
             variants: entry.variants,
-            rules_text_forms: entry.rules_text_forms,
-            definition_uses_rules_text: entry.definition_uses_rules_text,
             definition_symbol: entry
                 .definition_symbol
                 .map(DefinitionSymbol::compatibility_name),
             term_presentation: entry
                 .term_presentation
                 .map(TermPresentation::compatibility_name),
-            contexts: entry
-                .contexts
+            projections: entry
+                .projections
                 .into_iter()
-                .map(|context| {
-                    let (singular_capture, singular_definition) = context
-                        .singular
-                        .map(|singular| (Some(singular.capture), Some(singular.definition)))
-                        .unwrap_or((None, None));
-                    CompatibilityContext {
-                        owner: context.owner.map(ContextOwner::compatibility_name),
-                        pattern: context.pattern,
-                        term: context.term,
-                        definition: context.definition,
-                        singular_capture,
-                        singular_definition,
-                    }
+                .map(|projection| CompatibilityProjection {
+                    owner: projection.owner.map(ProjectionOwner::compatibility_name),
+                    pattern: projection.pattern,
+                    term: projection.term,
+                    definition: projection.definition,
                 })
                 .collect(),
             rules_symbol: entry.rules_symbol.map(|symbol| CompatibilityRulesSymbol {
@@ -392,19 +355,12 @@ pub(crate) fn validate(source: &[GlossaryDefinition]) -> Result<()> {
         for variant in &entry.variants {
             require_non_blank(variant, entry.id, "variant")?;
         }
-        if let Some(forms) = &entry.rules_text_forms {
-            for form in forms {
-                require_non_blank(form, entry.id, "rules-text form")?;
-            }
-        }
-
-        let forms: Vec<&str> = match &entry.rules_text_forms {
-            Some(forms) => forms.iter().map(String::as_str).collect(),
-            None if entry.matches_rules_text => std::iter::once(entry.term.as_str())
-                .chain(entry.variants.iter().map(String::as_str))
-                .collect(),
-            None => Vec::new(),
-        };
+        let forms: Vec<&str> = entry
+            .matches_term_in_rules_text
+            .then_some(entry.term.as_str())
+            .into_iter()
+            .chain(entry.variants.iter().map(String::as_str))
+            .collect();
         for form in forms {
             let key = form.to_lowercase();
             if let Some(owner) = matched_forms.insert(key, entry.id) {
@@ -415,21 +371,21 @@ pub(crate) fn validate(source: &[GlossaryDefinition]) -> Result<()> {
             }
         }
 
-        for context in &entry.contexts {
-            if context.term.is_none() && context.definition.is_none() {
+        for projection in &entry.projections {
+            if projection.term.is_none() && projection.definition.is_none() {
                 bail!(
-                    "Glossary {} has a context without a term or definition projection",
+                    "Glossary {} has a projection without a term or definition",
                     entry.id
                 );
             }
-            let capture_count = if let Some(pattern) = &context.pattern {
+            let capture_count = if let Some(pattern) = &projection.pattern {
                 let regex = RegexBuilder::new(pattern)
                     .case_insensitive(true)
                     .unicode(true)
                     .build()
                     .map_err(|error| {
                         anyhow::anyhow!(
-                            "Glossary {} has an invalid context pattern: {error}",
+                            "Glossary {} has an invalid projection pattern: {error}",
                             entry.id
                         )
                     })?;
@@ -437,38 +393,13 @@ pub(crate) fn validate(source: &[GlossaryDefinition]) -> Result<()> {
             } else {
                 None
             };
-            if let Some(term) = &context.term {
-                require_non_blank(term, entry.id, "context term")?;
+            if let Some(term) = &projection.term {
+                require_non_blank(term, entry.id, "projection term")?;
                 validate_template_captures(term, capture_count, &template_capture, entry.id)?;
             }
-            if let Some(definition) = &context.definition {
-                require_non_blank(definition, entry.id, "context definition")?;
+            if let Some(definition) = &projection.definition {
+                require_non_blank(definition, entry.id, "projection definition")?;
                 validate_template_captures(definition, capture_count, &template_capture, entry.id)?;
-            }
-            if let Some(singular) = &context.singular {
-                if singular.capture == 0 {
-                    bail!("Glossary {} has a zero singular capture", entry.id);
-                }
-                let capture_count = capture_count.ok_or_else(|| {
-                    anyhow::anyhow!(
-                        "Glossary {} has a singular capture without a context pattern",
-                        entry.id
-                    )
-                })?;
-                if singular.capture as usize > capture_count {
-                    bail!(
-                        "Glossary {} singular capture {} exceeds the context pattern's {capture_count} capture groups",
-                        entry.id,
-                        singular.capture
-                    );
-                }
-                require_non_blank(&singular.definition, entry.id, "singular definition")?;
-                validate_template_captures(
-                    &singular.definition,
-                    Some(capture_count),
-                    &template_capture,
-                    entry.id,
-                )?;
             }
         }
         if let Some(symbol) = &entry.rules_symbol {
@@ -517,11 +448,11 @@ fn validate_template_captures(
             anyhow::anyhow!("Glossary {id} has an invalid template capture reference: {error}")
         })?;
         let Some(capture_count) = capture_count else {
-            bail!("Glossary {id} has a template capture reference without a context pattern");
+            bail!("Glossary {id} has a template capture reference without a projection pattern");
         };
         if reference == 0 || reference > capture_count {
             bail!(
-                "Glossary {id} template capture {reference} exceeds the context pattern's {capture_count} capture groups"
+                "Glossary {id} template capture {reference} exceeds the projection pattern's {capture_count} capture groups"
             );
         }
     }
@@ -557,9 +488,8 @@ mod tests {
     term: "Echo",
     definition: "Create an echo ✦.",
     priority: 17,
-    matches_rules_text: true,
+    matches_term_in_rules_text: true,
     variants: ["echoes"],
-    definition_uses_rules_text: true,
     definition_symbol: Fast,
     term_presentation: SymbolOnly,
     rules_symbol: RulesSymbol(
@@ -568,12 +498,12 @@ mod tests {
       accessible_label: "spark",
       semantic_color_role: Spark,
     ),
-    contexts: [
-      GlossaryContext(
+    projections: [
+      GlossaryProjection(
         owner: Card,
-        pattern: "\\becho\\s+(\\d+)\\b",
+        pattern: r"\becho\s+(\d+)\b",
         term: "{term} {1}",
-        singular: SingularProjection(capture: 1, definition: "Create one echo."),
+        definition: "Create {1} echoes.",
       ),
     ],
   ),
@@ -583,9 +513,9 @@ mod tests {
     term: "Moon",
     definition: "A multiline\nUnicode definition.",
     priority: -3,
-    rules_text_forms: ["☾"],
+    variants: ["☾"],
     rules_symbol: RulesSymbol(token: lunar, glyph: Exhaust, accessible_label: "lunar"),
-    contexts: [GlossaryContext(owner: DreamAvatar, definition: "Avatar moon." )],
+    projections: [GlossaryProjection(owner: DreamAvatar, definition: "Avatar moon." )],
   ),
   GlossaryDefinition(
     id: "00000000-0000-4000-8000-000000000003",
@@ -624,7 +554,7 @@ mod tests {
     }
 
     #[test]
-    fn lowers_compound_contexts_defaults_and_optional_fields_in_order() {
+    fn lowers_compound_projections_defaults_and_optional_fields_in_order() {
         let source: Vec<GlossaryDefinition> = ron::from_str(synthetic_source()).unwrap();
         let lowered = lower(source).unwrap();
         let entries = lowered["entries"].as_array().unwrap();
@@ -632,13 +562,20 @@ mod tests {
         assert_eq!(entries.len(), 6);
         assert_eq!(entries[0]["id"].as_str(), Some(FIRST_ID));
         assert_eq!(entries[0]["category"].as_str(), Some("Card Types"));
-        assert_eq!(entries[0]["matches-rules-text"].as_bool(), Some(true));
+        assert_eq!(
+            entries[0]["matches-term-in-rules-text"].as_bool(),
+            Some(true)
+        );
         assert_eq!(entries[0]["definition-symbol"].as_str(), Some("fast"));
         assert_eq!(
             entries[0]["term-presentation"].as_str(),
             Some("symbol-only")
         );
-        assert_eq!(entries[0]["contexts"][0]["owner"].as_str(), Some("card"));
+        assert_eq!(entries[0]["projections"][0]["owner"].as_str(), Some("card"));
+        assert_eq!(
+            entries[0]["projections"][0]["pattern"].as_str(),
+            Some(r"\becho\s+(\d+)\b")
+        );
         assert_eq!(entries[0]["rules-symbol"]["token"].as_str(), Some("spark"));
         assert_eq!(
             entries[0]["rules-symbol"]["glyph"].as_str(),
@@ -648,24 +585,17 @@ mod tests {
             entries[0]["rules-symbol"]["accessible-label"].as_str(),
             Some("spark")
         );
-        assert_eq!(
-            entries[0]["contexts"][0]["singular-capture"].as_integer(),
-            Some(1)
-        );
-        assert_eq!(
-            entries[0]["contexts"][0]["singular-definition"].as_str(),
-            Some("Create one echo.")
-        );
 
         assert_eq!(entries[1]["id"].as_str(), Some(SECOND_ID));
-        assert_eq!(entries[1]["matches-rules-text"].as_bool(), Some(false));
-        assert_eq!(entries[1]["variants"].as_array().unwrap().len(), 0);
-        assert_eq!(entries[1]["rules-text-forms"][0].as_str(), Some("☾"));
-        assert!(entries[1].get("definition-uses-rules-text").is_none());
+        assert_eq!(
+            entries[1]["matches-term-in-rules-text"].as_bool(),
+            Some(false)
+        );
+        assert_eq!(entries[1]["variants"][0].as_str(), Some("☾"));
         assert!(entries[1].get("definition-symbol").is_none());
         assert!(entries[1].get("term-presentation").is_none());
         assert_eq!(
-            entries[1]["contexts"][0]["owner"].as_str(),
+            entries[1]["projections"][0]["owner"].as_str(),
             Some("dreamAvatar")
         );
     }
@@ -718,7 +648,8 @@ mod tests {
             ["symbol-only", "definition-only"]
         );
         assert_eq!(
-            [ContextOwner::Card, ContextOwner::DreamAvatar].map(ContextOwner::compatibility_name),
+            [ProjectionOwner::Card, ProjectionOwner::DreamAvatar]
+                .map(ProjectionOwner::compatibility_name),
             ["card", "dreamAvatar"]
         );
     }
@@ -744,7 +675,7 @@ mod tests {
     }
 
     #[test]
-    fn rejects_duplicate_ids_forms_blank_copy_and_invalid_contexts() {
+    fn rejects_duplicate_ids_forms_blank_copy_and_invalid_projections() {
         assert_error_contains(
             &synthetic_source().replace(SECOND_ID, FIRST_ID),
             "duplicate Glossary id",
@@ -754,24 +685,12 @@ mod tests {
             "blank term",
         );
         assert_error_contains(
-            &synthetic_source()
-                .replace("rules_text_forms: [\"☾\"]", "rules_text_forms: [\"echo\"]"),
+            &synthetic_source().replace("variants: [\"☾\"]", "variants: [\"echo\"]"),
             "claimed by both",
         );
         assert_error_contains(
-            &synthetic_source().replace(
-                "pattern: \"\\\\becho\\\\s+(\\\\d+)\\\\b\"",
-                "pattern: \"[\"",
-            ),
-            "invalid context pattern",
-        );
-        assert_error_contains(
-            &synthetic_source().replace("capture: 1", "capture: 0"),
-            "zero singular capture",
-        );
-        assert_error_contains(
-            &synthetic_source().replace("capture: 1", "capture: 2"),
-            "singular capture 2 exceeds",
+            &synthetic_source().replace("pattern: r\"\\becho\\s+(\\d+)\\b\"", "pattern: \"[\""),
+            "invalid projection pattern",
         );
         assert_error_contains(
             &synthetic_source().replace("term: \"{term} {1}\"", "term: \"{term} {2}\""),
@@ -782,7 +701,7 @@ mod tests {
                 "definition: \"Avatar moon.\"",
                 "definition: \"Avatar {1}.\"",
             ),
-            "template capture reference without a context pattern",
+            "template capture reference without a projection pattern",
         );
         assert_error_contains(
             &synthetic_source().replace(
@@ -927,9 +846,14 @@ mod tests {
         assert_eq!(categories.len(), 10);
         let owners: BTreeSet<_> = canonical
             .iter()
-            .flat_map(|entry| entry.contexts.iter().filter_map(|context| context.owner))
+            .flat_map(|entry| {
+                entry
+                    .projections
+                    .iter()
+                    .filter_map(|projection| projection.owner)
+            })
             .collect();
-        assert_eq!(owners, [ContextOwner::DreamAvatar].into_iter().collect());
+        assert_eq!(owners, [ProjectionOwner::DreamAvatar].into_iter().collect());
         let symbols: BTreeSet<_> = canonical
             .iter()
             .filter_map(|entry| entry.definition_symbol)

@@ -1,10 +1,8 @@
-export interface GlossaryContext {
+export interface GlossaryProjection {
   readonly owner?: "card" | "dreamAvatar";
   readonly pattern?: string;
   readonly term?: string;
   readonly definition?: string;
-  readonly singularCapture?: number;
-  readonly singularDefinition?: string;
 }
 
 export interface GlossarySourceEntry {
@@ -13,13 +11,11 @@ export interface GlossarySourceEntry {
   readonly term: string;
   readonly definition: string;
   readonly priority: number;
-  readonly matchesRulesText: boolean;
+  readonly matchesTermInRulesText: boolean;
   readonly variants: readonly string[];
-  readonly rulesTextForms?: readonly string[];
-  readonly definitionUsesRulesText?: boolean;
   readonly definitionSymbol?: "fast" | "interrupt" | "exhaust" | "trigger";
   readonly termPresentation?: "symbolOnly" | "definitionOnly";
-  readonly contexts: readonly GlossaryContext[];
+  readonly projections: readonly GlossaryProjection[];
 }
 
 export function validateGlossaryEntries(input: unknown): GlossarySourceEntry[];

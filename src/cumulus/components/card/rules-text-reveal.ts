@@ -1,6 +1,6 @@
 import type { GlossaryCatalogEntry } from "../../../data/glossary";
 import {
-  extractContextualGlossaryTerms,
+  extractProjectedGlossaryTerms,
   type RulesTextGlossaryOwner,
 } from "../../../data/glossary-terms";
 import type { InfoCardProps, InfoCardTextProps } from "../overlay/InfoCard";
@@ -46,7 +46,7 @@ export function rulesTextDefinitionCards(
   excludedIds: readonly string[] = [],
 ): Readonly<InfoCardProps>[] {
   const card = glossaryDefinitionsCardModel(
-    extractContextualGlossaryTerms(text, owner),
+    extractProjectedGlossaryTerms(text, owner),
     excludedIds,
   );
   return card === null ? [] : [card];

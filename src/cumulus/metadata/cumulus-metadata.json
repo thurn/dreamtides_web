@@ -2619,7 +2619,7 @@
             "name": "variants",
             "tsType": "readonly string[]",
             "optional": true,
-            "description": "Extra rules-text word forms beyond the canonical term."
+            "description": "Additional word or symbol forms recognized in rules text."
           },
           {
             "name": "termPresentation",

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 
 import {
-  contextualizeGlossaryEntry,
+  projectGlossaryEntry,
   extractGlossaryTerms,
 } from "./glossary-terms";
 import { GLOSSARY, glossaryRulesTextForms } from "./glossary";
@@ -135,7 +135,7 @@ function fixture(
   term: string,
   definition: string,
   priority = 0,
-  contexts: GlossaryCatalogEntry["contexts"] = [],
+  projections: GlossaryCatalogEntry["projections"] = [],
 ): GlossaryCatalogEntry {
   return {
     id,
@@ -143,27 +143,25 @@ function fixture(
     term,
     definition,
     priority,
-    matchesRulesText: true,
+    matchesTermInRulesText: true,
     variants: [],
-    contexts,
+    projections,
   };
 }
 
-describe("contextual glossary definitions", () => {
+describe("projected glossary definitions", () => {
   it("explains foresee 1 with its singular card flow", () => {
     const foresee = fixture("foresee", "Foresee", "Generic definition.", 0, [
       {
-        pattern: String.raw`\bforesee\s+(\d+)\b`,
+        pattern: String.raw`\bforesee\s+(1)\b`,
         term: "{term} {1}",
-        definition: "Look at the top {1} cards.",
-        singularCapture: 1,
-        singularDefinition:
+        definition:
           "Look at the top card of your deck. You may put it into your void.",
       },
     ]);
 
     expect(
-      contextualizeGlossaryEntry(foresee, "When you play an event, foresee 1."),
+      projectGlossaryEntry(foresee, "When you play an event, foresee 1."),
     ).toMatchObject({
       term: "Foresee 1",
       definition:
@@ -178,13 +176,11 @@ describe("contextual glossary definitions", () => {
         term: "{term} {1}",
         definition:
           "Look at the top {1} cards of your deck, then put any number of them into your void and the rest on top in any order.",
-        singularCapture: 1,
-        singularDefinition: "Singular definition.",
       },
     ]);
 
     expect(
-      contextualizeGlossaryEntry(foresee, "Foresee 3, then draw a card."),
+      projectGlossaryEntry(foresee, "Foresee 3, then draw a card."),
     ).toMatchObject({
       term: "Foresee 3",
       definition:
@@ -208,7 +204,7 @@ describe("contextual glossary definitions", () => {
     );
 
     expect(
-      contextualizeGlossaryEntry(
+      projectGlossaryEntry(
         reclaim,
         "An event in your void gains reclaim.",
       ).definition,
@@ -233,7 +229,7 @@ describe("contextual glossary definitions", () => {
     );
 
     expect(
-      contextualizeGlossaryEntry(exhaust, "2●, ☾: Draw a card.", "dreamAvatar")
+      projectGlossaryEntry(exhaust, "2●, ☾: Draw a card.", "dreamAvatar")
         .definition,
     ).toBe(
       "You may exhaust (☾) this dreamAvatar to activate this ability once per turn.",
@@ -244,20 +240,26 @@ describe("contextual glossary definitions", () => {
 describe("numeric keyword glossary projections", () => {
   const foresee = fixture("foresee", "Foresee", "Generic foresee.", 0, [
     {
+      pattern: String.raw`\bforesee\s+(1)\b`,
+      term: "{term} {1}",
+      definition: "Look at the top card.",
+    },
+    {
       pattern: String.raw`\bforesee\s+(\d+)\b`,
       term: "{term} {1}",
       definition: "Look at the top {1} cards.",
-      singularCapture: 1,
-      singularDefinition: "Look at the top card.",
     },
   ]);
   const erode = fixture("erode", "Erode", "Generic erode.", 0, [
     {
+      pattern: String.raw`\berode\s+(1)\b`,
+      term: "{term} {1}",
+      definition: "Put the top card into their void.",
+    },
+    {
       pattern: String.raw`\berode\s+(\d+)\b`,
       term: "{term} {1}",
       definition: "Put the top {1} cards into their void.",
-      singularCapture: 1,
-      singularDefinition: "Put the top card into their void.",
     },
   ]);
   const reclaim = fixture("reclaim", "Reclaim", "Generic reclaim.", 0, [
@@ -327,7 +329,7 @@ describe("numeric keyword glossary projections", () => {
       definition: "Play that card from your void for 2●.",
     },
   ])("adapts $text", ({ text, entry, term, definition }) => {
-    expect(contextualizeGlossaryEntry(entry, text)).toMatchObject({
+    expect(projectGlossaryEntry(entry, text)).toMatchObject({
       id: entry.id,
       term,
       definition,
@@ -336,7 +338,7 @@ describe("numeric keyword glossary projections", () => {
 
   it("keeps granted Reclaim without a cost contextual but non-numeric", () => {
     expect(
-      contextualizeGlossaryEntry(
+      projectGlossaryEntry(
         reclaim,
         "An event in your void gains reclaim.",
       ),

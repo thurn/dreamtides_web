@@ -150,18 +150,20 @@ describe("glossary", () => {
   it("uses rules-aware rendering for rules terms and exhaust guidance", () => {
     expect(
       glossaryDefinitionUsesRulesText({
-        matchesRulesText: true,
+        matchesTermInRulesText: true,
+        variants: [],
       }),
     ).toBe(true);
     expect(
       glossaryDefinitionUsesRulesText({
-        matchesRulesText: false,
-        definitionUsesRulesText: true,
+        matchesTermInRulesText: false,
+        variants: ["☾"],
       }),
     ).toBe(true);
     expect(
       glossaryDefinitionUsesRulesText({
-        matchesRulesText: false,
+        matchesTermInRulesText: false,
+        variants: [],
       }),
     ).toBe(false);
   });
@@ -185,7 +187,7 @@ describe("glossary", () => {
 
   it("defines the memory symbol as a rules-aware glossary entry", () => {
     const memory = requireGlossaryEntry(GLOSSARY_IDS.memory);
-    expect(memory.definitionUsesRulesText).toBe(true);
+    expect(glossaryDefinitionUsesRulesText(memory)).toBe(true);
     expect(GLOSSARY_INDEX["⧗"]).toBe(memory);
   });
 

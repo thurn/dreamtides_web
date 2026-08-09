@@ -19,7 +19,7 @@ function entry(
     term,
     definition: `${term} definition.`,
     priority: 0,
-    matchesRulesText: false,
+    matchesTermInRulesText: false,
     variants: [],
     ...presentation,
   };

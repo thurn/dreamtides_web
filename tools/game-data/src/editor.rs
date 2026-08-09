@@ -3547,7 +3547,7 @@ CardMetadataCatalog(
     term: r#"Echo"#,
     definition: "Create an echo.",
     priority: 17,
-    matches_rules_text: true,
+    matches_term_in_rules_text: true,
     variants: ["echoes"],
     rules_symbol: RulesSymbol(
       token: spark,
@@ -3555,12 +3555,11 @@ CardMetadataCatalog(
       accessible_label: "spark",
       semantic_color_role: Spark,
     ),
-    contexts: [
-      GlossaryContext(
-        pattern: r#"\\becho\\s+(\\d+)\\b"#,
+    projections: [
+      GlossaryProjection(
+        pattern: r#"\becho\s+(\d+)\b"#,
         term: "{term} {1}",
         definition: "Create {1} echoes.",
-        singular: SingularProjection(capture: 1, definition: "Create one echo."),
       ),
     ],
   ),
@@ -4153,7 +4152,7 @@ CardMetadataCatalog(
             );
         }
         assert_eq!(source.matches("term_presentation:").count(), 2);
-        assert!(source.contains("pattern: r#\"\\\\becho"));
+        assert!(source.contains("pattern: r#\"\\becho"));
 
         set_glossary_field(
             &mut definitions[index],

@@ -47,9 +47,9 @@ describe("RulesText", () => {
       term: "Fixture",
       definition: "Fixture definition.",
       priority: 0,
-      matchesRulesText: false,
+      matchesTermInRulesText: false,
       variants: [],
-      contexts: [],
+      projections: [],
       rulesSymbol: {
         token: "points",
         glyph: "points",

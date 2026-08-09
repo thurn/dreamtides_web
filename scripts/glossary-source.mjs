@@ -55,71 +55,52 @@ function optionalEnum(value, field, index, allowed) {
   return normalized;
 }
 
-function contextArray(value, index) {
+function projectionArray(value, index) {
   if (value === undefined) return [];
   if (!Array.isArray(value)) {
     throw invalid(
-      `Glossary entry ${String(index + 1)} contexts must be an array of tables.`,
+      `Glossary entry ${String(index + 1)} projections must be an array of tables.`,
     );
   }
-  return value.map((context, contextIndex) => {
+  return value.map((projection, projectionIndex) => {
     if (
-      context === null ||
-      typeof context !== "object" ||
-      Array.isArray(context)
+      projection === null ||
+      typeof projection !== "object" ||
+      Array.isArray(projection)
     ) {
       throw invalid(
-        `Glossary entry ${String(index + 1)} context ${String(contextIndex + 1)} must be a table.`,
+        `Glossary entry ${String(index + 1)} projection ${String(projectionIndex + 1)} must be a table.`,
       );
     }
-    const owner = optionalString(context.owner, "context owner", index);
+    const owner = optionalString(projection.owner, "projection owner", index);
     if (owner !== undefined && owner !== "card" && owner !== "dreamAvatar") {
       throw invalid(
-        `Glossary entry ${String(index + 1)} context ${String(contextIndex + 1)} owner must be "card" or "dreamAvatar".`,
+        `Glossary entry ${String(index + 1)} projection ${String(projectionIndex + 1)} owner must be "card" or "dreamAvatar".`,
       );
     }
-    const pattern = optionalString(context.pattern, "context pattern", index);
+    const pattern = optionalString(
+      projection.pattern,
+      "projection pattern",
+      index,
+    );
     if (pattern !== undefined) {
       try {
         new RegExp(pattern, "iu");
       } catch {
         throw invalid(
-          `Glossary entry ${String(index + 1)} context ${String(contextIndex + 1)} pattern must be a valid regular expression.`,
+          `Glossary entry ${String(index + 1)} projection ${String(projectionIndex + 1)} pattern must be a valid regular expression.`,
         );
       }
     }
-    const term = optionalString(context.term, "context term", index);
+    const term = optionalString(projection.term, "projection term", index);
     const definition = optionalString(
-      context.definition,
-      "context definition",
+      projection.definition,
+      "projection definition",
       index,
     );
-    const singularCapture =
-      context["singular-capture"] ?? context.singularCapture;
-    const singularDefinition = optionalString(
-      context["singular-definition"] ?? context.singularDefinition,
-      "context singular-definition",
-      index,
-    );
-    if (
-      singularCapture !== undefined &&
-      (!Number.isInteger(singularCapture) || singularCapture < 1)
-    ) {
-      throw invalid(
-        `Glossary entry ${String(index + 1)} context ${String(contextIndex + 1)} singular-capture must be a positive integer.`,
-      );
-    }
-    if (
-      (singularCapture === undefined) !==
-      (singularDefinition === undefined)
-    ) {
-      throw invalid(
-        `Glossary entry ${String(index + 1)} context ${String(contextIndex + 1)} singular-capture and singular-definition must be provided together.`,
-      );
-    }
     if (term === undefined && definition === undefined) {
       throw invalid(
-        `Glossary entry ${String(index + 1)} context ${String(contextIndex + 1)} must configure term or definition.`,
+        `Glossary entry ${String(index + 1)} projection ${String(projectionIndex + 1)} must configure term or definition.`,
       );
     }
     return {
@@ -127,12 +108,6 @@ function contextArray(value, index) {
       ...(pattern === undefined ? {} : { pattern }),
       ...(term === undefined ? {} : { term }),
       ...(definition === undefined ? {} : { definition }),
-      ...(singularCapture === undefined
-        ? {}
-        : {
-            singularCapture,
-            singularDefinition,
-          }),
     };
   });
 }
@@ -206,15 +181,9 @@ export function validateGlossaryEntries(input) {
     const definition = requiredString(value.definition, "definition", index);
     const priority = integer(value.priority, "priority", index);
     const variants = stringArray(value.variants, "variants", index);
-    const matchesRulesText =
-      value["matches-rules-text"] === true || value.matchesRulesText === true;
-    const rulesTextFormsValue =
-      value["rules-text-forms"] ?? value.rulesTextForms;
-    const rulesTextForms =
-      rulesTextFormsValue === undefined
-        ? undefined
-        : stringArray(rulesTextFormsValue, "rules-text-forms", index);
-    const contexts = contextArray(value.contexts, index);
+    const matchesTermInRulesText =
+      value["matches-term-in-rules-text"] === true || value.matchesTermInRulesText === true;
+    const projections = projectionArray(value.projections, index);
     const symbol = rulesSymbol(
       value["rules-symbol"] ?? value.rulesSymbol,
       index,
@@ -225,16 +194,6 @@ export function validateGlossaryEntries(input) {
       );
     }
     if (symbol !== undefined) rulesSymbolTokens.add(symbol.token);
-    const definitionUsesRulesTextValue =
-      value["definition-uses-rules-text"] ?? value.definitionUsesRulesText;
-    if (
-      definitionUsesRulesTextValue !== undefined &&
-      typeof definitionUsesRulesTextValue !== "boolean"
-    ) {
-      throw invalid(
-        `Glossary entry ${String(index + 1)} definition-uses-rules-text must be a boolean.`,
-      );
-    }
     const definitionSymbol = optionalEnum(
       value["definition-symbol"] ?? value.definitionSymbol,
       "definition-symbol",
@@ -253,8 +212,10 @@ export function validateGlossaryEntries(input) {
               "definitionOnly",
             ]);
 
-    const matchedEntryForms =
-      rulesTextForms ?? (matchesRulesText ? [term, ...variants] : []);
+    const matchedEntryForms = [
+      ...(matchesTermInRulesText ? [term] : []),
+      ...variants,
+    ];
     for (const form of matchedEntryForms) {
       const key = form.toLocaleLowerCase();
       const owner = matchedForms.get(key);
@@ -272,16 +233,12 @@ export function validateGlossaryEntries(input) {
       term,
       definition,
       priority,
-      matchesRulesText,
+      matchesTermInRulesText,
       variants,
-      ...(rulesTextForms === undefined ? {} : { rulesTextForms }),
-      ...(definitionUsesRulesTextValue === undefined
-        ? {}
-        : { definitionUsesRulesText: definitionUsesRulesTextValue }),
       ...(definitionSymbol === undefined ? {} : { definitionSymbol }),
       ...(termPresentation === undefined ? {} : { termPresentation }),
       ...(symbol === undefined ? {} : { rulesSymbol: symbol }),
-      contexts,
+      projections,
     };
   });
   if (
@@ -326,14 +283,16 @@ function entrySourceRanges(source) {
 }
 
 function replaceSourceAssignment(source, key, value) {
-  const contextStart = source.search(/^\[\[entries\.contexts\]\][ \t]*$/mu);
-  const headerEnd = contextStart < 0 ? source.length : contextStart;
+  const projectionStart = source.search(
+    /^\[\[entries\.projections\]\][ \t]*$/mu,
+  );
+  const headerEnd = projectionStart < 0 ? source.length : projectionStart;
   const header = source.slice(0, headerEnd);
-  const contexts = source.slice(headerEnd);
+  const projections = source.slice(headerEnd);
   const pattern = new RegExp(`^${key}[ \\t]*=.*$`, "mu");
   if (value === undefined) {
     if (!pattern.test(header)) return source;
-    return `${header.replace(pattern, "").replace(/\n{3,}$/u, "\n\n")}${contexts}`;
+    return `${header.replace(pattern, "").replace(/\n{3,}$/u, "\n\n")}${projections}`;
   }
   const sourceValue =
     key === "term-presentation"
@@ -343,10 +302,10 @@ function replaceSourceAssignment(source, key, value) {
       : value;
   const assignment = stringify({ [key]: sourceValue }).trimEnd();
   if (pattern.test(header)) {
-    return `${header.replace(pattern, assignment)}${contexts}`;
+    return `${header.replace(pattern, assignment)}${projections}`;
   }
   const separator = header.endsWith("\n") ? "" : "\n";
-  return `${header}${separator}${assignment}\n${contexts}`;
+  return `${header}${separator}${assignment}\n${projections}`;
 }
 
 /**
@@ -390,16 +349,8 @@ export function serializeGlossarySource(entries) {
       term: entry.term,
       definition: entry.definition,
       priority: entry.priority,
-      "matches-rules-text": entry.matchesRulesText,
+      "matches-term-in-rules-text": entry.matchesTermInRulesText,
       variants: entry.variants,
-      ...(entry.rulesTextForms === undefined
-        ? {}
-        : { "rules-text-forms": entry.rulesTextForms }),
-      ...(entry.definitionUsesRulesText === undefined
-        ? {}
-        : {
-            "definition-uses-rules-text": entry.definitionUsesRulesText,
-          }),
       ...(entry.definitionSymbol === undefined
         ? {}
         : { "definition-symbol": entry.definitionSymbol }),
@@ -427,24 +378,22 @@ export function serializeGlossarySource(entries) {
                   }),
             },
           }),
-      ...(entry.contexts.length === 0
+      ...(entry.projections.length === 0
         ? {}
         : {
-            contexts: entry.contexts.map((context) => ({
-              ...(context.owner === undefined ? {} : { owner: context.owner }),
-              ...(context.pattern === undefined
+            projections: entry.projections.map((projection) => ({
+              ...(projection.owner === undefined
                 ? {}
-                : { pattern: context.pattern }),
-              ...(context.term === undefined ? {} : { term: context.term }),
-              ...(context.definition === undefined
+                : { owner: projection.owner }),
+              ...(projection.pattern === undefined
                 ? {}
-                : { definition: context.definition }),
-              ...(context.singularCapture === undefined
+                : { pattern: projection.pattern }),
+              ...(projection.term === undefined
                 ? {}
-                : {
-                    "singular-capture": context.singularCapture,
-                    "singular-definition": context.singularDefinition,
-                  }),
+                : { term: projection.term }),
+              ...(projection.definition === undefined
+                ? {}
+                : { definition: projection.definition }),
             })),
           }),
     })),

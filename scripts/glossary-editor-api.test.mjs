@@ -28,9 +28,9 @@ function fixtureEntries() {
       term: "Spark",
       definition: "Combat power.",
       priority: 10,
-      matchesRulesText: true,
+      matchesTermInRulesText: true,
       variants: [],
-      contexts: [],
+      projections: [],
     },
     {
       id: SECOND_ID,
@@ -38,9 +38,9 @@ function fixtureEntries() {
       term: "Draft",
       definition: "Choose cards.",
       priority: 0,
-      matchesRulesText: false,
+      matchesTermInRulesText: false,
       variants: [],
-      contexts: [],
+      projections: [],
     },
   ];
 }

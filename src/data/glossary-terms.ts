@@ -3,7 +3,7 @@ import {
   glossaryRulesTextForms,
   lookupGlossaryTerm,
   type GlossaryCatalogEntry,
-  type GlossaryContext,
+  type GlossaryProjection,
 } from "./glossary";
 
 /** The semantic owner whose rules text is being explained. */
@@ -61,21 +61,21 @@ const GLOSSARY_FORM_RE = new RegExp(
   "gu",
 );
 
-function contextMatches(
-  context: GlossaryContext,
+function projectionMatches(
+  projection: GlossaryProjection,
   text: string,
   owner: RulesTextGlossaryOwner,
 ): readonly string[] | undefined {
-  if (context.owner !== undefined && context.owner !== owner) {
+  if (projection.owner !== undefined && projection.owner !== owner) {
     return undefined;
   }
-  if (context.pattern === undefined) {
+  if (projection.pattern === undefined) {
     return [""];
   }
-  return new RegExp(context.pattern, "iu").exec(text) ?? undefined;
+  return new RegExp(projection.pattern, "iu").exec(text) ?? undefined;
 }
 
-function renderContextTemplate(
+function renderProjectionTemplate(
   template: string,
   entry: GlossaryCatalogEntry,
   match: readonly string[],
@@ -93,29 +93,24 @@ function renderContextTemplate(
  * Rules-text reveals use this projection so numeric actions and granted
  * abilities explain the exact instance the player is reading.
  */
-export function contextualizeGlossaryEntry(
+export function projectGlossaryEntry(
   entry: GlossaryCatalogEntry,
   text: string,
   owner: RulesTextGlossaryOwner = "card",
 ): GlossaryCatalogEntry {
-  for (const context of entry.contexts ?? []) {
-    const match = contextMatches(context, text, owner);
+  for (const projection of entry.projections ?? []) {
+    const match = projectionMatches(projection, text, owner);
     if (match === undefined) continue;
-    const useSingularDefinition =
-      context.singularCapture !== undefined &&
-      Number.parseInt(match[context.singularCapture] ?? "", 10) === 1;
     return {
       ...entry,
       term:
-        context.term === undefined
+        projection.term === undefined
           ? entry.term
-          : renderContextTemplate(context.term, entry, match),
+          : renderProjectionTemplate(projection.term, entry, match),
       definition:
-        useSingularDefinition && context.singularDefinition !== undefined
-          ? renderContextTemplate(context.singularDefinition, entry, match)
-          : context.definition === undefined
-            ? entry.definition
-            : renderContextTemplate(context.definition, entry, match),
+        projection.definition === undefined
+          ? entry.definition
+          : renderProjectionTemplate(projection.definition, entry, match),
     };
   }
   return entry;
@@ -147,13 +142,13 @@ export function extractGlossaryTerms(text: string): GlossaryCatalogEntry[] {
 
 /**
  * Returns the glossary entries referenced in `text`, projected into the
- * sentence and semantic-owner context used by a rendered definition card.
+ * sentence and semantic owner used by a rendered definition card.
  */
-export function extractContextualGlossaryTerms(
+export function extractProjectedGlossaryTerms(
   text: string,
   owner: RulesTextGlossaryOwner = "card",
 ): GlossaryCatalogEntry[] {
   return extractGlossaryTerms(text).map((entry) =>
-    contextualizeGlossaryEntry(entry, text, owner),
+    projectGlossaryEntry(entry, text, owner),
   );
 }

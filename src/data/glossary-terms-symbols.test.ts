@@ -30,14 +30,13 @@ const FIXTURES = vi.hoisted(() => ({
 
 vi.mock("./glossary", () => ({
   GLOSSARY: [
-    { ...FIXTURES.fast, rulesTextForms: ["❖"] },
-    { ...FIXTURES.interrupt, rulesTextForms: ["❖❖"] },
-    { ...FIXTURES.exhaustCost, rulesTextForms: ["☾"] },
-    { ...FIXTURES.points, rulesTextForms: ["⍟"] },
-    { ...FIXTURES.night, rulesTextForms: ["▸Night"] },
+    { ...FIXTURES.fast, variants: ["❖"] },
+    { ...FIXTURES.interrupt, variants: ["❖❖"] },
+    { ...FIXTURES.exhaustCost, variants: ["☾"] },
+    { ...FIXTURES.points, variants: ["⍟"] },
+    { ...FIXTURES.night, variants: ["▸Night"] },
   ],
-  glossaryRulesTextForms: (entry: { rulesTextForms: string[] }) =>
-    entry.rulesTextForms,
+  glossaryRulesTextForms: (entry: { variants: string[] }) => entry.variants,
   lookupGlossaryTerm: (form: string) =>
     [
       ["❖", FIXTURES.fast],

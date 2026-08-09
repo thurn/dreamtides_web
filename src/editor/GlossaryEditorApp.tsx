@@ -190,7 +190,7 @@ export default function GlossaryEditorApp({
         }
         logEvent("glossary_editor_entry_saved", {
           glossaryId: entry.id,
-          matchesRulesText: entry.matchesRulesText,
+          matchesTermInRulesText: entry.matchesTermInRulesText,
           termPresentation: entry.termPresentation ?? "titleAndDefinition",
         });
       } catch (error: unknown) {
@@ -378,7 +378,7 @@ export default function GlossaryEditorApp({
                             onClick={() => setSelectedId(entry.id)}
                           >
                             <span>{entry.term}</span>
-                            <small>{entry.matchesRulesText ? "Rules term" : "Info Card"}</small>
+                            <small>{entry.matchesTermInRulesText ? "Rules term" : "Info Card"}</small>
                           </Pressable>
                         ))}
                       </div>

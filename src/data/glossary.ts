@@ -7,14 +7,14 @@ export interface GlossaryEntry {
   readonly term: string;
   /** Player-facing explanatory copy displayed on the Info Card. */
   readonly definition: string;
-  /** Extra rules-text word forms beyond the canonical term. */
+  /** Additional word or symbol forms recognized in rules text. */
   readonly variants?: readonly string[];
   /** Optional treatment for the entry's label in definition surfaces. */
   readonly termPresentation?: "symbolOnly" | "definitionOnly";
 }
 
-/** A RON-authored contextual projection of one canonical entry. */
-export interface GlossaryContext {
+/** A RON-authored projection of one canonical entry. */
+export interface GlossaryProjection {
   /** Limit this projection to rules text owned by this entity type. */
   readonly owner?: "card" | "dreamAvatar";
   /** Case-insensitive regular expression which the source sentence must match. */
@@ -23,10 +23,6 @@ export interface GlossaryContext {
   readonly term?: string;
   /** Definition template; `{term}` and numbered captures such as `{1}` expand. */
   readonly definition?: string;
-  /** Capture whose numeric value selects singular-definition when it equals 1. */
-  readonly singularCapture?: number;
-  /** Singular definition template paired with singularCapture. */
-  readonly singularDefinition?: string;
 }
 
 /** Fully identified record compiled to glossary.toml and shown in the editor. */
@@ -37,18 +33,14 @@ export interface GlossaryCatalogEntry extends GlossaryEntry {
   readonly category: string;
   /** Higher values place the entry earlier in a multi-term rules-text reveal. */
   readonly priority: number;
-  /** Whether card rules text recognizes this entry as an inline term. */
-  readonly matchesRulesText: boolean;
+  /** Whether rules text recognizes the canonical term itself. */
+  readonly matchesTermInRulesText: boolean;
   readonly variants: readonly string[];
-  /** Exact tokenizer forms, overriding term plus variants when present. */
-  readonly rulesTextForms?: readonly string[];
-  /** Render the definition with rules-aware inline glyphs. */
-  readonly definitionUsesRulesText?: boolean;
   /** Optional symbol shown beside this entry in a combined definition card. */
   readonly definitionSymbol?: "fast" | "interrupt" | "exhaust" | "trigger";
   /** Optional term treatment in a combined definition card. */
   /** Ordered sentence/owner-specific projections. */
-  readonly contexts?: readonly GlossaryContext[];
+  readonly projections?: readonly GlossaryProjection[];
   readonly rulesSymbol?: {
     readonly token:
       "essence" | "points" | "lunar" | "store" | "energy" | "spark";
@@ -66,9 +58,7 @@ export const INFO_CARD_GLOSSARY: readonly GlossaryCatalogEntry[] =
 /** Rules-text entries used by the card keyword tokenizer. */
 export const GLOSSARY: readonly GlossaryCatalogEntry[] =
   INFO_CARD_GLOSSARY.filter(
-    (entry) =>
-      entry.matchesRulesText ||
-      (entry.rulesTextForms !== undefined && entry.rulesTextForms.length > 0),
+    (entry) => entry.matchesTermInRulesText || entry.variants.length > 0,
   );
 
 export const RULES_SYMBOL_GLOSSARY: readonly GlossaryCatalogEntry[] =
@@ -168,10 +158,10 @@ export const GLOSSARY_INDEX: Readonly<Record<string, GlossaryCatalogEntry>> =
 export function glossaryRulesTextForms(
   entry: GlossaryCatalogEntry,
 ): readonly string[] {
-  return (
-    entry.rulesTextForms ??
-    (entry.matchesRulesText ? [entry.term, ...entry.variants] : [])
-  );
+  return [
+    ...(entry.matchesTermInRulesText ? [entry.term] : []),
+    ...entry.variants,
+  ];
 }
 
 /** Trigger arrow that can prefix a rules keyword. */
@@ -198,16 +188,11 @@ export function hasGlossaryTerm(word: string): boolean {
 /**
  * Whether a glossary definition uses rules-aware inline rendering.
  *
- * Rules-text entries use it by default; semantic Info Cards can opt in when
- * their explanatory prose includes a rules glyph.
+ * Every entry recognized in rules text uses the same renderer for its
+ * explanatory definition, including entries recognized by exact symbol forms.
  */
 export function glossaryDefinitionUsesRulesText(
-  entry: Pick<
-    GlossaryCatalogEntry,
-    "matchesRulesText" | "definitionUsesRulesText"
-  >,
+  entry: Pick<GlossaryCatalogEntry, "matchesTermInRulesText" | "variants">,
 ): boolean {
-  return (
-    entry.matchesRulesText === true || entry.definitionUsesRulesText === true
-  );
+  return entry.matchesTermInRulesText === true || entry.variants.length > 0;
 }

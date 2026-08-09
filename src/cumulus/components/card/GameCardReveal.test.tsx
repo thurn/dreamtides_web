@@ -7,7 +7,7 @@ import { CumulusRoot } from "../../CumulusRoot";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
 import * as glossary from "../../../data/glossary";
-import { extractContextualGlossaryTerms } from "../../../data/glossary-terms";
+import { extractProjectedGlossaryTerms } from "../../../data/glossary-terms";
 import { extractMaterializedFigmentPreviews } from "../../../data/materialized-figments";
 import { GameCard, type GameCardModel } from "./CardView";
 import { transfigurationFormFixture } from "../../test-helpers/transfiguration-fixture";
@@ -160,7 +160,7 @@ describe("GameCard reveal contract", () => {
       glossary.GLOSSARY_IDS.foresee,
       glossary.GLOSSARY_IDS.reclaim,
     ];
-    const numericEntries = extractContextualGlossaryTerms(renderedText).filter(
+    const numericEntries = extractProjectedGlossaryTerms(renderedText).filter(
       (entry) => numericGlossaryIds.includes(entry.id),
     );
 
@@ -315,7 +315,7 @@ describe("GameCard reveal contract", () => {
     },
   ])(
     "shows a separate title-free InfoCard with Boxicons for a $label card",
-    async ({ cardData, glossaryId, definition, iconCount }) => {
+    async ({ label, cardData, glossaryId, definition, iconCount }) => {
       vi.spyOn(glossary, "glossaryEntry").mockImplementation((id) =>
         id === glossaryId
           ? {
@@ -324,9 +324,8 @@ describe("GameCard reveal contract", () => {
               term: "Timing",
               definition,
               priority: 95,
-              matchesRulesText: false,
-              variants: [],
-              definitionUsesRulesText: true,
+              matchesTermInRulesText: false,
+              variants: [label === "fast" ? "❖" : "❖❖"],
               termPresentation: "definitionOnly",
             }
           : undefined,
