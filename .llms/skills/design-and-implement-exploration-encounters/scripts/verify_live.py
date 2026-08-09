@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify that a scratch design workset is runtime-complete in live Exploration."""
+"""Verify that a validated design workset is complete in generated Exploration."""
 
 from __future__ import annotations
 
@@ -7,27 +7,34 @@ import argparse
 import json
 import sys
 import tomllib
-import uuid
 from pathlib import Path
 from typing import Any
+
+from select_batch import SelectionError, canonical_uuid
 
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPTS_DIR.parents[3]
 DEFAULT_EXPLORATION = REPO_ROOT / "data/exploration.toml"
-AUTHORED_ACTION_FIELDS = (
-    "id",
-    "label",
-    "effect-text",
-    "template-id",
-    "template-variables",
-    "selection",
-)
 MISSING = object()
 
 
 class VerificationError(ValueError):
     """Raised when a designed encounter is absent or incomplete in live data."""
+
+
+def load_json(path: Path, label: str) -> dict[str, Any]:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError as error:
+        raise VerificationError(f"{label} does not exist: {path}") from error
+    except json.JSONDecodeError as error:
+        raise VerificationError(
+            f"{label} is invalid JSON: {path}:{error.lineno}:{error.colno}"
+        ) from error
+    if not isinstance(value, dict):
+        raise VerificationError(f"{label} must be a JSON object")
+    return value
 
 
 def load_toml(path: Path, label: str) -> dict[str, Any]:
@@ -40,94 +47,141 @@ def load_toml(path: Path, label: str) -> dict[str, Any]:
         raise VerificationError(f"{label} is invalid TOML: {path}: {error}") from error
 
 
-def normalized_uuid(value: Any, label: str) -> str:
-    if not isinstance(value, str):
-        raise VerificationError(f"{label} must be a UUID string")
+def normalized_uuid(value: Any, label: str, *, require_v4: bool = False) -> str:
     try:
-        return str(uuid.UUID(value))
-    except ValueError as error:
-        raise VerificationError(f"{label} must be a UUID") from error
+        return canonical_uuid(value, label, require_v4=require_v4)
+    except SelectionError as error:
+        raise VerificationError(str(error)) from error
 
 
-def encounter_map(document: dict[str, Any], label: str) -> dict[str, dict[str, Any]]:
+def live_encounter_map(document: dict[str, Any]) -> dict[str, dict[str, Any]]:
     encounters = document.get("encounter", [])
     if not isinstance(encounters, list):
-        raise VerificationError(f"{label} must contain encounter tables")
+        raise VerificationError("Live Exploration must contain encounter tables")
     by_id: dict[str, dict[str, Any]] = {}
+    all_action_ids: set[str] = set()
     for index, value in enumerate(encounters):
         if not isinstance(value, dict):
-            raise VerificationError(f"{label}.encounter[{index}] must be a table")
-        card_id = normalized_uuid(value.get("card-id"), f"{label}.encounter[{index}].card-id")
+            raise VerificationError(f"live.encounter[{index}] must be a table")
+        card_id = normalized_uuid(value.get("card-id"), f"live.encounter[{index}].card-id")
         if card_id in by_id:
-            raise VerificationError(f"{label} contains duplicate encounter UUID {card_id}")
+            raise VerificationError(f"Live Exploration contains duplicate encounter UUID {card_id}")
+        actions = value.get("action")
+        if not isinstance(actions, list) or not 1 <= len(actions) <= 4:
+            raise VerificationError(
+                f"Live encounter {card_id} must contain between one and four actions"
+            )
+        for action_index, action in enumerate(actions):
+            if not isinstance(action, dict):
+                raise VerificationError(f"Live action {card_id}:{action_index} must be a table")
+            action_id = normalized_uuid(
+                action.get("id"), f"live action {card_id}:{action_index}.id", require_v4=True
+            )
+            if action_id in all_action_ids:
+                raise VerificationError(f"Live Exploration contains duplicate action ID {action_id}")
+            all_action_ids.add(action_id)
         by_id[card_id] = value
     return by_id
 
 
 def verify(workset_path: Path, exploration_path: Path) -> dict[str, Any]:
-    workset = encounter_map(load_toml(workset_path, "Workset"), "workset")
-    live = encounter_map(load_toml(exploration_path, "Live Exploration"), "live")
-    if not workset:
+    workset = load_json(workset_path, "Workset")
+    if workset.get("schema_version") != 2:
+        raise VerificationError("Workset schema_version must equal 2")
+    designed_encounters = workset.get("encounters")
+    if not isinstance(designed_encounters, list) or not designed_encounters:
         raise VerificationError("Workset must contain at least one encounter")
+    live = live_encounter_map(load_toml(exploration_path, "Generated Exploration"))
 
-    # Scan the full catalog because action IDs are globally unique, including
-    # against encounters outside this workset.
-    all_live_action_ids: set[str] = set()
-    for card_id, encounter in live.items():
-        actions = encounter.get("action")
-        if not isinstance(actions, list) or len(actions) != 2:
-            raise VerificationError(
-                f"Live encounter {card_id} must contain exactly two actions"
-            )
-        for index, action in enumerate(actions):
-            if not isinstance(action, dict):
-                raise VerificationError(f"Live action {card_id}:{index} must be a table")
-            action_id = action.get("id")
-            if not isinstance(action_id, str) or not action_id:
-                raise VerificationError(f"Live action {card_id}:{index} has no ID")
-            if action_id in all_live_action_ids:
-                raise VerificationError(f"Live Exploration contains duplicate action ID {action_id}")
-            all_live_action_ids.add(action_id)
-
-    verified_ids = []
-    for card_id, designed in workset.items():
+    verified_ids: list[str] = []
+    seen_designed_ids: set[str] = set()
+    for index, designed in enumerate(designed_encounters):
+        if not isinstance(designed, dict):
+            raise VerificationError(f"workset.encounters[{index}] must be an object")
+        card_id = normalized_uuid(
+            designed.get("card_id"), f"workset.encounters[{index}].card_id"
+        )
+        if card_id in seen_designed_ids:
+            raise VerificationError(f"Workset contains duplicate encounter UUID {card_id}")
+        seen_designed_ids.add(card_id)
         implemented = live.get(card_id)
         if implemented is None:
             raise VerificationError(f"Workset UUID {card_id} is absent from live Exploration")
         if implemented.get("prose") != designed.get("prose"):
             raise VerificationError(f"Live encounter {card_id} does not preserve designed prose")
-        designed_actions = designed.get("action")
-        live_actions = implemented.get("action")
+
+        designed_actions = designed.get("actions")
         if not isinstance(designed_actions, list) or len(designed_actions) != 2:
             raise VerificationError(f"Workset encounter {card_id} must contain exactly two actions")
-        if not isinstance(live_actions, list) or len(live_actions) != 2:
-            raise VerificationError(f"Live encounter {card_id} must contain exactly two actions")
+        live_actions = implemented.get("action")
+        if not isinstance(live_actions, list):
+            raise VerificationError(f"Live encounter {card_id} has no actions")
         live_actions_by_id = {
             action.get("id"): action for action in live_actions if isinstance(action, dict)
         }
-        for index, designed_action in enumerate(designed_actions):
+        for action_index, designed_action in enumerate(designed_actions):
             if not isinstance(designed_action, dict):
-                raise VerificationError(f"Workset action {card_id}:{index} must be a table")
-            action_id = designed_action.get("id")
+                raise VerificationError(
+                    f"Workset action {card_id}:{action_index} must be an object"
+                )
+            action_id = normalized_uuid(
+                designed_action.get("action_id"),
+                f"workset action {card_id}:{action_index}.action_id",
+                require_v4=True,
+            )
             implemented_action = live_actions_by_id.get(action_id)
             if implemented_action is None:
                 raise VerificationError(
-                    f"Designed action {action_id!r} is absent from live encounter {card_id}"
+                    f"Designed action {action_id} is absent from live encounter {card_id}"
                 )
-            for field in AUTHORED_ACTION_FIELDS:
-                designed_value = designed_action.get(field, MISSING)
-                implemented_value = implemented_action.get(field, MISSING)
-                if designed_value != implemented_value:
+            if implemented_action.get("label") != designed_action.get("label"):
+                raise VerificationError(f"Live action {action_id} does not preserve its label")
+            presentation = designed_action.get("presentation")
+            if not isinstance(presentation, dict):
+                raise VerificationError(f"Workset action {action_id} has no presentation")
+            if implemented_action.get("effect-text") != presentation.get("effect_text"):
+                raise VerificationError(
+                    f"Live action {action_id} does not preserve presentation.effect_text"
+                )
+            followup = presentation.get("followup")
+            if followup is None:
+                if "followup-title" in implemented_action or "followup-subtitle" in implemented_action:
                     raise VerificationError(
-                        f"Live action {action_id} does not preserve authored field {field}"
+                        f"Live action {action_id} adds an unplanned followup presentation"
                     )
-            effect_kind = implemented_action.get("effect-kind")
-            if not isinstance(effect_kind, str) or not effect_kind.strip():
-                raise VerificationError(f"Live action {action_id} has no runtime effect-kind")
+            elif (
+                not isinstance(followup, dict)
+                or implemented_action.get("followup-title") != followup.get("title")
+                or implemented_action.get("followup-subtitle") != followup.get("subtitle")
+            ):
+                raise VerificationError(
+                    f"Live action {action_id} does not preserve its followup presentation"
+                )
+
+            effect = designed_action.get("effect")
+            if not isinstance(effect, dict):
+                raise VerificationError(f"Workset action {action_id} has no typed effect")
+            expected_kind = effect.get("runtime_effect_kind")
+            if implemented_action.get("effect-kind") != expected_kind:
+                raise VerificationError(
+                    f"Live action {action_id} does not use runtime effect kind {expected_kind!r}"
+                )
+            if designed_action.get("implementation_status") == "reuse":
+                expected_fields = designed_action.get("expected_live_fields")
+                if not isinstance(expected_fields, dict):
+                    raise VerificationError(
+                        f"Reuse action {action_id} has no expected_live_fields contract"
+                    )
+                for field, expected_value in expected_fields.items():
+                    actual_value = implemented_action.get(field, MISSING)
+                    if actual_value != expected_value:
+                        raise VerificationError(
+                            f"Live action {action_id} does not preserve lowered field {field}"
+                        )
         verified_ids.append(card_id)
 
     return {
-        "workset_encounter_count": len(workset),
+        "workset_encounter_count": len(designed_encounters),
         "verified_encounter_count": len(verified_ids),
         "verified_card_ids": verified_ids,
     }

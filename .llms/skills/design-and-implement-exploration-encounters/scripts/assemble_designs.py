@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate design winners and atomically render scratch TOML and display Markdown."""
+"""Validate Exploration winners and atomically render JSON workset and Markdown."""
 
 from __future__ import annotations
 
@@ -9,15 +9,18 @@ import os
 import re
 import sys
 import tomllib
-import uuid
 from pathlib import Path
 from typing import Any
 
-from select_batch import canonical_uuid, sha256
+from mechanic_ideas import (
+    MechanicCatalogError,
+    action_effect_schema,
+    load_mechanic_catalog,
+    mechanics_by_id,
+)
+from select_batch import SOURCE_KEYS, SelectionError, canonical_uuid, sha256
 
 
-PLACEHOLDER_RE = re.compile(r"\{([a-z][a-z0-9_]*)\}")
-SPECIAL_RE = re.compile(r"\$[A-Z][A-Z0-9_]*")
 WORD_RE = re.compile(r"[^\W_]+(?:['’\-][^\W_]+)*", re.UNICODE)
 PLAYER_REFERENCE_RE = re.compile(
     r"\b(?:i|me|my|mine|myself|we|us|our|ours|ourselves|you|your|yours|"
@@ -26,22 +29,30 @@ PLAYER_REFERENCE_RE = re.compile(
 )
 DEFINITE_ARTICLE_RE = re.compile(r"\bthe\b", re.IGNORECASE)
 ONE_INTRO_RE = re.compile(r"^\s*one\b", re.IGNORECASE)
-STANDARD_PREDICATES = {
-    "Event",
-    "Warrior",
-    "Spirit Animal",
-    "Survivor",
-    "≤2● cost Character",
-}
-SUPPORTED_SPECIALS = {"$OFFERED_CARD", "$DECK_CARD", "$STARTER_CARD"}
-ENTITY_VARIABLES = {"card_id", "card_name"}
-DREAMSIGN_VARIABLES = {"dreamsign", "dreamsign_name"}
+SNAKE_CASE_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 IMPLEMENTATION_NOTE_KEYS = {
     "state_transition",
     "offer_or_selection",
     "persisted_result",
     "outcome",
 }
+STANDARD_PREDICATES = {
+    "CheapCharacter",
+    "Survivor",
+    "SpiritAnimal",
+    "Character",
+    "Warrior",
+    "Event",
+}
+PREDICATE_COMPAT = {
+    "CheapCharacter": "cheap-character",
+    "Survivor": "survivor",
+    "SpiritAnimal": "spirit-animal",
+    "Character": "character",
+    "Warrior": "warrior",
+    "Event": "event",
+}
+TARGET_COMPAT = {"Chosen": "chosen", "Offered": "offered"}
 
 
 class AssemblyError(ValueError):
@@ -91,20 +102,11 @@ def load_json(path: Path, label: str) -> Any:
         ) from error
 
 
-def load_templates(path: Path) -> dict[int, str]:
-    raw = require_list(load_json(path, "Template catalog"), "$templates")
-    templates: dict[int, str] = {}
-    for index, value in enumerate(raw):
-        entry = require_object(value, f"$templates[{index}]")
-        template_id = require_int(entry.get("template_id"), f"$templates[{index}].template_id")
-        template = require_string(entry.get("template"), f"$templates[{index}].template")
-        if template_id in templates:
-            fail(f"$templates[{index}].template_id", "must be unique")
-        templates[template_id] = template
-    return templates
-
-
-def load_canonical_entities(path: Path, array_key: str, label: str) -> dict[str, dict[str, Any]]:
+def load_canonical_entities(
+    path: Path,
+    array_key: str,
+    label: str,
+) -> dict[str, dict[str, Any]]:
     try:
         with path.open("rb") as handle:
             document = tomllib.load(handle)
@@ -116,9 +118,12 @@ def load_canonical_entities(path: Path, array_key: str, label: str) -> dict[str,
     for index, value in enumerate(document.get(array_key, [])):
         if not isinstance(value, dict) or not isinstance(value.get("id"), str):
             continue
-        entity_id = canonical_uuid(
-            value["id"], f"{label}[{index}].id", require_lowercase=False
-        )
+        try:
+            entity_id = canonical_uuid(
+                value["id"], f"{label}[{index}].id", require_lowercase=False
+            )
+        except SelectionError as error:
+            raise AssemblyError(str(error)) from error
         if entity_id in entities:
             raise AssemblyError(f"{label} contains duplicate UUID {entity_id}")
         entities[entity_id] = value
@@ -129,162 +134,91 @@ def load_canonical_entities(path: Path, array_key: str, label: str) -> dict[str,
 
 def load_transfigurations(path: Path) -> set[str]:
     try:
-        source = path.read_text(encoding="utf-8")
+        with path.open("rb") as handle:
+            document = tomllib.load(handle)
     except FileNotFoundError as error:
-        raise AssemblyError(f"Journey type source does not exist: {path}") from error
-    declaration = re.search(
-        r"export\s+type\s+TransfigurationType\s*=\s*(.*?);",
-        source,
-        flags=re.DOTALL,
-    )
-    if declaration is None:
-        raise AssemblyError(f"No TransfigurationType union found in {path}")
-    values = set(re.findall(r'"([^"]+)"', declaration.group(1)))
+        raise AssemblyError(f"Transfiguration catalog does not exist: {path}") from error
+    except tomllib.TOMLDecodeError as error:
+        raise AssemblyError(f"Transfiguration catalog is invalid TOML: {path}: {error}") from error
+    forms = document.get("forms", [])
+    values = {
+        form["id"]
+        for form in forms
+        if isinstance(form, dict) and isinstance(form.get("id"), str)
+    }
     if not values:
-        raise AssemblyError(f"TransfigurationType is empty in {path}")
+        raise AssemblyError(f"Transfiguration catalog contains no forms: {path}")
     return values
 
 
-def validate_entity_reference(
-    value: Any,
+def validate_effect_value(value: Any, path: str) -> None:
+    if value is None or isinstance(value, (str, bool, int, float)):
+        return
+    if isinstance(value, list):
+        for index, entry in enumerate(value):
+            if not isinstance(entry, (str, bool, int, float)) or entry is None:
+                fail(f"{path}[{index}]", "must be a JSON scalar")
+        return
+    fail(path, "must be null, a JSON scalar, or a list of JSON scalars")
+
+
+def validate_known_references(
+    fields: dict[str, Any],
     path: str,
-    entities: dict[str, dict[str, Any]],
     *,
-    source_card_id: str | None = None,
-) -> None:
-    reference = require_object(value, path)
-    if set(reference) != {"id", "display_name"}:
-        fail(path, "must contain exactly id and display_name")
-    entity_id = canonical_uuid(reference.get("id"), f"{path}.id", require_lowercase=False)
-    display_name = require_string(reference.get("display_name"), f"{path}.display_name")
-    canonical = entities.get(entity_id)
-    if canonical is None:
-        fail(f"{path}.id", "does not identify canonical content")
-    if source_card_id is not None and entity_id == source_card_id:
-        fail(f"{path}.id", "must not identify the source card")
-    if display_name != canonical.get("name"):
-        fail(f"{path}.display_name", f"must equal {canonical.get('name')!r}")
-
-
-def validate_predicate(value: Any, path: str, rationale: Any, rationale_path: str) -> None:
-    predicate = require_string(value, path)
-    if predicate == "Character":
-        fail(path, "must not be Character; omit an unrestricted selection")
-    if predicate not in STANDARD_PREDICATES:
-        require_string(rationale, rationale_path)
-
-
-def validate_variables(
-    template: str,
-    action: dict[str, Any],
-    path: str,
     cards: dict[str, dict[str, Any]],
     dreamsigns: dict[str, dict[str, Any]],
     transfigurations: set[str],
     source_card_id: str,
 ) -> None:
-    variables = require_object(action.get("variables"), f"{path}.variables")
-    placeholders = set(PLACEHOLDER_RE.findall(template))
-    if set(variables) != placeholders:
-        missing = sorted(placeholders - set(variables))
-        extra = sorted(set(variables) - placeholders)
-        details = []
-        if missing:
-            details.append(f"missing {missing}")
-        if extra:
-            details.append(f"unexpected {extra}")
-        fail(f"{path}.variables", "; ".join(details))
-
-    rationale = action.get("predicate_exception_rationale")
-    for name, value in variables.items():
-        value_path = f"{path}.variables.{name}"
-        if name in ENTITY_VARIABLES:
-            validate_entity_reference(
-                value, value_path, cards, source_card_id=source_card_id
-            )
-        elif name in DREAMSIGN_VARIABLES:
-            validate_entity_reference(value, value_path, dreamsigns)
-        elif name == "transfiguration":
-            transfiguration = require_string(value, value_path)
-            if transfiguration not in transfigurations:
-                fail(value_path, "must be a canonical transfiguration")
-        elif name == "predicate":
-            validate_predicate(
-                value,
-                value_path,
-                rationale,
-                f"{path}.predicate_exception_rationale",
-            )
-        elif isinstance(value, bool) or not isinstance(value, (str, int, float)):
-            fail(value_path, "must be a JSON string or number")
-
-    specials = set(SPECIAL_RE.findall(template))
-    unknown_specials = specials - SUPPORTED_SPECIALS
-    if unknown_specials:
-        fail(path, f"uses undocumented special variables {sorted(unknown_specials)}")
-    selection = action.get("selection")
-    if selection is not None:
-        selection_object = require_object(selection, f"{path}.selection")
-        if not selection_object:
-            fail(f"{path}.selection", "must be omitted when empty")
-        for token, raw_rule in selection_object.items():
-            if token not in specials:
-                fail(f"{path}.selection.{token}", "is not a special variable in the template")
-            rule = require_object(raw_rule, f"{path}.selection.{token}")
-            if set(rule) != {"predicate"}:
-                fail(f"{path}.selection.{token}", "must contain exactly predicate")
-            validate_predicate(
-                rule.get("predicate"),
-                f"{path}.selection.{token}.predicate",
-                rationale,
-                f"{path}.predicate_exception_rationale",
-            )
-
-    has_nonstandard = any(
-        name == "predicate" and value not in STANDARD_PREDICATES
-        for name, value in variables.items()
-    ) or any(
-        rule.get("predicate") not in STANDARD_PREDICATES
-        for rule in (selection or {}).values()
-        if isinstance(rule, dict)
-    )
-    if "predicate_exception_rationale" in action and not has_nonstandard:
-        fail(
-            f"{path}.predicate_exception_rationale",
-            "must be omitted when every predicate is standard",
-        )
+    if "card_id" in fields:
+        try:
+            card_id = canonical_uuid(fields["card_id"], f"{path}.card_id")
+        except SelectionError as error:
+            raise AssemblyError(str(error)) from error
+        if card_id not in cards:
+            fail(f"{path}.card_id", "does not identify a canonical card")
+        if card_id == source_card_id:
+            fail(f"{path}.card_id", "must not identify the source card")
+    if "dreamsign_id" in fields:
+        try:
+            dreamsign_id = canonical_uuid(fields["dreamsign_id"], f"{path}.dreamsign_id")
+        except SelectionError as error:
+            raise AssemblyError(str(error)) from error
+        if dreamsign_id not in dreamsigns:
+            fail(f"{path}.dreamsign_id", "does not identify a canonical Dreamsign")
+    if "transfiguration" in fields and fields["transfiguration"] not in transfigurations:
+        fail(f"{path}.transfiguration", "must identify a canonical transfiguration form")
 
 
-def display_variable(value: Any, path: str) -> str:
-    if isinstance(value, bool):
-        return "true" if value else "false"
-    if isinstance(value, (str, int, float)):
-        return str(value)
-    if isinstance(value, dict):
-        display_name = value.get("display_name")
-        if isinstance(display_name, str) and display_name.strip():
-            return display_name
-    fail(path, "cannot be rendered as template text")
-
-
-def render_template(template: str, variables: dict[str, Any]) -> str:
-    def replace(match: re.Match[str]) -> str:
-        name = match.group(1)
-        return display_variable(variables[name], f"variables.{name}")
-
-    return PLACEHOLDER_RE.sub(replace, template)
+def compat_fields(fields: dict[str, Any]) -> dict[str, Any]:
+    output: dict[str, Any] = {}
+    for key, value in fields.items():
+        if value is None:
+            continue
+        compat_key = "deck-target" if key == "target" else key.replace("_", "-")
+        if key == "predicate":
+            value = PREDICATE_COMPAT.get(value, value)
+        elif key == "target":
+            value = TARGET_COMPAT.get(value, value)
+        output[compat_key] = value
+    return output
 
 
 def validate_result(
     raw: Any,
     manifest_entry: dict[str, Any],
-    templates: dict[int, str],
+    mechanics: dict[int, dict[str, Any]],
+    model_schema: dict[str, set[str]],
     cards: dict[str, dict[str, Any]],
     dreamsigns: dict[str, dict[str, Any]],
     transfigurations: set[str],
 ) -> dict[str, Any]:
     card = require_object(manifest_entry.get("card"), "$manifest.card")
-    source_card_id = canonical_uuid(card.get("id"), "$manifest.card.id")
+    try:
+        source_card_id = canonical_uuid(card.get("id"), "$manifest.card.id")
+    except SelectionError as error:
+        raise AssemblyError(str(error)) from error
     result = require_object(raw, f"$result[{source_card_id}]")
     allowed_root = {
         "card_id",
@@ -295,7 +229,12 @@ def validate_result(
     }
     if set(result) != allowed_root:
         fail(f"$result[{source_card_id}]", f"must contain exactly {sorted(allowed_root)}")
-    result_card_id = canonical_uuid(result.get("card_id"), f"$result[{source_card_id}].card_id")
+    try:
+        result_card_id = canonical_uuid(
+            result.get("card_id"), f"$result[{source_card_id}].card_id"
+        )
+    except SelectionError as error:
+        raise AssemblyError(str(error)) from error
     if result_card_id != source_card_id:
         fail(f"$result[{source_card_id}].card_id", "must match the request UUID")
 
@@ -309,49 +248,123 @@ def validate_result(
     if ONE_INTRO_RE.search(prose):
         fail(f"$result[{source_card_id}].prose", "must not begin with 'one'")
 
+    requested_action_ids = require_list(
+        manifest_entry.get("action_ids"), f"$manifest.cards[{source_card_id}].action_ids"
+    )
+    if len(requested_action_ids) != 2:
+        fail(f"$manifest.cards[{source_card_id}].action_ids", "must contain exactly two UUIDs")
     actions = require_list(result.get("actions"), f"$result[{source_card_id}].actions")
     if len(actions) != 2:
         fail(f"$result[{source_card_id}].actions", "must contain exactly two actions")
-    validated_actions = []
-    seen_template_ids: set[int] = set()
+
+    validated_actions: list[dict[str, Any]] = []
+    seen_mechanic_ids: set[int] = set()
     for index, raw_action in enumerate(actions):
         path = f"$result[{source_card_id}].actions[{index}]"
         action = require_object(raw_action, path)
         allowed_action = {
+            "action_id",
             "label",
-            "template_id",
-            "variables",
-            "selection",
+            "mechanic_id",
+            "presentation",
+            "effect",
             "predicate_exception_rationale",
             "implementation_notes",
         }
-        forbidden = {"template", "effect_text", "effect-kind", "effect_kind"}
-        for key in action:
-            if key in forbidden:
-                fail(f"{path}.{key}", "is forbidden; canonical wording and runtime kinds are assigned later")
-            if key not in allowed_action:
-                fail(f"{path}.{key}", "is not an allowed design field")
+        if not set(action).issubset(allowed_action):
+            fail(path, f"contains unsupported fields {sorted(set(action) - allowed_action)}")
+        required_action = allowed_action - {"predicate_exception_rationale"}
+        if not required_action.issubset(action):
+            fail(path, f"is missing fields {sorted(required_action - set(action))}")
+
+        try:
+            action_id = canonical_uuid(
+                action.get("action_id"), f"{path}.action_id", require_v4=True
+            )
+            requested_id = canonical_uuid(
+                requested_action_ids[index],
+                f"$manifest.cards[{source_card_id}].action_ids[{index}]",
+                require_v4=True,
+            )
+        except SelectionError as error:
+            raise AssemblyError(str(error)) from error
+        if action_id != requested_id:
+            fail(f"{path}.action_id", "must equal the pre-minted request UUID at this position")
+
         label = require_string(action.get("label"), f"{path}.label")
         if not 2 <= len(words(label)) <= 5:
             fail(f"{path}.label", "must contain 2 to 5 words")
         if len(label) > 32:
             fail(f"{path}.label", "must contain at most 32 characters")
-        template_id = require_int(action.get("template_id"), f"{path}.template_id")
-        template = templates.get(template_id)
-        if template is None:
-            fail(f"{path}.template_id", "is not in data/templates.json")
-        if template_id in seen_template_ids:
-            fail(f"{path}.template_id", "must differ from the other action")
-        seen_template_ids.add(template_id)
-        validate_variables(
-            template,
-            action,
-            path,
-            cards,
-            dreamsigns,
-            transfigurations,
-            source_card_id,
+
+        mechanic_id = require_int(action.get("mechanic_id"), f"{path}.mechanic_id")
+        mechanic = mechanics.get(mechanic_id)
+        if mechanic is None:
+            fail(f"{path}.mechanic_id", "is absent from the mechanic idea catalog")
+        if mechanic_id in seen_mechanic_ids:
+            fail(f"{path}.mechanic_id", "must differ from the other action")
+        seen_mechanic_ids.add(mechanic_id)
+
+        presentation = require_object(action.get("presentation"), f"{path}.presentation")
+        if set(presentation) != {"effect_text", "followup"}:
+            fail(f"{path}.presentation", "must contain exactly effect_text and followup")
+        require_string(presentation.get("effect_text"), f"{path}.presentation.effect_text")
+        followup = presentation.get("followup")
+        if followup is not None:
+            followup = require_object(followup, f"{path}.presentation.followup")
+            if set(followup) != {"title", "subtitle"}:
+                fail(f"{path}.presentation.followup", "must contain exactly title and subtitle")
+            require_string(followup.get("title"), f"{path}.presentation.followup.title")
+            require_string(followup.get("subtitle"), f"{path}.presentation.followup.subtitle")
+
+        effect = require_object(action.get("effect"), f"{path}.effect")
+        if set(effect) != {"variant", "fields", "runtime_effect_kind"}:
+            fail(f"{path}.effect", "must contain exactly variant, fields, and runtime_effect_kind")
+        variant = require_string(effect.get("variant"), f"{path}.effect.variant")
+        runtime_effect_kind = require_string(
+            effect.get("runtime_effect_kind"), f"{path}.effect.runtime_effect_kind"
         )
+        fields = require_object(effect.get("fields"), f"{path}.effect.fields")
+        for field_name, field_value in fields.items():
+            if not isinstance(field_name, str) or not SNAKE_CASE_RE.fullmatch(field_name):
+                fail(f"{path}.effect.fields", "field names must use snake_case")
+            validate_effect_value(field_value, f"{path}.effect.fields.{field_name}")
+        implementation = mechanic["implementation"]
+        if implementation["status"] == "reuse":
+            if variant != implementation["effect_variant"]:
+                fail(
+                    f"{path}.effect.variant",
+                    f"must equal {implementation['effect_variant']} for mechanic {mechanic_id}",
+                )
+            if runtime_effect_kind != implementation["runtime_effect_kind"]:
+                fail(
+                    f"{path}.effect.runtime_effect_kind",
+                    f"must equal {implementation['runtime_effect_kind']} for mechanic {mechanic_id}",
+                )
+            if set(fields) != model_schema[variant]:
+                fail(
+                    f"{path}.effect.fields",
+                    f"must contain exactly {sorted(model_schema[variant])} for {variant}",
+                )
+        validate_known_references(
+            fields,
+            f"{path}.effect.fields",
+            cards=cards,
+            dreamsigns=dreamsigns,
+            transfigurations=transfigurations,
+            source_card_id=source_card_id,
+        )
+
+        predicate = fields.get("predicate")
+        rationale = action.get("predicate_exception_rationale")
+        if isinstance(predicate, str) and predicate not in STANDARD_PREDICATES:
+            require_string(rationale, f"{path}.predicate_exception_rationale")
+        elif "predicate_exception_rationale" in action:
+            fail(
+                f"{path}.predicate_exception_rationale",
+                "must be omitted unless a nonstandard predicate is proposed",
+            )
+
         notes = require_object(action.get("implementation_notes"), f"{path}.implementation_notes")
         if set(notes) != IMPLEMENTATION_NOTE_KEYS:
             fail(
@@ -360,7 +373,12 @@ def validate_result(
             )
         for key in sorted(IMPLEMENTATION_NOTE_KEYS):
             require_string(notes.get(key), f"{path}.implementation_notes.{key}")
-        validated_actions.append(action)
+
+        validated = dict(action)
+        validated["implementation_status"] = implementation["status"]
+        if implementation["status"] == "reuse":
+            validated["expected_live_fields"] = compat_fields(fields)
+        validated_actions.append(validated)
 
     rationale = require_string(
         result.get("selection_rationale"), f"$result[{source_card_id}].selection_rationale"
@@ -381,91 +399,48 @@ def validate_result(
         if set(alternative) != {"summary", "rejected_because"}:
             fail(path, "must contain exactly summary and rejected_because")
         summary = require_string(alternative.get("summary"), f"{path}.summary")
-        rejected_because = require_string(
-            alternative.get("rejected_because"), f"{path}.rejected_because"
-        )
+        rejected = require_string(alternative.get("rejected_because"), f"{path}.rejected_because")
         if "\n" in summary or len(words(summary)) > 12:
             fail(f"{path}.summary", "must be one line containing at most 12 words")
-        if "\n" in rejected_because or len(words(rejected_because)) > 20:
-            fail(
-                f"{path}.rejected_because",
-                "must be one line containing at most 20 words",
-            )
-        normalized_summary = summary.casefold()
-        if normalized_summary in seen_summaries:
+        if "\n" in rejected or len(words(rejected)) > 20:
+            fail(f"{path}.rejected_because", "must be one line containing at most 20 words")
+        normalized = summary.casefold()
+        if normalized in seen_summaries:
             fail(f"{path}.summary", "must be distinct")
-        seen_summaries.add(normalized_summary)
+        seen_summaries.add(normalized)
 
     return {**result, "actions": validated_actions}
-
-
-def toml_key(key: str) -> str:
-    return key if re.fullmatch(r"[A-Za-z0-9_-]+", key) else json.dumps(key)
-
-
-def toml_value(value: Any, path: str = "value") -> str:
-    if isinstance(value, str):
-        return json.dumps(value, ensure_ascii=False)
-    if isinstance(value, bool):
-        return str(value).lower()
-    if isinstance(value, (int, float)) and not isinstance(value, bool):
-        return str(value)
-    if isinstance(value, list):
-        return "[" + ", ".join(toml_value(entry, path) for entry in value) + "]"
-    if isinstance(value, dict):
-        fields = [
-            f"{toml_key(str(key))} = {toml_value(entry, f'{path}.{key}')}"
-            for key, entry in value.items()
-        ]
-        return "{}" if not fields else "{ " + ", ".join(fields) + " }"
-    fail(path, "cannot be represented in TOML")
 
 
 def render_workset(
     manifest_entries: list[dict[str, Any]],
     results: dict[str, dict[str, Any]],
-    templates: dict[int, str],
 ) -> str:
-    lines = [
-        "# Validated winning Exploration designs.",
-        "# Scratch authoring scaffold: runtime effect fields are intentionally pending.",
-        "# Do not commit this file or copy it wholesale over the live catalog.",
-    ]
+    encounters = []
     for entry in manifest_entries:
-        card = entry["card"]
-        card_id = card["id"]
+        card_id = entry["card"]["id"]
         result = results[card_id]
-        lines.extend(
-            [
-                "",
-                "[[encounter]]",
-                f"card-id = {toml_value(card_id)}",
-                f"prose = {toml_value(result['prose'])}",
-            ]
+        encounters.append(
+            {
+                "card_id": card_id,
+                "prose": result["prose"],
+                "actions": result["actions"],
+            }
         )
-        for action in result["actions"]:
-            template_id = action["template_id"]
-            action_id = f"{card_id}:template-{template_id}"
-            lines.extend(
-                [
-                    "",
-                    "[[encounter.action]]",
-                    f"id = {toml_value(action_id)}",
-                    f"label = {toml_value(action['label'])}",
-                    f"effect-text = {toml_value(render_template(templates[template_id], action['variables']))}",
-                    f"template-id = {template_id}",
-                    f"template-variables = {toml_value(action['variables'], 'template-variables')}",
-                ]
-            )
-            if "selection" in action:
-                lines.append(f"selection = {toml_value(action['selection'], 'selection')}")
-    return "\n".join(lines) + "\n"
+    return json.dumps(
+        {
+            "schema_version": 2,
+            "purpose": "Validated scratch contract for implementation in data/exploration.ron.",
+            "encounters": encounters,
+        },
+        ensure_ascii=False,
+        indent=2,
+    ) + "\n"
 
 
 def render_display(
     manifest_entries: list[dict[str, Any]],
     results: dict[str, dict[str, Any]],
-    templates: dict[int, str],
 ) -> str:
     sections = []
     for entry in manifest_entries:
@@ -481,8 +456,9 @@ def render_display(
             result["prose"],
         ]
         for action in result["actions"]:
-            effect = render_template(templates[action["template_id"]], action["variables"])
-            lines.append(f"- ***{action['label']}*** — {effect}")
+            lines.append(
+                f"- ***{action['label']}*** — {action['presentation']['effect_text']}"
+            )
         sections.append("\n".join(lines))
     return "\n\n".join(sections) + "\n"
 
@@ -506,37 +482,56 @@ def assemble(
     display_output: Path,
 ) -> dict[str, Any]:
     manifest = require_object(load_json(manifest_path, "Manifest"), "$manifest")
-    if manifest.get("schema_version") != 1:
-        fail("$manifest.schema_version", "must equal 1")
+    if manifest.get("schema_version") != 2:
+        fail("$manifest.schema_version", "must equal 2")
     repository_raw = require_object(manifest.get("repository"), "$manifest.repository")
     digests = require_object(manifest.get("source_sha256"), "$manifest.source_sha256")
-    required_sources = {"cards", "dreamsigns", "exploration", "templates", "journey_types"}
-    if set(repository_raw) != required_sources or set(digests) != required_sources:
-        fail("$manifest.repository", f"must describe exactly {sorted(required_sources)}")
-    repository = {key: Path(require_string(repository_raw[key], f"$manifest.repository.{key}")) for key in required_sources}
+    if set(repository_raw) != set(SOURCE_KEYS) or set(digests) != set(SOURCE_KEYS):
+        fail("$manifest.repository", f"must describe exactly {sorted(SOURCE_KEYS)}")
+    repository = {
+        key: Path(require_string(repository_raw[key], f"$manifest.repository.{key}"))
+        for key in SOURCE_KEYS
+    }
     for key, path in repository.items():
-        actual = sha256(path)
+        try:
+            actual = sha256(path)
+        except SelectionError as error:
+            raise AssemblyError(str(error)) from error
         if actual != digests[key]:
             fail(f"$manifest.source_sha256.{key}", f"source changed after selection: {path}")
+
+    try:
+        catalog = load_mechanic_catalog(
+            repository["mechanic_ideas"], model_path=repository["exploration_model"]
+        )
+        model_schema = action_effect_schema(repository["exploration_model"])
+    except MechanicCatalogError as error:
+        raise AssemblyError(str(error)) from error
+    mechanics = mechanics_by_id(catalog)
+    cards = load_canonical_entities(repository["cards_compat"], "cards", "Card catalog")
+    dreamsigns = load_canonical_entities(
+        repository["dreamsigns_compat"], "dreamsign", "Dreamsign catalog"
+    )
+    transfigurations = load_transfigurations(repository["transfiguration_compat"])
 
     manifest_entries = require_list(manifest.get("cards"), "$manifest.cards")
     if not manifest_entries:
         fail("$manifest.cards", "must not be empty")
-    templates = load_templates(repository["templates"])
-    cards = load_canonical_entities(repository["cards"], "cards", "Card catalog")
-    dreamsigns = load_canonical_entities(repository["dreamsigns"], "dreamsign", "Dreamsign catalog")
-    transfigurations = load_transfigurations(repository["journey_types"])
-
     expected_ids: list[str] = []
     for index, entry_value in enumerate(manifest_entries):
         entry = require_object(entry_value, f"$manifest.cards[{index}]")
         card = require_object(entry.get("card"), f"$manifest.cards[{index}].card")
-        card_id = canonical_uuid(card.get("id"), f"$manifest.cards[{index}].card.id")
+        try:
+            card_id = canonical_uuid(card.get("id"), f"$manifest.cards[{index}].card.id")
+        except SelectionError as error:
+            raise AssemblyError(str(error)) from error
         if card_id in expected_ids:
             fail(f"$manifest.cards[{index}].card.id", "must be unique")
         expected_ids.append(card_id)
         art_path = Path(require_string(entry.get("art_path"), f"$manifest.cards[{index}].art_path"))
-        if sha256(art_path) != require_string(entry.get("art_sha256"), f"$manifest.cards[{index}].art_sha256"):
+        if sha256(art_path) != require_string(
+            entry.get("art_sha256"), f"$manifest.cards[{index}].art_sha256"
+        ):
             fail(f"$manifest.cards[{index}].art_sha256", "art changed after selection")
 
     if not results_dir.is_dir():
@@ -549,24 +544,20 @@ def assemble(
         raise AssemblyError(f"Result files do not match manifest; missing={missing}, extra={extra}")
 
     results: dict[str, dict[str, Any]] = {}
-    for entry_value in manifest_entries:
-        entry = require_object(entry_value, "$manifest.cards[]")
-        card = require_object(entry.get("card"), "$manifest.cards[].card")
-        card_id = canonical_uuid(card.get("id"), "$manifest.cards[].card.id")
-        result_path = results_dir / f"{card_id}.json"
+    for entry in manifest_entries:
+        card_id = entry["card"]["id"]
         results[card_id] = validate_result(
-            load_json(result_path, f"Result for {card_id}"),
+            load_json(results_dir / f"{card_id}.json", f"Result for {card_id}"),
             entry,
-            templates,
+            mechanics,
+            model_schema,
             cards,
             dreamsigns,
             transfigurations,
         )
 
-    workset = render_workset(manifest_entries, results, templates)
-    display = render_display(manifest_entries, results, templates)
-    atomic_write(workset_output, workset)
-    atomic_write(display_output, display)
+    atomic_write(workset_output, render_workset(manifest_entries, results))
+    atomic_write(display_output, render_display(manifest_entries, results))
     return {
         "workset": str(workset_output.resolve()),
         "display": str(display_output.resolve()),

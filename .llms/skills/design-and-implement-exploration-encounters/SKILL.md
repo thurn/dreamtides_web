@@ -1,198 +1,172 @@
 ---
 name: design-and-implement-exploration-encounters
-description: Design a random or UUID-selected batch of Dreamtides Exploration encounters and ship the winning designs directly into data/exploration.toml as complete replayable behavior. Use when expanding the live Exploration catalog, designing and implementing encounter batches in one pass, porting new card-art encounters straight to production, or adding the effect kinds, Cumulus choices, persisted outcomes, animations, logs, tests, and browser QA required by new Exploration mechanics.
+description: Design a random or UUID-selected batch of Dreamtides Exploration encounters and ship the winning designs into canonical data/exploration.ron as complete replayable behavior. Use when expanding the live Exploration catalog, designing and implementing encounter batches in one pass, porting card-art encounters to production, or adding the typed effects, reward selection, Cumulus choices, persisted outcomes, animations, logs, tests, and browser QA required by new Exploration mechanics.
 ---
 
-# Design and Implement Exploration Encounters
+# Design and implement Exploration encounters
 
-Ship one implementation-ready encounter for each selected canonical card. The
-default batch is five cards. Use private design competition for quality: each
-designer compares five concepts and emits only the winner plus four short
-rejection notes. Complete
-the selected designs as live, tested behavior in the same worktree.
+Run one pipeline from card selection through staged production implementation. Each
+selected card gets one encounter with two actions. The live catalog accepts one to
+four actions per encounter; two is the design policy for encounters created by this
+skill.
 
-## Establish the isolated run
+## Required references
 
-1. Invoke `$wt` and create a fresh worktree before reading repository data.
-   Continue follow-up work in that same unpromoted worktree.
-2. From the worktree root, run `npm install`, then
-   `scripts/regenerate-assets.sh` as required by the repository instructions.
-3. Create an empty temporary run directory outside the repository.
-4. Select the batch and create canonical per-card requests:
+Read these files completely before starting:
 
-   ```bash
-   python3 .llms/skills/design-and-implement-exploration-encounters/scripts/select_batch.py \
-     --run-dir <empty-run-directory>
-   ```
+- `references/design-contract.md`
+- `references/implementation-guide.md`
+- `references/mechanic-ideas.md`
 
-   The default is five random cards absent from live Exploration. Use
-   `--batch-size <positive-count>` or `--seed <integer>` when requested. For an
-   explicit set, add one `--card-id <canonical-uuid>` per card; explicit UUIDs
-   replace random selection. Stop if a requested UUID already has a live
-   encounter or fewer eligible cards exist than requested.
+The machine-readable mechanic library is
+`references/mechanic-ideas.json`. Its integer IDs identify design ideas. They are
+not runtime identifiers and do not belong in `ActionDefinition.id`.
+Validate the catalog and its rendered reference with:
 
-The selector writes `manifest.json`, `requests/`, and `results/`. It includes
-the resolved full-size artwork path in every request and records source digests
-so completed designs cannot be assembled against changed catalogs.
-
-## Run one designer per card
-
-Read [references/design-contract.md](references/design-contract.md) completely
-before dispatch. Spawn exactly one design subagent for each selected UUID and
-run them concurrently up to available capacity. Give each agent only its own
-request path, result path, the design-contract path, and this assignment:
-
-```text
-Design one implementation-ready Dreamtides Exploration encounter for the
-canonical request at <request-path>. Read and follow <design-contract-path>
-completely. Actually inspect the request's full-size art. Privately generate
-and rank five complete two-action concepts, then write only the winning design
-and four concise rejected-alternative notes to <result-path> using the exact
-JSON contract. Do not edit repository files or any other result. Report only
-the card UUID and result path.
+```bash
+python3 .llms/skills/design-and-implement-exploration-encounters/scripts/mechanic_ideas.py
 ```
 
-Design agents may read canonical repository data but must not edit it. Keep
-cards UUID-backed throughout. Wait for every result. If validation fails, send
-the precise error to that card's original agent for repair; never substitute a
-different card or accept a partial batch.
+## 1. Establish the worktree
 
-Assemble all winners atomically:
+Follow repository instructions and use the `wt` skill unless the user explicitly
+requests work on master. Run dependency installation and asset regeneration in the
+fresh worktree before selecting a batch. Keep all implementation and follow-up work
+in that worktree.
+
+Create a unique empty scratch directory under `/tmp`, for example:
+
+```bash
+RUN_DIR="$(mktemp -d /tmp/exploration-encounters.XXXXXX)"
+```
+
+Scratch requests, results, worksets, and displays stay outside version control.
+
+## 2. Select the batch
+
+Run:
+
+```bash
+python3 .llms/skills/design-and-implement-exploration-encounters/scripts/select_batch.py \
+  --run-dir "$RUN_DIR" \
+  --batch-size 5 \
+  --seed 12345
+```
+
+For explicit cards, repeat `--card-id <canonical-card-uuid>`. Card names are
+display-only; all selection and identity use UUIDs.
+
+The selector:
+
+- excludes card UUIDs already present in generated `data/exploration.toml`;
+- resolves and hashes each full-size artwork;
+- hashes canonical RON, generated compatibility data, the mechanic library, the
+  Rust Exploration model, and the editor effect schema;
+- pre-mints two lowercase RFC 4122 UUIDv4 action IDs for each request; and
+- writes one request per card plus a manifest.
+
+Treat request paths and UUIDs as immutable run inputs.
+
+## 3. Design one winner per card
+
+Use one independent designer subagent per request when parallel agent work is
+available. Give each designer only its request path, result path, and the design
+contract. The designer must inspect the full-size artwork, read the complete
+mechanic library, evaluate five distinct two-mechanic pairings, and write only the
+winning result JSON.
+
+Each result must preserve the two pre-minted action UUIDs in request order. Every
+action chooses a mechanic idea, owns its label and presentation, and declares the
+typed RON effect variant, exact source field names, and runtime compatibility kind.
+For a `reuse` idea these values must match the mechanic catalog. A
+`vertical_slice` idea may propose a new or extended variant and requires the full
+implementation described below.
+
+## 4. Assemble the validated workset
+
+After every result exists, run:
 
 ```bash
 python3 .llms/skills/design-and-implement-exploration-encounters/scripts/assemble_designs.py \
-  --manifest <run-directory>/manifest.json \
-  --results-dir <run-directory>/results \
-  --workset-output <run-directory>/encounter_workset.toml \
-  --display-output <run-directory>/display.md
+  --manifest "$RUN_DIR/manifest.json" \
+  --results-dir "$RUN_DIR/results" \
+  --workset-output "$RUN_DIR/encounter-workset.json" \
+  --display-output "$RUN_DIR/display.md"
 ```
 
-The assembler validates every card, artwork path, template, variable, entity
-reference, selection, prose field, action label, alternative note, and
-implementation note before writing either output. It rejects stale source
-digests, missing or extra result files, copied template wording, source-card
-targets, and duplicate templates within an encounter. Treat the generated TOML
-as scratch authoring input; never copy it wholesale over live data or commit the
-temporary run directory.
+Assembly is atomic. It rejects stale source hashes, missing or extra results,
+changed action UUIDs, invalid mechanic references, mismatched current effect
+variants or fields, bad canonical content references, and prose/copy violations.
 
-## Triage implementation complexity
+Show `display.md` to the user as an intermediate design checkpoint, then continue
+directly to implementation unless the user asks to pause.
 
-Read [references/implementation-guide.md](references/implementation-guide.md)
-before classifying or changing mechanics. For each action, compare its required
-semantics—not its wording—with existing effect kinds across offer preparation,
-selection payload, state transition, persisted result, logging, and outcome
-presentation.
+## 5. Implement canonical behavior
 
-Classify each winning design:
+Use the workset as a scratch contract. Add each encounter to the flat list in
+`data/exploration.ron` with `EncounterDefinition`, `ActionDefinition`,
+`ActionPresentation`, and typed `ActionEffect` values. Preserve card UUIDs, action
+UUIDs, prose, labels, effect text, and follow-up presentation exactly.
 
-- **Reuse-only:** Both actions are semantically identical to existing effect
-  kinds, require only authored fields already supported by the editor/compiler,
-  and their existing persisted outcome paths satisfy the complete animation and
-  logging contracts. The operator may author and verify these encounters
-  inline. Do not spawn an implementation agent merely to paste TOML.
-- **Vertical-slice:** Any action adds or extends a state transition, minted
-  offer, selection shape, persisted result, log schema, semantic outcome,
-  dedicated animation, or nontrivial Cumulus interaction. Group encounters by
-  shared mechanic family and delegate each group to one implementation agent.
-  A major mechanic must not be implemented inline.
+For `reuse` mechanics, author the declared current effect variant with the declared
+fields. For `vertical_slice` mechanics, implement the complete slice:
 
-Use one implementation agent per semantic mechanic family, not per card. Run
-implementation assignments sequentially by default because the authored-data
-schema, effect union, provider, view model, screen, and logging adapter are
-shared integration points. Parallelize only when file ownership is proven
-disjoint and no exhaustive type, registry, reducer, or catalog file overlaps.
+1. typed source model and compatibility lowering;
+2. generated-data validation and editor schema/bridge support;
+3. reward offer or selection preparation with stable content signatures;
+4. intent-event validation and replayable state transitions;
+5. persisted offered and selected identifiers or other outcome data;
+6. Cumulus follow-up and outcome presentation, including reduced motion behavior;
+7. reconstruction-grade journey logging; and
+8. deterministic synthetic tests for source, generation, runtime, replay, UI state,
+   and logging.
 
-Give each implementation agent the relevant request/result paths, scratch
-workset, implementation-guide path, and this assignment:
+Reuse a runtime kind only when its full semantics match. A shared chooser must flow
+through canonical reward mechanic IDs and compatible selection policy IDs.
 
-```text
-Implement the assigned Exploration encounter UUIDs from <workset-path> in this
-worktree. Read and follow <implementation-guide-path> completely. Own the full
-vertical slice for the assigned mechanic family: authored validation, asset
-compilation, typed runtime data, deterministic persisted offers and resolution,
-UUID-only intent, logging, semantic Cumulus outcome, dedicated animation,
-reduced motion, synthetic tests, live exploration.toml entries, generated
-assets, and focused verification. Do not leave TODOs or partial effect paths.
-Report changed files, focused checks, and unresolved blockers.
+Run the game-data compiler after RON or model changes:
+
+```bash
+npm run game-data:compile
 ```
 
-Review every implementation-agent diff before proceeding. Repair omissions in
-the same assignment when practical. The operator owns cross-group integration,
-reuse-only entries, global action-ID uniqueness, final generated output, and
-end-to-end verification.
+Generated `data/exploration.toml` is a compatibility output and verification input.
 
-## Complete the live vertical slice
+## 6. Verify the implementation
 
-For every winner:
-
-1. Add exactly one encounter with exactly two actions to
-   `data/exploration.toml`. Preserve `template-id`,
-   `template-variables`, optional `selection`, rendered `effect-text`, and the
-   generated globally unique action IDs unless a structural conflict requires a
-   deterministic UUID-based replacement.
-2. Reuse an effect kind only when all runtime semantics match. Implement every
-   new or extended kind through editor metadata, compilation, types, persisted
-   room-event state, deterministic provider behavior, UUID-only actions,
-   reconstructable logs, view models, UI, and outcome animation.
-3. Invoke `$cumulus` before changing Exploration UI. Game flow must fold from
-   the room event log; React state may sequence a resolved presentation but may
-   not gate shared behavior.
-4. Persist every minted choice and exact result needed for replay, explanation,
-   and presentation. Resolve names only at the display boundary.
-5. Give every successful action a dedicated semantic outcome sourced from its
-   persisted resolution. Picker UI, generic success copy, and closing the card
-   are not outcomes.
-
-Do not defer an in-scope broken dependency as pre-existing. Record only
-unrelated pre-existing issues in `pre-existing-issues.txt` and commit that file
-with the work.
-
-## Verify every encounter and action
-
-After live TOML is complete, run:
+Run:
 
 ```bash
 python3 .llms/skills/design-and-implement-exploration-encounters/scripts/verify_live.py \
-  --workset <run-directory>/encounter_workset.toml
+  --workset "$RUN_DIR/encounter-workset.json"
 ```
 
-Then:
+The verifier checks the full generated catalog for one-to-four-action cardinality
+and globally unique UUIDv4 action IDs. For the workset, it requires the designed two
+actions and compares UUIDs, prose, labels, presentation, runtime kinds, and lowered
+fields for reused mechanics.
 
-1. Run focused synthetic tests for authored compilation, offer minting,
-   deterministic resolution and replay, logging, semantic view-model output,
-   interaction, and each exact outcome animation.
-2. Run `scripts/regenerate-assets.sh` and inspect tracked output.
-3. Exercise every new action through the normal player workflow with
-   `agent-browser` on a non-default port using
-   `/?goto=exploration&card=<canonical-uuid>`.
-4. Assert the persisted state change, resolution, semantic outcome attributes,
-   animation completion/exit, responsive geometry, accessible result, reduced
-   motion behavior, and an empty `window.__caps` error buffer.
-5. Capture only the smallest desktop/mobile/outcome evidence set needed for
-   distinct visual risks. Keep image artifacts out of version control.
-6. Run `npm run review`. For major implementation work, request the repository's
-   single independent review and fix confirmed findings.
+Run focused tests while iterating, then `npm run review`. Run browser QA for runtime
+or presentation changes using the repository's isolated-session workflow. Exercise
+the normal player path, inspect `window.__caps`, and check both ordinary and
+follow-up/outcome states. Add targeted screenshots only when presentation changed.
 
-Do not accept a batch because TOML compiles while an effect branch, log field,
-selection contract, outcome, animation, test, or normal-player workflow remains
-pending.
+## 7. Stage and hand off
 
-## Deliver
+Stage only the completed production, test, documentation, and generated files in
+the worktree. Exclude scratch artifacts and images. Inspect the staged diff and ask
+for approval to promote through the `wt` workflow. Commit and promotion happen only
+after that approval.
 
-Confirm every manifest UUID appears exactly once in live Exploration and every
-scratch workset action maps to a runtime-complete live action. Commit all
-changes with a detailed message and push the worktree branch immediately.
-Return the complete `display.md`, relevant QA evidence, and the `$wt`
-promotion handoff. Do not commit scratch requests, design results, worksets,
-display files, or screenshots.
+## Stop conditions
 
-## Invariants
+Stop and report the blocker when:
 
-- Select, compare, persist, log, and test cards by canonical UUID, never name.
-- Never write the candidate catalog during this workflow.
-- Never implement before every selected design validates atomically.
-- Never infer mechanics from labels, prose, effect text, template IDs, or names.
-- Never mint shared randomness during React rendering or player resolution.
-- Never let a design agent edit repository data or an implementation agent own
-  only part of a new effect family.
-- Never finish with temporary designs but no committed, pushed live behavior.
+- a requested UUID is absent from canonical card data or is already represented;
+- full-size art is missing or ambiguous;
+- the source manifest changes during design;
+- a designer cannot produce schema-valid output after one repair attempt;
+- canonical compilation fails;
+- the live verifier fails;
+- deterministic tests, browser QA, or diff-aware review fail; or
+- a vertical slice cannot be made replayable and reconstructable within scope.

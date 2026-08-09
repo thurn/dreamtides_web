@@ -1,0 +1,748 @@
+{
+  "schema_version": 1,
+  "purpose": "A complete design-only library of reusable and aspirational Exploration mechanic ideas recovered from the original encounter brainstorming.",
+  "mechanics": [
+    {
+      "id": 1,
+      "concept": "Gain {essence} essence",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 2,
+      "concept": "Gain a random amount of essence between {essence1} and {essence2}",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 3,
+      "concept": "Purge a chosen card",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "PurgeSelected",
+        "runtime_effect_kind": "purge-selected"
+      }
+    },
+    {
+      "id": 4,
+      "concept": "Purge a chosen {predicate} card",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "PurgeSelected",
+        "runtime_effect_kind": "purge-selected"
+      }
+    },
+    {
+      "id": 5,
+      "concept": "Purge up to {count} chosen cards",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "PurgeSelected",
+        "runtime_effect_kind": "purge-selected"
+      }
+    },
+    {
+      "id": 6,
+      "concept": "Purge up to {count} chosen {predicate} cards",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "PurgeSelected",
+        "runtime_effect_kind": "purge-selected"
+      }
+    },
+    {
+      "id": 7,
+      "concept": "Purge a chosen {predicate} card and gain a random {predicate} replacement",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "ReplaceSelected",
+        "runtime_effect_kind": "replace-selected"
+      }
+    },
+    {
+      "id": 8,
+      "concept": "Purge up to {count} chosen {predicate} cards and gain a random {predicate} replacement for each card purged",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 9,
+      "concept": "Gain a random {predicate} card",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "GainRandomCards",
+        "runtime_effect_kind": "gain-random-cards"
+      }
+    },
+    {
+      "id": 10,
+      "concept": "Gain {card_id}",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "GainNamedCard",
+        "runtime_effect_kind": "gain-card"
+      }
+    },
+    {
+      "id": 11,
+      "concept": "Gain $OFFERED_CARD",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "GainGeneratedCard",
+        "runtime_effect_kind": "gain-offered-card"
+      }
+    },
+    {
+      "id": 12,
+      "concept": "Gain {count} copies of $OFFERED_CARD",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "GainGeneratedCard",
+        "runtime_effect_kind": "gain-offered-card"
+      }
+    },
+    {
+      "id": 13,
+      "concept": "Gain {count} random {predicate} cards",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "GainRandomCards",
+        "runtime_effect_kind": "gain-random-cards"
+      }
+    },
+    {
+      "id": 14,
+      "concept": "Draft a {predicate} from {offer_count} choices",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "DraftCard",
+        "runtime_effect_kind": "draft-card"
+      }
+    },
+    {
+      "id": 15,
+      "concept": "Draft a {predicate} from {offer_count} choices and gain {count} copies of it",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "DraftCard",
+        "runtime_effect_kind": "draft-card"
+      }
+    },
+    {
+      "id": 16,
+      "concept": "Take any number of {predicate} cards from {offer_count} choices",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "TakeCards",
+        "runtime_effect_kind": "take-cards"
+      }
+    },
+    {
+      "id": 17,
+      "concept": "Apply a transfiguration to a chosen card",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "TransfigureSelected",
+        "runtime_effect_kind": "transfigure-selected"
+      }
+    },
+    {
+      "id": 18,
+      "concept": "Apply {transfiguration} to a chosen card",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "TransfigureFixedSelected",
+        "runtime_effect_kind": "transfigure-fixed-selected"
+      }
+    },
+    {
+      "id": 19,
+      "concept": "Apply {transfiguration} to $DECK_CARD",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "TransfigureFixedSelected",
+        "runtime_effect_kind": "transfigure-fixed-selected"
+      }
+    },
+    {
+      "id": 20,
+      "concept": "Apply a transfiguration to {count} chosen {predicate} cards",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 21,
+      "concept": "Apply {transfiguration} to {count} chosen {predicate} cards",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 22,
+      "concept": "Apply a transfiguration to {count} random {predicate} cards",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 23,
+      "concept": "Apply {transfiguration} to {count} random {predicate} cards",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 24,
+      "concept": "Transfigure {count} random starter cards",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 25,
+      "concept": "Transfigure all starter cards",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 27,
+      "concept": "Gain {dreamsign_name}",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "GainDreamsign",
+        "runtime_effect_kind": "gain-dreamsign"
+      }
+    },
+    {
+      "id": 28,
+      "concept": "Gain a random dreamsign",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "GainRandomDreamsign",
+        "runtime_effect_kind": "gain-random-dreamsign"
+      }
+    },
+    {
+      "id": 29,
+      "concept": "Gain one of 3 offered dreamsigns",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 30,
+      "concept": "Replace a chosen dreamsign with one of 3 offered dreamsigns",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 32,
+      "concept": "Purge $STARTER_CARD",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 33,
+      "concept": "Purge a random starter card",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 34,
+      "concept": "Purge a random starter card and gain a {predicate} card",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 35,
+      "concept": "Purge all starter cards and replace each one with a {predicate} card",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 36,
+      "concept": "Choose one of {pack_count} packs of {pack_size} {predicate} cards to add to your deck",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "ChoosePack",
+        "runtime_effect_kind": "choose-pack"
+      }
+    },
+    {
+      "id": 37,
+      "concept": "The next draft or shop site you visit will contain transfigured cards",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "TransfigureNextDraftOrShop",
+        "runtime_effect_kind": "transfigure-next-draft-or-shop"
+      }
+    },
+    {
+      "id": 38,
+      "concept": "Draw {count} additional cards at the start of your next battle",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "NextBattleOpeningHand",
+        "runtime_effect_kind": "next-battle-opening-hand"
+      }
+    },
+    {
+      "id": 39,
+      "concept": "Gain {count} additional energy at the start of your next battle",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "NextBattleStartingEnergy",
+        "runtime_effect_kind": "next-battle-starting-energy"
+      }
+    },
+    {
+      "id": 40,
+      "concept": "Transfigure all cards in your deck",
+      "balance_class": "unique_effect",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 41,
+      "concept": "Add a duplication site to this dreamscape",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 42,
+      "concept": "Add a card market site to this dreamscape",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 43,
+      "concept": "Add a dreamsign bazaar site to this dreamscape",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 44,
+      "concept": "Add a transfiguration site to this dreamscape",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 45,
+      "concept": "Add a purge site to this dreamscape.",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 46,
+      "concept": "Choose one of three site types to add to this dreamscape.",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 47,
+      "concept": "Choose a card to purge and replace it with {card_id}",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "ReplaceSelectedWithCard",
+        "runtime_effect_kind": "replace-selected-with-card"
+      }
+    },
+    {
+      "id": 48,
+      "concept": "Purge a random {predicate} card and replace it with {card_id}",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 49,
+      "concept": "Gain {count} copies of $DECK_CARD",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "CopySelectedCard",
+        "runtime_effect_kind": "copy-selected-card"
+      }
+    },
+    {
+      "id": 50,
+      "concept": "Gain {count} copies of a chosen card",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "CopySelectedCard",
+        "runtime_effect_kind": "copy-selected-card"
+      }
+    },
+    {
+      "id": 51,
+      "concept": "Gain one copy of each of {count} chosen cards",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "CopySelectedCards",
+        "runtime_effect_kind": "copy-selected-cards"
+      }
+    },
+    {
+      "id": 52,
+      "concept": "Gain one copy of each of {count} random {predicate} cards",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 53,
+      "concept": "Change $DECK_CARD to become a {card_type}",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "ChangeSubtypeSelected",
+        "runtime_effect_kind": "change-subtype-selected"
+      }
+    },
+    {
+      "id": 54,
+      "concept": "Modify {count} random cards to become {card_type} cards",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 55,
+      "concept": "Draw 4 cards from your deck and choose one to gain a copy of.",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "CopyOfferedDeckCard",
+        "runtime_effect_kind": "copy-offered-deck-card"
+      }
+    },
+    {
+      "id": 56,
+      "concept": "All items in the next shop you visit are free",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 57,
+      "concept": "Pick a new Dream Avatar from 3 choices",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "ChooseDreamAvatar",
+        "runtime_effect_kind": "choose-dream-avatar"
+      }
+    },
+    {
+      "id": 58,
+      "concept": "Change a chosen character card to be a {subtype}",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "ChangeSubtypeSelected",
+        "runtime_effect_kind": "change-subtype-selected"
+      }
+    },
+    {
+      "id": 59,
+      "concept": "Gain {essence_per_card} essence for each {predicate} card in your deck",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "GainEssencePerCard",
+        "runtime_effect_kind": "gain-essence-per-card"
+      }
+    },
+    {
+      "id": 60,
+      "concept": "Purge a chosen card and gain {essence_per_spark} essence for each ✦ it had",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "PurgeForEssence",
+        "runtime_effect_kind": "purge-for-essence"
+      }
+    },
+    {
+      "id": 61,
+      "concept": "Purge a chosen card and gain a copy of another chosen card in your deck",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "PurgeAndCopy",
+        "runtime_effect_kind": "purge-and-copy"
+      }
+    },
+    {
+      "id": 62,
+      "concept": "Purge a chosen dreamsign and gain {essence} essence",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "PurgeDreamsignForEssence",
+        "runtime_effect_kind": "purge-dreamsign-for-essence"
+      }
+    },
+    {
+      "id": 63,
+      "concept": "Replace all of your dreamsigns with random dreamsigns",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 64,
+      "concept": "All characters in your deck gain +{spark_bonus}✦",
+      "balance_class": "unique_effect",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "IncreaseSparkAll",
+        "runtime_effect_kind": "increase-spark-all"
+      }
+    },
+    {
+      "id": 65,
+      "concept": "All cards in your deck are reduced in cost by {energy_cost_reduction}●. Gain {nightmare_count} Nightmare cards.",
+      "balance_class": "unique_effect",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "ReduceCostAllAndGainNightmares",
+        "runtime_effect_kind": "reduce-cost-all-and-gain-nightmares"
+      }
+    },
+    {
+      "id": 66,
+      "concept": "All cards in your deck become ❖ (fast)",
+      "balance_class": "unique_effect",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "MakeFastAll",
+        "runtime_effect_kind": "make-fast-all"
+      }
+    },
+    {
+      "id": 67,
+      "concept": "All characters in your deck become the subtype of your choice.",
+      "balance_class": "unique_effect",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "ChangeSubtypeAll",
+        "runtime_effect_kind": "change-subtype-all"
+      }
+    },
+    {
+      "id": 68,
+      "concept": "Double your current essence.",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 69,
+      "concept": "Gain {count} Nightmare cards. Gain {dreamsign}.",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 70,
+      "concept": "Gain {nightmare_count} Nightmare cards. Gain {card_name}.",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "GainNightmareAndCard",
+        "runtime_effect_kind": "gain-nightmare-and-card"
+      }
+    },
+    {
+      "id": 71,
+      "concept": "Gain {count} Nightmare cards. Gain one of 3 offered dreamsigns.",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 72,
+      "concept": "Gain a random legendary card.",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 73,
+      "concept": "Lose {essence} essence. Apply {transfiguration} to every eligible {predicate} card in your deck.",
+      "balance_class": "unique_effect",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 74,
+      "concept": "Purge a random {subtype} character. Every other {subtype} character in your deck gains +1✦.",
+      "balance_class": "unique_effect",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 75,
+      "concept": "Purge $DECK_CARD. Apply {transfiguration} to every other eligible card in your deck with the same card type.",
+      "balance_class": "unique_effect",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 76,
+      "concept": "Purge a chosen dreamsign. Gain 3 random dreamsigns.",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 77,
+      "concept": "Every {predicate} card in your deck becomes ❖ (fast). Gain {count} Nightmare cards.",
+      "balance_class": "unique_effect",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 78,
+      "concept": "Gain any number of {predicate} cards from 4 choices and apply {transfiguration} to each eligible card gained. Gain {count} Nightmare cards.",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 79,
+      "concept": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+      "balance_class": "unique_effect",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "PurgeDuplicatesAndGrantReclaim",
+        "runtime_effect_kind": "purge-duplicates-and-grant-reclaim"
+      }
+    },
+    {
+      "id": 80,
+      "concept": "Select 4 random cards from your deck and choose one to purge. Apply {transfiguration} to the other 3 eligible cards, then gain a copy of each.",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 81,
+      "concept": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+      "balance_class": "unique_effect",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "NextBattleSmallerHandAndCostDiscount",
+        "runtime_effect_kind": "next-battle-smaller-hand-and-cost-discount"
+      }
+    },
+    {
+      "id": 82,
+      "concept": "Lose half your current essence. The next {count} items you purchase are free.",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "vertical_slice"
+      }
+    },
+    {
+      "id": 83,
+      "concept": "Draft a transfigured {predicate} from {offer_count} choices.",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "TransfiguredCardDraft",
+        "runtime_effect_kind": "transfigured-card-draft"
+      }
+    },
+    {
+      "id": 84,
+      "concept": "Add a disclosed site to the current Dreamscape.",
+      "balance_class": "standard",
+      "implementation": {
+        "status": "reuse",
+        "effect_variant": "AddSite",
+        "runtime_effect_kind": "add-site"
+      }
+    }
+  ]
+}

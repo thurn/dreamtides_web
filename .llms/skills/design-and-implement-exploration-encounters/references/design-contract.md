@@ -1,201 +1,164 @@
 # Exploration encounter design contract
 
-## Purpose
+Design exactly one winning encounter for the request. Inspect the full-size artwork
+at `art_path`, use the canonical card UUID, read every mechanic in
+`repository.mechanic_ideas`, and write one JSON result at the assigned path.
 
-Design one live-ready encounter from one canonical card request. Inspect the
-full-size artwork before reading mechanics. Privately compare five complete
-encounter concepts, then emit one winner with two actions and four concise
-rejection notes. Do not edit repository files.
+## Request contract
 
-## Required request
-
-Read one JSON object with this shape:
+The request has this shape:
 
 ```json
 {
+  "schema_version": 2,
   "card": {
-    "id": "<canonical UUID>",
-    "name": "<canonical display name>",
-    "ability": "<complete rendered ability>",
-    "image_number": 1,
-    "card_type": "<canonical type>",
-    "subtype": "<canonical subtype or empty string>"
+    "id": "<canonical card UUID>",
+    "name": "<display name>",
+    "ability": "<rendered rules text>",
+    "image_number": 123,
+    "card_type": "Character",
+    "subtype": "Warrior"
   },
+  "action_ids": ["<UUIDv4>", "<UUIDv4>"],
   "art_path": "<absolute full-size image path>",
   "repository": {
-    "cards": "<absolute cards.toml path>",
-    "dreamsigns": "<absolute dreamsigns.toml path>",
-    "exploration": "<absolute exploration.toml path>",
-    "templates": "<absolute templates.json path>",
-    "journey_types": "<absolute journey.ts path>"
+    "cards_source": "<absolute data/cards.ron path>",
+    "cards_compat": "<absolute generated cards.toml path>",
+    "dreamsigns_source": "<absolute data/dreamsigns.ron path>",
+    "dreamsigns_compat": "<absolute generated dreamsigns.toml path>",
+    "exploration_source": "<absolute data/exploration.ron path>",
+    "exploration_compat": "<absolute generated exploration.toml path>",
+    "transfiguration_source": "<absolute data/transfiguration.ron path>",
+    "transfiguration_compat": "<absolute generated transfiguration.toml path>",
+    "mechanic_ideas": "<absolute mechanic-ideas.json path>",
+    "exploration_model": "<absolute exploration.rs path>",
+    "effect_schema": "<absolute exploration effect editor schema path>"
   }
 }
 ```
 
-Verify the card by UUID against `cards.toml`. Actually view `art_path`; never
-design from its filename. Read the complete template catalog only after the
-scene is understood. Inspect live template usage and canonical cards,
-Dreamsigns, transfigurations, economy, and archetype data as needed.
+Names exist for display and design context. UUIDs identify cards and Dreamsigns.
 
-## Scene reading
+## Design procedure
 
-Privately record material facts, supported atmosphere, the required subject,
-and deck intent before considering effects.
+1. Inspect the full-size art before writing prose or mechanics. Identify subjects,
+   motion, setting, light, implied sequence, and salient objects.
+2. Read the card's rules and type information to understand the deck intent the
+   encounter should support.
+3. Read all mechanic ideas. Consider both current `reuse` ideas and
+   `vertical_slice` ideas; implementation cost is a ranking factor, not an automatic
+   exclusion.
+4. Develop five distinct candidate pairings using ten distinct mechanic IDs. Each
+   pairing needs a coherent scene with two causally different actions.
+5. Rank the candidates for art fidelity, narrative causality, deck relevance,
+   meaningful choice tension, balance, and implementation tractability.
+6. Emit only the winner plus four compact rejected summaries.
 
-- For a Character card, use the canonical name only to identify the depicted
-  source character. Make that character the primary and only character
-  described. Visible props, terrain, architecture, weather, and light may
-  support the scene without displacing the character.
-- For other card types, describe the single entity or element occupying the
-  largest visible area. Omit smaller entities and keep at most one background
-  detail subordinate.
-- Describe only visible or strongly implied material facts. Use precise nouns,
-  strong verbs, restrained modifiers, and third-person present tense.
-- Do not quote the complete card name, invent proper names or lore, introduce
-  off-image observers, manufacture a dilemma, or disguise game operations as
-  scenery.
-- Reject metaphor, simile, personification, symbolic equivalence, impossible
-  agency, and opaque poetic conceits. Conventional visual phrasing is fine when
-  it describes literal appearance.
+The two winning mechanic IDs must differ. Treat each mechanic's concept as a design
+prompt: write final action-local presentation for the exact chosen values.
 
-Winning prose must contain at most 16 words, refer to no player/reader/viewer,
-never use the word `the`, and not begin with `one` to introduce a singular
-subject. Introduce a singular count subject with `a` or `an` when natural.
-
-## Mechanical design
-
-Infer what owning the source card suggests the player is building toward. Both
-choices must be useful: one may deepen synergy while the other offers
-flexibility, conversion, or risk management. Avoid strictly dominated pairs.
-
-Read every entry in `data/templates.json`. Prefer underused mechanics when
-quality is comparable, but art fidelity, complete action-to-effect causality,
-and deck intent are stronger criteria. A template marked
-`balance_class: unique_effect` needs an exceptional card-specific fit. The two
-winning actions must use distinct template IDs.
-
-Use these standard predicates unless a verified card-specific exception is
-materially stronger: `Event`, `Warrior`, `Spirit Animal`, `Survivor`, or
-`≤2● cost Character`. Do not use `Character` as a broad predicate; omit a
-runtime selection restriction when unrestricted eligibility is the better
-choice. A nonstandard predicate requires a concise
-`predicate_exception_rationale` naming the source-card connection and verified
-eligible-target count.
-
-Special variables are resolved from deterministic persisted offers:
-
-- `$OFFERED_CARD`: an eligible card outside the deck offered when the site
-  runtime is created.
-- `$DECK_CARD`: an eligible entry in the current deck.
-- `$STARTER_CARD`: an eligible starter entry in the current deck.
-
-Every special-card pool excludes the source-card UUID. Add a `selection` rule
-under the exact token only when a restriction improves the design. Braced
-placeholders always receive literal values in `variables`; special variables
-never appear in `variables`.
-
-For canonical cards and Dreamsigns, store UUID identity with display text:
+## Result contract
 
 ```json
 {
-  "id": "<canonical UUID>",
-  "display_name": "<canonical display name>"
-}
-```
-
-The referenced card UUID must differ from the source UUID. Verify
-transfiguration names against the canonical `TransfigurationType` union.
-
-## Private five-concept tournament
-
-Generate five materially distinct complete concepts. Each concept has frozen
-scene prose and two concrete labels paired with two template effects. Do not
-revise scene facts merely to justify a mechanic.
-
-Score privately from 1–10:
-
-- scene quality, 40%: fidelity, focus, vivid precision, and first-arrival
-  clarity with mechanics hidden;
-- action quality, 15%: two distinct purposeful acts grounded in the scene;
-- mechanical connection, 30%: the weaker action's complete
-  scene-to-label-to-effect causal chain;
-- archetype fit, 15%: both outcomes' usefulness for the source card's deck
-  intent.
-
-Round the weighted total to the nearest integer. Revise any concept whose
-mechanical-connection score is below 7. Rank higher totals first, breaking ties
-by scene fidelity, the weaker action chain, archetype fit, and clarity. Emit
-only rank 1. Summarize the other four concepts without their full prose or
-action data so the scratch result preserves selection pressure without forming
-a reusable candidate catalog.
-
-## Output JSON
-
-Write one strict JSON object and no Markdown:
-
-```json
-{
-  "card_id": "<source canonical UUID>",
-  "prose": "<winning scene prose>",
+  "card_id": "<request card UUID>",
+  "prose": "<encounter prose>",
   "actions": [
     {
+      "action_id": "<first request UUIDv4>",
       "label": "<2-5 words, at most 32 characters>",
-      "template_id": 1,
-      "variables": {},
-      "selection": {
-        "$SPECIAL_VARIABLE": {
-          "predicate": "<verified predicate>"
+      "mechanic_id": 14,
+      "presentation": {
+        "effect_text": "Draft a Warrior from 4 choices",
+        "followup": {
+          "title": "{action-label}",
+          "subtitle": "Choose one offered card."
         }
       },
-      "predicate_exception_rationale": "<only for a nonstandard predicate>",
+      "effect": {
+        "variant": "DraftCard",
+        "fields": {
+          "predicate": "Warrior",
+          "count": 1,
+          "offer_count": 4
+        },
+        "runtime_effect_kind": "draft-card"
+      },
       "implementation_notes": {
-        "state_transition": "<exact semantic state change>",
-        "offer_or_selection": "<what is minted and what UUID-only intent selects>",
-        "persisted_result": "<exact IDs and deltas needed for replay>",
-        "outcome": "<what the dedicated semantic result must present>"
+        "state_transition": "<exact state mutation>",
+        "offer_or_selection": "<how eligible choices are produced and chosen>",
+        "persisted_result": "<identifiers and values persisted for replay>",
+        "outcome": "<what the outcome surface presents>"
       }
     },
     {
-      "label": "<second action>",
-      "template_id": 2,
-      "variables": {},
+      "action_id": "<second request UUIDv4>",
+      "label": "<2-5 words, at most 32 characters>",
+      "mechanic_id": 64,
+      "presentation": {
+        "effect_text": "All characters in your deck gain +1✦",
+        "followup": null
+      },
+      "effect": {
+        "variant": "IncreaseSparkAll",
+        "fields": {"spark_bonus": 1},
+        "runtime_effect_kind": "increase-spark-all"
+      },
       "implementation_notes": {
-        "state_transition": "<exact semantic state change>",
-        "offer_or_selection": "<offer or none>",
-        "persisted_result": "<persisted facts>",
-        "outcome": "<exact result presentation>"
+        "state_transition": "<exact state mutation>",
+        "offer_or_selection": "<none or exact selection rule>",
+        "persisted_result": "<exact persisted result>",
+        "outcome": "<exact outcome presentation>"
       }
     }
   ],
-  "selection_rationale": "<why this concept won, at most 40 words>",
+  "selection_rationale": "<at most 40 words>",
   "alternatives_considered": [
-    {
-      "summary": "<concise concept summary>",
-      "rejected_because": "<specific weaker dimension>"
-    },
-    {
-      "summary": "<second alternative>",
-      "rejected_because": "<specific reason>"
-    },
-    {
-      "summary": "<third alternative>",
-      "rejected_because": "<specific reason>"
-    },
-    {
-      "summary": "<fourth alternative>",
-      "rejected_because": "<specific reason>"
-    }
+    {"summary": "<at most 12 words>", "rejected_because": "<at most 20 words>"},
+    {"summary": "<at most 12 words>", "rejected_because": "<at most 20 words>"},
+    {"summary": "<at most 12 words>", "rejected_because": "<at most 20 words>"},
+    {"summary": "<at most 12 words>", "rejected_because": "<at most 20 words>"}
   ]
 }
 ```
 
-Omit `selection` and `predicate_exception_rationale` when inapplicable. Actions
-must not contain `template`, `effect_text`, `effect-kind`, or guessed runtime
-field names. Canonical template wording lives only in `data/templates.json`.
-Implementation notes describe semantics so the operator can prove an existing
-effect kind matches or assign a complete new vertical slice.
+`presentation.followup` must be either `null` or an object with non-empty `title`
+and `subtitle`. Use it when the action opens a second-step chooser.
 
-Each alternative `summary` must be a single line of at most 12 words. Each
-`rejected_because` must be a single line of at most 20 words. Keep both at the
-concept level: do not preserve full losing prose, action pairs, template IDs,
-variables, predicates, or scores.
+## Typed effect rules
+
+For a mechanic whose implementation status is `reuse`:
+
+- `effect.variant` must equal its catalog `effect_variant`;
+- `effect.runtime_effect_kind` must equal its catalog `runtime_effect_kind`; and
+- `effect.fields` must contain every field and only the fields declared by that
+  current Rust `ActionEffect` variant. Represent optional fields explicitly as
+  `null`.
+
+Use Rust enum spellings in source fields, including `Warrior`, `SpiritAnimal`,
+`CheapCharacter`, `Character`, `Survivor`, `Event`, `Chosen`, and `Offered`.
+Card and Dreamsign fields contain canonical UUIDs. Transfiguration fields contain
+an ID from generated `transfiguration.toml`.
+
+For a `vertical_slice` mechanic, propose a PascalCase typed variant, snake_case
+source fields, and a kebab-case runtime kind. Implementation notes must pin down the
+new semantic contract strongly enough to implement preparation, persistence,
+execution, replay, presentation, logging, and tests. If a nonstandard predicate is
+part of the proposal, add `predicate_exception_rationale` to that action.
+
+## Prose rules
+
+Encounter prose:
+
+- contains at most 16 words;
+- describes only visible or strongly implied scene content;
+- omits player, reader, viewer, first-person, and second-person references;
+- omits the word `the`; and
+- does not begin with `One`.
+
+Action labels describe in-world choices, not implementation operations. Effect text
+is precise player-facing disclosure for the selected values and may use established
+runtime tokens such as `{fixed_card}`, `{offered_card}`, or `{action-label}`.
+
+Write the completed JSON directly to the assigned result path. Do not emit prose
+outside the JSON document.
