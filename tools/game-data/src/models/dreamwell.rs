@@ -500,6 +500,18 @@ mod tests {
             ),)
             .is_err()
         );
+        assert!(
+            ron::from_str::<Vec<DreamwellCardDefinition>>(
+                &source.replace("kind: Count", "kind: Unsupported")
+            )
+            .is_err()
+        );
+        assert!(
+            ron::from_str::<Vec<DreamwellCardDefinition>>(
+                &source.replace("instructions: \"Choose cards.\",", "")
+            )
+            .is_err()
+        );
         let duplicate = source.replace(
             "automation: [AutomationPrompt(",
             "automation: [AutomationPrompt(key: \"choose-card\", title: \"Title\", subtitle: \"Subtitle\", instructions: \"Instructions\"), AutomationPrompt(",

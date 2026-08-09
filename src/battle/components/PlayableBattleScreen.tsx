@@ -66,7 +66,11 @@ import type {
 } from "../../cumulus/screens/MobileBattleScreen";
 import type { MobileBattleResultAction } from "../../cumulus/screens/BattleResultSurface";
 import { useIsDesktop } from "../../cumulus/screens/use-is-desktop";
-import { createBattlePromptResolutionLogFields } from "./battle-prompt-logging";
+import {
+  createBattlePromptOpenedLogFields,
+  createBattlePromptResolutionLogFields,
+  promptTextLogFields,
+} from "./battle-prompt-logging";
 import { BattleTutorialGuidance } from "../../cumulus/screens/BattleTutorialGuidance";
 import { buildBattleTutorialGuidanceView } from "../../screens/cumulus_adapters/battle-tutorial-guidance-view-model";
 import { useBattleTutorialGuidance } from "../use-battle-tutorial-guidance";
@@ -244,6 +248,23 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   const [openNoteEditor, setOpenNoteEditor] = useState<string | null>(null);
   const [isResultOverlayDismissed, setIsResultOverlayDismissed] =
     useState(false);
+
+  useEffect(() => {
+    if (pendingPrompt === null) return;
+    logEventOnce(
+      `battle_prompt_opened:${battleInit.battleId}:${String(pendingPrompt.promptId)}`,
+      "battle_prompt_opened",
+      {
+        ...createBattleLogBaseFields(board, {
+          sourceSurface: "battlefield",
+          selectedCardId: null,
+        }),
+        ...createBattlePromptOpenedLogFields(board, pendingPrompt),
+        perspectiveSide,
+        promptSide: pendingPrompt.run.side,
+      },
+    );
+  }, [battleInit.battleId, board, pendingPrompt, perspectiveSide]);
 
   const clearPerspectiveBoundPresentation = useCallback((): void => {
     setPendingDrag(null);
@@ -544,19 +565,14 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
         promptId: pendingPrompt.promptId,
         perspectiveSide,
         promptSide: pendingPrompt.run.side,
-        promptMessageId: pendingPrompt.options.label.id,
-        promptMessageArguments:
-          "variables" in pendingPrompt.options.label
-            ? pendingPrompt.options.label.variables
-            : null,
+        ...promptTextLogFields("prompt", pendingPrompt.options.label),
         optionIndex,
-        optionMessageId:
-          pendingPrompt.options.options[optionIndex]?.label.id ?? null,
-        optionMessageArguments:
-          pendingPrompt.options.options[optionIndex] === undefined ||
-          !("variables" in pendingPrompt.options.options[optionIndex].label)
-            ? null
-            : pendingPrompt.options.options[optionIndex].label.variables,
+        ...(pendingPrompt.options.options[optionIndex] === undefined
+          ? {}
+          : promptTextLogFields(
+              "option",
+              pendingPrompt.options.options[optionIndex].label,
+            )),
       });
       resolvePendingPrompt({ kind: "choice", optionIndex });
     },
@@ -1582,7 +1598,9 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
         onClose={() => setIsPoolViewerOpen(false)}
         onPoolCardDragEnd={handleCardDragEnd}
         onPoolCardDragStart={handlePoolCardDragStart}
-        title={/* localization-ignore: semantic pool-viewer context value. */ "battle"}
+        title={
+          /* localization-ignore: semantic pool-viewer context value. */ "battle"
+        }
         variant="floating"
       />
       <MobileBattleScreenAdapter

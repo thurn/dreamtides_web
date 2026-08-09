@@ -69,6 +69,14 @@
     ability_text: ["Draw a card, then discard a card."],
     energy_added: 1,
     deck_tier: One,
+    automation: [
+      AutomationPrompt(
+        key: "discard-drawn-card",
+        title: "Choose a card to discard",
+        subtitle: "Choose one card from your hand.",
+        instructions: "Choose a card to discard.",
+      ),
+    ],
     art: (image: 1011222385, owned: true),
   ),
 
@@ -87,6 +95,21 @@
     ability_text: ["You may immediately play a ≤2● cost character from your void."],
     energy_added: 1,
     deck_tier: Three,
+    automation: [
+      AutomationPrompt(
+        key: "confirm-play-void-character",
+        title: "Play a character from your void?",
+        subtitle: "You may play a character without paying its energy cost.",
+        instructions: "Choose whether to play a character from your void.",
+      ),
+
+      AutomationPrompt(
+        key: "choose-void-character",
+        title: "Choose a character to play",
+        subtitle: "Choose an eligible character from your void.",
+        instructions: "Choose a character to play.",
+      ),
+    ],
     art: (image: 2155438699, owned: true),
   ),
 
@@ -105,6 +128,14 @@
     ability_text: ["A chosen card in your void gains reclaim until end of turn."],
     energy_added: 1,
     deck_tier: Two,
+    automation: [
+      AutomationPrompt(
+        key: "grant-reclaim",
+        title: "Choose a void card to gain Reclaim",
+        subtitle: "You may play it from your void this turn, then banish it.",
+        instructions: "Choose a card in your void.",
+      ),
+    ],
     art: (image: 1068256580, owned: true),
   ),
 
@@ -141,6 +172,23 @@
     ability_text: ["You may discard 2 cards, then draw 2 cards."],
     energy_added: 1,
     deck_tier: Three,
+    automation: [
+      AutomationPrompt(
+        key: "discard-and-draw",
+        title: "Discard {count} cards, then draw {count}?",
+        subtitle: "Choose whether to exchange cards from your hand.",
+        instructions: "Choose whether to discard and draw the same number of cards.",
+        arguments: [PromptArgument(name: "count", kind: Count)],
+      ),
+
+      AutomationPrompt(
+        key: "choose-discards",
+        title: "Discard {count} cards",
+        subtitle: "Choose cards from your hand.",
+        instructions: "Choose {count} cards to discard.",
+        arguments: [PromptArgument(name: "count", kind: Count)],
+      ),
+    ],
     art: (image: 1721490835),
   ),
 
@@ -150,6 +198,14 @@
     ability_text: ["Return a card from your void to your hand."],
     energy_added: 1,
     deck_tier: Three,
+    automation: [
+      AutomationPrompt(
+        key: "return-void-card",
+        title: "Return a void card to hand",
+        subtitle: "Choose one card from your void.",
+        instructions: "Choose a card to return to your hand.",
+      ),
+    ],
     art: (image: 2030910782, owned: true),
   ),
 
@@ -159,6 +215,14 @@
     ability_text: ["Banish an enemy until end of turn."],
     energy_added: 0,
     deck_tier: Three,
+    automation: [
+      AutomationPrompt(
+        key: "banish-enemy-character",
+        title: "Banish an enemy character",
+        subtitle: "Choose an opposing character in play.",
+        instructions: "Choose a character to banish until Ending.",
+      ),
+    ],
     art: (image: 1950881323, owned: true),
   ),
 
@@ -170,6 +234,14 @@
     ],
     energy_added: 0,
     deck_tier: Three,
+    automation: [
+      AutomationPrompt(
+        key: "pick-card-for-hand",
+        title: "Pick a card for your hand",
+        subtitle: "The other revealed card goes to the bottom of your deck.",
+        instructions: "Choose one revealed card to put into your hand.",
+      ),
+    ],
     art: (image: 1252796548, owned: true),
   ),
 
@@ -197,6 +269,21 @@
     ability_text: ["You may put a card from your void on top of your deck."],
     energy_added: 1,
     deck_tier: Four,
+    automation: [
+      AutomationPrompt(
+        key: "confirm-void-to-deck",
+        title: "Put a void card on top of your deck?",
+        subtitle: "Choose whether to return a card to your deck.",
+        instructions: "Choose whether to put a void card on top of your deck.",
+      ),
+
+      AutomationPrompt(
+        key: "choose-void-for-deck",
+        title: "Choose a void card to put on top",
+        subtitle: "Choose one card from your void.",
+        instructions: "Choose the card to put on top of your deck.",
+      ),
+    ],
     art: (image: 2285036621, owned: true),
   ),
 
@@ -206,6 +293,22 @@
     ability_text: ["You may abandon a character to draw 2 cards."],
     energy_added: 0,
     deck_tier: Four,
+    automation: [
+      AutomationPrompt(
+        key: "confirm-abandon-and-draw",
+        title: "Abandon a character to draw {count}?",
+        subtitle: "Choose whether to abandon a character you control.",
+        instructions: "Choose whether to abandon a character and draw {count} cards.",
+        arguments: [PromptArgument(name: "count", kind: Count)],
+      ),
+
+      AutomationPrompt(
+        key: "choose-character-to-abandon",
+        title: "Choose a character to abandon",
+        subtitle: "Choose one character you control.",
+        instructions: "Choose the character to abandon.",
+      ),
+    ],
     art: (image: 748956883, owned: true),
   ),
 
@@ -224,6 +327,15 @@
     ability_text: ["Discover a ≤2● cost card."],
     energy_added: 1,
     deck_tier: Two,
+    automation: [
+      AutomationPrompt(
+        key: "discover-card",
+        title: "Discover a ≤{maximumCost}● cost card",
+        subtitle: "Choose one of the sampled cards.",
+        instructions: "Choose a card costing at most {maximumCost}●.",
+        arguments: [PromptArgument(name: "maximumCost", kind: MaximumCost)],
+      ),
+    ],
     art: (image: 2622590199),
   ),
 
@@ -260,6 +372,14 @@
     ability_text: ["Rematerialize a character you control."],
     energy_added: 1,
     deck_tier: Three,
+    automation: [
+      AutomationPrompt(
+        key: "rematerialize-ally",
+        title: "Rematerialize an ally",
+        subtitle: "Choose one character you control.",
+        instructions: "Choose a character to rematerialize.",
+      ),
+    ],
     art: (image: 691496707),
   ),
 
@@ -269,6 +389,20 @@
     ability_text: ["Choose one: Draw a card or gain 2●."],
     energy_added: 0,
     deck_tier: Four,
+    automation: [
+      AutomationPrompt(
+        key: "choose-benefit",
+        title: "Choose one",
+        subtitle: "Choose a Dreamwell benefit.",
+        instructions: "Choose whether to draw a card or gain energy.",
+        choices: [
+          PromptChoice(key: "draw-card", label: "Draw a card"),
+
+          PromptChoice(key: "gain-energy", label: "Gain {amount}●"),
+        ],
+        arguments: [PromptArgument(name: "amount", kind: Amount)],
+      ),
+    ],
     art: (image: 1504647500),
   ),
 
@@ -278,6 +412,14 @@
     ability_text: ["Gain 2●. Discard a card."],
     energy_added: 1,
     deck_tier: One,
+    automation: [
+      AutomationPrompt(
+        key: "discard-card",
+        title: "Discard a card",
+        subtitle: "Choose one card from your hand.",
+        instructions: "Choose a card to discard.",
+      ),
+    ],
     art: (image: 450441286),
   ),
 
@@ -287,6 +429,14 @@
     ability_text: ["Discover a character."],
     energy_added: 0,
     deck_tier: Three,
+    automation: [
+      AutomationPrompt(
+        key: "discover-character",
+        title: "Discover a character",
+        subtitle: "Choose one of the sampled characters.",
+        instructions: "Choose a character card.",
+      ),
+    ],
     art: (image: 485518030),
   ),
 
@@ -296,6 +446,14 @@
     ability_text: ["Return an event from your void to your hand."],
     energy_added: 1,
     deck_tier: Three,
+    automation: [
+      AutomationPrompt(
+        key: "return-event",
+        title: "Return an event from your void to hand",
+        subtitle: "Choose one event from your void.",
+        instructions: "Choose an event to return to your hand.",
+      ),
+    ],
     art: (image: 2251144879),
   ),
 
@@ -323,6 +481,14 @@
     ability_text: ["You may discard your hand, then draw that many cards."],
     energy_added: 0,
     deck_tier: Four,
+    automation: [
+      AutomationPrompt(
+        key: "redraw-hand",
+        title: "Discard your hand and redraw?",
+        subtitle: "Draw the same number of cards you discard.",
+        instructions: "Choose whether to discard your hand and draw replacements.",
+      ),
+    ],
     art: (image: 635276573, crop: (x: 0, y: -1, scale: 1)),
   ),
 ]

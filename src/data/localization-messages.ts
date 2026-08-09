@@ -396,31 +396,9 @@ export const FLUENT_MESSAGE_IDS = [
   "battle-dreamwell-history-empty",
   "battle-victory-headline",
   "battle-ai-reject-action",
-  "battle-prompt-discover-card-max-cost",
   "battle-prompt-discover-character",
-  "battle-prompt-rematerialize-ally",
-  "battle-prompt-choose-void-card-reclaim",
-  "battle-prompt-choose-void-card-reclaim-subtitle",
-  "battle-prompt-choose-card-discard",
-  "battle-prompt-discard-card",
-  "battle-prompt-confirm-discard-draw",
-  "battle-prompt-discard-cards",
-  "battle-prompt-return-void-card",
-  "battle-prompt-return-event-from-void",
-  "battle-prompt-banish-enemy-character",
-  "battle-prompt-pick-card-for-hand",
-  "battle-prompt-confirm-put-void-on-top",
-  "battle-prompt-choose-void-for-top",
-  "battle-prompt-confirm-abandon-draw",
-  "battle-prompt-choose-character-abandon",
-  "battle-prompt-choose-one",
   "battle-prompt-confirm-yes",
   "battle-prompt-confirm-skip",
-  "battle-prompt-draw-card",
-  "battle-prompt-gain-energy",
-  "battle-prompt-discard-hand-redraw",
-  "battle-prompt-play-character-from-void",
-  "battle-prompt-choose-character-to-play",
   "battle-prompt-generic",
   "battle-prompt-generic-subtitle",
   "battle-prompt-generic-option",
@@ -1064,37 +1042,9 @@ export interface FluentMessageArgumentsById {
   readonly "battle-dreamwell-history-empty": never;
   readonly "battle-victory-headline": never;
   readonly "battle-ai-reject-action": never;
-  readonly "battle-prompt-discover-card-max-cost": {
-    readonly maxCost: FluentVariable;
-  };
   readonly "battle-prompt-discover-character": never;
-  readonly "battle-prompt-rematerialize-ally": never;
-  readonly "battle-prompt-choose-void-card-reclaim": never;
-  readonly "battle-prompt-choose-void-card-reclaim-subtitle": never;
-  readonly "battle-prompt-choose-card-discard": never;
-  readonly "battle-prompt-discard-card": never;
-  readonly "battle-prompt-confirm-discard-draw": {
-    readonly count: FluentVariable;
-  };
-  readonly "battle-prompt-discard-cards": { readonly count: FluentVariable };
-  readonly "battle-prompt-return-void-card": never;
-  readonly "battle-prompt-return-event-from-void": never;
-  readonly "battle-prompt-banish-enemy-character": never;
-  readonly "battle-prompt-pick-card-for-hand": never;
-  readonly "battle-prompt-confirm-put-void-on-top": never;
-  readonly "battle-prompt-choose-void-for-top": never;
-  readonly "battle-prompt-confirm-abandon-draw": {
-    readonly count: FluentVariable;
-  };
-  readonly "battle-prompt-choose-character-abandon": never;
-  readonly "battle-prompt-choose-one": never;
   readonly "battle-prompt-confirm-yes": never;
   readonly "battle-prompt-confirm-skip": never;
-  readonly "battle-prompt-draw-card": never;
-  readonly "battle-prompt-gain-energy": { readonly amount: FluentVariable };
-  readonly "battle-prompt-discard-hand-redraw": never;
-  readonly "battle-prompt-play-character-from-void": never;
-  readonly "battle-prompt-choose-character-to-play": never;
   readonly "battle-prompt-generic": never;
   readonly "battle-prompt-generic-subtitle": never;
   readonly "battle-prompt-generic-option": never;
@@ -1793,31 +1743,9 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "battle-dreamwell-history-empty": [] as const,
   "battle-victory-headline": [] as const,
   "battle-ai-reject-action": [] as const,
-  "battle-prompt-discover-card-max-cost": ["maxCost"] as const,
   "battle-prompt-discover-character": [] as const,
-  "battle-prompt-rematerialize-ally": [] as const,
-  "battle-prompt-choose-void-card-reclaim": [] as const,
-  "battle-prompt-choose-void-card-reclaim-subtitle": [] as const,
-  "battle-prompt-choose-card-discard": [] as const,
-  "battle-prompt-discard-card": [] as const,
-  "battle-prompt-confirm-discard-draw": ["count"] as const,
-  "battle-prompt-discard-cards": ["count"] as const,
-  "battle-prompt-return-void-card": [] as const,
-  "battle-prompt-return-event-from-void": [] as const,
-  "battle-prompt-banish-enemy-character": [] as const,
-  "battle-prompt-pick-card-for-hand": [] as const,
-  "battle-prompt-confirm-put-void-on-top": [] as const,
-  "battle-prompt-choose-void-for-top": [] as const,
-  "battle-prompt-confirm-abandon-draw": ["count"] as const,
-  "battle-prompt-choose-character-abandon": [] as const,
-  "battle-prompt-choose-one": [] as const,
   "battle-prompt-confirm-yes": [] as const,
   "battle-prompt-confirm-skip": [] as const,
-  "battle-prompt-draw-card": [] as const,
-  "battle-prompt-gain-energy": ["amount"] as const,
-  "battle-prompt-discard-hand-redraw": [] as const,
-  "battle-prompt-play-character-from-void": [] as const,
-  "battle-prompt-choose-character-to-play": [] as const,
   "battle-prompt-generic": [] as const,
   "battle-prompt-generic-subtitle": [] as const,
   "battle-prompt-generic-option": [] as const,
@@ -2283,25 +2211,8 @@ export type FluentMessageIdsWithoutVariables = [
   "battle-victory-headline",
   "battle-ai-reject-action",
   "battle-prompt-discover-character",
-  "battle-prompt-rematerialize-ally",
-  "battle-prompt-choose-void-card-reclaim",
-  "battle-prompt-choose-void-card-reclaim-subtitle",
-  "battle-prompt-choose-card-discard",
-  "battle-prompt-discard-card",
-  "battle-prompt-return-void-card",
-  "battle-prompt-return-event-from-void",
-  "battle-prompt-banish-enemy-character",
-  "battle-prompt-pick-card-for-hand",
-  "battle-prompt-confirm-put-void-on-top",
-  "battle-prompt-choose-void-for-top",
-  "battle-prompt-choose-character-abandon",
-  "battle-prompt-choose-one",
   "battle-prompt-confirm-yes",
   "battle-prompt-confirm-skip",
-  "battle-prompt-draw-card",
-  "battle-prompt-discard-hand-redraw",
-  "battle-prompt-play-character-from-void",
-  "battle-prompt-choose-character-to-play",
   "battle-prompt-generic",
   "battle-prompt-generic-subtitle",
   "battle-prompt-generic-option",
@@ -2441,11 +2352,6 @@ export type FluentMessageIdsWithVariables = [
   "battle-deck-order-title",
   "battle-deck-order-label",
   "battle-card-order-spark-summary",
-  "battle-prompt-discover-card-max-cost",
-  "battle-prompt-confirm-discard-draw",
-  "battle-prompt-discard-cards",
-  "battle-prompt-confirm-abandon-draw",
-  "battle-prompt-gain-energy",
   "battle-prompt-switch-side",
   "deck-browser-filter-accessible-name",
   "deck-browser-sort-accessible-name",

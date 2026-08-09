@@ -54,23 +54,15 @@
     },
     "dreamwellPrompts": {
       "identities": [
-        "battle-prompt-discover-character",
-        "battle-prompt-rematerialize-ally",
-        "battle-prompt-choose-void-card-reclaim"
+        "discover-character",
+        "rematerialize-ally",
+        "grant-reclaim"
       ],
       "targetOwner": "data/dreamwell.ron",
       "currentSources": [
         {
-          "path": "data/locales/en-US/battle-prompts.ftl",
-          "fields": ["battle-prompt-"]
-        },
-        {
-          "path": "src/rules/battle/dreamwell-effects-table.ts",
-          "fields": ["createMessageDescriptor"]
-        },
-        {
-          "path": "src/rules/journey/lifecycle.ts",
-          "fields": ["createMessageDescriptor"]
+          "path": "data/dreamwell.ron",
+          "fields": ["automation:", "AutomationPrompt("]
         }
       ],
       "consumers": [
@@ -165,11 +157,6 @@
       "rationale": "Persisted form validation retains the closed wire identity vocabulary."
     },
     {
-      "id": "src/rules/journey/lifecycle.ts#LEGACY_PROMPT_DESCRIPTORS#dreamwellPrompts",
-      "classification": "persisted-compatibility",
-      "rationale": "Legacy descriptors remain readable under a synthetic compatibility fixture."
-    },
-    {
       "id": "src/rules/journey/sites.ts#TRANSFIGURATION_TYPES#transfiguration",
       "classification": "closed-identity",
       "rationale": "Event validation retains the closed persisted form identity vocabulary."
@@ -179,34 +166,12 @@
     "gamble": [],
     "transfiguration": [],
     "dreamwellPrompts": [
-      "battle-prompt-banish-enemy-character",
-      "battle-prompt-choose-card-discard",
-      "battle-prompt-choose-character-abandon",
-      "battle-prompt-choose-character-to-play",
-      "battle-prompt-choose-one",
-      "battle-prompt-choose-void-card-reclaim",
-      "battle-prompt-choose-void-card-reclaim-subtitle",
-      "battle-prompt-choose-void-for-top",
-      "battle-prompt-confirm-abandon-draw",
-      "battle-prompt-confirm-discard-draw",
-      "battle-prompt-confirm-put-void-on-top",
+      "battle-prompt-discover-character",
       "battle-prompt-confirm-skip",
       "battle-prompt-confirm-yes",
-      "battle-prompt-discard-card",
-      "battle-prompt-discard-cards",
-      "battle-prompt-discard-hand-redraw",
-      "battle-prompt-discover-card-max-cost",
-      "battle-prompt-discover-character",
-      "battle-prompt-draw-card",
-      "battle-prompt-gain-energy",
       "battle-prompt-generic",
       "battle-prompt-generic-option",
       "battle-prompt-generic-subtitle",
-      "battle-prompt-pick-card-for-hand",
-      "battle-prompt-play-character-from-void",
-      "battle-prompt-rematerialize-ally",
-      "battle-prompt-return-event-from-void",
-      "battle-prompt-return-void-card",
       "battle-prompt-switch-side"
     ],
     "tides": [],

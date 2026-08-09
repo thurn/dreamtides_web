@@ -686,9 +686,7 @@ describe("MobileBattleScreen", () => {
       "var(--surface-status-badge)",
     );
     expect(storedTimeBadge?.style.border).toContain("var(--text-on-accent)");
-    expect(storedTimeBadge?.style.borderRadius).toBe(
-      "var(--radius-compact)",
-    );
+    expect(storedTimeBadge?.style.borderRadius).toBe("var(--radius-compact)");
     expect(
       battlefield?.querySelector('[data-battle-card-status="automated"]'),
     ).toBeNull();
@@ -2516,7 +2514,7 @@ describe("MobileBattleScreen", () => {
       ...view,
       cardPicker: {
         key: "prompt-42",
-        label: createMessageDescriptor("battle-prompt-discard-cards", { count: 2 }),
+        label: createMessageDescriptor("battle-prompt-generic"),
         side: "player",
         candidates: view.playerHand
           .slice(0, 2)
@@ -2658,7 +2656,7 @@ describe("MobileBattleScreen", () => {
         ...makeView(),
         choicePrompt: {
           key: "prompt-choice-42",
-          label: createMessageDescriptor("battle-prompt-discard-hand-redraw"),
+          label: createMessageDescriptor("battle-prompt-generic"),
           options: [
             { label: createMessageDescriptor("battle-prompt-confirm-yes") },
             { label: createMessageDescriptor("battle-prompt-confirm-skip") },
@@ -2721,7 +2719,7 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: "prompt-enemy",
-          label: createMessageDescriptor("battle-prompt-choose-card-discard"),
+          label: createMessageDescriptor("battle-prompt-generic"),
           side: "enemy",
           candidates: view.enemyHand.map((card) =>
             makePickerCandidate(card, "enemy", "hand"),
@@ -2885,8 +2883,8 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: "prompt-gallery",
-        label: createMessageDescriptor("battle-prompt-generic"),
-        subtitle: createMessageDescriptor("battle-prompt-generic-subtitle"),
+          label: createMessageDescriptor("battle-prompt-generic"),
+          subtitle: createMessageDescriptor("battle-prompt-generic-subtitle"),
           side: "player",
           candidates,
           candidateIds: candidates.map((candidate) => candidate.instanceId),
@@ -2921,7 +2919,9 @@ describe("MobileBattleScreen", () => {
       '[data-gallery-caption="text"]',
     );
     expect(captions).toHaveLength(4);
-    captions.forEach((caption) => expect(caption.textContent?.trim()).not.toBe(""));
+    captions.forEach((caption) =>
+      expect(caption.textContent?.trim()).not.toBe(""),
+    );
 
     act(() =>
       container
@@ -3004,7 +3004,7 @@ describe("MobileBattleScreen", () => {
       ...view,
       cardPicker: {
         key: "prompt-highlighted",
-        label: createMessageDescriptor("battle-prompt-discard-card"),
+        label: createMessageDescriptor("battle-prompt-generic"),
         side: "player",
         candidates: [makePickerCandidate(highlighted, "player", "hand", true)],
         candidateIds: [highlighted.id],
@@ -4047,8 +4047,9 @@ describe("MobileBattleScreen", () => {
     });
 
     expect(
-      document.querySelector("[data-transient-status-toast]")?.textContent
-        ?.trim(),
+      document
+        .querySelector("[data-transient-status-toast]")
+        ?.textContent?.trim(),
     ).not.toBe("");
     expect(interactions.onFigmentMerge).not.toHaveBeenCalled();
     expect(interactions.onSlotDrop).not.toHaveBeenCalled();

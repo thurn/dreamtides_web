@@ -304,6 +304,7 @@ export interface DreamwellCardDefinition {
   /** Curated art crop (pan/zoom) framing the source image, from the dreamwell
    *  catalog's `art` table. Absent on cards that have never been framed. */
   art?: ArtCrop;
+  automation?: readonly import("../data/dreamwell-database").DreamwellAutomationPrompt[];
 }
 
 /**

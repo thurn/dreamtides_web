@@ -22,6 +22,20 @@ import type { EventContext } from "../../eventlog/types";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { resolveBattleAiConfiguration } from "../../types/opponents-data";
 import { createMessageDescriptor } from "../../data/localization-descriptors";
+import {
+  isDreamwellPromptRef,
+  isLegacyPromptText,
+  type BattlePromptText,
+} from "../../data/dreamwell-prompts";
+import type { FluentMessageDescriptor } from "../../data/localization-messages";
+
+function resolveFixturePromptText(
+  text: BattlePromptText,
+): string | FluentMessageDescriptor {
+  if (isDreamwellPromptRef(text)) return text.promptKey;
+  if (isLegacyPromptText(text)) return text.text;
+  return text;
+}
 
 const ENEMY_DREAM_AVATAR: BattleDreamAvatarSummary = {
   id: "enemy-dream-avatar-uuid",
@@ -384,7 +398,7 @@ describe("buildMobileBattleView", () => {
       kind: "pick-cards",
       options: {
         kind: "pick-cards",
-        label: createMessageDescriptor("battle-prompt-discard-cards", { count: 2 }),
+        label: createMessageDescriptor("battle-prompt-generic"),
         subtitle: createMessageDescriptor("battle-prompt-generic-subtitle"),
         candidateIds: board.sides.player.hand.slice(0, 2),
         count: 2,
@@ -408,7 +422,7 @@ describe("buildMobileBattleView", () => {
     );
     expect(optimistic.cardPicker).toMatchObject({
       key: "42",
-      label: createMessageDescriptor("battle-prompt-discard-cards", { count: 2 }),
+      label: createMessageDescriptor("battle-prompt-generic"),
       subtitle: createMessageDescriptor("battle-prompt-generic-subtitle"),
       candidateIds: prompt.options.candidateIds,
       count: 2,
@@ -482,10 +496,10 @@ describe("buildMobileBattleView", () => {
       kind: "choice",
       options: {
         kind: "choice",
-        label: createMessageDescriptor("battle-prompt-choose-one"),
+        label: createMessageDescriptor("battle-prompt-generic"),
         options: [
-          { label: createMessageDescriptor("battle-prompt-draw-card") },
-          { label: createMessageDescriptor("battle-prompt-gain-energy", { amount: 2 }) },
+          { label: createMessageDescriptor("battle-prompt-generic-option") },
+          { label: createMessageDescriptor("battle-prompt-generic-option") },
         ],
       },
     } satisfies PendingPrompt;
@@ -505,10 +519,10 @@ describe("buildMobileBattleView", () => {
     );
     expect(optimistic.choicePrompt).toEqual({
       key: "44",
-      label: createMessageDescriptor("battle-prompt-choose-one"),
+      label: createMessageDescriptor("battle-prompt-generic"),
       options: [
-        { label: createMessageDescriptor("battle-prompt-draw-card") },
-        { label: createMessageDescriptor("battle-prompt-gain-energy", { amount: 2 }) },
+        { label: createMessageDescriptor("battle-prompt-generic-option") },
+        { label: createMessageDescriptor("battle-prompt-generic-option") },
       ],
       canResolve: false,
     });
@@ -605,7 +619,7 @@ describe("buildMobileBattleView", () => {
       kind: "pick-cards",
       options: {
         kind: "pick-cards",
-      label: createMessageDescriptor("battle-prompt-generic"),
+        label: createMessageDescriptor("battle-prompt-generic"),
         candidateIds: [],
         count: 1,
         optional: false,
@@ -988,14 +1002,14 @@ describe("Cumulus Dreamwell prompt battle flow", () => {
             isPlayerHandHidden: false,
             pendingPrompt: parked.pendingPrompt,
             confirmedPromptId: parked.pendingPrompt?.promptId ?? null,
+            promptTextResolver: resolveFixturePromptText,
           },
         );
         expect(
-          confirmationView.choicePrompt?.options.map((option) => option.label.id),
-        ).toEqual([
-          "battle-prompt-confirm-yes",
-          "battle-prompt-confirm-skip",
-        ]);
+          confirmationView.choicePrompt?.options.map((option) =>
+            typeof option.label === "string" ? option.label : option.label.id,
+          ),
+        ).toEqual(["battle-prompt-confirm-yes", "battle-prompt-confirm-skip"]);
         parked = resolvePendingPrompt(
           parked,
           { kind: "choice", optionIndex: 0 },
@@ -1015,6 +1029,7 @@ describe("Cumulus Dreamwell prompt battle flow", () => {
           isPlayerHandHidden: false,
           pendingPrompt: parked.pendingPrompt,
           confirmedPromptId: parked.pendingPrompt?.promptId ?? null,
+          promptTextResolver: resolveFixturePromptText,
         },
       );
       expect(pickerView.cardPicker).not.toBeNull();

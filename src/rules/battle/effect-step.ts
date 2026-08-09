@@ -2,7 +2,7 @@ import type { BattleDebugEdit } from "../../battle/debug/commands";
 import type { BattleMutableState, BattleSide } from "../../battle/types";
 import { rankSlotIds } from "../../battle/types";
 import type { EffectBindings } from "./fold";
-import type { FluentMessageDescriptor } from "../../data/localization-messages";
+import type { BattlePromptText } from "../../data/dreamwell-prompts";
 
 // ---------------------------------------------------------------------------
 // Core types
@@ -38,8 +38,8 @@ export interface StepContext {
 export type EffectPrompt =
   | {
       kind: "pick-cards";
-      label: FluentMessageDescriptor;
-      subtitle?: FluentMessageDescriptor;
+      label: BattlePromptText;
+      subtitle?: BattlePromptText;
       count: number;
       optional: boolean;
       candidates: (ctx: StepContext) => string[];
@@ -54,13 +54,13 @@ export type EffectPrompt =
     }
   | {
       kind: "choice";
-      label: FluentMessageDescriptor;
+      label: BattlePromptText;
       options: {
-        label: FluentMessageDescriptor;
+        label: BattlePromptText;
         build: (ctx: StepContext) => BattleDebugEdit[];
       }[];
     }
-  | { kind: "confirm"; label: FluentMessageDescriptor; onYes: EffectStep[] }
+  | { kind: "confirm"; label: BattlePromptText; onYes: EffectStep[] }
   | { kind: "foresee"; count: number };
 
 export type EffectStep =
@@ -90,7 +90,8 @@ export function charactersInVoid(
     const instance = state.cardInstances[id];
     if (instance === undefined) return false;
     if (instance.definition.battleCardKind !== "character") return false;
-    if (maxCost !== undefined && instance.definition.energyCost > maxCost) return false;
+    if (maxCost !== undefined && instance.definition.energyCost > maxCost)
+      return false;
     return true;
   });
 }
@@ -151,16 +152,25 @@ export function drawUntilEdits(
  * want to draw up to a specific hand size.
  */
 export function drawEdits(side: BattleSide, count: number): BattleDebugEdit[] {
-  return Array.from({ length: count }, (): BattleDebugEdit => ({ kind: "DRAW_CARD", side }));
+  return Array.from({ length: count }, (): BattleDebugEdit => ({
+    kind: "DRAW_CARD",
+    side,
+  }));
 }
 
 /** Returns an `ADJUST_CURRENT_ENERGY` edit of `+amount` for `side`. */
-export function gainEnergyEdits(side: BattleSide, amount: number): BattleDebugEdit[] {
+export function gainEnergyEdits(
+  side: BattleSide,
+  amount: number,
+): BattleDebugEdit[] {
   return [{ kind: "ADJUST_CURRENT_ENERGY", side, amount }];
 }
 
 /** Returns an `ADJUST_SCORE` edit of `+amount` for `side`. */
-export function gainScoreEdits(side: BattleSide, amount: number): BattleDebugEdit[] {
+export function gainScoreEdits(
+  side: BattleSide,
+  amount: number,
+): BattleDebugEdit[] {
   return [{ kind: "ADJUST_SCORE", side, amount }];
 }
 
@@ -181,7 +191,13 @@ export function addGainedSparkEdits(
 ): BattleDebugEdit[] {
   const instance = state.cardInstances[battleCardId];
   if (instance === undefined) return [];
-  return [{ kind: "SET_CARD_SPARK_DELTA", battleCardId, value: instance.sparkDelta + amount }];
+  return [
+    {
+      kind: "SET_CARD_SPARK_DELTA",
+      battleCardId,
+      value: instance.sparkDelta + amount,
+    },
+  ];
 }
 
 /**
@@ -193,9 +209,10 @@ export function discardHandEdits(
   side: BattleSide,
   state: BattleMutableState,
 ): BattleDebugEdit[] {
-  return state.sides[side].hand.map(
-    (battleCardId): BattleDebugEdit => ({ kind: "DISCARD_CARD", battleCardId }),
-  );
+  return state.sides[side].hand.map((battleCardId): BattleDebugEdit => ({
+    kind: "DISCARD_CARD",
+    battleCardId,
+  }));
 }
 
 /**

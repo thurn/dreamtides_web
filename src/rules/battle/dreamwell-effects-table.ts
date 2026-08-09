@@ -1,7 +1,11 @@
 import { selectBattleCardInstance } from "../../battle/state/selectors";
 import { selectDefaultCharacterPlaySlot } from "../../battle/state/selectors";
 import type { BattleDebugEdit } from "../../battle/debug/commands";
-import type { BattleFieldSlotAddress, BattleMutableState, BattleSide } from "../../battle/types";
+import type {
+  BattleFieldSlotAddress,
+  BattleMutableState,
+  BattleSide,
+} from "../../battle/types";
 import { BACK_RANK_SLOTS, rankSlotIds, slotIndex } from "../../battle/types";
 import {
   alliesInPlay,
@@ -16,7 +20,7 @@ import {
   topOfDeck,
 } from "./effect-step";
 import type { DreamwellEffectScript } from "../../battle/automation/dreamwell-effects";
-import { createMessageDescriptor } from "../../data/localization-descriptors";
+import { dreamwellPromptRef } from "../../data/dreamwell-prompts";
 
 // ---------------------------------------------------------------------------
 // Deterministic dreamwell effect table
@@ -28,6 +32,31 @@ const ECHO_CASCADE_ID = "2ad68489-044a-40d1-9be6-e62497a4e1fd";
 const FIRMAMENT_MIRROR_ID = "14dec460-3ec6-40c1-978f-67e70cb0b227";
 const SILENT_WINTER_ID = "9954cede-8a16-4053-b6e9-da745f4540f5";
 
+function prompt(
+  cardId: string,
+  promptKey: string,
+  arguments_: Readonly<Record<string, string | number>> = {},
+) {
+  return dreamwellPromptRef(cardId, promptKey, "title", arguments_);
+}
+
+function promptSubtitle(
+  cardId: string,
+  promptKey: string,
+  arguments_: Readonly<Record<string, string | number>> = {},
+) {
+  return dreamwellPromptRef(cardId, promptKey, "subtitle", arguments_);
+}
+
+function promptChoice(
+  cardId: string,
+  promptKey: string,
+  choiceKey: string,
+  arguments_: Readonly<Record<string, string | number>> = {},
+) {
+  return dreamwellPromptRef(cardId, promptKey, "choice", arguments_, choiceKey);
+}
+
 /** A local seeded stream consumes exactly one event-rng draw at prompt open. */
 function seededRandom(seed: number): () => number {
   let value = seed >>> 0;
@@ -37,9 +66,13 @@ function seededRandom(seed: number): () => number {
   };
 }
 
-function deterministicShuffle(ids: readonly string[], seedText: string): string[] {
+function deterministicShuffle(
+  ids: readonly string[],
+  seedText: string,
+): string[] {
   let seed = 2166136261;
-  for (const char of seedText) seed = Math.imul(seed ^ char.charCodeAt(0), 16777619) >>> 0;
+  for (const char of seedText)
+    seed = Math.imul(seed ^ char.charCodeAt(0), 16777619) >>> 0;
   const result = [...ids];
   const random = seededRandom(seed);
   for (let index = result.length - 1; index > 0; index -= 1) {
@@ -53,8 +86,10 @@ function sampledDiscoverCandidates(
   ctx: import("./effect-step").StepContext,
   matches: (battleCardId: string) => boolean,
 ): string[] {
-  const matching = ctx.state.sides[ctx.side].deck.filter((battleCardId) =>
-    ctx.state.cardInstances[battleCardId] !== undefined && matches(battleCardId),
+  const matching = ctx.state.sides[ctx.side].deck.filter(
+    (battleCardId) =>
+      ctx.state.cardInstances[battleCardId] !== undefined &&
+      matches(battleCardId),
   );
   const random = seededRandom(Math.floor(ctx.random() * 0x1_0000_0000));
   for (let index = matching.length - 1; index > 0; index -= 1) {
@@ -64,17 +99,29 @@ function sampledDiscoverCandidates(
   return matching.slice(0, 3);
 }
 
-function discoverResolution(chosenIds: string[], ctx: import("./effect-step").StepContext): BattleDebugEdit[] {
+function discoverResolution(
+  chosenIds: string[],
+  ctx: import("./effect-step").StepContext,
+): BattleDebugEdit[] {
   const chosen = chosenIds[0];
   if (chosen === undefined) return [];
   const sampled = ctx.promptCandidateIds ?? [];
-  const deckAfterChoice = ctx.state.sides[ctx.side].deck.filter((id) => id !== chosen);
+  const deckAfterChoice = ctx.state.sides[ctx.side].deck.filter(
+    (id) => id !== chosen,
+  );
   return [
-    { kind: "MOVE_CARD_TO_ZONE", battleCardId: chosen, destination: { side: ctx.side, zone: "hand" } },
+    {
+      kind: "MOVE_CARD_TO_ZONE",
+      battleCardId: chosen,
+      destination: { side: ctx.side, zone: "hand" },
+    },
     {
       kind: "REORDER_DECK",
       side: ctx.side,
-      order: deterministicShuffle(deckAfterChoice, `${sampled.join("|")}:${chosen}`),
+      order: deterministicShuffle(
+        deckAfterChoice,
+        `${sampled.join("|")}:${chosen}`,
+      ),
     },
   ];
 }
@@ -96,12 +143,15 @@ function selectTutorialCenterBackRankSlot(
 ): BattleFieldSlotAddress | null {
   const { backRank } = state.sides[side];
   const openSlotIds = rankSlotIds(backRank).filter(
-    (slotId) => backRank[slotId] === null && slotIndex(slotId) < BACK_RANK_SLOTS,
+    (slotId) =>
+      backRank[slotId] === null && slotIndex(slotId) < BACK_RANK_SLOTS,
   );
   if (openSlotIds.length === 0) return null;
   const center = (BACK_RANK_SLOTS - 1) / 2;
   const closest = openSlotIds.reduce((best, slotId) =>
-    Math.abs(slotIndex(slotId) - center) < Math.abs(slotIndex(best) - center) ? slotId : best,
+    Math.abs(slotIndex(slotId) - center) < Math.abs(slotIndex(best) - center)
+      ? slotId
+      : best,
   );
   return { side, zone: "backRank", slotId: closest };
 }
@@ -116,14 +166,35 @@ function selectTutorialCenterBackRankSlot(
 export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
   // Catalog entries with no effect are still registered so catalog coverage is
   // observable and status remains authoritative by UUID.
-  "32d64cb6-9856-43a2-9451-fcb14007a9a6": { id: "32d64cb6-9856-43a2-9451-fcb14007a9a6", steps: [] },
-  "5e17dc4b-b654-4962-ba5a-7b042852a980": { id: "5e17dc4b-b654-4962-ba5a-7b042852a980", steps: [] },
-  "662b7393-751c-4aa9-8150-5f20b4d176a4": { id: "662b7393-751c-4aa9-8150-5f20b4d176a4", steps: [] },
+  "32d64cb6-9856-43a2-9451-fcb14007a9a6": {
+    id: "32d64cb6-9856-43a2-9451-fcb14007a9a6",
+    steps: [],
+  },
+  "5e17dc4b-b654-4962-ba5a-7b042852a980": {
+    id: "5e17dc4b-b654-4962-ba5a-7b042852a980",
+    steps: [],
+  },
+  "662b7393-751c-4aa9-8150-5f20b4d176a4": {
+    id: "662b7393-751c-4aa9-8150-5f20b4d176a4",
+    steps: [],
+  },
 
   // Lily Lake — immediately draw an additional Dreamwell card.
   "558a1f1b-7dc1-4d83-9f00-c6af2187a954": {
     id: "558a1f1b-7dc1-4d83-9f00-c6af2187a954",
-    steps: [{ kind: "edits", build: (ctx) => [{ kind: "DRAW_DREAMWELL_CARD", side: ctx.side, turnNumber: ctx.state.turnNumber, additional: true }] }],
+    steps: [
+      {
+        kind: "edits",
+        build: (ctx) => [
+          {
+            kind: "DRAW_DREAMWELL_CARD",
+            side: ctx.side,
+            turnNumber: ctx.state.turnNumber,
+            additional: true,
+          },
+        ],
+      },
+    ],
   },
 
   // Ringvale — Discover a ≤2● cost card. Candidate sampling consumes exactly
@@ -131,103 +202,129 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
   // resolution after reload without sampling again.
   [DISCOVER_CARD_ID]: {
     id: DISCOVER_CARD_ID,
-    steps: [{
-      kind: "prompt",
-      prompt: {
-        kind: "pick-cards",
-        label: createMessageDescriptor("battle-prompt-discover-card-max-cost", { maxCost: 2 }),
-        count: 1,
-        optional: false,
-        candidates: (ctx) => sampledDiscoverCandidates(ctx, (id) => (ctx.state.cardInstances[id]?.definition.energyCost ?? Infinity) <= 2),
-        resolve: discoverResolution,
+    steps: [
+      {
+        kind: "prompt",
+        prompt: {
+          kind: "pick-cards",
+          label: prompt(DISCOVER_CARD_ID, "discover-card", { maximumCost: 2 }),
+          count: 1,
+          optional: false,
+          candidates: (ctx) =>
+            sampledDiscoverCandidates(
+              ctx,
+              (id) =>
+                (ctx.state.cardInstances[id]?.definition.energyCost ??
+                  Infinity) <= 2,
+            ),
+          resolve: discoverResolution,
+        },
       },
-    }],
+    ],
   },
 
   // Azure Cascade — Discover a character.
   [DISCOVER_CHARACTER_ID]: {
     id: DISCOVER_CHARACTER_ID,
-    steps: [{
-      kind: "prompt",
-      prompt: {
-        kind: "pick-cards",
-        label: createMessageDescriptor("battle-prompt-discover-character"),
-        count: 1,
-        optional: false,
-        candidates: (ctx) => sampledDiscoverCandidates(ctx, (id) => ctx.state.cardInstances[id]?.definition.battleCardKind === "character"),
-        resolve: discoverResolution,
+    steps: [
+      {
+        kind: "prompt",
+        prompt: {
+          kind: "pick-cards",
+          label: prompt(DISCOVER_CHARACTER_ID, "discover-character"),
+          count: 1,
+          optional: false,
+          candidates: (ctx) =>
+            sampledDiscoverCandidates(
+              ctx,
+              (id) =>
+                ctx.state.cardInstances[id]?.definition.battleCardKind ===
+                "character",
+            ),
+          resolve: discoverResolution,
+        },
       },
-    }],
+    ],
   },
 
   // Echoing Boughs — rematerialize one ally.
   [ECHO_CASCADE_ID]: {
     id: ECHO_CASCADE_ID,
-    steps: [{
-      kind: "prompt",
-      prompt: {
-        kind: "pick-cards",
-        label: createMessageDescriptor("battle-prompt-rematerialize-ally"),
-        count: 1,
-        optional: false,
-        candidates: (ctx) => alliesInPlay(ctx.state, ctx.side),
-        resolve: ([id]) => id === undefined ? [] : [{ kind: "REMATERIALIZE", battleCardId: id }],
+    steps: [
+      {
+        kind: "prompt",
+        prompt: {
+          kind: "pick-cards",
+          label: prompt(ECHO_CASCADE_ID, "rematerialize-ally"),
+          count: 1,
+          optional: false,
+          candidates: (ctx) => alliesInPlay(ctx.state, ctx.side),
+          resolve: ([id]) =>
+            id === undefined
+              ? []
+              : [{ kind: "REMATERIALIZE", battleCardId: id }],
+        },
       },
-    }],
+    ],
   },
 
   // Firmament Mirror — grant a turn-bounded Reclaim eligibility, distinct from
   // the reclaimed leave-play replacement status.
   [FIRMAMENT_MIRROR_ID]: {
     id: FIRMAMENT_MIRROR_ID,
-    steps: [{
-      kind: "prompt",
-      prompt: {
-        kind: "pick-cards",
-        label: createMessageDescriptor("battle-prompt-choose-void-card-reclaim"),
-        subtitle: createMessageDescriptor("battle-prompt-choose-void-card-reclaim-subtitle"),
-        count: 1,
-        optional: false,
-        candidates: (ctx) => ctx.state.sides[ctx.side].void,
-        resolve: ([id], ctx) => id === undefined ? [] : [{
-          kind: "SET_CARD_STATUS",
-          battleCardId: id,
-          status: { temporaryReclaimUntilEnding: { activeSide: ctx.state.activeSide, turnNumber: ctx.state.turnNumber, sourceId: FIRMAMENT_MIRROR_ID } },
-        }],
+    steps: [
+      {
+        kind: "prompt",
+        prompt: {
+          kind: "pick-cards",
+          label: prompt(FIRMAMENT_MIRROR_ID, "grant-reclaim"),
+          subtitle: promptSubtitle(FIRMAMENT_MIRROR_ID, "grant-reclaim"),
+          count: 1,
+          optional: false,
+          candidates: (ctx) => ctx.state.sides[ctx.side].void,
+          resolve: ([id], ctx) =>
+            id === undefined
+              ? []
+              : [
+                  {
+                    kind: "SET_CARD_STATUS",
+                    battleCardId: id,
+                    status: {
+                      temporaryReclaimUntilEnding: {
+                        activeSide: ctx.state.activeSide,
+                        turnNumber: ctx.state.turnNumber,
+                        sourceId: FIRMAMENT_MIRROR_ID,
+                      },
+                    },
+                  },
+                ],
+        },
       },
-    }],
+    ],
   },
 
   // Meteor Meadow — Draw a card.
   "5ec17498-9028-4a01-80a0-67c91b03d505": {
     id: "5ec17498-9028-4a01-80a0-67c91b03d505",
-    steps: [
-      { kind: "edits", build: (ctx) => drawEdits(ctx.side, 1) },
-    ],
+    steps: [{ kind: "edits", build: (ctx) => drawEdits(ctx.side, 1) }],
   },
 
   // Autumn Glade — +2⍟ score (active side).
   "02e8ea92-1218-413c-9f0b-4c865a3921d3": {
     id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
-    steps: [
-      { kind: "edits", build: (ctx) => gainScoreEdits(ctx.side, 2) },
-    ],
+    steps: [{ kind: "edits", build: (ctx) => gainScoreEdits(ctx.side, 2) }],
   },
 
   // Twilight Radiance — +1● current energy.
   "de98477c-e216-4618-bff1-0e24bd982fdb": {
     id: "de98477c-e216-4618-bff1-0e24bd982fdb",
-    steps: [
-      { kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 1) },
-    ],
+    steps: [{ kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 1) }],
   },
 
   // Prismatic Pastures — +3● current energy.
   "d585b78a-dfe3-4e12-95ac-432c3c880540": {
     id: "d585b78a-dfe3-4e12-95ac-432c3c880540",
-    steps: [
-      { kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 3) },
-    ],
+    steps: [{ kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 3) }],
   },
 
   // The Voltsurge — Each side draws 2.
@@ -236,10 +333,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
     steps: [
       {
         kind: "edits",
-        build: (_ctx) => [
-          ...drawEdits("player", 2),
-          ...drawEdits("enemy", 2),
-        ],
+        build: (_ctx) => [...drawEdits("player", 2), ...drawEdits("enemy", 2)],
       },
     ],
   },
@@ -248,7 +342,10 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
   "03e4e701-4720-4278-8198-9b7e0514d4cf": {
     id: "03e4e701-4720-4278-8198-9b7e0514d4cf",
     steps: [
-      { kind: "edits", build: ({ side }) => [{ kind: "ERODE", side, count: 3 }] },
+      {
+        kind: "edits",
+        build: ({ side }) => [{ kind: "ERODE", side, count: 3 }],
+      },
     ],
   },
 
@@ -256,7 +353,12 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
   "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf": {
     id: "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
     steps: [
-      { kind: "edits", build: (ctx) => [{ kind: "ADJUST_MAX_ENERGY", side: opponentOf(ctx.side), amount: 1 }] },
+      {
+        kind: "edits",
+        build: (ctx) => [
+          { kind: "ADJUST_MAX_ENERGY", side: opponentOf(ctx.side), amount: 1 },
+        ],
+      },
     ],
   },
 
@@ -288,12 +390,14 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
     steps: [
       {
         kind: "edits",
-        build: (ctx) => [{
-          kind: "SET_SIDE_HAND_VISIBILITY",
-          side: opponentOf(ctx.side),
-          viewer: ctx.side,
-          isRevealed: true,
-        }],
+        build: (ctx) => [
+          {
+            kind: "SET_SIDE_HAND_VISIBILITY",
+            side: opponentOf(ctx.side),
+            viewer: ctx.side,
+            isRevealed: true,
+          },
+        ],
       },
     ],
   },
@@ -305,9 +409,10 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
       {
         kind: "edits",
         build: (ctx) => {
-          const destination = ctx.isTutorial === true
-            ? selectTutorialCenterBackRankSlot(ctx.state, ctx.side)
-            : selectDefaultCharacterPlaySlot(ctx.state, ctx.side);
+          const destination =
+            ctx.isTutorial === true
+              ? selectTutorialCenterBackRankSlot(ctx.state, ctx.side)
+              : selectDefaultCharacterPlaySlot(ctx.state, ctx.side);
           if (destination === null) return [];
           return [
             {
@@ -335,7 +440,11 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
           return alliesInPlay(ctx.state, ctx.side).map((id) => {
             const instance = selectBattleCardInstance(ctx.state, id);
             const existing = instance?.sparkDelta ?? 0;
-            return { kind: "SET_CARD_SPARK_DELTA" as const, battleCardId: id, value: existing + 1 };
+            return {
+              kind: "SET_CARD_SPARK_DELTA" as const,
+              battleCardId: id,
+              value: existing + 1,
+            };
           });
         },
       },
@@ -354,7 +463,9 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
           const hand = ctx.state.sides[ctx.side].hand;
           const drawnId = hand[hand.length - 1];
           const drawn = selectBattleCardInstance(ctx.state, drawnId ?? null);
-          return drawn?.definition.battleCardKind === "character" ? gainEnergyEdits(ctx.side, 1) : [];
+          return drawn?.definition.battleCardKind === "character"
+            ? gainEnergyEdits(ctx.side, 1)
+            : [];
         },
       },
     ],
@@ -375,7 +486,11 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
             const slot = selectDefaultCharacterPlaySlot(ctx.state, side);
             if (voidChars.length === 0 || slot === null) continue;
             const pick = voidChars[Math.floor(ctx.random() * voidChars.length)];
-            edits.push({ kind: "MOVE_CARD_TO_ZONE", battleCardId: pick, destination: slot });
+            edits.push({
+              kind: "MOVE_CARD_TO_ZONE",
+              battleCardId: pick,
+              destination: slot,
+            });
           }
           return edits;
         },
@@ -396,7 +511,10 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: createMessageDescriptor("battle-prompt-choose-card-discard"),
+          label: prompt(
+            "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d",
+            "discard-drawn-card",
+          ),
           count: 1,
           optional: false,
           candidates: (ctx) => ctx.state.sides[ctx.side].hand,
@@ -408,7 +526,10 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
             const drawn = hand[hand.length - 1];
             return drawn !== undefined ? [drawn] : [];
           },
-          resolve: ([id]) => (id !== undefined ? [{ kind: "DISCARD_CARD", battleCardId: id }] : []),
+          resolve: ([id]) =>
+            id !== undefined
+              ? [{ kind: "DISCARD_CARD", battleCardId: id }]
+              : [],
         },
       },
     ],
@@ -423,11 +544,14 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: createMessageDescriptor("battle-prompt-discard-card"),
+          label: prompt("91deefd2-0400-4c78-ab9f-f6db864ff7e2", "discard-card"),
           count: 1,
           optional: false,
           candidates: (ctx) => ctx.state.sides[ctx.side].hand,
-          resolve: ([id]) => (id !== undefined ? [{ kind: "DISCARD_CARD", battleCardId: id }] : []),
+          resolve: ([id]) =>
+            id !== undefined
+              ? [{ kind: "DISCARD_CARD", battleCardId: id }]
+              : [],
         },
       },
     ],
@@ -441,17 +565,29 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "confirm",
-          label: createMessageDescriptor("battle-prompt-confirm-discard-draw", { count: 2 }),
+          label: prompt(
+            "fa8704fe-759f-408d-992d-d8f9d5ffd760",
+            "discard-and-draw",
+            { count: 2 },
+          ),
           onYes: [
             {
               kind: "prompt",
               prompt: {
                 kind: "pick-cards",
-                label: createMessageDescriptor("battle-prompt-discard-cards", { count: 2 }),
+                label: prompt(
+                  "fa8704fe-759f-408d-992d-d8f9d5ffd760",
+                  "choose-discards",
+                  { count: 2 },
+                ),
                 count: 2,
                 optional: false,
                 candidates: (ctx) => ctx.state.sides[ctx.side].hand,
-                resolve: (ids) => ids.map((id) => ({ kind: "DISCARD_CARD" as const, battleCardId: id })),
+                resolve: (ids) =>
+                  ids.map((id) => ({
+                    kind: "DISCARD_CARD" as const,
+                    battleCardId: id,
+                  })),
               },
             },
             { kind: "edits", build: (ctx) => drawEdits(ctx.side, 2) },
@@ -469,13 +605,22 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: createMessageDescriptor("battle-prompt-return-void-card"),
+          label: prompt(
+            "2b23a60c-209c-4c75-b63c-b7f73b2e1a56",
+            "return-void-card",
+          ),
           count: 1,
           optional: false,
           candidates: (ctx) => ctx.state.sides[ctx.side].void,
           resolve: ([id], ctx) =>
             id !== undefined
-              ? [{ kind: "MOVE_CARD_TO_ZONE", battleCardId: id, destination: { side: ctx.side, zone: "hand" } }]
+              ? [
+                  {
+                    kind: "MOVE_CARD_TO_ZONE",
+                    battleCardId: id,
+                    destination: { side: ctx.side, zone: "hand" },
+                  },
+                ]
               : [],
         },
       },
@@ -490,13 +635,19 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: createMessageDescriptor("battle-prompt-return-event-from-void"),
+          label: prompt("a0fbcbd9-96ee-4392-add7-e1d436f99553", "return-event"),
           count: 1,
           optional: false,
           candidates: (ctx) => eventsInVoid(ctx.state, ctx.side),
           resolve: ([id], ctx) =>
             id !== undefined
-              ? [{ kind: "MOVE_CARD_TO_ZONE", battleCardId: id, destination: { side: ctx.side, zone: "hand" } }]
+              ? [
+                  {
+                    kind: "MOVE_CARD_TO_ZONE",
+                    battleCardId: id,
+                    destination: { side: ctx.side, zone: "hand" },
+                  },
+                ]
               : [],
         },
       },
@@ -512,7 +663,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: createMessageDescriptor("battle-prompt-banish-enemy-character"),
+          label: prompt(SILENT_WINTER_ID, "banish-enemy-character"),
           count: 1,
           optional: false,
           candidates: (ctx) => enemyCharactersInPlay(ctx.state, ctx.side),
@@ -554,7 +705,10 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: createMessageDescriptor("battle-prompt-pick-card-for-hand"),
+          label: prompt(
+            "3a4293da-55a1-4094-898a-df402ffa1c92",
+            "pick-card-for-hand",
+          ),
           count: 1,
           optional: false,
           candidates: (ctx) => topOfDeck(ctx.state, ctx.side, 2),
@@ -564,13 +718,21 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
             const otherIndex = top2[0] === chosenId ? 1 : 0;
             const otherId = top2[otherIndex];
             const edits: BattleDebugEdit[] = [
-              { kind: "MOVE_CARD_TO_ZONE", battleCardId: chosenId, destination: { side: ctx.side, zone: "hand" } },
+              {
+                kind: "MOVE_CARD_TO_ZONE",
+                battleCardId: chosenId,
+                destination: { side: ctx.side, zone: "hand" },
+              },
             ];
             if (otherId !== undefined) {
               edits.push({
                 kind: "MOVE_CARD_TO_ZONE",
                 battleCardId: otherId,
-                destination: { side: ctx.side, zone: "deck", position: "bottom" },
+                destination: {
+                  side: ctx.side,
+                  zone: "deck",
+                  position: "bottom",
+                },
               });
             }
             return edits;
@@ -588,13 +750,19 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "confirm",
-          label: createMessageDescriptor("battle-prompt-confirm-put-void-on-top"),
+          label: prompt(
+            "556057bb-b134-497e-86c2-c6f30049e9e3",
+            "confirm-void-to-deck",
+          ),
           onYes: [
             {
               kind: "prompt",
               prompt: {
                 kind: "pick-cards",
-                label: createMessageDescriptor("battle-prompt-choose-void-for-top"),
+                label: prompt(
+                  "556057bb-b134-497e-86c2-c6f30049e9e3",
+                  "choose-void-for-deck",
+                ),
                 count: 1,
                 optional: false,
                 candidates: (ctx) => ctx.state.sides[ctx.side].void,
@@ -604,7 +772,11 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
                         {
                           kind: "MOVE_CARD_TO_ZONE",
                           battleCardId: id,
-                          destination: { side: ctx.side, zone: "deck", position: "top" },
+                          destination: {
+                            side: ctx.side,
+                            zone: "deck",
+                            position: "top",
+                          },
                         },
                       ]
                     : [],
@@ -624,17 +796,27 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "confirm",
-          label: createMessageDescriptor("battle-prompt-confirm-abandon-draw", { count: 2 }),
+          label: prompt(
+            "20be0fdd-d691-40a9-b4f8-15689ea7ebaa",
+            "confirm-abandon-and-draw",
+            { count: 2 },
+          ),
           onYes: [
             {
               kind: "prompt",
               prompt: {
                 kind: "pick-cards",
-                label: createMessageDescriptor("battle-prompt-choose-character-abandon"),
+                label: prompt(
+                  "20be0fdd-d691-40a9-b4f8-15689ea7ebaa",
+                  "choose-character-to-abandon",
+                ),
                 count: 1,
                 optional: false,
                 candidates: (ctx) => alliesInPlay(ctx.state, ctx.side),
-                resolve: ([id]) => (id !== undefined ? [{ kind: "ABANDON", battleCardId: id }] : []),
+                resolve: ([id]) =>
+                  id !== undefined
+                    ? [{ kind: "ABANDON", battleCardId: id }]
+                    : [],
               },
             },
             { kind: "edits", build: (ctx) => drawEdits(ctx.side, 2) },
@@ -652,10 +834,30 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "choice",
-          label: createMessageDescriptor("battle-prompt-choose-one"),
+          label: prompt(
+            "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c",
+            "choose-benefit",
+            { amount: 2 },
+          ),
           options: [
-            { label: createMessageDescriptor("battle-prompt-draw-card"), build: (ctx) => drawEdits(ctx.side, 1) },
-            { label: createMessageDescriptor("battle-prompt-gain-energy", { amount: 2 }), build: (ctx) => gainEnergyEdits(ctx.side, 2) },
+            {
+              label: promptChoice(
+                "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c",
+                "choose-benefit",
+                "draw-card",
+                { amount: 2 },
+              ),
+              build: (ctx) => drawEdits(ctx.side, 1),
+            },
+            {
+              label: promptChoice(
+                "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c",
+                "choose-benefit",
+                "gain-energy",
+                { amount: 2 },
+              ),
+              build: (ctx) => gainEnergyEdits(ctx.side, 2),
+            },
           ],
         },
       },
@@ -670,15 +872,21 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "confirm",
-          label: createMessageDescriptor("battle-prompt-discard-hand-redraw"),
+          label: prompt("446095b1-ec4d-40d7-8eed-a8221d339ea2", "redraw-hand"),
           onYes: [
             {
               kind: "edits",
               build: (ctx) => {
                 const handIds = ctx.state.sides[ctx.side].hand;
                 const n = handIds.length;
-                const discards: BattleDebugEdit[] = handIds.map((id) => ({ kind: "DISCARD_CARD", battleCardId: id }));
-                const draws: BattleDebugEdit[] = Array.from({ length: n }, () => ({ kind: "DRAW_CARD" as const, side: ctx.side }));
+                const discards: BattleDebugEdit[] = handIds.map((id) => ({
+                  kind: "DISCARD_CARD",
+                  battleCardId: id,
+                }));
+                const draws: BattleDebugEdit[] = Array.from(
+                  { length: n },
+                  () => ({ kind: "DRAW_CARD" as const, side: ctx.side }),
+                );
                 return [...discards, ...draws];
               },
             },
@@ -691,9 +899,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
   // Skypath — Foresee 1.
   "f9b479cf-02cb-40e1-bb64-70b29977bf15": {
     id: "f9b479cf-02cb-40e1-bb64-70b29977bf15",
-    steps: [
-      { kind: "prompt", prompt: { kind: "foresee", count: 1 } },
-    ],
+    steps: [{ kind: "prompt", prompt: { kind: "foresee", count: 1 } }],
   },
 
   // Ruin Tree — You may play a ≤2● character from your void.
@@ -706,20 +912,35 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "confirm",
-          label: createMessageDescriptor("battle-prompt-play-character-from-void"),
+          label: prompt(
+            "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5",
+            "confirm-play-void-character",
+          ),
           onYes: [
             {
               kind: "prompt",
               prompt: {
                 kind: "pick-cards",
-                label: createMessageDescriptor("battle-prompt-choose-character-to-play"),
+                label: prompt(
+                  "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5",
+                  "choose-void-character",
+                ),
                 count: 1,
                 optional: false,
                 candidates: (ctx) => charactersInVoid(ctx.state, ctx.side, 2),
                 resolve: ([id], ctx) => {
-                  const slot = selectDefaultCharacterPlaySlot(ctx.state, ctx.side);
+                  const slot = selectDefaultCharacterPlaySlot(
+                    ctx.state,
+                    ctx.side,
+                  );
                   return id !== undefined && slot !== null
-                    ? [{ kind: "MOVE_CARD_TO_ZONE", battleCardId: id, destination: slot }]
+                    ? [
+                        {
+                          kind: "MOVE_CARD_TO_ZONE",
+                          battleCardId: id,
+                          destination: slot,
+                        },
+                      ]
                     : [];
                 },
               },
@@ -738,7 +959,9 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 /**
  * Returns the `DreamwellEffectScript` for `cardId` if one exists, else `null`.
  */
-export function selectDreamwellEffectScript(cardId: string): DreamwellEffectScript | null {
+export function selectDreamwellEffectScript(
+  cardId: string,
+): DreamwellEffectScript | null {
   return DREAMWELL_EFFECTS[cardId] ?? null;
 }
 

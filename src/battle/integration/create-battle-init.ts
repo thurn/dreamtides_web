@@ -660,6 +660,7 @@ function toDreamwellCardDefinition(
     order: card.order,
     cardNumber: card.cardNumber,
     imageNumber: card.imageNumber ?? 0,
+    automation: [...(card.automation ?? [])],
   };
   // Firebase rejects `undefined` property values, so only attach `art` when the
   // card has actually been framed. Unframed cards omit the key entirely.

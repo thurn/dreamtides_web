@@ -57,12 +57,16 @@ describe("replay fixtures", () => {
       name: "pick-cards",
       prompt: {
         promptId: 17,
-        run: { scriptRef: { table: "battle", id: "synthetic-picker" }, cursor: [3, 1], side: "player" },
+        run: {
+          scriptRef: { table: "battle", id: "synthetic-picker" },
+          cursor: [3, 1],
+          side: "player",
+        },
         kind: "pick-cards",
         options: {
           kind: "pick-cards",
-          label: createMessageDescriptor("battle-prompt-discard-cards", { count: 2 }),
-          subtitle: createMessageDescriptor("battle-prompt-choose-void-card-reclaim-subtitle"),
+          label: createMessageDescriptor("battle-prompt-generic"),
+          subtitle: createMessageDescriptor("battle-prompt-generic-subtitle"),
           candidateIds: ["card-a", "card-b", "card-c"],
           count: 2,
           optional: true,
@@ -74,14 +78,18 @@ describe("replay fixtures", () => {
       name: "choice",
       prompt: {
         promptId: 18,
-        run: { scriptRef: { table: "battle", id: "synthetic-choice" }, cursor: [2], side: "enemy" },
+        run: {
+          scriptRef: { table: "battle", id: "synthetic-choice" },
+          cursor: [2],
+          side: "enemy",
+        },
         kind: "choice",
         options: {
           kind: "choice",
-          label: createMessageDescriptor("battle-prompt-choose-one"),
+          label: createMessageDescriptor("battle-prompt-generic"),
           options: [
-            { label: createMessageDescriptor("battle-prompt-draw-card") },
-            { label: createMessageDescriptor("battle-prompt-gain-energy", { amount: 2 }) },
+            { label: createMessageDescriptor("battle-prompt-generic-option") },
+            { label: createMessageDescriptor("battle-prompt-generic-option") },
           ],
         },
       },
@@ -90,11 +98,15 @@ describe("replay fixtures", () => {
       name: "confirm-materialized-choice",
       prompt: {
         promptId: 19,
-        run: { scriptRef: { table: "dreamwell", id: "synthetic-confirm" }, cursor: [0, 4], side: "player" },
+        run: {
+          scriptRef: { table: "dreamwell", id: "synthetic-confirm" },
+          cursor: [0, 4],
+          side: "player",
+        },
         kind: "confirm",
         options: {
           kind: "choice",
-          label: createMessageDescriptor("battle-prompt-discard-hand-redraw"),
+          label: createMessageDescriptor("battle-prompt-generic"),
           options: [
             { label: createMessageDescriptor("battle-prompt-confirm-yes") },
             { label: createMessageDescriptor("battle-prompt-confirm-skip") },
@@ -106,7 +118,11 @@ describe("replay fixtures", () => {
       name: "foresee",
       prompt: {
         promptId: 20,
-        run: { scriptRef: { table: "dreamwell", id: "synthetic-foresee" }, cursor: [5], side: "player" },
+        run: {
+          scriptRef: { table: "dreamwell", id: "synthetic-foresee" },
+          cursor: [5],
+          side: "player",
+        },
         kind: "foresee",
         options: {
           kind: "foresee",
@@ -115,23 +131,30 @@ describe("replay fixtures", () => {
         },
       },
     },
-  ] as const)("$name preserves every prompt field through compaction", ({ prompt }) => {
-    const base = GAME_ENGINE_CONFIG.genesisState(journeyOnly.genesis);
-    const state: FoldState = {
-      ...base,
-      battle: {
-        init: {} as never,
-        board: {} as never,
-        effectQueue: [],
-        pendingPrompt: prompt as never,
-        dawnFired: {} as never,
-      },
-    };
-    const decoded = GAME_ENGINE_CONFIG.decode(GAME_ENGINE_CONFIG.encode(state));
-    expect(decoded.battle?.pendingPrompt).toEqual(prompt);
-    expect(decoded.battle?.pendingPrompt?.run.cursor).toEqual(prompt.run.cursor);
-    expect(decoded.battle?.pendingPrompt?.options).toEqual(prompt.options);
-  });
+  ] as const)(
+    "$name preserves every prompt field through compaction",
+    ({ prompt }) => {
+      const base = GAME_ENGINE_CONFIG.genesisState(journeyOnly.genesis);
+      const state: FoldState = {
+        ...base,
+        battle: {
+          init: {} as never,
+          board: {} as never,
+          effectQueue: [],
+          pendingPrompt: prompt as never,
+          dawnFired: {} as never,
+        },
+      };
+      const decoded = GAME_ENGINE_CONFIG.decode(
+        GAME_ENGINE_CONFIG.encode(state),
+      );
+      expect(decoded.battle?.pendingPrompt).toEqual(prompt);
+      expect(decoded.battle?.pendingPrompt?.run.cursor).toEqual(
+        prompt.run.cursor,
+      );
+      expect(decoded.battle?.pendingPrompt?.options).toEqual(prompt.options);
+    },
+  );
 
   it("normalizes every compacted Bane reference to Nightmare", () => {
     const state = GAME_ENGINE_CONFIG.genesisState(journeyOnly.genesis);
@@ -141,11 +164,20 @@ describe("replay fixtures", () => {
         journey: {
           ...state.journey,
           deck: [
-            { entryId: "nightmare", cardNumber: NIGHTMARE_CARD_NUMBER, isBane: false },
+            {
+              entryId: "nightmare",
+              cardNumber: NIGHTMARE_CARD_NUMBER,
+              isBane: false,
+            },
             { entryId: "retired", cardNumber: 44, isBane: true },
           ],
           dreamsigns: [
-            { id: "negative", name: "Sign", effectDescription: "", isBane: true },
+            {
+              id: "negative",
+              name: "Sign",
+              effectDescription: "",
+              isBane: true,
+            },
           ],
           battleModifiers: [
             {
@@ -186,23 +218,26 @@ describe("replay fixtures", () => {
     ]);
   });
 
-  it.each(FIXTURES)(
-    "$name replays to its stamped finalHash",
-    ({ fixture }) => {
-      expect(fixture.providerSet).toBe(FIXTURE_PROVIDER_SET);
-      const result = replayLog({
-        genesis: fixture.genesis,
-        events: fixture.events,
-      });
-      expect(result.finalHash).toBe(fixture.finalHash);
-    },
-  );
+  it.each(FIXTURES)("$name replays to its stamped finalHash", ({ fixture }) => {
+    expect(fixture.providerSet).toBe(FIXTURE_PROVIDER_SET);
+    const result = replayLog({
+      genesis: fixture.genesis,
+      events: fixture.events,
+    });
+    expect(result.finalHash).toBe(fixture.finalHash);
+  });
 
   it.each(FIXTURES)(
     "$name replays deterministically (same hash twice)",
     ({ fixture }) => {
-      const once = replayLog({ genesis: fixture.genesis, events: fixture.events });
-      const twice = replayLog({ genesis: fixture.genesis, events: fixture.events });
+      const once = replayLog({
+        genesis: fixture.genesis,
+        events: fixture.events,
+      });
+      const twice = replayLog({
+        genesis: fixture.genesis,
+        events: fixture.events,
+      });
       expect(once.finalHash).toBe(twice.finalHash);
     },
   );

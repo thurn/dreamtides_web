@@ -191,8 +191,8 @@ export interface MobileBattleView {
 /** A UUID-safe card decision owned by the authoritative battle prompt. */
 export interface MobileBattleCardPickerView {
   readonly key: string;
-  readonly label: FluentMessageDescriptor;
-  readonly subtitle?: FluentMessageDescriptor;
+  readonly label: string | FluentMessageDescriptor;
+  readonly subtitle?: string | FluentMessageDescriptor;
   readonly side: MobileBattleOwner;
   readonly candidateOwner?: MobileBattleOwner | null;
   readonly candidates: readonly MobileBattleCardPickerCandidateView[];
@@ -217,8 +217,10 @@ export interface MobileBattleCardPickerCandidateView {
 /** An in-place option decision owned by the authoritative battle prompt. */
 export interface MobileBattleChoicePromptView {
   readonly key: string;
-  readonly label: FluentMessageDescriptor;
-  readonly options: readonly { readonly label: FluentMessageDescriptor }[];
+  readonly label: string | FluentMessageDescriptor;
+  readonly options: readonly {
+    readonly label: string | FluentMessageDescriptor;
+  }[];
   readonly canResolve: boolean;
 }
 
@@ -2897,7 +2899,9 @@ function NearHand({
         paddingLeft: isDesktop
           ? `calc(var(${BATTLE_HUD_START_CLEARANCE_PROPERTY}, 0px) + ${token("--space-2xl")})`
           : undefined,
-        transform: isDesktop ? `translateY(${token("--space-2xl")})` : undefined,
+        transform: isDesktop
+          ? `translateY(${token("--space-2xl")})`
+          : undefined,
         boxSizing: isDesktop ? "border-box" : undefined,
       }}
     >
@@ -3436,6 +3440,13 @@ function pickerZoneCaption(
   });
 }
 
+function formatBattlePromptText(
+  t: ReturnType<typeof useMessages>,
+  text: string | FluentMessageDescriptor,
+): string {
+  return typeof text === "string" ? text : formatMessageDescriptor(t, text);
+}
+
 function CardPickerGallery({
   cardPicker,
   selectedPickerCardIds,
@@ -3456,14 +3467,14 @@ function CardPickerGallery({
     cardPicker.count,
     cardPicker.candidates.length,
   );
-  const promptLabel = formatMessageDescriptor(t, cardPicker.label);
+  const promptLabel = formatBattlePromptText(t, cardPicker.label);
   const promptSubtitle =
     cardPicker.subtitle === undefined
       ? t("battle-card-picker-selected-count", {
           selectedCount: selectedPickerCardIds.length,
           requiredCount,
         })
-      : formatMessageDescriptor(t, cardPicker.subtitle);
+      : formatBattlePromptText(t, cardPicker.subtitle);
   const canSubmit =
     cardPicker.canResolve &&
     selectedPickerCardIds.length === requiredCount &&
@@ -3579,7 +3590,7 @@ function ControlRow({
   const choiceLabel =
     choicePrompt === null
       ? undefined
-      : formatMessageDescriptor(t, choicePrompt.label);
+      : formatBattlePromptText(t, choicePrompt.label);
   const disabled = interactions?.canInteract !== true;
   const hasAlternateNextControls = aiApproval !== null || choicePrompt !== null;
   const requiredPickerCount =
@@ -3647,7 +3658,7 @@ function ControlRow({
             }}
           >
             {t("battle-card-picker-progress", {
-              promptLabel: formatMessageDescriptor(t, cardPicker.label),
+              promptLabel: formatBattlePromptText(t, cardPicker.label),
               owner:
                 (cardPicker.candidateOwner ?? cardPicker.side) === perspective
                   ? "viewer"
@@ -3734,7 +3745,7 @@ function ControlRow({
               choicePrompt.options.map((option, index) => (
                 <GlassButton
                   key={`${choicePrompt.key}:${String(index)}`}
-                  label={formatMessageDescriptor(t, option.label)}
+                  label={formatBattlePromptText(t, option.label)}
                   variant={index === 0 ? "accent" : "default"}
                   disabled={
                     !choicePrompt.canResolve ||
@@ -3803,7 +3814,7 @@ function BattleControlMessage({
   const choiceLabel =
     choicePrompt === null
       ? undefined
-      : formatMessageDescriptor(t, choicePrompt.label);
+      : formatBattlePromptText(t, choicePrompt.label);
   const message =
     (promptNotice === null
       ? undefined
@@ -5244,7 +5255,8 @@ export function MobileBattleScreen({
             <IconButton
               glyph={GLYPHS.sidebarRight}
               size="sm"
-              label={/* localization-ignore: developer-only battle inspector control. */
+              label={
+                /* localization-ignore: developer-only battle inspector control. */
                 isInspectorOpen
                   ? "Close battle inspector"
                   : "Open battle inspector"
@@ -5391,9 +5403,15 @@ export function MobileBattleScreen({
       !isDockLayout &&
       isInspectorOpen ? (
         <GlassDialog
-          title={/* localization-ignore: developer-only battle inspector control. */ "Battle Inspector"}
-          subtitle={/* localization-ignore: developer-only battle inspector control. */ `Developer Tools · Opponent: ${view.inspector.opponentName}`}
-          closeLabel={/* localization-ignore: developer-only battle inspector control. */ "Close battle inspector"}
+          title={
+            /* localization-ignore: developer-only battle inspector control. */ "Battle Inspector"
+          }
+          subtitle={
+            /* localization-ignore: developer-only battle inspector control. */ `Developer Tools · Opponent: ${view.inspector.opponentName}`
+          }
+          closeLabel={
+            /* localization-ignore: developer-only battle inspector control. */ "Close battle inspector"
+          }
           cutoutAwareClose
           fullScreen
           onClose={closeInspector}

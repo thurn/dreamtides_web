@@ -33,11 +33,12 @@ import {
   materializeRandomSite,
 } from "../../random-site/random-site";
 import { SITE_TYPES } from "../../types/site-type";
+import { isFluentMessageDescriptor } from "../../data/localization-descriptors";
 import {
-  createMessageDescriptor,
-  isFluentMessageDescriptor,
-} from "../../data/localization-descriptors";
-import type { FluentMessageDescriptor } from "../../data/localization-messages";
+  isDreamwellPromptRef,
+  isLegacyPromptText,
+  type BattlePromptText,
+} from "../../data/dreamwell-prompts";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (SELECT_DREAM_AVATAR / START_JOURNEY)
@@ -666,94 +667,8 @@ function asValidBattleFoldState(value: unknown): BattleFoldState | null {
   };
 }
 
-const LEGACY_PROMPT_DESCRIPTORS: ReadonlyMap<string, FluentMessageDescriptor> =
-  new Map<string, FluentMessageDescriptor>([
-    [
-      "Discover a ≤2● cost card",
-      createMessageDescriptor("battle-prompt-discover-card-max-cost", { maxCost: 2 }),
-    ],
-    ["Discover a character", createMessageDescriptor("battle-prompt-discover-character")],
-    ["Rematerialize an ally", createMessageDescriptor("battle-prompt-rematerialize-ally")],
-    [
-      "Choose a void card to gain Reclaim",
-      createMessageDescriptor("battle-prompt-choose-void-card-reclaim"),
-    ],
-    ["Choose a card to discard", createMessageDescriptor("battle-prompt-choose-card-discard")],
-    ["Discard a card", createMessageDescriptor("battle-prompt-discard-card")],
-    [
-      "Discard 2 cards, then draw 2?",
-      createMessageDescriptor("battle-prompt-confirm-discard-draw", { count: 2 }),
-    ],
-    ["Discard 2 cards", createMessageDescriptor("battle-prompt-discard-cards", { count: 2 })],
-    ["Return a void card to hand", createMessageDescriptor("battle-prompt-return-void-card")],
-    [
-      "Return an event from your void to hand",
-      createMessageDescriptor("battle-prompt-return-event-from-void"),
-    ],
-    [
-      "Banish an enemy character",
-      createMessageDescriptor("battle-prompt-banish-enemy-character"),
-    ],
-    ["Pick a card for your hand", createMessageDescriptor("battle-prompt-pick-card-for-hand")],
-    [
-      "Put a void card on top of your deck?",
-      createMessageDescriptor("battle-prompt-confirm-put-void-on-top"),
-    ],
-    [
-      "Choose a void card to put on top",
-      createMessageDescriptor("battle-prompt-choose-void-for-top"),
-    ],
-    [
-      "Abandon a character to draw 2?",
-      createMessageDescriptor("battle-prompt-confirm-abandon-draw", { count: 2 }),
-    ],
-    [
-      "Choose a character to abandon",
-      createMessageDescriptor("battle-prompt-choose-character-abandon"),
-    ],
-    ["Choose one", createMessageDescriptor("battle-prompt-choose-one")],
-    ["Draw a card", createMessageDescriptor("battle-prompt-draw-card")],
-    ["Gain 2●", createMessageDescriptor("battle-prompt-gain-energy", { amount: 2 })],
-    [
-      "Discard your hand and redraw?",
-      createMessageDescriptor("battle-prompt-discard-hand-redraw"),
-    ],
-    [
-      "Play a character from your void?",
-      createMessageDescriptor("battle-prompt-play-character-from-void"),
-    ],
-    [
-      "Choose a character to play",
-      createMessageDescriptor("battle-prompt-choose-character-to-play"),
-    ],
-  ]);
-
-const LEGACY_RECLAIM_PROMPT_SCRIPT_ID =
-  "14dec460-3ec6-40c1-978f-67e70cb0b227";
-const LEGACY_RECLAIM_PROMPT_SUBTITLE =
-  "You may play it from your void this turn, then banish it.";
-
-function legacyPromptDescriptor(value: unknown): FluentMessageDescriptor {
-  return typeof value === "string"
-    ? (LEGACY_PROMPT_DESCRIPTORS.get(value) ??
-        createMessageDescriptor("battle-prompt-generic"))
-    : createMessageDescriptor("battle-prompt-generic");
-}
-
-function isLegacyReclaimPrompt(
-  pendingPrompt: Record<string, unknown>,
-  options: Record<string, unknown>,
-): boolean {
-  if (pendingPrompt.kind !== "pick-cards" || options.kind !== "pick-cards") {
-    return false;
-  }
-  if (!isRecord(pendingPrompt.run) || !isRecord(pendingPrompt.run.scriptRef)) {
-    return false;
-  }
-  return (
-    pendingPrompt.run.scriptRef.table === "dreamwell" &&
-    pendingPrompt.run.scriptRef.id === LEGACY_RECLAIM_PROMPT_SCRIPT_ID
-  );
+function legacyPromptText(value: string): BattlePromptText {
+  return { kind: "legacy-prompt-text", text: value };
 }
 
 export function normalizeLegacyPendingPrompt(
@@ -763,39 +678,35 @@ export function normalizeLegacyPendingPrompt(
     return value;
   }
   if (!isRecord(value.pendingPrompt.options)) return value;
-  const pendingPrompt = value.pendingPrompt;
   const options = { ...value.pendingPrompt.options };
   if (typeof options.label === "string") {
-    options.label = legacyPromptDescriptor(options.label);
+    options.label = legacyPromptText(options.label);
   }
   if (typeof options.subtitle === "string") {
-    options.subtitle =
-      options.subtitle === LEGACY_RECLAIM_PROMPT_SUBTITLE ||
-        isLegacyReclaimPrompt(pendingPrompt, options)
-        ? createMessageDescriptor("battle-prompt-choose-void-card-reclaim-subtitle")
-        : createMessageDescriptor("battle-prompt-generic-subtitle");
+    options.subtitle = legacyPromptText(options.subtitle);
   }
   if (Array.isArray(options.options)) {
     const legacyOptions: unknown[] = options.options;
     options.options = legacyOptions.map((option: unknown) => {
       if (!isRecord(option)) return option;
-      if (isFluentMessageDescriptor(option.label)) return option;
-      if (option.label === "Yes") {
-        return { ...option, label: createMessageDescriptor("battle-prompt-confirm-yes") };
-      }
-      if (option.label === "Skip") {
-        return { ...option, label: createMessageDescriptor("battle-prompt-confirm-skip") };
-      }
-      return {
-        ...option,
-        label: createMessageDescriptor("battle-prompt-generic-option"),
-      };
+      if (isPromptText(option.label)) return option;
+      return typeof option.label === "string"
+        ? { ...option, label: legacyPromptText(option.label) }
+        : option;
     });
   }
   return {
     ...value,
     pendingPrompt: { ...value.pendingPrompt, options },
   };
+}
+
+function isPromptText(value: unknown): value is BattlePromptText {
+  return (
+    isFluentMessageDescriptor(value) ||
+    isDreamwellPromptRef(value) ||
+    isLegacyPromptText(value)
+  );
 }
 
 function isChallengeCursor(value: unknown): value is ChallengeCursor {
@@ -855,7 +766,7 @@ function isActivePromptShape(
   } else if (value.kind !== pendingKind) {
     return false;
   }
-  if (value.kind !== "foresee" && !isFluentMessageDescriptor(value.label)) {
+  if (value.kind !== "foresee" && !isPromptText(value.label)) {
     return false;
   }
   switch (value.kind) {
@@ -863,8 +774,7 @@ function isActivePromptShape(
       return (
         Array.isArray(value.candidateIds) &&
         value.candidateIds.every((id) => typeof id === "string") &&
-        (value.subtitle === undefined ||
-          isFluentMessageDescriptor(value.subtitle)) &&
+        (value.subtitle === undefined || isPromptText(value.subtitle)) &&
         typeof value.count === "number" &&
         Number.isInteger(value.count) &&
         typeof value.optional === "boolean" &&
@@ -875,8 +785,7 @@ function isActivePromptShape(
       return (
         Array.isArray(value.options) &&
         value.options.every(
-          (option) =>
-            isRecord(option) && isFluentMessageDescriptor(option.label),
+          (option) => isRecord(option) && isPromptText(option.label),
         )
       );
     case "foresee":

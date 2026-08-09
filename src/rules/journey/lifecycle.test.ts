@@ -25,7 +25,11 @@ const GENESIS: Genesis = {
   seed: "lifecycle-seed",
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null },
+  contentConfig: {
+    poolVariant: "test",
+    draftMode: "pool",
+    fresh20PackSize: null,
+  },
 };
 
 function ctx(overrides: Partial<EventContext> = {}): EventContext {
@@ -130,8 +134,9 @@ function deterministicProvider(
     // Derive a stable dreamsign pool from (id, seed) so the package varies with
     // its inputs but is byte-identical across re-applications.
     const rng = makePrng(hashNumber(`${dreamAvatarId}:${seed}`));
-    const dreamsignPoolIds = Array.from({ length: 8 }, () =>
-      `ds-${String(Math.floor(rng() * 1_000_000))}`,
+    const dreamsignPoolIds = Array.from(
+      { length: 8 },
+      () => `ds-${String(Math.floor(rng() * 1_000_000))}`,
     );
     return {
       dreamAvatar,
@@ -223,7 +228,9 @@ describe("essence floor", () => {
 
   it("SET_ESSENCE allows arbitrary non-negative values and floors at zero", () => {
     const start = genesis();
-    expect(apply(start, "SET_ESSENCE", { value: 10_000 }).journey.essence).toBe(10_000);
+    expect(apply(start, "SET_ESSENCE", { value: 10_000 }).journey.essence).toBe(
+      10_000,
+    );
     expect(apply(start, "SET_ESSENCE", { value: -5 }).journey.essence).toBe(0);
   });
 
@@ -262,26 +269,32 @@ describe("essence floor", () => {
 describe("limits and completion", () => {
   it("SET_MAX_DREAMSIGNS sets the value", () => {
     expect(
-      apply(genesis(), "SET_MAX_DREAMSIGNS", { value: 7 }).journey.maxDreamsigns,
+      apply(genesis(), "SET_MAX_DREAMSIGNS", { value: 7 }).journey
+        .maxDreamsigns,
     ).toBe(7);
   });
 
   it("SET_MAX_DREAMSIGNS clamps a negative value to 0", () => {
     expect(
-      apply(genesis(), "SET_MAX_DREAMSIGNS", { value: -5 }).journey.maxDreamsigns,
+      apply(genesis(), "SET_MAX_DREAMSIGNS", { value: -5 }).journey
+        .maxDreamsigns,
     ).toBe(0);
   });
 
   it("SET_MAX_DREAMSIGNS truncates a fractional value to an integer", () => {
     expect(
-      apply(genesis(), "SET_MAX_DREAMSIGNS", { value: 4.7 }).journey.maxDreamsigns,
+      apply(genesis(), "SET_MAX_DREAMSIGNS", { value: 4.7 }).journey
+        .maxDreamsigns,
     ).toBe(4);
   });
 
   it("SET_MAX_DREAMSIGNS bounces a non-finite value (NaN/Infinity)", () => {
     expect(
-      reduceGameEvent(genesis(), event("SET_MAX_DREAMSIGNS", { value: Number.NaN }), ctx())
-        .outcome,
+      reduceGameEvent(
+        genesis(),
+        event("SET_MAX_DREAMSIGNS", { value: Number.NaN }),
+        ctx(),
+      ).outcome,
     ).toBe("bounced");
     expect(
       reduceGameEvent(
@@ -291,7 +304,6 @@ describe("limits and completion", () => {
       ).outcome,
     ).toBe("bounced");
   });
-
 });
 
 // ---------------------------------------------------------------------------
@@ -310,15 +322,15 @@ describe("navigation", () => {
       },
     };
     const siteScreen = apply(state, "ENTER_SITE", { siteId: "site-1" });
-    expect(siteScreen.journey.screen).toEqual({ type: "site", siteId: "site-1" });
+    expect(siteScreen.journey.screen).toEqual({
+      type: "site",
+      siteId: "site-1",
+    });
     expect(siteScreen.journey.activeSiteId).toBe("site-1");
 
     expect(
-      reduceGameEvent(
-        state,
-        event("ENTER_SITE", { siteId: "unknown" }),
-        ctx(),
-      ).outcome,
+      reduceGameEvent(state, event("ENTER_SITE", { siteId: "unknown" }), ctx())
+        .outcome,
     ).toBe("bounced");
   });
 
@@ -410,13 +422,21 @@ describe("REROLL_DREAM_AVATAR_OFFER", () => {
     const once = apply(start, "REROLL_DREAM_AVATAR_OFFER", {});
     const twice = apply(once, "REROLL_DREAM_AVATAR_OFFER", {});
 
-    expect(once.journey.screen).toEqual({ type: "journeyStart", rerollCount: 1 });
-    expect(twice.journey.screen).toEqual({ type: "journeyStart", rerollCount: 2 });
+    expect(once.journey.screen).toEqual({
+      type: "journeyStart",
+      rerollCount: 1,
+    });
+    expect(twice.journey.screen).toEqual({
+      type: "journeyStart",
+      rerollCount: 2,
+    });
   });
 
   it("bounces after the journey has started", () => {
     registerJourneyLifecycleContentProvider(deterministicProvider());
-    const started = apply(genesis(), "START_JOURNEY", { dreamAvatarId: "dc-1" });
+    const started = apply(genesis(), "START_JOURNEY", {
+      dreamAvatarId: "dc-1",
+    });
     const out = reduceGameEvent(
       started,
       event("REROLL_DREAM_AVATAR_OFFER", {}),
@@ -470,16 +490,26 @@ describe("SELECT_DREAM_AVATAR", () => {
   it("derives a byte-identical resolvedPackage for the same seed regardless of ctx", () => {
     registerJourneyLifecycleContentProvider(deterministicProvider());
     const start = genesis();
-    const a = apply(start, "SELECT_DREAM_AVATAR", { dreamAvatarId: "dc-42" }, ctx({
-      seq: 3,
-      timestamp: "2020-01-01T00:00:00.000Z",
-      rng: () => 0.1,
-    }));
-    const b = apply(start, "SELECT_DREAM_AVATAR", { dreamAvatarId: "dc-42" }, ctx({
-      seq: 3,
-      timestamp: "2099-12-31T23:59:59.000Z",
-      rng: () => 0.9,
-    }));
+    const a = apply(
+      start,
+      "SELECT_DREAM_AVATAR",
+      { dreamAvatarId: "dc-42" },
+      ctx({
+        seq: 3,
+        timestamp: "2020-01-01T00:00:00.000Z",
+        rng: () => 0.1,
+      }),
+    );
+    const b = apply(
+      start,
+      "SELECT_DREAM_AVATAR",
+      { dreamAvatarId: "dc-42" },
+      ctx({
+        seq: 3,
+        timestamp: "2099-12-31T23:59:59.000Z",
+        rng: () => 0.9,
+      }),
+    );
     expect(hashState(a.journey.resolvedPackage)).toBe(
       hashState(b.journey.resolvedPackage),
     );
@@ -582,7 +612,9 @@ describe("START_JOURNEY", () => {
 
   it("bounces START_JOURNEY once a dreamAvatar is already selected", () => {
     registerJourneyLifecycleContentProvider(deterministicProvider());
-    const started = apply(genesis(), "START_JOURNEY", { dreamAvatarId: "dc-7" });
+    const started = apply(genesis(), "START_JOURNEY", {
+      dreamAvatarId: "dc-7",
+    });
     const out = reduceGameEvent(
       started,
       event("START_JOURNEY", { dreamAvatarId: "dc-9" }),
@@ -608,9 +640,11 @@ describe("RESET_JOURNEY", () => {
     // by CAS rule 4 before routing — see the seam note in the task report).
     state = {
       ...state,
-      battle: { board: {}, effectQueue: [], pendingPrompt: null } as unknown as NonNullable<
-        typeof state.battle
-      >,
+      battle: {
+        board: {},
+        effectQueue: [],
+        pendingPrompt: null,
+      } as unknown as NonNullable<typeof state.battle>,
     };
 
     const reset = apply(state, "RESET_JOURNEY", {});
@@ -656,7 +690,11 @@ describe("LOAD_STATE", () => {
       pendingPrompt: {
         promptId: 12,
         kind: "choice",
-        run: { scriptRef: { table: "battle", id: "card" }, cursor: [0], side: "player" },
+        run: {
+          scriptRef: { table: "battle", id: "card" },
+          cursor: [0],
+          side: "player",
+        },
         options: {
           kind: "choice",
           label: "Choose one",
@@ -665,16 +703,46 @@ describe("LOAD_STATE", () => {
       },
     });
     const pending = normalized.pendingPrompt as {
-      options: { label: { id: string }; options: Array<{ label: { id: string } }> };
+      options: {
+        label: { kind: string; text: string };
+        options: Array<{ label: { kind: string; text: string } }>;
+      };
     };
-    expect(pending.options.label.id).toBe("battle-prompt-choose-one");
-    expect(pending.options.options.map((option) => option.label.id)).toEqual([
-      "battle-prompt-generic-option",
-      "battle-prompt-confirm-yes",
+    expect(pending.options.label).toEqual({
+      kind: "legacy-prompt-text",
+      text: "Choose one",
+    });
+    expect(pending.options.options.map((option) => option.label)).toEqual([
+      { kind: "legacy-prompt-text", text: "unrecognized legacy option" },
+      { kind: "legacy-prompt-text", text: "Yes" },
     ]);
   });
 
-  it("preserves the known Reclaim subtitle when importing a legacy battle through LOAD_STATE", () => {
+  it("keeps an old Fluent prompt descriptor readable", () => {
+    const descriptor = { id: "battle-prompt-generic" } as const;
+    const normalized = normalizeLegacyPendingPrompt({
+      pendingPrompt: {
+        promptId: 12,
+        kind: "choice",
+        run: {
+          scriptRef: { table: "battle", id: "card" },
+          cursor: [0],
+          side: "player",
+        },
+        options: {
+          kind: "choice",
+          label: descriptor,
+          options: [{ label: { id: "battle-prompt-confirm-yes" } }],
+        },
+      },
+    });
+    expect(
+      (normalized.pendingPrompt as { options: { label: unknown } }).options
+        .label,
+    ).toEqual(descriptor);
+  });
+
+  it("preserves legacy Dreamwell prompt text when importing a battle through LOAD_STATE", () => {
     const start = genesis();
     const snapshot: JourneyState = { ...start.journey };
     const battle = {
@@ -709,8 +777,14 @@ describe("LOAD_STATE", () => {
       run: battle.pendingPrompt.run,
       options: {
         kind: "pick-cards",
-        label: { id: "battle-prompt-choose-void-card-reclaim" },
-        subtitle: { id: "battle-prompt-choose-void-card-reclaim-subtitle" },
+        label: {
+          kind: "legacy-prompt-text",
+          text: "Choose a void card to gain Reclaim",
+        },
+        subtitle: {
+          kind: "legacy-prompt-text",
+          text: "You may play it from your void this turn, then banish it.",
+        },
         candidateIds: ["void-card-a", "void-card-b"],
         count: 1,
         optional: false,
@@ -726,12 +800,7 @@ describe("LOAD_STATE", () => {
       completionLevel: 9,
       essence: 123,
     };
-    const loaded = apply(
-      start,
-      "LOAD_STATE",
-      { snapshot },
-      ctx({ seq: 31 }),
-    );
+    const loaded = apply(start, "LOAD_STATE", { snapshot }, ctx({ seq: 31 }));
     expect(loaded.journey.runId).toBe("journey:31");
     expect(loaded.journey.completionLevel).toBe(9);
     expect(loaded.journey.essence).toBe(123);
@@ -752,12 +821,7 @@ describe("LOAD_STATE", () => {
     const start = genesis();
     const { runId: _runId, ...snapshot } = start.journey;
 
-    const loaded = apply(
-      start,
-      "LOAD_STATE",
-      { snapshot },
-      ctx({ seq: 44 }),
-    );
+    const loaded = apply(start, "LOAD_STATE", { snapshot }, ctx({ seq: 44 }));
 
     expect(loaded.journey.runId).toBe("journey:44");
   });
@@ -779,7 +843,11 @@ describe("LOAD_STATE", () => {
 
     expect(loaded.journey.deck).toEqual([
       expect.objectContaining({ entryId: "nightmare", isBane: true }),
-      expect.objectContaining({ entryId: "retired", cardNumber: 10002, isBane: true }),
+      expect.objectContaining({
+        entryId: "retired",
+        cardNumber: 10002,
+        isBane: true,
+      }),
     ]);
     expect(loaded.journey.dreamsigns[0]).toMatchObject({
       id: "negative",
@@ -798,8 +866,15 @@ describe("LOAD_STATE", () => {
 
   it("bounces a snapshot whose seed differs from the room seed", () => {
     const start = genesis();
-    const snapshot: JourneyState = { ...start.journey, seed: "some-other-seed" };
-    const out = reduceGameEvent(start, event("LOAD_STATE", { snapshot }), ctx());
+    const snapshot: JourneyState = {
+      ...start.journey,
+      seed: "some-other-seed",
+    };
+    const out = reduceGameEvent(
+      start,
+      event("LOAD_STATE", { snapshot }),
+      ctx(),
+    );
     expect(out.outcome).toBe("bounced");
   });
 
@@ -807,16 +882,26 @@ describe("LOAD_STATE", () => {
     const start = genesis();
     const snapshot = { ...start.journey } as Record<string, unknown>;
     delete snapshot.essence;
-    const out = reduceGameEvent(start, event("LOAD_STATE", { snapshot }), ctx());
+    const out = reduceGameEvent(
+      start,
+      event("LOAD_STATE", { snapshot }),
+      ctx(),
+    );
     expect(out.outcome).toBe("bounced");
   });
 
   it("bounces a snapshot that nulls a currently non-null run field", () => {
     registerJourneyLifecycleContentProvider(deterministicProvider());
-    const started = apply(genesis(), "START_JOURNEY", { dreamAvatarId: "dc-7" });
+    const started = apply(genesis(), "START_JOURNEY", {
+      dreamAvatarId: "dc-7",
+    });
     expect(started.journey.dreamAvatar).not.toBeNull();
     const snapshot: JourneyState = { ...started.journey, dreamAvatar: null };
-    const out = reduceGameEvent(started, event("LOAD_STATE", { snapshot }), ctx());
+    const out = reduceGameEvent(
+      started,
+      event("LOAD_STATE", { snapshot }),
+      ctx(),
+    );
     expect(out.outcome).toBe("bounced");
   });
 
@@ -830,7 +915,11 @@ describe("LOAD_STATE", () => {
         battle: {
           ...emptyBattle,
           effectQueue: [
-            { scriptRef: { table: "battle", id: "not-a-real-uuid" }, cursor: [0], side: "player" },
+            {
+              scriptRef: { table: "battle", id: "not-a-real-uuid" },
+              cursor: [0],
+              side: "player",
+            },
           ],
         },
       }),
@@ -844,7 +933,10 @@ describe("LOAD_STATE", () => {
     const snapshot: JourneyState = { ...start.journey };
     const out = reduceGameEvent(
       start,
-      event("LOAD_STATE", { snapshot, battle: { pendingPrompt: { promptId: 2 } } }),
+      event("LOAD_STATE", {
+        snapshot,
+        battle: { pendingPrompt: { promptId: 2 } },
+      }),
       ctx(),
     );
     expect(out.outcome).toBe("bounced");
@@ -873,7 +965,9 @@ describe("LOAD_STATE", () => {
       ],
       consumedTutorialAiActionOverrideIds: ["scripted-play"],
     };
-    expect(apply(start, "LOAD_STATE", { snapshot, battle: validBattle }).battle).toEqual({
+    expect(
+      apply(start, "LOAD_STATE", { snapshot, battle: validBattle }).battle,
+    ).toEqual({
       ...validBattle,
       mode: { kind: "journey" },
       challengeCursor: null,
@@ -914,10 +1008,12 @@ describe("LOAD_STATE", () => {
       nextLane: FRONT_RANK_SLOTS,
       handoff: { activeSide: "enemy", phase: "dreamwell", turnNumber: 3 },
     };
-    expect(apply(start, "LOAD_STATE", {
-      snapshot,
-      battle: { ...emptyBattle, challengeCursor: cursor },
-    }).battle?.challengeCursor).toEqual(cursor);
+    expect(
+      apply(start, "LOAD_STATE", {
+        snapshot,
+        battle: { ...emptyBattle, challengeCursor: cursor },
+      }).battle?.challengeCursor,
+    ).toEqual(cursor);
 
     const malformed = reduceGameEvent(
       start,
@@ -958,9 +1054,17 @@ describe("LOAD_STATE", () => {
           ...emptyBattle,
           pendingPrompt: {
             promptId: 2,
-            run: { scriptRef: { table: "battle", id: "not-a-real-uuid" }, cursor: [0], side: "player" },
+            run: {
+              scriptRef: { table: "battle", id: "not-a-real-uuid" },
+              cursor: [0],
+              side: "player",
+            },
             kind: "choice",
-            options: { kind: "choice", label: "bad", options: [{ wrong: "shape" }] },
+            options: {
+              kind: "choice",
+              label: "bad",
+              options: [{ wrong: "shape" }],
+            },
           },
         },
       }),

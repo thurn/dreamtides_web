@@ -1,6 +1,6 @@
 import type { BattleDebugEdit } from "../../battle/debug/commands";
 import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
-import type { FluentMessageDescriptor } from "../../data/localization-messages";
+import type { BattlePromptText } from "../../data/dreamwell-prompts";
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -11,8 +11,8 @@ import type { FluentMessageDescriptor } from "../../data/localization-messages";
 export type ActivePrompt =
   | {
       kind: "pick-cards";
-      label: FluentMessageDescriptor;
-      subtitle?: FluentMessageDescriptor;
+      label: BattlePromptText;
+      subtitle?: BattlePromptText;
       candidateIds: string[];
       count: number;
       optional: boolean;
@@ -21,8 +21,8 @@ export type ActivePrompt =
     }
   | {
       kind: "choice";
-      label: FluentMessageDescriptor;
-      options: { label: FluentMessageDescriptor }[];
+      label: BattlePromptText;
+      options: { label: BattlePromptText }[];
     }
   | { kind: "foresee"; count: number; cardIds: string[] };
 
@@ -39,7 +39,12 @@ export type PromptResolution =
 /** Result of inspecting the head of the step queue. */
 export type EffectStepPlan =
   | { type: "dispatch"; edits: BattleDebugEdit[]; rest: EffectStep[] }
-  | { type: "prompt"; active: ActivePrompt; prompt: EffectPrompt; rest: EffectStep[] }
+  | {
+      type: "prompt";
+      active: ActivePrompt;
+      prompt: EffectPrompt;
+      rest: EffectStep[];
+    }
   | { type: "done" };
 
 // ---------------------------------------------------------------------------
@@ -74,7 +79,10 @@ export function planNextEffectStep(
   return { type: "prompt", active, prompt, rest };
 }
 
-function buildActivePrompt(prompt: EffectPrompt, ctx: StepContext): ActivePrompt {
+function buildActivePrompt(
+  prompt: EffectPrompt,
+  ctx: StepContext,
+): ActivePrompt {
   switch (prompt.kind) {
     case "pick-cards": {
       const candidateIds = prompt.candidates(ctx);
@@ -165,15 +173,18 @@ export function applyPromptResolution(
         return { edits: [], rest };
       }
       return {
-        edits: [{
-          kind: "FORESEE",
-          side: ctx.side,
-          viewer: ctx.side,
-          viewedCardIds: resolution.viewedCardIds ??
-            ctx.state.sides[ctx.side].deck.slice(0, prompt.count),
-          orderedCardIds: resolution.orderedCardIds,
-          voidCardIds: resolution.voidCardIds,
-        }],
+        edits: [
+          {
+            kind: "FORESEE",
+            side: ctx.side,
+            viewer: ctx.side,
+            viewedCardIds:
+              resolution.viewedCardIds ??
+              ctx.state.sides[ctx.side].deck.slice(0, prompt.count),
+            orderedCardIds: resolution.orderedCardIds,
+            voidCardIds: resolution.voidCardIds,
+          },
+        ],
         rest,
       };
     }

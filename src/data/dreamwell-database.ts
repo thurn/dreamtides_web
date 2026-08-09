@@ -28,6 +28,25 @@ export interface DreamwellCard {
   art?: ArtCrop;
   cardType?: string;
   artOwned?: boolean;
+  automation?: readonly DreamwellAutomationPrompt[];
+}
+
+export type DreamwellPromptArgumentKind =
+  "Count" | "Amount" | "MaximumCost" | "CardUuid" | "Side";
+
+export interface DreamwellAutomationPrompt {
+  readonly key: string;
+  readonly title: string;
+  readonly subtitle: string;
+  readonly instructions: string;
+  readonly choices?: readonly {
+    readonly key: string;
+    readonly label: string;
+  }[];
+  readonly arguments?: readonly {
+    readonly name: string;
+    readonly kind: DreamwellPromptArgumentKind;
+  }[];
 }
 
 const DREAMWELL_JSON_PATH = "/dreamwell-data.json";
@@ -44,5 +63,150 @@ export async function loadDreamwellCards(): Promise<DreamwellCard[]> {
       `Failed to load Dreamwell data: ${String(response.status)} ${response.statusText}`,
     );
   }
-  return (await response.json()) as DreamwellCard[];
+  return parseDreamwellCards(await response.json());
+}
+
+const PROMPT_KEY = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
+const ARGUMENT_NAME = /^[a-z][a-zA-Z0-9]*$/u;
+const ARGUMENT_KINDS: readonly DreamwellPromptArgumentKind[] = [
+  "Count",
+  "Amount",
+  "MaximumCost",
+  "CardUuid",
+  "Side",
+];
+
+function isPromptArgumentKind(
+  value: unknown,
+): value is DreamwellPromptArgumentKind {
+  return (
+    typeof value === "string" && ARGUMENT_KINDS.some((kind) => kind === value)
+  );
+}
+
+function record(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+/** Validate the generated Dreamwell payload before it enters journey content. */
+export function parseDreamwellCards(value: unknown): DreamwellCard[] {
+  if (!Array.isArray(value)) throw new Error("Dreamwell data must be an array");
+  return value.map((candidate, cardIndex) => {
+    if (
+      !record(candidate) ||
+      typeof candidate.id !== "string" ||
+      typeof candidate.name !== "string" ||
+      typeof candidate.renderedText !== "string" ||
+      typeof candidate.order !== "number" ||
+      typeof candidate.energyAdded !== "number" ||
+      typeof candidate.cardNumber !== "number"
+    ) {
+      throw new Error(`Dreamwell card ${String(cardIndex + 1)} is malformed`);
+    }
+    const cardId = candidate.id;
+    const automation = candidate.automation ?? [];
+    if (!Array.isArray(automation))
+      throw new Error(`Dreamwell card ${cardId} automation must be an array`);
+    const promptKeys = new Set<string>();
+    const normalizedAutomation = automation.map(
+      (prompt, promptIndex): DreamwellAutomationPrompt => {
+        if (
+          !record(prompt) ||
+          typeof prompt.key !== "string" ||
+          !PROMPT_KEY.test(prompt.key) ||
+          typeof prompt.title !== "string" ||
+          prompt.title.trim() === "" ||
+          typeof prompt.subtitle !== "string" ||
+          prompt.subtitle.trim() === "" ||
+          typeof prompt.instructions !== "string" ||
+          prompt.instructions.trim() === ""
+        ) {
+          throw new Error(
+            `Dreamwell card ${cardId} prompt ${String(promptIndex + 1)} is malformed`,
+          );
+        }
+        const promptKey = prompt.key;
+        if (promptKeys.has(promptKey))
+          throw new Error(
+            `Dreamwell card ${cardId} duplicates prompt ${promptKey}`,
+          );
+        promptKeys.add(promptKey);
+        const choices = prompt.choices ?? [];
+        const arguments_ = prompt.arguments ?? [];
+        if (!Array.isArray(choices) || !Array.isArray(arguments_)) {
+          throw new Error(
+            `Dreamwell card ${cardId} prompt ${promptKey} collections are malformed`,
+          );
+        }
+        const choiceKeys = new Set<string>();
+        const normalizedChoices = choices.map((choice) => {
+          if (
+            !record(choice) ||
+            typeof choice.key !== "string" ||
+            !PROMPT_KEY.test(choice.key) ||
+            typeof choice.label !== "string" ||
+            choice.label.trim() === "" ||
+            choiceKeys.has(choice.key)
+          ) {
+            throw new Error(
+              `Dreamwell card ${cardId} prompt ${promptKey} has an invalid choice`,
+            );
+          }
+          choiceKeys.add(choice.key);
+          return { key: choice.key, label: choice.label };
+        });
+        const argumentNames = new Set<string>();
+        const normalizedArguments = arguments_.map((argument) => {
+          if (
+            !record(argument) ||
+            typeof argument.name !== "string" ||
+            !ARGUMENT_NAME.test(argument.name) ||
+            !isPromptArgumentKind(argument.kind) ||
+            argumentNames.has(argument.name)
+          ) {
+            throw new Error(
+              `Dreamwell card ${cardId} prompt ${promptKey} has an invalid argument`,
+            );
+          }
+          argumentNames.add(argument.name);
+          return {
+            name: argument.name,
+            kind: argument.kind,
+          };
+        });
+        const placeholders = new Set(
+          [
+            prompt.title,
+            prompt.subtitle,
+            prompt.instructions,
+            ...normalizedChoices.map((choice) => choice.label),
+          ].flatMap((text) =>
+            [...text.matchAll(/\{([a-z][a-zA-Z0-9]*)\}/gu)].map(
+              (match) => match[1],
+            ),
+          ),
+        );
+        if (
+          [...placeholders].some((name) => !argumentNames.has(name)) ||
+          [...argumentNames].some((name) => !placeholders.has(name))
+        ) {
+          throw new Error(
+            `Dreamwell card ${cardId} prompt ${promptKey} placeholder coverage is invalid`,
+          );
+        }
+        return {
+          key: promptKey,
+          title: prompt.title,
+          subtitle: prompt.subtitle,
+          instructions: prompt.instructions,
+          choices: normalizedChoices,
+          arguments: normalizedArguments,
+        };
+      },
+    );
+    return {
+      ...(candidate as unknown as DreamwellCard),
+      automation: normalizedAutomation,
+    };
+  });
 }

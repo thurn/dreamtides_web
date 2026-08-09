@@ -46,6 +46,7 @@ describe("loadTutorialCards", () => {
       order: 1,
       energyAdded: 1,
       cardNumber: 5,
+      automation: [],
     };
     vi.stubGlobal(
       "fetch",

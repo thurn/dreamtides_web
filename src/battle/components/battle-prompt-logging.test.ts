@@ -2,8 +2,11 @@ import { describe, expect, it } from "vitest";
 import { emptyBackRankSlots, emptyFrontRankSlots } from "../test-support";
 import type { BattleMutableState, BattleSide } from "../types";
 import type { PendingPrompt } from "../../rules/battle/fold";
-import { createBattlePromptResolutionLogFields } from "./battle-prompt-logging";
-import { createMessageDescriptor } from "../../data/localization-descriptors";
+import {
+  createBattlePromptOpenedLogFields,
+  createBattlePromptResolutionLogFields,
+} from "./battle-prompt-logging";
+import { dreamwellPromptRef } from "../../data/dreamwell-prompts";
 
 function side(): BattleMutableState["sides"][BattleSide] {
   return {
@@ -64,7 +67,10 @@ describe("createBattlePromptResolutionLogFields", () => {
       kind: "pick-cards",
       options: {
         kind: "pick-cards",
-        label: createMessageDescriptor("battle-prompt-generic"),
+        label: dreamwellPromptRef(
+          "2b23a60c-209c-4c75-b63c-b7f73b2e1a56",
+          "return-void-card",
+        ),
         candidateIds: ["void-instance", "battlefield-instance"],
         count: 1,
         optional: false,
@@ -72,15 +78,27 @@ describe("createBattlePromptResolutionLogFields", () => {
       },
     } satisfies PendingPrompt;
 
-    expect(createBattlePromptResolutionLogFields(board(), prompt, {
-      kind: "pick-cards",
-      chosenIds: ["battlefield-instance"],
-    })).toEqual({
+    expect(createBattlePromptOpenedLogFields(board(), prompt)).toMatchObject({
+      dreamwellCardUuid: "2b23a60c-209c-4c75-b63c-b7f73b2e1a56",
+      promptKey: "return-void-card",
+      promptArguments: {},
+      promptPart: "title",
+    });
+
+    expect(
+      createBattlePromptResolutionLogFields(board(), prompt, {
+        kind: "pick-cards",
+        chosenIds: ["battlefield-instance"],
+      }),
+    ).toEqual({
       dreamwellCardUuid: "2b23a60c-209c-4c75-b63c-b7f73b2e1a56",
       promptId: 81,
       promptKind: "pick-cards",
-      promptMessageId: "battle-prompt-generic",
-      promptMessageArguments: null,
+      promptDreamwellCardUuid: "2b23a60c-209c-4c75-b63c-b7f73b2e1a56",
+      promptKey: "return-void-card",
+      promptArguments: {},
+      promptPart: "title",
+      promptChoiceKey: null,
       candidateBattleCardInstanceIds: ["void-instance", "battlefield-instance"],
       candidateBackingCardUuids: [
         "11111111-1111-4111-8111-111111111111",

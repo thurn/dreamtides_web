@@ -36,6 +36,13 @@ import {
 import type { MobileBattleResultView } from "../../cumulus/screens/BattleResultSurface";
 import { cardIsRevealedTo } from "../../battle/state/card-visibility";
 import { starterCardHasRequiredTargets } from "../../battle/starter-card-targets";
+import {
+  isDreamwellPromptRef,
+  isLegacyPromptText,
+  resolveDreamwellPromptRef,
+  type BattlePromptText,
+} from "../../data/dreamwell-prompts";
+import type { FluentMessageDescriptor } from "../../data/localization-messages";
 
 const FALLBACK_PLAYER_DREAM_AVATAR = {
   imageNumber: "001",
@@ -63,6 +70,10 @@ export interface MobileBattleViewOptions {
   readonly pendingPrompt?: PendingPrompt | null;
   readonly confirmedPromptId?: number | null;
   readonly isResultOverlayDismissed?: boolean;
+  /** Synthetic seam for deterministic prompt-presentation tests. */
+  readonly promptTextResolver?: (
+    text: BattlePromptText,
+  ) => string | FluentMessageDescriptor;
 }
 
 export function buildMobileBattleView(
@@ -156,10 +167,14 @@ export function buildMobileBattleView(
       ownsPrompt ? (viewOptions.pendingPrompt ?? null) : null,
       viewOptions.confirmedPromptId ?? null,
       board,
+      init,
+      viewOptions.promptTextResolver,
     ),
     choicePrompt: buildChoicePromptView(
       ownsPrompt ? (viewOptions.pendingPrompt ?? null) : null,
       viewOptions.confirmedPromptId ?? null,
+      init,
+      viewOptions.promptTextResolver,
     ),
     dreamwell: buildDreamwellView(init, board),
     activeSide: board.activeSide,
@@ -224,15 +239,17 @@ export function buildMobileBattleResultView(
 function buildChoicePromptView(
   pendingPrompt: PendingPrompt | null,
   confirmedPromptId: number | null,
+  init: BattleInit,
+  resolver?: MobileBattleViewOptions["promptTextResolver"],
 ): MobileBattleChoicePromptView | null {
   if (pendingPrompt === null || pendingPrompt.options.kind !== "choice") {
     return null;
   }
   return {
     key: String(pendingPrompt.promptId),
-    label: pendingPrompt.options.label,
+    label: resolvePromptText(pendingPrompt.options.label, init, resolver),
     options: pendingPrompt.options.options.map((option) => ({
-      label: option.label,
+      label: resolvePromptText(option.label, init, resolver),
     })),
     canResolve: confirmedPromptId === pendingPrompt.promptId,
   };
@@ -242,6 +259,8 @@ function buildCardPickerView(
   pendingPrompt: PendingPrompt | null,
   confirmedPromptId: number | null,
   board: BattleMutableState,
+  init: BattleInit,
+  resolver?: MobileBattleViewOptions["promptTextResolver"],
 ): MobileBattleCardPickerView | null {
   if (pendingPrompt === null || pendingPrompt.options.kind !== "pick-cards") {
     return null;
@@ -272,10 +291,16 @@ function buildCardPickerView(
   );
   return {
     key: String(pendingPrompt.promptId),
-    label: pendingPrompt.options.label,
+    label: resolvePromptText(pendingPrompt.options.label, init, resolver),
     ...(pendingPrompt.options.subtitle === undefined
       ? {}
-      : { subtitle: pendingPrompt.options.subtitle }),
+      : {
+          subtitle: resolvePromptText(
+            pendingPrompt.options.subtitle,
+            init,
+            resolver,
+          ),
+        }),
     side: pendingPrompt.run.side,
     candidateOwner: candidates[0]?.owner ?? null,
     candidates,
@@ -285,6 +310,19 @@ function buildCardPickerView(
     canResolve: confirmedPromptId === pendingPrompt.promptId,
     presentation: staysOnBoard ? "board" : "gallery",
   };
+}
+
+function resolvePromptText(
+  text: BattlePromptText,
+  init: BattleInit,
+  resolver?: MobileBattleViewOptions["promptTextResolver"],
+): string | FluentMessageDescriptor {
+  if (resolver !== undefined) return resolver(text);
+  if (isDreamwellPromptRef(text)) {
+    return resolveDreamwellPromptRef(text, init.dreamwellDeck);
+  }
+  if (isLegacyPromptText(text)) return text.text;
+  return text;
 }
 
 function buildDreamwellView(

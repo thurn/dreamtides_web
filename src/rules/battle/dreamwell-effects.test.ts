@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
-import type { BackRankSlotId, BattleMutableState, BattleSide, FrontRankSlotId } from "../../battle/types";
-import { emptyBackRankSlots, emptyFrontRankSlots } from "../../battle/test-support";
+import type {
+  BackRankSlotId,
+  BattleMutableState,
+  BattleSide,
+  FrontRankSlotId,
+} from "../../battle/types";
+import {
+  emptyBackRankSlots,
+  emptyFrontRankSlots,
+} from "../../battle/test-support";
 import {
   alliesInPlay,
   charactersInVoid,
@@ -18,6 +26,58 @@ import {
   dreamwellAutomationStatus,
   selectDreamwellEffectScript,
 } from "./dreamwell-effects-table";
+import dreamwellCatalog from "../../../public/dreamwell-data.json";
+import type { DreamwellCard } from "../../data/dreamwell-database";
+import {
+  isDreamwellPromptRef,
+  resolveDreamwellPromptRef,
+} from "../../data/dreamwell-prompts";
+import type { EffectStep } from "./effect-step";
+
+describe("Dreamwell prompt catalog coverage", () => {
+  it("resolves every authored prompt reference from its owning card UUID", () => {
+    const refs: import("../../data/dreamwell-prompts").DreamwellPromptRef[] =
+      [];
+    const visit = (cardId: string, steps: readonly EffectStep[]): void => {
+      for (const step of steps) {
+        if (step.kind !== "prompt" || step.prompt.kind === "foresee") continue;
+        const prompt = step.prompt;
+        const texts = [
+          prompt.label,
+          ...(prompt.kind === "pick-cards" && prompt.subtitle !== undefined
+            ? [prompt.subtitle]
+            : []),
+          ...(prompt.kind === "choice"
+            ? prompt.options.map((option) => option.label)
+            : []),
+        ];
+        for (const text of texts) {
+          expect(
+            isDreamwellPromptRef(text),
+            `${cardId} must emit a semantic prompt ref`,
+          ).toBe(true);
+          if (isDreamwellPromptRef(text)) {
+            expect(text.cardId).toBe(cardId);
+            refs.push(text);
+          }
+        }
+        if (prompt.kind === "confirm") visit(cardId, prompt.onYes);
+      }
+    };
+    for (const [cardId, script] of Object.entries(DREAMWELL_EFFECTS)) {
+      visit(cardId, script.steps);
+    }
+    expect(refs.length).toBeGreaterThan(0);
+    for (const ref of refs) {
+      expect(() =>
+        resolveDreamwellPromptRef(
+          ref,
+          dreamwellCatalog as unknown as readonly DreamwellCard[],
+        ),
+      ).not.toThrow();
+    }
+  });
+});
 
 // ---------------------------------------------------------------------------
 // Minimal state fixture
@@ -518,10 +578,47 @@ describe("DREAMWELL_EFFECTS catalog coverage", () => {
 
   it("registers every current Dreamwell UUID", () => {
     const catalogIds = [
-      "32d64cb6-9856-43a2-9451-fcb14007a9a6", "5e17dc4b-b654-4962-ba5a-7b042852a980", "5ec17498-9028-4a01-80a0-67c91b03d505", "f9b479cf-02cb-40e1-bb64-70b29977bf15", "02e8ea92-1218-413c-9f0b-4c865a3921d3", "de98477c-e216-4618-bff1-0e24bd982fdb", "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d", "cf0f0a05-2a94-407c-8c22-e41b925f9c03", "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5", "558a1f1b-7dc1-4d83-9f00-c6af2187a954", "14dec460-3ec6-40c1-978f-67e70cb0b227", "03e4e701-4720-4278-8198-9b7e0514d4cf", "662b7393-751c-4aa9-8150-5f20b4d176a4", "7171ff89-ebe4-42d0-8863-9b4b0531cad2", "fa8704fe-759f-408d-992d-d8f9d5ffd760", "2b23a60c-209c-4c75-b63c-b7f73b2e1a56", "9954cede-8a16-4053-b6e9-da745f4540f5", "3a4293da-55a1-4094-898a-df402ffa1c92", "d585b78a-dfe3-4e12-95ac-432c3c880540", "a3033051-8eb7-4fbf-93d6-f947ed68974d", "556057bb-b134-497e-86c2-c6f30049e9e3", "20be0fdd-d691-40a9-b4f8-15689ea7ebaa", "a57f1276-3fb6-4527-b538-953fbace35cf", "f61431f3-33bd-42ff-a229-b4013582e86e", "51caf26d-83bf-45a9-bc80-010d353277db", "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a", "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf", "2ad68489-044a-40d1-9be6-e62497a4e1fd", "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c", "91deefd2-0400-4c78-ab9f-f6db864ff7e2", "8f5f2e26-44b5-447b-90d0-eaf22ab29fed", "a0fbcbd9-96ee-4392-add7-e1d436f99553", "06e62e45-53f9-4264-9aa6-2575b445332a", "120ec4c2-aa7b-48f4-be9f-f39820e565ca", "446095b1-ec4d-40d7-8eed-a8221d339ea2",
+      "32d64cb6-9856-43a2-9451-fcb14007a9a6",
+      "5e17dc4b-b654-4962-ba5a-7b042852a980",
+      "5ec17498-9028-4a01-80a0-67c91b03d505",
+      "f9b479cf-02cb-40e1-bb64-70b29977bf15",
+      "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+      "de98477c-e216-4618-bff1-0e24bd982fdb",
+      "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d",
+      "cf0f0a05-2a94-407c-8c22-e41b925f9c03",
+      "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5",
+      "558a1f1b-7dc1-4d83-9f00-c6af2187a954",
+      "14dec460-3ec6-40c1-978f-67e70cb0b227",
+      "03e4e701-4720-4278-8198-9b7e0514d4cf",
+      "662b7393-751c-4aa9-8150-5f20b4d176a4",
+      "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+      "fa8704fe-759f-408d-992d-d8f9d5ffd760",
+      "2b23a60c-209c-4c75-b63c-b7f73b2e1a56",
+      "9954cede-8a16-4053-b6e9-da745f4540f5",
+      "3a4293da-55a1-4094-898a-df402ffa1c92",
+      "d585b78a-dfe3-4e12-95ac-432c3c880540",
+      "a3033051-8eb7-4fbf-93d6-f947ed68974d",
+      "556057bb-b134-497e-86c2-c6f30049e9e3",
+      "20be0fdd-d691-40a9-b4f8-15689ea7ebaa",
+      "a57f1276-3fb6-4527-b538-953fbace35cf",
+      "f61431f3-33bd-42ff-a229-b4013582e86e",
+      "51caf26d-83bf-45a9-bc80-010d353277db",
+      "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
+      "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
+      "2ad68489-044a-40d1-9be6-e62497a4e1fd",
+      "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c",
+      "91deefd2-0400-4c78-ab9f-f6db864ff7e2",
+      "8f5f2e26-44b5-447b-90d0-eaf22ab29fed",
+      "a0fbcbd9-96ee-4392-add7-e1d436f99553",
+      "06e62e45-53f9-4264-9aa6-2575b445332a",
+      "120ec4c2-aa7b-48f4-be9f-f39820e565ca",
+      "446095b1-ec4d-40d7-8eed-a8221d339ea2",
     ];
-    expect(Object.keys(DREAMWELL_EFFECTS).sort()).toEqual([...catalogIds].sort());
-    for (const id of catalogIds) expect(dreamwellAutomationStatus(id)).toBe("auto");
+    expect(Object.keys(DREAMWELL_EFFECTS).sort()).toEqual(
+      [...catalogIds].sort(),
+    );
+    for (const id of catalogIds)
+      expect(dreamwellAutomationStatus(id)).toBe("auto");
   });
 });
 
@@ -532,11 +629,15 @@ describe("DREAMWELL_EFFECTS catalog coverage", () => {
 describe("dreamwellAutomationStatus", () => {
   it('returns "auto" for a known table id', () => {
     // Autumn Glade
-    expect(dreamwellAutomationStatus("02e8ea92-1218-413c-9f0b-4c865a3921d3")).toBe("auto");
+    expect(
+      dreamwellAutomationStatus("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
+    ).toBe("auto");
   });
 
   it('returns "none" for an unknown id', () => {
-    expect(dreamwellAutomationStatus("00000000-0000-0000-0000-000000000000")).toBe("none");
+    expect(
+      dreamwellAutomationStatus("00000000-0000-0000-0000-000000000000"),
+    ).toBe("none");
   });
 });
 
@@ -546,13 +647,17 @@ describe("dreamwellAutomationStatus", () => {
 
 describe("selectDreamwellEffectScript", () => {
   it("returns the script for a known id", () => {
-    const script = selectDreamwellEffectScript("02e8ea92-1218-413c-9f0b-4c865a3921d3");
+    const script = selectDreamwellEffectScript(
+      "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+    );
     expect(script).not.toBeNull();
     expect(script?.id).toBe("02e8ea92-1218-413c-9f0b-4c865a3921d3");
   });
 
   it("returns null for an unknown id", () => {
-    expect(selectDreamwellEffectScript("00000000-0000-0000-0000-000000000000")).toBeNull();
+    expect(
+      selectDreamwellEffectScript("00000000-0000-0000-0000-000000000000"),
+    ).toBeNull();
   });
 });
 
@@ -574,33 +679,69 @@ describe("Dreamwell Discover UUIDs", () => {
     const prompt = getFirstPromptStep(CARD_DISCOVER);
     if (prompt.kind !== "pick-cards") throw new Error("expected picker");
     let draws = 0;
-    const candidates = prompt.candidates({ ...makeCtx(state), random: () => { draws += 1; return 0.25; } });
+    const candidates = prompt.candidates({
+      ...makeCtx(state),
+      random: () => {
+        draws += 1;
+        return 0.25;
+      },
+    });
     expect(draws).toBe(1);
     expect(candidates).toHaveLength(3);
-    expect(candidates.every((id) => state.sides.player.deck.includes(id))).toBe(true);
-    expect(candidates.every((id) => state.cardInstances[id]?.definition.energyCost !== undefined && state.cardInstances[id].definition.energyCost <= 2)).toBe(true);
+    expect(candidates.every((id) => state.sides.player.deck.includes(id))).toBe(
+      true,
+    );
+    expect(
+      candidates.every(
+        (id) =>
+          state.cardInstances[id]?.definition.energyCost !== undefined &&
+          state.cardInstances[id].definition.energyCost <= 2,
+      ),
+    ).toBe(true);
 
     const chosen = candidates[0];
     if (chosen === undefined) throw new Error("expected discover candidate");
     const context = { ...makeCtx(state), promptCandidateIds: candidates };
     const direct = prompt.resolve([chosen], context);
-    const reloaded = prompt.resolve([chosen], { ...context, promptCandidateIds: [...candidates] });
+    const reloaded = prompt.resolve([chosen], {
+      ...context,
+      promptCandidateIds: [...candidates],
+    });
     expect(reloaded).toEqual(direct);
-    expect(direct[0]).toEqual({ kind: "MOVE_CARD_TO_ZONE", battleCardId: chosen, destination: { side: "player", zone: "hand" } });
+    expect(direct[0]).toEqual({
+      kind: "MOVE_CARD_TO_ZONE",
+      battleCardId: chosen,
+      destination: { side: "player", zone: "hand" },
+    });
     const reorder = direct[1];
     expect(reorder).toMatchObject({ kind: "REORDER_DECK", side: "player" });
     if (reorder?.kind !== "REORDER_DECK") throw new Error("expected reorder");
-    expect([...reorder.order].sort()).toEqual(state.sides.player.deck.filter((id) => id !== chosen).sort());
+    expect([...reorder.order].sort()).toEqual(
+      state.sides.player.deck.filter((id) => id !== chosen).sort(),
+    );
   });
 
   it("offers zero/fewer/exact character candidates without inventing cards", () => {
     const prompt = getFirstPromptStep(CHARACTER_DISCOVER);
     if (prompt.kind !== "pick-cards") throw new Error("expected picker");
-    const none = makeState({ playerDeck: ["event"], cardInstances: { event: makeEvent("event", "player", 1) } });
+    const none = makeState({
+      playerDeck: ["event"],
+      cardInstances: { event: makeEvent("event", "player", 1) },
+    });
     expect(prompt.candidates(makeCtx(none))).toEqual([]);
-    const fewer = makeState({ playerDeck: ["character"], cardInstances: { character: makeCharacter("character", "player", 5) } });
+    const fewer = makeState({
+      playerDeck: ["character"],
+      cardInstances: { character: makeCharacter("character", "player", 5) },
+    });
     expect(prompt.candidates(makeCtx(fewer))).toEqual(["character"]);
-    const exact = makeState({ playerDeck: ["a", "b", "c"], cardInstances: { a: makeCharacter("a", "player", 1), b: makeCharacter("b", "player", 2), c: makeCharacter("c", "player", 3) } });
+    const exact = makeState({
+      playerDeck: ["a", "b", "c"],
+      cardInstances: {
+        a: makeCharacter("a", "player", 1),
+        b: makeCharacter("b", "player", 2),
+        c: makeCharacter("c", "player", 3),
+      },
+    });
     expect(prompt.candidates(makeCtx(exact))).toHaveLength(3);
   });
 });
@@ -609,18 +750,37 @@ describe("new prompt-driven Dreamwell UUIDs", () => {
   it("rematerializes only an in-play ally", () => {
     const prompt = getFirstPromptStep("2ad68489-044a-40d1-9be6-e62497a4e1fd");
     if (prompt.kind !== "pick-cards") throw new Error("expected picker");
-    const state = makeState({ playerBackRank: { ...emptyBackRankSlots(), B0: "ally" }, cardInstances: { ally: makeCharacter("ally", "player", 2) } });
+    const state = makeState({
+      playerBackRank: { ...emptyBackRankSlots(), B0: "ally" },
+      cardInstances: { ally: makeCharacter("ally", "player", 2) },
+    });
     expect(prompt.candidates(makeCtx(state))).toEqual(["ally"]);
-    expect(prompt.resolve(["ally"], makeCtx(state))).toEqual([{ kind: "REMATERIALIZE", battleCardId: "ally" }]);
+    expect(prompt.resolve(["ally"], makeCtx(state))).toEqual([
+      { kind: "REMATERIALIZE", battleCardId: "ally" },
+    ]);
   });
 
   it("records the temporary Reclaim eligibility separately from reclaimed", () => {
     const prompt = getFirstPromptStep("14dec460-3ec6-40c1-978f-67e70cb0b227");
     if (prompt.kind !== "pick-cards") throw new Error("expected picker");
-    expect(prompt.subtitle?.id).toBe("battle-prompt-choose-void-card-reclaim-subtitle");
-    const state = makeState({ playerVoid: ["void-card"], cardInstances: { "void-card": makeCharacter("void-card", "player", 2) } });
+    expect(prompt.subtitle).toMatchObject({
+      kind: "dreamwell-prompt",
+      cardId: "14dec460-3ec6-40c1-978f-67e70cb0b227",
+      promptKey: "grant-reclaim",
+      part: "subtitle",
+    });
+    const state = makeState({
+      playerVoid: ["void-card"],
+      cardInstances: { "void-card": makeCharacter("void-card", "player", 2) },
+    });
     const [edit] = prompt.resolve(["void-card"], makeCtx(state));
-    expect(edit).toMatchObject({ kind: "SET_CARD_STATUS", battleCardId: "void-card", status: { temporaryReclaimUntilEnding: { activeSide: "player", turnNumber: 1 } } });
+    expect(edit).toMatchObject({
+      kind: "SET_CARD_STATUS",
+      battleCardId: "void-card",
+      status: {
+        temporaryReclaimUntilEnding: { activeSide: "player", turnNumber: 1 },
+      },
+    });
   });
 });
 
@@ -638,11 +798,14 @@ function makeCtx(
 /** Extract and assert the first edits step's build function; fails test if missing. */
 function getFirstEditsBuild(
   scriptId: string,
-): ((ctx: import("./effect-step").StepContext) => import("../../battle/debug/commands").BattleDebugEdit[]) {
+): (
+  ctx: import("./effect-step").StepContext,
+) => import("../../battle/debug/commands").BattleDebugEdit[] {
   const script = DREAMWELL_EFFECTS[scriptId];
   if (script === undefined) throw new Error(`no script for ${scriptId}`);
   const step = script.steps[0];
-  if (step === undefined || step.kind !== "edits") throw new Error(`step 0 is not edits for ${scriptId}`);
+  if (step === undefined || step.kind !== "edits")
+    throw new Error(`step 0 is not edits for ${scriptId}`);
   return step.build;
 }
 
@@ -651,7 +814,9 @@ describe("Autumn Glade builder", () => {
     const state = makeState();
     const build = getFirstEditsBuild("02e8ea92-1218-413c-9f0b-4c865a3921d3");
     const edits = build(makeCtx(state, "player"));
-    expect(edits).toEqual([{ kind: "ADJUST_SCORE", side: "player", amount: 2 }]);
+    expect(edits).toEqual([
+      { kind: "ADJUST_SCORE", side: "player", amount: 2 },
+    ]);
   });
 });
 
@@ -660,7 +825,9 @@ describe("Twilight Radiance builder", () => {
     const state = makeState();
     const build = getFirstEditsBuild("de98477c-e216-4618-bff1-0e24bd982fdb");
     const edits = build(makeCtx(state, "player"));
-    expect(edits).toEqual([{ kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: 1 }]);
+    expect(edits).toEqual([
+      { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: 1 },
+    ]);
   });
 });
 
@@ -669,8 +836,12 @@ describe("The Voltsurge builder", () => {
     const state = makeState();
     const build = getFirstEditsBuild("7171ff89-ebe4-42d0-8863-9b4b0531cad2");
     const edits = build(makeCtx(state, "player"));
-    const playerDraws = edits.filter((e) => e.kind === "DRAW_CARD" && e.side === "player");
-    const enemyDraws = edits.filter((e) => e.kind === "DRAW_CARD" && e.side === "enemy");
+    const playerDraws = edits.filter(
+      (e) => e.kind === "DRAW_CARD" && e.side === "player",
+    );
+    const enemyDraws = edits.filter(
+      (e) => e.kind === "DRAW_CARD" && e.side === "enemy",
+    );
     expect(playerDraws).toHaveLength(2);
     expect(enemyDraws).toHaveLength(2);
   });
@@ -681,20 +852,24 @@ describe("Nomad's Verge builder", () => {
     const state = makeState();
     const build = getFirstEditsBuild("51caf26d-83bf-45a9-bc80-010d353277db");
     const edits = build(makeCtx(state, "enemy"));
-    expect(edits).toEqual([expect.objectContaining({
-      kind: "CREATE_FIGMENT",
-      destination: { side: "enemy", zone: "backRank", slotId: "B0" },
-    })]);
+    expect(edits).toEqual([
+      expect.objectContaining({
+        kind: "CREATE_FIGMENT",
+        destination: { side: "enemy", zone: "backRank", slotId: "B0" },
+      }),
+    ]);
   });
 
   it("places the figment at the center of the rendered back rank during the tutorial", () => {
     const state = makeState();
     const build = getFirstEditsBuild("51caf26d-83bf-45a9-bc80-010d353277db");
     const edits = build({ ...makeCtx(state, "enemy"), isTutorial: true });
-    expect(edits).toEqual([expect.objectContaining({
-      kind: "CREATE_FIGMENT",
-      destination: { side: "enemy", zone: "backRank", slotId: "B4" },
-    })]);
+    expect(edits).toEqual([
+      expect.objectContaining({
+        kind: "CREATE_FIGMENT",
+        destination: { side: "enemy", zone: "backRank", slotId: "B4" },
+      }),
+    ]);
   });
 
   it("during the tutorial, falls back to the nearest open slot when the center is occupied", () => {
@@ -703,10 +878,12 @@ describe("Nomad's Verge builder", () => {
     });
     const build = getFirstEditsBuild("51caf26d-83bf-45a9-bc80-010d353277db");
     const edits = build({ ...makeCtx(state, "enemy"), isTutorial: true });
-    expect(edits).toEqual([expect.objectContaining({
-      kind: "CREATE_FIGMENT",
-      destination: { side: "enemy", zone: "backRank", slotId: "B5" },
-    })]);
+    expect(edits).toEqual([
+      expect.objectContaining({
+        kind: "CREATE_FIGMENT",
+        destination: { side: "enemy", zone: "backRank", slotId: "B5" },
+      }),
+    ]);
   });
 
   it("during the tutorial, ignores slots beyond BACK_RANK_SLOTS when picking the center", () => {
@@ -719,10 +896,12 @@ describe("Nomad's Verge builder", () => {
     });
     const build = getFirstEditsBuild("51caf26d-83bf-45a9-bc80-010d353277db");
     const edits = build({ ...makeCtx(state, "enemy"), isTutorial: true });
-    expect(edits).toEqual([expect.objectContaining({
-      kind: "CREATE_FIGMENT",
-      destination: { side: "enemy", zone: "backRank", slotId: "B4" },
-    })]);
+    expect(edits).toEqual([
+      expect.objectContaining({
+        kind: "CREATE_FIGMENT",
+        destination: { side: "enemy", zone: "backRank", slotId: "B4" },
+      }),
+    ]);
   });
 });
 
@@ -734,8 +913,12 @@ describe("Wellspring Commons builder", () => {
     });
     const build = getFirstEditsBuild("06e62e45-53f9-4264-9aa6-2575b445332a");
     const edits = build(makeCtx(state, "player"));
-    const playerDraws = edits.filter((e) => e.kind === "DRAW_CARD" && e.side === "player");
-    const enemyDraws = edits.filter((e) => e.kind === "DRAW_CARD" && e.side === "enemy");
+    const playerDraws = edits.filter(
+      (e) => e.kind === "DRAW_CARD" && e.side === "player",
+    );
+    const enemyDraws = edits.filter(
+      (e) => e.kind === "DRAW_CARD" && e.side === "enemy",
+    );
     expect(playerDraws).toHaveLength(0);
     expect(enemyDraws).toHaveLength(3);
   });
@@ -747,10 +930,14 @@ describe("The Brimming Well builder", () => {
     const build = getFirstEditsBuild("a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf");
     // Active side is player — opponent is enemy
     const edits = build(makeCtx(state, "player"));
-    expect(edits).toEqual([{ kind: "ADJUST_MAX_ENERGY", side: "enemy", amount: 1 }]);
+    expect(edits).toEqual([
+      { kind: "ADJUST_MAX_ENERGY", side: "enemy", amount: 1 },
+    ]);
     // Active side is enemy — opponent is player
     const edits2 = build(makeCtx(state, "enemy"));
-    expect(edits2).toEqual([{ kind: "ADJUST_MAX_ENERGY", side: "player", amount: 1 }]);
+    expect(edits2).toEqual([
+      { kind: "ADJUST_MAX_ENERGY", side: "player", amount: 1 },
+    ]);
   });
 });
 
@@ -765,14 +952,26 @@ describe("Eternal Horizon builder", () => {
     const build = getFirstEditsBuild("a57f1276-3fb6-4527-b538-953fbace35cf");
     const edits = build(makeCtx(state, "player"));
     expect(edits).toHaveLength(2);
-    const e1 = edits.find((e) => e.kind === "SET_CARD_SPARK_DELTA" && e.battleCardId === "ally1");
-    const e2 = edits.find((e) => e.kind === "SET_CARD_SPARK_DELTA" && e.battleCardId === "ally2");
+    const e1 = edits.find(
+      (e) => e.kind === "SET_CARD_SPARK_DELTA" && e.battleCardId === "ally1",
+    );
+    const e2 = edits.find(
+      (e) => e.kind === "SET_CARD_SPARK_DELTA" && e.battleCardId === "ally2",
+    );
     expect(e1).toBeDefined();
     expect(e2).toBeDefined();
     // ally1 has sparkDelta 0 → value should be 1
-    expect(e1).toMatchObject({ kind: "SET_CARD_SPARK_DELTA", battleCardId: "ally1", value: 1 });
+    expect(e1).toMatchObject({
+      kind: "SET_CARD_SPARK_DELTA",
+      battleCardId: "ally1",
+      value: 1,
+    });
     // ally2 has sparkDelta 3 → value should be 4
-    expect(e2).toMatchObject({ kind: "SET_CARD_SPARK_DELTA", battleCardId: "ally2", value: 4 });
+    expect(e2).toMatchObject({
+      kind: "SET_CARD_SPARK_DELTA",
+      battleCardId: "ally2",
+      value: 4,
+    });
   });
 });
 
@@ -841,7 +1040,8 @@ function getFirstPromptStep(
   const script = DREAMWELL_EFFECTS[scriptId];
   if (script === undefined) throw new Error(`no script for ${scriptId}`);
   const step = script.steps.find((s) => s.kind === "prompt");
-  if (step === undefined || step.kind !== "prompt") throw new Error(`no prompt step for ${scriptId}`);
+  if (step === undefined || step.kind !== "prompt")
+    throw new Error(`no prompt step for ${scriptId}`);
   return step.prompt;
 }
 
@@ -862,7 +1062,11 @@ describe("Leaf Light Canopy (2b23a60c) — return void card to hand", () => {
     if (prompt.kind !== "pick-cards") throw new Error("expected pick-cards");
     const edits = prompt.resolve(["v1"], makeCtx(state));
     expect(edits).toEqual([
-      { kind: "MOVE_CARD_TO_ZONE", battleCardId: "v1", destination: { side: "player", zone: "hand" } },
+      {
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: "v1",
+        destination: { side: "player", zone: "hand" },
+      },
     ]);
   });
 
@@ -892,12 +1096,19 @@ describe("Verdant Hollow (a0fbcbd9) — only events in void", () => {
   });
 
   it("resolve returns MOVE to hand", () => {
-    const state = makeState({ playerVoid: ["e1"], cardInstances: { e1: makeEvent("e1", "player", 1) } });
+    const state = makeState({
+      playerVoid: ["e1"],
+      cardInstances: { e1: makeEvent("e1", "player", 1) },
+    });
     const prompt = getFirstPromptStep(UUID);
     if (prompt.kind !== "pick-cards") throw new Error("expected pick-cards");
     const edits = prompt.resolve(["e1"], makeCtx(state));
     expect(edits).toEqual([
-      { kind: "MOVE_CARD_TO_ZONE", battleCardId: "e1", destination: { side: "player", zone: "hand" } },
+      {
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: "e1",
+        destination: { side: "player", zone: "hand" },
+      },
     ]);
   });
 });
@@ -932,7 +1143,11 @@ describe("Silent Winter (9954cede) — banish enemy character", () => {
     const edits = prompt.resolve(["ec1"], makeCtx(state, "player"));
     expect(edits).toEqual([
       expect.objectContaining({ kind: "SET_CARD_STATUS", battleCardId: "ec1" }),
-      { kind: "MOVE_CARD_TO_ZONE", battleCardId: "ec1", destination: { side: "enemy", zone: "banished" } },
+      {
+        kind: "MOVE_CARD_TO_ZONE",
+        battleCardId: "ec1",
+        destination: { side: "enemy", zone: "banished" },
+      },
     ]);
   });
 });
@@ -966,7 +1181,8 @@ describe("Astral Interface (ee1ef770) — draw then discard", () => {
     const script = DREAMWELL_EFFECTS[UUID];
     if (script === undefined) throw new Error("no script");
     const step1 = script.steps[1];
-    if (step1?.kind !== "prompt" || step1.prompt.kind !== "pick-cards") throw new Error();
+    if (step1?.kind !== "prompt" || step1.prompt.kind !== "pick-cards")
+      throw new Error();
     expect(step1.prompt.candidates(makeCtx(state))).toEqual(["h1", "h2"]);
   });
 
@@ -975,7 +1191,8 @@ describe("Astral Interface (ee1ef770) — draw then discard", () => {
     const script = DREAMWELL_EFFECTS[UUID];
     if (script === undefined) throw new Error("no script");
     const step1 = script.steps[1];
-    if (step1?.kind !== "prompt" || step1.prompt.kind !== "pick-cards") throw new Error();
+    if (step1?.kind !== "prompt" || step1.prompt.kind !== "pick-cards")
+      throw new Error();
     const edits = step1.prompt.resolve(["h1"], makeCtx(state));
     expect(edits).toEqual([{ kind: "DISCARD_CARD", battleCardId: "h1" }]);
   });
@@ -991,9 +1208,18 @@ describe("The Crossroads (af2ef62f) — choice draw / gain energy", () => {
     expect(prompt.options).toHaveLength(2);
     const opt0 = prompt.options[0];
     const opt1 = prompt.options[1];
-    if (opt0 === undefined || opt1 === undefined) throw new Error("missing options");
-    expect(opt0.label.id).toBe("battle-prompt-draw-card");
-    expect(opt1.label.id).toBe("battle-prompt-gain-energy");
+    if (opt0 === undefined || opt1 === undefined)
+      throw new Error("missing options");
+    expect(opt0.label).toMatchObject({
+      kind: "dreamwell-prompt",
+      promptKey: "choose-benefit",
+      choiceKey: "draw-card",
+    });
+    expect(opt1.label).toMatchObject({
+      kind: "dreamwell-prompt",
+      promptKey: "choose-benefit",
+      choiceKey: "gain-energy",
+    });
   });
 
   it("options[0].build → DRAW_CARD", () => {
@@ -1011,7 +1237,9 @@ describe("The Crossroads (af2ef62f) — choice draw / gain energy", () => {
     const opt1 = prompt.options[1];
     if (opt1 === undefined) throw new Error("missing option 1");
     const edits = opt1.build(makeCtx(makeState()));
-    expect(edits).toEqual([{ kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: 2 }]);
+    expect(edits).toEqual([
+      { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: 2 },
+    ]);
   });
 });
 
@@ -1043,7 +1271,8 @@ describe("The Bastion (20be0fdd) — confirm → abandon ally → draw 2", () =>
     const prompt = getFirstPromptStep(UUID);
     if (prompt.kind !== "confirm") throw new Error();
     const inner = prompt.onYes[0];
-    if (inner?.kind !== "prompt" || inner.prompt.kind !== "pick-cards") throw new Error();
+    if (inner?.kind !== "prompt" || inner.prompt.kind !== "pick-cards")
+      throw new Error();
     const edits = inner.prompt.resolve(["ally1"], makeCtx(state));
     expect(edits).toEqual([{ kind: "ABANDON", battleCardId: "ally1" }]);
   });
@@ -1118,7 +1347,9 @@ describe("Fortune's Wheel (446095b1) — discard hand then draw same count", () 
   it("confirm onYes edits step: exactly N DISCARD_CARD edits followed by exactly N DRAW_CARD edits", () => {
     const state = makeState({
       playerHand: handIds,
-      cardInstances: Object.fromEntries(handIds.map((id) => [id, makeCharacter(id, "player", 2)])),
+      cardInstances: Object.fromEntries(
+        handIds.map((id) => [id, makeCharacter(id, "player", 2)]),
+      ),
     });
     const script = DREAMWELL_EFFECTS[UUID];
     if (script === undefined) throw new Error(`no script for ${UUID}`);
@@ -1127,7 +1358,8 @@ describe("Fortune's Wheel (446095b1) — discard hand then draw same count", () 
     const prompt = step0.prompt;
     if (prompt.kind !== "confirm") throw new Error("expected confirm prompt");
     const onYesEdits = prompt.onYes.find((s) => s.kind === "edits");
-    if (onYesEdits?.kind !== "edits") throw new Error("expected edits in onYes");
+    if (onYesEdits?.kind !== "edits")
+      throw new Error("expected edits in onYes");
 
     const edits = onYesEdits.build(makeCtx(state, "player"));
 
@@ -1181,7 +1413,10 @@ describe("property test: all prompt scripts run without error on rich fixture", 
     nowMs: 42000,
   };
 
-  function walkSteps(steps: import("./effect-step").EffectStep[], label: string): void {
+  function walkSteps(
+    steps: import("./effect-step").EffectStep[],
+    label: string,
+  ): void {
     for (const step of steps) {
       if (step.kind === "edits") {
         expect(() => step.build(ctx)).not.toThrow();
@@ -1190,7 +1425,9 @@ describe("property test: all prompt scripts run without error on rich fixture", 
         const prompt = step.prompt;
         if (prompt.kind === "pick-cards") {
           let cands: string[];
-          expect(() => { cands = prompt.candidates(ctx); }).not.toThrow();
+          expect(() => {
+            cands = prompt.candidates(ctx);
+          }).not.toThrow();
           // resolve with as many candidates as count (or fewer if not enough)
           const chosen = (cands! ?? []).slice(0, prompt.count);
           expect(() => prompt.resolve(chosen, ctx)).not.toThrow();
