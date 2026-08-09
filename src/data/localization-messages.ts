@@ -1216,11 +1216,13 @@ export interface FluentMessageArgumentsById {
   };
   readonly "card-stat-accessible-name": {
     readonly change: FluentVariable;
+    readonly changeName: FluentVariable;
     readonly stat: FluentVariable;
   };
   readonly "card-stat-custom-accessible-name": {
     readonly baseName: FluentVariable;
     readonly change: FluentVariable;
+    readonly changeName: FluentVariable;
   };
   readonly "battle-control-group-accessible-name": never;
   readonly "exploration-pack-choose-accessible-name": {
@@ -1859,8 +1861,12 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
     "role",
     "state",
   ] as const,
-  "card-stat-accessible-name": ["change", "stat"] as const,
-  "card-stat-custom-accessible-name": ["baseName", "change"] as const,
+  "card-stat-accessible-name": ["change", "changeName", "stat"] as const,
+  "card-stat-custom-accessible-name": [
+    "baseName",
+    "change",
+    "changeName",
+  ] as const,
   "battle-control-group-accessible-name": [] as const,
   "exploration-pack-choose-accessible-name": ["packNumber"] as const,
   "gamble-suit-outcome-accessible-name": ["outcomeLabel", "suit"] as const,

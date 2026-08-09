@@ -756,7 +756,9 @@ describe("GameCard reveal contract", () => {
             form: transfigurationFormFixture("Empowered"),
             markedText: displaySnapshot.renderedText,
             energyChanged: true,
+            energyChangeName: "Fixture energy form",
             sparkChanged: false,
+            sparkChangeName: null,
             fastChanged: false,
           },
         }}

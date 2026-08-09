@@ -932,7 +932,13 @@ function GameCardSurface(props: GameCardSurfaceProps) {
       numberSizeVar="var(--cv-energy-orb-font-size)"
       numberCapPx={energyOrbCapPx}
       changeBadge={
-        transfiguration?.energyChanged === true ? "empowered" : undefined
+        transfiguration?.energyChanged === true &&
+        transfiguration.energyChangeName !== null
+          ? {
+              kind: "empowered",
+              accessibleName: transfiguration.energyChangeName,
+            }
+          : undefined
       }
     />
   );
@@ -1158,8 +1164,13 @@ function GameCardSurface(props: GameCardSurfaceProps) {
         numberSizeVar={sparkFontVar}
         numberCapPx={sparkCapPx}
         changeBadge={
-          !battlefieldPresentation && transfiguration?.sparkChanged === true
-            ? "kindled"
+          !battlefieldPresentation &&
+          transfiguration?.sparkChanged === true &&
+          transfiguration.sparkChangeName !== null
+            ? {
+                kind: "kindled",
+                accessibleName: transfiguration.sparkChangeName,
+              }
             : undefined
         }
       />

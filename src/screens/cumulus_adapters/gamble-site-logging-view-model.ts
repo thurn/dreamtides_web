@@ -10,6 +10,18 @@ import { logEventOnce } from "../../logging";
 import type { GambleSiteRuntime, SiteState } from "../../types/journey";
 import type { GambleData } from "../../types/gamble-data";
 
+function gambleCatalogLogFields(
+  runtime: GambleSiteRuntime,
+  gambleData: GambleData,
+) {
+  return {
+    gameId: runtime.gameId,
+    rulesVersion: runtime.rulesVersion,
+    gambleFoldHash: gambleData.foldHash,
+    selectionTrace: runtime.selectionTrace ?? null,
+  };
+}
+
 /** Record one Gamble visit without coupling logging payloads to the adapter. */
 export function logGambleSiteEntered(
   site: SiteState & { type: "Gamble" },
@@ -34,9 +46,7 @@ export function logGamblePrepared(
       "gamble_game_prepared",
       {
         siteId,
-        gameId: runtime.gameId,
-        rulesVersion: runtime.rulesVersion,
-        gambleFoldHash: gambleData.foldHash,
+        ...gambleCatalogLogFields(runtime, gambleData),
         isFarpoint: runtime.isFarpoint,
         wagerCost: runtime.wagerCost,
         prizeEssence: runtime.prizeEssence,
@@ -62,9 +72,7 @@ export function logGamblePrepared(
       "gamble_game_prepared",
       {
         siteId,
-        gameId: runtime.gameId,
-        rulesVersion: runtime.rulesVersion,
-        gambleFoldHash: gambleData.foldHash,
+        ...gambleCatalogLogFields(runtime, gambleData),
         isFarpoint: runtime.isFarpoint,
         drawCost: runtime.drawCost,
         maxRounds: runtime.shuffleCommitments.length,
@@ -97,7 +105,7 @@ export function logGamblePrepared(
         "gamble_game_prepared",
         {
           siteId,
-          gameId: runtime.gameId,
+          ...gambleCatalogLogFields(runtime, gambleData),
           playerDecision: "play_again",
           completedRounds: runtime.rounds.length,
           remainingTargetCardIds: view.cards.map((card) => card.cardId),
@@ -115,9 +123,7 @@ export function logGamblePrepared(
       "gamble_game_prepared",
       {
         siteId,
-        gameId: runtime.gameId,
-        rulesVersion: runtime.rulesVersion,
-        gambleFoldHash: gambleData.foldHash,
+        ...gambleCatalogLogFields(runtime, gambleData),
         roundNumber: runtime.roundNumber ?? 1,
         playerDecision:
           (runtime.roundNumber ?? 1) === 1 ? "initial" : "play_again",
@@ -144,9 +150,7 @@ export function logGamblePrepared(
       "gamble_game_prepared",
       {
         siteId,
-        gameId: runtime.gameId,
-        rulesVersion: runtime.rulesVersion,
-        gambleFoldHash: gambleData.foldHash,
+        ...gambleCatalogLogFields(runtime, gambleData),
         roundNumber: runtime.roundNumber,
         playerDecision: runtime.roundNumber === 1 ? "initial" : "play_again",
         isFarpoint: runtime.isFarpoint,
@@ -184,9 +188,7 @@ export function logGamblePrepared(
     "gamble_game_prepared",
     {
       siteId,
-      gameId: runtime.gameId,
-      rulesVersion: runtime.rulesVersion,
-      gambleFoldHash: gambleData.foldHash,
+      ...gambleCatalogLogFields(runtime, gambleData),
       isFarpoint: runtime.isFarpoint,
       shuffleCommitments: runtime.shuffleCommitments,
       dreamsignCandidates: runtime.dreamsignCandidateScores,
@@ -234,9 +236,7 @@ export function logGambleResolved(
       "gamble_wager_resolved",
       {
         siteId,
-        gameId: runtime.gameId,
-        rulesVersion: runtime.rulesVersion,
-        gambleFoldHash: gambleData.foldHash,
+        ...gambleCatalogLogFields(runtime, gambleData),
         attemptNumber: runtime.attemptNumber,
         playerDecision: runtime.playerDecision,
         payment: runtime.playerDecision === "deal" ? runtime.wagerCost : 0,
@@ -265,15 +265,13 @@ export function logGambleResolved(
       "gamble_wager_resolved",
       {
         siteId,
-        gameId: runtime.gameId,
-        rulesVersion: runtime.rulesVersion,
+        ...gambleCatalogLogFields(runtime, gambleData),
         roundNumber: result.roundNumber,
         payment: result.costPaid,
         selectedEntryId: result.targetEntryId,
         selectedCardId: result.targetCardId,
         revealedCard: result.card,
         resolvedSuitOutcome: result.outcome,
-        gambleFoldHash: gambleData.foldHash,
         matchingSuitCardCount:
           game.rules.kind === "fourSuitReprise"
             ? game.rules.matchingSuitCardCount
@@ -296,7 +294,7 @@ export function logGambleResolved(
       "gamble_wager_resolved",
       {
         siteId,
-        gameId: runtime.gameId,
+        ...gambleCatalogLogFields(runtime, gambleData),
         gateId: runtime.result.gateId,
         odds: gate?.chanceLabel ?? null,
         oddsNumerator: gate?.oddsNumerator ?? null,
@@ -325,7 +323,7 @@ export function logGambleResolved(
       "gamble_wager_resolved",
       {
         siteId,
-        gameId: runtime.gameId,
+        ...gambleCatalogLogFields(runtime, gambleData),
         roundNumber: runtime.roundNumber,
         tierNumber: result.tierNumber,
         bustCardCount: tier.bustCardCount,
@@ -353,7 +351,7 @@ export function logGambleResolved(
     "gamble_wager_resolved",
     {
       siteId,
-      gameId: runtime.gameId,
+      ...gambleCatalogLogFields(runtime, gambleData),
       attemptNumber: result.attemptNumber,
       winningCardCount: attempt?.winningCardCount ?? null,
       standardDeckSize: game.rules.standardDeckSize,
@@ -391,9 +389,7 @@ export function logGambleSettled(
       "gamble_wager_settled",
       {
         siteId,
-        gameId: runtime.gameId,
-        rulesVersion: runtime.rulesVersion,
-        gambleFoldHash: gambleData.foldHash,
+        ...gambleCatalogLogFields(runtime, gambleData),
         attemptNumber: runtime.attemptNumber,
         playerTotal: blackjackHandTotal(
           runtime.playerCards,
@@ -419,8 +415,7 @@ export function logGambleSettled(
       "gamble_wager_settled",
       {
         siteId,
-        gameId: runtime.gameId,
-        gambleFoldHash: gambleData.foldHash,
+        ...gambleCatalogLogFields(runtime, gambleData),
         roundNumber: result.roundNumber,
         payment: result.costPaid,
         selectedEntryId: result.targetEntryId,
@@ -448,7 +443,7 @@ export function logGambleSettled(
       "gamble_wager_settled",
       {
         siteId,
-        gameId: runtime.gameId,
+        ...gambleCatalogLogFields(runtime, gambleData),
         gateId: runtime.result.gateId,
         payment: runtime.wagerCost,
         essenceGained: runtime.result.essenceGained,
@@ -467,7 +462,7 @@ export function logGambleSettled(
       "gamble_wager_settled",
       {
         siteId,
-        gameId: runtime.gameId,
+        ...gambleCatalogLogFields(runtime, gambleData),
         roundNumber: runtime.roundNumber,
         tierNumber: result.tierNumber,
         busted: result.busted,
@@ -493,7 +488,7 @@ export function logGambleSettled(
     "gamble_wager_settled",
     {
       siteId,
-      gameId: runtime.gameId,
+      ...gambleCatalogLogFields(runtime, gambleData),
       attemptNumber: runtime.result.attemptNumber,
       cumulativeCost: runtime.result.cumulativeCost,
       essenceGained:

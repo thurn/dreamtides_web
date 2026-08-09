@@ -168,6 +168,8 @@ describe("catalog-driven Transfiguration operations", () => {
       applyTransfigurationToCard(data, card, "Perfected"),
     );
     expect(built.display.form).toBe(data.forms[8]);
+    expect(built.display.energyChangeName).toBe(data.forms[0]?.name);
+    expect(built.display.sparkChangeName).toBeNull();
     expect(built.display.markedText).toContain(TRANSFIGURE_MARK_START);
     expect(built.display.markedText).toContain(TRANSFIGURE_MARK_END);
   });

@@ -1,4 +1,4 @@
-// Defines journey currency costs, rewards, shop inventories, and gamble payouts.
+// Defines shared journey currency costs, rewards, and shop inventories.
 
 #![enable(implicit_some)]
 EconomyCatalog(

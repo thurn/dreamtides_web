@@ -96,6 +96,8 @@ describe("gamble-site-logging-view-model", () => {
     expect(getLogEntries()[0]).toMatchObject({
       event: "gamble_wager_settled",
       gameId: "tidemark-ladder-climb",
+      rulesVersion: RUNTIME.rulesVersion,
+      gambleFoldHash: gambleFixture().foldHash,
       attemptNumber: 1,
       cumulativeCost: 0,
       essenceGained: 25,
@@ -199,6 +201,8 @@ describe("gamble-site-logging-view-model", () => {
     });
     expect(getLogEntries()[2]).toMatchObject({
       event: "gamble_wager_settled",
+      rulesVersion: runtime.rulesVersion,
+      gambleFoldHash: gambleFixture().foldHash,
       finalEffect: "duplication",
       duplicatedEntryId: "duplicate-101",
     });
@@ -261,6 +265,8 @@ describe("gamble-site-logging-view-model", () => {
     });
     expect(getLogEntries()[2]).toMatchObject({
       event: "gamble_wager_settled",
+      rulesVersion: runtime.rulesVersion,
+      gambleFoldHash: gambleFixture().foldHash,
       playerTotal: 19,
       dealerTotal: 18,
       wagerPayment: 50,

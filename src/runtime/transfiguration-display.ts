@@ -29,8 +29,12 @@ export interface CardTransfigurationDisplay {
   readonly markedText: string;
   /** True when the energy cost changed (Empowered); badges the energy orb. */
   readonly energyChanged: boolean;
+  /** Catalog-authored name of the form that changed the energy cost. */
+  readonly energyChangeName: string | null;
   /** True when the spark changed (Kindled); badges the spark orb. */
   readonly sparkChanged: boolean;
+  /** Catalog-authored name of the form that changed spark. */
+  readonly sparkChangeName: string | null;
   /** True when the card gained Fast (Hastened); tints the speed bolt. */
   readonly fastChanged: boolean;
 }

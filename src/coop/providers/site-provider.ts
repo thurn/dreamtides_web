@@ -394,7 +394,8 @@ function buildGambleRuntime(
     (sum, game) => sum + game.selection.weight,
     0,
   );
-  let roll = rng() * totalWeight;
+  const selectionRoll = rng() * totalWeight;
+  let roll = selectionRoll;
   let selectedGameId = configuredGames.find(
     (game) => game.selection.fallback,
   )?.id;
@@ -408,13 +409,28 @@ function buildGambleRuntime(
     }
   }
   const definition = gambleGame(gambleData, requestedGameId ?? selectedGameId);
-  return buildGambleRuntimeFromDefinition(
+  const runtime = buildGambleRuntimeFromDefinition(
     journey,
     site,
     content,
     rng,
     definition,
   );
+  return {
+    ...runtime,
+    selectionTrace: {
+      source: requestedGameId === undefined ? "weighted" : "requested",
+      requestedGameId: requestedGameId ?? null,
+      selectionRoll,
+      totalWeight,
+      candidates: configuredGames.map((game) => ({
+        gameId: game.id,
+        weight: game.selection.weight,
+        fallback: game.selection.fallback,
+      })),
+      selectedGameId: runtime.gameId,
+    },
+  };
 }
 
 function buildGambleRuntimeFromDefinition(

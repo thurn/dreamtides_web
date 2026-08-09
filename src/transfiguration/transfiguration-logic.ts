@@ -67,7 +67,9 @@ export function buildTransfigurationDisplay(
   let card = original;
   let markedText = original.renderedText;
   let energyChanged = false;
+  let energyChangeName: string | null = null;
   let sparkChanged = false;
+  let sparkChangeName: string | null = null;
   let fastChanged = false;
 
   for (const step of steps) {
@@ -79,7 +81,9 @@ export function buildTransfigurationDisplay(
       const result = applyStatStep(card, stepDefinition.operation);
       card = result.card;
       energyChanged = energyChanged || result.energyChanged;
+      if (result.energyChanged) energyChangeName = stepDefinition.name;
       sparkChanged = sparkChanged || result.sparkChanged;
+      if (result.sparkChanged) sparkChangeName = stepDefinition.name;
       continue;
     }
     if (stepDefinition.operation.kind === "setFast") {
@@ -118,7 +122,9 @@ export function buildTransfigurationDisplay(
       form: definition,
       markedText,
       energyChanged,
+      energyChangeName,
       sparkChanged,
+      sparkChangeName,
       fastChanged,
     },
   };

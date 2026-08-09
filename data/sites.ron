@@ -1,4 +1,4 @@
-// Journey site presentation, random-site behavior, card choices, and Gamble rules.
+// Journey site presentation, placement, random-site behavior, and shared card choices.
 
 #![enable(implicit_some)]
 SitesCatalog(

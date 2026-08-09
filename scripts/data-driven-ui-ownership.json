@@ -10,7 +10,18 @@
         "blackjack"
       ],
       "targetOwner": "data/gamble.ron",
-      "currentSources": [],
+      "currentSources": [
+        {
+          "path": "data/gamble.ron",
+          "fields": [
+            "rules_version",
+            "selection",
+            "economy",
+            "presentation",
+            "rules"
+          ]
+        }
+      ],
       "consumers": [
         "src/rules/journey/gamble.ts",
         "src/rules/journey/sites.ts",
@@ -54,9 +65,28 @@
     },
     "dreamwellPrompts": {
       "identities": [
+        "banish-enemy-character",
+        "choose-benefit",
+        "choose-character-to-abandon",
+        "choose-discards",
+        "choose-void-character",
+        "choose-void-for-deck",
+        "confirm-abandon-and-draw",
+        "confirm-play-void-character",
+        "confirm-void-to-deck",
+        "discard-and-draw",
+        "discard-card",
+        "discard-drawn-card",
+        "discover-card",
         "discover-character",
+        "draw-card",
+        "gain-energy",
+        "pick-card-for-hand",
+        "redraw-hand",
         "rematerialize-ally",
-        "grant-reclaim"
+        "grant-reclaim",
+        "return-event",
+        "return-void-card"
       ],
       "targetOwner": "data/dreamwell.ron",
       "currentSources": [
@@ -148,8 +178,8 @@
     },
     {
       "id": "src/rules/battle/dreamwell-effects-table.ts#DREAMWELL_EFFECTS#dreamwellPrompts",
-      "classification": "migration-debt",
-      "rationale": "Effect behavior stays here while card-specific prompt content moves."
+      "classification": "closed-behavior-registry",
+      "rationale": "The scoped proposal keeps effect behavior in TypeScript while card-specific prompt content is catalog-owned."
     },
     {
       "id": "src/rules/journey/deck.ts#TRANSFIGURATION_TYPES#transfiguration",

@@ -833,6 +833,21 @@ describe("createSiteContentProvider — Gamble", () => {
     expect(randomThreeGate?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "gravok-three-gate-wager",
+      selectionTrace: {
+        source: "weighted",
+        requestedGameId: null,
+        selectionRoll: 0,
+        totalWeight: fixture.content.gambleData.games.reduce(
+          (total, game) => total + game.selection.weight,
+          0,
+        ),
+        candidates: fixture.content.gambleData.games.map((game) => ({
+          gameId: game.id,
+          weight: game.selection.weight,
+          fallback: game.selection.fallback,
+        })),
+        selectedGameId: "gravok-three-gate-wager",
+      },
     });
     expect(randomLadder?.runtime).toMatchObject({
       kind: "gamble",
@@ -877,6 +892,11 @@ describe("createSiteContentProvider — Gamble", () => {
     expect(forcedBlackjack?.runtime).toMatchObject({
       kind: "gamble",
       gameId: "blackjack",
+      selectionTrace: {
+        source: "requested",
+        requestedGameId: "blackjack",
+        selectedGameId: "blackjack",
+      },
       wagerCost: 90,
       prizeEssence: 300,
     });

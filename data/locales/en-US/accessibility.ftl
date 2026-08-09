@@ -356,17 +356,18 @@ atlas-node-accessible-name =
     }
 # Accessible name for a numeric stat orb on a card. $stat is "energy" for the
 # card's play cost, "spark" for its challenge strength, or "dreamwellEnergy"
-# for Energy granted by a Dreamwell card. $change is "empowered" or "kindled"
-# when the corresponding Transfiguration changed this stat, and "none"
-# otherwise. The visible numeral remains inside the same labeled element.
+# for Energy granted by a Dreamwell card. $change identifies which stat badge
+# is present, and $changeName is the source-English Transfiguration form name
+# supplied by the catalog. The visible numeral remains inside the same labeled
+# element.
 card-stat-accessible-name =
     { $stat ->
         [energy] Energy cost
         [spark] Spark
        *[dreamwellEnergy] Energy added
     }{ $change ->
-        [empowered] , Empowered
-        [kindled] , Kindled
+        [empowered] , { $changeName }
+        [kindled] , { $changeName }
        *[none] { "" }
     }
 # Accessible name for the same numeric card stat orb when its caller supplies a
@@ -377,10 +378,11 @@ card-stat-accessible-name =
 # stat, and "none" otherwise. The visible numeral and optional change badge are
 # inside this labeled element; preserve the base meaning while announcing the
 # changed state without assuming English punctuation or clause order.
+# $changeName is supplied by the Transfiguration catalog.
 card-stat-custom-accessible-name =
     { $change ->
-        [empowered] { $baseName }, Empowered
-        [kindled] { $baseName }, Kindled
+        [empowered] { $baseName }, { $changeName }
+        [kindled] { $baseName }, { $changeName }
        *[none] { $baseName }
     }
 # Accessible label for the group of battle navigation and choice controls.

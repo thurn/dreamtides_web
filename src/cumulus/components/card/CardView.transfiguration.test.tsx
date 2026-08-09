@@ -40,7 +40,9 @@ function display(markedText: string): CardTransfigurationDisplay {
     form: transfigurationFormFixture("Amplified"),
     markedText,
     energyChanged: false,
+    energyChangeName: null,
     sparkChanged: false,
+    sparkChangeName: null,
     fastChanged: false,
   };
 }

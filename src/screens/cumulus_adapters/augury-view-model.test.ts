@@ -199,9 +199,9 @@ function mappedOffer(
 const choiceRequest = (
   candidates: MerchantChoiceCandidate[],
   choiceType: "catalogCard" | "dreamsign" | "replacementCard" = "catalogCard",
-  ) => ({
-    choiceType,
-    candidates,
+) => ({
+  choiceType,
+  candidates,
 });
 
 function dreamsignObject(
@@ -273,7 +273,9 @@ describe("augury view model", () => {
       form: transfigurationFormFixture("Empowered"),
       markedText: "Changed fixture text.",
       energyChanged: true,
+      energyChangeName: "Fixture energy form",
       sparkChanged: false,
+      sparkChangeName: null,
       fastChanged: false,
     };
     const transfiguredObject = {
@@ -358,14 +360,12 @@ describe("augury view model", () => {
   });
 
   it("builds the persisted accept request from stable offer and choice ids", () => {
-    expect(buildAuguryAcceptRequest(encounter(), "A", "choice-2")).toEqual(
-      {
-        encounterSignature: "encounter-fixture",
-        offerId: "A",
-        archetypeId: "fit_card_draft",
-        choice: { choiceId: "choice-2" },
-      },
-    );
+    expect(buildAuguryAcceptRequest(encounter(), "A", "choice-2")).toEqual({
+      encounterSignature: "encounter-fixture",
+      offerId: "A",
+      archetypeId: "fit_card_draft",
+      choice: { choiceId: "choice-2" },
+    });
   });
 
   it("maps every merchant archetype to its strict Offer Tile category", () => {
@@ -478,7 +478,8 @@ describe("augury view model", () => {
       expect(
         auguryOfferHeadline(
           model,
-          auguryArchetype(CONFIG_DATA_FIXTURE.auguryData, offer.archetypeId).presentation,
+          auguryArchetype(CONFIG_DATA_FIXTURE.auguryData, offer.archetypeId)
+            .presentation,
         ),
         offer.archetypeId,
       ).not.toBe("");

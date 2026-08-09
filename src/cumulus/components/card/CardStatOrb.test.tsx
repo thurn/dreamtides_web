@@ -4,13 +4,18 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { CardStatOrb } from "./CardStatOrb";
+import type { CardStatChangeBadge } from "./CardStatOrb";
 import { CumulusRoot } from "../../CumulusRoot";
 
 function mountOrb(
   value: string,
-  changeBadge?: "empowered" | "kindled",
+  changeBadgeKind?: "empowered" | "kindled",
   ariaLabel?: string,
 ) {
+  const changeBadge: CardStatChangeBadge | undefined =
+    changeBadgeKind === undefined
+      ? undefined
+      : { kind: changeBadgeKind, accessibleName: "Synthetic form" };
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -18,7 +23,7 @@ function mountOrb(
     root.render(
       <CumulusRoot>
         <CardStatOrb
-          variant={changeBadge === "kindled" ? "spark" : "energy"}
+          variant={changeBadgeKind === "kindled" ? "spark" : "energy"}
           value={value}
           sizeVar="60px"
           numberSizeVar="45px"
@@ -48,28 +53,31 @@ describe("CardStatOrb transfiguration badge", () => {
   it.each([
     ["empowered", "fa-hammer"],
     ["kindled", "fa-hammer"],
-  ] as const)("renders the %s shape while preserving the white numeral", (changeBadge, glyphClass) => {
-    const { container, root } = mountOrb("12", changeBadge);
-    const orb = container.querySelector<HTMLElement>("[data-card-stat]");
-    const badge = container.querySelector<HTMLElement>(
-      `[data-card-stat-change="${changeBadge}"]`,
-    );
-    const badgeFace = badge?.querySelector<HTMLElement>(":scope > span");
+  ] as const)(
+    "renders the %s shape while preserving the white numeral",
+    (changeBadge, glyphClass) => {
+      const { container, root } = mountOrb("12", changeBadge);
+      const orb = container.querySelector<HTMLElement>("[data-card-stat]");
+      const badge = container.querySelector<HTMLElement>(
+        `[data-card-stat-change="${changeBadge}"]`,
+      );
+      const badgeFace = badge?.querySelector<HTMLElement>(":scope > span");
 
-    expect(orb?.getAttribute("aria-label")).not.toBe("");
-    expect(orb?.getAttribute("aria-label")).not.toMatch(/^card-stat-/);
-    expect(orb?.querySelector<HTMLElement>(":scope > div")?.style.color).toBe(
-      "rgb(255, 255, 255)",
-    );
-    expect(badgeFace?.style.width).toBe("calc(30px)");
-    expect(badge?.style.right).toBe("calc(-9px)");
-    expect(badgeFace?.style.background).toBe("rgb(0, 0, 0)");
-    expect(badgeFace?.style.border).toContain("rgb(255, 255, 255)");
-    expect(badgeFace?.querySelector(`.${glyphClass}`)).not.toBeNull();
+      expect(orb?.getAttribute("aria-label")).not.toBe("");
+      expect(orb?.getAttribute("aria-label")).not.toMatch(/^card-stat-/);
+      expect(orb?.querySelector<HTMLElement>(":scope > div")?.style.color).toBe(
+        "rgb(255, 255, 255)",
+      );
+      expect(badgeFace?.style.width).toBe("calc(30px)");
+      expect(badge?.style.right).toBe("calc(-9px)");
+      expect(badgeFace?.style.background).toBe("rgb(0, 0, 0)");
+      expect(badgeFace?.style.border).toContain("rgb(255, 255, 255)");
+      expect(badgeFace?.querySelector(`.${glyphClass}`)).not.toBeNull();
 
-    act(() => root.unmount());
-    container.remove();
-  });
+      act(() => root.unmount());
+      container.remove();
+    },
+  );
 
   it.each(["7", "12", "X"])(
     "keeps the %s value in the fitted numeral layer",
@@ -105,6 +113,7 @@ describe("CardStatOrb transfiguration badge", () => {
     expect(changedLabel).not.toBe("");
     expect(changedLabel).not.toBe(unchangedLabel);
     expect(changedLabel).not.toMatch(/^card-stat-/);
+    expect(changedLabel).toContain("Synthetic form");
 
     act(() => changed.root.unmount());
     changed.container.remove();

@@ -13,7 +13,11 @@ import { renderCardChangeBadge } from "./card-change-badge";
 import { useMessages } from "../../hooks/use-messages";
 
 export type CardStatOrbVariant = "energy" | "spark" | "dreamwellEnergy";
-export type CardStatChangeBadge = "empowered" | "kindled";
+export interface CardStatChangeBadge {
+  kind: "empowered" | "kindled";
+  /** Source-English form name supplied by the Transfiguration catalog. */
+  accessibleName: string;
+}
 
 /** Purple fill for the Dreamwell energy mark; the number stays white. */
 export const DREAMWELL_ENERGY_ICON_COLOR: CumulusColor = "#a855f7";
@@ -131,11 +135,13 @@ export function CardStatOrb({
     ariaLabel === undefined
       ? t("card-stat-accessible-name", {
           stat: variant,
-          change: changeBadge ?? "none",
+          change: changeBadge?.kind ?? "none",
+          changeName: changeBadge?.accessibleName ?? "",
         })
       : t("card-stat-custom-accessible-name", {
           baseName: ariaLabel,
-          change: changeBadge ?? "none",
+          change: changeBadge?.kind ?? "none",
+          changeName: changeBadge?.accessibleName ?? "",
         });
   const icon = ICON_BY_VARIANT[variant];
   // The digit box edge equals the CSS digit size; the digit sits over the
@@ -226,7 +232,7 @@ export function CardStatOrb({
       </div>
       {changeBadge === undefined ? null : (
         <span
-          data-card-stat-change={changeBadge}
+          data-card-stat-change={changeBadge.kind}
           aria-hidden="true"
           style={{
             position: "absolute",

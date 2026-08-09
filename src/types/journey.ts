@@ -84,11 +84,7 @@ export interface DeckEntryCardModification {
  * `node-unreachable` CSS treatment), so no `node-forgone` visual rule is needed.
  */
 export type AtlasNodeState =
-  | "unrevealed"
-  | "revealedLocked"
-  | "available"
-  | "completed"
-  | "forgone";
+  "unrevealed" | "revealedLocked" | "available" | "completed" | "forgone";
 
 /** An entry in the player's deck. Duplicates are possible. */
 export interface DeckEntry {
@@ -144,10 +140,7 @@ export interface CardSourceDebugEntry {
 
 /** Which surface produced the currently explained cards. */
 export type CardSourceDebugSurface =
-  | "Draft"
-  | "Shop"
-  | "BattleReward"
-  | "Reward";
+  "Draft" | "Shop" | "BattleReward" | "Reward";
 
 /** Global debug data for cards currently revealed on a journey screen. */
 export interface CardSourceDebugState {
@@ -259,9 +252,7 @@ export type JourneyFailureBattleResult = "defeat" | "draw";
  * to import battle internals.
  */
 export type JourneyFailureReason =
-  | "score_target_reached"
-  | "turn_limit_reached"
-  | "forced_result";
+  "score_target_reached" | "turn_limit_reached" | "forced_result";
 
 /**
  * Frozen snapshot describing why a playable battle ended without victory.
@@ -420,11 +411,27 @@ export interface GravokWagerResult {
   replacedDreamsignId?: string;
 }
 
+/** Catalog selection inputs persisted so a Gamble choice can be reconstructed. */
+export interface GambleSelectionTrace {
+  source: "weighted" | "requested";
+  requestedGameId: GambleGameId | null;
+  selectionRoll: number;
+  totalWeight: number;
+  candidates: {
+    gameId: GambleGameId;
+    weight: number;
+    fallback: boolean;
+  }[];
+  selectedGameId: GambleGameId;
+}
+
 /** Shared, replayable runtime for one Gravok's Three-Gate Wager encounter. */
 export interface GravokWagerSiteRuntime {
   kind: "gamble";
   gameId: "gravok-three-gate-wager";
   rulesVersion: string;
+  /** Absent only on persisted runtimes created before catalog tracing. */
+  selectionTrace?: GambleSelectionTrace;
   /** One-based wager number within this site visit. */
   roundNumber?: number;
   isFarpoint: boolean;
@@ -487,16 +494,18 @@ export interface ExplorationResolution {
   /** Exact Reclaim cost applied to each surviving concrete deck entry. */
   reclaimCostByEntryId?: Record<string, number>;
   /** Exact one-battle modifier created by the resolution. */
-  battleModifier?: {
-    kind: "opening-hand" | "starting-energy";
-    amount: number;
-    battlesRemaining: number;
-  } | {
-    kind: "smaller-hand-and-cost-discount";
-    openingHandDelta: -1;
-    energyCostReduction: 1;
-    battlesRemaining: number;
-  };
+  battleModifier?:
+    | {
+        kind: "opening-hand" | "starting-energy";
+        amount: number;
+        battlesRemaining: number;
+      }
+    | {
+        kind: "smaller-hand-and-cost-discount";
+        openingHandDelta: -1;
+        energyCostReduction: 1;
+        battlesRemaining: number;
+      };
   previousDreamAvatarId?: string;
   chosenDreamAvatarId?: string;
   /** Exact one-use future-site modifier created by the resolution. */
@@ -539,6 +548,8 @@ export interface TidemarkLadderClimbSiteRuntime {
   kind: "gamble";
   gameId: "tidemark-ladder-climb";
   rulesVersion: string;
+  /** Absent only on persisted runtimes created before catalog tracing. */
+  selectionTrace?: GambleSelectionTrace;
   isFarpoint: boolean;
   /** One independent full-deck commitment for each possible attempt. */
   shuffleCommitments: string[];
@@ -572,6 +583,8 @@ export interface StarwayStairsSiteRuntime {
   kind: "gamble";
   gameId: "starway-stairs";
   rulesVersion: string;
+  /** Absent only on persisted runtimes created before catalog tracing. */
+  selectionTrace?: GambleSelectionTrace;
   /** One-based game number within this site visit. */
   roundNumber: number;
   isFarpoint: boolean;
@@ -617,6 +630,8 @@ export interface FourSuitRepriseSiteRuntime {
   kind: "gamble";
   gameId: "four-suit-reprise";
   rulesVersion: string;
+  /** Absent only on persisted runtimes created before catalog tracing. */
+  selectionTrace?: GambleSelectionTrace;
   isFarpoint: boolean;
   drawCost: number;
   /** One independent full-deck commitment for each possible round. */
@@ -632,6 +647,8 @@ export interface BlackjackSiteRuntime {
   kind: "gamble";
   gameId: "blackjack";
   rulesVersion: string;
+  /** Absent only on persisted runtimes created before catalog tracing. */
+  selectionTrace?: GambleSelectionTrace;
   isFarpoint: boolean;
   wagerCost: number;
   prizeEssence: number;

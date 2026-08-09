@@ -31,7 +31,10 @@ import {
   type GameCardSelection,
 } from "../../components/card/CardView";
 import type { CumulusComponent } from "../registry";
-import { loadTransfigurationData, transfigurationForm } from "../../../data/transfiguration-data";
+import {
+  loadTransfigurationData,
+  transfigurationForm,
+} from "../../../data/transfiguration-data";
 import type { TransfigurationFormDefinition } from "../../../types/transfiguration-data";
 
 /**
@@ -92,7 +95,9 @@ function amplifiedDemoModel(
       form,
       markedText: `${before}${TRANSFIGURE_MARK_START}${amplifiedNumber}${TRANSFIGURE_MARK_END}${after}`,
       energyChanged: false,
+      energyChangeName: null,
       sparkChanged: false,
+      sparkChangeName: null,
       fastChanged: false,
     },
   };

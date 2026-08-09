@@ -885,13 +885,27 @@
     {
       "name": "changeBadge",
       "tsType": "CardStatChangeBadge",
-      "unionMembers": [
-        "empowered",
-        "kindled"
-      ],
+      "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Monochrome hammer marker for a transfiguration-changed stat, shared with\nthe Transfiguration site's atlas icon."
+      "description": "Monochrome hammer marker for a transfiguration-changed stat, shared with\nthe Transfiguration site's atlas icon.",
+      "nested": {
+        "name": "CardStatChangeBadge",
+        "fields": [
+          {
+            "name": "kind",
+            "tsType": "\"empowered\" | \"kindled\"",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "accessibleName",
+            "tsType": "string",
+            "optional": false,
+            "description": "Source-English form name supplied by the Transfiguration catalog."
+          }
+        ]
+      }
     }
   ],
   "CardView": [
@@ -966,10 +980,22 @@
             "description": "True when the energy cost changed (Empowered); badges the energy orb."
           },
           {
+            "name": "energyChangeName",
+            "tsType": "string | null",
+            "optional": false,
+            "description": "Catalog-authored name of the form that changed the energy cost."
+          },
+          {
             "name": "sparkChanged",
             "tsType": "boolean",
             "optional": false,
             "description": "True when the spark changed (Kindled); badges the spark orb."
+          },
+          {
+            "name": "sparkChangeName",
+            "tsType": "string | null",
+            "optional": false,
+            "description": "Catalog-authored name of the form that changed spark."
           },
           {
             "name": "fastChanged",

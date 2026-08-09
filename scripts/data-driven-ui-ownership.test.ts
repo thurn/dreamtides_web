@@ -36,11 +36,15 @@ function productionTypeScriptFiles(): string[] {
     .filter((path) => !path.endsWith("/src/data/localization-messages.ts"));
 }
 
-function identityValues(node: ts.Node, identities: ReadonlySet<string>): Set<string> {
+function identityValues(
+  node: ts.Node,
+  identities: ReadonlySet<string>,
+): Set<string> {
   const found = new Set<string>();
   function visit(current: ts.Node): void {
     if (
-      (ts.isStringLiteral(current) || ts.isNoSubstitutionTemplateLiteral(current)) &&
+      (ts.isStringLiteral(current) ||
+        ts.isNoSubstitutionTemplateLiteral(current)) &&
       identities.has(current.text)
     ) {
       found.add(current.text);
@@ -57,7 +61,10 @@ function identityValues(node: ts.Node, identities: ReadonlySet<string>): Set<str
   return found;
 }
 
-export function identityTablesInSource(sourceText: string, fileName: string): string[] {
+export function identityTablesInSource(
+  sourceText: string,
+  fileName: string,
+): string[] {
   const source = ts.createSourceFile(
     fileName,
     sourceText,
@@ -69,10 +76,18 @@ export function identityTablesInSource(sourceText: string, fileName: string): st
   for (const statement of source.statements) {
     if (!ts.isVariableStatement(statement)) continue;
     for (const declaration of statement.declarationList.declarations) {
-      if (!ts.isIdentifier(declaration.name) || declaration.initializer === undefined) continue;
+      if (
+        !ts.isIdentifier(declaration.name) ||
+        declaration.initializer === undefined
+      )
+        continue;
       for (const [family, definition] of Object.entries(inventory.families)) {
-        const matches = identityValues(declaration.initializer, new Set(definition.identities));
-        if (matches.size >= 2) tables.push(`${fileName}#${declaration.name.text}#${family}`);
+        const matches = identityValues(
+          declaration.initializer,
+          new Set(definition.identities),
+        );
+        if (matches.size >= 2)
+          tables.push(`${fileName}#${declaration.name.text}#${family}`);
       }
     }
   }
@@ -80,30 +95,64 @@ export function identityTablesInSource(sourceText: string, fileName: string): st
 }
 
 function productionIdentityTables(): string[] {
-  return productionTypeScriptFiles().flatMap((path) =>
-    identityTablesInSource(readFileSync(path, "utf8"), repoPath(path)),
-  ).sort();
+  return productionTypeScriptFiles()
+    .flatMap((path) =>
+      identityTablesInSource(readFileSync(path, "utf8"), repoPath(path)),
+    )
+    .sort();
 }
 
 function fluentMessageIds(): Set<string> {
   const ids = new Set<string>();
-  for (const path of collectFiles(resolve(ROOT, "data/locales/en-US"), /\.ftl$/)) {
-    for (const match of readFileSync(path, "utf8").matchAll(/^([a-z][a-z0-9-]*)\s*=/gm)) {
+  for (const path of collectFiles(
+    resolve(ROOT, "data/locales/en-US"),
+    /\.ftl$/,
+  )) {
+    for (const match of readFileSync(path, "utf8").matchAll(
+      /^([a-z][a-z0-9-]*)\s*=/gm,
+    )) {
       ids.add(match[1]);
     }
   }
   return ids;
 }
 
-function actualLegacyMessages(family: FamilyName, allIds: ReadonlySet<string>): string[] {
+function actualLegacyMessages(
+  family: FamilyName,
+  allIds: ReadonlySet<string>,
+): string[] {
   const expected = inventory.legacyFluentMessages[family];
-  const prefixes = [...new Set(expected.map((id) => id.replace(/(?:blackjack|four-suit|gravok|starway).*/, "")))]
-    .filter(Boolean);
-  if (family === "gamble") return [...allIds].filter((id) => /^gamble-(?:blackjack|four-suit|gravok|starway)/.test(id)).sort();
-  if (family === "transfiguration") return [...allIds].filter((id) => id === "transfiguration-form-name" || id.startsWith("transfiguration-change-")).sort();
-  if (family === "dreamwellPrompts") return [...allIds].filter((id) => id.startsWith("battle-prompt-")).sort();
-  if (family === "tides") return [...allIds].filter((id) => id === "tide-alignment-name" || id === "reveal-tide-alignment").sort();
-  if (family === "rulesSymbols") return [...allIds].filter((id) => id.startsWith("rules-text-symbol-")).sort();
+  const prefixes = [
+    ...new Set(
+      expected.map((id) =>
+        id.replace(/(?:blackjack|four-suit|gravok|starway).*/, ""),
+      ),
+    ),
+  ].filter(Boolean);
+  if (family === "gamble")
+    return [...allIds]
+      .filter((id) => /^gamble-(?:blackjack|four-suit|gravok|starway)/.test(id))
+      .sort();
+  if (family === "transfiguration")
+    return [...allIds]
+      .filter(
+        (id) =>
+          id === "transfiguration-form-name" ||
+          id.startsWith("transfiguration-change-"),
+      )
+      .sort();
+  if (family === "dreamwellPrompts")
+    return [...allIds].filter((id) => id.startsWith("battle-prompt-")).sort();
+  if (family === "tides")
+    return [...allIds]
+      .filter(
+        (id) => id === "tide-alignment-name" || id === "reveal-tide-alignment",
+      )
+      .sort();
+  if (family === "rulesSymbols")
+    return [...allIds]
+      .filter((id) => id.startsWith("rules-text-symbol-"))
+      .sort();
   return prefixes;
 }
 
@@ -122,10 +171,18 @@ describe("data-driven UI ownership", () => {
       expect(definition.targetOwner).toMatch(/^data\/[a-z_]+\.ron$/);
       for (const source of definition.currentSources) {
         const text = readFileSync(resolve(ROOT, source.path), "utf8");
-        for (const field of source.fields) expect(text, `${source.path} must contain ${field}`).toContain(field);
+        for (const field of source.fields)
+          expect(text, `${source.path} must contain ${field}`).toContain(field);
       }
-      for (const path of [...definition.consumers, ...definition.persisted, ...definition.logging]) {
-        expect(readFileSync(resolve(ROOT, path), "utf8"), `${path} must remain inventoried`).toBeTruthy();
+      for (const path of [
+        ...definition.consumers,
+        ...definition.persisted,
+        ...definition.logging,
+      ]) {
+        expect(
+          readFileSync(resolve(ROOT, path), "utf8"),
+          `${path} must remain inventoried`,
+        ).toBeTruthy();
       }
     }
   });
@@ -137,14 +194,16 @@ describe("data-driven UI ownership", () => {
     for (const entry of inventory.typescriptTableAllowlist) {
       expect(entry.rationale.length).toBeGreaterThan(10);
       expect(entry.classification).toMatch(
-        /^(?:migration-debt|closed-syntax|closed-identity|persisted-compatibility|unrelated-closed-renderer|unrelated-design-system)$/,
+        /^(?:closed-behavior-registry|closed-syntax|closed-identity|persisted-compatibility|unrelated-closed-renderer|unrelated-design-system)$/,
       );
     }
   });
 
   it("allows only inventoried legacy Fluent message families", () => {
     const ids = fluentMessageIds();
-    for (const family of Object.keys(inventory.legacyFluentMessages) as FamilyName[]) {
+    for (const family of Object.keys(
+      inventory.legacyFluentMessages,
+    ) as FamilyName[]) {
       expect(actualLegacyMessages(family, ids), family).toEqual(
         [...inventory.legacyFluentMessages[family]].sort(),
       );

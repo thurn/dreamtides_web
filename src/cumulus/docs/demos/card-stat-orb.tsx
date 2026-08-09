@@ -20,7 +20,13 @@ function CardStatOrbDemo(args: Record<string, unknown>) {
       }
       changeBadge={
         args.changeBadge === "empowered" || args.changeBadge === "kindled"
-          ? args.changeBadge
+          ? {
+              kind: args.changeBadge,
+              accessibleName:
+                typeof args.changeBadgeName === "string"
+                  ? args.changeBadgeName
+                  : "Transfiguration",
+            }
           : undefined
       }
     />
