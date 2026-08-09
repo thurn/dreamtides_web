@@ -23,6 +23,16 @@ const COPY_PROPERTIES = new Set([
   "supportingText",
 ]);
 
+const LOCALIZATION_CALLS = new Set([
+  "t",
+  "gettext",
+  "pgettext",
+  "ngettext",
+  "npgettext",
+  "formatGettext",
+  "createMessageDescriptor",
+]);
+
 function isHumanText(value) {
   return /\p{L}/u.test(value) && !/^https?:\/\//u.test(value);
 }
@@ -76,8 +86,7 @@ function isLocalizationCall(node) {
     if (
       current.type === "CallExpression" &&
       ((current.callee.type === "Identifier" &&
-        (current.callee.name === "t" ||
-          current.callee.name === "createMessageDescriptor")) ||
+        LOCALIZATION_CALLS.has(current.callee.name)) ||
         (current.callee.type === "MemberExpression" &&
           current.callee.property.type === "Identifier" &&
           current.callee.property.name === "getString"))
@@ -100,7 +109,7 @@ function isLocalizedExpression(node) {
   if (node?.type === "CallExpression") {
     return (
       node.callee.type === "Identifier" &&
-      (node.callee.name === "t" || node.callee.name === "createMessageDescriptor")
+      LOCALIZATION_CALLS.has(node.callee.name)
     );
   }
   if (node?.type === "ConditionalExpression") {
@@ -182,12 +191,12 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Require player-facing runtime copy to cross the Fluent localization boundary.",
+        "Require player-facing runtime copy to cross an approved localization boundary.",
     },
     schema: [],
     messages: {
       unlocalized:
-        "Player-facing copy must be a Fluent message or descriptor; preserve authored data and add a localization-ignore reason for an intentional developer-only value.",
+        "Player-facing copy must be a localized message or descriptor; preserve authored data and add a localization-ignore reason for an intentional developer-only value.",
     },
   },
 

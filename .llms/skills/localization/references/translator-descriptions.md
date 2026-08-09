@@ -34,9 +34,14 @@ Descriptions are especially important for:
 
 ## Comment scope
 
-Use `#` immediately above a message or term when its context is unique. Use a
-`##` group comment only when every message below shares the stated context.
-Use `###` for information that applies to the resource as a whole.
+For source-extracted gettext, use a `TRANSLATORS:` source comment immediately
+before the literal `gettext`, `pgettext`, `ngettext`, or `npgettext` call. GNU
+`xgettext` copies these comments into the POT. Inspect the generated entry to
+confirm that the comment stayed attached to the intended message.
+
+For Fluent, use `#` immediately above a message or term when its context is
+unique. Use a `##` group comment only when every message below shares the stated
+context. Use `###` for information that applies to the resource as a whole.
 
 Do not make a translator search several screens away for the operative
 description. Repeat a short fact when needed to make an individual translation

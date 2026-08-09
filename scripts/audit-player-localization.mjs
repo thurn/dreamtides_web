@@ -39,7 +39,7 @@ const EXCLUDED_CONTAINERS = [
 function sourceFiles() {
   return execFileSync(
     "git",
-    ["ls-files", "--cached", "--others", "--exclude-standard", "--", "src/**/*.ts", "src/**/*.tsx"],
+    ["ls-files", "--cached", "--others", "--exclude-standard", "--", "src"],
     { cwd: ROOT, encoding: "utf8" },
   )
     .split("\n")
@@ -74,7 +74,7 @@ export function auditPlayerLocalization(files = sourceFiles()) {
     if (isPlayerLocalizationFile(file)) continue;
     const lines = readFileSync(resolve(ROOT, file), "utf8").split("\n");
     lines.forEach((line, index) => {
-      if (!COPY_SHAPE.test(line) || /\bt\s*\(|createMessageDescriptor\s*\(/u.test(line)) return;
+      if (!COPY_SHAPE.test(line) || /\b(?:t|gettext|pgettext|ngettext|npgettext|formatGettext|createMessageDescriptor)\s*\(/u.test(line)) return;
       results.push({ file, line: index + 1, text: line.trim(), classification: classify(file, line) });
     });
   }

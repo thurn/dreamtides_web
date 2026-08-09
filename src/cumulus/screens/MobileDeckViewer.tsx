@@ -31,6 +31,8 @@ import { IconButton } from "../components/controls/IconButton";
 import { Select } from "../components/controls/Select";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
+import { formatGettext } from "../../data/gettext";
+import { useGettext } from "../hooks/use-gettext";
 import { useMessages } from "../hooks/use-messages";
 import {
   type DeckControlOption,
@@ -191,7 +193,17 @@ function TopBand({
   count: number;
   controls: React.ReactNode;
 }) {
-  const t = useMessages();
+  const { gettext, ngettext } = useGettext();
+  // TRANSLATORS: Title of the full-screen browser for the current player's
+  // deck. “Your” addresses the local player, including in a cooperative room.
+  const title = gettext("Your Deck");
+  // TRANSLATORS: Count beneath the deck-browser title. {count} is the
+  // non-negative number of cards currently in the player's deck and can be zero.
+  const cardCountTemplate = ngettext("{count} Card", "{count} Cards", count);
+  const cardCount = formatGettext(cardCountTemplate, { count });
+  // TRANSLATORS: Accessible name for the icon-only control that dismisses the
+  // deck browser and returns focus to the Journey screen beneath it.
+  const closeLabel = gettext("Close deck browser");
   return (
     <div
       style={{
@@ -238,7 +250,7 @@ function TopBand({
               color: token("--text-primary"),
             }}
           >
-            {t("deck-browser-title")}
+            {title}
           </div>
           {/* Card-count eyebrow: the whole deck's size, styled with the shared
               eyebrow tokens and pluralized exactly as the desktop header's count
@@ -251,7 +263,7 @@ function TopBand({
               color: token("--text-secondary"),
             }}
           >
-            {t("deck-browser-card-count", { count })}
+            {cardCount}
           </div>
         </div>
         <div style={{ position: "absolute", top: 0, right: 0 }}>
@@ -259,7 +271,7 @@ function TopBand({
             placement="onGlass"
             glyph={GLYPHS.close}
             size="md"
-            label={t("deck-browser-close")}
+            label={closeLabel}
             testId="mobile-deck-close"
             onPress={onClose}
           />
@@ -404,12 +416,18 @@ function DeckTile({
 
 /** Shown when the deck has no cards. */
 function EmptyDeck() {
-  const t = useMessages();
-  return <GridPlaceholder message={t("deck-browser-empty")} />;
+  const { gettext } = useGettext();
+  // TRANSLATORS: Empty state in the deck browser when the player's deck
+  // contains zero cards.
+  const message = gettext("Your deck is empty.");
+  return <GridPlaceholder message={message} />;
 }
 
 /** Shown when a filter hides every card in a non-empty deck. */
 function NoMatches() {
-  const t = useMessages();
-  return <GridPlaceholder message={t("deck-browser-no-filter-matches")} />;
+  const { gettext } = useGettext();
+  // TRANSLATORS: Empty state when the player's non-empty deck has no cards
+  // matching the active filter. The player can change or clear that filter.
+  const message = gettext("No cards match this filter.");
+  return <GridPlaceholder message={message} />;
 }

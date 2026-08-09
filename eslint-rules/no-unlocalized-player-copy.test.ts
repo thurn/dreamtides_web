@@ -31,6 +31,14 @@ tester.run("no-unlocalized-player-copy", rule, {
     },
     {
       filename: "src/cumulus/screens/FixtureScreen.tsx",
+      code: `<Button label={gettext("Open fixture")} />`,
+    },
+    {
+      filename: "src/cumulus/screens/FixtureScreen.tsx",
+      code: `const copy = { label: formatGettext(ngettext("{count} item", "{count} items", count), { count }) };`,
+    },
+    {
+      filename: "src/cumulus/screens/FixtureScreen.tsx",
       code: `<div data-testid="loading-card" className="glass-panel" />`,
     },
     {
