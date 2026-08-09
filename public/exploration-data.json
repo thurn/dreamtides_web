@@ -912,8 +912,138 @@
           "nightmareCount": 3
         }
       ]
+    },
+    {
+      "cardId": "34ea77a8-66e4-49b8-a934-a9d95cb74376",
+      "prose": "A lone navigator poles through flooded refineries while amber waters glitter with drifting wreckage.",
+      "action": [
+        {
+          "id": "1fc0d7a2-6946-4392-8157-7f43b2010e7e",
+          "label": "Search Flooded Ruins",
+          "effectText": "Draft a Survivor from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "survivor",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "887b267a-8c6c-4a90-b1ef-37e4f68b4c85",
+          "label": "Collect Passage Fares",
+          "effectText": "Gain 15 essence for each Survivor card in your deck",
+          "effectKind": "gain-essence-per-card",
+          "canonicalMechanicId": "gain-essence-by-deck-predicate",
+          "predicate": "survivor",
+          "essencePerCard": 15
+        }
+      ]
+    },
+    {
+      "cardId": "d09a6760-6630-4964-9c77-decc641df713",
+      "prose": "Police lights fracture rain around a hooded gunman poised between flight and concealment.",
+      "action": [
+        {
+          "id": "49273949-f29c-440f-b843-5a9d0640c236",
+          "label": "Rush Police Lights",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        },
+        {
+          "id": "18069673-2c22-4f94-88ca-b71ac87612bb",
+          "label": "Hide Beneath Steel",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "d9434b04-217c-4b37-b763-c46404d8fef9",
+      "prose": "Sunlit feathers stir beneath a vast woven circle as a lone wanderer approaches.",
+      "action": [
+        {
+          "id": "01f4ce1b-b187-4bfc-9ac1-7ac9f17a331b",
+          "label": "Follow Falling Feathers",
+          "effectText": "Draft a Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "3a534e36-c493-4304-90a4-337394810621",
+          "label": "Weave a New Pattern",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card, then choose its transfiguration.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "cardId": "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6",
+      "prose": "A colossal stag towers across a twilight road, white halo blazing between black antlers.",
+      "action": [
+        {
+          "id": "975398f9-e1f0-4a77-ad46-c989b0df2c2e",
+          "label": "Pass Beneath Its Halo",
+          "effectText": "Change a chosen character card to be a Spirit Animal",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to become a Spirit Animal.",
+          "effectKind": "change-subtype-selected",
+          "canonicalMechanicId": "change-entry-subtype",
+          "selectionPolicyId": "deck-entry-centrality",
+          "predicate": "character",
+          "subtype": "Spirit Animal",
+          "deckTarget": "chosen"
+        },
+        {
+          "id": "eb2c3aa6-6622-4d15-b5b7-c6c07004393f",
+          "label": "Meet Its Burning Gaze",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "e7c93c3b-14db-4131-ab50-71d152331777",
+      "prose": "A crimson rider surfs sunset air above a fractured city.",
+      "action": [
+        {
+          "id": "83a3d2b7-0ca2-40f4-89fa-726f6efb732b",
+          "label": "Ride crimson wake",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        },
+        {
+          "id": "c030376e-5171-4830-98bb-af5b3a9f2edc",
+          "label": "Abandon burning board",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to abandon for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        }
+      ]
     }
   ],
-  "contentHash": "57092601ed863ec8395aae1246a3641c2007a770b3cee26e1d480a5efa8c88ee",
-  "foldHash": "57092601ed863ec8395aae1246a3641c2007a770b3cee26e1d480a5efa8c88ee"
+  "contentHash": "0e6f87f6be0041d59d36c356e7880f85d31ab312fbcd05a4bbc4f3f6218e2478",
+  "foldHash": "0e6f87f6be0041d59d36c356e7880f85d31ab312fbcd05a4bbc4f3f6218e2478"
 }

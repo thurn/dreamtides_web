@@ -950,4 +950,147 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "34ea77a8-66e4-49b8-a934-a9d95cb74376",
+    prose: "A lone navigator poles through flooded refineries while amber waters glitter with drifting wreckage.",
+    actions: [
+      ActionDefinition(
+        label: "Search Flooded Ruins",
+        id: "1fc0d7a2-6946-4392-8157-7f43b2010e7e",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Survivor from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: Survivor, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Collect Passage Fares",
+        id: "887b267a-8c6c-4a90-b1ef-37e4f68b4c85",
+        presentation: ActionPresentation(
+          effect_text: "Gain 15 essence for each Survivor card in your deck",
+          followup: None,
+        ),
+        effect: GainEssencePerCard(predicate: Survivor, essence_per_card: 15),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "d09a6760-6630-4964-9c77-decc641df713",
+    prose: "Police lights fracture rain around a hooded gunman poised between flight and concealment.",
+    actions: [
+      ActionDefinition(
+        label: "Rush Police Lights",
+        id: "49273949-f29c-440f-b843-5a9d0640c236",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+
+      ActionDefinition(
+        label: "Hide Beneath Steel",
+        id: "18069673-2c22-4f94-88ca-b71ac87612bb",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "d9434b04-217c-4b37-b763-c46404d8fef9",
+    prose: "Sunlit feathers stir beneath a vast woven circle as a lone wanderer approaches.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Falling Feathers",
+        id: "01f4ce1b-b187-4bfc-9ac1-7ac9f17a331b",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Character from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: Character, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Weave a New Pattern",
+        id: "3a534e36-c493-4304-90a4-337394810621",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6",
+    prose: "A colossal stag towers across a twilight road, white halo blazing between black antlers.",
+    actions: [
+      ActionDefinition(
+        label: "Pass Beneath Its Halo",
+        id: "975398f9-e1f0-4a77-ad46-c989b0df2c2e",
+        presentation: ActionPresentation(
+          effect_text: "Change a chosen character card to be a Spirit Animal",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to become a Spirit Animal.",
+          ),
+        ),
+        effect: ChangeSubtypeSelected(
+          predicate: Character,
+          subtype: "Spirit Animal",
+          target: Chosen,
+        ),
+      ),
+
+      ActionDefinition(
+        label: "Meet Its Burning Gaze",
+        id: "eb2c3aa6-6622-4d15-b5b7-c6c07004393f",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "e7c93c3b-14db-4131-ab50-71d152331777",
+    prose: "A crimson rider surfs sunset air above a fractured city.",
+    actions: [
+      ActionDefinition(
+        label: "Ride crimson wake",
+        id: "83a3d2b7-0ca2-40f4-89fa-726f6efb732b",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+
+      ActionDefinition(
+        label: "Abandon burning board",
+        id: "c030376e-5171-4830-98bb-af5b3a9f2edc",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to abandon for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
 ]
