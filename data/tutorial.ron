@@ -6,7 +6,7 @@ TutorialCatalog(
     journey_start: PersistentSpeechBubble(
       // Seconds after the owning tutorial surface becomes active before this guidance appears.
       delay_seconds: 1,
-      // Signed pixels added to the computed horizontal dialogue position.
+      // Pixels added to the computed horizontal dialogue position.
       horizontal_offset_pixels: 40,
       // Desktop maximum width of the speech bubble, in pixels.
       maximum_width_pixels: 550,

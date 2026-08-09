@@ -123,7 +123,7 @@ ExplorationCatalog(
           label: "Accept His Commission",
           id: "954e8d50-d494-4fb2-b4c7-74979083b774:pair-1:template-58",
           presentation: ActionPresentation(
-            effect_text: "Change a chosen character card to be a Outsider",
+            effect_text: "Change a chosen character card to be an Outsider",
             followup: Followup(
               title: "{action-label}",
               subtitle: "Choose a Character to become {subtype}.",

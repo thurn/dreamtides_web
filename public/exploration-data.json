@@ -133,7 +133,7 @@
         {
           "id": "954e8d50-d494-4fb2-b4c7-74979083b774:pair-1:template-58",
           "label": "Accept His Commission",
-          "effectText": "Change a chosen character card to be a Outsider",
+          "effectText": "Change a chosen character card to be an Outsider",
           "followupTitle": "{action-label}",
           "followupSubtitle": "Choose a Character to become {subtype}.",
           "effectKind": "change-subtype-selected",
@@ -784,6 +784,6 @@
       ]
     }
   ],
-  "contentHash": "cba89a203826e383c0ff6fc2e1589323dc855f99a226b8f9f75469d50c5d896a",
-  "foldHash": "cba89a203826e383c0ff6fc2e1589323dc855f99a226b8f9f75469d50c5d896a"
+  "contentHash": "b2bab1493df4006f9973baf3db7528bda57962468a82d0f238a1afaa61eee0b1",
+  "foldHash": "b2bab1493df4006f9973baf3db7528bda57962468a82d0f238a1afaa61eee0b1"
 }

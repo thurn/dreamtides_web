@@ -114,7 +114,7 @@
     id: "f7e1f058-74fe-46db-bb12-f5f887e6a298",
     category: Resources,
     term: "Points",
-    definition: "Scoring points (⍟)  allows you to win a dream battle. Each battle has a different target points threshold to win.",
+    definition: "Scoring points (⍟) allows you to win a dream battle. Each battle has a different target points threshold to win.",
     priority: 60,
     rules_text_forms: ["⍟"],
     // Render inline rules glyphs in this definition even though the entry is not an automatic word match.
@@ -144,7 +144,8 @@
     priority: 100,
     matches_rules_text: true,
     variants: ["reclaimed"],
-    // Ordered projections specialize the displayed term or definition for a matching source sentence.
+    // A 'projection' overrides the displayed term or definition for a matching
+    // source sentence.
     contexts: [
       GlossaryContext(
         // Case-insensitive Unicode regular expression evaluated against the complete source text.
