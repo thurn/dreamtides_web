@@ -129,22 +129,73 @@ class DemoTransport implements EditorTransport {
   open = (_path: string) => this.load();
   async save(operations: readonly EditorOperation[], _revision: string) {
     const snapshot = await this.load();
-    for (const operation of operations) {
-      if (operation.operation === "set_affiliation_catalog_field") snapshot[operation.field] = operation.value;
-      else {
-        const affiliation = snapshot.affiliations.find((entry) => entry.id === operation.affiliation_id)!;
-        if (operation.operation === "set_affiliation_field") affiliation[operation.field] = operation.value;
-        else affiliation.signature_card_ids = [...operation.card_ids];
-      }
-    }
+    applyOperations(snapshot, operations);
     snapshot.sourceRevision = `demo-${Date.now()}`;
     this.snapshot = snapshot;
     return structuredClone(snapshot);
   }
 }
 
+interface RuntimeAffiliation {
+  id: string;
+  name: string;
+  atlasCardTheme: string;
+  signatureCards: string[];
+  weightStrength: number;
+  opponentBiasStrength: number;
+}
+
+class RealDataPreviewTransport implements EditorTransport {
+  private snapshot?: EditorSnapshot;
+  async load() {
+    if (this.snapshot) return structuredClone(this.snapshot);
+    const [affiliations, cards] = await Promise.all([
+      fetch("/affiliations-data.json").then((response) => response.json()) as Promise<RuntimeAffiliation[]>,
+      fetch("/cards_v2-data.json").then((response) => response.json()) as Promise<CardData[]>,
+    ]);
+    const first = affiliations[0];
+    this.snapshot = {
+      dataset: "affiliations",
+      repositoryRoot: "Current worktree data",
+      sourceRevision: "real-data-preview",
+      default_random_draw_max_multiplier: first?.weightStrength ?? 1,
+      default_opponent_deck_max_multiplier: first?.opponentBiasStrength ?? 1,
+      affiliations: affiliations.map((entry) => ({
+        id: entry.id,
+        name: entry.name,
+        atlas_card_theme: entry.atlasCardTheme,
+        signature_card_ids: entry.signatureCards,
+      })),
+      cards,
+    };
+    return structuredClone(this.snapshot);
+  }
+  open = (_path: string) => this.load();
+  async save(operations: readonly EditorOperation[], _revision: string) {
+    const snapshot = await this.load();
+    applyOperations(snapshot, operations);
+    snapshot.sourceRevision = `real-data-preview-${Date.now()}`;
+    this.snapshot = snapshot;
+    return structuredClone(snapshot);
+  }
+}
+
+function applyOperations(snapshot: EditorSnapshot, operations: readonly EditorOperation[]): void {
+  for (const operation of operations) {
+    if (operation.operation === "set_affiliation_catalog_field") snapshot[operation.field] = operation.value;
+    else {
+      const affiliation = snapshot.affiliations.find((entry) => entry.id === operation.affiliation_id)!;
+      if (operation.operation === "set_affiliation_field") affiliation[operation.field] = operation.value;
+      else affiliation.signature_card_ids = [...operation.card_ids];
+    }
+  }
+}
+
 export const editorRegistry = new Map<string, () => EditorTransport>([["affiliations", () => new NativeTransport()]]);
 
 export function createTransport(): EditorTransport {
-  return new URLSearchParams(location.search).has("demo") ? new DemoTransport() : editorRegistry.get("affiliations")!();
+  const parameters = new URLSearchParams(location.search);
+  if (parameters.has("real")) return new RealDataPreviewTransport();
+  if (parameters.has("demo")) return new DemoTransport();
+  return editorRegistry.get("affiliations")!();
 }
