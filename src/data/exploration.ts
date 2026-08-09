@@ -66,7 +66,7 @@ export function explorationActionUsesOfferedDeckTarget(
 export interface ExplorationEncounterContent {
   cardId: CardId;
   prose: string;
-  actions: readonly [ExplorationActionContent, ExplorationActionContent];
+  actions: readonly ExplorationActionContent[];
 }
 
 export interface ExplorationContent {
