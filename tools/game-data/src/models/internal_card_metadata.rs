@@ -68,6 +68,8 @@ fn lower_facets(facets: Vec<FacetDefinition>) -> toml::Value {
 }
 
 pub fn validate(source: &CardMetadataCatalog) -> Result<()> {
+    validate_facets("tag", &source.tag_facets)?;
+    validate_facets("tide", &source.tide_facets)?;
     let mut ids = BTreeSet::new();
     let mut numbers = BTreeSet::new();
     for card in &source.cards {
@@ -85,8 +87,6 @@ pub fn validate(source: &CardMetadataCatalog) -> Result<()> {
         }
         validate_labels(card.id, "tags", &card.tags)?;
     }
-    validate_facets("tag", &source.tag_facets)?;
-    validate_facets("tide", &source.tide_facets)?;
     Ok(())
 }
 
@@ -126,16 +126,9 @@ fn validate_facets(kind: &str, facets: &[FacetDefinition]) -> Result<()> {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::BTreeSet;
-    use std::fs;
-    use std::path::Path;
-
     use pretty_assertions::assert_eq;
-    use uuid::{Uuid, Variant, Version};
 
     use super::*;
-    use crate::models::cards::CardDefinition;
-    use crate::models::compat::CompatDocument;
 
     const FIRST_ID: &str = "00000000-0000-4000-8000-000000000001";
     const SECOND_ID: &str = "00000000-0000-4000-8000-000000000002";
@@ -255,66 +248,6 @@ CardMetadataCatalog(
                 .to_string()
                 .contains(expected),
             "error did not contain {expected}"
-        );
-    }
-
-    #[test]
-    #[ignore = "real-catalog parity probe retained for canonical internal card metadata review"]
-    fn canonical_candidate_matches_current_compatibility_sources() {
-        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-        let current_ron: CompatDocument = ron::from_str(
-            &fs::read_to_string(root.join("data/internal/internal_card_metadata.ron")).unwrap(),
-        )
-        .unwrap();
-        let current_toml: toml::Value = toml::from_str(
-            &fs::read_to_string(root.join("data/internal/internal_card_metadata.toml")).unwrap(),
-        )
-        .unwrap();
-        assert_eq!(current_ron.data, current_toml);
-
-        let canonical: CardMetadataCatalog = ron::from_str(
-            &fs::read_to_string(root.join("data/internal/internal_card_metadata_canonical.ron"))
-                .unwrap(),
-        )
-        .unwrap();
-        assert_eq!(lower(canonical.clone()).unwrap(), current_ron.data);
-
-        let cards: Vec<CardDefinition> =
-            ron::from_str(&fs::read_to_string(root.join("data/cards.ron")).unwrap()).unwrap();
-        let metadata_ids: Vec<_> = canonical
-            .cards
-            .iter()
-            .map(|entry| entry.id.to_string())
-            .collect();
-        let card_ids: Vec<_> = cards.iter().map(|entry| entry.id.clone()).collect();
-        assert_eq!(metadata_ids, card_ids);
-        assert_eq!(
-            metadata_ids.iter().collect::<BTreeSet<_>>().len(),
-            canonical.cards.len()
-        );
-
-        for id in metadata_ids {
-            let parsed = Uuid::parse_str(&id).unwrap();
-            assert_eq!(parsed.get_version(), Some(Version::Random));
-            assert_eq!(parsed.get_variant(), Variant::RFC4122);
-            assert_eq!(parsed.hyphenated().to_string(), id);
-        }
-        assert_eq!(
-            canonical
-                .cards
-                .iter()
-                .map(|entry| entry.number)
-                .collect::<BTreeSet<_>>()
-                .len(),
-            canonical.cards.len()
-        );
-        assert_eq!(
-            canonical.tag_facets.len(),
-            current_toml["tags"].as_array().unwrap().len()
-        );
-        assert_eq!(
-            canonical.tide_facets.len(),
-            current_toml["tides"].as_array().unwrap().len()
         );
     }
 }

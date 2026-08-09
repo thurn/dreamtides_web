@@ -11,9 +11,9 @@ use sha2::{Digest, Sha256};
 use crate::manifest::{Dataset, Manifest, MigrationState};
 use crate::models::{
     affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft, dream_avatars,
-    dream_guides, dreamscapes, dreamsigns, dreamwell, economy, exploration, figments, gamble,
-    glossary, opponents, reward_selection, sites, tide_alignments, transfiguration, tutorial,
-    tutorial_journey_pool,
+    dream_guides, dreamscapes, dreamsign_profiles, dreamsign_signatures, dreamsigns, dreamwell,
+    economy, exploration, figments, gamble, glossary, internal_card_metadata, opponents,
+    reward_selection, sites, tide_alignments, transfiguration, tutorial, tutorial_journey_pool,
 };
 
 pub const BUILD_VERSION: &str = env!("GAME_DATA_BUILD_VERSION");
@@ -145,8 +145,14 @@ fn adapt(
                         metadata_dataset.source
                     )
                 })?;
-            let metadata: compat::CompatDocument = parse_ron(&metadata_source, metadata_dataset)?;
-            let known_card_ids = cards::metadata_by_id(&metadata.data)?.into_keys().collect();
+            let metadata: internal_card_metadata::CardMetadataCatalog =
+                parse_ron(&metadata_source, metadata_dataset)?;
+            internal_card_metadata::validate(&metadata)?;
+            let known_card_ids = metadata
+                .cards
+                .into_iter()
+                .map(|entry| entry.id.to_string())
+                .collect();
             dream_avatars::validate_signature_card_references(&avatars, &known_card_ids)?;
 
             let avatar_metadata_dataset = manifest.dataset("internal-avatar-metadata")?;
@@ -164,6 +170,8 @@ fn adapt(
         }
         "dream_guides_v1" => dream_guides::lower(parse_ron(source, dataset)?),
         "dreamscapes_v1" => dreamscapes::lower(parse_ron(source, dataset)?),
+        "dreamsign_profiles_v1" => dreamsign_profiles::lower(parse_ron(source, dataset)?),
+        "dreamsign_signatures_v1" => dreamsign_signatures::lower(parse_ron(source, dataset)?),
         "dreamsign_metadata_v1" => dreamsigns::lower_metadata(parse_ron(source, dataset)?),
         "dreamsign_tags_v1" => dreamsigns::lower_tags(parse_ron(source, dataset)?),
         "dreamsigns_v1" => {
@@ -206,10 +214,12 @@ fn adapt(
                         metadata_dataset.source
                     )
                 })?;
-            let metadata: compat::CompatDocument = parse_ron(&metadata_source, metadata_dataset)?;
+            let metadata: internal_card_metadata::CardMetadataCatalog =
+                parse_ron(&metadata_source, metadata_dataset)?;
+            let compatibility_metadata = internal_card_metadata::lower(metadata)?;
             cards::lower(
                 parse_ron(source, dataset)?,
-                cards::metadata_by_id(&metadata.data)?,
+                cards::metadata_by_id(&compatibility_metadata)?,
             )
         }
         "economy_v1" => economy::lower(parse_ron(source, dataset)?),
@@ -220,6 +230,7 @@ fn adapt(
             opponents::validate_card_references(&catalog, &known_card_ids)?;
             opponents::lower_internal_ai(catalog)
         }
+        "internal_card_metadata_v1" => internal_card_metadata::lower(parse_ron(source, dataset)?),
         "opponents_v1" => {
             let catalog: opponents::OpponentsCatalog = parse_ron(source, dataset)?;
             let battle_dataset = manifest.dataset("battle")?;
@@ -567,6 +578,14 @@ mod tests {
                 "dreamscapes_v1" => {
                     canonical::<Vec<dreamscapes::DreamscapeDefinition>>(&source, true);
                 }
+                "dreamsign_profiles_v1" => {
+                    canonical::<Vec<dreamsign_profiles::DreamsignProfileDefinition>>(&source, true);
+                }
+                "dreamsign_signatures_v1" => {
+                    canonical::<Vec<dreamsign_signatures::DreamsignSignatureDefinition>>(
+                        &source, true,
+                    );
+                }
                 "dreamsign_metadata_v1" => {
                     canonical::<dreamsigns::DreamsignMetadataCatalog>(&source, true);
                 }
@@ -590,6 +609,9 @@ mod tests {
                 }
                 "internal_ai_v1" => {
                     canonical::<opponents::InternalAiCatalog>(&source, true);
+                }
+                "internal_card_metadata_v1" => {
+                    canonical::<internal_card_metadata::CardMetadataCatalog>(&source, true);
                 }
                 "opponents_v1" => {
                     canonical::<opponents::OpponentsCatalog>(&source, true);

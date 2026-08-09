@@ -79,17 +79,9 @@ pub fn validate(source: &[DreamsignSignatureDefinition]) -> Result<()> {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::BTreeSet;
-    use std::fs;
-    use std::path::Path;
-
     use pretty_assertions::assert_eq;
-    use uuid::{Uuid, Variant, Version};
 
     use super::*;
-    use crate::models::cards::CardDefinition;
-    use crate::models::compat::CompatDocument;
-    use crate::models::dreamsigns::DreamsignDefinition;
 
     const FIRST_ID: &str = "00000000-0000-4000-8000-000000000001";
     const SECOND_ID: &str = "00000000-0000-4000-8000-000000000002";
@@ -209,72 +201,6 @@ mod tests {
                 .to_string()
                 .contains(expected),
             "error did not contain {expected}"
-        );
-    }
-
-    #[test]
-    #[ignore = "real-catalog parity probe retained for canonical Dreamsign signature review"]
-    fn canonical_candidate_matches_current_compatibility_sources() {
-        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-        let current_ron: CompatDocument =
-            ron::from_str(&fs::read_to_string(root.join("data/dreamsign_signatures.ron")).unwrap())
-                .unwrap();
-        let current_toml: toml::Value = toml::from_str(
-            &fs::read_to_string(root.join("data/dreamsign_signatures.toml")).unwrap(),
-        )
-        .unwrap();
-        assert_eq!(current_ron.data, current_toml);
-
-        let canonical: Vec<DreamsignSignatureDefinition> = ron::from_str(
-            &fs::read_to_string(root.join("data/dreamsign_signatures_canonical.ron")).unwrap(),
-        )
-        .unwrap();
-        assert_eq!(lower(canonical.clone()).unwrap(), current_ron.data);
-
-        let dreamsigns: Vec<DreamsignDefinition> =
-            ron::from_str(&fs::read_to_string(root.join("data/dreamsigns.ron")).unwrap()).unwrap();
-        let cards: Vec<CardDefinition> =
-            ron::from_str(&fs::read_to_string(root.join("data/cards.ron")).unwrap()).unwrap();
-        let signature_ids: Vec<_> = canonical.iter().map(|entry| entry.id.to_string()).collect();
-        let dreamsign_ids: Vec<_> = dreamsigns
-            .iter()
-            .map(|entry| entry.id.to_string())
-            .collect();
-        assert_eq!(signature_ids, dreamsign_ids);
-        assert_eq!(
-            signature_ids.iter().collect::<BTreeSet<_>>().len(),
-            canonical.len()
-        );
-
-        let known_card_ids: BTreeSet<_> = cards.iter().map(|card| card.id.as_str()).collect();
-        let mut observed_classifications = BTreeSet::new();
-        for definition in &canonical {
-            let id = definition.id.to_string();
-            let parsed = Uuid::parse_str(&id).unwrap();
-            assert_eq!(parsed.get_version(), Some(Version::Random));
-            assert_eq!(parsed.get_variant(), Variant::RFC4122);
-            assert_eq!(parsed.hyphenated().to_string(), id);
-
-            match &definition.classification {
-                SignatureClassification::Neutral => {
-                    observed_classifications.insert("neutral");
-                }
-                SignatureClassification::Tailored { card_ids } => {
-                    observed_classifications.insert("tailored");
-                    for card_id in card_ids {
-                        let id = card_id.to_string();
-                        assert!(known_card_ids.contains(id.as_str()));
-                        let parsed = Uuid::parse_str(&id).unwrap();
-                        assert_eq!(parsed.get_version(), Some(Version::Random));
-                        assert_eq!(parsed.get_variant(), Variant::RFC4122);
-                        assert_eq!(parsed.hyphenated().to_string(), id);
-                    }
-                }
-            }
-        }
-        assert_eq!(
-            observed_classifications,
-            ["neutral", "tailored"].into_iter().collect()
         );
     }
 }

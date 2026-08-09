@@ -153,16 +153,9 @@ fn reject_duplicates<T: Copy + Ord>(id: DreamsignId, field: &str, values: &[T]) 
 
 #[cfg(test)]
 mod tests {
-    use std::collections::BTreeSet;
-    use std::fs;
-    use std::path::Path;
-
     use pretty_assertions::assert_eq;
-    use uuid::{Uuid, Variant, Version};
 
     use super::*;
-    use crate::models::compat::CompatDocument;
-    use crate::models::dreamsigns::DreamsignDefinition;
 
     const FIRST_ID: &str = "00000000-0000-4000-8000-000000000001";
     const SECOND_ID: &str = "00000000-0000-4000-8000-000000000002";
@@ -265,90 +258,6 @@ mod tests {
                 .to_string()
                 .contains(expected),
             "error did not contain {expected}"
-        );
-    }
-
-    #[test]
-    #[ignore = "real-catalog parity probe retained for canonical Dreamsign profile review"]
-    fn canonical_candidate_matches_current_compatibility_sources() {
-        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-        let current_ron: CompatDocument =
-            ron::from_str(&fs::read_to_string(root.join("data/dreamsign_profiles.ron")).unwrap())
-                .unwrap();
-        let current_toml: toml::Value =
-            toml::from_str(&fs::read_to_string(root.join("data/dreamsign_profiles.toml")).unwrap())
-                .unwrap();
-        assert_eq!(current_ron.data, current_toml);
-
-        let canonical: Vec<DreamsignProfileDefinition> = ron::from_str(
-            &fs::read_to_string(root.join("data/dreamsign_profiles_canonical.ron")).unwrap(),
-        )
-        .unwrap();
-        assert_eq!(lower(canonical.clone()).unwrap(), current_ron.data);
-
-        let dreamsigns: Vec<DreamsignDefinition> =
-            ron::from_str(&fs::read_to_string(root.join("data/dreamsigns.ron")).unwrap()).unwrap();
-        let profile_ids: Vec<_> = canonical.iter().map(|entry| entry.id.to_string()).collect();
-        let dreamsign_ids: Vec<_> = dreamsigns
-            .iter()
-            .map(|entry| entry.id.to_string())
-            .collect();
-        assert_eq!(profile_ids, dreamsign_ids);
-        assert_eq!(
-            profile_ids.iter().collect::<BTreeSet<_>>().len(),
-            canonical.len()
-        );
-
-        for id in profile_ids {
-            let parsed = Uuid::parse_str(&id).unwrap();
-            assert_eq!(parsed.get_version(), Some(Version::Random));
-            assert_eq!(parsed.get_variant(), Variant::RFC4122);
-            assert_eq!(parsed.hyphenated().to_string(), id);
-        }
-
-        assert_eq!(
-            canonical
-                .iter()
-                .flat_map(|entry| entry.subtypes.iter().copied())
-                .collect::<BTreeSet<_>>(),
-            [
-                ProfileSubtype::SpiritAnimal,
-                ProfileSubtype::Survivor,
-                ProfileSubtype::Warrior,
-            ]
-            .into_iter()
-            .collect()
-        );
-        assert_eq!(
-            canonical
-                .iter()
-                .flat_map(|entry| entry.card_types.iter().copied())
-                .collect::<BTreeSet<_>>(),
-            [ProfileCardType::Character, ProfileCardType::Event]
-                .into_iter()
-                .collect()
-        );
-        assert_eq!(
-            canonical
-                .iter()
-                .flat_map(|entry| entry.cost_bands.iter().copied())
-                .collect::<BTreeSet<_>>(),
-            [
-                ProfileCostBand::Cheap,
-                ProfileCostBand::Mid,
-                ProfileCostBand::Big,
-            ]
-            .into_iter()
-            .collect()
-        );
-        assert_eq!(
-            canonical
-                .iter()
-                .flat_map(|entry| entry.keywords.iter().copied())
-                .collect::<BTreeSet<_>>(),
-            [ProfileKeyword::Fast, ProfileKeyword::Reclaim]
-                .into_iter()
-                .collect()
         );
     }
 }
