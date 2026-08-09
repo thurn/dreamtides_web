@@ -26,6 +26,10 @@
 // `tidePoolByDreamAvatar` is keyed by DreamAvatar UUID; each
 // entry has `starter` (the always-joined signature tide, or null), `facets` (a
 // random subset is drawn each run) and `neutral` (the broad tail).
+// Production treats a null starter as the signatureless marker: it randomly
+// selects a signatured DreamAvatar and consumes that borrowed entry's starter,
+// facets, and neutral tail. The signatureless entry's complete facet library and
+// broad tail remain fallback data for artifact consumers.
 //
 // Curated card tweaks (designed combos that the affinity grow scatters, one-off
 // add/remove) live in data/tides4-overrides.jsonc and are re-applied on every bake.

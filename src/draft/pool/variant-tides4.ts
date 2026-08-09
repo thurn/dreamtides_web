@@ -24,7 +24,7 @@
 // bag, and deal the configured number of copies at the configured per-card cap —
 // seeding the starter's (signature) cards first so the signature tide is
 // guaranteed into the pool rather than risking being cut by the bag overflow. A
-// A signatured
+// signatured
 // DreamAvatar leans its own identity a different way each run (the facet subset).
 // A signatureless DreamAvatar has no identity to anchor on, so it borrows a
 // random signatured DreamAvatar's whole pool (that archetype's signature core plus
