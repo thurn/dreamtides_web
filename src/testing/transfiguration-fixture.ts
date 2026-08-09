@@ -28,8 +28,15 @@ const FIXTURE: TransfigurationData = {
       maximumCost: 100,
       step: 10,
       statDeltaBands: [
-        { minimumDelta: 1, maximumDelta: 1, base: 10, jitter: 0, floor: 10 },
-        { minimumDelta: 2, base: 30, jitter: 0, floor: 30 },
+        {
+          minimumDelta: 1,
+          maximumDelta: 1,
+          band: { base: 10, jitter: 0, floor: 10 },
+        },
+        {
+          minimumDelta: 2,
+          band: { base: 30, jitter: 0, floor: 30 },
+        },
       ],
     },
   },

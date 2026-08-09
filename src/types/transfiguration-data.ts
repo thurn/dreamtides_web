@@ -6,6 +6,12 @@ export interface TransfigurationCostBand {
   readonly floor: number;
 }
 
+export interface TransfigurationStatDeltaBand {
+  readonly minimumDelta: number;
+  readonly maximumDelta?: number;
+  readonly band: TransfigurationCostBand;
+}
+
 export type TransfigurationEligibility =
   | { readonly kind: "positiveEnergyCost" }
   | { readonly kind: "distinctAuthoredAmplifiedText" }
@@ -88,10 +94,7 @@ export interface TransfigurationData {
       readonly minimumCost: number;
       readonly maximumCost: number;
       readonly step: number;
-      readonly statDeltaBands: readonly (TransfigurationCostBand & {
-        readonly minimumDelta: number;
-        readonly maximumDelta?: number;
-      })[];
+      readonly statDeltaBands: readonly TransfigurationStatDeltaBand[];
     };
   };
   readonly forms: readonly TransfigurationFormDefinition[];

@@ -158,11 +158,11 @@ export function parseTransfigurationData(value: unknown): TransfigurationData {
     value.site.pricing.statDeltaBands.length === 0 ||
     !value.site.pricing.statDeltaBands.every(
       (band) =>
-        isCostBand(band) &&
         isRecord(band) &&
         finite(band.minimumDelta) &&
         band.minimumDelta > 0 &&
-        (band.maximumDelta === undefined || finite(band.maximumDelta)),
+        (band.maximumDelta === undefined || finite(band.maximumDelta)) &&
+        isCostBand(band.band),
     ) ||
     !Array.isArray(value.forms) ||
     value.forms.length !== 9

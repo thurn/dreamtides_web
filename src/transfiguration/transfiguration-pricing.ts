@@ -42,12 +42,13 @@ function statBand(
   const band = data.site.pricing.statDeltaBands.find(
     (candidate) =>
       delta >= candidate.minimumDelta &&
-      (candidate.maximumDelta === undefined ||
-        delta <= candidate.maximumDelta),
+      (candidate.maximumDelta === undefined || delta <= candidate.maximumDelta),
   );
   if (band === undefined)
-    throw new Error(`Missing Transfiguration stat-delta band for ${String(delta)}`);
-  return band;
+    throw new Error(
+      `Missing Transfiguration stat-delta band for ${String(delta)}`,
+    );
+  return band.band;
 }
 
 /**
@@ -68,9 +69,9 @@ export function transfigurationCostBand(
       return form.pricing;
     case "statDelta": {
       if (form.operation.kind === "halveEnergyCost") {
-      const energyCost = card.energyCost ?? 0;
+        const energyCost = card.energyCost ?? 0;
         if (energyCost <= 0) return { base: 0, jitter: 0, floor: 0 };
-      const delta = energyCost - Math.floor(energyCost / 2);
+        const delta = energyCost - Math.floor(energyCost / 2);
         return statBand(data, delta);
       }
       if (form.operation.kind !== "doubleSpark")
@@ -99,8 +100,7 @@ export function rollTransfigurationCost(
   const stepCount = (band.jitter / data.site.pricing.step) * 2 + 1;
   const stepIndex = Math.min(Math.floor(rng() * stepCount), stepCount - 1);
   const offset =
-    (stepIndex - band.jitter / data.site.pricing.step) *
-    data.site.pricing.step;
+    (stepIndex - band.jitter / data.site.pricing.step) * data.site.pricing.step;
   return clampCost(data, Math.max(band.floor, band.base + offset));
 }
 
