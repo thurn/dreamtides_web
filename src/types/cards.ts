@@ -3,6 +3,10 @@ import type { CardId, CardName } from "./card-identity";
 /** The two card types in Dreamtides. */
 export type CardType = "Character" | "Event";
 
+/** Authored gameplay roles that give a card a unique systemic purpose. */
+export const CARD_ROLES = ["starter-deck", "nightmare"] as const;
+export type CardRole = (typeof CARD_ROLES)[number];
+
 /** Canonical rarity vocabulary shared by authored-data compilers and loaders. */
 export const CARD_RARITIES = ["Legendary", "Starter", "Special"] as const;
 
@@ -41,6 +45,8 @@ export interface CardData {
   cardType: CardType;
   subtype: string;
   isStarter: boolean;
+  /** Gameplay roles compiled from the canonical card's RON `roles` field. */
+  roles?: CardRole[];
   /**
    * Rarity bucket sourced from the TOML. Present only on `Legendary` and
    * `Starter` cards; most cards have no rarity.

@@ -20,10 +20,13 @@ export function parseAuguryData(value: unknown): AuguryData {
   const ids = new Set<string>();
   const families = new Set<string>();
   for (const entry of value.archetypes) {
+    const presentation = isRecord(entry) && isRecord(entry.presentation) ? entry.presentation : undefined;
+    const requiresBackgroundArt = isRecord(entry) && (entry.id === "dreamsign" || entry.id === "add_site");
     if (
       !isRecord(entry) || typeof entry.id !== "string" || ids.has(entry.id) ||
       typeof entry.name !== "string" || entry.name.trim() === "" ||
       !isPresentation(entry.presentation) ||
+      (presentation?.backgroundArt !== undefined) !== requiresBackgroundArt ||
       typeof entry.enabled !== "boolean" || typeof entry.family !== "string" ||
       typeof entry.weight !== "number" || !Number.isFinite(entry.weight) || entry.weight <= 0 ||
       typeof entry.selectionPolicyId !== "string" || !isRecord(entry.quantities) ||
@@ -53,7 +56,11 @@ function isPresentationText(value: unknown): boolean {
 }
 
 function isPresentation(value: unknown): boolean {
-  return isRecord(value) && isPresentationText(value.headline) && isPresentationText(value.subtitle);
+  return isRecord(value) && isPresentationText(value.headline) && isPresentationText(value.subtitle) &&
+    (value.backgroundArt === undefined ||
+      (isRecord(value.backgroundArt) && value.backgroundArt.source === "card" &&
+        typeof value.backgroundArt.imageNumber === "number" &&
+        Number.isInteger(value.backgroundArt.imageNumber) && value.backgroundArt.imageNumber > 0));
 }
 
 export async function loadAuguryData(): Promise<AuguryData> {

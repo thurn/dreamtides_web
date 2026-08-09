@@ -29,6 +29,7 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
     atlasFoldHash,
     sitesFoldHash,
     draftFoldHash,
+    cardRolesFoldHash,
     economyFoldHash,
     gambleFoldHash,
     transfigurationFoldHash,
@@ -45,6 +46,9 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
     !(atlasFoldHash === undefined || typeof atlasFoldHash === "string") ||
     !(sitesFoldHash === undefined || typeof sitesFoldHash === "string") ||
     !(draftFoldHash === undefined || typeof draftFoldHash === "string") ||
+    !(
+      cardRolesFoldHash === undefined || typeof cardRolesFoldHash === "string"
+    ) ||
     !(economyFoldHash === undefined || typeof economyFoldHash === "string") ||
     !(gambleFoldHash === undefined || typeof gambleFoldHash === "string") ||
     !(
@@ -77,6 +81,7 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
     ...(atlasFoldHash === undefined ? {} : { atlasFoldHash }),
     ...(sitesFoldHash === undefined ? {} : { sitesFoldHash }),
     ...(draftFoldHash === undefined ? {} : { draftFoldHash }),
+    ...(cardRolesFoldHash === undefined ? {} : { cardRolesFoldHash }),
     ...(economyFoldHash === undefined ? {} : { economyFoldHash }),
     ...(gambleFoldHash === undefined ? {} : { gambleFoldHash }),
     ...(transfigurationFoldHash === undefined

@@ -4,10 +4,6 @@ import {
   cardImageUrl,
   hasAssignedImage,
 } from "../../../data/card-database";
-import {
-  OFFER_TILE_BACKGROUND_IMAGE_NUMBERS,
-  type OfferTileBackgroundKind,
-} from "../../../data/offer-tile-art";
 import { identiconsForced } from "../../../runtime/identicon-mode";
 import type { CardId } from "../../../types/card-identity";
 import type { FrozenCardData } from "../../../types/cards";
@@ -292,7 +288,7 @@ export function OfferTile({
           }}
         >
           <span className="cumulus-offer-tile__visual-content">
-            <OfferVisual model={model} />
+            <OfferVisual model={model} presentation={presentation} />
           </span>
         </span>
         <img
@@ -382,10 +378,12 @@ function DreamsignArtPiece({
 
 function OfferFullArtBackground({
   kind,
+  backgroundArt,
 }: {
-  readonly kind: OfferTileBackgroundKind;
+  readonly kind: "dreamsign-gift" | "add-site";
+  readonly backgroundArt: NonNullable<AuguryArchetypeData["presentation"]["backgroundArt"]>;
 }): ReactElement {
-  const imageNumber = OFFER_TILE_BACKGROUND_IMAGE_NUMBERS[kind];
+  const imageNumber = backgroundArt.imageNumber;
   return (
     <span
       data-offer-tile-full-art-background={kind}
@@ -422,8 +420,10 @@ function OfferFullArtBackground({
 
 function DreamsignGiftComposition({
   dreamsign,
+  backgroundArt,
 }: {
   readonly dreamsign: OfferTileDreamsign;
+  readonly backgroundArt: NonNullable<AuguryArchetypeData["presentation"]["backgroundArt"]>;
 }): ReactElement {
   return (
     <span
@@ -437,7 +437,7 @@ function DreamsignGiftComposition({
         pointerEvents: "none",
       }}
     >
-      <OfferFullArtBackground kind="dreamsign-gift" />
+      <OfferFullArtBackground kind="dreamsign-gift" backgroundArt={backgroundArt} />
       <DreamsignArtPiece
         dreamsign={dreamsign}
         edge={offerStagePercentage(54)}
@@ -448,8 +448,10 @@ function DreamsignGiftComposition({
 
 function AddSiteComposition({
   site,
+  backgroundArt,
 }: {
   readonly site: OfferTileSite;
+  readonly backgroundArt: NonNullable<AuguryArchetypeData["presentation"]["backgroundArt"]>;
 }): ReactElement {
   return (
     <span
@@ -463,7 +465,7 @@ function AddSiteComposition({
         pointerEvents: "none",
       }}
     >
-      <OfferFullArtBackground kind="add-site" />
+      <OfferFullArtBackground kind="add-site" backgroundArt={backgroundArt} />
       <span
         data-offer-tile-site-id={site.id}
         style={{
@@ -704,9 +706,17 @@ function CardArtOperation({
 
 function OfferVisual({
   model,
+  presentation,
 }: {
   readonly model: OfferTileModel;
+  readonly presentation: AuguryArchetypeData["presentation"];
 }): ReactElement {
+  const requireBackgroundArt = (): NonNullable<AuguryArchetypeData["presentation"]["backgroundArt"]> => {
+    if (presentation.backgroundArt === undefined) {
+      throw new Error(`Augury ${model.kind} presentation is missing background art`);
+    }
+    return presentation.backgroundArt;
+  };
   switch (model.kind) {
     case "card-gift":
       return <CardArtMosaic cards={[model.card]} />;
@@ -765,8 +775,8 @@ function OfferVisual({
         />
       );
     case "dreamsign-gift":
-      return <DreamsignGiftComposition dreamsign={model.dreamsign} />;
+      return <DreamsignGiftComposition dreamsign={model.dreamsign} backgroundArt={requireBackgroundArt()} />;
     case "add-site":
-      return <AddSiteComposition site={model.site} />;
+      return <AddSiteComposition site={model.site} backgroundArt={requireBackgroundArt()} />;
   }
 }

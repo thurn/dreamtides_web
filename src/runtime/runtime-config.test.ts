@@ -5,6 +5,7 @@ import { economyFixture } from "../testing/economy-fixture";
 import { opponentsFixture } from "../testing/opponents-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
+import { CARD_ROLE_DATA } from "../data/card-roles";
 import {
   contentConfigFromRuntime,
   contentConfigsEqual,
@@ -257,6 +258,7 @@ describe("contentConfigFromRuntime", () => {
       atlasFoldHash,
       sitesFoldHash,
       draftFoldHash: draftData.foldHash,
+      cardRolesFoldHash: CARD_ROLE_DATA.foldHash,
       economyFoldHash: economyData.foldHash,
       gambleFoldHash: CONFIG_DATA_FIXTURE.gambleData.foldHash,
       transfigurationFoldHash: CONFIG_DATA_FIXTURE.transfigurationData.foldHash,
@@ -296,6 +298,7 @@ describe("contentConfigsEqual", () => {
     atlasFoldHash: "fixture-atlas-fold-hash",
     sitesFoldHash: "fixture-sites-fold-hash",
     draftFoldHash: "fixture-draft-fold-hash",
+    cardRolesFoldHash: "fixture-card-roles-fold-hash",
     economyFoldHash: economyData.foldHash,
     gambleFoldHash: CONFIG_DATA_FIXTURE.gambleData.foldHash,
     transfigurationFoldHash: CONFIG_DATA_FIXTURE.transfigurationData.foldHash,
@@ -318,6 +321,9 @@ describe("contentConfigsEqual", () => {
     ).toBe(false);
     expect(
       contentConfigsEqual(base, { ...base, draftFoldHash: "different" }),
+    ).toBe(false);
+    expect(
+      contentConfigsEqual(base, { ...base, cardRolesFoldHash: "different" }),
     ).toBe(false);
     expect(
       contentConfigsEqual(base, { ...base, economyFoldHash: "different" }),

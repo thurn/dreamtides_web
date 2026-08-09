@@ -2,7 +2,6 @@ import { generateInitialAtlas } from "../atlas/atlas-generator";
 import { toJourneyDreamAvatar } from "../data/dream-avatar-selection";
 import { buildDreamAvatarPackage } from "../data/journey-content";
 import type { JourneyContent } from "../data/journey-content";
-import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import {
   DEFAULT_DRAFT_CONFIG,
   createInitialDraftState,
@@ -434,7 +433,7 @@ export function startJourneyFromDreamAvatar({
     buildDreamAvatarPackage(dreamAvatar, poolContext, seed);
 
   const deck = [...prev.deck];
-  for (const cardNumber of STARTER_CARD_NUMBERS) {
+  for (const cardNumber of poolContext.starterCardNumbers) {
     if (deck.some((entry) => entry.cardNumber === cardNumber)) {
       continue;
     }

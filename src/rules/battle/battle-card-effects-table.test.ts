@@ -8,27 +8,16 @@ import {
   selectBattleCardEffectScript,
 } from "./battle-card-effects-table";
 import { newEffectRun, resolveScript, type EffectRun } from "./fold";
+import { STARTER_CARD_IDS } from "../../data/card-roles";
 
 const UNREGISTERED_ID = "00000000-0000-0000-0000-000000000000";
-const STARTER_CARD_IDS = [
-  "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
-  "647f5150-b2e0-424b-9480-27557642524e",
-  "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
-  "a28ad36d-fa74-4190-a463-7efd3a6233d0",
-  "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
-  "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
-  "4408b942-09a0-4f4e-a403-10c708c6e3c5",
-  "2162742c-09d0-4e62-ae49-0f8f79b45adc",
-  "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
-  "944e15d2-d680-4ebe-8d18-36826f4b1535",
-] as const;
 
 describe("Starter UUID text-hash coverage", () => {
   it("tracks every Starter UUID exactly once across triggered automation", () => {
-    const tracked = Object.keys(BATTLE_TRIGGERED_EFFECTS)
-      .filter((id): id is (typeof STARTER_CARD_IDS)[number] =>
-        (STARTER_CARD_IDS as readonly string[]).includes(id),
-      );
+    const starterIds = new Set<string>(STARTER_CARD_IDS);
+    const tracked = Object.keys(BATTLE_TRIGGERED_EFFECTS).filter((id) =>
+      starterIds.has(id),
+    );
     expect(tracked).toEqual(STARTER_CARD_IDS);
     for (const id of tracked) {
       expect(BATTLE_TRIGGERED_EFFECTS[id].textHash).toMatch(/^[0-9a-f]{8}$/);

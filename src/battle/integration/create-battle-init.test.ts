@@ -120,6 +120,7 @@ function makeSteeredPoolContext(): {
   const poolContext: RunPoolContext = {
     poolData,
     idIndex: nameIndex,
+    starterCardNumbers: [],
     allDreamsignPoolIds: [],
     poolVariant: "tides4",
   };
@@ -1247,6 +1248,7 @@ describe("createBattleInit", () => {
       const emptyIndexContext: RunPoolContext = {
         poolData: makeSteeredPoolContext().poolContext.poolData,
         idIndex: new Map<string, number>([["does-not-exist", -1]]),
+        starterCardNumbers: [],
         allDreamsignPoolIds: [],
         // The mismatched index exercises the empty-resolved-list fallback.
         poolVariant: "tides4",

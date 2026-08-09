@@ -27,6 +27,11 @@ export const TEST_DECKLISTS: string[][] = [
   deckNames("Gamma"),
 ];
 
+/** Synthetic starter numbers for tests; production resolves UUID roles from RON. */
+export const TEST_STARTER_CARD_NUMBERS = [
+  101, 102, 103, 104, 105, 106, 107, 108, 109, 110,
+] as const;
+
 /** Returns a card-name -> card-number index covering every name in the corpus. */
 export function buildTestNameIndex(): Map<string, number> {
   const index = new Map<string, number>();
@@ -112,6 +117,7 @@ export function makeTestPoolContext(
   return {
     poolData,
     idIndex: buildIdIndex(cardDatabase),
+    starterCardNumbers: TEST_STARTER_CARD_NUMBERS,
     allDreamsignPoolIds,
     poolVariant: "tides4",
     tides4Tuning: { dealSize: 60, copyCap: 2, maxFacets: 3 },

@@ -35,6 +35,7 @@ const fake = vi.hoisted(() => {
       atlasFoldHash: "fixture-atlas-fold-hash",
       sitesFoldHash: "fixture-sites-fold-hash",
       draftFoldHash: "fixture-draft-fold-hash",
+      cardRolesFoldHash: "fixture-card-roles-fold-hash",
       economyFoldHash: "a".repeat(64),
       gambleFoldHash: "g".repeat(64),
       transfigurationFoldHash: "x".repeat(64),
@@ -237,7 +238,9 @@ describe("hooks.ts bounce diagnostics", () => {
     expect(seq).toBe(2);
     expect(interveningSeqs).toEqual([1]);
     expect(bounceReason).toBe("partner_conflict");
-    expect(container.querySelector("[data-coop-bounce-toast]")?.textContent).not.toBe("");
+    expect(
+      container.querySelector("[data-coop-bounce-toast]")?.textContent,
+    ).not.toBe("");
   });
 
   it("shows an invalid-action error without blaming a partner", async () => {

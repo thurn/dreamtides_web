@@ -16,6 +16,7 @@ import { economyFixture } from "../testing/economy-fixture";
 import { opponentsFixture } from "../testing/opponents-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
+import { CARD_ROLE_DATA } from "../data/card-roles";
 
 const REDUCER_VERSION = "dreamtides-coop-v24";
 const ATLAS_FOLD_HASH = "fixture-atlas-fold-hash";
@@ -23,6 +24,7 @@ const SITES_FOLD_HASH = "fixture-sites-fold-hash";
 const DRAFT_DATA = draftDataFixture();
 const ECONOMY = economyFixture();
 const PINNED_ECONOMY = {
+  cardRolesFoldHash: CARD_ROLE_DATA.foldHash,
   economyFoldHash: ECONOMY.foldHash,
   gambleFoldHash: CONFIG_DATA_FIXTURE.gambleData.foldHash,
   transfigurationFoldHash: CONFIG_DATA_FIXTURE.transfigurationData.foldHash,

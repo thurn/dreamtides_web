@@ -95,6 +95,8 @@ export interface ContentConfig {
   sitesFoldHash?: string;
   /** Draft offers, caps, and pool tuning pinned independently of URL settings. */
   draftFoldHash?: string;
+  /** Starter-deck and named gameplay identities derived from card roles. */
+  cardRolesFoldHash?: string;
   /** Economy coefficients and genesis defaults pinned independently of URL settings. */
   economyFoldHash?: string;
   /** Gamble game rules and economic outcomes. */
@@ -118,6 +120,7 @@ export interface PinnedContentConfig extends ContentConfig {
   atlasFoldHash: string;
   sitesFoldHash: string;
   draftFoldHash: string;
+  cardRolesFoldHash: string;
   economyFoldHash: string;
   gambleFoldHash: string;
   transfigurationFoldHash: string;

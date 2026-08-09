@@ -3286,7 +3286,7 @@
     },
     {
       "name": "presentation",
-      "tsType": "Readonly<{ headline: AuguryPresentationText; subtitle: AuguryPresentationText; }>",
+      "tsType": "Readonly<{ headline: AuguryPresentationText; subtitle: AuguryPresentationText; backgroundArt?: Readonly<{ source: \"card\"; imageNumber: number; }> | undefined; }>",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,

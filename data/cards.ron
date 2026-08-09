@@ -5526,6 +5526,7 @@
     energy_cost: Fixed(2),
     kind: Character(subtype: "Musician", spark: Fixed(1)),
     rarity: Starter,
+    roles: [StarterDeck],
     art: (image: 507269458, crop: (x: -0.684, y: 1.0, scale: 1.17)),
   ),
 
@@ -5536,6 +5537,7 @@
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visionary", spark: Fixed(1)),
     rarity: Starter,
+    roles: [StarterDeck],
     art: (image: 1016596168, crop: (x: 0.042, y: 1.0, scale: 1.17)),
   ),
 
@@ -5546,6 +5548,7 @@
     energy_cost: Fixed(4),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(4)),
     rarity: Starter,
+    roles: [StarterDeck],
     art: (image: 2654359867, crop: (x: 0.294, y: 0.032, scale: 1.17)),
   ),
 
@@ -5556,6 +5559,7 @@
     energy_cost: Fixed(5),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
     rarity: Starter,
+    roles: [StarterDeck],
     art: (image: 2427491211, crop: (x: 0.0, y: 0.644, scale: 1.17)),
   ),
 
@@ -5566,6 +5570,7 @@
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
     rarity: Starter,
+    roles: [StarterDeck],
     art: (image: 1793552419, crop: (x: 0.21, y: 1.0, scale: 1.17)),
   ),
 
@@ -5576,6 +5581,7 @@
     energy_cost: Fixed(6),
     kind: Character(subtype: "Synth", spark: Fixed(6)),
     rarity: Starter,
+    roles: [StarterDeck],
     art: (image: 2123360831, crop: (x: -0.42, y: 1.0, scale: 1.17)),
   ),
 
@@ -5586,6 +5592,7 @@
     energy_cost: Fixed(3),
     kind: Event,
     rarity: Starter,
+    roles: [StarterDeck],
     art: (image: 635276744),
   ),
 
@@ -5596,6 +5603,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     rarity: Starter,
+    roles: [StarterDeck],
     art: (image: 2633345429, crop: (x: -0.336, y: 0.839, scale: 1.17)),
   ),
 
@@ -5606,6 +5614,7 @@
     energy_cost: Fixed(2),
     kind: Event,
     rarity: Starter,
+    roles: [StarterDeck],
     art: (image: 2603708601, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -5616,6 +5625,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     rarity: Starter,
+    roles: [StarterDeck],
     art: (image: 1225878700, crop: (x: -0.672, y: 0.839, scale: 1.17)),
   ),
 
@@ -5636,6 +5646,7 @@
     energy_cost: Fixed(2),
     kind: Event,
     rarity: Special,
+    roles: [Nightmare],
     art: (image: 1486924805),
   ),
 ]

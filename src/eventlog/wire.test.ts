@@ -16,6 +16,7 @@ const GENESIS: Genesis = {
     atlasFoldHash: "fixture-atlas-fold-hash",
     sitesFoldHash: "fixture-sites-fold-hash",
     draftFoldHash: "fixture-draft-fold-hash",
+    cardRolesFoldHash: "fixture-card-roles-fold-hash",
     economyFoldHash: "fixture-economy-fold-hash",
     rewardSelectionFoldHash: "fixture-reward-selection-fold-hash",
     auguryFoldHash: "fixture-augury-fold-hash",
@@ -147,6 +148,12 @@ describe("RTDB log wire decoding", () => {
     ).toBe("fixture-draft-fold-hash");
   });
 
+  it("round-trips the pinned card-role fold hash", () => {
+    expect(
+      decodeGenesis(JSON.stringify(GENESIS))?.contentConfig?.cardRolesFoldHash,
+    ).toBe("fixture-card-roles-fold-hash");
+  });
+
   it("round-trips the pinned tutorial fold hash", () => {
     expect(
       decodeGenesis(JSON.stringify(GENESIS))?.contentConfig?.tutorialFoldHash,
@@ -155,6 +162,7 @@ describe("RTDB log wire decoding", () => {
 
   it.each([
     ["draftFoldHash", 42],
+    ["cardRolesFoldHash", 42],
     ["sitesFoldHash", 42],
     ["economyFoldHash", 42],
     ["rewardSelectionFoldHash", 42],

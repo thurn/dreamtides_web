@@ -61,6 +61,16 @@ The catalog-level `encounter` record requires two offers from distinct families
 and controls whether the player may decline both. Archetype weights are positive
 relative lottery weights. Chooser sizes, granted copies, bundle bounds, starter
 target limits, and presentation placeholders are validated by the typed model.
+The Dreamsign and add-site presentations require `background_art: CardImage(...)`;
+asset generation and `OfferTile` rendering consume that authored image number.
+
+## `data/cards.ron`
+
+Each card owns its stable UUID, rules text, gameplay shape, rarity, art, and any
+closed gameplay `roles`. `StarterDeck` marks the ordered fixed journey deck and
+must agree with `Starter` rarity. Exactly one `Special` card carries `Nightmare`.
+The generated card-role projection resolves these UUIDs through the loaded card
+catalog and supplies a fold hash for multiplayer configuration gating.
 
 ## `data/internal/internal_card_metadata.ron`
 

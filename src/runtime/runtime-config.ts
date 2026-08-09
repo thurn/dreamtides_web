@@ -3,6 +3,7 @@ import type { ContentConfig, PinnedContentConfig } from "../eventlog/types";
 import type { EconomyData } from "../types/economy-data";
 import type { OpponentsData } from "../types/opponents-data";
 import type { DraftData } from "../types/draft-data";
+import { CARD_ROLE_DATA } from "../data/card-roles";
 import type { RewardSelectionData } from "../types/reward-selection-data";
 import type { AuguryData } from "../types/augury-data";
 import type { GambleData } from "../types/gamble-data";
@@ -91,6 +92,7 @@ export function contentConfigFromRuntime(
     atlasFoldHash,
     sitesFoldHash,
     draftFoldHash: draftData.foldHash,
+    cardRolesFoldHash: CARD_ROLE_DATA.foldHash,
     economyFoldHash: economyData.foldHash,
     gambleFoldHash: gambleData.foldHash,
     transfigurationFoldHash: transfigurationData.foldHash,
@@ -114,6 +116,7 @@ export function contentConfigsEqual(
     a.atlasFoldHash === b.atlasFoldHash &&
     a.sitesFoldHash === b.sitesFoldHash &&
     a.draftFoldHash === b.draftFoldHash &&
+    a.cardRolesFoldHash === b.cardRolesFoldHash &&
     a.economyFoldHash === b.economyFoldHash &&
     a.gambleFoldHash === b.gambleFoldHash &&
     a.transfigurationFoldHash === b.transfigurationFoldHash &&

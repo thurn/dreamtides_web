@@ -40,6 +40,7 @@ const CONTENT_CONFIG: PinnedContentConfig = {
   atlasFoldHash: "fixture-atlas-fold-hash",
   sitesFoldHash: "fixture-sites-fold-hash",
   draftFoldHash: "fixture-draft-fold-hash",
+  cardRolesFoldHash: "fixture-card-roles-fold-hash",
   economyFoldHash: "a".repeat(64),
   gambleFoldHash: "g".repeat(64),
   transfigurationFoldHash: "x".repeat(64),

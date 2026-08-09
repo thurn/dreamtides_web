@@ -11,7 +11,6 @@ import type {
 } from "../../types/content";
 import type { CardData } from "../../types/cards";
 import { getLogEntries, resetLog } from "../../logging";
-import { STARTER_CARD_NUMBERS } from "../../data/starter-cards";
 
 import {
   buildStageBLayerSpec,
@@ -480,8 +479,11 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
 // ordering, determinism, and size preservation, not specific TOML values.
 // ---------------------------------------------------------------------------
 
-/** Ten Starter cards resolved from the production STARTER_CARD_NUMBERS. */
-const STARTERS: CardData[] = STARTER_CARD_NUMBERS.map((num, i) =>
+/** Ten synthetic Starter cards used by the layer-tuning fixtures. */
+const SYNTHETIC_STARTER_NUMBERS = [
+  101, 102, 103, 104, 105, 106, 107, 108, 109, 110,
+] as const;
+const STARTERS: CardData[] = SYNTHETIC_STARTER_NUMBERS.map((num, i) =>
   makeCard(
     `5000${i}000-0000-0000-0000-0000000005${String(10 + i).padStart(2, "0")}`,
     num,
@@ -659,7 +661,7 @@ function buildAtLayer(
   })!;
 }
 
-const STARTER_NUMBER_SET = new Set<number>(STARTER_CARD_NUMBERS);
+const STARTER_NUMBER_SET = new Set<number>(SYNTHETIC_STARTER_NUMBERS);
 
 function isStarter(card: CardData): boolean {
   return STARTER_NUMBER_SET.has(card.cardNumber);

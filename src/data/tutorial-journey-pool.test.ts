@@ -152,6 +152,7 @@ describe("buildTutorialJourneyPackage", () => {
     const pool = validateTutorialJourneyPool(syntheticSource(), 8);
     const context = {
       idIndex: new Map(CARD_IDS.map((id, index) => [id, index + 101])),
+      starterCardNumbers: [],
       allDreamsignPoolIds: [OPENING_DREAMSIGN_ID],
       poolData: {},
     } satisfies RunPoolContext;
@@ -182,7 +183,9 @@ describe("buildTutorialJourneyPackage", () => {
     expect(pkg.dreamsignPoolIds).toEqual([OPENING_DREAMSIGN_ID]);
     expect(pkg.openingDreamsignOfferIds).toEqual([OPENING_DREAMSIGN_ID]);
     expect(console.log).toHaveBeenCalledOnce();
-    expect(JSON.parse(vi.mocked(console.log).mock.calls[0][0] as string)).toMatchObject({
+    expect(
+      JSON.parse(vi.mocked(console.log).mock.calls[0][0] as string),
+    ).toMatchObject({
       event: "draft_pool_constructed",
       source: "authored_tutorial",
       poolSize: 8,
@@ -197,6 +200,7 @@ describe("buildTutorialJourneyPackage", () => {
     const pool = validateTutorialJourneyPool(syntheticSource(), 8);
     const context = {
       idIndex: new Map([[CARD_IDS[0], 101]]),
+      starterCardNumbers: [],
       allDreamsignPoolIds: [OPENING_DREAMSIGN_ID],
       poolData: {},
     } satisfies RunPoolContext;
@@ -215,6 +219,7 @@ describe("buildTutorialJourneyPackage", () => {
     const pool = validateTutorialJourneyPool(syntheticSource(), 8);
     const context = {
       idIndex: new Map(CARD_IDS.map((id, index) => [id, index + 101])),
+      starterCardNumbers: [],
       allDreamsignPoolIds: [],
       poolData: {},
     } satisfies RunPoolContext;
@@ -258,6 +263,7 @@ describe("buildTutorialJourneyPackage", () => {
     const pool = validateTutorialJourneyPool(syntheticSource(), 8);
     const context = {
       idIndex: new Map(CARD_IDS.map((id, index) => [id, index + 101])),
+      starterCardNumbers: [],
       allDreamsignPoolIds: [OPENING_DREAMSIGN_ID],
       poolData: {},
     } satisfies RunPoolContext;

@@ -23,7 +23,6 @@
 // database keyed by card number, but candidacy, fit, selection, cuts, and
 // replacements are all computed on UUIDs.
 
-import { STARTER_CARD_NUMBERS } from "../../data/starter-cards.ts";
 import {
   buildCooccurrence,
   synergyAscending,
@@ -337,10 +336,10 @@ export function buildCorpusOpponentDeck(args: {
   // Corpus co-occurrence over the known-good decks (UUID-keyed, directional).
   const cooc = buildCooccurrence(deckSets);
 
-  // Starter lookup, resolved from the Starter card NUMBERS via the database.
+  // Starter lookup, derived from the RON-authored gameplay role.
   const startersByNumber = new Map<number, CardData>();
   for (const card of cardDatabase.values()) {
-    if (STARTER_CARD_NUMBERS.includes(card.cardNumber)) {
+    if (card.isStarter) {
       startersByNumber.set(card.cardNumber, card);
     }
   }

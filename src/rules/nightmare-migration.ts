@@ -1,4 +1,4 @@
-import { NIGHTMARE_CARD_NUMBER } from "../data/nightmare-identity";
+import { NIGHTMARE_CARD_NUMBER } from "../data/nightmare";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;

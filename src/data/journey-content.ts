@@ -76,7 +76,7 @@ import type {
   DreamscapeContent,
 } from "../types/content";
 import type { AtlasData } from "../types/journey";
-import { STARTER_CARD_NUMBERS } from "./starter-cards";
+import { resolveCatalogStarterCardNumbers } from "./card-roles";
 import { buildFitModel, type FitModel } from "../draft/fit-model";
 import type { TutorialConfiguration } from "../types/tutorial";
 import {
@@ -186,6 +186,8 @@ export interface JourneyContent {
  */
 export interface RunPoolContext {
   poolData: PoolData;
+  /** RON-role starter deck resolved from UUIDs in authored catalog order. */
+  starterCardNumbers: readonly number[];
   /**
    * Stable card UUID (lowercased) -> card-number index — the single,
    * collision-free identity index every pool resolves through. A pool's
@@ -319,7 +321,7 @@ export function buildDreamAvatarPackage(
       cappedCardNumbers,
     });
   }
-  for (const starter of STARTER_CARD_NUMBERS) {
+  for (const starter of ctx.starterCardNumbers) {
     delete draftPoolCopiesByCard[String(starter)];
   }
 
@@ -359,7 +361,7 @@ export function buildDreamAvatarTides4Provenance(
   const provenance = pool.tides4Provenance;
   if (provenance === undefined) return null;
 
-  const starterSet = new Set(STARTER_CARD_NUMBERS);
+  const starterSet = new Set(ctx.starterCardNumbers);
   // Resolve a tide's decklist of card ids to card numbers through the id index,
   // dropping starter cards and de-duplicating, so a tide deck shows the same
   // draftable cards a player sees.
@@ -551,6 +553,7 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
   const poolContext: RunPoolContext = {
     poolData,
     idIndex,
+    starterCardNumbers: resolveCatalogStarterCardNumbers(draftPoolCards),
     poolCopyCapsByCardNumber,
     defaultPoolCopyCap: draftData.pool.tides4.copyCap,
     allDreamsignPoolIds: dreamsignTemplates.map((template) => template.id),

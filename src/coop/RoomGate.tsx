@@ -240,6 +240,7 @@ function hasPinnedContentConfig(genesis: Genesis): genesis is PinnedGenesis {
     typeof genesis.contentConfig.atlasFoldHash === "string" &&
     typeof genesis.contentConfig.sitesFoldHash === "string" &&
     typeof genesis.contentConfig.draftFoldHash === "string" &&
+    typeof genesis.contentConfig.cardRolesFoldHash === "string" &&
     typeof genesis.contentConfig.economyFoldHash === "string" &&
     typeof genesis.contentConfig.gambleFoldHash === "string" &&
     typeof genesis.contentConfig.transfigurationFoldHash === "string" &&

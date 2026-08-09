@@ -153,13 +153,27 @@ export function compileAuguryData(sourceValue) {
     if (id === "card_bundle" && quantities.minimumBundleSize > quantities.bundleSize) {
       fail(`${path}.quantities.minimum-bundle-size`, "must not exceed bundle-size");
     }
-    const presentation = exact(source.presentation, `${path}.presentation`, ["headline", "subtitle"]);
+    const hasBackgroundArt = id === "dreamsign" || id === "add_site";
+    const presentation = exact(source.presentation, `${path}.presentation`, [
+      "headline",
+      "subtitle",
+      ...(hasBackgroundArt ? ["background-art-image-number"] : []),
+    ]);
     return {
       id,
       name: nonempty(source.name, `${path}.name`),
       presentation: {
         headline: presentationText(presentation.headline, `${path}.presentation.headline`, contract.presentation.headline),
         subtitle: presentationText(presentation.subtitle, `${path}.presentation.subtitle`, contract.presentation.subtitle),
+        ...(hasBackgroundArt ? {
+          backgroundArt: {
+            source: "card",
+            imageNumber: positive(
+              presentation["background-art-image-number"],
+              `${path}.presentation.background-art-image-number`,
+            ),
+          },
+        } : {}),
       },
       enabled: source.enabled,
       family: source.family,

@@ -4624,6 +4624,7 @@ CardMetadataCatalog(
             kind: CardKind::Event,
             speed: crate::models::cards::Speed::Normal,
             rarity: None,
+            roles: Vec::new(),
             art: crate::models::cards::Art {
                 image: 1,
                 owned: false,

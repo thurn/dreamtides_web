@@ -362,6 +362,14 @@ describe("OfferTile", () => {
   });
 
   it("renders Dreamsign offers over their authored full-art backgrounds", () => {
+    const dreamsignPresentation = {
+      ...PRESENTATION,
+      backgroundArt: { source: "card", imageNumber: 123456 },
+    } as const;
+    const sitePresentation = {
+      ...PRESENTATION,
+      backgroundArt: { source: "card", imageNumber: 654321 },
+    } as const;
     const gift: OfferTileModel = {
       id: "dreamsign-gift",
       kind: "dreamsign-gift",
@@ -382,8 +390,8 @@ describe("OfferTile", () => {
     act(() => {
       root.render(
         <CumulusRoot>
-          <OfferTile presentation={PRESENTATION} model={gift} onPress={() => {}} testId="gift" />
-          <OfferTile presentation={PRESENTATION} model={addSite} onPress={() => {}} testId="site" />
+          <OfferTile presentation={dreamsignPresentation} model={gift} onPress={() => {}} testId="gift" />
+          <OfferTile presentation={sitePresentation} model={addSite} onPress={() => {}} testId="site" />
         </CumulusRoot>,
       );
     });
@@ -396,12 +404,12 @@ describe("OfferTile", () => {
     )!;
     expect(giftLayout.dataset.offerTileDreamsignLayout).toBe("single");
     expect(giftBackground.dataset.offerTileFullArtBackgroundImage).toBe(
-      "386654065",
+      "123456",
     );
     expect(giftBackground.style.overflow).toBe("hidden");
     expect(
       giftBackground.querySelector<HTMLImageElement>("img")?.src,
-    ).toContain("/cards/386654065.webp");
+    ).toContain("/cards/123456.webp");
     expect(
       giftLayout.querySelector<HTMLElement>("[data-offer-tile-dreamsign-id]")
         ?.style.width,
@@ -419,12 +427,12 @@ describe("OfferTile", () => {
     expect(siteLayout.style.width).toBe("208px");
     expect(siteLayout.style.height).toBe("208px");
     expect(siteBackground.dataset.offerTileFullArtBackgroundImage).toBe(
-      "334049261",
+      "654321",
     );
     expect(siteBackground.style.overflow).toBe("hidden");
     const siteBackgroundImage =
       siteBackground.querySelector<HTMLImageElement>("img")!;
-    expect(siteBackgroundImage.src).toContain("/cards/334049261.webp");
+    expect(siteBackgroundImage.src).toContain("/cards/654321.webp");
     expect(siteBackgroundImage.style.width).toBe("120%");
     expect(siteBackgroundImage.style.maxWidth).toBe("none");
     expect(siteBackgroundImage.style.height).toBe("120%");

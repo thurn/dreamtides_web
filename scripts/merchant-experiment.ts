@@ -29,7 +29,7 @@ import type { JourneyContent } from "../src/data/journey-content";
 import { buildFitModel } from "../src/draft/fit-model";
 import type { FitModel } from "../src/draft/fit-model";
 import { buildIdIndex } from "../src/data/cards-v2-database";
-import { STARTER_CARD_NUMBERS } from "../src/data/starter-cards";
+import { resolveStarterCardNumbers } from "../src/data/card-roles";
 import type { CardData } from "../src/types/cards";
 import type { DreamsignTemplate } from "../src/types/content";
 import type { DeckEntry, JourneyState, SiteState } from "../src/types/journey";
@@ -236,13 +236,13 @@ const HARNESS_SITE: SiteState = {
   isVisited: false,
 };
 
-/** The standard starter deck every new journey begins with (cardNumbers 510–519). */
-function starterDeckEntries(): DeckEntry[] {
-  return STARTER_CARD_NUMBERS.map((cardNumber, i) => ({
-    entryId: `deck-${String(i + 1)}`,
-    cardNumber,
-    transfiguration: null,
-    isBane: false,
+/** Resolve the RON-role starter deck through the experiment's UUID index. */
+function starterDeckEntries(idToCardNumber: ReadonlyMap<string, number>): DeckEntry[] {
+  return resolveStarterCardNumbers(idToCardNumber).map((cardNumber, i) => ({
+      entryId: `deck-${String(i + 1)}`,
+      cardNumber,
+      transfiguration: null,
+      isBane: false,
   }));
 }
 
@@ -256,7 +256,7 @@ function buildDeckPrefix(
   picks: number,
   idToCardNumber: Map<string, number>,
 ): DeckEntry[] {
-  const deck = starterDeckEntries();
+  const deck = starterDeckEntries(idToCardNumber);
   if (picks === 0) return deck;
 
   const flatPickIds: string[] = [];

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "presentation": {
+    "progress": "Draft ({pickNumber}/{pickTotal})"
+  },
+  "offers": {
+    "cardsPerOffer": 4,
+    "picksPerSite": 5
+  },
+  "rarityCaps": [
+    {
+      "rarity": "Legendary",
+      "poolCopyCap": 1,
+      "maxPicksPerRun": 1
+    }
+  ],
+  "pool": {
+    "defaultStrategy": "tides4",
+    "tides4": {
+      "dealSize": 150,
+      "copyCap": 2,
+      "maxFacets": 3
+    }
+  },
+  "contentHash": "4d6cf2b1df04bda261fefcc711024357826c848b898f41e1a39ff858f0c20012",
+  "foldHash": "c2c67dab49ea873e81360208d63aac5c746f4a00d2e8401111c729bb727cbb69"
+}

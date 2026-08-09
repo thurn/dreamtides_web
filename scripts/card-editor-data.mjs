@@ -6,7 +6,6 @@ import {
   DEFAULT_DRAFT_RECORDS_DIR,
   readCardPopularity,
 } from "./lib/card-popularity.mjs";
-import { NIGHTMARE_CARD_ID } from "../src/data/nightmare-identity.ts";
 import { transformCard } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -828,7 +827,7 @@ function blockContentInsertOffset(blockText) {
 
 export function refreshCardDataJson({ rootDir = ROOT, cardTomlPath = DEFAULT_CARD_TOML_PATH } = {}) {
   const cards = readSourceCards(rootDir, cardTomlPath)
-    .filter((card) => card.rarity !== "Special" || card.id === NIGHTMARE_CARD_ID)
+    .filter((card) => card.rarity !== "Special" || card.roles?.includes("nightmare") === true)
     .map(transformCard);
   const cardJsonPath = join(rootDir, CARD_JSON_PATH);
 

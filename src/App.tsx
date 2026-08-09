@@ -40,7 +40,6 @@ import { DebugScreen } from "./screens/DebugScreen";
 import JourneyDebugEditor from "./screens/JourneyDebugEditor";
 import { CardSourceOverlay } from "./screens/CardSourceOverlay";
 import { ErrorBoundary } from "./components/ErrorBoundary";
-import { STARTER_CARD_NUMBERS } from "./data/starter-cards";
 import { getSavedJourney } from "./state/saved-journeys";
 import { logEvent } from "./logging";
 import type { RuntimeConfig } from "./runtime/runtime-config";
@@ -254,10 +253,6 @@ export function JourneyApp({
     // unobstructed. We still observe the transition to keep the ref
     // up-to-date in case future logic needs it.
     //
-    // `STARTER_CARD_NUMBERS` import retained for future starter-deck flows
-    // (e.g. per-dream-avatar tutorials); underscore prefix silences unused
-    // warnings without deleting the import, which other tests still rely on.
-    void STARTER_CARD_NUMBERS;
     previousScreenTypeRef.current = state.screen.type;
   }, [state.deck, state.dreamAvatar, state.screen.type]);
 

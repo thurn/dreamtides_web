@@ -8,19 +8,17 @@ import type {
 } from "../types/draft";
 import { logEvent } from "../logging";
 import { logAffiliationDraw } from "../affiliations/affiliation-weights";
-import { DEFAULT_DRAFT_SITE_PICK_COUNT } from "./draft-site-config";
+import { DEFAULT_DRAFT_DATA } from "../data/draft-data";
 
 /** Default shared draft configuration. */
 export const DEFAULT_DRAFT_CONFIG: Readonly<DraftConfig> = {
-  packSize: 4,
-  sitePickCount: DEFAULT_DRAFT_SITE_PICK_COUNT,
-  rarityCaps: [
-    { rarity: "Legendary", poolCopyCap: 1, maxPicksPerRun: 1 },
-  ],
+  packSize: DEFAULT_DRAFT_DATA.offers.cardsPerOffer,
+  sitePickCount: DEFAULT_DRAFT_DATA.offers.picksPerSite,
+  rarityCaps: DEFAULT_DRAFT_DATA.rarityCaps,
 };
 
 /** Legacy default used by tests and imported saves without persisted site data. */
-export const SITE_PICKS = DEFAULT_DRAFT_SITE_PICK_COUNT;
+export const SITE_PICKS = DEFAULT_DRAFT_DATA.offers.picksPerSite;
 
 /**
  * Sample unique card numbers from weighted entries without replacement.

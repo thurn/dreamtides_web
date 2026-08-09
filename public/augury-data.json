@@ -261,6 +261,10 @@
         "subtitle": {
           "kind": "text",
           "text": "Gain {dreamsignName}"
+        },
+        "backgroundArt": {
+          "source": "card",
+          "imageNumber": 386654065
         }
       },
       "enabled": true,
@@ -280,6 +284,10 @@
         "subtitle": {
           "kind": "text",
           "text": "Add the {siteName} site."
+        },
+        "backgroundArt": {
+          "source": "card",
+          "imageNumber": 334049261
         }
       },
       "enabled": true,
@@ -289,6 +297,6 @@
       "quantities": {}
     }
   ],
-  "contentHash": "fd0a5b59ae22e827932ce2d750423e07c0bda1bad809bdabea5489d057c056b1",
-  "foldHash": "fd0a5b59ae22e827932ce2d750423e07c0bda1bad809bdabea5489d057c056b1"
+  "contentHash": "31de560e226b2a50ebb48814794bcacd41129179cc1ef9c0a36775f068f336e9",
+  "foldHash": "31de560e226b2a50ebb48814794bcacd41129179cc1ef9c0a36775f068f336e9"
 }

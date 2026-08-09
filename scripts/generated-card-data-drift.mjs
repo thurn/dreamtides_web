@@ -2,7 +2,6 @@ import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parse } from "smol-toml";
-import { NIGHTMARE_CARD_ID } from "../src/data/nightmare-identity.ts";
 import { transformCard } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -80,7 +79,7 @@ export function expectedCardDataFromToml({ rootDir = ROOT } = {}) {
   // Mirror the runtime filter in setup-assets.mjs: Special-rarity cards are
   // excluded from the runtime pool, except Nightmare.
   return allCards
-    .filter((card) => card.rarity !== "Special" || card.id === NIGHTMARE_CARD_ID)
+    .filter((card) => card.rarity !== "Special" || card.roles?.includes("nightmare") === true)
     .map(transformCard);
 }
 

@@ -12,8 +12,7 @@ import { dirname, resolve, join } from "node:path";
 import { homedir } from "node:os";
 import { pathToFileURL } from "node:url";
 import { parse } from "smol-toml";
-import { NIGHTMARE_CARD_ID } from "../src/data/nightmare-identity.ts";
-import { OFFER_TILE_BACKGROUND_IMAGE_NUMBERS } from "../src/data/offer-tile-art.ts";
+import { compileCardRoleData } from "./card-role-data.mjs";
 import {
   CARD_ID_RE,
   readAdaptedRecordDecklistIds,
@@ -326,7 +325,7 @@ export function transformCard(card) {
       result[camelKey] = value;
     }
   }
-  result.isStarter = card.rarity === "Starter";
+  result.isStarter = card.roles?.includes("starter-deck") === true;
   if (!("spark" in result)) {
     result.spark = null;
   }
@@ -1276,6 +1275,7 @@ export function regenerateCardData({
   publicDir = PUBLIC_DIR,
   cardJsonPath = join(publicDir, "card-data.json"),
   cardV2JsonPath = join(publicDir, "cards_v2-data.json"),
+  cardRoleJsonPath = join(ROOT, "src", "generated", "config", "card-role-data.json"),
 } = {}) {
   console.log("Parsing cards.toml for the runtime card catalog...");
   const cardTomlContent = readFileSync(cardTomlPath, "utf8");
@@ -1288,10 +1288,14 @@ export function regenerateCardData({
 
   console.log(`Found ${allCards.length} total cards`);
 
-  // Filter out Special-rarity cards from the runtime pool, except Nightmare,
-  // the sole Bane card required by journey effects.
+  const cardRoleData = compileCardRoleData(allCards);
+  mkdirSync(dirname(cardRoleJsonPath), { recursive: true });
+  writeFileSync(cardRoleJsonPath, `${JSON.stringify(cardRoleData, null, 2)}\n`);
+
+  // Filter out Special-rarity cards from the runtime pool, except the
+  // RON-role card required by Nightmare journey effects.
   const cards = allCards.filter(
-    (c) => c.rarity !== "Special" || c.id === NIGHTMARE_CARD_ID,
+    (card) => card.rarity !== "Special" || card.id === cardRoleData.nightmare.cardId,
   );
   console.log(`Filtered to ${cards.length} runtime cards`);
 
@@ -1496,6 +1500,7 @@ export function setupAssets({
     "reward-selection-data.json",
   );
   const generatedAuguryJsonPath = join(generatedConfigDir, "augury-data.json");
+  const generatedDraftJsonPath = join(generatedConfigDir, "draft-data.json");
   const affiliationsJsonPath = join(publicDir, "affiliations-data.json");
   const atlasJsonPath = join(publicDir, "atlas-data.json");
   const economyJsonPath = join(publicDir, "economy-data.json");
@@ -1987,7 +1992,10 @@ export function setupAssets({
   const jsonDraftData = compileDraftData(
     parse(readFileSync(draftTomlPath, "utf8")),
   );
-  writeFileSync(draftJsonPath, JSON.stringify(jsonDraftData, null, 2) + "\n");
+  const serializedDraftData = JSON.stringify(jsonDraftData, null, 2) + "\n";
+  mkdirSync(generatedConfigDir, { recursive: true });
+  writeFileSync(draftJsonPath, serializedDraftData);
+  writeFileSync(generatedDraftJsonPath, serializedDraftData);
   console.log("Wrote Draft data to draft-data.json");
 
   console.log("Parsing journey.toml...");
@@ -2192,14 +2200,17 @@ export function setupAssets({
     `Linked ${linkedV2} of ${jsonCardsV2.length} cards_v2 images (${missingV2} missing)`,
   );
 
-  // Symbolic offer tiles use a small set of fixed card-art fields that are not
-  // tied to the current card catalogs. Keep them in the generated card-art
-  // directory so local review and production uploads resolve the same assets.
+  // Symbolic offer-tile art is authored in Augury presentation data. Keep the
+  // referenced images in the generated card-art directory so local review and
+  // production uploads resolve the same assets.
   let linkedOfferTileBackgrounds = 0;
   let missingOfferTileBackgrounds = 0;
-  for (const imageNumber of Object.values(
-    OFFER_TILE_BACKGROUND_IMAGE_NUMBERS,
-  )) {
+  const offerTileBackgroundImageNumbers = jsonAuguryData.archetypes.flatMap(
+    (archetype) => archetype.presentation.backgroundArt === undefined
+      ? []
+      : [archetype.presentation.backgroundArt.imageNumber],
+  );
+  for (const imageNumber of offerTileBackgroundImageNumbers) {
     const hash = imageHash(imageNumber);
     const cachePath = join(imageCacheDir, hash);
     const symlinkPath = join(cardsDir, `${imageNumber}.webp`);

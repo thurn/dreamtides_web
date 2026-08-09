@@ -102,6 +102,7 @@ function tidesContext(
   return {
     poolData,
     idIndex: new Map(),
+    starterCardNumbers: [],
     allDreamsignPoolIds: [],
     poolVariant,
   };

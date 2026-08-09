@@ -61,6 +61,8 @@ pub struct CardDefinition {
     pub speed: Speed,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub rarity: Option<Rarity>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub roles: Vec<CardRole>,
     pub art: Art,
 }
 
@@ -110,6 +112,12 @@ pub enum Rarity {
     Special,
 }
 
+#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Hash, Ord, PartialOrd)]
+pub enum CardRole {
+    StarterDeck,
+    Nightmare,
+}
+
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct Art {
@@ -153,6 +161,15 @@ impl Rarity {
             Self::Starter => "Starter",
             Self::Tutorial => "Tutorial",
             Self::Special => "Special",
+        }
+    }
+}
+
+impl CardRole {
+    fn as_compat(self) -> &'static str {
+        match self {
+            Self::StarterDeck => "starter-deck",
+            Self::Nightmare => "nightmare",
         }
     }
 }
@@ -211,7 +228,7 @@ pub fn lower(
         let mut record = toml::map::Map::new();
         record.insert("name".into(), card.name.into());
         record.insert("mtg-name".into(), metadata.mtg_origin.into());
-        record.insert("id".into(), card.id.into());
+        record.insert("id".into(), card.id.clone().into());
         record.insert(
             "rendered-text".into(),
             card.ability_text.join("\n\n").into(),
@@ -226,6 +243,21 @@ pub fn lower(
             "rarity".into(),
             card.rarity.map(Rarity::as_compat).unwrap_or("").into(),
         );
+        if !card.roles.is_empty() {
+            let unique_roles = card.roles.iter().copied().collect::<BTreeSet<_>>();
+            if unique_roles.len() != card.roles.len() {
+                bail!("card {} contains a duplicate gameplay role", card.id);
+            }
+            record.insert(
+                "roles".into(),
+                toml::Value::Array(
+                    card.roles
+                        .into_iter()
+                        .map(|role| role.as_compat().into())
+                        .collect(),
+                ),
+            );
+        }
         record.insert("is-fast".into(), is_fast.into());
         record.insert("is-interrupt".into(), is_interrupt.into());
         record.insert("spark".into(), spark);
@@ -272,6 +304,7 @@ mod tests {
             kind,
             speed: Speed::Interrupt,
             rarity: Some(Rarity::Legendary),
+            roles: Vec::new(),
             art: Art {
                 image: 7,
                 owned: true,
@@ -324,10 +357,12 @@ mod tests {
 
         let mut event_card = card(OrbValue::Variable, CardKind::Event);
         event_card.amplified_text = None;
+        event_card.roles = vec![CardRole::Nightmare];
         let event = lower(vec![event_card], metadata(1)).unwrap();
         assert_eq!(event["cards"][0]["card-type"].as_str(), Some("Event"));
         assert_eq!(event["cards"][0]["subtype"].as_str(), Some(""));
         assert!(event["cards"][0].get("amplified-text").is_none());
+        assert_eq!(event["cards"][0]["roles"][0].as_str(), Some("nightmare"));
     }
 
     #[test]

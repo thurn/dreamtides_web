@@ -49,7 +49,6 @@ import type {
 import type { FoldState } from "../../rules/fold-state";
 import type { JourneyState, SiteState, SiteType } from "../../types/journey";
 import { asCardId, asCardName } from "../../types/card-identity";
-import { STARTER_CARD_NUMBERS } from "../../data/starter-cards";
 import {
   loadTestAffiliations,
   loadTestAtlasData,
@@ -59,6 +58,7 @@ import {
 import {
   buildTestCorpusCards,
   makeTestPoolContext,
+  TEST_STARTER_CARD_NUMBERS,
 } from "../../__test-helpers__/pool-context";
 import { LayerName } from "../../types/layer-name";
 import { buildMerchantContext } from "../../journey_v2/context/buildMerchantContext";
@@ -140,7 +140,7 @@ function makeDreamAvatar(id: string): DreamAvatarContent {
 function makeJourneyContent(): JourneyContent {
   const dreamsignTemplates = makeDreamsignTemplates();
   const dreamsignIds = dreamsignTemplates.map((template) => template.id);
-  const starterCards = STARTER_CARD_NUMBERS.map((cardNumber) =>
+  const starterCards = TEST_STARTER_CARD_NUMBERS.map((cardNumber) =>
     makeCard(cardNumber, true),
   );
   const corpusCards = buildTestCorpusCards();

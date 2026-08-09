@@ -45,6 +45,13 @@ pub struct ArchetypeDefinition {
 pub struct ArchetypePresentation {
     pub headline: PresentationText,
     pub subtitle: PresentationText,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub background_art: Option<PresentationArt>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+pub enum PresentationArt {
+    CardImage(i64),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -466,19 +473,20 @@ fn lower_archetype(source: ArchetypeDefinition) -> toml::Value {
     let mut output = toml::map::Map::new();
     output.insert("id".into(), kind.as_compat().into());
     output.insert("name".into(), source.name.into());
-    output.insert(
-        "presentation".into(),
-        toml::Value::Table(toml::map::Map::from_iter([
-            (
-                "headline".into(),
-                lower_presentation_text(source.presentation.headline),
-            ),
-            (
-                "subtitle".into(),
-                lower_presentation_text(source.presentation.subtitle),
-            ),
-        ])),
-    );
+    let mut presentation = toml::map::Map::from_iter([
+        (
+            "headline".into(),
+            lower_presentation_text(source.presentation.headline),
+        ),
+        (
+            "subtitle".into(),
+            lower_presentation_text(source.presentation.subtitle),
+        ),
+    ]);
+    if let Some(PresentationArt::CardImage(image_number)) = source.presentation.background_art {
+        presentation.insert("background-art-image-number".into(), image_number.into());
+    }
+    output.insert("presentation".into(), toml::Value::Table(presentation));
     output.insert("enabled".into(), true.into());
     output.insert("family".into(), source.ability.family().as_compat().into());
     output.insert("weight".into(), i64::from(source.weight).into());
@@ -555,7 +563,7 @@ fn validate(source: &AuguryCatalog) -> Result<()> {
         if archetype.name.trim().is_empty() {
             bail!("{path}.name must be non-empty");
         }
-        validate_presentation(&path, &archetype.presentation)?;
+        validate_presentation(&path, &archetype.presentation, kind)?;
         validate_ability(&path, &archetype.ability)?;
         families.insert(archetype.ability.family());
     }
@@ -568,7 +576,11 @@ fn validate(source: &AuguryCatalog) -> Result<()> {
     Ok(())
 }
 
-fn validate_presentation(path: &str, presentation: &ArchetypePresentation) -> Result<()> {
+fn validate_presentation(
+    path: &str,
+    presentation: &ArchetypePresentation,
+    kind: ArchetypeKind,
+) -> Result<()> {
     validate_presentation_text(
         &format!("{path}.presentation.headline"),
         &presentation.headline,
@@ -576,7 +588,16 @@ fn validate_presentation(path: &str, presentation: &ArchetypePresentation) -> Re
     validate_presentation_text(
         &format!("{path}.presentation.subtitle"),
         &presentation.subtitle,
-    )
+    )?;
+    let requires_background = matches!(kind, ArchetypeKind::Dreamsign | ArchetypeKind::AddSite);
+    match (&presentation.background_art, requires_background) {
+        (Some(PresentationArt::CardImage(image_number)), _) if *image_number <= 0 => {
+            bail!("{path}.presentation.background_art image number must be positive")
+        }
+        (None, true) => bail!("{path}.presentation.background_art is required"),
+        (Some(_), false) => bail!("{path}.presentation.background_art is not supported"),
+        _ => Ok(()),
+    }
 }
 
 fn validate_presentation_text(path: &str, text: &PresentationText) -> Result<()> {
@@ -702,6 +723,12 @@ mod tests {
             presentation: ArchetypePresentation {
                 headline: PresentationText::Text("Synthetic headline".into()),
                 subtitle: PresentationText::Text("Synthetic subtitle".into()),
+                background_art: match ability.kind() {
+                    ArchetypeKind::Dreamsign | ArchetypeKind::AddSite => {
+                        Some(PresentationArt::CardImage(42))
+                    }
+                    _ => None,
+                },
             },
             ability,
             weight: 3,
@@ -797,6 +824,10 @@ mod tests {
             Some(2)
         );
         assert!(archetypes[7]["quantities"].as_table().unwrap().is_empty());
+        assert_eq!(
+            archetypes[11]["presentation"]["background-art-image-number"].as_integer(),
+            Some(42)
+        );
         assert_eq!(archetypes[12]["family"].as_str(), Some("site"));
     }
 

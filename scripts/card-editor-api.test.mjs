@@ -13,7 +13,7 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, it } from "vitest";
-import { NIGHTMARE_CARD_ID as NIGHTMARE_ID } from "../src/data/nightmare-identity.ts";
+import { NIGHTMARE_CARD_ID as NIGHTMARE_ID } from "../src/data/nightmare.ts";
 import { createCardEditorApiMiddleware } from "./card-editor-api.mjs";
 
 const FIRST_ID = "11111111-1111-4111-8111-111111111111";
@@ -74,6 +74,7 @@ energy-cost = 0
 card-type = "Event"
 subtype = ""
 rarity = "Special"
+roles = ["nightmare"]
 is-fast = false
 spark = ""
 image-number = 1004

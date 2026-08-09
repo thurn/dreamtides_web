@@ -10,7 +10,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { parse } from "smol-toml";
 import { describe, expect, it } from "vitest";
-import { NIGHTMARE_CARD_ID as NIGHTMARE_ID } from "../src/data/nightmare-identity.ts";
+import { NIGHTMARE_CARD_ID as NIGHTMARE_ID } from "../src/data/nightmare.ts";
 import {
   patchRenderedCardsToml,
   readEditorCards,
@@ -84,6 +84,7 @@ energy-cost = 0
 card-type = "Event"
 subtype = ""
 rarity = "Special"
+roles = ["nightmare"]
 is-fast = false
 spark = ""
 image-number = 1004

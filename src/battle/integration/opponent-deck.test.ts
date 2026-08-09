@@ -152,6 +152,7 @@ function makePoolContext(db: Map<number, CardData>): RunPoolContext {
   return {
     poolData,
     idIndex: buildIdIndex(db),
+    starterCardNumbers: [],
     allDreamsignPoolIds: [],
     poolVariant: "tides4",
   };

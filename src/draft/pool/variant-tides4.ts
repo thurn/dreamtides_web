@@ -45,13 +45,10 @@ import {
 } from "./types.ts";
 import type { Tides4DecksJson } from "./tides4-io.ts";
 import type { Tides4Tuning } from "../../types/draft-data";
+import { DEFAULT_DRAFT_DATA } from "../../data/draft-data";
 
 /** Developer/test fallback; production injects the compiled draft.toml values. */
-export const DEFAULT_TIDES4_TUNING: Tides4Tuning = {
-  dealSize: 150,
-  copyCap: 2,
-  maxFacets: 3,
-};
+export const DEFAULT_TIDES4_TUNING: Tides4Tuning = DEFAULT_DRAFT_DATA.pool.tides4;
 
 /**
  * Build a pool by combining tide decks: join the avatar's starter tide (its

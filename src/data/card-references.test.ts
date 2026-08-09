@@ -13,7 +13,6 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { parse as parseToml } from "smol-toml";
-import { STARTER_CARD_NUMBERS } from "./starter-cards";
 
 const ROOT = process.cwd();
 const DATA_DIR = join(ROOT, "data");
@@ -26,6 +25,7 @@ interface RawCard {
   name: string;
   tags?: string[];
   "card-number": number;
+  roles?: string[];
 }
 interface RawDreamAvatar {
   name: string;
@@ -79,9 +79,7 @@ describe("card references resolve to real cards", () => {
     expect(poolCardIds.size).toBeGreaterThan(0);
     for (const id of poolCardIds) {
       expectCard("tutorial_journey_pool.toml", id);
-      expect(STARTER_CARD_NUMBERS).not.toContain(
-        idToCard.get(id)?.["card-number"],
-      );
+      expect(idToCard.get(id)?.roles ?? []).not.toContain("starter-deck");
     }
 
     const taggedCardIds = new Set(

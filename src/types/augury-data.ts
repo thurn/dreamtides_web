@@ -12,6 +12,8 @@ export interface AuguryArchetypeData {
   presentation: Readonly<{
     headline: AuguryPresentationText;
     subtitle: AuguryPresentationText;
+    /** Optional full-bleed card art for symbolic non-card compositions. */
+    backgroundArt?: Readonly<{ source: "card"; imageNumber: number }>;
   }>;
   enabled: boolean;
   family: MerchantOfferFamily;

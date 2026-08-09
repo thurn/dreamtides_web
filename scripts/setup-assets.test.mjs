@@ -431,6 +431,7 @@ card-number = 3
 card-type = "Character"
 subtype = "Beast"
 rarity = "Starter"
+roles = ["starter-deck"]
 energy-cost = 1
 spark = 1
 is-fast = false
@@ -528,6 +529,7 @@ rendered-text = "Use the canonical Dreamsign text."
         rarity: "Starter",
         subtype: "Beast",
         isStarter: true,
+        roles: ["starter-deck"],
         energyCost: 1,
         spark: 1,
         isFast: false,
@@ -585,6 +587,7 @@ id = "solo"
 card-number = 1
 card-type = "Event"
 rarity = "Starter"
+roles = ["starter-deck"]
 energy-cost = 1
 spark = 1
 is-fast = false

@@ -149,7 +149,11 @@ AuguryCatalog(
     ArchetypeDefinition(
       id: "432102c0-91c0-4954-acd0-3404d2148a25",
       name: "Dreamsign: Grant dreamsign",
-      presentation: (headline: Text("Gain a Dreamsign"), subtitle: Text("Gain {dreamsignName}")),
+      presentation: (
+        headline: Text("Gain a Dreamsign"),
+        subtitle: Text("Gain {dreamsignName}"),
+        background_art: CardImage(386654065),
+      ),
       ability: Dreamsign(selection_policy: DreamsignMatch),
       weight: 8,
     ),
@@ -157,7 +161,11 @@ AuguryCatalog(
     ArchetypeDefinition(
       id: "1003a54d-1659-490b-aa48-b88b9da5df68",
       name: "Site: Add a site",
-      presentation: (headline: Text("Add a Site"), subtitle: Text("Add the {siteName} site.")),
+      presentation: (
+        headline: Text("Add a Site"),
+        subtitle: Text("Add the {siteName} site."),
+        background_art: CardImage(334049261),
+      ),
       ability: AddSite,
       weight: 6,
     ),

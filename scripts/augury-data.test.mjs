@@ -16,6 +16,21 @@ describe("compileAuguryData", () => {
     expect(result.archetypes.every((entry) => entry.enabled)).toBe(true);
     expect(result.foldHash).toBe(result.contentHash);
     expect(result.contentHash).toMatch(/^[0-9a-f]{64}$/u);
+    expect(
+      result.archetypes
+        .filter(({ id }) => id === "dreamsign" || id === "add_site")
+        .every(({ presentation }) => presentation.backgroundArt?.source === "card"),
+    ).toBe(true);
+  });
+
+  it("requires background art only for symbolic full-art offers", () => {
+    const missing = source();
+    delete missing.archetype.find(({ id }) => id === "dreamsign").presentation["background-art-image-number"];
+    expect(() => compileAuguryData(missing)).toThrow(/background-art-image-number/u);
+
+    const unsupported = source();
+    unsupported.archetype.find(({ id }) => id === "purge").presentation["background-art-image-number"] = 123;
+    expect(() => compileAuguryData(unsupported)).toThrow(/unknown key/u);
   });
 
   it("compiles a reordered subset spanning two families", () => {

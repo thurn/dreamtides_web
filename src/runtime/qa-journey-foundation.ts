@@ -1,5 +1,4 @@
 import { generateInitialAtlas } from "../atlas/atlas-generator";
-import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import { toJourneyDreamAvatar } from "../data/dream-avatar-selection";
 import { initializeDraftState } from "../draft/draft-engine";
 import { buildDreamAvatarPackage } from "../data/journey-content";
@@ -76,7 +75,7 @@ export function createQaJourneyFoundation(
     seed,
     essence: dreamAvatar.startingEssence,
     maxDreamsigns: journeyContent.economyData.journey.dreamsignCap,
-    deck: STARTER_CARD_NUMBERS.map((cardNumber, index) => ({
+    deck: poolContext.starterCardNumbers.map((cardNumber, index) => ({
       entryId: `deck-${String(index + 1)}`,
       cardNumber,
       transfiguration: null,

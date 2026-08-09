@@ -1,5 +1,6 @@
 import type { DraftData } from "../types/draft-data";
 import { CARD_RARITIES } from "../types/cards";
+import generatedDraftData from "../generated/config/draft-data.json";
 
 export type {
   DraftData,
@@ -98,6 +99,9 @@ export function parseDraftData(value: unknown): DraftData {
   }
   return value as unknown as DraftData;
 }
+
+/** Generated compatibility view for code paths that need RON-owned defaults. */
+export const DEFAULT_DRAFT_DATA = parseDraftData(generatedDraftData);
 
 /** Fetch the strictly compiled draft rules before any room is folded. */
 export async function loadDraftData(): Promise<DraftData> {

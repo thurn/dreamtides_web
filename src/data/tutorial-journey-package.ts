@@ -5,7 +5,6 @@ import type {
 } from "../types/content";
 import type { CardData } from "../types/cards";
 import type { RunPoolContext } from "./journey-content";
-import { STARTER_CARD_NUMBERS } from "./starter-cards";
 import type { TutorialJourneyPool } from "./tutorial-journey-pool";
 import { extractGlossaryTerms } from "./glossary-terms";
 
@@ -27,7 +26,7 @@ export function buildTutorialJourneyPackage(
     );
   }
 
-  const starterCardNumbers = new Set(STARTER_CARD_NUMBERS);
+  const starterCardNumbers = new Set(context.starterCardNumbers);
   const draftPoolCopiesByCard: Record<string, number> = {};
   const unresolvedCardIds: string[] = [];
   for (const tide of tutorialPool.tides) {

@@ -12,7 +12,6 @@ import {
   loadTestDreamscapes,
   makeTestAtlasNode,
 } from "../__test-helpers__/atlas-fixtures";
-import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
 import type {
@@ -23,6 +22,7 @@ import type { JourneyContent } from "../data/journey-content";
 import {
   buildTestCorpusCards,
   makeTestPoolContext,
+  TEST_STARTER_CARD_NUMBERS,
 } from "../__test-helpers__/pool-context";
 import type { DreamAtlas, JourneyState } from "../types/journey";
 import type { PoolDraftState } from "../types/draft";
@@ -78,7 +78,7 @@ function makeDreamAvatar(): DreamAvatarContent {
 function makeJourneyContent(
   dreamAvatar: DreamAvatarContent = makeDreamAvatar(),
 ): JourneyContent {
-  const starterCards = STARTER_CARD_NUMBERS.map((cardNumber) =>
+  const starterCards = TEST_STARTER_CARD_NUMBERS.map((cardNumber) =>
     makeCard(cardNumber, { isStarter: true }),
   );
   const corpusCards = buildTestCorpusCards();
@@ -358,10 +358,10 @@ describe("journey state actions", () => {
       next.resolvedPackage?.dreamsignPoolIds,
     );
     expect(next.deck.map((entry) => entry.cardNumber)).toEqual(
-      STARTER_CARD_NUMBERS,
+      TEST_STARTER_CARD_NUMBERS,
     );
     expect(next.deck.map((entry) => entry.entryId)).toEqual(
-      STARTER_CARD_NUMBERS.map((_, index) => `deck-${String(index + 1)}`),
+      TEST_STARTER_CARD_NUMBERS.map((_, index) => `deck-${String(index + 1)}`),
     );
     const nextPoolState = next.draftState;
     expect(nextPoolState?.draftPoolCopiesByCard).toEqual(
@@ -399,7 +399,12 @@ describe("journey state actions", () => {
     const dreamAvatar = makeDreamAvatar();
     const journeyContent = makeJourneyContent(dreamAvatar);
     const authoredCardNumbers = [...journeyContent.cardDatabase.keys()]
-      .filter((cardNumber) => !STARTER_CARD_NUMBERS.includes(cardNumber))
+      .filter(
+        (cardNumber) =>
+          !TEST_STARTER_CARD_NUMBERS.includes(
+            cardNumber as (typeof TEST_STARTER_CARD_NUMBERS)[number],
+          ),
+      )
       .slice(0, 2);
     const authoredCopies = {
       [String(authoredCardNumbers[0])]: 2,
