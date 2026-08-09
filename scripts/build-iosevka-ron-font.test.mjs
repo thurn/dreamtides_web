@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { parseGlossarySource } from "./glossary-source.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(HERE, "..");
@@ -52,20 +53,19 @@ function symbolCharacters() {
 }
 
 function rulesSymbolGlyphs() {
-  const rulesText = read("src/cumulus/components/card/RulesText.tsx");
+  const glossary = parseGlossarySource(read("data/glossary.toml"));
   const standaloneGlyph = read(
     "src/cumulus/components/controls/StandaloneGlyph.tsx",
   );
 
-  const symbolIconBlock =
-    /const SYMBOL_ICON_CLASSES[^=]*=\s*\{([\s\S]*?)\n\};/.exec(rulesText);
-  expect(symbolIconBlock).not.toBeNull();
   const symbolGlyphs = new Map(
-    entries(
-      symbolIconBlock?.[1] ?? "",
-      /^\s*(\w+):\s*\{[^}]*?className:\s*GLYPHS\.(\w+)/gm,
+    glossary.flatMap((entry) =>
+      entry.rulesSymbol === undefined
+        ? []
+        : [[entry.rulesSymbol.token, entry.rulesSymbol.glyph]],
     ),
   );
+  expect(symbolGlyphs.size).toBeGreaterThan(0);
 
   const exportedConstants = new Map(
     entries(
@@ -74,8 +74,6 @@ function rulesSymbolGlyphs() {
     ),
   );
   expect(exportedConstants.size).toBeGreaterThan(0);
-  symbolGlyphs.set("energy", exportedConstants.get("ENERGY_ICON_CLASS"));
-  symbolGlyphs.set("spark", exportedConstants.get("SPARK_INLINE_ICON_CLASS"));
   symbolGlyphs.set("bolt", exportedConstants.get("BOLT_ICON_CLASS"));
   return symbolGlyphs;
 }
