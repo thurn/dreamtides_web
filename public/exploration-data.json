@@ -96,7 +96,7 @@
         {
           "id": "8b5eb29c-146f-46fb-9407-55004128fba7:pair-1:template-10",
           "label": "Accept the Lantern",
-          "effectText": "Gain Lantern Keeper",
+          "effectText": "Gain {fixed_card}",
           "effectKind": "gain-card",
           "canonicalMechanicId": "gain-card",
           "selectionPolicyId": "fixed",
@@ -124,7 +124,7 @@
         {
           "id": "954e8d50-d494-4fb2-b4c7-74979083b774:pair-1:template-10",
           "label": "Answer His Signal",
-          "effectText": "Gain Breach Artist",
+          "effectText": "Gain {fixed_card}",
           "effectKind": "gain-card",
           "canonicalMechanicId": "gain-card",
           "selectionPolicyId": "fixed",
@@ -181,7 +181,7 @@
         {
           "id": "e2f542eb-090f-4a22-a42c-a120eb6caaa3:pair-1:template-10",
           "label": "Call Across the Sky",
-          "effectText": "Gain Cloudmantle Ray",
+          "effectText": "Gain {fixed_card}",
           "effectKind": "gain-card",
           "canonicalMechanicId": "gain-card",
           "selectionPolicyId": "fixed",
@@ -269,7 +269,7 @@
         {
           "id": "15b63630-d9f8-473b-9717-15ad91ff2f16:pair-1:template-65",
           "label": "Overload the aperture",
-          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 Nightmare cards.",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
           "effectKind": "reduce-cost-all-and-gain-nightmares",
           "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
           "energyCostReduction": 1,
@@ -297,7 +297,7 @@
         {
           "id": "764b62f6-6af9-40ad-8d1f-653cc1a11030:pair-5:template-65",
           "label": "Charge Through the Smoke",
-          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 Nightmare cards.",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
           "effectKind": "reduce-cost-all-and-gain-nightmares",
           "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
           "energyCostReduction": 1,
@@ -615,7 +615,7 @@
         {
           "id": "9d14885c-a757-40cc-b43e-87dbec7ec379:pair-1:template-47",
           "label": "Feed it, then gaze",
-          "effectText": "Choose a card to purge and replace it with Glimpse of Infinity",
+          "effectText": "Choose a card to purge and replace it with {fixed_card}",
           "followupTitle": "{action-label}",
           "followupSubtitle": "Choose a card to replace.",
           "effectKind": "replace-selected-with-card",
@@ -784,6 +784,6 @@
       ]
     }
   ],
-  "contentHash": "1996b008769e500483d837c283ce2afe4452b6a748fc2e5d1a3796586897bc96",
-  "foldHash": "1996b008769e500483d837c283ce2afe4452b6a748fc2e5d1a3796586897bc96"
+  "contentHash": "cba89a203826e383c0ff6fc2e1589323dc855f99a226b8f9f75469d50c5d896a",
+  "foldHash": "cba89a203826e383c0ff6fc2e1589323dc855f99a226b8f9f75469d50c5d896a"
 }

@@ -1350,7 +1350,7 @@ describe("exploration-view-model", () => {
       {
         id: "fixed-card",
         label: "Gain a card",
-        effectText: `Gain ${fixedCard.name}`,
+        effectText: "Gain {fixed_card}",
         effectKind: "gain-card",
         cardId: fixedCard.id,
       },
@@ -1361,7 +1361,7 @@ describe("exploration-view-model", () => {
       {
         id: "nightmare-card",
         label: "Accept the cost",
-        effectText: "Gain 3 Nightmare cards.",
+        effectText: "Gain 3 {nightmare_card} cards.",
         effectKind: "reduce-cost-all-and-gain-nightmares",
         nightmareCount: 3,
       },
@@ -1381,15 +1381,16 @@ describe("exploration-view-model", () => {
     );
 
     expect(fixed.effectParts).toMatchObject([
-      { kind: "text", text: "Gain " },
+      { kind: "text" },
       {
         kind: "entity",
         entity: { kind: "card", card: { id: fixedCard.id } },
       },
     ]);
-    expect(nightmare.effectText).toBe("Gain 3 Nightmare cards.");
+    expect(fixed.effectText).not.toContain("{fixed_card}");
+    expect(nightmare.effectText).not.toContain("{nightmare_card}");
     expect(nightmare.effectParts).toMatchObject([
-      { kind: "text", text: "Gain 3 " },
+      { kind: "text" },
       {
         kind: "entity",
         entity: {
@@ -1398,7 +1399,7 @@ describe("exploration-view-model", () => {
           copies: 3,
         },
       },
-      { kind: "text", text: " cards." },
+      { kind: "text" },
     ]);
     expect(dreamsign.effectParts).toMatchObject([
       { kind: "text", text: "Gain " },

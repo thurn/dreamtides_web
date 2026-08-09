@@ -92,7 +92,7 @@ ExplorationCatalog(
         ActionDefinition(
           label: "Accept the Lantern",
           id: "8b5eb29c-146f-46fb-9407-55004128fba7:pair-1:template-10",
-          presentation: ActionPresentation(effect_text: "Gain Lantern Keeper", followup: None),
+          presentation: ActionPresentation(effect_text: "Gain {fixed_card}", followup: None),
           effect: GainCard(card_id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586"),
         ),
 
@@ -115,7 +115,7 @@ ExplorationCatalog(
         ActionDefinition(
           label: "Answer His Signal",
           id: "954e8d50-d494-4fb2-b4c7-74979083b774:pair-1:template-10",
-          presentation: ActionPresentation(effect_text: "Gain Breach Artist", followup: None),
+          presentation: ActionPresentation(effect_text: "Gain {fixed_card}", followup: None),
           effect: GainCard(card_id: "87aba308-00b4-40d8-a46f-4e6f58a664a8"),
         ),
 
@@ -167,7 +167,7 @@ ExplorationCatalog(
         ActionDefinition(
           label: "Call Across the Sky",
           id: "e2f542eb-090f-4a22-a42c-a120eb6caaa3:pair-1:template-10",
-          presentation: ActionPresentation(effect_text: "Gain Cloudmantle Ray", followup: None),
+          presentation: ActionPresentation(effect_text: "Gain {fixed_card}", followup: None),
           effect: GainCard(card_id: "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5"),
         ),
 
@@ -256,7 +256,7 @@ ExplorationCatalog(
           label: "Overload the aperture",
           id: "15b63630-d9f8-473b-9717-15ad91ff2f16:pair-1:template-65",
           presentation: ActionPresentation(
-            effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 Nightmare cards.",
+            effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
             followup: None,
           ),
           effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
@@ -285,7 +285,7 @@ ExplorationCatalog(
           label: "Charge Through the Smoke",
           id: "764b62f6-6af9-40ad-8d1f-653cc1a11030:pair-5:template-65",
           presentation: ActionPresentation(
-            effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 Nightmare cards.",
+            effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
             followup: None,
           ),
           effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
@@ -626,7 +626,7 @@ ExplorationCatalog(
           label: "Feed it, then gaze",
           id: "9d14885c-a757-40cc-b43e-87dbec7ec379:pair-1:template-47",
           presentation: ActionPresentation(
-            effect_text: "Choose a card to purge and replace it with Glimpse of Infinity",
+            effect_text: "Choose a card to purge and replace it with {fixed_card}",
             followup: Followup(title: "{action-label}", subtitle: "Choose a card to replace."),
           ),
           effect: ReplaceSelectedWithCard(card_id: "1658d9a0-c3b0-4eb7-babc-4933acf362c4"),

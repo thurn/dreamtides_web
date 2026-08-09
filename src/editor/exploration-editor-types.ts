@@ -36,7 +36,7 @@ export interface EncounterRuntimeCardSelection {
   predicate: string | null;
   cardId: string;
   cardName: string;
-  source: "player_deck" | "catalog_fallback" | "offer_pool" | "starter_deck";
+  source: "player_deck" | "catalog_fallback" | "offer_pool" | "starter_deck" | "fixed_reference";
 }
 
 export type ExplorationEditorControl =

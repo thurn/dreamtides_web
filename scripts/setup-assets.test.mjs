@@ -84,6 +84,16 @@ describe("transformExplorationData", () => {
         .filter((action) => action.effectText.includes("{deck_card}"))
         .every((action) => action.deckTarget === "offered"),
     ).toBe(true);
+    expect(
+      actions
+        .filter((action) => action.cardId !== undefined)
+        .every((action) => action.effectText.includes("{fixed_card}")),
+    ).toBe(true);
+    expect(
+      actions
+        .filter((action) => action.nightmareCount !== undefined)
+        .every((action) => action.effectText.includes("{nightmare_card}")),
+    ).toBe(true);
     expect(actions.map((action) => action.effectKind)).toEqual(
       expect.arrayContaining([
         "make-fast-all",
@@ -108,7 +118,7 @@ describe("transformExplorationData", () => {
         id: `action-${String(encounterIndex)}-${String(actionIndex)}`,
         label: "Synthetic action",
         "effect-text": "Synthetic effect",
-        "effect-kind": "gain-card",
+        "effect-kind": "make-fast-all",
       })),
     }));
     encounters[0].action[0] = {
@@ -276,6 +286,7 @@ describe("transformExplorationData", () => {
     offered.encounter[0].action[1] = {
       ...offered.encounter[0].action[1],
       "effect-kind": "replace-selected-with-card",
+      "effect-text": "Replace the selection with {fixed_card}",
       "card-id": "fixed-card-id",
     };
     offered.encounter[1].action[0] = {
@@ -300,6 +311,29 @@ describe("transformExplorationData", () => {
     expect(
       transformExplorationData(missingForm).encounters[1].action[0].transfiguration,
     ).toBe("Empowered");
+  });
+
+  it("requires UUID-backed presentation slots for fixed and Nightmare cards", () => {
+    const fixed = syntheticExplorationSource();
+    fixed.encounter[0].action[0] = {
+      ...fixed.encounter[0].action[0],
+      "effect-kind": "gain-card",
+      "effect-text": "Gain a referenced card",
+      "card-id": "fixed-card-id",
+    };
+    expect(() => transformExplorationData(fixed)).toThrow(/must present \{fixed_card\}/u);
+
+    const nightmare = syntheticExplorationSource();
+    nightmare.encounter[0].action[0] = {
+      ...nightmare.encounter[0].action[0],
+      "effect-kind": "reduce-cost-all-and-gain-nightmares",
+      "effect-text": "Apply an effect and gain cards",
+      "energy-cost-reduction": 1,
+      "nightmare-count": 2,
+    };
+    expect(() => transformExplorationData(nightmare)).toThrow(
+      /must present \{nightmare_card\}/u,
+    );
   });
 });
 

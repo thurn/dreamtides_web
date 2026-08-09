@@ -15,6 +15,17 @@ describe("exploration editor data", () => {
     expect(actions.every((action) => action.effectText.length > 0)).toBe(true);
     expect(actions.flatMap((action) => action.runtimeCardSelections)
       .every((selection) => /^[0-9a-f-]{36}$/u.test(selection.cardId))).toBe(true);
+    expect(actions
+      .filter((action) => action.cardId !== undefined)
+      .every((action) => action.runtimeCardSelections.some((selection) =>
+        selection.placeholder === "{fixed_card}" &&
+        selection.cardId.toLowerCase() === action.cardId.toLowerCase() &&
+        selection.source === "fixed_reference"))).toBe(true);
+    expect(actions
+      .filter((action) => action.effectText.includes("{nightmare_card}"))
+      .every((action) => action.runtimeCardSelections.some((selection) =>
+        selection.placeholder === "{nightmare_card}" &&
+        selection.source === "fixed_reference"))).toBe(true);
     expect(data).not.toHaveProperty("templates");
   });
 

@@ -1,5 +1,7 @@
 const LOW_COST_CARD_PATTERN = /^≤(\d+)● cost (Character|Event)$/u;
 const SIMULATED_PLAYER_DECK_SIZE = 30;
+const NIGHTMARE_CARD_ID = "b0a2c3d4-e5f6-4789-8abc-0def12345678";
+const PRESENTATION_CARD_SLOT_PATTERN = /\{(offered_card|deck_card|fixed_card|nightmare_card)\}/gu;
 
 function randomIndex(length, random) {
   if (length < 1) throw new Error("Cannot select from an empty card list.");
@@ -52,6 +54,20 @@ function matchesPredicate(card, predicate) {
 }
 
 function chooseCard(action, slot, cards, playerDeck, random) {
+  const fixedCardId = slot === "fixed_card"
+    ? action.cardId
+    : slot === "nightmare_card" ? NIGHTMARE_CARD_ID : undefined;
+  if (fixedCardId !== undefined) {
+    const card = cards.find((candidate) => candidate.id.toLowerCase() === fixedCardId.toLowerCase());
+    if (card === undefined) throw new Error(`Unknown card UUID ${fixedCardId} for {${slot}}.`);
+    return {
+      placeholder: `{${slot}}`,
+      predicate: null,
+      cardId: card.id,
+      cardName: card.name,
+      source: "fixed_reference",
+    };
+  }
   const candidates = slot === "offered_card"
     ? cards.filter((card) => card.isOfferable && matchesPredicate(card, action.predicate))
     : playerDeck.filter((card) => matchesPredicate(card, action.predicate));
@@ -75,14 +91,14 @@ function chooseCard(action, slot, cards, playerDeck, random) {
 /** Render action-local presentation slots with simulated UUID-backed entities. */
 export function renderActionPresentation(action, cards, playerDeck, random) {
   const slots = [...new Set(
-    [...action.effectText.matchAll(/\{(offered_card|deck_card)\}/gu)].map((match) => match[1]),
+    [...action.effectText.matchAll(PRESENTATION_CARD_SLOT_PATTERN)].map((match) => match[1]),
   )];
   const runtimeCardSelections = slots.map((slot) =>
     chooseCard(action, slot, cards, playerDeck, random));
   const selections = new Map(runtimeCardSelections.map((entry) => [entry.placeholder, entry]));
   const renderedEffectParts = [];
   let cursor = 0;
-  for (const match of action.effectText.matchAll(/\{(offered_card|deck_card)\}/gu)) {
+  for (const match of action.effectText.matchAll(PRESENTATION_CARD_SLOT_PATTERN)) {
     if (match.index > cursor) {
       renderedEffectParts.push({ kind: "text", text: action.effectText.slice(cursor, match.index) });
     }

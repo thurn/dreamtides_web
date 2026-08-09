@@ -871,7 +871,9 @@ export function transformExplorationData(source) {
         );
       }
       if (
-        action.effectKind === "replace-selected-with-card" &&
+        ["gain-card", "replace-selected-with-card", "gain-nightmare-and-card"].includes(
+          action.effectKind,
+        ) &&
         (typeof action.cardId !== "string" || action.cardId.length === 0)
       ) {
         throw new Error(
@@ -913,9 +915,12 @@ export function transformExplorationData(source) {
         );
       }
       if (
-        action.effectKind === "reduce-cost-all-and-gain-nightmares" &&
-        (typeof action.energyCostReduction !== "number" ||
-          action.energyCostReduction <= 0 ||
+        ["gain-nightmare-and-card", "reduce-cost-all-and-gain-nightmares"].includes(
+          action.effectKind,
+        ) &&
+        ((action.effectKind === "reduce-cost-all-and-gain-nightmares" &&
+          (typeof action.energyCostReduction !== "number" ||
+            action.energyCostReduction <= 0)) ||
           typeof action.nightmareCount !== "number" ||
           action.nightmareCount <= 0)
       ) {
@@ -1000,6 +1005,10 @@ export function transformExplorationData(source) {
       const allowedSlots = new Set([
         ...(action.effectKind === "gain-offered-card" ? ["{offered_card}"] : []),
         ...(action.deckTarget === "offered" ? ["{deck_card}"] : []),
+        ...(action.cardId === undefined ? [] : ["{fixed_card}"]),
+        ...(["gain-nightmare-and-card", "reduce-cost-all-and-gain-nightmares"].includes(
+          action.effectKind,
+        ) ? ["{nightmare_card}"] : []),
       ]);
       for (const slot of presentationSlots) {
         if (!allowedSlots.has(slot)) {
@@ -1016,6 +1025,21 @@ export function transformExplorationData(source) {
       if (action.deckTarget === "offered" && !presentationSlots.includes("{deck_card}")) {
         throw new Error(
           `exploration.toml: action ${action.id} must present {deck_card}`,
+        );
+      }
+      if (action.cardId !== undefined && !presentationSlots.includes("{fixed_card}")) {
+        throw new Error(
+          `exploration.toml: action ${action.id} must present {fixed_card}`,
+        );
+      }
+      if (
+        ["gain-nightmare-and-card", "reduce-cost-all-and-gain-nightmares"].includes(
+          action.effectKind,
+        ) &&
+        !presentationSlots.includes("{nightmare_card}")
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} must present {nightmare_card}`,
         );
       }
       const followupSlots = [

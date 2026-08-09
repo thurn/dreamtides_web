@@ -769,26 +769,26 @@ function effectReferencesForAction(
       entity: deckCardEntity,
     });
   }
-  const cardIds = [action.cardId];
-  if (
-    action.effectKind === "gain-nightmare-and-card" ||
-    action.effectKind === "reduce-cost-all-and-gain-nightmares"
-  ) {
-    cardIds.push(NIGHTMARE_CARD_ID);
+  if (action.effectText.includes("{fixed_card}") && action.cardId !== undefined) {
+    const card = cardById(content, action.cardId);
+    if (card !== null) {
+      references.push({
+        needle: "{fixed_card}",
+        entity: { kind: "card", card },
+      });
+    }
   }
-  for (const cardId of cardIds) {
-    if (cardId === undefined) continue;
-    const card = cardById(content, cardId);
+  if (action.effectText.includes("{nightmare_card}")) {
+    const card = cardById(content, NIGHTMARE_CARD_ID);
     if (card !== null) {
       const copies =
-        cardId === NIGHTMARE_CARD_ID &&
         action.nightmareCount !== undefined &&
         Number.isInteger(action.nightmareCount) &&
         action.nightmareCount > 1
           ? action.nightmareCount
           : undefined;
       references.push({
-        needle: card.name,
+        needle: "{nightmare_card}",
         entity: {
           kind: "card",
           card,
