@@ -3402,6 +3402,12 @@ mod tests {
     priority: 17,
     matches_rules_text: true,
     variants: ["echoes"],
+    rules_symbol: RulesSymbol(
+      token: spark,
+      glyph: Spark,
+      accessible_label: "spark",
+      semantic_color_role: Spark,
+    ),
     contexts: [
       GlossaryContext(
         pattern: r#"\\becho\\s+(\\d+)\\b"#,
@@ -3420,6 +3426,39 @@ mod tests {
     priority: -3,
     variants: [],
     term_presentation: SymbolOnly,
+    rules_symbol: RulesSymbol(token: lunar, glyph: Exhaust, accessible_label: "lunar"),
+  ),
+  GlossaryDefinition(
+    id: "00000000-0000-4000-8000-000000000023",
+    category: Resources,
+    term: "Essence",
+    definition: "Currency.",
+    priority: 0,
+    rules_symbol: RulesSymbol(token: essence, glyph: Essence, accessible_label: "essence"),
+  ),
+  GlossaryDefinition(
+    id: "00000000-0000-4000-8000-000000000024",
+    category: Resources,
+    term: "Points",
+    definition: "Score.",
+    priority: 0,
+    rules_symbol: RulesSymbol(token: points, glyph: Points, accessible_label: "points"),
+  ),
+  GlossaryDefinition(
+    id: "00000000-0000-4000-8000-000000000025",
+    category: Resources,
+    term: "Memory",
+    definition: "Stored counters.",
+    priority: 0,
+    rules_symbol: RulesSymbol(token: store, glyph: Memory, accessible_label: "memory"),
+  ),
+  GlossaryDefinition(
+    id: "00000000-0000-4000-8000-000000000026",
+    category: Resources,
+    term: "Energy",
+    definition: "Play resource.",
+    priority: 0,
+    rules_symbol: RulesSymbol(token: energy, glyph: Energy, accessible_label: "energy"),
   ),
 ]
 "###;
@@ -3990,6 +4029,10 @@ mod tests {
             [
                 "00000000-0000-4000-8000-000000000021",
                 "00000000-0000-4000-8000-000000000022",
+                "00000000-0000-4000-8000-000000000023",
+                "00000000-0000-4000-8000-000000000024",
+                "00000000-0000-4000-8000-000000000025",
+                "00000000-0000-4000-8000-000000000026",
             ]
         );
     }

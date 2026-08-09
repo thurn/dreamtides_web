@@ -226,7 +226,7 @@ impl TermPresentation {
 pub struct GlossaryId(Uuid);
 
 impl GlossaryId {
-    fn parse(value: &str) -> std::result::Result<Self, String> {
+    pub(crate) fn parse(value: &str) -> std::result::Result<Self, String> {
         let uuid = Uuid::parse_str(value).map_err(|error| error.to_string())?;
         if uuid.get_version() != Some(Version::Random) || uuid.get_variant() != Variant::RFC4122 {
             return Err("Glossary identifier must be an RFC 4122 UUIDv4".into());
