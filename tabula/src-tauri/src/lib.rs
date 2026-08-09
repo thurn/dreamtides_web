@@ -4,29 +4,13 @@ use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::sync::Mutex;
 
-use serde::{Deserialize, Serialize};
+use dreamtides_game_data::affiliations::{self, AffiliationCatalog, AffiliationDefinition};
+use serde::Serialize;
 use serde_json::Value;
 use tauri::State;
 
 #[derive(Default)]
 struct Repository(Mutex<Option<PathBuf>>);
-
-#[derive(Clone, Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
-struct AffiliationCatalog {
-    default_random_draw_max_multiplier: f64,
-    default_opponent_deck_max_multiplier: f64,
-    affiliations: Vec<Affiliation>,
-}
-
-#[derive(Clone, Deserialize, Serialize)]
-#[serde(deny_unknown_fields)]
-struct Affiliation {
-    id: String,
-    name: String,
-    atlas_card_theme: String,
-    signature_card_ids: Vec<String>,
-}
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -36,7 +20,7 @@ struct EditorSnapshot {
     source_revision: String,
     default_random_draw_max_multiplier: f64,
     default_opponent_deck_max_multiplier: f64,
-    affiliations: Vec<Affiliation>,
+    affiliations: Vec<AffiliationDefinition>,
     cards: Value,
 }
 
@@ -86,6 +70,8 @@ fn snapshot(root: &Path) -> Result<EditorSnapshot, String> {
         .map_err(|error| format!("Read affiliations.ron: {error}"))?;
     let catalog: AffiliationCatalog =
         ron::from_str(&source).map_err(|error| format!("Parse affiliations.ron: {error}"))?;
+    affiliations::validate(&catalog)
+        .map_err(|error| format!("Validate affiliations.ron: {error:#}"))?;
     let cards: Value = serde_json::from_slice(
         &fs::read(root.join("public/cards_v2-data.json"))
             .map_err(|error| format!("Read card catalog: {error}"))?,
@@ -109,6 +95,22 @@ fn log_event(root: &Path, event: &str, operation: Option<&Value>, outcome: &str)
         let record = serde_json::json!({
             "timestamp": std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|value| value.as_secs()).unwrap_or_default(),
             "event": event, "dataset": "affiliations", "operation": operation.and_then(|value| value.get("operation")), "outcome": outcome,
+        });
+        let _ = writeln!(file, "{record}");
+    }
+}
+
+fn log_operations_event(root: &Path, operations: &[Value], outcome: &str) {
+    let path = root.join("logs/tabula-log.jsonl");
+    let _ = fs::create_dir_all(path.parent().unwrap());
+    if let Ok(mut file) = OpenOptions::new().create(true).append(true).open(path) {
+        let kinds = operations
+            .iter()
+            .filter_map(|operation| operation.get("operation").and_then(Value::as_str))
+            .collect::<Vec<_>>();
+        let record = serde_json::json!({
+            "timestamp": std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|value| value.as_secs()).unwrap_or_default(),
+            "event": "operations_saved", "dataset": "affiliations", "operation_count": operations.len(), "operation_kinds": kinds, "outcome": outcome,
         });
         let _ = writeln!(file, "{record}");
     }
@@ -149,8 +151,8 @@ fn open_repository(path: String, state: State<'_, Repository>) -> Result<EditorS
 }
 
 #[tauri::command]
-fn save_editor_operation(
-    operation: Value,
+fn save_editor_operations(
+    operations: Vec<Value>,
     expected_source_revision: String,
     state: State<'_, Repository>,
 ) -> Result<EditorSnapshot, String> {
@@ -180,7 +182,7 @@ fn save_editor_operation(
         .take()
         .unwrap()
         .write_all(
-            serde_json::to_string(&vec![operation.clone()])
+            serde_json::to_string(&operations)
                 .unwrap()
                 .as_bytes(),
         )
@@ -194,10 +196,10 @@ fn save_editor_operation(
             .last()
             .unwrap_or("Save failed")
             .to_owned();
-        log_event(&root, "operation_saved", Some(&operation), "failure");
+        log_operations_event(&root, &operations, "failure");
         return Err(diagnostic);
     }
-    log_event(&root, "operation_saved", Some(&operation), "success");
+    log_operations_event(&root, &operations, "success");
     snapshot(&root)
 }
 
@@ -209,7 +211,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             load_editor_snapshot,
             open_repository,
-            save_editor_operation
+            save_editor_operations
         ])
         .run(tauri::generate_context!())
         .expect("error while running Tabula");

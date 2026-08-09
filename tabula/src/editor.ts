@@ -18,43 +18,79 @@ export interface EditorSnapshot {
   cards: CardData[];
 }
 
+export interface AffiliationDraft {
+  default_random_draw_max_multiplier: string;
+  default_opponent_deck_max_multiplier: string;
+  affiliations: Affiliation[];
+}
+
 export type EditorOperation =
-  | { operation: "set_affiliation_catalog_field"; field: string; value: number }
-  | { operation: "set_affiliation_field"; affiliation_id: string; field: string; value: string }
+  | { operation: "set_affiliation_catalog_field"; field: "default_random_draw_max_multiplier" | "default_opponent_deck_max_multiplier"; value: number }
+  | { operation: "set_affiliation_field"; affiliation_id: string; field: "name" | "atlas_card_theme"; value: string }
   | { operation: "replace_affiliation_signature_cards"; affiliation_id: string; card_ids: string[] };
-export type EditorOperationFactory = (current: EditorSnapshot) => EditorOperation;
+
+export interface DraftValidation {
+  fields: Record<string, string>;
+  unresolvedCardIds: Record<string, string[]>;
+  errorCount: number;
+}
 
 export interface EditorTransport {
   load(): Promise<EditorSnapshot>;
   open(path: string): Promise<EditorSnapshot>;
-  save(operation: EditorOperation, revision: string): Promise<EditorSnapshot>;
+  save(operations: readonly EditorOperation[], revision: string): Promise<EditorSnapshot>;
 }
 
-export function updateSignatureCards(
-  affiliationId: string,
-  update: (ids: string[]) => string[],
-): EditorOperationFactory {
-  return (current) => {
-    const affiliation = current.affiliations.find((entry) => entry.id === affiliationId);
-    if (!affiliation) throw new Error(`Affiliation ${affiliationId} is unavailable`);
-    return {
-      operation: "replace_affiliation_signature_cards",
-      affiliation_id: affiliationId,
-      card_ids: update(affiliation.signature_card_ids),
-    };
+export function draftFromSnapshot(snapshot: EditorSnapshot): AffiliationDraft {
+  return {
+    default_random_draw_max_multiplier: String(snapshot.default_random_draw_max_multiplier),
+    default_opponent_deck_max_multiplier: String(snapshot.default_opponent_deck_max_multiplier),
+    affiliations: structuredClone(snapshot.affiliations),
   };
 }
 
-export function searchAvailableCards(
-  cards: readonly CardData[],
-  selectedIds: readonly string[],
-  query: string,
-  cardType: string,
-): CardData[] {
-  const selected = new Set(selectedIds);
+export function buildOperations(snapshot: EditorSnapshot, draft: AffiliationDraft): EditorOperation[] {
+  const operations: EditorOperation[] = [];
+  const random = Number(draft.default_random_draw_max_multiplier);
+  const opponent = Number(draft.default_opponent_deck_max_multiplier);
+  if (random !== snapshot.default_random_draw_max_multiplier) operations.push({ operation: "set_affiliation_catalog_field", field: "default_random_draw_max_multiplier", value: random });
+  if (opponent !== snapshot.default_opponent_deck_max_multiplier) operations.push({ operation: "set_affiliation_catalog_field", field: "default_opponent_deck_max_multiplier", value: opponent });
+  for (const affiliation of draft.affiliations) {
+    const original = snapshot.affiliations.find((entry) => entry.id === affiliation.id);
+    if (!original) continue;
+    if (affiliation.name !== original.name) operations.push({ operation: "set_affiliation_field", affiliation_id: affiliation.id, field: "name", value: affiliation.name });
+    if (affiliation.atlas_card_theme !== original.atlas_card_theme) operations.push({ operation: "set_affiliation_field", affiliation_id: affiliation.id, field: "atlas_card_theme", value: affiliation.atlas_card_theme });
+    if (affiliation.signature_card_ids.join("\0") !== original.signature_card_ids.join("\0")) {
+      operations.push({ operation: "replace_affiliation_signature_cards", affiliation_id: affiliation.id, card_ids: affiliation.signature_card_ids });
+    }
+  }
+  return operations;
+}
+
+export function validateDraft(draft: AffiliationDraft, cards: readonly CardData[]): DraftValidation {
+  const fields: Record<string, string> = {};
+  const unresolvedCardIds: Record<string, string[]> = {};
+  const validateMultiplier = (field: keyof Pick<AffiliationDraft, "default_random_draw_max_multiplier" | "default_opponent_deck_max_multiplier">) => {
+    const value = Number(draft[field]);
+    if (!Number.isFinite(value) || value < 1) fields[field] = "Enter a number greater than or equal to 1.";
+  };
+  validateMultiplier("default_random_draw_max_multiplier");
+  validateMultiplier("default_opponent_deck_max_multiplier");
+  const knownCards = new Set<string>(cards.map((card) => card.id));
+  for (const affiliation of draft.affiliations) {
+    if (!affiliation.name.trim()) fields[`${affiliation.id}.name`] = "Name is required.";
+    if (!affiliation.atlas_card_theme.trim()) fields[`${affiliation.id}.atlas_card_theme`] = "Atlas card theme is required.";
+    if (affiliation.signature_card_ids.length === 0) fields[`${affiliation.id}.signature_card_ids`] = "Choose at least one signature card.";
+    if (new Set(affiliation.signature_card_ids).size !== affiliation.signature_card_ids.length) fields[`${affiliation.id}.signature_card_ids`] = "A signature card can appear only once.";
+    const unresolved = affiliation.signature_card_ids.filter((id) => !knownCards.has(id));
+    if (unresolved.length) unresolvedCardIds[affiliation.id] = unresolved;
+  }
+  return { fields, unresolvedCardIds, errorCount: Object.keys(fields).length + Object.values(unresolvedCardIds).reduce((count, ids) => count + ids.length, 0) };
+}
+
+export function searchCards(cards: readonly CardData[], query: string, cardType: string): CardData[] {
   const normalized = query.trim().toLocaleLowerCase();
   return cards.filter((card) => {
-    if (selected.has(card.id)) return false;
     if (cardType !== "all" && card.cardType !== cardType) return false;
     return normalized === "" || [card.name, card.renderedText, card.subtype, card.id]
       .some((value) => String(value).toLocaleLowerCase().includes(normalized));
@@ -64,8 +100,8 @@ export function searchAvailableCards(
 class NativeTransport implements EditorTransport {
   load = () => invoke<EditorSnapshot>("load_editor_snapshot");
   open = (path: string) => invoke<EditorSnapshot>("open_repository", { path });
-  save = (operation: EditorOperation, revision: string) =>
-    invoke<EditorSnapshot>("save_editor_operation", { operation, expectedSourceRevision: revision });
+  save = (operations: readonly EditorOperation[], revision: string) =>
+    invoke<EditorSnapshot>("save_editor_operations", { operations, expectedSourceRevision: revision });
 }
 
 const FIXTURE_IDS = [
@@ -91,17 +127,15 @@ class DemoTransport implements EditorTransport {
     return structuredClone(this.snapshot);
   }
   open = (_path: string) => this.load();
-  async save(operation: EditorOperation, _revision: string) {
+  async save(operations: readonly EditorOperation[], _revision: string) {
     const snapshot = await this.load();
-    if (operation.operation === "set_affiliation_catalog_field") {
-      if (operation.field === "default_random_draw_max_multiplier") snapshot.default_random_draw_max_multiplier = operation.value;
-      else snapshot.default_opponent_deck_max_multiplier = operation.value;
-    } else {
-      const affiliation = snapshot.affiliations.find((entry) => entry.id === operation.affiliation_id)!;
-      if (operation.operation === "set_affiliation_field") {
-        if (operation.field === "name") affiliation.name = operation.value;
-        else affiliation.atlas_card_theme = operation.value;
-      } else affiliation.signature_card_ids = operation.card_ids;
+    for (const operation of operations) {
+      if (operation.operation === "set_affiliation_catalog_field") snapshot[operation.field] = operation.value;
+      else {
+        const affiliation = snapshot.affiliations.find((entry) => entry.id === operation.affiliation_id)!;
+        if (operation.operation === "set_affiliation_field") affiliation[operation.field] = operation.value;
+        else affiliation.signature_card_ids = [...operation.card_ids];
+      }
     }
     snapshot.sourceRevision = `demo-${Date.now()}`;
     this.snapshot = snapshot;
@@ -109,12 +143,8 @@ class DemoTransport implements EditorTransport {
   }
 }
 
-export const editorRegistry = new Map<string, () => EditorTransport>([
-  ["affiliations", () => new NativeTransport()],
-]);
+export const editorRegistry = new Map<string, () => EditorTransport>([["affiliations", () => new NativeTransport()]]);
 
 export function createTransport(): EditorTransport {
-  return new URLSearchParams(location.search).has("demo")
-    ? new DemoTransport()
-    : editorRegistry.get("affiliations")!();
+  return new URLSearchParams(location.search).has("demo") ? new DemoTransport() : editorRegistry.get("affiliations")!();
 }
