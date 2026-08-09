@@ -6,7 +6,10 @@ Never edit files in the main repo directly unless explicitly asked to work "on m
 
 Perform follow up work on the same worktree as the intial work until promotion.
 
-*Always* commit changes with detailed description, then `git push` immediately.
+Stage completed work in the worktree, but do not commit it until the user
+approves promotion. After approval, commit the staged work with a detailed
+description, move the commit to `master`, and push `master` to the remote.
+Worktree branches are local-only and must never be pushed to a remote.
 
 Do not create new branches unless explicitly requested.
 
