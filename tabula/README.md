@@ -11,3 +11,7 @@ The frontend communicates through the closed `EditorSnapshot`, `AffiliationDraft
 The Tauri backend loads typed RON plus the generated card catalog and delegates each explicit save as one operation batch to `scripts/game-data-pipeline.mjs edit`. That pipeline checks the source revision, applies operation-sized RON patches in the Rust game-data editor, validates and compiles the complete staged data tree, and publishes atomically. Tabula logs operation counts, kinds, and outcomes to `logs/tabula-log.jsonl` without logging field contents.
 
 Run all proof-of-concept checks from the repository root with `npm run tabula:check`.
+
+## Native acceptance test
+
+Run `npm run tabula:test:e2e` from the repository root to exercise the packaged macOS WKWebView with WebdriverIO's embedded Tauri driver. The test copies the real affiliation catalog and its validation dependencies into a temporary repository, edits affiliation `4b715cd0-8b41-4b82-9cef-c47b15e8992b` through the rendered UI, saves through Tauri IPC and the Rust data pipeline, verifies an operation-sized source diff on disk, then reloads the persisted value through the UI. The worktree's canonical data is never modified. Native screenshots and captured logs are written to the ignored `tabula/e2e/artifacts/` directory.

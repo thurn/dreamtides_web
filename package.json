@@ -36,6 +36,7 @@
     "game-data:parity": "node scripts/game-data-parity.mjs",
     "tabula": "npm --prefix tabula install && npm --prefix tabula run tauri dev",
     "tabula:check": "npm --prefix tabula run check",
+    "tabula:test:e2e": "npm --prefix tabula run test:e2e:native",
     "tabula:dev": "npm --prefix tabula run tauri dev",
     "setup-assets": "node scripts/setup-assets.mjs",
     "cumulus-tokens": "node scripts/generate-cumulus-tokens.mjs",

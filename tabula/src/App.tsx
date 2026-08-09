@@ -226,7 +226,7 @@ export function App() {
               const original = snapshot.affiliations.find((entry) => entry.id === affiliation.id);
               const changed = original ? affiliation.name !== original.name || affiliation.atlas_card_theme !== original.atlas_card_theme || affiliation.signature_card_ids.join("\0") !== original.signature_card_ids.join("\0") : true;
               const errors = Object.keys(validation?.fields ?? {}).some((field) => field.startsWith(`${affiliation.id}.`)) || Boolean(validation?.unresolvedCardIds[affiliation.id]?.length);
-              return <Pressable key={affiliation.id} as="button" className="record-row" aria-current={affiliation.id === selectedId ? "page" : undefined} data-selected={affiliation.id === selectedId} onClick={() => setSelectedId(affiliation.id)}>
+              return <Pressable key={affiliation.id} as="button" className="record-row" aria-current={affiliation.id === selectedId ? "page" : undefined} data-record-id={affiliation.id} data-selected={affiliation.id === selectedId} onClick={() => setSelectedId(affiliation.id)}>
                 <span className="record-title"><strong>{affiliation.name || "Untitled affiliation"}</strong>{changed && <i className="dirty-mark" aria-label="Unsaved changes" />}{errors && <i className="error-mark" aria-label="Validation error">!</i>}</span>
                 <span>{affiliation.signature_card_ids.length} cards · {affiliation.atlas_card_theme || "No theme"}</span>
               </Pressable>;

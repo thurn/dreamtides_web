@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   publicDir: resolve(__dirname, "../public"),
   resolve: { dedupe: ["react", "react-dom"] },
+  build: { cssMinify: false },
   server: { port: 1420, strictPort: true, fs: { allow: [resolve(__dirname, "..")] } },
   clearScreen: false,
 });

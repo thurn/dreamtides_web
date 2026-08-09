@@ -3,5 +3,5 @@
   "identifier": "default",
   "description": "Tabula desktop permissions",
   "windows": ["main"],
-  "permissions": ["core:default", "dialog:allow-open"]
+  "permissions": ["core:default", "dialog:allow-open", "wdio:default", "wdio-webdriver:default"]
 }

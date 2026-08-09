@@ -18,7 +18,9 @@ struct EditorSnapshot {
     dataset: &'static str,
     repository_root: String,
     source_revision: String,
+    #[serde(rename = "default_random_draw_max_multiplier")]
     default_random_draw_max_multiplier: f64,
+    #[serde(rename = "default_opponent_deck_max_multiplier")]
     default_opponent_deck_max_multiplier: f64,
     affiliations: Vec<AffiliationDefinition>,
     cards: Value,
@@ -37,6 +39,12 @@ fn repository_at(path: &Path) -> Option<PathBuf> {
 }
 
 fn discover_repository() -> Result<PathBuf, String> {
+    #[cfg(feature = "e2e")]
+    if let Some(path) = std::env::var_os("TABULA_E2E_REPOSITORY_ROOT") {
+        return repository_at(Path::new(&path)).ok_or_else(|| {
+            "TABULA_E2E_REPOSITORY_ROOT is not a Dreamtides repository".to_string()
+        });
+    }
     let current = std::env::current_dir().map_err(|error| error.to_string())?;
     repository_at(&current).ok_or_else(|| "Choose a Dreamtides repository to begin".into())
 }
@@ -181,11 +189,7 @@ fn save_editor_operations(
         .stdin
         .take()
         .unwrap()
-        .write_all(
-            serde_json::to_string(&operations)
-                .unwrap()
-                .as_bytes(),
-        )
+        .write_all(serde_json::to_string(&operations).unwrap().as_bytes())
         .map_err(|error| format!("Write operation: {error}"))?;
     let output = child
         .wait_with_output()
@@ -205,14 +209,19 @@ fn save_editor_operations(
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    tauri::Builder::default()
+    let builder = tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .manage(Repository::default())
         .invoke_handler(tauri::generate_handler![
             load_editor_snapshot,
             open_repository,
             save_editor_operations
-        ])
+        ]);
+    #[cfg(feature = "e2e")]
+    let builder = builder
+        .plugin(tauri_plugin_wdio::init())
+        .plugin(tauri_plugin_wdio_webdriver::init());
+    builder
         .run(tauri::generate_context!())
         .expect("error while running Tabula");
 }
@@ -220,6 +229,24 @@ pub fn run() {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn snapshot_preserves_canonical_catalog_field_names() {
+        let value = serde_json::to_value(EditorSnapshot {
+            dataset: "affiliations",
+            repository_root: "/fixture".into(),
+            source_revision: "revision".into(),
+            default_random_draw_max_multiplier: 1.25,
+            default_opponent_deck_max_multiplier: 3.5,
+            affiliations: Vec::new(),
+            cards: Value::Array(Vec::new()),
+        })
+        .unwrap();
+        assert_eq!(value["default_random_draw_max_multiplier"], 1.25);
+        assert_eq!(value["default_opponent_deck_max_multiplier"], 3.5);
+        assert!(value.get("defaultRandomDrawMaxMultiplier").is_none());
+    }
+
     #[test]
     fn finds_repository_from_nested_path() {
         let temp = tempfile::tempdir().unwrap();

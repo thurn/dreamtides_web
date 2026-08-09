@@ -12,4 +12,9 @@ import "../../src/cumulus/assets/phosphor.css";
 import "./styles.css";
 import { App } from "./App";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(<React.StrictMode><CumulusRoot><App /></CumulusRoot></React.StrictMode>);
+async function bootstrap() {
+  if (import.meta.env.MODE === "e2e") await import("@wdio/tauri-plugin");
+  ReactDOM.createRoot(document.getElementById("root")!).render(<React.StrictMode><CumulusRoot><App /></CumulusRoot></React.StrictMode>);
+}
+
+void bootstrap();
