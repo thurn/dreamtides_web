@@ -377,11 +377,7 @@ pub fn migrate(
         .with_context(|| format!("parse migration input {}", toml_path.display()))?;
     let record_count = inferred_record_count(&value);
     let document = compat::CompatDocument { data: value };
-    let pretty = PrettyConfig::new()
-        .depth_limit(128)
-        .struct_names(true)
-        .separate_tuple_members(true)
-        .enumerate_arrays(true);
+    let pretty = migration_pretty_config();
     let mut ron = ron::ser::to_string_pretty(&document, pretty)?;
     if !ron.ends_with('\n') {
         ron.push('\n');
@@ -412,14 +408,7 @@ pub fn migrate(
     if reparsed != document {
         bail!("migrated RON failed semantic round-trip for {id}");
     }
-    let serialized_again = ron::ser::to_string_pretty(
-        &reparsed,
-        PrettyConfig::new()
-            .depth_limit(128)
-            .struct_names(true)
-            .separate_tuple_members(true)
-            .enumerate_arrays(true),
-    )?;
+    let serialized_again = ron::ser::to_string_pretty(&reparsed, migration_pretty_config())?;
     if serialized_again.trim_end() != ron.trim_end() {
         bail!("migrated RON formatting is not idempotent for {id}");
     }
@@ -430,6 +419,14 @@ pub fn migrate(
         output_path: output.display().to_string(),
         record_count,
     })
+}
+
+fn migration_pretty_config() -> PrettyConfig {
+    PrettyConfig::new()
+        .depth_limit(128)
+        .struct_names(true)
+        .separate_tuple_members(true)
+        .enumerate_arrays(false)
 }
 
 pub fn stage_edit(
@@ -530,13 +527,20 @@ mod tests {
             .depth_limit(128)
             .struct_names(true)
             .separate_tuple_members(true)
-            .enumerate_arrays(true)
+            .enumerate_arrays(false)
             .extensions(extensions);
         let text = ron::ser::to_string_pretty(&parsed, config.clone()).unwrap();
         let reparsed: T = ron::from_str(&text).unwrap();
         assert_eq!(reparsed, parsed);
         assert_eq!(ron::ser::to_string_pretty(&reparsed, config).unwrap(), text);
         text
+    }
+
+    #[test]
+    fn migration_serializer_omits_generated_array_indices() {
+        let text = ron::ser::to_string_pretty(&vec!["first", "second"], migration_pretty_config())
+            .unwrap();
+        assert!(!text.contains("/*["));
     }
 
     #[test]

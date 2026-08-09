@@ -3363,7 +3363,7 @@ fn serialize_ron<T: serde::Serialize + ?Sized>(value: &T, implicit_some: bool) -
         .depth_limit(128)
         .struct_names(true)
         .separate_tuple_members(true)
-        .enumerate_arrays(true)
+        .enumerate_arrays(false)
         .extensions(extensions);
     let mut text = ron::ser::to_string_pretty(value, pretty)?;
     if !text.ends_with('\n') {
@@ -4597,6 +4597,12 @@ CardMetadataCatalog(
             ron::from_str::<ExplorationCatalog>(&patched).unwrap(),
             catalog
         );
+    }
+
+    #[test]
+    fn editor_serializer_omits_generated_array_indices() {
+        let text = serialize_ron(&vec!["first", "second"], false).unwrap();
+        assert!(!text.contains("/*["));
     }
 
     #[test]

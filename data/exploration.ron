@@ -3,12 +3,10 @@
 #![enable(implicit_some)]
 ExplorationCatalog(
   encounters: [
-    /*[0]*/
     EncounterDefinition(
       card_id: "161482b6-af07-4d9e-822d-8c738672beb9",
       prose: "A young lantern bearer approaches a towering window of stars.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Invite someone through",
           id: "161482b6-af07-4d9e-822d-8c738672beb9:pair-5:template-11",
@@ -16,7 +14,6 @@ ExplorationCatalog(
           effect: GainOfferedCard(predicate: CheapCharacter, count: None),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Send a possession through",
           id: "161482b6-af07-4d9e-822d-8c738672beb9:pair-5:template-17",
@@ -29,12 +26,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[1]*/
     EncounterDefinition(
       card_id: "738a5af0-f848-4d48-bceb-9a43c9b11066",
       prose: "An armored traveler hunches beside a doorway veiled in luminous grids.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Open the Passage",
           id: "738a5af0-f848-4d48-bceb-9a43c9b11066:pair-1:template-13",
@@ -45,7 +40,6 @@ ExplorationCatalog(
           effect: GainRandomCards(predicate: Survivor, count: 2),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Choose a Guide",
           id: "738a5af0-f848-4d48-bceb-9a43c9b11066:pair-1:template-14",
@@ -58,12 +52,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[2]*/
     EncounterDefinition(
       card_id: "401bb341-8385-41e9-8f6f-7b48e9ce174d",
       prose: "A heavy-furred wolf prowls low through blazing grass, its eyes shining.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Call Across the Fire",
           id: "401bb341-8385-41e9-8f6f-7b48e9ce174d:pair-1:template-14",
@@ -74,7 +66,6 @@ ExplorationCatalog(
           effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Invite Another to Follow",
           id: "401bb341-8385-41e9-8f6f-7b48e9ce174d:pair-1:template-58",
@@ -94,12 +85,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[3]*/
     EncounterDefinition(
       card_id: "8b5eb29c-146f-46fb-9407-55004128fba7",
       prose: "A skull-faced guardian extends a lantern ablaze with drifting motes.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Accept the Lantern",
           id: "8b5eb29c-146f-46fb-9407-55004128fba7:pair-1:template-10",
@@ -107,7 +96,6 @@ ExplorationCatalog(
           effect: GainCard(card_id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586"),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Study the Motes",
           id: "8b5eb29c-146f-46fb-9407-55004128fba7:pair-1:template-14",
@@ -120,12 +108,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[4]*/
     EncounterDefinition(
       card_id: "954e8d50-d494-4fb2-b4c7-74979083b774",
       prose: "A gunman stands braced as cables of shadow stream from him.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Answer His Signal",
           id: "954e8d50-d494-4fb2-b4c7-74979083b774:pair-1:template-10",
@@ -133,7 +119,6 @@ ExplorationCatalog(
           effect: GainCard(card_id: "87aba308-00b4-40d8-a46f-4e6f58a664a8"),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Accept His Commission",
           id: "954e8d50-d494-4fb2-b4c7-74979083b774:pair-1:template-58",
@@ -149,12 +134,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[5]*/
     EncounterDefinition(
       card_id: "b8ecc46d-bd92-4826-a416-7ce177e69cbf",
       prose: "An owl perches heavily on a branch, dense plumage backlit.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Follow the owl\'s focus",
           id: "b8ecc46d-bd92-4826-a416-7ce177e69cbf:pair-1:template-14",
@@ -165,7 +148,6 @@ ExplorationCatalog(
           effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Answer its low call",
           id: "b8ecc46d-bd92-4826-a416-7ce177e69cbf:pair-1:template-13",
@@ -178,12 +160,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[6]*/
     EncounterDefinition(
       card_id: "e2f542eb-090f-4a22-a42c-a120eb6caaa3",
       prose: "Beneath a starry haze, a dark whale banks with fins extended.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Call Across the Sky",
           id: "e2f542eb-090f-4a22-a42c-a120eb6caaa3:pair-1:template-10",
@@ -191,7 +171,6 @@ ExplorationCatalog(
           effect: GainCard(card_id: "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5"),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Follow Its Crossing",
           id: "e2f542eb-090f-4a22-a42c-a120eb6caaa3:pair-1:template-14",
@@ -204,12 +183,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[7]*/
     EncounterDefinition(
       card_id: "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
       prose: "An elephant looms through starry haze, bright tusks sharply curved.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Reach toward the tusks",
           id: "46783333-78f9-4146-a8ec-0d1b81e1bf2f:pair-1:template-27",
@@ -220,7 +197,6 @@ ExplorationCatalog(
           effect: GainDreamsign(dreamsign_id: "2d4eb3ee-0931-45ed-8365-69f18096ead5"),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Sound a gathering call",
           id: "46783333-78f9-4146-a8ec-0d1b81e1bf2f:pair-1:template-59",
@@ -233,12 +209,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[8]*/
     EncounterDefinition(
       card_id: "886c9d49-b25f-4ddd-97f0-2ec4b42eda89",
       prose: "A colossal rider looms through star-filled haze, long hair streaming.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Answer Their Muster",
           id: "886c9d49-b25f-4ddd-97f0-2ec4b42eda89:pair-5:template-36",
@@ -252,7 +226,6 @@ ExplorationCatalog(
           effect: ChoosePack(predicate: Warrior, pack_count: 2, pack_size: 3),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Receive Their Blessing",
           id: "886c9d49-b25f-4ddd-97f0-2ec4b42eda89:pair-5:template-64",
@@ -265,12 +238,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[9]*/
     EncounterDefinition(
       card_id: "15b63630-d9f8-473b-9717-15ad91ff2f16",
       prose: "Branching currents surround a figure kneeling inside a ruptured chamber.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Accept the charge",
           id: "15b63630-d9f8-473b-9717-15ad91ff2f16:pair-1:template-66",
@@ -281,7 +252,6 @@ ExplorationCatalog(
           effect: MakeFastAll,
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Overload the aperture",
           id: "15b63630-d9f8-473b-9717-15ad91ff2f16:pair-1:template-65",
@@ -294,12 +264,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[10]*/
     EncounterDefinition(
       card_id: "764b62f6-6af9-40ad-8d1f-653cc1a11030",
       prose: "A cloaked warrior leans forward, raising a bright-emblemed standard through smoke.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Rally at the Crest",
           id: "764b62f6-6af9-40ad-8d1f-653cc1a11030:pair-5:template-36",
@@ -313,7 +281,6 @@ ExplorationCatalog(
           effect: ChoosePack(predicate: Warrior, pack_count: 2, pack_size: 3),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Charge Through the Smoke",
           id: "764b62f6-6af9-40ad-8d1f-653cc1a11030:pair-5:template-65",
@@ -326,12 +293,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[11]*/
     EncounterDefinition(
       card_id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
       prose: "A solitary man pauses on a gnarled bough beneath suspended lanterns.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Offer Him an Exchange",
           id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586:pair-1:template-61",
@@ -345,7 +310,6 @@ ExplorationCatalog(
           effect: PurgeAndCopy,
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Present a Written Charm",
           id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586:pair-1:template-19",
@@ -365,12 +329,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[12]*/
     EncounterDefinition(
       card_id: "123baf70-305a-4583-bdba-a10b5153fbeb",
       prose: "A masked soldier braces a long rifle amid smoke-darkened wreckage.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Call for Reinforcements",
           id: "123baf70-305a-4583-bdba-a10b5153fbeb:pair-1:template-15",
@@ -381,7 +343,6 @@ ExplorationCatalog(
           effect: DraftCard(predicate: Survivor, count: 2, offer_count: 4),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Request Field Training",
           id: "123baf70-305a-4583-bdba-a10b5153fbeb:pair-1:template-19",
@@ -401,12 +362,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[13]*/
     EncounterDefinition(
       card_id: "e455225f-c444-44a2-8796-805cae2b755f",
       prose: "A witch extends both hands as stones hover around her.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Read the suspended pattern",
           id: "e455225f-c444-44a2-8796-805cae2b755f:pair-3:template-28",
@@ -417,7 +376,6 @@ ExplorationCatalog(
           effect: GainRandomDreamsign,
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Break the suspended pattern",
           id: "e455225f-c444-44a2-8796-805cae2b755f:pair-3:template-62",
@@ -430,12 +388,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[14]*/
     EncounterDefinition(
       card_id: "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6",
       prose: "Three sealed figures press through billowing haze, opaque visors hidden beneath hoods.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Learn their ways",
           id: "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6:pair-5:template-53",
@@ -453,7 +409,6 @@ ExplorationCatalog(
           ),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Recruit an Ally",
           id: "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6:pair-5:template-9",
@@ -466,12 +421,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[15]*/
     EncounterDefinition(
       card_id: "f9a65b32-537b-457c-9eaf-b512cf1f3791",
       prose: "Luminous seams thread a heavy thorax; articulated legs fold above a branch beneath spread wings.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Copy the linked armor pattern",
           id: "f9a65b32-537b-457c-9eaf-b512cf1f3791:pair-2:template-49",
@@ -485,7 +438,6 @@ ExplorationCatalog(
           effect: CopySelectedCard(predicate: CheapCharacter, count: 2, target: Offered),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Compare the repeating plates",
           id: "f9a65b32-537b-457c-9eaf-b512cf1f3791:pair-2:template-55",
@@ -501,12 +453,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[16]*/
     EncounterDefinition(
       card_id: "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034",
       prose: "A skeletal giant reaches across water, its shape repeating in broken reflections.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Study the bare crown",
           id: "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034:pair-1:template-27",
@@ -517,7 +467,6 @@ ExplorationCatalog(
           effect: GainDreamsign(dreamsign_id: "eb55b141-82f8-4ba4-b319-420f762e9ee4"),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Hold the hollow gaze",
           id: "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034:pair-1:template-38",
@@ -530,12 +479,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[17]*/
     EncounterDefinition(
       card_id: "86fd585b-e9d0-4dc1-bce9-488014b9316d",
       prose: "A luminous jellyfish glides among stars, its flowing tendrils brightly lit.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Study its measured pulse",
           id: "86fd585b-e9d0-4dc1-bce9-488014b9316d:pair-1:template-38",
@@ -546,7 +493,6 @@ ExplorationCatalog(
           effect: NextBattleOpeningHand(count: 2),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Follow its radiant wake",
           id: "86fd585b-e9d0-4dc1-bce9-488014b9316d:pair-1:template-39",
@@ -559,12 +505,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[18]*/
     EncounterDefinition(
       card_id: "b1d36337-5668-4f1d-b155-2d07fc00f872",
       prose: "A lone astronaut stands rigid where luminous steps meet a vast black aperture.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Follow the astronaut",
           id: "b1d36337-5668-4f1d-b155-2d07fc00f872:pair-1:template-57",
@@ -575,7 +519,6 @@ ExplorationCatalog(
           effect: ChooseDreamAvatar(offer_count: 3),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Enter the aperture alone",
           id: "b1d36337-5668-4f1d-b155-2d07fc00f872:pair-1:template-79",
@@ -588,12 +531,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[19]*/
     EncounterDefinition(
       card_id: "edb479be-68a5-45bc-bd19-2602156edb57",
       prose: "A colossal eagle beats broad wings through canyon haze, dark feathers edged with glare.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Echo its wingbeats",
           id: "edb479be-68a5-45bc-bd19-2602156edb57:pair-1:template-12",
@@ -604,7 +545,6 @@ ExplorationCatalog(
           effect: GainOfferedCard(predicate: SpiritAnimal, count: 3),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Join its flight",
           id: "edb479be-68a5-45bc-bd19-2602156edb57:pair-1:template-16",
@@ -620,12 +560,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[20]*/
     EncounterDefinition(
       card_id: "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e",
       prose: "A lone fisher casts a slender line across misty, light-speckled water.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Haul his line",
           id: "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e:pair-1:template-15",
@@ -636,7 +574,6 @@ ExplorationCatalog(
           effect: DraftCard(predicate: CheapCharacter, count: 2, offer_count: 4),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Guide his cast",
           id: "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e:pair-1:template-16",
@@ -652,12 +589,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[21]*/
     EncounterDefinition(
       card_id: "2ce84a16-1295-4738-9e2d-1f57590b2269",
       prose: "A hooded warrior stands rigid as marked slabs orbit a luminous sword.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Join His Vigil",
           id: "2ce84a16-1295-4738-9e2d-1f57590b2269:pair-3:template-16",
@@ -671,7 +606,6 @@ ExplorationCatalog(
           effect: TakeCards(predicate: CheapCharacter, offer_count: 4),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Answer His Summons",
           id: "2ce84a16-1295-4738-9e2d-1f57590b2269:pair-3:template-12",
@@ -684,12 +618,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[22]*/
     EncounterDefinition(
       card_id: "9d14885c-a757-40cc-b43e-87dbec7ec379",
       prose: "A tentacled colossus surges through a furnace-bright rupture.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Feed it, then gaze",
           id: "9d14885c-a757-40cc-b43e-87dbec7ec379:pair-1:template-47",
@@ -700,7 +632,6 @@ ExplorationCatalog(
           effect: ReplaceSelectedWithCard(card_id: "1658d9a0-c3b0-4eb7-babc-4933acf362c4"),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Witness its emergence",
           id: "9d14885c-a757-40cc-b43e-87dbec7ec379:pair-1:template-16",
@@ -716,12 +647,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[23]*/
     EncounterDefinition(
       card_id: "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2",
       prose: "An immense creature crouches between slender trunks, rough limbs glowing with narrow lines.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Touch a luminous seam",
           id: "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2:pair-4:template-18",
@@ -739,7 +668,6 @@ ExplorationCatalog(
           ),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Follow its lowered gaze",
           id: "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2:pair-4:template-37",
@@ -752,12 +680,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[24]*/
     EncounterDefinition(
       card_id: "1dc8f23e-58bd-47e5-9510-b48315fba1df",
       prose: "A dark-coated explorer holds a bright lantern as wind whips his hair.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Touch the lantern",
           id: "1dc8f23e-58bd-47e5-9510-b48315fba1df:pair-3:template-17",
@@ -768,7 +694,6 @@ ExplorationCatalog(
           effect: TransfigureSelected(count: 1),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Follow his light onward",
           id: "1dc8f23e-58bd-47e5-9510-b48315fba1df:pair-3:template-37",
@@ -781,12 +706,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[25]*/
     EncounterDefinition(
       card_id: "7ad10754-690c-45fa-abe6-28944da6eef6",
       prose: "A rigid figure fractures into dark pieces beside a molten fissure.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Separate the drifting fragments",
           id: "7ad10754-690c-45fa-abe6-28944da6eef6:pair-1:template-51",
@@ -797,7 +720,6 @@ ExplorationCatalog(
           effect: CopySelectedCards(count: 2),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Fuse the glowing fragments",
           id: "7ad10754-690c-45fa-abe6-28944da6eef6:pair-1:template-50",
@@ -813,12 +735,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[26]*/
     EncounterDefinition(
       card_id: "7dd2214f-8d16-453a-9f28-62712e64eae1",
       prose: "A black firefly hovers, amber abdomen blazing.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Rest in its radiance",
           id: "7dd2214f-8d16-453a-9f28-62712e64eae1:pair-4:template-39",
@@ -829,7 +749,6 @@ ExplorationCatalog(
           effect: NextBattleStartingEnergy(count: 2),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Gather its amber light",
           id: "7dd2214f-8d16-453a-9f28-62712e64eae1:pair-4:template-59",
@@ -842,12 +761,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[27]*/
     EncounterDefinition(
       card_id: "5b2b2188-b9f0-4b3b-9185-26a820d343c7",
       prose: "A suited astronaut crosses glassy water as blue canyon light spills ahead.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Follow the canyon light",
           id: "5b2b2188-b9f0-4b3b-9185-26a820d343c7:pair-2:template-39",
@@ -858,7 +775,6 @@ ExplorationCatalog(
           effect: NextBattleStartingEnergy(count: 2),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Enter the blue radiance",
           id: "5b2b2188-b9f0-4b3b-9185-26a820d343c7:pair-2:template-81",
@@ -871,12 +787,10 @@ ExplorationCatalog(
       ],
     ),
 
-    /*[28]*/
     EncounterDefinition(
       card_id: "77f31db4-0397-49a7-8886-f5459ee960e9",
       prose: "An armored warrior sweeps a glowing scythe through wind-driven sand.",
       actions: [
-        /*[0]*/
         ActionDefinition(
           label: "Yield",
           id: "77f31db4-0397-49a7-8886-f5459ee960e9:pair-1:template-60",
@@ -890,7 +804,6 @@ ExplorationCatalog(
           effect: PurgeForEssence(essence_per_spark: 20),
         ),
 
-        /*[1]*/
         ActionDefinition(
           label: "Barter",
           id: "77f31db4-0397-49a7-8886-f5459ee960e9:pair-1:template-61",
