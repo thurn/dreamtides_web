@@ -56,7 +56,7 @@ function runtime(): ShopSiteRuntime {
 
 const site: SiteState = {
   id: "dreamsign-bazaar-site",
-  type: "DreamsignMarket",
+  type: "DreamsignBazaar",
   isEnhanced: false,
   isVisited: false,
 };
@@ -177,7 +177,7 @@ describe("buildDreamsignBazaarSiteView", () => {
         id: "fixture-amunet",
         name: "Amunet Fixture",
         homeDreamscapeId: "fixture-dream",
-        siteType: "DreamsignMarket",
+        siteType: "DreamsignBazaar",
         portraitSource: "fixture-guide.png",
         dialogue: { site: ["Choose carefully."] },
         homeSpecialty: "Fixture specialty.",

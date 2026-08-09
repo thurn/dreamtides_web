@@ -61,6 +61,11 @@ SitesCatalog(
       site: Duplication,
       icon: "bxf bx-copy",
       glossary_id: "8222c5e2-a3ce-4caf-bd13-5c77ff15d7cf",
+      rules: Duplication(
+        // Select eligible entries from the player's current deck.
+        // Standard sites offer three candidates; enhanced sites expose every eligible entry.
+        card_choices: CardChoiceLimits(standard: Count(3), enhanced: All),
+      ),
     ),
 
     SiteMetadata(
@@ -76,10 +81,10 @@ SitesCatalog(
     ),
 
     SiteMetadata(
-      site: DreamsignMarket,
+      site: DreamsignBazaar,
       icon: "bxf bx-pyramid",
       glossary_id: "5b5b47d6-c858-4b42-af96-a520c84666eb",
-      presentation: DreamsignMarket(
+      presentation: DreamsignBazaar(
         title: "Dreamsign Bazaar",
         restocked: "Restocked",
         restock_offers_action: "Restock Offers",
@@ -119,16 +124,10 @@ SitesCatalog(
     ),
   ],
 
-  fallback_site_type: FallbackSiteType(
-    icon: "bx bx-help-circle",
-    name: "Unknown Site",
-    description: "An unfamiliar site from an earlier dream.",
-  ),
-
   random_site: RandomSiteRules(
     destinations: [
       Shop,
-      DreamsignMarket,
+      DreamsignBazaar,
       DreamsignRevelation,
       Transfiguration,
       Duplication,
@@ -139,6 +138,4 @@ SitesCatalog(
     ],
     home_choice_count: 3,
   ),
-
-  card_choices: CardChoiceRules(duplication: CardChoiceLimits(standard: Count(3), enhanced: All)),
 )

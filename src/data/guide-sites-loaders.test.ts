@@ -1,8 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { MINIMAL_SITES_DATA } from "../__test-helpers__/atlas-fixtures";
+import type { SiteType } from "../types/site-type";
 import type { SitesData } from "../types/sites-data";
 import { loadDreamGuides } from "./dreamscapes";
-import { loadSitesData } from "./sites-data";
+import { loadSitesData, siteTypeIcon } from "./sites-data";
 
 function response(value: unknown): Response {
   return {
@@ -90,7 +91,10 @@ describe("compiled guide and site artifact loaders", () => {
         sites.siteTypes.Shop.glossaryId = "missing-fixture-glossary";
       },
       (sites) => {
-        sites.cardChoices.duplication.standardLimit = Number.NaN;
+        const rules = sites.siteTypes.Duplication.rules;
+        if (rules?.kind === "duplication") {
+          rules.cardChoices.standardLimit = Number.NaN;
+        }
       },
       (sites) => {
         sites.guideAssignments.RandomSite = {
@@ -109,6 +113,12 @@ describe("compiled guide and site artifact loaders", () => {
       );
       await expect(loadSitesData()).rejects.toThrow(/malformed sites-data/u);
     }
+  });
+
+  it("throws when requested site metadata is absent", () => {
+    expect(() =>
+      siteTypeIcon(MINIMAL_SITES_DATA, "UnknownSite" as SiteType),
+    ).toThrow(/Missing Sites metadata for UnknownSite/u);
   });
 
   it("enforces site-specific guide contexts and template slots at runtime", async () => {

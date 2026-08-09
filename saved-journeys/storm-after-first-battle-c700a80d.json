@@ -947,7 +947,7 @@
               "randomSite": {
                 "mode": "homeChoice",
                 "candidateSiteTypes": [
-                  "DreamsignMarket",
+                  "DreamsignBazaar",
                   "Duplication",
                   "Purge",
                   "Augury",
@@ -1218,9 +1218,9 @@
               "randomSite": {
                 "mode": "single",
                 "candidateSiteTypes": [
-                  "DreamsignMarket"
+                  "DreamsignBazaar"
                 ],
-                "destinationSiteType": "DreamsignMarket"
+                "destinationSiteType": "DreamsignBazaar"
               }
             },
             {

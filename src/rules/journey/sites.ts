@@ -327,7 +327,7 @@ function randomIntInRange(
  * site's TYPE:
  *   - Essence / Augury: generated purely in-reducer (Essence draws its
  *     amount from `ctx.rng`; Augury seeds a fresh, un-completed runtime).
- *   - Reward / DreamsignRevelation / Shop / DreamsignMarket / Transfiguration /
+ *   - Reward / DreamsignRevelation / Shop / DreamsignBazaar / Transfiguration /
  *     Duplication / Gamble: delegated to the registered {@link SiteContentProvider}.
  *
  * An existing runtime is authoritative, so a repeated event bounces without
@@ -421,7 +421,7 @@ export function openSite(
     case "Reward":
     case "DreamsignRevelation":
     case "Shop":
-    case "DreamsignMarket":
+    case "DreamsignBazaar":
     case "Transfiguration":
     case "Duplication":
     case "Gamble":

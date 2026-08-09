@@ -20,7 +20,7 @@ export interface EconomyData {
     stock: {
       cardShop: EconomyStock;
       specialtyShop: EconomyStock;
-      dreamsignMarket: EconomyStock;
+      dreamsignBazaar: EconomyStock;
     };
     discounts: {
       slotCounts: EconomyWeightedValue[];

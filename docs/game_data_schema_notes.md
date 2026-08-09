@@ -828,7 +828,7 @@ Essence charged for a card in a Specialty Shop slot.
 
 ### `dreamsign = 50`
 
-Essence charged for a Dreamsign in a Dreamsign Market slot.
+Essence charged for a Dreamsign in a Dreamsign Bazaar slot.
 
 ### `card-slots = 5`
 
@@ -848,11 +848,11 @@ Number of Dreamsign offers generated for each Specialty Shop visit.
 
 ### `card-slots = 0`
 
-Number of card offers generated for each Dreamsign Market visit.
+Number of card offers generated for each Dreamsign Bazaar visit.
 
 ### `dreamsign-slots = 3`
 
-Number of Dreamsign offers generated for each Dreamsign Market visit.
+Number of Dreamsign offers generated for each Dreamsign Bazaar visit.
 
 ### `slot-counts = [`
 

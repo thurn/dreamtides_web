@@ -10,7 +10,7 @@ function fixture() {
       stock: {
         "card-shop": { "card-slots": 4, "dreamsign-slots": 1 },
         "specialty-shop": { "card-slots": 3, "dreamsign-slots": 0 },
-        "dreamsign-market": { "card-slots": 1, "dreamsign-slots": 2 },
+        "dreamsign-bazaar": { "card-slots": 1, "dreamsign-slots": 2 },
       },
       discounts: {
         "slot-counts": [

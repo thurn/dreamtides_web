@@ -455,7 +455,7 @@ mod tests {
             (SiteType::Duplication, "Duplication"),
             (SiteType::Reward, "Reward"),
             (SiteType::Augury, "Augury"),
-            (SiteType::DreamsignMarket, "DreamsignMarket"),
+            (SiteType::DreamsignBazaar, "DreamsignBazaar"),
             (SiteType::DreamsignRevelation, "DreamsignRevelation"),
             (SiteType::RandomSite, "RandomSite"),
             (SiteType::Gamble, "Gamble"),

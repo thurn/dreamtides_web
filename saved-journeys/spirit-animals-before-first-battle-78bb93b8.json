@@ -784,7 +784,7 @@
               "randomSite": {
                 "mode": "homeChoice",
                 "candidateSiteTypes": [
-                  "DreamsignMarket",
+                  "DreamsignBazaar",
                   "Duplication",
                   "Purge",
                   "Augury",

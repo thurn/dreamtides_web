@@ -112,7 +112,7 @@ sites appear and no site is enhanced.
 ### Pharaoh's Gate
 
 - **Dream Guide:** Amunet, the Tomb-Keeper
-- **Signature Site:** [Dreamsign Market](#dreamsign-market)
+- **Signature Site:** [Dreamsign Bazaar](#dreamsign-bazaar)
 - **Affiliation:** Erode, Void matters
 - **Site Icon:** `boxicons3/pyramid`
 
@@ -457,13 +457,13 @@ site cannot be revisited.
 
 Icon: `boxicons3/store-alt-2`
 
-### Dreamsign Market
+### Dreamsign Bazaar
 
-The Dreamsign Market is run by **Amunet, the Tomb-Keeper** (home: Pharaoh's
+The Dreamsign Bazaar is run by **Amunet, the Tomb-Keeper** (home: Pharaoh's
 Gate). It is the site for purchasing dreamsigns with essence, and offers a
 restock option that refreshes the available choices once for essence. A dreamsign's
 median price is around 100 essence, and the restock option always costs 50 essence.
-A Dreamsign Market always shows 3 dreamsigns to purchase plus a restock option.
+A Dreamsign Bazaar always shows 3 dreamsigns to purchase plus a restock option.
 
 Dreamsigns are drawn from the run's shared Dreamsign pool, which was seeded from
 the selected Dream Avatar's tides, and are removed from that pool when shown.
@@ -716,7 +716,7 @@ enhancements are:
 | Guide | Home Dreamscape | Site | Enhancement |
 | ----- | --------------- | ---- | ----------- |
 | Tobias Tanglefur | Tumbleleaf Village | Card Shop | Discounted cards drawn from the player's Dream Avatar signature tide |
-| Amunet, the Tomb-Keeper | Pharaoh's Gate | Dreamsign Market | Restock the choices once for free |
+| Amunet, the Tomb-Keeper | Pharaoh's Gate | Dreamsign Bazaar | Restock the choices once for free |
 | Sigrún | Winterwake Fjords | Dreamsign Revelation | Always a choice (never a single random dreamsign), more choices, tailored to the deck |
 | Durgan Forgehammer | Frostforge | Transfiguration | Pick any card and any applicable transfiguration |
 | Deacon Holt | Hope's End | Duplication | Pick any card to duplicate |

@@ -50,7 +50,7 @@ pub struct ShopStock {
 pub struct ShopStockCatalog {
     pub card_shop: ShopStock,
     pub specialty_shop: ShopStock,
-    pub dreamsign_market: ShopStock,
+    pub dreamsign_bazaar: ShopStock,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -152,7 +152,7 @@ pub fn lower(source: EconomyCatalog) -> Result<toml::Value> {
             stock: CompatibilityStockCatalog {
                 card_shop: CompatibilityStock::from(&source.shop.stock.card_shop),
                 specialty_shop: CompatibilityStock::from(&source.shop.stock.specialty_shop),
-                dreamsign_market: CompatibilityStock::from(&source.shop.stock.dreamsign_market),
+                dreamsign_bazaar: CompatibilityStock::from(&source.shop.stock.dreamsign_bazaar),
             },
             discounts: source.shop.discounts.into(),
             reroll: source.shop.reroll.into(),
@@ -304,8 +304,8 @@ struct CompatibilityStockCatalog {
     card_shop: CompatibilityStock,
     #[serde(rename = "specialty-shop")]
     specialty_shop: CompatibilityStock,
-    #[serde(rename = "dreamsign-market")]
-    dreamsign_market: CompatibilityStock,
+    #[serde(rename = "dreamsign-bazaar")]
+    dreamsign_bazaar: CompatibilityStock,
 }
 
 #[derive(Serialize)]
@@ -470,7 +470,7 @@ mod tests {
                         card_slots: 3,
                         dreamsign_slots: 4,
                     },
-                    dreamsign_market: ShopStock {
+                    dreamsign_bazaar: ShopStock {
                         card_slots: 5,
                         dreamsign_slots: 6,
                     },
@@ -551,7 +551,7 @@ mod tests {
                 .keys()
                 .map(String::as_str)
                 .collect::<Vec<_>>(),
-            vec!["card-shop", "specialty-shop", "dreamsign-market"]
+            vec!["card-shop", "specialty-shop", "dreamsign-bazaar"]
         );
         assert_eq!(
             lowered["shop"]["discounts"]["slot-counts"][0]["weight"].as_integer(),

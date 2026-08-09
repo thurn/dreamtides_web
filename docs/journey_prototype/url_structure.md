@@ -38,7 +38,7 @@ reflected automatically:
 | `Duplication`        | `duplication`         |
 | `Reward`             | `reward`              |
 | `Augury`             | `augury`             |
-| `DreamsignMarket`    | `dreamsign-market`    |
+| `DreamsignBazaar`    | `dreamsign-bazaar`    |
 | `DreamsignRevelation`| `dreamsign-revelation`|
 | `RandomSite`         | `random-site`         |
 | `Gamble`             | `gamble`              |

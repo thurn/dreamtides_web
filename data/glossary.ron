@@ -649,7 +649,7 @@
   GlossaryDefinition(
     id: "5b5b47d6-c858-4b42-af96-a520c84666eb",
     category: Sites,
-    term: "Dreamsign Market",
+    term: "Dreamsign Bazaar",
     definition: "Purchase dreamsigns from a rotating selection.",
     priority: 0,
   ),

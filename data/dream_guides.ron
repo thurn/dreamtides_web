@@ -17,7 +17,7 @@
     home_dreamscape_id: "b25b9906-8380-45bf-9435-678ce18316ea",
     portrait_source: "amunet.png",
     site_dialogue: ["The sands remember all dreams.", "Choose, and I shall show you another."],
-    specialty: DreamsignMarket(
+    specialty: DreamsignBazaar(
       description: "Amunet will restock the dreamsign choices once at no cost.",
     ),
   ),

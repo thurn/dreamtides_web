@@ -188,7 +188,7 @@ const fakeProvider: SiteContentProvider = {
           remainingDreamsignPool: [`pool-${String(draw)}`],
         };
       case "Shop":
-      case "DreamsignMarket":
+      case "DreamsignBazaar":
         return {
           runtime: {
             kind: "shop",
@@ -364,7 +364,7 @@ describe("Random Site", () => {
     });
     const out = reduce(opened.state, "CHOOSE_RANDOM_SITE", {
       siteId: SITE_ID,
-      siteType: "DreamsignMarket",
+      siteType: "DreamsignBazaar",
     });
     expect(out.outcome).toBe("bounced");
   });

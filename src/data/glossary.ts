@@ -110,7 +110,7 @@ export const GLOSSARY_IDS = {
     Duplication: "8222c5e2-a3ce-4caf-bd13-5c77ff15d7cf",
     Reward: "28925242-3799-4faa-b4bd-b8aac52ca442",
     Augury: "ffd3977a-a463-4326-bdf2-5b1b8c3d9160",
-    DreamsignMarket: "5b5b47d6-c858-4b42-af96-a520c84666eb",
+    DreamsignBazaar: "5b5b47d6-c858-4b42-af96-a520c84666eb",
     DreamsignRevelation: "ac70fd6b-a91a-407f-b7b7-255668cd6bec",
     RandomSite: "1aeb05bc-53e1-4ea4-9e73-9239160799dc",
     Gamble: "f1ff2fb5-3d77-4eb8-b492-78cbe11fd265",

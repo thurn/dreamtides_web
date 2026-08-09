@@ -12,7 +12,7 @@ export function economyFixture(): EconomyData {
       stock: {
         cardShop: { cardSlots: 5, dreamsignSlots: 0 },
         specialtyShop: { cardSlots: 5, dreamsignSlots: 0 },
-        dreamsignMarket: { cardSlots: 0, dreamsignSlots: 3 },
+        dreamsignBazaar: { cardSlots: 0, dreamsignSlots: 3 },
       },
       discounts: {
         slotCounts: [

@@ -27,12 +27,12 @@ import type {
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
 
-/** Resolve Amunet, the resident Dream Guide for Dreamsign Markets. */
+/** Resolve Amunet, the resident Dream Guide for Dreamsign Bazaars. */
 export function resolveDreamsignBazaarGuide(
   guides: readonly DreamGuideContent[],
   guideIdOverride?: string,
 ): DreamGuideContent {
-  return requireGuideForSiteType(guides, "DreamsignMarket", guideIdOverride);
+  return requireGuideForSiteType(guides, "DreamsignBazaar", guideIdOverride);
 }
 
 /** Build Amunet's guide slice for the shared character-gallery layout. */
@@ -126,10 +126,10 @@ export function buildDreamsignBazaarSiteView(params: {
   const scene: ArtRef | null =
     params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
   return {
-    presentation: params.sitesData.siteTypes.DreamsignMarket
+    presentation: params.sitesData.siteTypes.DreamsignBazaar
       .presentation as Extract<
       import("../../types/sites-data").SitePresentation,
-      { kind: "dreamsign-market" }
+      { kind: "dreamsign-bazaar" }
     >,
     siteId: params.site.id,
     scene,

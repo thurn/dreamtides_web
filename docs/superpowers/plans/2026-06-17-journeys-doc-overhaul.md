@@ -95,7 +95,7 @@ export type SiteType =
   | "Purge" | "Essence" | "Transfiguration" | "Duplication"
   | "Reward" | "Cleanse"
   // Added this pass:
-  | "Augury" | "DreamsignMarket" | "DreamsignRevelation"
+  | "Augury" | "DreamsignBazaar" | "DreamsignRevelation"
   | "RandomSite" | "Gamble" | "Exploration";
 ```
 
@@ -334,9 +334,9 @@ This task owns the destructive removals deferred from Task 1: `DreamJourney`→`
 
 **Files:**
 - Modify: `src/types/journey.ts` (remove `Cleanse`, `omens`; rename `DreamJourney`→`Augury` in `SiteType` + `DreamJourneySiteRuntime` discriminant if renamed), `src/types/content.ts`
-- Modify: `src/components/ScreenRouter.tsx` (dispatch: rename DreamJourney case; add DreamsignMarket, DreamsignRevelation, and the three stub cases; remove Cleanse case)
+- Modify: `src/components/ScreenRouter.tsx` (dispatch: rename DreamJourney case; add DreamsignBazaar, DreamsignRevelation, and the three stub cases; remove Cleanse case)
 - Modify: `src/state/journey-context.tsx` + `src/state/journey-state-actions.ts` (drop `omens`, default essence)
-- Modify: `src/shop/*` (Dreamsign Market = essence-priced dreamsign variant; restock 50 essence; drop omen pricing), `src/journey_v2/*` (Augury naming)
+- Modify: `src/shop/*` (Dreamsign Bazaar = essence-priced dreamsign variant; restock 50 essence; drop omen pricing), `src/journey_v2/*` (Augury naming)
 - Modify: `src/purge/purge-pricing.ts` (formula constant + doc table), Purge screen (Nightmare selection — fold in Cleanse)
 - Create: `src/screens/StubSiteScreen.tsx` (Random Site / Gamble / Exploration placeholder)
 - Modify: `src/screens/JourneyStartScreen.tsx` only if it reads `omens` (it does not currently)
@@ -356,7 +356,7 @@ Update/author the purge pricing test to pin the doc's economy anchors as a small
 
 - [ ] **Step 6: Rename Dream Journey → Augury.** Rename the `SiteType` member, the runtime discriminant/kind if it embeds the name, screen/route labels, and log event names. The underlying merchant/journey mechanics stay; only the name changes. Keep `src/journey_v2` internals; update player-facing strings + type names.
 
-- [ ] **Step 7: Dreamsign Market + Dreamsign Revelation.** Dreamsign Market: a Shop variant that sells dreamsigns for essence (3 items + 50-essence restock) reusing `ShopScreen` + dreamsign pool. Dreamsign Revelation: route to the existing dreamsign offering screen (1 random, or choice-of-3; home dreamscape → always a choice). Add both `ScreenRouter` cases.
+- [ ] **Step 7: Dreamsign Bazaar + Dreamsign Revelation.** Dreamsign Bazaar: a Shop variant that sells dreamsigns for essence (3 items + 50-essence restock) reusing `ShopScreen` + dreamsign pool. Dreamsign Revelation: route to the existing dreamsign offering screen (1 random, or choice-of-3; home dreamscape → always a choice). Add both `ScreenRouter` cases.
 
 - [ ] **Step 8: Three stub sites.** Add `StubSiteScreen.tsx` rendering the guide framing + a short "coming soon" body + a Continue button that calls `completeJourneySite`. Add `ScreenRouter` cases for `RandomSite`, `Gamble`, `Exploration` → `StubSiteScreen`.
 
@@ -364,20 +364,20 @@ Update/author the purge pricing test to pin the doc's economy anchors as a small
 
 - [ ] **Step 10: Run tests + standard verification.** Expected: PASS. Confirm no `omens`/`Cleanse`/`DreamJourney` identifiers remain (`grep -rn "omens\|Cleanse\|DreamJourney" src/` returns only intentional history-free results, ideally none).
 
-- [ ] **Step 11: Manual QA.** QA targets: visit Augury (renamed, two-reward choice works), Dreamsign Market (buy a dreamsign with essence + restock for 50 essence), Dreamsign Revelation (single + choice-of-3), each of the three stub screens (renders + Continue completes the site), and Purge (remove an ordinary card and Nightmare; prices follow 40/100/190…). Confirm no Omens appears anywhere in the HUD. Run the Manual QA Procedure at both viewports.
+- [ ] **Step 11: Manual QA.** QA targets: visit Augury (renamed, two-reward choice works), Dreamsign Bazaar (buy a dreamsign with essence + restock for 50 essence), Dreamsign Revelation (single + choice-of-3), each of the three stub screens (renders + Continue completes the site), and Purge (remove an ordinary card and Nightmare; prices follow 40/100/190…). Confirm no Omens appears anywhere in the HUD. Run the Manual QA Procedure at both viewports.
 
 - [ ] **Step 12: Commit.**
 
 ```bash
 git add src
-git commit -m "feat(journeys): site remap (Augury, Dreamsign Market/Revelation, stubs), single-currency essence, Nightmare into Purge, purge 30+5N(N+1), essence 200"
+git commit -m "feat(journeys): site remap (Augury, Dreamsign Bazaar/Revelation, stubs), single-currency essence, Nightmare into Purge, purge 30+5N(N+1), essence 200"
 ```
 
 ## Task 6: Dream Guides + Home Specialties presentation
 
 **Files:**
 - Create: `src/components/DreamGuideFrame.tsx` (portrait=top / landscape=side framing + dialog)
-- Modify: guide-bearing site screens to render the frame (Shop, Dreamsign Market, Dreamsign Revelation, Transfiguration, Duplication, Purge, Augury, Random Site, Gamble, Exploration)
+- Modify: guide-bearing site screens to render the frame (Shop, Dreamsign Bazaar, Dreamsign Revelation, Transfiguration, Duplication, Purge, Augury, Random Site, Gamble, Exploration)
 - Modify: enhancement application — where `isEnhanced` is set, surface the guide's `homeSpecialty` (the enhanced behavior already flows through `isEnhanced`; this task makes the guide identity + specialty visible and ensures each guide maps to its site)
 - Test: extend an integration test asserting guide↔site mapping
 

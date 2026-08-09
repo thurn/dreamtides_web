@@ -806,7 +806,7 @@ mod tests {
         ("site-reward", "28925242-3799-4faa-b4bd-b8aac52ca442"),
         ("site-augury", "ffd3977a-a463-4326-bdf2-5b1b8c3d9160"),
         (
-            "site-dreamsign-market",
+            "site-dreamsign-bazaar",
             "5b5b47d6-c858-4b42-af96-a520c84666eb",
         ),
         (

@@ -9,7 +9,7 @@ EconomyCatalog(
     stock: (
       card_shop: (card_slots: 5, dreamsign_slots: 0),
       specialty_shop: (card_slots: 5, dreamsign_slots: 0),
-      dreamsign_market: (card_slots: 0, dreamsign_slots: 3),
+      dreamsign_bazaar: (card_slots: 0, dreamsign_slots: 3),
     ),
     discounts: (
       // Relative weights select how many generated offers receive a discount.

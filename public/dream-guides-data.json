@@ -19,7 +19,7 @@
       "id": "amunet_the_tomb_keeper",
       "name": "Amunet, the Tomb-Keeper",
       "homeDreamscapeId": "pharaohs_gate",
-      "siteType": "DreamsignMarket",
+      "siteType": "DreamsignBazaar",
       "portraitSource": "amunet.png",
       "homeSpecialty": "Amunet will restock the dreamsign choices once at no cost.",
       "dialogue": {
@@ -162,5 +162,5 @@
       }
     }
   ],
-  "contentHash": "d2423a14c19732d5a77883a0215a4900b7b267b1e804207f09c90310f043ab3a"
+  "contentHash": "adb053d07f771d2b71525e3e17d1c246ee32ab3104af6b94798724ec4b333fd2"
 }

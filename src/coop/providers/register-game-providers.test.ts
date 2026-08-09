@@ -92,7 +92,7 @@ const GENESIS: Genesis = {
   },
 };
 
-/** Eight dreamsign templates so the reward / dreamsign / market generators have a live pool. */
+/** Eight dreamsign templates so the reward, revelation, and bazaar generators have a live pool. */
 function makeDreamsignTemplates(): DreamsignTemplate[] {
   return Array.from({ length: 8 }, (_value, index) => ({
     id: `dreamsign-${String(index)}`,
@@ -170,7 +170,7 @@ const CONTENT_SITE_TYPES: SiteType[] = [
   "Reward",
   "DreamsignRevelation",
   "Shop",
-  "DreamsignMarket",
+  "DreamsignBazaar",
   "Transfiguration",
   "Duplication",
   "Gamble",
@@ -269,7 +269,7 @@ describe("registerGameProviders (real content providers)", () => {
         openedTypes.add(site.type);
         seq += 1;
         tail.push(ev(seq, "OPEN_SITE", { siteId: site.id }));
-        if (site.type === "Shop" || site.type === "DreamsignMarket") {
+        if (site.type === "Shop" || site.type === "DreamsignBazaar") {
           seq += 1;
           tail.push(ev(seq, "REROLL_SHOP", { siteId: site.id }));
         }
@@ -317,15 +317,15 @@ describe("registerGameProviders (real content providers)", () => {
     expect(frontier.every((candidate) => candidate.dreamscapeId !== null)).toBe(
       true,
     );
-    const marketSiteId = siteIdByType.get("DreamsignMarket");
-    expect(marketSiteId).toBeDefined();
-    if (marketSiteId !== undefined) {
-      const marketRuntime = first.finalState.journey.siteRuntime[marketSiteId];
-      expect(marketRuntime?.kind).toBe("shop");
-      if (marketRuntime?.kind === "shop") {
-        expect(marketRuntime.slots).toHaveLength(3);
+    const bazaarSiteId = siteIdByType.get("DreamsignBazaar");
+    expect(bazaarSiteId).toBeDefined();
+    if (bazaarSiteId !== undefined) {
+      const bazaarRuntime = first.finalState.journey.siteRuntime[bazaarSiteId];
+      expect(bazaarRuntime?.kind).toBe("shop");
+      if (bazaarRuntime?.kind === "shop") {
+        expect(bazaarRuntime.slots).toHaveLength(3);
         expect(
-          marketRuntime.slots.every((slot) => slot.itemType === "dreamsign"),
+          bazaarRuntime.slots.every((slot) => slot.itemType === "dreamsign"),
         ).toBe(true);
       }
     }

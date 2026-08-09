@@ -187,7 +187,7 @@ pub enum SiteType {
     Duplication,
     Reward,
     Augury,
-    DreamsignMarket,
+    DreamsignBazaar,
     DreamsignRevelation,
     RandomSite,
     Gamble,
@@ -206,7 +206,7 @@ impl SiteType {
             Self::Duplication => "Duplication",
             Self::Reward => "Reward",
             Self::Augury => "Augury",
-            Self::DreamsignMarket => "DreamsignMarket",
+            Self::DreamsignBazaar => "DreamsignBazaar",
             Self::DreamsignRevelation => "DreamsignRevelation",
             Self::RandomSite => "RandomSite",
             Self::Gamble => "Gamble",
@@ -879,10 +879,10 @@ mod tests {
     fn rejects_missing_referenced_profiles_invalid_order_and_ranges() {
         let mut custom_profile = catalog();
         let profile = custom_profile.fill_profiles["early"].clone();
-        custom_profile.fill_profiles.insert("middle".into(), profile);
-        if let LayerRules::Standard { fill_profile, .. } =
-            &mut custom_profile.layers[2].rules
-        {
+        custom_profile
+            .fill_profiles
+            .insert("middle".into(), profile);
+        if let LayerRules::Standard { fill_profile, .. } = &mut custom_profile.layers[2].rules {
             *fill_profile = "middle".into();
         }
         lower(custom_profile).unwrap();

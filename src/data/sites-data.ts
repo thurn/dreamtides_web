@@ -56,7 +56,7 @@ const PRESENTATION_KIND_BY_SITE: Readonly<Partial<Record<SiteType, string>>> = {
   Draft: "draft",
   Shop: "shop",
   Purge: "purge",
-  DreamsignMarket: "dreamsign-market",
+  DreamsignBazaar: "dreamsign-bazaar",
   DreamsignRevelation: "dreamsign-revelation",
   RandomSite: "random-site",
 };
@@ -72,7 +72,7 @@ const PRESENTATION_KEYS: Readonly<Record<string, readonly string[]>> = {
     "freePrice",
   ],
   purge: ["kind", "title", "instruction", "purgeAction"],
-  "dreamsign-market": [
+  "dreamsign-bazaar": [
     "kind",
     "title",
     "restocked",
@@ -99,6 +99,23 @@ function isSitePresentation(value: unknown, siteType: SiteType): boolean {
   );
 }
 
+function isSiteRules(value: unknown, siteType: SiteType): boolean {
+  if (siteType !== "Duplication") return value === null;
+  if (
+    !isRecord(value) ||
+    !hasExactKeys(value, ["kind", "cardChoices"]) ||
+    value.kind !== "duplication" ||
+    !isRecord(value.cardChoices) ||
+    !hasExactKeys(value.cardChoices, ["standardLimit", "enhancedLimit"])
+  ) {
+    return false;
+  }
+  return (
+    isInteger(value.cardChoices.standardLimit, { min: 1 }) &&
+    isChoiceLimit(value.cardChoices.enhancedLimit)
+  );
+}
+
 function isSitesData(value: unknown): value is SitesData {
   if (!isRecord(value)) return false;
   if (
@@ -107,9 +124,7 @@ function isSitesData(value: unknown): value is SitesData {
       "contentHash",
       "foldHash",
       "siteTypes",
-      "fallbackSiteType",
       "randomSite",
-      "cardChoices",
       "guideAssignments",
     ]) ||
     value.schemaVersion !== 1 ||
@@ -118,22 +133,18 @@ function isSitesData(value: unknown): value is SitesData {
     typeof value.foldHash !== "string" ||
     !SHA256_HEX.test(value.foldHash) ||
     !isRecord(value.siteTypes) ||
-    !isRecord(value.fallbackSiteType) ||
     !isRecord(value.randomSite) ||
-    !isRecord(value.cardChoices) ||
     !isRecord(value.guideAssignments)
   )
     return false;
   if (
     !hasExactKeys(value.siteTypes, SITE_TYPES) ||
-    !hasExactKeys(value.fallbackSiteType, ["icon", "name", "description"]) ||
     !hasExactKeys(value.randomSite, [
       "destinations",
       "homeChoiceCount",
       "insufficientDestinations",
       "guideId",
     ]) ||
-    !hasExactKeys(value.cardChoices, ["duplication"]) ||
     !hasExactKeys(value.guideAssignments, GUIDE_SITE_TYPES)
   ) {
     return false;
@@ -142,20 +153,19 @@ function isSitesData(value: unknown): value is SitesData {
     const metadata = value.siteTypes[siteType];
     if (
       !isRecord(metadata) ||
-      !hasExactKeys(metadata, ["icon", "glossaryId", "presentation"]) ||
+      !hasExactKeys(metadata, [
+        "icon",
+        "glossaryId",
+        "presentation",
+        "rules",
+      ]) ||
       !isNonEmptyString(metadata.icon) ||
       !isNonEmptyString(metadata.glossaryId) ||
-      !isSitePresentation(metadata.presentation, siteType)
+      !isSitePresentation(metadata.presentation, siteType) ||
+      !isSiteRules(metadata.rules, siteType)
     ) {
       return false;
     }
-  }
-  if (
-    !isNonEmptyString(value.fallbackSiteType.icon) ||
-    !isNonEmptyString(value.fallbackSiteType.name) ||
-    !isNonEmptyString(value.fallbackSiteType.description)
-  ) {
-    return false;
   }
   const random = value.randomSite;
   if (
@@ -174,18 +184,6 @@ function isSitesData(value: unknown): value is SitesData {
     !isNonEmptyString(random.guideId)
   )
     return false;
-
-  for (const kind of ["duplication"] as const) {
-    const choice = value.cardChoices[kind];
-    if (
-      !isRecord(choice) ||
-      !hasExactKeys(choice, ["standardLimit", "enhancedLimit"]) ||
-      !isInteger(choice.standardLimit, { min: 1 }) ||
-      !isChoiceLimit(choice.enhancedLimit)
-    ) {
-      return false;
-    }
-  }
 
   const guideIds = new Set<string>();
   const homeDreamscapeIds = new Set<string>();
@@ -239,29 +237,29 @@ export async function loadSitesData(): Promise<SitesData> {
   return value;
 }
 
-function siteTypeData(sitesData: SitesData, siteType: SiteType) {
-  return (sitesData.siteTypes as Partial<SitesData["siteTypes"]>)[siteType];
+function requireSiteTypeData(sitesData: SitesData, siteType: SiteType) {
+  const metadata = (sitesData.siteTypes as Partial<SitesData["siteTypes"]>)[
+    siteType
+  ];
+  if (metadata === undefined) {
+    throw new Error(`Missing Sites metadata for ${siteType}`);
+  }
+  return metadata;
 }
 
 export function siteTypeIcon(sitesData: SitesData, siteType: SiteType): string {
-  return (
-    siteTypeData(sitesData, siteType)?.icon ?? sitesData.fallbackSiteType.icon
-  );
+  return requireSiteTypeData(sitesData, siteType).icon;
 }
 
 export function siteTypeName(sitesData: SitesData, siteType: SiteType): string {
-  const metadata = siteTypeData(sitesData, siteType);
-  return metadata === undefined
-    ? sitesData.fallbackSiteType.name
-    : requireGlossaryEntry(metadata.glossaryId).term;
+  const metadata = requireSiteTypeData(sitesData, siteType);
+  return requireGlossaryEntry(metadata.glossaryId).term;
 }
 
 export function siteTypeDescription(
   sitesData: SitesData,
   siteType: SiteType,
 ): string {
-  const metadata = siteTypeData(sitesData, siteType);
-  return metadata === undefined
-    ? sitesData.fallbackSiteType.description
-    : requireGlossaryEntry(metadata.glossaryId).definition;
+  const metadata = requireSiteTypeData(sitesData, siteType);
+  return requireGlossaryEntry(metadata.glossaryId).definition;
 }

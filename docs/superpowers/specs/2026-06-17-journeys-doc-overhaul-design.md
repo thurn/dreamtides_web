@@ -23,7 +23,7 @@ tune the economy.
 4. Implement **affiliations** as real IDF similarity-weighted reweighting of all
    random card/dreamsign draws plus opponent-deck bias.
 5. Remap existing sites to doc names; build the three doc sites that map cleanly
-   onto existing code (Dreamsign Market, Dreamsign Revelation, Augury);
+   onto existing code (Dreamsign Bazaar, Dreamsign Revelation, Augury);
    stub the three genuinely new sites (Random Site, Gamble, Exploration).
 6. Apply economy tweaks (starting essence 200, purge `30 + 5·N·(N+1)`, single
    currency, Nightmare folded into Purge).
@@ -34,14 +34,14 @@ tune the economy.
 - **Full doc in one pass.**
 - **Affiliations use real IDF similarity** now, reusing the tides4 /
   `tides-similarity` machinery.
-- **Three sites map to existing code** and are built properly: Dreamsign Market
+- **Three sites map to existing code** and are built properly: Dreamsign Bazaar
   (Shop variant), Dreamsign Revelation (existing dreamsign offering), Augury
   (renamed Dream Journey).
 - **Three sites are stubs** this pass: Random Site, Gamble, Exploration —
   registered as site types with guides + atlas icons + a minimal placeholder
   screen so the atlas/dreamscape system is complete.
 - **Currency consolidation:** fold the existing "Omens" currency into **essence**
-  (single currency per the doc). Dreamsign Market and shop restocks cost essence.
+  (single currency per the doc). Dreamsign Bazaar and shop restocks cost essence.
 - **Nightmare:** retire the separate "Cleanse" site; Purge selects and removes Nightmare
   (cheaply / free) alongside ordinary cards.
 - **Dream Avatar selection:** only change is **starting essence default → 200**
@@ -73,7 +73,7 @@ Major gaps this spec closes:
 | Dreamscapes | procedural biome names | 11 named dreamscapes with guide and affiliation |
 | Dream Guides | none | 10 named NPCs + dialog + home specialties |
 | Affiliations | none | IDF similarity reweighting on all draws + opponent bias |
-| Sites | DreamJourney/Cleanse/Omens | Augury rename, Dreamsign Market, Nightmare→Purge, single currency, 3 stubs |
+| Sites | DreamJourney/Cleanse/Omens | Augury rename, Dreamsign Bazaar, Nightmare→Purge, single currency, 3 stubs |
 | Economy | essence 250, purge `30+8N(N+1)` | essence 200, purge `30+5N(N+1)` |
 
 ## 4. Key file map (anchors)
@@ -139,7 +139,7 @@ acceptance criteria.
   types: layer-based `DreamAtlas` (layers, nodes, connections), 5-state node
   enum (`unrevealed | revealedLocked | available | completed | forgone`),
   dreamscape/guide/affiliation content types, known-dreamsign carrier fields,
-  new `SiteType` members (`Augury`, `DreamsignMarket`, `RandomSite`,
+  new `SiteType` members (`Augury`, `DreamsignBazaar`, `RandomSite`,
   `Gamble`, `Exploration`), retire `Cleanse`/Omens from the type surface.
 - **Manual QA:** load the app, confirm it still boots to the Dream Avatar select
   screen with no console errors after the type/data changes (compile-only QA;
@@ -205,7 +205,7 @@ acceptance criteria.
 **T1.4 — Site remap, new sites, currency + Nightmare consolidation, economy.**
 - Rename **Dream Journey → Augury** across types/state/screens/logging
   (two-reward choice, pure upside).
-- **Dreamsign Market**: Shop variant selling dreamsigns for essence (3 items +
+- **Dreamsign Bazaar**: Shop variant selling dreamsigns for essence (3 items +
   50-essence restock), reusing Shop component + dreamsign pool.
 - **Dreamsign Revelation**: existing dreamsign offering (1 random or choice-of-3;
   home = always a choice).
@@ -217,7 +217,7 @@ acceptance criteria.
 - **Nightmare:** retire Cleanse; extend Purge to select + remove Nightmare cheaply/free.
 - **Economy:** starting essence default **200**; purge formula
   `30 + 5·N·(N+1)` in `src/purge/purge-pricing.ts`; restock 50; cap 500.
-- **Manual QA:** visit Augury (renamed), Dreamsign Market (buy with
+- **Manual QA:** visit Augury (renamed), Dreamsign Bazaar (buy with
   essence + restock), Dreamsign Revelation (single + choice), each stub screen,
   and Purge (remove an ordinary card + a Nightmare card, prices match new formula).
   Confirm no Omens UI remains. Landscape + portrait.

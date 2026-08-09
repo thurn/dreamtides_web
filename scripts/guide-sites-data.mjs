@@ -358,7 +358,7 @@ const PRESENTATION_KEYS = {
     "free-price",
   ],
   purge: ["kind", "title", "instruction", "purge-action"],
-  "dreamsign-market": [
+  "dreamsign-bazaar": [
     "kind",
     "title",
     "restocked",
@@ -375,7 +375,7 @@ const PRESENTATION_KIND_BY_SITE = {
   Draft: "draft",
   Shop: "shop",
   Purge: "purge",
-  DreamsignMarket: "dreamsign-market",
+  DreamsignBazaar: "dreamsign-bazaar",
   DreamsignRevelation: "dreamsign-revelation",
   RandomSite: "random-site",
 };
@@ -440,7 +440,7 @@ function compileSitePresentation(value, type, file, path) {
           ["count"],
         ),
       };
-    case "dreamsign-market":
+    case "dreamsign-bazaar":
       return {
         kind,
         title: text("title"),
@@ -459,15 +459,41 @@ function compileSitePresentation(value, type, file, path) {
   }
 }
 
+function compileSiteRules(value, type, file, path) {
+  if (type !== "Duplication") {
+    if (value !== undefined) fail(file, path, `${type} does not define rules`);
+    return null;
+  }
+  const source = keys(value, file, path, ["kind", "card-choices"]);
+  const kind = exactIdentity(source.kind, "duplication", file, `${path}.kind`);
+  const choices = keys(source["card-choices"], file, `${path}.card-choices`, [
+    "standard-limit",
+    "enhanced-limit",
+  ]);
+  return {
+    kind,
+    cardChoices: {
+      standardLimit: compileChoiceLimit(
+        choices["standard-limit"],
+        file,
+        `${path}.card-choices.standard-limit`,
+      ),
+      enhancedLimit: compileChoiceLimit(
+        choices["enhanced-limit"],
+        file,
+        `${path}.card-choices.enhanced-limit`,
+      ),
+    },
+  };
+}
+
 /** Strictly compile sites.toml and cross-validate linked catalogs. */
 export function compileSitesData(sourceValue, catalogs = {}) {
   const file = "sites.toml";
   const root = keys(sourceValue, file, "root", [
     "schema-version",
     "site-types",
-    "fallback-site-type",
     "random-site",
-    "card-choices",
   ]);
   if (number(root["schema-version"], file, "schema-version") !== 1) {
     fail(file, "schema-version", "only schema version 1 is supported");
@@ -484,6 +510,7 @@ export function compileSitesData(sourceValue, catalogs = {}) {
       "icon",
       "glossary-id",
       ...(rawMetadata.presentation === undefined ? [] : ["presentation"]),
+      ...(rawMetadata.rules === undefined ? [] : ["rules"]),
     ]);
     const type = siteType(metadata.type, file, `${path}.type`);
     if (siteTypes[type] !== undefined)
@@ -497,6 +524,7 @@ export function compileSitesData(sourceValue, catalogs = {}) {
         file,
         `${path}.presentation`,
       ),
+      rules: compileSiteRules(metadata.rules, type, file, `${path}.rules`),
     };
   }
   for (const type of SITE_TYPES)
@@ -513,21 +541,6 @@ export function compileSitesData(sourceValue, catalogs = {}) {
         );
     }
   }
-  const fallback = keys(
-    root["fallback-site-type"],
-    file,
-    "fallback-site-type",
-    ["icon", "name", "description"],
-  );
-  const fallbackSiteType = {
-    icon: string(fallback.icon, file, "fallback-site-type.icon"),
-    name: string(fallback.name, file, "fallback-site-type.name"),
-    description: string(
-      fallback.description,
-      file,
-      "fallback-site-type.description",
-    ),
-  };
   const random = keys(root["random-site"], file, "random-site", [
     "destinations",
     "home-choice-count",
@@ -575,33 +588,6 @@ export function compileSitesData(sourceValue, catalogs = {}) {
       "cannot exceed destination count",
     );
 
-  const choices = keys(root["card-choices"], file, "card-choices", [
-    "duplication",
-  ]);
-  const cardChoices = Object.fromEntries(
-    ["duplication"].map((kind) => {
-      const source = keys(choices[kind], file, `card-choices.${kind}`, [
-        "standard-limit",
-        "enhanced-limit",
-      ]);
-      return [
-        kind,
-        {
-          standardLimit: compileChoiceLimit(
-            source["standard-limit"],
-            file,
-            `card-choices.${kind}.standard-limit`,
-          ),
-          enhancedLimit: compileChoiceLimit(
-            source["enhanced-limit"],
-            file,
-            `card-choices.${kind}.enhanced-limit`,
-          ),
-        },
-      ];
-    }),
-  );
-
   const guides = catalogs.guides?.guides ?? catalogs.guides ?? [];
   const guideAssignments = Object.fromEntries(
     guides.map((guide) => [
@@ -618,15 +604,17 @@ export function compileSitesData(sourceValue, catalogs = {}) {
   const normalized = {
     schemaVersion: 1,
     siteTypes,
-    fallbackSiteType,
     randomSite: { ...randomSite, guideId: randomSiteGuideId },
-    cardChoices,
     guideAssignments,
   };
   const behavior = {
     schemaVersion: 1,
     randomSite: normalized.randomSite,
-    cardChoices,
+    rulesBySiteType: Object.fromEntries(
+      Object.entries(siteTypes).flatMap(([type, metadata]) =>
+        metadata.rules === null ? [] : [[type, metadata.rules]],
+      ),
+    ),
     guideAssignments,
   };
   return {

@@ -1229,7 +1229,12 @@ function generateInitialAtlasInternal(
             weight: game.selection.weight,
           })),
         },
-        cardChoices: build.sitesData.cardChoices,
+        rulesBySiteType: Object.fromEntries(
+          Object.entries(build.sitesData.siteTypes).flatMap(
+            ([siteType, metadata]) =>
+              metadata.rules === null ? [] : [[siteType, metadata.rules]],
+          ),
+        ),
       },
     });
   }

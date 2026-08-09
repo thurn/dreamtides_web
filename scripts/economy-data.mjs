@@ -113,7 +113,7 @@ export function compileEconomyData(sourceValue) {
   const stocks = keys(shop.stock, "shop.stock", [
     "card-shop",
     "specialty-shop",
-    "dreamsign-market",
+    "dreamsign-bazaar",
   ]);
   const discounts = keys(shop.discounts, "shop.discounts", [
     "slot-counts",
@@ -188,9 +188,9 @@ export function compileEconomyData(sourceValue) {
           stocks["specialty-shop"],
           "shop.stock.specialty-shop",
         ),
-        dreamsignMarket: stock(
-          stocks["dreamsign-market"],
-          "shop.stock.dreamsign-market",
+        dreamsignBazaar: stock(
+          stocks["dreamsign-bazaar"],
+          "shop.stock.dreamsign-bazaar",
         ),
       },
       discounts: {

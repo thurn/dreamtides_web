@@ -128,7 +128,7 @@ export function DreamsignBazaarSiteScreenAdapter({
   const handleClose = useCallback(() => {
     if (site === null) return;
     logEvent("site_completed", {
-      siteType: "DreamsignMarket",
+      siteType: "DreamsignBazaar",
       outcome: "left",
     });
     mutations.completeSite(site.id, "shop_left");

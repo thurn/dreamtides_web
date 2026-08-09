@@ -36,7 +36,7 @@ const SITE_TYPES = [
   "Duplication",
   "Reward",
   "Augury",
-  "DreamsignMarket",
+  "DreamsignBazaar",
   "DreamsignRevelation",
   "RandomSite",
   "Gamble",

@@ -1,4 +1,4 @@
-// DreamsignBazaarSiteScreen — Amunet's Cumulus Dreamsign market. It uses the
+// DreamsignBazaarSiteScreen — Amunet's Cumulus Dreamsign bazaar. It uses the
 // Dream Market's guide/gallery stage with Dreamsign entities in the glass shelf.
 
 import { motion } from "framer-motion";
@@ -57,7 +57,7 @@ export interface DreamsignBazaarPurgeView {
 export interface DreamsignBazaarSiteView {
   presentation: Extract<
     import("../../types/sites-data").SitePresentation,
-    { kind: "dreamsign-market" }
+    { kind: "dreamsign-bazaar" }
   >;
   /** Stable site id. */
   siteId: string;

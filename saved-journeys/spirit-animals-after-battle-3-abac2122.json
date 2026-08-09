@@ -812,7 +812,7 @@
               "id": "site-56",
               "isEnhanced": false,
               "isVisited": false,
-              "type": "DreamsignMarket"
+              "type": "DreamsignBazaar"
             },
             {
               "id": "site-57",
@@ -859,9 +859,9 @@
               "randomSite": {
                 "mode": "single",
                 "candidateSiteTypes": [
-                  "DreamsignMarket"
+                  "DreamsignBazaar"
                 ],
-                "destinationSiteType": "DreamsignMarket"
+                "destinationSiteType": "DreamsignBazaar"
               }
             },
             {
@@ -957,7 +957,7 @@
               "randomSite": {
                 "mode": "homeChoice",
                 "candidateSiteTypes": [
-                  "DreamsignMarket",
+                  "DreamsignBazaar",
                   "Duplication",
                   "Purge",
                   "Augury",
@@ -1425,7 +1425,7 @@
           "biomeColor": "#2dd4bf",
           "biomeName": "Pharaoh's Gate",
           "dreamscapeId": "pharaohs_gate",
-          "enhancedSiteType": "DreamsignMarket",
+          "enhancedSiteType": "DreamsignBazaar",
           "forwardIds": [
             "dreamscape-11"
           ],
@@ -1441,7 +1441,7 @@
               "id": "site-43",
               "isEnhanced": true,
               "isVisited": false,
-              "type": "DreamsignMarket"
+              "type": "DreamsignBazaar"
             },
             {
               "data": {

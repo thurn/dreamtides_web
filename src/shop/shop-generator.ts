@@ -88,7 +88,7 @@ export interface ShopInventoryResult {
    * The draft multiset after this shop drew its card slots from — and spent —
    * it. Present only for a card shop that spent the run draft multiset.
    * `undefined` means the shop did not touch the run's draft state — a card-less
-   * Dreamsign Market (`cardCount: 0`) or a run with no draft state —
+   * Dreamsign Bazaar (`cardCount: 0`) or a run with no draft state —
    * and the caller MUST keep its existing draft state rather than persist
    * anything from the result.
    *

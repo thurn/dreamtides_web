@@ -82,10 +82,10 @@ function sitesFixture() {
         instruction: "Choose.",
         "purge-action": "Purge {count}",
       };
-    if (type === "DreamsignMarket")
+    if (type === "DreamsignBazaar")
       return {
-        kind: "dreamsign-market",
-        title: "Market",
+        kind: "dreamsign-bazaar",
+        title: "Bazaar",
         restocked: "Restocked",
         "restock-offers-action": "Restock Offers",
         "restock-action": "Restock",
@@ -110,19 +110,22 @@ function sitesFixture() {
       ...(presentation(type) === undefined
         ? {}
         : { presentation: presentation(type) }),
+      ...(type === "Duplication"
+        ? {
+            rules: {
+              kind: "duplication",
+              "card-choices": {
+                "standard-limit": 3,
+                "enhanced-limit": "all",
+              },
+            },
+          }
+        : {}),
     })),
-    "fallback-site-type": {
-      icon: "fixture-fallback-icon",
-      name: "Fixture Unknown Site",
-      description: "A synthetic unknown site.",
-    },
     "random-site": {
       destinations: ["Shop", "Purge", "Augury", "Gamble"],
       "home-choice-count": 3,
       "insufficient-destinations": "fail",
-    },
-    "card-choices": {
-      duplication: { "standard-limit": 3, "enhanced-limit": "all" },
     },
   };
 }
@@ -176,6 +179,16 @@ describe("canonical Dream Guide and Sites compilers", () => {
       baseline.sites.contentHash,
     );
     expect(changedPresentation.foldHash).toBe(baseline.sites.foldHash);
+
+    const changedRules = sitesFixture();
+    changedRules["site-types"].find(
+      (metadata) => metadata.type === "Duplication",
+    ).rules["card-choices"]["standard-limit"] = 4;
+    const compiledRules = compileSitesData(changedRules, {
+      guides: baseline.guides,
+      glossaryIds: SITE_TYPES.map((type) => `fixture-glossary-${type}`),
+    });
+    expect(compiledRules.foldHash).not.toBe(baseline.sites.foldHash);
 
     const guideSource = guidesFixture();
     guideSource.guides[0].dialogue.site = ["Changed dialogue."];
@@ -243,6 +256,25 @@ describe("canonical Dream Guide and Sites compilers", () => {
       /missing metadata/u,
     );
 
+    const missingDuplicationRules = sitesFixture();
+    delete missingDuplicationRules["site-types"].find(
+      (metadata) => metadata.type === "Duplication",
+    ).rules;
+    expect(() => compileSitesData(missingDuplicationRules, catalogs)).toThrow(
+      /site-types\[6\]\.rules/u,
+    );
+
+    const misplacedDuplicationRules = sitesFixture();
+    misplacedDuplicationRules["site-types"].find(
+      (metadata) => metadata.type === "Shop",
+    ).rules = {
+      kind: "duplication",
+      "card-choices": { "standard-limit": 3, "enhanced-limit": "all" },
+    };
+    expect(() => compileSitesData(misplacedDuplicationRules, catalogs)).toThrow(
+      /Shop does not define rules/u,
+    );
+
     expect(() =>
       compileSitesData(sitesFixture(), {
         ...catalogs,
@@ -258,15 +290,21 @@ describe("canonical Dream Guide and Sites compilers", () => {
 
     const twoHomeChoices = sitesFixture();
     twoHomeChoices["random-site"]["home-choice-count"] = 2;
-    expect(compileSitesData(twoHomeChoices, catalogs).randomSite.homeChoiceCount).toBe(2);
+    expect(
+      compileSitesData(twoHomeChoices, catalogs).randomSite.homeChoiceCount,
+    ).toBe(2);
 
     const oneHomeChoice = sitesFixture();
     oneHomeChoice["random-site"]["home-choice-count"] = 1;
-    expect(() => compileSitesData(oneHomeChoice, catalogs)).toThrow(/between 2 and 3/u);
+    expect(() => compileSitesData(oneHomeChoice, catalogs)).toThrow(
+      /between 2 and 3/u,
+    );
 
     const tooManyHomeChoices = sitesFixture();
     tooManyHomeChoices["random-site"]["home-choice-count"] = 4;
-    expect(() => compileSitesData(tooManyHomeChoices, catalogs)).toThrow(/between 2 and 3/u);
+    expect(() => compileSitesData(tooManyHomeChoices, catalogs)).toThrow(
+      /between 2 and 3/u,
+    );
 
     const obsoleteGamble = { ...sitesFixture(), gamble: {} };
     expect(() => compileSitesData(obsoleteGamble, catalogs)).toThrow(

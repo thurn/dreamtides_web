@@ -76,7 +76,7 @@ export function siteDispositionFor(
         kind: "screen",
         screen: <CardShopSiteScreenAdapter siteId={site.id} />,
       };
-    case "DreamsignMarket":
+    case "DreamsignBazaar":
       return {
         kind: "screen",
         screen: <DreamsignBazaarSiteScreenAdapter siteId={site.id} />,

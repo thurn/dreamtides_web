@@ -24,7 +24,7 @@ const GUIDE_SITE_TYPES = [
   "Transfiguration",
   "Duplication",
   "Augury",
-  "DreamsignMarket",
+  "DreamsignBazaar",
   "DreamsignRevelation",
   "RandomSite",
   "Gamble",

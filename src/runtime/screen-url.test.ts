@@ -142,7 +142,7 @@ describe("siteTypeSlug", () => {
   it("kebab-cases camel-case site types and lowercases simple ones", () => {
     expect(siteTypeSlug("Purge")).toBe("purge");
     expect(siteTypeSlug("Augury")).toBe("augury");
-    expect(siteTypeSlug("DreamsignMarket")).toBe("dreamsign-market");
+    expect(siteTypeSlug("DreamsignBazaar")).toBe("dreamsign-bazaar");
     expect(siteTypeSlug("Exploration")).toBe("exploration");
   });
 });

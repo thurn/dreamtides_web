@@ -18,7 +18,7 @@ export type SitePresentation =
     }
   | { kind: "purge"; title: string; instruction: string; purgeAction: string }
   | {
-      kind: "dreamsign-market";
+      kind: "dreamsign-bazaar";
       title: string;
       restocked: string;
       restockOffersAction: string;
@@ -29,10 +29,22 @@ export type SitePresentation =
   | { kind: "dreamsign-revelation"; loading: string; exhausted: string }
   | { kind: "random-site"; title: string };
 
+export interface DuplicationSiteRules {
+  kind: "duplication";
+  cardChoices: {
+    standardLimit: number;
+    /** `null` means every eligible entry. */
+    enhancedLimit: number | null;
+  };
+}
+
+export type SiteRules = DuplicationSiteRules;
+
 export interface SiteTypeData {
   icon: string;
   glossaryId: string;
   presentation: SitePresentation | null;
+  rules: SiteRules | null;
 }
 
 /** Validated browser data compiled from data/sites.toml. */
@@ -41,20 +53,12 @@ export interface SitesData {
   contentHash: string;
   foldHash: string;
   siteTypes: Readonly<Record<SiteType, SiteTypeData>>;
-  fallbackSiteType: { icon: string; name: string; description: string };
   randomSite: {
     destinations: readonly RandomSiteDestinationType[];
     homeChoiceCount: number;
     insufficientDestinations: "fail";
     guideId: string;
   };
-  cardChoices: Readonly<{
-    duplication: {
-      standardLimit: number;
-      /** `null` means every eligible entry. */
-      enhancedLimit: number | null;
-    };
-  }>;
   guideAssignments: Readonly<
     Partial<
       Record<

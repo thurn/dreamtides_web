@@ -267,7 +267,7 @@ describe("generateShopInventory", () => {
     );
     expect(cardSlots.length).toBeGreaterThan(0);
     // A Card Shop never offers dreamsigns; those are sold at the Dreamsign
-    // Market, which requests dreamsign slots explicitly.
+    // Bazaar, which requests dreamsign slots explicitly.
     expect(dreamsignSlots).toHaveLength(0);
   });
 

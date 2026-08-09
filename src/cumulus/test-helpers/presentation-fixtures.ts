@@ -13,14 +13,14 @@ export const SHOP_PRESENTATION = {
 
 // localization-ignore: test-only fixture mirrors authored RON presentation copy.
 export const DREAMSIGN_MARKET_PRESENTATION = {
-  kind: "dreamsign-market",
+  kind: "dreamsign-bazaar",
   title: "Dreamsign Bazaar",
   restocked: "Restocked",
   restockOffersAction: "Restock Offers",
   restockAction: "Restock",
   freePrice: "Free",
   replacementTitle: "Choose a Dreamsign to Replace",
-} satisfies Extract<SitePresentation, { kind: "dreamsign-market" }>;
+} satisfies Extract<SitePresentation, { kind: "dreamsign-bazaar" }>;
 
 // localization-ignore: test-only fixture mirrors authored RON presentation copy.
 export const PURGE_PRESENTATION = {

@@ -18,7 +18,7 @@ const SITE_TYPES: [SiteType; 14] = [
     SiteType::Duplication,
     SiteType::Reward,
     SiteType::Augury,
-    SiteType::DreamsignMarket,
+    SiteType::DreamsignBazaar,
     SiteType::DreamsignRevelation,
     SiteType::RandomSite,
     SiteType::Gamble,
@@ -88,9 +88,7 @@ const GLOSSARY_ID_MAP: [(&str, &str); 14] = [
 #[serde(deny_unknown_fields)]
 pub struct SitesCatalog {
     pub site_types: Vec<SiteMetadata>,
-    pub fallback_site_type: FallbackSiteType,
     pub random_site: RandomSiteRules,
-    pub card_choices: CardChoiceRules,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -100,6 +98,7 @@ pub struct SiteMetadata {
     pub icon: String,
     pub glossary_id: GlossaryId,
     pub presentation: Option<SitePresentation>,
+    pub rules: Option<SiteRules>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -124,7 +123,7 @@ pub enum SitePresentation {
         instruction: String,
         purge_action: String,
     },
-    DreamsignMarket {
+    DreamsignBazaar {
         title: String,
         restocked: String,
         restock_offers_action: String,
@@ -142,11 +141,8 @@ pub enum SitePresentation {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct FallbackSiteType {
-    pub icon: String,
-    pub name: String,
-    pub description: String,
+pub enum SiteRules {
+    Duplication { card_choices: CardChoiceLimits },
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -154,12 +150,6 @@ pub struct FallbackSiteType {
 pub struct RandomSiteRules {
     pub destinations: Vec<SiteType>,
     pub home_choice_count: u32,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct CardChoiceRules {
-    pub duplication: CardChoiceLimits,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -222,12 +212,8 @@ struct CompatibilityCatalog {
     schema_version: u32,
     #[serde(rename = "site-types")]
     site_types: Vec<CompatibilitySiteMetadata>,
-    #[serde(rename = "fallback-site-type")]
-    fallback_site_type: FallbackSiteType,
     #[serde(rename = "random-site")]
     random_site: CompatibilityRandomSiteRules,
-    #[serde(rename = "card-choices")]
-    card_choices: CompatibilityCardChoiceRules,
 }
 
 #[derive(Serialize)]
@@ -239,6 +225,8 @@ struct CompatibilitySiteMetadata {
     glossary_id: &'static str,
     #[serde(skip_serializing_if = "Option::is_none")]
     presentation: Option<toml::Value>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    rules: Option<toml::Value>,
 }
 
 #[derive(Serialize)]
@@ -248,11 +236,6 @@ struct CompatibilityRandomSiteRules {
     home_choice_count: u32,
     #[serde(rename = "insufficient-destinations")]
     insufficient_destinations: &'static str,
-}
-
-#[derive(Serialize)]
-struct CompatibilityCardChoiceRules {
-    duplication: CompatibilityCardChoiceLimits,
 }
 
 #[derive(Serialize)]
@@ -288,6 +271,7 @@ fn lower_with_glossary_map(
                 icon: metadata.icon,
                 glossary_id: compatibility_glossary_id(glossary_ids, metadata.glossary_id)?,
                 presentation: metadata.presentation.map(lower_presentation),
+                rules: metadata.rules.map(lower_rules).transpose()?,
             })
         })
         .collect::<Result<Vec<_>>>()?;
@@ -301,16 +285,25 @@ fn lower_with_glossary_map(
         home_choice_count: source.random_site.home_choice_count,
         insufficient_destinations: "fail",
     };
-    let card_choices = CompatibilityCardChoiceRules {
-        duplication: lower_choice_limits(source.card_choices.duplication),
-    };
     Ok(toml::Value::try_from(CompatibilityCatalog {
         schema_version: 1,
         site_types,
-        fallback_site_type: source.fallback_site_type,
         random_site,
-        card_choices,
     })?)
+}
+
+fn lower_rules(source: SiteRules) -> Result<toml::Value> {
+    match source {
+        SiteRules::Duplication { card_choices } => {
+            let mut table = toml::map::Map::new();
+            table.insert("kind".into(), "duplication".into());
+            table.insert(
+                "card-choices".into(),
+                toml::Value::try_from(lower_choice_limits(card_choices))?,
+            );
+            Ok(toml::Value::Table(table))
+        }
+    }
 }
 
 fn lower_presentation(source: SitePresentation) -> toml::Value {
@@ -357,7 +350,7 @@ fn lower_presentation(source: SitePresentation) -> toml::Value {
             put("instruction", instruction);
             put("purge-action", purge_action);
         }
-        SitePresentation::DreamsignMarket {
+        SitePresentation::DreamsignBazaar {
             title,
             restocked,
             restock_offers_action,
@@ -365,7 +358,7 @@ fn lower_presentation(source: SitePresentation) -> toml::Value {
             free_price,
             replacement_title,
         } => {
-            put("kind", "dreamsign-market".into());
+            put("kind", "dreamsign-bazaar".into());
             put("title", title);
             put("restocked", restocked);
             put("restock-offers-action", restock_offers_action);
@@ -427,25 +420,19 @@ fn validate(source: &SitesCatalog) -> Result<()> {
         );
         validate_text("site metadata icon", &metadata.icon)?;
         validate_presentation(metadata)?;
+        validate_rules(metadata)?;
     }
     ensure!(
         sites == SITE_TYPES.map(SiteType::as_compat).into_iter().collect(),
         "site metadata must cover every site type exactly once"
     );
-    validate_text("fallback site icon", &source.fallback_site_type.icon)?;
-    validate_text("fallback site name", &source.fallback_site_type.name)?;
-    validate_text(
-        "fallback site description",
-        &source.fallback_site_type.description,
-    )?;
-
     let allowed_destinations = BTreeSet::from([
         "Shop",
         "Purge",
         "Transfiguration",
         "Duplication",
         "Augury",
-        "DreamsignMarket",
+        "DreamsignBazaar",
         "DreamsignRevelation",
         "Gamble",
         "Exploration",
@@ -470,7 +457,25 @@ fn validate(source: &SitesCatalog) -> Result<()> {
         source.random_site.home_choice_count as usize <= destinations.len(),
         "Random Site home choice count exceeds its destinations"
     );
-    validate_choice_limits(&source.card_choices.duplication)?;
+    Ok(())
+}
+
+fn validate_rules(metadata: &SiteMetadata) -> Result<()> {
+    let expected = match metadata.site {
+        SiteType::Duplication => Some("duplication"),
+        _ => None,
+    };
+    let actual = metadata.rules.as_ref().map(|value| match value {
+        SiteRules::Duplication { .. } => "duplication",
+    });
+    ensure!(
+        actual == expected,
+        "{} rules must match its site type",
+        metadata.site.as_compat()
+    );
+    if let Some(SiteRules::Duplication { card_choices }) = &metadata.rules {
+        validate_choice_limits(card_choices)?;
+    }
     Ok(())
 }
 
@@ -480,7 +485,7 @@ fn validate_presentation(metadata: &SiteMetadata) -> Result<()> {
         SiteType::Draft => Some("draft"),
         SiteType::Shop => Some("shop"),
         SiteType::Purge => Some("purge"),
-        SiteType::DreamsignMarket => Some("dreamsign-market"),
+        SiteType::DreamsignBazaar => Some("dreamsign-bazaar"),
         SiteType::DreamsignRevelation => Some("dreamsign-revelation"),
         SiteType::RandomSite => Some("random-site"),
         _ => None,
@@ -490,7 +495,7 @@ fn validate_presentation(metadata: &SiteMetadata) -> Result<()> {
         SitePresentation::Draft { .. } => "draft",
         SitePresentation::Shop { .. } => "shop",
         SitePresentation::Purge { .. } => "purge",
-        SitePresentation::DreamsignMarket { .. } => "dreamsign-market",
+        SitePresentation::DreamsignBazaar { .. } => "dreamsign-bazaar",
         SitePresentation::DreamsignRevelation { .. } => "dreamsign-revelation",
         SitePresentation::RandomSite { .. } => "random-site",
     });
@@ -531,7 +536,7 @@ fn validate_presentation(metadata: &SiteMetadata) -> Result<()> {
                 validate_slots("Purge action", purge_action, &["count"])?;
                 vec![title, instruction, purge_action]
             }
-            SitePresentation::DreamsignMarket {
+            SitePresentation::DreamsignBazaar {
                 title,
                 restocked,
                 restock_offers_action,
@@ -612,7 +617,7 @@ mod tests {
         ("glossary-reward", "00000000-0000-4000-8000-000000000008"),
         ("glossary-augury", "00000000-0000-4000-8000-000000000009"),
         (
-            "glossary-dreamsign-market",
+            "glossary-dreamsign-bazaar",
             "00000000-0000-4000-8000-000000000010",
         ),
         (
@@ -639,15 +644,11 @@ mod tests {
                 icon: format!("icon-{}", site.as_compat()),
                 glossary_id: GlossaryId::parse(canonical).unwrap(),
                 presentation: synthetic_presentation(site),
+                rules: synthetic_rules(site),
             })
             .collect();
         SitesCatalog {
             site_types,
-            fallback_site_type: FallbackSiteType {
-                icon: "fallback-icon".into(),
-                name: "Unknöwn Site".into(),
-                description: "First line\nsecond line".into(),
-            },
             random_site: RandomSiteRules {
                 destinations: vec![
                     SiteType::Shop,
@@ -655,19 +656,25 @@ mod tests {
                     SiteType::Transfiguration,
                     SiteType::Duplication,
                     SiteType::Augury,
-                    SiteType::DreamsignMarket,
+                    SiteType::DreamsignBazaar,
                     SiteType::DreamsignRevelation,
                     SiteType::Gamble,
                     SiteType::Exploration,
                 ],
                 home_choice_count: 3,
             },
-            card_choices: CardChoiceRules {
-                duplication: CardChoiceLimits {
+        }
+    }
+
+    fn synthetic_rules(site: SiteType) -> Option<SiteRules> {
+        match site {
+            SiteType::Duplication => Some(SiteRules::Duplication {
+                card_choices: CardChoiceLimits {
                     standard: ChoiceLimit::Count(4),
                     enhanced: ChoiceLimit::Count(7),
                 },
-            },
+            }),
+            _ => None,
         }
     }
 
@@ -693,8 +700,8 @@ mod tests {
                 instruction: "Choose".into(),
                 purge_action: "Purge {count}".into(),
             }),
-            SiteType::DreamsignMarket => Some(SitePresentation::DreamsignMarket {
-                title: "Market".into(),
+            SiteType::DreamsignBazaar => Some(SitePresentation::DreamsignBazaar {
+                title: "Bazaar".into(),
                 restocked: "Restocked".into(),
                 restock_offers_action: "Offers".into(),
                 restock_action: "Restock".into(),
@@ -726,16 +733,12 @@ mod tests {
             site_types[0]["glossary-id"].as_str(),
             Some("glossary-battle")
         );
+        let duplication = site_types
+            .iter()
+            .find(|metadata| metadata["type"].as_str() == Some("Duplication"))
+            .unwrap();
         assert_eq!(
-            lowered["fallback-site-type"]["name"].as_str(),
-            Some("Unknöwn Site")
-        );
-        assert_eq!(
-            lowered["fallback-site-type"]["description"].as_str(),
-            Some("First line\nsecond line")
-        );
-        assert_eq!(
-            lowered["card-choices"]["duplication"]["enhanced-limit"].as_integer(),
+            duplication["rules"]["card-choices"]["enhanced-limit"].as_integer(),
             Some(7)
         );
     }
@@ -786,8 +789,41 @@ mod tests {
         duplicate_destination.random_site.destinations[1] = SiteType::Shop;
         assert_error_contains(duplicate_destination, "duplicate Random Site destination");
 
+        let mut missing_duplication_rules = synthetic_catalog();
+        missing_duplication_rules
+            .site_types
+            .iter_mut()
+            .find(|metadata| metadata.site == SiteType::Duplication)
+            .unwrap()
+            .rules = None;
+        assert_error_contains(missing_duplication_rules, "Duplication rules must match");
+
+        let mut misplaced_duplication_rules = synthetic_catalog();
+        let duplication_rules = misplaced_duplication_rules
+            .site_types
+            .iter()
+            .find(|metadata| metadata.site == SiteType::Duplication)
+            .unwrap()
+            .rules
+            .clone();
+        misplaced_duplication_rules
+            .site_types
+            .iter_mut()
+            .find(|metadata| metadata.site == SiteType::Shop)
+            .unwrap()
+            .rules = duplication_rules;
+        assert_error_contains(misplaced_duplication_rules, "Shop rules must match");
+
         let mut invalid_choice_count = synthetic_catalog();
-        invalid_choice_count.card_choices.duplication.standard = ChoiceLimit::Count(0);
+        let duplication = invalid_choice_count
+            .site_types
+            .iter_mut()
+            .find(|metadata| metadata.site == SiteType::Duplication)
+            .unwrap();
+        let Some(SiteRules::Duplication { card_choices }) = &mut duplication.rules else {
+            panic!("synthetic Duplication rules missing");
+        };
+        card_choices.standard = ChoiceLimit::Count(0);
         assert_error_contains(invalid_choice_count, "card choice count must be positive");
 
         let mut unmapped = synthetic_catalog();

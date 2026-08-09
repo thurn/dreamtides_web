@@ -34,17 +34,16 @@ authored Draft signature.
 The Site document is a typed `SitesCatalog`; its generated `sites.toml`
 compatibility document carries `schema-version = 1`. The source contains:
 
-| Section                 | Authored contract                                                                            |
-| ----------------------- | -------------------------------------------------------------------------------------------- |
-| `site_types`            | Exactly one icon and glossary reference for every `SiteType`.                                |
-| `fallback_site_type`    | Neutral presentation for an unknown site identifier.                                         |
-| `random_site`           | Eligible destinations, home and away choice counts, and the insufficient-destination policy. |
-| `card_choices`          | Standard and enhanced candidate counts for Transfiguration and Duplication.                  |
-| `gamble.selection`      | Game weights and a guaranteed supported fallback.                                            |
-| `gamble.three_gate`     | Gate order and win/lose results.                                                             |
-| `gamble.ladder_climb`   | Attempt count, target range, and ordered reward tiers.                                       |
-| `gamble.starway_stairs` | Attempt count, target range, and ordered reward tiers.                                       |
-| `gamble.four_suit_reprise` | Draw count, suit order, ranking order, and result table.                                  |
+| Section                        | Authored contract                                                                              |
+| ------------------------------ | ---------------------------------------------------------------------------------------------- |
+| `site_types`                   | Exactly one metadata record for every `SiteType`, including presentation and site-local rules. |
+| `random_site`                  | Eligible destinations, home and away choice counts, and the insufficient-destination policy.   |
+| `site_types.Duplication.rules` | Eligible deck-entry candidates shown by standard and enhanced Duplication sites.               |
+| `gamble.selection`             | Game weights and a guaranteed supported fallback.                                              |
+| `gamble.three_gate`            | Gate order and win/lose results.                                                               |
+| `gamble.ladder_climb`          | Attempt count, target range, and ordered reward tiers.                                         |
+| `gamble.starway_stairs`        | Attempt count, target range, and ordered reward tiers.                                         |
+| `gamble.four_suit_reprise`     | Draw count, suit order, ranking order, and result table.                                       |
 
 Four-Suit prices and Essence rewards live in `economy.ron`. The other Gamble
 prices and rewards continue to use the existing Economy catalog. The Sites
@@ -56,6 +55,11 @@ counts. Gamble tables must cover their code-owned identities and accepted
 template values. When the external art catalog is available, guide portrait
 source filenames must also resolve.
 
+The Duplication metadata owns its `rules.card_choices` configuration.
+`Count(3)` selects three eligible entries from the player's current deck, while
+`All` exposes every eligible entry. Site rules contribute to the Sites fold
+hash.
+
 ## Generated artifacts and hashes
 
 `scripts/guide-sites-data.mjs` provides the strict compilers used by full asset
@@ -64,9 +68,9 @@ loaders reject malformed or unsupported generated artifacts.
 
 Both compiled catalogs have stable SHA-256 `contentHash` values. Sites also has
 a `foldHash` covering guide home and specialty assignments plus every site rule
-that can affect generated or reduced state. Icons, glossary mappings, fallback
-presentation, guide portraits, and dialogue affect content hashes while staying
-outside `foldHash`.
+that can affect generated or reduced state. Icons, glossary mappings, guide
+portraits, and dialogue affect content hashes while staying outside
+`foldHash`.
 
 Atlas generation, site opening, Random Site resolution, and Gamble resolution
 log the Sites fold hash and the resolved configuration needed to reconstruct a

@@ -45,7 +45,7 @@ export const SYNTHETIC_ATLAS_DREAMSCAPES: DreamscapeContent[] = [
       "Transfiguration",
       "Duplication",
       "Augury",
-      "DreamsignMarket",
+      "DreamsignBazaar",
       "DreamsignRevelation",
       "RandomSite",
       "Gamble",
@@ -98,9 +98,9 @@ const SYNTHETIC_SITE_TYPES = Object.fromEntries(
                       "Choose any number of cards to remove from your deck for an essence cost",
                     purgeAction: "Purge {count}",
                   }
-                : type === "DreamsignMarket"
+                : type === "DreamsignBazaar"
                   ? {
-                      kind: "dreamsign-market",
+                      kind: "dreamsign-bazaar",
                       title: "Dreamsign Bazaar",
                       restocked: "Restocked",
                       restockOffersAction: "Restock Offers",
@@ -117,6 +117,13 @@ const SYNTHETIC_SITE_TYPES = Object.fromEntries(
                     : type === "RandomSite"
                       ? { kind: "random-site", title: "Choose a Site" }
                       : null,
+      rules:
+        type === "Duplication"
+          ? {
+              kind: "duplication",
+              cardChoices: { standardLimit: 3, enhancedLimit: null },
+            }
+          : null,
     },
   ]),
 ) as SitesData["siteTypes"];
@@ -127,15 +134,10 @@ export const MINIMAL_SITES_DATA: SitesData = {
   contentHash: "c".repeat(64),
   foldHash: "d".repeat(64),
   siteTypes: SYNTHETIC_SITE_TYPES,
-  fallbackSiteType: {
-    icon: "fixture-fallback-icon",
-    name: "Fixture Site",
-    description: "A synthetic fallback site.",
-  },
   randomSite: {
     destinations: [
       "Shop",
-      "DreamsignMarket",
+      "DreamsignBazaar",
       "DreamsignRevelation",
       "Transfiguration",
       "Duplication",
@@ -147,9 +149,6 @@ export const MINIMAL_SITES_DATA: SitesData = {
     homeChoiceCount: 3,
     insufficientDestinations: "fail",
     guideId: "fixture-random-guide",
-  },
-  cardChoices: {
-    duplication: { standardLimit: 3, enhancedLimit: null },
   },
   guideAssignments: Object.fromEntries(
     SYNTHETIC_ATLAS_DREAMSCAPES.flatMap((dreamscape) =>

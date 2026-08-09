@@ -506,7 +506,11 @@ function selectCardChoiceEntryIds(
   rng: () => number,
 ): string[] {
   const ordered = isEnhanced ? [...deck] : rngShuffle(deck, rng);
-  const duplicationLimits = content.sitesData.cardChoices.duplication;
+  const duplicationRules = content.sitesData.siteTypes.Duplication.rules;
+  if (duplicationRules?.kind !== "duplication") {
+    throw new Error("Duplication site rules are unavailable");
+  }
+  const duplicationLimits = duplicationRules.cardChoices;
   const configuredLimit =
     kind === "transfiguration"
       ? isEnhanced
@@ -713,17 +717,17 @@ export function createSiteContentProvider(
           };
         }
         case "Shop":
-        case "DreamsignMarket": {
-          const isMarket = site.type === "DreamsignMarket";
-          const stock = isMarket
-            ? content.economyData.shop.stock.dreamsignMarket
+        case "DreamsignBazaar": {
+          const isBazaar = site.type === "DreamsignBazaar";
+          const stock = isBazaar
+            ? content.economyData.shop.stock.dreamsignBazaar
             : site.isEnhanced
               ? content.economyData.shop.stock.specialtyShop
               : content.economyData.shop.stock.cardShop;
           const generated = generateShopInventory({
             economy: content.economyData.shop,
             cardDatabase: content.cardDatabase,
-            draftState: isMarket ? null : shopSourceDraftState(journey),
+            draftState: isBazaar ? null : shopSourceDraftState(journey),
             remainingDreamsignPoolIds: journey.remainingDreamsignPool,
             dreamsignTemplates: content.dreamsignTemplates,
             dreamsignRegenerationPoolIds: dreamsignRegenerationPoolIds(journey),
@@ -820,16 +824,16 @@ export function createSiteContentProvider(
 
     rerollShop: ({ journey, site, rng }): ShopRerollResult | null => {
       const stream = streamFromKeyed(rng);
-      const isMarket = site.type === "DreamsignMarket";
-      const stock = isMarket
-        ? content.economyData.shop.stock.dreamsignMarket
+      const isBazaar = site.type === "DreamsignBazaar";
+      const stock = isBazaar
+        ? content.economyData.shop.stock.dreamsignBazaar
         : site.isEnhanced
           ? content.economyData.shop.stock.specialtyShop
           : content.economyData.shop.stock.cardShop;
       const generated = generateShopInventory({
         economy: content.economyData.shop,
         cardDatabase: content.cardDatabase,
-        draftState: isMarket ? null : shopSourceDraftState(journey),
+        draftState: isBazaar ? null : shopSourceDraftState(journey),
         remainingDreamsignPoolIds: journey.remainingDreamsignPool,
         dreamsignTemplates: content.dreamsignTemplates,
         dreamsignRegenerationPoolIds: dreamsignRegenerationPoolIds(journey),

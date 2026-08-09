@@ -52,7 +52,7 @@ pub enum GuideSpecialty {
     Shop {
         description: String,
     },
-    DreamsignMarket {
+    DreamsignBazaar {
         description: String,
     },
     DreamsignRevelation {
@@ -148,7 +148,7 @@ canonical_uuid!(DreamscapeId, "home Dreamscape identifier");
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 enum SpecialtyKind {
     Shop,
-    DreamsignMarket,
+    DreamsignBazaar,
     DreamsignRevelation,
     Transfiguration,
     Duplication,
@@ -162,7 +162,7 @@ enum SpecialtyKind {
 impl SpecialtyKind {
     const ALL: [Self; 10] = [
         Self::Shop,
-        Self::DreamsignMarket,
+        Self::DreamsignBazaar,
         Self::DreamsignRevelation,
         Self::Transfiguration,
         Self::Duplication,
@@ -176,7 +176,7 @@ impl SpecialtyKind {
     fn compatibility_name(self) -> &'static str {
         match self {
             Self::Shop => "Shop",
-            Self::DreamsignMarket => "DreamsignMarket",
+            Self::DreamsignBazaar => "DreamsignBazaar",
             Self::DreamsignRevelation => "DreamsignRevelation",
             Self::Transfiguration => "Transfiguration",
             Self::Duplication => "Duplication",
@@ -193,7 +193,7 @@ impl GuideSpecialty {
     fn kind(&self) -> SpecialtyKind {
         match self {
             Self::Shop { .. } => SpecialtyKind::Shop,
-            Self::DreamsignMarket { .. } => SpecialtyKind::DreamsignMarket,
+            Self::DreamsignBazaar { .. } => SpecialtyKind::DreamsignBazaar,
             Self::DreamsignRevelation { .. } => SpecialtyKind::DreamsignRevelation,
             Self::Transfiguration { .. } => SpecialtyKind::Transfiguration,
             Self::Duplication { .. } => SpecialtyKind::Duplication,
@@ -208,7 +208,7 @@ impl GuideSpecialty {
     fn description(&self) -> &str {
         match self {
             Self::Shop { description }
-            | Self::DreamsignMarket { description }
+            | Self::DreamsignBazaar { description }
             | Self::DreamsignRevelation { description }
             | Self::Transfiguration { description }
             | Self::Duplication { description }
@@ -315,7 +315,7 @@ fn lower_guide(
             dialogue.gamble_blackjack = Some(gamble.blackjack);
         }
         GuideSpecialty::Shop { .. }
-        | GuideSpecialty::DreamsignMarket { .. }
+        | GuideSpecialty::DreamsignBazaar { .. }
         | GuideSpecialty::DreamsignRevelation { .. }
         | GuideSpecialty::Transfiguration { .. }
         | GuideSpecialty::Duplication { .. }
@@ -430,7 +430,7 @@ pub(crate) fn validate(source: &[GuideDefinition]) -> Result<()> {
                 )?;
             }
             GuideSpecialty::Shop { .. }
-            | GuideSpecialty::DreamsignMarket { .. }
+            | GuideSpecialty::DreamsignBazaar { .. }
             | GuideSpecialty::DreamsignRevelation { .. }
             | GuideSpecialty::Transfiguration { .. }
             | GuideSpecialty::Duplication { .. }
@@ -538,7 +538,7 @@ pub(crate) mod tests {
 #![enable(implicit_some)]
 [
   GuideDefinition(id: "00000000-0000-4000-8000-000000000001", name: "Guide 1", home_dreamscape_id: "00000000-0000-4000-8000-000000000101", portrait_source: "one.png", site_dialogue: [r#"Site 1"#], specialty: Shop(description: "Shop copy")),
-  GuideDefinition(id: "00000000-0000-4000-8000-000000000002", name: "Guide 2", home_dreamscape_id: "00000000-0000-4000-8000-000000000102", portrait_source: "two.png", site_dialogue: ["Site 2"], specialty: DreamsignMarket(description: "Market copy")),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000002", name: "Guide 2", home_dreamscape_id: "00000000-0000-4000-8000-000000000102", portrait_source: "two.png", site_dialogue: ["Site 2"], specialty: DreamsignBazaar(description: "Bazaar copy")),
   GuideDefinition(id: "00000000-0000-4000-8000-000000000003", name: "Guide 3", home_dreamscape_id: "00000000-0000-4000-8000-000000000103", portrait_source: "three.png", site_dialogue: ["Site 3"], specialty: DreamsignRevelation(description: "Revelation copy")),
   GuideDefinition(id: "00000000-0000-4000-8000-000000000004", name: "Guide 4", home_dreamscape_id: "00000000-0000-4000-8000-000000000104", portrait_source: "four.png", site_dialogue: ["Site 4"], specialty: Transfiguration(description: "Transfiguration copy")),
   GuideDefinition(id: "00000000-0000-4000-8000-000000000005", name: "Guide 5", home_dreamscape_id: "00000000-0000-4000-8000-000000000105", portrait_source: "five.png", site_dialogue: ["Site 5"], specialty: Duplication(description: "Duplication copy")),
@@ -585,7 +585,7 @@ pub(crate) mod tests {
             site_types,
             vec![
                 "Shop",
-                "DreamsignMarket",
+                "DreamsignBazaar",
                 "DreamsignRevelation",
                 "Transfiguration",
                 "Duplication",
