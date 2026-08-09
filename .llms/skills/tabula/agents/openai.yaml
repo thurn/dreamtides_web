@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tabula"
+  short_description: "Build and validate the Tabula RON editor"
+  default_prompt: "Use $tabula to implement and validate a high-quality Tabula RON editor change."
