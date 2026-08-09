@@ -1,4 +1,4 @@
 interface:
   display_name: "Localize Dreamtides"
-  short_description: "Build translator-ready gettext and Fluent copy"
-  default_prompt: "Use $localization to localize this player-facing feature with complete messages and clear translator context."
+  short_description: "Write translator-ready Fluent messages"
+  default_prompt: "Use $localization to localize this player-facing feature with clear translator context."

@@ -60,26 +60,6 @@ the check mode requires every candidate to be a protected player file, an
 authored-data source, a machine/diagnostic value, or an explicit developer or
 fixture surface.
 
-## Gettext proof of concept
-
-The deck-browser title, card counts, empty states, close label, and status-bar
-deck label form a source-extracted gettext slice. Their complete English
-messages and `TRANSLATORS:` descriptions live beside their TypeScript display
-boundaries. `useGettext()` provides `gettext`, `pgettext`, `ngettext`, and
-`npgettext`; `formatGettext()` substitutes validated named semantic values
-after gettext has selected the complete translated message.
-
-Run `npm run gettext:extract` to regenerate
-`data/locales/gettext/messages.pot` with GNU `xgettext`. Run
-`npm run gettext:compile` to compile the Polish proof catalog into the JSON
-shape consumed by the browser runtime. `npm run gettext:check` verifies both
-generated artifacts. The default source locale is `en-US`; append `?locale=pl`
-to a local URL to exercise the Polish catalog and its three plural forms.
-
-Gettext source messages own their full grammatical unit. Articles, nouns,
-verbs, punctuation, and placeholder order stay within `gettext` or `ngettext`
-calls rather than being assembled from independently translated fragments.
-
 ## Term Groups
 
 The vocabulary covers:

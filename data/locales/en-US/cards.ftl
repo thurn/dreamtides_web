@@ -14,6 +14,21 @@ deck-sort-subtype = Subtype
 deck-size-small = S
 deck-size-medium = M
 deck-size-large = L
+# Title of the full-screen browser for the current player's deck. “Your”
+# addresses the local player, including one participant in a cooperative room.
+deck-browser-title = Your { -deck }
+# Count beneath the deck-browser title. $count is the number of cards currently
+# in the player's deck, is a non-negative integer, and can be zero.
+deck-browser-card-count =
+    { $count ->
+        [one] { $count } { -card(number: "one") }
+       *[other] { $count } { -card(number: "other") }
+    }
+# Empty state in the deck browser when the player's deck contains zero cards.
+deck-browser-empty = Your deck is empty.
+# Empty state when the player's non-empty deck has no cards matching the active
+# filter. The player can change or clear that filter to see cards again.
+deck-browser-no-filter-matches = No cards match this filter.
 # Subtitle for a card-pool browser. $visibleCount and $totalCount are
 # non-negative card counts; the visible count may be smaller after filtering.
 card-pool-browser-count =

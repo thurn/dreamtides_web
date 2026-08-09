@@ -171,6 +171,10 @@ export const FLUENT_MESSAGE_IDS = [
   "deck-size-small",
   "deck-size-medium",
   "deck-size-large",
+  "deck-browser-title",
+  "deck-browser-card-count",
+  "deck-browser-empty",
+  "deck-browser-no-filter-matches",
   "card-pool-browser-count",
   "card-pool-viewer-title",
   "card-pool-source-option",
@@ -374,8 +378,10 @@ export const FLUENT_MESSAGE_IDS = [
   "deck-sort-accessible-name",
   "deck-sort-ascending-accessible-name",
   "deck-sort-descending-accessible-name",
+  "deck-browser-close",
   "deck-browser-filter-accessible-name",
   "deck-browser-sort-accessible-name",
+  "journey-status-deck-open",
   "journey-status-dreamsigns-open",
   "battle-zone-browser-close",
   "exploration-outcome-rewards-gained",
@@ -652,6 +658,10 @@ export interface FluentMessageArgumentsById {
   readonly "deck-size-small": never;
   readonly "deck-size-medium": never;
   readonly "deck-size-large": never;
+  readonly "deck-browser-title": never;
+  readonly "deck-browser-card-count": { readonly count: FluentVariable };
+  readonly "deck-browser-empty": never;
+  readonly "deck-browser-no-filter-matches": never;
   readonly "card-pool-browser-count": {
     readonly totalCount: FluentVariable;
     readonly visibleCount: FluentVariable;
@@ -962,12 +972,14 @@ export interface FluentMessageArgumentsById {
   readonly "deck-sort-accessible-name": never;
   readonly "deck-sort-ascending-accessible-name": never;
   readonly "deck-sort-descending-accessible-name": never;
+  readonly "deck-browser-close": never;
   readonly "deck-browser-filter-accessible-name": {
     readonly selection: FluentVariable;
   };
   readonly "deck-browser-sort-accessible-name": {
     readonly selection: FluentVariable;
   };
+  readonly "journey-status-deck-open": { readonly count: FluentVariable };
   readonly "journey-status-dreamsigns-open": { readonly count: FluentVariable };
   readonly "battle-zone-browser-close": { readonly zone: FluentVariable };
   readonly "exploration-outcome-rewards-gained": {
@@ -1382,6 +1394,10 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "deck-size-small": [] as const,
   "deck-size-medium": [] as const,
   "deck-size-large": [] as const,
+  "deck-browser-title": [] as const,
+  "deck-browser-card-count": ["count"] as const,
+  "deck-browser-empty": [] as const,
+  "deck-browser-no-filter-matches": [] as const,
   "card-pool-browser-count": ["totalCount", "visibleCount"] as const,
   "card-pool-viewer-title": ["context"] as const,
   "card-pool-source-option": ["source"] as const,
@@ -1620,8 +1636,10 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "deck-sort-accessible-name": [] as const,
   "deck-sort-ascending-accessible-name": [] as const,
   "deck-sort-descending-accessible-name": [] as const,
+  "deck-browser-close": [] as const,
   "deck-browser-filter-accessible-name": ["selection"] as const,
   "deck-browser-sort-accessible-name": ["selection"] as const,
+  "journey-status-deck-open": ["count"] as const,
   "journey-status-dreamsigns-open": ["count"] as const,
   "battle-zone-browser-close": ["zone"] as const,
   "exploration-outcome-rewards-gained": ["rewardCount"] as const,
@@ -1918,6 +1936,9 @@ export type FluentMessageIdsWithoutVariables = [
   "deck-size-small",
   "deck-size-medium",
   "deck-size-large",
+  "deck-browser-title",
+  "deck-browser-empty",
+  "deck-browser-no-filter-matches",
   "card-pool-all-subtypes-option",
   "card-pool-search-label",
   "card-pool-tide-provenance-title",
@@ -2053,6 +2074,7 @@ export type FluentMessageIdsWithoutVariables = [
   "deck-sort-accessible-name",
   "deck-sort-ascending-accessible-name",
   "deck-sort-descending-accessible-name",
+  "deck-browser-close",
   "card-pool-subtype-filter-label",
   "card-pool-cost-filter-label",
   "card-pool-close-action",
@@ -2099,6 +2121,7 @@ export type FluentMessageIdsWithVariables = [
   "dreamscape-reward-status",
   "dreamscape-reward-dreamsign-label",
   "tutorial-drag-to-block",
+  "deck-browser-card-count",
   "card-pool-browser-count",
   "card-pool-viewer-title",
   "card-pool-source-option",
@@ -2169,6 +2192,7 @@ export type FluentMessageIdsWithVariables = [
   "battle-prompt-switch-side",
   "deck-browser-filter-accessible-name",
   "deck-browser-sort-accessible-name",
+  "journey-status-deck-open",
   "journey-status-dreamsigns-open",
   "battle-zone-browser-close",
   "exploration-outcome-rewards-gained",

@@ -28,6 +28,7 @@ describe("appLocalization", () => {
 
   it("formats representative zero, one, and multiple counts without leaking IDs", () => {
     const messages = [
+      ["deck-browser-card-count", "count"],
       ["battle-zone-browser-total-count", "count"],
       ["battle-card-memory-counter-count", "count"],
       ["battle-figment-create-action", "count"],

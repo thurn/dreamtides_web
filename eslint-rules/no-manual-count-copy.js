@@ -89,12 +89,12 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Require complete localized messages for count-dependent player copy.",
+        "Require complete Fluent messages for count-dependent player copy.",
     },
     schema: [],
     messages: {
       manualCountCopy:
-        "Count-dependent player copy must be a complete localized plural message; pass the count as semantic data.",
+        "Count-dependent player copy must be a complete Fluent message with a numeric selector; pass the count as semantic data.",
     },
   },
 

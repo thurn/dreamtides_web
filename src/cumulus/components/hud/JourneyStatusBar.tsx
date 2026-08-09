@@ -40,9 +40,7 @@ import type { CSSProperties, ReactElement } from "react";
 import { richText } from "../card/rich-text";
 import { glossaryInfoCard } from "../card/glossary-info-card";
 import { GLOSSARY_IDS } from "../../../data/glossary";
-import { formatGettext } from "../../../data/gettext";
 import { token } from "../../primitives/tokens";
-import { useGettext } from "../../hooks/use-gettext";
 import { useMessages } from "../../hooks/use-messages";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
 import { IconButton } from "../controls/IconButton";
@@ -536,10 +534,7 @@ function QsbHudBar({
   dreamAvatar?: QsbDreamAvatar;
   scale?: number;
 }): ReactElement {
-  const { ngettext } = useGettext();
-  // prettier-ignore
-  const deckLabelTemplate = /* TRANSLATORS: Accessible name for the Journey status-bar control that opens the local player's deck. {count} is the non-negative deck size and can be zero. */ ngettext("View deck containing {count} Card", "View deck containing {count} Cards", deck);
-  const deckLabel = formatGettext(deckLabelTemplate, { count: deck });
+  const t = useMessages();
   return (
     <div
       style={{
@@ -569,7 +564,7 @@ function QsbHudBar({
         as="button"
         className="qsbDeck"
         data-journey-deck-target=""
-        aria-label={deckLabel}
+        aria-label={t("journey-status-deck-open", { count: deck })}
         onClick={onViewDeck}
         style={{
           height: Math.round(66 * scale),

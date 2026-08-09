@@ -20,6 +20,9 @@ deck-filter-subtype-accessible-name = Filter by subtype
 deck-sort-accessible-name = Sort order
 deck-sort-ascending-accessible-name = Sort ascending
 deck-sort-descending-accessible-name = Sort descending
+# Accessible name for the icon-only control that dismisses the player's deck
+# browser and returns focus to the Journey screen beneath it.
+deck-browser-close = Close deck browser
 # Accessible name for the deck type-filter control. $selection is the displayed
 # name of the active filter option; it is canonical card vocabulary or a card
 # subtype name whose grammatical gender is unknown.
@@ -27,6 +30,13 @@ deck-browser-filter-accessible-name = Filter deck by { $selection }
 # Accessible name for the deck sort control. $selection is the displayed name
 # of the active sort order.
 deck-browser-sort-accessible-name = Sort deck by { $selection }
+# Accessible name for the Journey status-bar control that opens the current
+# player's deck. $count is the non-negative current deck size and can be zero.
+journey-status-deck-open =
+    { $count ->
+        [one] View deck containing { $count } { -card(number: "one") }
+       *[other] View deck containing { $count } { -card(number: "other") }
+    }
 # Accessible name for the Journey status-bar control that opens the player's
 # Dreamsign gallery. $count is the positive number of collected Dreamsigns.
 journey-status-dreamsigns-open =
