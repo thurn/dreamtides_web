@@ -24,9 +24,7 @@ import {
   makeTestPoolContext,
 } from "../__test-helpers__/pool-context";
 import type { DreamAtlas, JourneyState } from "../types/journey";
-import type { PoolDraftState, ReplayDraftState } from "../types/draft";
-import type { DraftRecord } from "../data/cards-v2-database";
-import { buildFitModel, type FitModel } from "../draft/replay/fit-model";
+import type { PoolDraftState } from "../types/draft";
 import { toJourneyDreamAvatar } from "../data/dream-avatar-selection";
 import { createDefaultState } from "./journey-context";
 import {
@@ -136,107 +134,6 @@ function makeAtlas(): DreamAtlas {
   };
 }
 
-/**
- * A deterministic deck-fit corpus for replay tests. Forty cards `C1..C40`
- * (numbers 1..40). Card `C1` strongly co-occurs with `C2` and `C3` with `C4`
- * across a 20-deck corpus, so a deck containing `C1` ranks `C2` ahead of `C4`
- * and vice-versa — giving the next-offer ranking an unambiguous, deck-dependent
- * answer with no RNG. Mirrors the design verified for the fit model.
- */
-const REPLAY_NAME_INDEX: Map<string, number> = (() => {
-  const index = new Map<string, number>();
-  for (let i = 1; i <= 40; i += 1) {
-    index.set(`C${String(i)}`, i);
-  }
-  return index;
-})();
-
-function buildReplayCorpus(): string[][] {
-  const decks: string[][] = [];
-  for (let d = 0; d < 20; d += 1) {
-    const deck: string[] = d < 10 ? ["C1", "C2"] : ["C3", "C4"];
-    let filler = 5 + (d % 5);
-    while (deck.length < 16) {
-      const name = `C${String(filler)}`;
-      if (!deck.includes(name)) {
-        deck.push(name);
-      }
-      filler += 1;
-      if (filler > 40) {
-        filler = 5;
-      }
-    }
-    decks.push(deck);
-  }
-  return decks;
-}
-
-function makeReplayFitModel(): FitModel {
-  return buildFitModel(buildReplayCorpus(), REPLAY_NAME_INDEX);
-}
-
-/** Card database covering the replay corpus cards (numbers 1..40). */
-function makeReplayCardDatabase(): Map<number, CardData> {
-  const cards = new Map<number, CardData>();
-  for (const cardNumber of REPLAY_NAME_INDEX.values()) {
-    cards.set(
-      cardNumber,
-      makeCard(cardNumber, { name: asCardName(`C${String(cardNumber)}`) }),
-    );
-  }
-  return cards;
-}
-
-/**
- * A replay draft state already entered at `site-1` and showing `currentOffer`.
- * `packSequence[0]` (pick 1) is the four-card offer the player picks from;
- * `packSequence[1]` (pick 2) is a five-card pack the engine must rank against
- * the post-pick deck.
- */
-function makeReplayDraftState(): ReplayDraftState {
-  return {
-    mode: "replay",
-    recordId: "test-record",
-    // pick 1 offer = whole 4-card pack; pick 2 = 5-card pack to rank.
-    packSequence: [
-      [1, 3, 30, 31],
-      [2, 4, 30, 31, 32],
-    ],
-    signatureCardNumbers: [],
-    currentOffer: [1, 3, 30, 31],
-    activeSiteId: "site-1",
-    pickNumber: 1,
-    sitePicksCompleted: 0,
-  };
-}
-
-/** Minimal replay record fixture: a single record so selection is index 0. */
-function makeReplayRecord(): DraftRecord {
-  const corpus = buildReplayCorpus();
-  // 30 packs, each a 4-card pack of real corpus cards.
-  const packs = Array.from({ length: 30 }, (_, i) => {
-    const base = (i % 9) + 5; // rotate through filler cards C5..C13
-    return [
-      `C${String(base)}`,
-      `C${String(base + 1)}`,
-      `C${String(base + 2)}`,
-      `C${String(base + 3)}`,
-    ];
-  });
-  const picks: string[][] = Array.from({ length: 30 }, () => []);
-  return {
-    id: "record-0",
-    draftId: "draft-0",
-    sourceFile: "draft-0-records.json",
-    mainboard: corpus[0],
-    mainboardIds: corpus[0],
-    packs,
-    picks,
-    packIds: packs,
-    pickIds: picks,
-  };
-}
-
 beforeEach(() => {
   // Restore first so each test starts with a clean console.log spy: journey start
   // now emits a `draft_pool_constructed` log, and without clearing, that call
@@ -317,7 +214,7 @@ describe("journey state actions", () => {
     const prev: JourneyState = {
       ...createDefaultState(),
       draftState: {
-        mode: "pool",
+        mode: "tides4",
         draftPoolCopiesByCard: {
           "201": 1,
           "202": 1,
@@ -371,7 +268,7 @@ describe("journey state actions", () => {
     const prev: JourneyState = {
       ...createDefaultState(),
       draftState: {
-        mode: "pool",
+        mode: "tides4",
         draftPoolCopiesByCard: {
           "201": 1,
           "202": 1,
@@ -464,7 +361,7 @@ describe("journey state actions", () => {
     expect(next.deck.map((entry) => entry.entryId)).toEqual(
       STARTER_CARD_NUMBERS.map((_, index) => `deck-${String(index + 1)}`),
     );
-    const nextPoolState = next.draftState as PoolDraftState | null;
+    const nextPoolState = next.draftState;
     expect(nextPoolState?.draftPoolCopiesByCard).toEqual(
       next.resolvedPackage?.draftPoolCopiesByCard,
     );
@@ -530,7 +427,7 @@ describe("journey state actions", () => {
 
     expect(next.resolvedPackage).toBe(authoredPackage);
     expect(next.isTutorialJourney).toBe(true);
-    expect(next.draftState?.mode).toBe("pool");
+    expect(next.draftState?.mode).toBe("tides4");
     expect((next.draftState as PoolDraftState).draftPoolCopiesByCard).toEqual(
       authoredCopies,
     );
@@ -597,220 +494,5 @@ describe("journey state actions", () => {
       isVisited: true,
     });
     expect(next.siteRuntime["site-2"]).toBe(runtime);
-  });
-});
-
-describe("journey state actions (replay draft)", () => {
-  it("starts a replay journey with a replay draft state", () => {
-    const dreamAvatar = makeDreamAvatar();
-    const journeyContent: JourneyContent = {
-      ...makeJourneyContent(dreamAvatar),
-      draftMode: "replay",
-      draftRecords: [makeReplayRecord()],
-      fitModel: makeReplayFitModel(),
-    };
-    const prev = createDefaultState();
-
-    const next = startJourneyFromDreamAvatar({
-      prev,
-      dreamAvatar,
-      journeyContent,
-      seedOverride: "replay-seed-1",
-    });
-
-    expect(next.draftState?.mode).toBe("replay");
-    const replayState = next.draftState as ReplayDraftState;
-    expect(replayState.recordId).toBe("record-0");
-    expect(replayState.packSequence.length).toBe(30);
-    expect(replayState.currentOffer).toEqual([]);
-    expect(replayState.pickNumber).toBe(1);
-    // The resolved package is still built normally in replay mode so shops,
-    // signatures, and the dreamsign pool keep working.
-    expect(next.resolvedPackage).not.toBeNull();
-    expect(next.resolvedPackage?.draftPoolSize).toBeGreaterThan(0);
-    const knownIds = new Set(
-      next.atlas.knownDreamsignCarrierIds
-        .map((id) => next.atlas.nodes[id]?.knownDreamsignId)
-        .filter((id): id is string => id != null),
-    );
-    expect(next.remainingDreamsignPool).toEqual(
-      (next.resolvedPackage?.dreamsignPoolIds ?? []).filter(
-        (id) => !knownIds.has(id),
-      ),
-    );
-  });
-
-  it("falls back to a pool draft state when no records are present", () => {
-    const dreamAvatar = makeDreamAvatar();
-    const journeyContent: JourneyContent = {
-      ...makeJourneyContent(dreamAvatar),
-      draftMode: "replay",
-      draftRecords: [],
-      fitModel: undefined,
-    };
-    const prev = createDefaultState();
-
-    const next = startJourneyFromDreamAvatar({
-      prev,
-      dreamAvatar,
-      journeyContent,
-      seedOverride: "replay-seed-2",
-    });
-
-    expect(next.draftState?.mode).toBe("pool");
-  });
-
-  it("appends the pick and ranks the next offer against the updated deck", () => {
-    const cardDatabase = makeReplayCardDatabase();
-    const fitModel = makeReplayFitModel();
-
-    const prevPickC1: JourneyState = {
-      ...createDefaultState(),
-      draftState: makeReplayDraftState(),
-    };
-    // Picking C1 (number 1): the next pack [2,4,30,31,32] must rank C2 first,
-    // because C1's corpus partner is C2 and the engine sees the post-pick deck.
-    const afterC1 = pickDraftCardInJourneyState({
-      prev: prevPickC1,
-      siteId: "site-1",
-      cardNumber: 1,
-      cardDatabase,
-      fitModel,
-    });
-    expect(afterC1.deck.map((entry) => entry.cardNumber)).toEqual([1]);
-    expect(afterC1.draftState?.pickNumber).toBe(2);
-    const offerAfterC1 = afterC1.draftState?.currentOffer ?? [];
-    expect(offerAfterC1[0]).toBe(2);
-
-    const prevPickC3: JourneyState = {
-      ...createDefaultState(),
-      draftState: makeReplayDraftState(),
-    };
-    // Picking C3 (number 3) from the SAME pick-1 offer: the same next pack must
-    // now rank C4 first, proving the ranking reflects the just-picked card.
-    const afterC3 = pickDraftCardInJourneyState({
-      prev: prevPickC3,
-      siteId: "site-1",
-      cardNumber: 3,
-      cardDatabase,
-      fitModel,
-    });
-    expect(afterC3.deck.map((entry) => entry.cardNumber)).toEqual([3]);
-    const offerAfterC3 = afterC3.draftState?.currentOffer ?? [];
-    expect(offerAfterC3[0]).toBe(4);
-    // The two next-offers differ only because the deck the engine saw differed.
-    expect(offerAfterC1).not.toEqual(offerAfterC3);
-    expect(console.log).not.toHaveBeenCalled();
-  });
-
-  it("commits a prepared replay pick and rejects a diverged one", () => {
-    const cardDatabase = makeReplayCardDatabase();
-    const fitModel = makeReplayFitModel();
-    const prev: JourneyState = {
-      ...createDefaultState(),
-      draftState: makeReplayDraftState(),
-    };
-
-    const prepared = prepareDraftCardPickInJourneyState({
-      prev,
-      siteId: "site-1",
-      cardNumber: 1,
-      cardDatabase,
-      fitModel,
-    });
-    // The prepared next offer is computed against the deck WITH C1, so it leads
-    // with C2 just like the direct-pick path.
-    expect((prepared.next.draftState?.currentOffer ?? [])[0]).toBe(2);
-
-    // Happy path: state unchanged since prepare -> commit writes prepared.next.
-    const committed = commitPreparedDraftCardPickInJourneyState({
-      prev,
-      prepared,
-    });
-    expect(committed?.deck).toEqual(prepared.next.deck);
-    expect(committed?.draftState?.currentOffer).toEqual(
-      prepared.next.draftState?.currentOffer,
-    );
-
-    // Conflict on a diverged currentOffer.
-    const staleOffer: JourneyState = {
-      ...prev,
-      draftState: { ...makeReplayDraftState(), currentOffer: [3, 1, 30, 31] },
-    };
-    expect(
-      commitPreparedDraftCardPickInJourneyState({ prev: staleOffer, prepared }),
-    ).toBeNull();
-
-    // Conflict on a diverged pickNumber.
-    const stalePick: JourneyState = {
-      ...prev,
-      draftState: { ...makeReplayDraftState(), pickNumber: 2 },
-    };
-    expect(
-      commitPreparedDraftCardPickInJourneyState({ prev: stalePick, prepared }),
-    ).toBeNull();
-
-    // Conflict on a diverged deck.
-    const staleDeck: JourneyState = {
-      ...prev,
-      deck: [
-        {
-          entryId: "deck-1",
-          cardNumber: 99,
-          transfiguration: null,
-          isBane: false,
-        },
-      ],
-    };
-    expect(
-      commitPreparedDraftCardPickInJourneyState({ prev: staleDeck, prepared }),
-    ).toBeNull();
-    expect(console.log).not.toHaveBeenCalled();
-  });
-
-  it("leaves pool-mode pick output unchanged by the append-first reorder", () => {
-    // Same setup as the pool pick test, but asserts the reorder did not alter
-    // the observable result: deck gets the card, pick advances, and a fresh
-    // pool offer of four cards is produced.
-    const cardDatabase = new Map<number, CardData>(
-      [101, 102, 103, 104, 201, 202, 203, 204].map((cardNumber) => [
-        cardNumber,
-        makeCard(cardNumber),
-      ]),
-    );
-    const prev: JourneyState = {
-      ...createDefaultState(),
-      draftState: {
-        mode: "pool",
-        draftPoolCopiesByCard: { "201": 1, "202": 1, "203": 1, "204": 1 },
-        remainingCopiesByCard: { "201": 1, "202": 1, "203": 1, "204": 1 },
-        currentOffer: [101, 102, 103, 104],
-        activeSiteId: "site-1",
-        pickNumber: 1,
-        sitePicksCompleted: 0,
-      },
-    };
-
-    // fitModel is supplied but must be ignored for a pool state.
-    const next = pickDraftCardInJourneyState({
-      prev,
-      siteId: "site-1",
-      cardNumber: 101,
-      cardDatabase,
-      fitModel: makeReplayFitModel(),
-    });
-
-    expect(next.deck).toEqual([
-      {
-        entryId: "deck-1",
-        cardNumber: 101,
-        transfiguration: null,
-        isBane: false,
-      },
-    ]);
-    expect(next.draftState?.pickNumber).toBe(2);
-    expect(next.draftState?.sitePicksCompleted).toBe(1);
-    expect(next.draftState?.currentOffer).toHaveLength(4);
-    expect(console.log).not.toHaveBeenCalled();
   });
 });

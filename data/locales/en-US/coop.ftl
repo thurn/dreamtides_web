@@ -65,7 +65,6 @@ coop-presence-connected-count =
 # Content-settings gate title and explanation.
 coop-content-settings-title = This Game Uses Different Settings
 coop-content-settings-message = Both players use the same content settings to play together.
-coop-use-game-settings-action = Use This Game’s Settings
 coop-unadoptable-settings-detail = This game needs settings this build cannot adopt.
 coop-player-disconnected-title = Player Disconnected
 coop-playtest-paused-message = The playtest is paused. Take control when you are ready to continue.
@@ -75,9 +74,6 @@ application-comparison-this-game = This Game
 # Comparison-table heading for this client's local configuration.
 application-comparison-yours = Yours
 # Config comparison row labels.
-coop-config-pool-label = Pool
-coop-config-draft-label = Draft
-coop-config-pack-size-label = Pack Size
 coop-config-atlas-rules-label = Atlas Rules
 coop-config-site-rules-label = Site Rules
 coop-config-draft-rules-label = Draft Rules
@@ -87,4 +83,3 @@ coop-config-transfiguration-rules-label = Transfiguration Rules
 coop-config-opponent-rules-label = Opponent Rules
 coop-config-tutorial-rules-label = Tutorial Rules
 coop-config-unavailable = Unavailable
-coop-config-default = Default

@@ -3,19 +3,11 @@ import type { ResolvedDreamAvatarPackage } from "../types/content";
 import type {
   DraftConfig,
   DraftState,
-  Fresh20DraftState,
   PackContext,
   PoolDraftState,
-  ReplayDraftState,
 } from "../types/draft";
 import { logEvent } from "../logging";
 import { logAffiliationDraw } from "../affiliations/affiliation-weights";
-import { computeReplayOffer, type FitModel } from "./replay/fit-model";
-import {
-  computeFresh20Offer,
-  recordFresh20Shown,
-  type Fresh20Deps,
-} from "./fresh20/fresh20-offer";
 import { DEFAULT_DRAFT_SITE_PICK_COUNT } from "./draft-site-config";
 
 /** Default shared draft configuration. */
@@ -29,59 +21,6 @@ export const DEFAULT_DRAFT_CONFIG: Readonly<DraftConfig> = {
 
 /** Legacy default used by tests and imported saves without persisted site data. */
 export const SITE_PICKS = DEFAULT_DRAFT_SITE_PICK_COUNT;
-
-/**
- * Dependencies the engine needs to compute a replay offer. Supplied by callers
- * on every replay-mode `revealOffer` / `processPlayerPick` / `enterDraftSite`;
- * pool-mode calls omit it.
- */
-export interface ReplayDeps {
-  /**
-   * The player's current deck (card numbers). When computing the offer for the
-   * NEXT pick this MUST already include the just-picked card; callers handle
-   * that ordering.
-   */
-  deckCardNumbers: readonly number[];
-  /** The deck-fit model used to rank a pack. */
-  fitModel: FitModel;
-  /** How many cards to offer (e.g. `DEFAULT_DRAFT_CONFIG.packSize`). */
-  offerSize: number;
-  /** Ranker. Defaults to the real {@link computeReplayOffer}; tests inject a fake. */
-  computeOffer?: typeof computeReplayOffer;
-}
-
-/**
- * Per-offer dependencies for the deck-fit draft modes. `revealOffer` and the
- * pick/entry helpers accept whichever member matches the active draft state:
- * {@link ReplayDeps} for `mode:"replay"`, {@link Fresh20Deps} for
- * `mode:"fresh20"`. Pool-mode calls pass `undefined`.
- */
-export type OfferDeps = ReplayDeps | Fresh20Deps;
-
-/**
- * Compute a replay offer from the frozen pack sequence. Returns the deck-fit
- * best `offerSize` cards of the pack for this pick, the whole pack when it is
- * small, or `[]` once the sequence is exhausted (e.g. `pickNumber > 30`).
- */
-export function buildReplayOffer(
-  state: ReplayDraftState,
-  deps: ReplayDeps,
-): number[] {
-  const pack = state.packSequence[state.pickNumber - 1];
-  if (pack === undefined || pack.length === 0) {
-    return [];
-  }
-  if (pack.length <= deps.offerSize) {
-    return [...pack];
-  }
-  return (deps.computeOffer ?? computeReplayOffer)(
-    pack,
-    deps.deckCardNumbers,
-    state.signatureCardNumbers,
-    deps.fitModel,
-    deps.offerSize,
-  );
-}
 
 /**
  * Sample unique card numbers from weighted entries without replacement.
@@ -150,9 +89,6 @@ export function drawAndSpendUniqueCards(
   affiliationWeights?: ReadonlyMap<number, number>,
   rng: () => number = Math.random,
 ): number[] {
-  if (state.mode !== "pool") {
-    throw new Error("drawAndSpendUniqueCards requires a pool draft state");
-  }
   const buildEntries = (
     copies: Record<string, number>,
   ): Array<{ cardNumber: number; weight: number }> => {
@@ -282,43 +218,8 @@ function revealOffer(
   state: DraftState,
   config: DraftConfig,
   options: { logEvents: boolean } = { logEvents: true },
-  offerDeps?: OfferDeps,
   rng: () => number = Math.random,
 ): boolean {
-  if (state.mode === "replay") {
-    if (offerDeps === undefined) {
-      throw new Error("revealOffer requires replayDeps for a replay draft state");
-    }
-    state.currentOffer = buildReplayOffer(state, offerDeps);
-    if (options.logEvents) {
-      logEvent("draft_offer_revealed", {
-        pickNumber: state.pickNumber,
-        offerCards: state.currentOffer,
-      });
-    }
-    return state.currentOffer.length > 0;
-  }
-
-  if (state.mode === "fresh20") {
-    if (offerDeps === undefined) {
-      throw new Error(
-        "revealOffer requires fresh20Deps for a fresh20 draft state",
-      );
-    }
-    state.currentOffer = computeFresh20Offer(state, offerDeps as Fresh20Deps);
-    // Record the shown cards so the cooldown / twice-then-never caps apply on
-    // later picks. Done here (once per pick) rather than in the pure offer
-    // computation so the offer builder stays side-effect free.
-    recordFresh20Shown(state, state.currentOffer);
-    if (options.logEvents) {
-      logEvent("draft_offer_revealed", {
-        pickNumber: state.pickNumber,
-        offerCards: state.currentOffer,
-      });
-    }
-    return state.currentOffer.length > 0;
-  }
-
   // Cards already shown in this site visit are excluded so the same card is
   // never offered twice within one visit. The set resets when a new draft site
   // visit begins (see enterDraftSite).
@@ -445,7 +346,7 @@ export function createInitialDraftState(
   );
 
   return {
-    mode: "pool",
+    mode: "tides4",
     draftPoolCopiesByCard,
     ...(resolvedPackage.openingDraftOffers === undefined
       ? {}
@@ -455,48 +356,6 @@ export function createInitialDraftState(
           ),
         }),
     remainingCopiesByCard: { ...draftPoolCopiesByCard },
-    currentOffer: [],
-    activeSiteId: null,
-    pickNumber: 1,
-    sitePicksCompleted: 0,
-    siteShownCardNumbers: [],
-  };
-}
-
-/**
- * Create an initial replay {@link ReplayDraftState} from a chosen record's
- * frozen pack sequence and the DreamAvatar's signature cards.
- */
-export function createInitialReplayDraftState(args: {
-  recordId: string;
-  packSequence: number[][];
-  signatureCardNumbers: number[];
-}): ReplayDraftState {
-  return {
-    mode: "replay",
-    recordId: args.recordId,
-    packSequence: args.packSequence,
-    signatureCardNumbers: args.signatureCardNumbers,
-    currentOffer: [],
-    activeSiteId: null,
-    pickNumber: 1,
-    sitePicksCompleted: 0,
-    siteShownCardNumbers: [],
-  };
-}
-
-/**
- * Create an initial {@link Fresh20DraftState}. The packs are rolled lazily at
- * each pick, so nothing is frozen up front: only the pack size and the (empty)
- * show history are seeded here.
- */
-export function createInitialFresh20DraftState(args: {
-  packSize: number;
-}): Fresh20DraftState {
-  return {
-    mode: "fresh20",
-    packSize: args.packSize,
-    shownPicksByCard: {},
     currentOffer: [],
     activeSiteId: null,
     pickNumber: 1,
@@ -527,21 +386,14 @@ export function enterDraftSite(
   siteId: string,
   _cardDatabase: Map<number, CardData>,
   config: DraftConfig = DEFAULT_DRAFT_CONFIG,
-  offerDeps?: OfferDeps,
   rng: () => number = Math.random,
 ): void {
   if (state.activeSiteId === siteId) {
     logEvent("draft_site_entered", {
       siteId,
       pickNumber: state.pickNumber,
-      poolSize:
-        state.mode === "pool"
-          ? countRemainingCards(state.remainingCopiesByCard)
-          : 0,
+      poolSize: countRemainingCards(state.remainingCopiesByCard),
       offerCards: state.currentOffer,
-      // A pool offer is always either full or empty, so `> 0` matches the old
-      // `=== packSize` check there; for replay it also reports a valid short
-      // pack (fewer than packSize cards) as available.
       offerAvailable: state.currentOffer.length > 0,
       resumedExistingOffer: state.currentOffer.length > 0,
       cardsPerOffer: config.packSize,
@@ -554,15 +406,12 @@ export function enterDraftSite(
   state.activeSiteId = siteId;
   state.sitePicksCompleted = 0;
   state.siteShownCardNumbers = [];
-  const hasOffer = revealOffer(state, config, { logEvents: true }, offerDeps, rng);
+  const hasOffer = revealOffer(state, config, { logEvents: true }, rng);
 
   logEvent("draft_site_entered", {
     siteId,
     pickNumber: state.pickNumber,
-    poolSize:
-      state.mode === "pool"
-        ? countRemainingCards(state.remainingCopiesByCard)
-        : 0,
+    poolSize: countRemainingCards(state.remainingCopiesByCard),
     offerCards: state.currentOffer,
     offerAvailable: hasOffer,
     resumedExistingOffer: false,
@@ -580,7 +429,6 @@ export function enterDraftSite(
 export function rerollDraftOffer(
   state: DraftState,
   config: DraftConfig = DEFAULT_DRAFT_CONFIG,
-  offerDeps?: OfferDeps,
   rng: () => number = Math.random,
 ): boolean {
   const previousOffer = [...state.currentOffer];
@@ -588,7 +436,6 @@ export function rerollDraftOffer(
     state,
     config,
     { logEvents: true },
-    offerDeps,
     rng,
   );
 
@@ -597,14 +444,10 @@ export function rerollDraftOffer(
     pickNumber: state.pickNumber,
     previousOffer,
     offerCards: state.currentOffer,
-    ...(state.mode === "pool"
-      ? {
-          poolRemaining: countRemainingCards(state.remainingCopiesByCard),
-          uniqueCardsRemaining: countRemainingUniqueCards(
-            state.remainingCopiesByCard,
-          ),
-        }
-      : {}),
+    poolRemaining: countRemainingCards(state.remainingCopiesByCard),
+    uniqueCardsRemaining: countRemainingUniqueCards(
+      state.remainingCopiesByCard,
+    ),
   });
 
   return hasOffer;
@@ -625,7 +468,6 @@ function processPlayerPickInternal(
   cardDatabase: Map<number, CardData>,
   config: DraftConfig = DEFAULT_DRAFT_CONFIG,
   options: { logEvents: boolean },
-  offerDeps?: OfferDeps,
   rng: () => number = Math.random,
   postPickDeckCardNumbers: readonly number[] = [cardNumber],
 ): boolean {
@@ -645,32 +487,26 @@ function processPlayerPickInternal(
       cardNumber,
       cardName: card?.name ?? "Unknown",
       offerCards: currentOffer,
-      ...(state.mode === "pool"
-        ? {
-            poolRemaining: countRemainingCards(state.remainingCopiesByCard),
-            uniqueCardsRemaining: countRemainingUniqueCards(
-              state.remainingCopiesByCard,
-            ),
-          }
-        : {}),
+      poolRemaining: countRemainingCards(state.remainingCopiesByCard),
+      uniqueCardsRemaining: countRemainingUniqueCards(
+        state.remainingCopiesByCard,
+      ),
     });
   }
 
   state.pickNumber += 1;
   state.sitePicksCompleted += 1;
 
-  if (state.mode === "pool") {
-    for (const rarityCap of config.rarityCaps) {
-      const pickedAtRarity = postPickDeckCardNumbers.reduce(
-        (count, draftedCardNumber) =>
-          cardDatabase.get(draftedCardNumber)?.rarity === rarityCap.rarity
-            ? count + 1
-            : count,
-        0,
-      );
-      if (pickedAtRarity >= rarityCap.maxPicksPerRun) {
-        removeRarityFromPool(state, cardDatabase, rarityCap.rarity);
-      }
+  for (const rarityCap of config.rarityCaps) {
+    const pickedAtRarity = postPickDeckCardNumbers.reduce(
+      (count, draftedCardNumber) =>
+        cardDatabase.get(draftedCardNumber)?.rarity === rarityCap.rarity
+          ? count + 1
+          : count,
+      0,
+    );
+    if (pickedAtRarity >= rarityCap.maxPicksPerRun) {
+      removeRarityFromPool(state, cardDatabase, rarityCap.rarity);
     }
   }
 
@@ -679,7 +515,7 @@ function processPlayerPickInternal(
     return true;
   }
 
-  return !revealOffer(state, config, options, offerDeps, rng);
+  return !revealOffer(state, config, options, rng);
 }
 
 export function processPlayerPick(
@@ -687,7 +523,6 @@ export function processPlayerPick(
   state: DraftState,
   cardDatabase: Map<number, CardData>,
   config: DraftConfig = DEFAULT_DRAFT_CONFIG,
-  offerDeps?: OfferDeps,
   rng: () => number = Math.random,
   postPickDeckCardNumbers?: readonly number[],
 ): boolean {
@@ -697,7 +532,6 @@ export function processPlayerPick(
     cardDatabase,
     config,
     { logEvents: true },
-    offerDeps,
     rng,
     postPickDeckCardNumbers,
   );
@@ -708,7 +542,6 @@ export function processPlayerPickWithoutLogging(
   state: DraftState,
   cardDatabase: Map<number, CardData>,
   config: DraftConfig = DEFAULT_DRAFT_CONFIG,
-  offerDeps?: OfferDeps,
   rng: () => number = Math.random,
   postPickDeckCardNumbers?: readonly number[],
 ): boolean {
@@ -718,7 +551,6 @@ export function processPlayerPickWithoutLogging(
     cardDatabase,
     config,
     { logEvents: false },
-    offerDeps,
     rng,
     postPickDeckCardNumbers,
   );
@@ -733,13 +565,9 @@ export function completeDraftSite(
     siteId: state.activeSiteId,
     cardsDrafted: [...draftedCardNumbers],
     picksCompleted: state.sitePicksCompleted,
-    ...(state.mode === "pool"
-      ? {
-          poolRemaining: countRemainingCards(state.remainingCopiesByCard),
-          uniqueCardsRemaining: countRemainingUniqueCards(
-            state.remainingCopiesByCard,
-          ),
-        }
-      : {}),
+    poolRemaining: countRemainingCards(state.remainingCopiesByCard),
+    uniqueCardsRemaining: countRemainingUniqueCards(
+      state.remainingCopiesByCard,
+    ),
   });
 }

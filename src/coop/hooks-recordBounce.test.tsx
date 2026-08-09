@@ -31,9 +31,7 @@ const fake = vi.hoisted(() => {
     reducerVersion: "v",
     createdAt: 0,
     contentConfig: {
-      poolVariant: "test",
-      draftMode: "pool",
-      fresh20PackSize: null,
+      poolVariant: "tides4",
       atlasFoldHash: "fixture-atlas-fold-hash",
       sitesFoldHash: "fixture-sites-fold-hash",
       draftFoldHash: "fixture-draft-fold-hash",

@@ -10,7 +10,6 @@ import { createPortal } from "react-dom";
 import type { CardData } from "../types/cards";
 import type { DreamAvatarContent } from "../types/content";
 import { loadJourneyContent, type JourneyContent } from "../data/journey-content";
-import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import { GameCard } from "../cumulus/components/card/CardView";
 import {
   DreamAvatarPortrait,
@@ -623,7 +622,7 @@ export default function SignatureDecksApp() {
 
   useEffect(() => {
     let cancelled = false;
-    loadJourneyContent(DEFAULT_POOL_VARIANT)
+    loadJourneyContent()
       .then((loaded) => {
         if (!cancelled) setContent(loaded);
       })

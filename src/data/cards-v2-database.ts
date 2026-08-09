@@ -45,7 +45,7 @@ export async function loadDecklistIds(): Promise<string[][]> {
 
 /**
  * A single human-seat entry from the adapted Cube Cobra draft corpus, bundled
- * by `scripts/setup-assets.mjs` for the record-replay draft mode. `packs` and
+ * by `scripts/setup-assets.mjs` for corpus-based scoring. `packs` and
  * `picks` are aligned arrays of length 30 (10 picks per pack × 3 packs); their
  * entries are CURRENT display names, refreshed from each card's stable id at
  * bundle time. `packIds`/`pickIds` carry the matching cards_v2 UUIDs, aligned
@@ -66,7 +66,7 @@ export interface DraftRecord {
 /**
  * Fetch the bundled adapted draft records (`docs/draft_records_adapted`,
  * written to `/draft-records-data.json` by `scripts/setup-assets.mjs`) used
- * by the record-replay draft mode and opponent deck construction.
+ * by opponent deck construction and shared corpus scoring.
  */
 export async function loadDraftRecords(): Promise<DraftRecord[]> {
   const response = await fetch("/draft-records-data.json");
@@ -126,7 +126,7 @@ export async function loadTides4Decks(): Promise<Tides4DecksJson | null> {
  * Build a card-UUID -> card-number index from a v2 database, keyed on the
  * lowercased stable card id. Card ids are unique (one per card), so there is no
  * collision to resolve: two cards that share a display name keep distinct id
- * keys here. This is the rename-stable index the record-replay fit model and
+ * keys here. This is the rename-stable index the corpus fit model and
  * draft-record helpers translate card numbers against, so a same-name collision
  * never blends two distinct cards.
  */

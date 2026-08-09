@@ -13,7 +13,7 @@ import type {
 } from "../../types/journey";
 import type { RunPoolContext } from "../../data/journey-content";
 import type { DraftRecord } from "../../data/cards-v2-database";
-import type { FitModel } from "../../draft/replay/fit-model";
+import type { FitModel } from "../../draft/fit-model";
 import { DEFAULT_POOL_VARIANT } from "../../draft/pool/types";
 import {
   applyCardKeywordModification,

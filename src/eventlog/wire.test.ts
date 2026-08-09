@@ -13,8 +13,6 @@ const GENESIS: Genesis = {
   createdAt: 0,
   contentConfig: {
     poolVariant: "tides4",
-    draftMode: "pool",
-    fresh20PackSize: null,
     atlasFoldHash: "fixture-atlas-fold-hash",
     sitesFoldHash: "fixture-sites-fold-hash",
     draftFoldHash: "fixture-draft-fold-hash",
@@ -116,8 +114,6 @@ describe("RTDB log wire decoding", () => {
       ...GENESIS,
       contentConfig: {
         poolVariant: "tides4",
-        draftMode: "pool",
-        fresh20PackSize: null,
       },
     };
     expect(decodeGenesis(JSON.stringify(legacy))).toEqual(legacy);
@@ -133,6 +129,14 @@ describe("RTDB log wire decoding", () => {
     const malformed = {
       ...GENESIS,
       contentConfig: { ...GENESIS.contentConfig, atlasFoldHash: 42 },
+    };
+    expect(decodeGenesis(JSON.stringify(malformed))).toBeNull();
+  });
+
+  it("rejects a room configured with any draft-pool strategy except tides4", () => {
+    const malformed = {
+      ...GENESIS,
+      contentConfig: { ...GENESIS.contentConfig, poolVariant: "unknown" },
     };
     expect(decodeGenesis(JSON.stringify(malformed))).toBeNull();
   });

@@ -105,7 +105,7 @@ interface RoomGateProps {
   db: Database;
   /** The `?game=` room id, or `null` to auto-create a fresh room. */
   gameId: string | null;
-  /** This client's runtime config; its content slice is pinned into a new room's genesis. */
+  /** This client's presentation and room-navigation runtime config. */
   runtimeConfig: RuntimeConfig;
   /** Hash of Atlas sections which influence deterministic folding. */
   atlasFoldHash: string;
@@ -292,7 +292,6 @@ export function RoomGate({
   const localContentConfig = useMemo(
     () =>
       contentConfigFromRuntime(
-        runtimeConfig,
         atlasFoldHash,
         sitesFoldHash,
         draftData,

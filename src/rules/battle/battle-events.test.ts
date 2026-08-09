@@ -58,7 +58,7 @@ const GENESIS: Genesis = {
   seed: "battle-events-seed",
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null },
+  contentConfig: { poolVariant: "tides4" },
 };
 
 /** A deterministic PRNG bound to a seed so a generation draw is reproducible. */

@@ -1,6 +1,6 @@
 import type { DraftRarityCap } from "./draft-data";
 
-/** Configuration shared across all pack generation strategies. */
+/** Configuration for the tides4 draft offer engine. */
 export interface DraftConfig {
   /** Number of cards shown per pick. */
   packSize: number;
@@ -40,8 +40,10 @@ export interface PackContext {
   affiliationWeights?: ReadonlyMap<number, number>;
 }
 
-/** Fields shared by every draft mode. Survives across dreamscape visits. */
-interface DraftStateCommon {
+/** Persistent tides4 draft state. Survives across dreamscape visits. */
+export interface DraftState {
+  /** Persisted discriminator for future draft-algorithm extensions. */
+  mode: "tides4";
   /** Current offer presented to the player. */
   currentOffer: number[];
   /** Site currently owning the in-progress or completed visit state. */
@@ -65,14 +67,6 @@ interface DraftStateCommon {
     siteId: string;
     actionId: string;
   };
-}
-
-/**
- * Pool-based draft state: offers are weighted samples from a fixed run
- * multiset that is spent down and recreated as picks are made.
- */
-export interface PoolDraftState extends DraftStateCommon {
-  mode: "pool";
   /**
    * The full fixed run multiset, keyed by card number. Immutable for the run:
    * when `remainingCopiesByCard` is exhausted the multiset is recreated from
@@ -88,41 +82,5 @@ export interface PoolDraftState extends DraftStateCommon {
   remainingCopiesByCard: Record<string, number>;
 }
 
-/**
- * Record-replay draft state: offers are the deck-fit best slice of a frozen
- * sequence of real packs, indexed by `pickNumber`.
- */
-export interface ReplayDraftState extends DraftStateCommon {
-  mode: "replay";
-  /** Chosen record/seat id, for logging/debug. */
-  recordId: string;
-  /** 30 frozen, resolved, deduped packs; indexed by `pickNumber - 1`. */
-  packSequence: number[][];
-  /** DreamAvatar signatures; seed the fit model when the deck is small. */
-  signatureCardNumbers: number[];
-}
-
-/**
- * Fresh-pack draft state: at each pick a brand-new random pack of `packSize`
- * cards is generated from the cards currently eligible to be shown, and the
- * same deck-fit ranking as the replay draft selects the best slice to offer.
- *
- * The packs are not frozen up front: each one depends on which cards have
- * already been shown, so the pack for a pick can only be rolled once the prior
- * picks are resolved. Offers are persisted in `currentOffer` exactly like the
- * other modes, so a reload never re-rolls a pick that has already been shown.
- */
-export interface Fresh20DraftState extends DraftStateCommon {
-  mode: "fresh20";
-  /** Number of cards in each freshly generated random pack (e.g. 20). */
-  packSize: number;
-  /**
-   * Show history keyed by card number: the (ascending, deduped) pick numbers at
-   * which each card has appeared in a shown offer. Drives the show cooldown and
-   * the twice-then-never cap; cards never shown are absent.
-   */
-  shownPicksByCard: Record<string, number[]>;
-}
-
-/** Persistent draft state, survives across dreamscape visits. */
-export type DraftState = PoolDraftState | ReplayDraftState | Fresh20DraftState;
+/** Explicit alias for code that consumes the fixed tides4 pool multiset. */
+export type PoolDraftState = DraftState;

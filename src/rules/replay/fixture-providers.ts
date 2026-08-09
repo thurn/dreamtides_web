@@ -223,7 +223,7 @@ function fixtureNextNode(): DreamscapeNode {
  */
 function fixtureDraftState(): PoolDraftState {
   return {
-    mode: "pool",
+    mode: "tides4",
     currentOffer: [],
     activeSiteId: null,
     pickNumber: 1,
@@ -308,7 +308,6 @@ function draftProvider(): DraftContentProvider {
       return match ? Number(match[1]) : null;
     },
     cardDatabase: () => new Map(),
-    offerDepsFor: () => undefined,
     draftConfigFor: () => undefined,
   };
 }

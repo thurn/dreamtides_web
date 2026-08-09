@@ -60,16 +60,6 @@ export function extractDraftDebugInfo(
     sitePicksCompleted: draftState.sitePicksCompleted,
   };
 
-  // Replay drafts have no spend-down pool; surface empty pool metrics.
-  if (draftState.mode !== "pool") {
-    return {
-      ...common,
-      remainingCards: 0,
-      remainingUniqueCards: 0,
-      topRemainingCards: [],
-    };
-  }
-
   return {
     ...common,
     remainingCards: countRemainingCards(draftState.remainingCopiesByCard),

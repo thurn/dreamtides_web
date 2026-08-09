@@ -23,7 +23,7 @@ interface ToyState {
   seqs: number[];
 }
 
-const GENESIS: Genesis = { seed: "toy-seed", reducerVersion: "v1", createdAt: 0, contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null } };
+const GENESIS: Genesis = { seed: "toy-seed", reducerVersion: "v1", createdAt: 0, contentConfig: { poolVariant: "tides4" } };
 
 // A pure left-fold whose result depends on (prior state, payload, seq-keyed
 // rng, seq) but NOT on `intervening` or the snapshot horizon. That makes a
@@ -358,7 +358,7 @@ interface CasState {
   applied: number[];
 }
 
-const CAS_GENESIS: Genesis = { seed: "cas-seed", reducerVersion: "v1", createdAt: 0, contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null } };
+const CAS_GENESIS: Genesis = { seed: "cas-seed", reducerVersion: "v1", createdAt: 0, contentConfig: { poolVariant: "tides4" } };
 
 const casConfig: EngineConfig<CasState> = {
   genesisState: () => ({ applied: [] }),

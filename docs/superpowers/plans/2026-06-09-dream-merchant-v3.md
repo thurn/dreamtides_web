@@ -32,7 +32,7 @@ src/data/
   merchant-corpus.ts              # NEW: loader + types for baked artifact
   dreamsign-profiles.ts           # NEW: loader + types for profiles
   journey-content.ts                # MODIFY: add merchantCorpus, dreamsignProfiles
-src/draft/replay/fit-model.ts     # MODIFY: extract scoreCandidatesForDeck
+src/draft/fit-model.ts     # MODIFY: extract scoreCandidatesForDeck
 src/journey_v2/
   tuning.ts                       # NEW: every weight/band/blend constant
   signals/rng.ts                  # NEW: seeded rng + bandSample
@@ -87,7 +87,7 @@ by card UUID:
    apply minDf gates without the records).
 4. **clusters** — build an IDF-weighted co-occurrence graph over mainboard
    UUIDs (same idf/minDf/maxDfFrac conventions as
-   `scripts/draft-replay-experiment.mjs` already mirrors), keep each node's
+   `scripts/draft-corpus-fit.mjs` mirrors), keep each node's
    top 10 edges, then run **deterministic synchronous label propagation**
    (initial label = own UUID; each round every node adopts the
    highest-total-edge-weight label among neighbors, ties broken by
@@ -256,11 +256,11 @@ in a `#` comment above each entry so the human review pass can audit it.
 ### Task 5: Per-candidate fit scoring in fit-model.ts
 
 **Files:**
-- Modify: `src/draft/replay/fit-model.ts`
-- Test: `src/draft/replay/fit-model.test.ts` (extend existing)
+- Modify: `src/draft/fit-model.ts`
+- Test: `src/draft/fit-model.test.ts` (extend existing)
 
-`computeReplayOffer` computes per-candidate fit internally. Extract that into
-an exported function so the merchant can score arbitrary candidate sets:
+The fit model exports per-candidate scores so the merchant can score arbitrary
+candidate sets:
 
 ```typescript
 export interface CandidateFitScore {
@@ -276,29 +276,17 @@ export function scoreCandidatesForDeck(
 ): Map<number, CandidateFitScore>
 ```
 
-`computeReplayOffer` is re-expressed on top of it. The raw components are
-needed by merchant centrality (`0.65 * prior + 0.35 * cooccur`, spec
-"Transfiguration: v3 benefit scores").
+The raw components are needed by merchant centrality
+(`0.65 * prior + 0.35 * cooccur`, spec "Transfiguration: v3 benefit scores").
 
-Tests: on a small synthetic corpus (already the pattern in the existing test
-file), (a) `computeReplayOffer` returns byte-identical output before and after
-the refactor — pin the current output for one fixture corpus/pack/deck triple
-*before* refactoring (bug class: extraction changes replay-draft behavior);
-(b) `scoreCandidatesForDeck` on an empty deck returns prior-driven scores with
-zero cooccur/neighborCf (bug class: empty-deck division blowup).
+Tests use a small synthetic corpus. `scoreCandidatesForDeck` on an empty deck
+returns prior-driven scores with zero cooccur/neighborCf.
 
-- [ ] **Step 1: Add the pin test** for `computeReplayOffer` on a fixture
-      triple, capturing today's output. Run it; expected PASS (it pins
-      current behavior).
-- [ ] **Step 2: Write the failing tests** for `scoreCandidatesForDeck`.
-      Run: `npx vitest run src/draft/replay/fit-model.test.ts` — new cases
+- [ ] **Step 1: Write the failing tests** for `scoreCandidatesForDeck`.
+      Run: `npx vitest run src/draft/fit-model.test.ts` — new cases
       FAIL (function not exported).
-- [ ] **Step 3: Extract and implement.** All cases PASS, including the pin.
-- [ ] **Step 4: Run** `npm run draft-replay-metric` once.
-      Expected: recall@4 unchanged from the value documented in the script
-      header comments (~80.4%). This is the live-behavior check the unit pin
-      can't give.
-- [ ] **Step 5: lint/typecheck/test, commit, push.**
+- [ ] **Step 2: Extract and implement.** All cases PASS.
+- [ ] **Step 3: lint/typecheck/test, commit, push.**
 
 ### Task 6: Seeded RNG and band sampling
 

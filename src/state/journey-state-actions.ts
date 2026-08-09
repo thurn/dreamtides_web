@@ -1,22 +1,13 @@
 import { generateInitialAtlas } from "../atlas/atlas-generator";
 import { toJourneyDreamAvatar } from "../data/dream-avatar-selection";
-import {
-  buildDreamAvatarPackage,
-  buildReplayDraftState,
-} from "../data/journey-content";
+import { buildDreamAvatarPackage } from "../data/journey-content";
 import type { JourneyContent } from "../data/journey-content";
-import { buildIdIndex } from "../data/cards-v2-database";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import {
   DEFAULT_DRAFT_CONFIG,
   createInitialDraftState,
-  createInitialFresh20DraftState,
   processPlayerPickWithoutLogging,
 } from "../draft/draft-engine";
-import { replayDepsFor } from "../draft/replay/replay-deps";
-import { fresh20DepsFor } from "../draft/fresh20/fresh20-deps";
-import { FRESH20_DEFAULT_PACK_SIZE } from "../draft/fresh20/fresh20-offer";
-import type { FitModel } from "../draft/replay/fit-model";
 import type { CardData } from "../types/cards";
 import type {
   DreamAvatarContent,
@@ -88,7 +79,6 @@ export function pickDraftCardInJourneyState({
   siteId,
   cardNumber,
   cardDatabase,
-  fitModel,
   affiliationWeights,
 }: {
   prev: JourneyState;
@@ -96,13 +86,8 @@ export function pickDraftCardInJourneyState({
   cardNumber: number;
   cardDatabase: Map<number, CardData>;
   /**
-   * Live deck-fit model, only present in replay mode. When set, the NEXT
-   * offer is ranked against the deck *after* this pick (see below).
-   */
-  fitModel?: FitModel;
-  /**
    * Affiliation reweighting (`cardNumber -> multiplier`) for the dreamscape this
-   * draft site sits in, threaded into the NEXT pool-mode offer so the whole site
+   * draft site sits in, threaded into the NEXT tides4 offer so the whole site
    * visit stays biased toward the affiliation. Absent in a neutral dreamscape.
    */
   affiliationWeights?: ReadonlyMap<number, number>;
@@ -115,20 +100,10 @@ export function pickDraftCardInJourneyState({
     throw new Error(`Draft site ${siteId} is not active.`);
   }
 
-  // Append the picked card FIRST so the replay deck-fit ranking for the NEXT
-  // offer reflects the deck *including* the just-picked card. For pool mode
-  // the offer never reads the deck, so this reordering is observationally
-  // identical to advancing the draft state first. The engine's offer-
-  // membership check still validates `cardNumber` against the PRE-pick
-  // `currentOffer` (unchanged), so the reorder is safe.
+  // Append the picked card before advancing the cloned draft state. The engine's
+  // offer-membership check still validates against the pre-pick current offer.
   const withCard = addCardToJourneyState(prev, cardNumber);
   const draftState = structuredClone(prev.draftState);
-  const offerDeps =
-    draftState.mode === "replay"
-      ? replayDepsFor(withCard.deck, fitModel)
-      : draftState.mode === "fresh20"
-        ? fresh20DepsFor(withCard.deck, fitModel, cardDatabase)
-        : undefined;
   processPlayerPickWithoutLogging(
     cardNumber,
     draftState,
@@ -136,7 +111,6 @@ export function pickDraftCardInJourneyState({
     affiliationWeights === undefined
       ? undefined
       : { ...DEFAULT_DRAFT_CONFIG, affiliationWeights },
-    offerDeps,
     // Explicit randomness source: this legacy pick path advances the draft
     // outside the pure journey reducer, so it keeps its `Math.random` draw. The
     // event-sourced path (`src/rules/journey/draft.ts`) drives the same engine
@@ -153,15 +127,12 @@ export function prepareDraftCardPickInJourneyState({
   siteId,
   cardNumber,
   cardDatabase,
-  fitModel,
   affiliationWeights,
 }: {
   prev: JourneyState;
   siteId: string;
   cardNumber: number;
   cardDatabase: Map<number, CardData>;
-  /** Live deck-fit model, only present in replay mode. Passed straight through. */
-  fitModel?: FitModel;
   /**
    * Affiliation reweighting for the current dreamscape, threaded into the NEXT
    * offer so a multi-pick draft visit stays biased. Absent in a neutral dreamscape.
@@ -184,7 +155,6 @@ export function prepareDraftCardPickInJourneyState({
     siteId,
     cardNumber,
     cardDatabase,
-    fitModel,
     affiliationWeights,
   });
 
@@ -511,36 +481,10 @@ export function startJourneyFromDreamAvatar({
     (id) => !knownDreamsignIds.has(id),
   );
 
-  // In replay mode the draft state is a frozen real-pack sequence chosen from
-  // the bundled record corpus; fresh20 mode rolls fresh random packs each pick;
-  // pool mode draws offers from the generated run multiset. The resolved package
-  // is still built normally in every mode — it provides signatures, the
-  // dreamsign pool, the starter decklist, and the shop pool (which the deck-fit
-  // modes' shops draw from). The deck-fit modes both require a fit model; when
-  // the record corpus failed to load they fall back to the pool draft.
-  const useReplayDraft =
-    journeyContent.draftMode === "replay" &&
-    journeyContent.draftRecords !== undefined &&
-    journeyContent.draftRecords.length > 0;
-  const useFresh20Draft =
-    journeyContent.draftMode === "fresh20" &&
-    journeyContent.fitModel !== undefined;
-  const draftState = useReplayDraft
-    ? buildReplayDraftState(
-        dreamAvatar,
-        // The replay state resolves record pack ids and the DreamAvatar's
-        // signature card ids against a lowercased-id index, matching the
-        // id-keyed fit model.
-        buildIdIndex(journeyContent.cardDatabase),
-        seed,
-        journeyContent.draftRecords ?? [],
-        journeyContent.fitModel,
-      )
-    : useFresh20Draft
-      ? createInitialFresh20DraftState({
-          packSize: journeyContent.fresh20PackSize ?? FRESH20_DEFAULT_PACK_SIZE,
-        })
-      : createInitialDraftState(journeyContent.cardDatabase, resolvedPackage);
+  const draftState = createInitialDraftState(
+    journeyContent.cardDatabase,
+    resolvedPackage,
+  );
 
   return {
     ...prev,

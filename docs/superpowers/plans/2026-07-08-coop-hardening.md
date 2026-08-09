@@ -62,8 +62,6 @@ export interface Genesis {
 }
 export interface ContentConfig {
   poolVariant: string;
-  draftMode: string;
-  fresh20PackSize: number | null;
   journeyVariant: string;
 }
 ```
@@ -221,7 +219,7 @@ Fixes audit finding **P0-3**. Scope note: `PICK_DRAFT_CARD` already advances off
 - Test: `src/rules/journey/draft.test.ts`, `src/rules/reducer.test.ts`, plus browser QA
 
 **Interfaces:**
-- Consumes: `EventContext.rng`, `DraftContentProvider` (existing methods `cardDatabase()`, `offerDepsFor(draftState, deckCardNumbers)`, `draftConfigFor(draftState)` — see `src/rules/journey/draft.ts:48-68`), the existing `enterDraftSite(state, siteId, cardDatabase, draftConfig, offerDeps, random)` engine function that `src/data/draft-site-bootstrap.ts:92` calls today.
+- Consumes: `EventContext.rng`, `DraftContentProvider` (methods `cardDatabase()` and `draftConfigFor(draftState)`), and the draft engine's `enterDraftSite(state, siteId, cardDatabase, draftConfig, random)` function.
 - Produces:
 
 ```ts
@@ -238,7 +236,7 @@ enterDraftSite: (siteId: string) => Promise<number>;
 **Pinned semantics for the `ENTER_DRAFT_SITE` reducer case** (mirror `OPEN_SITE`, `sites.ts:305-351`):
 1. Bounce when: payload malformed, no provider registered, `journey.draftState === null`, or the site is not a draft site for this run.
 2. **Idempotent no-change applied** when `draftState.activeSiteId === siteId` already (zero rng draws on this path — replay at a later seq must not reroll the offer).
-3. Otherwise clone `draftState`, call `enterDraftSite(clone, siteId, provider.cardDatabase(), provider.draftConfigFor(clone) ?? DEFAULT_DRAFT_CONFIG, provider.offerDepsFor(clone, deckCardNumbers), rngStream(ctx))` — the same `rngStream` adapter `PICK_DRAFT_CARD` uses (`draft.ts:106`) — and return the updated journey with outcome applied.
+3. Otherwise clone `draftState`, call `enterDraftSite(clone, siteId, provider.cardDatabase(), provider.draftConfigFor(clone) ?? DEFAULT_DRAFT_CONFIG, rngStream(ctx))`, and return the updated journey with outcome applied.
 4. `enterDraftSiteState` in `draft-site-bootstrap.ts` gains an rng parameter used for its `enterDraftSite` call; the reducer path supplies `ctx.rng`-backed draws. (The function keeps working for any remaining preview callers, but after this task the screens have none.)
 
 **Pinned UI change:** both `DraftSiteScreen.tsx` and `DraftSiteScreenAdapter.tsx` delete the `localDraftState` / `draftStateRef` / `writtenLocalDraftStateRef` bootstrap machinery (the effect at `DraftSiteScreen.tsx:520-566` and its adapter twin) and instead fire `actions.enterDraftSite(siteId)` once per site visit — from an effect keyed on `siteId` guarded only by "the displayed `draftState.activeSiteId` differs from `siteId`". The instant first paint the local bootstrap existed for is provided by the optimistic echo (the intent folds locally with a predicted-seq rng; a skewed prediction shows a preview offer that reconciles to the confirmed one within a round-trip, per the design spec's echo semantics). `SET_DRAFT_STATE` remains as the debug event `App.tsx:587` (`onForceLegendaryOffer`) uses.

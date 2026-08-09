@@ -37,7 +37,7 @@ export function readDraftSiteProgress(
   const offerCardNumbers = isActive ? [...(effective?.currentOffer ?? [])] : [];
   const offerKey = offerCardNumbers.join(",");
   const remainingTotal =
-    isActive && effective && effective.mode === "pool"
+    isActive && effective && effective.mode === "tides4"
       ? countRemainingCards(effective.remainingCopiesByCard)
       : 0;
   const isComplete =

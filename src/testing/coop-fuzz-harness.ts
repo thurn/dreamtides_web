@@ -95,9 +95,7 @@ export const FUZZ_GENESIS: Genesis = {
   reducerVersion: "coop-fuzz-v1",
   createdAt: 0,
   contentConfig: {
-    poolVariant: "fixture",
-    draftMode: "pool",
-    fresh20PackSize: null,
+    poolVariant: "tides4",
   },
 };
 

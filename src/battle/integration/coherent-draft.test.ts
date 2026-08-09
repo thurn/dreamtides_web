@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildFitModel } from "../../draft/replay/fit-model";
+import { buildFitModel } from "../../draft/fit-model";
 import { createSeededRng, simulateCoherentDraft } from "./coherent-draft";
 
 // A two-cluster corpus plus mixed packs, so the draft has both factions to

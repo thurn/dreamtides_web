@@ -65,8 +65,6 @@ const { createRoomEvictingStale, writePresence, ROOM_PRESERVATION_WINDOW_MS } = 
 
 const CONTENT_CONFIG: ContentConfig = {
   poolVariant: "tides4",
-  draftMode: "pool",
-  fresh20PackSize: null,
 };
 
 function genesisAt(createdAt: number): string {

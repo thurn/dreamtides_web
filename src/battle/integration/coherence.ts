@@ -2,7 +2,7 @@
 // (design doc `docs/cards2/opponent_deck_coherent_draft_design.md`). "Coherence"
 // is defined purely as resemblance to the real human decks in the
 // `docs/draft_records_adapted/` corpus, measured with the same IDF machinery the
-// draft-replay fit model already uses — no archetype tags, no hand-labeled deck
+// shared corpus fit model already uses — no archetype tags, no hand-labeled deck
 // quality, no card-text taxonomy.
 //
 // A deck's coherence aggregates three corpus-relative signals, each computed
@@ -14,8 +14,7 @@
 //     deck's card pairs. Coherent decks pair cards real decks ran together.
 //   - selfConsistency: for each card, remove it and ask the fit model to rank it
 //     against deterministic distractors given the rest of the deck. A coherent
-//     deck is one whose own cards the model re-picks (the replay recall measure
-//     turned inward on a generated deck).
+//     deck is one whose own cards the model re-picks.
 //
 // This module is pure: no RNG, no I/O. The distractor set for self-consistency
 // is derived deterministically from the card number so the whole score is a pure
@@ -26,7 +25,7 @@ import { idfCosine, type IdfDeck } from "../../draft/idf-fit";
 import {
   scoreCandidatesForDeck,
   type FitModel,
-} from "../../draft/replay/fit-model";
+} from "../../draft/fit-model";
 
 /** Tuning knobs for the coherence metric. Authored in `opponents.toml` and
  * measured by `npm run opponent-coherence-metric`. */
@@ -178,8 +177,7 @@ function selfConsistency(
     let rank = 1;
     for (const [c, s] of scored) {
       if (c === held) continue;
-      // Match `computeReplayOffer`'s ordering: higher fit ranks ahead, ties
-      // broken by ascending card number.
+      // Higher fit ranks ahead, with ties broken by ascending card number.
       if (s.fit > heldFit || (s.fit === heldFit && c < held)) rank += 1;
     }
     testable += 1;

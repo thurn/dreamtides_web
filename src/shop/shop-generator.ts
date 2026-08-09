@@ -1,6 +1,6 @@
 import type { CardData } from "../types/cards";
-import type { DreamsignTemplate, ResolvedDreamAvatarPackage } from "../types/content";
-import type { DraftState, PoolDraftState } from "../types/draft";
+import type { DreamsignTemplate } from "../types/content";
+import type { DraftState } from "../types/draft";
 import type { Dreamsign, RuntimeShopSlot } from "../types/journey";
 import type { EconomyData, EconomyWeightedValue } from "../types/economy-data";
 
@@ -207,40 +207,8 @@ export function runtimeSlotsToShopSlots(
 }
 
 /**
- * Build a transient pool {@link PoolDraftState} for shops to draw from when the
- * run's live draft state is a replay state (which has no card multiset of its
- * own). The pool comes from the resolved DreamAvatar package. Returns
- * `null` when there is no package or the pool is empty. The caller passes this
- * to {@link generateShopInventory} in place of the replay draft state, and on
- * write-back keeps the replay state (it does NOT persist the spent pool), so
- * replay shops draw fresh from the package pool each generation — acceptable,
- * since the draft pool is not shared with the replay draft.
- */
-export function replayShopDraftState(
-  resolvedPackage: ResolvedDreamAvatarPackage | null | undefined,
-): PoolDraftState | null {
-  const copies = resolvedPackage?.draftPoolCopiesByCard;
-  if (copies === undefined || Object.keys(copies).length === 0) {
-    return null;
-  }
-  return {
-    mode: "pool",
-    draftPoolCopiesByCard: copies,
-    remainingCopiesByCard: { ...copies },
-    currentOffer: [],
-    activeSiteId: null,
-    pickNumber: 1,
-    sitePicksCompleted: 0,
-    siteShownCardNumbers: [],
-  };
-}
-
-/**
  * Summarizes a draft state's remaining card supply for the shop reconstruction
- * log. For a `pool` draft this is the distinct card count and the total copies
- * still available to draw; other modes report only their `mode` (they draw from
- * a frozen pack/replay sequence rather than a depleting multiset). Returns
- * `{ mode: null }` when the run has no draft state at all. This is what
+ * log. Returns `{ mode: null }` when the run has no draft state at all. This is what
  * distinguishes a genuinely exhausted pool from a missing card source when a
  * shop renders empty.
  */
@@ -248,7 +216,6 @@ function summarizeDraftPool(
   state: DraftState | null,
 ): { mode: string | null; distinctRemaining?: number; copiesRemaining?: number } {
   if (state === null) return { mode: null };
-  if (state.mode !== "pool") return { mode: state.mode };
   const entries = Object.values(state.remainingCopiesByCard);
   let distinctRemaining = 0;
   let copiesRemaining = 0;
@@ -258,7 +225,7 @@ function summarizeDraftPool(
       copiesRemaining += copies;
     }
   }
-  return { mode: "pool", distinctRemaining, copiesRemaining };
+  return { mode: state.mode, distinctRemaining, copiesRemaining };
 }
 
 function shuffledIndices(length: number, rng: () => number): number[] {

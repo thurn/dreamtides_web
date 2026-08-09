@@ -118,7 +118,7 @@ Maximum total cards of this rarity the player may pick during the entire run.
 
 ### `default-strategy = "tides4"`
 
-Pool-generation strategy used when no developer ?algo= override is supplied.
+Pool-generation strategy used by every journey.
 
 ### `deal-size = 150`
 

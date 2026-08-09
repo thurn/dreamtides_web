@@ -71,7 +71,7 @@ or curve inputs, and preset ID for production reconstruction.
 
 Room genesis pins `opponentsFoldHash` in its content configuration. A client may
 join gameplay only when its local opponent catalog hash matches the room. The
-opponent catalog is part of reducer protocol `dreamtides-coop-v23`. Gameplay
+opponent catalog is part of reducer protocol `dreamtides-coop-v24`. Gameplay
 rooms require that protocol and a matching `opponentsFoldHash`.
 
 ## AI presets

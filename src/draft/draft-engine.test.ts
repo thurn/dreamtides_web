@@ -4,23 +4,13 @@ import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
 import type { DraftConfig, PoolDraftState } from "../types/draft";
 import type { ResolvedDreamAvatarPackage } from "../types/content";
-import type { FitModel } from "./replay/fit-model";
 import {
-  completeDraftSite,
-  createInitialFresh20DraftState,
-  createInitialReplayDraftState,
-  drawAndSpendUniqueCards,
   enterDraftSite,
   getCurrentOffer,
   initializeDraftState,
   processPlayerPick,
-  type ReplayDeps,
   SITE_PICKS,
 } from "./draft-engine";
-import {
-  FRESH20_COOLDOWN_PICKS,
-  type Fresh20Deps,
-} from "./fresh20/fresh20-offer";
 
 function makeCard(
   cardNumber: number,
@@ -82,7 +72,7 @@ function makeDraftState(
   overrides: Partial<PoolDraftState> = {},
 ): PoolDraftState {
   const base: PoolDraftState = {
-    mode: "pool",
+    mode: "tides4",
     draftPoolCopiesByCard: {},
     remainingCopiesByCard: {},
     currentOffer: [],
@@ -191,10 +181,10 @@ describe("fixed multiset offer generation", () => {
     };
     const state = initializeDraftState(cardDatabase, resolvedPackage);
 
-    enterDraftSite(state, "site-a", cardDatabase, undefined, undefined, () => 0);
+    enterDraftSite(state, "site-a", cardDatabase, undefined, () => 0);
     expect(state.currentOffer).toEqual([8, 6, 4, 2]);
 
-    processPlayerPick(8, state, cardDatabase, undefined, undefined, () => 0);
+    processPlayerPick(8, state, cardDatabase, undefined, () => 0);
     expect(state.currentOffer).toEqual([7, 5, 3, 1]);
     expect(
       getLogEntries()
@@ -202,7 +192,7 @@ describe("fixed multiset offer generation", () => {
         .map((entry) => entry.source),
     ).toEqual(["authored_opening", "authored_opening"]);
 
-    processPlayerPick(7, state, cardDatabase, undefined, undefined, () => 0);
+    processPlayerPick(7, state, cardDatabase, undefined, () => 0);
     expect(state.currentOffer).toEqual([9, 10, 11, 12]);
     const revealedOffers = getLogEntries().filter(
       (entry) => entry.event === "draft_offer_revealed",
@@ -573,7 +563,7 @@ describe("configured draft rules", () => {
       ),
     });
 
-    enterDraftSite(state, "site-configured", cardDatabase, config, undefined, () => 0);
+    enterDraftSite(state, "site-configured", cardDatabase, config, () => 0);
     expect(state.currentOffer).toHaveLength(3);
     expect(
       processPlayerPick(
@@ -581,7 +571,6 @@ describe("configured draft rules", () => {
         state,
         cardDatabase,
         config,
-        undefined,
         () => 0,
       ),
     ).toBe(false);
@@ -592,7 +581,6 @@ describe("configured draft rules", () => {
         state,
         cardDatabase,
         config,
-        undefined,
         () => 0,
       ),
     ).toBe(true);
@@ -621,415 +609,11 @@ describe("configured draft rules", () => {
       state,
       cardDatabase,
       config,
-      undefined,
       () => 0,
       [2, 1],
     );
 
     expect(state.draftPoolCopiesByCard).toEqual({ "4": 1 });
     expect(state.remainingCopiesByCard).toEqual({ "4": 1 });
-  });
-});
-
-describe("replay mode", () => {
-  // A minimal FitModel stand-in. The real ranker is never invoked in these
-  // tests — a fake `computeOffer` is injected — so the model only needs to be a
-  // value of the right type.
-  const fakeFitModel = {} as unknown as FitModel;
-
-  // Build packs of distinct card numbers. Pack p (0-indexed) holds
-  // [p*10 + 1 .. p*10 + size].
-  function makePackSequence(packCount: number, size: number): number[][] {
-    return Array.from({ length: packCount }, (_, p) =>
-      Array.from({ length: size }, (_, i) => p * 10 + i + 1),
-    );
-  }
-
-  // A deterministic fake ranker: it returns `offerSize` cards of the pack, but
-  // ROTATED by the current deck size, so the offer is a pure function of the
-  // pack and the deck passed in `replayDeps.deckCardNumbers`. Distinct decks
-  // therefore produce distinct offers — which is what we assert. Returned as a
-  // `vi.fn` so call counts are observable via `.mock.calls.length`.
-  function makeEchoOffer(): NonNullable<ReplayDeps["computeOffer"]> {
-    return vi.fn(
-      (
-        pack: readonly number[],
-        deck: readonly number[],
-        _signatures: readonly number[],
-        _model: FitModel,
-        offerSize: number,
-      ): number[] => {
-        const shift = deck.length % pack.length;
-        const rotated = [...pack.slice(shift), ...pack.slice(0, shift)];
-        return rotated.slice(0, offerSize);
-      },
-    );
-  }
-
-  function makeReplayDeps(
-    overrides: Partial<ReplayDeps> = {},
-  ): ReplayDeps {
-    return {
-      deckCardNumbers: [],
-      fitModel: fakeFitModel,
-      offerSize: 4,
-      computeOffer: makeEchoOffer(),
-      ...overrides,
-    };
-  }
-
-  it("offers the deck-fit slice of packSequence[pickNumber - 1]", () => {
-    const cardDatabase = buildDB(
-      Array.from({ length: 60 }, (_, index) => makeCard(index + 1)),
-    );
-    const state = createInitialReplayDraftState({
-      recordId: "seat-3",
-      packSequence: makePackSequence(30, 8),
-      signatureCardNumbers: [501],
-    });
-    const computeOffer = makeEchoOffer();
-
-    enterDraftSite(state, "site-a", cardDatabase, undefined, {
-      deckCardNumbers: [],
-      fitModel: fakeFitModel,
-      offerSize: 4,
-      computeOffer,
-    });
-
-    // First pick reads pack 0 ([1..8]); empty deck → no rotation → first four.
-    expect(state.currentOffer).toEqual([1, 2, 3, 4]);
-    expect(computeOffer).toHaveBeenCalledTimes(1);
-  });
-
-  it("advances to the next pack after a pick", () => {
-    const cardDatabase = buildDB(
-      Array.from({ length: 60 }, (_, index) => makeCard(index + 1)),
-    );
-    const state = createInitialReplayDraftState({
-      recordId: "seat-3",
-      packSequence: makePackSequence(30, 8),
-      signatureCardNumbers: [],
-    });
-
-    enterDraftSite(state, "site-a", cardDatabase, undefined, makeReplayDeps());
-    expect(state.pickNumber).toBe(1);
-    expect(state.currentOffer).toEqual([1, 2, 3, 4]);
-
-    const complete = processPlayerPick(
-      state.currentOffer[0],
-      state,
-      cardDatabase,
-      undefined,
-      makeReplayDeps(),
-    );
-
-    expect(complete).toBe(false);
-    expect(state.pickNumber).toBe(2);
-    // Pack 1 is [11..18]; empty deck passed in deps → first four.
-    expect(state.currentOffer).toEqual([11, 12, 13, 14]);
-  });
-
-  it("offers the whole pack without scoring when it is no larger than offerSize", () => {
-    const cardDatabase = buildDB(
-      Array.from({ length: 60 }, (_, index) => makeCard(index + 1)),
-    );
-    const packSequence = makePackSequence(30, 8);
-    packSequence[0] = [1, 2, 3]; // smaller than offerSize 4
-    const state = createInitialReplayDraftState({
-      recordId: "seat-3",
-      packSequence,
-      signatureCardNumbers: [],
-    });
-    const computeOffer = makeEchoOffer();
-
-    enterDraftSite(state, "site-a", cardDatabase, undefined, {
-      deckCardNumbers: [99],
-      fitModel: fakeFitModel,
-      offerSize: 4,
-      computeOffer,
-    });
-
-    expect(state.currentOffer).toEqual([1, 2, 3]);
-    // Small pack returns whole; the ranker is not consulted.
-    expect(computeOffer).not.toHaveBeenCalled();
-  });
-
-  it("yields an empty offer once the pack sequence is exhausted", () => {
-    const cardDatabase = buildDB([makeCard(1)]);
-    const state = createInitialReplayDraftState({
-      recordId: "seat-3",
-      packSequence: makePackSequence(2, 8),
-      signatureCardNumbers: [],
-    });
-    // Past the end of the 2-pack sequence.
-    state.pickNumber = 5;
-
-    enterDraftSite(state, "site-a", cardDatabase, undefined, makeReplayDeps());
-
-    expect(state.currentOffer).toEqual([]);
-    const entered = getLogEntries().find(
-      (entry) => entry.event === "draft_site_entered",
-    );
-    expect(entered?.offerAvailable).toBe(false);
-  });
-
-  it("treats an empty pack as an exhausted offer without throwing", () => {
-    const cardDatabase = buildDB([makeCard(1)]);
-    const packSequence = makePackSequence(3, 8);
-    packSequence[0] = [];
-    const state = createInitialReplayDraftState({
-      recordId: "seat-3",
-      packSequence,
-      signatureCardNumbers: [],
-    });
-
-    expect(() =>
-      enterDraftSite(state, "site-a", cardDatabase, undefined, makeReplayDeps()),
-    ).not.toThrow();
-    expect(state.currentOffer).toEqual([]);
-  });
-
-  it("throws when replayDeps is omitted in replay mode", () => {
-    const cardDatabase = buildDB([makeCard(1)]);
-    const state = createInitialReplayDraftState({
-      recordId: "seat-3",
-      packSequence: makePackSequence(30, 8),
-      signatureCardNumbers: [],
-    });
-
-    expect(() => enterDraftSite(state, "site-a", cardDatabase)).toThrow(
-      /replayDeps/,
-    );
-  });
-
-  it("advances pickNumber and sitePicksCompleted across a full site visit", () => {
-    const cardDatabase = buildDB(
-      Array.from({ length: 60 }, (_, index) => makeCard(index + 1)),
-    );
-    const state = createInitialReplayDraftState({
-      recordId: "seat-3",
-      packSequence: makePackSequence(30, 8),
-      signatureCardNumbers: [],
-    });
-
-    enterDraftSite(state, "site-a", cardDatabase, undefined, makeReplayDeps());
-
-    for (let pickIndex = 0; pickIndex < SITE_PICKS; pickIndex += 1) {
-      expect(state.sitePicksCompleted).toBe(pickIndex);
-      const isComplete = processPlayerPick(
-        state.currentOffer[0],
-        state,
-        cardDatabase,
-        undefined,
-        makeReplayDeps(),
-      );
-      expect(isComplete).toBe(pickIndex === SITE_PICKS - 1);
-    }
-
-    expect(state.sitePicksCompleted).toBe(SITE_PICKS);
-    expect(state.pickNumber).toBe(SITE_PICKS + 1);
-    expect(state.currentOffer).toEqual([]);
-  });
-
-  it("reflects the deck passed in replayDeps.deckCardNumbers", () => {
-    const cardDatabase = buildDB(
-      Array.from({ length: 60 }, (_, index) => makeCard(index + 1)),
-    );
-    const packSequence = makePackSequence(30, 8);
-    const emptyDeckState = createInitialReplayDraftState({
-      recordId: "seat-3",
-      packSequence,
-      signatureCardNumbers: [],
-    });
-    const fullDeckState = createInitialReplayDraftState({
-      recordId: "seat-3",
-      packSequence,
-      signatureCardNumbers: [],
-    });
-
-    enterDraftSite(emptyDeckState, "site-a", cardDatabase, undefined, {
-      deckCardNumbers: [],
-      fitModel: fakeFitModel,
-      offerSize: 4,
-      computeOffer: makeEchoOffer(),
-    });
-    enterDraftSite(fullDeckState, "site-a", cardDatabase, undefined, {
-      // A 3-card deck rotates pack [1..8] by 3 → starts at 4.
-      deckCardNumbers: [97, 98, 99],
-      fitModel: fakeFitModel,
-      offerSize: 4,
-      computeOffer: makeEchoOffer(),
-    });
-
-    expect(emptyDeckState.currentOffer).toEqual([1, 2, 3, 4]);
-    expect(fullDeckState.currentOffer).toEqual([4, 5, 6, 7]);
-    expect(emptyDeckState.currentOffer).not.toEqual(fullDeckState.currentOffer);
-  });
-
-  it("createInitialReplayDraftState produces the expected shape", () => {
-    const state = createInitialReplayDraftState({
-      recordId: "seat-7",
-      packSequence: [[1, 2], [3, 4]],
-      signatureCardNumbers: [9, 10],
-    });
-
-    expect(state).toEqual({
-      mode: "replay",
-      recordId: "seat-7",
-      packSequence: [[1, 2], [3, 4]],
-      signatureCardNumbers: [9, 10],
-      currentOffer: [],
-      activeSiteId: null,
-      pickNumber: 1,
-      sitePicksCompleted: 0,
-      siteShownCardNumbers: [],
-    });
-  });
-
-  it("drawAndSpendUniqueCards rejects a replay draft state", () => {
-    const state = createInitialReplayDraftState({
-      recordId: "seat-3",
-      packSequence: makePackSequence(30, 8),
-      signatureCardNumbers: [],
-    });
-
-    expect(() => drawAndSpendUniqueCards(state, 4)).toThrow(
-      /requires a pool draft state/,
-    );
-  });
-});
-
-describe("completeDraftSite", () => {
-  it("logs the drafted cards provided by the draft site UI", () => {
-    const state = makeDraftState({
-      activeSiteId: "site-a",
-      remainingCopiesByCard: { "9": 1, "10": 1 },
-      sitePicksCompleted: 2,
-    });
-
-    completeDraftSite(state, [4, 7]);
-
-    const completionEvent = getLogEntries().find(
-      (entry) => entry.event === "draft_site_completed",
-    );
-    expect(completionEvent).toBeDefined();
-    expect(completionEvent?.siteId).toBe("site-a");
-    expect(completionEvent?.cardsDrafted).toEqual([4, 7]);
-    expect(completionEvent?.picksCompleted).toBe(2);
-  });
-});
-
-describe("fresh20 mode", () => {
-  const fakeFitModel = {} as unknown as FitModel;
-
-  // A deterministic ranker: returns the first `offerSize` cards of the pack so
-  // the offer is a pure function of the (deterministically sampled) pack.
-  function makeHeadOffer(): NonNullable<Fresh20Deps["computeOffer"]> {
-    return vi.fn(
-      (pack: readonly number[], _deck, _sig, _model, offerSize: number) =>
-        pack.slice(0, offerSize),
-    );
-  }
-
-  // rng = 0 on every draw makes the partial Fisher–Yates a no-op, so a pack is
-  // the first `packSize` eligible cards in input order — fully deterministic.
-  const zeroRng = (): number => 0;
-
-  function makeFresh20Deps(
-    allCardNumbers: number[],
-    overrides: Partial<Fresh20Deps> = {},
-  ): Fresh20Deps {
-    return {
-      deckCardNumbers: [],
-      fitModel: fakeFitModel,
-      offerSize: 4,
-      allCardNumbers,
-      rng: zeroRng,
-      computeOffer: makeHeadOffer(),
-      ...overrides,
-    };
-  }
-
-  it("rolls a fresh pack and offers the ranker's slice on entry", () => {
-    const all = Array.from({ length: 60 }, (_, i) => i + 1);
-    const cardDatabase = buildDB(all.map((n) => makeCard(n)));
-    const state = createInitialFresh20DraftState({ packSize: 20 });
-    const computeOffer = makeHeadOffer();
-
-    enterDraftSite(
-      state,
-      "site-a",
-      cardDatabase,
-      undefined,
-      makeFresh20Deps(all, { computeOffer }),
-    );
-
-    // packSize 20, zero rng → pack [1..20]; head ranker → first four.
-    expect(state.currentOffer).toEqual([1, 2, 3, 4]);
-    expect(computeOffer).toHaveBeenCalledTimes(1);
-  });
-
-  it("records every shown card so it goes on cooldown next pick", () => {
-    const all = Array.from({ length: 60 }, (_, i) => i + 1);
-    const cardDatabase = buildDB(all.map((n) => makeCard(n)));
-    const state = createInitialFresh20DraftState({ packSize: 20 });
-
-    enterDraftSite(state, "site-a", cardDatabase, undefined, makeFresh20Deps(all));
-    expect(state.currentOffer).toEqual([1, 2, 3, 4]);
-    // All four shown cards are recorded at pick 1.
-    for (const card of [1, 2, 3, 4]) {
-      expect(state.shownPicksByCard[String(card)]).toEqual([1]);
-    }
-
-    const complete = processPlayerPick(
-      state.currentOffer[0],
-      state,
-      cardDatabase,
-      undefined,
-      makeFresh20Deps(all),
-    );
-
-    expect(complete).toBe(false);
-    expect(state.pickNumber).toBe(2);
-    // Pick 2's pack must exclude the four cards shown at pick 1 (cooldown), so
-    // the next eligible head-of-list cards [5..8] are offered instead.
-    expect(state.currentOffer).toEqual([5, 6, 7, 8]);
-  });
-
-  it("frees a card again once its cooldown elapses", () => {
-    // A tiny universe forces reuse: 8 cards, packSize 8 → every pick shows the 4
-    // best of all 8 still-eligible cards. Card 1, shown at pick 1, must be
-    // offerable again exactly FRESH20_COOLDOWN_PICKS picks later.
-    const all = [1, 2, 3, 4, 5, 6, 7, 8];
-    const cardDatabase = buildDB(all.map((n) => makeCard(n)));
-    const state = createInitialFresh20DraftState({ packSize: 8 });
-    // Pretend card 1 was shown once, long enough ago to be free at pick
-    // 1 + FRESH20_COOLDOWN_PICKS.
-    state.shownPicksByCard = { "1": [1] };
-    state.pickNumber = 1 + FRESH20_COOLDOWN_PICKS;
-    state.activeSiteId = null;
-
-    const seenPacks: number[][] = [];
-    enterDraftSite(
-      state,
-      "site-a",
-      cardDatabase,
-      undefined,
-      makeFresh20Deps(all, {
-        computeOffer: vi.fn((pack: readonly number[], _d, _s, _m, n: number) => {
-          seenPacks.push([...pack]);
-          return pack.slice(0, n);
-        }),
-      }),
-    );
-    expect(seenPacks[0]).toContain(1);
-  });
-
-  it("throws when fresh20 deps are missing", () => {
-    const cardDatabase = buildDB([makeCard(1), makeCard(2)]);
-    const state = createInitialFresh20DraftState({ packSize: 20 });
-    expect(() => enterDraftSite(state, "site-a", cardDatabase)).toThrow(
-      /fresh20Deps/,
-    );
   });
 });

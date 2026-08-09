@@ -19,7 +19,7 @@
 //   4. cluster      — community id from deterministic synchronous label
 //                     propagation over an IDF-weighted co-occurrence graph
 //                     (top 10 edges per node; same idf/minDf/maxDfFrac
-//                     conventions as scripts/draft-replay-experiment.mjs).
+//                     conventions as scripts/draft-corpus-fit.mjs).
 //                     Clusters with >= 8 members are retained; each cluster's
 //                     flagship maximizes idf(c) * quality(c).
 //
@@ -47,8 +47,8 @@ const CHOICE_FIT = {
   l2: 0.01,
 };
 
-// IDF conventions for the cluster graph: same knobs the replay fit model and
-// scripts/draft-replay-experiment.mjs use (DEFAULT_FIT_TUNING).
+// IDF conventions for the cluster graph: same knobs the shared corpus fit model
+// uses.
 const CLUSTER_GRAPH = {
   idfPower: 1,
   minDf: 2,
@@ -276,7 +276,7 @@ function computeMultiplicityAndDf(mainboards) {
 /**
  * Build the IDF-weighted co-occurrence adjacency over the mainboard UUIDs:
  * hygiene-filter decks to the distinct-card range, derive df/idf with the
- * rare/common cutoffs (the draft-replay-experiment conventions), accumulate the
+ * shared rare/common cutoffs, accumulate the
  * symmetric edge weights idf(a)*idf(b) per shared deck, then keep each node's
  * top {@link CLUSTER_GRAPH.topEdges} edges (weight desc, neighbor UUID asc).
  *

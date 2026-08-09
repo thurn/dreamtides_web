@@ -93,9 +93,7 @@ const GENESIS: Genesis = {
   reducerVersion: "test",
   createdAt: 0,
   contentConfig: {
-    poolVariant: "test",
-    draftMode: "pool",
-    fresh20PackSize: null,
+    poolVariant: "tides4",
   },
 };
 
@@ -224,7 +222,7 @@ const DRAFT_SITE_ID = "draft-site-1";
  */
 function populatedDraftState(): PoolDraftState {
   return {
-    mode: "pool",
+    mode: "tides4",
     currentOffer: [100, 101, 102],
     activeSiteId: DRAFT_SITE_ID,
     pickNumber: 1,
@@ -257,7 +255,7 @@ function shopNode(): DreamscapeNode {
 /** A pool draft the Site fake's `rerollShop` returns (non-null draftState). */
 function rerolledDraftState(): DraftState {
   return {
-    mode: "pool",
+    mode: "tides4",
     currentOffer: [],
     activeSiteId: DRAFT_SITE_ID,
     pickNumber: 2,
@@ -275,7 +273,6 @@ function draftProvider(): DraftContentProvider {
       return match ? Number(match[1]) : null;
     },
     cardDatabase: () => new Map(),
-    offerDepsFor: () => undefined,
     draftConfigFor: () => undefined,
   };
 }

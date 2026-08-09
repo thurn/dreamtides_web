@@ -24,7 +24,7 @@ const GENESIS: Genesis = {
   seed: "draft-seed",
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null },
+  contentConfig: { poolVariant: "tides4" },
 };
 
 function ctx(overrides: Partial<EventContext> = {}): EventContext {
@@ -84,7 +84,7 @@ function makeCard(cardNumber: number): CardData {
  */
 function poolDraftState(overrides: Partial<PoolDraftState> = {}): PoolDraftState {
   return {
-    mode: "pool",
+    mode: "tides4",
     draftPoolCopiesByCard: {
       "1": 1,
       "2": 1,
@@ -181,7 +181,6 @@ function provider(): DraftContentProvider {
       return match ? Number(match[1]) : null;
     },
     cardDatabase: () => CARD_DB,
-    offerDepsFor: () => undefined,
     draftConfigFor: () => ({
       packSize: 4,
       sitePickCount: 5,

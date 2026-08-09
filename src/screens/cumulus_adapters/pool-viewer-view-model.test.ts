@@ -13,10 +13,10 @@ function card(id: string, number: number, name: string, cardType: CardData["card
 const alpha = card("card-alpha", 1, "Shared Name");
 const beta = card("card-beta", 2, "Shared Name", "Event");
 const database = new Map([[1, alpha], [2, beta]]);
-const poolState: DraftState = { mode: "pool", draftPoolCopiesByCard: { "1": 2, "2": 1 }, remainingCopiesByCard: { "1": 2, "2": 1 }, currentOffer: [], activeSiteId: null, pickNumber: 1, sitePicksCompleted: 0 };
+const poolState: DraftState = { mode: "tides4", draftPoolCopiesByCard: { "1": 2, "2": 1 }, remainingCopiesByCard: { "1": 2, "2": 1 }, currentOffer: [], activeSiteId: null, pickNumber: 1, sitePicksCompleted: 0 };
 
 function build(overrides: Partial<Parameters<typeof buildPoolViewerView>[0]> = {}) {
-  return buildPoolViewerView({ cardDatabase: database, draftState: poolState, resolvedPackage: null, replayRecord: null, poolVariant: null, tides4Provenance: null, source: "run", filters: DEFAULT_POOL_VIEWER_FILTERS, title: "pool", frame: "fullScreen", ...overrides });
+  return buildPoolViewerView({ cardDatabase: database, draftState: poolState, resolvedPackage: null, poolVariant: null, tides4Provenance: null, source: "run", filters: DEFAULT_POOL_VIEWER_FILTERS, title: "pool", frame: "fullScreen", ...overrides });
 }
 
 describe("buildPoolViewerView", () => {
@@ -30,15 +30,6 @@ describe("buildPoolViewerView", () => {
     const view = build({ filters: { ...DEFAULT_POOL_VIEWER_FILTERS, type: "event", query: "shared" } });
     expect(view.cards).toHaveLength(1);
     expect(view.cards[0]?.entryId).toBe(`run:${beta.id}`);
-  });
-
-  it("builds replay deck counts and pick history from UUID channels", () => {
-    const replayRecord = { id: "record", draftId: "draft", sourceFile: "fixture.json", mainboard: ["ignored"], mainboardIds: [alpha.id, alpha.id, beta.id], packs: [["old alpha", "old beta"]], picks: [["old beta"]], packIds: [[alpha.id, beta.id]], pickIds: [[beta.id]] };
-    const view = build({ draftState: { mode: "replay", recordId: "record", packSequence: [], signatureCardNumbers: [], currentOffer: [], activeSiteId: null, pickNumber: 1, sitePicksCompleted: 0 }, replayRecord, source: "deck" });
-    expect(view.cards.map((entry) => entry.entryId)).toEqual([`deck:${alpha.id}`, `deck:${beta.id}`]);
-    expect(view.cards[0]?.caption).toEqual({ kind: "text", text: "×2" });
-    const history = build({ draftState: { mode: "replay", recordId: "record", packSequence: [], signatureCardNumbers: [], currentOffer: [], activeSiteId: null, pickNumber: 1, sitePicksCompleted: 0 }, replayRecord, source: "history" });
-    expect(history.replayRows[0]?.cards[1]).toMatchObject({ cardId: beta.id, picked: true });
   });
 
   it("keeps source-specific empty states and provenance visible", () => {

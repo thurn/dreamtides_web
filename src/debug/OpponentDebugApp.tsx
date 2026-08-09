@@ -41,7 +41,7 @@ import {
  * (see `opponent-algorithms.tsx`), so what the tool shows matches what a real
  * battle at the same position would generate for a given seed. "Refresh"
  * advances a nonce that changes the battle seed, re-rolling a fresh generation
- * under the same layer / dreamscape parameters. The `?algo=` param selects the
+ * under the same layer / dreamscape parameters. `?opponentAlgorithm=` selects the
  * opponent-deck algorithm (coherent or corpus).
  */
 
@@ -82,7 +82,7 @@ function generateOpponent(
   // (in the URL or verbally) greps the `opponent_deck_constructed` log directly.
   // The id identifies the seeded generation; the algo (also carried in the URL)
   // determines which DreamAvatar roster the seed draws from, so reproducing a
-  // share requires both the id and the `?algo=` value.
+  // share requires both the id and the opponent-algorithm value.
   const battleEntryKey = opponentGenerationId({
     completionLevel,
     dreamscapeId,
@@ -236,7 +236,7 @@ export default function OpponentDebugApp() {
 
   useEffect(() => {
     let cancelled = false;
-    loadJourneyContent(DEFAULT_POOL_VARIANT)
+    loadJourneyContent()
       .then((loaded) => {
         if (!cancelled) setContent(loaded);
       })

@@ -101,9 +101,7 @@ function siteState(siteId = "site-a", siteType: SiteType = "Shop"): FoldState {
     reducerVersion: "test",
     createdAt: 0,
     contentConfig: {
-      poolVariant: "test",
-      draftMode: "pool",
-      fresh20PackSize: null,
+      poolVariant: "tides4",
     },
   });
   return {
@@ -181,7 +179,7 @@ function draftOfferState(
   const node = base.journey.atlas.nodes.node;
   if (node === undefined) throw new Error("Fixture node is missing.");
   const draftState: PoolDraftState = {
-    mode: "pool",
+    mode: "tides4",
     currentOffer,
     activeSiteId: siteId,
     pickNumber,

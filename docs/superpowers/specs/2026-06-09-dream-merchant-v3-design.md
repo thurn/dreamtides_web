@@ -318,7 +318,7 @@ property rather than leaving it to inspection.
 New module `src/journey_v2/signals/`, leaning on existing draft code. All deck
 understanding is mechanical; cards are identified by UUID throughout.
 
-- **Fit** — `FitModel` from `src/draft/replay/fit-model.ts`, used as-is
+- **Fit** — `FitModel` from `src/draft/fit-model.ts`, used as-is
   (neighbor-CF + IDF co-occurrence + prior; recall@4 ≈ 80%). `fitNorm` is the
   min-max normalization of fit scores over the candidate pool for the current
   deck. `fitPrior` and `fitCooccurrence` are the model's component signals.

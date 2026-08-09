@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { FitModel } from "../../draft/replay/fit-model";
+import type { FitModel } from "../../draft/fit-model";
 import type { DreamsignProfile } from "../../data/dreamsign-profiles";
 import { buildMerchantContext } from "../context/buildMerchantContext";
 import { merchantRng } from "../signals/rng";

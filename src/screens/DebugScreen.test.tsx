@@ -88,7 +88,7 @@ function makeResolvedPackage(): ResolvedDreamAvatarPackage {
 
 function makeDraftState(): DraftState {
   return {
-    mode: "pool",
+    mode: "tides4",
     draftPoolCopiesByCard: { "1": 3, "2": 1 },
     remainingCopiesByCard: { "1": 3, "2": 1 },
     currentOffer: [1, 2],

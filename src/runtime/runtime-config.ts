@@ -1,5 +1,3 @@
-import { resolvePoolVariant } from "../draft/pool";
-import type { PoolVariant } from "../draft/pool";
 import { normalizeRoomId } from "../eventlog/room";
 import type { ContentConfig, PinnedContentConfig } from "../eventlog/types";
 import type { EconomyData } from "../types/economy-data";
@@ -24,27 +22,6 @@ export interface RuntimeConfig {
   tutorialPlaybackSpeed?: number;
   gameId: string | null;
   databaseMode: DatabaseMode;
-  /**
-   * Draft-pool construction algorithm from `?algo=`, resolved to the registered
-   * `PoolVariant`. An absent value stays undefined until the compiled draft
-   * data supplies the production default; an explicit unrecognized value is an
-   * error. Drives the journey prototype's draft and enemy pools.
-   */
-  poolVariant?: PoolVariant;
-  /**
-   * Selects the draft mode: `"replay"` activates the record-replay draft (from
-   * `?algo=replay`); `"fresh20"` activates the fresh-random-pack draft (from
-   * `?algo=fresh20`); `"pool"` is the default pool-based draft. `poolVariant`
-   * remains undefined for replay/fresh20 until the compiled draft data supplies
-   * the production pool default.
-   */
-  draftMode?: "pool" | "replay" | "fresh20";
-  /**
-   * Cards per freshly generated pack in `?algo=fresh20`, from `?packsize=`.
-   * A positive integer; absent or invalid values leave it unset and the
-   * fresh20 draft uses its default pack size.
-   */
-  fresh20PackSize?: number;
   /**
    * Name of a saved journey to load on boot, from `?loadJourney=`. When set, the
    * app fetches the matching snapshot from the dev server's `/api/saved-journeys`
@@ -92,15 +69,11 @@ export interface RuntimeConfig {
 export type DatabaseMode = "emulator" | "realtime";
 
 /**
- * Extracts the fold-relevant content slice a room pins into its genesis. Only
- * parameters that change how the log folds belong here (draft pool/mode and
- * pack size); presentation-only configuration such as `aiMode` is excluded so
- * two clients differing purely in presentation still
- * fold — and join — the same room. Absent optional fields fall back to the
- * same defaults `parseRuntimeConfig` applies.
+ * Extracts the fold-relevant content slice a room pins into its genesis.
+ * Presentation-only configuration such as `aiMode` is excluded so two clients
+ * differing purely in presentation still fold — and join — the same room.
  */
 export function contentConfigFromRuntime(
-  config: RuntimeConfig,
   atlasFoldHash: string,
   sitesFoldHash: string,
   draftData: DraftData,
@@ -114,9 +87,7 @@ export function contentConfigFromRuntime(
   tutorialFoldHash: string,
 ): PinnedContentConfig {
   return {
-    poolVariant: config.poolVariant ?? draftData.pool.defaultStrategy,
-    draftMode: config.draftMode ?? "pool",
-    fresh20PackSize: config.fresh20PackSize ?? null,
+    poolVariant: draftData.pool.defaultStrategy,
     atlasFoldHash,
     sitesFoldHash,
     draftFoldHash: draftData.foldHash,
@@ -140,8 +111,6 @@ export function contentConfigsEqual(
 ): boolean {
   return (
     a.poolVariant === b.poolVariant &&
-    a.draftMode === b.draftMode &&
-    a.fresh20PackSize === b.fresh20PackSize &&
     a.atlasFoldHash === b.atlasFoldHash &&
     a.sitesFoldHash === b.sitesFoldHash &&
     a.draftFoldHash === b.draftFoldHash &&
@@ -158,42 +127,6 @@ export function contentConfigsEqual(
   );
 }
 
-/**
- * Overlays a content config onto an existing query string, producing the search
- * the config gate reloads to so this client adopts a room's pinned params. The
- * content-bearing params (`algo`, `packsize`) are rewritten to match
- * `config`; every other param — notably `game` (keep us in the room) and `ui` —
- * is preserved. It is the inverse of the content slice of `parseRuntimeConfig`:
- * feeding the result back through `parseRuntimeConfig` yields a config whose
- * content slice equals `config`.
- */
-export function applyContentConfigToSearch(
-  currentSearch: string,
-  config: ContentConfig,
-): string {
-  const params = new URLSearchParams(currentSearch);
-  if (config.draftMode === "replay") {
-    params.set("algo", "replay");
-    params.delete("packsize");
-  } else if (config.draftMode === "fresh20") {
-    params.set("algo", "fresh20");
-    if (config.fresh20PackSize === null) {
-      params.delete("packsize");
-    } else {
-      params.set("packsize", String(config.fresh20PackSize));
-    }
-  } else {
-    params.set("algo", config.poolVariant);
-    params.delete("packsize");
-  }
-  params.delete("journey");
-  params.delete("debugJourneyShape");
-  params.delete("debugJourneyReward");
-  params.delete("debugJourneyCost");
-  const query = params.toString();
-  return query === "" ? "" : `?${query}`;
-}
-
 /** Returns a canonical gameplay query string with the obsolete UI key removed. */
 export function removeUiParamFromSearch(search: string): string {
   const params = new URLSearchParams(search);
@@ -204,14 +137,6 @@ export function removeUiParamFromSearch(search: string): string {
 
 export function parseRuntimeConfig(search: string): RuntimeConfig {
   const params = new URLSearchParams(search);
-  const rawAlgo = params.get("algo");
-  const draftMode = parseDraftMode(rawAlgo);
-  // Draft modes and an absent `?algo=` defer pool strategy resolution until the
-  // compiled draft data has loaded. Explicit developer variants resolve here.
-  const poolVariant =
-    draftMode === "pool" && rawAlgo !== null && rawAlgo !== ""
-      ? resolvePoolVariant(rawAlgo)
-      : undefined;
   return {
     seedOverride: parseSeedOverride(params.get("seed")),
     aiMode: params.get("ai") === "1",
@@ -220,9 +145,6 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     ),
     gameId: normalizeRoomId(params.get("game")),
     databaseMode: parseDatabaseMode(params.get("realtime")),
-    poolVariant,
-    draftMode,
-    fresh20PackSize: parsePackSize(params.get("packsize")),
     loadJourneyName: parseLoadJourneyName(params.get("loadJourney")),
     gotoScene: parseGotoScene(params.get("goto")),
     explorationCardId: parseExplorationCardId(params.get("card")),
@@ -260,23 +182,6 @@ function parseGotoScene(rawScene: string | null): string | null {
   }
   const trimmed = rawScene.trim();
   return trimmed === "" ? null : trimmed;
-}
-
-function parseDraftMode(rawAlgo: string | null): "pool" | "replay" | "fresh20" {
-  if (rawAlgo === "replay") return "replay";
-  if (rawAlgo === "fresh20") return "fresh20";
-  return "pool";
-}
-
-function parsePackSize(rawPackSize: string | null): number | undefined {
-  if (rawPackSize === null || !/^\d+$/.test(rawPackSize)) {
-    return undefined;
-  }
-  const parsed = Number(rawPackSize);
-  if (!Number.isInteger(parsed) || parsed <= 0) {
-    return undefined;
-  }
-  return parsed;
 }
 
 function parseDatabaseMode(rawRealtime: string | null): DatabaseMode {

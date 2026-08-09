@@ -32,9 +32,7 @@ const GENESIS = {
   reducerVersion: "test",
   createdAt: 0,
   contentConfig: {
-    poolVariant: "test",
-    draftMode: "pool",
-    fresh20PackSize: null,
+    poolVariant: "tides4",
   },
 };
 const SITE_ID = "site-1";

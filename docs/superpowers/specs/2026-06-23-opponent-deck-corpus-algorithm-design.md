@@ -259,8 +259,8 @@ selections during implementation.
 ## `/opponent` UI
 
 - Add an **algorithm switcher** (mirroring the `/sigdecks` mode toggle), mirrored
-  to a `?algo=` URL parameter for shareable links: `?algo=coherent` (default) and
-  `?algo=corpus`.
+  to a `?opponentAlgorithm=` URL parameter for shareable links:
+  `?opponentAlgorithm=coherent` (default) and `?opponentAlgorithm=corpus`.
 - In `corpus` mode, the panel additionally shows:
   - the selected source seat (`name`, `draftId#seat`, source file);
   - `signatureFit`, `affiliationFit`, `combined`, candidate count, and the top-K
@@ -326,4 +326,4 @@ to?" — yes.
 4. Implement `buildCorpusOpponentDeck` (Stage A + Stage B) with logging.
 5. Add the algorithm registry + switcher + provenance panel to `OpponentDebugApp`.
 6. Verification: lint, typecheck, tests, and browser QA of `/opponent` in both
-   `?algo=` modes across layers and dreamscapes.
+   `?opponentAlgorithm=` modes across layers and dreamscapes.

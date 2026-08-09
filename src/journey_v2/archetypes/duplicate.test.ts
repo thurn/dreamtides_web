@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { FitModel } from "../../draft/replay/fit-model";
+import type { FitModel } from "../../draft/fit-model";
 import { applyMerchantPayloadToState } from "../encounter/resolveMerchantOffer";
 import { merchantRng } from "../signals/rng";
 import { buildMerchantContext } from "../context/buildMerchantContext";

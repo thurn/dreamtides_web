@@ -6,7 +6,6 @@ import { opponentsFixture } from "../testing/opponents-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import {
-  applyContentConfigToSearch,
   contentConfigFromRuntime,
   contentConfigsEqual,
   parseRuntimeConfig,
@@ -21,9 +20,6 @@ describe("parseRuntimeConfig", () => {
       tutorialPlaybackSpeed: 1,
       gameId: null,
       databaseMode: "emulator",
-      poolVariant: undefined,
-      draftMode: "pool",
-      fresh20PackSize: undefined,
       loadJourneyName: null,
       gotoScene: null,
       explorationCardId: null,
@@ -187,23 +183,6 @@ describe("parseRuntimeConfig", () => {
     });
   });
 
-  describe("poolVariant", () => {
-    it("defers an absent algo to compiled draft data", () => {
-      expect(parseRuntimeConfig("").poolVariant).toBeUndefined();
-      expect(parseRuntimeConfig("?algo=").poolVariant).toBeUndefined();
-    });
-
-    it("throws on an unrecognised algo (no silent fallback)", () => {
-      expect(() => parseRuntimeConfig("?algo=nonsense")).toThrow(
-        /Unrecognized \?algo=/,
-      );
-    });
-
-    it("returns tides4 when explicitly selected", () => {
-      expect(parseRuntimeConfig("?algo=tides4").poolVariant).toBe("tides4");
-    });
-  });
-
   describe("databaseMode", () => {
     it("returns realtime only when realtime=1", () => {
       expect(parseRuntimeConfig("?realtime=1").databaseMode).toBe("realtime");
@@ -217,61 +196,6 @@ describe("parseRuntimeConfig", () => {
         "emulator",
       );
       expect(parseRuntimeConfig("?realtime=2").databaseMode).toBe("emulator");
-    });
-  });
-
-  describe("draftMode", () => {
-    it("returns replay when algo=replay", () => {
-      expect(parseRuntimeConfig("?algo=replay").draftMode).toBe("replay");
-    });
-
-    it("returns fresh20 when algo=fresh20", () => {
-      expect(parseRuntimeConfig("?algo=fresh20").draftMode).toBe("fresh20");
-    });
-
-    it("returns pool when algo is absent or a known pool variant", () => {
-      expect(parseRuntimeConfig("").draftMode).toBe("pool");
-      expect(parseRuntimeConfig("?algo=tides4").draftMode).toBe("pool");
-    });
-
-    it("returns pool when algo is empty", () => {
-      expect(parseRuntimeConfig("?algo=").draftMode).toBe("pool");
-    });
-
-    it("defers pool resolution when algo=replay", () => {
-      expect(parseRuntimeConfig("?algo=replay").poolVariant).toBeUndefined();
-    });
-
-    it("defers pool resolution when algo=fresh20", () => {
-      expect(parseRuntimeConfig("?algo=fresh20").poolVariant).toBeUndefined();
-    });
-  });
-
-  describe("fresh20PackSize", () => {
-    it("is undefined when packsize is absent", () => {
-      expect(parseRuntimeConfig("").fresh20PackSize).toBeUndefined();
-      expect(
-        parseRuntimeConfig("?algo=fresh20").fresh20PackSize,
-      ).toBeUndefined();
-    });
-
-    it("parses a positive integer packsize", () => {
-      expect(parseRuntimeConfig("?packsize=15").fresh20PackSize).toBe(15);
-      expect(parseRuntimeConfig("?packsize=1").fresh20PackSize).toBe(1);
-    });
-
-    it("ignores zero, negative, non-integer, and non-numeric packsize", () => {
-      expect(parseRuntimeConfig("?packsize=0").fresh20PackSize).toBeUndefined();
-      expect(
-        parseRuntimeConfig("?packsize=-4").fresh20PackSize,
-      ).toBeUndefined();
-      expect(
-        parseRuntimeConfig("?packsize=2.5").fresh20PackSize,
-      ).toBeUndefined();
-      expect(
-        parseRuntimeConfig("?packsize=abc").fresh20PackSize,
-      ).toBeUndefined();
-      expect(parseRuntimeConfig("?packsize=").fresh20PackSize).toBeUndefined();
     });
   });
 
@@ -294,9 +218,9 @@ describe("removeUiParamFromSearch", () => {
   it("removes every ui key while preserving unrelated parameters", () => {
     expect(
       removeUiParamFromSearch(
-        "?game=room-7&ui=legacy&algo=fresh20&ui=cumulus&deviceFrame=iphone16",
+        "?game=room-7&ui=legacy&seed=42&ui=cumulus&deviceFrame=iphone16",
       ),
-    ).toBe("?game=room-7&algo=fresh20&deviceFrame=iphone16");
+    ).toBe("?game=room-7&seed=42&deviceFrame=iphone16");
   });
 
   it("returns an empty search when ui was the only key", () => {
@@ -316,7 +240,6 @@ describe("contentConfigFromRuntime", () => {
   it("extracts the fold-relevant slice with defaults for absent optionals", () => {
     expect(
       contentConfigFromRuntime(
-        parseRuntimeConfig(""),
         atlasFoldHash,
         sitesFoldHash,
         draftData,
@@ -331,8 +254,6 @@ describe("contentConfigFromRuntime", () => {
       ),
     ).toEqual({
       poolVariant: DEFAULT_POOL_VARIANT,
-      draftMode: "pool",
-      fresh20PackSize: null,
       atlasFoldHash,
       sitesFoldHash,
       draftFoldHash: draftData.foldHash,
@@ -349,46 +270,9 @@ describe("contentConfigFromRuntime", () => {
     });
   });
 
-  it("reflects the fresh20 draft mode, pack size, and current journey", () => {
+  it("pins the strategy compiled into draft data", () => {
     expect(
       contentConfigFromRuntime(
-        parseRuntimeConfig("?algo=fresh20&packsize=15"),
-        atlasFoldHash,
-        sitesFoldHash,
-        draftData,
-        economyData,
-        CONFIG_DATA_FIXTURE.gambleData,
-        CONFIG_DATA_FIXTURE.transfigurationData,
-        opponentsData,
-        CONFIG_DATA_FIXTURE.rewardSelectionData,
-        CONFIG_DATA_FIXTURE.auguryData,
-        explorationFoldHash,
-        tutorialFoldHash,
-      ),
-    ).toEqual({
-      poolVariant: DEFAULT_POOL_VARIANT,
-      draftMode: "fresh20",
-      fresh20PackSize: 15,
-      atlasFoldHash,
-      sitesFoldHash,
-      draftFoldHash: draftData.foldHash,
-      economyFoldHash: economyData.foldHash,
-      gambleFoldHash: CONFIG_DATA_FIXTURE.gambleData.foldHash,
-      transfigurationFoldHash: CONFIG_DATA_FIXTURE.transfigurationData.foldHash,
-      rewardSelectionFoldHash: CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
-      auguryFoldHash: CONFIG_DATA_FIXTURE.auguryData.foldHash,
-      explorationFoldHash,
-      tutorialFoldHash,
-      opponentsFoldHash: opponentsData.foldHash,
-      defaultStartingEssence: economyData.journey.defaultStartingEssence,
-      dreamsignCap: economyData.journey.dreamsignCap,
-    });
-  });
-
-  it("reflects the named pool algorithm", () => {
-    expect(
-      contentConfigFromRuntime(
-        parseRuntimeConfig("?algo=tides4"),
         atlasFoldHash,
         sitesFoldHash,
         draftData,
@@ -409,8 +293,6 @@ describe("contentConfigsEqual", () => {
   const economyData = economyFixture();
   const base: ContentConfig = {
     poolVariant: "tides4",
-    draftMode: "pool",
-    fresh20PackSize: null,
     atlasFoldHash: "fixture-atlas-fold-hash",
     sitesFoldHash: "fixture-sites-fold-hash",
     draftFoldHash: "fixture-draft-fold-hash",
@@ -431,12 +313,6 @@ describe("contentConfigsEqual", () => {
   });
 
   it("is false when any single field differs", () => {
-    expect(contentConfigsEqual(base, { ...base, draftMode: "replay" })).toBe(
-      false,
-    );
-    expect(contentConfigsEqual(base, { ...base, fresh20PackSize: 20 })).toBe(
-      false,
-    );
     expect(
       contentConfigsEqual(base, { ...base, atlasFoldHash: "different" }),
     ).toBe(false);
@@ -482,124 +358,5 @@ describe("contentConfigsEqual", () => {
     expect(contentConfigsEqual(base, { ...base, dreamsignCap: 999 })).toBe(
       false,
     );
-  });
-});
-
-describe("applyContentConfigToSearch", () => {
-  it("round-trips: reparsing the result yields the same content slice", () => {
-    const economyData = economyFixture();
-    const pinnedEconomy = {
-      draftFoldHash: draftDataFixture().foldHash,
-      economyFoldHash: economyData.foldHash,
-      gambleFoldHash: CONFIG_DATA_FIXTURE.gambleData.foldHash,
-      transfigurationFoldHash: CONFIG_DATA_FIXTURE.transfigurationData.foldHash,
-      rewardSelectionFoldHash: CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
-      auguryFoldHash: CONFIG_DATA_FIXTURE.auguryData.foldHash,
-      explorationFoldHash: "fixture-exploration-fold-hash",
-      tutorialFoldHash: "fixture-tutorial-fold-hash",
-      opponentsFoldHash: opponentsFixture().foldHash,
-      defaultStartingEssence: economyData.journey.defaultStartingEssence,
-      dreamsignCap: economyData.journey.dreamsignCap,
-    };
-    const configs: ContentConfig[] = [
-      {
-        poolVariant: "tides4",
-        draftMode: "pool",
-        fresh20PackSize: null,
-        atlasFoldHash: "fixture-atlas-fold-hash",
-        sitesFoldHash: "fixture-sites-fold-hash",
-        ...pinnedEconomy,
-      },
-      {
-        poolVariant: DEFAULT_POOL_VARIANT,
-        draftMode: "replay",
-        fresh20PackSize: null,
-        atlasFoldHash: "fixture-atlas-fold-hash",
-        sitesFoldHash: "fixture-sites-fold-hash",
-        ...pinnedEconomy,
-      },
-      {
-        poolVariant: DEFAULT_POOL_VARIANT,
-        draftMode: "fresh20",
-        fresh20PackSize: 12,
-        atlasFoldHash: "fixture-atlas-fold-hash",
-        sitesFoldHash: "fixture-sites-fold-hash",
-        ...pinnedEconomy,
-      },
-      {
-        poolVariant: DEFAULT_POOL_VARIANT,
-        draftMode: "fresh20",
-        fresh20PackSize: null,
-        atlasFoldHash: "fixture-atlas-fold-hash",
-        sitesFoldHash: "fixture-sites-fold-hash",
-        ...pinnedEconomy,
-      },
-    ];
-    for (const config of configs) {
-      const search = applyContentConfigToSearch("", config);
-      expect(
-        contentConfigFromRuntime(
-          parseRuntimeConfig(search),
-          config.atlasFoldHash ?? "fixture-atlas-fold-hash",
-          config.sitesFoldHash ?? "fixture-sites-fold-hash",
-          {
-            ...draftDataFixture(),
-            foldHash: config.draftFoldHash ?? draftDataFixture().foldHash,
-          },
-          {
-            ...economyData,
-            foldHash: config.economyFoldHash ?? economyData.foldHash,
-          },
-          {
-            ...CONFIG_DATA_FIXTURE.gambleData,
-            foldHash:
-              config.gambleFoldHash ?? CONFIG_DATA_FIXTURE.gambleData.foldHash,
-          },
-          {
-            ...CONFIG_DATA_FIXTURE.transfigurationData,
-            foldHash:
-              config.transfigurationFoldHash ??
-              CONFIG_DATA_FIXTURE.transfigurationData.foldHash,
-          },
-          {
-            ...opponentsFixture(),
-            foldHash: config.opponentsFoldHash ?? opponentsFixture().foldHash,
-          },
-          {
-            ...CONFIG_DATA_FIXTURE.rewardSelectionData,
-            foldHash:
-              config.rewardSelectionFoldHash ??
-              CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
-          },
-          {
-            ...CONFIG_DATA_FIXTURE.auguryData,
-            foldHash:
-              config.auguryFoldHash ?? CONFIG_DATA_FIXTURE.auguryData.foldHash,
-          },
-          config.explorationFoldHash ?? "fixture-exploration-fold-hash",
-          config.tutorialFoldHash ?? "fixture-tutorial-fold-hash",
-        ),
-      ).toEqual(config);
-    }
-  });
-
-  it("preserves unrelated gameplay and device params while overriding content params", () => {
-    const config: ContentConfig = {
-      poolVariant: "tides4",
-      draftMode: "pool",
-      fresh20PackSize: null,
-    };
-    const result = applyContentConfigToSearch(
-      "?game=abc123&deviceFrame=iphone16&algo=fresh20&packsize=9&journey=classic&debugJourneyShape=single_offer",
-      config,
-    );
-    const params = new URLSearchParams(result);
-    expect(params.get("game")).toBe("abc123");
-    expect(params.get("deviceFrame")).toBe("iphone16");
-    expect(params.get("algo")).toBe("tides4");
-    // packsize is dropped when the adopted mode is not fresh20.
-    expect(params.get("packsize")).toBeNull();
-    expect(params.get("journey")).toBeNull();
-    expect(params.get("debugJourneyShape")).toBeNull();
   });
 });

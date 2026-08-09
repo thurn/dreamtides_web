@@ -2,7 +2,7 @@ import { asCardName } from "../../types/card-identity";
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
-import type { FitModel } from "../../draft/replay/fit-model";
+import type { FitModel } from "../../draft/fit-model";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,

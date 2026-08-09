@@ -4,7 +4,7 @@
 // deck cards to show, the stat tiles, the dreamsign labels, the ability flag,
 // and an optional provenance panel. The component renders purely off the view,
 // so adding an algorithm is just adding an entry here. Selection is driven by
-// the `?algo=` URL param via {@link getAlgorithm}.
+// the `?opponentAlgorithm=` URL param via {@link getAlgorithm}.
 //
 // Each algorithm OWNS its own logging: the coherent algorithm logs
 // `opponent_deck_constructed` (mirroring a production battle), and the corpus
@@ -224,7 +224,7 @@ export const OPPONENT_ALGORITHMS: readonly DebugAlgorithm[] = [
   coherentAlgorithm,
 ];
 
-/** Resolve the algorithm for an `?algo=` value, defaulting to corpus. */
+/** Resolve the selected opponent algorithm, defaulting to corpus. */
 export function getAlgorithm(id: string | null): DebugAlgorithm {
   return (
     OPPONENT_ALGORITHMS.find((algorithm) => algorithm.id === id) ??

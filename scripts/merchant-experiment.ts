@@ -26,8 +26,8 @@ import type {
 } from "../src/data/merchant-corpus";
 import type { DreamsignProfile } from "../src/data/dreamsign-profiles";
 import type { JourneyContent } from "../src/data/journey-content";
-import { buildFitModel } from "../src/draft/replay/fit-model";
-import type { FitModel } from "../src/draft/replay/fit-model";
+import { buildFitModel } from "../src/draft/fit-model";
+import type { FitModel } from "../src/draft/fit-model";
 import { buildIdIndex } from "../src/data/cards-v2-database";
 import { STARTER_CARD_NUMBERS } from "../src/data/starter-cards";
 import type { CardData } from "../src/types/cards";

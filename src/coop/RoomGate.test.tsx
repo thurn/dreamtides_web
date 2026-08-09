@@ -17,7 +17,7 @@ import { opponentsFixture } from "../testing/opponents-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 
-const REDUCER_VERSION = "dreamtides-coop-v23";
+const REDUCER_VERSION = "dreamtides-coop-v24";
 const ATLAS_FOLD_HASH = "fixture-atlas-fold-hash";
 const SITES_FOLD_HASH = "fixture-sites-fold-hash";
 const DRAFT_DATA = draftDataFixture();
@@ -92,9 +92,6 @@ function runtimeConfig(overrides: Partial<RuntimeConfig> = {}): RuntimeConfig {
     aiMode: true,
     gameId: "abc123",
     databaseMode: "emulator",
-    poolVariant: "tides4",
-    draftMode: "pool",
-    fresh20PackSize: undefined,
     ...overrides,
   };
 }
@@ -178,8 +175,6 @@ describe("RoomGate content-config gate", () => {
   it("pins new rooms to the semantic reducer protocol", () => {
     const genesis = createFreshGenesis({
       poolVariant: "tides4",
-      draftMode: "pool",
-      fresh20PackSize: null,
       atlasFoldHash: ATLAS_FOLD_HASH,
       sitesFoldHash: SITES_FOLD_HASH,
       draftFoldHash: DRAFT_DATA.foldHash,
@@ -194,15 +189,13 @@ describe("RoomGate content-config gate", () => {
     mount(runtimeConfig());
     await flush();
 
-    // Room pinned a different draft mode than the local config.
+    // Room pinned a different Atlas ruleset.
     act(() => {
       deliverNode?.(
         nodeWith(
           genesisWith({
             poolVariant: "tides4",
-            draftMode: "replay",
-            fresh20PackSize: null,
-            atlasFoldHash: ATLAS_FOLD_HASH,
+            atlasFoldHash: "different-atlas-fold-hash",
             sitesFoldHash: SITES_FOLD_HASH,
             draftFoldHash: DRAFT_DATA.foldHash,
             ...PINNED_ECONOMY,
@@ -214,7 +207,7 @@ describe("RoomGate content-config gate", () => {
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
     expect(container.querySelector("[data-room-children]")).toBeNull();
-    expect(container.textContent).toContain("Use This Game’s Settings");
+    expect(container.textContent).toContain("Create New Game");
   });
 
   it("mounts children when contentConfig matches", async () => {
@@ -227,8 +220,6 @@ describe("RoomGate content-config gate", () => {
         nodeWith(
           genesisWith({
             poolVariant: "tides4",
-            draftMode: "pool",
-            fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
             sitesFoldHash: SITES_FOLD_HASH,
             draftFoldHash: DRAFT_DATA.foldHash,
@@ -257,8 +248,6 @@ describe("RoomGate content-config gate", () => {
         nodeWith(
           genesisWith({
             poolVariant: "tides4",
-            draftMode: "pool",
-            fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
             sitesFoldHash: SITES_FOLD_HASH,
             draftFoldHash: DRAFT_DATA.foldHash,
@@ -283,8 +272,6 @@ describe("RoomGate content-config gate", () => {
         nodeWith(
           genesisWith({
             poolVariant: "tides4",
-            draftMode: "pool",
-            fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
             draftFoldHash: DRAFT_DATA.foldHash,
             ...PINNED_ECONOMY,
@@ -308,8 +295,6 @@ describe("RoomGate content-config gate", () => {
         nodeWith(
           genesisWith({
             poolVariant: "tides4",
-            draftMode: "pool",
-            fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
             sitesFoldHash: SITES_FOLD_HASH,
             draftFoldHash: "different-draft-fold-hash",
@@ -352,8 +337,6 @@ describe("RoomGate content-config gate", () => {
         nodeWith(
           genesisWith({
             poolVariant: "tides4",
-            draftMode: "pool",
-            fresh20PackSize: null,
             atlasFoldHash: "different-atlas-fold-hash",
             sitesFoldHash: SITES_FOLD_HASH,
             ...PINNED_ECONOMY,
@@ -376,8 +359,6 @@ describe("RoomGate content-config gate", () => {
         nodeWith(
           genesisWith({
             poolVariant: "tides4",
-            draftMode: "pool",
-            fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
             sitesFoldHash: "different-sites-fold-hash",
             ...PINNED_ECONOMY,
@@ -400,8 +381,6 @@ describe("RoomGate content-config gate", () => {
         nodeWith(
           genesisWith({
             poolVariant: "tides4",
-            draftMode: "pool",
-            fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
             sitesFoldHash: SITES_FOLD_HASH,
             ...PINNED_ECONOMY,
@@ -425,8 +404,6 @@ describe("RoomGate content-config gate", () => {
         nodeWith(
           genesisWith({
             poolVariant: "tides4",
-            draftMode: "pool",
-            fresh20PackSize: null,
           }),
         ),
       );
@@ -446,8 +423,6 @@ describe("RoomGate content-config gate", () => {
         nodeWith({
           ...genesisWith({
             poolVariant: "tides4",
-            draftMode: "pool",
-            fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
             sitesFoldHash: SITES_FOLD_HASH,
             ...PINNED_ECONOMY,
@@ -471,8 +446,6 @@ describe("RoomGate content-config gate", () => {
         nodeWith({
           ...genesisWith({
             poolVariant: "tides4",
-            draftMode: "pool",
-            fresh20PackSize: null,
             atlasFoldHash: ATLAS_FOLD_HASH,
             sitesFoldHash: SITES_FOLD_HASH,
             ...PINNED_ECONOMY,

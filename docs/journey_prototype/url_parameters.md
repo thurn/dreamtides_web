@@ -103,42 +103,6 @@ local Realtime Database emulator at `127.0.0.1:9000` with the
 
 Room navigation keeps `realtime=1` in the URL when a cloud room is created.
 
-## `algo`
-
-The journey uses the `tides4` draft-pool algorithm documented in
-`docs/cards2/tides_algorithms.md`. An absent `algo` value and `algo=tides4` both
-select this pool. The parameter is read once at page load.
-
-Two `algo` values select a deck-fit draft mode while retaining tides4 as the
-run's underlying pool context. Both build a deck-fit model from the historical
-draft-record corpus and rank candidate cards by how well they fit the deck
-drafted so far:
-
-- `algo=replay` — replays a historical draft, showing the deck-fit best slice of
-  a real recorded pack at each pick.
-- `algo=fresh20` — rolls a brand-new random pack of cards at each pick and shows
-  the deck-fit best slice of it. A shown card is held off for at least 10 picks
-  before it can be shown again, and is retired for good once it has been shown
-  twice. Every pack is drawn only from cards still eligible under those rules.
-
-The `algo` selection governs draft pack construction for these two modes.
-
-## `packsize`
-
-Sets the number of cards in each freshly generated pack for `algo=fresh20`. It
-must be a positive integer; an absent or invalid value uses the fresh20 default
-of 20. It has no effect in any other draft mode.
-
-Examples:
-
-```
-http://localhost:5173/                          # journey prototype, tides4 pool
-http://localhost:5173/?algo=tides4              # explicit tides4 pool
-http://localhost:5173/?algo=replay              # record-replay deck-fit draft
-http://localhost:5173/?algo=fresh20             # fresh-pack deck-fit draft (20-card packs)
-http://localhost:5173/?algo=fresh20&packsize=30 # fresh-pack draft with 30-card packs
-```
-
 ## `game`
 
 Parses a Firebase multiplayer room id into `runtimeConfig.gameId`. The value is

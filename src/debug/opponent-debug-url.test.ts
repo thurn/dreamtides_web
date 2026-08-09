@@ -34,7 +34,7 @@ describe("opponent-debug-url", () => {
     expect(parseOpponentDebugParams(search)).toEqual(params);
   });
 
-  it("round-trips the coherent algo through the query string", () => {
+  it("round-trips the coherent opponent algorithm through the query string", () => {
     const params: OpponentDebugParams = {
       completionLevel: 2,
       dreamscapeId: "grid_city",
@@ -42,18 +42,18 @@ describe("opponent-debug-url", () => {
       algo: "coherent",
     };
     const search = opponentDebugSearch(params);
-    expect(search).toContain("algo=coherent");
+    expect(search).toContain("opponentAlgorithm=coherent");
     expect(parseOpponentDebugParams(search)).toEqual(params);
   });
 
-  it("omits the algo token for the corpus default", () => {
+  it("omits the opponentAlgorithm token for the corpus default", () => {
     const search = opponentDebugSearch({
       completionLevel: 1,
       dreamscapeId: null,
       nonce: 0,
       algo: "corpus",
     });
-    expect(search).not.toContain("algo");
+    expect(search).not.toContain("opponentAlgorithm");
   });
 
   it("round-trips params through the generation id (defaulting algo)", () => {
@@ -96,7 +96,7 @@ describe("opponent-debug-url", () => {
 
   it("prefers a valid gen token over discrete params, overlaying the algo", () => {
     const parsed = parseOpponentDebugParams(
-      "?gen=opponent-debug:frostforge:5:3&layer=1&dreamscape=grid_city&n=9&algo=corpus",
+      "?gen=opponent-debug:frostforge:5:3&layer=1&dreamscape=grid_city&n=9&opponentAlgorithm=corpus",
     );
     expect(parsed).toEqual({
       completionLevel: 5,
@@ -135,8 +135,8 @@ describe("opponent-debug-url", () => {
     });
   });
 
-  it("treats malformed numbers and an unknown algo as their defaults", () => {
-    expect(parseOpponentDebugParams("?layer=abc&n=xyz&algo=bogus")).toEqual({
+  it("treats malformed numbers and an unknown opponent algorithm as their defaults", () => {
+    expect(parseOpponentDebugParams("?layer=abc&n=xyz&opponentAlgorithm=bogus")).toEqual({
       completionLevel: 0,
       dreamscapeId: null,
       nonce: 0,

@@ -2,7 +2,7 @@ import {
   scoreCandidatesForDeck,
   type CandidateFitScore,
   type FitModel,
-} from "../../draft/replay/fit-model";
+} from "../../draft/fit-model";
 import type { CardData } from "../../types/cards";
 import type { MerchantDeckCard } from "../types";
 import type { RewardSelectionTuning } from "../../types/reward-selection-data";

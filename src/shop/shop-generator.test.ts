@@ -1,12 +1,11 @@
 import { describe, it, expect } from "vitest";
 import { getLogEntries, resetLog } from "../logging";
 import type { CardData } from "../types/cards";
-import type { DreamsignTemplate, ResolvedDreamAvatarPackage } from "../types/content";
-import type { PoolDraftState, ReplayDraftState } from "../types/draft";
+import type { DreamsignTemplate } from "../types/content";
+import type { PoolDraftState } from "../types/draft";
 import {
   generateShopInventory as generateShopInventoryRaw,
   effectivePrice,
-  replayShopDraftState,
   runtimeSlotsToShopSlots,
   shopSlotsToRuntime,
   type ShopGenerationOptions,
@@ -52,7 +51,7 @@ function makeDraftState(copies: Record<number, number>): PoolDraftState {
     draftPoolCopiesByCard[cardNumber] = count;
   }
   return {
-    mode: "pool",
+    mode: "tides4",
     draftPoolCopiesByCard,
     remainingCopiesByCard: { ...draftPoolCopiesByCard },
     currentOffer: [],
@@ -285,7 +284,7 @@ describe("generateShopInventory", () => {
       .map((slot) => slot.card!.cardNumber);
     expect(drawnCardNumbers.length).toBeGreaterThan(0);
     // Spent cards were removed from the returned draft state.
-    const resultPoolState = result.draftState as PoolDraftState | undefined;
+    const resultPoolState = result.draftState;
     for (const cardNumber of drawnCardNumbers) {
       expect(
         resultPoolState?.remainingCopiesByCard[String(cardNumber)],
@@ -408,8 +407,8 @@ describe("generateShopInventory", () => {
     // The original passed-in object is unchanged.
     expect(draftState.remainingCopiesByCard).toEqual(before);
     expect(result.draftState).toBeDefined();
-    expect(result.draftState?.mode).toBe("pool");
-    if (result.draftState?.mode !== "pool") throw new Error("expected pool state");
+    expect(result.draftState?.mode).toBe("tides4");
+    if (result.draftState?.mode !== "tides4") throw new Error("expected pool state");
     expect(result.draftState.remainingCopiesByCard).not.toEqual(before);
   });
 
@@ -443,8 +442,7 @@ describe("generateShopInventory", () => {
     // The regular shop spends drawn cards from the draft multiset.
     expect(
       Object.keys(
-        (result.draftState as PoolDraftState | undefined)?.remainingCopiesByCard ??
-          {},
+        result.draftState?.remainingCopiesByCard ?? {},
       ).length,
     ).toBeLessThan(Object.keys(draftState.remainingCopiesByCard).length);
   });
@@ -458,104 +456,5 @@ describe("generateShopInventory", () => {
         dreamsignTemplates: DREAMSIGN_TEMPLATES,
       }),
     ).not.toThrow();
-  });
-});
-
-function makeReplayState(): ReplayDraftState {
-  return {
-    mode: "replay",
-    recordId: "record-0",
-    packSequence: [[1, 2, 3, 4]],
-    signatureCardNumbers: [],
-    currentOffer: [1, 2, 3, 4],
-    activeSiteId: "site-1",
-    pickNumber: 1,
-    sitePicksCompleted: 0,
-  };
-}
-
-function makePackage(
-  draftPoolCopiesByCard: Record<string, number>,
-): ResolvedDreamAvatarPackage {
-  return {
-    dreamAvatar: {
-      id: "dream-avatar-0",
-      name: "Test",
-      title: "Test",
-      renderedText: "",
-      imageNumber: "0001",
-      startingEssence: 250,
-      signatureCards: [],
-    },
-    draftPoolCopiesByCard,
-    dreamsignPoolIds: [],
-    mandatoryOnlyPoolSize: 0,
-    draftPoolSize: 0,
-    doubledCardCount: 0,
-    legalSubsetCount: 1,
-    preferredSubsetCount: 1,
-  };
-}
-
-describe("replayShopDraftState", () => {
-  it("builds a fresh pool draft state from the package draft pool", () => {
-    const copies = { "1": 1, "2": 2, "3": 1 };
-    const state = replayShopDraftState(makePackage(copies));
-
-    expect(state).not.toBeNull();
-    expect(state?.mode).toBe("pool");
-    expect(state?.draftPoolCopiesByCard).toEqual(copies);
-    expect(state?.remainingCopiesByCard).toEqual(copies);
-    // remainingCopiesByCard is a fresh copy, not the same reference.
-    expect(state?.remainingCopiesByCard).not.toBe(
-      state?.draftPoolCopiesByCard,
-    );
-    expect(state?.currentOffer).toEqual([]);
-    expect(state?.activeSiteId).toBeNull();
-  });
-
-  it("returns null for a missing or empty package pool", () => {
-    expect(replayShopDraftState(null)).toBeNull();
-    expect(replayShopDraftState(undefined)).toBeNull();
-    expect(replayShopDraftState(makePackage({}))).toBeNull();
-  });
-
-  it("lets a replay shop draw card slots from the substituted package pool", () => {
-    // A replay draft state has no card multiset; substituting the package pool
-    // (the caller's behavior) lets generateShopInventory populate card slots,
-    // which it cannot do off the replay state directly.
-    const cards = makeDatabase([
-      makeCard({ cardNumber: 1 }),
-      makeCard({ cardNumber: 2 }),
-      makeCard({ cardNumber: 3 }),
-      makeCard({ cardNumber: 4 }),
-      makeCard({ cardNumber: 5 }),
-    ]);
-    const replayState = makeReplayState();
-    const shopPool = replayShopDraftState(
-      makePackage({ "1": 1, "2": 1, "3": 1, "4": 1, "5": 1 }),
-    );
-
-    // Sanity: feeding the replay state directly throws (no multiset to draw).
-    expect(() =>
-      generateShopInventory({
-        cardDatabase: cards,
-        draftState: replayState,
-        remainingDreamsignPoolIds: [],
-        dreamsignTemplates: DREAMSIGN_TEMPLATES,
-      }),
-    ).toThrow();
-
-    const result = generateShopInventory({
-      cardDatabase: cards,
-      draftState: shopPool,
-      remainingDreamsignPoolIds: [],
-      dreamsignTemplates: DREAMSIGN_TEMPLATES,
-    });
-    const cardSlots = result.slots.filter((slot) => slot.itemType === "card");
-    expect(cardSlots.length).toBeGreaterThan(0);
-    for (const slot of cardSlots) {
-      expect(slot.basePrice).toBe(ECONOMY.shop.prices.standardCard);
-    }
   });
 });

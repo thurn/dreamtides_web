@@ -45,7 +45,6 @@ import { generateRewardSiteData } from "../../rewards/reward-generator";
 import { drawDreamsignOptions } from "../../dreamsign/dreamsign-pool";
 import {
   generateShopInventory,
-  replayShopDraftState,
   shopSlotsToRuntime,
 } from "../../shop/shop-generator";
 import {
@@ -91,24 +90,8 @@ function coerceMerchantChoice(value: unknown): MerchantChoice | undefined {
   return typeof choiceId === "string" ? { choiceId } : undefined;
 }
 
-/** Whether the run's draft is a deck-fit mode (replay / fresh20). */
-function isDeckFitDraft(journey: JourneyState): boolean {
-  return (
-    journey.draftState?.mode === "replay" ||
-    journey.draftState?.mode === "fresh20"
-  );
-}
-
-/**
- * The draft state a shop draws its card slots from. Deck-fit runs use a
- * transient pool rebuilt from the resolved package (their live draft state is a
- * frozen pack sequence, not a multiset); pool runs draw from the run draft
- * state directly.
- */
 function shopSourceDraftState(journey: JourneyState): DraftState | null {
-  return isDeckFitDraft(journey)
-    ? replayShopDraftState(journey.resolvedPackage)
-    : journey.draftState;
+  return journey.draftState;
 }
 
 /** A uniform rng shuffle (no ambient `Math.random`). */
@@ -778,7 +761,7 @@ export function createSiteContentProvider(
                 }),
           };
           // SEAM (Task 27): the `SiteOpenResult` seam cannot carry the spent
-          // draft state (only `remainingDreamsignPool`), so a pool-mode shop's
+          // draft state (only `remainingDreamsignPool`), so a tides4 shop's
           // draft-multiset consumption is not persisted on OPEN. Slots are still
           // drawn deterministically from the run pool. The Dreamsign pool the
           // shop drew is persisted below.
@@ -854,13 +837,7 @@ export function createSiteContentProvider(
         dreamsignCount: stock.dreamsignSlots,
         rng: stream,
       });
-      // Task-15 trap: deck-fit runs keep the live draft state, and a card-less
-      // shop hands back no draft state (`generated.draftState` is `undefined`),
-      // so `?? journey.draftState` keeps the run's draft pool intact rather than
-      // null-wiping it on a reroll. ALWAYS returns the resolved draft state.
-      const draftState = isDeckFitDraft(journey)
-        ? journey.draftState
-        : (generated.draftState ?? journey.draftState);
+      const draftState = generated.draftState ?? journey.draftState;
       const currentRuntime = journey.siteRuntime[site.id];
       return {
         slots:

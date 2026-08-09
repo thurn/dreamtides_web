@@ -91,7 +91,7 @@ function genesis(seed) {
     seed,
     reducerVersion: "fixture",
     createdAt: 0,
-    contentConfig: { poolVariant: "fixture", draftMode: "pool", fresh20PackSize: null },
+    contentConfig: { poolVariant: "tides4" },
   };
 }
 

@@ -1,10 +1,9 @@
-import { useCallback, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import {
   ApplicationStateScreen,
   type ApplicationStateComparisonRow,
 } from "../cumulus/screens/ApplicationStateScreen";
 import type { ContentConfig } from "../eventlog/types";
-import { applyContentConfigToSearch } from "../runtime/runtime-config";
 import { createMessageDescriptor } from "../data/localization-descriptors";
 import type { FluentMessageDescriptor } from "../data/localization-messages";
 
@@ -17,43 +16,13 @@ interface ConfigGateScreenProps {
 }
 
 /**
- * Controller for the recoverable room-content configuration gate. URL rewriting
- * and reload remain here; Cumulus receives only its selected state and action.
+ * Controller for the recoverable room-content configuration gate.
  */
 export function ConfigGateScreen({
   roomContentConfig,
   localContentConfig,
   onStartNewGame,
 }: ConfigGateScreenProps): ReactNode {
-  const canAdopt =
-    roomContentConfig?.atlasFoldHash !== undefined &&
-    roomContentConfig.atlasFoldHash === localContentConfig.atlasFoldHash &&
-    roomContentConfig.sitesFoldHash !== undefined &&
-    roomContentConfig.sitesFoldHash === localContentConfig.sitesFoldHash &&
-    roomContentConfig.draftFoldHash !== undefined &&
-    roomContentConfig.draftFoldHash === localContentConfig.draftFoldHash &&
-    roomContentConfig.economyFoldHash !== undefined &&
-    roomContentConfig.economyFoldHash === localContentConfig.economyFoldHash &&
-    roomContentConfig.gambleFoldHash !== undefined &&
-    roomContentConfig.gambleFoldHash === localContentConfig.gambleFoldHash &&
-    roomContentConfig.transfigurationFoldHash !== undefined &&
-    roomContentConfig.transfigurationFoldHash ===
-      localContentConfig.transfigurationFoldHash &&
-    roomContentConfig.opponentsFoldHash !== undefined &&
-    roomContentConfig.opponentsFoldHash ===
-      localContentConfig.opponentsFoldHash &&
-    roomContentConfig.tutorialFoldHash !== undefined &&
-    roomContentConfig.tutorialFoldHash === localContentConfig.tutorialFoldHash;
-
-  const handleUseRoomSettings = useCallback(() => {
-    if (!canAdopt || roomContentConfig === undefined) return;
-    const nextSearch = applyContentConfigToSearch(
-      window.location.search,
-      roomContentConfig,
-    );
-    window.location.search = nextSearch;
-  }, [canAdopt, roomContentConfig]);
-
   return (
     <ApplicationStateScreen
       view={{
@@ -61,26 +30,14 @@ export function ConfigGateScreen({
         title: createMessageDescriptor("coop-content-settings-title"),
         message: createMessageDescriptor("coop-content-settings-message"),
         comparison: configComparisonRows(roomContentConfig, localContentConfig),
-        ...(canAdopt
-          ? {
-              actions: [
-                {
-                  id: "primary",
-                  label: createMessageDescriptor("coop-use-game-settings-action"),
-                  onPress: handleUseRoomSettings,
-                },
-              ],
-            }
-          : {
-              detailMessage: createMessageDescriptor("coop-unadoptable-settings-detail"),
-              actions: [
-                {
-                  id: "primary",
-                  label: createMessageDescriptor("coop-create-new-game-action"),
-                  onPress: onStartNewGame,
-                },
-              ],
-            }),
+        detailMessage: createMessageDescriptor("coop-unadoptable-settings-detail"),
+        actions: [
+          {
+            id: "primary",
+            label: createMessageDescriptor("coop-create-new-game-action"),
+            onPress: onStartNewGame,
+          },
+        ],
       }}
     />
   );
@@ -112,13 +69,8 @@ function describeConfig(
 }[] {
   const unavailable = (): ConfigDisplayValue =>
     createMessageDescriptor("coop-config-unavailable");
-  const defaultValue = (): ConfigDisplayValue =>
-    createMessageDescriptor("coop-config-default");
   if (config === undefined) {
     const unavailableRows = [
-      { kind: "pool", label: createMessageDescriptor("coop-config-pool-label") },
-      { kind: "draft", label: createMessageDescriptor("coop-config-draft-label") },
-      { kind: "pack-size", label: createMessageDescriptor("coop-config-pack-size-label") },
       { kind: "atlas", label: createMessageDescriptor("coop-config-atlas-rules-label") },
       { kind: "site", label: createMessageDescriptor("coop-config-site-rules-label") },
       { kind: "draft-rules", label: createMessageDescriptor("coop-config-draft-rules-label") },
@@ -135,16 +87,6 @@ function describeConfig(
     ];
   }
   return [
-    { label: createMessageDescriptor("coop-config-pool-label"), value: config.poolVariant, comparisonKey: config.poolVariant },
-    { label: createMessageDescriptor("coop-config-draft-label"), value: config.draftMode, comparisonKey: config.draftMode },
-    {
-      label: createMessageDescriptor("coop-config-pack-size-label"),
-      value:
-        config.fresh20PackSize === null
-          ? defaultValue()
-          : String(config.fresh20PackSize),
-      comparisonKey: config.fresh20PackSize === null ? "default" : String(config.fresh20PackSize),
-    },
     {
       label: createMessageDescriptor("coop-config-atlas-rules-label"),
       value: config.atlasFoldHash?.slice(0, 12) ?? unavailable(),

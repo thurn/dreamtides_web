@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildFitModel } from "../../draft/replay/fit-model";
+import { buildFitModel } from "../../draft/fit-model";
 import { scoreDeckCoherence as scoreConfiguredDeckCoherence } from "./coherence";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 

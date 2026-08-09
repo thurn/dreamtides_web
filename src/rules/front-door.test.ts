@@ -25,9 +25,7 @@ const GENESIS: Genesis = {
   createdAt: 0,
   frontDoorEntry: "main",
   contentConfig: {
-    poolVariant: "test",
-    draftMode: "pool",
-    fresh20PackSize: null,
+    poolVariant: "tides4",
   },
 };
 

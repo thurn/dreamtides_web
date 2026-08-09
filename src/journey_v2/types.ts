@@ -1,4 +1,4 @@
-import type { FitModel } from "../draft/replay/fit-model";
+import type { FitModel } from "../draft/fit-model";
 import type { MerchantCorpus } from "../data/merchant-corpus";
 import type { DreamsignProfile } from "../data/dreamsign-profiles";
 import type { JourneyContent } from "../data/journey-content";

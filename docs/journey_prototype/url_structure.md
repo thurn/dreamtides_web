@@ -101,7 +101,7 @@ log, stamped with the room `gameId` like every other entry.
 ## Relationship to query parameters
 
 The path reflects *where the player is*; query parameters configure *how the run
-boots and behaves* (room id, RNG seed, draft algorithm, QA jumps). They compose
+boots and behaves* (room id, RNG seed, QA jumps). They compose
 freely — a path always carries the run's query string alongside it. See
 `url_parameters.md` for the full parameter reference, including `?goto=<scene>`,
 the developer QA jump that boots a fresh room straight onto a target screen.

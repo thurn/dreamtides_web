@@ -65,7 +65,6 @@ export function JourneyApp({
   const { state, mutations, journeyContent } = useJourney();
   const resolvedPoolVariant =
     journeyContent.poolContext?.poolVariant ??
-    runtimeConfig.poolVariant ??
     journeyContent.draftData.pool.defaultStrategy;
   // Reflect the current screen into the address-bar path (e.g.
   // `/dreamscape/ember-wood/purge`, `/atlas`) so the URL shows where the player
@@ -217,19 +216,6 @@ export function JourneyApp({
 
   const hasDraftData = state.resolvedPackage !== null;
   const hasCardSourceDebug = state.cardSourceDebug !== null;
-
-  // In record-replay draft mode the Pool Viewer surfaces the replayed record's
-  // own deck and pick log. Resolve the record the draft state points at from
-  // the bundled corpus (loaded into `journeyContent`) so the viewer can show the
-  // deck the original drafter built and their pack-by-pack picks.
-  const draftState = state.draftState;
-  const replayRecord = useMemo(() => {
-    if (draftState === null || draftState.mode !== "replay") {
-      return null;
-    }
-    const records = journeyContent.draftRecords ?? [];
-    return records.find((record) => record.id === draftState.recordId) ?? null;
-  }, [draftState, journeyContent.draftRecords]);
 
   const resolvedDreamAvatarId = state.resolvedPackage?.dreamAvatar.id ?? null;
   // Tide provenance: which preconstructed tides the run's pool was dealt from
@@ -442,7 +428,6 @@ export function JourneyApp({
             draftState={state.draftState}
             resolvedPackage={state.resolvedPackage}
             poolVariant={resolvedPoolVariant}
-            replayRecord={replayRecord}
             tides4Provenance={tides4Provenance}
             isOpen={poolViewerOpen}
             onClose={handleClosePoolViewer}
@@ -567,14 +552,7 @@ export default function App({
   }, []);
 
   useEffect(() => {
-    Promise.all([
-      loadJourneyContent(
-        runtimeConfig.poolVariant,
-        runtimeConfig.draftMode,
-        runtimeConfig.fresh20PackSize,
-      ),
-      loadTutorialConfiguration(),
-    ])
+    Promise.all([loadJourneyContent(), loadTutorialConfiguration()])
       .then(([loadedContent, tutorial]) => {
         logEvent("tutorial_configuration_loaded", {
           contentHash: tutorial.contentHash,
@@ -609,11 +587,7 @@ export default function App({
             : "Failed to load journey content.",
         );
       });
-  }, [
-    runtimeConfig.poolVariant,
-    runtimeConfig.draftMode,
-    runtimeConfig.fresh20PackSize,
-  ]);
+  }, []);
 
   useEffect(() => {
     if (journeyContent === null) {

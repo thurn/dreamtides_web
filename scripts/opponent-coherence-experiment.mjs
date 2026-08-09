@@ -2,7 +2,7 @@
 // (design `docs/cards2/opponent_deck_coherent_draft_design.md`). It measures
 // whether generated opponent decks are internally COHERENT — defined purely as
 // resemblance to the real human decks in `docs/draft_records_adapted/`, using the
-// same IDF machinery as the draft-replay fit model. No human labels, no archetype
+// same IDF machinery as the shared corpus fit model. No human labels, no archetype
 // taxonomy: coherence is corpus-relative only.
 //
 // The harness generates opponent decks across seeds and completion levels, scores
@@ -19,7 +19,7 @@
 //
 // TS<->JS MIRROR. The scoring/draft below faithfully reimplements
 // src/battle/integration/{coherence,coherent-draft,opponent-deck}.ts and
-// src/draft/replay/fit-model.ts. If you change a formula in one, change it here.
+// src/draft/fit-model.ts. If you change a formula in one, change it here.
 //
 // Usage:
 //   npm run opponent-coherence-metric
@@ -33,7 +33,7 @@ import {
   loadCorpus,
   buildFitModel,
   DEFAULT_TUNING,
-} from "./draft-replay-experiment.mjs";
+} from "./draft-corpus-fit.mjs";
 import { compileOpponentsData } from "./opponents-data.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");

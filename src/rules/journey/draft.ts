@@ -24,7 +24,6 @@ import {
   enterDraftSite as engineEnterDraftSite,
   processPlayerPickWithoutLogging,
   rerollDraftOffer as engineRerollDraftOffer,
-  type OfferDeps,
 } from "../../draft/draft-engine";
 import { mintEntryId } from "./deck";
 import { findSite } from "./sites";
@@ -37,8 +36,8 @@ import { findSite } from "./sites";
  * The deterministic content `PICK_DRAFT_CARD` needs but cannot compute inside a
  * pure reducer: the event carries a card UUID (not the `cardNumber` the draft
  * state works in), and advancing the draft (revealing the next offer) reads the
- * TOML-sourced card catalogue plus, for the deck-fit draft modes, a fit model
- * and the dreamscape's affiliation reweighting. All of that only loads
+ * TOML-sourced card catalogue plus the dreamscape's affiliation reweighting.
+ * That content only loads
  * asynchronously, while the reducer must fold synchronously from
  * `(state, event, ctx)` alone.
  *
@@ -57,16 +56,6 @@ export interface DraftContentProvider {
   resolveCardNumber(cardId: string): number | null;
   /** The card database the draft engine consults (rarity, etc.). */
   cardDatabase(): Map<number, CardData>;
-  /**
-   * The per-offer deck-fit deps for the NEXT offer, given the draft state and
-   * the deck card numbers *including* the just-picked card (the deck-fit modes
-   * rank the next pack against the post-pick deck). Pool mode returns
-   * `undefined`.
-   */
-  offerDepsFor(
-    draftState: DraftState,
-    deckCardNumbers: readonly number[],
-  ): OfferDeps | undefined;
   /**
    * The explicit draft config for the active dreamscape, including any
    * affiliation reweighting. `undefined` rejects the reducer action.
@@ -187,9 +176,7 @@ export function pickDraftCard(
   if (packIndex < 0 || packIndex >= offer.length) return null;
   if (offer[packIndex] !== cardNumber) return null;
 
-  // Append the picked card FIRST so the deck-fit ranking for the NEXT offer
-  // reflects the deck including the just-picked card (pool mode never reads the
-  // deck, so this ordering is observationally identical there).
+  // Append the picked card before advancing the persisted draft state.
   const entry: DeckEntry = {
     entryId: mintEntryId(journey.deck, ctx.seq, 0),
     cardNumber,
@@ -203,7 +190,6 @@ export function pickDraftCard(
   // Advance the draft on a clone so a bounce (from a thrown engine error, which
   // the root reducer catches) never leaves a half-mutated live state.
   const nextDraftState = structuredClone(draftState);
-  const offerDeps = provider.offerDepsFor(nextDraftState, deckCardNumbers);
   const config = provider.draftConfigFor(nextDraftState, site);
   if (config === undefined) return null;
   const stream = rngStream(ctx);
@@ -212,7 +198,6 @@ export function pickDraftCard(
     nextDraftState,
     provider.cardDatabase(),
     config,
-    offerDeps,
     stream,
     deckCardNumbers,
   );
@@ -264,8 +249,6 @@ export function enterDraftSite(
   if (draftState.activeSiteId === siteId) return null;
 
   const nextDraftState = structuredClone(draftState);
-  const deckCardNumbers = journey.deck.map((entry) => entry.cardNumber);
-  const offerDeps = provider.offerDepsFor(nextDraftState, deckCardNumbers);
   const config = provider.draftConfigFor(nextDraftState, site);
   if (config === undefined) return null;
   const stream = rngStream(ctx);
@@ -274,7 +257,6 @@ export function enterDraftSite(
     siteId,
     provider.cardDatabase(),
     config,
-    offerDeps,
     stream,
   );
   const modifierIndex = journey.siteOfferModifiers.findIndex(
@@ -307,7 +289,7 @@ export function enterDraftSite(
 /**
  * `REROLL_DRAFT_OFFER { siteId }` — shared debug-only replacement of the
  * active offer. It keeps the draft's pick counter and deck unchanged, while
- * the engine records the abandoned pack as shown so pool-mode offers remain
+ * the engine records the abandoned pack as shown so offers remain
  * unique within this site visit. The event context supplies the deterministic
  * replacement roll, making the debug action converge for connected clients.
  */
@@ -335,15 +317,12 @@ export function rerollDraftOffer(
   if (site === null || site.type !== "Draft") return null;
 
   const nextDraftState = structuredClone(draftState);
-  const deckCardNumbers = journey.deck.map((entry) => entry.cardNumber);
-  const offerDeps = provider.offerDepsFor(nextDraftState, deckCardNumbers);
   const config = provider.draftConfigFor(nextDraftState, site);
   if (config === undefined) return null;
   const stream = rngStream(ctx);
   const hasOffer = engineRerollDraftOffer(
     nextDraftState,
     config,
-    offerDeps,
     stream,
   );
   if (!hasOffer) return null;

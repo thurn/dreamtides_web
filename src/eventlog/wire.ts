@@ -26,8 +26,6 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
   if (!isRecord(value)) return null;
   const {
     poolVariant,
-    draftMode,
-    fresh20PackSize,
     atlasFoldHash,
     sitesFoldHash,
     draftFoldHash,
@@ -43,12 +41,7 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
     dreamsignCap,
   } = value;
   if (
-    typeof poolVariant !== "string" ||
-    typeof draftMode !== "string" ||
-    !(
-      fresh20PackSize === null ||
-      (typeof fresh20PackSize === "number" && Number.isFinite(fresh20PackSize))
-    ) ||
+    poolVariant !== "tides4" ||
     !(atlasFoldHash === undefined || typeof atlasFoldHash === "string") ||
     !(sitesFoldHash === undefined || typeof sitesFoldHash === "string") ||
     !(draftFoldHash === undefined || typeof draftFoldHash === "string") ||
@@ -81,8 +74,6 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
   }
   return {
     poolVariant,
-    draftMode,
-    fresh20PackSize,
     ...(atlasFoldHash === undefined ? {} : { atlasFoldHash }),
     ...(sitesFoldHash === undefined ? {} : { sitesFoldHash }),
     ...(draftFoldHash === undefined ? {} : { draftFoldHash }),

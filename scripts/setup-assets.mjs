@@ -69,25 +69,6 @@ const ROOT = resolve(
   process.env.DREAMTIDES_DATA_ROOT ?? resolve(import.meta.dirname, ".."),
 );
 const DATA_DIR = join(ROOT, "data");
-const LEGACY_DRAFT_POOL_ARTIFACTS = [
-  "decklists-data.json",
-  "human-decklists-data.json",
-  "merged-archetype-lists-data.json",
-  "affinity-corpus-data.json",
-  "tides-data.json",
-  "tides2-data.json",
-  "tides2-relationships-data.json",
-  "tides3-data.json",
-  "tides5-data.json",
-];
-
-/** Keep a regenerated public directory aligned with the current pool inputs. */
-export function removeLegacyDraftPoolArtifacts(publicDir) {
-  for (const filename of LEGACY_DRAFT_POOL_ARTIFACTS) {
-    rmSync(join(publicDir, filename), { force: true });
-  }
-}
-
 export const IMAGE_CACHE_DIR = join(
   homedir(),
   "Library",
@@ -358,7 +339,7 @@ export function transformCard(card) {
 
 /**
  * Bundle adapted draft records from `docs/draft_records_adapted` into a flat
- * array of per-human-seat entries for the record-replay draft mode.
+ * array of per-human-seat corpus entries.
  *
  * Each file is JSONC (`docs/draft_records_adapted/*.jsonc` carry inline `//`
  * card-name comments written by `add-uuids-to-draft-records.mjs`); the comments
@@ -385,19 +366,9 @@ export function transformCard(card) {
  *   `packIds[i]`/`pickIds[i]` are the matching stable UUIDs, index-for-index.
  *   With the default options all four pick arrays have length 30.
  *
- * Options (all optional, defaults preserve the canonical behaviour):
- *   * `seatFilter` — a `Set` of `"<draftId>#<seat>"` keys; when given, only seats
- *     whose key is in the set are kept (every other seat is skipped before any
- *     work). Useful for focused corpus experiments.
- *   * `requireFullPicks` (default true) — when true, a seat is dropped unless it
- *     trims to exactly 30 picks (the standard 3×15 / first-three-packs layout).
- *     When false, a seat is kept with whatever pack-1-3 / pickInPack≤10 picks it
- *     has (≥1), so non-standard layouts — 5 packs of 9, a single big pack — still
- *     contribute their high-signal early picks.
  */
-export function buildDraftRecords(dir, cardMaps, opts = {}) {
+export function buildDraftRecords(dir, cardMaps) {
   const { idToName } = cardMaps;
-  const { seatFilter = null, requireFullPicks = true } = opts;
   let droppedNames = 0;
   let skippedIncomplete = 0;
 
@@ -435,11 +406,6 @@ export function buildDraftRecords(dir, cardMaps, opts = {}) {
     for (const seatData of raw.seats) {
       const { seat, mainboard: rawMainboard, picks: rawPicks } = seatData;
 
-      // When a seat filter is supplied, keep only the requested (draftId, seat)
-      // seats — the rest are skipped before any resolution work.
-      if (seatFilter !== null && !seatFilter.has(`${draftId}#${seat}`))
-        continue;
-
       // Skip seats without a non-empty mainboard or a picks array.
       if (!Array.isArray(rawMainboard) || rawMainboard.length === 0) continue;
       if (!Array.isArray(rawPicks)) continue;
@@ -452,10 +418,7 @@ export function buildDraftRecords(dir, cardMaps, opts = {}) {
         .filter((p) => p.pack >= 1 && p.pack <= 3 && p.pickInPack <= 10)
         .sort((a, b) => a.pickNumber - b.pickNumber);
 
-      // The standard bundle demands exactly 30 trimmed picks (a uniform record
-      // for the replay draft mode); a relaxed caller keeps any seat with at least
-      // one trimmed pick, so non-standard pack layouts still contribute.
-      if (requireFullPicks ? trimmed.length !== 30 : trimmed.length === 0) {
+      if (trimmed.length !== 30) {
         skippedIncomplete++;
         continue;
       }
@@ -1500,7 +1463,6 @@ export function setupAssets({
   tutorialDialogueFrameArtPath = TUTORIAL_DIALOGUE_FRAME_ART_PATH,
   catalogFixtureOnly = false,
 } = {}) {
-  removeLegacyDraftPoolArtifacts(publicDir);
   if (catalogFixtureOnly) {
     setupCatalogFixture({
       cardTomlPath,
@@ -1621,7 +1583,7 @@ export function setupAssets({
     `Wrote ${decklistIds.length} id-keyed decklists to decklist-ids-data.json`,
   );
 
-  // Adapted draft records bundled for record-replay draft mode. Each JSON file
+  // Adapted draft records bundled for corpus-backed scoring. Each JSON file
   // in `docs/draft_records_adapted` is
   // one draft event; we extract one entry per seat (trimmed to the first 10 picks
   // per pack) and write the flat array to the browser bundle.

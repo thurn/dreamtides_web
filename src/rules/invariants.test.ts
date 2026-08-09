@@ -14,9 +14,7 @@ const GENESIS = {
   reducerVersion: "test",
   createdAt: 0,
   contentConfig: {
-    poolVariant: "test",
-    draftMode: "pool" as const,
-    fresh20PackSize: null,
+    poolVariant: "tides4",
   },
 };
 

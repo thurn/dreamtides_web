@@ -75,14 +75,7 @@ import type {
 } from "../types/content";
 import type { AtlasData } from "../types/journey";
 import { STARTER_CARD_NUMBERS } from "./starter-cards";
-import { buildFitModel, type FitModel } from "../draft/replay/fit-model";
-import {
-  selectReplayRecordIndex,
-  resolveCardIds,
-  buildPackSequence,
-} from "../draft/replay/draft-records";
-import { createInitialReplayDraftState } from "../draft/draft-engine";
-import type { ReplayDraftState } from "../types/draft";
+import { buildFitModel, type FitModel } from "../draft/fit-model";
 import type { TutorialConfiguration } from "../types/tutorial";
 import {
   TUTORIAL_JOURNEY_POOL,
@@ -147,13 +140,7 @@ export interface JourneyContent {
    */
   apollyonIncarnations?: readonly ApollyonIncarnationContent[];
   poolContext?: RunPoolContext;
-  /**
-   * Draft mode for this run: `"replay"` activates the record-replay draft;
-   * `"fresh20"` activates the fresh-random-pack draft; `"pool"` is the default.
-   * From `?algo=`.
-   */
-  draftMode?: "pool" | "replay" | "fresh20";
-  /** The full adapted draft-record corpus when the run needs record-backed ranking. */
+  /** The full adapted draft-record corpus used by record-backed scoring. */
   draftRecords?: DraftRecord[];
   /**
    * The curated known-good decklists corpus loaded from
@@ -163,12 +150,10 @@ export interface JourneyContent {
    */
   knownGoodDecklists?: readonly KnownGoodDecklist[];
   /**
-   * The live deck-fit model built from all record mainboards when the run uses
-   * record-backed recommendations or draft ranking.
+   * The live deck-fit model built from all record mainboards for record-backed
+   * recommendations and opponent construction.
    */
   fitModel?: FitModel;
-  /** Cards per fresh pack in fresh20 mode (from `?packsize=`); defaults applied at use. */
-  fresh20PackSize?: number;
   /**
    * Baked merchant corpus artifact (quality, multiplicity, clusters) loaded
    * from `public/merchant-corpus-data.json`. Populated unconditionally before
@@ -223,9 +208,7 @@ export interface RunPoolContext {
 /**
  * FNV-1a hash of a string into a 32-bit unsigned integer, used to derive the
  * tides4 generator's numeric seed from the journey seed and DreamAvatar id so each
- * run's pool is reproducible. Exported so replay record selection derives its
- * record index from the same journey seed (with a `:replay` salt), keeping draft
- * selection reproducible per run.
+ * run's pool is reproducible.
  */
 export function hashStringToSeed(input: string): number {
   let hash = 2166136261;
@@ -436,19 +419,11 @@ export function buildDreamAvatarTides4Provenance(
 }
 
 /**
- * Loads V2 journey content and the tides4 run-pool context. `draftMode`
- * (from `?algo=`) switches to a deck-fit draft: `"replay"` replays a real
- * record's packs, `"fresh20"` rolls fresh random packs. Both fetch the full
- * draft-record corpus and build the live deck-fit model from it.
- * `fresh20PackSize` (from `?packsize=`) is carried through for the fresh20 draft.
+ * Loads V2 journey content and the tides4 run-pool context. The draft-record
+ * corpus and its fit model remain shared inputs for opponent and reward scoring.
  */
-export async function loadJourneyContent(
-  poolVariant?: PoolVariant,
-  draftMode: "pool" | "replay" | "fresh20" = "pool",
-  fresh20PackSize?: number,
-): Promise<JourneyContent> {
+export async function loadJourneyContent(): Promise<JourneyContent> {
   const draftData = await loadDraftData();
-  const resolvedPoolVariant = poolVariant ?? draftData.pool.defaultStrategy;
   const [
     cardDatabase,
     exploration,
@@ -486,7 +461,7 @@ export async function loadJourneyContent(
     // The id-keyed decklist corpus affiliation reweighting scores on. It is
     // fold-relevant provider input, so malformed data blocks app entry.
     loadDecklistIds(),
-    // The draft-record corpus supplies deck-fit modes and coherent opponent decks.
+    // The draft-record corpus supplies record-backed scoring and opponent decks.
     loadDraftRecords(),
     // The known-good decklists corpus is always fetched so the corpus opponent-deck
     // algorithm has curated decks available on every path. It is fold-relevant
@@ -552,7 +527,7 @@ export async function loadJourneyContent(
   }));
 
   // Build the collision-free id index once; every pool resolves through it, and
-  // (in replay mode) the fit model translates card numbers against it too.
+  // the fit model translates card numbers against it too.
   const idIndex = buildIdIndex(cardDatabase);
   const rarityCopyCapByRarity = new Map(
     draftData.rarityCaps.map((cap) => [cap.rarity, cap.poolCopyCap]),
@@ -573,16 +548,12 @@ export async function loadJourneyContent(
     poolCopyCapsByCardNumber,
     defaultPoolCopyCap: draftData.pool.tides4.copyCap,
     allDreamsignPoolIds: dreamsignTemplates.map((template) => template.id),
-    poolVariant: resolvedPoolVariant,
+    poolVariant: draftData.pool.defaultStrategy,
     tides4Tuning: draftData.pool.tides4,
   };
 
-  // Live fit corpus = all record mainboards (no per-record leave-one-out). Live
-  // play does not teacher-force the deck along the replayed record's pick path,
-  // so the self-neighbour leak the offline eval guards against does not occur
-  // here; the eval's leave-one-out exists only to produce an honest offline
-  // metric. The model is built once here and reused across every battle in the
-  // session (it backs the deck-fit draft modes AND opponent deck construction).
+  // Live fit corpus = all record mainboards. The model is built once here and
+  // reused across opponent, reward, and merchant scoring for the session.
   const fitModel =
     draftRecords.length > 0
       ? buildFitModel(
@@ -612,57 +583,13 @@ export async function loadJourneyContent(
     opponentsData,
     apollyonIncarnations,
     poolContext,
-    draftMode,
     draftRecords,
     knownGoodDecklists,
     fitModel,
-    fresh20PackSize,
     merchantCorpus,
     dreamsignProfiles,
     dreamsignSignatures,
   };
-}
-
-/**
- * Build a {@link ReplayDraftState} for a new journey run in replay mode. Selects
- * a draft record deterministically from the corpus, biased toward records whose
- * served packs contain the DreamAvatar's signature (archetype) cards so the
- * player can draft toward that archetype. The salted hash of `journeySeed` (the
- * `:replay` salt keeps the selection independent from the per-DreamAvatar
- * pool-gen draw, which uses `${journeySeed}:${dreamAvatar.id}`) seeds the final
- * pick within the matched shortlist, keeping the selection reproducible per
- * seed. When no usable IDF signal is available (no fitModel, no weighted
- * signatures) the selection falls back to a uniform seeded draw.
- *
- * @throws If `draftRecords` is empty.
- */
-export function buildReplayDraftState(
-  dreamAvatar: DreamAvatarContent,
-  idIndex: Map<string, number>,
-  journeySeed: string,
-  draftRecords: readonly DraftRecord[],
-  fitModel?: FitModel,
-): ReplayDraftState {
-  if (draftRecords.length === 0) {
-    throw new Error("buildReplayDraftState requires at least one draft record");
-  }
-  const index = selectReplayRecordIndex(
-    dreamAvatar.signatureCardIds ?? [],
-    draftRecords,
-    fitModel?.idf,
-    hashStringToSeed(`${journeySeed}:replay`),
-  );
-  const record = draftRecords[index];
-  const packSequence = buildPackSequence(record, idIndex);
-  const signatureCardNumbers = resolveCardIds(
-    dreamAvatar.signatureCardIds ?? [],
-    idIndex,
-  );
-  return createInitialReplayDraftState({
-    recordId: record.id,
-    packSequence,
-    signatureCardNumbers,
-  });
 }
 
 function countDraftPoolSize(

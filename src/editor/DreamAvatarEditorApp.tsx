@@ -23,7 +23,6 @@ import {
   type JourneyContent,
 } from "../data/journey-content";
 import { loadTides4Decks } from "../data/cards-v2-database";
-import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import type { Tides4DecksJson } from "../draft/pool/tides4-io";
 import {
   beginFieldEdit,
@@ -332,7 +331,7 @@ export default function DreamAvatarEditorApp({
       return;
     }
     let cancelled = false;
-    loadJourneyContent(DEFAULT_POOL_VARIANT)
+    loadJourneyContent()
       .then((loaded) => {
         if (!cancelled) {
           setJourneyContent(loaded);

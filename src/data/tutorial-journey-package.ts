@@ -128,7 +128,7 @@ export function buildTutorialJourneyPackage(
 
   logEvent("draft_pool_constructed", {
     dreamAvatarId: dreamAvatar.id,
-    algo: "tutorial_tides",
+    source: "authored_tutorial",
     seed: "authored",
     poolSize: draftPoolSize,
     distinctCardCount: Object.keys(draftPoolCopiesByCard).length,

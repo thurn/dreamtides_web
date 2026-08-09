@@ -5,9 +5,7 @@
     "reducerVersion": "fixture",
     "createdAt": 0,
     "contentConfig": {
-      "poolVariant": "fixture",
-      "draftMode": "pool",
-      "fresh20PackSize": null
+      "poolVariant": "tides4"
     }
   },
   "events": [
@@ -85,5 +83,5 @@
       }
     }
   ],
-  "finalHash": "3248bf210595cb7d67e681bf391c759866b603644167c9e9908836461c3c86d3"
+  "finalHash": "fa1c64e053119ff29cf39f19c5c11a615a8018563ba93ceaa9d3d469123b410a"
 }

@@ -225,7 +225,7 @@ not by design.
   `loadDraftRecords().catch(() => [])`,
   `loadKnownGoodDecklists().catch(() => [])`,
   `loadMerchantCorpus().catch(() => undefined)`. Scenario: client A's
-  draft-records fetch fails → its `offerDepsFor` returns `undefined` while
+  draft-records fetch fails → corpus-backed scoring inputs are unavailable while
   client B has real deps → the same committed `PICK_DRAFT_CARD` reveals a
   different next offer on each client; same class for `BEGIN_BATTLE`
   opponent decks. Divergence is detected by the tripwire but never repaired.

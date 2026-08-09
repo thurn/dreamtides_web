@@ -2,12 +2,6 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
-import type { DreamAvatarContent } from "../types/content";
-import type { FitModel } from "../draft/replay/fit-model";
-import {
-  selectRecordIndex,
-  selectReplayRecordIndex,
-} from "../draft/replay/draft-records";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_SITES_DATA,
@@ -20,11 +14,7 @@ import { opponentsFixture } from "../testing/opponents-fixture";
 import { transfigurationFixture } from "../testing/transfiguration-fixture";
 import explorationJson from "../../public/exploration-data.json";
 import type { DraftRecord, KnownGoodDecklist } from "./cards-v2-database";
-import {
-  buildReplayDraftState,
-  hashStringToSeed,
-  loadJourneyContent,
-} from "./journey-content";
+import { loadJourneyContent } from "./journey-content";
 
 const DRAFT_HASH = "d".repeat(64);
 const DRAFT_DATA = draftDataFixture({
@@ -64,18 +54,6 @@ function makeRecord(id: string, packCardIds: string[][]): DraftRecord {
     picks: packCardIds.map(() => []),
     packIds: packCardIds,
     pickIds: packCardIds.map(() => []),
-  };
-}
-
-function makeDreamAvatar(signatureCardIds: string[]): DreamAvatarContent {
-  return {
-    id: "avatar-test",
-    name: "Test Avatar",
-    title: "Speaker of Tests",
-    renderedText: "",
-    imageNumber: "0001",
-    startingEssence: 250,
-    signatureCardIds,
   };
 }
 
@@ -267,7 +245,7 @@ describe("loadJourneyContent", () => {
     await expect(loadJourneyContent()).rejects.toThrow(message);
   });
 
-  it("builds the shared fit model from draft records in pool mode", async () => {
+  it("builds the shared fit model from draft records", async () => {
     const cards = makeCards(20);
     const record = makeRecord("record-1", [cards.map((card) => card.id)]);
     stubFetch({
@@ -277,15 +255,13 @@ describe("loadJourneyContent", () => {
       draftRecords: [record],
     });
 
-    const content = await loadJourneyContent("tides4", "pool");
+    const content = await loadJourneyContent();
 
-    expect(content.draftMode).toBe("pool");
     expect(content.draftRecords).toEqual([record]);
     expect(content.fitModel).toBeDefined();
-    expect(content.fresh20PackSize).toBeUndefined();
   });
 
-  it("defaults an omitted starting essence and carries replay mode", async () => {
+  it("defaults an omitted starting essence and retains record scoring inputs", async () => {
     const economy = economyFixture();
     economy.journey.defaultStartingEssence = 137;
     const record = makeRecord("record-1", [["card-1"]]);
@@ -307,119 +283,10 @@ describe("loadJourneyContent", () => {
       economy,
     });
 
-    const content = await loadJourneyContent("tides4", "replay");
+    const content = await loadJourneyContent();
 
     expect(content.dreamAvatars[0].startingEssence).toBe(137);
-    expect(content.draftMode).toBe("replay");
     expect(content.draftRecords).toEqual([record]);
     expect(content.fitModel).toBeDefined();
-  });
-});
-
-describe("buildReplayDraftState", () => {
-  const cards = [makeCard(101), makeCard(102), makeCard(103), makeCard(104)];
-  const idIndex = new Map<string, number>(
-    cards.map((card) => [card.id, card.cardNumber]),
-  );
-  const recordA = makeRecord("record-a", [
-    [cards[0].id, cards[1].id],
-    [cards[2].id],
-  ]);
-  const recordB = makeRecord("record-b", [
-    [cards[1].id, cards[2].id],
-    [cards[3].id],
-  ]);
-  const records = [recordA, recordB];
-
-  it("rejects an empty record corpus", () => {
-    expect(() =>
-      buildReplayDraftState(makeDreamAvatar([]), idIndex, "seed", []),
-    ).toThrow("requires at least one draft record");
-  });
-
-  it("is deterministic and resolves packs plus signature UUIDs", () => {
-    const avatar = makeDreamAvatar([cards[0].id, "unknown", cards[2].id]);
-    const first = buildReplayDraftState(avatar, idIndex, "seed-a", records);
-    const second = buildReplayDraftState(avatar, idIndex, "seed-a", records);
-
-    expect(first).toEqual(second);
-    expect(first.mode).toBe("replay");
-    expect(first.signatureCardNumbers).toEqual([101, 103]);
-    expect(first.packSequence.flat()).toEqual(
-      records
-        .find((record) => record.id === first.recordId)
-        ?.packIds.flat()
-        .map((id) => idIndex.get(id)),
-    );
-  });
-
-  it("draws both records across deterministic seeds", () => {
-    const ids = new Set<string>();
-    for (let index = 0; index < 20; index += 1) {
-      ids.add(
-        buildReplayDraftState(
-          makeDreamAvatar([]),
-          idIndex,
-          `seed-${String(index)}`,
-          records,
-        ).recordId,
-      );
-    }
-    expect(ids).toEqual(new Set(["record-a", "record-b"]));
-  });
-
-  it("uses the uniform fallback without a fit model", () => {
-    const seed = "uniform-seed";
-    const state = buildReplayDraftState(
-      makeDreamAvatar([cards[0].id]),
-      idIndex,
-      seed,
-      records,
-    );
-    const expectedIndex = selectRecordIndex(
-      hashStringToSeed(`${seed}:replay`),
-      records.length,
-    );
-    expect(state.recordId).toBe(records[expectedIndex].id);
-  });
-
-  it("uses positive signature IDF to select a matching record", () => {
-    const fitModel: FitModel = {
-      idf: new Map([[cards[0].id, 3]]),
-      decks: [],
-      prior: new Map(),
-      coocNorm: new Map(),
-      numberToId: new Map(),
-      idIndex: new Map(),
-      tuning: {
-        alpha: 1,
-        beta: 0.9,
-        gamma: 0.25,
-        K: 50,
-        idfPower: 1,
-        minDf: 2,
-        maxDfFrac: 0.6,
-        minDeckSize: 16,
-        maxDeckSize: 34,
-      },
-    };
-    const avatar = makeDreamAvatar([cards[0].id]);
-    const ordered = [recordB, recordA];
-    const seed = "fit-seed";
-    const state = buildReplayDraftState(
-      avatar,
-      idIndex,
-      seed,
-      ordered,
-      fitModel,
-    );
-    const expectedIndex = selectReplayRecordIndex(
-      avatar.signatureCardIds ?? [],
-      ordered,
-      fitModel.idf,
-      hashStringToSeed(`${seed}:replay`),
-    );
-
-    expect(state.recordId).toBe(ordered[expectedIndex].id);
   });
 });

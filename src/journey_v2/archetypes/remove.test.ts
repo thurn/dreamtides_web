@@ -12,7 +12,7 @@ import {
 } from "../testing/fixtures";
 import type { CardData } from "../../types/cards";
 import type { DeckEntry } from "../../types/journey";
-import type { FitModel } from "../../draft/replay/fit-model";
+import type { FitModel } from "../../draft/fit-model";
 import type { MerchantContext } from "../types";
 import { purgeBuilder } from "./remove";
 import { asCardId, asCardName } from "../../types/card-identity";

@@ -194,8 +194,7 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 
 `?goto=` composes with the other runtime parameters documented in
 `url_parameters.md` (read once at page load, not reactive). For example, pair it
-with `?seed=` for a fixed RNG seed, or `?algo=` to select a draft mode
-for the bootstrapped run. Use `?goto=gamble&gambleGame=ladder-climb` for a
+with `?seed=` for a fixed RNG seed. Use `?goto=gamble&gambleGame=ladder-climb` for a
 stable Ladder Climb QA entry point, or `?goto=gamble&gambleGame=starway-stairs`
 for Starway Stairs. Use `?goto=gamble&gambleGame=four-suit-reprise` for a
 stable Four-Suit Reprise entry point.

@@ -11,7 +11,7 @@ import {
 } from "./create-battle-init";
 import { deriveBattleSeed } from "../random";
 import type { DraftRecord } from "../../data/cards-v2-database";
-import { buildFitModel, type FitModel } from "../../draft/replay/fit-model";
+import { buildFitModel, type FitModel } from "../../draft/fit-model";
 import { buildPoolData } from "../../draft/pool/pool-data";
 import type { RunPoolContext } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";

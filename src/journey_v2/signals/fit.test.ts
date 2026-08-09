@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildFitModel } from "../../draft/replay/fit-model";
+import { buildFitModel } from "../../draft/fit-model";
 import { fitScores, fitLooByEntry, centrality } from "./fit";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";

@@ -71,9 +71,8 @@ input across Realtime Database round trips.
 - `seed` — the deterministic room seed.
 - `reducerVersion` — the semantic reducer protocol required to fold the room.
 - `createdAt` — epoch milliseconds used by stale-room eviction.
-- `contentConfig` — the pinned pool variant, draft mode, fresh-pack size, Atlas
-  `foldHash`, Sites `foldHash`, economy `foldHash` and genesis defaults, and
-  opponent-rules `foldHash`.
+- `contentConfig` — the pinned pool variant, Atlas `foldHash`, Sites `foldHash`,
+  economy `foldHash` and genesis defaults, and opponent-rules `foldHash`.
 - `frontDoorEntry` — an optional `main`, `loading`, or `tutorial` starting
   phase. Its presence marks a single-controller hosted playtest; rooms without
   it begin in collaborative journey mode.
@@ -86,7 +85,7 @@ opens the configuration gate. Draft URL settings can be adopted when the Atlas,
 Sites, economy, and opponent hashes agree. A catalog hash mismatch offers a new
 room using the local content. Room genesis documents without a Sites hash are
 readable and enter this configuration gate. The current reducer protocol is
-`dreamtides-coop-v23`; rooms with an incompatible protocol, including
+`dreamtides-coop-v24`; rooms with an incompatible protocol, including
 `dreamtides-coop-v22`, open the Version Gate before folding or appending. The
 compatible legacy-version set is empty.
 

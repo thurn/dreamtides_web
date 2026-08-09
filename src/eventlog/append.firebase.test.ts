@@ -42,9 +42,7 @@ const genesis: Genesis = {
   reducerVersion: "v1",
   createdAt: 0,
   contentConfig: {
-    poolVariant: "test",
-    draftMode: "pool",
-    fresh20PackSize: null,
+    poolVariant: "tides4",
   },
 };
 

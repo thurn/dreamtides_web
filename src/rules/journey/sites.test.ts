@@ -26,9 +26,7 @@ const GENESIS: Genesis = {
   reducerVersion: "test",
   createdAt: 0,
   contentConfig: {
-    poolVariant: "test",
-    draftMode: "pool",
-    fresh20PackSize: null,
+    poolVariant: "tides4",
   },
 };
 
@@ -936,7 +934,7 @@ describe("COMPLETE_SITE", () => {
   it("allows an observer to commit the deterministic completed-draft handoff", () => {
     const completedDraft = siteState("Draft", {
       draftState: {
-        mode: "pool",
+        mode: "tides4",
         currentOffer: [],
         activeSiteId: SITE_ID,
         pickNumber: 6,
@@ -969,7 +967,7 @@ describe("COMPLETE_SITE", () => {
   it("keeps an observer from completing an active draft offer", () => {
     const activeDraft = siteState("Draft", {
       draftState: {
-        mode: "pool",
+        mode: "tides4",
         currentOffer: [1, 2, 3, 4],
         activeSiteId: SITE_ID,
         pickNumber: 5,

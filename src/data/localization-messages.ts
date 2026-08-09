@@ -85,16 +85,12 @@ export const FLUENT_MESSAGE_IDS = [
   "coop-presence-connected-count",
   "coop-content-settings-title",
   "coop-content-settings-message",
-  "coop-use-game-settings-action",
   "coop-unadoptable-settings-detail",
   "coop-player-disconnected-title",
   "coop-playtest-paused-message",
   "coop-take-control-action",
   "application-comparison-this-game",
   "application-comparison-yours",
-  "coop-config-pool-label",
-  "coop-config-draft-label",
-  "coop-config-pack-size-label",
   "coop-config-atlas-rules-label",
   "coop-config-site-rules-label",
   "coop-config-draft-rules-label",
@@ -104,7 +100,6 @@ export const FLUENT_MESSAGE_IDS = [
   "coop-config-opponent-rules-label",
   "coop-config-tutorial-rules-label",
   "coop-config-unavailable",
-  "coop-config-default",
   "journey-start-title",
   "journey-start-choose-action",
   "journey-start-reroll-action",
@@ -210,14 +205,9 @@ export const FLUENT_MESSAGE_IDS = [
   "card-pool-tide-provenance-title",
   "card-pool-tide-provenance-summary",
   "card-pool-tide-provenance-description",
-  "card-pool-replay-record-title",
-  "card-pool-replay-record-description",
   "card-pool-construction-title",
   "card-pool-construction-summary",
   "card-pool-construction-description",
-  "card-pool-replay-pick-title",
-  "card-pool-replay-pick-summary",
-  "card-pool-replay-card-label",
   "card-rules-transfiguration-changed",
   "card-transfiguration-badge",
   "card-type-line",
@@ -595,16 +585,12 @@ export interface FluentMessageArgumentsById {
   readonly "coop-presence-connected-count": { readonly count: FluentVariable };
   readonly "coop-content-settings-title": never;
   readonly "coop-content-settings-message": never;
-  readonly "coop-use-game-settings-action": never;
   readonly "coop-unadoptable-settings-detail": never;
   readonly "coop-player-disconnected-title": never;
   readonly "coop-playtest-paused-message": never;
   readonly "coop-take-control-action": never;
   readonly "application-comparison-this-game": never;
   readonly "application-comparison-yours": never;
-  readonly "coop-config-pool-label": never;
-  readonly "coop-config-draft-label": never;
-  readonly "coop-config-pack-size-label": never;
   readonly "coop-config-atlas-rules-label": never;
   readonly "coop-config-site-rules-label": never;
   readonly "coop-config-draft-rules-label": never;
@@ -614,7 +600,6 @@ export interface FluentMessageArgumentsById {
   readonly "coop-config-opponent-rules-label": never;
   readonly "coop-config-tutorial-rules-label": never;
   readonly "coop-config-unavailable": never;
-  readonly "coop-config-default": never;
   readonly "journey-start-title": never;
   readonly "journey-start-choose-action": never;
   readonly "journey-start-reroll-action": never;
@@ -749,26 +734,11 @@ export interface FluentMessageArgumentsById {
     readonly facetAvailableCount: FluentVariable;
     readonly facetDrawnCount: FluentVariable;
   };
-  readonly "card-pool-replay-record-title": never;
-  readonly "card-pool-replay-record-description": {
-    readonly sourceFile: FluentVariable;
-  };
   readonly "card-pool-construction-title": never;
   readonly "card-pool-construction-summary": {
     readonly algorithm: FluentVariable;
   };
   readonly "card-pool-construction-description": never;
-  readonly "card-pool-replay-pick-title": {
-    readonly pickNumber: FluentVariable;
-  };
-  readonly "card-pool-replay-pick-summary": {
-    readonly cardList: FluentVariable;
-    readonly hasPicks: FluentVariable;
-  };
-  readonly "card-pool-replay-card-label": {
-    readonly cardName: FluentVariable;
-    readonly picked: FluentVariable;
-  };
   readonly "card-rules-transfiguration-changed": {
     readonly formName: FluentVariable;
   };
@@ -1394,16 +1364,12 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "coop-presence-connected-count": ["count"] as const,
   "coop-content-settings-title": [] as const,
   "coop-content-settings-message": [] as const,
-  "coop-use-game-settings-action": [] as const,
   "coop-unadoptable-settings-detail": [] as const,
   "coop-player-disconnected-title": [] as const,
   "coop-playtest-paused-message": [] as const,
   "coop-take-control-action": [] as const,
   "application-comparison-this-game": [] as const,
   "application-comparison-yours": [] as const,
-  "coop-config-pool-label": [] as const,
-  "coop-config-draft-label": [] as const,
-  "coop-config-pack-size-label": [] as const,
   "coop-config-atlas-rules-label": [] as const,
   "coop-config-site-rules-label": [] as const,
   "coop-config-draft-rules-label": [] as const,
@@ -1413,7 +1379,6 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "coop-config-opponent-rules-label": [] as const,
   "coop-config-tutorial-rules-label": [] as const,
   "coop-config-unavailable": [] as const,
-  "coop-config-default": [] as const,
   "journey-start-title": [] as const,
   "journey-start-choose-action": [] as const,
   "journey-start-reroll-action": [] as const,
@@ -1529,14 +1494,9 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
     "facetAvailableCount",
     "facetDrawnCount",
   ] as const,
-  "card-pool-replay-record-title": [] as const,
-  "card-pool-replay-record-description": ["sourceFile"] as const,
   "card-pool-construction-title": [] as const,
   "card-pool-construction-summary": ["algorithm"] as const,
   "card-pool-construction-description": [] as const,
-  "card-pool-replay-pick-title": ["pickNumber"] as const,
-  "card-pool-replay-pick-summary": ["cardList", "hasPicks"] as const,
-  "card-pool-replay-card-label": ["cardName", "picked"] as const,
   "card-rules-transfiguration-changed": ["formName"] as const,
   "card-transfiguration-badge": ["formName"] as const,
   "card-type-line": [
@@ -1996,16 +1956,12 @@ export type FluentMessageIdsWithoutVariables = [
   "coop-presence-write-error",
   "coop-content-settings-title",
   "coop-content-settings-message",
-  "coop-use-game-settings-action",
   "coop-unadoptable-settings-detail",
   "coop-player-disconnected-title",
   "coop-playtest-paused-message",
   "coop-take-control-action",
   "application-comparison-this-game",
   "application-comparison-yours",
-  "coop-config-pool-label",
-  "coop-config-draft-label",
-  "coop-config-pack-size-label",
   "coop-config-atlas-rules-label",
   "coop-config-site-rules-label",
   "coop-config-draft-rules-label",
@@ -2015,7 +1971,6 @@ export type FluentMessageIdsWithoutVariables = [
   "coop-config-opponent-rules-label",
   "coop-config-tutorial-rules-label",
   "coop-config-unavailable",
-  "coop-config-default",
   "journey-start-title",
   "journey-start-choose-action",
   "journey-start-reroll-action",
@@ -2093,7 +2048,6 @@ export type FluentMessageIdsWithoutVariables = [
   "card-pool-all-subtypes-option",
   "card-pool-search-label",
   "card-pool-tide-provenance-title",
-  "card-pool-replay-record-title",
   "card-pool-construction-title",
   "card-pool-construction-description",
   "card-gallery-empty-default",
@@ -2295,11 +2249,7 @@ export type FluentMessageIdsWithVariables = [
   "card-pool-cost-filter-option",
   "card-pool-tide-provenance-summary",
   "card-pool-tide-provenance-description",
-  "card-pool-replay-record-description",
   "card-pool-construction-summary",
-  "card-pool-replay-pick-title",
-  "card-pool-replay-pick-summary",
-  "card-pool-replay-card-label",
   "card-rules-transfiguration-changed",
   "card-transfiguration-badge",
   "card-type-line",

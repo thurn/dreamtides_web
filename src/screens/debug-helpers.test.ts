@@ -32,7 +32,7 @@ function makeDraftState(
   overrides: Partial<PoolDraftState> = {},
 ): PoolDraftState {
   return {
-    mode: "pool",
+    mode: "tides4",
     draftPoolCopiesByCard: {},
     remainingCopiesByCard: {},
     currentOffer: [],

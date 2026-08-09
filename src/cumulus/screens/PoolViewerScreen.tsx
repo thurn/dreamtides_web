@@ -20,9 +20,7 @@ export type PoolViewerSourceId =
   | "run"
   | "tides"
   | "catalog"
-  | "signature"
-  | "deck"
-  | "history";
+  | "signature";
 export type PoolViewerTitleKind = "pool" | "battle";
 
 export type PoolViewerSortDirection = "asc" | "desc";
@@ -38,20 +36,6 @@ export interface PoolViewerFilterView {
   cost: PoolViewerCostFilter;
 }
 
-export interface PoolViewerReplayCardView {
-  entryId: string;
-  label: string;
-  picked: boolean;
-  cardId: string | null;
-}
-
-export interface PoolViewerReplayRowView {
-  entryId: string;
-  pickNumber: number;
-  pickedCardNames: readonly string[];
-  cards: readonly PoolViewerReplayCardView[];
-}
-
 export type PoolViewerDisclosureView =
   | {
       id: "tides";
@@ -61,7 +45,6 @@ export type PoolViewerDisclosureView =
       facetDrawnCount: number;
       facetAvailableCount: number;
     }
-  | { id: "record"; recordId: string; sourceFile: string }
   | { id: "algorithm"; variant: string };
 
 export interface PoolViewerView {
@@ -76,7 +59,6 @@ export interface PoolViewerView {
   sortOptions: readonly string[];
   subtypeOptions: readonly { value: string; label: string }[];
   disclosures: readonly PoolViewerDisclosureView[];
-  replayRows: readonly PoolViewerReplayRowView[];
   error: string | null;
 }
 
@@ -105,19 +87,6 @@ const controlsStyle: CSSProperties = {
   gap: token("--space-s"),
   padding: token("--space-s"),
 };
-
-interface RuntimeListFormatter {
-  format(values: readonly string[]): string;
-}
-
-function formatLocalizedList(values: readonly string[]): string {
-  const ListFormat = (
-    Intl as typeof Intl & {
-      ListFormat: new () => RuntimeListFormatter;
-    }
-  ).ListFormat;
-  return new ListFormat().format(values);
-}
 
 /** Shared pure pool viewer for full-screen and floating integration shells. */
 export function PoolViewerScreen({
@@ -209,20 +178,16 @@ export function PoolViewerScreen({
           title={
             disclosure.id === "tides"
               ? t("card-pool-tide-provenance-title")
-              : disclosure.id === "record"
-                ? t("card-pool-replay-record-title")
-                : t("card-pool-construction-title")
+              : t("card-pool-construction-title")
           }
           summary={
             disclosure.id === "tides"
               ? t("card-pool-tide-provenance-summary", {
                   tideCount: disclosure.tideCount,
                 })
-              : disclosure.id === "record"
-                ? disclosure.recordId
-                : t("card-pool-construction-summary", {
-                    algorithm: disclosure.variant,
-                  })
+              : t("card-pool-construction-summary", {
+                  algorithm: disclosure.variant,
+                })
           }
           expanded={expandedDisclosures[disclosure.id] ?? true}
           onExpandedChange={(expanded) => setExpandedDisclosures((current) => ({ ...current, [disclosure.id]: expanded }))}
@@ -236,35 +201,11 @@ export function PoolViewerScreen({
                   facetDrawnCount: disclosure.facetDrawnCount,
                   facetAvailableCount: disclosure.facetAvailableCount,
                 })
-              : disclosure.id === "record"
-                ? t("card-pool-replay-record-description", {
-                    sourceFile: disclosure.sourceFile,
-                  })
-                : t("card-pool-construction-description")}
+              : t("card-pool-construction-description")}
           </p>
         </DisclosureSection>
       ))}
-      {view.source === "history" ? (
-        <section data-pool-pick-history="" style={{ overflowY: "auto", padding: token("--space-s") }}>
-          {view.replayRows.length === 0 ? (
-            <p data-pool-empty="" style={{ font: token("--t-body"), color: token("--text-on-glass-muted") }}>{emptyLabel}</p>
-          ) : view.replayRows.map((row) => (
-            <DisclosureSection key={row.entryId} title={t("card-pool-replay-pick-title", { pickNumber: row.pickNumber })} summary={t("card-pool-replay-pick-summary", { hasPicks: row.pickedCardNames.length === 0 ? "no" : "yes", cardList: formatLocalizedList(row.pickedCardNames) })} expanded={expandedDisclosures[row.entryId] ?? true} onExpandedChange={(expanded) => setExpandedDisclosures((current) => ({ ...current, [row.entryId]: expanded }))} testId={row.entryId}>
-              <p style={{ margin: token("--space-s"), font: token("--t-body-sm"), color: token("--text-on-glass-muted") }}>
-                {formatLocalizedList(
-                  row.cards.map((card) =>
-                    t("card-pool-replay-card-label", {
-                      picked: card.picked ? "yes" : "no",
-                      cardName: card.label,
-                    }),
-                  ),
-                )}
-              </p>
-            </DisclosureSection>
-          ))}
-        </section>
-      ) : (
-        <CardBrowserPanel
+      <CardBrowserPanel
           title={t("card-pool-viewer-title", { context: view.title })}
           subtitle={t("card-pool-browser-count", {
             visibleCount: view.visibleCount,
@@ -282,8 +223,7 @@ export function PoolViewerScreen({
           onCardPress={onCardPress}
           onCardDragStart={onCardDragStart}
           onCardDragEnd={onCardDragEnd}
-        />
-      )}
+      />
     </section>
   );
 }

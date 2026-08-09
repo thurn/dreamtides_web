@@ -19,7 +19,7 @@ import {
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
 import { buildIdIndex } from "../../data/cards-v2-database";
 import type { DraftRecord } from "../../data/cards-v2-database";
-import { buildFitModel, type FitModel } from "../../draft/replay/fit-model";
+import { buildFitModel, type FitModel } from "../../draft/fit-model";
 import { buildPoolData } from "../../draft/pool/pool-data";
 import { getLogEntries, resetLog } from "../../logging";
 import type { RunPoolContext } from "../../data/journey-content";

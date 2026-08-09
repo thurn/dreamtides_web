@@ -30,7 +30,7 @@ similarity alone. No human labeling, no hand-tagged "good deck / bad deck" sets,
 and no external taxonomy of archetypes are used to judge coherence. Coherence is
 defined as resemblance to the real decks in the corpus, measured with the same
 inverse-document-frequency (IDF) similarity machinery the project already uses
-for draft replay.
+for corpus-backed fit scoring.
 
 All existing opponent deck-card construction code is deleted and rewritten.
 
@@ -38,13 +38,13 @@ All existing opponent deck-card construction code is deleted and rewritten.
 
 - `docs/cards2/` — sibling design docs for the card and draft systems; this
   document lives alongside them.
-- `src/draft/replay/fit-model.ts` — the existing deck-fit scoring model. It
+- `src/draft/fit-model.ts` — the existing deck-fit scoring model. It
   learns a "how well does this candidate card fit this deck" score from the
   draft-records corpus using neighbor collaborative filtering, IDF-weighted
   co-occurrence, and a global play-rate prior. This module's scoring and
   similarity functions are the reusable core of both the new picker and the new
   validation harness.
-- `src/draft/replay/draft-records.ts` — loader that turns the corpus files into
+- `src/draft/draft-records.ts` — loader that turns the corpus files into
   decklists and pick sequences the fit model consumes.
 - `docs/draft_records_adapted/` — the authoritative corpus: ~1,000 real
   eight-seat drafts, each seat carrying its final mainboard plus a full pick
@@ -52,10 +52,8 @@ All existing opponent deck-card construction code is deleted and rewritten.
   by UUID and resolve to the Dreamtides card database. This is the single source
   of truth for "what coherent decks look like." Per repo convention, all new
   draft work consumes only this directory.
-- `scripts/draft-replay-experiment.mjs` (`npm run draft-replay-metric`) — the
-  offline harness that tuned the fit model and reports recall@4 under
-  leave-one-out. The new coherence harness is a sibling of this script and
-  shares its corpus-loading and IDF approach.
+- `scripts/draft-corpus-fit.mjs` — the shared corpus loader and IDF model used by
+  the offline coherence harness.
 - `src/affiliations/affiliation-weights.ts` — the existing affiliation
   reweighting system. Each dreamscape names an affiliation; this module measures a
   card's affinity to an affiliation's curated signature probe using the same IDF
@@ -100,7 +98,7 @@ For a reader new to this system:
   affiliation's probe. A deck can be internally coherent yet score low
   affiliation fit (a tight archetype belonging to the wrong faction), so the two
   are distinct axes that must both be satisfied in an affiliated dreamscape.
-- Fit model. The existing scoring model in `src/draft/replay/fit-model.ts`. It
+- Fit model. The existing scoring model in `src/draft/fit-model.ts`. It
   learns, from the corpus, how well a candidate card fits a partially built deck.
   It works in inverse-document-frequency (IDF) space, where each card is weighted
   by how distinctive it is across decks, and a deck is a vector; cosine
@@ -137,12 +135,9 @@ scattering of unconnected cards. The only coherence lever in the current builder
 is an affiliation bias, and it does nothing in neutral dreamscapes — which is
 exactly where the worst decks appear.
 
-The project already solved the adjacent problem for the player. The draft replay
-feature shows the player, at each pick, the cards from a fixed real pack that
-best fit the deck drafted so far. That fit is learned from the corpus and scores
-recall@4 around 80% — meaning the model usually ranks the card a human actually
-took inside the top four. The opponent builder should make picks the same way
-the replay ranks them, instead of rolling dice.
+The fit model learns candidate relevance from the draft corpus using neighboring
+decks, card co-occurrence, and play-rate priors. The opponent builder uses that
+same model to make corpus-grounded picks.
 
 The term "coherence" throughout this document means: the degree to which a deck
 resembles the real decks people actually drafted in the corpus. A coherent deck
@@ -466,8 +461,7 @@ and the pick-budget and removal curves are tuned against this harness. Tuning is
 a corpus-only optimization: maximize generated-deck coherence toward the
 real-corpus reference while preserving the intended difficulty spread and
 per-seed variety. Tuned values are committed as defaults with a comment pointing
-at the harness, exactly as the fit model's defaults already point at the
-draft-replay experiment.
+at the harness.
 
 ## Alternatives Considered
 

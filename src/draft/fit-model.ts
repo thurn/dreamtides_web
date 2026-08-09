@@ -1,8 +1,7 @@
-// The deck-fit scoring model for the record-replay draft. At each pick the
-// replay shows the player the cards from a fixed real pack that best FIT the
-// deck they have drafted so far, where "fit" is learned from ~993 historical
-// final decks. This module is pure: it builds an immutable model once from a
-// corpus of decklists, then scores each pick deterministically (no RNG, no I/O).
+// The shared deck-fit scoring model. It learns card relationships from the
+// historical draft corpus for opponent, reward, Augury, and merchant scoring.
+// This module is pure: it builds an immutable model once from a corpus of
+// decklists, then scores candidates deterministically (no RNG, no I/O).
 //
 // Fit blends three signals, each computed in card-UUID space (lowercased stable
 // card ids — collision-free, so two cards that share a display name stay
@@ -17,11 +16,7 @@
 //     fallback that dominates on pick 1 when the deck is empty.
 // The IDF math uses the shared deck-scoring primitives in `src/draft/idf-fit.ts`.
 //
-// A plain-JS mirror of this scoring lives in
-// `scripts/draft-replay-experiment.mjs` (the offline recall@4 harness that tuned
-// `DEFAULT_FIT_TUNING`). If you change a formula here, change it there too.
-
-import { idfCosine, type IdfDeck } from "../idf-fit.ts";
+import { idfCosine, type IdfDeck } from "./idf-fit.ts";
 
 /**
  * Tuning knobs for the fit model. `alpha`/`beta`/`gamma` are the blend weights
@@ -50,10 +45,7 @@ export interface FitTuning {
 }
 
 /**
- * Tuned defaults. Chosen by `scripts/draft-replay-experiment.mjs` (run it via
- * `npm run draft-replay-metric`), which measures recall@4 — how often the
- * top-four offer contains the card the human actually took — under sibling-safe
- * leave-one-out over the full 993-record draft corpus.
+ * Tuned defaults learned from the full adapted draft corpus.
  *
  * This config scores recall@4 = 80.4%, versus a popularity-4 baseline of 52.1%
  * and a random-4 baseline of 46.7% (+28.3 points over popularity). Recall rises
@@ -83,9 +75,8 @@ export const DEFAULT_FIT_TUNING: FitTuning = {
 
 /**
  * An immutable fit model built once from a decklist corpus. Everything here is
- * derived in card-UUID space (lowercased stable card ids); {@link
- * computeReplayOffer} translates the card numbers it is given through
- * `numberToId` / `idIndex` at the boundary.
+ * derived in card-UUID space (lowercased stable card ids). Numeric consumers
+ * translate through `numberToId` / `idIndex` at the boundary.
  */
 export interface FitModel {
   /** Filtered corpus decks as IDF vectors, in their (filtered) corpus order. */
@@ -119,8 +110,7 @@ export interface FitModel {
  * @param corpusDecks Historical decks; each is a list of card ids (lowercased
  *   stable UUIDs; duplicates and unknown ids are tolerated — only distinct ids
  *   matter).
- * @param idIndex Card-id -> card-number index, used to translate the numeric
- *   inputs of {@link computeReplayOffer} into the id space the model lives in.
+ * @param idIndex Card-id -> card-number index used at numeric scoring boundaries.
  * @param tuning Optional overrides for {@link DEFAULT_FIT_TUNING}.
  */
 export function buildFitModel(
@@ -341,8 +331,8 @@ export interface CandidateFitScore {
 /**
  * Score a set of candidate card numbers against a given deck, returning a
  * {@link CandidateFitScore} for each candidate.  The `fit` field is the
- * blended, per-call min-max normalized score that {@link computeReplayOffer}
- * uses for ranking; the three raw component fields expose the individual
+ * blended, per-call min-max normalized score used for ranking; the three raw
+ * component fields expose the individual
  * signals for downstream consumers (e.g. the merchant centrality signal uses
  * `0.65 * prior + 0.35 * cooccur`).
  *
@@ -397,63 +387,4 @@ export function scoreCandidatesForDeck(
     });
   }
   return result;
-}
-
-/**
- * Rank the cards of a single pack by how well they fit the player's current
- * deck and return the best `offerSize` of them. Pure and deterministic: no RNG,
- * and the input arrays are never mutated.
- *
- * Implemented on top of {@link scoreCandidatesForDeck}.
- *
- * @param packCardNumbers The pack the player is picking from (card numbers; may
- *   contain duplicates or numbers unknown to the model).
- * @param deckCardNumbers Cards the player has already drafted (card numbers).
- * @param signatureCardNumbers The deck's signature/seed cards. Folded into the
- *   deck set exactly like picked cards, so they steer early picks before the
- *   player has committed to anything.
- * @param fitModel The model from {@link buildFitModel}.
- * @param offerSize How many cards to offer (e.g. 4).
- * @returns Card numbers of the offered cards. Ranked best-fit first when scored;
- *   sorted ascending when the pack is small enough to return whole.
- */
-export function computeReplayOffer(
-  packCardNumbers: readonly number[],
-  deckCardNumbers: readonly number[],
-  signatureCardNumbers: readonly number[],
-  fitModel: FitModel,
-  offerSize: number,
-): number[] {
-  const { numberToId, idIndex } = fitModel;
-
-  // 1. Candidates: pack numbers -> ids, drop unknowns, dedupe first-seen.
-  const candidateIds = idsFromNumbers(packCardNumbers, numberToId);
-
-  const toNumber = (id: string): number => {
-    const num = idIndex.get(id);
-    // Ids came out of numberToId (inverse of idIndex), so this is defined; the
-    // ?? keeps the type honest without a non-null assertion.
-    return num ?? -1;
-  };
-
-  // 2. Small pack: nothing to discriminate on — return everything, sorted by
-  //    card number ascending for a stable, deck-independent order.
-  if (candidateIds.length <= offerSize) {
-    return candidateIds.map(toNumber).sort((a, b) => a - b);
-  }
-
-  // 3. Deck set = picked cards ∪ signatures, translated to ids and deduped.
-  //    Signatures are folded in exactly like picks so they steer early offers.
-  const allDeckNumbers = [...deckCardNumbers, ...signatureCardNumbers];
-
-  // 4. Delegate to scoreCandidatesForDeck for the per-candidate scoring.
-  const scored = scoreCandidatesForDeck(packCardNumbers, allDeckNumbers, fitModel);
-
-  // 5. Rank by fit desc, tie-break by card number asc, return the first
-  //    `offerSize` card numbers in that order.
-  const candidateNumbers = candidateIds.map(toNumber);
-  candidateNumbers.sort(
-    (a, b) => (scored.get(b)?.fit ?? 0) - (scored.get(a)?.fit ?? 0) || a - b,
-  );
-  return candidateNumbers.slice(0, offerSize);
 }

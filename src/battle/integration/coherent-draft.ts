@@ -18,7 +18,7 @@
 import {
   scoreCandidatesForDeck,
   type FitModel,
-} from "../../draft/replay/fit-model";
+} from "../../draft/fit-model";
 
 /** A deterministic [0,1) PRNG (mulberry32). Seeding from the battle seed keeps a
  * whole simulated draft reproducible without touching the shared battle RNG

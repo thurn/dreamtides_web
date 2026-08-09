@@ -166,7 +166,7 @@ describe("buildTutorialJourneyPackage", () => {
     expect(console.log).toHaveBeenCalledOnce();
     expect(JSON.parse(vi.mocked(console.log).mock.calls[0][0] as string)).toMatchObject({
       event: "draft_pool_constructed",
-      algo: "tutorial_tides",
+      source: "authored_tutorial",
       poolSize: 8,
       distinctCardCount: 8,
       tideIds: ["first-tide", "second-tide", "third-tide"],

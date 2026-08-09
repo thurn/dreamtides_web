@@ -118,11 +118,6 @@ card-pool-tide-provenance-description =
         [one] Built to { $dealSize } { -card(number: "one") }
        *[other] Built to { $dealSize } { -card(number: "other") }
     } with a per-card copy cap of { $copyCap }; { $facetDrawnCount } of { $facetAvailableCount } theme Tides were drawn.
-# Title of the disclosure describing the loaded replay record.
-card-pool-replay-record-title = Replay record
-# Description of the replay deck source. $sourceFile is a developer-authored
-# file name or path and should remain unchanged inside the localized sentence.
-card-pool-replay-record-description = Record deck loaded from { $sourceFile }.
 # Title of the disclosure describing the active pool algorithm.
 card-pool-construction-title = Pool construction
 # Short diagnostic summary. $algorithm is a stable internal algorithm id and
@@ -130,26 +125,6 @@ card-pool-construction-title = Pool construction
 card-pool-construction-summary = Algorithm: { $algorithm }
 # Description of the active run-pool contents and remaining-copy quantities.
 card-pool-construction-description = The active run pool is shown with its remaining copies.
-# Title for one chronological replay pick. $pickNumber is a positive one-based
-# pick number; the surrounding disclosure contains the pack and selected cards.
-card-pool-replay-pick-title = Pick { $pickNumber }
-# Summary for one replay pick. $hasPicks is "yes" when at least one selection
-# was recorded. $cardList is a locale-formatted list of canonical card display
-# names with unknown grammatical gender; it is empty when $hasPicks is "no".
-card-pool-replay-pick-summary =
-    { $hasPicks ->
-        [yes] Chose { $cardList }
-       *[no] No pick recorded
-    }
-# One card name inside the locale-formatted replay pack list. $picked is "yes"
-# when this card was selected and "no" otherwise. $cardName is a canonical card
-# display name with unknown grammatical gender. The check mark is a compact
-# visual status marker, and list punctuation is supplied by Intl.ListFormat.
-card-pool-replay-card-label =
-    { $picked ->
-        [yes] ✓ { $cardName }
-       *[no] { $cardName }
-    }
 # Tooltip explaining why a card's rules text differs from its base rules.
 # $formName is the authored Transfiguration form name.
 card-rules-transfiguration-changed = Rules text changed by { $formName } Transfiguration

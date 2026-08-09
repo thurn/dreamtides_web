@@ -17,7 +17,7 @@ interface ToyState {
   log: string[];
 }
 
-const GENESIS: Genesis = { seed: "toy-seed", reducerVersion: "v1", createdAt: 0, contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null } };
+const GENESIS: Genesis = { seed: "toy-seed", reducerVersion: "v1", createdAt: 0, contentConfig: { poolVariant: "tides4" } };
 
 /**
  * Toy reducer:

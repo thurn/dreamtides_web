@@ -27,7 +27,7 @@ const GENESIS: Genesis = {
   seed: "test-seed",
   reducerVersion: "test",
   createdAt: 0,
-  contentConfig: { poolVariant: "test", draftMode: "pool", fresh20PackSize: null },
+  contentConfig: { poolVariant: "tides4" },
 };
 
 /** A base fold state with a known, mutable essence value. */
@@ -586,9 +586,7 @@ describe("genesisFoldState", () => {
     const fold = genesisFoldState({
       ...GENESIS,
       contentConfig: {
-        poolVariant: "test",
-        draftMode: "pool",
-        fresh20PackSize: null,
+        poolVariant: "tides4",
         economyFoldHash: "synthetic-economy",
         defaultStartingEssence: 137,
         dreamsignCap: 9,
@@ -603,9 +601,7 @@ describe("genesisFoldState", () => {
     const genesis: Genesis = {
       ...GENESIS,
       contentConfig: {
-        poolVariant: "test",
-        draftMode: "pool",
-        fresh20PackSize: null,
+        poolVariant: "tides4",
         atlasFoldHash: "synthetic-atlas",
         economyFoldHash: "synthetic-economy",
         defaultStartingEssence: 137,

@@ -6,14 +6,14 @@ export function isPoolVariant(value: unknown): value is PoolVariant {
   return value === "tides4";
 }
 
-/** Resolve an optional URL value to the production draft-pool strategy. */
+/** Resolve an optional configured value to the production draft-pool strategy. */
 export function resolvePoolVariant(value: unknown): PoolVariant {
   if (value === null || value === undefined || value === "") {
     return DEFAULT_POOL_VARIANT;
   }
   if (!isPoolVariant(value)) {
     throw new Error(
-      `Unrecognized ?algo= pool variant: ${JSON.stringify(value)}. ` +
+      `Unrecognized draft-pool variant: ${JSON.stringify(value)}. ` +
         "Valid variant: tides4.",
     );
   }

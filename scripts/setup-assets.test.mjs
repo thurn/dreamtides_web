@@ -18,28 +18,12 @@ import {
   linkExplorationArt,
   parseEnergyCost,
   parseSpark,
-  removeLegacyDraftPoolArtifacts,
   setupAssets,
   stripJsonComments,
   transformCard,
   transformExplorationData,
   validateDreamAvatarMapping,
 } from "./setup-assets.mjs";
-
-describe("removeLegacyDraftPoolArtifacts", () => {
-  it("clears stale browser data for legacy pool algorithms", () => {
-    const publicDir = mkdtempSync(join(tmpdir(), "legacy-pool-artifacts-"));
-    const stalePath = join(publicDir, "tides3-data.json");
-    const currentPath = join(publicDir, "tides4-data.json");
-    writeFileSync(stalePath, "{}\n");
-    writeFileSync(currentPath, "{}\n");
-
-    removeLegacyDraftPoolArtifacts(publicDir);
-
-    expect(existsSync(stalePath)).toBe(false);
-    expect(existsSync(currentPath)).toBe(true);
-  });
-});
 
 describe("generateOpponentsData", () => {
   it("writes the compiled browser artifact during asset setup", () => {

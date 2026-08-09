@@ -37,8 +37,6 @@ const { createRoomEvictingStale, RoomExistsError } =
 
 const CONTENT_CONFIG: PinnedContentConfig = {
   poolVariant: "tides4",
-  draftMode: "pool",
-  fresh20PackSize: null,
   atlasFoldHash: "fixture-atlas-fold-hash",
   sitesFoldHash: "fixture-sites-fold-hash",
   draftFoldHash: "fixture-draft-fold-hash",

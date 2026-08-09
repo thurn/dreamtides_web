@@ -41,8 +41,8 @@ import {
   scoreDeckAffiliationFit,
   type AffiliationWeightContext,
 } from "../../affiliations/affiliation-weights";
-import type { FitModel } from "../../draft/replay/fit-model";
-import { buildPackSequence } from "../../draft/replay/draft-records";
+import type { FitModel } from "../../draft/fit-model";
+import { buildPackSequence } from "../../draft/draft-records";
 import {
   createSeededRng,
   simulateCoherentDraft,

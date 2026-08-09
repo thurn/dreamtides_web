@@ -18,8 +18,6 @@ import type { ContentConfig, Genesis } from "./types";
 
 const CONTENT_CONFIG: ContentConfig = {
   poolVariant: "tides4",
-  draftMode: "pool",
-  fresh20PackSize: null,
 };
 
 function genesisAt(createdAt: number): string {
@@ -121,8 +119,6 @@ describe("genesisLogNode (createRoom's written node)", () => {
   it("writes genesis.contentConfig verbatim", () => {
     const contentConfig: ContentConfig = {
       poolVariant: "tides4",
-      draftMode: "fresh20",
-      fresh20PackSize: 20,
     };
     const genesis: Genesis = {
       seed: "room-seed",

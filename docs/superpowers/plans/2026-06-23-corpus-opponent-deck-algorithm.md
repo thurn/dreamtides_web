@@ -4,7 +4,7 @@
 
 **Goal:** Add a second, switchable opponent-generation algorithm to the `/opponent` debug view that selects a real known-good corpus deck fitting the opponent's Dream Avatar (and, secondarily, the dreamscape affiliation), then tunes that deck by run layer.
 
-**Architecture:** A UUID-keyed IDF/affinity fit module (extracted from the duplicated `/sigdecks` logic and the name-keyed affiliation affinity), plus a co-occurrence synergy module, feed a new `buildCorpusOpponentDeck` (Stage A selection + Stage B layer tuning). Two new generated artifacts (`known-good-decklists-data.json`, `dreamsign-signatures-data.json`) supply the corpus and the dreamsign-synergy data. `OpponentDebugApp` gains a small algorithm registry so both the existing coherent-draft and the new corpus algorithm render through one interface, selected via `?algo=`. Scope is debug-view-only: live battles keep using `buildOpponentDeck`.
+**Architecture:** A UUID-keyed IDF/affinity fit module (extracted from the duplicated `/sigdecks` logic and the name-keyed affiliation affinity), plus a co-occurrence synergy module, feed a new `buildCorpusOpponentDeck` (Stage A selection + Stage B layer tuning). Two new generated artifacts (`known-good-decklists-data.json`, `dreamsign-signatures-data.json`) supply the corpus and the dreamsign-synergy data. `OpponentDebugApp` gains a small algorithm registry so both the existing coherent-draft and the new corpus algorithm render through one interface, selected via `?opponentAlgorithm=`. Scope is debug-view-only: live battles keep using `buildOpponentDeck`.
 
 **Tech Stack:** TypeScript, React, Vite; Vitest (`npm test` → `vitest run`), ESLint (`npm run lint`), `tsc --noEmit` (`npm run typecheck`); Node asset build via `scripts/setup-assets.mjs` / `scripts/regenerate-assets.sh`; TOML via `smol-toml`.
 
@@ -56,7 +56,7 @@ Hard rules for all code written in this plan:
 - `src/data/journey-content.ts` — add `knownGoodDecklists` and `dreamsignSignatures` to `JourneyContent` (+ their types); load them in `loadJourneyContent`.
 - `src/debug/SignatureDecksApp.tsx` — refactor its local IDF/fit onto `src/draft/idf-fit.ts` (behavior-preserving).
 - `src/affiliations/affiliation-weights.ts` — refactor `computeAffinityByName` to delegate to `computeAffinity` (behavior-preserving).
-- `src/debug/OpponentDebugApp.tsx` — route through the algorithm registry; add the `?algo=` switcher and the corpus provenance panel.
+- `src/debug/OpponentDebugApp.tsx` — route through the algorithm registry; add the `?opponentAlgorithm=` switcher and the corpus provenance panel.
 - `src/debug/opponent-debug-url.ts` — parse/serialize the `algo` param.
 
 ---
@@ -574,7 +574,7 @@ git commit -m "refactor(opponent-debug): route generation through an algorithm r
 
 ---
 
-## Task 10: Register the corpus algorithm + `?algo=` switcher
+## Task 10: Register the corpus algorithm + `?opponentAlgorithm=` switcher
 
 **Files:**
 - Modify: `src/debug/opponent-algorithms.ts` (add the `corpus` algorithm)
@@ -585,7 +585,7 @@ git commit -m "refactor(opponent-debug): route generation through an algorithm r
 
 Add a `DebugAlgorithm` with `id: "corpus"` that calls `buildCorpusOpponentDeck` (passing `content.knownGoodDecklists ?? []`, `content.dreamsignSignatures`, `content.dreamsignTemplates`, etc.) and maps `CorpusOpponentDeckBuild` into `AlgorithmView`: `deckCards = finalCards`; stat rows for source name, signature/affiliation/combined fit, candidate count, top-K size; `dreamsignLabels` from the assigned dreamsign (or empty); `abilityActive`; `provenance` left for Task 11.
 
-- [ ] **Step 2: Add the `algo` URL param**
+- [ ] **Step 2: Add the `opponentAlgorithm` URL param**
 
 In `opponent-debug-url.ts`, parse `algo` (default `"coherent"`, accept `"corpus"`) and serialize it back like the other params; when `"coherent"`, omit it from the URL so existing links stay bare (mirror `SignatureDecksApp`'s `mode` handling).
 
@@ -602,7 +602,7 @@ Expected: PASS.
 
 ```bash
 git add src/debug/opponent-algorithms.ts src/debug/opponent-debug-url.ts src/debug/OpponentDebugApp.tsx
-git commit -m "feat(opponent-debug): corpus algorithm + ?algo= switcher"
+git commit -m "feat(opponent-debug): corpus algorithm + ?opponentAlgorithm= switcher"
 ```
 
 ---
@@ -650,8 +650,8 @@ Expected: all PASS. If any pre-existing failure is unrelated to this work, recor
 
 - [ ] **Step 3: Browser QA**
 
-Start a QA server on a non-default port: `npm run dev -- --port 5174`. With `/opt/homebrew/bin/agent-browser` (fallback `npx agent-browser`), open `http://localhost:5174/opponent?algo=corpus` and verify, sweeping layer and dreamscape:
-- the switcher toggles between coherent and corpus and round-trips through `?algo=`;
+Start a QA server on a non-default port: `npm run dev -- --port 5174`. With `/opt/homebrew/bin/agent-browser` (fallback `npx agent-browser`), open `http://localhost:5174/opponent?opponentAlgorithm=corpus` and verify, sweeping layer and dreamscape:
+- the switcher toggles between coherent and corpus and round-trips through `?opponentAlgorithm=`;
 - layer 0 shows ability inactive, no Legendaries, 10 Starters added, no dreamsign; layer 1 shows 5 Starters; layer 3+ shows one dreamsign; layer 5+ shows Legendaries retained;
 - the provenance panel shows source seat, top-K, the modification diff, and the dreamsign;
 - the deck grid and panel are free of clipping/overlap and legible at the tested sizes;
@@ -670,6 +670,6 @@ git commit -m "chore(opponents): regenerate assets + verification for corpus alg
 
 ## Self-review notes
 
-- **Spec coverage:** known-good corpus (T5) ✓; unified IDF/affinity fit (T1, T3, T4) ✓; co-occurrence "least synergistic" (T2) ✓; Stage A selection incl. λ/top-K/edge cases (T7) ✓; Stage B layer table incl. legendary replacement + dreamsign fallback (T8) ✓; dreamsign neutral/tailored + signature artifact via subagents (T6) ✓; logging (T8) ✓; `/opponent` registry + `?algo=` + provenance (T9–T11) ✓; debug-view-only scope (no live-battle wiring) ✓; resolved-vs-nonland fidelity is left as the spec's flagged item — surfaced in T5 Step 3 assertions (counts/UUID resolution) rather than silently trimmed; revisit only if QA shows oversized decks distort the view.
+- **Spec coverage:** known-good corpus (T5) ✓; unified IDF/affinity fit (T1, T3, T4) ✓; co-occurrence "least synergistic" (T2) ✓; Stage A selection incl. λ/top-K/edge cases (T7) ✓; Stage B layer table incl. legendary replacement + dreamsign fallback (T8) ✓; dreamsign neutral/tailored + signature artifact via subagents (T6) ✓; logging (T8) ✓; `/opponent` registry + `?opponentAlgorithm=` + provenance (T9–T11) ✓; debug-view-only scope (no live-battle wiring) ✓; resolved-vs-nonland fidelity is left as the spec's flagged item — surfaced in T5 Step 3 assertions (counts/UUID resolution) rather than silently trimmed; revisit only if QA shows oversized decks distort the view.
 - **Test discipline:** no test pins a tunable constant or a TOML value; the dreamsign artifact test (T6) and the known-good test (T5) assert structural/grounding invariants that survive data edits; selection/tuning tests assert determinism, schedule, and ordering invariants, not specific cards.
 - **UUID identity:** every new module/artifact/log/test keys on the lowercased UUID; names and card numbers are decoration only. The name-collision guardrail (T1, re-asserted in T7) fails any name-keyed regression. The only `string`-generic call with name keys is the optional legacy affiliation cleanup (T4), which is outside the new feature's identity path. No new code reaches into the name-keyed `FitModel`/`coherence`/`affiliation-weights` for identity.

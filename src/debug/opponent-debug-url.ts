@@ -47,7 +47,7 @@ function normalizeDreamscape(raw: string | null | undefined): string | null {
   return NEUTRAL_TOKENS.has(trimmed) ? null : trimmed;
 }
 
-/** Coerce an arbitrary `?algo=` / selector value to a known algorithm,
+/** Coerce an arbitrary `?opponentAlgorithm=` / selector value to a known algorithm,
  * defaulting to corpus. */
 export function normalizeOpponentDebugAlgo(
   raw: string | null | undefined,
@@ -76,7 +76,7 @@ export function opponentGenerationId(params: OpponentDebugParams): string {
  * token), validating the trailing layer / nonce as numbers. The id does not
  * carry the algorithm choice (a separate query param), so the returned `algo`
  * is the default `"corpus"`; callers reading a full query string overlay the
- * `?algo=` value.
+ * `?opponentAlgorithm=` value.
  */
 export function parseOpponentGenerationId(
   id: string,
@@ -108,8 +108,8 @@ export function parseOpponentDebugParams(
   const query = new URLSearchParams(search);
 
   // The algorithm is an orthogonal query param read independently of the seed
-  // params, so a `gen=` link and an `?algo=` choice compose freely.
-  const algo = normalizeOpponentDebugAlgo(query.get("algo"));
+  // params, so a `gen=` link and an opponent-algorithm choice compose freely.
+  const algo = normalizeOpponentDebugAlgo(query.get("opponentAlgorithm"));
 
   const gen = query.get("gen");
   if (gen != null) {
@@ -127,8 +127,8 @@ export function parseOpponentDebugParams(
 
 /**
  * Serialize params into a canonical `?layer=…&dreamscape=…&n=…` query string
- * (leading `?` included; `dreamscape` omitted for a neutral build, `algo`
- * omitted for the corpus default so default links stay bare). Round-trips
+ * (leading `?` included; `dreamscape` omitted for a neutral build,
+ * `opponentAlgorithm` omitted for the corpus default so default links stay bare). Round-trips
  * with {@link parseOpponentDebugParams}.
  */
 export function opponentDebugSearch(params: OpponentDebugParams): string {
@@ -139,7 +139,7 @@ export function opponentDebugSearch(params: OpponentDebugParams): string {
   }
   query.set("n", String(params.nonce));
   if (params.algo === "coherent") {
-    query.set("algo", params.algo);
+    query.set("opponentAlgorithm", params.algo);
   }
   return `?${query.toString()}`;
 }
