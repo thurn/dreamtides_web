@@ -61,29 +61,6 @@
       "bigMinimum": 4,
       "cheapCharacterMaximum": 2
     },
-    "allowedTransfigurations": [
-      "Empowered",
-      "Amplified",
-      "Kindled",
-      "Inspired",
-      "Enduring",
-      "Hastened",
-      "Resonant",
-      "Attuned"
-    ],
-    "transfigurationBenefit": {
-      "empoweredCostDivisor": 2,
-      "kindledSparkDivisor": 4,
-      "flat": {
-        "Amplified": 0.4,
-        "Inspired": 0.55,
-        "Enduring": 0.55,
-        "Hastened": 0.5,
-        "Resonant": 0.5,
-        "Attuned": 0.5,
-        "Perfected": 0.65
-      }
-    },
     "placeableSiteTypes": [
       "Shop",
       "Purge",
@@ -91,6 +68,6 @@
       "Duplication"
     ]
   },
-  "contentHash": "506d0423a87751dc9b5835e8e86d52f77f08ac44a447b7ed988b5a32b80dd623",
-  "foldHash": "506d0423a87751dc9b5835e8e86d52f77f08ac44a447b7ed988b5a32b80dd623"
+  "contentHash": "9c80f7c68b53e06e2cec7ca37223af73443402b030cdbe013709637e9f349341",
+  "foldHash": "9c80f7c68b53e06e2cec7ca37223af73443402b030cdbe013709637e9f349341"
 }

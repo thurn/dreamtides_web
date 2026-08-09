@@ -39,6 +39,7 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
             guide,
             guideLine,
             economyData: journeyContent.economyData,
+            transfigurationData: journeyContent.transfigurationData,
           }),
     [
       state.essence,
@@ -51,6 +52,7 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
       shopRuntime,
       journeyContent.cardDatabase,
       journeyContent.economyData,
+      journeyContent.transfigurationData,
       guide,
     ],
   );

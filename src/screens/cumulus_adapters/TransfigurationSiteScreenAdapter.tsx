@@ -1,22 +1,20 @@
 // Wiring-only adapter for the standard desktop Cumulus Transfiguration site.
 
-import { useCallback, useEffect, useMemo } from "react";
-import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
-import type { TransfigurationType } from "../../types/journey";
 import { TransfigurationSiteScreen } from "../../cumulus/screens/TransfigurationSiteScreen";
 import {
   buildTransfigurationSiteView,
   resolveTransfigurationGuide,
 } from "./transfiguration-view-model";
 import { useGuideDialogue } from "./guide-dialogue-view-model";
+import { useTransfigurationSiteActions } from "../../state/transfiguration-site-actions";
 
 export function TransfigurationSiteScreenAdapter({
   siteId,
 }: {
   siteId: string;
 }) {
-  const { state, mutations, journeyContent } = useJourney();
+  const { state, journeyContent } = useJourney();
   const node =
     state.currentDreamscape === null
       ? null
@@ -34,96 +32,31 @@ export function TransfigurationSiteScreenAdapter({
   );
   const guideLine = useGuideDialogue(guide, "site");
 
-  const view = useMemo(
-    () =>
-      site === null
-        ? null
-        : buildTransfigurationSiteView({
-            state,
-            sceneNode: node,
-            site,
-            runtime,
-            cardDatabase: journeyContent.cardDatabase,
-            guide,
-            guideLine,
-          }),
-    [state, node, site, runtime, journeyContent.cardDatabase, guide],
-  );
-
-  useEffect(() => {
-    if (site !== null && persistedRuntime === undefined) {
-      mutations.ensureCardChoiceRuntime(site.id, "transfiguration");
-    }
-  }, [mutations, persistedRuntime, site]);
-
-  useEffect(() => {
-    if (site === null) return;
-    logEventOnce(`transfiguration:${site.id}:site-entered`, "site_entered", {
-      siteType: site.type,
-      isEnhanced: site.isEnhanced,
-      deckSize: state.deck.length,
-    });
-  }, [site, state.deck.length]);
-
-  const handleClose = useCallback(() => {
-    if (site === null) return;
-    logEvent("site_completed", {
-      siteType: "Transfiguration",
-      outcome:
-        runtime === null || runtime.entryIds.length === 0
-          ? "no_candidates"
-          : "skipped",
-    });
-    mutations.completeSite(site.id, "transfiguration_skipped");
-  }, [mutations, runtime, site]);
-
-  const handleTransfigure = useCallback(
-    (
-      entryId: string,
-      type: TransfigurationType,
-      effectDescription: string,
-      effectDetails: Record<string, unknown>,
-      essenceCost: number,
-    ) => {
-      if (site === null || runtime === null) return;
-      const entry = state.deck.find(
-        (candidate) => candidate.entryId === entryId,
-      );
-      if (entry === undefined) return;
-      logEvent("transfiguration_completed", {
-        siteId: site.id,
-        entryId,
-        cardId: journeyContent.cardDatabase.get(entry.cardNumber)?.id ?? null,
-        transfigurationType: type,
-        effectDescription,
-        effectDetails,
-        essenceCost,
-        essenceBefore: state.essence,
-        essenceAfter: Math.max(0, state.essence - essenceCost),
-        offeredForms: runtime.transfigurationOffers
-          .filter((offer) => offer.entryId === entryId)
-          .map((offer) => offer.type),
-        isEnhanced: site.isEnhanced,
-        currentDreamscape: state.currentDreamscape,
-        completionLevel: state.completionLevel,
-      });
-      mutations.acceptTransfigurationChoice(
-        site.id,
-        entryId,
-        type,
-        effectDescription,
-        effectDetails,
-      );
-    },
-    [mutations, journeyContent.cardDatabase, runtime, site, state],
-  );
+  const view =
+    site === null
+      ? null
+      : buildTransfigurationSiteView({
+          state,
+          sceneNode: node,
+          site,
+          runtime,
+          cardDatabase: journeyContent.cardDatabase,
+          guide,
+          guideLine,
+          transfigurationData: journeyContent.transfigurationData,
+        });
+  const actions = useTransfigurationSiteActions({
+    site,
+    runtime,
+    needsRuntime: persistedRuntime === undefined,
+  });
 
   if (site === null || view === null) return null;
   return (
     <TransfigurationSiteScreen
       view={view}
-      onClose={handleClose}
-      onTransfigure={handleTransfigure}
+      onClose={actions.close}
+      onTransfigure={actions.transfigure}
     />
   );
 }

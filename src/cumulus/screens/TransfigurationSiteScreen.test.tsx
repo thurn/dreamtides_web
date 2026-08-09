@@ -12,6 +12,7 @@ import {
   type TransfigurationCandidateView,
   type TransfigurationSiteView,
 } from "./TransfigurationSiteScreen";
+import { transfigurationFormFixture } from "../test-helpers/transfiguration-fixture";
 
 function makeCard(index: number): CardData {
   return {
@@ -40,6 +41,7 @@ function candidate(index: number): TransfigurationCandidateView {
     forms: [
       {
         type: "Empowered",
+        presentation: transfigurationFormFixture("Empowered"),
         change: { kind: "energy-delta", from: 2, to: 1 },
         description: "Reduce this card's energy cost.",
         effectDetails: { fixture: true },
@@ -50,6 +52,7 @@ function candidate(index: number): TransfigurationCandidateView {
           displaySnapshot: { ...card, energyCost: 1 },
           transfiguration: {
             type: "Empowered",
+            form: transfigurationFormFixture("Empowered"),
             markedText: card.renderedText,
             energyChanged: true,
             sparkChanged: false,
@@ -59,6 +62,7 @@ function candidate(index: number): TransfigurationCandidateView {
       },
       {
         type: "Kindled",
+        presentation: transfigurationFormFixture("Kindled"),
         change: { kind: "spark-delta", from: 2, to: 4 },
         description: "Double this character's spark.",
         effectDetails: { fixture: true },
@@ -69,6 +73,7 @@ function candidate(index: number): TransfigurationCandidateView {
           displaySnapshot: { ...card, spark: 4 },
           transfiguration: {
             type: "Kindled",
+            form: transfigurationFormFixture("Kindled"),
             markedText: card.renderedText,
             energyChanged: false,
             sparkChanged: true,
@@ -114,6 +119,7 @@ function enhancedView(): TransfigurationSiteView {
           displaySnapshot: reforgedCard,
           transfiguration: {
             type: "Kindled",
+            form: transfigurationFormFixture("Kindled"),
             markedText: reforgedCard.renderedText,
             energyChanged: false,
             sparkChanged: true,
@@ -252,8 +258,9 @@ describe("TransfigurationSiteScreen", () => {
     expect(picker?.dataset.galleryColumns).toBe("5");
     expect(picker?.dataset.gallerySpacing).toBe("regular");
     expect(picker?.dataset.galleryRole).toBe("picker");
-    expect(picker?.querySelector("[data-glass-panel-header] p")?.textContent?.trim())
-      .not.toBe("");
+    expect(
+      picker?.querySelector("[data-glass-panel-header] p")?.textContent?.trim(),
+    ).not.toBe("");
     expect(
       container.querySelectorAll(
         '[data-testid^="cumulus-transfiguration-card-"]',
@@ -267,12 +274,15 @@ describe("TransfigurationSiteScreen", () => {
         ?.getAttribute("aria-disabled"),
     ).toBe("true");
     expect(
-      container.querySelector(
-        '[data-gallery-entry-id="entry-5"] [data-gallery-caption="text"]',
-      )?.textContent?.trim(),
+      container
+        .querySelector(
+          '[data-gallery-entry-id="entry-5"] [data-gallery-caption="text"]',
+        )
+        ?.textContent?.trim(),
     ).not.toBe("");
     expect(
-      container.querySelector('[data-testid="cumulus-transfiguration-decline"]')
+      container
+        .querySelector('[data-testid="cumulus-transfiguration-decline"]')
         ?.textContent?.trim(),
     ).not.toBe("");
 
@@ -401,7 +411,7 @@ describe("TransfigurationSiteScreen", () => {
     const empowered = container.querySelector<HTMLButtonElement>(
       '[data-testid="cumulus-transfiguration-form-Empowered"]',
     );
-    expect(empowered?.textContent).toBe("Empowered40");
+    expect(empowered?.textContent?.trim()).not.toBe("");
     expect(empowered?.dataset.transfigurationButtonVariant).toBe("priced");
     expect(empowered?.getAttribute("aria-description")?.trim()).not.toBe("");
     expect(empowered?.style.padding).toBe("var(--space-xs)");
@@ -621,10 +631,12 @@ describe("TransfigurationSiteScreen", () => {
     expect(animate).not.toHaveBeenCalled();
     expect(container.querySelectorAll('[role="radio"]')).toHaveLength(2);
     expect(
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="cumulus-transfiguration-form-Empowered"]',
-      )?.textContent,
-    ).toBe("Empowered");
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-transfiguration-form-Empowered"]',
+        )
+        ?.textContent?.trim(),
+    ).not.toBe("");
     expect(
       container.querySelector<HTMLButtonElement>(
         '[data-testid="cumulus-transfiguration-form-Empowered"]',

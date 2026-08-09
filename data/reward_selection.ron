@@ -60,22 +60,5 @@ RewardSelectionCatalog(
     cheap_character_maximum: 2,
   ),
 
-  transfiguration: TransfigurationRules(
-    allowed_forms: [Empowered, Amplified, Kindled, Inspired, Enduring, Hastened, Resonant, Attuned],
-    // Empowered benefit is the card cost divided by this value.
-    empowered_cost_divisor: 2,
-    // Kindled benefit is the card's spark divided by this value.
-    kindled_spark_divisor: 4,
-    flat_benefits: [
-      (form: Amplified, benefit: 0.4),
-      (form: Inspired, benefit: 0.55),
-      (form: Enduring, benefit: 0.55),
-      (form: Hastened, benefit: 0.5),
-      (form: Resonant, benefit: 0.5),
-      (form: Attuned, benefit: 0.5),
-      (form: Perfected, benefit: 0.65),
-    ],
-  ),
-
   site: SiteRules(placeable_types: [Shop, Purge, Transfiguration, Duplication]),
 )

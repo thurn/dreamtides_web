@@ -6,6 +6,9 @@ import type { RunPoolContext } from "../../data/journey-content";
 import type { PoolData } from "../../draft/pool/types";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { buildDesktopDeckView } from "./desktop-deck-view-model";
+import { transfigurationFixture } from "../../testing/transfiguration-fixture";
+
+const transfigurationData = transfigurationFixture();
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
@@ -113,13 +116,13 @@ describe("buildDesktopDeckView", () => {
       makeEntry({ entryId: "e1", cardNumber: 1 }),
     ];
 
-    const view = buildDesktopDeckView(deck, database(a, b), null, []);
+    const view = buildDesktopDeckView(transfigurationData, deck, database(a, b), null, []);
 
     expect(view.cards.map((c) => c.entryId)).toEqual(["e2", "e1"]);
   });
 
   it("maps the DreamAvatar to the sidebar view (portrait visual + rules text)", () => {
-    const view = buildDesktopDeckView([], database(), dreamAvatar, []);
+    const view = buildDesktopDeckView(transfigurationData, [], database(), dreamAvatar, []);
 
     expect(view.dreamAvatar).toEqual({
       id: "dc-1",
@@ -131,13 +134,13 @@ describe("buildDesktopDeckView", () => {
   });
 
   it("carries a null DreamAvatar through as null", () => {
-    const view = buildDesktopDeckView([], database(), null, []);
+    const view = buildDesktopDeckView(transfigurationData, [], database(), null, []);
     expect(view.dreamAvatar).toBeNull();
   });
 
   it("copies the dreamsigns into the view", () => {
     const signs = [dreamsign];
-    const view = buildDesktopDeckView([], database(), null, signs);
+    const view = buildDesktopDeckView(transfigurationData, [], database(), null, signs);
 
     expect(view.dreamsigns).toEqual(signs);
     // A copy, not the caller's array, so the view cannot alias live state.
@@ -146,6 +149,7 @@ describe("buildDesktopDeckView", () => {
 
   it("derives the current journey tides from the chosen avatar id and stable run seed", () => {
     const view = buildDesktopDeckView(
+      transfigurationData,
       [],
       database(),
       dreamAvatar,

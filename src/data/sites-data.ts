@@ -86,7 +86,7 @@ function isSitesData(value: unknown): value is SitesData {
       "insufficientDestinations",
       "guideId",
     ]) ||
-    !hasExactKeys(value.cardChoices, ["transfiguration", "duplication"]) ||
+    !hasExactKeys(value.cardChoices, ["duplication"]) ||
     !hasExactKeys(value.guideAssignments, GUIDE_SITE_TYPES)
   ) {
     return false;
@@ -128,7 +128,7 @@ function isSitesData(value: unknown): value is SitesData {
   )
     return false;
 
-  for (const kind of ["transfiguration", "duplication"] as const) {
+  for (const kind of ["duplication"] as const) {
     const choice = value.cardChoices[kind];
     if (
       !isRecord(choice) ||

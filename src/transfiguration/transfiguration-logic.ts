@@ -7,23 +7,20 @@ import {
   TRANSFIGURE_MARK_END,
   TRANSFIGURE_MARK_START,
 } from "../runtime/transfigure-markers";
-import {
-  TRANSFIGURATION_COLORS,
-  TRANSFIGURATION_ICONS,
-  TRANSFIGURATION_TINT_COLORS,
-} from "../runtime/transfiguration-display";
 import type { CardTransfigurationDisplay } from "../runtime/transfiguration-display";
+import { transfigurationForm } from "../data/transfiguration-data";
+import type {
+  TransfigurationData,
+  TransfigurationEligibility,
+  TransfigurationFormDefinition,
+  TransfigurationOperation,
+} from "../types/transfiguration-data";
 
 // The card-display constants and the display descriptor type live in
 // `src/runtime/transfiguration-display.ts` so the Cumulus UI library can import
 // the card-rendering pieces without reaching into this game-logic module. They
 // are re-exported here so this module's existing consumers keep importing them
 // from `transfiguration-logic`.
-export {
-  TRANSFIGURATION_COLORS,
-  TRANSFIGURATION_ICONS,
-  TRANSFIGURATION_TINT_COLORS,
-};
 export type { CardTransfigurationDisplay };
 
 /**
@@ -60,13 +57,12 @@ export interface TransfiguredCard {
  * applicable change, marking each one.
  */
 export function buildTransfigurationDisplay(
+  data: TransfigurationData,
   original: CardData,
   type: TransfigurationType,
 ): TransfiguredCard {
-  const steps: Exclude<TransfigurationType, "Perfected">[] =
-    type === "Perfected"
-      ? perfectedSteps(original)
-      : [type];
+  const definition = transfigurationForm(data, type);
+  const steps = operationSteps(data, original, definition);
 
   let card = original;
   let markedText = original.renderedText;
@@ -75,21 +71,25 @@ export function buildTransfigurationDisplay(
   let fastChanged = false;
 
   for (const step of steps) {
-    if (step === "Empowered" || step === "Kindled") {
-      const result = applyStatStep(card, step);
+    const stepDefinition = transfigurationForm(data, step);
+    if (
+      stepDefinition.operation.kind === "halveEnergyCost" ||
+      stepDefinition.operation.kind === "doubleSpark"
+    ) {
+      const result = applyStatStep(card, stepDefinition.operation);
       card = result.card;
       energyChanged = energyChanged || result.energyChanged;
       sparkChanged = sparkChanged || result.sparkChanged;
       continue;
     }
-    if (step === "Hastened") {
+    if (stepDefinition.operation.kind === "setFast") {
       if (!card.isFast) {
         card = { ...card, isFast: true };
         fastChanged = true;
       }
       continue;
     }
-    if (step === "Amplified") {
+    if (stepDefinition.operation.kind === "useAuthoredAmplifiedText") {
       const transform = amplifiedTransform(card);
       if (transform === null) continue;
       markedText = transform.marked(markedText);
@@ -100,7 +100,10 @@ export function buildTransfigurationDisplay(
     // to the plain text (the card) and to the accumulated marked text (which
     // carries earlier steps' markers): the same find pattern lands in the same
     // place because the markers are invisible private-use characters.
-    const transform = textTransformFor(card.renderedText, step);
+    const transform = textTransformFor(
+      card.renderedText,
+      stepDefinition.operation,
+    );
     if (transform === null) {
       continue;
     }
@@ -112,6 +115,7 @@ export function buildTransfigurationDisplay(
     card,
     display: {
       type,
+      form: definition,
       markedText,
       energyChanged,
       sparkChanged,
@@ -123,118 +127,83 @@ export function buildTransfigurationDisplay(
 /** A prepared transfiguration offer with a pre-computed semantic change. */
 export interface TransfigurationOffer {
   type: TransfigurationType;
+  form: TransfigurationFormDefinition;
   change: TransfigurationChange;
   previewCard: CardData;
 }
 
-/** Returns true if the card is eligible for Empowered transfiguration. */
-export function isEmpoweredEligible(card: CardData): boolean {
-  return card.energyCost !== null && card.energyCost > 0;
-}
-
-/** Returns true when the card has a distinct, non-empty authored Amplified form. */
-export function isAmplifiedEligible(card: CardData): boolean {
-  return (
-    card.amplifiedText !== undefined &&
-    card.amplifiedText.trim().length > 0 &&
-    card.amplifiedText !== card.renderedText
-  );
-}
-
-/** Returns true if the card is a Character (eligible for Kindled). */
-export function isKindledEligible(card: CardData): boolean {
-  return card.cardType === "Character";
-}
-
-/** Returns true if the card is an Event (eligible for Inspired). */
-export function isInspiredEligible(card: CardData): boolean {
-  return card.cardType === "Event";
-}
-
-/** Returns true if the card is an Event (eligible for Enduring). */
-export function isEnduringEligible(card: CardData): boolean {
-  return card.cardType === "Event";
-}
-
-/** Returns true if the card is an Event that is not already fast (Hastened). */
-export function isHastenedEligible(card: CardData): boolean {
-  return card.cardType === "Event" && !card.isFast;
-}
-
-/**
- * Returns true if the card has a named trigger whose reach Resonant can widen:
- * a `▸Dawn` trigger (which then also fires on materialize), a `▸Materialized`
- * trigger (which then also fires on dissolve), or a `once per turn` clause
- * (which then fires any number of times per turn).
- */
-export function isResonantEligible(card: CardData): boolean {
-  return resonantTransform(card.renderedText) !== null;
-}
-
-/**
- * Returns true if the card has an activated ability with an energy cost (an
- * `N●` cost token before the ability's colon) that Attuned can reduce by 1.
- */
-export function isAttunedEligible(card: CardData): boolean {
-  return attunedTransform(card.renderedText) !== null;
-}
-
-/**
- * Returns true if the card is eligible for two or more of the other
- * transfigurations — the requirement for Perfected.
- */
-export function isPerfectedEligible(card: CardData): boolean {
-  return eligibleNonPerfectedTransfigurations(card).length >= 2;
-}
-
-/** Eligibility check functions for every non-Perfected transfiguration. */
-const NON_PERFECTED_CHECKS: ReadonlyArray<
-  [Exclude<TransfigurationType, "Perfected">, (card: CardData) => boolean]
-> = [
-  ["Empowered", isEmpoweredEligible],
-  ["Amplified", isAmplifiedEligible],
-  ["Kindled", isKindledEligible],
-  ["Inspired", isInspiredEligible],
-  ["Enduring", isEnduringEligible],
-  ["Hastened", isHastenedEligible],
-  ["Resonant", isResonantEligible],
-  ["Attuned", isAttunedEligible],
-];
-
-function eligibleNonPerfectedTransfigurations(
+/** Evaluate one compiler-validated eligibility predicate without form identity. */
+export function isTransfigurationEligibilitySatisfied(
+  data: TransfigurationData,
   card: CardData,
-): Exclude<TransfigurationType, "Perfected">[] {
-  return NON_PERFECTED_CHECKS.filter(([, check]) => check(card)).map(
-    ([type]) => type,
-  );
+  eligibility: TransfigurationEligibility,
+): boolean {
+  switch (eligibility.kind) {
+    case "positiveEnergyCost":
+      return card.energyCost !== null && card.energyCost > 0;
+    case "distinctAuthoredAmplifiedText":
+      return (
+        card.amplifiedText !== undefined &&
+        card.amplifiedText.trim().length > 0 &&
+        card.amplifiedText !== card.renderedText
+      );
+    case "cardType":
+      return card.cardType === eligibility.cardType;
+    case "eventWithoutFast":
+      return card.cardType === "Event" && !card.isFast;
+    case "namedTrigger":
+      return resonantTransform(card.renderedText) !== null;
+    case "activatedEnergyCost":
+      return attunedTransform(card.renderedText, 1, 0) !== null;
+    case "atLeastEligibleForms":
+      return eligibleDefinitions(data, card, false).length >= eligibility.count;
+  }
 }
 
-/**
- * A full-text authored replacement must precede every incremental text edit so
- * it cannot erase an Inspired, Enduring, Resonant, or Attuned change. Runtime
- * data generation separately requires the replacement to retain the patterns
- * those later transforms consume.
- */
-function perfectedSteps(
+function eligibleDefinitions(
+  data: TransfigurationData,
   card: CardData,
-): Exclude<TransfigurationType, "Perfected">[] {
-  const eligible = eligibleNonPerfectedTransfigurations(card);
-  return eligible.includes("Amplified")
-    ? ["Amplified", ...eligible.filter((type) => type !== "Amplified")]
-    : eligible;
+  includeComposite: boolean,
+): TransfigurationFormDefinition[] {
+  return data.site.formOrder
+    .map((id) => transfigurationForm(data, id))
+    .filter(
+      (definition) =>
+        (includeComposite ||
+          definition.operation.kind !== "applyEligibleForms") &&
+        isTransfigurationEligibilitySatisfied(
+          data,
+          card,
+          definition.eligibility,
+        ),
+    );
 }
 
 /** Returns the list of transfiguration types the card is eligible for. */
 export function eligibleTransfigurations(
+  data: TransfigurationData,
   card: CardData,
 ): TransfigurationType[] {
-  const types: TransfigurationType[] = eligibleNonPerfectedTransfigurations(
-    card,
+  return eligibleDefinitions(data, card, true).map(
+    (definition) => definition.id,
   );
-  if (isPerfectedEligible(card)) {
-    types.push("Perfected");
-  }
-  return types;
+}
+
+function operationSteps(
+  data: TransfigurationData,
+  card: CardData,
+  definition: TransfigurationFormDefinition,
+): TransfigurationType[] {
+  const operation = definition.operation;
+  if (operation.kind !== "applyEligibleForms") return [definition.id];
+  return operation.formOrder.filter((id) => {
+    const definition = transfigurationForm(data, id);
+    return isTransfigurationEligibilitySatisfied(
+      data,
+      card,
+      definition.eligibility,
+    );
+  });
 }
 
 /**
@@ -243,28 +212,34 @@ export function eligibleTransfigurations(
  * Perfected applies every other transfiguration the card is eligible for.
  */
 export function applyTransfigurationToCard(
+  data: TransfigurationData,
   card: CardData,
   type: TransfigurationType,
 ): CardData {
-  if (type === "Perfected") {
+  const definition = transfigurationForm(data, type);
+  if (definition.operation.kind === "applyEligibleForms") {
     let result = card;
-    for (const step of perfectedSteps(card)) {
-      result = applyTransfigurationToCard(result, step);
+    for (const step of operationSteps(data, card, definition)) {
+      result = applyTransfigurationToCard(data, result, step);
     }
     return result;
   }
-  if (type === "Empowered" || type === "Kindled") {
-    return applyStatStep(card, type).card;
-  }
-  if (type === "Hastened") {
+  if (
+    definition.operation.kind === "halveEnergyCost" ||
+    definition.operation.kind === "doubleSpark"
+  )
+    return applyStatStep(card, definition.operation).card;
+  if (definition.operation.kind === "setFast")
     return card.isFast ? card : { ...card, isFast: true };
-  }
-  if (type === "Amplified") {
-    return isAmplifiedEligible(card)
+  if (definition.operation.kind === "useAuthoredAmplifiedText")
+    return isTransfigurationEligibilitySatisfied(
+      data,
+      card,
+      definition.eligibility,
+    )
       ? { ...card, renderedText: card.amplifiedText! }
       : card;
-  }
-  const transform = textTransformFor(card.renderedText, type);
+  const transform = textTransformFor(card.renderedText, definition.operation);
   if (transform === null) {
     return card;
   }
@@ -286,9 +261,12 @@ interface StatStepResult {
  */
 function applyStatStep(
   card: CardData,
-  step: "Empowered" | "Kindled",
+  operation: Extract<
+    TransfigurationOperation,
+    { kind: "halveEnergyCost" | "doubleSpark" }
+  >,
 ): StatStepResult {
-  if (step === "Empowered") {
+  if (operation.kind === "halveEnergyCost") {
     if (card.energyCost === null || card.energyCost <= 0) {
       return { card, energyChanged: false, sparkChanged: false };
     }
@@ -297,14 +275,23 @@ function applyStatStep(
     // halved cost and render the stale pre-Empowered orbs.
     const { energyCosts: _energyCosts, ...rest } = card;
     return {
-      card: { ...rest, energyCost: Math.floor(card.energyCost / 2) },
+      card: {
+        ...rest,
+        energyCost: Math.max(
+          operation.minimum,
+          Math.floor(card.energyCost / 2),
+        ),
+      },
       energyChanged: true,
       sparkChanged: false,
     };
   }
   const oldSpark = card.spark ?? 0;
   return {
-    card: { ...card, spark: oldSpark === 0 ? 1 : oldSpark * 2 },
+    card: {
+      ...card,
+      spark: oldSpark === 0 ? operation.zeroResult : oldSpark * 2,
+    },
     energyChanged: false,
     sparkChanged: true,
   };
@@ -328,20 +315,23 @@ interface TextTransform {
  */
 function textTransformFor(
   text: string,
-  step: Exclude<
-    TransfigurationType,
-    "Perfected" | "Empowered" | "Amplified" | "Kindled" | "Hastened"
-  >,
+  operation: TransfigurationOperation,
 ): TextTransform | null {
-  switch (step) {
-    case "Inspired":
-      return appendTransform("Draw a card.");
-    case "Enduring":
-      return appendTransform("Reclaim.");
-    case "Resonant":
+  switch (operation.kind) {
+    case "appendRulesClause":
+      return appendTransform(
+        operation.clause === "DrawCard" ? "Draw a card." : "Reclaim.",
+      );
+    case "widenNamedTrigger":
       return resonantTransform(text);
-    case "Attuned":
-      return attunedTransform(text);
+    case "reduceActivatedEnergyCost":
+      return attunedTransform(text, operation.amount, operation.minimum);
+    case "halveEnergyCost":
+    case "useAuthoredAmplifiedText":
+    case "doubleSpark":
+    case "setFast":
+    case "applyEligibleForms":
+      return null;
   }
 }
 
@@ -363,7 +353,10 @@ function diffTokens(text: string): string[] {
 }
 
 /** Marks every token introduced by an authored replacement. */
-function markAuthoredReplacement(original: string, replacement: string): string {
+function markAuthoredReplacement(
+  original: string,
+  replacement: string,
+): string {
   const before = diffTokens(original);
   const after = diffTokens(replacement);
   const lengths = Array.from({ length: before.length + 1 }, () =>
@@ -409,8 +402,13 @@ function markAuthoredReplacement(original: string, replacement: string): string 
 }
 
 function amplifiedTransform(card: CardData): TextTransform | null {
-  if (!isAmplifiedEligible(card)) return null;
-  const replacement = card.amplifiedText!;
+  if (
+    card.amplifiedText === undefined ||
+    card.amplifiedText.trim() === "" ||
+    card.amplifiedText === card.renderedText
+  )
+    return null;
+  const replacement = card.amplifiedText;
   return {
     plain: () => replacement,
     marked: () => markAuthoredReplacement(card.renderedText, replacement),
@@ -427,8 +425,7 @@ function amplifiedTransform(card: CardData): TextTransform | null {
 function resonantTransform(text: string): TextTransform | null {
   if (/once per turn/i.test(text)) {
     return {
-      plain: (t) =>
-        t.replace(/once per turn/i, "any number of times per turn"),
+      plain: (t) => t.replace(/once per turn/i, "any number of times per turn"),
       marked: (t) =>
         t.replace(/once per turn/i, mark("any number of times per turn")),
     };
@@ -461,13 +458,17 @@ const ATTUNED_COST_PATTERN = /([1-9]\d*)●(?=[^:.\n]*:)/;
  * Attuned reduces an activated ability's energy cost by 1, tinting only the
  * changed number (the `●` glyph keeps its resource hue).
  */
-function attunedTransform(text: string): TextTransform | null {
+function attunedTransform(
+  text: string,
+  amount: number,
+  minimum: number,
+): TextTransform | null {
   const match = ATTUNED_COST_PATTERN.exec(text);
   if (match === null) {
     return null;
   }
   const token = `${match[1]}●`;
-  const newNum = String(parseInt(match[1], 10) - 1);
+  const newNum = String(Math.max(minimum, parseInt(match[1], 10) - amount));
   return {
     plain: (t) => t.replace(token, `${newNum}●`),
     marked: (t) => t.replace(token, `${mark(newNum)}●`),
@@ -476,14 +477,17 @@ function attunedTransform(text: string): TextTransform | null {
 
 /** Builds the preview card and description for a given transfiguration type. */
 function buildOffer(
+  data: TransfigurationData,
   card: CardData,
   type: TransfigurationType,
 ): TransfigurationOffer {
-  const previewCard = applyTransfigurationToCard(card, type);
-  switch (type) {
-    case "Empowered":
+  const form = transfigurationForm(data, type);
+  const previewCard = applyTransfigurationToCard(data, card, type);
+  switch (form.operation.kind) {
+    case "halveEnergyCost":
       return {
         type,
+        form,
         change: {
           kind: "energy-delta",
           from: card.energyCost ?? 0,
@@ -491,9 +495,10 @@ function buildOffer(
         },
         previewCard,
       };
-    case "Kindled":
+    case "doubleSpark":
       return {
         type,
+        form,
         change: {
           kind: "spark-delta",
           from: card.spark ?? 0,
@@ -501,34 +506,50 @@ function buildOffer(
         },
         previewCard,
       };
-    case "Inspired":
-      return { type, change: { kind: "added-draw" }, previewCard };
-    case "Enduring":
-      return { type, change: { kind: "added-reclaim" }, previewCard };
-    case "Hastened":
-      return { type, change: { kind: "added-fast" }, previewCard };
-    case "Amplified": {
+    case "appendRulesClause":
       return {
         type,
-        change: { kind: "amplified-rules", rulesText: previewCard.renderedText },
+        form,
+        change:
+          form.operation.clause === "DrawCard"
+            ? { kind: "added-draw" }
+            : { kind: "added-reclaim" },
+        previewCard,
+      };
+    case "setFast":
+      return { type, form, change: { kind: "added-fast" }, previewCard };
+    case "useAuthoredAmplifiedText": {
+      return {
+        type,
+        form,
+        change: {
+          kind: "amplified-rules",
+          rulesText: previewCard.renderedText,
+        },
         previewCard,
       };
     }
-    case "Resonant":
+    case "widenNamedTrigger":
       return {
         type,
+        form,
         change: { kind: "widened-trigger" },
         previewCard,
       };
-    case "Attuned":
+    case "reduceActivatedEnergyCost":
       return {
         type,
-        change: { kind: "reduced-activated-cost", amount: 1 },
+        form,
+        change: {
+          kind: "reduced-activated-cost",
+          amount: form.operation.amount,
+        },
         previewCard,
       };
-    case "Perfected":
+    case "applyEligibleForms":
       return {
         type,
+        form,
         change: { kind: "all-available" },
         previewCard,
       };
@@ -537,22 +558,23 @@ function buildOffer(
 
 /**
  * Every transfiguration form the Transfiguration site offers for a card: one
- * full offer per eligible form, in the canonical {@link NON_PERFECTED_CHECKS}
- * order. Perfected is intentionally excluded so the player's choice between the
+ * full offer per eligible form, in catalog order. Composite forms are excluded
+ * so the player's choice between the
  * individual forms stays meaningful — Perfected (which folds in every other
  * form) would otherwise dominate the list and make the choice moot. Returns an
  * empty array when the card already carries a transfiguration or no form
  * applies.
  */
 export function offeredTransfigurationForms(
+  data: TransfigurationData,
   card: CardData,
   existingTransfiguration: TransfigurationType | null,
 ): TransfigurationOffer[] {
   if (existingTransfiguration !== null) {
     return [];
   }
-  return eligibleNonPerfectedTransfigurations(card).map((type) =>
-    buildOffer(card, type),
+  return eligibleDefinitions(data, card, false).map((definition) =>
+    buildOffer(data, card, definition.id),
   );
 }
 
@@ -563,26 +585,28 @@ export function offeredTransfigurationForms(
  * are eligible.
  */
 export function assignTransfiguration(
+  data: TransfigurationData,
   card: CardData,
   existingTransfiguration: TransfigurationType | null,
 ): TransfigurationOffer | null {
   if (existingTransfiguration !== null) {
     return null;
   }
-  const eligible = eligibleTransfigurations(card);
+  const eligible = eligibleTransfigurations(data, card);
   if (eligible.length === 0) {
     return null;
   }
   const chosen = eligible[Math.floor(Math.random() * eligible.length)];
-  return buildOffer(card, chosen);
+  return buildOffer(data, card, chosen);
 }
 
 /** Returns the semantic change produced by a transfiguration. */
 export function describeTransfiguration(
+  data: TransfigurationData,
   card: CardData,
   type: TransfigurationType,
 ): TransfigurationChange {
-  return buildOffer(card, type).change;
+  return buildOffer(data, card, type).change;
 }
 
 /** Returns a record of the specific fields modified by a transfiguration offer. */

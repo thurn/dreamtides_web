@@ -32,6 +32,8 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
     sitesFoldHash,
     draftFoldHash,
     economyFoldHash,
+    gambleFoldHash,
+    transfigurationFoldHash,
     rewardSelectionFoldHash,
     auguryFoldHash,
     explorationFoldHash,
@@ -51,6 +53,11 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
     !(sitesFoldHash === undefined || typeof sitesFoldHash === "string") ||
     !(draftFoldHash === undefined || typeof draftFoldHash === "string") ||
     !(economyFoldHash === undefined || typeof economyFoldHash === "string") ||
+    !(gambleFoldHash === undefined || typeof gambleFoldHash === "string") ||
+    !(
+      transfigurationFoldHash === undefined ||
+      typeof transfigurationFoldHash === "string"
+    ) ||
     !(
       rewardSelectionFoldHash === undefined ||
       typeof rewardSelectionFoldHash === "string"
@@ -80,6 +87,10 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
     ...(sitesFoldHash === undefined ? {} : { sitesFoldHash }),
     ...(draftFoldHash === undefined ? {} : { draftFoldHash }),
     ...(economyFoldHash === undefined ? {} : { economyFoldHash }),
+    ...(gambleFoldHash === undefined ? {} : { gambleFoldHash }),
+    ...(transfigurationFoldHash === undefined
+      ? {}
+      : { transfigurationFoldHash }),
     ...(rewardSelectionFoldHash === undefined
       ? {}
       : { rewardSelectionFoldHash }),

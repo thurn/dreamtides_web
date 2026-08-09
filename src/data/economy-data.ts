@@ -23,7 +23,6 @@ export async function loadEconomyData(): Promise<EconomyData> {
     !SHA256_HEX.test(candidate.foldHash ?? "") ||
     candidate.journey === undefined ||
     candidate.shop === undefined ||
-    candidate.transfiguration === undefined ||
     candidate.exploration === undefined ||
     "gamble" in candidate
   ) {

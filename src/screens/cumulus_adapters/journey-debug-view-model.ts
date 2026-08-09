@@ -3,6 +3,7 @@ import type { DreamsignTemplate } from "../../types/content";
 import type { JourneyState } from "../../types/journey";
 import { resolveDeckEntryCard } from "../../card-type-change";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
+import type { TransfigurationData } from "../../types/transfiguration-data";
 import type {
   JourneyDebugEditorView,
   JourneyDebugDeckEntryView,
@@ -15,11 +16,19 @@ import type {
  * Dreamsign mutations carry their explicit provider address separately.
  */
 export function buildJourneyDebugEditorView(
+  transfigurationData: TransfigurationData,
   state: JourneyState,
   cardDatabase: ReadonlyMap<number, CardData>,
   dreamsignOptions: readonly DreamsignTemplate[],
 ): JourneyDebugEditorView {
   return {
+    transfigurationOptions: [
+      { value: "none", label: "None" },
+      ...transfigurationData.forms.map((form) => ({
+        value: form.id,
+        label: form.name,
+      })),
+    ],
     essence: state.essence,
     maxDreamsigns: state.maxDreamsigns,
     completionLevel: state.completionLevel,
@@ -39,7 +48,10 @@ export function buildJourneyDebugEditorView(
     })),
     deck: state.deck.map((entry): JourneyDebugDeckEntryView => {
       const base = cardDatabase.get(entry.cardNumber);
-      const displaySnapshot = base === undefined ? null : resolveDeckEntryCard(base, entry);
+      const displaySnapshot =
+        base === undefined
+          ? null
+          : resolveDeckEntryCard(transfigurationData, base, entry);
       return {
         entryId: entry.entryId,
         cardId: displaySnapshot?.id ?? `unknown:${String(entry.cardNumber)}`,
@@ -57,7 +69,13 @@ export function buildJourneyDebugEditorView(
           displaySnapshot,
           ...(entry.transfiguration === null || base === undefined
             ? {}
-            : { transfiguration: buildTransfigurationDisplay(base, entry.transfiguration).display }),
+            : {
+                transfiguration: buildTransfigurationDisplay(
+                  transfigurationData,
+                  base,
+                  entry.transfiguration,
+                ).display,
+              }),
         },
       };
     }),

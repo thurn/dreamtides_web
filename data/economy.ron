@@ -41,35 +41,6 @@ EconomyCatalog(
     enhanced_discount_percent: 30,
   ),
 
-  transfiguration: (
-    minimum_cost: 0,
-    maximum_cost: 100,
-    // Cost bands use this increment for their base, jitter, and floor values.
-    step: 10,
-    form_bands: [
-      FormCostBand(form: Amplified, cost: (base: 10, jitter: 20, floor: 10)),
-
-      FormCostBand(form: Attuned, cost: (base: 10, jitter: 20, floor: 10)),
-
-      FormCostBand(form: Inspired, cost: (base: 20, jitter: 20, floor: 10)),
-
-      FormCostBand(form: Enduring, cost: (base: 50, jitter: 30, floor: 20)),
-
-      FormCostBand(form: Resonant, cost: (base: 50, jitter: 30, floor: 20)),
-
-      FormCostBand(form: Perfected, cost: (base: 100, jitter: 0, floor: 100)),
-    ],
-    stat_delta_bands: [
-      StatDeltaCostBand(magnitude: One, cost: (base: 10, jitter: 20, floor: 10)),
-
-      StatDeltaCostBand(magnitude: Two, cost: (base: 30, jitter: 20, floor: 10)),
-
-      StatDeltaCostBand(magnitude: Three, cost: (base: 50, jitter: 20, floor: 30)),
-
-      StatDeltaCostBand(magnitude: FourOrMore, cost: (base: 70, jitter: 20, floor: 50)),
-    ],
-  ),
-
   battle_reward: (base_essence: 100, essence_per_completion_level: 50, minimum_essence: 0),
 
   exploration: (default_essence_per_spark: 40),

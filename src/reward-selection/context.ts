@@ -58,7 +58,11 @@ export function buildRewardSelectionContext(input: {
       : [{
           entry,
           baseCard,
-          effectiveCard: resolveDeckEntryCard(baseCard, entry),
+          effectiveCard: resolveDeckEntryCard(
+            journeyContent.transfigurationData,
+            baseCard,
+            entry,
+          ),
         }];
   });
   return {

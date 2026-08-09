@@ -10,6 +10,7 @@ import * as glossary from "../../../data/glossary";
 import { extractContextualGlossaryTerms } from "../../../data/glossary-terms";
 import { extractMaterializedFigmentPreviews } from "../../../data/materialized-figments";
 import { GameCard, type GameCardModel } from "./CardView";
+import { transfigurationFormFixture } from "../../test-helpers/transfiguration-fixture";
 
 vi.mock("../../../data/materialized-figments", () => ({
   extractMaterializedFigmentPreviews: vi.fn(() => []),
@@ -752,6 +753,7 @@ describe("GameCard reveal contract", () => {
           displaySnapshot,
           transfiguration: {
             type: "Empowered",
+            form: transfigurationFormFixture("Empowered"),
             markedText: displaySnapshot.renderedText,
             energyChanged: true,
             sparkChanged: false,
@@ -779,7 +781,7 @@ describe("GameCard reveal contract", () => {
     );
     expect(
       document.querySelector(
-        '[data-cumulus-reveal-card="primary"] [aria-label="Empowered transfiguration"]',
+        '[data-cumulus-reveal-card="primary"] i[aria-label]',
       ),
     ).not.toBeNull();
     act(() => root.unmount());

@@ -128,21 +128,6 @@ transfiguration-picker-instruction =
 # Caption beneath a card that has already been reforged. $form is its canonical
 # Transfiguration form name and is one of the forms defined by game data.
 transfiguration-reforged-card-caption = { $form } · Reforged
-# Short form name shown on Transfiguration detail and picker surfaces. $form is
-# one of the nine finite TransfigurationType identifiers; the value is a
-# semantic selector, not authored prose.
-transfiguration-form-name =
-    { $form ->
-        [Empowered] Empowered
-        [Amplified] Amplified
-        [Kindled] Kindled
-        [Inspired] Inspired
-        [Enduring] Enduring
-        [Hastened] Hastened
-        [Resonant] Resonant
-        [Perfected] Perfected
-       *[Attuned] Attuned
-    }
 # Empty or loading text in the Transfiguration picker. $state is "empty" when
 # no card can be reforged or "loading" while choices are being prepared.
 transfiguration-picker-empty-state =
@@ -232,21 +217,6 @@ dreamsign-bazaar-replacement-cancel = Cancel
 # authored effect-text fragments; the complete sentence and inserted noun stay
 # together here so the adapter never supplies English grammar.
 exploration-effect-missing-deck-card = { $before }an eligible card{ $after }
-# Complete disclosure appended after an authored Exploration effect when a
-# fixed transfiguration form is offered. $transfiguration is a finite semantic
-# form id, and the parenthesized disclosure is visible player copy.
-exploration-fixed-transfiguration-disclosure =
-    ({ $transfiguration ->
-        [Empowered] Halve its ● cost, rounded down
-        [Kindled] Double its ✦, or set it to 1 if it is 0
-        [Inspired] Add "Draw a card" to its rules text
-        [Enduring] Add "Reclaim" to its rules text
-        [Hastened] Make it Fast
-        [Amplified] Replace its ability with its authored stronger form
-        [Resonant] Widen a named trigger to fire more often
-        [Attuned] Reduce an activated ability's cost by 1●
-       *[Perfected] Apply every available transfiguration
-    })
 # Complete site disclosure appended after an authored Exploration effect.
 # $siteType is an opaque configured site-type name.
 exploration-offered-site-disclosure = { $siteType }.

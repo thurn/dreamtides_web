@@ -17,6 +17,7 @@ import type {
 } from "../../cumulus/screens/DesktopDeckViewer";
 import { buildMobileDeckView } from "./mobile-deck-view-model";
 import { buildDreamAvatarTideViews } from "./journey-start-view-model";
+import type { TransfigurationData } from "../../types/transfiguration-data";
 
 /** Map the run's DreamAvatar to the sidebar view (portrait visual + rules text). */
 function toDreamAvatarView(
@@ -38,6 +39,7 @@ function toDreamAvatarView(
  * Deterministic in its arguments.
  */
 export function buildDesktopDeckView(
+  transfigurationData: TransfigurationData,
   deck: readonly DeckEntry[],
   cardDatabase: Map<number, CardData>,
   dreamAvatar: DreamAvatar | null,
@@ -51,7 +53,7 @@ export function buildDesktopDeckView(
       ? undefined
       : dreamAvatars.find((candidate) => candidate.id === dreamAvatar.id);
   return {
-    cards: buildMobileDeckView(deck, cardDatabase).cards,
+    cards: buildMobileDeckView(transfigurationData, deck, cardDatabase).cards,
     dreamAvatar: toDreamAvatarView(dreamAvatar),
     dreamsigns: [...dreamsigns],
     tides:

@@ -20,7 +20,10 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import type { MerchantCorpus, MerchantCorpusCard } from "../src/data/merchant-corpus";
+import type {
+  MerchantCorpus,
+  MerchantCorpusCard,
+} from "../src/data/merchant-corpus";
 import type { DreamsignProfile } from "../src/data/dreamsign-profiles";
 import type { JourneyContent } from "../src/data/journey-content";
 import { buildFitModel } from "../src/draft/replay/fit-model";
@@ -51,7 +54,11 @@ import type {
 // Signal accessors and candidate enumerators reused so desirability percentiles
 // are computed against the EXACT same signals the builders sample on.
 import { qualityOf } from "../src/journey_v2/signals/corpus";
-import { fitScores, fitLooByEntry, centrality } from "../src/journey_v2/signals/fit";
+import {
+  fitScores,
+  fitLooByEntry,
+  centrality,
+} from "../src/journey_v2/signals/fit";
 import { dreamsignMatchScore } from "../src/journey_v2/signals/dreamsignMatch";
 import { grantCandidatePool } from "../src/journey_v2/archetypes/grant";
 import { buildCategoryUniverse } from "../src/journey_v2/archetypes/categories";
@@ -60,10 +67,7 @@ import {
   transfigurationBenefit,
 } from "../src/journey_v2/archetypes/improve";
 import { purgeCandidates } from "../src/journey_v2/archetypes/remove";
-import {
-  applyTransfigurationToCard,
-  eligibleTransfigurations,
-} from "../src/transfiguration/transfiguration-logic";
+import { eligibleTransfigurations } from "../src/transfiguration/transfiguration-logic";
 import type { TransfigurationType } from "../src/types/journey";
 
 // ---------------------------------------------------------------------------
@@ -108,7 +112,10 @@ interface RawDraftRecord {
 }
 
 interface RawMerchantCorpus {
-  cards: Record<string, { quality: number; multiplicity: number; df: number; cluster?: number }>;
+  cards: Record<
+    string,
+    { quality: number; multiplicity: number; df: number; cluster?: number }
+  >;
   clusters: Array<{ id: number; flagship: string; members: string[] }>;
 }
 
@@ -136,7 +143,10 @@ function loadMerchantCorpusFromDisk(): MerchantCorpus {
   return { cards, clusters: raw.clusters };
 }
 
-function loadDreamsignProfilesFromDisk(): ReadonlyMap<string, DreamsignProfile> {
+function loadDreamsignProfilesFromDisk(): ReadonlyMap<
+  string,
+  DreamsignProfile
+> {
   const raw = readJson<RawDreamsignProfile[]>("dreamsign-profiles-data.json");
   const profiles = new Map<string, DreamsignProfile>();
   for (const entry of raw) {
@@ -177,15 +187,15 @@ function buildJourneyContent(): {
     }
   }
 
-  const dreamsignTemplates = readJson<DreamsignTemplate[]>("dreamsign-data.json").map(
-    (entry) => ({
-      id: entry.id,
-      name: entry.name,
-      effectDescription: entry.effectDescription,
-      imageName: entry.imageName,
-      imageAlt: entry.imageAlt,
-    }),
-  );
+  const dreamsignTemplates = readJson<DreamsignTemplate[]>(
+    "dreamsign-data.json",
+  ).map((entry) => ({
+    id: entry.id,
+    name: entry.name,
+    effectDescription: entry.effectDescription,
+    imageName: entry.imageName,
+    imageAlt: entry.imageAlt,
+  }));
 
   const records = readJson<RawDraftRecord[]>("draft-records-data.json");
 
@@ -295,7 +305,11 @@ function journeyStateFor(deck: DeckEntry[], seed: string): JourneyState {
     failureSummary: null,
     hasSeenStartingDeckPopup: false,
     battleModifiers: [],
-    shopModifiers: { freeRerolls: 0, upcomingOmenDiscounts: 0, essenceDiscountPercent: 0 },
+    shopModifiers: {
+      freeRerolls: 0,
+      upcomingOmenDiscounts: 0,
+      essenceDiscountPercent: 0,
+    },
     dreamscapeModifiers: [],
   };
 }
@@ -360,7 +374,10 @@ export function outcomeKey(encounter: MerchantEncounter): string {
  * continuous-signal archetypes (fit, quality, blended scores) ties are rare, so
  * mid-rank and strict-less-than agree to within rounding.
  */
-export function percentileOf(value: number, population: readonly number[]): number {
+export function percentileOf(
+  value: number,
+  population: readonly number[],
+): number {
   if (population.length === 0) return 0;
   let below = 0;
   let ties = 0;
@@ -381,7 +398,10 @@ export function percentileOf(value: number, population: readonly number[]): numb
  * desirability)", which the symmetric mid-rank `percentileOf` would understate
  * whenever many starters share the maximum misfit.
  */
-export function misfitPercentile(value: number, population: readonly number[]): number {
+export function misfitPercentile(
+  value: number,
+  population: readonly number[],
+): number {
   if (population.length === 0) return 0;
   let atOrBelow = 0;
   for (const p of population) if (p <= value) atOrBelow += 1;
@@ -457,7 +477,10 @@ export interface DesirabilityTarget {
 }
 
 /** The spec default: median >= 75th percentile, floor >= 50th. */
-export const DEFAULT_DESIRABILITY_TARGET: DesirabilityTarget = { median: 75, floor: 50 };
+export const DEFAULT_DESIRABILITY_TARGET: DesirabilityTarget = {
+  median: 75,
+  floor: 50,
+};
 
 /**
  * Per-archetype desirability target overrides, with their justification.
@@ -492,7 +515,10 @@ function grantSignalByUuid(
   const useQuality = archetypeId === "premium_draft";
   if (useQuality) {
     for (const card of pool) {
-      result.set(card.cardUuid, corpus === undefined ? 0 : qualityOf(corpus, card.cardUuid));
+      result.set(
+        card.cardUuid,
+        corpus === undefined ? 0 : qualityOf(corpus, card.cardUuid),
+      );
     }
     return result;
   }
@@ -508,12 +534,19 @@ function grantSignalByUuid(
     const belowFit = context.deckCards.length < MERCHANT_TUNING.minDeckForFit;
     if (belowFit || fitModel === undefined) {
       for (const card of pool) {
-        result.set(card.cardUuid, corpus === undefined ? 0 : qualityOf(corpus, card.cardUuid));
+        result.set(
+          card.cardUuid,
+          corpus === undefined ? 0 : qualityOf(corpus, card.cardUuid),
+        );
       }
       return result;
     }
     const deckCards = context.deckCards.map((dc) => dc.card);
-    const scores = fitScores(pool.map((c) => c.card), deckCards, fitModel);
+    const scores = fitScores(
+      pool.map((c) => c.card),
+      deckCards,
+      fitModel,
+    );
     const fitRaw = pool.map((card) => scores.get(card.cardUuid)?.fit ?? 0);
     const qualityRaw = pool.map((card) =>
       corpus === undefined ? 0 : qualityOf(corpus, card.cardUuid),
@@ -532,8 +565,13 @@ function grantSignalByUuid(
     return result;
   }
   const deck = context.deckCards.map((dc) => dc.card);
-  const scores = fitScores(pool.map((c) => c.card), deck, fitModel);
-  for (const card of pool) result.set(card.cardUuid, scores.get(card.cardUuid)?.fit ?? 0);
+  const scores = fitScores(
+    pool.map((c) => c.card),
+    deck,
+    fitModel,
+  );
+  for (const card of pool)
+    result.set(card.cardUuid, scores.get(card.cardUuid)?.fit ?? 0);
   return result;
 }
 
@@ -563,15 +601,23 @@ export function desirabilityPercentile(
     if (fitModel === undefined) return null;
     const categoryId = categoryIdOfOffer(offer);
     if (categoryId === undefined) return null;
-    const category = buildCategoryUniverse(context).find((c) => c.id === categoryId);
+    const category = buildCategoryUniverse(context).find(
+      (c) => c.id === categoryId,
+    );
     if (category === undefined) return null;
     const memberSet = new Set(category.memberUuids);
     const categoryPool = grantCandidatePool(context).filter((c) =>
       memberSet.has(c.cardUuid),
     );
     if (categoryPool.length === 0) return null;
-    const scores = fitScores(categoryPool.map((c) => c.card), deck, fitModel);
-    const population = categoryPool.map((c) => scores.get(c.cardUuid)?.fit ?? 0);
+    const scores = fitScores(
+      categoryPool.map((c) => c.card),
+      deck,
+      fitModel,
+    );
+    const population = categoryPool.map(
+      (c) => scores.get(c.cardUuid)?.fit ?? 0,
+    );
     const targetUuids = offerCardUuids(offer);
     if (targetUuids.length === 0) return null;
     const best = Math.max(
@@ -595,7 +641,9 @@ export function desirabilityPercentile(
     const population = [...signalByUuid.values()];
     const targetUuids = offerCardUuids(offer);
     if (targetUuids.length === 0 || population.length === 0) return null;
-    const best = Math.max(...targetUuids.map((u) => signalByUuid.get(u) ?? -Infinity));
+    const best = Math.max(
+      ...targetUuids.map((u) => signalByUuid.get(u) ?? -Infinity),
+    );
     if (!Number.isFinite(best)) return null;
     return percentileOf(best, population);
   }
@@ -605,7 +653,8 @@ export function desirabilityPercentile(
     if (pairs.length === 0) return null;
     const blend = MERCHANT_TUNING.transfigureBlend;
     const score = (benefit: number, card: CardData): number =>
-      blend.benefit * benefit + blend.centrality * centrality(card, deck, context.fitModel);
+      blend.benefit * benefit +
+      blend.centrality * centrality(card, deck, context.fitModel);
     const population = pairs.map((p) => score(p.benefit, p.deckCard.card));
     // targetKey is `entryId:transfiguration`.
     const [entryId, transfiguration] = offer.targetKey.split(":");
@@ -653,7 +702,9 @@ export function desirabilityPercentile(
     );
     if (population.length === 0) return null;
     const offeredIds = offer.targetKey.split(",");
-    const offered = offeredIds.map((id) => dreamsignMatchScore(profiles?.get(id), deck));
+    const offered = offeredIds.map((id) =>
+      dreamsignMatchScore(profiles?.get(id), deck),
+    );
     if (offered.length === 0) return null;
     return percentileOf(Math.max(...offered), population);
   }
@@ -688,7 +739,9 @@ function offerCardUuids(offer: MerchantOffer): string[] {
   if (uuids.length === 0) {
     for (const part of offer.targetKey.split(",")) {
       // strip any `cluster:`/`entry:` style prefixes by taking the last colon segment
-      const piece = part.includes(":") ? part.slice(part.indexOf(":") + 1) : part;
+      const piece = part.includes(":")
+        ? part.slice(part.indexOf(":") + 1)
+        : part;
       if (piece.length > 0) uuids.push(piece);
     }
   }
@@ -877,8 +930,10 @@ function twoSlotExpectedSlots(
   eligibleIds: readonly MerchantArchetypeId[],
 ): Map<MerchantArchetypeId, number> {
   const result = new Map<MerchantArchetypeId, number>();
-  const weightOf = (id: MerchantArchetypeId): number => MERCHANT_TUNING.weights[id];
-  const familyOf = (id: MerchantArchetypeId): string => MERCHANT_ARCHETYPE_FAMILIES[id];
+  const weightOf = (id: MerchantArchetypeId): number =>
+    MERCHANT_TUNING.weights[id];
+  const familyOf = (id: MerchantArchetypeId): string =>
+    MERCHANT_ARCHETYPE_FAMILIES[id];
 
   let totalWeight = 0;
   for (const id of eligibleIds) totalWeight += weightOf(id);
@@ -923,7 +978,10 @@ export function computeArchetypeCoverage(
   for (const s of samples) {
     sampleCount += 1;
     for (const offer of s.encounter.offers) {
-      observed.set(offer.archetypeId, (observed.get(offer.archetypeId) ?? 0) + 1);
+      observed.set(
+        offer.archetypeId,
+        (observed.get(offer.archetypeId) ?? 0) + 1,
+      );
       totalSlots += 1;
     }
     const eligibleIds = s.debug.eligibleArchetypeIds;
@@ -945,12 +1003,19 @@ export function computeArchetypeCoverage(
   const rows: ArchetypeCoverageRow[] = [];
   for (const builder of MERCHANT_ARCHETYPE_BUILDERS) {
     const id = builder.archetypeId;
-    const observedShare = totalSlots > 0 ? (observed.get(id) ?? 0) / totalSlots : 0;
+    const observedShare =
+      totalSlots > 0 ? (observed.get(id) ?? 0) / totalSlots : 0;
     // Mean per-sample expected share (over ALL samples, mirroring observedShare's
     // per-slot/total normalization): expectedSum is "expected slots" so divide by
     // 2*samples to put it on the same per-slot share scale.
-    const expectedShare = sampleCount > 0 ? (expectedSum.get(id) ?? 0) / (2 * sampleCount) : 0;
-    const ratio = expectedShare > 0 ? observedShare / expectedShare : observedShare > 0 ? Infinity : 1;
+    const expectedShare =
+      sampleCount > 0 ? (expectedSum.get(id) ?? 0) / (2 * sampleCount) : 0;
+    const ratio =
+      expectedShare > 0
+        ? observedShare / expectedShare
+        : observedShare > 0
+          ? Infinity
+          : 1;
     // Within 2x in either direction, but only judged for archetypes that were
     // ever eligible (a never-eligible archetype trivially has 0 expected).
     const everEligible = (eligibleCount.get(id) ?? 0) > 0;
@@ -1036,7 +1101,9 @@ export interface ContentCoverageReport {
  * Extracts the transfiguration types an offer exercises (across transfigure /
  * starter_transfigure / transfigured_draft).
  */
-function offerTransfigurationTypes(offer: MerchantOffer): TransfigurationType[] {
+function offerTransfigurationTypes(
+  offer: MerchantOffer,
+): TransfigurationType[] {
   const types: TransfigurationType[] = [];
   if (offer.archetypeId === "transfigure") {
     const t = offer.targetKey.split(":")[1];
@@ -1058,7 +1125,10 @@ function offerTransfigurationTypes(offer: MerchantOffer): TransfigurationType[] 
 }
 
 function isTransfiguration(v: string | undefined): v is TransfigurationType {
-  return v !== undefined && (ALL_TRANSFIGURATION_TYPES as readonly string[]).includes(v);
+  return (
+    v !== undefined &&
+    (ALL_TRANSFIGURATION_TYPES as readonly string[]).includes(v)
+  );
 }
 
 /** Card UUIDs offered through a grant/draft archetype. */
@@ -1111,12 +1181,15 @@ const TRANSFIGURATION_REACHABLE_MIN_CARDS = 2;
 function reachableTransfigurationTypes(
   samples: readonly SampledEncounter[],
 ): Set<TransfigurationType> {
+  const transfigurationData =
+    samples[0]?.context.rewardSelection.content.transfigurationData;
+  if (transfigurationData === undefined) return new Set();
   const eligibleCardsByType = new Map<TransfigurationType, Set<number>>();
   const seenCards = new Set<number>();
   const consider = (card: CardData): void => {
     if (seenCards.has(card.cardNumber)) return;
     seenCards.add(card.cardNumber);
-    for (const t of eligibleTransfigurations(card)) {
+    for (const t of eligibleTransfigurations(transfigurationData, card)) {
       const set = eligibleCardsByType.get(t) ?? new Set<number>();
       set.add(card.cardNumber);
       eligibleCardsByType.set(t, set);
@@ -1183,7 +1256,10 @@ function reachableDreamsigns(
     if (n === 0) continue;
     const bandSize = Math.min(
       n,
-      Math.max(Math.ceil(bandFraction * n), Math.min(MERCHANT_TUNING.bandMinimum, n)),
+      Math.max(
+        Math.ceil(bandFraction * n),
+        Math.min(MERCHANT_TUNING.bandMinimum, n),
+      ),
     );
     for (let i = 0; i < bandSize; i += 1) {
       const entry = scored[i];
@@ -1210,7 +1286,10 @@ export function computeContentCoverage(
   const dreamsignOffered = new Set<string>();
   const cardsOffered = new Set<string>();
   // Deck-target diversity: archetype -> stateKey -> entryId counts.
-  const deckTargets = new Map<MerchantArchetypeId, Map<string, Map<string, number>>>();
+  const deckTargets = new Map<
+    MerchantArchetypeId,
+    Map<string, Map<string, number>>
+  >();
 
   for (const s of samples) {
     const stateKey = deckStateKey(s);
@@ -1228,7 +1307,9 @@ export function computeContentCoverage(
 
       const targetKey = deckTargetKey(offer);
       if (targetKey !== null) {
-        const byState = deckTargets.get(offer.archetypeId) ?? new Map<string, Map<string, number>>();
+        const byState =
+          deckTargets.get(offer.archetypeId) ??
+          new Map<string, Map<string, number>>();
         const counts = byState.get(stateKey) ?? new Map<string, number>();
         counts.set(targetKey, (counts.get(targetKey) ?? 0) + 1);
         byState.set(stateKey, counts);
@@ -1245,14 +1326,16 @@ export function computeContentCoverage(
   // Target: every transfiguration type ANY reachable card is eligible for must
   // appear (the physically-attainable form of "all 8 types appear").
   const reachableTypes = reachableTransfigurationTypes(samples);
-  const reachableTransfigurationTypesList = ALL_TRANSFIGURATION_TYPES.filter((t) =>
-    reachableTypes.has(t),
+  const reachableTransfigurationTypesList = ALL_TRANSFIGURATION_TYPES.filter(
+    (t) => reachableTypes.has(t),
   );
   const unreachableTransfigurationTypesList = ALL_TRANSFIGURATION_TYPES.filter(
     (t) => !reachableTypes.has(t),
   );
   const allReachableTransfigurationTypesAppear =
-    reachableTransfigurationTypesList.every((t) => (transfigCounts.get(t) ?? 0) > 0);
+    reachableTransfigurationTypesList.every(
+      (t) => (transfigCounts.get(t) ?? 0) > 0,
+    );
 
   // Dreamsign coverage: raw (of all templates) and of the reachable set.
   const dreamsignTotal = journeyContent.dreamsignTemplates?.length ?? 0;
@@ -1308,7 +1391,8 @@ export function computeContentCoverage(
       if (distinct < minDistinct) minDistinct = distinct;
       if (perp < minPerplexity) minPerplexity = perp;
       if (distinct >= 2) statesWithMultiple += 1;
-      for (const [k, v] of counts) globalCounts.set(k, (globalCounts.get(k) ?? 0) + v);
+      for (const [k, v] of counts)
+        globalCounts.set(k, (globalCounts.get(k) ?? 0) + v);
     }
     return {
       archetypeId,
@@ -1413,8 +1497,12 @@ function main(): void {
 
   // ---- Metric 1: distinct outcomes ----
   const distinct = computeDistinctOutcomes(samples);
-  console.log("=== Metric 1: Distinct outcomes (target: >= 50 distinct at pick-0 and pick-5) ===");
-  console.log(`${pad("bucket", 8)}${pad("encounters", 12)}${pad("distinct", 10)}${pad("perplexity", 12)}`);
+  console.log(
+    "=== Metric 1: Distinct outcomes (target: >= 50 distinct at pick-0 and pick-5) ===",
+  );
+  console.log(
+    `${pad("bucket", 8)}${pad("encounters", 12)}${pad("distinct", 10)}${pad("perplexity", 12)}`,
+  );
   for (const row of distinct) {
     console.log(
       `${pad(`pick-${String(row.bucket)}`, 8)}${pad(String(row.encounters), 12)}${pad(String(row.distinct), 10)}${pad(row.perplexity.toFixed(1), 12)}`,
@@ -1422,17 +1510,25 @@ function main(): void {
   }
   const pick0 = distinct.find((r) => r.bucket === 0);
   const pick5 = distinct.find((r) => r.bucket === 5);
-  const distinctPass = (pick0?.distinct ?? 0) >= 50 && (pick5?.distinct ?? 0) >= 50;
-  console.log(`Result: ${passLabel(distinctPass)} (pick-0=${String(pick0?.distinct ?? 0)}, pick-5=${String(pick5?.distinct ?? 0)})\n`);
+  const distinctPass =
+    (pick0?.distinct ?? 0) >= 50 && (pick5?.distinct ?? 0) >= 50;
+  console.log(
+    `Result: ${passLabel(distinctPass)} (pick-0=${String(pick0?.distinct ?? 0)}, pick-5=${String(pick5?.distinct ?? 0)})\n`,
+  );
   results.push({ name: "distinct_outcomes", pass: distinctPass });
 
   // ---- Metric 2: desirability ----
   const desirability = computeDesirability(samples);
-  console.log("=== Metric 2: Desirability (default target: median >= 75th pct, floor >= 50th pct) ===");
-  console.log(`${pad("archetype", 22)}${pad("samples", 9)}${pad("median", 9)}${pad("floor", 9)}${pad("result", 6)}`);
+  console.log(
+    "=== Metric 2: Desirability (default target: median >= 75th pct, floor >= 50th pct) ===",
+  );
+  console.log(
+    `${pad("archetype", 22)}${pad("samples", 9)}${pad("median", 9)}${pad("floor", 9)}${pad("result", 6)}`,
+  );
   let desirabilityPass = true;
   for (const row of desirability) {
-    const target = DESIRABILITY_TARGETS[row.archetypeId] ?? DEFAULT_DESIRABILITY_TARGET;
+    const target =
+      DESIRABILITY_TARGETS[row.archetypeId] ?? DEFAULT_DESIRABILITY_TARGET;
     const rowPass = row.median >= target.median && row.floor >= target.floor;
     if (!rowPass) desirabilityPass = false;
     const targetNote =
@@ -1448,17 +1544,27 @@ function main(): void {
 
   // ---- Metric 3: repetition ----
   const repetition = computeRepetition(samples);
-  console.log("=== Metric 3: Repetition (target: < 2% identical-pair probability per deck state) ===");
-  console.log(`mean P(identical pair) = ${fmtPct(repetition.meanProbability * 100, 3)}`);
-  console.log(`max  P(identical pair) = ${fmtPct(repetition.maxProbability * 100, 3)} (state ${repetition.worstState})`);
+  console.log(
+    "=== Metric 3: Repetition (target: < 2% identical-pair probability per deck state) ===",
+  );
+  console.log(
+    `mean P(identical pair) = ${fmtPct(repetition.meanProbability * 100, 3)}`,
+  );
+  console.log(
+    `max  P(identical pair) = ${fmtPct(repetition.maxProbability * 100, 3)} (state ${repetition.worstState})`,
+  );
   const repetitionPass = repetition.meanProbability < 0.02;
   console.log(`Result: ${passLabel(repetitionPass)}\n`);
   results.push({ name: "repetition", pass: repetitionPass });
 
   // ---- Metric 4: archetype coverage ----
   const coverage = computeArchetypeCoverage(samples);
-  console.log("=== Metric 4: Archetype coverage (target: observed within 2x of weight-implied, when eligible) ===");
-  console.log(`${pad("archetype", 22)}${pad("eligible", 9)}${pad("observed", 10)}${pad("expected", 10)}${pad("ratio", 8)}${pad("result", 6)}`);
+  console.log(
+    "=== Metric 4: Archetype coverage (target: observed within 2x of weight-implied, when eligible) ===",
+  );
+  console.log(
+    `${pad("archetype", 22)}${pad("eligible", 9)}${pad("observed", 10)}${pad("expected", 10)}${pad("ratio", 8)}${pad("result", 6)}`,
+  );
   let coveragePass = true;
   for (const row of coverage) {
     if (!row.withinTarget) coveragePass = false;
@@ -1481,7 +1587,9 @@ function main(): void {
     const reach = content.unreachableTransfigurationTypes.includes(type)
       ? " (unreachable — no eligible pool card)"
       : "";
-    console.log(`  ${pad(type, 12)}${fmtPct((content.transfigurationShares[type] ?? 0) * 100, 2)}${reach}`);
+    console.log(
+      `  ${pad(type, 12)}${fmtPct((content.transfigurationShares[type] ?? 0) * 100, 2)}${reach}`,
+    );
   }
   console.log(
     `  reachable types: ${content.reachableTransfigurationTypes.join(", ")}`,
@@ -1501,10 +1609,16 @@ function main(): void {
     `Non-starter pool cards offered: ${String(content.cardsOffered)}/${String(content.nonStarterPoolTotal)} = ${fmtPct(content.cardCoverage * 100)} (target >= 90%)`,
   );
   if (content.neverOfferedCardNames.length > 0) {
-    console.log(`  never offered (${String(content.neverOfferedCardNames.length)}): ${content.neverOfferedCardNames.join(", ")}`);
+    console.log(
+      `  never offered (${String(content.neverOfferedCardNames.length)}): ${content.neverOfferedCardNames.join(", ")}`,
+    );
   }
-  console.log("Deck-target diversity per targeting archetype (target: multiple distinct targets per fixed state):");
-  console.log(`  ${pad("archetype", 16)}${pad("distinct(g)", 12)}${pad("perplex(g)", 11)}${pad("minDistinct/state", 18)}${pad("states>=2/total", 16)}`);
+  console.log(
+    "Deck-target diversity per targeting archetype (target: multiple distinct targets per fixed state):",
+  );
+  console.log(
+    `  ${pad("archetype", 16)}${pad("distinct(g)", 12)}${pad("perplex(g)", 11)}${pad("minDistinct/state", 18)}${pad("states>=2/total", 16)}`,
+  );
   for (const row of content.deckTargetDiversity) {
     console.log(
       `  ${pad(row.archetypeId, 16)}${pad(String(row.distinctGlobal), 12)}${pad(row.perplexityGlobal.toFixed(1), 11)}${pad(String(row.minDistinctPerState), 18)}${pad(`${String(row.statesWithMultiple)}/${String(row.statesTotal)}`, 16)}`,
@@ -1528,7 +1642,12 @@ function main(): void {
 
   // ---- Write JSON report ----
   const report = {
-    config: { records: RECORD_COUNT, seeds: SEED_COUNT, buckets: PICK_BUCKETS, encounters: samples.length },
+    config: {
+      records: RECORD_COUNT,
+      seeds: SEED_COUNT,
+      buckets: PICK_BUCKETS,
+      encounters: samples.length,
+    },
     distinctOutcomes: distinct,
     desirability,
     repetition,

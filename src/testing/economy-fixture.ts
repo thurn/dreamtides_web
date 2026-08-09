@@ -38,32 +38,6 @@ export function economyFixture(): EconomyData {
       marginalCosts: [40, 60, 90, 130, 180, 240],
       enhancedDiscountPercent: 30,
     },
-    transfiguration: {
-      minimumCost: 0,
-      maximumCost: 100,
-      step: 10,
-      freeBand: { base: 0, jitter: 0, floor: 0 },
-      formBands: {
-        Amplified: { base: 10, jitter: 20, floor: 10 },
-        Attuned: { base: 10, jitter: 20, floor: 10 },
-        Inspired: { base: 20, jitter: 20, floor: 10 },
-        Enduring: { base: 50, jitter: 30, floor: 20 },
-        Resonant: { base: 50, jitter: 30, floor: 20 },
-        Perfected: { base: 100, jitter: 0, floor: 100 },
-      },
-      statDeltaBands: [
-        { minimumDelta: 1, maximumDelta: 1, base: 10, jitter: 20, floor: 10 },
-        { minimumDelta: 2, maximumDelta: 2, base: 30, jitter: 20, floor: 10 },
-        { minimumDelta: 3, maximumDelta: 3, base: 50, jitter: 20, floor: 30 },
-        {
-          minimumDelta: 4,
-          maximumDelta: null,
-          base: 70,
-          jitter: 20,
-          floor: 50,
-        },
-      ],
-    },
     battleReward: {
       baseEssence: 100,
       essencePerCompletionLevel: 50,

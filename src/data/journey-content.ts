@@ -58,6 +58,7 @@ import { loadAtlasData } from "./atlas-data";
 import { loadSitesData } from "./sites-data";
 import { loadEconomyData } from "./economy-data";
 import { loadGambleData } from "./gamble-data";
+import { loadTransfigurationData } from "./transfiguration-data";
 import { loadDraftData } from "./draft-data";
 import { loadOpponentsData } from "./opponents-data";
 import type { EconomyData } from "../types/economy-data";
@@ -65,6 +66,7 @@ import type { DraftData } from "../types/draft-data";
 import type { OpponentsData } from "../types/opponents-data";
 import type { SitesData } from "../types/sites-data";
 import type { GambleData } from "../types/gamble-data";
+import type { TransfigurationData } from "../types/transfiguration-data";
 import type {
   AffiliationContent,
   ApollyonIncarnationContent,
@@ -133,6 +135,8 @@ export interface JourneyContent {
   economyData: EconomyData;
   /** Fold-relevant Gamble rules, economy, and authored presentation. */
   gambleData: GambleData;
+  /** Fold-relevant Transfiguration rules, tuning, and authored presentation. */
+  transfigurationData: TransfigurationData;
   /** Fold-relevant opponent and battle tuning loaded before room entry. */
   opponentsData: OpponentsData;
   /**
@@ -467,6 +471,7 @@ export async function loadJourneyContent(
     sitesData,
     economyData,
     gambleData,
+    transfigurationData,
     opponentsData,
     apollyonIncarnations,
     _figmentCatalog,
@@ -511,6 +516,7 @@ export async function loadJourneyContent(
     loadSitesData(),
     loadEconomyData(),
     loadGambleData(),
+    loadTransfigurationData(),
     loadOpponentsData(),
     // Apollyon's incarnations are small and always loaded so the Atlas can
     // present a per-run guise for the boss node.
@@ -602,6 +608,7 @@ export async function loadJourneyContent(
     draftData,
     economyData,
     gambleData,
+    transfigurationData,
     opponentsData,
     apollyonIncarnations,
     poolContext,

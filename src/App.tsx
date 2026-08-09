@@ -718,6 +718,8 @@ export default function App({
       draftData={journeyContent.draftData}
       opponentsData={journeyContent.opponentsData}
       economyData={journeyContent.economyData}
+      gambleData={journeyContent.gambleData}
+      transfigurationData={journeyContent.transfigurationData}
       rewardSelectionData={journeyContent.rewardSelectionData}
       auguryData={journeyContent.auguryData}
       explorationFoldHash={

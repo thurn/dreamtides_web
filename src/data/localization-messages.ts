@@ -99,6 +99,8 @@ export const FLUENT_MESSAGE_IDS = [
   "coop-config-site-rules-label",
   "coop-config-draft-rules-label",
   "coop-config-economy-rules-label",
+  "coop-config-gamble-rules-label",
+  "coop-config-transfiguration-rules-label",
   "coop-config-opponent-rules-label",
   "coop-config-tutorial-rules-label",
   "coop-config-unavailable",
@@ -274,7 +276,6 @@ export const FLUENT_MESSAGE_IDS = [
   "transfiguration-picker-title",
   "transfiguration-picker-instruction",
   "transfiguration-reforged-card-caption",
-  "transfiguration-form-name",
   "transfiguration-picker-empty-state",
   "transfiguration-form-picker-title",
   "transfiguration-choose-again-action",
@@ -312,7 +313,6 @@ export const FLUENT_MESSAGE_IDS = [
   "dreamsign-bazaar-replacement-full",
   "dreamsign-bazaar-replacement-cancel",
   "exploration-effect-missing-deck-card",
-  "exploration-fixed-transfiguration-disclosure",
   "exploration-offered-site-disclosure",
   "exploration-effect-resolved-fallback",
   "battle-zone-browser-viewer-title",
@@ -487,16 +487,6 @@ export const FLUENT_MESSAGE_IDS = [
   "character-dialogue-accessible-name",
   "card-order-reorder-action",
   "transfiguration-form-choice",
-  "transfiguration-change-energy",
-  "transfiguration-change-spark",
-  "transfiguration-change-draw",
-  "transfiguration-change-reclaim",
-  "transfiguration-change-fast",
-  "transfiguration-change-amplified",
-  "transfiguration-change-resonant",
-  "transfiguration-change-attuned",
-  "transfiguration-change-perfected",
-  "transfiguration-change-unavailable",
   "gamble-wager-prize-accessible-name",
   "gamble-gate-bet-accessible-name",
   "gamble-draw-attempt-accessible-name",
@@ -649,6 +639,8 @@ export interface FluentMessageArgumentsById {
   readonly "coop-config-site-rules-label": never;
   readonly "coop-config-draft-rules-label": never;
   readonly "coop-config-economy-rules-label": never;
+  readonly "coop-config-gamble-rules-label": never;
+  readonly "coop-config-transfiguration-rules-label": never;
   readonly "coop-config-opponent-rules-label": never;
   readonly "coop-config-tutorial-rules-label": never;
   readonly "coop-config-unavailable": never;
@@ -808,9 +800,9 @@ export interface FluentMessageArgumentsById {
     readonly picked: FluentVariable;
   };
   readonly "card-rules-transfiguration-changed": {
-    readonly form: FluentVariable;
+    readonly formName: FluentVariable;
   };
-  readonly "card-transfiguration-badge": { readonly form: FluentVariable };
+  readonly "card-transfiguration-badge": { readonly formName: FluentVariable };
   readonly "rules-text-symbol-essence": never;
   readonly "rules-text-symbol-points": never;
   readonly "rules-text-symbol-lunar": never;
@@ -899,7 +891,6 @@ export interface FluentMessageArgumentsById {
   readonly "transfiguration-reforged-card-caption": {
     readonly form: FluentVariable;
   };
-  readonly "transfiguration-form-name": { readonly form: FluentVariable };
   readonly "transfiguration-picker-empty-state": {
     readonly state: FluentVariable;
   };
@@ -947,9 +938,6 @@ export interface FluentMessageArgumentsById {
   readonly "exploration-effect-missing-deck-card": {
     readonly after: FluentVariable;
     readonly before: FluentVariable;
-  };
-  readonly "exploration-fixed-transfiguration-disclosure": {
-    readonly transfiguration: FluentVariable;
   };
   readonly "exploration-offered-site-disclosure": {
     readonly siteType: FluentVariable;
@@ -1183,7 +1171,7 @@ export interface FluentMessageArgumentsById {
   };
   readonly "exploration-card-transfiguring": {
     readonly cardName: FluentVariable;
-    readonly form: FluentVariable;
+    readonly formName: FluentVariable;
   };
   readonly "exploration-purge-before-copy": {
     readonly purgedCardName: FluentVariable;
@@ -1252,28 +1240,8 @@ export interface FluentMessageArgumentsById {
   readonly "card-order-reorder-action": { readonly itemLabel: FluentVariable };
   readonly "transfiguration-form-choice": {
     readonly essenceCost: FluentVariable;
-    readonly form: FluentVariable;
+    readonly formName: FluentVariable;
   };
-  readonly "transfiguration-change-energy": {
-    readonly from: FluentVariable;
-    readonly to: FluentVariable;
-  };
-  readonly "transfiguration-change-spark": {
-    readonly from: FluentVariable;
-    readonly to: FluentVariable;
-  };
-  readonly "transfiguration-change-draw": never;
-  readonly "transfiguration-change-reclaim": never;
-  readonly "transfiguration-change-fast": never;
-  readonly "transfiguration-change-amplified": {
-    readonly rulesText: FluentVariable;
-  };
-  readonly "transfiguration-change-resonant": never;
-  readonly "transfiguration-change-attuned": {
-    readonly amount: FluentVariable;
-  };
-  readonly "transfiguration-change-perfected": never;
-  readonly "transfiguration-change-unavailable": never;
   readonly "gamble-wager-prize-accessible-name": {
     readonly dreamsignName: FluentVariable;
     readonly essenceAmount: FluentVariable;
@@ -1504,6 +1472,8 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "coop-config-site-rules-label": [] as const,
   "coop-config-draft-rules-label": [] as const,
   "coop-config-economy-rules-label": [] as const,
+  "coop-config-gamble-rules-label": [] as const,
+  "coop-config-transfiguration-rules-label": [] as const,
   "coop-config-opponent-rules-label": [] as const,
   "coop-config-tutorial-rules-label": [] as const,
   "coop-config-unavailable": [] as const,
@@ -1631,8 +1601,8 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "card-pool-replay-pick-title": ["pickNumber"] as const,
   "card-pool-replay-pick-summary": ["cardList", "hasPicks"] as const,
   "card-pool-replay-card-label": ["cardName", "picked"] as const,
-  "card-rules-transfiguration-changed": ["form"] as const,
-  "card-transfiguration-badge": ["form"] as const,
+  "card-rules-transfiguration-changed": ["formName"] as const,
+  "card-transfiguration-badge": ["formName"] as const,
   "rules-text-symbol-essence": [] as const,
   "rules-text-symbol-points": [] as const,
   "rules-text-symbol-lunar": [] as const,
@@ -1706,7 +1676,6 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "transfiguration-picker-title": [] as const,
   "transfiguration-picker-instruction": ["state"] as const,
   "transfiguration-reforged-card-caption": ["form"] as const,
-  "transfiguration-form-name": ["form"] as const,
   "transfiguration-picker-empty-state": ["state"] as const,
   "transfiguration-form-picker-title": [] as const,
   "transfiguration-choose-again-action": [] as const,
@@ -1744,7 +1713,6 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "dreamsign-bazaar-replacement-full": ["count"] as const,
   "dreamsign-bazaar-replacement-cancel": [] as const,
   "exploration-effect-missing-deck-card": ["after", "before"] as const,
-  "exploration-fixed-transfiguration-disclosure": ["transfiguration"] as const,
   "exploration-offered-site-disclosure": ["siteType"] as const,
   "exploration-effect-resolved-fallback": [] as const,
   "battle-zone-browser-viewer-title": ["zone"] as const,
@@ -1916,7 +1884,7 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
     "purgedCardName",
     "sourceCardName",
   ] as const,
-  "exploration-card-transfiguring": ["cardName", "form"] as const,
+  "exploration-card-transfiguring": ["cardName", "formName"] as const,
   "exploration-purge-before-copy": [
     "purgedCardName",
     "sourceCardName",
@@ -1955,17 +1923,7 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "tide-object-accessible-name": ["tideName"] as const,
   "character-dialogue-accessible-name": ["speakerName"] as const,
   "card-order-reorder-action": ["itemLabel"] as const,
-  "transfiguration-form-choice": ["essenceCost", "form"] as const,
-  "transfiguration-change-energy": ["from", "to"] as const,
-  "transfiguration-change-spark": ["from", "to"] as const,
-  "transfiguration-change-draw": [] as const,
-  "transfiguration-change-reclaim": [] as const,
-  "transfiguration-change-fast": [] as const,
-  "transfiguration-change-amplified": ["rulesText"] as const,
-  "transfiguration-change-resonant": [] as const,
-  "transfiguration-change-attuned": ["amount"] as const,
-  "transfiguration-change-perfected": [] as const,
-  "transfiguration-change-unavailable": [] as const,
+  "transfiguration-form-choice": ["essenceCost", "formName"] as const,
   "gamble-wager-prize-accessible-name": [
     "dreamsignName",
     "essenceAmount",
@@ -2142,6 +2100,8 @@ export type FluentMessageIdsWithoutVariables = [
   "coop-config-site-rules-label",
   "coop-config-draft-rules-label",
   "coop-config-economy-rules-label",
+  "coop-config-gamble-rules-label",
+  "coop-config-transfiguration-rules-label",
   "coop-config-opponent-rules-label",
   "coop-config-tutorial-rules-label",
   "coop-config-unavailable",
@@ -2394,12 +2354,6 @@ export type FluentMessageIdsWithoutVariables = [
   "card-pool-cost-filter-label",
   "card-pool-close-action",
   "card-pool-sort-label",
-  "transfiguration-change-draw",
-  "transfiguration-change-reclaim",
-  "transfiguration-change-fast",
-  "transfiguration-change-resonant",
-  "transfiguration-change-perfected",
-  "transfiguration-change-unavailable",
   "battle-control-group-accessible-name",
   "card-attribute-interrupt-accessible-name",
   "card-attribute-fast-accessible-name",
@@ -2478,7 +2432,6 @@ export type FluentMessageIdsWithVariables = [
   "gamble-essence-outcome",
   "transfiguration-picker-instruction",
   "transfiguration-reforged-card-caption",
-  "transfiguration-form-name",
   "transfiguration-picker-empty-state",
   "transfiguration-decline-action",
   "transfiguration-confirm-action",
@@ -2489,7 +2442,6 @@ export type FluentMessageIdsWithVariables = [
   "purge-site-action",
   "dreamsign-bazaar-replacement-full",
   "exploration-effect-missing-deck-card",
-  "exploration-fixed-transfiguration-disclosure",
   "exploration-offered-site-disclosure",
   "battle-zone-browser-viewer-title",
   "battle-zone-browser-opponent-title",
@@ -2562,10 +2514,6 @@ export type FluentMessageIdsWithVariables = [
   "character-dialogue-accessible-name",
   "card-order-reorder-action",
   "transfiguration-form-choice",
-  "transfiguration-change-energy",
-  "transfiguration-change-spark",
-  "transfiguration-change-amplified",
-  "transfiguration-change-attuned",
   "gamble-wager-prize-accessible-name",
   "gamble-gate-bet-accessible-name",
   "gamble-draw-attempt-accessible-name",

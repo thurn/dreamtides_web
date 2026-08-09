@@ -47,6 +47,7 @@ import {
 } from "../../transfiguration/transfiguration-logic";
 import { MERCHANT_TUNING } from "../../journey_v2/tuning";
 import { projectGuideView } from "./guide-view-model";
+import { transfigurationForm } from "../../data/transfiguration-data";
 
 /** Resolve Layaway, the resident guide for Exploration. */
 export function resolveExplorationGuide(
@@ -126,7 +127,7 @@ function deckCardChoice(
 ): ExplorationCardChoiceView | null {
   const base = content.cardDatabase.get(entry.cardNumber);
   if (base === undefined) return null;
-  const resolved = resolveDeckEntryCard(base, entry);
+  const resolved = resolveDeckEntryCard(content.transfigurationData, base, entry);
   return {
     entryId: entry.entryId,
     model: modelForCard(resolved),
@@ -165,13 +166,25 @@ function freeTransfigurationCandidates(
     if (entry.transfiguration !== null) return [];
     const base = content.cardDatabase.get(entry.cardNumber);
     if (base === undefined) return [];
-    const card = resolveDeckEntryCard(base, entry);
+    const card = resolveDeckEntryCard(content.transfigurationData, base, entry);
     if (predicate !== undefined && !matchesPredicate(card, predicate, content))
       return [];
-    const forms = offeredTransfigurationForms(card, null).map((offer) => {
-      const preview = buildTransfigurationDisplay(card, offer.type);
+    const forms = offeredTransfigurationForms(
+      content.transfigurationData,
+      card,
+      null,
+    ).map((offer) => {
+      const preview = buildTransfigurationDisplay(
+        content.transfigurationData,
+        card,
+        offer.type,
+      );
       return {
         type: offer.type,
+        presentation: transfigurationForm(
+          content.transfigurationData,
+          offer.type,
+        ),
         change: offer.change,
         effectDetails: transfigurationEffectDetails(offer, card),
         essenceCost: 0,
@@ -208,7 +221,11 @@ function offeredCards(
     if (transfiguration === undefined) {
       return [{ entryId: card.id, model: modelForCard(card), isBane: false }];
     }
-    const preview = buildTransfigurationDisplay(card, transfiguration);
+    const preview = buildTransfigurationDisplay(
+      content.transfigurationData,
+      card,
+      transfiguration,
+    );
     return [
       {
         entryId: card.id,
@@ -481,7 +498,11 @@ function followupForAction(
           (card) =>
             state.deck.find((entry) => entry.entryId === card.entryId)
               ?.transfiguration === null &&
-            offeredTransfigurationForms(card.model.displaySnapshot, null).some(
+            offeredTransfigurationForms(
+              content.transfigurationData,
+              card.model.displaySnapshot,
+              null,
+            ).some(
               (form) => form.type === action.transfiguration,
             ),
         ),
@@ -673,6 +694,7 @@ interface DeckCardVariableTarget {
 
 function fixedTransfigurationDisclosure(
   action: ExplorationActionContent,
+  content: JourneyContent,
 ): ExplorationEffectDisclosure | undefined {
   if (
     action.effectKind !== "transfigure-fixed-selected" ||
@@ -683,6 +705,10 @@ function fixedTransfigurationDisclosure(
   return {
     kind: "fixed-transfiguration",
     transfiguration: action.transfiguration,
+    effectDisclosure: transfigurationForm(
+      content.transfigurationData,
+      action.transfiguration,
+    ).effectDisclosure,
   };
 }
 
@@ -701,12 +727,13 @@ function deckCardVariableTarget(
   if (target === undefined) return null;
   const base = content.cardDatabase.get(target.cardNumber);
   if (base === undefined) return null;
-  const card = resolveDeckEntryCard(base, target);
+  const card = resolveDeckEntryCard(content.transfigurationData, base, target);
   const entity =
     action.effectKind === "transfigure-fixed-selected" &&
     action.transfiguration !== undefined
       ? (() => {
           const preview = buildTransfigurationDisplay(
+            content.transfigurationData,
             card,
             action.transfiguration,
           );
@@ -903,7 +930,7 @@ function actionView(
     deckCardTarget?.entity,
   );
   const effectDisclosure =
-    fixedTransfigurationDisclosure(action) ??
+    fixedTransfigurationDisclosure(action, content) ??
     (action.effectKind === "add-site" && offer.offeredSiteType !== undefined
       ? { kind: "offered-site" as const, siteType: offer.offeredSiteType }
       : undefined);
@@ -1153,15 +1180,19 @@ function rewardForResolution(
       type !== undefined &&
       base !== undefined
     ) {
-      const before = resolveDeckEntryCard(base, {
+      const before = resolveDeckEntryCard(content.transfigurationData, base, {
         ...entry,
         transfiguration: null,
       });
-      const after = resolveDeckEntryCard(base, {
+      const after = resolveDeckEntryCard(content.transfigurationData, base, {
         ...entry,
         transfiguration: type,
       });
-      const display = buildTransfigurationDisplay(base, type).display;
+      const display = buildTransfigurationDisplay(
+        content.transfigurationData,
+        base,
+        type,
+      ).display;
       return {
         kind: "transfiguration",
         entryId,

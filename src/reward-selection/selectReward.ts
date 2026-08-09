@@ -390,20 +390,24 @@ function transfigurationCandidates(
     ) continue;
     if (constraints.fixedDeckEntryId !== undefined && entry.entryId !== constraints.fixedDeckEntryId) continue;
     const forms = merchantTransfigurations(
+      context.content.transfigurationData,
       baseCard,
-      context.tuning.allowedTransfigurations,
     ).filter((form) =>
       (constraints.allowPerfected === true || form !== "Perfected") &&
       (constraints.fixedTransfiguration === undefined || form === constraints.fixedTransfiguration) &&
       (allowed.size === 0 || allowed.has(form)),
     );
     for (const form of forms) {
-      const preview = applyTransfigurationToCard(baseCard, form);
+      const preview = applyTransfigurationToCard(
+        context.content.transfigurationData,
+        baseCard,
+        form,
+      );
       const benefit = transfigurationBenefit(
+        context.content.transfigurationData,
         baseCard,
         form,
         preview,
-        context.tuning.transfigurationBenefit,
       );
       if (benefit <= 0) continue;
       const cardCentrality = centrality(
@@ -443,8 +447,8 @@ function transfiguredCatalogCandidates(
   const candidates = built.flatMap((candidate): Candidate[] => {
     if (candidate.card === undefined) return [];
     const forms = merchantTransfigurations(
+      context.content.transfigurationData,
       candidate.card,
-      context.tuning.allowedTransfigurations,
     ).filter((form) =>
       (request.constraints?.allowPerfected === true || form !== "Perfected") &&
       (request.constraints?.fixedTransfiguration === undefined ||
@@ -455,10 +459,14 @@ function transfiguredCatalogCandidates(
       .map((form) => ({
         form,
         benefit: transfigurationBenefit(
+          context.content.transfigurationData,
           candidate.card!,
           form,
-          applyTransfigurationToCard(candidate.card!, form),
-          context.tuning.transfigurationBenefit,
+          applyTransfigurationToCard(
+            context.content.transfigurationData,
+            candidate.card!,
+            form,
+          ),
         ),
       }))
       .filter(({ benefit }) => benefit > 0)

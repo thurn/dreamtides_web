@@ -126,7 +126,6 @@ pub enum InsufficientDestinations {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct CardChoiceRules {
-    pub transfiguration: CardChoiceLimits,
     pub duplication: CardChoiceLimits,
 }
 
@@ -220,7 +219,6 @@ struct CompatibilityRandomSiteRules {
 
 #[derive(Serialize)]
 struct CompatibilityCardChoiceRules {
-    transfiguration: CompatibilityCardChoiceLimits,
     duplication: CompatibilityCardChoiceLimits,
 }
 
@@ -273,7 +271,6 @@ fn lower_with_glossary_map(
         },
     };
     let card_choices = CompatibilityCardChoiceRules {
-        transfiguration: lower_choice_limits(source.card_choices.transfiguration),
         duplication: lower_choice_limits(source.card_choices.duplication),
     };
     Ok(toml::Value::try_from(CompatibilityCatalog {
@@ -372,7 +369,6 @@ fn validate(source: &SitesCatalog) -> Result<()> {
         source.random_site.home_choice_count as usize <= destinations.len(),
         "Random Site home choice count exceeds its destinations"
     );
-    validate_choice_limits(&source.card_choices.transfiguration)?;
     validate_choice_limits(&source.card_choices.duplication)?;
     Ok(())
 }
@@ -466,10 +462,6 @@ mod tests {
                 insufficient_destinations: InsufficientDestinations::Fail,
             },
             card_choices: CardChoiceRules {
-                transfiguration: CardChoiceLimits {
-                    standard: ChoiceLimit::Count(2),
-                    enhanced: ChoiceLimit::All,
-                },
                 duplication: CardChoiceLimits {
                     standard: ChoiceLimit::Count(4),
                     enhanced: ChoiceLimit::Count(7),
@@ -499,10 +491,6 @@ mod tests {
         assert_eq!(
             lowered["fallback-site-type"]["description"].as_str(),
             Some("First line\nsecond line")
-        );
-        assert_eq!(
-            lowered["card-choices"]["transfiguration"]["enhanced-limit"].as_str(),
-            Some("all")
         );
         assert_eq!(
             lowered["card-choices"]["duplication"]["enhanced-limit"].as_integer(),
@@ -545,7 +533,7 @@ mod tests {
         assert_error_contains(duplicate_destination, "duplicate Random Site destination");
 
         let mut invalid_choice_count = synthetic_catalog();
-        invalid_choice_count.card_choices.transfiguration.standard = ChoiceLimit::Count(0);
+        invalid_choice_count.card_choices.duplication.standard = ChoiceLimit::Count(0);
         assert_error_contains(invalid_choice_count, "card choice count must be positive");
 
         let mut unmapped = synthetic_catalog();

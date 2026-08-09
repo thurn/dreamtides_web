@@ -9,6 +9,7 @@ import {
 import { rerollCost } from "../../shop/shop-pricing";
 import type { CardData } from "../../types/cards";
 import type { EconomyData } from "../../types/economy-data";
+import type { TransfigurationData } from "../../types/transfiguration-data";
 import type {
   DreamGuideContent,
   ResolvedDreamAvatarPackage,
@@ -48,6 +49,7 @@ export function buildCardShopGuideView(
 
 /** Resolve persistent card slots into UUID-derived, effectively priced wares. */
 export function buildCardShopOffers(
+  transfigurationData: TransfigurationData,
   runtime: ShopSiteRuntime,
   cardDatabase: ReadonlyMap<number, CardData>,
   essence: number,
@@ -61,7 +63,11 @@ export function buildCardShopOffers(
     const transfigured =
       slot.transfiguration === undefined
         ? null
-        : buildTransfigurationDisplay(card, slot.transfiguration);
+        : buildTransfigurationDisplay(
+            transfigurationData,
+            card,
+            slot.transfiguration,
+          );
     const price = effectivePrice(slot, priceModifiers);
     offers.push({
       entryId: `shop-slot-${String(slotIndex)}-${card.id}`,
@@ -152,6 +158,7 @@ export function buildCardShopSiteView(params: {
   guide: DreamGuideContent;
   guideLine: string;
   economyData: EconomyData;
+  transfigurationData: TransfigurationData;
 }): CardShopSiteView {
   const priceModifiers: ShopPriceModifiers = {
     essenceDiscountPercent: params.state.shopModifiers.essenceDiscountPercent,
@@ -163,6 +170,7 @@ export function buildCardShopSiteView(params: {
     scene,
     guide: buildCardShopGuideView(params.guide, params.guideLine),
     offers: buildCardShopOffers(
+      params.transfigurationData,
       params.runtime,
       params.cardDatabase,
       params.state.essence,

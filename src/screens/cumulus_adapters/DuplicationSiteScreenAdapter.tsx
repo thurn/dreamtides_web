@@ -1,6 +1,6 @@
 // Wiring-only adapter for the Cumulus Duplication site.
 
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect } from "react";
 import { DuplicationSiteScreen } from "../../cumulus/screens/DuplicationSiteScreen";
 import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
@@ -10,6 +10,7 @@ import {
   resolveDuplicationGuide,
 } from "./duplication-view-model";
 import { useGuideDialogue } from "./guide-dialogue-view-model";
+import { useGuidePresentedLog } from "../../state/guide-logging";
 
 export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
   const { state, mutations, journeyContent } = useJourney();
@@ -29,22 +30,27 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
     site?.guideIdOverride,
   );
   const guideLine = useGuideDialogue(guide, "site");
+  useGuidePresentedLog({
+    enabled: site !== null,
+    key: `duplication:${siteId}:guide:${guide.id}`,
+    guideId: guide.id,
+    siteType: site?.type ?? "Duplication",
+    isEnhanced: site?.isEnhanced ?? false,
+  });
 
-  const view = useMemo(
-    () =>
-      site === null
-        ? null
-        : buildDuplicationSiteView({
-            state,
-            sceneNode: node,
-            site,
-            runtime,
-            cardDatabase: journeyContent.cardDatabase,
-            guide,
-            guideLine,
-          }),
-    [state, node, site, runtime, journeyContent.cardDatabase, guide],
-  );
+  const view =
+    site === null
+      ? null
+      : buildDuplicationSiteView({
+          state,
+          sceneNode: node,
+          site,
+          runtime,
+          cardDatabase: journeyContent.cardDatabase,
+          guide,
+          guideLine,
+          transfigurationData: journeyContent.transfigurationData,
+        });
 
   useEffect(() => {
     if (site !== null && persistedRuntime === undefined) {
@@ -68,18 +74,7 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
     });
   }, [journeyContent.cardDatabase, runtime, site, state]);
 
-  useEffect(() => {
-    if (site === null) return;
-    if (guide !== null) {
-      logEventOnce(
-        `duplication:${site.id}:guide:${guide.id}`,
-        "dream_guide_presented",
-        { guideId: guide.id, siteType: site.type, isEnhanced: site.isEnhanced },
-      );
-    }
-  }, [guide, site]);
-
-  const handleClose = useCallback(() => {
+  const handleClose = () => {
     if (site === null) return;
     logEvent("site_completed", {
       siteType: "Duplication",
@@ -89,7 +84,7 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
           : "skipped",
     });
     mutations.completeSite(site.id, "duplication_skipped");
-  }, [mutations, runtime, site]);
+  };
 
   const handleDuplicate = useCallback(
     (entryId: string) => {

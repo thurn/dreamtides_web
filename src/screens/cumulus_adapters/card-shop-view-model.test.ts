@@ -4,6 +4,7 @@ import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { artRef } from "../../cumulus/primitives/art";
 import { economyFixture } from "../../testing/economy-fixture";
+import { transfigurationFixture } from "../../testing/transfiguration-fixture";
 import type { ShopSiteRuntime, SiteState } from "../../types/journey";
 import {
   buildCardShopOffers,
@@ -77,7 +78,7 @@ const site: SiteState = {
 
 describe("buildCardShopOffers", () => {
   it("uses UUID-derived tile ids and resolves purchase availability after discounts", () => {
-    const offers = buildCardShopOffers(runtime(), database(), 90, {
+    const offers = buildCardShopOffers(transfigurationFixture(), runtime(), database(), 90, {
       essenceDiscountPercent: 10,
     });
 
@@ -119,7 +120,7 @@ describe("buildCardShopOffers", () => {
           : slot,
       ),
     };
-    const offers = buildCardShopOffers(transfiguredRuntime, database(), 500, {
+    const offers = buildCardShopOffers(transfigurationFixture(), transfiguredRuntime, database(), 500, {
       essenceDiscountPercent: 0,
     });
     expect(offers[0]?.model.transfiguration?.type).toBe("Empowered");
@@ -211,6 +212,7 @@ describe("buildCardShopSiteView", () => {
       },
       guideLine: "A chosen greeting.",
       economyData: economyFixture(),
+      transfigurationData: transfigurationFixture(),
     });
 
     expect(view.siteId).toBe("shop-site");

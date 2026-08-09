@@ -51,6 +51,7 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
         journeyState: state,
         tutorialConfiguration: journeyContent.tutorial?.draft,
         defaultPickCount: journeyContent.draftData.offers.picksPerSite,
+        transfigurationData: journeyContent.transfigurationData,
       }),
     [
       progress.offerCardNumbers,

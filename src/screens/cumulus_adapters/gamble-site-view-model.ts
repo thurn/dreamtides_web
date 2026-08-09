@@ -30,6 +30,7 @@ import {
   blackjackHandTotal,
 } from "../../data/blackjack";
 import { gambleGameByRulesKind } from "../../data/gamble-data";
+import { transfigurationForm } from "../../data/transfiguration-data";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
@@ -41,6 +42,7 @@ import type {
   StarwayStairsGame,
   ThreeGateGame,
 } from "../../types/gamble-data";
+import type { TransfigurationData } from "../../types/transfiguration-data";
 import type {
   DreamscapeNode,
   FourSuitRepriseSiteRuntime,
@@ -412,6 +414,7 @@ function buildBlackjackSiteView(params: {
 }
 
 function buildFourSuitTransfigurationCandidate(
+  transfigurationData: TransfigurationData,
   target: FourSuitRepriseTarget,
 ): TransfigurationCandidateView {
   return {
@@ -424,11 +427,16 @@ function buildFourSuitTransfigurationCandidate(
     reforgedType: null,
     forms: target.transfigurationOffers.map((offer) => {
       const preview = buildTransfigurationDisplay(
+        transfigurationData,
         target.cardSnapshot,
         offer.type,
       );
       return {
         type: offer.type,
+        presentation: transfigurationForm(
+          transfigurationData,
+          offer.type,
+        ),
         change: offer.change,
         effectDetails: offer.effectDetails,
         essenceCost: 0,
@@ -464,6 +472,7 @@ function buildFourSuitRepriseSiteView(params: {
   guideLine: string;
   game: FourSuitRepriseGame;
   runtime: FourSuitRepriseSiteRuntime;
+  transfigurationData: TransfigurationData;
 }): FourSuitRepriseSiteView {
   const { runtime } = params;
   const latestRound = runtime.rounds[runtime.rounds.length - 1] ?? null;
@@ -482,6 +491,7 @@ function buildFourSuitRepriseSiteView(params: {
     target === null || latestRound?.chosenTransfiguration === undefined
       ? null
       : buildTransfigurationDisplay(
+          params.transfigurationData,
           target.cardSnapshot,
           latestRound.chosenTransfiguration,
         );
@@ -547,7 +557,10 @@ function buildFourSuitRepriseSiteView(params: {
             essenceGained: latestRound.essenceGained,
             target: resultTarget,
             transfigurationCandidate:
-              buildFourSuitTransfigurationCandidate(target),
+              buildFourSuitTransfigurationCandidate(
+                params.transfigurationData,
+                target,
+              ),
             chosenTransfiguration: latestRound.chosenTransfiguration ?? null,
           },
     canPlayAgain:
@@ -567,6 +580,7 @@ export function buildGambleSiteView(params: {
   guide: DreamGuideContent;
   guideLine: string;
   gambleData: GambleData;
+  transfigurationData: TransfigurationData;
 }): GambleSiteView | null {
   const runtimeCandidate = params.state.siteRuntime[params.site.id];
   const runtime: GambleSiteRuntime | null =

@@ -10,7 +10,6 @@ pub struct EconomyCatalog {
     pub shop: ShopRules,
     pub site_rewards: SiteRewardRules,
     pub purge: PurgeRules,
-    pub transfiguration: TransfigurationRules,
     pub battle_reward: BattleRewardRules,
     pub exploration: ExplorationRules,
 }
@@ -134,91 +133,6 @@ pub struct PurgeRules {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct TransfigurationRules {
-    pub minimum_cost: u32,
-    pub maximum_cost: u32,
-    pub step: u32,
-    pub form_bands: Vec<FormCostBand>,
-    pub stat_delta_bands: Vec<StatDeltaCostBand>,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-#[serde(deny_unknown_fields)]
-pub struct CostBand {
-    pub base: u32,
-    pub jitter: u32,
-    pub floor: u32,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct FormCostBand {
-    pub form: TransfigurationForm,
-    pub cost: CostBand,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Hash)]
-pub enum TransfigurationForm {
-    Amplified,
-    Attuned,
-    Inspired,
-    Enduring,
-    Resonant,
-    Perfected,
-}
-
-impl TransfigurationForm {
-    const ALL: [Self; 6] = [
-        Self::Amplified,
-        Self::Attuned,
-        Self::Inspired,
-        Self::Enduring,
-        Self::Resonant,
-        Self::Perfected,
-    ];
-
-    fn as_compat(self) -> &'static str {
-        match self {
-            Self::Amplified => "Amplified",
-            Self::Attuned => "Attuned",
-            Self::Inspired => "Inspired",
-            Self::Enduring => "Enduring",
-            Self::Resonant => "Resonant",
-            Self::Perfected => "Perfected",
-        }
-    }
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct StatDeltaCostBand {
-    pub magnitude: StatDeltaMagnitude,
-    pub cost: CostBand,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Hash)]
-pub enum StatDeltaMagnitude {
-    One,
-    Two,
-    Three,
-    FourOrMore,
-}
-
-impl StatDeltaMagnitude {
-    const ALL: [Self; 4] = [Self::One, Self::Two, Self::Three, Self::FourOrMore];
-
-    fn bounds(self) -> (u32, Option<u32>) {
-        match self {
-            Self::One => (1, Some(1)),
-            Self::Two => (2, Some(2)),
-            Self::Three => (3, Some(3)),
-            Self::FourOrMore => (4, None),
-        }
-    }
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
 pub struct BattleRewardRules {
     pub base_essence: u32,
     pub essence_per_completion_level: u32,
@@ -259,38 +173,6 @@ pub fn lower(source: EconomyCatalog) -> Result<toml::Value> {
             dreamsign_revelation: source.site_rewards.dreamsign_revelation.into(),
         },
         purge: source.purge.into(),
-        transfiguration: CompatibilityTransfiguration {
-            minimum_cost: source.transfiguration.minimum_cost,
-            maximum_cost: source.transfiguration.maximum_cost,
-            step: source.transfiguration.step,
-            free_band: CostBand {
-                base: 0,
-                jitter: 0,
-                floor: 0,
-            },
-            form_bands: source
-                .transfiguration
-                .form_bands
-                .into_iter()
-                .map(|entry| CompatibilityFormCostBand {
-                    form: entry.form.as_compat(),
-                    cost: entry.cost,
-                })
-                .collect(),
-            stat_delta_bands: source
-                .transfiguration
-                .stat_delta_bands
-                .into_iter()
-                .map(|entry| {
-                    let (minimum_delta, maximum_delta) = entry.magnitude.bounds();
-                    CompatibilityStatDeltaCostBand {
-                        minimum_delta,
-                        maximum_delta,
-                        cost: entry.cost,
-                    }
-                })
-                .collect(),
-        },
         battle_reward: source.battle_reward.into(),
         exploration: source.exploration.into(),
     };
@@ -333,34 +215,6 @@ fn validate(source: &EconomyCatalog) -> Result<()> {
         source.purge.enhanced_discount_percent,
     )?;
 
-    let transfiguration = &source.transfiguration;
-    ensure!(
-        transfiguration.minimum_cost <= transfiguration.maximum_cost,
-        "transfiguration minimum cost must not exceed maximum cost"
-    );
-    ensure!(
-        transfiguration.step > 0,
-        "transfiguration step must be positive"
-    );
-    validate_identity_order(
-        "transfiguration form bands",
-        &transfiguration.form_bands,
-        &TransfigurationForm::ALL,
-        |entry| entry.form,
-    )?;
-    validate_identity_order(
-        "transfiguration stat delta bands",
-        &transfiguration.stat_delta_bands,
-        &StatDeltaMagnitude::ALL,
-        |entry| entry.magnitude,
-    )?;
-    for entry in &transfiguration.form_bands {
-        validate_cost_band(transfiguration, entry.cost)?;
-    }
-    for entry in &transfiguration.stat_delta_bands {
-        validate_cost_band(transfiguration, entry.cost)?;
-    }
-
     Ok(())
 }
 
@@ -397,25 +251,6 @@ fn validate_range(label: &str, range: IntegerRange) -> Result<()> {
     Ok(())
 }
 
-fn validate_cost_band(rules: &TransfigurationRules, band: CostBand) -> Result<()> {
-    for (field, value) in [
-        ("base", band.base),
-        ("jitter", band.jitter),
-        ("floor", band.floor),
-    ] {
-        ensure!(
-            value % rules.step == 0,
-            "transfiguration band {field} must be a multiple of step"
-        );
-    }
-    ensure!(
-        (rules.minimum_cost..=rules.maximum_cost).contains(&band.base)
-            && (rules.minimum_cost..=rules.maximum_cost).contains(&band.floor),
-        "transfiguration band base and floor must be within global bounds"
-    );
-    Ok(())
-}
-
 fn validate_identity_order<T, I>(
     label: &str,
     entries: &[T],
@@ -445,7 +280,6 @@ struct CompatibilityEconomy {
     #[serde(rename = "site-rewards")]
     site_rewards: CompatibilitySiteRewards,
     purge: CompatibilityPurge,
-    transfiguration: CompatibilityTransfiguration,
     #[serde(rename = "battle-reward")]
     battle_reward: CompatibilityBattleReward,
     exploration: CompatibilityExploration,
@@ -590,21 +424,6 @@ impl From<DreamsignRevelationRules> for CompatibilityDreamsignRevelation {
 }
 
 #[derive(Serialize)]
-struct CompatibilityTransfiguration {
-    #[serde(rename = "minimum-cost")]
-    minimum_cost: u32,
-    #[serde(rename = "maximum-cost")]
-    maximum_cost: u32,
-    step: u32,
-    #[serde(rename = "free-band")]
-    free_band: CostBand,
-    #[serde(rename = "form-bands")]
-    form_bands: Vec<CompatibilityFormCostBand>,
-    #[serde(rename = "stat-delta-bands")]
-    stat_delta_bands: Vec<CompatibilityStatDeltaCostBand>,
-}
-
-#[derive(Serialize)]
 struct CompatibilityPurge {
     #[serde(rename = "marginal-costs")]
     marginal_costs: Vec<u32>,
@@ -619,23 +438,6 @@ impl From<PurgeRules> for CompatibilityPurge {
             enhanced_discount_percent: value.enhanced_discount_percent,
         }
     }
-}
-
-#[derive(Serialize)]
-struct CompatibilityFormCostBand {
-    form: &'static str,
-    #[serde(flatten)]
-    cost: CostBand,
-}
-
-#[derive(Serialize)]
-struct CompatibilityStatDeltaCostBand {
-    #[serde(rename = "minimum-delta")]
-    minimum_delta: u32,
-    #[serde(rename = "maximum-delta", skip_serializing_if = "Option::is_none")]
-    maximum_delta: Option<u32>,
-    #[serde(flatten)]
-    cost: CostBand,
 }
 
 #[derive(Serialize)]
@@ -744,35 +546,6 @@ mod tests {
                 marginal_costs: vec![8, 21],
                 enhanced_discount_percent: 15,
             },
-            transfiguration: TransfigurationRules {
-                minimum_cost: 0,
-                maximum_cost: 120,
-                step: 5,
-                form_bands: TransfigurationForm::ALL
-                    .into_iter()
-                    .enumerate()
-                    .map(|(index, form)| FormCostBand {
-                        form,
-                        cost: CostBand {
-                            base: 10 + index as u32 * 5,
-                            jitter: 5,
-                            floor: 5,
-                        },
-                    })
-                    .collect(),
-                stat_delta_bands: StatDeltaMagnitude::ALL
-                    .into_iter()
-                    .enumerate()
-                    .map(|(index, magnitude)| StatDeltaCostBand {
-                        magnitude,
-                        cost: CostBand {
-                            base: 40 + index as u32 * 5,
-                            jitter: 10,
-                            floor: 15,
-                        },
-                    })
-                    .collect(),
-            },
             battle_reward: BattleRewardRules {
                 base_essence: 31,
                 essence_per_completion_level: 9,
@@ -796,7 +569,6 @@ mod tests {
                 "shop",
                 "site-rewards",
                 "purge",
-                "transfiguration",
                 "battle-reward",
                 "exploration",
             ]
@@ -826,42 +598,6 @@ mod tests {
         assert_eq!(
             lowered["site-rewards"]["reward"]["fallback-essence"]["max"].as_integer(),
             Some(48)
-        );
-
-        let transfiguration = &lowered["transfiguration"];
-        assert_eq!(
-            transfiguration["free-band"],
-            toml::Value::try_from(CostBand {
-                base: 0,
-                jitter: 0,
-                floor: 0,
-            })
-            .unwrap()
-        );
-        assert_eq!(
-            transfiguration["form-bands"]
-                .as_array()
-                .unwrap()
-                .iter()
-                .map(|entry| entry["form"].as_str().unwrap())
-                .collect::<Vec<_>>(),
-            vec![
-                "Amplified",
-                "Attuned",
-                "Inspired",
-                "Enduring",
-                "Resonant",
-                "Perfected"
-            ]
-        );
-        let delta_bands = transfiguration["stat-delta-bands"].as_array().unwrap();
-        assert_eq!(delta_bands[0]["minimum-delta"].as_integer(), Some(1));
-        assert_eq!(delta_bands[0]["maximum-delta"].as_integer(), Some(1));
-        assert!(
-            !delta_bands[3]
-                .as_table()
-                .unwrap()
-                .contains_key("maximum-delta")
         );
 
         assert_eq!(
@@ -917,17 +653,6 @@ mod tests {
         source.purge.marginal_costs.clear();
         assert_error_contains(source, "purge marginal costs must not be empty");
 
-        let mut source = catalog();
-        source.transfiguration.step = 0;
-        assert_error_contains(source, "step must be positive");
-
-        let mut source = catalog();
-        source.transfiguration.form_bands[0].cost.base = 11;
-        assert_error_contains(source, "multiple of step");
-
-        let mut source = catalog();
-        source.transfiguration.form_bands[0].cost.floor = 125;
-        assert_error_contains(source, "within global bounds");
     }
 
     #[test]
@@ -936,13 +661,6 @@ mod tests {
         source.shop.stock.swap(0, 1);
         assert_error_contains(source, "shop stock");
 
-        let mut source = catalog();
-        source.transfiguration.form_bands.pop();
-        assert_error_contains(source, "form bands");
-
-        let mut source = catalog();
-        source.transfiguration.stat_delta_bands[1].magnitude = StatDeltaMagnitude::One;
-        assert_error_contains(source, "stat delta bands");
     }
 
     fn assert_error_contains(source: EconomyCatalog, expected: &str) {

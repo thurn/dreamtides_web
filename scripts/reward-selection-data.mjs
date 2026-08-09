@@ -1,9 +1,5 @@
 import { createHash } from "node:crypto";
 
-const TRANSFIGURATIONS = new Set([
-  "Empowered", "Amplified", "Kindled", "Inspired", "Enduring",
-  "Hastened", "Resonant", "Attuned", "Perfected",
-]);
 const SITE_TYPES = new Set(["Shop", "Purge", "Transfiguration", "Duplication"]);
 
 function fail(path, message) {
@@ -82,7 +78,7 @@ export function compileRewardSelectionData(sourceValue) {
   const root = exact(sourceValue, "root", [
     "schema-version", "rules-version", "bands", "eligibility", "bundle",
     "blends", "categories", "centrality", "dreamsign", "cost-bands",
-    "transfiguration", "site",
+    "site",
   ]);
   if (number(root["schema-version"], "schema-version", { minimum: 1, integer: true }) !== 1) {
     fail("schema-version", "only schema version 1 is supported");
@@ -106,8 +102,6 @@ export function compileRewardSelectionData(sourceValue) {
   const dreamsign = exact(root.dreamsign, "dreamsign", ["full-coverage-count", "featureless-coverage", "quality-weight"]);
   const quality = exact(dreamsign["quality-weight"], "dreamsign.quality-weight", ["1", "2", "3"]);
   const costBands = exact(root["cost-bands"], "cost-bands", ["cheap-maximum", "mid-minimum", "mid-maximum", "big-minimum", "cheap-character-maximum"]);
-  const transfiguration = exact(root.transfiguration, "transfiguration", ["allowed-forms", "empowered-cost-divisor", "kindled-spark-divisor", "flat-benefit"]);
-  const flatBenefit = exact(transfiguration["flat-benefit"], "transfiguration.flat-benefit", ["Amplified", "Inspired", "Enduring", "Hastened", "Resonant", "Attuned", "Perfected"]);
   const site = exact(root.site, "site", ["placeable-types"]);
 
   const tuning = {
@@ -153,12 +147,6 @@ export function compileRewardSelectionData(sourceValue) {
       midMaximum: number(costBands["mid-maximum"], "cost-bands.mid-maximum", { minimum: 0, integer: true }),
       bigMinimum: number(costBands["big-minimum"], "cost-bands.big-minimum", { minimum: 0, integer: true }),
       cheapCharacterMaximum: number(costBands["cheap-character-maximum"], "cost-bands.cheap-character-maximum", { minimum: 0, integer: true }),
-    },
-    allowedTransfigurations: stringList(transfiguration["allowed-forms"], "transfiguration.allowed-forms", TRANSFIGURATIONS),
-    transfigurationBenefit: {
-      empoweredCostDivisor: number(transfiguration["empowered-cost-divisor"], "transfiguration.empowered-cost-divisor", { minimum: 1 }),
-      kindledSparkDivisor: number(transfiguration["kindled-spark-divisor"], "transfiguration.kindled-spark-divisor", { minimum: 1 }),
-      flat: Object.fromEntries(Object.entries(flatBenefit).map(([key, value]) => [key, number(value, `transfiguration.flat-benefit.${key}`, { minimum: 0 })])),
     },
     placeableSiteTypes: stringList(site["placeable-types"], "site.placeable-types", SITE_TYPES),
   };

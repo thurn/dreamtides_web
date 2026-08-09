@@ -1,4 +1,4 @@
-import type { SiteType, TransfigurationType } from "./journey";
+import type { SiteType } from "./journey";
 
 export interface RewardSelectionBand {
   fraction: number;
@@ -44,12 +44,6 @@ export interface RewardSelectionTuning {
     midMaximum: number;
     bigMinimum: number;
     cheapCharacterMaximum: number;
-  }>;
-  allowedTransfigurations: readonly TransfigurationType[];
-  transfigurationBenefit: Readonly<{
-    empoweredCostDivisor: number;
-    kindledSparkDivisor: number;
-    flat: Readonly<Partial<Record<TransfigurationType, number>>>;
   }>;
   placeableSiteTypes: readonly SiteType[];
 }

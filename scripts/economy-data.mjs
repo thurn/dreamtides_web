@@ -1,14 +1,5 @@
 import { createHash } from "node:crypto";
 
-const FORMS = [
-  "Amplified",
-  "Attuned",
-  "Inspired",
-  "Enduring",
-  "Resonant",
-  "Perfected",
-];
-
 function fail(path, message) {
   throw new Error(`economy.toml ${path}: ${message}`);
 }
@@ -76,26 +67,6 @@ function stock(value, path) {
     dreamsignSlots: count(source["dreamsign-slots"], `${path}.dreamsign-slots`),
   };
 }
-function band(value, path, transfiguration) {
-  const source = keys(value, path, ["base", "jitter", "floor"]);
-  const result = {
-    base: count(source.base, `${path}.base`),
-    jitter: count(source.jitter, `${path}.jitter`),
-    floor: count(source.floor, `${path}.floor`),
-  };
-  for (const [key, value] of Object.entries(result)) {
-    if (value % transfiguration.step !== 0)
-      fail(`${path}.${key}`, "must be a multiple of step");
-  }
-  if (
-    result.base < transfiguration.minimumCost ||
-    result.base > transfiguration.maximumCost ||
-    result.floor < transfiguration.minimumCost ||
-    result.floor > transfiguration.maximumCost
-  )
-    fail(path, "base and floor must be within global bounds");
-  return result;
-}
 function stable(value) {
   if (Array.isArray(value)) return value.map(stable);
   if (typeof value !== "object" || value === null) return value;
@@ -119,7 +90,6 @@ export function compileEconomyData(sourceValue) {
     "shop",
     "site-rewards",
     "purge",
-    "transfiguration",
     "battle-reward",
     "exploration",
   ]);
@@ -183,95 +153,6 @@ export function compileEconomyData(sourceValue) {
   );
   if (marginalCosts.length === 0)
     fail("purge.marginal-costs", "must not be empty");
-  const transfiguration = keys(root.transfiguration, "transfiguration", [
-    "minimum-cost",
-    "maximum-cost",
-    "step",
-    "free-band",
-    "form-bands",
-    "stat-delta-bands",
-  ]);
-  const transfigurationShape = {
-    minimumCost: count(
-      transfiguration["minimum-cost"],
-      "transfiguration.minimum-cost",
-    ),
-    maximumCost: count(
-      transfiguration["maximum-cost"],
-      "transfiguration.maximum-cost",
-    ),
-    step: number(transfiguration.step, "transfiguration.step", { min: 1 }),
-  };
-  if (transfigurationShape.minimumCost > transfigurationShape.maximumCost)
-    fail("transfiguration", "minimum-cost must not exceed maximum-cost");
-  const formBands = {};
-  for (const [index, raw] of list(
-    transfiguration["form-bands"],
-    "transfiguration.form-bands",
-  ).entries()) {
-    const path = `transfiguration.form-bands[${String(index)}]`;
-    const source = keys(raw, path, ["form", "base", "jitter", "floor"]);
-    const form = source.form;
-    if (typeof form !== "string" || !FORMS.includes(form))
-      fail(`${path}.form`, "unknown form");
-    if (form in formBands) fail(`${path}.form`, "duplicate form");
-    const { form: _form, ...bandSource } = source;
-    formBands[form] = band(bandSource, path, transfigurationShape);
-  }
-  for (const form of FORMS)
-    if (!(form in formBands))
-      fail("transfiguration.form-bands", `missing form ${form}`);
-  const statDeltaBands = list(
-    transfiguration["stat-delta-bands"],
-    "transfiguration.stat-delta-bands",
-  ).map((raw, index) => {
-    const path = `transfiguration.stat-delta-bands[${String(index)}]`;
-    const source = table(raw, path);
-    const expected =
-      index === 3
-        ? ["minimum-delta", "base", "jitter", "floor"]
-        : ["minimum-delta", "maximum-delta", "base", "jitter", "floor"];
-    keys(source, path, expected);
-    const minimumDelta = number(
-      source["minimum-delta"],
-      `${path}.minimum-delta`,
-      { min: 1 },
-    );
-    const maximumDelta =
-      source["maximum-delta"] === undefined
-        ? null
-        : number(source["maximum-delta"], `${path}.maximum-delta`, {
-            min: minimumDelta,
-          });
-    const bandSource = {
-      base: source.base,
-      jitter: source.jitter,
-      floor: source.floor,
-    };
-    return {
-      minimumDelta,
-      maximumDelta,
-      ...band(bandSource, path, transfigurationShape),
-    };
-  });
-  const expectedDeltas = [
-    [1, 1],
-    [2, 2],
-    [3, 3],
-    [4, null],
-  ];
-  if (
-    statDeltaBands.length !== 4 ||
-    statDeltaBands.some(
-      (entry, index) =>
-        entry.minimumDelta !== expectedDeltas[index][0] ||
-        entry.maximumDelta !== expectedDeltas[index][1],
-    )
-  )
-    fail(
-      "transfiguration.stat-delta-bands",
-      "must define delta identities 1, 2, 3, and 4+",
-    );
   const battle = keys(root["battle-reward"], "battle-reward", [
     "base-essence",
     "essence-per-completion-level",
@@ -280,14 +161,6 @@ export function compileEconomyData(sourceValue) {
   const exploration = keys(root.exploration, "exploration", [
     "default-essence-per-spark",
   ]);
-  const freeBand = band(
-    transfiguration["free-band"],
-    "transfiguration.free-band",
-    transfigurationShape,
-  );
-  if (freeBand.base !== 0 || freeBand.jitter !== 0 || freeBand.floor !== 0) {
-    fail("transfiguration.free-band", "must remain zero-cost");
-  }
   const payload = {
     schemaVersion: 1,
     journey: {
@@ -375,12 +248,6 @@ export function compileEconomyData(sourceValue) {
         purge["enhanced-discount-percent"],
         "purge.enhanced-discount-percent",
       ),
-    },
-    transfiguration: {
-      ...transfigurationShape,
-      freeBand,
-      formBands,
-      statDeltaBands,
     },
     battleReward: {
       baseEssence: count(battle["base-essence"], "battle-reward.base-essence"),

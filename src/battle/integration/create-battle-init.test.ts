@@ -30,6 +30,7 @@ import {
 } from "../../runtime/transfigure-markers";
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
+import { transfigurationFixture } from "../../testing/transfiguration-fixture";
 
 // The padded minimum battle deck size; the enemy deck is padded up to this.
 const MIN_BATTLE_DECK_SIZE = 25;
@@ -37,6 +38,7 @@ const MIN_BATTLE_DECK_SIZE = 25;
 function makeBaseInput(): CreateBattleInitInput {
   return {
     opponentsData: opponentsFixture(),
+    transfigurationData: transfigurationFixture(),
     battleEntryKey: "site-7::2::dreamscape-2",
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
@@ -722,7 +724,11 @@ describe("createBattleInit", () => {
           }
         )?.transfigurationDisplay;
         expect(display).toEqual(
-          buildTransfigurationDisplay(card, type).display,
+          buildTransfigurationDisplay(
+            input.transfigurationData,
+            card,
+            type,
+          ).display,
         );
       },
     );

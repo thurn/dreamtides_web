@@ -76,7 +76,6 @@ function sitesFixture() {
       "insufficient-destinations": "fail",
     },
     "card-choices": {
-      transfiguration: { "standard-limit": 3, "enhanced-limit": "all" },
       duplication: { "standard-limit": 3, "enhanced-limit": "all" },
     },
   };

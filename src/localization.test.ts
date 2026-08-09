@@ -55,34 +55,20 @@ describe("appLocalization", () => {
         ).not.toBe("");
       }
     }
-    const forms = [
-      "Empowered",
-      "Amplified",
-      "Kindled",
-      "Inspired",
-      "Enduring",
-      "Hastened",
-      "Resonant",
-      "Attuned",
-      "Perfected",
-    ] as const;
     const formMessages = [
       "exploration-card-transfiguring",
       "card-transfiguration-badge",
       "card-rules-transfiguration-changed",
       "transfiguration-form-choice",
-      "transfiguration-form-name",
     ] as const;
     for (const id of formMessages) {
-      for (const form of forms) {
-        const formatted = appLocalization.getString(id, {
-          cardName: "Fixture",
-          essenceCost: 0,
-          form,
-        });
-        expect(formatted).not.toBe("");
-        expect(formatted).not.toContain(id);
-      }
+      const formatted = appLocalization.getString(id, {
+        cardName: "Fixture",
+        essenceCost: 0,
+        formName: "Fixture Form",
+      });
+      expect(formatted).not.toBe("");
+      expect(formatted).not.toContain(id);
     }
   });
 

@@ -2,8 +2,15 @@ import { describe, expect, it } from "vitest";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { JourneyState } from "../../types/journey";
-import { buildJourneyDebugEditorView } from "./journey-debug-view-model";
+import { buildJourneyDebugEditorView as buildJourneyDebugEditorViewImpl } from "./journey-debug-view-model";
 import { NIGHTMARE_CARD_ID, NIGHTMARE_CARD_NAME } from "../../data/nightmare";
+import { transfigurationFixture } from "../../testing/transfiguration-fixture";
+
+const buildJourneyDebugEditorView = (
+  ...args: Parameters<typeof buildJourneyDebugEditorViewImpl> extends readonly [unknown, ...infer Rest]
+    ? Rest
+    : never
+) => buildJourneyDebugEditorViewImpl(transfigurationFixture(), ...args);
 
 function card(overrides: Partial<CardData> = {}): CardData {
   return {

@@ -38,6 +38,8 @@ const fake = vi.hoisted(() => {
       sitesFoldHash: "fixture-sites-fold-hash",
       draftFoldHash: "fixture-draft-fold-hash",
       economyFoldHash: "a".repeat(64),
+      gambleFoldHash: "g".repeat(64),
+      transfigurationFoldHash: "x".repeat(64),
       rewardSelectionFoldHash: "c".repeat(64),
       auguryFoldHash: "d".repeat(64),
       explorationFoldHash: "e".repeat(64),

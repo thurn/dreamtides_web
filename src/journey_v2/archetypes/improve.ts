@@ -5,9 +5,9 @@ import {
 } from "../../transfiguration/transfiguration-logic";
 import type { CardData } from "../../types/cards";
 import type { TransfigurationType } from "../../types/journey";
-import type { RewardSelectionTuning } from "../../types/reward-selection-data";
+import type { TransfigurationData } from "../../types/transfiguration-data";
+import { transfigurationForm } from "../../data/transfiguration-data";
 import { auguryArchetype } from "../../data/augury-data";
-import { MERCHANT_TUNING } from "../tuning";
 import type { MerchantRng } from "../signals/rng";
 import type {
   MerchantApplyPayload,
@@ -49,30 +49,25 @@ function clamp01(v: number): number {
  * archetypes (`transfigure`, `starter_transfigure`) added in later tasks.
  */
 export function transfigurationBenefit(
+  data: TransfigurationData,
   card: CardData,
   transfiguration: TransfigurationType,
   preview: CardData,
-  tuning: RewardSelectionTuning["transfigurationBenefit"] = MERCHANT_TUNING.transfigurationBenefit,
 ): number {
-  switch (transfiguration) {
-    case "Empowered": {
+  const form = transfigurationForm(data, transfiguration);
+  switch (form.benefit.kind) {
+    case "ratio": {
+      if (form.operation.kind === "halveEnergyCost") {
       const oldCost = card.energyCost ?? 0;
       const newCost = preview.energyCost ?? 0;
-      return clamp01((oldCost - newCost) / tuning.empoweredCostDivisor);
-    }
-    case "Kindled": {
+        return clamp01((oldCost - newCost) / form.benefit.divisor);
+      }
       const oldSpark = card.spark ?? 0;
       const newSpark = preview.spark ?? 0;
-      return clamp01((newSpark - oldSpark) / tuning.kindledSparkDivisor);
+      return clamp01((newSpark - oldSpark) / form.benefit.divisor);
     }
-    case "Amplified":
-    case "Inspired":
-    case "Enduring":
-    case "Hastened":
-    case "Resonant":
-    case "Attuned":
-    case "Perfected":
-      return tuning.flat[transfiguration] ?? 0;
+    case "flat":
+      return form.benefit.value;
   }
 }
 
@@ -83,17 +78,19 @@ export function transfigurationBenefit(
  * Journey, so both the improve and grant families filter through this helper.
  */
 export function merchantTransfigurations(
+  data: TransfigurationData,
   card: CardData,
-  allowed: readonly TransfigurationType[] = MERCHANT_TUNING.allowedTransfigurations,
 ): readonly TransfigurationType[] {
-  const allowedSet = new Set(allowed);
-  return eligibleTransfigurations(card).filter((type) => allowedSet.has(type));
+  return eligibleTransfigurations(data, card).filter(
+    (type) => transfigurationForm(data, type).merchantAllowed,
+  );
 }
 
 // --- transfigure --------------------------------------------------------------
 
 /** A single (deck entry, eligible transfiguration) candidate pair. */
 export interface TransfigureCandidatePair {
+  transfigurationData: TransfigurationData;
   deckCard: MerchantDeckCard;
   entryId: string;
   transfiguration: TransfigurationType;
@@ -120,18 +117,23 @@ export function transfigureCandidatePairs(
     if (deckCard.deckEntry.transfiguration !== null) continue;
     const base = deckCard.card;
     for (const transfiguration of merchantTransfigurations(
+      context.rewardSelection.content.transfigurationData,
       base,
-      context.rewardSelection.tuning.allowedTransfigurations,
     )) {
-      const preview = applyTransfigurationToCard(base, transfiguration);
+      const preview = applyTransfigurationToCard(
+        context.rewardSelection.content.transfigurationData,
+        base,
+        transfiguration,
+      );
       const benefit = transfigurationBenefit(
+        context.rewardSelection.content.transfigurationData,
         base,
         transfiguration,
         preview,
-        context.rewardSelection.tuning.transfigurationBenefit,
       );
       if (benefit <= 0) continue;
       all.push({
+        transfigurationData: context.rewardSelection.content.transfigurationData,
         deckCard,
         entryId: deckCard.entryId,
         transfiguration,
@@ -154,6 +156,7 @@ function transfigurePreviewObject(
   // equals `pair.preview` (an equivalence test guards this), so the visible
   // result matches the benefit math.
   const built = buildTransfigurationDisplay(
+    pair.transfigurationData,
     pair.deckCard.card,
     pair.transfiguration,
   );
@@ -251,15 +254,19 @@ function positiveBenefitTransfigurations(
   card: CardData,
 ): readonly TransfigurationType[] {
   return merchantTransfigurations(
+    context.rewardSelection.content.transfigurationData,
     card,
-    context.rewardSelection.tuning.allowedTransfigurations,
   ).filter((transfiguration) => {
-    const preview = applyTransfigurationToCard(card, transfiguration);
+    const preview = applyTransfigurationToCard(
+      context.rewardSelection.content.transfigurationData,
+      card,
+      transfiguration,
+    );
     return transfigurationBenefit(
+      context.rewardSelection.content.transfigurationData,
       card,
       transfiguration,
       preview,
-      context.rewardSelection.tuning.transfigurationBenefit,
     ) > 0;
   });
 }
@@ -316,16 +323,21 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
         : context.deckEntryById.get(binding.entryId);
       const chosen = binding.transfiguration;
       if (deckCard === undefined) continue;
-      const preview = applyTransfigurationToCard(deckCard.card, chosen);
+      const preview = applyTransfigurationToCard(
+        context.rewardSelection.content.transfigurationData,
+        deckCard.card,
+        chosen,
+      );
       const pair: TransfigureCandidatePair = {
+        transfigurationData: context.rewardSelection.content.transfigurationData,
         deckCard,
         entryId: deckCard.entryId,
         transfiguration: chosen,
         benefit: transfigurationBenefit(
+          context.rewardSelection.content.transfigurationData,
           deckCard.card,
           chosen,
           preview,
-          context.rewardSelection.tuning.transfigurationBenefit,
         ),
         preview,
       };

@@ -19,16 +19,13 @@ export interface SitesData {
     insufficientDestinations: "fail";
     guideId: string;
   };
-  cardChoices: Readonly<
-    Record<
-      "transfiguration" | "duplication",
-      {
-        standardLimit: number;
-        /** `null` means every eligible entry. */
-        enhancedLimit: number | null;
-      }
-    >
-  >;
+  cardChoices: Readonly<{
+    duplication: {
+      standardLimit: number;
+      /** `null` means every eligible entry. */
+      enhancedLimit: number | null;
+    };
+  }>;
   guideAssignments: Readonly<
     Partial<
       Record<

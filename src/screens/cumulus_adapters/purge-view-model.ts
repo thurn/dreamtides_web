@@ -26,6 +26,7 @@ import { toDeckCardView } from "./mobile-deck-view-model";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 import { projectGuideView } from "./guide-view-model";
+import type { TransfigurationData } from "../../types/transfiguration-data";
 
 /** Resolve Master Takeshi, the resident guide for Purge. */
 export function resolvePurgeGuide(
@@ -45,12 +46,13 @@ export function buildPurgeGuideView(
 
 /** Resolve every deck entry into the card view used by the purge grid. */
 export function buildPurgeCardViews(
+  transfigurationData: TransfigurationData,
   deck: readonly DeckEntry[],
   cardDatabase: Map<number, CardData>,
 ): PurgeCardView[] {
   const cards: PurgeCardView[] = [];
   for (const entry of deck) {
-    const view = toDeckCardView(entry, cardDatabase);
+    const view = toDeckCardView(transfigurationData, entry, cardDatabase);
     if (view === null) continue;
     cards.push({
       ...view,
@@ -78,6 +80,7 @@ export function buildPurgeSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState;
   cardDatabase: Map<number, CardData>;
+  transfigurationData: TransfigurationData;
   guide: DreamGuideContent;
   guideLine: string;
   tutorialConfiguration?: TutorialSiteConfiguration;
@@ -111,7 +114,11 @@ export function buildPurgeSiteView(params: {
       "Purge",
       params.tutorialConfiguration,
     ),
-    cards: buildPurgeCardViews(params.state.deck, params.cardDatabase),
+    cards: buildPurgeCardViews(
+      params.transfigurationData,
+      params.state.deck,
+      params.cardDatabase,
+    ),
     visitCosts: buildPurgeVisitCosts(params.economyData.purge, modifiers),
     maxPaidSelections,
   };

@@ -86,6 +86,7 @@ function buildBattleInit(
   );
   return createBattleInit({
     opponentsData: content.opponentsData,
+    transfigurationData: content.transfigurationData,
     battleEntryKey,
     battleInstanceId: `battle:${journey.runId ?? "unscoped"}:${battleEntryKey}`,
     seedOverride,

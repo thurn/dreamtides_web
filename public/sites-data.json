@@ -81,10 +81,6 @@
     "guideId": "maddox"
   },
   "cardChoices": {
-    "transfiguration": {
-      "standardLimit": 3,
-      "enhancedLimit": null
-    },
     "duplication": {
       "standardLimit": 3,
       "enhancedLimit": null
@@ -132,6 +128,6 @@
       "homeDreamscapeId": "grid_city"
     }
   },
-  "contentHash": "3a8fde0b85c46402e07703666ba72414898ab6303a43c38778a6abd0ad30b575",
-  "foldHash": "e111c6c1253a7b486c75c85716545ca4ee52cd6ca53a37513c50dc9aed6afe9a"
+  "contentHash": "3bd8ecee64b8952c379a46ba729a762f189e716bc2a6456c8277cff162fa6dfd",
+  "foldHash": "acb50b99e7df14d5cd1ccbe421e9194e2105d3a139765468ee7538b5ea9d513a"
 }

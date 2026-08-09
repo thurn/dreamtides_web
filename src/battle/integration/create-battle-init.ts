@@ -56,6 +56,7 @@ import type {
 import type { DreamwellCard } from "../../data/dreamwell-database";
 import type { TutorialTriggerDefinition } from "../../types/tutorial";
 import type { EconomyData } from "../../types/economy-data";
+import type { TransfigurationData } from "../../types/transfiguration-data";
 import {
   resolveBattleAiConfiguration,
   type OpponentsData,
@@ -91,6 +92,8 @@ function padBattleDeck(
 export interface CreateBattleInitInput {
   /** Complete authored opponent and battle tuning for this folded battle. */
   opponentsData: OpponentsData;
+  /** Authoritative Transfiguration rules and presentation catalog. */
+  transfigurationData: TransfigurationData;
   /** Direct battle payout tuning. Omitted only by historical engine fixtures. */
   economyData?: EconomyData;
   battleEntryKey: string;
@@ -275,7 +278,12 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
         );
       }
       return freezeBattleDeckCardDefinition(
-        normalizePlayerDeckCard(entry, card, playerBattleEnergyCostReduction),
+        normalizePlayerDeckCard(
+          input.transfigurationData,
+          entry,
+          card,
+          playerBattleEnergyCostReduction,
+        ),
       );
     });
   // The opponent is built by emulating its DreamAvatar's journey to the
@@ -868,6 +876,7 @@ function cloneBattleDeckCardDefinition(
 }
 
 function normalizePlayerDeckCard(
+  transfigurationData: TransfigurationData,
   entry: JourneyState["deck"][number],
   card: CardData,
   battleEnergyCostReduction = 0,
@@ -876,7 +885,7 @@ function normalizePlayerDeckCard(
   // and rules text (transfiguration, type/keyword changes, persistent spark,
   // then debug stat overrides) rather than the printed base values.
   const effectiveCard = applyCardKeywordModification(
-    resolveDeckEntryCard(card, entry),
+    resolveDeckEntryCard(transfigurationData, card, entry),
     battleEnergyCostReduction > 0
       ? { energyCostReduction: battleEnergyCostReduction }
       : undefined,
@@ -884,6 +893,7 @@ function normalizePlayerDeckCard(
   const transfigurationDisplay = (() => {
     if (entry.transfiguration === null) return undefined;
     const transfigured = buildTransfigurationDisplay(
+      transfigurationData,
       card,
       entry.transfiguration,
     );

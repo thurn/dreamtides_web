@@ -90,7 +90,7 @@ describe("compiled guide and site artifact loaders", () => {
         sites.siteTypes.Shop.glossaryId = "missing-fixture-glossary";
       },
       (sites) => {
-        sites.cardChoices.transfiguration.standardLimit = Number.NaN;
+        sites.cardChoices.duplication.standardLimit = Number.NaN;
       },
       (sites) => {
         sites.guideAssignments.RandomSite = {

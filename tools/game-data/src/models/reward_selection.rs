@@ -15,7 +15,6 @@ pub struct RewardSelectionCatalog {
     pub centrality: CentralityRules,
     pub dreamsign: DreamsignRules,
     pub cost_bands: CostBandRules,
-    pub transfiguration: TransfigurationRules,
     pub site: SiteRules,
 }
 
@@ -166,102 +165,6 @@ pub struct CostBandRules {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct TransfigurationRules {
-    pub allowed_forms: Vec<TransfigurationForm>,
-    pub empowered_cost_divisor: PositiveNumber,
-    pub kindled_spark_divisor: PositiveNumber,
-    pub flat_benefits: Vec<FlatTransfigurationBenefit>,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(untagged)]
-pub enum PositiveNumber {
-    Integer(u32),
-    Float(f64),
-}
-
-impl PositiveNumber {
-    fn value(self) -> f64 {
-        match self {
-            Self::Integer(value) => f64::from(value),
-            Self::Float(value) => value,
-        }
-    }
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Ord, PartialOrd)]
-pub enum TransfigurationForm {
-    Empowered,
-    Amplified,
-    Kindled,
-    Inspired,
-    Enduring,
-    Hastened,
-    Resonant,
-    Attuned,
-    Perfected,
-}
-
-impl TransfigurationForm {
-    fn as_compat(self) -> &'static str {
-        match self {
-            Self::Empowered => "Empowered",
-            Self::Amplified => "Amplified",
-            Self::Kindled => "Kindled",
-            Self::Inspired => "Inspired",
-            Self::Enduring => "Enduring",
-            Self::Hastened => "Hastened",
-            Self::Resonant => "Resonant",
-            Self::Attuned => "Attuned",
-            Self::Perfected => "Perfected",
-        }
-    }
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct FlatTransfigurationBenefit {
-    pub form: FlatBenefitForm,
-    pub benefit: f64,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Ord, PartialOrd)]
-pub enum FlatBenefitForm {
-    Amplified,
-    Inspired,
-    Enduring,
-    Hastened,
-    Resonant,
-    Attuned,
-    Perfected,
-}
-
-impl FlatBenefitForm {
-    const ALL: [Self; 7] = [
-        Self::Amplified,
-        Self::Inspired,
-        Self::Enduring,
-        Self::Hastened,
-        Self::Resonant,
-        Self::Attuned,
-        Self::Perfected,
-    ];
-
-    fn as_compat(self) -> &'static str {
-        match self {
-            Self::Amplified => "Amplified",
-            Self::Inspired => "Inspired",
-            Self::Enduring => "Enduring",
-            Self::Hastened => "Hastened",
-            Self::Resonant => "Resonant",
-            Self::Attuned => "Attuned",
-            Self::Perfected => "Perfected",
-        }
-    }
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
 pub struct SiteRules {
     pub placeable_types: Vec<PlaceableSiteType>,
 }
@@ -298,7 +201,6 @@ struct CompatibilityCatalog {
     centrality: CompatibilityCentrality,
     dreamsign: CompatibilityDreamsign,
     cost_bands: CompatibilityCostBands,
-    transfiguration: CompatibilityTransfiguration,
     site: CompatibilitySite,
 }
 
@@ -381,15 +283,6 @@ struct CompatibilityCostBands {
 
 #[derive(Serialize)]
 #[serde(rename_all = "kebab-case")]
-struct CompatibilityTransfiguration {
-    allowed_forms: Vec<String>,
-    empowered_cost_divisor: PositiveNumber,
-    kindled_spark_divisor: PositiveNumber,
-    flat_benefit: toml::map::Map<String, toml::Value>,
-}
-
-#[derive(Serialize)]
-#[serde(rename_all = "kebab-case")]
 struct CompatibilitySite {
     placeable_types: Vec<String>,
 }
@@ -408,18 +301,6 @@ pub fn lower(source: RewardSelectionCatalog) -> Result<toml::Value> {
             )
         })
         .collect();
-    let flat_benefit = source
-        .transfiguration
-        .flat_benefits
-        .iter()
-        .map(|entry| {
-            (
-                entry.form.as_compat().to_owned(),
-                toml::Value::Float(entry.benefit),
-            )
-        })
-        .collect();
-
     Ok(toml::Value::try_from(CompatibilityCatalog {
         schema_version: 1,
         rules_version: source.rules_version.as_compat().to_owned(),
@@ -471,17 +352,6 @@ pub fn lower(source: RewardSelectionCatalog) -> Result<toml::Value> {
             mid_maximum: source.cost_bands.mid_maximum,
             big_minimum: source.cost_bands.big_minimum,
             cheap_character_maximum: source.cost_bands.cheap_character_maximum,
-        },
-        transfiguration: CompatibilityTransfiguration {
-            allowed_forms: source
-                .transfiguration
-                .allowed_forms
-                .into_iter()
-                .map(|form| form.as_compat().to_owned())
-                .collect(),
-            empowered_cost_divisor: source.transfiguration.empowered_cost_divisor,
-            kindled_spark_divisor: source.transfiguration.kindled_spark_divisor,
-            flat_benefit,
         },
         site: CompatibilitySite {
             placeable_types: source
@@ -606,30 +476,6 @@ fn validate(source: &RewardSelectionCatalog) -> Result<()> {
     }
 
     validate_nonempty_unique(
-        "transfiguration.allowed_forms",
-        source.transfiguration.allowed_forms.iter().copied(),
-    )?;
-    at_least_one(
-        "transfiguration.empowered_cost_divisor",
-        source.transfiguration.empowered_cost_divisor.value(),
-    )?;
-    at_least_one(
-        "transfiguration.kindled_spark_divisor",
-        source.transfiguration.kindled_spark_divisor.value(),
-    )?;
-    validate_complete_set(
-        "transfiguration.flat_benefits",
-        source
-            .transfiguration
-            .flat_benefits
-            .iter()
-            .map(|entry| entry.form),
-        FlatBenefitForm::ALL,
-    )?;
-    for entry in &source.transfiguration.flat_benefits {
-        nonnegative("transfiguration flat benefit", entry.benefit)?;
-    }
-    validate_nonempty_unique(
         "site.placeable_types",
         source.site.placeable_types.iter().copied(),
     )?;
@@ -662,12 +508,6 @@ fn nonnegative(path: &str, value: f64) -> Result<()> {
     Ok(())
 }
 
-fn at_least_one(path: &str, value: f64) -> Result<()> {
-    if !value.is_finite() || value < 1.0 {
-        bail!("{path} must be a finite number greater than or equal to 1");
-    }
-    Ok(())
-}
 
 fn blend<const N: usize>(path: &str, weights: [f64; N]) -> Result<()> {
     for weight in weights {
@@ -771,30 +611,6 @@ RewardSelectionCatalog(
     big_minimum: 6,
     cheap_character_maximum: 4,
   ),
-  transfiguration: TransfigurationRules(
-    allowed_forms: [
-      Perfected,
-      Attuned,
-      Resonant,
-      Hastened,
-      Enduring,
-      Inspired,
-      Kindled,
-      Amplified,
-      Empowered,
-    ],
-    empowered_cost_divisor: 2.5,
-    kindled_spark_divisor: 3.5,
-    flat_benefits: [
-      (form: Perfected, benefit: 0.71),
-      (form: Attuned, benefit: 0.72),
-      (form: Resonant, benefit: 0.73),
-      (form: Hastened, benefit: 0.74),
-      (form: Enduring, benefit: 0.75),
-      (form: Inspired, benefit: 0.76),
-      (form: Amplified, benefit: 0.77),
-    ],
-  ),
   site: SiteRules(
     placeable_types: [Duplication, Transfiguration, Purge, Shop],
   ),
@@ -828,44 +644,6 @@ RewardSelectionCatalog(
             .collect();
         assert_eq!(quality_keys, ["3", "1", "2"]);
 
-        let forms: Vec<_> = lowered["transfiguration"]["allowed-forms"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|value| value.as_str().unwrap())
-            .collect();
-        assert_eq!(
-            forms,
-            [
-                "Perfected",
-                "Attuned",
-                "Resonant",
-                "Hastened",
-                "Enduring",
-                "Inspired",
-                "Kindled",
-                "Amplified",
-                "Empowered",
-            ]
-        );
-        let benefit_keys: Vec<_> = lowered["transfiguration"]["flat-benefit"]
-            .as_table()
-            .unwrap()
-            .keys()
-            .map(String::as_str)
-            .collect();
-        assert_eq!(
-            benefit_keys,
-            [
-                "Perfected",
-                "Attuned",
-                "Resonant",
-                "Hastened",
-                "Enduring",
-                "Inspired",
-                "Amplified",
-            ]
-        );
         let site_types: Vec<_> = lowered["site"]["placeable-types"]
             .as_array()
             .unwrap()
@@ -894,14 +672,6 @@ RewardSelectionCatalog(
                 "      (quality: One, weight: 1.1),",
             ),
             "dreamsign.quality_weights contains duplicate",
-        );
-        assert_lower_error(
-            &synthetic_source().replace("      (form: Amplified, benefit: 0.77),\n", ""),
-            "transfiguration.flat_benefits must define exactly",
-        );
-        assert_lower_error(
-            &synthetic_source().replace("      Empowered,\n", "      Perfected,\n"),
-            "transfiguration.allowed_forms contains duplicate",
         );
         assert_lower_error(
             &synthetic_source().replace(
@@ -966,16 +736,6 @@ RewardSelectionCatalog(
                 "mid_minimum: 3",
                 "mid_minimum: 4",
                 "cost bands must be ordered",
-            ),
-            (
-                "empowered_cost_divisor: 2.5",
-                "empowered_cost_divisor: 0.5",
-                "greater than or equal to 1",
-            ),
-            (
-                "(form: Perfected, benefit: 0.71)",
-                "(form: Perfected, benefit: -0.1)",
-                "finite nonnegative",
             ),
         ] {
             assert_lower_error(&synthetic_source().replacen(from, to, 1), expected);

@@ -104,7 +104,6 @@ export const MINIMAL_SITES_DATA: SitesData = {
     guideId: "fixture-random-guide",
   },
   cardChoices: {
-    transfiguration: { standardLimit: 3, enhancedLimit: null },
     duplication: { standardLimit: 3, enhancedLimit: null },
   },
   gamble: {

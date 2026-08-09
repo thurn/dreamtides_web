@@ -10,9 +10,20 @@ import type {
   TransfigurationType,
 } from "../../types/journey";
 import {
-  buildTransfigurationCandidates,
-  buildTransfigurationSiteView,
+  buildTransfigurationCandidates as buildTransfigurationCandidatesImpl,
+  buildTransfigurationSiteView as buildTransfigurationSiteViewImpl,
 } from "./transfiguration-view-model";
+import { transfigurationFixture } from "../../testing/transfiguration-fixture";
+
+const transfigurationData = transfigurationFixture();
+const buildTransfigurationCandidates = (
+  ...args: Parameters<typeof buildTransfigurationCandidatesImpl> extends readonly [unknown, ...infer Rest]
+    ? Rest
+    : never
+) => buildTransfigurationCandidatesImpl(transfigurationData, ...args);
+const buildTransfigurationSiteView = (
+  params: Omit<Parameters<typeof buildTransfigurationSiteViewImpl>[0], "transfigurationData">,
+) => buildTransfigurationSiteViewImpl({ ...params, transfigurationData });
 
 const GUIDE = {
   id: "fixture-transfiguration-guide",

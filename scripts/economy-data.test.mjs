@@ -2,14 +2,6 @@ import { describe, expect, it } from "vitest";
 import { compileEconomyData } from "./economy-data.mjs";
 
 function fixture() {
-  const bands = [
-    ["Amplified", 20, 10, 10],
-    ["Attuned", 30, 10, 10],
-    ["Inspired", 40, 20, 20],
-    ["Enduring", 60, 20, 30],
-    ["Resonant", 70, 20, 30],
-    ["Perfected", 120, 0, 120],
-  ].map(([form, base, jitter, floor]) => ({ form, base, jitter, floor }));
   return {
     "schema-version": 1,
     journey: { "default-starting-essence": 137, "dreamsign-cap": 9 },
@@ -44,37 +36,6 @@ function fixture() {
       },
     },
     purge: { "marginal-costs": [13, 29, 61], "enhanced-discount-percent": 25 },
-    transfiguration: {
-      "minimum-cost": 0,
-      "maximum-cost": 120,
-      step: 10,
-      "free-band": { base: 0, jitter: 0, floor: 0 },
-      "form-bands": bands,
-      "stat-delta-bands": [
-        {
-          "minimum-delta": 1,
-          "maximum-delta": 1,
-          base: 20,
-          jitter: 10,
-          floor: 10,
-        },
-        {
-          "minimum-delta": 2,
-          "maximum-delta": 2,
-          base: 40,
-          jitter: 20,
-          floor: 20,
-        },
-        {
-          "minimum-delta": 3,
-          "maximum-delta": 3,
-          base: 60,
-          jitter: 20,
-          floor: 40,
-        },
-        { "minimum-delta": 4, base: 80, jitter: 20, floor: 60 },
-      ],
-    },
     "battle-reward": {
       "base-essence": 43,
       "essence-per-completion-level": 17,
@@ -154,20 +115,6 @@ describe("compileEconomyData", () => {
         source.shop.discounts.percentages.push({ value: 25, weight: 1 });
       },
       /duplicate value/u,
-    ],
-    [
-      "nonzero free band",
-      (source) => {
-        source.transfiguration["free-band"].base = 10;
-      },
-      /must remain zero-cost/u,
-    ],
-    [
-      "malformed bands",
-      (source) => {
-        source.transfiguration["stat-delta-bands"][3]["minimum-delta"] = 5;
-      },
-      /delta identities/u,
     ],
   ])("rejects %s", (_label, mutate, pattern) => {
     const source = fixture();

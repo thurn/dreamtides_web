@@ -100,6 +100,10 @@ export interface ContentConfig {
   draftFoldHash?: string;
   /** Economy coefficients and genesis defaults pinned independently of URL settings. */
   economyFoldHash?: string;
+  /** Gamble game rules and economic outcomes. */
+  gambleFoldHash?: string;
+  /** Transfiguration predicates, operations, pricing, and benefits. */
+  transfigurationFoldHash?: string;
   /** Shared reward-selection scoring and eligibility tuning. */
   rewardSelectionFoldHash?: string;
   /** Augury encounter rules, archetype weights, policies, and quantities. */
@@ -118,6 +122,8 @@ export interface PinnedContentConfig extends ContentConfig {
   sitesFoldHash: string;
   draftFoldHash: string;
   economyFoldHash: string;
+  gambleFoldHash: string;
+  transfigurationFoldHash: string;
   rewardSelectionFoldHash: string;
   auguryFoldHash: string;
   explorationFoldHash: string;

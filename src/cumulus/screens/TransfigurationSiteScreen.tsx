@@ -9,7 +9,6 @@ import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
 import { GlassButton } from "../components/controls/GlassButton";
 import {
   TransfigurationButton,
-  transfigurationChangeDescriptor,
   type TransfigurationButtonModel,
 } from "../components/controls/TransfigurationButton";
 import { GlassPanel } from "../components/overlay/GlassPanel";
@@ -20,10 +19,7 @@ import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
-import {
-  formatMessageDescriptor,
-  useMessages,
-} from "../hooks/use-messages";
+import { useMessages } from "../hooks/use-messages";
 
 export type TransfigurationGuideView = GuideGalleryGuideView;
 
@@ -95,7 +91,6 @@ export function TransfigurationSiteScreen({
   onClose,
   onTransfigure,
 }: TransfigurationSiteScreenProps) {
-  const t = useMessages();
   const reduceMotion =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -280,10 +275,7 @@ export function TransfigurationSiteScreen({
                   onTransfigure(
                     picked.entryId,
                     form.type,
-                    formatMessageDescriptor(
-                      t,
-                      transfigurationChangeDescriptor(form.change),
-                    ),
+                    form.presentation.selectedCardDescription,
                     form.effectDetails,
                     form.essenceCost,
                   );

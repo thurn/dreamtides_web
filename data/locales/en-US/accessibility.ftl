@@ -126,19 +126,8 @@ exploration-purge-and-copy-complete =
     }
 # Accessible announcement while an Exploration outcome transfigures one card.
 # $cardName is the canonical display name with unknown grammatical gender;
-# $form is one of the nine stable Transfiguration form identifiers.
-exploration-card-transfiguring =
-    { $form ->
-        [Empowered] Transfiguring { $cardName } into its Empowered form
-        [Amplified] Transfiguring { $cardName } into its Amplified form
-        [Kindled] Transfiguring { $cardName } into its Kindled form
-        [Inspired] Transfiguring { $cardName } into its Inspired form
-        [Enduring] Transfiguring { $cardName } into its Enduring form
-        [Hastened] Transfiguring { $cardName } into its Hastened form
-        [Attuned] Transfiguring { $cardName } into its Attuned form
-        [Perfected] Transfiguring { $cardName } into its Perfected form
-       *[Resonant] Transfiguring { $cardName } into its Resonant form
-    }
+# $formName is the source-English name supplied by the Transfiguration catalog.
+exploration-card-transfiguring = Transfiguring { $cardName } into its { $formName } form
 # Accessible announcement during the first phase of a compound Exploration
 # outcome. $purgedCardName is removed before a copy of $sourceCardName is made;
 # both are canonical card display names with unknown grammatical gender.
@@ -288,56 +277,14 @@ character-dialogue-accessible-name = { $speakerName } speaks
 # Accessible command on a drag handle that reorders one card. $itemLabel is the
 # displayed card label; activating arrow-key commands moves that physical entry.
 card-order-reorder-action = Reorder { $itemLabel }
-# Accessible name for a selectable Transfiguration form and its price. $form is
-# one of the nine stable form identifiers; $essenceCost is a non-negative
-# integer, where exact zero means the choice is free.
+# Accessible name for a selectable Transfiguration form and its price.
+# $formName is the authored catalog name; $essenceCost is a non-negative integer,
+# where exact zero means the choice is free.
 transfiguration-form-choice =
-    { $form ->
-        [Empowered] Empowered
-        [Amplified] Amplified
-        [Kindled] Kindled
-        [Inspired] Inspired
-        [Enduring] Enduring
-        [Hastened] Hastened
-        [Attuned] Attuned
-        [Perfected] Perfected
-       *[Resonant] Resonant
-    }{ $essenceCost ->
+    { $formName }{ $essenceCost ->
         [0] , free
        *[other] , { $essenceCost } { -essence }
     }
-# Accessibility-only change summary for a Transfiguration detail panel. The
-# numeric $from and $to values are finite non-negative costs and Spark totals;
-# the values are presented as semantic numbers rather than preformatted text.
-transfiguration-change-energy = Energy cost: { $from } → { $to }
-# Accessibility-only change summary for a Transfiguration detail panel. The
-# numeric $from and $to values are finite non-negative Spark totals.
-transfiguration-change-spark = Spark: { $from } → { $to }
-# Accessibility-only change summary for a Transfiguration detail panel. This
-# complete message describes the player consequence of adding Draw.
-transfiguration-change-draw = Adds: Draw a card.
-# Accessibility-only change summary for a Transfiguration detail panel. This
-# complete message describes the player consequence of adding Reclaim.
-transfiguration-change-reclaim = Adds: Reclaim.
-# Accessibility-only change summary for a Transfiguration detail panel. This
-# complete message describes the player consequence of adding Fast.
-transfiguration-change-fast = Adds: Fast.
-# Accessibility-only change summary for an Amplified Transfiguration. $rulesText
-# is opaque authored card rules text; it may contain rule symbols and must be
-# inserted without parsing or rewording.
-transfiguration-change-amplified = “{ $rulesText }”
-# Accessibility-only change summary for a Resonant Transfiguration. It explains
-# the trigger consequence in a complete sentence.
-transfiguration-change-resonant = Widens a named trigger to fire more often.
-# Accessibility-only change summary for an Attuned Transfiguration. $amount is
-# a finite non-negative activated-ability cost reduction, including zero when
-# the authored change permits it.
-transfiguration-change-attuned = Activated ability costs { $amount } less.
-# Accessibility-only change summary for a Perfected Transfiguration. It states
-# the complete player consequence without variables.
-transfiguration-change-perfected = Applies every available transfiguration.
-# Accessibility-only fallback when a Transfiguration change cannot be resolved.
-transfiguration-change-unavailable = Transfiguration change unavailable.
 # Complete accessible name for an unrevealed wager prize card. It combines the
 # draw condition and reward because the visual title and description are hidden
 # from assistive technology by the labeled card group. $targetLabel is the

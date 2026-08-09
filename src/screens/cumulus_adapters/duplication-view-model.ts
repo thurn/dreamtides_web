@@ -18,6 +18,7 @@ import type {
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { toDeckCardView } from "./mobile-deck-view-model";
 import { projectGuideView } from "./guide-view-model";
+import type { TransfigurationData } from "../../types/transfiguration-data";
 
 /** Resolve Deacon Holt, the resident guide for Duplication. */
 export function resolveDuplicationGuide(
@@ -37,6 +38,7 @@ export function buildDuplicationGuideView(
 
 /** Resolve the persisted concrete entry ids into their current card displays. */
 export function buildDuplicationCards(
+  transfigurationData: TransfigurationData,
   state: JourneyState,
   runtime: CardChoiceSiteRuntime | null,
   cardDatabase: Map<number, CardData>,
@@ -50,7 +52,7 @@ export function buildDuplicationCards(
   for (const entryId of runtime.entryIds) {
     const entry = deckByEntryId.get(entryId);
     if (entry === undefined) continue;
-    const card = toDeckCardView(entry, cardDatabase);
+    const card = toDeckCardView(transfigurationData, entry, cardDatabase);
     if (card === null) continue;
     cards.push({ entryId: card.entryId, model: card.model });
   }
@@ -83,6 +85,7 @@ export function buildDuplicationSiteView(params: {
   cardDatabase: Map<number, CardData>;
   guide: DreamGuideContent;
   guideLine: string;
+  transfigurationData: TransfigurationData;
 }): DuplicationSiteView {
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
@@ -94,6 +97,7 @@ export function buildDuplicationSiteView(params: {
     alreadyAccepted: (params.runtime?.acceptedEntryIds.length ?? 0) > 0,
     isEnhanced: params.site.isEnhanced,
     cards: buildDuplicationCards(
+      params.transfigurationData,
       params.state,
       params.runtime,
       params.cardDatabase,

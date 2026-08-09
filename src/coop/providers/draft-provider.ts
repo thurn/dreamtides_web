@@ -67,7 +67,11 @@ export function createDraftContentProvider(
     transfigurationForCard: (cardNumber, rng) => {
       const card = content.cardDatabase.get(cardNumber);
       if (card === undefined) return null;
-      const forms = offeredTransfigurationForms(card, null);
+      const forms = offeredTransfigurationForms(
+        content.transfigurationData,
+        card,
+        null,
+      );
       if (forms.length === 0) return null;
       return forms[Math.floor(rng() * forms.length)]?.type ?? null;
     },

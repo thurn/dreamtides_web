@@ -5,6 +5,7 @@ import {
   MINIMAL_SITES_DATA,
 } from "../../__test-helpers__/atlas-fixtures";
 import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
+import { transfigurationFormFixture } from "../../testing/transfiguration-fixture";
 import type {
   MerchantChoiceCandidate,
   MerchantContext,
@@ -269,6 +270,7 @@ describe("augury view model", () => {
     };
     const transfiguration = {
       type: "Empowered" as const,
+      form: transfigurationFormFixture("Empowered"),
       markedText: "Changed fixture text.",
       energyChanged: true,
       sparkChanged: false,

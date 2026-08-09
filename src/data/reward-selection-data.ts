@@ -40,8 +40,6 @@ export function parseRewardSelectionData(value: unknown): RewardSelectionData {
     !isRecord(tuning.centrality) || Object.values(tuning.centrality).some((entry) => !finite(entry)) ||
     !isRecord(tuning.dreamsign) || !finite(tuning.dreamsign.fullCoverageCount) || !finite(tuning.dreamsign.featurelessCoverage) || !isRecord(tuning.dreamsign.qualityWeight) || Object.values(tuning.dreamsign.qualityWeight).some((entry) => !finite(entry)) ||
     !isRecord(tuning.costBands) || Object.values(tuning.costBands).some((entry) => !finite(entry)) ||
-    !Array.isArray(tuning.allowedTransfigurations) || tuning.allowedTransfigurations.some((entry) => typeof entry !== "string") ||
-    !isRecord(tuning.transfigurationBenefit) || !finite(tuning.transfigurationBenefit.empoweredCostDivisor) || !finite(tuning.transfigurationBenefit.kindledSparkDivisor) || !isRecord(tuning.transfigurationBenefit.flat) || Object.values(tuning.transfigurationBenefit.flat).some((entry) => !finite(entry)) ||
     !Array.isArray(tuning.placeableSiteTypes) || tuning.placeableSiteTypes.some((entry) => typeof entry !== "string")
   ) throw new Error("Failed to load reward-selection data: malformed reward-selection-data.json");
   return value as unknown as RewardSelectionData;

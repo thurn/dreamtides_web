@@ -3,10 +3,15 @@ import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import {
   buildDraftTransfiguredOfferLog,
-  buildDraftView,
+  buildDraftView as buildDraftViewImpl,
   resolveOfferCards,
   sortOfferCards,
 } from "./draft-view-model";
+import { transfigurationFixture } from "../../testing/transfiguration-fixture";
+
+const buildDraftView = (
+  params: Omit<Parameters<typeof buildDraftViewImpl>[0], "transfigurationData">,
+) => buildDraftViewImpl({ ...params, transfigurationData: transfigurationFixture() });
 
 function card(overrides: Partial<CardData> & { cardNumber: number }): CardData {
   return {

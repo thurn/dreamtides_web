@@ -12,6 +12,8 @@ import type {
   SiteState,
 } from "../../types/journey";
 import type { ArtRef } from "../../cumulus/primitives/art";
+import type { TransfigurationData } from "../../types/transfiguration-data";
+import { transfigurationForm } from "../../data/transfiguration-data";
 import type {
   TransfigurationCandidateView,
   TransfigurationGuideView,
@@ -39,6 +41,7 @@ export function buildTransfigurationGuideView(
 
 /** Group persisted form rows into card choices for the active visit mode. */
 export function buildTransfigurationCandidates(
+  transfigurationData: TransfigurationData,
   state: JourneyState,
   runtime: CardChoiceSiteRuntime | null,
   cardDatabase: ReadonlyMap<number, CardData>,
@@ -70,9 +73,14 @@ export function buildTransfigurationCandidates(
       candidates.set(entry.entryId, candidate);
     }
 
-    const preview = buildTransfigurationDisplay(card, offer.type);
+    const preview = buildTransfigurationDisplay(
+      transfigurationData,
+      card,
+      offer.type,
+    );
     candidate.forms.push({
       type: offer.type,
+      presentation: transfigurationForm(transfigurationData, offer.type),
       change: offer.change,
       effectDetails: offer.effectDetails,
       essenceCost: offer.essenceCost,
@@ -103,7 +111,11 @@ export function buildTransfigurationCandidates(
     if (entry.transfiguration === null) continue;
     const card = cardDatabase.get(entry.cardNumber);
     if (card === undefined) continue;
-    const reforged = buildTransfigurationDisplay(card, entry.transfiguration);
+    const reforged = buildTransfigurationDisplay(
+      transfigurationData,
+      card,
+      entry.transfiguration,
+    );
     wholeDeck.push({
       entryId: entry.entryId,
       model: {
@@ -128,6 +140,7 @@ export function buildTransfigurationSiteView(params: {
   cardDatabase: ReadonlyMap<number, CardData>;
   guide: DreamGuideContent;
   guideLine: string;
+  transfigurationData: TransfigurationData;
 }): TransfigurationSiteView {
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
@@ -139,6 +152,7 @@ export function buildTransfigurationSiteView(params: {
     isEnhanced: params.site.isEnhanced,
     alreadyAccepted: (params.runtime?.acceptedEntryIds.length ?? 0) > 0,
     candidates: buildTransfigurationCandidates(
+      params.transfigurationData,
       params.state,
       params.runtime,
       params.cardDatabase,

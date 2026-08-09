@@ -5,6 +5,7 @@ import {
 } from "../test-support";
 import { createBattleInit } from "./create-battle-init";
 import type { CreateBattleInitInput } from "./create-battle-init";
+import { transfigurationFixture } from "../../testing/transfiguration-fixture";
 import {
   buildOpponentDreamsigns,
   opponentAbilityIsActive,
@@ -263,6 +264,7 @@ function makeInput(
     },
   };
   return {
+    transfigurationData: transfigurationFixture(),
     opponentsData: OPPONENTS,
     battleEntryKey: "site-1::0::dreamscape-2",
     site: baseState.atlas.nodes["dreamscape-2"].sites[0],
@@ -564,6 +566,7 @@ describe("createBattleInit opponent invariants", () => {
 
       const common = {
         opponentsData: OPPONENTS,
+        transfigurationData: transfigurationFixture(),
         battleEntryKey: "site-1::0::affiliated-node",
         site: baseState.atlas.nodes["dreamscape-2"].sites[0],
         cardDatabase: db,

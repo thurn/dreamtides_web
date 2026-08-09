@@ -65,10 +65,11 @@ describe("merchantTransfigurations", () => {
       spark: 2,
       renderedText: "Deal 2 damage.",
     });
-    expect(eligibleTransfigurations(card)).toContain("Perfected");
-    expect(merchantTransfigurations(card)).not.toContain("Perfected");
+    const data = makeMerchantTestContent({ cards: [card] }).transfigurationData;
+    expect(eligibleTransfigurations(data, card)).toContain("Perfected");
+    expect(merchantTransfigurations(data, card)).not.toContain("Perfected");
     // It still offers the underlying types.
-    expect(merchantTransfigurations(card)).toContain("Empowered");
+    expect(merchantTransfigurations(data, card)).toContain("Empowered");
   });
 
   it("includes Hastened for a non-fast Event", () => {
@@ -81,7 +82,8 @@ describe("merchantTransfigurations", () => {
       isFast: false,
       renderedText: "Deal damage.",
     });
-    expect(merchantTransfigurations(card)).toContain("Hastened");
+    const data = makeMerchantTestContent({ cards: [card] }).transfigurationData;
+    expect(merchantTransfigurations(data, card)).toContain("Hastened");
   });
 });
 

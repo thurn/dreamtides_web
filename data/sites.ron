@@ -111,8 +111,5 @@ SitesCatalog(
     insufficient_destinations: Fail,
   ),
 
-  card_choices: CardChoiceRules(
-    transfiguration: CardChoiceLimits(standard: Count(3), enhanced: All),
-    duplication: CardChoiceLimits(standard: Count(3), enhanced: All),
-  ),
+  card_choices: CardChoiceRules(duplication: CardChoiceLimits(standard: Count(3), enhanced: All)),
 )

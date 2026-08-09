@@ -475,11 +475,10 @@ export function compileSitesData(sourceValue, catalogs = {}) {
     );
 
   const choices = keys(root["card-choices"], file, "card-choices", [
-    "transfiguration",
     "duplication",
   ]);
   const cardChoices = Object.fromEntries(
-    ["transfiguration", "duplication"].map((kind) => {
+    ["duplication"].map((kind) => {
       const source = keys(choices[kind], file, `card-choices.${kind}`, [
         "standard-limit",
         "enhanced-limit",

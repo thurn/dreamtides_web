@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createDefaultState } from "../../state/journey-context";
 import { gambleGameByRulesKind } from "../../data/gamble-data";
 import { gambleFixture } from "../../testing/gamble-fixture";
+import { transfigurationFixture } from "../../testing/transfiguration-fixture";
 import type { DreamGuideContent } from "../../types/content";
 import type {
   FourSuitRepriseSiteRuntime,
@@ -26,11 +27,15 @@ import {
 } from "./gamble-site-view-model";
 
 const buildGambleSiteView = (
-  params: Omit<Parameters<typeof buildGambleSiteViewImpl>[0], "gambleData">,
+  params: Omit<
+    Parameters<typeof buildGambleSiteViewImpl>[0],
+    "gambleData" | "transfigurationData"
+  >,
 ) =>
   buildGambleSiteViewImpl({
     ...params,
     gambleData: gambleFixture(),
+    transfigurationData: transfigurationFixture(),
   });
 
 const GUIDE_LINE = "Fixture game line.";

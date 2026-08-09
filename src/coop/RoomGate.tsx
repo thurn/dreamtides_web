@@ -19,6 +19,8 @@ import type { OpponentsData } from "../types/opponents-data";
 import type { RewardSelectionData } from "../types/reward-selection-data";
 import type { AuguryData } from "../types/augury-data";
 import type { DraftData } from "../types/draft-data";
+import type { GambleData } from "../types/gamble-data";
+import type { TransfigurationData } from "../types/transfiguration-data";
 import {
   createRoomEvictingStale,
   generateRoomId,
@@ -113,6 +115,8 @@ interface RoomGateProps {
   draftData: DraftData;
   /** Validated economy content and journey defaults pinned into room genesis. */
   economyData: EconomyData;
+  gambleData: GambleData;
+  transfigurationData: TransfigurationData;
   opponentsData: OpponentsData;
   rewardSelectionData: RewardSelectionData;
   auguryData: AuguryData;
@@ -237,6 +241,8 @@ function hasPinnedContentConfig(genesis: Genesis): genesis is PinnedGenesis {
     typeof genesis.contentConfig.sitesFoldHash === "string" &&
     typeof genesis.contentConfig.draftFoldHash === "string" &&
     typeof genesis.contentConfig.economyFoldHash === "string" &&
+    typeof genesis.contentConfig.gambleFoldHash === "string" &&
+    typeof genesis.contentConfig.transfigurationFoldHash === "string" &&
     typeof genesis.contentConfig.rewardSelectionFoldHash === "string" &&
     typeof genesis.contentConfig.auguryFoldHash === "string" &&
     typeof genesis.contentConfig.explorationFoldHash === "string" &&
@@ -271,6 +277,8 @@ export function RoomGate({
   sitesFoldHash,
   draftData,
   economyData,
+  gambleData,
+  transfigurationData,
   opponentsData,
   rewardSelectionData,
   auguryData,
@@ -289,6 +297,8 @@ export function RoomGate({
         sitesFoldHash,
         draftData,
         economyData,
+        gambleData,
+        transfigurationData,
         opponentsData,
         rewardSelectionData,
         auguryData,
@@ -300,6 +310,8 @@ export function RoomGate({
       auguryData,
       draftData,
       economyData,
+      gambleData,
+      transfigurationData,
       explorationFoldHash,
       opponentsData,
       rewardSelectionData,
@@ -494,6 +506,8 @@ export function RoomGate({
       sitesFoldHash: localContentConfig.sitesFoldHash,
       draftFoldHash: localContentConfig.draftFoldHash,
       economyFoldHash: localContentConfig.economyFoldHash,
+      gambleFoldHash: localContentConfig.gambleFoldHash,
+      transfigurationFoldHash: localContentConfig.transfigurationFoldHash,
       rewardSelectionFoldHash: localContentConfig.rewardSelectionFoldHash,
       auguryFoldHash: localContentConfig.auguryFoldHash,
       explorationFoldHash: localContentConfig.explorationFoldHash,

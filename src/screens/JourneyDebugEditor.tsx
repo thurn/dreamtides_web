@@ -8,7 +8,21 @@ const SOURCE = "journey_debug_editor";
 /** Outer controller for the diagnostic editor's Cumulus presentation. */
 export default function JourneyDebugEditor({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { state, mutations, journeyContent } = useJourney();
-  const view = useMemo(() => buildJourneyDebugEditorView(state, journeyContent.cardDatabase, journeyContent.dreamsignTemplates), [journeyContent.cardDatabase, journeyContent.dreamsignTemplates, state]);
+  const view = useMemo(
+    () =>
+      buildJourneyDebugEditorView(
+        journeyContent.transfigurationData,
+        state,
+        journeyContent.cardDatabase,
+        journeyContent.dreamsignTemplates,
+      ),
+    [
+      journeyContent.cardDatabase,
+      journeyContent.dreamsignTemplates,
+      journeyContent.transfigurationData,
+      state,
+    ],
+  );
   const dreamsignIndex = (actionId: string): number => Number(actionId.slice(actionId.lastIndexOf(":") + 1));
   const changeResource = (id: JourneyDebugResourceId, delta: number): void => {
     if (id === "essence") mutations.setEssence(state.essence + delta, SOURCE);

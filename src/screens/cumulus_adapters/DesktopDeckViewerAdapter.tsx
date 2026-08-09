@@ -31,6 +31,7 @@ export function DesktopDeckViewerAdapter({
   const view = useMemo(
     () =>
       buildDesktopDeckView(
+        journeyContent.transfigurationData,
         state.deck,
         journeyContent.cardDatabase,
         state.dreamAvatar,
@@ -46,6 +47,7 @@ export function DesktopDeckViewerAdapter({
       state.dreamsigns,
       journeyContent.dreamAvatars,
       journeyContent.poolContext,
+      journeyContent.transfigurationData,
       state.seed,
     ],
   );

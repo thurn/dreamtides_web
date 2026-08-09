@@ -17,6 +17,7 @@ import type { TutorialSiteConfiguration } from "../../types/tutorial";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
+import type { TransfigurationData } from "../../types/transfiguration-data";
 
 /**
  * Sort an offered pack for display: cheapest first, then alphabetically as a
@@ -63,6 +64,7 @@ export function buildDraftView(params: {
   journeyState?: JourneyState;
   tutorialConfiguration?: TutorialSiteConfiguration;
   defaultPickCount: number;
+  transfigurationData: TransfigurationData;
 }): DraftView {
   const pickTotal =
     params.site !== null
@@ -77,7 +79,11 @@ export function buildDraftView(params: {
         if (type === undefined) {
           return { cardId: card.id, displaySnapshot: card };
         }
-        const transfigured = buildTransfigurationDisplay(card, type);
+        const transfigured = buildTransfigurationDisplay(
+          params.transfigurationData,
+          card,
+          type,
+        );
         return {
           cardId: card.id,
           displaySnapshot: transfigured.card,

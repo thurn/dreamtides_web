@@ -31,7 +31,6 @@ import type {
   StarwayStairsGame,
   ThreeGateGame,
 } from "../../types/gamble-data";
-import type { CardData } from "../../types/cards";
 import {
   STANDARD_PLAYING_CARD_DECK,
   gravokWagerCost,
@@ -131,7 +130,11 @@ function transfigureShopSlots(
     if (slot.itemType !== "card") return slot;
     const card = content.cardDatabase.get(slot.cardNumber);
     if (card === undefined) return slot;
-    const forms = offeredTransfigurationForms(card, null);
+    const forms = offeredTransfigurationForms(
+      content.transfigurationData,
+      card,
+      null,
+    );
     const form = forms[Math.floor(rng() * forms.length)];
     return form === undefined ? slot : { ...slot, transfiguration: form.type };
   });
@@ -300,8 +303,16 @@ function buildFourSuitRepriseRuntime(
     if (entry.isBane || entry.transfiguration !== null) return [];
     const baseCard = content.cardDatabase.get(entry.cardNumber);
     if (baseCard === undefined) return [];
-    const cardSnapshot = resolveDeckEntryCard(baseCard, entry);
-    const forms = offeredTransfigurationForms(cardSnapshot, null);
+    const cardSnapshot = resolveDeckEntryCard(
+      content.transfigurationData,
+      baseCard,
+      entry,
+    );
+    const forms = offeredTransfigurationForms(
+      content.transfigurationData,
+      cardSnapshot,
+      null,
+    );
     if (forms.length === 0) return [];
     return [
       {
@@ -490,26 +501,35 @@ function buildGambleFallbackRuntime(
  */
 function selectCardChoiceEntryIds(
   deck: readonly DeckEntry[],
-  cardDatabase: Map<number, CardData>,
+  content: JourneyContent,
   kind: "transfiguration" | "duplication",
   isEnhanced: boolean,
-  limits: JourneyContent["sitesData"]["cardChoices"]["transfiguration"],
   rng: () => number,
 ): string[] {
   const ordered = isEnhanced ? [...deck] : rngShuffle(deck, rng);
-  const configuredLimit = isEnhanced
-    ? limits.enhancedLimit
-    : limits.standardLimit;
+  const duplicationLimits = content.sitesData.cardChoices.duplication;
+  const configuredLimit =
+    kind === "transfiguration"
+      ? isEnhanced
+        ? content.transfigurationData.site.enhancedChoiceLimit
+        : content.transfigurationData.site.standardChoiceLimit
+      : isEnhanced
+        ? duplicationLimits.enhancedLimit
+        : duplicationLimits.standardLimit;
   const limit = configuredLimit ?? Number.POSITIVE_INFINITY;
   const entryIds: string[] = [];
   for (const entry of ordered) {
     if (entryIds.length >= limit) break;
-    const card = cardDatabase.get(entry.cardNumber);
+    const card = content.cardDatabase.get(entry.cardNumber);
     if (card === undefined) continue;
     if (
       kind === "transfiguration" &&
       (entry.transfiguration !== null ||
-        offeredTransfigurationForms(card, entry.transfiguration).length === 0)
+        offeredTransfigurationForms(
+          content.transfigurationData,
+          card,
+          entry.transfiguration,
+        ).length === 0)
     ) {
       continue;
     }
@@ -522,18 +542,15 @@ function selectCardChoiceEntryIds(
 function buildCardChoiceRuntime(
   journey: JourneyState,
   site: SiteState,
-  cardDatabase: Map<number, CardData>,
+  content: JourneyContent,
   kind: "transfiguration" | "duplication",
   rng: () => number,
-  economy: JourneyContent["economyData"]["transfiguration"],
-  limits: JourneyContent["sitesData"]["cardChoices"]["transfiguration"],
 ): CardChoiceSiteRuntime {
   const entryIds = selectCardChoiceEntryIds(
     journey.deck,
-    cardDatabase,
+    content,
     kind,
     site.isEnhanced,
-    limits,
     rng,
   );
 
@@ -553,9 +570,10 @@ function buildCardChoiceRuntime(
   for (const entryId of entryIds) {
     const entry = deckByEntryId.get(entryId);
     if (entry === undefined) continue;
-    const card = cardDatabase.get(entry.cardNumber);
+    const card = content.cardDatabase.get(entry.cardNumber);
     if (card === undefined) continue;
     for (const offer of offeredTransfigurationForms(
+      content.transfigurationData,
       card,
       entry.transfiguration,
     )) {
@@ -566,7 +584,7 @@ function buildCardChoiceRuntime(
         effectDetails: transfigurationEffectDetails(offer, card),
         previewCard: offer.previewCard,
         essenceCost: transfigurationEssenceCost(
-          economy,
+          content.transfigurationData,
           journey.seed,
           site.id,
           entryId,
@@ -767,11 +785,9 @@ export function createSiteContentProvider(
           const runtime = buildCardChoiceRuntime(
             journey,
             site,
-            content.cardDatabase,
+            content,
             kind,
             stream,
-            content.economyData.transfiguration,
-            content.sitesData.cardChoices[kind],
           );
           return { runtime };
         }

@@ -27,8 +27,13 @@ export function MobileDeckViewerAdapter({
   const { state, journeyContent } = useJourney();
 
   const view = useMemo(
-    () => buildMobileDeckView(state.deck, journeyContent.cardDatabase),
-    [state.deck, journeyContent.cardDatabase],
+    () =>
+      buildMobileDeckView(
+        journeyContent.transfigurationData,
+        state.deck,
+        journeyContent.cardDatabase,
+      ),
+    [state.deck, journeyContent.cardDatabase, journeyContent.transfigurationData],
   );
 
   useEffect(() => {

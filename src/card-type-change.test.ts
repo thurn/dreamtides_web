@@ -9,6 +9,9 @@ import {
   applyCardStatOverride,
   resolveDeckEntryCard,
 } from "./card-type-change";
+import { transfigurationFixture } from "./testing/transfiguration-fixture";
+
+const transfigurationData = transfigurationFixture();
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
@@ -124,7 +127,7 @@ describe("resolveDeckEntryCard", () => {
     });
 
     // Empowered alone would halve 8 -> 4; the override wins with 3.
-    const result = resolveDeckEntryCard(card, entry);
+    const result = resolveDeckEntryCard(transfigurationData, card, entry);
 
     expect(result.energyCost).toBe(3);
   });
@@ -150,7 +153,7 @@ describe("resolveDeckEntryCard", () => {
       statOverride: { spark: 7 },
     });
 
-    const result = resolveDeckEntryCard(card, entry);
+    const result = resolveDeckEntryCard(transfigurationData, card, entry);
 
     // typeChange layer
     expect(result.cardType).toBe("Character");
@@ -172,6 +175,6 @@ describe("resolveDeckEntryCard", () => {
       sparkBonus: 1,
     });
 
-    expect(resolveDeckEntryCard(card, entry).spark).toBe(5);
+    expect(resolveDeckEntryCard(transfigurationData, card, entry).spark).toBe(5);
   });
 });

@@ -34,6 +34,11 @@ export function ConfigGateScreen({
     roomContentConfig.draftFoldHash === localContentConfig.draftFoldHash &&
     roomContentConfig.economyFoldHash !== undefined &&
     roomContentConfig.economyFoldHash === localContentConfig.economyFoldHash &&
+    roomContentConfig.gambleFoldHash !== undefined &&
+    roomContentConfig.gambleFoldHash === localContentConfig.gambleFoldHash &&
+    roomContentConfig.transfigurationFoldHash !== undefined &&
+    roomContentConfig.transfigurationFoldHash ===
+      localContentConfig.transfigurationFoldHash &&
     roomContentConfig.opponentsFoldHash !== undefined &&
     roomContentConfig.opponentsFoldHash ===
       localContentConfig.opponentsFoldHash &&
@@ -159,6 +164,17 @@ function describeConfig(
       label: createMessageDescriptor("coop-config-economy-rules-label"),
       value: config.economyFoldHash?.slice(0, 12) ?? unavailable(),
       comparisonKey: config.economyFoldHash?.slice(0, 12) ?? "unavailable",
+    },
+    {
+      label: createMessageDescriptor("coop-config-gamble-rules-label"),
+      value: config.gambleFoldHash?.slice(0, 12) ?? unavailable(),
+      comparisonKey: config.gambleFoldHash?.slice(0, 12) ?? "unavailable",
+    },
+    {
+      label: createMessageDescriptor("coop-config-transfiguration-rules-label"),
+      value: config.transfigurationFoldHash?.slice(0, 12) ?? unavailable(),
+      comparisonKey:
+        config.transfigurationFoldHash?.slice(0, 12) ?? "unavailable",
     },
     {
       label: createMessageDescriptor("coop-config-opponent-rules-label"),

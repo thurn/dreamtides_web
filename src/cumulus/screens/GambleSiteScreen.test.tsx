@@ -18,6 +18,7 @@ import {
   type StarwayStairsSiteView,
   type BlackjackSiteView,
 } from "./GambleSiteScreen";
+import { transfigurationFormFixture } from "../test-helpers/transfiguration-fixture";
 
 const PRESENTATION: GamblePresentation = {
   title: "Fixture game",
@@ -275,6 +276,7 @@ function fourSuitResultView(
         forms: [
           {
             type: "Empowered",
+            presentation: transfigurationFormFixture("Empowered"),
             description: "Fixture form.",
             effectDetails: { fixture: true },
             essenceCost: 0,
@@ -284,6 +286,7 @@ function fourSuitResultView(
               displaySnapshot: { ...card, energyCost: 1 },
               transfiguration: {
                 type: "Empowered",
+                form: transfigurationFormFixture("Empowered"),
                 markedText: card.renderedText,
                 energyChanged: true,
                 sparkChanged: false,

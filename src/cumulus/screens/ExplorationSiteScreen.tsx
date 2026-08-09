@@ -334,6 +334,7 @@ export type ExplorationEffectDisclosure =
   | {
       readonly kind: "fixed-transfiguration";
       readonly transfiguration: TransfigurationType;
+      readonly effectDisclosure: string;
     }
   | { readonly kind: "offered-site"; readonly siteType: string };
 
@@ -537,10 +538,7 @@ function ExplorationChoiceContents({
   const disclosure = action.effectDisclosure === undefined
     ? null
     : action.effectDisclosure.kind === "fixed-transfiguration"
-      ? formatMessageDescriptor(t, {
-          id: "exploration-fixed-transfiguration-disclosure",
-          variables: { transfiguration: action.effectDisclosure.transfiguration },
-        })
+      ? `(${action.effectDisclosure.effectDisclosure})`
       : formatMessageDescriptor(t, {
           id: "exploration-offered-site-disclosure",
           variables: { siteType: action.effectDisclosure.siteType },
@@ -2770,7 +2768,7 @@ export function ExplorationSiteScreen({
             role="status"
             aria-label={t("exploration-card-transfiguring", {
               cardName: transfigurationReward.before.displaySnapshot.name,
-              form: transfigurationReward.after.transfiguration.type,
+              formName: transfigurationReward.after.transfiguration.form.name,
             })}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

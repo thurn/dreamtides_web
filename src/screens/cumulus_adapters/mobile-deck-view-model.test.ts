@@ -4,6 +4,9 @@ import type { DeckEntry } from "../../types/journey";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { buildMobileDeckView, toDeckCardView } from "./mobile-deck-view-model";
 import { NIGHTMARE_CARD_ID, NIGHTMARE_CARD_NAME } from "../../data/nightmare";
+import { transfigurationFixture } from "../../testing/transfiguration-fixture";
+
+const transfigurationData = transfigurationFixture();
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
@@ -42,7 +45,7 @@ describe("toDeckCardView", () => {
     const card = makeCard({ cardNumber: 7 });
     const entry = makeEntry({ entryId: "e7", cardNumber: 7 });
 
-    const view = toDeckCardView(entry, database(card));
+    const view = toDeckCardView(transfigurationData, entry, database(card));
 
     expect(view).not.toBeNull();
     expect(view?.entryId).toBe("e7");
@@ -53,7 +56,7 @@ describe("toDeckCardView", () => {
 
   it("returns null when the card number is not in the database", () => {
     expect(
-      toDeckCardView(makeEntry({ cardNumber: 999 }), database()),
+      toDeckCardView(transfigurationData, makeEntry({ cardNumber: 999 }), database()),
     ).toBeNull();
   });
 
@@ -61,7 +64,7 @@ describe("toDeckCardView", () => {
     const card = makeCard({ cardNumber: 3, energyCost: 5 });
     const entry = makeEntry({ cardNumber: 3, statOverride: { energyCost: 0 } });
 
-    const view = toDeckCardView(entry, database(card));
+    const view = toDeckCardView(transfigurationData, entry, database(card));
 
     expect(view?.model.displaySnapshot.energyCost).toBe(0);
   });
@@ -74,7 +77,7 @@ describe("toDeckCardView", () => {
       sparkBonus: 1,
     });
 
-    const view = toDeckCardView(entry, database(card));
+    const view = toDeckCardView(transfigurationData, entry, database(card));
 
     expect(view?.model.transfiguration).toBeDefined();
     // Kindled changes spark, so the display marks the spark as changed.
@@ -84,6 +87,7 @@ describe("toDeckCardView", () => {
 
   it("preserves the Nightmare flag", () => {
     const view = toDeckCardView(
+      transfigurationData,
       makeEntry({ cardNumber: 10002, isBane: true }),
       database(makeCard({
         id: NIGHTMARE_CARD_ID,
@@ -104,7 +108,7 @@ describe("buildMobileDeckView", () => {
       makeEntry({ entryId: "e1", cardNumber: 1 }),
     ];
 
-    const view = buildMobileDeckView(deck, database(a, b));
+    const view = buildMobileDeckView(transfigurationData, deck, database(a, b));
 
     expect(view.cards.map((c) => c.entryId)).toEqual(["e2", "e1"]);
   });
@@ -116,6 +120,7 @@ describe("buildMobileDeckView", () => {
     ];
 
     const view = buildMobileDeckView(
+      transfigurationData,
       deck,
       database(makeCard({ cardNumber: 1 })),
     );
@@ -130,7 +135,7 @@ describe("buildMobileDeckView", () => {
       makeEntry({ entryId: "copy-b", cardNumber: 1 }),
     ];
 
-    const view = buildMobileDeckView(deck, database(card));
+    const view = buildMobileDeckView(transfigurationData, deck, database(card));
 
     expect(view.cards.map((c) => c.entryId)).toEqual(["copy-a", "copy-b"]);
   });

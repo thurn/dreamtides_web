@@ -89,7 +89,16 @@ function resolvedDeckCards(
     const base = content.cardDatabase.get(entry.cardNumber);
     return base === undefined
       ? []
-      : [{ entry, card: resolveDeckEntryCard(base, entry) }];
+      : [
+          {
+            entry,
+            card: resolveDeckEntryCard(
+              content.transfigurationData,
+              base,
+              entry,
+            ),
+          },
+        ];
   });
 }
 
@@ -163,14 +172,14 @@ function isLegacyDeckCardVariableTarget(
       return (
         entry.transfiguration === null &&
         action.transfiguration !== undefined &&
-        offeredTransfigurationForms(card, null).some(
+        offeredTransfigurationForms(content.transfigurationData, card, null).some(
           (form) => form.type === action.transfiguration,
         )
       );
     case "transfigure-selected":
       return (
         entry.transfiguration === null &&
-        offeredTransfigurationForms(card, null).length > 0
+        offeredTransfigurationForms(content.transfigurationData, card, null).length > 0
       );
     default:
       return true;
@@ -699,7 +708,16 @@ function cardForEntry(
   const entry = journey.deck.find((candidate) => candidate.entryId === entryId);
   if (entry === undefined) return null;
   const base = content.cardDatabase.get(entry.cardNumber);
-  return base === undefined ? null : { entry, card: resolveDeckEntryCard(base, entry) };
+  return base === undefined
+    ? null
+    : {
+        entry,
+        card: resolveDeckEntryCard(
+          content.transfigurationData,
+          base,
+          entry,
+        ),
+      };
 }
 
 function cardIdForEntry(
@@ -1213,6 +1231,7 @@ export function resolveExplorationChoice(input: {
         !matchesPredicate(selected.card, action.predicate, content)
       ) return null;
       const transfiguration = offeredTransfigurationForms(
+        content.transfigurationData,
         selected.card,
         selected.entry.transfiguration,
       ).find((form) => form.type === selection.transfiguration)?.type;
@@ -1498,7 +1517,11 @@ export function resolveExplorationChoice(input: {
         selected.entry.transfiguration !== null ||
         (action.predicate !== undefined &&
           !matchesPredicate(selected.card, action.predicate, content)) ||
-        !offeredTransfigurationForms(selected.card, null).some(
+        !offeredTransfigurationForms(
+          content.transfigurationData,
+          selected.card,
+          null,
+        ).some(
           (form) => form.type === action.transfiguration,
         )
       ) return null;

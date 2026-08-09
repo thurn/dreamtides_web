@@ -777,18 +777,22 @@ export function bestTransfiguration(
   card: CardData,
 ): TransfigurationType | null {
   const eligible = merchantTransfigurations(
+    context.rewardSelection.content.transfigurationData,
     card,
-    context.rewardSelection.tuning.allowedTransfigurations,
   );
   let best: TransfigurationType | null = null;
   let bestBenefit = -Infinity;
   for (const transfiguration of eligible) {
-    const preview = applyTransfigurationToCard(card, transfiguration);
+    const preview = applyTransfigurationToCard(
+      context.rewardSelection.content.transfigurationData,
+      card,
+      transfiguration,
+    );
     const benefit = transfigurationBenefit(
+      context.rewardSelection.content.transfigurationData,
       card,
       transfiguration,
       preview,
-      context.rewardSelection.tuning.transfigurationBenefit,
     );
     if (benefit > bestBenefit) {
       bestBenefit = benefit;
@@ -803,8 +807,8 @@ function transfigurableCandidates(
 ): readonly MerchantCatalogCard[] {
   return grantCandidatePool(context).filter(
     (card) => merchantTransfigurations(
+      context.rewardSelection.content.transfigurationData,
       card.card,
-      context.rewardSelection.tuning.allowedTransfigurations,
     ).length > 0,
   );
 }
@@ -848,7 +852,11 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
     for (const card of sampled) {
       const transfiguration = chosenForms.get(card.cardUuid);
       if (transfiguration === undefined) continue;
-      const built = buildTransfigurationDisplay(card.card, transfiguration);
+      const built = buildTransfigurationDisplay(
+        context.rewardSelection.content.transfigurationData,
+        card.card,
+        transfiguration,
+      );
       choices.push({
         card,
         transfiguration,

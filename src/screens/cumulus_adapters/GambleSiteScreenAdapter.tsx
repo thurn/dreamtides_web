@@ -68,8 +68,17 @@ export function GambleSiteScreenAdapter({
             guide,
             guideLine,
             gambleData,
+            transfigurationData: journeyContent.transfigurationData,
           }),
-    [gambleData, guide, guideLine, node, site, state],
+    [
+      gambleData,
+      guide,
+      guideLine,
+      journeyContent.transfigurationData,
+      node,
+      site,
+      state,
+    ],
   );
   useEffect(() => {
     if (site === null) return;

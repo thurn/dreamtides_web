@@ -6,11 +6,22 @@ import { asCardId, asCardName } from "../../types/card-identity";
 import { economyFixture } from "../../testing/economy-fixture";
 import type { DeckEntry, SiteState } from "../../types/journey";
 import {
-  buildPurgeCardViews,
+  buildPurgeCardViews as buildPurgeCardViewsImpl,
   buildPurgeGuideView,
-  buildPurgeSiteView,
+  buildPurgeSiteView as buildPurgeSiteViewImpl,
   buildPurgeVisitCosts,
 } from "./purge-view-model";
+import { transfigurationFixture } from "../../testing/transfiguration-fixture";
+
+const transfigurationData = transfigurationFixture();
+const buildPurgeCardViews = (
+  ...args: Parameters<typeof buildPurgeCardViewsImpl> extends readonly [unknown, ...infer Rest]
+    ? Rest
+    : never
+) => buildPurgeCardViewsImpl(transfigurationData, ...args);
+const buildPurgeSiteView = (
+  params: Omit<Parameters<typeof buildPurgeSiteViewImpl>[0], "transfigurationData">,
+) => buildPurgeSiteViewImpl({ ...params, transfigurationData });
 
 const GUIDE = {
   id: "fixture-purge-guide",

@@ -14,6 +14,7 @@ import {
   applyDeckEntryCardModification,
 } from "../../card-type-change";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
+import type { TransfigurationData } from "../../types/transfiguration-data";
 import type {
   DeckCardView,
   MobileDeckView,
@@ -28,6 +29,7 @@ import type {
  * when the entry's card number is not in the database.
  */
 export function toDeckCardView(
+  transfigurationData: TransfigurationData,
   entry: DeckEntry,
   cardDatabase: Map<number, CardData>,
 ): DeckCardView | null {
@@ -54,6 +56,7 @@ export function toDeckCardView(
   }
 
   const transfigured = buildTransfigurationDisplay(
+    transfigurationData,
     modified,
     entry.transfiguration,
   );
@@ -76,12 +79,13 @@ export function toDeckCardView(
  * order. Deterministic in its arguments.
  */
 export function buildMobileDeckView(
+  transfigurationData: TransfigurationData,
   deck: readonly DeckEntry[],
   cardDatabase: Map<number, CardData>,
 ): MobileDeckView {
   const cards: DeckCardView[] = [];
   for (const entry of deck) {
-    const view = toDeckCardView(entry, cardDatabase);
+    const view = toDeckCardView(transfigurationData, entry, cardDatabase);
     if (view !== null) cards.push(view);
   }
   return { cards };

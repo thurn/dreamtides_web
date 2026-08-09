@@ -19,17 +19,35 @@
 
 import type { CardData } from "../types/cards";
 import type { TransfigurationType } from "../types/journey";
-import type { EconomyData, TransfigurationCostBand } from "../types/economy-data";
+import type {
+  TransfigurationCostBand,
+  TransfigurationData,
+} from "../types/transfiguration-data";
 import { merchantRng } from "../journey_v2/signals/rng";
+import { transfigurationForm } from "../data/transfiguration-data";
 
 /** Lowest and highest essence a transfiguration can ever cost. */
-function clampCost(config: EconomyData["transfiguration"], value: number): number {
-  return Math.max(config.minimumCost, Math.min(config.maximumCost, value));
+function clampCost(data: TransfigurationData, value: number): number {
+  return Math.max(
+    data.site.pricing.minimumCost,
+    Math.min(data.site.pricing.maximumCost, value),
+  );
 }
 
 /** Resolves a magnitude to the compiler-validated stat-delta band table. */
-function statBand(config: EconomyData["transfiguration"], delta: number): TransfigurationCostBand {
-  return config.statDeltaBands.find((band) => delta >= band.minimumDelta && (band.maximumDelta === null || delta <= band.maximumDelta))!;
+function statBand(
+  data: TransfigurationData,
+  delta: number,
+): TransfigurationCostBand {
+  const band = data.site.pricing.statDeltaBands.find(
+    (candidate) =>
+      delta >= candidate.minimumDelta &&
+      (candidate.maximumDelta === undefined ||
+        delta <= candidate.maximumDelta),
+  );
+  if (band === undefined)
+    throw new Error(`Missing Transfiguration stat-delta band for ${String(delta)}`);
+  return band;
 }
 
 /**
@@ -38,32 +56,29 @@ function statBand(config: EconomyData["transfiguration"], delta: number): Transf
  * change always lands in the same band.
  */
 export function transfigurationCostBand(
-  config: EconomyData["transfiguration"],
+  data: TransfigurationData,
   card: CardData,
   type: TransfigurationType,
 ): TransfigurationCostBand {
-  switch (type) {
-    case "Hastened":
-      return config.freeBand;
-    case "Empowered": {
+  const form = transfigurationForm(data, type);
+  switch (form.pricing.kind) {
+    case "free":
+      return { base: 0, jitter: 0, floor: 0 };
+    case "band":
+      return form.pricing;
+    case "statDelta": {
+      if (form.operation.kind === "halveEnergyCost") {
       const energyCost = card.energyCost ?? 0;
-      if (energyCost <= 0) {
-        return config.freeBand;
-      }
+        if (energyCost <= 0) return { base: 0, jitter: 0, floor: 0 };
       const delta = energyCost - Math.floor(energyCost / 2);
-      return statBand(config, delta);
-    }
-    case "Kindled": {
-      const oldSpark = card.spark ?? 0;
-      // Kindling a 0-spark character up to 1 is the gentlest nudge — free.
-      if (oldSpark === 0) {
-        return config.freeBand;
+        return statBand(data, delta);
       }
-      const delta = oldSpark; // doubling adds `oldSpark` spark.
-      return statBand(config, delta);
+      if (form.operation.kind !== "doubleSpark")
+        throw new Error(`Invalid stat-delta operation ${form.operation.kind}`);
+      const oldSpark = card.spark ?? 0;
+      if (oldSpark === 0) return { base: 0, jitter: 0, floor: 0 };
+      return statBand(data, oldSpark);
     }
-    default:
-      return config.formBands[type];
   }
 }
 
@@ -74,17 +89,19 @@ export function transfigurationCostBand(
  * unchanged without consuming a draw.
  */
 export function rollTransfigurationCost(
-  config: EconomyData["transfiguration"],
+  data: TransfigurationData,
   band: TransfigurationCostBand,
   rng: () => number,
 ): number {
   if (band.jitter <= 0) {
-    return clampCost(config, band.base);
+    return clampCost(data, band.base);
   }
-  const stepCount = (band.jitter / config.step) * 2 + 1;
+  const stepCount = (band.jitter / data.site.pricing.step) * 2 + 1;
   const stepIndex = Math.min(Math.floor(rng() * stepCount), stepCount - 1);
-  const offset = (stepIndex - band.jitter / config.step) * config.step;
-  return clampCost(config, Math.max(band.floor, band.base + offset));
+  const offset =
+    (stepIndex - band.jitter / data.site.pricing.step) *
+    data.site.pricing.step;
+  return clampCost(data, Math.max(band.floor, band.base + offset));
 }
 
 /**
@@ -94,14 +111,14 @@ export function rollTransfigurationCost(
  * the cost charged on accept and can be reconstructed from the logs.
  */
 export function transfigurationEssenceCost(
-  config: EconomyData["transfiguration"],
+  data: TransfigurationData,
   seed: string,
   siteId: string,
   entryId: string,
   card: CardData,
   type: TransfigurationType,
 ): number {
-  const band = transfigurationCostBand(config, card, type);
+  const band = transfigurationCostBand(data, card, type);
   const rng = merchantRng(seed, siteId, entryId, type, "transfiguration_cost");
-  return rollTransfigurationCost(config, band, rng);
+  return rollTransfigurationCost(data, band, rng);
 }

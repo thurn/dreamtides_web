@@ -10,16 +10,6 @@ export interface EconomyStock {
   cardSlots: number;
   dreamsignSlots: number;
 }
-export interface TransfigurationCostBand {
-  base: number;
-  jitter: number;
-  floor: number;
-}
-export interface TransfigurationStatBand extends TransfigurationCostBand {
-  minimumDelta: number;
-  maximumDelta: number | null;
-}
-
 export interface EconomyData {
   schemaVersion: 1;
   contentHash: string;
@@ -51,22 +41,6 @@ export interface EconomyData {
     };
   };
   purge: { marginalCosts: number[]; enhancedDiscountPercent: number };
-  transfiguration: {
-    minimumCost: number;
-    maximumCost: number;
-    step: number;
-    freeBand: TransfigurationCostBand;
-    formBands: Record<
-      | "Amplified"
-      | "Attuned"
-      | "Inspired"
-      | "Enduring"
-      | "Resonant"
-      | "Perfected",
-      TransfigurationCostBand
-    >;
-    statDeltaBands: TransfigurationStatBand[];
-  };
   battleReward: {
     baseEssence: number;
     essencePerCompletionLevel: number;

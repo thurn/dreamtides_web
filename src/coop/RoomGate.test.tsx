@@ -24,6 +24,8 @@ const DRAFT_DATA = draftDataFixture();
 const ECONOMY = economyFixture();
 const PINNED_ECONOMY = {
   economyFoldHash: ECONOMY.foldHash,
+  gambleFoldHash: CONFIG_DATA_FIXTURE.gambleData.foldHash,
+  transfigurationFoldHash: CONFIG_DATA_FIXTURE.transfigurationData.foldHash,
   defaultStartingEssence: ECONOMY.journey.defaultStartingEssence,
   dreamsignCap: ECONOMY.journey.dreamsignCap,
   opponentsFoldHash: opponentsFixture().foldHash,
@@ -134,6 +136,8 @@ function mount(config: RuntimeConfig): void {
         sitesFoldHash={SITES_FOLD_HASH}
         draftData={DRAFT_DATA}
         economyData={ECONOMY}
+        gambleData={CONFIG_DATA_FIXTURE.gambleData}
+        transfigurationData={CONFIG_DATA_FIXTURE.transfigurationData}
         opponentsData={opponentsFixture()}
         rewardSelectionData={CONFIG_DATA_FIXTURE.rewardSelectionData}
         auguryData={CONFIG_DATA_FIXTURE.auguryData}

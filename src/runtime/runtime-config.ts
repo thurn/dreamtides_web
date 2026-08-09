@@ -7,6 +7,8 @@ import type { OpponentsData } from "../types/opponents-data";
 import type { DraftData } from "../types/draft-data";
 import type { RewardSelectionData } from "../types/reward-selection-data";
 import type { AuguryData } from "../types/augury-data";
+import type { GambleData } from "../types/gamble-data";
+import type { TransfigurationData } from "../types/transfiguration-data";
 import { asCardId, isCardId, type CardId } from "../types/card-identity";
 import type { GambleGameId } from "../types/gamble";
 
@@ -103,6 +105,8 @@ export function contentConfigFromRuntime(
   sitesFoldHash: string,
   draftData: DraftData,
   economyData: EconomyData,
+  gambleData: GambleData,
+  transfigurationData: TransfigurationData,
   opponentsData: OpponentsData,
   rewardSelectionData: RewardSelectionData,
   auguryData: AuguryData,
@@ -117,6 +121,8 @@ export function contentConfigFromRuntime(
     sitesFoldHash,
     draftFoldHash: draftData.foldHash,
     economyFoldHash: economyData.foldHash,
+    gambleFoldHash: gambleData.foldHash,
+    transfigurationFoldHash: transfigurationData.foldHash,
     rewardSelectionFoldHash: rewardSelectionData.foldHash,
     auguryFoldHash: auguryData.foldHash,
     explorationFoldHash,
@@ -140,6 +146,8 @@ export function contentConfigsEqual(
     a.sitesFoldHash === b.sitesFoldHash &&
     a.draftFoldHash === b.draftFoldHash &&
     a.economyFoldHash === b.economyFoldHash &&
+    a.gambleFoldHash === b.gambleFoldHash &&
+    a.transfigurationFoldHash === b.transfigurationFoldHash &&
     a.rewardSelectionFoldHash === b.rewardSelectionFoldHash &&
     a.auguryFoldHash === b.auguryFoldHash &&
     a.explorationFoldHash === b.explorationFoldHash &&

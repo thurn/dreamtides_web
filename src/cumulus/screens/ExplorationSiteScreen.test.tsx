@@ -18,6 +18,7 @@ import {
   type ExplorationDeckModificationView,
   type ExplorationSiteView,
 } from "./ExplorationSiteScreen";
+import { transfigurationFormFixture } from "../test-helpers/transfiguration-fixture";
 
 const reducedMotionPreference = vi.hoisted(() => ({ value: true }));
 
@@ -150,7 +151,8 @@ function purgeAndCopyRewardView(): ExplorationSiteView {
   if (base.reward === null || "kind" in base.reward) return base;
   const copiedCardModel = base.reward.objects.cards[0];
   const purgedCardModel = base.reward.objects.cards[1];
-  if (copiedCardModel === undefined || purgedCardModel === undefined) return base;
+  if (copiedCardModel === undefined || purgedCardModel === undefined)
+    return base;
   return {
     ...base,
     outcomeKind: "purge-and-copy",
@@ -217,6 +219,7 @@ function transfigurationRewardView(): ExplorationSiteView {
         },
         transfiguration: {
           type: "Kindled",
+          form: transfigurationFormFixture("Kindled"),
           markedText: base.card.displaySnapshot.renderedText,
           energyChanged: false,
           sparkChanged: true,
@@ -261,9 +264,10 @@ function deckModificationRewardView(
       { entryId: "deck-entry-b", model: second, isBane: false },
     ],
   };
-  const deckModification: ExplorationDeckModificationView = kind === "spark"
-    ? { ...common, kind: "spark", amount: 1 }
-    : { ...common, kind: "fast" };
+  const deckModification: ExplorationDeckModificationView =
+    kind === "spark"
+      ? { ...common, kind: "spark", amount: 1 }
+      : { ...common, kind: "fast" };
   return {
     ...base,
     reward: {
@@ -362,11 +366,19 @@ function multipleCardCopiesRewardView(): ExplorationSiteView {
       count: 2,
       pairs: [
         {
-          source: { entryId: "source-entry-a", model: base.card, isBane: false },
+          source: {
+            entryId: "source-entry-a",
+            model: base.card,
+            isBane: false,
+          },
           copy: { entryId: "copy-entry-a", model: base.card, isBane: false },
         },
         {
-          source: { entryId: "source-entry-b", model: secondCard, isBane: false },
+          source: {
+            entryId: "source-entry-b",
+            model: secondCard,
+            isBane: false,
+          },
           copy: { entryId: "copy-entry-b", model: secondCard, isBane: false },
         },
       ],
@@ -618,9 +630,7 @@ describe("ExplorationSiteScreen", () => {
     const fullArt = frameBreak?.querySelector<HTMLImageElement>(
       "[data-exploration-full-art]",
     );
-    expect(
-      fullArt?.getAttribute("src"),
-    ).toContain("/exploration/17.jpg");
+    expect(fullArt?.getAttribute("src")).toContain("/exploration/17.jpg");
     expect(
       container.querySelector('[data-testid="cumulus-exploration-channel"]'),
     ).toBeNull();
@@ -780,9 +790,7 @@ describe("ExplorationSiteScreen", () => {
         ?.click(),
     );
 
-    expect(
-      container.querySelector("[data-exploration-followup]"),
-    ).toBeNull();
+    expect(container.querySelector("[data-exploration-followup]")).toBeNull();
     expect(onResolve).toHaveBeenCalledWith("choice-a", {
       entryIds: ["minted-entry"],
     });
@@ -835,7 +843,9 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(effect?.textContent).not.toMatch(/[●✦]/u);
     expect(energyGlyph?.querySelector("i")?.className).toContain("bx-fire-alt");
-    expect(energyGlyph?.parentElement?.style.color).toContain(ENERGY_ICON_COLOR);
+    expect(energyGlyph?.parentElement?.style.color).toContain(
+      ENERGY_ICON_COLOR,
+    );
     expect(sparkGlyph?.querySelector("i")?.className).toContain("bx-sparkle");
     expect(sparkGlyph?.parentElement?.style.color).toContain(SPARK_ICON_COLOR);
 
@@ -973,6 +983,7 @@ describe("ExplorationSiteScreen", () => {
                 },
                 transfiguration: {
                   type: "Inspired",
+                  form: transfigurationFormFixture("Inspired"),
                   markedText: `${referencedCard.renderedText} Draw a card.`,
                   energyChanged: false,
                   sparkChanged: false,
@@ -1310,6 +1321,7 @@ describe("ExplorationSiteScreen", () => {
                 forms: [
                   {
                     type: "Empowered",
+                    presentation: transfigurationFormFixture("Empowered"),
                     description: "Energy cost: 2 → 1",
                     effectDetails: { energyCost: { before: 2, after: 1 } },
                     essenceCost: 0,
@@ -1319,6 +1331,7 @@ describe("ExplorationSiteScreen", () => {
                       displaySnapshot: transformed,
                       transfiguration: {
                         type: "Empowered",
+                        form: transfigurationFormFixture("Empowered"),
                         markedText: transformed.renderedText,
                         energyChanged: true,
                         sparkChanged: false,
@@ -1653,9 +1666,7 @@ describe("ExplorationSiteScreen", () => {
         ?.click(),
     );
     expect(confirm?.textContent).toContain("Choose a card to purge");
-    expect(
-      container.querySelector("[data-card-choice-operation]"),
-    ).toBeNull();
+    expect(container.querySelector("[data-card-choice-operation]")).toBeNull();
     act(() => root.unmount());
   });
 
@@ -1836,8 +1847,7 @@ describe("ExplorationSiteScreen", () => {
     );
     const deckTarget = document.createElement("button");
     deckTarget.dataset.journeyDeckTarget = "";
-    deckTarget.getBoundingClientRect = () =>
-      new DOMRect(1210, 720, 50, 70);
+    deckTarget.getBoundingClientRect = () => new DOMRect(1210, 720, 50, 70);
     document.body.append(deckTarget);
     const onExit = vi.fn();
     const { container, root } = mount(
@@ -1868,7 +1878,7 @@ describe("ExplorationSiteScreen", () => {
     ).toBe("transfigured");
     expect(
       container.querySelector(
-        '[data-testid="cumulus-exploration-transfigured-card"] [aria-label="Kindled transfiguration"]',
+        '[data-testid="cumulus-exploration-transfigured-card"] i[aria-label]',
       ),
     ).not.toBeNull();
 
@@ -2000,8 +2010,7 @@ describe("ExplorationSiteScreen", () => {
     );
     const deckTarget = document.createElement("button");
     deckTarget.dataset.journeyDeckTarget = "";
-    deckTarget.getBoundingClientRect = () =>
-      new DOMRect(1210, 720, 50, 70);
+    deckTarget.getBoundingClientRect = () => new DOMRect(1210, 720, 50, 70);
     document.body.append(deckTarget);
     const onExit = vi.fn();
     const { container, root } = mount(
@@ -2046,9 +2055,7 @@ describe("ExplorationSiteScreen", () => {
     act(() => {
       vi.advanceTimersByTime(10_000);
     });
-    expect(
-      container.querySelector("[data-exploration-purge-card]"),
-    ).toBeNull();
+    expect(container.querySelector("[data-exploration-purge-card]")).toBeNull();
     const copyOutcome = container.querySelector<HTMLElement>(
       '[data-exploration-outcome="purge-and-copy"][data-exploration-compound-phase="copying"]',
     );
@@ -2129,7 +2136,9 @@ describe("ExplorationSiteScreen", () => {
         '[data-exploration-outcome="purge-and-copy"]',
       )?.dataset.explorationCompoundPhase,
     ).toBe("purging");
-    expect(container.querySelector("[data-exploration-purge-card]")).not.toBeNull();
+    expect(
+      container.querySelector("[data-exploration-purge-card]"),
+    ).not.toBeNull();
 
     act(() => {
       vi.advanceTimersByTime(10_000);
@@ -2144,7 +2153,9 @@ describe("ExplorationSiteScreen", () => {
         (card) => card.getAttribute("data-exploration-card-copy-role"),
       ),
     ).toEqual(["original", "copy"]);
-    expect(container.querySelector("[data-exploration-card-copy-flight]")).toBeNull();
+    expect(
+      container.querySelector("[data-exploration-card-copy-flight]"),
+    ).toBeNull();
     expect(onExit).not.toHaveBeenCalled();
 
     act(() => {
@@ -2209,9 +2220,7 @@ describe("ExplorationSiteScreen", () => {
       "exploration-deck-modification",
     );
     expect(
-      [...(cards ?? [])].map(
-        (card) => card.dataset.explorationDeckEntryId,
-      ),
+      [...(cards ?? [])].map((card) => card.dataset.explorationDeckEntryId),
     ).toEqual(["deck-entry-a", "deck-entry-b"]);
     const sparkAnnouncement = reward?.querySelector<HTMLElement>(
       "[data-radial-announcement]",
@@ -2300,7 +2309,9 @@ describe("ExplorationSiteScreen", () => {
     expect(
       announcement?.querySelector("[data-inline-glyph] i")?.className,
     ).toContain("bx-bolt");
-    expect(reward?.querySelectorAll('[data-attribute-chip="fast"]')).toHaveLength(2);
+    expect(
+      reward?.querySelectorAll('[data-attribute-chip="fast"]'),
+    ).toHaveLength(2);
     act(() => persisted.root.unmount());
   });
 
@@ -2347,15 +2358,20 @@ describe("ExplorationSiteScreen", () => {
     const energyGlyph = modification?.querySelector<HTMLElement>(
       '[data-inline-glyph][aria-label="energy"]',
     );
-    expect(modification?.querySelector('[data-radial-announcement-headline]')?.textContent)
-      .not.toBe("");
+    expect(
+      modification?.querySelector("[data-radial-announcement-headline]")
+        ?.textContent,
+    ).not.toBe("");
     expect(energyGlyph?.querySelector("i")?.className).toContain("bx-fire-alt");
-    expect(energyGlyph?.parentElement?.style.color).toContain(ENERGY_ICON_COLOR);
+    expect(energyGlyph?.parentElement?.style.color).toContain(
+      ENERGY_ICON_COLOR,
+    );
     expect(
       container.querySelector("[data-exploration-deck-modification-reward]"),
     ).not.toBeNull();
-    expect(container.querySelector("[data-exploration-reward-stage]"))
-      .toBeNull();
+    expect(
+      container.querySelector("[data-exploration-reward-stage]"),
+    ).toBeNull();
 
     act(() => {
       vi.advanceTimersByTime(3_360);
@@ -2363,8 +2379,9 @@ describe("ExplorationSiteScreen", () => {
     expect(
       container.querySelector("[data-exploration-deck-modification-reward]"),
     ).toBeNull();
-    expect(container.querySelector("[data-exploration-reward-stage]"))
-      .not.toBeNull();
+    expect(
+      container.querySelector("[data-exploration-reward-stage]"),
+    ).not.toBeNull();
     expect(onExit).not.toHaveBeenCalled();
     act(() => root.unmount());
   });
@@ -2422,9 +2439,7 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(purgedCards).toHaveLength(2);
     expect(
-      [...purgedCards].map(
-        (card) => card.dataset.explorationDeckEntryId,
-      ),
+      [...purgedCards].map((card) => card.dataset.explorationDeckEntryId),
     ).toEqual(["purged-entry-a", "purged-entry-b"]);
     expect(
       container.querySelector("[data-exploration-deck-modification-reward]"),
@@ -2434,9 +2449,7 @@ describe("ExplorationSiteScreen", () => {
     act(() => {
       vi.advanceTimersByTime(3_100);
     });
-    expect(
-      container.querySelector("[data-exploration-purge-card]"),
-    ).toBeNull();
+    expect(container.querySelector("[data-exploration-purge-card]")).toBeNull();
     const reclaim = container.querySelector<HTMLElement>(
       '[data-exploration-deck-modification-kind="reclaim"]',
     );
@@ -2607,13 +2620,10 @@ describe("ExplorationSiteScreen", () => {
       container.querySelectorAll("[data-exploration-essence-card]"),
     ).toHaveLength(6);
     expect(
-      container.querySelectorAll(
-        '[data-essence-value-variant="rewardBadge"]',
-      ),
+      container.querySelectorAll('[data-essence-value-variant="rewardBadge"]'),
     ).toHaveLength(6);
     expect(
-      container.querySelector("[data-exploration-essence-cards]")
-        ?.textContent,
+      container.querySelector("[data-exploration-essence-cards]")?.textContent,
     ).toContain("+15");
     expect(
       container.querySelector("[data-exploration-essence-announcement]"),
@@ -2667,9 +2677,7 @@ describe("ExplorationSiteScreen", () => {
     const purgedDreamsign = container.querySelector<HTMLElement>(
       "[data-exploration-purged-dreamsign]",
     );
-    expect(purgedDreamsign?.dataset.dreamsignId).toBe(
-      "purged-dreamsign-id",
-    );
+    expect(purgedDreamsign?.dataset.dreamsignId).toBe("purged-dreamsign-id");
     expect(
       container.querySelector(
         "[data-exploration-purged-dreamsign-announcement]",
@@ -2896,12 +2904,22 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(outcome?.dataset.explorationCopyCount).toBe("2");
     expect(
-      [...container.querySelectorAll('[data-exploration-card-copy-role="original"]')]
-        .map((element) => element.getAttribute("data-exploration-deck-entry-id")),
+      [
+        ...container.querySelectorAll(
+          '[data-exploration-card-copy-role="original"]',
+        ),
+      ].map((element) =>
+        element.getAttribute("data-exploration-deck-entry-id"),
+      ),
     ).toEqual(["source-entry-a", "source-entry-b"]);
     expect(
-      [...container.querySelectorAll('[data-exploration-card-copy-role="copy"]')]
-        .map((element) => element.getAttribute("data-exploration-deck-entry-id")),
+      [
+        ...container.querySelectorAll(
+          '[data-exploration-card-copy-role="copy"]',
+        ),
+      ].map((element) =>
+        element.getAttribute("data-exploration-deck-entry-id"),
+      ),
     ).toEqual(["copy-entry-a", "copy-entry-b"]);
     expect(onExit).not.toHaveBeenCalled();
 

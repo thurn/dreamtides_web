@@ -17,6 +17,7 @@ import { draftDataFixture } from "../testing/draft-data-fixture";
 import { economyFixture } from "../testing/economy-fixture";
 import { gambleFixture } from "../testing/gamble-fixture";
 import { opponentsFixture } from "../testing/opponents-fixture";
+import { transfigurationFixture } from "../testing/transfiguration-fixture";
 import explorationJson from "../../public/exploration-data.json";
 import type { DraftRecord, KnownGoodDecklist } from "./cards-v2-database";
 import {
@@ -170,6 +171,7 @@ describe("loadJourneyContent", () => {
         },
       ],
       ["/draft-data.json", DRAFT_DATA],
+      ["/transfiguration-data.json", transfigurationFixture()],
       ["/opponents-data.json", opponentsFixture()],
       ["/apollyon-incarnations-data.json", []],
       ["/figments-data.json", []],

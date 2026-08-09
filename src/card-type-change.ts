@@ -6,6 +6,7 @@ import type {
   DeckEntryCardModification,
 } from "./types/journey";
 import { applyTransfigurationToCard } from "./transfiguration/transfiguration-logic";
+import type { TransfigurationData } from "./types/transfiguration-data";
 
 type CardTypeFields = Pick<CardData, "cardType" | "subtype">;
 type CardStatFields = Pick<CardData, "energyCost" | "spark">;
@@ -178,13 +179,18 @@ export function applyCardSparkBonus<T extends CardStatFields>(
 /** The canonical deck-entry resolution: transfiguration, type/keyword changes,
  *  additive spark, then debug stat overrides (applied last). */
 export function resolveDeckEntryCard(
+  transfigurationData: TransfigurationData,
   card: CardData,
   entry: DeckEntry,
 ): CardData {
   const transfigured =
     entry.transfiguration === null
       ? card
-      : applyTransfigurationToCard(card, entry.transfiguration);
+      : applyTransfigurationToCard(
+          transfigurationData,
+          card,
+          entry.transfiguration,
+        );
   const modified = applyDeckEntryCardModification(transfigured, {
     typeChange: entry.typeChange,
     keywords: entry.keywordModification,

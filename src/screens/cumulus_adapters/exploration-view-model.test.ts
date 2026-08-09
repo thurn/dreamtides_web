@@ -17,10 +17,33 @@ import {
   MINIMAL_SITES_DATA,
 } from "../../__test-helpers__/atlas-fixtures";
 import {
-  buildExplorationActionEffect,
-  buildExplorationSiteView,
+  buildExplorationActionEffect as buildExplorationActionEffectImpl,
+  buildExplorationSiteView as buildExplorationSiteViewImpl,
   resolveExplorationGuide,
 } from "./exploration-view-model";
+import { transfigurationFixture } from "../../testing/transfiguration-fixture";
+
+function withTransfiguration(content: JourneyContent): JourneyContent {
+  return { ...content, transfigurationData: transfigurationFixture() };
+}
+
+const buildExplorationActionEffect = (
+  ...args: Parameters<typeof buildExplorationActionEffectImpl>
+) =>
+  buildExplorationActionEffectImpl(
+    args[0],
+    args[1],
+    withTransfiguration(args[2]),
+    args[3],
+  );
+
+const buildExplorationSiteView = (
+  params: Parameters<typeof buildExplorationSiteViewImpl>[0],
+) =>
+  buildExplorationSiteViewImpl({
+    ...params,
+    content: withTransfiguration(params.content),
+  });
 
 const sourceId = asCardId("161482b6-af07-4d9e-822d-8c738672beb9");
 
@@ -574,6 +597,7 @@ describe("exploration-view-model", () => {
     expect(view.actions[0].effectDisclosure).toEqual({
       kind: "fixed-transfiguration",
       transfiguration: "Empowered",
+      effectDisclosure: "Fixture energy effect",
     });
   });
 

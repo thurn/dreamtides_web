@@ -6,6 +6,29 @@ import {
 } from "../../components/controls/TransfigurationButton";
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
+import type { TransfigurationFormDefinition } from "../../../types/transfiguration-data";
+
+function demoPresentation(
+  id: TransfigurationType,
+): TransfigurationFormDefinition {
+  return {
+    id,
+    glossaryUuid: "00000000-0000-4000-8000-000000000001",
+    name: id,
+    effectDisclosure: "Demo effect",
+    selectedCardDescription: "Demo selected-card effect",
+    accessibilityDescription: `${id} demo`,
+    glyph: `transfiguration${id}`,
+    accentColor: "#9b8afb",
+    tintColor: "#c9c1ff",
+    displayOrder: 0,
+    merchantAllowed: true,
+    eligibility: { kind: "positiveEnergyCost" },
+    operation: { kind: "halveEnergyCost", rounding: "Down", minimum: 0 },
+    pricing: { kind: "free" },
+    benefit: { kind: "flat", value: 1 },
+  };
+}
 
 const DEMO_FORMS = [
   {
@@ -41,8 +64,7 @@ function TransfigurationButtonDemo() {
         width: "100%",
         maxWidth: 560,
         display: "grid",
-        gridTemplateColumns:
-          "repeat(auto-fit, minmax(min(240px, 100%), 1fr))",
+        gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))",
         gap: token("--space-l"),
       }}
     >
@@ -55,15 +77,17 @@ function TransfigurationButtonDemo() {
             gap: token("--space-s"),
           }}
         >
-          {DEMO_FORMS.map((form) => (
-            <TransfigurationButton
-              key={form.type}
-              form={form}
-              variant={variant}
-              selected={selected === form.type}
-              onPress={setSelected}
-            />
-          ))}
+          {DEMO_FORMS.map((form) => {
+            return (
+              <TransfigurationButton
+                key={form.type}
+                form={{ ...form, presentation: demoPresentation(form.type) }}
+                variant={variant}
+                selected={selected === form.type}
+                onPress={setSelected}
+              />
+            );
+          })}
         </div>
       ))}
     </div>

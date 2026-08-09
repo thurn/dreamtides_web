@@ -321,6 +321,8 @@ describe("contentConfigFromRuntime", () => {
         sitesFoldHash,
         draftData,
         economyData,
+        CONFIG_DATA_FIXTURE.gambleData,
+        CONFIG_DATA_FIXTURE.transfigurationData,
         opponentsData,
         CONFIG_DATA_FIXTURE.rewardSelectionData,
         CONFIG_DATA_FIXTURE.auguryData,
@@ -335,6 +337,8 @@ describe("contentConfigFromRuntime", () => {
       sitesFoldHash,
       draftFoldHash: draftData.foldHash,
       economyFoldHash: economyData.foldHash,
+      gambleFoldHash: CONFIG_DATA_FIXTURE.gambleData.foldHash,
+      transfigurationFoldHash: CONFIG_DATA_FIXTURE.transfigurationData.foldHash,
       rewardSelectionFoldHash: CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
       auguryFoldHash: CONFIG_DATA_FIXTURE.auguryData.foldHash,
       explorationFoldHash,
@@ -353,6 +357,8 @@ describe("contentConfigFromRuntime", () => {
         sitesFoldHash,
         draftData,
         economyData,
+        CONFIG_DATA_FIXTURE.gambleData,
+        CONFIG_DATA_FIXTURE.transfigurationData,
         opponentsData,
         CONFIG_DATA_FIXTURE.rewardSelectionData,
         CONFIG_DATA_FIXTURE.auguryData,
@@ -367,6 +373,8 @@ describe("contentConfigFromRuntime", () => {
       sitesFoldHash,
       draftFoldHash: draftData.foldHash,
       economyFoldHash: economyData.foldHash,
+      gambleFoldHash: CONFIG_DATA_FIXTURE.gambleData.foldHash,
+      transfigurationFoldHash: CONFIG_DATA_FIXTURE.transfigurationData.foldHash,
       rewardSelectionFoldHash: CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
       auguryFoldHash: CONFIG_DATA_FIXTURE.auguryData.foldHash,
       explorationFoldHash,
@@ -385,6 +393,8 @@ describe("contentConfigFromRuntime", () => {
         sitesFoldHash,
         draftData,
         economyData,
+        CONFIG_DATA_FIXTURE.gambleData,
+        CONFIG_DATA_FIXTURE.transfigurationData,
         opponentsData,
         CONFIG_DATA_FIXTURE.rewardSelectionData,
         CONFIG_DATA_FIXTURE.auguryData,
@@ -405,6 +415,8 @@ describe("contentConfigsEqual", () => {
     sitesFoldHash: "fixture-sites-fold-hash",
     draftFoldHash: "fixture-draft-fold-hash",
     economyFoldHash: economyData.foldHash,
+    gambleFoldHash: CONFIG_DATA_FIXTURE.gambleData.foldHash,
+    transfigurationFoldHash: CONFIG_DATA_FIXTURE.transfigurationData.foldHash,
     rewardSelectionFoldHash: CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
     auguryFoldHash: CONFIG_DATA_FIXTURE.auguryData.foldHash,
     explorationFoldHash: "fixture-exploration-fold-hash",
@@ -433,6 +445,15 @@ describe("contentConfigsEqual", () => {
     ).toBe(false);
     expect(
       contentConfigsEqual(base, { ...base, economyFoldHash: "different" }),
+    ).toBe(false);
+    expect(
+      contentConfigsEqual(base, { ...base, gambleFoldHash: "different" }),
+    ).toBe(false);
+    expect(
+      contentConfigsEqual(base, {
+        ...base,
+        transfigurationFoldHash: "different",
+      }),
     ).toBe(false);
     expect(
       contentConfigsEqual(base, { ...base, sitesFoldHash: "different" }),
@@ -470,6 +491,8 @@ describe("applyContentConfigToSearch", () => {
     const pinnedEconomy = {
       draftFoldHash: draftDataFixture().foldHash,
       economyFoldHash: economyData.foldHash,
+      gambleFoldHash: CONFIG_DATA_FIXTURE.gambleData.foldHash,
+      transfigurationFoldHash: CONFIG_DATA_FIXTURE.transfigurationData.foldHash,
       rewardSelectionFoldHash: CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
       auguryFoldHash: CONFIG_DATA_FIXTURE.auguryData.foldHash,
       explorationFoldHash: "fixture-exploration-fold-hash",
@@ -526,6 +549,17 @@ describe("applyContentConfigToSearch", () => {
           {
             ...economyData,
             foldHash: config.economyFoldHash ?? economyData.foldHash,
+          },
+          {
+            ...CONFIG_DATA_FIXTURE.gambleData,
+            foldHash:
+              config.gambleFoldHash ?? CONFIG_DATA_FIXTURE.gambleData.foldHash,
+          },
+          {
+            ...CONFIG_DATA_FIXTURE.transfigurationData,
+            foldHash:
+              config.transfigurationFoldHash ??
+              CONFIG_DATA_FIXTURE.transfigurationData.foldHash,
           },
           {
             ...opponentsFixture(),

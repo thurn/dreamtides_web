@@ -9,10 +9,21 @@ import type {
   SiteState,
 } from "../../types/journey";
 import {
-  buildDuplicationCards,
+  buildDuplicationCards as buildDuplicationCardsImpl,
   buildDuplicationOfferLog,
-  buildDuplicationSiteView,
+  buildDuplicationSiteView as buildDuplicationSiteViewImpl,
 } from "./duplication-view-model";
+import { transfigurationFixture } from "../../testing/transfiguration-fixture";
+
+const transfigurationData = transfigurationFixture();
+const buildDuplicationCards = (
+  ...args: Parameters<typeof buildDuplicationCardsImpl> extends readonly [unknown, ...infer Rest]
+    ? Rest
+    : never
+) => buildDuplicationCardsImpl(transfigurationData, ...args);
+const buildDuplicationSiteView = (
+  params: Omit<Parameters<typeof buildDuplicationSiteViewImpl>[0], "transfigurationData">,
+) => buildDuplicationSiteViewImpl({ ...params, transfigurationData });
 
 const GUIDE = {
   id: "fixture-duplication-guide",

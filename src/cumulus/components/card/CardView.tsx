@@ -24,15 +24,10 @@ import {
 import { computeCardTextScale } from "./card-display-scale";
 import { BOLT_ICON_CLASS } from "../controls/StandaloneGlyph";
 import { InlineGlyph } from "../typography/InlineGlyph";
-import { glyph } from "../../primitives/glyph";
+import { GLYPHS } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
 import { CardStatOrb } from "./CardStatOrb";
 import { renderCardChangeBadge } from "./card-change-badge";
-import {
-  TRANSFIGURATION_COLORS,
-  TRANSFIGURATION_ICONS,
-  TRANSFIGURATION_TINT_COLORS,
-} from "../../../runtime/transfiguration-display";
 import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
 import { TRANSFIGURE_MARK_START } from "../../../runtime/transfigure-markers";
 import { renderRulesText } from "./RulesText";
@@ -41,10 +36,7 @@ import { useMessages } from "../../hooks/use-messages";
 import { DESKTOP_MIN_WIDTH } from "../../screens/use-is-desktop";
 import { Pressable } from "../../primitives/Pressable";
 import { useRevealSource } from "../../internal/reveal/context";
-import {
-  DEFAULT_ART_CROP,
-  resolveCardArtImageStyle,
-} from "./card-art-crop";
+import { DEFAULT_ART_CROP, resolveCardArtImageStyle } from "./card-art-crop";
 import { rulesTextDefinitionCards } from "./rules-text-reveal";
 import { glossaryInfoCard } from "./glossary-info-card";
 
@@ -80,7 +72,10 @@ const GAME_CARD_SELECTION_COLORS = {
   "spark-changed": "spark",
   "energy-changed": "energy",
   figment: "accent-bright",
-} as const satisfies Record<Exclude<GameCardSelection, "transfigured">, CumulusColor>;
+} as const satisfies Record<
+  Exclude<GameCardSelection, "transfigured">,
+  CumulusColor
+>;
 
 function gameCardSelectionColor(
   selection: GameCardSelection,
@@ -89,7 +84,7 @@ function gameCardSelectionColor(
   return selection === "transfigured"
     ? transfiguration === undefined
       ? "selected"
-      : TRANSFIGURATION_COLORS[transfiguration.type]
+      : transfiguration.form.accentColor
     : GAME_CARD_SELECTION_COLORS[selection];
 }
 
@@ -101,18 +96,13 @@ export function cardSelectionShadowLayers(
   const selectionCss = resolveColor(
     gameCardSelectionColor(selection, transfiguration),
   );
-  return [
-    `0 0 0 3px ${selectionCss}`,
-    `0 0 12px ${selectionCss}`,
-  ];
+  return [`0 0 0 3px ${selectionCss}`, `0 0 12px ${selectionCss}`];
 }
 const CARD_TIMING_GLOSSARY_IDS = [
   GLOSSARY_IDS.fast,
   GLOSSARY_IDS.interrupt,
 ] as const;
-function cardTimingInfoCards(
-  card: Pick<CardData, "isFast" | "isInterrupt">,
-) {
+function cardTimingInfoCards(card: Pick<CardData, "isFast" | "isInterrupt">) {
   if (card.isInterrupt === true) {
     return [glossaryInfoCard(GLOSSARY_IDS.interrupt)];
   }
@@ -126,16 +116,12 @@ function cardRulesTextDefinitionCards(
   card: Pick<CardData, "isFast" | "isInterrupt" | "renderedText">,
   extraExcludedIds: readonly string[] = [],
 ) {
-  return rulesTextDefinitionCards(
-    card.renderedText,
-    "card",
-    [
-      ...(card.isFast || card.isInterrupt === true
-        ? CARD_TIMING_GLOSSARY_IDS
-        : []),
-      ...extraExcludedIds,
-    ],
-  );
+  return rulesTextDefinitionCards(card.renderedText, "card", [
+    ...(card.isFast || card.isInterrupt === true
+      ? CARD_TIMING_GLOSSARY_IDS
+      : []),
+    ...extraExcludedIds,
+  ]);
 }
 
 /**
@@ -326,9 +312,7 @@ function ArtLayers({
   const blurCanvasHeightPct =
     featherHeightPct > 0 ? (100 / featherHeightPct) * 100 : 100;
   const blurCanvasTopPct =
-    featherHeightPct > 0
-      ? -(featherStartPct / featherHeightPct) * 100
-      : 0;
+    featherHeightPct > 0 ? -(featherStartPct / featherHeightPct) * 100 : 0;
   const tintStartPct = Math.max(0, seamPct - ART_EXTENSION_TINT_ABOVE_PCT);
   const tintGradient = `linear-gradient(to bottom, rgba(${tintRgb}, 0) ${tintStartPct.toFixed(2)}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_SEAM_ALPHA}) ${seamPct.toFixed(2)}%, rgba(${tintRgb}, ${ART_EXTENSION_TINT_EDGE_ALPHA}) 100%)`;
   return (
@@ -578,7 +562,9 @@ function rarityStyleFor(card: { rarity?: Rarity }): RarityStyle | null {
 interface AttributeChip {
   key: string;
   boltCount: number;
-  ariaLabelId: "card-attribute-interrupt-accessible-name" | "card-attribute-fast-accessible-name";
+  ariaLabelId:
+    | "card-attribute-interrupt-accessible-name"
+    | "card-attribute-fast-accessible-name";
 }
 
 /**
@@ -590,10 +576,22 @@ function buildAttributeChips(
   card: Pick<CardData, "isFast" | "isInterrupt">,
 ): AttributeChip[] {
   if (card.isInterrupt === true) {
-    return [{ key: "interrupt", boltCount: 2, ariaLabelId: "card-attribute-interrupt-accessible-name" }];
+    return [
+      {
+        key: "interrupt",
+        boltCount: 2,
+        ariaLabelId: "card-attribute-interrupt-accessible-name",
+      },
+    ];
   }
   if (card.isFast) {
-    return [{ key: "fast", boltCount: 1, ariaLabelId: "card-attribute-fast-accessible-name" }];
+    return [
+      {
+        key: "fast",
+        boltCount: 1,
+        ariaLabelId: "card-attribute-fast-accessible-name",
+      },
+    ];
   }
   return [];
 }
@@ -910,9 +908,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
   const rulesTextChanged =
     transfiguration?.markedText.includes(TRANSFIGURE_MARK_START) === true;
   const transfigurationTint =
-    transfiguration === undefined
-      ? undefined
-      : TRANSFIGURATION_TINT_COLORS[transfiguration.type];
+    transfiguration === undefined ? undefined : transfiguration.form.tintColor;
   const slotContext: CardViewSlotContext = {
     card,
     large,
@@ -1047,14 +1043,12 @@ function GameCardSurface(props: GameCardSurfaceProps) {
       </span>
       {transfiguration !== undefined ? (
         <i
-          className={glyph(
-            `bxf ${TRANSFIGURATION_ICONS[transfiguration.type]}`,
-          )}
+          className={GLYPHS[transfiguration.form.glyph]}
           aria-label={t("card-transfiguration-badge", {
-            form: transfiguration.type,
+            formName: transfiguration.form.name,
           })}
           title={t("card-transfiguration-badge", {
-            form: transfiguration.type,
+            formName: transfiguration.form.name,
           })}
           style={{
             flex: "0 0 auto",
@@ -1246,9 +1240,10 @@ function GameCardSurface(props: GameCardSurfaceProps) {
   // watermark-clipped bottom always tucks under the box's first text line. The
   // figment frame is full-bleed (no fill band), so its art is instead held
   // covering to the very bottom edge.
-  const safeAreaTarget = figment || battlefieldPresentation
-    ? FIGMENT_ART_SAFE_AREA_TARGET
-    : artSafeAreaTarget(boxTopFrac);
+  const safeAreaTarget =
+    figment || battlefieldPresentation
+      ? FIGMENT_ART_SAFE_AREA_TARGET
+      : artSafeAreaTarget(boxTopFrac);
 
   // Report the measured box top so the art-crop editor can floor zoom-out and
   // pan against the same box-relative safe area the card renders with.
@@ -1454,7 +1449,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
             <span
               data-card-rules-text-change={transfiguration?.type}
               title={t("card-rules-transfiguration-changed", {
-                form: transfiguration.type,
+                formName: transfiguration.form.name,
               })}
               style={{
                 position: "absolute",
@@ -1470,7 +1465,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
               {renderCardChangeBadge({
                 sizeVar: "var(--cv-transfiguration-change-badge-size)",
                 ariaLabel: t("card-rules-transfiguration-changed", {
-                  form: transfiguration.type,
+                  formName: transfiguration.form.name,
                 }),
               })}
             </span>
@@ -1671,11 +1666,7 @@ export interface GameCardRevealOptions {
 /** Build the complete canonical reveal used by every UUID-backed card source. */
 export function gameCardRevealSpec(
   model: GameCardModel,
-  {
-    selection,
-    exhausted = false,
-    figment = false,
-  }: GameCardRevealOptions = {},
+  { selection, exhausted = false, figment = false }: GameCardRevealOptions = {},
 ) {
   const displaySnapshot = figment
     ? {
@@ -1687,9 +1678,7 @@ export function gameCardRevealSpec(
       }
     : model.displaySnapshot;
   const statusCards = exhausted
-    ? [
-        glossaryInfoCard(GLOSSARY_IDS.exhausted),
-      ]
+    ? [glossaryInfoCard(GLOSSARY_IDS.exhausted)]
     : [];
   const figmentStatusCards = figment
     ? [glossaryInfoCard(GLOSSARY_IDS.figment)]

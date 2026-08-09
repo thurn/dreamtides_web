@@ -31,6 +31,8 @@ import {
   type GameCardSelection,
 } from "../../components/card/CardView";
 import type { CumulusComponent } from "../registry";
+import { loadTransfigurationData, transfigurationForm } from "../../../data/transfiguration-data";
+import type { TransfigurationFormDefinition } from "../../../types/transfiguration-data";
 
 /**
  * Curated, deterministic real card UUIDs from data/cards.toml. Ordered
@@ -70,7 +72,10 @@ interface GameCardDemoArgs {
  * transfiguration logic lives outside Cumulus; this mirrors the resolved model
  * a caller supplies by incrementing and marking the first authored number.
  */
-function amplifiedDemoModel(card: CardData): GameCardModel {
+function amplifiedDemoModel(
+  card: CardData,
+  form: TransfigurationFormDefinition,
+): GameCardModel {
   const match = /\d+/.exec(card.renderedText);
   if (match === null || match.index === undefined) {
     return { cardId: card.id, displaySnapshot: card };
@@ -84,6 +89,7 @@ function amplifiedDemoModel(card: CardData): GameCardModel {
     displaySnapshot: { ...card, renderedText },
     transfiguration: {
       type: "Amplified",
+      form,
       markedText: `${before}${TRANSFIGURE_MARK_START}${amplifiedNumber}${TRANSFIGURE_MARK_END}${after}`,
       energyChanged: false,
       sparkChanged: false,
@@ -99,7 +105,10 @@ function GameCardDemo({
   figment = false,
   presentation = "full",
 }: GameCardDemoArgs) {
-  const [cards, setCards] = useState<CardData[] | null>(null);
+  const [content, setContent] = useState<{
+    cards: CardData[];
+    amplified: TransfigurationFormDefinition;
+  } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -107,8 +116,9 @@ function GameCardDemo({
     Promise.all([
       loadCardDatabase(),
       loadFigmentDatabase().catch(() => undefined),
+      loadTransfigurationData(),
     ])
-      .then(([database]) => {
+      .then(([database, , transfigurationData]) => {
         if (cancelled) {
           return;
         }
@@ -118,11 +128,12 @@ function GameCardDemo({
         for (const card of database.values()) {
           byId.set(card.id, card);
         }
-        setCards(
-          CURATED_CARD_IDS.map((id) => byId.get(id)).filter(
+        setContent({
+          cards: CURATED_CARD_IDS.map((id) => byId.get(id)).filter(
             (card): card is CardData => card !== undefined,
           ),
-        );
+          amplified: transfigurationForm(transfigurationData, "Amplified"),
+        });
       })
       .catch((cause: unknown) => {
         if (!cancelled) {
@@ -141,7 +152,7 @@ function GameCardDemo({
       </div>
     );
   }
-  if (cards === null) {
+  if (content === null) {
     return <div style={{ opacity: 0.7 }}>Loading cards…</div>;
   }
 
@@ -154,12 +165,12 @@ function GameCardDemo({
         alignItems: "flex-start",
       }}
     >
-      {cards.map((card, index) => (
+      {content.cards.map((card, index) => (
         <div key={card.id} style={{ width: 168, flex: "0 0 auto" }}>
           <GameCard
             model={
               index === 0
-                ? amplifiedDemoModel(card)
+                ? amplifiedDemoModel(card, content.amplified)
                 : { cardId: card.id, displaySnapshot: card }
             }
             selection={selection}

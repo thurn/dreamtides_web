@@ -376,7 +376,11 @@ describe("Exploration provider", () => {
       const base = content.cardDatabase.get(entry.cardNumber);
       return (
         base !== undefined &&
-        resolveDeckEntryCard(base, entry).subtype === "Spirit Animal"
+        resolveDeckEntryCard(
+          CONFIG_DATA_FIXTURE.transfigurationData,
+          base,
+          entry,
+        ).subtype === "Spirit Animal"
       );
     }).length;
     const withEssence = resolve(
@@ -729,7 +733,13 @@ describe("Exploration provider", () => {
       if (base === undefined) throw new Error("Expected a catalog card");
       if (originalEntryIds.has(entry.entryId)) {
         expect(entry.keywordModification?.energyCostReduction).toBe(1);
-        expect(resolveDeckEntryCard(base, entry).energyCost).toBe(
+        expect(
+          resolveDeckEntryCard(
+            CONFIG_DATA_FIXTURE.transfigurationData,
+            base,
+            entry,
+          ).energyCost,
+        ).toBe(
           base.energyCost === null ? null : Math.max(0, base.energyCost - 1),
         );
       } else {
@@ -1053,7 +1063,13 @@ describe("Exploration provider", () => {
       (entry) => entry.entryId === "warrior-entry",
     );
     if (changedEntry === undefined) throw new Error("Expected changed entry");
-    expect(resolveDeckEntryCard(warrior, changedEntry).subtype).toBe(
+    expect(
+      resolveDeckEntryCard(
+        CONFIG_DATA_FIXTURE.transfigurationData,
+        warrior,
+        changedEntry,
+      ).subtype,
+    ).toBe(
       "Survivor",
     );
     expect(changed.siteRuntime[site.id]).toMatchObject({

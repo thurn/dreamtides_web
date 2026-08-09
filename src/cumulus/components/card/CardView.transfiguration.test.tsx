@@ -12,6 +12,7 @@ import {
   TRANSFIGURE_MARK_START,
 } from "../../../runtime/transfigure-markers";
 import { CardView, type GameCardSelection } from "./CardView";
+import { transfigurationFormFixture } from "../../test-helpers/transfiguration-fixture";
 
 const CARD_ID = asCardId("11111111-1111-4111-8111-111111111111");
 
@@ -36,6 +37,7 @@ function card(overrides: Partial<CardData> = {}): CardData {
 function display(markedText: string): CardTransfigurationDisplay {
   return {
     type: "Amplified",
+    form: transfigurationFormFixture("Amplified"),
     markedText,
     energyChanged: false,
     sparkChanged: false,
@@ -85,7 +87,7 @@ describe("CardView transfiguration rules marker", () => {
 
     expect(
       container.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
-    ).toContain("#f59e0b");
+    ).toContain(display("").form.accentColor);
 
     act(() => root.unmount());
     container.remove();
@@ -101,7 +103,9 @@ describe("CardView transfiguration rules marker", () => {
       (span) => span.style.fontWeight === "600",
     );
 
-    expect(changedText?.style.color).toBe("rgb(252, 211, 77)");
+    const expected = document.createElement("span");
+    expected.style.color = display("").form.tintColor;
+    expect(changedText?.style.color).toBe(expected.style.color);
 
     act(() => root.unmount());
     container.remove();
@@ -143,9 +147,7 @@ describe("CardView transfiguration rules marker", () => {
   it("omits the rules badge for a stat-only transfiguration", () => {
     const { container, root } = mount(display(card().renderedText));
 
-    expect(
-      container.querySelector("[data-card-rules-text-change]"),
-    ).toBeNull();
+    expect(container.querySelector("[data-card-rules-text-change]")).toBeNull();
 
     act(() => root.unmount());
     container.remove();

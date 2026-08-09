@@ -151,33 +151,11 @@ card-pool-replay-card-label =
        *[no] { $cardName }
     }
 # Tooltip explaining why a card's rules text differs from its base rules.
-# $form is one of the nine stable Transfiguration form identifiers.
-card-rules-transfiguration-changed =
-    { $form ->
-        [Empowered] Rules text changed by Empowered Transfiguration
-        [Amplified] Rules text changed by Amplified Transfiguration
-        [Kindled] Rules text changed by Kindled Transfiguration
-        [Inspired] Rules text changed by Inspired Transfiguration
-        [Enduring] Rules text changed by Enduring Transfiguration
-        [Hastened] Rules text changed by Hastened Transfiguration
-        [Attuned] Rules text changed by Attuned Transfiguration
-        [Perfected] Rules text changed by Perfected Transfiguration
-       *[Resonant] Rules text changed by Resonant Transfiguration
-    }
+# $formName is the authored Transfiguration form name.
+card-rules-transfiguration-changed = Rules text changed by { $formName } Transfiguration
 # Accessible description and tooltip for a card's Transfiguration badge. $form
-# is one of the nine stable Transfiguration form identifiers.
-card-transfiguration-badge =
-    { $form ->
-        [Empowered] Empowered Transfiguration
-        [Amplified] Amplified Transfiguration
-        [Kindled] Kindled Transfiguration
-        [Inspired] Inspired Transfiguration
-        [Enduring] Enduring Transfiguration
-        [Hastened] Hastened Transfiguration
-        [Attuned] Attuned Transfiguration
-        [Perfected] Perfected Transfiguration
-       *[Resonant] Resonant Transfiguration
-    }
+# $formName is the authored Transfiguration form name.
+card-transfiguration-badge = { $formName } Transfiguration
 rules-text-symbol-essence = essence
 rules-text-symbol-points = points
 rules-text-symbol-lunar = lunar
