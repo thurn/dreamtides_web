@@ -782,8 +782,138 @@
           "canonicalMechanicId": "purge-and-duplicate"
         }
       ]
+    },
+    {
+      "cardId": "5e1b943f-9fa2-4055-b613-5dd09a048c99",
+      "prose": "A lone pilgrim faces a radiant portal while shattered monoliths drift across an alien sky.",
+      "action": [
+        {
+          "id": "4703469c-ec5c-41de-89d2-cac4884fb43b",
+          "label": "Cross Radiant Threshold",
+          "effectText": "Draft a transfigured ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        },
+        {
+          "id": "de7d14e5-188c-4b2a-b33f-6df0c13416e1",
+          "label": "Chart Drifting Fragments",
+          "effectText": "The next draft or shop site you visit will contain transfigured cards",
+          "effectKind": "transfigure-next-draft-or-shop",
+          "canonicalMechanicId": "next-site-transfiguration"
+        }
+      ]
+    },
+    {
+      "cardId": "94818862-2875-4ee1-8f72-7c0cdc624202",
+      "prose": "A lone diver hovers beside a colossal radiant jellyfish, pale tendrils unfurling through dark water.",
+      "action": [
+        {
+          "id": "a6f4aa8d-c110-4f58-b995-fa94c7a8a3bf",
+          "label": "Touch Its Tendrils",
+          "effectText": "Purge a chosen Character card and gain a random Character replacement",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to replace.",
+          "effectKind": "replace-selected",
+          "canonicalMechanicId": "replace-deck-entry",
+          "selectionPolicyId": "card-fit-quality",
+          "predicate": "character"
+        },
+        {
+          "id": "f7fc0718-5584-46ac-99b4-f69199c18c5a",
+          "label": "Enter Its Radiance",
+          "effectText": "Draft a transfigured Spirit Animal from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured Spirit Animal.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "2305722e-59c1-47d7-9e05-dc1c32c946a2",
+      "prose": "A lone guitarist strums amid ember-lit smoke as fiery notes spiral skyward.",
+      "action": [
+        {
+          "id": "267846c9-c8d3-4c57-9f29-f0ce9f30653d",
+          "label": "Catch drifting notes",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "42607972-b7e0-47bf-ac8b-338f6f6f0325",
+          "label": "Ride blazing crescendo",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "eed92573-8052-494c-adae-9838de5375a1",
+      "prose": "Twin wolves flank a cloaked wanderer beneath a blood-red moon, awaiting her silent command.",
+      "action": [
+        {
+          "id": "db3744ed-0e89-4115-bf2e-9a1c7260b0fd",
+          "label": "Follow Their Tracks",
+          "effectText": "Draft a Spirit Animal from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "43cd4453-02df-4904-8fd3-824cc44dedb7",
+          "label": "Answer Their Howl",
+          "effectText": "Gain 15 essence for each Spirit Animal card in your deck",
+          "effectKind": "gain-essence-per-card",
+          "canonicalMechanicId": "gain-essence-by-deck-predicate",
+          "predicate": "spirit-animal",
+          "essencePerCard": 15
+        }
+      ]
+    },
+    {
+      "cardId": "027ae231-6569-49bb-866f-7c36ec794a11",
+      "prose": "A skeletal wraith unravels into black ribbons amid a burning field.",
+      "action": [
+        {
+          "id": "79529128-5eca-4c1c-bdac-0ed9f4445773",
+          "label": "Feed It a Memory",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to burn for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "e9d289fd-26bf-4e5f-a02a-807f1f4c3464",
+          "label": "Enter Black Flame",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
     }
   ],
-  "contentHash": "2c6b2b3b2f7ea0d16192563b862e94932d1e3c88c76ee46fa738107f3b72f8a5",
-  "foldHash": "2c6b2b3b2f7ea0d16192563b862e94932d1e3c88c76ee46fa738107f3b72f8a5"
+  "contentHash": "57092601ed863ec8395aae1246a3641c2007a770b3cee26e1d480a5efa8c88ee",
+  "foldHash": "57092601ed863ec8395aae1246a3641c2007a770b3cee26e1d480a5efa8c88ee"
 }

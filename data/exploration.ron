@@ -814,4 +814,140 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "5e1b943f-9fa2-4055-b613-5dd09a048c99",
+    prose: "A lone pilgrim faces a radiant portal while shattered monoliths drift across an alien sky.",
+    actions: [
+      ActionDefinition(
+        label: "Cross Radiant Threshold",
+        id: "4703469c-ec5c-41de-89d2-cac4884fb43b",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured ≤2● cost Character from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: TransfiguredCardDraft(predicate: CheapCharacter, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Chart Drifting Fragments",
+        id: "de7d14e5-188c-4b2a-b33f-6df0c13416e1",
+        presentation: ActionPresentation(
+          effect_text: "The next draft or shop site you visit will contain transfigured cards",
+          followup: None,
+        ),
+        effect: TransfigureNextDraftOrShop,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "94818862-2875-4ee1-8f72-7c0cdc624202",
+    prose: "A lone diver hovers beside a colossal radiant jellyfish, pale tendrils unfurling through dark water.",
+    actions: [
+      ActionDefinition(
+        label: "Touch Its Tendrils",
+        id: "a6f4aa8d-c110-4f58-b995-fa94c7a8a3bf",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen Character card and gain a random Character replacement",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Character to replace."),
+        ),
+        effect: ReplaceSelected(predicate: Character),
+      ),
+
+      ActionDefinition(
+        label: "Enter Its Radiance",
+        id: "f7fc0718-5584-46ac-99b4-f69199c18c5a",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Spirit Animal from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one transfigured Spirit Animal.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: SpiritAnimal, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "2305722e-59c1-47d7-9e05-dc1c32c946a2",
+    prose: "A lone guitarist strums amid ember-lit smoke as fiery notes spiral skyward.",
+    actions: [
+      ActionDefinition(
+        label: "Catch drifting notes",
+        id: "267846c9-c8d3-4c57-9f29-f0ce9f30653d",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Ride blazing crescendo",
+        id: "42607972-b7e0-47bf-ac8b-338f6f6f0325",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "eed92573-8052-494c-adae-9838de5375a1",
+    prose: "Twin wolves flank a cloaked wanderer beneath a blood-red moon, awaiting her silent command.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Their Tracks",
+        id: "db3744ed-0e89-4115-bf2e-9a1c7260b0fd",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Spirit Animal from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Answer Their Howl",
+        id: "43cd4453-02df-4904-8fd3-824cc44dedb7",
+        presentation: ActionPresentation(
+          effect_text: "Gain 15 essence for each Spirit Animal card in your deck",
+          followup: None,
+        ),
+        effect: GainEssencePerCard(predicate: SpiritAnimal, essence_per_card: 15),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "027ae231-6569-49bb-866f-7c36ec794a11",
+    prose: "A skeletal wraith unravels into black ribbons amid a burning field.",
+    actions: [
+      ActionDefinition(
+        label: "Feed It a Memory",
+        id: "79529128-5eca-4c1c-bdac-0ed9f4445773",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to burn for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Enter Black Flame",
+        id: "e9d289fd-26bf-4e5f-a02a-807f1f4c3464",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
 ]
