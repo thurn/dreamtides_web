@@ -288,7 +288,7 @@ saves validate and regenerate the compatibility and runtime artifacts.
 
 The standalone `/images` route browses candidate card art. Favorite and manual
 used marks are keyed by Shutterstock image number in the tracked
-`data/image-viewer-state.json` file. The toolbar's Favorites link opens
+`data/internal/image-viewer-state.json` file. The toolbar's Favorites link opens
 `/images/favorites`, which shows every favorite including images marked as used.
 
 ## Info Card Glossary

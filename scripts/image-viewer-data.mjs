@@ -31,6 +31,7 @@ export const METADATA_FILENAME = "untagged-categorized.json";
  */
 export const DEFAULT_IMAGE_VIEWER_STATE_PATH = join(
   "data",
+  "internal",
   "image-viewer-state.json",
 );
 

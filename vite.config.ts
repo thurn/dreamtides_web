@@ -40,6 +40,7 @@ const buildHash = resolveBuildHash(__dirname);
 const imageViewerStatePath = path.join(
   __dirname,
   "data",
+  "internal",
   "image-viewer-state.json",
 );
 export const generatedDataTomlWatchPattern =
