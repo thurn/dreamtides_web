@@ -1,7 +1,11 @@
 import type { DraftData } from "../types/draft-data";
 import { CARD_RARITIES } from "../types/cards";
 
-export type { DraftData, DraftRarityCap, Tides4Tuning } from "../types/draft-data";
+export type {
+  DraftData,
+  DraftRarityCap,
+  Tides4Tuning,
+} from "../types/draft-data";
 
 const PATH = "/draft-data.json";
 const SHA256_HEX = /^[0-9a-f]{64}$/u;
@@ -34,6 +38,7 @@ export function parseDraftData(value: unknown): DraftData {
       "schemaVersion",
       "contentHash",
       "foldHash",
+      "presentation",
       "offers",
       "rarityCaps",
       "pool",
@@ -41,7 +46,16 @@ export function parseDraftData(value: unknown): DraftData {
     value.schemaVersion !== 1 ||
     typeof value.contentHash !== "string" ||
     !SHA256_HEX.test(value.contentHash) ||
-    value.foldHash !== value.contentHash ||
+    typeof value.foldHash !== "string" ||
+    !SHA256_HEX.test(value.foldHash) ||
+    !isRecord(value.presentation) ||
+    !hasExactKeys(value.presentation, ["progress"]) ||
+    typeof value.presentation.progress !== "string" ||
+    value.presentation.progress.trim().length === 0 ||
+    [...value.presentation.progress.matchAll(/\{([^{}]+)\}/gu)]
+      .map((match) => match[1])
+      .sort()
+      .join(",") !== "pickNumber,pickTotal" ||
     !isRecord(value.offers) ||
     !hasExactKeys(value.offers, ["cardsPerOffer", "picksPerSite"]) ||
     !isPositiveInteger(value.offers.cardsPerOffer) ||

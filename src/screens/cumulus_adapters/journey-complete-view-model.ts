@@ -1,10 +1,12 @@
 import type { CardData } from "../../types/cards";
 import type { JourneyState } from "../../types/journey";
 import type { JourneyCompleteView } from "../../cumulus/screens/JourneyCompleteScreen";
-import { buildStartingDeckView } from "./starting-deck-view-model";
+import { buildStartingDeckCards } from "./starting-deck-view-model";
 
 /** Build the victory statistics shown on the completion surface. */
-export function buildJourneyCompleteView(state: JourneyState): JourneyCompleteView {
+export function buildJourneyCompleteView(
+  state: JourneyState,
+): JourneyCompleteView {
   const completedDreamscapes = Object.values(state.atlas.nodes).filter(
     (node) => node.state === "completed",
   ).length;
@@ -57,7 +59,7 @@ export function buildJourneyCompleteCardIds(
   deck: JourneyState["deck"],
   cardDatabase: Map<number, CardData>,
 ): readonly string[] {
-  return buildStartingDeckView(deck, cardDatabase).cards.map(
+  return buildStartingDeckCards(deck, cardDatabase).map(
     (entry) => entry.model.cardId,
   );
 }

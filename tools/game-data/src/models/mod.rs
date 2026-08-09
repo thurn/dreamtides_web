@@ -18,6 +18,7 @@ pub mod figments;
 pub mod gamble;
 pub mod glossary;
 pub mod internal_card_metadata;
+pub mod journey;
 pub mod opponents;
 pub mod reward_selection;
 pub mod sites;

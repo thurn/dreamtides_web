@@ -8,6 +8,8 @@ import type {
   JourneyState,
 } from "../../types/journey";
 import type { TutorialSiteConfiguration } from "../../types/tutorial";
+import type { SitesData } from "../../types/sites-data";
+import type { JourneyData } from "../../types/journey-data";
 import type { ArtRef } from "../../cumulus/primitives/art";
 import type {
   DreamsignRevelationGuideView,
@@ -46,10 +48,17 @@ export function buildDreamsignRevelationView(params: {
   offeredDreamsigns: readonly Dreamsign[] | null;
   pendingPurgeDreamsign: Dreamsign | null;
   tutorialConfiguration?: TutorialSiteConfiguration;
+  sitesData: SitesData;
+  journeyData: JourneyData;
 }): DreamsignRevelationView {
   const scene: ArtRef | null =
     params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
   return {
+    presentation: params.sitesData.siteTypes.DreamsignRevelation
+      .presentation as Extract<
+      import("../../types/sites-data").SitePresentation,
+      { kind: "dreamsign-revelation" }
+    >,
     scene,
     guide: buildDreamsignRevelationGuideView(params.guide, params.guideLine),
     offer: params.offeredDreamsigns ?? [],
@@ -63,6 +72,7 @@ export function buildDreamsignRevelationView(params: {
       params.pendingPurgeDreamsign === null
         ? null
         : {
+            presentation: params.journeyData.presentation.dreamsignReplacement,
             pendingDreamsign: params.pendingPurgeDreamsign,
             currentDreamsigns: params.state.dreamsigns,
             maxDreamsigns: params.state.maxDreamsigns,

@@ -99,6 +99,46 @@ pub struct SiteMetadata {
     pub site: SiteType,
     pub icon: String,
     pub glossary_id: GlossaryId,
+    pub presentation: Option<SitePresentation>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+pub enum SitePresentation {
+    Battle {
+        label: String,
+        final_boss_label: String,
+        locked_guidance: String,
+    },
+    Draft {
+        label: String,
+    },
+    Shop {
+        title: String,
+        restocked: String,
+        restock_offers_action: String,
+        restock_action: String,
+        free_price: String,
+    },
+    Purge {
+        title: String,
+        instruction: String,
+        purge_action: String,
+    },
+    DreamsignMarket {
+        title: String,
+        restocked: String,
+        restock_offers_action: String,
+        restock_action: String,
+        free_price: String,
+        replacement_title: String,
+    },
+    DreamsignRevelation {
+        loading: String,
+        exhausted: String,
+    },
+    RandomSite {
+        title: String,
+    },
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -197,6 +237,8 @@ struct CompatibilitySiteMetadata {
     icon: String,
     #[serde(rename = "glossary-id")]
     glossary_id: &'static str,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    presentation: Option<toml::Value>,
 }
 
 #[derive(Serialize)]
@@ -245,6 +287,7 @@ fn lower_with_glossary_map(
                 site_type: metadata.site.as_compat(),
                 icon: metadata.icon,
                 glossary_id: compatibility_glossary_id(glossary_ids, metadata.glossary_id)?,
+                presentation: metadata.presentation.map(lower_presentation),
             })
         })
         .collect::<Result<Vec<_>>>()?;
@@ -268,6 +311,79 @@ fn lower_with_glossary_map(
         random_site,
         card_choices,
     })?)
+}
+
+fn lower_presentation(source: SitePresentation) -> toml::Value {
+    let mut table = toml::map::Map::new();
+    let mut put = |key: &str, value: String| {
+        table.insert(key.into(), value.into());
+    };
+    match source {
+        SitePresentation::Battle {
+            label,
+            final_boss_label,
+            locked_guidance,
+        } => {
+            put("kind", "battle".into());
+            put("label", label);
+            put("final-boss-label", final_boss_label);
+            put("locked-guidance", locked_guidance);
+        }
+        SitePresentation::Draft { label } => {
+            put("kind", "draft".into());
+            put("label", label);
+        }
+        SitePresentation::Shop {
+            title,
+            restocked,
+            restock_offers_action,
+            restock_action,
+            free_price,
+        } => {
+            put("kind", "shop".into());
+            put("title", title);
+            put("restocked", restocked);
+            put("restock-offers-action", restock_offers_action);
+            put("restock-action", restock_action);
+            put("free-price", free_price);
+        }
+        SitePresentation::Purge {
+            title,
+            instruction,
+            purge_action,
+        } => {
+            put("kind", "purge".into());
+            put("title", title);
+            put("instruction", instruction);
+            put("purge-action", purge_action);
+        }
+        SitePresentation::DreamsignMarket {
+            title,
+            restocked,
+            restock_offers_action,
+            restock_action,
+            free_price,
+            replacement_title,
+        } => {
+            put("kind", "dreamsign-market".into());
+            put("title", title);
+            put("restocked", restocked);
+            put("restock-offers-action", restock_offers_action);
+            put("restock-action", restock_action);
+            put("free-price", free_price);
+            put("replacement-title", replacement_title);
+        }
+        SitePresentation::DreamsignRevelation { loading, exhausted } => {
+            put("kind", "dreamsign-revelation".into());
+            put("loading", loading);
+            put("exhausted", exhausted);
+        }
+        SitePresentation::RandomSite { title } => {
+            put("kind", "random-site".into());
+            put("title", title);
+        }
+    }
+    toml::Value::Table(table)
 }
 
 fn lower_choice_limits(source: CardChoiceLimits) -> CompatibilityCardChoiceLimits {
@@ -310,6 +426,7 @@ fn validate(source: &SitesCatalog) -> Result<()> {
             metadata.glossary_id
         );
         validate_text("site metadata icon", &metadata.icon)?;
+        validate_presentation(metadata)?;
     }
     ensure!(
         sites == SITE_TYPES.map(SiteType::as_compat).into_iter().collect(),
@@ -354,6 +471,107 @@ fn validate(source: &SitesCatalog) -> Result<()> {
         "Random Site home choice count exceeds its destinations"
     );
     validate_choice_limits(&source.card_choices.duplication)?;
+    Ok(())
+}
+
+fn validate_presentation(metadata: &SiteMetadata) -> Result<()> {
+    let expected = match metadata.site {
+        SiteType::Battle => Some("battle"),
+        SiteType::Draft => Some("draft"),
+        SiteType::Shop => Some("shop"),
+        SiteType::Purge => Some("purge"),
+        SiteType::DreamsignMarket => Some("dreamsign-market"),
+        SiteType::DreamsignRevelation => Some("dreamsign-revelation"),
+        SiteType::RandomSite => Some("random-site"),
+        _ => None,
+    };
+    let actual = metadata.presentation.as_ref().map(|value| match value {
+        SitePresentation::Battle { .. } => "battle",
+        SitePresentation::Draft { .. } => "draft",
+        SitePresentation::Shop { .. } => "shop",
+        SitePresentation::Purge { .. } => "purge",
+        SitePresentation::DreamsignMarket { .. } => "dreamsign-market",
+        SitePresentation::DreamsignRevelation { .. } => "dreamsign-revelation",
+        SitePresentation::RandomSite { .. } => "random-site",
+    });
+    ensure!(
+        actual == expected,
+        "{} presentation must match its site type",
+        metadata.site.as_compat()
+    );
+    if let Some(presentation) = &metadata.presentation {
+        let values: Vec<&str> = match presentation {
+            SitePresentation::Battle {
+                label,
+                final_boss_label,
+                locked_guidance,
+            } => vec![label, final_boss_label, locked_guidance],
+            SitePresentation::Draft { label } => {
+                validate_slots("Draft label", label, &["pickCount"])?;
+                vec![label]
+            }
+            SitePresentation::Shop {
+                title,
+                restocked,
+                restock_offers_action,
+                restock_action,
+                free_price,
+            } => vec![
+                title,
+                restocked,
+                restock_offers_action,
+                restock_action,
+                free_price,
+            ],
+            SitePresentation::Purge {
+                title,
+                instruction,
+                purge_action,
+            } => {
+                validate_slots("Purge action", purge_action, &["count"])?;
+                vec![title, instruction, purge_action]
+            }
+            SitePresentation::DreamsignMarket {
+                title,
+                restocked,
+                restock_offers_action,
+                restock_action,
+                free_price,
+                replacement_title,
+            } => vec![
+                title,
+                restocked,
+                restock_offers_action,
+                restock_action,
+                free_price,
+                replacement_title,
+            ],
+            SitePresentation::DreamsignRevelation { loading, exhausted } => {
+                vec![loading, exhausted]
+            }
+            SitePresentation::RandomSite { title } => vec![title],
+        };
+        for value in values {
+            validate_text("site presentation text", value)?;
+        }
+    }
+    Ok(())
+}
+
+fn validate_slots(label: &str, template: &str, required: &[&str]) -> Result<()> {
+    for slot in required {
+        ensure!(
+            template.matches(&format!("{{{slot}}}")).count() == 1,
+            "{label} must contain {{{slot}}} exactly once"
+        );
+    }
+    let stripped = required.iter().fold(template.to_owned(), |value, slot| {
+        value.replace(&format!("{{{slot}}}"), "")
+    });
+    ensure!(
+        !stripped.contains('{') && !stripped.contains('}'),
+        "{label} contains an unsupported placeholder"
+    );
     Ok(())
 }
 
@@ -420,6 +638,7 @@ mod tests {
                 site,
                 icon: format!("icon-{}", site.as_compat()),
                 glossary_id: GlossaryId::parse(canonical).unwrap(),
+                presentation: synthetic_presentation(site),
             })
             .collect();
         SitesCatalog {
@@ -449,6 +668,47 @@ mod tests {
                     enhanced: ChoiceLimit::Count(7),
                 },
             },
+        }
+    }
+
+    fn synthetic_presentation(site: SiteType) -> Option<SitePresentation> {
+        match site {
+            SiteType::Battle => Some(SitePresentation::Battle {
+                label: "Battle".into(),
+                final_boss_label: "Boss".into(),
+                locked_guidance: "Locked".into(),
+            }),
+            SiteType::Draft => Some(SitePresentation::Draft {
+                label: "Draft {pickCount}x".into(),
+            }),
+            SiteType::Shop => Some(SitePresentation::Shop {
+                title: "Shop".into(),
+                restocked: "Restocked".into(),
+                restock_offers_action: "Offers".into(),
+                restock_action: "Restock".into(),
+                free_price: "Free".into(),
+            }),
+            SiteType::Purge => Some(SitePresentation::Purge {
+                title: "Purge".into(),
+                instruction: "Choose".into(),
+                purge_action: "Purge {count}".into(),
+            }),
+            SiteType::DreamsignMarket => Some(SitePresentation::DreamsignMarket {
+                title: "Market".into(),
+                restocked: "Restocked".into(),
+                restock_offers_action: "Offers".into(),
+                restock_action: "Restock".into(),
+                free_price: "Free".into(),
+                replacement_title: "Replace".into(),
+            }),
+            SiteType::DreamsignRevelation => Some(SitePresentation::DreamsignRevelation {
+                loading: "Loading".into(),
+                exhausted: "Exhausted".into(),
+            }),
+            SiteType::RandomSite => Some(SitePresentation::RandomSite {
+                title: "Choose".into(),
+            }),
+            _ => None,
         }
     }
 

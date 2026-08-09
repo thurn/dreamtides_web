@@ -15,6 +15,7 @@ import {
   type PurgeSiteView,
 } from "./PurgeSiteScreen";
 import { CumulusRoot } from "../CumulusRoot";
+import { PURGE_PRESENTATION } from "../test-helpers/presentation-fixtures";
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
@@ -36,6 +37,7 @@ function makeCard(overrides: Partial<CardData> = {}): CardData {
 
 function view(cardCount = 2): PurgeSiteView {
   return {
+    presentation: PURGE_PRESENTATION,
     siteId: "purge-site",
     scene: null,
     guide: {

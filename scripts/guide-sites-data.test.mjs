@@ -57,12 +57,59 @@ function guidesFixture() {
 }
 
 function sitesFixture() {
+  const presentation = (type) => {
+    if (type === "Battle")
+      return {
+        kind: "battle",
+        label: "Battle",
+        "final-boss-label": "Final Boss",
+        "locked-guidance": "Locked.",
+      };
+    if (type === "Draft") return { kind: "draft", label: "Draft {pickCount}x" };
+    if (type === "Shop")
+      return {
+        kind: "shop",
+        title: "Shop",
+        restocked: "Restocked",
+        "restock-offers-action": "Restock Offers",
+        "restock-action": "Restock",
+        "free-price": "Free",
+      };
+    if (type === "Purge")
+      return {
+        kind: "purge",
+        title: "Purge",
+        instruction: "Choose.",
+        "purge-action": "Purge {count}",
+      };
+    if (type === "DreamsignMarket")
+      return {
+        kind: "dreamsign-market",
+        title: "Market",
+        restocked: "Restocked",
+        "restock-offers-action": "Restock Offers",
+        "restock-action": "Restock",
+        "free-price": "Free",
+        "replacement-title": "Replace",
+      };
+    if (type === "DreamsignRevelation")
+      return {
+        kind: "dreamsign-revelation",
+        loading: "Loading",
+        exhausted: "Exhausted",
+      };
+    if (type === "RandomSite") return { kind: "random-site", title: "Choose" };
+    return undefined;
+  };
   return {
     "schema-version": 1,
     "site-types": SITE_TYPES.map((type) => ({
       type,
       icon: `fixture-icon-${type}`,
       "glossary-id": `fixture-glossary-${type}`,
+      ...(presentation(type) === undefined
+        ? {}
+        : { presentation: presentation(type) }),
     })),
     "fallback-site-type": {
       icon: "fixture-fallback-icon",

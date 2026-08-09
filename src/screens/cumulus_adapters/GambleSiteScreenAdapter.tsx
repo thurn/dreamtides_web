@@ -69,12 +69,15 @@ export function GambleSiteScreenAdapter({
             guideLine,
             gambleData,
             transfigurationData: journeyContent.transfigurationData,
+            replacementPresentation:
+              journeyContent.journeyData.presentation.dreamsignReplacement,
           }),
     [
       gambleData,
       guide,
       guideLine,
       journeyContent.transfigurationData,
+      journeyContent.journeyData,
       node,
       site,
       state,

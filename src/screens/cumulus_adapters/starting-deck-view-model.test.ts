@@ -4,7 +4,18 @@ import { describe, expect, it } from "vitest";
 import type { CardData } from "../../types/cards";
 import type { DeckEntry } from "../../types/journey";
 import { asCardId, asCardName } from "../../types/card-identity";
-import { buildStartingDeckView } from "./starting-deck-view-model";
+import { buildStartingDeckView as buildStartingDeckViewImpl } from "./starting-deck-view-model";
+import { JOURNEY_DATA_FIXTURE } from "../../testing/journey-data-fixture";
+
+const buildStartingDeckView = (
+  deck: readonly DeckEntry[],
+  cardDatabase: Map<number, CardData>,
+) =>
+  buildStartingDeckViewImpl(
+    deck,
+    cardDatabase,
+    JOURNEY_DATA_FIXTURE.presentation.startingDeck,
+  );
 
 function makeCardDatabase(): Map<number, CardData> {
   return new Map<number, CardData>([

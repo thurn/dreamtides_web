@@ -18,6 +18,9 @@ export interface DraftData {
   schemaVersion: 1;
   contentHash: string;
   foldHash: string;
+  presentation: {
+    progress: string;
+  };
   offers: {
     cardsPerOffer: number;
     picksPerSite: number;

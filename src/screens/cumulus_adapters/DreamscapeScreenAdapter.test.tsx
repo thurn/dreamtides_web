@@ -20,6 +20,7 @@ import {
   MINIMAL_SITES_DATA,
 } from "../../__test-helpers__/atlas-fixtures";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
+import { JOURNEY_DATA_FIXTURE } from "../../testing/journey-data-fixture";
 
 const screenMock = vi.hoisted(() =>
   vi.fn<(props: DreamscapeScreenProps) => void>(),
@@ -123,6 +124,7 @@ function setJourneyContext(
       atlasData: MINIMAL_ATLAS_DATA,
       sitesData: MINIMAL_SITES_DATA,
       draftData: draftDataFixture(),
+      journeyData: JOURNEY_DATA_FIXTURE,
       ...journeyContent,
     },
   } as JourneyContextValue);

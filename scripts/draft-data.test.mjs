@@ -4,6 +4,7 @@ import { compileDraftData } from "./draft-data.mjs";
 function fixture() {
   return {
     "schema-version": 1,
+    presentation: { progress: "Draft ({pickNumber}/{pickTotal})" },
     offers: { "cards-per-offer": 4, "picks-per-site": 5 },
     "rarity-caps": [
       {
@@ -42,23 +43,86 @@ describe("compileDraftData", () => {
       "Special",
     ]);
     expect(first.contentHash).toMatch(/^[0-9a-f]{64}$/u);
-    expect(first.foldHash).toBe(first.contentHash);
+    expect(first.foldHash).toMatch(/^[0-9a-f]{64}$/u);
+    source.presentation.progress = "Pick {pickNumber} of {pickTotal}";
+    expect(compileDraftData(source).contentHash).not.toBe(first.contentHash);
+    expect(compileDraftData(source).foldHash).toBe(first.foldHash);
 
     source.pool.tides4["max-facets"] += 1;
     expect(compileDraftData(source).foldHash).not.toBe(first.foldHash);
   });
 
   it.each([
-    ["unknown root key", (source) => { source.extra = true; }, /unknown key/u],
-    ["unknown nested key", (source) => { source.offers.extra = 1; }, /unknown key/u],
-    ["unsupported version", (source) => { source["schema-version"] = 2; }, /only schema version 1/u],
-    ["unsupported strategy", (source) => { source.pool["default-strategy"] = "retired"; }, /only "tides4"/u],
-    ["unknown rarity", (source) => { source["rarity-caps"][0].rarity = "Mythic"; }, /unknown rarity/u],
-    ["duplicate rarity", (source) => { source["rarity-caps"][1].rarity = "Special"; }, /duplicate rarity/u],
-    ["zero offer size", (source) => { source.offers["cards-per-offer"] = 0; }, /positive integer/u],
-    ["fractional picks", (source) => { source.offers["picks-per-site"] = 1.5; }, /positive integer/u],
-    ["rarity cap above strategy cap", (source) => { source["rarity-caps"][0]["pool-copy-cap"] = 3; }, /must not exceed/u],
-    ["insufficient distinct cards", (source) => { source.pool.tides4["deal-size"] = 38; }, /one site can show 20/u],
+    [
+      "unknown root key",
+      (source) => {
+        source.extra = true;
+      },
+      /unknown key/u,
+    ],
+    [
+      "unknown nested key",
+      (source) => {
+        source.offers.extra = 1;
+      },
+      /unknown key/u,
+    ],
+    [
+      "unsupported version",
+      (source) => {
+        source["schema-version"] = 2;
+      },
+      /only schema version 1/u,
+    ],
+    [
+      "unsupported strategy",
+      (source) => {
+        source.pool["default-strategy"] = "retired";
+      },
+      /only "tides4"/u,
+    ],
+    [
+      "unknown rarity",
+      (source) => {
+        source["rarity-caps"][0].rarity = "Mythic";
+      },
+      /unknown rarity/u,
+    ],
+    [
+      "duplicate rarity",
+      (source) => {
+        source["rarity-caps"][1].rarity = "Special";
+      },
+      /duplicate rarity/u,
+    ],
+    [
+      "zero offer size",
+      (source) => {
+        source.offers["cards-per-offer"] = 0;
+      },
+      /positive integer/u,
+    ],
+    [
+      "fractional picks",
+      (source) => {
+        source.offers["picks-per-site"] = 1.5;
+      },
+      /positive integer/u,
+    ],
+    [
+      "rarity cap above strategy cap",
+      (source) => {
+        source["rarity-caps"][0]["pool-copy-cap"] = 3;
+      },
+      /must not exceed/u,
+    ],
+    [
+      "insufficient distinct cards",
+      (source) => {
+        source.pool.tides4["deal-size"] = 38;
+      },
+      /one site can show 20/u,
+    ],
   ])("rejects %s", (_label, mutate, pattern) => {
     const source = fixture();
     mutate(source);

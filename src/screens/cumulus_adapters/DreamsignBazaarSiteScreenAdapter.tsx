@@ -1,3 +1,5 @@
+/* eslint-disable max-lines -- this adapter keeps the full screen wiring together. */
+
 // Adapter for Amunet's Cumulus Dreamsign Bazaar. Wiring only.
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -5,19 +7,37 @@ import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import { DreamsignBazaarSiteScreen } from "../../cumulus/screens/DreamsignBazaarSiteScreen";
-import { buildDreamsignBazaarSiteView, resolveDreamsignBazaarGuide } from "./dreamsign-bazaar-view-model";
+import {
+  buildDreamsignBazaarSiteView,
+  resolveDreamsignBazaarGuide,
+} from "./dreamsign-bazaar-view-model";
 import { useGuideDialogue } from "./guide-dialogue-view-model";
 
-export function DreamsignBazaarSiteScreenAdapter({ siteId }: { siteId: string }) {
+export function DreamsignBazaarSiteScreenAdapter({
+  siteId,
+}: {
+  siteId: string;
+}) {
   const { state, mutations, journeyContent } = useJourney();
-  const node = state.currentDreamscape === null ? null : (state.atlas.nodes[state.currentDreamscape] ?? null);
+  const node =
+    state.currentDreamscape === null
+      ? null
+      : (state.atlas.nodes[state.currentDreamscape] ?? null);
   const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
   const runtime = state.siteRuntime[siteId];
   const shopRuntime = runtime?.kind === "shop" ? runtime : null;
-  const guide = resolveDreamsignBazaarGuide(journeyContent.guides, site?.guideIdOverride);
+  const guide = resolveDreamsignBazaarGuide(
+    journeyContent.guides,
+    site?.guideIdOverride,
+  );
   const guideLine = useGuideDialogue(guide, "site");
   const [pendingSlotIndex, setPendingSlotIndex] = useState<number | null>(null);
-  const pendingDreamsign = pendingSlotIndex === null || shopRuntime === null ? null : shopRuntime.slots[pendingSlotIndex]?.itemType === "dreamsign" ? shopRuntime.slots[pendingSlotIndex].dreamsign : null;
+  const pendingDreamsign =
+    pendingSlotIndex === null || shopRuntime === null
+      ? null
+      : shopRuntime.slots[pendingSlotIndex]?.itemType === "dreamsign"
+        ? shopRuntime.slots[pendingSlotIndex].dreamsign
+        : null;
   const view = useMemo(
     () =>
       site === null || shopRuntime === null
@@ -31,12 +51,23 @@ export function DreamsignBazaarSiteScreenAdapter({ siteId }: { siteId: string })
             guideLine,
             pendingDreamsign,
             economyData: journeyContent.economyData,
+            sitesData: journeyContent.sitesData,
           }),
-    [state, node, site, shopRuntime, guide, pendingDreamsign, journeyContent.economyData],
+    [
+      state,
+      node,
+      site,
+      shopRuntime,
+      guide,
+      pendingDreamsign,
+      journeyContent.economyData,
+      journeyContent.sitesData,
+    ],
   );
 
   useEffect(() => {
-    if (site !== null && runtime === undefined) mutations.ensureShopRuntime(site);
+    if (site !== null && runtime === undefined)
+      mutations.ensureShopRuntime(site);
   }, [mutations, runtime, site]);
   useEffect(() => {
     if (site === null || view === null) return;
@@ -44,18 +75,24 @@ export function DreamsignBazaarSiteScreenAdapter({ siteId }: { siteId: string })
       siteType: site.type,
       isEnhanced: site.isEnhanced,
       essence: state.essence,
-      offerIds: view.offers.map((offer) => requireDreamsignId(offer.dreamsign, "Dreamsign Bazaar log")),
+      offerIds: view.offers.map((offer) =>
+        requireDreamsignId(offer.dreamsign, "Dreamsign Bazaar log"),
+      ),
       offerPrices: view.offers.map((offer) => offer.price),
       restockPrice: view.restock.price,
     });
   }, [site, state.essence, view]);
   useEffect(() => {
     if (guide === null || site === null) return;
-    logEventOnce(`dreamsign-bazaar:${site.id}:guide:${guide.id}`, "dream_guide_presented", {
-      guideId: guide.id,
-      siteType: site.type,
-      isEnhanced: site.isEnhanced,
-    });
+    logEventOnce(
+      `dreamsign-bazaar:${site.id}:guide:${guide.id}`,
+      "dream_guide_presented",
+      {
+        guideId: guide.id,
+        siteType: site.type,
+        isEnhanced: site.isEnhanced,
+      },
+    );
   }, [guide, site]);
 
   const handleBuy = useCallback(
@@ -69,7 +106,13 @@ export function DreamsignBazaarSiteScreenAdapter({ siteId }: { siteId: string })
       }
       mutations.buyShopSlot(site.id, slotIndex);
     },
-    [mutations, shopRuntime, site, state.dreamsigns.length, state.maxDreamsigns],
+    [
+      mutations,
+      shopRuntime,
+      site,
+      state.dreamsigns.length,
+      state.maxDreamsigns,
+    ],
   );
   const handlePurge = useCallback(
     (purgeIndex: number) => {
@@ -92,5 +135,14 @@ export function DreamsignBazaarSiteScreenAdapter({ siteId }: { siteId: string })
   }, [mutations, site]);
 
   if (site === null || view === null) return null;
-  return <DreamsignBazaarSiteScreen view={view} onBuy={handleBuy} onPurge={handlePurge} onCancelPurge={() => setPendingSlotIndex(null)} onRestock={handleRestock} onClose={handleClose} />;
+  return (
+    <DreamsignBazaarSiteScreen
+      view={view}
+      onBuy={handleBuy}
+      onPurge={handlePurge}
+      onCancelPurge={() => setPendingSlotIndex(null)}
+      onRestock={handleRestock}
+      onClose={handleClose}
+    />
+  );
 }

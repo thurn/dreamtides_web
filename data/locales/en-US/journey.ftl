@@ -1,9 +1,5 @@
 ### Journey progression and navigation
 
-# Journey-start title, action, and reroll control.
-journey-start-title = Choose Your Avatar
-journey-start-choose-action = Choose
-journey-start-reroll-action = Reroll Avatars
 # Loading-screen card feature labels.
 tutorial-feature-cost = Cost
 tutorial-feature-spark = Spark
@@ -54,11 +50,6 @@ journey-menu-load-generic-error = Failed to load journey.
 # Transient status after the player opens the build identifier from Journey
 # chrome. $gitSha is an opaque technical build identifier.
 journey-menu-build-sha-status = Build Git SHA: { $gitSha }
-# Dreamscape site labels and lock guidance.
-dreamscape-battle-label = Battle
-dreamscape-final-boss-label = Final Boss
-dreamscape-draft-label = Draft { $pickCount }x
-dreamscape-locked-site-guidance = You must visit the other sites in this dreamscape first.
 
 # Battle-preview route failure title and explanation.
 
@@ -140,24 +131,11 @@ dreamscape-reward-dreamsign-label =
         [found] Dreamsign found
        *[gained] Dreamsign gained
     }
-# Compact progress below the visible draft pack. $pickNumber is the positive
-# one-based current pick and $pickTotal is the positive total number of picks.
-draft-pick-progress = Draft ({ $pickNumber }/{ $pickTotal })
-dreamsign-replacement-title = Choose a Dreamsign to Replace
-dreamsign-replacement-new-label = New Dreamsign
 dreamsign-replacement-pending-label = Cumulus Dreamsign replacement pending reward
 dreamsign-replacement-collection-label = Cumulus Dreamsign replacement collection
-dreamsign-replace-action = Replace
-dreamsign-replacement-keep-current-action = Keep Current Dreamsigns
 dreamsign-replacement-decline-reward-action = Decline Dreamsign reward
 dreamsign-revelation-cancel-action = Cancel
 dreamsign-revelation-cancel-replacement-action = Cancel replacement
-dreamsign-revelation-loading = Revealing Dreamsigns...
-dreamsign-revelation-exhausted = The Dreamsign pool is exhausted.
-starting-deck-title = Starting Deck
-starting-deck-subtitle = These are the cards you begin the journey with.
-starting-deck-empty = No cards in starting deck.
-starting-deck-begin-action = Begin Journey
 draft-reroll-offer = Reroll draft offer
 tutorial-how-to-play-title = How to Play
 tutorial-how-to-play-close = Close how to play

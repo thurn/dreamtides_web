@@ -28,6 +28,7 @@ function card(cardNumber: number): CardData {
 
 function view(offer: number[]): DraftView {
   return {
+    progressLabel: "Draft (1/5)",
     scene: null,
     offer: offer.map((cardNumber) => {
       const displaySnapshot = card(cardNumber);
@@ -80,7 +81,10 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
+function mount(element: ReactElement): {
+  container: HTMLDivElement;
+  root: Root;
+} {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -132,7 +136,9 @@ describe("Cumulus DraftScreen", () => {
         ?.textContent,
     ).toContain("At a Draft site");
     expect(onTutorialShown).toHaveBeenCalledOnce();
-    expect(container.querySelectorAll("[data-draft-offer-card]")).toHaveLength(4);
+    expect(container.querySelectorAll("[data-draft-offer-card]")).toHaveLength(
+      4,
+    );
 
     const firstCard = container.querySelector<HTMLElement>(
       '[data-draft-offer-card="101"] [role="button"]',
@@ -151,10 +157,14 @@ describe("Cumulus DraftScreen", () => {
       <DraftScreen view={view([101, 102, 103, 104])} onPick={vi.fn()} />,
     );
 
-    const grid = container.querySelector<HTMLElement>("[data-draft-offer-grid]");
+    const grid = container.querySelector<HTMLElement>(
+      "[data-draft-offer-grid]",
+    );
     expect(grid?.style.gridTemplateColumns).toBe("repeat(2, auto)");
     expect(grid?.style.gridTemplateRows).toBe("repeat(2, auto)");
-    const stage = container.querySelector<HTMLElement>("[data-draft-offer-stage]");
+    const stage = container.querySelector<HTMLElement>(
+      "[data-draft-offer-stage]",
+    );
     expect(stage?.style.justifyContent).toBe("flex-start");
     expect(stage?.style.paddingLeft).toBe("var(--space-xs)");
     expect(stage?.style.paddingRight).toBe("var(--space-xs)");
@@ -175,14 +185,18 @@ describe("Cumulus DraftScreen", () => {
       <DraftScreen view={view([101, 102, 103, 104])} onPick={vi.fn()} />,
     );
 
-    const grid = container.querySelector<HTMLElement>("[data-draft-offer-grid]");
+    const grid = container.querySelector<HTMLElement>(
+      "[data-draft-offer-grid]",
+    );
     expect(grid?.style.gridTemplateColumns).toBe("repeat(4, auto)");
     expect(grid?.style.gridTemplateRows).toBe("repeat(1, auto)");
     const firstCard = container.querySelector<HTMLElement>(
       '[data-draft-offer-card="101"]',
     );
     expect(firstCard?.style.width).toContain("300px");
-    const stage = container.querySelector<HTMLElement>("[data-draft-offer-stage]");
+    const stage = container.querySelector<HTMLElement>(
+      "[data-draft-offer-stage]",
+    );
     expect(stage?.style.justifyContent).toBe("center");
     expect(stage?.style.paddingLeft).toBe("var(--space-m)");
     expect(grid?.style.gap).toBe("var(--space-m)");
@@ -198,7 +212,9 @@ describe("Cumulus DraftScreen", () => {
       <DraftScreen view={view([101, 102, 103, 104])} onPick={vi.fn()} />,
     );
 
-    const grid = container.querySelector<HTMLElement>("[data-draft-offer-grid]");
+    const grid = container.querySelector<HTMLElement>(
+      "[data-draft-offer-grid]",
+    );
     expect(grid?.style.gridTemplateColumns).toBe("repeat(2, auto)");
     expect(grid?.style.gridTemplateRows).toBe("repeat(2, auto)");
     expect(
@@ -218,7 +234,9 @@ describe("Cumulus DraftScreen", () => {
     expect(cells).toHaveLength(4);
     for (const cardNumber of [101, 102, 103, 104]) {
       expect(
-        container.querySelector(`[data-draft-offer-card="${String(cardNumber)}"]`),
+        container.querySelector(
+          `[data-draft-offer-card="${String(cardNumber)}"]`,
+        ),
       ).not.toBeNull();
     }
     // The one label: a floating semantic pick counter.

@@ -10,6 +10,7 @@ import {
   DreamsignBazaarSiteScreen,
   type DreamsignBazaarSiteView,
 } from "./DreamsignBazaarSiteScreen";
+import { DREAMSIGN_MARKET_PRESENTATION } from "../test-helpers/presentation-fixtures";
 
 function sign(index: number): Dreamsign {
   return {
@@ -23,6 +24,7 @@ function sign(index: number): Dreamsign {
 
 function view(): DreamsignBazaarSiteView {
   return {
+    presentation: DREAMSIGN_MARKET_PRESENTATION,
     siteId: "dreamsign-bazaar-site",
     scene: null,
     guide: {
@@ -67,7 +69,10 @@ class ResizeObserverStub {
   disconnect(): void {}
 }
 
-function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
+function mount(element: ReactElement): {
+  container: HTMLDivElement;
+  root: Root;
+} {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -101,8 +106,9 @@ describe("DreamsignBazaarSiteScreen", () => {
     );
 
     expect(
-      container.querySelector('[data-testid="cumulus-dreamsign-bazaar-speech-bubble"]')
-        ?.textContent,
+      container.querySelector(
+        '[data-testid="cumulus-dreamsign-bazaar-speech-bubble"]',
+      )?.textContent,
     ).toContain("Amunet, the Tomb-Keeper");
     const gallery = container.querySelector<HTMLElement>(
       '[data-testid="cumulus-dreamsign-bazaar-gallery"]',
@@ -110,7 +116,9 @@ describe("DreamsignBazaarSiteScreen", () => {
     expect(gallery?.dataset.dreamsignGallerySize).toBe("compact");
     expect(container.querySelector("h2")?.textContent).toBe("Dreamsign Bazaar");
     expect(
-      container.querySelectorAll('[data-testid^="cumulus-dreamsign-bazaar-offer-"]'),
+      container.querySelectorAll(
+        '[data-testid^="cumulus-dreamsign-bazaar-offer-"]',
+      ),
     ).toHaveLength(3);
     expect(
       container.querySelectorAll('[data-dreamsign-gallery-caption="essence"]'),
@@ -132,7 +140,9 @@ describe("DreamsignBazaarSiteScreen", () => {
     const restockGlyph = container.querySelector<HTMLElement>(
       "[data-dreamsign-gallery-action-glyph]",
     );
-    expect(Number.parseFloat(restockGlyph?.style.fontSize ?? "0")).toBeGreaterThan(70);
+    expect(
+      Number.parseFloat(restockGlyph?.style.fontSize ?? "0"),
+    ).toBeGreaterThan(70);
     expect(restockGlyph?.style.color).toBe("var(--text-on-accent)");
     expect(restockGlyph?.style.textShadow).toBe("var(--text-outline-media)");
     expect(restockGlyph?.parentElement?.style.background).toBe("");
@@ -158,8 +168,9 @@ describe("DreamsignBazaarSiteScreen", () => {
       />,
     );
 
-    expect(container.querySelector("[data-guide-gallery-desktop-composition]"))
-      .not.toBeNull();
+    expect(
+      container.querySelector("[data-guide-gallery-desktop-composition]"),
+    ).not.toBeNull();
     expect(
       container.querySelector<HTMLElement>(
         '[data-testid="cumulus-dreamsign-bazaar-gallery"]',
@@ -192,9 +203,9 @@ describe("DreamsignBazaarSiteScreen", () => {
     expect(onBuy).toHaveBeenCalledTimes(1);
     expect(onRestock).toHaveBeenCalledTimes(1);
     expect(
-      container.querySelector(
-        '[data-dreamsign-gallery-entry-id="dreamsign-offer-0"]',
-      )?.getAttribute("data-dreamsign-gallery-reserved"),
+      container
+        .querySelector('[data-dreamsign-gallery-entry-id="dreamsign-offer-0"]')
+        ?.getAttribute("data-dreamsign-gallery-reserved"),
     ).toBe("true");
     expect(
       container.querySelector(

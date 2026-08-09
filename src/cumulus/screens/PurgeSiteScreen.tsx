@@ -14,6 +14,7 @@ import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
 import { useMessages } from "../hooks/use-messages";
+import { formatAuthoredTemplate } from "../../data/authored-template";
 
 export type PurgeGuideView = GuideGalleryGuideView;
 
@@ -32,6 +33,10 @@ export interface PurgeCardView extends DeckCardView {
 }
 
 export interface PurgeSiteView {
+  presentation: Extract<
+    import("../../types/sites-data").SitePresentation,
+    { kind: "purge" }
+  >;
   /** Stable site id used by the shared character-gallery layout. */
   siteId: string;
   /** Current dreamscape scene art behind the site, if resolved. */
@@ -91,12 +96,21 @@ export function PurgeSiteScreen({
         view.maxPaidSelections,
         view.visitCosts,
       ).map((reservation) => ({
-        label: reservation.label.kind === "decline"
-          ? t("purge-site-decline-action")
-          : t("purge-site-action", { count: reservation.label.count }),
+        label:
+          reservation.label.kind === "decline"
+            ? t("purge-site-decline-action")
+            : formatAuthoredTemplate(view.presentation.purgeAction, {
+                count: reservation.label.count,
+              }),
         essenceCost: reservation.essenceCost,
       })),
-    [freeEntryIds, t, view.maxPaidSelections, view.visitCosts],
+    [
+      freeEntryIds,
+      t,
+      view.maxPaidSelections,
+      view.presentation.purgeAction,
+      view.visitCosts,
+    ],
   );
   const tutorialVisible = useDelayedTutorialSpeechBubbleVisibility(
     view.tutorial?.id ?? view.tutorial?.model.text,
@@ -141,6 +155,7 @@ export function PurgeSiteScreen({
       renderGallery={(layout) => (
         <PurgeGallery
           layout={layout}
+          presentation={view.presentation}
           cards={view.cards}
           selectedEntryIds={selectedEntryIds}
           selectedCount={selectedCount}
@@ -172,6 +187,7 @@ export function PurgeSiteScreen({
 
 function PurgeGallery({
   layout,
+  presentation,
   cards,
   selectedEntryIds,
   selectedCount,
@@ -183,6 +199,7 @@ function PurgeGallery({
   onToggle,
 }: {
   readonly layout: "mobile" | "desktop";
+  readonly presentation: PurgeSiteView["presentation"];
   readonly cards: readonly PurgeCardView[];
   readonly selectedEntryIds: readonly string[];
   readonly selectedCount: number;
@@ -215,15 +232,17 @@ function PurgeGallery({
       }}
     >
       <CardPickerPanel
-        title={t("purge-site-title")}
-        subtitle={t("purge-site-subtitle")}
+        title={presentation.title}
+        subtitle={presentation.instruction}
         rightAccessory={{
           kind: "glassButton",
           button: {
             label:
               selectedCount === 0
                 ? t("purge-site-decline-action")
-                : t("purge-site-action", { count: selectedCount }),
+                : formatAuthoredTemplate(presentation.purgeAction, {
+                    count: selectedCount,
+                  }),
             essenceCost: selectedCount === 0 ? null : totalCost,
             widthReservations: actionWidthReservations,
             variant: selectedCount === 0 ? "default" : "danger",

@@ -12,6 +12,10 @@ import {
 } from "./DreamsignRevelationScreen";
 import { JOURNEY_STATUS_BAR_CLEARANCE_OP } from "../components/hud/JourneyStatusBar";
 import { CumulusRoot } from "../CumulusRoot";
+import {
+  DREAMSIGN_REVELATION_PRESENTATION,
+  JOURNEY_PRESENTATION,
+} from "../test-helpers/presentation-fixtures";
 
 function dreamsign(id: string, imageName: string): Dreamsign {
   return {
@@ -25,6 +29,7 @@ function dreamsign(id: string, imageName: string): Dreamsign {
 
 function view(): DreamsignRevelationView {
   return {
+    presentation: DREAMSIGN_REVELATION_PRESENTATION,
     scene: null,
     guide: {
       id: "sigrun",
@@ -61,7 +66,10 @@ class ResizeObserverStub {
   disconnect(): void {}
 }
 
-function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
+function mount(element: ReactElement): {
+  container: HTMLDivElement;
+  root: Root;
+} {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -118,7 +126,9 @@ describe("DreamsignRevelationScreen", () => {
     );
 
     expect(
-      container.querySelector('[data-testid="revelation-site-tutorial-dialogue"]'),
+      container.querySelector(
+        '[data-testid="revelation-site-tutorial-dialogue"]',
+      ),
     ).toBeNull();
     expect(
       container.querySelector('[data-testid="revelation-guide-art"]'),
@@ -131,14 +141,17 @@ describe("DreamsignRevelationScreen", () => {
       vi.advanceTimersByTime(999);
     });
     expect(
-      container.querySelector('[data-testid="revelation-site-tutorial-dialogue"]'),
+      container.querySelector(
+        '[data-testid="revelation-site-tutorial-dialogue"]',
+      ),
     ).toBeNull();
     act(() => {
       vi.advanceTimersByTime(1);
     });
     expect(
-      container.querySelector('[data-testid="revelation-site-tutorial-dialogue"]')
-        ?.textContent,
+      container.querySelector(
+        '[data-testid="revelation-site-tutorial-dialogue"]',
+      )?.textContent,
     ).toContain("A Dreamsign gives ongoing benefits.");
     expect(
       container.querySelector<HTMLElement>("[data-revelation-site-tutorial]")
@@ -152,7 +165,9 @@ describe("DreamsignRevelationScreen", () => {
       container.querySelector('[data-testid="revelation-speech-bubble"]')
         ?.textContent,
     ).toContain("Choose one sign.");
-    expect(container.querySelectorAll("[data-revelation-option]")).toHaveLength(3);
+    expect(container.querySelectorAll("[data-revelation-option]")).toHaveLength(
+      3,
+    );
 
     act(() => root.unmount());
   });
@@ -160,14 +175,27 @@ describe("DreamsignRevelationScreen", () => {
   it("keeps unavailable choices focusable and revealable while suppressing keyboard activation", () => {
     const onClaim = vi.fn();
     const { container, root } = mount(
-      <DreamsignRevelationScreen view={view()} claimedIndex={0} onClaim={onClaim} onSkip={vi.fn()} onPurge={vi.fn()} onCancelPurge={vi.fn()} />,
+      <DreamsignRevelationScreen
+        view={view()}
+        claimedIndex={0}
+        onClaim={onClaim}
+        onSkip={vi.fn()}
+        onPurge={vi.fn()}
+        onCancelPurge={vi.fn()}
+      />,
     );
-    const source = container.querySelector<HTMLElement>('[data-testid="dreamsign-revelation-art-1"]')!;
+    const source = container.querySelector<HTMLElement>(
+      '[data-testid="dreamsign-revelation-art-1"]',
+    )!;
     expect(source.tabIndex).toBe(0);
     expect(source.getAttribute("aria-disabled")).toBe("true");
     act(() => source.focus());
     expect(source.dataset.revealActive).toBe("true");
-    act(() => { source.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true })); });
+    act(() => {
+      source.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+      );
+    });
     expect(onClaim).not.toHaveBeenCalled();
     act(() => root.unmount());
   });
@@ -237,6 +265,7 @@ describe("DreamsignRevelationScreen", () => {
     const replacementView: DreamsignRevelationView = {
       ...view(),
       purge: {
+        presentation: JOURNEY_PRESENTATION.dreamsignReplacement,
         pendingDreamsign: dreamsign("pending", "aurora.png"),
         currentDreamsigns: [dreamsign("owned", "eye_3.png")],
         maxDreamsigns: 1,

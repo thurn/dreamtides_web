@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "presentation": {
+    "start": {
+      "title": "Choose Your Avatar",
+      "chooseAction": "Choose",
+      "rerollAction": "Reroll Avatars"
+    },
+    "startingDeck": {
+      "title": "Starting Deck",
+      "subtitle": "These are the cards you begin the journey with.",
+      "emptyState": "No cards in starting deck.",
+      "beginAction": "Begin Journey"
+    },
+    "dreamsignReplacement": {
+      "title": "Choose a Dreamsign to Replace",
+      "newDreamsignLabel": "New Dreamsign",
+      "replaceAction": "Replace",
+      "keepCurrentAction": "Keep Current Dreamsigns"
+    }
+  },
+  "contentHash": "9162f5bf35c36e10a81beef52bd083144ea758b8cdf78c36a73fb340ba8a7da7"
+}

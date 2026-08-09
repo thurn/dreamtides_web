@@ -10,6 +10,7 @@ import { rerollCost } from "../../shop/shop-pricing";
 import type { CardData } from "../../types/cards";
 import type { EconomyData } from "../../types/economy-data";
 import type { TransfigurationData } from "../../types/transfiguration-data";
+import type { SitesData } from "../../types/sites-data";
 import type {
   DreamGuideContent,
   ResolvedDreamAvatarPackage,
@@ -159,6 +160,7 @@ export function buildCardShopSiteView(params: {
   guideLine: string;
   economyData: EconomyData;
   transfigurationData: TransfigurationData;
+  sitesData: SitesData;
 }): CardShopSiteView {
   const priceModifiers: ShopPriceModifiers = {
     essenceDiscountPercent: params.state.shopModifiers.essenceDiscountPercent,
@@ -166,6 +168,10 @@ export function buildCardShopSiteView(params: {
   const scene: ArtRef | null =
     params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
   return {
+    presentation: params.sitesData.siteTypes.Shop.presentation as Extract<
+      import("../../types/sites-data").SitePresentation,
+      { kind: "shop" }
+    >,
     siteId: params.site.id,
     scene,
     guide: buildCardShopGuideView(params.guide, params.guideLine),

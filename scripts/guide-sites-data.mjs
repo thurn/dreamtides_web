@@ -346,6 +346,119 @@ function compileChoiceLimit(value, file, path) {
   return number(value, file, path, { min: 1 });
 }
 
+const PRESENTATION_KEYS = {
+  battle: ["kind", "label", "final-boss-label", "locked-guidance"],
+  draft: ["kind", "label"],
+  shop: [
+    "kind",
+    "title",
+    "restocked",
+    "restock-offers-action",
+    "restock-action",
+    "free-price",
+  ],
+  purge: ["kind", "title", "instruction", "purge-action"],
+  "dreamsign-market": [
+    "kind",
+    "title",
+    "restocked",
+    "restock-offers-action",
+    "restock-action",
+    "free-price",
+    "replacement-title",
+  ],
+  "dreamsign-revelation": ["kind", "loading", "exhausted"],
+  "random-site": ["kind", "title"],
+};
+const PRESENTATION_KIND_BY_SITE = {
+  Battle: "battle",
+  Draft: "draft",
+  Shop: "shop",
+  Purge: "purge",
+  DreamsignMarket: "dreamsign-market",
+  DreamsignRevelation: "dreamsign-revelation",
+  RandomSite: "random-site",
+};
+
+function presentationTemplate(value, file, path, slots) {
+  const result = string(value, file, path);
+  const found = placeholders(result).sort();
+  if (found.join(",") !== [...slots].sort().join(",")) {
+    fail(
+      file,
+      path,
+      `expected exactly ${slots.map((slot) => `{${slot}}`).join(" and ")}`,
+    );
+  }
+  return result;
+}
+
+function compileSitePresentation(value, type, file, path) {
+  const expectedKind = PRESENTATION_KIND_BY_SITE[type];
+  if (expectedKind === undefined) {
+    if (value !== undefined)
+      fail(file, path, `${type} does not define presentation`);
+    return null;
+  }
+  const source = table(value, file, path);
+  const kind = exactIdentity(source.kind, expectedKind, file, `${path}.kind`);
+  keys(source, file, path, PRESENTATION_KEYS[kind]);
+  const text = (key) => string(source[key], file, `${path}.${key}`);
+  switch (kind) {
+    case "battle":
+      return {
+        kind,
+        label: text("label"),
+        finalBossLabel: text("final-boss-label"),
+        lockedGuidance: text("locked-guidance"),
+      };
+    case "draft":
+      return {
+        kind,
+        label: presentationTemplate(source.label, file, `${path}.label`, [
+          "pickCount",
+        ]),
+      };
+    case "shop":
+      return {
+        kind,
+        title: text("title"),
+        restocked: text("restocked"),
+        restockOffersAction: text("restock-offers-action"),
+        restockAction: text("restock-action"),
+        freePrice: text("free-price"),
+      };
+    case "purge":
+      return {
+        kind,
+        title: text("title"),
+        instruction: text("instruction"),
+        purgeAction: presentationTemplate(
+          source["purge-action"],
+          file,
+          `${path}.purge-action`,
+          ["count"],
+        ),
+      };
+    case "dreamsign-market":
+      return {
+        kind,
+        title: text("title"),
+        restocked: text("restocked"),
+        restockOffersAction: text("restock-offers-action"),
+        restockAction: text("restock-action"),
+        freePrice: text("free-price"),
+        replacementTitle: text("replacement-title"),
+      };
+    case "dreamsign-revelation":
+      return { kind, loading: text("loading"), exhausted: text("exhausted") };
+    case "random-site":
+      return { kind, title: text("title") };
+    default:
+      throw new Error(`unreachable presentation kind ${kind}`);
+  }
+}
+
 /** Strictly compile sites.toml and cross-validate linked catalogs. */
 export function compileSitesData(sourceValue, catalogs = {}) {
   const file = "sites.toml";
@@ -370,6 +483,7 @@ export function compileSitesData(sourceValue, catalogs = {}) {
       "type",
       "icon",
       "glossary-id",
+      ...(rawMetadata.presentation === undefined ? [] : ["presentation"]),
     ]);
     const type = siteType(metadata.type, file, `${path}.type`);
     if (siteTypes[type] !== undefined)
@@ -377,6 +491,12 @@ export function compileSitesData(sourceValue, catalogs = {}) {
     siteTypes[type] = {
       icon: string(metadata.icon, file, `${path}.icon`),
       glossaryId: string(metadata["glossary-id"], file, `${path}.glossary-id`),
+      presentation: compileSitePresentation(
+        metadata.presentation,
+        type,
+        file,
+        `${path}.presentation`,
+      ),
     };
   }
   for (const type of SITE_TYPES)

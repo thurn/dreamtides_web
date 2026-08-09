@@ -57,12 +57,30 @@ function hash(value) {
 export function compileDraftData(sourceValue) {
   const root = keys(sourceValue, "root", [
     "schema-version",
+    "presentation",
     "offers",
     "rarity-caps",
     "pool",
   ]);
   if (positiveInteger(root["schema-version"], "schema-version") !== 1) {
     fail("schema-version", "only schema version 1 is supported");
+  }
+  const presentationSource = keys(root.presentation, "presentation", [
+    "progress",
+  ]);
+  const progress = presentationSource.progress;
+  if (
+    typeof progress !== "string" ||
+    progress.trim() === "" ||
+    [...progress.matchAll(/\{([^{}]+)\}/gu)]
+      .map((match) => match[1])
+      .sort()
+      .join(",") !== "pickNumber,pickTotal"
+  ) {
+    fail(
+      "presentation.progress",
+      "expected exactly {pickNumber} and {pickTotal}",
+    );
   }
 
   const offers = keys(root.offers, "offers", [
@@ -87,7 +105,10 @@ export function compileDraftData(sourceValue) {
     offers["picks-per-site"],
     "offers.picks-per-site",
   );
-  const dealSize = positiveInteger(tides4["deal-size"], "pool.tides4.deal-size");
+  const dealSize = positiveInteger(
+    tides4["deal-size"],
+    "pool.tides4.deal-size",
+  );
   const copyCap = positiveInteger(tides4["copy-cap"], "pool.tides4.copy-cap");
   const maxFacets = positiveInteger(
     tides4["max-facets"],
@@ -140,6 +161,7 @@ export function compileDraftData(sourceValue) {
 
   const payload = {
     schemaVersion: 1,
+    presentation: { progress },
     offers: { cardsPerOffer, picksPerSite },
     rarityCaps,
     pool: {
@@ -148,5 +170,11 @@ export function compileDraftData(sourceValue) {
     },
   };
   const contentHash = hash(payload);
-  return { ...payload, contentHash, foldHash: contentHash };
+  const behavior = {
+    schemaVersion: payload.schemaVersion,
+    offers: payload.offers,
+    rarityCaps: payload.rarityCaps,
+    pool: payload.pool,
+  };
+  return { ...payload, contentHash, foldHash: hash(behavior) };
 }

@@ -35,12 +35,13 @@ const TIDE_HIT_SLOP = token("--space-xs");
  * hairline, the tides cluster + starting essence, and the Choose action. */
 function DreamAvatarConsole({
   dreamAvatar,
+  chooseLabel,
   onChoose,
 }: {
   dreamAvatar: DreamAvatarOfferView;
+  chooseLabel: string;
   onChoose: () => void;
 }) {
-  const t = useMessages();
   return (
     <GlassPanel testId={`dream-avatar-glass-panel-${dreamAvatar.id}`}>
       <div
@@ -70,7 +71,7 @@ function DreamAvatarConsole({
           style={{ marginTop: token("--space-l"), display: "grid" }}
         >
           <GlassButton
-            label={t("journey-start-choose-action")}
+            label={chooseLabel}
             variant="accent"
             placement="onGlass"
             onPress={onChoose}
@@ -129,8 +130,7 @@ function DreamAvatarTitle({
 
 /** The screen's uppercase eyebrow, painted on the portrait at top-center. It
  * does not swipe on mobile and spans the full width on desktop. */
-function ScreenHeader() {
-  const t = useMessages();
+function ScreenHeader({ title }: { readonly title: string }) {
   return (
     <div
       style={{
@@ -144,7 +144,7 @@ function ScreenHeader() {
         pointerEvents: "none",
       }}
     >
-      <OnMediaEyebrow label={t("journey-start-title")} />
+      <OnMediaEyebrow label={title} />
     </div>
   );
 }
@@ -216,6 +216,7 @@ function DreamAvatarPage({
  * the offered DreamAvatars, one per page. */
 export function CarouselSelect({
   dreamAvatars,
+  presentation,
   guideDialogue,
   onPick,
   onReroll,
@@ -267,7 +268,7 @@ export function CarouselSelect({
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
     >
-      <ScreenHeader />
+      <ScreenHeader title={presentation.title} />
       {guideDialogue !== undefined && (
         <JourneyStartGuideDialogue
           dialogue={guideDialogue}
@@ -276,7 +277,10 @@ export function CarouselSelect({
         />
       )}
       {onReroll !== undefined && (
-        <JourneyStartRerollControl onReroll={onReroll} />
+        <JourneyStartRerollControl
+          onReroll={onReroll}
+          label={presentation.rerollAction}
+        />
       )}
 
       {/* Track */}
@@ -319,6 +323,7 @@ export function CarouselSelect({
         >
           <DreamAvatarConsole
             dreamAvatar={activeDreamAvatar}
+            chooseLabel={presentation.chooseAction}
             onChoose={() => {
               onPick(activeDreamAvatar.id);
             }}

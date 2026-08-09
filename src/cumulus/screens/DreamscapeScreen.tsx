@@ -93,9 +93,7 @@ export function DreamscapeScreen({
 }: DreamscapeScreenProps) {
   const t = useMessages();
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
-  const [collectingSiteId, setCollectingSiteId] = useState<
-    string | null
-  >(null);
+  const [collectingSiteId, setCollectingSiteId] = useState<string | null>(null);
   const guideDialogueVisible = useDelayedTutorialSpeechBubbleVisibility(
     view.guideDialogue?.id ?? view.guideDialogue?.model.text,
     view.guideDialogue === undefined
@@ -113,9 +111,8 @@ export function DreamscapeScreen({
   const collectingModel =
     collectingSiteId === null
       ? null
-      : (view.sites.find(
-          (model) => model.site.id === collectingSiteId,
-        ) ?? null);
+      : (view.sites.find((model) => model.site.id === collectingSiteId) ??
+        null);
   const collectingReward =
     collectingSiteId === null
       ? null
@@ -124,11 +121,10 @@ export function DreamscapeScreen({
   const handleSelectSite = useCallback(
     (siteId: string) => {
       if (collectingSiteId !== null || view.replacement !== null) return;
-      const model = view.sites.find((candidate) => candidate.site.id === siteId);
-      if (
-        model?.site.type === "Essence" ||
-        model?.site.type === "Reward"
-      ) {
+      const model = view.sites.find(
+        (candidate) => candidate.site.id === siteId,
+      );
+      if (model?.site.type === "Essence" || model?.site.type === "Reward") {
         completionRequestedRef.current = null;
         setCollectingSiteId(siteId);
       }
@@ -213,8 +209,7 @@ export function DreamscapeScreen({
       {view.sites
         .filter(
           (model) =>
-            !model.site.isVisited ||
-            model.site.id === collectingSiteId,
+            !model.site.isVisited || model.site.id === collectingSiteId,
         )
         .map((model) => {
           const isCollecting = model.site.id === collectingSiteId;
@@ -300,7 +295,9 @@ export function DreamscapeScreen({
             collectingReward.kind === "dreamsign"
               ? t("dreamscape-reward-status", {
                   kind: "dreamsign",
-                  state: collectingReward.requiresReplacement ? "found" : "gained",
+                  state: collectingReward.requiresReplacement
+                    ? "found"
+                    : "gained",
                   dreamsignName: collectingReward.dreamsign.name,
                   amount: 0,
                 })
@@ -398,7 +395,9 @@ export function DreamscapeScreen({
                 }}
               >
                 {t("dreamscape-reward-dreamsign-label", {
-                  state: collectingReward.requiresReplacement ? "found" : "gained",
+                  state: collectingReward.requiresReplacement
+                    ? "found"
+                    : "gained",
                 })}
               </motion.div>
             </>
@@ -426,7 +425,7 @@ export function DreamscapeScreen({
           view={view.replacement}
           onReplace={onReplaceDreamsign}
           onCancel={onDeclineReward}
-          cancelLabel={t("dreamsign-replacement-keep-current-action")}
+          cancelLabel={view.replacement.presentation.keepCurrentAction}
           closeLabel={t("dreamsign-replacement-decline-reward-action")}
         />
       )}

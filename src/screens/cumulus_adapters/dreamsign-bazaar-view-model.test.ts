@@ -11,6 +11,7 @@ import {
   buildDreamsignBazaarRestock,
   buildDreamsignBazaarSiteView,
 } from "./dreamsign-bazaar-view-model";
+import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
 
 function sign(id: string, name: string): Dreamsign {
   return {
@@ -184,6 +185,7 @@ describe("buildDreamsignBazaarSiteView", () => {
       guideLine: "A chosen greeting.",
       pendingDreamsign,
       economyData: economyFixture(),
+      sitesData: MINIMAL_SITES_DATA,
     });
 
     expect(view.siteId).toBe("dreamsign-bazaar-site");

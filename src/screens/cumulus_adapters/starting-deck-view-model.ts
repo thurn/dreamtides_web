@@ -17,6 +17,7 @@ import type {
   StartingDeckCardView,
   StartingDeckView,
 } from "../../cumulus/screens/StartingDeckOverlay";
+import type { JourneyData } from "../../types/journey-data";
 
 /**
  * Resolve every resolvable deck entry to its starting-deck card view, in deck
@@ -29,10 +30,10 @@ import type {
  * `entryId` (never the card name,
  * which is not unique).
  */
-export function buildStartingDeckView(
+export function buildStartingDeckCards(
   deck: readonly DeckEntry[],
   cardDatabase: Map<number, CardData>,
-): StartingDeckView {
+): StartingDeckCardView[] {
   const cards: StartingDeckCardView[] = [];
   for (const entry of deck) {
     const base = cardDatabase.get(entry.cardNumber);
@@ -53,5 +54,13 @@ export function buildStartingDeckView(
       testId: `starting-deck-modal-card-${entry.entryId}`,
     });
   }
-  return { cards };
+  return cards;
+}
+
+export function buildStartingDeckView(
+  deck: readonly DeckEntry[],
+  cardDatabase: Map<number, CardData>,
+  presentation: JourneyData["presentation"]["startingDeck"],
+): StartingDeckView {
+  return { cards: buildStartingDeckCards(deck, cardDatabase), presentation };
 }

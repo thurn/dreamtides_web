@@ -27,6 +27,12 @@ export function buildRandomSiteView(params: {
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
   const guideId = params.guide.id;
   return {
+    title: (
+      params.sitesData.siteTypes.RandomSite.presentation as Extract<
+        import("../../types/sites-data").SitePresentation,
+        { kind: "random-site" }
+      >
+    ).title,
     siteId: params.site.id,
     scene,
     guide: {

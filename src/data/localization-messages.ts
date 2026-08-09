@@ -100,9 +100,6 @@ export const FLUENT_MESSAGE_IDS = [
   "coop-config-opponent-rules-label",
   "coop-config-tutorial-rules-label",
   "coop-config-unavailable",
-  "journey-start-title",
-  "journey-start-choose-action",
-  "journey-start-reroll-action",
   "tutorial-feature-cost",
   "tutorial-feature-spark",
   "tutorial-feature-ability",
@@ -131,10 +128,6 @@ export const FLUENT_MESSAGE_IDS = [
   "journey-menu-load-error",
   "journey-menu-load-generic-error",
   "journey-menu-build-sha-status",
-  "dreamscape-battle-label",
-  "dreamscape-final-boss-label",
-  "dreamscape-draft-label",
-  "dreamscape-locked-site-guidance",
   "journey-complete-title",
   "journey-complete-new-journey",
   "journey-complete-stat-battles",
@@ -153,22 +146,11 @@ export const FLUENT_MESSAGE_IDS = [
   "atlas-known-dreamsign-title",
   "dreamscape-reward-status",
   "dreamscape-reward-dreamsign-label",
-  "draft-pick-progress",
-  "dreamsign-replacement-title",
-  "dreamsign-replacement-new-label",
   "dreamsign-replacement-pending-label",
   "dreamsign-replacement-collection-label",
-  "dreamsign-replace-action",
-  "dreamsign-replacement-keep-current-action",
   "dreamsign-replacement-decline-reward-action",
   "dreamsign-revelation-cancel-action",
   "dreamsign-revelation-cancel-replacement-action",
-  "dreamsign-revelation-loading",
-  "dreamsign-revelation-exhausted",
-  "starting-deck-title",
-  "starting-deck-subtitle",
-  "starting-deck-empty",
-  "starting-deck-begin-action",
   "draft-reroll-offer",
   "tutorial-how-to-play-title",
   "tutorial-how-to-play-close",
@@ -279,20 +261,9 @@ export const FLUENT_MESSAGE_IDS = [
   "augury-error-choose-vision",
   "augury-error-visions-shifted",
   "augury-error-path-closed",
-  "card-shop-title",
   "card-shop-leave-action",
-  "site-restocked",
-  "site-restock-offers-action",
-  "site-restock-action",
-  "site-free-price",
-  "dreamsign-bazaar-title",
   "dreamsign-bazaar-leave-action",
-  "purge-site-title",
-  "purge-site-subtitle",
   "purge-site-decline-action",
-  "purge-site-action",
-  "random-site-title",
-  "dreamsign-bazaar-replacement-title",
   "dreamsign-bazaar-replacement-full",
   "dreamsign-bazaar-replacement-cancel",
   "exploration-effect-missing-deck-card",
@@ -600,9 +571,6 @@ export interface FluentMessageArgumentsById {
   readonly "coop-config-opponent-rules-label": never;
   readonly "coop-config-tutorial-rules-label": never;
   readonly "coop-config-unavailable": never;
-  readonly "journey-start-title": never;
-  readonly "journey-start-choose-action": never;
-  readonly "journey-start-reroll-action": never;
   readonly "tutorial-feature-cost": never;
   readonly "tutorial-feature-spark": never;
   readonly "tutorial-feature-ability": never;
@@ -633,10 +601,6 @@ export interface FluentMessageArgumentsById {
   readonly "journey-menu-load-error": { readonly detail: FluentVariable };
   readonly "journey-menu-load-generic-error": never;
   readonly "journey-menu-build-sha-status": { readonly gitSha: FluentVariable };
-  readonly "dreamscape-battle-label": never;
-  readonly "dreamscape-final-boss-label": never;
-  readonly "dreamscape-draft-label": { readonly pickCount: FluentVariable };
-  readonly "dreamscape-locked-site-guidance": never;
   readonly "journey-complete-title": never;
   readonly "journey-complete-new-journey": never;
   readonly "journey-complete-stat-battles": { readonly count: FluentVariable };
@@ -666,25 +630,11 @@ export interface FluentMessageArgumentsById {
   readonly "dreamscape-reward-dreamsign-label": {
     readonly state: FluentVariable;
   };
-  readonly "draft-pick-progress": {
-    readonly pickNumber: FluentVariable;
-    readonly pickTotal: FluentVariable;
-  };
-  readonly "dreamsign-replacement-title": never;
-  readonly "dreamsign-replacement-new-label": never;
   readonly "dreamsign-replacement-pending-label": never;
   readonly "dreamsign-replacement-collection-label": never;
-  readonly "dreamsign-replace-action": never;
-  readonly "dreamsign-replacement-keep-current-action": never;
   readonly "dreamsign-replacement-decline-reward-action": never;
   readonly "dreamsign-revelation-cancel-action": never;
   readonly "dreamsign-revelation-cancel-replacement-action": never;
-  readonly "dreamsign-revelation-loading": never;
-  readonly "dreamsign-revelation-exhausted": never;
-  readonly "starting-deck-title": never;
-  readonly "starting-deck-subtitle": never;
-  readonly "starting-deck-empty": never;
-  readonly "starting-deck-begin-action": never;
   readonly "draft-reroll-offer": never;
   readonly "tutorial-how-to-play-title": never;
   readonly "tutorial-how-to-play-close": never;
@@ -850,20 +800,9 @@ export interface FluentMessageArgumentsById {
   readonly "augury-error-choose-vision": never;
   readonly "augury-error-visions-shifted": never;
   readonly "augury-error-path-closed": never;
-  readonly "card-shop-title": never;
   readonly "card-shop-leave-action": never;
-  readonly "site-restocked": never;
-  readonly "site-restock-offers-action": never;
-  readonly "site-restock-action": never;
-  readonly "site-free-price": never;
-  readonly "dreamsign-bazaar-title": never;
   readonly "dreamsign-bazaar-leave-action": never;
-  readonly "purge-site-title": never;
-  readonly "purge-site-subtitle": never;
   readonly "purge-site-decline-action": never;
-  readonly "purge-site-action": { readonly count: FluentVariable };
-  readonly "random-site-title": never;
-  readonly "dreamsign-bazaar-replacement-title": never;
   readonly "dreamsign-bazaar-replacement-full": {
     readonly count: FluentVariable;
   };
@@ -1379,9 +1318,6 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "coop-config-opponent-rules-label": [] as const,
   "coop-config-tutorial-rules-label": [] as const,
   "coop-config-unavailable": [] as const,
-  "journey-start-title": [] as const,
-  "journey-start-choose-action": [] as const,
-  "journey-start-reroll-action": [] as const,
   "tutorial-feature-cost": [] as const,
   "tutorial-feature-spark": [] as const,
   "tutorial-feature-ability": [] as const,
@@ -1410,10 +1346,6 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "journey-menu-load-error": ["detail"] as const,
   "journey-menu-load-generic-error": [] as const,
   "journey-menu-build-sha-status": ["gitSha"] as const,
-  "dreamscape-battle-label": [] as const,
-  "dreamscape-final-boss-label": [] as const,
-  "dreamscape-draft-label": ["pickCount"] as const,
-  "dreamscape-locked-site-guidance": [] as const,
   "journey-complete-title": [] as const,
   "journey-complete-new-journey": [] as const,
   "journey-complete-stat-battles": ["count"] as const,
@@ -1437,22 +1369,11 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
     "state",
   ] as const,
   "dreamscape-reward-dreamsign-label": ["state"] as const,
-  "draft-pick-progress": ["pickNumber", "pickTotal"] as const,
-  "dreamsign-replacement-title": [] as const,
-  "dreamsign-replacement-new-label": [] as const,
   "dreamsign-replacement-pending-label": [] as const,
   "dreamsign-replacement-collection-label": [] as const,
-  "dreamsign-replace-action": [] as const,
-  "dreamsign-replacement-keep-current-action": [] as const,
   "dreamsign-replacement-decline-reward-action": [] as const,
   "dreamsign-revelation-cancel-action": [] as const,
   "dreamsign-revelation-cancel-replacement-action": [] as const,
-  "dreamsign-revelation-loading": [] as const,
-  "dreamsign-revelation-exhausted": [] as const,
-  "starting-deck-title": [] as const,
-  "starting-deck-subtitle": [] as const,
-  "starting-deck-empty": [] as const,
-  "starting-deck-begin-action": [] as const,
   "draft-reroll-offer": [] as const,
   "tutorial-how-to-play-title": [] as const,
   "tutorial-how-to-play-close": [] as const,
@@ -1585,20 +1506,9 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "augury-error-choose-vision": [] as const,
   "augury-error-visions-shifted": [] as const,
   "augury-error-path-closed": [] as const,
-  "card-shop-title": [] as const,
   "card-shop-leave-action": [] as const,
-  "site-restocked": [] as const,
-  "site-restock-offers-action": [] as const,
-  "site-restock-action": [] as const,
-  "site-free-price": [] as const,
-  "dreamsign-bazaar-title": [] as const,
   "dreamsign-bazaar-leave-action": [] as const,
-  "purge-site-title": [] as const,
-  "purge-site-subtitle": [] as const,
   "purge-site-decline-action": [] as const,
-  "purge-site-action": ["count"] as const,
-  "random-site-title": [] as const,
-  "dreamsign-bazaar-replacement-title": [] as const,
   "dreamsign-bazaar-replacement-full": ["count"] as const,
   "dreamsign-bazaar-replacement-cancel": [] as const,
   "exploration-effect-missing-deck-card": ["after", "before"] as const,
@@ -1971,9 +1881,6 @@ export type FluentMessageIdsWithoutVariables = [
   "coop-config-opponent-rules-label",
   "coop-config-tutorial-rules-label",
   "coop-config-unavailable",
-  "journey-start-title",
-  "journey-start-choose-action",
-  "journey-start-reroll-action",
   "tutorial-feature-cost",
   "tutorial-feature-spark",
   "tutorial-feature-ability",
@@ -1997,9 +1904,6 @@ export type FluentMessageIdsWithoutVariables = [
   "journey-menu-save-generic-error",
   "journey-menu-load-unavailable",
   "journey-menu-load-generic-error",
-  "dreamscape-battle-label",
-  "dreamscape-final-boss-label",
-  "dreamscape-locked-site-guidance",
   "journey-complete-title",
   "journey-complete-new-journey",
   "journey-complete-stat-cards",
@@ -2008,21 +1912,11 @@ export type FluentMessageIdsWithoutVariables = [
   "journey-failed-new-journey-action",
   "atlas-final-boss-title",
   "atlas-known-dreamsign-title",
-  "dreamsign-replacement-title",
-  "dreamsign-replacement-new-label",
   "dreamsign-replacement-pending-label",
   "dreamsign-replacement-collection-label",
-  "dreamsign-replace-action",
-  "dreamsign-replacement-keep-current-action",
   "dreamsign-replacement-decline-reward-action",
   "dreamsign-revelation-cancel-action",
   "dreamsign-revelation-cancel-replacement-action",
-  "dreamsign-revelation-loading",
-  "dreamsign-revelation-exhausted",
-  "starting-deck-title",
-  "starting-deck-subtitle",
-  "starting-deck-empty",
-  "starting-deck-begin-action",
   "draft-reroll-offer",
   "tutorial-how-to-play-title",
   "tutorial-how-to-play-close",
@@ -2096,19 +1990,9 @@ export type FluentMessageIdsWithoutVariables = [
   "augury-error-choose-vision",
   "augury-error-visions-shifted",
   "augury-error-path-closed",
-  "card-shop-title",
   "card-shop-leave-action",
-  "site-restocked",
-  "site-restock-offers-action",
-  "site-restock-action",
-  "site-free-price",
-  "dreamsign-bazaar-title",
   "dreamsign-bazaar-leave-action",
-  "purge-site-title",
-  "purge-site-subtitle",
   "purge-site-decline-action",
-  "random-site-title",
-  "dreamsign-bazaar-replacement-title",
   "dreamsign-bazaar-replacement-cancel",
   "exploration-effect-resolved-fallback",
   "battle-zone-browser-shared-banished-title",
@@ -2226,7 +2110,6 @@ export type FluentMessageIdsWithVariables = [
   "journey-menu-load-loaded",
   "journey-menu-load-error",
   "journey-menu-build-sha-status",
-  "dreamscape-draft-label",
   "journey-complete-stat-battles",
   "journey-complete-stat-dreamscapes",
   "journey-complete-stat-dreamsigns",
@@ -2237,7 +2120,6 @@ export type FluentMessageIdsWithVariables = [
   "journey-failed-stat-label",
   "dreamscape-reward-status",
   "dreamscape-reward-dreamsign-label",
-  "draft-pick-progress",
   "tutorial-drag-to-block",
   "deck-browser-card-count",
   "card-pool-browser-count",
@@ -2275,7 +2157,6 @@ export type FluentMessageIdsWithVariables = [
   "duplication-picker-empty-state",
   "duplication-decline-action",
   "duplication-confirm-action",
-  "purge-site-action",
   "dreamsign-bazaar-replacement-full",
   "exploration-effect-missing-deck-card",
   "exploration-offered-site-disclosure",

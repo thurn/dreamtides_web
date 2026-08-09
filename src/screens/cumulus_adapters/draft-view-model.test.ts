@@ -8,10 +8,19 @@ import {
   sortOfferCards,
 } from "./draft-view-model";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
+import { draftDataFixture } from "../../testing/draft-data-fixture";
 
 const buildDraftView = (
-  params: Omit<Parameters<typeof buildDraftViewImpl>[0], "transfigurationData">,
-) => buildDraftViewImpl({ ...params, transfigurationData: transfigurationFixture() });
+  params: Omit<
+    Parameters<typeof buildDraftViewImpl>[0],
+    "transfigurationData" | "presentation"
+  >,
+) =>
+  buildDraftViewImpl({
+    ...params,
+    transfigurationData: transfigurationFixture(),
+    presentation: draftDataFixture().presentation,
+  });
 
 function card(overrides: Partial<CardData> & { cardNumber: number }): CardData {
   return {

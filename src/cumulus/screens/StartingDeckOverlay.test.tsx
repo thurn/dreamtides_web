@@ -8,6 +8,7 @@ import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { StartingDeckOverlay } from "./StartingDeckOverlay";
 import type { StartingDeckView } from "./StartingDeckOverlay";
+import { JOURNEY_PRESENTATION } from "../test-helpers/presentation-fixtures";
 
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
@@ -65,6 +66,7 @@ function makeCard(cardNumber: number, name: string, text: string): CardData {
 
 function makeView(cardCount = 2): StartingDeckView {
   return {
+    presentation: JOURNEY_PRESENTATION.startingDeck,
     cards: Array.from({ length: cardCount }, (_, index) => {
       const cardNumber = index + 1;
       return {
@@ -364,7 +366,14 @@ describe("StartingDeckOverlay", () => {
 
   it("renders the empty-state placeholder when the deck is empty", () => {
     const { container, root } = mount(
-      <StartingDeckOverlay isOpen view={{ cards: [] }} onClose={vi.fn()} />,
+      <StartingDeckOverlay
+        isOpen
+        view={{
+          cards: [],
+          presentation: JOURNEY_PRESENTATION.startingDeck,
+        }}
+        onClose={vi.fn()}
+      />,
     );
 
     expect(container.textContent).toContain("No cards in starting deck.");

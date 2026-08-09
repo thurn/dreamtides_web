@@ -1,3 +1,5 @@
+/* eslint-disable max-lines -- this adapter keeps the full screen wiring together. */
+
 import { useCallback, useEffect, useMemo } from "react";
 import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
@@ -40,6 +42,7 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
             guideLine,
             economyData: journeyContent.economyData,
             transfigurationData: journeyContent.transfigurationData,
+            sitesData: journeyContent.sitesData,
           }),
     [
       state.essence,

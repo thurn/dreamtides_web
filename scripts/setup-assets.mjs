@@ -27,6 +27,7 @@ import {
 import { collectAtlasAssetSources, compileAtlasData } from "./atlas-data.mjs";
 import { compileEconomyData } from "./economy-data.mjs";
 import { compileDraftData } from "./draft-data.mjs";
+import { compileJourneyData } from "./journey-data.mjs";
 import { compileRewardSelectionData } from "./reward-selection-data.mjs";
 import { compileAuguryData } from "./augury-data.mjs";
 import { isRewardCardPredicate } from "./reward-selection-contracts.mjs";
@@ -37,9 +38,7 @@ import {
   compileSitesData,
   deriveDreamscapesData,
 } from "./guide-sites-data.mjs";
-import {
-  buildExplorationEffectDefinitions,
-} from "./exploration-effect-definitions.mjs";
+import { buildExplorationEffectDefinitions } from "./exploration-effect-definitions.mjs";
 import { amplifiedStructuralErrors } from "./lib/amplified-validation.mjs";
 import {
   compileGambleData,
@@ -1407,14 +1406,8 @@ export function setupAssets({
   dreamAvatarV2TomlPath = join(DATA_DIR, "dream_avatars.toml"),
   dreamwellTomlPath = join(DATA_DIR, "dreamwell.toml"),
   dreamsignTomlPath = join(DATA_DIR, "dreamsigns.toml"),
-  dreamsignProfilesTomlPath = join(
-    DATA_DIR,
-    "dreamsign_profiles.toml",
-  ),
-  dreamsignSignaturesTomlPath = join(
-    DATA_DIR,
-    "dreamsign_signatures.toml",
-  ),
+  dreamsignProfilesTomlPath = join(DATA_DIR, "dreamsign_profiles.toml"),
+  dreamsignSignaturesTomlPath = join(DATA_DIR, "dreamsign_signatures.toml"),
   dreamscapesTomlPath = join(DATA_DIR, "dreamscapes.toml"),
   dreamGuidesTomlPath = join(DATA_DIR, "dream_guides.toml"),
   sitesTomlPath = join(DATA_DIR, "sites.toml"),
@@ -1425,15 +1418,13 @@ export function setupAssets({
   atlasTomlPath = join(DATA_DIR, "atlas.toml"),
   economyTomlPath = join(DATA_DIR, "economy.toml"),
   draftTomlPath = join(DATA_DIR, "draft.toml"),
+  journeyTomlPath = join(DATA_DIR, "journey.toml"),
   opponentsTomlPath = join(DATA_DIR, "opponents.toml"),
   glossaryTomlPath = join(DATA_DIR, "glossary.toml"),
   gambleTomlPath = join(DATA_DIR, "gamble.toml"),
   transfigurationTomlPath = join(DATA_DIR, "transfiguration.toml"),
   tideAlignmentsTomlPath = join(DATA_DIR, "tide_alignments.toml"),
-  apollyonIncarnationsTomlPath = join(
-    DATA_DIR,
-    "apollyon_incarnations.toml",
-  ),
+  apollyonIncarnationsTomlPath = join(DATA_DIR, "apollyon_incarnations.toml"),
   figmentTomlPath = join(DATA_DIR, "figments.toml"),
   tutorialTomlPath = join(DATA_DIR, "tutorial.toml"),
   merchantCorpusJsonPath = join(DATA_DIR, "merchant_corpus.json"),
@@ -1512,9 +1503,16 @@ export function setupAssets({
   const transfigurationJsonPath = join(publicDir, "transfiguration-data.json");
   const tideAlignmentsJsonPath = join(publicDir, "tide-alignments-data.json");
   const generatedGambleJsonPath = join(generatedConfigDir, "gamble-data.json");
-  const generatedTransfigurationJsonPath = join(generatedConfigDir, "transfiguration-data.json");
-  const generatedTideAlignmentsJsonPath = join(generatedConfigDir, "tide-alignments-data.json");
+  const generatedTransfigurationJsonPath = join(
+    generatedConfigDir,
+    "transfiguration-data.json",
+  );
+  const generatedTideAlignmentsJsonPath = join(
+    generatedConfigDir,
+    "tide-alignments-data.json",
+  );
   const draftJsonPath = join(publicDir, "draft-data.json");
+  const journeyJsonPath = join(publicDir, "journey-data.json");
   const opponentsJsonPath = join(publicDir, "opponents-data.json");
   const apollyonIncarnationsJsonPath = join(
     publicDir,
@@ -1933,12 +1931,36 @@ export function setupAssets({
   console.log("Wrote Economy data to economy-data.json");
 
   const generatedCatalogs = [
-    ["Gamble", gambleTomlPath, gambleJsonPath, generatedGambleJsonPath, compileGambleData],
-    ["Transfiguration", transfigurationTomlPath, transfigurationJsonPath, generatedTransfigurationJsonPath, compileTransfigurationData],
-    ["Tide alignments", tideAlignmentsTomlPath, tideAlignmentsJsonPath, generatedTideAlignmentsJsonPath, compileTideAlignmentsData],
+    [
+      "Gamble",
+      gambleTomlPath,
+      gambleJsonPath,
+      generatedGambleJsonPath,
+      compileGambleData,
+    ],
+    [
+      "Transfiguration",
+      transfigurationTomlPath,
+      transfigurationJsonPath,
+      generatedTransfigurationJsonPath,
+      compileTransfigurationData,
+    ],
+    [
+      "Tide alignments",
+      tideAlignmentsTomlPath,
+      tideAlignmentsJsonPath,
+      generatedTideAlignmentsJsonPath,
+      compileTideAlignmentsData,
+    ],
   ];
   mkdirSync(generatedConfigDir, { recursive: true });
-  for (const [label, tomlPath, publicPath, generatedPath, compileCatalog] of generatedCatalogs) {
+  for (const [
+    label,
+    tomlPath,
+    publicPath,
+    generatedPath,
+    compileCatalog,
+  ] of generatedCatalogs) {
     console.log(`Parsing ${tomlPath.slice(tomlPath.lastIndexOf("/") + 1)}...`);
     const serialized = `${JSON.stringify(compileCatalog(parse(readFileSync(tomlPath, "utf8"))), null, 2)}\n`;
     writeFileSync(publicPath, serialized);
@@ -1967,6 +1989,16 @@ export function setupAssets({
   );
   writeFileSync(draftJsonPath, JSON.stringify(jsonDraftData, null, 2) + "\n");
   console.log("Wrote Draft data to draft-data.json");
+
+  console.log("Parsing journey.toml...");
+  const jsonJourneyData = compileJourneyData(
+    parse(readFileSync(journeyTomlPath, "utf8")),
+  );
+  writeFileSync(
+    journeyJsonPath,
+    JSON.stringify(jsonJourneyData, null, 2) + "\n",
+  );
+  console.log("Wrote Journey data to journey-data.json");
 
   console.log("Parsing reward_selection.toml...");
   const jsonRewardSelectionData = compileRewardSelectionData(

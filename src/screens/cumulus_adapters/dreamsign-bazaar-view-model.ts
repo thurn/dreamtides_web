@@ -9,6 +9,7 @@ import {
 import { rerollCost } from "../../shop/shop-pricing";
 import type { DreamGuideContent } from "../../types/content";
 import type { EconomyData } from "../../types/economy-data";
+import type { SitesData } from "../../types/sites-data";
 import type {
   DreamscapeNode,
   Dreamsign,
@@ -117,6 +118,7 @@ export function buildDreamsignBazaarSiteView(params: {
   guideLine: string;
   pendingDreamsign: Dreamsign | null;
   economyData: EconomyData;
+  sitesData: SitesData;
 }): DreamsignBazaarSiteView {
   const priceModifiers: ShopPriceModifiers = {
     essenceDiscountPercent: params.state.shopModifiers.essenceDiscountPercent,
@@ -124,6 +126,11 @@ export function buildDreamsignBazaarSiteView(params: {
   const scene: ArtRef | null =
     params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
   return {
+    presentation: params.sitesData.siteTypes.DreamsignMarket
+      .presentation as Extract<
+      import("../../types/sites-data").SitePresentation,
+      { kind: "dreamsign-market" }
+    >,
     siteId: params.site.id,
     scene,
     guide: buildDreamsignBazaarGuideView(params.guide, params.guideLine),

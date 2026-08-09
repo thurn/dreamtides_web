@@ -38,6 +38,10 @@ export interface DreamsignRevelationGuideView {
 
 /** Everything rendered by the pure Revelation screen. */
 export interface DreamsignRevelationView {
+  presentation: Extract<
+    import("../../types/sites-data").SitePresentation,
+    { kind: "dreamsign-revelation" }
+  >;
   /** The current dreamscape scene art. */
   scene: ArtRef | null;
   /** Sigrun's character art and dialog. */
@@ -416,10 +420,10 @@ function OfferStack({
 }) {
   const t = useMessages();
   if (!view.offerReady) {
-    return <StatusLine text={t("dreamsign-revelation-loading")} />;
+    return <StatusLine text={view.presentation.loading} />;
   }
   if (view.offer.length === 0) {
-    return <StatusLine text={t("dreamsign-revelation-exhausted")} />;
+    return <StatusLine text={view.presentation.exhausted} />;
   }
 
   const enhanced = view.offer.length > 3;

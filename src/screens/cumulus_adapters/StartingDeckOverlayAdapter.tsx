@@ -31,8 +31,13 @@ export function StartingDeckOverlayAdapter({
   const wasOpenRef = useRef(false);
 
   const view = useMemo(
-    () => buildStartingDeckView(state.deck, journeyContent.cardDatabase),
-    [state.deck, journeyContent.cardDatabase],
+    () =>
+      buildStartingDeckView(
+        state.deck,
+        journeyContent.cardDatabase,
+        journeyContent.journeyData.presentation.startingDeck,
+      ),
+    [state.deck, journeyContent.cardDatabase, journeyContent.journeyData],
   );
   const cardCount = view.cards.length;
 

@@ -20,11 +20,36 @@ describe("parseDraftData", () => {
 
   const invalidCases: Array<[string, (value: DraftData) => void]> = [
     ["unknown key", (value) => Object.assign(value.offers, { extra: 1 })],
-    ["mismatched fold hash", (value) => { value.foldHash = "b".repeat(64); }],
-    ["invalid numeric range", (value) => { value.pool.tides4.maxFacets = 0; }],
-    ["duplicate rarity", (value) => { value.rarityCaps.push({ ...value.rarityCaps[0] }); }],
-    ["cap relationship", (value) => { value.rarityCaps[0].poolCopyCap = 3; }],
-    ["site capacity", (value) => { value.pool.tides4.dealSize = 38; }],
+    [
+      "invalid fold hash",
+      (value) => {
+        value.foldHash = "invalid";
+      },
+    ],
+    [
+      "invalid numeric range",
+      (value) => {
+        value.pool.tides4.maxFacets = 0;
+      },
+    ],
+    [
+      "duplicate rarity",
+      (value) => {
+        value.rarityCaps.push({ ...value.rarityCaps[0] });
+      },
+    ],
+    [
+      "cap relationship",
+      (value) => {
+        value.rarityCaps[0].poolCopyCap = 3;
+      },
+    ],
+    [
+      "site capacity",
+      (value) => {
+        value.pool.tides4.dealSize = 38;
+      },
+    ],
   ];
 
   it.each(invalidCases)("rejects %s", (_label, mutate) => {
@@ -50,7 +75,9 @@ describe("loadDraftData", () => {
   it("reports HTTP failures", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockResolvedValue({ ok: false, status: 404, statusText: "Missing" }),
+      vi
+        .fn()
+        .mockResolvedValue({ ok: false, status: 404, statusText: "Missing" }),
     );
     await expect(loadDraftData()).rejects.toThrow(/404 Missing/u);
   });

@@ -52,6 +52,7 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
         tutorialConfiguration: journeyContent.tutorial?.draft,
         defaultPickCount: journeyContent.draftData.offers.picksPerSite,
         transfigurationData: journeyContent.transfigurationData,
+        presentation: journeyContent.draftData.presentation,
       }),
     [
       progress.offerCardNumbers,
@@ -63,6 +64,8 @@ export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
       state,
       journeyContent.tutorial?.draft,
       journeyContent.draftData.offers.picksPerSite,
+      journeyContent.draftData.presentation,
+      journeyContent.transfigurationData,
     ],
   );
 

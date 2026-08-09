@@ -20,6 +20,7 @@ import {
 import { collectAtlasAssetSources, compileAtlasData } from "./atlas-data.mjs";
 import { compileEconomyData } from "./economy-data.mjs";
 import { compileDraftData } from "./draft-data.mjs";
+import { compileJourneyData } from "./journey-data.mjs";
 import { compileRewardSelectionData } from "./reward-selection-data.mjs";
 import { compileAuguryData } from "./augury-data.mjs";
 import {
@@ -64,9 +65,7 @@ function parsedArray(dataDir, filename, key) {
 
 function compileAtlasAtRoot(rootDir, atlasAssetSourceDirs) {
   const dataDir = join(rootDir, "data");
-  const atlasSource = parse(
-    readFileSync(join(dataDir, "atlas.toml"), "utf8"),
-  );
+  const atlasSource = parse(readFileSync(join(dataDir, "atlas.toml"), "utf8"));
   const assetSources = collectAtlasAssetSources(atlasAssetSourceDirs);
   return compileAtlasData(atlasSource, {
     dreamscapes: compileGuideSiteCatalogsAtRoot(rootDir).dreamscapes,
@@ -202,6 +201,12 @@ export const SIMPLE_CONFIGS = [
     jsonFile: "draft-data.json",
     arrayKey: null,
     transform: compileDraftData,
+  },
+  {
+    tomlFile: "journey.toml",
+    jsonFile: "journey-data.json",
+    arrayKey: null,
+    transform: compileJourneyData,
   },
   {
     tomlFile: "reward_selection.toml",

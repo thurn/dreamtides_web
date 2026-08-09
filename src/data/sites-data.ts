@@ -51,6 +51,54 @@ function isChoiceLimit(value: unknown): value is number | null {
   return value === null || isInteger(value, { min: 1 });
 }
 
+const PRESENTATION_KIND_BY_SITE: Readonly<Partial<Record<SiteType, string>>> = {
+  Battle: "battle",
+  Draft: "draft",
+  Shop: "shop",
+  Purge: "purge",
+  DreamsignMarket: "dreamsign-market",
+  DreamsignRevelation: "dreamsign-revelation",
+  RandomSite: "random-site",
+};
+const PRESENTATION_KEYS: Readonly<Record<string, readonly string[]>> = {
+  battle: ["kind", "label", "finalBossLabel", "lockedGuidance"],
+  draft: ["kind", "label"],
+  shop: [
+    "kind",
+    "title",
+    "restocked",
+    "restockOffersAction",
+    "restockAction",
+    "freePrice",
+  ],
+  purge: ["kind", "title", "instruction", "purgeAction"],
+  "dreamsign-market": [
+    "kind",
+    "title",
+    "restocked",
+    "restockOffersAction",
+    "restockAction",
+    "freePrice",
+    "replacementTitle",
+  ],
+  "dreamsign-revelation": ["kind", "loading", "exhausted"],
+  "random-site": ["kind", "title"],
+};
+
+function isSitePresentation(value: unknown, siteType: SiteType): boolean {
+  const expectedKind = PRESENTATION_KIND_BY_SITE[siteType];
+  if (expectedKind === undefined) return value === null;
+  if (
+    !isRecord(value) ||
+    value.kind !== expectedKind ||
+    !hasExactKeys(value, PRESENTATION_KEYS[expectedKind])
+  )
+    return false;
+  return Object.entries(value).every(
+    ([key, field]) => key === "kind" || isNonEmptyString(field),
+  );
+}
+
 function isSitesData(value: unknown): value is SitesData {
   if (!isRecord(value)) return false;
   if (
@@ -94,9 +142,10 @@ function isSitesData(value: unknown): value is SitesData {
     const metadata = value.siteTypes[siteType];
     if (
       !isRecord(metadata) ||
-      !hasExactKeys(metadata, ["icon", "glossaryId"]) ||
+      !hasExactKeys(metadata, ["icon", "glossaryId", "presentation"]) ||
       !isNonEmptyString(metadata.icon) ||
-      !isNonEmptyString(metadata.glossaryId)
+      !isNonEmptyString(metadata.glossaryId) ||
+      !isSitePresentation(metadata.presentation, siteType)
     ) {
       return false;
     }

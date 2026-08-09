@@ -4,9 +4,16 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DraftDocument {
+    pub presentation: DraftPresentation,
     pub offers: Offers,
     pub rarity_caps: IndexMap<Rarity, RarityCap>,
     pub pool: Pool,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct DraftPresentation {
+    pub progress: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -57,8 +64,17 @@ impl Rarity {
 }
 
 pub fn lower(source: DraftDocument) -> anyhow::Result<toml::Value> {
+    anyhow::ensure!(
+        source.presentation.progress.matches("{pickNumber}").count() == 1
+            && source.presentation.progress.matches("{pickTotal}").count() == 1,
+        "draft progress must contain {{pickNumber}} and {{pickTotal}} exactly once"
+    );
     let mut root = toml::map::Map::new();
     root.insert("schema-version".into(), 1_i64.into());
+    root.insert(
+        "presentation".into(),
+        toml::Value::try_from(source.presentation)?,
+    );
     root.insert(
         "offers".into(),
         toml::Value::Table(toml::map::Map::from_iter([
@@ -112,6 +128,9 @@ mod tests {
 
     fn document() -> DraftDocument {
         DraftDocument {
+            presentation: DraftPresentation {
+                progress: "Draft ({pickNumber}/{pickTotal})".into(),
+            },
             offers: Offers {
                 cards_per_offer: 4,
                 picks_per_site: 5,
@@ -142,5 +161,12 @@ mod tests {
             output["rarity-caps"][0]["rarity"].as_str(),
             Some("Legendary")
         );
+    }
+
+    #[test]
+    fn rejects_invalid_progress_placeholders() {
+        let mut source = document();
+        source.presentation.progress = "Draft ({pickNumber})".into();
+        assert!(lower(source).unwrap_err().to_string().contains("pickTotal"));
     }
 }

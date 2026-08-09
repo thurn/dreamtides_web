@@ -55,6 +55,10 @@ export interface DreamsignBazaarPurgeView {
 }
 
 export interface DreamsignBazaarSiteView {
+  presentation: Extract<
+    import("../../types/sites-data").SitePresentation,
+    { kind: "dreamsign-market" }
+  >;
   /** Stable site id. */
   siteId: string;
   /** Current dreamscape scene art behind the site, if resolved. */
@@ -104,6 +108,7 @@ export function DreamsignBazaarSiteScreen({
       renderGallery={(layout) => (
         <DreamsignBazaarGallery
           layout={layout}
+          presentation={view.presentation}
           offers={view.offers}
           restock={view.restock}
           onBuy={onBuy}
@@ -115,6 +120,7 @@ export function DreamsignBazaarSiteScreen({
       {view.purge !== null ? (
         <DreamsignReplacementDialog
           purge={view.purge}
+          title={view.presentation.replacementTitle}
           onPurge={onPurge}
           onCancel={onCancelPurge}
         />
@@ -125,6 +131,7 @@ export function DreamsignBazaarSiteScreen({
 
 function DreamsignBazaarGallery({
   layout,
+  presentation,
   offers,
   restock,
   onBuy,
@@ -132,6 +139,7 @@ function DreamsignBazaarGallery({
   onClose,
 }: {
   readonly layout: "mobile" | "desktop";
+  readonly presentation: DreamsignBazaarSiteView["presentation"];
   readonly offers: readonly DreamsignBazaarOfferView[];
   readonly restock: DreamsignBazaarRestockView;
   readonly onBuy: (slotIndex: number) => void;
@@ -216,26 +224,35 @@ function DreamsignBazaarGallery({
       }}
     >
       <DreamsignGalleryPanel
-        title={t("dreamsign-bazaar-title")}
+        title={presentation.title}
         entries={offers.map((offer) => ({
           entryId: offer.entryId,
           dreamsign: offer.dreamsign,
           price: offer.price,
-          state:
-            locallyPurchasedEntryIds.has(offer.entryId) ? "purchased" : offer.state,
+          state: locallyPurchasedEntryIds.has(offer.entryId)
+            ? "purchased"
+            : offer.state,
         }))}
         endAction={{
           entryId: restock.entryId,
           glyph: GLYPHS.refresh,
           label:
             restock.state === "used"
-              ? t("site-restocked")
+              ? presentation.restocked
               : desktop
-                ? t("site-restock-offers-action")
-                : t("site-restock-action"),
+                ? presentation.restockOffersAction
+                : presentation.restockAction,
           glossaryId: GLOSSARY_IDS.dreamsignRestock,
-          price: restock.state === "used" || restock.price === 0 ? null : restock.price,
-          text: restock.state === "used" ? t("site-restocked") : restock.price === 0 ? t("site-free-price") : null,
+          price:
+            restock.state === "used" || restock.price === 0
+              ? null
+              : restock.price,
+          text:
+            restock.state === "used"
+              ? presentation.restocked
+              : restock.price === 0
+                ? presentation.freePrice
+                : null,
           disabled: restock.state !== "available",
         }}
         size={desktop ? "standard" : "compact"}
@@ -276,7 +293,12 @@ function DreamsignBazaarGallery({
             willChange: "transform, opacity",
           }}
         >
-          <div style={{ width: travel.sourceRect.width, height: travel.sourceRect.width }}>
+          <div
+            style={{
+              width: travel.sourceRect.width,
+              height: travel.sourceRect.width,
+            }}
+          >
             <Dreamsign dreamsign={travel.dreamsign} variant="hud" />
           </div>
         </motion.div>
@@ -300,15 +322,22 @@ interface PurchaseTravel {
 }
 
 function snapshotRect(rect: DOMRect): RectSnapshot {
-  return { left: rect.left, top: rect.top, width: rect.width, height: rect.height };
+  return {
+    left: rect.left,
+    top: rect.top,
+    width: rect.width,
+    height: rect.height,
+  };
 }
 
 function DreamsignReplacementDialog({
   purge,
+  title,
   onPurge,
   onCancel,
 }: {
   readonly purge: DreamsignBazaarPurgeView;
+  readonly title: string;
   readonly onPurge: (index: number) => void;
   readonly onCancel: () => void;
 }) {
@@ -344,12 +373,20 @@ function DreamsignReplacementDialog({
       >
         <h2
           id="dreamsign-bazaar-purge-title"
-          style={{ margin: 0, font: token("--t-title-sm"), color: token("--text-primary") }}
+          style={{
+            margin: 0,
+            font: token("--t-title-sm"),
+            color: token("--text-primary"),
+          }}
         >
-          {t("dreamsign-bazaar-replacement-title")}
+          {title}
         </h2>
-        <p style={{ font: token("--t-body"), color: token("--text-secondary") }}>
-          {t("dreamsign-bazaar-replacement-full", { count: purge.maxDreamsigns })}
+        <p
+          style={{ font: token("--t-body"), color: token("--text-secondary") }}
+        >
+          {t("dreamsign-bazaar-replacement-full", {
+            count: purge.maxDreamsigns,
+          })}
         </p>
         <div
           style={{

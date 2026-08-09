@@ -3,6 +3,7 @@ import { createDefaultState } from "../../state/journey-context";
 import { gambleGameByRulesKind } from "../../data/gamble-data";
 import { gambleFixture } from "../../testing/gamble-fixture";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
+import { JOURNEY_DATA_FIXTURE } from "../../testing/journey-data-fixture";
 import type { DreamGuideContent } from "../../types/content";
 import type {
   FourSuitRepriseSiteRuntime,
@@ -30,13 +31,15 @@ import {
 const buildGambleSiteView = (
   params: Omit<
     Parameters<typeof buildGambleSiteViewImpl>[0],
-    "gambleData" | "transfigurationData"
+    "gambleData" | "transfigurationData" | "replacementPresentation"
   >,
 ) =>
   buildGambleSiteViewImpl({
     ...params,
     gambleData: gambleFixture(),
     transfigurationData: transfigurationFixture(),
+    replacementPresentation:
+      JOURNEY_DATA_FIXTURE.presentation.dreamsignReplacement,
   });
 
 const GUIDE_LINE = "Fixture game line.";
@@ -488,6 +491,8 @@ describe("gamble-site-view-model — Ladder Climb", () => {
       guideLine: GUIDE_LINE,
       gambleData,
       transfigurationData: transfigurationFixture(),
+      replacementPresentation:
+        JOURNEY_DATA_FIXTURE.presentation.dreamsignReplacement,
     });
     expect(view?.gameId).toBe("tidemark-ladder-climb");
     if (view?.gameId !== "tidemark-ladder-climb") {

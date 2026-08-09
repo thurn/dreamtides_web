@@ -19,7 +19,6 @@ import { GLOSSARY_IDS } from "../../data/glossary";
 import { DEBUG_REROLL_TOP } from "./chrome-geometry";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
-import { useMessages } from "../hooks/use-messages";
 
 /** Canonical rules copy in the Journey Start console's inherited type voice. */
 export function JourneyStartAbilityCopy({
@@ -154,11 +153,7 @@ export function TidesEssenceBlock({
           }}
         >
           {dreamAvatar.tides.slice(0, MAX_TIDE_DISCS).map((tide) => (
-            <TideDiscReveal
-              key={tide.id}
-              tide={tide}
-              hitSlop={hitSlop}
-            />
+            <TideDiscReveal key={tide.id} tide={tide} hitSlop={hitSlop} />
           ))}
         </div>
       )}
@@ -189,6 +184,7 @@ export interface DreamAvatarOfferView {
 export type JourneyStartGuideDialogueView = TutorialSpeechBubbleView;
 
 export interface JourneyStartScreenProps {
+  presentation: import("../../types/journey-data").JourneyData["presentation"]["start"];
   /** The DreamAvatars offered this run (three normally; one in the tutorial). */
   dreamAvatars: DreamAvatarOfferView[];
   /** Mira's introduction to the fixed tutorial DreamAvatar choice. */
@@ -258,10 +254,11 @@ export function JourneyStartGuideDialogue({
 /** Shared top-right debug action used by both journey-start layouts. */
 export function JourneyStartRerollControl({
   onReroll,
+  label,
 }: {
   readonly onReroll: () => void;
+  readonly label: string;
 }) {
-  const t = useMessages();
   return (
     <div
       data-dream-avatar-reroll-control
@@ -277,7 +274,7 @@ export function JourneyStartRerollControl({
     >
       <IconButton
         glyph={GLYPHS.refresh}
-        label={t("journey-start-reroll-action")}
+        label={label}
         onPress={onReroll}
         testId="reroll-dream-avatars"
       />

@@ -29,7 +29,6 @@ import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import "./site-node.css";
-import { useMessages } from "../../hooks/use-messages";
 
 /** Compact diameter for site nodes placed over a dreamscape scene. */
 const SCENE_NODE_SIZE = 60;
@@ -40,11 +39,6 @@ const REWARD_NODE_SIZE = 160;
 /** The node's fixed accent — the system's violet, not a per-node color. The ring
  * and reveal disc derive their alpha from it via {@link withAlpha}. */
 const NODE_ACCENT: CumulusColor = "accent";
-
-export type DreamscapeSiteLabel =
-  | { readonly kind: "battle"; readonly isFinalBoss: boolean }
-  | { readonly kind: "draft"; readonly pickCount: number }
-  | { readonly kind: "authored"; readonly name: string };
 
 /**
  * One site placed in the dreamscape scene. The screen builds these models from
@@ -62,7 +56,8 @@ export interface DreamscapeSiteModel {
   /** Clickable: not visited and not locked. */
   isInteractive: boolean;
   /** Display label (battle tier / `Draft Nx` / site type name). */
-  label: DreamscapeSiteLabel | string;
+  label: string;
+  lockedGuidance?: string;
   /** One-line mechanic blurb shown in the reveal. */
   blurb: string;
   /** The site {@link Glyph}. */
@@ -112,17 +107,7 @@ export function SiteNode({
   presentation = "scene",
   onSelect,
 }: SiteNodeProps): React.ReactElement {
-  const t = useMessages();
   const { site, pos, index, isBattle, isLocked, isInteractive } = model;
-  const label = typeof model.label === "string"
-    ? model.label
-    : model.label.kind === "authored"
-      ? model.label.name
-      : model.label.kind === "draft"
-        ? t("dreamscape-draft-label", { pickCount: model.label.pickCount })
-        : model.label.isFinalBoss
-          ? t("dreamscape-final-boss-label")
-          : t("dreamscape-battle-label");
 
   const binding = useRevealSource({
     identity: { entityType: "site", entityId: revealEntityId("site", site.id) },
@@ -132,8 +117,8 @@ export function SiteNode({
         card: {
           variant: "icon",
           glyph: model.icon,
-          title: label,
-          body: siteRevealBody(model, t("dreamscape-locked-site-guidance")),
+          title: model.label,
+          body: siteRevealBody(model, model.lockedGuidance ?? ""),
         },
       },
       secondaries: [],
@@ -143,11 +128,12 @@ export function SiteNode({
   const lastPointerType = React.useRef<string | null>(null);
   const pointerDown = binding.sourceProps.onPointerDown;
 
-  const diameter = presentation === "reward"
-    ? REWARD_NODE_SIZE
-    : presentation === "choice"
-      ? "clamp(72px, 9vw, 112px)"
-      : SCENE_NODE_SIZE;
+  const diameter =
+    presentation === "reward"
+      ? REWARD_NODE_SIZE
+      : presentation === "choice"
+        ? "clamp(72px, 9vw, 112px)"
+        : SCENE_NODE_SIZE;
   // A locked guardian stays at full opacity but its disc is desaturated to a
   // clear, readable "disabled" grey. The dimming lands on the disc alone so the
   // lock badge stays crisp and legible.
@@ -156,17 +142,20 @@ export function SiteNode({
   // Ring + border derive from the node's fixed accent via color-mix alpha. The
   // bright ring shows while the reveal is up (hover on a fine pointer, press on
   // touch).
-  const ring = binding.sourceProps["data-reveal-active"] === "true"
-    ? `0 0 0 2px ${withAlpha(NODE_ACCENT, 0.9)}, 0 0 30px ${withAlpha(NODE_ACCENT, 0.55)}, 0 14px 26px rgba(0,0,0,.55)`
-    : `0 0 0 1px ${withAlpha(NODE_ACCENT, 0.35)}, 0 0 18px ${withAlpha(NODE_ACCENT, 0.26)}, 0 8px 18px rgba(0,0,0,.5)`;
+  const ring =
+    binding.sourceProps["data-reveal-active"] === "true"
+      ? `0 0 0 2px ${withAlpha(NODE_ACCENT, 0.9)}, 0 0 30px ${withAlpha(NODE_ACCENT, 0.55)}, 0 14px 26px rgba(0,0,0,.55)`
+      : `0 0 0 1px ${withAlpha(NODE_ACCENT, 0.35)}, 0 0 18px ${withAlpha(NODE_ACCENT, 0.26)}, 0 8px 18px rgba(0,0,0,.5)`;
 
   const nodeStyle: CSSProperties = {
     left: `${String(pos.x)}%`,
     top: `${String(pos.y)}%`,
     width: diameter,
     height: diameter,
-    marginLeft: typeof diameter === "number" ? -diameter / 2 : `calc(${diameter} / -2)`,
-    marginTop: typeof diameter === "number" ? -diameter / 2 : `calc(${diameter} / -2)`,
+    marginLeft:
+      typeof diameter === "number" ? -diameter / 2 : `calc(${diameter} / -2)`,
+    marginTop:
+      typeof diameter === "number" ? -diameter / 2 : `calc(${diameter} / -2)`,
     animationDelay: `${String(index * -1.37)}s`,
     zIndex: binding.sourceProps["data-reveal-active"] === "true" ? 40 : 10,
     ...binding.sourceProps.style,
@@ -181,14 +170,21 @@ export function SiteNode({
       {...binding.sourceProps}
       className={"ds-node" + (motion ? " floaty" : "")}
       style={nodeStyle}
-      onPointerDown={(event) => { lastPointerType.current = event.pointerType; pointerDown?.(event); }}
-      onClick={() => { if (isInteractive && lastPointerType.current !== "touch") onSelect(site.id); }}
+      onPointerDown={(event) => {
+        lastPointerType.current = event.pointerType;
+        pointerDown?.(event);
+      }}
+      onClick={() => {
+        if (isInteractive && lastPointerType.current !== "touch")
+          onSelect(site.id);
+      }}
       onKeyDown={(event) => {
         if (isInteractive && (event.key === "Enter" || event.key === " ")) {
-          event.preventDefault(); onSelect(site.id);
+          event.preventDefault();
+          onSelect(site.id);
         }
       }}
-      aria-label={label}
+      aria-label={model.label}
       aria-disabled={!isInteractive}
       data-site-id={site.id}
       data-site-type={site.type}
@@ -207,9 +203,18 @@ export function SiteNode({
         <span
           className="ds-ico"
           style={{
-            fontSize: typeof diameter === "number" ? diameter * 0.52 : "clamp(38px, 4.7vw, 58px)",
-            width: typeof diameter === "number" ? diameter * 0.52 : "clamp(38px, 4.7vw, 58px)",
-            height: typeof diameter === "number" ? diameter * 0.52 : "clamp(38px, 4.7vw, 58px)",
+            fontSize:
+              typeof diameter === "number"
+                ? diameter * 0.52
+                : "clamp(38px, 4.7vw, 58px)",
+            width:
+              typeof diameter === "number"
+                ? diameter * 0.52
+                : "clamp(38px, 4.7vw, 58px)",
+            height:
+              typeof diameter === "number"
+                ? diameter * 0.52
+                : "clamp(38px, 4.7vw, 58px)",
           }}
         >
           <i

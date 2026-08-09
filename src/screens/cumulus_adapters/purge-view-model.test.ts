@@ -12,16 +12,28 @@ import {
   buildPurgeVisitCosts,
 } from "./purge-view-model";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
+import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
 
 const transfigurationData = transfigurationFixture();
 const buildPurgeCardViews = (
-  ...args: Parameters<typeof buildPurgeCardViewsImpl> extends readonly [unknown, ...infer Rest]
+  ...args: Parameters<typeof buildPurgeCardViewsImpl> extends readonly [
+    unknown,
+    ...infer Rest,
+  ]
     ? Rest
     : never
 ) => buildPurgeCardViewsImpl(transfigurationData, ...args);
 const buildPurgeSiteView = (
-  params: Omit<Parameters<typeof buildPurgeSiteViewImpl>[0], "transfigurationData">,
-) => buildPurgeSiteViewImpl({ ...params, transfigurationData });
+  params: Omit<
+    Parameters<typeof buildPurgeSiteViewImpl>[0],
+    "transfigurationData" | "sitesData"
+  >,
+) =>
+  buildPurgeSiteViewImpl({
+    ...params,
+    transfigurationData,
+    sitesData: MINIMAL_SITES_DATA,
+  });
 
 const GUIDE = {
   id: "fixture-purge-guide",

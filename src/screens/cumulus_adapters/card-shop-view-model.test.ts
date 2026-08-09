@@ -5,6 +5,7 @@ import { asCardId, asCardName } from "../../types/card-identity";
 import { artRef } from "../../cumulus/primitives/art";
 import { economyFixture } from "../../testing/economy-fixture";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
+import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
 import type { ShopSiteRuntime, SiteState } from "../../types/journey";
 import {
   buildCardShopOffers,
@@ -78,9 +79,15 @@ const site: SiteState = {
 
 describe("buildCardShopOffers", () => {
   it("uses UUID-derived tile ids and resolves purchase availability after discounts", () => {
-    const offers = buildCardShopOffers(transfigurationFixture(), runtime(), database(), 90, {
-      essenceDiscountPercent: 10,
-    });
+    const offers = buildCardShopOffers(
+      transfigurationFixture(),
+      runtime(),
+      database(),
+      90,
+      {
+        essenceDiscountPercent: 10,
+      },
+    );
 
     expect(
       offers.map((offer) => ({
@@ -120,13 +127,24 @@ describe("buildCardShopOffers", () => {
           : slot,
       ),
     };
-    const offers = buildCardShopOffers(transfigurationFixture(), transfiguredRuntime, database(), 500, {
-      essenceDiscountPercent: 0,
-    });
+    const offers = buildCardShopOffers(
+      transfigurationFixture(),
+      transfiguredRuntime,
+      database(),
+      500,
+      {
+        essenceDiscountPercent: 0,
+      },
+    );
     expect(offers[0]?.model.transfiguration?.type).toBe("Empowered");
     expect(
       buildCardShopTransfiguredOfferLog(
         {
+          presentation: MINIMAL_SITES_DATA.siteTypes.Shop
+            .presentation as Extract<
+            import("../../types/sites-data").SitePresentation,
+            { kind: "shop" }
+          >,
           siteId: "shop-site",
           scene: null,
           guide: {
@@ -213,6 +231,7 @@ describe("buildCardShopSiteView", () => {
       guideLine: "A chosen greeting.",
       economyData: economyFixture(),
       transfigurationData: transfigurationFixture(),
+      sitesData: MINIMAL_SITES_DATA,
     });
 
     expect(view.siteId).toBe("shop-site");

@@ -15,10 +15,7 @@ import {
   scatterSites,
   seedFromString,
 } from "../../cumulus/components/dreamscape/dreamscape-scatter";
-import type {
-  DreamscapeSiteLabel,
-  DreamscapeSiteModel,
-} from "../../cumulus/components/dreamscape/SiteNode";
+import type { DreamscapeSiteModel } from "../../cumulus/components/dreamscape/SiteNode";
 import type {
   QsbDreamAvatar,
   QsbDreamsign,
@@ -39,7 +36,9 @@ import type {
 } from "../../types/journey";
 import type { SitesData } from "../../types/sites-data";
 import type { TutorialDreamscapeConfiguration } from "../../types/tutorial";
+import type { JourneyData } from "../../types/journey-data";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
+import { formatAuthoredTemplate } from "../../data/authored-template";
 
 /** The completion level at which the guardian battle is the final boss. */
 const FINAL_BOSS_COMPLETION_LEVEL = 6;
@@ -105,11 +104,17 @@ export function resolveDreamscapeSiteSelection(
 }
 
 /** Battle label by completion level: the final boss or a plain battle. */
-export function battleLabel(completionLevel: number): DreamscapeSiteLabel {
-  return {
-    kind: "battle",
-    isFinalBoss: completionLevel === FINAL_BOSS_COMPLETION_LEVEL,
-  };
+export function battleLabel(
+  completionLevel: number,
+  sitesData: SitesData,
+): string {
+  const presentation = sitesData.siteTypes.Battle.presentation as Extract<
+    import("../../types/sites-data").SitePresentation,
+    { kind: "battle" }
+  >;
+  return completionLevel === FINAL_BOSS_COMPLETION_LEVEL
+    ? presentation.finalBossLabel
+    : presentation.label;
 }
 
 /**
@@ -131,14 +136,22 @@ export function buildSiteModels(
     const isBattle = site.type === "Battle";
     const isLocked = isBattle && !allNonBattleVisited;
     const isInteractive = !site.isVisited && !isLocked;
-    const label: DreamscapeSiteLabel = isBattle
-      ? battleLabel(completionLevel)
+    const battlePresentation = sitesData.siteTypes.Battle
+      .presentation as Extract<
+      import("../../types/sites-data").SitePresentation,
+      { kind: "battle" }
+    >;
+    const draftPresentation = sitesData.siteTypes.Draft.presentation as Extract<
+      import("../../types/sites-data").SitePresentation,
+      { kind: "draft" }
+    >;
+    const label = isBattle
+      ? battleLabel(completionLevel, sitesData)
       : site.type === "Draft"
-        ? {
-            kind: "draft",
+        ? formatAuthoredTemplate(draftPresentation.label, {
             pickCount: draftSitePickCount(site, defaultDraftPickCount),
-          }
-        : { kind: "authored", name: siteTypeName(sitesData, site.type) };
+          })
+        : siteTypeName(sitesData, site.type);
     return {
       site,
       pos: positions[index] ?? FALLBACK_POS,
@@ -147,6 +160,7 @@ export function buildSiteModels(
       isLocked,
       isInteractive,
       label,
+      lockedGuidance: battlePresentation.lockedGuidance,
       blurb: siteTypeDescription(sitesData, site.type),
       icon: glyph(siteTypeIcon(sitesData, site.type)),
     };
@@ -234,13 +248,11 @@ export function buildDreamscapeView(
   node: DreamscapeNode,
   state: JourneyState,
   sitesData: SitesData,
+  journeyData: JourneyData,
+  defaultDraftPickCount: number,
   replacementSiteId: string | null = null,
   tutorialConfiguration?: TutorialDreamscapeConfiguration,
-  defaultDraftPickCount?: number,
 ): DreamscapeView {
-  if (defaultDraftPickCount === undefined) {
-    throw new Error("Dreamscape view requires validated Draft data.");
-  }
   const inlineRewards: Record<string, InlineRewardView> = {};
   node.sites.forEach((site) => {
     const runtime = state.siteRuntime?.[site.id];
@@ -274,7 +286,11 @@ export function buildDreamscapeView(
       defaultDraftPickCount,
     ),
     inlineRewards,
-    replacement: buildDreamsignReplacementView(state, replacementSiteId),
+    replacement: buildDreamsignReplacementView(
+      state,
+      replacementSiteId,
+      journeyData,
+    ),
     guideDialogue: buildDreamscapeGuideDialogue(
       node,
       state,
@@ -344,6 +360,7 @@ export function buildDreamscapeGuidanceLog(
 export function buildDreamsignReplacementView(
   state: JourneyState,
   siteId: string | null,
+  journeyData: JourneyData,
 ): DreamsignReplacementView | null {
   if (siteId === null || state.dreamsigns.length < state.maxDreamsigns) {
     return null;
@@ -357,6 +374,7 @@ export function buildDreamsignReplacementView(
     return null;
   }
   return {
+    presentation: journeyData.presentation.dreamsignReplacement,
     pendingDreamsign: runtime.reward.dreamsign,
     currentDreamsigns: state.dreamsigns,
     maxDreamsigns: state.maxDreamsigns,

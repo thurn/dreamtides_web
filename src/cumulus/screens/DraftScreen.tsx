@@ -40,6 +40,7 @@ import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial
 
 /** Everything the draft screen renders, mapped from live journey state. */
 export interface DraftView {
+  progressLabel: string;
   /** The dreamscape's scene art, or null while the dreamscape is unrevealed. */
   scene: ArtRef | null;
   /** The offered pack, resolved to cards (by UUID) and sorted for display. */
@@ -158,8 +159,7 @@ export function DraftScreen({
   useEffect(() => {
     setPendingPick(null);
   }, [view.offerKey]);
-  const availableTutorial =
-    pendingPick === null ? view.tutorial : undefined;
+  const availableTutorial = pendingPick === null ? view.tutorial : undefined;
   const tutorialVisible = useDelayedTutorialSpeechBubbleVisibility(
     availableTutorial?.id ?? availableTutorial?.model.text,
     availableTutorial === undefined
@@ -333,10 +333,7 @@ export function DraftScreen({
             textShadow: token("--text-outline-media"),
           }}
         >
-          {t("draft-pick-progress", {
-            pickNumber: view.pickNumber,
-            pickTotal: view.pickTotal,
-          })}
+          {view.progressLabel}
         </div>
       </div>
 

@@ -3,59 +3,108 @@
   "siteTypes": {
     "Battle": {
       "icon": "bxf bx-sword-alt",
-      "glossaryId": "85ffab8d-f972-4340-9b45-99f6aff6ccec"
+      "glossaryId": "85ffab8d-f972-4340-9b45-99f6aff6ccec",
+      "presentation": {
+        "kind": "battle",
+        "label": "Battle",
+        "finalBossLabel": "Final Boss",
+        "lockedGuidance": "You must visit the other sites in this dreamscape first."
+      }
     },
     "Draft": {
       "icon": "bxf bx-rectangle-vertical",
-      "glossaryId": "1ee13681-1ff5-431c-94a1-3390d45e1717"
+      "glossaryId": "1ee13681-1ff5-431c-94a1-3390d45e1717",
+      "presentation": {
+        "kind": "draft",
+        "label": "Draft {pickCount}x"
+      }
     },
     "Shop": {
       "icon": "bxf bx-store-alt-2",
-      "glossaryId": "25f28ed1-5729-4240-a352-80f92fce530c"
+      "glossaryId": "25f28ed1-5729-4240-a352-80f92fce530c",
+      "presentation": {
+        "kind": "shop",
+        "title": "Dream Market",
+        "restocked": "Restocked",
+        "restockOffersAction": "Restock Offers",
+        "restockAction": "Restock",
+        "freePrice": "Free"
+      }
     },
     "Purge": {
       "icon": "bxf bx-hot",
-      "glossaryId": "4873bddf-7bf5-41e8-979e-36eb193db5a6"
+      "glossaryId": "4873bddf-7bf5-41e8-979e-36eb193db5a6",
+      "presentation": {
+        "kind": "purge",
+        "title": "Purge Cards",
+        "instruction": "Choose any number of cards to remove from your deck for an essence cost",
+        "purgeAction": "Purge {count}"
+      }
     },
     "Essence": {
       "icon": "bxf bx-diamond-alt",
-      "glossaryId": "ba8ea132-f636-4fed-be27-e8eff0c9cb07"
+      "glossaryId": "ba8ea132-f636-4fed-be27-e8eff0c9cb07",
+      "presentation": null
     },
     "Transfiguration": {
       "icon": "fa-solid fa-hammer",
-      "glossaryId": "7ae25c1a-76c5-4aed-9e1c-a2d5ec160bd7"
+      "glossaryId": "7ae25c1a-76c5-4aed-9e1c-a2d5ec160bd7",
+      "presentation": null
     },
     "Duplication": {
       "icon": "bxf bx-copy",
-      "glossaryId": "8222c5e2-a3ce-4caf-bd13-5c77ff15d7cf"
+      "glossaryId": "8222c5e2-a3ce-4caf-bd13-5c77ff15d7cf",
+      "presentation": null
     },
     "Reward": {
       "icon": "bxf bx-treasure-chest",
-      "glossaryId": "28925242-3799-4faa-b4bd-b8aac52ca442"
+      "glossaryId": "28925242-3799-4faa-b4bd-b8aac52ca442",
+      "presentation": null
     },
     "Augury": {
       "icon": "bxf bx-eye",
-      "glossaryId": "ffd3977a-a463-4326-bdf2-5b1b8c3d9160"
+      "glossaryId": "ffd3977a-a463-4326-bdf2-5b1b8c3d9160",
+      "presentation": null
     },
     "DreamsignMarket": {
       "icon": "bxf bx-pyramid",
-      "glossaryId": "5b5b47d6-c858-4b42-af96-a520c84666eb"
+      "glossaryId": "5b5b47d6-c858-4b42-af96-a520c84666eb",
+      "presentation": {
+        "kind": "dreamsign-market",
+        "title": "Dreamsign Bazaar",
+        "restocked": "Restocked",
+        "restockOffersAction": "Restock Offers",
+        "restockAction": "Restock",
+        "freePrice": "Free",
+        "replacementTitle": "Choose a Dreamsign to Replace"
+      }
     },
     "DreamsignRevelation": {
       "icon": "bxf bx-meteor",
-      "glossaryId": "ac70fd6b-a91a-407f-b7b7-255668cd6bec"
+      "glossaryId": "ac70fd6b-a91a-407f-b7b7-255668cd6bec",
+      "presentation": {
+        "kind": "dreamsign-revelation",
+        "loading": "Revealing Dreamsigns...",
+        "exhausted": "The Dreamsign pool is exhausted."
+      }
     },
     "RandomSite": {
       "icon": "fa-solid fa-question",
-      "glossaryId": "1aeb05bc-53e1-4ea4-9e73-9239160799dc"
+      "glossaryId": "1aeb05bc-53e1-4ea4-9e73-9239160799dc",
+      "presentation": {
+        "kind": "random-site",
+        "title": "Choose a Site"
+      }
     },
     "Gamble": {
       "icon": "bxf bx-coin",
-      "glossaryId": "f1ff2fb5-3d77-4eb8-b492-78cbe11fd265"
+      "glossaryId": "f1ff2fb5-3d77-4eb8-b492-78cbe11fd265",
+      "presentation": null
     },
     "Exploration": {
       "icon": "bxf bx-compass",
-      "glossaryId": "46059d35-cb9e-4c4b-8635-087b6239f308"
+      "glossaryId": "46059d35-cb9e-4c4b-8635-087b6239f308",
+      "presentation": null
     }
   },
   "fallbackSiteType": {
@@ -127,6 +176,6 @@
       "homeDreamscapeId": "grid_city"
     }
   },
-  "contentHash": "f31914f0a6a54c2182cfe4cf04ee3c3fe60b08539854643d0e745dc9d1a4dc31",
+  "contentHash": "a732da41e58eb9c0a9cb0e63eed123d3c256ee404e43b40a98d0dcefa3d4b365",
   "foldHash": "a431717c87d3f52d1e14f8f14ddd22a3c97b45a856a8446d7a245bc590389973"
 }

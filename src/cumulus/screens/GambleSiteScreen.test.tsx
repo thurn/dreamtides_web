@@ -19,6 +19,7 @@ import {
   type BlackjackSiteView,
 } from "./GambleSiteScreen";
 import { transfigurationFormFixture } from "../test-helpers/transfiguration-fixture";
+import { JOURNEY_PRESENTATION } from "../test-helpers/presentation-fixtures";
 
 const PRESENTATION: GamblePresentation = {
   title: "Fixture game",
@@ -651,6 +652,7 @@ describe("GambleSiteScreen", () => {
         pendingDreamsignReplacement: true,
       },
       replacement: {
+        presentation: JOURNEY_PRESENTATION.dreamsignReplacement,
         pendingDreamsign: JACKPOT_DREAMSIGN,
         currentDreamsigns: [
           {

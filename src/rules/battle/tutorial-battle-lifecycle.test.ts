@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
+import { JOURNEY_DATA_FIXTURE } from "../../testing/journey-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
@@ -192,6 +193,7 @@ function content(): JourneyContent {
   return {
     ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
+    journeyData: JOURNEY_DATA_FIXTURE,
     cardDatabase: new Map(cards.map((item) => [item.cardNumber, item])),
     dreamAvatars: [
       {
@@ -397,7 +399,10 @@ describe("tutorial battle lifecycle", () => {
           horizontalOffset: 12,
           verticalOffset: -20,
           bubbleWidth: 300,
-          match: { kind: "glossary", id: "59f426ac-b9cb-47af-a00a-8cbab941c6c4" },
+          match: {
+            kind: "glossary",
+            id: "59f426ac-b9cb-47af-a00a-8cbab941c6c4",
+          },
           text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
         },
       ],
@@ -487,7 +492,10 @@ describe("tutorial battle lifecycle", () => {
           horizontalOffset: 0,
           verticalOffset: 0,
           bubbleWidth: 700,
-          match: { kind: "glossary", id: "59f426ac-b9cb-47af-a00a-8cbab941c6c4" },
+          match: {
+            kind: "glossary",
+            id: "59f426ac-b9cb-47af-a00a-8cbab941c6c4",
+          },
           text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
         },
       ],

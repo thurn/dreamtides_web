@@ -71,6 +71,52 @@ const SYNTHETIC_SITE_TYPES = Object.fromEntries(
     {
       icon: `fixture-icon-${type}`,
       glossaryId: GLOSSARY_IDS.sites[type],
+      presentation:
+        type === "Battle"
+          ? {
+              kind: "battle",
+              label: "Battle",
+              finalBossLabel: "Final Boss",
+              lockedGuidance: "Visit the other sites first.",
+            }
+          : type === "Draft"
+            ? { kind: "draft", label: "Draft {pickCount}x" }
+            : type === "Shop"
+              ? {
+                  kind: "shop",
+                  title: "Dream Market",
+                  restocked: "Restocked",
+                  restockOffersAction: "Restock Offers",
+                  restockAction: "Restock",
+                  freePrice: "Free",
+                }
+              : type === "Purge"
+                ? {
+                    kind: "purge",
+                    title: "Purge Cards",
+                    instruction:
+                      "Choose any number of cards to remove from your deck for an essence cost",
+                    purgeAction: "Purge {count}",
+                  }
+                : type === "DreamsignMarket"
+                  ? {
+                      kind: "dreamsign-market",
+                      title: "Dreamsign Bazaar",
+                      restocked: "Restocked",
+                      restockOffersAction: "Restock Offers",
+                      restockAction: "Restock",
+                      freePrice: "Free",
+                      replacementTitle: "Choose a Dreamsign to Replace",
+                    }
+                  : type === "DreamsignRevelation"
+                    ? {
+                        kind: "dreamsign-revelation",
+                        loading: "Revealing Dreamsigns...",
+                        exhausted: "The Dreamsign pool is exhausted.",
+                      }
+                    : type === "RandomSite"
+                      ? { kind: "random-site", title: "Choose a Site" }
+                      : null,
     },
   ]),
 ) as SitesData["siteTypes"];

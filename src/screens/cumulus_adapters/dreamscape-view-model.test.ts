@@ -9,6 +9,7 @@ import type {
 import { resolveArtRef } from "../../cumulus/primitives/art";
 import { createDefaultState } from "../../state/journey-context";
 import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
+import { JOURNEY_DATA_FIXTURE } from "../../testing/journey-data-fixture";
 import {
   battleLabel,
   buildDreamscapeHudView,
@@ -37,9 +38,10 @@ const buildDreamscapeView = (
     dreamscapeNode,
     state,
     sitesData,
+    JOURNEY_DATA_FIXTURE,
+    5,
     replacementSiteId,
     undefined,
-    5,
   );
 
 function site(
@@ -72,9 +74,9 @@ function node(overrides: Partial<DreamscapeNode> = {}): DreamscapeNode {
 
 describe("battleLabel", () => {
   it("identifies the final boss at the last completion level", () => {
-    expect(battleLabel(6)).toEqual({ kind: "battle", isFinalBoss: true });
-    expect(battleLabel(0)).toEqual({ kind: "battle", isFinalBoss: false });
-    expect(battleLabel(3)).toEqual({ kind: "battle", isFinalBoss: false });
+    expect(battleLabel(6, MINIMAL_SITES_DATA)).toBe("Final Boss");
+    expect(battleLabel(0, MINIMAL_SITES_DATA)).toBe("Battle");
+    expect(battleLabel(3, MINIMAL_SITES_DATA)).toBe("Battle");
   });
 });
 
@@ -113,9 +115,8 @@ describe("buildSiteModels", () => {
     const models = buildSiteModels(node(), 6);
     const battle = models.find((m) => m.isBattle);
     const draft = models.find((m) => m.site.type === "Draft");
-    expect(battle?.label).toEqual({ kind: "battle", isFinalBoss: true });
-    expect(draft?.label).toMatchObject({ kind: "draft" });
-    expect(draft?.label).toMatchObject({ kind: "draft", pickCount: 5 });
+    expect(battle?.label).toBe("Final Boss");
+    expect(draft?.label).toBe("Draft 5x");
   });
 });
 
@@ -362,6 +363,7 @@ describe("buildDreamscapeView", () => {
       requiresReplacement: true,
     });
     expect(view.replacement).toEqual({
+      presentation: JOURNEY_DATA_FIXTURE.presentation.dreamsignReplacement,
       pendingDreamsign,
       currentDreamsigns: [heldDreamsign],
       maxDreamsigns: 1,

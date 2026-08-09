@@ -5,10 +5,15 @@ import type { ArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import type { Glyph } from "../primitives/glyph";
 import { GlassPanel } from "../components/overlay/GlassPanel";
-import { SiteNode, type DreamscapeSiteModel } from "../components/dreamscape/SiteNode";
-import { GuideGallerySiteLayout, type GuideGalleryGuideView } from "./GuideGallerySiteLayout";
+import {
+  SiteNode,
+  type DreamscapeSiteModel,
+} from "../components/dreamscape/SiteNode";
+import {
+  GuideGallerySiteLayout,
+  type GuideGalleryGuideView,
+} from "./GuideGallerySiteLayout";
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
-import { useMessages } from "../hooks/use-messages";
 
 export interface RandomSiteChoiceView {
   siteType: RandomSiteDestinationType;
@@ -18,6 +23,7 @@ export interface RandomSiteChoiceView {
 }
 
 export interface RandomSiteView {
+  title: string;
   siteId: string;
   scene: ArtRef | null;
   guide: GuideGalleryGuideView;
@@ -32,19 +38,23 @@ export function RandomSiteScreen({
   onChoose: (siteType: RandomSiteDestinationType) => void;
 }) {
   const reduceMotion = useReducedMotion();
-  const t = useMessages();
-  const [selected, setSelected] = useState<RandomSiteDestinationType | null>(null);
+  const [selected, setSelected] = useState<RandomSiteDestinationType | null>(
+    null,
+  );
   const committed = useRef(false);
-  const choose = useCallback((siteType: RandomSiteDestinationType) => {
-    if (committed.current) return;
-    committed.current = true;
-    setSelected(siteType);
-    if (reduceMotion === true) {
-      onChoose(siteType);
-      return;
-    }
-    window.setTimeout(() => onChoose(siteType), 420);
-  }, [onChoose, reduceMotion]);
+  const choose = useCallback(
+    (siteType: RandomSiteDestinationType) => {
+      if (committed.current) return;
+      committed.current = true;
+      setSelected(siteType);
+      if (reduceMotion === true) {
+        onChoose(siteType);
+        return;
+      }
+      window.setTimeout(() => onChoose(siteType), 420);
+    },
+    [onChoose, reduceMotion],
+  );
 
   return (
     <GuideGallerySiteLayout
@@ -60,11 +70,17 @@ export function RandomSiteScreen({
           data-random-site-choice-panel=""
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: reduceMotion === true ? 0 : 0.28, duration: reduceMotion === true ? 0 : 0.32 }}
+          transition={{
+            delay: reduceMotion === true ? 0 : 0.28,
+            duration: reduceMotion === true ? 0 : 0.32,
+          }}
           style={{
             position: "relative",
             zIndex: 10,
-            width: layout === "desktop" ? "min(760px, 100%)" : GUIDE_GALLERY_MOBILE_PANEL_WIDTH,
+            width:
+              layout === "desktop"
+                ? "min(760px, 100%)"
+                : GUIDE_GALLERY_MOBILE_PANEL_WIDTH,
             height: layout === "desktop" ? 330 : "100%",
             maxHeight: "100%",
             pointerEvents: "auto",
@@ -72,7 +88,11 @@ export function RandomSiteScreen({
             justifySelf: "center",
           }}
         >
-          <GlassPanel title={t("random-site-title")} headerDivider={false} testId="cumulus-random-site-panel">
+          <GlassPanel
+            title={view.title}
+            headerDivider={false}
+            testId="cumulus-random-site-panel"
+          >
             <div
               style={{
                 minHeight: 260,
@@ -100,6 +120,7 @@ export function RandomSiteScreen({
                   isLocked: false,
                   isInteractive: selected === null,
                   label: choice.label,
+                  lockedGuidance: "",
                   blurb: choice.blurb,
                   icon: choice.icon,
                 };
@@ -107,12 +128,17 @@ export function RandomSiteScreen({
                   <motion.div
                     key={choice.siteType}
                     data-random-site-choice={choice.siteType}
-                    animate={selected === null
-                      ? { opacity: 1, scale: 1, y: 0 }
-                      : selected === choice.siteType
-                        ? { opacity: 1, scale: 1.45, y: -20 }
-                        : { opacity: 0, scale: 0.72, y: 12 }}
-                    transition={{ duration: reduceMotion === true ? 0 : 0.38, ease: [0.22, 0.61, 0.36, 1] }}
+                    animate={
+                      selected === null
+                        ? { opacity: 1, scale: 1, y: 0 }
+                        : selected === choice.siteType
+                          ? { opacity: 1, scale: 1.45, y: -20 }
+                          : { opacity: 0, scale: 0.72, y: 12 }
+                    }
+                    transition={{
+                      duration: reduceMotion === true ? 0 : 0.38,
+                      ease: [0.22, 0.61, 0.36, 1],
+                    }}
                     style={{
                       position: "relative",
                       width: "100%",

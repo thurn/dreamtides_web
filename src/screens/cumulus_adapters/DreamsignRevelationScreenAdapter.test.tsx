@@ -20,6 +20,8 @@ import type {
 import type { TutorialSiteConfiguration } from "../../types/tutorial";
 import { LayerName } from "../../types/layer-name";
 import { economyFixture } from "../../testing/economy-fixture";
+import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
+import { JOURNEY_DATA_FIXTURE } from "../../testing/journey-data-fixture";
 
 const screenMock = vi.hoisted(() => vi.fn());
 const loggingMock = vi.hoisted(() => {
@@ -155,6 +157,8 @@ function setJourneyContext(
     journeyContent: {
       guides: [GUIDE],
       economyData: economyFixture(),
+      sitesData: MINIMAL_SITES_DATA,
+      journeyData: JOURNEY_DATA_FIXTURE,
       tutorialDreamsignRevelation: tutorialConfiguration,
     } as unknown as JourneyContent,
   } as JourneyContextValue);

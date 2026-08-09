@@ -117,6 +117,7 @@ export function JourneyStartScreenAdapter() {
   return (
     <JourneyStartScreen
       key={rerollCount}
+      presentation={journeyContent.journeyData.presentation.start}
       dreamAvatars={dreamAvatars}
       guideDialogue={guideDialogue}
       onGuideDialogueShown={handleGuideDialogueShown}

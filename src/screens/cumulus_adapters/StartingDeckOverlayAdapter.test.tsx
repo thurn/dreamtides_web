@@ -13,6 +13,7 @@ import type { CardData } from "../../types/cards";
 import type { JourneyState } from "../../types/journey";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { StartingDeckView } from "../../cumulus/screens/StartingDeckOverlay";
+import { JOURNEY_DATA_FIXTURE } from "../../testing/journey-data-fixture";
 
 vi.mock("../../state/journey-context", () => ({
   useJourney: vi.fn(),
@@ -86,7 +87,10 @@ function setJourneyContext(): void {
     state: makeState(),
     mutations: {} as JourneyMutations,
     cardDatabase,
-    journeyContent: { cardDatabase } as JourneyContent,
+    journeyContent: {
+      cardDatabase,
+      journeyData: JOURNEY_DATA_FIXTURE,
+    } as JourneyContent,
   });
 }
 

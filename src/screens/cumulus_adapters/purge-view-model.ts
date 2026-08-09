@@ -27,6 +27,7 @@ import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 import { projectGuideView } from "./guide-view-model";
 import type { TransfigurationData } from "../../types/transfiguration-data";
+import type { SitesData } from "../../types/sites-data";
 
 /** Resolve Master Takeshi, the resident guide for Purge. */
 export function resolvePurgeGuide(
@@ -85,6 +86,7 @@ export function buildPurgeSiteView(params: {
   guideLine: string;
   tutorialConfiguration?: TutorialSiteConfiguration;
   economyData: EconomyData;
+  sitesData: SitesData;
 }): PurgeSiteView {
   const modifiers: PurgePriceModifiers = {
     isEnhanced: params.site.isEnhanced,
@@ -106,6 +108,10 @@ export function buildPurgeSiteView(params: {
     params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
 
   return {
+    presentation: params.sitesData.siteTypes.Purge.presentation as Extract<
+      import("../../types/sites-data").SitePresentation,
+      { kind: "purge" }
+    >,
     siteId: params.site.id,
     scene,
     guide: buildPurgeGuideView(params.guide, params.guideLine),

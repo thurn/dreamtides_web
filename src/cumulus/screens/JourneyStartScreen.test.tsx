@@ -10,6 +10,7 @@ import {
 } from "./JourneyStartScreen";
 import { CumulusRoot } from "../CumulusRoot";
 import { lookupGlossaryTerm } from "../../data/glossary";
+import { JOURNEY_PRESENTATION } from "../test-helpers/presentation-fixtures";
 
 class ResizeObserverStub {
   constructor(_callback: ResizeObserverCallback) {}
@@ -38,8 +39,18 @@ const OFFERED: DreamAvatarOfferView[] = [
     startingEssence: 250,
     signatureCards: [],
     tides: [
-      { id: "tide-01", label: "Ember Rush", description: "Aggressive early pressure.", tide: "ember" },
-      { id: "tide-02", label: "Verdant Growth", description: "Ramps into large threats.", tide: "wild" },
+      {
+        id: "tide-01",
+        label: "Ember Rush",
+        description: "Aggressive early pressure.",
+        tide: "ember",
+      },
+      {
+        id: "tide-02",
+        label: "Verdant Growth",
+        description: "Ramps into large threats.",
+        tide: "wild",
+      },
     ],
   },
 ];
@@ -72,7 +83,10 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
+function mount(element: ReactElement): {
+  container: HTMLDivElement;
+  root: Root;
+} {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -86,6 +100,7 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
   it("renders every portrait page and a glass console for the active DreamAvatar", () => {
     const { container, root } = mount(
       <JourneyStartScreen
+        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={OFFERED}
         onPick={vi.fn()}
         onReroll={vi.fn()}
@@ -125,6 +140,7 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
   it("shows the tides cluster only for DreamAvatars that have tides", () => {
     const { container, root } = mount(
       <JourneyStartScreen
+        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={OFFERED}
         onPick={vi.fn()}
         onReroll={vi.fn()}
@@ -166,6 +182,7 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     const onPick = vi.fn();
     const { container, root } = mount(
       <JourneyStartScreen
+        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={OFFERED}
         onPick={onPick}
         onReroll={vi.fn()}
@@ -200,6 +217,7 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     const onReroll = vi.fn();
     const { container, root } = mount(
       <JourneyStartScreen
+        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={OFFERED}
         onPick={vi.fn()}
         onReroll={onReroll}
@@ -229,14 +247,15 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     const tutorialDreamAvatar = OFFERED[0];
     const { container, root } = mount(
       <JourneyStartScreen
+        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={[tutorialDreamAvatar]}
         onPick={vi.fn()}
       />,
     );
 
-    expect(
-      container.querySelectorAll("[data-dream-avatar-page]"),
-    ).toHaveLength(1);
+    expect(container.querySelectorAll("[data-dream-avatar-page]")).toHaveLength(
+      1,
+    );
     expect(
       container.querySelector(
         `[data-dream-avatar-page="${tutorialDreamAvatar.id}"]`,
@@ -256,6 +275,7 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
   it("fades in Mira's tutorial guidance with highlighted Dream Avatar copy", () => {
     const { container, root } = mount(
       <JourneyStartScreen
+        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={[OFFERED[0]]}
         guideDialogue={{
           model: {
@@ -312,6 +332,7 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     const dreamAvatar = { ...OFFERED[0], renderedText: ability };
     const { container, root } = mount(
       <JourneyStartScreen
+        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={[dreamAvatar]}
         onPick={vi.fn()}
         onReroll={vi.fn()}
@@ -358,6 +379,7 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
   it("renders every DreamAvatar as a standalone column, not a carousel", () => {
     const { container, root } = mount(
       <JourneyStartScreen
+        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={OFFERED}
         onPick={vi.fn()}
         onReroll={vi.fn()}
@@ -407,6 +429,7 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
     const tutorialDreamAvatar = OFFERED[0];
     const { container, root } = mount(
       <JourneyStartScreen
+        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={[tutorialDreamAvatar]}
         onPick={vi.fn()}
       />,
@@ -432,6 +455,7 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
   it("renders tutorial guidance at the prominent desktop scale", () => {
     const { container, root } = mount(
       <JourneyStartScreen
+        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={[OFFERED[0]]}
         guideDialogue={{
           model: {
@@ -459,9 +483,7 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
     );
     expect(anchor?.style.width).toBe("500px");
     expect(anchor?.style.maxWidth).toBe("calc(50vw - 250px)");
-    expect(anchor?.style.transform).toBe(
-      "translate(30px, calc(-50% + 10px))",
-    );
+    expect(anchor?.style.transform).toBe("translate(30px, calc(-50% + 10px))");
 
     act(() => {
       root.unmount();
@@ -471,6 +493,7 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
   it("shows a hover-only tide disc per tide for tided DreamAvatars", () => {
     const { container, root } = mount(
       <JourneyStartScreen
+        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={OFFERED}
         onPick={vi.fn()}
         onReroll={vi.fn()}

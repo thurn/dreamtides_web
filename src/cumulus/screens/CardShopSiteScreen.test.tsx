@@ -11,6 +11,7 @@ import {
   type CardShopSiteView,
 } from "./CardShopSiteScreen";
 import { CumulusRoot } from "../CumulusRoot";
+import { SHOP_PRESENTATION } from "../test-helpers/presentation-fixtures";
 
 function makeCard(index: number): CardData {
   return {
@@ -31,6 +32,7 @@ function makeCard(index: number): CardData {
 
 function view(): CardShopSiteView {
   return {
+    presentation: SHOP_PRESENTATION,
     siteId: "shop-site",
     scene: null,
     guide: {
@@ -42,7 +44,10 @@ function view(): CardShopSiteView {
     offers: Array.from({ length: 5 }, (_, index) => ({
       entryId: `shop-offer-${String(index)}`,
       slotIndex: index,
-      model: (() => { const displaySnapshot = makeCard(index + 1); return { cardId: displaySnapshot.id, displaySnapshot }; })(),
+      model: (() => {
+        const displaySnapshot = makeCard(index + 1);
+        return { cardId: displaySnapshot.id, displaySnapshot };
+      })(),
       price: 100 + index * 10,
       state: index === 4 ? ("unaffordable" as const) : ("available" as const),
     })),
@@ -122,16 +127,16 @@ describe("CardShopSiteScreen", () => {
     expect(
       container.querySelectorAll('[data-testid^="cumulus-card-shop-offer-"]'),
     ).toHaveLength(5);
-    expect(container.querySelectorAll('[data-gallery-caption="essence"]')).toHaveLength(6);
+    expect(
+      container.querySelectorAll('[data-gallery-caption="essence"]'),
+    ).toHaveLength(6);
     expect(container.textContent).not.toContain("Buy");
 
     const restockGlyph = container.querySelector<HTMLElement>(
       "[data-gallery-action-glyph]",
     );
     expect(restockGlyph?.className).toContain("bx-refresh-cw");
-    expect(restockGlyph?.style.color).toBe(
-      "var(--gallery-action-foreground)",
-    );
+    expect(restockGlyph?.style.color).toBe("var(--gallery-action-foreground)");
     expect(restockGlyph?.style.textShadow).toBe("var(--shadow-sm)");
     expect(
       container.querySelector("[data-gallery-action-label]")?.textContent,
@@ -140,7 +145,8 @@ describe("CardShopSiteScreen", () => {
     expect(container.textContent).not.toContain("Tap a card to purchase it");
     expect(restockGlyph?.style.filter).toBe("");
     expect(
-      container.querySelector('[data-testid="cumulus-card-shop-restock"]')
+      container
+        .querySelector('[data-testid="cumulus-card-shop-restock"]')
         ?.getAttribute("data-press-feedback"),
     ).toBe("stationary");
     const price = container.querySelector<HTMLElement>(
@@ -221,11 +227,14 @@ describe("CardShopSiteScreen", () => {
     });
     expect(onBuy).toHaveBeenCalledWith(0);
     expect(
-      container.querySelector('[data-gallery-entry-id="shop-offer-0"]')
+      container
+        .querySelector('[data-gallery-entry-id="shop-offer-0"]')
         ?.getAttribute("data-gallery-reserved"),
     ).toBe("true");
     expect(
-      container.querySelector('[data-testid="cumulus-card-shop-purchase-travel"]'),
+      container.querySelector(
+        '[data-testid="cumulus-card-shop-purchase-travel"]',
+      ),
     ).not.toBeNull();
     expect(container.textContent).not.toContain("Acquired");
 
@@ -246,5 +255,4 @@ describe("CardShopSiteScreen", () => {
 
     act(() => root.unmount());
   });
-
 });

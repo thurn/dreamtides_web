@@ -36,6 +36,7 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
             tutorialConfiguration: tutorialPurge,
             economyData: journeyContent.economyData,
             transfigurationData: journeyContent.transfigurationData,
+            sitesData: journeyContent.sitesData,
           }),
     [
       state,
@@ -47,6 +48,7 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
       guideLine,
       journeyContent.economyData,
       journeyContent.transfigurationData,
+      journeyContent.sitesData,
     ],
   );
 

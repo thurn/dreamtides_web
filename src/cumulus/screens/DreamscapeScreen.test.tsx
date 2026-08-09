@@ -10,6 +10,7 @@ import { glyph } from "../primitives/glyph";
 import { artRef } from "../primitives/art";
 import type { SiteState } from "../../types/journey";
 import { CumulusRoot } from "../CumulusRoot";
+import { JOURNEY_PRESENTATION } from "../test-helpers/presentation-fixtures";
 
 vi.mock("framer-motion", () => ({
   motion: {
@@ -25,10 +26,7 @@ vi.mock("framer-motion", () => ({
       initial?: unknown;
       transition?: unknown;
     } & HTMLAttributes<HTMLDivElement>) => (
-      <div
-        {...props}
-        data-motion-animate={JSON.stringify(animate)}
-      >
+      <div {...props} data-motion-animate={JSON.stringify(animate)}>
         {children}
       </div>
     ),
@@ -44,10 +42,7 @@ vi.mock("framer-motion", () => ({
       initial?: unknown;
       transition?: unknown;
     } & HTMLAttributes<HTMLElement>) => (
-      <section
-        {...props}
-        data-motion-opacity={String(animate?.opacity)}
-      >
+      <section {...props} data-motion-opacity={String(animate?.opacity)}>
         {children}
       </section>
     ),
@@ -198,7 +193,15 @@ describe("DreamscapeScreen", () => {
   it("renders the scene, one node per unvisited site, and drops visited sites", () => {
     act(() => {
       root.render(
-        <CumulusRoot><DreamscapeScreen view={VIEW} onSelectSite={() => undefined} onInlineRewardAnimationComplete={() => undefined} onReplaceDreamsign={() => undefined} onDeclineReward={() => undefined} /></CumulusRoot>,
+        <CumulusRoot>
+          <DreamscapeScreen
+            view={VIEW}
+            onSelectSite={() => undefined}
+            onInlineRewardAnimationComplete={() => undefined}
+            onReplaceDreamsign={() => undefined}
+            onDeclineReward={() => undefined}
+          />
+        </CumulusRoot>,
       );
     });
     expect(container.querySelector("[data-cumulus-dreamscape]")).not.toBeNull();
@@ -213,10 +216,20 @@ describe("DreamscapeScreen", () => {
   it("leaves persistent journey chrome to the router-owned wrapper", () => {
     act(() => {
       root.render(
-        <CumulusRoot><DreamscapeScreen view={VIEW} onSelectSite={() => undefined} onInlineRewardAnimationComplete={() => undefined} onReplaceDreamsign={() => undefined} onDeclineReward={() => undefined} /></CumulusRoot>,
+        <CumulusRoot>
+          <DreamscapeScreen
+            view={VIEW}
+            onSelectSite={() => undefined}
+            onInlineRewardAnimationComplete={() => undefined}
+            onReplaceDreamsign={() => undefined}
+            onDeclineReward={() => undefined}
+          />
+        </CumulusRoot>,
       );
     });
-    expect(container.querySelector("[data-journey-status-bar-anchor]")).toBeNull();
+    expect(
+      container.querySelector("[data-journey-status-bar-anchor]"),
+    ).toBeNull();
   });
 
   it("animates an Essence reward at its node before completing it in place", () => {
@@ -268,9 +281,7 @@ describe("DreamscapeScreen", () => {
     const collectedView: DreamscapeView = {
       ...essenceView,
       sites: [
-        siteModel(
-          siteState("s-essence", { type: "Essence", isVisited: true }),
-        ),
+        siteModel(siteState("s-essence", { type: "Essence", isVisited: true })),
       ],
     };
     act(() => {
@@ -326,9 +337,7 @@ describe("DreamscapeScreen", () => {
           <DreamscapeScreen
             view={rewardView}
             onSelectSite={onSelectSite}
-            onInlineRewardAnimationComplete={
-              onInlineRewardAnimationComplete
-            }
+            onInlineRewardAnimationComplete={onInlineRewardAnimationComplete}
             onReplaceDreamsign={() => undefined}
             onDeclineReward={() => undefined}
           />
@@ -362,9 +371,7 @@ describe("DreamscapeScreen", () => {
     const collectedView: DreamscapeView = {
       ...rewardView,
       sites: [
-        siteModel(
-          siteState("s-reward", { type: "Reward", isVisited: true }),
-        ),
+        siteModel(siteState("s-reward", { type: "Reward", isVisited: true })),
       ],
     };
     act(() => {
@@ -373,9 +380,7 @@ describe("DreamscapeScreen", () => {
           <DreamscapeScreen
             view={collectedView}
             onSelectSite={onSelectSite}
-            onInlineRewardAnimationComplete={
-              onInlineRewardAnimationComplete
-            }
+            onInlineRewardAnimationComplete={onInlineRewardAnimationComplete}
             onReplaceDreamsign={() => undefined}
             onDeclineReward={() => undefined}
           />
@@ -449,6 +454,7 @@ describe("DreamscapeScreen", () => {
             view={{
               ...rewardView,
               replacement: {
+                presentation: JOURNEY_PRESENTATION.dreamsignReplacement,
                 pendingDreamsign,
                 currentDreamsigns: [heldDreamsign],
                 maxDreamsigns: 1,

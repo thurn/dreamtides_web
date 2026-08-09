@@ -18,6 +18,8 @@ import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import type { TransfigurationData } from "../../types/transfiguration-data";
+import type { DraftData } from "../../types/draft-data";
+import { formatAuthoredTemplate } from "../../data/authored-template";
 
 /**
  * Sort an offered pack for display: cheapest first, then alphabetically as a
@@ -65,11 +67,16 @@ export function buildDraftView(params: {
   tutorialConfiguration?: TutorialSiteConfiguration;
   defaultPickCount: number;
   transfigurationData: TransfigurationData;
+  presentation: DraftData["presentation"];
 }): DraftView {
   const pickTotal =
     params.site !== null
       ? draftSitePickCount(params.site, params.defaultPickCount)
       : 0;
+  const pickNumber = Math.min(
+    params.sitePicksCompleted + 1,
+    Math.max(pickTotal, 1),
+  );
   return {
     scene:
       params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null,
@@ -93,8 +100,12 @@ export function buildDraftView(params: {
     ),
     offerKey: params.offerCardNumbers.join(","),
     // Clamp so the last pack never reads past the total (e.g. "(6/5)").
-    pickNumber: Math.min(params.sitePicksCompleted + 1, Math.max(pickTotal, 1)),
+    pickNumber,
     pickTotal,
+    progressLabel: formatAuthoredTemplate(params.presentation.progress, {
+      pickNumber,
+      pickTotal,
+    }),
     tutorial:
       params.journeyState === undefined
         ? undefined

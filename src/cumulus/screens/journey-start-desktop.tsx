@@ -24,7 +24,6 @@ import {
   type DreamAvatarOfferView,
   type JourneyStartScreenProps,
 } from "./journey-start-shared";
-import { useMessages } from "../hooks/use-messages";
 
 /** Desktop column metrics. Box measures are content-driven layout, so these are
  * caller numbers. Each column is a fixed-width figure stage with a narrower,
@@ -57,10 +56,7 @@ function AlignedAbilityBox({ children }: { readonly children: ReactNode }) {
     const natural = element.offsetHeight;
     const nextScale =
       natural > ALIGNED_ABILITY_MIN_HEIGHT
-        ? Math.max(
-            ABILITY_MIN_SCALE,
-            ALIGNED_ABILITY_MIN_HEIGHT / natural,
-          )
+        ? Math.max(ABILITY_MIN_SCALE, ALIGNED_ABILITY_MIN_HEIGHT / natural)
         : 1;
     setFit({
       scale: nextScale,
@@ -96,8 +92,7 @@ function AlignedAbilityBox({ children }: { readonly children: ReactNode }) {
 
 /** The desktop screen's small purple eyebrow title, pinned near the top of the
  * screen — the mobile ScreenHeader's uppercase accent treatment, in flow. */
-function DesktopTitle() {
-  const t = useMessages();
+function DesktopTitle({ title }: { readonly title: string }) {
   return (
     <div
       style={{
@@ -111,7 +106,7 @@ function DesktopTitle() {
         textAlign: "center",
       }}
     >
-      {t("journey-start-title")}
+      {title}
     </div>
   );
 }
@@ -164,12 +159,13 @@ function PortraitName({ dreamAvatar }: { dreamAvatar: DreamAvatarOfferView }) {
  * preserves backdrop blur. */
 function DreamAvatarCard({
   dreamAvatar,
+  chooseLabel,
   onChoose,
 }: {
   dreamAvatar: DreamAvatarOfferView;
+  chooseLabel: string;
   onChoose: () => void;
 }) {
-  const t = useMessages();
   return (
     <div
       data-dream-avatar-column={dreamAvatar.id}
@@ -212,7 +208,7 @@ function DreamAvatarCard({
             style={{ marginTop: token("--space-l"), display: "grid" }}
           >
             <GlassButton
-              label={t("journey-start-choose-action")}
+              label={chooseLabel}
               variant="accent"
               placement="onGlass"
               onPress={onChoose}
@@ -229,9 +225,11 @@ function DreamAvatarCard({
  * panel, which rides up over the legs and takes its natural height. */
 function DreamAvatarColumn({
   dreamAvatar,
+  chooseLabel,
   onChoose,
 }: {
   dreamAvatar: DreamAvatarOfferView;
+  chooseLabel: string;
   onChoose: () => void;
 }) {
   return (
@@ -255,6 +253,7 @@ function DreamAvatarColumn({
       </div>
       <DreamAvatarCard
         dreamAvatar={dreamAvatar}
+        chooseLabel={chooseLabel}
         onChoose={onChoose}
       />
     </div>
@@ -266,6 +265,7 @@ function DreamAvatarColumn({
  * fixed-width portrait columns. */
 export function DesktopSelect({
   dreamAvatars,
+  presentation,
   guideDialogue,
   onPick,
   onReroll,
@@ -306,7 +306,10 @@ export function DesktopSelect({
         />
       )}
       {onReroll !== undefined && (
-        <JourneyStartRerollControl onReroll={onReroll} />
+        <JourneyStartRerollControl
+          onReroll={onReroll}
+          label={presentation.rerollAction}
+        />
       )}
 
       {/* Small purple eyebrow title, near the top. */}
@@ -317,7 +320,7 @@ export function DesktopSelect({
           padding: `calc(${token("--safe-top")} + ${token("--space-l")}) ${token("--gutter")} 0`,
         }}
       >
-        <DesktopTitle />
+        <DesktopTitle title={presentation.title} />
       </div>
 
       {/* The offered DreamAvatars, centered in the remaining space. The inner
@@ -348,6 +351,7 @@ export function DesktopSelect({
             <DreamAvatarColumn
               key={dreamAvatar.id}
               dreamAvatar={dreamAvatar}
+              chooseLabel={presentation.chooseAction}
               onChoose={() => {
                 onPick(dreamAvatar.id);
               }}

@@ -39,6 +39,10 @@ export interface CardShopRestockView {
 }
 
 export interface CardShopSiteView {
+  presentation: Extract<
+    import("../../types/sites-data").SitePresentation,
+    { kind: "shop" }
+  >;
   /** Stable site id used by the shared character-gallery layout. */
   siteId: string;
   /** Current dreamscape scene art behind the site, if resolved. */
@@ -80,6 +84,7 @@ export function CardShopSiteScreen({
       renderGallery={(layout) => (
         <CardShopGallery
           layout={layout}
+          presentation={view.presentation}
           offers={view.offers}
           restock={view.restock}
           onBuy={onBuy}
@@ -93,6 +98,7 @@ export function CardShopSiteScreen({
 
 function CardShopGallery({
   layout,
+  presentation,
   offers,
   restock,
   onBuy,
@@ -100,6 +106,7 @@ function CardShopGallery({
   onClose,
 }: {
   readonly layout: "mobile" | "desktop";
+  readonly presentation: CardShopSiteView["presentation"];
   readonly offers: readonly CardShopOfferView[];
   readonly restock: CardShopRestockView;
   readonly onBuy: (slotIndex: number) => void;
@@ -193,7 +200,7 @@ function CardShopGallery({
       }}
     >
       <CardPickerPanel
-        title={t("card-shop-title")}
+        title={presentation.title}
         rightAccessory={{
           kind: "iconButton",
           button: {
@@ -215,7 +222,9 @@ function CardShopGallery({
         }))}
         testId="cumulus-card-shop-gallery"
         onCardPress={(entryId) => {
-          const offer = offers.find((candidate) => candidate.entryId === entryId);
+          const offer = offers.find(
+            (candidate) => candidate.entryId === entryId,
+          );
           if (offer !== undefined) buyOffer(offer);
         }}
         endAction={{
@@ -223,15 +232,15 @@ function CardShopGallery({
           glyph: GLYPHS.refresh,
           label:
             restock.state === "used"
-              ? t("site-restocked")
+              ? presentation.restocked
               : desktop
-                ? t("site-restock-offers-action")
-                : t("site-restock-action"),
+                ? presentation.restockOffersAction
+                : presentation.restockAction,
           caption:
             restock.state === "used"
-              ? { kind: "text", text: t("site-restocked") }
+              ? { kind: "text", text: presentation.restocked }
               : restock.price === 0
-                ? { kind: "text", text: t("site-free-price") }
+                ? { kind: "text", text: presentation.freePrice }
                 : { kind: "essence", amount: restock.price },
           disabled: restock.state !== "available",
           testId: "cumulus-card-shop-restock",
