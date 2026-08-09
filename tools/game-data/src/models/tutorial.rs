@@ -1601,6 +1601,7 @@ const AI_OVERRIDE_IDS: &[(&str, &str)] = &[(
     "2fd657e4-02d2-412e-acad-4b063504a188",
 )];
 
+#[cfg(test)]
 const GLOSSARY_IDS: &[(&str, &str)] = &[
     ("support", "59f426ac-b9cb-47af-a00a-8cbab941c6c4"),
     ("foresee", "21e9a392-3983-49ba-8072-aa950c63ebad"),

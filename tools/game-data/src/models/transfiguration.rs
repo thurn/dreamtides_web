@@ -82,6 +82,7 @@ pub enum TransfigurationFormId {
     Perfected,
 }
 
+#[cfg(test)]
 impl TransfigurationFormId {
     const ALL: [Self; 9] = [
         Self::Empowered,

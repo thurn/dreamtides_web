@@ -113,7 +113,6 @@
           "path": "data/tide_alignments.ron",
           "fields": [
             "display_name",
-            "glyph",
             "accent_color",
             "accessibility_name"
           ]
@@ -172,9 +171,19 @@
       "rationale": "The generic glyph vocabulary remains closed in TypeScript."
     },
     {
+      "id": "src/data/gamble-data.ts#GAME_RULE_KIND#gamble",
+      "classification": "closed-behavior-registry",
+      "rationale": "The loader validates each stable game identity against its generated rules variant."
+    },
+    {
       "id": "src/data/glossary.ts#GLOSSARY_IDS#rulesSymbols",
       "classification": "closed-identity",
       "rationale": "The broader glossary semantic-ID registry supports non-symbol information cards."
+    },
+    {
+      "id": "src/data/tide-alignments-data.ts#ALIGNMENT_CONTRACT#tides",
+      "classification": "persisted-compatibility",
+      "rationale": "The loader validates compiler-derived alignment identities, deck colors, and glyphs at the generated JSON boundary."
     },
     {
       "id": "src/rules/battle/dreamwell-effects-table.ts#DREAMWELL_EFFECTS#dreamwellPrompts",

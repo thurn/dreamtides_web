@@ -29,6 +29,7 @@ pub enum GambleGameId {
     Blackjack,
 }
 
+#[cfg(test)]
 impl GambleGameId {
     const ALL: [Self; 5] = [
         Self::GravokThreeGateWager,
