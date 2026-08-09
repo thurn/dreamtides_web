@@ -18,7 +18,6 @@ pub struct TransfigurationSite {
     pub standard_choice_limit: ChoiceLimit,
     pub enhanced_choice_limit: ChoiceLimit,
     pub pricing: TransfigurationPricing,
-    pub form_order: Vec<TransfigurationFormId>,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
@@ -61,10 +60,8 @@ pub struct TransfigurationFormDefinition {
     pub effect_disclosure: String,
     pub selected_card_description: String,
     pub accessibility_description: String,
-    pub glyph: TransfigurationGlyph,
     pub accent_color: String,
     pub tint_color: String,
-    pub display_order: u32,
     pub merchant_allowed: bool,
     pub eligibility: EligibilityPredicate,
     pub operation: EffectOperation,
@@ -179,7 +176,37 @@ pub enum BenefitScoring {
 
 pub fn lower(source: TransfigurationCatalog) -> Result<toml::Value> {
     validate(&source)?;
-    Ok(toml::Value::try_from(source)?)
+    let glyphs = source
+        .forms
+        .iter()
+        .map(|form| glyph_for(form.id))
+        .collect::<Vec<_>>();
+    let mut compatibility = toml::Value::try_from(source)?;
+    for (form, glyph) in compatibility["forms"]
+        .as_array_mut()
+        .expect("serialized Transfiguration forms must be an array")
+        .iter_mut()
+        .zip(glyphs)
+    {
+        form.as_table_mut()
+            .expect("serialized Transfiguration form must be a table")
+            .insert("glyph".into(), toml::Value::try_from(glyph)?);
+    }
+    Ok(compatibility)
+}
+
+fn glyph_for(id: TransfigurationFormId) -> TransfigurationGlyph {
+    match id {
+        TransfigurationFormId::Empowered => TransfigurationGlyph::TransfigurationEmpowered,
+        TransfigurationFormId::Amplified => TransfigurationGlyph::TransfigurationAmplified,
+        TransfigurationFormId::Kindled => TransfigurationGlyph::TransfigurationKindled,
+        TransfigurationFormId::Inspired => TransfigurationGlyph::TransfigurationInspired,
+        TransfigurationFormId::Enduring => TransfigurationGlyph::TransfigurationEnduring,
+        TransfigurationFormId::Hastened => TransfigurationGlyph::TransfigurationHastened,
+        TransfigurationFormId::Resonant => TransfigurationGlyph::TransfigurationResonant,
+        TransfigurationFormId::Attuned => TransfigurationGlyph::TransfigurationAttuned,
+        TransfigurationFormId::Perfected => TransfigurationGlyph::TransfigurationPerfected,
+    }
 }
 
 pub(crate) fn validate(source: &TransfigurationCatalog) -> Result<()> {
@@ -187,23 +214,27 @@ pub(crate) fn validate(source: &TransfigurationCatalog) -> Result<()> {
         !source.site.rules_version.trim().is_empty(),
         "transfiguration.site.rules_version must not be blank"
     );
-    ensure!(
-        matches!(source.site.standard_choice_limit, ChoiceLimit::Count(value) if value > 0),
-        "transfiguration.site.standard_choice_limit must be a positive Count"
-    );
-    ensure!(
-        source.site.enhanced_choice_limit == ChoiceLimit::All,
-        "transfiguration.site.enhanced_choice_limit must be All"
-    );
-    ensure!(
-        source.site.form_order == TransfigurationFormId::ALL,
-        "transfiguration.site.form_order must contain every stable form exactly once in deterministic order"
-    );
+    validate_choice_limit(
+        "transfiguration.site.standard_choice_limit",
+        source.site.standard_choice_limit,
+    )?;
+    validate_choice_limit(
+        "transfiguration.site.enhanced_choice_limit",
+        source.site.enhanced_choice_limit,
+    )?;
     validate_pricing(&source.site.pricing)?;
-    let ids = source.forms.iter().map(|form| form.id).collect::<Vec<_>>();
     ensure!(
-        ids == TransfigurationFormId::ALL,
-        "transfiguration.forms must contain every stable form exactly once in deterministic order"
+        !source.forms.is_empty(),
+        "transfiguration.forms must contain at least one form"
+    );
+    let form_ids = source
+        .forms
+        .iter()
+        .map(|form| form.id)
+        .collect::<BTreeSet<_>>();
+    ensure!(
+        form_ids.len() == source.forms.len(),
+        "transfiguration.forms must not repeat a stable form id"
     );
     let mut glossary_ids = BTreeSet::new();
     for (index, form) in source.forms.iter().enumerate() {
@@ -223,11 +254,7 @@ pub(crate) fn validate(source: &TransfigurationCatalog) -> Result<()> {
         }
         validate_color(&path, "accent_color", &form.accent_color)?;
         validate_color(&path, "tint_color", &form.tint_color)?;
-        ensure!(
-            form.display_order == index as u32,
-            "{path}.display_order must match deterministic form order"
-        );
-        validate_form_contract(&path, form)?;
+        validate_form_contract(&path, form, &form_ids)?;
         match form.benefit {
             BenefitScoring::Ratio { divisor } => ensure!(
                 divisor.is_finite() && divisor > 0.0,
@@ -238,6 +265,13 @@ pub(crate) fn validate(source: &TransfigurationCatalog) -> Result<()> {
                 "{path}.benefit value must be within [0, 1]"
             ),
         }
+    }
+    Ok(())
+}
+
+fn validate_choice_limit(path: &str, limit: ChoiceLimit) -> Result<()> {
+    if let ChoiceLimit::Count(value) = limit {
+        ensure!(value > 0, "{path} Count must be positive");
     }
     Ok(())
 }
@@ -289,7 +323,11 @@ fn validate_pricing(pricing: &TransfigurationPricing) -> Result<()> {
     Ok(())
 }
 
-fn validate_form_contract(path: &str, form: &TransfigurationFormDefinition) -> Result<()> {
+fn validate_form_contract(
+    path: &str,
+    form: &TransfigurationFormDefinition,
+    configured_ids: &BTreeSet<TransfigurationFormId>,
+) -> Result<()> {
     let valid = matches!(
         (
             &form.eligibility,
@@ -350,21 +388,6 @@ fn validate_form_contract(path: &str, form: &TransfigurationFormDefinition) -> R
         valid,
         "{path} has an illegal predicate/operation/pricing/benefit pairing"
     );
-    let expected_glyph = match form.id {
-        TransfigurationFormId::Empowered => TransfigurationGlyph::TransfigurationEmpowered,
-        TransfigurationFormId::Amplified => TransfigurationGlyph::TransfigurationAmplified,
-        TransfigurationFormId::Kindled => TransfigurationGlyph::TransfigurationKindled,
-        TransfigurationFormId::Inspired => TransfigurationGlyph::TransfigurationInspired,
-        TransfigurationFormId::Enduring => TransfigurationGlyph::TransfigurationEnduring,
-        TransfigurationFormId::Hastened => TransfigurationGlyph::TransfigurationHastened,
-        TransfigurationFormId::Resonant => TransfigurationGlyph::TransfigurationResonant,
-        TransfigurationFormId::Attuned => TransfigurationGlyph::TransfigurationAttuned,
-        TransfigurationFormId::Perfected => TransfigurationGlyph::TransfigurationPerfected,
-    };
-    ensure!(
-        form.glyph == expected_glyph,
-        "{path}.glyph does not match its stable form id"
-    );
     if let FormPricing::Band(band) = &form.pricing {
         validate_band(
             &format!("{path}.pricing"),
@@ -391,9 +414,13 @@ fn validate_form_contract(path: &str, form: &TransfigurationFormDefinition) -> R
             },
         ) => {}
         (TransfigurationFormId::Perfected, EffectOperation::ApplyEligibleForms { form_order }) => {
+            let referenced = form_order.iter().copied().collect::<BTreeSet<_>>();
             ensure!(
-                form_order == &TransfigurationFormId::ALL[..8],
-                "{path}.operation.form_order must contain every non-Perfected form exactly once and cannot recurse"
+                !form_order.is_empty()
+                    && referenced.len() == form_order.len()
+                    && !referenced.contains(&TransfigurationFormId::Perfected)
+                    && referenced.iter().all(|id| configured_ids.contains(id)),
+                "{path}.operation.form_order must contain unique configured forms and cannot recurse"
             );
         }
         (_, EffectOperation::ApplyEligibleForms { .. }) => ensure!(
@@ -539,17 +566,6 @@ mod tests {
                 BenefitScoring::Flat { value: 0.65 },
             ),
         };
-        let glyph = [
-            TransfigurationGlyph::TransfigurationEmpowered,
-            TransfigurationGlyph::TransfigurationAmplified,
-            TransfigurationGlyph::TransfigurationKindled,
-            TransfigurationGlyph::TransfigurationInspired,
-            TransfigurationGlyph::TransfigurationEnduring,
-            TransfigurationGlyph::TransfigurationHastened,
-            TransfigurationGlyph::TransfigurationResonant,
-            TransfigurationGlyph::TransfigurationAttuned,
-            TransfigurationGlyph::TransfigurationPerfected,
-        ][index];
         TransfigurationFormDefinition {
             id,
             glossary_uuid: IDS[index].into(),
@@ -557,10 +573,8 @@ mod tests {
             effect_disclosure: "Effect".into(),
             selected_card_description: "Selected".into(),
             accessibility_description: "Accessible".into(),
-            glyph,
             accent_color: "#123456".into(),
             tint_color: "#abcdef".into(),
-            display_order: index as u32,
             merchant_allowed: id != TransfigurationFormId::Perfected,
             eligibility,
             operation,
@@ -584,7 +598,6 @@ mod tests {
                         band: band(),
                     }],
                 },
-                form_order: TransfigurationFormId::ALL.to_vec(),
             },
             forms: TransfigurationFormId::ALL
                 .into_iter()
@@ -600,13 +613,17 @@ mod tests {
     }
     #[test]
     fn rejects_missing_duplicate_invalid_tokens_illegal_pairs_and_cycles() {
-        let mut missing = catalog();
-        missing.forms.pop();
+        let mut subset = catalog();
+        subset.forms.remove(7);
+        subset.forms.pop();
+        assert!(validate(&subset).is_ok());
+        let mut empty = catalog();
+        empty.forms.clear();
         assert!(
-            validate(&missing)
+            validate(&empty)
                 .unwrap_err()
                 .to_string()
-                .contains("every stable form")
+                .contains("at least one form")
         );
         let mut duplicate = catalog();
         duplicate.forms[1].glossary_uuid = duplicate.forms[0].glossary_uuid.clone();
@@ -641,6 +658,22 @@ mod tests {
                 .unwrap_err()
                 .to_string()
                 .contains("cannot recurse")
+        );
+    }
+
+    #[test]
+    fn accepts_all_or_positive_count_choice_limits() {
+        let mut source = catalog();
+        source.site.standard_choice_limit = ChoiceLimit::All;
+        source.site.enhanced_choice_limit = ChoiceLimit::Count(2);
+        validate(&source).unwrap();
+
+        source.site.enhanced_choice_limit = ChoiceLimit::Count(0);
+        assert!(
+            validate(&source)
+                .unwrap_err()
+                .to_string()
+                .contains("positive")
         );
     }
 }

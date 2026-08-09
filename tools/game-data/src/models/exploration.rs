@@ -91,7 +91,6 @@ string_enum!(Predicate {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct ExplorationCatalog {
-    pub actions_per_encounter: u32,
     pub effects: Vec<EffectDefinition>,
     pub encounters: Vec<EncounterDefinition>,
 }
@@ -318,6 +317,12 @@ pub fn lower(catalog: ExplorationCatalog) -> Result<toml::Value> {
         .encounters
         .into_iter()
         .map(|encounter| {
+            if !(1..=4).contains(&encounter.actions.len()) {
+                bail!(
+                    "Exploration encounter {} must contain between one and four actions",
+                    encounter.card_id
+                );
+            }
             if !encounter_ids.insert(encounter.card_id.clone()) {
                 bail!(
                     "duplicate Exploration encounter card UUID: {}",
@@ -344,13 +349,6 @@ pub fn lower(catalog: ExplorationCatalog) -> Result<toml::Value> {
 
     Ok(toml::Value::Table(toml::map::Map::from_iter([
         ("schema-version".into(), 1_i64.into()),
-        (
-            "encounters".into(),
-            toml::Value::Table(toml::map::Map::from_iter([(
-                "actions-per-encounter".into(),
-                i64::from(catalog.actions_per_encounter).into(),
-            )])),
-        ),
         ("effect-kind".into(), toml::Value::Array(effects)),
         ("encounter".into(), toml::Value::Array(encounters)),
     ])))

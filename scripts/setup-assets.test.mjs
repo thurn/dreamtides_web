@@ -139,10 +139,16 @@ describe("transformExplorationData", () => {
     expect(effectKinds).toContain("increase-spark-all");
   });
 
-  it("enforces the Exploration screen's two-choice encounter contract", () => {
+  it("compiles Exploration encounters with one through four actions", () => {
     const source = syntheticExplorationSource();
-    source.encounters = { "actions-per-encounter": 3 };
-    expect(() => transformExplorationData(source)).toThrow(/must be 2/u);
+    source.encounter[0].action.push({
+      ...source.encounter[0].action[0],
+      id: "synthetic-third-action",
+    });
+    expect(transformExplorationData(source).encounters[0].action).toHaveLength(3);
+
+    source.encounter[0].action = [];
+    expect(() => transformExplorationData(source)).toThrow(/between one and four actions/u);
   });
 
   it("compiles custom Dreamsigns as canonical collectible data", () => {

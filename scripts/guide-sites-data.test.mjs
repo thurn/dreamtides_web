@@ -72,7 +72,6 @@ function sitesFixture() {
     "random-site": {
       destinations: ["Shop", "Purge", "Augury", "Gamble"],
       "home-choice-count": 3,
-      "away-choice-count": 1,
       "insufficient-destinations": "fail",
     },
     "card-choices": {
@@ -210,11 +209,17 @@ describe("canonical Dream Guide and Sites compilers", () => {
       /cannot be materialized/u,
     );
 
+    const twoHomeChoices = sitesFixture();
+    twoHomeChoices["random-site"]["home-choice-count"] = 2;
+    expect(compileSitesData(twoHomeChoices, catalogs).randomSite.homeChoiceCount).toBe(2);
+
+    const oneHomeChoice = sitesFixture();
+    oneHomeChoice["random-site"]["home-choice-count"] = 1;
+    expect(() => compileSitesData(oneHomeChoice, catalogs)).toThrow(/between 2 and 3/u);
+
     const tooManyHomeChoices = sitesFixture();
     tooManyHomeChoices["random-site"]["home-choice-count"] = 4;
-    expect(() => compileSitesData(tooManyHomeChoices, catalogs)).toThrow(
-      /requires exactly 3/u,
-    );
+    expect(() => compileSitesData(tooManyHomeChoices, catalogs)).toThrow(/between 2 and 3/u);
 
     const obsoleteGamble = { ...sitesFixture(), gamble: {} };
     expect(() => compileSitesData(obsoleteGamble, catalogs)).toThrow(

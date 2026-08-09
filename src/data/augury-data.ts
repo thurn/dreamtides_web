@@ -14,10 +14,11 @@ export function parseAuguryData(value: unknown): AuguryData {
   if (
     !isRecord(value) || value.schemaVersion !== 1 ||
     typeof value.contentHash !== "string" || !SHA256_HEX.test(value.contentHash) || value.foldHash !== value.contentHash ||
-    !isRecord(value.encounter) || value.encounter.offerCount !== 2 || value.encounter.distinctFamilies !== true || typeof value.encounter.allowDecline !== "boolean" ||
-    !Array.isArray(value.archetypes) || value.archetypes.length !== 13
+    !isRecord(value.encounter) || typeof value.encounter.allowDecline !== "boolean" ||
+    !Array.isArray(value.archetypes) || value.archetypes.length < 2
   ) throw new Error("Failed to load Augury data: malformed augury-data.json");
   const ids = new Set<string>();
+  const families = new Set<string>();
   for (const entry of value.archetypes) {
     if (
       !isRecord(entry) || typeof entry.id !== "string" || ids.has(entry.id) ||
@@ -29,7 +30,12 @@ export function parseAuguryData(value: unknown): AuguryData {
       Object.values(entry.quantities).some((quantity) => typeof quantity !== "number" || !Number.isInteger(quantity) || quantity <= 0)
     ) throw new Error("Failed to load Augury data: malformed augury-data.json");
     ids.add(entry.id);
+    if (entry.enabled) families.add(entry.family);
   }
+  if (
+    value.archetypes.filter((entry) => isRecord(entry) && entry.enabled === true).length < 2 ||
+    families.size < 2
+  ) throw new Error("Failed to load Augury data: malformed augury-data.json");
   return value as unknown as AuguryData;
 }
 

@@ -732,12 +732,6 @@ export function transformExplorationData(source) {
   const effectDefinitionByKind = new Map(
     effectDefinitions.map((definition) => [definition.kind, definition]),
   );
-  const actionsPerEncounter = source.encounters?.["actions-per-encounter"] ?? 2;
-  if (actionsPerEncounter !== 2) {
-    throw new Error(
-      "exploration.toml: encounters.actions-per-encounter must be 2 for the two-choice screen contract",
-    );
-  }
   const customCards = (source["custom-card"] ?? []).map((raw) => {
     const card = transformTomlRecord(raw);
     return {
@@ -828,12 +822,9 @@ export function transformExplorationData(source) {
       );
     }
     encounterIds.add(encounter.cardId.toLowerCase());
-    if (
-      !Array.isArray(encounter.action) ||
-      encounter.action.length !== actionsPerEncounter
-    ) {
+    if (!Array.isArray(encounter.action) || encounter.action.length < 1 || encounter.action.length > 4) {
       throw new Error(
-        `exploration.toml: encounter ${encounter.cardId} must have exactly ${String(actionsPerEncounter)} actions`,
+        `exploration.toml: encounter ${encounter.cardId} must have between one and four actions`,
       );
     }
     for (const action of encounter.action) {
@@ -1026,7 +1017,6 @@ export function transformExplorationData(source) {
   }));
   const hashPayload = {
     schemaVersion: 1,
-    actionsPerEncounter,
     effectKinds,
     customCards,
     customDreamsigns,

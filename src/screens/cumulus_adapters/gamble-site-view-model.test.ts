@@ -14,6 +14,7 @@ import type {
   BlackjackSiteRuntime,
 } from "../../types/journey";
 import type { CardData } from "../../types/cards";
+import type { GambleData } from "../../types/gamble-data";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type {
   GambleSiteView,
@@ -443,6 +444,57 @@ describe("gamble-site-view-model — Ladder Climb", () => {
       throw new Error("expected Ladder Climb view");
     }
     expect(view.nextDraw?.cost).toBe(0);
+  });
+
+  it("derives terminal misses from the configured attempt count", () => {
+    const fixture = gambleFixture();
+    const gambleData: GambleData = {
+      ...fixture,
+      games: fixture.games.map((game) =>
+        game.rules.kind === "ladderClimb" && game.economy.kind === "ladderClimb"
+          ? {
+              ...game,
+              rules: { ...game.rules, attempts: game.rules.attempts.slice(0, 2) },
+              economy: { ...game.economy, attempts: game.economy.attempts.slice(0, 2) },
+            }
+          : game,
+      ),
+    };
+    const runtime: TidemarkLadderClimbSiteRuntime = {
+      ...LADDER_RUNTIME,
+      shuffleCommitments: LADDER_RUNTIME.shuffleCommitments.slice(0, 2),
+      committedCards: LADDER_RUNTIME.committedCards.slice(0, 2),
+      revealedCards: LADDER_RUNTIME.committedCards.slice(0, 2),
+      cumulativeCost: 5,
+      result: {
+        attemptNumber: 2,
+        card: LADDER_RUNTIME.committedCards[1],
+        won: false,
+        costPaid: 5,
+        cumulativeCost: 5,
+        resultSettled: true,
+        dreamsignAwarded: false,
+        pendingDreamsignReplacement: false,
+      },
+    };
+    const view = buildGambleSiteViewImpl({
+      state: {
+        ...createDefaultState(),
+        siteRuntime: { [GAMBLE_SITE.id]: runtime },
+      },
+      sceneNode: null,
+      site: GAMBLE_SITE,
+      guide: GUIDE,
+      guideLine: GUIDE_LINE,
+      gambleData,
+      transfigurationData: transfigurationFixture(),
+    });
+    expect(view?.gameId).toBe("tidemark-ladder-climb");
+    if (view?.gameId !== "tidemark-ladder-climb") {
+      throw new Error("expected Ladder Climb view");
+    }
+    expect(view.result?.terminal).toBe(true);
+    expect(view.nextDraw).toBeNull();
   });
 });
 

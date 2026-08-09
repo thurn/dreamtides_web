@@ -171,8 +171,7 @@ function eligibleDefinitions(
   card: CardData,
   includeComposite: boolean,
 ): TransfigurationFormDefinition[] {
-  return data.site.formOrder
-    .map((id) => transfigurationForm(data, id))
+  return data.forms
     .filter(
       (definition) =>
         (includeComposite ||

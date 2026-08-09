@@ -100,9 +100,9 @@ function normalizeGambleRules(value, path) {
 }
 
 export function compileGambleData(source) {
-  if (!Array.isArray(source?.games) || source.games.length !== 5) {
+  if (!Array.isArray(source?.games) || source.games.length < 1 || source.games.length > 5) {
     throw new Error(
-      "gamble.toml games: expected the five compiler-validated games",
+      "gamble.toml games: expected between one and five compiler-validated games",
     );
   }
   const games = source.games.map((game, index) => {
@@ -138,11 +138,11 @@ function choiceLimit(value, path) {
 export function compileTransfigurationData(source) {
   if (
     !Array.isArray(source?.forms) ||
-    source.forms.length !== 9 ||
+    source.forms.length === 0 ||
     source.site === undefined
   ) {
     throw new Error(
-      "transfiguration.toml: expected site and nine compiler-validated forms",
+      "transfiguration.toml: expected site and at least one compiler-validated form",
     );
   }
   const site = normalize(source.site);

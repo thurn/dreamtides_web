@@ -1,8 +1,6 @@
 {
   "schemaVersion": 1,
   "encounter": {
-    "offerCount": 2,
-    "distinctFamilies": true,
     "allowDecline": true
   },
   "archetypes": [
@@ -291,6 +289,6 @@
       "quantities": {}
     }
   ],
-  "contentHash": "1056f2abd78978b639d81f02c604904e52ff149bf313e7477905304e2fa919ee",
-  "foldHash": "1056f2abd78978b639d81f02c604904e52ff149bf313e7477905304e2fa919ee"
+  "contentHash": "fd0a5b59ae22e827932ce2d750423e07c0bda1bad809bdabea5489d057c056b1",
+  "foldHash": "fd0a5b59ae22e827932ce2d750423e07c0bda1bad809bdabea5489d057c056b1"
 }

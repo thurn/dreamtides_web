@@ -73,7 +73,6 @@ export interface TransfigurationFormDefinition {
     | "transfigurationPerfected";
   readonly accentColor: `#${string}`;
   readonly tintColor: `#${string}`;
-  readonly displayOrder: number;
   readonly merchantAllowed: boolean;
   readonly eligibility: TransfigurationEligibility;
   readonly operation: TransfigurationOperation;
@@ -87,9 +86,8 @@ export interface TransfigurationData {
   readonly foldHash: string;
   readonly site: {
     readonly rulesVersion: string;
-    readonly standardChoiceLimit: number;
+    readonly standardChoiceLimit: number | null;
     readonly enhancedChoiceLimit: number | null;
-    readonly formOrder: readonly TransfigurationType[];
     readonly pricing: {
       readonly minimumCost: number;
       readonly maximumCost: number;

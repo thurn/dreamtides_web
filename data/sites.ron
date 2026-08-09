@@ -107,8 +107,6 @@ SitesCatalog(
       Exploration,
     ],
     home_choice_count: 3,
-    away_choice_count: 1,
-    insufficient_destinations: Fail,
   ),
 
   card_choices: CardChoiceRules(duplication: CardChoiceLimits(standard: Count(3), enhanced: All)),

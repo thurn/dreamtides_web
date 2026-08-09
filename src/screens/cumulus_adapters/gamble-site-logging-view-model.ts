@@ -344,8 +344,8 @@ export function logGambleResolved(
   if (runtime.gameId !== "tidemark-ladder-climb") return;
   const result = runtime.result;
   if (result === null) return;
-  const attempt = gambleGameByRulesKind(gambleData, "ladderClimb").rules
-    .attempts[result.attemptNumber - 1];
+  const ladderGame = gambleGameByRulesKind(gambleData, "ladderClimb");
+  const attempt = ladderGame.rules.attempts[result.attemptNumber - 1];
   logEventOnce(
     `Gamble:${siteId}:ladder-result:${runtime.shuffleCommitments[result.attemptNumber - 1] ?? "unknown"}`,
     "gamble_wager_resolved",
@@ -366,7 +366,7 @@ export function logGambleResolved(
           : 0,
       terminalReason: result.won
         ? "won"
-        : result.attemptNumber === 4
+        : result.attemptNumber === ladderGame.rules.attempts.length
           ? "missed_all"
           : "miss",
     },

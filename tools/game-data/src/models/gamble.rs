@@ -226,10 +226,14 @@ pub fn lower(source: GambleCatalog) -> Result<toml::Value> {
 }
 
 pub(crate) fn validate(source: &GambleCatalog) -> Result<()> {
-    let ids = source.games.iter().map(|game| game.id).collect::<Vec<_>>();
+    let ids = source
+        .games
+        .iter()
+        .map(|game| game.id)
+        .collect::<BTreeSet<_>>();
     ensure!(
-        ids == GambleGameId::ALL,
-        "gamble.games must contain every stable game id exactly once in deterministic fallback order"
+        !source.games.is_empty() && ids.len() == source.games.len(),
+        "gamble.games must contain at least one game and must not repeat stable ids"
     );
     ensure!(
         source
@@ -254,6 +258,7 @@ pub(crate) fn validate(source: &GambleCatalog) -> Result<()> {
         validate_variant_pairing(&path, game)?;
         validate_rules(&path, &game.rules)?;
         validate_economy(&path, &game.economy)?;
+        validate_rules_economy_alignment(&path, &game.rules, &game.economy)?;
     }
     Ok(())
 }
@@ -287,8 +292,10 @@ fn validate_presentation(
         .map(|label| label.key.as_str())
         .collect::<Vec<_>>();
     ensure!(
-        actual == expected_outcomes,
-        "{path}.presentation.outcome_labels must cover every emitted outcome in deterministic order"
+        actual.iter().copied().collect::<BTreeSet<_>>()
+            == expected_outcomes.iter().copied().collect::<BTreeSet<_>>()
+            && actual.len() == expected_outcomes.len(),
+        "{path}.presentation.outcome_labels must cover every emitted outcome exactly once"
     );
     Ok(())
 }
@@ -405,7 +412,6 @@ fn validate_rules(path: &str, rules: &GambleGameRules) -> Result<()> {
                     .iter()
                     .map(|attempt| (attempt.attempt, attempt.winning_card_count)),
                 *standard_deck_size,
-                4,
             )?;
         }
         GambleGameRules::StarwayStairs {
@@ -421,8 +427,11 @@ fn validate_rules(path: &str, rules: &GambleGameRules) -> Result<()> {
                 path,
                 tiers.iter().map(|tier| (tier.tier, tier.bust_card_count)),
                 *standard_deck_size,
-                3,
             )?;
+            ensure!(
+                tiers.len() <= 3,
+                "{path}.rules.tiers supports between one and three rendered tiers"
+            );
         }
         GambleGameRules::FourSuitReprise {
             standard_deck_size,
@@ -436,19 +445,20 @@ fn validate_rules(path: &str, rules: &GambleGameRules) -> Result<()> {
                     && *matching_suit_card_count * 4 == *standard_deck_size,
                 "{path}.rules matching suit ranges must partition the deck"
             );
-            let expected = [
+            let expected = BTreeSet::from([
                 (CardSuit::Spades, FourSuitOutcome::Transfiguration),
                 (CardSuit::Diamonds, FourSuitOutcome::Essence),
                 (CardSuit::Hearts, FourSuitOutcome::Duplication),
                 (CardSuit::Clubs, FourSuitOutcome::Purge),
-            ];
+            ]);
             ensure!(
                 outcomes
                     .iter()
                     .map(|entry| (entry.suit, entry.outcome))
-                    .collect::<Vec<_>>()
-                    == expected,
-                "{path}.rules.outcomes must cover every suit and outcome exactly once in canonical order"
+                    .collect::<BTreeSet<_>>()
+                    == expected
+                    && outcomes.len() == expected.len(),
+                "{path}.rules.outcomes must cover every suit and outcome exactly once"
             );
         }
         GambleGameRules::Blackjack {
@@ -474,11 +484,10 @@ fn validate_numbered_counts(
     path: &str,
     values: impl Iterator<Item = (u32, u32)>,
     deck_size: u32,
-    expected_len: usize,
 ) -> Result<()> {
     let values = values.collect::<Vec<_>>();
     ensure!(
-        values.len() == expected_len
+        !values.is_empty()
             && values
                 .iter()
                 .enumerate()
@@ -499,9 +508,13 @@ fn validate_economy(path: &str, economy: &GambleEconomy) -> Result<()> {
     match economy {
         GambleEconomy::ThreeGate { rewards, .. } => {
             ensure!(
-                rewards.iter().map(|reward| reward.gate).collect::<Vec<_>>()
-                    == [GateId::Six, GateId::Nine, GateId::Jack],
-                "{path}.economy.rewards must cover every gate in order"
+                rewards
+                    .iter()
+                    .map(|reward| reward.gate)
+                    .collect::<BTreeSet<_>>()
+                    == BTreeSet::from([GateId::Six, GateId::Nine, GateId::Jack])
+                    && rewards.len() == 3,
+                "{path}.economy.rewards must cover every gate exactly once"
             );
         }
         GambleEconomy::LadderClimb {
@@ -509,25 +522,61 @@ fn validate_economy(path: &str, economy: &GambleEconomy) -> Result<()> {
             attempts,
         } => {
             ensure!(
-                attempts.len() == 4
+                !attempts.is_empty()
                     && attempts
                         .iter()
                         .enumerate()
                         .all(|(index, attempt)| attempt.attempt == index as u32 + 1),
-                "{path}.economy.attempts must cover attempts 1 through 4 in order"
+                "{path}.economy.attempts must use consecutive numbering from one"
             );
         }
         GambleEconomy::StarwayStairs { rewards, .. } => {
             ensure!(
-                rewards.len() == 3
+                !rewards.is_empty()
+                    && rewards.len() <= 3
                     && rewards
                         .iter()
                         .enumerate()
                         .all(|(index, reward)| reward.tier == index as u32 + 1),
-                "{path}.economy.rewards must cover tiers 1 through 3 in order"
+                "{path}.economy.rewards must define between one and three consecutive tiers from one"
             );
         }
         GambleEconomy::FourSuitReprise { .. } | GambleEconomy::Blackjack { .. } => {}
+    }
+    Ok(())
+}
+
+fn validate_rules_economy_alignment(
+    path: &str,
+    rules: &GambleGameRules,
+    economy: &GambleEconomy,
+) -> Result<()> {
+    match (rules, economy) {
+        (
+            GambleGameRules::LadderClimb {
+                attempts: rules, ..
+            },
+            GambleEconomy::LadderClimb {
+                attempts: economy, ..
+            },
+        ) => ensure!(
+            rules
+                .iter()
+                .map(|entry| entry.attempt)
+                .eq(economy.iter().map(|entry| entry.attempt)),
+            "{path} ladder rules and economy must define the same attempts"
+        ),
+        (
+            GambleGameRules::StarwayStairs { tiers, .. },
+            GambleEconomy::StarwayStairs { rewards, .. },
+        ) => ensure!(
+            tiers
+                .iter()
+                .map(|entry| entry.tier)
+                .eq(rewards.iter().map(|entry| entry.tier)),
+            "{path} Starway rules and economy must define the same tiers"
+        ),
+        _ => {}
     }
     Ok(())
 }
@@ -726,22 +775,17 @@ mod tests {
     }
 
     #[test]
-    fn rejects_coverage_duplicates_invalid_values_pairings_and_outcomes() {
-        let mut missing = catalog();
-        missing.games.pop();
-        assert!(
-            validate(&missing)
-                .unwrap_err()
-                .to_string()
-                .contains("every stable game id")
-        );
+    fn accepts_configured_subsets_and_rejects_duplicates_invalid_values_pairings_and_outcomes() {
+        let mut subset = catalog();
+        subset.games.pop();
+        validate(&subset).unwrap();
         let mut duplicate = catalog();
         duplicate.games[1].id = duplicate.games[0].id;
         assert!(
             validate(&duplicate)
                 .unwrap_err()
                 .to_string()
-                .contains("every stable game id")
+                .contains("must not repeat stable ids")
         );
         let mut weight = catalog();
         weight.games[0].selection.weight = -1.0;
@@ -781,5 +825,41 @@ mod tests {
                 .to_string()
                 .contains("every emitted outcome")
         );
+    }
+
+    #[test]
+    fn accepts_variable_stage_counts_and_reordered_total_mappings() {
+        let mut source = catalog();
+        for game in &mut source.games {
+            match (&mut game.rules, &mut game.economy) {
+                (
+                    GambleGameRules::LadderClimb { attempts: rules, .. },
+                    GambleEconomy::LadderClimb {
+                        attempts: economy, ..
+                    },
+                ) => {
+                    rules.truncate(2);
+                    economy.truncate(2);
+                }
+                (
+                    GambleGameRules::StarwayStairs { tiers, .. },
+                    GambleEconomy::StarwayStairs { rewards, .. },
+                ) => {
+                    tiers.truncate(2);
+                    rewards.truncate(2);
+                }
+                (
+                    GambleGameRules::ThreeGate { .. },
+                    GambleEconomy::ThreeGate { rewards, .. },
+                ) => rewards.reverse(),
+                (
+                    GambleGameRules::FourSuitReprise { outcomes, .. },
+                    GambleEconomy::FourSuitReprise { .. },
+                ) => outcomes.reverse(),
+                _ => {}
+            }
+            game.presentation.outcome_labels.reverse();
+        }
+        validate(&source).unwrap();
     }
 }

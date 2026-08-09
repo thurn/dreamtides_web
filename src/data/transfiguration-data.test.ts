@@ -6,7 +6,6 @@ import {
 } from "./transfiguration-data";
 
 interface MutableCatalog {
-  site: { formOrder: unknown[] };
   forms: Array<Record<string, unknown>>;
 }
 
@@ -15,15 +14,22 @@ function mutableFixture(): MutableCatalog {
 }
 
 describe("parseTransfigurationData", () => {
-  it("accepts a complete synthetic catalog and resolves stable form identity", () => {
+  it("accepts configured subsets and resolves stable form identity", () => {
+    const value = mutableFixture();
+    value.forms = value.forms.slice(0, 3).reverse();
     const parsed = parseTransfigurationData(mutableFixture());
     expect(transfigurationForm(parsed, "Hastened").id).toBe("Hastened");
+
+    const subset = parseTransfigurationData(value);
+    expect(subset.forms.map(({ id }) => id)).toEqual([
+      "Kindled",
+      "Amplified",
+      "Empowered",
+    ]);
   });
 
   it.each([
-    (value: MutableCatalog) => {
-      value.site.formOrder.reverse();
-    },
+    (value: MutableCatalog) => { value.forms[1].id = value.forms[0].id; },
     (value: MutableCatalog) => {
       value.forms[0].operation = { kind: "unknown" };
     },

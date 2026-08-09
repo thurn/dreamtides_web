@@ -249,7 +249,9 @@ function buildLadderClimbSiteView(params: {
             card: result.card,
             won: result.won,
             resultSettled: result.resultSettled,
-            terminal: result.won || result.attemptNumber === 4,
+            terminal:
+              result.won ||
+              result.attemptNumber === params.game.rules.attempts.length,
             pendingDreamsignReplacement: result.pendingDreamsignReplacement,
           },
     replacement:

@@ -7,30 +7,13 @@ import type { GambleGameId } from "../types/gamble";
 
 const GAMBLE_DATA_JSON_PATH = "/gamble-data.json";
 const SHA256_HEX = /^[0-9a-f]{64}$/u;
-const RULE_KINDS: readonly GambleRulesKind[] = [
-  "threeGate",
-  "ladderClimb",
-  "starwayStairs",
-  "fourSuitReprise",
-  "blackjack",
-];
-
-function isGameIdAtIndex(value: unknown, index: number): value is GambleGameId {
-  switch (index) {
-    case 0:
-      return value === "gravok-three-gate-wager";
-    case 1:
-      return value === "tidemark-ladder-climb";
-    case 2:
-      return value === "starway-stairs";
-    case 3:
-      return value === "four-suit-reprise";
-    case 4:
-      return value === "blackjack";
-    default:
-      return false;
-  }
-}
+const GAME_RULE_KIND = {
+  "gravok-three-gate-wager": "threeGate",
+  "tidemark-ladder-climb": "ladderClimb",
+  "starway-stairs": "starwayStairs",
+  "four-suit-reprise": "fourSuitReprise",
+  blackjack: "blackjack",
+} as const satisfies Readonly<Record<GambleGameId, GambleRulesKind>>;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -47,15 +30,21 @@ function isGambleData(value: unknown): value is GambleData {
     !SHA256_HEX.test(String(value.contentHash)) ||
     !SHA256_HEX.test(String(value.foldHash)) ||
     !Array.isArray(value.games) ||
-    value.games.length !== RULE_KINDS.length
+    value.games.length < 1 ||
+    value.games.length > Object.keys(GAME_RULE_KIND).length
   ) {
     return false;
   }
+  const ids = new Set<string>();
   return (
-    value.games.every((game, index) => {
+    value.games.every((game) => {
+      const gameId = isRecord(game) && typeof game.id === "string"
+        ? game.id as GambleGameId
+        : null;
+      const ruleKind = gameId === null ? undefined : GAME_RULE_KIND[gameId];
       if (
         !isRecord(game) ||
-        !isGameIdAtIndex(game.id, index) ||
+        gameId === null || ruleKind === undefined || ids.has(gameId) ||
         !isNonBlank(game.rulesVersion) ||
         !isRecord(game.selection) ||
         typeof game.selection.weight !== "number" ||
@@ -63,8 +52,8 @@ function isGambleData(value: unknown): value is GambleData {
         typeof game.selection.fallback !== "boolean" ||
         !isRecord(game.economy) ||
         !isRecord(game.rules) ||
-        game.economy.kind !== RULE_KINDS[index] ||
-        game.rules.kind !== RULE_KINDS[index] ||
+        game.economy.kind !== ruleKind ||
+        game.rules.kind !== ruleKind ||
         !isRecord(game.presentation) ||
         !isNonBlank(game.presentation.title) ||
         !isNonBlank(game.presentation.rulesDisclosure) ||
@@ -74,6 +63,7 @@ function isGambleData(value: unknown): value is GambleData {
       ) {
         return false;
       }
+      ids.add(gameId);
       return true;
     }) &&
     value.games.filter(

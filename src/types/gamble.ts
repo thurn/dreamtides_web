@@ -39,7 +39,7 @@ export type GambleGameId =
   | "blackjack";
 
 /** One-based attempt number in Tidemark Ladder Climb. */
-export type TidemarkLadderClimbAttemptNumber = 1 | 2 | 3 | 4;
+export type TidemarkLadderClimbAttemptNumber = number;
 
 /** One-based tier number in Starway Stairs. */
-export type StarwayStairsTierNumber = 1 | 2 | 3;
+export type StarwayStairsTierNumber = number;

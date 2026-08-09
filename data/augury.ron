@@ -3,10 +3,6 @@
 #![enable(implicit_some)]
 AuguryCatalog(
   encounter: (
-    // Number of offers generated whenever the player visits an Augury site.
-    offer_count: 2,
-    // Prevents both offer slots from drawing abilities in the same family.
-    distinct_families: true,
     // Allows the player to leave without accepting either offer.
     allow_decline: true,
   ),

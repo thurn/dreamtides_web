@@ -76,7 +76,6 @@
       "Exploration"
     ],
     "homeChoiceCount": 3,
-    "awayChoiceCount": 1,
     "insufficientDestinations": "fail",
     "guideId": "maddox"
   },
@@ -128,6 +127,6 @@
       "homeDreamscapeId": "grid_city"
     }
   },
-  "contentHash": "3bd8ecee64b8952c379a46ba729a762f189e716bc2a6456c8277cff162fa6dfd",
-  "foldHash": "acb50b99e7df14d5cd1ccbe421e9194e2105d3a139765468ee7538b5ea9d513a"
+  "contentHash": "f31914f0a6a54c2182cfe4cf04ee3c3fe60b08539854643d0e745dc9d1a4dc31",
+  "foldHash": "a431717c87d3f52d1e14f8f14ddd22a3c97b45a856a8446d7a245bc590389973"
 }

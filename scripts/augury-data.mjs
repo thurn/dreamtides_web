@@ -125,9 +125,7 @@ function presentationText(value, path, contract) {
 export function compileAuguryData(sourceValue) {
   const root = exact(sourceValue, "root", ["schema-version", "encounter", "archetype"]);
   if (positive(root["schema-version"], "schema-version") !== 1) fail("schema-version", "only schema version 1 is supported");
-  const encounter = exact(root.encounter, "encounter", ["offer-count", "distinct-families", "allow-decline"]);
-  if (encounter["offer-count"] !== 2) fail("encounter.offer-count", "Augury requires exactly 2 offers");
-  if (encounter["distinct-families"] !== true) fail("encounter.distinct-families", "must be true");
+  const encounter = exact(root.encounter, "encounter", ["allow-decline"]);
   if (typeof encounter["allow-decline"] !== "boolean") fail("encounter.allow-decline", "expected a boolean");
   if (!Array.isArray(root.archetype)) fail("archetype", "expected an array of tables");
   const seen = new Set();
@@ -170,7 +168,6 @@ export function compileAuguryData(sourceValue) {
       quantities,
     };
   });
-  for (const id of ARCHETYPE_CONTRACTS.keys()) if (!seen.has(id)) fail("archetype", `missing archetype ${id}`);
   const enabled = archetypes.filter((entry) => entry.enabled);
   if (enabled.length < 2) fail("archetype", "at least two archetypes must be enabled");
   if (new Set(enabled.map((entry) => entry.family)).size < 2) {
@@ -178,7 +175,7 @@ export function compileAuguryData(sourceValue) {
   }
   const payload = {
     schemaVersion: 1,
-    encounter: { offerCount: 2, distinctFamilies: true, allowDecline: encounter["allow-decline"] },
+    encounter: { allowDecline: encounter["allow-decline"] },
     archetypes,
   };
   const contentHash = hash(payload);

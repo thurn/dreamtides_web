@@ -1,21 +1,22 @@
 use std::collections::BTreeSet;
 
-use anyhow::{Result, bail, ensure};
+use anyhow::{Result, ensure};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct TideAlignmentCatalog {
-    pub alignments: Vec<TideAlignmentDefinition>,
+    pub ember: TideAlignmentPresentation,
+    pub valor: TideAlignmentPresentation,
+    pub vision: TideAlignmentPresentation,
+    pub wild: TideAlignmentPresentation,
+    pub shadow: TideAlignmentPresentation,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct TideAlignmentDefinition {
-    pub id: TideAlignmentId,
-    pub deck_color: TideDeckColor,
+pub struct TideAlignmentPresentation {
     pub display_name: String,
-    pub glyph: TideGlyph,
     pub accent_color: String,
     pub chip_background: String,
     pub chip_border: String,
@@ -55,14 +56,6 @@ pub enum TideAlignmentId {
 }
 
 impl TideAlignmentId {
-    const ALL: [Self; 5] = [
-        Self::Ember,
-        Self::Valor,
-        Self::Vision,
-        Self::Wild,
-        Self::Shadow,
-    ];
-
     fn as_compat(self) -> &'static str {
         match self {
             Self::Ember => "ember",
@@ -121,38 +114,67 @@ struct CompatibilityAlignment {
 
 pub fn lower(source: TideAlignmentCatalog) -> Result<toml::Value> {
     validate(&source)?;
+    let alignments = [
+        (
+            TideAlignmentId::Ember,
+            TideDeckColor::Orange,
+            TideGlyph::TideEmber,
+            source.ember,
+        ),
+        (
+            TideAlignmentId::Valor,
+            TideDeckColor::Yellow,
+            TideGlyph::TideValor,
+            source.valor,
+        ),
+        (
+            TideAlignmentId::Vision,
+            TideDeckColor::Blue,
+            TideGlyph::TideVision,
+            source.vision,
+        ),
+        (
+            TideAlignmentId::Wild,
+            TideDeckColor::Green,
+            TideGlyph::TideWild,
+            source.wild,
+        ),
+        (
+            TideAlignmentId::Shadow,
+            TideDeckColor::Purple,
+            TideGlyph::TideShadow,
+            source.shadow,
+        ),
+    ];
     Ok(toml::Value::try_from(CompatibilityCatalog {
-        alignments: source
-            .alignments
+        alignments: alignments
             .into_iter()
-            .map(|alignment| CompatibilityAlignment {
-                id: alignment.id.as_compat(),
-                deck_color: alignment.deck_color.as_compat(),
-                display_name: alignment.display_name,
-                glyph: alignment.glyph.as_compat(),
-                accent_color: alignment.accent_color,
-                chip_background: alignment.chip_background,
-                chip_border: alignment.chip_border,
-                accessibility_name: alignment.accessibility_name,
-            })
+            .map(
+                |(id, deck_color, glyph, presentation)| CompatibilityAlignment {
+                    id: id.as_compat(),
+                    deck_color: deck_color.as_compat(),
+                    display_name: presentation.display_name,
+                    glyph: glyph.as_compat(),
+                    accent_color: presentation.accent_color,
+                    chip_background: presentation.chip_background,
+                    chip_border: presentation.chip_border,
+                    accessibility_name: presentation.accessibility_name,
+                },
+            )
             .collect(),
     })?)
 }
 
 pub(crate) fn validate(source: &TideAlignmentCatalog) -> Result<()> {
-    let ids = source
-        .alignments
-        .iter()
-        .map(|entry| entry.id)
-        .collect::<Vec<_>>();
-    ensure!(
-        ids == TideAlignmentId::ALL,
-        "tide alignments must contain every stable id exactly once in canonical order"
-    );
     let mut names = BTreeSet::new();
-    let mut deck_colors = BTreeSet::new();
-    for (index, alignment) in source.alignments.iter().enumerate() {
-        let path = format!("alignments[{index}]");
+    for (id, alignment) in [
+        ("ember", &source.ember),
+        ("valor", &source.valor),
+        ("vision", &source.vision),
+        ("wild", &source.wild),
+        ("shadow", &source.shadow),
+    ] {
+        let path = format!("{id}");
         ensure!(
             !alignment.display_name.trim().is_empty(),
             "{path}.display_name must not be blank"
@@ -165,36 +187,12 @@ pub(crate) fn validate(source: &TideAlignmentCatalog) -> Result<()> {
             names.insert(alignment.display_name.to_lowercase()),
             "{path}.display_name duplicates another alignment"
         );
-        ensure!(
-            deck_colors.insert(alignment.deck_color),
-            "{path}.deck_color duplicates another alignment"
-        );
         validate_color(&path, &alignment.accent_color)?;
         validate_color(&path, &alignment.chip_background)?;
         ensure!(
             alignment.chip_border.starts_with("rgba(") && alignment.chip_border.ends_with(')'),
             "{path}.chip_border must be an rgba() CSS color"
         );
-        let expected_glyph = match alignment.id {
-            TideAlignmentId::Ember => TideGlyph::TideEmber,
-            TideAlignmentId::Valor => TideGlyph::TideValor,
-            TideAlignmentId::Vision => TideGlyph::TideVision,
-            TideAlignmentId::Wild => TideGlyph::TideWild,
-            TideAlignmentId::Shadow => TideGlyph::TideShadow,
-        };
-        let expected_deck_color = match alignment.id {
-            TideAlignmentId::Ember => TideDeckColor::Orange,
-            TideAlignmentId::Valor => TideDeckColor::Yellow,
-            TideAlignmentId::Vision => TideDeckColor::Blue,
-            TideAlignmentId::Wild => TideDeckColor::Green,
-            TideAlignmentId::Shadow => TideDeckColor::Purple,
-        };
-        if alignment.glyph != expected_glyph {
-            bail!("{path}.glyph does not match the stable tide id");
-        }
-        if alignment.deck_color != expected_deck_color {
-            bail!("{path}.deck_color does not match the stable tide id");
-        }
     }
     Ok(())
 }
@@ -212,53 +210,23 @@ fn validate_color(path: &str, color: &str) -> Result<()> {
 mod tests {
     use super::*;
 
+    fn presentation(name: &str, color: &str) -> TideAlignmentPresentation {
+        TideAlignmentPresentation {
+            display_name: name.into(),
+            accent_color: color.into(),
+            chip_background: "#111111".into(),
+            chip_border: "rgba(1, 2, 3, 0.5)".into(),
+            accessibility_name: format!("{name} alignment"),
+        }
+    }
+
     fn catalog() -> TideAlignmentCatalog {
-        let records = [
-            (
-                TideAlignmentId::Ember,
-                TideDeckColor::Orange,
-                TideGlyph::TideEmber,
-                "#fb923c",
-            ),
-            (
-                TideAlignmentId::Valor,
-                TideDeckColor::Yellow,
-                TideGlyph::TideValor,
-                "#facc15",
-            ),
-            (
-                TideAlignmentId::Vision,
-                TideDeckColor::Blue,
-                TideGlyph::TideVision,
-                "#60a5fa",
-            ),
-            (
-                TideAlignmentId::Wild,
-                TideDeckColor::Green,
-                TideGlyph::TideWild,
-                "#4ade80",
-            ),
-            (
-                TideAlignmentId::Shadow,
-                TideDeckColor::Purple,
-                TideGlyph::TideShadow,
-                "#c084fc",
-            ),
-        ];
         TideAlignmentCatalog {
-            alignments: records
-                .into_iter()
-                .map(|(id, deck_color, glyph, color)| TideAlignmentDefinition {
-                    id,
-                    deck_color,
-                    display_name: format!("{id:?}"),
-                    glyph,
-                    accent_color: color.into(),
-                    chip_background: "#111111".into(),
-                    chip_border: "rgba(1, 2, 3, 0.5)".into(),
-                    accessibility_name: format!("{id:?} alignment"),
-                })
-                .collect(),
+            ember: presentation("Ember", "#fb923c"),
+            valor: presentation("Valor", "#facc15"),
+            vision: presentation("Vision", "#60a5fa"),
+            wild: presentation("Wild", "#4ade80"),
+            shadow: presentation("Shadow", "#c084fc"),
         }
     }
 
@@ -268,36 +236,23 @@ mod tests {
     }
 
     #[test]
-    fn rejects_missing_duplicate_reordered_and_invalid_presentation() {
-        let mut missing = catalog();
-        missing.alignments.pop();
-        assert!(
-            validate(&missing)
-                .unwrap_err()
-                .to_string()
-                .contains("every stable id")
-        );
-
+    fn rejects_duplicate_and_invalid_presentation() {
         let mut duplicate = catalog();
-        duplicate.alignments[1].id = TideAlignmentId::Ember;
+        duplicate.valor.display_name = duplicate.ember.display_name.clone();
         assert!(
             validate(&duplicate)
                 .unwrap_err()
                 .to_string()
-                .contains("every stable id")
+                .contains("display_name duplicates")
         );
 
         let mut invalid = catalog();
-        invalid.alignments[0].accent_color = "orange".into();
+        invalid.ember.accent_color = "orange".into();
         assert!(
             validate(&invalid)
                 .unwrap_err()
                 .to_string()
                 .contains("accent_color")
         );
-
-        let mut glyph = catalog();
-        glyph.alignments[0].glyph = TideGlyph::TideValor;
-        assert!(validate(&glyph).unwrap_err().to_string().contains("glyph"));
     }
 }

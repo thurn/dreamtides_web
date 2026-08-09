@@ -2171,9 +2171,6 @@ fn replace_action(
     expected_action_id: String,
     action: JsonValue,
 ) -> Result<()> {
-    if slot > 1 {
-        bail!("INVALID_EDIT: Exploration action slot must be 0 or 1");
-    }
     let replacement = action_from_compat(catalog, action)?;
     if replacement.id != expected_action_id {
         bail!("FIELD_NOT_APPLICABLE: Exploration action IDs cannot be changed");

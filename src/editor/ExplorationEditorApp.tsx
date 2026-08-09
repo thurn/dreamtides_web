@@ -51,7 +51,7 @@ interface ReferenceCatalog {
 
 interface CardPickerTarget {
   cardId: string;
-  slot: 0 | 1;
+  slot: number;
 }
 
 const EMPTY_CATALOG: ReferenceCatalog = {
@@ -121,7 +121,7 @@ function serverData(loaded: ExplorationEditorLoadResult): ExplorationEditorServe
 function replaceAction(
   data: ExplorationEditorServerData,
   cardId: string,
-  slot: 0 | 1,
+  slot: number,
   action: ExplorationEditorAction,
 ): ExplorationEditorServerData {
   return {
@@ -130,10 +130,7 @@ function replaceAction(
       ? encounter
       : {
           ...encounter,
-          actions: encounter.actions.map((entry, index) => index === slot ? action : entry) as [
-            ExplorationEditorAction,
-            ExplorationEditorAction,
-          ],
+          actions: encounter.actions.map((entry, index) => index === slot ? action : entry),
         }),
   };
 }
@@ -283,7 +280,7 @@ function ExplorationEditorRow({
     })), [data.effectDefinitions, templates]);
 
   const saveAction = useCallback(async (
-    slot: 0 | 1,
+    slot: number,
     nextAction: ExplorationEditorAction,
     eventName: string,
     eventData: Record<string, unknown>,
@@ -410,7 +407,7 @@ function ExplorationEditorRow({
   }
 
   async function saveActionText(
-    slot: 0 | 1,
+    slot: number,
     field: "label" | "template",
     value: string,
     revision: number,
@@ -444,7 +441,7 @@ function ExplorationEditorRow({
   }
 
   function updateField(
-    slot: 0 | 1,
+    slot: number,
     field: string,
     value: unknown,
     eventName = "exploration_editor_effect_field_saved",
@@ -470,7 +467,7 @@ function ExplorationEditorRow({
   }
 
   function controlFor(
-    slot: 0 | 1,
+    slot: number,
     action: ExplorationEditorAction,
     field: ExplorationEditorFieldDefinition,
   ) {
@@ -613,7 +610,7 @@ function ExplorationEditorRow({
     );
   }
 
-  function actionPanel(action: ExplorationEditorAction, slot: 0 | 1) {
+  function actionPanel(action: ExplorationEditorAction, slot: number) {
     const definition = definitions.get(action.effectKind) as ExplorationEditorEffectDefinition;
     const status = actionStatuses[actionTarget(encounter.cardId, slot)];
     return (
@@ -728,8 +725,7 @@ function ExplorationEditorRow({
               )}
             </div>
             <div className="exploration-editor-actions">
-              {actionPanel(encounter.actions[0], 0)}
-              {actionPanel(encounter.actions[1], 1)}
+              {encounter.actions.map(actionPanel)}
             </div>
           </div>
         </div>

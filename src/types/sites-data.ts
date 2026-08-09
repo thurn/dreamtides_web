@@ -15,7 +15,6 @@ export interface SitesData {
   randomSite: {
     destinations: readonly RandomSiteDestinationType[];
     homeChoiceCount: number;
-    awayChoiceCount: 1;
     insufficientDestinations: "fail";
     guideId: string;
   };

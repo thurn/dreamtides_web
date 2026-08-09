@@ -19,17 +19,13 @@ DraftDocument(
   },
 
   pool: (
-    // Strategy used when no developer override is supplied.
-    default_strategy: Tides4,
-    strategies: {
-      Tides4: (
-        // Total card copies dealt into the generated draft pool.
-        deal_size: 150,
-        // Default maximum copies of any one card in the pool.
-        copy_cap: 2,
-        // Maximum distinct facets used to build the pool.
-        max_facets: 3,
-      ),
-    },
+    tides4: (
+      // Total card copies dealt into the generated draft pool.
+      deal_size: 150,
+      // Default maximum copies of any one card in the pool.
+      copy_cap: 2,
+      // Maximum distinct facets used to build the pool.
+      max_facets: 3,
+    ),
   ),
 )

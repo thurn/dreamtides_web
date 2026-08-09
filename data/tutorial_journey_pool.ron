@@ -35,7 +35,6 @@
       id: "1f70bdd6-31c1-4997-b6c4-c2574f84a1b9",
       name: "The Bannerwake",
       description: "Every oath adds another voice: cheap warriors gather quickly, then grow mighty in one another's company.",
-      kind: Valor,
       cards: [
         (card_id: "66959155-9e79-459e-afdb-eb4c0fbdeb11", copies: 2),
         (card_id: "d95533f4-7809-44a8-a882-7675c61cee1c", copies: 2),
@@ -68,7 +67,6 @@
       id: "9566e984-618c-41dd-8148-94af1f0e30cd",
       name: "The Sunwall Accord",
       description: "A disciplined line shifts, shields, and supports its neighbors until even the humblest recruit can hold the horizon.",
-      kind: Valor,
       cards: [
         (card_id: "56411ed4-bda9-4fdf-82e5-b5492de67039", copies: 2),
         (card_id: "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", copies: 2),
@@ -101,7 +99,6 @@
       id: "52a1732b-9a6d-473a-9ce4-a842b5f16c3b",
       name: "The Unfallen Host",
       description: "No warrior is lost to the dark for long; the fallen return, carrying each defeat into the next charge.",
-      kind: Valor,
       cards: [
         (card_id: "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", copies: 2),
         (card_id: "6f1833a0-30f5-4718-9a3e-7620beb72bfc", copies: 2),

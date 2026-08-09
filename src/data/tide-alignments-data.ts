@@ -13,42 +13,18 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function isAlignmentAtIndex(value: unknown, index: number): boolean {
-  if (!isRecord(value) || value.displayOrder !== undefined) return false;
-  switch (index) {
-    case 0:
-      return (
-        value.id === "ember" &&
-        value.deckColor === "orange" &&
-        value.glyph === "tideEmber"
-      );
-    case 1:
-      return (
-        value.id === "valor" &&
-        value.deckColor === "yellow" &&
-        value.glyph === "tideValor"
-      );
-    case 2:
-      return (
-        value.id === "vision" &&
-        value.deckColor === "blue" &&
-        value.glyph === "tideVision"
-      );
-    case 3:
-      return (
-        value.id === "wild" &&
-        value.deckColor === "green" &&
-        value.glyph === "tideWild"
-      );
-    case 4:
-      return (
-        value.id === "shadow" &&
-        value.deckColor === "purple" &&
-        value.glyph === "tideShadow"
-      );
-    default:
-      return false;
-  }
+const ALIGNMENT_CONTRACT = {
+  ember: { deckColor: "orange", glyph: "tideEmber" },
+  valor: { deckColor: "yellow", glyph: "tideValor" },
+  vision: { deckColor: "blue", glyph: "tideVision" },
+  wild: { deckColor: "green", glyph: "tideWild" },
+  shadow: { deckColor: "purple", glyph: "tideShadow" },
+} as const;
+
+function isAlignment(value: unknown): value is TideAlignmentDefinition {
+  if (!isRecord(value) || typeof value.id !== "string") return false;
+  const contract = ALIGNMENT_CONTRACT[value.id as keyof typeof ALIGNMENT_CONTRACT];
+  return contract !== undefined && value.deckColor === contract.deckColor && value.glyph === contract.glyph;
 }
 
 export function parseTideAlignmentsData(value: unknown): TideAlignmentsData {
@@ -57,10 +33,9 @@ export function parseTideAlignmentsData(value: unknown): TideAlignmentsData {
     value.schemaVersion !== 1 ||
     !HASH.test(String(value.contentHash)) ||
     !Array.isArray(value.alignments) ||
-    value.alignments.length !== 5 ||
     !value.alignments.every(
-      (alignment, index) =>
-        isAlignmentAtIndex(alignment, index) &&
+      (alignment) =>
+        isAlignment(alignment) &&
         isRecord(alignment) &&
         typeof alignment.displayName === "string" &&
         alignment.displayName.trim() !== "" &&
@@ -70,7 +45,9 @@ export function parseTideAlignmentsData(value: unknown): TideAlignmentsData {
         alignment.chipBorder.startsWith("rgba(") &&
         typeof alignment.accessibilityName === "string" &&
         alignment.accessibilityName.trim() !== "",
-    )
+    ) ||
+    new Set(value.alignments.map((alignment) => isRecord(alignment) ? alignment.id : null)).size !==
+      Object.keys(ALIGNMENT_CONTRACT).length
   ) {
     throw new Error(
       "Failed to load tide alignments: malformed tide-alignments-data.json",

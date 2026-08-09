@@ -18,6 +18,16 @@ describe("compileAuguryData", () => {
     expect(result.contentHash).toMatch(/^[0-9a-f]{64}$/u);
   });
 
+  it("compiles a reordered subset spanning two families", () => {
+    const configured = source();
+    configured.archetype = [configured.archetype[9], configured.archetype[0]];
+    const result = compileAuguryData(configured);
+    expect(result.archetypes.map(({ id }) => id)).toEqual([
+      "purge",
+      "fit_card_grant",
+    ]);
+  });
+
   it("rejects removed presentation fields", () => {
     const invalid = source();
     invalid.archetype[0].copy = { title: "Dead copy" };

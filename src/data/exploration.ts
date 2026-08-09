@@ -111,7 +111,7 @@ export function explorationActionUsesSpecialVariable(
 export interface ExplorationEncounterContent {
   cardId: CardId;
   prose: string;
-  actions: readonly [ExplorationActionContent, ExplorationActionContent];
+  actions: readonly ExplorationActionContent[];
 }
 
 export interface ExplorationEffectFieldContent {
@@ -142,7 +142,6 @@ export interface ExplorationEffectDefinitionContent {
 export interface ExplorationContent {
   /** Present on compiler output; optional only for focused synthetic fixtures. */
   schemaVersion?: 1;
-  actionsPerEncounter?: number;
   contentHash?: string;
   foldHash?: string;
   effectKinds?: readonly ExplorationEffectDefinitionContent[];
@@ -153,7 +152,6 @@ export interface ExplorationContent {
 
 interface RawExplorationData {
   schemaVersion?: number;
-  actionsPerEncounter?: number;
   contentHash?: string;
   foldHash?: string;
   effectKinds?: ExplorationEffectDefinitionContent[];
@@ -193,7 +191,7 @@ export async function loadExplorationContent(): Promise<ExplorationContent> {
   }
   const raw = (await response.json()) as RawExplorationData;
   if (
-    raw.schemaVersion !== 1 || raw.actionsPerEncounter !== 2 ||
+    raw.schemaVersion !== 1 ||
     typeof raw.contentHash !== "string" || !/^[0-9a-f]{64}$/u.test(raw.contentHash) ||
     raw.foldHash !== raw.contentHash || !Array.isArray(raw.effectKinds) || raw.effectKinds.length === 0
   ) {
@@ -220,15 +218,15 @@ export async function loadExplorationContent(): Promise<ExplorationContent> {
   }));
   const encounters = (raw.encounters ?? []).map((encounter) => {
     const actions = encounter.action ?? [];
-    if (actions.length !== 2) {
+    if (actions.length < 1 || actions.length > 4) {
       throw new Error(
-        `Invalid Exploration data: encounter ${String(encounter.cardId)} must have two actions`,
+        `Invalid Exploration data: encounter ${String(encounter.cardId)} must have between one and four actions`,
       );
     }
     return {
       cardId: asCardId(requiredString(encounter.cardId, "encounter card id")),
       prose: requiredString(encounter.prose, "encounter prose"),
-      actions: [validateAction(actions[0]), validateAction(actions[1])],
+      actions: actions.map(validateAction),
     } satisfies ExplorationEncounterContent;
   });
   if (encounters.length === 0) {
@@ -258,7 +256,6 @@ export async function loadExplorationContent(): Promise<ExplorationContent> {
   }
   return {
     schemaVersion: 1,
-    actionsPerEncounter: raw.actionsPerEncounter,
     contentHash: raw.contentHash,
     foldHash: raw.foldHash,
     effectKinds: raw.effectKinds,

@@ -46,21 +46,7 @@ pub struct TideDefinition {
     pub id: TideId,
     pub name: String,
     pub description: String,
-    pub kind: TideKind,
     pub cards: Vec<CardPoolEntry>,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum TideKind {
-    Valor,
-}
-
-impl TideKind {
-    fn as_compat(self) -> &'static str {
-        match self {
-            Self::Valor => "valor",
-        }
-    }
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
@@ -166,13 +152,13 @@ fn lower_with_tide_map(
         .map(|tide| {
             let id = compatibility_ids
                 .get(&tide.id)
-                .ok_or_else(|| anyhow::anyhow!("unmapped canonical Tide identifier: {}", tide.id))?
-                .clone();
+                .cloned()
+                .unwrap_or_else(|| tide.id.to_string());
             Ok(CompatibilityTide {
                 id,
                 name: tide.name,
                 description: tide.description,
-                kind: tide.kind.as_compat(),
+                kind: "valor",
                 cards: tide
                     .cards
                     .into_iter()
@@ -242,12 +228,12 @@ pub(crate) fn validate(source: &TutorialJourneyPoolCatalog) -> Result<()> {
         "opening must contain between one and three Dreamsigns"
     );
     ensure!(
-        source.opening.offers.len() == 2,
-        "opening must contain exactly two offers"
+        !source.opening.offers.is_empty(),
+        "opening must contain at least one offer"
     );
     ensure!(
-        source.tides.len() == 3,
-        "tutorial journey pool must contain exactly three Tides"
+        !source.tides.is_empty(),
+        "tutorial journey pool must contain at least one Tide"
     );
 
     let dreamsign_ids: BTreeSet<_> = source.opening.dreamsign_ids.iter().copied().collect();
@@ -259,8 +245,8 @@ pub(crate) fn validate(source: &TutorialJourneyPoolCatalog) -> Result<()> {
     let mut opening_card_ids = BTreeSet::new();
     for (offer_index, offer) in source.opening.offers.iter().enumerate() {
         ensure!(
-            offer.card_ids.len() == 4,
-            "opening offer {offer_index} must contain exactly four cards"
+            (1..=4).contains(&offer.card_ids.len()),
+            "opening offer {offer_index} must contain between one and four cards"
         );
         for card_id in &offer.card_ids {
             ensure!(
@@ -394,7 +380,6 @@ mod tests {
                         id: "10000000-0000-4000-8000-000000000001",
                         name: "First Tide",
                         description: "First description.",
-                        kind: Valor,
                         cards: [
                             (card_id: "{}", copies: 2),
                             (card_id: "{}", copies: 1),
@@ -405,7 +390,6 @@ mod tests {
                         id: "10000000-0000-4000-8000-000000000002",
                         name: "Second Tide",
                         description: "A Unicode wave: 海.",
-                        kind: Valor,
                         cards: [
                             (card_id: "{}", copies: 1),
                             (card_id: "{}", copies: 1),
@@ -416,7 +400,6 @@ mod tests {
                         id: "10000000-0000-4000-8000-000000000003",
                         name: "Third Tide",
                         description: "Third description.",
-                        kind: Valor,
                         cards: [
                             (card_id: "{}", copies: 1),
                             (card_id: "{}", copies: 1),
@@ -561,14 +544,13 @@ mod tests {
     }
 
     #[test]
-    fn rejects_incomplete_or_ambiguous_tide_identity_maps() {
+    fn falls_back_to_canonical_tide_ids_and_rejects_ambiguous_aliases() {
         let catalog = parse(&synthetic_source());
         let incomplete = &SYNTHETIC_TIDE_ID_MAP[..2];
-        assert!(
-            lower_with_tide_map(catalog.clone(), incomplete)
-                .unwrap_err()
-                .to_string()
-                .contains("unmapped canonical Tide identifier")
+        let lowered = lower_with_tide_map(catalog.clone(), incomplete).unwrap();
+        assert_eq!(
+            lowered["tides"][2]["id"].as_str(),
+            Some("10000000-0000-4000-8000-000000000003")
         );
 
         let duplicate_legacy = [

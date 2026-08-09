@@ -25,7 +25,7 @@ pub struct JourneyRules {
 #[serde(deny_unknown_fields)]
 pub struct ShopRules {
     pub prices: ShopPrices,
-    pub stock: Vec<ShopStock>,
+    pub stock: ShopStockCatalog,
     pub discounts: DiscountRules,
     pub reroll: RerollRules,
 }
@@ -41,20 +41,16 @@ pub struct ShopPrices {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct ShopStock {
-    pub shop: ShopKind,
     pub card_slots: u32,
     pub dreamsign_slots: u32,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Hash)]
-pub enum ShopKind {
-    CardShop,
-    SpecialtyShop,
-    DreamsignMarket,
-}
-
-impl ShopKind {
-    const ALL: [Self; 3] = [Self::CardShop, Self::SpecialtyShop, Self::DreamsignMarket];
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct ShopStockCatalog {
+    pub card_shop: ShopStock,
+    pub specialty_shop: ShopStock,
+    pub dreamsign_market: ShopStock,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -148,19 +144,15 @@ pub struct ExplorationRules {
 pub fn lower(source: EconomyCatalog) -> Result<toml::Value> {
     validate(&source)?;
 
-    let [card_shop, specialty_shop, dreamsign_market] = source.shop.stock.as_slice() else {
-        unreachable!("validated shop stock cardinality");
-    };
-
     let compatibility = CompatibilityEconomy {
         schema_version: 1,
         journey: source.journey.into(),
         shop: CompatibilityShop {
             prices: source.shop.prices.into(),
             stock: CompatibilityStockCatalog {
-                card_shop: CompatibilityStock::from(card_shop),
-                specialty_shop: CompatibilityStock::from(specialty_shop),
-                dreamsign_market: CompatibilityStock::from(dreamsign_market),
+                card_shop: CompatibilityStock::from(&source.shop.stock.card_shop),
+                specialty_shop: CompatibilityStock::from(&source.shop.stock.specialty_shop),
+                dreamsign_market: CompatibilityStock::from(&source.shop.stock.dreamsign_market),
             },
             discounts: source.shop.discounts.into(),
             reroll: source.shop.reroll.into(),
@@ -181,9 +173,6 @@ pub fn lower(source: EconomyCatalog) -> Result<toml::Value> {
 }
 
 fn validate(source: &EconomyCatalog) -> Result<()> {
-    validate_identity_order("shop stock", &source.shop.stock, &ShopKind::ALL, |entry| {
-        entry.shop
-    })?;
     validate_weighted(
         "discount slot counts",
         &source.shop.discounts.slot_counts,
@@ -247,26 +236,6 @@ fn validate_range(label: &str, range: IntegerRange) -> Result<()> {
     ensure!(
         range.min <= range.max,
         "{label} minimum must not exceed maximum"
-    );
-    Ok(())
-}
-
-fn validate_identity_order<T, I>(
-    label: &str,
-    entries: &[T],
-    expected: &[I],
-    identity: impl Fn(&T) -> I,
-) -> Result<()>
-where
-    I: Copy + Eq,
-{
-    ensure!(
-        entries.len() == expected.len()
-            && entries
-                .iter()
-                .zip(expected)
-                .all(|(entry, expected)| identity(entry) == *expected),
-        "{label} must define every identity exactly once in canonical order"
     );
     Ok(())
 }
@@ -492,23 +461,20 @@ mod tests {
                     specialty_card: 22,
                     dreamsign: 7,
                 },
-                stock: vec![
-                    ShopStock {
-                        shop: ShopKind::CardShop,
+                stock: ShopStockCatalog {
+                    card_shop: ShopStock {
                         card_slots: 1,
                         dreamsign_slots: 2,
                     },
-                    ShopStock {
-                        shop: ShopKind::SpecialtyShop,
+                    specialty_shop: ShopStock {
                         card_slots: 3,
                         dreamsign_slots: 4,
                     },
-                    ShopStock {
-                        shop: ShopKind::DreamsignMarket,
+                    dreamsign_market: ShopStock {
                         card_slots: 5,
                         dreamsign_slots: 6,
                     },
-                ],
+                },
                 discounts: DiscountRules {
                     slot_counts: vec![
                         WeightedValue {
@@ -652,13 +618,6 @@ mod tests {
         let mut source = catalog();
         source.purge.marginal_costs.clear();
         assert_error_contains(source, "purge marginal costs must not be empty");
-    }
-
-    #[test]
-    fn rejects_missing_duplicate_and_out_of_order_closed_identities() {
-        let mut source = catalog();
-        source.shop.stock.swap(0, 1);
-        assert_error_contains(source, "shop stock");
     }
 
     fn assert_error_contains(source: EconomyCatalog, expected: &str) {

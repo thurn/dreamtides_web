@@ -97,8 +97,8 @@ export interface ExplorationSiteView {
   fullArt: ArtRef;
   /** Opening authored prose shown once the frame break fills the viewport. */
   narrative: string;
-  /** The two authored actions for this encounter. */
-  actions: readonly [ExplorationActionView, ExplorationActionView];
+  /** The authored actions for this encounter, in reveal order. */
+  actions: readonly ExplorationActionView[];
   /** Persisted action identity after one choice has resolved. */
   resolvedActionId: string | null;
   /** Exact UUID-backed objects granted by the persisted resolution. */

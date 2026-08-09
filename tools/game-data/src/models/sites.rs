@@ -114,13 +114,6 @@ pub struct FallbackSiteType {
 pub struct RandomSiteRules {
     pub destinations: Vec<SiteType>,
     pub home_choice_count: u32,
-    pub away_choice_count: u32,
-    pub insufficient_destinations: InsufficientDestinations,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum InsufficientDestinations {
-    Fail,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -211,8 +204,6 @@ struct CompatibilityRandomSiteRules {
     destinations: Vec<&'static str>,
     #[serde(rename = "home-choice-count")]
     home_choice_count: u32,
-    #[serde(rename = "away-choice-count")]
-    away_choice_count: u32,
     #[serde(rename = "insufficient-destinations")]
     insufficient_destinations: &'static str,
 }
@@ -265,10 +256,7 @@ fn lower_with_glossary_map(
             .map(SiteType::as_compat)
             .collect(),
         home_choice_count: source.random_site.home_choice_count,
-        away_choice_count: source.random_site.away_choice_count,
-        insufficient_destinations: match source.random_site.insufficient_destinations {
-            InsufficientDestinations::Fail => "fail",
-        },
+        insufficient_destinations: "fail",
     };
     let card_choices = CompatibilityCardChoiceRules {
         duplication: lower_choice_limits(source.card_choices.duplication),
@@ -358,12 +346,8 @@ fn validate(source: &SitesCatalog) -> Result<()> {
         );
     }
     ensure!(
-        source.random_site.home_choice_count == 3,
-        "Random Site home choice count must be 3"
-    );
-    ensure!(
-        source.random_site.away_choice_count == 1,
-        "Random Site away choice count must be 1"
+        (2..=3).contains(&source.random_site.home_choice_count),
+        "Random Site home choice count must be between two and three"
     );
     ensure!(
         source.random_site.home_choice_count as usize <= destinations.len(),
@@ -458,8 +442,6 @@ mod tests {
                     SiteType::Exploration,
                 ],
                 home_choice_count: 3,
-                away_choice_count: 1,
-                insufficient_destinations: InsufficientDestinations::Fail,
             },
             card_choices: CardChoiceRules {
                 duplication: CardChoiceLimits {
@@ -520,6 +502,18 @@ mod tests {
 
     #[test]
     fn rejects_identity_reference_and_cross_field_invariant_violations() {
+        let mut two_choices = synthetic_catalog();
+        two_choices.random_site.home_choice_count = 2;
+        lower_with_glossary_map(two_choices, &SYNTHETIC_GLOSSARY_ID_MAP).unwrap();
+
+        let mut one_choice = synthetic_catalog();
+        one_choice.random_site.home_choice_count = 1;
+        assert_error_contains(one_choice, "between two and three");
+
+        let mut four_choices = synthetic_catalog();
+        four_choices.random_site.home_choice_count = 4;
+        assert_error_contains(four_choices, "between two and three");
+
         let mut duplicate_site = synthetic_catalog();
         duplicate_site.site_types[1].site = duplicate_site.site_types[0].site;
         assert_error_contains(duplicate_site, "duplicate site metadata");

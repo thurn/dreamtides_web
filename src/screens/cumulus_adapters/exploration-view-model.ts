@@ -1396,7 +1396,7 @@ export function buildExplorationSiteView(params: {
       ? []
       : [actionView(action, offer, params.state, params.content)];
   });
-  if (actions.length !== 2) return null;
+  if (actions.length < 1 || actions.length > 4) return null;
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
   const reward = rewardForResolution(
@@ -1419,7 +1419,7 @@ export function buildExplorationSiteView(params: {
     guide: projectGuideView(params.guide, params.guideLine),
     card: { cardId: asCardId(sourceCard.id), displaySnapshot: sourceCard },
     narrative: encounter.prose,
-    actions: actions as [ExplorationActionView, ExplorationActionView],
+    actions,
     resolvedActionId: params.runtime.resolution?.actionId ?? null,
     reward,
     outcomeKind,

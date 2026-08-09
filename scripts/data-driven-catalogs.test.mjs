@@ -24,6 +24,16 @@ describe("data-driven catalog runtime generation", () => {
     expect(first.foldHash).toBe(first.contentHash);
   });
 
+  it("preserves a configured Gamble subset and order", () => {
+    const source = parsed("gamble.toml");
+    source.games = [source.games[4], source.games[0]];
+    const result = compileGambleData(source);
+    expect(result.games.map((game) => game.id)).toEqual([
+      "blackjack",
+      "gravok-three-gate-wager",
+    ]);
+  });
+
   it("normalizes closed Transfiguration variants without form switches", () => {
     const result = compileTransfigurationData(parsed("transfiguration.toml"));
     expect(result.forms.map((form) => form.id)).toHaveLength(9);
@@ -31,6 +41,21 @@ describe("data-driven catalog runtime generation", () => {
     expect(result.forms[0].operation.kind).toBe("halveEnergyCost");
     expect(result.site.standardChoiceLimit).toBe(3);
     expect(result.site.enhancedChoiceLimit).toBeNull();
+  });
+
+  it("preserves a configured Transfiguration subset and variable limits", () => {
+    const source = parsed("transfiguration.toml");
+    source.forms = source.forms.slice(0, 3).reverse();
+    source.site.standard_choice_limit = "All";
+    source.site.enhanced_choice_limit = { Count: 2 };
+    const result = compileTransfigurationData(source);
+    expect(result.forms.map((form) => form.id)).toEqual([
+      "Kindled",
+      "Amplified",
+      "Empowered",
+    ]);
+    expect(result.site.standardChoiceLimit).toBeNull();
+    expect(result.site.enhancedChoiceLimit).toBe(2);
   });
 
   it("keeps presentation-only tide metadata outside gameplay folds", () => {

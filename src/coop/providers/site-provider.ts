@@ -494,8 +494,8 @@ function buildGambleFallbackRuntime(
 }
 
 /**
- * Select up to three deck entries to surface at a card-choice site (the whole
- * deck at an enhanced site). Candidate order is a deterministic rng shuffle; a
+ * Select the configured number of deck entries to surface at a card-choice
+ * site. Candidate order is a deterministic rng shuffle; a
  * transfiguration site skips entries with no eligible form.
  */
 function selectCardChoiceEntryIds(

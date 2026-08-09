@@ -26,8 +26,7 @@ pub struct RarityCap {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct Pool {
-    pub default_strategy: Strategy,
-    pub strategies: IndexMap<Strategy, StrategyDefinition>,
+    pub tides4: StrategyDefinition,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -46,11 +45,6 @@ pub enum Rarity {
     Legendary,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Hash)]
-pub enum Strategy {
-    Tides4,
-}
-
 impl Rarity {
     fn as_compat(self) -> &'static str {
         match self {
@@ -62,22 +56,7 @@ impl Rarity {
     }
 }
 
-impl Strategy {
-    fn as_compat(self) -> &'static str {
-        match self {
-            Self::Tides4 => "tides4",
-        }
-    }
-}
-
 pub fn lower(source: DraftDocument) -> anyhow::Result<toml::Value> {
-    if !source
-        .pool
-        .strategies
-        .contains_key(&source.pool.default_strategy)
-    {
-        anyhow::bail!("draft default_strategy has no matching strategy definition");
-    }
     let mut root = toml::map::Map::new();
     root.insert("schema-version".into(), 1_i64.into());
     root.insert(
@@ -113,20 +92,16 @@ pub fn lower(source: DraftDocument) -> anyhow::Result<toml::Value> {
         ),
     );
     let mut pool = toml::map::Map::new();
+    pool.insert("default-strategy".into(), "tides4".into());
+    let definition = source.pool.tides4;
     pool.insert(
-        "default-strategy".into(),
-        source.pool.default_strategy.as_compat().into(),
+        "tides4".into(),
+        toml::Value::Table(toml::map::Map::from_iter([
+            ("deal-size".into(), i64::from(definition.deal_size).into()),
+            ("copy-cap".into(), i64::from(definition.copy_cap).into()),
+            ("max-facets".into(), i64::from(definition.max_facets).into()),
+        ])),
     );
-    for (strategy, definition) in source.pool.strategies {
-        pool.insert(
-            strategy.as_compat().into(),
-            toml::Value::Table(toml::map::Map::from_iter([
-                ("deal-size".into(), i64::from(definition.deal_size).into()),
-                ("copy-cap".into(), i64::from(definition.copy_cap).into()),
-                ("max-facets".into(), i64::from(definition.max_facets).into()),
-            ])),
-        );
-    }
     root.insert("pool".into(), toml::Value::Table(pool));
     Ok(toml::Value::Table(root))
 }
@@ -149,15 +124,11 @@ mod tests {
                 },
             )]),
             pool: Pool {
-                default_strategy: Strategy::Tides4,
-                strategies: IndexMap::from([(
-                    Strategy::Tides4,
-                    StrategyDefinition {
-                        deal_size: 150,
-                        copy_cap: 2,
-                        max_facets: 3,
-                    },
-                )]),
+                tides4: StrategyDefinition {
+                    deal_size: 150,
+                    copy_cap: 2,
+                    max_facets: 3,
+                },
             },
         }
     }
@@ -170,18 +141,6 @@ mod tests {
         assert_eq!(
             output["rarity-caps"][0]["rarity"].as_str(),
             Some("Legendary")
-        );
-    }
-
-    #[test]
-    fn rejects_a_missing_default_strategy() {
-        let mut source = document();
-        source.pool.strategies.clear();
-        assert!(
-            lower(source)
-                .unwrap_err()
-                .to_string()
-                .contains("default_strategy")
         );
     }
 }

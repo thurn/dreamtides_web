@@ -84,7 +84,7 @@ describe("compiled guide and site artifact loaders", () => {
         sites.randomSite.destinations = ["Battle" as never];
       },
       (sites) => {
-        sites.randomSite.homeChoiceCount = 2;
+        sites.randomSite.homeChoiceCount = 4;
       },
       (sites) => {
         sites.siteTypes.Shop.glossaryId = "missing-fixture-glossary";

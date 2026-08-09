@@ -21,7 +21,6 @@ function demoPresentation(
     glyph: `transfiguration${id}`,
     accentColor: "#9b8afb",
     tintColor: "#c9c1ff",
-    displayOrder: 0,
     merchantAllowed: true,
     eligibility: { kind: "positiveEnergyCost" },
     operation: { kind: "halveEnergyCost", rounding: "Down", minimum: 0 },

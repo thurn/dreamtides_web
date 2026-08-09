@@ -86,7 +86,7 @@ describe("catalog-driven Transfiguration predicates", () => {
   it("derives eligible order solely from the injected catalog", () => {
     const reversed = {
       ...data,
-      site: { ...data.site, formOrder: [...data.site.formOrder].reverse() },
+      forms: [...data.forms].reverse(),
     };
     const card = makeCard({ amplifiedText: "Deal 5 damage." });
     expect(eligibleTransfigurations(reversed, card)).toEqual(

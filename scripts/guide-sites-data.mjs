@@ -411,7 +411,6 @@ export function compileSitesData(sourceValue, catalogs = {}) {
   const random = keys(root["random-site"], file, "random-site", [
     "destinations",
     "home-choice-count",
-    "away-choice-count",
     "insufficient-destinations",
   ]);
   const destinations = unique(
@@ -440,13 +439,7 @@ export function compileSitesData(sourceValue, catalogs = {}) {
       random["home-choice-count"],
       file,
       "random-site.home-choice-count",
-      { min: 2 },
-    ),
-    awayChoiceCount: number(
-      random["away-choice-count"],
-      file,
-      "random-site.away-choice-count",
-      { min: 1 },
+      { min: 2, max: 3 },
     ),
     insufficientDestinations: exactIdentity(
       random["insufficient-destinations"],
@@ -455,18 +448,6 @@ export function compileSitesData(sourceValue, catalogs = {}) {
       "random-site.insufficient-destinations",
     ),
   };
-  if (randomSite.awayChoiceCount !== 1)
-    fail(
-      file,
-      "random-site.away-choice-count",
-      "current materializer requires 1",
-    );
-  if (randomSite.homeChoiceCount !== 3)
-    fail(
-      file,
-      "random-site.home-choice-count",
-      "current Random Site screen requires exactly 3",
-    );
   if (randomSite.homeChoiceCount > destinations.length)
     fail(
       file,

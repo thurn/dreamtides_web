@@ -131,7 +131,7 @@ export interface LadderClimbResultView {
   /** Stable result identity for animation replay. */
   id: string;
   /** One-based attempt that produced this card. */
-  attemptNumber: 1 | 2 | 3 | 4;
+  attemptNumber: number;
   /** Inclusive rank target shown before this attempt was drawn. */
   targetRank: PlayingCardRank;
   card: {
@@ -157,7 +157,7 @@ export interface LadderClimbSiteView {
   rewardDreamsign: DreamsignData;
   /** Only the currently unlocked attempt; future attempts stay undisclosed. */
   nextDraw: {
-    attemptNumber: 1 | 2 | 3 | 4;
+    attemptNumber: number;
     targetRank: PlayingCardRank;
     cost: number;
     canAfford: boolean;
@@ -1932,7 +1932,7 @@ function StarwayStairsScreen({
                             }
                             essenceGained={
                               !view.result.busted &&
-                              view.result.tierNumber === 3
+                              view.result.tierNumber === view.tiers.length
                                 ? view.result.prizeAtRisk
                                 : undefined
                             }

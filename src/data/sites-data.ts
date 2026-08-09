@@ -82,7 +82,6 @@ function isSitesData(value: unknown): value is SitesData {
     !hasExactKeys(value.randomSite, [
       "destinations",
       "homeChoiceCount",
-      "awayChoiceCount",
       "insufficientDestinations",
       "guideId",
     ]) ||
@@ -112,7 +111,7 @@ function isSitesData(value: unknown): value is SitesData {
   const random = value.randomSite;
   if (
     !Array.isArray(random.destinations) ||
-    random.destinations.length < 3 ||
+    random.destinations.length < 1 ||
     random.destinations.some(
       (destination) =>
         !RANDOM_SITE_DESTINATION_TYPES.includes(
@@ -120,9 +119,8 @@ function isSitesData(value: unknown): value is SitesData {
         ),
     ) ||
     new Set(random.destinations).size !== random.destinations.length ||
-    random.homeChoiceCount !== 3 ||
+    !isInteger(random.homeChoiceCount, { min: 2, max: 3 }) ||
     random.homeChoiceCount > random.destinations.length ||
-    random.awayChoiceCount !== 1 ||
     random.insufficientDestinations !== "fail" ||
     !isNonEmptyString(random.guideId)
   )

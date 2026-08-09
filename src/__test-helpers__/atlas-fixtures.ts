@@ -99,7 +99,6 @@ export const MINIMAL_SITES_DATA: SitesData = {
       "Exploration",
     ],
     homeChoiceCount: 3,
-    awayChoiceCount: 1,
     insufficientDestinations: "fail",
     guideId: "fixture-random-guide",
   },

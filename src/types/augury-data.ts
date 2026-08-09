@@ -41,8 +41,6 @@ export interface AuguryData {
   contentHash: string;
   foldHash: string;
   encounter: Readonly<{
-    offerCount: 2;
-    distinctFamilies: true;
     allowDecline: boolean;
   }>;
   archetypes: readonly AuguryArchetypeData[];

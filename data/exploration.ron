@@ -2,8 +2,6 @@
 
 #![enable(implicit_some)]
 ExplorationCatalog(
-  actions_per_encounter: 2,
-
   effects: [
     EffectDefinition(
       kind: PurgeAndCopy,

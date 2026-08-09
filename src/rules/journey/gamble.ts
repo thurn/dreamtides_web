@@ -831,7 +831,7 @@ export function cashOutStarwayStairs(
   );
 }
 
-/** Prepare another independent three-tier game after a terminal Starway round. */
+/** Prepare another independent configured-tier game after a terminal Starway round. */
 export function playAgainStarwayStairs(
   journey: JourneyState,
   payload: Record<string, unknown>,

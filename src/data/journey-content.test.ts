@@ -81,7 +81,6 @@ describe("loadJourneyContent", () => {
   }): void {
     const explorationData = {
       schemaVersion: explorationJson.schemaVersion,
-      actionsPerEncounter: explorationJson.actionsPerEncounter,
       contentHash: explorationJson.contentHash,
       foldHash: explorationJson.foldHash,
       effectKinds: explorationJson.effectKinds,

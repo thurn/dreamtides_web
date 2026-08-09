@@ -102,32 +102,12 @@ function isBenefit(value: unknown): boolean {
   );
 }
 
-function isFormAtIndex(
-  value: unknown,
-  index: number,
-): value is TransfigurationType {
-  switch (index) {
-    case 0:
-      return value === "Empowered";
-    case 1:
-      return value === "Amplified";
-    case 2:
-      return value === "Kindled";
-    case 3:
-      return value === "Inspired";
-    case 4:
-      return value === "Enduring";
-    case 5:
-      return value === "Hastened";
-    case 6:
-      return value === "Resonant";
-    case 7:
-      return value === "Attuned";
-    case 8:
-      return value === "Perfected";
-    default:
-      return false;
-  }
+function isFormId(value: unknown): value is TransfigurationType {
+  return dataFormIds().some((expected) => expected === value);
+}
+
+function glyphFor(id: TransfigurationType): string {
+  return `transfiguration${id}`;
 }
 
 export function parseTransfigurationData(value: unknown): TransfigurationData {
@@ -139,16 +119,16 @@ export function parseTransfigurationData(value: unknown): TransfigurationData {
     !isRecord(value.site) ||
     typeof value.site.rulesVersion !== "string" ||
     value.site.rulesVersion.trim() === "" ||
-    !finite(value.site.standardChoiceLimit) ||
-    value.site.standardChoiceLimit <= 0 ||
+    !(
+      value.site.standardChoiceLimit === null ||
+      (finite(value.site.standardChoiceLimit) &&
+        value.site.standardChoiceLimit > 0)
+    ) ||
     !(
       value.site.enhancedChoiceLimit === null ||
       (finite(value.site.enhancedChoiceLimit) &&
         value.site.enhancedChoiceLimit > 0)
     ) ||
-    !Array.isArray(value.site.formOrder) ||
-    value.site.formOrder.length !== 9 ||
-    !value.site.formOrder.every(isFormAtIndex) ||
     !isRecord(value.site.pricing) ||
     !finite(value.site.pricing.minimumCost) ||
     !finite(value.site.pricing.maximumCost) ||
@@ -165,16 +145,25 @@ export function parseTransfigurationData(value: unknown): TransfigurationData {
         isCostBand(band.band),
     ) ||
     !Array.isArray(value.forms) ||
-    value.forms.length !== 9
+    value.forms.length < 1 ||
+    value.forms.length > dataFormIds().length
   )
     throw new Error(
       "Failed to load Transfiguration data: malformed transfiguration-data.json",
     );
+  const formIds = new Set<TransfigurationType>();
+  for (const form of value.forms) {
+    if (!isRecord(form) || !isFormId(form.id) || formIds.has(form.id)) {
+      throw new Error(
+        "Failed to load Transfiguration data: malformed transfiguration-data.json",
+      );
+    }
+    formIds.add(form.id);
+  }
   const valid = value.forms.every(
-    (form, index) =>
+    (form) =>
       isRecord(form) &&
-      isFormAtIndex(form.id, index) &&
-      form.displayOrder === index &&
+      isFormId(form.id) &&
       typeof form.name === "string" &&
       form.name.trim() !== "" &&
       COLOR.test(String(form.accentColor)) &&
@@ -183,14 +172,20 @@ export function parseTransfigurationData(value: unknown): TransfigurationData {
       typeof form.selectedCardDescription === "string" &&
       typeof form.accessibilityDescription === "string" &&
       typeof form.glossaryUuid === "string" &&
-      typeof form.glyph === "string" &&
+      form.glyph === glyphFor(form.id) &&
       typeof form.merchantAllowed === "boolean" &&
       isEligibility(form.eligibility) &&
       isOperation(form.operation) &&
       isPricing(form.pricing) &&
       isBenefit(form.benefit),
   );
-  if (!valid)
+  const referencesConfiguredForms = value.forms.every((form) => {
+    if (!isRecord(form) || !isRecord(form.operation) || form.operation.kind !== "applyEligibleForms") return true;
+    const order = form.operation.formOrder;
+    return Array.isArray(order) && new Set(order).size === order.length &&
+      order.every((id) => isFormId(id) && formIds.has(id) && id !== form.id);
+  });
+  if (!valid || !referencesConfiguredForms)
     throw new Error(
       "Failed to load Transfiguration data: malformed transfiguration-data.json",
     );

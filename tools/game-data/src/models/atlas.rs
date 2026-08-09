@@ -57,7 +57,7 @@ pub struct AtlasCatalog {
     pub graph: GraphRules,
     pub dreamscape_selection: DreamscapeSelectionRules,
     pub site_composition: SiteCompositionRules,
-    pub fill_profiles: IndexMap<FillTiming, FillProfile>,
+    pub fill_profiles: IndexMap<String, FillProfile>,
     pub known_dreamsign: KnownDreamsignRules,
     pub boss: BossDefinition,
     pub presentation: Presentation,
@@ -84,13 +84,13 @@ pub enum LayerRules {
     Standard {
         node_count: IntegerRange,
         site_count: IntegerRange,
-        fill_profile: FillTiming,
+        fill_profile: String,
         #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
         mandatory_sites: IndexMap<SiteType, u32>,
     },
     Boss {
         site_count: IntegerRange,
-        fill_profile: FillTiming,
+        fill_profile: String,
         #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
         mandatory_sites: IndexMap<SiteType, u32>,
     },
@@ -161,25 +161,12 @@ pub struct DreamscapeSelectionRules {
     pub repeat_discourage_strength: f64,
     pub exclude_connected_repeats: bool,
     pub exclude_same_layer_repeats: bool,
-    pub exhaustion_fallback: ExhaustionFallback,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum ExhaustionFallback {
-    AllowRepeats,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct SiteCompositionRules {
-    pub unique_non_draft_sites: bool,
     pub known_dreamsign_site: SiteType,
-    pub mandatory_capacity_behavior: MandatoryCapacityBehavior,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum MandatoryCapacityBehavior {
-    OmitFill,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -187,21 +174,6 @@ pub enum MandatoryCapacityBehavior {
 pub struct FillProfile {
     pub signature_site_weight: f64,
     pub site_weights: IndexMap<SiteType, f64>,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Hash)]
-pub enum FillTiming {
-    Early,
-    Late,
-}
-
-impl FillTiming {
-    fn as_compat(self) -> &'static str {
-        match self {
-            Self::Early => "early",
-            Self::Late => "late",
-        }
-    }
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Hash)]
@@ -405,19 +377,19 @@ fn validate(source: &AtlasCatalog) -> Result<()> {
         }
     }
 
-    let profile_timings = source.fill_profiles.keys().copied().collect::<HashSet<_>>();
-    for profile in source.fill_profiles.values() {
+    ensure!(
+        !source.fill_profiles.is_empty(),
+        "fill profiles must contain at least one profile"
+    );
+    for (id, profile) in &source.fill_profiles {
+        ensure!(!id.trim().is_empty(), "fill profile id must not be blank");
         validate_positive_finite("signature_site_weight", profile.signature_site_weight)?;
         for weight in profile.site_weights.values() {
             validate_positive_finite("site weight", *weight)?;
         }
     }
-    ensure!(
-        profile_timings == HashSet::from([FillTiming::Early, FillTiming::Late]),
-        "fill profiles must define Early and Late exactly once"
-    );
     for layer in &source.layers {
-        let profile = match layer.rules {
+        let profile = match &layer.rules {
             LayerRules::Starter => None,
             LayerRules::Standard { fill_profile, .. } | LayerRules::Boss { fill_profile, .. } => {
                 Some(fill_profile)
@@ -425,7 +397,7 @@ fn validate(source: &AtlasCatalog) -> Result<()> {
         };
         if let Some(timing) = profile {
             ensure!(
-                source.fill_profiles.contains_key(&timing),
+                source.fill_profiles.contains_key(timing),
                 "Atlas layer references an undefined fill profile"
             );
         }
@@ -530,7 +502,7 @@ fn lower_layer(layer: LayerDefinition, defaults: &LayerDefaults) -> toml::Value 
             table.insert("role".into(), "standard".into());
             table.insert("node-count".into(), range_table(node_count));
             table.insert("site-count".into(), range_table(site_count));
-            table.insert("fill-profile".into(), fill_profile.as_compat().into());
+            table.insert("fill-profile".into(), fill_profile.into());
             table.insert("mandatory-sites".into(), site_count_table(mandatory_sites));
         }
         LayerRules::Boss {
@@ -541,7 +513,7 @@ fn lower_layer(layer: LayerDefinition, defaults: &LayerDefaults) -> toml::Value 
             table.insert("role".into(), "boss".into());
             table.insert("node-count".into(), range_table(defaults.boss_node_count));
             table.insert("site-count".into(), range_table(site_count));
-            table.insert("fill-profile".into(), fill_profile.as_compat().into());
+            table.insert("fill-profile".into(), fill_profile.into());
             table.insert("mandatory-sites".into(), site_count_table(mandatory_sites));
         }
     }
@@ -613,39 +585,24 @@ fn lower_dreamscape_selection(
             "exclude-same-layer-repeats".into(),
             value.exclude_same_layer_repeats.into(),
         ),
-        (
-            "exhaustion-fallback".into(),
-            match value.exhaustion_fallback {
-                ExhaustionFallback::AllowRepeats => "allow-repeats",
-            }
-            .into(),
-        ),
+        ("exhaustion-fallback".into(), "allow-repeats".into()),
     ])
 }
 
 fn lower_site_composition(value: SiteCompositionRules) -> toml::map::Map<String, toml::Value> {
     toml::map::Map::from_iter([
-        (
-            "unique-non-draft-sites".into(),
-            value.unique_non_draft_sites.into(),
-        ),
+        ("unique-non-draft-sites".into(), true.into()),
         (
             "known-dreamsign-site".into(),
             value.known_dreamsign_site.as_compat().into(),
         ),
-        (
-            "mandatory-capacity-behavior".into(),
-            match value.mandatory_capacity_behavior {
-                MandatoryCapacityBehavior::OmitFill => "omit-fill",
-            }
-            .into(),
-        ),
+        ("mandatory-capacity-behavior".into(), "omit-fill".into()),
     ])
 }
 
-fn lower_fill_profile(timing: FillTiming, profile: FillProfile) -> toml::Value {
+fn lower_fill_profile(id: String, profile: FillProfile) -> toml::Value {
     toml::Value::Table(toml::map::Map::from_iter([
-        ("id".into(), timing.as_compat().into()),
+        ("id".into(), id.into()),
         (
             "signature-site-weight".into(),
             profile.signature_site_weight.into(),
@@ -751,17 +708,13 @@ mod tests {
                     LayerPosition::One => LayerRules::Starter,
                     LayerPosition::Seven => LayerRules::Boss {
                         site_count: IntegerRange { min: 4, max: 8 },
-                        fill_profile: FillTiming::Late,
+                        fill_profile: "late".into(),
                         mandatory_sites: IndexMap::new(),
                     },
                     _ => LayerRules::Standard {
                         node_count: IntegerRange { min: 2, max: 4 },
                         site_count: IntegerRange { min: 4, max: 8 },
-                        fill_profile: if index < 4 {
-                            FillTiming::Early
-                        } else {
-                            FillTiming::Late
-                        },
+                        fill_profile: if index < 4 { "early" } else { "late" }.into(),
                         mandatory_sites: if index == 1 {
                             IndexMap::from([(SiteType::Draft, 2), (SiteType::Augury, 1)])
                         } else {
@@ -792,16 +745,13 @@ mod tests {
                 repeat_discourage_strength: 3.0,
                 exclude_connected_repeats: true,
                 exclude_same_layer_repeats: false,
-                exhaustion_fallback: ExhaustionFallback::AllowRepeats,
             },
             site_composition: SiteCompositionRules {
-                unique_non_draft_sites: true,
                 known_dreamsign_site: SiteType::Reward,
-                mandatory_capacity_behavior: MandatoryCapacityBehavior::OmitFill,
             },
             fill_profiles: IndexMap::from([
                 (
-                    FillTiming::Early,
+                    "early".into(),
                     FillProfile {
                         signature_site_weight: 4.0,
                         site_weights: IndexMap::from([
@@ -811,7 +761,7 @@ mod tests {
                     },
                 ),
                 (
-                    FillTiming::Late,
+                    "late".into(),
                     FillProfile {
                         signature_site_weight: 6.0,
                         site_weights: IndexMap::from([
@@ -926,16 +876,24 @@ mod tests {
     }
 
     #[test]
-    fn rejects_missing_profiles_invalid_order_and_ranges() {
+    fn rejects_missing_referenced_profiles_invalid_order_and_ranges() {
+        let mut custom_profile = catalog();
+        let profile = custom_profile.fill_profiles["early"].clone();
+        custom_profile.fill_profiles.insert("middle".into(), profile);
+        if let LayerRules::Standard { fill_profile, .. } =
+            &mut custom_profile.layers[2].rules
+        {
+            *fill_profile = "middle".into();
+        }
+        lower(custom_profile).unwrap();
+
         let mut missing_profile = catalog();
-        missing_profile
-            .fill_profiles
-            .shift_remove(&FillTiming::Early);
+        missing_profile.fill_profiles.shift_remove("early");
         assert!(
             lower(missing_profile)
                 .unwrap_err()
                 .to_string()
-                .contains("Early and Late")
+                .contains("undefined fill profile")
         );
 
         let mut invalid_order = catalog();

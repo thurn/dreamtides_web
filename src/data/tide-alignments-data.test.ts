@@ -35,12 +35,18 @@ describe("tide alignments data", () => {
     expect(tideAlignmentForDeckColor("orange", data).id).toBe("ember");
   });
 
-  it("rejects missing, reordered, and malformed presentation", () => {
+  it("accepts reordered entries and rejects missing or malformed presentation", () => {
     const reordered = structuredClone(syntheticData()) as {
       alignments: unknown[];
     };
     reordered.alignments.reverse();
-    expect(() => parseTideAlignmentsData(reordered)).toThrow(/malformed/u);
+    expect(parseTideAlignmentsData(reordered).alignments[0].id).toBe("shadow");
+
+    const missing = structuredClone(syntheticData()) as {
+      alignments: unknown[];
+    };
+    missing.alignments.pop();
+    expect(() => parseTideAlignmentsData(missing)).toThrow(/malformed/u);
 
     const invalid = structuredClone(syntheticData()) as {
       alignments: Array<Record<string, unknown>>;

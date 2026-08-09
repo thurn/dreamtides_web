@@ -106,19 +106,19 @@ export function validateTutorialJourneyPool(
     invalid("opening-dreamsigns must not contain duplicate UUIDs");
   }
 
-  if (!Array.isArray(source.tides) || source.tides.length !== 3) {
-    invalid("tides must contain exactly three entries");
+  if (!Array.isArray(source.tides) || source.tides.length === 0) {
+    invalid("tides must contain at least one entry");
   }
 
   const rawOpeningOffers = source["opening-offers"];
-  if (!Array.isArray(rawOpeningOffers) || rawOpeningOffers.length !== 2) {
-    invalid("opening-offers must contain exactly two offers");
+  if (!Array.isArray(rawOpeningOffers) || rawOpeningOffers.length === 0) {
+    invalid("opening-offers must contain at least one offer");
   }
   const openingCardIds = new Set<string>();
   const openingOffers = rawOpeningOffers.map((value, offerIndex) => {
     const label = `opening-offers[${String(offerIndex)}]`;
-    if (!Array.isArray(value) || value.length !== 4) {
-      return invalid(`${label} must contain exactly four card UUIDs`);
+    if (!Array.isArray(value) || value.length === 0 || value.length > 4) {
+      return invalid(`${label} must contain between one and four card UUIDs`);
     }
     return value.map((cardIdValue, cardIndex) => {
       const cardId = nonBlankString(
@@ -227,7 +227,7 @@ export function parseTutorialJourneyPool(source: string): TutorialJourneyPool {
   return validateTutorialJourneyPool(parse(source));
 }
 
-/** The fixed three-tide package used by the tutorial journey handoff. */
+/** The authored package used by the tutorial journey handoff. */
 export const TUTORIAL_JOURNEY_POOL = parseTutorialJourneyPool(
   tutorialJourneyPoolSource,
 );

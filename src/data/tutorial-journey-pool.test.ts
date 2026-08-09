@@ -111,6 +111,24 @@ describe("validateTutorialJourneyPool", () => {
     expect(pool.openingDreamsignIds).toEqual([OPENING_DREAMSIGN_ID]);
   });
 
+  it("accepts a single tide and variably sized opening offers", () => {
+    const source = syntheticSource();
+    source.tides = [
+      {
+        id: "one-tide",
+        name: "One Tide",
+        description: "One complete synthetic tide.",
+        type: "valor",
+        cards: CARD_IDS.map((id) => ({ id, copies: 1 })),
+      },
+    ];
+    source["opening-offers"] = [[CARD_IDS[0]], CARD_IDS.slice(1, 4)];
+
+    const pool = validateTutorialJourneyPool(source, 8);
+    expect(pool.tides).toHaveLength(1);
+    expect(pool.openingOffers.map((offer) => offer.length)).toEqual([1, 3]);
+  });
+
   it("rejects pool-wide duplicate card UUIDs", () => {
     const source = syntheticSource();
     const tides = source.tides as Array<Record<string, unknown>>;

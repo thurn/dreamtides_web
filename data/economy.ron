@@ -6,13 +6,11 @@ EconomyCatalog(
 
   shop: (
     prices: (standard_card: 100, specialty_card: 200, dreamsign: 50),
-    stock: [
-      ShopStock(shop: CardShop, card_slots: 5, dreamsign_slots: 0),
-
-      ShopStock(shop: SpecialtyShop, card_slots: 5, dreamsign_slots: 0),
-
-      ShopStock(shop: DreamsignMarket, card_slots: 0, dreamsign_slots: 3),
-    ],
+    stock: (
+      card_shop: (card_slots: 5, dreamsign_slots: 0),
+      specialty_shop: (card_slots: 5, dreamsign_slots: 0),
+      dreamsign_market: (card_slots: 0, dreamsign_slots: 3),
+    ),
     discounts: (
       // Relative weights select how many generated offers receive a discount.
       slot_counts: [(value: 1, weight: 1), (value: 2, weight: 1)],

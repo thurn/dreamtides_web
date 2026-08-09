@@ -114,7 +114,7 @@ export interface ExplorationEditorEncounter {
   cardAbilityText: string;
   imageNumber: number;
   prose: string;
-  actions: [ExplorationEditorAction, ExplorationEditorAction];
+  actions: ExplorationEditorAction[];
 }
 
 export interface ExplorationEditorServerData {
@@ -141,7 +141,7 @@ export interface ExplorationEditorClient {
   }): Promise<{ data: ExplorationEditorServerData; clientRevision: number }>;
   saveAction(request: {
     cardId: string;
-    slot: 0 | 1;
+    slot: number;
     action: ExplorationEditorAction;
     clientRevision: number;
   }): Promise<{ data: ExplorationEditorServerData; clientRevision: number }>;

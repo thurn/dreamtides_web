@@ -14,7 +14,6 @@ export function transfigurationFormFixture(
     glyph: `transfiguration${id}`,
     accentColor: ["#", "222222"].join("") as `#${string}`,
     tintColor: ["#", "bbbbbb"].join("") as `#${string}`,
-    displayOrder: 0,
     merchantAllowed: true,
     eligibility: { kind: "positiveEnergyCost" },
     operation: { kind: "halveEnergyCost", rounding: "Down", minimum: 0 },

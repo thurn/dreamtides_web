@@ -440,8 +440,8 @@ function validateExplorationDocument(document, templates, catalogs) {
     }
     encounterIds.add(normalizedCardId);
     requiredString(encounter.prose, `encounter ${cardId} prose`);
-    if (!Array.isArray(encounter.action) || encounter.action.length !== 2) {
-      throw editorError("INVALID_EXPLORATION", `Encounter ${cardId} must have two actions.`);
+    if (!Array.isArray(encounter.action) || encounter.action.length < 1 || encounter.action.length > 4) {
+      throw editorError("INVALID_EXPLORATION", `Encounter ${cardId} must have between one and four actions.`);
     }
     for (const actionRaw of encounter.action) {
       const action = camelAction(actionRaw);

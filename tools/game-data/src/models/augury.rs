@@ -27,8 +27,6 @@ pub struct AuguryCatalog {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct EncounterRules {
-    pub offer_count: u32,
-    pub distinct_families: bool,
     pub allow_decline: bool,
 }
 
@@ -451,17 +449,10 @@ pub fn lower(source: AuguryCatalog) -> Result<toml::Value> {
     let encounter = source.encounter;
     root.insert(
         "encounter".into(),
-        toml::Value::Table(toml::map::Map::from_iter([
-            (
-                "offer-count".into(),
-                i64::from(encounter.offer_count).into(),
-            ),
-            (
-                "distinct-families".into(),
-                encounter.distinct_families.into(),
-            ),
-            ("allow-decline".into(), encounter.allow_decline.into()),
-        ])),
+        toml::Value::Table(toml::map::Map::from_iter([(
+            "allow-decline".into(),
+            encounter.allow_decline.into(),
+        )])),
     );
     root.insert(
         "archetype".into(),
@@ -539,12 +530,6 @@ fn lower_presentation_text(source: PresentationText) -> toml::Value {
 }
 
 fn validate(source: &AuguryCatalog) -> Result<()> {
-    if source.encounter.offer_count != 2 {
-        bail!("encounter.offer_count must be 2");
-    }
-    if !source.encounter.distinct_families {
-        bail!("encounter.distinct_families must be true");
-    }
     let mut kinds = BTreeSet::new();
     let mut ids = BTreeSet::new();
     let mut families = BTreeSet::new();
@@ -727,8 +712,6 @@ mod tests {
         use ArchetypeAbility::*;
         AuguryCatalog {
             encounter: EncounterRules {
-                offer_count: 2,
-                distinct_families: true,
                 allow_decline: false,
             },
             archetypes: vec![
@@ -791,11 +774,6 @@ mod tests {
     fn lowers_every_ability_policy_quantity_shape_and_encounter_rule() {
         let output = lower(catalog()).unwrap();
         assert_eq!(output["schema-version"].as_integer(), Some(1));
-        assert_eq!(output["encounter"]["offer-count"].as_integer(), Some(2));
-        assert_eq!(
-            output["encounter"]["distinct-families"].as_bool(),
-            Some(true)
-        );
         assert_eq!(output["encounter"]["allow-decline"].as_bool(), Some(false));
         let archetypes = output["archetype"].as_array().unwrap();
         assert_eq!(archetypes.len(), 13);
@@ -849,7 +827,7 @@ mod tests {
     #[test]
     fn rejects_unknown_fields_and_unknown_enum_variants() {
         let source = r#"AuguryCatalog(
-          encounter: (offer_count: 2, distinct_families: true, allow_decline: true, surprise: true),
+          encounter: (allow_decline: true, surprise: true),
           archetypes: [],
         )"#;
         assert!(ron::from_str::<AuguryCatalog>(source).is_err());
@@ -1009,27 +987,6 @@ mod tests {
                 .unwrap_err()
                 .to_string()
                 .contains("granted_copies must be in [1, 4]")
-        );
-    }
-
-    #[test]
-    fn rejects_unsupported_encounter_rules() {
-        let mut offer_count = catalog();
-        offer_count.encounter.offer_count = 3;
-        assert!(
-            lower(offer_count)
-                .unwrap_err()
-                .to_string()
-                .contains("offer_count must be 2")
-        );
-
-        let mut repeated_families = catalog();
-        repeated_families.encounter.distinct_families = false;
-        assert!(
-            lower(repeated_families)
-                .unwrap_err()
-                .to_string()
-                .contains("distinct_families must be true")
         );
     }
 

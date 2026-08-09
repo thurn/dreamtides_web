@@ -1,6 +1,5 @@
 {
   "schemaVersion": 1,
-  "actionsPerEncounter": 2,
   "effectKinds": [
     {
       "kind": "purge-and-copy",
@@ -1792,6 +1791,6 @@
       ]
     }
   ],
-  "contentHash": "83a9887a416681c50f229b429962b84c589cf67bbbcd7c43b48782545416367c",
-  "foldHash": "83a9887a416681c50f229b429962b84c589cf67bbbcd7c43b48782545416367c"
+  "contentHash": "03294312115dd659423fb9d8f9491956a1866a45c69b6e7fd855531263577712",
+  "foldHash": "03294312115dd659423fb9d8f9491956a1866a45c69b6e7fd855531263577712"
 }

@@ -372,7 +372,6 @@ function makeRandomSite(
   mode: "single" | "homeChoice",
   candidates: RandomSiteDestinationType[],
   homeChoiceCount: number,
-  awayChoiceCount: number,
   guideId: string | null,
   draftPickCount: number,
 ): SiteState {
@@ -382,7 +381,7 @@ function makeRandomSite(
     );
   }
   const destinationSiteType =
-    mode === "single" && awayChoiceCount === 1 && candidates.length > 0
+    mode === "single" && candidates.length > 0
       ? candidates[randomInt(0, candidates.length - 1)]
       : undefined;
   return {
@@ -553,7 +552,6 @@ function generateSiteCompositionInternal(
         "single",
         candidates,
         sitesData.randomSite.homeChoiceCount,
-        sitesData.randomSite.awayChoiceCount,
         randomSiteGuideId,
         context.draftPickCount,
       );
@@ -598,7 +596,6 @@ function generateSiteCompositionInternal(
         "homeChoice",
         candidates,
         sitesData.randomSite.homeChoiceCount,
-        sitesData.randomSite.awayChoiceCount,
         randomSiteGuideId,
         context.draftPickCount,
       );
