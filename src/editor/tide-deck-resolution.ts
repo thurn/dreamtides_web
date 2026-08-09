@@ -12,7 +12,7 @@ export interface TideDeckResolution {
   found: boolean;
   /** Distinct cards in the tide, in decklist order. */
   cards: ResolvedTideCard[];
-  /** Decklist entries (their stale name, or UUID) that match no card. */
+  /** Decklist UUIDs that match no card. */
   unresolved: string[];
   /** Total copies across the whole decklist. */
   totalCopies: number;
@@ -39,7 +39,7 @@ export function resolveTideDeck(
     totalCopies += entry.copies;
     const card = cardsByUuid.get(entry.id.toLowerCase());
     if (card === undefined) {
-      unresolved.push(entry.name !== "" ? entry.name : entry.id);
+      unresolved.push(entry.id);
     } else {
       cards.push({ card, copies: entry.copies });
     }

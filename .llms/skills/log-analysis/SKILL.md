@@ -107,7 +107,7 @@ The `tides4` pool is the union of the dealt tide decks in `tideDeckIds`, subject
 to the logged `tides4Tuning` values (`dealSize`, `copyCap`, and `maxFacets`). The
 first selected tide is the Dream Avatar's signature tide; the remaining ids are
 dealt from its authored facet/neutral tide pool. Cross-reference those ids with
-`data/tides4.jsonc` to see the exact UUID-keyed card lists.
+`data/tides.ron` to see the exact UUID-keyed card lists.
 
 For "Why is card UUID X in my pool?", isolate the game's
 `draft_pool_constructed`, confirm its `dreamAvatarId`, then find X in the cards

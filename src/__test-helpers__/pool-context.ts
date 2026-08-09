@@ -103,12 +103,12 @@ export function makeTestPoolContext(
     version: 1,
     tides: decklistIds.map((ids, index) => ({
       id: `test-tide-${String(index + 1)}`,
-      name: `Test Tide ${String(index + 1)}`,
+      displayName: `Test Tide ${String(index + 1)}`,
+      displayDescription: `Test Tide ${String(index + 1)} description`,
       role: index === 0 ? "signature" : index === 1 ? "facet" : "neutral",
       color: index === 0 ? "purple" : index === 1 ? "green" : "blue",
       cards: ids.map((id) => ({
         id,
-        name: cards.find((card) => card.id === id)?.name ?? id,
         copies: 2,
       })),
     })),

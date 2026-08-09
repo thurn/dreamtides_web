@@ -3,7 +3,7 @@ import type { CardSizePreset } from "./card-size";
 /**
  * All tides-editor view state lives in the URL so a view is shareable and
  * survives reload:
- *   - `file`  the tides4 artifact.
+ *   - `file`  the canonical tides catalog.
  *   - `tide`  the selected tide id; absent means the list view.
  *   - `size`  the detail card-grid size preset (default `medium`).
  */
@@ -13,7 +13,7 @@ export interface TidesEditorUrlState {
   size: CardSizePreset;
 }
 
-export const DEFAULT_TIDES_FILE = "tides4";
+export const DEFAULT_TIDES_FILE = "tides";
 const DEFAULT_SIZE: CardSizePreset = "medium";
 
 function isSize(value: string | null): value is CardSizePreset {

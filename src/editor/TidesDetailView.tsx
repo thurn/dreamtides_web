@@ -4,8 +4,6 @@ import type { CardSizePreset } from "./card-size";
 import { SIZE_PRESETS } from "./card-size";
 import { CardView } from "../cumulus/components/card/CardView";
 import CardBrowserGrid from "./card-browser/CardBrowserGrid";
-import { DreamAvatarPortrait } from "../cumulus/components/hud/DreamAvatarPortrait";
-import { RulesText } from "../cumulus/components/card/RulesText";
 import { StandaloneGlyph } from "../cumulus/components/controls/StandaloneGlyph";
 import { GLYPHS, glyph } from "../cumulus/primitives/glyph";
 import { tideAccentColor, tideColorChip } from "./tide-visuals";
@@ -73,45 +71,15 @@ function SaveStatusBadge({ saveStatus }: { saveStatus: TideSaveStatus }) {
 /** The large featured token at the top of the detail view. */
 function FeaturedSource({
   tide,
-  dreamAvatarById,
   cardById,
 }: {
   tide: Tides4DeckJson;
-  dreamAvatarById: ReadonlyMap<string, EditorDreamAvatar>;
   cardById: ReadonlyMap<string, CardData>;
 }) {
-  if (tide.role === "signature" && tide.dreamAvatarId !== undefined) {
-    const dreamAvatar = dreamAvatarById.get(tide.dreamAvatarId.toLowerCase());
-    if (dreamAvatar === undefined) return null;
-    return (
-      <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
-        <div style={{ width: 160, flex: "0 0 auto" }}>
-          <DreamAvatarPortrait dreamAvatar={dreamAvatar} variant="panel" />
-        </div>
-        <div style={{ minWidth: 0 }}>
-          <div style={{ fontWeight: 800, fontSize: "1.1rem" }}>
-            {dreamAvatar.name}
-          </div>
-          <div
-            style={{ color: "#8edbd1", fontSize: "0.85rem", marginBottom: 8 }}
-          >
-            {dreamAvatar.title}
-          </div>
-          <div style={{ fontSize: "0.9rem", lineHeight: 1.4, maxWidth: 460 }}>
-            <RulesText
-              text={dreamAvatar.renderedText}
-              owner={{ kind: "dreamAvatar", id: dreamAvatar.id }}
-            />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (tide.leanCardId !== undefined) {
-    const card = cardById.get(tide.leanCardId.toLowerCase());
+  const first = tide.cards[0];
+  if (first !== undefined) {
+    const card = cardById.get(first.id.toLowerCase());
     if (card === undefined) return null;
-    const heading = tide.role === "facet" ? "Lean card" : "Seed card";
     return (
       <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
         <div style={{ width: 200, flex: "0 0 200px" }}>
@@ -121,7 +89,7 @@ function FeaturedSource({
           <div
             style={{ fontSize: "0.78rem", color: "rgba(247, 241, 223, 0.5)" }}
           >
-            {heading}
+            First card in curated order
           </div>
           <div style={{ fontWeight: 800, fontSize: "1.05rem" }}>
             {card.name}
@@ -202,7 +170,6 @@ const TEXT_INPUT_STYLE = {
 
 export default function TidesDetailView({
   tide,
-  dreamAvatarById,
   cardById,
   size,
   saveStatus,
@@ -279,7 +246,7 @@ export default function TidesDetailView({
         <span
           style={{ color: "rgba(247, 241, 223, 0.55)", fontSize: "0.82rem" }}
         >
-          {tide.name}
+          {tide.id}
         </span>
         <span style={{ marginLeft: "auto" }}>
           <SaveStatusBadge saveStatus={saveStatus} />
@@ -311,7 +278,6 @@ export default function TidesDetailView({
         >
           <FeaturedSource
             tide={tide}
-            dreamAvatarById={dreamAvatarById}
             cardById={cardById}
           />
           <div

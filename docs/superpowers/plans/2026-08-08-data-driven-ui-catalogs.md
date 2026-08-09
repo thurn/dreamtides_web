@@ -176,7 +176,7 @@ This presentation catalog contains exactly the five stable tide alignment IDs. E
 
 The runtime and editor consume the same generated data. `tide-spec.ts` becomes a loader-backed accessor rather than an authored table, and consumers stop deriving display names by title-casing IDs.
 
-The compiler validates exact stable-ID coverage, unique IDs, valid glyph tokens, valid CSS colors, and deterministic order. Tides4 draft-pool data remains in `data/tides4.jsonc`.
+The compiler validates exact stable-ID coverage, unique IDs, valid glyph tokens, valid CSS colors, and deterministic order. Tides4 tide definitions are curated in `data/tides.ron`, and Dream Avatar tide-pool composition is curated in `data/dream_avatar_tide_pools.ron`.
 
 ### 5. Glossary-owned rules symbols
 

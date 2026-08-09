@@ -3,8 +3,7 @@
 // facets and broad tides, and dealing to the configured size. These tests pin the
 // structural contract (determinism per seed, the deal size and copy cap, the
 // always-joined starter, the varying facet subset, and the failure modes)
-// against synthetic artifacts — never against the committed `data/tides4.jsonc`,
-// whose content is baked design data and subject to change at any time.
+// against synthetic artifacts rather than mutable production data.
 
 import { describe, expect, it } from "vitest";
 
@@ -33,27 +32,29 @@ function makeTides4(
   const mkCards = (tideId: string) =>
     Array.from({ length: cardsPerTide }, (_, i) => ({
       id: `${tideId}-card-${String(i)}`,
-      name: `Card ${tideId}.${String(i)}`,
       copies,
     }));
   const tides: Tides4DecksJson["tides"] = [
     {
       id: "tide-sig-1",
-      name: "Sig 1",
+      displayName: "Sig 1",
+      displayDescription: "Signature description",
       role: "signature",
       color: "purple",
       cards: mkCards("tide-sig-1"),
     },
     ...Array.from({ length: facetCount }, (_, f) => ({
       id: `tide-fac-${String(f + 1)}`,
-      name: `Facet ${String(f + 1)}`,
+      displayName: `Facet ${String(f + 1)}`,
+      displayDescription: `Facet ${String(f + 1)} description`,
       role: "facet" as const,
       color: "green" as const,
       cards: mkCards(`tide-fac-${String(f + 1)}`),
     })),
     ...Array.from({ length: neutralCount }, (_, n) => ({
       id: `tide-neu-${String(n + 1)}`,
-      name: `Neutral ${String(n + 1)}`,
+      displayName: `Neutral ${String(n + 1)}`,
+      displayDescription: `Neutral ${String(n + 1)} description`,
       role: "neutral" as const,
       color: "blue" as const,
       cards: mkCards(`tide-neu-${String(n + 1)}`),
@@ -178,12 +179,12 @@ describe("generateTides4", () => {
     const data = makeTides4(4, 30);
     data.tides.push({
       id: "tide-sig-2",
-      name: "Sig 2",
+      displayName: "Sig 2",
+      displayDescription: "Second signature description",
       role: "signature",
       color: "yellow",
       cards: Array.from({ length: 30 }, (_, i) => ({
         id: `tide-sig-2-card-${String(i)}`,
-        name: `Card tide-sig-2.${String(i)}`,
         copies: 2,
       })),
     });
@@ -204,6 +205,41 @@ describe("generateTides4", () => {
       leadsSeen.add(lead);
     }
     expect(leadsSeen.size).toBe(2);
+  });
+
+  it("selects signatureless archetypes by authored pool order, independent of tide UUID order", () => {
+    const data = makeTides4(1, 3, 1);
+    const second = {
+      id: "tide-sig-0",
+      displayName: "Lexicographically First",
+      displayDescription: "Second authored archetype",
+      role: "signature" as const,
+      color: "yellow" as const,
+      cards: [{ id: "second-signature-card", copies: 2 }],
+    };
+    data.tides.push(second);
+    data.tidePoolByDreamAvatar = {
+      "avatar-authored-first": data.tidePoolByDreamAvatar["dc-a"],
+      "avatar-authored-second": {
+        starter: second.id,
+        facets: data.tidePoolByDreamAvatar["dc-a"].facets,
+        neutral: data.tidePoolByDreamAvatar["dc-a"].neutral,
+      },
+      "avatar-signatureless": {
+        starter: null,
+        facets: data.tidePoolByDreamAvatar["dc-a"].facets,
+        neutral: data.tidePoolByDreamAvatar["dc-a"].neutral,
+      },
+    };
+
+    const result = generateTides4(
+      () => 0,
+      makePoolData(data),
+      "avatar-signatureless",
+      { dealSize: 4, copyCap: 2, maxFacets: 1 },
+    );
+
+    expect(result.tides4Provenance.borrowedArchetypeName).toBe("Sig 1");
   });
 
   it("shuffles all tides together without a dreamAvatar id or pool entry", () => {

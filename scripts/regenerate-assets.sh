@@ -12,24 +12,19 @@
 # and Cumulus sources are unchanged. glossary.toml is imported directly by the
 # runtime and has no generated bundle.
 #
-# The committed, git-tracked artifacts (data/*.jsonc, data/*.json, docs/cards2/*)
-# are baked from source by the scripts below, while the gitignored public/ bundles
-# are derived from those artifacts and generated TOML by setup-assets. The bakes
-# READ the public/ bundles and setup-assets COPIES the baked artifacts back into
-# public/, so setup-assets must bracket the bakes — run once before (to give them
-# inputs) and once after (to refresh the bundles from the fresh artifacts).
+# The committed merchant corpus is baked from generated public inputs, while the
+# gitignored public/ bundles are derived from canonical sources and generated
+# TOML by setup-assets. Setup runs before and after that bake so both phases see
+# current inputs.
 #
 # Order:
 #    1. setup-assets         build public/ inputs from canonical RON + records
 #    2. bake-merchant-corpus  data/merchant_corpus.json
-#    3. bake-tides4           data/tides4.jsonc + docs/cards2/tides4_decklists.md
-#    4. setup-assets         copy the fresh artifacts into public/
-#    5. generate-cumulus-tokens    src/cumulus/primitives/tokens.ts
-#    6. generate-cumulus-metadata  src/cumulus/metadata/cumulus-metadata.json
-#    7. generate-cumulus-docs   .llms/skills/cumulus/ component reference + index
-#    8. generate-localization-types  src/data/localization-messages.ts
-#    9. check-tides4          confirm the tides4 freshness gate passes
-#   10. check-tide-annotations  confirm each tide label matches its deck contents
+#    3. setup-assets         copy the fresh artifacts into public/
+#    4. generate-cumulus-tokens    src/cumulus/primitives/tokens.ts
+#    5. generate-cumulus-metadata  src/cumulus/metadata/cumulus-metadata.json
+#    6. generate-cumulus-docs   .llms/skills/cumulus/ component reference + index
+#    7. generate-localization-types  src/data/localization-messages.ts
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -82,35 +77,26 @@ EOF
   exit 0
 fi
 
-step "1/10  setup-assets — build public/ inputs from source"
+step "1/7  setup-assets — build public/ inputs from source"
 node scripts/setup-assets.mjs
 
-step "2/10  bake-merchant-corpus — data/merchant_corpus.json"
+step "2/7  bake-merchant-corpus — data/merchant_corpus.json"
 node scripts/bake-merchant-corpus.mjs
 
-step "3/10  bake-tides4 — data/tides4.jsonc + markdown"
-node scripts/bake-tides4.mjs
-
-step "4/10  setup-assets — copy fresh artifacts into public/"
+step "3/7  setup-assets — copy fresh artifacts into public/"
 node scripts/setup-assets.mjs
 
-step "5/10  generate-cumulus-tokens — src/cumulus/primitives/tokens.ts"
+step "4/7  generate-cumulus-tokens — src/cumulus/primitives/tokens.ts"
 node scripts/generate-cumulus-tokens.mjs
 
-step "6/10  generate-cumulus-metadata — src/cumulus/metadata/cumulus-metadata.json"
+step "5/7  generate-cumulus-metadata — src/cumulus/metadata/cumulus-metadata.json"
 node scripts/generate-cumulus-metadata.mjs
 
-step "7/10  generate-cumulus-docs — .llms/skills/cumulus component reference"
+step "6/7  generate-cumulus-docs — .llms/skills/cumulus component reference"
 node scripts/generate-cumulus-docs.mjs
 
-step "8/10  generate-localization-types — src/data/localization-messages.ts"
+step "7/7  generate-localization-types — src/data/localization-messages.ts"
 node scripts/generate-localization-types.mjs
-
-step "9/10  check-tides4 — verify the freshness gate"
-node scripts/check-tides4.mjs
-
-step "10/10  check-tide-annotations — verify tide labels match their decks"
-node scripts/check-tide-annotations.mjs
 
 step "Done — git-tracked files changed by this run"
 git status --short -- data docs src/cumulus/primitives/tokens.ts src/cumulus/metadata/cumulus-metadata.json .llms/skills/cumulus || true

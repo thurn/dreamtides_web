@@ -7,9 +7,7 @@
 //    tides, shuffle them together, and deal your draft pool, never more than 2
 //    copies of a card."
 //
-// `tides4` bakes the axes of an avatar's identity as separate decks
-// (`scripts/bake-tides4.mjs`, committed as
-// `data/tides4.jsonc`, rendered as `docs/cards2/tides4_decklists.md`):
+// `data/tides.ron` curates the axes of an avatar's identity as separate decks:
 //   * a SIGNATURE tide is one signatured DreamAvatar's signature cards themselves
 //     — the always-joined identity floor;
 //   * a FACET tide is a single-anchor affinity pool — the coherent lean one
@@ -48,7 +46,8 @@ import type { Tides4Tuning } from "../../types/draft-data";
 import { DEFAULT_DRAFT_DATA } from "../../data/draft-data";
 
 /** Developer/test fallback; production injects the compiled draft.toml values. */
-export const DEFAULT_TIDES4_TUNING: Tides4Tuning = DEFAULT_DRAFT_DATA.pool.tides4;
+export const DEFAULT_TIDES4_TUNING: Tides4Tuning =
+  DEFAULT_DRAFT_DATA.pool.tides4;
 
 /**
  * Build a pool by combining tide decks: join the avatar's starter tide (its
@@ -77,16 +76,10 @@ export function generateTides4(
   const data: Tides4DecksJson | undefined = poolData.tides4Decks;
   if (!data) {
     missingPoolData(
-      "no tide decks are bundled (data/tides4.jsonc, served as /tides4-data.json)",
+      "no tide decks are bundled (data/tides.ron and data/dream_avatar_tide_pools.ron, served as /tides4-data.json)",
     );
   }
-  return combineTidesPool(
-    rng,
-    poolData,
-    data,
-    dreamAvatarId,
-    tuning,
-  );
+  return combineTidesPool(rng, poolData, data, dreamAvatarId, tuning);
 }
 
 /**
@@ -118,9 +111,11 @@ export function combineTidesPool(
   const signatureless = own !== undefined && own.starter === null;
   let entry = own;
   if (signatureless) {
-    const archetypes = Object.values(data.tidePoolByDreamAvatar)
-      .filter((e) => e.starter !== null)
-      .sort((a, b) => ((a.starter ?? "") < (b.starter ?? "") ? -1 : 1));
+    // Canonical pool order is authored and stable. Using it keeps the random
+    // archetype slot independent of the opaque UUID values assigned to tides.
+    const archetypes = Object.values(data.tidePoolByDreamAvatar).filter(
+      (candidate) => candidate.starter !== null,
+    );
     if (archetypes.length > 0) {
       entry = archetypes[Math.floor(rng() * archetypes.length)];
     }
@@ -131,14 +126,15 @@ export function combineTidesPool(
   // surfaces so the player can read which coherent archetype they got.
   const borrowedArchetypeName =
     signatureless && entry && entry.starter !== null
-      ? (tideById.get(entry.starter)?.name ?? null)
+      ? (tideById.get(entry.starter)?.displayName ?? null)
       : null;
 
   // The full selection order for this run's pool, each tide tagged with WHY it
   // was joined: the always-joined starter, the random facet subset (the variety
   // engine), then the fill (undrawn facets, kept ahead of the broad tail so a
   // pool only reaches for generic cards once its own theme is exhausted).
-  const joinSelections: { id: string; selection: Tides4PoolTideSelection }[] = [];
+  const joinSelections: { id: string; selection: Tides4PoolTideSelection }[] =
+    [];
   let facetAvailableCount = 0;
   let facetDrawnCount = 0;
   if (entry) {
@@ -166,7 +162,10 @@ export function combineTidesPool(
   } else {
     // Robustness fallback (load-time validation requires an entry per
     // DreamAvatar): shuffle every tide together, tagging each by its own role.
-    for (const id of shuffle(rng, data.tides.map((t) => t.id))) {
+    for (const id of shuffle(
+      rng,
+      data.tides.map((t) => t.id),
+    )) {
       const role = tideById.get(id)?.role;
       joinSelections.push({
         id,
@@ -219,7 +218,8 @@ export function combineTidesPool(
     for (const card of tide.cards) {
       // Skip cards whose UUID is no longer in the catalog (the index, when
       // present, is the source of truth for catalog membership).
-      if (poolData.cardNameById && !poolData.cardNameById.has(card.id)) continue;
+      if (poolData.cardNameById && !poolData.cardNameById.has(card.id))
+        continue;
       const cardId = asCardId(card.id);
       if (!seenInTide.has(cardId)) {
         seenInTide.add(cardId);
@@ -243,7 +243,6 @@ export function combineTidesPool(
     if (fold) deckIds.push(id);
     tides.push({
       id,
-      name: tide.name,
       displayName: tide.displayName,
       displayDescription: tide.displayDescription,
       role: tide.role,

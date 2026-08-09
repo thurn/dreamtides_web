@@ -88,11 +88,7 @@ const tideGroupTitleStyle: CSSProperties = {
 };
 
 function tideOptionLabel(tide: EditorTideOption): string {
-  return tide.displayName !== ""
-    ? tide.displayName
-    : tide.shortName !== ""
-      ? tide.shortName
-      : tide.name;
+  return tide.displayName !== "" ? tide.displayName : tide.id;
 }
 
 function resolveTides(

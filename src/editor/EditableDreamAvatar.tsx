@@ -137,7 +137,7 @@ export default function EditableDreamAvatar({
     if (tide === undefined) {
       return id;
     }
-    return tide.displayName !== "" ? tide.displayName : tide.shortName !== "" ? tide.shortName : tide.name;
+    return tide.displayName !== "" ? tide.displayName : tide.id;
   }
 
   return (
@@ -297,7 +297,7 @@ export default function EditableDreamAvatar({
           >
             {starterTide !== undefined ? (
               <span
-                title={`Starter: ${starterTide.name}`}
+                title={`Starter: ${starterTide.displayName}`}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",

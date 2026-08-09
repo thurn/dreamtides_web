@@ -1,7 +1,7 @@
 // The select-screen tides preview must show the EXACT tides the draft will deal
 // from, so these tests pin it against `generateTides4` run with the same seed
 // formula the pool builder uses. They use a synthetic tides artifact, never the
-// committed `data/tides4.jsonc`, whose content is baked design data.
+// manually curated production catalog.
 
 import { describe, expect, it } from "vitest";
 
@@ -17,27 +17,29 @@ function makeTides4(): Tides4DecksJson {
   const mkCards = (tideId: string) =>
     Array.from({ length: 30 }, (_, i) => ({
       id: `${tideId}-card-${String(i)}`,
-      name: `Card ${tideId}.${String(i)}`,
       copies: 2,
     }));
   const tides: Tides4DecksJson["tides"] = [
     {
       id: "tide-sig-1",
-      name: "Sig 1",
+      displayName: "Sig 1",
+      displayDescription: "Signature description",
       role: "signature",
       color: "purple",
       cards: mkCards("tide-sig-1"),
     },
     ...Array.from({ length: 6 }, (_, f) => ({
       id: `tide-fac-${String(f + 1)}`,
-      name: `Facet ${String(f + 1)}`,
+      displayName: `Facet ${String(f + 1)}`,
+      displayDescription: `Facet ${String(f + 1)} description`,
       role: "facet" as const,
       color: "green" as const,
       cards: mkCards(`tide-fac-${String(f + 1)}`),
     })),
     ...Array.from({ length: 2 }, (_, n) => ({
       id: `tide-neu-${String(n + 1)}`,
-      name: `Neutral ${String(n + 1)}`,
+      displayName: `Neutral ${String(n + 1)}`,
+      displayDescription: `Neutral ${String(n + 1)} description`,
       role: "neutral" as const,
       color: "blue" as const,
       cards: mkCards(`tide-neu-${String(n + 1)}`),

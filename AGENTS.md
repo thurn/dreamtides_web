@@ -73,7 +73,7 @@ and include its output with your commit.
 
 Unless otherwise specified, assume all draft questions are about the "tides4"
 draft pool construction algorithm and that the source data for drafts lives
-in data/tides4.jsonc
+in data/tides.ron and data/dream_avatar_tide_pools.ron
 
 
 # Draft Data

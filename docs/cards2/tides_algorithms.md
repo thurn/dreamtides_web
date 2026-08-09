@@ -1,24 +1,27 @@
 # Tides4 draft-pool construction
 
 Tides4 builds each Dream Avatar's 150-card draft pool from preconstructed decks
-called tides. The committed artifact is `data/tides4.jsonc`; its readable card
-lists are generated in `docs/cards2/tides4_decklists.md`.
+called tides. Designers curate tide identities, card membership, and Dream
+Avatar pool composition directly in `data/tides.ron` and
+`data/dream_avatar_tide_pools.ron`. Tide, card, and Dream Avatar references use
+UUIDv4 identities.
 
-## Artifact construction
+## Tide catalog
 
-`npm run bake-tides4` derives the artifact deterministically from the canonical
-card catalog, Dream Avatar signatures, and adapted draft records. The bake builds
-an availability-corrected pick corpus keyed by card UUID and emits three tide
-roles:
+The catalog defines three tide roles:
 
 - A signature tide captures the stable core for one signed Dream Avatar.
-- Facet tides capture coherent leans around individual signature anchors.
+- Facet tides capture coherent leans sampled for run-to-run variety.
 - Neutral tides provide broad, reusable fill for every pool.
 
-Authored membership adjustments live in `data/tides4-overrides.jsonc`. Display
-names, descriptions, colors, and claims are preserved by tide id across bakes.
-Run `npm run check-tides4` to verify that the committed artifact matches a fresh
-bake, and `npm run check-tide-annotations` to validate its player-facing labels.
+Each tide contains its player-facing display name and description, color, role,
+and an ordered list of card UUIDs with copy counts. `data/tides.ron` is a flat
+top-level list of these definitions. `data/dream_avatar_tide_pools.ron` is a
+flat top-level list of per-avatar signature, facet, and neutral composition.
+The game-data compiler validates UUIDs, role-correct pool references, complete
+Dream Avatar coverage, and card-catalog references, then generates one TOML
+projection for each source. The tides and Dream Avatar editors publish
+revision-checked semantic operations to the owning canonical RON source.
 
 ## Runtime construction
 
@@ -38,10 +41,10 @@ UUIDs, tuning, per-tide contribution, and each card's primary source tide.
 
 ## Data flow
 
-`scripts/regenerate-assets.sh` bakes the artifact, copies it to the browser's
-generated `public/tides4-data.json`, regenerates the readable decklists, and runs
-the freshness and annotation checks. Runtime loading validates the artifact in
-`src/draft/pool/tides4-io.ts` before pool construction.
+`scripts/setup-assets.mjs` composes generated `data/tides.toml` and
+`data/dream_avatar_tide_pools.toml` into `public/tides4-data.json`. Runtime
+loading validates that browser projection in `src/draft/pool/tides4-io.ts`
+before pool construction.
 
 ## Historical archive
 

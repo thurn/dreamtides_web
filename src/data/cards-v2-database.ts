@@ -1,9 +1,6 @@
 import type { CardId } from "../types/card-identity";
 import type { CardData } from "../types/cards";
-import type {
-  GeneratedPool,
-  Tides4DecksJson,
-} from "../draft/pool";
+import type { GeneratedPool, Tides4DecksJson } from "../draft/pool";
 import { validateTides4Decks } from "../draft/pool";
 
 /**
@@ -54,13 +51,13 @@ export async function loadDecklistIds(): Promise<string[][]> {
 export interface DraftRecord {
   id: string;
   draftId: string;
-  sourceFile: string;  // adapted-record JSON filename this seat came from
+  sourceFile: string; // adapted-record JSON filename this seat came from
   mainboard: string[];
-  mainboardIds: string[];  // stable cards_v2 UUIDs aligned to `mainboard`
-  packs: string[][];  // 30 trimmed packs of current card names (raw order)
-  picks: string[][];  // human picks aligned to packs (each 0..3 names)
-  packIds: string[][];  // stable cards_v2 UUIDs aligned to `packs`
-  pickIds: string[][];  // stable cards_v2 UUIDs aligned to `picks`
+  mainboardIds: string[]; // stable cards_v2 UUIDs aligned to `mainboard`
+  packs: string[][]; // 30 trimmed packs of current card names (raw order)
+  picks: string[][]; // human picks aligned to packs (each 0..3 names)
+  packIds: string[][]; // stable cards_v2 UUIDs aligned to `packs`
+  pickIds: string[][]; // stable cards_v2 UUIDs aligned to `picks`
 }
 
 /**
@@ -86,11 +83,11 @@ export async function loadDraftRecords(): Promise<DraftRecord[]> {
  * used for algorithmic work — `name` is display-only metadata.
  */
 export interface KnownGoodDecklist {
-  id: string;        // `${draftId}#${seat}`
+  id: string; // `${draftId}#${seat}`
   draftId: string;
   seat: number;
-  name: string;       // display-only
-  mainboardIds: string[];  // stable cards_v2 UUIDs (lowercased)
+  name: string; // display-only
+  mainboardIds: string[]; // stable cards_v2 UUIDs (lowercased)
 }
 
 /**
@@ -110,8 +107,9 @@ export async function loadKnownGoodDecklists(): Promise<KnownGoodDecklist[]> {
 }
 
 /**
- * Fetch the committed `tides4` artifact (`data/tides4.jsonc`, copied to
- * `/tides4-data.json` by `scripts/setup-assets.mjs`) the `tides4` pool variant
+ * Fetch the browser projection compiled from `data/tides.ron` and
+ * `data/dream_avatar_tide_pools.ron` to
+ * `/tides4-data.json` by `scripts/setup-assets.mjs`. The `tides4` pool variant
  * combines into pools — the signature, facet, and neutral tide decks and the
  * per-DreamAvatar tide pools in one file. Returns `null` if the asset is missing
  * so the caller can surface a clear configuration error when the variant runs.
@@ -199,7 +197,10 @@ export function resolvePool(
     // and cap rather than silently overwrite.
     const existing = draftPoolCopiesByCard[String(cardNumber)] ?? 0;
     if (existing > 0) collidedCardNumbers.push(cardNumber);
-    draftPoolCopiesByCard[String(cardNumber)] = Math.min(cap, existing + copies);
+    draftPoolCopiesByCard[String(cardNumber)] = Math.min(
+      cap,
+      existing + copies,
+    );
   }
 
   return {

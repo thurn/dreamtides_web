@@ -15,6 +15,9 @@ use crate::manifest::Manifest;
 use crate::models::affiliations::{self, AffiliationCatalog, CanonicalUuid};
 use crate::models::cards::{CardDefinition, CardKind, Crop, OrbValue};
 use crate::models::compat::CompatDocument;
+use crate::models::dream_avatar_tide_pools::{
+    self, DreamAvatarId as TidePoolDreamAvatarId, DreamAvatarPool, DreamAvatarTidePoolsCatalog,
+};
 use crate::models::dream_avatars::{self, AvatarDefinition, DreamAvatarId};
 use crate::models::dream_guides::{self, GuideDefinition, GuideId};
 use crate::models::dreamscapes::{
@@ -38,6 +41,7 @@ use crate::models::glossary::{self, GlossaryDefinition, GlossaryId, TermPresenta
 use crate::models::internal_card_metadata::{
     self, CardMetadataCatalog, CardMetadataDefinition, FacetDefinition,
 };
+use crate::models::tides::{self, TideColor, TideDefinition, TideId, TidesCatalog};
 use crate::models::tutorial::{
     self, ActionDefinition as TutorialActionDefinition, TutorialCatalog,
 };
@@ -87,6 +91,17 @@ enum EditOperation {
         avatar_id: String,
         field: String,
         value: JsonValue,
+    },
+    SetTideField {
+        tide_id: String,
+        field: String,
+        value: JsonValue,
+    },
+    SetDreamAvatarTidePool {
+        dream_avatar_id: String,
+        starter: Option<String>,
+        facets: Vec<String>,
+        neutral: Vec<String>,
     },
     SetDreamsignField {
         dreamsign_id: String,
@@ -170,8 +185,265 @@ pub fn stage_edit(
         "figments" => edit_figments(manifest, staging_root, request.operations),
         "glossary" => edit_glossary(manifest, staging_root, request.operations),
         "tutorial" => edit_tutorial(manifest, staging_root, request.operations),
+        "tides" => edit_tides(manifest, staging_root, request.operations),
+        "dream-avatar-tide-pools" => {
+            edit_dream_avatar_tide_pools(manifest, staging_root, request.operations)
+        }
         dataset => edit_compat(manifest, staging_root, dataset, request.operations),
     }
+}
+
+fn edit_tides(
+    manifest: &Manifest,
+    staging_root: &Path,
+    operations: Vec<EditOperation>,
+) -> Result<EditReport> {
+    let dataset = manifest.dataset("tides")?;
+    if dataset.adapter != "tides_v1"
+        || dataset.editor != crate::manifest::EditorCapability::Semantic
+    {
+        bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for tides");
+    }
+    let source_path = staging_root.join(&dataset.source);
+    let original_text = fs::read_to_string(&source_path)
+        .with_context(|| format!("read staged tides source {}", source_path.display()))?;
+    let original: TidesCatalog =
+        ron::from_str(&original_text).context("MALFORMED_SOURCE: staged tides RON is invalid")?;
+    tides::validate(&original).context("MALFORMED_SOURCE: staged tides catalog is invalid")?;
+    let mut catalog = original.clone();
+    let mut source = original_text;
+
+    for operation in operations {
+        match operation {
+            EditOperation::SetTideField {
+                tide_id,
+                field,
+                value,
+            } => {
+                let index = unique_tide_index(&catalog, &tide_id)?;
+                set_tide_field(&mut catalog[index], &field, value)?;
+                source = patch_tide_field(&source, &catalog[index], &field)?;
+            }
+            _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to tides"),
+        }
+        tides::validate(&catalog)
+            .context("INVALID_EDIT: tide edit violates the catalog contract")?;
+    }
+
+    verify_round_trip::<TidesCatalog>(&source, &catalog)?;
+    let changed = catalog != original;
+    if changed {
+        atomic_write(&source_path, source.as_bytes())?;
+    }
+    Ok(EditReport {
+        ok: true,
+        changed,
+        dataset_id: "tides".into(),
+        source_revision: revision(staging_root, manifest, &["tides"])?,
+    })
+}
+
+fn edit_dream_avatar_tide_pools(
+    manifest: &Manifest,
+    staging_root: &Path,
+    operations: Vec<EditOperation>,
+) -> Result<EditReport> {
+    let dataset = manifest.dataset("dream-avatar-tide-pools")?;
+    if dataset.adapter != "dream_avatar_tide_pools_v1"
+        || dataset.editor != crate::manifest::EditorCapability::Semantic
+    {
+        bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for Dream Avatar tide pools");
+    }
+    let tides_dataset = manifest.dataset("tides")?;
+    let tides: TidesCatalog = ron::from_str(&fs::read_to_string(
+        staging_root.join(&tides_dataset.source),
+    )?)
+    .context("MALFORMED_SOURCE: staged tides RON is invalid")?;
+    let tide_kinds =
+        tides::tide_kinds(&tides).context("MALFORMED_SOURCE: staged tides catalog is invalid")?;
+    let source_path = staging_root.join(&dataset.source);
+    let original_text = fs::read_to_string(&source_path).with_context(|| {
+        format!(
+            "read staged Dream Avatar tide-pool source {}",
+            source_path.display()
+        )
+    })?;
+    let original: DreamAvatarTidePoolsCatalog = ron::from_str(&original_text)
+        .context("MALFORMED_SOURCE: staged Dream Avatar tide-pool RON is invalid")?;
+    dream_avatar_tide_pools::validate(&original, &tide_kinds)
+        .context("MALFORMED_SOURCE: staged Dream Avatar tide-pool catalog is invalid")?;
+    let mut catalog = original.clone();
+    let mut source = original_text;
+
+    for operation in operations {
+        match operation {
+            EditOperation::SetDreamAvatarTidePool {
+                dream_avatar_id,
+                starter,
+                facets,
+                neutral,
+            } => {
+                let index = unique_tide_pool_index(&catalog, &dream_avatar_id)?;
+                let replacement = DreamAvatarPool {
+                    dream_avatar_id: TidePoolDreamAvatarId::parse(&dream_avatar_id).map_err(
+                        |error| anyhow::anyhow!("INVALID_EDIT: Dream Avatar identity: {error}"),
+                    )?,
+                    starter: parse_optional_tide_id(starter.as_deref())?,
+                    facets: parse_tide_ids(&facets)?,
+                    neutral: parse_tide_ids(&neutral)?,
+                };
+                source = patch_tide_pool(&source, &catalog[index], &replacement)?;
+                catalog[index] = replacement;
+            }
+            _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to Dream Avatar tide pools"),
+        }
+        dream_avatar_tide_pools::validate(&catalog, &tide_kinds)
+            .context("INVALID_EDIT: tide-pool edit violates the catalog contract")?;
+    }
+
+    verify_round_trip::<DreamAvatarTidePoolsCatalog>(&source, &catalog)?;
+    let changed = catalog != original;
+    if changed {
+        atomic_write(&source_path, source.as_bytes())?;
+    }
+    Ok(EditReport {
+        ok: true,
+        changed,
+        dataset_id: "dream-avatar-tide-pools".into(),
+        source_revision: revision(staging_root, manifest, &["dream-avatar-tide-pools"])?,
+    })
+}
+
+fn unique_tide_index(catalog: &TidesCatalog, id: &str) -> Result<usize> {
+    let requested = TideId::parse(id)
+        .map_err(|error| anyhow::anyhow!("INVALID_EDIT: Tide identity {id}: {error}"))?;
+    let matches = catalog
+        .iter()
+        .enumerate()
+        .filter(|(_, tide)| tide.id == requested)
+        .map(|(index, _)| index)
+        .collect::<Vec<_>>();
+    match matches.as_slice() {
+        [] => bail!("RECORD_NOT_FOUND: Tide identity {id}"),
+        [index] => Ok(*index),
+        _ => bail!("MALFORMED_SOURCE: duplicate Tide identity {id}"),
+    }
+}
+
+fn unique_tide_pool_index(catalog: &DreamAvatarTidePoolsCatalog, id: &str) -> Result<usize> {
+    let requested = TidePoolDreamAvatarId::parse(id).map_err(|error| {
+        anyhow::anyhow!("INVALID_EDIT: Tide-pool Dream Avatar identity {id}: {error}")
+    })?;
+    let matches = catalog
+        .iter()
+        .enumerate()
+        .filter(|(_, pool)| pool.dream_avatar_id == requested)
+        .map(|(index, _)| index)
+        .collect::<Vec<_>>();
+    match matches.as_slice() {
+        [] => bail!("RECORD_NOT_FOUND: Tide-pool Dream Avatar identity {id}"),
+        [index] => Ok(*index),
+        _ => bail!("MALFORMED_SOURCE: duplicate Tide-pool Dream Avatar identity {id}"),
+    }
+}
+
+fn set_tide_field(tide: &mut TideDefinition, field: &str, value: JsonValue) -> Result<()> {
+    match field {
+        "display_name" | "displayName" => tide.display_name = json_string(value, field)?,
+        "display_description" | "displayDescription" => {
+            tide.display_description = json_string(value, field)?
+        }
+        "color" => {
+            tide.color = match json_string(value, field)?.as_str() {
+                "purple" => TideColor::Purple,
+                "green" => TideColor::Green,
+                "yellow" => TideColor::Yellow,
+                "blue" => TideColor::Blue,
+                "orange" => TideColor::Orange,
+                other => bail!("INVALID_EDIT: unsupported tide color {other}"),
+            }
+        }
+        _ => bail!("INVALID_EDIT: unsupported tide field {field}"),
+    }
+    Ok(())
+}
+
+fn patch_tide_field(source: &str, tide: &TideDefinition, field: &str) -> Result<String> {
+    let source_field = match field {
+        "display_name" | "displayName" => "display_name",
+        "display_description" | "displayDescription" => "display_description",
+        "color" => "color",
+        _ => bail!("INVALID_EDIT: unsupported tide field {field}"),
+    };
+    let record =
+        typed_record_range_at_indent(source, "TideDefinition", "id", &tide.id.to_string(), 2)?;
+    let replacement = match source_field {
+        "display_name" => ron::to_string(&tide.display_name)?,
+        "display_description" => ron::to_string(&tide.display_description)?,
+        "color" => ron::to_string(&tide.color)?,
+        _ => unreachable!(),
+    };
+    patch_field_value(source, record, source_field, &replacement)
+}
+
+fn parse_optional_tide_id(value: Option<&str>) -> Result<Option<TideId>> {
+    value
+        .map(|id| {
+            TideId::parse(id)
+                .map_err(|error| anyhow::anyhow!("INVALID_EDIT: Tide identity {id}: {error}"))
+        })
+        .transpose()
+}
+
+fn parse_tide_ids(values: &[String]) -> Result<Vec<TideId>> {
+    values
+        .iter()
+        .map(|id| {
+            TideId::parse(id)
+                .map_err(|error| anyhow::anyhow!("INVALID_EDIT: Tide identity {id}: {error}"))
+        })
+        .collect()
+}
+
+fn patch_tide_pool(
+    source: &str,
+    before: &DreamAvatarPool,
+    after: &DreamAvatarPool,
+) -> Result<String> {
+    let mut patched = source.to_owned();
+    for (field, replacement) in [
+        (
+            "starter",
+            (before.starter != after.starter)
+                .then(|| render_ron_value(&after.starter, true))
+                .transpose()?,
+        ),
+        (
+            "facets",
+            (before.facets != after.facets)
+                .then(|| ron::to_string(&after.facets))
+                .transpose()?,
+        ),
+        (
+            "neutral",
+            (before.neutral != after.neutral)
+                .then(|| ron::to_string(&after.neutral))
+                .transpose()?,
+        ),
+    ] {
+        let Some(replacement) = replacement else {
+            continue;
+        };
+        let record = typed_record_range_at_indent(
+            &patched,
+            "DreamAvatarPool",
+            "dream_avatar_id",
+            &after.dream_avatar_id.to_string(),
+            2,
+        )?;
+        patched = patch_field_value(&patched, record, field, &replacement)?;
+    }
+    Ok(patched)
 }
 
 fn edit_tutorial(
@@ -3416,6 +3688,57 @@ mod tests {
     const CARD_ID: &str = "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5";
     const AVATAR_ID: &str = "00000000-0000-4000-8000-000000000011";
     const GLOSSARY_ID: &str = "00000000-0000-4000-8000-000000000021";
+    const TIDE_ID: &str = "00000000-0000-4000-8000-000000000041";
+
+    const TIDES_SOURCE: &str = r###"// Stable tides guidance.
+
+#![enable(implicit_some)]
+
+[
+  // Edited tide comment.
+  TideDefinition(
+    id: "00000000-0000-4000-8000-000000000041",
+    display_name: r#"Raw Tide"#,
+    display_description: "First description",
+    color: Purple,
+    kind: Signature,
+    cards: [CardCopies(id: "00000000-0000-4000-8000-000000000051", copies: 2)],
+  ),
+
+  /* Unrelated tide comment. */
+  TideDefinition(
+    id: "00000000-0000-4000-8000-000000000042",
+    display_name: "Facet Tide",
+    display_description: "Second description",
+    color: Green,
+    kind: Facet,
+    cards: [CardCopies(id: "00000000-0000-4000-8000-000000000052", copies: 1)],
+  ),
+
+  TideDefinition(
+    id: "00000000-0000-4000-8000-000000000043",
+    display_name: "Neutral Tide",
+    display_description: "Third description",
+    color: Blue,
+    kind: Neutral,
+    cards: [CardCopies(id: "00000000-0000-4000-8000-000000000053", copies: 1)],
+  ),
+]
+"###;
+
+    const TIDE_POOLS_SOURCE: &str = r###"// Stable Dream Avatar tide-pool guidance.
+
+#![enable(implicit_some)]
+
+[
+  DreamAvatarPool(
+    dream_avatar_id: "00000000-0000-4000-8000-000000000061",
+    starter: "00000000-0000-4000-8000-000000000041",
+    facets: ["00000000-0000-4000-8000-000000000042"],
+    neutral: ["00000000-0000-4000-8000-000000000043"],
+  ),
+]
+"###;
 
     const EXPLORATION_SOURCE: &str = r###"// Stable Exploration guidance.
 #![enable(implicit_some)]
@@ -4436,6 +4759,89 @@ CardMetadataCatalog(
                 .contains("RECORD_NOT_FOUND")
         );
         assert!(unique_dream_avatar_index(&avatars, "not-a-uuid").is_err());
+    }
+
+    #[test]
+    fn tide_scalar_edit_is_operation_sized_and_preserves_unrelated_source() {
+        let mut catalog: TidesCatalog = ron::from_str(TIDES_SOURCE).unwrap();
+        let index = unique_tide_index(&catalog, TIDE_ID).unwrap();
+        set_tide_field(
+            &mut catalog[index],
+            "displayName",
+            json!("Edited Tide"),
+        )
+        .unwrap();
+        let patched = patch_tide_field(TIDES_SOURCE, &catalog[index], "displayName").unwrap();
+
+        assert_eq!(ron::from_str::<TidesCatalog>(&patched).unwrap(), catalog);
+        let before = TIDES_SOURCE.lines().collect::<Vec<_>>();
+        let after = patched.lines().collect::<Vec<_>>();
+        assert_eq!(before.len(), after.len());
+        assert_eq!(
+            before
+                .iter()
+                .zip(after.iter())
+                .filter(|(left, right)| left != right)
+                .count(),
+            1
+        );
+        assert!(patched.contains("/* Unrelated tide comment. */"));
+        assert!(patched.contains("display_name: \"Facet Tide\""));
+    }
+
+    #[test]
+    fn tide_editor_round_trips_color() {
+        let mut catalog: TidesCatalog = ron::from_str(TIDES_SOURCE).unwrap();
+        let index = unique_tide_index(&catalog, TIDE_ID).unwrap();
+        set_tide_field(&mut catalog[index], "color", json!("orange")).unwrap();
+        let patched = patch_tide_field(TIDES_SOURCE, &catalog[index], "color").unwrap();
+
+        assert_eq!(ron::from_str::<TidesCatalog>(&patched).unwrap(), catalog);
+        assert!(patched.contains("color: Orange"));
+        assert!(patched.contains("display_name: \"Facet Tide\""));
+    }
+
+    #[test]
+    fn tide_pool_editor_round_trips_optional_and_list_shapes() {
+        let mut catalog: DreamAvatarTidePoolsCatalog =
+            ron::from_str(TIDE_POOLS_SOURCE).unwrap();
+
+        let before = catalog[0].clone();
+        let after = DreamAvatarPool {
+            dream_avatar_id: before.dream_avatar_id,
+            starter: None,
+            facets: vec![TideId::parse("00000000-0000-4000-8000-000000000042").unwrap()],
+            neutral: vec![],
+        };
+        let patched = patch_tide_pool(TIDE_POOLS_SOURCE, &before, &after).unwrap();
+        catalog[0] = after;
+
+        assert_eq!(
+            ron::from_str::<DreamAvatarTidePoolsCatalog>(&patched).unwrap(),
+            catalog
+        );
+        assert!(patched.contains("starter: None"));
+        assert!(patched.contains("neutral: []"));
+    }
+
+    #[test]
+    fn tide_editor_rejects_invalid_identities_fields_and_roles() {
+        let mut catalog: TidesCatalog = ron::from_str(TIDES_SOURCE).unwrap();
+        assert!(unique_tide_index(&catalog, "not-a-uuid").is_err());
+        assert!(unique_tide_index(&catalog, "00000000-0000-4000-8000-000000000099").is_err());
+        let index = unique_tide_index(&catalog, TIDE_ID).unwrap();
+        assert!(set_tide_field(&mut catalog[index], "color", json!("teal")).is_err());
+        assert!(set_tide_field(&mut catalog[index], "kind", json!("neutral")).is_err());
+
+        let mut pools: DreamAvatarTidePoolsCatalog =
+            ron::from_str(TIDE_POOLS_SOURCE).unwrap();
+        pools[0].facets = vec![TideId::parse(TIDE_ID).unwrap()];
+        assert!(
+            dream_avatar_tide_pools::validate(&pools, &tides::tide_kinds(&catalog).unwrap())
+                .unwrap_err()
+                .to_string()
+                .contains("facet reference")
+        );
     }
 
     fn action(kind: EffectKind) -> JsonValue {

@@ -45,6 +45,7 @@ import {
   compileTideAlignmentsData,
   compileTransfigurationData,
 } from "./data-driven-catalogs.mjs";
+import { compileTidesData } from "./tides-data.mjs";
 
 // Re-exported for `setup-assets.test.mjs`, which exercises the JSONC comment
 // stripper alongside the asset-build helpers defined here.
@@ -698,11 +699,17 @@ export function transformExplorationData(source) {
   if (
     !Array.isArray(compilerEffectKinds) ||
     compilerEffectKinds.length !== EXPLORATION_EFFECT_KINDS.length ||
-    compilerEffectKinds.some((kind, index) => kind !== EXPLORATION_EFFECT_KINDS[index]) ||
+    compilerEffectKinds.some(
+      (kind, index) => kind !== EXPLORATION_EFFECT_KINDS[index],
+    ) ||
     editorEffectKinds.length !== EXPLORATION_EFFECT_KINDS.length ||
-    editorEffectKinds.some((kind, index) => kind !== EXPLORATION_EFFECT_KINDS[index])
+    editorEffectKinds.some(
+      (kind, index) => kind !== EXPLORATION_EFFECT_KINDS[index],
+    )
   ) {
-    throw new Error("exploration.toml: compiler, runtime, and editor effect kinds must match");
+    throw new Error(
+      "exploration.toml: compiler, runtime, and editor effect kinds must match",
+    );
   }
   const effectKindSet = new Set(EXPLORATION_EFFECT_KINDS);
   const customCards = (source["custom-card"] ?? []).map((raw) => {
@@ -789,7 +796,11 @@ export function transformExplorationData(source) {
       );
     }
     encounterIds.add(encounter.cardId.toLowerCase());
-    if (!Array.isArray(encounter.action) || encounter.action.length < 1 || encounter.action.length > 4) {
+    if (
+      !Array.isArray(encounter.action) ||
+      encounter.action.length < 1 ||
+      encounter.action.length > 4
+    ) {
       throw new Error(
         `exploration.toml: encounter ${encounter.cardId} must have between one and four actions`,
       );
@@ -871,9 +882,11 @@ export function transformExplorationData(source) {
         );
       }
       if (
-        ["gain-card", "replace-selected-with-card", "gain-nightmare-and-card"].includes(
-          action.effectKind,
-        ) &&
+        [
+          "gain-card",
+          "replace-selected-with-card",
+          "gain-nightmare-and-card",
+        ].includes(action.effectKind) &&
         (typeof action.cardId !== "string" || action.cardId.length === 0)
       ) {
         throw new Error(
@@ -915,9 +928,10 @@ export function transformExplorationData(source) {
         );
       }
       if (
-        ["gain-nightmare-and-card", "reduce-cost-all-and-gain-nightmares"].includes(
-          action.effectKind,
-        ) &&
+        [
+          "gain-nightmare-and-card",
+          "reduce-cost-all-and-gain-nightmares",
+        ].includes(action.effectKind) &&
         ((action.effectKind === "reduce-cost-all-and-gain-nightmares" &&
           (typeof action.energyCostReduction !== "number" ||
             action.energyCostReduction <= 0)) ||
@@ -989,7 +1003,10 @@ export function transformExplorationData(source) {
           `exploration.toml: action ${action.id} has unsupported deck-target`,
         );
       }
-      if ((action.followupTitle === undefined) !== (action.followupSubtitle === undefined)) {
+      if (
+        (action.followupTitle === undefined) !==
+        (action.followupSubtitle === undefined)
+      ) {
         throw new Error(
           `exploration.toml: action ${action.id} requires both followup fields`,
         );
@@ -1003,12 +1020,17 @@ export function transformExplorationData(source) {
         ...new Set(action.effectText.match(/\{([a-z][a-z0-9_]*)\}/gu) ?? []),
       ];
       const allowedSlots = new Set([
-        ...(action.effectKind === "gain-offered-card" ? ["{offered_card}"] : []),
+        ...(action.effectKind === "gain-offered-card"
+          ? ["{offered_card}"]
+          : []),
         ...(action.deckTarget === "offered" ? ["{deck_card}"] : []),
         ...(action.cardId === undefined ? [] : ["{fixed_card}"]),
-        ...(["gain-nightmare-and-card", "reduce-cost-all-and-gain-nightmares"].includes(
-          action.effectKind,
-        ) ? ["{nightmare_card}"] : []),
+        ...([
+          "gain-nightmare-and-card",
+          "reduce-cost-all-and-gain-nightmares",
+        ].includes(action.effectKind)
+          ? ["{nightmare_card}"]
+          : []),
       ]);
       for (const slot of presentationSlots) {
         if (!allowedSlots.has(slot)) {
@@ -1017,25 +1039,35 @@ export function transformExplorationData(source) {
           );
         }
       }
-      if (action.effectKind === "gain-offered-card" && !presentationSlots.includes("{offered_card}")) {
+      if (
+        action.effectKind === "gain-offered-card" &&
+        !presentationSlots.includes("{offered_card}")
+      ) {
         throw new Error(
           `exploration.toml: action ${action.id} must present {offered_card}`,
         );
       }
-      if (action.deckTarget === "offered" && !presentationSlots.includes("{deck_card}")) {
+      if (
+        action.deckTarget === "offered" &&
+        !presentationSlots.includes("{deck_card}")
+      ) {
         throw new Error(
           `exploration.toml: action ${action.id} must present {deck_card}`,
         );
       }
-      if (action.cardId !== undefined && !presentationSlots.includes("{fixed_card}")) {
+      if (
+        action.cardId !== undefined &&
+        !presentationSlots.includes("{fixed_card}")
+      ) {
         throw new Error(
           `exploration.toml: action ${action.id} must present {fixed_card}`,
         );
       }
       if (
-        ["gain-nightmare-and-card", "reduce-cost-all-and-gain-nightmares"].includes(
-          action.effectKind,
-        ) &&
+        [
+          "gain-nightmare-and-card",
+          "reduce-cost-all-and-gain-nightmares",
+        ].includes(action.effectKind) &&
         !presentationSlots.includes("{nightmare_card}")
       ) {
         throw new Error(
@@ -1044,8 +1076,9 @@ export function transformExplorationData(source) {
       }
       const followupSlots = [
         ...new Set(
-          `${action.followupTitle ?? ""}\n${action.followupSubtitle ?? ""}`
-            .match(/\{([a-z][a-z0-9-]*)\}/gu) ?? [],
+          `${action.followupTitle ?? ""}\n${action.followupSubtitle ?? ""}`.match(
+            /\{([a-z][a-z0-9-]*)\}/gu,
+          ) ?? [],
         ),
       ];
       const allowedFollowupSlots = new Set([
@@ -1326,7 +1359,13 @@ export function regenerateCardData({
   publicDir = PUBLIC_DIR,
   cardJsonPath = join(publicDir, "card-data.json"),
   cardV2JsonPath = join(publicDir, "cards_v2-data.json"),
-  cardRoleJsonPath = join(ROOT, "src", "generated", "config", "card-role-data.json"),
+  cardRoleJsonPath = join(
+    ROOT,
+    "src",
+    "generated",
+    "config",
+    "card-role-data.json",
+  ),
 } = {}) {
   console.log("Parsing cards.toml for the runtime card catalog...");
   const cardTomlContent = readFileSync(cardTomlPath, "utf8");
@@ -1346,7 +1385,8 @@ export function regenerateCardData({
   // Filter out Special-rarity cards from the runtime pool, except the
   // RON-role card required by Nightmare journey effects.
   const cards = allCards.filter(
-    (card) => card.rarity !== "Special" || card.id === cardRoleData.nightmare.cardId,
+    (card) =>
+      card.rarity !== "Special" || card.id === cardRoleData.nightmare.cardId,
   );
   console.log(`Filtered to ${cards.length} runtime cards`);
 
@@ -1652,20 +1692,21 @@ export function setupAssets({
     `Wrote ${knownGoodDecklists.length} known-good decklists to known-good-decklists-data.json`,
   );
 
-  // The committed `tides4` artifact (signature/facet/neutral tides + the
-  // per-DreamAvatar tide pools in one file) the `tides4` pool variant combines
-  // into pools. Baked by `npm run bake-tides4`, committed as JSONC with a
-  // provenance header.
-  const tides4SourcePath = join(DATA_DIR, "tides4.jsonc");
+  // The compiled projection of the manually curated tide decks and per-avatar
+  // pool composition consumed by the tides4 pool variant.
+  const tidesSourcePath = join(DATA_DIR, "tides.toml");
+  const tidePoolsSourcePath = join(DATA_DIR, "dream_avatar_tide_pools.toml");
   const tides4JsonPath = join(publicDir, "tides4-data.json");
-  if (existsSync(tides4SourcePath)) {
-    const tides4Jsonc = readFileSync(tides4SourcePath, "utf8");
-    const served = JSON.stringify(JSON.parse(stripJsonComments(tides4Jsonc)));
-    writeFileSync(tides4JsonPath, served + "\n");
-    console.log("Copied tides4.jsonc to tides4-data.json (comments stripped)");
+  if (existsSync(tidesSourcePath) && existsSync(tidePoolsSourcePath)) {
+    const served = compileTidesData(
+      parse(readFileSync(tidesSourcePath, "utf8")),
+      parse(readFileSync(tidePoolsSourcePath, "utf8")),
+    );
+    writeFileSync(tides4JsonPath, `${JSON.stringify(served)}\n`);
+    console.log("Compiled tide catalogs to tides4-data.json");
   } else {
     console.log(
-      "No data/tides4.jsonc found; run `npm run bake-tides4` to create it.",
+      "No compiled tides or Dream Avatar tide pools found; run `npm run game-data:compile`.",
     );
   }
 
@@ -2257,9 +2298,10 @@ export function setupAssets({
   let linkedOfferTileBackgrounds = 0;
   let missingOfferTileBackgrounds = 0;
   const offerTileBackgroundImageNumbers = jsonAuguryData.archetypes.flatMap(
-    (archetype) => archetype.presentation.backgroundArt === undefined
-      ? []
-      : [archetype.presentation.backgroundArt.imageNumber],
+    (archetype) =>
+      archetype.presentation.backgroundArt === undefined
+        ? []
+        : [archetype.presentation.backgroundArt.imageNumber],
   );
   for (const imageNumber of offerTileBackgroundImageNumbers) {
     const hash = imageHash(imageNumber);

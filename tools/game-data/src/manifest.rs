@@ -105,6 +105,8 @@ impl Manifest {
             "glossary_v1",
             "sites_v1",
             "tide_alignments_v1",
+            "tides_v1",
+            "dream_avatar_tide_pools_v1",
             "transfiguration_v1",
             "tutorial_v1",
             "tutorial_journey_pool_v1",

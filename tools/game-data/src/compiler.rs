@@ -10,10 +10,11 @@ use sha2::{Digest, Sha256};
 
 use crate::manifest::{Dataset, Manifest, MigrationState};
 use crate::models::{
-    affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft, dream_avatars,
-    dream_guides, dreamscapes, dreamsign_profiles, dreamsign_signatures, dreamsigns, dreamwell,
-    economy, exploration, figments, gamble, glossary, internal_card_metadata, journey, opponents,
-    reward_selection, sites, tide_alignments, transfiguration, tutorial, tutorial_journey_pool,
+    affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft,
+    dream_avatar_tide_pools, dream_avatars, dream_guides, dreamscapes, dreamsign_profiles,
+    dreamsign_signatures, dreamsigns, dreamwell, economy, exploration, figments, gamble, glossary,
+    internal_card_metadata, journey, opponents, reward_selection, sites, tide_alignments, tides,
+    transfiguration, tutorial, tutorial_journey_pool,
 };
 
 pub const BUILD_VERSION: &str = env!("GAME_DATA_BUILD_VERSION");
@@ -290,6 +291,43 @@ fn adapt(
             tutorial_journey_pool::lower(catalog)
         }
         "tide_alignments_v1" => tide_alignments::lower(parse_ron(source, dataset)?),
+        "tides_v1" => {
+            let catalog: tides::TidesCatalog = parse_ron(source, dataset)?;
+            let cards_dataset = manifest.dataset("cards")?;
+            let cards: Vec<cards::CardDefinition> = parse_ron(
+                &fs::read_to_string(root.join(&cards_dataset.source))
+                    .with_context(|| format!("read card source {}", cards_dataset.source))?,
+                cards_dataset,
+            )?;
+            tides::validate_references(&catalog, &cards.into_iter().map(|card| card.id).collect())?;
+            tides::lower(catalog)
+        }
+        "dream_avatar_tide_pools_v1" => {
+            let catalog: dream_avatar_tide_pools::DreamAvatarTidePoolsCatalog =
+                parse_ron(source, dataset)?;
+            let tides_dataset = manifest.dataset("tides")?;
+            let tides_catalog: tides::TidesCatalog = parse_ron(
+                &fs::read_to_string(root.join(&tides_dataset.source))
+                    .with_context(|| format!("read tides source {}", tides_dataset.source))?,
+                tides_dataset,
+            )?;
+            let avatars_dataset = manifest.dataset("dream-avatars")?;
+            let avatars: Vec<dream_avatars::AvatarDefinition> = parse_ron(
+                &fs::read_to_string(root.join(&avatars_dataset.source)).with_context(|| {
+                    format!("read Dream Avatar source {}", avatars_dataset.source)
+                })?,
+                avatars_dataset,
+            )?;
+            dream_avatar_tide_pools::validate_references(
+                &catalog,
+                &tides::tide_kinds(&tides_catalog)?,
+                &avatars
+                    .into_iter()
+                    .map(|avatar| avatar.id.to_string())
+                    .collect(),
+            )?;
+            dream_avatar_tide_pools::lower(catalog)
+        }
         "transfiguration_v1" => transfiguration::lower(parse_ron(source, dataset)?),
         "compat_v1" => {
             let document: compat::CompatDocument = parse_ron(source, dataset)?;
@@ -647,6 +685,14 @@ mod tests {
                 }
                 "tide_alignments_v1" => {
                     canonical::<tide_alignments::TideAlignmentCatalog>(&source, false);
+                }
+                "tides_v1" => {
+                    canonical::<tides::TidesCatalog>(&source, true);
+                }
+                "dream_avatar_tide_pools_v1" => {
+                    canonical::<dream_avatar_tide_pools::DreamAvatarTidePoolsCatalog>(
+                        &source, true,
+                    );
                 }
                 "transfiguration_v1" => {
                     canonical::<transfiguration::TransfigurationCatalog>(&source, true);

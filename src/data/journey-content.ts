@@ -400,7 +400,6 @@ export function buildDreamAvatarTides4Provenance(
 
   const tides: Tides4TideSummary[] = provenance.tides.map((tide) => ({
     id: tide.id,
-    name: tide.name,
     displayName: tide.displayName,
     displayDescription: tide.displayDescription,
     role: tide.role,

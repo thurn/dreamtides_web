@@ -2,21 +2,31 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
-import { stripJsonComments, transformDreamAvatar } from "./setup-assets.mjs";
+import { transformDreamAvatar } from "./setup-assets.mjs";
 import { compileEconomyData } from "./economy-data.mjs";
+import { compileTidesData } from "./tides-data.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 export const DEFAULT_DREAM_AVATAR_TOML_PATH = join(
   "data",
   "dream_avatars.toml",
 );
-export const TIDES4_SOURCE_PATH = join("data", "tides4.jsonc");
+export const TIDES_SOURCE_PATH = join("data", "tides.ron");
+export const TIDES_TOML_PATH = join("data", "tides.toml");
+export const TIDE_POOLS_SOURCE_PATH = join(
+  "data",
+  "dream_avatar_tide_pools.ron",
+);
+export const TIDE_POOLS_TOML_PATH = join(
+  "data",
+  "dream_avatar_tide_pools.toml",
+);
 export const DEFAULT_ECONOMY_TOML_PATH = join("data", "economy.toml");
 const DREAM_AVATAR_JSON_PATH = join("public", "dream-avatars-v2-data.json");
-const TIDES4_JSON_PATH = join("public", "tides4-data.json");
 
 // Generated compatibility TOML supplies editor records. Semantic field saves
-// target canonical `dream_avatars.ron`; tide-pool saves target `tides4.jsonc`.
+// target canonical `dream_avatars.ron`; tide-pool saves target the dedicated
+// Dream Avatar tide-pool catalog.
 export const EDITABLE_DREAM_AVATAR_FIELDS = new Set([
   "name",
   "title",
@@ -45,9 +55,11 @@ function readSourceDreamAvatars(rootDir, dreamAvatarTomlPath) {
   return dreamAvatars;
 }
 
-function readTides4(rootDir, tides4Path) {
-  const absolute = join(rootDir, tides4Path);
-  return JSON.parse(stripJsonComments(readFileSync(absolute, "utf8")));
+function readTides4(rootDir, tides4Path, tidePoolsPath) {
+  return compileTidesData(
+    parse(readFileSync(join(rootDir, tides4Path), "utf8")),
+    parse(readFileSync(join(rootDir, tidePoolsPath), "utf8")),
+  );
 }
 
 /**
@@ -57,14 +69,13 @@ function readTides4(rootDir, tides4Path) {
  */
 export function readTideCatalog({
   rootDir = ROOT,
-  tides4Path = TIDES4_SOURCE_PATH,
+  tides4Path = TIDES_TOML_PATH,
+  tidePoolsPath = TIDE_POOLS_TOML_PATH,
 } = {}) {
-  const tides4 = readTides4(rootDir, tides4Path);
+  const tides4 = readTides4(rootDir, tides4Path, tidePoolsPath);
   const tides = Array.isArray(tides4.tides) ? tides4.tides : [];
   return tides.map((tide) => ({
     id: tide.id,
-    name: typeof tide.name === "string" ? tide.name : tide.id,
-    shortName: typeof tide.shortName === "string" ? tide.shortName : "",
     displayName: typeof tide.displayName === "string" ? tide.displayName : "",
     color: tide.color,
     role: tide.role,
@@ -119,10 +130,11 @@ function editorRecordFromDreamAvatar(
 export function readEditorDreamAvatars({
   rootDir = ROOT,
   dreamAvatarTomlPath = DEFAULT_DREAM_AVATAR_TOML_PATH,
-  tides4Path = TIDES4_SOURCE_PATH,
+  tides4Path = TIDES_TOML_PATH,
+  tidePoolsPath = TIDE_POOLS_TOML_PATH,
   economyTomlPath = DEFAULT_ECONOMY_TOML_PATH,
 } = {}) {
-  const tides4 = readTides4(rootDir, tides4Path);
+  const tides4 = readTides4(rootDir, tides4Path, tidePoolsPath);
   const economy = compileEconomyData(
     parse(readFileSync(join(rootDir, economyTomlPath), "utf8")),
   );
@@ -315,42 +327,6 @@ export function validateTidePool(rawValue, tideCatalog) {
   };
 }
 
-function escapeRegExp(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
-}
-
-/**
- * Replace a single DreamAvatar's entry within the `tidePoolByDreamAvatar` block
- * of `data/tides4.jsonc`. Each entry is stored on its own line as a compact JSON
- * object, so a line-anchored replacement preserves the file's surrounding
- * comments, ordering, and formatting while swapping just the one pool. The
- * result is re-parsed (comments stripped) to guarantee it stays valid JSON.
- */
-export function patchTides4Pool(source, { dreamAvatarId, pool }) {
-  const compact = JSON.stringify({
-    starter: pool.starter,
-    facets: pool.facets,
-    neutral: pool.neutral,
-  });
-
-  const entryPattern = new RegExp(
-    `^(\\s*"${escapeRegExp(dreamAvatarId)}"\\s*:\\s*)\\{.*?\\}(,?)([^\\n]*)$`,
-    "mu",
-  );
-
-  if (!entryPattern.test(source)) {
-    throw new Error(
-      `DreamAvatar ${dreamAvatarId} was not found in tides4.jsonc`,
-    );
-  }
-
-  const patched = source.replace(entryPattern, `$1${compact}$2$3`);
-  // Validate the result is still well-formed JSONC.
-  JSON.parse(stripJsonComments(patched));
-
-  return { source: patched };
-}
-
 export function refreshDreamAvatarDataJson({
   rootDir = ROOT,
   dreamAvatarTomlPath = DEFAULT_DREAM_AVATAR_TOML_PATH,
@@ -364,18 +340,4 @@ export function refreshDreamAvatarDataJson({
   writeFileSync(jsonPath, JSON.stringify(dreamAvatars, null, 2) + "\n");
 
   return { count: dreamAvatars.length, path: jsonPath };
-}
-
-export function refreshTides4DataJson({
-  rootDir = ROOT,
-  tides4Path = TIDES4_SOURCE_PATH,
-} = {}) {
-  const jsonc = readFileSync(join(rootDir, tides4Path), "utf8");
-  const served = JSON.stringify(JSON.parse(stripJsonComments(jsonc)));
-  const jsonPath = join(rootDir, TIDES4_JSON_PATH);
-
-  mkdirSync(join(rootDir, "public"), { recursive: true });
-  writeFileSync(jsonPath, served + "\n");
-
-  return { path: jsonPath };
 }

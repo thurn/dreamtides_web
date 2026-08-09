@@ -71,7 +71,12 @@ export async function saveTideField(
     {
       method: "PATCH",
       headers: { Accept: "application/json", "Content-Type": "application/json" },
-      body: JSON.stringify({ id: request.id, field: request.field, value: request.value }),
+      body: JSON.stringify({
+        id: request.id,
+        field: request.field,
+        value: request.value,
+        expectedSourceRevision: request.expectedSourceRevision,
+      }),
     },
   );
   return readJsonResponse<SaveTideFieldResponse>(response);

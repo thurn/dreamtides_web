@@ -132,20 +132,12 @@ export type Tides4TideSelection =
  * overlay names a card's source tide from these.
  */
 export interface Tides4TideSummary {
-  /** Stable tide id, e.g. "tide-sig-01" / "tide-fac-01" / "tide-neu-01". */
+  /** Stable tide UUIDv4. */
   id: string;
-  /** Human-readable tide name. */
-  name: string;
-  /**
-   * A narrative, thematic name for the tide shown on the player-facing screens
-   * (DreamAvatar select, Pool Viewer, "Why Cards"), when the tide is annotated.
-   */
-  displayName?: string;
-  /**
-   * A 10-20 word player-facing description of what makes the tide distinctive,
-   * shown in the tide hover popovers, when the tide is annotated.
-   */
-  displayDescription?: string;
+  /** Narrative, thematic name shown on player-facing screens. */
+  displayName: string;
+  /** Player-facing description of what makes the tide distinctive. */
+  displayDescription: string;
   /** Whether the tide is a signature floor, a directional facet, or a broad tide. */
   role: Tides4Role;
   /** Why this tide was joined this run. */

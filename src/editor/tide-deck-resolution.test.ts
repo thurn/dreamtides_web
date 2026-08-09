@@ -24,7 +24,8 @@ function makeCard(id: string, cardNumber: number, name: string): CardData {
 function makeDeck(cards: Tides4DeckJson["cards"]): Tides4DeckJson {
   return {
     id: "tide-fac-01",
-    name: "Test tide",
+    displayName: "Test tide",
+    displayDescription: "Test description",
     color: "purple",
     role: "facet",
     cards,
@@ -50,8 +51,8 @@ describe("resolveTideDeck", () => {
     const a = makeCard("11111111-1111-1111-1111-111111111111", 1, "Alpha");
     const b = makeCard("22222222-2222-2222-2222-222222222222", 2, "Beta");
     const deck = makeDeck([
-      { id: a.id, name: "Alpha", copies: 2 },
-      { id: b.id, name: "Beta", copies: 1 },
+      { id: a.id, copies: 2 },
+      { id: b.id, copies: 1 },
     ]);
 
     const resolution = resolveTideDeck(deck, cardsByUuid(a, b));
@@ -66,7 +67,7 @@ describe("resolveTideDeck", () => {
   it("matches UUIDs case-insensitively", () => {
     const a = makeCard("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", 7, "Alpha");
     const deck = makeDeck([
-      { id: a.id.toUpperCase(), name: "Alpha", copies: 1 },
+      { id: a.id.toUpperCase(), copies: 1 },
     ]);
 
     const resolution = resolveTideDeck(deck, cardsByUuid(a));
@@ -79,17 +80,16 @@ describe("resolveTideDeck", () => {
   it("reports unmatched UUIDs as unresolved while keeping matched cards and counting every copy", () => {
     const a = makeCard("11111111-1111-1111-1111-111111111111", 1, "Alpha");
     const deck = makeDeck([
-      { id: a.id, name: "Alpha", copies: 1 },
-      { id: "99999999-9999-9999-9999-999999999999", name: "Ghost", copies: 2 },
-      { id: "00000000-0000-0000-0000-000000000000", name: "", copies: 1 },
+      { id: a.id, copies: 1 },
+      { id: "99999999-9999-9999-9999-999999999999", copies: 2 },
+      { id: "00000000-0000-0000-0000-000000000000", copies: 1 },
     ]);
 
     const resolution = resolveTideDeck(deck, cardsByUuid(a));
 
     expect(resolution.cards.map((entry) => entry.card.id)).toEqual([a.id]);
-    // An unresolved entry falls back to its UUID when the stale name is blank.
     expect(resolution.unresolved).toEqual([
-      "Ghost",
+      "99999999-9999-9999-9999-999999999999",
       "00000000-0000-0000-0000-000000000000",
     ]);
     expect(resolution.totalCopies).toBe(4);

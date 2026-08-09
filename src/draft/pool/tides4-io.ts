@@ -1,7 +1,6 @@
-// Schema and validation for the committed `tides4` artifact (`data/tides4.jsonc`,
-// served as `/tides4-data.json`), the single input the tides4 pool algorithm
-// combines into draft pools. It bakes the axes of a DreamAvatar's identity as
-// separate decks and recombines a seeded subset per run.
+// Schema and validation for the browser projection of `data/tides.ron` and
+// `data/dream_avatar_tide_pools.ron`, served as `/tides4-data.json`. The tides4
+// pool algorithm recombines these manually curated decks into a seeded draft pool.
 //
 // The artifact carries both halves of the algorithm so it is self-contained:
 //   * `tides` — the preconstructed decklists. Each tide has a `role`:
@@ -19,21 +18,13 @@
 //     subset is drawn from each run), and `neutral` (the broad tail tides joined
 //     to top the pool up to full size). Every DreamAvatar has an entry.
 //
-// Cards are keyed by their stable cards_v2 UUID; the `name` fields are
-// informational, refreshed at bake time, so a card rename never invalidates the
-// artifact. The whole file is baked by `scripts/bake-tides4.mjs`; because the
-// per-DreamAvatar pools reference tide ids, a dangling id is a hard error so a
-// stale combination cannot ship silently. Pure and dependency-free so the bake
-// script, the metric harnesses, the unit tests, and the browser loader all share
-// one implementation.
+// Cards and tides are keyed by stable UUID. Display copy is retained only for
+// tide labels; card display data resolves from the card catalog at render time.
 
 /** One card entry in a committed tide deck. */
 export interface TideDeckCardJson {
   id: string;
-  name: string;
   copies: number;
-  subtype?: string;
-  text?: string;
 }
 
 /** The role a tide plays in pool construction. */
@@ -53,64 +44,20 @@ export const TIDES4_COLORS: readonly Tides4Color[] = [
 
 /** One preconstructed `tides4` deck. */
 export interface Tides4DeckJson {
-  /** Stable tide id, e.g. "tide-sig-01" / "tide-fac-01" / "tide-neu-01". */
+  /** Stable UUIDv4 tide identity. */
   id: string;
-  /** Human-readable tide name (its DreamAvatar, its lean card, or its breadth). */
-  name: string;
-  /**
-   * A short hand-authored label (1-3 words) for the mechanical identity the tide
-   * expresses, e.g. "Sacrifice Aggro" or "Spell Tempo". Present once the tide has
-   * been annotated; preserved across bakes by stable id.
-   */
-  shortName?: string;
-  /**
-   * A narrative, thematic name (not literal game terms) shown for the tide on the
-   * player-facing DreamAvatar select, pool viewer, and "why this card" screens.
-   * Present once annotated; preserved across bakes by stable id.
-   */
-  displayName?: string;
-  /**
-   * A 10-20 word player-facing description of what makes the tide distinctive,
-   * free of card, DreamAvatar, and tide names. Shown in the hover popovers on the
-   * player-facing tide screens; preserved across bakes by stable id.
-   */
-  displayDescription?: string;
-  /** A one-sentence summary of what the tide does and how it differs from peers. */
-  summary?: string;
-  /** A one-paragraph description of the tide's structure, engine, and contrasts. */
-  description?: string;
-  /**
-   * Machine-checkable archetype the tide's label is built around: its dominant
-   * tribe (a subtype, or `"events"`) and the mechanics it expresses. The
-   * annotation consistency gate (scripts/check-tide-annotations.mjs) validates
-   * these against the actual card list so a label that drifts off its deck fails
-   * loudly. Preserved across bakes by stable id; ignored by the runtime.
-   */
-  claims?: {
-    tribe?: string;
-    mechanics?: string[];
-  };
+  /** Player-facing narrative label. */
+  displayName: string;
+  /** Player-facing explanation of the tide's mechanical identity. */
+  displayDescription: string;
   /**
    * The deck color this tide's mechanical identity belongs to. Every tide is
-   * annotated with one; preserved across bakes by stable id. A tide without a
-   * valid color is rejected by {@link validateTides4Decks}.
+   * assigned one. A tide without a valid color is rejected by
+   * {@link validateTides4Decks}.
    */
   color: Tides4Color;
   /** Whether this is a signature floor, a directional facet, or a broad tide. */
   role: Tides4Role;
-  /**
-   * For a `signature` tide, the stable UUID of the DreamAvatar whose signature
-   * cards it holds. Absent on facet and neutral tides. Lets the player-facing and
-   * editor screens resolve the source DreamAvatar without matching on names.
-   */
-  dreamAvatarId?: string;
-  /**
-   * For a `facet` or `neutral` tide, the stable cards_v2 UUID of the single card
-   * the pool is themed around (a facet's lean anchor, a neutral's farthest-point
-   * seed). Absent on signature tides. Lets a screen feature the themed card by
-   * UUID rather than re-resolving it from the (non-unique) tide name.
-   */
-  leanCardId?: string;
   /** The decklist as UUID + copies entries. */
   cards: TideDeckCardJson[];
 }
@@ -132,7 +79,7 @@ export interface Tides4DreamAvatarPool {
   neutral: string[];
 }
 
-/** The committed `tides4` artifact (`data/tides4.jsonc`). */
+/** Browser projection compiled from the canonical tide catalog. */
 export interface Tides4DecksJson {
   version: number;
   /** All tide decks (signature floors, directional facets, broad neutrals). */
@@ -164,11 +111,18 @@ export function validateTides4Decks(json: unknown): Tides4DecksJson {
   }
   const ids = new Set<string>();
   for (const tide of data.tides) {
-    if (typeof tide !== "object" || tide === null) fail("tide is not an object");
-    if (typeof tide.id !== "string" || tide.id === "") fail("tide without an id");
+    if (typeof tide !== "object" || tide === null)
+      fail("tide is not an object");
+    if (typeof tide.id !== "string" || tide.id === "")
+      fail("tide without an id");
     if (ids.has(tide.id)) fail(`duplicate tide id "${tide.id}"`);
     ids.add(tide.id);
-    if (typeof tide.name !== "string") fail(`tide "${tide.id}" without a name`);
+    if (typeof tide.displayName !== "string") {
+      fail(`tide "${tide.id}" without a display name`);
+    }
+    if (typeof tide.displayDescription !== "string") {
+      fail(`tide "${tide.id}" without a display description`);
+    }
     if (
       tide.role !== "signature" &&
       tide.role !== "facet" &&
@@ -188,9 +142,6 @@ export function validateTides4Decks(json: unknown): Tides4DecksJson {
       }
       if (typeof card.id !== "string" || card.id === "") {
         fail(`tide "${tide.id}" has a card without a UUID`);
-      }
-      if (typeof card.name !== "string") {
-        fail(`tide "${tide.id}" card "${card.id}" has no name`);
       }
       if (typeof card.copies !== "number" || card.copies < 1) {
         fail(`tide "${tide.id}" card "${card.id}" has invalid copies`);
@@ -223,7 +174,9 @@ export function validateTides4Decks(json: unknown): Tides4DecksJson {
     for (const key of ["facets", "neutral"] as const) {
       for (const tideId of entry[key]) {
         if (!known(tideId)) {
-          fail(`tide "${String(tideId)}" in "${dreamAvatarId}".${key} names no tide`);
+          fail(
+            `tide "${String(tideId)}" in "${dreamAvatarId}".${key} names no tide`,
+          );
         }
       }
     }

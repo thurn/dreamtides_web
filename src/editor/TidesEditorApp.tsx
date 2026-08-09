@@ -165,11 +165,17 @@ export default function TidesEditorApp({
   const handleSaveField = useCallback(
     (field: EditableTideField, value: string) => {
       const tideId = urlState.tideId;
-      if (tideId === null) return;
+      if (tideId === null || loadStatus.kind !== "loaded") return;
       const seq = (saveSeqRef.current += 1);
       setSaveStatus({ status: "saving" });
       apiClient
-        .saveTideField({ file, id: tideId, field, value })
+        .saveTideField({
+          file,
+          id: tideId,
+          field,
+          value,
+          expectedSourceRevision: loadStatus.artifact.sourceRevision,
+        })
         .then((response) => {
           if (seq !== saveSeqRef.current) return;
           console.info(`[tides-editor] saved ${file} ${tideId}.${field}.`);
@@ -179,6 +185,7 @@ export default function TidesEditorApp({
               ...current,
               artifact: {
                 ...current.artifact,
+                sourceRevision: response.sourceRevision,
                 tides: current.artifact.tides.map((tide) =>
                   tide.id === response.tide.id ? response.tide : tide,
                 ),
@@ -194,7 +201,7 @@ export default function TidesEditorApp({
           setSaveStatus({ status: "error", message });
         });
     },
-    [apiClient, file, urlState.tideId],
+    [apiClient, file, loadStatus, urlState.tideId],
   );
 
   return (
@@ -221,7 +228,7 @@ export default function TidesEditorApp({
           -
         </span>
         <span style={{ color: "#8edbd1", fontSize: "0.82rem", fontWeight: 600 }}>
-          {`${file}.jsonc`}
+          {`${file}.ron`}
         </span>
       </header>
 
@@ -288,7 +295,7 @@ export default function TidesEditorApp({
         {loadStatus.kind === "loaded" && selectedTide === null && urlState.tideId !== null ? (
           <div style={{ marginTop: 12 }}>
             <p role="status" style={{ color: "#f0c6bd" }}>
-              {`Tide "${urlState.tideId}" was not found in ${file}.jsonc.`}
+              {`Tide "${urlState.tideId}" was not found in ${file}.ron.`}
             </p>
             <button
               type="button"

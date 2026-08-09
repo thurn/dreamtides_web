@@ -13,6 +13,7 @@ export type EditableTideField = "displayName" | "displayDescription" | "color";
  */
 export interface TidesArtifact {
   file: string;
+  sourceRevision: string;
   version: number;
   tides: Tides4DeckJson[];
   tidePoolByDreamAvatar: Record<string, Tides4DreamAvatarPool>;
@@ -24,12 +25,14 @@ export interface SaveTideFieldRequest {
   id: string;
   field: EditableTideField;
   value: string;
+  expectedSourceRevision: string;
 }
 
 /** The server's confirmation after a successful annotation save. */
 export interface SaveTideFieldResponse {
   file: string;
   tide: Tides4DeckJson;
+  sourceRevision: string;
 }
 
 /**

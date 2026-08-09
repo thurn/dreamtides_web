@@ -1,0 +1,1 @@
+`cargo fmt --manifest-path tools/game-data/Cargo.toml -- --check` reports existing formatting drift in `tools/game-data/src/models/atlas.rs` and `tools/game-data/src/models/gamble.rs`. Those files are outside the tides migration and were not modified.

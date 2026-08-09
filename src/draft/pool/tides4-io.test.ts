@@ -2,8 +2,7 @@
 // schema invariants (every tide has an id, role, and cards; every DreamAvatar
 // pool has a non-empty facet list, an array neutral list, and a starter that is
 // null or an existing tide; every referenced id names an existing tide) against
-// synthetic fixtures — never against the committed `data/tides4.jsonc`, whose
-// content is baked design data and subject to change at any time.
+// synthetic fixtures — never against the manually curated production catalog.
 
 import { describe, expect, it } from "vitest";
 
@@ -16,31 +15,34 @@ function makeArtifact(): Tides4DecksJson {
     tides: [
       {
         id: "tide-sig-01",
-        name: "Rael signature",
+        displayName: "Rael signature",
+        displayDescription: "Signature description",
         role: "signature",
         color: "purple",
         cards: [
-          { id: "11111111-1111-1111-1111-111111111111", name: "Card A", copies: 2 },
-          { id: "22222222-2222-2222-2222-222222222222", name: "Card B", copies: 1 },
+          { id: "11111111-1111-1111-1111-111111111111", copies: 2 },
+          { id: "22222222-2222-2222-2222-222222222222", copies: 1 },
         ],
       },
       {
         id: "tide-fac-01",
-        name: "Lean: Card A",
+        displayName: "Lean: Card A",
+        displayDescription: "Facet description",
         role: "facet",
         color: "green",
         cards: [
-          { id: "11111111-1111-1111-1111-111111111111", name: "Card A", copies: 2 },
-          { id: "44444444-4444-4444-4444-444444444444", name: "Card D", copies: 1 },
+          { id: "11111111-1111-1111-1111-111111111111", copies: 2 },
+          { id: "44444444-4444-4444-4444-444444444444", copies: 1 },
         ],
       },
       {
         id: "tide-neu-01",
-        name: "Broad: Card C / Card D",
+        displayName: "Broad: Card C / Card D",
+        displayDescription: "Neutral description",
         role: "neutral",
         color: "blue",
         cards: [
-          { id: "33333333-3333-3333-3333-333333333333", name: "Card C", copies: 1 },
+          { id: "33333333-3333-3333-3333-333333333333", copies: 1 },
         ],
       },
     ],

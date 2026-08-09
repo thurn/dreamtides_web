@@ -39,9 +39,8 @@ export type Tides4PoolTideSelection =
 
 export interface Tides4PoolTide {
   id: string;
-  name: string;
-  displayName?: string;
-  displayDescription?: string;
+  displayName: string;
+  displayDescription: string;
   role: Tides4Role;
   selection: Tides4PoolTideSelection;
   joined: boolean;

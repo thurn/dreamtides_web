@@ -74,14 +74,11 @@ describe("regenerate-assets.sh", () => {
     ).toEqual([
       "node scripts/setup-assets.mjs",
       "node scripts/bake-merchant-corpus.mjs",
-      "node scripts/bake-tides4.mjs",
       "node scripts/setup-assets.mjs",
       "node scripts/generate-cumulus-tokens.mjs",
       "node scripts/generate-cumulus-metadata.mjs",
       "node scripts/generate-cumulus-docs.mjs",
       "node scripts/generate-localization-types.mjs",
-      "node scripts/check-tides4.mjs",
-      "node scripts/check-tide-annotations.mjs",
     ]);
   });
 

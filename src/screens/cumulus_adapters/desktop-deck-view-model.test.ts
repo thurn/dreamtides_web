@@ -76,16 +76,13 @@ function tidesContext(
       tides: [
         {
           id: tideId,
-          name: "Fixture Tide",
           displayName: "Kindled Path",
           displayDescription:
             "Gather strength before releasing a decisive surge.",
           role: "signature",
           color: "orange",
-          dreamAvatarId: dreamAvatar.id,
           cards: Array.from({ length: 80 }, (_, index) => ({
             id: `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
-            name: `Fixture ${String(index)}`,
             copies: 2,
           })),
         },

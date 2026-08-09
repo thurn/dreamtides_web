@@ -13,12 +13,12 @@ import {
 function tide(id: string, cardCount: number): Tides4DeckJson {
   return {
     id,
-    name: id,
+    displayName: id,
+    displayDescription: `${id} description`,
     role: "facet",
     color: "purple",
     cards: Array.from({ length: cardCount }, (_, index) => ({
       id: `${id}-card-${String(index)}`,
-      name: `${id}-card-${String(index)}`,
       copies: 1,
     })),
   };
@@ -60,10 +60,11 @@ describe("largestTides", () => {
   it("counts copies, not unique card entries", () => {
     const big: Tides4DeckJson = {
       id: "big",
-      name: "big",
+      displayName: "big",
+      displayDescription: "big description",
       role: "facet",
       color: "purple",
-      cards: [{ id: "x", name: "x", copies: 20 }],
+      cards: [{ id: "x", copies: 20 }],
     };
     const tides = [tide("a", 5), tide("b", 5), tide("c", 5), tide("d", 5), big];
     expect(largestTides(tides)).toHaveLength(4);

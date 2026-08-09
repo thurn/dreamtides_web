@@ -13,8 +13,6 @@ export type DreamAvatarSearchScope = "name" | "all";
 /** A tide identity (without its decklist) the editor's tide picker renders. */
 export interface EditorTideOption {
   id: string;
-  name: string;
-  shortName: string;
   displayName: string;
   color: Tides4Color;
   role: Tides4Role;

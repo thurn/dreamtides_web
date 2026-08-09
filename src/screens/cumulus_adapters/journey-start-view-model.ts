@@ -95,9 +95,8 @@ export function largestTides(tides: Tides4DeckJson[]): Tides4DeckJson[] {
 function toTideView(tide: Tides4DeckJson): DreamAvatarTideView {
   return {
     id: tide.id,
-    label: tide.displayName ?? tide.shortName ?? tide.name,
-    description:
-      tide.displayDescription ?? tide.summary ?? tide.description ?? tide.name,
+    label: tide.displayName !== "" ? tide.displayName : tide.id,
+    description: tide.displayDescription,
     tide: tideAlignmentForDeckColor(tide.color).id,
   };
 }

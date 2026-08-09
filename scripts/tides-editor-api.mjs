@@ -1,41 +1,22 @@
-// Dev-server middleware backing the tides editor (`/tides`). It loads a committed
-// tides artifact and writes player-facing annotation edits (displayName,
-// displayDescription, color) back to it.
-//
-//   GET   /api/editor/tide-decks[?file=tides4]            -> the full artifact
-//   PATCH /api/editor/tide-decks/<tideId>[?file=tides4]   -> edit one tide annotation
-//
-// `apply: "serve"` (in vite.config.ts) keeps it out of production builds. Writes
-// go through an atomic temp-file swap with rollback so a crash mid-save never
-// leaves the JSONC source or its regenerated JSON partially written. The bake's
-// freshness gate stays green because the rewrite reuses the bake serializer and
-// touches only the freshness-ignored annotation fields.
+// Dev-server middleware backing the source-preserving canonical RON tides editor.
 
-import {
-  existsSync,
-  readFileSync,
-  renameSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+
 import {
-  patchTideAnnotation,
   readTidesArtifact,
-  refreshTidesDataJson,
   resolveTidesFile,
   validateTideEdit,
 } from "./tides-editor-data.mjs";
+import {
+  sourceRevision,
+  stageAndPublishGameDataEdit,
+} from "./game-data-pipeline.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-// A dedicated base path distinct from the card editor's legacy `/api/editor/tides`
-// tag-registry endpoint, which the tide-deck editor must not shadow.
 const BASE_PATH = "/api/editor/tide-decks";
-
-const defaultFileSystem = { existsSync, readFileSync, renameSync, rmSync, writeFileSync };
-
-let saveCounter = 0;
+export const TIDES_EDITOR_SOURCE_PATHS = [join("data", "tides.ron")];
 
 function jsonResponse(res, statusCode, body) {
   res.writeHead(statusCode, { "Content-Type": "application/json; charset=utf-8" });
@@ -69,9 +50,7 @@ function readRequestBody(req) {
     req.on("data", (chunk) => {
       body += chunk;
     });
-    req.on("end", () => {
-      resolvePromise(body);
-    });
+    req.on("end", () => resolvePromise(body));
     req.on("error", reject);
   });
 }
@@ -87,53 +66,6 @@ async function readJsonRequest(req) {
   }
 }
 
-function tempPathFor(destination, extension) {
-  saveCounter += 1;
-  return `${destination}.${process.pid}.${Date.now()}.${saveCounter}.${extension}`;
-}
-
-function preparedWrite(destination, content) {
-  return {
-    destination,
-    temp: tempPathFor(destination, "tmp"),
-    backup: tempPathFor(destination, "bak"),
-    content,
-  };
-}
-
-/** Atomic multi-file commit via temp swap with rollback. */
-function commitFiles(writes, fileSystem) {
-  const preexisting = new Set(writes.filter((write) => fileSystem.existsSync(write.destination)));
-  try {
-    for (const write of writes) fileSystem.writeFileSync(write.temp, write.content);
-    for (const write of writes) {
-      if (preexisting.has(write)) fileSystem.renameSync(write.destination, write.backup);
-    }
-    for (const write of writes) fileSystem.renameSync(write.temp, write.destination);
-  } catch (error) {
-    for (const write of writes) fileSystem.rmSync(write.temp, { force: true, recursive: true });
-    for (const write of writes) {
-      if (preexisting.has(write)) {
-        if (fileSystem.existsSync(write.backup)) {
-          fileSystem.rmSync(write.destination, { force: true, recursive: true });
-          fileSystem.renameSync(write.backup, write.destination);
-        }
-      } else {
-        fileSystem.rmSync(write.destination, { force: true, recursive: true });
-      }
-    }
-    throw error;
-  }
-  for (const write of writes) {
-    if (!preexisting.has(write)) continue;
-    try {
-      fileSystem.rmSync(write.backup, { force: true, recursive: true });
-    } catch {
-      // Backups are removed after every destination file is committed.
-    }
-  }
-}
-
 function tideIdFromRawPath(rawPath) {
   if (rawPath === BASE_PATH) return null;
   const segment = rawPath.slice(BASE_PATH.length + 1);
@@ -145,7 +77,34 @@ function tideIdFromRawPath(rawPath) {
   }
 }
 
-async function handlePatch(req, res, rootDir, tideId, resolved, fileSystem) {
+function statusFor(error) {
+  if (error.code === "STALE_SOURCE") return 409;
+  if (error.code === "RECORD_NOT_FOUND") return 404;
+  if (["INVALID_EDIT", "FIELD_NOT_APPLICABLE"].includes(error.code)) return 400;
+  if (["MALFORMED_SOURCE", "COMPATIBILITY_VALIDATION_FAILED"].includes(error.code)) {
+    return 422;
+  }
+  return error.statusCode ?? 500;
+}
+
+function collectionResponse(rootDir, resolved, revision, loadArtifact) {
+  return {
+    file: resolved.file,
+    ...loadArtifact({ rootDir, tomlPath: resolved.tomlPath }),
+    sourceRevision: revision(rootDir, TIDES_EDITOR_SOURCE_PATHS),
+  };
+}
+
+async function handlePatch({
+  req,
+  res,
+  rootDir,
+  tideId,
+  resolved,
+  publishEdit,
+  revision,
+  loadArtifact,
+}) {
   let body;
   try {
     body = await readJsonRequest(req);
@@ -156,53 +115,72 @@ async function handlePatch(req, res, rootDir, tideId, resolved, fileSystem) {
     }
     throw error;
   }
-
-  if (body === null || typeof body !== "object" || Array.isArray(body)) {
-    errorResponse(res, 400, "INVALID_REQUEST", "PATCH body must be a JSON object.");
-    return;
-  }
-  if (typeof body.field !== "string") {
-    errorResponse(res, 400, "INVALID_REQUEST", "PATCH body field must be a string.");
+  if (
+    body === null ||
+    typeof body !== "object" ||
+    Array.isArray(body) ||
+    typeof body.field !== "string" ||
+    typeof body.expectedSourceRevision !== "string"
+  ) {
+    errorResponse(
+      res,
+      400,
+      "INVALID_REQUEST",
+      "PATCH body requires field and expectedSourceRevision strings.",
+    );
     return;
   }
   if (typeof body.id === "string" && body.id !== tideId) {
-    errorResponse(res, 400, "TIDE_ID_MISMATCH", "Route tide id must match request body id.", {
-      routeId: tideId,
-      bodyId: body.id,
-    });
+    errorResponse(
+      res,
+      400,
+      "TIDE_ID_MISMATCH",
+      "Route tide id must match request body id.",
+    );
     return;
   }
-
   const validation = validateTideEdit(body.field, body.value);
   if (!validation.ok) {
-    errorResponse(res, 400, "INVALID_EDIT", validation.message, { field: body.field });
-    return;
-  }
-
-  const jsoncAbs = join(rootDir, resolved.jsoncPath);
-  const source = fileSystem.readFileSync(jsoncAbs, "utf8");
-
-  let patched;
-  try {
-    patched = patchTideAnnotation(source, {
-      tideId,
-      field: validation.field,
-      value: validation.value,
+    errorResponse(res, 400, "INVALID_EDIT", validation.message, {
+      field: body.field,
     });
-  } catch (error) {
-    errorResponse(res, 404, "TIDE_NOT_FOUND", error instanceof Error ? error.message : "Tide not found.");
     return;
   }
 
-  commitFiles([preparedWrite(jsoncAbs, patched.source)], fileSystem);
-  refreshTidesDataJson({ rootDir, jsoncPath: resolved.jsoncPath, jsonPath: resolved.jsonPath });
-
-  jsonResponse(res, 200, { file: resolved.file, tide: patched.tide });
+  const result = await publishEdit({
+    rootDir,
+    dataset: "tides",
+    operations: [
+      {
+        operation: "set_tide_field",
+        tide_id: tideId,
+        field: validation.field,
+        value: validation.value,
+      },
+    ],
+    sourcePaths: TIDES_EDITOR_SOURCE_PATHS,
+    expectedSourceRevision: body.expectedSourceRevision,
+  });
+  const artifact = loadArtifact({ rootDir, tomlPath: resolved.tomlPath });
+  const tide = artifact.tides.find((entry) => entry.id === tideId);
+  if (tide === undefined) {
+    const error = new Error("Published tide could not be reloaded.");
+    error.code = "PUBLICATION_FAILED";
+    throw error;
+  }
+  jsonResponse(res, 200, {
+    file: resolved.file,
+    tide,
+    sourceRevision:
+      result.sourceRevision ?? revision(rootDir, TIDES_EDITOR_SOURCE_PATHS),
+  });
 }
 
 export function createTidesEditorApiMiddleware({
   rootDir = ROOT,
-  fileSystem = defaultFileSystem,
+  publishEdit = stageAndPublishGameDataEdit,
+  revision = sourceRevision,
+  loadArtifact = readTidesArtifact,
 } = {}) {
   return async function tidesEditorApiMiddleware(req, res, next) {
     const rawPath = rawPathFromUrl(req.url);
@@ -210,40 +188,64 @@ export function createTidesEditorApiMiddleware({
       next();
       return;
     }
-
+    let resolved;
     try {
-      const resolved = resolveTidesFile(rootDir, fileParamFromUrl(req.url));
+      resolved = resolveTidesFile(rootDir, fileParamFromUrl(req.url));
       if (!resolved.ok) {
         errorResponse(res, 400, "INVALID_FILE", resolved.message);
         return;
       }
-      if (!fileSystem.existsSync(join(rootDir, resolved.jsoncPath))) {
-        errorResponse(res, 404, "FILE_NOT_FOUND", "The requested tides file was not found.", {
-          file: resolved.file,
+      if (!existsSync(join(rootDir, resolved.ronPath))) {
+        errorResponse(res, 404, "FILE_NOT_FOUND", "The requested tides file was not found.");
+        return;
+      }
+      const tideId = tideIdFromRawPath(rawPath);
+      if (req.method === "GET" && tideId === null) {
+        jsonResponse(
+          res,
+          200,
+          collectionResponse(rootDir, resolved, revision, loadArtifact),
+        );
+        return;
+      }
+      if (req.method === "PATCH" && tideId !== null) {
+        await handlePatch({
+          req,
+          res,
+          rootDir,
+          tideId,
+          resolved,
+          publishEdit,
+          revision,
+          loadArtifact,
         });
         return;
       }
-
-      const tideId = tideIdFromRawPath(rawPath);
-
-      if (req.method === "GET" && tideId === null) {
-        const artifact = readTidesArtifact({ rootDir, jsoncPath: resolved.jsoncPath });
-        jsonResponse(res, 200, { file: resolved.file, ...artifact });
-        return;
-      }
-
-      if (req.method === "PATCH" && tideId !== null) {
-        await handlePatch(req, res, rootDir, tideId, resolved, fileSystem);
-        return;
-      }
-
-      jsonResponse(
-        res,
-        405,
-        { error: { code: "METHOD_NOT_ALLOWED", message: "Method is not allowed for this endpoint." } },
-      );
+      jsonResponse(res, 405, {
+        error: {
+          code: "METHOD_NOT_ALLOWED",
+          message: "Method is not allowed for this endpoint.",
+        },
+      });
     } catch (error) {
-      errorResponse(res, 500, "SAVE_FAILED", error instanceof Error ? error.message : "Save failed.");
+      let confirmed;
+      if (error.code === "STALE_SOURCE" && resolved?.ok === true) {
+        confirmed = collectionResponse(rootDir, resolved, revision, loadArtifact);
+      }
+      errorResponse(
+        res,
+        statusFor(error),
+        error.code ?? "PUBLICATION_FAILED",
+        error instanceof Error ? error.message : "Tide editor transaction failed.",
+        {
+          datasetId: "tides",
+          source: TIDES_EDITOR_SOURCE_PATHS[0],
+          ...(error.currentSourceRevision === undefined
+            ? {}
+            : { currentSourceRevision: error.currentSourceRevision }),
+          ...(confirmed === undefined ? {} : { confirmed }),
+        },
+      );
     }
   };
 }

@@ -21,8 +21,8 @@ const PROVENANCE: Tides4ProvenanceSummary = {
   facetAvailableCount: 2,
   tides: [{
     id: "tide-a",
-    name: "Signature A",
     displayName: "Signature A",
+    displayDescription: "Signature description",
     role: "signature",
     selection: "starter",
     joined: true,

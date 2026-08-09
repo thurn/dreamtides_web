@@ -1,6 +1,5 @@
 import type { CardData } from "../types/cards";
 import { GameCard } from "../cumulus/components/card/CardView";
-import { DreamAvatarPortrait } from "../cumulus/components/hud/DreamAvatarPortrait";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";
 import type { EditorDreamAvatar } from "./tides-types";
 
@@ -21,22 +20,12 @@ interface TideSourcePreviewProps {
  */
 export function TideSourcePreview({
   tide,
-  dreamAvatarById,
   cardById,
   size,
 }: TideSourcePreviewProps) {
-  if (tide.role === "signature" && tide.dreamAvatarId !== undefined) {
-    const dreamAvatar = dreamAvatarById.get(tide.dreamAvatarId.toLowerCase());
-    if (dreamAvatar === undefined) return null;
-    return (
-      <div style={{ width: size, height: size, flex: `0 0 ${size}px` }}>
-        <DreamAvatarPortrait dreamAvatar={dreamAvatar} variant="thumb" profile={{ id: dreamAvatar.id, ability: dreamAvatar.renderedText }} />
-      </div>
-    );
-  }
-
-  if (tide.leanCardId !== undefined) {
-    const card = cardById.get(tide.leanCardId.toLowerCase());
+  const first = tide.cards[0];
+  if (first !== undefined) {
+    const card = cardById.get(first.id.toLowerCase());
     if (card === undefined) return null;
     return (
       <div style={{ width: size, flex: `0 0 ${size}px` }}>

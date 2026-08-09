@@ -34,7 +34,7 @@ const ROLE_GROUPS: { role: Tides4Role; label: string; blurb: string }[] = [
 
 /** The player-facing label for a tide, preferring its curated names. */
 export function tideLabel(tide: Tides4DeckJson): string {
-  return tide.displayName ?? tide.shortName ?? tide.name;
+  return tide.displayName !== "" ? tide.displayName : tide.id;
 }
 
 function tideCardCount(tide: Tides4DeckJson): number {
@@ -113,7 +113,7 @@ function TideTile({
             whiteSpace: "nowrap",
           }}
         >
-          {tide.name}
+          {tide.id}
         </div>
         <div
           style={{

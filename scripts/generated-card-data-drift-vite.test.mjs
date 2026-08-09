@@ -10,7 +10,9 @@ import viteConfig, {
 } from "../vite.config.ts";
 import { generatedConfigDataWatchPaths } from "./config-data.mjs";
 
-const rootDir = dirname(fileURLToPath(new URL("../package.json", import.meta.url)));
+const rootDir = dirname(
+  fileURLToPath(new URL("../package.json", import.meta.url)),
+);
 
 function makeHotUpdateContext(file) {
   return {
@@ -43,8 +45,8 @@ describe("generated card data drift Vite integration", () => {
     // reload the page. The .worktrees and
     // .claude/worktrees directories are ignored so creating a git worktree
     // (which writes a full repo copy, including a tsconfig.json) does not force
-    // a full reload. data/tides4.jsonc and the public dream-avatar/tides4 JSON catalogs (all
-    // rewritten by the dreamAvatar editor) are ignored so those editor saves do
+    // a full reload. The canonical tide sources and public DreamAvatar/tides JSON catalogs
+    // (all rewritten by the dreamAvatar editor) are ignored so those editor saves do
     // not reload the page either. Exploration's canonical templates and generated public catalog
     // are ignored because its API sends a targeted journey reload event. The
     // public dreamwell JSON catalog (rewritten
@@ -59,7 +61,8 @@ describe("generated card data drift Vite integration", () => {
       resolve(join(rootDir, "saved-journeys")) + "/**",
       resolve(join(rootDir, ".worktrees")) + "/**",
       resolve(join(rootDir, ".claude", "worktrees")) + "/**",
-      resolve(join(rootDir, "data", "tides4.jsonc")),
+      resolve(join(rootDir, "data", "tides.ron")),
+      resolve(join(rootDir, "data", "dream_avatar_tide_pools.ron")),
       resolve(join(rootDir, "public", "dream-avatars-v2-data.json")),
       resolve(join(rootDir, "public", "tides4-data.json")),
       resolve(join(rootDir, "public", "dreamwell-data.json")),
@@ -74,9 +77,7 @@ describe("generated card data drift Vite integration", () => {
     expect(
       callHotUpdate(
         plugin,
-        makeHotUpdateContext(
-          join(rootDir, "data", "cards.toml"),
-        ),
+        makeHotUpdateContext(join(rootDir, "data", "cards.toml")),
       ),
     ).toEqual([]);
     expect(
@@ -93,7 +94,9 @@ describe("generated card data drift Vite integration", () => {
     expect(
       callHotUpdate(
         plugin,
-        makeHotUpdateContext(join(rootDir, "src", "editor", "CardEditorApp.tsx")),
+        makeHotUpdateContext(
+          join(rootDir, "src", "editor", "CardEditorApp.tsx"),
+        ),
       ),
     ).toBeUndefined();
   });

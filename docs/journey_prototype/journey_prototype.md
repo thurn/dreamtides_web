@@ -25,8 +25,7 @@ validated, generated compatibility TOML. It is idempotent and then:
 2. Parses generated `dream_avatars.toml` into `public/dream-avatars-v2-data.json`.
 3. Symlinks `public/cards/{cardNumber}.webp` into the local image cache at
    `~/Library/Caches/io.github.dreamtides.tv/image_cache/`.
-4. Copies `data/tides4.jsonc` into `public/tides4-data.json` with comments
-   stripped.
+4. Compiles generated `data/tides.toml` into `public/tides4-data.json`.
 5. Compiles generated `data/atlas.toml` into validated `public/atlas-data.json`.
 6. Compiles and cross-validates the canonical Dream Guide and Site catalogs,
    derives Dreamscape assignments, and emits `public/dream-guides-data.json`,

@@ -349,8 +349,12 @@ function tidesEditorApiPlugin(): Plugin {
     name: "tides-editor-api",
     apply: "serve",
     configureServer(server) {
+      const editorRoot = process.env.DREAMTIDES_EDITOR_DATA_ROOT;
       server.middlewares.use(
-        createTidesEditorApiMiddleware({ rootDir: __dirname }),
+        createTidesEditorApiMiddleware({
+          rootDir:
+            editorRoot === undefined ? __dirname : path.resolve(editorRoot),
+        }),
       );
     },
   };
@@ -1051,12 +1055,14 @@ export default defineConfig({
         path.resolve(path.join(__dirname, "saved-journeys")) + "/**",
         path.resolve(path.join(__dirname, ".worktrees")) + "/**",
         path.resolve(path.join(__dirname, ".claude", "worktrees")) + "/**",
-        // The dreamAvatar editor writes data/tides4.jsonc (tide-pool edits) and
-        // regenerates the public dream-avatar/tides4 JSON catalogs on every save.
-        // tides4.jsonc is canonical JSONC and the generated JSON outputs live
-        // under public/, so all three are otherwise watched; ignoring them keeps a
+        // The DreamAvatar and tides editors write the canonical tide catalogs and
+        // regenerate the public DreamAvatar/tides JSON catalogs on every save.
+        // These files are otherwise watched; ignoring them keeps a
         // dream-avatar-editor save from reloading the page mid-edit.
-        path.resolve(path.join(__dirname, "data", "tides4.jsonc")),
+        path.resolve(path.join(__dirname, "data", "tides.ron")),
+        path.resolve(
+          path.join(__dirname, "data", "dream_avatar_tide_pools.ron"),
+        ),
         path.resolve(
           path.join(__dirname, "public", "dream-avatars-v2-data.json"),
         ),

@@ -32,18 +32,10 @@ function fixture() {
     join(rootDir, "data", "dream_avatars.ron"),
     "canonical source\n",
   );
+  writeFileSync(join(rootDir, "data", "tides.ron"), "canonical tides source\n");
   writeFileSync(
-    join(rootDir, "data", "tides4.jsonc"),
-    [
-      "{",
-      '  "version": 1,',
-      '  "tides": [],',
-      '  "tidePoolByDreamAvatar": {',
-      `    "${AVATAR_ID}": {"starter":"signature","facets":["facet"],"neutral":["neutral"]}`,
-      "  }",
-      "}",
-      "",
-    ].join("\n"),
+    join(rootDir, "data", "dream_avatar_tide_pools.ron"),
+    "canonical tide pools source\n",
   );
   const data = {
     dreamAvatars: [
@@ -66,33 +58,25 @@ function fixture() {
     tides: [
       {
         id: "signature",
-        name: "Signature",
-        shortName: "",
-        displayName: "",
+        displayName: "Signature",
         color: "purple",
         role: "signature",
       },
       {
         id: "facet",
-        name: "Facet",
-        shortName: "",
-        displayName: "",
+        displayName: "Facet",
         color: "green",
         role: "facet",
       },
       {
         id: "facet-2",
-        name: "Facet 2",
-        shortName: "",
-        displayName: "",
+        displayName: "Facet 2",
         color: "blue",
         role: "facet",
       },
       {
         id: "neutral",
-        name: "Neutral",
-        shortName: "",
-        displayName: "",
+        displayName: "Neutral",
         color: "yellow",
         role: "neutral",
       },
@@ -186,17 +170,21 @@ describe("DreamAvatar canonical RON editor API", () => {
       ],
       sourcePaths: DREAM_AVATAR_EDITOR_SOURCE_PATHS,
       expectedSourceRevision: "revision-1",
-      stagedFiles: {},
     });
   });
 
-  it("stages tide-pool source patches in the same revisioned transaction", async () => {
+  it("submits tide-pool semantic operations in the same revisioned transaction", async () => {
     const { rootDir, data } = fixture();
-    const publishEdit = vi.fn(async ({ stagedFiles }) => {
-      writeFileSync(
-        join(rootDir, "data", "tides4.jsonc"),
-        stagedFiles["data/tides4.jsonc"],
-      );
+    const publishEdit = vi.fn(async ({ operations }) => {
+      expect(operations).toEqual([
+        {
+          operation: "set_dream_avatar_tide_pool",
+          dream_avatar_id: AVATAR_ID,
+          starter: "signature",
+          facets: ["facet-2"],
+          neutral: ["neutral"],
+        },
+      ]);
       data.dreamAvatars[0].tidePool = {
         starter: "signature",
         facets: ["facet-2"],
@@ -229,15 +217,18 @@ describe("DreamAvatar canonical RON editor API", () => {
     expect(saved.status).toBe(200);
     expect(publishEdit).toHaveBeenCalledWith(
       expect.objectContaining({
-        dataset: "dream-avatars",
-        operations: [],
+        dataset: "dream-avatar-tide-pools",
+        operations: [
+          {
+            operation: "set_dream_avatar_tide_pool",
+            dream_avatar_id: AVATAR_ID,
+            starter: "signature",
+            facets: ["facet-2"],
+            neutral: ["neutral"],
+          },
+        ],
         sourcePaths: DREAM_AVATAR_EDITOR_SOURCE_PATHS,
         expectedSourceRevision: "revision-1",
-        stagedFiles: {
-          "data/tides4.jsonc": expect.stringContaining(
-            `"${AVATAR_ID}": {"starter":"signature","facets":["facet-2"],"neutral":["neutral"]}`,
-          ),
-        },
       }),
     );
   });
@@ -280,7 +271,11 @@ describe("DreamAvatar canonical RON editor API", () => {
         "utf8",
       );
       const tidesBefore = readFileSync(
-        join(rootDir, "data", "tides4.jsonc"),
+        join(rootDir, "data", "tides.ron"),
+        "utf8",
+      );
+      const tidePoolsBefore = readFileSync(
+        join(rootDir, "data", "dream_avatar_tide_pools.ron"),
         "utf8",
       );
       const failure = Object.assign(new Error(`${code}: fixture failure`), {
@@ -316,9 +311,15 @@ describe("DreamAvatar canonical RON editor API", () => {
       expect(
         readFileSync(join(rootDir, "data", "dream_avatars.ron"), "utf8"),
       ).toBe(sourceBefore);
-      expect(readFileSync(join(rootDir, "data", "tides4.jsonc"), "utf8")).toBe(
+      expect(readFileSync(join(rootDir, "data", "tides.ron"), "utf8")).toBe(
         tidesBefore,
       );
+      expect(
+        readFileSync(
+          join(rootDir, "data", "dream_avatar_tide_pools.ron"),
+          "utf8",
+        ),
+      ).toBe(tidePoolsBefore);
     },
   );
 });

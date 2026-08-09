@@ -25,7 +25,7 @@ export interface TidePoolModalProps {
 }
 
 function tideLabel(tide: EditorTideOption): string {
-  return tide.displayName !== "" ? tide.displayName : tide.shortName !== "" ? tide.shortName : tide.name;
+  return tide.displayName !== "" ? tide.displayName : tide.id;
 }
 
 const overlayStyle: CSSProperties = {
@@ -178,7 +178,7 @@ export default function TidePoolModal({
                   key={tide.id}
                   type="button"
                   aria-pressed={starter === tide.id}
-                  title={`${tide.name} (${tide.id})`}
+                  title={`${tide.displayName} (${tide.id})`}
                   onClick={() => setStarter(starter === tide.id ? null : tide.id)}
                   style={tideChipStyle(starter === tide.id, TIDE_DOT_COLOR[tide.color])}
                 >
@@ -206,7 +206,7 @@ export default function TidePoolModal({
                     key={tide.id}
                     type="button"
                     aria-pressed={active}
-                    title={`${tide.name} (${tide.id})`}
+                    title={`${tide.displayName} (${tide.id})`}
                     onClick={() => setFacets((current) => toggle(current, tide.id))}
                     style={tideChipStyle(active, TIDE_DOT_COLOR[tide.color])}
                   >
@@ -228,7 +228,7 @@ export default function TidePoolModal({
                     key={tide.id}
                     type="button"
                     aria-pressed={active}
-                    title={`${tide.name} (${tide.id})`}
+                    title={`${tide.displayName} (${tide.id})`}
                     onClick={() => setNeutral((current) => toggle(current, tide.id))}
                     style={tideChipStyle(active, TIDE_DOT_COLOR[tide.color])}
                   >

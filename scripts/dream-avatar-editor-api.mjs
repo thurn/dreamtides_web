@@ -1,10 +1,9 @@
-import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   DEFAULT_DREAM_AVATAR_TOML_PATH,
-  TIDES4_SOURCE_PATH,
-  patchTides4Pool,
+  TIDE_POOLS_SOURCE_PATH,
+  TIDES_SOURCE_PATH,
   readEditorDreamAvatars,
   readTideCatalog,
   validateDreamAvatarEdit,
@@ -20,7 +19,8 @@ const BASE_PATH = "/api/editor/dream-avatars";
 export const DREAM_AVATAR_SOURCE_PATH = join("data", "dream_avatars.ron");
 export const DREAM_AVATAR_EDITOR_SOURCE_PATHS = [
   DREAM_AVATAR_SOURCE_PATH,
-  TIDES4_SOURCE_PATH,
+  TIDES_SOURCE_PATH,
+  TIDE_POOLS_SOURCE_PATH,
 ];
 const UUID_V4_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u;
@@ -259,8 +259,8 @@ async function handlePatch(
     return;
   }
 
+  let dataset;
   let operations;
-  let stagedFiles;
   if (body.field === "tide-pool") {
     const validation = validateTidePool(body.value, beforeData.tides);
     if (!validation.ok) {
@@ -269,13 +269,16 @@ async function handlePatch(
       });
       return;
     }
-    const source = readFileSync(join(rootDir, TIDES4_SOURCE_PATH), "utf8");
-    const patched = patchTides4Pool(source, {
-      dreamAvatarId,
-      pool: validation.value,
-    });
-    operations = [];
-    stagedFiles = { [TIDES4_SOURCE_PATH]: patched.source };
+    dataset = "dream-avatar-tide-pools";
+    operations = [
+      {
+        operation: "set_dream_avatar_tide_pool",
+        dream_avatar_id: dreamAvatarId,
+        starter: validation.value.starter,
+        facets: validation.value.facets,
+        neutral: validation.value.neutral,
+      },
+    ];
   } else {
     const validation = validateDreamAvatarEdit(body.field, body.value);
     if (!validation.ok) {
@@ -285,6 +288,7 @@ async function handlePatch(
       });
       return;
     }
+    dataset = "dream-avatars";
     operations = [
       {
         operation: "set_dream_avatar_field",
@@ -293,16 +297,14 @@ async function handlePatch(
         value: validation.value,
       },
     ];
-    stagedFiles = {};
   }
 
   const result = await publishEdit({
     rootDir,
-    dataset: "dream-avatars",
+    dataset,
     operations,
     sourcePaths: DREAM_AVATAR_EDITOR_SOURCE_PATHS,
     expectedSourceRevision: body.expectedSourceRevision,
-    stagedFiles,
   });
   const confirmed = confirmedRecord(loadData(rootDir), dreamAvatarId);
   if (confirmed === undefined) {

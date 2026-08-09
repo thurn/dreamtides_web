@@ -71,9 +71,6 @@
     "bake-merchant-corpus": "node scripts/setup-assets.mjs && node scripts/bake-merchant-corpus.mjs",
     "merchant-corpus-parity": "node scripts/setup-assets.mjs && node scripts/merchant-corpus-parity.mjs",
     "merchant-metric": "node scripts/setup-assets.mjs && vite-node scripts/merchant-experiment.ts",
-    "bake-tides4": "node scripts/setup-assets.mjs && node scripts/bake-tides4.mjs",
-    "check-tides4": "node scripts/setup-assets.mjs && node scripts/check-tides4.mjs",
-    "check-tide-annotations": "node scripts/setup-assets.mjs && node scripts/check-tide-annotations.mjs",
     "bake-draft-records": "node scripts/setup-assets.mjs && node scripts/rebuild-adapted-draft-records.mjs"
   },
   "dependencies": {
