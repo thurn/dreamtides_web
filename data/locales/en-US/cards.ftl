@@ -179,17 +179,6 @@ card-type-line =
                *[no] { $cardType }
             }
     }
-# Canonical alignment name beneath the icon on a Tide information card. $tide
-# is one of "ember", "valor", "vision", "wild", or "shadow" from the semantic
-# Tide model; translations may use the established localized proper names.
-tide-alignment-name =
-    { $tide ->
-        [ember] Ember
-        [valor] Valor
-        [vision] Vision
-        [wild] Wild
-       *[shadow] Shadow
-    }
 # Shared card-gallery and battle-zone controls.
 card-gallery-empty-default = No cards.
 card-choice-purge-operation = This card will be purged

@@ -12,7 +12,7 @@ The single semantic tide mark: a colored disc carrying the tide's glyph and its 
 
 > **Guidance:** The tide-identity palette lives in src/cumulus/components/hud/tide-spec.ts.
 
-Its five tides — Ember #fb923c, Valor #facc15, Vision #60a5fa, Wild #4ade80, Shadow #c084fc — each own a fixed accent and glyph, exposed as TIDES / tideVisual / tideAlignmentLabel. TideDisc and InfoCard's tide variant read that table.
+The canonical tide-alignment catalog supplies each fixed accent, glyph, display name, and accessibility name to TideDisc and InfoCard.
 
 Selection-provenance controls use role colors instead. tide-spec has no renderable component of its own, so it is documented here on its canonical renderer.
 
@@ -20,7 +20,7 @@ Selection-provenance controls use role colors instead. tide-spec has no renderab
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `tide` | `Tide` = `"shadow" \| "ember" \| "valor" \| "vision" \| "wild"` | yes | — | Which of the five tides. Fixes the disc's color and glyph. |
+| `tide` | `TideAlignmentId` = `"shadow" \| "ember" \| "valor" \| "vision" \| "wild"` | yes | — | Which of the five tides. Fixes the disc's color and glyph. |
 | `id` | `string` | yes | — | Stable id (a tide deck id) for the `data-tide-disc` QA hook. |
 | `label` | `string` | yes | — | Display name used by the source and its tide card. |
 | `description` | `string` | yes | — | Semantic description revealed by this tide source. |

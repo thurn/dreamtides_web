@@ -508,7 +508,6 @@ fn nonnegative(path: &str, value: f64) -> Result<()> {
     Ok(())
 }
 
-
 fn blend<const N: usize>(path: &str, weights: [f64; N]) -> Result<()> {
     for weight in weights {
         unit_interval(path, weight)?;

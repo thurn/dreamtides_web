@@ -6,10 +6,8 @@
 
 import { TideDisc } from "../../components/hud/TideDisc";
 import { token } from "../../primitives/tokens";
-import { TIDES, type Tide } from "../../components/hud/tide-spec";
+import { tideAlignments } from "../../components/hud/tide-spec";
 import type { CumulusComponent } from "../registry";
-
-const ALL_TIDES = Object.keys(TIDES) as Tide[];
 
 function TideDiscDemo() {
   return (
@@ -23,13 +21,13 @@ function TideDiscDemo() {
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        {ALL_TIDES.map((tide) => (
+        {tideAlignments().map((alignment) => (
           <TideDisc
-            key={tide}
-            tide={tide}
-            id={`demo-sm-${tide}`}
-            label={tide}
-            description={`A ${tide} tide.`}
+            key={alignment.id}
+            tide={alignment.id}
+            id={`demo-sm-${alignment.id}`}
+            label={alignment.displayName}
+            description={alignment.accessibilityName}
           />
         ))}
       </div>
@@ -53,7 +51,7 @@ export const tideDiscDemo: CumulusComponent = {
   callout:
     "The tide-identity palette lives in src/cumulus/components/hud/tide-spec.ts.",
   details: [
-    "Its five tides — Ember #fb923c, Valor #facc15, Vision #60a5fa, Wild #4ade80, Shadow #c084fc — each own a fixed accent and glyph, exposed as TIDES / tideVisual / tideAlignmentLabel. TideDisc and InfoCard's tide variant read that table.",
+    "The canonical tide-alignment catalog supplies each fixed accent, glyph, display name, and accessibility name to TideDisc and InfoCard.",
     "Selection-provenance controls use role colors instead. tide-spec has no renderable component of its own, so it is documented here on its canonical renderer.",
   ],
   group: "Components",

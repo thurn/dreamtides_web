@@ -8,7 +8,7 @@ import { DreamAvatarPortrait } from "../cumulus/components/hud/DreamAvatarPortra
 import { RulesText } from "../cumulus/components/card/RulesText";
 import { StandaloneGlyph } from "../cumulus/components/controls/StandaloneGlyph";
 import { GLYPHS, glyph } from "../cumulus/primitives/glyph";
-import { TIDE_ACCENT_COLOR, TIDE_COLOR_CHIP } from "./tide-visuals";
+import { tideAccentColor, tideColorChip } from "./tide-visuals";
 import {
   TIDES4_COLORS,
   type Tides4Color,
@@ -86,14 +86,15 @@ function FeaturedSource({
     return (
       <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
         <div style={{ width: 160, flex: "0 0 auto" }}>
-          <DreamAvatarPortrait
-            dreamAvatar={dreamAvatar}
-            variant="panel"
-          />
+          <DreamAvatarPortrait dreamAvatar={dreamAvatar} variant="panel" />
         </div>
         <div style={{ minWidth: 0 }}>
-          <div style={{ fontWeight: 800, fontSize: "1.1rem" }}>{dreamAvatar.name}</div>
-          <div style={{ color: "#8edbd1", fontSize: "0.85rem", marginBottom: 8 }}>
+          <div style={{ fontWeight: 800, fontSize: "1.1rem" }}>
+            {dreamAvatar.name}
+          </div>
+          <div
+            style={{ color: "#8edbd1", fontSize: "0.85rem", marginBottom: 8 }}
+          >
             {dreamAvatar.title}
           </div>
           <div style={{ fontSize: "0.9rem", lineHeight: 1.4, maxWidth: 460 }}>
@@ -117,10 +118,14 @@ function FeaturedSource({
           <CardView card={card} large />
         </div>
         <div>
-          <div style={{ fontSize: "0.78rem", color: "rgba(247, 241, 223, 0.5)" }}>
+          <div
+            style={{ fontSize: "0.78rem", color: "rgba(247, 241, 223, 0.5)" }}
+          >
             {heading}
           </div>
-          <div style={{ fontWeight: 800, fontSize: "1.05rem" }}>{card.name}</div>
+          <div style={{ fontWeight: 800, fontSize: "1.05rem" }}>
+            {card.name}
+          </div>
         </div>
       </div>
     );
@@ -139,7 +144,7 @@ function ColorPicker({
   return (
     <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
       {TIDES4_COLORS.map((color) => {
-        const chip = TIDE_COLOR_CHIP[color];
+        const chip = tideColorChip(color);
         const selected = color === value;
         return (
           <button
@@ -162,12 +167,12 @@ function ColorPicker({
               color: "#ffffff",
               background: chip.background,
               border: selected
-                ? `2px solid ${TIDE_ACCENT_COLOR[color]}`
+                ? `2px solid ${tideAccentColor(color)}`
                 : `1px solid ${chip.border}`,
               boxShadow: selected ? `0 0 0 2px rgba(0,0,0,0.4)` : "none",
             }}
           >
-            <StandaloneGlyph glyph={glyph(`bx ${chip.icon}`)} color="white" />
+            <StandaloneGlyph glyph={chip.icon} color="white" />
             {color}
           </button>
         );
@@ -205,7 +210,7 @@ export default function TidesDetailView({
   onSaveField,
   onBack,
 }: TidesDetailViewProps) {
-  const chip = TIDE_COLOR_CHIP[tide.color];
+  const chip = tideColorChip(tide.color);
   const [displayName, setDisplayName] = useState(tide.displayName ?? "");
   const [displayDescription, setDisplayDescription] = useState(
     tide.displayDescription ?? "",
@@ -218,12 +223,28 @@ export default function TidesDetailView({
   }
   function commitDisplayDescription() {
     const next = displayDescription.trim();
-    if (next !== (tide.displayDescription ?? "")) onSaveField("displayDescription", next);
+    if (next !== (tide.displayDescription ?? ""))
+      onSaveField("displayDescription", next);
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", minHeight: 0, flex: "1 1 auto", gap: 16 }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 12, flex: "0 0 auto" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: 0,
+        flex: "1 1 auto",
+        gap: 16,
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          flex: "0 0 auto",
+        }}
+      >
         <button
           type="button"
           data-tide-back=""
@@ -246,12 +267,18 @@ export default function TidesDetailView({
         </button>
         <span
           className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium"
-          style={{ background: chip.background, borderColor: chip.border, color: "#ffffff" }}
+          style={{
+            background: chip.background,
+            borderColor: chip.border,
+            color: "#ffffff",
+          }}
         >
           <StandaloneGlyph glyph={glyph(`bx ${chip.icon}`)} color="white" />
           {tide.role}
         </span>
-        <span style={{ color: "rgba(247, 241, 223, 0.55)", fontSize: "0.82rem" }}>
+        <span
+          style={{ color: "rgba(247, 241, 223, 0.55)", fontSize: "0.82rem" }}
+        >
           {tide.name}
         </span>
         <span style={{ marginLeft: "auto" }}>
@@ -287,7 +314,15 @@ export default function TidesDetailView({
             dreamAvatarById={dreamAvatarById}
             cardById={cardById}
           />
-          <div style={{ flex: "1 1 320px", minWidth: 280, display: "flex", flexDirection: "column", gap: 14 }}>
+          <div
+            style={{
+              flex: "1 1 320px",
+              minWidth: 280,
+              display: "flex",
+              flexDirection: "column",
+              gap: 14,
+            }}
+          >
             <div>
               <label style={FIELD_LABEL_STYLE} htmlFor="tide-display-name">
                 Display name
@@ -307,7 +342,10 @@ export default function TidesDetailView({
               />
             </div>
             <div>
-              <label style={FIELD_LABEL_STYLE} htmlFor="tide-display-description">
+              <label
+                style={FIELD_LABEL_STYLE}
+                htmlFor="tide-display-description"
+              >
                 Display description
               </label>
               <textarea
@@ -331,11 +369,24 @@ export default function TidesDetailView({
           </div>
         </section>
 
-        <section style={{ display: "flex", flexDirection: "column", gap: 10, minHeight: 0 }}>
+        <section
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 10,
+            minHeight: 0,
+          }}
+        >
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <h2 style={{ margin: 0, fontSize: "0.95rem", fontWeight: 800 }}>
               Cards
-              <span style={{ marginLeft: 8, color: "rgba(247, 241, 223, 0.4)", fontWeight: 600 }}>
+              <span
+                style={{
+                  marginLeft: 8,
+                  color: "rgba(247, 241, 223, 0.4)",
+                  fontWeight: 600,
+                }}
+              >
                 {resolvedCards.length}
               </span>
             </h2>
@@ -367,7 +418,10 @@ export default function TidesDetailView({
             items={resolvedCards}
             size={size}
             getKey={(entry) => entry.key}
-            containerProps={{ "aria-label": "Tide cards", style: { flex: "0 0 auto", overflow: "visible" } }}
+            containerProps={{
+              "aria-label": "Tide cards",
+              style: { flex: "0 0 auto", overflow: "visible" },
+            }}
             renderItem={(entry) => (
               <div style={{ position: "relative" }}>
                 <CardView card={entry.card} />

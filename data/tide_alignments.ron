@@ -2,41 +2,56 @@ TideAlignmentCatalog(
   alignments: [
     TideAlignmentDefinition(
       id: ember,
+      deck_color: orange,
       display_name: "Ember",
       glyph: TideEmber,
       accent_color: "#fb923c",
+      chip_background: "#5c2c0f",
+      chip_border: "rgba(251, 146, 60, 0.55)",
       accessibility_name: "Ember tide alignment",
     ),
 
     TideAlignmentDefinition(
       id: valor,
+      deck_color: yellow,
       display_name: "Valor",
       glyph: TideValor,
       accent_color: "#facc15",
+      chip_background: "#4a3a00",
+      chip_border: "rgba(250, 204, 21, 0.55)",
       accessibility_name: "Valor tide alignment",
     ),
 
     TideAlignmentDefinition(
       id: vision,
+      deck_color: blue,
       display_name: "Vision",
       glyph: TideVision,
       accent_color: "#60a5fa",
+      chip_background: "#13315c",
+      chip_border: "rgba(96, 165, 250, 0.55)",
       accessibility_name: "Vision tide alignment",
     ),
 
     TideAlignmentDefinition(
       id: wild,
+      deck_color: green,
       display_name: "Wild",
       glyph: TideWild,
       accent_color: "#4ade80",
+      chip_background: "#0f3d22",
+      chip_border: "rgba(74, 222, 128, 0.55)",
       accessibility_name: "Wild tide alignment",
     ),
 
     TideAlignmentDefinition(
       id: shadow,
+      deck_color: purple,
       display_name: "Shadow",
       glyph: TideShadow,
       accent_color: "#c084fc",
+      chip_background: "#3b1259",
+      chip_border: "rgba(192, 132, 252, 0.55)",
       accessibility_name: "Shadow tide alignment",
     ),
   ],

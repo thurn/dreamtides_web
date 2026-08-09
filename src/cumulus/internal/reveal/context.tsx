@@ -5,6 +5,7 @@ import {
 } from "react";
 import { logEvent } from "../../../logging";
 import type { RichText } from "../../components/card/rich-text";
+import { tideAccessibilityName } from "../../components/hud/tide-spec";
 import { infoCardVariant, type RevealCoordinatorSource, type RevealDismissalReason, type RevealGameCard, type RevealInfoCardModel, type RevealPlacementException, type RevealSourceIdentity, type RevealSpec } from "./model";
 import {
   activationOutcomeForTouch, initialRevealCoordinatorState, reduceRevealState,
@@ -59,11 +60,7 @@ function infoCardDescription(card: RevealInfoCardModel, t: MessageFormatter): st
       ? card.title
       : formatMessageDescriptor(t, card.titleDescriptor),
     "subtitle" in card ? card.subtitle : undefined,
-    card.variant === "tide"
-      ? t("reveal-tide-alignment", {
-          tide: card.tide,
-        })
-      : undefined,
+    card.variant === "tide" ? tideAccessibilityName(card.tide) : undefined,
     card.bodyDescriptor === undefined
       ? richTextDescription(card.body, t)
       : formatMessageDescriptor(t, card.bodyDescriptor),

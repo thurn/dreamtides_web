@@ -86,20 +86,8 @@
       "targetOwner": "data/tide_alignments.ron",
       "currentSources": [
         {
-          "path": "src/cumulus/components/hud/tide-spec.ts",
-          "fields": ["TIDES", "tideAlignmentLabel"]
-        },
-        {
-          "path": "src/editor/tide-visuals.ts",
-          "fields": ["TIDE_COLOR_CHIP", "TIDE_ACCENT_COLOR"]
-        },
-        {
-          "path": "data/locales/en-US/cards.ftl",
-          "fields": ["tide-alignment-name"]
-        },
-        {
-          "path": "data/locales/en-US/accessibility.ftl",
-          "fields": ["reveal-tide-alignment"]
+          "path": "data/tide_alignments.ron",
+          "fields": ["display_name", "glyph", "accent_color", "accessibility_name"]
         }
       ],
       "consumers": [
@@ -149,11 +137,6 @@
       "rationale": "The parser retains the supported token syntax after metadata cutover."
     },
     {
-      "id": "src/cumulus/components/hud/tide-spec.ts#TIDES#tides",
-      "classification": "migration-debt",
-      "rationale": "Per-alignment presentation table."
-    },
-    {
       "id": "src/cumulus/components/overlay/TutorialFeatureCallout.tsx#CARD_FEATURES#rulesSymbols",
       "classification": "unrelated-closed-renderer",
       "rationale": "Tutorial card features are not rules-text token metadata."
@@ -192,11 +175,6 @@
       "id": "src/rules/journey/sites.ts#TRANSFIGURATION_TYPES#transfiguration",
       "classification": "closed-identity",
       "rationale": "Event validation retains the closed persisted form identity vocabulary."
-    },
-    {
-      "id": "src/screens/cumulus_adapters/journey-start-view-model.ts#TIDE_BY_COLOR#tides",
-      "classification": "migration-debt",
-      "rationale": "Per-alignment mapping must resolve generated tide metadata."
     }
   ],
   "legacyFluentMessages": {
@@ -233,7 +211,7 @@
       "battle-prompt-return-void-card",
       "battle-prompt-switch-side"
     ],
-    "tides": ["reveal-tide-alignment", "tide-alignment-name"],
+    "tides": [],
     "rulesSymbols": [
       "rules-text-symbol-energy",
       "rules-text-symbol-essence",

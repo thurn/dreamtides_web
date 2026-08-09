@@ -8,8 +8,8 @@ import { selectedTides4Decks } from "../../data/tides4-preview";
 import { selectDreamAvatarOfferForReroll } from "../../data/dream-avatar-selection";
 import type { RunPoolContext } from "../../data/journey-content";
 import type { DreamAvatarContent } from "../../types/content";
-import type { Tides4Color, Tides4DeckJson } from "../../draft/pool/tides4-io";
-import type { Tide } from "../../cumulus/components/hud/tide-spec";
+import type { Tides4DeckJson } from "../../draft/pool/tides4-io";
+import { tideAlignmentForDeckColor } from "../../data/tide-alignments-data";
 import type {
   TutorialJourneyPool,
   TutorialJourneyTide,
@@ -24,15 +24,6 @@ import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bub
 
 /** The select screen shows at most this many tides per DreamAvatar. */
 const MAX_TIDES_SHOWN = 4;
-
-/** Map a tides4 deck color to the Cumulus {@link Tide} whose icon + palette it uses. */
-const TIDE_BY_COLOR: Record<Tides4Color, Tide> = {
-  purple: "shadow",
-  green: "wild",
-  yellow: "valor",
-  blue: "vision",
-  orange: "ember",
-};
 
 /**
  * Resolve the shared journey-start offer. Tutorial selection persists one exact
@@ -107,7 +98,7 @@ function toTideView(tide: Tides4DeckJson): DreamAvatarTideView {
     label: tide.displayName ?? tide.shortName ?? tide.name,
     description:
       tide.displayDescription ?? tide.summary ?? tide.description ?? tide.name,
-    tide: TIDE_BY_COLOR[tide.color],
+    tide: tideAlignmentForDeckColor(tide.color).id,
   };
 }
 

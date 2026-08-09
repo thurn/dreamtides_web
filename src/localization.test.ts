@@ -213,11 +213,6 @@ describe("appLocalization", () => {
         variable: "direction",
         values: ["previous", "next"],
       },
-      {
-        id: "tide-alignment-name",
-        variable: "tide",
-        values: ["ember", "valor", "vision", "wild", "shadow"],
-      },
     ];
 
     for (const { id, variable, values } of selectorCases) {

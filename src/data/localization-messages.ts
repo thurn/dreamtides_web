@@ -227,7 +227,6 @@ export const FLUENT_MESSAGE_IDS = [
   "rules-text-symbol-energy",
   "rules-text-symbol-spark",
   "card-type-line",
-  "tide-alignment-name",
   "card-gallery-empty-default",
   "card-choice-purge-operation",
   "card-choice-copy-operation",
@@ -520,7 +519,6 @@ export const FLUENT_MESSAGE_IDS = [
   "journey-start-carousel-navigation-action",
   "reveal-description-join",
   "reveal-definition-entry",
-  "reveal-tide-alignment",
   "reveal-list-and",
   "reveal-card-energy",
   "reveal-card-energy-variable",
@@ -815,7 +813,6 @@ export interface FluentMessageArgumentsById {
     readonly presentation: FluentVariable;
     readonly subtype: FluentVariable;
   };
-  readonly "tide-alignment-name": { readonly tide: FluentVariable };
   readonly "card-gallery-empty-default": never;
   readonly "card-choice-purge-operation": never;
   readonly "card-choice-copy-operation": never;
@@ -1341,7 +1338,6 @@ export interface FluentMessageArgumentsById {
     readonly definition: FluentVariable;
     readonly term: FluentVariable;
   };
-  readonly "reveal-tide-alignment": { readonly tide: FluentVariable };
   readonly "reveal-list-and": {
     readonly left: FluentVariable;
     readonly right: FluentVariable;
@@ -1615,7 +1611,6 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
     "presentation",
     "subtype",
   ] as const,
-  "tide-alignment-name": ["tide"] as const,
   "card-gallery-empty-default": [] as const,
   "card-choice-purge-operation": [] as const,
   "card-choice-copy-operation": [] as const,
@@ -1986,7 +1981,6 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "journey-start-carousel-navigation-action": ["direction"] as const,
   "reveal-description-join": ["left", "right"] as const,
   "reveal-definition-entry": ["definition", "term"] as const,
-  "reveal-tide-alignment": ["tide"] as const,
   "reveal-list-and": ["left", "right"] as const,
   "reveal-card-energy": ["value"] as const,
   "reveal-card-energy-variable": [] as const,
@@ -2416,7 +2410,6 @@ export type FluentMessageIdsWithVariables = [
   "card-rules-transfiguration-changed",
   "card-transfiguration-badge",
   "card-type-line",
-  "tide-alignment-name",
   "exploration-deck-modification-spark",
   "exploration-deck-modification-energy-cost",
   "exploration-deck-modification-subtype",
@@ -2537,7 +2530,6 @@ export type FluentMessageIdsWithVariables = [
   "journey-start-carousel-navigation-action",
   "reveal-description-join",
   "reveal-definition-entry",
-  "reveal-tide-alignment",
   "reveal-list-and",
   "reveal-card-energy",
   "reveal-card-energy-alternatives",

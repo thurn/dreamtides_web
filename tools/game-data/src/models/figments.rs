@@ -378,5 +378,4 @@ mod tests {
             "error did not contain {expected}"
         );
     }
-
 }

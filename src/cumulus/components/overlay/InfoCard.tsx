@@ -28,7 +28,7 @@ import { renderRulesSymbolsInline } from "../card/RulesText";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { controlChrome } from "../../internal/control-treatment";
 import { applySymbolReplacements } from "../../primitives/symbol-replacements";
-import { tideVisual, type Tide } from "../hud/tide-spec";
+import { tideAlignmentLabel, tideVisual, type Tide } from "../hud/tide-spec";
 import { formatMessageDescriptor, useMessages } from "../../hooks/use-messages";
 import type { FluentMessageDescriptor } from "../../../data/localization-messages";
 
@@ -221,12 +221,7 @@ const siteDiscStyle: React.CSSProperties = {
 
 /** Which media treatment an InfoCard renders. */
 export type InfoCardVariant =
-  | "object"
-  | "fullBleed"
-  | "atlasReveal"
-  | "icon"
-  | "tide"
-  | "text";
+  "object" | "fullBleed" | "atlasReveal" | "icon" | "tide" | "text";
 
 /**
  * The copy every InfoCard carries, shared across all media variants. The
@@ -368,9 +363,7 @@ export type InfoCardProps =
  * uses this same contract so a wide strict variant cannot overflow the geometry
  * reserved for it.
  */
-export function infoCardNativeWidth(
-  variant: InfoCardProps["variant"],
-): number {
+export function infoCardNativeWidth(variant: InfoCardProps["variant"]): number {
   return variant === "atlasReveal" ? ATLAS_REVEAL_CARD_W : CARD_W;
 }
 
@@ -388,9 +381,12 @@ interface InfoCardContentOverride {
   readonly body?: React.ReactNode;
 }
 
-function TideAlignmentName({ tide }: { readonly tide: Tide }): React.ReactElement {
-  const t = useMessages();
-  return <>{t("tide-alignment-name", { tide })}</>;
+function TideAlignmentName({
+  tide,
+}: {
+  readonly tide: Tide;
+}): React.ReactElement {
+  return <>{tideAlignmentLabel(tide)}</>;
 }
 
 function InfoCardBody(
@@ -476,12 +472,7 @@ function InfoCardBody(
      clipped. A long body simply grows the card taller and the image grows with
      it, so the image always fills behind the card. --- */
   if (props.variant === "fullBleed") {
-    const {
-      image,
-      imageCrop = "center",
-      figure,
-      subtitle,
-    } = props;
+    const { image, imageCrop = "center", figure, subtitle } = props;
     return (
       <div
         style={{
@@ -564,18 +555,28 @@ function InfoCardBody(
           }}
         >
           <div
-            style={{ ...tHeadline, marginBottom: subtitle ? token("--space-xxs") : body ? token("--space-s") : 0 }}
+            style={{
+              ...tHeadline,
+              marginBottom: subtitle
+                ? token("--space-xxs")
+                : body
+                  ? token("--space-s")
+                  : 0,
+            }}
           >
             {titleContent}
           </div>
           {subtitle !== undefined && subtitle !== "" && (
-            <div style={{ ...tEpithet, marginBottom: body ? token("--space-s") : 0 }}>
+            <div
+              style={{
+                ...tEpithet,
+                marginBottom: body ? token("--space-s") : 0,
+              }}
+            >
               {renderRulesSymbolsInline(subtitle)}
             </div>
           )}
-          {body != null && (
-            <div style={{ ...tBody }}>{bodyContent}</div>
-          )}
+          {body != null && <div style={{ ...tBody }}>{bodyContent}</div>}
         </div>
       </div>
     );
@@ -586,12 +587,7 @@ function InfoCardBody(
      place headline, guide subtitle, and body copy sit in a left text column
      while the resident figure stands over the panel's right side. --- */
   if (props.variant === "atlasReveal") {
-    const {
-      image,
-      imageCrop = "center",
-      figure,
-      subtitle,
-    } = props;
+    const { image, imageCrop = "center", figure, subtitle } = props;
     return (
       <div
         style={{
@@ -692,9 +688,7 @@ function InfoCardBody(
                 </div>
               )}
             </div>
-            {body != null && (
-              <div style={tAtlasBody}>{bodyContent}</div>
-            )}
+            {body != null && <div style={tAtlasBody}>{bodyContent}</div>}
           </div>
         </div>
       </div>
@@ -706,7 +700,10 @@ function InfoCardBody(
     const { glyph } = props;
     return (
       <div
-        style={{ ...shell, padding: `${geometrySpace(PADY)} ${geometrySpace(PADX)}` }}
+        style={{
+          ...shell,
+          padding: `${geometrySpace(PADY)} ${geometrySpace(PADX)}`,
+        }}
       >
         <div
           style={{
@@ -738,7 +735,9 @@ function InfoCardBody(
           <div style={tHeadline}>{titleContent}</div>
         </div>
         {body != null && (
-          <div style={{ ...tBody, marginTop: token("--space-m") }}>{bodyContent}</div>
+          <div style={{ ...tBody, marginTop: token("--space-m") }}>
+            {bodyContent}
+          </div>
         )}
       </div>
     );
@@ -751,7 +750,10 @@ function InfoCardBody(
     const v = tideVisual(tide);
     return (
       <div
-        style={{ ...shell, padding: `${geometrySpace(PADY)} ${geometrySpace(PADX)}` }}
+        style={{
+          ...shell,
+          padding: `${geometrySpace(PADY)} ${geometrySpace(PADX)}`,
+        }}
       >
         <div
           style={{
@@ -783,13 +785,17 @@ function InfoCardBody(
           </span>
           <div>
             <div style={tHeadline}>{titleContent}</div>
-            <div style={{ ...tMeta, color: v.fg, marginTop: token("--space-xs") }}>
+            <div
+              style={{ ...tMeta, color: v.fg, marginTop: token("--space-xs") }}
+            >
               <TideAlignmentName tide={tide} />
             </div>
           </div>
         </div>
         {body != null && (
-          <div style={{ ...tBody, marginTop: token("--space-m") }}>{bodyContent}</div>
+          <div style={{ ...tBody, marginTop: token("--space-m") }}>
+            {bodyContent}
+          </div>
         )}
       </div>
     );
@@ -800,7 +806,10 @@ function InfoCardBody(
   const hasHeadline = title !== undefined;
   return (
     <div
-      style={{ ...shell, padding: `${geometrySpace(PADY)} ${geometrySpace(PADX)}` }}
+      style={{
+        ...shell,
+        padding: `${geometrySpace(PADY)} ${geometrySpace(PADX)}`,
+      }}
     >
       {hasHeadline && (
         <div
@@ -808,14 +817,20 @@ function InfoCardBody(
             display: "flex",
             alignItems: "center",
             gap: geometrySpace("--space-s"),
-            marginBottom: subtitle ? token("--space-xxs") : body ? token("--space-s") : 0,
+            marginBottom: subtitle
+              ? token("--space-xxs")
+              : body
+                ? token("--space-s")
+                : 0,
           }}
         >
           <div style={tHeadline}>{titleContent}</div>
         </div>
       )}
       {subtitle !== undefined && subtitle !== "" && (
-        <div style={{ ...tEpithet, marginBottom: body ? token("--space-s") : 0 }}>
+        <div
+          style={{ ...tEpithet, marginBottom: body ? token("--space-s") : 0 }}
+        >
           {renderRulesSymbolsInline(subtitle)}
         </div>
       )}
@@ -936,7 +951,8 @@ function EditableInfoCardCopy({
     const raw = event.currentTarget.value;
     const rawCaret = event.currentTarget.selectionStart ?? raw.length;
     const replacement = applySymbolReplacements(raw, rawCaret);
-    pendingCaretRef.current = replacement.value === raw ? null : replacement.caret;
+    pendingCaretRef.current =
+      replacement.value === raw ? null : replacement.caret;
     value.onDraftChange(replacement.value);
   };
   const handleKeyDown = (
@@ -1057,20 +1073,12 @@ export function EditableInfoCard({
   };
   const titleContent =
     title === undefined ? undefined : (
-      <EditableInfoCardCopy
-        field="title"
-        mode="single-line"
-        value={title}
-      >
+      <EditableInfoCardCopy field="title" mode="single-line" value={title}>
         {renderRulesSymbolsInline(title.value)}
       </EditableInfoCardCopy>
     );
   const bodyContent = (
-    <EditableInfoCardCopy
-      field="description"
-      mode="multiline"
-      value={body}
-    >
+    <EditableInfoCardCopy field="description" mode="multiline" value={body}>
       {renderRichText(bodyModel, 0, { substituteRulesSymbols: true })}
     </EditableInfoCardCopy>
   );

@@ -479,16 +479,6 @@ journey-start-carousel-navigation-action =
 reveal-description-join = { $left }. { $right }
 # One glossary definition entry in a hidden reveal description.
 reveal-definition-entry = { $term }. { $definition }
-# A tide's alignment clause in a hidden reveal description. $tide is one of the
-# five semantic tide ids; the title-cased alignment is player-visible copy.
-reveal-tide-alignment =
-    { $tide ->
-        [ember] Ember tide alignment
-        [valor] Valor tide alignment
-        [vision] Vision tide alignment
-        [wild] Wild tide alignment
-       *[shadow] Shadow tide alignment
-    }
 # Connects two or more authored energy-cost labels in a hidden card
 # description. $left may already contain a connected prefix; both variables are
 # opaque cost labels and the conjunction stays in Fluent.

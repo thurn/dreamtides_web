@@ -652,7 +652,6 @@ mod tests {
         let mut source = catalog();
         source.purge.marginal_costs.clear();
         assert_error_contains(source, "purge marginal costs must not be empty");
-
     }
 
     #[test]
@@ -660,7 +659,6 @@ mod tests {
         let mut source = catalog();
         source.shop.stock.swap(0, 1);
         assert_error_contains(source, "shop stock");
-
     }
 
     fn assert_error_contains(source: EconomyCatalog, expected: &str) {

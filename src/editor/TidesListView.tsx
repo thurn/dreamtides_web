@@ -1,9 +1,8 @@
 import type { CardData } from "../types/cards";
 import type { Tides4DeckJson, Tides4Role } from "../draft/pool/tides4-io";
-import { TIDE_COLOR_CHIP } from "./tide-visuals";
+import { tideColorChip } from "./tide-visuals";
 import { TideSourcePreview } from "./TideSourcePreview";
 import { StandaloneGlyph } from "../cumulus/components/controls/StandaloneGlyph";
-import { glyph } from "../cumulus/primitives/glyph";
 import type { EditorDreamAvatar } from "./tides-types";
 
 interface TidesListViewProps {
@@ -23,7 +22,8 @@ const ROLE_GROUPS: { role: Tides4Role; label: string; blurb: string }[] = [
   {
     role: "facet",
     label: "Facet",
-    blurb: "Single-anchor lean pools — the variety engine a pool draws a few of.",
+    blurb:
+      "Single-anchor lean pools — the variety engine a pool draws a few of.",
   },
   {
     role: "neutral",
@@ -52,7 +52,7 @@ function TideTile({
   cardById: ReadonlyMap<string, CardData>;
   onSelectTide: (tideId: string) => void;
 }) {
-  const chip = TIDE_COLOR_CHIP[tide.color];
+  const chip = tideColorChip(tide.color);
   const label = tideLabel(tide);
   const thumbSize = tide.role === "signature" ? 48 : 64;
 
@@ -94,9 +94,13 @@ function TideTile({
       <div style={{ minWidth: 0, flex: "1 1 auto" }}>
         <span
           className="inline-flex max-w-full items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium"
-          style={{ background: chip.background, borderColor: chip.border, color: "#ffffff" }}
+          style={{
+            background: chip.background,
+            borderColor: chip.border,
+            color: "#ffffff",
+          }}
         >
-          <StandaloneGlyph glyph={glyph(`bx ${chip.icon}`)} color="white" />
+          <StandaloneGlyph glyph={chip.icon} color="white" />
           <span className="truncate">{label}</span>
         </span>
         <div
@@ -111,7 +115,13 @@ function TideTile({
         >
           {tide.name}
         </div>
-        <div style={{ marginTop: 2, fontSize: "0.72rem", color: "rgba(247, 241, 223, 0.45)" }}>
+        <div
+          style={{
+            marginTop: 2,
+            fontSize: "0.72rem",
+            color: "rgba(247, 241, 223, 0.45)",
+          }}
+        >
           {tide.cards.length} cards · {tideCardCount(tide)} copies
         </div>
       </div>
@@ -147,11 +157,23 @@ export default function TidesListView({
             <header style={{ marginBottom: 10 }}>
               <h2 style={{ margin: 0, fontSize: "0.95rem", fontWeight: 800 }}>
                 {label}
-                <span style={{ marginLeft: 8, color: "rgba(247, 241, 223, 0.4)", fontWeight: 600 }}>
+                <span
+                  style={{
+                    marginLeft: 8,
+                    color: "rgba(247, 241, 223, 0.4)",
+                    fontWeight: 600,
+                  }}
+                >
                   {groupTides.length}
                 </span>
               </h2>
-              <p style={{ margin: "2px 0 0", fontSize: "0.76rem", color: "rgba(247, 241, 223, 0.5)" }}>
+              <p
+                style={{
+                  margin: "2px 0 0",
+                  fontSize: "0.76rem",
+                  color: "rgba(247, 241, 223, 0.5)",
+                }}
+              >
                 {blurb}
               </p>
             </header>
