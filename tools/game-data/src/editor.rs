@@ -27,8 +27,8 @@ use crate::models::dreamsigns::{
 };
 use crate::models::dreamwell::{self, ArtCrop, DeckTier, DreamwellCardDefinition};
 use crate::models::exploration::{
-    ActionDefinition, ActionEffect, DynamicValue, EffectKind, ExplorationCatalog, Predicate,
-    TemplateInvocation,
+    ActionDefinition, ActionEffect, ActionPresentation, DeckTarget, EffectKind, ExplorationCatalog,
+    Followup, Predicate,
 };
 use crate::models::figments::{
     ArtCrop as FigmentArtCrop, CharacterType as FigmentCharacterType, FigmentBehavior,
@@ -137,22 +137,9 @@ enum EditOperation {
         expected_action_id: String,
         action: JsonValue,
     },
-    ReplaceTemplate {
-        template_id: i64,
-        actions: Vec<TemplateActionEdit>,
-    },
     AdoptStagedCompatibility {
         output_sha256: String,
     },
-}
-
-#[derive(Debug, Deserialize)]
-#[serde(deny_unknown_fields)]
-struct TemplateActionEdit {
-    card_id: String,
-    slot: usize,
-    expected_action_id: String,
-    action: JsonValue,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize)]
@@ -2113,13 +2100,15 @@ fn edit_exploration(
         .context("MALFORMED_SOURCE: staged Exploration RON is invalid")?;
     reject_duplicate_exploration_ids(&original)?;
     let mut catalog = original.clone();
+    let mut source_text = original_text.clone();
     for operation in operations {
         match operation {
             EditOperation::SetEncounterProse { card_id, prose } => {
                 if prose.trim().is_empty() {
                     bail!("INVALID_EDIT: encounter prose must not be blank");
                 }
-                unique_encounter_mut(&mut catalog, &card_id)?.prose = prose;
+                unique_encounter_mut(&mut catalog, &card_id)?.prose = prose.clone();
+                source_text = patch_exploration_prose(&source_text, &card_id, &prose)?;
             }
             EditOperation::ReplaceAction {
                 card_id,
@@ -2127,24 +2116,9 @@ fn edit_exploration(
                 expected_action_id,
                 action,
             } => {
-                replace_action(&mut catalog, card_id, slot, expected_action_id, action)?;
-            }
-            EditOperation::ReplaceTemplate {
-                template_id,
-                actions,
-            } => {
-                if template_id < 1 {
-                    bail!("INVALID_EDIT: template_id must be positive");
-                }
-                for edit in actions {
-                    replace_action(
-                        &mut catalog,
-                        edit.card_id,
-                        edit.slot,
-                        edit.expected_action_id,
-                        edit.action,
-                    )?;
-                }
+                let replacement =
+                    replace_action(&mut catalog, card_id, slot, expected_action_id, action)?;
+                source_text = patch_exploration_action(&source_text, &replacement)?;
             }
             _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to Exploration"),
         }
@@ -2152,9 +2126,8 @@ fn edit_exploration(
     reject_duplicate_exploration_ids(&catalog)?;
     let changed = catalog != original;
     if changed {
-        let text = serialize_ron(&catalog, true)?;
-        verify_round_trip::<ExplorationCatalog>(&text, &catalog)?;
-        atomic_write(&source_path, text.as_bytes())?;
+        verify_round_trip::<ExplorationCatalog>(&source_text, &catalog)?;
+        atomic_write(&source_path, source_text.as_bytes())?;
     }
     Ok(EditReport {
         ok: true,
@@ -2170,8 +2143,8 @@ fn replace_action(
     slot: usize,
     expected_action_id: String,
     action: JsonValue,
-) -> Result<()> {
-    let replacement = action_from_compat(catalog, action)?;
+) -> Result<ActionDefinition> {
+    let replacement = action_from_compat(action)?;
     if replacement.id != expected_action_id {
         bail!("FIELD_NOT_APPLICABLE: Exploration action IDs cannot be changed");
     }
@@ -2183,8 +2156,87 @@ fn replace_action(
     if current.id != expected_action_id {
         bail!("RECORD_NOT_FOUND: expected action id does not match the selected slot");
     }
-    encounter.actions[slot] = replacement;
-    Ok(())
+    encounter.actions[slot] = replacement.clone();
+    Ok(replacement)
+}
+
+fn patch_exploration_prose(source: &str, card_id: &str, prose: &str) -> Result<String> {
+    let record =
+        typed_record_range_at_indent(source, "EncounterDefinition", "card_id", card_id, 4)?;
+    let value = top_level_field_value_range(source, record, "prose")?
+        .context("MALFORMED_SOURCE: Exploration encounter has no prose field")?;
+    Ok(format!(
+        "{}{}{}",
+        &source[..value.start],
+        ron::to_string(prose)?,
+        &source[value.end..],
+    ))
+}
+
+fn patch_exploration_action(source: &str, action: &ActionDefinition) -> Result<String> {
+    let record = typed_record_range_at_indent(source, "ActionDefinition", "id", &action.id, 8)?;
+    let existing_source = format!("#![enable(implicit_some)]\n{}", &source[record.clone()]);
+    let existing: ActionDefinition = ron::from_str(&existing_source)
+        .context("MALFORMED_SOURCE: Exploration action record is invalid")?;
+    let mut patched = source.to_owned();
+
+    if existing.label != action.label {
+        patched = patch_exploration_action_field(
+            &patched,
+            &action.id,
+            "label",
+            &ron::to_string(&action.label)?,
+        )?;
+    }
+    if existing.presentation.effect_text != action.presentation.effect_text
+        && existing.presentation.followup == action.presentation.followup
+    {
+        let action_record =
+            typed_record_range_at_indent(&patched, "ActionDefinition", "id", &action.id, 8)?;
+        let presentation = top_level_field_value_range(&patched, action_record, "presentation")?
+            .context("MALFORMED_SOURCE: Exploration action has no presentation field")?;
+        let effect_text = top_level_field_value_range(&patched, presentation, "effect_text")?
+            .context("MALFORMED_SOURCE: Exploration presentation has no effect_text field")?;
+        patched = format!(
+            "{}{}{}",
+            &patched[..effect_text.start],
+            ron::to_string(&action.presentation.effect_text)?,
+            &patched[effect_text.end..],
+        );
+    } else if existing.presentation != action.presentation {
+        patched = patch_exploration_action_field(
+            &patched,
+            &action.id,
+            "presentation",
+            &render_ron_value(&action.presentation, true)?,
+        )?;
+    }
+    if existing.effect != action.effect {
+        patched = patch_exploration_action_field(
+            &patched,
+            &action.id,
+            "effect",
+            &render_ron_value(&action.effect, true)?,
+        )?;
+    }
+    Ok(patched)
+}
+
+fn patch_exploration_action_field(
+    source: &str,
+    action_id: &str,
+    field: &str,
+    replacement: &str,
+) -> Result<String> {
+    let record = typed_record_range_at_indent(source, "ActionDefinition", "id", action_id, 8)?;
+    let value = top_level_field_value_range(source, record, field)?
+        .with_context(|| format!("MALFORMED_SOURCE: Exploration action has no {field} field"))?;
+    Ok(format!(
+        "{}{}{}",
+        &source[..value.start],
+        replacement,
+        &source[value.end..],
+    ))
 }
 
 fn unique_encounter_mut<'a>(
@@ -2231,7 +2283,7 @@ fn reject_duplicate_exploration_ids(catalog: &ExplorationCatalog) -> Result<()> 
     Ok(())
 }
 
-fn action_from_compat(catalog: &ExplorationCatalog, value: JsonValue) -> Result<ActionDefinition> {
+fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
     let object = value
         .as_object()
         .context("INVALID_EDIT: Exploration action must be an object")?;
@@ -2239,25 +2291,17 @@ fn action_from_compat(catalog: &ExplorationCatalog, value: JsonValue) -> Result<
     let kind = EffectKind::from_compat(&kind_name)
         .with_context(|| format!("INVALID_EDIT: unknown Exploration effect kind {kind_name}"))?;
     validate_action_fields(object, kind)?;
-    let definition = catalog
-        .effects
-        .iter()
-        .find(|definition| definition.kind == kind)
-        .context("MALFORMED_SOURCE: action effect kind has no definition")?;
     if let Some(requested) = optional_json_string(object, "canonicalMechanicId")? {
-        if requested != definition.mechanic.as_compat() {
-            bail!(
-                "FIELD_NOT_APPLICABLE: canonicalMechanicId is derived from the effect definition"
-            );
+        if requested != kind.mechanic().as_compat() {
+            bail!("FIELD_NOT_APPLICABLE: canonicalMechanicId is derived from the typed effect");
         }
     }
     if let Some(requested) = optional_json_string(object, "selectionPolicyId")? {
-        let default = definition
-            .selection_policy
-            .as_ref()
-            .map(|policy| policy.default.as_compat());
+        let default = kind
+            .default_selection_policy()
+            .map(|policy| policy.as_compat());
         if Some(requested.as_str()) != default {
-            bail!("FIELD_NOT_APPLICABLE: selectionPolicyId is derived from the effect definition");
+            bail!("FIELD_NOT_APPLICABLE: selectionPolicyId is derived from the typed effect");
         }
     }
     let effect = match kind {
@@ -2284,6 +2328,7 @@ fn action_from_compat(catalog: &ExplorationCatalog, value: JsonValue) -> Result<
         EffectKind::ChangeSubtypeSelected => ActionEffect::ChangeSubtypeSelected {
             predicate: optional_predicate(object, "predicate")?,
             subtype: required_json_string(object, "subtype")?,
+            target: json_deck_target(object)?,
         },
         EffectKind::ChangeSubtypeAll => ActionEffect::ChangeSubtypeAll {
             subtype_options: string_array(object, "subtypeOptions")?,
@@ -2317,6 +2362,7 @@ fn action_from_compat(catalog: &ExplorationCatalog, value: JsonValue) -> Result<
         EffectKind::TransfigureFixedSelected => ActionEffect::TransfigureFixedSelected {
             predicate: optional_predicate(object, "predicate")?,
             transfiguration: required_json_string(object, "transfiguration")?,
+            target: json_deck_target(object)?,
         },
         EffectKind::GainRandomDreamsign => ActionEffect::GainRandomDreamsign,
         EffectKind::PurgeDreamsignForEssence => ActionEffect::PurgeDreamsignForEssence {
@@ -2325,6 +2371,7 @@ fn action_from_compat(catalog: &ExplorationCatalog, value: JsonValue) -> Result<
         EffectKind::CopySelectedCard => ActionEffect::CopySelectedCard {
             predicate: optional_predicate(object, "predicate")?,
             count: positive_int(object, "count")?,
+            target: json_deck_target(object)?,
         },
         EffectKind::CopySelectedCards => ActionEffect::CopySelectedCards {
             count: positive_int(object, "count")?,
@@ -2369,18 +2416,21 @@ fn action_from_compat(catalog: &ExplorationCatalog, value: JsonValue) -> Result<
         },
         EffectKind::AddSite => ActionEffect::AddSite,
     };
-    let variables = dynamic_object(object.get("templateVariables"), "templateVariables")?;
-    let selections = dynamic_object(object.get("selection"), "selection")?;
+    let followup_title = optional_json_string(object, "followupTitle")?;
+    let followup_subtitle = optional_json_string(object, "followupSubtitle")?;
+    if followup_title.is_some() != followup_subtitle.is_some() {
+        bail!("INVALID_EDIT: followupTitle and followupSubtitle must be provided together");
+    }
     Ok(ActionDefinition {
         label: required_json_string(object, "label")?,
         id: required_json_string(object, "id")?,
-        effect_text: required_json_string(object, "effectText")?,
-        effect,
-        template: TemplateInvocation {
-            id: positive_int(object, "templateId")?,
-            variables,
-            selections,
+        presentation: ActionPresentation {
+            effect_text: required_json_string(object, "effectText")?,
+            followup: followup_title
+                .zip(followup_subtitle)
+                .map(|(title, subtitle)| Followup { title, subtitle }),
         },
+        effect,
     })
 }
 
@@ -2392,13 +2442,11 @@ fn validate_action_fields(
         "id",
         "label",
         "effectText",
+        "followupTitle",
+        "followupSubtitle",
         "renderedEffectText",
         "renderedEffectParts",
         "runtimeCardSelections",
-        "templateId",
-        "template",
-        "templateVariables",
-        "selection",
         "effectKind",
         "canonicalMechanicId",
         "selectionPolicyId",
@@ -2409,7 +2457,7 @@ fn validate_action_fields(
         EffectKind::PurgeSelected => &["predicate", "count"],
         EffectKind::GainRandomCards => &["predicate", "count"],
         EffectKind::DraftCard => &["predicate", "count", "offerCount"],
-        EffectKind::ChangeSubtypeSelected => &["predicate", "subtype"],
+        EffectKind::ChangeSubtypeSelected => &["predicate", "subtype", "deckTarget"],
         EffectKind::ChangeSubtypeAll => &["subtypeOptions"],
         EffectKind::GainCard => &["cardId"],
         EffectKind::GainDreamsign => &["dreamsignId"],
@@ -2417,9 +2465,9 @@ fn validate_action_fields(
         EffectKind::ChoosePack => &["predicate", "packCount", "packSize"],
         EffectKind::IncreaseSparkAll => &["sparkBonus"],
         EffectKind::ReduceCostAllAndGainNightmares => &["energyCostReduction", "nightmareCount"],
-        EffectKind::TransfigureFixedSelected => &["predicate", "transfiguration"],
+        EffectKind::TransfigureFixedSelected => &["predicate", "transfiguration", "deckTarget"],
         EffectKind::PurgeDreamsignForEssence => &["essence"],
-        EffectKind::CopySelectedCard => &["predicate", "count"],
+        EffectKind::CopySelectedCard => &["predicate", "count", "deckTarget"],
         EffectKind::CopySelectedCards => &["count"],
         EffectKind::CopyOfferedDeckCard => &["offerCount"],
         EffectKind::NextBattleOpeningHand => &["count"],
@@ -2514,6 +2562,12 @@ fn optional_predicate(
     }
 }
 
+fn json_deck_target(object: &serde_json::Map<String, JsonValue>) -> Result<DeckTarget> {
+    let value = required_json_string(object, "deckTarget")?;
+    DeckTarget::from_compat(&value)
+        .with_context(|| format!("INVALID_EDIT: unknown deck target {value}"))
+}
+
 fn string_array(object: &serde_json::Map<String, JsonValue>, key: &str) -> Result<Vec<String>> {
     object
         .get(key)
@@ -2527,50 +2581,6 @@ fn string_array(object: &serde_json::Map<String, JsonValue>, key: &str) -> Resul
                 .with_context(|| format!("INVALID_EDIT: every {key} entry must be a string"))
         })
         .collect()
-}
-
-fn dynamic_object(
-    value: Option<&JsonValue>,
-    key: &str,
-) -> Result<indexmap::IndexMap<String, DynamicValue>> {
-    match value {
-        None | Some(JsonValue::Null) => Ok(indexmap::IndexMap::new()),
-        Some(JsonValue::Object(object)) => object
-            .iter()
-            .map(|(name, value)| {
-                Ok((
-                    name.clone(),
-                    dynamic_value_from_json(value)
-                        .with_context(|| format!("INVALID_EDIT: invalid {key}.{name}"))?,
-                ))
-            })
-            .collect(),
-        Some(_) => bail!("INVALID_EDIT: {key} must be an object"),
-    }
-}
-
-fn dynamic_value_from_json(value: &JsonValue) -> Result<DynamicValue> {
-    match value {
-        JsonValue::String(value) => Ok(DynamicValue::String(value.clone())),
-        JsonValue::Number(value) => value
-            .as_i64()
-            .map(DynamicValue::Integer)
-            .context("dynamic numbers must be integers"),
-        JsonValue::Bool(value) => Ok(DynamicValue::Boolean(*value)),
-        JsonValue::Object(value) => Ok(DynamicValue::Object(
-            value
-                .iter()
-                .map(|(key, value)| Ok((key.clone(), dynamic_value_from_json(value)?)))
-                .collect::<Result<_>>()?,
-        )),
-        JsonValue::Array(value) => Ok(DynamicValue::Array(
-            value
-                .iter()
-                .map(dynamic_value_from_json)
-                .collect::<Result<_>>()?,
-        )),
-        JsonValue::Null => bail!("dynamic metadata does not permit null"),
-    }
 }
 
 fn unique_card_index(cards: &[CardDefinition], id: &str) -> Result<usize> {
@@ -3406,6 +3416,52 @@ mod tests {
     const CARD_ID: &str = "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5";
     const AVATAR_ID: &str = "00000000-0000-4000-8000-000000000011";
     const GLOSSARY_ID: &str = "00000000-0000-4000-8000-000000000021";
+
+    const EXPLORATION_SOURCE: &str = r###"// Stable Exploration guidance.
+#![enable(implicit_some)]
+ExplorationCatalog(
+  encounters: [
+    EncounterDefinition(
+      card_id: "00000000-0000-4000-8000-000000000031",
+      prose: "First scene",
+      actions: [
+        // Edited action comment.
+        ActionDefinition(
+          label: "First",
+          id: "first-action",
+          presentation: ActionPresentation(effect_text: "First effect", followup: None),
+          effect: MakeFastAll,
+        ),
+        ActionDefinition(
+          label: "Second",
+          id: "second-action",
+          presentation: ActionPresentation(effect_text: "Second effect", followup: None),
+          effect: AddSite,
+        ),
+      ],
+    ),
+    /* Unrelated encounter comment. */
+    EncounterDefinition(
+      card_id: "00000000-0000-4000-8000-000000000032",
+      prose: "Unrelated scene",
+      actions: [
+        ActionDefinition(
+          label: "Third",
+          id: "third-action",
+          presentation: ActionPresentation(effect_text: "Third effect", followup: None),
+          effect: MakeFastAll,
+        ),
+        ActionDefinition(
+          label: "Fourth",
+          id: "fourth-action",
+          presentation: ActionPresentation(effect_text: "Fourth effect", followup: None),
+          effect: AddSite,
+        ),
+      ],
+    ),
+  ],
+)
+"###;
 
     const CARD_SOURCE: &str = r##"// Stable catalog guidance.
 #![enable(implicit_some)]
@@ -4385,19 +4441,11 @@ CardMetadataCatalog(
         assert!(unique_dream_avatar_index(&avatars, "not-a-uuid").is_err());
     }
 
-    fn catalog() -> ExplorationCatalog {
-        let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-        ron::from_str(&fs::read_to_string(root.join("data/exploration.ron")).unwrap()).unwrap()
-    }
-
     fn action(kind: EffectKind) -> JsonValue {
         let mut value = Map::from_iter([
             ("id".into(), json!("fixture-action")),
             ("label".into(), json!("Choose")),
             ("effectText".into(), json!("Effect")),
-            ("templateId".into(), json!(1)),
-            ("templateVariables".into(), json!({})),
-            ("selection".into(), json!({})),
             ("effectKind".into(), json!(kind.as_compat())),
         ]);
         let fields: &[(&str, JsonValue)] = match kind {
@@ -4410,7 +4458,9 @@ CardMetadataCatalog(
                 ("count", json!(1)),
                 ("offerCount", json!(2)),
             ],
-            EffectKind::ChangeSubtypeSelected => &[("subtype", json!("Guide"))],
+            EffectKind::ChangeSubtypeSelected => {
+                &[("subtype", json!("Guide")), ("deckTarget", json!("chosen"))]
+            }
             EffectKind::ChangeSubtypeAll => &[("subtypeOptions", json!(["Guide", "Warrior"]))],
             EffectKind::GainCard => &[("cardId", json!("00000000-0000-4000-8000-000000000001"))],
             EffectKind::GainDreamsign => {
@@ -4430,9 +4480,12 @@ CardMetadataCatalog(
                 ("energyCostReduction", json!(1)),
                 ("nightmareCount", json!(1)),
             ],
-            EffectKind::TransfigureFixedSelected => &[("transfiguration", json!("DoubledSpark"))],
+            EffectKind::TransfigureFixedSelected => &[
+                ("transfiguration", json!("DoubledSpark")),
+                ("deckTarget", json!("chosen")),
+            ],
             EffectKind::PurgeDreamsignForEssence => &[("essence", json!(5))],
-            EffectKind::CopySelectedCard => &[("count", json!(1))],
+            EffectKind::CopySelectedCard => &[("count", json!(1)), ("deckTarget", json!("chosen"))],
             EffectKind::CopySelectedCards => &[("count", json!(2))],
             EffectKind::CopyOfferedDeckCard => &[("offerCount", json!(3))],
             EffectKind::NextBattleOpeningHand => &[("count", json!(1))],
@@ -4469,11 +4522,9 @@ CardMetadataCatalog(
 
     #[test]
     fn maps_every_exploration_effect_variant_and_rejects_foreign_fields() {
-        let catalog = catalog();
-        for definition in &catalog.effects {
-            action_from_compat(&catalog, action(definition.kind)).unwrap_or_else(|error| {
-                panic!("{} did not map: {error:#}", definition.kind.as_compat())
-            });
+        for kind in EffectKind::ALL {
+            action_from_compat(action(kind))
+                .unwrap_or_else(|error| panic!("{} did not map: {error:#}", kind.as_compat()));
         }
         let mut invalid = action(EffectKind::MakeFastAll);
         invalid
@@ -4481,7 +4532,7 @@ CardMetadataCatalog(
             .unwrap()
             .insert("count".into(), json!(1));
         assert!(
-            action_from_compat(&catalog, invalid)
+            action_from_compat(invalid)
                 .unwrap_err()
                 .to_string()
                 .contains("does not apply")
@@ -4490,18 +4541,79 @@ CardMetadataCatalog(
 
     #[test]
     fn rejects_exploration_derived_field_overrides() {
-        let catalog = catalog();
         let mut invalid = action(EffectKind::GainDreamsign);
         invalid
             .as_object_mut()
             .unwrap()
             .insert("selectionPolicyId".into(), json!("uniform"));
         assert!(
-            action_from_compat(&catalog, invalid)
+            action_from_compat(invalid)
                 .unwrap_err()
                 .to_string()
                 .contains("FIELD_NOT_APPLICABLE")
         );
+    }
+
+    #[test]
+    fn exploration_presentation_edit_preserves_unrelated_source() {
+        let mut catalog: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
+        catalog.encounters[0].actions[0].presentation.effect_text = "Edited effect".into();
+        let patched =
+            patch_exploration_action(EXPLORATION_SOURCE, &catalog.encounters[0].actions[0])
+                .unwrap();
+
+        assert!(patched.starts_with("// Stable Exploration guidance."));
+        assert!(patched.contains("// Edited action comment."));
+        let unrelated = EXPLORATION_SOURCE
+            .find("    /* Unrelated encounter comment. */")
+            .unwrap();
+        let patched_unrelated = patched
+            .find("    /* Unrelated encounter comment. */")
+            .unwrap();
+        assert_eq!(
+            &EXPLORATION_SOURCE[unrelated..],
+            &patched[patched_unrelated..]
+        );
+        let reparsed: ExplorationCatalog = ron::from_str(&patched).unwrap();
+        assert_eq!(reparsed, catalog);
+    }
+
+    #[test]
+    fn exploration_effect_edit_preserves_implicit_some_notation() {
+        let mut catalog: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
+        catalog.encounters[0].actions[0].effect = ActionEffect::PurgeSelected {
+            predicate: Some(Predicate::Event),
+            count: Some(2),
+        };
+        let patched =
+            patch_exploration_action(EXPLORATION_SOURCE, &catalog.encounters[0].actions[0])
+                .unwrap();
+
+        assert!(patched.contains("effect: PurgeSelected("));
+        assert!(patched.contains("predicate: Event"));
+        assert!(patched.contains("count: 2"));
+        assert!(!patched.contains("Some("));
+        assert_eq!(
+            ron::from_str::<ExplorationCatalog>(&patched).unwrap(),
+            catalog
+        );
+    }
+
+    #[test]
+    fn exploration_prose_edit_changes_only_the_scalar() {
+        let patched = patch_exploration_prose(
+            EXPLORATION_SOURCE,
+            "00000000-0000-4000-8000-000000000031",
+            "Edited scene",
+        )
+        .unwrap();
+        let changed_lines = EXPLORATION_SOURCE
+            .lines()
+            .zip(patched.lines())
+            .filter(|(before, after)| before != after)
+            .collect::<Vec<_>>();
+        assert_eq!(changed_lines.len(), 1);
+        assert!(patched.contains("/* Unrelated encounter comment. */"));
     }
 
     #[test]

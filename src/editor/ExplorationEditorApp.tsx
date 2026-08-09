@@ -17,7 +17,7 @@ import type {
   EncounterRenderedTemplatePart,
   ExplorationEditorAction,
   ExplorationEditorClient,
-  ExplorationEditorEffectDefinition,
+  ExplorationEditorEffectSchema,
   ExplorationEditorEncounter,
   ExplorationEditorFieldDefinition,
   ExplorationEditorLoadResult,
@@ -152,24 +152,12 @@ function actionTarget(cardId: string, slot: number): string {
   return `${cardId}:${String(slot)}`;
 }
 
-function effectTemplateValue(effectKind: string, templateId: number): string {
-  return `${effectKind}:${String(templateId)}`;
-}
-
-function parseEffectTemplateValue(value: string): {
-  effectKind: ExplorationEditorAction["effectKind"];
-  templateId: number;
-} {
-  const separator = value.lastIndexOf(":");
-  const templateId = Number(value.slice(separator + 1));
-  if (separator < 1 || !Number.isInteger(templateId)) {
-    throw new Error(`Invalid effect/template choice: ${value}`);
-  }
-  return {
-    effectKind: value.slice(0, separator) as ExplorationEditorAction["effectKind"],
-    templateId,
-  };
-}
+const EFFECT_FIELD_KEYS = [
+  "predicate", "count", "cardId", "dreamsignId", "packCount", "packSize",
+  "offerCount", "essencePerSpark", "essencePerCard", "sparkBonus", "essence",
+  "energyCostReduction", "subtype", "subtypeOptions", "nightmareCount",
+  "transfiguration", "deckTarget",
+] as const;
 
 function ExplorationCardPicker({
   cards,
@@ -262,22 +250,13 @@ function ExplorationEditorRow({
     revision: number;
   }>>({});
   const definitions = useMemo(
-    () => new Map(data.effectDefinitions.map((definition) => [definition.kind, definition])),
-    [data.effectDefinitions],
+    () => new Map(data.effectSchemas.map((schema) => [schema.kind, schema])),
+    [data.effectSchemas],
   );
-  const templates = useMemo(
-    () => new Map(data.templates.map((template) => [template.id, template])),
-    [data.templates],
-  );
-  const effectTemplateOptions = useMemo(() => data.effectDefinitions.flatMap((definition) =>
-    definition.templateIds.flatMap((templateId) => {
-      const template = templates.get(templateId);
-      return template === undefined ? [] : [{
-        value: effectTemplateValue(definition.kind, templateId),
-        label: `${definition.label} — ${template.text}`,
-        triggerLabel: `${definition.label} — Template ${String(templateId)}`,
-      }];
-    })), [data.effectDefinitions, templates]);
+  const effectOptions = useMemo(() => data.effectSchemas.map((schema) => ({
+    value: schema.kind,
+    label: schema.label,
+  })), [data.effectSchemas]);
 
   const saveAction = useCallback(async (
     slot: number,
@@ -408,27 +387,11 @@ function ExplorationEditorRow({
 
   async function saveActionText(
     slot: number,
-    field: "label" | "template",
+    field: "label" | "effectText",
     value: string,
     revision: number,
   ) {
-    if (field === "template") {
-      const action = encounter.actions[slot];
-      const response = await client.saveTemplate({
-        templateId: action.templateId,
-        value,
-        clientRevision: revision,
-      });
-      if (response.clientRevision !== revision) throw new Error("Mismatched template confirmation.");
-      onServerData(response.data);
-      logEvent("exploration_editor_template_saved", {
-        cardId: encounter.cardId,
-        slot,
-        templateId: action.templateId,
-      });
-      return;
-    }
-    const action = { ...encounter.actions[slot], label: value };
+    const action = { ...encounter.actions[slot], [field]: value };
     const response = await client.saveAction({
       cardId: encounter.cardId,
       slot,
@@ -437,7 +400,9 @@ function ExplorationEditorRow({
     });
     if (response.clientRevision !== revision) throw new Error("Mismatched label confirmation.");
     onServerData(response.data);
-    logEvent("exploration_editor_label_saved", { cardId: encounter.cardId, slot });
+    logEvent(field === "label"
+      ? "exploration_editor_label_saved"
+      : "exploration_editor_effect_text_saved", { cardId: encounter.cardId, slot });
   }
 
   function updateField(
@@ -447,22 +412,10 @@ function ExplorationEditorRow({
     eventName = "exploration_editor_effect_field_saved",
   ) {
     const current = encounter.actions[slot];
-    let templateId = current.templateId;
-    if (field === "predicate" && current.effectKind === "purge-selected") {
-      if (value === "") {
-        if (templateId === 4) templateId = 3;
-        if (templateId === 6) templateId = 5;
-      } else {
-        if (templateId === 3) templateId = 4;
-        if (templateId === 5) templateId = 6;
-      }
-    }
-    void saveAction(slot, { ...current, [field]: value, templateId }, eventName, {
+    void saveAction(slot, { ...current, [field]: value }, eventName, {
       field,
       value,
       effectKind: current.effectKind,
-      fromTemplateId: current.templateId,
-      toTemplateId: templateId,
     });
   }
 
@@ -563,6 +516,24 @@ function ExplorationEditorRow({
         </div>
       );
     }
+    if (field.control === "deck-target") {
+      return (
+        <label className="exploration-editor-select-field" key={key}>
+          <span>{field.label}</span>
+          <Select
+            full
+            size="sm"
+            ariaLabel={field.label}
+            options={[
+              { value: "chosen", label: "Player chooses" },
+              { value: "offered", label: "Offered automatically" },
+            ]}
+            value={action.deckTarget ?? "chosen"}
+            onChange={(value) => updateField(slot, field.key, value)}
+          />
+        </label>
+      );
+    }
     if (field.control === "card") {
       const card = typeof action.cardId === "string"
         ? catalog.cardsById.get(action.cardId.toLowerCase())
@@ -611,7 +582,7 @@ function ExplorationEditorRow({
   }
 
   function actionPanel(action: ExplorationEditorAction, slot: number) {
-    const definition = definitions.get(action.effectKind) as ExplorationEditorEffectDefinition;
+    const definition = definitions.get(action.effectKind) as ExplorationEditorEffectSchema;
     const status = actionStatuses[actionTarget(encounter.cardId, slot)];
     return (
       <section className="exploration-editor-action" key={action.id}>
@@ -623,10 +594,10 @@ function ExplorationEditorRow({
           "single-line",
         )}
         {editable(
-          { cardId: `${encounter.cardId}:${String(slot)}`, field: "template" },
-          action.template,
+          { cardId: `${encounter.cardId}:${String(slot)}`, field: "effectText" },
+          action.effectText,
           <p>{renderedEffect(action.renderedEffectParts, catalog)}</p>,
-          (value, revision) => saveActionText(slot, "template", value, revision),
+          (value, revision) => saveActionText(slot, "effectText", value, revision),
         )}
         <div className="exploration-editor-action-selects">
           <label className="exploration-editor-select-field">
@@ -635,22 +606,41 @@ function ExplorationEditorRow({
               full
               size="sm"
               ariaLabel={`Effect for ${action.label}`}
-              options={effectTemplateOptions}
-              value={effectTemplateValue(action.effectKind, action.templateId)}
+              options={effectOptions}
+              value={action.effectKind}
               onChange={(value) => {
-                const next = parseEffectTemplateValue(value);
-                const effectKindChanged = next.effectKind !== action.effectKind;
+                const nextDefinition = definitions.get(
+                  value as ExplorationEditorAction["effectKind"],
+                );
+                if (nextDefinition === undefined) return;
+                const nextAction = { ...action };
+                for (const key of EFFECT_FIELD_KEYS) delete nextAction[key];
+                for (const field of nextDefinition.fields) {
+                  const retained = action[field.key];
+                  const fallback = field.key === "cardId"
+                    ? encounter.cardId
+                    : field.key === "dreamsignId"
+                      ? catalog.dreamsigns.find((entry) => entry.id !== undefined)?.id
+                      : field.key === "subtype"
+                        ? data.subtypes[0]
+                        : field.key === "subtypeOptions"
+                          ? data.subtypes
+                          : field.defaultValue;
+                  const fieldValue = retained ?? fallback;
+                  if (fieldValue !== undefined) nextAction[field.key] = fieldValue;
+                }
                 void saveAction(
                   slot,
-                  { ...action, effectKind: next.effectKind, templateId: next.templateId },
-                  effectKindChanged
-                    ? "exploration_editor_effect_kind_changed"
-                    : "exploration_editor_template_selected",
+                  {
+                    ...nextAction,
+                    effectKind: nextDefinition.kind,
+                    canonicalMechanicId: nextDefinition.canonicalMechanicId,
+                    selectionPolicyId: nextDefinition.defaultSelectionPolicyId,
+                  },
+                  "exploration_editor_effect_kind_changed",
                   {
                     fromEffectKind: action.effectKind,
-                    toEffectKind: next.effectKind,
-                    fromTemplateId: action.templateId,
-                    toTemplateId: next.templateId,
+                    toEffectKind: nextDefinition.kind,
                   },
                 );
               }}
@@ -659,10 +649,7 @@ function ExplorationEditorRow({
         </div>
         {definition.fields.length > 0 && (
           <div className="exploration-editor-fields">
-            {definition.fields
-              .filter((field) => field.templateIds === undefined ||
-                field.templateIds.includes(action.templateId))
-              .map((field) => controlFor(slot, action, field))}
+            {definition.fields.map((field) => controlFor(slot, action, field))}
           </div>
         )}
         <span
@@ -779,14 +766,14 @@ export default function ExplorationEditorApp({
       setLoadState("ready");
       logEvent("exploration_editor_loaded", {
         encounterCount: loaded.encounters.length,
-        effectKindCount: loaded.effectDefinitions.length,
+        effectKindCount: loaded.effectSchemas.length,
         runtimeCardSelections: loaded.encounters.flatMap((encounter) =>
           encounter.actions.flatMap((action, slot) =>
             action.runtimeCardSelections.map((selection) => ({
               encounterCardId: encounter.cardId,
               actionId: action.id,
               actionSlot: slot,
-              templateId: action.templateId,
+              deckTarget: action.deckTarget,
               ...selection,
             })))),
       });

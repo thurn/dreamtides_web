@@ -57,10 +57,10 @@ RON, generated TOML, and owned JSON as one recoverable transaction. A stale
 revision returns `STALE_SOURCE` without writing.
 
 Cards uses UUID-routed card-field operations and ordered tag/tide registry
-diffs. Exploration uses UUID plus action-slot/action-ID routing; template saves
-stage `data/templates.json` and every affected typed action as one batch.
-Selection policy and canonical mechanic values are derived from the selected
-Exploration effect definition.
+diffs. Exploration uses UUID plus action-slot/action-ID routing. Each action
+stores its label, effect text, optional followup copy, and typed effect together
+in `data/exploration.ron`. Selection policy and canonical mechanic values are
+derived from the typed effect variant.
 
 Shape-preserving editor catalogs reuse their established endpoint-specific
 request validation and mutation logic inside the isolated staging root. Rust

@@ -2,119 +2,70 @@
 
 At a Delve site, the game selects one card from the player's deck as the
 narrative focus. The player enters a short event inspired by that card and
-chooses between two actions. Each action uses one mechanical effect template.
+chooses between two actions.
 
-The exploration encounter designer studies the selected card and its artwork,
-then chooses ten distinct effect templates and arranges them into five pairs.
-Every pair has a stable ID and exactly two actions. The designer stores each
-template ID with narrative labels and structured variable values. Canonical
-template wording remains in the catalog.
+Every production encounter is authored in
+[`../../data/exploration.ron`](../../data/exploration.ron). An action colocates
+its player-facing presentation with one closed typed gameplay effect:
 
-The canonical effect catalog is
-[`../../data/templates.json`](../../data/templates.json).
-Each catalog entry has this shape:
-
-```json
-{
-  "template_id": 6,
-  "template": "Purge up to {count} chosen {predicate} cards"
-}
+```ron
+(
+  label: "Invite someone through",
+  id: "161482b6-af07-4d9e-822d-8c738672beb9:pair-5:template-11",
+  presentation: (
+    effect_text: "Gain {offered_card}",
+  ),
+  effect: GainOfferedCard(
+    predicate: Character,
+    count: None,
+  ),
+)
 ```
 
-The complete request and response shapes are documented in the
-[exploration encounter contracts](../../.llms/skills/exploration-encounter-designer/references/contracts.md).
-A random canonical card can be generated from the repository root with:
+The `presentation` record owns text shown to the player. `effect` owns all
+gameplay semantics. Changing presentation text cannot change which cards are
+eligible, whether a target is chosen, or how the effect resolves.
 
-```bash
-python3 .llms/skills/exploration-encounter-designer/scripts/generate-exploration-input.py
+## Presentation slots
+
+Effect text supports typed card-reference slots where a runtime-selected card
+must be shown inline:
+
+- `{offered_card}` displays the card produced by `GainOfferedCard`.
+- `{deck_card}` displays the deck entry automatically offered by an effect whose
+  `target` is `Offered`.
+
+Followup title and subtitle support scalar slots derived from the same action,
+including `{action-label}`, `{count}`, `{subtype}`, `{transfiguration}`, and
+`{essence-per-spark}`.
+
+Slots are presentation references. The compiler validates that each slot is
+compatible with the typed effect, and runtime behavior reads only the effect.
+
+## Deck targets
+
+Effects that can operate on either a player-selected deck entry or an
+automatically offered entry carry an explicit target:
+
+```ron
+effect: CopySelectedCard(
+  target: Offered,
+  predicate: Some(CheapCharacter),
+  count: 2,
+),
 ```
 
-Pass `--seed <integer>` to reproduce the selected card and `--card-type` with
-`character`, `event`, or `all` to choose its pool.
+`Chosen` opens the appropriate card chooser after the action is selected.
+`Offered` mints the target into the persisted Exploration offer and can present
+it with `{deck_card}`.
 
-## Template Variables
+## Editor schema
 
-Braced variables such as `{count}`, `{predicate}`, and `{card_id}` are values
-chosen by the encounter designer. Every braced variable in a template receives
-a value in the action's `variables` object. Player-facing text is rendered from
-the canonical template when it is displayed.
+The browser editor obtains labels, controls, and safe field defaults from the
+closed code-owned schema in
+[`../../scripts/exploration-effect-definitions.mjs`](../../scripts/exploration-effect-definitions.mjs).
+That schema is development tooling metadata. Player-facing action and followup
+copy stays in `data/exploration.ron` and is saved on the individual action.
 
-For example, this template:
-
-```text
-Purge up to {count} chosen {predicate} cards
-```
-
-can be resolved as:
-
-```json
-{
-  "variables": {
-    "count": 4,
-    "predicate": "Event"
-  }
-}
-```
-
-This action displays as `Purge up to 4 chosen Event cards`.
-
-A predicate is an objective rule that selects or classifies cards. Predicates
-can describe card type, subtype, cost, spark, ability, legendary status, or
-starter status. Predicates must create a meaningful restriction; `Character` is
-forbidden because it covers roughly 70% of the card catalog. Use a narrower
-subtype, cost, spark, ability, or combined objective condition instead.
-
-Existing cards and dreamsigns use an object containing their canonical UUID and
-display name. Game logic consumes the UUID, while template rendering uses the
-display name:
-
-```json
-{
-  "card_id": {
-    "id": "18ff6a45-148a-40bf-85ae-4a51f32f406a",
-    "display_name": "Blazing Emberwing"
-  }
-}
-```
-
-## Runtime Variables
-
-Templates can contain special variables resolved from game state when the event
-is created:
-
-- `$OFFERED_CARD` is a random card offered from the card pool.
-- `$DECK_CARD` is a random card selected from the player's current deck.
-- `$STARTER_CARD` is a random starter card selected from the player's current
-  deck.
-
-When a runtime card variable has an eligibility restriction, the action records
-it in `selection`:
-
-```json
-{
-  "selection": {
-    "$DECK_CARD": {
-      "predicate": "Spirit Animal"
-    }
-  }
-}
-```
-
-An unrestricted runtime variable omits `selection`.
-Runtime tokens remain literal in authoring displays. For example, the canonical
-template `Gain $OFFERED_CARD` displays exactly as `Gain $OFFERED_CARD` until the
-game creates the event.
-
-## Applying a Template
-
-For each action, the encounter designer:
-
-1. Stores the catalog's `template_id` without copying its template string.
-2. Adds every required braced value to `variables`.
-3. Adds restricted runtime selection rules when the template calls for them.
-4. Renders display copy from `data/templates.json`, substituting braced values
-   while keeping runtime tokens literal.
-5. Edits template wording in `data/templates.json`, so every candidate using
-   that template ID receives the same canonical wording.
-6. Validates the request and output with
-   `.llms/skills/exploration-encounter-designer/scripts/validate-exploration.py`.
+After editing canonical data, run `scripts/regenerate-assets.sh` to regenerate
+the compatibility TOML and browser JSON.

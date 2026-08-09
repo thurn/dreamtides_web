@@ -85,7 +85,6 @@ describe("loadJourneyContent", () => {
       schemaVersion: explorationJson.schemaVersion,
       contentHash: explorationJson.contentHash,
       foldHash: explorationJson.foldHash,
-      effectKinds: explorationJson.effectKinds,
       customCards: [],
       customDreamsigns: [],
       encounters: [

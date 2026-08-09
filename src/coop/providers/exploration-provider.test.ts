@@ -756,9 +756,9 @@ describe("Exploration provider", () => {
     const selectedCopy: ExplorationActionContent = {
       id: "copy-selected",
       label: "Copy a selected card",
-      effectText: "Gain 2 copies of $DECK_CARD",
+      effectText: "Gain 2 copies of {deck_card}",
       effectKind: "copy-selected-card",
-      selection: { $DECK_CARD: { predicate: "≤2● cost Character" } },
+      deckTarget: "offered",
       predicate: "cheap-character",
       count: 2,
     };
@@ -989,13 +989,13 @@ describe("Exploration provider", () => {
     });
   });
 
-  it("mints a non-matching subtype target for $DECK_CARD and rejects another eligible card", () => {
+  it("mints a non-matching subtype target and rejects another eligible card", () => {
     const subtypeAction: ExplorationActionContent = {
       id: "become-survivor",
       label: "Fit a matching hood",
-      effectText: "Change $DECK_CARD to become a Survivor",
+      effectText: "Change {deck_card} to become a Survivor",
       effectKind: "change-subtype-selected",
-      selection: { $DECK_CARD: { predicate: "≤2● cost Character" } },
+      deckTarget: "offered",
       predicate: "cheap-character",
       subtype: "Survivor",
     };

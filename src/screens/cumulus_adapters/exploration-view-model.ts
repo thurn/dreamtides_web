@@ -16,8 +16,7 @@ import type {
 } from "../../cumulus/screens/ExplorationSiteScreen";
 import type { TransfigurationCandidateView } from "../../cumulus/screens/TransfigurationSiteScreen";
 import {
-  explorationActionUsesSpecialVariable,
-  explorationEffectDefinition,
+  explorationActionUsesOfferedDeckTarget,
   explorationEncounterForCard,
   type ExplorationActionContent,
   type ExplorationPredicate,
@@ -288,11 +287,7 @@ function configuredFollowupCopy(
   key: "followupTitle" | "followupSubtitle",
   fallback: string,
 ): string {
-  const exploration = content.exploration;
-  const template =
-    exploration === undefined
-      ? undefined
-      : explorationEffectDefinition(exploration, action.effectKind)?.copy[key];
+  const template = action[key];
   if (template === undefined || template === "") return fallback;
   const values: Readonly<Record<string, string | number>> = {
     "action-label": action.label,
@@ -318,10 +313,7 @@ function followupForAction(
   content: JourneyContent,
 ): ExplorationFollowupView {
   const deckCards = eligibleDeckCards(state, content, action.predicate);
-  const hasMintedDeckCard = explorationActionUsesSpecialVariable(
-    action,
-    "$DECK_CARD",
-  );
+  const hasMintedDeckCard = explorationActionUsesOfferedDeckTarget(action);
   switch (action.effectKind) {
     case "purge-and-copy":
       return deckFollowup(
@@ -718,7 +710,7 @@ function deckCardVariableTarget(
   state: JourneyState,
   content: JourneyContent,
 ): DeckCardVariableTarget | null {
-  if (!explorationActionUsesSpecialVariable(action, "$DECK_CARD")) return null;
+  if (!explorationActionUsesOfferedDeckTarget(action)) return null;
   const offeredEntryId = offer.offeredDeckEntryIds?.[0];
   if (offeredEntryId === undefined || offer.offeredDeckEntryIds?.length !== 1) {
     return null;
@@ -757,23 +749,23 @@ function effectReferencesForAction(
   deckCardEntity?: DeckCardVariableTarget["entity"],
 ): readonly ExplorationEffectReference[] {
   const references: ExplorationEffectReference[] = [];
-  if (action.effectText.includes("$OFFERED_CARD")) {
+  if (action.effectText.includes("{offered_card}")) {
     const offeredCardId = offer.offeredCardIds[0];
     const offeredCard =
       offeredCardId === undefined ? null : cardById(content, offeredCardId);
     if (offeredCard !== null) {
       references.push({
-        needle: "$OFFERED_CARD",
+        needle: "{offered_card}",
         entity: { kind: "card", card: offeredCard },
       });
     }
   }
   if (
-    action.effectText.includes("$DECK_CARD") &&
+    action.effectText.includes("{deck_card}") &&
     deckCardEntity !== undefined
   ) {
     references.push({
-      needle: "$DECK_CARD",
+      needle: "{deck_card}",
       entity: deckCardEntity,
     });
   }
@@ -856,14 +848,14 @@ export function buildExplorationActionEffect(
     cursor = next.index + next.reference.needle.length;
   }
   if (!parts.some((part) => part.kind === "entity")) {
-    const deckCardIndex = action.effectText.indexOf("$DECK_CARD");
+    const deckCardIndex = action.effectText.indexOf("{deck_card}");
     if (deckCardIndex >= 0) {
       return {
         effectText: action.effectText,
         effectFallback: {
           kind: "missing-deck-card",
           before: action.effectText.slice(0, deckCardIndex),
-          after: action.effectText.slice(deckCardIndex + "$DECK_CARD".length),
+          after: action.effectText.slice(deckCardIndex + "{deck_card}".length),
         },
       };
     }
@@ -896,10 +888,7 @@ function actionView(
 ): ExplorationActionView {
   const deckCardTarget = deckCardVariableTarget(action, offer, state, content);
   const followup = followupForAction(action, offer, state, content);
-  const requiresDeckCardTarget = explorationActionUsesSpecialVariable(
-    action,
-    "$DECK_CARD",
-  );
+  const requiresDeckCardTarget = explorationActionUsesOfferedDeckTarget(action);
   const hasRequiredOffer =
     action.effectKind === "gain-random-dreamsign"
       ? (offer.offeredDreamsignIds?.length ?? 0) > 0
@@ -939,9 +928,7 @@ function actionView(
     effectKind: action.effectKind,
     mechanics: {
       effectKind: action.effectKind,
-      ...(action.templateId === undefined
-        ? {}
-        : { templateId: action.templateId }),
+      ...(action.deckTarget === undefined ? {} : { deckTarget: action.deckTarget }),
       ...(action.predicate === undefined
         ? {}
         : { predicate: action.predicate }),

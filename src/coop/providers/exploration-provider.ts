@@ -2,7 +2,7 @@ import { resolveDeckEntryCard } from "../../card-type-change";
 import { createDreamsign } from "../../data/dreamsigns";
 import { toJourneyDreamAvatar } from "../../data/dream-avatar-selection";
 import {
-  explorationActionUsesSpecialVariable,
+  explorationActionUsesOfferedDeckTarget,
   explorationEncounterForCard,
   type ExplorationActionContent,
   type ExplorationPredicate,
@@ -102,8 +102,8 @@ function resolvedDeckCards(
   });
 }
 
-function usesDeckCardVariable(action: ExplorationActionContent): boolean {
-  return explorationActionUsesSpecialVariable(action, "$DECK_CARD");
+function usesOfferedDeckTarget(action: ExplorationActionContent): boolean {
+  return explorationActionUsesOfferedDeckTarget(action);
 }
 
 function emptyOffer(
@@ -221,7 +221,7 @@ function buildLegacyActionOffer(
       .map((dreamAvatar) => dreamAvatar.id);
     return offer;
   }
-  if (usesDeckCardVariable(action) && action.effectKind !== "replace-selected") {
+  if (usesOfferedDeckTarget(action) && action.effectKind !== "replace-selected") {
     const target = legacyShuffled(
       resolvedDeckCards(journey, content).filter(
         ({ entry, card }) =>
@@ -470,7 +470,7 @@ function buildActionOffer(
     offer.offeredSiteType = siteType;
     return withSelection(offer, selected);
   }
-  if (usesDeckCardVariable(action)) {
+  if (usesOfferedDeckTarget(action)) {
     const selected = select({
       constraints: {
         predicate: action.predicate ?? "any",
@@ -859,7 +859,7 @@ export function resolveExplorationChoice(input: {
     typeof payload.selection === "object" && payload.selection !== null
       ? (payload.selection as ExplorationSelection)
       : {};
-  if (usesDeckCardVariable(action)) {
+  if (usesOfferedDeckTarget(action)) {
     const entryIds = stringArray(selection.entryIds);
     if (
       entryIds === null ||

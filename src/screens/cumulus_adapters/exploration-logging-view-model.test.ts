@@ -19,7 +19,7 @@ describe("exploration logging view model", () => {
           effectKind: "copy-offered-deck-card",
           mechanics: {
             effectKind: "copy-offered-deck-card",
-            templateId: 55,
+            deckTarget: "offered",
             offerCount: 4,
           },
         },
@@ -62,7 +62,7 @@ describe("exploration logging view model", () => {
         {
           actionId,
           effectKind: "copy-offered-deck-card",
-          mechanics: { templateId: 55, offerCount: 4 },
+          mechanics: { deckTarget: "offered", offerCount: 4 },
         },
         {
           actionId: "fallback",
@@ -76,7 +76,7 @@ describe("exploration logging view model", () => {
       presentedCardId: "encounter-card-uuid",
       actionId,
       effectKind: "copy-offered-deck-card",
-      authoredMechanics: { templateId: 55, offerCount: 4 },
+      authoredMechanics: { deckTarget: "offered", offerCount: 4 },
       selection: { entryIds: [offeredEntryId] },
       gainedEntryIds: [gainedEntryId],
       affectedEntryIds: [offeredEntryId],
@@ -105,7 +105,6 @@ describe("exploration logging view model", () => {
           effectKind: "transfigure-next-draft-or-shop",
           mechanics: {
             effectKind: "transfigure-next-draft-or-shop",
-            templateId: 37,
           },
         },
       ],
@@ -137,7 +136,7 @@ describe("exploration logging view model", () => {
 
     expect(buildExplorationResolutionLog(view, runtime)).toMatchObject({
       effectKind: "transfigure-next-draft-or-shop",
-      authoredMechanics: { templateId: 37 },
+      authoredMechanics: { effectKind: "transfigure-next-draft-or-shop" },
       outcomeKind: "site-offer-modifier",
       siteOfferModifier: modifier,
     });
@@ -164,7 +163,6 @@ describe("exploration logging view model", () => {
           effectKind: "purge-for-essence",
           mechanics: {
             effectKind: "purge-for-essence",
-            templateId: 60,
             essencePerSpark: 20,
           },
         },
@@ -197,7 +195,7 @@ describe("exploration logging view model", () => {
     };
 
     expect(buildExplorationResolutionLog(view, runtime)).toMatchObject({
-      authoredMechanics: { templateId: 60, essencePerSpark: 20 },
+      authoredMechanics: { essencePerSpark: 20 },
       selection: { entryIds: [purgedEntry.entryId] },
       purgedEntrySnapshots: [purgedEntry],
       essenceGained: 100,

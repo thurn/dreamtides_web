@@ -672,9 +672,9 @@ describe("exploration-view-model", () => {
               {
                 id: "inspire-event",
                 label: "Present a Written Charm",
-                effectText: "Apply Inspired to $DECK_CARD",
+                effectText: "Apply Inspired to {deck_card}",
                 effectKind: "transfigure-fixed-selected",
-                selection: { $DECK_CARD: { predicate: "Event" } },
+                deckTarget: "offered",
                 predicate: "event",
                 transfiguration: "Inspired",
               },
@@ -791,11 +791,9 @@ describe("exploration-view-model", () => {
               {
                 id: "become-survivor",
                 label: "Fit a matching hood",
-                effectText: "Change $DECK_CARD to become a Survivor",
+                effectText: "Change {deck_card} to become a Survivor",
                 effectKind: "change-subtype-selected",
-                selection: {
-                  $DECK_CARD: { predicate: "≤2● cost Character" },
-                },
+                deckTarget: "offered",
                 predicate: "cheap-character",
                 subtype: "Survivor",
               },
@@ -837,7 +835,7 @@ describe("exploration-view-model", () => {
       automaticSelection: { entryIds: ["entry-target"] },
       available: true,
     });
-    expect(view.actions[0].effectText).not.toContain("$DECK_CARD");
+    expect(view.actions[0].effectText).not.toContain("{deck_card}");
 
     const resolvedView = buildExplorationSiteView({
       sceneNode: null,
@@ -1259,7 +1257,7 @@ describe("exploration-view-model", () => {
               {
                 id: "gain-offered",
                 label: "Invite someone through",
-                effectText: "Gain $OFFERED_CARD",
+                effectText: "Gain {offered_card}",
                 effectKind: "gain-offered-card",
                 predicate: "cheap-character",
               },

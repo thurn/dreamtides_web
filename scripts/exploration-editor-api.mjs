@@ -2,11 +2,8 @@ import { existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  previewExplorationTemplateEdit,
+  normalizeExplorationAction,
   readExplorationEditorData,
-  updateExplorationAction,
-  updateExplorationProse,
-  updateExplorationTemplate,
 } from "./exploration-editor-data.mjs";
 import {
   sourceRevision,
@@ -16,11 +13,7 @@ import {
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/exploration";
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
-const TEMPLATE_ID_PATTERN = /^\d+$/u;
-const EXPLORATION_SOURCE_PATHS = [
-  "data/exploration.ron",
-  "data/templates.json",
-];
+const EXPLORATION_SOURCE_PATHS = ["data/exploration.ron"];
 
 function respond(res, status, body) {
   res.writeHead(status, { "Content-Type": "application/json; charset=utf-8" });
@@ -65,9 +58,6 @@ function routeFor(url) {
   const parts = path.slice(BASE_PATH.length + 1).split("/");
   const decoded = parts.map(decodeSegment);
   if (decoded.some((entry) => entry === null)) return { kind: "invalid" };
-  if (parts.length === 2 && decoded[0] === "templates") {
-    return { kind: "template", templateId: decoded[1] };
-  }
   if (parts.length === 2 && decoded[0] === "encounters") {
     return { kind: "encounter", cardId: decoded[1] };
   }
@@ -91,7 +81,7 @@ function statusFor(error) {
   return error.statusCode ?? 400;
 }
 
-/** Vite development middleware for the TOML-backed Exploration editor. */
+/** Vite development middleware for the typed-RON Exploration editor. */
 export function createExplorationEditorApiMiddleware(options = {}) {
   const rootDir = options.rootDir ?? ROOT;
   const onChanged = options.onChanged ?? (() => {});
@@ -101,7 +91,6 @@ export function createExplorationEditorApiMiddleware(options = {}) {
     ...(options.explorationTomlPath === undefined
       ? {}
       : { explorationTomlPath: options.explorationTomlPath }),
-    ...(options.templatesPath === undefined ? {} : { templatesPath: options.templatesPath }),
     ...(options.cardsTomlPath === undefined ? {} : { cardsTomlPath: options.cardsTomlPath }),
     ...(options.dreamsignsTomlPath === undefined
       ? {}
@@ -111,7 +100,6 @@ export function createExplorationEditorApiMiddleware(options = {}) {
       : { explorationJsonPath: options.explorationJsonPath }),
   };
   const ronBacked = options.explorationTomlPath === undefined &&
-    options.templatesPath === undefined &&
     existsSync(join(rootDir, "data", "game-data-manifest.ron"));
   let writeQueue = Promise.resolve();
 
@@ -158,41 +146,7 @@ export function createExplorationEditorApiMiddleware(options = {}) {
           error.code = "INVALID_EDIT";
           throw error;
         }
-        if (route.kind === "template") {
-          if (!TEMPLATE_ID_PATTERN.test(route.templateId ?? "")) {
-            const error = new Error("Route template id must contain digits only.");
-            error.code = "INVALID_TEMPLATE_ID";
-            throw error;
-          }
-          const edit = { templateId: Number(route.templateId), value: body.value };
-          if (ronBacked) {
-            const preview = previewExplorationTemplateEdit(edit, dataOptions);
-            const result = await stageAndPublishGameDataEdit({
-              rootDir,
-              dataset: "exploration",
-              expectedSourceRevision: body.expectedSourceRevision,
-              sourcePaths: EXPLORATION_SOURCE_PATHS,
-              stagedFiles: { "data/templates.json": preview.templateSource },
-              operations: [{
-                operation: "replace_template",
-                template_id: edit.templateId,
-                actions: preview.actions.map((entry) => ({
-                  card_id: entry.cardId,
-                  slot: entry.slot,
-                  expected_action_id: entry.expectedActionId,
-                  action: entry.action,
-                })),
-              }],
-            });
-            data = {
-              ...readExplorationEditorData(dataOptions),
-              sourceRevision: result.sourceRevision,
-            };
-          } else {
-            data = updateExplorationTemplate(edit, dataOptions);
-          }
-          onChanged({ kind: "template", templateId: Number(route.templateId) });
-        } else {
+        {
           if (!UUID_PATTERN.test(route.cardId ?? "")) {
             const error = new Error("Route card id must be a UUID.");
             error.code = "INVALID_CARD_ID";
@@ -215,9 +169,7 @@ export function createExplorationEditorApiMiddleware(options = {}) {
                 ...readExplorationEditorData(dataOptions),
                 sourceRevision: result.sourceRevision,
               };
-            } else {
-              data = updateExplorationProse({ cardId: route.cardId, value: body.value }, dataOptions);
-            }
+            } else throw new Error("Exploration editor writes require typed RON.");
             onChanged({ kind: "prose", cardId: route.cardId });
           } else {
             if (route.slot !== "0" && route.slot !== "1") {
@@ -235,6 +187,11 @@ export function createExplorationEditorApiMiddleware(options = {}) {
                 error.code = "RECORD_NOT_FOUND";
                 throw error;
               }
+              const action = normalizeExplorationAction(body.action, {
+                cardIds: new Set(current.cards.map((card) => card.id.toLowerCase())),
+                dreamsignIds: new Set(current.dreamsigns.flatMap((dreamsign) =>
+                  dreamsign.id === undefined ? [] : [dreamsign.id.toLowerCase()])),
+              });
               const result = await stageAndPublishGameDataEdit({
                 rootDir,
                 dataset: "exploration",
@@ -245,20 +202,14 @@ export function createExplorationEditorApiMiddleware(options = {}) {
                   card_id: route.cardId,
                   slot: Number(route.slot),
                   expected_action_id: expectedActionId,
-                  action: body.action,
+                  action,
                 }],
               });
               data = {
                 ...readExplorationEditorData(dataOptions),
                 sourceRevision: result.sourceRevision,
               };
-            } else {
-              data = updateExplorationAction({
-                cardId: route.cardId,
-                slot: Number(route.slot),
-                action: body.action,
-              }, dataOptions);
-            }
+            } else throw new Error("Exploration editor writes require typed RON.");
             onChanged({ kind: "action", cardId: route.cardId, slot: Number(route.slot) });
           }
         }

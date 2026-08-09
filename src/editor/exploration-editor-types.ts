@@ -46,7 +46,8 @@ export type ExplorationEditorControl =
   | "dreamsign"
   | "subtype"
   | "subtype-options"
-  | "transfiguration";
+  | "transfiguration"
+  | "deck-target";
 
 export interface ExplorationEditorFieldDefinition {
   key: string;
@@ -56,23 +57,16 @@ export interface ExplorationEditorFieldDefinition {
   optional?: boolean;
   min?: number;
   step?: number;
-  templateIds?: number[];
   resource?: "essence" | "energy" | "spark";
 }
 
-export interface ExplorationEditorEffectDefinition {
+export interface ExplorationEditorEffectSchema {
   kind: ExplorationEffectKind;
   label: string;
-  templateIds: number[];
   fields: ExplorationEditorFieldDefinition[];
   canonicalMechanicId?: RewardMechanicId;
   defaultSelectionPolicyId?: RewardSelectionPolicyId;
   allowedSelectionPolicyIds?: RewardSelectionPolicyId[];
-}
-
-export interface ExplorationEditorTemplate {
-  id: number;
-  text: string;
 }
 
 export interface ExplorationEditorAction {
@@ -82,10 +76,8 @@ export interface ExplorationEditorAction {
   renderedEffectText: string;
   renderedEffectParts: EncounterRenderedTemplatePart[];
   runtimeCardSelections: EncounterRuntimeCardSelection[];
-  templateId: number;
-  template: string;
-  templateVariables: Record<string, unknown>;
-  selection?: Record<string, { predicate: string }>;
+  followupTitle?: string;
+  followupSubtitle?: string;
   effectKind: ExplorationEffectKind;
   canonicalMechanicId?: RewardMechanicId;
   selectionPolicyId?: RewardSelectionPolicyId;
@@ -105,6 +97,7 @@ export interface ExplorationEditorAction {
   subtypeOptions?: string[];
   nightmareCount?: number;
   transfiguration?: TransfigurationType;
+  deckTarget?: "chosen" | "offered";
   [key: string]: unknown;
 }
 
@@ -119,8 +112,7 @@ export interface ExplorationEditorEncounter {
 
 export interface ExplorationEditorServerData {
   encounters: ExplorationEditorEncounter[];
-  templates: ExplorationEditorTemplate[];
-  effectDefinitions: ExplorationEditorEffectDefinition[];
+  effectSchemas: ExplorationEditorEffectSchema[];
   predicates: Array<{ value: string; label: string }>;
   transfigurations: TransfigurationType[];
   subtypes: string[];
@@ -143,11 +135,6 @@ export interface ExplorationEditorClient {
     cardId: string;
     slot: number;
     action: ExplorationEditorAction;
-    clientRevision: number;
-  }): Promise<{ data: ExplorationEditorServerData; clientRevision: number }>;
-  saveTemplate(request: {
-    templateId: number;
-    value: string;
     clientRevision: number;
   }): Promise<{ data: ExplorationEditorServerData; clientRevision: number }>;
 }

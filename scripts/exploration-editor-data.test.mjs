@@ -1,283 +1,76 @@
-// @vitest-environment node
-
-import * as fs from "node:fs";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
-import { parse } from "smol-toml";
-import { afterEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  explorationEditorInternals,
+  normalizeExplorationAction,
   readExplorationEditorData,
-  updateExplorationAction,
-  updateExplorationProse,
-  updateExplorationTemplate,
 } from "./exploration-editor-data.mjs";
-import {
-  buildExplorationEffectDefinitions,
-  EXPLORATION_EFFECT_DEFINITIONS,
-  EXPLORATION_EFFECT_FIELD_KEYS,
-} from "./exploration-editor-schema.mjs";
-import { transformExplorationData } from "./setup-assets.mjs";
-
-const roots = [];
-
-function fixtureRoot() {
-  const rootDir = fs.mkdtempSync(join(tmpdir(), "exploration-editor-data-"));
-  roots.push(rootDir);
-  fs.mkdirSync(join(rootDir, "data"), { recursive: true });
-  fs.mkdirSync(join(rootDir, "public"), { recursive: true });
-  for (const relative of [
-    "data/exploration.toml",
-    "data/cards.toml",
-    "data/dreamsigns.toml",
-    "data/templates.json",
-    "public/exploration-data.json",
-  ]) {
-    fs.copyFileSync(relative, join(rootDir, relative));
-  }
-  return rootDir;
-}
-
-afterEach(() => {
-  for (const rootDir of roots.splice(0)) {
-    fs.rmSync(rootDir, { recursive: true, force: true });
-  }
-});
+import { EXPLORATION_EFFECT_SCHEMAS } from "./exploration-editor-schema.mjs";
 
 describe("exploration editor data", () => {
-  it("loads the UUID-keyed catalog with resolved card information", () => {
-    const data = readExplorationEditorData({ rootDir: fixtureRoot() });
+  it("loads action-local presentation with UUID-backed previews", () => {
+    const data = readExplorationEditorData({ random: () => 0 });
+    const actions = data.encounters.flatMap((encounter) => encounter.actions);
+
     expect(data.encounters.length).toBeGreaterThan(0);
-    expect(data.effectDefinitions).toHaveLength(
-      EXPLORATION_EFFECT_DEFINITIONS.length,
-    );
-    expect(data.encounters.every((encounter) =>
-      encounter.cardId.match(/^[0-9a-f-]{36}$/iu) &&
-      encounter.cardName.length > 0 &&
-      encounter.actions.length === 2)).toBe(true);
-    expect(
-      data.dreamsigns.every((dreamsign) =>
-        !Object.hasOwn(dreamsign, "isNegative")),
-    ).toBe(true);
+    expect(actions).toHaveLength(data.encounters.length * 2);
+    expect(actions.every((action) => action.effectText.length > 0)).toBe(true);
+    expect(actions.flatMap((action) => action.runtimeCardSelections)
+      .every((selection) => /^[0-9a-f-]{36}$/u.test(selection.cardId))).toBe(true);
+    expect(data).not.toHaveProperty("templates");
   });
 
-  it("compiles every effect to its canonical mechanic and only selectable effects to a policy", () => {
-    expect(EXPLORATION_EFFECT_DEFINITIONS.every((definition) =>
-      typeof definition.canonicalMechanicId === "string" &&
-      definition.canonicalMechanicId.length > 0)).toBe(true);
-
-    const byKind = new Map(
-      EXPLORATION_EFFECT_DEFINITIONS.map((definition) => [definition.kind, definition]),
-    );
-    expect(byKind.get("purge-and-copy")).toMatchObject({
-      canonicalMechanicId: "purge-and-duplicate",
-    });
-    expect(byKind.get("purge-and-copy")).not.toHaveProperty("selectionPolicyId");
-    expect(byKind.get("purge-for-essence")).toMatchObject({
-      canonicalMechanicId: "purge-for-essence",
-      defaultSelectionPolicyId: "purge-misfit",
-    });
-    expect(byKind.get("replace-selected-with-card")).toMatchObject({
-      canonicalMechanicId: "replace-deck-entry",
-      defaultSelectionPolicyId: "fixed",
-    });
-    expect(byKind.get("gain-nightmare-and-card")).toMatchObject({
-      canonicalMechanicId: "gain-nightmare-and-card",
-    });
-  });
-
-  it("rejects unknown chooser-copy slots at the TOML compiler boundary", () => {
-    const document = parse(fs.readFileSync("data/exploration.toml", "utf8"));
-    document["effect-kind"][0].copy["followup-title"] = "Choose {unknown}";
-    expect(() => buildExplorationEffectDefinitions(document)).toThrow(
-      /unknown copy slot \{unknown\}/u,
-    );
-  });
-
-  it("rejects unknown and incompatible canonical selection contracts", () => {
-    const unknownMechanic = parse(fs.readFileSync("data/exploration.toml", "utf8"));
-    unknownMechanic["effect-kind"][0]["canonical-mechanic-id"] = "typo-mechanic";
-    expect(() => buildExplorationEffectDefinitions(unknownMechanic)).toThrow(/canonical-mechanic-id is unknown/u);
-
-    const unknownPolicy = parse(fs.readFileSync("data/exploration.toml", "utf8"));
-    const gainCard = unknownPolicy["effect-kind"].find(({ kind }) => kind === "gain-card");
-    gainCard["allowed-selection-policy-ids"] = ["typo-policy"];
-    gainCard["default-selection-policy-id"] = "typo-policy";
-    expect(() => buildExplorationEffectDefinitions(unknownPolicy)).toThrow(/selection-policy-id is unknown/u);
-
-    const incompatible = parse(fs.readFileSync("data/exploration.toml", "utf8"));
-    const draft = incompatible["effect-kind"].find(({ kind }) => kind === "draft-card");
-    draft["allowed-selection-policy-ids"] = ["purge-misfit"];
-    draft["default-selection-policy-id"] = "purge-misfit";
-    expect(() => buildExplorationEffectDefinitions(incompatible)).toThrow(/incompatible/u);
-  });
-
-  it("rejects unsupported action predicates", () => {
-    const document = parse(fs.readFileSync("data/exploration.toml", "utf8"));
-    const action = document.encounter.flatMap((encounter) => encounter.action)
-      .find((candidate) => typeof candidate.predicate === "string" && candidate.predicate.length > 0);
-    action.predicate = "typo-predicate";
-    expect(() => transformExplorationData(document)).toThrow(/unsupported predicate/u);
-  });
-
-  it("round-trips every effect kind with defaults and removes stale fields", () => {
-    const rootDir = fixtureRoot();
-    let data = readExplorationEditorData({ rootDir });
-    const encounter = data.encounters[0];
-    let action = encounter.actions[0];
-
-    for (const definition of EXPLORATION_EFFECT_DEFINITIONS) {
-      data = updateExplorationAction({
-        cardId: encounter.cardId,
-        slot: 0,
-        action: { ...action, effectKind: definition.kind, templateId: -1 },
-      }, { rootDir });
-      action = data.encounters[0].actions[0];
-      expect(action.effectKind).toBe(definition.kind);
-      expect(action.templateId).toBe(definition.templateIds[0]);
-      expect(action.effectText.trim()).not.toBe("");
-      const allowed = new Set(definition.fields.map((field) => field.key));
-      for (const key of EXPLORATION_EFFECT_FIELD_KEYS) {
-        if (!allowed.has(key)) expect(action).not.toHaveProperty(key);
-      }
+  it("publishes a closed code-owned schema without player copy", () => {
+    expect(EXPLORATION_EFFECT_SCHEMAS).toHaveLength(34);
+    expect(new Set(EXPLORATION_EFFECT_SCHEMAS.map((entry) => entry.kind)).size)
+      .toBe(EXPLORATION_EFFECT_SCHEMAS.length);
+    for (const definition of EXPLORATION_EFFECT_SCHEMAS) {
+      expect(definition).not.toHaveProperty("templateIds");
+      expect(definition).not.toHaveProperty("copy");
     }
-
-    const document = parse(fs.readFileSync(join(rootDir, "data/exploration.toml"), "utf8"));
-    expect(JSON.parse(fs.readFileSync(join(rootDir, "public/exploration-data.json"), "utf8")))
-      .toEqual(transformExplorationData(document));
   });
 
-  it("moves an optional Any card purge to its predicate-free template", () => {
-    const rootDir = fixtureRoot();
-    const data = readExplorationEditorData({ rootDir });
-    const encounter = data.encounters[0];
-
-    let result = updateExplorationAction({
-      cardId: encounter.cardId,
-      slot: 0,
-      action: {
-        ...encounter.actions[0],
-        effectKind: "purge-selected",
-        templateId: 4,
-        predicate: "",
-      },
-    }, { rootDir });
-    expect(result.encounters[0].actions[0]).toMatchObject({
-      effectKind: "purge-selected",
-      templateId: 3,
-      effectText: "Purge a chosen card",
-      count: 1,
-    });
-    expect(result.encounters[0].actions[0]).not.toHaveProperty("predicate");
-
-    result = updateExplorationAction({
-      cardId: encounter.cardId,
-      slot: 0,
-      action: {
-        ...result.encounters[0].actions[0],
-        templateId: 6,
-        predicate: "",
-        count: 2,
-      },
-    }, { rootDir });
-    expect(result.encounters[0].actions[0]).toMatchObject({
-      effectKind: "purge-selected",
-      templateId: 5,
-      effectText: "Purge up to 2 chosen cards",
+  it("normalizes mechanics without constructing presentation text", () => {
+    const effectText = `Authored ${String(Math.random())}`;
+    const normalized = normalizeExplorationAction({
+      id: "synthetic-action",
+      label: "Synthetic action",
+      effectText,
+      effectKind: "copy-selected-card",
+      deckTarget: "offered",
       count: 2,
     });
-    expect(result.encounters[0].actions[0]).not.toHaveProperty("predicate");
+
+    expect(normalized.effectText).toBe(effectText);
+    expect(normalized.deckTarget).toBe("offered");
+    expect(normalized.canonicalMechanicId).toBe("duplicate-deck-entry");
   });
 
-  it("preserves system-managed comments and unrelated records on targeted writes", () => {
-    const rootDir = fixtureRoot();
-    const path = join(rootDir, "data/exploration.toml");
-    const before = fs.readFileSync(path, "utf8");
-    const data = readExplorationEditorData({ rootDir });
-    const target = data.encounters[0];
-    const unrelated = explorationEditorInternals.actionBlock(before, data.encounters[1].cardId, 0);
-    const unrelatedSource = before.slice(unrelated.start, unrelated.end);
-    const comments = before.match(/^# selected .*$/gmu);
-
-    updateExplorationProse({
-      cardId: target.cardId,
-      value: "A deliberately revised scene.",
-    }, { rootDir });
-    const after = fs.readFileSync(path, "utf8");
-    const afterUnrelated = explorationEditorInternals.actionBlock(after, data.encounters[1].cardId, 0);
-    expect(after.slice(afterUnrelated.start, afterUnrelated.end)).toBe(unrelatedSource);
-    expect(after.match(/^# selected .*$/gmu)).toEqual(comments);
-    expect(after).toContain('prose = "A deliberately revised scene."');
-  });
-
-  it("propagates template copy only to matching actions and preserves placeholders", () => {
-    const rootDir = fixtureRoot();
-    const path = join(rootDir, "data/exploration.toml");
-    const data = readExplorationEditorData({ rootDir });
-    const unrelatedEncounter = data.encounters.find((encounter) =>
-      encounter.actions.every((action) => action.templateId !== 14));
-    const before = fs.readFileSync(path, "utf8");
-    const unrelated = explorationEditorInternals.actionBlock(before, unrelatedEncounter.cardId, 0);
-    const unrelatedSource = before.slice(unrelated.start, unrelated.end);
-
-    const result = updateExplorationTemplate({
-      templateId: 14,
-      value: "Discover one {predicate} among {offer_count} choices",
-    }, { rootDir });
-    expect(result.encounters.flatMap((encounter) => encounter.actions)
-      .filter((action) => action.templateId === 14)
-      .every((action) => action.effectText.startsWith("Discover one "))).toBe(true);
-    const after = fs.readFileSync(path, "utf8");
-    const afterUnrelated = explorationEditorInternals.actionBlock(after, unrelatedEncounter.cardId, 0);
-    expect(after.slice(afterUnrelated.start, afterUnrelated.end)).toBe(unrelatedSource);
-
-    const templateBeforeFailure = fs.readFileSync(join(rootDir, "data/templates.json"), "utf8");
-    expect(() => updateExplorationTemplate({
-      templateId: 14,
-      value: "Discover a {predicate}",
-    }, { rootDir })).toThrow("preserve the existing placeholder set");
-    expect(fs.readFileSync(join(rootDir, "data/templates.json"), "utf8"))
-      .toBe(templateBeforeFailure);
-  });
-
-  it("rolls back every destination when an atomic replacement fails", () => {
-    const rootDir = fixtureRoot();
-    const explorationPath = join(rootDir, "data/exploration.toml");
-    const jsonPath = join(rootDir, "public/exploration-data.json");
-    const beforeExploration = fs.readFileSync(explorationPath, "utf8");
-    const beforeJson = fs.readFileSync(jsonPath, "utf8");
-    const cardId = readExplorationEditorData({ rootDir }).encounters[0].cardId;
-    const fileSystem = {
-      ...fs,
-      renameSync(from, to) {
-        if (from.includes(".tmp-") && to === jsonPath) throw new Error("fixture rename failure");
-        fs.renameSync(from, to);
-      },
+  it("rejects unknown action card and Dreamsign references before staging", () => {
+    const references = {
+      cardIds: new Set(["00000000-0000-4000-8000-000000000001"]),
+      dreamsignIds: new Set(["00000000-0000-4000-8000-000000000002"]),
     };
-
-    expect(() => updateExplorationProse({ cardId, value: "This must roll back." }, {
-      rootDir,
-      fileSystem,
-    })).toThrow("fixture rename failure");
-    expect(fs.readFileSync(explorationPath, "utf8")).toBe(beforeExploration);
-    expect(fs.readFileSync(jsonPath, "utf8")).toBe(beforeJson);
+    expect(() => normalizeExplorationAction({
+      id: "unknown-card",
+      label: "Synthetic action",
+      effectText: "Synthetic effect",
+      effectKind: "gain-card",
+      cardId: "00000000-0000-4000-8000-000000000099",
+    }, references)).toThrow(/Unknown card reference/u);
+    expect(() => normalizeExplorationAction({
+      id: "unknown-dreamsign",
+      label: "Synthetic action",
+      effectText: "Synthetic effect",
+      effectKind: "gain-dreamsign",
+      dreamsignId: "00000000-0000-4000-8000-000000000099",
+    }, references)).toThrow(/Unknown Dreamsign reference/u);
   });
 
-  it("rejects unknown UUID references without touching authored data", () => {
-    const rootDir = fixtureRoot();
-    const path = join(rootDir, "data/exploration.toml");
-    const before = fs.readFileSync(path, "utf8");
-    const encounter = readExplorationEditorData({ rootDir }).encounters[0];
-    expect(() => updateExplorationAction({
-      cardId: encounter.cardId,
-      slot: 0,
-      action: {
-        ...encounter.actions[0],
-        effectKind: "gain-card",
-        templateId: 10,
-        cardId: "11111111-1111-4111-8111-111111111111",
-      },
-    }, { rootDir })).toThrow("unknown card UUID");
-    expect(fs.readFileSync(path, "utf8")).toBe(before);
+  it("keeps followup copy on the individual actions", () => {
+    const data = readExplorationEditorData({ random: () => 0 });
+    const actions = data.encounters.flatMap((encounter) => encounter.actions);
+    const withFollowup = actions.filter((action) => action.followupTitle !== undefined);
+
+    expect(withFollowup.length).toBeGreaterThan(0);
+    expect(withFollowup.every((action) => action.followupSubtitle !== undefined)).toBe(true);
   });
 });

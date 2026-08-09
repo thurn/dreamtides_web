@@ -89,10 +89,4 @@ export const explorationEditorClient: ExplorationEditorClient = {
     );
   },
 
-  saveTemplate(request) {
-    return patch(
-      `/api/editor/exploration/templates/${String(request.templateId)}`,
-      { value: request.value, clientRevision: request.clientRevision },
-    );
-  },
 };

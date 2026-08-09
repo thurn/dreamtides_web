@@ -1,31 +1,18 @@
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
-import { parse } from "smol-toml";
-import {
-  buildExplorationEffectDefinitions,
-  EXPLORATION_PREDICATES,
-  EXPLORATION_TRANSFIGURATIONS,
-} from "./exploration-effect-definitions.mjs";
-
 export {
-  buildExplorationEffectDefinitions,
+  EXPLORATION_EFFECT_SCHEMAS,
   EXPLORATION_PREDICATES,
   EXPLORATION_TRANSFIGURATIONS,
-} from "./exploration-effect-definitions.mjs";
+} from "./exploration-effect-editor-schema.mjs";
 
-const authoredSource = parse(readFileSync(
-  resolve(import.meta.dirname, "../data/exploration.toml"),
-  "utf8",
-));
+import { EXPLORATION_EFFECT_SCHEMAS } from "./exploration-effect-editor-schema.mjs";
 
-export const EXPLORATION_EFFECT_DEFINITIONS = buildExplorationEffectDefinitions(authoredSource);
-export const EXPLORATION_EFFECT_DEFINITION_BY_KIND = new Map(
-  EXPLORATION_EFFECT_DEFINITIONS.map((definition) => [definition.kind, definition]),
-);
-export const EXPLORATION_EFFECT_FIELD_KEYS = new Set(
-  EXPLORATION_EFFECT_DEFINITIONS.flatMap((definition) => definition.fields.map((entry) => entry.key)),
+export const EXPLORATION_EFFECT_SCHEMA_BY_KIND = new Map(
+  EXPLORATION_EFFECT_SCHEMAS.map((schema) => [schema.kind, schema]),
 );
 
-export function predicateDisplayName(predicate) {
-  return EXPLORATION_PREDICATES.find((entry) => entry.value === predicate)?.label ?? predicate;
+export function predicateDisplayName(value) {
+  return value
+    .split("-")
+    .map((word) => `${word.slice(0, 1).toUpperCase()}${word.slice(1)}`)
+    .join(" ");
 }

@@ -37,7 +37,8 @@ import {
   compileSitesData,
   deriveDreamscapesData,
 } from "./guide-sites-data.mjs";
-import { buildExplorationEffectDefinitions } from "./exploration-effect-definitions.mjs";
+import { EXPLORATION_EFFECT_SCHEMAS } from "./exploration-effect-editor-schema.mjs";
+import { EXPLORATION_EFFECT_KINDS } from "./exploration-effect-kinds.mjs";
 import { amplifiedStructuralErrors } from "./lib/amplified-validation.mjs";
 import {
   compileGambleData,
@@ -666,43 +667,6 @@ export function transformDreamsign(dreamsign, altTextByImageName = new Map()) {
   };
 }
 
-const EXPLORATION_EFFECT_KINDS = new Set([
-  "purge-and-copy",
-  "gain-dreamsign",
-  "gain-card",
-  "transfigure-selected",
-  "purge-selected",
-  "choose-pack",
-  "draft-card",
-  "purge-for-essence",
-  "change-subtype-selected",
-  "change-subtype-all",
-  "take-cards",
-  "replace-selected-with-card",
-  "replace-selected",
-  "gain-nightmare-and-card",
-  "gain-random-cards",
-  "transfigure-fixed-selected",
-  "gain-offered-card",
-  "transfigure-next-draft-or-shop",
-  "gain-essence-per-card",
-  "increase-spark-all",
-  "gain-random-dreamsign",
-  "purge-dreamsign-for-essence",
-  "make-fast-all",
-  "reduce-cost-all-and-gain-nightmares",
-  "copy-selected-card",
-  "copy-selected-cards",
-  "copy-offered-deck-card",
-  "next-battle-opening-hand",
-  "next-battle-starting-energy",
-  "next-battle-smaller-hand-and-cost-discount",
-  "choose-dream-avatar",
-  "purge-duplicates-and-grant-reclaim",
-  "transfigured-card-draft",
-  "add-site",
-]);
-
 function transformTomlRecord(record) {
   const result = {};
   for (const [key, value] of Object.entries(record)) {
@@ -722,14 +686,25 @@ function transformTomlRecord(record) {
 
 /** Convert and validate the authored Exploration encounter catalog. */
 export function transformExplorationData(source) {
-  const effectDefinitions = buildExplorationEffectDefinitions(
-    source["effect-kind"] === undefined
-      ? parse(readFileSync(join(DATA_DIR, "exploration.toml"), "utf8"))
-      : source,
+  if (source["schema-version"] !== 2) {
+    throw new Error("exploration.toml: schema-version must be 2");
+  }
+  const effectSchemas = EXPLORATION_EFFECT_SCHEMAS;
+  const effectSchemaByKind = new Map(
+    effectSchemas.map((schema) => [schema.kind, schema]),
   );
-  const effectDefinitionByKind = new Map(
-    effectDefinitions.map((definition) => [definition.kind, definition]),
-  );
+  const compilerEffectKinds = source["effect-kinds"];
+  const editorEffectKinds = effectSchemas.map((schema) => schema.kind);
+  if (
+    !Array.isArray(compilerEffectKinds) ||
+    compilerEffectKinds.length !== EXPLORATION_EFFECT_KINDS.length ||
+    compilerEffectKinds.some((kind, index) => kind !== EXPLORATION_EFFECT_KINDS[index]) ||
+    editorEffectKinds.length !== EXPLORATION_EFFECT_KINDS.length ||
+    editorEffectKinds.some((kind, index) => kind !== EXPLORATION_EFFECT_KINDS[index])
+  ) {
+    throw new Error("exploration.toml: compiler, runtime, and editor effect kinds must match");
+  }
+  const effectKindSet = new Set(EXPLORATION_EFFECT_KINDS);
   const customCards = (source["custom-card"] ?? []).map((raw) => {
     const card = transformTomlRecord(raw);
     return {
@@ -759,9 +734,8 @@ export function transformExplorationData(source) {
           id,
           label,
           effectText,
-          templateId,
-          templateVariables,
-          selection,
+          followupTitle,
+          followupSubtitle,
           effectKind,
           ...effectFields
         } = rawAction;
@@ -769,16 +743,12 @@ export function transformExplorationData(source) {
           id,
           label,
           effectText,
-          templateId,
-          templateVariables,
-          ...(selection === undefined ? {} : { selection }),
+          ...(followupTitle === undefined ? {} : { followupTitle }),
+          ...(followupSubtitle === undefined ? {} : { followupSubtitle }),
           effectKind,
           ...effectFields,
         };
-        const definition = effectDefinitionByKind.get(action.effectKind);
-        const specialVariables = [
-          ...new Set(action.effectText?.match(/\$[A-Z][A-Z0-9_]*/gu) ?? []),
-        ];
+        const definition = effectSchemaByKind.get(action.effectKind);
         const defaults = Object.fromEntries(
           (definition?.fields ?? []).flatMap((entry) =>
             entry.defaultValue === undefined || action[entry.key] !== undefined
@@ -799,7 +769,6 @@ export function transformExplorationData(source) {
                   action.selectionPolicyId ??
                   definition.defaultSelectionPolicyId,
               }),
-          ...(specialVariables.length === 0 ? {} : { specialVariables }),
         };
       }),
     };
@@ -832,12 +801,12 @@ export function transformExplorationData(source) {
         );
       }
       actionIds.add(action.id);
-      if (!EXPLORATION_EFFECT_KINDS.has(action.effectKind)) {
+      if (!effectKindSet.has(action.effectKind)) {
         throw new Error(
           `exploration.toml: action ${action.id} has unknown effect-kind ${String(action.effectKind)}`,
         );
       }
-      const definition = effectDefinitionByKind.get(action.effectKind);
+      const definition = effectSchemaByKind.get(action.effectKind);
       if (
         definition?.allowedSelectionPolicyIds !== undefined &&
         !definition.allowedSelectionPolicyIds.includes(action.selectionPolicyId)
@@ -875,13 +844,15 @@ export function transformExplorationData(source) {
           `exploration.toml: action ${action.id} has unsupported predicate ${String(action.predicate)}`,
         );
       }
+      const invalidCount =
+        typeof action.count !== "number" ||
+        !Number.isInteger(action.count) ||
+        action.count <= 0;
       if (
-        (action.effectKind === "draft-card" ||
-          (action.effectKind === "gain-offered-card" &&
-            action.templateId === 12)) &&
-        (typeof action.count !== "number" ||
-          !Number.isInteger(action.count) ||
-          action.count <= 0)
+        (action.effectKind === "draft-card" && invalidCount) ||
+        (action.effectKind === "gain-offered-card" &&
+          action.count !== undefined &&
+          invalidCount)
       ) {
         throw new Error(
           `exploration.toml: action ${action.id} requires a positive whole-number count`,
@@ -997,25 +968,81 @@ export function transformExplorationData(source) {
           `exploration.toml: action ${action.id} requires a non-empty subtype`,
         );
       }
+      const targetedKinds = new Set([
+        "change-subtype-selected",
+        "transfigure-fixed-selected",
+        "copy-selected-card",
+      ]);
+      if (targetedKinds.has(action.effectKind)) {
+        if (action.deckTarget !== "chosen" && action.deckTarget !== "offered") {
+          throw new Error(
+            `exploration.toml: action ${action.id} requires deck-target`,
+          );
+        }
+      } else if (action.deckTarget !== undefined) {
+        throw new Error(
+          `exploration.toml: action ${action.id} has unsupported deck-target`,
+        );
+      }
+      if ((action.followupTitle === undefined) !== (action.followupSubtitle === undefined)) {
+        throw new Error(
+          `exploration.toml: action ${action.id} requires both followup fields`,
+        );
+      }
+      if (/\$[A-Z][A-Z0-9_]*/u.test(action.effectText)) {
+        throw new Error(
+          `exploration.toml: action ${action.id} uses an untyped presentation token`,
+        );
+      }
+      const presentationSlots = [
+        ...new Set(action.effectText.match(/\{([a-z][a-z0-9_]*)\}/gu) ?? []),
+      ];
+      const allowedSlots = new Set([
+        ...(action.effectKind === "gain-offered-card" ? ["{offered_card}"] : []),
+        ...(action.deckTarget === "offered" ? ["{deck_card}"] : []),
+      ]);
+      for (const slot of presentationSlots) {
+        if (!allowedSlots.has(slot)) {
+          throw new Error(
+            `exploration.toml: action ${action.id} has unsupported presentation slot ${slot}`,
+          );
+        }
+      }
+      if (action.effectKind === "gain-offered-card" && !presentationSlots.includes("{offered_card}")) {
+        throw new Error(
+          `exploration.toml: action ${action.id} must present {offered_card}`,
+        );
+      }
+      if (action.deckTarget === "offered" && !presentationSlots.includes("{deck_card}")) {
+        throw new Error(
+          `exploration.toml: action ${action.id} must present {deck_card}`,
+        );
+      }
+      const followupSlots = [
+        ...new Set(
+          `${action.followupTitle ?? ""}\n${action.followupSubtitle ?? ""}`
+            .match(/\{([a-z][a-z0-9-]*)\}/gu) ?? [],
+        ),
+      ];
+      const allowedFollowupSlots = new Set([
+        "{action-label}",
+        "{count}",
+        "{subtype}",
+        "{transfiguration}",
+        "{essence-per-spark}",
+      ]);
+      for (const slot of followupSlots) {
+        if (!allowedFollowupSlots.has(slot)) {
+          throw new Error(
+            `exploration.toml: action ${action.id} has unsupported followup slot ${slot}`,
+          );
+        }
+      }
     }
   }
 
-  const effectKinds = effectDefinitions.map((definition) => ({
-    kind: definition.kind,
-    label: definition.label,
-    canonicalMechanicId: definition.canonicalMechanicId,
-    ...(definition.defaultSelectionPolicyId === undefined
-      ? {}
-      : {
-          defaultSelectionPolicyId: definition.defaultSelectionPolicyId,
-          allowedSelectionPolicyIds: definition.allowedSelectionPolicyIds,
-        }),
-    copy: definition.copy,
-    fields: definition.fields,
-  }));
   const hashPayload = {
-    schemaVersion: 1,
-    effectKinds,
+    schemaVersion: 2,
     customCards,
     customDreamsigns,
     encounters,

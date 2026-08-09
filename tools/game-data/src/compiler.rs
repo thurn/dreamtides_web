@@ -224,7 +224,7 @@ fn adapt(
             )
         }
         "economy_v1" => economy::lower(parse_ron(source, dataset)?),
-        "exploration_v1" => exploration::lower(parse_ron(source, dataset)?),
+        "exploration_v2" => exploration::lower(parse_ron(source, dataset)?),
         "internal_ai_v1" => {
             let catalog: opponents::InternalAiCatalog = parse_ron(source, dataset)?;
             let known_card_ids = known_opponent_card_ids(root, manifest)?;
@@ -608,7 +608,7 @@ mod tests {
                 "dreamwell_metadata_v1" => {
                     canonical::<Vec<dreamwell::DreamwellCardMetadata>>(&source, true);
                 }
-                "exploration_v1" => {
+                "exploration_v2" => {
                     canonical::<ExplorationCatalog>(&source, true);
                 }
                 "internal_ai_v1" => {

@@ -70,9 +70,6 @@ const SERVER_DATA: ExplorationEditorServerData = {
         { kind: "text", text: " cards to add to your deck" },
       ],
       runtimeCardSelections: [],
-      templateId: 36,
-      template: "Choose one of {pack_count} packs of {pack_size} {predicate} cards to add to your deck",
-      templateVariables: { pack_count: 2, pack_size: 3, predicate: "Character" },
       effectKind: "choose-pack",
       predicate: "character",
       packCount: 2,
@@ -80,45 +77,31 @@ const SERVER_DATA: ExplorationEditorServerData = {
     }, {
       id: `${CARD_ID}:second`,
       label: "Invite an ally",
-      effectText: "Gain $OFFERED_CARD",
+      effectText: "Gain {offered_card}",
       renderedEffectText: "Gain Fixture Ally",
       renderedEffectParts: [
         { kind: "text", text: "Gain " },
         {
           kind: "card",
-          placeholder: "$OFFERED_CARD",
+          placeholder: "{offered_card}",
           cardId: REWARD_CARD_ID,
           cardName: "Fixture Ally",
         },
       ],
       runtimeCardSelections: [{
-        placeholder: "$OFFERED_CARD",
+        placeholder: "{offered_card}",
         predicate: "Character",
         cardId: REWARD_CARD_ID,
         cardName: "Fixture Ally",
         source: "offer_pool",
       }],
-      templateId: 11,
-      template: "Gain $OFFERED_CARD",
-      templateVariables: {},
-      selection: { $OFFERED_CARD: { predicate: "Character" } },
       effectKind: "gain-offered-card",
       predicate: "character",
     }],
   }],
-  templates: [
-    { id: 3, text: "Purge a chosen card" },
-    { id: 4, text: "Purge a chosen {predicate} card" },
-    { id: 9, text: "Gain a random {predicate} card" },
-    { id: 10, text: "Gain {card_id}" },
-    { id: 11, text: "Gain $OFFERED_CARD" },
-    { id: 13, text: "Gain {count} random {predicate} cards" },
-    { id: 36, text: "Choose one of {pack_count} packs of {pack_size} {predicate} cards to add to your deck" },
-  ],
-  effectDefinitions: [{
+  effectSchemas: [{
     kind: "choose-pack",
     label: "Choose a pack",
-    templateIds: [36],
     fields: [
       { key: "predicate", label: "Card predicate", control: "predicate" },
       { key: "packCount", label: "Pack count", control: "number", min: 1 },
@@ -127,7 +110,6 @@ const SERVER_DATA: ExplorationEditorServerData = {
   }, {
     kind: "purge-selected",
     label: "Purge selected cards",
-    templateIds: [3, 4],
     fields: [{
       key: "predicate",
       label: "Card predicate",
@@ -137,20 +119,17 @@ const SERVER_DATA: ExplorationEditorServerData = {
   }, {
     kind: "gain-card",
     label: "Gain card",
-    templateIds: [10],
     fields: [{ key: "cardId", label: "Card", control: "card" }],
   }, {
     kind: "gain-offered-card",
     label: "Gain offered card",
-    templateIds: [11],
     fields: [{ key: "predicate", label: "Card predicate", control: "predicate" }],
   }, {
     kind: "gain-random-cards",
     label: "Gain random cards",
-    templateIds: [9, 13],
     fields: [
       { key: "predicate", label: "Card predicate", control: "predicate" },
-      { key: "count", label: "Count", control: "number", min: 1, templateIds: [13] },
+      { key: "count", label: "Count", control: "number", min: 1 },
     ],
   }],
   predicates: [
@@ -174,7 +153,6 @@ function client(overrides: Partial<ExplorationEditorClient> = {}): ExplorationEd
     load: vi.fn().mockResolvedValue(loadResult()),
     saveProse: vi.fn(),
     saveAction: vi.fn(),
-    saveTemplate: vi.fn(),
     ...overrides,
   };
 }
@@ -256,9 +234,9 @@ describe("ExplorationEditorApp", () => {
     expect(runtimeCardName?.querySelector("u")?.textContent).toBe("Fixture Ally");
     expect(runtimeCardName?.querySelector("[data-reveal-entity-type]"))
       .toBeNull();
-    expect(container.querySelector("[data-runtime-card-placeholder='$OFFERED_CARD']"))
+    expect(container.querySelector("[data-runtime-card-placeholder='{offered_card}']"))
       .not.toBeNull();
-    expect(container.textContent).not.toContain("$OFFERED_CARD");
+    expect(container.textContent).not.toContain("{offered_card}");
     expect(container.querySelectorAll("[aria-label^='Effect for']")).toHaveLength(2);
     expect(container.querySelectorAll("[aria-label^='Template for']")).toHaveLength(0);
     act(() => root.unmount());
@@ -290,7 +268,7 @@ describe("ExplorationEditorApp", () => {
     act(() => root.unmount());
   });
 
-  it("saves the selected effect and template pair immediately", async () => {
+  it("saves the selected typed effect immediately", async () => {
     const saveAction = vi.fn((
       request: Parameters<ExplorationEditorClient["saveAction"]>[0],
     ) => Promise.resolve({
@@ -304,11 +282,9 @@ describe("ExplorationEditorApp", () => {
     act(() => trigger.click());
     const options = [...document.body.querySelectorAll<HTMLButtonElement>("[role='option']")];
     expect(options.map((entry) => entry.textContent)).toEqual(expect.arrayContaining([
-      "Gain random cards — Gain a random {predicate} card",
-      "Gain random cards — Gain {count} random {predicate} cards",
+      "Gain random cards",
     ]));
-    const option = options.find((entry) => entry.textContent ===
-        "Gain random cards — Gain {count} random {predicate} cards");
+    const option = options.find((entry) => entry.textContent === "Gain random cards");
     await act(async () => {
       option!.click();
       await Promise.resolve();
@@ -317,7 +293,6 @@ describe("ExplorationEditorApp", () => {
     expect(request?.cardId).toBe(CARD_ID);
     expect(request?.slot).toBe(0);
     expect(request?.action.effectKind).toBe("gain-random-cards");
-    expect(request?.action.templateId).toBe(13);
     act(() => root.unmount());
   });
 
@@ -334,9 +309,6 @@ describe("ExplorationEditorApp", () => {
         { kind: "text", text: " card" },
       ],
       runtimeCardSelections: [],
-      templateId: 4,
-      template: "Purge a chosen {predicate} card",
-      templateVariables: { predicate: "Character" },
       effectKind: "purge-selected",
       predicate: "character",
       count: 1,
@@ -345,9 +317,6 @@ describe("ExplorationEditorApp", () => {
     normalized.encounters[0].actions[0] = {
       ...normalized.encounters[0].actions[0],
       effectText: "Purge a chosen card",
-      templateId: 3,
-      template: "Purge a chosen card",
-      templateVariables: {},
       renderedEffectText: "Purge a chosen card",
       renderedEffectParts: [{ kind: "text", text: "Purge a chosen card" }],
     };
@@ -358,7 +327,9 @@ describe("ExplorationEditorApp", () => {
       request: Parameters<ExplorationEditorClient["saveAction"]>[0],
     ) => Promise.resolve({
       clientRevision: request.clientRevision,
-      data: structuredClone(request.action.templateId === 3 ? normalizedData : filteredData),
+      data: structuredClone(String(request.action.predicate ?? "") === ""
+        ? normalizedData
+        : filteredData),
     }));
     const { container, root } = await renderLoaded(client({
       load: vi.fn().mockResolvedValue(loaded),
@@ -379,7 +350,6 @@ describe("ExplorationEditorApp", () => {
     });
     expect(saveAction.mock.calls[0]?.[0].action).toMatchObject({
       predicate: "",
-      templateId: 3,
     });
     expect(container.querySelector("[aria-label='Card predicate']")).not.toBeNull();
 
@@ -396,7 +366,6 @@ describe("ExplorationEditorApp", () => {
     });
     expect(saveAction.mock.calls[1]?.[0].action).toMatchObject({
       predicate: "character",
-      templateId: 4,
     });
 
     act(() => root.unmount());

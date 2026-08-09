@@ -5,6 +5,7 @@ import type {
   RewardMechanicId,
   RewardSelectionPolicyId,
 } from "../reward-selection/types";
+import { EXPLORATION_EFFECT_KINDS } from "../../scripts/exploration-effect-kinds.mjs";
 
 const EXPLORATION_DATA_PATH = "/exploration-data.json";
 
@@ -16,46 +17,7 @@ export type ExplorationPredicate =
   | "survivor"
   | "warrior";
 
-export type ExplorationSpecialVariable =
-  | "$OFFERED_CARD"
-  | "$DECK_CARD"
-  | "$STARTER_CARD";
-
-export type ExplorationEffectKind =
-  | "purge-and-copy"
-  | "gain-dreamsign"
-  | "gain-card"
-  | "transfigure-selected"
-  | "purge-selected"
-  | "choose-pack"
-  | "draft-card"
-  | "purge-for-essence"
-  | "change-subtype-selected"
-  | "change-subtype-all"
-  | "take-cards"
-  | "replace-selected-with-card"
-  | "replace-selected"
-  | "gain-nightmare-and-card"
-  | "gain-random-cards"
-  | "transfigure-fixed-selected"
-  | "gain-offered-card"
-  | "transfigure-next-draft-or-shop"
-  | "gain-essence-per-card"
-  | "increase-spark-all"
-  | "gain-random-dreamsign"
-  | "purge-dreamsign-for-essence"
-  | "make-fast-all"
-  | "reduce-cost-all-and-gain-nightmares"
-  | "copy-selected-card"
-  | "copy-selected-cards"
-  | "copy-offered-deck-card"
-  | "next-battle-opening-hand"
-  | "next-battle-starting-energy"
-  | "next-battle-smaller-hand-and-cost-discount"
-  | "choose-dream-avatar"
-  | "purge-duplicates-and-grant-reclaim"
-  | "transfigured-card-draft"
-  | "add-site";
+export type ExplorationEffectKind = typeof EXPLORATION_EFFECT_KINDS[number];
 
 const TRANSFIGURATION_EXPLORATION_EFFECT_KINDS: ReadonlySet<ExplorationEffectKind> =
   new Set(["transfigure-selected", "transfigure-fixed-selected"]);
@@ -70,12 +32,8 @@ export interface ExplorationActionContent {
   id: string;
   label: string;
   effectText: string;
-  templateId?: number;
-  templateVariables?: Readonly<Record<string, unknown>>;
-  /** Authored special-variable eligibility keyed by the canonical token. */
-  selection?: Readonly<Record<string, { readonly predicate?: string }>>;
-  /** Special selections compiled from the authored template syntax. */
-  specialVariables?: readonly ExplorationSpecialVariable[];
+  followupTitle?: string;
+  followupSubtitle?: string;
   effectKind: ExplorationEffectKind;
   /** Compiled site-neutral mechanic and its non-player-facing selection policy. */
   canonicalMechanicId?: RewardMechanicId;
@@ -96,55 +54,26 @@ export interface ExplorationActionContent {
   subtypeOptions?: readonly string[];
   nightmareCount?: number;
   transfiguration?: TransfigurationType;
+  deckTarget?: "chosen" | "offered";
 }
 
-export function explorationActionUsesSpecialVariable(
+export function explorationActionUsesOfferedDeckTarget(
   action: ExplorationActionContent,
-  variable: ExplorationSpecialVariable,
 ): boolean {
-  return (
-    action.specialVariables?.includes(variable) === true ||
-    action.selection?.[variable] !== undefined
-  );
+  return action.deckTarget === "offered";
 }
 
 export interface ExplorationEncounterContent {
   cardId: CardId;
   prose: string;
-  actions: readonly ExplorationActionContent[];
-}
-
-export interface ExplorationEffectFieldContent {
-  key: string;
-  label: string;
-  control: string;
-  optional?: boolean;
-  defaultValue?: unknown;
-  min?: number;
-  step?: number;
-  resource?: string;
-  templateIds?: readonly number[];
-}
-
-export interface ExplorationEffectDefinitionContent {
-  kind: ExplorationEffectKind;
-  label: string;
-  canonicalMechanicId: RewardMechanicId;
-  defaultSelectionPolicyId?: RewardSelectionPolicyId;
-  allowedSelectionPolicyIds?: readonly RewardSelectionPolicyId[];
-  copy: Readonly<{
-    followupTitle: string;
-    followupSubtitle: string;
-  }>;
-  fields: readonly ExplorationEffectFieldContent[];
+  actions: readonly [ExplorationActionContent, ExplorationActionContent];
 }
 
 export interface ExplorationContent {
   /** Present on compiler output; optional only for focused synthetic fixtures. */
-  schemaVersion?: 1;
+  schemaVersion?: 2;
   contentHash?: string;
   foldHash?: string;
-  effectKinds?: readonly ExplorationEffectDefinitionContent[];
   customCards: readonly CardData[];
   customDreamsigns: readonly Dreamsign[];
   encounters: readonly ExplorationEncounterContent[];
@@ -154,7 +83,6 @@ interface RawExplorationData {
   schemaVersion?: number;
   contentHash?: string;
   foldHash?: string;
-  effectKinds?: ExplorationEffectDefinitionContent[];
   customCards?: CardData[];
   customDreamsigns?: Dreamsign[];
   encounters?: Array<{
@@ -172,6 +100,21 @@ function requiredString(value: unknown, label: string): string {
 }
 
 function validateAction(raw: ExplorationActionContent): ExplorationActionContent {
+  if ((raw.followupTitle === undefined) !== (raw.followupSubtitle === undefined)) {
+    throw new Error("Invalid Exploration data: action followup fields must be paired");
+  }
+  const targeted = new Set<ExplorationEffectKind>([
+    "change-subtype-selected",
+    "transfigure-fixed-selected",
+    "copy-selected-card",
+  ]);
+  if (targeted.has(raw.effectKind)) {
+    if (raw.deckTarget !== "chosen" && raw.deckTarget !== "offered") {
+      throw new Error("Invalid Exploration data: targeted action requires deckTarget");
+    }
+  } else if (raw.deckTarget !== undefined) {
+    throw new Error("Invalid Exploration data: action has unsupported deckTarget");
+  }
   return {
     ...raw,
     id: requiredString(raw.id, "action id"),
@@ -181,7 +124,9 @@ function validateAction(raw: ExplorationActionContent): ExplorationActionContent
   };
 }
 
-/** Load the authored encounter catalog generated from exploration.toml. */
+const EXPLORATION_EFFECT_KIND_SET: ReadonlySet<string> = new Set(EXPLORATION_EFFECT_KINDS);
+
+/** Load the authored encounter catalog generated from exploration.ron. */
 export async function loadExplorationContent(): Promise<ExplorationContent> {
   const response = await fetch(EXPLORATION_DATA_PATH);
   if (!response.ok) {
@@ -191,25 +136,11 @@ export async function loadExplorationContent(): Promise<ExplorationContent> {
   }
   const raw = (await response.json()) as RawExplorationData;
   if (
-    raw.schemaVersion !== 1 ||
+    raw.schemaVersion !== 2 ||
     typeof raw.contentHash !== "string" || !/^[0-9a-f]{64}$/u.test(raw.contentHash) ||
-    raw.foldHash !== raw.contentHash || !Array.isArray(raw.effectKinds) || raw.effectKinds.length === 0
+    raw.foldHash !== raw.contentHash
   ) {
     throw new Error("Invalid Exploration data: malformed compiler metadata");
-  }
-  const effectKindIds = new Set<string>();
-  for (const definition of raw.effectKinds) {
-    if (
-      typeof definition.kind !== "string" ||
-      effectKindIds.has(definition.kind) || typeof definition.label !== "string" ||
-      typeof definition.canonicalMechanicId !== "string" ||
-      typeof definition.copy?.followupTitle !== "string" ||
-      typeof definition.copy?.followupSubtitle !== "string" ||
-      !Array.isArray(definition.fields)
-    ) {
-      throw new Error("Invalid Exploration data: malformed effect-kind definition");
-    }
-    effectKindIds.add(definition.kind);
   }
   const customCards = (raw.customCards ?? []).map((card) => ({
     ...card,
@@ -243,7 +174,7 @@ export async function loadExplorationContent(): Promise<ExplorationContent> {
     }
     encounterIds.add(encounterId);
     for (const action of encounter.actions) {
-      if (!effectKindIds.has(action.effectKind)) {
+      if (!EXPLORATION_EFFECT_KIND_SET.has(action.effectKind)) {
         throw new Error(`Invalid Exploration data: unknown effect kind ${action.effectKind}`);
       }
       if (actionIds.has(action.id)) {
@@ -255,22 +186,13 @@ export async function loadExplorationContent(): Promise<ExplorationContent> {
     }
   }
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     contentHash: raw.contentHash,
     foldHash: raw.foldHash,
-    effectKinds: raw.effectKinds,
     customCards,
     customDreamsigns: raw.customDreamsigns ?? [],
     encounters,
   };
-}
-
-/** Resolve TOML-authored effect metadata by its persisted effect kind. */
-export function explorationEffectDefinition(
-  content: ExplorationContent,
-  kind: ExplorationEffectKind,
-): ExplorationEffectDefinitionContent | null {
-  return content.effectKinds?.find((entry) => entry.kind === kind) ?? null;
 }
 
 /** Resolve an encounter by its source-card UUID. */

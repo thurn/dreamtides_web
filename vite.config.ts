@@ -1045,7 +1045,6 @@ export default defineConfig({
         // Exploration editor saves update canonical templates and regenerate
         // the public runtime catalog. Its targeted websocket event refreshes
         // journey pages while the editor keeps its in-progress UI state.
-        path.resolve(path.join(__dirname, "data", "templates.json")),
         path.resolve(path.join(__dirname, "public", "exploration-data.json")),
         // Saving a journey writes a JSON file here; ignore it so the save does
         // not trigger a full page reload that would close the debug overlay.

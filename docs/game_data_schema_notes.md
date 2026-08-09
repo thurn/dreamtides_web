@@ -97,7 +97,7 @@ The `internal_card_metadata_v1` adapter generates
 
 ## `data/draft.ron`
 
-### `schema-version = 1`
+### `schema-version = 2`
 
 Version of this file's schema. Increment only when the compiler contract changes.
 
@@ -997,157 +997,13 @@ Schema version for the Exploration compiler and runtime parser.
 
 Two-choice screen contract: every authored encounter must present two actions.
 
-### `[[effect-kind]]`
-
-Each effect-kind entry defines one designer-selectable mechanic. The kind is
-persisted in encounters; label is editor copy; template-ids document compatible
-design templates; canonical-mechanic-id connects to shared reward selection.
-default-selection-policy-id is applied when an action omits an override, while
-allowed-selection-policy-ids bounds designer-authored policy overrides.
-copy strings accept {action-label}, {count}, {subtype}, {transfiguration}, and
-{essence-per-spark}; blank strings mean that the mechanic has no chooser copy.
-Field entries describe editor controls and compiler defaults. optional controls
-whether omission is legal; default-value is materialized into generated JSON;
-min/step/resource are editor affordances; field template-ids narrow applicability.
-Purge and copy: purge-and-duplicate.
-
-### `[[effect-kind]]`
-
-Gain Dreamsign: gain-dreamsign.
-
-### `[[effect-kind]]`
-
-Gain card: gain-card.
-
-### `[[effect-kind]]`
-
-Transfigure selected card: transfigure-deck-entry.
-
-### `[[effect-kind]]`
-
-Purge selected cards: purge-deck-entry.
-
-### `[[effect-kind]]`
-
-Choose a pack: pack-chooser.
-
-### `[[effect-kind]]`
-
-Draft a card: catalog-card-chooser.
-
-### `[[effect-kind]]`
-
-Purge for essence: purge-for-essence.
-
-### `[[effect-kind]]`
-
-Change selected subtype: change-entry-subtype.
-
-### `[[effect-kind]]`
-
-Choose subtype for all characters: change-deck-subtype.
-
-### `[[effect-kind]]`
-
-Take offered cards: catalog-card-chooser.
-
-### `[[effect-kind]]`
-
-Replace selected card with a fixed card: replace-deck-entry.
-
-### `[[effect-kind]]`
-
-Replace selected card: replace-deck-entry.
-
-### `[[effect-kind]]`
-
-Gain Nightmares and a card: gain-nightmare-and-card.
-
-### `[[effect-kind]]`
-
-Gain random cards: gain-card.
-
-### `[[effect-kind]]`
-
-Apply a fixed transfiguration: transfigure-deck-entry.
-
-### `[[effect-kind]]`
-
-Gain an offered card: gain-card.
-
-### `[[effect-kind]]`
-
-Transfigure the next Draft or Shop: next-site-transfiguration.
-
-### `[[effect-kind]]`
-
-Gain essence per card: gain-essence-by-deck-predicate.
-
-### `[[effect-kind]]`
-
-Increase spark for all characters: increase-deck-spark.
-
-### `[[effect-kind]]`
-
-Gain random Dreamsign: gain-dreamsign.
-
-### `[[effect-kind]]`
-
-Purge Dreamsign for essence: purge-dreamsign-for-essence.
-
-### `[[effect-kind]]`
-
-Make all cards fast: make-deck-fast.
-
-### `[[effect-kind]]`
-
-Reduce costs and gain Nightmares: reduce-deck-cost-and-add-nightmares.
-
-### `[[effect-kind]]`
-
-Copy a selected deck card: duplicate-deck-entry.
-
-### `[[effect-kind]]`
-
-Copy selected deck cards: duplicate-deck-entry.
-
-### `[[effect-kind]]`
-
-Copy an offered deck card: duplicate-deck-entry.
-
-### `[[effect-kind]]`
-
-Increase next opening hand: next-battle-modifier.
-
-### `[[effect-kind]]`
-
-Increase next starting energy: next-battle-modifier.
-
-### `[[effect-kind]]`
-
-Reduce next opening hand and card costs: next-battle-modifier.
-
-### `[[effect-kind]]`
-
-Choose a new Dream Avatar: choose-dream-avatar.
-
-### `[[effect-kind]]`
-
-Purge duplicates and grant Reclaim: purge-duplicates-and-grant-reclaim.
-
-### `[[effect-kind]]`
-
-Draft a transfigured card: transfigured-card-chooser.
-
-### `[[effect-kind]]`
-
-Add a disclosed site: add-site.
-
 ### `[[encounter]]`
 
 Exploration encounters are keyed by the UUID of the card whose artwork and
 mechanics inspire the scene. Each encounter has exactly two player actions.
-Template metadata traces each production action back to the selected design.
+Each action contains its player-facing presentation and one typed gameplay
+effect. Presentation slots reference runtime entities for display; the effect
+variant defines selection, targeting, and resolution semantics.
 selected prose: pair-2 (rank 2)
 selected actions: pair-5 (rank 4)
 

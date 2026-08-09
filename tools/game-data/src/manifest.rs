@@ -95,7 +95,7 @@ impl Manifest {
             "dreamwell_v1",
             "cards_v2",
             "economy_v1",
-            "exploration_v1",
+            "exploration_v2",
             "internal_ai_v1",
             "internal_card_metadata_v1",
             "opponents_v1",
