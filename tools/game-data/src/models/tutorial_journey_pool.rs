@@ -20,16 +20,16 @@ const LEGACY_TIDE_ID_MAP: [(&str, &str); 3] = [
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct TutorialJourneyPoolCatalog {
-    pub dream_avatar_id: DreamAvatarId,
+pub struct TutorialJourneyDraftPool {
+    pub tutorial_dream_avatar_id: DreamAvatarId,
     pub pool_size: u32,
-    pub opening: OpeningSetup,
-    pub tides: Vec<TideDefinition>,
+    pub tutorial_opening_draft_picks: TutorialOpeningDraftPicks,
+    pub tutorial_tides: Vec<TideDefinition>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct OpeningSetup {
+pub struct TutorialOpeningDraftPicks {
     pub dreamsign_ids: Vec<DreamsignId>,
     pub offers: Vec<OpeningOffer>,
 }
@@ -136,18 +136,18 @@ struct CompatibilityCard {
     copies: u32,
 }
 
-pub fn lower(source: TutorialJourneyPoolCatalog) -> Result<toml::Value> {
+pub fn lower(source: TutorialJourneyDraftPool) -> Result<toml::Value> {
     lower_with_tide_map(source, &LEGACY_TIDE_ID_MAP)
 }
 
 fn lower_with_tide_map(
-    source: TutorialJourneyPoolCatalog,
+    source: TutorialJourneyDraftPool,
     tide_id_map: &[(&str, &str)],
 ) -> Result<toml::Value> {
     validate(&source)?;
     let compatibility_ids = compatibility_tide_ids(tide_id_map)?;
     let tides = source
-        .tides
+        .tutorial_tides
         .into_iter()
         .map(|tide| {
             let id = compatibility_ids
@@ -171,16 +171,16 @@ fn lower_with_tide_map(
         })
         .collect::<Result<_>>()?;
     Ok(toml::Value::try_from(CompatibilityCatalog {
-        dream_avatar_id: source.dream_avatar_id.to_string(),
+        dream_avatar_id: source.tutorial_dream_avatar_id.to_string(),
         pool_size: source.pool_size,
         opening_dreamsigns: source
-            .opening
+            .tutorial_opening_draft_picks
             .dreamsign_ids
             .into_iter()
             .map(|id| id.to_string())
             .collect(),
         opening_offers: source
-            .opening
+            .tutorial_opening_draft_picks
             .offers
             .into_iter()
             .map(|offer| {
@@ -218,32 +218,42 @@ fn compatibility_tide_ids(tide_id_map: &[(&str, &str)]) -> Result<BTreeMap<TideI
     Ok(result)
 }
 
-pub(crate) fn validate(source: &TutorialJourneyPoolCatalog) -> Result<()> {
+pub(crate) fn validate(source: &TutorialJourneyDraftPool) -> Result<()> {
     ensure!(
         source.pool_size > 0,
         "tutorial journey pool size must be positive"
     );
     ensure!(
-        (1..=3).contains(&source.opening.dreamsign_ids.len()),
+        (1..=3).contains(&source.tutorial_opening_draft_picks.dreamsign_ids.len()),
         "opening must contain between one and three Dreamsigns"
     );
     ensure!(
-        !source.opening.offers.is_empty(),
+        !source.tutorial_opening_draft_picks.offers.is_empty(),
         "opening must contain at least one offer"
     );
     ensure!(
-        !source.tides.is_empty(),
+        !source.tutorial_tides.is_empty(),
         "tutorial journey pool must contain at least one Tide"
     );
 
-    let dreamsign_ids: BTreeSet<_> = source.opening.dreamsign_ids.iter().copied().collect();
+    let dreamsign_ids: BTreeSet<_> = source
+        .tutorial_opening_draft_picks
+        .dreamsign_ids
+        .iter()
+        .copied()
+        .collect();
     ensure!(
-        dreamsign_ids.len() == source.opening.dreamsign_ids.len(),
+        dreamsign_ids.len() == source.tutorial_opening_draft_picks.dreamsign_ids.len(),
         "opening Dreamsign identifiers must be unique"
     );
 
     let mut opening_card_ids = BTreeSet::new();
-    for (offer_index, offer) in source.opening.offers.iter().enumerate() {
+    for (offer_index, offer) in source
+        .tutorial_opening_draft_picks
+        .offers
+        .iter()
+        .enumerate()
+    {
         ensure!(
             (1..=4).contains(&offer.card_ids.len()),
             "opening offer {offer_index} must contain between one and four cards"
@@ -260,7 +270,7 @@ pub(crate) fn validate(source: &TutorialJourneyPoolCatalog) -> Result<()> {
     let mut tide_names = BTreeSet::new();
     let mut card_ids = BTreeSet::new();
     let mut authored_copy_count = 0_u32;
-    for tide in &source.tides {
+    for tide in &source.tutorial_tides {
         ensure!(
             tide_ids.insert(tide.id),
             "duplicate Tide identifier: {}",
@@ -313,23 +323,23 @@ pub(crate) fn validate(source: &TutorialJourneyPoolCatalog) -> Result<()> {
 }
 
 pub fn validate_references(
-    source: &TutorialJourneyPoolCatalog,
+    source: &TutorialJourneyDraftPool,
     known_card_ids: &BTreeSet<String>,
     known_dream_avatar_ids: &BTreeSet<String>,
     known_dreamsign_ids: &BTreeSet<String>,
 ) -> Result<()> {
     ensure!(
-        known_dream_avatar_ids.contains(&source.dream_avatar_id.to_string()),
+        known_dream_avatar_ids.contains(&source.tutorial_dream_avatar_id.to_string()),
         "tutorial journey pool references unknown DreamAvatar {}",
-        source.dream_avatar_id
+        source.tutorial_dream_avatar_id
     );
-    for dreamsign_id in &source.opening.dreamsign_ids {
+    for dreamsign_id in &source.tutorial_opening_draft_picks.dreamsign_ids {
         ensure!(
             known_dreamsign_ids.contains(&dreamsign_id.to_string()),
             "tutorial journey pool references unknown Dreamsign {dreamsign_id}"
         );
     }
-    for tide in &source.tides {
+    for tide in &source.tutorial_tides {
         for card in &tide.cards {
             ensure!(
                 known_card_ids.contains(&card.card_id.to_string()),
@@ -353,7 +363,7 @@ mod tests {
         ("third", "10000000-0000-4000-8000-000000000003"),
     ];
 
-    fn parse(source: &str) -> TutorialJourneyPoolCatalog {
+    fn parse(source: &str) -> TutorialJourneyDraftPool {
         ron::from_str(source).unwrap()
     }
 
@@ -362,10 +372,10 @@ mod tests {
             .map(|value| format!("20000000-0000-4000-8000-{value:012}"))
             .collect::<Vec<_>>();
         format!(
-            r#"(
-                dream_avatar_id: "30000000-0000-4000-8000-000000000001",
+            r#"TutorialJourneyDraftPool(
+                tutorial_dream_avatar_id: "30000000-0000-4000-8000-000000000001",
                 pool_size: 9,
-                opening: (
+                tutorial_opening_draft_picks: TutorialOpeningDraftPicks(
                     dreamsign_ids: [
                         "40000000-0000-4000-8000-000000000001",
                         "40000000-0000-4000-8000-000000000002",
@@ -375,7 +385,7 @@ mod tests {
                         (card_ids: ["{}", "{}", "{}", "{}"]),
                     ],
                 ),
-                tides: [
+                tutorial_tides: [
                     (
                         id: "10000000-0000-4000-8000-000000000001",
                         name: "First Tide",
@@ -464,7 +474,7 @@ mod tests {
     fn rejects_unknown_fields_and_non_uuidv4_identities() {
         let unknown =
             synthetic_source().replacen("pool_size: 9,", "pool_size: 9, surprise: true,", 1);
-        assert!(ron::from_str::<TutorialJourneyPoolCatalog>(&unknown).is_err());
+        assert!(ron::from_str::<TutorialJourneyDraftPool>(&unknown).is_err());
 
         for invalid in [
             "10000000-0000-1000-8000-000000000001".to_owned(),
@@ -472,7 +482,7 @@ mod tests {
         ] {
             let source =
                 synthetic_source().replacen("10000000-0000-4000-8000-000000000001", &invalid, 1);
-            assert!(ron::from_str::<TutorialJourneyPoolCatalog>(&source).is_err());
+            assert!(ron::from_str::<TutorialJourneyDraftPool>(&source).is_err());
         }
     }
 
@@ -522,7 +532,7 @@ mod tests {
         }
 
         let mut empty = parse(&synthetic_source());
-        empty.opening.dreamsign_ids.clear();
+        empty.tutorial_opening_draft_picks.dreamsign_ids.clear();
         assert!(
             lower_with_tide_map(empty, &SYNTHETIC_TIDE_ID_MAP)
                 .unwrap_err()
@@ -582,14 +592,14 @@ mod tests {
     fn validates_foreign_catalog_references() {
         let catalog = parse(&synthetic_source());
         let card_ids = catalog
-            .tides
+            .tutorial_tides
             .iter()
             .flat_map(|tide| &tide.cards)
             .map(|card| card.card_id.to_string())
             .collect::<BTreeSet<_>>();
-        let dream_avatar_ids = BTreeSet::from([catalog.dream_avatar_id.to_string()]);
+        let dream_avatar_ids = BTreeSet::from([catalog.tutorial_dream_avatar_id.to_string()]);
         let dreamsign_ids = catalog
-            .opening
+            .tutorial_opening_draft_picks
             .dreamsign_ids
             .iter()
             .map(ToString::to_string)

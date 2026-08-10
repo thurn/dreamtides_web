@@ -254,7 +254,7 @@ fn adapt(
         "sites_v1" => sites::lower(parse_ron(source, dataset)?),
         "tutorial_v1" => tutorial::lower(parse_ron(source, dataset)?),
         "tutorial_journey_pool_v1" => {
-            let catalog: tutorial_journey_pool::TutorialJourneyPoolCatalog =
+            let catalog: tutorial_journey_pool::TutorialJourneyDraftPool =
                 parse_ron(source, dataset)?;
             let cards_dataset = manifest.dataset("cards")?;
             let cards: Vec<cards::CardDefinition> = parse_ron(
@@ -681,7 +681,7 @@ mod tests {
                     canonical::<tutorial::TutorialCatalog>(&source, true);
                 }
                 "tutorial_journey_pool_v1" => {
-                    canonical::<tutorial_journey_pool::TutorialJourneyPoolCatalog>(&source, true);
+                    canonical::<tutorial_journey_pool::TutorialJourneyDraftPool>(&source, true);
                 }
                 "tide_alignments_v1" => {
                     canonical::<tide_alignments::TideAlignmentCatalog>(&source, false);

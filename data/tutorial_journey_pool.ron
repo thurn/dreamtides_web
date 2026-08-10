@@ -1,13 +1,16 @@
-// Defines the fixed pool, opening offers, and three Tides used by tutorial journeys.
+// Defines the fixed draft pool, opening picks, and Tides used by tutorial journeys.
 
 #![enable(implicit_some)]
-(
-  dream_avatar_id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+TutorialJourneyDraftPool(
+  // The Dream Avatar offered after the standalone tutorial and used to start its journey.
+  tutorial_dream_avatar_id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
 
   // Matches the ordinary journey deal size and the sum of all Tide card copies.
   pool_size: 150,
 
-  opening: (
+  // Predetermines the first Dreamsign Revelation and first two Draft offers so
+  // every tutorial journey begins with the same teachable choices.
+  tutorial_opening_draft_picks: TutorialOpeningDraftPicks(
     dreamsign_ids: ["4409a691-49b4-4fb0-82f6-4f45ae86d8c2"],
     // Each inner list is one complete four-card opening offer.
     offers: [
@@ -30,7 +33,7 @@
     ],
   ),
 
-  tides: [
+  tutorial_tides: [
     (
       id: "1f70bdd6-31c1-4997-b6c4-c2574f84a1b9",
       name: "The Bannerwake",
