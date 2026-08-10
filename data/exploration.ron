@@ -8108,4 +8108,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "1ce0f0f2-4b1a-483d-b93b-74c36e946a08",
+    prose: "A deathless knight marches across a burned horizon, crimson pennant streaming through ash.",
+    actions: [
+      ActionDefinition(
+        label: "Call fallen recruits",
+        id: "4a515375-8c31-4ce0-897b-50150a0b7c2e",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "March through black fire",
+        id: "07a0dba2-5ac1-47a6-ae23-6b8c98ee2a2f",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "db4618f6-121b-4c97-98d3-c29849c5824e",
+    prose: "A kneeling child touches glowing water while countless golden ripples spread beneath stormclouds.",
+    actions: [
+      ActionDefinition(
+        label: "Follow a Returning Ripple",
+        id: "f12604f5-f55d-4658-b319-f6e80e774fbe",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered deck card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Still Every Echo",
+        id: "d5131386-f24a-4070-bc85-bb87da15f384",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "c8579b20-95ff-4b1d-b4c6-6bd049fc4760",
+    prose: "A luminous wolf pack howls across gnarled branches, white fur streaming among drifting motes.",
+    actions: [
+      ActionDefinition(
+        label: "Answer Their Moonlit Howls",
+        id: "d2144533-407d-4d22-9fc7-89eda64b05bd",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 2 packs of 3 Spirit Animal cards to add to your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one Spirit Animal pack to add to your deck.",
+          ),
+        ),
+        effect: ChoosePack(predicate: SpiritAnimal, pack_count: 2, pack_size: 3),
+      ),
+
+      ActionDefinition(
+        label: "Gather Their Drifting Light",
+        id: "7877515a-84fb-486b-ac0d-39249738b601",
+        presentation: ActionPresentation(
+          effect_text: "Gain 15 essence for each Spirit Animal card in your deck",
+          followup: None,
+        ),
+        effect: GainEssencePerCard(predicate: SpiritAnimal, essence_per_card: 15),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "8624f9c7-dc92-4f4a-9c79-319b9c121b19",
+    prose: "A woman climbs blazing steps, her dark hair streaming through smoke.",
+    actions: [
+      ActionDefinition(
+        label: "Join Her Climb",
+        id: "21778eda-0b4a-487b-bcef-734321c8fecd",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered low-cost character.",
+          ),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Share Her Fire",
+        id: "6b56baff-fe52-4b32-9e52-534d34863444",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "041fafeb-f159-4aba-90c2-3ce4b3038bdc",
+    prose: "A hulking antlered creature strides through burning grass, ember-red eyes glowing beneath tangled bark.",
+    actions: [
+      ActionDefinition(
+        label: "Read its ember eyes",
+        id: "7069b48b-aacb-4604-9202-120cff1567c8",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Match its heavy stride",
+        id: "09917d76-41ef-4117-a0e6-84f716663df2",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
 ]

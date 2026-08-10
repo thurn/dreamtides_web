@@ -7571,8 +7571,136 @@
           "nightmareCount": 3
         }
       ]
+    },
+    {
+      "cardId": "1ce0f0f2-4b1a-483d-b93b-74c36e946a08",
+      "prose": "A deathless knight marches across a burned horizon, crimson pennant streaming through ash.",
+      "action": [
+        {
+          "id": "4a515375-8c31-4ce0-897b-50150a0b7c2e",
+          "label": "Call fallen recruits",
+          "effectText": "Draft a ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "07a0dba2-5ac1-47a6-ae23-6b8c98ee2a2f",
+          "label": "March through black fire",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "db4618f6-121b-4c97-98d3-c29849c5824e",
+      "prose": "A kneeling child touches glowing water while countless golden ripples spread beneath stormclouds.",
+      "action": [
+        {
+          "id": "f12604f5-f55d-4658-b319-f6e80e774fbe",
+          "label": "Follow a Returning Ripple",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered deck card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "d5131386-f24a-4070-bc85-bb87da15f384",
+          "label": "Still Every Echo",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "c8579b20-95ff-4b1d-b4c6-6bd049fc4760",
+      "prose": "A luminous wolf pack howls across gnarled branches, white fur streaming among drifting motes.",
+      "action": [
+        {
+          "id": "d2144533-407d-4d22-9fc7-89eda64b05bd",
+          "label": "Answer Their Moonlit Howls",
+          "effectText": "Choose one of 2 packs of 3 Spirit Animal cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Spirit Animal pack to add to your deck.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "spirit-animal",
+          "packCount": 2,
+          "packSize": 3
+        },
+        {
+          "id": "7877515a-84fb-486b-ac0d-39249738b601",
+          "label": "Gather Their Drifting Light",
+          "effectText": "Gain 15 essence for each Spirit Animal card in your deck",
+          "effectKind": "gain-essence-per-card",
+          "canonicalMechanicId": "gain-essence-by-deck-predicate",
+          "predicate": "spirit-animal",
+          "essencePerCard": 15
+        }
+      ]
+    },
+    {
+      "cardId": "8624f9c7-dc92-4f4a-9c79-319b9c121b19",
+      "prose": "A woman climbs blazing steps, her dark hair streaming through smoke.",
+      "action": [
+        {
+          "id": "21778eda-0b4a-487b-bcef-734321c8fecd",
+          "label": "Join Her Climb",
+          "effectText": "Draft a ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered low-cost character.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "6b56baff-fe52-4b32-9e52-534d34863444",
+          "label": "Share Her Fire",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "041fafeb-f159-4aba-90c2-3ce4b3038bdc",
+      "prose": "A hulking antlered creature strides through burning grass, ember-red eyes glowing beneath tangled bark.",
+      "action": [
+        {
+          "id": "7069b48b-aacb-4604-9202-120cff1567c8",
+          "label": "Read its ember eyes",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "09917d76-41ef-4117-a0e6-84f716663df2",
+          "label": "Match its heavy stride",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
     }
   ],
-  "contentHash": "40fad6fb8a3d9e8e5f099892572df5460c0a1306a943ec54002853a8a4d93ac9",
-  "foldHash": "40fad6fb8a3d9e8e5f099892572df5460c0a1306a943ec54002853a8a4d93ac9"
+  "contentHash": "5b26031fa2a94ea9b7bb21eeffdb3d1b7ef43f93e6ce956714e616992b7b7a9e",
+  "foldHash": "5b26031fa2a94ea9b7bb21eeffdb3d1b7ef43f93e6ce956714e616992b7b7a9e"
 }
