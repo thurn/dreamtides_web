@@ -8622,8 +8622,145 @@
           "count": 2
         }
       ]
+    },
+    {
+      "cardId": "b977afaf-f583-45ec-8e34-99fbfa4e9190",
+      "prose": "A lone knight faces a horned colossus framed by blazing runes and airborne stone.",
+      "action": [
+        {
+          "id": "b8e6f704-5142-4004-9c00-d932d99d5717",
+          "label": "Rally beneath runes",
+          "effectText": "Choose one of 2 packs of 3 Warrior cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one pack to add to your deck.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "warrior",
+          "packCount": 2,
+          "packSize": 3
+        },
+        {
+          "id": "51f5fe3f-8c57-4366-94db-d270fa71ea04",
+          "label": "Name a blood tithe",
+          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "3cda9dd7-cb81-43c1-9db5-1444d7363e13",
+      "prose": "A colossal dragon lowers its glowing gaze toward two figures as lightning fractures floating stone.",
+      "action": [
+        {
+          "id": "124bc32b-bb3e-4f6e-bddf-2bf6545c0e07",
+          "label": "Share Dragon's Strength",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        },
+        {
+          "id": "481781a1-e481-406f-9fb9-a755d09fc73a",
+          "label": "Call a Kindred Beast",
+          "effectText": "Draft a transfigured Spirit Animal from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered transfigured Spirit Animal.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e",
+      "prose": "A lone explorer faces prismatic light erupting from dark surf.",
+      "action": [
+        {
+          "id": "0b933aba-385d-4b0e-b5fe-757020a3d2b8",
+          "label": "Collect Prismatic Fragments",
+          "effectText": "Take any number of ≤2● cost Character cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any number of offered cards.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        },
+        {
+          "id": "8f7e4825-8e28-4a4b-97c3-289dde13c3b1",
+          "label": "Enter Rainbow Pillar",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "14ac6804-ed1d-4148-aad7-11796b6fff6c",
+      "prose": "A broad-winged butterfly rests on a mossy branch, cyan light flooding patterned wings.",
+      "action": [
+        {
+          "id": "6ba69f16-ccb0-4701-974c-79e7982b71da",
+          "label": "Trace Its Patterns",
+          "effectText": "Choose one of 2 packs of 3 Spirit Animal cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Spirit Animal pack to add to your deck.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "spirit-animal",
+          "packCount": 2,
+          "packSize": 3
+        },
+        {
+          "id": "865623c9-731a-4001-b9b5-c6c4d924da42",
+          "label": "Receive Its Light",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "4b4cc613-2e28-4851-975f-14146286a062",
+      "prose": "A plated warrior presents a glyph-lit sword as orange sparks scatter across streaming cloth.",
+      "action": [
+        {
+          "id": "ad42076b-df1c-453f-ae18-621b56122677",
+          "label": "Answer their blade salute",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Warrior.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "42531eee-ce02-47e4-92bb-4d80217bef9e",
+          "label": "Invoke their blade-glyphs",
+          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        }
+      ]
     }
   ],
-  "contentHash": "015a12ac680515439e57a3e5a8411c79090144c5bc262f7ae1c8a0e5de7dc3cf",
-  "foldHash": "015a12ac680515439e57a3e5a8411c79090144c5bc262f7ae1c8a0e5de7dc3cf"
+  "contentHash": "dac180b4ebe8d098a779997cb32ed9325a2c05bbbebed5578c822da622f2111a",
+  "foldHash": "dac180b4ebe8d098a779997cb32ed9325a2c05bbbebed5578c822da622f2111a"
 }

@@ -9252,4 +9252,146 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "b977afaf-f583-45ec-8e34-99fbfa4e9190",
+    prose: "A lone knight faces a horned colossus framed by blazing runes and airborne stone.",
+    actions: [
+      ActionDefinition(
+        label: "Rally beneath runes",
+        id: "b8e6f704-5142-4004-9c00-d932d99d5717",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 2 packs of 3 Warrior cards to add to your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one pack to add to your deck.",
+          ),
+        ),
+        effect: ChoosePack(predicate: Warrior, pack_count: 2, pack_size: 3),
+      ),
+
+      ActionDefinition(
+        label: "Name a blood tithe",
+        id: "51f5fe3f-8c57-4366-94db-d270fa71ea04",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "3cda9dd7-cb81-43c1-9db5-1444d7363e13",
+    prose: "A colossal dragon lowers its glowing gaze toward two figures as lightning fractures floating stone.",
+    actions: [
+      ActionDefinition(
+        label: "Share Dragon's Strength",
+        id: "124bc32b-bb3e-4f6e-bddf-2bf6545c0e07",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Call a Kindred Beast",
+        id: "481781a1-e481-406f-9fb9-a755d09fc73a",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Spirit Animal from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered transfigured Spirit Animal.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: SpiritAnimal, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e",
+    prose: "A lone explorer faces prismatic light erupting from dark surf.",
+    actions: [
+      ActionDefinition(
+        label: "Collect Prismatic Fragments",
+        id: "0b933aba-385d-4b0e-b5fe-757020a3d2b8",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of ≤2● cost Character cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered cards.",
+          ),
+        ),
+        effect: TakeCards(predicate: CheapCharacter, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Enter Rainbow Pillar",
+        id: "8f7e4825-8e28-4a4b-97c3-289dde13c3b1",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "14ac6804-ed1d-4148-aad7-11796b6fff6c",
+    prose: "A broad-winged butterfly rests on a mossy branch, cyan light flooding patterned wings.",
+    actions: [
+      ActionDefinition(
+        label: "Trace Its Patterns",
+        id: "6ba69f16-ccb0-4701-974c-79e7982b71da",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 2 packs of 3 Spirit Animal cards to add to your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one Spirit Animal pack to add to your deck.",
+          ),
+        ),
+        effect: ChoosePack(predicate: SpiritAnimal, pack_count: 2, pack_size: 3),
+      ),
+
+      ActionDefinition(
+        label: "Receive Its Light",
+        id: "865623c9-731a-4001-b9b5-c6c4d924da42",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "4b4cc613-2e28-4851-975f-14146286a062",
+    prose: "A plated warrior presents a glyph-lit sword as orange sparks scatter across streaming cloth.",
+    actions: [
+      ActionDefinition(
+        label: "Answer their blade salute",
+        id: "ad42076b-df1c-453f-ae18-621b56122677",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Invoke their blade-glyphs",
+        id: "42531eee-ce02-47e4-92bb-4d80217bef9e",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+    ],
+  ),
 ]
