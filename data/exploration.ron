@@ -7271,4 +7271,140 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "9adbe3db-d872-4b75-92b5-d7f2798c22ce",
+    prose: "A cybernetic figure strides through shattered clockwork as glowing hands cross behind him.",
+    actions: [
+      ActionDefinition(
+        label: "Break the Cycle",
+        id: "a9fd3639-8d1c-4456-930f-13f4589db33c",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+
+      ActionDefinition(
+        label: "Double the Tempo",
+        id: "1932f514-7017-4a49-bcf6-720bb57e6e7a",
+        presentation: ActionPresentation(
+          effect_text: "Gain one copy of each of 2 chosen cards",
+          followup: Followup(title: "{action-label}", subtitle: "Choose 2 cards to echo."),
+        ),
+        effect: CopySelectedCards(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "6da831c8-6fda-4078-9f2b-873db2416aad",
+    prose: "A cabled woman stands amid red conduits and ruined machinery, backlit by pale haze.",
+    actions: [
+      ActionDefinition(
+        label: "Sever Red Conduits",
+        id: "e40afd51-75b6-41d5-b4f1-0998550c404c",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen Event card",
+          followup: Followup(title: "{action-label}", subtitle: "Choose an Event to disconnect."),
+        ),
+        effect: PurgeSelected(predicate: Event, count: None),
+      ),
+
+      ActionDefinition(
+        label: "Harvest Null Current",
+        id: "7b600e2f-dfe0-4e88-b4bf-4495f7df3db7",
+        presentation: ActionPresentation(
+          effect_text: "Gain 15 essence for each Event card in your deck",
+          followup: None,
+        ),
+        effect: GainEssencePerCard(predicate: Event, essence_per_card: 15),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "2708c635-9332-4cfb-b43d-889ba2e329b6",
+    prose: "A spear-bearing guardian stands among three black cats above vine-covered ruins beneath green light.",
+    actions: [
+      ActionDefinition(
+        label: "Call Shadow Pride",
+        id: "328cb6f8-97b2-4728-9e4f-62c59abe099a",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 random Spirit Animal cards",
+          followup: None,
+        ),
+        effect: GainRandomCards(predicate: SpiritAnimal, count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Raise Guardian Spear",
+        id: "ffd8190c-a34d-40d4-8e9b-65142eff53e8",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "6f1833a0-30f5-4718-9a3e-7620beb72bfc",
+    prose: "A windblown salvager faces a luminous clockwork horse amid colossal gears and tilted towers.",
+    actions: [
+      ActionDefinition(
+        label: "Strip Redundant Mechanisms",
+        id: "2de081c2-6567-4e13-99e5-a0bbf16923b3",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+
+      ActionDefinition(
+        label: "Restore Clockwork Steed",
+        id: "b9a4ae59-15f9-48ff-be29-b83b96f11f5f",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "b5fbff03-f850-4627-94eb-12ed4dc15334",
+    prose: "A black cat pauses between a golden forest dawn and violet shadows alive with fireflies.",
+    actions: [
+      ActionDefinition(
+        label: "Step Into Dawn",
+        id: "1adca56f-6e11-4772-b8c1-8712df94c1a8",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Follow Shadowed Trail",
+        id: "db447f57-cc18-4a36-9f5b-b07e5ac6af1c",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Spirit Animal from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one Spirit Animal from the shadows.",
+          ),
+        ),
+        effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
 ]

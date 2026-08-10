@@ -6787,8 +6787,134 @@
           "count": 2
         }
       ]
+    },
+    {
+      "cardId": "9adbe3db-d872-4b75-92b5-d7f2798c22ce",
+      "prose": "A cybernetic figure strides through shattered clockwork as glowing hands cross behind him.",
+      "action": [
+        {
+          "id": "a9fd3639-8d1c-4456-930f-13f4589db33c",
+          "label": "Break the Cycle",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "1932f514-7017-4a49-bcf6-720bb57e6e7a",
+          "label": "Double the Tempo",
+          "effectText": "Gain one copy of each of 2 chosen cards",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose 2 cards to echo.",
+          "effectKind": "copy-selected-cards",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "6da831c8-6fda-4078-9f2b-873db2416aad",
+      "prose": "A cabled woman stands amid red conduits and ruined machinery, backlit by pale haze.",
+      "action": [
+        {
+          "count": 1,
+          "id": "e40afd51-75b6-41d5-b4f1-0998550c404c",
+          "label": "Sever Red Conduits",
+          "effectText": "Purge a chosen Event card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose an Event to disconnect.",
+          "effectKind": "purge-selected",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "purge-misfit",
+          "predicate": "event"
+        },
+        {
+          "id": "7b600e2f-dfe0-4e88-b4bf-4495f7df3db7",
+          "label": "Harvest Null Current",
+          "effectText": "Gain 15 essence for each Event card in your deck",
+          "effectKind": "gain-essence-per-card",
+          "canonicalMechanicId": "gain-essence-by-deck-predicate",
+          "predicate": "event",
+          "essencePerCard": 15
+        }
+      ]
+    },
+    {
+      "cardId": "2708c635-9332-4cfb-b43d-889ba2e329b6",
+      "prose": "A spear-bearing guardian stands among three black cats above vine-covered ruins beneath green light.",
+      "action": [
+        {
+          "id": "328cb6f8-97b2-4728-9e4f-62c59abe099a",
+          "label": "Call Shadow Pride",
+          "effectText": "Gain 2 random Spirit Animal cards",
+          "effectKind": "gain-random-cards",
+          "canonicalMechanicId": "gain-card",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "spirit-animal",
+          "count": 2
+        },
+        {
+          "id": "ffd8190c-a34d-40d4-8e9b-65142eff53e8",
+          "label": "Raise Guardian Spear",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "6f1833a0-30f5-4718-9a3e-7620beb72bfc",
+      "prose": "A windblown salvager faces a luminous clockwork horse amid colossal gears and tilted towers.",
+      "action": [
+        {
+          "id": "2de081c2-6567-4e13-99e5-a0bbf16923b3",
+          "label": "Strip Redundant Mechanisms",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "b9a4ae59-15f9-48ff-be29-b83b96f11f5f",
+          "label": "Restore Clockwork Steed",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card, then choose its transfiguration.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "cardId": "b5fbff03-f850-4627-94eb-12ed4dc15334",
+      "prose": "A black cat pauses between a golden forest dawn and violet shadows alive with fireflies.",
+      "action": [
+        {
+          "id": "1adca56f-6e11-4772-b8c1-8712df94c1a8",
+          "label": "Step Into Dawn",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "db447f57-cc18-4a36-9f5b-b07e5ac6af1c",
+          "label": "Follow Shadowed Trail",
+          "effectText": "Draft a Spirit Animal from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Spirit Animal from the shadows.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "count": 1,
+          "offerCount": 4
+        }
+      ]
     }
   ],
-  "contentHash": "5063b1571534e1bb8c7fa82350e8a591d14662c24e8517ee0e0d59267bc110b1",
-  "foldHash": "5063b1571534e1bb8c7fa82350e8a591d14662c24e8517ee0e0d59267bc110b1"
+  "contentHash": "3c818473ed2573da28d2222a98cf02bbeafeec02245df4883dc8eed4b7930995",
+  "foldHash": "3c818473ed2573da28d2222a98cf02bbeafeec02245df4883dc8eed4b7930995"
 }
