@@ -3622,4 +3622,140 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "d6ec65a2-d61e-4617-bdd0-75d5573c063d",
+    prose: "A lone warrior raises a flaming blade beneath a radiant ring as embers scatter.",
+    actions: [
+      ActionDefinition(
+        label: "Signal Through Ring",
+        id: "6a6ab089-2192-41e1-838d-3e8035544dfa",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Gather Falling Embers",
+        id: "5169756d-be6e-4b9b-8f95-d914714108a6",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "5931e388-1856-4e5a-85f8-a5aa34f867b1",
+    prose: "An astronaut rides through mirrored shallows toward radiant trees as white birds scatter overhead.",
+    actions: [
+      ActionDefinition(
+        label: "Release Reflected Echoes",
+        id: "2ce3f099-f892-4753-a540-c939beb664d5",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+
+      ActionDefinition(
+        label: "Follow Sunlit Flight",
+        id: "7556e80f-6234-4d38-a1be-d3a9e7df8d6b",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "2a828466-450a-4637-9c68-6b54522450c0",
+    prose: "A cybernetic wanderer faces sunset beyond shattered towers as sparks and rubble drift.",
+    actions: [
+      ActionDefinition(
+        label: "Charge Ruined Circuit",
+        id: "430fd519-1c75-4657-8b8a-2ff5e4e5633f",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Reclaim Broken City",
+        id: "4bf1fa01-1890-45b5-80a7-6b6163e8cf25",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "3725379c-676d-4efd-81ee-7e45d80db6d0",
+    prose: "A red-coated child studies five rune-lit monoliths drifting above a broken stone path.",
+    actions: [
+      ActionDefinition(
+        label: "Gather Four Fragments",
+        id: "4ccb1862-58b1-4541-bbeb-bc7e75bd9087",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one revealed fragment to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Choose Living Vision",
+        id: "564b95e4-804e-411e-baad-c847f8b96e51",
+        presentation: ActionPresentation(
+          effect_text: "Pick a new Dream Avatar from 3 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Dream Avatar."),
+        ),
+        effect: ChooseDreamAvatar(offer_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "21965e95-0c8c-470c-a1e1-06d7b87a8d00",
+    prose: "A lone technician raises a cabled instrument as cyan light floods ruined machinery.",
+    actions: [
+      ActionDefinition(
+        label: "Calibrate the instrument",
+        id: "97b44061-7988-4bd9-a5e5-31b8e5eb3b0d",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices and gain 2 copies of it",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered Event to gain twice.",
+          ),
+        ),
+        effect: DraftCard(predicate: Event, count: 2, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Overload the instrument",
+        id: "ef6f3edd-fa06-4711-b772-22dc5a36ef3a",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
 ]

@@ -3386,8 +3386,133 @@
           "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
         }
       ]
+    },
+    {
+      "cardId": "d6ec65a2-d61e-4617-bdd0-75d5573c063d",
+      "prose": "A lone warrior raises a flaming blade beneath a radiant ring as embers scatter.",
+      "action": [
+        {
+          "id": "6a6ab089-2192-41e1-838d-3e8035544dfa",
+          "label": "Signal Through Ring",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Warrior.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "5169756d-be6e-4b9b-8f95-d914714108a6",
+          "label": "Gather Falling Embers",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "5931e388-1856-4e5a-85f8-a5aa34f867b1",
+      "prose": "An astronaut rides through mirrored shallows toward radiant trees as white birds scatter overhead.",
+      "action": [
+        {
+          "id": "2ce3f099-f892-4753-a540-c939beb664d5",
+          "label": "Release Reflected Echoes",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "7556e80f-6234-4d38-a1be-d3a9e7df8d6b",
+          "label": "Follow Sunlit Flight",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "2a828466-450a-4637-9c68-6b54522450c0",
+      "prose": "A cybernetic wanderer faces sunset beyond shattered towers as sparks and rubble drift.",
+      "action": [
+        {
+          "id": "430fd519-1c75-4657-8b8a-2ff5e4e5633f",
+          "label": "Charge Ruined Circuit",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "4bf1fa01-1890-45b5-80a7-6b6163e8cf25",
+          "label": "Reclaim Broken City",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "3725379c-676d-4efd-81ee-7e45d80db6d0",
+      "prose": "A red-coated child studies five rune-lit monoliths drifting above a broken stone path.",
+      "action": [
+        {
+          "id": "4ccb1862-58b1-4541-bbeb-bc7e75bd9087",
+          "label": "Gather Four Fragments",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one revealed fragment to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "564b95e4-804e-411e-baad-c847f8b96e51",
+          "label": "Choose Living Vision",
+          "effectText": "Pick a new Dream Avatar from 3 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Dream Avatar.",
+          "effectKind": "choose-dream-avatar",
+          "canonicalMechanicId": "choose-dream-avatar",
+          "selectionPolicyId": "uniform",
+          "offerCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "21965e95-0c8c-470c-a1e1-06d7b87a8d00",
+      "prose": "A lone technician raises a cabled instrument as cyan light floods ruined machinery.",
+      "action": [
+        {
+          "id": "97b44061-7988-4bd9-a5e5-31b8e5eb3b0d",
+          "label": "Calibrate the instrument",
+          "effectText": "Draft an Event from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Event to gain twice.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "ef6f3edd-fa06-4711-b772-22dc5a36ef3a",
+          "label": "Overload the instrument",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
     }
   ],
-  "contentHash": "1b8cde4b6a07575d43f0a0990b6ce2adb935e5d4ec3417e2478938fe34da8396",
-  "foldHash": "1b8cde4b6a07575d43f0a0990b6ce2adb935e5d4ec3417e2478938fe34da8396"
+  "contentHash": "6355ca563c19cd148c393233571718252bb55cb625cccac8941fcebf2e847058",
+  "foldHash": "6355ca563c19cd148c393233571718252bb55cb625cccac8941fcebf2e847058"
 }
