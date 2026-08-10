@@ -2487,8 +2487,144 @@
           "offerCount": 4
         }
       ]
+    },
+    {
+      "cardId": "2d180bd7-4cc7-49fb-b76c-0990656cedc0",
+      "prose": "A hooded sorcerer releases black fragments through a blazing crescent above flooded marshland.",
+      "action": [
+        {
+          "id": "739338ed-18ee-405f-ac7f-d61b172ef040",
+          "label": "Feed Ashen Swarm",
+          "effectText": "Purge a random Mage character. Every other Mage character in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Mage",
+          "sparkBonus": 1
+        },
+        {
+          "id": "e08c9e7d-e1d8-4440-b2bb-fe8c1946a868",
+          "label": "Open Burning Crescent",
+          "effectText": "Draft a transfigured Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered transfigured Character.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "881e3a5f-280f-413a-b927-352aeb3bda71",
+      "prose": "A lone axebearer faces crimson light and blood-red tracks among tangled, snow-dusted trees.",
+      "action": [
+        {
+          "id": "6954d3b6-64d5-4a8a-8828-fcfe269d9037",
+          "label": "Face Bloodred Dawn",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "c69786b7-190b-41f1-9798-5dbc26953eb4",
+          "label": "Follow Crimson Trail",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+      "prose": "Rain streaks across a chainsaw wielder amid burning wreckage and airborne sparks.",
+      "action": [
+        {
+          "id": "03acd44c-bc0c-4040-91f9-8a8f050278f4",
+          "label": "Call More Avengers",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Warrior.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "003415d5-e8d0-446e-8f2c-70da5c55d79a",
+          "label": "Avenge Fallen Warrior",
+          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "f4c570d4-c500-4b66-ad97-e8ccbef19392",
+      "prose": "A kneeling swordsman faces a colossal eagle amid floating boulders and ember-lit winds.",
+      "action": [
+        {
+          "id": "1a7669af-79d6-4b97-b4d4-a7f7dbba4d9e",
+          "label": "Channel Fallen Soul",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to channel for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "d97e844b-7e6e-42a6-8f74-296a20d9be7a",
+          "label": "Parley With Eagle",
+          "effectText": "Draft a Spirit Animal from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Spirit Animal.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "count": 1,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "ce84b8af-b802-42d3-8a31-36827cff17b2",
+      "prose": "A staff-bearing figure braces beneath a curling blue-white wave.",
+      "action": [
+        {
+          "id": "3d859f1f-a46e-4f71-a226-dce111a4aa36",
+          "label": "Channel curling wave",
+          "effectText": "Draft a transfigured Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered transfigured Event.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        },
+        {
+          "id": "97759157-5ba7-4e8c-8923-53bc06ead192",
+          "label": "Brace behind staff",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
     }
   ],
-  "contentHash": "c3832ce6aa34d59af03f18130e2f544e6d26919fa85749099b459d915b3fb961",
-  "foldHash": "c3832ce6aa34d59af03f18130e2f544e6d26919fa85749099b459d915b3fb961"
+  "contentHash": "fa33231a0a420c6d5f6fbf0dc4585279a0a305af3f2c2291027b1a975df28587",
+  "foldHash": "fa33231a0a420c6d5f6fbf0dc4585279a0a305af3f2c2291027b1a975df28587"
 }

@@ -2631,4 +2631,146 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "2d180bd7-4cc7-49fb-b76c-0990656cedc0",
+    prose: "A hooded sorcerer releases black fragments through a blazing crescent above flooded marshland.",
+    actions: [
+      ActionDefinition(
+        label: "Feed Ashen Swarm",
+        id: "739338ed-18ee-405f-ac7f-d61b172ef040",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Mage character. Every other Mage character in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Mage", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Open Burning Crescent",
+        id: "e08c9e7d-e1d8-4440-b2bb-fe8c1946a868",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered transfigured Character.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: Character, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "881e3a5f-280f-413a-b927-352aeb3bda71",
+    prose: "A lone axebearer faces crimson light and blood-red tracks among tangled, snow-dusted trees.",
+    actions: [
+      ActionDefinition(
+        label: "Face Bloodred Dawn",
+        id: "6954d3b6-64d5-4a8a-8828-fcfe269d9037",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Follow Crimson Trail",
+        id: "c69786b7-190b-41f1-9798-5dbc26953eb4",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e",
+    prose: "Rain streaks across a chainsaw wielder amid burning wreckage and airborne sparks.",
+    actions: [
+      ActionDefinition(
+        label: "Call More Avengers",
+        id: "03acd44c-bc0c-4040-91f9-8a8f050278f4",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Avenge Fallen Warrior",
+        id: "003415d5-e8d0-446e-8f2c-70da5c55d79a",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "f4c570d4-c500-4b66-ad97-e8ccbef19392",
+    prose: "A kneeling swordsman faces a colossal eagle amid floating boulders and ember-lit winds.",
+    actions: [
+      ActionDefinition(
+        label: "Channel Fallen Soul",
+        id: "1a7669af-79d6-4b97-b4d4-a7f7dbba4d9e",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to channel for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Parley With Eagle",
+        id: "d97e844b-7e6e-42a6-8f74-296a20d9be7a",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Spirit Animal from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered Spirit Animal.",
+          ),
+        ),
+        effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "ce84b8af-b802-42d3-8a31-36827cff17b2",
+    prose: "A staff-bearing figure braces beneath a curling blue-white wave.",
+    actions: [
+      ActionDefinition(
+        label: "Channel curling wave",
+        id: "3d859f1f-a46e-4f71-a226-dce111a4aa36",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Event from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered transfigured Event.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: Event, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Brace behind staff",
+        id: "97759157-5ba7-4e8c-8923-53bc06ead192",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
 ]
