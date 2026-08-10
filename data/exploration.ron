@@ -13352,4 +13352,140 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "409147ec-d959-4f66-b126-564702e2cd4a",
+    prose: "A masked scavenger feeds a black bird amid cables, ruins, and violet haze.",
+    actions: [
+      ActionDefinition(
+        label: "Feed Gathering Flock",
+        id: "022e8512-f209-42fa-8604-b12bb0d4b6b4",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices and gain 2 copies of it",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one returning ally."),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 2, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Follow Raven's Passage",
+        id: "4806c33a-6e7b-4d5b-90f1-8331b4fba789",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured ≤2● cost Character from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one altered companion."),
+        ),
+        effect: TransfiguredCardDraft(predicate: CheapCharacter, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "d30bd488-f921-49cb-a44f-353c54cb6548",
+    prose: "A spear-bearing rider crosses burning grass atop a black panther beneath starry skies.",
+    actions: [
+      ActionDefinition(
+        label: "Release Black Panther",
+        id: "6f5e2dcb-e9ca-488c-8b61-d9f33ff92e79",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen Spirit Animal card and gain a random Spirit Animal replacement",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Spirit Animal to release into fire.",
+          ),
+        ),
+        effect: ReplaceSelected(predicate: SpiritAnimal),
+      ),
+
+      ActionDefinition(
+        label: "Charge Through Fire",
+        id: "905cf858-d8b3-4884-af24-1c953c00b0cf",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6",
+    prose: "A child rows beneath a floating ship while turquoise stars blaze across silent water.",
+    actions: [
+      ActionDefinition(
+        label: "Signal the floating ship",
+        id: "9e93c870-7712-43bd-9e8a-2b48ea1f21fb",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Row into the starsea",
+        id: "1737aebf-6a88-4ce7-9907-9f07934db5db",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a",
+    prose: "A cloaked sentinel raises a luminous spear as green fire engulfs shattered scaffolds.",
+    actions: [
+      ActionDefinition(
+        label: "Walk into green fire",
+        id: "40010f1f-45ac-466f-ab49-4901358b8e14",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to abandon for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Raise radiant spear",
+        id: "0d57b28b-3f03-46ed-9bfe-5ea8f4b80cdf",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "aba40bc6-3e9e-4874-be8a-6984cbf13146",
+    prose: "A masked renegade descends burning stairs as sparks and shattered beams erupt through smoke.",
+    actions: [
+      ActionDefinition(
+        label: "Descend burning stairs",
+        id: "676694a1-81de-4dc8-b9ed-3249e59e1a55",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Gather falling sparks",
+        id: "0cc50ca6-38d1-4bbe-a752-23f31e376898",
+        presentation: ActionPresentation(
+          effect_text: "Gain 15 essence for each ≤2● cost Character in your deck",
+          followup: None,
+        ),
+        effect: GainEssencePerCard(predicate: CheapCharacter, essence_per_card: 15),
+      ),
+    ],
+  ),
 ]

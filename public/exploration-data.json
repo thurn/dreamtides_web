@@ -12356,8 +12356,144 @@
           "count": 2
         }
       ]
+    },
+    {
+      "cardId": "409147ec-d959-4f66-b126-564702e2cd4a",
+      "prose": "A masked scavenger feeds a black bird amid cables, ruins, and violet haze.",
+      "action": [
+        {
+          "id": "022e8512-f209-42fa-8604-b12bb0d4b6b4",
+          "label": "Feed Gathering Flock",
+          "effectText": "Draft a ≤2● cost Character from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one returning ally.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "4806c33a-6e7b-4d5b-90f1-8331b4fba789",
+          "label": "Follow Raven's Passage",
+          "effectText": "Draft a transfigured ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one altered companion.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "d30bd488-f921-49cb-a44f-353c54cb6548",
+      "prose": "A spear-bearing rider crosses burning grass atop a black panther beneath starry skies.",
+      "action": [
+        {
+          "id": "6f5e2dcb-e9ca-488c-8b61-d9f33ff92e79",
+          "label": "Release Black Panther",
+          "effectText": "Purge a chosen Spirit Animal card and gain a random Spirit Animal replacement",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Spirit Animal to release into fire.",
+          "effectKind": "replace-selected",
+          "canonicalMechanicId": "replace-deck-entry",
+          "selectionPolicyId": "card-fit-quality",
+          "predicate": "spirit-animal"
+        },
+        {
+          "id": "905cf858-d8b3-4884-af24-1c953c00b0cf",
+          "label": "Charge Through Fire",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6",
+      "prose": "A child rows beneath a floating ship while turquoise stars blaze across silent water.",
+      "action": [
+        {
+          "id": "9e93c870-7712-43bd-9e8a-2b48ea1f21fb",
+          "label": "Signal the floating ship",
+          "effectText": "Draft a ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "1737aebf-6a88-4ce7-9907-9f07934db5db",
+          "label": "Row into the starsea",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        }
+      ]
+    },
+    {
+      "cardId": "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a",
+      "prose": "A cloaked sentinel raises a luminous spear as green fire engulfs shattered scaffolds.",
+      "action": [
+        {
+          "id": "40010f1f-45ac-466f-ab49-4901358b8e14",
+          "label": "Walk into green fire",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to abandon for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "0d57b28b-3f03-46ed-9bfe-5ea8f4b80cdf",
+          "label": "Raise radiant spear",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "aba40bc6-3e9e-4874-be8a-6984cbf13146",
+      "prose": "A masked renegade descends burning stairs as sparks and shattered beams erupt through smoke.",
+      "action": [
+        {
+          "id": "676694a1-81de-4dc8-b9ed-3249e59e1a55",
+          "label": "Descend burning stairs",
+          "effectText": "Draft a ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "0cc50ca6-38d1-4bbe-a752-23f31e376898",
+          "label": "Gather falling sparks",
+          "effectText": "Gain 15 essence for each ≤2● cost Character in your deck",
+          "effectKind": "gain-essence-per-card",
+          "canonicalMechanicId": "gain-essence-by-deck-predicate",
+          "predicate": "cheap-character",
+          "essencePerCard": 15
+        }
+      ]
     }
   ],
-  "contentHash": "13c4f9cfdace9151a27c8cc988658b17bf9feeea7c9e991ed72c573312cc07f4",
-  "foldHash": "13c4f9cfdace9151a27c8cc988658b17bf9feeea7c9e991ed72c573312cc07f4"
+  "contentHash": "6c2335b1a2647fe7216bff8207aa511b69414cf5a8a531b20913f91d82b90639",
+  "foldHash": "6c2335b1a2647fe7216bff8207aa511b69414cf5a8a531b20913f91d82b90639"
 }
