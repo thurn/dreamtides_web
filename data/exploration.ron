@@ -3341,4 +3341,146 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "b6bad2a1-b857-4dd7-8b22-050eb68433a5",
+    prose: "A lone figure faces a red-veined colossus looming above flooded factory ruins.",
+    actions: [
+      ActionDefinition(
+        label: "Search Drowned Factory",
+        id: "661b716b-e08a-47f9-b8d8-350eed3b4b40",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of ≤2● cost Character cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered cards.",
+          ),
+        ),
+        effect: TakeCards(predicate: CheapCharacter, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Enter Burning Seams",
+        id: "ff89acc5-e4a2-4be8-9975-ba6e3e2be325",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "6f0b709d-0f57-46de-bfba-6a8b4df2b991",
+    prose: "A lone diver approaches an immense luminous jellyfish while pale rays pierce blue kelp.",
+    actions: [
+      ActionDefinition(
+        label: "Touch Living Light",
+        id: "9dedee93-c20a-4838-840a-3615abec62df",
+        presentation: ActionPresentation(
+          effect_text: "Gain a random dreamsign",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Dreamsign to release if needed.",
+          ),
+        ),
+        effect: GainRandomDreamsign,
+      ),
+
+      ActionDefinition(
+        label: "Follow Returning Current",
+        id: "35d2eb8c-44d9-48b6-8bc6-be9436e3370d",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "fd355778-abea-4513-844c-91bf75929ebe",
+    prose: "A hooded reaper rides a flaming horse above skulls as embers and stones scatter.",
+    actions: [
+      ActionDefinition(
+        label: "Trade One Soul",
+        id: "27ca259e-cb79-4772-953f-c55234a49e51",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+
+      ActionDefinition(
+        label: "Reap Every Echo",
+        id: "1dfb9178-2259-4bd4-a269-d8b91b8d7ca6",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "2a8dff0b-759f-40cc-af40-393a4e7129d4",
+    prose: "A kneeling woman fragments beneath a blue machine-ring amid rain-soaked industrial ruins.",
+    actions: [
+      ActionDefinition(
+        label: "Feed Memory Engine",
+        id: "75674e8b-d888-4080-a2b7-6596881c5198",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+
+      ActionDefinition(
+        label: "Stand Beneath Halo",
+        id: "77e5e76a-f4cc-4a59-acb8-1e9260fc22e2",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7",
+    prose: "A hulking shadowed creature crouches beneath a lightning-wreathed orb.",
+    actions: [
+      ActionDefinition(
+        label: "Study lightning-wreathed orb",
+        id: "aa8527f0-925c-41aa-94b5-39721de19559",
+        presentation: ActionPresentation(
+          effect_text: "Gain Crystal Orb",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
+        ),
+        effect: GainDreamsign(dreamsign_id: "ede46f71-aa77-4b12-9824-0d3706da6a22"),
+      ),
+
+      ActionDefinition(
+        label: "Channel orb's lightning",
+        id: "81b35c0b-1eff-44eb-9d7d-308e67b31736",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
 ]

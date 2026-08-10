@@ -3143,8 +3143,128 @@
           "count": 2
         }
       ]
+    },
+    {
+      "cardId": "b6bad2a1-b857-4dd7-8b22-050eb68433a5",
+      "prose": "A lone figure faces a red-veined colossus looming above flooded factory ruins.",
+      "action": [
+        {
+          "id": "661b716b-e08a-47f9-b8d8-350eed3b4b40",
+          "label": "Search Drowned Factory",
+          "effectText": "Take any number of ≤2● cost Character cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any number of offered cards.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        },
+        {
+          "id": "ff89acc5-e4a2-4be8-9975-ba6e3e2be325",
+          "label": "Enter Burning Seams",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "6f0b709d-0f57-46de-bfba-6a8b4df2b991",
+      "prose": "A lone diver approaches an immense luminous jellyfish while pale rays pierce blue kelp.",
+      "action": [
+        {
+          "id": "9dedee93-c20a-4838-840a-3615abec62df",
+          "label": "Touch Living Light",
+          "effectText": "Gain a random dreamsign",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to release if needed.",
+          "effectKind": "gain-random-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "dreamsign-match"
+        },
+        {
+          "id": "35d2eb8c-44d9-48b6-8bc6-be9436e3370d",
+          "label": "Follow Returning Current",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "fd355778-abea-4513-844c-91bf75929ebe",
+      "prose": "A hooded reaper rides a flaming horse above skulls as embers and stones scatter.",
+      "action": [
+        {
+          "id": "27ca259e-cb79-4772-953f-c55234a49e51",
+          "label": "Trade One Soul",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "1dfb9178-2259-4bd4-a269-d8b91b8d7ca6",
+          "label": "Reap Every Echo",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "2a8dff0b-759f-40cc-af40-393a4e7129d4",
+      "prose": "A kneeling woman fragments beneath a blue machine-ring amid rain-soaked industrial ruins.",
+      "action": [
+        {
+          "id": "75674e8b-d888-4080-a2b7-6596881c5198",
+          "label": "Feed Memory Engine",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "77e5e76a-f4cc-4a59-acb8-1e9260fc22e2",
+          "label": "Stand Beneath Halo",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7",
+      "prose": "A hulking shadowed creature crouches beneath a lightning-wreathed orb.",
+      "action": [
+        {
+          "id": "aa8527f0-925c-41aa-94b5-39721de19559",
+          "label": "Study lightning-wreathed orb",
+          "effectText": "Gain Crystal Orb",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to replace.",
+          "effectKind": "gain-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "fixed",
+          "dreamsignId": "ede46f71-aa77-4b12-9824-0d3706da6a22"
+        },
+        {
+          "id": "81b35c0b-1eff-44eb-9d7d-308e67b31736",
+          "label": "Channel orb's lightning",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
     }
   ],
-  "contentHash": "5171d8efbde132be6196949a3819893a9a4df845dccde388ef6a9825aa58a32e",
-  "foldHash": "5171d8efbde132be6196949a3819893a9a4df845dccde388ef6a9825aa58a32e"
+  "contentHash": "37ad3207cd4418ef0c7883b75972db81acf1e7dd33c3405f1d0b451373cdf503",
+  "foldHash": "37ad3207cd4418ef0c7883b75972db81acf1e7dd33c3405f1d0b451373cdf503"
 }
