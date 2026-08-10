@@ -11347,8 +11347,138 @@
           "essencePerCard": 15
         }
       ]
+    },
+    {
+      "cardId": "120ea441-f6ff-434b-973c-bde459f65368",
+      "prose": "A solitary figure crosses a broken bridge beneath an upside-down sea and fractured reflections.",
+      "action": [
+        {
+          "id": "01f98df4-d453-4039-8271-40616328a26d",
+          "label": "Invert a Known Event",
+          "effectText": "Purge a chosen Event card and gain a random Event replacement",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose an Event to invert.",
+          "effectKind": "replace-selected",
+          "canonicalMechanicId": "replace-deck-entry",
+          "selectionPolicyId": "card-fit-quality",
+          "predicate": "event"
+        },
+        {
+          "id": "b2fb8f35-cc6f-48b3-96e9-df24b7a7c800",
+          "label": "Cross Reflected Horizon",
+          "effectText": "Draft a transfigured Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one inverted discovery.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "a6866438-3632-408d-b464-c10f8a43a5c2",
+      "prose": "A hooded figure waits beside a blue spectral doorway while pale currents coil through ruins.",
+      "action": [
+        {
+          "id": "0c68e13c-831e-4271-9a7f-28205aba2759",
+          "label": "Feed Pale Current",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "da72a623-3e95-480c-a53f-a76c5b8a10a5",
+          "label": "Cross Spectral Doorway",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "45e3d703-7efc-4dc2-b854-33211f8d4f11",
+      "prose": "A solitary miner walks through timbered depths toward warm light spilling along a narrow shaft.",
+      "action": [
+        {
+          "id": "e2f06613-f10b-464d-88ee-f59184ada1b5",
+          "label": "Inspect promising seams",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one revealed card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "09d0f878-671a-47e5-8719-3585b1620482",
+          "label": "Follow the lower gleam",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        }
+      ]
+    },
+    {
+      "cardId": "3e83cbe2-2b21-4804-9906-4b4735db9869",
+      "prose": "A lone boat approaches a spectral galleon pitching through green-lit waves.",
+      "action": [
+        {
+          "id": "24d7ce34-6636-43e7-b22e-b2c17ce42599",
+          "label": "Board phantom galleon",
+          "effectText": "Draft a ≤2● cost Character from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one cheap phantom to recruit twice.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "e793121c-e0e3-4f9f-8738-ff4d1c4f95df",
+          "label": "Release drowned echoes",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "d95533f4-7809-44a8-a882-7675c61cee1c",
+      "prose": "A black-armored warrior grips a long sword as red embers stream through gathering smoke.",
+      "action": [
+        {
+          "id": "098be30f-8c99-420d-8973-d11b2d2bac24",
+          "label": "Gather red embers",
+          "effectText": "Gain 2 random Warrior cards",
+          "effectKind": "gain-random-cards",
+          "canonicalMechanicId": "gain-card",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "warrior",
+          "count": 2
+        },
+        {
+          "id": "88f91d60-01ef-48ee-a2aa-49bdba4f3d86",
+          "label": "Enter gathering smoke",
+          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        }
+      ]
     }
   ],
-  "contentHash": "a010cc71f79222f0ef856d38bf0a3d452e44d364abf7b1a0259ad4677835ced0",
-  "foldHash": "a010cc71f79222f0ef856d38bf0a3d452e44d364abf7b1a0259ad4677835ced0"
+  "contentHash": "279065f5b8b83372b6ae28b43321fc37e49d1098d451d2df81e4b9d9927756b4",
+  "foldHash": "279065f5b8b83372b6ae28b43321fc37e49d1098d451d2df81e4b9d9927756b4"
 }

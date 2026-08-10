@@ -12223,4 +12223,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "120ea441-f6ff-434b-973c-bde459f65368",
+    prose: "A solitary figure crosses a broken bridge beneath an upside-down sea and fractured reflections.",
+    actions: [
+      ActionDefinition(
+        label: "Invert a Known Event",
+        id: "01f98df4-d453-4039-8271-40616328a26d",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen Event card and gain a random Event replacement",
+          followup: Followup(title: "{action-label}", subtitle: "Choose an Event to invert."),
+        ),
+        effect: ReplaceSelected(predicate: Event),
+      ),
+
+      ActionDefinition(
+        label: "Cross Reflected Horizon",
+        id: "b2fb8f35-cc6f-48b3-96e9-df24b7a7c800",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one inverted discovery."),
+        ),
+        effect: TransfiguredCardDraft(predicate: Event, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "a6866438-3632-408d-b464-c10f8a43a5c2",
+    prose: "A hooded figure waits beside a blue spectral doorway while pale currents coil through ruins.",
+    actions: [
+      ActionDefinition(
+        label: "Feed Pale Current",
+        id: "0c68e13c-831e-4271-9a7f-28205aba2759",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+
+      ActionDefinition(
+        label: "Cross Spectral Doorway",
+        id: "da72a623-3e95-480c-a53f-a76c5b8a10a5",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "45e3d703-7efc-4dc2-b854-33211f8d4f11",
+    prose: "A solitary miner walks through timbered depths toward warm light spilling along a narrow shaft.",
+    actions: [
+      ActionDefinition(
+        label: "Inspect promising seams",
+        id: "e2f06613-f10b-464d-88ee-f59184ada1b5",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one revealed card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Follow the lower gleam",
+        id: "09d0f878-671a-47e5-8719-3585b1620482",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "3e83cbe2-2b21-4804-9906-4b4735db9869",
+    prose: "A lone boat approaches a spectral galleon pitching through green-lit waves.",
+    actions: [
+      ActionDefinition(
+        label: "Board phantom galleon",
+        id: "24d7ce34-6636-43e7-b22e-b2c17ce42599",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices and gain 2 copies of it",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one cheap phantom to recruit twice.",
+          ),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 2, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Release drowned echoes",
+        id: "e793121c-e0e3-4f9f-8738-ff4d1c4f95df",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "d95533f4-7809-44a8-a882-7675c61cee1c",
+    prose: "A black-armored warrior grips a long sword as red embers stream through gathering smoke.",
+    actions: [
+      ActionDefinition(
+        label: "Gather red embers",
+        id: "098be30f-8c99-420d-8973-d11b2d2bac24",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 random Warrior cards",
+          followup: None,
+        ),
+        effect: GainRandomCards(predicate: Warrior, count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Enter gathering smoke",
+        id: "88f91d60-01ef-48ee-a2aa-49bdba4f3d86",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+    ],
+  ),
 ]
