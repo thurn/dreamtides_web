@@ -9542,8 +9542,137 @@
           "predicate": "character"
         }
       ]
+    },
+    {
+      "cardId": "967c714f-40c5-4a77-8e22-40691a2755d4",
+      "prose": "A lone soldier faces a burning black portal suspended among storm clouds and distant stars.",
+      "action": [
+        {
+          "id": "3fc64f9c-a399-4d5d-98a6-632f8a6cb319",
+          "label": "Cross Burning Threshold",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card, then choose its transfiguration.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "count": 1
+        },
+        {
+          "id": "7097e2d2-efce-4b6c-9ab6-9d2a2a8dfeb6",
+          "label": "Feed Oblivion",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to burn for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        }
+      ]
+    },
+    {
+      "cardId": "29088c75-c2c9-40dc-a77a-65360e464b45",
+      "prose": "A staff-bearing mage hurls turquoise light against a skeletal giant unraveling into crows.",
+      "action": [
+        {
+          "count": 1,
+          "id": "f5fe702d-4dc5-491e-ac81-12100eea96a9",
+          "label": "Banish Crow Fiend",
+          "effectText": "Purge a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one card to banish with it.",
+          "effectKind": "purge-selected",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "purge-misfit"
+        },
+        {
+          "id": "694519ab-50da-4b21-a0cb-e5f9a89dbb36",
+          "label": "Study Azure Ward",
+          "effectText": "Draft an Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Event.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 1,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea",
+      "prose": "An incandescent ring devours ruined blocks, hurling ash across a pale sun.",
+      "action": [
+        {
+          "id": "4a886ca5-dac7-4b24-af91-8134f1a6e3b8",
+          "label": "Abandon Familiar Shadows",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "2269992d-019c-45c2-b171-14c4814053a6",
+          "label": "Enter Burning Ring",
+          "effectText": "All cards in your deck cost 1● less. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "831bc7cf-e8c9-4943-8156-91b7397ef849",
+      "prose": "A suited Survivor carries a glowing canister toward a colossal sphere amid toxic factory smoke.",
+      "action": [
+        {
+          "id": "9c4b8c33-8b94-4a38-9e7b-80602cc8cbee",
+          "label": "Salvage What Remains",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "33790dcd-32a8-425b-a47e-56a9b0591eb4",
+          "label": "Enter the Sphere",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        }
+      ]
+    },
+    {
+      "cardId": "867b98cf-171b-497b-9252-9af5dcf70726",
+      "prose": "A hooded channeler raises an axe as golden fire spirals past a vast planet.",
+      "action": [
+        {
+          "id": "692fe52b-d460-4972-8b1e-26119c370dd7",
+          "label": "Call a stellar host",
+          "effectText": "Choose one of 2 packs of 3 Warrior cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one pack to add to your deck.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "warrior",
+          "packCount": 2,
+          "packSize": 3
+        },
+        {
+          "id": "61fff905-bd68-4df5-9f72-d4484ec57fd7",
+          "label": "Harvest golden resonance",
+          "effectText": "Gain 15 essence for each Warrior card in your deck",
+          "effectKind": "gain-essence-per-card",
+          "canonicalMechanicId": "gain-essence-by-deck-predicate",
+          "predicate": "warrior",
+          "essencePerCard": 15
+        }
+      ]
     }
   ],
-  "contentHash": "e1e5b2fa1028fad5bbe691fdec0faccd9da70d13c8c5dfa75393b123b56355a2",
-  "foldHash": "e1e5b2fa1028fad5bbe691fdec0faccd9da70d13c8c5dfa75393b123b56355a2"
+  "contentHash": "752ebb5cc65b1a7847076f68585e7c72b1b7474e6f8e453e3bd2cd39ae9cb6a8",
+  "foldHash": "752ebb5cc65b1a7847076f68585e7c72b1b7474e6f8e453e3bd2cd39ae9cb6a8"
 }

@@ -10237,4 +10237,146 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "967c714f-40c5-4a77-8e22-40691a2755d4",
+    prose: "A lone soldier faces a burning black portal suspended among storm clouds and distant stars.",
+    actions: [
+      ActionDefinition(
+        label: "Cross Burning Threshold",
+        id: "3fc64f9c-a399-4d5d-98a6-632f8a6cb319",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+
+      ActionDefinition(
+        label: "Feed Oblivion",
+        id: "7097e2d2-efce-4b6c-9ab6-9d2a2a8dfeb6",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to burn for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "29088c75-c2c9-40dc-a77a-65360e464b45",
+    prose: "A staff-bearing mage hurls turquoise light against a skeletal giant unraveling into crows.",
+    actions: [
+      ActionDefinition(
+        label: "Banish Crow Fiend",
+        id: "f5fe702d-4dc5-491e-ac81-12100eea96a9",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one card to banish with it.",
+          ),
+        ),
+        effect: PurgeSelected(predicate: None, count: None),
+      ),
+
+      ActionDefinition(
+        label: "Study Azure Ward",
+        id: "694519ab-50da-4b21-a0cb-e5f9a89dbb36",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Event."),
+        ),
+        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea",
+    prose: "An incandescent ring devours ruined blocks, hurling ash across a pale sun.",
+    actions: [
+      ActionDefinition(
+        label: "Abandon Familiar Shadows",
+        id: "4a886ca5-dac7-4b24-af91-8134f1a6e3b8",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+
+      ActionDefinition(
+        label: "Enter Burning Ring",
+        id: "2269992d-019c-45c2-b171-14c4814053a6",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck cost 1● less. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "831bc7cf-e8c9-4943-8156-91b7397ef849",
+    prose: "A suited Survivor carries a glowing canister toward a colossal sphere amid toxic factory smoke.",
+    actions: [
+      ActionDefinition(
+        label: "Salvage What Remains",
+        id: "9c4b8c33-8b94-4a38-9e7b-80602cc8cbee",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+
+      ActionDefinition(
+        label: "Enter the Sphere",
+        id: "33790dcd-32a8-425b-a47e-56a9b0591eb4",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "867b98cf-171b-497b-9252-9af5dcf70726",
+    prose: "A hooded channeler raises an axe as golden fire spirals past a vast planet.",
+    actions: [
+      ActionDefinition(
+        label: "Call a stellar host",
+        id: "692fe52b-d460-4972-8b1e-26119c370dd7",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 2 packs of 3 Warrior cards to add to your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one pack to add to your deck.",
+          ),
+        ),
+        effect: ChoosePack(predicate: Warrior, pack_count: 2, pack_size: 3),
+      ),
+
+      ActionDefinition(
+        label: "Harvest golden resonance",
+        id: "61fff905-bd68-4df5-9f72-d4484ec57fd7",
+        presentation: ActionPresentation(
+          effect_text: "Gain 15 essence for each Warrior card in your deck",
+          followup: None,
+        ),
+        effect: GainEssencePerCard(predicate: Warrior, essence_per_card: 15),
+      ),
+    ],
+  ),
 ]
