@@ -7959,8 +7959,142 @@
           "selectionPolicyId": "site-uniform"
         }
       ]
+    },
+    {
+      "cardId": "20896b2e-59cc-4494-942c-eb95b75adaf9",
+      "prose": "A lone survivor raises a crimson flare above shattered towers as distant beacons pierce orange haze.",
+      "action": [
+        {
+          "id": "3a42d6a8-0184-47ae-9e6c-b2c1102455d7",
+          "label": "Answer Crimson Beacon",
+          "effectText": "Draft a Survivor from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Survivor.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "survivor",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "b3c1f810-5367-4b0f-801f-7bd0d133d850",
+          "label": "Count Answering Flares",
+          "effectText": "Gain 15 essence for each Survivor card in your deck",
+          "effectKind": "gain-essence-per-card",
+          "canonicalMechanicId": "gain-essence-by-deck-predicate",
+          "predicate": "survivor",
+          "essencePerCard": 15
+        }
+      ]
+    },
+    {
+      "cardId": "f7b135ea-4894-46ab-b41d-ba2f74b070a1",
+      "prose": "A parent lifts a child above windswept grass as sunset burns across distant clouds.",
+      "action": [
+        {
+          "id": "c22e1257-2964-45d4-a7bf-cfbe4b549a1d",
+          "label": "Keep Shared Memory",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one revealed card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "07f25e60-96ac-4776-85db-2652342b78c3",
+          "label": "Lift Toward Dawn",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "4eb42989-7498-4995-a3ab-89eb026b0c13",
+      "prose": "An undead husk tears open its chest, exposing furnace-bright bones amid swirling ash.",
+      "action": [
+        {
+          "id": "71beb24f-66e1-4d68-9617-180fe6c9f66b",
+          "label": "Harvest Burning Heart",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to burn for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "e2115221-96bf-422d-a276-678a953d4323",
+          "label": "Shape Living Fire",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card, then choose its transfiguration.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "cardId": "74e82d0d-e107-4207-ad2a-73d016ea54a9",
+      "prose": "A rainbow aperture fractures within towering white clouds, bright shards scattering outward.",
+      "action": [
+        {
+          "id": "b8a1eabd-a3e5-43bf-83a5-6790ffebdff7",
+          "label": "Cross the Aperture",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        },
+        {
+          "id": "980a710d-661b-44e1-a28f-9971eff97bd6",
+          "label": "Touch a Bright Shard",
+          "effectText": "Draft a transfigured Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured Event.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "a031eada-2c47-49c6-8c19-d2fe85f8ce97",
+      "prose": "A lone explorer lifts a lantern toward blue lights beyond a flooded cavern.",
+      "action": [
+        {
+          "id": "5a482b08-5acb-4942-9bc5-bb0d0cf08863",
+          "label": "Read Hidden Revelations",
+          "effectText": "Draft an Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one revealed Event.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "d708cb15-fcdf-4886-b5ac-8921573563f5",
+          "label": "Cross the Flooded Threshold",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        }
+      ]
     }
   ],
-  "contentHash": "f1753113419801b7e8ccd7c96747ec8fbf61f5747df8858c99299e485e51b5c0",
-  "foldHash": "f1753113419801b7e8ccd7c96747ec8fbf61f5747df8858c99299e485e51b5c0"
+  "contentHash": "6fd95cccfe4fd670eb24529f83f93c3a9ed74993c0b0f746148cf3af04be01d0",
+  "foldHash": "6fd95cccfe4fd670eb24529f83f93c3a9ed74993c0b0f746148cf3af04be01d0"
 }

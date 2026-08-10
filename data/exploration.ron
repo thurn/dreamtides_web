@@ -8536,4 +8536,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "20896b2e-59cc-4494-942c-eb95b75adaf9",
+    prose: "A lone survivor raises a crimson flare above shattered towers as distant beacons pierce orange haze.",
+    actions: [
+      ActionDefinition(
+        label: "Answer Crimson Beacon",
+        id: "3a42d6a8-0184-47ae-9e6c-b2c1102455d7",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Survivor from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Survivor."),
+        ),
+        effect: DraftCard(predicate: Survivor, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Count Answering Flares",
+        id: "b3c1f810-5367-4b0f-801f-7bd0d133d850",
+        presentation: ActionPresentation(
+          effect_text: "Gain 15 essence for each Survivor card in your deck",
+          followup: None,
+        ),
+        effect: GainEssencePerCard(predicate: Survivor, essence_per_card: 15),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "f7b135ea-4894-46ab-b41d-ba2f74b070a1",
+    prose: "A parent lifts a child above windswept grass as sunset burns across distant clouds.",
+    actions: [
+      ActionDefinition(
+        label: "Keep Shared Memory",
+        id: "c22e1257-2964-45d4-a7bf-cfbe4b549a1d",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one revealed card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Lift Toward Dawn",
+        id: "07f25e60-96ac-4776-85db-2652342b78c3",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "4eb42989-7498-4995-a3ab-89eb026b0c13",
+    prose: "An undead husk tears open its chest, exposing furnace-bright bones amid swirling ash.",
+    actions: [
+      ActionDefinition(
+        label: "Harvest Burning Heart",
+        id: "71beb24f-66e1-4d68-9617-180fe6c9f66b",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to burn for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Shape Living Fire",
+        id: "e2115221-96bf-422d-a276-678a953d4323",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "74e82d0d-e107-4207-ad2a-73d016ea54a9",
+    prose: "A rainbow aperture fractures within towering white clouds, bright shards scattering outward.",
+    actions: [
+      ActionDefinition(
+        label: "Cross the Aperture",
+        id: "b8a1eabd-a3e5-43bf-83a5-6790ffebdff7",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+
+      ActionDefinition(
+        label: "Touch a Bright Shard",
+        id: "980a710d-661b-44e1-a28f-9971eff97bd6",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one transfigured Event."),
+        ),
+        effect: TransfiguredCardDraft(predicate: Event, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "a031eada-2c47-49c6-8c19-d2fe85f8ce97",
+    prose: "A lone explorer lifts a lantern toward blue lights beyond a flooded cavern.",
+    actions: [
+      ActionDefinition(
+        label: "Read Hidden Revelations",
+        id: "5a482b08-5acb-4942-9bc5-bb0d0cf08863",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one revealed Event."),
+        ),
+        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Cross the Flooded Threshold",
+        id: "d708cb15-fcdf-4886-b5ac-8921573563f5",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+    ],
+  ),
 ]
