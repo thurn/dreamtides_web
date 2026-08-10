@@ -5368,8 +5368,137 @@
           "offerCount": 4
         }
       ]
+    },
+    {
+      "cardId": "4b20e66e-2466-4518-8ef9-67f580bd6f14",
+      "prose": "A half-formed android stands amid hanging cables, teal light, and drifting digital fragments inside a factory.",
+      "action": [
+        {
+          "id": "9fe6a033-f07b-4699-9b49-f70a1c64d1d0",
+          "label": "Complete Her Materialization",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card, then choose its transfiguration.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "count": 1
+        },
+        {
+          "id": "4cfe1c71-e9fc-4e35-8d73-44021ca161b4",
+          "label": "Read Future Datastream",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "8adfa141-6864-4f5f-a9ca-59306eaf5432",
+      "prose": "A man with radiant wings leaps empty-handed from a splintering bridge.",
+      "action": [
+        {
+          "id": "60ffaf18-ff58-4c6d-b86a-09f10b0db8e0",
+          "label": "Follow his radiant flight",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "472e903b-f832-4cd9-90ab-82dee9f8177c",
+          "label": "Leap empty-handed",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
+    },
+    {
+      "cardId": "33cf7dca-d8d2-42b7-854a-b3f503b03488",
+      "prose": "A white-coated girl reaches into a star-filled aperture, fingertips touching a radiant point.",
+      "action": [
+        {
+          "id": "b6db8bcf-65f5-4502-a027-82bc1b0dad2e",
+          "label": "Touch the radiant point",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card, then choose its transfiguration.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "count": 1
+        },
+        {
+          "id": "7b798e2d-0e0c-4c10-809f-cf2e1060a2c5",
+          "label": "Search within the aperture",
+          "effectText": "Draft a transfigured ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured ≤2● cost Character.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "3a4ee059-4b6a-4a85-b3b8-a472834ea843",
+      "prose": "A lone woman stands atop luminous stairs, one hand raised toward a radiant crescent.",
+      "action": [
+        {
+          "id": "d6b9ae1d-c990-4900-84af-874e7a67dc5b",
+          "label": "Ascend Beside Her",
+          "effectText": "Draft an Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "27610e28-ede5-457f-9408-74b12fb3c820",
+          "label": "Reach for the Crescent",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card, then choose its transfiguration.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "cardId": "bedee263-27b9-4d73-ab77-6b5c747dff69",
+      "prose": "A scarred soldier braces a rifle across burning wreckage, one boot planted high amid flying embers.",
+      "action": [
+        {
+          "id": "4eb72353-e83a-4548-8099-19e9ab34f657",
+          "label": "Salvage usable wreckage",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "c2b3b679-40ab-445d-a5e2-ec07fa68116d",
+          "label": "Feed scraps to flames",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to burn for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        }
+      ]
     }
   ],
-  "contentHash": "fd6b6a01a202522a00cf9fe27d6787e9abf91abe0315dbeb54b5e05baf59086d",
-  "foldHash": "fd6b6a01a202522a00cf9fe27d6787e9abf91abe0315dbeb54b5e05baf59086d"
+  "contentHash": "3afbb05c50346bd6185b2d942ad99a62f158c7cf7aaa40c7ab5b2f1cb8b209e5",
+  "foldHash": "3afbb05c50346bd6185b2d942ad99a62f158c7cf7aaa40c7ab5b2f1cb8b209e5"
 }

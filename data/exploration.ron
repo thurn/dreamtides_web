@@ -5738,4 +5738,149 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "4b20e66e-2466-4518-8ef9-67f580bd6f14",
+    prose: "A half-formed android stands amid hanging cables, teal light, and drifting digital fragments inside a factory.",
+    actions: [
+      ActionDefinition(
+        label: "Complete Her Materialization",
+        id: "9fe6a033-f07b-4699-9b49-f70a1c64d1d0",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+
+      ActionDefinition(
+        label: "Read Future Datastream",
+        id: "4cfe1c71-e9fc-4e35-8d73-44021ca161b4",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "8adfa141-6864-4f5f-a9ca-59306eaf5432",
+    prose: "A man with radiant wings leaps empty-handed from a splintering bridge.",
+    actions: [
+      ActionDefinition(
+        label: "Follow his radiant flight",
+        id: "60ffaf18-ff58-4c6d-b86a-09f10b0db8e0",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Leap empty-handed",
+        id: "472e903b-f832-4cd9-90ab-82dee9f8177c",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "33cf7dca-d8d2-42b7-854a-b3f503b03488",
+    prose: "A white-coated girl reaches into a star-filled aperture, fingertips touching a radiant point.",
+    actions: [
+      ActionDefinition(
+        label: "Touch the radiant point",
+        id: "b6db8bcf-65f5-4502-a027-82bc1b0dad2e",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+
+      ActionDefinition(
+        label: "Search within the aperture",
+        id: "7b798e2d-0e0c-4c10-809f-cf2e1060a2c5",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured ≤2● cost Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one transfigured ≤2● cost Character.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: CheapCharacter, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "3a4ee059-4b6a-4a85-b3b8-a472834ea843",
+    prose: "A lone woman stands atop luminous stairs, one hand raised toward a radiant crescent.",
+    actions: [
+      ActionDefinition(
+        label: "Ascend Beside Her",
+        id: "d6b9ae1d-c990-4900-84af-874e7a67dc5b",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Reach for the Crescent",
+        id: "27610e28-ede5-457f-9408-74b12fb3c820",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "bedee263-27b9-4d73-ab77-6b5c747dff69",
+    prose: "A scarred soldier braces a rifle across burning wreckage, one boot planted high amid flying embers.",
+    actions: [
+      ActionDefinition(
+        label: "Salvage usable wreckage",
+        id: "4eb72353-e83a-4548-8099-19e9ab34f657",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+
+      ActionDefinition(
+        label: "Feed scraps to flames",
+        id: "c2b3b679-40ab-445d-a5e2-ec07fa68116d",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to burn for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
 ]
