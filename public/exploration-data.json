@@ -3645,8 +3645,141 @@
           "essencePerSpark": 20
         }
       ]
+    },
+    {
+      "cardId": "0458658d-7e02-4286-9249-93674d16620b",
+      "prose": "An armored monarch fixes white-lit eyes beneath a striped crown as embers drift.",
+      "action": [
+        {
+          "id": "4c8341ec-0140-410e-b856-ef47b3ecb538",
+          "label": "Honor His Crown",
+          "effectText": "Gain Pyramid Relic",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to replace.",
+          "effectKind": "gain-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "fixed",
+          "dreamsignId": "278ec1ab-f532-4862-84ae-63df5e49548c"
+        },
+        {
+          "id": "99c3ef00-5f96-4418-ac1f-de3186071b76",
+          "label": "Study His Armor",
+          "effectText": "Draft a transfigured ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured ≤2● cost Character.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "fcb830e5-85ff-48f3-be1e-46e102a5c8e8",
+      "prose": "A lone scavenger surveys piled machinery beneath towering cyan-lit ruins and drifting dust.",
+      "action": [
+        {
+          "id": "12e8d8cb-0674-401c-ad99-bdc40a9b75d1",
+          "label": "Rebuild a Companion",
+          "effectText": "Purge a chosen Character card and gain a random Character replacement",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to dismantle and rebuild.",
+          "effectKind": "replace-selected",
+          "canonicalMechanicId": "replace-deck-entry",
+          "selectionPolicyId": "card-fit-quality",
+          "predicate": "character"
+        },
+        {
+          "id": "fe8c624d-92a1-4493-91c3-b0171d992115",
+          "label": "Smelt Valuable Wreckage",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to smelt for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        }
+      ]
+    },
+    {
+      "cardId": "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+      "prose": "Twin palm-sigils burn as a fragmented titan hovers above a lone traveler and shattered stones.",
+      "action": [
+        {
+          "id": "a5e4a581-39b4-4100-8802-68f31c04adff",
+          "label": "Touch Echoing Sigil",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one revealed card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "92feb9c6-efb6-48da-ba52-936841f17de8",
+          "label": "Enter Hollow Halo",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
+    },
+    {
+      "cardId": "f82c7407-b642-4ab1-8878-171f9121b3eb",
+      "prose": "A spear-bearing lookout crouches on a high branch above mist and distant birds.",
+      "action": [
+        {
+          "id": "d8efb5f7-1149-475f-b109-999f89f9a97c",
+          "label": "End a Warrior's Watch",
+          "effectText": "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        },
+        {
+          "id": "d364351c-0313-4c21-8248-e6ae4ab3d6da",
+          "label": "Read Distant Flight",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "1d92e103-8415-433d-97d6-ac8a83660b34",
+      "prose": "A gas-masked rower guides a narrow boat through ochre fog.",
+      "action": [
+        {
+          "id": "425d75c4-7b51-4560-9913-cb23199f6932",
+          "label": "Board the narrow boat",
+          "effectText": "Draft a Survivor from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Survivor.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "survivor",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "d417bba6-6402-4544-af16-6a46fdfd309d",
+          "label": "Trade with the rower",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        }
+      ]
     }
   ],
-  "contentHash": "28e89e3de9e83e809bdac4636652cfaca2364e544f96411c236feb888c7cfca9",
-  "foldHash": "28e89e3de9e83e809bdac4636652cfaca2364e544f96411c236feb888c7cfca9"
+  "contentHash": "780380183237fdd02b01c45eea29ff619daeb7dab5f010832d8f3d01f9f70f57",
+  "foldHash": "780380183237fdd02b01c45eea29ff619daeb7dab5f010832d8f3d01f9f70f57"
 }

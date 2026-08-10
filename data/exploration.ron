@@ -3906,4 +3906,149 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "0458658d-7e02-4286-9249-93674d16620b",
+    prose: "An armored monarch fixes white-lit eyes beneath a striped crown as embers drift.",
+    actions: [
+      ActionDefinition(
+        label: "Honor His Crown",
+        id: "4c8341ec-0140-410e-b856-ef47b3ecb538",
+        presentation: ActionPresentation(
+          effect_text: "Gain Pyramid Relic",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
+        ),
+        effect: GainDreamsign(dreamsign_id: "278ec1ab-f532-4862-84ae-63df5e49548c"),
+      ),
+
+      ActionDefinition(
+        label: "Study His Armor",
+        id: "99c3ef00-5f96-4418-ac1f-de3186071b76",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured ≤2● cost Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one transfigured ≤2● cost Character.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: CheapCharacter, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "fcb830e5-85ff-48f3-be1e-46e102a5c8e8",
+    prose: "A lone scavenger surveys piled machinery beneath towering cyan-lit ruins and drifting dust.",
+    actions: [
+      ActionDefinition(
+        label: "Rebuild a Companion",
+        id: "12e8d8cb-0674-401c-ad99-bdc40a9b75d1",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen Character card and gain a random Character replacement",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to dismantle and rebuild.",
+          ),
+        ),
+        effect: ReplaceSelected(predicate: Character),
+      ),
+
+      ActionDefinition(
+        label: "Smelt Valuable Wreckage",
+        id: "fe8c624d-92a1-4493-91c3-b0171d992115",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to smelt for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "c32ef131-d283-4bf1-bf65-2d5e5d232168",
+    prose: "Twin palm-sigils burn as a fragmented titan hovers above a lone traveler and shattered stones.",
+    actions: [
+      ActionDefinition(
+        label: "Touch Echoing Sigil",
+        id: "a5e4a581-39b4-4100-8802-68f31c04adff",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one revealed card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Enter Hollow Halo",
+        id: "92feb9c6-efb6-48da-ba52-936841f17de8",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "f82c7407-b642-4ab1-8878-171f9121b3eb",
+    prose: "A spear-bearing lookout crouches on a high branch above mist and distant birds.",
+    actions: [
+      ActionDefinition(
+        label: "End a Warrior's Watch",
+        id: "d8efb5f7-1149-475f-b109-999f89f9a97c",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Read Distant Flight",
+        id: "d364351c-0313-4c21-8248-e6ae4ab3d6da",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "1d92e103-8415-433d-97d6-ac8a83660b34",
+    prose: "A gas-masked rower guides a narrow boat through ochre fog.",
+    actions: [
+      ActionDefinition(
+        label: "Board the narrow boat",
+        id: "425d75c4-7b51-4560-9913-cb23199f6932",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Survivor from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Survivor."),
+        ),
+        effect: DraftCard(predicate: Survivor, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Trade with the rower",
+        id: "d417bba6-6402-4544-af16-6a46fdfd309d",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+    ],
+  ),
 ]
