@@ -3483,4 +3483,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "f95cae7b-6502-4dbe-ae26-16853959d9a3",
+    prose: "A rifle-bearing traveler stands on broken rooftops beneath dense orange haze.",
+    actions: [
+      ActionDefinition(
+        label: "Search Broken Rooftops",
+        id: "5818fa07-32bc-4af7-857f-3d54e2f17927",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of ≤2● cost Character cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered cards.",
+          ),
+        ),
+        effect: TakeCards(predicate: CheapCharacter, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Study Orange Haze",
+        id: "e892a1ed-f70e-46d8-afd0-53882ef5d741",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "fbf725ca-8837-46d4-970c-922153e27b6e",
+    prose: "A glowing skeleton advances through burning ruins beneath a circular crown of fire and drifting embers.",
+    actions: [
+      ActionDefinition(
+        label: "Feed Ruinous Flame",
+        id: "87bd0782-5acc-4cc0-8498-1ddec3d9999a",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to burn for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Cross Burning Halo",
+        id: "17a96db4-e97d-4a7d-9118-81fef35832c6",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "4fe9f53e-149a-4b9f-8fac-f75560c986f2",
+    prose: "A lone figure stands inside a shattered maze as golden light consumes distant walls.",
+    actions: [
+      ActionDefinition(
+        label: "Mark Surviving Passage",
+        id: "99eb25cd-b345-439d-8ccf-870af2da4116",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+
+      ActionDefinition(
+        label: "Erase Every Echo",
+        id: "f372f27e-3d53-4bb4-8c20-e695c7cd0895",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b",
+    prose: "A lone conductor raises his baton above a city erupting in golden fire.",
+    actions: [
+      ActionDefinition(
+        label: "Call Firelit Soloist",
+        id: "f1a4eeaa-c4f4-45b9-a9f9-785f2952f104",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured ≤2● cost Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one transfigured ≤2● cost Character.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: CheapCharacter, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Conduct Final Crescendo",
+        id: "b0788f98-475c-495e-88b1-10cda2e72702",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "6e2188f8-580e-4a66-a3e3-267d509de903",
+    prose: "A pale rock path ends abruptly above an amber abyss.",
+    actions: [
+      ActionDefinition(
+        label: "Turn from the path",
+        id: "5b32c1e7-688d-4ce8-9497-22d650aa6fec",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a card to leave behind."),
+        ),
+        effect: PurgeSelected(predicate: None, count: None),
+      ),
+
+      ActionDefinition(
+        label: "Leap into abyss",
+        id: "9e861f68-e885-411d-97d8-6ccdcab6c80e",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
 ]
