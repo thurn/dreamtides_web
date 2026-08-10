@@ -13366,8 +13366,128 @@
           "count": 2
         }
       ]
+    },
+    {
+      "cardId": "b0a2c3d4-e5f6-4789-8abc-0def12345678",
+      "prose": "A child sits awake as a vast, many-limbed creature descends through darkness.",
+      "action": [
+        {
+          "id": "e77e78d4-7b74-478f-9d27-2ca6709712ce",
+          "label": "Wake Before It Descends",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "6d43d558-7a09-4d22-8d14-9aa503f78156",
+          "label": "Invite Nightmare Closer",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "c06b993d-a1f4-42ad-85a9-ebf611d9a129",
+      "prose": "A blazing runner surges through airborne embers as firebirds wheel toward dawn.",
+      "action": [
+        {
+          "id": "30a4aa09-ccb4-453d-8e92-ce059736c678",
+          "label": "Race With Firebirds",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        },
+        {
+          "id": "72785214-e131-4966-8d37-93abb25ffc69",
+          "label": "Gather Sunrise Fury",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "516dbd2d-dae4-4873-937e-adfeeee4444d",
+      "prose": "A spear-bearing guardian stands before a radiant arch as ornate towers dissolve into white fragments.",
+      "action": [
+        {
+          "id": "31164815-133c-448a-b687-5897957eff4c",
+          "label": "Enter the radiant arch",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        },
+        {
+          "id": "fdf82e82-a938-4fe4-875b-eb829513a313",
+          "label": "Reinforce the guardian",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Warrior.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "382dafa1-f8ff-47b4-9151-15b84067a5b2",
+      "prose": "A torch-bearing saboteur guards golden plunder as a shattered flagship burns behind dark waves.",
+      "action": [
+        {
+          "id": "6dac96c3-29b8-4ae0-9adf-03f972c5f81b",
+          "label": "Scuttle burning flagship",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to scuttle for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+          "label": "Gather drifting plunder",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "8b7883ee-a235-4793-aa56-086fb1e28d36",
+      "prose": "A lone warrior faces a colossal sword blazing above a ruined harbor.",
+      "action": [
+        {
+          "id": "40ae9a6f-3cee-4014-8a3d-7c9f55f81484",
+          "label": "Feed blazing sword",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to sacrifice for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "07145c6c-20f3-4a2d-9058-d8dba4fc23e0",
+          "label": "Brace for bladefall",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
     }
   ],
-  "contentHash": "13e0ea09f6884fa5524c82cc52f3c29ff6736529fa93e98f8f70bb5fc93ec149",
-  "foldHash": "13e0ea09f6884fa5524c82cc52f3c29ff6736529fa93e98f8f70bb5fc93ec149"
+  "contentHash": "ea27cb1438f5eb286bfc63dcfe2823bb6763bf0b404cd4b46d35a8ae396fea4d",
+  "foldHash": "ea27cb1438f5eb286bfc63dcfe2823bb6763bf0b404cd4b46d35a8ae396fea4d"
 }

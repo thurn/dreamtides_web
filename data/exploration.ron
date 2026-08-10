@@ -14466,4 +14466,140 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "b0a2c3d4-e5f6-4789-8abc-0def12345678",
+    prose: "A child sits awake as a vast, many-limbed creature descends through darkness.",
+    actions: [
+      ActionDefinition(
+        label: "Wake Before It Descends",
+        id: "e77e78d4-7b74-478f-9d27-2ca6709712ce",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Invite Nightmare Closer",
+        id: "6d43d558-7a09-4d22-8d14-9aa503f78156",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "c06b993d-a1f4-42ad-85a9-ebf611d9a129",
+    prose: "A blazing runner surges through airborne embers as firebirds wheel toward dawn.",
+    actions: [
+      ActionDefinition(
+        label: "Race With Firebirds",
+        id: "30a4aa09-ccb4-453d-8e92-ce059736c678",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+
+      ActionDefinition(
+        label: "Gather Sunrise Fury",
+        id: "72785214-e131-4966-8d37-93abb25ffc69",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "516dbd2d-dae4-4873-937e-adfeeee4444d",
+    prose: "A spear-bearing guardian stands before a radiant arch as ornate towers dissolve into white fragments.",
+    actions: [
+      ActionDefinition(
+        label: "Enter the radiant arch",
+        id: "31164815-133c-448a-b687-5897957eff4c",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+
+      ActionDefinition(
+        label: "Reinforce the guardian",
+        id: "fdf82e82-a938-4fe4-875b-eb829513a313",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "382dafa1-f8ff-47b4-9151-15b84067a5b2",
+    prose: "A torch-bearing saboteur guards golden plunder as a shattered flagship burns behind dark waves.",
+    actions: [
+      ActionDefinition(
+        label: "Scuttle burning flagship",
+        id: "6dac96c3-29b8-4ae0-9adf-03f972c5f81b",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to scuttle for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Gather drifting plunder",
+        id: "2ee82d80-05c4-49f5-a1b7-9386314bac2f",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "8b7883ee-a235-4793-aa56-086fb1e28d36",
+    prose: "A lone warrior faces a colossal sword blazing above a ruined harbor.",
+    actions: [
+      ActionDefinition(
+        label: "Feed blazing sword",
+        id: "40ae9a6f-3cee-4014-8a3d-7c9f55f81484",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to sacrifice for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Brace for bladefall",
+        id: "07145c6c-20f3-4a2d-9058-d8dba4fc23e0",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
 ]
