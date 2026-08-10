@@ -4987,8 +4987,136 @@
           "count": 1
         }
       ]
+    },
+    {
+      "cardId": "ad76c77a-e456-4e59-bbf7-6bcb56f892ee",
+      "prose": "A boatman leans into a white oar as luminous green water rushes downward.",
+      "action": [
+        {
+          "id": "2ca7d5ee-101e-429f-99ce-fbccc069edfa",
+          "label": "Pull against the current",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "38549dea-c5b6-49df-bda9-d621a7e0ca6f",
+          "label": "Ride the downward current",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
+    },
+    {
+      "cardId": "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b",
+      "prose": "A silent curator shelters beneath burning silk as wind scatters glowing fragments.",
+      "action": [
+        {
+          "id": "4acb50ff-fae1-455b-bf45-751ca60e38dc",
+          "label": "Shelter a Remnant",
+          "effectText": "Draft a ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "27fac223-11b9-429e-8800-274dac9a7b72",
+          "label": "Feed Dying Flame",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to burn for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        }
+      ]
+    },
+    {
+      "cardId": "47b1d6b7-0388-4bb9-abfc-ed832d902e9f",
+      "prose": "A colossal construct rises over a sunset city, circular face glowing above outspread arms.",
+      "action": [
+        {
+          "id": "1f0c04d4-8fe5-4dfd-8b0a-1e60ed008fb5",
+          "label": "Read Its Glowing Face",
+          "effectText": "Draft an Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "8ccffd6d-63e7-48fa-a3b6-424adecaa738",
+          "label": "Answer Its Open Hands",
+          "effectText": "Gain 15 essence for each Event card in your deck",
+          "effectKind": "gain-essence-per-card",
+          "canonicalMechanicId": "gain-essence-by-deck-predicate",
+          "predicate": "event",
+          "essencePerCard": 15
+        }
+      ]
+    },
+    {
+      "cardId": "a7c2ee76-48c9-4587-8f01-81d00ae280cb",
+      "prose": "An armed man stands braced amid shattered concrete beneath an ashen sky.",
+      "action": [
+        {
+          "id": "28e86ac8-17e1-495c-867b-4e84f80d8a23",
+          "label": "Follow His Example",
+          "effectText": "Draft a Survivor from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Survivor.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "survivor",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "7ce8a057-9d68-41b1-94d0-c2c05ec827ef",
+          "label": "Honor His Stand",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "08fe3190-f559-4152-941d-33ec4180f509",
+      "prose": "Golden sparks cascade from glowing monitors across a shadowed workstation.",
+      "action": [
+        {
+          "id": "969ce2f6-6e1f-4e5f-9710-5683ff3dc498",
+          "label": "Read glowing monitors",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "1f8131d0-730f-45a8-a074-6a2eff77584c",
+          "label": "Gather falling sparks",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
     }
   ],
-  "contentHash": "238e42262fa0f68ab46d96fb7cf42467776389f10f74a21954a62337f5f61c4b",
-  "foldHash": "238e42262fa0f68ab46d96fb7cf42467776389f10f74a21954a62337f5f61c4b"
+  "contentHash": "92c0e93cb6b45bd5aecba70d11054155e13d6b1fff71ad3126b5e0978637b6e8",
+  "foldHash": "92c0e93cb6b45bd5aecba70d11054155e13d6b1fff71ad3126b5e0978637b6e8"
 }

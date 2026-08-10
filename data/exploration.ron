@@ -5327,4 +5327,137 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "ad76c77a-e456-4e59-bbf7-6bcb56f892ee",
+    prose: "A boatman leans into a white oar as luminous green water rushes downward.",
+    actions: [
+      ActionDefinition(
+        label: "Pull against the current",
+        id: "2ca7d5ee-101e-429f-99ce-fbccc069edfa",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Ride the downward current",
+        id: "38549dea-c5b6-49df-bda9-d621a7e0ca6f",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b",
+    prose: "A silent curator shelters beneath burning silk as wind scatters glowing fragments.",
+    actions: [
+      ActionDefinition(
+        label: "Shelter a Remnant",
+        id: "4acb50ff-fae1-455b-bf45-751ca60e38dc",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Feed Dying Flame",
+        id: "27fac223-11b9-429e-8800-274dac9a7b72",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to burn for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "47b1d6b7-0388-4bb9-abfc-ed832d902e9f",
+    prose: "A colossal construct rises over a sunset city, circular face glowing above outspread arms.",
+    actions: [
+      ActionDefinition(
+        label: "Read Its Glowing Face",
+        id: "1f0c04d4-8fe5-4dfd-8b0a-1e60ed008fb5",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Answer Its Open Hands",
+        id: "8ccffd6d-63e7-48fa-a3b6-424adecaa738",
+        presentation: ActionPresentation(
+          effect_text: "Gain 15 essence for each Event card in your deck",
+          followup: None,
+        ),
+        effect: GainEssencePerCard(predicate: Event, essence_per_card: 15),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "a7c2ee76-48c9-4587-8f01-81d00ae280cb",
+    prose: "An armed man stands braced amid shattered concrete beneath an ashen sky.",
+    actions: [
+      ActionDefinition(
+        label: "Follow His Example",
+        id: "28e86ac8-17e1-495c-867b-4e84f80d8a23",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Survivor from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Survivor."),
+        ),
+        effect: DraftCard(predicate: Survivor, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Honor His Stand",
+        id: "7ce8a057-9d68-41b1-94d0-c2c05ec827ef",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "08fe3190-f559-4152-941d-33ec4180f509",
+    prose: "Golden sparks cascade from glowing monitors across a shadowed workstation.",
+    actions: [
+      ActionDefinition(
+        label: "Read glowing monitors",
+        id: "969ce2f6-6e1f-4e5f-9710-5683ff3dc498",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Gather falling sparks",
+        id: "1f8131d0-730f-45a8-a074-6a2eff77584c",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
 ]
