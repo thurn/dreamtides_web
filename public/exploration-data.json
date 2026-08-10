@@ -9280,8 +9280,134 @@
           "count": 2
         }
       ]
+    },
+    {
+      "cardId": "747859fb-6fca-49fc-a653-08011a9bb44c",
+      "prose": "A kneeling knight grips a luminous sword as wildfire devours shattered battlements.",
+      "action": [
+        {
+          "id": "2fe0502f-ba70-4c91-8af0-37f907731203",
+          "label": "Burn a Forsworn Oath",
+          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        },
+        {
+          "id": "c39376b8-e9c2-4156-a602-2bd2455fac8b",
+          "label": "Rally Broken Banners",
+          "effectText": "Choose one of 3 packs of 3 Warrior cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one returning warband.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "warrior",
+          "packCount": 3,
+          "packSize": 3
+        }
+      ]
+    },
+    {
+      "cardId": "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa",
+      "prose": "A child braces cracked glass while silver sand spills through a colossal chained hourglass.",
+      "action": [
+        {
+          "id": "a9ca68b4-f32c-44c7-99f4-921431f6771b",
+          "label": "Cup Falling Minutes",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "8c2fbeca-9f8e-4156-9437-ae3405daff0e",
+          "label": "Shatter Hourglass",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
+    },
+    {
+      "cardId": "8cb543d7-e70b-4526-b473-bb17dcaee2a7",
+      "prose": "A lone drifter dangles beneath bright balloons above immense clouds streaked with coral light.",
+      "action": [
+        {
+          "id": "485a331a-b263-4921-a342-81453dfd1dbf",
+          "label": "Ride the rising colors",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        },
+        {
+          "id": "6b84b818-e65e-4b21-b503-7177ae0152df",
+          "label": "Drift toward new lands",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        }
+      ]
+    },
+    {
+      "cardId": "99101fce-f2b4-4032-b999-317ce3e4a6dd",
+      "prose": "A lone astronaut carves a luminous dune beneath a vast planet and star-filled sky.",
+      "action": [
+        {
+          "id": "305154b4-f3c1-44f7-804a-70a7c01f7c7f",
+          "label": "Ride falling sand",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        },
+        {
+          "id": "2fabc324-73cc-4cf0-99d2-57326d538096",
+          "label": "Signal passing rider",
+          "effectText": "Draft a ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 1,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "470bbf9d-a73c-4e00-bc66-cb0fa767c8de",
+      "prose": "A red-robed vizier studies a luminous blue underwater window framed by towering crimson curtains.",
+      "action": [
+        {
+          "id": "9c4457d3-45ba-4939-9f78-514979d7caa5",
+          "label": "Read scattered portents",
+          "effectText": "Gain 2 random ≤2● cost Character cards",
+          "effectKind": "gain-random-cards",
+          "canonicalMechanicId": "gain-card",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "cheap-character",
+          "count": 2
+        },
+        {
+          "id": "c6ef09e4-4b57-44a1-a147-58feac6ffd39",
+          "label": "Focus a single portent",
+          "effectText": "Draft a ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 1,
+          "offerCount": 4
+        }
+      ]
     }
   ],
-  "contentHash": "22c5847d54c20f8f71029b363ff1480b41d18cb9868fd9d5cfeee0b9045979d6",
-  "foldHash": "22c5847d54c20f8f71029b363ff1480b41d18cb9868fd9d5cfeee0b9045979d6"
+  "contentHash": "f12474909e766004eed0a681616825e9f33853e088d759b64560ca163a841cf2",
+  "foldHash": "f12474909e766004eed0a681616825e9f33853e088d759b64560ca163a841cf2"
 }

@@ -9962,4 +9962,134 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "747859fb-6fca-49fc-a653-08011a9bb44c",
+    prose: "A kneeling knight grips a luminous sword as wildfire devours shattered battlements.",
+    actions: [
+      ActionDefinition(
+        label: "Burn a Forsworn Oath",
+        id: "2fe0502f-ba70-4c91-8af0-37f907731203",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior. Every other Warrior in your deck gains +1✦",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Rally Broken Banners",
+        id: "c39376b8-e9c2-4156-a602-2bd2455fac8b",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 3 packs of 3 Warrior cards to add to your deck",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one returning warband."),
+        ),
+        effect: ChoosePack(predicate: Warrior, pack_count: 3, pack_size: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa",
+    prose: "A child braces cracked glass while silver sand spills through a colossal chained hourglass.",
+    actions: [
+      ActionDefinition(
+        label: "Cup Falling Minutes",
+        id: "a9ca68b4-f32c-44c7-99f4-921431f6771b",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Shatter Hourglass",
+        id: "8c2fbeca-9f8e-4156-9437-ae3405daff0e",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "8cb543d7-e70b-4526-b473-bb17dcaee2a7",
+    prose: "A lone drifter dangles beneath bright balloons above immense clouds streaked with coral light.",
+    actions: [
+      ActionDefinition(
+        label: "Ride the rising colors",
+        id: "485a331a-b263-4921-a342-81453dfd1dbf",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+
+      ActionDefinition(
+        label: "Drift toward new lands",
+        id: "6b84b818-e65e-4b21-b503-7177ae0152df",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "99101fce-f2b4-4032-b999-317ce3e4a6dd",
+    prose: "A lone astronaut carves a luminous dune beneath a vast planet and star-filled sky.",
+    actions: [
+      ActionDefinition(
+        label: "Ride falling sand",
+        id: "305154b4-f3c1-44f7-804a-70a7c01f7c7f",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+
+      ActionDefinition(
+        label: "Signal passing rider",
+        id: "2fabc324-73cc-4cf0-99d2-57326d538096",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "470bbf9d-a73c-4e00-bc66-cb0fa767c8de",
+    prose: "A red-robed vizier studies a luminous blue underwater window framed by towering crimson curtains.",
+    actions: [
+      ActionDefinition(
+        label: "Read scattered portents",
+        id: "9c4457d3-45ba-4939-9f78-514979d7caa5",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 random ≤2● cost Character cards",
+          followup: None,
+        ),
+        effect: GainRandomCards(predicate: CheapCharacter, count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Focus a single portent",
+        id: "c6ef09e4-4b57-44a1-a147-58feac6ffd39",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
 ]
