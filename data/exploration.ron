@@ -11087,4 +11087,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "1654d50f-815d-4172-b46b-8baa34a124db",
+    prose: "A spear-bearing figure faces a towering spiral of seawater beneath storm-dark skies.",
+    actions: [
+      ActionDefinition(
+        label: "Ride Surging Crest",
+        id: "af23b52e-0222-4fe3-a66a-a9bbaf135a38",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Enter Silent Undertow",
+        id: "ee5061c9-ec09-4b86-b5aa-8cef605a1796",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+    prose: "A colossal rune-marked direwolf prowls beside a lone explorer amid angular ice.",
+    actions: [
+      ActionDefinition(
+        label: "Trace Golden Markings",
+        id: "9b289eff-9bee-4dcc-84f5-53af0db66046",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+
+      ActionDefinition(
+        label: "Follow Giant Tracks",
+        id: "ea5d037d-e073-40f2-96f6-0fede9150878",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Spirit Animal from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered Spirit Animal.",
+          ),
+        ),
+        effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "6475483c-07de-43a0-b419-aaae6f436ec6",
+    prose: "Burning meteors tear through a smoke-choked sky above a sprawling city.",
+    actions: [
+      ActionDefinition(
+        label: "Erase every echo",
+        id: "d3bacfb6-7cf3-42ca-93f4-4189cf3632c6",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+
+      ActionDefinition(
+        label: "Welcome falling fire",
+        id: "bbdcaf49-b077-417d-8f7a-18c6c355478b",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "a56e0f68-30b6-404e-9b83-a7584177f21e",
+    prose: "A spear-wielding warrior channels lightning toward a colossal horned demon framed by crimson fire.",
+    actions: [
+      ActionDefinition(
+        label: "Drive lightning home",
+        id: "6e9ce731-4ab1-435b-b355-65f45984d58b",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to sacrifice for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Hear demon's bargain",
+        id: "bfdd2306-a1e3-4aab-ac1c-87474b1d562d",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6",
+    prose: "A red-visored commando brandishes twin pistols atop a dark ridge amid drifting white sparks.",
+    actions: [
+      ActionDefinition(
+        label: "Study twin pistols",
+        id: "48671e80-d720-432d-83dd-f3d9a613736f",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Follow commando's signal",
+        id: "fcea4f01-7d04-41c2-a139-a7cdfc9ae480",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
 ]
