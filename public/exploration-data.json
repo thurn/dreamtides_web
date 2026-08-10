@@ -1042,8 +1042,133 @@
           "essencePerSpark": 20
         }
       ]
+    },
+    {
+      "cardId": "06a4709d-fbef-4ea2-aa5e-caa2beac80ab",
+      "prose": "A yellow-cloaked explorer faces a blue vortex as stone and golden fragments spiral skyward.",
+      "action": [
+        {
+          "id": "fc027ccd-4178-405b-bf03-4a1a28669ae6",
+          "label": "Cross Blue Threshold",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        },
+        {
+          "id": "a19de2d0-b8f1-41f9-ba8b-65db01ce304e",
+          "label": "Catch Golden Fragments",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "8571d7b3-5401-4678-9e81-e14538c8c46e",
+      "prose": "A lone mage suspends blue fire amid sparking ruins, twisted cables, and shattered machines.",
+      "action": [
+        {
+          "id": "336c6140-542b-4d42-b19b-5736d864669f",
+          "label": "Unmake Every Echo",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "70d0757e-a7af-4340-bdaf-dc275c64a6e0",
+          "label": "Bind a Fallen Fragment",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "09332e5b-3b4e-458f-9df0-3fc0419f65c3",
+      "prose": "Three lights orbit a levitating girl while shattered towers rise around her.",
+      "action": [
+        {
+          "id": "23267320-5d47-4a21-962d-57b38d663726",
+          "label": "Channel Three Lights",
+          "effectText": "Draft an Event from 3 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 1,
+          "offerCount": 3
+        },
+        {
+          "id": "fc11e676-82eb-42cd-bc3c-7774e1f6ad06",
+          "label": "Feed Rising Ruin",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to dissolve for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        }
+      ]
+    },
+    {
+      "cardId": "42427d15-c019-4786-9d7e-285829c4f3cb",
+      "prose": "A cabled silhouette reaches into golden radiance as luminous signals ripple around her.",
+      "action": [
+        {
+          "id": "effc05ad-ee43-4fc2-83c1-f25bd6bf1754",
+          "label": "Tune Her Signal",
+          "effectText": "All characters in your deck become the subtype of your choice",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one shared subtype for every Character.",
+          "effectKind": "change-subtype-all",
+          "canonicalMechanicId": "change-deck-subtype",
+          "subtypeOptions": [
+            "Warrior",
+            "Mage",
+            "Spirit Animal",
+            "Survivor"
+          ]
+        },
+        {
+          "id": "ff2a2adc-9678-4e91-8c29-853a045270e5",
+          "label": "Ride Golden Current",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        }
+      ]
+    },
+    {
+      "cardId": "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
+      "prose": "A rusted colossus stands among wildflowers as petals drift through mist.",
+      "action": [
+        {
+          "id": "318bc9a6-362a-426d-9faa-f3ca025fb3c8",
+          "label": "Rekindle buried circuits",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        },
+        {
+          "id": "be14d140-b1b2-4372-b0a6-c4228d463627",
+          "label": "Yield iron to flowers",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
     }
   ],
-  "contentHash": "0e6f87f6be0041d59d36c356e7880f85d31ab312fbcd05a4bbc4f3f6218e2478",
-  "foldHash": "0e6f87f6be0041d59d36c356e7880f85d31ab312fbcd05a4bbc4f3f6218e2478"
+  "contentHash": "2b7ed334889382da45725c27a504b73995bf1f75c28c8a25fc5f969ac683307a",
+  "foldHash": "2b7ed334889382da45725c27a504b73995bf1f75c28c8a25fc5f969ac683307a"
 }
