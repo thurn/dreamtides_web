@@ -3202,4 +3202,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1",
+    prose: "An armored wanderer watches a cyan beam rise beyond flooded industrial wreckage.",
+    actions: [
+      ActionDefinition(
+        label: "Bury Fallen Echoes",
+        id: "42ec0173-42f1-433d-8366-0f3aadb47d7a",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+
+      ActionDefinition(
+        label: "Signal Distant Survivors",
+        id: "7039f6a6-4653-49fc-bf2e-fcdc0b2c36b4",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Survivor from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Survivor."),
+        ),
+        effect: DraftCard(predicate: Survivor, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "56f019a8-6b77-4bcb-bfa6-37b94e188ead",
+    prose: "A colossal skull-faced apparition reaches toward a child amid black smoke, ruins, and green starlight.",
+    actions: [
+      ActionDefinition(
+        label: "Accept Profane Hand",
+        id: "9d805cd7-bc81-40aa-a4a7-d8983c8d293b",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered transfigured Character.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: Character, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Seal Returning Echoes",
+        id: "f863131d-c742-4d99-90ea-088701382e53",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "6cf545ba-b014-4333-a0da-573e8f97d734",
+    prose: "A staff-bearing nomad crosses golden grass beneath vast luminous rings curling through clouds.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Cloud Rings",
+        id: "7add2423-653d-42c7-8902-841f4b5ecc13",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+
+      ActionDefinition(
+        label: "Leave Worthy Offering",
+        id: "4e6a5b56-24b8-4069-abc3-83f1914d331d",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to offer for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "fbf32510-0bad-4567-859f-b3db6d7be5d5",
+    prose: "A lone figure stands amid burning homes as embers and black birds fill smoke.",
+    actions: [
+      ActionDefinition(
+        label: "Let Echoes Burn",
+        id: "29905ca2-3a18-4024-a443-d8cb28c91446",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+
+      ActionDefinition(
+        label: "Carry Shared Burden",
+        id: "c0d41e23-2f38-4d17-a1a3-32285b7e4da6",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "ed02e610-2e68-4457-95a6-c7c6db60ca40",
+    prose: "A cybernetic figure hangs from thick cables amid crackling electrical arcs.",
+    actions: [
+      ActionDefinition(
+        label: "Reroute thick cables",
+        id: "47e86617-7ce3-495e-a540-d961cbc41fc8",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+
+      ActionDefinition(
+        label: "Channel electrical arcs",
+        id: "6252f2e0-f865-4468-bf91-64d94646c851",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
 ]

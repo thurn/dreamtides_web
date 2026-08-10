@@ -3024,8 +3024,127 @@
           "count": 2
         }
       ]
+    },
+    {
+      "cardId": "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1",
+      "prose": "An armored wanderer watches a cyan beam rise beyond flooded industrial wreckage.",
+      "action": [
+        {
+          "id": "42ec0173-42f1-433d-8366-0f3aadb47d7a",
+          "label": "Bury Fallen Echoes",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "7039f6a6-4653-49fc-bf2e-fcdc0b2c36b4",
+          "label": "Signal Distant Survivors",
+          "effectText": "Draft a Survivor from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Survivor.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "survivor",
+          "count": 1,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "56f019a8-6b77-4bcb-bfa6-37b94e188ead",
+      "prose": "A colossal skull-faced apparition reaches toward a child amid black smoke, ruins, and green starlight.",
+      "action": [
+        {
+          "id": "9d805cd7-bc81-40aa-a4a7-d8983c8d293b",
+          "label": "Accept Profane Hand",
+          "effectText": "Draft a transfigured Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered transfigured Character.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "offerCount": 4
+        },
+        {
+          "id": "f863131d-c742-4d99-90ea-088701382e53",
+          "label": "Seal Returning Echoes",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "6cf545ba-b014-4333-a0da-573e8f97d734",
+      "prose": "A staff-bearing nomad crosses golden grass beneath vast luminous rings curling through clouds.",
+      "action": [
+        {
+          "id": "7add2423-653d-42c7-8902-841f4b5ecc13",
+          "label": "Follow Cloud Rings",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        },
+        {
+          "id": "4e6a5b56-24b8-4069-abc3-83f1914d331d",
+          "label": "Leave Worthy Offering",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to offer for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        }
+      ]
+    },
+    {
+      "cardId": "fbf32510-0bad-4567-859f-b3db6d7be5d5",
+      "prose": "A lone figure stands amid burning homes as embers and black birds fill smoke.",
+      "action": [
+        {
+          "id": "29905ca2-3a18-4024-a443-d8cb28c91446",
+          "label": "Let Echoes Burn",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "c0d41e23-2f38-4d17-a1a3-32285b7e4da6",
+          "label": "Carry Shared Burden",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
+    },
+    {
+      "cardId": "ed02e610-2e68-4457-95a6-c7c6db60ca40",
+      "prose": "A cybernetic figure hangs from thick cables amid crackling electrical arcs.",
+      "action": [
+        {
+          "id": "47e86617-7ce3-495e-a540-d961cbc41fc8",
+          "label": "Reroute thick cables",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "6252f2e0-f865-4468-bf91-64d94646c851",
+          "label": "Channel electrical arcs",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
     }
   ],
-  "contentHash": "1056e6cf88b519c81581b77de05d9089f176b82f569b13dfc53f386334e862f6",
-  "foldHash": "1056e6cf88b519c81581b77de05d9089f176b82f569b13dfc53f386334e862f6"
+  "contentHash": "5171d8efbde132be6196949a3819893a9a4df845dccde388ef6a9825aa58a32e",
+  "foldHash": "5171d8efbde132be6196949a3819893a9a4df845dccde388ef6a9825aa58a32e"
 }
