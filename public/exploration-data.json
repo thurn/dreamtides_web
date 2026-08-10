@@ -7699,8 +7699,131 @@
           "canonicalMechanicId": "next-battle-modifier"
         }
       ]
+    },
+    {
+      "cardId": "cd3d8e4a-618e-4c2f-be60-0363b81887f1",
+      "prose": "A lone technician stands between radiant pylons as electricity crawls through a ruined laboratory.",
+      "action": [
+        {
+          "id": "24f6f288-d86f-4274-94ae-1746b22732a7",
+          "label": "Reconstruct Lost Echo",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one scanned memory.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "c5f95c3f-fd1f-4b54-af26-feb8182f335a",
+          "label": "Open Charged Gateway",
+          "effectText": "Draft a transfigured Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one altered event.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "6d6ce556-60df-486f-b2d8-5df168a6f75e",
+      "prose": "A blazing humanoid descends ruined stairs, trailing molten light through a darkened house.",
+      "action": [
+        {
+          "id": "1e719b8a-526e-45b4-9d79-fd93bc694bb6",
+          "label": "Feed Its Flame",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to burn for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "a6c5d591-c423-4700-9a69-7ea25fc80236",
+          "label": "Gather Shed Embers",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "a37876f4-08a7-4352-bb3a-6d24f5c9407d",
+      "prose": "A cloaked mage raises a blazing staff toward a cracked lighthouse wrapped in spectral light.",
+      "action": [
+        {
+          "id": "8a1703d0-4d80-4528-8198-2ab1f572d5d9",
+          "label": "Follow the beacon",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        },
+        {
+          "id": "815b977d-dbef-47d6-9fa9-f4e0e8e4f597",
+          "label": "Catch a stray current",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "58f96494-87ec-4145-9e1c-95951d0ab711",
+      "prose": "Pilgrims cross an orange desert toward a colossal ring cracked by distant light.",
+      "action": [
+        {
+          "id": "734d9853-d247-4daf-8b26-a145452ad6bd",
+          "label": "Gather Portal Omens",
+          "effectText": "Take any number of Event cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any offered Events to carry onward.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        },
+        {
+          "id": "fdac337f-2d71-4e91-9a10-7b7bac538fdc",
+          "label": "Follow Endless Footprints",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "4cece464-2fde-483d-af92-04cd0341be5b",
+      "prose": "A shattered helicopter descends through roaring orange fire, black smoke streaming from broken rotors.",
+      "action": [
+        {
+          "id": "67d04a76-98ab-4a50-b863-9547b92d738e",
+          "label": "Search the black smoke",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "285662bc-bb49-489f-9ae2-c957e218aeba",
+          "label": "Enter the roaring fire",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
     }
   ],
-  "contentHash": "5b26031fa2a94ea9b7bb21eeffdb3d1b7ef43f93e6ce956714e616992b7b7a9e",
-  "foldHash": "5b26031fa2a94ea9b7bb21eeffdb3d1b7ef43f93e6ce956714e616992b7b7a9e"
+  "contentHash": "bb1bfc122574405d6aa3a558351aecdc400db706f7e5001ab534ced566dac05d",
+  "foldHash": "bb1bfc122574405d6aa3a558351aecdc400db706f7e5001ab534ced566dac05d"
 }
