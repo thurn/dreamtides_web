@@ -7132,4 +7132,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "d755cfa4-d7c0-46d8-a836-909c45c68890",
+    prose: "Candlelight reveals a sealed doorway amid toppled shelves and blue-lit ruins.",
+    actions: [
+      ActionDefinition(
+        label: "Search Fallen Shelves",
+        id: "4bd5fa38-c88b-41fe-b343-40ecb3938930",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one recovered card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Unseal Glowing Door",
+        id: "b887e3c7-3668-45b1-874a-aa053b273289",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83",
+    prose: "A lone child crosses an immense open book as violet radiance lifts pages toward stars.",
+    actions: [
+      ActionDefinition(
+        label: "Read Familiar Pages",
+        id: "2507001d-80d6-4799-9a08-42f568f9b14e",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card to copy."),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Cross Into Radiance",
+        id: "13c7a2ba-1352-4e12-b161-0a220046fb6d",
+        presentation: ActionPresentation(
+          effect_text: "The next draft or shop site you visit will contain transfigured cards",
+          followup: None,
+        ),
+        effect: TransfigureNextDraftOrShop,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188",
+    prose: "A pillar of flame lifts shattered structures above a ruined city as embers fill darkness.",
+    actions: [
+      ActionDefinition(
+        label: "Feed One Memory",
+        id: "57ca0627-a256-4f1a-aea1-63348508e5da",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+
+      ActionDefinition(
+        label: "Cleanse Every Echo",
+        id: "3e78f870-b864-4704-8c4b-cdcb59e76cc7",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1",
+    prose: "A masked duelist grips a lightning blade amid rain, smoking cables, and skeletal towers.",
+    actions: [
+      ActionDefinition(
+        label: "Ground Fallen Current",
+        id: "08d29b7e-55bf-4b88-b61a-88c2e7f56a88",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Overcharge Every Circuit",
+        id: "d451ccef-f4be-407e-800b-55c04608896b",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5",
+    prose: "A broad manta ray glides through glowing orange clouds, its dark wings outstretched.",
+    actions: [
+      ActionDefinition(
+        label: "Follow the manta ray",
+        id: "9c0080aa-8c00-43a7-b6ed-694d77a062c5",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered ≤2● cost Character.",
+          ),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Glide through glowing clouds",
+        id: "736cbb15-73c5-4efb-b550-0641ea58a24d",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
 ]
