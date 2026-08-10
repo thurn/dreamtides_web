@@ -5460,4 +5460,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "7947e9db-a85e-4277-a42a-8d45f7475295",
+    prose: "A dark-robed samurai carries swords toward a red gate beneath crimson clouds.",
+    actions: [
+      ActionDefinition(
+        label: "Study Their Swords",
+        id: "615df811-503d-4051-8ba3-6a918a875542",
+        presentation: ActionPresentation(
+          effect_text: "Gain Curved Blade",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
+        ),
+        effect: GainDreamsign(dreamsign_id: "246ac924-74dd-4387-9fd6-5bc8e563907a"),
+      ),
+
+      ActionDefinition(
+        label: "Cross the Red Gate",
+        id: "be58a8a4-c10f-4cdd-9278-e27a3a4605ae",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck become the subtype of your choice",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one shared subtype for every Character.",
+          ),
+        ),
+        effect: ChangeSubtypeAll(subtype_options: ["Warrior", "Mage", "Spirit Animal", "Survivor"]),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "a36898f6-707e-4b28-89dc-ec896f484203",
+    prose: "A hovering woman reaches toward a colossal luminous jellyfish as charged tendrils coil among stars.",
+    actions: [
+      ActionDefinition(
+        label: "Touch Radiant Bell",
+        id: "30083494-e757-4512-a52b-2f17715467c1",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+
+      ActionDefinition(
+        label: "Receive Falling Light",
+        id: "d4cb0655-c311-4497-b06a-548a1549ccd4",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "b4754e5a-29e6-418c-bdfa-8e0230a21b7b",
+    prose: "A dark, many-eyed figure spreads feathered arms above shadowed ranks as lightning forks through rain.",
+    actions: [
+      ActionDefinition(
+        label: "Rouse Shadowed Flock",
+        id: "bbaf2e35-d7fd-4d0c-a0f9-6d67af20f6ce",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Accept Nightmare Covenant",
+        id: "cbf843b9-5924-4a54-a8f5-2cdf7a177289",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "b64f0beb-6ba4-4559-b6ab-091c2f60a613",
+    prose: "A crowned rider gallops beneath storm clouds, dragging a flaming sword past circling ravens.",
+    actions: [
+      ActionDefinition(
+        label: "Call Fallen Vanguard",
+        id: "a5827c8a-e39a-4929-a5bc-1bcae5aa4694",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one fallen Warrior to call back.",
+          ),
+        ),
+        effect: DraftCard(predicate: Warrior, offer_count: 4, count: 1),
+      ),
+
+      ActionDefinition(
+        label: "Join Ashen Charge",
+        id: "902931da-6ab3-4987-b345-3317b4ade36a",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "8904714c-38a9-491f-92ce-5cb5ece26ab1",
+    prose: "A vast star vortex spirals above an orange planetary horizon.",
+    actions: [
+      ActionDefinition(
+        label: "Study the star vortex",
+        id: "d49df15d-c49a-4822-84e6-bb1600b617d1",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Enter the star vortex",
+        id: "b4ef0468-075e-49a3-a2b4-5943632102da",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one transfigured Event."),
+        ),
+        effect: TransfiguredCardDraft(predicate: Event, offer_count: 4),
+      ),
+    ],
+  ),
 ]

@@ -5115,8 +5115,140 @@
           "count": 2
         }
       ]
+    },
+    {
+      "cardId": "7947e9db-a85e-4277-a42a-8d45f7475295",
+      "prose": "A dark-robed samurai carries swords toward a red gate beneath crimson clouds.",
+      "action": [
+        {
+          "id": "615df811-503d-4051-8ba3-6a918a875542",
+          "label": "Study Their Swords",
+          "effectText": "Gain Curved Blade",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to replace.",
+          "effectKind": "gain-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "fixed",
+          "dreamsignId": "246ac924-74dd-4387-9fd6-5bc8e563907a"
+        },
+        {
+          "id": "be58a8a4-c10f-4cdd-9278-e27a3a4605ae",
+          "label": "Cross the Red Gate",
+          "effectText": "All characters in your deck become the subtype of your choice",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one shared subtype for every Character.",
+          "effectKind": "change-subtype-all",
+          "canonicalMechanicId": "change-deck-subtype",
+          "subtypeOptions": [
+            "Warrior",
+            "Mage",
+            "Spirit Animal",
+            "Survivor"
+          ]
+        }
+      ]
+    },
+    {
+      "cardId": "a36898f6-707e-4b28-89dc-ec896f484203",
+      "prose": "A hovering woman reaches toward a colossal luminous jellyfish as charged tendrils coil among stars.",
+      "action": [
+        {
+          "id": "30083494-e757-4512-a52b-2f17715467c1",
+          "label": "Touch Radiant Bell",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card, then choose its transfiguration.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "count": 1
+        },
+        {
+          "id": "d4cb0655-c311-4497-b06a-548a1549ccd4",
+          "label": "Receive Falling Light",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "b4754e5a-29e6-418c-bdfa-8e0230a21b7b",
+      "prose": "A dark, many-eyed figure spreads feathered arms above shadowed ranks as lightning forks through rain.",
+      "action": [
+        {
+          "id": "bbaf2e35-d7fd-4d0c-a0f9-6d67af20f6ce",
+          "label": "Rouse Shadowed Flock",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        },
+        {
+          "id": "cbf843b9-5924-4a54-a8f5-2cdf7a177289",
+          "label": "Accept Nightmare Covenant",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "b64f0beb-6ba4-4559-b6ab-091c2f60a613",
+      "prose": "A crowned rider gallops beneath storm clouds, dragging a flaming sword past circling ravens.",
+      "action": [
+        {
+          "id": "a5827c8a-e39a-4929-a5bc-1bcae5aa4694",
+          "label": "Call Fallen Vanguard",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one fallen Warrior to call back.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "902931da-6ab3-4987-b345-3317b4ade36a",
+          "label": "Join Ashen Charge",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        }
+      ]
+    },
+    {
+      "cardId": "8904714c-38a9-491f-92ce-5cb5ece26ab1",
+      "prose": "A vast star vortex spirals above an orange planetary horizon.",
+      "action": [
+        {
+          "id": "d49df15d-c49a-4822-84e6-bb1600b617d1",
+          "label": "Study the star vortex",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "b4ef0468-075e-49a3-a2b4-5943632102da",
+          "label": "Enter the star vortex",
+          "effectText": "Draft a transfigured Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured Event.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        }
+      ]
     }
   ],
-  "contentHash": "92c0e93cb6b45bd5aecba70d11054155e13d6b1fff71ad3126b5e0978637b6e8",
-  "foldHash": "92c0e93cb6b45bd5aecba70d11054155e13d6b1fff71ad3126b5e0978637b6e8"
+  "contentHash": "a37bc15524e950da296e1de94271dc5bbbe34259bf79ea28b3d9dbe4fedc6f72",
+  "foldHash": "a37bc15524e950da296e1de94271dc5bbbe34259bf79ea28b3d9dbe4fedc6f72"
 }
