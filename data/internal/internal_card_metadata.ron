@@ -3538,99 +3538,54 @@ CardMetadataCatalog(
   // Facet registries define the labels and colors available in the card editor.
   tag_facets: [
     FacetDefinition(name: "Ally Audit", color: "#ea580c"),
-
     FacetDefinition(name: "Art OK", color: "#15803d"),
-
     FacetDefinition(name: "Art Rework", color: "#b91c1c"),
-
     FacetDefinition(name: "Cantrips", color: "#7c3aed"),
-
     FacetDefinition(name: "Discover", color: "#1d4ed8"),
-
     FacetDefinition(name: "Elves", color: "#15803d"),
-
     FacetDefinition(name: "Free Sacrifice", color: "#b91c1c"),
-
     FacetDefinition(name: "Merfolk Looter", color: "#0e7490"),
-
     FacetDefinition(name: "Removal", color: "#c2410c"),
-
     FacetDefinition(name: "Thoughtseize", color: "#be185d"),
-
     FacetDefinition(name: "Blood Artist", color: "#7e22ce"),
-
     FacetDefinition(name: "ETB Draw", color: "#0369a1"),
-
     FacetDefinition(name: "Lurrus", color: "#4d7c0f"),
-
     FacetDefinition(name: "Tidehollow Sculler", color: "#9f1239"),
-
     FacetDefinition(name: "Ritual", color: "#a16207"),
-
     FacetDefinition(name: "Vanilla", color: "#525252"),
-
     FacetDefinition(name: "Ichor Wellspring", color: "#0d9488"),
-
     FacetDefinition(name: "Counterspell", color: "#1e3a8a"),
-
     FacetDefinition(name: "Lotus Petal", color: "#ca8a04"),
-
     FacetDefinition(name: "Figment Maker", color: "#7c2d12"),
-
     FacetDefinition(name: "Event Payoff", color: "#6d28d9"),
-
     FacetDefinition(name: "Character Payoff", color: "#2563eb"),
-
     FacetDefinition(name: "Self-Mill", color: "#3f6212"),
-
     FacetDefinition(name: "Storage Removal", color: "#b45309"),
-
     FacetDefinition(name: "Ninja", color: "#334155"),
-
     FacetDefinition(name: "ETB Bounce", color: "#0891b2"),
-
     FacetDefinition(name: "Awaken", color: "#c026d3"),
-
     FacetDefinition(name: "Spirit Lord", color: "#166534"),
-
     FacetDefinition(name: "Spark Scaler", color: "#a21caf"),
-
     FacetDefinition(name: "Score Trigger", color: "#d97706"),
-
     FacetDefinition(name: "tutorial", color: "#ca8a04"),
   ],
 
   tide_facets: [
     FacetDefinition(name: "Abandon", color: "#a52727"),
-
     FacetDefinition(name: "Blink", color: "#a55727"),
-
     FacetDefinition(name: "Celestial Reverie Combo", color: "#a58627"),
-
     FacetDefinition(name: "Cheap Characters", color: "#94a527"),
-
     FacetDefinition(name: "Cindermarch / Shadow Soloist Combo", color: "#66a527"),
-
     FacetDefinition(name: "Discard / Madness", color: "#36a527"),
-
     FacetDefinition(name: "Events", color: "#27a546"),
-
     FacetDefinition(name: "Fading Farewell", color: "#27a577"),
-
     FacetDefinition(name: "Outsiders", color: "#27a5a5"),
-
     FacetDefinition(name: "Reclaim Combo", color: "#2775a5"),
-
     FacetDefinition(name: "Spirit Animals", color: "#2746a5"),
-
     FacetDefinition(name: "Storm", color: "#3827a5"),
-
     FacetDefinition(name: "Survivors", color: "#6627a5"),
-
     FacetDefinition(name: "Wake the Fallen / Shadow March Combo", color: "#9627a5"),
-
     FacetDefinition(name: "Warrior Aggro", color: "#a52786"),
-
     FacetDefinition(name: "Warrior Combo", color: "#a52755"),
   ],
 )

@@ -397,7 +397,6 @@
         instructions: "Choose whether to draw a card or gain energy.",
         choices: [
           PromptChoice(key: "draw-card", label: "Draw a card"),
-
           PromptChoice(key: "gain-energy", label: "Gain {amount}●"),
         ],
         arguments: [PromptArgument(name: "amount", kind: Amount)],

@@ -328,7 +328,19 @@ function segmentHasNamedRecord(nodes) {
   );
 }
 
-function shouldSeparateSegments(group, segments, indentLevel) {
+function segmentWillRenderMultiline(segment, indentLevel, options) {
+  const flat = flatSequence(segment.nodes);
+  if (flat === null) return true;
+  const commaWidth = segment.comma?.token.text.length ?? 0;
+  return (
+    (indentLevel + 1) * options.indentWidth +
+      flat.length +
+      commaWidth >
+    options.printWidth
+  );
+}
+
+function shouldSeparateSegments(group, segments, indentLevel, options) {
   if (segments.length < 2) return false;
 
   const isRecordWithNamedFields =
@@ -341,7 +353,51 @@ function shouldSeparateSegments(group, segments, indentLevel) {
     group.open.text === "[" &&
     segments.every((segment) => segmentHasNamedRecord(segment.nodes));
 
-  return isRecordWithNamedFields || isListOfNamedRecords;
+  const hasMultilineListEntry =
+    isListOfNamedRecords &&
+    segments.some((segment) =>
+      segmentWillRenderMultiline(segment, indentLevel, options),
+    );
+
+  return isRecordWithNamedFields || hasMultilineListEntry;
+}
+
+function wrapLineComment(text, firstLineWidth, continuationLineWidth) {
+  const prefix = /^(?:\/\/[/!]?)\s*/u.exec(text)?.[0] ?? "// ";
+  const words = text.slice(prefix.length).trim().split(/\s+/u);
+  if (words.length === 1 && words[0] === "") return [prefix.trimEnd()];
+
+  const lines = [];
+  let line = prefix;
+  let width = firstLineWidth;
+  for (const word of words) {
+    const separator = line === prefix ? "" : " ";
+    if (
+      line !== prefix &&
+      line.length + separator.length + word.length > width
+    ) {
+      lines.push(line);
+      line = `${prefix}${word}`;
+      width = continuationLineWidth;
+    } else {
+      line += `${separator}${word}`;
+    }
+  }
+  lines.push(line);
+  return lines;
+}
+
+function renderLineComment(writer, token, indentLevel, options) {
+  const indentationWidth = indentLevel * options.indentWidth;
+  const lines = wrapLineComment(
+    token.text,
+    options.printWidth - writer.column,
+    options.printWidth - indentationWidth,
+  );
+  for (let index = 0; index < lines.length; index += 1) {
+    if (index > 0) writer.newline(indentLevel);
+    writer.append(lines[index]);
+  }
 }
 
 function renderSequence(writer, nodes, indentLevel, options) {
@@ -353,7 +409,7 @@ function renderSequence(writer, nodes, indentLevel, options) {
 
     if (token.kind === "line-comment") {
       if (writer.lineHasContent) writer.space();
-      writer.append(token.text);
+      renderLineComment(writer, token, indentLevel, options);
       if (index < nodes.length - 1) writer.newline(indentLevel);
       previous = null;
       continue;
@@ -384,6 +440,7 @@ function renderGroup(writer, group, indentLevel, options) {
     group,
     segments,
     indentLevel,
+    options,
   );
   const hasIntentionalRootBlankLine =
     indentLevel === 0 &&
@@ -436,6 +493,9 @@ function renderGroup(writer, group, indentLevel, options) {
 function comparableNodes(nodes, output = []) {
   for (const node of nodes) {
     if (node.kind === "token") {
+      if (["line-comment", "block-comment"].includes(node.token.kind)) {
+        continue;
+      }
       output.push(`${node.token.kind}\0${node.token.text}`);
       continue;
     }
@@ -481,7 +541,7 @@ export function formatRon(source, options = {}) {
     } else if (token.newlinesBefore > 0 && writer.lineHasContent) {
       writer.newline(0);
     }
-    renderSequence(writer, [node], 0, { printWidth });
+    renderSequence(writer, [node], 0, { indentWidth, printWidth });
     if (isComment && !sawTopLevelValue) sawLeadingFileComment = true;
     else if (!isComment) sawTopLevelValue = true;
   }

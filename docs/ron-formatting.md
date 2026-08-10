@@ -3,10 +3,11 @@
 The repository formats tracked RON sources with two-space indentation and a
 100-column target. Short lists, maps, tuples, and structs remain on one line;
 larger values break at their top-level commas. Lists of named records use a
-blank line between entries, while lists of simple values use ordinary line
-breaks without blank separators. String and comment contents are preserved
-exactly. A leading file comment is separated from the top-level RON value and
-attributes by a blank line.
+blank line between entries when an entry spans multiple lines. Single-line
+entries and simple values use ordinary line breaks without blank separators.
+String literals are preserved exactly even when their contents exceed the
+column target. Line comments wrap at word boundaries. A leading file comment
+is separated from the top-level RON value and attributes by a blank line.
 
 Format every tracked or unignored RON file:
 

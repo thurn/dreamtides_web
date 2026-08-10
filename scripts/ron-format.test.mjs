@@ -34,6 +34,20 @@ second: [line]"#,
     expect(formatted).toContain("/* exact comment */");
   });
 
+  it("wraps line comments without changing string literals", () => {
+    const source = `Catalog(
+      // This guidance is deliberately long enough to wrap cleanly at word boundaries.
+      text: "A deliberately long string literal that remains exactly as authored even beyond the configured width",
+    )`;
+
+    expect(formatRon(source, options)).toBe(`Catalog(
+  // This guidance is deliberately long enough to wrap
+  // cleanly at word boundaries.
+  text: "A deliberately long string literal that remains exactly as authored even beyond the configured width",
+)
+`);
+  });
+
   it("separates a leading file comment from the top-level value", () => {
     const source = `// Catalog guidance.\n// More guidance.\n#![enable(implicit_some)]\nCatalog(value: 1)`;
 
@@ -64,18 +78,15 @@ Catalog(value: 1)
 `);
   });
 
-  it("separates named records in top-level lists with blank lines", () => {
+  it("does not separate single-line named records in top-level lists", () => {
     const source = `[
       CardDefinition(id: "one"),
       CardDefinition(id: "two"),
     ]`;
 
-    expect(formatRon(source, options)).toBe(`[
-  CardDefinition(id: "one"),
-
-  CardDefinition(id: "two"),
-]
-`);
+    expect(formatRon(source, options)).toBe(
+      `[CardDefinition(id: "one"), CardDefinition(id: "two")]\n`,
+    );
   });
 
   it("separates named records in nested lists without separating atom entries", () => {
@@ -97,6 +108,18 @@ Catalog(value: 1)
       id: "two",
       signature_card_ids: ["gamma", "delta"],
     ),
+  ],
+)
+`);
+  });
+
+  it("does not separate single-line named records in a wrapped nested list", () => {
+    const source = `Catalog(cards: [CardCopies(id: "first", copies: 2), CardCopies(id: "second", copies: 1)])`;
+
+    expect(formatRon(source, options)).toBe(`Catalog(
+  cards: [
+    CardCopies(id: "first", copies: 2),
+    CardCopies(id: "second", copies: 1),
   ],
 )
 `);

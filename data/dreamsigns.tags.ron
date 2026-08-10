@@ -4,9 +4,7 @@
 (
   tags: [
     DreamsignTag(name: "Ally Audit", color: "#ea580c"),
-
     DreamsignTag(name: "Tag OK", color: "#15803d"),
-
     DreamsignTag(name: "J10", color: "#1d4ed8"),
   ],
 )

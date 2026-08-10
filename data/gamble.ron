@@ -9,9 +9,7 @@ GambleCatalog(
         enhanced_wager: 45,
         rewards: [
           GateReward(gate: six, essence: 100),
-
           GateReward(gate: nine, essence: 150),
-
           GateReward(gate: jack, essence: 200),
         ],
       ),
@@ -20,12 +18,10 @@ GambleCatalog(
         rules_disclosure: "Choose a gate, then draw. Higher gates are harder and pay more.",
         action_labels: [
           AuthoredText(key: "bet", text: "Bet"),
-
           AuthoredText(key: "leave", text: "Leave"),
         ],
         outcome_labels: [
           AuthoredText(key: "won", text: "Won!"),
-
           AuthoredText(key: "bust", text: "Bust!"),
         ],
         accessibility_description: "Choose one of three gates and draw a card to resolve the wager.",
@@ -69,11 +65,8 @@ GambleCatalog(
         win_essence: 25,
         attempts: [
           AttemptPrice(attempt: 1, standard_cost: 0, enhanced_cost: 0),
-
           AttemptPrice(attempt: 2, standard_cost: 5, enhanced_cost: 0),
-
           AttemptPrice(attempt: 3, standard_cost: 10, enhanced_cost: 0),
-
           AttemptPrice(attempt: 4, standard_cost: 15, enhanced_cost: 0),
         ],
       ),
@@ -82,12 +75,10 @@ GambleCatalog(
         rules_disclosure: "Draw against four successively easier targets. Each success gains essence.",
         action_labels: [
           AuthoredText(key: "draw", text: "Draw"),
-
           AuthoredText(key: "leave", text: "Leave"),
         ],
         outcome_labels: [
           AuthoredText(key: "won", text: "Won"),
-
           AuthoredText(key: "miss", text: "Miss"),
         ],
         accessibility_description: "Draw a card on each rung of a four-step ladder.",
@@ -97,11 +88,8 @@ GambleCatalog(
         strong_pool_limit: 50,
         attempts: [
           LadderAttempt(attempt: 1, threshold: Queen, winning_card_count: 12),
-
           LadderAttempt(attempt: 2, threshold: Ten, winning_card_count: 20),
-
           LadderAttempt(attempt: 3, threshold: Eight, winning_card_count: 28),
-
           LadderAttempt(attempt: 4, threshold: Six, winning_card_count: 36),
         ],
       ),
@@ -116,9 +104,7 @@ GambleCatalog(
         enhanced_wager: 20,
         rewards: [
           TierReward(tier: 1, essence: 60),
-
           TierReward(tier: 2, essence: 140),
-
           TierReward(tier: 3, essence: 300),
         ],
       ),
@@ -127,16 +113,12 @@ GambleCatalog(
         rules_disclosure: "Climb for a larger prize, but a low draw loses the wager.",
         action_labels: [
           AuthoredText(key: "bet", text: "Bet"),
-
           AuthoredText(key: "climb", text: "Climb"),
-
           AuthoredText(key: "take", text: "Take"),
         ],
         outcome_labels: [
           AuthoredText(key: "safe", text: "Safe!"),
-
           AuthoredText(key: "bust", text: "Bust!"),
-
           AuthoredText(key: "prize-at-stake", text: "Prize at stake"),
         ],
         accessibility_description: "Choose whether to climb for a larger prize or take the current prize.",
@@ -146,9 +128,7 @@ GambleCatalog(
         max_retries: 2,
         tiers: [
           StarwayTier(tier: 1, highest_bust_rank: Two, bust_card_count: 4),
-
           StarwayTier(tier: 2, highest_bust_rank: Four, bust_card_count: 12),
-
           StarwayTier(tier: 3, highest_bust_rank: Seven, bust_card_count: 24),
         ],
       ),
@@ -168,16 +148,12 @@ GambleCatalog(
         rules_disclosure: "Choose a card to wager",
         action_labels: [
           AuthoredText(key: "draw", text: "Draw"),
-
           AuthoredText(key: "choose-another", text: "Choose Another Card"),
         ],
         outcome_labels: [
           AuthoredText(key: "transfiguration", text: "Transfigure"),
-
           AuthoredText(key: "essence", text: "Gained"),
-
           AuthoredText(key: "duplication", text: "Duplicated"),
-
           AuthoredText(key: "purge", text: "Purged"),
         ],
         accessibility_description: "Choose a card to wager, then draw one of four suit outcomes.",
@@ -188,11 +164,8 @@ GambleCatalog(
         matching_suit_card_count: 13,
         outcomes: [
           SuitOutcome(suit: spades, outcome: transfiguration),
-
           SuitOutcome(suit: diamonds, outcome: essence),
-
           SuitOutcome(suit: hearts, outcome: duplication),
-
           SuitOutcome(suit: clubs, outcome: purge),
         ],
       ),
@@ -208,22 +181,15 @@ GambleCatalog(
         rules_disclosure: "Closest to 21 Without Going Over",
         action_labels: [
           AuthoredText(key: "deal", text: "Deal"),
-
           AuthoredText(key: "hit", text: "Hit"),
-
           AuthoredText(key: "stand", text: "Stand"),
         ],
         outcome_labels: [
           AuthoredText(key: "player-win", text: "You Win!"),
-
           AuthoredText(key: "dealer-win", text: "Dealer Wins"),
-
           AuthoredText(key: "push", text: "Push"),
-
           AuthoredText(key: "bust", text: "Bust!"),
-
           AuthoredText(key: "wager-returned", text: "Wager Returned"),
-
           AuthoredText(key: "wins", text: "Wins"),
         ],
         accessibility_description: "Deal, hit, or stand against the dealer without going over 21.",
