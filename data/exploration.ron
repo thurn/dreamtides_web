@@ -10379,4 +10379,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81",
+    prose: "Two travelers face a radiant sphere as green mist coils among floating cavern stones.",
+    actions: [
+      ActionDefinition(
+        label: "Split Their Paths",
+        id: "601ea2d5-1e71-4c17-9a4d-d4b0d9dc4734",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 random ≤2● cost Character cards",
+          followup: None,
+        ),
+        effect: GainRandomCards(predicate: CheapCharacter, count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Bind Their Destinies",
+        id: "a6e49a60-829b-4dea-9aac-e16503c780ca",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices and gain 2 copies of it",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered low-cost Character to gain twice.",
+          ),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 2, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "86881031-393f-4359-96f5-3adde6bdd74d",
+    prose: "A haloed figure hovers with white wings above a horned reflection.",
+    actions: [
+      ActionDefinition(
+        label: "Gather Fallen Feathers",
+        id: "e1e8a6cc-4363-4af7-8b73-cc1026eb2f93",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices and gain 2 copies of it",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 2, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Touch Horned Reflection",
+        id: "b6bcb0bc-0c40-4f60-bf1e-30e7c3ab26a7",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "70716dd8-1133-4966-b01b-757ea627874c",
+    prose: "A lone detective presses a pistol against his temple while black wings flee neon rain.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Scattered Clues",
+        id: "8bd953b1-93eb-4b34-9008-596107596217",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one discovered pattern to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Take Up His Case",
+        id: "65ddbb3a-bcba-41c1-a81e-128a8e412dc8",
+        presentation: ActionPresentation(
+          effect_text: "Change a chosen character card to be a Detective",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to become a Detective.",
+          ),
+        ),
+        effect: ChangeSubtypeSelected(predicate: Character, subtype: "Detective", target: Chosen),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "9a18d375-1b6d-4df4-95ec-c7c5c3f36379",
+    prose: "A lone child crosses towering paper stacks while symbol-covered pages spiral into golden light.",
+    actions: [
+      ActionDefinition(
+        label: "Gather flying pages",
+        id: "839b2fd1-4bb6-4b61-a378-eb25863fbc2f",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Solve their hidden pattern",
+        id: "144f5e25-c537-4d71-8dab-7de719eb93a5",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "c7c95f67-a838-4e39-879c-cfbf0591540c",
+    prose: "An astronaut wades beneath a haloed moon while black tendrils loop across alien surf.",
+    actions: [
+      ActionDefinition(
+        label: "Chart Repeating Currents",
+        id: "15c305b1-567d-4efd-a989-9fb778467a10",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices and gain 2 copies of it",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one Event to echo."),
+        ),
+        effect: DraftCard(predicate: Event, count: 2, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Follow Lunar Tide",
+        id: "423e54a7-d0ea-4ac6-8115-dd7be68a5f41",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
 ]

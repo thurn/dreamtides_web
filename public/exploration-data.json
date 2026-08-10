@@ -9671,8 +9671,143 @@
           "essencePerCard": 15
         }
       ]
+    },
+    {
+      "cardId": "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81",
+      "prose": "Two travelers face a radiant sphere as green mist coils among floating cavern stones.",
+      "action": [
+        {
+          "id": "601ea2d5-1e71-4c17-9a4d-d4b0d9dc4734",
+          "label": "Split Their Paths",
+          "effectText": "Gain 2 random ≤2● cost Character cards",
+          "effectKind": "gain-random-cards",
+          "canonicalMechanicId": "gain-card",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "cheap-character",
+          "count": 2
+        },
+        {
+          "id": "a6e49a60-829b-4dea-9aac-e16503c780ca",
+          "label": "Bind Their Destinies",
+          "effectText": "Draft a ≤2● cost Character from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered low-cost Character to gain twice.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 2,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "86881031-393f-4359-96f5-3adde6bdd74d",
+      "prose": "A haloed figure hovers with white wings above a horned reflection.",
+      "action": [
+        {
+          "id": "e1e8a6cc-4363-4af7-8b73-cc1026eb2f93",
+          "label": "Gather Fallen Feathers",
+          "effectText": "Draft a ≤2● cost Character from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "b6bcb0bc-0c40-4f60-bf1e-30e7c3ab26a7",
+          "label": "Touch Horned Reflection",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "70716dd8-1133-4966-b01b-757ea627874c",
+      "prose": "A lone detective presses a pistol against his temple while black wings flee neon rain.",
+      "action": [
+        {
+          "id": "8bd953b1-93eb-4b34-9008-596107596217",
+          "label": "Follow Scattered Clues",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one discovered pattern to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "65ddbb3a-bcba-41c1-a81e-128a8e412dc8",
+          "label": "Take Up His Case",
+          "effectText": "Change a chosen character card to be a Detective",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to become a Detective.",
+          "effectKind": "change-subtype-selected",
+          "canonicalMechanicId": "change-entry-subtype",
+          "selectionPolicyId": "deck-entry-centrality",
+          "predicate": "character",
+          "subtype": "Detective",
+          "deckTarget": "chosen"
+        }
+      ]
+    },
+    {
+      "cardId": "9a18d375-1b6d-4df4-95ec-c7c5c3f36379",
+      "prose": "A lone child crosses towering paper stacks while symbol-covered pages spiral into golden light.",
+      "action": [
+        {
+          "id": "839b2fd1-4bb6-4b61-a378-eb25863fbc2f",
+          "label": "Gather flying pages",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "144f5e25-c537-4d71-8dab-7de719eb93a5",
+          "label": "Solve their hidden pattern",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
+    },
+    {
+      "cardId": "c7c95f67-a838-4e39-879c-cfbf0591540c",
+      "prose": "An astronaut wades beneath a haloed moon while black tendrils loop across alien surf.",
+      "action": [
+        {
+          "id": "15c305b1-567d-4efd-a989-9fb778467a10",
+          "label": "Chart Repeating Currents",
+          "effectText": "Draft an Event from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Event to echo.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "423e54a7-d0ea-4ac6-8115-dd7be68a5f41",
+          "label": "Follow Lunar Tide",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
     }
   ],
-  "contentHash": "752ebb5cc65b1a7847076f68585e7c72b1b7474e6f8e453e3bd2cd39ae9cb6a8",
-  "foldHash": "752ebb5cc65b1a7847076f68585e7c72b1b7474e6f8e453e3bd2cd39ae9cb6a8"
+  "contentHash": "c0e4c21634f91c28cb241fb4217f670cda1c6fce93fa319e7b326a8e5306cd08",
+  "foldHash": "c0e4c21634f91c28cb241fb4217f670cda1c6fce93fa319e7b326a8e5306cd08"
 }
