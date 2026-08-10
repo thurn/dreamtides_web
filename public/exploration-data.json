@@ -9144,8 +9144,144 @@
           "count": 2
         }
       ]
+    },
+    {
+      "cardId": "401fdd0a-356b-49c1-806d-d50617b084d2",
+      "prose": "A radiant spirit climbs flowered steps as violet ribbons curl among glowing trees.",
+      "action": [
+        {
+          "id": "c183f486-9701-456c-ab94-cb53c9c4269a",
+          "label": "Release Repeated Echoes",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "599e17cc-10c3-4ece-a0d5-2b8d17d98041",
+          "label": "Gather Every Grove Shape",
+          "effectText": "All characters in your deck become the subtype of your choice",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one shared subtype for every Character.",
+          "effectKind": "change-subtype-all",
+          "canonicalMechanicId": "change-deck-subtype",
+          "subtypeOptions": [
+            "Warrior",
+            "Mage",
+            "Spirit Animal",
+            "Survivor"
+          ]
+        }
+      ]
+    },
+    {
+      "cardId": "a42fbd1b-7629-48c9-90da-e9a4246867d7",
+      "prose": "A lone warrior stands on shattered rigging, sword lowered toward a blazing horizon.",
+      "action": [
+        {
+          "id": "03be8f4e-f9c9-423c-ab6e-0455cf980a6f",
+          "label": "Rally Dawnlit Crew",
+          "effectText": "Choose one of 2 packs of 3 Warrior cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Warrior pack to add to your deck.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "warrior",
+          "packCount": 2,
+          "packSize": 3
+        },
+        {
+          "id": "ffa72a9e-4858-4a3d-8ba2-5b3f9ae86256",
+          "label": "Raise Sunlit Blade",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad",
+      "prose": "A radiant doorway repels a dissolving skiff, hurling every splinter back across black water.",
+      "action": [
+        {
+          "id": "10c01067-e937-425c-a5ba-7892f3fa0c9b",
+          "label": "Cross Returning Light",
+          "effectText": "Draft a transfigured Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one altered Event.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        },
+        {
+          "id": "2b164f1a-3ec4-4772-a224-12a87d39e8e0",
+          "label": "Salvage Repeating Timber",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        }
+      ]
+    },
+    {
+      "cardId": "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a",
+      "prose": "A red-cloaked warrior lowers a long sword before a radiant gateway encircled by black tendrils.",
+      "action": [
+        {
+          "id": "50651c94-943e-494e-ba09-c3962928b78f",
+          "label": "Muster beyond the gateway",
+          "effectText": "Choose one of 2 packs of 3 Warrior cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one pack to add to your deck.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "warrior",
+          "packCount": 2,
+          "packSize": 3
+        },
+        {
+          "id": "d33d4cc1-d5dc-4ff5-ac11-195a72be9a5e",
+          "label": "Feed grasping tendrils",
+          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "8436eaae-e410-4bfb-89d2-55bebf5a8144",
+      "prose": "A lone soldier races through flooded woods as red fire converges from every side.",
+      "action": [
+        {
+          "id": "e06b551a-28b6-4665-9912-8695c1dd9592",
+          "label": "Draw Their Fire",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to sacrifice for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "be64aeeb-da6f-4b6e-af0b-4c47fda4f2cd",
+          "label": "Sprint for Daylight",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
     }
   ],
-  "contentHash": "400a94282c12298c71b7d08f5b1d9e1ef6b042d8b1839bceface31e0effbfe5c",
-  "foldHash": "400a94282c12298c71b7d08f5b1d9e1ef6b042d8b1839bceface31e0effbfe5c"
+  "contentHash": "22c5847d54c20f8f71029b363ff1480b41d18cb9868fd9d5cfeee0b9045979d6",
+  "foldHash": "22c5847d54c20f8f71029b363ff1480b41d18cb9868fd9d5cfeee0b9045979d6"
 }

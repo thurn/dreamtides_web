@@ -9817,4 +9817,149 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "401fdd0a-356b-49c1-806d-d50617b084d2",
+    prose: "A radiant spirit climbs flowered steps as violet ribbons curl among glowing trees.",
+    actions: [
+      ActionDefinition(
+        label: "Release Repeated Echoes",
+        id: "c183f486-9701-456c-ab94-cb53c9c4269a",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+
+      ActionDefinition(
+        label: "Gather Every Grove Shape",
+        id: "599e17cc-10c3-4ece-a0d5-2b8d17d98041",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck become the subtype of your choice",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one shared subtype for every Character.",
+          ),
+        ),
+        effect: ChangeSubtypeAll(subtype_options: ["Warrior", "Mage", "Spirit Animal", "Survivor"]),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "a42fbd1b-7629-48c9-90da-e9a4246867d7",
+    prose: "A lone warrior stands on shattered rigging, sword lowered toward a blazing horizon.",
+    actions: [
+      ActionDefinition(
+        label: "Rally Dawnlit Crew",
+        id: "03be8f4e-f9c9-423c-ab6e-0455cf980a6f",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 2 packs of 3 Warrior cards to add to your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one Warrior pack to add to your deck.",
+          ),
+        ),
+        effect: ChoosePack(predicate: Warrior, pack_count: 2, pack_size: 3),
+      ),
+
+      ActionDefinition(
+        label: "Raise Sunlit Blade",
+        id: "ffa72a9e-4858-4a3d-8ba2-5b3f9ae86256",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad",
+    prose: "A radiant doorway repels a dissolving skiff, hurling every splinter back across black water.",
+    actions: [
+      ActionDefinition(
+        label: "Cross Returning Light",
+        id: "10c01067-e937-425c-a5ba-7892f3fa0c9b",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one altered Event."),
+        ),
+        effect: TransfiguredCardDraft(predicate: Event, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Salvage Repeating Timber",
+        id: "2b164f1a-3ec4-4772-a224-12a87d39e8e0",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a",
+    prose: "A red-cloaked warrior lowers a long sword before a radiant gateway encircled by black tendrils.",
+    actions: [
+      ActionDefinition(
+        label: "Muster beyond the gateway",
+        id: "50651c94-943e-494e-ba09-c3962928b78f",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 2 packs of 3 Warrior cards to add to your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one pack to add to your deck.",
+          ),
+        ),
+        effect: ChoosePack(predicate: Warrior, pack_count: 2, pack_size: 3),
+      ),
+
+      ActionDefinition(
+        label: "Feed grasping tendrils",
+        id: "d33d4cc1-d5dc-4ff5-ac11-195a72be9a5e",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "8436eaae-e410-4bfb-89d2-55bebf5a8144",
+    prose: "A lone soldier races through flooded woods as red fire converges from every side.",
+    actions: [
+      ActionDefinition(
+        label: "Draw Their Fire",
+        id: "e06b551a-28b6-4665-9912-8695c1dd9592",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to sacrifice for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Sprint for Daylight",
+        id: "be64aeeb-da6f-4b6e-af0b-4c47fda4f2cd",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
 ]
