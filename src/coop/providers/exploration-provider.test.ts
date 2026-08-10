@@ -608,13 +608,13 @@ describe("Exploration provider", () => {
 
   it("excludes ineligible bulk targets and rejects tampered target snapshots atomically", () => {
     const action: ExplorationActionContent = {
-      id: "bulk-inspired",
+      id: "bulk-hastened",
       label: "Enter Spiraling Light",
       effectText: "Spend essence to transfigure Events.",
       effectKind: "transfigure-all-for-essence",
       essence: 100,
       predicate: "event",
-      transfiguration: "Inspired",
+      transfiguration: "Hastened",
     };
     const fallback: ExplorationActionContent = {
       id: "fallback",
@@ -635,14 +635,6 @@ describe("Exploration provider", () => {
     const content: JourneyContent = {
       ...base,
       cardDatabase: new Map(base.cardDatabase).set(102, unsupported),
-      transfigurationData: {
-        ...base.transfigurationData,
-        forms: base.transfigurationData.forms.map((form) =>
-          form.id === "Inspired"
-            ? { ...form, eligibility: { kind: "eventWithoutFast" as const } }
-            : form,
-        ),
-      },
     };
     const prepared = buildState(content, {
       ...journeyFixture(content),
@@ -657,7 +649,7 @@ describe("Exploration provider", () => {
         {
           entryId: "already-transfigured",
           cardNumber: 101,
-          transfiguration: "Inspired",
+          transfiguration: "Hastened",
           isBane: false,
         },
         {
