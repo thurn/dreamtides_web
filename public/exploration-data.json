@@ -2763,8 +2763,148 @@
           "count": 1
         }
       ]
+    },
+    {
+      "cardId": "cbabe603-1333-42bd-85c0-555c664b60b3",
+      "prose": "A pale mourner sheds blue tears while mothlike lights drift through tangled black hair.",
+      "action": [
+        {
+          "id": "aca2cb35-6c30-4056-8492-addcf4f34609",
+          "label": "Release Final Tear",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to dissolve for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "ee57e8bb-03cb-46d5-a444-d16d7df8974b",
+          "label": "Gather Blue Echoes",
+          "effectText": "Gain 2 copies of a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to gain 2 copies of.",
+          "effectKind": "copy-selected-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "count": 2,
+          "deckTarget": "chosen"
+        }
+      ]
+    },
+    {
+      "cardId": "f4b34207-2ad4-421b-8798-9c20320607ae",
+      "prose": "A child opens a ribboned box as a colossal glowing brain rises through curling smoke.",
+      "action": [
+        {
+          "id": "7498e9fb-f13d-407d-abc0-7bbcda84f057",
+          "label": "Trace Branching Thoughts",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card to remember.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "7d2ab950-5059-4d2c-88bc-65596364eb50",
+          "label": "Unseal Inner Power",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card, then reveal its inner form.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "cardId": "41c14462-86b9-42a4-8a61-859d59ffa466",
+      "prose": "A lone warrior faces a colossal blade dissolving beneath lightning and drifting black fragments.",
+      "action": [
+        {
+          "id": "18f296be-0164-45e8-ab72-9a75af101b0b",
+          "label": "Reforge Shattered Blade",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card, then choose its transfiguration.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "count": 1
+        },
+        {
+          "count": 1,
+          "id": "07f390d1-1bc1-445b-8ec5-f6d691357d9d",
+          "label": "Pronounce Warrior Judgment",
+          "effectText": "Purge a chosen Warrior",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Warrior to condemn.",
+          "effectKind": "purge-selected",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "purge-misfit",
+          "predicate": "warrior"
+        }
+      ]
+    },
+    {
+      "cardId": "f10a9ba9-f5eb-4011-9426-a89c5de3b550",
+      "prose": "A lone survivor confronts a burning translucent wall as stones drift beyond its frame.",
+      "action": [
+        {
+          "id": "02cd4cba-658c-4c99-8d9a-e0ae01067d65",
+          "label": "Send Someone Beyond",
+          "effectText": "Purge a chosen Character card and gain a random Character replacement",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to send beyond.",
+          "effectKind": "replace-selected",
+          "canonicalMechanicId": "replace-deck-entry",
+          "selectionPolicyId": "card-fit-quality",
+          "predicate": "character"
+        },
+        {
+          "id": "419ec21e-2403-49b7-acf8-c9ff4bd47089",
+          "label": "Cross Burning Veil",
+          "effectText": "Draft a transfigured ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured ≤2● cost Character.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "7be2e6d7-abff-4c44-a0c3-35460da1693c",
+      "prose": "A sword-wielding warrior springs from a paneled wall, dark hair streaming.",
+      "action": [
+        {
+          "id": "20bef881-164e-4061-af5b-6da04ba69d88",
+          "label": "Study warrior's sword",
+          "effectText": "Gain Curved Blade",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to replace.",
+          "effectKind": "gain-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "fixed",
+          "dreamsignId": "246ac924-74dd-4387-9fd6-5bc8e563907a"
+        },
+        {
+          "id": "21023675-4a7e-4f5e-afed-56f70c0d68cd",
+          "label": "Kick from paneled wall",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
     }
   ],
-  "contentHash": "eb1582b2ce37740731c9e58cf9a47a1a9b48ea0d77626debc13cca792098d20e",
-  "foldHash": "eb1582b2ce37740731c9e58cf9a47a1a9b48ea0d77626debc13cca792098d20e"
+  "contentHash": "5ce342c086e38dd1209c8051efeedb7cc7e7c4f5f46c4602f5658760b50d7c6e",
+  "foldHash": "5ce342c086e38dd1209c8051efeedb7cc7e7c4f5f46c4602f5658760b50d7c6e"
 }
