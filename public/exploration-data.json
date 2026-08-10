@@ -8501,8 +8501,129 @@
           "offerCount": 4
         }
       ]
+    },
+    {
+      "cardId": "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf",
+      "prose": "A young guitarist strums from a broad branch above reflective water in a sunlit autumn forest.",
+      "action": [
+        {
+          "id": "1990f8a2-21c3-4492-a0f3-d0144909f1d8",
+          "label": "Follow Waking Melody",
+          "effectText": "Gain a random dreamsign",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to release if needed.",
+          "effectKind": "gain-random-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "dreamsign-match"
+        },
+        {
+          "id": "2b68abf4-20a2-4002-9eee-7007ac874b40",
+          "label": "Carry Dawn's Chorus",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "bbf83d18-81b6-48c8-886f-4b9f0feb599f",
+      "prose": "A hooded spearbearer confronts a colossal white wolf as stones hover above frozen ruins.",
+      "action": [
+        {
+          "id": "b806c4a6-2cd3-4426-8e83-327e39437ee0",
+          "label": "Answer Wolf Vision",
+          "effectText": "Draft a transfigured Spirit Animal from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured Spirit Animal.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "offerCount": 4
+        },
+        {
+          "id": "1663a82a-e0f6-4979-b90f-39f46037eb2d",
+          "label": "Study Frozen Omens",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "6b739127-1a23-4c5d-877a-8829dd7a8b8c",
+      "prose": "A masked cyborg dissolves into colored fragments while red lenses burn against pale fog.",
+      "action": [
+        {
+          "id": "d0827a70-ec6d-48c8-8406-4840c1793070",
+          "label": "Stabilize Red Core",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "78165b3f-d165-43d8-a18b-6b56affad906",
+          "label": "Trace Scattered Signal",
+          "effectText": "The next draft or shop site you visit will contain transfigured cards",
+          "effectKind": "transfigure-next-draft-or-shop",
+          "canonicalMechanicId": "next-site-transfiguration"
+        }
+      ]
+    },
+    {
+      "cardId": "7ffb1179-6c94-4f80-9613-ece2b799f19d",
+      "prose": "Headtaker's many faces kindle turquoise; each severed crown nourishes those remaining.",
+      "action": [
+        {
+          "id": "5cbf127a-b64f-46c6-9fc6-5149538c5da8",
+          "label": "Sever a Crown",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to sever for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "d244c4b0-3a78-4961-a975-ebadcae7df6f",
+          "label": "Stand as Many",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "88994286-96db-4ba6-a660-b30ae9b52cff",
+      "prose": "A torchbearer confronts towering horned smoke-beasts amid sickly green haze.",
+      "action": [
+        {
+          "id": "cb02245c-4aa0-4961-8262-7bb9052916bc",
+          "label": "Feed the Smoke",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to feed the smoke for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "2f58737a-51b7-45b7-aaf6-875680d96c1b",
+          "label": "Raise the Torch",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
     }
   ],
-  "contentHash": "c7a3229ba0b869829717e1a89fbe7b6f51579d6bf87d37362a4447abfb1a5a52",
-  "foldHash": "c7a3229ba0b869829717e1a89fbe7b6f51579d6bf87d37362a4447abfb1a5a52"
+  "contentHash": "015a12ac680515439e57a3e5a8411c79090144c5bc262f7ae1c8a0e5de7dc3cf",
+  "foldHash": "015a12ac680515439e57a3e5a8411c79090144c5bc262f7ae1c8a0e5de7dc3cf"
 }
