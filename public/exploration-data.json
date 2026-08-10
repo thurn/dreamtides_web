@@ -1709,8 +1709,143 @@
           "count": 2
         }
       ]
+    },
+    {
+      "cardId": "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a",
+      "prose": "An armored standard bearer raises a luminous banner beneath a vast ringed planet.",
+      "action": [
+        {
+          "id": "18842f04-1d3e-42c7-b421-ef3f6ae3efe4",
+          "label": "Answer Banner's Call",
+          "effectText": "Choose one of 2 packs of 3 Character cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one pack to add to your deck.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "character",
+          "packCount": 2,
+          "packSize": 3
+        },
+        {
+          "id": "41c670d1-c12c-4152-a184-05a4cbed2be9",
+          "label": "Raise Luminous Standard",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "19aeffa6-fd1b-4b8f-bb0c-c35659521976",
+      "prose": "A hooded child reaches toward a black cat amid snow, cables, and ruined towers.",
+      "action": [
+        {
+          "id": "a90ef06a-7e4a-4aa6-b5c5-90d2b83d7252",
+          "label": "Shelter Alley Stray",
+          "effectText": "Gain Black Cat",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to replace.",
+          "effectKind": "gain-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "fixed",
+          "dreamsignId": "257c160f-7d70-4ebd-bb0f-f83e61907310"
+        },
+        {
+          "id": "c9a6b1a0-6340-48cb-b30c-a0917271546a",
+          "label": "Continue Through Ruins",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "78673e2b-a6d1-43de-8850-3d3327de5cc6",
+      "prose": "Fiery spirits stream skyward around a lone warrior standing amid smoldering branches.",
+      "action": [
+        {
+          "id": "bb8d9d56-cb78-44a9-8bef-6b4c87c20ec8",
+          "label": "Bind Rising Spirits",
+          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        },
+        {
+          "id": "b7ee400f-1516-4d59-acf2-7a201ef256fb",
+          "label": "Call Warriors Home",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005",
+      "prose": "A masked survivor trails black cables through pale city light, red embers glowing beneath armor.",
+      "action": [
+        {
+          "id": "1ebb9a53-fb79-4cf2-a9a7-2a00a6fb4b8c",
+          "label": "Kindle a Last Soul",
+          "effectText": "Purge a random Survivor. Every other Survivor in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Survivor",
+          "sparkBonus": 1
+        },
+        {
+          "id": "c7d270b5-db54-4921-a085-4b91548c31aa",
+          "label": "Follow Dawn's Passage",
+          "effectText": "Draft a Survivor from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Survivor.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "survivor",
+          "count": 1,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "491e4233-0911-46ed-bced-0498e69b5bba",
+      "prose": "A hooded figure extends one hand amid hard rain and orange firelight.",
+      "action": [
+        {
+          "id": "05183178-7ae0-4f3a-ba9c-e3bbec631f22",
+          "label": "Take their hand",
+          "effectText": "Draft an Event from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Event to gain twice.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "496eb06b-c9a2-44bd-8e3e-a047b2043af2",
+          "label": "Release their hand",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
     }
   ],
-  "contentHash": "9bd3a5e4cf5b4917c30fc15cf2fc0204ffadd8bc1cae782bc3768cad315c4be2",
-  "foldHash": "9bd3a5e4cf5b4917c30fc15cf2fc0204ffadd8bc1cae782bc3768cad315c4be2"
+  "contentHash": "99209de71b636cb027552e976d6f2419a429beaed3125a827cac15889e7e1c89",
+  "foldHash": "99209de71b636cb027552e976d6f2419a429beaed3125a827cac15889e7e1c89"
 }

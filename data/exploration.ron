@@ -1794,4 +1794,140 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a",
+    prose: "An armored standard bearer raises a luminous banner beneath a vast ringed planet.",
+    actions: [
+      ActionDefinition(
+        label: "Answer Banner's Call",
+        id: "18842f04-1d3e-42c7-b421-ef3f6ae3efe4",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 2 packs of 3 Character cards to add to your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one pack to add to your deck.",
+          ),
+        ),
+        effect: ChoosePack(predicate: Character, pack_count: 2, pack_size: 3),
+      ),
+
+      ActionDefinition(
+        label: "Raise Luminous Standard",
+        id: "41c670d1-c12c-4152-a184-05a4cbed2be9",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "19aeffa6-fd1b-4b8f-bb0c-c35659521976",
+    prose: "A hooded child reaches toward a black cat amid snow, cables, and ruined towers.",
+    actions: [
+      ActionDefinition(
+        label: "Shelter Alley Stray",
+        id: "a90ef06a-7e4a-4aa6-b5c5-90d2b83d7252",
+        presentation: ActionPresentation(
+          effect_text: "Gain Black Cat",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
+        ),
+        effect: GainDreamsign(dreamsign_id: "257c160f-7d70-4ebd-bb0f-f83e61907310"),
+      ),
+
+      ActionDefinition(
+        label: "Continue Through Ruins",
+        id: "c9a6b1a0-6340-48cb-b30c-a0917271546a",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "78673e2b-a6d1-43de-8850-3d3327de5cc6",
+    prose: "Fiery spirits stream skyward around a lone warrior standing amid smoldering branches.",
+    actions: [
+      ActionDefinition(
+        label: "Bind Rising Spirits",
+        id: "bb8d9d56-cb78-44a9-8bef-6b4c87c20ec8",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Call Warriors Home",
+        id: "b7ee400f-1516-4d59-acf2-7a201ef256fb",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005",
+    prose: "A masked survivor trails black cables through pale city light, red embers glowing beneath armor.",
+    actions: [
+      ActionDefinition(
+        label: "Kindle a Last Soul",
+        id: "1ebb9a53-fb79-4cf2-a9a7-2a00a6fb4b8c",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Survivor. Every other Survivor in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Survivor", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Follow Dawn's Passage",
+        id: "c7d270b5-db54-4921-a085-4b91548c31aa",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Survivor from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Survivor."),
+        ),
+        effect: DraftCard(predicate: Survivor, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "491e4233-0911-46ed-bced-0498e69b5bba",
+    prose: "A hooded figure extends one hand amid hard rain and orange firelight.",
+    actions: [
+      ActionDefinition(
+        label: "Take their hand",
+        id: "05183178-7ae0-4f3a-ba9c-e3bbec631f22",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices and gain 2 copies of it",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered Event to gain twice.",
+          ),
+        ),
+        effect: DraftCard(predicate: Event, count: 2, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Release their hand",
+        id: "496eb06b-c9a2-44bd-8e3e-a047b2043af2",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
 ]
