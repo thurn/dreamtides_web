@@ -311,14 +311,21 @@ TutorialCatalog(
       "a57f1276-3fb6-4527-b538-953fbace35cf",
       "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
     ],
-    // Stable semantic roles for cards reused by the scripted sequence, loading screen, and live
+    // Constants for cards used by tutorial presentation, scripted actions, and the live battle
     // handoff.
-    scripted_card_roles: TutorialScriptedCardRoles(
-      player_card_id: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
-      opponent_card_id: "229ab3a1-3720-41a2-924c-8fe112188f8e",
-      enemy_starter_card_id: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
-      loading_event_card_id: "944e15d2-d680-4ebe-8d18-36826f4b1535",
-      dreamwell_card_id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+    tutorial_card_constants: TutorialCardConstants(
+      // Character controlled by the player throughout the scripted tutorial sequence.
+      tutorial_player_character_card_id: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+      // Character controlled by the opponent throughout the scripted tutorial sequence.
+      tutorial_opponent_character_card_id: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+      // Character shown beside the event card on the tutorial loading screen.
+      loading_screen_character_card_id: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+      // Event shown beside the character card on the tutorial loading screen.
+      loading_screen_event_card_id: "944e15d2-d680-4ebe-8d18-36826f4b1535",
+      // Enemy character materialized into the back rank when the live battle begins.
+      handoff_enemy_character_card_id: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+      // Dreamwell card featured during the scripted tutorial sequence.
+      tutorial_dreamwell_card_id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
     ),
     // Exact rules-engine state created when the scripted sequence hands control to the player.
     handoff: TutorialBattleHandoff(
@@ -343,9 +350,9 @@ TutorialCatalog(
       // Card roles to materialize into the live board; Deck consumes a starter-deck copy and
       // Created mints one.
       card_placements: [
-        Rank(card: Player, side: Player, source: Deck, slot: Front(4)),
-        Rank(card: EnemyStarter, side: Enemy, source: Deck, slot: Back(5)),
-        Void(card: Opponent, side: Enemy, source: Created),
+        Rank(card: TutorialPlayerCharacter, side: Player, source: Deck, slot: Front(4)),
+        Rank(card: HandoffEnemyCharacter, side: Enemy, source: Deck, slot: Back(5)),
+        Void(card: TutorialOpponentCharacter, side: Enemy, source: Created),
       ],
     ),
     ai_action_overrides: [

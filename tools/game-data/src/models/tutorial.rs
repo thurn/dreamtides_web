@@ -140,7 +140,7 @@ pub struct TutorialBattleConfiguration {
     pub forced_enemy_draws: Vec<EntityId>,
     /// Complete shared Dreamwell prefix, including pre-handoff scripted draws.
     pub dreamwell_draws: Vec<EntityId>,
-    pub scripted_card_roles: TutorialScriptedCardRoles,
+    pub tutorial_card_constants: TutorialCardConstants,
     pub handoff: TutorialBattleHandoff,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub ai_action_overrides: Vec<TutorialAiActionOverride>,
@@ -148,12 +148,13 @@ pub struct TutorialBattleConfiguration {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct TutorialScriptedCardRoles {
-    pub player_card_id: EntityId,
-    pub opponent_card_id: EntityId,
-    pub enemy_starter_card_id: EntityId,
-    pub loading_event_card_id: EntityId,
-    pub dreamwell_card_id: EntityId,
+pub struct TutorialCardConstants {
+    pub tutorial_player_character_card_id: EntityId,
+    pub tutorial_opponent_character_card_id: EntityId,
+    pub loading_screen_character_card_id: EntityId,
+    pub loading_screen_event_card_id: EntityId,
+    pub handoff_enemy_character_card_id: EntityId,
+    pub tutorial_dreamwell_card_id: EntityId,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -196,10 +197,10 @@ pub enum TutorialHandoffPlacement {
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub enum TutorialScriptedCardRole {
-    Player,
-    Opponent,
-    EnemyStarter,
-    LoadingEvent,
+    TutorialPlayerCharacter,
+    TutorialOpponentCharacter,
+    HandoffEnemyCharacter,
+    LoadingScreenEvent,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
@@ -613,6 +614,11 @@ fn validate_battle(battle: &TutorialBattleConfiguration) -> Result<()> {
         !battle.starter_deck.is_empty(),
         "Tutorial starter deck must not be empty"
     );
+    ensure!(
+        battle.tutorial_card_constants.loading_screen_character_card_id
+            != battle.tutorial_card_constants.handoff_enemy_character_card_id,
+        "Tutorial loading-screen and handoff enemy characters must use different card UUIDs"
+    );
     for copies in battle.starter_deck.values() {
         ensure!(*copies > 0, "Tutorial starter deck copies must be positive");
     }
@@ -754,7 +760,7 @@ struct CompatibilityBattle {
     forced_enemy_draws: Vec<String>,
     dreamwell_draws: Vec<String>,
     starter_deck: Vec<CompatibilityStarterDeckEntry>,
-    featured_cards: CompatibilityFeaturedCards,
+    tutorial_card_constants: CompatibilityTutorialCardConstants,
     handoff: CompatibilityHandoff,
     ai_action_overrides: Vec<CompatibilityAiActionOverride>,
 }
@@ -768,12 +774,13 @@ struct CompatibilityStarterDeckEntry {
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
-struct CompatibilityFeaturedCards {
-    player_card_id: String,
-    opponent_card_id: String,
-    enemy_starter_card_id: String,
-    loading_event_card_id: String,
-    dreamwell_card_id: String,
+struct CompatibilityTutorialCardConstants {
+    tutorial_player_character_card_id: String,
+    tutorial_opponent_character_card_id: String,
+    loading_screen_character_card_id: String,
+    loading_screen_event_card_id: String,
+    handoff_enemy_character_card_id: String,
+    tutorial_dreamwell_card_id: String,
 }
 
 #[derive(Serialize)]
@@ -1014,12 +1021,31 @@ fn lower_battle(value: TutorialBattleConfiguration) -> Result<CompatibilityBattl
                 copies,
             })
             .collect(),
-        featured_cards: CompatibilityFeaturedCards {
-            player_card_id: value.scripted_card_roles.player_card_id.to_string(),
-            opponent_card_id: value.scripted_card_roles.opponent_card_id.to_string(),
-            enemy_starter_card_id: value.scripted_card_roles.enemy_starter_card_id.to_string(),
-            loading_event_card_id: value.scripted_card_roles.loading_event_card_id.to_string(),
-            dreamwell_card_id: value.scripted_card_roles.dreamwell_card_id.to_string(),
+        tutorial_card_constants: CompatibilityTutorialCardConstants {
+            tutorial_player_character_card_id: value
+                .tutorial_card_constants
+                .tutorial_player_character_card_id
+                .to_string(),
+            tutorial_opponent_character_card_id: value
+                .tutorial_card_constants
+                .tutorial_opponent_character_card_id
+                .to_string(),
+            loading_screen_character_card_id: value
+                .tutorial_card_constants
+                .loading_screen_character_card_id
+                .to_string(),
+            loading_screen_event_card_id: value
+                .tutorial_card_constants
+                .loading_screen_event_card_id
+                .to_string(),
+            handoff_enemy_character_card_id: value
+                .tutorial_card_constants
+                .handoff_enemy_character_card_id
+                .to_string(),
+            tutorial_dreamwell_card_id: value
+                .tutorial_card_constants
+                .tutorial_dreamwell_card_id
+                .to_string(),
         },
         handoff: CompatibilityHandoff {
             active_side: side(value.handoff.active_side),
@@ -1271,10 +1297,10 @@ fn side(value: TutorialSide) -> &'static str {
 }
 fn featured_role(value: TutorialScriptedCardRole) -> &'static str {
     match value {
-        TutorialScriptedCardRole::Player => "player",
-        TutorialScriptedCardRole::Opponent => "opponent",
-        TutorialScriptedCardRole::EnemyStarter => "enemyStarter",
-        TutorialScriptedCardRole::LoadingEvent => "loadingEvent",
+        TutorialScriptedCardRole::TutorialPlayerCharacter => "tutorialPlayerCharacter",
+        TutorialScriptedCardRole::TutorialOpponentCharacter => "tutorialOpponentCharacter",
+        TutorialScriptedCardRole::HandoffEnemyCharacter => "handoffEnemyCharacter",
+        TutorialScriptedCardRole::LoadingScreenEvent => "loadingScreenEvent",
     }
 }
 fn placement_source(value: TutorialPlacementSource) -> &'static str {
@@ -1827,12 +1853,19 @@ mod tests {
                 forced_player_draws: vec![],
                 forced_enemy_draws: vec![entity("00000000-0000-4000-8000-000000000102")],
                 dreamwell_draws: vec![entity("00000000-0000-4000-8000-000000000201")],
-                scripted_card_roles: TutorialScriptedCardRoles {
-                    player_card_id: entity("00000000-0000-4000-8000-000000000101"),
-                    opponent_card_id: entity("00000000-0000-4000-8000-000000000102"),
-                    enemy_starter_card_id: entity("00000000-0000-4000-8000-000000000103"),
-                    loading_event_card_id: entity("00000000-0000-4000-8000-000000000104"),
-                    dreamwell_card_id: entity("00000000-0000-4000-8000-000000000201"),
+                tutorial_card_constants: TutorialCardConstants {
+                    tutorial_player_character_card_id: entity(
+                        "00000000-0000-4000-8000-000000000101",
+                    ),
+                    tutorial_opponent_character_card_id: entity(
+                        "00000000-0000-4000-8000-000000000102",
+                    ),
+                    loading_screen_character_card_id: entity(
+                        "00000000-0000-4000-8000-000000000105",
+                    ),
+                    loading_screen_event_card_id: entity("00000000-0000-4000-8000-000000000104"),
+                    handoff_enemy_character_card_id: entity("00000000-0000-4000-8000-000000000103"),
+                    tutorial_dreamwell_card_id: entity("00000000-0000-4000-8000-000000000201"),
                 },
                 handoff: TutorialBattleHandoff {
                     active_side: TutorialSide::Enemy,
@@ -1855,13 +1888,13 @@ mod tests {
                     },
                     card_placements: vec![
                         TutorialHandoffPlacement::Rank {
-                            card: TutorialScriptedCardRole::LoadingEvent,
+                            card: TutorialScriptedCardRole::LoadingScreenEvent,
                             side: TutorialSide::Player,
                             source: TutorialPlacementSource::Deck,
                             slot: TutorialRankSlot::Back(1),
                         },
                         TutorialHandoffPlacement::Void {
-                            card: TutorialScriptedCardRole::Opponent,
+                            card: TutorialScriptedCardRole::TutorialOpponentCharacter,
                             side: TutorialSide::Enemy,
                             source: TutorialPlacementSource::Created,
                         },
@@ -2060,6 +2093,21 @@ mod tests {
                 .unwrap_err()
                 .to_string()
                 .contains("outside the draw list")
+        );
+
+        let mut reused_loading_character = synthetic_catalog();
+        reused_loading_character
+            .battle
+            .tutorial_card_constants
+            .loading_screen_character_card_id = reused_loading_character
+            .battle
+            .tutorial_card_constants
+            .handoff_enemy_character_card_id;
+        assert!(
+            lower(reused_loading_character)
+                .unwrap_err()
+                .to_string()
+                .contains("loading-screen and handoff enemy characters")
         );
     }
 

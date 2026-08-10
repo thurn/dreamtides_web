@@ -12,8 +12,8 @@ import type {
   TutorialTriggerDefinition,
   TutorialTriggerDelay,
   TutorialTriggerEvent,
-  TutorialFeaturedCardRole,
-  TutorialFeaturedCards,
+  TutorialCardConstantRole,
+  TutorialCardConstants,
 } from "../types/tutorial";
 import { confirmSourceRevision } from "../editor/source-revision";
 import { parseTutorialBattleAiActionOverrides } from "../types/tutorial-ai-action-overrides";
@@ -24,9 +24,9 @@ import {
   assertTutorialBattleConfigurationContracts,
   assertTutorialDeckSufficiency,
   isTutorialBattlePhase,
-  isTutorialFeaturedCardRole,
+  isTutorialCardConstantRole,
   isTutorialHandoffSlotLegal,
-  tutorialFeaturedCardId as resolveTutorialFeaturedCardId,
+  tutorialCardConstantId as resolveTutorialCardConstantId,
 } from "../../scripts/tutorial-battle-contracts.mjs";
 
 const ACTION_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
@@ -59,28 +59,35 @@ function parseSide(value: unknown, field: string): "player" | "enemy" {
   throw new Error(`Tutorial battle ${field} must be player or enemy.`);
 }
 
-function parseFeaturedCards(value: unknown): TutorialFeaturedCards {
+function parseTutorialCardConstants(value: unknown): TutorialCardConstants {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
-    throw new Error("Tutorial battle must contain a featuredCards table.");
+    throw new Error("Tutorial battle must contain a tutorialCardConstants table.");
   }
   const record = value as Record<string, unknown>;
   return {
-    playerCardId: parseUuid(record.playerCardId, "featuredCards.playerCardId"),
-    opponentCardId: parseUuid(
-      record.opponentCardId,
-      "featuredCards.opponentCardId",
+    tutorialPlayerCharacterCardId: parseUuid(
+      record.tutorialPlayerCharacterCardId,
+      "tutorialCardConstants.tutorialPlayerCharacterCardId",
     ),
-    enemyStarterCardId: parseUuid(
-      record.enemyStarterCardId,
-      "featuredCards.enemyStarterCardId",
+    tutorialOpponentCharacterCardId: parseUuid(
+      record.tutorialOpponentCharacterCardId,
+      "tutorialCardConstants.tutorialOpponentCharacterCardId",
     ),
-    loadingEventCardId: parseUuid(
-      record.loadingEventCardId,
-      "featuredCards.loadingEventCardId",
+    loadingScreenCharacterCardId: parseUuid(
+      record.loadingScreenCharacterCardId,
+      "tutorialCardConstants.loadingScreenCharacterCardId",
     ),
-    dreamwellCardId: parseUuid(
-      record.dreamwellCardId,
-      "featuredCards.dreamwellCardId",
+    loadingScreenEventCardId: parseUuid(
+      record.loadingScreenEventCardId,
+      "tutorialCardConstants.loadingScreenEventCardId",
+    ),
+    handoffEnemyCharacterCardId: parseUuid(
+      record.handoffEnemyCharacterCardId,
+      "tutorialCardConstants.handoffEnemyCharacterCardId",
+    ),
+    tutorialDreamwellCardId: parseUuid(
+      record.tutorialDreamwellCardId,
+      "tutorialCardConstants.tutorialDreamwellCardId",
     ),
   };
 }
@@ -170,7 +177,7 @@ function parseHandoffPlacements(value: unknown) {
       );
     }
     const record = candidate as Record<string, unknown>;
-    if (!isTutorialFeaturedCardRole(record.cardRole)) {
+    if (!isTutorialCardConstantRole(record.cardRole)) {
       throw new Error(
         `Tutorial battle handoff placement ${String(index + 1)} has an invalid cardRole.`,
       );
@@ -265,7 +272,7 @@ export function parseTutorialBattleConfiguration(
   }
   const record = value as Record<string, unknown>;
   const battle = {
-    featuredCards: parseFeaturedCards(record.featuredCards),
+    tutorialCardConstants: parseTutorialCardConstants(record.tutorialCardConstants),
     playerDreamAvatarId: parseUuid(
       record.playerDreamAvatarId,
       "playerDreamAvatarId",
@@ -307,11 +314,11 @@ export function parseTutorialBattleConfiguration(
 }
 
 /** Resolve a stable authored role to its configured card UUID. */
-export function tutorialFeaturedCardId(
-  featuredCards: TutorialFeaturedCards,
-  role: TutorialFeaturedCardRole,
+export function tutorialCardConstantId(
+  tutorialCardConstants: TutorialCardConstants,
+  role: TutorialCardConstantRole,
 ): string {
-  return resolveTutorialFeaturedCardId(featuredCards, role);
+  return resolveTutorialCardConstantId(tutorialCardConstants, role);
 }
 
 /** The deck-size value displayed and initialized from the starter-deck recipe. */

@@ -1,8 +1,8 @@
-const FEATURED_CARD_ROLES = new Set([
-  "player",
-  "opponent",
-  "enemyStarter",
-  "loadingEvent",
+const TUTORIAL_CARD_CONSTANT_ROLES = new Set([
+  "tutorialPlayerCharacter",
+  "tutorialOpponentCharacter",
+  "handoffEnemyCharacter",
+  "loadingScreenEvent",
 ]);
 
 const BATTLE_PHASES = new Set([
@@ -20,8 +20,8 @@ function defaultError(message) {
   return new Error(message);
 }
 
-export function isTutorialFeaturedCardRole(value) {
-  return FEATURED_CARD_ROLES.has(value);
+export function isTutorialCardConstantRole(value) {
+  return TUTORIAL_CARD_CONSTANT_ROLES.has(value);
 }
 
 export function isTutorialBattlePhase(value) {
@@ -37,18 +37,18 @@ export function isTutorialHandoffSlotLegal(side, zone, slotId) {
     : /^B[0-9]$/u.test(slotId);
 }
 
-export function tutorialFeaturedCardId(featuredCards, role) {
+export function tutorialCardConstantId(tutorialCardConstants, role) {
   switch (role) {
-    case "player":
-      return featuredCards.playerCardId;
-    case "opponent":
-      return featuredCards.opponentCardId;
-    case "enemyStarter":
-      return featuredCards.enemyStarterCardId;
-    case "loadingEvent":
-      return featuredCards.loadingEventCardId;
+    case "tutorialPlayerCharacter":
+      return tutorialCardConstants.tutorialPlayerCharacterCardId;
+    case "tutorialOpponentCharacter":
+      return tutorialCardConstants.tutorialOpponentCharacterCardId;
+    case "handoffEnemyCharacter":
+      return tutorialCardConstants.handoffEnemyCharacterCardId;
+    case "loadingScreenEvent":
+      return tutorialCardConstants.loadingScreenEventCardId;
     default:
-      throw new Error(`Unknown tutorial featured-card role: ${String(role)}`);
+      throw new Error(`Unknown tutorial card-constant role: ${String(role)}`);
   }
 }
 
@@ -56,11 +56,19 @@ export function assertTutorialBattleConfigurationContracts(
   battle,
   makeError = defaultError,
 ) {
+  if (
+    battle.tutorialCardConstants.loadingScreenCharacterCardId ===
+    battle.tutorialCardConstants.handoffEnemyCharacterCardId
+  ) {
+    throw makeError(
+      "Tutorial loading-screen and handoff enemy characters must use different card UUIDs.",
+    );
+  }
   const starterIds = new Set(battle.starterDeck.map((entry) => entry.cardId));
   for (const placement of battle.handoff.placements) {
     if (placement.source !== "deck") continue;
-    const cardId = tutorialFeaturedCardId(
-      battle.featuredCards,
+    const cardId = tutorialCardConstantId(
+      battle.tutorialCardConstants,
       placement.cardRole,
     );
     if (!starterIds.has(cardId)) {
@@ -69,9 +77,13 @@ export function assertTutorialBattleConfigurationContracts(
       );
     }
   }
-  if (!battle.dreamwellDraws.includes(battle.featuredCards.dreamwellCardId)) {
+  if (
+    !battle.dreamwellDraws.includes(
+      battle.tutorialCardConstants.tutorialDreamwellCardId,
+    )
+  ) {
     throw makeError(
-      "Tutorial battle featuredCards.dreamwellCardId must appear in dreamwellDraws.",
+      "Tutorial battle tutorialCardConstants.tutorialDreamwellCardId must appear in dreamwellDraws.",
     );
   }
   if (battle.handoff.dreamwellDeckIndex > battle.dreamwellDraws.length) {
@@ -126,7 +138,7 @@ export function assertTutorialDeckSufficiency(
     if (placement.source !== "deck") continue;
     consumeDeckCard(
       decks[placement.side],
-      tutorialFeaturedCardId(battle.featuredCards, placement.cardRole),
+      tutorialCardConstantId(battle.tutorialCardConstants, placement.cardRole),
       `${placement.side} ${placement.zone} placement`,
       makeError,
     );

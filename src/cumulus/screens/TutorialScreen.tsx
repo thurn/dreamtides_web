@@ -63,7 +63,7 @@ import type {
   TutorialAction,
   TutorialDreamAvatarOwner,
   TutorialEditorSaveStatus,
-  TutorialFeaturedCards,
+  TutorialCardConstants,
   TutorialHowToPlayTrigger,
 } from "../../types/tutorial";
 import { renderTutorialInstructionParagraph } from "../internal/tutorial-instruction-text";
@@ -155,7 +155,7 @@ export interface TutorialView {
 
 export interface TutorialEditorView {
   readonly actions: readonly TutorialAction[];
-  readonly featuredCards: TutorialFeaturedCards;
+  readonly tutorialCardConstants: TutorialCardConstants;
   readonly saveStatus: TutorialEditorSaveStatus;
   readonly saveError: string | null;
 }

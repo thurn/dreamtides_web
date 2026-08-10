@@ -372,7 +372,7 @@ export function buildTutorialView(
   dreamwellCards: readonly DreamwellCard[] | null = null,
 ): TutorialView {
   const deckSize = tutorialStarterDeckSize(battleConfiguration);
-  const { featuredCards } = battleConfiguration;
+  const { tutorialCardConstants } = battleConfiguration;
   const playerDreamAvatar = dreamAvatarById(
     dreamAvatars,
     battleConfiguration.playerDreamAvatarId,
@@ -382,7 +382,7 @@ export function buildTutorialView(
     battleConfiguration.enemyDreamAvatarId,
   );
   const playerCard =
-    cards?.find((card) => card.id === featuredCards.playerCardId) ?? null;
+    cards?.find((card) => card.id === tutorialCardConstants.tutorialPlayerCharacterCardId) ?? null;
   const currentAction =
     playback?.currentActionIndex === null ||
     playback?.currentActionIndex === undefined
@@ -584,7 +584,7 @@ export function buildTutorialView(
   }
   const primaryOpponentRecord =
     opponentPlayedRecords.find(
-      (record) => record.card.id === featuredCards.opponentCardId,
+      (record) => record.card.id === tutorialCardConstants.tutorialOpponentCharacterCardId,
     ) ?? null;
   const primaryOpponentCard = primaryOpponentRecord?.card ?? null;
   const tutorialCard = primaryOpponentRecord?.view ?? null;
@@ -749,12 +749,12 @@ export function buildTutorialView(
   const revealedDreamwellApplied =
     revealedDreamwellActionIndex >= 0 &&
     completedActionCount > revealedDreamwellActionIndex &&
-    (revealedDreamwellCard?.id !== featuredCards.dreamwellCardId ||
+    (revealedDreamwellCard?.id !== tutorialCardConstants.tutorialDreamwellCardId ||
       dreamwellExplanationCompleted);
   const enemyDreamwellApplied = enemyDreamwellDrawn && revealedDreamwellApplied;
   const dreamwellScoreGain =
     revealedDreamwellApplied &&
-    revealedDreamwellCard?.id === featuredCards.dreamwellCardId
+    revealedDreamwellCard?.id === tutorialCardConstants.tutorialDreamwellCardId
       ? AUTUMN_GLADE_SCORE_GAIN
       : 0;
   const enemyDreamwellScore =

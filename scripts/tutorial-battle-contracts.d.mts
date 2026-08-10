@@ -1,15 +1,15 @@
 import type {
   TutorialAction,
   TutorialBattleConfiguration,
-  TutorialFeaturedCardRole,
-  TutorialFeaturedCards,
+  TutorialCardConstantRole,
+  TutorialCardConstants,
 } from "../src/types/tutorial";
 
 type TutorialValidationErrorFactory = (message: string) => Error;
 
-export function isTutorialFeaturedCardRole(
+export function isTutorialCardConstantRole(
   value: unknown,
-): value is TutorialFeaturedCardRole;
+): value is TutorialCardConstantRole;
 
 export function isTutorialBattlePhase(
   value: unknown,
@@ -21,9 +21,9 @@ export function isTutorialHandoffSlotLegal(
   slotId: unknown,
 ): boolean;
 
-export function tutorialFeaturedCardId(
-  featuredCards: TutorialFeaturedCards,
-  role: TutorialFeaturedCardRole,
+export function tutorialCardConstantId(
+  tutorialCardConstants: TutorialCardConstants,
+  role: TutorialCardConstantRole,
 ): string;
 
 export function assertTutorialBattleConfigurationContracts(

@@ -20,12 +20,13 @@ import {
 } from "./tutorial-data.mjs";
 
 const FIXTURE_BATTLE = {
-  featuredCards: {
-    playerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
-    opponentCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
-    enemyStarterCardId: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
-    loadingEventCardId: "944e15d2-d680-4ebe-8d18-36826f4b1535",
-    dreamwellCardId: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+  tutorialCardConstants: {
+    tutorialPlayerCharacterCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+    tutorialOpponentCharacterCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+    loadingScreenCharacterCardId: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+    loadingScreenEventCardId: "944e15d2-d680-4ebe-8d18-36826f4b1535",
+    handoffEnemyCharacterCardId: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+    tutorialDreamwellCardId: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
   },
   playerDreamAvatarId: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
   enemyDreamAvatarId: "b99936ca-97f9-4930-af5a-fa9ef92557ef",
@@ -58,21 +59,21 @@ const FIXTURE_BATTLE = {
     },
     placements: [
       {
-        cardRole: "player",
+        cardRole: "tutorialPlayerCharacter",
         side: "player",
         source: "deck",
         zone: "frontRank",
         slotId: "F2",
       },
       {
-        cardRole: "enemyStarter",
+        cardRole: "handoffEnemyCharacter",
         side: "enemy",
         source: "deck",
         zone: "backRank",
         slotId: "B3",
       },
       {
-        cardRole: "opponent",
+        cardRole: "tutorialOpponentCharacter",
         side: "enemy",
         source: "created",
         zone: "void",
@@ -276,9 +277,9 @@ describe("tutorial data", () => {
     expect(() =>
       validateTutorialBattleConfiguration({
         ...FIXTURE_BATTLE,
-        featuredCards: undefined,
+        tutorialCardConstants: undefined,
       }),
-    ).toThrow(/featuredCards/u);
+    ).toThrow(/tutorialCardConstants/u);
     expect(() =>
       validateTutorialBattleConfiguration({
         ...FIXTURE_BATTLE,
@@ -291,11 +292,21 @@ describe("tutorial data", () => {
     expect(() =>
       validateTutorialBattleConfiguration({
         ...FIXTURE_BATTLE,
+        tutorialCardConstants: {
+          ...FIXTURE_BATTLE.tutorialCardConstants,
+          loadingScreenCharacterCardId:
+            FIXTURE_BATTLE.tutorialCardConstants.handoffEnemyCharacterCardId,
+        },
+      }),
+    ).toThrow(/loading-screen and handoff enemy characters/u);
+    expect(() =>
+      validateTutorialBattleConfiguration({
+        ...FIXTURE_BATTLE,
         handoff: {
           ...FIXTURE_BATTLE.handoff,
           placements: [
             {
-              cardRole: "player",
+              cardRole: "tutorialPlayerCharacter",
               side: "player",
               source: "deck",
               zone: "backRank",
@@ -354,9 +365,10 @@ describe("tutorial data", () => {
           ...configuration,
           battle: {
             ...configuration.battle,
-            featuredCards: {
-              ...configuration.battle.featuredCards,
-              playerCardId: "00000000-0000-4000-8000-000000000123",
+            tutorialCardConstants: {
+              ...configuration.battle.tutorialCardConstants,
+              tutorialPlayerCharacterCardId:
+                "00000000-0000-4000-8000-000000000123",
             },
           },
         },

@@ -552,7 +552,7 @@ export default function App({
         logEvent("tutorial_configuration_loaded", {
           contentHash: tutorial.contentHash,
           foldHash: tutorial.foldHash,
-          featuredCards: tutorial.battle.featuredCards,
+          tutorialCardConstants: tutorial.battle.tutorialCardConstants,
           playerDreamAvatarId: tutorial.battle.playerDreamAvatarId,
           enemyDreamAvatarId: tutorial.battle.enemyDreamAvatarId,
           derivedDeckSize: tutorialStarterDeckSize(tutorial.battle),

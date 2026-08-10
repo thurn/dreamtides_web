@@ -1,7 +1,7 @@
 import type { LoadingView } from "../../cumulus/screens/LoadingScreen";
 import type { CardId } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
-import type { TutorialFeaturedCards } from "../../types/tutorial";
+import type { TutorialCardConstants } from "../../types/tutorial";
 
 function resolveCardById(
   cardDatabase: ReadonlyMap<number, CardData>,
@@ -21,24 +21,24 @@ function resolveCardById(
 /** Build the two UUID-resolved card models for the loading-screen anatomy scene. */
 export function buildLoadingView(
   cardDatabase: ReadonlyMap<number, CardData>,
-  featuredCards: TutorialFeaturedCards,
+  tutorialCardConstants: TutorialCardConstants,
 ): LoadingView {
-  const runeboundChampion = resolveCardById(
+  const loadingCharacter = resolveCardById(
     cardDatabase,
-    featuredCards.enemyStarterCardId,
+    tutorialCardConstants.loadingScreenCharacterCardId,
   );
-  const worldsAwait = resolveCardById(
+  const loadingEvent = resolveCardById(
     cardDatabase,
-    featuredCards.loadingEventCardId,
+    tutorialCardConstants.loadingScreenEventCardId,
   );
   return {
-    runeboundChampion: {
-      cardId: runeboundChampion.id,
-      displaySnapshot: runeboundChampion,
+    loadingCharacter: {
+      cardId: loadingCharacter.id,
+      displaySnapshot: loadingCharacter,
     },
-    worldsAwait: {
-      cardId: worldsAwait.id,
-      displaySnapshot: worldsAwait,
+    loadingEvent: {
+      cardId: loadingEvent.id,
+      displaySnapshot: loadingEvent,
     },
   };
 }

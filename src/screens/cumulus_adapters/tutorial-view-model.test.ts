@@ -14,19 +14,19 @@ import type {
 } from "../../types/tutorial";
 import {
   makeTutorialBattleConfiguration,
-  TEST_TUTORIAL_FEATURED_CARDS,
+  TEST_TUTORIAL_CARD_CONSTANTS,
 } from "../../test/tutorial-configuration-fixture";
 
 const TUTORIAL_BATTLE_CONFIGURATION = makeTutorialBattleConfiguration();
-const TUTORIAL_OPPONENT_CARD_ID = TEST_TUTORIAL_FEATURED_CARDS.opponentCardId;
-const TUTORIAL_PLAYER_CARD_ID = TEST_TUTORIAL_FEATURED_CARDS.playerCardId;
+const TUTORIAL_OPPONENT_CARD_ID = TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId;
+const TUTORIAL_PLAYER_CARD_ID = TEST_TUTORIAL_CARD_CONSTANTS.tutorialPlayerCharacterCardId;
 const TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID =
-  TEST_TUTORIAL_FEATURED_CARDS.enemyStarterCardId;
+  TEST_TUTORIAL_CARD_CONSTANTS.handoffEnemyCharacterCardId;
 
 function tutorialActionLogDetails(action: TutorialAction) {
   return tutorialActionLogDetailsFromView(
     action,
-    TEST_TUTORIAL_FEATURED_CARDS.dreamwellCardId,
+    TEST_TUTORIAL_CARD_CONSTANTS.tutorialDreamwellCardId,
   );
 }
 
@@ -159,9 +159,9 @@ const VOLTSURGE: DreamwellCard = {
 describe("buildTutorialView", () => {
   it("uses a synthetic scenario for identities, deck size, energy, and target", () => {
     const battleConfiguration = makeTutorialBattleConfiguration({
-      featuredCards: {
-        ...TEST_TUTORIAL_FEATURED_CARDS,
-        playerCardId: RUNEBOUND_CHAMPION.id,
+      tutorialCardConstants: {
+        ...TEST_TUTORIAL_CARD_CONSTANTS,
+        tutorialPlayerCharacterCardId: RUNEBOUND_CHAMPION.id,
       },
       playerDreamAvatarId: TUTORIAL_DREAM_AVATARS[1].id,
       enemyDreamAvatarId: TUTORIAL_DREAM_AVATARS[0].id,

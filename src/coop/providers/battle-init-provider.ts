@@ -38,7 +38,7 @@ import type {
 } from "../../types/tutorial";
 import { advanceAtlas } from "../../atlas/atlas-generator";
 import { resolveBattleAiConfiguration } from "../../types/opponents-data";
-import { tutorialFeaturedCardId } from "../../data/tutorial-actions";
+import { tutorialCardConstantId } from "../../data/tutorial-actions";
 
 const deferredOpponentLogs = new Map<number, () => void>();
 
@@ -323,8 +323,8 @@ function arrangeTutorialHandoff(
 ): void {
   const placementCards = battleConfiguration.handoff.placements.map(
     (placement, index) => {
-      const cardId = tutorialFeaturedCardId(
-        battleConfiguration.featuredCards,
+      const cardId = tutorialCardConstantId(
+        battleConfiguration.tutorialCardConstants,
         placement.cardRole,
       );
       if (placement.source === "deck") {

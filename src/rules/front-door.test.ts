@@ -2,15 +2,15 @@ import { beforeEach, describe, expect, it } from "vitest";
 import type { EventContext, GameEvent, Genesis } from "../eventlog/types";
 import { TUTORIAL_PLAYER_CARD_INSTANCE_ID } from "../data/tutorial-cards";
 import {
-  TEST_TUTORIAL_FEATURED_CARDS,
+  TEST_TUTORIAL_CARD_CONSTANTS,
   TEST_TUTORIAL_PLAYER_AVATAR_ID,
 } from "../test/tutorial-configuration-fixture";
 import { registerTutorialFrontDoorContentProvider } from "./front-door";
 import { genesisFoldState } from "./fold-state";
 import { reduceGameEvent } from "./reducer";
 
-const TUTORIAL_OPPONENT_CARD_ID = TEST_TUTORIAL_FEATURED_CARDS.opponentCardId;
-const TUTORIAL_PLAYER_CARD_ID = TEST_TUTORIAL_FEATURED_CARDS.playerCardId;
+const TUTORIAL_OPPONENT_CARD_ID = TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId;
+const TUTORIAL_PLAYER_CARD_ID = TEST_TUTORIAL_CARD_CONSTANTS.tutorialPlayerCharacterCardId;
 
 beforeEach(() => {
   registerTutorialFrontDoorContentProvider({

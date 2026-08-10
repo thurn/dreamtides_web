@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../../cumulus/CumulusRoot";
 import {
   makeTutorialConfiguration,
-  TEST_TUTORIAL_FEATURED_CARDS,
+  TEST_TUTORIAL_CARD_CONSTANTS,
 } from "../../test/tutorial-configuration-fixture";
 import { getLogEntries, resetLog } from "../../logging";
 import { asCardId, asCardName } from "../../types/card-identity";
@@ -18,10 +18,10 @@ const coopMocks = vi.hoisted(() => ({
   advanceFrontDoor: vi.fn().mockResolvedValue(1),
   cardDatabase: new Map<number, CardData>(),
 }));
-const TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID =
-  TEST_TUTORIAL_FEATURED_CARDS.enemyStarterCardId;
+const TUTORIAL_LOADING_CHARACTER_CARD_ID =
+  TEST_TUTORIAL_CARD_CONSTANTS.loadingScreenCharacterCardId;
 const TUTORIAL_WORLDS_AWAIT_CARD_ID =
-  TEST_TUTORIAL_FEATURED_CARDS.loadingEventCardId;
+  TEST_TUTORIAL_CARD_CONSTANTS.loadingScreenEventCardId;
 
 vi.mock("../../state/front-door-context", () => ({
   useFrontDoor: () => ({
@@ -76,7 +76,7 @@ beforeEach(() => {
     disconnect() {}
   };
   coopMocks.cardDatabase.clear();
-  const champion = card(1, TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID);
+  const champion = card(1, TUTORIAL_LOADING_CHARACTER_CARD_ID);
   const worlds = card(2, TUTORIAL_WORLDS_AWAIT_CARD_ID);
   coopMocks.cardDatabase.set(champion.cardNumber, champion);
   coopMocks.cardDatabase.set(worlds.cardNumber, worlds);

@@ -12,7 +12,7 @@ import {
 } from "./tutorial-actions";
 import {
   makeTutorialBattleConfiguration,
-  TEST_TUTORIAL_FEATURED_CARDS,
+  TEST_TUTORIAL_CARD_CONSTANTS,
 } from "../test/tutorial-configuration-fixture";
 
 const ACTIONS_RESPONSE = {
@@ -1018,13 +1018,13 @@ describe("parseTutorialAtlasConfiguration", () => {
 describe("parseTutorialBattleConfiguration", () => {
   it("preserves UUID-authored draw order and rejects invalid entries", () => {
     const battle = makeTutorialBattleConfiguration({
-      featuredCards: {
-        ...TEST_TUTORIAL_FEATURED_CARDS,
-        dreamwellCardId: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+      tutorialCardConstants: {
+        ...TEST_TUTORIAL_CARD_CONSTANTS,
+        tutorialDreamwellCardId: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
       },
       starterDeck: [
-        { cardId: TEST_TUTORIAL_FEATURED_CARDS.playerCardId, copies: 3 },
-        { cardId: TEST_TUTORIAL_FEATURED_CARDS.enemyStarterCardId, copies: 3 },
+        { cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialPlayerCharacterCardId, copies: 3 },
+        { cardId: TEST_TUTORIAL_CARD_CONSTANTS.handoffEnemyCharacterCardId, copies: 3 },
         { cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8", copies: 3 },
         { cardId: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", copies: 3 },
       ],
@@ -1032,7 +1032,7 @@ describe("parseTutorialBattleConfiguration", () => {
       forcedEnemyDraws: ["a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"],
       dreamwellDraws: [
         "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
-        TEST_TUTORIAL_FEATURED_CARDS.dreamwellCardId,
+        TEST_TUTORIAL_CARD_CONSTANTS.tutorialDreamwellCardId,
       ],
       aiActionOverrides: [
         {
@@ -1114,5 +1114,19 @@ describe("parseTutorialBattleConfiguration", () => {
         ],
       }),
     ).toThrow(/registered semantic play automation/u);
+  });
+
+  it("requires distinct loading-screen and handoff enemy characters", () => {
+    const battle = makeTutorialBattleConfiguration({
+      tutorialCardConstants: {
+        ...TEST_TUTORIAL_CARD_CONSTANTS,
+        loadingScreenCharacterCardId:
+          TEST_TUTORIAL_CARD_CONSTANTS.handoffEnemyCharacterCardId,
+      },
+    });
+
+    expect(() => parseTutorialBattleConfiguration(battle)).toThrow(
+      /loading-screen and handoff enemy characters/u,
+    );
   });
 });

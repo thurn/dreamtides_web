@@ -9,20 +9,27 @@ normalized browser artifact to `public/tutorial-data.json`.
 
 ## Scenario identity
 
-`battle.scripted_card_roles` assigns stable semantic roles to cards reused by
-the scripted sequence, loading presentation, and playable handoff:
+`battle.tutorial_card_constants` is the set of card UUID constants used by tutorial
+presentation, scripted actions, and the playable handoff:
 
-- `player_card_id`: the scripted player character
-- `opponent_card_id`: the scripted opponent character
-- `enemy_starter_card_id`: the enemy character shown during loading and placed at
-  the live handoff
-- `loading_event_card_id`: the event shown during loading
-- `dreamwell_card_id`: the featured Dreamwell card
+- `tutorial_player_character_card_id`: the character controlled by the player
+  during the scripted tutorial sequence
+- `tutorial_opponent_character_card_id`: the character controlled by the
+  opponent during the scripted tutorial sequence
+- `loading_screen_character_card_id`: the character shown on the loading screen
+- `loading_screen_event_card_id`: the event shown on the loading screen
+- `handoff_enemy_character_card_id`: the enemy character placed into the back
+  rank at the playable handoff
+- `tutorial_dreamwell_card_id`: the Dreamwell card featured during the scripted
+  tutorial sequence
 
 Every field is a catalog UUID. Ordinary card roles resolve against
-`cards.ron`; `dreamwellCardId` resolves against `dreamwell.ron`.
+`cards.ron`; `tutorialDreamwellCardId` resolves against `dreamwell.ron`.
 `player_dream_avatar_id` and `enemy_dream_avatar_id` resolve against
 `dream_avatars.ron`.
+
+The loading-screen character and handoff enemy character must use different
+card UUIDs.
 
 ## Battle setup
 

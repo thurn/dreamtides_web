@@ -98,11 +98,11 @@ function card(
 const CHAMPION = card("11111111-1111-4111-8111-111111111111", 1, "Character");
 const WORLDS = card("22222222-2222-4222-8222-222222222222", 2, "Event");
 const VIEW: LoadingView = {
-  runeboundChampion: {
+  loadingCharacter: {
     cardId: CHAMPION.id,
     displaySnapshot: CHAMPION,
   },
-  worldsAwait: { cardId: WORLDS.id, displaySnapshot: WORLDS },
+  loadingEvent: { cardId: WORLDS.id, displaySnapshot: WORLDS },
 };
 
 let root: Root | null = null;
@@ -192,11 +192,11 @@ describe("LoadingScreen", () => {
     ).toBe("Dreamtides Cards:");
     expect(
       container.querySelector(
-        '[data-loading-card-type-label="runeboundChampion"]',
+        '[data-loading-card-type-label="loadingCharacter"]',
       )?.textContent,
     ).toBe("Character");
     expect(
-      container.querySelector('[data-loading-card-type-label="worldsAwait"]')
+      container.querySelector('[data-loading-card-type-label="loadingEvent"]')
         ?.textContent,
     ).toBe("Event");
   });
@@ -304,10 +304,10 @@ describe("LoadingScreen", () => {
   it("anchors every callout to the intended rendered card region", () => {
     const container = renderLoadingScreen();
     const champion = container.querySelector<HTMLElement>(
-      '[data-loading-card-group="runeboundChampion"]',
+      '[data-loading-card-group="loadingCharacter"]',
     );
     const worlds = container.querySelector<HTMLElement>(
-      '[data-loading-card-group="worldsAwait"]',
+      '[data-loading-card-group="loadingEvent"]',
     );
 
     expect(champion?.querySelector('[data-card-stat="energy"]')).not.toBeNull();

@@ -8,7 +8,7 @@ import {
   assertTutorialBattleConfigurationContracts,
   assertTutorialDeckSufficiency,
   isTutorialBattlePhase,
-  isTutorialFeaturedCardRole,
+  isTutorialCardConstantRole,
   isTutorialHandoffSlotLegal,
 } from "./tutorial-battle-contracts.mjs";
 
@@ -89,30 +89,34 @@ function validateInteger(value, field, minimum = 0) {
   return value;
 }
 
-function validateFeaturedCards(value) {
+function validateTutorialCardConstants(value) {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
-    throw invalid("Tutorial battle must contain a featuredCards table.");
+    throw invalid("Tutorial battle must contain a tutorialCardConstants table.");
   }
   return {
-    playerCardId: validateUuid(
-      value.playerCardId,
-      "featuredCards.playerCardId",
+    tutorialPlayerCharacterCardId: validateUuid(
+      value.tutorialPlayerCharacterCardId,
+      "tutorialCardConstants.tutorialPlayerCharacterCardId",
     ),
-    opponentCardId: validateUuid(
-      value.opponentCardId,
-      "featuredCards.opponentCardId",
+    tutorialOpponentCharacterCardId: validateUuid(
+      value.tutorialOpponentCharacterCardId,
+      "tutorialCardConstants.tutorialOpponentCharacterCardId",
     ),
-    enemyStarterCardId: validateUuid(
-      value.enemyStarterCardId,
-      "featuredCards.enemyStarterCardId",
+    loadingScreenCharacterCardId: validateUuid(
+      value.loadingScreenCharacterCardId,
+      "tutorialCardConstants.loadingScreenCharacterCardId",
     ),
-    loadingEventCardId: validateUuid(
-      value.loadingEventCardId,
-      "featuredCards.loadingEventCardId",
+    loadingScreenEventCardId: validateUuid(
+      value.loadingScreenEventCardId,
+      "tutorialCardConstants.loadingScreenEventCardId",
     ),
-    dreamwellCardId: validateUuid(
-      value.dreamwellCardId,
-      "featuredCards.dreamwellCardId",
+    handoffEnemyCharacterCardId: validateUuid(
+      value.handoffEnemyCharacterCardId,
+      "tutorialCardConstants.handoffEnemyCharacterCardId",
+    ),
+    tutorialDreamwellCardId: validateUuid(
+      value.tutorialDreamwellCardId,
+      "tutorialCardConstants.tutorialDreamwellCardId",
     ),
   };
 }
@@ -192,7 +196,7 @@ function validateHandoffPlacements(value) {
         `Tutorial battle handoff placement ${String(index + 1)} must be a table.`,
       );
     }
-    if (!isTutorialFeaturedCardRole(entry.cardRole)) {
+    if (!isTutorialCardConstantRole(entry.cardRole)) {
       throw invalid(
         `Tutorial battle handoff placement ${String(index + 1)} has an invalid cardRole.`,
       );
@@ -336,7 +340,7 @@ export function validateTutorialBattleConfiguration(value) {
     throw invalid("Tutorial data must contain a battle table.");
   }
   const battle = {
-    featuredCards: validateFeaturedCards(value.featuredCards),
+    tutorialCardConstants: validateTutorialCardConstants(value.tutorialCardConstants),
     playerDreamAvatarId: validateUuid(
       value.playerDreamAvatarId,
       "playerDreamAvatarId",
@@ -1074,10 +1078,11 @@ export function validateTutorialCatalogReferences(
   const dreamwell = new Set(dreamwellCardIds);
   const battle = configuration.battle;
   const requiredCards = new Set([
-    battle.featuredCards.playerCardId,
-    battle.featuredCards.opponentCardId,
-    battle.featuredCards.enemyStarterCardId,
-    battle.featuredCards.loadingEventCardId,
+    battle.tutorialCardConstants.tutorialPlayerCharacterCardId,
+    battle.tutorialCardConstants.tutorialOpponentCharacterCardId,
+    battle.tutorialCardConstants.loadingScreenCharacterCardId,
+    battle.tutorialCardConstants.loadingScreenEventCardId,
+    battle.tutorialCardConstants.handoffEnemyCharacterCardId,
     ...battle.starterDeck.map((entry) => entry.cardId),
     ...battle.forcedPlayerDraws,
     ...battle.forcedEnemyDraws,
@@ -1114,7 +1119,7 @@ export function validateTutorialCatalogReferences(
     }
   }
   const requiredDreamwell = new Set([
-    battle.featuredCards.dreamwellCardId,
+    battle.tutorialCardConstants.tutorialDreamwellCardId,
     ...battle.dreamwellDraws,
     ...battle.aiActionOverrides.map((override) => override.trigger.cardId),
     ...configuration.actions

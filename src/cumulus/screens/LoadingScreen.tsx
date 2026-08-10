@@ -25,8 +25,8 @@ import { useIsDesktop } from "./use-is-desktop";
 import { useMessages } from "../hooks/use-messages";
 
 export interface LoadingView {
-  readonly runeboundChampion: GameCardModel;
-  readonly worldsAwait: GameCardModel;
+  readonly loadingCharacter: GameCardModel;
+  readonly loadingEvent: GameCardModel;
 }
 
 export interface LoadingScreenProps {
@@ -185,7 +185,7 @@ function AnnotatedLoadingCard({
   annotations,
   isDesktop,
 }: {
-  readonly groupId: "runeboundChampion" | "worldsAwait";
+  readonly groupId: "loadingCharacter" | "loadingEvent";
   readonly cardType: "character" | "event";
   readonly model: GameCardModel;
   readonly annotations: readonly AnnotationSpec[];
@@ -506,16 +506,16 @@ export function LoadingScreen({
         }}
       >
         <AnnotatedLoadingCard
-          groupId="runeboundChampion"
+          groupId="loadingCharacter"
           cardType="character"
-          model={view.runeboundChampion}
+          model={view.loadingCharacter}
           annotations={RUNEBOUND_ANNOTATIONS}
           isDesktop={isDesktop}
         />
         <AnnotatedLoadingCard
-          groupId="worldsAwait"
+          groupId="loadingEvent"
           cardType="event"
-          model={view.worldsAwait}
+          model={view.loadingEvent}
           annotations={WORLDS_AWAIT_ANNOTATIONS}
           isDesktop={isDesktop}
         />

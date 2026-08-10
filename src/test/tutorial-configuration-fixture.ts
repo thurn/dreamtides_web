@@ -1,16 +1,17 @@
 import type {
   TutorialBattleConfiguration,
   TutorialConfiguration,
-  TutorialFeaturedCards,
+  TutorialCardConstants,
   TutorialSpeechBubble,
 } from "../types/tutorial";
 
-export const TEST_TUTORIAL_FEATURED_CARDS: TutorialFeaturedCards = {
-  playerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
-  opponentCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
-  enemyStarterCardId: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
-  loadingEventCardId: "944e15d2-d680-4ebe-8d18-36826f4b1535",
-  dreamwellCardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+export const TEST_TUTORIAL_CARD_CONSTANTS: TutorialCardConstants = {
+  tutorialPlayerCharacterCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+  tutorialOpponentCharacterCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+  loadingScreenCharacterCardId: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+  loadingScreenEventCardId: "944e15d2-d680-4ebe-8d18-36826f4b1535",
+  handoffEnemyCharacterCardId: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+  tutorialDreamwellCardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
 };
 
 export const TEST_TUTORIAL_PLAYER_AVATAR_ID =
@@ -22,15 +23,15 @@ export function makeTutorialBattleConfiguration(
   overrides: Partial<TutorialBattleConfiguration> = {},
 ): TutorialBattleConfiguration {
   return {
-    featuredCards: TEST_TUTORIAL_FEATURED_CARDS,
+    tutorialCardConstants: TEST_TUTORIAL_CARD_CONSTANTS,
     playerDreamAvatarId: TEST_TUTORIAL_PLAYER_AVATAR_ID,
     enemyDreamAvatarId: TEST_TUTORIAL_ENEMY_AVATAR_ID,
     startingEnergy: 4,
     scoreToWin: 10,
     starterDeck: [
-      { cardId: TEST_TUTORIAL_FEATURED_CARDS.playerCardId, copies: 10 },
-      { cardId: TEST_TUTORIAL_FEATURED_CARDS.enemyStarterCardId, copies: 10 },
-      { cardId: TEST_TUTORIAL_FEATURED_CARDS.loadingEventCardId, copies: 10 },
+      { cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialPlayerCharacterCardId, copies: 10 },
+      { cardId: TEST_TUTORIAL_CARD_CONSTANTS.handoffEnemyCharacterCardId, copies: 10 },
+      { cardId: TEST_TUTORIAL_CARD_CONSTANTS.loadingScreenEventCardId, copies: 10 },
     ],
     handoff: {
       activeSide: "player",
@@ -53,21 +54,21 @@ export function makeTutorialBattleConfiguration(
       },
       placements: [
         {
-          cardRole: "player",
+          cardRole: "tutorialPlayerCharacter",
           side: "player",
           source: "deck",
           zone: "frontRank",
           slotId: "F4",
         },
         {
-          cardRole: "enemyStarter",
+          cardRole: "handoffEnemyCharacter",
           side: "enemy",
           source: "deck",
           zone: "backRank",
           slotId: "B5",
         },
         {
-          cardRole: "opponent",
+          cardRole: "tutorialOpponentCharacter",
           side: "enemy",
           source: "created",
           zone: "void",
@@ -77,7 +78,7 @@ export function makeTutorialBattleConfiguration(
     forcedPlayerDraws: [],
     forcedEnemyDraws: [],
     dreamwellDraws: [
-      TEST_TUTORIAL_FEATURED_CARDS.dreamwellCardId,
+      TEST_TUTORIAL_CARD_CONSTANTS.tutorialDreamwellCardId,
       "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
     ],
     aiActionOverrides: [],

@@ -122,12 +122,19 @@ vi.mock("./data/tutorial-actions", () => ({
       actions: [],
       triggers: [],
       battle: {
-        featuredCards: {
-          playerCardId: "00000000-0000-4000-8000-000000000001",
-          opponentCardId: "00000000-0000-4000-8000-000000000002",
-          enemyStarterCardId: "00000000-0000-4000-8000-000000000003",
-          loadingEventCardId: "00000000-0000-4000-8000-000000000004",
-          dreamwellCardId: "00000000-0000-4000-8000-000000000005",
+        tutorialCardConstants: {
+          tutorialPlayerCharacterCardId:
+            "00000000-0000-4000-8000-000000000001",
+          tutorialOpponentCharacterCardId:
+            "00000000-0000-4000-8000-000000000002",
+          loadingScreenCharacterCardId:
+            "00000000-0000-4000-8000-000000000008",
+          loadingScreenEventCardId:
+            "00000000-0000-4000-8000-000000000004",
+          handoffEnemyCharacterCardId:
+            "00000000-0000-4000-8000-000000000003",
+          tutorialDreamwellCardId:
+            "00000000-0000-4000-8000-000000000005",
         },
         playerDreamAvatarId: "00000000-0000-4000-8000-000000000006",
         enemyDreamAvatarId: "00000000-0000-4000-8000-000000000007",

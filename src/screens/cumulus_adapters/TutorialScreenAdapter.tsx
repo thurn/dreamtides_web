@@ -93,7 +93,7 @@ export function TutorialScreenAdapter({
   useTutorialPresentationLogging(
     state.tutorial,
     view,
-    battleConfiguration.featuredCards.dreamwellCardId,
+    battleConfiguration.tutorialCardConstants.tutorialDreamwellCardId,
     playbackSpeed,
   );
   const howToPlayLogging = useTutorialHowToPlayLogging(view.battle.battleId);
@@ -131,7 +131,7 @@ export function TutorialScreenAdapter({
         import.meta.env.DEV
           ? {
               actions: authoredActions,
-              featuredCards: battleConfiguration.featuredCards,
+              tutorialCardConstants: battleConfiguration.tutorialCardConstants,
               saveStatus,
               saveError,
             }

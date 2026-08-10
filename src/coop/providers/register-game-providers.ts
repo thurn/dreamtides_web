@@ -53,7 +53,7 @@ export function registerGameProviders(content: JourneyContent): void {
     content.tutorial === undefined
       ? null
       : {
-          playerCardId: content.tutorial.battle.featuredCards.playerCardId,
+          playerCardId: content.tutorial.battle.tutorialCardConstants.tutorialPlayerCharacterCardId,
           journeyDreamAvatarId: content.tutorial.battle.playerDreamAvatarId,
         },
   );

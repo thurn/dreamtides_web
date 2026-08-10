@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { TEST_TUTORIAL_FEATURED_CARDS } from "../../test/tutorial-configuration-fixture";
+import { TEST_TUTORIAL_CARD_CONSTANTS } from "../../test/tutorial-configuration-fixture";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { buildLoadingView } from "./loading-view-model";
 
-const TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID =
-  TEST_TUTORIAL_FEATURED_CARDS.enemyStarterCardId;
-const TUTORIAL_WORLDS_AWAIT_CARD_ID =
-  TEST_TUTORIAL_FEATURED_CARDS.loadingEventCardId;
+const TUTORIAL_LOADING_CHARACTER_CARD_ID =
+  TEST_TUTORIAL_CARD_CONSTANTS.loadingScreenCharacterCardId;
+const TUTORIAL_LOADING_EVENT_CARD_ID =
+  TEST_TUTORIAL_CARD_CONSTANTS.loadingScreenEventCardId;
 
 function card(cardNumber: number, id: string): CardData {
   return {
@@ -28,29 +28,29 @@ function card(cardNumber: number, id: string): CardData {
 
 describe("buildLoadingView", () => {
   it("resolves both authored cards by UUID", () => {
-    const champion = card(1, TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID);
-    const worlds = card(2, TUTORIAL_WORLDS_AWAIT_CARD_ID);
+    const champion = card(1, TUTORIAL_LOADING_CHARACTER_CARD_ID);
+    const worlds = card(2, TUTORIAL_LOADING_EVENT_CARD_ID);
     const view = buildLoadingView(
       new Map([
         [champion.cardNumber, champion],
         [worlds.cardNumber, worlds],
       ]),
-      TEST_TUTORIAL_FEATURED_CARDS,
+      TEST_TUTORIAL_CARD_CONSTANTS,
     );
 
-    expect(view.runeboundChampion.cardId).toBe(champion.id);
-    expect(view.worldsAwait.cardId).toBe(worlds.id);
-    expect(view.runeboundChampion.displaySnapshot).toBe(champion);
-    expect(view.worldsAwait.displaySnapshot).toBe(worlds);
+    expect(view.loadingCharacter.cardId).toBe(champion.id);
+    expect(view.loadingEvent.cardId).toBe(worlds.id);
+    expect(view.loadingCharacter.displaySnapshot).toBe(champion);
+    expect(view.loadingEvent.displaySnapshot).toBe(worlds);
   });
 
   it("fails loudly when an authored UUID is absent", () => {
-    const champion = card(1, TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID);
+    const champion = card(1, TUTORIAL_LOADING_CHARACTER_CARD_ID);
     expect(() =>
       buildLoadingView(
         new Map([[champion.cardNumber, champion]]),
-        TEST_TUTORIAL_FEATURED_CARDS,
+        TEST_TUTORIAL_CARD_CONSTANTS,
       ),
-    ).toThrow(TUTORIAL_WORLDS_AWAIT_CARD_ID);
+    ).toThrow(TUTORIAL_LOADING_EVENT_CARD_ID);
   });
 });

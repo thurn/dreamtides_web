@@ -134,16 +134,20 @@ export interface TutorialConfiguration {
 }
 
 /** Stable semantic card roles shared by tutorial presentation and battle setup. */
-export type TutorialFeaturedCardRole =
-  "player" | "opponent" | "enemyStarter" | "loadingEvent";
+export type TutorialCardConstantRole =
+  | "tutorialPlayerCharacter"
+  | "tutorialOpponentCharacter"
+  | "handoffEnemyCharacter"
+  | "loadingScreenEvent";
 
-/** UUIDs selected once and reused anywhere the tutorial needs that role. */
-export interface TutorialFeaturedCards {
-  readonly playerCardId: string;
-  readonly opponentCardId: string;
-  readonly enemyStarterCardId: string;
-  readonly loadingEventCardId: string;
-  readonly dreamwellCardId: string;
+/** UUID constants used by tutorial presentation, scripted actions, and handoff. */
+export interface TutorialCardConstants {
+  readonly tutorialPlayerCharacterCardId: string;
+  readonly tutorialOpponentCharacterCardId: string;
+  readonly loadingScreenCharacterCardId: string;
+  readonly loadingScreenEventCardId: string;
+  readonly handoffEnemyCharacterCardId: string;
+  readonly tutorialDreamwellCardId: string;
 }
 
 /** One card and copy count in the shared tutorial starter-deck recipe. */
@@ -164,7 +168,7 @@ export interface TutorialBattleHandoffSideConfiguration {
 /** A configured card role materialized into a rank or void at handoff. */
 export type TutorialBattleHandoffPlacement = Readonly<
   {
-    cardRole: TutorialFeaturedCardRole;
+    cardRole: TutorialCardConstantRole;
     side: "player" | "enemy";
     source: "deck" | "created";
   } & ({ zone: "frontRank" | "backRank"; slotId: string } | { zone: "void" })
@@ -191,7 +195,7 @@ export interface TutorialBattleHandoffConfiguration {
 
 /** UUID-authored scenario used before and after the playable battle handoff. */
 export interface TutorialBattleConfiguration {
-  readonly featuredCards: TutorialFeaturedCards;
+  readonly tutorialCardConstants: TutorialCardConstants;
   readonly playerDreamAvatarId: string;
   readonly enemyDreamAvatarId: string;
   readonly startingEnergy: number;

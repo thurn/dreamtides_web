@@ -12,12 +12,13 @@ import { TutorialEditorRail } from "./TutorialEditorRail";
 
 const NEW_ACTION_ID = "11111111-1111-4111-8111-111111111111";
 
-const TEST_TUTORIAL_FEATURED_CARDS = {
-  playerCardId: "11111111-1111-4111-8111-111111111111",
-  opponentCardId: "22222222-2222-4222-8222-222222222222",
-  enemyStarterCardId: "33333333-3333-4333-8333-333333333333",
-  loadingEventCardId: "44444444-4444-4444-8444-444444444444",
-  dreamwellCardId: "55555555-5555-4555-8555-555555555555",
+const TEST_TUTORIAL_CARD_CONSTANTS = {
+  tutorialPlayerCharacterCardId: "11111111-1111-4111-8111-111111111111",
+  tutorialOpponentCharacterCardId: "22222222-2222-4222-8222-222222222222",
+  loadingScreenCharacterCardId: "66666666-6666-4666-8666-666666666666",
+  loadingScreenEventCardId: "44444444-4444-4444-8444-444444444444",
+  handoffEnemyCharacterCardId: "33333333-3333-4333-8333-333333333333",
+  tutorialDreamwellCardId: "55555555-5555-4555-8555-555555555555",
 } as const;
 
 vi.mock("framer-motion", () => ({
@@ -92,7 +93,7 @@ function EditorHarness({
     <CumulusRoot>
       <TutorialEditorRail
         actions={actions}
-        featuredCards={TEST_TUTORIAL_FEATURED_CARDS}
+        tutorialCardConstants={TEST_TUTORIAL_CARD_CONSTANTS}
         saveStatus="idle"
         saveError={null}
         onActionsChange={(next, persist) => {
@@ -149,7 +150,7 @@ describe("TutorialEditorRail", () => {
         <CumulusRoot>
           <TutorialEditorRail
             actions={actions}
-            featuredCards={TEST_TUTORIAL_FEATURED_CARDS}
+            tutorialCardConstants={TEST_TUTORIAL_CARD_CONSTANTS}
             saveStatus="idle"
             saveError={null}
             onActionsChange={vi.fn()}
@@ -607,7 +608,7 @@ describe("TutorialEditorRail", () => {
         <CumulusRoot>
           <TutorialEditorRail
             actions={actions}
-            featuredCards={TEST_TUTORIAL_FEATURED_CARDS}
+            tutorialCardConstants={TEST_TUTORIAL_CARD_CONSTANTS}
             saveStatus="idle"
             saveError={null}
             onActionsChange={vi.fn()}
@@ -766,7 +767,7 @@ describe("TutorialEditorRail", () => {
         {
           id: NEW_ACTION_ID,
           action: "draw-opponent-card",
-          cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
+          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
           wait: 0,
         },
       ],
@@ -845,7 +846,7 @@ describe("TutorialEditorRail", () => {
           id: NEW_ACTION_ID,
           action: "draw-dreamwell-card",
           owner: "enemy",
-          cardId: TEST_TUTORIAL_FEATURED_CARDS.dreamwellCardId,
+          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialDreamwellCardId,
           wait: 0,
         },
       ],
@@ -855,7 +856,7 @@ describe("TutorialEditorRail", () => {
       container.querySelector<HTMLInputElement>(
         `[data-testid="tutorial-action-card-id-${NEW_ACTION_ID}"]`,
       )?.value,
-    ).toBe(TEST_TUTORIAL_FEATURED_CARDS.dreamwellCardId);
+    ).toBe(TEST_TUTORIAL_CARD_CONSTANTS.tutorialDreamwellCardId);
 
     act(() => root.unmount());
     container.remove();
@@ -890,7 +891,7 @@ describe("TutorialEditorRail", () => {
         {
           id: NEW_ACTION_ID,
           action: "reposition-opponent-character",
-          cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
+          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
           wait: 0,
         },
       ],
@@ -900,7 +901,7 @@ describe("TutorialEditorRail", () => {
       container.querySelector<HTMLInputElement>(
         `[data-testid="tutorial-action-card-id-${NEW_ACTION_ID}"]`,
       )?.value,
-    ).toBe(TEST_TUTORIAL_FEATURED_CARDS.opponentCardId);
+    ).toBe(TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId);
 
     act(() => root.unmount());
     container.remove();
@@ -934,8 +935,8 @@ describe("TutorialEditorRail", () => {
         {
           id: NEW_ACTION_ID,
           action: "reposition-player-character",
-          cardId: TEST_TUTORIAL_FEATURED_CARDS.playerCardId,
-          opposingCardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
+          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialPlayerCharacterCardId,
+          opposingCardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
           wait: 0,
         },
       ],
@@ -945,12 +946,12 @@ describe("TutorialEditorRail", () => {
       container.querySelector<HTMLInputElement>(
         `[data-testid="tutorial-action-card-id-${NEW_ACTION_ID}"]`,
       )?.value,
-    ).toBe(TEST_TUTORIAL_FEATURED_CARDS.playerCardId);
+    ).toBe(TEST_TUTORIAL_CARD_CONSTANTS.tutorialPlayerCharacterCardId);
     expect(
       container.querySelector<HTMLInputElement>(
         `[data-testid="tutorial-action-opposing-card-id-${NEW_ACTION_ID}"]`,
       )?.value,
-    ).toBe(TEST_TUTORIAL_FEATURED_CARDS.opponentCardId);
+    ).toBe(TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId);
 
     act(() => root.unmount());
     container.remove();
@@ -982,7 +983,7 @@ describe("TutorialEditorRail", () => {
         {
           id: NEW_ACTION_ID,
           action: "reveal-and-play-opponent-card",
-          cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
+          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
           revealDuration: 2,
           wait: 0,
         },
@@ -1000,7 +1001,7 @@ describe("TutorialEditorRail", () => {
         {
           id: NEW_ACTION_ID,
           action: "reveal-and-play-opponent-card",
-          cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
+          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
           revealDuration: 2,
           speechBubble: {
             speaker: "mira",
@@ -1029,7 +1030,7 @@ describe("TutorialEditorRail", () => {
         {
           id: NEW_ACTION_ID,
           action: "reveal-and-play-opponent-card",
-          cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
+          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
           revealDuration: 2,
           speechBubble: {
             speaker: "mira",
@@ -1058,7 +1059,7 @@ describe("TutorialEditorRail", () => {
         {
           id: NEW_ACTION_ID,
           action: "reveal-and-play-opponent-card",
-          cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
+          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
           revealDuration: 2,
           speechBubble: {
             speaker: "mira",
@@ -1087,7 +1088,7 @@ describe("TutorialEditorRail", () => {
         {
           id: NEW_ACTION_ID,
           action: "reveal-and-play-opponent-card",
-          cardId: TEST_TUTORIAL_FEATURED_CARDS.opponentCardId,
+          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
           revealDuration: 2.5,
           speechBubble: {
             speaker: "mira",

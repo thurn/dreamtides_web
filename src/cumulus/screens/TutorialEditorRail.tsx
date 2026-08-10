@@ -25,7 +25,7 @@ import type {
   TutorialHowToPlayTrigger,
   TutorialSpeechBubble,
   TutorialSpeechBubbleSpeaker,
-  TutorialFeaturedCards,
+  TutorialCardConstants,
 } from "../../types/tutorial";
 import { isCardId } from "../../types/card-identity";
 
@@ -33,7 +33,7 @@ export interface TutorialEditorRailProps {
   readonly actions: readonly TutorialAction[];
   readonly saveStatus: TutorialEditorSaveStatus;
   readonly saveError: string | null;
-  readonly featuredCards: TutorialFeaturedCards;
+  readonly tutorialCardConstants: TutorialCardConstants;
   readonly onActionsChange: (
     actions: readonly TutorialAction[],
     persist: boolean,
@@ -129,7 +129,7 @@ function nextActionId(
 function defaultAction(
   actionName: TutorialActionName,
   actions: readonly TutorialAction[],
-  featuredCards: TutorialFeaturedCards,
+  tutorialCardConstants: TutorialCardConstants,
 ): TutorialAction {
   const id = nextActionId(actionName, actions);
   if (actionName === "display-speech-bubble") {
@@ -164,7 +164,7 @@ function defaultAction(
     return {
       id,
       action: "reveal-and-play-opponent-card",
-      cardId: featuredCards.opponentCardId,
+      cardId: tutorialCardConstants.tutorialOpponentCharacterCardId,
       revealDuration: 2,
       wait: 0,
     };
@@ -174,7 +174,7 @@ function defaultAction(
       id,
       action: "draw-card",
       owner: "player",
-      cardId: featuredCards.playerCardId,
+      cardId: tutorialCardConstants.tutorialPlayerCharacterCardId,
       reason: "dreamwell-effect",
       wait: 0,
     };
@@ -184,7 +184,7 @@ function defaultAction(
       id,
       action: "draw-dreamwell-card",
       owner: "enemy",
-      cardId: featuredCards.dreamwellCardId,
+      cardId: tutorialCardConstants.tutorialDreamwellCardId,
       wait: 0,
     };
   }
@@ -192,7 +192,7 @@ function defaultAction(
     return {
       id,
       action: "reposition-opponent-character",
-      cardId: featuredCards.opponentCardId,
+      cardId: tutorialCardConstants.tutorialOpponentCharacterCardId,
       wait: 0,
     };
   }
@@ -200,8 +200,8 @@ function defaultAction(
     return {
       id,
       action: "reposition-player-character",
-      cardId: featuredCards.playerCardId,
-      opposingCardId: featuredCards.opponentCardId,
+      cardId: tutorialCardConstants.tutorialPlayerCharacterCardId,
+      opposingCardId: tutorialCardConstants.tutorialOpponentCharacterCardId,
       wait: 0,
     };
   }
@@ -209,8 +209,8 @@ function defaultAction(
     return {
       id,
       action: "resolve-challenge",
-      challengerCardId: featuredCards.opponentCardId,
-      blockerCardId: featuredCards.playerCardId,
+      challengerCardId: tutorialCardConstants.tutorialOpponentCharacterCardId,
+      blockerCardId: tutorialCardConstants.tutorialPlayerCharacterCardId,
       wait: 0,
     };
   }
@@ -220,7 +220,7 @@ function defaultAction(
   return {
     id,
     action: "draw-opponent-card",
-    cardId: featuredCards.opponentCardId,
+    cardId: tutorialCardConstants.tutorialOpponentCharacterCardId,
     wait: 0,
   };
 }
@@ -228,7 +228,7 @@ function defaultAction(
 function changedActionType(
   action: TutorialAction,
   actionName: TutorialActionName,
-  featuredCards: TutorialFeaturedCards,
+  tutorialCardConstants: TutorialCardConstants,
 ): TutorialAction {
   if (actionName === "display-speech-bubble") {
     return {
@@ -273,7 +273,7 @@ function changedActionType(
       cardId:
         action.action === "draw-opponent-card"
           ? action.cardId
-          : featuredCards.opponentCardId,
+          : tutorialCardConstants.tutorialOpponentCharacterCardId,
       wait: action.wait,
     };
   }
@@ -285,7 +285,7 @@ function changedActionType(
       cardId:
         action.action === "draw-card"
           ? action.cardId
-          : featuredCards.playerCardId,
+          : tutorialCardConstants.tutorialPlayerCharacterCardId,
       reason:
         action.action === "draw-card" ? action.reason : "dreamwell-effect",
       wait: action.wait,
@@ -298,7 +298,7 @@ function changedActionType(
       cardId:
         action.action === "reposition-opponent-character"
           ? action.cardId
-          : featuredCards.opponentCardId,
+          : tutorialCardConstants.tutorialOpponentCharacterCardId,
       wait: action.wait,
     };
   }
@@ -309,11 +309,11 @@ function changedActionType(
       cardId:
         action.action === "reposition-player-character"
           ? action.cardId
-          : featuredCards.playerCardId,
+          : tutorialCardConstants.tutorialPlayerCharacterCardId,
       opposingCardId:
         action.action === "reposition-player-character"
           ? action.opposingCardId
-          : featuredCards.opponentCardId,
+          : tutorialCardConstants.tutorialOpponentCharacterCardId,
       wait: action.wait,
     };
   }
@@ -324,11 +324,11 @@ function changedActionType(
       challengerCardId:
         action.action === "resolve-challenge"
           ? action.challengerCardId
-          : featuredCards.opponentCardId,
+          : tutorialCardConstants.tutorialOpponentCharacterCardId,
       blockerCardId:
         action.action === "resolve-challenge"
           ? action.blockerCardId
-          : featuredCards.playerCardId,
+          : tutorialCardConstants.tutorialPlayerCharacterCardId,
       wait: action.wait,
     };
   }
@@ -353,7 +353,7 @@ function changedActionType(
       cardId:
         action.action === "reveal-and-play-opponent-card"
           ? action.cardId
-          : featuredCards.opponentCardId,
+          : tutorialCardConstants.tutorialOpponentCharacterCardId,
       revealDuration:
         action.action === "reveal-and-play-opponent-card"
           ? action.revealDuration
@@ -376,7 +376,7 @@ function changedActionType(
       cardId:
         action.action === "draw-dreamwell-card"
           ? action.cardId
-          : featuredCards.dreamwellCardId,
+          : tutorialCardConstants.tutorialDreamwellCardId,
       ...(action.action === "draw-dreamwell-card" &&
       action.revealDuration !== undefined
         ? { revealDuration: action.revealDuration }
@@ -685,14 +685,14 @@ function TutorialActionRow({
   action,
   index,
   actions,
-  featuredCards,
+  tutorialCardConstants,
   onActionsChange,
   onPlayFromAction,
 }: {
   readonly action: TutorialAction;
   readonly index: number;
   readonly actions: readonly TutorialAction[];
-  readonly featuredCards: TutorialFeaturedCards;
+  readonly tutorialCardConstants: TutorialCardConstants;
   readonly onActionsChange: TutorialEditorRailProps["onActionsChange"];
   readonly onPlayFromAction: TutorialEditorRailProps["onPlayFromAction"];
 }): ReactElement {
@@ -790,7 +790,7 @@ function TutorialActionRow({
                 ) {
                   return;
                 }
-                update(changedActionType(action, value, featuredCards), true);
+                update(changedActionType(action, value, tutorialCardConstants), true);
               }}
             />
           </div>
@@ -1339,14 +1339,14 @@ function SaveStatus({
 
 function TutorialEditorContent({
   actions,
-  featuredCards,
+  tutorialCardConstants,
   onActionsChange,
   onReplay,
   onPlayFromAction,
 }: Pick<
   TutorialEditorRailProps,
   | "actions"
-  | "featuredCards"
+  | "tutorialCardConstants"
   | "onActionsChange"
   | "onReplay"
   | "onPlayFromAction"
@@ -1406,7 +1406,7 @@ function TutorialEditorContent({
             action={action}
             index={index}
             actions={actions}
-            featuredCards={featuredCards}
+            tutorialCardConstants={tutorialCardConstants}
             onActionsChange={onActionsChange}
             onPlayFromAction={onPlayFromAction}
           />
@@ -1435,7 +1435,7 @@ function TutorialEditorContent({
             return;
           }
           onActionsChange(
-            [...actions, defaultAction(value, actions, featuredCards)],
+            [...actions, defaultAction(value, actions, tutorialCardConstants)],
             true,
           );
         }}
@@ -1466,7 +1466,7 @@ function TutorialEditorSaveFooter({
 /** Draggable, autosaving action list for the local Tutorial Editor. */
 export function TutorialEditorRail({
   actions,
-  featuredCards,
+  tutorialCardConstants,
   saveStatus,
   saveError,
   onActionsChange,
@@ -1490,7 +1490,7 @@ export function TutorialEditorRail({
     >
       <TutorialEditorContent
         actions={actions}
-        featuredCards={featuredCards}
+        tutorialCardConstants={tutorialCardConstants}
         onActionsChange={onActionsChange}
         onReplay={onReplay}
         onPlayFromAction={onPlayFromAction}
@@ -1502,7 +1502,7 @@ export function TutorialEditorRail({
 /** Full-screen Tutorial Editor used below the docked-rail breakpoint. */
 export function TutorialEditorTakeover({
   actions,
-  featuredCards,
+  tutorialCardConstants,
   saveStatus,
   saveError,
   onActionsChange,
@@ -1532,7 +1532,7 @@ export function TutorialEditorTakeover({
       >
         <TutorialEditorContent
           actions={actions}
-          featuredCards={featuredCards}
+          tutorialCardConstants={tutorialCardConstants}
           onActionsChange={onActionsChange}
           onReplay={onReplay}
           onPlayFromAction={onPlayFromAction}

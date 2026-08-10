@@ -880,21 +880,21 @@ describe("tutorial battle lifecycle", () => {
         },
         placements: [
           {
-            cardRole: "player" as const,
+            cardRole: "tutorialPlayerCharacter" as const,
             side: "player" as const,
             source: "deck" as const,
             zone: "backRank" as const,
             slotId: "B2",
           },
           {
-            cardRole: "enemyStarter" as const,
+            cardRole: "handoffEnemyCharacter" as const,
             side: "enemy" as const,
             source: "deck" as const,
             zone: "frontRank" as const,
             slotId: "F7",
           },
           {
-            cardRole: "opponent" as const,
+            cardRole: "tutorialOpponentCharacter" as const,
             side: "player" as const,
             source: "created" as const,
             zone: "void" as const,
@@ -1527,7 +1527,7 @@ describe("tutorial battle lifecycle", () => {
       },
     };
     registerTutorialFrontDoorContentProvider({
-      playerCardId: tutorialContent.tutorial.battle.featuredCards.playerCardId,
+      playerCardId: tutorialContent.tutorial.battle.tutorialCardConstants.tutorialPlayerCharacterCardId,
       journeyDreamAvatarId: configuredAvatarId,
     });
     registerTutorialBattleInitProvider(
