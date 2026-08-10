@@ -4341,4 +4341,149 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "5f4bc2cf-4464-409f-acd5-fe4d6df28a05",
+    prose: "A sword-bearing wanderer faces glowing stone tablets within a misty forest.",
+    actions: [
+      ActionDefinition(
+        label: "Search Misty Forest",
+        id: "0d5983d5-b1c6-4b39-81c3-f3ad61d0fb6e",
+        presentation: ActionPresentation(
+          effect_text: "Gain Amplified Acorn",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
+        ),
+        effect: GainDreamsign(dreamsign_id: "c706d0ba-2f41-4b14-95d8-db168ac6246c"),
+      ),
+
+      ActionDefinition(
+        label: "Study Glowing Tablets",
+        id: "d9e0cac9-4551-418c-a25b-adb74acf0661",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one transfigured Warrior."),
+        ),
+        effect: TransfiguredCardDraft(predicate: Warrior, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "d89f4c33-ffd3-4313-8106-0a9f7013cad8",
+    prose: "A lone figure faces a colossal experiment tearing through a sparking metal ring amid shattered ruins.",
+    actions: [
+      ActionDefinition(
+        label: "Feed Colossus a Form",
+        id: "f71a5456-7f43-4d2a-ba95-bb2d2e76c711",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one card to consume, then a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+
+      ActionDefinition(
+        label: "Shatter Containment Ring",
+        id: "2efe46a7-9203-4366-98c3-e59253ca7b2c",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "7f90d17b-9146-4550-a372-a9d77e814ce6",
+    prose: "A lone figure watches concentric architecture splinter across a pale, wind-torn sky.",
+    actions: [
+      ActionDefinition(
+        label: "Trigger Final Collapse",
+        id: "df123793-531c-46e9-a1eb-a399ddc1ee45",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to collapse for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Chart Falling Fragments",
+        id: "448f22fb-04d2-417d-ab29-0ed9fc2bea8a",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "43628666-2ecd-47a7-b2c0-241cda0de5e8",
+    prose: "An armored warrior raises a rifle amid ruined towers beneath a radiant ringed world.",
+    actions: [
+      ActionDefinition(
+        label: "Scavenge Tactical Echoes",
+        id: "e44dad17-f574-43d8-bcf6-1ff539b751b4",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one revealed card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Hold High Ground",
+        id: "fb0813b8-bfb8-4844-9915-ba04bb3476c8",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "5832785d-fb97-40b5-a12b-bb660f5e04b6",
+    prose: "A lone surfer crouches on a white board inside a bursting rainbow wave.",
+    actions: [
+      ActionDefinition(
+        label: "Follow the surfer's line",
+        id: "fa613820-07f3-49f9-9ff8-f696756322c5",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+
+      ActionDefinition(
+        label: "Ride the rainbow wave",
+        id: "780b903b-235a-4c7a-9030-435671d88afc",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck become the subtype of your choice",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one shared subtype for every Character.",
+          ),
+        ),
+        effect: ChangeSubtypeAll(subtype_options: ["Warrior", "Mage", "Spirit Animal", "Survivor"]),
+      ),
+    ],
+  ),
 ]

@@ -4058,8 +4058,143 @@
           "deckTarget": "chosen"
         }
       ]
+    },
+    {
+      "cardId": "5f4bc2cf-4464-409f-acd5-fe4d6df28a05",
+      "prose": "A sword-bearing wanderer faces glowing stone tablets within a misty forest.",
+      "action": [
+        {
+          "id": "0d5983d5-b1c6-4b39-81c3-f3ad61d0fb6e",
+          "label": "Search Misty Forest",
+          "effectText": "Gain Amplified Acorn",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to replace.",
+          "effectKind": "gain-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "fixed",
+          "dreamsignId": "c706d0ba-2f41-4b14-95d8-db168ac6246c"
+        },
+        {
+          "id": "d9e0cac9-4551-418c-a25b-adb74acf0661",
+          "label": "Study Glowing Tablets",
+          "effectText": "Draft a transfigured Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured Warrior.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "d89f4c33-ffd3-4313-8106-0a9f7013cad8",
+      "prose": "A lone figure faces a colossal experiment tearing through a sparking metal ring amid shattered ruins.",
+      "action": [
+        {
+          "id": "f71a5456-7f43-4d2a-ba95-bb2d2e76c711",
+          "label": "Feed Colossus a Form",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one card to consume, then a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "2efe46a7-9203-4366-98c3-e59253ca7b2c",
+          "label": "Shatter Containment Ring",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "7f90d17b-9146-4550-a372-a9d77e814ce6",
+      "prose": "A lone figure watches concentric architecture splinter across a pale, wind-torn sky.",
+      "action": [
+        {
+          "id": "df123793-531c-46e9-a1eb-a399ddc1ee45",
+          "label": "Trigger Final Collapse",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to collapse for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "448f22fb-04d2-417d-ab29-0ed9fc2bea8a",
+          "label": "Chart Falling Fragments",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "43628666-2ecd-47a7-b2c0-241cda0de5e8",
+      "prose": "An armored warrior raises a rifle amid ruined towers beneath a radiant ringed world.",
+      "action": [
+        {
+          "id": "e44dad17-f574-43d8-bcf6-1ff539b751b4",
+          "label": "Scavenge Tactical Echoes",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one revealed card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "fb0813b8-bfb8-4844-9915-ba04bb3476c8",
+          "label": "Hold High Ground",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "5832785d-fb97-40b5-a12b-bb660f5e04b6",
+      "prose": "A lone surfer crouches on a white board inside a bursting rainbow wave.",
+      "action": [
+        {
+          "id": "fa613820-07f3-49f9-9ff8-f696756322c5",
+          "label": "Follow the surfer's line",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card, then choose its transfiguration.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "count": 1
+        },
+        {
+          "id": "780b903b-235a-4c7a-9030-435671d88afc",
+          "label": "Ride the rainbow wave",
+          "effectText": "All characters in your deck become the subtype of your choice",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one shared subtype for every Character.",
+          "effectKind": "change-subtype-all",
+          "canonicalMechanicId": "change-deck-subtype",
+          "subtypeOptions": [
+            "Warrior",
+            "Mage",
+            "Spirit Animal",
+            "Survivor"
+          ]
+        }
+      ]
     }
   ],
-  "contentHash": "8fdc84b88cabd45512b5362dbb7cd84cd7560b61151271dab0d9f82187d638c0",
-  "foldHash": "8fdc84b88cabd45512b5362dbb7cd84cd7560b61151271dab0d9f82187d638c0"
+  "contentHash": "70fd42d7ee7b90b6b561dfc646328cc7d9385e7aebe6500371aeb4f43b5ceb90",
+  "foldHash": "70fd42d7ee7b90b6b561dfc646328cc7d9385e7aebe6500371aeb4f43b5ceb90"
 }
