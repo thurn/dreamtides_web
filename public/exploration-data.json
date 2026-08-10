@@ -10199,8 +10199,142 @@
           "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
         }
       ]
+    },
+    {
+      "cardId": "8fed2e20-09c6-43e0-b6e0-5a4a417529a1",
+      "prose": "A young archer braces beneath mossy boughs as sunlight pierces tangled forest ruins.",
+      "action": [
+        {
+          "id": "68ef942b-bdda-4569-9728-98f35c21dea6",
+          "label": "Follow Her Hidden Trail",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Warrior.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "b1b1d7c9-f765-413b-aaa6-a1ad41eaf413",
+          "label": "Endure Forest's Trial",
+          "effectText": "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "475fcc5b-c82d-4ef7-8020-90a8aeb2df53",
+      "prose": "Golden loops suspend one figure while another stands amid a storm of shards.",
+      "action": [
+        {
+          "id": "e008836b-1268-4f60-bec8-25b45004cddd",
+          "label": "Collect Broken Fragments",
+          "effectText": "Take any number of Event cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any number of offered cards.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        },
+        {
+          "id": "9f73489e-d41f-4883-b2cb-d571ef95fd2d",
+          "label": "Enter Golden Loop",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        }
+      ]
+    },
+    {
+      "cardId": "f38ab9b6-bea7-4c6e-b5db-2609796ba46b",
+      "prose": "A colossal panther carries a child through shattered mountains as golden lightning rends dawn.",
+      "action": [
+        {
+          "id": "097f6aa7-f2bf-468c-a940-4cf5dcf394c0",
+          "label": "Call a Dawn Companion",
+          "effectText": "Draft a Spirit Animal from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Spirit Animal to join the run.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "52b0afe8-8f54-49f3-9f71-d0493220060c",
+          "label": "Ride Golden Lightning",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "174a5909-48e2-4aab-8cc5-fa3292281d1d",
+      "prose": "A young mage traces fire across dark ground beneath a colossal white-orange brushstroke.",
+      "action": [
+        {
+          "id": "fb4df013-a237-4c21-a3c0-62fd742e7fee",
+          "label": "Gather stray brushstrokes",
+          "effectText": "Take any number of Event cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any number of offered Events.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        },
+        {
+          "id": "4d38ba7a-b3f4-4b03-b3e4-e0836cde4c68",
+          "label": "Complete sweeping inscription",
+          "effectText": "Lose 100 essence. Apply Inspired to every eligible Event card in your deck.",
+          "effectKind": "transfigure-all-for-essence",
+          "canonicalMechanicId": "transfigure-deck-for-essence",
+          "essence": 100,
+          "predicate": "event",
+          "transfiguration": "Inspired"
+        }
+      ]
+    },
+    {
+      "cardId": "d2a3d344-613c-449e-9a87-0f720a85585d",
+      "prose": "A lone explorer stands on a mossy bough above clouds as sunset gilds towering roots.",
+      "action": [
+        {
+          "id": "c2963441-2a48-4e89-b87a-dc2594dec43f",
+          "label": "Prune a Fading Bough",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to prune for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "d9a98018-25d4-4def-aa1d-ae1c71a4a8fb",
+          "label": "Nourish Living Canopy",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
     }
   ],
-  "contentHash": "1835484f8ba12c67b5f349e7d9edd4a184d10a3ce109e4ebf08166eeb674d260",
-  "foldHash": "1835484f8ba12c67b5f349e7d9edd4a184d10a3ce109e4ebf08166eeb674d260"
+  "contentHash": "d1bc2b2cacec7dda93dc18e42fb1ab8d7e5f52db4e2c266b31eefaeb440433e2",
+  "foldHash": "d1bc2b2cacec7dda93dc18e42fb1ab8d7e5f52db4e2c266b31eefaeb440433e2"
 }

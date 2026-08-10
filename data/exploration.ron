@@ -10941,4 +10941,150 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "8fed2e20-09c6-43e0-b6e0-5a4a417529a1",
+    prose: "A young archer braces beneath mossy boughs as sunlight pierces tangled forest ruins.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Her Hidden Trail",
+        id: "68ef942b-bdda-4569-9728-98f35c21dea6",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Endure Forest's Trial",
+        id: "b1b1d7c9-f765-413b-aaa6-a1ad41eaf413",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "475fcc5b-c82d-4ef7-8020-90a8aeb2df53",
+    prose: "Golden loops suspend one figure while another stands amid a storm of shards.",
+    actions: [
+      ActionDefinition(
+        label: "Collect Broken Fragments",
+        id: "e008836b-1268-4f60-bec8-25b45004cddd",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Event cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered cards.",
+          ),
+        ),
+        effect: TakeCards(predicate: Event, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Enter Golden Loop",
+        id: "9f73489e-d41f-4883-b2cb-d571ef95fd2d",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "f38ab9b6-bea7-4c6e-b5db-2609796ba46b",
+    prose: "A colossal panther carries a child through shattered mountains as golden lightning rends dawn.",
+    actions: [
+      ActionDefinition(
+        label: "Call a Dawn Companion",
+        id: "097f6aa7-f2bf-468c-a940-4cf5dcf394c0",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Spirit Animal from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one Spirit Animal to join the run.",
+          ),
+        ),
+        effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Ride Golden Lightning",
+        id: "52b0afe8-8f54-49f3-9f71-d0493220060c",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "174a5909-48e2-4aab-8cc5-fa3292281d1d",
+    prose: "A young mage traces fire across dark ground beneath a colossal white-orange brushstroke.",
+    actions: [
+      ActionDefinition(
+        label: "Gather stray brushstrokes",
+        id: "fb4df013-a237-4c21-a3c0-62fd742e7fee",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Event cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered Events.",
+          ),
+        ),
+        effect: TakeCards(predicate: Event, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Complete sweeping inscription",
+        id: "4d38ba7a-b3f4-4b03-b3e4-e0836cde4c68",
+        presentation: ActionPresentation(
+          effect_text: "Lose 100 essence. Apply Inspired to every eligible Event card in your deck.",
+          followup: None,
+        ),
+        effect: TransfigureAllForEssence(
+          essence: 100,
+          predicate: Event,
+          transfiguration: "Inspired",
+        ),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "d2a3d344-613c-449e-9a87-0f720a85585d",
+    prose: "A lone explorer stands on a mossy bough above clouds as sunset gilds towering roots.",
+    actions: [
+      ActionDefinition(
+        label: "Prune a Fading Bough",
+        id: "c2963441-2a48-4e89-b87a-dc2594dec43f",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to prune for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Nourish Living Canopy",
+        id: "d9a98018-25d4-4def-aa1d-ae1c71a4a8fb",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
 ]
