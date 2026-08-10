@@ -11226,4 +11226,146 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "31501d09-5dde-44f4-a938-7ca95ad988a0",
+    prose: "A skull-winged Ancient rises from a blazing pit as molten cracks shed feathers and stone.",
+    actions: [
+      ActionDefinition(
+        label: "Claim Fallen Wings",
+        id: "66a93ab4-c049-46eb-a176-d4b63e69c840",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast).",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+
+      ActionDefinition(
+        label: "Feed Blazing Pit",
+        id: "7c6686df-0417-48f5-9910-3a6bbc5f182c",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had.",
+          followup: Followup(
+            title: "Feed Blazing Pit",
+            subtitle: "Choose a card to burn for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "647f5150-b2e0-424b-9480-27557642524e",
+    prose: "A caped watcher stands atop a vintage car before an immense ringed planet.",
+    actions: [
+      ActionDefinition(
+        label: "Read Celestial Rings",
+        id: "016b8f18-dc7a-457f-b997-34e261e1fe2c",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card to copy."),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Drive Toward Horizon",
+        id: "47d8057e-6ca7-41b4-8eb8-323bb66617dd",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "7fb4b7f5-0dfc-4151-8a88-82f822960b61",
+    prose: "A lone surfer carries a patterned board dissolving into color beneath towering clouds.",
+    actions: [
+      ActionDefinition(
+        label: "Read Every Tide",
+        id: "5c6ca20e-38b4-44d5-8130-eb4e465709c1",
+        presentation: ActionPresentation(
+          effect_text: "Gain 15 essence for each Survivor card in your deck",
+          followup: None,
+        ),
+        effect: GainEssencePerCard(predicate: Survivor, essence_per_card: 15),
+      ),
+
+      ActionDefinition(
+        label: "Choose a Shared Horizon",
+        id: "1e27d150-b8e4-45be-a90d-117adef035fa",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck become the subtype of your choice",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one shared subtype for every Character.",
+          ),
+        ),
+        effect: ChangeSubtypeAll(subtype_options: ["Warrior", "Mage", "Spirit Animal", "Survivor"]),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "54471b31-4449-453d-9a6e-814d6225520a",
+    prose: "Ashen figures with ember eyes advance from luminous fog beneath a bruised midnight sky.",
+    actions: [
+      ActionDefinition(
+        label: "Rally Straggling Shadows",
+        id: "c844f0a0-50ab-46ec-b4aa-e5f3b1e02020",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Cheap Character cards from 4 choices",
+          followup: Followup(
+            title: "Rally Straggling Shadows",
+            subtitle: "Choose any number of offered cards.",
+          ),
+        ),
+        effect: TakeCards(predicate: CheapCharacter, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Release Repeated Echoes",
+        id: "2da3c9e3-9b89-4df5-ae5c-11448f92bc5e",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every remaining card gains reclaim",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "7c9f3a38-1434-4db4-a856-24fe744e8322",
+    prose: "A lone wanderer crosses mistbound woods beneath a river of violet stars.",
+    actions: [
+      ActionDefinition(
+        label: "Read Canopy Stars",
+        id: "4a2891c0-c3a7-42c5-9b80-a5760478ea34",
+        presentation: ActionPresentation(
+          effect_text: "Gain a random dreamsign",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Dreamsign to release if needed.",
+          ),
+        ),
+        effect: GainRandomDreamsign,
+      ),
+
+      ActionDefinition(
+        label: "Bottle Falling Starlight",
+        id: "12f4e09f-07e3-4db6-9db7-72d42b4a064e",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
 ]
