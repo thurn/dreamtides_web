@@ -4764,4 +4764,140 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "a8bca1eb-abc8-42e0-b770-0f03af250b81",
+    prose: "A burnished ring hovers in amber haze, turquoise light circling a dark core.",
+    actions: [
+      ActionDefinition(
+        label: "Enter turquoise light",
+        id: "9ab47aa7-c8a6-478c-9261-d9eb1d099fed",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one transfigured Event."),
+        ),
+        effect: TransfiguredCardDraft(predicate: Event, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Touch the dark core",
+        id: "c63ece9d-615f-4c10-a21c-1df1bc16b61d",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card to copy."),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "3cc9253a-4db6-4b02-92d6-a37805d192fb",
+    prose: "A rootbound stone slab hovers above surf, white glyphs glowing across its face.",
+    actions: [
+      ActionDefinition(
+        label: "Study each glyph",
+        id: "387de565-4f7d-49f8-8ac5-8332e98b425e",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card to copy."),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Read a full sequence",
+        id: "ab726a7a-217b-4d3b-bcc1-db202ef0ab7e",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Event."),
+        ),
+        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "cc1c1acd-f0ff-46cc-94d9-401b9daf253f",
+    prose: "A rusted colossus hunches among factory cables, turquoise core glowing within layered plating.",
+    actions: [
+      ActionDefinition(
+        label: "Restart Its Core",
+        id: "842a4c2f-49ab-4f74-809e-a3bb4380f7c4",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Study Its Plating",
+        id: "1101ddaa-28e0-4d3b-b373-ba5329dbaa12",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "1bae969b-0bc4-4777-86f3-1e860d601c5c",
+    prose: "A caster spreads both arms beneath a red eclipse, glowing eyes bright inside a dark cowl.",
+    actions: [
+      ActionDefinition(
+        label: "Hold its burning gaze",
+        id: "d8ac6a21-d668-4f81-95d9-ffb238c09b24",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Raise both arms higher",
+        id: "91bdca62-29cd-4bb4-adcf-4209a86833e9",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "cd2d4eaf-6295-451d-aaa2-ea74188bac3b",
+    prose: "A pale panther sprawls across a high branch, amber eyes fixed forward.",
+    actions: [
+      ActionDefinition(
+        label: "Follow its gaze",
+        id: "e5e39862-e56d-4b0e-a619-be7eb3267eed",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Spirit Animal from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered Spirit Animal.",
+          ),
+        ),
+        effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Honor the panther",
+        id: "2187fdf0-f80a-42ad-9432-b41ee60aa913",
+        presentation: ActionPresentation(
+          effect_text: "Gain 15 essence for each Spirit Animal card in your deck",
+          followup: None,
+        ),
+        effect: GainEssencePerCard(predicate: SpiritAnimal, essence_per_card: 15),
+      ),
+    ],
+  ),
 ]
