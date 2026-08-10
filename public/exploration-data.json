@@ -8220,8 +8220,154 @@
           "sparkBonus": 1
         }
       ]
+    },
+    {
+      "cardId": "09e17f29-8ee1-477f-8175-ff37eb1f254a",
+      "prose": "A masked survivor watches mossy factory ruins rise beneath a pale, fractured sky.",
+      "action": [
+        {
+          "id": "aea75970-6235-40ac-b422-c6327f0a9c8f",
+          "label": "Mourn Fallen Kin",
+          "effectText": "Purge a random Survivor. Every other Survivor in your deck gains +1✦",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Survivor",
+          "sparkBonus": 1
+        },
+        {
+          "id": "fb6da0d5-b233-43c4-8a0e-d586af299a60",
+          "label": "Signal Distant Survivors",
+          "effectText": "Draft a Survivor from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one answering survivor.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "survivor",
+          "count": 2,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "f7c68226-def4-4eb0-bdfe-b028482e1351",
+      "prose": "A colossal sleeper floats beneath green light while a masked technician studies nearby controls.",
+      "action": [
+        {
+          "id": "e3c70736-fe3b-47e2-9aba-019beb235974",
+          "label": "Activate Synthesis Protocol",
+          "effectText": "Change a chosen character card to be a Synth",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to awaken as a Synth.",
+          "effectKind": "change-subtype-selected",
+          "canonicalMechanicId": "change-entry-subtype",
+          "selectionPolicyId": "deck-entry-centrality",
+          "predicate": "character",
+          "subtype": "Synth",
+          "deckTarget": "chosen"
+        },
+        {
+          "id": "7eaed211-387e-47fd-af0a-02fe1a85ad90",
+          "label": "Sample Dormant Tissue",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one sampled card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "795a7b54-40d5-42f9-bc3a-9e92bc938c2d",
+      "prose": "A lone climber braces against an icy slope as boulders plunge through blinding snow.",
+      "action": [
+        {
+          "id": "c7a3969f-c71f-4c48-a13f-f9e16278c22d",
+          "label": "Cut loose a burden",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to abandon for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "66233bad-6370-48ea-a3dc-4148e7de5de2",
+          "label": "Race falling boulders",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "7992dbb5-ca45-4066-aca3-ff1d6d87619e",
+      "prose": "A woman rides a howling wolf atop shattered peaks beneath green stars and drifting stones.",
+      "action": [
+        {
+          "id": "b305be4e-5f2f-453e-b245-39cc4e26bbe3",
+          "label": "Answer Summit Howl",
+          "effectText": "Draft a Spirit Animal from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Spirit Animal answering from distant peaks.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "e299eea4-62d6-4817-b2ce-4ef28a68e14b",
+          "label": "Share Moonbound Shape",
+          "effectText": "Change a chosen character card to be a Spirit Animal",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to become a Spirit Animal.",
+          "effectKind": "change-subtype-selected",
+          "canonicalMechanicId": "change-entry-subtype",
+          "selectionPolicyId": "deck-entry-centrality",
+          "predicate": "character",
+          "subtype": "Spirit Animal",
+          "deckTarget": "chosen"
+        }
+      ]
+    },
+    {
+      "cardId": "229ab3a1-3720-41a2-924c-8fe112188f8e",
+      "prose": "A young guitarist watches sunset spill across a rocky shore, guitar resting against a shoulder.",
+      "action": [
+        {
+          "id": "62880fba-b9ac-40d5-a814-87822a99abbd",
+          "label": "Request a new ballad",
+          "effectText": "Draft an Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "284de061-6625-481e-9116-dae02c4bdb4d",
+          "label": "Request a familiar refrain",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        }
+      ]
     }
   ],
-  "contentHash": "988638dfbe539b5fed85df28b69ce18b65053fdc328c4530bee732da1cae09e3",
-  "foldHash": "988638dfbe539b5fed85df28b69ce18b65053fdc328c4530bee732da1cae09e3"
+  "contentHash": "84dc98c0ab25568ea25102b676db08d04ff7acb2b1202eb9f739b29e7165070f",
+  "foldHash": "84dc98c0ab25568ea25102b676db08d04ff7acb2b1202eb9f739b29e7165070f"
 }

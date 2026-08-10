@@ -8817,4 +8817,150 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "09e17f29-8ee1-477f-8175-ff37eb1f254a",
+    prose: "A masked survivor watches mossy factory ruins rise beneath a pale, fractured sky.",
+    actions: [
+      ActionDefinition(
+        label: "Mourn Fallen Kin",
+        id: "aea75970-6235-40ac-b422-c6327f0a9c8f",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Survivor. Every other Survivor in your deck gains +1✦",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Survivor", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Signal Distant Survivors",
+        id: "fb6da0d5-b233-43c4-8a0e-d586af299a60",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Survivor from 4 choices and gain 2 copies of it",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one answering survivor."),
+        ),
+        effect: DraftCard(predicate: Survivor, count: 2, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "f7c68226-def4-4eb0-bdfe-b028482e1351",
+    prose: "A colossal sleeper floats beneath green light while a masked technician studies nearby controls.",
+    actions: [
+      ActionDefinition(
+        label: "Activate Synthesis Protocol",
+        id: "e3c70736-fe3b-47e2-9aba-019beb235974",
+        presentation: ActionPresentation(
+          effect_text: "Change a chosen character card to be a Synth",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to awaken as a Synth.",
+          ),
+        ),
+        effect: ChangeSubtypeSelected(predicate: Character, subtype: "Synth", target: Chosen),
+      ),
+
+      ActionDefinition(
+        label: "Sample Dormant Tissue",
+        id: "7eaed211-387e-47fd-af0a-02fe1a85ad90",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one sampled card to copy."),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "795a7b54-40d5-42f9-bc3a-9e92bc938c2d",
+    prose: "A lone climber braces against an icy slope as boulders plunge through blinding snow.",
+    actions: [
+      ActionDefinition(
+        label: "Cut loose a burden",
+        id: "c7a3969f-c71f-4c48-a13f-f9e16278c22d",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to abandon for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Race falling boulders",
+        id: "66233bad-6370-48ea-a3dc-4148e7de5de2",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "7992dbb5-ca45-4066-aca3-ff1d6d87619e",
+    prose: "A woman rides a howling wolf atop shattered peaks beneath green stars and drifting stones.",
+    actions: [
+      ActionDefinition(
+        label: "Answer Summit Howl",
+        id: "b305be4e-5f2f-453e-b245-39cc4e26bbe3",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Spirit Animal from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one Spirit Animal answering from distant peaks.",
+          ),
+        ),
+        effect: DraftCard(predicate: SpiritAnimal, offer_count: 4, count: 1),
+      ),
+
+      ActionDefinition(
+        label: "Share Moonbound Shape",
+        id: "e299eea4-62d6-4817-b2ce-4ef28a68e14b",
+        presentation: ActionPresentation(
+          effect_text: "Change a chosen character card to be a Spirit Animal",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to become a Spirit Animal.",
+          ),
+        ),
+        effect: ChangeSubtypeSelected(
+          predicate: Character,
+          subtype: "Spirit Animal",
+          target: Chosen,
+        ),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+    prose: "A young guitarist watches sunset spill across a rocky shore, guitar resting against a shoulder.",
+    actions: [
+      ActionDefinition(
+        label: "Request a new ballad",
+        id: "62880fba-b9ac-40d5-a814-87822a99abbd",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Request a familiar refrain",
+        id: "284de061-6625-481e-9116-dae02c4bdb4d",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card to copy."),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+    ],
+  ),
 ]
