@@ -4193,4 +4193,152 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "84fd9c6e-79c6-4b65-878b-1534f3e4b220",
+    prose: "A dark eclipse hangs within a broad orange corona amid violet haze.",
+    actions: [
+      ActionDefinition(
+        label: "Study Dark Eclipse",
+        id: "31edb3d9-9dbc-4424-86f8-72471a3de0a8",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Enter Orange Corona",
+        id: "3ddd401a-2078-4f64-a031-2b434dfbc74d",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one transfigured Event."),
+        ),
+        effect: TransfiguredCardDraft(predicate: Event, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "8c117d3f-09af-4312-9897-694a76bd23c6",
+    prose: "A mounted lancer approaches a shattered lightning-ring amid green fog, grass, and fallen monoliths.",
+    actions: [
+      ActionDefinition(
+        label: "Ride Beyond Ruins",
+        id: "30184690-942e-4f15-9a9d-0178a89bfa28",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Warrior from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one transfigured Warrior beyond the breach.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: Warrior, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Bind Worlds Together",
+        id: "0dc54870-c1be-4900-9d2f-6f5adb53e8a1",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck become the subtype of your choice",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one shared subtype for every Character.",
+          ),
+        ),
+        effect: ChangeSubtypeAll(subtype_options: ["Warrior", "Mage", "Spirit Animal", "Survivor"]),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "fa7dadd8-c72f-42e7-b203-3d22aa36122f",
+    prose: "A crimson construct reaches toward a luminous fragment amid concentric mechanisms and cascading metallic wreckage.",
+    actions: [
+      ActionDefinition(
+        label: "Catch Luminous Fragment",
+        id: "1d45ddf4-c795-48f1-9681-3b3cff29211f",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+
+      ActionDefinition(
+        label: "Reclaim Broken Mechanism",
+        id: "b1c14803-7be3-4ca1-82f6-dbea16be7c7b",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "cf173b05-7bf2-465b-91e2-41f213c536d1",
+    prose: "A ragged reaper raises a hooked scythe before a vast, blood-bright moon.",
+    actions: [
+      ActionDefinition(
+        label: "Pay Death's Levy",
+        id: "9a8df8ee-ccd4-46fd-ab28-1b241cea04fd",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to purge for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Raise Twin Recruits",
+        id: "c26cc8a0-7c3d-481c-a3d5-7de84434db30",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices and gain 2 copies of it",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, offer_count: 4, count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "d24ea640-638d-4ce2-b15d-b3f4588bda6b",
+    prose: "A luminous star tunnel coils toward a blue-white aperture.",
+    actions: [
+      ActionDefinition(
+        label: "Enter the aperture",
+        id: "42be7260-9ddb-45b5-849b-c73a18a4bc65",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices and gain 2 copies of it",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered Event to gain twice.",
+          ),
+        ),
+        effect: DraftCard(predicate: Event, count: 2, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Trace the star tunnel",
+        id: "53a57aeb-b406-4711-9cee-0c7a3bd81b83",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 copies of a chosen Event",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose an Event to gain two copies of.",
+          ),
+        ),
+        effect: CopySelectedCard(predicate: Event, count: 2, target: Chosen),
+      ),
+    ],
+  ),
 ]

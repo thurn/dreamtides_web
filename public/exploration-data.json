@@ -3913,8 +3913,153 @@
           "packSize": 3
         }
       ]
+    },
+    {
+      "cardId": "84fd9c6e-79c6-4b65-878b-1534f3e4b220",
+      "prose": "A dark eclipse hangs within a broad orange corona amid violet haze.",
+      "action": [
+        {
+          "id": "31edb3d9-9dbc-4424-86f8-72471a3de0a8",
+          "label": "Study Dark Eclipse",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "3ddd401a-2078-4f64-a031-2b434dfbc74d",
+          "label": "Enter Orange Corona",
+          "effectText": "Draft a transfigured Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured Event.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "8c117d3f-09af-4312-9897-694a76bd23c6",
+      "prose": "A mounted lancer approaches a shattered lightning-ring amid green fog, grass, and fallen monoliths.",
+      "action": [
+        {
+          "id": "30184690-942e-4f15-9a9d-0178a89bfa28",
+          "label": "Ride Beyond Ruins",
+          "effectText": "Draft a transfigured Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured Warrior beyond the breach.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "offerCount": 4
+        },
+        {
+          "id": "0dc54870-c1be-4900-9d2f-6f5adb53e8a1",
+          "label": "Bind Worlds Together",
+          "effectText": "All characters in your deck become the subtype of your choice",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one shared subtype for every Character.",
+          "effectKind": "change-subtype-all",
+          "canonicalMechanicId": "change-deck-subtype",
+          "subtypeOptions": [
+            "Warrior",
+            "Mage",
+            "Spirit Animal",
+            "Survivor"
+          ]
+        }
+      ]
+    },
+    {
+      "cardId": "fa7dadd8-c72f-42e7-b203-3d22aa36122f",
+      "prose": "A crimson construct reaches toward a luminous fragment amid concentric mechanisms and cascading metallic wreckage.",
+      "action": [
+        {
+          "id": "1d45ddf4-c795-48f1-9681-3b3cff29211f",
+          "label": "Catch Luminous Fragment",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card, then choose its transfiguration.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "count": 1
+        },
+        {
+          "id": "b1c14803-7be3-4ca1-82f6-dbea16be7c7b",
+          "label": "Reclaim Broken Mechanism",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "cf173b05-7bf2-465b-91e2-41f213c536d1",
+      "prose": "A ragged reaper raises a hooked scythe before a vast, blood-bright moon.",
+      "action": [
+        {
+          "id": "9a8df8ee-ccd4-46fd-ab28-1b241cea04fd",
+          "label": "Pay Death's Levy",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to purge for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "c26cc8a0-7c3d-481c-a3d5-7de84434db30",
+          "label": "Raise Twin Recruits",
+          "effectText": "Draft a Warrior from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Warrior.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 2,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "d24ea640-638d-4ce2-b15d-b3f4588bda6b",
+      "prose": "A luminous star tunnel coils toward a blue-white aperture.",
+      "action": [
+        {
+          "id": "42be7260-9ddb-45b5-849b-c73a18a4bc65",
+          "label": "Enter the aperture",
+          "effectText": "Draft an Event from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Event to gain twice.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "53a57aeb-b406-4711-9cee-0c7a3bd81b83",
+          "label": "Trace the star tunnel",
+          "effectText": "Gain 2 copies of a chosen Event",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose an Event to gain two copies of.",
+          "effectKind": "copy-selected-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "predicate": "event",
+          "count": 2,
+          "deckTarget": "chosen"
+        }
+      ]
     }
   ],
-  "contentHash": "85706cd3ab213310b09741cf7f74cd48dec30171451b4bf2656add045b6ba047",
-  "foldHash": "85706cd3ab213310b09741cf7f74cd48dec30171451b4bf2656add045b6ba047"
+  "contentHash": "8fdc84b88cabd45512b5362dbb7cd84cd7560b61151271dab0d9f82187d638c0",
+  "foldHash": "8fdc84b88cabd45512b5362dbb7cd84cd7560b61151271dab0d9f82187d638c0"
 }
