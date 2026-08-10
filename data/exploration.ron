@@ -5036,4 +5036,149 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "7530e916-e4b9-4988-b3ac-0e400c7a04ff",
+    prose: "A cybernetic agent surveys rain-veiled towers as neon signals burn below.",
+    actions: [
+      ActionDefinition(
+        label: "Trace a Signal",
+        id: "514c1aab-3676-437c-81c3-4526fde67143",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one intercepted card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Erase the Evidence",
+        id: "57fefb12-49a5-4b23-9500-489921a1a8c8",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a card to erase."),
+        ),
+        effect: PurgeSelected(predicate: None, count: None),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "f07dfe42-566c-4e91-a250-9e2781e9d06f",
+    prose: "A red-eyed cellist plays amid black water while embers drift across a blood-red moon.",
+    actions: [
+      ActionDefinition(
+        label: "Conduct Final Chorus",
+        id: "fbd06d78-d18a-4248-9f31-61db84d2c1ce",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck become the subtype of your choice",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one shared subtype for every Character.",
+          ),
+        ),
+        effect: ChangeSubtypeAll(subtype_options: ["Warrior", "Mage", "Spirit Animal", "Survivor"]),
+      ),
+
+      ActionDefinition(
+        label: "Answer Scarlet Refrain",
+        id: "e9e7f750-8e74-4ab4-9fe4-1c2ed1e05afc",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "b8a66998-f2d8-401d-8262-d5a658563936",
+    prose: "Black cables consume a cybernetic marksman aiming across burning wreckage beneath falling ash.",
+    actions: [
+      ActionDefinition(
+        label: "Yield to Black Cables",
+        id: "fad87e00-bfac-4ec4-8047-752814b91ebe",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen Warrior card and gain a random Warrior replacement",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Warrior for black cables to consume.",
+          ),
+        ),
+        effect: ReplaceSelected(predicate: Warrior),
+      ),
+
+      ActionDefinition(
+        label: "Fire Before Dissolving",
+        id: "66957744-1b9e-486c-a015-ece9cc8ded3e",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "9af63811-7fef-4e28-b672-95ea82796f45",
+    prose: "An armored runner races from a white-blue blast as burning projectiles tear through smoke.",
+    actions: [
+      ActionDefinition(
+        label: "Call Extraction Protocol",
+        id: "ccd5b997-cf13-4519-ac40-bb515fef6cb5",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen Character card and gain a random Character replacement",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to extract and replace.",
+          ),
+        ),
+        effect: ReplaceSelected(predicate: Character),
+      ),
+
+      ActionDefinition(
+        label: "Outrun the Shockwave",
+        id: "a6d3bfe2-72d9-42d7-8380-fe97fff4de47",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "faadc87f-98fe-4a58-b1a9-a7c0cff70e08",
+    prose: "Cabled bones fit a glowing visor onto an animal skull as blue current arcs.",
+    actions: [
+      ActionDefinition(
+        label: "Archive a Bright Memory",
+        id: "afbe7127-b2e8-4c56-9f1f-798dc23377e9",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one recalled card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Erase a Dead Signal",
+        id: "630f352a-a706-486c-a6f9-42295c2a8a65",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one memory to erase."),
+        ),
+        effect: PurgeSelected(predicate: None, count: None),
+      ),
+    ],
+  ),
 ]
