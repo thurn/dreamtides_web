@@ -10092,4 +10092,149 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "01a8482b-5b4f-4c49-8791-2702cb5dfd3d",
+    prose: "A lone herald strides from roaring fire while scattered embers gather into armed silhouettes.",
+    actions: [
+      ActionDefinition(
+        label: "Temper Warrior Flames",
+        id: "b7321ee5-b0a5-48b8-b320-4ae9fbc8aa76",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior; every other Warrior in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Rally Emberborn",
+        id: "e1f83b66-82a7-4053-8f55-c9d74509a41d",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Warriors from 4 choices.",
+          followup: Followup(
+            title: "Rally Emberborn",
+            subtitle: "Choose any offered Warriors to gain.",
+          ),
+        ),
+        effect: TakeCards(predicate: Warrior, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "a952f833-825a-435f-82b1-8d85f872d274",
+    prose: "A smoke-wreathed skull-creature raises one claw as orange fire burns inside its open jaws.",
+    actions: [
+      ActionDefinition(
+        label: "Feed Burning Maw",
+        id: "02682355-b807-4371-abb8-18fc89e564db",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to devour for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Lure Fragile Prey",
+        id: "c7b74d34-1e9b-4b8f-88f2-404afb38a376",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices and gain 2 copies of it",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered Character to lure twice.",
+          ),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 2, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "bd27a996-bcdd-4f49-95c2-92c9d5875344",
+    prose: "A candlelit child huddles beneath a horned shadow as smoke and stones churn.",
+    actions: [
+      ActionDefinition(
+        label: "Cast Away a Memory",
+        id: "0229ca6b-7a95-42db-9395-d523f7c0b2a6",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one card to cast into darkness.",
+          ),
+        ),
+        effect: PurgeSelected(predicate: None, count: None),
+      ),
+
+      ActionDefinition(
+        label: "Accept Its Nightmare Bargain",
+        id: "e96cec7f-511a-4eae-8522-9c5b2b25bbed",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "be72bd04-21a6-4035-a117-2b7213ad1a34",
+    prose: "A lone traveler approaches a twisted wooden arch alive with runes and coiling golden lightning.",
+    actions: [
+      ActionDefinition(
+        label: "Catch Arcing Current",
+        id: "034d737d-db81-404b-88e0-28b2b83fbd06",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Cross Rune-Bound Arch",
+        id: "a483ce26-56a7-4bcf-a6ce-beda00f7aa23",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40",
+    prose: "A lone rescuer scans burning ruins as fiery arcs sweep through airborne rubble.",
+    actions: [
+      ActionDefinition(
+        label: "Search Embered Streets",
+        id: "96e28888-ef45-440e-ae49-5508583f392e",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Survivor from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Survivor."),
+        ),
+        effect: DraftCard(predicate: Survivor, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Trade Places in Fire",
+        id: "eddcf564-381b-41e9-bfc8-7309c2fecb3f",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen Character card and gain a random Character replacement",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to send into the fire.",
+          ),
+        ),
+        effect: ReplaceSelected(predicate: Character),
+      ),
+    ],
+  ),
 ]

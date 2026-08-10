@@ -9406,8 +9406,144 @@
           "offerCount": 4
         }
       ]
+    },
+    {
+      "cardId": "01a8482b-5b4f-4c49-8791-2702cb5dfd3d",
+      "prose": "A lone herald strides from roaring fire while scattered embers gather into armed silhouettes.",
+      "action": [
+        {
+          "id": "b7321ee5-b0a5-48b8-b320-4ae9fbc8aa76",
+          "label": "Temper Warrior Flames",
+          "effectText": "Purge a random Warrior; every other Warrior in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        },
+        {
+          "id": "e1f83b66-82a7-4053-8f55-c9d74509a41d",
+          "label": "Rally Emberborn",
+          "effectText": "Take any number of Warriors from 4 choices.",
+          "followupTitle": "Rally Emberborn",
+          "followupSubtitle": "Choose any offered Warriors to gain.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "a952f833-825a-435f-82b1-8d85f872d274",
+      "prose": "A smoke-wreathed skull-creature raises one claw as orange fire burns inside its open jaws.",
+      "action": [
+        {
+          "id": "02682355-b807-4371-abb8-18fc89e564db",
+          "label": "Feed Burning Maw",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to devour for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "c7b74d34-1e9b-4b8f-88f2-404afb38a376",
+          "label": "Lure Fragile Prey",
+          "effectText": "Draft a ≤2● cost Character from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Character to lure twice.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 2,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "bd27a996-bcdd-4f49-95c2-92c9d5875344",
+      "prose": "A candlelit child huddles beneath a horned shadow as smoke and stones churn.",
+      "action": [
+        {
+          "count": 1,
+          "id": "0229ca6b-7a95-42db-9395-d523f7c0b2a6",
+          "label": "Cast Away a Memory",
+          "effectText": "Purge a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one card to cast into darkness.",
+          "effectKind": "purge-selected",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "purge-misfit"
+        },
+        {
+          "id": "e96cec7f-511a-4eae-8522-9c5b2b25bbed",
+          "label": "Accept Its Nightmare Bargain",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "be72bd04-21a6-4035-a117-2b7213ad1a34",
+      "prose": "A lone traveler approaches a twisted wooden arch alive with runes and coiling golden lightning.",
+      "action": [
+        {
+          "id": "034d737d-db81-404b-88e0-28b2b83fbd06",
+          "label": "Catch Arcing Current",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "a483ce26-56a7-4bcf-a6ce-beda00f7aa23",
+          "label": "Cross Rune-Bound Arch",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        }
+      ]
+    },
+    {
+      "cardId": "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40",
+      "prose": "A lone rescuer scans burning ruins as fiery arcs sweep through airborne rubble.",
+      "action": [
+        {
+          "id": "96e28888-ef45-440e-ae49-5508583f392e",
+          "label": "Search Embered Streets",
+          "effectText": "Draft a Survivor from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Survivor.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "survivor",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "eddcf564-381b-41e9-bfc8-7309c2fecb3f",
+          "label": "Trade Places in Fire",
+          "effectText": "Purge a chosen Character card and gain a random Character replacement",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to send into the fire.",
+          "effectKind": "replace-selected",
+          "canonicalMechanicId": "replace-deck-entry",
+          "selectionPolicyId": "card-fit-quality",
+          "predicate": "character"
+        }
+      ]
     }
   ],
-  "contentHash": "f12474909e766004eed0a681616825e9f33853e088d759b64560ca163a841cf2",
-  "foldHash": "f12474909e766004eed0a681616825e9f33853e088d759b64560ca163a841cf2"
+  "contentHash": "e1e5b2fa1028fad5bbe691fdec0faccd9da70d13c8c5dfa75393b123b56355a2",
+  "foldHash": "e1e5b2fa1028fad5bbe691fdec0faccd9da70d13c8c5dfa75393b123b56355a2"
 }
