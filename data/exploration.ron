@@ -14602,4 +14602,62 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "944e15d2-d680-4ebe-8d18-36826f4b1535",
+    prose: "A traveler and towering machine survey an alien colony beneath a planet filling every horizon.",
+    actions: [
+      ActionDefinition(
+        label: "Descend to Colony",
+        id: "10f900af-8f77-4e5a-8254-a0366b7dd9e1",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+
+      ActionDefinition(
+        label: "Chart Another World",
+        id: "effbfca6-c3d2-4b20-a4e6-fc225feb47c1",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Event from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one transfigured Event discovered beyond this horizon.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: Event, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "d217303e-b115-484a-b22c-0e44d5701389",
+    prose: "A woman and dog sit atop a parked vehicle as countless lanterns rise among stars.",
+    actions: [
+      ActionDefinition(
+        label: "Gather Drifting Lanterns",
+        id: "bff4948e-ee37-4dda-8628-47c97b442611",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Event cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered Events.",
+          ),
+        ),
+        effect: TakeCards(predicate: Event, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Release Every Lantern",
+        id: "fc40fd6a-43b4-4074-a5f1-ad3d3247b9e5",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck cost 1● less. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
 ]
