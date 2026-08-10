@@ -28,6 +28,7 @@ export function buildExplorationEntryLog(
       offeredCardIds: offer.offeredCardIds,
       offeredDreamsignIds: offer.offeredDreamsignIds ?? [],
       offeredDeckEntryIds: offer.offeredDeckEntryIds ?? [],
+      eligibleDeckEntryIds: offer.eligibleDeckEntryIds ?? [],
       offeredDreamAvatarIds: offer.offeredDreamAvatarIds ?? [],
       packCardIds: offer.packCardIds,
       replacementCardIdByEntryId: offer.replacementCardIdByEntryId,
@@ -64,6 +65,9 @@ export function buildExplorationCompletionLog(
 ) {
   const resolution = runtime.resolution;
   if (resolution === null) return null;
+  const offer = runtime.actionOffers.find(
+    (candidate) => candidate.actionId === resolution.actionId,
+  );
   return {
     presentedCardId: runtime.encounterCardId,
     actionId: resolution.actionId,
@@ -75,14 +79,19 @@ export function buildExplorationCompletionLog(
     purgedEntrySnapshots: resolution.purgedEntrySnapshots ?? [],
     gainedEntryIds: resolution.gainedEntryIds ?? [],
     affectedEntryIds: resolution.affectedEntryIds,
+    eligibleDeckEntryIds: offer?.eligibleDeckEntryIds ?? [],
     sparkBeforeByEntryId: resolution.sparkBeforeByEntryId ?? {},
     sparkAfterByEntryId: resolution.sparkAfterByEntryId ?? {},
     selection: resolution.selection ?? {},
+    selectionContentRevision: resolution.selectionContentRevision ?? null,
     battleModifier: resolution.battleModifier ?? null,
     chosenDreamAvatarId: resolution.chosenDreamAvatarId ?? null,
     reclaimCostByEntryId: resolution.reclaimCostByEntryId ?? {},
     siteOfferModifier: resolution.siteOfferModifier ?? null,
     outcomeKind: view.outcomeKind,
     essenceGained: resolution.essenceGained,
+    essenceSpent: resolution.essenceSpent ?? 0,
+    chosenTransfiguration: resolution.chosenTransfiguration ?? null,
+    resolvedPredicate: resolution.resolvedPredicate ?? null,
   };
 }

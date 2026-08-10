@@ -210,6 +210,7 @@ export const FLUENT_MESSAGE_IDS = [
   "exploration-deck-modification-subtype",
   "exploration-deck-modification-subtype-unavailable",
   "exploration-deck-modification-reclaim",
+  "exploration-deck-modification-transfiguration",
   "augury-card-choice-copy-count",
   "gamble-wager-prize-title",
   "gamble-wager-prize-description",
@@ -393,6 +394,7 @@ export const FLUENT_MESSAGE_IDS = [
   "exploration-card-copies-gained",
   "exploration-purge-and-copy-complete",
   "exploration-card-transfiguring",
+  "exploration-bulk-transfiguration-complete",
   "exploration-purge-before-copy",
   "exploration-dream-avatar-changed",
   "exploration-dreamsign-purging",
@@ -722,6 +724,10 @@ export interface FluentMessageArgumentsById {
   };
   readonly "exploration-deck-modification-subtype-unavailable": never;
   readonly "exploration-deck-modification-reclaim": never;
+  readonly "exploration-deck-modification-transfiguration": {
+    readonly essenceAmount: FluentVariable;
+    readonly formName: FluentVariable;
+  };
   readonly "augury-card-choice-copy-count": { readonly count: FluentVariable };
   readonly "gamble-wager-prize-title": { readonly targetLabel: FluentVariable };
   readonly "gamble-wager-prize-description": {
@@ -1015,6 +1021,11 @@ export interface FluentMessageArgumentsById {
   };
   readonly "exploration-card-transfiguring": {
     readonly cardName: FluentVariable;
+    readonly formName: FluentVariable;
+  };
+  readonly "exploration-bulk-transfiguration-complete": {
+    readonly cardCount: FluentVariable;
+    readonly essenceAmount: FluentVariable;
     readonly formName: FluentVariable;
   };
   readonly "exploration-purge-before-copy": {
@@ -1443,6 +1454,10 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "exploration-deck-modification-subtype": ["subtype"] as const,
   "exploration-deck-modification-subtype-unavailable": [] as const,
   "exploration-deck-modification-reclaim": [] as const,
+  "exploration-deck-modification-transfiguration": [
+    "essenceAmount",
+    "formName",
+  ] as const,
   "augury-card-choice-copy-count": ["count"] as const,
   "gamble-wager-prize-title": ["targetLabel"] as const,
   "gamble-wager-prize-description": [
@@ -1662,6 +1677,11 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
     "sourceCardName",
   ] as const,
   "exploration-card-transfiguring": ["cardName", "formName"] as const,
+  "exploration-bulk-transfiguration-complete": [
+    "cardCount",
+    "essenceAmount",
+    "formName",
+  ] as const,
   "exploration-purge-before-copy": [
     "purgedCardName",
     "sourceCardName",
@@ -2138,6 +2158,7 @@ export type FluentMessageIdsWithVariables = [
   "exploration-deck-modification-spark",
   "exploration-deck-modification-energy-cost",
   "exploration-deck-modification-subtype",
+  "exploration-deck-modification-transfiguration",
   "augury-card-choice-copy-count",
   "gamble-wager-prize-title",
   "gamble-wager-prize-description",
@@ -2204,6 +2225,7 @@ export type FluentMessageIdsWithVariables = [
   "exploration-card-copies-gained",
   "exploration-purge-and-copy-complete",
   "exploration-card-transfiguring",
+  "exploration-bulk-transfiguration-complete",
   "exploration-purge-before-copy",
   "exploration-dream-avatar-changed",
   "exploration-dreamsign-purging",

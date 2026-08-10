@@ -2650,6 +2650,11 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
             transfiguration: required_json_string(object, "transfiguration")?,
             target: json_deck_target(object)?,
         },
+        EffectKind::TransfigureAllForEssence => ActionEffect::TransfigureAllForEssence {
+            essence: positive_int(object, "essence")?,
+            predicate: json_predicate(object, "predicate")?,
+            transfiguration: required_json_string(object, "transfiguration")?,
+        },
         EffectKind::GainRandomDreamsign => ActionEffect::GainRandomDreamsign,
         EffectKind::PurgeDreamsignForEssence => ActionEffect::PurgeDreamsignForEssence {
             essence: positive_int(object, "essence")?,
@@ -2754,6 +2759,7 @@ fn validate_action_fields(
         EffectKind::PurgeRandomSubtypeAndIncreaseSpark => &["subtype", "sparkBonus"],
         EffectKind::ReduceCostAllAndGainNightmares => &["energyCostReduction", "nightmareCount"],
         EffectKind::TransfigureFixedSelected => &["predicate", "transfiguration", "deckTarget"],
+        EffectKind::TransfigureAllForEssence => &["essence", "predicate", "transfiguration"],
         EffectKind::PurgeDreamsignForEssence => &["essence"],
         EffectKind::CopySelectedCard => &["predicate", "count", "deckTarget"],
         EffectKind::CopySelectedCards => &["count"],
@@ -4906,6 +4912,11 @@ CardMetadataCatalog(
             EffectKind::TransfigureFixedSelected => &[
                 ("transfiguration", json!("DoubledSpark")),
                 ("deckTarget", json!("chosen")),
+            ],
+            EffectKind::TransfigureAllForEssence => &[
+                ("essence", json!(100)),
+                ("predicate", json!("event")),
+                ("transfiguration", json!("Inspired")),
             ],
             EffectKind::PurgeDreamsignForEssence => &[("essence", json!(5))],
             EffectKind::CopySelectedCard => &[("count", json!(1)), ("deckTarget", json!("chosen"))],

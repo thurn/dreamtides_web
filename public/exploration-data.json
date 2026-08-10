@@ -6137,8 +6137,138 @@
           "sparkBonus": 1
         }
       ]
+    },
+    {
+      "cardId": "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+      "prose": "A horn-helmed warrior holds a glowing-tipped staff inside a spiraling band of white light.",
+      "action": [
+        {
+          "id": "bae4e7e1-2cd2-4b35-bd3c-2945c29922d3",
+          "label": "Study Glowing Staff",
+          "effectText": "Gain Crystal Wand",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to replace.",
+          "effectKind": "gain-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "fixed",
+          "dreamsignId": "4bb408a8-7941-42dc-9ff6-dbc1400c99ed"
+        },
+        {
+          "id": "3ebe3b11-ce73-4494-a379-d55c0123b30f",
+          "label": "Enter Spiraling Light",
+          "effectText": "Lose 100 essence. Apply Inspired to every eligible Event card in your deck.",
+          "effectKind": "transfigure-all-for-essence",
+          "canonicalMechanicId": "transfigure-deck-for-essence",
+          "essence": 100,
+          "predicate": "event",
+          "transfiguration": "Inspired"
+        }
+      ]
+    },
+    {
+      "cardId": "ccff822e-e2ae-4d38-9720-6df289dbe4cd",
+      "prose": "A synthetic face peers beneath fractured black plating as cyan lights glow through haze.",
+      "action": [
+        {
+          "id": "79a5523b-0917-41fb-b5b9-513ba546670c",
+          "label": "Authorize Another Image",
+          "effectText": "Gain 1 copy of a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to gain 1 copy of.",
+          "effectKind": "copy-selected-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "count": 1,
+          "deckTarget": "chosen"
+        },
+        {
+          "id": "abc6d977-d2cc-4828-b725-ee4a0d5765fa",
+          "label": "Erase Every Duplicate",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "13c45db4-ebab-4364-a14a-59a2e9c52bb5",
+      "prose": "A many-armed apparition hovers beneath a radiant ring while a kneeling swordsman faces orange ruins.",
+      "action": [
+        {
+          "count": 1,
+          "id": "f9a71b16-ef2a-45f5-a4b4-958d692c0824",
+          "label": "Sever Corrupt Invocation",
+          "effectText": "Purge a chosen Event",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose an Event to sever.",
+          "effectKind": "purge-selected",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "purge-misfit",
+          "predicate": "event"
+        },
+        {
+          "id": "506f34cf-e826-4d7a-a0a6-a3a456c9019d",
+          "label": "Accept Corrupt Covenant",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f",
+      "prose": "A lone soldier stands beside a torn flag amid embers, smoke, wire, and scattered gear.",
+      "action": [
+        {
+          "id": "fccc9055-cae3-427e-8055-4951d19accf6",
+          "label": "Raise Field Standard",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        },
+        {
+          "id": "d70a2fb9-6b0f-4c6d-87f8-b39beeef5bc8",
+          "label": "Cross Smoke Corridor",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        }
+      ]
+    },
+    {
+      "cardId": "006e2f95-59a2-4cda-a777-e64f4aa31060",
+      "prose": "A burning helicopter breaks apart amid orange smoke and airborne debris.",
+      "action": [
+        {
+          "id": "5fa9d0a1-115e-4a02-a110-91e9b4d6f1b8",
+          "label": "Salvage the airborne debris",
+          "effectText": "Purge a chosen Event card and gain a random Event replacement",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose an Event to salvage and replace.",
+          "effectKind": "replace-selected",
+          "canonicalMechanicId": "replace-deck-entry",
+          "selectionPolicyId": "card-fit-quality",
+          "predicate": "event"
+        },
+        {
+          "id": "f8d39c94-0296-4a26-a4d8-7087cb082c20",
+          "label": "Search the orange smoke",
+          "effectText": "Draft an Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Event.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 1,
+          "offerCount": 4
+        }
+      ]
     }
   ],
-  "contentHash": "6e23f720c73b73df5862f627a8447e95b6941f881c936996bd28e6039424ddfb",
-  "foldHash": "6e23f720c73b73df5862f627a8447e95b6941f881c936996bd28e6039424ddfb"
+  "contentHash": "a64717d3c22422c7133c1857b3f37a36ec8fb911e5107c6a789a433bdcb5006e",
+  "foldHash": "a64717d3c22422c7133c1857b3f37a36ec8fb911e5107c6a789a433bdcb5006e"
 }

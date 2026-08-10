@@ -282,4 +282,72 @@ describe("exploration logging view model", () => {
       sparkAfterByEntryId: { "warrior-a": 3, "warrior-b": 5 },
     });
   });
+
+  it("records frozen bulk transfiguration targets, form, and essence cost", () => {
+    const actionId = "transfigure-all-events";
+    const affectedEntryIds = ["event-a", "event-b"];
+    const view = {
+      actions: [
+        {
+          id: actionId,
+          effectKind: "transfigure-all-for-essence",
+          mechanics: {
+            effectKind: "transfigure-all-for-essence",
+            essence: 100,
+            predicate: "event",
+            transfiguration: "Inspired",
+          },
+        },
+      ],
+      outcomeKind: "transfiguration",
+    } as unknown as ExplorationSiteView;
+    const runtime: ExplorationSiteRuntime = {
+      kind: "exploration",
+      encounterCardId: "encounter-card-uuid",
+      actionOffers: [
+        {
+          actionId,
+          canonicalMechanicId: "transfigure-deck-for-essence",
+          selectionSignature: "bulk-target-signature",
+          eligibleDeckEntryIds: affectedEntryIds,
+          offeredCardIds: [],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+      ],
+      resolution: {
+        actionId,
+        selectionContentRevision: "bulk-content-revision",
+        selectionSignature: "bulk-target-signature",
+        gainedCardIds: [],
+        gainedDreamsignIds: [],
+        purgedCardIds: [],
+        affectedEntryIds,
+        essenceGained: 0,
+        essenceSpent: 100,
+        chosenTransfiguration: "Inspired",
+        resolvedPredicate: "event",
+      },
+    };
+
+    expect(buildExplorationEntryLog(view, runtime)).toMatchObject({
+      offers: [
+        {
+          canonicalMechanicId: "transfigure-deck-for-essence",
+          selectionSignature: "bulk-target-signature",
+          eligibleDeckEntryIds: affectedEntryIds,
+        },
+      ],
+    });
+    expect(buildExplorationCompletionLog(view, runtime)).toMatchObject({
+      affectedEntryIds,
+      essenceGained: 0,
+      essenceSpent: 100,
+      chosenTransfiguration: "Inspired",
+      resolvedPredicate: "event",
+      selectionContentRevision: "bulk-content-revision",
+      outcomeKind: "transfiguration",
+    });
+  });
 });

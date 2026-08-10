@@ -236,6 +236,13 @@ export type ExplorationDeckModificationView =
     })
   | (ExplorationDeckModificationViewBase & {
       readonly kind: "reclaim";
+    })
+  | (ExplorationDeckModificationViewBase & {
+      /** Fixed form applied to every affected deck entry. */
+      readonly kind: "transfiguration";
+      readonly transfiguration: TransfigurationType;
+      readonly formName: string;
+      readonly essenceSpent: number;
     });
 
 export interface ExplorationCardChoiceView {
@@ -499,6 +506,11 @@ function explorationDeckModificationHeadline(
         : t("exploration-deck-modification-subtype", { subtype: modification.subtype });
     case "reclaim":
       return t("exploration-deck-modification-reclaim");
+    case "transfiguration":
+      return t("exploration-deck-modification-transfiguration", {
+        essenceAmount: modification.essenceSpent,
+        formName: modification.formName,
+      });
   }
 }
 
@@ -3441,12 +3453,18 @@ export function ExplorationSiteScreen({
             data-exploration-deck-modification-count={deckModification.cards.length}
             role="status"
             aria-label={
-              deckModification.announcementDescriptor === undefined
-                ? deckModification.announcement
-                : formatMessageDescriptor(
-                    t,
-                    deckModification.announcementDescriptor,
-                  )
+              deckModification.kind === "transfiguration"
+                ? t("exploration-bulk-transfiguration-complete", {
+                    cardCount: deckModification.cards.length,
+                    essenceAmount: deckModification.essenceSpent,
+                    formName: deckModification.formName,
+                  })
+                : deckModification.announcementDescriptor === undefined
+                  ? deckModification.announcement
+                  : formatMessageDescriptor(
+                      t,
+                      deckModification.announcementDescriptor,
+                    )
             }
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -3482,6 +3500,16 @@ export function ExplorationSiteScreen({
                   data-exploration-reclaim-cost={
                     deckModification.kind === "reclaim"
                       ? deckModification.reclaimCostByEntryId?.[card.entryId]
+                      : undefined
+                  }
+                  data-exploration-transfiguration={
+                    deckModification.kind === "transfiguration"
+                      ? deckModification.transfiguration
+                      : undefined
+                  }
+                  data-exploration-essence-spent={
+                    deckModification.kind === "transfiguration"
+                      ? deckModification.essenceSpent
                       : undefined
                   }
                   data-card-id={card.model.cardId}
@@ -3527,7 +3555,9 @@ export function ExplorationSiteScreen({
                           ? "energy-changed"
                           : deckModification.kind === "reclaim"
                             ? "reward"
-                            : "changed"
+                            : deckModification.kind === "transfiguration"
+                              ? "transfigured"
+                              : "changed"
                     }
                     hideRulesText
                     testId={`cumulus-exploration-deck-modification-card-${card.entryId}`}

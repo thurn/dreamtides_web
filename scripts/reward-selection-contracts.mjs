@@ -7,6 +7,7 @@ export const REWARD_SELECTION_POLICY_IDS = Object.freeze([
 export const REWARD_MECHANIC_IDS = Object.freeze([
   "gain-card", "catalog-card-chooser", "pack-chooser",
   "transfigured-card-chooser", "gain-dreamsign", "transfigure-deck-entry",
+  "transfigure-deck-for-essence",
   "purge-deck-entry", "purge-for-essence", "purge-and-duplicate",
   "replace-deck-entry", "duplicate-deck-entry", "change-entry-subtype",
   "change-deck-subtype", "gain-nightmare-and-card",

@@ -6581,4 +6581,141 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "7e2f2ac0-4e3c-4520-80c6-c830581b40de",
+    prose: "A horn-helmed warrior holds a glowing-tipped staff inside a spiraling band of white light.",
+    actions: [
+      ActionDefinition(
+        label: "Study Glowing Staff",
+        id: "bae4e7e1-2cd2-4b35-bd3c-2945c29922d3",
+        presentation: ActionPresentation(
+          effect_text: "Gain Crystal Wand",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
+        ),
+        effect: GainDreamsign(dreamsign_id: "4bb408a8-7941-42dc-9ff6-dbc1400c99ed"),
+      ),
+
+      ActionDefinition(
+        label: "Enter Spiraling Light",
+        id: "3ebe3b11-ce73-4494-a379-d55c0123b30f",
+        presentation: ActionPresentation(
+          effect_text: "Lose 100 essence. Apply Inspired to every eligible Event card in your deck.",
+          followup: None,
+        ),
+        effect: TransfigureAllForEssence(
+          essence: 100,
+          predicate: Event,
+          transfiguration: "Inspired",
+        ),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "ccff822e-e2ae-4d38-9720-6df289dbe4cd",
+    prose: "A synthetic face peers beneath fractured black plating as cyan lights glow through haze.",
+    actions: [
+      ActionDefinition(
+        label: "Authorize Another Image",
+        id: "79a5523b-0917-41fb-b5b9-513ba546670c",
+        presentation: ActionPresentation(
+          effect_text: "Gain 1 copy of a chosen card",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a card to gain 1 copy of."),
+        ),
+        effect: CopySelectedCard(predicate: None, count: 1, target: Chosen),
+      ),
+
+      ActionDefinition(
+        label: "Erase Every Duplicate",
+        id: "abc6d977-d2cc-4828-b725-ee4a0d5765fa",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "13c45db4-ebab-4364-a14a-59a2e9c52bb5",
+    prose: "A many-armed apparition hovers beneath a radiant ring while a kneeling swordsman faces orange ruins.",
+    actions: [
+      ActionDefinition(
+        label: "Sever Corrupt Invocation",
+        id: "f9a71b16-ef2a-45f5-a4b4-958d692c0824",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen Event",
+          followup: Followup(title: "{action-label}", subtitle: "Choose an Event to sever."),
+        ),
+        effect: PurgeSelected(predicate: Event, count: None),
+      ),
+
+      ActionDefinition(
+        label: "Accept Corrupt Covenant",
+        id: "506f34cf-e826-4d7a-a0a6-a3a456c9019d",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f",
+    prose: "A lone soldier stands beside a torn flag amid embers, smoke, wire, and scattered gear.",
+    actions: [
+      ActionDefinition(
+        label: "Raise Field Standard",
+        id: "fccc9055-cae3-427e-8055-4951d19accf6",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Cross Smoke Corridor",
+        id: "d70a2fb9-6b0f-4c6d-87f8-b39beeef5bc8",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "006e2f95-59a2-4cda-a777-e64f4aa31060",
+    prose: "A burning helicopter breaks apart amid orange smoke and airborne debris.",
+    actions: [
+      ActionDefinition(
+        label: "Salvage the airborne debris",
+        id: "5fa9d0a1-115e-4a02-a110-91e9b4d6f1b8",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen Event card and gain a random Event replacement",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose an Event to salvage and replace.",
+          ),
+        ),
+        effect: ReplaceSelected(predicate: Event),
+      ),
+
+      ActionDefinition(
+        label: "Search the orange smoke",
+        id: "f8d39c94-0296-4a26-a4d8-7087cb082c20",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Event."),
+        ),
+        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
 ]

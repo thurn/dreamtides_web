@@ -102,6 +102,27 @@ function resolvedDeckCards(
   });
 }
 
+function transfigureAllEligibleEntryIds(
+  action: ExplorationActionContent,
+  journey: JourneyState,
+  content: JourneyContent,
+): string[] {
+  const predicate = action.predicate;
+  const transfiguration = action.transfiguration;
+  if (predicate === undefined || transfiguration === undefined) return [];
+  return resolvedDeckCards(journey, content)
+    .filter(
+      ({ entry, card }) =>
+        entry.transfiguration === null &&
+        matchesPredicate(card, predicate, content) &&
+        offeredTransfigurationForms(content.transfigurationData, card, null).some(
+          (form) => form.type === transfiguration,
+        ),
+    )
+    .map(({ entry }) => entry.entryId)
+    .sort((left, right) => left.localeCompare(right));
+}
+
 function usesOfferedDeckTarget(action: ExplorationActionContent): boolean {
   return explorationActionUsesOfferedDeckTarget(action);
 }
@@ -308,6 +329,8 @@ function canonicalSelectionForAction(action: ExplorationActionContent): {
     case "transfigure-selected":
     case "transfigure-fixed-selected":
       return { mechanicId: "transfigure-deck-entry", policyId: "transfiguration-value" };
+    case "transfigure-all-for-essence":
+      return { mechanicId: "transfigure-deck-for-essence" };
     case "purge-selected":
       return { mechanicId: "purge-deck-entry", policyId: "purge-misfit" };
     case "purge-for-essence":
@@ -407,6 +430,24 @@ function buildActionOffer(
     const outcome = selectReward(context, request);
     return outcome.ok ? outcome : null;
   };
+
+  if (action.effectKind === "transfigure-all-for-essence") {
+    offer.eligibleDeckEntryIds = transfigureAllEligibleEntryIds(action, journey, content);
+    offer.selectionKey = action.id;
+    offer.selectionRulesVersion = SELECTION_RULES_VERSION;
+    offer.selectionContentRevision = context.selectionContentRevision;
+    offer.selectionSignature = stableDigest({
+      mechanicId: canonical.mechanicId,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
+      selectionContentRevision: context.selectionContentRevision,
+      effectKind: action.effectKind,
+      essence: action.essence ?? null,
+      predicate: action.predicate ?? null,
+      transfiguration: action.transfiguration ?? null,
+      eligibleDeckEntryIds: offer.eligibleDeckEntryIds,
+    });
+    return offer;
+  }
 
   if (action.effectKind === "gain-card" && action.cardId !== undefined) {
     const selected = select({
@@ -900,6 +941,8 @@ export function resolveExplorationChoice(input: {
   const result = baseResolution(actionId);
   if (runtime.selectionRulesVersion !== undefined) {
     result.selectionRulesVersion = runtime.selectionRulesVersion;
+    result.selectionContentRevision =
+      offer.selectionContentRevision ?? runtime.selectionContentRevision;
     result.encounterSignature = runtime.encounterSignature;
     if (offer.selectionSignature !== undefined) {
       result.selectionSignature = offer.selectionSignature;
@@ -965,6 +1008,50 @@ export function resolveExplorationChoice(input: {
   };
 
   switch (action.effectKind) {
+    case "transfigure-all-for-essence": {
+      const essence = action.essence;
+      const transfiguration = action.transfiguration;
+      const affectedEntryIds = offer.eligibleDeckEntryIds;
+      if (
+        essence === undefined ||
+        !Number.isInteger(essence) ||
+        essence <= 0 ||
+        next.essence < essence ||
+        action.predicate === undefined ||
+        transfiguration === undefined ||
+        affectedEntryIds === undefined ||
+        affectedEntryIds.length === 0
+      ) return null;
+      const expectedEntryIds = transfigureAllEligibleEntryIds(action, next, content);
+      if (
+        expectedEntryIds.length !== affectedEntryIds.length ||
+        expectedEntryIds.some((entryId, index) => entryId !== affectedEntryIds[index])
+      ) return null;
+      const targets = affectedEntryIds.map((entryId) =>
+        deckTarget(next, content, entryId),
+      );
+      if (targets.some((target) => target === null)) return null;
+      if (
+        !applyReward({
+          kind: "composite",
+          children: [
+            ...(targets as Array<NonNullable<(typeof targets)[number]>>).map(
+              (target) => ({
+                kind: "transfigure_deck_entry" as const,
+                ...target,
+                transfiguration,
+              }),
+            ),
+            { kind: "add_essence", amount: -essence },
+          ],
+        })
+      ) return null;
+      result.affectedEntryIds.push(...affectedEntryIds);
+      result.chosenTransfiguration = transfiguration;
+      result.resolvedPredicate = action.predicate;
+      result.essenceSpent = essence;
+      break;
+    }
     case "copy-selected-card": {
       const entryIds = stringArray(selection.entryIds);
       if (entryIds === null || entryIds.length !== 1) return null;

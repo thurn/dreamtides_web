@@ -1004,6 +1004,176 @@ describe("exploration-view-model", () => {
     });
   });
 
+  it("gates and presents a persisted bulk transfiguration paid with essence", () => {
+    const source = card(sourceId, 17);
+    const firstEvent = {
+      ...card(asCardId("f0000000-0000-4000-8000-000000000080"), 80),
+      cardType: "Event" as const,
+      subtype: "",
+      spark: null,
+    };
+    const secondEvent = {
+      ...card(asCardId("f0000000-0000-4000-8000-000000000081"), 81),
+      cardType: "Event" as const,
+      subtype: "",
+      spark: null,
+    };
+    const actionId = "transfigure-all-events";
+    const actionOffers = [
+      {
+        actionId,
+        canonicalMechanicId: "transfigure-deck-for-essence" as const,
+        eligibleDeckEntryIds: ["entry-event-a", "entry-event-b"],
+        offeredCardIds: [],
+        packCardIds: [],
+        replacementCardIdByEntryId: {},
+        transfigurationByEntryId: {},
+      },
+      {
+        actionId: "gain-card",
+        offeredCardIds: [],
+        packCardIds: [],
+        replacementCardIdByEntryId: {},
+        transfigurationByEntryId: {},
+      },
+    ];
+    const content = {
+      cardDatabase: new Map([
+        [source.cardNumber, source],
+        [firstEvent.cardNumber, firstEvent],
+        [secondEvent.cardNumber, secondEvent],
+      ]),
+      dreamAvatars: [],
+      dreamwellCards: [],
+      dreamsignTemplates: [],
+      dreamscapes: [],
+      affiliations: [],
+      guides: [guide],
+      atlasData: MINIMAL_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
+      exploration: {
+        customCards: [],
+        customDreamsigns: [],
+        encounters: [
+          {
+            cardId: source.id,
+            prose: "The authored scene appears.",
+            actions: [
+              {
+                id: actionId,
+                label: "Enter Spiraling Light",
+                effectText:
+                  "Lose 100 essence. Apply Inspired to every eligible Event card in your deck.",
+                effectKind: "transfigure-all-for-essence",
+                essence: 100,
+                predicate: "event",
+                transfiguration: "Inspired",
+              },
+              {
+                id: "gain-card",
+                label: "Gain the card",
+                effectText: "Gain the card.",
+                effectKind: "gain-card",
+                cardId: source.id,
+              },
+            ],
+          },
+        ],
+      },
+    } as unknown as JourneyContent;
+    const startingDeck = [firstEvent, secondEvent].map((event, index) => ({
+      entryId: index === 0 ? "entry-event-a" : "entry-event-b",
+      cardNumber: event.cardNumber,
+      transfiguration: null,
+      isBane: false,
+    }));
+    const unresolvedRuntime: ExplorationSiteRuntime = {
+      kind: "exploration",
+      encounterCardId: source.id,
+      actionOffers,
+      resolution: null,
+    };
+    const viewAt99 = buildExplorationSiteView({
+      sceneNode: null,
+      site: explorationSite,
+      guide,
+      guideLine: "Fixture line.",
+      runtime: unresolvedRuntime,
+      state: { ...createDefaultState(), essence: 99, deck: startingDeck },
+      content,
+    });
+    const viewAt100 = buildExplorationSiteView({
+      sceneNode: null,
+      site: explorationSite,
+      guide,
+      guideLine: "Fixture line.",
+      runtime: unresolvedRuntime,
+      state: { ...createDefaultState(), essence: 100, deck: startingDeck },
+      content,
+    });
+
+    expect(viewAt99?.actions[0]?.available).toBe(false);
+    expect(viewAt100?.actions[0]).toMatchObject({
+      available: true,
+      followup: { kind: "none" },
+      effectDisclosure: {
+        kind: "fixed-transfiguration",
+        transfiguration: "Inspired",
+      },
+    });
+
+    const resolvedView = buildExplorationSiteView({
+      sceneNode: null,
+      site: explorationSite,
+      guide,
+      guideLine: "Fixture line.",
+      runtime: {
+        ...unresolvedRuntime,
+        resolution: {
+          actionId,
+          gainedCardIds: [],
+          gainedDreamsignIds: [],
+          purgedCardIds: [],
+          affectedEntryIds: ["entry-event-a", "entry-event-b"],
+          essenceGained: 0,
+          essenceSpent: 100,
+          chosenTransfiguration: "Inspired",
+        },
+      },
+      state: {
+        ...createDefaultState(),
+        essence: 0,
+        deck: startingDeck.map((entry) => ({
+          ...entry,
+          transfiguration: "Inspired" as const,
+        })),
+      },
+      content,
+    });
+
+    expect(resolvedView).toMatchObject({
+      outcomeKind: "transfiguration",
+      reward: {
+        deckModification: {
+          kind: "transfiguration",
+          transfiguration: "Inspired",
+          formName: "Fixture Inspired",
+          essenceSpent: 100,
+          cards: [
+            {
+              entryId: "entry-event-a",
+              model: { transfiguration: { type: "Inspired" } },
+            },
+            {
+              entryId: "entry-event-b",
+              model: { transfiguration: { type: "Inspired" } },
+            },
+          ],
+        },
+      },
+    });
+  });
+
   it("builds the standard free-form transfiguration picker with zero-cost forms", () => {
     const source = card(sourceId, 17);
     const state = {

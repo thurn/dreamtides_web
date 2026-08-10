@@ -205,6 +205,32 @@ describe("transformExplorationData", () => {
     ).toThrow(/requires positive essence-per-card/);
   });
 
+  it("compiles and validates paid bulk transfiguration fields", () => {
+    const source = syntheticExplorationSource();
+    source.encounter[0].action[0] = {
+      ...source.encounter[0].action[0],
+      "effect-kind": "transfigure-all-for-essence",
+      "effect-text": "Transfigure all Events.",
+      essence: 100,
+      predicate: "event",
+      transfiguration: "Inspired",
+    };
+
+    const [action] = transformExplorationData(source).encounters[0].action;
+    expect(action).toMatchObject({
+      effectKind: "transfigure-all-for-essence",
+      canonicalMechanicId: "transfigure-deck-for-essence",
+      essence: 100,
+      predicate: "event",
+      transfiguration: "Inspired",
+    });
+
+    source.encounter[0].action[0].essence = 0;
+    expect(() => transformExplorationData(source)).toThrow(
+      /requires positive whole-number essence, predicate, and transfiguration/u,
+    );
+  });
+
   it("rejects invalid cardinalities for new Exploration mechanics", () => {
     const countSource = syntheticExplorationSource();
     countSource.encounter[0].action[0] = {

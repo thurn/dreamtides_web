@@ -1,7 +1,7 @@
 use std::collections::BTreeSet;
 use std::fmt;
 
-use anyhow::{Result, bail};
+use anyhow::{bail, Result};
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
@@ -31,6 +31,7 @@ string_enum!(EffectKind {
     TakeCards => "take-cards", ReplaceSelectedWithCard => "replace-selected-with-card",
     ReplaceSelected => "replace-selected", GainNightmareAndCard => "gain-nightmare-and-card",
     GainRandomCards => "gain-random-cards", TransfigureFixedSelected => "transfigure-fixed-selected",
+    TransfigureAllForEssence => "transfigure-all-for-essence",
     GainOfferedCard => "gain-offered-card", TransfigureNextDraftOrShop => "transfigure-next-draft-or-shop",
     GainEssencePerCard => "gain-essence-per-card", IncreaseSparkAll => "increase-spark-all",
     PurgeRandomSubtypeAndIncreaseSpark => "purge-random-subtype-and-increase-spark",
@@ -48,6 +49,7 @@ string_enum!(EffectKind {
 string_enum!(Mechanic {
     PurgeAndDuplicate => "purge-and-duplicate", GainDreamsign => "gain-dreamsign",
     GainCard => "gain-card", TransfigureDeckEntry => "transfigure-deck-entry",
+    TransfigureDeckForEssence => "transfigure-deck-for-essence",
     PurgeDeckEntry => "purge-deck-entry", PackChooser => "pack-chooser",
     CatalogCardChooser => "catalog-card-chooser", PurgeForEssence => "purge-for-essence",
     ChangeEntrySubtype => "change-entry-subtype", ChangeDeckSubtype => "change-deck-subtype",
@@ -78,7 +80,7 @@ string_enum!(Predicate {
 string_enum!(DeckTarget { Chosen => "chosen", Offered => "offered" });
 
 impl EffectKind {
-    pub(crate) const ALL: [Self; 35] = [
+    pub(crate) const ALL: [Self; 36] = [
         Self::PurgeAndCopy,
         Self::GainDreamsign,
         Self::GainCard,
@@ -96,6 +98,7 @@ impl EffectKind {
         Self::GainRandomCards,
         Self::TransfigureFixedSelected,
         Self::GainOfferedCard,
+        Self::TransfigureAllForEssence,
         Self::TransfigureNextDraftOrShop,
         Self::GainEssencePerCard,
         Self::IncreaseSparkAll,
@@ -124,6 +127,7 @@ impl EffectKind {
             Self::TransfigureSelected | Self::TransfigureFixedSelected => {
                 Mechanic::TransfigureDeckEntry
             }
+            Self::TransfigureAllForEssence => Mechanic::TransfigureDeckForEssence,
             Self::PurgeSelected | Self::PurgeRandomSubtypeAndIncreaseSpark => {
                 Mechanic::PurgeDeckEntry
             }
@@ -205,6 +209,7 @@ impl ActionEffect {
             }
             Self::PurgeAndCopy => EffectKind::PurgeAndCopy,
             Self::TransfigureFixedSelected { .. } => EffectKind::TransfigureFixedSelected,
+            Self::TransfigureAllForEssence { .. } => EffectKind::TransfigureAllForEssence,
             Self::GainRandomDreamsign => EffectKind::GainRandomDreamsign,
             Self::PurgeDreamsignForEssence { .. } => EffectKind::PurgeDreamsignForEssence,
             Self::CopySelectedCard { .. } => EffectKind::CopySelectedCard,
@@ -370,6 +375,11 @@ pub enum ActionEffect {
         predicate: Option<Predicate>,
         transfiguration: String,
         target: DeckTarget,
+    },
+    TransfigureAllForEssence {
+        essence: i64,
+        predicate: Predicate,
+        transfiguration: String,
     },
     GainRandomDreamsign,
     PurgeDreamsignForEssence {
@@ -643,6 +653,16 @@ fn lower_action_effect(effect: ActionEffect, output: &mut toml::map::Map<String,
             text!("transfiguration", transfiguration);
             text!("deck-target", target.as_compat());
         }
+        ActionEffect::TransfigureAllForEssence {
+            essence,
+            predicate: value,
+            transfiguration,
+        } => {
+            kind!(TransfigureAllForEssence);
+            int!("essence", essence);
+            predicate!(value);
+            text!("transfiguration", transfiguration);
+        }
         ActionEffect::GainRandomDreamsign => {
             kind!(GainRandomDreamsign);
         }
@@ -761,6 +781,12 @@ mod tests {
         presentation: ActionPresentation(effect_text: "Purge a random Warrior and strengthen the rest.", followup: None),
         effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
       ),
+      ActionDefinition(
+        label: "Enter synthetic light",
+        id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+        presentation: ActionPresentation(effect_text: "Spend essence to transfigure Events.", followup: None),
+        effect: TransfigureAllForEssence(essence: 100, predicate: Event, transfiguration: "Inspired"),
+      ),
     ],
   ),
 ]
@@ -782,6 +808,10 @@ mod tests {
         assert!(matches!(
             catalog[0].actions[2].effect,
             ActionEffect::PurgeRandomSubtypeAndIncreaseSpark { .. }
+        ));
+        assert!(matches!(
+            catalog[0].actions[3].effect,
+            ActionEffect::TransfigureAllForEssence { .. }
         ));
     }
 
@@ -821,5 +851,17 @@ mod tests {
             Some("purge-deck-entry")
         );
         assert_eq!(actions[2]["selection-policy-id"].as_str(), Some("uniform"));
+        assert_eq!(
+            actions[3]["effect-kind"].as_str(),
+            Some("transfigure-all-for-essence")
+        );
+        assert_eq!(actions[3]["essence"].as_integer(), Some(100));
+        assert_eq!(actions[3]["predicate"].as_str(), Some("event"));
+        assert_eq!(actions[3]["transfiguration"].as_str(), Some("Inspired"));
+        assert_eq!(
+            actions[3]["canonical-mechanic-id"].as_str(),
+            Some("transfigure-deck-for-essence")
+        );
+        assert!(actions[3].get("selection-policy-id").is_none());
     }
 }

@@ -5,7 +5,8 @@ export const REWARD_SELECTION_POLICY_IDS: readonly [
 ];
 export const REWARD_MECHANIC_IDS: readonly [
   "gain-card", "catalog-card-chooser", "pack-chooser", "transfigured-card-chooser",
-  "gain-dreamsign", "transfigure-deck-entry", "purge-deck-entry",
+  "gain-dreamsign", "transfigure-deck-entry", "transfigure-deck-for-essence",
+  "purge-deck-entry",
   "purge-for-essence", "purge-and-duplicate", "replace-deck-entry",
   "duplicate-deck-entry", "change-entry-subtype", "change-deck-subtype",
   "gain-nightmare-and-card", "next-site-transfiguration",

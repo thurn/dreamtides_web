@@ -645,7 +645,9 @@
       "concept": "Lose {essence} essence. Apply {transfiguration} to every eligible {predicate} card in your deck.",
       "balance_class": "unique_effect",
       "implementation": {
-        "status": "vertical_slice"
+        "status": "reuse",
+        "effect_variant": "TransfigureAllForEssence",
+        "runtime_effect_kind": "transfigure-all-for-essence"
       }
     },
     {

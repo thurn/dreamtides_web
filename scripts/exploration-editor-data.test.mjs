@@ -30,13 +30,30 @@ describe("exploration editor data", () => {
   });
 
   it("publishes a closed code-owned schema without player copy", () => {
-    expect(EXPLORATION_EFFECT_SCHEMAS).toHaveLength(35);
+    expect(EXPLORATION_EFFECT_SCHEMAS).toHaveLength(36);
     expect(new Set(EXPLORATION_EFFECT_SCHEMAS.map((entry) => entry.kind)).size)
       .toBe(EXPLORATION_EFFECT_SCHEMAS.length);
     for (const definition of EXPLORATION_EFFECT_SCHEMAS) {
       expect(definition).not.toHaveProperty("templateIds");
       expect(definition).not.toHaveProperty("copy");
     }
+    expect(
+      EXPLORATION_EFFECT_SCHEMAS.find(
+        (definition) => definition.kind === "transfigure-all-for-essence",
+      ),
+    ).toEqual({
+      kind: "transfigure-all-for-essence",
+      label: "Transfigure all eligible cards for essence",
+      canonicalMechanicId: "transfigure-deck-for-essence",
+      fields: [
+        expect.objectContaining({ key: "essence", min: 1 }),
+        expect.objectContaining({ key: "predicate", defaultValue: "event" }),
+        expect.objectContaining({
+          key: "transfiguration",
+          defaultValue: "Inspired",
+        }),
+      ],
+    });
   });
 
   it("normalizes mechanics without constructing presentation text", () => {

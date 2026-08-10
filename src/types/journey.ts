@@ -4,6 +4,7 @@ import type {
 } from "./content";
 import type { CardData, CardType } from "./cards";
 import type {
+  RewardCardPredicate,
   RewardMechanicId,
   RewardSelectionPolicyId,
   RewardSelectionTrace,
@@ -460,6 +461,8 @@ export interface ExplorationActionOfferRuntime {
   offeredDreamsignIds?: string[];
   /** Randomly minted concrete deck-entry UUIDs for deck-card effects. */
   offeredDeckEntryIds?: string[];
+  /** Deterministic eligible deck-entry UUIDs captured when a bulk effect is prepared. */
+  eligibleDeckEntryIds?: string[];
   /** Randomly offered DreamAvatar UUIDs for identity replacement effects. */
   offeredDreamAvatarIds?: string[];
   packCardIds: string[][];
@@ -473,6 +476,7 @@ export interface ExplorationActionOfferRuntime {
 export interface ExplorationResolution {
   actionId: string;
   selectionRulesVersion?: string;
+  selectionContentRevision?: string;
   encounterSignature?: string;
   selectionSignature?: string;
   /** Validated UUID-only player intent persisted for replay and diagnostics. */
@@ -492,7 +496,11 @@ export interface ExplorationResolution {
   sparkBeforeByEntryId?: Record<string, number>;
   sparkAfterByEntryId?: Record<string, number>;
   essenceGained: number;
+  /** Exact Essence deducted by the resolved action. */
+  essenceSpent?: number;
   chosenTransfiguration?: TransfigurationType;
+  /** Exact typed card predicate used to select a persisted bulk result. */
+  resolvedPredicate?: Exclude<RewardCardPredicate, "any">;
   chosenSubtype?: string;
   /** Exact Reclaim cost applied to each surviving concrete deck entry. */
   reclaimCostByEntryId?: Record<string, number>;

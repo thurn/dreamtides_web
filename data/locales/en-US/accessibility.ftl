@@ -128,6 +128,16 @@ exploration-purge-and-copy-complete =
 # $cardName is the canonical display name with unknown grammatical gender;
 # $formName is the source-English name supplied by the Transfiguration catalog.
 exploration-card-transfiguring = Transfiguring { $cardName } into its { $formName } form
+# Accessible completed-state announcement after one paid Exploration effect
+# applies the same Transfiguration form to all eligible deck cards.
+# $cardCount is the positive number of concrete deck entries changed;
+# $formName is the form's canonical source display name; $essenceAmount is the
+# positive integer Essence cost already deducted from the current player.
+exploration-bulk-transfiguration-complete =
+    { $cardCount ->
+        [one] Transfigured { $cardCount } eligible card into its { $formName } form and spent { $essenceAmount } { -essence }
+       *[other] Transfigured { $cardCount } eligible cards into their { $formName } forms and spent { $essenceAmount } { -essence }
+    }
 # Accessible announcement during the first phase of a compound Exploration
 # outcome. $purgedCardName is removed before a copy of $sourceCardName is made;
 # both are canonical card display names with unknown grammatical gender.

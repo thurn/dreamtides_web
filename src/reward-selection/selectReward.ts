@@ -637,6 +637,7 @@ function candidatesFor(
     case "add-site":
       return otherCandidates(context, request);
     case "purge-and-duplicate":
+    case "transfigure-deck-for-essence":
     case "change-deck-subtype":
     case "gain-nightmare-and-card":
     case "next-site-transfiguration":
@@ -661,6 +662,7 @@ function keyKind(request: RewardSelectionRequest): RewardCandidateKeyKind {
     case "gain-dreamsign":
       return "dreamsignId";
     case "transfigure-deck-entry":
+    case "transfigure-deck-for-essence":
       return "entryModification";
     case "purge-deck-entry":
     case "purge-for-essence":

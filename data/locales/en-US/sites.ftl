@@ -19,6 +19,11 @@ exploration-deck-modification-subtype = { $subtype }
 exploration-deck-modification-subtype-unavailable = Subtype
 # Compact headline in the radial announcement for an Exploration Reclaim grant.
 exploration-deck-modification-reclaim = Reclaim
+# Compact radial headline after a paid Exploration effect applies one fixed
+# Transfiguration form to every eligible deck card. $formName is the canonical
+# source display name of that form; $essenceAmount is the positive integer
+# Essence cost already paid, and the genuine minus sign communicates the loss.
+exploration-deck-modification-transfiguration = { $formName } · −{ $essenceAmount } { -essence }
 # Accessible label on a selected Augury card showing how many copies the offer
 # grants. $count is a positive integer; the numeral is visible in the badge and
 # is repeated here because this message is exposed only to assistive technology.

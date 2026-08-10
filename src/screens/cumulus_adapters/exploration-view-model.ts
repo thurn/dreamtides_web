@@ -127,9 +127,20 @@ function deckCardChoice(
   const base = content.cardDatabase.get(entry.cardNumber);
   if (base === undefined) return null;
   const resolved = resolveDeckEntryCard(content.transfigurationData, base, entry);
+  const transfiguration =
+    entry.transfiguration === null
+      ? undefined
+      : buildTransfigurationDisplay(
+          content.transfigurationData,
+          base,
+          entry.transfiguration,
+        ).display;
   return {
     entryId: entry.entryId,
-    model: modelForCard(resolved),
+    model: {
+      ...modelForCard(resolved),
+      ...(transfiguration === undefined ? {} : { transfiguration }),
+    },
     isBane: entry.isBane,
   };
 }
@@ -537,6 +548,7 @@ function followupForAction(
       );
     case "gain-offered-card":
     case "add-site":
+    case "transfigure-all-for-essence":
       return { kind: "none" };
     case "take-cards": {
       const cards = offeredCards(offer.offeredCardIds, content);
@@ -690,7 +702,8 @@ function fixedTransfigurationDisclosure(
   content: JourneyContent,
 ): ExplorationEffectDisclosure | undefined {
   if (
-    action.effectKind !== "transfigure-fixed-selected" ||
+    (action.effectKind !== "transfigure-fixed-selected" &&
+      action.effectKind !== "transfigure-all-for-essence") ||
     action.transfiguration === undefined
   ) {
     return undefined;
@@ -893,8 +906,13 @@ function actionView(
   const hasRequiredOffer =
     action.effectKind === "gain-random-dreamsign"
       ? (offer.offeredDreamsignIds?.length ?? 0) > 0
-      : action.effectKind === "gain-offered-card"
-        ? offer.offeredCardIds.length === 1
+      : action.effectKind === "transfigure-all-for-essence"
+        ? (offer.eligibleDeckEntryIds?.length ?? 0) > 0 &&
+          Number.isInteger(action.essence) &&
+          (action.essence ?? 0) > 0 &&
+          state.essence >= (action.essence ?? Number.POSITIVE_INFINITY)
+        : action.effectKind === "gain-offered-card"
+          ? offer.offeredCardIds.length === 1
         : action.effectKind === "copy-offered-deck-card"
           ? (offer.offeredDeckEntryIds?.length ?? 0) > 0
           : action.effectKind === "purge-random-subtype-and-increase-spark"
@@ -1304,6 +1322,25 @@ function rewardForResolution(
           cards,
           reclaimCostByEntryId: resolution.reclaimCostByEntryId ?? {},
         };
+      case "transfigure-all-for-essence": {
+        const transfiguration =
+          resolution.chosenTransfiguration ?? resolvedAction.transfiguration;
+        if (transfiguration === undefined) return null;
+        return {
+          kind: "transfiguration" as const,
+          transfiguration,
+          formName: transfigurationForm(
+            content.transfigurationData,
+            transfiguration,
+          ).name,
+          essenceSpent: resolution.essenceSpent ?? 0,
+          announcement: resolvedEffectText,
+          ...(resolvedEffectDescriptor === undefined
+            ? {}
+            : { announcementDescriptor: resolvedEffectDescriptor }),
+          cards,
+        };
+      }
       default:
         return null;
     }

@@ -903,6 +903,20 @@ export function transformExplorationData(source) {
         );
       }
       if (
+        action.effectKind === "transfigure-all-for-essence" &&
+        (typeof action.essence !== "number" ||
+          !Number.isInteger(action.essence) ||
+          action.essence <= 0 ||
+          typeof action.predicate !== "string" ||
+          action.predicate.length === 0 ||
+          typeof action.transfiguration !== "string" ||
+          action.transfiguration.length === 0)
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} requires positive whole-number essence, predicate, and transfiguration`,
+        );
+      }
+      if (
         action.effectKind === "gain-essence-per-card" &&
         (typeof action.essencePerCard !== "number" ||
           action.essencePerCard <= 0)

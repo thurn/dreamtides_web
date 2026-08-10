@@ -409,6 +409,34 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
     ]
   },
   {
+    "kind": "transfigure-all-for-essence",
+    "label": "Transfigure all eligible cards for essence",
+    "canonicalMechanicId": "transfigure-deck-for-essence",
+    "fields": [
+      {
+        "key": "essence",
+        "label": "Essence cost",
+        "control": "number",
+        "defaultValue": 100,
+        "min": 1,
+        "step": 10,
+        "resource": "essence"
+      },
+      {
+        "key": "predicate",
+        "label": "Card predicate",
+        "control": "predicate",
+        "defaultValue": "event"
+      },
+      {
+        "key": "transfiguration",
+        "label": "Transfiguration",
+        "control": "transfiguration",
+        "defaultValue": "Inspired"
+      }
+    ]
+  },
+  {
     "kind": "transfigure-next-draft-or-shop",
     "label": "Transfigure the next Draft or Shop",
     "canonicalMechanicId": "next-site-transfiguration",

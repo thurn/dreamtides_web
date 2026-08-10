@@ -279,6 +279,39 @@ function deckModificationRewardView(
   };
 }
 
+function bulkTransfigurationRewardView(): ExplorationSiteView {
+  const base = deckModificationRewardView();
+  if (base.reward === null || "kind" in base.reward) return base;
+  const transfiguration = {
+    type: "Inspired" as const,
+    form: transfigurationFormFixture("Inspired"),
+    markedText: base.card.displaySnapshot.renderedText,
+    energyChanged: false,
+    energyChangeName: null,
+    sparkChanged: false,
+    sparkChangeName: null,
+    fastChanged: false,
+  };
+  return {
+    ...base,
+    outcomeKind: "transfiguration",
+    reward: {
+      ...base.reward,
+      deckModification: {
+        kind: "transfiguration",
+        transfiguration: "Inspired",
+        formName: "Fixture Inspired",
+        essenceSpent: 100,
+        announcement: "Authored bulk transfiguration outcome.",
+        cards: base.reward.deckModification?.cards.map((card) => ({
+          ...card,
+          model: { ...card.model, transfiguration },
+        })) ?? [],
+      },
+    },
+  };
+}
+
 function essenceRewardView(): ExplorationSiteView {
   const base = view(true);
   const cards = Array.from({ length: 6 }, (_unused, index) => ({
@@ -2251,6 +2284,61 @@ describe("ExplorationSiteScreen", () => {
       vi.advanceTimersByTime(10_000);
     });
     expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
+  it("presents a localized paid bulk transfiguration with exact cost and targets", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={bulkTransfigurationRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={vi.fn()}
+      />,
+    );
+
+    const reward = container.querySelector<HTMLElement>(
+      '[data-exploration-deck-modification-kind="transfiguration"]',
+    );
+    expect(reward?.dataset.explorationDeckModificationCount).toBe("2");
+    expect(reward?.getAttribute("aria-label")).not.toBe("");
+    expect(reward?.getAttribute("aria-label")).not.toContain(
+      "exploration-bulk-transfiguration-complete",
+    );
+    expect(
+      reward?.querySelector("[data-radial-announcement-headline]")
+        ?.textContent,
+    ).not.toBe("");
+    const cards = reward?.querySelectorAll<HTMLElement>(
+      "[data-exploration-deck-modification-card]",
+    );
+    expect(
+      [...(cards ?? [])].map((card) => ({
+        entryId: card.dataset.explorationDeckEntryId,
+        essenceSpent: card.dataset.explorationEssenceSpent,
+        transfiguration: card.dataset.explorationTransfiguration,
+      })),
+    ).toEqual([
+      {
+        entryId: "deck-entry-a",
+        essenceSpent: "100",
+        transfiguration: "Inspired",
+      },
+      {
+        entryId: "deck-entry-b",
+        essenceSpent: "100",
+        transfiguration: "Inspired",
+      },
+    ]);
+    expect(
+      reward?.querySelectorAll(
+        '[data-exploration-deck-modification-card] i[aria-label]',
+      ),
+    ).toHaveLength(2);
     act(() => root.unmount());
   });
 

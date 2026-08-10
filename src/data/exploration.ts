@@ -20,7 +20,11 @@ export type ExplorationPredicate =
 export type ExplorationEffectKind = typeof EXPLORATION_EFFECT_KINDS[number];
 
 const TRANSFIGURATION_EXPLORATION_EFFECT_KINDS: ReadonlySet<ExplorationEffectKind> =
-  new Set(["transfigure-selected", "transfigure-fixed-selected"]);
+  new Set([
+    "transfigure-selected",
+    "transfigure-fixed-selected",
+    "transfigure-all-for-essence",
+  ]);
 
 export function isTransfigurationExplorationEffect(
   effectKind: ExplorationEffectKind,
@@ -114,6 +118,17 @@ function validateAction(raw: ExplorationActionContent): ExplorationActionContent
     }
   } else if (raw.deckTarget !== undefined) {
     throw new Error("Invalid Exploration data: action has unsupported deckTarget");
+  }
+  if (
+    raw.effectKind === "transfigure-all-for-essence" &&
+    (!Number.isInteger(raw.essence) ||
+      (raw.essence ?? 0) <= 0 ||
+      raw.predicate === undefined ||
+      raw.transfiguration === undefined)
+  ) {
+    throw new Error(
+      "Invalid Exploration data: bulk transfiguration requires essence, predicate, and transfiguration",
+    );
   }
   return {
     ...raw,
