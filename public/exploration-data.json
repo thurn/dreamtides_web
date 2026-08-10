@@ -3511,8 +3511,142 @@
           "nightmareCount": 3
         }
       ]
+    },
+    {
+      "cardId": "78599234-6054-4df1-8e79-c38782517f9a",
+      "prose": "A towering tentacled creature advances between scattered ships across firelit seas.",
+      "action": [
+        {
+          "id": "191f2f8c-9928-4c32-8592-6a3203a13cb2",
+          "label": "Enter Firelit Seas",
+          "effectText": "Gain Piranha",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to replace.",
+          "effectKind": "gain-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "fixed",
+          "dreamsignId": "6b51e477-352c-489b-8d5f-049bc378fde9"
+        },
+        {
+          "id": "292e600b-1161-4c67-964e-bb09b4555a0a",
+          "label": "Spare Scattered Ships",
+          "effectText": "Choose one of 2 packs of 3 Survivor cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one pack to add to your deck.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "survivor",
+          "packCount": 2,
+          "packSize": 3
+        }
+      ]
+    },
+    {
+      "cardId": "26a05558-4692-43d2-ae6c-a6eb385a6d22",
+      "prose": "A lantern-bearing warrior advances beside a rune-marked wolf through erupting fire and airborne stone.",
+      "action": [
+        {
+          "id": "e760e76b-b628-48a0-a12f-eca84bb5f32f",
+          "label": "Feed Crystal Flame",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to burn for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "cbe7a8e8-0275-4f1d-9be5-077f004aa4d4",
+          "label": "Share Runic Fire",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "975f49d3-213a-43fc-8079-5fe40f126a7b",
+      "prose": "A cloaked scavenger strides through burning wreckage as ember-bright fissures pulse beneath a ragged mantle.",
+      "action": [
+        {
+          "id": "3b3d209b-54f6-42e5-bd28-924faaff88fa",
+          "label": "Exchange Fading Echoes",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "4a1bf772-4a82-4361-bd74-29290853ae3e",
+          "label": "Search Ember Wreckage",
+          "effectText": "Draft a transfigured ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured ≤2● cost Character.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "312e42cb-e8ee-43da-9ef8-173a69583c97",
+      "prose": "A silver-haired matriarch bears an antlered spear beside an immense sunlit tree.",
+      "action": [
+        {
+          "id": "05c630ff-a808-4b90-8d10-d846c4f6287a",
+          "label": "Call Sylvan Retinue",
+          "effectText": "Choose one of 2 packs of 3 Warrior cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Warrior retinue to add to your deck.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "warrior",
+          "packCount": 2,
+          "packSize": 3
+        },
+        {
+          "id": "59d712a3-f2d7-460a-937c-3c0808e4874d",
+          "label": "Receive Elderwood Blessing",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "98f16d26-be71-49ad-9034-5fafb5d3f053",
+      "prose": "A silhouetted maestro raises a baton as green radiance sweeps across a starry sky.",
+      "action": [
+        {
+          "id": "1b8b8de3-a11b-4280-aa12-939aa0dd0489",
+          "label": "Follow the baton",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        },
+        {
+          "id": "aeab101a-0048-4e8a-9b77-63f1a83d3309",
+          "label": "Lower the baton",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to retire for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        }
+      ]
     }
   ],
-  "contentHash": "6355ca563c19cd148c393233571718252bb55cb625cccac8941fcebf2e847058",
-  "foldHash": "6355ca563c19cd148c393233571718252bb55cb625cccac8941fcebf2e847058"
+  "contentHash": "28e89e3de9e83e809bdac4636652cfaca2364e544f96411c236feb888c7cfca9",
+  "foldHash": "28e89e3de9e83e809bdac4636652cfaca2364e544f96411c236feb888c7cfca9"
 }

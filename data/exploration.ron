@@ -3758,4 +3758,152 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "78599234-6054-4df1-8e79-c38782517f9a",
+    prose: "A towering tentacled creature advances between scattered ships across firelit seas.",
+    actions: [
+      ActionDefinition(
+        label: "Enter Firelit Seas",
+        id: "191f2f8c-9928-4c32-8592-6a3203a13cb2",
+        presentation: ActionPresentation(
+          effect_text: "Gain Piranha",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
+        ),
+        effect: GainDreamsign(dreamsign_id: "6b51e477-352c-489b-8d5f-049bc378fde9"),
+      ),
+
+      ActionDefinition(
+        label: "Spare Scattered Ships",
+        id: "292e600b-1161-4c67-964e-bb09b4555a0a",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 2 packs of 3 Survivor cards to add to your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one pack to add to your deck.",
+          ),
+        ),
+        effect: ChoosePack(predicate: Survivor, pack_count: 2, pack_size: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "26a05558-4692-43d2-ae6c-a6eb385a6d22",
+    prose: "A lantern-bearing warrior advances beside a rune-marked wolf through erupting fire and airborne stone.",
+    actions: [
+      ActionDefinition(
+        label: "Feed Crystal Flame",
+        id: "e760e76b-b628-48a0-a12f-eca84bb5f32f",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to burn for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Share Runic Fire",
+        id: "cbe7a8e8-0275-4f1d-9be5-077f004aa4d4",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "975f49d3-213a-43fc-8079-5fe40f126a7b",
+    prose: "A cloaked scavenger strides through burning wreckage as ember-bright fissures pulse beneath a ragged mantle.",
+    actions: [
+      ActionDefinition(
+        label: "Exchange Fading Echoes",
+        id: "3b3d209b-54f6-42e5-bd28-924faaff88fa",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+
+      ActionDefinition(
+        label: "Search Ember Wreckage",
+        id: "4a1bf772-4a82-4361-bd74-29290853ae3e",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured ≤2● cost Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one transfigured ≤2● cost Character.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: CheapCharacter, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "312e42cb-e8ee-43da-9ef8-173a69583c97",
+    prose: "A silver-haired matriarch bears an antlered spear beside an immense sunlit tree.",
+    actions: [
+      ActionDefinition(
+        label: "Call Sylvan Retinue",
+        id: "05c630ff-a808-4b90-8d10-d846c4f6287a",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 2 packs of 3 Warrior cards to add to your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one Warrior retinue to add to your deck.",
+          ),
+        ),
+        effect: ChoosePack(predicate: Warrior, pack_count: 2, pack_size: 3),
+      ),
+
+      ActionDefinition(
+        label: "Receive Elderwood Blessing",
+        id: "59d712a3-f2d7-460a-937c-3c0808e4874d",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "98f16d26-be71-49ad-9034-5fafb5d3f053",
+    prose: "A silhouetted maestro raises a baton as green radiance sweeps across a starry sky.",
+    actions: [
+      ActionDefinition(
+        label: "Follow the baton",
+        id: "1b8b8de3-a11b-4280-aa12-939aa0dd0489",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Lower the baton",
+        id: "aeab101a-0048-4e8a-9b77-63f1a83d3309",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to retire for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
 ]
