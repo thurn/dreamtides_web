@@ -7183,8 +7183,137 @@
           "deckTarget": "offered"
         }
       ]
+    },
+    {
+      "cardId": "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2",
+      "prose": "A winged cellist bows beneath a radiant eclipse as birds wheel above shadowed spires.",
+      "action": [
+        {
+          "id": "746d38d7-3db5-40ef-8d95-13e16824f8dd",
+          "label": "Answer Celestial Refrain",
+          "effectText": "Draft a Character from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one summoned character.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "50684e69-b2c6-4e55-a8f1-6e92298fdefd",
+          "label": "Absorb Eclipse's Pulse",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
+      "prose": "Two armored fighters face across broken catwalks as molten sparks engulf a ruined foundry.",
+      "action": [
+        {
+          "count": 1,
+          "id": "56f7503f-269c-4937-88c8-45a704476793",
+          "label": "Sever Burning Catwalk",
+          "effectText": "Purge a chosen Character card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to cast into molten wreckage.",
+          "effectKind": "purge-selected",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "purge-misfit",
+          "predicate": "character"
+        },
+        {
+          "id": "5b4149c5-5097-48be-ae56-c6609fa42175",
+          "label": "Let Duel Burn",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "79b37916-c05d-4818-9d67-3b90e340926e",
+      "prose": "A lone child faces a radiant portal while burning ruins coil across a darkened city.",
+      "action": [
+        {
+          "id": "e441b406-a8d6-47dd-bd44-9ac9a0fca791",
+          "label": "Cross into stillness",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "69770100-9d41-4daf-9edf-527488df4fd4",
+          "label": "Embrace the inferno",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "245b49b9-e1e5-4dd0-ae18-718c437b8eb0",
+      "prose": "A white-haired conduit levitates wrecked cars as blue lightning webs across a shattered roadway.",
+      "action": [
+        {
+          "id": "a2a01aff-54a2-4315-aa26-445161412048",
+          "label": "Gather Resonant Crew",
+          "effectText": "Choose one of 2 packs of 3 Character cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one character pack to join the circuit.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "character",
+          "packCount": 2,
+          "packSize": 3
+        },
+        {
+          "id": "e4c739a2-ff7f-4b8f-9f48-4dcd4fcd19be",
+          "label": "Release Shared Charge",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "a75c22ac-e343-4757-964e-a0bb981b5a28",
+      "prose": "A white wolf stands alert among mossy trunks, luminous markings bright across thick fur.",
+      "action": [
+        {
+          "id": "0851823c-fa9a-4478-a30a-31410f5fd0e5",
+          "label": "Follow the white wolf",
+          "effectText": "Draft a Spirit Animal from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Spirit Animal.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "09fd2af7-8067-4616-b361-c5958d670f2f",
+          "label": "Study its luminous markings",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
     }
   ],
-  "contentHash": "ef9c0ed249e7f736a6ec0ab76bed4e12e54e0acaa13ebc655d134868e1c4bb14",
-  "foldHash": "ef9c0ed249e7f736a6ec0ab76bed4e12e54e0acaa13ebc655d134868e1c4bb14"
+  "contentHash": "923b03e5dc6e833913c67f0a899f04b440f41742c8d8a489a74de44aec01f1f9",
+  "foldHash": "923b03e5dc6e833913c67f0a899f04b440f41742c8d8a489a74de44aec01f1f9"
 }
