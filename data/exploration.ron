@@ -10802,4 +10802,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "69d9e550-eacc-49f2-8cc5-30b8940c9eed",
+    prose: "A hooded boatman rows among glowing moons while a skiff carries gathered spheres.",
+    actions: [
+      ActionDefinition(
+        label: "Welcome Moonlit Passengers",
+        id: "2186b2ae-9dcd-40e1-8db7-54fe496fef75",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered passenger."),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Collect Celestial Fares",
+        id: "f3eb2901-28fb-4e72-a194-0c2370e10940",
+        presentation: ActionPresentation(
+          effect_text: "Gain 15 essence for each ≤2● cost Character in your deck",
+          followup: None,
+        ),
+        effect: GainEssencePerCard(predicate: CheapCharacter, essence_per_card: 15),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "60feb0d0-89b8-48fc-b01a-ce54e2c9941f",
+    prose: "A lone spearman crosses luminous grass beneath vast twisted limbs reaching through stormlight.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Lone Spearman",
+        id: "21db3ef3-d98e-4e3a-99a2-0014c4114dae",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Feed Grasping Roots",
+        id: "4593f282-2eb1-4835-9574-a6790839f6ca",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to offer for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "4f7cb174-6324-46a8-9973-44adfa7fef9f",
+    prose: "Field Reverent pauses where bare trunks bloom into prismatic currents and jeweled petals.",
+    actions: [
+      ActionDefinition(
+        label: "Gather Every Color",
+        id: "581f1236-2c9a-4f47-b4e8-f980581baec6",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Become One Spectrum",
+        id: "918a26e9-e0a3-4e85-8fad-5504f8cbe02a",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck become the subtype of your choice",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one shared subtype for every Character.",
+          ),
+        ),
+        effect: ChangeSubtypeAll(subtype_options: ["Warrior", "Mage", "Spirit Animal", "Survivor"]),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "2c9711c7-800c-4e55-a488-17ea5a6813c6",
+    prose: "A branch-crowned musician strums among glowing butterflies beneath rose-colored hill mist.",
+    actions: [
+      ActionDefinition(
+        label: "Call a New Voice",
+        id: "a589c796-ca54-4c75-972f-79513d37ea63",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one Character to join the song.",
+          ),
+        ),
+        effect: DraftCard(predicate: Character, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Strengthen the Chorus",
+        id: "5ab02a06-fdb4-4a8a-a377-70c4f0148323",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "4e1c0192-2649-489f-aad3-75ff2887c0a7",
+    prose: "A masked cyborg surveys red-eyed machine wrecks beneath a frost-hazed city of needlelike towers.",
+    actions: [
+      ActionDefinition(
+        label: "Rebuild buried designs",
+        id: "eb61b093-d732-4d23-8fc6-2559b34442a5",
+        presentation: ActionPresentation(
+          effect_text: "Gain one copy of each of 2 chosen cards",
+          followup: Followup(title: "{action-label}", subtitle: "Choose 2 cards to copy."),
+        ),
+        effect: CopySelectedCards(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Reclaim unique remains",
+        id: "7c9f191a-dee9-44d3-b8af-b35209ebb22b",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
 ]

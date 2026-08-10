@@ -10061,8 +10061,146 @@
           "offerCount": 4
         }
       ]
+    },
+    {
+      "cardId": "69d9e550-eacc-49f2-8cc5-30b8940c9eed",
+      "prose": "A hooded boatman rows among glowing moons while a skiff carries gathered spheres.",
+      "action": [
+        {
+          "id": "2186b2ae-9dcd-40e1-8db7-54fe496fef75",
+          "label": "Welcome Moonlit Passengers",
+          "effectText": "Draft a ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered passenger.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "f3eb2901-28fb-4e72-a194-0c2370e10940",
+          "label": "Collect Celestial Fares",
+          "effectText": "Gain 15 essence for each ≤2● cost Character in your deck",
+          "effectKind": "gain-essence-per-card",
+          "canonicalMechanicId": "gain-essence-by-deck-predicate",
+          "predicate": "cheap-character",
+          "essencePerCard": 15
+        }
+      ]
+    },
+    {
+      "cardId": "60feb0d0-89b8-48fc-b01a-ce54e2c9941f",
+      "prose": "A lone spearman crosses luminous grass beneath vast twisted limbs reaching through stormlight.",
+      "action": [
+        {
+          "id": "21db3ef3-d98e-4e3a-99a2-0014c4114dae",
+          "label": "Follow Lone Spearman",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Warrior.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "4593f282-2eb1-4835-9574-a6790839f6ca",
+          "label": "Feed Grasping Roots",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to offer for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        }
+      ]
+    },
+    {
+      "cardId": "4f7cb174-6324-46a8-9973-44adfa7fef9f",
+      "prose": "Field Reverent pauses where bare trunks bloom into prismatic currents and jeweled petals.",
+      "action": [
+        {
+          "id": "581f1236-2c9a-4f47-b4e8-f980581baec6",
+          "label": "Gather Every Color",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        },
+        {
+          "id": "918a26e9-e0a3-4e85-8fad-5504f8cbe02a",
+          "label": "Become One Spectrum",
+          "effectText": "All characters in your deck become the subtype of your choice",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one shared subtype for every Character.",
+          "effectKind": "change-subtype-all",
+          "canonicalMechanicId": "change-deck-subtype",
+          "subtypeOptions": [
+            "Warrior",
+            "Mage",
+            "Spirit Animal",
+            "Survivor"
+          ]
+        }
+      ]
+    },
+    {
+      "cardId": "2c9711c7-800c-4e55-a488-17ea5a6813c6",
+      "prose": "A branch-crowned musician strums among glowing butterflies beneath rose-colored hill mist.",
+      "action": [
+        {
+          "id": "a589c796-ca54-4c75-972f-79513d37ea63",
+          "label": "Call a New Voice",
+          "effectText": "Draft a Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Character to join the song.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "5ab02a06-fdb4-4a8a-a377-70c4f0148323",
+          "label": "Strengthen the Chorus",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "4e1c0192-2649-489f-aad3-75ff2887c0a7",
+      "prose": "A masked cyborg surveys red-eyed machine wrecks beneath a frost-hazed city of needlelike towers.",
+      "action": [
+        {
+          "id": "eb61b093-d732-4d23-8fc6-2559b34442a5",
+          "label": "Rebuild buried designs",
+          "effectText": "Gain one copy of each of 2 chosen cards",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose 2 cards to copy.",
+          "effectKind": "copy-selected-cards",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "count": 2
+        },
+        {
+          "id": "7c9f191a-dee9-44d3-b8af-b35209ebb22b",
+          "label": "Reclaim unique remains",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
     }
   ],
-  "contentHash": "4d5521945bd44540c9215e27effc36f5406fe37c4e3a5de758caf14f0e507512",
-  "foldHash": "4d5521945bd44540c9215e27effc36f5406fe37c4e3a5de758caf14f0e507512"
+  "contentHash": "1835484f8ba12c67b5f349e7d9edd4a184d10a3ce109e4ebf08166eeb674d260",
+  "foldHash": "1835484f8ba12c67b5f349e7d9edd4a184d10a3ce109e4ebf08166eeb674d260"
 }
