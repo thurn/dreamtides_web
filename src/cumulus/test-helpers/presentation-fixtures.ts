@@ -1,4 +1,3 @@
-import type { JourneyData } from "../../types/journey-data";
 import type { SitePresentation } from "../../types/sites-data";
 
 // localization-ignore: test-only fixture mirrors authored RON presentation copy.
@@ -37,24 +36,3 @@ export const DREAMSIGN_REVELATION_PRESENTATION = {
   loading: "Revealing Dreamsigns...",
   exhausted: "The Dreamsign pool is exhausted.",
 } satisfies Extract<SitePresentation, { kind: "dreamsign-revelation" }>;
-
-// localization-ignore: test-only fixture mirrors authored RON presentation copy.
-export const JOURNEY_PRESENTATION: JourneyData["presentation"] = {
-  start: {
-    title: "Choose Your Avatar",
-    chooseAction: "Choose",
-    rerollAction: "Reroll Avatars",
-  },
-  startingDeck: {
-    title: "Starting Deck",
-    subtitle: "These are the cards you begin the journey with.",
-    emptyState: "No cards in starting deck.",
-    beginAction: "Begin Journey",
-  },
-  dreamsignReplacement: {
-    title: "Choose a Dreamsign to Replace",
-    newDreamsignLabel: "New Dreamsign",
-    replaceAction: "Replace",
-    keepCurrentAction: "Keep Current Dreamsigns",
-  },
-};

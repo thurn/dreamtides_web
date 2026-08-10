@@ -9,7 +9,6 @@ import type {
 import { resolveArtRef } from "../../cumulus/primitives/art";
 import { createDefaultState } from "../../state/journey-context";
 import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
-import { JOURNEY_DATA_FIXTURE } from "../../testing/journey-data-fixture";
 import {
   battleLabel,
   buildDreamscapeHudView,
@@ -38,7 +37,6 @@ const buildDreamscapeView = (
     dreamscapeNode,
     state,
     sitesData,
-    JOURNEY_DATA_FIXTURE,
     5,
     replacementSiteId,
     undefined,
@@ -363,7 +361,6 @@ describe("buildDreamscapeView", () => {
       requiresReplacement: true,
     });
     expect(view.replacement).toEqual({
-      presentation: JOURNEY_DATA_FIXTURE.presentation.dreamsignReplacement,
       pendingDreamsign,
       currentDreamsigns: [heldDreamsign],
       maxDreamsigns: 1,

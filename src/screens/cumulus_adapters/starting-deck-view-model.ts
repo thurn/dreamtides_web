@@ -17,7 +17,6 @@ import type {
   StartingDeckCardView,
   StartingDeckView,
 } from "../../cumulus/screens/StartingDeckOverlay";
-import type { JourneyData } from "../../types/journey-data";
 
 /**
  * Resolve every resolvable deck entry to its starting-deck card view, in deck
@@ -60,7 +59,6 @@ export function buildStartingDeckCards(
 export function buildStartingDeckView(
   deck: readonly DeckEntry[],
   cardDatabase: Map<number, CardData>,
-  presentation: JourneyData["presentation"]["startingDeck"],
 ): StartingDeckView {
-  return { cards: buildStartingDeckCards(deck, cardDatabase), presentation };
+  return { cards: buildStartingDeckCards(deck, cardDatabase) };
 }

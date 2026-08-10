@@ -216,12 +216,12 @@ function DreamAvatarPage({
  * the offered DreamAvatars, one per page. */
 export function CarouselSelect({
   dreamAvatars,
-  presentation,
   guideDialogue,
   onPick,
   onReroll,
   onGuideDialogueShown,
 }: JourneyStartScreenProps) {
+  const t = useMessages();
   const [index, setIndex] = useState(0);
   const [dx, setDx] = useState(0);
   const drag = useRef<{ active: boolean; x0: number }>({
@@ -268,7 +268,7 @@ export function CarouselSelect({
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
     >
-      <ScreenHeader title={presentation.title} />
+      <ScreenHeader title={t("journey-start-title")} />
       {guideDialogue !== undefined && (
         <JourneyStartGuideDialogue
           dialogue={guideDialogue}
@@ -279,7 +279,7 @@ export function CarouselSelect({
       {onReroll !== undefined && (
         <JourneyStartRerollControl
           onReroll={onReroll}
-          label={presentation.rerollAction}
+          label={t("journey-start-reroll-action")}
         />
       )}
 
@@ -323,7 +323,7 @@ export function CarouselSelect({
         >
           <DreamAvatarConsole
             dreamAvatar={activeDreamAvatar}
-            chooseLabel={presentation.chooseAction}
+            chooseLabel={t("journey-start-choose-action")}
             onChoose={() => {
               onPick(activeDreamAvatar.id);
             }}

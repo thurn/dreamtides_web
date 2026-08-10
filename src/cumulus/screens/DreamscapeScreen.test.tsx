@@ -10,7 +10,6 @@ import { glyph } from "../primitives/glyph";
 import { artRef } from "../primitives/art";
 import type { SiteState } from "../../types/journey";
 import { CumulusRoot } from "../CumulusRoot";
-import { JOURNEY_PRESENTATION } from "../test-helpers/presentation-fixtures";
 
 vi.mock("framer-motion", () => ({
   motion: {
@@ -454,7 +453,6 @@ describe("DreamscapeScreen", () => {
             view={{
               ...rewardView,
               replacement: {
-                presentation: JOURNEY_PRESENTATION.dreamsignReplacement,
                 pendingDreamsign,
                 currentDreamsigns: [heldDreamsign],
                 maxDreamsigns: 1,

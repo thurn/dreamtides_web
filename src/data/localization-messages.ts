@@ -100,6 +100,17 @@ export const FLUENT_MESSAGE_IDS = [
   "coop-config-opponent-rules-label",
   "coop-config-tutorial-rules-label",
   "coop-config-unavailable",
+  "journey-start-title",
+  "journey-start-choose-action",
+  "journey-start-reroll-action",
+  "starting-deck-title",
+  "starting-deck-subtitle",
+  "starting-deck-empty-state",
+  "starting-deck-begin-action",
+  "dreamsign-replacement-title",
+  "dreamsign-replacement-new-label",
+  "dreamsign-replacement-replace-action",
+  "dreamsign-replacement-keep-current-action",
   "tutorial-feature-cost",
   "tutorial-feature-spark",
   "tutorial-feature-ability",
@@ -614,6 +625,17 @@ export interface FluentMessageArgumentsById {
   readonly "coop-config-opponent-rules-label": never;
   readonly "coop-config-tutorial-rules-label": never;
   readonly "coop-config-unavailable": never;
+  readonly "journey-start-title": never;
+  readonly "journey-start-choose-action": never;
+  readonly "journey-start-reroll-action": never;
+  readonly "starting-deck-title": never;
+  readonly "starting-deck-subtitle": never;
+  readonly "starting-deck-empty-state": never;
+  readonly "starting-deck-begin-action": never;
+  readonly "dreamsign-replacement-title": never;
+  readonly "dreamsign-replacement-new-label": never;
+  readonly "dreamsign-replacement-replace-action": never;
+  readonly "dreamsign-replacement-keep-current-action": never;
   readonly "tutorial-feature-cost": never;
   readonly "tutorial-feature-spark": never;
   readonly "tutorial-feature-ability": never;
@@ -1411,6 +1433,17 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "coop-config-opponent-rules-label": [] as const,
   "coop-config-tutorial-rules-label": [] as const,
   "coop-config-unavailable": [] as const,
+  "journey-start-title": [] as const,
+  "journey-start-choose-action": [] as const,
+  "journey-start-reroll-action": [] as const,
+  "starting-deck-title": [] as const,
+  "starting-deck-subtitle": [] as const,
+  "starting-deck-empty-state": [] as const,
+  "starting-deck-begin-action": [] as const,
+  "dreamsign-replacement-title": [] as const,
+  "dreamsign-replacement-new-label": [] as const,
+  "dreamsign-replacement-replace-action": [] as const,
+  "dreamsign-replacement-keep-current-action": [] as const,
   "tutorial-feature-cost": [] as const,
   "tutorial-feature-spark": [] as const,
   "tutorial-feature-ability": [] as const,
@@ -2024,6 +2057,17 @@ export type FluentMessageIdsWithoutVariables = [
   "coop-config-opponent-rules-label",
   "coop-config-tutorial-rules-label",
   "coop-config-unavailable",
+  "journey-start-title",
+  "journey-start-choose-action",
+  "journey-start-reroll-action",
+  "starting-deck-title",
+  "starting-deck-subtitle",
+  "starting-deck-empty-state",
+  "starting-deck-begin-action",
+  "dreamsign-replacement-title",
+  "dreamsign-replacement-new-label",
+  "dreamsign-replacement-replace-action",
+  "dreamsign-replacement-keep-current-action",
   "tutorial-feature-cost",
   "tutorial-feature-spark",
   "tutorial-feature-ability",

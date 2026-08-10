@@ -1,5 +1,20 @@
 ### Journey progression and navigation
 
+# Title and actions on the Dream Avatar selection screen.
+journey-start-title = Choose Your Avatar
+journey-start-choose-action = Choose
+journey-start-reroll-action = Reroll Avatars
+# Copy for the modal that introduces the player's initial deck.
+starting-deck-title = Starting Deck
+starting-deck-subtitle = These are the cards you begin the journey with.
+starting-deck-empty-state = No cards in starting deck.
+starting-deck-begin-action = Begin Journey
+# Shared copy for choosing which held Dreamsign to replace after gaining one
+# while at capacity.
+dreamsign-replacement-title = Choose a Dreamsign to Replace
+dreamsign-replacement-new-label = New Dreamsign
+dreamsign-replacement-replace-action = Replace
+dreamsign-replacement-keep-current-action = Keep Current Dreamsigns
 # Loading-screen card feature labels.
 tutorial-feature-cost = Cost
 tutorial-feature-spark = Spark

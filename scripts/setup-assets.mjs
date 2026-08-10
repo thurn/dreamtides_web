@@ -26,7 +26,6 @@ import {
 import { collectAtlasAssetSources, compileAtlasData } from "./atlas-data.mjs";
 import { compileEconomyData } from "./economy-data.mjs";
 import { compileDraftData } from "./draft-data.mjs";
-import { compileJourneyData } from "./journey-data.mjs";
 import { compileRewardSelectionData } from "./reward-selection-data.mjs";
 import { compileAuguryData } from "./augury-data.mjs";
 import { isRewardCardPredicate } from "./reward-selection-contracts.mjs";
@@ -1536,7 +1535,6 @@ export function setupAssets({
   atlasTomlPath = join(DATA_DIR, "atlas.toml"),
   economyTomlPath = join(DATA_DIR, "economy.toml"),
   draftTomlPath = join(DATA_DIR, "draft.toml"),
-  journeyTomlPath = join(DATA_DIR, "journey.toml"),
   opponentsTomlPath = join(DATA_DIR, "opponents.toml"),
   glossaryTomlPath = join(DATA_DIR, "glossary.toml"),
   gambleTomlPath = join(DATA_DIR, "gamble.toml"),
@@ -1631,7 +1629,6 @@ export function setupAssets({
     "resonance-data.json",
   );
   const draftJsonPath = join(publicDir, "draft-data.json");
-  const journeyJsonPath = join(publicDir, "journey-data.json");
   const opponentsJsonPath = join(publicDir, "opponents-data.json");
   const apollyonIncarnationsJsonPath = join(
     publicDir,
@@ -2112,16 +2109,6 @@ export function setupAssets({
   writeFileSync(draftJsonPath, serializedDraftData);
   writeFileSync(generatedDraftJsonPath, serializedDraftData);
   console.log("Wrote Draft data to draft-data.json");
-
-  console.log("Parsing journey.toml...");
-  const jsonJourneyData = compileJourneyData(
-    parse(readFileSync(journeyTomlPath, "utf8")),
-  );
-  writeFileSync(
-    journeyJsonPath,
-    JSON.stringify(jsonJourneyData, null, 2) + "\n",
-  );
-  console.log("Wrote Journey data to journey-data.json");
 
   console.log("Parsing reward_selection.toml...");
   const jsonRewardSelectionData = compileRewardSelectionData(

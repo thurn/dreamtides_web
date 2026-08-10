@@ -122,7 +122,6 @@ function buildGravokWagerSiteView(params: {
   guideLine: string;
   game: ThreeGateGame;
   runtime: GravokWagerSiteRuntime;
-  replacementPresentation: import("../../types/journey-data").JourneyData["presentation"]["dreamsignReplacement"];
 }): GravokWagerSiteView {
   const { runtime } = params;
   const result = runtime.result;
@@ -177,7 +176,6 @@ function buildGravokWagerSiteView(params: {
       result?.pendingDreamsignReplacement === true &&
       runtime.rewardDreamsign !== null
         ? {
-            presentation: params.replacementPresentation,
             pendingDreamsign: runtime.rewardDreamsign,
             currentDreamsigns: params.state.dreamsigns,
             maxDreamsigns: params.state.maxDreamsigns,
@@ -194,7 +192,6 @@ function buildLadderClimbSiteView(params: {
   guideLine: string;
   game: LadderClimbGame;
   runtime: TidemarkLadderClimbSiteRuntime;
-  replacementPresentation: import("../../types/journey-data").JourneyData["presentation"]["dreamsignReplacement"];
 }): LadderClimbSiteView {
   const { runtime } = params;
   const result = runtime.result;
@@ -257,7 +254,6 @@ function buildLadderClimbSiteView(params: {
     replacement:
       result?.pendingDreamsignReplacement === true
         ? {
-            presentation: params.replacementPresentation,
             pendingDreamsign: runtime.rewardDreamsign,
             currentDreamsigns: params.state.dreamsigns,
             maxDreamsigns: params.state.maxDreamsigns,
@@ -471,7 +467,6 @@ function buildFourSuitRepriseSiteView(params: {
   game: FourSuitRepriseGame;
   runtime: FourSuitRepriseSiteRuntime;
   transfigurationData: TransfigurationData;
-  replacementPresentation: import("../../types/journey-data").JourneyData["presentation"]["dreamsignReplacement"];
 }): FourSuitRepriseSiteView {
   const { runtime } = params;
   const latestRound = runtime.rounds[runtime.rounds.length - 1] ?? null;
@@ -572,7 +567,6 @@ export function buildGambleSiteView(params: {
   guideLine: string;
   gambleData: GambleData;
   transfigurationData: TransfigurationData;
-  replacementPresentation: import("../../types/journey-data").JourneyData["presentation"]["dreamsignReplacement"];
 }): GambleSiteView | null {
   const runtimeCandidate = params.state.siteRuntime[params.site.id];
   const runtime: GambleSiteRuntime | null =

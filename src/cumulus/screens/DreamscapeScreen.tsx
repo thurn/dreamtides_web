@@ -425,7 +425,7 @@ export function DreamscapeScreen({
           view={view.replacement}
           onReplace={onReplaceDreamsign}
           onCancel={onDeclineReward}
-          cancelLabel={view.replacement.presentation.keepCurrentAction}
+          cancelLabel={t("dreamsign-replacement-keep-current-action")}
           closeLabel={t("dreamsign-replacement-decline-reward-action")}
         />
       )}

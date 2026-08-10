@@ -10,7 +10,6 @@ import {
 } from "./JourneyStartScreen";
 import { CumulusRoot } from "../CumulusRoot";
 import { lookupGlossaryTerm } from "../../data/glossary";
-import { JOURNEY_PRESENTATION } from "../test-helpers/presentation-fixtures";
 
 class ResizeObserverStub {
   constructor(_callback: ResizeObserverCallback) {}
@@ -100,7 +99,6 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
   it("renders every portrait page and a glass console for the active DreamAvatar", () => {
     const { container, root } = mount(
       <JourneyStartScreen
-        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={OFFERED}
         onPick={vi.fn()}
         onReroll={vi.fn()}
@@ -140,7 +138,6 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
   it("shows the tides cluster only for DreamAvatars that have tides", () => {
     const { container, root } = mount(
       <JourneyStartScreen
-        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={OFFERED}
         onPick={vi.fn()}
         onReroll={vi.fn()}
@@ -182,7 +179,6 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     const onPick = vi.fn();
     const { container, root } = mount(
       <JourneyStartScreen
-        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={OFFERED}
         onPick={onPick}
         onReroll={vi.fn()}
@@ -217,7 +213,6 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     const onReroll = vi.fn();
     const { container, root } = mount(
       <JourneyStartScreen
-        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={OFFERED}
         onPick={vi.fn()}
         onReroll={onReroll}
@@ -247,7 +242,6 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     const tutorialDreamAvatar = OFFERED[0];
     const { container, root } = mount(
       <JourneyStartScreen
-        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={[tutorialDreamAvatar]}
         onPick={vi.fn()}
       />,
@@ -275,7 +269,6 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
   it("fades in Mira's tutorial guidance with highlighted Dream Avatar copy", () => {
     const { container, root } = mount(
       <JourneyStartScreen
-        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={[OFFERED[0]]}
         guideDialogue={{
           model: {
@@ -332,7 +325,6 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     const dreamAvatar = { ...OFFERED[0], renderedText: ability };
     const { container, root } = mount(
       <JourneyStartScreen
-        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={[dreamAvatar]}
         onPick={vi.fn()}
         onReroll={vi.fn()}
@@ -379,7 +371,6 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
   it("renders every DreamAvatar as a standalone column, not a carousel", () => {
     const { container, root } = mount(
       <JourneyStartScreen
-        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={OFFERED}
         onPick={vi.fn()}
         onReroll={vi.fn()}
@@ -429,7 +420,6 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
     const tutorialDreamAvatar = OFFERED[0];
     const { container, root } = mount(
       <JourneyStartScreen
-        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={[tutorialDreamAvatar]}
         onPick={vi.fn()}
       />,
@@ -455,7 +445,6 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
   it("renders tutorial guidance at the prominent desktop scale", () => {
     const { container, root } = mount(
       <JourneyStartScreen
-        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={[OFFERED[0]]}
         guideDialogue={{
           model: {
@@ -493,7 +482,6 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
   it("shows a hover-only tide disc per tide for tided DreamAvatars", () => {
     const { container, root } = mount(
       <JourneyStartScreen
-        presentation={JOURNEY_PRESENTATION.start}
         dreamAvatars={OFFERED}
         onPick={vi.fn()}
         onReroll={vi.fn()}

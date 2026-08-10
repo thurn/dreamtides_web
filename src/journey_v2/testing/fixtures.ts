@@ -3,7 +3,6 @@ import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
 import type { FitModel } from "../../draft/fit-model";
-import { JOURNEY_DATA_FIXTURE } from "../../testing/journey-data-fixture";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
@@ -163,7 +162,6 @@ export function makeMerchantTestContent({
   return {
     ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
-    journeyData: JOURNEY_DATA_FIXTURE,
     cardDatabase: new Map(cards.map((card) => [card.cardNumber, card])),
     dreamAvatars: [],
     dreamwellCards: [],

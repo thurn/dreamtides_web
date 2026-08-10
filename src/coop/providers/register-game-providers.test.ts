@@ -7,7 +7,6 @@
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
-import { JOURNEY_DATA_FIXTURE } from "../../testing/journey-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
 import { loadTestSitesData } from "../../__test-helpers__/atlas-fixtures";
 import { gambleGameByRulesKind } from "../../data/gamble-data";
@@ -150,7 +149,6 @@ function makeJourneyContent(): JourneyContent {
   return {
     ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
-    journeyData: JOURNEY_DATA_FIXTURE,
     cardDatabase,
     dreamAvatars: [makeDreamAvatar(DREAM_AVATAR_ID)],
     dreamwellCards: [],

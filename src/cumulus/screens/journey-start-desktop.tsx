@@ -24,6 +24,7 @@ import {
   type DreamAvatarOfferView,
   type JourneyStartScreenProps,
 } from "./journey-start-shared";
+import { useMessages } from "../hooks/use-messages";
 
 /** Desktop column metrics. Box measures are content-driven layout, so these are
  * caller numbers. Each column is a fixed-width figure stage with a narrower,
@@ -265,12 +266,12 @@ function DreamAvatarColumn({
  * fixed-width portrait columns. */
 export function DesktopSelect({
   dreamAvatars,
-  presentation,
   guideDialogue,
   onPick,
   onReroll,
   onGuideDialogueShown,
 }: JourneyStartScreenProps) {
+  const t = useMessages();
   return (
     <div
       className="cumulus"
@@ -308,7 +309,7 @@ export function DesktopSelect({
       {onReroll !== undefined && (
         <JourneyStartRerollControl
           onReroll={onReroll}
-          label={presentation.rerollAction}
+          label={t("journey-start-reroll-action")}
         />
       )}
 
@@ -320,7 +321,7 @@ export function DesktopSelect({
           padding: `calc(${token("--safe-top")} + ${token("--space-l")}) ${token("--gutter")} 0`,
         }}
       >
-        <DesktopTitle title={presentation.title} />
+        <DesktopTitle title={t("journey-start-title")} />
       </div>
 
       {/* The offered DreamAvatars, centered in the remaining space. The inner
@@ -351,7 +352,7 @@ export function DesktopSelect({
             <DreamAvatarColumn
               key={dreamAvatar.id}
               dreamAvatar={dreamAvatar}
-              chooseLabel={presentation.chooseAction}
+              chooseLabel={t("journey-start-choose-action")}
               onChoose={() => {
                 onPick(dreamAvatar.id);
               }}

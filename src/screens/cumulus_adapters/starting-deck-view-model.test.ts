@@ -5,7 +5,6 @@ import type { CardData } from "../../types/cards";
 import type { DeckEntry } from "../../types/journey";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { buildStartingDeckView as buildStartingDeckViewImpl } from "./starting-deck-view-model";
-import { JOURNEY_DATA_FIXTURE } from "../../testing/journey-data-fixture";
 
 const buildStartingDeckView = (
   deck: readonly DeckEntry[],
@@ -13,8 +12,7 @@ const buildStartingDeckView = (
 ) =>
   buildStartingDeckViewImpl(
     deck,
-    cardDatabase,
-    JOURNEY_DATA_FIXTURE.presentation.startingDeck,
+    cardDatabase
   );
 
 function makeCardDatabase(): Map<number, CardData> {

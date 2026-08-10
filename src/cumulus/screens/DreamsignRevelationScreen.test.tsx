@@ -14,7 +14,6 @@ import { JOURNEY_STATUS_BAR_CLEARANCE_OP } from "../components/hud/JourneyStatus
 import { CumulusRoot } from "../CumulusRoot";
 import {
   DREAMSIGN_REVELATION_PRESENTATION,
-  JOURNEY_PRESENTATION,
 } from "../test-helpers/presentation-fixtures";
 
 function dreamsign(id: string, imageName: string): Dreamsign {
@@ -265,7 +264,6 @@ describe("DreamsignRevelationScreen", () => {
     const replacementView: DreamsignRevelationView = {
       ...view(),
       purge: {
-        presentation: JOURNEY_PRESENTATION.dreamsignReplacement,
         pendingDreamsign: dreamsign("pending", "aurora.png"),
         currentDreamsigns: [dreamsign("owned", "eye_3.png")],
         maxDreamsigns: 1,

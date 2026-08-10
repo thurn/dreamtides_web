@@ -21,6 +21,7 @@
 import type { ReactElement } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { DeckGalleryOverlay } from "./DeckGalleryOverlay";
+import { useMessages } from "../hooks/use-messages";
 
 /**
  * One starting-deck card, resolved to the card the player actually holds
@@ -40,7 +41,6 @@ export interface StartingDeckCardView {
 /** The full starting-deck view: every resolvable entry in acquisition order. */
 export interface StartingDeckView {
   cards: StartingDeckCardView[];
-  presentation: import("../../types/journey-data").JourneyData["presentation"]["startingDeck"];
 }
 
 /** Props for {@link StartingDeckOverlay}. */
@@ -62,14 +62,15 @@ export function StartingDeckOverlay({
   view,
   onClose,
 }: StartingDeckOverlayProps): ReactElement {
+  const t = useMessages();
   return (
     <DeckGalleryOverlay
       isOpen={isOpen}
-      title={view.presentation.title}
-      subtitle={view.presentation.subtitle}
+      title={t("starting-deck-title")}
+      subtitle={t("starting-deck-subtitle")}
       cards={view.cards}
-      emptyLabel={view.presentation.emptyState}
-      actionLabel={view.presentation.beginAction}
+      emptyLabel={t("starting-deck-empty-state")}
+      actionLabel={t("starting-deck-begin-action")}
       onClose={onClose}
     />
   );

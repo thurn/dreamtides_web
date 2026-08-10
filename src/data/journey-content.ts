@@ -60,11 +60,9 @@ import { loadEconomyData } from "./economy-data";
 import { loadGambleData } from "./gamble-data";
 import { loadTransfigurationData } from "./transfiguration-data";
 import { loadDraftData } from "./draft-data";
-import { loadJourneyData } from "./journey-data";
 import { loadOpponentsData } from "./opponents-data";
 import type { EconomyData } from "../types/economy-data";
 import type { DraftData } from "../types/draft-data";
-import type { JourneyData } from "../types/journey-data";
 import type { OpponentsData } from "../types/opponents-data";
 import type { SitesData } from "../types/sites-data";
 import type { GambleData } from "../types/gamble-data";
@@ -126,8 +124,6 @@ export interface JourneyContent {
   sitesData: SitesData;
   /** Validated draft rules loaded before room folding begins. */
   draftData: DraftData;
-  /** Authored presentation shared by Journey surfaces. */
-  journeyData: JourneyData;
   /** Validated direct economy tuning loaded before room folding begins. */
   economyData: EconomyData;
   /** Fold-relevant Gamble rules, economy, and authored presentation. */
@@ -449,7 +445,6 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
     guides,
     atlasData,
     sitesData,
-    journeyData,
     economyData,
     gambleData,
     transfigurationData,
@@ -495,7 +490,6 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
     loadDreamGuides(),
     loadAtlasData(),
     loadSitesData(),
-    loadJourneyData(),
     loadEconomyData(),
     loadGambleData(),
     loadTransfigurationData(),
@@ -585,7 +579,6 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
     atlasData,
     sitesData,
     draftData,
-    journeyData,
     economyData,
     gambleData,
     transfigurationData,

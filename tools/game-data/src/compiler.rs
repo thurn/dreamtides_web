@@ -13,7 +13,7 @@ use crate::models::{
     affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft,
     dream_avatar_tide_pools, dream_avatars, dream_guides, dreamscapes, dreamsign_profiles,
     dreamsign_signatures, dreamsigns, dreamwell, economy, exploration, figments, gamble, glossary,
-    internal_card_metadata, journey, opponents, resonance, reward_selection, sites, tides,
+    internal_card_metadata, opponents, resonance, reward_selection, sites, tides,
     transfiguration, tutorial, tutorial_journey_pool,
 };
 
@@ -135,7 +135,6 @@ fn adapt(
         "augury_v1" => augury::lower(parse_ron(source, dataset)?),
         "battle_v1" => opponents::lower_battle(parse_ron(source, dataset)?),
         "draft_v1" => draft::lower(parse_ron(source, dataset)?),
-        "journey_v1" => journey::lower(parse_ron(source, dataset)?),
         "dream_avatar_metadata_v1" => dream_avatars::lower_metadata(parse_ron(source, dataset)?),
         "dream_avatars_v1" => {
             let avatars: Vec<dream_avatars::AvatarDefinition> = parse_ron(source, dataset)?;
@@ -613,9 +612,6 @@ mod tests {
                 }
                 "draft_v1" => {
                     canonical::<DraftDocument>(&source, false);
-                }
-                "journey_v1" => {
-                    canonical::<journey::JourneyCatalog>(&source, true);
                 }
                 "dream_avatar_metadata_v1" => {
                     canonical::<Vec<dream_avatars::AvatarMetadata>>(&source, true);

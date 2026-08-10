@@ -20,7 +20,6 @@ import {
 import { collectAtlasAssetSources, compileAtlasData } from "./atlas-data.mjs";
 import { compileEconomyData } from "./economy-data.mjs";
 import { compileDraftData } from "./draft-data.mjs";
-import { compileJourneyData } from "./journey-data.mjs";
 import { compileRewardSelectionData } from "./reward-selection-data.mjs";
 import { compileAuguryData } from "./augury-data.mjs";
 import {
@@ -201,12 +200,6 @@ export const SIMPLE_CONFIGS = [
     jsonFile: "draft-data.json",
     arrayKey: null,
     transform: compileDraftData,
-  },
-  {
-    tomlFile: "journey.toml",
-    jsonFile: "journey-data.json",
-    arrayKey: null,
-    transform: compileJourneyData,
   },
   {
     tomlFile: "reward_selection.toml",

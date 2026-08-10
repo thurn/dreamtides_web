@@ -184,7 +184,6 @@ export interface DreamAvatarOfferView {
 export type JourneyStartGuideDialogueView = TutorialSpeechBubbleView;
 
 export interface JourneyStartScreenProps {
-  presentation: import("../../types/journey-data").JourneyData["presentation"]["start"];
   /** The DreamAvatars offered this run (three normally; one in the tutorial). */
   dreamAvatars: DreamAvatarOfferView[];
   /** Mira's introduction to the fixed tutorial DreamAvatar choice. */

@@ -8,7 +8,6 @@ import { useMessages } from "../hooks/use-messages";
 
 /** The pending and currently held Dreamsigns shown by a replacement choice. */
 export interface DreamsignReplacementView {
-  presentation: import("../../types/journey-data").JourneyData["presentation"]["dreamsignReplacement"];
   pendingDreamsign: DreamsignData;
   currentDreamsigns: readonly DreamsignData[];
   maxDreamsigns: number;
@@ -33,7 +32,7 @@ export function DreamsignReplacementDialog({
   const t = useMessages();
   return (
     <GlassDialog
-      title={view.presentation.title}
+      title={t("dreamsign-replacement-title")}
       subtitle={t("dreamsign-replacement-capacity", {
         count: view.maxDreamsigns,
       })}
@@ -67,7 +66,7 @@ export function DreamsignReplacementDialog({
               color: token("--text-on-glass-muted"),
             }}
           >
-            {view.presentation.newDreamsignLabel}
+            {t("dreamsign-replacement-new-label")}
           </p>
           <div style={{ width: 88, height: 88 }}>
             <Dreamsign
@@ -109,7 +108,7 @@ export function DreamsignReplacementDialog({
                   />
                 </div>
                 <GlassButton
-                  label={view.presentation.replaceAction}
+                  label={t("dreamsign-replacement-replace-action")}
                   variant="accent"
                   placement="onGlass"
                   testId={`replace-dreamsign-${dreamsignId}`}

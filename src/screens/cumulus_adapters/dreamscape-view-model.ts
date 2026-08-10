@@ -36,7 +36,6 @@ import type {
 } from "../../types/journey";
 import type { SitesData } from "../../types/sites-data";
 import type { TutorialDreamscapeConfiguration } from "../../types/tutorial";
-import type { JourneyData } from "../../types/journey-data";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 import { formatAuthoredTemplate } from "../../data/authored-template";
 
@@ -248,7 +247,6 @@ export function buildDreamscapeView(
   node: DreamscapeNode,
   state: JourneyState,
   sitesData: SitesData,
-  journeyData: JourneyData,
   defaultDraftPickCount: number,
   replacementSiteId: string | null = null,
   tutorialConfiguration?: TutorialDreamscapeConfiguration,
@@ -289,7 +287,6 @@ export function buildDreamscapeView(
     replacement: buildDreamsignReplacementView(
       state,
       replacementSiteId,
-      journeyData,
     ),
     guideDialogue: buildDreamscapeGuideDialogue(
       node,
@@ -360,7 +357,6 @@ export function buildDreamscapeGuidanceLog(
 export function buildDreamsignReplacementView(
   state: JourneyState,
   siteId: string | null,
-  journeyData: JourneyData,
 ): DreamsignReplacementView | null {
   if (siteId === null || state.dreamsigns.length < state.maxDreamsigns) {
     return null;
@@ -374,7 +370,6 @@ export function buildDreamsignReplacementView(
     return null;
   }
   return {
-    presentation: journeyData.presentation.dreamsignReplacement,
     pendingDreamsign: runtime.reward.dreamsign,
     currentDreamsigns: state.dreamsigns,
     maxDreamsigns: state.maxDreamsigns,
