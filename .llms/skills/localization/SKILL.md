@@ -1,176 +1,341 @@
 ---
 name: localization
-description: Use when adding, editing, reviewing, or migrating player-facing Dreamtides text or locales, including Fluent messages and terms in data/locales, useMessages integration, translator comments and descriptions, glossary work, plural or select logic, localization QA, and audits for hard-coded UI copy. Triggers on localization, internationalization, i18n, l10n, translation, Fluent, FTL, translator context, translator descriptions, plurals, grammatical gender or case, articles, classifiers, and locale-aware copy.
+description: Use when adding, editing, reviewing, or migrating player-facing Dreamtides text with Trox, including tx/txa/Tx authoring, LocalizedString integration, placeholders, plural or semantic selectors, terms and forms, translator descriptions, trox.ron, locale profiles, CSV translation workflow, bundles, localization QA, and audits for hard-coded or preformatted UI copy. Triggers on localization, internationalization, i18n, l10n, translation, Trox, placeholders, plurals, grammatical agreement, locale-aware copy, and translator context.
 ---
 
-# Localization
+# Localization with Trox
 
 > [!WARNING]
 > Existing player-facing source English is immutable unless the user explicitly
-> authorizes a separate copy change. A localization or localization-infrastructure
-> task may move, parameterize, or restructure existing copy, but it must preserve
-> the exact rendered wording for every state, including capitalization,
-> punctuation, meaningful whitespace, interpolated values, accessible names, and
-> accessible descriptions. Never rewrite, shorten, delete, or “improve” existing
-> copy to satisfy lint, tests, types, Fluent syntax, selector design, or tooling.
-> Preserve the copy and fix the implementation around it; if exact parity is not
-> possible, stop and report the conflict instead of changing the text.
+> authorizes a separate copy change. A localization task may move, parameterize,
+> or restructure existing copy, but it must preserve the exact rendered wording
+> for every state, including capitalization, punctuation, meaningful whitespace,
+> interpolated values, accessible names, and accessible descriptions. If exact
+> parity is impossible, stop and report the conflict instead of changing the
+> text to satisfy Trox, lint, tests, types, or selector design.
 
-Create complete, translator-ready messages whose meaning survives changes in
-grammar, word order, writing system, and culture. Treat translator context as
-part of the feature contract, not optional commentary.
+Trox extracts complete English messages from Rust, TypeScript/TSX, and static
+RON, expands target-locale translation rows, and builds deterministic source
+and target bundles. Application code carries immutable, locale-independent
+`LocalizedString` values until an explicit `Localizer` resolves them at the
+presentation boundary.
 
-## Preserve existing source-copy parity
+Treat every placeholder as a semantic API. Trox checks syntax and structure;
+it cannot prove that the input code supplies the value the message actually
+means.
 
-Treat the pre-change source-English output as a feature contract. This rule
-applies to visible strings and accessibility-only language. It does not prevent
-authoring copy for a genuinely new surface or making a copy change the user has
-explicitly requested.
+## Read the current contract
 
-For migrations, inventory the existing output before editing and compare it
-with the localized output afterward. Cover every finite semantic branch and
-representative valid numeric states, including zero when it can occur. Review
-wording, capitalization, punctuation, interpolation order, and meaningful
-spacing independently from the structural tests.
+Before changing Trox authoring or infrastructure, read:
 
-Lint and structural tests establish localization architecture; they do not
-authorize copy edits and they do not prove source-copy parity. Keep repository
-tests semantic and locale-neutral as required. Use a task-local parity ledger,
-temporary comparison output, and diff review to prove that existing English
-rendering stayed identical without committing tests that assert English UI
-strings. When the original construction is awkward or grammatically flawed,
-move it faithfully and file any desired copy improvement as separate work.
+- `~/trox/README.md` for the system overview and CLI workflow;
+- `~/trox/TROX_EVOLUTION.md` for implementation-driven corrections;
+- the relevant authoring, placeholder, selector, term, runtime, and CLI sections
+  of `~/trox/TROX_DESIGN.md`;
+- the matching Rust, TypeScript, or RON examples and authoring checklist in
+  `~/trox/TROX_SYNTAX_EXAMPLES.md`.
 
-## Read the localization contract
+When prose and implementation disagree, verify behavior against `~/trox` source
+and tests. Do not promise diagnostics or fallback behavior that only appears in
+design prose. Generate current artifacts before treating fixture CSVs as
+normative.
 
-Before editing localization code or copy, read:
+Within the project, inspect the nearest `trox.ron`, the relevant source call
+sites and data model, `terms.ron`, affected locale profiles, current locale CSV
+rows, bundle loading, and the display boundary. Read `data/glossary.toml` when a
+canonical Dreamtides concept appears, but do not assume glossary membership
+justifies a Trox term.
 
-- `docs/journey_prototype/localization.md` for this repository's Fluent term
-  model;
-- the relevant resource under `data/locales/en-US`;
-- `data/glossary.toml` when a canonical game concept or keyword appears.
+## Preserve source-copy parity
 
-Read [references/translator-descriptions.md](references/translator-descriptions.md)
-before writing or reviewing messages, terms, variables, or translator comments.
-Read [references/fluent-language-design.md](references/fluent-language-design.md)
-when the work involves selectors, counts, agreement, terms, variables, or a new
-locale.
+Before a migration, record the exact pre-change English output in a task-local
+parity ledger. Inventory every finite semantic branch and representative valid
+numeric state, including zero when it can occur. Include visible strings,
+headings, controls, empty states, errors, notifications, tooltips, live-region
+announcements, accessible names, descriptions, and meaningful image text.
 
-## Build the semantic inventory
+After migration, compare rendered source-locale output against the ledger.
+Review wording, capitalization, punctuation, interpolation order, meaningful
+spacing, and line breaks independently from structural checks. Trox identity
+and extraction do not prove that a migration preserved the old output.
 
-Inspect the feature in code and, when runtime behavior or presentation changes,
-in the browser. Inventory all player-facing language, including headings,
-controls, status text, empty states, errors, notifications, tooltips,
-accessibility names, and meaningful image descriptions.
+Keep committed tests semantic and locale-neutral. Use the parity ledger and
+temporary comparison output rather than tests that assert specific UI strings.
+When existing copy is awkward, move it faithfully and propose any copy change
+as separate work.
 
-For each string, determine:
+## Audit the input semantics first
 
-1. where and when it appears;
-2. what it means in game terms;
-3. who acts on whom, and whether the event is past, present, future, command,
-   question, or status;
-4. which values vary and the full domain of each value;
-5. whether zero, one, and multiple values are possible;
-6. whether space, line count, capitalization, or accessibility imposes a real
-   constraint.
+Do not mechanically replace string interpolation with `txa`. Trace every
+dynamic value to its source and determine:
 
-Resolve uncertainty from the implementation, data model, design, or user. Do
-not make translators infer product behavior from English wording.
+1. what the player-facing value means, not merely its variable name or type;
+2. whether it is raw semantic data, user-authored text, a stable ID, a
+   `LocalizedString`, or already formatted/localized text;
+3. its complete domain, including zero, negative, fractional, missing, unknown,
+   and forward-compatible values where relevant;
+4. whether it controls grammar, appears visibly, or does both;
+5. whether a locale may need case, number, gender, noun class, articles,
+   classifiers, agreement, or different word order;
+6. whether the current branch is a grammatical choice or ordinary product/game
+   control flow.
 
-## Design translation units
+Never trust an existing placeholder, formatter, or helper simply because the
+English output looks correct. Question hidden assumptions such as:
 
-- Localize complete semantic utterances. Keep articles, adjectives, verbs,
-  pronouns, punctuation, and word order together.
-- Name message IDs by stable meaning and context, not by their current English
-  words. Give semantically different uses separate IDs even when English is
-  identical.
-- Reuse private Fluent terms for canonical game vocabulary. Keep contextual
-  grammar in complete messages.
-- Pass semantic data as variables. Do not pass prelocalized English fragments,
-  punctuation, articles, or already pluralized labels.
-- Use selectors for grammatical or semantic variation. Do not assemble
-  sentences from translated fragments in React.
-- Preserve translator freedom. Specify the required meaning and genuine UI
-  constraints; do not prescribe English word order or literal equivalents.
-- Write natural, polished source English. Localization infrastructure does not
-  excuse vague, telegraphic, or inconsistent copy.
+- a preformatted string containing an English article, noun, count, punctuation,
+  list, date, currency, percentage, unit, or sentence fragment;
+- a label that is already pluralized or localized before it reaches Trox;
+- a boolean intended to render as player-facing `true` or `false`;
+- a name assumed to provide grammatical gender or a form of address;
+- a fixed English word order implied by concatenation or placeholder position;
+- a count variable whose name disguises whether it is actual, required,
+  remaining, maximum, selected, or display-only.
+
+For every numeric message, independently verify the relationship among:
+
+- the value passed to `plural(...)` or `ordinal(...)`;
+- the value bound to each visible count placeholder;
+- the value passed to `counted(...)` or another numbered term form.
+
+Trox validates each role but does not prove that they represent the same
+quantity. Use the same value only when the product semantics say they are the
+same; otherwise name and describe each value distinctly. Confirm that a
+selector-only count should remain hidden and that a visible count is bound
+separately. `counted(term_id, count)` inflects a term but does not render the
+number.
+
+Numeric roles have different runtime contracts. A scalar number placeholder
+may contain any finite number, including a negative or fractional value.
+`plural(...)`, `ordinal(...)`, exact branch keys, and numbered term forms accept
+only nonnegative integers no greater than `2^53 - 1`. Do not force a signed or
+fractional product value into a numeric selector; model its semantic branch
+separately.
+
+Manual inventory remains mandatory. Do not assume `trox check` detects every
+hard-coded UI string, localized concatenation, manual count branch, visible
+boolean, or suspicious preformatted phrase.
+
+## Design complete messages
+
+- Make every message and every selector leaf a complete semantic utterance or
+  complete UI label. Keep articles, verbs, nouns, pronouns, punctuation, and
+  word order together.
+- Keep fixed vocabulary literal in the complete message. Do not pass translated
+  fragments, punctuation, articles, prepositions, conjugated verbs, or already
+  pluralized labels as scalar arguments.
+- Use `tx(pattern, description)` when no visible placeholder appears, including
+  a selector whose input is not displayed.
+- Use `txa(pattern, inline_arguments, description)` whenever any leaf contains
+  a visible placeholder. The argument keys must exactly equal the union of
+  placeholders across all leaves.
+- Use `meaning(...)` only to disambiguate identical English with distinct
+  semantics, such as noun and verb senses. A meaning key never replaces a
+  translator description.
+- Use ordinary host-language control flow for independent actions, screens,
+  outcomes, permissions, and game decisions. Use Trox `select` only when one
+  unresolved message must preserve a tight translator-visible grammatical or
+  semantic relationship.
+- Use `plural` and `ordinal` for locale-dependent numeric grammar, always with
+  `other`. Use `exact(0, ...)` only when zero has deliberate product wording;
+  exact zero is separate from plural grammar.
+- Expect nested selectors, terms, and locale facets to create a translation-row
+  cross-product. Review translator cost instead of suppressing expansion
+  warnings reflexively.
+
+Code patterns, descriptions, selector branches, and argument maps must stay
+inline at the direct Trox call site. Trox scans source lexically rather than
+using the host compiler. Do not use aliases, wrapper authoring APIs, prebuilt
+patterns, prebuilt argument objects, spreads, computed keys, host template
+interpolation, concatenated literals, or computed descriptions.
+
+RON authoring is deliberately static:
+
+```ron
+Tx(
+    text: "Close deck browser",
+    description: "Accessible button label that closes the deck browser.",
+)
+```
+
+RON `Tx` supports one flat complete message plus optional `description` and
+`meaning`. It does not support placeholders, arguments, selectors, terms, or
+nested Trox constructors. Put dynamic content in Rust or TypeScript.
+
+## Question every placeholder
+
+Placeholder names use lowercase ASCII snake case, begin with a letter, and
+contain at most 64 ASCII characters. Use semantic names such as
+`opponent_name`, `selected_count`, or `required_count`; avoid vague names such
+as `name`, `item`, `text`, `thing`, `data`, or `value`. Escape literal braces as
+`{{` and `}}`.
+
+Placeholder spelling is message identity. Renaming an existing placeholder
+creates a different entry and can obsolete translator history even when the
+rendered English is unchanged. Improve a vague name only after reviewing that
+impact; use `meaning(...)` when distinct semantics need distinct identities.
+
+For each placeholder, document and verify:
+
+- its meaning and provenance;
+- its argument kind: scalar, term, or atomic opaque localized value;
+- its runtime type and allowed values;
+- whether zero or absence is possible;
+- whether it is safe for a translator to move, repeat, or omit;
+- whether grammar requires a term form or an explicit semantic selector.
+
+The placeholder set belongs to the whole message family. One source leaf may
+omit a declared placeholder, and a target row may move, repeat, omit, or use any
+placeholder declared by the entry. Unknown target placeholders are errors;
+omission is a warning because it can be intentional. Investigate an omission
+warning. Never add an irrelevant interpolation or rewrite source copy merely to
+silence it.
+
+Bare scalars may be Unicode text, finite numbers, or booleans. Trox formats
+numbers with bundle data but provides no v1 currency, percentage, date, unit,
+list, rounding, or custom-number styles. Use semantic `select` rather than
+visible boolean interpolation. If a required formatter is outside Trox's
+contract, stop and design that boundary explicitly rather than smuggling
+preformatted English through a placeholder.
+
+The extractor classifies every bare binding as the same coarse `scalar` schema;
+it does not infer whether host code supplies text, a number, or a boolean. Two
+call sites sharing one message identity can therefore pass schema compatibility
+while giving the same placeholder different runtime kinds or meanings. Find and
+audit every call site that shares the extracted message, or add a stable
+`meaning(...)` discriminator when the uses are semantically distinct.
+
+## Use terms and opaque values narrowly
+
+Terms are for runtime-varying concepts that require a requested grammatical
+form, cardinal inflection, or locale-owned facet. They are not a central
+dictionary for every game word. Ask, “What runtime grammatical operation
+requires this term?” If there is none, keep the fixed word in the complete
+message.
+
+Map domain values explicitly to stable `TermId` values. Do not derive term IDs
+from display names or enum spellings. Request at most one named form and follow
+its configured number policy. Locale profiles own classifications such as
+message-scoped gender; application code supplies the semantic term ID rather
+than guessing grammar.
+
+Use `opaque(localized_value)` only for an atomic `LocalizedString` with no
+placeholders or selectors whose surface is grammatically invariant in the
+containing message, such as an independently translated proper name. If the
+value needs an article, case, number, or agreement, model it as a term or
+redesign the complete message. Never place an English `a` or `an` before an
+opaque value.
 
 ## Write translator descriptions
 
-Place Fluent comments immediately before the message, term, or cohesive group
-they describe. Give every new or changed unit enough context to translate it
-without opening the source code. Short labels, ambiguous words, variables, and
-messages whose grammar depends on game state normally require per-message
-comments.
+Every Rust or TypeScript Trox call requires a nonempty literal description.
+RON descriptions may be explicit or inherit a configured path default, but
+ambiguous or dynamic content needs specific context. A useful description
+explains the applicable parts of this contract:
 
-A useful description answers the applicable parts of this compact contract:
-
-- **Placement and role:** the surface and whether this is a title, action,
-  status, narration, tooltip, or accessibility label.
+- **Placement and role:** surface and whether the unit is a title, action,
+  status, narration, tooltip, live announcement, or accessibility label.
 - **Meaning and consequence:** what the player sees, does, gains, loses, or
   confirms; explain specialized Dreamtides meaning.
-- **Participants and grammar:** identify the actor, action, object, referents,
-  tense, and tone when the English can hide them.
-- **Variables:** state what each variable represents, its type or allowed
-  values, whether zero is possible, and a realistic example when useful.
-- **Constraints:** record only real limits such as a compact control, a forced
-  line break, markup, or text that must match another named concept.
+- **Participants and grammar:** actor, action, object, referents, tense, tone,
+  and agreement data hidden by English.
+- **Variables and selectors:** what each input represents, its type and domain,
+  whether zero is possible, whether it is visible, and a realistic example.
+- **Constraints:** only genuine limits such as a compact control, forced line
+  break, or text that must match a named product concept.
 
-Never write a comment that merely repeats the English, says only “button
-label,” or names an implementation component. Never ask for literal
-translation, fixed English word order, or English capitalization rules.
+Do not merely repeat the English or name an implementation component. Do not
+prescribe English word order, literal translation, or English capitalization.
+Descriptions affect source revision; changing one deliberately stales rows for
+translator reapproval.
 
-## Author Fluent safely
+## Integrate at the presentation boundary
 
-Use Fluent comment levels deliberately:
+Keep `LocalizedString` values unresolved through view models and events.
+Serialize them with Trox's canonical wire format, and decode imported, saved,
+replayed, or network values only through the configured `Localizer` or
+`SourceCatalog`; generic JSON decoding cannot authorize entries, terms, or
+opaque values. Load the configured source and target bundles explicitly,
+construct a `Localizer` in the application context, and resolve immediately
+before display.
 
-- `#` for one message or term;
-- `##` for a related group;
-- `###` for resource-wide context.
+Use `resolveChecked` or `resolve_checked` when target-resolution failures must
+remain explicit, and inspect structured diagnostics from recovering resolution.
+Treat checked target resolution as the portable failure contract. Recovering
+`resolve` currently differs by runtime: Rust may retain a valid target message
+while recovering a missing target term form or nested opaque value inside it;
+TypeScript falls back the whole message when checked target interpolation
+fails. Verify and test the application's runtime before depending on
+placeholder-level recovery. Diagnostic hooks are observational logging
+boundaries and must not throw or panic.
 
-Keep the English source in the resources listed by
-`data/locales/en-US/manifest.json`. Add or extend a shared term only when the
-concept recurs and has a stable canonical meaning. Follow
-the repository's literal grammatical-number facet convention for countable
-terms; the installed Fluent parser cannot forward a runtime variable into a
-term argument.
+Trox resolves configured parent locales while building the target bundle. The
+runtime loads one flattened target bundle plus the source bundle; it does not
+discover, negotiate, download, or walk parent locales. When recovering
+resolution falls back to a source message, numeric placeholders still use the
+target bundle's number format while source-fallback term surfaces come from the
+source bundle.
 
-Model numeric variation with the runtime count selector in the complete
-message. Treat exact zero behavior as a product decision separate from plural
-grammar. Let locales add their required CLDR categories and morphology.
+Do not concatenate, template-interpolate, parse, compare, or implicitly coerce
+localized values. Do not use resolved text as an identifier, map key,
+control-flow signal, analytics dimension, or test selector. Keep UUIDs and
+other stable semantic IDs in game logic and resolve names only for display.
 
-Do not create global fragments for `a`/`an`, possessives, prepositions, or
-conjugated verbs. Anticipate locale-specific case, gender, agreement,
-classifiers, numeral placement, spacing, and sentence structure without making
-them application-level concerns unless they carry real game semantics.
+## Run the Trox workflow
 
-## Integrate at the display boundary
+Use the project's configured CLI invocation; do not invent a package-install
+command or assume a global binary.
 
-Request complete message IDs through `useMessages()` and pass typed semantic
-variables. Resolve names immediately before display and keep UUIDs throughout
-game logic. Keep player-facing fallback and error copy inside the localization
-resource.
+1. When configured artifacts should be current, run
+   `trox check --deny warnings` for a clean baseline before editing. After
+   source changes, use `trox check` diagnostically and expect
+   `trox.csv-out-of-date` until extraction synchronizes affected CSVs.
+2. Run `trox extract`, or `trox extract --locale <locale>` for intentionally
+   scoped work. Extraction synchronizes CSVs transactionally and preserves
+   translations, notes, workflow columns, stale suggestions, and obsolete rows.
+3. Inspect affected CSV rows. Pay special attention to `conditions`, `english`,
+   `description`, `placeholders`, `status`, `previous_translation`, and source
+   locations. Confirm branches, selector inputs, and term facets mean what the
+   application code claims. Treat `conditions` as translator-facing labels,
+   not executable logic or proof of semantic correctness; trace selector
+   expressions and predicates back to the application data model.
+4. Translators edit only `translation`, `translator_note`, and approved extra
+   workflow columns. Trox owns the other columns. Editing a generated English
+   report does not change source code.
+   Translations are plain Unicode text plus declared placeholders; they do not
+   contain executable selector syntax, HTML, Markdown, or rich-text programs.
+   An empty translation is missing. The exact cell `^` inherits the resolved
+   translation from the immediately preceding active row of the same entry;
+   preserve canonical row order and never sort the CSV casually.
+5. Re-run `trox check --deny warnings`. If a warning is intentional, preserve
+   the copy and semantics and use the named, reasoned lint policy. Never weaken
+   data or change wording just to get a clean check.
+6. Build strict production bundles with `trox bundle`. Reserve
+   `--allow-missing` for development fallback. Use `trox prune` only after
+   explicit review of obsolete translator work.
 
-Do not use translated strings as identifiers, equality keys, parsing inputs,
-control-flow signals, analytics dimensions, or test selectors. Add stable
-semantic selectors or data attributes when QA needs them.
+## Verify the experience
 
-## Verify the result
+Run focused application tests and the repository's required review command.
+Test deterministic semantic construction, branch coverage, argument/selector
+relationships, checked resolution diagnostics, and bundle compatibility with
+synthetic fixtures. Do not assert specific UI strings.
 
-1. For a migration, compare every moved source-English unit and each dynamic
-   branch against the pre-change parity ledger. Resolve any wording difference
-   before treating lint or test success as meaningful.
-2. Run `npm run localization-types` and inspect generated-contract drift.
-3. Add focused structural or formatting tests for variables, selector branches,
-   and parse diagnostics. Do not assert specific UI strings.
-4. Run the relevant component tests and `npm run review`.
-5. For runtime or presentation changes, exercise the normal workflow with
-   browser QA. Check representative counts such as `0`, `1`, and `2` when they
-   are valid, narrow layouts, clipping or overflow, accessibility output, raw
-   message-ID leakage, and `window.__caps`.
-6. Review every new description independently from the English value: confirm
-   that it explains the intended experience rather than paraphrasing the text.
+For runtime or presentation changes, exercise the normal player workflow in
+the browser. Cover valid exact and plural states such as `0`, `1`, `2`, and a
+larger count; every semantic branch; a locale with a different plural system;
+an RTL locale with placeholder isolation; long translations; narrow layouts;
+accessibility output; source fallback; and malformed or missing-resource
+diagnostics. Check for clipping, overflow, raw placeholder or ID leakage,
+incorrect number formatting, and errors in `window.__caps`.
 
-Before finishing, confirm that a translator can determine meaning, variable
-semantics, grammatical relationships, and real constraints without reading
-TypeScript.
+Before finishing, confirm that:
+
+- source English still matches the parity ledger;
+- every dynamic input was traced and its assumptions were verified;
+- selector, visible placeholder, and term-form values are semantically aligned;
+- every leaf is a complete translation unit;
+- every description lets a translator understand meaning, variables,
+  grammatical relationships, and real constraints without reading code;
+- current CSVs and bundles were generated and validated by the configured
+  Trox toolchain.

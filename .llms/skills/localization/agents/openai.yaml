@@ -1,4 +1,4 @@
 interface:
   display_name: "Localize Dreamtides"
-  short_description: "Write translator-ready Fluent messages"
-  default_prompt: "Use $localization to localize this player-facing feature with clear translator context."
+  short_description: "Author translator-ready Trox messages"
+  default_prompt: "Use $localization to localize this player-facing feature with Trox and verify every placeholder assumption."
