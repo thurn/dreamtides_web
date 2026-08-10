@@ -13765,4 +13765,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "c86c1364-6ac4-4c90-8053-4e49441a2c83",
+    prose: "A solitary girl studies countless keys glowing across a chained cavern wall.",
+    actions: [
+      ActionDefinition(
+        label: "Test Four Keys",
+        id: "1680c896-8158-4a26-818c-6cbcf7991634",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one revealed pattern to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Melt a False Key",
+        id: "3a0711f3-7d76-408f-82fa-22ea9a1c0a24",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one pattern to melt, then another to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "071bcab4-ed02-48a0-93dc-8fd0f36611c8",
+    prose: "A spined berserker convulses amid lightning, trailing tendrils and fragments through colored haze.",
+    actions: [
+      ActionDefinition(
+        label: "Harness Raging Lightning",
+        id: "f08b8e9c-69cf-4de9-b93c-e35859a2df98",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Devour Burning Lights",
+        id: "e69d6716-d497-48ac-a334-a23fe747360a",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "ccbefadc-aab8-4f8c-a705-07bd70c91731",
+    prose: "A solitary architect faces a luminous portal while black tendrils condense above ruined machinery.",
+    actions: [
+      ActionDefinition(
+        label: "Open Construct Gate",
+        id: "17e00de7-23b4-4780-b6e8-6e9480fe326e",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 2 packs of 3 ≤2● cost Character cards to add to your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one construct cohort to add to your deck.",
+          ),
+        ),
+        effect: ChoosePack(predicate: CheapCharacter, pack_count: 2, pack_size: 3),
+      ),
+
+      ActionDefinition(
+        label: "Focus Mirrorlight Core",
+        id: "8e534371-4c70-4a3f-b233-ddbab1f36122",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "874d5e8f-4e12-4426-a2e7-1ab761d2ca12",
+    prose: "A solitary astronaut climbs mossy steps through vast rings toward a crackling portal.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Glowing Footsteps",
+        id: "022723f4-d18e-4d2e-9600-c44303ff3d36",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Cross Crackling Threshold",
+        id: "f6bf3f1f-ef1d-4f94-8a85-b8620c7bfc6a",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "7ea13d02-9d97-492e-9edb-f326eb3b4d1c",
+    prose: "A lone figure raises both arms beneath forked lightning and storm-wracked clouds above a broken pier.",
+    actions: [
+      ActionDefinition(
+        label: "Break Every Restraint",
+        id: "2ff475a8-37b2-4cd2-ad8b-648968b27ec3",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+
+      ActionDefinition(
+        label: "Catch Forked Lightning",
+        id: "ab98f7d2-176c-4a2f-867c-944821be5c2e",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
 ]
