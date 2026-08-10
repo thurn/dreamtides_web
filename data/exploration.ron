@@ -13904,4 +13904,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "af739e3d-bc61-4fab-bf81-a22e78d7e524",
+    prose: "A fractured machine drifts inside a radiant ring as tendrils spread beneath descending light.",
+    actions: [
+      ActionDefinition(
+        label: "Sever Echoing Fragments",
+        id: "cc177a0b-1939-4e16-a21b-33660d97666f",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card in your deck. Every remaining card gains reclaim",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+
+      ActionDefinition(
+        label: "Reassemble a Lost Reflection",
+        id: "b2218e35-f94b-4b34-99e8-00d44c52581c",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one pattern to rebuild."),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "3995100d-cdde-4c6a-9bf9-87167c8deb57",
+    prose: "A lone summoner raises blazing arms as a phoenix erupts above ruined spires.",
+    actions: [
+      ActionDefinition(
+        label: "Feed Funeral Pyre",
+        id: "b5f17041-386a-4b23-98aa-7d531efc283a",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to immolate for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Scatter Rebirth Sparks",
+        id: "3471e8f7-69db-46ae-9bbd-180c8b02f426",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "3811a0a2-66af-4c06-b179-948dfa9b2ee3",
+    prose: "A child rests atop a glowing moon while amber clouds drift beneath countless stars.",
+    actions: [
+      ActionDefinition(
+        label: "Record a fallen story",
+        id: "e5484397-b234-4b89-a65a-4eee4370dde2",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Event."),
+        ),
+        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Read the starfield",
+        id: "f9971914-4a31-476a-bc21-cbc22631c92c",
+        presentation: ActionPresentation(
+          effect_text: "Gain a random dreamsign",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Dreamsign to release if needed.",
+          ),
+        ),
+        effect: GainRandomDreamsign,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "9d51dca1-28d7-4e8e-bc13-c5b665d6db72",
+    prose: "An orange-eyed figure emerges between angular masks, black tendrils fanning across its glowing chest.",
+    actions: [
+      ActionDefinition(
+        label: "Name every borrowed shape",
+        id: "df14d3e7-b6ad-4414-afb2-e19721b8aaa4",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck become the subtype of your choice",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one shared subtype for every Character.",
+          ),
+        ),
+        effect: ChangeSubtypeAll(subtype_options: ["Warrior", "Mage", "Spirit Animal", "Survivor"]),
+      ),
+
+      ActionDefinition(
+        label: "Wear its hidden face",
+        id: "f163368d-e8f5-40dd-bf4f-f8dc4b5f1106",
+        presentation: ActionPresentation(
+          effect_text: "Pick a new Dream Avatar from 3 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Dream Avatar."),
+        ),
+        effect: ChooseDreamAvatar(offer_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "0211963d-d097-4427-9d16-5e857621e481",
+    prose: "A lone traveler approaches a ruined sanctum beneath a luminous blue ring and hovering stone.",
+    actions: [
+      ActionDefinition(
+        label: "Study luminous ring",
+        id: "5221f0ab-7a1d-411d-8e7b-fa0d8c128658",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Enter ruined sanctum",
+        id: "d43566ce-c720-428e-92f1-62651c78d092",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
 ]

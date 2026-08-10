@@ -12860,8 +12860,138 @@
           "count": 2
         }
       ]
+    },
+    {
+      "cardId": "af739e3d-bc61-4fab-bf81-a22e78d7e524",
+      "prose": "A fractured machine drifts inside a radiant ring as tendrils spread beneath descending light.",
+      "action": [
+        {
+          "id": "cc177a0b-1939-4e16-a21b-33660d97666f",
+          "label": "Sever Echoing Fragments",
+          "effectText": "Purge all copies of every duplicated card in your deck. Every remaining card gains reclaim",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "b2218e35-f94b-4b34-99e8-00d44c52581c",
+          "label": "Reassemble a Lost Reflection",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one pattern to rebuild.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "3995100d-cdde-4c6a-9bf9-87167c8deb57",
+      "prose": "A lone summoner raises blazing arms as a phoenix erupts above ruined spires.",
+      "action": [
+        {
+          "id": "b5f17041-386a-4b23-98aa-7d531efc283a",
+          "label": "Feed Funeral Pyre",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to immolate for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "3471e8f7-69db-46ae-9bbd-180c8b02f426",
+          "label": "Scatter Rebirth Sparks",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "3811a0a2-66af-4c06-b179-948dfa9b2ee3",
+      "prose": "A child rests atop a glowing moon while amber clouds drift beneath countless stars.",
+      "action": [
+        {
+          "id": "e5484397-b234-4b89-a65a-4eee4370dde2",
+          "label": "Record a fallen story",
+          "effectText": "Draft an Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Event.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "f9971914-4a31-476a-bc21-cbc22631c92c",
+          "label": "Read the starfield",
+          "effectText": "Gain a random dreamsign",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to release if needed.",
+          "effectKind": "gain-random-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "dreamsign-match"
+        }
+      ]
+    },
+    {
+      "cardId": "9d51dca1-28d7-4e8e-bc13-c5b665d6db72",
+      "prose": "An orange-eyed figure emerges between angular masks, black tendrils fanning across its glowing chest.",
+      "action": [
+        {
+          "id": "df14d3e7-b6ad-4414-afb2-e19721b8aaa4",
+          "label": "Name every borrowed shape",
+          "effectText": "All characters in your deck become the subtype of your choice",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one shared subtype for every Character.",
+          "effectKind": "change-subtype-all",
+          "canonicalMechanicId": "change-deck-subtype",
+          "subtypeOptions": [
+            "Warrior",
+            "Mage",
+            "Spirit Animal",
+            "Survivor"
+          ]
+        },
+        {
+          "id": "f163368d-e8f5-40dd-bf4f-f8dc4b5f1106",
+          "label": "Wear its hidden face",
+          "effectText": "Pick a new Dream Avatar from 3 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Dream Avatar.",
+          "effectKind": "choose-dream-avatar",
+          "canonicalMechanicId": "choose-dream-avatar",
+          "selectionPolicyId": "uniform",
+          "offerCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "0211963d-d097-4427-9d16-5e857621e481",
+      "prose": "A lone traveler approaches a ruined sanctum beneath a luminous blue ring and hovering stone.",
+      "action": [
+        {
+          "id": "5221f0ab-7a1d-411d-8e7b-fa0d8c128658",
+          "label": "Study luminous ring",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "d43566ce-c720-428e-92f1-62651c78d092",
+          "label": "Enter ruined sanctum",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
     }
   ],
-  "contentHash": "d383729a730fd21fcf9d6f331f6f4521faf6ae36c7eb0cf6888e549cf43282b0",
-  "foldHash": "d383729a730fd21fcf9d6f331f6f4521faf6ae36c7eb0cf6888e549cf43282b0"
+  "contentHash": "a79ce502ee552434e2f6c90d4c3c7c7c9681a3ef9691c4110bb3f6234485883e",
+  "foldHash": "a79ce502ee552434e2f6c90d4c3c7c7c9681a3ef9691c4110bb3f6234485883e"
 }
