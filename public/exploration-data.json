@@ -6267,8 +6267,146 @@
           "offerCount": 4
         }
       ]
+    },
+    {
+      "cardId": "0d867086-8413-40c3-820f-1a5de486577e",
+      "prose": "A cloaked mage raises a burning staff before a vast winged beast under green fire.",
+      "action": [
+        {
+          "count": 1,
+          "id": "4b9eebeb-8ea6-4d52-bbaf-f3a7807d68c1",
+          "label": "Feed the Maw",
+          "effectText": "Purge a chosen Character card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to sacrifice.",
+          "effectKind": "purge-selected",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "purge-misfit",
+          "predicate": "character"
+        },
+        {
+          "id": "7c8a24cc-7135-4734-ad64-817454370c87",
+          "label": "Summon Defenders",
+          "effectText": "Gain 2 random Character cards",
+          "effectKind": "gain-random-cards",
+          "canonicalMechanicId": "gain-card",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "character",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "bd43b120-2503-406c-8b72-ea3dc55198a0",
+      "prose": "A lone fighter erupts with white energy as shattered trains buckle and debris fills yellow sky.",
+      "action": [
+        {
+          "id": "42f2fbef-96fe-4223-b2e5-44286f752ab4",
+          "label": "Choose Who Survives",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "f1a48400-d96b-4aa2-8b3f-cb9a93dc8ad9",
+          "label": "Ride Shattering Wake",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        }
+      ]
+    },
+    {
+      "cardId": "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+      "prose": "A rifle-bearing witness crosses burning wreckage as ash-dark figures close from every side.",
+      "action": [
+        {
+          "id": "2f176147-18c1-45df-834a-620ca0b97150",
+          "label": "Feed Burning Ground",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to dissolve for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "ce3b0d6d-27c2-4b57-ab97-1e81a968b0de",
+          "label": "Bear Final Testimony",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "f46490a5-7030-4ade-93e9-bedb5813f590",
+      "prose": "A solitary survivor faces a firelit cloud above an icy, bird-streaked wasteland.",
+      "action": [
+        {
+          "id": "06726bb6-4ec0-433d-b88a-87f752f7dbc2",
+          "label": "Honor Absent Companions",
+          "effectText": "Purge a random Survivor. Every other Survivor in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Survivor",
+          "sparkBonus": 1
+        },
+        {
+          "id": "3f33f3be-e172-4689-b94b-fb2f133044c5",
+          "label": "Search Distant Wreckage",
+          "effectText": "Choose one of 2 packs of 3 Survivor cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Survivor pack.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "survivor",
+          "packCount": 2,
+          "packSize": 3
+        }
+      ]
+    },
+    {
+      "cardId": "57bb1572-6075-4efd-a592-102b134132fd",
+      "prose": "A red-cloaked knight approaches a blue beacon among pale Gothic towers and drifting petals.",
+      "action": [
+        {
+          "id": "e8e50b30-cbcd-41c4-9428-14a2b5b40035",
+          "label": "Answer Azure Beacon",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Warrior answering the call.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "75469517-395e-4612-aba2-242850b93483",
+          "label": "Unite Silent Orders",
+          "effectText": "All characters in your deck become the subtype of your choice",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one shared subtype for every Character.",
+          "effectKind": "change-subtype-all",
+          "canonicalMechanicId": "change-deck-subtype",
+          "subtypeOptions": [
+            "Warrior",
+            "Mage",
+            "Spirit Animal",
+            "Survivor"
+          ]
+        }
+      ]
     }
   ],
-  "contentHash": "a64717d3c22422c7133c1857b3f37a36ec8fb911e5107c6a789a433bdcb5006e",
-  "foldHash": "a64717d3c22422c7133c1857b3f37a36ec8fb911e5107c6a789a433bdcb5006e"
+  "contentHash": "ce4091b6d70e528efa7863880c0f640b1ff75b29dc89c9abbcdd577a433db071",
+  "foldHash": "ce4091b6d70e528efa7863880c0f640b1ff75b29dc89c9abbcdd577a433db071"
 }
