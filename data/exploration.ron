@@ -7407,4 +7407,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "2e8571c0-4faf-4e7a-a702-26952d2035ee",
+    prose: "A hooded watcher surveys a crowded avenue burning beneath shattered towers and distant domes.",
+    actions: [
+      ActionDefinition(
+        label: "Abandon a Straggler",
+        id: "ded01c5a-c919-4f61-bb4f-31f7bb64680c",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Survivor. Every other Survivor in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Survivor", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Guide Survivors Through",
+        id: "a69656f2-7396-4f7a-a002-328c0bc0330a",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Survivor from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Survivor."),
+        ),
+        effect: DraftCard(predicate: Survivor, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "fc4b06d6-3b30-4769-af98-88fcea5b54dd",
+    prose: "A woman with a white umbrella stands amid orange umbrellas spiraling above mirrored rainwater.",
+    actions: [
+      ActionDefinition(
+        label: "Echo Familiar Shelter",
+        id: "7ec8de13-9b68-4972-bc2c-4a1340faea86",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one revealed card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Catch Twin Reflections",
+        id: "cc3278ca-f9a2-43fb-821e-89e4b0f94708",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices and gain 2 copies of it",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered Event to gain twice.",
+          ),
+        ),
+        effect: DraftCard(predicate: Event, count: 2, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "cfa78375-85b7-47e9-95f5-b31e6d112c52",
+    prose: "A masked scavenger scans a glowing display beside a radiation-marked crate in yellow haze.",
+    actions: [
+      ActionDefinition(
+        label: "Follow the glowing scan",
+        id: "290be933-979d-47c0-b687-28605eda1c27",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Survivor from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Survivor."),
+        ),
+        effect: DraftCard(predicate: Survivor, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Open the marked crate",
+        id: "70417d2b-b102-410c-9ef9-dd253ddcbf8f",
+        presentation: ActionPresentation(
+          effect_text: "Gain 15 essence for each Survivor card in your deck",
+          followup: None,
+        ),
+        effect: GainEssencePerCard(predicate: Survivor, essence_per_card: 15),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+    prose: "A narrow suspension bridge ends at a hanging lantern amid peach clouds.",
+    actions: [
+      ActionDefinition(
+        label: "Cross the Bridge",
+        id: "857c0e1d-126f-4ecb-bea4-b611c709e02d",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+
+      ActionDefinition(
+        label: "Enter Its Light",
+        id: "904bffd1-2ff6-4f13-8103-dccd4d48c89a",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one transfigured Event."),
+        ),
+        effect: TransfiguredCardDraft(predicate: Event, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "448abb34-d77d-40ac-8292-58db03176247",
+    prose: "A skull-crowned binder channels screaming spirits through a fiery sigil and blood-red gem.",
+    actions: [
+      ActionDefinition(
+        label: "Feed the Blood Gem",
+        id: "ca826d55-7525-456e-b40e-41b94744055c",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to feed the gem for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Bind Fallen Warriors",
+        id: "c007cf3f-7779-4081-bcae-b1726dc816c2",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+    ],
+  ),
 ]

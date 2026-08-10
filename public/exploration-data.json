@@ -6913,8 +6913,148 @@
           "offerCount": 4
         }
       ]
+    },
+    {
+      "cardId": "2e8571c0-4faf-4e7a-a702-26952d2035ee",
+      "prose": "A hooded watcher surveys a crowded avenue burning beneath shattered towers and distant domes.",
+      "action": [
+        {
+          "id": "ded01c5a-c919-4f61-bb4f-31f7bb64680c",
+          "label": "Abandon a Straggler",
+          "effectText": "Purge a random Survivor. Every other Survivor in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Survivor",
+          "sparkBonus": 1
+        },
+        {
+          "id": "a69656f2-7396-4f7a-a002-328c0bc0330a",
+          "label": "Guide Survivors Through",
+          "effectText": "Draft a Survivor from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Survivor.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "survivor",
+          "count": 1,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "fc4b06d6-3b30-4769-af98-88fcea5b54dd",
+      "prose": "A woman with a white umbrella stands amid orange umbrellas spiraling above mirrored rainwater.",
+      "action": [
+        {
+          "id": "7ec8de13-9b68-4972-bc2c-4a1340faea86",
+          "label": "Echo Familiar Shelter",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one revealed card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "cc3278ca-f9a2-43fb-821e-89e4b0f94708",
+          "label": "Catch Twin Reflections",
+          "effectText": "Draft an Event from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Event to gain twice.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 2,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "cfa78375-85b7-47e9-95f5-b31e6d112c52",
+      "prose": "A masked scavenger scans a glowing display beside a radiation-marked crate in yellow haze.",
+      "action": [
+        {
+          "id": "290be933-979d-47c0-b687-28605eda1c27",
+          "label": "Follow the glowing scan",
+          "effectText": "Draft a Survivor from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Survivor.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "survivor",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "70417d2b-b102-410c-9ef9-dd253ddcbf8f",
+          "label": "Open the marked crate",
+          "effectText": "Gain 15 essence for each Survivor card in your deck",
+          "effectKind": "gain-essence-per-card",
+          "canonicalMechanicId": "gain-essence-by-deck-predicate",
+          "predicate": "survivor",
+          "essencePerCard": 15
+        }
+      ]
+    },
+    {
+      "cardId": "0fde04ac-8552-45ce-83a3-5ab2384b36da",
+      "prose": "A narrow suspension bridge ends at a hanging lantern amid peach clouds.",
+      "action": [
+        {
+          "id": "857c0e1d-126f-4ecb-bea4-b611c709e02d",
+          "label": "Cross the Bridge",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        },
+        {
+          "id": "904bffd1-2ff6-4f13-8103-dccd4d48c89a",
+          "label": "Enter Its Light",
+          "effectText": "Draft a transfigured Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured Event.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "448abb34-d77d-40ac-8292-58db03176247",
+      "prose": "A skull-crowned binder channels screaming spirits through a fiery sigil and blood-red gem.",
+      "action": [
+        {
+          "id": "ca826d55-7525-456e-b40e-41b94744055c",
+          "label": "Feed the Blood Gem",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to feed the gem for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "c007cf3f-7779-4081-bcae-b1726dc816c2",
+          "label": "Bind Fallen Warriors",
+          "effectText": "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        }
+      ]
     }
   ],
-  "contentHash": "3c818473ed2573da28d2222a98cf02bbeafeec02245df4883dc8eed4b7930995",
-  "foldHash": "3c818473ed2573da28d2222a98cf02bbeafeec02245df4883dc8eed4b7930995"
+  "contentHash": "a3b730843a2366f9517d1b34644c33d1a2571aede2229dbf209d0d0cdb1ebb10",
+  "foldHash": "a3b730843a2366f9517d1b34644c33d1a2571aede2229dbf209d0d0cdb1ebb10"
 }
