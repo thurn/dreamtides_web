@@ -2211,4 +2211,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "1658d9a0-c3b0-4eb7-babc-4933acf362c4",
+    prose: "A lone figure faces a colossal glowing turbine amid hanging cables, wreckage, and violet haze.",
+    actions: [
+      ActionDefinition(
+        label: "Cross Circular Threshold",
+        id: "28f4c90f-10a6-4cbf-921e-65b24e3748a2",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+
+      ActionDefinition(
+        label: "Draw Power From Rim",
+        id: "2567fc2d-d519-4442-a55d-ceff6fd13d04",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "fa036c27-2234-4f76-8857-c242530627ce",
+    prose: "A red-eyed colossus cradles a tiny figure amid leaning towers and luminous smoke.",
+    actions: [
+      ActionDefinition(
+        label: "Lift Ruinbound Survivor",
+        id: "1a3107df-966f-4784-8365-f433a04a0dff",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured ≤2● cost Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one transfigured ≤2● cost Character.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: CheapCharacter, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Release Buried Echoes",
+        id: "2542e069-c6c6-4d76-b4b1-c71138371931",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "55340736-7fc5-4555-8f47-081d770a6e8d",
+    prose: "Blue fire erupts from a soldier's rifle as dark fragments scatter through smoke.",
+    actions: [
+      ActionDefinition(
+        label: "Call Reinforcements",
+        id: "5eeaf583-5906-4ce6-b007-8654ffe60368",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Lay Covering Fire",
+        id: "d1233e3f-06e7-4a78-9192-4ca49cb0728c",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "3e802ecd-a83b-491b-9528-a4672d0e986f",
+    prose: "A many-eyed colossus descends through burning rain as a lone figure braces below.",
+    actions: [
+      ActionDefinition(
+        label: "Surrender Repeated Memories",
+        id: "9d85ef97-4f53-4633-bbb1-699cc25e6944",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+
+      ActionDefinition(
+        label: "Shelter Beneath Horror",
+        id: "a7469f8f-b4ff-44c7-b9de-679249a826d4",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "85251f03-c873-46d8-81be-ab421c901a53",
+    prose: "A black-robed woman peers through windblown hair, red tassels framing her painted face.",
+    actions: [
+      ActionDefinition(
+        label: "Release Red Tassels",
+        id: "a02d57fe-f7a2-48de-899b-9a26b2122c0d",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+
+      ActionDefinition(
+        label: "Follow Her Painted Gaze",
+        id: "a38ee60e-39d3-46c0-98c1-28769950541f",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices and gain 2 copies of it",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered low-cost Character to gain twice.",
+          ),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 2, offer_count: 4),
+      ),
+    ],
+  ),
 ]
