@@ -74,8 +74,8 @@ export function makeTutorialBattleConfiguration(
         },
       ],
     },
-    playerDraws: [],
-    enemyDraws: [],
+    forcedPlayerDraws: [],
+    forcedEnemyDraws: [],
     dreamwellDraws: [
       TEST_TUTORIAL_FEATURED_CARDS.dreamwellCardId,
       "7171ff89-ebe4-42d0-8863-9b4b0531cad2",

@@ -363,8 +363,8 @@ function arrangeTutorialHandoff(
     "enemy",
     authoredHands.enemy,
   );
-  stackTutorialDeck(board, "player", battleConfiguration.playerDraws);
-  stackTutorialEnemyDeck(board, battleConfiguration.enemyDraws);
+  stackTutorialDeck(board, "player", battleConfiguration.forcedPlayerDraws);
+  stackTutorialEnemyDeck(board, battleConfiguration.forcedEnemyDraws);
 
   board.activeSide = battleConfiguration.handoff.activeSide;
   board.turnNumber = battleConfiguration.handoff.turnNumber;

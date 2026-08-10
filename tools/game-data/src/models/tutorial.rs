@@ -11,9 +11,9 @@ use uuid::{Uuid, Variant, Version};
 #[serde(deny_unknown_fields)]
 pub struct TutorialCatalog {
     pub default_maximum_width_pixels: u32,
-    pub journey_guidance: TutorialJourneyGuidance,
-    pub battle: TutorialBattleConfiguration,
     pub scripted_tutorial_sequence: Vec<TutorialActionDefinition>,
+    pub battle: TutorialBattleConfiguration,
+    pub journey_guidance: TutorialJourneyGuidance,
     pub triggers: Vec<TutorialTriggerDefinition>,
 }
 
@@ -135,8 +135,8 @@ pub struct TutorialBattleConfiguration {
     pub starting_energy: u32,
     pub score_to_win: u32,
     pub starter_deck: Vec<TutorialStarterDeckEntry>,
-    pub player_draws: Vec<EntityId>,
-    pub enemy_draws: Vec<EntityId>,
+    pub forced_player_draws: Vec<EntityId>,
+    pub forced_enemy_draws: Vec<EntityId>,
     /// Complete shared Dreamwell prefix, including pre-handoff scripted draws.
     pub dreamwell_draws: Vec<EntityId>,
     pub scripted_card_roles: TutorialScriptedCardRoles,
@@ -765,8 +765,8 @@ struct CompatibilityBattle {
     enemy_dream_avatar_id: String,
     starting_energy: u32,
     score_to_win: u32,
-    player_draws: Vec<String>,
-    enemy_draws: Vec<String>,
+    forced_player_draws: Vec<String>,
+    forced_enemy_draws: Vec<String>,
     dreamwell_draws: Vec<String>,
     starter_deck: Vec<CompatibilityStarterDeckEntry>,
     featured_cards: CompatibilityFeaturedCards,
@@ -1018,8 +1018,8 @@ fn lower_battle(value: TutorialBattleConfiguration) -> Result<CompatibilityBattl
         enemy_dream_avatar_id: value.enemy_dream_avatar_id.to_string(),
         starting_energy: value.starting_energy,
         score_to_win: value.score_to_win,
-        player_draws: ids(value.player_draws),
-        enemy_draws: ids(value.enemy_draws),
+        forced_player_draws: ids(value.forced_player_draws),
+        forced_enemy_draws: ids(value.forced_enemy_draws),
         dreamwell_draws: ids(value.dreamwell_draws),
         starter_deck: value
             .starter_deck
@@ -1839,8 +1839,8 @@ mod tests {
                     card_id: entity("00000000-0000-4000-8000-000000000101"),
                     copies: 2,
                 }],
-                player_draws: vec![],
-                enemy_draws: vec![entity("00000000-0000-4000-8000-000000000102")],
+                forced_player_draws: vec![],
+                forced_enemy_draws: vec![entity("00000000-0000-4000-8000-000000000102")],
                 dreamwell_draws: vec![entity("00000000-0000-4000-8000-000000000201")],
                 scripted_card_roles: TutorialScriptedCardRoles {
                     player_card_id: entity("00000000-0000-4000-8000-000000000101"),
@@ -2181,7 +2181,7 @@ mod tests {
         assert!(triggers[1].get("delay").is_none());
         assert_eq!(triggers[0]["bubbleWidth"].as_integer(), Some(500));
         assert!(
-            lowered["battle"]["playerDraws"]
+            lowered["battle"]["forcedPlayerDraws"]
                 .as_array()
                 .unwrap()
                 .is_empty()

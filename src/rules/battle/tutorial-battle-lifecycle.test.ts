@@ -238,8 +238,8 @@ function content(): JourneyContent {
     tutorial: makeTutorialConfiguration(
       makeTutorialBattleConfiguration({
         starterDeck: STARTERS.map(([, cardId]) => ({ cardId, copies: 3 })),
-        playerDraws: PLAYER_DRAW_SEQUENCE,
-        enemyDraws: ENEMY_DRAW_SEQUENCE,
+        forcedPlayerDraws: PLAYER_DRAW_SEQUENCE,
+        forcedEnemyDraws: ENEMY_DRAW_SEQUENCE,
         dreamwellDraws: DREAMWELL_SEQUENCE,
         aiActionOverrides: [
           {
@@ -810,12 +810,12 @@ describe("tutorial battle lifecycle", () => {
       ...tutorialContent.tutorial!,
       battle: {
         ...tutorialContent.tutorial!.battle,
-        playerDraws: [
+        forcedPlayerDraws: [
           PLAYER_DRAW_SEQUENCE[1],
           PLAYER_DRAW_SEQUENCE[0],
           ...PLAYER_DRAW_SEQUENCE.slice(2),
         ],
-        enemyDraws: [
+        forcedEnemyDraws: [
           ENEMY_DRAW_SEQUENCE[1],
           ENEMY_DRAW_SEQUENCE[0],
           ...ENEMY_DRAW_SEQUENCE.slice(2),

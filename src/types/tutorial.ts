@@ -198,8 +198,8 @@ export interface TutorialBattleConfiguration {
   readonly scoreToWin: number;
   readonly starterDeck: readonly TutorialStarterDeckEntry[];
   readonly handoff: TutorialBattleHandoffConfiguration;
-  readonly playerDraws: readonly string[];
-  readonly enemyDraws: readonly string[];
+  readonly forcedPlayerDraws: readonly string[];
+  readonly forcedEnemyDraws: readonly string[];
   /** Complete shared deck prefix, including authored pre-handoff draws. */
   readonly dreamwellDraws: readonly string[];
   /** One-shot, state-matched actions which take priority over heuristic AI. */

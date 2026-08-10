@@ -1586,10 +1586,10 @@ the runtime asset pipeline.
 
 Persistent guidance for journey surfaces and the first two battles.
 
-### `battle.player_draws`
+### `battle.forced_player_draws`
 
-Cards are drawn from each list in order after the authored tutorial actions
-hand control to the playable battle.
+`battle.forced_player_draws` and `battle.forced_enemy_draws` are drawn in order
+after the authored tutorial actions hand control to the playable battle.
 
 ### `battle.dreamwell_draws`
 

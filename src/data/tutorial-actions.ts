@@ -239,7 +239,7 @@ function parseHandoff(value: unknown) {
 
 function parseCardDrawList(
   value: unknown,
-  field: "playerDraws" | "enemyDraws" | "dreamwellDraws",
+  field: "forcedPlayerDraws" | "forcedEnemyDraws" | "dreamwellDraws",
 ): readonly string[] {
   if (!Array.isArray(value)) {
     throw new Error(`Tutorial battle ${field} must be an array of card UUIDs.`);
@@ -278,8 +278,8 @@ export function parseTutorialBattleConfiguration(
     scoreToWin: parseInteger(record.scoreToWin, "scoreToWin", 1),
     starterDeck: parseStarterDeck(record.starterDeck),
     handoff: parseHandoff(record.handoff),
-    playerDraws: parseCardDrawList(record.playerDraws, "playerDraws"),
-    enemyDraws: parseCardDrawList(record.enemyDraws, "enemyDraws"),
+    forcedPlayerDraws: parseCardDrawList(record.forcedPlayerDraws, "forcedPlayerDraws"),
+    forcedEnemyDraws: parseCardDrawList(record.forcedEnemyDraws, "forcedEnemyDraws"),
     dreamwellDraws: parseCardDrawList(record.dreamwellDraws, "dreamwellDraws"),
     aiActionOverrides: parseTutorialBattleAiActionOverrides(
       record.aiActionOverrides ?? [],

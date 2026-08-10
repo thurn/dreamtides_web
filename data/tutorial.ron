@@ -1,160 +1,9 @@
-// Complete tutorial guidance, scripted battle setup, and supplemental teaching triggers.
+// Complete scripted tutorial, battle setup, journey guidance, and supplemental teaching triggers.
 
 #![enable(implicit_some)]
 TutorialCatalog(
   // Default desktop width for any tutorial bubble or trigger without an override.
   default_maximum_width_pixels: 500,
-
-  journey_guidance: TutorialJourneyGuidance(
-    journey_start: TutorialSpeechBubble(
-      // Seconds after the owning tutorial surface becomes active before this guidance appears.
-      delay_seconds: 1,
-      // Pixels added to the computed horizontal dialogue position.
-      horizontal_offset_pixels: 40,
-      // Desktop maximum width of the speech bubble, in pixels.
-      maximum_width_pixels: 550,
-      text: "For each journey, you must choose a [purple]Dream Avatar[/purple] who provides a permanent ability.",
-    ),
-    dreamscape: TutorialSpeechBubble(
-      delay_seconds: 1,
-      maximum_width_pixels: 700,
-      text: "In each dream, you will visit [purple]sites[/purple] to build your deck and prepare for a [purple]dream battle[/purple].",
-    ),
-    atlas: TutorialSpeechBubble(
-      delay_seconds: 1,
-      maximum_width_pixels: 700,
-      text: "On the [purple]Atlas[/purple] screen, you will pick which dream to enter next.",
-    ),
-    draft: TutorialSpeechBubble(
-      delay_seconds: 1,
-      maximum_width_pixels: 600,
-      text: "At a [purple]Draft[/purple] site you build your deck by repeatedly selecting one of four cards to add.",
-    ),
-    purge: TutorialSpeechBubble(
-      delay_seconds: 1,
-      maximum_width_pixels: 600,
-      text: "You can [yellow]purge[/yellow] cards here, removing them from your deck for an ◆ essence cost.",
-    ),
-    dreamsign_revelation: TutorialSpeechBubble(
-      delay_seconds: 1,
-      maximum_width_pixels: 600,
-      text: "A [purple]Dreamsign[/purple] is a persistent artifact of the dream that gives ongoing benefits.",
-    ),
-    first_battle: TutorialSpeechBubble(
-      delay_seconds: 1,
-      maximum_width_pixels: 700,
-      text: "Before each dream battle, you can view cards from your opponent's deck and see the ⍟ required to win",
-    ),
-    second_battle: TutorialSpeechBubble(
-      delay_seconds: 1,
-      maximum_width_pixels: 700,
-      text: "For this battle, the opponent's avatar ability is active and you must score 25⍟ to win",
-    ),
-  ),
-
-  battle: TutorialBattleConfiguration(
-    player_dream_avatar_id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
-    enemy_dream_avatar_id: "b99936ca-97f9-4930-af5a-fa9ef92557ef",
-    starting_energy: 4,
-    score_to_win: 10,
-    starter_deck: [
-      TutorialStarterDeckEntry(card_id: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8", copies: 3),
-
-      TutorialStarterDeckEntry(card_id: "647f5150-b2e0-424b-9480-27557642524e", copies: 3),
-
-      TutorialStarterDeckEntry(card_id: "e83014d3-9d35-4e80-a1b3-9b25360ad2af", copies: 3),
-
-      TutorialStarterDeckEntry(card_id: "a28ad36d-fa74-4190-a463-7efd3a6233d0", copies: 3),
-
-      TutorialStarterDeckEntry(card_id: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", copies: 3),
-
-      TutorialStarterDeckEntry(card_id: "5ab11bef-5dcd-49f5-be49-ae2ccde76e70", copies: 3),
-
-      TutorialStarterDeckEntry(card_id: "4408b942-09a0-4f4e-a403-10c708c6e3c5", copies: 3),
-
-      TutorialStarterDeckEntry(card_id: "2162742c-09d0-4e62-ae49-0f8f79b45adc", copies: 3),
-
-      TutorialStarterDeckEntry(card_id: "910b4cf9-dec7-4e03-af4f-7d5ae342eeba", copies: 3),
-
-      TutorialStarterDeckEntry(card_id: "944e15d2-d680-4ebe-8d18-36826f4b1535", copies: 3),
-    ],
-    player_draws: [
-      "4408b942-09a0-4f4e-a403-10c708c6e3c5",
-      "647f5150-b2e0-424b-9480-27557642524e",
-      "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
-      "944e15d2-d680-4ebe-8d18-36826f4b1535",
-      "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
-    ],
-    enemy_draws: [
-      "944e15d2-d680-4ebe-8d18-36826f4b1535",
-      "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
-      "647f5150-b2e0-424b-9480-27557642524e",
-      "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
-      "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
-    ],
-    // Complete shared deck prefix, including the two pre-handoff scripted draws.
-    dreamwell_draws: [
-      "02e8ea92-1218-413c-9f0b-4c865a3921d3",
-      "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
-      "51caf26d-83bf-45a9-bc80-010d353277db",
-      "5ec17498-9028-4a01-80a0-67c91b03d505",
-      "03e4e701-4720-4278-8198-9b7e0514d4cf",
-      "de98477c-e216-4618-bff1-0e24bd982fdb",
-      "662b7393-751c-4aa9-8150-5f20b4d176a4",
-      "120ec4c2-aa7b-48f4-be9f-f39820e565ca",
-      "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
-      "a57f1276-3fb6-4527-b538-953fbace35cf",
-      "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
-    ],
-    // Stable semantic roles for cards reused by the scripted sequence, loading screen, and live handoff.
-    scripted_card_roles: TutorialScriptedCardRoles(
-      player_card_id: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
-      opponent_card_id: "229ab3a1-3720-41a2-924c-8fe112188f8e",
-      enemy_starter_card_id: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
-      loading_event_card_id: "944e15d2-d680-4ebe-8d18-36826f4b1535",
-      dreamwell_card_id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
-    ),
-    // Exact rules-engine state created when the scripted sequence hands control to the player.
-    handoff: TutorialBattleHandoff(
-      active_side: Player,
-      turn_number: 4,
-      phase: Dawn,
-      dreamwell_deck_index: 2,
-      player: TutorialHandoffSide(
-        current_energy: 5,
-        maximum_energy: 5,
-        score: 0,
-        dreamwell_card_index: 1,
-        dreamwell_drawn_turn: 3,
-      ),
-      enemy: TutorialHandoffSide(
-        current_energy: 0,
-        maximum_energy: 5,
-        score: 2,
-        dreamwell_card_index: 0,
-        dreamwell_drawn_turn: 2,
-      ),
-      // Card roles to materialize into the live board; Deck consumes a starter-deck copy and Created mints one.
-      card_placements: [
-        Rank(card: Player, side: Player, source: Deck, slot: Front(4)),
-
-        Rank(card: EnemyStarter, side: Enemy, source: Deck, slot: Back(5)),
-
-        Void(card: Opponent, side: Enemy, source: Created),
-      ],
-    ),
-    ai_action_overrides: [
-      // A one-shot authored AI decision. Matching proceeds in source order before heuristic planning.
-      TutorialAiActionOverride(
-        // Stable identity used to consume this override exactly once in the shared room log.
-        id: "2fd657e4-02d2-412e-acad-4b063504a188",
-        // Battle-state edge which makes this override eligible.
-        trigger: AfterEnemyDreamwell(card_id: "51caf26d-83bf-45a9-bc80-010d353277db"),
-        // Semantic action submitted through the ordinary battle play-card path.
-        action: PlayCard(card_id: "229ab3a1-3720-41a2-924c-8fe112188f8e"),
-      ),
-    ],
-  ),
 
   // Ordered, event-log-backed sequence played before the live tutorial battle begins.
   scripted_tutorial_sequence: [
@@ -416,6 +265,157 @@ TutorialCatalog(
       ),
     ),
   ],
+
+  battle: TutorialBattleConfiguration(
+    player_dream_avatar_id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+    enemy_dream_avatar_id: "b99936ca-97f9-4930-af5a-fa9ef92557ef",
+    starting_energy: 4,
+    score_to_win: 10,
+    starter_deck: [
+      TutorialStarterDeckEntry(card_id: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8", copies: 3),
+
+      TutorialStarterDeckEntry(card_id: "647f5150-b2e0-424b-9480-27557642524e", copies: 3),
+
+      TutorialStarterDeckEntry(card_id: "e83014d3-9d35-4e80-a1b3-9b25360ad2af", copies: 3),
+
+      TutorialStarterDeckEntry(card_id: "a28ad36d-fa74-4190-a463-7efd3a6233d0", copies: 3),
+
+      TutorialStarterDeckEntry(card_id: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", copies: 3),
+
+      TutorialStarterDeckEntry(card_id: "5ab11bef-5dcd-49f5-be49-ae2ccde76e70", copies: 3),
+
+      TutorialStarterDeckEntry(card_id: "4408b942-09a0-4f4e-a403-10c708c6e3c5", copies: 3),
+
+      TutorialStarterDeckEntry(card_id: "2162742c-09d0-4e62-ae49-0f8f79b45adc", copies: 3),
+
+      TutorialStarterDeckEntry(card_id: "910b4cf9-dec7-4e03-af4f-7d5ae342eeba", copies: 3),
+
+      TutorialStarterDeckEntry(card_id: "944e15d2-d680-4ebe-8d18-36826f4b1535", copies: 3),
+    ],
+    forced_player_draws: [
+      "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+      "647f5150-b2e0-424b-9480-27557642524e",
+      "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
+      "944e15d2-d680-4ebe-8d18-36826f4b1535",
+      "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
+    ],
+    forced_enemy_draws: [
+      "944e15d2-d680-4ebe-8d18-36826f4b1535",
+      "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
+      "647f5150-b2e0-424b-9480-27557642524e",
+      "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+      "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
+    ],
+    // Complete shared deck prefix, including the two pre-handoff scripted draws.
+    dreamwell_draws: [
+      "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+      "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+      "51caf26d-83bf-45a9-bc80-010d353277db",
+      "5ec17498-9028-4a01-80a0-67c91b03d505",
+      "03e4e701-4720-4278-8198-9b7e0514d4cf",
+      "de98477c-e216-4618-bff1-0e24bd982fdb",
+      "662b7393-751c-4aa9-8150-5f20b4d176a4",
+      "120ec4c2-aa7b-48f4-be9f-f39820e565ca",
+      "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
+      "a57f1276-3fb6-4527-b538-953fbace35cf",
+      "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
+    ],
+    // Stable semantic roles for cards reused by the scripted sequence, loading screen, and live handoff.
+    scripted_card_roles: TutorialScriptedCardRoles(
+      player_card_id: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+      opponent_card_id: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+      enemy_starter_card_id: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+      loading_event_card_id: "944e15d2-d680-4ebe-8d18-36826f4b1535",
+      dreamwell_card_id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+    ),
+    // Exact rules-engine state created when the scripted sequence hands control to the player.
+    handoff: TutorialBattleHandoff(
+      active_side: Player,
+      turn_number: 4,
+      phase: Dawn,
+      dreamwell_deck_index: 2,
+      player: TutorialHandoffSide(
+        current_energy: 5,
+        maximum_energy: 5,
+        score: 0,
+        dreamwell_card_index: 1,
+        dreamwell_drawn_turn: 3,
+      ),
+      enemy: TutorialHandoffSide(
+        current_energy: 0,
+        maximum_energy: 5,
+        score: 2,
+        dreamwell_card_index: 0,
+        dreamwell_drawn_turn: 2,
+      ),
+      // Card roles to materialize into the live board; Deck consumes a starter-deck copy and Created mints one.
+      card_placements: [
+        Rank(card: Player, side: Player, source: Deck, slot: Front(4)),
+
+        Rank(card: EnemyStarter, side: Enemy, source: Deck, slot: Back(5)),
+
+        Void(card: Opponent, side: Enemy, source: Created),
+      ],
+    ),
+    ai_action_overrides: [
+      // A one-shot authored AI decision. Matching proceeds in source order before heuristic planning.
+      TutorialAiActionOverride(
+        // Stable identity used to consume this override exactly once in the shared room log.
+        id: "2fd657e4-02d2-412e-acad-4b063504a188",
+        // Battle-state edge which makes this override eligible.
+        trigger: AfterEnemyDreamwell(card_id: "51caf26d-83bf-45a9-bc80-010d353277db"),
+        // Semantic action submitted through the ordinary battle play-card path.
+        action: PlayCard(card_id: "229ab3a1-3720-41a2-924c-8fe112188f8e"),
+      ),
+    ],
+  ),
+
+  journey_guidance: TutorialJourneyGuidance(
+    journey_start: TutorialSpeechBubble(
+      // Seconds after the owning tutorial surface becomes active before this guidance appears.
+      delay_seconds: 1,
+      // Pixels added to the computed horizontal dialogue position.
+      horizontal_offset_pixels: 40,
+      // Desktop maximum width of the speech bubble, in pixels.
+      maximum_width_pixels: 550,
+      text: "For each journey, you must choose a [purple]Dream Avatar[/purple] who provides a permanent ability.",
+    ),
+    dreamscape: TutorialSpeechBubble(
+      delay_seconds: 1,
+      maximum_width_pixels: 700,
+      text: "In each dream, you will visit [purple]sites[/purple] to build your deck and prepare for a [purple]dream battle[/purple].",
+    ),
+    atlas: TutorialSpeechBubble(
+      delay_seconds: 1,
+      maximum_width_pixels: 700,
+      text: "On the [purple]Atlas[/purple] screen, you will pick which dream to enter next.",
+    ),
+    draft: TutorialSpeechBubble(
+      delay_seconds: 1,
+      maximum_width_pixels: 600,
+      text: "At a [purple]Draft[/purple] site you build your deck by repeatedly selecting one of four cards to add.",
+    ),
+    purge: TutorialSpeechBubble(
+      delay_seconds: 1,
+      maximum_width_pixels: 600,
+      text: "You can [yellow]purge[/yellow] cards here, removing them from your deck for an ◆ essence cost.",
+    ),
+    dreamsign_revelation: TutorialSpeechBubble(
+      delay_seconds: 1,
+      maximum_width_pixels: 600,
+      text: "A [purple]Dreamsign[/purple] is a persistent artifact of the dream that gives ongoing benefits.",
+    ),
+    first_battle: TutorialSpeechBubble(
+      delay_seconds: 1,
+      maximum_width_pixels: 700,
+      text: "Before each dream battle, you can view cards from your opponent's deck and see the ⍟ required to win",
+    ),
+    second_battle: TutorialSpeechBubble(
+      delay_seconds: 1,
+      maximum_width_pixels: 700,
+      text: "For this battle, the opponent's avatar ability is active and you must score 25⍟ to win",
+    ),
+  ),
 
   // Shared first-occurrence explanations evaluated during the tutorial journey and battles.
   triggers: [

@@ -349,8 +349,8 @@ export function validateTutorialBattleConfiguration(value) {
     scoreToWin: validateInteger(value.scoreToWin, "scoreToWin", 1),
     starterDeck: validateStarterDeck(value.starterDeck),
     handoff: validateHandoff(value.handoff),
-    playerDraws: validateCardDrawList(value.playerDraws, "playerDraws"),
-    enemyDraws: validateCardDrawList(value.enemyDraws, "enemyDraws"),
+    forcedPlayerDraws: validateCardDrawList(value.forcedPlayerDraws, "forcedPlayerDraws"),
+    forcedEnemyDraws: validateCardDrawList(value.forcedEnemyDraws, "forcedEnemyDraws"),
     dreamwellDraws: validateCardDrawList(
       value.dreamwellDraws,
       "dreamwellDraws",
@@ -1079,8 +1079,8 @@ export function validateTutorialCatalogReferences(
     battle.featuredCards.enemyStarterCardId,
     battle.featuredCards.loadingEventCardId,
     ...battle.starterDeck.map((entry) => entry.cardId),
-    ...battle.playerDraws,
-    ...battle.enemyDraws,
+    ...battle.forcedPlayerDraws,
+    ...battle.forcedEnemyDraws,
     ...battle.aiActionOverrides.map((override) => override.action.cardId),
   ]);
   for (const action of configuration.actions) {

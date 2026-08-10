@@ -35,8 +35,9 @@ The compact scripted presentation places its player character in the first
 available back-rank or front-rank presentation slot. These transient layout
 positions are presentation-owned and are not authored battle state.
 
-`player_draws`, `enemy_draws`, and `dreamwell_draws` define deterministic draw
-prefixes. `ai_action_overrides` defines state-matched semantic AI actions. The
+`forced_player_draws` and `forced_enemy_draws` define deterministic post-handoff
+draw prefixes. `dreamwell_draws` defines the shared Dreamwell prefix, and
+`ai_action_overrides` defines state-matched semantic AI actions. The
 validator checks that the starter recipe contains enough copies for scripted
 hands, configured draws, deck-backed placements, and the three-card Erode
 state.

@@ -1028,8 +1028,8 @@ describe("parseTutorialBattleConfiguration", () => {
         { cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8", copies: 3 },
         { cardId: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", copies: 3 },
       ],
-      playerDraws: ["5a980eff-6ec7-44d8-9977-b98e66bbc2c8"],
-      enemyDraws: ["a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"],
+      forcedPlayerDraws: ["5a980eff-6ec7-44d8-9977-b98e66bbc2c8"],
+      forcedEnemyDraws: ["a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"],
       dreamwellDraws: [
         "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
         TEST_TUTORIAL_FEATURED_CARDS.dreamwellCardId,
@@ -1053,7 +1053,7 @@ describe("parseTutorialBattleConfiguration", () => {
     expect(() =>
       parseTutorialBattleConfiguration({
         ...battle,
-        enemyDraws: ["not-a-uuid"],
+        forcedEnemyDraws: ["not-a-uuid"],
       }),
     ).toThrow(/array of card UUIDs/u);
     expect(() =>

@@ -160,11 +160,11 @@ export function assertTutorialDeckSufficiency(
       }
     }
   }
-  for (const cardId of battle.playerDraws) {
-    consumeDeckCard(decks.player, cardId, "playerDraws", makeError);
+  for (const cardId of battle.forcedPlayerDraws) {
+    consumeDeckCard(decks.player, cardId, "forcedPlayerDraws", makeError);
   }
-  for (const cardId of battle.enemyDraws) {
-    consumeDeckCard(decks.enemy, cardId, "enemyDraws", makeError);
+  for (const cardId of battle.forcedEnemyDraws) {
+    consumeDeckCard(decks.enemy, cardId, "forcedEnemyDraws", makeError);
   }
   const enemyCardsRemaining = [...decks.enemy.values()].reduce(
     (total, count) => total + count,

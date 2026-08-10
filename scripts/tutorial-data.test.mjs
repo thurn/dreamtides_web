@@ -79,8 +79,8 @@ const FIXTURE_BATTLE = {
       },
     ],
   },
-  playerDraws: ["5a980eff-6ec7-44d8-9977-b98e66bbc2c8"],
-  enemyDraws: ["a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"],
+  forcedPlayerDraws: ["5a980eff-6ec7-44d8-9977-b98e66bbc2c8"],
+  forcedEnemyDraws: ["a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"],
   dreamwellDraws: ["7171ff89-ebe4-42d0-8863-9b4b0531cad2"],
   aiActionOverrides: [
     {
@@ -318,9 +318,9 @@ describe("tutorial data", () => {
         triggers: [],
         battle: {
           ...FIXTURE_BATTLE,
-          playerDraws: [
-            FIXTURE_BATTLE.playerDraws[0],
-            FIXTURE_BATTLE.playerDraws[0],
+          forcedPlayerDraws: [
+            FIXTURE_BATTLE.forcedPlayerDraws[0],
+            FIXTURE_BATTLE.forcedPlayerDraws[0],
           ],
           starterDeck: FIXTURE_BATTLE.starterDeck.map((entry) => ({
             ...entry,
@@ -494,7 +494,7 @@ describe("tutorial data", () => {
     expect(() =>
       validateTutorialBattleConfiguration({
         ...FIXTURE_BATTLE,
-        playerDraws: ["Card Name"],
+        forcedPlayerDraws: ["Card Name"],
       }),
     ).toThrow(/array of card UUIDs/u);
     expect(() =>
