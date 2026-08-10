@@ -7053,8 +7053,138 @@
           "sparkBonus": 1
         }
       ]
+    },
+    {
+      "cardId": "de946f5a-1e27-4d40-ae44-9ef8cc041949",
+      "prose": "A silhouetted rower stands in a dark skiff, paddle balanced across one shoulder beneath countless stars.",
+      "action": [
+        {
+          "id": "63586673-781f-4281-bc1d-e4f8b11ead28",
+          "label": "Take up the paddle",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "75579971-169c-42bb-a622-684d551de035",
+          "label": "Navigate by the stars",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c",
+      "prose": "A crouched hunter faces a burning metal aperture as sparks drift through tangled forest.",
+      "action": [
+        {
+          "id": "7ba9c54a-04ba-40bc-bc2d-750531b02e46",
+          "label": "Send a Warrior Through",
+          "effectText": "Purge a chosen Warrior card and gain a random Warrior replacement",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Warrior to send through the aperture.",
+          "effectKind": "replace-selected",
+          "canonicalMechanicId": "replace-deck-entry",
+          "selectionPolicyId": "card-fit-quality",
+          "predicate": "warrior"
+        },
+        {
+          "id": "e50931a6-0fc9-46ab-9029-316e84287ea9",
+          "label": "Summon Future Champion",
+          "effectText": "Draft a transfigured Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered transfigured Warrior.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "4752fc43-6696-4bc3-88d0-4d5b97622fa8",
+      "prose": "A spired chapel glows with green windowlight above mist-shrouded graves.",
+      "action": [
+        {
+          "id": "242770a4-8c81-4b66-8abb-6e8a9c5cb53d",
+          "label": "Open Mist-Shrouded Graves",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "3299fd8e-89f2-4ca2-b6cf-ef1bcc8c0893",
+          "label": "Gather Green Windowlight",
+          "effectText": "Gain 15 essence for each Event card in your deck",
+          "effectKind": "gain-essence-per-card",
+          "canonicalMechanicId": "gain-essence-by-deck-predicate",
+          "predicate": "event",
+          "essencePerCard": 15
+        }
+      ]
+    },
+    {
+      "cardId": "61060827-8bed-4b63-b63d-6c3b0536e941",
+      "prose": "A lean wolf howls from a jagged peak, its dark coat rimmed in amber light.",
+      "action": [
+        {
+          "id": "b33ca91e-45b3-4d09-8b8c-9612de3b6c73",
+          "label": "Answer the Howl",
+          "effectText": "Choose one of 2 packs of 3 Spirit Animal cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Spirit Animal pack to add to your deck.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "spirit-animal",
+          "packCount": 2,
+          "packSize": 3
+        },
+        {
+          "id": "56500107-6da7-47af-9807-83e4a6ed8e38",
+          "label": "Echo the Howl",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa",
+      "prose": "A survivor in protective gear crouches amid rain and embers, one gloved hand reaching forward.",
+      "action": [
+        {
+          "id": "480fed49-33b3-45f8-bc1b-cfa285789d39",
+          "label": "Answer their reach",
+          "effectText": "Draft a Survivor from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Survivor.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "survivor",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "b00478b9-2366-491a-98ce-3f8c37364063",
+          "label": "Study their protective gear",
+          "effectText": "Change {deck_card} to become a Survivor",
+          "effectKind": "change-subtype-selected",
+          "canonicalMechanicId": "change-entry-subtype",
+          "selectionPolicyId": "deck-entry-centrality",
+          "predicate": "cheap-character",
+          "subtype": "Survivor",
+          "deckTarget": "offered"
+        }
+      ]
     }
   ],
-  "contentHash": "a3b730843a2366f9517d1b34644c33d1a2571aede2229dbf209d0d0cdb1ebb10",
-  "foldHash": "a3b730843a2366f9517d1b34644c33d1a2571aede2229dbf209d0d0cdb1ebb10"
+  "contentHash": "ef9c0ed249e7f736a6ec0ab76bed4e12e54e0acaa13ebc655d134868e1c4bb14",
+  "foldHash": "ef9c0ed249e7f736a6ec0ab76bed4e12e54e0acaa13ebc655d134868e1c4bb14"
 }
