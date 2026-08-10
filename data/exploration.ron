@@ -8383,4 +8383,157 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "91d9afed-ea29-43af-9021-0f3ecbdc252e",
+    prose: "A young traveler rests beneath a glowing umbrella as celestial sparks cross ruined towers.",
+    actions: [
+      ActionDefinition(
+        label: "Catch Falling Sparks",
+        id: "d15d75f3-e054-4c9c-8bdb-0ecf9a3b6d7f",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Event."),
+        ),
+        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Share Umbrella Light",
+        id: "5475c405-917b-4384-8d16-08f819fe2d2c",
+        presentation: ActionPresentation(
+          effect_text: "Lose 100 essence. Apply Inspired to every eligible Event card in your deck.",
+          followup: None,
+        ),
+        effect: TransfigureAllForEssence(
+          essence: 100,
+          predicate: Event,
+          transfiguration: "Inspired",
+        ),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "0e1209c3-1041-4079-9b1c-f96816a7deb5",
+    prose: "A torch-bearing child and luminous-antlered deer stand together between dead trees and steep mountains.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Torchlit Trail",
+        id: "53c5305b-362a-462d-802b-5ac1a92c4c67",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered low-cost Character.",
+          ),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Share Antlered Magic",
+        id: "2a59080c-2ddb-4f58-909c-580884fdc0ba",
+        presentation: ActionPresentation(
+          effect_text: "Change a chosen character card to be a Spirit Animal",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to become a Spirit Animal.",
+          ),
+        ),
+        effect: ChangeSubtypeSelected(
+          predicate: Character,
+          subtype: "Spirit Animal",
+          target: Chosen,
+        ),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c",
+    prose: "A diver drifts among luminous violet jellyfish as bright bubbles rise through dark water.",
+    actions: [
+      ActionDefinition(
+        label: "Join Violet Bloom",
+        id: "a7eee3ac-fe55-41e2-9e7e-7738377c6df4",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Spirit Animal cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered Spirit Animals.",
+          ),
+        ),
+        effect: TakeCards(predicate: SpiritAnimal, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Rise With Bubbles",
+        id: "efef24e0-3342-4c55-9823-5491e293d1e7",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "33874387-2490-48ed-93bc-a47a16e399ad",
+    prose: "A cable-bound synth raises a white flame while orange fire and debris erupt around him.",
+    actions: [
+      ActionDefinition(
+        label: "Bind a Fading Soul",
+        id: "65b14413-5463-4ee7-aa17-1b6f38d86689",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+
+      ActionDefinition(
+        label: "Store Pale Fire",
+        id: "d7d0168a-6fc5-43d8-a0ff-5d79bbcfa8d7",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "1b341984-d32e-42a7-ae56-b22059c59737",
+    prose: "A masked survivor watches glowing motes drift through a canyon of stacked wrecked cars.",
+    actions: [
+      ActionDefinition(
+        label: "Signal From Wreckheap",
+        id: "3486f705-b5dd-4f73-9214-a673509808e1",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Survivor from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one Survivor answering the signal.",
+          ),
+        ),
+        effect: DraftCard(predicate: Survivor, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Map Distant Lights",
+        id: "655656f7-b0cf-4e60-baad-c575de0a1735",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+    ],
+  ),
 ]
