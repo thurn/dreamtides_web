@@ -1,19 +1,4 @@
-// Transfiguration turns one untransfigured deck card into a stronger form.
-//
-// Each form ID names a closed mechanic implemented by the game rules. This
-// catalog deliberately does not repeat those mechanics as configurable
-// predicate and operation keys: changing such keys could not create a new
-// mechanic. Modders can enable a supported form by including it here, remove a
-// form by omitting it, and tune its presentation, pricing, and reward-selection
-// score. Adding a new kind of Transfiguration requires a new rules implementation
-// and a corresponding form ID.
-//
-// A standard Transfiguration site shuffles eligible deck cards and offers up to
-// `standard_choice_limit` of them. An enhanced site offers every eligible deck
-// card when `enhanced_choice_limit` is `All`. After choosing a card, the player
-// may select any individual form for which that card is eligible. Perfected is
-// reserved for authored rewards and applies every other eligible configured form
-// in this catalog's order.
+// Configuration for the transfiguration mechanic which upgrades cards
 
 #![enable(implicit_some)]
 TransfigurationCatalog(
