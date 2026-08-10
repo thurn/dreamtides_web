@@ -13488,4 +13488,147 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "cd4d689d-1442-4a19-8e6a-182b425d066d",
+    prose: "A scientist confronts a many-limbed organism suspended above green-lit machinery and drifting vapor.",
+    actions: [
+      ActionDefinition(
+        label: "Feed Living Sample",
+        id: "48e5a48c-797d-42c1-ad77-958c006a179c",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck.",
+          followup: Followup(
+            title: "Feed Living Sample",
+            subtitle: "First choose a card to purge, then a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+
+      ActionDefinition(
+        label: "Release Mutation Field",
+        id: "c2c0eeb3-81d2-40e3-832e-d28e7c947c93",
+        presentation: ActionPresentation(
+          effect_text: "Lose 100 essence. Apply Kindled to every eligible Character card in your deck.",
+          followup: None,
+        ),
+        effect: TransfigureAllForEssence(
+          essence: 100,
+          predicate: Character,
+          transfiguration: "Kindled",
+        ),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "0d848dc8-a1a2-410b-b19a-b5f65375e141",
+    prose: "A lone child faces a radiant gateway opening from ruined streets onto sunlit trees and stars.",
+    actions: [
+      ActionDefinition(
+        label: "Release Ruined Echoes",
+        id: "6a76e445-0f00-42cb-b311-10dfe06ee0c6",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+
+      ActionDefinition(
+        label: "Cross Radiant Gateway",
+        id: "911d56d5-0393-408a-9444-31723685c8f4",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "374ec185-b0f7-40e6-9988-09e96abccebe",
+    prose: "A lone astronaut watches a radiant planet and dark moon from an orbital platform.",
+    actions: [
+      ActionDefinition(
+        label: "Call Across Dark Orbit",
+        id: "2389cbe3-a7d8-400e-8c0e-3af528184044",
+        presentation: ActionPresentation(
+          effect_text: "Gain a random Character card",
+          followup: None,
+        ),
+        effect: GainRandomCards(predicate: Character, count: 1),
+      ),
+
+      ActionDefinition(
+        label: "Study Familiar Currents",
+        id: "2a772e51-c714-4d04-8f87-13dea391c58b",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one revealed card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "a9b5afaa-e149-4bf4-9007-077e8e9f12e6",
+    prose: "An armed wanderer confronts a lightning-filled ring amid burning wreckage and shattered towers.",
+    actions: [
+      ActionDefinition(
+        label: "Feed Rift an Echo",
+        id: "9cfa0b35-c957-4885-a8d8-76ac77ff7a1c",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "Feed Rift an Echo",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+
+      ActionDefinition(
+        label: "Cross Broken Threshold",
+        id: "0e6a772a-ff06-4399-b735-3612b02c4b04",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "ca37f80e-8474-4d40-b793-7a900f6ca467",
+    prose: "A lone spellcaster raises a blazing wand toward a colossal lightning-scarred dragon.",
+    actions: [
+      ActionDefinition(
+        label: "Walk Warrior's Path",
+        id: "9e83afb7-6bda-4db9-be89-870d62185693",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Face Waking Dragon",
+        id: "5dae9bee-5718-42ce-a4dc-55b5f7973af8",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+    ],
+  ),
 ]

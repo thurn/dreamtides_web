@@ -12492,8 +12492,133 @@
           "essencePerCard": 15
         }
       ]
+    },
+    {
+      "cardId": "cd4d689d-1442-4a19-8e6a-182b425d066d",
+      "prose": "A scientist confronts a many-limbed organism suspended above green-lit machinery and drifting vapor.",
+      "action": [
+        {
+          "id": "48e5a48c-797d-42c1-ad77-958c006a179c",
+          "label": "Feed Living Sample",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck.",
+          "followupTitle": "Feed Living Sample",
+          "followupSubtitle": "First choose a card to purge, then a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "c2c0eeb3-81d2-40e3-832e-d28e7c947c93",
+          "label": "Release Mutation Field",
+          "effectText": "Lose 100 essence. Apply Kindled to every eligible Character card in your deck.",
+          "effectKind": "transfigure-all-for-essence",
+          "canonicalMechanicId": "transfigure-deck-for-essence",
+          "essence": 100,
+          "predicate": "character",
+          "transfiguration": "Kindled"
+        }
+      ]
+    },
+    {
+      "cardId": "0d848dc8-a1a2-410b-b19a-b5f65375e141",
+      "prose": "A lone child faces a radiant gateway opening from ruined streets onto sunlit trees and stars.",
+      "action": [
+        {
+          "id": "6a76e445-0f00-42cb-b311-10dfe06ee0c6",
+          "label": "Release Ruined Echoes",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "911d56d5-0393-408a-9444-31723685c8f4",
+          "label": "Cross Radiant Gateway",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        }
+      ]
+    },
+    {
+      "cardId": "374ec185-b0f7-40e6-9988-09e96abccebe",
+      "prose": "A lone astronaut watches a radiant planet and dark moon from an orbital platform.",
+      "action": [
+        {
+          "id": "2389cbe3-a7d8-400e-8c0e-3af528184044",
+          "label": "Call Across Dark Orbit",
+          "effectText": "Gain a random Character card",
+          "effectKind": "gain-random-cards",
+          "canonicalMechanicId": "gain-card",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "character",
+          "count": 1
+        },
+        {
+          "id": "2a772e51-c714-4d04-8f87-13dea391c58b",
+          "label": "Study Familiar Currents",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one revealed card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "a9b5afaa-e149-4bf4-9007-077e8e9f12e6",
+      "prose": "An armed wanderer confronts a lightning-filled ring amid burning wreckage and shattered towers.",
+      "action": [
+        {
+          "id": "9cfa0b35-c957-4885-a8d8-76ac77ff7a1c",
+          "label": "Feed Rift an Echo",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "Feed Rift an Echo",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "0e6a772a-ff06-4399-b735-3612b02c4b04",
+          "label": "Cross Broken Threshold",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        }
+      ]
+    },
+    {
+      "cardId": "ca37f80e-8474-4d40-b793-7a900f6ca467",
+      "prose": "A lone spellcaster raises a blazing wand toward a colossal lightning-scarred dragon.",
+      "action": [
+        {
+          "id": "9e83afb7-6bda-4db9-be89-870d62185693",
+          "label": "Walk Warrior's Path",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Warrior.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "5dae9bee-5718-42ce-a4dc-55b5f7973af8",
+          "label": "Face Waking Dragon",
+          "effectText": "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        }
+      ]
     }
   ],
-  "contentHash": "6c2335b1a2647fe7216bff8207aa511b69414cf5a8a531b20913f91d82b90639",
-  "foldHash": "6c2335b1a2647fe7216bff8207aa511b69414cf5a8a531b20913f91d82b90639"
+  "contentHash": "ccecbfe4ea18a5b96c72ad1fb94706ca3d8c914b85a8661c42684788aaf8fc76",
+  "foldHash": "ccecbfe4ea18a5b96c72ad1fb94706ca3d8c914b85a8661c42684788aaf8fc76"
 }
