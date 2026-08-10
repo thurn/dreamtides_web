@@ -4321,8 +4321,135 @@
           "sparkBonus": 1
         }
       ]
+    },
+    {
+      "cardId": "f8678d24-f18b-4c94-a6c2-50efb8193b7f",
+      "prose": "A scarlet officiant raises a staff before a colossal skull shrine veiled in blue mist.",
+      "action": [
+        {
+          "id": "5f07a718-9a98-4728-bf85-07880acf30d2",
+          "label": "Place an Ossuary Offering",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to entomb for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "d9919f67-027e-4a53-bb72-395e11573c89",
+          "label": "Accept Hollow Counsel",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "770b21e4-ea6a-4910-8fca-2ec5b8813da1",
+      "prose": "A suited broker falls between exploding towers as contracts and debris spiral through blue fire.",
+      "action": [
+        {
+          "id": "2b9f0166-f77e-48c9-b2a0-82aeb7b08813",
+          "label": "Catch Falling Contracts",
+          "effectText": "Take any number of Event cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any number of offered Events.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        },
+        {
+          "id": "c7c50596-f234-4f4e-823d-88700dc1ab99",
+          "label": "Ride Blue Shockwave",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
+    },
+    {
+      "cardId": "fb967cc1-4199-4a08-8070-724e07cebea5",
+      "prose": "A lone traveler crosses blazing sigils while ember-ringed pathways multiply across a crimson void.",
+      "action": [
+        {
+          "id": "c205d317-65cb-42a2-a0b6-f45ef1e85c66",
+          "label": "Trace a Repeating Step",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "93e32481-e67d-42c4-895a-a8f8ecbd3a2b",
+          "label": "Shatter a Forward Sigil",
+          "effectText": "The next draft or shop site you visit will contain transfigured cards",
+          "effectKind": "transfigure-next-draft-or-shop",
+          "canonicalMechanicId": "next-site-transfiguration"
+        }
+      ]
+    },
+    {
+      "cardId": "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a",
+      "prose": "Golden sigils bind a midnight courser while violet spirit-fire lifts stones beneath an aurora.",
+      "action": [
+        {
+          "id": "05bda8e7-c1fe-4c92-8080-dd7aba664abd",
+          "label": "Follow Its Spirit Trail",
+          "effectText": "Draft a spirit animal from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one spirit animal to follow.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "63fb1aa5-e761-47f4-9c94-e407967cb6dd",
+          "label": "Trace Its Golden Sigils",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "37d9165f-2b3a-44a2-848b-401cf4466a7c",
+      "prose": "A blue-robed guide gathers drifting soul-signals amid a mist-veiled city.",
+      "action": [
+        {
+          "id": "ec53cc34-edb3-4264-9998-457672f91662",
+          "label": "Release a Lost Visionary",
+          "effectText": "Purge a random Visionary character. Every other Visionary character in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Visionary",
+          "sparkBonus": 1
+        },
+        {
+          "id": "289a0bd9-1537-4a6a-a8ab-757696df81dc",
+          "label": "Follow a Soul-Signal",
+          "effectText": "Gain a random dreamsign",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to release if needed.",
+          "effectKind": "gain-random-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "dreamsign-match"
+        }
+      ]
     }
   ],
-  "contentHash": "f098fdd14ae60859741e6e6a2a44622f3b7f1fdd6c98e4e9072aaae4afd46bc6",
-  "foldHash": "f098fdd14ae60859741e6e6a2a44622f3b7f1fdd6c98e4e9072aaae4afd46bc6"
+  "contentHash": "0ee40bae7b01e2ed6b41d20fb5aef89550a7d614d0bf8f90bffb6bcee2ced493",
+  "foldHash": "0ee40bae7b01e2ed6b41d20fb5aef89550a7d614d0bf8f90bffb6bcee2ced493"
 }
