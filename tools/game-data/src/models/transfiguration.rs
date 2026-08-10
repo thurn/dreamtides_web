@@ -94,15 +94,15 @@ impl TransfigurationFormId {
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub enum TransfigurationGlyph {
-    TransfigurationEmpowered,
-    TransfigurationAmplified,
-    TransfigurationKindled,
-    TransfigurationInspired,
-    TransfigurationEnduring,
-    TransfigurationHastened,
-    TransfigurationResonant,
-    TransfigurationAttuned,
-    TransfigurationPerfected,
+    Empowered,
+    Amplified,
+    Kindled,
+    Inspired,
+    Enduring,
+    Hastened,
+    Resonant,
+    Attuned,
+    Perfected,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -126,15 +126,15 @@ pub fn lower(source: TransfigurationCatalog) -> Result<toml::Value> {
 #[cfg(test)]
 fn fixture_glyph(id: TransfigurationFormId) -> TransfigurationGlyph {
     match id {
-        TransfigurationFormId::Empowered => TransfigurationGlyph::TransfigurationEmpowered,
-        TransfigurationFormId::Amplified => TransfigurationGlyph::TransfigurationAmplified,
-        TransfigurationFormId::Kindled => TransfigurationGlyph::TransfigurationKindled,
-        TransfigurationFormId::Inspired => TransfigurationGlyph::TransfigurationInspired,
-        TransfigurationFormId::Enduring => TransfigurationGlyph::TransfigurationEnduring,
-        TransfigurationFormId::Hastened => TransfigurationGlyph::TransfigurationHastened,
-        TransfigurationFormId::Resonant => TransfigurationGlyph::TransfigurationResonant,
-        TransfigurationFormId::Attuned => TransfigurationGlyph::TransfigurationAttuned,
-        TransfigurationFormId::Perfected => TransfigurationGlyph::TransfigurationPerfected,
+        TransfigurationFormId::Empowered => TransfigurationGlyph::Empowered,
+        TransfigurationFormId::Amplified => TransfigurationGlyph::Amplified,
+        TransfigurationFormId::Kindled => TransfigurationGlyph::Kindled,
+        TransfigurationFormId::Inspired => TransfigurationGlyph::Inspired,
+        TransfigurationFormId::Enduring => TransfigurationGlyph::Enduring,
+        TransfigurationFormId::Hastened => TransfigurationGlyph::Hastened,
+        TransfigurationFormId::Resonant => TransfigurationGlyph::Resonant,
+        TransfigurationFormId::Attuned => TransfigurationGlyph::Attuned,
+        TransfigurationFormId::Perfected => TransfigurationGlyph::Perfected,
     }
 }
 
@@ -436,7 +436,7 @@ mod tests {
     #[test]
     fn accepts_reassigned_supported_glyphs() {
         let mut source = catalog();
-        source.forms[0].glyph = TransfigurationGlyph::TransfigurationKindled;
+        source.forms[0].glyph = TransfigurationGlyph::Kindled;
         validate(&source).unwrap();
     }
 

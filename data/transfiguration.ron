@@ -20,8 +20,9 @@ TransfigurationCatalog(
       step: 10,
       // Empowered and Kindled use the size of their stat change to choose one
       // of these bands. Empowered's delta is the amount of ● removed; Kindled's
-      // delta is the original ✦. A zero-✦ Kindled card is free. The ranges must
-      // be contiguous, and the final band must have no maximum.
+      // delta is the original ✦. Kindling a zero-✦ card raises it to 1✦ and
+      // costs no Essence. The ranges must be contiguous, and the final band
+      // must have no maximum.
       stat_delta_bands: [
         TransfigurationStatDeltaBand(
           minimum_delta: 1,
@@ -50,36 +51,35 @@ TransfigurationCatalog(
     ),
   ),
 
-  // `pricing` controls Transfiguration-site Essence quotes. `StatDelta` uses
-  // the site table above, `Band` supplies a form-specific band, and `Free`
-  // always costs zero.
-  //
-  // `reward_score` ranks concrete card/form pairs when Augury, Exploration, or
-  // another generated reward asks for a valuable Transfiguration. `StatDelta`
-  // scores the actual stat improvement divided by `divisor` and clamps it to
-  // [0, 1]; `Flat` assigns the same score to every eligible card. Perfected is
-  // omitted from generated rewards and is available only when authored
-  // explicitly.
-  //
   // Form order controls ordinary-site option order and the order in which
-  // Perfected applies its eligible forms. Each `glossary_uuid` links the form
-  // to its canonical Glossary entry.
-  // `glyph` selects the Cumulus icon rendered on form controls and transformed
-  // cards; any supported Transfiguration glyph may be assigned to any form.
-  // `accent_color` styles the control and badge; `tint_color` highlights the
-  // exact card text or stat changed by the form.
+  // Perfected applies its eligible forms.
   forms: [
     // Empowered is eligible for cards with a positive ● cost. It halves that
     // cost, rounds down, and never produces a negative value.
     TransfigurationFormDefinition(
       id: Empowered,
+      // Each `glossary_uuid` links the form to its canonical Glossary entry.
       glossary_uuid: "a66c513e-500b-4891-8c09-9641ae300ba4",
       name: "Empowered",
       description: "Halve its ● cost, rounded down",
-      glyph: TransfigurationEmpowered,
+      // `glyph` selects the Cumulus icon rendered on form controls and
+      // transformed cards; any supported Transfiguration glyph may be assigned
+      // to any form.
+      glyph: Empowered,
+      // `accent_color` styles the control and badge; `tint_color` highlights
+      // the exact card text or stat changed by the form.
       accent_color: "#10b981",
       tint_color: "#6ee7b7",
+      // `pricing` controls Transfiguration-site Essence quotes. `StatDelta`
+      // uses the site table above, `Band` supplies a form-specific band, and
+      // `Free` always costs zero.
       pricing: StatDelta,
+      // `reward_score` ranks concrete card/form pairs when Augury, Exploration,
+      // or another generated reward asks for a valuable Transfiguration.
+      // `StatDelta` scores the actual stat improvement divided by `divisor` and
+      // clamps it to [0, 1]; `Flat` assigns the same score to every eligible
+      // card. Perfected is omitted from generated rewards and is available only
+      // when authored explicitly.
       reward_score: StatDelta(divisor: 2.0),
     ),
 
@@ -90,7 +90,7 @@ TransfigurationCatalog(
       glossary_uuid: "a2c070ca-eacd-4cca-b69d-3d48f0787a16",
       name: "Amplified",
       description: "Replace its ability with its authored stronger form",
-      glyph: TransfigurationAmplified,
+      glyph: Amplified,
       accent_color: "#f59e0b",
       tint_color: "#fcd34d",
       pricing: Band(TransfigurationCostBand(base: 10, jitter: 20, floor: 10)),
@@ -104,7 +104,7 @@ TransfigurationCatalog(
       glossary_uuid: "f40df441-0e44-4122-b4d4-cdc4085a9ffb",
       name: "Kindled",
       description: "Double its ✦, or set it to 1 if it is 0",
-      glyph: TransfigurationKindled,
+      glyph: Kindled,
       accent_color: "#ef4444",
       tint_color: "#fca5a5",
       pricing: StatDelta,
@@ -117,7 +117,7 @@ TransfigurationCatalog(
       glossary_uuid: "f0ff63b4-424b-4ae9-81d5-a4f6546afa3f",
       name: "Inspired",
       description: "Add \"Draw a card\" to its rules text",
-      glyph: TransfigurationInspired,
+      glyph: Inspired,
       accent_color: "#3b82f6",
       tint_color: "#93c5fd",
       pricing: Band(TransfigurationCostBand(base: 20, jitter: 20, floor: 10)),
@@ -130,7 +130,7 @@ TransfigurationCatalog(
       glossary_uuid: "eb4cfc5f-237a-47cd-9215-7cce3f15583f",
       name: "Enduring",
       description: "Add \"Reclaim\" to its rules text",
-      glyph: TransfigurationEnduring,
+      glyph: Enduring,
       accent_color: "#6366f1",
       tint_color: "#a5b4fc",
       pricing: Band(TransfigurationCostBand(base: 50, jitter: 30, floor: 20)),
@@ -143,7 +143,7 @@ TransfigurationCatalog(
       glossary_uuid: "19f6c2c9-dd6b-4d65-9f95-f6a3486772cc",
       name: "Hastened",
       description: "Make it Fast",
-      glyph: TransfigurationHastened,
+      glyph: Hastened,
       accent_color: "#06b6d4",
       tint_color: "#67e8f9",
       pricing: Free,
@@ -158,7 +158,7 @@ TransfigurationCatalog(
       glossary_uuid: "c3fa83af-ee3b-47cd-8112-5e5cc38821de",
       name: "Resonant",
       description: "Widen a named trigger to fire more often",
-      glyph: TransfigurationResonant,
+      glyph: Resonant,
       accent_color: "#d946ef",
       tint_color: "#f0abfc",
       pricing: Band(TransfigurationCostBand(base: 50, jitter: 30, floor: 20)),
@@ -172,7 +172,7 @@ TransfigurationCatalog(
       glossary_uuid: "980d283a-9558-4b66-84a0-fcb91fdf4ceb",
       name: "Attuned",
       description: "Reduce an activated ability's cost by 1●",
-      glyph: TransfigurationAttuned,
+      glyph: Attuned,
       accent_color: "#f43f5e",
       tint_color: "#fda4af",
       pricing: Band(TransfigurationCostBand(base: 10, jitter: 20, floor: 10)),
@@ -186,7 +186,7 @@ TransfigurationCatalog(
       glossary_uuid: "22adf539-d2c9-4f33-9416-159d03a220ad",
       name: "Perfected",
       description: "Apply every available transfiguration",
-      glyph: TransfigurationPerfected,
+      glyph: Perfected,
       accent_color: "#a855f7",
       tint_color: "#d8b4fe",
       pricing: Band(TransfigurationCostBand(base: 100, jitter: 0, floor: 100)),

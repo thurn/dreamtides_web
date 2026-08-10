@@ -166,7 +166,7 @@ export function compileTransfigurationData(source) {
         ),
       ),
     ),
-    glyph: form.glyph[0].toLowerCase() + form.glyph.slice(1),
+    glyph: `transfiguration${form.glyph}`,
     pricing: variant(form.pricing, `forms[${String(index)}].pricing`),
     rewardScore: variant(
       form.reward_score,
