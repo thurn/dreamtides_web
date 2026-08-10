@@ -9927,8 +9927,142 @@
           "essencePerCard": 15
         }
       ]
+    },
+    {
+      "cardId": "56411ed4-bda9-4fdf-82e5-b5492de67039",
+      "prose": "An armored commander guides a fire-breathing dragon across sunset peaks and storm-darkened sky.",
+      "action": [
+        {
+          "id": "285fb938-05ce-461e-90f9-5e014925908a",
+          "label": "Command Skybound Host",
+          "effectText": "All characters in your deck become the subtype of your choice.",
+          "followupTitle": "Command Skybound Host",
+          "followupSubtitle": "Choose one shared subtype for every Character.",
+          "effectKind": "change-subtype-all",
+          "canonicalMechanicId": "change-deck-subtype",
+          "subtypeOptions": [
+            "Warrior",
+            "Mage",
+            "Spirit Animal",
+            "Survivor"
+          ]
+        },
+        {
+          "id": "8c75f115-e1a1-473f-83bf-c8369b8d0a31",
+          "label": "Share Dragonfire",
+          "effectText": "All characters in your deck gain +1✦.",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "4fac8060-2644-409f-806b-c6a845ef6f31",
+      "prose": "A lone figure opens a glowing cage as countless stars stream across peach-colored clouds.",
+      "action": [
+        {
+          "id": "f2c123c5-a49a-4924-a179-853a77ed066e",
+          "label": "Release Captive Stars",
+          "effectText": "Take any number of Event cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any number of offered Events.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        },
+        {
+          "id": "49a12de4-306b-4409-b9e6-473dc64aa178",
+          "label": "Follow Starry Trail",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        }
+      ]
+    },
+    {
+      "cardId": "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7",
+      "prose": "A solitary woman pauses on broken stairs rising through clouds toward crimson light.",
+      "action": [
+        {
+          "id": "37a7b92c-cc6f-4b21-937d-04b4e5debc11",
+          "label": "Climb Toward Transfiguration",
+          "effectText": "Draft a transfigured ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured ≤2● cost Character.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        },
+        {
+          "id": "c890dbf0-4d74-4a0e-8ffc-2e5aef3cb38f",
+          "label": "Kneel on Broken Steps",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
+    },
+    {
+      "cardId": "4644db03-fbcd-4af5-a229-17962ce093d5",
+      "prose": "A shrouded reaper raises a black scythe before a pale eclipse, ember eyes burning.",
+      "action": [
+        {
+          "id": "d7932dd7-77c4-4226-ba88-f8c012192c6c",
+          "label": "Offer One to Scythe",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to reap for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "e8b93126-2317-469b-b1b8-8427e8b92322",
+          "label": "Receive Eclipse's Corona",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "cc21a902-e482-46c0-bf07-e04035f39190",
+      "prose": "Emerald radiance floods a vinebound gate as a lone mage raises conjured flame.",
+      "action": [
+        {
+          "id": "5891b1c2-d6ed-4b62-94db-c71c01f4f97c",
+          "label": "Cross in Another Shape",
+          "effectText": "Purge a chosen ≤2● cost Character and gain a random ≤2● cost Character replacement",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a ≤2● cost Character to send through.",
+          "effectKind": "replace-selected",
+          "canonicalMechanicId": "replace-deck-entry",
+          "selectionPolicyId": "card-fit-quality",
+          "predicate": "cheap-character"
+        },
+        {
+          "id": "6dd585f7-0037-4f49-a13d-ccfce7981ea2",
+          "label": "Call Beyond Veil",
+          "effectText": "Draft a transfigured ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured ≤2● cost Character.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        }
+      ]
     }
   ],
-  "contentHash": "1f81430f98e49fe74a0847960776f773dc6b3097d7141dabc1f88a7dc10a4095",
-  "foldHash": "1f81430f98e49fe74a0847960776f773dc6b3097d7141dabc1f88a7dc10a4095"
+  "contentHash": "4d5521945bd44540c9215e27effc36f5406fe37c4e3a5de758caf14f0e507512",
+  "foldHash": "4d5521945bd44540c9215e27effc36f5406fe37c4e3a5de758caf14f0e507512"
 }

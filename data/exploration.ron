@@ -10654,4 +10654,152 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "56411ed4-bda9-4fdf-82e5-b5492de67039",
+    prose: "An armored commander guides a fire-breathing dragon across sunset peaks and storm-darkened sky.",
+    actions: [
+      ActionDefinition(
+        label: "Command Skybound Host",
+        id: "285fb938-05ce-461e-90f9-5e014925908a",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck become the subtype of your choice.",
+          followup: Followup(
+            title: "Command Skybound Host",
+            subtitle: "Choose one shared subtype for every Character.",
+          ),
+        ),
+        effect: ChangeSubtypeAll(subtype_options: ["Warrior", "Mage", "Spirit Animal", "Survivor"]),
+      ),
+
+      ActionDefinition(
+        label: "Share Dragonfire",
+        id: "8c75f115-e1a1-473f-83bf-c8369b8d0a31",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦.",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "4fac8060-2644-409f-806b-c6a845ef6f31",
+    prose: "A lone figure opens a glowing cage as countless stars stream across peach-colored clouds.",
+    actions: [
+      ActionDefinition(
+        label: "Release Captive Stars",
+        id: "f2c123c5-a49a-4924-a179-853a77ed066e",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Event cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered Events.",
+          ),
+        ),
+        effect: TakeCards(predicate: Event, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Follow Starry Trail",
+        id: "49a12de4-306b-4409-b9e6-473dc64aa178",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7",
+    prose: "A solitary woman pauses on broken stairs rising through clouds toward crimson light.",
+    actions: [
+      ActionDefinition(
+        label: "Climb Toward Transfiguration",
+        id: "37a7b92c-cc6f-4b21-937d-04b4e5debc11",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured ≤2● cost Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one transfigured ≤2● cost Character.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: CheapCharacter, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Kneel on Broken Steps",
+        id: "c890dbf0-4d74-4a0e-8ffc-2e5aef3cb38f",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "4644db03-fbcd-4af5-a229-17962ce093d5",
+    prose: "A shrouded reaper raises a black scythe before a pale eclipse, ember eyes burning.",
+    actions: [
+      ActionDefinition(
+        label: "Offer One to Scythe",
+        id: "d7932dd7-77c4-4226-ba88-f8c012192c6c",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to reap for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Receive Eclipse's Corona",
+        id: "e8b93126-2317-469b-b1b8-8427e8b92322",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "cc21a902-e482-46c0-bf07-e04035f39190",
+    prose: "Emerald radiance floods a vinebound gate as a lone mage raises conjured flame.",
+    actions: [
+      ActionDefinition(
+        label: "Cross in Another Shape",
+        id: "5891b1c2-d6ed-4b62-94db-c71c01f4f97c",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen ≤2● cost Character and gain a random ≤2● cost Character replacement",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a ≤2● cost Character to send through.",
+          ),
+        ),
+        effect: ReplaceSelected(predicate: CheapCharacter),
+      ),
+
+      ActionDefinition(
+        label: "Call Beyond Veil",
+        id: "6dd585f7-0037-4f49-a13d-ccfce7981ea2",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured ≤2● cost Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one transfigured ≤2● cost Character.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: CheapCharacter, offer_count: 4),
+      ),
+    ],
+  ),
 ]
