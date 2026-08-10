@@ -1983,8 +1983,138 @@
           "count": 1
         }
       ]
+    },
+    {
+      "cardId": "c750af2e-8185-4af0-bb38-4a41430c71b3",
+      "prose": "A red-hooded rider rests atop a colossal crimson wolf beneath a luminous forest halo.",
+      "action": [
+        {
+          "id": "4ee1e031-c934-4481-92be-4c473e781b35",
+          "label": "Call Halo Echoes",
+          "effectText": "Draft a Spirit Animal from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "1dcc31bc-9b61-42f5-944e-bfdb7d3e52fd",
+          "label": "Ride Before Dawn",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "8855e20c-e23f-4499-a5e8-a7a46ff81d2b",
+      "prose": "A black-cloaked warrior raises a burning blade amid crimson clouds, sparks, and floating stone.",
+      "action": [
+        {
+          "id": "091b66c8-316c-4ef5-9bbb-26db6c8d45d3",
+          "label": "Shatter Crimson Seal",
+          "effectText": "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        },
+        {
+          "id": "ebe3c30f-702b-4679-8b69-6ea288dab2a4",
+          "label": "Enter Red Eclipse",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "ca0e9275-7fbe-47ce-b776-da5b2607145e",
+      "prose": "A hooded axeman waits inside a luminous doorway as pale fragments swirl through darkness.",
+      "action": [
+        {
+          "id": "ce639cdc-40fc-40e9-a7df-7c7baca6ec57",
+          "label": "Cross Marked Threshold",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        },
+        {
+          "count": 1,
+          "id": "63fd4d38-9af6-45d4-83f6-6f4833a49548",
+          "label": "Offer a Memory",
+          "effectText": "Purge a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card for the axe.",
+          "effectKind": "purge-selected",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "purge-misfit"
+        }
+      ]
+    },
+    {
+      "cardId": "4733876a-d6b1-48d2-b322-5f71aee9f3d6",
+      "prose": "A lone survivor faces a pale ring above collapsed towers and smoldering machinery.",
+      "action": [
+        {
+          "id": "ab93596a-375d-4a22-946e-75423ac3c0ec",
+          "label": "Cross Pale Threshold",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "d83459ea-273c-4eef-8eb6-64e94c606285",
+          "label": "Search Fallen District",
+          "effectText": "Draft a Survivor from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Survivor.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "survivor",
+          "count": 1,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "965ce3b2-a722-475c-99c5-5b35685d2404",
+      "prose": "A towering stag emerges through green mist, white eyes glowing beneath vast antlers.",
+      "action": [
+        {
+          "id": "1cff8649-c9db-41f8-8aba-45c86ae081b6",
+          "label": "Enter Green Mist",
+          "effectText": "Draft a Spirit Animal from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Spirit Animal.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "d00054fa-6184-4cc2-bdc4-36d9bdd4bcaa",
+          "label": "Follow Its Gaze",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
     }
   ],
-  "contentHash": "d9a8fbe2e296bb57062a31d62ed2aacd3305fc755f55d7e6d1a27e09e7419f41",
-  "foldHash": "d9a8fbe2e296bb57062a31d62ed2aacd3305fc755f55d7e6d1a27e09e7419f41"
+  "contentHash": "4b5522fe02c246b629dc8632dc06f005c3fcc09ed5576942be49f7ca930868a4",
+  "foldHash": "4b5522fe02c246b629dc8632dc06f005c3fcc09ed5576942be49f7ca930868a4"
 }
