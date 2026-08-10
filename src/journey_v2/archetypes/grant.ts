@@ -23,7 +23,7 @@ import {
 } from "../trace/buildTrace";
 import type { MerchantOfferTrace } from "../trace/types";
 import { buildCategoryUniverse, type MerchantCategory } from "./categories";
-import { merchantTransfigurations, transfigurationBenefit } from "./improve";
+import { rewardTransfigurations, transfigurationBenefit } from "./improve";
 import type {
   MerchantArchetypeBuilder,
   MerchantChoiceCandidateDraft,
@@ -776,7 +776,7 @@ export function bestTransfiguration(
   context: MerchantContext,
   card: CardData,
 ): TransfigurationType | null {
-  const eligible = merchantTransfigurations(
+  const eligible = rewardTransfigurations(
     context.rewardSelection.content.transfigurationData,
     card,
   );
@@ -806,7 +806,7 @@ function transfigurableCandidates(
   context: MerchantContext,
 ): readonly MerchantCatalogCard[] {
   return grantCandidatePool(context).filter(
-    (card) => merchantTransfigurations(
+    (card) => rewardTransfigurations(
       context.rewardSelection.content.transfigurationData,
       card.card,
     ).length > 0,

@@ -28,16 +28,28 @@ describe("parseTransfigurationData", () => {
     ]);
   });
 
+  it("accepts a supported glyph reassigned to another form", () => {
+    const value = mutableFixture();
+    value.forms[0].glyph = "transfigurationKindled";
+    const parsed = parseTransfigurationData(value);
+    expect(parsed.forms[0]?.glyph).toBe("transfigurationKindled");
+  });
+
   it.each([
-    (value: MutableCatalog) => { value.forms[1].id = value.forms[0].id; },
     (value: MutableCatalog) => {
-      value.forms[0].operation = { kind: "unknown" };
+      value.forms[1].id = value.forms[0].id;
     },
     (value: MutableCatalog) => {
-      value.forms[0].eligibility = { kind: "cardType", cardType: "Dream" };
+      value.forms[0].glyph = "notATransfigurationGlyph";
+    },
+    (value: MutableCatalog) => {
+      value.forms[0].description = "";
     },
     (value: MutableCatalog) => {
       value.forms[0].pricing = { kind: "band", base: Number.NaN };
+    },
+    (value: MutableCatalog) => {
+      value.forms[0].rewardScore = { kind: "statDelta", divisor: 0 };
     },
   ])("rejects malformed closed catalog structures", (mutate) => {
     const value = mutableFixture();

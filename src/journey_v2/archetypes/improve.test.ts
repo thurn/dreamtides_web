@@ -15,7 +15,7 @@ import type { CardData } from "../../types/cards";
 import type { DeckEntry } from "../../types/journey";
 import type { MerchantContext } from "../types";
 import {
-  merchantTransfigurations,
+  rewardTransfigurations,
   starterTransfigureBuilder,
   transfigureBuilder,
   transfigureCandidatePairs,
@@ -53,7 +53,7 @@ function makeContext(input: {
   });
 }
 
-describe("merchantTransfigurations", () => {
+describe("rewardTransfigurations", () => {
   it("never offers Perfected, even when the card is Perfected-eligible", () => {
     // A Character with cost, a digit, and spark is eligible for several
     // transfigurations, which makes it Perfected-eligible.
@@ -67,9 +67,9 @@ describe("merchantTransfigurations", () => {
     });
     const data = makeMerchantTestContent({ cards: [card] }).transfigurationData;
     expect(eligibleTransfigurations(data, card)).toContain("Perfected");
-    expect(merchantTransfigurations(data, card)).not.toContain("Perfected");
+    expect(rewardTransfigurations(data, card)).not.toContain("Perfected");
     // It still offers the underlying types.
-    expect(merchantTransfigurations(data, card)).toContain("Empowered");
+    expect(rewardTransfigurations(data, card)).toContain("Empowered");
   });
 
   it("includes Hastened for a non-fast Event", () => {
@@ -83,7 +83,7 @@ describe("merchantTransfigurations", () => {
       renderedText: "Deal damage.",
     });
     const data = makeMerchantTestContent({ cards: [card] }).transfigurationData;
-    expect(merchantTransfigurations(data, card)).toContain("Hastened");
+    expect(rewardTransfigurations(data, card)).toContain("Hastened");
   });
 });
 

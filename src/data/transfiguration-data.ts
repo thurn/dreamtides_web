@@ -25,52 +25,6 @@ function isCostBand(value: unknown): boolean {
   );
 }
 
-function isEligibility(value: unknown): boolean {
-  if (!isRecord(value) || typeof value.kind !== "string") return false;
-  switch (value.kind) {
-    case "positiveEnergyCost":
-    case "distinctAuthoredAmplifiedText":
-    case "eventWithoutFast":
-    case "namedTrigger":
-    case "activatedEnergyCost":
-      return true;
-    case "cardType":
-      return value.cardType === "Character" || value.cardType === "Event";
-    case "atLeastEligibleForms":
-      return finite(value.count) && value.count > 0;
-    default:
-      return false;
-  }
-}
-
-function isOperation(value: unknown): boolean {
-  if (!isRecord(value) || typeof value.kind !== "string") return false;
-  switch (value.kind) {
-    case "halveEnergyCost":
-      return value.rounding === "Down" && finite(value.minimum);
-    case "useAuthoredAmplifiedText":
-    case "setFast":
-    case "widenNamedTrigger":
-      return true;
-    case "doubleSpark":
-      return finite(value.zeroResult);
-    case "appendRulesClause":
-      return value.clause === "DrawCard" || value.clause === "Reclaim";
-    case "reduceActivatedEnergyCost":
-      return finite(value.amount) && value.amount > 0 && finite(value.minimum);
-    case "applyEligibleForms":
-      return (
-        Array.isArray(value.formOrder) &&
-        value.formOrder.length > 0 &&
-        value.formOrder.every((id) =>
-          dataFormIds().some((expected) => expected === id),
-        )
-      );
-    default:
-      return false;
-  }
-}
-
 function dataFormIds(): readonly TransfigurationType[] {
   return [
     "Empowered",
@@ -94,11 +48,11 @@ function isPricing(value: unknown): boolean {
   );
 }
 
-function isBenefit(value: unknown): boolean {
+function isRewardScore(value: unknown): boolean {
   if (!isRecord(value)) return false;
   return (
     (value.kind === "flat" && finite(value.value)) ||
-    (value.kind === "ratio" && finite(value.divisor) && value.divisor > 0)
+    (value.kind === "statDelta" && finite(value.divisor) && value.divisor > 0)
   );
 }
 
@@ -106,8 +60,8 @@ function isFormId(value: unknown): value is TransfigurationType {
   return dataFormIds().some((expected) => expected === value);
 }
 
-function glyphFor(id: TransfigurationType): string {
-  return `transfiguration${id}`;
+function isTransfigurationGlyph(value: unknown): boolean {
+  return dataFormIds().some((id) => value === `transfiguration${id}`);
 }
 
 export function parseTransfigurationData(value: unknown): TransfigurationData {
@@ -117,8 +71,6 @@ export function parseTransfigurationData(value: unknown): TransfigurationData {
     !HASH.test(String(value.contentHash)) ||
     !HASH.test(String(value.foldHash)) ||
     !isRecord(value.site) ||
-    typeof value.site.rulesVersion !== "string" ||
-    value.site.rulesVersion.trim() === "" ||
     !(
       value.site.standardChoiceLimit === null ||
       (finite(value.site.standardChoiceLimit) &&
@@ -166,26 +118,16 @@ export function parseTransfigurationData(value: unknown): TransfigurationData {
       isFormId(form.id) &&
       typeof form.name === "string" &&
       form.name.trim() !== "" &&
+      typeof form.description === "string" &&
+      form.description.trim() !== "" &&
       COLOR.test(String(form.accentColor)) &&
       COLOR.test(String(form.tintColor)) &&
-      typeof form.effectDisclosure === "string" &&
-      typeof form.selectedCardDescription === "string" &&
-      typeof form.accessibilityDescription === "string" &&
       typeof form.glossaryUuid === "string" &&
-      form.glyph === glyphFor(form.id) &&
-      typeof form.merchantAllowed === "boolean" &&
-      isEligibility(form.eligibility) &&
-      isOperation(form.operation) &&
+      isTransfigurationGlyph(form.glyph) &&
       isPricing(form.pricing) &&
-      isBenefit(form.benefit),
+      isRewardScore(form.rewardScore),
   );
-  const referencesConfiguredForms = value.forms.every((form) => {
-    if (!isRecord(form) || !isRecord(form.operation) || form.operation.kind !== "applyEligibleForms") return true;
-    const order = form.operation.formOrder;
-    return Array.isArray(order) && new Set(order).size === order.length &&
-      order.every((id) => isFormId(id) && formIds.has(id) && id !== form.id);
-  });
-  if (!valid || !referencesConfiguredForms)
+  if (!valid)
     throw new Error(
       "Failed to load Transfiguration data: malformed transfiguration-data.json",
     );

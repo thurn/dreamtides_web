@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use anyhow::{Result, ensure};
+use anyhow::{ensure, Result};
 use serde::{Deserialize, Serialize};
 use uuid::{Uuid, Variant, Version};
 
@@ -14,14 +14,13 @@ pub struct TransfigurationCatalog {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct TransfigurationSite {
-    pub rules_version: String,
-    pub standard_choice_limit: ChoiceLimit,
-    pub enhanced_choice_limit: ChoiceLimit,
+    pub standard_choice_limit: TransfigurationChoiceLimit,
+    pub enhanced_choice_limit: TransfigurationChoiceLimit,
     pub pricing: TransfigurationPricing,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum ChoiceLimit {
+pub enum TransfigurationChoiceLimit {
     Count(u32),
     All,
 }
@@ -32,20 +31,20 @@ pub struct TransfigurationPricing {
     pub minimum_cost: u32,
     pub maximum_cost: u32,
     pub step: u32,
-    pub stat_delta_bands: Vec<StatDeltaBand>,
+    pub stat_delta_bands: Vec<TransfigurationStatDeltaBand>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct StatDeltaBand {
+pub struct TransfigurationStatDeltaBand {
     pub minimum_delta: u32,
     pub maximum_delta: Option<u32>,
-    pub band: CostBand,
+    pub band: TransfigurationCostBand,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct CostBand {
+pub struct TransfigurationCostBand {
     pub base: u32,
     pub jitter: u32,
     pub floor: u32,
@@ -57,16 +56,12 @@ pub struct TransfigurationFormDefinition {
     pub id: TransfigurationFormId,
     pub glossary_uuid: String,
     pub name: String,
-    pub effect_disclosure: String,
-    pub selected_card_description: String,
-    pub accessibility_description: String,
+    pub description: String,
+    pub glyph: TransfigurationGlyph,
     pub accent_color: String,
     pub tint_color: String,
-    pub merchant_allowed: bool,
-    pub eligibility: EligibilityPredicate,
-    pub operation: EffectOperation,
-    pub pricing: FormPricing,
-    pub benefit: BenefitScoring,
+    pub pricing: TransfigurationFormPricing,
+    pub reward_score: TransfigurationRewardScore,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Ord, PartialOrd)]
@@ -111,92 +106,25 @@ pub enum TransfigurationGlyph {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-pub enum EligibilityPredicate {
-    PositiveEnergyCost,
-    DistinctAuthoredAmplifiedText,
-    CardType { card_type: CardType },
-    EventWithoutFast,
-    NamedTrigger,
-    ActivatedEnergyCost,
-    AtLeastEligibleForms { count: u32 },
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum CardType {
-    Character,
-    Event,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-pub enum EffectOperation {
-    HalveEnergyCost {
-        rounding: Rounding,
-        minimum: u32,
-    },
-    UseAuthoredAmplifiedText,
-    DoubleSpark {
-        zero_result: u32,
-    },
-    AppendRulesClause {
-        clause: RulesClause,
-    },
-    SetFast,
-    WidenNamedTrigger,
-    ReduceActivatedEnergyCost {
-        amount: u32,
-        minimum: u32,
-    },
-    ApplyEligibleForms {
-        form_order: Vec<TransfigurationFormId>,
-    },
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum Rounding {
-    Down,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum RulesClause {
-    DrawCard,
-    Reclaim,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-pub enum FormPricing {
+pub enum TransfigurationFormPricing {
     Free,
     StatDelta,
-    Band(CostBand),
+    Band(TransfigurationCostBand),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-pub enum BenefitScoring {
-    Ratio { divisor: f64 },
+pub enum TransfigurationRewardScore {
+    StatDelta { divisor: f64 },
     Flat { value: f64 },
 }
 
 pub fn lower(source: TransfigurationCatalog) -> Result<toml::Value> {
     validate(&source)?;
-    let glyphs = source
-        .forms
-        .iter()
-        .map(|form| glyph_for(form.id))
-        .collect::<Vec<_>>();
-    let mut compatibility = toml::Value::try_from(source)?;
-    for (form, glyph) in compatibility["forms"]
-        .as_array_mut()
-        .expect("serialized Transfiguration forms must be an array")
-        .iter_mut()
-        .zip(glyphs)
-    {
-        form.as_table_mut()
-            .expect("serialized Transfiguration form must be a table")
-            .insert("glyph".into(), toml::Value::try_from(glyph)?);
-    }
-    Ok(compatibility)
+    Ok(toml::Value::try_from(source)?)
 }
 
-fn glyph_for(id: TransfigurationFormId) -> TransfigurationGlyph {
+#[cfg(test)]
+fn fixture_glyph(id: TransfigurationFormId) -> TransfigurationGlyph {
     match id {
         TransfigurationFormId::Empowered => TransfigurationGlyph::TransfigurationEmpowered,
         TransfigurationFormId::Amplified => TransfigurationGlyph::TransfigurationAmplified,
@@ -211,10 +139,6 @@ fn glyph_for(id: TransfigurationFormId) -> TransfigurationGlyph {
 }
 
 pub(crate) fn validate(source: &TransfigurationCatalog) -> Result<()> {
-    ensure!(
-        !source.site.rules_version.trim().is_empty(),
-        "transfiguration.site.rules_version must not be blank"
-    );
     validate_choice_limit(
         "transfiguration.site.standard_choice_limit",
         source.site.standard_choice_limit,
@@ -245,33 +169,28 @@ pub(crate) fn validate(source: &TransfigurationCatalog) -> Result<()> {
             glossary_ids.insert(&form.glossary_uuid),
             "{path}.glossary_uuid duplicates another form"
         );
-        for (field, value) in [
-            ("name", &form.name),
-            ("effect_disclosure", &form.effect_disclosure),
-            ("selected_card_description", &form.selected_card_description),
-            ("accessibility_description", &form.accessibility_description),
-        ] {
+        for (field, value) in [("name", &form.name), ("description", &form.description)] {
             ensure!(!value.trim().is_empty(), "{path}.{field} must not be blank");
         }
         validate_color(&path, "accent_color", &form.accent_color)?;
         validate_color(&path, "tint_color", &form.tint_color)?;
-        validate_form_contract(&path, form, &form_ids)?;
-        match form.benefit {
-            BenefitScoring::Ratio { divisor } => ensure!(
+        validate_form_contract(&path, form)?;
+        match form.reward_score {
+            TransfigurationRewardScore::StatDelta { divisor } => ensure!(
                 divisor.is_finite() && divisor > 0.0,
-                "{path}.benefit divisor must be positive and finite"
+                "{path}.reward_score divisor must be positive and finite"
             ),
-            BenefitScoring::Flat { value } => ensure!(
+            TransfigurationRewardScore::Flat { value } => ensure!(
                 value.is_finite() && (0.0..=1.0).contains(&value),
-                "{path}.benefit value must be within [0, 1]"
+                "{path}.reward_score value must be within [0, 1]"
             ),
         }
     }
     Ok(())
 }
 
-fn validate_choice_limit(path: &str, limit: ChoiceLimit) -> Result<()> {
-    if let ChoiceLimit::Count(value) = limit {
+fn validate_choice_limit(path: &str, limit: TransfigurationChoiceLimit) -> Result<()> {
+    if let TransfigurationChoiceLimit::Count(value) = limit {
         ensure!(value > 0, "{path} Count must be positive");
     }
     Ok(())
@@ -324,72 +243,28 @@ fn validate_pricing(pricing: &TransfigurationPricing) -> Result<()> {
     Ok(())
 }
 
-fn validate_form_contract(
-    path: &str,
-    form: &TransfigurationFormDefinition,
-    configured_ids: &BTreeSet<TransfigurationFormId>,
-) -> Result<()> {
+fn validate_form_contract(path: &str, form: &TransfigurationFormDefinition) -> Result<()> {
     let valid = matches!(
+        (&form.id, &form.pricing, &form.reward_score),
         (
-            &form.eligibility,
-            &form.operation,
-            &form.pricing,
-            &form.benefit
-        ),
-        (
-            EligibilityPredicate::PositiveEnergyCost,
-            EffectOperation::HalveEnergyCost {
-                rounding: Rounding::Down,
-                ..
-            },
-            FormPricing::StatDelta,
-            BenefitScoring::Ratio { .. }
+            TransfigurationFormId::Empowered | TransfigurationFormId::Kindled,
+            TransfigurationFormPricing::StatDelta,
+            TransfigurationRewardScore::StatDelta { .. }
         ) | (
-            EligibilityPredicate::DistinctAuthoredAmplifiedText,
-            EffectOperation::UseAuthoredAmplifiedText,
-            FormPricing::Band(_),
-            BenefitScoring::Flat { .. }
+            TransfigurationFormId::Hastened,
+            TransfigurationFormPricing::Free,
+            TransfigurationRewardScore::Flat { .. }
         ) | (
-            EligibilityPredicate::CardType {
-                card_type: CardType::Character
-            },
-            EffectOperation::DoubleSpark { .. },
-            FormPricing::StatDelta,
-            BenefitScoring::Ratio { .. }
-        ) | (
-            EligibilityPredicate::CardType {
-                card_type: CardType::Event
-            },
-            EffectOperation::AppendRulesClause { .. },
-            FormPricing::Band(_),
-            BenefitScoring::Flat { .. }
-        ) | (
-            EligibilityPredicate::EventWithoutFast,
-            EffectOperation::SetFast,
-            FormPricing::Free,
-            BenefitScoring::Flat { .. }
-        ) | (
-            EligibilityPredicate::NamedTrigger,
-            EffectOperation::WidenNamedTrigger,
-            FormPricing::Band(_),
-            BenefitScoring::Flat { .. }
-        ) | (
-            EligibilityPredicate::ActivatedEnergyCost,
-            EffectOperation::ReduceActivatedEnergyCost { .. },
-            FormPricing::Band(_),
-            BenefitScoring::Flat { .. }
-        ) | (
-            EligibilityPredicate::AtLeastEligibleForms { .. },
-            EffectOperation::ApplyEligibleForms { .. },
-            FormPricing::Band(_),
-            BenefitScoring::Flat { .. }
+            _,
+            TransfigurationFormPricing::Band(_),
+            TransfigurationRewardScore::Flat { .. }
         )
     );
     ensure!(
         valid,
-        "{path} has an illegal predicate/operation/pricing/benefit pairing"
+        "{path} has pricing or reward scoring incompatible with its form id"
     );
-    if let FormPricing::Band(band) = &form.pricing {
+    if let TransfigurationFormPricing::Band(band) = &form.pricing {
         validate_band(
             &format!("{path}.pricing"),
             band,
@@ -401,39 +276,14 @@ fn validate_form_contract(
             },
         )?;
     }
-    match (&form.id, &form.operation) {
-        (
-            TransfigurationFormId::Inspired,
-            EffectOperation::AppendRulesClause {
-                clause: RulesClause::DrawCard,
-            },
-        )
-        | (
-            TransfigurationFormId::Enduring,
-            EffectOperation::AppendRulesClause {
-                clause: RulesClause::Reclaim,
-            },
-        ) => {}
-        (TransfigurationFormId::Perfected, EffectOperation::ApplyEligibleForms { form_order }) => {
-            let referenced = form_order.iter().copied().collect::<BTreeSet<_>>();
-            ensure!(
-                !form_order.is_empty()
-                    && referenced.len() == form_order.len()
-                    && !referenced.contains(&TransfigurationFormId::Perfected)
-                    && referenced.iter().all(|id| configured_ids.contains(id)),
-                "{path}.operation.form_order must contain unique configured forms and cannot recurse"
-            );
-        }
-        (_, EffectOperation::ApplyEligibleForms { .. }) => ensure!(
-            false,
-            "{path}.operation ApplyEligibleForms would create a recursive application cycle"
-        ),
-        _ => {}
-    }
     Ok(())
 }
 
-fn validate_band(path: &str, band: &CostBand, pricing: &TransfigurationPricing) -> Result<()> {
+fn validate_band(
+    path: &str,
+    band: &TransfigurationCostBand,
+    pricing: &TransfigurationPricing,
+) -> Result<()> {
     ensure!(band.floor <= band.base, "{path}.floor must not exceed base");
     ensure!(
         band.jitter % pricing.step == 0,
@@ -481,119 +331,58 @@ mod tests {
         "980d283a-9558-4b66-84a0-fcb91fdf4ceb",
         "22adf539-d2c9-4f33-9416-159d03a220ad",
     ];
-    fn band() -> CostBand {
-        CostBand {
+    fn band() -> TransfigurationCostBand {
+        TransfigurationCostBand {
             base: 10,
             jitter: 0,
             floor: 10,
         }
     }
     fn form(id: TransfigurationFormId, index: usize) -> TransfigurationFormDefinition {
-        let (eligibility, operation, pricing, benefit) = match id {
-            TransfigurationFormId::Empowered => (
-                EligibilityPredicate::PositiveEnergyCost,
-                EffectOperation::HalveEnergyCost {
-                    rounding: Rounding::Down,
-                    minimum: 0,
-                },
-                FormPricing::StatDelta,
-                BenefitScoring::Ratio { divisor: 2.0 },
-            ),
-            TransfigurationFormId::Amplified => (
-                EligibilityPredicate::DistinctAuthoredAmplifiedText,
-                EffectOperation::UseAuthoredAmplifiedText,
-                FormPricing::Band(band()),
-                BenefitScoring::Flat { value: 0.4 },
-            ),
-            TransfigurationFormId::Kindled => (
-                EligibilityPredicate::CardType {
-                    card_type: CardType::Character,
-                },
-                EffectOperation::DoubleSpark { zero_result: 1 },
-                FormPricing::StatDelta,
-                BenefitScoring::Ratio { divisor: 4.0 },
-            ),
-            TransfigurationFormId::Inspired => (
-                EligibilityPredicate::CardType {
-                    card_type: CardType::Event,
-                },
-                EffectOperation::AppendRulesClause {
-                    clause: RulesClause::DrawCard,
-                },
-                FormPricing::Band(band()),
-                BenefitScoring::Flat { value: 0.55 },
-            ),
-            TransfigurationFormId::Enduring => (
-                EligibilityPredicate::CardType {
-                    card_type: CardType::Event,
-                },
-                EffectOperation::AppendRulesClause {
-                    clause: RulesClause::Reclaim,
-                },
-                FormPricing::Band(band()),
-                BenefitScoring::Flat { value: 0.55 },
+        let (pricing, reward_score) = match id {
+            TransfigurationFormId::Empowered | TransfigurationFormId::Kindled => (
+                TransfigurationFormPricing::StatDelta,
+                TransfigurationRewardScore::StatDelta { divisor: 2.0 },
             ),
             TransfigurationFormId::Hastened => (
-                EligibilityPredicate::EventWithoutFast,
-                EffectOperation::SetFast,
-                FormPricing::Free,
-                BenefitScoring::Flat { value: 0.5 },
-            ),
-            TransfigurationFormId::Resonant => (
-                EligibilityPredicate::NamedTrigger,
-                EffectOperation::WidenNamedTrigger,
-                FormPricing::Band(band()),
-                BenefitScoring::Flat { value: 0.5 },
-            ),
-            TransfigurationFormId::Attuned => (
-                EligibilityPredicate::ActivatedEnergyCost,
-                EffectOperation::ReduceActivatedEnergyCost {
-                    amount: 1,
-                    minimum: 0,
-                },
-                FormPricing::Band(band()),
-                BenefitScoring::Flat { value: 0.5 },
+                TransfigurationFormPricing::Free,
+                TransfigurationRewardScore::Flat { value: 0.5 },
             ),
             TransfigurationFormId::Perfected => (
-                EligibilityPredicate::AtLeastEligibleForms { count: 2 },
-                EffectOperation::ApplyEligibleForms {
-                    form_order: TransfigurationFormId::ALL[..8].to_vec(),
-                },
-                FormPricing::Band(CostBand {
+                TransfigurationFormPricing::Band(TransfigurationCostBand {
                     base: 100,
                     jitter: 0,
                     floor: 100,
                 }),
-                BenefitScoring::Flat { value: 0.65 },
+                TransfigurationRewardScore::Flat { value: 0.65 },
+            ),
+            _ => (
+                TransfigurationFormPricing::Band(band()),
+                TransfigurationRewardScore::Flat { value: 0.5 },
             ),
         };
         TransfigurationFormDefinition {
             id,
             glossary_uuid: IDS[index].into(),
             name: format!("{id:?}"),
-            effect_disclosure: "Effect".into(),
-            selected_card_description: "Selected".into(),
-            accessibility_description: "Accessible".into(),
+            description: "Effect".into(),
+            glyph: fixture_glyph(id),
             accent_color: "#123456".into(),
             tint_color: "#abcdef".into(),
-            merchant_allowed: id != TransfigurationFormId::Perfected,
-            eligibility,
-            operation,
             pricing,
-            benefit,
+            reward_score,
         }
     }
     fn catalog() -> TransfigurationCatalog {
         TransfigurationCatalog {
             site: TransfigurationSite {
-                rules_version: "v1".into(),
-                standard_choice_limit: ChoiceLimit::Count(3),
-                enhanced_choice_limit: ChoiceLimit::All,
+                standard_choice_limit: TransfigurationChoiceLimit::Count(3),
+                enhanced_choice_limit: TransfigurationChoiceLimit::All,
                 pricing: TransfigurationPricing {
                     minimum_cost: 0,
                     maximum_cost: 100,
                     step: 10,
-                    stat_delta_bands: vec![StatDeltaBand {
+                    stat_delta_bands: vec![TransfigurationStatDeltaBand {
                         minimum_delta: 1,
                         maximum_delta: None,
                         band: band(),
@@ -609,72 +398,59 @@ mod tests {
     }
 
     #[test]
-    fn lowers_all_predicates_and_operations_deterministically() {
+    fn lowers_presentation_and_tuning_deterministically() {
         assert_eq!(lower(catalog()).unwrap(), lower(catalog()).unwrap());
     }
     #[test]
-    fn rejects_missing_duplicate_invalid_tokens_illegal_pairs_and_cycles() {
+    fn rejects_missing_duplicate_invalid_tokens_and_illegal_tuning() {
         let mut subset = catalog();
         subset.forms.remove(7);
         subset.forms.pop();
         assert!(validate(&subset).is_ok());
         let mut empty = catalog();
         empty.forms.clear();
-        assert!(
-            validate(&empty)
-                .unwrap_err()
-                .to_string()
-                .contains("at least one form")
-        );
+        assert!(validate(&empty)
+            .unwrap_err()
+            .to_string()
+            .contains("at least one form"));
         let mut duplicate = catalog();
         duplicate.forms[1].glossary_uuid = duplicate.forms[0].glossary_uuid.clone();
-        assert!(
-            validate(&duplicate)
-                .unwrap_err()
-                .to_string()
-                .contains("glossary_uuid duplicates")
-        );
+        assert!(validate(&duplicate)
+            .unwrap_err()
+            .to_string()
+            .contains("glossary_uuid duplicates"));
         let mut color = catalog();
         color.forms[0].accent_color = "green".into();
-        assert!(
-            validate(&color)
-                .unwrap_err()
-                .to_string()
-                .contains("accent_color")
-        );
+        assert!(validate(&color)
+            .unwrap_err()
+            .to_string()
+            .contains("accent_color"));
         let mut illegal = catalog();
-        illegal.forms[0].operation = EffectOperation::SetFast;
-        assert!(
-            validate(&illegal)
-                .unwrap_err()
-                .to_string()
-                .contains("illegal predicate")
-        );
-        let mut cycle = catalog();
-        cycle.forms[8].operation = EffectOperation::ApplyEligibleForms {
-            form_order: TransfigurationFormId::ALL.to_vec(),
-        };
-        assert!(
-            validate(&cycle)
-                .unwrap_err()
-                .to_string()
-                .contains("cannot recurse")
-        );
+        illegal.forms[0].pricing = TransfigurationFormPricing::Free;
+        assert!(validate(&illegal)
+            .unwrap_err()
+            .to_string()
+            .contains("incompatible"));
+    }
+
+    #[test]
+    fn accepts_reassigned_supported_glyphs() {
+        let mut source = catalog();
+        source.forms[0].glyph = TransfigurationGlyph::TransfigurationKindled;
+        validate(&source).unwrap();
     }
 
     #[test]
     fn accepts_all_or_positive_count_choice_limits() {
         let mut source = catalog();
-        source.site.standard_choice_limit = ChoiceLimit::All;
-        source.site.enhanced_choice_limit = ChoiceLimit::Count(2);
+        source.site.standard_choice_limit = TransfigurationChoiceLimit::All;
+        source.site.enhanced_choice_limit = TransfigurationChoiceLimit::Count(2);
         validate(&source).unwrap();
 
-        source.site.enhanced_choice_limit = ChoiceLimit::Count(0);
-        assert!(
-            validate(&source)
-                .unwrap_err()
-                .to_string()
-                .contains("positive")
-        );
+        source.site.enhanced_choice_limit = TransfigurationChoiceLimit::Count(0);
+        assert!(validate(&source)
+            .unwrap_err()
+            .to_string()
+            .contains("positive"));
     }
 }

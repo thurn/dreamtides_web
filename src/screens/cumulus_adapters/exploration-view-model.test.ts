@@ -597,7 +597,7 @@ describe("exploration-view-model", () => {
     expect(view.actions[0].effectDisclosure).toEqual({
       kind: "fixed-transfiguration",
       transfiguration: "Empowered",
-      effectDisclosure: "Fixture energy effect",
+      effectDisclosure: "Fixture Empowered effect",
     });
   });
 

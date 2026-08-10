@@ -55,34 +55,38 @@ export function transfigurationBenefit(
   preview: CardData,
 ): number {
   const form = transfigurationForm(data, transfiguration);
-  switch (form.benefit.kind) {
-    case "ratio": {
-      if (form.operation.kind === "halveEnergyCost") {
-      const oldCost = card.energyCost ?? 0;
-      const newCost = preview.energyCost ?? 0;
-        return clamp01((oldCost - newCost) / form.benefit.divisor);
+  switch (form.rewardScore.kind) {
+    case "statDelta": {
+      if (transfiguration === "Empowered") {
+        const oldCost = card.energyCost ?? 0;
+        const newCost = preview.energyCost ?? 0;
+        return clamp01((oldCost - newCost) / form.rewardScore.divisor);
+      }
+      if (transfiguration !== "Kindled") {
+        throw new Error(
+          `Invalid stat-delta reward score for ${transfiguration}`,
+        );
       }
       const oldSpark = card.spark ?? 0;
       const newSpark = preview.spark ?? 0;
-      return clamp01((newSpark - oldSpark) / form.benefit.divisor);
+      return clamp01((newSpark - oldSpark) / form.rewardScore.divisor);
     }
     case "flat":
-      return form.benefit.value;
+      return form.rewardScore.value;
   }
 }
 
 /**
- * The transfigurations the Dream Merchant may offer for a card: every eligible
- * type except Perfected. Perfected (which chains every other applicable
- * transfiguration) is reserved for other surfaces and never offered on a Dream
- * Journey, so both the improve and grant families filter through this helper.
+ * The transfigurations a generated reward may offer for a card: every eligible
+ * type except Perfected. Perfected chains every other applicable form and is
+ * reserved for authored rewards.
  */
-export function merchantTransfigurations(
+export function rewardTransfigurations(
   data: TransfigurationData,
   card: CardData,
 ): readonly TransfigurationType[] {
   return eligibleTransfigurations(data, card).filter(
-    (type) => transfigurationForm(data, type).merchantAllowed,
+    (type) => type !== "Perfected",
   );
 }
 
@@ -116,7 +120,7 @@ export function transfigureCandidatePairs(
   for (const deckCard of context.deckCards) {
     if (deckCard.deckEntry.transfiguration !== null) continue;
     const base = deckCard.card;
-    for (const transfiguration of merchantTransfigurations(
+    for (const transfiguration of rewardTransfigurations(
       context.rewardSelection.content.transfigurationData,
       base,
     )) {
@@ -253,7 +257,7 @@ function positiveBenefitTransfigurations(
   context: MerchantContext,
   card: CardData,
 ): readonly TransfigurationType[] {
-  return merchantTransfigurations(
+  return rewardTransfigurations(
     context.rewardSelection.content.transfigurationData,
     card,
   ).filter((transfiguration) => {

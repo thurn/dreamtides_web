@@ -11,10 +11,97 @@ import type { CardTransfigurationDisplay } from "../runtime/transfiguration-disp
 import { transfigurationForm } from "../data/transfiguration-data";
 import type {
   TransfigurationData,
-  TransfigurationEligibility,
   TransfigurationFormDefinition,
-  TransfigurationOperation,
 } from "../types/transfiguration-data";
+
+type TransfigurationEligibilityRule =
+  | { readonly kind: "positiveEnergyCost" }
+  | { readonly kind: "distinctAuthoredAmplifiedText" }
+  | { readonly kind: "character" }
+  | { readonly kind: "event" }
+  | { readonly kind: "eventWithoutFast" }
+  | { readonly kind: "namedTrigger" }
+  | { readonly kind: "activatedEnergyCost" }
+  | { readonly kind: "atLeastEligibleForms"; readonly count: number };
+
+export type TransfigurationOperation =
+  | { readonly kind: "halveEnergyCost"; readonly minimum: number }
+  | { readonly kind: "useAuthoredAmplifiedText" }
+  | { readonly kind: "doubleSpark"; readonly zeroResult: number }
+  | {
+      readonly kind: "appendRulesClause";
+      readonly clause: "DrawCard" | "Reclaim";
+    }
+  | { readonly kind: "setFast" }
+  | { readonly kind: "widenNamedTrigger" }
+  | {
+      readonly kind: "reduceActivatedEnergyCost";
+      readonly amount: number;
+      readonly minimum: number;
+    }
+  | { readonly kind: "applyEligibleForms" };
+
+export interface TransfigurationMechanic {
+  readonly eligibility: TransfigurationEligibilityRule;
+  readonly operation: TransfigurationOperation;
+}
+
+/** The closed rules mechanic selected by a stable Transfiguration form ID. */
+export function transfigurationMechanic(
+  type: TransfigurationType,
+): TransfigurationMechanic {
+  switch (type) {
+    case "Empowered":
+      return {
+        eligibility: { kind: "positiveEnergyCost" },
+        operation: { kind: "halveEnergyCost", minimum: 0 },
+      };
+    case "Amplified":
+      return {
+        eligibility: { kind: "distinctAuthoredAmplifiedText" },
+        operation: { kind: "useAuthoredAmplifiedText" },
+      };
+    case "Kindled":
+      return {
+        eligibility: { kind: "character" },
+        operation: { kind: "doubleSpark", zeroResult: 1 },
+      };
+    case "Inspired":
+      return {
+        eligibility: { kind: "event" },
+        operation: { kind: "appendRulesClause", clause: "DrawCard" },
+      };
+    case "Enduring":
+      return {
+        eligibility: { kind: "event" },
+        operation: { kind: "appendRulesClause", clause: "Reclaim" },
+      };
+    case "Hastened":
+      return {
+        eligibility: { kind: "eventWithoutFast" },
+        operation: { kind: "setFast" },
+      };
+    case "Resonant":
+      return {
+        eligibility: { kind: "namedTrigger" },
+        operation: { kind: "widenNamedTrigger" },
+      };
+    case "Attuned":
+      return {
+        eligibility: { kind: "activatedEnergyCost" },
+        operation: {
+          kind: "reduceActivatedEnergyCost",
+          amount: 1,
+          minimum: 0,
+        },
+      };
+    case "Perfected":
+      return {
+        eligibility: { kind: "atLeastEligibleForms", count: 2 },
+        operation: { kind: "applyEligibleForms" },
+      };
+  }
+}
 
 // The card-display constants and the display descriptor type live in
 // `src/runtime/transfiguration-display.ts` so the Cumulus UI library can import
@@ -74,11 +161,12 @@ export function buildTransfigurationDisplay(
 
   for (const step of steps) {
     const stepDefinition = transfigurationForm(data, step);
+    const operation = transfigurationMechanic(step).operation;
     if (
-      stepDefinition.operation.kind === "halveEnergyCost" ||
-      stepDefinition.operation.kind === "doubleSpark"
+      operation.kind === "halveEnergyCost" ||
+      operation.kind === "doubleSpark"
     ) {
-      const result = applyStatStep(card, stepDefinition.operation);
+      const result = applyStatStep(card, operation);
       card = result.card;
       energyChanged = energyChanged || result.energyChanged;
       if (result.energyChanged) energyChangeName = stepDefinition.name;
@@ -86,14 +174,14 @@ export function buildTransfigurationDisplay(
       if (result.sparkChanged) sparkChangeName = stepDefinition.name;
       continue;
     }
-    if (stepDefinition.operation.kind === "setFast") {
+    if (operation.kind === "setFast") {
       if (!card.isFast) {
         card = { ...card, isFast: true };
         fastChanged = true;
       }
       continue;
     }
-    if (stepDefinition.operation.kind === "useAuthoredAmplifiedText") {
+    if (operation.kind === "useAuthoredAmplifiedText") {
       const transform = amplifiedTransform(card);
       if (transform === null) continue;
       markedText = transform.marked(markedText);
@@ -104,10 +192,7 @@ export function buildTransfigurationDisplay(
     // to the plain text (the card) and to the accumulated marked text (which
     // carries earlier steps' markers): the same find pattern lands in the same
     // place because the markers are invisible private-use characters.
-    const transform = textTransformFor(
-      card.renderedText,
-      stepDefinition.operation,
-    );
+    const transform = textTransformFor(card.renderedText, operation);
     if (transform === null) {
       continue;
     }
@@ -138,11 +223,11 @@ export interface TransfigurationOffer {
   previewCard: CardData;
 }
 
-/** Evaluate one compiler-validated eligibility predicate without form identity. */
-export function isTransfigurationEligibilitySatisfied(
+/** Evaluate one closed rules eligibility predicate without form identity. */
+function isTransfigurationEligibilitySatisfied(
   data: TransfigurationData,
   card: CardData,
-  eligibility: TransfigurationEligibility,
+  eligibility: TransfigurationEligibilityRule,
 ): boolean {
   switch (eligibility.kind) {
     case "positiveEnergyCost":
@@ -153,8 +238,10 @@ export function isTransfigurationEligibilitySatisfied(
         card.amplifiedText.trim().length > 0 &&
         card.amplifiedText !== card.renderedText
       );
-    case "cardType":
-      return card.cardType === eligibility.cardType;
+    case "character":
+      return card.cardType === "Character";
+    case "event":
+      return card.cardType === "Event";
     case "eventWithoutFast":
       return card.cardType === "Event" && !card.isFast;
     case "namedTrigger":
@@ -171,17 +258,15 @@ function eligibleDefinitions(
   card: CardData,
   includeComposite: boolean,
 ): TransfigurationFormDefinition[] {
-  return data.forms
-    .filter(
-      (definition) =>
-        (includeComposite ||
-          definition.operation.kind !== "applyEligibleForms") &&
-        isTransfigurationEligibilitySatisfied(
-          data,
-          card,
-          definition.eligibility,
-        ),
-    );
+  return data.forms.filter(
+    (definition) =>
+      (includeComposite || definition.id !== "Perfected") &&
+      isTransfigurationEligibilitySatisfied(
+        data,
+        card,
+        transfigurationMechanic(definition.id).eligibility,
+      ),
+  );
 }
 
 /** Returns the list of transfiguration types the card is eligible for. */
@@ -199,16 +284,18 @@ function operationSteps(
   card: CardData,
   definition: TransfigurationFormDefinition,
 ): TransfigurationType[] {
-  const operation = definition.operation;
+  const operation = transfigurationMechanic(definition.id).operation;
   if (operation.kind !== "applyEligibleForms") return [definition.id];
-  return operation.formOrder.filter((id) => {
-    const definition = transfigurationForm(data, id);
-    return isTransfigurationEligibilitySatisfied(
+  return data.forms.flatMap(({ id }) =>
+    id !== "Perfected" &&
+    isTransfigurationEligibilitySatisfied(
       data,
       card,
-      definition.eligibility,
-    );
-  });
+      transfigurationMechanic(id).eligibility,
+    )
+      ? [id]
+      : [],
+  );
 }
 
 /**
@@ -221,30 +308,31 @@ export function applyTransfigurationToCard(
   card: CardData,
   type: TransfigurationType,
 ): CardData {
-  const definition = transfigurationForm(data, type);
-  if (definition.operation.kind === "applyEligibleForms") {
+  const operation = transfigurationMechanic(type).operation;
+  if (operation.kind === "applyEligibleForms") {
     let result = card;
-    for (const step of operationSteps(data, card, definition)) {
+    for (const step of operationSteps(
+      data,
+      card,
+      transfigurationForm(data, type),
+    )) {
       result = applyTransfigurationToCard(data, result, step);
     }
     return result;
   }
-  if (
-    definition.operation.kind === "halveEnergyCost" ||
-    definition.operation.kind === "doubleSpark"
-  )
-    return applyStatStep(card, definition.operation).card;
-  if (definition.operation.kind === "setFast")
+  if (operation.kind === "halveEnergyCost" || operation.kind === "doubleSpark")
+    return applyStatStep(card, operation).card;
+  if (operation.kind === "setFast")
     return card.isFast ? card : { ...card, isFast: true };
-  if (definition.operation.kind === "useAuthoredAmplifiedText")
+  if (operation.kind === "useAuthoredAmplifiedText")
     return isTransfigurationEligibilitySatisfied(
       data,
       card,
-      definition.eligibility,
+      transfigurationMechanic(type).eligibility,
     )
       ? { ...card, renderedText: card.amplifiedText! }
       : card;
-  const transform = textTransformFor(card.renderedText, definition.operation);
+  const transform = textTransformFor(card.renderedText, operation);
   if (transform === null) {
     return card;
   }
@@ -488,7 +576,8 @@ function buildOffer(
 ): TransfigurationOffer {
   const form = transfigurationForm(data, type);
   const previewCard = applyTransfigurationToCard(data, card, type);
-  switch (form.operation.kind) {
+  const operation = transfigurationMechanic(type).operation;
+  switch (operation.kind) {
     case "halveEnergyCost":
       return {
         type,
@@ -516,7 +605,7 @@ function buildOffer(
         type,
         form,
         change:
-          form.operation.clause === "DrawCard"
+          operation.clause === "DrawCard"
             ? { kind: "added-draw" }
             : { kind: "added-reclaim" },
         previewCard,
@@ -547,7 +636,7 @@ function buildOffer(
         form,
         change: {
           kind: "reduced-activated-cost",
-          amount: form.operation.amount,
+          amount: operation.amount,
         },
         previewCard,
       };

@@ -100,7 +100,11 @@ function normalizeGambleRules(value, path) {
 }
 
 export function compileGambleData(source) {
-  if (!Array.isArray(source?.games) || source.games.length < 1 || source.games.length > 5) {
+  if (
+    !Array.isArray(source?.games) ||
+    source.games.length < 1 ||
+    source.games.length > 5
+  ) {
     throw new Error(
       "gamble.toml games: expected between one and five compiler-validated games",
     );
@@ -158,19 +162,16 @@ export function compileTransfigurationData(source) {
     ...normalize(
       Object.fromEntries(
         Object.entries(form).filter(
-          ([key]) =>
-            !["eligibility", "operation", "pricing", "benefit"].includes(key),
+          ([key]) => !["pricing", "reward_score"].includes(key),
         ),
       ),
     ),
     glyph: form.glyph[0].toLowerCase() + form.glyph.slice(1),
-    eligibility: variant(
-      form.eligibility,
-      `forms[${String(index)}].eligibility`,
-    ),
-    operation: variant(form.operation, `forms[${String(index)}].operation`),
     pricing: variant(form.pricing, `forms[${String(index)}].pricing`),
-    benefit: variant(form.benefit, `forms[${String(index)}].benefit`),
+    rewardScore: variant(
+      form.reward_score,
+      `forms[${String(index)}].reward_score`,
+    ),
   }));
   return catalog({ site, forms }, true);
 }

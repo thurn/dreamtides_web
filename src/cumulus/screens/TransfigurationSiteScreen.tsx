@@ -275,7 +275,7 @@ export function TransfigurationSiteScreen({
                   onTransfigure(
                     picked.entryId,
                     form.type,
-                    form.presentation.selectedCardDescription,
+                    form.presentation.description,
                     form.effectDetails,
                     form.essenceCost,
                   );

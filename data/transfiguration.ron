@@ -1,195 +1,211 @@
+// Transfiguration turns one untransfigured deck card into a stronger form.
+//
+// Each form ID names a closed mechanic implemented by the game rules. This
+// catalog deliberately does not repeat those mechanics as configurable
+// predicate and operation keys: changing such keys could not create a new
+// mechanic. Modders can enable a supported form by including it here, remove a
+// form by omitting it, and tune its presentation, pricing, and reward-selection
+// score. Adding a new kind of Transfiguration requires a new rules implementation
+// and a corresponding form ID.
+//
+// A standard Transfiguration site shuffles eligible deck cards and offers up to
+// `standard_choice_limit` of them. An enhanced site offers every eligible deck
+// card when `enhanced_choice_limit` is `All`. After choosing a card, the player
+// may select any individual form for which that card is eligible. Perfected is
+// reserved for authored rewards and applies every other eligible configured form
+// in this catalog's order.
+
 #![enable(implicit_some)]
 TransfigurationCatalog(
   site: TransfigurationSite(
-    rules_version: "transfiguration-v1",
+    // Maximum number of eligible deck cards shown at an ordinary site.
     standard_choice_limit: Count(3),
+    // `All` shows every eligible deck card at an enhanced site. `Count(n)` can
+    // cap the enhanced offer without changing the ordinary-site limit.
     enhanced_choice_limit: All,
+    // Prices are rolled deterministically for a particular journey, site, deck
+    // entry, and form, so the displayed quote is also the charged price.
     pricing: TransfigurationPricing(
+      // Clamp every rolled price to this inclusive range, in Essence.
       minimum_cost: 0,
       maximum_cost: 100,
+      // Fixed-band jitter selects a uniformly random multiple of this step from
+      // `base - jitter` through `base + jitter`, then applies the band's floor
+      // and the global clamp above.
       step: 10,
+      // Empowered and Kindled use the size of their stat change to choose one
+      // of these bands. Empowered's delta is the amount of ● removed; Kindled's
+      // delta is the original ✦. A zero-✦ Kindled card is free. The ranges must
+      // be contiguous, and the final band must have no maximum.
       stat_delta_bands: [
-        StatDeltaBand(
+        TransfigurationStatDeltaBand(
           minimum_delta: 1,
           maximum_delta: 1,
-          band: CostBand(base: 10, jitter: 20, floor: 10),
+          band: TransfigurationCostBand(base: 10, jitter: 20, floor: 10),
         ),
 
-        StatDeltaBand(
+        TransfigurationStatDeltaBand(
           minimum_delta: 2,
           maximum_delta: 2,
-          band: CostBand(base: 30, jitter: 20, floor: 10),
+          band: TransfigurationCostBand(base: 30, jitter: 20, floor: 10),
         ),
 
-        StatDeltaBand(
+        TransfigurationStatDeltaBand(
           minimum_delta: 3,
           maximum_delta: 3,
-          band: CostBand(base: 50, jitter: 20, floor: 30),
+          band: TransfigurationCostBand(base: 50, jitter: 20, floor: 30),
         ),
 
-        StatDeltaBand(
+        TransfigurationStatDeltaBand(
           minimum_delta: 4,
           maximum_delta: None,
-          band: CostBand(base: 70, jitter: 20, floor: 50),
+          band: TransfigurationCostBand(base: 70, jitter: 20, floor: 50),
         ),
       ],
     ),
   ),
 
+  // `pricing` controls Transfiguration-site Essence quotes. `StatDelta` uses
+  // the site table above, `Band` supplies a form-specific band, and `Free`
+  // always costs zero.
+  //
+  // `reward_score` ranks concrete card/form pairs when Augury, Exploration, or
+  // another generated reward asks for a valuable Transfiguration. `StatDelta`
+  // scores the actual stat improvement divided by `divisor` and clamps it to
+  // [0, 1]; `Flat` assigns the same score to every eligible card. Perfected is
+  // omitted from generated rewards and is available only when authored
+  // explicitly.
+  //
+  // Form order controls ordinary-site option order and the order in which
+  // Perfected applies its eligible forms. Each `glossary_uuid` links the form
+  // to its canonical Glossary entry.
+  // `glyph` selects the Cumulus icon rendered on form controls and transformed
+  // cards; any supported Transfiguration glyph may be assigned to any form.
+  // `accent_color` styles the control and badge; `tint_color` highlights the
+  // exact card text or stat changed by the form.
   forms: [
+    // Empowered is eligible for cards with a positive ● cost. It halves that
+    // cost, rounds down, and never produces a negative value.
     TransfigurationFormDefinition(
       id: Empowered,
       glossary_uuid: "a66c513e-500b-4891-8c09-9641ae300ba4",
       name: "Empowered",
-      effect_disclosure: "Halve its ● cost, rounded down",
-      selected_card_description: "Its energy cost is halved, rounded down.",
-      accessibility_description: "Reduces this card's energy cost by half, rounded down.",
+      description: "Halve its ● cost, rounded down",
+      glyph: TransfigurationEmpowered,
       accent_color: "#10b981",
       tint_color: "#6ee7b7",
-      merchant_allowed: true,
-      eligibility: PositiveEnergyCost,
-      operation: HalveEnergyCost(rounding: Down, minimum: 0),
       pricing: StatDelta,
-      benefit: Ratio(divisor: 2.0),
+      reward_score: StatDelta(divisor: 2.0),
     ),
 
+    // Amplified is eligible when the card has authored amplified rules text
+    // that differs from its ordinary rules. It uses that authored replacement.
     TransfigurationFormDefinition(
       id: Amplified,
       glossary_uuid: "a2c070ca-eacd-4cca-b69d-3d48f0787a16",
       name: "Amplified",
-      effect_disclosure: "Replace its ability with its authored stronger form",
-      selected_card_description: "Its ability is replaced by its authored stronger form.",
-      accessibility_description: "Replaces this card's rules with its authored amplified rules.",
+      description: "Replace its ability with its authored stronger form",
+      glyph: TransfigurationAmplified,
       accent_color: "#f59e0b",
       tint_color: "#fcd34d",
-      merchant_allowed: true,
-      eligibility: DistinctAuthoredAmplifiedText,
-      operation: UseAuthoredAmplifiedText,
-      pricing: Band(CostBand(base: 10, jitter: 20, floor: 10)),
-      benefit: Flat(value: 0.4),
+      pricing: Band(TransfigurationCostBand(base: 10, jitter: 20, floor: 10)),
+      reward_score: Flat(value: 0.4),
     ),
 
+    // Kindled is eligible for Characters. It doubles base ✦, treating zero as
+    // a special case that becomes 1✦.
     TransfigurationFormDefinition(
       id: Kindled,
       glossary_uuid: "f40df441-0e44-4122-b4d4-cdc4085a9ffb",
       name: "Kindled",
-      effect_disclosure: "Double its ✦, or set it to 1 if it is 0",
-      selected_card_description: "Its base spark is doubled, or set to 1 if it is 0.",
-      accessibility_description: "Doubles this character's base spark, or sets zero spark to one.",
+      description: "Double its ✦, or set it to 1 if it is 0",
+      glyph: TransfigurationKindled,
       accent_color: "#ef4444",
       tint_color: "#fca5a5",
-      merchant_allowed: true,
-      eligibility: CardType(card_type: Character),
-      operation: DoubleSpark(zero_result: 1),
       pricing: StatDelta,
-      benefit: Ratio(divisor: 4.0),
+      reward_score: StatDelta(divisor: 4.0),
     ),
 
+    // Inspired is eligible for Events and appends “Draw a card.”
     TransfigurationFormDefinition(
       id: Inspired,
       glossary_uuid: "f0ff63b4-424b-4ae9-81d5-a4f6546afa3f",
       name: "Inspired",
-      effect_disclosure: "Add \"Draw a card\" to its rules text",
-      selected_card_description: "Draw a card is appended to its rules text.",
-      accessibility_description: "Adds Draw a card to this event's rules.",
+      description: "Add \"Draw a card\" to its rules text",
+      glyph: TransfigurationInspired,
       accent_color: "#3b82f6",
       tint_color: "#93c5fd",
-      merchant_allowed: true,
-      eligibility: CardType(card_type: Event),
-      operation: AppendRulesClause(clause: DrawCard),
-      pricing: Band(CostBand(base: 20, jitter: 20, floor: 10)),
-      benefit: Flat(value: 0.55),
+      pricing: Band(TransfigurationCostBand(base: 20, jitter: 20, floor: 10)),
+      reward_score: Flat(value: 0.55),
     ),
 
+    // Enduring is eligible for Events and appends “Reclaim.”
     TransfigurationFormDefinition(
       id: Enduring,
       glossary_uuid: "eb4cfc5f-237a-47cd-9215-7cce3f15583f",
       name: "Enduring",
-      effect_disclosure: "Add \"Reclaim\" to its rules text",
-      selected_card_description: "Reclaim is appended to its rules text.",
-      accessibility_description: "Adds Reclaim to this event's rules.",
+      description: "Add \"Reclaim\" to its rules text",
+      glyph: TransfigurationEnduring,
       accent_color: "#6366f1",
       tint_color: "#a5b4fc",
-      merchant_allowed: true,
-      eligibility: CardType(card_type: Event),
-      operation: AppendRulesClause(clause: Reclaim),
-      pricing: Band(CostBand(base: 50, jitter: 30, floor: 20)),
-      benefit: Flat(value: 0.55),
+      pricing: Band(TransfigurationCostBand(base: 50, jitter: 30, floor: 20)),
+      reward_score: Flat(value: 0.55),
     ),
 
+    // Hastened is eligible for Events that are not Fast and makes them Fast.
     TransfigurationFormDefinition(
       id: Hastened,
       glossary_uuid: "19f6c2c9-dd6b-4d65-9f95-f6a3486772cc",
       name: "Hastened",
-      effect_disclosure: "Make it Fast",
-      selected_card_description: "It becomes Fast.",
-      accessibility_description: "Makes this event Fast.",
+      description: "Make it Fast",
+      glyph: TransfigurationHastened,
       accent_color: "#06b6d4",
       tint_color: "#67e8f9",
-      merchant_allowed: true,
-      eligibility: EventWithoutFast,
-      operation: SetFast,
       pricing: Free,
-      benefit: Flat(value: 0.5),
+      reward_score: Flat(value: 0.5),
     ),
 
+    // Resonant is eligible when the rules contain a supported named trigger.
+    // It widens “once per turn”, Dawn, or Materialized using the rules engine's
+    // corresponding rewrite.
     TransfigurationFormDefinition(
       id: Resonant,
       glossary_uuid: "c3fa83af-ee3b-47cd-8112-5e5cc38821de",
       name: "Resonant",
-      effect_disclosure: "Widen a named trigger to fire more often",
-      selected_card_description: "A named trigger fires more often.",
-      accessibility_description: "Widens a named trigger on this card to fire more often.",
+      description: "Widen a named trigger to fire more often",
+      glyph: TransfigurationResonant,
       accent_color: "#d946ef",
       tint_color: "#f0abfc",
-      merchant_allowed: true,
-      eligibility: NamedTrigger,
-      operation: WidenNamedTrigger,
-      pricing: Band(CostBand(base: 50, jitter: 30, floor: 20)),
-      benefit: Flat(value: 0.5),
+      pricing: Band(TransfigurationCostBand(base: 50, jitter: 30, floor: 20)),
+      reward_score: Flat(value: 0.5),
     ),
 
+    // Attuned is eligible when a card has a positive activated-ability ● cost.
+    // It reduces the first supported activated cost by 1, to a minimum of zero.
     TransfigurationFormDefinition(
       id: Attuned,
       glossary_uuid: "980d283a-9558-4b66-84a0-fcb91fdf4ceb",
       name: "Attuned",
-      effect_disclosure: "Reduce an activated ability's cost by 1●",
-      selected_card_description: "An activated ability costs 1● less.",
-      accessibility_description: "Reduces an activated ability's energy cost by one.",
+      description: "Reduce an activated ability's cost by 1●",
+      glyph: TransfigurationAttuned,
       accent_color: "#f43f5e",
       tint_color: "#fda4af",
-      merchant_allowed: true,
-      eligibility: ActivatedEnergyCost,
-      operation: ReduceActivatedEnergyCost(amount: 1, minimum: 0),
-      pricing: Band(CostBand(base: 10, jitter: 20, floor: 10)),
-      benefit: Flat(value: 0.5),
+      pricing: Band(TransfigurationCostBand(base: 10, jitter: 20, floor: 10)),
+      reward_score: Flat(value: 0.5),
     ),
 
+    // Perfected is eligible when at least two other configured forms are
+    // eligible. It applies those forms in this catalog's order.
     TransfigurationFormDefinition(
       id: Perfected,
       glossary_uuid: "22adf539-d2c9-4f33-9416-159d03a220ad",
       name: "Perfected",
-      effect_disclosure: "Apply every available transfiguration",
-      selected_card_description: "Every eligible transfiguration is applied in canonical order.",
-      accessibility_description: "Applies every other eligible transfiguration to this card.",
+      description: "Apply every available transfiguration",
+      glyph: TransfigurationPerfected,
       accent_color: "#a855f7",
       tint_color: "#d8b4fe",
-      merchant_allowed: false,
-      eligibility: AtLeastEligibleForms(count: 2),
-      operation: ApplyEligibleForms(
-        form_order: [
-          Empowered,
-          Amplified,
-          Kindled,
-          Inspired,
-          Enduring,
-          Hastened,
-          Resonant,
-          Attuned,
-        ],
-      ),
-      pricing: Band(CostBand(base: 100, jitter: 0, floor: 100)),
-      benefit: Flat(value: 0.65),
+      pricing: Band(TransfigurationCostBand(base: 100, jitter: 0, floor: 100)),
+      reward_score: Flat(value: 0.65),
     ),
   ],
 )

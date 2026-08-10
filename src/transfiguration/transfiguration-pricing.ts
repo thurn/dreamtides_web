@@ -25,6 +25,7 @@ import type {
 } from "../types/transfiguration-data";
 import { merchantRng } from "../journey_v2/signals/rng";
 import { transfigurationForm } from "../data/transfiguration-data";
+import { transfigurationMechanic } from "./transfiguration-logic";
 
 /** Lowest and highest essence a transfiguration can ever cost. */
 function clampCost(data: TransfigurationData, value: number): number {
@@ -68,14 +69,15 @@ export function transfigurationCostBand(
     case "band":
       return form.pricing;
     case "statDelta": {
-      if (form.operation.kind === "halveEnergyCost") {
+      const operation = transfigurationMechanic(type).operation;
+      if (operation.kind === "halveEnergyCost") {
         const energyCost = card.energyCost ?? 0;
         if (energyCost <= 0) return { base: 0, jitter: 0, floor: 0 };
         const delta = energyCost - Math.floor(energyCost / 2);
         return statBand(data, delta);
       }
-      if (form.operation.kind !== "doubleSpark")
-        throw new Error(`Invalid stat-delta operation ${form.operation.kind}`);
+      if (operation.kind !== "doubleSpark")
+        throw new Error(`Invalid stat-delta form ${type}`);
       const oldSpark = card.spark ?? 0;
       if (oldSpark === 0) return { base: 0, jitter: 0, floor: 0 };
       return statBand(data, oldSpark);

@@ -7,7 +7,6 @@ import {
   assignTransfiguration,
   buildTransfigurationDisplay,
   eligibleTransfigurations,
-  isTransfigurationEligibilitySatisfied,
   offeredTransfigurationForms,
   transfigurationEffectDetails,
   TRANSFIGURE_MARK_END,
@@ -36,51 +35,29 @@ function makeCard(overrides: Partial<CardData> = {}): CardData {
 
 afterEach(() => vi.restoreAllMocks());
 
-describe("catalog-driven Transfiguration predicates", () => {
-  it("evaluates every closed predicate kind from catalog parameters", () => {
+describe("Transfiguration eligibility", () => {
+  it("evaluates every closed form mechanic selected by stable form ID", () => {
     const character = makeCard({
       amplifiedText: "Deal 5 damage.",
       renderedText: "▸Dawn: Deal 3 damage. 2●: Gain 1 spark.",
     });
     const event = makeCard({ cardType: "Event", spark: null });
 
-    expect(
-      isTransfigurationEligibilitySatisfied(data, character, {
-        kind: "positiveEnergyCost",
-      }),
-    ).toBe(true);
-    expect(
-      isTransfigurationEligibilitySatisfied(data, character, {
-        kind: "distinctAuthoredAmplifiedText",
-      }),
-    ).toBe(true);
-    expect(
-      isTransfigurationEligibilitySatisfied(data, event, {
-        kind: "cardType",
-        cardType: "Event",
-      }),
-    ).toBe(true);
-    expect(
-      isTransfigurationEligibilitySatisfied(data, event, {
-        kind: "eventWithoutFast",
-      }),
-    ).toBe(true);
-    expect(
-      isTransfigurationEligibilitySatisfied(data, character, {
-        kind: "namedTrigger",
-      }),
-    ).toBe(true);
-    expect(
-      isTransfigurationEligibilitySatisfied(data, character, {
-        kind: "activatedEnergyCost",
-      }),
-    ).toBe(true);
-    expect(
-      isTransfigurationEligibilitySatisfied(data, character, {
-        kind: "atLeastEligibleForms",
-        count: 4,
-      }),
-    ).toBe(true);
+    expect(eligibleTransfigurations(data, character)).toEqual([
+      "Empowered",
+      "Amplified",
+      "Kindled",
+      "Resonant",
+      "Attuned",
+      "Perfected",
+    ]);
+    expect(eligibleTransfigurations(data, event)).toEqual([
+      "Empowered",
+      "Inspired",
+      "Enduring",
+      "Hastened",
+      "Perfected",
+    ]);
   });
 
   it("derives eligible order solely from the injected catalog", () => {
@@ -95,7 +72,7 @@ describe("catalog-driven Transfiguration predicates", () => {
   });
 });
 
-describe("catalog-driven Transfiguration operations", () => {
+describe("Transfiguration mechanics", () => {
   it("interprets stat, authored-text, clause, fast, trigger, and ability operations", () => {
     expect(
       applyTransfigurationToCard(data, makeCard({ energyCost: 5 }), "Empowered")
@@ -148,7 +125,7 @@ describe("catalog-driven Transfiguration operations", () => {
     ).toContain("1●");
   });
 
-  it("applies only eligible catalog children for a composite operation", () => {
+  it("applies only eligible configured forms for Perfected", () => {
     const card = makeCard({
       cardType: "Event",
       energyCost: 4,
@@ -159,6 +136,49 @@ describe("catalog-driven Transfiguration operations", () => {
     expect(result.isFast).toBe(true);
     expect(result.renderedText).toContain("1●");
     expect(result.spark).toBe(card.spark);
+  });
+
+  it("honors a configured form subset when applying Perfected", () => {
+    const subset = {
+      ...data,
+      forms: data.forms.filter(({ id }) =>
+        ["Empowered", "Inspired", "Perfected"].includes(id),
+      ),
+    };
+    const card = makeCard({ cardType: "Event", energyCost: 4 });
+    const result = applyTransfigurationToCard(subset, card, "Perfected");
+    expect(result.energyCost).toBe(2);
+    expect(result.renderedText).toMatch(/Draw a card\.$/u);
+    expect(result.renderedText).not.toMatch(/Reclaim/u);
+    expect(result.isFast).toBe(false);
+  });
+
+  it("uses catalog order when composing Perfected text changes", () => {
+    const card = makeCard({
+      cardType: "Event",
+      amplifiedText: "Authored replacement.",
+    });
+    const forms = (["Inspired", "Amplified", "Perfected"] as const).map(
+      (id) => {
+        const form = data.forms.find((candidate) => candidate.id === id);
+        if (form === undefined) throw new Error(`Missing fixture form ${id}`);
+        return form;
+      },
+    );
+    const inspiredFirst = applyTransfigurationToCard(
+      { ...data, forms },
+      card,
+      "Perfected",
+    );
+    const amplifiedFirst = applyTransfigurationToCard(
+      { ...data, forms: [forms[1], forms[0], forms[2]] },
+      card,
+      "Perfected",
+    );
+    expect(inspiredFirst.renderedText).toBe("Authored replacement.");
+    expect(amplifiedFirst.renderedText).toBe(
+      "Authored replacement. Draw a card.",
+    );
   });
 
   it("keeps mechanical and marked display results equivalent", () => {

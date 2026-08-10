@@ -2,7 +2,7 @@ import { applyTransfigurationToCard } from "../transfiguration/transfiguration-l
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate } from "../types/content";
 import type { SiteType, TransfigurationType } from "../types/journey";
-import { transfigurationBenefit, merchantTransfigurations } from "../journey_v2/archetypes/improve";
+import { transfigurationBenefit, rewardTransfigurations } from "../journey_v2/archetypes/improve";
 import { qualityOf } from "../journey_v2/signals/corpus";
 import {
   dreamsignHasDeckCoverage,
@@ -389,7 +389,7 @@ function transfigurationCandidates(
       effectiveCard.isStarter
     ) continue;
     if (constraints.fixedDeckEntryId !== undefined && entry.entryId !== constraints.fixedDeckEntryId) continue;
-    const forms = merchantTransfigurations(
+    const forms = rewardTransfigurations(
       context.content.transfigurationData,
       baseCard,
     ).filter((form) =>
@@ -446,7 +446,7 @@ function transfiguredCatalogCandidates(
   const allowed = new Set(request.constraints?.allowedTransfigurations ?? []);
   const candidates = built.flatMap((candidate): Candidate[] => {
     if (candidate.card === undefined) return [];
-    const forms = merchantTransfigurations(
+    const forms = rewardTransfigurations(
       context.content.transfigurationData,
       candidate.card,
     ).filter((form) =>

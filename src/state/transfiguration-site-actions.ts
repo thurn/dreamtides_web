@@ -1,6 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { transfigurationForm } from "../data/transfiguration-data";
 import { logEvent, logEventOnce } from "../logging";
+import { transfigurationMechanic } from "../transfiguration/transfiguration-logic";
 import { useJourney } from "./journey-context";
 import type {
   CardChoiceSiteRuntime,
@@ -53,15 +54,15 @@ export function useTransfigurationSiteActions(input: {
       {
         siteId: site.id,
         transfigurationFoldHash: transfigurationData.foldHash,
-        rulesVersion: transfigurationData.site.rulesVersion,
         offers: runtime.transfigurationOffers.map((offer) => {
           const form = transfigurationForm(transfigurationData, offer.type);
+          const mechanic = transfigurationMechanic(offer.type);
           return {
             entryId: offer.entryId,
             formId: offer.type,
-            predicate: form.eligibility,
+            predicate: mechanic.eligibility,
             predicateSatisfied: true,
-            operation: form.operation,
+            operation: mechanic.operation,
             pricing: form.pricing,
             essenceCost: offer.essenceCost,
             result: offer.effectDetails,
@@ -103,10 +104,9 @@ export function useTransfigurationSiteActions(input: {
         cardId: journeyContent.cardDatabase.get(entry.cardNumber)?.id ?? null,
         transfigurationType: type,
         transfigurationFoldHash: transfigurationData.foldHash,
-        rulesVersion: transfigurationData.site.rulesVersion,
-        predicate: form.eligibility,
+        predicate: transfigurationMechanic(type).eligibility,
         predicateSatisfied: true,
-        operation: form.operation,
+        operation: transfigurationMechanic(type).operation,
         pricing: form.pricing,
         effectDetails,
         essenceCost,

@@ -1,15 +1,56 @@
 import type {
   TransfigurationData,
   TransfigurationFormDefinition,
+  TransfigurationPricing,
+  TransfigurationRewardScore,
 } from "../types/transfiguration-data";
 import type { TransfigurationType } from "../types/journey";
+
+const FORM_IDS: readonly TransfigurationType[] = [
+  "Empowered",
+  "Amplified",
+  "Kindled",
+  "Inspired",
+  "Enduring",
+  "Hastened",
+  "Resonant",
+  "Attuned",
+  "Perfected",
+];
+
+function fixtureForm(
+  id: TransfigurationType,
+  index: number,
+  pricing: TransfigurationPricing,
+  rewardScore: TransfigurationRewardScore,
+): TransfigurationFormDefinition {
+  return {
+    id,
+    glossaryUuid: `00000000-0000-4000-8000-00000000000${String(index + 1)}`,
+    name: `Fixture ${id}`,
+    description: `Fixture ${id} effect`,
+    glyph: `transfiguration${id}`,
+    accentColor: `#${String(index + 1).repeat(6)}`,
+    tintColor: `#${String(9 - index).repeat(6)}`,
+    pricing,
+    rewardScore,
+  };
+}
+
+const FIXED_COSTS: Partial<Record<TransfigurationType, number>> = {
+  Amplified: 10,
+  Inspired: 20,
+  Enduring: 30,
+  Resonant: 40,
+  Attuned: 10,
+  Perfected: 100,
+};
 
 const FIXTURE: TransfigurationData = {
   schemaVersion: 1,
   contentHash: "a".repeat(64),
   foldHash: "b".repeat(64),
   site: {
-    rulesVersion: "fixture-transfiguration-rules",
     standardChoiceLimit: 3,
     enhancedChoiceLimit: null,
     pricing: {
@@ -29,164 +70,33 @@ const FIXTURE: TransfigurationData = {
       ],
     },
   },
-  forms: [
-    {
-      id: "Empowered",
-      glossaryUuid: "00000000-0000-4000-8000-000000000001",
-      name: "Fixture Empowered",
-      effectDisclosure: "Fixture energy effect",
-      selectedCardDescription: "Fixture selected energy effect",
-      accessibilityDescription: "Fixture accessible energy effect",
-      glyph: "transfigurationEmpowered",
-      accentColor: "#111111",
-      tintColor: "#aaaaaa",
-      merchantAllowed: true,
-      eligibility: { kind: "positiveEnergyCost" },
-      operation: { kind: "halveEnergyCost", rounding: "Down", minimum: 0 },
-      pricing: { kind: "statDelta" },
-      benefit: { kind: "ratio", divisor: 2 },
-    },
-    {
-      id: "Amplified",
-      glossaryUuid: "00000000-0000-4000-8000-000000000002",
-      name: "Fixture Amplified",
-      effectDisclosure: "Fixture amplified effect",
-      selectedCardDescription: "Fixture selected amplified effect",
-      accessibilityDescription: "Fixture accessible amplified effect",
-      glyph: "transfigurationAmplified",
-      accentColor: "#222222",
-      tintColor: "#bbbbbb",
-      merchantAllowed: true,
-      eligibility: { kind: "distinctAuthoredAmplifiedText" },
-      operation: { kind: "useAuthoredAmplifiedText" },
-      pricing: { kind: "band", base: 10, jitter: 0, floor: 10 },
-      benefit: { kind: "flat", value: 0.4 },
-    },
-    {
-      id: "Kindled",
-      glossaryUuid: "00000000-0000-4000-8000-000000000003",
-      name: "Fixture Kindled",
-      effectDisclosure: "Fixture spark effect",
-      selectedCardDescription: "Fixture selected spark effect",
-      accessibilityDescription: "Fixture accessible spark effect",
-      glyph: "transfigurationKindled",
-      accentColor: "#333333",
-      tintColor: "#cccccc",
-      merchantAllowed: true,
-      eligibility: { kind: "cardType", cardType: "Character" },
-      operation: { kind: "doubleSpark", zeroResult: 1 },
-      pricing: { kind: "statDelta" },
-      benefit: { kind: "ratio", divisor: 4 },
-    },
-    {
-      id: "Inspired",
-      glossaryUuid: "00000000-0000-4000-8000-000000000004",
-      name: "Fixture Inspired",
-      effectDisclosure: "Fixture draw effect",
-      selectedCardDescription: "Fixture selected draw effect",
-      accessibilityDescription: "Fixture accessible draw effect",
-      glyph: "transfigurationInspired",
-      accentColor: "#444444",
-      tintColor: "#dddddd",
-      merchantAllowed: true,
-      eligibility: { kind: "cardType", cardType: "Event" },
-      operation: { kind: "appendRulesClause", clause: "DrawCard" },
-      pricing: { kind: "band", base: 20, jitter: 0, floor: 20 },
-      benefit: { kind: "flat", value: 0.5 },
-    },
-    {
-      id: "Enduring",
-      glossaryUuid: "00000000-0000-4000-8000-000000000005",
-      name: "Fixture Enduring",
-      effectDisclosure: "Fixture reclaim effect",
-      selectedCardDescription: "Fixture selected reclaim effect",
-      accessibilityDescription: "Fixture accessible reclaim effect",
-      glyph: "transfigurationEnduring",
-      accentColor: "#555555",
-      tintColor: "#eeeeee",
-      merchantAllowed: true,
-      eligibility: { kind: "cardType", cardType: "Event" },
-      operation: { kind: "appendRulesClause", clause: "Reclaim" },
-      pricing: { kind: "band", base: 30, jitter: 0, floor: 30 },
-      benefit: { kind: "flat", value: 0.5 },
-    },
-    {
-      id: "Hastened",
-      glossaryUuid: "00000000-0000-4000-8000-000000000006",
-      name: "Fixture Hastened",
-      effectDisclosure: "Fixture fast effect",
-      selectedCardDescription: "Fixture selected fast effect",
-      accessibilityDescription: "Fixture accessible fast effect",
-      glyph: "transfigurationHastened",
-      accentColor: "#666666",
-      tintColor: "#999999",
-      merchantAllowed: true,
-      eligibility: { kind: "eventWithoutFast" },
-      operation: { kind: "setFast" },
-      pricing: { kind: "free" },
-      benefit: { kind: "flat", value: 0.5 },
-    },
-    {
-      id: "Resonant",
-      glossaryUuid: "00000000-0000-4000-8000-000000000007",
-      name: "Fixture Resonant",
-      effectDisclosure: "Fixture trigger effect",
-      selectedCardDescription: "Fixture selected trigger effect",
-      accessibilityDescription: "Fixture accessible trigger effect",
-      glyph: "transfigurationResonant",
-      accentColor: "#777777",
-      tintColor: "#888888",
-      merchantAllowed: true,
-      eligibility: { kind: "namedTrigger" },
-      operation: { kind: "widenNamedTrigger" },
-      pricing: { kind: "band", base: 40, jitter: 0, floor: 40 },
-      benefit: { kind: "flat", value: 0.5 },
-    },
-    {
-      id: "Attuned",
-      glossaryUuid: "00000000-0000-4000-8000-000000000008",
-      name: "Fixture Attuned",
-      effectDisclosure: "Fixture ability effect",
-      selectedCardDescription: "Fixture selected ability effect",
-      accessibilityDescription: "Fixture accessible ability effect",
-      glyph: "transfigurationAttuned",
-      accentColor: "#121212",
-      tintColor: "#ababab",
-      merchantAllowed: true,
-      eligibility: { kind: "activatedEnergyCost" },
-      operation: { kind: "reduceActivatedEnergyCost", amount: 1, minimum: 0 },
-      pricing: { kind: "band", base: 10, jitter: 0, floor: 10 },
-      benefit: { kind: "flat", value: 0.5 },
-    },
-    {
-      id: "Perfected",
-      glossaryUuid: "00000000-0000-4000-8000-000000000009",
-      name: "Fixture Perfected",
-      effectDisclosure: "Fixture combined effect",
-      selectedCardDescription: "Fixture selected combined effect",
-      accessibilityDescription: "Fixture accessible combined effect",
-      glyph: "transfigurationPerfected",
-      accentColor: "#232323",
-      tintColor: "#bcbcbc",
-      merchantAllowed: false,
-      eligibility: { kind: "atLeastEligibleForms", count: 2 },
-      operation: {
-        kind: "applyEligibleForms",
-        formOrder: [
-          "Empowered",
-          "Amplified",
-          "Kindled",
-          "Inspired",
-          "Enduring",
-          "Hastened",
-          "Resonant",
-          "Attuned",
-        ],
-      },
-      pricing: { kind: "band", base: 100, jitter: 0, floor: 100 },
-      benefit: { kind: "flat", value: 0.6 },
-    },
-  ],
+  forms: FORM_IDS.map((id, index) => {
+    if (id === "Empowered" || id === "Kindled") {
+      return fixtureForm(
+        id,
+        index,
+        { kind: "statDelta" },
+        { kind: "statDelta", divisor: id === "Empowered" ? 2 : 4 },
+      );
+    }
+    if (id === "Hastened") {
+      return fixtureForm(
+        id,
+        index,
+        { kind: "free" },
+        { kind: "flat", value: 0.5 },
+      );
+    }
+    const cost = FIXED_COSTS[id];
+    if (cost === undefined)
+      throw new Error(`Missing fixed Transfiguration cost for ${id}`);
+    return fixtureForm(
+      id,
+      index,
+      { kind: "band", base: cost, jitter: 0, floor: cost },
+      { kind: "flat", value: id === "Amplified" ? 0.4 : 0.5 },
+    );
+  }),
 };
 
 export function transfigurationFixture(): TransfigurationData {

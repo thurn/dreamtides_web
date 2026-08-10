@@ -19,11 +19,7 @@ export interface TransfigurationButtonModel {
   /** Authored presentation resolved from the injected catalog. */
   presentation: Pick<
     TransfigurationFormDefinition,
-    | "name"
-    | "selectedCardDescription"
-    | "accessibilityDescription"
-    | "glyph"
-    | "accentColor"
+    "name" | "description" | "glyph" | "accentColor"
   >;
   /** Locale-neutral rules change announced as the option's accessible description. */
   change?: TransfigurationChange;
@@ -78,7 +74,7 @@ export function TransfigurationButton({
       data-transfiguration-button-variant={variant}
       role="radio"
       aria-checked={selected}
-      aria-description={form.presentation.accessibilityDescription}
+      aria-description={form.presentation.description}
       aria-label={t("transfiguration-form-choice", {
         formName: form.presentation.name,
         essenceCost: form.essenceCost,

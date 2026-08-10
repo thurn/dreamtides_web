@@ -700,7 +700,7 @@ function fixedTransfigurationDisclosure(
     effectDisclosure: transfigurationForm(
       content.transfigurationData,
       action.transfiguration,
-    ).effectDisclosure,
+    ).description,
   };
 }
 

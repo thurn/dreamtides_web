@@ -49,12 +49,13 @@
       "currentSources": [
         {
           "path": "data/transfiguration.ron",
-          "fields": ["forms", "eligibility", "operation", "pricing", "benefit"]
+          "fields": ["forms", "description", "glyph", "pricing", "reward_score"]
         }
       ],
       "consumers": [
         "src/reward-selection/selectReward.ts",
         "src/rules/journey/sites.ts",
+        "src/transfiguration/transfiguration-logic.ts",
         "src/cumulus/components/controls/TransfigurationButton.tsx",
         "src/cumulus/screens/TransfigurationSiteScreen.tsx"
       ],
@@ -111,11 +112,7 @@
       "currentSources": [
         {
           "path": "data/tide_alignments.ron",
-          "fields": [
-            "display_name",
-            "accent_color",
-            "accessibility_name"
-          ]
+          "fields": ["display_name", "accent_color", "accessibility_name"]
         }
       ],
       "consumers": [

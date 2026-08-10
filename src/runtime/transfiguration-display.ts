@@ -23,7 +23,7 @@ export interface CardTransfigurationDisplay {
   readonly type: TransfigurationType;
   readonly form: Pick<
     TransfigurationFormDefinition,
-    "name" | "accessibilityDescription" | "glyph" | "accentColor" | "tintColor"
+    "name" | "description" | "glyph" | "accentColor" | "tintColor"
   >;
   /** Rules text with the changed/added spans wrapped in transfigure markers. */
   readonly markedText: string;

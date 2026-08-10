@@ -11,7 +11,8 @@ import {
 } from "./data-driven-catalogs.mjs";
 
 const ROOT = resolve(import.meta.dirname, "..");
-const parsed = (file) => parse(readFileSync(resolve(ROOT, "data", file), "utf8"));
+const parsed = (file) =>
+  parse(readFileSync(resolve(ROOT, "data", file), "utf8"));
 
 describe("data-driven catalog runtime generation", () => {
   it("emits deterministic gameplay hashes and stable Gamble identities", () => {
@@ -19,7 +20,11 @@ describe("data-driven catalog runtime generation", () => {
     const first = compileGambleData(source);
     expect(compileGambleData(source)).toEqual(first);
     expect(first.games.map((game) => game.id)).toEqual([
-      "gravok-three-gate-wager", "tidemark-ladder-climb", "starway-stairs", "four-suit-reprise", "blackjack",
+      "gravok-three-gate-wager",
+      "tidemark-ladder-climb",
+      "starway-stairs",
+      "four-suit-reprise",
+      "blackjack",
     ]);
     expect(first.foldHash).toBe(first.contentHash);
   });
@@ -34,11 +39,13 @@ describe("data-driven catalog runtime generation", () => {
     ]);
   });
 
-  it("normalizes closed Transfiguration variants without form switches", () => {
+  it("normalizes Transfiguration tuning without restating closed mechanics", () => {
     const result = compileTransfigurationData(parsed("transfiguration.toml"));
     expect(result.forms.map((form) => form.id)).toHaveLength(9);
-    expect(result.forms[0].eligibility.kind).toBe("positiveEnergyCost");
-    expect(result.forms[0].operation.kind).toBe("halveEnergyCost");
+    expect(result.forms[0].glyph).toBe("transfigurationEmpowered");
+    expect(result.forms[0].rewardScore.kind).toBe("statDelta");
+    expect(result.forms[0]).not.toHaveProperty("eligibility");
+    expect(result.forms[0]).not.toHaveProperty("operation");
     expect(result.site.standardChoiceLimit).toBe(3);
     expect(result.site.enhancedChoiceLimit).toBeNull();
   });
@@ -60,7 +67,13 @@ describe("data-driven catalog runtime generation", () => {
 
   it("keeps presentation-only tide metadata outside gameplay folds", () => {
     const result = compileTideAlignmentsData(parsed("tide_alignments.toml"));
-    expect(result.alignments.map((alignment) => alignment.id)).toEqual(["ember", "valor", "vision", "wild", "shadow"]);
+    expect(result.alignments.map((alignment) => alignment.id)).toEqual([
+      "ember",
+      "valor",
+      "vision",
+      "wild",
+      "shadow",
+    ]);
     expect(result).not.toHaveProperty("foldHash");
   });
 });
