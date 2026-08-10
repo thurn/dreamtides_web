@@ -7312,8 +7312,137 @@
           "count": 2
         }
       ]
+    },
+    {
+      "cardId": "c96c6c7f-c0fe-4272-b856-a54ace01f596",
+      "prose": "A radiant ring splits behind a lone traveler as black tendrils swarm.",
+      "action": [
+        {
+          "id": "b7329e1f-0bf4-42da-b26b-34a9536067e6",
+          "label": "Shatter the Veil",
+          "effectText": "Lose 100 essence. Apply Inspired to every eligible Event card in your deck.",
+          "effectKind": "transfigure-all-for-essence",
+          "canonicalMechanicId": "transfigure-deck-for-essence",
+          "essence": 100,
+          "predicate": "event",
+          "transfiguration": "Inspired"
+        },
+        {
+          "id": "ac08f8f4-8a6b-43f3-b3a9-0212d9371a16",
+          "label": "Accept the Swarm",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7",
+      "prose": "A solitary trident-bearer crosses deep snow toward black towers beneath a rose-colored storm.",
+      "action": [
+        {
+          "id": "90036feb-0132-4ba8-8415-0f11a17c898d",
+          "label": "Make Final Stand",
+          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        },
+        {
+          "id": "b1184d31-cc69-4f4f-a145-640b2b2b20bb",
+          "label": "Trace Fresh Footprints",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "23a7aca4-3c64-4963-a9a0-d3638822df48",
+      "prose": "A red-coated child faces a chained black aperture as debris drifts above a broken causeway.",
+      "action": [
+        {
+          "count": 1,
+          "id": "68bdf67c-88d9-430e-98b8-c54749d0ab98",
+          "label": "Feed Black Aperture",
+          "effectText": "Purge a chosen Character card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character for the aperture to banish.",
+          "effectKind": "purge-selected",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "purge-misfit",
+          "predicate": "character"
+        },
+        {
+          "id": "7bcb0ab4-5d61-41ca-8f88-c9d9502ef82b",
+          "label": "Cross Narrow Causeway",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
+    },
+    {
+      "cardId": "90a6a7a0-b739-475e-8379-647741aab423",
+      "prose": "A crowned herald wades toward a colossal armored sentinel looming before a mistbound castle.",
+      "action": [
+        {
+          "id": "0f929d84-0afd-4747-8522-522208334d72",
+          "label": "Call Warrior Echoes",
+          "effectText": "Draft a Warrior from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Warrior to echo twice.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "63648d40-a6ec-442f-aa36-24aafcb01ddc",
+          "label": "Awaken Silent Colossus",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "d8c90a33-a581-469a-9fd3-9a80d1cc5315",
+      "prose": "An ink-black giant rises from glowing wreckage as a lone figure recoils beneath falling debris.",
+      "action": [
+        {
+          "id": "03898d32-57c1-41ae-9e72-b5280f7787da",
+          "label": "Call Shapes From Rubble",
+          "effectText": "Take any number of Cheap Character cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any survivors to raise from the ruins.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        },
+        {
+          "id": "cc04dded-f831-4465-84ed-890ec04cb751",
+          "label": "Feed Waking Giant",
+          "effectText": "Lose 100 essence. Apply Kindled to every eligible Cheap Character card in your deck.",
+          "effectKind": "transfigure-all-for-essence",
+          "canonicalMechanicId": "transfigure-deck-for-essence",
+          "essence": 100,
+          "predicate": "cheap-character",
+          "transfiguration": "Kindled"
+        }
+      ]
     }
   ],
-  "contentHash": "923b03e5dc6e833913c67f0a899f04b440f41742c8d8a489a74de44aec01f1f9",
-  "foldHash": "923b03e5dc6e833913c67f0a899f04b440f41742c8d8a489a74de44aec01f1f9"
+  "contentHash": "c85afb1fd4b1d400034462e80cebe408e03d7833fb3a2e9894b70d6742db5e0c",
+  "foldHash": "c85afb1fd4b1d400034462e80cebe408e03d7833fb3a2e9894b70d6742db5e0c"
 }
