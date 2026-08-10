@@ -13252,8 +13252,122 @@
           "sparkBonus": 1
         }
       ]
+    },
+    {
+      "cardId": "b4df0b25-0c46-4faa-8db6-84f5f3c3444b",
+      "prose": "A courier waves from a pale dragon soaring between sunlit clouds and gathering storm.",
+      "action": [
+        {
+          "id": "d4c36b55-dfd9-4487-8691-f74f0e97efad",
+          "label": "Request a Hatchling",
+          "effectText": "Draft a Spirit Animal from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Spirit Animal to join the flight.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "34b990e1-387f-4d61-a7f7-2bff50fd4c2f",
+          "label": "Challenge Gathering Storm",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "7977748d-02c1-4702-ba68-5c49f7f0759b",
+      "prose": "A hollow wanderer blooms with crimson organs while tendrils root into a shattered wasteland.",
+      "action": [
+        {
+          "id": "65b093d4-f7c6-4006-8d48-b0406463a3f9",
+          "label": "Graft Living Tissue",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to cultivate, then choose a different card to propagate.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "0728a8ae-a839-4851-abe0-2df32da02553",
+          "label": "Release Crimson Growth",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "ffa4fa56-8897-465d-b812-3798e3cf5a1f",
+      "prose": "A colossal red-eyed crow lowers its beak as a lone augur whispers among burning leaves.",
+      "action": [
+        {
+          "id": "b312af6f-756d-4c19-bb2a-ac62908bbecd",
+          "label": "Whisper Back Every Echo",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "f19f245d-ba05-462b-8db4-853833ba4bb9",
+          "label": "Read Ember Omen",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "25173cac-333f-4efc-9a03-b532d5783419",
+      "prose": "A red biplane climbs above serrated peaks while cloudbanks swallow every route below.",
+      "action": [
+        {
+          "id": "7213ad24-4cff-466c-9288-f2f8d610b000",
+          "label": "Survey Mountain Passes",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "f4a4ee8d-9610-4841-8e24-20a51f6868ba",
+          "label": "Catch High Tailwind",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "629fe4d4-826f-41b9-a913-458a503856a8",
+      "prose": "A cliffside marksman aims across sunset canyons while a saddled horse waits nearby.",
+      "action": [
+        {
+          "id": "34f9fc83-52e4-4709-9361-6cc10129354d",
+          "label": "Ride Beyond Sunset",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        },
+        {
+          "id": "a99a5ce8-d73b-42b4-88ef-f71ea3e0491f",
+          "label": "Hold High Ground",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
     }
   ],
-  "contentHash": "6dd990902b9b70aec4ab97d8cf5ecacc0289f1713da8319b25994d385d7b12b2",
-  "foldHash": "6dd990902b9b70aec4ab97d8cf5ecacc0289f1713da8319b25994d385d7b12b2"
+  "contentHash": "13e0ea09f6884fa5524c82cc52f3c29ff6736529fa93e98f8f70bb5fc93ec149",
+  "foldHash": "13e0ea09f6884fa5524c82cc52f3c29ff6736529fa93e98f8f70bb5fc93ec149"
 }
