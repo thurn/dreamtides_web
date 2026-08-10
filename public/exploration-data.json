@@ -8093,8 +8093,135 @@
           "selectionPolicyId": "site-uniform"
         }
       ]
+    },
+    {
+      "cardId": "724a1362-3f0f-4b77-b14e-22c0b877349a",
+      "prose": "A mounted captain gallops through burning woods as radiant birds scatter beside a shadowed spear.",
+      "action": [
+        {
+          "id": "d83ed895-db5f-4851-8cc7-cd9a194f5e85",
+          "label": "Follow radiant wings",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "3994f237-6cdc-4047-b98d-97e7f31fcfb0",
+          "label": "Outride roaring wildfire",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
+    },
+    {
+      "cardId": "890970bd-475f-4da4-b835-2fb75882a84d",
+      "prose": "A tethered Synth kneels among broken machines while cold monitors flood a ruined factory with light.",
+      "action": [
+        {
+          "id": "535a143b-d2a5-4f00-8e57-483d8f6dc794",
+          "label": "Harvest Hidden Pattern",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to erase, then choose a different pattern to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "47171f27-08de-4baf-a409-4e1ddacd96ff",
+          "label": "Rewrite Living Chassis",
+          "effectText": "Change a chosen character card to be a Synth",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to become a Synth.",
+          "effectKind": "change-subtype-selected",
+          "canonicalMechanicId": "change-entry-subtype",
+          "selectionPolicyId": "deck-entry-centrality",
+          "predicate": "character",
+          "subtype": "Synth",
+          "deckTarget": "chosen"
+        }
+      ]
+    },
+    {
+      "cardId": "f7ffe999-685d-4ea2-85de-2e567eb2a042",
+      "prose": "Countless keys orbit a luminous keyhole while a solitary child approaches.",
+      "action": [
+        {
+          "id": "7f5989f5-dcea-452b-a678-4febe5f6baba",
+          "label": "Cross Green Threshold",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        },
+        {
+          "id": "871d3b6f-2fe3-47d2-afca-72d52a0e5e80",
+          "label": "Gather Falling Keys",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "243a15d3-a4eb-415c-b106-86d4a2b7ec6a",
+      "prose": "A swordsman holds a curved blade atop a rocky ledge, wind tugging at his coat.",
+      "action": [
+        {
+          "id": "d167e8f0-7dbe-4df3-a3de-82d0d0993386",
+          "label": "Follow the Swordsman",
+          "effectText": "Choose one of 2 packs of 3 Warrior cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Warrior pack to add to your deck.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "warrior",
+          "packCount": 2,
+          "packSize": 3
+        },
+        {
+          "id": "b718d1a0-af08-4d66-977f-5a8fa2a08ee6",
+          "label": "Cross His Blade",
+          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "72debe2e-1f47-4a66-83c3-71bb72876663",
+      "prose": "A skull-faced giant rises through smoke, both massive hands opening beneath pale beams.",
+      "action": [
+        {
+          "id": "21d839c9-51b2-4905-bd7b-46f4154b1c53",
+          "label": "Answer its open hand",
+          "effectText": "Draft a ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered low-cost Character.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "b6e5c3c3-cff9-404f-9521-b890c1c5139c",
+          "label": "Mirror its rising gesture",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
     }
   ],
-  "contentHash": "6fd95cccfe4fd670eb24529f83f93c3a9ed74993c0b0f746148cf3af04be01d0",
-  "foldHash": "6fd95cccfe4fd670eb24529f83f93c3a9ed74993c0b0f746148cf3af04be01d0"
+  "contentHash": "988638dfbe539b5fed85df28b69ce18b65053fdc328c4530bee732da1cae09e3",
+  "foldHash": "988638dfbe539b5fed85df28b69ce18b65053fdc328c4530bee732da1cae09e3"
 }
