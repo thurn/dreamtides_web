@@ -4051,4 +4051,146 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "2690912e-0295-4d12-a603-5946d37902d3",
+    prose: "A tall shadow figure advances through violet smoke, its amber eyes glowing.",
+    actions: [
+      ActionDefinition(
+        label: "Study Its Glowing Eyes",
+        id: "2f0e6d94-2e56-4abf-83c2-ae49b1c0f05d",
+        presentation: ActionPresentation(
+          effect_text: "Gain Cloud Lens",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
+        ),
+        effect: GainDreamsign(dreamsign_id: "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4"),
+      ),
+
+      ActionDefinition(
+        label: "Enter Violet Smoke",
+        id: "ec73d2ba-4a56-44a0-b895-2e62b58608d5",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one transfigured Event."),
+        ),
+        effect: TransfiguredCardDraft(predicate: Event, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "8a8af982-d1a1-42a0-9229-5e3af13e8dbe",
+    prose: "A lone traveler crosses a fractured stone causeway above glowing magma beneath choking smoke.",
+    actions: [
+      ActionDefinition(
+        label: "Cast Echoes Below",
+        id: "a9e2feac-1f32-4a95-9555-810ea083cbd4",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+
+      ActionDefinition(
+        label: "Cross Crumbling Causeway",
+        id: "4ebf0221-0b1b-4a47-9d68-0138cdba2cfb",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "151b80b1-0a3f-48d4-9c85-99a9c274fd7f",
+    prose: "Three haloed soldiers emerge through blue-white mist, leveling futuristic weapons inside a ruined hangar.",
+    actions: [
+      ActionDefinition(
+        label: "Join Haloed Formation",
+        id: "3093ef72-9645-46c4-95c5-ac10f68921c9",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices and gain 2 copies of it",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered Warrior to gain twice.",
+          ),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 2, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Channel Rising Mist",
+        id: "c6279afc-2819-4141-a1cb-20917bb00e2f",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+    prose: "A trench-coated stranger reveals a many-clawed arm amid burning streets and warped shadows.",
+    actions: [
+      ActionDefinition(
+        label: "Accept Abyssal Graft",
+        id: "b4c9022f-0397-4d02-b058-f43f9c444139",
+        presentation: ActionPresentation(
+          effect_text: "Change a chosen character card to be an Outsider",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to become an Outsider.",
+          ),
+        ),
+        effect: ChangeSubtypeSelected(predicate: Character, subtype: "Outsider", target: Chosen),
+      ),
+
+      ActionDefinition(
+        label: "Walk Through Fire",
+        id: "e4d90d10-b9ad-464d-a7ab-e7a261fdcb59",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "fb41a90e-279c-419c-80fc-7c3469ba0c74",
+    prose: "A colossal tortoise strides through bright grass, its mosaic shell gleaming beneath blue sky.",
+    actions: [
+      ActionDefinition(
+        label: "Follow its stride",
+        id: "7f8d242e-4e44-4ea8-bc1f-60f0d29af2ea",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Spirit Animal from 4 choices and gain 2 copies of it",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered Spirit Animal to gain twice.",
+          ),
+        ),
+        effect: DraftCard(predicate: SpiritAnimal, count: 2, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Study its mosaic shell",
+        id: "543c23fe-24f2-4054-a56b-3c53cb22e80a",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 2 packs of 3 Spirit Animal cards to add to your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one Spirit Animal pack to add to your deck.",
+          ),
+        ),
+        effect: ChoosePack(predicate: SpiritAnimal, pack_count: 2, pack_size: 3),
+      ),
+    ],
+  ),
 ]

@@ -3778,8 +3778,143 @@
           "canonicalMechanicId": "purge-and-duplicate"
         }
       ]
+    },
+    {
+      "cardId": "2690912e-0295-4d12-a603-5946d37902d3",
+      "prose": "A tall shadow figure advances through violet smoke, its amber eyes glowing.",
+      "action": [
+        {
+          "id": "2f0e6d94-2e56-4abf-83c2-ae49b1c0f05d",
+          "label": "Study Its Glowing Eyes",
+          "effectText": "Gain Cloud Lens",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to replace.",
+          "effectKind": "gain-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "fixed",
+          "dreamsignId": "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4"
+        },
+        {
+          "id": "ec73d2ba-4a56-44a0-b895-2e62b58608d5",
+          "label": "Enter Violet Smoke",
+          "effectText": "Draft a transfigured Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured Event.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "8a8af982-d1a1-42a0-9229-5e3af13e8dbe",
+      "prose": "A lone traveler crosses a fractured stone causeway above glowing magma beneath choking smoke.",
+      "action": [
+        {
+          "id": "a9e2feac-1f32-4a95-9555-810ea083cbd4",
+          "label": "Cast Echoes Below",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "4ebf0221-0b1b-4a47-9d68-0138cdba2cfb",
+          "label": "Cross Crumbling Causeway",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
+    },
+    {
+      "cardId": "151b80b1-0a3f-48d4-9c85-99a9c274fd7f",
+      "prose": "Three haloed soldiers emerge through blue-white mist, leveling futuristic weapons inside a ruined hangar.",
+      "action": [
+        {
+          "id": "3093ef72-9645-46c4-95c5-ac10f68921c9",
+          "label": "Join Haloed Formation",
+          "effectText": "Draft a Warrior from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Warrior to gain twice.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "c6279afc-2819-4141-a1cb-20917bb00e2f",
+          "label": "Channel Rising Mist",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb",
+      "prose": "A trench-coated stranger reveals a many-clawed arm amid burning streets and warped shadows.",
+      "action": [
+        {
+          "id": "b4c9022f-0397-4d02-b058-f43f9c444139",
+          "label": "Accept Abyssal Graft",
+          "effectText": "Change a chosen character card to be an Outsider",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to become an Outsider.",
+          "effectKind": "change-subtype-selected",
+          "canonicalMechanicId": "change-entry-subtype",
+          "selectionPolicyId": "deck-entry-centrality",
+          "predicate": "character",
+          "subtype": "Outsider",
+          "deckTarget": "chosen"
+        },
+        {
+          "id": "e4d90d10-b9ad-464d-a7ab-e7a261fdcb59",
+          "label": "Walk Through Fire",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "fb41a90e-279c-419c-80fc-7c3469ba0c74",
+      "prose": "A colossal tortoise strides through bright grass, its mosaic shell gleaming beneath blue sky.",
+      "action": [
+        {
+          "id": "7f8d242e-4e44-4ea8-bc1f-60f0d29af2ea",
+          "label": "Follow its stride",
+          "effectText": "Draft a Spirit Animal from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Spirit Animal to gain twice.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "543c23fe-24f2-4054-a56b-3c53cb22e80a",
+          "label": "Study its mosaic shell",
+          "effectText": "Choose one of 2 packs of 3 Spirit Animal cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Spirit Animal pack to add to your deck.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "spirit-animal",
+          "packCount": 2,
+          "packSize": 3
+        }
+      ]
     }
   ],
-  "contentHash": "780380183237fdd02b01c45eea29ff619daeb7dab5f010832d8f3d01f9f70f57",
-  "foldHash": "780380183237fdd02b01c45eea29ff619daeb7dab5f010832d8f3d01f9f70f57"
+  "contentHash": "85706cd3ab213310b09741cf7f74cd48dec30171451b4bf2656add045b6ba047",
+  "foldHash": "85706cd3ab213310b09741cf7f74cd48dec30171451b4bf2656add045b6ba047"
 }
