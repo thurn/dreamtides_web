@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "purpose": "A complete design-only library of reusable and aspirational Exploration mechanic ideas recovered from the original encounter brainstorming.",
+  "purpose": "A complete design-only library of all 82 entries from /tmp/templates.json, with implementation annotations used by the encounter-redesign pipeline.",
   "mechanics": [
     {
       "id": 1,
@@ -459,9 +459,7 @@
       "concept": "Change $DECK_CARD to become a {card_type}",
       "balance_class": "standard",
       "implementation": {
-        "status": "reuse",
-        "effect_variant": "ChangeSubtypeSelected",
-        "runtime_effect_kind": "change-subtype-selected"
+        "status": "vertical_slice"
       }
     },
     {

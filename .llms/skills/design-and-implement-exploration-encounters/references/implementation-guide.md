@@ -1,5 +1,16 @@
 # Exploration implementation guide
 
+## Preservation boundary for redesign batches
+
+A redesign workset replaces one nominated `ActionDefinition` inside one existing
+encounter. Preserve the encounter's card UUID, prose, list position, and untouched
+action exactly. Preserve the untouched action UUID. Give the replacement action its
+pre-minted UUIDv4 because the choice has new semantics.
+
+Generated verification must compare the untouched action structurally, prove the
+old action UUID is absent globally, and prove the new UUID appears exactly once.
+Unselected candidate encounters are outside the implementation diff.
+
 ## Canonical data and generation
 
 Exploration authoring lives in `data/exploration.ron`. Its root is a flat RON list
@@ -154,3 +165,7 @@ Completion requires:
 - runtime and visual QA pass when applicable;
 - `npm run review` passes; and
 - the complete intended diff is staged in the worktree for approval.
+
+For a redesign batch, completion additionally requires one exact action replacement
+per assignment, preservation of prose and the untouched action, and the declared
+recipient/donor template delta of `+1/-1`.

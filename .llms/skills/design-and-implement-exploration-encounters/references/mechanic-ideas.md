@@ -1,8 +1,9 @@
-# Exploration mechanic ideas
+# Complete Exploration template library
 
-A complete design-only library of reusable and aspirational Exploration mechanic ideas recovered from the original encounter brainstorming.
+A complete design-only library of all 82 entries from /tmp/templates.json, with implementation annotations used by the encounter-redesign pipeline.
 
-This is a design reference, not runtime game data. `data/exploration.ron` owns
+The ID and template-concept columns preserve the source list. This is a design
+reference, not runtime game data. `data/exploration.ron` owns
 action presentation and typed behavior. A `vertical_slice` idea requires a complete
 new or extended implementation before it can be authored live.
 
@@ -58,7 +59,7 @@ new or extended implementation before it can be authored live.
 | 50 | Gain {count} copies of a chosen card | standard | reuse `CopySelectedCard` |
 | 51 | Gain one copy of each of {count} chosen cards | standard | reuse `CopySelectedCards` |
 | 52 | Gain one copy of each of {count} random {predicate} cards | standard | vertical slice required |
-| 53 | Change $DECK_CARD to become a {card_type} | standard | reuse `ChangeSubtypeSelected` |
+| 53 | Change $DECK_CARD to become a {card_type} | standard | vertical slice required |
 | 54 | Modify {count} random cards to become {card_type} cards | standard | vertical slice required |
 | 55 | Draw 4 cards from your deck and choose one to gain a copy of. | standard | reuse `CopyOfferedDeckCard` |
 | 56 | All items in the next shop you visit are free | standard | vertical slice required |

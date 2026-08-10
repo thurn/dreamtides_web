@@ -181,11 +181,12 @@ def mechanics_by_id(catalog: dict[str, Any]) -> dict[int, dict[str, Any]]:
 
 def render_markdown(catalog: dict[str, Any]) -> str:
     lines = [
-        "# Exploration mechanic ideas",
+        "# Complete Exploration template library",
         "",
         catalog["purpose"],
         "",
-        "This is a design reference, not runtime game data. `data/exploration.ron` owns",
+        "The ID and template-concept columns preserve the source list. This is a design",
+        "reference, not runtime game data. `data/exploration.ron` owns",
         "action presentation and typed behavior. A `vertical_slice` idea requires a complete",
         "new or extended implementation before it can be authored live.",
         "",
