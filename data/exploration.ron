@@ -5883,4 +5883,146 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "f0165a60-df1c-41db-87bb-a784c26835a5",
+    prose: "A luminous jellyfish pulses underwater, its golden bell trailing long violet tendrils.",
+    actions: [
+      ActionDefinition(
+        label: "Follow its radiant pulse",
+        id: "9580c2c3-9dec-405c-ad2e-3ba04991cf62",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Spirit Animal from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered Spirit Animal.",
+          ),
+        ),
+        effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Gather its golden light",
+        id: "705a807a-6dfd-4252-9c52-16355d4820bb",
+        presentation: ActionPresentation(
+          effect_text: "Gain 15 essence for each Spirit Animal card in your deck",
+          followup: None,
+        ),
+        effect: GainEssencePerCard(predicate: SpiritAnimal, essence_per_card: 15),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "7b55efd1-6d9f-4156-9de7-1c71ccc410cb",
+    prose: "Rain lashes a shattered crimson vessel while a scientist confronts its colossal captive.",
+    actions: [
+      ActionDefinition(
+        label: "Release Stolen Life",
+        id: "60926e48-c8f4-4680-963f-f8b82be32c0c",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered transfigured Character.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: Character, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Harvest Living Pattern",
+        id: "44a0d3e8-1193-4b4f-adb2-41a8a6169844",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "29d25251-8b42-4d3d-97e6-6c3abaabd9a2",
+    prose: "A colossal creature unfurls through orange smoke, hooked limbs sweeping outward.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Its Sweeping Limbs",
+        id: "8fd01df5-2022-4ed9-8a80-b24b41cdcfd5",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+
+      ActionDefinition(
+        label: "Inhale Its Orange Smoke",
+        id: "3512bf48-b98f-42ed-9fd2-841e1177646c",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "87f075b1-b058-4570-a75f-c4f8f544e192",
+    prose: "A helmeted explorer drifts weightless, one gloved hand reaching through blue radiance.",
+    actions: [
+      ActionDefinition(
+        label: "Touch the Radiance",
+        id: "1d43475e-8b08-429b-9766-bf5419dca7f1",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured ≤2● cost Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered transfigured character.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: CheapCharacter, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Follow the Radiance",
+        id: "f02d6cf4-1984-4d3b-8c81-b48b8c75a68b",
+        presentation: ActionPresentation(
+          effect_text: "The next draft or shop site you visit will contain transfigured cards",
+          followup: None,
+        ),
+        effect: TransfigureNextDraftOrShop,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "8896c178-757e-4775-b117-a4357ebfe30f",
+    prose: "A red-coated woman braces amid flames, long hair streaming across burning wreckage.",
+    actions: [
+      ActionDefinition(
+        label: "Search burning wreckage",
+        id: "d88f9b07-b4da-4306-a2c0-ae0c11732a1d",
+        presentation: ActionPresentation(effect_text: "Gain a random Event card", followup: None),
+        effect: GainRandomCards(predicate: Event, count: 1),
+      ),
+
+      ActionDefinition(
+        label: "Feed nearby flames",
+        id: "471ba59c-7417-4f6e-bdb6-d2ca6d2dc547",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to burn for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
 ]

@@ -5497,8 +5497,137 @@
           "essencePerSpark": 20
         }
       ]
+    },
+    {
+      "cardId": "f0165a60-df1c-41db-87bb-a784c26835a5",
+      "prose": "A luminous jellyfish pulses underwater, its golden bell trailing long violet tendrils.",
+      "action": [
+        {
+          "id": "9580c2c3-9dec-405c-ad2e-3ba04991cf62",
+          "label": "Follow its radiant pulse",
+          "effectText": "Draft a Spirit Animal from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Spirit Animal.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "705a807a-6dfd-4252-9c52-16355d4820bb",
+          "label": "Gather its golden light",
+          "effectText": "Gain 15 essence for each Spirit Animal card in your deck",
+          "effectKind": "gain-essence-per-card",
+          "canonicalMechanicId": "gain-essence-by-deck-predicate",
+          "predicate": "spirit-animal",
+          "essencePerCard": 15
+        }
+      ]
+    },
+    {
+      "cardId": "7b55efd1-6d9f-4156-9de7-1c71ccc410cb",
+      "prose": "Rain lashes a shattered crimson vessel while a scientist confronts its colossal captive.",
+      "action": [
+        {
+          "id": "60926e48-c8f4-4680-963f-f8b82be32c0c",
+          "label": "Release Stolen Life",
+          "effectText": "Draft a transfigured Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered transfigured Character.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "offerCount": 4
+        },
+        {
+          "id": "44a0d3e8-1193-4b4f-adb2-41a8a6169844",
+          "label": "Harvest Living Pattern",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        }
+      ]
+    },
+    {
+      "cardId": "29d25251-8b42-4d3d-97e6-6c3abaabd9a2",
+      "prose": "A colossal creature unfurls through orange smoke, hooked limbs sweeping outward.",
+      "action": [
+        {
+          "id": "8fd01df5-2022-4ed9-8a80-b24b41cdcfd5",
+          "label": "Follow Its Sweeping Limbs",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        },
+        {
+          "id": "3512bf48-b98f-42ed-9fd2-841e1177646c",
+          "label": "Inhale Its Orange Smoke",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "87f075b1-b058-4570-a75f-c4f8f544e192",
+      "prose": "A helmeted explorer drifts weightless, one gloved hand reaching through blue radiance.",
+      "action": [
+        {
+          "id": "1d43475e-8b08-429b-9766-bf5419dca7f1",
+          "label": "Touch the Radiance",
+          "effectText": "Draft a transfigured ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered transfigured character.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        },
+        {
+          "id": "f02d6cf4-1984-4d3b-8c81-b48b8c75a68b",
+          "label": "Follow the Radiance",
+          "effectText": "The next draft or shop site you visit will contain transfigured cards",
+          "effectKind": "transfigure-next-draft-or-shop",
+          "canonicalMechanicId": "next-site-transfiguration"
+        }
+      ]
+    },
+    {
+      "cardId": "8896c178-757e-4775-b117-a4357ebfe30f",
+      "prose": "A red-coated woman braces amid flames, long hair streaming across burning wreckage.",
+      "action": [
+        {
+          "id": "d88f9b07-b4da-4306-a2c0-ae0c11732a1d",
+          "label": "Search burning wreckage",
+          "effectText": "Gain a random Event card",
+          "effectKind": "gain-random-cards",
+          "canonicalMechanicId": "gain-card",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "event",
+          "count": 1
+        },
+        {
+          "id": "471ba59c-7417-4f6e-bdb6-d2ca6d2dc547",
+          "label": "Feed nearby flames",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to burn for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        }
+      ]
     }
   ],
-  "contentHash": "3afbb05c50346bd6185b2d942ad99a62f158c7cf7aaa40c7ab5b2f1cb8b209e5",
-  "foldHash": "3afbb05c50346bd6185b2d942ad99a62f158c7cf7aaa40c7ab5b2f1cb8b209e5"
+  "contentHash": "6945cef87697cf4c68c3bd587e874c5f72fee560335f88484125a94937a900a1",
+  "foldHash": "6945cef87697cf4c68c3bd587e874c5f72fee560335f88484125a94937a900a1"
 }
