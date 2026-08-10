@@ -14188,4 +14188,146 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "5c5e316f-c499-4991-9733-bb6e3d826d7e",
+    prose: "A wired figure stands among fallen bodies as mechanical arms descend through green light.",
+    actions: [
+      ActionDefinition(
+        label: "Drain Fallen Sparks",
+        id: "bf97f94c-f328-4141-860b-cccbc55a31d2",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to drain for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Restore a Lost Pattern",
+        id: "427e2b2a-2647-4e29-bf77-7a3c04724c5b",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one remembered card to restore.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "f68774ce-0e94-489f-90a5-68e03a549ff6",
+    prose: "Rain hisses through a broken overpass while cyan butterflies rise from a masked survivor's vigil.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Luminous Flight",
+        id: "2c2eb427-4efc-4912-bafb-5f5f1954ac27",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+
+      ActionDefinition(
+        label: "Gather Fleeting Light",
+        id: "67b0fc03-8ccd-4f13-9111-6f39e31f03da",
+        presentation: ActionPresentation(
+          effect_text: "Gain a random dreamsign",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Dreamsign to release if needed.",
+          ),
+        ),
+        effect: GainRandomDreamsign,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "3076694f-ffc2-46c9-8e1a-39f3878c73c9",
+    prose: "A luminous rift suspends shattered stone while dark tendrils probe descending steps.",
+    actions: [
+      ActionDefinition(
+        label: "Invite Riftborn Stranger",
+        id: "a2d95205-d8b0-4d11-a42a-ea4c8be28be7",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Character from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Character."),
+        ),
+        effect: DraftCard(predicate: Character, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Accept Rift's Shape",
+        id: "afd46c27-23bd-4e51-957a-5b0aa5a4cab6",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck become the subtype of your choice",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one shared subtype for every Character.",
+          ),
+        ),
+        effect: ChangeSubtypeAll(subtype_options: ["Warrior", "Mage", "Spirit Animal", "Survivor"]),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c",
+    prose: "A masked rider leads spectral birds through a sky burning between dusk and dream.",
+    actions: [
+      ActionDefinition(
+        label: "Outfly Falling Night",
+        id: "08b717a3-c3fa-4f94-8758-f6449d528c52",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+
+      ActionDefinition(
+        label: "Gather Every Wing",
+        id: "a5fe7663-d7a0-46b2-99ec-f9fc1cff2be2",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "a7820b34-9fdc-46cc-8357-53c8caa056b1",
+    prose: "A horned machine broker coils bladed cables around an orange mask and glowing circuitry.",
+    actions: [
+      ActionDefinition(
+        label: "Trade one warrior",
+        id: "b3959b4f-713f-44c8-ae28-964d48e0ce89",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen Warrior and gain a random Warrior replacement",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Warrior to surrender."),
+        ),
+        effect: ReplaceSelected(predicate: Warrior),
+      ),
+
+      ActionDefinition(
+        label: "Collect blood tithe",
+        id: "2d3e332c-0017-4e62-b174-e6def2476529",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+    ],
+  ),
 ]
