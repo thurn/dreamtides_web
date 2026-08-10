@@ -6996,4 +6996,140 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "8367b757-c3d2-4c22-9043-8baadee1c5ba",
+    prose: "A cloaked mage raises a long staff and a glowing orb amid smoke and falling debris.",
+    actions: [
+      ActionDefinition(
+        label: "Follow the raised staff",
+        id: "5d15f7f9-79e3-4e0b-a3e7-63ccfc8b79cf",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Accept the glowing orb",
+        id: "d963a026-84f2-4599-8bd8-cb19f4132163",
+        presentation: ActionPresentation(
+          effect_text: "Change a chosen character card to be a Warrior",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to become a Warrior.",
+          ),
+        ),
+        effect: ChangeSubtypeSelected(predicate: Character, subtype: "Warrior", target: Chosen),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "25d00336-5ad7-433b-8ced-71720a9f074a",
+    prose: "A lone child rows across mirrored starlight beneath a vast wheel of luminous arcs.",
+    actions: [
+      ActionDefinition(
+        label: "Complete Celestial Circuit",
+        id: "831d6520-da93-4290-b33a-9ba4554cf675",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+
+      ActionDefinition(
+        label: "Row Through Radiance",
+        id: "7132803a-00c2-40fe-afa5-791ab350c0f6",
+        presentation: ActionPresentation(
+          effect_text: "The next draft or shop site you visit will contain transfigured cards",
+          followup: None,
+        ),
+        effect: TransfigureNextDraftOrShop,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "f7084ba7-8c85-4847-80df-b0c98ec77d78",
+    prose: "A luminous boatman poles across still floodwater, pale motes drifting through his wake.",
+    actions: [
+      ActionDefinition(
+        label: "Gather His Pale Motes",
+        id: "8b31dc84-9f7a-48c4-978c-bf553261db30",
+        presentation: ActionPresentation(
+          effect_text: "Gain Rune Stone",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
+        ),
+        effect: GainDreamsign(dreamsign_id: "dec81fa2-7865-448c-95bc-622b884cea9e"),
+      ),
+
+      ActionDefinition(
+        label: "Follow His Luminous Wake",
+        id: "2b610f6c-0249-4aad-b79f-ae6fddadc233",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "dcaba429-6fbc-4ea5-b063-871134ccd03b",
+    prose: "A patterned balloon climbs beneath dark cloudbanks, its rounded envelope glowing amber.",
+    actions: [
+      ActionDefinition(
+        label: "Trace a Pattern",
+        id: "06dc78a2-9f9e-4fa1-9384-a7e3d069dc1f",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card to copy."),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Trade a Pattern",
+        id: "4bd43acf-d902-4cb7-adb3-ff176bf77028",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "fc0c6f10-8864-4660-904a-8e90d261c6ef",
+    prose: "A robed warrior stands motionless among planted swords as pink petals scatter.",
+    actions: [
+      ActionDefinition(
+        label: "Salute the warrior",
+        id: "1eb84a5a-427e-43b4-aa5f-532e2574ef82",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Uproot a planted sword",
+        id: "255a201d-6779-4805-ae59-857756c7a8df",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+    ],
+  ),
 ]
