@@ -10582,8 +10582,127 @@
           "count": 2
         }
       ]
+    },
+    {
+      "cardId": "c430ed7b-523e-4580-9a53-d43d11265633",
+      "prose": "A red-clad runner erupts through blue light as scarlet trails and debris streak behind.",
+      "action": [
+        {
+          "id": "2719cc15-94db-4fea-b061-e92a78371fb5",
+          "label": "Become Living Lightning",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        },
+        {
+          "id": "c44535c8-4490-4893-8037-fb40db5fb7c8",
+          "label": "Bottle Lingering Charge",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "1750c85c-f547-4d21-b7e3-9e5c5fcb3171",
+      "prose": "A lone pianist plays across tidal flats as countless birds cross a firelit horizon.",
+      "action": [
+        {
+          "id": "9780b16c-75ed-4ad0-9efb-43e087fe5dc1",
+          "label": "Follow Rising Flock",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "487aaad7-7fc3-419e-b139-98dfdcba5747",
+          "label": "Join Pianist's Refrain",
+          "effectText": "Change a chosen character card to be a Musician",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to become a Musician.",
+          "effectKind": "change-subtype-selected",
+          "canonicalMechanicId": "change-entry-subtype",
+          "selectionPolicyId": "deck-entry-centrality",
+          "predicate": "character",
+          "subtype": "Musician",
+          "deckTarget": "chosen"
+        }
+      ]
+    },
+    {
+      "cardId": "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7",
+      "prose": "A ragged caller summons blue-eyed wolves from a firelit haze.",
+      "action": [
+        {
+          "id": "01826773-fe30-42ce-b7ce-21bf7fae6111",
+          "label": "Call Twin Echoes",
+          "effectText": "Gain one copy of each of 2 chosen cards",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose 2 cards to echo.",
+          "effectKind": "copy-selected-cards",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "count": 2
+        },
+        {
+          "id": "e9d4f9de-8795-4c88-9f88-f125b6dd621b",
+          "label": "Share Packfire",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "68978d92-aa8b-4873-bb0b-6e52f12b0849",
+      "prose": "A cable-bound Hacker sheds her interface beneath a pale disc as black fragments drift.",
+      "action": [
+        {
+          "id": "eedcceb0-5446-4155-b4c1-1e4f467a16f1",
+          "label": "Claim a Lost Chronicle",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one recalled card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "eb808cb8-fdf4-4ad2-ae06-60103b5321ed",
+          "label": "Sever Every Connection",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        }
+      ]
+    },
+    {
+      "cardId": "c92a7dc0-04b0-4c54-9485-59a92505eabc",
+      "prose": "An armored trooper braces a colossal cannon above burning towers as debris whips past.",
+      "action": [
+        {
+          "id": "fd89e187-5fbe-4096-8e30-c2705957a135",
+          "label": "Charge colossal cannon",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "542ca815-ab73-4251-8de4-ea8e932135ac",
+          "label": "Reinforce every trooper",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
     }
   ],
-  "contentHash": "74a1d7c0afedf38bb6275f76b1a98672cc2a863e9c981696495fcfe08b53662d",
-  "foldHash": "74a1d7c0afedf38bb6275f76b1a98672cc2a863e9c981696495fcfe08b53662d"
+  "contentHash": "ef6a07167f9a705d1fa61fae6650abe7518168634c95f0eb6958dec214431aab",
+  "foldHash": "ef6a07167f9a705d1fa61fae6650abe7518168634c95f0eb6958dec214431aab"
 }

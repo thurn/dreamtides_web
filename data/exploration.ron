@@ -11368,4 +11368,140 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "c430ed7b-523e-4580-9a53-d43d11265633",
+    prose: "A red-clad runner erupts through blue light as scarlet trails and debris streak behind.",
+    actions: [
+      ActionDefinition(
+        label: "Become Living Lightning",
+        id: "2719cc15-94db-4fea-b061-e92a78371fb5",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+
+      ActionDefinition(
+        label: "Bottle Lingering Charge",
+        id: "c44535c8-4490-4893-8037-fb40db5fb7c8",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "1750c85c-f547-4d21-b7e3-9e5c5fcb3171",
+    prose: "A lone pianist plays across tidal flats as countless birds cross a firelit horizon.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Rising Flock",
+        id: "9780b16c-75ed-4ad0-9efb-43e087fe5dc1",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Join Pianist's Refrain",
+        id: "487aaad7-7fc3-419e-b139-98dfdcba5747",
+        presentation: ActionPresentation(
+          effect_text: "Change a chosen character card to be a Musician",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to become a Musician.",
+          ),
+        ),
+        effect: ChangeSubtypeSelected(predicate: Character, subtype: "Musician", target: Chosen),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7",
+    prose: "A ragged caller summons blue-eyed wolves from a firelit haze.",
+    actions: [
+      ActionDefinition(
+        label: "Call Twin Echoes",
+        id: "01826773-fe30-42ce-b7ce-21bf7fae6111",
+        presentation: ActionPresentation(
+          effect_text: "Gain one copy of each of 2 chosen cards",
+          followup: Followup(title: "{action-label}", subtitle: "Choose 2 cards to echo."),
+        ),
+        effect: CopySelectedCards(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Share Packfire",
+        id: "e9d4f9de-8795-4c88-9f88-f125b6dd621b",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "68978d92-aa8b-4873-bb0b-6e52f12b0849",
+    prose: "A cable-bound Hacker sheds her interface beneath a pale disc as black fragments drift.",
+    actions: [
+      ActionDefinition(
+        label: "Claim a Lost Chronicle",
+        id: "eedcceb0-5446-4155-b4c1-1e4f467a16f1",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one recalled card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Sever Every Connection",
+        id: "eb808cb8-fdf4-4ad2-ae06-60103b5321ed",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "c92a7dc0-04b0-4c54-9485-59a92505eabc",
+    prose: "An armored trooper braces a colossal cannon above burning towers as debris whips past.",
+    actions: [
+      ActionDefinition(
+        label: "Charge colossal cannon",
+        id: "fd89e187-5fbe-4096-8e30-c2705957a135",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Reinforce every trooper",
+        id: "542ca815-ab73-4251-8de4-ea8e932135ac",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
 ]
