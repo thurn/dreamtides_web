@@ -5763,8 +5763,131 @@
           "deckTarget": "chosen"
         }
       ]
+    },
+    {
+      "cardId": "f4082c01-fdc8-4583-afdb-76bac980b3bf",
+      "prose": "A lone soldier faces a towering sandstorm across a stark, sunlit wasteland.",
+      "action": [
+        {
+          "id": "f1ca6a23-c366-4515-91ee-0ee5cc0a0f3a",
+          "label": "Wait Out the Storm",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "1bf1f186-404a-44f2-a705-6474fca1ddf6",
+          "label": "March into the Storm",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
+    },
+    {
+      "cardId": "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9",
+      "prose": "A young voyager rows through clouds toward a green floating island as white birds scatter.",
+      "action": [
+        {
+          "id": "44ebf09a-b562-4132-85a3-f44d7cac8e6d",
+          "label": "Seek Island Companions",
+          "effectText": "Take any number of Character cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any number of offered cards.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "offerCount": 4
+        },
+        {
+          "id": "cd713f4b-bbb7-4761-a75f-579222eef578",
+          "label": "Catch Dawn Updraft",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "18ff6a45-148a-40bf-85ae-4a51f32f406a",
+      "prose": "A radiant firebird sweeps above a lone child as molten feathers coil through darkness.",
+      "action": [
+        {
+          "id": "c6f9e2d6-306e-4db7-9961-d8154f5132e6",
+          "label": "Chase Burning Wings",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "0a6038e3-2a98-4a27-b03a-707355b4fee2",
+          "label": "Receive Living Flame",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f",
+      "prose": "A mounted archer looses an arrow while fire engulfs a shattered ridge.",
+      "action": [
+        {
+          "id": "8ebf20ca-56e0-4dd5-b60e-0fcf294e94dc",
+          "label": "Signal a Rider Exchange",
+          "effectText": "Purge a chosen Warrior card and gain a random Warrior replacement",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Warrior to replace.",
+          "effectKind": "replace-selected",
+          "canonicalMechanicId": "replace-deck-entry",
+          "selectionPolicyId": "card-fit-quality",
+          "predicate": "warrior"
+        },
+        {
+          "id": "c7e23aa9-7ff6-4d41-b0bc-0993d9bb0b6c",
+          "label": "Ride Across Flaming Ground",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        }
+      ]
+    },
+    {
+      "cardId": "9495f501-f627-4b74-a848-b3d928641229",
+      "prose": "A hooded hewer raises a runed blade against a golden-eyed bear amid driving snow.",
+      "action": [
+        {
+          "id": "9a157364-23e9-4b99-ae01-2f0ddf6e67a4",
+          "label": "Lower Runed Hewer",
+          "effectText": "Draft a Spirit Animal from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one spirit animal to spare.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "3ce21beb-bebc-4339-8844-1b600ddddbc3",
+          "label": "Strike Through Snow",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to hew for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        }
+      ]
     }
   ],
-  "contentHash": "51f6a349bd7284c26d698c9fc1503702a1c3f73223f13cfceb6001770af5c247",
-  "foldHash": "51f6a349bd7284c26d698c9fc1503702a1c3f73223f13cfceb6001770af5c247"
+  "contentHash": "563b48e71f7a19b600b225235fd01a4c661beee608a4ded707eed8bb03ecc4f4",
+  "foldHash": "563b48e71f7a19b600b225235fd01a4c661beee608a4ded707eed8bb03ecc4f4"
 }

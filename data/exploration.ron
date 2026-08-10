@@ -6164,4 +6164,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "f4082c01-fdc8-4583-afdb-76bac980b3bf",
+    prose: "A lone soldier faces a towering sandstorm across a stark, sunlit wasteland.",
+    actions: [
+      ActionDefinition(
+        label: "Wait Out the Storm",
+        id: "f1ca6a23-c366-4515-91ee-0ee5cc0a0f3a",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "March into the Storm",
+        id: "1bf1f186-404a-44f2-a705-6474fca1ddf6",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9",
+    prose: "A young voyager rows through clouds toward a green floating island as white birds scatter.",
+    actions: [
+      ActionDefinition(
+        label: "Seek Island Companions",
+        id: "44ebf09a-b562-4132-85a3-f44d7cac8e6d",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Character cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered cards.",
+          ),
+        ),
+        effect: TakeCards(predicate: Character, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Catch Dawn Updraft",
+        id: "cd713f4b-bbb7-4761-a75f-579222eef578",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "18ff6a45-148a-40bf-85ae-4a51f32f406a",
+    prose: "A radiant firebird sweeps above a lone child as molten feathers coil through darkness.",
+    actions: [
+      ActionDefinition(
+        label: "Chase Burning Wings",
+        id: "c6f9e2d6-306e-4db7-9961-d8154f5132e6",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Receive Living Flame",
+        id: "0a6038e3-2a98-4a27-b03a-707355b4fee2",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f",
+    prose: "A mounted archer looses an arrow while fire engulfs a shattered ridge.",
+    actions: [
+      ActionDefinition(
+        label: "Signal a Rider Exchange",
+        id: "8ebf20ca-56e0-4dd5-b60e-0fcf294e94dc",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen Warrior card and gain a random Warrior replacement",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Warrior to replace."),
+        ),
+        effect: ReplaceSelected(predicate: Warrior),
+      ),
+
+      ActionDefinition(
+        label: "Ride Across Flaming Ground",
+        id: "c7e23aa9-7ff6-4d41-b0bc-0993d9bb0b6c",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "9495f501-f627-4b74-a848-b3d928641229",
+    prose: "A hooded hewer raises a runed blade against a golden-eyed bear amid driving snow.",
+    actions: [
+      ActionDefinition(
+        label: "Lower Runed Hewer",
+        id: "9a157364-23e9-4b99-ae01-2f0ddf6e67a4",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Spirit Animal from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one spirit animal to spare.",
+          ),
+        ),
+        effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Strike Through Snow",
+        id: "3ce21beb-bebc-4339-8844-1b600ddddbc3",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to hew for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
 ]
