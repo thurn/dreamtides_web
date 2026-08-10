@@ -5181,4 +5181,150 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "07ceb104-0b27-473a-bc72-e6225479ed83",
+    prose: "A colossal stone whale breaches through drifting rubble as a tethered astronaut reaches toward its flank.",
+    actions: [
+      ActionDefinition(
+        label: "Join Stoneborn Migration",
+        id: "84931c7c-a555-424d-bb12-d3d8293feb59",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Spirit Animal from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered Spirit Animal.",
+          ),
+        ),
+        effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Ride Leviathan's Wake",
+        id: "15a3b944-2a40-4c5c-917e-bf708fd13ea6",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "145f72b9-5ff7-4477-b7f5-55ca89a135ae",
+    prose: "A skeletal sorcerer raises a red-lit staff amid hooked black tendrils.",
+    actions: [
+      ActionDefinition(
+        label: "Touch red-lit staff",
+        id: "4fababcc-bf4e-4512-bc31-9cd292d844dc",
+        presentation: ActionPresentation(
+          effect_text: "Apply Inspired to a chosen Event",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose an Event to become Inspired.",
+          ),
+        ),
+        effect: TransfigureFixedSelected(
+          predicate: Event,
+          transfiguration: "Inspired",
+          target: Chosen,
+        ),
+      ),
+
+      ActionDefinition(
+        label: "Enter black tendrils",
+        id: "fc670f3a-9565-4773-8bf9-ee6d97c733f4",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Event from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered transfigured Event.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: Event, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "3fdf265c-8aa2-4367-9fee-43e242bdb462",
+    prose: "Two red-clad figures study fractured towers as luminous patterns descend around them.",
+    actions: [
+      ActionDefinition(
+        label: "Copy a luminous pattern",
+        id: "3fa519a9-40bf-456b-a490-1dacdaf278ad",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card to copy."),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Interpret descending patterns",
+        id: "673ad72b-9073-4453-bf85-d1d111a98706",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Event."),
+        ),
+        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea",
+    prose: "A colossal rider charges through billowing dust, a long spear leveled beneath stars.",
+    actions: [
+      ActionDefinition(
+        label: "Join Their Charge",
+        id: "140f0bca-11a4-48f4-a49d-b1df74f029f4",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Match Their Pace",
+        id: "7c543c64-35fb-481d-b1d3-af9a6caf99c4",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "4f0f0811-1a4c-4d42-a804-77dba8707792",
+    prose: "A shadowed shopkeeper stands behind a counter, one hand lifted toward shelves packed with glowing curios.",
+    actions: [
+      ActionDefinition(
+        label: "Trade across the counter",
+        id: "1c5991fd-d12b-4e1f-9df7-9284057fb6d3",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen Character card and gain a random Character replacement",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Character to trade."),
+        ),
+        effect: ReplaceSelected(predicate: Character),
+      ),
+
+      ActionDefinition(
+        label: "Submit a glowing curio",
+        id: "6f27558c-eac2-42cf-a1d9-988b99691fd5",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+    ],
+  ),
 ]

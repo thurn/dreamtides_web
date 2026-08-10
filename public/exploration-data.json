@@ -4844,8 +4844,151 @@
           "selectionPolicyId": "purge-misfit"
         }
       ]
+    },
+    {
+      "cardId": "07ceb104-0b27-473a-bc72-e6225479ed83",
+      "prose": "A colossal stone whale breaches through drifting rubble as a tethered astronaut reaches toward its flank.",
+      "action": [
+        {
+          "id": "84931c7c-a555-424d-bb12-d3d8293feb59",
+          "label": "Join Stoneborn Migration",
+          "effectText": "Draft a Spirit Animal from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Spirit Animal.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "15a3b944-2a40-4c5c-917e-bf708fd13ea6",
+          "label": "Ride Leviathan's Wake",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "145f72b9-5ff7-4477-b7f5-55ca89a135ae",
+      "prose": "A skeletal sorcerer raises a red-lit staff amid hooked black tendrils.",
+      "action": [
+        {
+          "id": "4fababcc-bf4e-4512-bc31-9cd292d844dc",
+          "label": "Touch red-lit staff",
+          "effectText": "Apply Inspired to a chosen Event",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose an Event to become Inspired.",
+          "effectKind": "transfigure-fixed-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "predicate": "event",
+          "transfiguration": "Inspired",
+          "deckTarget": "chosen"
+        },
+        {
+          "id": "fc670f3a-9565-4773-8bf9-ee6d97c733f4",
+          "label": "Enter black tendrils",
+          "effectText": "Draft a transfigured Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered transfigured Event.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "3fdf265c-8aa2-4367-9fee-43e242bdb462",
+      "prose": "Two red-clad figures study fractured towers as luminous patterns descend around them.",
+      "action": [
+        {
+          "id": "3fa519a9-40bf-456b-a490-1dacdaf278ad",
+          "label": "Copy a luminous pattern",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "673ad72b-9073-4453-bf85-d1d111a98706",
+          "label": "Interpret descending patterns",
+          "effectText": "Draft an Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Event.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 1,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea",
+      "prose": "A colossal rider charges through billowing dust, a long spear leveled beneath stars.",
+      "action": [
+        {
+          "id": "140f0bca-11a4-48f4-a49d-b1df74f029f4",
+          "label": "Join Their Charge",
+          "effectText": "Draft a ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "7c543c64-35fb-481d-b1d3-af9a6caf99c4",
+          "label": "Match Their Pace",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "4f0f0811-1a4c-4d42-a804-77dba8707792",
+      "prose": "A shadowed shopkeeper stands behind a counter, one hand lifted toward shelves packed with glowing curios.",
+      "action": [
+        {
+          "id": "1c5991fd-d12b-4e1f-9df7-9284057fb6d3",
+          "label": "Trade across the counter",
+          "effectText": "Purge a chosen Character card and gain a random Character replacement",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to trade.",
+          "effectKind": "replace-selected",
+          "canonicalMechanicId": "replace-deck-entry",
+          "selectionPolicyId": "card-fit-quality",
+          "predicate": "character"
+        },
+        {
+          "id": "6f27558c-eac2-42cf-a1d9-988b99691fd5",
+          "label": "Submit a glowing curio",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card, then choose its transfiguration.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "count": 1
+        }
+      ]
     }
   ],
-  "contentHash": "750cc730b3ea1d58a97c30c56c4482aa6e3613aa949859caddf73aeb6fbfcdea",
-  "foldHash": "750cc730b3ea1d58a97c30c56c4482aa6e3613aa949859caddf73aeb6fbfcdea"
+  "contentHash": "238e42262fa0f68ab46d96fb7cf42467776389f10f74a21954a62337f5f61c4b",
+  "foldHash": "238e42262fa0f68ab46d96fb7cf42467776389f10f74a21954a62337f5f61c4b"
 }
