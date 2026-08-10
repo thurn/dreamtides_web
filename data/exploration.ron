@@ -11649,4 +11649,149 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "a5056a4c-542b-4a7c-8fe6-895126c7d4c8",
+    prose: "A lone spearman awakens a colossal winged skeleton amid fire, embers, and airborne stone.",
+    actions: [
+      ActionDefinition(
+        label: "Call Carrion Thralls",
+        id: "4b32d28f-dcc2-4533-a8bd-04b381bb2e96",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 random ≤2● cost Character cards",
+          followup: None,
+        ),
+        effect: GainRandomCards(predicate: CheapCharacter, count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Wake Ossuary Colossus",
+        id: "6fe876b1-ed04-4227-91a2-6af5780d9a69",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "ffec9fdd-d948-4756-b7df-39b9e982613e",
+    prose: "A skull-faced red spider towers over a lone hunter within a misty jungle.",
+    actions: [
+      ActionDefinition(
+        label: "Offer Spider Prey",
+        id: "045c8c0b-9892-458f-ac72-70bb5df418a6",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to offer for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Harvest Crimson Silk",
+        id: "6ca4fdbe-0816-45cc-8ce1-8094d270ae5e",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "21e376da-f4c3-4a60-bd63-a272b35db5a6",
+    prose: "A colossal skull looms above burning graves, its cavern mouth crowded with crosses and embers.",
+    actions: [
+      ActionDefinition(
+        label: "Feed the burial fire",
+        id: "29d33ac5-c56e-4c0e-8ee8-c8268b01c0e6",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to burn for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Rest beneath the skull",
+        id: "27077f5a-473e-4973-ae36-91ae63d42f0b",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "01d53e49-7833-4122-a970-b72c73ad2c28",
+    prose: "A solitary horseman crosses crimson ice toward a halo-crowned colossus clutching a luminous sword.",
+    actions: [
+      ActionDefinition(
+        label: "Read crimson reflections",
+        id: "b8ac1ae3-3e3a-4eac-8a29-9fd04f1740fe",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one reflected card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Approach silent colossus",
+        id: "72e75246-8e38-40e4-b3cd-d656be0e2052",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "1434440c-c86f-4b7d-83e7-3bd1f7dde63e",
+    prose: "A lone spellcaster spreads both arms as blue-white rings hurl rubble across a dark void.",
+    actions: [
+      ActionDefinition(
+        label: "Stabilize blue rings",
+        id: "57e55570-d3c1-4aef-aa23-9a0d12bf13aa",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Release airborne rubble",
+        id: "eb514a7e-b571-45c5-b672-488df11e1fa4",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
 ]
