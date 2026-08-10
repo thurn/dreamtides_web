@@ -4486,4 +4486,140 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "e4ab6a18-c3b2-4149-a446-c7c1e8d66714",
+    prose: "A red-armored gunner scans violet-lit wreckage, a long rifle across her back.",
+    actions: [
+      ActionDefinition(
+        label: "Search Violet Wreckage",
+        id: "f421da80-0aef-4563-b558-543a94a542de",
+        presentation: ActionPresentation(
+          effect_text: "Gain Sealed Letter",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
+        ),
+        effect: GainDreamsign(dreamsign_id: "bb8bb233-7cb1-43b3-af30-e71ab9e832c5"),
+      ),
+
+      ActionDefinition(
+        label: "Study Her Long Rifle",
+        id: "b842f52d-75b8-4f1a-aa04-a91871221a13",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one transfigured Warrior."),
+        ),
+        effect: TransfiguredCardDraft(predicate: Warrior, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "181b4924-743b-49c3-8056-6afd08ebde1d",
+    prose: "A red-eyed guitarist strikes a crimson instrument amid pale fog and trailing black ribbons.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Crimson Chord",
+        id: "855dd911-04e1-4975-b0f4-29813f8631b2",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one Event from four offered songs.",
+          ),
+        ),
+        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Play Impossible Tempo",
+        id: "ed726ca9-6e65-4680-8596-444d872c28db",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "b1bea643-1a7b-4e5e-b072-7174d3405421",
+    prose: "A solitary astronaut crosses luminous water toward a hovering ring beneath a star-filled sky.",
+    actions: [
+      ActionDefinition(
+        label: "Observe Luminous Ripples",
+        id: "d34c602c-c0b4-4298-97a3-af067500f1ef",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Chart Distant Halo",
+        id: "df7bf376-7b3f-41c8-809f-de6375da6884",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "44ae8838-4714-43a5-a7bd-e9f806f35ca9",
+    prose: "A pilot rides within a massive battlesuit as neon rain scatters across city steel.",
+    actions: [
+      ActionDefinition(
+        label: "Enter Open Cockpit",
+        id: "622b741a-3ba2-4626-936f-2e442cbc9abc",
+        presentation: ActionPresentation(
+          effect_text: "Change a chosen character card to be a Vehicle",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to become a Vehicle.",
+          ),
+        ),
+        effect: ChangeSubtypeSelected(predicate: Character, subtype: "Vehicle", target: Chosen),
+      ),
+
+      ActionDefinition(
+        label: "Redline Every Servo",
+        id: "823736ec-b4ed-4c34-a863-cbfadcedb8c0",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "32f3d6f2-43c5-4510-a23e-558769a7a8c9",
+    prose: "A vast horned dragon looms through amber smoke while a lone sorcerer gathers fire.",
+    actions: [
+      ActionDefinition(
+        label: "Accept Its Dominion",
+        id: "d53b7ccc-dd63-4927-a711-02810c66a739",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+
+      ActionDefinition(
+        label: "Defy Its Dominion",
+        id: "80701c20-b897-4307-9222-1d56aa1b446f",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
 ]

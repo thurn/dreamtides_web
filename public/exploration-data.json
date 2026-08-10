@@ -4193,8 +4193,136 @@
           ]
         }
       ]
+    },
+    {
+      "cardId": "e4ab6a18-c3b2-4149-a446-c7c1e8d66714",
+      "prose": "A red-armored gunner scans violet-lit wreckage, a long rifle across her back.",
+      "action": [
+        {
+          "id": "f421da80-0aef-4563-b558-543a94a542de",
+          "label": "Search Violet Wreckage",
+          "effectText": "Gain Sealed Letter",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to replace.",
+          "effectKind": "gain-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "fixed",
+          "dreamsignId": "bb8bb233-7cb1-43b3-af30-e71ab9e832c5"
+        },
+        {
+          "id": "b842f52d-75b8-4f1a-aa04-a91871221a13",
+          "label": "Study Her Long Rifle",
+          "effectText": "Draft a transfigured Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured Warrior.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "181b4924-743b-49c3-8056-6afd08ebde1d",
+      "prose": "A red-eyed guitarist strikes a crimson instrument amid pale fog and trailing black ribbons.",
+      "action": [
+        {
+          "id": "855dd911-04e1-4975-b0f4-29813f8631b2",
+          "label": "Follow Crimson Chord",
+          "effectText": "Draft an Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Event from four offered songs.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "ed726ca9-6e65-4680-8596-444d872c28db",
+          "label": "Play Impossible Tempo",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        }
+      ]
+    },
+    {
+      "cardId": "b1bea643-1a7b-4e5e-b072-7174d3405421",
+      "prose": "A solitary astronaut crosses luminous water toward a hovering ring beneath a star-filled sky.",
+      "action": [
+        {
+          "id": "d34c602c-c0b4-4298-97a3-af067500f1ef",
+          "label": "Observe Luminous Ripples",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "df7bf376-7b3f-41c8-809f-de6375da6884",
+          "label": "Chart Distant Halo",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        }
+      ]
+    },
+    {
+      "cardId": "44ae8838-4714-43a5-a7bd-e9f806f35ca9",
+      "prose": "A pilot rides within a massive battlesuit as neon rain scatters across city steel.",
+      "action": [
+        {
+          "id": "622b741a-3ba2-4626-936f-2e442cbc9abc",
+          "label": "Enter Open Cockpit",
+          "effectText": "Change a chosen character card to be a Vehicle",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to become a Vehicle.",
+          "effectKind": "change-subtype-selected",
+          "canonicalMechanicId": "change-entry-subtype",
+          "selectionPolicyId": "deck-entry-centrality",
+          "predicate": "character",
+          "subtype": "Vehicle",
+          "deckTarget": "chosen"
+        },
+        {
+          "id": "823736ec-b4ed-4c34-a863-cbfadcedb8c0",
+          "label": "Redline Every Servo",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "32f3d6f2-43c5-4510-a23e-558769a7a8c9",
+      "prose": "A vast horned dragon looms through amber smoke while a lone sorcerer gathers fire.",
+      "action": [
+        {
+          "id": "d53b7ccc-dd63-4927-a711-02810c66a739",
+          "label": "Accept Its Dominion",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        },
+        {
+          "id": "80701c20-b897-4307-9222-1d56aa1b446f",
+          "label": "Defy Its Dominion",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
     }
   ],
-  "contentHash": "70fd42d7ee7b90b6b561dfc646328cc7d9385e7aebe6500371aeb4f43b5ceb90",
-  "foldHash": "70fd42d7ee7b90b6b561dfc646328cc7d9385e7aebe6500371aeb4f43b5ceb90"
+  "contentHash": "f098fdd14ae60859741e6e6a2a44622f3b7f1fdd6c98e4e9072aaae4afd46bc6",
+  "foldHash": "f098fdd14ae60859741e6e6a2a44622f3b7f1fdd6c98e4e9072aaae4afd46bc6"
 }
