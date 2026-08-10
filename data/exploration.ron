@@ -9672,4 +9672,149 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "87aba308-00b4-40d8-a46f-4e6f58a664a8",
+    prose: "A tethered runner bursts through a glass tower as moonlit shards scatter into storm clouds.",
+    actions: [
+      ActionDefinition(
+        label: "Shatter Every Delay",
+        id: "2dbedc84-1c2f-459e-9e6e-acafa1cd93ee",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+
+      ActionDefinition(
+        label: "Leave One Plan Behind",
+        id: "e9875a87-289d-40b1-a19e-2e566c3b332d",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d",
+    prose: "Rain floods a ruined street as a soldier waits beside a mother’s farewell.",
+    actions: [
+      ActionDefinition(
+        label: "Guide Civilians Out",
+        id: "1a98c609-f6f1-4d2f-b28d-88a45df715c5",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Survivor cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any offered Survivor cards.",
+          ),
+        ),
+        effect: TakeCards(predicate: Survivor, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Join Armed Escort",
+        id: "f2c32564-7c99-42d8-8dda-477cb48e6e67",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "3e6a5236-9850-4a69-9fe1-48389365a399",
+    prose: "Blind Butcher's sealed gaze hangs above two blood-bright maws and cold luminous sigils.",
+    actions: [
+      ActionDefinition(
+        label: "Enter Lower Maw",
+        id: "a4efcf82-5a4e-4116-bbfe-5d3ea87ca882",
+        presentation: ActionPresentation(
+          effect_text: "Change a chosen character card to be a Monster",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to become a Monster.",
+          ),
+        ),
+        effect: ChangeSubtypeSelected(predicate: Character, subtype: "Monster", target: Chosen),
+      ),
+
+      ActionDefinition(
+        label: "Feed Upper Maw",
+        id: "eeefd61b-d20e-439c-966b-c6ce07870182",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Monster character. Every other Monster character in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Monster", spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "ecf77f27-df0f-47c4-99c2-48d7fa46a137",
+    prose: "A suspended automaton hangs from cables above a flare-bearing technician in red vapor.",
+    actions: [
+      ActionDefinition(
+        label: "Repair the Automaton",
+        id: "8565c1d1-0191-4ee1-aa44-5c19b949731e",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its repaired form.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+
+      ActionDefinition(
+        label: "Exchange Broken Chassis",
+        id: "896d2bb8-2767-4a70-b53d-5b30c03bf607",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to dismantle, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "4cec92f2-9bac-4949-a602-cd0a44618aaf",
+    prose: "A neon-eyed visitor raises a glowing umbrella as rain and colored fragments orbit a ruined street.",
+    actions: [
+      ActionDefinition(
+        label: "Gather neon fragments",
+        id: "821fbcd1-95a9-435e-a4bb-4f6571b09769",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Event cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered Events.",
+          ),
+        ),
+        effect: TakeCards(predicate: Event, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Echo familiar wonders",
+        id: "8363b7c3-88d3-4404-a0b2-69b44ed15df4",
+        presentation: ActionPresentation(
+          effect_text: "Gain one copy of each of 2 chosen cards",
+          followup: Followup(title: "{action-label}", subtitle: "Choose 2 cards to copy."),
+        ),
+        effect: CopySelectedCards(count: 2),
+      ),
+    ],
+  ),
 ]
