@@ -1844,8 +1844,147 @@
           "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
         }
       ]
+    },
+    {
+      "cardId": "16f4962d-2950-4360-8f55-bc47428480ef",
+      "prose": "A gas-masked captain rides an armored horse past black spires toward a blinding flare.",
+      "action": [
+        {
+          "id": "dc5e4b4a-ddf0-430e-a0d3-7cf76c32763f",
+          "label": "Signal Dune Patrols",
+          "effectText": "Take any number of Survivor cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any offered Survivor cards.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "survivor",
+          "offerCount": 4
+        },
+        {
+          "id": "22c53836-f2e3-478c-be8c-e88a4ca95ebb",
+          "label": "Ride Toward Flare",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4",
+      "prose": "An engineer welds a colossal translucent machine as green light floods tangled cables.",
+      "action": [
+        {
+          "id": "9e4b23ef-8f2e-47d8-b74a-0b30f8bf6e16",
+          "label": "Splice New Synapses",
+          "effectText": "Take any number of Event cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any number of offered Events.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        },
+        {
+          "id": "4aebb9cc-8d9f-4ecc-a438-5873ff59e765",
+          "label": "Tap Living Current",
+          "effectText": "Gain 15 essence for each Event card in your deck",
+          "effectKind": "gain-essence-per-card",
+          "canonicalMechanicId": "gain-essence-by-deck-predicate",
+          "predicate": "event",
+          "essencePerCard": 15
+        }
+      ]
+    },
+    {
+      "cardId": "6196d53d-a226-490d-a3bb-159a78d1b2b7",
+      "prose": "An electrified sphere suspends a luminous figure above a lone silhouette among fractured towers.",
+      "action": [
+        {
+          "id": "ebd4291c-d546-4ac7-94aa-0b3ff13adeb9",
+          "label": "Stabilize Forming Figure",
+          "effectText": "Draft a transfigured Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered transfigured card.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "offerCount": 4
+        },
+        {
+          "id": "4590ec64-0a96-4bd2-a69e-5359c3eb8b42",
+          "label": "Collapse Electric Sphere",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to nullify for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        }
+      ]
+    },
+    {
+      "cardId": "76766584-a8fb-41cc-8c4b-09655f478703",
+      "prose": "A colossal crow escorts a small child through blue-lit trees, one eye blazing.",
+      "action": [
+        {
+          "id": "39ac9a72-78c0-421c-8b9a-af3afc81e7f5",
+          "label": "Follow Feathered Sentinel",
+          "effectText": "Draft a Spirit Animal from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Spirit Animal.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "50d54415-8488-43a2-9b64-caea9c0825dc",
+          "label": "Gather First Light",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "78b5a42d-b099-48f1-a1b4-5b6bc177adeb",
+      "prose": "A sword-bearing warrior faces floating amber shards above violet clouds.",
+      "action": [
+        {
+          "id": "5958cc6e-dda8-44a0-be6c-00affc060522",
+          "label": "Call Through Shards",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Warrior.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "4cb4a714-3f0c-4a42-9240-7cacd9046103",
+          "label": "Channel a Shard",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card, then choose its transfiguration.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "count": 1
+        }
+      ]
     }
   ],
-  "contentHash": "99209de71b636cb027552e976d6f2419a429beaed3125a827cac15889e7e1c89",
-  "foldHash": "99209de71b636cb027552e976d6f2419a429beaed3125a827cac15889e7e1c89"
+  "contentHash": "d9a8fbe2e296bb57062a31d62ed2aacd3305fc755f55d7e6d1a27e09e7419f41",
+  "foldHash": "d9a8fbe2e296bb57062a31d62ed2aacd3305fc755f55d7e6d1a27e09e7419f41"
 }

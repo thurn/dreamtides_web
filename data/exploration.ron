@@ -1930,4 +1930,152 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "16f4962d-2950-4360-8f55-bc47428480ef",
+    prose: "A gas-masked captain rides an armored horse past black spires toward a blinding flare.",
+    actions: [
+      ActionDefinition(
+        label: "Signal Dune Patrols",
+        id: "dc5e4b4a-ddf0-430e-a0d3-7cf76c32763f",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Survivor cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any offered Survivor cards.",
+          ),
+        ),
+        effect: TakeCards(predicate: Survivor, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Ride Toward Flare",
+        id: "22c53836-f2e3-478c-be8c-e88a4ca95ebb",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4",
+    prose: "An engineer welds a colossal translucent machine as green light floods tangled cables.",
+    actions: [
+      ActionDefinition(
+        label: "Splice New Synapses",
+        id: "9e4b23ef-8f2e-47d8-b74a-0b30f8bf6e16",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Event cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered Events.",
+          ),
+        ),
+        effect: TakeCards(predicate: Event, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Tap Living Current",
+        id: "4aebb9cc-8d9f-4ecc-a438-5873ff59e765",
+        presentation: ActionPresentation(
+          effect_text: "Gain 15 essence for each Event card in your deck",
+          followup: None,
+        ),
+        effect: GainEssencePerCard(predicate: Event, essence_per_card: 15),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "6196d53d-a226-490d-a3bb-159a78d1b2b7",
+    prose: "An electrified sphere suspends a luminous figure above a lone silhouette among fractured towers.",
+    actions: [
+      ActionDefinition(
+        label: "Stabilize Forming Figure",
+        id: "ebd4291c-d546-4ac7-94aa-0b3ff13adeb9",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered transfigured card.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: Character, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Collapse Electric Sphere",
+        id: "4590ec64-0a96-4bd2-a69e-5359c3eb8b42",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to nullify for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "76766584-a8fb-41cc-8c4b-09655f478703",
+    prose: "A colossal crow escorts a small child through blue-lit trees, one eye blazing.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Feathered Sentinel",
+        id: "39ac9a72-78c0-421c-8b9a-af3afc81e7f5",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Spirit Animal from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered Spirit Animal.",
+          ),
+        ),
+        effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Gather First Light",
+        id: "50d54415-8488-43a2-9b64-caea9c0825dc",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "78b5a42d-b099-48f1-a1b4-5b6bc177adeb",
+    prose: "A sword-bearing warrior faces floating amber shards above violet clouds.",
+    actions: [
+      ActionDefinition(
+        label: "Call Through Shards",
+        id: "5958cc6e-dda8-44a0-be6c-00affc060522",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Channel a Shard",
+        id: "4cb4a714-3f0c-4a42-9240-7cacd9046103",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+    ],
+  ),
 ]
