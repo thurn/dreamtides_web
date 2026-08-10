@@ -8759,8 +8759,133 @@
           "sparkBonus": 1
         }
       ]
+    },
+    {
+      "cardId": "e72245f2-c153-4e79-ba8e-956d18202b48",
+      "prose": "A lone intruder faces a radiant data portal while stolen images flicker across dark walls.",
+      "action": [
+        {
+          "id": "c139e3d4-6751-4b4f-9349-9cc38238e26e",
+          "label": "Erase Redundant Memories",
+          "effectText": "Purge all copies of every duplicated card in your deck. Every remaining card gains reclaim",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "5fe3b34d-3d76-4e67-87a5-d02fb3b3a220",
+          "label": "Copy a Stolen Memory",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one captured memory.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "81074582-dfb3-497c-8c04-f97a24d6b1d4",
+      "prose": "A horned witch listens as ember eyes smolder inside spiraling bone chambers.",
+      "action": [
+        {
+          "id": "bc123b4d-35ae-4a48-8d18-8a042b2e31fa",
+          "label": "Trade a Memory",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "182f4e1a-9c8b-494c-8c87-6112c2c4ede3",
+          "label": "Raise a Fallen Warrior",
+          "effectText": "Draft a transfigured Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured Warrior to raise from below.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "1b4d2adc-64ab-4020-bae6-b35321898bf0",
+      "prose": "A cloaked warden raises a blue lantern above shadowed ships in a radiant harbor.",
+      "action": [
+        {
+          "id": "e7adc30c-f167-41e9-9f88-b3990d429261",
+          "label": "Summon a harbor guard",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Warrior.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "10f63eba-ac1f-4150-8919-9def8d3ccf8a",
+          "label": "Scan glowing horizons",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "cc98441a-a8f9-421f-9895-423bd7fc31b4",
+      "prose": "A lone child watches a blazing meteor cleave starry clouds above an emerald horizon.",
+      "action": [
+        {
+          "id": "69bab67f-b41c-4f6c-a4d4-961be805121e",
+          "label": "Run beneath its wake",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "75ac8da3-9733-467a-8785-bf0066ab98f3",
+          "label": "Catch a falling fragment",
+          "effectText": "Draft a transfigured Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured Event.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "8e7b0eb9-4933-420b-abee-413bf5b3d2fc",
+      "prose": "A lone child faces a radiant violet doorway as stone fragments drift through blue ruins.",
+      "action": [
+        {
+          "id": "796f52f1-14cc-414c-85c7-9b8a2694e6bb",
+          "label": "Count drifting fragments",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "fb695274-f200-4f17-8dc5-7745ae63a2f9",
+          "label": "Enter violet doorway",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
     }
   ],
-  "contentHash": "dac180b4ebe8d098a779997cb32ed9325a2c05bbbebed5578c822da622f2111a",
-  "foldHash": "dac180b4ebe8d098a779997cb32ed9325a2c05bbbebed5578c822da622f2111a"
+  "contentHash": "0fd519f6ec20f08d7dc26a1dcb032439ffacdc97b105d3995b6bd5f1013ea64f",
+  "foldHash": "0fd519f6ec20f08d7dc26a1dcb032439ffacdc97b105d3995b6bd5f1013ea64f"
 }

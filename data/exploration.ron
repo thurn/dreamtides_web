@@ -9394,4 +9394,140 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "e72245f2-c153-4e79-ba8e-956d18202b48",
+    prose: "A lone intruder faces a radiant data portal while stolen images flicker across dark walls.",
+    actions: [
+      ActionDefinition(
+        label: "Erase Redundant Memories",
+        id: "c139e3d4-6751-4b4f-9349-9cc38238e26e",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card in your deck. Every remaining card gains reclaim",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+
+      ActionDefinition(
+        label: "Copy a Stolen Memory",
+        id: "5fe3b34d-3d76-4e67-87a5-d02fb3b3a220",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one captured memory."),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "81074582-dfb3-497c-8c04-f97a24d6b1d4",
+    prose: "A horned witch listens as ember eyes smolder inside spiraling bone chambers.",
+    actions: [
+      ActionDefinition(
+        label: "Trade a Memory",
+        id: "bc123b4d-35ae-4a48-8d18-8a042b2e31fa",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+
+      ActionDefinition(
+        label: "Raise a Fallen Warrior",
+        id: "182f4e1a-9c8b-494c-8c87-6112c2c4ede3",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Warrior from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one transfigured Warrior to raise from below.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: Warrior, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "1b4d2adc-64ab-4020-bae6-b35321898bf0",
+    prose: "A cloaked warden raises a blue lantern above shadowed ships in a radiant harbor.",
+    actions: [
+      ActionDefinition(
+        label: "Summon a harbor guard",
+        id: "e7adc30c-f167-41e9-9f88-b3990d429261",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Scan glowing horizons",
+        id: "10f63eba-ac1f-4150-8919-9def8d3ccf8a",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "cc98441a-a8f9-421f-9895-423bd7fc31b4",
+    prose: "A lone child watches a blazing meteor cleave starry clouds above an emerald horizon.",
+    actions: [
+      ActionDefinition(
+        label: "Run beneath its wake",
+        id: "69bab67f-b41c-4f6c-a4d4-961be805121e",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Catch a falling fragment",
+        id: "75ac8da3-9733-467a-8785-bf0066ab98f3",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one transfigured Event."),
+        ),
+        effect: TransfiguredCardDraft(predicate: Event, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "8e7b0eb9-4933-420b-abee-413bf5b3d2fc",
+    prose: "A lone child faces a radiant violet doorway as stone fragments drift through blue ruins.",
+    actions: [
+      ActionDefinition(
+        label: "Count drifting fragments",
+        id: "796f52f1-14cc-414c-85c7-9b8a2694e6bb",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Enter violet doorway",
+        id: "fb695274-f200-4f17-8dc5-7745ae63a2f9",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
 ]
