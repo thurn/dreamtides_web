@@ -9806,8 +9806,129 @@
           "count": 2
         }
       ]
+    },
+    {
+      "cardId": "625fe37e-8059-481c-99fd-109fd02ceedd",
+      "prose": "A lone survivor confronts colossal tentacles as fire tears through a ruined city.",
+      "action": [
+        {
+          "id": "0d62c219-a015-4bc7-8a0e-a7707569b64a",
+          "label": "Feed Ruin's Hunger",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one memory to surrender, then one to preserve.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "d78945e5-7d47-47fd-a14a-18737a3ca1a3",
+          "label": "Embrace Final Catastrophe",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "8e003d04-e489-4c55-9c72-fc5612909d07",
+      "prose": "A masked courier races a mechanical camel past burning ruins beneath an amber sky.",
+      "action": [
+        {
+          "id": "b875c1aa-8948-45f5-b594-b90afe85c1b3",
+          "label": "Open Packed Saddlebags",
+          "effectText": "Choose one of 2 packs of 3 ≤2● cost Character cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one pack to add to your deck.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "cheap-character",
+          "packCount": 2,
+          "packSize": 3
+        },
+        {
+          "id": "52949805-3fb2-40fd-b72d-4448a49b2722",
+          "label": "Spur Mechanical Mount",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        }
+      ]
+    },
+    {
+      "cardId": "01298848-1ebb-48a1-b00b-d7e0af890870",
+      "prose": "A quiet child crouches amid violet blossoms as luminous butterflies gather beneath a coral dawn.",
+      "action": [
+        {
+          "id": "525c322c-6a70-4874-bfcf-27eca02508cc",
+          "label": "Gather luminous wings",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        },
+        {
+          "id": "b456a39f-2b40-4ebf-a4fa-66add8e6125a",
+          "label": "Wait for coral dawn",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "c6d8a7cc-3856-4030-96eb-450e406dec33",
+      "prose": "An explorer approaches a glowing spiral while thorny trunks twist through floating debris.",
+      "action": [
+        {
+          "id": "05c51da2-77d3-44e2-8ade-a5865c94854c",
+          "label": "Offer echoes to thorns",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "c577d037-bd4f-432e-b0af-09e77e7ba94d",
+          "label": "Face spiraling light",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "b6d1df72-d989-4689-a599-4490a0c2568d",
+      "prose": "A cloaked mage raises a crescent staff before a golden gate blazing with green runes.",
+      "action": [
+        {
+          "id": "3970b448-18ef-4962-a566-9dfdfb737f01",
+          "label": "Read glowing runes",
+          "effectText": "Draft an Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "caf46795-a689-4264-8fe8-409a3545eeae",
+          "label": "Channel golden gate",
+          "effectText": "Gain 15 essence for each Event card in your deck",
+          "effectKind": "gain-essence-per-card",
+          "canonicalMechanicId": "gain-essence-by-deck-predicate",
+          "predicate": "event",
+          "essencePerCard": 15
+        }
+      ]
     }
   ],
-  "contentHash": "c0e4c21634f91c28cb241fb4217f670cda1c6fce93fa319e7b326a8e5306cd08",
-  "foldHash": "c0e4c21634f91c28cb241fb4217f670cda1c6fce93fa319e7b326a8e5306cd08"
+  "contentHash": "1f81430f98e49fe74a0847960776f773dc6b3097d7141dabc1f88a7dc10a4095",
+  "foldHash": "1f81430f98e49fe74a0847960776f773dc6b3097d7141dabc1f88a7dc10a4095"
 }
