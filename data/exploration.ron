@@ -6445,4 +6445,140 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb",
+    prose: "A lone firefighter grips an axe before a towering explosion, embers scattering across smoke.",
+    actions: [
+      ActionDefinition(
+        label: "Brace against the blast",
+        id: "404f43fa-2119-48d2-bfc0-879f6972a7f7",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Follow into the fire",
+        id: "e78e529b-a267-46cc-846c-46d6d5b6c7f7",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "a911ef71-799c-4240-ad13-8fabd3caeafa",
+    prose: "Two youths carry shining rings across suspended gears as fog swallows distant machinery.",
+    actions: [
+      ActionDefinition(
+        label: "Turn Great Wheel Back",
+        id: "660f7fb5-240c-4c8c-9853-cc93851d938d",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Race Clockwork Forward",
+        id: "3d435a07-0fae-46cb-b589-03bb93b15c55",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "bbdc6ee7-e9b1-488b-90b9-19337b65fee6",
+    prose: "An armored warrior stands amid firelit grass, lowered sword bright beside a long coat.",
+    actions: [
+      ActionDefinition(
+        label: "Raise His Lowered Sword",
+        id: "6e8baf27-49cf-409c-97cb-4e9abcc39390",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 2 packs of 3 Warrior cards to add to your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one Warrior pack to add to your deck.",
+          ),
+        ),
+        effect: ChoosePack(predicate: Warrior, pack_count: 2, pack_size: 3),
+      ),
+
+      ActionDefinition(
+        label: "Adopt His Battle Discipline",
+        id: "5bf49a6e-ada6-4e3e-b381-f333178599c8",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck become the subtype of your choice",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one shared subtype for every Character.",
+          ),
+        ),
+        effect: ChangeSubtypeAll(subtype_options: ["Warrior", "Mage", "Spirit Animal", "Survivor"]),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "995c570b-2d86-4f6f-8f02-dd0902e32fcd",
+    prose: "A solitary man faces a radiant circle, red glyphs blazing above fractured stone.",
+    actions: [
+      ActionDefinition(
+        label: "Read the Glyphs",
+        id: "87c8e0cb-f9b7-4cf4-a4c0-69db684b2601",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Event."),
+        ),
+        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Seal the Circle",
+        id: "64f25dd3-dac8-4694-b4f3-24176287fcc2",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "1268a899-b209-46bb-bce4-6def1dcd0404",
+    prose: "A white-haired woman radiates light among dark trees and drifting violet motes.",
+    actions: [
+      ActionDefinition(
+        label: "Gather violet motes",
+        id: "4971417d-2b6a-4f5d-b47f-03555d2051f0",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Enter her radiance",
+        id: "d7e68bf2-a5b8-4d37-90c5-0a0e81e61add",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
 ]

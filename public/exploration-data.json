@@ -6012,8 +6012,133 @@
           "count": 2
         }
       ]
+    },
+    {
+      "cardId": "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb",
+      "prose": "A lone firefighter grips an axe before a towering explosion, embers scattering across smoke.",
+      "action": [
+        {
+          "id": "404f43fa-2119-48d2-bfc0-879f6972a7f7",
+          "label": "Brace against the blast",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "e78e529b-a267-46cc-846c-46d6d5b6c7f7",
+          "label": "Follow into the fire",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "a911ef71-799c-4240-ad13-8fabd3caeafa",
+      "prose": "Two youths carry shining rings across suspended gears as fog swallows distant machinery.",
+      "action": [
+        {
+          "id": "660f7fb5-240c-4c8c-9853-cc93851d938d",
+          "label": "Turn Great Wheel Back",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "3d435a07-0fae-46cb-b589-03bb93b15c55",
+          "label": "Race Clockwork Forward",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
+    },
+    {
+      "cardId": "bbdc6ee7-e9b1-488b-90b9-19337b65fee6",
+      "prose": "An armored warrior stands amid firelit grass, lowered sword bright beside a long coat.",
+      "action": [
+        {
+          "id": "6e8baf27-49cf-409c-97cb-4e9abcc39390",
+          "label": "Raise His Lowered Sword",
+          "effectText": "Choose one of 2 packs of 3 Warrior cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Warrior pack to add to your deck.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "warrior",
+          "packCount": 2,
+          "packSize": 3
+        },
+        {
+          "id": "5bf49a6e-ada6-4e3e-b381-f333178599c8",
+          "label": "Adopt His Battle Discipline",
+          "effectText": "All characters in your deck become the subtype of your choice",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one shared subtype for every Character.",
+          "effectKind": "change-subtype-all",
+          "canonicalMechanicId": "change-deck-subtype",
+          "subtypeOptions": [
+            "Warrior",
+            "Mage",
+            "Spirit Animal",
+            "Survivor"
+          ]
+        }
+      ]
+    },
+    {
+      "cardId": "995c570b-2d86-4f6f-8f02-dd0902e32fcd",
+      "prose": "A solitary man faces a radiant circle, red glyphs blazing above fractured stone.",
+      "action": [
+        {
+          "id": "87c8e0cb-f9b7-4cf4-a4c0-69db684b2601",
+          "label": "Read the Glyphs",
+          "effectText": "Draft an Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Event.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "64f25dd3-dac8-4694-b4f3-24176287fcc2",
+          "label": "Seal the Circle",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "1268a899-b209-46bb-bce4-6def1dcd0404",
+      "prose": "A white-haired woman radiates light among dark trees and drifting violet motes.",
+      "action": [
+        {
+          "id": "4971417d-2b6a-4f5d-b47f-03555d2051f0",
+          "label": "Gather violet motes",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "d7e68bf2-a5b8-4d37-90c5-0a0e81e61add",
+          "label": "Enter her radiance",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
     }
   ],
-  "contentHash": "7cf620f49de3dd355915a5821f0f17ee2f7bdaf69ef32e1ca9d97b54434af0dc",
-  "foldHash": "7cf620f49de3dd355915a5821f0f17ee2f7bdaf69ef32e1ca9d97b54434af0dc"
+  "contentHash": "6e23f720c73b73df5862f627a8447e95b6941f881c936996bd28e6039424ddfb",
+  "foldHash": "6e23f720c73b73df5862f627a8447e95b6941f881c936996bd28e6039424ddfb"
 }
