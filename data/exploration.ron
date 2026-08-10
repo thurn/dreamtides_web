@@ -11939,4 +11939,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "34ef6c0c-1a23-4870-a52c-90d34e9769be",
+    prose: "A young guitarist plays beside dark mountains as golden lights descend across a violet sky.",
+    actions: [
+      ActionDefinition(
+        label: "Catch a Falling Verse",
+        id: "04b17bbb-44ae-4d99-9b1b-ca2c149a986f",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Event."),
+        ),
+        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Share Starlit Refrain",
+        id: "f3beb8c5-cb4e-408d-bdb2-b0d2249712f5",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "290ea9db-0340-4838-842a-0dea09b5340a",
+    prose: "A hooded witch balances pale fire above lava-lit stone beside a smoking volcanic wall.",
+    actions: [
+      ActionDefinition(
+        label: "Channel Magma Vein",
+        id: "82bc3723-34ab-4743-b12f-75589225ce80",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Bind Pale Flame",
+        id: "5f959db4-79ff-4f8b-87e3-914197b63457",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "f0a70e7d-46af-4d32-92cc-9d510e97a07e",
+    prose: "Railgun Reinforcer materializes through cyan static, weapon raised amid broken machinery.",
+    actions: [
+      ActionDefinition(
+        label: "Feed Backup Matrix",
+        id: "54f804f3-8f60-4474-ad33-50c6972201b0",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to dissolve, then choose a different card to reinforce.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+
+      ActionDefinition(
+        label: "Trigger Squad Relay",
+        id: "71311891-4fab-4956-a346-959b2dc7e031",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "e4e8d3b9-3463-4b92-8fbe-35064f72402d",
+    prose: "A lone Synth stands atop an orbital pinnacle as auroras consume a planet's horizon.",
+    actions: [
+      ActionDefinition(
+        label: "Share the Ascension",
+        id: "ade4e283-b41c-4291-b7f2-c8016e6bfb0b",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Let the World Burn",
+        id: "5b64dd00-27d1-4ba2-a383-afef20a30f64",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+    prose: "A lone observer watches red fire billow into skull-shaped smoke beside a waiting vehicle.",
+    actions: [
+      ActionDefinition(
+        label: "Record detonation pattern",
+        id: "e0c43f27-69b3-4144-890b-be2c6e782c65",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices and gain 2 copies of it",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered Event to gain twice.",
+          ),
+        ),
+        effect: DraftCard(predicate: Event, count: 2, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Ride expanding shockwave",
+        id: "363b6fc0-cc56-459f-8940-18c0a0b3717a",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+    ],
+  ),
 ]
