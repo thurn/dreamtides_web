@@ -6405,8 +6405,137 @@
           ]
         }
       ]
+    },
+    {
+      "cardId": "caaee8a9-0c22-41b4-950f-4c1131b98221",
+      "prose": "A seated dreamer watches birds cross luminous planets above a cloud-ringed celestial sea.",
+      "action": [
+        {
+          "id": "edb5eddb-3b50-4f96-8ab9-7bfa7db2ba02",
+          "label": "Call Celestial Companions",
+          "effectText": "Take any number of Character cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any number of offered Characters.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "offerCount": 4
+        },
+        {
+          "id": "e3375d56-4eaa-408b-b471-e0df76239715",
+          "label": "Hold Dawn's Vision",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "5639053e-1fe3-4a42-b9c3-3fdf894bfab6",
+      "prose": "An infected survivor crosses blazing wreckage as torn cloth and embers scatter behind.",
+      "action": [
+        {
+          "id": "302b8c4c-ab36-4730-8ac1-f3fdcf192f10",
+          "label": "Let Ash Claim One",
+          "effectText": "Purge a random Survivor. Every other Survivor in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Survivor",
+          "sparkBonus": 1
+        },
+        {
+          "id": "2a87956b-3dfd-4bf7-a83a-5f7bc7c017dd",
+          "label": "Breathe Burning Spores",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "d1c25546-dcf2-481e-8f00-9afef3adf24b",
+      "prose": "A green-coated scout grips a tattered flag before a broken circular arch.",
+      "action": [
+        {
+          "id": "bdd36e53-1e1d-4cfd-994a-dce5a21f7b27",
+          "label": "Scout beyond the arch",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        },
+        {
+          "id": "2d29f3a3-353b-45e1-a499-978337af2dd5",
+          "label": "Raise the tattered flag",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "e656cfd3-7481-46e5-934d-4dd242b00031",
+      "prose": "A neon city buckles around a white-hot blast, high-rises splintering into airborne shards.",
+      "action": [
+        {
+          "id": "d6e5dbe1-22a4-4f1e-a224-97c81e0138d2",
+          "label": "Absorb the Blast",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "d0644f5b-63f9-43cf-9f71-51d1bd3b8685",
+          "label": "Study Falling Shards",
+          "effectText": "Draft an Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 1,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "331e2846-85d1-4667-8c64-dc6c21a418ed",
+      "prose": "A radiant star gleams inside a vast blue moon above floating steps and scattered stones.",
+      "action": [
+        {
+          "id": "a7352f50-8a8f-4c8c-949c-89202556c361",
+          "label": "Climb floating steps",
+          "effectText": "Draft a Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Character.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "68108582-c8fb-421c-8e09-400dcbe8c8c6",
+          "label": "Reach for bright star",
+          "effectText": "Gain a random dreamsign",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to replace if needed.",
+          "effectKind": "gain-random-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "dreamsign-match"
+        }
+      ]
     }
   ],
-  "contentHash": "ce4091b6d70e528efa7863880c0f640b1ff75b29dc89c9abbcdd577a433db071",
-  "foldHash": "ce4091b6d70e528efa7863880c0f640b1ff75b29dc89c9abbcdd577a433db071"
+  "contentHash": "19845b0bc2a6970d12a90aa700ea0c89dc1d3dbce06cc123bfb0442318ef7ab8",
+  "foldHash": "19845b0bc2a6970d12a90aa700ea0c89dc1d3dbce06cc123bfb0442318ef7ab8"
 }

@@ -6860,4 +6860,140 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "caaee8a9-0c22-41b4-950f-4c1131b98221",
+    prose: "A seated dreamer watches birds cross luminous planets above a cloud-ringed celestial sea.",
+    actions: [
+      ActionDefinition(
+        label: "Call Celestial Companions",
+        id: "edb5eddb-3b50-4f96-8ab9-7bfa7db2ba02",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Character cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered Characters.",
+          ),
+        ),
+        effect: TakeCards(predicate: Character, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Hold Dawn's Vision",
+        id: "e3375d56-4eaa-408b-b471-e0df76239715",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "5639053e-1fe3-4a42-b9c3-3fdf894bfab6",
+    prose: "An infected survivor crosses blazing wreckage as torn cloth and embers scatter behind.",
+    actions: [
+      ActionDefinition(
+        label: "Let Ash Claim One",
+        id: "302b8c4c-ab36-4730-8ac1-f3fdcf192f10",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Survivor. Every other Survivor in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Survivor", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Breathe Burning Spores",
+        id: "2a87956b-3dfd-4bf7-a83a-5f7bc7c017dd",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "d1c25546-dcf2-481e-8f00-9afef3adf24b",
+    prose: "A green-coated scout grips a tattered flag before a broken circular arch.",
+    actions: [
+      ActionDefinition(
+        label: "Scout beyond the arch",
+        id: "bdd36e53-1e1d-4cfd-994a-dce5a21f7b27",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+
+      ActionDefinition(
+        label: "Raise the tattered flag",
+        id: "2d29f3a3-353b-45e1-a499-978337af2dd5",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "e656cfd3-7481-46e5-934d-4dd242b00031",
+    prose: "A neon city buckles around a white-hot blast, high-rises splintering into airborne shards.",
+    actions: [
+      ActionDefinition(
+        label: "Absorb the Blast",
+        id: "d6e5dbe1-22a4-4f1e-a224-97c81e0138d2",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Study Falling Shards",
+        id: "d0644f5b-63f9-43cf-9f71-51d1bd3b8685",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "331e2846-85d1-4667-8c64-dc6c21a418ed",
+    prose: "A radiant star gleams inside a vast blue moon above floating steps and scattered stones.",
+    actions: [
+      ActionDefinition(
+        label: "Climb floating steps",
+        id: "a7352f50-8a8f-4c8c-949c-89202556c361",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Character from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Character."),
+        ),
+        effect: DraftCard(predicate: Character, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Reach for bright star",
+        id: "68108582-c8fb-421c-8e09-400dcbe8c8c6",
+        presentation: ActionPresentation(
+          effect_text: "Gain a random dreamsign",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Dreamsign to replace if needed.",
+          ),
+        ),
+        effect: GainRandomDreamsign,
+      ),
+    ],
+  ),
 ]
