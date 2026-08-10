@@ -37,7 +37,6 @@ const FIXTURE_BATTLE = {
     { cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8", copies: 10 },
     { cardId: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", copies: 10 },
   ],
-  scriptedBoard: { playerBackRankIndex: 1, playerFrontRankIndex: 1 },
   handoff: {
     activeSide: "enemy",
     turnNumber: 6,

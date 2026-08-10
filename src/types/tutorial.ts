@@ -23,12 +23,14 @@ export type TutorialTriggerDelay = Readonly<
   Partial<Record<TutorialTriggerEvent, number>>
 >;
 
-/** Shared placement and copy authored for every tutorial speech bubble. */
-export interface TutorialSpeechBubblePresentation {
+/** Shared authoring model for every tutorial speech bubble. */
+export interface TutorialSpeechBubble {
   /** Character whose portrait anchors the bubble. */
   readonly speaker: TutorialSpeechBubbleSpeaker;
   /** Seconds after the owning tutorial surface becomes active before the bubble appears. */
   readonly delay?: number | TutorialTriggerDelay;
+  /** Seconds the bubble remains visible; omitted for guidance owned by a surface lifecycle. */
+  readonly duration?: number;
   /** Signed pixels added to the computed horizontal dialogue position. */
   readonly horizontalOffset: number;
   /** Signed pixels added to the computed vertical dialogue position. */
@@ -39,42 +41,29 @@ export interface TutorialSpeechBubblePresentation {
   readonly text: string;
 }
 
-/** Persistent Mira guidance used by tutorial journey surfaces. */
-export type TutorialPersistentSpeechBubble =
-  TutorialSpeechBubblePresentation & {
-    readonly speaker: "mira";
-    readonly delay?: number;
-  };
-
-/** Shared authoring model for timed tutorial speech bubbles. */
-export interface TutorialSpeechBubble extends TutorialSpeechBubblePresentation {
-  /** Seconds the bubble remains visible after it appears. */
-  readonly duration: number;
-}
-
 /** Persistent guidance shown beside the tutorial journey-start offer. */
 export interface TutorialJourneyStartConfiguration {
-  readonly speechBubble: TutorialPersistentSpeechBubble;
+  readonly speechBubble: TutorialSpeechBubble;
 }
 
 /** Persistent guidance shown over the first tutorial dreamscape. */
 export interface TutorialDreamscapeConfiguration {
-  readonly speechBubble: TutorialPersistentSpeechBubble;
+  readonly speechBubble: TutorialSpeechBubble;
 }
 
 /** Persistent guidance shown on the first tutorial Atlas visit. */
 export interface TutorialAtlasConfiguration {
-  readonly speechBubble: TutorialPersistentSpeechBubble;
+  readonly speechBubble: TutorialSpeechBubble;
 }
 
 /** Persistent Mira guidance shown on the first visit to one site type. */
 export interface TutorialSiteConfiguration {
-  readonly speechBubble: TutorialPersistentSpeechBubble;
+  readonly speechBubble: TutorialSpeechBubble;
 }
 
 /** Persistent Mira guidance shown on one tutorial-journey battle preview. */
 export interface TutorialBattleStartGuidance {
-  readonly speechBubble: TutorialPersistentSpeechBubble;
+  readonly speechBubble: TutorialSpeechBubble;
 }
 
 /** Persistent Mira guidance authored for the first two battle previews. */
@@ -116,12 +105,13 @@ export type TutorialTriggerMatcher =
 /** One TOML-authored first-occurrence tutorial shared across journey and battle. */
 export interface TutorialTriggerDefinition extends Omit<
   TutorialSpeechBubble,
-  "delay"
+  "delay" | "duration"
 > {
   readonly id: string;
   readonly on: readonly TutorialTriggerEvent[];
   readonly priority: number;
   readonly delay?: TutorialTriggerDelay;
+  readonly duration: number;
   readonly match: TutorialTriggerMatcher;
 }
 
@@ -160,12 +150,6 @@ export interface TutorialFeaturedCards {
 export interface TutorialStarterDeckEntry {
   readonly cardId: string;
   readonly copies: number;
-}
-
-/** Compact scripted-battle placement used before the live handoff. */
-export interface TutorialScriptedBoardConfiguration {
-  readonly playerBackRankIndex: number;
-  readonly playerFrontRankIndex: number;
 }
 
 /** Authored side state at the playable tutorial-battle handoff. */
@@ -213,7 +197,6 @@ export interface TutorialBattleConfiguration {
   readonly startingEnergy: number;
   readonly scoreToWin: number;
   readonly starterDeck: readonly TutorialStarterDeckEntry[];
-  readonly scriptedBoard: TutorialScriptedBoardConfiguration;
   readonly handoff: TutorialBattleHandoffConfiguration;
   readonly playerDraws: readonly string[];
   readonly enemyDraws: readonly string[];

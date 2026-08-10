@@ -10,64 +10,54 @@ use uuid::{Uuid, Variant, Version};
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct TutorialCatalog {
-    pub journey_guidance: JourneyGuidance,
-    pub battle: BattleConfiguration,
-    pub actions: Vec<ActionDefinition>,
-    pub triggers: Vec<TriggerDefinition>,
+    pub default_maximum_width_pixels: u32,
+    pub journey_guidance: TutorialJourneyGuidance,
+    pub battle: TutorialBattleConfiguration,
+    pub scripted_tutorial_sequence: Vec<TutorialActionDefinition>,
+    pub triggers: Vec<TutorialTriggerDefinition>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct JourneyGuidance {
-    pub journey_start: PersistentSpeechBubble,
-    pub dreamscape: PersistentSpeechBubble,
-    pub atlas: PersistentSpeechBubble,
-    pub draft: PersistentSpeechBubble,
-    pub purge: PersistentSpeechBubble,
-    pub dreamsign_revelation: PersistentSpeechBubble,
-    pub first_battle: PersistentSpeechBubble,
-    pub second_battle: PersistentSpeechBubble,
+pub struct TutorialJourneyGuidance {
+    pub journey_start: TutorialSpeechBubble,
+    pub dreamscape: TutorialSpeechBubble,
+    pub atlas: TutorialSpeechBubble,
+    pub draft: TutorialSpeechBubble,
+    pub purge: TutorialSpeechBubble,
+    pub dreamsign_revelation: TutorialSpeechBubble,
+    pub first_battle: TutorialSpeechBubble,
+    pub second_battle: TutorialSpeechBubble,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct PersistentSpeechBubble {
-    #[serde(default, skip_serializing_if = "Scalar::is_zero")]
-    pub delay_seconds: Scalar,
-    #[serde(default, skip_serializing_if = "Scalar::is_zero")]
-    pub horizontal_offset_pixels: Scalar,
-    #[serde(default, skip_serializing_if = "Scalar::is_zero")]
-    pub vertical_offset_pixels: Scalar,
-    pub maximum_width_pixels: u32,
-    pub text: String,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct SpeechBubble {
+pub struct TutorialSpeechBubble {
     #[serde(default, skip_serializing_if = "is_mira")]
-    pub speaker: Speaker,
+    pub speaker: TutorialSpeaker,
     #[serde(default, skip_serializing_if = "Scalar::is_zero")]
     pub delay_seconds: Scalar,
-    pub duration_seconds: Scalar,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub duration_seconds: Option<Scalar>,
     #[serde(default, skip_serializing_if = "Scalar::is_zero")]
     pub horizontal_offset_pixels: Scalar,
     #[serde(default, skip_serializing_if = "Scalar::is_zero")]
     pub vertical_offset_pixels: Scalar,
-    pub maximum_width_pixels: u32,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub maximum_width_pixels: Option<u32>,
     pub text: String,
 }
 
 #[derive(Clone, Copy, Debug, Default, Deserialize, Serialize, PartialEq, Eq)]
-pub enum Speaker {
+pub enum TutorialSpeaker {
     #[default]
     Mira,
     Player,
     Enemy,
 }
 
-fn is_mira(value: &Speaker) -> bool {
-    *value == Speaker::Mira
+fn is_mira(value: &TutorialSpeaker) -> bool {
+    *value == TutorialSpeaker::Mira
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq)]
@@ -139,33 +129,32 @@ impl<'de> Deserialize<'de> for EntityId {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct BattleConfiguration {
+pub struct TutorialBattleConfiguration {
     pub player_dream_avatar_id: EntityId,
     pub enemy_dream_avatar_id: EntityId,
     pub starting_energy: u32,
     pub score_to_win: u32,
-    pub starter_deck: Vec<StarterDeckEntry>,
+    pub starter_deck: Vec<TutorialStarterDeckEntry>,
     pub player_draws: Vec<EntityId>,
     pub enemy_draws: Vec<EntityId>,
     /// Complete shared Dreamwell prefix, including pre-handoff scripted draws.
     pub dreamwell_draws: Vec<EntityId>,
-    pub featured_cards: FeaturedCards,
-    pub scripted_board: ScriptedBoard,
-    pub handoff: BattleHandoff,
+    pub scripted_card_roles: TutorialScriptedCardRoles,
+    pub handoff: TutorialBattleHandoff,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub ai_action_overrides: Vec<AiActionOverride>,
+    pub ai_action_overrides: Vec<TutorialAiActionOverride>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct StarterDeckEntry {
+pub struct TutorialStarterDeckEntry {
     pub card_id: EntityId,
     pub copies: u32,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct FeaturedCards {
+pub struct TutorialScriptedCardRoles {
     pub player_card_id: EntityId,
     pub opponent_card_id: EntityId,
     pub enemy_starter_card_id: EntityId,
@@ -175,26 +164,19 @@ pub struct FeaturedCards {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct ScriptedBoard {
-    pub player_back_rank_index: u32,
-    pub player_front_rank_index: u32,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct BattleHandoff {
-    pub active_side: Side,
+pub struct TutorialBattleHandoff {
+    pub active_side: TutorialSide,
     pub turn_number: u32,
-    pub phase: BattlePhase,
+    pub phase: TutorialBattlePhase,
     pub dreamwell_deck_index: u32,
-    pub player: HandoffSide,
-    pub enemy: HandoffSide,
-    pub placements: Vec<HandoffPlacement>,
+    pub player: TutorialHandoffSide,
+    pub enemy: TutorialHandoffSide,
+    pub card_placements: Vec<TutorialHandoffPlacement>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct HandoffSide {
+pub struct TutorialHandoffSide {
     pub current_energy: u32,
     pub maximum_energy: u32,
     pub score: u32,
@@ -204,23 +186,22 @@ pub struct HandoffSide {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub enum HandoffPlacement {
+pub enum TutorialHandoffPlacement {
     Rank {
-        card: FeaturedCardRole,
-        side: Side,
-        source: PlacementSource,
-        rank: Rank,
-        slot_id: String,
+        card: TutorialScriptedCardRole,
+        side: TutorialSide,
+        source: TutorialPlacementSource,
+        slot: TutorialRankSlot,
     },
     Void {
-        card: FeaturedCardRole,
-        side: Side,
-        source: PlacementSource,
+        card: TutorialScriptedCardRole,
+        side: TutorialSide,
+        source: TutorialPlacementSource,
     },
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum FeaturedCardRole {
+pub enum TutorialScriptedCardRole {
     Player,
     Opponent,
     EnemyStarter,
@@ -228,25 +209,25 @@ pub enum FeaturedCardRole {
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum Side {
+pub enum TutorialSide {
     Player,
     Enemy,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum PlacementSource {
+pub enum TutorialPlacementSource {
     Deck,
     Created,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum Rank {
-    Front,
-    Back,
+pub enum TutorialRankSlot {
+    Front(u32),
+    Back(u32),
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum BattlePhase {
+pub enum TutorialBattlePhase {
     Dreamwell,
     Draw,
     Dawn,
@@ -259,27 +240,27 @@ pub enum BattlePhase {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct AiActionOverride {
+pub struct TutorialAiActionOverride {
     pub id: EntityId,
-    pub trigger: AiTrigger,
-    pub action: AiAction,
+    pub trigger: TutorialAiTrigger,
+    pub action: TutorialAiAction,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub enum AiTrigger {
+pub enum TutorialAiTrigger {
     AfterEnemyDreamwell { card_id: EntityId },
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub enum AiAction {
+pub enum TutorialAiAction {
     PlayCard { card_id: EntityId },
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct ActionDefinition {
+pub struct TutorialActionDefinition {
     pub id: EntityId,
     pub wait_seconds: Scalar,
     pub behavior: TutorialAction,
@@ -289,25 +270,25 @@ pub struct ActionDefinition {
 #[serde(deny_unknown_fields)]
 pub enum TutorialAction {
     DisplaySpeechBubble {
-        speech_bubble: SpeechBubble,
+        speech_bubble: TutorialSpeechBubble,
     },
     DisplayHowToPlay {
-        trigger: HowToPlayTrigger,
+        trigger: TutorialHowToPlayTrigger,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        companion: Option<HowToPlayCompanion>,
+        companion: Option<TutorialHowToPlayCompanion>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         card_width_pixels: Option<u32>,
         text: String,
     },
     AnimateDreamAvatarPortrait {
-        owner: Side,
+        owner: TutorialSide,
         pause_seconds: Scalar,
         duration_seconds: Scalar,
     },
     DrawCard {
-        owner: Side,
+        owner: TutorialSide,
         card_id: EntityId,
-        reason: CardDrawReason,
+        reason: TutorialCardDrawReason,
     },
     DrawOpponentCard {
         card_id: EntityId,
@@ -316,7 +297,7 @@ pub enum TutorialAction {
         card_id: EntityId,
         reveal_duration_seconds: Scalar,
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        speech_bubble: Option<SpeechBubble>,
+        speech_bubble: Option<TutorialSpeechBubble>,
     },
     RepositionOpponentCharacter {
         card_id: EntityId,
@@ -330,51 +311,52 @@ pub enum TutorialAction {
         blocker_card_id: EntityId,
     },
     DrawDreamwellCard {
-        owner: Side,
+        owner: TutorialSide,
         card_id: EntityId,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         reveal_duration_seconds: Option<Scalar>,
     },
     EndTurn {
         #[serde(default, skip_serializing_if = "Option::is_none")]
-        speech_bubble: Option<SpeechBubble>,
+        speech_bubble: Option<TutorialSpeechBubble>,
     },
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum HowToPlayTrigger {
+pub enum TutorialHowToPlayTrigger {
     Immediate,
     PlayerTurnAnnouncementComplete,
     EnemyTurnAnnouncementComplete,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum HowToPlayCompanion {
+pub enum TutorialHowToPlayCompanion {
     DreamwellCard,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum CardDrawReason {
+pub enum TutorialCardDrawReason {
     DreamwellEffect,
     TurnDraw,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct TriggerDefinition {
+pub struct TutorialTriggerDefinition {
     pub id: EntityId,
-    pub on: Vec<TriggerEvent>,
+    pub on: Vec<TutorialTriggerEvent>,
     pub priority: Scalar,
     #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
-    pub delay_seconds: IndexMap<TriggerEvent, Scalar>,
+    pub delay_seconds: IndexMap<TutorialTriggerEvent, Scalar>,
     pub duration_seconds: Scalar,
-    pub maximum_width_pixels: u32,
-    pub matcher: TriggerMatcher,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub maximum_width_pixels: Option<u32>,
+    pub matcher: TutorialTriggerMatcher,
     pub text: String,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Hash)]
-pub enum TriggerEvent {
+pub enum TutorialTriggerEvent {
     CardSeen,
     CardPlay,
     CardNoValidTargets,
@@ -388,7 +370,7 @@ pub enum TriggerEvent {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub enum TriggerMatcher {
+pub enum TutorialTriggerMatcher {
     Glossary { glossary_id: EntityId },
     EventCard,
     Card { card_id: EntityId },
@@ -402,15 +384,16 @@ pub fn lower(source: TutorialCatalog) -> Result<toml::Value> {
 }
 
 pub(crate) fn validate(source: &TutorialCatalog) -> Result<()> {
+    validate_width(source.default_maximum_width_pixels)?;
     let mut entity_ids = BTreeSet::new();
-    for action in &source.actions {
+    for action in &source.scripted_tutorial_sequence {
         ensure!(
             entity_ids.insert(action.id),
             "duplicate Tutorial entity id {}",
             action.id
         );
         validate_nonnegative(action.wait_seconds, "action wait")?;
-        validate_action(action)?;
+        validate_action(action, source.default_maximum_width_pixels)?;
     }
     for trigger in &source.triggers {
         ensure!(
@@ -429,7 +412,11 @@ pub(crate) fn validate(source: &TutorialCatalog) -> Result<()> {
             trigger.id
         );
         validate_finite(trigger.priority, "trigger priority")?;
-        validate_width(trigger.maximum_width_pixels)?;
+        validate_width(
+            trigger
+                .maximum_width_pixels
+                .unwrap_or(source.default_maximum_width_pixels),
+        )?;
         validate_text(&trigger.text, "trigger text")?;
         let events: BTreeSet<_> = trigger.on.iter().map(|event| *event as u8).collect();
         ensure!(
@@ -445,16 +432,16 @@ pub(crate) fn validate(source: &TutorialCatalog) -> Result<()> {
             );
             validate_nonnegative(*delay, "trigger delay")?;
         }
-        if let TriggerMatcher::Any = trigger.matcher {
+        if let TutorialTriggerMatcher::Any = trigger.matcher {
             ensure!(
                 trigger.on.len() == 1
                     && matches!(
                         trigger.on[0],
-                        TriggerEvent::ChallengeResolved
-                            | TriggerEvent::FigmentCreated
-                            | TriggerEvent::OpponentRepositionOpportunity
-                            | TriggerEvent::PlayerNightPhase
-                            | TriggerEvent::TransfigurationSeen
+                        TutorialTriggerEvent::ChallengeResolved
+                            | TutorialTriggerEvent::FigmentCreated
+                            | TutorialTriggerEvent::OpponentRepositionOpportunity
+                            | TutorialTriggerEvent::PlayerNightPhase
+                            | TutorialTriggerEvent::TransfigurationSeen
                     ),
                 "Tutorial trigger {} uses Any for an unsupported event",
                 trigger.id
@@ -469,11 +456,17 @@ pub(crate) fn validate(source: &TutorialCatalog) -> Result<()> {
         );
     }
     validate_battle(&source.battle)?;
-    validate_guidance(&source.journey_guidance)?;
+    validate_guidance(
+        &source.journey_guidance,
+        source.default_maximum_width_pixels,
+    )?;
     Ok(())
 }
 
-fn validate_guidance(guidance: &JourneyGuidance) -> Result<()> {
+fn validate_guidance(
+    guidance: &TutorialJourneyGuidance,
+    default_maximum_width_pixels: u32,
+) -> Result<()> {
     for bubble in [
         &guidance.journey_start,
         &guidance.dreamscape,
@@ -484,6 +477,14 @@ fn validate_guidance(guidance: &JourneyGuidance) -> Result<()> {
         &guidance.first_battle,
         &guidance.second_battle,
     ] {
+        ensure!(
+            bubble.speaker == TutorialSpeaker::Mira,
+            "persistent Tutorial guidance must use Mira as its speaker"
+        );
+        ensure!(
+            bubble.duration_seconds.is_none(),
+            "persistent Tutorial guidance must not set a duration"
+        );
         validate_nonnegative(bubble.delay_seconds, "persistent bubble delay")?;
         validate_finite(
             bubble.horizontal_offset_pixels,
@@ -493,16 +494,23 @@ fn validate_guidance(guidance: &JourneyGuidance) -> Result<()> {
             bubble.vertical_offset_pixels,
             "persistent bubble vertical offset",
         )?;
-        validate_width(bubble.maximum_width_pixels)?;
+        validate_width(
+            bubble
+                .maximum_width_pixels
+                .unwrap_or(default_maximum_width_pixels),
+        )?;
         validate_text(&bubble.text, "persistent bubble text")?;
     }
     Ok(())
 }
 
-fn validate_action(action: &ActionDefinition) -> Result<()> {
+fn validate_action(
+    action: &TutorialActionDefinition,
+    default_maximum_width_pixels: u32,
+) -> Result<()> {
     match &action.behavior {
         TutorialAction::DisplaySpeechBubble { speech_bubble } => {
-            validate_speech_bubble(speech_bubble)
+            validate_timed_speech_bubble(speech_bubble, default_maximum_width_pixels)
         }
         TutorialAction::DisplayHowToPlay {
             card_width_pixels,
@@ -532,7 +540,7 @@ fn validate_action(action: &ActionDefinition) -> Result<()> {
         } => {
             validate_nonnegative(*reveal_duration_seconds, "card reveal duration")?;
             if let Some(bubble) = speech_bubble {
-                validate_speech_bubble(bubble)?;
+                validate_timed_speech_bubble(bubble, default_maximum_width_pixels)?;
             }
             Ok(())
         }
@@ -567,7 +575,7 @@ fn validate_action(action: &ActionDefinition) -> Result<()> {
         }
         TutorialAction::EndTurn { speech_bubble } => {
             if let Some(bubble) = speech_bubble {
-                validate_speech_bubble(bubble)?;
+                validate_timed_speech_bubble(bubble, default_maximum_width_pixels)?;
             }
             Ok(())
         }
@@ -577,9 +585,15 @@ fn validate_action(action: &ActionDefinition) -> Result<()> {
     }
 }
 
-fn validate_speech_bubble(bubble: &SpeechBubble) -> Result<()> {
+fn validate_timed_speech_bubble(
+    bubble: &TutorialSpeechBubble,
+    default_maximum_width_pixels: u32,
+) -> Result<()> {
     validate_nonnegative(bubble.delay_seconds, "speech bubble delay")?;
-    validate_nonnegative(bubble.duration_seconds, "speech bubble duration")?;
+    let duration = bubble
+        .duration_seconds
+        .context("timed Tutorial speech bubbles must set duration_seconds")?;
+    validate_nonnegative(duration, "speech bubble duration")?;
     validate_finite(
         bubble.horizontal_offset_pixels,
         "speech bubble horizontal offset",
@@ -588,11 +602,15 @@ fn validate_speech_bubble(bubble: &SpeechBubble) -> Result<()> {
         bubble.vertical_offset_pixels,
         "speech bubble vertical offset",
     )?;
-    validate_width(bubble.maximum_width_pixels)?;
+    validate_width(
+        bubble
+            .maximum_width_pixels
+            .unwrap_or(default_maximum_width_pixels),
+    )?;
     validate_text(&bubble.text, "speech bubble text")
 }
 
-fn validate_battle(battle: &BattleConfiguration) -> Result<()> {
+fn validate_battle(battle: &TutorialBattleConfiguration) -> Result<()> {
     ensure!(
         battle.score_to_win > 0,
         "Tutorial score_to_win must be positive"
@@ -614,14 +632,6 @@ fn validate_battle(battle: &BattleConfiguration) -> Result<()> {
         );
     }
     ensure!(
-        battle.scripted_board.player_back_rank_index < 3,
-        "player back-rank index is outside the compact board"
-    );
-    ensure!(
-        battle.scripted_board.player_front_rank_index < 2,
-        "player front-rank index is outside the compact board"
-    );
-    ensure!(
         battle.handoff.turn_number > 0,
         "Tutorial handoff turn must be positive"
     );
@@ -638,29 +648,28 @@ fn validate_battle(battle: &BattleConfiguration) -> Result<()> {
     );
     let mut occupied = BTreeSet::new();
     ensure!(
-        !battle.handoff.placements.is_empty(),
+        !battle.handoff.card_placements.is_empty(),
         "Tutorial handoff placements must not be empty"
     );
-    for placement in &battle.handoff.placements {
-        if let HandoffPlacement::Rank {
-            side,
-            rank,
-            slot_id,
-            ..
-        } = placement
-        {
+    for placement in &battle.handoff.card_placements {
+        if let TutorialHandoffPlacement::Rank { side, slot, .. } = placement {
+            let (rank, index, maximum_index) = match (*side, *slot) {
+                (_, TutorialRankSlot::Front(index)) => (0_u8, index, 8),
+                (TutorialSide::Player, TutorialRankSlot::Back(index)) => (1, index, 4),
+                (TutorialSide::Enemy, TutorialRankSlot::Back(index)) => (1, index, 9),
+            };
             ensure!(
-                !slot_id.trim().is_empty(),
-                "Tutorial handoff rank placement has a blank slot"
+                index <= maximum_index,
+                "Tutorial handoff rank slot is outside the {side:?} board"
             );
             ensure!(
-                occupied.insert((*side as u8, *rank as u8, slot_id)),
+                occupied.insert((*side as u8, rank, index)),
                 "Tutorial handoff repeats a slot"
             );
         }
     }
     for action_override in &battle.ai_action_overrides {
-        let AiTrigger::AfterEnemyDreamwell { card_id } = action_override.trigger;
+        let TutorialAiTrigger::AfterEnemyDreamwell { card_id } = action_override.trigger;
         ensure!(
             dreamwell_ids.contains(&card_id),
             "Tutorial AI override {} references a Dreamwell card outside the draw list",
@@ -761,7 +770,6 @@ struct CompatibilityBattle {
     dreamwell_draws: Vec<String>,
     starter_deck: Vec<CompatibilityStarterDeckEntry>,
     featured_cards: CompatibilityFeaturedCards,
-    scripted_board: CompatibilityScriptedBoard,
     handoff: CompatibilityHandoff,
     ai_action_overrides: Vec<CompatibilityAiActionOverride>,
 }
@@ -781,13 +789,6 @@ struct CompatibilityFeaturedCards {
     enemy_starter_card_id: String,
     loading_event_card_id: String,
     dreamwell_card_id: String,
-}
-
-#[derive(Serialize)]
-#[serde(rename_all = "camelCase")]
-struct CompatibilityScriptedBoard {
-    player_back_rank_index: u32,
-    player_front_rank_index: u32,
 }
 
 #[derive(Serialize)]
@@ -956,7 +957,8 @@ impl TryFrom<TutorialCatalog> for CompatibilityCatalog {
     type Error = anyhow::Error;
 
     fn try_from(source: TutorialCatalog) -> Result<Self> {
-        let JourneyGuidance {
+        let default_maximum_width_pixels = source.default_maximum_width_pixels;
+        let TutorialJourneyGuidance {
             journey_start,
             dreamscape,
             atlas,
@@ -967,45 +969,50 @@ impl TryFrom<TutorialCatalog> for CompatibilityCatalog {
             second_battle,
         } = source.journey_guidance;
         Ok(Self {
-            journey_start: guidance(journey_start),
-            dreamscape: guidance(dreamscape),
-            atlas: guidance(atlas),
-            draft: guidance(draft),
-            purge: guidance(purge),
-            dreamsign_revelation: guidance(dreamsign_revelation),
+            journey_start: guidance(journey_start, default_maximum_width_pixels),
+            dreamscape: guidance(dreamscape, default_maximum_width_pixels),
+            atlas: guidance(atlas, default_maximum_width_pixels),
+            draft: guidance(draft, default_maximum_width_pixels),
+            purge: guidance(purge, default_maximum_width_pixels),
+            dreamsign_revelation: guidance(dreamsign_revelation, default_maximum_width_pixels),
             battle_start: CompatibilityBattleStart {
-                first_battle: guidance(first_battle),
-                second_battle: guidance(second_battle),
+                first_battle: guidance(first_battle, default_maximum_width_pixels),
+                second_battle: guidance(second_battle, default_maximum_width_pixels),
             },
             battle: lower_battle(source.battle)?,
             actions: source
-                .actions
+                .scripted_tutorial_sequence
                 .into_iter()
-                .map(lower_action)
+                .map(|action| lower_action(action, default_maximum_width_pixels))
                 .collect::<Result<_>>()?,
             triggers: source
                 .triggers
                 .into_iter()
-                .map(lower_trigger)
+                .map(|trigger| lower_trigger(trigger, default_maximum_width_pixels))
                 .collect::<Result<_>>()?,
         })
     }
 }
 
-fn guidance(value: PersistentSpeechBubble) -> CompatibilityGuidance {
+fn guidance(
+    value: TutorialSpeechBubble,
+    default_maximum_width_pixels: u32,
+) -> CompatibilityGuidance {
     CompatibilityGuidance {
         speech_bubble: CompatibilityPersistentSpeechBubble {
             speaker: "mira",
             delay: value.delay_seconds,
             horizontal_offset: value.horizontal_offset_pixels,
             vertical_offset: value.vertical_offset_pixels,
-            bubble_width: value.maximum_width_pixels,
+            bubble_width: value
+                .maximum_width_pixels
+                .unwrap_or(default_maximum_width_pixels),
             text: value.text,
         },
     }
 }
 
-fn lower_battle(value: BattleConfiguration) -> Result<CompatibilityBattle> {
+fn lower_battle(value: TutorialBattleConfiguration) -> Result<CompatibilityBattle> {
     Ok(CompatibilityBattle {
         player_dream_avatar_id: value.player_dream_avatar_id.to_string(),
         enemy_dream_avatar_id: value.enemy_dream_avatar_id.to_string(),
@@ -1023,15 +1030,11 @@ fn lower_battle(value: BattleConfiguration) -> Result<CompatibilityBattle> {
             })
             .collect(),
         featured_cards: CompatibilityFeaturedCards {
-            player_card_id: value.featured_cards.player_card_id.to_string(),
-            opponent_card_id: value.featured_cards.opponent_card_id.to_string(),
-            enemy_starter_card_id: value.featured_cards.enemy_starter_card_id.to_string(),
-            loading_event_card_id: value.featured_cards.loading_event_card_id.to_string(),
-            dreamwell_card_id: value.featured_cards.dreamwell_card_id.to_string(),
-        },
-        scripted_board: CompatibilityScriptedBoard {
-            player_back_rank_index: value.scripted_board.player_back_rank_index,
-            player_front_rank_index: value.scripted_board.player_front_rank_index,
+            player_card_id: value.scripted_card_roles.player_card_id.to_string(),
+            opponent_card_id: value.scripted_card_roles.opponent_card_id.to_string(),
+            enemy_starter_card_id: value.scripted_card_roles.enemy_starter_card_id.to_string(),
+            loading_event_card_id: value.scripted_card_roles.loading_event_card_id.to_string(),
+            dreamwell_card_id: value.scripted_card_roles.dreamwell_card_id.to_string(),
         },
         handoff: CompatibilityHandoff {
             active_side: side(value.handoff.active_side),
@@ -1042,7 +1045,7 @@ fn lower_battle(value: BattleConfiguration) -> Result<CompatibilityBattle> {
             enemy: lower_handoff_side(value.handoff.enemy),
             placements: value
                 .handoff
-                .placements
+                .card_placements
                 .into_iter()
                 .map(lower_placement)
                 .collect(),
@@ -1051,10 +1054,10 @@ fn lower_battle(value: BattleConfiguration) -> Result<CompatibilityBattle> {
             .ai_action_overrides
             .into_iter()
             .map(|entry| {
-                let AiTrigger::AfterEnemyDreamwell {
+                let TutorialAiTrigger::AfterEnemyDreamwell {
                     card_id: trigger_card_id,
                 } = entry.trigger;
-                let AiAction::PlayCard {
+                let TutorialAiAction::PlayCard {
                     card_id: action_card_id,
                 } = entry.action;
                 Ok(CompatibilityAiActionOverride {
@@ -1074,7 +1077,7 @@ fn lower_battle(value: BattleConfiguration) -> Result<CompatibilityBattle> {
     })
 }
 
-fn lower_handoff_side(value: HandoffSide) -> CompatibilityHandoffSide {
+fn lower_handoff_side(value: TutorialHandoffSide) -> CompatibilityHandoffSide {
     CompatibilityHandoffSide {
         current_energy: value.current_energy,
         max_energy: value.maximum_energy,
@@ -1084,22 +1087,27 @@ fn lower_handoff_side(value: HandoffSide) -> CompatibilityHandoffSide {
     }
 }
 
-fn lower_placement(value: HandoffPlacement) -> CompatibilityPlacement {
+fn lower_placement(value: TutorialHandoffPlacement) -> CompatibilityPlacement {
     match value {
-        HandoffPlacement::Rank {
+        TutorialHandoffPlacement::Rank {
             card,
             side: placement_side,
             source,
-            rank,
-            slot_id,
-        } => CompatibilityPlacement {
-            card_role: featured_role(card),
-            side: side(placement_side),
-            source: placement_source(source),
-            zone: rank_name(rank),
-            slot_id: Some(slot_id),
-        },
-        HandoffPlacement::Void {
+            slot,
+        } => {
+            let (zone, prefix, index) = match slot {
+                TutorialRankSlot::Front(index) => ("frontRank", 'F', index),
+                TutorialRankSlot::Back(index) => ("backRank", 'B', index),
+            };
+            CompatibilityPlacement {
+                card_role: featured_role(card),
+                side: side(placement_side),
+                source: placement_source(source),
+                zone,
+                slot_id: Some(format!("{prefix}{index}")),
+            }
+        }
+        TutorialHandoffPlacement::Void {
             card,
             side: placement_side,
             source,
@@ -1113,11 +1121,14 @@ fn lower_placement(value: HandoffPlacement) -> CompatibilityPlacement {
     }
 }
 
-fn lower_action(value: ActionDefinition) -> Result<CompatibilityAction> {
+fn lower_action(
+    value: TutorialActionDefinition,
+    default_maximum_width_pixels: u32,
+) -> Result<CompatibilityAction> {
     let behavior = match value.behavior {
         TutorialAction::DisplaySpeechBubble { speech_bubble } => {
             CompatibilityActionBehavior::DisplaySpeechBubble {
-                speech_bubble: lower_speech_bubble(speech_bubble),
+                speech_bubble: lower_speech_bubble(speech_bubble, default_maximum_width_pixels)?,
             }
         }
         TutorialAction::DisplayHowToPlay {
@@ -1161,7 +1172,9 @@ fn lower_action(value: ActionDefinition) -> Result<CompatibilityAction> {
         } => CompatibilityActionBehavior::RevealAndPlayOpponentCard {
             card_id: card_id.to_string(),
             reveal_duration: reveal_duration_seconds,
-            speech_bubble: speech_bubble.map(lower_speech_bubble),
+            speech_bubble: speech_bubble
+                .map(|bubble| lower_speech_bubble(bubble, default_maximum_width_pixels))
+                .transpose()?,
         },
         TutorialAction::RepositionOpponentCharacter { card_id } => {
             CompatibilityActionBehavior::RepositionOpponentCharacter {
@@ -1192,7 +1205,9 @@ fn lower_action(value: ActionDefinition) -> Result<CompatibilityAction> {
             reveal_duration: reveal_duration_seconds,
         },
         TutorialAction::EndTurn { speech_bubble } => CompatibilityActionBehavior::EndTurn {
-            speech_bubble: speech_bubble.map(lower_speech_bubble),
+            speech_bubble: speech_bubble
+                .map(|bubble| lower_speech_bubble(bubble, default_maximum_width_pixels))
+                .transpose()?,
         },
     };
     Ok(CompatibilityAction {
@@ -1202,28 +1217,38 @@ fn lower_action(value: ActionDefinition) -> Result<CompatibilityAction> {
     })
 }
 
-fn lower_speech_bubble(value: SpeechBubble) -> CompatibilitySpeechBubble {
-    CompatibilitySpeechBubble {
+fn lower_speech_bubble(
+    value: TutorialSpeechBubble,
+    default_maximum_width_pixels: u32,
+) -> Result<CompatibilitySpeechBubble> {
+    Ok(CompatibilitySpeechBubble {
         speaker: speaker(value.speaker).into(),
         delay: value.delay_seconds,
-        duration: value.duration_seconds,
+        duration: value
+            .duration_seconds
+            .context("timed Tutorial speech bubbles must set duration_seconds")?,
         horizontal_offset: value.horizontal_offset_pixels,
         vertical_offset: value.vertical_offset_pixels,
-        bubble_width: value.maximum_width_pixels,
+        bubble_width: value
+            .maximum_width_pixels
+            .unwrap_or(default_maximum_width_pixels),
         text: value.text,
-    }
+    })
 }
 
-fn lower_trigger(value: TriggerDefinition) -> Result<CompatibilityTrigger> {
+fn lower_trigger(
+    value: TutorialTriggerDefinition,
+    default_maximum_width_pixels: u32,
+) -> Result<CompatibilityTrigger> {
     let matcher = match value.matcher {
-        TriggerMatcher::Glossary { glossary_id } => CompatibilityMatcher::Glossary {
+        TutorialTriggerMatcher::Glossary { glossary_id } => CompatibilityMatcher::Glossary {
             id: glossary_id.to_string(),
         },
-        TriggerMatcher::EventCard => CompatibilityMatcher::CardType { card_type: "event" },
-        TriggerMatcher::Card { card_id } => CompatibilityMatcher::CardId {
+        TutorialTriggerMatcher::EventCard => CompatibilityMatcher::CardType { card_type: "event" },
+        TutorialTriggerMatcher::Card { card_id } => CompatibilityMatcher::CardId {
             card_id: card_id.to_string(),
         },
-        TriggerMatcher::Any => CompatibilityMatcher::Any,
+        TutorialTriggerMatcher::Any => CompatibilityMatcher::Any,
     };
     Ok(CompatibilityTrigger {
         id: compatibility_id(value.id, TRIGGER_IDS)?,
@@ -1235,7 +1260,9 @@ fn lower_trigger(value: TriggerDefinition) -> Result<CompatibilityTrigger> {
             .map(|(event, delay)| (trigger_event(event), delay))
             .collect(),
         duration: value.duration_seconds,
-        bubble_width: value.maximum_width_pixels,
+        bubble_width: value
+            .maximum_width_pixels
+            .unwrap_or(default_maximum_width_pixels),
         matcher,
         text: value.text,
     })
@@ -1244,75 +1271,73 @@ fn lower_trigger(value: TriggerDefinition) -> Result<CompatibilityTrigger> {
 fn ids(values: Vec<EntityId>) -> Vec<String> {
     values.into_iter().map(|id| id.to_string()).collect()
 }
-fn speaker(value: Speaker) -> &'static str {
+fn speaker(value: TutorialSpeaker) -> &'static str {
     match value {
-        Speaker::Mira => "mira",
-        Speaker::Player => "player",
-        Speaker::Enemy => "enemy",
+        TutorialSpeaker::Mira => "mira",
+        TutorialSpeaker::Player => "player",
+        TutorialSpeaker::Enemy => "enemy",
     }
 }
-fn side(value: Side) -> &'static str {
+fn side(value: TutorialSide) -> &'static str {
     match value {
-        Side::Player => "player",
-        Side::Enemy => "enemy",
+        TutorialSide::Player => "player",
+        TutorialSide::Enemy => "enemy",
     }
 }
-fn featured_role(value: FeaturedCardRole) -> &'static str {
+fn featured_role(value: TutorialScriptedCardRole) -> &'static str {
     match value {
-        FeaturedCardRole::Player => "player",
-        FeaturedCardRole::Opponent => "opponent",
-        FeaturedCardRole::EnemyStarter => "enemyStarter",
-        FeaturedCardRole::LoadingEvent => "loadingEvent",
+        TutorialScriptedCardRole::Player => "player",
+        TutorialScriptedCardRole::Opponent => "opponent",
+        TutorialScriptedCardRole::EnemyStarter => "enemyStarter",
+        TutorialScriptedCardRole::LoadingEvent => "loadingEvent",
     }
 }
-fn placement_source(value: PlacementSource) -> &'static str {
+fn placement_source(value: TutorialPlacementSource) -> &'static str {
     match value {
-        PlacementSource::Deck => "deck",
-        PlacementSource::Created => "created",
+        TutorialPlacementSource::Deck => "deck",
+        TutorialPlacementSource::Created => "created",
     }
 }
-fn rank_name(value: Rank) -> &'static str {
+fn phase(value: TutorialBattlePhase) -> &'static str {
     match value {
-        Rank::Front => "frontRank",
-        Rank::Back => "backRank",
+        TutorialBattlePhase::Dreamwell => "dreamwell",
+        TutorialBattlePhase::Draw => "draw",
+        TutorialBattlePhase::Dawn => "dawn",
+        TutorialBattlePhase::Day => "day",
+        TutorialBattlePhase::Dusk => "dusk",
+        TutorialBattlePhase::Night => "night",
+        TutorialBattlePhase::Challenge => "challenge",
+        TutorialBattlePhase::Ending => "ending",
     }
 }
-fn phase(value: BattlePhase) -> &'static str {
+fn how_to_play_trigger(value: TutorialHowToPlayTrigger) -> &'static str {
     match value {
-        BattlePhase::Dreamwell => "dreamwell",
-        BattlePhase::Draw => "draw",
-        BattlePhase::Dawn => "dawn",
-        BattlePhase::Day => "day",
-        BattlePhase::Dusk => "dusk",
-        BattlePhase::Night => "night",
-        BattlePhase::Challenge => "challenge",
-        BattlePhase::Ending => "ending",
+        TutorialHowToPlayTrigger::Immediate => "immediate",
+        TutorialHowToPlayTrigger::PlayerTurnAnnouncementComplete => {
+            "player-turn-announcement-complete"
+        }
+        TutorialHowToPlayTrigger::EnemyTurnAnnouncementComplete => {
+            "enemy-turn-announcement-complete"
+        }
     }
 }
-fn how_to_play_trigger(value: HowToPlayTrigger) -> &'static str {
+fn draw_reason(value: TutorialCardDrawReason) -> &'static str {
     match value {
-        HowToPlayTrigger::Immediate => "immediate",
-        HowToPlayTrigger::PlayerTurnAnnouncementComplete => "player-turn-announcement-complete",
-        HowToPlayTrigger::EnemyTurnAnnouncementComplete => "enemy-turn-announcement-complete",
+        TutorialCardDrawReason::DreamwellEffect => "dreamwell-effect",
+        TutorialCardDrawReason::TurnDraw => "turn-draw",
     }
 }
-fn draw_reason(value: CardDrawReason) -> &'static str {
+fn trigger_event(value: TutorialTriggerEvent) -> &'static str {
     match value {
-        CardDrawReason::DreamwellEffect => "dreamwell-effect",
-        CardDrawReason::TurnDraw => "turn-draw",
-    }
-}
-fn trigger_event(value: TriggerEvent) -> &'static str {
-    match value {
-        TriggerEvent::CardSeen => "card-seen",
-        TriggerEvent::CardPlay => "card-play",
-        TriggerEvent::CardNoValidTargets => "card-no-valid-targets",
-        TriggerEvent::ChallengeResolved => "challenge-resolved",
-        TriggerEvent::DreamwellResolve => "dreamwell-resolve",
-        TriggerEvent::FigmentCreated => "figment-created",
-        TriggerEvent::OpponentRepositionOpportunity => "opponent-reposition-opportunity",
-        TriggerEvent::PlayerNightPhase => "player-night-phase",
-        TriggerEvent::TransfigurationSeen => "transfiguration-seen",
+        TutorialTriggerEvent::CardSeen => "card-seen",
+        TutorialTriggerEvent::CardPlay => "card-play",
+        TutorialTriggerEvent::CardNoValidTargets => "card-no-valid-targets",
+        TutorialTriggerEvent::ChallengeResolved => "challenge-resolved",
+        TutorialTriggerEvent::DreamwellResolve => "dreamwell-resolve",
+        TutorialTriggerEvent::FigmentCreated => "figment-created",
+        TutorialTriggerEvent::OpponentRepositionOpportunity => "opponent-reposition-opportunity",
+        TutorialTriggerEvent::PlayerNightPhase => "player-night-phase",
+        TutorialTriggerEvent::TransfigurationSeen => "transfiguration-seen",
     }
 }
 
@@ -1325,13 +1350,88 @@ fn compatibility_id(id: EntityId, mapping: &[(&str, &str)]) -> Result<String> {
 
 pub(crate) fn actions_from_compatibility_json(
     value: serde_json::Value,
-) -> Result<Vec<ActionDefinition>> {
+) -> Result<Vec<TutorialActionDefinition>> {
     let actions: Vec<CompatibilityAction> = serde_json::from_value(value)
         .context("Tutorial actions must match the compatibility action schema")?;
     actions
         .into_iter()
-        .map(ActionDefinition::try_from)
+        .map(TutorialActionDefinition::try_from)
         .collect()
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum TutorialSpeechBubbleOwner {
+    Display,
+    RevealAndPlayOpponentCard,
+    EndTurn,
+}
+
+fn action_speech_bubble(
+    action: &TutorialActionDefinition,
+) -> Option<(TutorialSpeechBubbleOwner, &TutorialSpeechBubble)> {
+    match &action.behavior {
+        TutorialAction::DisplaySpeechBubble { speech_bubble } => {
+            Some((TutorialSpeechBubbleOwner::Display, speech_bubble))
+        }
+        TutorialAction::RevealAndPlayOpponentCard {
+            speech_bubble: Some(speech_bubble),
+            ..
+        } => Some((
+            TutorialSpeechBubbleOwner::RevealAndPlayOpponentCard,
+            speech_bubble,
+        )),
+        TutorialAction::EndTurn {
+            speech_bubble: Some(speech_bubble),
+        } => Some((TutorialSpeechBubbleOwner::EndTurn, speech_bubble)),
+        _ => None,
+    }
+}
+
+fn action_speech_bubble_mut(
+    action: &mut TutorialActionDefinition,
+) -> Option<(TutorialSpeechBubbleOwner, &mut TutorialSpeechBubble)> {
+    match &mut action.behavior {
+        TutorialAction::DisplaySpeechBubble { speech_bubble } => {
+            Some((TutorialSpeechBubbleOwner::Display, speech_bubble))
+        }
+        TutorialAction::RevealAndPlayOpponentCard {
+            speech_bubble: Some(speech_bubble),
+            ..
+        } => Some((
+            TutorialSpeechBubbleOwner::RevealAndPlayOpponentCard,
+            speech_bubble,
+        )),
+        TutorialAction::EndTurn {
+            speech_bubble: Some(speech_bubble),
+        } => Some((TutorialSpeechBubbleOwner::EndTurn, speech_bubble)),
+        _ => None,
+    }
+}
+
+pub(crate) fn preserve_default_bubble_width_omissions(
+    before: &[TutorialActionDefinition],
+    after: &mut [TutorialActionDefinition],
+    default_maximum_width_pixels: u32,
+) {
+    for edited_action in after {
+        let edited_id = edited_action.id;
+        let Some((edited_owner, edited_bubble)) = action_speech_bubble_mut(edited_action) else {
+            continue;
+        };
+        if edited_bubble.maximum_width_pixels != Some(default_maximum_width_pixels) {
+            continue;
+        }
+        let width_was_explicit = before
+            .iter()
+            .find(|action| action.id == edited_id)
+            .and_then(action_speech_bubble)
+            .is_some_and(|(owner, bubble)| {
+                owner == edited_owner && bubble.maximum_width_pixels.is_some()
+            });
+        if !width_was_explicit {
+            edited_bubble.maximum_width_pixels = None;
+        }
+    }
 }
 
 fn entity_id_from_compatibility(value: &str, mapping: &[(&str, &str)]) -> Result<EntityId> {
@@ -1342,7 +1442,7 @@ fn entity_id_from_compatibility(value: &str, mapping: &[(&str, &str)]) -> Result
     EntityId::parse(canonical).map_err(anyhow::Error::msg)
 }
 
-impl TryFrom<CompatibilityAction> for ActionDefinition {
+impl TryFrom<CompatibilityAction> for TutorialActionDefinition {
     type Error = anyhow::Error;
 
     fn try_from(value: CompatibilityAction) -> Result<Self> {
@@ -1359,18 +1459,18 @@ impl TryFrom<CompatibilityAction> for ActionDefinition {
                 text,
             } => TutorialAction::DisplayHowToPlay {
                 trigger: match trigger.as_str() {
-                    "immediate" => HowToPlayTrigger::Immediate,
+                    "immediate" => TutorialHowToPlayTrigger::Immediate,
                     "player-turn-announcement-complete" => {
-                        HowToPlayTrigger::PlayerTurnAnnouncementComplete
+                        TutorialHowToPlayTrigger::PlayerTurnAnnouncementComplete
                     }
                     "enemy-turn-announcement-complete" => {
-                        HowToPlayTrigger::EnemyTurnAnnouncementComplete
+                        TutorialHowToPlayTrigger::EnemyTurnAnnouncementComplete
                     }
                     _ => anyhow::bail!("unsupported How to Play trigger {trigger}"),
                 },
                 companion: match companion.as_deref() {
                     None => None,
-                    Some("dreamwell-card") => Some(HowToPlayCompanion::DreamwellCard),
+                    Some("dreamwell-card") => Some(TutorialHowToPlayCompanion::DreamwellCard),
                     Some(other) => anyhow::bail!("unsupported How to Play companion {other}"),
                 },
                 card_width_pixels: card_width,
@@ -1393,8 +1493,8 @@ impl TryFrom<CompatibilityAction> for ActionDefinition {
                 owner: parse_side(&owner)?,
                 card_id: EntityId::parse(&card_id).map_err(anyhow::Error::msg)?,
                 reason: match reason.as_str() {
-                    "dreamwell-effect" => CardDrawReason::DreamwellEffect,
-                    "turn-draw" => CardDrawReason::TurnDraw,
+                    "dreamwell-effect" => TutorialCardDrawReason::DreamwellEffect,
+                    "turn-draw" => TutorialCardDrawReason::TurnDraw,
                     _ => anyhow::bail!("unsupported card draw reason {reason}"),
                 },
             },
@@ -1450,36 +1550,36 @@ impl TryFrom<CompatibilityAction> for ActionDefinition {
             wait_seconds: value.wait,
             behavior,
         };
-        validate_action(&action)?;
+        validate_action(&action, 500)?;
         Ok(action)
     }
 }
 
-impl TryFrom<CompatibilitySpeechBubble> for SpeechBubble {
+impl TryFrom<CompatibilitySpeechBubble> for TutorialSpeechBubble {
     type Error = anyhow::Error;
 
     fn try_from(value: CompatibilitySpeechBubble) -> Result<Self> {
         Ok(Self {
             speaker: match value.speaker.as_str() {
-                "mira" => Speaker::Mira,
-                "player" => Speaker::Player,
-                "enemy" => Speaker::Enemy,
+                "mira" => TutorialSpeaker::Mira,
+                "player" => TutorialSpeaker::Player,
+                "enemy" => TutorialSpeaker::Enemy,
                 other => anyhow::bail!("unsupported speech bubble speaker {other}"),
             },
             delay_seconds: value.delay,
-            duration_seconds: value.duration,
+            duration_seconds: Some(value.duration),
             horizontal_offset_pixels: value.horizontal_offset,
             vertical_offset_pixels: value.vertical_offset,
-            maximum_width_pixels: value.bubble_width,
+            maximum_width_pixels: Some(value.bubble_width),
             text: value.text,
         })
     }
 }
 
-fn parse_side(value: &str) -> Result<Side> {
+fn parse_side(value: &str) -> Result<TutorialSide> {
     match value {
-        "player" => Ok(Side::Player),
-        "enemy" => Ok(Side::Enemy),
+        "player" => Ok(TutorialSide::Player),
+        "enemy" => Ok(TutorialSide::Enemy),
         _ => anyhow::bail!("unsupported Tutorial side {value}"),
     }
 }
@@ -1635,24 +1735,26 @@ mod tests {
         entity(mapping[index].1)
     }
 
-    fn bubble(text: &str) -> SpeechBubble {
-        SpeechBubble {
-            speaker: Speaker::Mira,
+    fn bubble(text: &str) -> TutorialSpeechBubble {
+        TutorialSpeechBubble {
+            speaker: TutorialSpeaker::Mira,
             delay_seconds: Scalar::Integer(0),
-            duration_seconds: Scalar::Float(2.5),
+            duration_seconds: Some(Scalar::Float(2.5)),
             horizontal_offset_pixels: Scalar::Integer(0),
             vertical_offset_pixels: Scalar::Integer(-7),
-            maximum_width_pixels: 444,
+            maximum_width_pixels: Some(444),
             text: text.into(),
         }
     }
 
     fn synthetic_catalog() -> TutorialCatalog {
-        let persistent = PersistentSpeechBubble {
+        let persistent = TutorialSpeechBubble {
+            speaker: TutorialSpeaker::Mira,
             delay_seconds: Scalar::Float(1.25),
+            duration_seconds: None,
             horizontal_offset_pixels: Scalar::Integer(-12),
             vertical_offset_pixels: Scalar::Integer(8),
-            maximum_width_pixels: 456,
+            maximum_width_pixels: Some(456),
             text: "Persistent Unicode ✦".into(),
         };
         let actions = vec![
@@ -1660,20 +1762,20 @@ mod tests {
                 speech_bubble: bubble("Line one\nline two"),
             },
             TutorialAction::DisplayHowToPlay {
-                trigger: HowToPlayTrigger::EnemyTurnAnnouncementComplete,
-                companion: Some(HowToPlayCompanion::DreamwellCard),
+                trigger: TutorialHowToPlayTrigger::EnemyTurnAnnouncementComplete,
+                companion: Some(TutorialHowToPlayCompanion::DreamwellCard),
                 card_width_pixels: Some(480),
                 text: "How to play".into(),
             },
             TutorialAction::AnimateDreamAvatarPortrait {
-                owner: Side::Enemy,
+                owner: TutorialSide::Enemy,
                 pause_seconds: Scalar::Integer(1),
                 duration_seconds: Scalar::Float(0.75),
             },
             TutorialAction::DrawCard {
-                owner: Side::Player,
+                owner: TutorialSide::Player,
                 card_id: entity("00000000-0000-4000-8000-000000000101"),
-                reason: CardDrawReason::TurnDraw,
+                reason: TutorialCardDrawReason::TurnDraw,
             },
             TutorialAction::DrawOpponentCard {
                 card_id: entity("00000000-0000-4000-8000-000000000102"),
@@ -1695,7 +1797,7 @@ mod tests {
                 blocker_card_id: entity("00000000-0000-4000-8000-000000000101"),
             },
             TutorialAction::DrawDreamwellCard {
-                owner: Side::Enemy,
+                owner: TutorialSide::Enemy,
                 card_id: entity("00000000-0000-4000-8000-000000000201"),
                 reveal_duration_seconds: None,
             },
@@ -1705,7 +1807,7 @@ mod tests {
         ]
         .into_iter()
         .enumerate()
-        .map(|(index, behavior)| ActionDefinition {
+        .map(|(index, behavior)| TutorialActionDefinition {
             id: mapped_id(ACTION_IDS, index),
             wait_seconds: if index == 0 {
                 Scalar::Float(0.5)
@@ -1717,7 +1819,8 @@ mod tests {
         .collect();
 
         TutorialCatalog {
-            journey_guidance: JourneyGuidance {
+            default_maximum_width_pixels: 500,
+            journey_guidance: TutorialJourneyGuidance {
                 journey_start: persistent.clone(),
                 dreamscape: persistent.clone(),
                 atlas: persistent.clone(),
@@ -1727,124 +1830,119 @@ mod tests {
                 first_battle: persistent.clone(),
                 second_battle: persistent,
             },
-            battle: BattleConfiguration {
+            battle: TutorialBattleConfiguration {
                 player_dream_avatar_id: entity("00000000-0000-4000-8000-000000000301"),
                 enemy_dream_avatar_id: entity("00000000-0000-4000-8000-000000000302"),
                 starting_energy: 7,
                 score_to_win: 19,
-                starter_deck: vec![StarterDeckEntry {
+                starter_deck: vec![TutorialStarterDeckEntry {
                     card_id: entity("00000000-0000-4000-8000-000000000101"),
                     copies: 2,
                 }],
                 player_draws: vec![],
                 enemy_draws: vec![entity("00000000-0000-4000-8000-000000000102")],
                 dreamwell_draws: vec![entity("00000000-0000-4000-8000-000000000201")],
-                featured_cards: FeaturedCards {
+                scripted_card_roles: TutorialScriptedCardRoles {
                     player_card_id: entity("00000000-0000-4000-8000-000000000101"),
                     opponent_card_id: entity("00000000-0000-4000-8000-000000000102"),
                     enemy_starter_card_id: entity("00000000-0000-4000-8000-000000000103"),
                     loading_event_card_id: entity("00000000-0000-4000-8000-000000000104"),
                     dreamwell_card_id: entity("00000000-0000-4000-8000-000000000201"),
                 },
-                scripted_board: ScriptedBoard {
-                    player_back_rank_index: 2,
-                    player_front_rank_index: 1,
-                },
-                handoff: BattleHandoff {
-                    active_side: Side::Enemy,
+                handoff: TutorialBattleHandoff {
+                    active_side: TutorialSide::Enemy,
                     turn_number: 3,
-                    phase: BattlePhase::Night,
+                    phase: TutorialBattlePhase::Night,
                     dreamwell_deck_index: 1,
-                    player: HandoffSide {
+                    player: TutorialHandoffSide {
                         current_energy: 3,
                         maximum_energy: 4,
                         score: 5,
                         dreamwell_card_index: 0,
                         dreamwell_drawn_turn: 2,
                     },
-                    enemy: HandoffSide {
+                    enemy: TutorialHandoffSide {
                         current_energy: 2,
                         maximum_energy: 2,
                         score: 6,
                         dreamwell_card_index: 0,
                         dreamwell_drawn_turn: 2,
                     },
-                    placements: vec![
-                        HandoffPlacement::Rank {
-                            card: FeaturedCardRole::LoadingEvent,
-                            side: Side::Player,
-                            source: PlacementSource::Deck,
-                            rank: Rank::Back,
-                            slot_id: "B1".into(),
+                    card_placements: vec![
+                        TutorialHandoffPlacement::Rank {
+                            card: TutorialScriptedCardRole::LoadingEvent,
+                            side: TutorialSide::Player,
+                            source: TutorialPlacementSource::Deck,
+                            slot: TutorialRankSlot::Back(1),
                         },
-                        HandoffPlacement::Void {
-                            card: FeaturedCardRole::Opponent,
-                            side: Side::Enemy,
-                            source: PlacementSource::Created,
+                        TutorialHandoffPlacement::Void {
+                            card: TutorialScriptedCardRole::Opponent,
+                            side: TutorialSide::Enemy,
+                            source: TutorialPlacementSource::Created,
                         },
                     ],
                 },
-                ai_action_overrides: vec![AiActionOverride {
+                ai_action_overrides: vec![TutorialAiActionOverride {
                     id: mapped_id(AI_OVERRIDE_IDS, 0),
-                    trigger: AiTrigger::AfterEnemyDreamwell {
+                    trigger: TutorialAiTrigger::AfterEnemyDreamwell {
                         card_id: entity("00000000-0000-4000-8000-000000000201"),
                     },
-                    action: AiAction::PlayCard {
+                    action: TutorialAiAction::PlayCard {
                         card_id: entity("00000000-0000-4000-8000-000000000102"),
                     },
                 }],
             },
-            actions,
+            scripted_tutorial_sequence: actions,
             triggers: vec![
-                TriggerDefinition {
+                TutorialTriggerDefinition {
                     id: mapped_id(TRIGGER_IDS, 0),
                     on: vec![
-                        TriggerEvent::CardSeen,
-                        TriggerEvent::CardPlay,
-                        TriggerEvent::CardNoValidTargets,
-                        TriggerEvent::DreamwellResolve,
+                        TutorialTriggerEvent::CardSeen,
+                        TutorialTriggerEvent::CardPlay,
+                        TutorialTriggerEvent::CardNoValidTargets,
+                        TutorialTriggerEvent::DreamwellResolve,
                     ],
                     priority: Scalar::Float(7.5),
-                    delay_seconds: [(TriggerEvent::CardSeen, Scalar::Float(0.25))]
+                    delay_seconds: [(TutorialTriggerEvent::CardSeen, Scalar::Float(0.25))]
                         .into_iter()
                         .collect(),
                     duration_seconds: Scalar::Integer(3),
-                    maximum_width_pixels: 500,
-                    matcher: TriggerMatcher::Glossary {
+                    maximum_width_pixels: None,
+                    matcher: TutorialTriggerMatcher::Glossary {
                         glossary_id: mapped_id(GLOSSARY_IDS, 0),
                     },
                     text: "Glossary".into(),
                 },
-                TriggerDefinition {
+                TutorialTriggerDefinition {
                     id: mapped_id(TRIGGER_IDS, 1),
-                    on: vec![TriggerEvent::ChallengeResolved],
+                    on: vec![TutorialTriggerEvent::ChallengeResolved],
                     priority: Scalar::Integer(2),
                     delay_seconds: IndexMap::new(),
                     duration_seconds: Scalar::Integer(4),
-                    maximum_width_pixels: 501,
-                    matcher: TriggerMatcher::EventCard,
+                    maximum_width_pixels: Some(501),
+                    matcher: TutorialTriggerMatcher::EventCard,
                     text: "Card type".into(),
                 },
-                TriggerDefinition {
+                TutorialTriggerDefinition {
                     id: mapped_id(TRIGGER_IDS, 2),
-                    on: vec![TriggerEvent::PlayerNightPhase],
+                    on: vec![TutorialTriggerEvent::PlayerNightPhase],
                     priority: Scalar::Integer(3),
                     delay_seconds: IndexMap::new(),
                     duration_seconds: Scalar::Integer(5),
-                    maximum_width_pixels: 502,
-                    matcher: TriggerMatcher::Card {
+                    maximum_width_pixels: Some(502),
+                    matcher: TutorialTriggerMatcher::Card {
                         card_id: entity("00000000-0000-4000-8000-000000000101"),
                     },
                     text: "Card".into(),
                 },
-                TriggerDefinition {
+                TutorialTriggerDefinition {
                     id: mapped_id(TRIGGER_IDS, 3),
-                    on: vec![TriggerEvent::FigmentCreated],
+                    on: vec![TutorialTriggerEvent::FigmentCreated],
                     priority: Scalar::Integer(4),
                     delay_seconds: IndexMap::new(),
                     duration_seconds: Scalar::Integer(6),
-                    maximum_width_pixels: 503,
-                    matcher: TriggerMatcher::Any,
+                    maximum_width_pixels: Some(503),
+                    matcher: TutorialTriggerMatcher::Any,
                     text: "Any".into(),
                 },
             ],
@@ -1853,7 +1951,7 @@ mod tests {
 
     #[test]
     fn rejects_unknown_fields_and_non_uuidv4_identity() {
-        let unknown = r#"TutorialCatalog(journey_guidance: JourneyGuidance(journey_start: PersistentSpeechBubble(maximum_width_pixels: 500, text: \"x\"), dreamscape: PersistentSpeechBubble(maximum_width_pixels: 500, text: \"x\"), atlas: PersistentSpeechBubble(maximum_width_pixels: 500, text: \"x\"), draft: PersistentSpeechBubble(maximum_width_pixels: 500, text: \"x\"), purge: PersistentSpeechBubble(maximum_width_pixels: 500, text: \"x\"), dreamsign_revelation: PersistentSpeechBubble(maximum_width_pixels: 500, text: \"x\"), first_battle: PersistentSpeechBubble(maximum_width_pixels: 500, text: \"x\"), second_battle: PersistentSpeechBubble(maximum_width_pixels: 500, text: \"x\"), surprise: true), battle: ( ))"#;
+        let unknown = r#"TutorialCatalog(default_maximum_width_pixels: 500, journey_guidance: TutorialJourneyGuidance(journey_start: TutorialSpeechBubble(text: \"x\"), dreamscape: TutorialSpeechBubble(text: \"x\"), atlas: TutorialSpeechBubble(text: \"x\"), draft: TutorialSpeechBubble(text: \"x\"), purge: TutorialSpeechBubble(text: \"x\"), dreamsign_revelation: TutorialSpeechBubble(text: \"x\"), first_battle: TutorialSpeechBubble(text: \"x\"), second_battle: TutorialSpeechBubble(text: \"x\"), surprise: true), battle: ( ))"#;
         assert!(ron::from_str::<TutorialCatalog>(unknown).is_err());
         for invalid in [
             "legacy-id",
@@ -1866,16 +1964,15 @@ mod tests {
 
     #[test]
     fn exhaustively_lowers_closed_vocabularies() {
-        assert_eq!([Side::Player, Side::Enemy].map(side), ["player", "enemy"]);
         assert_eq!(
-            [Rank::Front, Rank::Back].map(rank_name),
-            ["frontRank", "backRank"]
+            [TutorialSide::Player, TutorialSide::Enemy].map(side),
+            ["player", "enemy"]
         );
         assert_eq!(
             [
-                HowToPlayTrigger::Immediate,
-                HowToPlayTrigger::PlayerTurnAnnouncementComplete,
-                HowToPlayTrigger::EnemyTurnAnnouncementComplete
+                TutorialHowToPlayTrigger::Immediate,
+                TutorialHowToPlayTrigger::PlayerTurnAnnouncementComplete,
+                TutorialHowToPlayTrigger::EnemyTurnAnnouncementComplete
             ]
             .map(how_to_play_trigger),
             [
@@ -1885,19 +1982,23 @@ mod tests {
             ]
         );
         assert_eq!(
-            [CardDrawReason::DreamwellEffect, CardDrawReason::TurnDraw].map(draw_reason),
+            [
+                TutorialCardDrawReason::DreamwellEffect,
+                TutorialCardDrawReason::TurnDraw
+            ]
+            .map(draw_reason),
             ["dreamwell-effect", "turn-draw"]
         );
         assert_eq!(
             [
-                BattlePhase::Dreamwell,
-                BattlePhase::Draw,
-                BattlePhase::Dawn,
-                BattlePhase::Day,
-                BattlePhase::Dusk,
-                BattlePhase::Night,
-                BattlePhase::Challenge,
-                BattlePhase::Ending,
+                TutorialBattlePhase::Dreamwell,
+                TutorialBattlePhase::Draw,
+                TutorialBattlePhase::Dawn,
+                TutorialBattlePhase::Day,
+                TutorialBattlePhase::Dusk,
+                TutorialBattlePhase::Night,
+                TutorialBattlePhase::Challenge,
+                TutorialBattlePhase::Ending,
             ]
             .map(phase),
             [
@@ -1912,20 +2013,25 @@ mod tests {
             ]
         );
         assert_eq!(
-            [Speaker::Mira, Speaker::Player, Speaker::Enemy].map(speaker),
+            [
+                TutorialSpeaker::Mira,
+                TutorialSpeaker::Player,
+                TutorialSpeaker::Enemy
+            ]
+            .map(speaker),
             ["mira", "player", "enemy"]
         );
         assert_eq!(
             [
-                TriggerEvent::CardSeen,
-                TriggerEvent::CardPlay,
-                TriggerEvent::CardNoValidTargets,
-                TriggerEvent::ChallengeResolved,
-                TriggerEvent::DreamwellResolve,
-                TriggerEvent::FigmentCreated,
-                TriggerEvent::OpponentRepositionOpportunity,
-                TriggerEvent::PlayerNightPhase,
-                TriggerEvent::TransfigurationSeen,
+                TutorialTriggerEvent::CardSeen,
+                TutorialTriggerEvent::CardPlay,
+                TutorialTriggerEvent::CardNoValidTargets,
+                TutorialTriggerEvent::ChallengeResolved,
+                TutorialTriggerEvent::DreamwellResolve,
+                TutorialTriggerEvent::FigmentCreated,
+                TutorialTriggerEvent::OpponentRepositionOpportunity,
+                TutorialTriggerEvent::PlayerNightPhase,
+                TutorialTriggerEvent::TransfigurationSeen,
             ]
             .map(trigger_event),
             [
@@ -1951,7 +2057,7 @@ mod tests {
         assert!(validate_finite(Scalar::Float(f64::INFINITY), "test").is_err());
 
         let mut duplicate = synthetic_catalog();
-        duplicate.actions[1].id = duplicate.actions[0].id;
+        duplicate.scripted_tutorial_sequence[1].id = duplicate.scripted_tutorial_sequence[0].id;
         assert!(
             lower(duplicate)
                 .unwrap_err()
@@ -1960,9 +2066,10 @@ mod tests {
         );
 
         let mut invalid_reference = synthetic_catalog();
-        invalid_reference.battle.ai_action_overrides[0].trigger = AiTrigger::AfterEnemyDreamwell {
-            card_id: entity("00000000-0000-4000-8000-000000000299"),
-        };
+        invalid_reference.battle.ai_action_overrides[0].trigger =
+            TutorialAiTrigger::AfterEnemyDreamwell {
+                card_id: entity("00000000-0000-4000-8000-000000000299"),
+            };
         assert!(
             lower(invalid_reference)
                 .unwrap_err()
@@ -1972,8 +2079,61 @@ mod tests {
     }
 
     #[test]
+    fn tutorial_editor_preserves_inherited_widths_and_explicit_width_edits() {
+        let mut before = synthetic_catalog().scripted_tutorial_sequence;
+        let TutorialAction::DisplaySpeechBubble { speech_bubble } = &mut before[0].behavior else {
+            panic!("synthetic first action must be a speech bubble");
+        };
+        speech_bubble.maximum_width_pixels = None;
+
+        let edited_json = serde_json::json!([{
+            "id": "welcome",
+            "action": "display-speech-bubble",
+            "speechBubble": {
+                "speaker": "mira",
+                "duration": 2.5,
+                "horizontalOffset": 0,
+                "verticalOffset": -7,
+                "bubbleWidth": 500,
+                "text": "Edited"
+            },
+            "wait": 0.5
+        }]);
+        let mut inherited_edit = actions_from_compatibility_json(edited_json.clone()).unwrap();
+        preserve_default_bubble_width_omissions(&before, &mut inherited_edit, 500);
+        assert_eq!(
+            action_speech_bubble(&inherited_edit[0])
+                .unwrap()
+                .1
+                .maximum_width_pixels,
+            None
+        );
+
+        let TutorialAction::DisplaySpeechBubble { speech_bubble } = &mut before[0].behavior else {
+            unreachable!();
+        };
+        speech_bubble.maximum_width_pixels = Some(444);
+        let mut explicit_edit = actions_from_compatibility_json(edited_json).unwrap();
+        preserve_default_bubble_width_omissions(&before, &mut explicit_edit, 500);
+        assert_eq!(
+            action_speech_bubble(&explicit_edit[0])
+                .unwrap()
+                .1
+                .maximum_width_pixels,
+            Some(500)
+        );
+    }
+
+    #[test]
     fn lowers_every_action_and_matcher_variant_with_exact_compatibility_keys() {
-        let lowered = lower(synthetic_catalog()).unwrap();
+        let mut catalog = synthetic_catalog();
+        let TutorialAction::DisplaySpeechBubble { speech_bubble } =
+            &mut catalog.scripted_tutorial_sequence[0].behavior
+        else {
+            panic!("synthetic first action must be a speech bubble");
+        };
+        speech_bubble.maximum_width_pixels = None;
+        let lowered = lower(catalog).unwrap();
         let actions = lowered["actions"].as_array().unwrap();
         assert_eq!(actions.len(), 11);
         assert_eq!(
@@ -2002,6 +2162,10 @@ mod tests {
             Some(-7)
         );
         assert!(actions[0]["speechBubble"].get("horizontalOffset").is_none());
+        assert_eq!(
+            actions[0]["speechBubble"]["bubbleWidth"].as_integer(),
+            Some(500)
+        );
         assert!(actions[9].get("revealDuration").is_none());
         assert!(actions[10].get("speechBubble").is_none());
 
@@ -2015,6 +2179,7 @@ mod tests {
         assert_eq!(triggers[2]["match"]["kind"].as_str(), Some("card-id"));
         assert_eq!(triggers[3]["match"]["kind"].as_str(), Some("any"));
         assert!(triggers[1].get("delay").is_none());
+        assert_eq!(triggers[0]["bubbleWidth"].as_integer(), Some(500));
         assert!(
             lowered["battle"]["playerDraws"]
                 .as_array()
@@ -2025,6 +2190,11 @@ mod tests {
             lowered["battle"]["handoff"]["placements"][0]["zone"].as_str(),
             Some("backRank")
         );
+        assert_eq!(
+            lowered["battle"]["handoff"]["placements"][0]["slotId"].as_str(),
+            Some("B1")
+        );
+        assert!(lowered["battle"].get("scriptedBoard").is_none());
         assert!(
             lowered["battle"]["handoff"]["placements"][1]
                 .get("slotId")

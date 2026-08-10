@@ -157,7 +157,7 @@ const VOLTSURGE: DreamwellCard = {
 };
 
 describe("buildTutorialView", () => {
-  it("uses a synthetic scenario for identities, deck size, energy, target, and compact slots", () => {
+  it("uses a synthetic scenario for identities, deck size, energy, and target", () => {
     const battleConfiguration = makeTutorialBattleConfiguration({
       featuredCards: {
         ...TEST_TUTORIAL_FEATURED_CARDS,
@@ -168,10 +168,6 @@ describe("buildTutorialView", () => {
       startingEnergy: 9,
       scoreToWin: 17,
       starterDeck: [{ cardId: RUNEBOUND_CHAMPION.id, copies: 7 }],
-      scriptedBoard: {
-        playerBackRankIndex: 2,
-        playerFrontRankIndex: 1,
-      },
     });
     const actions: readonly TutorialAction[] = [
       {
@@ -234,7 +230,7 @@ describe("buildTutorialView", () => {
       maxEnergy: 9,
       pointsToWin: 17,
     });
-    expect(tutorial.battle.player.frontRank[1]?.card?.model.cardId).toBe(
+    expect(tutorial.battle.player.frontRank[0]?.card?.model.cardId).toBe(
       RUNEBOUND_CHAMPION.id,
     );
   });

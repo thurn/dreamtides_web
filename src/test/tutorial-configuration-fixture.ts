@@ -2,7 +2,7 @@ import type {
   TutorialBattleConfiguration,
   TutorialConfiguration,
   TutorialFeaturedCards,
-  TutorialPersistentSpeechBubble,
+  TutorialSpeechBubble,
 } from "../types/tutorial";
 
 export const TEST_TUTORIAL_FEATURED_CARDS: TutorialFeaturedCards = {
@@ -32,10 +32,6 @@ export function makeTutorialBattleConfiguration(
       { cardId: TEST_TUTORIAL_FEATURED_CARDS.enemyStarterCardId, copies: 10 },
       { cardId: TEST_TUTORIAL_FEATURED_CARDS.loadingEventCardId, copies: 10 },
     ],
-    scriptedBoard: {
-      playerBackRankIndex: 0,
-      playerFrontRankIndex: 0,
-    },
     handoff: {
       activeSide: "player",
       turnNumber: 4,
@@ -89,7 +85,7 @@ export function makeTutorialBattleConfiguration(
   };
 }
 
-const SPEECH_BUBBLE: TutorialPersistentSpeechBubble = {
+const SPEECH_BUBBLE: TutorialSpeechBubble = {
   speaker: "mira",
   horizontalOffset: 0,
   verticalOffset: 0,

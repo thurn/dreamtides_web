@@ -1020,7 +1020,7 @@ export function buildTutorialView(
           playerCardPlayed &&
           !playerCardRepositioned &&
           playerTurnCard !== null &&
-          index === battleConfiguration.scriptedBoard.playerBackRankIndex
+          index === 0
             ? {
                 ...slot,
                 card: {
@@ -1036,7 +1036,7 @@ export function buildTutorialView(
           playerCardRepositioned &&
           !(challengeResolved && challengeLoserOwner === "player") &&
           playerTurnCard !== null &&
-          index === battleConfiguration.scriptedBoard.playerFrontRankIndex
+          index === 0
             ? {
                 ...slot,
                 card: {

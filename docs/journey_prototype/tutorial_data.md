@@ -9,8 +9,8 @@ normalized browser artifact to `public/tutorial-data.json`.
 
 ## Scenario identity
 
-`battle.featured_cards` assigns stable semantic roles to the cards reused by the
-tutorial:
+`battle.scripted_card_roles` assigns stable semantic roles to cards reused by
+the scripted sequence, loading presentation, and playable handoff:
 
 - `player_card_id`: the scripted player character
 - `opponent_card_id`: the scripted opponent character
@@ -27,13 +27,13 @@ Every field is a catalog UUID. Ordinary card roles resolve against
 ## Battle setup
 
 The `battle` record contains `starting_energy`, `score_to_win`, and
-`starter_deck`. Each `StarterDeckEntry` has a `card_id` and a positive
+`starter_deck`. Each `TutorialStarterDeckEntry` has a `card_id` and a positive
 `copies` count. The displayed and initialized deck size is the sum of those
 counts.
 
-`battle.scripted_board` selects the compact player back-rank and front-rank
-indices used by the scripted presentation. Back-rank indices range from 0 to 2;
-front-rank indices range from 0 to 1.
+The compact scripted presentation places its player character in the first
+available back-rank or front-rank presentation slot. These transient layout
+positions are presentation-owned and are not authored battle state.
 
 `player_draws`, `enemy_draws`, and `dreamwell_draws` define deterministic draw
 prefixes. `ai_action_overrides` defines state-matched semantic AI actions. The
@@ -51,25 +51,33 @@ scripted sequence:
 - `battle.handoff.player` and `battle.handoff.enemy` set current and maximum
   energy, score, Dreamwell card index, and the turn of the latest Dreamwell
   draw.
-- `battle.handoff.placements` materializes featured card roles into a side and
-  zone. A placement sourced from `deck` consumes a matching starter-deck copy;
-  a placement sourced from `created` creates an instance with tutorial
+- `battle.handoff.card_placements` materializes scripted card roles into a side
+  and zone. A placement sourced from `Deck` consumes a matching starter-deck
+  copy; a placement sourced from `Created` creates an instance with tutorial
   provenance.
 
-Rank placements use canonical `slot_id` values. Front-rank slots are `F0` through
-`F8`; the player back rank uses `B0` through `B4`; the enemy back rank uses
-`B0` through `B9`. Void placements omit `slotId`.
+Rank placements use typed `Front(index)` and `Back(index)` slots. Front-rank
+indices range from 0 through 8; player back-rank indices range from 0 through
+4; enemy back-rank indices range from 0 through 9. The compiler lowers these
+typed slots to the browser battle-address format.
 
 ## Guidance and actions
 
-`actions` is the ordered front-door tutorial sequence. `triggers` contains
-shared first-occurrence explanations. The `journey_start`, `dreamscape`,
+`scripted_tutorial_sequence` is the ordered front-door tutorial sequence.
+`triggers` contains shared first-occurrence explanations. The `journey_start`, `dreamscape`,
 `atlas`, `draft`, `purge`, `dreamsign_revelation`, `first_battle`, and
 `second_battle` records
-configure persistent Mira guidance on their journey surfaces.
+configure persistent Mira guidance on their journey surfaces. Every authored
+bubble uses `TutorialSpeechBubble`; surface-owned guidance omits
+`duration_seconds`, while timed sequence bubbles set it.
+
+`default_maximum_width_pixels` supplies the desktop width for bubbles and
+triggers that omit `maximum_width_pixels`. Individual entries override it only
+when their composition needs a different width.
 
 Each action, trigger, and AI override has a UUIDv4 identity. The development
-Tutorial Editor applies typed semantic operations to the ordered `actions`
+Tutorial Editor applies typed semantic operations to the ordered
+`scripted_tutorial_sequence`
 collection. Scalar saves patch the authored value span; behavior and structural
 saves patch the affected subtree. Every save validates the complete typed
 catalog, regenerates compatibility TOML and browser JSON in staging, and

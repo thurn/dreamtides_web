@@ -484,6 +484,7 @@ function SpeechBubbleEditor({
   }
   const appearanceDelay =
     typeof speechBubble.delay === "number" ? speechBubble.delay : 0;
+  const visibleDuration = speechBubble.duration ?? 0;
 
   return (
     <div
@@ -549,19 +550,19 @@ function SpeechBubbleEditor({
       />
       <NumberStepper
         label="Visible Duration"
-        value={speechBubble.duration}
-        displayValue={`${waitLabel(speechBubble.duration)}s`}
+        value={visibleDuration}
+        displayValue={`${waitLabel(visibleDuration)}s`}
         size="sm"
         decrementLabel={`Decrease speech bubble duration for action ${String(actionNumber)}`}
         incrementLabel={`Increase speech bubble duration for action ${String(actionNumber)}`}
-        decrementDisabled={speechBubble.duration <= 0}
+        decrementDisabled={visibleDuration <= 0}
         onDecrement={() =>
           onChange(
             {
               ...speechBubble,
               duration: Math.max(
                 0,
-                Math.round((speechBubble.duration - 0.5) * 10) / 10,
+                Math.round((visibleDuration - 0.5) * 10) / 10,
               ),
             },
             true,
@@ -571,7 +572,7 @@ function SpeechBubbleEditor({
           onChange(
             {
               ...speechBubble,
-              duration: Math.round((speechBubble.duration + 0.5) * 10) / 10,
+              duration: Math.round((visibleDuration + 0.5) * 10) / 10,
             },
             true,
           )

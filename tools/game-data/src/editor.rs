@@ -42,9 +42,7 @@ use crate::models::internal_card_metadata::{
     self, CardMetadataCatalog, CardMetadataDefinition, FacetDefinition,
 };
 use crate::models::tides::{self, TideColor, TideDefinition, TideId, TidesCatalog};
-use crate::models::tutorial::{
-    self, ActionDefinition as TutorialActionDefinition, TutorialCatalog,
-};
+use crate::models::tutorial::{self, TutorialActionDefinition, TutorialCatalog};
 
 #[derive(Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -470,11 +468,20 @@ fn edit_tutorial(
     for operation in operations {
         match operation {
             EditOperation::ReplaceTutorialActions { actions } => {
-                let replacement = tutorial::actions_from_compatibility_json(actions)
+                let mut replacement = tutorial::actions_from_compatibility_json(actions)
                     .context("INVALID_EDIT: Tutorial actions are invalid")?;
                 reject_duplicate_tutorial_actions(&replacement)?;
-                source_text = patch_tutorial_actions(&source_text, &catalog.actions, &replacement)?;
-                catalog.actions = replacement;
+                tutorial::preserve_default_bubble_width_omissions(
+                    &catalog.scripted_tutorial_sequence,
+                    &mut replacement,
+                    catalog.default_maximum_width_pixels,
+                );
+                source_text = patch_tutorial_actions(
+                    &source_text,
+                    &catalog.scripted_tutorial_sequence,
+                    &replacement,
+                )?;
+                catalog.scripted_tutorial_sequence = replacement;
                 tutorial::validate(&catalog)
                     .context("INVALID_EDIT: Tutorial edit violates the catalog contract")?;
             }
@@ -517,8 +524,10 @@ fn patch_tutorial_actions(
             .all(|(left, right)| left.id == right.id);
     if !same_structure {
         let catalog = tutorial_catalog_range(source)?;
-        let actions = top_level_field_value_range(source, catalog, "actions")?
-            .context("MALFORMED_SOURCE: Tutorial catalog is missing actions")?;
+        let actions = top_level_field_value_range(source, catalog, "scripted_tutorial_sequence")?
+            .context(
+            "MALFORMED_SOURCE: Tutorial catalog is missing scripted_tutorial_sequence",
+        )?;
         return replace_source_ranges(source, vec![(actions, render_ron_value(after, true)?)]);
     }
 
@@ -557,7 +566,7 @@ fn tutorial_catalog_range(source: &str) -> Result<Range<usize>> {
 }
 
 fn tutorial_action_record_range(source: &str, id: &str) -> Result<Range<usize>> {
-    typed_record_range_at_indent(source, "ActionDefinition", "id", id, 4)
+    typed_record_range_at_indent(source, "TutorialActionDefinition", "id", id, 4)
 }
 
 fn render_ron_value<T: serde::Serialize + ?Sized>(
@@ -5254,21 +5263,21 @@ CardMetadataCatalog(
     const TUTORIAL_EDITOR_SOURCE: &str = r###"// Preserve catalog guidance.
 #![enable(implicit_some)]
 TutorialCatalog(
-  actions: [
-    ActionDefinition(
+  default_maximum_width_pixels: 700,
+  scripted_tutorial_sequence: [
+    TutorialActionDefinition(
       id: "11111111-1111-4111-8111-111111111111",
       wait_seconds: 1,
       behavior: DisplaySpeechBubble(
-        speech_bubble: SpeechBubble(
+        speech_bubble: TutorialSpeechBubble(
           duration_seconds: 3,
-          maximum_width_pixels: 700,
           text: r#"Raw tutorial text"#,
         ),
       ),
     ),
 
     /* Preserve the unrelated action comment. */
-    ActionDefinition(
+    TutorialActionDefinition(
       id: "22222222-2222-4222-8222-222222222222",
       wait_seconds: 0,
       behavior: DrawOpponentCard(
@@ -5280,7 +5289,7 @@ TutorialCatalog(
 "###;
 
     fn tutorial_fixture_actions() -> Vec<TutorialActionDefinition> {
-        tutorial::actions_from_compatibility_json(json!([
+        let mut actions = tutorial::actions_from_compatibility_json(json!([
           {
             "id": "11111111-1111-4111-8111-111111111111",
             "action": "display-speech-bubble",
@@ -5301,12 +5310,18 @@ TutorialCatalog(
             "wait": 0
           }
         ]))
-        .unwrap()
+        .unwrap();
+        tutorial::preserve_default_bubble_width_omissions(
+            &parse_tutorial_actions(TUTORIAL_EDITOR_SOURCE),
+            &mut actions,
+            700,
+        );
+        actions
     }
 
     fn parse_tutorial_actions(source: &str) -> Vec<TutorialActionDefinition> {
         let catalog = tutorial_catalog_range(source).unwrap();
-        let actions = top_level_field_value_range(source, catalog, "actions")
+        let actions = top_level_field_value_range(source, catalog, "scripted_tutorial_sequence")
             .unwrap()
             .unwrap();
         ron::from_str(&format!("#![enable(implicit_some)]\n{}", &source[actions])).unwrap()
@@ -5327,6 +5342,7 @@ TutorialCatalog(
         assert!(patched.starts_with("// Preserve catalog guidance.\n"));
         assert!(patched.contains("/* Preserve the unrelated action comment. */"));
         assert!(patched.contains("text: r#\"Raw tutorial text\"#"));
+        assert!(!patched.contains("\n          maximum_width_pixels:"));
         assert_eq!(parse_tutorial_actions(&patched), after);
     }
 

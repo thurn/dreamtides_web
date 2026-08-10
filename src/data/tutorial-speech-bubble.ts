@@ -1,11 +1,11 @@
 import type {
-  TutorialSpeechBubblePresentation,
+  TutorialSpeechBubble,
   TutorialTriggerEvent,
 } from "../types/tutorial";
 
 /** Resolve scalar or event-specific authored speech-bubble timing. */
 export function tutorialSpeechBubbleDelaySeconds(
-  speechBubble: Pick<TutorialSpeechBubblePresentation, "delay">,
+  speechBubble: Pick<TutorialSpeechBubble, "delay">,
   event?: TutorialTriggerEvent,
 ): number {
   const { delay } = speechBubble;

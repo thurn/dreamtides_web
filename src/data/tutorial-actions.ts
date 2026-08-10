@@ -122,27 +122,6 @@ function parseStarterDeck(value: unknown) {
   });
 }
 
-function parseScriptedBoard(value: unknown) {
-  if (value === null || typeof value !== "object" || Array.isArray(value)) {
-    throw new Error("Tutorial battle must contain a scriptedBoard table.");
-  }
-  const record = value as Record<string, unknown>;
-  const playerBackRankIndex = parseInteger(
-    record.playerBackRankIndex,
-    "scriptedBoard.playerBackRankIndex",
-  );
-  const playerFrontRankIndex = parseInteger(
-    record.playerFrontRankIndex,
-    "scriptedBoard.playerFrontRankIndex",
-  );
-  if (playerBackRankIndex >= 3 || playerFrontRankIndex >= 2) {
-    throw new Error(
-      "Tutorial battle scriptedBoard indices must fit the compact three-slot back rank and two-slot front rank.",
-    );
-  }
-  return { playerBackRankIndex, playerFrontRankIndex };
-}
-
 function parseHandoffSide(value: unknown, side: "player" | "enemy") {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
     throw new Error(`Tutorial battle handoff must contain a ${side} table.`);
@@ -298,7 +277,6 @@ export function parseTutorialBattleConfiguration(
     startingEnergy: parseInteger(record.startingEnergy, "startingEnergy"),
     scoreToWin: parseInteger(record.scoreToWin, "scoreToWin", 1),
     starterDeck: parseStarterDeck(record.starterDeck),
-    scriptedBoard: parseScriptedBoard(record.scriptedBoard),
     handoff: parseHandoff(record.handoff),
     playerDraws: parseCardDrawList(record.playerDraws, "playerDraws"),
     enemyDraws: parseCardDrawList(record.enemyDraws, "enemyDraws"),
@@ -940,7 +918,8 @@ export function parseTutorialTriggers(
         `Tutorial trigger ${JSON.stringify(record.id)} must define a speech bubble.`,
       );
     }
-    if (speechBubble.duration <= 0) {
+    const duration = speechBubble.duration;
+    if (duration === undefined || duration <= 0) {
       throw new Error(
         `Tutorial trigger ${JSON.stringify(record.id)} must have a positive duration.`,
       );
@@ -1008,6 +987,7 @@ export function parseTutorialTriggers(
       priority,
       match: parsedMatch,
       ...triggerSpeechBubble,
+      duration,
       ...(Object.keys(triggerDelay).length === 0
         ? {}
         : { delay: triggerDelay }),

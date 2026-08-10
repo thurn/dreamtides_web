@@ -147,26 +147,6 @@ function validateStarterDeck(value) {
   });
 }
 
-function validateScriptedBoard(value) {
-  if (value === null || typeof value !== "object" || Array.isArray(value)) {
-    throw invalid("Tutorial battle must contain a scriptedBoard table.");
-  }
-  const playerBackRankIndex = validateInteger(
-    value.playerBackRankIndex,
-    "scriptedBoard.playerBackRankIndex",
-  );
-  const playerFrontRankIndex = validateInteger(
-    value.playerFrontRankIndex,
-    "scriptedBoard.playerFrontRankIndex",
-  );
-  if (playerBackRankIndex >= 3 || playerFrontRankIndex >= 2) {
-    throw invalid(
-      "Tutorial battle scriptedBoard indices must fit the compact three-slot back rank and two-slot front rank.",
-    );
-  }
-  return { playerBackRankIndex, playerFrontRankIndex };
-}
-
 function validateHandoffSide(value, side) {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
     throw invalid(`Tutorial battle handoff must contain a ${side} table.`);
@@ -368,7 +348,6 @@ export function validateTutorialBattleConfiguration(value) {
     startingEnergy: validateInteger(value.startingEnergy, "startingEnergy"),
     scoreToWin: validateInteger(value.scoreToWin, "scoreToWin", 1),
     starterDeck: validateStarterDeck(value.starterDeck),
-    scriptedBoard: validateScriptedBoard(value.scriptedBoard),
     handoff: validateHandoff(value.handoff),
     playerDraws: validateCardDrawList(value.playerDraws, "playerDraws"),
     enemyDraws: validateCardDrawList(value.enemyDraws, "enemyDraws"),
