@@ -11477,8 +11477,131 @@
           "sparkBonus": 1
         }
       ]
+    },
+    {
+      "cardId": "95711262-8510-475c-a572-c1cd144d54cb",
+      "prose": "A child wanders through violet flowers as luminous insects drift beneath an emerald dawn.",
+      "action": [
+        {
+          "id": "6e60339a-28ce-40f8-82b9-27c012b2da3f",
+          "label": "Catch Returning Light",
+          "effectText": "Draft an Event from 4 choices.",
+          "followupTitle": "Catch Returning Light",
+          "followupSubtitle": "Choose one remembered Event to keep.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "82892492-1abf-411f-b26a-bda5cadeb706",
+          "label": "Welcome Emerald Dawn",
+          "effectText": "All characters in your deck gain +1✦.",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "648237c5-ceff-4a28-aaf8-4aa099eae80d",
+      "prose": "Two armored petitioners approach a colossal shadowed sovereign amid green fire, red light, and mist.",
+      "action": [
+        {
+          "id": "e131d680-a1b0-4907-8d30-a8b434bf1c5b",
+          "label": "Offer Lesser Subject",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a subject to offer, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "2b88eb65-9cb4-4486-b93e-ca26ba1e5b12",
+          "label": "Accept Sovereign's Champion",
+          "effectText": "Draft a transfigured Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured Character.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "d6e8842f-c0a4-4b4c-93bd-377cfae60894",
+      "prose": "A mounted knight races across sunlit grass as crimson cloth and black smoke stream behind.",
+      "action": [
+        {
+          "id": "4790344c-2167-4bf9-bef0-5d33787d7f68",
+          "label": "Chase His Shadow",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        },
+        {
+          "id": "46e7de23-2c95-4611-aa5c-ba39b9507229",
+          "label": "Rally Beneath Crimson",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "73fc1b7f-3c2b-4993-9590-924240515c2f",
+      "prose": "A lone hart crosses luminous water beneath circling stars, drifting clouds, and cobalt night.",
+      "action": [
+        {
+          "id": "7f0d6a6a-fb11-4314-841a-532724aa3e9c",
+          "label": "Follow Starwheel Dawn",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "653fffee-ea77-4cd3-b1ec-b3409ba82760",
+          "label": "Shatter Moonlit Reflection",
+          "effectText": "Purge a random Spirit Animal character. Every other Spirit Animal character in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Spirit Animal",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "0a19c54c-7a2e-4614-99c9-2c9142729ebb",
+      "prose": "A solitary runner races toward white light through a tunnel of suspended cyan screens.",
+      "action": [
+        {
+          "id": "c80a360f-9d3b-4bf6-b22d-0588a58e63af",
+          "label": "Capture a Screen Echo",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one projected deck card.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "c9b12011-3160-443e-ae04-ff36762059a4",
+          "label": "Outrun Every Projection",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        }
+      ]
     }
   ],
-  "contentHash": "279065f5b8b83372b6ae28b43321fc37e49d1098d451d2df81e4b9d9927756b4",
-  "foldHash": "279065f5b8b83372b6ae28b43321fc37e49d1098d451d2df81e4b9d9927756b4"
+  "contentHash": "d453e0eeeb125381e6dde1735467b25c7452fc2acc8dea6724a34f00872cfe9d",
+  "foldHash": "d453e0eeeb125381e6dde1735467b25c7452fc2acc8dea6724a34f00872cfe9d"
 }

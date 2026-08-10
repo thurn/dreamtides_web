@@ -12362,4 +12362,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "95711262-8510-475c-a572-c1cd144d54cb",
+    prose: "A child wanders through violet flowers as luminous insects drift beneath an emerald dawn.",
+    actions: [
+      ActionDefinition(
+        label: "Catch Returning Light",
+        id: "6e60339a-28ce-40f8-82b9-27c012b2da3f",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices.",
+          followup: Followup(
+            title: "Catch Returning Light",
+            subtitle: "Choose one remembered Event to keep.",
+          ),
+        ),
+        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Welcome Emerald Dawn",
+        id: "82892492-1abf-411f-b26a-bda5cadeb706",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦.",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "648237c5-ceff-4a28-aaf8-4aa099eae80d",
+    prose: "Two armored petitioners approach a colossal shadowed sovereign amid green fire, red light, and mist.",
+    actions: [
+      ActionDefinition(
+        label: "Offer Lesser Subject",
+        id: "e131d680-a1b0-4907-8d30-a8b434bf1c5b",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a subject to offer, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+
+      ActionDefinition(
+        label: "Accept Sovereign's Champion",
+        id: "2b88eb65-9cb4-4486-b93e-ca26ba1e5b12",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one transfigured Character.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: Character, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "d6e8842f-c0a4-4b4c-93bd-377cfae60894",
+    prose: "A mounted knight races across sunlit grass as crimson cloth and black smoke stream behind.",
+    actions: [
+      ActionDefinition(
+        label: "Chase His Shadow",
+        id: "4790344c-2167-4bf9-bef0-5d33787d7f68",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+
+      ActionDefinition(
+        label: "Rally Beneath Crimson",
+        id: "46e7de23-2c95-4611-aa5c-ba39b9507229",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "73fc1b7f-3c2b-4993-9590-924240515c2f",
+    prose: "A lone hart crosses luminous water beneath circling stars, drifting clouds, and cobalt night.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Starwheel Dawn",
+        id: "7f0d6a6a-fb11-4314-841a-532724aa3e9c",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Shatter Moonlit Reflection",
+        id: "653fffee-ea77-4cd3-b1ec-b3409ba82760",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Spirit Animal character. Every other Spirit Animal character in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Spirit Animal", spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "0a19c54c-7a2e-4614-99c9-2c9142729ebb",
+    prose: "A solitary runner races toward white light through a tunnel of suspended cyan screens.",
+    actions: [
+      ActionDefinition(
+        label: "Capture a Screen Echo",
+        id: "c80a360f-9d3b-4bf6-b22d-0588a58e63af",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one projected deck card."),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Outrun Every Projection",
+        id: "c9b12011-3160-443e-ae04-ff36762059a4",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+    ],
+  ),
 ]
