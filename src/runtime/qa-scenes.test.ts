@@ -467,6 +467,26 @@ describe('the "exploration" QA scene', () => {
     }
   });
 
+  it("makes the full catalog available to authored draft follow-ups", () => {
+    const { content, encounterCardId } = explorationContent();
+
+    const state = buildQaScene("exploration", content, {
+      explorationCardId: encounterCardId,
+    });
+
+    expect(state?.resolvedPackage?.draftPoolCopiesByCard).toEqual(
+      Object.fromEntries(
+        [...content.cardDatabase.values()].map((card) => [
+          String(card.cardNumber),
+          1,
+        ]),
+      ),
+    );
+    expect(state?.draftState?.draftPoolCopiesByCard).toEqual(
+      state?.resolvedPackage?.draftPoolCopiesByCard,
+    );
+  });
+
   it("provides a dedicated duplicate-deck scene with two duplicated card UUIDs", () => {
     const { content, encounterCardId } = explorationContent();
 

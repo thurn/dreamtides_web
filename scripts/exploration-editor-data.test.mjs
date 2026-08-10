@@ -30,7 +30,7 @@ describe("exploration editor data", () => {
   });
 
   it("publishes a closed code-owned schema without player copy", () => {
-    expect(EXPLORATION_EFFECT_SCHEMAS).toHaveLength(34);
+    expect(EXPLORATION_EFFECT_SCHEMAS).toHaveLength(35);
     expect(new Set(EXPLORATION_EFFECT_SCHEMAS.map((entry) => entry.kind)).size)
       .toBe(EXPLORATION_EFFECT_SCHEMAS.length);
     for (const definition of EXPLORATION_EFFECT_SCHEMAS) {

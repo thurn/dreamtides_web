@@ -340,6 +340,8 @@ function canonicalSelectionForAction(action: ExplorationActionContent): {
       return { mechanicId: "gain-essence-by-deck-predicate" };
     case "increase-spark-all":
       return { mechanicId: "increase-deck-spark" };
+    case "purge-random-subtype-and-increase-spark":
+      return { mechanicId: "purge-deck-entry", policyId: "uniform" };
     case "purge-dreamsign-for-essence":
       return { mechanicId: "purge-dreamsign-for-essence" };
     case "make-fast-all":
@@ -468,6 +470,31 @@ function buildActionOffer(
     const siteType = selected?.bindings.siteTypes[0];
     if (selected === null || siteType === undefined) return null;
     offer.offeredSiteType = siteType;
+    return withSelection(offer, selected);
+  }
+  if (action.effectKind === "purge-random-subtype-and-increase-spark") {
+    if (action.subtype === undefined) return null;
+    const eligibleEntryIds = resolvedDeckCards(journey, content)
+      .filter(
+        ({ card }) =>
+          card.cardType === "Character" &&
+          card.subtype === action.subtype &&
+          card.id.toLowerCase() !== encounterCardId.toLowerCase(),
+      )
+      .map(({ entry }) => entry.entryId)
+      .sort((left, right) => left.localeCompare(right));
+    if (eligibleEntryIds.length < 2) return offer;
+    const eligible = new Set(eligibleEntryIds);
+    const selected = select({
+      constraints: {
+        allowStarters: true,
+        excludedDeckEntryIds: journey.deck
+          .map((entry) => entry.entryId)
+          .filter((entryId) => !eligible.has(entryId)),
+      },
+    });
+    if (selected === null || selected.bindings.deckEntryIds.length !== 1) return null;
+    offer.offeredDeckEntryIds = [...selected.bindings.deckEntryIds];
     return withSelection(offer, selected);
   }
   if (usesOfferedDeckTarget(action)) {
@@ -1589,6 +1616,69 @@ export function resolveExplorationChoice(input: {
         })
       ) return null;
       result.affectedEntryIds.push(...affectedEntryIds);
+      break;
+    }
+    case "purge-random-subtype-and-increase-spark": {
+      const subtype = action.subtype;
+      const sparkBonus = action.sparkBonus;
+      const purgedEntryId = offer.offeredDeckEntryIds?.[0];
+      if (
+        subtype === undefined ||
+        sparkBonus === undefined ||
+        !Number.isInteger(sparkBonus) ||
+        sparkBonus <= 0 ||
+        purgedEntryId === undefined
+      ) return null;
+      const resolved = resolvedDeckCards(next, content);
+      const purged = resolved.find(
+        ({ entry, card }) =>
+          entry.entryId === purgedEntryId &&
+          card.cardType === "Character" &&
+          card.subtype === subtype,
+      );
+      const survivors = resolved.filter(
+        ({ entry, card }) =>
+          entry.entryId !== purgedEntryId &&
+          card.cardType === "Character" &&
+          card.subtype === subtype,
+      );
+      if (purged === undefined || survivors.length === 0) return null;
+      const purgeTarget = deckTarget(next, content, purgedEntryId);
+      const survivorTargets = survivors.map(({ entry }) =>
+        deckTarget(next, content, entry.entryId),
+      );
+      if (
+        purgeTarget === null ||
+        survivorTargets.some((target) => target === null) ||
+        !applyReward({
+          kind: "composite",
+          children: [
+            { kind: "remove_deck_entry", ...purgeTarget },
+            ...(survivorTargets as Array<NonNullable<(typeof survivorTargets)[number]>>).map(
+              (target) => ({
+                kind: "add_deck_entry_spark_bonus" as const,
+                ...target,
+                amount: sparkBonus,
+              }),
+            ),
+          ],
+        })
+      ) return null;
+      const sparkBeforeByEntryId = Object.fromEntries(
+        survivors.map(({ entry, card }) => [entry.entryId, Math.max(0, card.spark ?? 0)]),
+      );
+      result.purgedCardIds.push(purged.card.id);
+      result.purgedEntryIds?.push(purged.entry.entryId);
+      result.purgedEntrySnapshots?.push(purged.entry);
+      result.affectedEntryIds.push(...survivors.map(({ entry }) => entry.entryId));
+      result.sparkBeforeByEntryId = sparkBeforeByEntryId;
+      result.sparkAfterByEntryId = Object.fromEntries(
+        Object.entries(sparkBeforeByEntryId).map(([entryId, spark]) => [
+          entryId,
+          spark + sparkBonus,
+        ]),
+      );
+      result.selection = { entryIds: [purgedEntryId] };
       break;
     }
     case "make-fast-all": {

@@ -1438,8 +1438,140 @@
           "essencePerSpark": 20
         }
       ]
+    },
+    {
+      "cardId": "c97b0a5b-64d0-480f-8db7-3fde93738d86",
+      "prose": "A horned colossus leaps from shattered stone, moonlit tendrils coiling as boulders rise.",
+      "action": [
+        {
+          "id": "c6be47aa-68dc-4d5e-aeff-ac85de91f368",
+          "label": "Claim Colossus Strength",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        },
+        {
+          "id": "41d2f0f1-09c2-4fa8-8d14-1c2f3c070ddd",
+          "label": "Embrace Moonborn Hunger",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f",
+      "prose": "Five luminous birds rise from a hooded figure's hand above a mistbound city.",
+      "action": [
+        {
+          "id": "b760eb50-c7d8-470f-a90b-60b20a78730f",
+          "label": "Release Luminous Messengers",
+          "effectText": "Take any number of ≤2● cost Character cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any number of offered cards.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        },
+        {
+          "id": "571d4537-5ff6-47df-bdc0-77be447f411c",
+          "label": "Gather Their Shared Glow",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "e3193b23-2002-40a9-91fc-e0713200355e",
+      "prose": "Windblown leaves circle a lone swordsman climbing stone steps beneath a crimson moon.",
+      "action": [
+        {
+          "id": "4ae750c2-496f-4a48-a6b4-2acfd82fcb69",
+          "label": "Follow Moonlit Steps",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "65bcfadc-5775-4dd5-9147-4e82fa75e2ad",
+          "label": "Swear a Blood Oath",
+          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "29c4c45d-33df-42ac-bf28-387eb00264aa",
+      "prose": "Black cables bind a lone figure beneath sickly light across a shattered factory floor.",
+      "action": [
+        {
+          "id": "848f3ea9-1370-496b-bb50-9ba7013ea791",
+          "label": "Unravel Tangled Memories",
+          "effectText": "Take any number of Event cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any number of offered Events.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        },
+        {
+          "id": "8fbc7243-142a-4724-b683-161b463e8a66",
+          "label": "Accept Every Sorrow",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "7df5255e-bf23-4c14-b31b-be89fb864ee0",
+      "prose": "Two figures face a shattered starship glowing across blue grass.",
+      "action": [
+        {
+          "id": "82492620-482a-4e47-b589-85f6b48e014a",
+          "label": "Search shattered hull",
+          "effectText": "Draft an Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Event.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "57e56e5c-48c3-4b17-9ee2-80651d7ed7fb",
+          "label": "Restart buried reactor",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
     }
   ],
-  "contentHash": "984e47db5993e04cd47353f73d787268a34b13a8b14640590479bab7570745be",
-  "foldHash": "984e47db5993e04cd47353f73d787268a34b13a8b14640590479bab7570745be"
+  "contentHash": "da651fbf03f39f481ae42bcc3a24cd76ce4828dbe15d2b6cc1f04dfef8caa308",
+  "foldHash": "da651fbf03f39f481ae42bcc3a24cd76ce4828dbe15d2b6cc1f04dfef8caa308"
 }

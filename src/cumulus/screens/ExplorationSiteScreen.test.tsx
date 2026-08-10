@@ -2474,6 +2474,77 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
+  it("presents a purged card before strengthening the survivors", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = true;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const modified = deckModificationRewardView();
+    if (modified.reward === null || "kind" in modified.reward) {
+      throw new Error("fixture requires a deck modification reward");
+    }
+    const purgedCard = modified.reward.deckModification?.cards[0]?.model;
+    const survivorCards = modified.reward.deckModification?.cards;
+    if (purgedCard === undefined || survivorCards === undefined) {
+      throw new Error("fixture requires purged and surviving cards");
+    }
+    const purgeAndStrengthenView: ExplorationSiteView = {
+      ...modified,
+      reward: {
+        objects: {
+          cards: [],
+          purgedCards: [
+            { entryId: "purged-warrior", model: purgedCard, isBane: false },
+          ],
+          dreamsigns: [],
+        },
+        deckModification: {
+          kind: "spark",
+          announcement:
+            "Purge a random Warrior. Every other Warrior in your deck gains +1 spark.",
+          cards: survivorCards,
+          amount: 1,
+        },
+      },
+    };
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={purgeAndStrengthenView}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-exploration-deck-entry-id="purged-warrior"]',
+      )?.dataset.explorationPurgeCard,
+    ).toBe("");
+    expect(
+      container.querySelector("[data-exploration-deck-modification-reward]"),
+    ).toBeNull();
+    expect(onExit).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(3_100);
+    });
+    expect(container.querySelector("[data-exploration-purge-card]")).toBeNull();
+    const spark = container.querySelector<HTMLElement>(
+      '[data-exploration-deck-modification-kind="spark"]',
+    );
+    expect(spark?.dataset.explorationDeckModificationCount).toBe("2");
+    expect(onExit).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
   it("resumes a persisted deck modification directly at the reward moment", () => {
     vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
     reducedMotionPreference.value = false;

@@ -33,6 +33,7 @@ string_enum!(EffectKind {
     GainRandomCards => "gain-random-cards", TransfigureFixedSelected => "transfigure-fixed-selected",
     GainOfferedCard => "gain-offered-card", TransfigureNextDraftOrShop => "transfigure-next-draft-or-shop",
     GainEssencePerCard => "gain-essence-per-card", IncreaseSparkAll => "increase-spark-all",
+    PurgeRandomSubtypeAndIncreaseSpark => "purge-random-subtype-and-increase-spark",
     GainRandomDreamsign => "gain-random-dreamsign", PurgeDreamsignForEssence => "purge-dreamsign-for-essence",
     MakeFastAll => "make-fast-all", ReduceCostAllAndGainNightmares => "reduce-cost-all-and-gain-nightmares",
     CopySelectedCard => "copy-selected-card", CopySelectedCards => "copy-selected-cards",
@@ -77,7 +78,7 @@ string_enum!(Predicate {
 string_enum!(DeckTarget { Chosen => "chosen", Offered => "offered" });
 
 impl EffectKind {
-    pub(crate) const ALL: [Self; 34] = [
+    pub(crate) const ALL: [Self; 35] = [
         Self::PurgeAndCopy,
         Self::GainDreamsign,
         Self::GainCard,
@@ -98,6 +99,7 @@ impl EffectKind {
         Self::TransfigureNextDraftOrShop,
         Self::GainEssencePerCard,
         Self::IncreaseSparkAll,
+        Self::PurgeRandomSubtypeAndIncreaseSpark,
         Self::GainRandomDreamsign,
         Self::PurgeDreamsignForEssence,
         Self::MakeFastAll,
@@ -122,7 +124,9 @@ impl EffectKind {
             Self::TransfigureSelected | Self::TransfigureFixedSelected => {
                 Mechanic::TransfigureDeckEntry
             }
-            Self::PurgeSelected => Mechanic::PurgeDeckEntry,
+            Self::PurgeSelected | Self::PurgeRandomSubtypeAndIncreaseSpark => {
+                Mechanic::PurgeDeckEntry
+            }
             Self::ChoosePack => Mechanic::PackChooser,
             Self::DraftCard | Self::TakeCards => Mechanic::CatalogCardChooser,
             Self::PurgeForEssence => Mechanic::PurgeForEssence,
@@ -159,6 +163,7 @@ impl EffectKind {
                 Some(SelectionPolicy::TransfigurationValue)
             }
             Self::PurgeSelected | Self::PurgeForEssence => Some(SelectionPolicy::PurgeMisfit),
+            Self::PurgeRandomSubtypeAndIncreaseSpark => Some(SelectionPolicy::Uniform),
             Self::ChoosePack | Self::GainRandomCards => Some(SelectionPolicy::CardBundle),
             Self::DraftCard | Self::TakeCards | Self::TransfiguredCardDraft => {
                 Some(SelectionPolicy::CardFit)
@@ -191,6 +196,9 @@ impl ActionEffect {
             Self::GainEssencePerCard { .. } => EffectKind::GainEssencePerCard,
             Self::ChoosePack { .. } => EffectKind::ChoosePack,
             Self::IncreaseSparkAll { .. } => EffectKind::IncreaseSparkAll,
+            Self::PurgeRandomSubtypeAndIncreaseSpark { .. } => {
+                EffectKind::PurgeRandomSubtypeAndIncreaseSpark
+            }
             Self::MakeFastAll => EffectKind::MakeFastAll,
             Self::ReduceCostAllAndGainNightmares { .. } => {
                 EffectKind::ReduceCostAllAndGainNightmares
@@ -346,6 +354,10 @@ pub enum ActionEffect {
         pack_size: i64,
     },
     IncreaseSparkAll {
+        spark_bonus: i64,
+    },
+    PurgeRandomSubtypeAndIncreaseSpark {
+        subtype: String,
         spark_bonus: i64,
     },
     MakeFastAll,
@@ -597,6 +609,14 @@ fn lower_action_effect(effect: ActionEffect, output: &mut toml::map::Map<String,
             kind!(IncreaseSparkAll);
             int!("spark-bonus", spark_bonus);
         }
+        ActionEffect::PurgeRandomSubtypeAndIncreaseSpark {
+            subtype,
+            spark_bonus,
+        } => {
+            kind!(PurgeRandomSubtypeAndIncreaseSpark);
+            text!("subtype", subtype);
+            int!("spark-bonus", spark_bonus);
+        }
         ActionEffect::MakeFastAll => {
             kind!(MakeFastAll);
         }
@@ -735,6 +755,12 @@ mod tests {
         presentation: ActionPresentation(effect_text: "Gain {offered_card}", followup: None),
         effect: GainGeneratedCard(predicate: Character, count: None),
       ),
+      ActionDefinition(
+        label: "Swear a synthetic oath",
+        id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+        presentation: ActionPresentation(effect_text: "Purge a random Warrior and strengthen the rest.", followup: None),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
     ],
   ),
 ]
@@ -752,6 +778,10 @@ mod tests {
         assert!(matches!(
             catalog[0].actions[1].effect,
             ActionEffect::GainGeneratedCard { .. }
+        ));
+        assert!(matches!(
+            catalog[0].actions[2].effect,
+            ActionEffect::PurgeRandomSubtypeAndIncreaseSpark { .. }
         ));
     }
 
@@ -780,5 +810,16 @@ mod tests {
             actions[1]["effect-kind"].as_str(),
             Some("gain-offered-card")
         );
+        assert_eq!(
+            actions[2]["effect-kind"].as_str(),
+            Some("purge-random-subtype-and-increase-spark")
+        );
+        assert_eq!(actions[2]["subtype"].as_str(), Some("Warrior"));
+        assert_eq!(actions[2]["spark-bonus"].as_integer(), Some(1));
+        assert_eq!(
+            actions[2]["canonical-mechanic-id"].as_str(),
+            Some("purge-deck-entry")
+        );
+        assert_eq!(actions[2]["selection-policy-id"].as_str(), Some("uniform"));
     }
 }

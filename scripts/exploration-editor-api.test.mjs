@@ -42,7 +42,7 @@ describe("exploration editor API", () => {
     const result = await call("GET", "/api/editor/exploration");
     expect(result.status).toBe(200);
     expect(result.body.encounters.length).toBeGreaterThan(0);
-    expect(result.body.effectSchemas).toHaveLength(34);
+    expect(result.body.effectSchemas).toHaveLength(35);
     expect(result.body).not.toHaveProperty("templates");
     expect(result.body.sourceRevision).toMatch(/^[0-9a-f]{64}$/u);
   });

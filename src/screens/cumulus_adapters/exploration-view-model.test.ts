@@ -200,8 +200,12 @@ describe("exploration-view-model", () => {
     });
   });
 
-  it("builds a UUID-keyed deck-wide spark reward from the affected entries", () => {
-    const source = card(sourceId, 17);
+  it("builds a persisted purge plus subtype survivor spark reward", () => {
+    const source = { ...card(sourceId, 17), subtype: "Warrior" };
+    const purged = {
+      ...card(asCardId("f0000000-0000-4000-8000-000000000019"), 19),
+      subtype: "Warrior",
+    };
     const event = {
       ...card(asCardId("f0000000-0000-4000-8000-000000000018"), 18),
       cardType: "Event" as const,
@@ -230,8 +234,9 @@ describe("exploration-view-model", () => {
       encounterCardId: source.id,
       actionOffers: [
         {
-          actionId: "increase-spark",
+          actionId: "blood-oath",
           offeredCardIds: [],
+          offeredDeckEntryIds: ["entry-purged"],
           packCardIds: [],
           replacementCardIdByEntryId: {},
           transfigurationByEntryId: {},
@@ -245,11 +250,22 @@ describe("exploration-view-model", () => {
         },
       ],
       resolution: {
-        actionId: "increase-spark",
+        actionId: "blood-oath",
         gainedCardIds: [],
         gainedDreamsignIds: [],
-        purgedCardIds: [],
+        purgedCardIds: [purged.id],
+        purgedEntryIds: ["entry-purged"],
+        purgedEntrySnapshots: [
+          {
+            entryId: "entry-purged",
+            cardNumber: purged.cardNumber,
+            transfiguration: null,
+            isBane: false,
+          },
+        ],
         affectedEntryIds: ["entry-character"],
+        sparkBeforeByEntryId: { "entry-character": 2 },
+        sparkAfterByEntryId: { "entry-character": 3 },
         essenceGained: 0,
       },
     };
@@ -257,6 +273,7 @@ describe("exploration-view-model", () => {
       cardDatabase: new Map([
         [source.cardNumber, source],
         [event.cardNumber, event],
+        [purged.cardNumber, purged],
       ]),
       dreamAvatars: [],
       dreamwellCards: [],
@@ -275,10 +292,12 @@ describe("exploration-view-model", () => {
             prose: "The authored scene appears.",
             actions: [
               {
-                id: "increase-spark",
-                label: "Receive Their Blessing",
-                effectText: "All characters in your deck gain +1✦",
-                effectKind: "increase-spark-all",
+                id: "blood-oath",
+                label: "Swear a Blood Oath",
+                effectText:
+                  "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+                effectKind: "purge-random-subtype-and-increase-spark",
+                subtype: "Warrior",
                 sparkBonus: 1,
               },
               {
@@ -305,11 +324,21 @@ describe("exploration-view-model", () => {
     });
 
     expect(view?.reward).toMatchObject({
-      objects: { cards: [], purgedCards: [], dreamsigns: [] },
+      objects: {
+        cards: [],
+        purgedCards: [
+          {
+            entryId: "entry-purged",
+            model: { cardId: purged.id },
+          },
+        ],
+        dreamsigns: [],
+      },
       deckModification: {
         kind: "spark",
         amount: 1,
-        announcement: "All characters in your deck gain +1✦",
+        announcement:
+          "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
         cards: [
           {
             entryId: "entry-character",
@@ -1299,6 +1328,10 @@ describe("exploration-view-model", () => {
       automaticSelection: { cardIds: [offered.id] },
     });
     expect(view.actions[1].followup).toEqual({ kind: "none" });
+    expect(view.actions.map((action) => action.id)).toEqual([
+      "gain-offered",
+      "increase-spark",
+    ]);
   });
 
   it("builds UUID-backed references for fixed cards, Nightmare, and Dreamsigns", () => {

@@ -75,6 +75,8 @@ export function buildExplorationCompletionLog(
     purgedEntrySnapshots: resolution.purgedEntrySnapshots ?? [],
     gainedEntryIds: resolution.gainedEntryIds ?? [],
     affectedEntryIds: resolution.affectedEntryIds,
+    sparkBeforeByEntryId: resolution.sparkBeforeByEntryId ?? {},
+    sparkAfterByEntryId: resolution.sparkAfterByEntryId ?? {},
     selection: resolution.selection ?? {},
     battleModifier: resolution.battleModifier ?? null,
     chosenDreamAvatarId: resolution.chosenDreamAvatarId ?? null,

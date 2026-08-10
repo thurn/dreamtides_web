@@ -2631,6 +2631,12 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
         EffectKind::IncreaseSparkAll => ActionEffect::IncreaseSparkAll {
             spark_bonus: positive_int(object, "sparkBonus")?,
         },
+        EffectKind::PurgeRandomSubtypeAndIncreaseSpark => {
+            ActionEffect::PurgeRandomSubtypeAndIncreaseSpark {
+                subtype: required_json_string(object, "subtype")?,
+                spark_bonus: positive_int(object, "sparkBonus")?,
+            }
+        }
         EffectKind::MakeFastAll => ActionEffect::MakeFastAll,
         EffectKind::ReduceCostAllAndGainNightmares => {
             ActionEffect::ReduceCostAllAndGainNightmares {
@@ -2745,6 +2751,7 @@ fn validate_action_fields(
         EffectKind::GainEssencePerCard => &["predicate", "essencePerCard"],
         EffectKind::ChoosePack => &["predicate", "packCount", "packSize"],
         EffectKind::IncreaseSparkAll => &["sparkBonus"],
+        EffectKind::PurgeRandomSubtypeAndIncreaseSpark => &["subtype", "sparkBonus"],
         EffectKind::ReduceCostAllAndGainNightmares => &["energyCostReduction", "nightmareCount"],
         EffectKind::TransfigureFixedSelected => &["predicate", "transfiguration", "deckTarget"],
         EffectKind::PurgeDreamsignForEssence => &["essence"],
@@ -4888,6 +4895,10 @@ CardMetadataCatalog(
                 ("packSize", json!(3)),
             ],
             EffectKind::IncreaseSparkAll => &[("sparkBonus", json!(1))],
+            EffectKind::PurgeRandomSubtypeAndIncreaseSpark => &[
+                ("subtype", json!("Warrior")),
+                ("sparkBonus", json!(1)),
+            ],
             EffectKind::ReduceCostAllAndGainNightmares => &[
                 ("energyCostReduction", json!(1)),
                 ("nightmareCount", json!(1)),

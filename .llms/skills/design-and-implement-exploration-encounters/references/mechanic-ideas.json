@@ -653,7 +653,9 @@
       "concept": "Purge a random {subtype} character. Every other {subtype} character in your deck gains +1✦.",
       "balance_class": "unique_effect",
       "implementation": {
-        "status": "vertical_slice"
+        "status": "reuse",
+        "effect_variant": "PurgeRandomSubtypeAndIncreaseSpark",
+        "runtime_effect_kind": "purge-random-subtype-and-increase-spark"
       }
     },
     {

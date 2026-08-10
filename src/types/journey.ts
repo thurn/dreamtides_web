@@ -488,6 +488,9 @@ export interface ExplorationResolution {
   purgedEntrySnapshots?: DeckEntry[];
   purgedDreamsignIds?: string[];
   affectedEntryIds: string[];
+  /** Exact resolved spark values before and after a persisted deck mutation. */
+  sparkBeforeByEntryId?: Record<string, number>;
+  sparkAfterByEntryId?: Record<string, number>;
   essenceGained: number;
   chosenTransfiguration?: TransfigurationType;
   chosenSubtype?: string;

@@ -207,4 +207,79 @@ describe("exploration logging view model", () => {
       outcomeKind: "purged-card-essence",
     });
   });
+
+  it("records the deterministic subtype victim and every survivor spark transition", () => {
+    const actionId = "blood-oath";
+    const purgedEntry = {
+      entryId: "warrior-purged",
+      cardNumber: 17,
+      transfiguration: null,
+      sparkBonus: 2,
+      isBane: false,
+    } as const;
+    const view = {
+      actions: [
+        {
+          id: actionId,
+          effectKind: "purge-random-subtype-and-increase-spark",
+          mechanics: {
+            effectKind: "purge-random-subtype-and-increase-spark",
+            subtype: "Warrior",
+            sparkBonus: 1,
+          },
+        },
+      ],
+      outcomeKind: "spark",
+    } as unknown as ExplorationSiteView;
+    const runtime: ExplorationSiteRuntime = {
+      kind: "exploration",
+      encounterCardId: "encounter-card-uuid",
+      actionOffers: [
+        {
+          actionId,
+          canonicalMechanicId: "purge-deck-entry",
+          selectionPolicyId: "uniform",
+          offeredCardIds: [],
+          offeredDeckEntryIds: [purgedEntry.entryId],
+          packCardIds: [],
+          replacementCardIdByEntryId: {},
+          transfigurationByEntryId: {},
+        },
+      ],
+      resolution: {
+        actionId,
+        selection: { entryIds: [purgedEntry.entryId] },
+        gainedCardIds: [],
+        gainedDreamsignIds: [],
+        purgedCardIds: ["purged-warrior-uuid"],
+        purgedEntryIds: [purgedEntry.entryId],
+        purgedEntrySnapshots: [purgedEntry],
+        affectedEntryIds: ["warrior-a", "warrior-b"],
+        sparkBeforeByEntryId: { "warrior-a": 2, "warrior-b": 4 },
+        sparkAfterByEntryId: { "warrior-a": 3, "warrior-b": 5 },
+        essenceGained: 0,
+      },
+    };
+
+    expect(buildExplorationEntryLog(view, runtime)).toMatchObject({
+      offers: [
+        {
+          actionId,
+          canonicalMechanicId: "purge-deck-entry",
+          selectionPolicyId: "uniform",
+          offeredDeckEntryIds: [purgedEntry.entryId],
+        },
+      ],
+    });
+    expect(buildExplorationResolutionLog(view, runtime)).toMatchObject({
+      authoredMechanics: { subtype: "Warrior", sparkBonus: 1 },
+      purgedEntrySnapshots: [purgedEntry],
+      sparkBeforeByEntryId: { "warrior-a": 2, "warrior-b": 4 },
+      sparkAfterByEntryId: { "warrior-a": 3, "warrior-b": 5 },
+    });
+    expect(buildExplorationCompletionLog(view, runtime)).toMatchObject({
+      sparkBeforeByEntryId: { "warrior-a": 2, "warrior-b": 4 },
+      sparkAfterByEntryId: { "warrior-a": 3, "warrior-b": 5 },
+    });
+  });
 });

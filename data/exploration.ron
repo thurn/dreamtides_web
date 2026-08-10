@@ -1522,4 +1522,140 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "c97b0a5b-64d0-480f-8db7-3fde93738d86",
+    prose: "A horned colossus leaps from shattered stone, moonlit tendrils coiling as boulders rise.",
+    actions: [
+      ActionDefinition(
+        label: "Claim Colossus Strength",
+        id: "c6be47aa-68dc-4d5e-aeff-ac85de91f368",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Embrace Moonborn Hunger",
+        id: "41d2f0f1-09c2-4fa8-8d14-1c2f3c070ddd",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f",
+    prose: "Five luminous birds rise from a hooded figure's hand above a mistbound city.",
+    actions: [
+      ActionDefinition(
+        label: "Release Luminous Messengers",
+        id: "b760eb50-c7d8-470f-a90b-60b20a78730f",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of ≤2● cost Character cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered cards.",
+          ),
+        ),
+        effect: TakeCards(predicate: CheapCharacter, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Gather Their Shared Glow",
+        id: "571d4537-5ff6-47df-bdc0-77be447f411c",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "e3193b23-2002-40a9-91fc-e0713200355e",
+    prose: "Windblown leaves circle a lone swordsman climbing stone steps beneath a crimson moon.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Moonlit Steps",
+        id: "4ae750c2-496f-4a48-a6b4-2acfd82fcb69",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Swear a Blood Oath",
+        id: "65bcfadc-5775-4dd5-9147-4e82fa75e2ad",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "29c4c45d-33df-42ac-bf28-387eb00264aa",
+    prose: "Black cables bind a lone figure beneath sickly light across a shattered factory floor.",
+    actions: [
+      ActionDefinition(
+        label: "Unravel Tangled Memories",
+        id: "848f3ea9-1370-496b-bb50-9ba7013ea791",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Event cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered Events.",
+          ),
+        ),
+        effect: TakeCards(predicate: Event, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Accept Every Sorrow",
+        id: "8fbc7243-142a-4724-b683-161b463e8a66",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "7df5255e-bf23-4c14-b31b-be89fb864ee0",
+    prose: "Two figures face a shattered starship glowing across blue grass.",
+    actions: [
+      ActionDefinition(
+        label: "Search shattered hull",
+        id: "82492620-482a-4e47-b589-85f6b48e014a",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Event."),
+        ),
+        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Restart buried reactor",
+        id: "57e56e5c-48c3-4b17-9ee2-80651d7ed7fb",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
 ]

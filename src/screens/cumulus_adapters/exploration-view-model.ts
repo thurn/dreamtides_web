@@ -663,6 +663,7 @@ function followupForAction(
     case "gain-random-cards":
     case "gain-essence-per-card":
     case "increase-spark-all":
+    case "purge-random-subtype-and-increase-spark":
     case "make-fast-all":
     case "reduce-cost-all-and-gain-nightmares":
     case "next-battle-opening-hand":
@@ -896,6 +897,8 @@ function actionView(
         ? offer.offeredCardIds.length === 1
         : action.effectKind === "copy-offered-deck-card"
           ? (offer.offeredDeckEntryIds?.length ?? 0) > 0
+          : action.effectKind === "purge-random-subtype-and-increase-spark"
+            ? (offer.offeredDeckEntryIds?.length ?? 0) === 1
           : action.effectKind === "choose-dream-avatar"
             ? (offer.offeredDreamAvatarIds?.length ?? 0) > 0
             : action.effectKind === "add-site"
@@ -1251,6 +1254,7 @@ function rewardForResolution(
     if (cards.length === 0) return null;
     switch (resolvedAction.effectKind) {
       case "increase-spark-all":
+      case "purge-random-subtype-and-increase-spark":
         return {
           kind: "spark" as const,
           amount: resolvedAction.sparkBonus ?? 1,
@@ -1309,7 +1313,12 @@ function rewardForResolution(
     return card === null ? [] : [modelForCard(card)];
   });
   const purgedCards =
-    resolvedAction?.effectKind === "purge-and-copy" ||
+    resolvedAction?.effectKind === "purge-random-subtype-and-increase-spark"
+      ? (resolution.purgedEntrySnapshots ?? []).flatMap((entry) => {
+          const card = deckCardChoice(entry, content);
+          return card === null ? [] : [card];
+        })
+      : resolvedAction?.effectKind === "purge-and-copy" ||
     resolvedAction?.effectKind === "purge-duplicates-and-grant-reclaim" ||
     resolvedAction?.effectKind === "replace-selected" ||
     resolvedAction?.effectKind === "replace-selected-with-card"
@@ -1326,7 +1335,7 @@ function rewardForResolution(
             },
           ];
         })
-      : [];
+        : [];
   const dreamsigns = resolution.gainedDreamsignIds.flatMap((dreamsignId) => {
     const normalized = dreamsignId.toLowerCase();
     const dreamsign = state.dreamsigns.find(
@@ -1379,9 +1388,16 @@ export function buildExplorationSiteView(params: {
     const offer = params.runtime.actionOffers.find(
       (candidate) => candidate.actionId === action.id,
     );
-    return offer === undefined
-      ? []
-      : [actionView(action, offer, params.state, params.content)];
+    if (offer === undefined) return [];
+    const view = actionView(action, offer, params.state, params.content);
+    if (
+      action.effectKind === "purge-random-subtype-and-increase-spark" &&
+      !view.available &&
+      params.runtime.resolution?.actionId !== action.id
+    ) {
+      return [];
+    }
+    return [view];
   });
   if (actions.length < 1 || actions.length > 4) return null;
   const scene: ArtRef | null =

@@ -920,6 +920,15 @@ export function transformExplorationData(source) {
         );
       }
       if (
+        action.effectKind === "purge-random-subtype-and-increase-spark" &&
+        (typeof action.subtype !== "string" || action.subtype.trim().length === 0 ||
+          typeof action.sparkBonus !== "number" || action.sparkBonus <= 0)
+      ) {
+        throw new Error(
+          `exploration.toml: action ${action.id} requires subtype and positive spark-bonus`,
+        );
+      }
+      if (
         action.effectKind === "purge-dreamsign-for-essence" &&
         (typeof action.essence !== "number" || action.essence <= 0)
       ) {

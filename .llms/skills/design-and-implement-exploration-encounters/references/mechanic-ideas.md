@@ -79,7 +79,7 @@ new or extended implementation before it can be authored live.
 | 71 | Gain {count} Nightmare cards. Gain one of 3 offered dreamsigns. | standard | vertical slice required |
 | 72 | Gain a random legendary card. | standard | vertical slice required |
 | 73 | Lose {essence} essence. Apply {transfiguration} to every eligible {predicate} card in your deck. | unique_effect | vertical slice required |
-| 74 | Purge a random {subtype} character. Every other {subtype} character in your deck gains +1✦. | unique_effect | vertical slice required |
+| 74 | Purge a random {subtype} character. Every other {subtype} character in your deck gains +1✦. | unique_effect | reuse `PurgeRandomSubtypeAndIncreaseSpark` |
 | 75 | Purge $DECK_CARD. Apply {transfiguration} to every other eligible card in your deck with the same card type. | unique_effect | vertical slice required |
 | 76 | Purge a chosen dreamsign. Gain 3 random dreamsigns. | standard | vertical slice required |
 | 77 | Every {predicate} card in your deck becomes ❖ (fast). Gain {count} Nightmare cards. | unique_effect | vertical slice required |

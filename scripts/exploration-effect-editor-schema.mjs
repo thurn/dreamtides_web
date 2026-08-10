@@ -452,6 +452,30 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
     ]
   },
   {
+    "kind": "purge-random-subtype-and-increase-spark",
+    "label": "Purge random subtype and strengthen survivors",
+    "canonicalMechanicId": "purge-deck-entry",
+    "defaultSelectionPolicyId": "uniform",
+    "allowedSelectionPolicyIds": [
+      "uniform"
+    ],
+    "fields": [
+      {
+        "key": "subtype",
+        "label": "Character subtype",
+        "control": "subtype"
+      },
+      {
+        "key": "sparkBonus",
+        "label": "Spark bonus",
+        "control": "number",
+        "defaultValue": 1,
+        "min": 1,
+        "resource": "spark"
+      }
+    ]
+  },
+  {
     "kind": "gain-random-dreamsign",
     "label": "Gain random Dreamsign",
     "canonicalMechanicId": "gain-dreamsign",

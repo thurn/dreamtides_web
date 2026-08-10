@@ -6,6 +6,7 @@ import { createDefaultState } from "../state/journey-context";
 import { createDreamsign } from "../data/dreamsigns";
 import { createQaJourneyFoundation } from "./qa-journey-foundation";
 import { buildExplorationRuntime } from "../coop/providers/exploration-provider";
+import { initializeDraftState } from "../draft/draft-engine";
 
 export interface QaSceneBuildOptions {
   /** Exact authored encounter source-card UUID for Exploration QA scenes. */
@@ -672,7 +673,7 @@ function explorationScene(
         ? "Exploration (Enhanced)"
         : "Exploration",
     description:
-      "The Exploration site with Event, Survivor, cheap Character, and Spirit Animal cards available for interaction QA" +
+      "The Exploration site with Event, Survivor, Warrior, cheap Character, and Spirit Animal cards available for interaction QA" +
       (hasDuplicates ? ", including two duplicated card UUIDs." : "."),
     build: (journeyContent, options) => {
       const state = parkOnSite("Exploration", isEnhanced)(journeyContent);
@@ -692,6 +693,10 @@ function explorationScene(
       add((card) => card.cardType === "Event", 1);
       add(
         (card) => card.cardType === "Character" && card.subtype === "Survivor",
+        2,
+      );
+      add(
+        (card) => card.cardType === "Character" && card.subtype === "Warrior",
         2,
       );
       add(
@@ -721,9 +726,28 @@ function explorationScene(
             entryId: `exploration-qa-duplicate-${String(index + 1)}`,
           }))
         : [];
+      const qaDraftPoolCopiesByCard = Object.fromEntries(
+        cards.map((card) => [String(card.cardNumber), 1]),
+      );
+      const qaResolvedPackage =
+        state.resolvedPackage === null
+          ? null
+          : {
+              ...state.resolvedPackage,
+              draftPoolCopiesByCard: qaDraftPoolCopiesByCard,
+              draftPoolSize: cards.length,
+            };
       const qaState: JourneyState = {
         ...state,
         deck: [...uniqueDeck, ...duplicateEntries],
+        resolvedPackage: qaResolvedPackage,
+        draftState:
+          qaResolvedPackage === null
+            ? state.draftState
+            : initializeDraftState(
+                journeyContent.cardDatabase,
+                qaResolvedPackage,
+              ),
         dreamsigns:
           heldDreamsignTemplate === undefined
             ? state.dreamsigns

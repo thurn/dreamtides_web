@@ -439,6 +439,83 @@ describe("Exploration provider", () => {
     }
   });
 
+  it("persists a uniformly purged subtype entry and exact survivor spark changes", () => {
+    const oathAction: ExplorationActionContent = {
+      id: "blood-oath",
+      label: "Swear a Blood Oath",
+      effectText:
+        "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+      effectKind: "purge-random-subtype-and-increase-spark",
+      subtype: "Warrior",
+      sparkBonus: 1,
+    };
+    const fallbackAction: ExplorationActionContent = {
+      id: "battle-energy",
+      label: "Take the high road",
+      effectText: "Gain 1 additional energy at the start of your next battle",
+      effectKind: "next-battle-starting-energy",
+      count: 1,
+    };
+    const content = contentFixture([oathAction, fallbackAction]);
+    const warriors = [120, 121, 122].map((cardNumber, index) => ({
+      entryId: `warrior-${String(index)}`,
+      cardNumber,
+      transfiguration: null,
+      isBane: false,
+    }));
+    const prepared = buildState(content, {
+      ...journeyFixture(content),
+      deck: warriors,
+    });
+    const offer = prepared.runtime.actionOffers[0];
+    expect(offer).toMatchObject({
+      canonicalMechanicId: "purge-deck-entry",
+      selectionPolicyId: "uniform",
+      offeredDeckEntryIds: [expect.stringMatching(/^warrior-/u)],
+    });
+    expect(offer?.selectionTrace?.candidateCount).toBe(3);
+
+    const resolved = resolve(content, prepared.journey, oathAction.id);
+    const runtime = resolved.siteRuntime[site.id];
+    if (runtime?.kind !== "exploration" || runtime.resolution === null) {
+      throw new Error("Expected persisted Exploration resolution");
+    }
+    const victimId = offer?.offeredDeckEntryIds?.[0];
+    const survivorIds = warriors
+      .map((entry) => entry.entryId)
+      .filter((entryId) => entryId !== victimId);
+    expect(runtime.resolution.selection).toEqual({ entryIds: [victimId] });
+    expect(runtime.resolution.purgedEntryIds).toEqual([victimId]);
+    expect(runtime.resolution.affectedEntryIds).toEqual(survivorIds);
+    expect(runtime.resolution.sparkBeforeByEntryId).toEqual(
+      Object.fromEntries(survivorIds.map((entryId) => [entryId, 2])),
+    );
+    expect(runtime.resolution.sparkAfterByEntryId).toEqual(
+      Object.fromEntries(survivorIds.map((entryId) => [entryId, 3])),
+    );
+    expect(resolved.deck).toHaveLength(2);
+    expect(resolved.deck.every((entry) => entry.sparkBonus === 1)).toBe(true);
+    expect(resolve(content, prepared.journey, oathAction.id)).toEqual(resolved);
+
+    const unavailable = buildState(content, {
+      ...journeyFixture(content),
+      deck: warriors.slice(0, 1),
+    });
+    expect(unavailable.runtime.actionOffers[0]?.offeredDeckEntryIds).toEqual([]);
+    expect(
+      resolveExplorationChoice({
+        journey: unavailable.journey,
+        site,
+        payload: {
+          actionId: oathAction.id,
+          selectionRulesVersion: unavailable.runtime.selectionRulesVersion,
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+  });
+
   it("builds two distinct Warrior packs and resolves the selected pack", () => {
     const packAction: ExplorationActionContent = {
       id: "warrior-packs",

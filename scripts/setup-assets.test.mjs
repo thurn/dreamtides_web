@@ -137,6 +137,12 @@ describe("transformExplorationData", () => {
       "effect-kind": "increase-spark-all",
       "spark-bonus": 1,
     };
+    encounters[1].action[1] = {
+      ...encounters[1].action[1],
+      "effect-kind": "purge-random-subtype-and-increase-spark",
+      subtype: "Warrior",
+      "spark-bonus": 1,
+    };
     return {
       "schema-version": 2,
       "effect-kinds": [...EXPLORATION_EFFECT_KINDS],
@@ -153,6 +159,7 @@ describe("transformExplorationData", () => {
     expect(effectKinds).toContain("gain-offered-card");
     expect(effectKinds).toContain("gain-essence-per-card");
     expect(effectKinds).toContain("increase-spark-all");
+    expect(effectKinds).toContain("purge-random-subtype-and-increase-spark");
   });
 
   it("compiles Exploration encounters with one through four actions", () => {

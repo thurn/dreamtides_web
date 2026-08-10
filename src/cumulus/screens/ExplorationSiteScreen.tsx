@@ -1528,7 +1528,7 @@ export function ExplorationSiteScreen({
     effectReward?.kind === "site-offer-modifier" ? effectReward : null;
   const rewardItems = useMemo(() => rewardItemsFor(view.reward), [view.reward]);
   const purgeBeforeDeckModification =
-    deckModification?.kind === "reclaim" && purgedRewardCards.length > 0;
+    deckModification !== null && purgedRewardCards.length > 0;
   const showDeckModification =
     deckModification !== null &&
     !deckModificationPresented &&
