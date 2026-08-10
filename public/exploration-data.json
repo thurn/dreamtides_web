@@ -10963,8 +10963,134 @@
           "canonicalMechanicId": "next-battle-modifier"
         }
       ]
+    },
+    {
+      "cardId": "650b2ed4-f016-46c0-815a-f53fffe08a9a",
+      "prose": "Mirrored mechanisms peel apart around a lone figure, revealing a golden path beyond rain-dark glass.",
+      "action": [
+        {
+          "id": "b8a37a13-d4f8-455b-82b5-249e5b74a0ec",
+          "label": "Trace Reflected Paths",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "Trace Reflected Paths",
+          "followupSubtitle": "Choose one revealed deck card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "3da6819e-c190-4156-9b36-956bcf0d9be2",
+          "label": "Walk Singular Light",
+          "effectText": "Purge all copies of every duplicated card. Every remaining card gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7",
+      "prose": "A tattooed archer crosses a rain-soaked battlefield as distant fires glow beyond shattered barricades.",
+      "action": [
+        {
+          "id": "ac2d6b33-402a-469f-a032-e41903b7811a",
+          "label": "Honor Fallen Warriors",
+          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        },
+        {
+          "id": "eabe7395-d9b4-4876-9838-79b217ab4588",
+          "label": "Chart Scorched Passage",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        }
+      ]
+    },
+    {
+      "cardId": "4dc2a049-d326-463b-85c7-117d5fd5ba72",
+      "prose": "A lone astronaut faces a blazing portal amid twisted gantries and drifting embers.",
+      "action": [
+        {
+          "id": "bf86f6be-4d73-46ae-b4db-e880352a7474",
+          "label": "Pay Passage in Kind",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "45f7aca7-cd3d-42a4-af11-e7564a3599d8",
+          "label": "Call Through the Breach",
+          "effectText": "Draft a transfigured ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transfigured ≤2● cost Character.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "c36e67ab-fbee-4d83-b57b-34d34f60e17c",
+      "prose": "A radiant summoner conjures a colossal tentacled shadow amid sparks, thorns, and burning clouds.",
+      "action": [
+        {
+          "id": "cdf492cb-01e4-4dcd-ba8f-3ee49bb6e415",
+          "label": "Summon Survivor Choir",
+          "effectText": "Choose one of 2 packs of 3 Survivor cards to add to your deck",
+          "followupTitle": "Summon Survivor Choir",
+          "followupSubtitle": "Choose one pack to add to your deck.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "survivor",
+          "packCount": 2,
+          "packSize": 3
+        },
+        {
+          "id": "664c9209-ac07-4381-9a60-8344ac189192",
+          "label": "Bind Hungering Shadow",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "70306382-ac0d-4b08-843a-23efb3835c94",
+      "prose": "A lone guardian cradles an infant beneath a lightning-wreathed vessel amid floating wreckage.",
+      "action": [
+        {
+          "id": "3a50dfca-ceed-4352-af72-bf502b071f5c",
+          "label": "Welcome New Arrivals",
+          "effectText": "Take any number of Character cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any number of offered Characters.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "offerCount": 4
+        },
+        {
+          "id": "e27832de-1271-4fb5-948e-543dc377c28a",
+          "label": "Weather First Contact",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
     }
   ],
-  "contentHash": "7eb8c9cfe5eed1b35161edfa65bebe8fb2c1a6223e41e0d08d28c631d01d06a7",
-  "foldHash": "7eb8c9cfe5eed1b35161edfa65bebe8fb2c1a6223e41e0d08d28c631d01d06a7"
+  "contentHash": "ef2fc0690bdf22b2e10f64815569f72d47cede7e923e09f2eccb2c76d3f62430",
+  "foldHash": "ef2fc0690bdf22b2e10f64815569f72d47cede7e923e09f2eccb2c76d3f62430"
 }
