@@ -4582,8 +4582,132 @@
           "essencePerCard": 15
         }
       ]
+    },
+    {
+      "cardId": "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6",
+      "prose": "A black-limbed giant buckles beneath orange lightning as shattered stone hangs airborne.",
+      "action": [
+        {
+          "id": "2f149773-c998-413c-bf83-1b05d17d92fc",
+          "label": "Confront Buckling Giant",
+          "effectText": "Gain Black Horn",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to replace.",
+          "effectKind": "gain-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "fixed",
+          "dreamsignId": "c92438fc-8e1f-4f97-9dcf-8ca0edaa8607"
+        },
+        {
+          "id": "072ff391-7b19-4b7f-83d7-11f71646df3e",
+          "label": "Harness Orange Lightning",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49",
+      "prose": "A red-coated swordsman raises blue fire among tangled trunks, green leaves, and drifting lights.",
+      "action": [
+        {
+          "id": "0f718294-7b7a-4f8c-ba1a-39c007a52d75",
+          "label": "Signal Hidden Patrol",
+          "effectText": "Take any number of Warrior cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any offered Warriors to join your trail.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "offerCount": 4
+        },
+        {
+          "id": "5db20830-6098-4243-9b8b-d476c2d206f0",
+          "label": "Carry Dawnfire Forward",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "b4838d67-f055-4fd3-a64d-0a4d2b6678cc",
+      "prose": "A helmeted visitor raises a hand between flowering grass and towers of floating neon panels.",
+      "action": [
+        {
+          "id": "e5a727c5-d7e4-4d63-bc31-0a569297ba1d",
+          "label": "Trade a Memory",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "ae385aff-6eb4-4035-8875-0edb357c3205",
+          "label": "Gather Neon Currency",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "0637b453-4362-4f01-b3e6-07c27af9c847",
+      "prose": "A smiling emberling balances on scorched wreckage as stones rise through smoke.",
+      "action": [
+        {
+          "id": "750bc96a-ac8d-499d-9618-1f27e5e6dea0",
+          "label": "Feed Its Hunger",
+          "effectText": "Purge a random Visitor character. Every other Visitor character in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Visitor",
+          "sparkBonus": 1
+        },
+        {
+          "id": "4f5a4e00-bb9d-437b-9afd-9792af6caec9",
+          "label": "Read Rising Cinders",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "d26d31c0-7bd2-4d58-bed9-444e032a1087",
+      "prose": "A vast keyhole blazes within a brass wall etched with curling patterns.",
+      "action": [
+        {
+          "id": "07e8c60c-5466-48b8-8f23-a2e59e620715",
+          "label": "Enter the blazing keyhole",
+          "effectText": "Draft an Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Event.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "1850e44a-ba13-4de6-8fc1-b672bf89696f",
+          "label": "Trace the curling patterns",
+          "effectText": "The next draft or shop site you visit will contain transfigured cards",
+          "effectKind": "transfigure-next-draft-or-shop",
+          "canonicalMechanicId": "next-site-transfiguration"
+        }
+      ]
     }
   ],
-  "contentHash": "ba78fdc6287be35757b32c55fdb5971ed881c070a37469d3164b1514e2b43980",
-  "foldHash": "ba78fdc6287be35757b32c55fdb5971ed881c070a37469d3164b1514e2b43980"
+  "contentHash": "3ab31e6632d553384b1a28935276d8c477308a2e93e986f12985c763b50abdc4",
+  "foldHash": "3ab31e6632d553384b1a28935276d8c477308a2e93e986f12985c763b50abdc4"
 }

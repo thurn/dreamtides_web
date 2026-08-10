@@ -4900,4 +4900,140 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6",
+    prose: "A black-limbed giant buckles beneath orange lightning as shattered stone hangs airborne.",
+    actions: [
+      ActionDefinition(
+        label: "Confront Buckling Giant",
+        id: "2f149773-c998-413c-bf83-1b05d17d92fc",
+        presentation: ActionPresentation(
+          effect_text: "Gain Black Horn",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
+        ),
+        effect: GainDreamsign(dreamsign_id: "c92438fc-8e1f-4f97-9dcf-8ca0edaa8607"),
+      ),
+
+      ActionDefinition(
+        label: "Harness Orange Lightning",
+        id: "072ff391-7b19-4b7f-83d7-11f71646df3e",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49",
+    prose: "A red-coated swordsman raises blue fire among tangled trunks, green leaves, and drifting lights.",
+    actions: [
+      ActionDefinition(
+        label: "Signal Hidden Patrol",
+        id: "0f718294-7b7a-4f8c-ba1a-39c007a52d75",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Warrior cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any offered Warriors to join your trail.",
+          ),
+        ),
+        effect: TakeCards(predicate: Warrior, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Carry Dawnfire Forward",
+        id: "5db20830-6098-4243-9b8b-d476c2d206f0",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "b4838d67-f055-4fd3-a64d-0a4d2b6678cc",
+    prose: "A helmeted visitor raises a hand between flowering grass and towers of floating neon panels.",
+    actions: [
+      ActionDefinition(
+        label: "Trade a Memory",
+        id: "e5a727c5-d7e4-4d63-bc31-0a569297ba1d",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+
+      ActionDefinition(
+        label: "Gather Neon Currency",
+        id: "ae385aff-6eb4-4035-8875-0edb357c3205",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "0637b453-4362-4f01-b3e6-07c27af9c847",
+    prose: "A smiling emberling balances on scorched wreckage as stones rise through smoke.",
+    actions: [
+      ActionDefinition(
+        label: "Feed Its Hunger",
+        id: "750bc96a-ac8d-499d-9618-1f27e5e6dea0",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Visitor character. Every other Visitor character in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Visitor", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Read Rising Cinders",
+        id: "4f5a4e00-bb9d-437b-9afd-9792af6caec9",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "d26d31c0-7bd2-4d58-bed9-444e032a1087",
+    prose: "A vast keyhole blazes within a brass wall etched with curling patterns.",
+    actions: [
+      ActionDefinition(
+        label: "Enter the blazing keyhole",
+        id: "07e8c60c-5466-48b8-8f23-a2e59e620715",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Event."),
+        ),
+        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Trace the curling patterns",
+        id: "1850e44a-ba13-4de6-8fc1-b672bf89696f",
+        presentation: ActionPresentation(
+          effect_text: "The next draft or shop site you visit will contain transfigured cards",
+          followup: None,
+        ),
+        effect: TransfigureNextDraftOrShop,
+      ),
+    ],
+  ),
 ]
