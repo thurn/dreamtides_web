@@ -1,15 +1,16 @@
 # Battle, Opponent, and Internal AI Data
 
-Three typed RON catalogs own the battle configuration boundary:
+Four typed RON catalogs own the battle configuration boundary:
 
 - `data/battle.ron` defines core battle setup shared by player and opponent
   controllers.
-- `data/opponents.ron` defines Dreamwell construction, opponent progression,
-  and opponent deck generation.
+- `data/dreamwell.ron` defines the shared Dreamwell cards and deck-construction
+  rules.
+- `data/opponents.ron` defines opponent progression and deck generation.
 - `data/internal/internal_ai.ron` defines the journey AI deck and automated
   opponent tuning.
 
-Asset setup strictly validates all three sources and composes them into the
+Asset setup strictly validates all four sources and composes them into the
 gitignored `public/opponents-data.json` runtime artifact. The browser loads that
 artifact as required `JourneyContent.opponentsData` before room gameplay mounts.
 
@@ -21,17 +22,19 @@ tutorial-specific sequencing remain in `tutorial.ron`.
 
 ## Schema
 
-The typed `BattleRules`, `OpponentsCatalog`, and `InternalAiCatalog` roots and
-their nested record and enum types define the authored contract. Every field is
-required and unknown fields fail compilation. The game-data compiler generates
-`data/battle.toml`, `data/opponents.toml`, and
+The typed `BattleRules`, `DreamwellCatalog`, `OpponentsCatalog`, and
+`InternalAiCatalog` roots and their nested record and enum types define the
+authored contract. Every field is required and unknown fields fail compilation.
+The game-data compiler generates `data/battle.toml`, `data/dreamwell.toml`,
+`data/opponents.toml`, and
 `data/internal/internal_ai.toml`; the composed `data/opponents.toml`
 compatibility shape is consumed by asset generation.
 
 | Source | Section | Authored contract |
 | --- | --- | --- |
 | `battle.ron` | root | Minimum deck size, both opening-hand sizes, score targets, turn/energy/hand limits, starting side, opening-draw behavior, and signature-card count. |
-| `opponents.ron` | `dreamwell` | One-time opening orders, recurring orders, cards drawn per recurring order, and minimum constructed deck length. |
+| `dreamwell.ron` | `rules` | One-time opening orders, recurring orders, cards drawn per recurring order, and minimum constructed deck length. |
+| `dreamwell.ron` | `cards` | UUID-keyed Dreamwell card rules, energy grants, tier membership, automation prompts, and art. |
 | `opponents.ron` | `progression` | Ability, Dreamsign, and Legendary unlock layers plus the starter-dilution schedule. |
 | `opponents.ron` | `coherent_draft` | Distinct-card, removal, and temperature curves; best-of count; affiliation objective; record source count; and coherence scoring coefficients. |
 | `opponents.ron` | `corpus_selection` | Affiliation weight and the top-ranked seeded sampling window. |
@@ -54,7 +57,7 @@ absent from `cards.ron`. Failures identify the RON path that needs correction.
 
 ## Generated artifact and hashes
 
-Run `scripts/regenerate-assets.sh` after editing any of the three catalogs. The
+Run `scripts/regenerate-assets.sh` after editing any of the four catalogs. The
 game-data compiler generates their compatibility TOML and composes
 `data/opponents.toml`; `scripts/opponents-data.mjs` validates that document and
 generates the runtime JSON. Generated TOML and runtime JSON are reproducible and

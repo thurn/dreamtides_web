@@ -1,493 +1,522 @@
-// Defines the shared Dreamwell cards that grant energy and resolve bonus abilities.
+// Defines the shared Dreamwell's construction rules and card catalog.
+//
+// Both players draw from the same seeded deck. Each drawn card permanently
+// increases that player's maximum energy by `energy_added`, then resolves the
+// player-facing rules in `ability_text` and any matching automation prompt.
 
 #![enable(implicit_some)]
-[
-  DreamwellCardDefinition(
-    name: "Dawning Horizon",
-    id: "32d64cb6-9856-43a2-9451-fcb14007a9a6",
-    ability_text: ["(no ability)"],
-    // Permanently increases the drawing player's maximum energy by this amount.
-    energy_added: 2,
-    // Starting cards appear only in the first cycle; numbered tiers recur in ascending order.
-    deck_tier: Starting,
-    art: (image: 1963305268, owned: true),
+DreamwellCatalog(
+  // Controls how the shared deck is assembled from each card's `deck_tier`.
+  // Cards are shuffled only within their tier, using the battle's deterministic
+  // Dreamwell RNG stream.
+  rules: DreamwellRules(
+    // Tiers included in full, once, at the front of the first cycle. `Starting`
+    // cards lower to compatibility order 0, so every Starting card appears once.
+    opening_orders: [0],
+    // Tiers sampled in order for the first and every later cycle. Numbered
+    // tiers One through Four lower to compatibility orders 1 through 4.
+    recurring_orders: [1, 2, 3, 4],
+    // Maximum cards sampled from each recurring tier per cycle. A smaller tier
+    // contributes every available card; no card is duplicated within a cycle.
+    cards_per_recurring_order: 5,
+    // Complete cycles are appended until the prebuilt deck reaches at least
+    // this many cards. The final cycle may take the deck beyond this threshold.
+    minimum_constructed_length: 62,
   ),
 
-  DreamwellCardDefinition(
-    name: "Sunrise Cavern",
-    id: "5e17dc4b-b654-4962-ba5a-7b042852a980",
-    ability_text: ["(no ability)"],
-    energy_added: 2,
-    deck_tier: Starting,
-    art: (
-      image: 565499323,
-      owned: true,
-      // Pan and zoom framing applied after the image fills the card frame.
-      crop: (x: 1, y: 0, scale: 1),
+  // Canonical card definitions. UUID is stable identity; names are display-only
+  // and are not required to be unique. Source order is preserved in generated
+  // data but deck construction groups cards by `deck_tier`.
+  cards: [
+    DreamwellCardDefinition(
+      name: "Dawning Horizon",
+      id: "32d64cb6-9856-43a2-9451-fcb14007a9a6",
+      ability_text: ["(no ability)"],
+      // Permanently increases the drawing player's maximum energy by this amount.
+      energy_added: 2,
+      // Starting cards appear only in the first cycle; numbered tiers recur in ascending order.
+      deck_tier: Starting,
+      art: (image: 1963305268, owned: true),
     ),
-  ),
 
-  DreamwellCardDefinition(
-    name: "Meteor Meadow",
-    id: "5ec17498-9028-4a01-80a0-67c91b03d505",
-    ability_text: ["Draw a card."],
-    energy_added: 1,
-    deck_tier: Two,
-    art: (image: 2421338077, owned: true),
-  ),
-
-  DreamwellCardDefinition(
-    name: "Skypath",
-    id: "f9b479cf-02cb-40e1-bb64-70b29977bf15",
-    ability_text: ["Foresee 1."],
-    energy_added: 1,
-    deck_tier: One,
-    art: (image: 1897537165, owned: true),
-  ),
-
-  DreamwellCardDefinition(
-    name: "Autumn Glade",
-    id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
-    ability_text: ["Gain 2⍟."],
-    energy_added: 1,
-    deck_tier: One,
-    art: (image: 1789989917, owned: true),
-  ),
-
-  DreamwellCardDefinition(
-    name: "Twilight Radiance",
-    id: "de98477c-e216-4618-bff1-0e24bd982fdb",
-    ability_text: ["Gain 1●."],
-    energy_added: 1,
-    deck_tier: One,
-    art: (image: 1786390154, owned: true),
-  ),
-
-  DreamwellCardDefinition(
-    name: "Astral Interface",
-    id: "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d",
-    ability_text: ["Draw a card, then discard a card."],
-    energy_added: 1,
-    deck_tier: One,
-    automation: [
-      AutomationPrompt(
-        key: "discard-drawn-card",
-        title: "Choose a card to discard",
-        subtitle: "Choose one card from your hand.",
-        instructions: "Choose a card to discard.",
+    DreamwellCardDefinition(
+      name: "Sunrise Cavern",
+      id: "5e17dc4b-b654-4962-ba5a-7b042852a980",
+      ability_text: ["(no ability)"],
+      energy_added: 2,
+      deck_tier: Starting,
+      art: (
+        image: 565499323,
+        owned: true,
+        // Pan and zoom framing applied after the image fills the card frame.
+        crop: (x: 1, y: 0, scale: 1),
       ),
-    ],
-    art: (image: 1011222385, owned: true),
-  ),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Glimmering Horizon",
-    id: "cf0f0a05-2a94-407c-8c22-e41b925f9c03",
-    ability_text: ["If you have fewer than 2 cards in hand, draw until you have 2 cards in hand."],
-    energy_added: 1,
-    deck_tier: Two,
-    art: (image: 2419795157, owned: true),
-  ),
+    DreamwellCardDefinition(
+      name: "Meteor Meadow",
+      id: "5ec17498-9028-4a01-80a0-67c91b03d505",
+      ability_text: ["Draw a card."],
+      energy_added: 1,
+      deck_tier: Two,
+      art: (image: 2421338077, owned: true),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Ruin Tree",
-    id: "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5",
-    ability_text: ["You may immediately play a ≤2● cost character from your void."],
-    energy_added: 1,
-    deck_tier: Three,
-    automation: [
-      AutomationPrompt(
-        key: "confirm-play-void-character",
-        title: "Play a character from your void?",
-        subtitle: "You may play a character without paying its energy cost.",
-        instructions: "Choose whether to play a character from your void.",
-      ),
+    DreamwellCardDefinition(
+      name: "Skypath",
+      id: "f9b479cf-02cb-40e1-bb64-70b29977bf15",
+      ability_text: ["Foresee 1."],
+      energy_added: 1,
+      deck_tier: One,
+      art: (image: 1897537165, owned: true),
+    ),
 
-      AutomationPrompt(
-        key: "choose-void-character",
-        title: "Choose a character to play",
-        subtitle: "Choose an eligible character from your void.",
-        instructions: "Choose a character to play.",
-      ),
-    ],
-    art: (image: 2155438699, owned: true),
-  ),
+    DreamwellCardDefinition(
+      name: "Autumn Glade",
+      id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+      ability_text: ["Gain 2⍟."],
+      energy_added: 1,
+      deck_tier: One,
+      art: (image: 1789989917, owned: true),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Lily Lake",
-    id: "558a1f1b-7dc1-4d83-9f00-c6af2187a954",
-    ability_text: ["Draw an additional Dreamwell card."],
-    energy_added: 1,
-    deck_tier: Three,
-    art: (image: 1302572581, owned: true),
-  ),
+    DreamwellCardDefinition(
+      name: "Twilight Radiance",
+      id: "de98477c-e216-4618-bff1-0e24bd982fdb",
+      ability_text: ["Gain 1●."],
+      energy_added: 1,
+      deck_tier: One,
+      art: (image: 1786390154, owned: true),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Firmament Mirror",
-    id: "14dec460-3ec6-40c1-978f-67e70cb0b227",
-    ability_text: ["A chosen card in your void gains reclaim until end of turn."],
-    energy_added: 1,
-    deck_tier: Two,
-    automation: [
-      AutomationPrompt(
-        key: "grant-reclaim",
-        title: "Choose a void card to gain Reclaim",
-        subtitle: "You may play it from your void this turn, then banish it.",
-        instructions: "Choose a card in your void.",
-      ),
-    ],
-    art: (image: 1068256580, owned: true),
-  ),
+    DreamwellCardDefinition(
+      name: "Astral Interface",
+      id: "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d",
+      ability_text: ["Draw a card, then discard a card."],
+      energy_added: 1,
+      deck_tier: One,
+      automation: [
+        AutomationPrompt(
+          key: "discard-drawn-card",
+          title: "Choose a card to discard",
+          subtitle: "Choose one card from your hand.",
+          instructions: "Choose a card to discard.",
+        ),
+      ],
+      art: (image: 1011222385, owned: true),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Shadow Passage",
-    id: "03e4e701-4720-4278-8198-9b7e0514d4cf",
-    ability_text: ["Erode 3."],
-    energy_added: 1,
-    deck_tier: One,
-    art: (image: 1068256757, owned: true),
-  ),
+    DreamwellCardDefinition(
+      name: "Glimmering Horizon",
+      id: "cf0f0a05-2a94-407c-8c22-e41b925f9c03",
+      ability_text: [
+        "If you have fewer than 2 cards in hand, draw until you have 2 cards in hand.",
+      ],
+      energy_added: 1,
+      deck_tier: Two,
+      art: (image: 2419795157, owned: true),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Summer Blossom",
-    id: "662b7393-751c-4aa9-8150-5f20b4d176a4",
-    ability_text: ["(no ability)"],
-    energy_added: 2,
-    deck_tier: Two,
-    art: (image: 1924168808, owned: true),
-  ),
+    DreamwellCardDefinition(
+      name: "Ruin Tree",
+      id: "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5",
+      ability_text: ["You may immediately play a ≤2● cost character from your void."],
+      energy_added: 1,
+      deck_tier: Three,
+      automation: [
+        AutomationPrompt(
+          key: "confirm-play-void-character",
+          title: "Play a character from your void?",
+          subtitle: "You may play a character without paying its energy cost.",
+          instructions: "Choose whether to play a character from your void.",
+        ),
 
-  DreamwellCardDefinition(
-    name: "The Voltsurge",
-    id: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
-    ability_text: ["Each player draws 2 cards."],
-    energy_added: 1,
-    deck_tier: Three,
-    art: (image: 1125132389, owned: true),
-  ),
+        AutomationPrompt(
+          key: "choose-void-character",
+          title: "Choose a character to play",
+          subtitle: "Choose an eligible character from your void.",
+          instructions: "Choose a character to play.",
+        ),
+      ],
+      art: (image: 2155438699, owned: true),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Sunset's Last Gaze",
-    id: "fa8704fe-759f-408d-992d-d8f9d5ffd760",
-    ability_text: ["You may discard 2 cards, then draw 2 cards."],
-    energy_added: 1,
-    deck_tier: Three,
-    automation: [
-      AutomationPrompt(
-        key: "discard-and-draw",
-        title: "Discard {count} cards, then draw {count}?",
-        subtitle: "Choose whether to exchange cards from your hand.",
-        instructions: "Choose whether to discard and draw the same number of cards.",
-        arguments: [PromptArgument(name: "count", kind: Count)],
-      ),
+    DreamwellCardDefinition(
+      name: "Lily Lake",
+      id: "558a1f1b-7dc1-4d83-9f00-c6af2187a954",
+      ability_text: ["Draw an additional Dreamwell card."],
+      energy_added: 1,
+      deck_tier: Three,
+      art: (image: 1302572581, owned: true),
+    ),
 
-      AutomationPrompt(
-        key: "choose-discards",
-        title: "Discard {count} cards",
-        subtitle: "Choose cards from your hand.",
-        instructions: "Choose {count} cards to discard.",
-        arguments: [PromptArgument(name: "count", kind: Count)],
-      ),
-    ],
-    art: (image: 1721490835),
-  ),
+    DreamwellCardDefinition(
+      name: "Firmament Mirror",
+      id: "14dec460-3ec6-40c1-978f-67e70cb0b227",
+      ability_text: ["A chosen card in your void gains reclaim until end of turn."],
+      energy_added: 1,
+      deck_tier: Two,
+      automation: [
+        AutomationPrompt(
+          key: "grant-reclaim",
+          title: "Choose a void card to gain Reclaim",
+          subtitle: "You may play it from your void this turn, then banish it.",
+          instructions: "Choose a card in your void.",
+        ),
+      ],
+      art: (image: 1068256580, owned: true),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Leaf Light Canopy",
-    id: "2b23a60c-209c-4c75-b63c-b7f73b2e1a56",
-    ability_text: ["Return a card from your void to your hand."],
-    energy_added: 1,
-    deck_tier: Three,
-    automation: [
-      AutomationPrompt(
-        key: "return-void-card",
-        title: "Return a void card to hand",
-        subtitle: "Choose one card from your void.",
-        instructions: "Choose a card to return to your hand.",
-      ),
-    ],
-    art: (image: 2030910782, owned: true),
-  ),
+    DreamwellCardDefinition(
+      name: "Shadow Passage",
+      id: "03e4e701-4720-4278-8198-9b7e0514d4cf",
+      ability_text: ["Erode 3."],
+      energy_added: 1,
+      deck_tier: One,
+      art: (image: 1068256757, owned: true),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Silent Winter",
-    id: "9954cede-8a16-4053-b6e9-da745f4540f5",
-    ability_text: ["Banish an enemy until end of turn."],
-    energy_added: 0,
-    deck_tier: Three,
-    automation: [
-      AutomationPrompt(
-        key: "banish-enemy-character",
-        title: "Banish an enemy character",
-        subtitle: "Choose an opposing character in play.",
-        instructions: "Choose a character to banish until Ending.",
-      ),
-    ],
-    art: (image: 1950881323, owned: true),
-  ),
+    DreamwellCardDefinition(
+      name: "Summer Blossom",
+      id: "662b7393-751c-4aa9-8150-5f20b4d176a4",
+      ability_text: ["(no ability)"],
+      energy_added: 2,
+      deck_tier: Two,
+      art: (image: 1924168808, owned: true),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Shining Beacon",
-    id: "3a4293da-55a1-4094-898a-df402ffa1c92",
-    ability_text: [
-      "Look at the top 2 cards of your deck. Put one of them into your hand and the other on the bottom of your deck.",
-    ],
-    energy_added: 0,
-    deck_tier: Three,
-    automation: [
-      AutomationPrompt(
-        key: "pick-card-for-hand",
-        title: "Pick a card for your hand",
-        subtitle: "The other revealed card goes to the bottom of your deck.",
-        instructions: "Choose one revealed card to put into your hand.",
-      ),
-    ],
-    art: (image: 1252796548, owned: true),
-  ),
+    DreamwellCardDefinition(
+      name: "The Voltsurge",
+      id: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+      ability_text: ["Each player draws 2 cards."],
+      energy_added: 1,
+      deck_tier: Three,
+      art: (image: 1125132389, owned: true),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Prismatic Pastures",
-    id: "d585b78a-dfe3-4e12-95ac-432c3c880540",
-    ability_text: ["Gain 3●."],
-    energy_added: 0,
-    deck_tier: Four,
-    art: (image: 2295991867, owned: true),
-  ),
+    DreamwellCardDefinition(
+      name: "Sunset's Last Gaze",
+      id: "fa8704fe-759f-408d-992d-d8f9d5ffd760",
+      ability_text: ["You may discard 2 cards, then draw 2 cards."],
+      energy_added: 1,
+      deck_tier: Three,
+      automation: [
+        AutomationPrompt(
+          key: "discard-and-draw",
+          title: "Discard {count} cards, then draw {count}?",
+          subtitle: "Choose whether to exchange cards from your hand.",
+          instructions: "Choose whether to discard and draw the same number of cards.",
+          arguments: [PromptArgument(name: "count", kind: Count)],
+        ),
 
-  DreamwellCardDefinition(
-    name: "Celestial Gateway",
-    id: "a3033051-8eb7-4fbf-93d6-f947ed68974d",
-    ability_text: ["Return a random character from each player's void to play."],
-    energy_added: 1,
-    deck_tier: Four,
-    art: (image: 2256745741),
-  ),
+        AutomationPrompt(
+          key: "choose-discards",
+          title: "Discard {count} cards",
+          subtitle: "Choose cards from your hand.",
+          instructions: "Choose {count} cards to discard.",
+          arguments: [PromptArgument(name: "count", kind: Count)],
+        ),
+      ],
+      art: (image: 1721490835),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Luminous Enigma",
-    id: "556057bb-b134-497e-86c2-c6f30049e9e3",
-    ability_text: ["You may put a card from your void on top of your deck."],
-    energy_added: 1,
-    deck_tier: Four,
-    automation: [
-      AutomationPrompt(
-        key: "confirm-void-to-deck",
-        title: "Put a void card on top of your deck?",
-        subtitle: "Choose whether to return a card to your deck.",
-        instructions: "Choose whether to put a void card on top of your deck.",
-      ),
+    DreamwellCardDefinition(
+      name: "Leaf Light Canopy",
+      id: "2b23a60c-209c-4c75-b63c-b7f73b2e1a56",
+      ability_text: ["Return a card from your void to your hand."],
+      energy_added: 1,
+      deck_tier: Three,
+      automation: [
+        AutomationPrompt(
+          key: "return-void-card",
+          title: "Return a void card to hand",
+          subtitle: "Choose one card from your void.",
+          instructions: "Choose a card to return to your hand.",
+        ),
+      ],
+      art: (image: 2030910782, owned: true),
+    ),
 
-      AutomationPrompt(
-        key: "choose-void-for-deck",
-        title: "Choose a void card to put on top",
-        subtitle: "Choose one card from your void.",
-        instructions: "Choose the card to put on top of your deck.",
-      ),
-    ],
-    art: (image: 2285036621, owned: true),
-  ),
+    DreamwellCardDefinition(
+      name: "Silent Winter",
+      id: "9954cede-8a16-4053-b6e9-da745f4540f5",
+      ability_text: ["Banish an enemy until end of turn."],
+      energy_added: 0,
+      deck_tier: Three,
+      automation: [
+        AutomationPrompt(
+          key: "banish-enemy-character",
+          title: "Banish an enemy character",
+          subtitle: "Choose an opposing character in play.",
+          instructions: "Choose a character to banish until Ending.",
+        ),
+      ],
+      art: (image: 1950881323, owned: true),
+    ),
 
-  DreamwellCardDefinition(
-    name: "The Bastion",
-    id: "20be0fdd-d691-40a9-b4f8-15689ea7ebaa",
-    ability_text: ["You may abandon a character to draw 2 cards."],
-    energy_added: 0,
-    deck_tier: Four,
-    automation: [
-      AutomationPrompt(
-        key: "confirm-abandon-and-draw",
-        title: "Abandon a character to draw {count}?",
-        subtitle: "Choose whether to abandon a character you control.",
-        instructions: "Choose whether to abandon a character and draw {count} cards.",
-        arguments: [PromptArgument(name: "count", kind: Count)],
-      ),
+    DreamwellCardDefinition(
+      name: "Shining Beacon",
+      id: "3a4293da-55a1-4094-898a-df402ffa1c92",
+      ability_text: [
+        "Look at the top 2 cards of your deck. Put one of them into your hand and the other on the bottom of your deck.",
+      ],
+      energy_added: 0,
+      deck_tier: Three,
+      automation: [
+        AutomationPrompt(
+          key: "pick-card-for-hand",
+          title: "Pick a card for your hand",
+          subtitle: "The other revealed card goes to the bottom of your deck.",
+          instructions: "Choose one revealed card to put into your hand.",
+        ),
+      ],
+      art: (image: 1252796548, owned: true),
+    ),
 
-      AutomationPrompt(
-        key: "choose-character-to-abandon",
-        title: "Choose a character to abandon",
-        subtitle: "Choose one character you control.",
-        instructions: "Choose the character to abandon.",
-      ),
-    ],
-    art: (image: 748956883, owned: true),
-  ),
+    DreamwellCardDefinition(
+      name: "Prismatic Pastures",
+      id: "d585b78a-dfe3-4e12-95ac-432c3c880540",
+      ability_text: ["Gain 3●."],
+      energy_added: 0,
+      deck_tier: Four,
+      art: (image: 2295991867, owned: true),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Eternal Horizon",
-    id: "a57f1276-3fb6-4527-b538-953fbace35cf",
-    ability_text: ["Each character you control gains +1✦."],
-    energy_added: 0,
-    deck_tier: Four,
-    art: (image: 1633431259, owned: true),
-  ),
+    DreamwellCardDefinition(
+      name: "Celestial Gateway",
+      id: "a3033051-8eb7-4fbf-93d6-f947ed68974d",
+      ability_text: ["Return a random character from each player's void to play."],
+      energy_added: 1,
+      deck_tier: Four,
+      art: (image: 2256745741),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Ringvale",
-    id: "f61431f3-33bd-42ff-a229-b4013582e86e",
-    ability_text: ["Discover a ≤2● cost card."],
-    energy_added: 1,
-    deck_tier: Two,
-    automation: [
-      AutomationPrompt(
-        key: "discover-card",
-        title: "Discover a ≤{maximumCost}● cost card",
-        subtitle: "Choose one of the sampled cards.",
-        instructions: "Choose a card costing at most {maximumCost}●.",
-        arguments: [PromptArgument(name: "maximumCost", kind: MaximumCost)],
-      ),
-    ],
-    art: (image: 2622590199),
-  ),
+    DreamwellCardDefinition(
+      name: "Luminous Enigma",
+      id: "556057bb-b134-497e-86c2-c6f30049e9e3",
+      ability_text: ["You may put a card from your void on top of your deck."],
+      energy_added: 1,
+      deck_tier: Four,
+      automation: [
+        AutomationPrompt(
+          key: "confirm-void-to-deck",
+          title: "Put a void card on top of your deck?",
+          subtitle: "Choose whether to return a card to your deck.",
+          instructions: "Choose whether to put a void card on top of your deck.",
+        ),
 
-  DreamwellCardDefinition(
-    name: "Nomad's Verge",
-    id: "51caf26d-83bf-45a9-bc80-010d353277db",
-    ability_text: ["Materialize a 1✦ ethereal figment."],
-    energy_added: 1,
-    deck_tier: One,
-    art: (image: 2637215371),
-  ),
+        AutomationPrompt(
+          key: "choose-void-for-deck",
+          title: "Choose a void card to put on top",
+          subtitle: "Choose one card from your void.",
+          instructions: "Choose the card to put on top of your deck.",
+        ),
+      ],
+      art: (image: 2285036621, owned: true),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Ember Cavern",
-    id: "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
-    ability_text: ["Reveal the opponent's hand."],
-    energy_added: 1,
-    deck_tier: One,
-    art: (image: 263151206, crop: (x: -1, y: 0.1, scale: 1.2)),
-  ),
+    DreamwellCardDefinition(
+      name: "The Bastion",
+      id: "20be0fdd-d691-40a9-b4f8-15689ea7ebaa",
+      ability_text: ["You may abandon a character to draw 2 cards."],
+      energy_added: 0,
+      deck_tier: Four,
+      automation: [
+        AutomationPrompt(
+          key: "confirm-abandon-and-draw",
+          title: "Abandon a character to draw {count}?",
+          subtitle: "Choose whether to abandon a character you control.",
+          instructions: "Choose whether to abandon a character and draw {count} cards.",
+          arguments: [PromptArgument(name: "count", kind: Count)],
+        ),
 
-  DreamwellCardDefinition(
-    name: "Broken Aqueduct",
-    id: "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
-    ability_text: ["The opponent gains 1 maximum ●."],
-    energy_added: 2,
-    deck_tier: Three,
-    art: (image: 243607573, crop: (x: 0, y: 1, scale: 1)),
-  ),
+        AutomationPrompt(
+          key: "choose-character-to-abandon",
+          title: "Choose a character to abandon",
+          subtitle: "Choose one character you control.",
+          instructions: "Choose the character to abandon.",
+        ),
+      ],
+      art: (image: 748956883, owned: true),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Echoing Boughs",
-    id: "2ad68489-044a-40d1-9be6-e62497a4e1fd",
-    ability_text: ["Rematerialize a character you control."],
-    energy_added: 1,
-    deck_tier: Three,
-    automation: [
-      AutomationPrompt(
-        key: "rematerialize-ally",
-        title: "Rematerialize an ally",
-        subtitle: "Choose one character you control.",
-        instructions: "Choose a character to rematerialize.",
-      ),
-    ],
-    art: (image: 691496707),
-  ),
+    DreamwellCardDefinition(
+      name: "Eternal Horizon",
+      id: "a57f1276-3fb6-4527-b538-953fbace35cf",
+      ability_text: ["Each character you control gains +1✦."],
+      energy_added: 0,
+      deck_tier: Four,
+      art: (image: 1633431259, owned: true),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Centennial Square",
-    id: "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c",
-    ability_text: ["Choose one: Draw a card or gain 2●."],
-    energy_added: 0,
-    deck_tier: Four,
-    automation: [
-      AutomationPrompt(
-        key: "choose-benefit",
-        title: "Choose one",
-        subtitle: "Choose a Dreamwell benefit.",
-        instructions: "Choose whether to draw a card or gain energy.",
-        choices: [
-          PromptChoice(key: "draw-card", label: "Draw a card"),
-          PromptChoice(key: "gain-energy", label: "Gain {amount}●"),
-        ],
-        arguments: [PromptArgument(name: "amount", kind: Amount)],
-      ),
-    ],
-    art: (image: 1504647500),
-  ),
+    DreamwellCardDefinition(
+      name: "Ringvale",
+      id: "f61431f3-33bd-42ff-a229-b4013582e86e",
+      ability_text: ["Discover a ≤2● cost card."],
+      energy_added: 1,
+      deck_tier: Two,
+      automation: [
+        AutomationPrompt(
+          key: "discover-card",
+          title: "Discover a ≤{maximumCost}● cost card",
+          subtitle: "Choose one of the sampled cards.",
+          instructions: "Choose a card costing at most {maximumCost}●.",
+          arguments: [PromptArgument(name: "maximumCost", kind: MaximumCost)],
+        ),
+      ],
+      art: (image: 2622590199),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Ancient Mine",
-    id: "91deefd2-0400-4c78-ab9f-f6db864ff7e2",
-    ability_text: ["Gain 2●. Discard a card."],
-    energy_added: 1,
-    deck_tier: One,
-    automation: [
-      AutomationPrompt(
-        key: "discard-card",
-        title: "Discard a card",
-        subtitle: "Choose one card from your hand.",
-        instructions: "Choose a card to discard.",
-      ),
-    ],
-    art: (image: 450441286),
-  ),
+    DreamwellCardDefinition(
+      name: "Nomad's Verge",
+      id: "51caf26d-83bf-45a9-bc80-010d353277db",
+      ability_text: ["Materialize a 1✦ ethereal figment."],
+      energy_added: 1,
+      deck_tier: One,
+      art: (image: 2637215371),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Azure Cascade",
-    id: "8f5f2e26-44b5-447b-90d0-eaf22ab29fed",
-    ability_text: ["Discover a character."],
-    energy_added: 0,
-    deck_tier: Three,
-    automation: [
-      AutomationPrompt(
-        key: "discover-character",
-        title: "Discover a character",
-        subtitle: "Choose one of the sampled characters.",
-        instructions: "Choose a character card.",
-      ),
-    ],
-    art: (image: 485518030),
-  ),
+    DreamwellCardDefinition(
+      name: "Ember Cavern",
+      id: "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
+      ability_text: ["Reveal the opponent's hand."],
+      energy_added: 1,
+      deck_tier: One,
+      art: (image: 263151206, crop: (x: -1, y: 0.1, scale: 1.2)),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Rusted Edifice",
-    id: "a0fbcbd9-96ee-4392-add7-e1d436f99553",
-    ability_text: ["Return an event from your void to your hand."],
-    energy_added: 1,
-    deck_tier: Three,
-    automation: [
-      AutomationPrompt(
-        key: "return-event",
-        title: "Return an event from your void to hand",
-        subtitle: "Choose one event from your void.",
-        instructions: "Choose an event to return to your hand.",
-      ),
-    ],
-    art: (image: 2251144879),
-  ),
+    DreamwellCardDefinition(
+      name: "Broken Aqueduct",
+      id: "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
+      ability_text: ["The opponent gains 1 maximum ●."],
+      energy_added: 2,
+      deck_tier: Three,
+      art: (image: 243607573, crop: (x: 0, y: 1, scale: 1)),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Overgrown Passage",
-    id: "06e62e45-53f9-4264-9aa6-2575b445332a",
-    ability_text: ["Each player draws until they have at least 3 cards in hand."],
-    energy_added: 2,
-    deck_tier: Three,
-    art: (image: 1282908316),
-  ),
+    DreamwellCardDefinition(
+      name: "Echoing Boughs",
+      id: "2ad68489-044a-40d1-9be6-e62497a4e1fd",
+      ability_text: ["Rematerialize a character you control."],
+      energy_added: 1,
+      deck_tier: Three,
+      automation: [
+        AutomationPrompt(
+          key: "rematerialize-ally",
+          title: "Rematerialize an ally",
+          subtitle: "Choose one character you control.",
+          instructions: "Choose a character to rematerialize.",
+        ),
+      ],
+      art: (image: 691496707),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Sunset Pool",
-    id: "120ec4c2-aa7b-48f4-be9f-f39820e565ca",
-    ability_text: ["Draw a card. If it is a character, gain 1●."],
-    energy_added: 1,
-    deck_tier: Three,
-    art: (image: 2313906183),
-  ),
+    DreamwellCardDefinition(
+      name: "Centennial Square",
+      id: "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c",
+      ability_text: ["Choose one: Draw a card or gain 2●."],
+      energy_added: 0,
+      deck_tier: Four,
+      automation: [
+        AutomationPrompt(
+          key: "choose-benefit",
+          title: "Choose one",
+          subtitle: "Choose a Dreamwell benefit.",
+          instructions: "Choose whether to draw a card or gain energy.",
+          choices: [
+            PromptChoice(key: "draw-card", label: "Draw a card"),
+            PromptChoice(key: "gain-energy", label: "Gain {amount}●"),
+          ],
+          arguments: [PromptArgument(name: "amount", kind: Amount)],
+        ),
+      ],
+      art: (image: 1504647500),
+    ),
 
-  DreamwellCardDefinition(
-    name: "Fortune's Wheel",
-    id: "446095b1-ec4d-40d7-8eed-a8221d339ea2",
-    ability_text: ["You may discard your hand, then draw that many cards."],
-    energy_added: 0,
-    deck_tier: Four,
-    automation: [
-      AutomationPrompt(
-        key: "redraw-hand",
-        title: "Discard your hand and redraw?",
-        subtitle: "Draw the same number of cards you discard.",
-        instructions: "Choose whether to discard your hand and draw replacements.",
-      ),
-    ],
-    art: (image: 635276573, crop: (x: 0, y: -1, scale: 1)),
-  ),
-]
+    DreamwellCardDefinition(
+      name: "Ancient Mine",
+      id: "91deefd2-0400-4c78-ab9f-f6db864ff7e2",
+      ability_text: ["Gain 2●. Discard a card."],
+      energy_added: 1,
+      deck_tier: One,
+      automation: [
+        AutomationPrompt(
+          key: "discard-card",
+          title: "Discard a card",
+          subtitle: "Choose one card from your hand.",
+          instructions: "Choose a card to discard.",
+        ),
+      ],
+      art: (image: 450441286),
+    ),
+
+    DreamwellCardDefinition(
+      name: "Azure Cascade",
+      id: "8f5f2e26-44b5-447b-90d0-eaf22ab29fed",
+      ability_text: ["Discover a character."],
+      energy_added: 0,
+      deck_tier: Three,
+      automation: [
+        AutomationPrompt(
+          key: "discover-character",
+          title: "Discover a character",
+          subtitle: "Choose one of the sampled characters.",
+          instructions: "Choose a character card.",
+        ),
+      ],
+      art: (image: 485518030),
+    ),
+
+    DreamwellCardDefinition(
+      name: "Rusted Edifice",
+      id: "a0fbcbd9-96ee-4392-add7-e1d436f99553",
+      ability_text: ["Return an event from your void to your hand."],
+      energy_added: 1,
+      deck_tier: Three,
+      automation: [
+        AutomationPrompt(
+          key: "return-event",
+          title: "Return an event from your void to hand",
+          subtitle: "Choose one event from your void.",
+          instructions: "Choose an event to return to your hand.",
+        ),
+      ],
+      art: (image: 2251144879),
+    ),
+
+    DreamwellCardDefinition(
+      name: "Overgrown Passage",
+      id: "06e62e45-53f9-4264-9aa6-2575b445332a",
+      ability_text: ["Each player draws until they have at least 3 cards in hand."],
+      energy_added: 2,
+      deck_tier: Three,
+      art: (image: 1282908316),
+    ),
+
+    DreamwellCardDefinition(
+      name: "Sunset Pool",
+      id: "120ec4c2-aa7b-48f4-be9f-f39820e565ca",
+      ability_text: ["Draw a card. If it is a character, gain 1●."],
+      energy_added: 1,
+      deck_tier: Three,
+      art: (image: 2313906183),
+    ),
+
+    DreamwellCardDefinition(
+      name: "Fortune's Wheel",
+      id: "446095b1-ec4d-40d7-8eed-a8221d339ea2",
+      ability_text: ["You may discard your hand, then draw that many cards."],
+      energy_added: 0,
+      deck_tier: Four,
+      automation: [
+        AutomationPrompt(
+          key: "redraw-hand",
+          title: "Discard your hand and redraw?",
+          subtitle: "Draw the same number of cards you discard.",
+          instructions: "Choose whether to discard your hand and draw replacements.",
+        ),
+      ],
+      art: (image: 635276573, crop: (x: 0, y: -1, scale: 1)),
+    ),
+  ],
+)

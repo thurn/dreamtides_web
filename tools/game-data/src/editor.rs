@@ -28,7 +28,9 @@ use crate::models::dreamsigns::{
     self, DreamsignDefinition, DreamsignId, DreamsignMetadataCatalog, DreamsignTag,
     DreamsignTagCatalog,
 };
-use crate::models::dreamwell::{self, ArtCrop, DeckTier, DreamwellCardDefinition};
+use crate::models::dreamwell::{
+    self, ArtCrop, DeckTier, DreamwellCardDefinition, DreamwellCatalog,
+};
 use crate::models::exploration::{
     ActionDefinition, ActionEffect, ActionId, ActionPresentation, DeckTarget, EffectKind,
     ExplorationCatalog, Followup, Predicate,
@@ -1023,7 +1025,7 @@ fn edit_dreamwell(
     operations: Vec<EditOperation>,
 ) -> Result<EditReport> {
     let dataset = manifest.dataset("dreamwell")?;
-    if dataset.adapter != "dreamwell_v1"
+    if dataset.adapter != "dreamwell_v2"
         || dataset.editor != crate::manifest::EditorCapability::Semantic
     {
         bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for dreamwell");
@@ -1031,11 +1033,11 @@ fn edit_dreamwell(
     let source_path = staging_root.join(&dataset.source);
     let original_text = fs::read_to_string(&source_path)
         .with_context(|| format!("read staged Dreamwell source {}", source_path.display()))?;
-    let original: Vec<DreamwellCardDefinition> = ron::from_str(&original_text)
+    let original: DreamwellCatalog = ron::from_str(&original_text)
         .context("MALFORMED_SOURCE: staged Dreamwell RON is invalid")?;
     dreamwell::validate(&original)
         .context("MALFORMED_SOURCE: staged Dreamwell catalog is invalid")?;
-    let mut cards = original.clone();
+    let mut catalog = original.clone();
     let mut source_text = original_text;
 
     for operation in operations {
@@ -1045,18 +1047,19 @@ fn edit_dreamwell(
                 field,
                 value,
             } => {
-                let index = unique_dreamwell_index(&cards, &dreamwell_id)?;
-                set_dreamwell_field(&mut cards[index], &field, value)?;
-                source_text = patch_dreamwell_source_field(&source_text, &cards[index], &field)?;
+                let index = unique_dreamwell_index(&catalog.cards, &dreamwell_id)?;
+                set_dreamwell_field(&mut catalog.cards[index], &field, value)?;
+                source_text =
+                    patch_dreamwell_source_field(&source_text, &catalog.cards[index], &field)?;
             }
             _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to Dreamwell"),
         }
     }
 
-    dreamwell::validate(&cards)
+    dreamwell::validate(&catalog)
         .context("INVALID_EDIT: Dreamwell edit violates the catalog contract")?;
-    verify_round_trip::<Vec<DreamwellCardDefinition>>(&source_text, &cards)?;
-    let changed = cards != original;
+    verify_round_trip::<DreamwellCatalog>(&source_text, &catalog)?;
+    let changed = catalog != original;
     if changed {
         atomic_write(&source_path, source_text.as_bytes())?;
     }
@@ -1149,11 +1152,12 @@ fn patch_dreamwell_source_field(
         "image-number" | "image_number" | "art" => "art",
         _ => bail!("INVALID_EDIT: unsupported Dreamwell field {field}"),
     };
-    let record = typed_record_range(
+    let record = typed_record_range_at_indent(
         source,
         "DreamwellCardDefinition",
         "id",
         &card.id.to_string(),
+        4,
     )?;
     let range = top_level_field_value_range(source, record.clone(), source_field)?
         .with_context(|| format!("MALFORMED_SOURCE: Dreamwell card is missing {source_field}"))?;
@@ -4046,41 +4050,52 @@ CardMetadataCatalog(
     const DREAMWELL_EDITOR_SOURCE: &str = r###"// Stable Dreamwell guidance.
 
 #![enable(implicit_some)]
-[
-  // Edited record comment.
-  DreamwellCardDefinition(
-    name: r#"Raw Horizon"#,
-    id: "00000000-0000-4000-8000-000000000021",
-    ability_text: ["First paragraph", "Second paragraph"],
-    energy_added: 2,
-    deck_tier: Starting,
-    art: (
-      image: 7,
-      // Preserve nested art provenance guidance.
-      owned: true,
+DreamwellCatalog(
+  // Unrelated construction rules must survive card edits byte-for-byte.
+  rules: DreamwellRules(
+    opening_orders: [0],
+    recurring_orders: [1, 2, 3, 4],
+    cards_per_recurring_order: 5,
+    minimum_constructed_length: 62,
+  ),
+  cards: [
+    // Edited record comment.
+    DreamwellCardDefinition(
+      name: r#"Raw Horizon"#,
+      id: "00000000-0000-4000-8000-000000000021",
+      ability_text: ["First paragraph", "Second paragraph"],
+      energy_added: 2,
+      deck_tier: Starting,
+      art: (
+        image: 7,
+        // Preserve nested art provenance guidance.
+        owned: true,
+      ),
     ),
-  ),
 
-  /* Unrelated record comment. */
-  DreamwellCardDefinition(
-    name: "Unrelated Dreamwell",
-    id: "00000000-0000-4000-8000-000000000022",
-    ability_text: ["Unrelated ability."],
-    energy_added: 1,
-    deck_tier: Two,
-    art: (image: 8, crop: (x: 0.25, y: -0.5, scale: 1.5)),
-  ),
-]
+    /* Unrelated record comment. */
+    DreamwellCardDefinition(
+      name: "Unrelated Dreamwell",
+      id: "00000000-0000-4000-8000-000000000022",
+      ability_text: ["Unrelated ability."],
+      energy_added: 1,
+      deck_tier: Two,
+      art: (image: 8, crop: (x: 0.25, y: -0.5, scale: 1.5)),
+    ),
+  ],
+)
 "###;
 
     #[test]
     fn dreamwell_scalar_edit_is_operation_sized_and_preserves_source() {
-        let mut cards: Vec<DreamwellCardDefinition> =
-            ron::from_str(DREAMWELL_EDITOR_SOURCE).unwrap();
-        set_dreamwell_field(&mut cards[0], "energy-added", json!(3)).unwrap();
-        let patched =
-            patch_dreamwell_source_field(DREAMWELL_EDITOR_SOURCE, &cards[0], "energy-added")
-                .unwrap();
+        let mut catalog: DreamwellCatalog = ron::from_str(DREAMWELL_EDITOR_SOURCE).unwrap();
+        set_dreamwell_field(&mut catalog.cards[0], "energy-added", json!(3)).unwrap();
+        let patched = patch_dreamwell_source_field(
+            DREAMWELL_EDITOR_SOURCE,
+            &catalog.cards[0],
+            "energy-added",
+        )
+        .unwrap();
 
         assert_eq!(
             DREAMWELL_EDITOR_SOURCE
@@ -4091,9 +4106,10 @@ CardMetadataCatalog(
             1
         );
         assert!(patched.contains("/* Unrelated record comment. */"));
+        assert!(patched.contains("minimum_constructed_length: 62"));
         assert_eq!(
-            ron::from_str::<Vec<DreamwellCardDefinition>>(&patched).unwrap(),
-            cards
+            ron::from_str::<DreamwellCatalog>(&patched).unwrap(),
+            catalog
         );
     }
 
@@ -4108,14 +4124,14 @@ CardMetadataCatalog(
             ("art", json!({ "x": 0.5, "y": -0.25, "scale": 1.75 })),
         ];
         for (field, value) in cases {
-            let mut cards: Vec<DreamwellCardDefinition> =
-                ron::from_str(DREAMWELL_EDITOR_SOURCE).unwrap();
-            set_dreamwell_field(&mut cards[0], field, value).unwrap();
+            let mut catalog: DreamwellCatalog = ron::from_str(DREAMWELL_EDITOR_SOURCE).unwrap();
+            set_dreamwell_field(&mut catalog.cards[0], field, value).unwrap();
             let patched =
-                patch_dreamwell_source_field(DREAMWELL_EDITOR_SOURCE, &cards[0], field).unwrap();
+                patch_dreamwell_source_field(DREAMWELL_EDITOR_SOURCE, &catalog.cards[0], field)
+                    .unwrap();
             assert_eq!(
-                ron::from_str::<Vec<DreamwellCardDefinition>>(&patched).unwrap(),
-                cards,
+                ron::from_str::<DreamwellCatalog>(&patched).unwrap(),
+                catalog,
                 "field {field} failed typed round trip"
             );
             assert!(patched.contains("/* Unrelated record comment. */"));
@@ -4125,36 +4141,39 @@ CardMetadataCatalog(
 
     #[test]
     fn dreamwell_editor_rejects_invalid_identity_and_values() {
-        let mut cards: Vec<DreamwellCardDefinition> =
-            ron::from_str(DREAMWELL_EDITOR_SOURCE).unwrap();
+        let mut catalog: DreamwellCatalog = ron::from_str(DREAMWELL_EDITOR_SOURCE).unwrap();
         assert!(
-            unique_dreamwell_index(&cards, "missing")
+            unique_dreamwell_index(&catalog.cards, "missing")
                 .unwrap_err()
                 .to_string()
                 .contains("RECORD_NOT_FOUND")
         );
-        assert!(set_dreamwell_field(&mut cards[0], "order", json!(5)).is_err());
+        assert!(set_dreamwell_field(&mut catalog.cards[0], "order", json!(5)).is_err());
         assert!(
-            set_dreamwell_field(&mut cards[0], "art", json!({ "x": 0, "y": 0, "scale": 0 }))
-                .is_err()
+            set_dreamwell_field(
+                &mut catalog.cards[0],
+                "art",
+                json!({ "x": 0, "y": 0, "scale": 0 }),
+            )
+            .is_err()
         );
-        assert!(set_dreamwell_field(&mut cards[0], "card-number", json!(1)).is_err());
+        assert!(set_dreamwell_field(&mut catalog.cards[0], "card-number", json!(1)).is_err());
     }
 
     #[test]
     fn dreamwell_semantic_no_op_preserves_source_bytes() {
-        let mut cards: Vec<DreamwellCardDefinition> =
-            ron::from_str(DREAMWELL_EDITOR_SOURCE).unwrap();
-        let original = cards.clone();
-        set_dreamwell_field(&mut cards[0], "name", json!("Raw Horizon")).unwrap();
+        let mut catalog: DreamwellCatalog = ron::from_str(DREAMWELL_EDITOR_SOURCE).unwrap();
+        let original = catalog.clone();
+        set_dreamwell_field(&mut catalog.cards[0], "name", json!("Raw Horizon")).unwrap();
         let patched =
-            patch_dreamwell_source_field(DREAMWELL_EDITOR_SOURCE, &cards[0], "name").unwrap();
+            patch_dreamwell_source_field(DREAMWELL_EDITOR_SOURCE, &catalog.cards[0], "name")
+                .unwrap();
 
-        assert_eq!(cards, original);
+        assert_eq!(catalog, original);
         assert_ne!(patched, DREAMWELL_EDITOR_SOURCE);
         assert_eq!(
-            ron::from_str::<Vec<DreamwellCardDefinition>>(&patched).unwrap(),
-            cards
+            ron::from_str::<DreamwellCatalog>(&patched).unwrap(),
+            catalog
         );
         // edit_dreamwell compares typed catalogs before writing, so this
         // normalized replacement is deliberately suppressed as a no-op.

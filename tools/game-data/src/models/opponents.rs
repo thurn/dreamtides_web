@@ -1,4 +1,4 @@
-use std::collections::{BTreeSet, HashSet};
+use std::collections::BTreeSet;
 use std::fmt;
 use std::str::FromStr;
 
@@ -8,10 +8,11 @@ use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
+use super::dreamwell::{self, DreamwellRules};
+
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct OpponentsCatalog {
-    pub dreamwell: DreamwellRules,
     pub progression: ProgressionRules,
     pub coherent_draft: CoherentDraftRules,
     pub corpus_selection: CorpusSelectionRules,
@@ -53,15 +54,6 @@ pub struct BattleRules {
 pub enum StartingSide {
     Player,
     Enemy,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct DreamwellRules {
-    pub opening_orders: Vec<u32>,
-    pub recurring_orders: Vec<u32>,
-    pub cards_per_recurring_order: u32,
-    pub minimum_constructed_length: u32,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -467,11 +459,12 @@ struct CompatibilityAiPreset {
 pub fn lower(
     opponents: OpponentsCatalog,
     battle: BattleRules,
+    dreamwell: DreamwellRules,
     internal_ai: InternalAiCatalog,
 ) -> Result<toml::Value> {
     let source = CombinedCatalog {
         battle,
-        dreamwell: opponents.dreamwell,
+        dreamwell,
         progression: opponents.progression,
         coherent_draft: opponents.coherent_draft,
         corpus_selection: opponents.corpus_selection,
@@ -650,15 +643,7 @@ pub fn validate_card_references(
 fn validate(source: &CombinedCatalog) -> Result<()> {
     validate_battle_rules(&source.battle)?;
 
-    validate_orders(&source.dreamwell)?;
-    require_positive(
-        "dreamwell.cards_per_recurring_order",
-        source.dreamwell.cards_per_recurring_order,
-    )?;
-    require_positive(
-        "dreamwell.minimum_constructed_length",
-        source.dreamwell.minimum_constructed_length,
-    )?;
+    dreamwell::validate_rules(&source.dreamwell)?;
     require_nonempty(
         "progression.starter_dilution",
         &source.progression.starter_dilution,
@@ -711,23 +696,6 @@ fn validate_battle_rules(source: &BattleRules) -> Result<()> {
 fn validate_internal_ai(source: &InternalAiCatalog) -> Result<()> {
     validate_deck(&source.journey_ai_deck)?;
     validate_ai(&source.ai)
-}
-
-fn validate_orders(source: &DreamwellRules) -> Result<()> {
-    require_nonempty("dreamwell.opening_orders", &source.opening_orders)?;
-    require_nonempty("dreamwell.recurring_orders", &source.recurring_orders)?;
-    let opening: HashSet<_> = source.opening_orders.iter().copied().collect();
-    if opening.len() != source.opening_orders.len() {
-        bail!("dreamwell.opening_orders contains a duplicate order");
-    }
-    let recurring: HashSet<_> = source.recurring_orders.iter().copied().collect();
-    if recurring.len() != source.recurring_orders.len() {
-        bail!("dreamwell.recurring_orders contains a duplicate order");
-    }
-    if let Some(overlap) = opening.intersection(&recurring).next() {
-        bail!("dreamwell order {overlap} appears in opening and recurring orders");
-    }
-    Ok(())
 }
 
 fn validate_count_curve(path: &str, curve: CountCurve, positive: bool) -> Result<()> {
@@ -948,12 +916,6 @@ mod tests {
 
     fn catalog() -> OpponentsCatalog {
         OpponentsCatalog {
-            dreamwell: DreamwellRules {
-                opening_orders: vec![8],
-                recurring_orders: vec![9, 10],
-                cards_per_recurring_order: 2,
-                minimum_constructed_length: 14,
-            },
             progression: ProgressionRules {
                 ability_active_from_layer: 0,
                 dreamsigns_from_layer: 2,
@@ -983,6 +945,15 @@ mod tests {
                 affiliation_weight: 0.75,
                 top_ranked_sampling_window: 5,
             },
+        }
+    }
+
+    fn dreamwell_rules() -> DreamwellRules {
+        DreamwellRules {
+            opening_orders: vec![8],
+            recurring_orders: vec![9, 10],
+            cards_per_recurring_order: 2,
+            minimum_constructed_length: 14,
         }
     }
 
@@ -1051,7 +1022,7 @@ mod tests {
 
     #[test]
     fn lowers_every_compatibility_key_and_enum_variant() {
-        let lowered = lower(catalog(), battle(), internal_ai()).unwrap();
+        let lowered = lower(catalog(), battle(), dreamwell_rules(), internal_ai()).unwrap();
         assert_eq!(lowered["schema-version"].as_integer(), Some(1));
         assert_eq!(lowered["battle"]["starting-side"].as_str(), Some("enemy"));
         assert_eq!(
@@ -1080,7 +1051,13 @@ mod tests {
         let mut expectiminimax_ai = internal_ai();
         expectiminimax_ai.ai.presets[&AiPresetId::Standard].opponent_mode =
             OpponentMode::Expectiminimax;
-        let lowered = lower(catalog(), player_battle, expectiminimax_ai).unwrap();
+        let lowered = lower(
+            catalog(),
+            player_battle,
+            dreamwell_rules(),
+            expectiminimax_ai,
+        )
+        .unwrap();
         assert_eq!(lowered["battle"]["starting-side"].as_str(), Some("player"));
         assert_eq!(
             lowered["ai"]["presets"][0]["opponent-mode"].as_str(),
@@ -1089,7 +1066,7 @@ mod tests {
 
         let standalone_battle = lower_battle(battle()).unwrap();
         let standalone_ai = lower_internal_ai(internal_ai()).unwrap();
-        let composed = lower(catalog(), battle(), internal_ai()).unwrap();
+        let composed = lower(catalog(), battle(), dreamwell_rules(), internal_ai()).unwrap();
         assert_eq!(composed["battle"], standalone_battle["battle"]);
         assert_eq!(
             composed["journey-ai-deck"],
@@ -1109,8 +1086,8 @@ mod tests {
         assert!(ron::from_str::<BattleRules>(&unknown_battle).is_err());
         let source = ron::ser::to_string(&catalog()).unwrap();
         let unknown_opponents = source.replacen(
-            "cards_per_recurring_order:2",
-            "cards_per_recurring_order:2,surprise:true",
+            "ability_active_from_layer:0",
+            "ability_active_from_layer:0,surprise:true",
             1,
         );
         assert!(ron::from_str::<OpponentsCatalog>(&unknown_opponents).is_err());
@@ -1128,9 +1105,14 @@ mod tests {
 
     #[test]
     fn rejects_invalid_collections_curves_weights_and_preset_references() {
-        let mut source = catalog();
-        source.dreamwell.recurring_orders.push(8);
-        assert_opponents_error_contains(source, "appears in opening and recurring");
+        let mut source = dreamwell_rules();
+        source.recurring_orders.push(8);
+        assert!(
+            dreamwell::validate_rules(&source)
+                .unwrap_err()
+                .to_string()
+                .contains("appears in opening and recurring")
+        );
 
         let mut source = catalog();
         source.coherent_draft.distinct_card_curve = CountCurve { first: 9, last: 8 };
@@ -1176,7 +1158,7 @@ mod tests {
     }
 
     fn assert_opponents_error_contains(source: OpponentsCatalog, expected: &str) {
-        let error = lower(source, battle(), internal_ai())
+        let error = lower(source, battle(), dreamwell_rules(), internal_ai())
             .unwrap_err()
             .to_string();
         assert!(

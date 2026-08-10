@@ -779,6 +779,31 @@ Managed by the dreamsign editor's "Manage tags" panel.
 
 ## `data/dreamwell.ron`
 
+The typed `DreamwellCatalog` owns both the rules for constructing the shared
+deck and the canonical card definitions placed into that deck.
+
+### `rules.opening_orders: [0]`
+
+Compatibility order groups included in full, once, at the front of the first
+cycle. `Starting` cards lower to order 0.
+
+### `rules.recurring_orders: [1, 2, 3, 4]`
+
+Compatibility order groups sampled in this order in the first and every later
+cycle. Tiers `One` through `Four` lower to orders 1 through 4.
+
+### `rules.cards_per_recurring_order: 5`
+
+Maximum cards sampled from each recurring order per cycle. A smaller group
+contributes every available card.
+
+### `rules.minimum_constructed_length: 62`
+
+Complete cycles are appended until the prebuilt deck reaches at least this
+length. A final complete cycle may exceed the threshold.
+
+### `cards: [DreamwellCardDefinition(...)]`
+
 ### `DreamwellCardDefinition`
 
 Dreamwell cards
@@ -1210,26 +1235,9 @@ Number of opponent deck cards highlighted as DreamAvatar signature cards.
 
 ## `data/opponents.ron`
 
-The typed `OpponentsCatalog` document defines Dreamwell construction, opponent
-progression, coherent drafting, and corpus selection. The compiler composes it
-with the battle and internal AI catalogs for the generated opponent runtime
-data.
-
-### `dreamwell.opening_orders: [0]`
-
-Dreamwell card orders included once, at the start of the first cycle.
-
-### `dreamwell.recurring_orders: [1, 2, 3, 4]`
-
-Dreamwell card orders sampled in the first and every subsequent cycle.
-
-### `dreamwell.cards_per_recurring_order: 5`
-
-Cards sampled from each recurring order per cycle.
-
-### `dreamwell.minimum_constructed_length: 62`
-
-Cycles repeat until the constructed Dreamwell deck reaches this length.
+The typed `OpponentsCatalog` document defines opponent progression, coherent
+drafting, and corpus selection. The compiler composes it with the battle,
+Dreamwell, and internal AI catalogs for the generated opponent runtime data.
 
 ### `progression.ability_active_from_layer: 1`
 

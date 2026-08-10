@@ -9,6 +9,22 @@ use uuid::{Uuid, Variant, Version};
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
+pub struct DreamwellCatalog {
+    pub rules: DreamwellRules,
+    pub cards: Vec<DreamwellCardDefinition>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct DreamwellRules {
+    pub opening_orders: Vec<u32>,
+    pub recurring_orders: Vec<u32>,
+    pub cards_per_recurring_order: u32,
+    pub minimum_constructed_length: u32,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
 pub struct DreamwellCardDefinition {
     pub name: String,
     pub id: DreamwellCardId,
@@ -187,7 +203,7 @@ struct CompatibilityArtCrop {
 }
 
 pub fn lower(
-    source: Vec<DreamwellCardDefinition>,
+    source: DreamwellCatalog,
     metadata: Vec<DreamwellCardMetadata>,
 ) -> Result<toml::Value> {
     validate(&source)?;
@@ -210,6 +226,7 @@ pub fn lower(
         );
     }
     let dreamwell = source
+        .cards
         .into_iter()
         .map(|card| {
             let metadata = metadata_by_id.remove(&card.id).ok_or_else(|| {
@@ -254,7 +271,53 @@ fn number(value: f64) -> toml::Value {
     }
 }
 
-pub(crate) fn validate(source: &[DreamwellCardDefinition]) -> Result<()> {
+pub(crate) fn validate(source: &DreamwellCatalog) -> Result<()> {
+    validate_rules(&source.rules)?;
+    validate_cards(&source.cards)
+}
+
+pub(crate) fn validate_rules(source: &DreamwellRules) -> Result<()> {
+    ensure!(
+        !source.opening_orders.is_empty(),
+        "dreamwell.opening_orders must not be empty"
+    );
+    ensure!(
+        !source.recurring_orders.is_empty(),
+        "dreamwell.recurring_orders must not be empty"
+    );
+    let opening = source
+        .opening_orders
+        .iter()
+        .copied()
+        .collect::<BTreeSet<_>>();
+    ensure!(
+        opening.len() == source.opening_orders.len(),
+        "dreamwell.opening_orders contains a duplicate order"
+    );
+    let recurring = source
+        .recurring_orders
+        .iter()
+        .copied()
+        .collect::<BTreeSet<_>>();
+    ensure!(
+        recurring.len() == source.recurring_orders.len(),
+        "dreamwell.recurring_orders contains a duplicate order"
+    );
+    if let Some(overlap) = opening.intersection(&recurring).next() {
+        bail!("dreamwell order {overlap} appears in opening and recurring orders");
+    }
+    ensure!(
+        source.cards_per_recurring_order > 0,
+        "dreamwell.cards_per_recurring_order must be greater than zero"
+    );
+    ensure!(
+        source.minimum_constructed_length > 0,
+        "dreamwell.minimum_constructed_length must be greater than zero"
+    );
+    Ok(())
+}
+
+fn validate_cards(source: &[DreamwellCardDefinition]) -> Result<()> {
     ensure!(!source.is_empty(), "Dreamwell catalog must not be empty");
     let mut ids = BTreeSet::new();
     let placeholder =
@@ -374,8 +437,15 @@ mod tests {
 
     fn synthetic_source() -> &'static str {
         r##"#![enable(implicit_some)]
-[
-  DreamwellCardDefinition(
+DreamwellCatalog(
+  rules: DreamwellRules(
+    opening_orders: [0],
+    recurring_orders: [1, 2, 3, 4],
+    cards_per_recurring_order: 2,
+    minimum_constructed_length: 8,
+  ),
+  cards: [
+    DreamwellCardDefinition(
     name: "Première lumière",
     id: "00000000-0000-4000-8000-000000000001",
     ability_text: ["Draw a card.", "Then gain 1●."],
@@ -388,7 +458,7 @@ mod tests {
     ),
   ),
 
-  DreamwellCardDefinition(
+    DreamwellCardDefinition(
     name: "Second",
     id: "00000000-0000-4000-8000-000000000002",
     ability_text: [],
@@ -396,7 +466,8 @@ mod tests {
     deck_tier: Four,
     art: (image: 43),
   ),
-]
+  ],
+)
 "##
     }
 
@@ -414,7 +485,7 @@ mod tests {
 "##
     }
 
-    fn parse_source(source: &str) -> Vec<DreamwellCardDefinition> {
+    fn parse_source(source: &str) -> DreamwellCatalog {
         ron::from_str(source).unwrap()
     }
 
@@ -494,20 +565,18 @@ mod tests {
         assert_eq!(automation[0]["key"].as_str(), Some("choose-card"));
 
         assert!(
-            ron::from_str::<Vec<DreamwellCardDefinition>>(&source.replace(
+            ron::from_str::<DreamwellCatalog>(&source.replace(
                 "key: \"choose-card\"",
                 "key: \"choose-card\", surprise: true"
             ),)
             .is_err()
         );
         assert!(
-            ron::from_str::<Vec<DreamwellCardDefinition>>(
-                &source.replace("kind: Count", "kind: Unsupported")
-            )
-            .is_err()
+            ron::from_str::<DreamwellCatalog>(&source.replace("kind: Count", "kind: Unsupported"))
+                .is_err()
         );
         assert!(
-            ron::from_str::<Vec<DreamwellCardDefinition>>(
+            ron::from_str::<DreamwellCatalog>(
                 &source.replace("instructions: \"Choose cards.\",", "")
             )
             .is_err()
@@ -531,7 +600,7 @@ mod tests {
             "ability_text: [\"Draw a card.\", \"Then gain 1●.\"],",
             "ability_text: [\"Draw a card.\", \"Then gain 1●.\"], surprise: true,",
         );
-        assert!(ron::from_str::<Vec<DreamwellCardDefinition>>(&unknown).is_err());
+        assert!(ron::from_str::<DreamwellCatalog>(&unknown).is_err());
         let unknown_metadata =
             synthetic_metadata().replace("number: 7,", "number: 7, surprise: true,");
         assert!(ron::from_str::<Vec<DreamwellCardMetadata>>(&unknown_metadata).is_err());
@@ -545,7 +614,7 @@ mod tests {
         ] {
             let source = synthetic_source().replacen(FIRST_ID, invalid, 1);
             assert!(
-                ron::from_str::<Vec<DreamwellCardDefinition>>(&source).is_err(),
+                ron::from_str::<DreamwellCatalog>(&source).is_err(),
                 "accepted {invalid}"
             );
         }

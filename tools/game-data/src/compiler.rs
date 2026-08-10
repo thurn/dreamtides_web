@@ -192,8 +192,8 @@ fn adapt(
             dreamsigns::lower(definitions, metadata)
         }
         "dreamwell_metadata_v1" => dreamwell::lower_metadata(parse_ron(source, dataset)?),
-        "dreamwell_v1" => {
-            let definitions: Vec<dreamwell::DreamwellCardDefinition> = parse_ron(source, dataset)?;
+        "dreamwell_v2" => {
+            let catalog: dreamwell::DreamwellCatalog = parse_ron(source, dataset)?;
             let metadata_dataset = manifest.dataset("internal-dreamwell-metadata")?;
             let metadata_path = root.join(&metadata_dataset.source);
             let metadata: Vec<dreamwell::DreamwellCardMetadata> = parse_ron(
@@ -205,7 +205,7 @@ fn adapt(
                 })?,
                 metadata_dataset,
             )?;
-            dreamwell::lower(definitions, metadata)
+            dreamwell::lower(catalog, metadata)
         }
         "cards_v2" => {
             let metadata_dataset = manifest.dataset("internal-card-metadata")?;
@@ -239,13 +239,18 @@ fn adapt(
             let battle_source = fs::read_to_string(root.join(&battle_dataset.source))
                 .with_context(|| format!("read battle source {}", battle_dataset.source))?;
             let battle = parse_ron(&battle_source, battle_dataset)?;
+            let dreamwell_dataset = manifest.dataset("dreamwell")?;
+            let dreamwell_source = fs::read_to_string(root.join(&dreamwell_dataset.source))
+                .with_context(|| format!("read Dreamwell source {}", dreamwell_dataset.source))?;
+            let dreamwell: dreamwell::DreamwellCatalog =
+                parse_ron(&dreamwell_source, dreamwell_dataset)?;
             let ai_dataset = manifest.dataset("internal-ai")?;
             let ai_source = fs::read_to_string(root.join(&ai_dataset.source))
                 .with_context(|| format!("read internal AI source {}", ai_dataset.source))?;
             let internal_ai = parse_ron(&ai_source, ai_dataset)?;
             let known_card_ids = known_opponent_card_ids(root, manifest)?;
             opponents::validate_card_references(&internal_ai, &known_card_ids)?;
-            opponents::lower(catalog, battle, internal_ai)
+            opponents::lower(catalog, battle, dreamwell.rules, internal_ai)
         }
         "reward_selection_v1" => reward_selection::lower(parse_ron(source, dataset)?),
         "figments_v1" => figments::lower(parse_ron(source, dataset)?),
@@ -644,8 +649,8 @@ mod tests {
                 "economy_v1" => {
                     canonical::<economy::EconomyCatalog>(&source, true);
                 }
-                "dreamwell_v1" => {
-                    canonical::<Vec<dreamwell::DreamwellCardDefinition>>(&source, true);
+                "dreamwell_v2" => {
+                    canonical::<dreamwell::DreamwellCatalog>(&source, true);
                 }
                 "dreamwell_metadata_v1" => {
                     canonical::<Vec<dreamwell::DreamwellCardMetadata>>(&source, true);

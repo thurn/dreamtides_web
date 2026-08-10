@@ -1,41 +1,84 @@
-// Dreamwell construction, opponent progression, and opponent deck generation.
+// Opponent difficulty progression and deck-generation tuning.
+//
+// Layer values are zero-indexed Atlas completion levels: layer 0 is the first
+// battle and the final layer is `layer_count - 1`. Curve endpoints are sampled
+// at those two ends and linearly interpolated between them.
+//
+// Shared battle setup belongs to battle.ron. Dreamwell cards and construction
+// rules belong to dreamwell.ron. Automated-play search tuning and the journey
+// AI deck belong to internal/internal_ai.ron.
 
 #![enable(implicit_some)]
 OpponentsCatalog(
-  dreamwell: DreamwellRules(
-    // Orders drawn once when constructing the initial Dreamwell.
-    opening_orders: [0],
-    // Orders eligible for every later Dreamwell refill.
-    recurring_orders: [1, 2, 3, 4],
-    cards_per_recurring_order: 5,
-    minimum_constructed_length: 62,
-  ),
-
+  // Journey opponent difficulty schedule. Ability and Dreamsign unlocks apply
+  // to every opponent; Legendary retention and Starter dilution tune corpus
+  // decks specifically.
   progression: ProgressionRules(
-    // Layer values are zero-indexed completion levels.
+    // The opponent DreamAvatar's ability is inactive below this layer.
     ability_active_from_layer: 1,
+    // Opponents receive one deterministically selected Dreamsign from this
+    // layer onward, provided Dreamsign templates are available.
     dreamsigns_from_layer: 3,
+    // Corpus decks replace Legendary cards below this layer and retain them
+    // from this layer onward.
     legendaries_from_layer: 5,
-    // Later layers beyond this list contribute no starter cards.
+    // Number of Starter cards inserted by corpus tuning at each layer. The
+    // least-synergistic non-Starters are cut first, preserving deck size.
+    // Layers beyond this list insert zero Starters.
     starter_dilution: [10, 5],
   ),
 
+  // Simulates drafts from real adapted draft records. For each battle it
+  // builds several seeded candidate drafts, scores them, and keeps the best.
   coherent_draft: CoherentDraftRules(
+    // Target number of distinct card identities in the finished opponent deck
+    // at the first and final Atlas layers. Intermediate layers interpolate and
+    // round to the nearest integer.
     distinct_card_curve: CountCurve(first: 14, last: 30),
+    // Extra distinct cards drafted and then pruned for coherence at the first
+    // and final layers. This is added to the distinct-card target to determine
+    // the simulated pick budget.
     removal_curve: CountCurve(first: 2, last: 8),
+    // Draft-choice exploration at the first and final layers. Higher values
+    // produce more varied picks; lower values favor the strongest-ranked pick.
     temperature_curve: TemperatureCurve(first: 0.45, last: 0.12),
+    // Number of independently seeded candidate drafts generated before the
+    // highest-scoring candidate is selected.
     best_of: 4,
+    // Multiplier applied to affiliation fit in the candidate objective. A
+    // neutral Dreamscape contributes no affiliation term.
     affiliation_objective_weight: 1.0,
+    // Maximum number of adapted draft records selected, by seeded partial
+    // shuffle, as the source of real pack sequences for a candidate draft.
     pack_source_records: 48,
+    // Coefficients and sampling limits used to score internal deck coherence.
+    // The three weights must each be in [0, 1] and sum exactly to 1.
     coherence: CoherenceRules(
+      // Number of nearest real corpus decks averaged for neighbor similarity.
       nearest_neighbors: 10,
+      // Contribution from similarity to those nearest corpus decks.
       neighbor_weight: 0.5,
+      // Contribution from normalized pairwise card co-occurrence.
       cooccurrence_weight: 0.3,
+      // Contribution from the deck's ability to re-select its own cards.
       self_consistency_weight: 0.2,
+      // Highest-ranked non-deck cards tested against each held-out deck card.
       self_distractors: 12,
+      // A held-out card counts as recalled when it ranks within this many
+      // positions among itself and the sampled distractors.
       self_recall_k: 4,
     ),
   ),
 
-  corpus_selection: CorpusSelectionRules(affiliation_weight: 0.25, top_ranked_sampling_window: 8),
+  // Selects a known-good deck from the adapted corpus, then applies the shared
+  // progression rules above. Candidate ranking is deterministic; seeded
+  // sampling inside the top-ranked window provides variety between battles.
+  corpus_selection: CorpusSelectionRules(
+    // Secondary multiplier for Dreamscape-affiliation fit. DreamAvatar
+    // signature-card fit is the primary unweighted selection signal.
+    affiliation_weight: 0.25,
+    // Number of highest-ranked corpus decks eligible for seeded sampling.
+    // When the corpus is smaller, every ranked deck remains eligible.
+    top_ranked_sampling_window: 8,
+  ),
 )
