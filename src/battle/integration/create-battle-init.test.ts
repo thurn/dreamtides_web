@@ -10,14 +10,9 @@ import {
   type CreateBattleInitInput,
 } from "./create-battle-init";
 import { deriveBattleSeed } from "../random";
-import type { DraftRecord } from "../../data/cards-v2-database";
-import { buildFitModel, type FitModel } from "../../draft/fit-model";
-import { buildPoolData } from "../../draft/pool/pool-data";
-import type { RunPoolContext } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { DreamAvatarContent } from "../../types/content";
-import type { PoolCard } from "../../draft/pool/types";
 import type {
   CardKeywordModification,
   CardTypeChange,
@@ -75,101 +70,6 @@ function makePackageCard(
     imageNumber: cardNumber,
     artOwned: true,
   };
-}
-
-/**
- * Builds a {@link RunPoolContext} over the battle test card database with two
- * disjoint decklists, each large enough (>= 16 cards) to enter the fit corpus.
- * Returns the context plus the card names that make up each decklist so steering
- * assertions can compare against a known set.
- */
-function makeSteeredPoolContext(): {
-  poolContext: RunPoolContext;
-  fitModel: FitModel;
-  draftRecords: DraftRecord[];
-  decklistA: string[];
-  decklistB: string[];
-} {
-  const cardDatabase = makeBattleTestCardDatabase();
-  // Synthetic corpus tokens are unique card names, so a local name -> cardNumber
-  // index serves as the collision-free id index the fit model resolves against.
-  const nameIndex = new Map<string, number>();
-  for (const card of cardDatabase.values()) {
-    if (!nameIndex.has(card.name)) nameIndex.set(card.name, card.cardNumber);
-  }
-  const byNumber = (n: number): string => {
-    const card = cardDatabase.get(n);
-    if (card === undefined) throw new Error(`missing test card #${String(n)}`);
-    return card.name;
-  };
-  // Decklist A: the "alpha pool" range (1000..1023). Decklist B: the "beta pool"
-  // range (1100..1123). Disjoint card sets so a steered draw is distinguishable.
-  const decklistA = Array.from({ length: 24 }, (_, i) => byNumber(1000 + i));
-  const decklistB = Array.from({ length: 24 }, (_, i) => byNumber(1100 + i));
-
-  const poolCards: PoolCard[] = Array.from(cardDatabase.values()).map(
-    (card) => ({
-      name: card.name,
-    }),
-  );
-  const poolData = buildPoolData(poolCards, [decklistA, decklistB]);
-
-  // This synthetic corpus carries no card UUIDs, so each card's identity is its
-  // name and the name->number map serves as the collision-free id index the pool
-  // resolves through.
-  const poolContext: RunPoolContext = {
-    poolData,
-    idIndex: nameIndex,
-    starterCardNumbers: [],
-    allDreamsignPoolIds: [],
-    poolVariant: "tides4",
-  };
-
-  // A synthetic corpus: coherent A and B decks (so the fit model learns each
-  // faction's cards co-occur) plus mixed packs (so the coherent draft has both
-  // factions to discriminate among). A signature steering toward A should yield
-  // an A-dominated deck.
-  const records: DraftRecord[] = [];
-  const addFaction = (
-    faction: string,
-    cards: readonly string[],
-    other: readonly string[],
-  ): void => {
-    for (let r = 0; r < 24; r += 1) {
-      const mainboard = cards.slice(r % 6, (r % 6) + 18);
-      const packs: string[][] = [];
-      for (let p = 0; p < 30; p += 1) {
-        const pack: string[] = [];
-        for (let k = 0; k < 6; k += 1)
-          pack.push(cards[(p * 3 + k) % cards.length]);
-        for (let k = 0; k < 4; k += 1)
-          pack.push(other[(p * 2 + k) % other.length]);
-        packs.push(pack);
-      }
-      records.push({
-        id: `${faction}-${String(r)}`,
-        draftId: `${faction}-${String(r)}`,
-        sourceFile: "test",
-        mainboard,
-        mainboardIds: mainboard,
-        packs,
-        picks: [],
-        // The fit model and pack source key on the record's id arrays; this
-        // synthetic corpus uses card names as the id token, so the id arrays
-        // mirror the name arrays.
-        packIds: packs,
-        pickIds: [],
-      });
-    }
-  };
-  addFaction("a", decklistA, decklistB);
-  addFaction("b", decklistB, decklistA);
-  const fitModel = buildFitModel(
-    records.map((r) => r.mainboardIds),
-    nameIndex,
-  );
-
-  return { poolContext, fitModel, draftRecords: records, decklistA, decklistB };
 }
 
 /**
@@ -725,11 +625,8 @@ describe("createBattleInit", () => {
           }
         )?.transfigurationDisplay;
         expect(display).toEqual(
-          buildTransfigurationDisplay(
-            input.transfigurationData,
-            card,
-            type,
-          ).display,
+          buildTransfigurationDisplay(input.transfigurationData, card, type)
+            .display,
         );
       },
     );
@@ -1082,8 +979,8 @@ describe("createBattleInit", () => {
     });
 
     it("excludes starters and null-energy cards in the fallback path", () => {
-      // With no poolContext the deck is sampled from draftable cards
-      // (non-starter, numeric cost). Confirm both exclusions hold over a card
+      // Minimal fixture content samples from draftable cards (non-starter,
+      // numeric cost). Confirm both exclusions hold over a card
       // database where every non-excluded candidate would otherwise be chosen.
       const baseInput = makeBaseInput();
       const augmented = new Map(baseInput.cardDatabase);
@@ -1112,87 +1009,8 @@ describe("createBattleInit", () => {
       }
     });
 
-    it("builds a steered deck from a poolContext decklist that resolves and pads", () => {
-      const { poolContext, decklistA } = makeSteeredPoolContext();
-      const cardDatabase = makeBattleTestCardDatabase();
-      // Steer toward decklist A: its cards as the DreamAvatar signature.
-      const init = createBattleInit({
-        ...makeBaseInput(),
-        cardDatabase,
-        poolContext,
-        dreamAvatars: makeSignatureDreamAvatars(decklistA),
-      });
-
-      expect(init.enemyDeckDefinition.length).toBeGreaterThanOrEqual(
-        MIN_BATTLE_DECK_SIZE,
-      );
-      // Every chosen card resolves to a real card-database entry whose identity
-      // is indexed in the run pool context.
-      for (const card of init.enemyDeckDefinition) {
-        expect(card.cardNumber).toBeGreaterThan(0);
-        expect(cardDatabase.get(card.cardNumber)).toBeDefined();
-        expect(poolContext.idIndex.has(card.name)).toBe(true);
-      }
-    });
-
-    it("steers the enemy deck toward the signed decklist for fixed battle seeds", () => {
-      const { poolContext, fitModel, draftRecords, decklistA, decklistB } =
-        makeSteeredPoolContext();
-      const decklistANumbers = new Set(
-        decklistA.map((name) => poolContext.idIndex.get(name)),
-      );
-      const decklistBNumbers = new Set(
-        decklistB.map((name) => poolContext.idIndex.get(name)),
-      );
-
-      for (const seedOverride of [11, 2024]) {
-        const init = createBattleInit({
-          ...makeBaseInput(),
-          poolContext,
-          fitModel,
-          draftRecords,
-          dreamAvatars: makeSignatureDreamAvatars(decklistA),
-          seedOverride,
-        });
-
-        const deckNumbers = init.enemyDeckDefinition.map((c) => c.cardNumber);
-        const fromA = deckNumbers.filter((n) => decklistANumbers.has(n)).length;
-        const fromB = deckNumbers.filter((n) => decklistBNumbers.has(n)).length;
-        // The coherent draft steered toward A draws far more of A's cards than
-        // B's. The two decklists are disjoint card ranges, so this is a clean
-        // signal that signature seeding shaped the deck.
-        expect(fromA).toBeGreaterThan(fromB);
-        expect(fromA).toBeGreaterThan(0);
-        // The deck is A-dominated: the large majority of its distinct cards come
-        // from the steered decklist.
-        const uniqueChosen = new Set(deckNumbers);
-        const uniqueA = [...uniqueChosen].filter((n) =>
-          decklistANumbers.has(n),
-        ).length;
-        expect(uniqueA).toBeGreaterThan(uniqueChosen.size / 2);
-      }
-    });
-
-    it("is deterministic for a fixed seed with a poolContext", () => {
-      const { poolContext, decklistA } = makeSteeredPoolContext();
-      const input: CreateBattleInitInput = {
-        ...makeBaseInput(),
-        poolContext,
-        dreamAvatars: makeSignatureDreamAvatars(decklistA),
-        seedOverride: 777,
-      };
-      const first = createBattleInit(input);
-      const second = createBattleInit(input);
-      expect(first.enemyDeckDefinition.map((c) => c.cardNumber)).toEqual(
-        second.enemyDeckDefinition.map((c) => c.cardNumber),
-      );
-    });
-
-    it("falls back to a non-empty deck when poolContext is undefined", () => {
-      const init = createBattleInit({
-        ...makeBaseInput(),
-        poolContext: undefined,
-      });
+    it("builds a non-empty deck with minimal content", () => {
+      const init = createBattleInit(makeBaseInput());
       expect(init.enemyDeckDefinition.length).toBeGreaterThan(0);
       for (const card of init.enemyDeckDefinition) {
         expect(makeBattleTestCardDatabase().get(card.cardNumber)).toBeDefined();
@@ -1240,29 +1058,6 @@ describe("createBattleInit", () => {
       expect(deckNumbers).toEqual(
         second.enemyDeckDefinition.map((c) => c.cardNumber),
       );
-    });
-
-    it("falls back when a poolContext resolves no matching UUIDs", () => {
-      // A poolContext whose id index shares nothing with the generated pool keys
-      // yields an empty resolved list; the fallback still fills the deck.
-      const emptyIndexContext: RunPoolContext = {
-        poolData: makeSteeredPoolContext().poolContext.poolData,
-        idIndex: new Map<string, number>([["does-not-exist", -1]]),
-        starterCardNumbers: [],
-        allDreamsignPoolIds: [],
-        // The mismatched index exercises the empty-resolved-list fallback.
-        poolVariant: "tides4",
-      };
-      const init = createBattleInit({
-        ...makeBaseInput(),
-        poolContext: emptyIndexContext,
-      });
-      expect(init.enemyDeckDefinition.length).toBeGreaterThanOrEqual(
-        MIN_BATTLE_DECK_SIZE,
-      );
-      for (const card of init.enemyDeckDefinition) {
-        expect(makeBattleTestCardDatabase().get(card.cardNumber)).toBeDefined();
-      }
     });
   });
 

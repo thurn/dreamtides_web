@@ -16,7 +16,6 @@ describe("opponent-debug-url", () => {
       completionLevel: 3,
       dreamscapeId: "pharaohs_gate",
       nonce: 2,
-      algo: "coherent",
     };
     const parsed = parseOpponentDebugParams(opponentDebugSearch(params));
     expect(parsed).toEqual(params);
@@ -27,41 +26,17 @@ describe("opponent-debug-url", () => {
       completionLevel: 0,
       dreamscapeId: null,
       nonce: 0,
-      algo: "coherent",
     };
     const search = opponentDebugSearch(params);
     expect(search).not.toContain("dreamscape");
     expect(parseOpponentDebugParams(search)).toEqual(params);
   });
 
-  it("round-trips the coherent opponent algorithm through the query string", () => {
-    const params: OpponentDebugParams = {
-      completionLevel: 2,
-      dreamscapeId: "grid_city",
-      nonce: 1,
-      algo: "coherent",
-    };
-    const search = opponentDebugSearch(params);
-    expect(search).toContain("opponentAlgorithm=coherent");
-    expect(parseOpponentDebugParams(search)).toEqual(params);
-  });
-
-  it("omits the opponentAlgorithm token for the corpus default", () => {
-    const search = opponentDebugSearch({
-      completionLevel: 1,
-      dreamscapeId: null,
-      nonce: 0,
-      algo: "corpus",
-    });
-    expect(search).not.toContain("opponentAlgorithm");
-  });
-
-  it("round-trips params through the generation id (defaulting algo)", () => {
+  it("round-trips params through the generation id", () => {
     const params: OpponentDebugParams = {
       completionLevel: MAX_LAYER,
       dreamscapeId: "the_rust_expanse",
       nonce: 5,
-      algo: "corpus",
     };
     const id = opponentGenerationId(params);
     expect(parseOpponentGenerationId(id)).toEqual(params);
@@ -72,7 +47,6 @@ describe("opponent-debug-url", () => {
       completionLevel: 4,
       dreamscapeId: "grid_city",
       nonce: 1,
-      algo: "coherent",
     });
     expect(id).toBe("opponent-debug:grid_city:4:1");
   });
@@ -83,26 +57,23 @@ describe("opponent-debug-url", () => {
         completionLevel: 2,
         dreamscapeId: null,
         nonce: 0,
-        algo: "coherent",
       }),
     ).toBe("opponent-debug:neutral:2:0");
     expect(parseOpponentGenerationId("opponent-debug:neutral:2:0")).toEqual({
       completionLevel: 2,
       dreamscapeId: null,
       nonce: 0,
-      algo: "corpus",
     });
   });
 
-  it("prefers a valid gen token over discrete params, overlaying the algo", () => {
+  it("prefers a valid gen token over discrete params", () => {
     const parsed = parseOpponentDebugParams(
-      "?gen=opponent-debug:frostforge:5:3&layer=1&dreamscape=grid_city&n=9&opponentAlgorithm=corpus",
+      "?gen=opponent-debug:frostforge:5:3&layer=1&dreamscape=grid_city&n=9",
     );
     expect(parsed).toEqual({
       completionLevel: 5,
       dreamscapeId: "frostforge",
       nonce: 3,
-      algo: "corpus",
     });
   });
 
@@ -112,7 +83,6 @@ describe("opponent-debug-url", () => {
       completionLevel: 2,
       dreamscapeId: null,
       nonce: 4,
-      algo: "corpus",
     });
   });
 
@@ -121,26 +91,31 @@ describe("opponent-debug-url", () => {
       parseOpponentDebugParams(`?layer=${String(MAX_LAYER + 10)}`, MAX_LAYER)
         .completionLevel,
     ).toBe(MAX_LAYER);
-    expect(parseOpponentDebugParams("?layer=-3", MAX_LAYER).completionLevel).toBe(
-      0,
-    );
+    expect(
+      parseOpponentDebugParams("?layer=-3", MAX_LAYER).completionLevel,
+    ).toBe(0);
   });
 
-  it("defaults a bare query to the layer-0 neutral corpus generation", () => {
+  it("defaults a bare query to the layer-0 neutral generation", () => {
     expect(parseOpponentDebugParams("")).toEqual({
       completionLevel: 0,
       dreamscapeId: null,
       nonce: 0,
-      algo: "corpus",
     });
   });
 
-  it("treats malformed numbers and an unknown opponent algorithm as their defaults", () => {
-    expect(parseOpponentDebugParams("?layer=abc&n=xyz&opponentAlgorithm=bogus")).toEqual({
+  it("treats malformed numbers as their defaults", () => {
+    expect(parseOpponentDebugParams("?layer=abc&n=xyz")).toEqual({
       completionLevel: 0,
       dreamscapeId: null,
       nonce: 0,
-      algo: "corpus",
     });
+  });
+
+  it("does not preserve opponent deck algorithm parameters", () => {
+    const parsed = parseOpponentDebugParams(
+      "?layer=2&algo=coherent&opponentAlgorithm=coherent",
+    );
+    expect(opponentDebugSearch(parsed)).toBe("?layer=2&n=0");
   });
 });

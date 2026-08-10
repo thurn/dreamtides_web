@@ -197,9 +197,8 @@ export function buildCorpusOpponentDeck(args: {
   /**
    * The battle entry key the deck is built for, recorded in
    * `corpus_opponent_deck_constructed` so a production battle's opponent deck
-   * greps out of `logs/journey-log.jsonl` by entry key (matching the coherent
-   * algorithm's `opponent_deck_constructed`). Omitted by callers without an
-   * entry key (e.g. unit tests).
+   * greps out of `logs/journey-log.jsonl` by entry key. Omitted by callers
+   * without an entry key (e.g. unit tests).
    */
   battleEntryKey?: string;
   /**

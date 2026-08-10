@@ -21,9 +21,8 @@ import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import { CardView } from "../cumulus/components/card/CardView";
 import { DreamAvatarPortrait } from "../cumulus/components/hud/DreamAvatarPortrait";
 import { dreamsignIconUrl } from "../cumulus/components/atlas/atlas-display";
-import { getAlgorithm, OPPONENT_ALGORITHMS } from "./opponent-algorithms";
+import { buildOpponentDebugView } from "./opponent-algorithms";
 import {
-  normalizeOpponentDebugAlgo,
   opponentDebugSearch,
   opponentGenerationId,
   parseOpponentDebugParams,
@@ -37,12 +36,11 @@ import {
  *
  * The opponent is built by replaying the exact primitives `createBattleInit`
  * uses ({@link selectOpponentDreamAvatar}, {@link buildOpponentDreamsigns}) to
- * derive the run context, then routing the deck through a selected algorithm
- * (see `opponent-algorithms.tsx`), so what the tool shows matches what a real
+ * derive the run context, then building the production deck through
+ * `opponent-algorithms.tsx`, so what the tool shows matches what a real
  * battle at the same position would generate for a given seed. "Refresh"
  * advances a nonce that changes the battle seed, re-rolling a fresh generation
- * under the same layer / dreamscape parameters. `?opponentAlgorithm=` selects the
- * opponent-deck algorithm (coherent or corpus).
+ * under the same layer / dreamscape parameters.
  */
 
 /** The fixed enemy-pool sub-seed derivation `createBattleInit` applies to the
@@ -54,8 +52,7 @@ function deriveEnemyPoolSeed(seed: number): number {
 interface OpponentGeneration {
   /** The shareable id for this generation; identical to the logged battleEntryKey. */
   generationId: string;
-  /** Byte-for-byte the logged battleEntryKey (== {@link generationId}); the
-   * coherent algorithm passes it to `logOpponentDeckConstructed`. */
+  /** Byte-for-byte the logged battleEntryKey (== {@link generationId}). */
   battleEntryKey: string;
   dreamAvatar: DreamAvatarContent | null;
   dreamsigns: DreamsignTemplate[];
@@ -75,19 +72,14 @@ function generateOpponent(
   completionLevel: number,
   dreamscapeId: string | null,
   nonce: number,
-  algo: string,
 ): OpponentGeneration {
   const layerCount = content.atlasData.layers.length;
   // The generation id IS the logged battleEntryKey, so the id a user shares
-  // (in the URL or verbally) greps the `opponent_deck_constructed` log directly.
-  // The id identifies the seeded generation; the algo (also carried in the URL)
-  // determines which DreamAvatar roster the seed draws from, so reproducing a
-  // share requires both the id and the opponent-algorithm value.
+  // (in the URL or verbally) greps the corpus construction log directly.
   const battleEntryKey = opponentGenerationId({
     completionLevel,
     dreamscapeId,
     nonce,
-    algo: "coherent",
   });
   const seed = deriveBattleSeed(`opponent-debug-seed:${battleEntryKey}`);
   const streams = createBattleRngStreams(seed);
@@ -97,14 +89,12 @@ function generateOpponent(
       ? null
       : (content.dreamscapes.find((d) => d.id === dreamscapeId) ?? null);
 
-  // The corpus algorithm fields the dreamscape's RESIDENT DreamAvatars (and the
-  // known-good decks associated with them); other algorithms draw from the full
-  // roster. The starter / neutral dreamscape has no residents, so the list is
+  // The opponent is drawn from the dreamscape's resident DreamAvatars and their
+  // known-good decks. The starter / neutral dreamscape has no residents, so the list is
   // empty and no restriction applies. `nextInt` consumes exactly one RNG draw
   // regardless of the pool size, so narrowing the pool leaves the subsequent
   // dreamsign draw stable.
-  const eligibleDreamAvatarIds =
-    algo === "corpus" ? (dreamscape?.dreamAvatarIds ?? null) : null;
+  const eligibleDreamAvatarIds = dreamscape?.dreamAvatarIds ?? null;
 
   // Mirror createBattleInit's order of RNG consumption on the enemyDescriptor
   // stream: select the opponent DreamAvatar first, then its dreamsigns.
@@ -121,21 +111,16 @@ function generateOpponent(
     streams.enemyDescriptor,
   );
 
-  if (algo === "corpus") {
-    // Reconstruction record for the dreamscape-restricted DreamAvatar pick: the
-    // resident pool the seed drew from and the DreamAvatar it landed on, so a
-    // corpus generation can be replayed from `logs/journey-log.jsonl`.
-    logEvent("corpus_opponent_dream_avatar_selected", {
-      battleEntryKey,
-      dreamscapeId,
-      completionLevel,
-      restrictedToDreamscapeResidents:
-        eligibleDreamAvatarIds != null && eligibleDreamAvatarIds.length > 0,
-      eligibleDreamAvatarIds: eligibleDreamAvatarIds ?? [],
-      selectedDreamAvatarId: dreamAvatar?.id ?? null,
-      selectedDreamAvatarName: dreamAvatar?.name ?? null,
-    });
-  }
+  logEvent("corpus_opponent_dream_avatar_selected", {
+    battleEntryKey,
+    dreamscapeId,
+    completionLevel,
+    restrictedToDreamscapeResidents:
+      eligibleDreamAvatarIds != null && eligibleDreamAvatarIds.length > 0,
+    eligibleDreamAvatarIds: eligibleDreamAvatarIds ?? [],
+    selectedDreamAvatarId: dreamAvatar?.id ?? null,
+    selectedDreamAvatarName: dreamAvatar?.name ?? null,
+  });
 
   const affiliation =
     dreamscape?.affiliationId == null
@@ -145,9 +130,8 @@ function generateOpponent(
 
   const poolSeed = deriveEnemyPoolSeed(seed);
 
-  // The deck build + reconstruction logging is owned by the selected algorithm
-  // (see `opponent-algorithms.tsx`); `generateOpponent` produces only the run
-  // CONTEXT both algorithms consume.
+  // The deck build + reconstruction logging is owned by the view-model builder;
+  // `generateOpponent` produces its run context.
   return {
     generationId: battleEntryKey,
     battleEntryKey,
@@ -215,7 +199,6 @@ export default function OpponentDebugApp() {
     initialParams.dreamscapeId,
   );
   const [nonce, setNonce] = useState(initialParams.nonce);
-  const [algoId, setAlgoId] = useState(initialParams.algo);
   const [copied, setCopied] = useState(false);
 
   // Keep the address bar in sync with the current parameters (no history spam:
@@ -225,14 +208,13 @@ export default function OpponentDebugApp() {
       completionLevel,
       dreamscapeId,
       nonce,
-      algo: algoId,
     });
     window.history.replaceState(
       null,
       "",
       `${window.location.pathname}${search}`,
     );
-  }, [completionLevel, dreamscapeId, nonce, algoId]);
+  }, [completionLevel, dreamscapeId, nonce]);
 
   useEffect(() => {
     let cancelled = false;
@@ -270,30 +252,21 @@ export default function OpponentDebugApp() {
 
   const generation = useMemo(() => {
     if (content === null) return null;
-    return generateOpponent(
-      content,
-      completionLevel,
-      dreamscapeId,
-      nonce,
-      algoId,
-    );
-  }, [content, completionLevel, dreamscapeId, nonce, algoId]);
+    return generateOpponent(content, completionLevel, dreamscapeId, nonce);
+  }, [content, completionLevel, dreamscapeId, nonce]);
 
-  // The selected algorithm turns the run context into the rendered view (deck,
-  // stat tiles, dreamsign labels, ability, provenance). Re-runs when the algo
-  // changes; this is where the deck build + reconstruction logging happen.
+  // Build the rendered deck, stat tiles, dreamsign labels, ability, provenance,
+  // and reconstruction log from the generated run context.
   const view = useMemo(() => {
     if (content === null || generation === null) return null;
-    return getAlgorithm(algoId).build(content, {
+    return buildOpponentDebugView(content, {
       opponentDreamAvatar: generation.dreamAvatar,
       affiliation: generation.affiliation,
       completionLevel: generation.completionLevel,
       layerCount: generation.layerCount,
       poolSeed: generation.poolSeed,
-      dreamsigns: generation.dreamsigns,
-      battleEntryKey: generation.battleEntryKey,
     });
-  }, [content, generation, algoId]);
+  }, [content, generation]);
 
   const copyGenerationId = (id: string) => {
     const done = () => {
@@ -440,23 +413,6 @@ export default function OpponentDebugApp() {
                 </select>
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <span style={labelStyle}>Algorithm</span>
-                <select
-                  value={algoId}
-                  onChange={(e) => {
-                    setAlgoId(normalizeOpponentDebugAlgo(e.target.value));
-                  }}
-                  style={selectStyle}
-                >
-                  {OPPONENT_ALGORITHMS.map((algorithm) => (
-                    <option key={algorithm.id} value={algorithm.id}>
-                      {algorithm.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
               <button
                 onClick={() => {
                   setNonce((n) => n + 1);
@@ -490,7 +446,7 @@ export default function OpponentDebugApp() {
                 </span>
                 <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
                   <code
-                    title="Identical to the battleEntryKey in the opponent_deck_constructed log entry"
+                    title="Identical to the battleEntryKey in the corpus opponent-deck log entry"
                     style={{
                       flex: 1,
                       background: INSET_BG,
@@ -703,11 +659,10 @@ export default function OpponentDebugApp() {
                   </span>
                 </div>
 
-                {view === null || view.unavailable === true ? (
+                {view === null ? (
                   <div style={{ fontSize: 13, color: MUTED, padding: 12 }}>
-                    {algoId === "corpus"
-                      ? "Corpus opponent deck unavailable (no known-good decklists in the corpus)."
-                      : "Coherent-draft simulation unavailable (no fit model, draft records, or usable packs). A real battle here would fall back to a sampled draftable deck."}
+                    Opponent deck unavailable (no known-good decklists in the
+                    corpus).
                   </div>
                 ) : (
                   <>

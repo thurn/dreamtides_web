@@ -24,7 +24,6 @@ export async function loadOpponentsData(): Promise<OpponentsData> {
     candidate.battle === undefined ||
     candidate.dreamwell === undefined ||
     candidate.progression === undefined ||
-    candidate.coherentDraft === undefined ||
     candidate.corpusSelection === undefined ||
     candidate.ai === undefined ||
     !Array.isArray(candidate.journeyAiDeck)

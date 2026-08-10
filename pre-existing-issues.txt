@@ -1,1 +1,3 @@
-`cargo fmt --manifest-path tools/game-data/Cargo.toml -- --check` reports existing formatting drift in `tools/game-data/src/editor.rs` and the `exploration.rs`, `gamble.rs`, and `transfiguration.rs` models. The reported sections predate this task and were not modified.
+`cargo fmt --manifest-path tools/game-data/Cargo.toml -- --check` reports existing formatting drift in `tools/game-data/src/editor.rs` and the `exploration.rs`, `gamble.rs`, `transfiguration.rs`, and `tutorial.rs` models. The reported sections predate this task and were not modified.
+
+The `/opponent` debug tool uses a desktop two-column layout at a 390px viewport, producing 72px of horizontal document overflow. The deck panel begins at x=276px and ends at x=462px. This layout predates the opponent-algorithm selector removal and is outside this task's scope.

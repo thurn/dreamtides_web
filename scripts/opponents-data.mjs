@@ -62,18 +62,6 @@ function unique(values, path) {
   }
   return values;
 }
-function curve(value, path, options, direction) {
-  const source = keys(value, path, ["first", "last"]);
-  const result = {
-    first: number(source.first, `${path}.first`, options),
-    last: number(source.last, `${path}.last`, options),
-  };
-  if (direction === "up" && result.first > result.last)
-    fail(path, "must be monotonically non-decreasing");
-  if (direction === "down" && result.first < result.last)
-    fail(path, "must be monotonically non-increasing");
-  return result;
-}
 function stable(value) {
   if (Array.isArray(value)) return value.map(stable);
   if (typeof value !== "object" || value === null) return value;
@@ -96,7 +84,6 @@ export function compileOpponentsData(sourceValue, { cardIds } = {}) {
     "battle",
     "dreamwell",
     "progression",
-    "coherent-draft",
     "corpus-selection",
     "journey-ai-deck",
     "ai",
@@ -144,43 +131,6 @@ export function compileOpponentsData(sourceValue, { cardIds } = {}) {
     "legendaries-from-layer",
     "starter-dilution",
   ]);
-  const coherent = keys(root["coherent-draft"], "coherent-draft", [
-    "distinct-card-curve",
-    "removal-curve",
-    "temperature-curve",
-    "best-of",
-    "affiliation-objective-weight",
-    "pack-source-records",
-    "coherence",
-  ]);
-  const coherence = keys(coherent.coherence, "coherent-draft.coherence", [
-    "nearest-neighbors",
-    "neighbor-weight",
-    "cooccurrence-weight",
-    "self-consistency-weight",
-    "self-distractors",
-    "self-recall-k",
-  ]);
-  const neighborWeight = number(
-    coherence["neighbor-weight"],
-    "coherent-draft.coherence.neighbor-weight",
-    { max: 1, integer: false },
-  );
-  const cooccurrenceWeight = number(
-    coherence["cooccurrence-weight"],
-    "coherent-draft.coherence.cooccurrence-weight",
-    { max: 1, integer: false },
-  );
-  const selfConsistencyWeight = number(
-    coherence["self-consistency-weight"],
-    "coherent-draft.coherence.self-consistency-weight",
-    { max: 1, integer: false },
-  );
-  if (
-    Math.abs(neighborWeight + cooccurrenceWeight + selfConsistencyWeight - 1) >
-    1e-9
-  )
-    fail("coherent-draft.coherence", "weights must sum to 1");
   const corpus = keys(root["corpus-selection"], "corpus-selection", [
     "affiliation-weight",
     "top-ranked-sampling-window",
@@ -371,57 +321,6 @@ export function compileOpponentsData(sourceValue, { cardIds } = {}) {
         progression["starter-dilution"],
         "progression.starter-dilution",
       ),
-    },
-    coherentDraft: {
-      distinctCardCurve: curve(
-        coherent["distinct-card-curve"],
-        "coherent-draft.distinct-card-curve",
-        { min: 1 },
-        "up",
-      ),
-      removalCurve: curve(
-        coherent["removal-curve"],
-        "coherent-draft.removal-curve",
-        {},
-        "up",
-      ),
-      temperatureCurve: curve(
-        coherent["temperature-curve"],
-        "coherent-draft.temperature-curve",
-        { min: Number.MIN_VALUE, max: 1, integer: false },
-        "down",
-      ),
-      bestOf: number(coherent["best-of"], "coherent-draft.best-of", { min: 1 }),
-      affiliationObjectiveWeight: number(
-        coherent["affiliation-objective-weight"],
-        "coherent-draft.affiliation-objective-weight",
-        { integer: false },
-      ),
-      packSourceRecords: number(
-        coherent["pack-source-records"],
-        "coherent-draft.pack-source-records",
-        { min: 1 },
-      ),
-      coherence: {
-        nearestNeighbors: number(
-          coherence["nearest-neighbors"],
-          "coherent-draft.coherence.nearest-neighbors",
-          { min: 1 },
-        ),
-        neighborWeight,
-        cooccurrenceWeight,
-        selfConsistencyWeight,
-        selfDistractors: number(
-          coherence["self-distractors"],
-          "coherent-draft.coherence.self-distractors",
-          { min: 1 },
-        ),
-        selfRecallK: number(
-          coherence["self-recall-k"],
-          "coherent-draft.coherence.self-recall-k",
-          { min: 1 },
-        ),
-      },
     },
     corpusSelection: {
       affiliationWeight: number(

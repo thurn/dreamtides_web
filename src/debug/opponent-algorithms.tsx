@@ -1,33 +1,15 @@
-// The `/opponent` debug tool's opponent-deck ALGORITHM REGISTRY. Each registered
-// algorithm takes the shared run context the tool derives (DreamAvatar,
-// affiliation, run position, pool seed) and produces an `AlgorithmView`: the
-// deck cards to show, the stat tiles, the dreamsign labels, the ability flag,
-// and an optional provenance panel. The component renders purely off the view,
-// so adding an algorithm is just adding an entry here. Selection is driven by
-// the `?opponentAlgorithm=` URL param via {@link getAlgorithm}.
-//
-// Each algorithm OWNS its own logging: the coherent algorithm logs
-// `opponent_deck_constructed` (mirroring a production battle), and the corpus
-// algorithm's builder logs `corpus_opponent_deck_constructed` internally.
+// The `/opponent` debug tool's deck construction view model. It uses the same
+// corpus selection and layer tuning as production battles, including the
+// `corpus_opponent_deck_constructed` reconstruction log.
 
 import type { ReactNode } from "react";
 import type { CardData } from "../types/cards";
 import type { JourneyContent } from "../data/journey-content";
-import type {
-  AffiliationContent,
-  DreamAvatarContent,
-  DreamsignTemplate,
-} from "../types/content";
-import {
-  buildOpponentDeck,
-  logOpponentDeckConstructed,
-} from "../battle/integration/opponent-deck";
+import type { AffiliationContent, DreamAvatarContent } from "../types/content";
 import {
   buildCorpusOpponentDeck,
   type CorpusOpponentDeckBuild,
 } from "../battle/integration/corpus-opponent-deck";
-import { opponentAbilityIsActive } from "../battle/integration/opponent-deck";
-import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import { CardView } from "../cumulus/components/card/CardView";
 
 /** One stat tile shown in the left panel's 2-column grid. */
@@ -37,199 +19,77 @@ export interface StatRow {
 }
 
 /**
- * The fully-resolved presentation for one opponent generation under one
- * algorithm. The component renders entirely off this view (deck grid, stat
- * tiles, dreamsign labels, ability state, optional provenance) so the two
- * algorithms share one render path.
+ * The fully-resolved presentation for one opponent generation. The component
+ * renders the deck grid, stat tiles, dreamsign labels, ability state, and
+ * optional provenance from this view.
  */
-export interface AlgorithmView {
+export interface OpponentDebugView {
   /** Cards to show in the deck grid. */
   deckCards: CardData[];
   /** The stat tiles, in display order. */
   statRows: StatRow[];
-  /** Dreamsign display names this algorithm assigned (populated for parity;
+  /** Dreamsign display names assigned to the opponent;
    * the dreamsign icon section is driven by run context, not this field). */
   dreamsignLabels: string[];
   /** Whether the opponent DreamAvatar's ability is active at this layer. */
   abilityActive: boolean;
-  /**
-   * When `true`, the algorithm produced no deck for these parameters; the
-   * component shows the algorithm's "unavailable" fallback message instead of
-   * the (empty) deck grid. The coherent algorithm sets this when its
-   * `buildOpponentDeck` returns `null`, preserving the exact prior behavior.
-   */
-  unavailable?: boolean;
   /** Optional provenance panel rendered below the deck grid. */
   provenance?: ReactNode;
 }
 
 /**
- * The shared run context one algorithm needs to build its view. The five core
- * fields (DreamAvatar, affiliation, completion level, layer count, pool seed)
- * drive both algorithms; `dreamsigns` and `battleEntryKey` are the run context
- * the coherent algorithm needs to reproduce the existing display + log.
+ * The shared run context needed to build the debug view.
  */
-export interface AlgorithmParams {
+export interface OpponentDebugViewParams {
   opponentDreamAvatar: DreamAvatarContent | null;
   affiliation: AffiliationContent | null;
   completionLevel: number;
   layerCount: number;
   poolSeed: number;
-  /** The run's dreamsigns (run context; also shown in the dreamsign section). */
-  dreamsigns: readonly DreamsignTemplate[];
-  /** The logged battleEntryKey == the shareable generation id. */
-  battleEntryKey: string;
 }
 
-/** A selectable opponent-deck algorithm for the `/opponent` debug tool. */
-export interface DebugAlgorithm {
-  id: string;
-  label: string;
-  build(content: JourneyContent, params: AlgorithmParams): AlgorithmView | null;
-}
+export function buildOpponentDebugView(
+  content: JourneyContent,
+  params: OpponentDebugViewParams,
+): OpponentDebugView | null {
+  const build = buildCorpusOpponentDeck({
+    opponentDreamAvatar: params.opponentDreamAvatar,
+    knownGoodDecklists: content.knownGoodDecklists ?? [],
+    affiliation: params.affiliation,
+    cardDatabase: content.cardDatabase,
+    dreamsignSignatures: content.dreamsignSignatures,
+    dreamsignTemplates: content.dreamsignTemplates,
+    completionLevel: params.completionLevel,
+    layerCount: params.layerCount,
+    poolSeed: params.poolSeed,
+    opponentsContentHash: content.opponentsData.contentHash,
+    progression: content.opponentsData.progression,
+    selectionConfig: content.opponentsData.corpusSelection,
+  });
+  if (build === null) return null;
 
-// ---------------------------------------------------------------------------
-// Coherent algorithm: the production coherent-draft simulation. Builds the
-// deck via `buildOpponentDeck` and logs `opponent_deck_constructed`, exactly as
-// `createBattleInit` does, so the tool matches a real battle at the same
-// position.
-// ---------------------------------------------------------------------------
-
-const coherentAlgorithm: DebugAlgorithm = {
-  id: "coherent",
-  label: "Coherent",
-  build(content, params) {
-    const build = buildOpponentDeck({
-      opponentDreamAvatar: params.opponentDreamAvatar,
-      fitModel: content.fitModel,
-      draftRecords: content.draftRecords ?? [],
-      poolContext: content.poolContext,
-      cardDatabase: content.cardDatabase,
-      affiliation: params.affiliation,
-      completionLevel: params.completionLevel,
-      layerCount: params.layerCount,
-      poolSeed: params.poolSeed,
-      config: content.opponentsData.coherentDraft,
-    });
-
-    // Record the generation so the debug run is reconstructable from the journey
-    // log just like a production battle's opponent build.
-    logOpponentDeckConstructed({
-      battleEntryKey: params.battleEntryKey,
-      opponentDreamAvatar: params.opponentDreamAvatar,
-      poolVariant: content.poolContext?.poolVariant ?? DEFAULT_POOL_VARIANT,
-      poolSeed: params.poolSeed,
-      completionLevel: params.completionLevel,
-      layerCount: params.layerCount,
-      affiliation: params.affiliation,
-      dreamsigns: params.dreamsigns,
-      build,
-      fallbackDeckSize: build?.cards.length ?? 0,
-      opponentsContentHash: content.opponentsData.contentHash,
-      progression: content.opponentsData.progression,
-      coherentDraft: content.opponentsData.coherentDraft,
-    });
-
-    return {
-      deckCards: build?.distinctCards ?? [],
-      statRows: [
-        {
-          label: "Affiliation",
-          value: params.affiliation?.name ?? "Neutral",
-        },
-        {
-          label: "Distinct",
-          value: String(build?.distinctCards.length ?? 0),
-        },
-        {
-          label: "Coherence",
-          value: build ? build.coherence.score.toFixed(3) : "—",
-        },
-        {
-          label: "Affil. fit",
-          value: build ? build.affiliationFit.toFixed(3) : "—",
-        },
-        {
-          label: "Best of",
-          value: String(build?.candidateCount ?? 0),
-        },
-        {
-          label: "Removed",
-          value: String(build?.removalCount ?? 0),
-        },
-      ],
-      dreamsignLabels: params.dreamsigns.map((d) => d.name),
-      abilityActive: opponentAbilityIsActive(
-        params.completionLevel,
-        content.opponentsData.progression.abilityActiveFromLayer,
-      ),
-      unavailable: build === null,
-    };
-  },
-};
-
-// ---------------------------------------------------------------------------
-// Corpus algorithm: Stage A selects a known-good decklist for the opponent
-// DreamAvatar, Stage B tunes it to the run position. The builder logs
-// `corpus_opponent_deck_constructed` internally.
-// ---------------------------------------------------------------------------
-
-const corpusAlgorithm: DebugAlgorithm = {
-  id: "corpus",
-  label: "Corpus",
-  build(content, params) {
-    const build = buildCorpusOpponentDeck({
-      opponentDreamAvatar: params.opponentDreamAvatar,
-      knownGoodDecklists: content.knownGoodDecklists ?? [],
-      affiliation: params.affiliation,
-      cardDatabase: content.cardDatabase,
-      dreamsignSignatures: content.dreamsignSignatures,
-      dreamsignTemplates: content.dreamsignTemplates,
-      completionLevel: params.completionLevel,
-      layerCount: params.layerCount,
-      poolSeed: params.poolSeed,
-      opponentsContentHash: content.opponentsData.contentHash,
-      progression: content.opponentsData.progression,
-      selectionConfig: content.opponentsData.corpusSelection,
-    });
-    if (build === null) return null;
-
-    return {
-      deckCards: build.finalCards,
-      statRows: [
-        { label: "Source", value: build.source.name },
-        { label: "Sig fit", value: build.signatureFit.toFixed(3) },
-        { label: "Affil. fit", value: build.affiliationFit.toFixed(3) },
-        { label: "Combined", value: build.combined.toFixed(3) },
-        { label: "Candidates", value: String(build.candidateCount) },
-        { label: "Top-K", value: String(build.topK.length) },
-      ],
-      dreamsignLabels: build.dreamsign ? [build.dreamsign.name] : [],
-      abilityActive: build.abilityActive,
-      provenance: (
-        <CorpusProvenance
-          build={build}
-          completionLevel={params.completionLevel}
-          dreamsignsFromLayer={
-            content.opponentsData.progression.dreamsignsFromLayer
-          }
-        />
-      ),
-    };
-  },
-};
-
-export const OPPONENT_ALGORITHMS: readonly DebugAlgorithm[] = [
-  corpusAlgorithm,
-  coherentAlgorithm,
-];
-
-/** Resolve the selected opponent algorithm, defaulting to corpus. */
-export function getAlgorithm(id: string | null): DebugAlgorithm {
-  return (
-    OPPONENT_ALGORITHMS.find((algorithm) => algorithm.id === id) ??
-    corpusAlgorithm
-  );
+  return {
+    deckCards: build.finalCards,
+    statRows: [
+      { label: "Source", value: build.source.name },
+      { label: "Sig fit", value: build.signatureFit.toFixed(3) },
+      { label: "Affil. fit", value: build.affiliationFit.toFixed(3) },
+      { label: "Combined", value: build.combined.toFixed(3) },
+      { label: "Candidates", value: String(build.candidateCount) },
+      { label: "Top-K", value: String(build.topK.length) },
+    ],
+    dreamsignLabels: build.dreamsign ? [build.dreamsign.name] : [],
+    abilityActive: build.abilityActive,
+    provenance: (
+      <CorpusProvenance
+        build={build}
+        completionLevel={params.completionLevel}
+        dreamsignsFromLayer={
+          content.opponentsData.progression.dreamsignsFromLayer
+        }
+      />
+    ),
+  };
 }
 
 // ---------------------------------------------------------------------------

@@ -1235,8 +1235,8 @@ Number of opponent deck cards highlighted as DreamAvatar signature cards.
 
 ## `data/opponents.ron`
 
-The typed `OpponentsCatalog` document defines opponent progression, coherent
-drafting, and corpus selection. The compiler composes it with the battle,
+The typed `OpponentsCatalog` document defines opponent progression and corpus
+selection. The compiler composes it with the battle,
 Dreamwell, and internal AI catalogs for the generated opponent runtime data.
 
 ### `progression.ability_active_from_layer: 1`
@@ -1256,57 +1256,6 @@ First layer where Legendary cards remain in opponent decks.
 
 Starter cards inserted at each layer after cutting weak non-Starters. Missing
 later entries mean that no Starter cards are inserted.
-
-### `coherent_draft.distinct_card_curve: CountCurve(first: 14, last: 30)`
-
-Target distinct-card count at the first and last Atlas layers. Intermediate
-layers use linear interpolation.
-
-### `coherent_draft.removal_curve: CountCurve(first: 2, last: 8)`
-
-Cards over-drafted and then pruned at the first and last Atlas layers.
-
-### `coherent_draft.temperature_curve: TemperatureCurve(first: 0.45, last: 0.12)`
-
-Draft-choice exploration at the first and last Atlas layers. Higher values
-make picks more varied; lower values make picks greedier.
-
-### `coherent_draft.best_of: 4`
-
-Number of seeded candidate drafts generated before choosing the best result.
-
-### `coherent_draft.affiliation_objective_weight: 1.0`
-
-Multiplier for affiliation fit when ranking candidate drafts.
-
-### `coherent_draft.pack_source_records: 48`
-
-Number of adapted draft records used to assemble the simulated pack source.
-
-### `coherent_draft.coherence.nearest_neighbors: 10`
-
-Number of closest real corpus decks averaged for the neighbor-similarity term.
-
-### `coherent_draft.coherence.neighbor_weight: 0.5`
-
-Blend weight for similarity to nearby real corpus decks.
-
-### `coherent_draft.coherence.cooccurrence_weight: 0.3`
-
-Blend weight for how often pairs of cards occur together in the corpus.
-
-### `coherent_draft.coherence.self_consistency_weight: 0.2`
-
-Blend weight for how reliably the model re-selects cards from this deck.
-The three blend weights must sum to 1.
-
-### `coherent_draft.coherence.self_distractors: 12`
-
-Unrelated candidate cards compared with each held-out deck card.
-
-### `coherent_draft.coherence.self_recall_k: 4`
-
-A held-out card counts as recovered when ranked within this many candidates.
 
 ### `corpus_selection.affiliation_weight: 0.25`
 

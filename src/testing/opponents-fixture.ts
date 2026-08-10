@@ -52,22 +52,6 @@ export function opponentsFixture(): OpponentsData {
       legendariesFromLayer: 5,
       starterDilution: [10, 5],
     },
-    coherentDraft: {
-      distinctCardCurve: { first: 14, last: 30 },
-      removalCurve: { first: 2, last: 8 },
-      temperatureCurve: { first: 0.45, last: 0.12 },
-      bestOf: 4,
-      affiliationObjectiveWeight: 1,
-      packSourceRecords: 48,
-      coherence: {
-        nearestNeighbors: 10,
-        neighborWeight: 0.5,
-        cooccurrenceWeight: 0.3,
-        selfConsistencyWeight: 0.2,
-        selfDistractors: 12,
-        selfRecallK: 4,
-      },
-    },
     corpusSelection: { affiliationWeight: 0.25, topRankedSamplingWindow: 8 },
     journeyAiDeck: STARTER_IDS.map((cardId) => ({ cardId, count: 3 })),
     ai: {

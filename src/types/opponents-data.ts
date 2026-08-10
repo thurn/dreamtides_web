@@ -1,10 +1,5 @@
 export type OpponentMode = "expectiminimax" | "worstCase";
 
-export interface OpponentCurve {
-  first: number;
-  last: number;
-}
-
 export interface AiEvaluationWeights {
   scoreDifference: number;
   frontRankSpark: number;
@@ -67,22 +62,6 @@ export interface OpponentsData {
     dreamsignsFromLayer: number;
     legendariesFromLayer: number;
     starterDilution: number[];
-  };
-  coherentDraft: {
-    distinctCardCurve: OpponentCurve;
-    removalCurve: OpponentCurve;
-    temperatureCurve: OpponentCurve;
-    bestOf: number;
-    affiliationObjectiveWeight: number;
-    packSourceRecords: number;
-    coherence: {
-      nearestNeighbors: number;
-      neighborWeight: number;
-      cooccurrenceWeight: number;
-      selfConsistencyWeight: number;
-      selfDistractors: number;
-      selfRecallK: number;
-    };
   };
   corpusSelection: {
     affiliationWeight: number;

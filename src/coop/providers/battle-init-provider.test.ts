@@ -79,11 +79,6 @@ describe("battle init provider", () => {
         (entry) => entry.event === "opponent_signature_cards_selected",
       ),
     ).toBe(true);
-    expect(
-      getLogEntries().some(
-        (entry) => entry.event === "opponent_deck_constructed",
-      ),
-    ).toBe(true);
     const count = getLogEntries().length;
     expect(settleDeferredOpponentLog(17, true)).toBe(false);
     expect(getLogEntries()).toHaveLength(count);

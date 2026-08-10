@@ -98,12 +98,9 @@ function buildBattleInit(
     affiliations: content.affiliations,
     dreamwellCards: content.dreamwellCards,
     dreamsignTemplates: content.dreamsignTemplates,
-    poolContext: content.poolContext,
     knownGoodDecklists: content.knownGoodDecklists,
     economyData: content.economyData,
     dreamsignSignatures: content.dreamsignSignatures,
-    fitModel: content.fitModel,
-    draftRecords: content.draftRecords,
     deferOpponentLog,
     tutorialTriggers: content.tutorial?.triggers,
   });

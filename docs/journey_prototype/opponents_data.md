@@ -30,18 +30,17 @@ The game-data compiler generates `data/battle.toml`, `data/dreamwell.toml`,
 `data/internal/internal_ai.toml`; the composed `data/opponents.toml`
 compatibility shape is consumed by asset generation.
 
-| Source | Section | Authored contract |
-| --- | --- | --- |
-| `battle.ron` | root | Minimum deck size, both opening-hand sizes, score targets, turn/energy/hand limits, starting side, opening-draw behavior, and signature-card count. |
-| `dreamwell.ron` | `rules` | One-time opening orders, recurring orders, cards drawn per recurring order, and minimum constructed deck length. |
-| `dreamwell.ron` | `cards` | UUID-keyed Dreamwell card rules, energy grants, tier membership, automation prompts, and art. |
-| `opponents.ron` | `progression` | Ability, Dreamsign, and Legendary unlock layers plus the starter-dilution schedule. |
-| `opponents.ron` | `coherent_draft` | Distinct-card, removal, and temperature curves; best-of count; affiliation objective; record source count; and coherence scoring coefficients. |
-| `opponents.ron` | `corpus_selection` | Affiliation weight and the top-ranked seeded sampling window. |
-| `internal_ai.ron` | `journey_ai_deck` | Card UUID and positive copy count for each journey AI deck entry. |
-| `internal_ai.ron` | `ai.evaluation` | Static board-evaluation weights. |
-| `internal_ai.ron` | `ai.opponent-model` | Removal prior, response-archetype priors, and the global sampling safety cap. |
-| `internal_ai.ron` | `ai.presets` | Named search breadth, response mode, sample count, search depth, journey time budget, and deterministic tutorial expansion budget. |
+| Source            | Section             | Authored contract                                                                                                                                   |
+| ----------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `battle.ron`      | root                | Minimum deck size, both opening-hand sizes, score targets, turn/energy/hand limits, starting side, opening-draw behavior, and signature-card count. |
+| `dreamwell.ron`   | `rules`             | One-time opening orders, recurring orders, cards drawn per recurring order, and minimum constructed deck length.                                    |
+| `dreamwell.ron`   | `cards`             | UUID-keyed Dreamwell card rules, energy grants, tier membership, automation prompts, and art.                                                       |
+| `opponents.ron`   | `progression`       | Ability, Dreamsign, and Legendary unlock layers plus the starter-dilution schedule.                                                                 |
+| `opponents.ron`   | `corpus_selection`  | Affiliation weight and the top-ranked seeded sampling window.                                                                                       |
+| `internal_ai.ron` | `journey_ai_deck`   | Card UUID and positive copy count for each journey AI deck entry.                                                                                   |
+| `internal_ai.ron` | `ai.evaluation`     | Static board-evaluation weights.                                                                                                                    |
+| `internal_ai.ron` | `ai.opponent-model` | Removal prior, response-archetype priors, and the global sampling safety cap.                                                                       |
+| `internal_ai.ron` | `ai.presets`        | Named search breadth, response mode, sample count, search depth, journey time budget, and deterministic tutorial expansion budget.                  |
 
 Layer numbers are zero-indexed completion levels. Curve endpoints map to the
 first and last Atlas layers and code linearly interpolates intermediate layers.
@@ -50,8 +49,8 @@ authored array use its final value. Starter dilution is indexed the same way,
 with entries beyond the authored array contributing zero starters.
 
 The compiler rejects missing or unknown keys, invalid numeric ranges,
-non-monotonic curves, duplicate or overlapping Dreamwell orders, invalid
-coherence weights, invalid or duplicate preset IDs, unknown preset references,
+duplicate or overlapping Dreamwell orders, invalid or duplicate preset IDs,
+unknown preset references,
 sample counts above the safety cap, non-positive deck counts, and AI deck UUIDs
 absent from `cards.ron`. Failures identify the RON path that needs correction.
 

@@ -30,22 +30,6 @@ function fixture() {
       "legendaries-from-layer": 6,
       "starter-dilution": [7, 3, 1],
     },
-    "coherent-draft": {
-      "distinct-card-curve": { first: 8, last: 20 },
-      "removal-curve": { first: 1, last: 5 },
-      "temperature-curve": { first: 0.6, last: 0.2 },
-      "best-of": 3,
-      "affiliation-objective-weight": 0.75,
-      "pack-source-records": 12,
-      coherence: {
-        "nearest-neighbors": 4,
-        "neighbor-weight": 0.5,
-        "cooccurrence-weight": 0.25,
-        "self-consistency-weight": 0.25,
-        "self-distractors": 6,
-        "self-recall-k": 2,
-      },
-    },
     "corpus-selection": {
       "affiliation-weight": 0.4,
       "top-ranked-sampling-window": 5,
@@ -114,9 +98,6 @@ describe("compileOpponentsData", () => {
         x.progression["ability-active-from-layer"] += 1;
       },
       (x) => {
-        x["coherent-draft"]["pack-source-records"] += 1;
-      },
-      (x) => {
         x["corpus-selection"]["affiliation-weight"] = 0.5;
       },
       (x) => {
@@ -161,20 +142,6 @@ describe("compileOpponentsData", () => {
         x.dreamwell["recurring-orders"] = [0, 2];
       },
       /appears in opening and recurring/u,
-    ],
-    [
-      "non-monotonic curve",
-      (x) => {
-        x["coherent-draft"]["removal-curve"] = { first: 5, last: 1 };
-      },
-      /monotonically non-decreasing/u,
-    ],
-    [
-      "bad coherence weights",
-      (x) => {
-        x["coherent-draft"].coherence["neighbor-weight"] = 0.1;
-      },
-      /weights must sum to 1/u,
     ],
     [
       "unknown card",

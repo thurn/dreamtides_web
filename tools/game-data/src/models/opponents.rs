@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 use std::fmt;
 use std::str::FromStr;
 
-use anyhow::{Result, bail};
+use anyhow::{bail, Result};
 use indexmap::IndexMap;
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
@@ -14,7 +14,6 @@ use super::dreamwell::{self, DreamwellRules};
 #[serde(deny_unknown_fields)]
 pub struct OpponentsCatalog {
     pub progression: ProgressionRules,
-    pub coherent_draft: CoherentDraftRules,
     pub corpus_selection: CorpusSelectionRules,
 }
 
@@ -29,7 +28,6 @@ struct CombinedCatalog {
     battle: BattleRules,
     dreamwell: DreamwellRules,
     progression: ProgressionRules,
-    coherent_draft: CoherentDraftRules,
     corpus_selection: CorpusSelectionRules,
     journey_ai_deck: Vec<DeckEntry>,
     ai: AiRules,
@@ -63,43 +61,6 @@ pub struct ProgressionRules {
     pub dreamsigns_from_layer: u32,
     pub legendaries_from_layer: u32,
     pub starter_dilution: Vec<u32>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct CoherentDraftRules {
-    pub distinct_card_curve: CountCurve,
-    pub removal_curve: CountCurve,
-    pub temperature_curve: TemperatureCurve,
-    pub best_of: u32,
-    pub affiliation_objective_weight: f64,
-    pub pack_source_records: u32,
-    pub coherence: CoherenceRules,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-#[serde(deny_unknown_fields)]
-pub struct CountCurve {
-    pub first: u32,
-    pub last: u32,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct TemperatureCurve {
-    pub first: f64,
-    pub last: f64,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct CoherenceRules {
-    pub nearest_neighbors: u32,
-    pub neighbor_weight: f64,
-    pub cooccurrence_weight: f64,
-    pub self_consistency_weight: f64,
-    pub self_distractors: u32,
-    pub self_recall_k: u32,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -262,8 +223,6 @@ struct CompatibilityCatalog {
     battle: CompatibilityBattleRules,
     dreamwell: CompatibilityDreamwellRules,
     progression: CompatibilityProgressionRules,
-    #[serde(rename = "coherent-draft")]
-    coherent_draft: CompatibilityCoherentDraftRules,
     #[serde(rename = "corpus-selection")]
     corpus_selection: CompatibilityCorpusSelectionRules,
     #[serde(rename = "journey-ai-deck")]
@@ -333,45 +292,6 @@ struct CompatibilityProgressionRules {
     legendaries_from_layer: u32,
     #[serde(rename = "starter-dilution")]
     starter_dilution: Vec<u32>,
-}
-
-#[derive(Serialize)]
-struct CompatibilityCoherentDraftRules {
-    #[serde(rename = "distinct-card-curve")]
-    distinct_card_curve: CountCurve,
-    #[serde(rename = "removal-curve")]
-    removal_curve: CountCurve,
-    #[serde(rename = "temperature-curve")]
-    temperature_curve: CompatibilityTemperatureCurve,
-    #[serde(rename = "best-of")]
-    best_of: u32,
-    #[serde(rename = "affiliation-objective-weight")]
-    affiliation_objective_weight: toml::Value,
-    #[serde(rename = "pack-source-records")]
-    pack_source_records: u32,
-    coherence: CompatibilityCoherenceRules,
-}
-
-#[derive(Serialize)]
-struct CompatibilityTemperatureCurve {
-    first: toml::Value,
-    last: toml::Value,
-}
-
-#[derive(Serialize)]
-struct CompatibilityCoherenceRules {
-    #[serde(rename = "nearest-neighbors")]
-    nearest_neighbors: u32,
-    #[serde(rename = "neighbor-weight")]
-    neighbor_weight: toml::Value,
-    #[serde(rename = "cooccurrence-weight")]
-    cooccurrence_weight: toml::Value,
-    #[serde(rename = "self-consistency-weight")]
-    self_consistency_weight: toml::Value,
-    #[serde(rename = "self-distractors")]
-    self_distractors: u32,
-    #[serde(rename = "self-recall-k")]
-    self_recall_k: u32,
 }
 
 #[derive(Serialize)]
@@ -466,7 +386,6 @@ pub fn lower(
         battle,
         dreamwell,
         progression: opponents.progression,
-        coherent_draft: opponents.coherent_draft,
         corpus_selection: opponents.corpus_selection,
         journey_ai_deck: internal_ai.journey_ai_deck,
         ai: internal_ai.ai,
@@ -487,33 +406,6 @@ pub fn lower(
             dreamsigns_from_layer: source.progression.dreamsigns_from_layer,
             legendaries_from_layer: source.progression.legendaries_from_layer,
             starter_dilution: source.progression.starter_dilution,
-        },
-        coherent_draft: CompatibilityCoherentDraftRules {
-            distinct_card_curve: source.coherent_draft.distinct_card_curve,
-            removal_curve: source.coherent_draft.removal_curve,
-            temperature_curve: CompatibilityTemperatureCurve {
-                first: compatibility_number(source.coherent_draft.temperature_curve.first),
-                last: compatibility_number(source.coherent_draft.temperature_curve.last),
-            },
-            best_of: source.coherent_draft.best_of,
-            affiliation_objective_weight: compatibility_number(
-                source.coherent_draft.affiliation_objective_weight,
-            ),
-            pack_source_records: source.coherent_draft.pack_source_records,
-            coherence: CompatibilityCoherenceRules {
-                nearest_neighbors: source.coherent_draft.coherence.nearest_neighbors,
-                neighbor_weight: compatibility_number(
-                    source.coherent_draft.coherence.neighbor_weight,
-                ),
-                cooccurrence_weight: compatibility_number(
-                    source.coherent_draft.coherence.cooccurrence_weight,
-                ),
-                self_consistency_weight: compatibility_number(
-                    source.coherent_draft.coherence.self_consistency_weight,
-                ),
-                self_distractors: source.coherent_draft.coherence.self_distractors,
-                self_recall_k: source.coherent_draft.coherence.self_recall_k,
-            },
         },
         corpus_selection: CompatibilityCorpusSelectionRules {
             affiliation_weight: compatibility_number(source.corpus_selection.affiliation_weight),
@@ -649,28 +541,6 @@ fn validate(source: &CombinedCatalog) -> Result<()> {
         &source.progression.starter_dilution,
     )?;
 
-    validate_count_curve(
-        "coherent_draft.distinct_card_curve",
-        source.coherent_draft.distinct_card_curve,
-        true,
-    )?;
-    validate_count_curve(
-        "coherent_draft.removal_curve",
-        source.coherent_draft.removal_curve,
-        false,
-    )?;
-    validate_temperature_curve(source.coherent_draft.temperature_curve)?;
-    require_positive("coherent_draft.best_of", source.coherent_draft.best_of)?;
-    require_nonnegative_finite(
-        "coherent_draft.affiliation_objective_weight",
-        source.coherent_draft.affiliation_objective_weight,
-    )?;
-    require_positive(
-        "coherent_draft.pack_source_records",
-        source.coherent_draft.pack_source_records,
-    )?;
-    validate_coherence(&source.coherent_draft.coherence)?;
-
     require_unit_interval(
         "corpus_selection.affiliation_weight",
         source.corpus_selection.affiliation_weight,
@@ -696,58 +566,6 @@ fn validate_battle_rules(source: &BattleRules) -> Result<()> {
 fn validate_internal_ai(source: &InternalAiCatalog) -> Result<()> {
     validate_deck(&source.journey_ai_deck)?;
     validate_ai(&source.ai)
-}
-
-fn validate_count_curve(path: &str, curve: CountCurve, positive: bool) -> Result<()> {
-    if positive {
-        require_positive(&format!("{path}.first"), curve.first)?;
-        require_positive(&format!("{path}.last"), curve.last)?;
-    }
-    if curve.first > curve.last {
-        bail!("{path} must be monotonically non-decreasing");
-    }
-    Ok(())
-}
-
-fn validate_temperature_curve(curve: TemperatureCurve) -> Result<()> {
-    require_positive_unit_interval("coherent_draft.temperature_curve.first", curve.first)?;
-    require_positive_unit_interval("coherent_draft.temperature_curve.last", curve.last)?;
-    if curve.first < curve.last {
-        bail!("coherent_draft.temperature_curve must be monotonically non-increasing");
-    }
-    Ok(())
-}
-
-fn validate_coherence(source: &CoherenceRules) -> Result<()> {
-    require_positive(
-        "coherent_draft.coherence.nearest_neighbors",
-        source.nearest_neighbors,
-    )?;
-    require_unit_interval(
-        "coherent_draft.coherence.neighbor_weight",
-        source.neighbor_weight,
-    )?;
-    require_unit_interval(
-        "coherent_draft.coherence.cooccurrence_weight",
-        source.cooccurrence_weight,
-    )?;
-    require_unit_interval(
-        "coherent_draft.coherence.self_consistency_weight",
-        source.self_consistency_weight,
-    )?;
-    let sum = source.neighbor_weight + source.cooccurrence_weight + source.self_consistency_weight;
-    if (sum - 1.0).abs() > 1e-9 {
-        bail!("coherent_draft.coherence weights must sum to 1");
-    }
-    require_positive(
-        "coherent_draft.coherence.self_distractors",
-        source.self_distractors,
-    )?;
-    require_positive(
-        "coherent_draft.coherence.self_recall_k",
-        source.self_recall_k,
-    )?;
-    Ok(())
 }
 
 fn validate_deck(entries: &[DeckEntry]) -> Result<()> {
@@ -898,13 +716,6 @@ fn require_unit_interval(path: &str, value: f64) -> Result<()> {
     Ok(())
 }
 
-fn require_positive_unit_interval(path: &str, value: f64) -> Result<()> {
-    if !value.is_finite() || value <= 0.0 || value > 1.0 {
-        bail!("{path} must be a finite number greater than 0 and at most 1");
-    }
-    Ok(())
-}
-
 #[cfg(test)]
 mod tests {
     use pretty_assertions::assert_eq;
@@ -921,25 +732,6 @@ mod tests {
                 dreamsigns_from_layer: 2,
                 legendaries_from_layer: 4,
                 starter_dilution: vec![6, 3],
-            },
-            coherent_draft: CoherentDraftRules {
-                distinct_card_curve: CountCurve { first: 5, last: 8 },
-                removal_curve: CountCurve { first: 0, last: 3 },
-                temperature_curve: TemperatureCurve {
-                    first: 0.8,
-                    last: 0.2,
-                },
-                best_of: 3,
-                affiliation_objective_weight: 2.5,
-                pack_source_records: 17,
-                coherence: CoherenceRules {
-                    nearest_neighbors: 4,
-                    neighbor_weight: 0.2,
-                    cooccurrence_weight: 0.3,
-                    self_consistency_weight: 0.5,
-                    self_distractors: 6,
-                    self_recall_k: 2,
-                },
             },
             corpus_selection: CorpusSelectionRules {
                 affiliation_weight: 0.75,
@@ -1030,10 +822,6 @@ mod tests {
             Some(8)
         );
         assert_eq!(
-            lowered["coherent-draft"]["temperature-curve"]["last"].as_float(),
-            Some(0.2)
-        );
-        assert_eq!(
             lowered["journey-ai-deck"][0]["card-id"].as_str(),
             Some(CARD_ONE)
         );
@@ -1104,30 +892,13 @@ mod tests {
     }
 
     #[test]
-    fn rejects_invalid_collections_curves_weights_and_preset_references() {
+    fn rejects_invalid_collections_and_preset_references() {
         let mut source = dreamwell_rules();
         source.recurring_orders.push(8);
-        assert!(
-            dreamwell::validate_rules(&source)
-                .unwrap_err()
-                .to_string()
-                .contains("appears in opening and recurring")
-        );
-
-        let mut source = catalog();
-        source.coherent_draft.distinct_card_curve = CountCurve { first: 9, last: 8 };
-        assert_opponents_error_contains(source, "non-decreasing");
-
-        let mut source = catalog();
-        source.coherent_draft.temperature_curve = TemperatureCurve {
-            first: 0.2,
-            last: 0.8,
-        };
-        assert_opponents_error_contains(source, "non-increasing");
-
-        let mut source = catalog();
-        source.coherent_draft.coherence.self_consistency_weight = 0.4;
-        assert_opponents_error_contains(source, "weights must sum to 1");
+        assert!(dreamwell::validate_rules(&source)
+            .unwrap_err()
+            .to_string()
+            .contains("appears in opening and recurring"));
 
         let mut source = internal_ai();
         source.journey_ai_deck[1].card_id = source.journey_ai_deck[0].card_id;
@@ -1149,22 +920,10 @@ mod tests {
         validate_card_references(&source, &known).unwrap();
 
         let incomplete = BTreeSet::from([CARD_ONE.parse().unwrap()]);
-        assert!(
-            validate_card_references(&source, &incomplete)
-                .unwrap_err()
-                .to_string()
-                .contains(CARD_TWO)
-        );
-    }
-
-    fn assert_opponents_error_contains(source: OpponentsCatalog, expected: &str) {
-        let error = lower(source, battle(), dreamwell_rules(), internal_ai())
+        assert!(validate_card_references(&source, &incomplete)
             .unwrap_err()
-            .to_string();
-        assert!(
-            error.contains(expected),
-            "{error:?} did not contain {expected:?}"
-        );
+            .to_string()
+            .contains(CARD_TWO));
     }
 
     fn assert_internal_ai_error_contains(source: InternalAiCatalog, expected: &str) {
