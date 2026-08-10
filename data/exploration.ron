@@ -12501,4 +12501,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "49641e8e-93a8-46cb-92a9-246b0fd57899",
+    prose: "A red-eyed soldier stands amid levitating rubble as black tendrils unfurl through a ruined cavern.",
+    actions: [
+      ActionDefinition(
+        label: "Feed Ravenous Tendrils",
+        id: "b284f3ab-e20b-411b-9f81-1ea25f8470d0",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Survivor. Every other Survivor in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Survivor", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Accept Total Corruption",
+        id: "f30ff862-8146-453f-b518-72fbeb2de224",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "9629a58a-9f30-40f0-9199-835ea2dddc76",
+    prose: "A lone armed traveler crosses suspended machinery toward a smoke-bright opening above a vast industrial chasm.",
+    actions: [
+      ActionDefinition(
+        label: "Cross Industrial Threshold",
+        id: "12c6f08f-e030-4a15-bd75-416a5a01288b",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+
+      ActionDefinition(
+        label: "Carry Single Weapon",
+        id: "af570fe6-7543-4c9a-9b1e-a103cd739945",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277",
+    prose: "Nexus Wayfinder stands beneath blue sigils, red cloak lifted by waterfall mist.",
+    actions: [
+      ActionDefinition(
+        label: "Trace Hidden Route",
+        id: "93a79839-5890-472c-9b7d-41983153a22c",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+
+      ActionDefinition(
+        label: "Invite Swift Companion",
+        id: "44dbbd56-8e13-4080-abf6-61a4abbecf53",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered ≤2● cost Character.",
+          ),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "ce09ddfa-c349-4b32-b524-fb74444cddcb",
+    prose: "A skull-faced arbiter crosses rose petals among colossal broken swords and drifting crimson fragments.",
+    actions: [
+      ActionDefinition(
+        label: "Condemn a Fallen Warrior",
+        id: "9e777f6d-6c26-4dc3-b049-a5bb8767c249",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Reforge a Broken Blade",
+        id: "ba49060c-bf3f-4120-8747-2eb80c6cb048",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its reforged form.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "f3985df4-0867-4fd6-8312-6b358dc26883",
+    prose: "A gas-masked survivor drives a biohazard banner through luminous green smoke and grasping shadows.",
+    actions: [
+      ActionDefinition(
+        label: "Call through toxic smoke",
+        id: "8d9b537e-82fc-4944-b950-192889ecf31a",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 2 packs of 3 Survivor cards to add to your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one pack to add to your deck.",
+          ),
+        ),
+        effect: ChoosePack(predicate: Survivor, pack_count: 2, pack_size: 3),
+      ),
+
+      ActionDefinition(
+        label: "Carry one true banner",
+        id: "3e737b61-414c-4f8f-8ab2-d3f5e5e581b9",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
 ]

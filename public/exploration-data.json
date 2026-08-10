@@ -11600,8 +11600,134 @@
           "canonicalMechanicId": "make-deck-fast"
         }
       ]
+    },
+    {
+      "cardId": "49641e8e-93a8-46cb-92a9-246b0fd57899",
+      "prose": "A red-eyed soldier stands amid levitating rubble as black tendrils unfurl through a ruined cavern.",
+      "action": [
+        {
+          "id": "b284f3ab-e20b-411b-9f81-1ea25f8470d0",
+          "label": "Feed Ravenous Tendrils",
+          "effectText": "Purge a random Survivor. Every other Survivor in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Survivor",
+          "sparkBonus": 1
+        },
+        {
+          "id": "f30ff862-8146-453f-b518-72fbeb2de224",
+          "label": "Accept Total Corruption",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "9629a58a-9f30-40f0-9199-835ea2dddc76",
+      "prose": "A lone armed traveler crosses suspended machinery toward a smoke-bright opening above a vast industrial chasm.",
+      "action": [
+        {
+          "id": "12c6f08f-e030-4a15-bd75-416a5a01288b",
+          "label": "Cross Industrial Threshold",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        },
+        {
+          "id": "af570fe6-7543-4c9a-9b1e-a103cd739945",
+          "label": "Carry Single Weapon",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
+    },
+    {
+      "cardId": "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277",
+      "prose": "Nexus Wayfinder stands beneath blue sigils, red cloak lifted by waterfall mist.",
+      "action": [
+        {
+          "id": "93a79839-5890-472c-9b7d-41983153a22c",
+          "label": "Trace Hidden Route",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        },
+        {
+          "id": "44dbbd56-8e13-4080-abf6-61a4abbecf53",
+          "label": "Invite Swift Companion",
+          "effectText": "Draft a ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered ≤2● cost Character.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 1,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "ce09ddfa-c349-4b32-b524-fb74444cddcb",
+      "prose": "A skull-faced arbiter crosses rose petals among colossal broken swords and drifting crimson fragments.",
+      "action": [
+        {
+          "id": "9e777f6d-6c26-4dc3-b049-a5bb8767c249",
+          "label": "Condemn a Fallen Warrior",
+          "effectText": "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        },
+        {
+          "id": "ba49060c-bf3f-4120-8747-2eb80c6cb048",
+          "label": "Reforge a Broken Blade",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card, then choose its reforged form.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "cardId": "f3985df4-0867-4fd6-8312-6b358dc26883",
+      "prose": "A gas-masked survivor drives a biohazard banner through luminous green smoke and grasping shadows.",
+      "action": [
+        {
+          "id": "8d9b537e-82fc-4944-b950-192889ecf31a",
+          "label": "Call through toxic smoke",
+          "effectText": "Choose one of 2 packs of 3 Survivor cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one pack to add to your deck.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "survivor",
+          "packCount": 2,
+          "packSize": 3
+        },
+        {
+          "id": "3e737b61-414c-4f8f-8ab2-d3f5e5e581b9",
+          "label": "Carry one true banner",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
     }
   ],
-  "contentHash": "d453e0eeeb125381e6dde1735467b25c7452fc2acc8dea6724a34f00872cfe9d",
-  "foldHash": "d453e0eeeb125381e6dde1735467b25c7452fc2acc8dea6724a34f00872cfe9d"
+  "contentHash": "eb71ee210c6aa2b7663d930edfe76d0e738ec719832408ddf5736aa906bd6cfc",
+  "foldHash": "eb71ee210c6aa2b7663d930edfe76d0e738ec719832408ddf5736aa906bd6cfc"
 }
