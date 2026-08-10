@@ -5247,8 +5247,129 @@
           "offerCount": 4
         }
       ]
+    },
+    {
+      "cardId": "c11eb833-a45b-4983-949d-848039d0504c",
+      "prose": "Black birds crowd twisted branches around a staff-bearing sentinel beneath falling embers.",
+      "action": [
+        {
+          "id": "2532f464-2151-49c2-a130-2e94b89ca8e8",
+          "label": "Rally the Rookery",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        },
+        {
+          "id": "7bdb9e6e-6eb6-40f0-b9bb-f07e9c10393a",
+          "label": "Send Flocks Ahead",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "7d5672d2-c8fa-4837-9e98-8cccdd07ff56",
+      "prose": "A lantern-bearer climbs fractured stairs toward a blazing circular portal suspended beneath stars.",
+      "action": [
+        {
+          "id": "d4e0b232-862e-447a-80ed-3b051e597df5",
+          "label": "Read Lantern Echo",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one reflected card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "5f409d96-e865-4fd4-a137-71146588af92",
+          "label": "Cross Blazing Threshold",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        }
+      ]
+    },
+    {
+      "cardId": "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+      "prose": "Two astronauts cross a snowy valley toward a golden beam descending through starlight.",
+      "action": [
+        {
+          "id": "89bfc76a-2ab6-435b-9ab6-7b11faad6fbd",
+          "label": "Follow Twin Footprints",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "5a4edb70-cf3c-4caf-808a-0ff46f6096c4",
+          "label": "Enter Golden Beam",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card, then choose its transfiguration.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "cardId": "465d3463-1d8a-466d-b91f-b1993332b4d3",
+      "prose": "A cloaked swordsman watches neon traffic from a rain-swept rooftop above glowing towers.",
+      "action": [
+        {
+          "id": "10325095-5749-422a-9398-68fc12eb3830",
+          "label": "Betray a Hidden Rival",
+          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        },
+        {
+          "id": "e162a1b7-4056-4896-b8a6-e0c0d8389216",
+          "label": "Tap City Currents",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "50267984-eaa3-415e-a23f-581c54b0ad2d",
+      "prose": "A lone silhouette watches incandescent ruin scatter towers and debris across a smoke-choked horizon.",
+      "action": [
+        {
+          "id": "8b3c547f-3043-4d29-b40c-3629a38f848f",
+          "label": "Walk Into Fire",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        },
+        {
+          "id": "130fa566-0948-4c79-84b1-9372a51a3f67",
+          "label": "Claim a Reborn Fragment",
+          "effectText": "Draft a transfigured event from 4 choices.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transformed event from the ruins.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        }
+      ]
     }
   ],
-  "contentHash": "a37bc15524e950da296e1de94271dc5bbbe34259bf79ea28b3d9dbe4fedc6f72",
-  "foldHash": "a37bc15524e950da296e1de94271dc5bbbe34259bf79ea28b3d9dbe4fedc6f72"
+  "contentHash": "fd6b6a01a202522a00cf9fe27d6787e9abf91abe0315dbeb54b5e05baf59086d",
+  "foldHash": "fd6b6a01a202522a00cf9fe27d6787e9abf91abe0315dbeb54b5e05baf59086d"
 }

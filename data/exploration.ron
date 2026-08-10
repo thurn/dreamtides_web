@@ -5599,4 +5599,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "c11eb833-a45b-4983-949d-848039d0504c",
+    prose: "Black birds crowd twisted branches around a staff-bearing sentinel beneath falling embers.",
+    actions: [
+      ActionDefinition(
+        label: "Rally the Rookery",
+        id: "2532f464-2151-49c2-a130-2e94b89ca8e8",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Send Flocks Ahead",
+        id: "7bdb9e6e-6eb6-40f0-b9bb-f07e9c10393a",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "7d5672d2-c8fa-4837-9e98-8cccdd07ff56",
+    prose: "A lantern-bearer climbs fractured stairs toward a blazing circular portal suspended beneath stars.",
+    actions: [
+      ActionDefinition(
+        label: "Read Lantern Echo",
+        id: "d4e0b232-862e-447a-80ed-3b051e597df5",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one reflected card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Cross Blazing Threshold",
+        id: "5f409d96-e865-4fd4-a137-71146588af92",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+    prose: "Two astronauts cross a snowy valley toward a golden beam descending through starlight.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Twin Footprints",
+        id: "89bfc76a-2ab6-435b-9ab6-7b11faad6fbd",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Enter Golden Beam",
+        id: "5a4edb70-cf3c-4caf-808a-0ff46f6096c4",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "465d3463-1d8a-466d-b91f-b1993332b4d3",
+    prose: "A cloaked swordsman watches neon traffic from a rain-swept rooftop above glowing towers.",
+    actions: [
+      ActionDefinition(
+        label: "Betray a Hidden Rival",
+        id: "10325095-5749-422a-9398-68fc12eb3830",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Tap City Currents",
+        id: "e162a1b7-4056-4896-b8a6-e0c0d8389216",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "50267984-eaa3-415e-a23f-581c54b0ad2d",
+    prose: "A lone silhouette watches incandescent ruin scatter towers and debris across a smoke-choked horizon.",
+    actions: [
+      ActionDefinition(
+        label: "Walk Into Fire",
+        id: "8b3c547f-3043-4d29-b40c-3629a38f848f",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+
+      ActionDefinition(
+        label: "Claim a Reborn Fragment",
+        id: "130fa566-0948-4c79-84b1-9372a51a3f67",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured event from 4 choices.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one transformed event from the ruins.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: Event, offer_count: 4),
+      ),
+    ],
+  ),
 ]
