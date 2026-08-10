@@ -8963,4 +8963,151 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "dbd014b1-1ec8-4762-bd96-48a2a4824de2",
+    prose: "Two armed sentries guard a shadowed stairwell beneath green backlight and drifting sparks.",
+    actions: [
+      ActionDefinition(
+        label: "Send in a Pair",
+        id: "bb72ae85-2c17-4c81-a6a4-8c7db6f7f474",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Character from 4 choices and gain 2 copies of it",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one Character pair."),
+        ),
+        effect: DraftCard(predicate: Character, count: 2, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Secure the Stairwell",
+        id: "50c0f784-ad01-4fde-9cff-27a0fedbe1d6",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "4d4618bd-4779-4953-b446-dab05e1da5db",
+    prose: "A lone traveler watches a crimson nebula burn above black spires and misty cascades.",
+    actions: [
+      ActionDefinition(
+        label: "Enter Crimson Wake",
+        id: "60f3eac0-e097-4e24-a4d1-d7381cf36c4f",
+        presentation: ActionPresentation(
+          effect_text: "Lose 100 essence. Apply Inspired to every eligible Event card in your deck.",
+          followup: None,
+        ),
+        effect: TransfigureAllForEssence(
+          essence: 100,
+          predicate: Event,
+          transfiguration: "Inspired",
+        ),
+      ),
+
+      ActionDefinition(
+        label: "Gather Falling Starlight",
+        id: "ff1f7348-a85e-406f-b6a0-0727f9194c72",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa",
+    prose: "A lone astronaut faces a blazing golden ring as ruined towers shed embers into smoke.",
+    actions: [
+      ActionDefinition(
+        label: "Release Hollow Echoes",
+        id: "f5f7b66b-1dbd-43cf-89b0-590f2dcca456",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+
+      ActionDefinition(
+        label: "Enter Golden Ring",
+        id: "8eeb761b-4d05-4bdb-965d-cd7fd85bb317",
+        presentation: ActionPresentation(
+          effect_text: "Lose 100 essence. Apply Kindled to every eligible Character card in your deck.",
+          followup: None,
+        ),
+        effect: TransfigureAllForEssence(
+          essence: 100,
+          predicate: Character,
+          transfiguration: "Kindled",
+        ),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+    prose: "A tentacled alien vessel hangs above a glowing city while missiles streak through blue darkness.",
+    actions: [
+      ActionDefinition(
+        label: "Accept Alien Command",
+        id: "8383e42e-37a7-45cb-9eb0-6e54a4362340",
+        presentation: ActionPresentation(
+          effect_text: "Pick a new Dream Avatar from 3 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Dream Avatar."),
+        ),
+        effect: ChooseDreamAvatar(offer_count: 3),
+      ),
+
+      ActionDefinition(
+        label: "Broadcast Shaping Signal",
+        id: "5954ad36-d709-4fd0-b024-11420bdf6bc9",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck become the subtype of your choice",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one shared subtype for every Character.",
+          ),
+        ),
+        effect: ChangeSubtypeAll(subtype_options: ["Warrior", "Mage", "Spirit Animal", "Survivor"]),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "06f8cfff-92ec-4668-afbc-f33a274c3b1a",
+    prose: "A lone mechanic faces a shattered blue veil while bright fragments float above orange embers.",
+    actions: [
+      ActionDefinition(
+        label: "Study Reflected Possibilities",
+        id: "f2beb685-fe36-49fd-9547-55a49071c82f",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one reflected card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Cross Shattered Veil",
+        id: "f799e9a0-6d47-4700-bfaa-c56c7867137c",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Event from 4 choices.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one transformed Event beyond the fracture.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: Event, offer_count: 4),
+      ),
+    ],
+  ),
 ]

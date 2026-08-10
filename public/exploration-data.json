@@ -8366,8 +8366,143 @@
           "offerCount": 4
         }
       ]
+    },
+    {
+      "cardId": "dbd014b1-1ec8-4762-bd96-48a2a4824de2",
+      "prose": "Two armed sentries guard a shadowed stairwell beneath green backlight and drifting sparks.",
+      "action": [
+        {
+          "id": "bb72ae85-2c17-4c81-a6a4-8c7db6f7f474",
+          "label": "Send in a Pair",
+          "effectText": "Draft a Character from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Character pair.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "50c0f784-ad01-4fde-9cff-27a0fedbe1d6",
+          "label": "Secure the Stairwell",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "4d4618bd-4779-4953-b446-dab05e1da5db",
+      "prose": "A lone traveler watches a crimson nebula burn above black spires and misty cascades.",
+      "action": [
+        {
+          "id": "60f3eac0-e097-4e24-a4d1-d7381cf36c4f",
+          "label": "Enter Crimson Wake",
+          "effectText": "Lose 100 essence. Apply Inspired to every eligible Event card in your deck.",
+          "effectKind": "transfigure-all-for-essence",
+          "canonicalMechanicId": "transfigure-deck-for-essence",
+          "essence": 100,
+          "predicate": "event",
+          "transfiguration": "Inspired"
+        },
+        {
+          "id": "ff1f7348-a85e-406f-b6a0-0727f9194c72",
+          "label": "Gather Falling Starlight",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa",
+      "prose": "A lone astronaut faces a blazing golden ring as ruined towers shed embers into smoke.",
+      "action": [
+        {
+          "id": "f5f7b66b-1dbd-43cf-89b0-590f2dcca456",
+          "label": "Release Hollow Echoes",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "8eeb761b-4d05-4bdb-965d-cd7fd85bb317",
+          "label": "Enter Golden Ring",
+          "effectText": "Lose 100 essence. Apply Kindled to every eligible Character card in your deck.",
+          "effectKind": "transfigure-all-for-essence",
+          "canonicalMechanicId": "transfigure-deck-for-essence",
+          "essence": 100,
+          "predicate": "character",
+          "transfiguration": "Kindled"
+        }
+      ]
+    },
+    {
+      "cardId": "4ef8b2e7-3525-4c25-aa30-f751467f182f",
+      "prose": "A tentacled alien vessel hangs above a glowing city while missiles streak through blue darkness.",
+      "action": [
+        {
+          "id": "8383e42e-37a7-45cb-9eb0-6e54a4362340",
+          "label": "Accept Alien Command",
+          "effectText": "Pick a new Dream Avatar from 3 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Dream Avatar.",
+          "effectKind": "choose-dream-avatar",
+          "canonicalMechanicId": "choose-dream-avatar",
+          "selectionPolicyId": "uniform",
+          "offerCount": 3
+        },
+        {
+          "id": "5954ad36-d709-4fd0-b024-11420bdf6bc9",
+          "label": "Broadcast Shaping Signal",
+          "effectText": "All characters in your deck become the subtype of your choice",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one shared subtype for every Character.",
+          "effectKind": "change-subtype-all",
+          "canonicalMechanicId": "change-deck-subtype",
+          "subtypeOptions": [
+            "Warrior",
+            "Mage",
+            "Spirit Animal",
+            "Survivor"
+          ]
+        }
+      ]
+    },
+    {
+      "cardId": "06f8cfff-92ec-4668-afbc-f33a274c3b1a",
+      "prose": "A lone mechanic faces a shattered blue veil while bright fragments float above orange embers.",
+      "action": [
+        {
+          "id": "f2beb685-fe36-49fd-9547-55a49071c82f",
+          "label": "Study Reflected Possibilities",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one reflected card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "f799e9a0-6d47-4700-bfaa-c56c7867137c",
+          "label": "Cross Shattered Veil",
+          "effectText": "Draft a transfigured Event from 4 choices.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one transformed Event beyond the fracture.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        }
+      ]
     }
   ],
-  "contentHash": "84dc98c0ab25568ea25102b676db08d04ff7acb2b1202eb9f739b29e7165070f",
-  "foldHash": "84dc98c0ab25568ea25102b676db08d04ff7acb2b1202eb9f739b29e7165070f"
+  "contentHash": "c7a3229ba0b869829717e1a89fbe7b6f51579d6bf87d37362a4447abfb1a5a52",
+  "foldHash": "c7a3229ba0b869829717e1a89fbe7b6f51579d6bf87d37362a4447abfb1a5a52"
 }
