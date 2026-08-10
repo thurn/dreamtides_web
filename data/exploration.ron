@@ -7975,4 +7975,137 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "f79c63f6-7cf1-4030-be39-217fd3c2fb7f",
+    prose: "An armored warrior braces a spear against a horned shadow-beast amid roaring fire and flying ash.",
+    actions: [
+      ActionDefinition(
+        label: "Summon Clan Reinforcements",
+        id: "effc9aaa-7660-4eed-bd89-6f502ea58111",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Sacrifice Clan Champion",
+        id: "cb27950c-7df6-4a8e-a540-0a9ae04cae1c",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "691883df-63d8-4664-a1fe-d5f3b5becd11",
+    prose: "A traveler faces a colossal spectral antelope, its luminous horns piercing snowfall.",
+    actions: [
+      ActionDefinition(
+        label: "Seek Kindred Tracks",
+        id: "7f0ca9bf-ab65-4cac-b2b6-6477dac271c9",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 2 packs of 3 Spirit Animal cards to add to your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one Spirit Animal pack to add to your deck.",
+          ),
+        ),
+        effect: ChoosePack(predicate: SpiritAnimal, pack_count: 2, pack_size: 3),
+      ),
+
+      ActionDefinition(
+        label: "Accept Stored Hornlight",
+        id: "085c6812-0210-481f-85fe-3ee0054cd43e",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "f160fd01-b3c3-4904-b15f-339f6fcf5ca5",
+    prose: "Two seated figures watch an orange sun sink beneath wind-streaked clouds.",
+    actions: [
+      ActionDefinition(
+        label: "Study fading sunlight",
+        id: "53e95bb4-6743-41d8-80db-9daed79a4123",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Share a silent rest",
+        id: "9a760ddb-ee2b-4f29-b2a9-c32973428346",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "28c3ef90-c0dc-4b85-92c8-40758b99e0ce",
+    prose: "A red-cloaked woman wades through dark water as loose petals spiral around her.",
+    actions: [
+      ActionDefinition(
+        label: "Read the Ripples",
+        id: "319999a1-16dc-4064-86ed-1b46947315da",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Follow Her Wake",
+        id: "fb8aa820-b60f-4099-8b7b-97f46120f21d",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 1, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5",
+    prose: "A many-eyed Visitor spreads vast tendrils above a burning city choked with smoke.",
+    actions: [
+      ActionDefinition(
+        label: "Offer an Invader",
+        id: "e9d14079-adda-42b1-a0e1-8fe8fa8113a7",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Visitor character. Every other Visitor character in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Visitor", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Surrender the City",
+        id: "214467f4-5cb2-49f3-b734-040890792a4a",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck cost 1● less. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
 ]

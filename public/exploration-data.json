@@ -7441,8 +7441,138 @@
           "transfiguration": "Kindled"
         }
       ]
+    },
+    {
+      "cardId": "f79c63f6-7cf1-4030-be39-217fd3c2fb7f",
+      "prose": "An armored warrior braces a spear against a horned shadow-beast amid roaring fire and flying ash.",
+      "action": [
+        {
+          "id": "effc9aaa-7660-4eed-bd89-6f502ea58111",
+          "label": "Summon Clan Reinforcements",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Warrior.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "cb27950c-7df6-4a8e-a540-0a9ae04cae1c",
+          "label": "Sacrifice Clan Champion",
+          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "691883df-63d8-4664-a1fe-d5f3b5becd11",
+      "prose": "A traveler faces a colossal spectral antelope, its luminous horns piercing snowfall.",
+      "action": [
+        {
+          "id": "7f0ca9bf-ab65-4cac-b2b6-6477dac271c9",
+          "label": "Seek Kindred Tracks",
+          "effectText": "Choose one of 2 packs of 3 Spirit Animal cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Spirit Animal pack to add to your deck.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "spirit-animal",
+          "packCount": 2,
+          "packSize": 3
+        },
+        {
+          "id": "085c6812-0210-481f-85fe-3ee0054cd43e",
+          "label": "Accept Stored Hornlight",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "f160fd01-b3c3-4904-b15f-339f6fcf5ca5",
+      "prose": "Two seated figures watch an orange sun sink beneath wind-streaked clouds.",
+      "action": [
+        {
+          "id": "53e95bb4-6743-41d8-80db-9daed79a4123",
+          "label": "Study fading sunlight",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "9a760ddb-ee2b-4f29-b2a9-c32973428346",
+          "label": "Share a silent rest",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "28c3ef90-c0dc-4b85-92c8-40758b99e0ce",
+      "prose": "A red-cloaked woman wades through dark water as loose petals spiral around her.",
+      "action": [
+        {
+          "id": "319999a1-16dc-4064-86ed-1b46947315da",
+          "label": "Read the Ripples",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "fb8aa820-b60f-4099-8b7b-97f46120f21d",
+          "label": "Follow Her Wake",
+          "effectText": "Draft a ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 1,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5",
+      "prose": "A many-eyed Visitor spreads vast tendrils above a burning city choked with smoke.",
+      "action": [
+        {
+          "id": "e9d14079-adda-42b1-a0e1-8fe8fa8113a7",
+          "label": "Offer an Invader",
+          "effectText": "Purge a random Visitor character. Every other Visitor character in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Visitor",
+          "sparkBonus": 1
+        },
+        {
+          "id": "214467f4-5cb2-49f3-b734-040890792a4a",
+          "label": "Surrender the City",
+          "effectText": "All cards in your deck cost 1● less. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
     }
   ],
-  "contentHash": "c85afb1fd4b1d400034462e80cebe408e03d7833fb3a2e9894b70d6742db5e0c",
-  "foldHash": "c85afb1fd4b1d400034462e80cebe408e03d7833fb3a2e9894b70d6742db5e0c"
+  "contentHash": "40fad6fb8a3d9e8e5f099892572df5460c0a1306a943ec54002853a8a4d93ac9",
+  "foldHash": "40fad6fb8a3d9e8e5f099892572df5460c0a1306a943ec54002853a8a4d93ac9"
 }
