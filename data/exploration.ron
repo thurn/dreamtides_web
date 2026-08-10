@@ -1371,4 +1371,155 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d",
+    prose: "A solitary synth faces a star-filled triangle while lightning fractures a floating geometric world.",
+    actions: [
+      ActionDefinition(
+        label: "Reach Through Aperture",
+        id: "39bb1741-e483-46a3-92de-a2f7ff565f43",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one transfigured Character.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: Character, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Follow Fractured Path",
+        id: "d2e566db-2a41-4144-9e81-bb7560d7af11",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "7762759b-c1df-4c86-9dbb-a49d152f3616",
+    prose: "A skeletal wraith splinters among planted swords as golden radiance consumes its outstretched form.",
+    actions: [
+      ActionDefinition(
+        label: "Cradle Embering Skull",
+        id: "5bd96937-7082-4df7-8530-9cd395c92a29",
+        presentation: ActionPresentation(
+          effect_text: "Gain Mortal Skull",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
+        ),
+        effect: GainDreamsign(dreamsign_id: "eb55b141-82f8-4ba4-b319-420f762e9ee4"),
+      ),
+
+      ActionDefinition(
+        label: "Scatter Remaining Bones",
+        id: "0982249b-d8b0-4ae2-807a-ae7829fd95ee",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to shatter for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "b957466e-f748-4a95-89b2-8509dc762223",
+    prose: "A pale child traces a luminous circle across dusty boards inside a ruined hall.",
+    actions: [
+      ActionDefinition(
+        label: "Erase a Memory",
+        id: "07bb2b3e-1f58-4396-8d82-6e18e316a0a9",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to erase for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Read Four Omens",
+        id: "80aaf221-b037-420a-ada7-19e012628ffc",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card to copy."),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "5ce69085-aa75-4654-8abe-f9e773931e63",
+    prose: "A lone figure holds a glowing instrument beneath planets spiraling through vast cloud rings.",
+    actions: [
+      ActionDefinition(
+        label: "Read Four Orbits",
+        id: "e9dbf328-be2c-44a5-83e5-b2d7189d88a0",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one revealed card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Capture a Fallen Sign",
+        id: "decaba17-496d-44b6-acce-b6a381154736",
+        presentation: ActionPresentation(
+          effect_text: "Gain a random dreamsign",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Dreamsign to replace if needed.",
+          ),
+        ),
+        effect: GainRandomDreamsign,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "40b44ed7-d737-455b-bd42-e617a263b110",
+    prose: "A torch-bearing child confronts a green-eyed spider amid violet forest fog.",
+    actions: [
+      ActionDefinition(
+        label: "Accept spinner's weaving",
+        id: "2be6bd53-49a8-4f4d-acd3-de52bf636395",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+
+      ActionDefinition(
+        label: "Feed hungry torch",
+        id: "f3e85fb2-dee5-4bc8-bc90-f815a6a26f72",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to burn for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
 ]
