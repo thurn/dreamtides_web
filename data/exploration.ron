@@ -12640,4 +12640,140 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "89c0d03c-2199-415a-bc66-89e451034328",
+    prose: "A lone rider charges through twisted woods toward a horizon blazing with dawn.",
+    actions: [
+      ActionDefinition(
+        label: "Gather Dawn Riders",
+        id: "d7099375-7689-4d1c-9d4c-8f166dc9fd13",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 2 packs of 3 Character cards to add to your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one traveling company to follow dawn.",
+          ),
+        ),
+        effect: ChoosePack(predicate: Character, pack_count: 2, pack_size: 3),
+      ),
+
+      ActionDefinition(
+        label: "Carry Sunrise Home",
+        id: "c799b0b3-dde2-40db-a569-a76fe90185de",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "2162742c-09d0-4e62-ae49-0f8f79b45adc",
+    prose: "A lone figure faces a colossal cracked head glowing across shallow surf.",
+    actions: [
+      ActionDefinition(
+        label: "Recover Drowned Memory",
+        id: "1674049a-3e71-4193-8b62-d0bd42b391e7",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card to copy."),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Meet Ancient Gaze",
+        id: "dae76c01-db9f-42ce-8710-99d958d11a76",
+        presentation: ActionPresentation(
+          effect_text: "The next draft or shop site you visit will contain transfigured cards",
+          followup: None,
+        ),
+        effect: TransfigureNextDraftOrShop,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15",
+    prose: "A hooded specter waits beneath bone-white branches as silent snow buries every departing footprint.",
+    actions: [
+      ActionDefinition(
+        label: "Pay Snowbound Tribute",
+        id: "fb9586f5-4a9e-41c7-a711-9e808662ddeb",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Visitor character. Every other Visitor character in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Visitor", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Follow Vanishing Footprints",
+        id: "e34914e1-adf5-4a41-abc6-9e629446cbe7",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "1c8e6736-13d6-42d1-8668-46f422fec11e",
+    prose: "A serene gesture sends towers, walkways, and windows spinning into a luminous void.",
+    actions: [
+      ActionDefinition(
+        label: "Shatter a Legacy",
+        id: "3f9750eb-274a-4ad4-9441-5516f4dbaebe",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to dissolve for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Shatter Every Limit",
+        id: "20e033a7-dffc-4cae-a89d-9fe674c28a9d",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "f1452b45-51dc-453a-916e-88bd9d29e36e",
+    prose: "A red-eyed visitor shelters beneath an umbrella as black tendrils writhe through midnight rain.",
+    actions: [
+      ActionDefinition(
+        label: "Step Beneath Umbrella",
+        id: "37f1b36b-9179-4e38-a937-a856d30e56cd",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+
+      ActionDefinition(
+        label: "Wait Out Night",
+        id: "a69f3ea4-0568-40dd-af62-b1c35cd0a32b",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
 ]

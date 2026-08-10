@@ -11726,8 +11726,132 @@
           "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
         }
       ]
+    },
+    {
+      "cardId": "89c0d03c-2199-415a-bc66-89e451034328",
+      "prose": "A lone rider charges through twisted woods toward a horizon blazing with dawn.",
+      "action": [
+        {
+          "id": "d7099375-7689-4d1c-9d4c-8f166dc9fd13",
+          "label": "Gather Dawn Riders",
+          "effectText": "Choose one of 2 packs of 3 Character cards to add to your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one traveling company to follow dawn.",
+          "effectKind": "choose-pack",
+          "canonicalMechanicId": "pack-chooser",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "character",
+          "packCount": 2,
+          "packSize": 3
+        },
+        {
+          "id": "c799b0b3-dde2-40db-a569-a76fe90185de",
+          "label": "Carry Sunrise Home",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "2162742c-09d0-4e62-ae49-0f8f79b45adc",
+      "prose": "A lone figure faces a colossal cracked head glowing across shallow surf.",
+      "action": [
+        {
+          "id": "1674049a-3e71-4193-8b62-d0bd42b391e7",
+          "label": "Recover Drowned Memory",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "dae76c01-db9f-42ce-8710-99d958d11a76",
+          "label": "Meet Ancient Gaze",
+          "effectText": "The next draft or shop site you visit will contain transfigured cards",
+          "effectKind": "transfigure-next-draft-or-shop",
+          "canonicalMechanicId": "next-site-transfiguration"
+        }
+      ]
+    },
+    {
+      "cardId": "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15",
+      "prose": "A hooded specter waits beneath bone-white branches as silent snow buries every departing footprint.",
+      "action": [
+        {
+          "id": "fb9586f5-4a9e-41c7-a711-9e808662ddeb",
+          "label": "Pay Snowbound Tribute",
+          "effectText": "Purge a random Visitor character. Every other Visitor character in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Visitor",
+          "sparkBonus": 1
+        },
+        {
+          "id": "e34914e1-adf5-4a41-abc6-9e629446cbe7",
+          "label": "Follow Vanishing Footprints",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "1c8e6736-13d6-42d1-8668-46f422fec11e",
+      "prose": "A serene gesture sends towers, walkways, and windows spinning into a luminous void.",
+      "action": [
+        {
+          "id": "3f9750eb-274a-4ad4-9441-5516f4dbaebe",
+          "label": "Shatter a Legacy",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to dissolve for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "20e033a7-dffc-4cae-a89d-9fe674c28a9d",
+          "label": "Shatter Every Limit",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "f1452b45-51dc-453a-916e-88bd9d29e36e",
+      "prose": "A red-eyed visitor shelters beneath an umbrella as black tendrils writhe through midnight rain.",
+      "action": [
+        {
+          "id": "37f1b36b-9179-4e38-a937-a856d30e56cd",
+          "label": "Step Beneath Umbrella",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        },
+        {
+          "id": "a69f3ea4-0568-40dd-af62-b1c35cd0a32b",
+          "label": "Wait Out Night",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
     }
   ],
-  "contentHash": "eb71ee210c6aa2b7663d930edfe76d0e738ec719832408ddf5736aa906bd6cfc",
-  "foldHash": "eb71ee210c6aa2b7663d930edfe76d0e738ec719832408ddf5736aa906bd6cfc"
+  "contentHash": "4ebe870e61993a65b516ee5ed561864eb8e0d33bcc0675ce4742ef9f89a311b0",
+  "foldHash": "4ebe870e61993a65b516ee5ed561864eb8e0d33bcc0675ce4742ef9f89a311b0"
 }
