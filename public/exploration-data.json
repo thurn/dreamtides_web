@@ -10701,8 +10701,142 @@
           "sparkBonus": 1
         }
       ]
+    },
+    {
+      "cardId": "8d35aec1-29ad-432c-9c23-25a52804cbae",
+      "prose": "A lone mage tears through a towering ruin as blue lightning fractures stone and shadow.",
+      "action": [
+        {
+          "id": "5ce24a74-9a00-40ec-92ec-8caba0836f98",
+          "label": "Become Living Lightning",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        },
+        {
+          "id": "95a51af4-90ff-42e8-96bf-8daa5ff58245",
+          "label": "Shatter and Echo",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one pattern to shatter, then another to echo.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        }
+      ]
+    },
+    {
+      "cardId": "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
+      "prose": "Black birds wheel around a solitary figure beneath a lightning-struck ring above open water.",
+      "action": [
+        {
+          "id": "b2dcdf98-17a9-4223-ba93-5395c067b2e7",
+          "label": "Follow Circling Flock",
+          "effectText": "Draft a Character from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Character.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "9528609e-55da-43b7-b586-26b52f9e4120",
+          "label": "Cross Crackling Ring",
+          "effectText": "Draft a transfigured Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered transfigured Character.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "bf323913-3695-49ee-8d13-8165657e3dc9",
+      "prose": "A solitary forager gathers luminous leaves while an ancient tree sheds whispers into blue mist.",
+      "action": [
+        {
+          "id": "f13d8eee-988a-4890-8ffd-2cfd7c5778b8",
+          "label": "Catch a Golden Whisper",
+          "effectText": "Draft a transfigured Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one altered Event from the falling whispers.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        },
+        {
+          "id": "316e3f24-aa54-4da3-863d-d05985ba0dc4",
+          "label": "Return Echoes to Roots",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "cd7ff671-2317-4a54-b9da-acfefb90e6b0",
+      "prose": "A skeletal colossus rises behind a lone knight as cyan fissures flare across dark ground.",
+      "action": [
+        {
+          "id": "342e7303-27e6-423b-a4cb-05eb9a4ae052",
+          "label": "Raise twin followers",
+          "effectText": "Draft a Character from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Character to gain twice.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "b9287b66-b27a-4b72-88b9-a46d925ef226",
+          "label": "Unmake echoes, awaken souls",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "4b2f044c-0afe-432a-a121-2ea785bb1182",
+      "prose": "An armored warrior grips twin burning blades while embers whirl through shattered ruins.",
+      "action": [
+        {
+          "id": "3c1553e8-4129-4bb3-b7a7-47595f2d1b9b",
+          "label": "Call Twin Reinforcements",
+          "effectText": "Draft a Warrior from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Warrior pair.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "9dcfa11b-79e4-4339-9222-6c022ec82517",
+          "label": "Feed Twin Blades",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to burn for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        }
+      ]
     }
   ],
-  "contentHash": "ef6a07167f9a705d1fa61fae6650abe7518168634c95f0eb6958dec214431aab",
-  "foldHash": "ef6a07167f9a705d1fa61fae6650abe7518168634c95f0eb6958dec214431aab"
+  "contentHash": "768399e76e75fe6570705b894949149d4a50afb8d9ca789629188c64ad282be7",
+  "foldHash": "768399e76e75fe6570705b894949149d4a50afb8d9ca789629188c64ad282be7"
 }

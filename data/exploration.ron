@@ -11504,4 +11504,149 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "8d35aec1-29ad-432c-9c23-25a52804cbae",
+    prose: "A lone mage tears through a towering ruin as blue lightning fractures stone and shadow.",
+    actions: [
+      ActionDefinition(
+        label: "Become Living Lightning",
+        id: "5ce24a74-9a00-40ec-92ec-8caba0836f98",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+
+      ActionDefinition(
+        label: "Shatter and Echo",
+        id: "95a51af4-90ff-42e8-96bf-8daa5ff58245",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one pattern to shatter, then another to echo.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
+    prose: "Black birds wheel around a solitary figure beneath a lightning-struck ring above open water.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Circling Flock",
+        id: "b2dcdf98-17a9-4223-ba93-5395c067b2e7",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Character from 4 choices and gain 2 copies of it",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Character."),
+        ),
+        effect: DraftCard(predicate: Character, count: 2, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Cross Crackling Ring",
+        id: "9528609e-55da-43b7-b586-26b52f9e4120",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered transfigured Character.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: Character, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "bf323913-3695-49ee-8d13-8165657e3dc9",
+    prose: "A solitary forager gathers luminous leaves while an ancient tree sheds whispers into blue mist.",
+    actions: [
+      ActionDefinition(
+        label: "Catch a Golden Whisper",
+        id: "f13d8eee-988a-4890-8ffd-2cfd7c5778b8",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Event from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one altered Event from the falling whispers.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: Event, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Return Echoes to Roots",
+        id: "316e3f24-aa54-4da3-863d-d05985ba0dc4",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "cd7ff671-2317-4a54-b9da-acfefb90e6b0",
+    prose: "A skeletal colossus rises behind a lone knight as cyan fissures flare across dark ground.",
+    actions: [
+      ActionDefinition(
+        label: "Raise twin followers",
+        id: "342e7303-27e6-423b-a4cb-05eb9a4ae052",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Character from 4 choices and gain 2 copies of it",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered Character to gain twice.",
+          ),
+        ),
+        effect: DraftCard(predicate: Character, count: 2, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Unmake echoes, awaken souls",
+        id: "b9287b66-b27a-4b72-88b9-a46d925ef226",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "4b2f044c-0afe-432a-a121-2ea785bb1182",
+    prose: "An armored warrior grips twin burning blades while embers whirl through shattered ruins.",
+    actions: [
+      ActionDefinition(
+        label: "Call Twin Reinforcements",
+        id: "3c1553e8-4129-4bb3-b7a7-47595f2d1b9b",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices and gain 2 copies of it",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one Warrior pair."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 2, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Feed Twin Blades",
+        id: "9dcfa11b-79e4-4339-9222-6c022ec82517",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to burn for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
 ]
