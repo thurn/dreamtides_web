@@ -8884,8 +8884,133 @@
           "canonicalMechanicId": "next-battle-modifier"
         }
       ]
+    },
+    {
+      "cardId": "0bddeb19-ff49-4a77-bc06-955377ba3ed1",
+      "prose": "A gold-lit fighter crouches among floating boulders while luminous currents spiral through green haze.",
+      "action": [
+        {
+          "id": "ced812d9-7943-4625-aead-10e08af7d0ea",
+          "label": "Release Golden Burden",
+          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        },
+        {
+          "id": "514d3ba6-e57a-438e-8dfd-28cf7db97e5d",
+          "label": "Compress Next Horizon",
+          "effectText": "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          "effectKind": "next-battle-smaller-hand-and-cost-discount",
+          "canonicalMechanicId": "next-battle-modifier"
+        }
+      ]
+    },
+    {
+      "cardId": "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b",
+      "prose": "A skeletal spider-giant scatters black shards while two tiny figures hang beneath glowing red eyes.",
+      "action": [
+        {
+          "id": "42b861a7-ad92-47ff-9ead-3e2933a0352c",
+          "label": "Abandon Echo Swarm",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "8acae80f-fdf0-4bc1-a05b-36c281729f80",
+          "label": "Weave Falling Shards",
+          "effectText": "Draft a ≤2● cost Character from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Character to weave twice.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 2,
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "6b1c0e39-0e70-4061-b037-0e10026cfabb",
+      "prose": "A child reaches from a giant leaf toward golden light flooding a vast green canopy.",
+      "action": [
+        {
+          "id": "865da58f-b05c-4656-93e8-a50a5355e893",
+          "label": "Gather Living Seedlings",
+          "effectText": "Take any number of Character cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any offered Characters to gather.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "offerCount": 4
+        },
+        {
+          "id": "2e5b0300-5ef0-406c-a891-69578ec86175",
+          "label": "Bottle Golden Sunlight",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "7e4cca36-5134-415a-b30a-c4876b58976c",
+      "prose": "A robed mage levitates within amber rings as eight runic tablets circle through gathering smoke.",
+      "action": [
+        {
+          "id": "1682d2cc-c984-4b4b-bbec-c8d5d7c4bd4c",
+          "label": "Repeat a Forgotten Name",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one remembered card to echo.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "cc08e452-0c6b-4968-b92d-2e5903c93fdd",
+          "label": "Silence Every Echo",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "eae700c9-5005-4627-b8d6-a5c2c273e61a",
+      "prose": "A solitary child opens a radiant door amid towering blue ruins and suspended debris.",
+      "action": [
+        {
+          "id": "f36f3d74-56bf-43c6-912c-00dffea13935",
+          "label": "Steal a Glimpse",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "bdb645e8-bd51-470d-b44e-ce29e4bfbcf9",
+          "label": "Exchange Hidden Memories",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        }
+      ]
     }
   ],
-  "contentHash": "0fd519f6ec20f08d7dc26a1dcb032439ffacdc97b105d3995b6bd5f1013ea64f",
-  "foldHash": "0fd519f6ec20f08d7dc26a1dcb032439ffacdc97b105d3995b6bd5f1013ea64f"
+  "contentHash": "85aa357065bae4fef5c7249dfe2e2d4873e4ddfe3535e479945915976d0a2a90",
+  "foldHash": "85aa357065bae4fef5c7249dfe2e2d4873e4ddfe3535e479945915976d0a2a90"
 }
