@@ -11213,8 +11213,142 @@
           "canonicalMechanicId": "make-deck-fast"
         }
       ]
+    },
+    {
+      "cardId": "66959155-9e79-459e-afdb-eb4c0fbdeb11",
+      "prose": "A young spear-bearer confronts a radiant portal amid fractured monoliths and crawling lightning.",
+      "action": [
+        {
+          "id": "549d2807-9aad-4eeb-9905-2dab386ddabd",
+          "label": "Seek a Guardian",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Warrior waiting beyond the portal.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "875aa793-b67b-401d-b957-510315aa0922",
+          "label": "Face Trial Alone",
+          "effectText": "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+      "prose": "A lone guitarist plays as turquoise butterflies stream from a luminous instrument.",
+      "action": [
+        {
+          "id": "b8d9dcfa-a9a4-48cb-891e-92d9537a7e99",
+          "label": "Follow Turquoise Butterflies",
+          "effectText": "Draft a transfigured Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered transfigured Character.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "offerCount": 4
+        },
+        {
+          "id": "7382f0c8-6815-496f-a49a-16a982db9448",
+          "label": "Sustain Luminous Chord",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3",
+      "prose": "An armored warrior braces a twin-bladed spear while viridian fire devours a shattered containment bay.",
+      "action": [
+        {
+          "id": "3ef10694-2df5-4cea-917a-65007ac58d16",
+          "label": "Contain Viridian Fire",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        },
+        {
+          "id": "345db217-c611-4c41-b844-1232492b9a92",
+          "label": "Temper Twin Blades",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "6fa9c440-3912-4b1e-868c-840ae772fe1c",
+      "prose": "A lone traveler faces a tunnel of twisted roots, their ember-cracks glaring around pale light.",
+      "action": [
+        {
+          "id": "fa77f4f5-55e4-419d-8a4e-3789a68c37c5",
+          "label": "Feed an ember-root",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to feed for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "b9157b60-5f41-4978-b12a-192a5d1af363",
+          "label": "Read reflected paths",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one reflected card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "99ca2635-a91a-46ba-a9d3-4d2581c354f3",
+      "prose": "A torchbearer faces a colossal stag among green-lit trees and still forest water.",
+      "action": [
+        {
+          "id": "5713e85a-d5cb-4308-8aa3-733abedf3011",
+          "label": "Follow Colossal Stag",
+          "effectText": "Draft a Spirit Animal from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one Spirit Animal to follow.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "b282314f-606f-4814-8c75-e2e2db02a353",
+          "label": "Raise Gathering Flame",
+          "effectText": "Gain 15 essence for each Character card in your deck",
+          "effectKind": "gain-essence-per-card",
+          "canonicalMechanicId": "gain-essence-by-deck-predicate",
+          "predicate": "character",
+          "essencePerCard": 15
+        }
+      ]
     }
   ],
-  "contentHash": "a539dd4dba6336515dd2af0cc369119498348c7f0585ee572df5a027cce4f18f",
-  "foldHash": "a539dd4dba6336515dd2af0cc369119498348c7f0585ee572df5a027cce4f18f"
+  "contentHash": "a010cc71f79222f0ef856d38bf0a3d452e44d364abf7b1a0259ad4677835ced0",
+  "foldHash": "a010cc71f79222f0ef856d38bf0a3d452e44d364abf7b1a0259ad4677835ced0"
 }

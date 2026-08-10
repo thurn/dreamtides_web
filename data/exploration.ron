@@ -12078,4 +12078,149 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "66959155-9e79-459e-afdb-eb4c0fbdeb11",
+    prose: "A young spear-bearer confronts a radiant portal amid fractured monoliths and crawling lightning.",
+    actions: [
+      ActionDefinition(
+        label: "Seek a Guardian",
+        id: "549d2807-9aad-4eeb-9905-2dab386ddabd",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered Warrior waiting beyond the portal.",
+          ),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Face Trial Alone",
+        id: "875aa793-b67b-401d-b957-510315aa0922",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+    prose: "A lone guitarist plays as turquoise butterflies stream from a luminous instrument.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Turquoise Butterflies",
+        id: "b8d9dcfa-a9a4-48cb-891e-92d9537a7e99",
+        presentation: ActionPresentation(
+          effect_text: "Draft a transfigured Character from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one offered transfigured Character.",
+          ),
+        ),
+        effect: TransfiguredCardDraft(predicate: Character, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Sustain Luminous Chord",
+        id: "7382f0c8-6815-496f-a49a-16a982db9448",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3",
+    prose: "An armored warrior braces a twin-bladed spear while viridian fire devours a shattered containment bay.",
+    actions: [
+      ActionDefinition(
+        label: "Contain Viridian Fire",
+        id: "3ef10694-2df5-4cea-917a-65007ac58d16",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+
+      ActionDefinition(
+        label: "Temper Twin Blades",
+        id: "345db217-c611-4c41-b844-1232492b9a92",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "6fa9c440-3912-4b1e-868c-840ae772fe1c",
+    prose: "A lone traveler faces a tunnel of twisted roots, their ember-cracks glaring around pale light.",
+    actions: [
+      ActionDefinition(
+        label: "Feed an ember-root",
+        id: "fa77f4f5-55e4-419d-8a4e-3789a68c37c5",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to feed for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Read reflected paths",
+        id: "b9157b60-5f41-4978-b12a-192a5d1af363",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one reflected card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "99ca2635-a91a-46ba-a9d3-4d2581c354f3",
+    prose: "A torchbearer faces a colossal stag among green-lit trees and still forest water.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Colossal Stag",
+        id: "5713e85a-d5cb-4308-8aa3-733abedf3011",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Spirit Animal from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one Spirit Animal to follow.",
+          ),
+        ),
+        effect: DraftCard(predicate: SpiritAnimal, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Raise Gathering Flame",
+        id: "b282314f-606f-4814-8c75-e2e2db02a353",
+        presentation: ActionPresentation(
+          effect_text: "Gain 15 essence for each Character card in your deck",
+          followup: None,
+        ),
+        effect: GainEssencePerCard(predicate: Character, essence_per_card: 15),
+      ),
+    ],
+  ),
 ]
