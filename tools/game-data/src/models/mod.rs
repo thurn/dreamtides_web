@@ -2,6 +2,7 @@ pub mod affiliations;
 pub mod apollyon_incarnations;
 pub mod atlas;
 pub mod augury;
+pub mod card_counts;
 pub mod cards;
 pub mod compat;
 pub mod draft;

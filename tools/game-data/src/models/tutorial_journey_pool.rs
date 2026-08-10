@@ -2,6 +2,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 
 use anyhow::{Result, ensure};
+use indexmap::IndexMap;
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
@@ -46,14 +47,8 @@ pub struct TideDefinition {
     pub id: TideId,
     pub name: String,
     pub description: String,
-    pub cards: Vec<CardPoolEntry>,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-#[serde(deny_unknown_fields)]
-pub struct CardPoolEntry {
-    pub card_id: CardId,
-    pub copies: u32,
+    #[serde(deserialize_with = "super::card_counts::deserialize")]
+    pub cards: IndexMap<CardId, u32>,
 }
 
 macro_rules! canonical_uuid {
@@ -162,9 +157,9 @@ fn lower_with_tide_map(
                 cards: tide
                     .cards
                     .into_iter()
-                    .map(|card| CompatibilityCard {
-                        id: card.card_id.to_string(),
-                        copies: card.copies,
+                    .map(|(card_id, copies)| CompatibilityCard {
+                        id: card_id.to_string(),
+                        copies,
                     })
                     .collect(),
             })
@@ -292,19 +287,15 @@ pub(crate) fn validate(source: &TutorialJourneyDraftPool) -> Result<()> {
             tide.id
         );
         ensure!(!tide.cards.is_empty(), "Tide {} has no cards", tide.id);
-        for card in &tide.cards {
+        for (card_id, copies) in &tide.cards {
+            ensure!(card_ids.insert(*card_id), "Tides repeat card {}", card_id);
             ensure!(
-                card_ids.insert(card.card_id),
-                "Tides repeat card {}",
-                card.card_id
-            );
-            ensure!(
-                (1..=2).contains(&card.copies),
+                (1..=2).contains(copies),
                 "card {} copies must be one or two",
-                card.card_id
+                card_id
             );
             authored_copy_count = authored_copy_count
-                .checked_add(card.copies)
+                .checked_add(*copies)
                 .ok_or_else(|| anyhow::anyhow!("tutorial journey pool copy count overflow"))?;
         }
     }
@@ -340,11 +331,11 @@ pub fn validate_references(
         );
     }
     for tide in &source.tutorial_tides {
-        for card in &tide.cards {
+        for card_id in tide.cards.keys() {
             ensure!(
-                known_card_ids.contains(&card.card_id.to_string()),
+                known_card_ids.contains(&card_id.to_string()),
                 "tutorial journey pool references unknown card {}",
-                card.card_id
+                card_id
             );
         }
     }
@@ -390,30 +381,30 @@ mod tests {
                         id: "10000000-0000-4000-8000-000000000001",
                         name: "First Tide",
                         description: "First description.",
-                        cards: [
-                            (card_id: "{}", copies: 2),
-                            (card_id: "{}", copies: 1),
-                            (card_id: "{}", copies: 1),
-                        ],
+                        cards: {{
+                            "{}": 2,
+                            "{}": 1,
+                            "{}": 1,
+                        }},
                     ),
                     (
                         id: "10000000-0000-4000-8000-000000000002",
                         name: "Second Tide",
                         description: "A Unicode wave: 海.",
-                        cards: [
-                            (card_id: "{}", copies: 1),
-                            (card_id: "{}", copies: 1),
-                            (card_id: "{}", copies: 1),
-                        ],
+                        cards: {{
+                            "{}": 1,
+                            "{}": 1,
+                            "{}": 1,
+                        }},
                     ),
                     (
                         id: "10000000-0000-4000-8000-000000000003",
                         name: "Third Tide",
                         description: "Third description.",
-                        cards: [
-                            (card_id: "{}", copies: 1),
-                            (card_id: "{}", copies: 1),
-                        ],
+                        cards: {{
+                            "{}": 1,
+                            "{}": 1,
+                        }},
                     ),
                 ],
             )"#,
@@ -505,8 +496,8 @@ mod tests {
                 "opening offers repeat card",
             ),
             (
-                "20000000-0000-4000-8000-000000000006\", copies: 1",
-                "20000000-0000-4000-8000-000000000001\", copies: 1",
+                "20000000-0000-4000-8000-000000000006\": 1",
+                "20000000-0000-4000-8000-000000000001\": 1",
                 "Tides repeat card",
             ),
             (
@@ -514,7 +505,11 @@ mod tests {
                 "pool_size: 10",
                 "contain 9 copies, expected 10",
             ),
-            ("copies: 2", "copies: 3", "copies must be one or two"),
+            (
+                "20000000-0000-4000-8000-000000000001\": 2",
+                "20000000-0000-4000-8000-000000000001\": 3",
+                "copies must be one or two",
+            ),
             (
                 "name: \"Second Tide\"",
                 "name: \"First Tide\"",
@@ -594,8 +589,8 @@ mod tests {
         let card_ids = catalog
             .tutorial_tides
             .iter()
-            .flat_map(|tide| &tide.cards)
-            .map(|card| card.card_id.to_string())
+            .flat_map(|tide| tide.cards.keys())
+            .map(ToString::to_string)
             .collect::<BTreeSet<_>>();
         let dream_avatar_ids = BTreeSet::from([catalog.tutorial_dream_avatar_id.to_string()]);
         let dreamsign_ids = catalog

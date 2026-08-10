@@ -2,6 +2,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 
 use anyhow::{Result, bail};
+use indexmap::IndexMap;
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
@@ -16,14 +17,8 @@ pub struct TideDefinition {
     pub display_description: String,
     pub color: TideColor,
     pub kind: TideKind,
-    pub cards: Vec<CardCopies>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct CardCopies {
-    pub id: CardId,
-    pub copies: u32,
+    #[serde(deserialize_with = "super::card_counts::deserialize")]
+    pub cards: IndexMap<CardId, u32>,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
@@ -129,17 +124,13 @@ pub fn validate(catalog: &TidesCatalog) -> Result<()> {
         if tide.cards.is_empty() {
             bail!("Tide {} must contain at least one card", tide.id);
         }
-        let mut card_ids = BTreeSet::new();
-        for card in &tide.cards {
-            if card.copies == 0 {
+        for (card_id, copies) in &tide.cards {
+            if *copies == 0 {
                 bail!(
                     "Tide {} card {} must have at least one copy",
                     tide.id,
-                    card.id
+                    card_id
                 );
-            }
-            if !card_ids.insert(card.id) {
-                bail!("Tide {} contains duplicate card UUID {}", tide.id, card.id);
             }
         }
     }
@@ -157,9 +148,9 @@ pub fn validate_references(
 ) -> Result<()> {
     validate(catalog)?;
     for tide in catalog {
-        for card in &tide.cards {
-            if !known_card_ids.contains(&card.id.to_string()) {
-                bail!("Tide {} references unknown card UUID {}", tide.id, card.id);
+        for card_id in tide.cards.keys() {
+            if !known_card_ids.contains(&card_id.to_string()) {
+                bail!("Tide {} references unknown card UUID {}", tide.id, card_id);
             }
         }
     }
@@ -190,10 +181,10 @@ pub fn lower(catalog: TidesCatalog) -> Result<toml::Value> {
                         toml::Value::Array(
                             tide.cards
                                 .into_iter()
-                                .map(|card| {
+                                .map(|(card_id, copies)| {
                                     toml::Value::Table(toml::map::Map::from_iter([
-                                        ("id".into(), card.id.to_string().into()),
-                                        ("copies".into(), i64::from(card.copies).into()),
+                                        ("id".into(), card_id.to_string().into()),
+                                        ("copies".into(), i64::from(copies).into()),
                                     ]))
                                 })
                                 .collect(),
@@ -236,10 +227,7 @@ mod tests {
                 display_description: "Unicode tide — exact copy".into(),
                 color,
                 kind,
-                cards: vec![CardCopies {
-                    id: CardId::parse(card_id).unwrap(),
-                    copies: 2,
-                }],
+                cards: IndexMap::from_iter([(CardId::parse(card_id).unwrap(), 2)]),
             })
             .collect()
     }

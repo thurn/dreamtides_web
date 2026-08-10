@@ -134,7 +134,8 @@ pub struct TutorialBattleConfiguration {
     pub enemy_dream_avatar_id: EntityId,
     pub starting_energy: u32,
     pub score_to_win: u32,
-    pub starter_deck: Vec<TutorialStarterDeckEntry>,
+    #[serde(deserialize_with = "super::card_counts::deserialize")]
+    pub starter_deck: IndexMap<EntityId, u32>,
     pub forced_player_draws: Vec<EntityId>,
     pub forced_enemy_draws: Vec<EntityId>,
     /// Complete shared Dreamwell prefix, including pre-handoff scripted draws.
@@ -143,13 +144,6 @@ pub struct TutorialBattleConfiguration {
     pub handoff: TutorialBattleHandoff,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub ai_action_overrides: Vec<TutorialAiActionOverride>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct TutorialStarterDeckEntry {
-    pub card_id: EntityId,
-    pub copies: u32,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -619,17 +613,8 @@ fn validate_battle(battle: &TutorialBattleConfiguration) -> Result<()> {
         !battle.starter_deck.is_empty(),
         "Tutorial starter deck must not be empty"
     );
-    let mut starter_ids = BTreeSet::new();
-    for entry in &battle.starter_deck {
-        ensure!(
-            entry.copies > 0,
-            "Tutorial starter deck copies must be positive"
-        );
-        ensure!(
-            starter_ids.insert(entry.card_id),
-            "Tutorial starter deck repeats {}",
-            entry.card_id
-        );
+    for copies in battle.starter_deck.values() {
+        ensure!(*copies > 0, "Tutorial starter deck copies must be positive");
     }
     ensure!(
         battle.handoff.turn_number > 0,
@@ -1024,9 +1009,9 @@ fn lower_battle(value: TutorialBattleConfiguration) -> Result<CompatibilityBattl
         starter_deck: value
             .starter_deck
             .into_iter()
-            .map(|entry| CompatibilityStarterDeckEntry {
-                card_id: entry.card_id.to_string(),
-                copies: entry.copies,
+            .map(|(card_id, copies)| CompatibilityStarterDeckEntry {
+                card_id: card_id.to_string(),
+                copies,
             })
             .collect(),
         featured_cards: CompatibilityFeaturedCards {
@@ -1835,10 +1820,10 @@ mod tests {
                 enemy_dream_avatar_id: entity("00000000-0000-4000-8000-000000000302"),
                 starting_energy: 7,
                 score_to_win: 19,
-                starter_deck: vec![TutorialStarterDeckEntry {
-                    card_id: entity("00000000-0000-4000-8000-000000000101"),
-                    copies: 2,
-                }],
+                starter_deck: IndexMap::from_iter([(
+                    entity("00000000-0000-4000-8000-000000000101"),
+                    2,
+                )]),
                 forced_player_draws: vec![],
                 forced_enemy_draws: vec![entity("00000000-0000-4000-8000-000000000102")],
                 dreamwell_draws: vec![entity("00000000-0000-4000-8000-000000000201")],

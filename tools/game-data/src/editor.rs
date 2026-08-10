@@ -3724,7 +3724,7 @@ mod tests {
     display_description: "First description",
     color: Purple,
     kind: Signature,
-    cards: [CardCopies(id: "00000000-0000-4000-8000-000000000051", copies: 2)],
+    cards: {"00000000-0000-4000-8000-000000000051": 2},
   ),
 
   /* Unrelated tide comment. */
@@ -3734,7 +3734,7 @@ mod tests {
     display_description: "Second description",
     color: Green,
     kind: Facet,
-    cards: [CardCopies(id: "00000000-0000-4000-8000-000000000052", copies: 1)],
+    cards: {"00000000-0000-4000-8000-000000000052": 1},
   ),
 
   TideDefinition(
@@ -3743,7 +3743,7 @@ mod tests {
     display_description: "Third description",
     color: Blue,
     kind: Neutral,
-    cards: [CardCopies(id: "00000000-0000-4000-8000-000000000053", copies: 1)],
+    cards: {"00000000-0000-4000-8000-000000000053": 1},
   ),
 ]
 "###;
