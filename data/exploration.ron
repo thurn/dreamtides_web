@@ -13631,4 +13631,138 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "6497d8b1-85b8-486d-99e2-5c141486d508",
+    prose: "A sword-bearing warrior faces a descending dragon amid amber smoke and jagged mountains.",
+    actions: [
+      ActionDefinition(
+        label: "Call Dragonbound Allies",
+        id: "d0636342-669a-4623-8c05-8ce9fdba8b8d",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Offer a Worthy Champion",
+        id: "a9f63ed8-65e6-412a-b515-af6c12ee531d",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "3b5f5686-f63b-4998-b713-2f6777ecbb5f",
+    prose: "A small masked knight raises twin blue blades amid drifting sparks and shattered towers.",
+    actions: [
+      ActionDefinition(
+        label: "Answer Twin-Blade Challenge",
+        id: "59d8da7a-3f28-40bb-a353-aa3cd4900fe4",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Gather Falling Sparks",
+        id: "a9ce3029-2c87-41c3-b1fa-ce803135d1f1",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "9e9efbc0-d438-48a9-9551-85c93fb33f3e",
+    prose: "A recursive corridor fractures floating rubble, pulling blue light through impossible angles.",
+    actions: [
+      ActionDefinition(
+        label: "Enter Distant Passage",
+        id: "b1f2880c-a545-4822-9967-0fefbf1e8d4b",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+
+      ActionDefinition(
+        label: "Capture Broken Angles",
+        id: "a5254a4c-8f4c-4227-ac2c-1e23de452036",
+        presentation: ActionPresentation(
+          effect_text: "The next draft or shop site you visit will contain transfigured cards",
+          followup: None,
+        ),
+        effect: TransfigureNextDraftOrShop,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "41d0aa36-f15a-487d-b97c-7fd765973921",
+    prose: "A violinist draws green fire from luminous strings beneath floating city lights.",
+    actions: [
+      ActionDefinition(
+        label: "Play a Supporting Harmony",
+        id: "4a59f8a7-6704-4aa3-a7b3-00683145565c",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Follow Rising Notes",
+        id: "8d77cfda-9be0-4e3a-abfc-9814fb14d0b1",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "426825c7-7259-41af-ac1c-c042b878d69b",
+    prose: "An undead knight swings a flaming blade through smoke, embers, and shattered stone.",
+    actions: [
+      ActionDefinition(
+        label: "Kindle every blade",
+        id: "774cc59b-fe3c-4ba5-a7f6-8453ec9d6eb9",
+        presentation: ActionPresentation(
+          effect_text: "Lose 100 essence. Apply Kindled to every eligible Warrior card in your deck.",
+          followup: None,
+        ),
+        effect: TransfigureAllForEssence(
+          essence: 100,
+          predicate: Warrior,
+          transfiguration: "Kindled",
+        ),
+      ),
+
+      ActionDefinition(
+        label: "Feed fallen champion",
+        id: "6265b65f-5d85-4cfc-b1a3-5d2ac17f1184",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+    ],
+  ),
 ]

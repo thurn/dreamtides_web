@@ -12617,8 +12617,133 @@
           "sparkBonus": 1
         }
       ]
+    },
+    {
+      "cardId": "6497d8b1-85b8-486d-99e2-5c141486d508",
+      "prose": "A sword-bearing warrior faces a descending dragon amid amber smoke and jagged mountains.",
+      "action": [
+        {
+          "id": "d0636342-669a-4623-8c05-8ce9fdba8b8d",
+          "label": "Call Dragonbound Allies",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Warrior.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "a9f63ed8-65e6-412a-b515-af6c12ee531d",
+          "label": "Offer a Worthy Champion",
+          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "3b5f5686-f63b-4998-b713-2f6777ecbb5f",
+      "prose": "A small masked knight raises twin blue blades amid drifting sparks and shattered towers.",
+      "action": [
+        {
+          "id": "59d8da7a-3f28-40bb-a353-aa3cd4900fe4",
+          "label": "Answer Twin-Blade Challenge",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Warrior.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "a9ce3029-2c87-41c3-b1fa-ce803135d1f1",
+          "label": "Gather Falling Sparks",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "9e9efbc0-d438-48a9-9551-85c93fb33f3e",
+      "prose": "A recursive corridor fractures floating rubble, pulling blue light through impossible angles.",
+      "action": [
+        {
+          "id": "b1f2880c-a545-4822-9967-0fefbf1e8d4b",
+          "label": "Enter Distant Passage",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        },
+        {
+          "id": "a5254a4c-8f4c-4227-ac2c-1e23de452036",
+          "label": "Capture Broken Angles",
+          "effectText": "The next draft or shop site you visit will contain transfigured cards",
+          "effectKind": "transfigure-next-draft-or-shop",
+          "canonicalMechanicId": "next-site-transfiguration"
+        }
+      ]
+    },
+    {
+      "cardId": "41d0aa36-f15a-487d-b97c-7fd765973921",
+      "prose": "A violinist draws green fire from luminous strings beneath floating city lights.",
+      "action": [
+        {
+          "id": "4a59f8a7-6704-4aa3-a7b3-00683145565c",
+          "label": "Play a Supporting Harmony",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        },
+        {
+          "id": "8d77cfda-9be0-4e3a-abfc-9814fb14d0b1",
+          "label": "Follow Rising Notes",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "426825c7-7259-41af-ac1c-c042b878d69b",
+      "prose": "An undead knight swings a flaming blade through smoke, embers, and shattered stone.",
+      "action": [
+        {
+          "id": "774cc59b-fe3c-4ba5-a7f6-8453ec9d6eb9",
+          "label": "Kindle every blade",
+          "effectText": "Lose 100 essence. Apply Kindled to every eligible Warrior card in your deck.",
+          "effectKind": "transfigure-all-for-essence",
+          "canonicalMechanicId": "transfigure-deck-for-essence",
+          "essence": 100,
+          "predicate": "warrior",
+          "transfiguration": "Kindled"
+        },
+        {
+          "id": "6265b65f-5d85-4cfc-b1a3-5d2ac17f1184",
+          "label": "Feed fallen champion",
+          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        }
+      ]
     }
   ],
-  "contentHash": "ccecbfe4ea18a5b96c72ad1fb94706ca3d8c914b85a8661c42684788aaf8fc76",
-  "foldHash": "ccecbfe4ea18a5b96c72ad1fb94706ca3d8c914b85a8661c42684788aaf8fc76"
+  "contentHash": "5ef8ef6d09d78045a011edeb78eecbd88c35af6774e4bd2b65b2ab7ac0ce80ec",
+  "foldHash": "5ef8ef6d09d78045a011edeb78eecbd88c35af6774e4bd2b65b2ab7ac0ce80ec"
 }
