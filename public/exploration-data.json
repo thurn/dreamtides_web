@@ -2903,8 +2903,129 @@
           "count": 2
         }
       ]
+    },
+    {
+      "cardId": "5a747998-7219-4e23-be42-b8cb3be12348",
+      "prose": "A red automaton surveys hanging machinery as luminous insects drift through overgrown ruins.",
+      "action": [
+        {
+          "id": "8dfae3bb-c49b-49bf-ac27-c7293d293dc1",
+          "label": "Salvage Fallen Chassis",
+          "effectText": "Purge a random Synth character. Every other Synth character in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Synth",
+          "sparkBonus": 1
+        },
+        {
+          "id": "8e628041-47ac-4a18-b62b-79672762b53a",
+          "label": "Gather Luminous Motes",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "7697da0e-d759-4c75-8c9c-477e9058b035",
+      "prose": "A cybernetic agent fires midair as teal light shatters a black, angular structure.",
+      "action": [
+        {
+          "id": "61faffda-a3cd-4b60-b033-bd6bc412207c",
+          "label": "Detonate an Agent",
+          "effectText": "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        },
+        {
+          "id": "a63c84e0-5d10-4155-8fcc-f6c967330014",
+          "label": "Leap Through Breach",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        }
+      ]
+    },
+    {
+      "cardId": "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd",
+      "prose": "A twin-sword warrior holds burning ruins alone as embers drift through gray smoke.",
+      "action": [
+        {
+          "id": "19e2443d-3b39-43e8-a1c6-afac64aeab2c",
+          "label": "Rally Through Ash",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        },
+        {
+          "id": "0446e8d0-aab3-47dd-ab0e-87abb4830829",
+          "label": "Take Their Place",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        }
+      ]
+    },
+    {
+      "cardId": "48257e3e-9600-4edf-a905-e73a41ab5ec1",
+      "prose": "A crimson flamingo balances above glassy water while its reflection stretches beneath bright clouds.",
+      "action": [
+        {
+          "id": "b4d75829-b9bd-4580-8b53-61a81552ed97",
+          "label": "Disturb Crimson Reflection",
+          "effectText": "Gain 1 copy of a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to gain 1 copy of.",
+          "effectKind": "copy-selected-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "count": 1,
+          "deckTarget": "chosen"
+        },
+        {
+          "id": "4568fc2d-c53c-4644-8b54-53ff5a9dbb71",
+          "label": "Welcome Azure Dawn",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "8bf53fe6-8a25-401e-9a99-84343a026bb0",
+      "prose": "A black-clad mourner stands motionless beneath floating candlelight.",
+      "action": [
+        {
+          "id": "dbcdcf41-82be-4b9d-8f79-a6dd0f1d14d4",
+          "label": "Tend floating candlelight",
+          "effectText": "Gain Candle",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to replace.",
+          "effectKind": "gain-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "fixed",
+          "dreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627"
+        },
+        {
+          "id": "61f8ab2d-c18a-4213-a853-407ff9564af2",
+          "label": "Wait beside mourner",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
     }
   ],
-  "contentHash": "5ce342c086e38dd1209c8051efeedb7cc7e7c4f5f46c4602f5658760b50d7c6e",
-  "foldHash": "5ce342c086e38dd1209c8051efeedb7cc7e7c4f5f46c4602f5658760b50d7c6e"
+  "contentHash": "1056e6cf88b519c81581b77de05d9089f176b82f569b13dfc53f386334e862f6",
+  "foldHash": "1056e6cf88b519c81581b77de05d9089f176b82f569b13dfc53f386334e862f6"
 }

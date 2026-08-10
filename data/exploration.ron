@@ -3069,4 +3069,137 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "5a747998-7219-4e23-be42-b8cb3be12348",
+    prose: "A red automaton surveys hanging machinery as luminous insects drift through overgrown ruins.",
+    actions: [
+      ActionDefinition(
+        label: "Salvage Fallen Chassis",
+        id: "8dfae3bb-c49b-49bf-ac27-c7293d293dc1",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Synth character. Every other Synth character in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Synth", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Gather Luminous Motes",
+        id: "8e628041-47ac-4a18-b62b-79672762b53a",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "7697da0e-d759-4c75-8c9c-477e9058b035",
+    prose: "A cybernetic agent fires midair as teal light shatters a black, angular structure.",
+    actions: [
+      ActionDefinition(
+        label: "Detonate an Agent",
+        id: "61faffda-a3cd-4b60-b033-bd6bc412207c",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Leap Through Breach",
+        id: "a63c84e0-5d10-4155-8fcc-f6c967330014",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd",
+    prose: "A twin-sword warrior holds burning ruins alone as embers drift through gray smoke.",
+    actions: [
+      ActionDefinition(
+        label: "Rally Through Ash",
+        id: "19e2443d-3b39-43e8-a1c6-afac64aeab2c",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Take Their Place",
+        id: "0446e8d0-aab3-47dd-ab0e-87abb4830829",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "48257e3e-9600-4edf-a905-e73a41ab5ec1",
+    prose: "A crimson flamingo balances above glassy water while its reflection stretches beneath bright clouds.",
+    actions: [
+      ActionDefinition(
+        label: "Disturb Crimson Reflection",
+        id: "b4d75829-b9bd-4580-8b53-61a81552ed97",
+        presentation: ActionPresentation(
+          effect_text: "Gain 1 copy of a chosen card",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a card to gain 1 copy of."),
+        ),
+        effect: CopySelectedCard(predicate: None, count: 1, target: Chosen),
+      ),
+
+      ActionDefinition(
+        label: "Welcome Azure Dawn",
+        id: "4568fc2d-c53c-4644-8b54-53ff5a9dbb71",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "8bf53fe6-8a25-401e-9a99-84343a026bb0",
+    prose: "A black-clad mourner stands motionless beneath floating candlelight.",
+    actions: [
+      ActionDefinition(
+        label: "Tend floating candlelight",
+        id: "dbcdcf41-82be-4b9d-8f79-a6dd0f1d14d4",
+        presentation: ActionPresentation(
+          effect_text: "Gain Candle",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
+        ),
+        effect: GainDreamsign(dreamsign_id: "89c83d7e-5617-49b4-b6cd-214680fe0627"),
+      ),
+
+      ActionDefinition(
+        label: "Wait beside mourner",
+        id: "61f8ab2d-c18a-4213-a853-407ff9564af2",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
 ]
