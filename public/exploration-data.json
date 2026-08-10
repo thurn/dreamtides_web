@@ -11982,8 +11982,144 @@
           "deckTarget": "chosen"
         }
       ]
+    },
+    {
+      "cardId": "8451340c-02c5-465a-8c25-51efb2dc857a",
+      "prose": "A mounted standard-bearer faces a colossal stone god burning with wrath above a shattered ridge.",
+      "action": [
+        {
+          "id": "438b139d-835e-4eba-93e0-34d152681365",
+          "label": "Receive Titan's Wrath",
+          "effectText": "All characters in your deck gain +1✦.",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        },
+        {
+          "id": "2aa2434c-1865-4466-813c-c1659d03b2e9",
+          "label": "Offer Standard-Bearer",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had.",
+          "followupTitle": "Offer Standard-Bearer",
+          "followupSubtitle": "Choose a card to sacrifice for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        }
+      ]
+    },
+    {
+      "cardId": "c6ae1899-c94c-464f-8edb-4a0b1ec2c981",
+      "prose": "A young figure runs across an open tome as countless books and pages fill starlight.",
+      "action": [
+        {
+          "id": "4004dd49-c3de-4c47-bdf7-454daad4bcdd",
+          "label": "Gather Floating Volumes",
+          "effectText": "Take any number of Event cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any number of offered Events.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "offerCount": 4
+        },
+        {
+          "id": "a311186c-5992-4af4-b982-4bd2eef339a2",
+          "label": "Cast Away a Memory",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to cast away for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        }
+      ]
+    },
+    {
+      "cardId": "16d2e85d-f940-43dd-9867-784b3a5ec5d7",
+      "prose": "A haloed reaper floats above broken pillars while burning orbs coil among suspended stones.",
+      "action": [
+        {
+          "count": 1,
+          "id": "9a92c28e-6ee7-4496-a295-51c3ef2ba914",
+          "label": "Approach the Scythe",
+          "effectText": "Purge a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to surrender.",
+          "effectKind": "purge-selected",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "purge-misfit"
+        },
+        {
+          "id": "00bdb574-fce2-4566-9f90-791a6f790f4e",
+          "label": "Study Fallen Halo",
+          "effectText": "Gain a random dreamsign",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to release if needed.",
+          "effectKind": "gain-random-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "dreamsign-match"
+        }
+      ]
+    },
+    {
+      "cardId": "f860e815-3ed9-463d-ac4d-ed8d2778f8ad",
+      "prose": "A giant black panther prowls before a dark-clad companion among ash-gray trees and orange branches.",
+      "action": [
+        {
+          "id": "7b18ba6f-2158-4dea-8a2c-53927e597d22",
+          "label": "Feed Burning Gaze",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "Feed Burning Gaze",
+          "followupSubtitle": "Choose a card to offer for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "132b7409-efb0-4622-b312-5c29fc2432e9",
+          "label": "Join Silent Hunt",
+          "effectText": "Change a chosen character card to be a Spirit Animal",
+          "followupTitle": "Join Silent Hunt",
+          "followupSubtitle": "Choose a Character to become a Spirit Animal.",
+          "effectKind": "change-subtype-selected",
+          "canonicalMechanicId": "change-entry-subtype",
+          "selectionPolicyId": "deck-entry-centrality",
+          "predicate": "character",
+          "subtype": "Spirit Animal",
+          "deckTarget": "chosen"
+        }
+      ]
+    },
+    {
+      "cardId": "31ecf933-c897-41a5-ab94-822ea65898d8",
+      "prose": "A solitary guitarist strums amid luminous ribbons of turquoise, gold, crimson, and violet.",
+      "action": [
+        {
+          "id": "56604a49-0920-4242-bc4c-233859bb882f",
+          "label": "Follow Rising Chorus",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "d78b6b85-e7a0-47a2-8732-bd9be4bf28d8",
+          "label": "Braid Chromatic Refrain",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card, then choose its transfiguration.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "count": 1
+        }
+      ]
     }
   ],
-  "contentHash": "fe915ebe54c70877dd45858a62c1cc68bb796d8a5c47515eeb4ff811cd2fd498",
-  "foldHash": "fe915ebe54c70877dd45858a62c1cc68bb796d8a5c47515eeb4ff811cd2fd498"
+  "contentHash": "8dc5ac2b5634783f011d83bead8f8999c45fda96f9a79a50d5312c13d706e31f",
+  "foldHash": "8dc5ac2b5634783f011d83bead8f8999c45fda96f9a79a50d5312c13d706e31f"
 }

@@ -12915,4 +12915,159 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "8451340c-02c5-465a-8c25-51efb2dc857a",
+    prose: "A mounted standard-bearer faces a colossal stone god burning with wrath above a shattered ridge.",
+    actions: [
+      ActionDefinition(
+        label: "Receive Titan's Wrath",
+        id: "438b139d-835e-4eba-93e0-34d152681365",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦.",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Offer Standard-Bearer",
+        id: "2aa2434c-1865-4466-813c-c1659d03b2e9",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had.",
+          followup: Followup(
+            title: "Offer Standard-Bearer",
+            subtitle: "Choose a card to sacrifice for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "c6ae1899-c94c-464f-8edb-4a0b1ec2c981",
+    prose: "A young figure runs across an open tome as countless books and pages fill starlight.",
+    actions: [
+      ActionDefinition(
+        label: "Gather Floating Volumes",
+        id: "4004dd49-c3de-4c47-bdf7-454daad4bcdd",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Event cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered Events.",
+          ),
+        ),
+        effect: TakeCards(predicate: Event, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Cast Away a Memory",
+        id: "a311186c-5992-4af4-b982-4bd2eef339a2",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to cast away for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "16d2e85d-f940-43dd-9867-784b3a5ec5d7",
+    prose: "A haloed reaper floats above broken pillars while burning orbs coil among suspended stones.",
+    actions: [
+      ActionDefinition(
+        label: "Approach the Scythe",
+        id: "9a92c28e-6ee7-4496-a295-51c3ef2ba914",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a card to surrender."),
+        ),
+        effect: PurgeSelected(predicate: None, count: None),
+      ),
+
+      ActionDefinition(
+        label: "Study Fallen Halo",
+        id: "00bdb574-fce2-4566-9f90-791a6f790f4e",
+        presentation: ActionPresentation(
+          effect_text: "Gain a random dreamsign",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Dreamsign to release if needed.",
+          ),
+        ),
+        effect: GainRandomDreamsign,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "f860e815-3ed9-463d-ac4d-ed8d2778f8ad",
+    prose: "A giant black panther prowls before a dark-clad companion among ash-gray trees and orange branches.",
+    actions: [
+      ActionDefinition(
+        label: "Feed Burning Gaze",
+        id: "7b18ba6f-2158-4dea-8a2c-53927e597d22",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "Feed Burning Gaze",
+            subtitle: "Choose a card to offer for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Join Silent Hunt",
+        id: "132b7409-efb0-4622-b312-5c29fc2432e9",
+        presentation: ActionPresentation(
+          effect_text: "Change a chosen character card to be a Spirit Animal",
+          followup: Followup(
+            title: "Join Silent Hunt",
+            subtitle: "Choose a Character to become a Spirit Animal.",
+          ),
+        ),
+        effect: ChangeSubtypeSelected(
+          predicate: Character,
+          subtype: "Spirit Animal",
+          target: Chosen,
+        ),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "31ecf933-c897-41a5-ab94-822ea65898d8",
+    prose: "A solitary guitarist strums amid luminous ribbons of turquoise, gold, crimson, and violet.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Rising Chorus",
+        id: "56604a49-0920-4242-bc4c-233859bb882f",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Braid Chromatic Refrain",
+        id: "d78b6b85-e7a0-47a2-8732-bd9be4bf28d8",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+    ],
+  ),
 ]
