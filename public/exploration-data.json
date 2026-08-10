@@ -5626,8 +5626,145 @@
           "essencePerSpark": 20
         }
       ]
+    },
+    {
+      "cardId": "3fab0780-59d4-45f1-8aac-a870ad8729ac",
+      "prose": "An armored swordsman grips a glowing blade amid fire, a red cloak streaming sideways.",
+      "action": [
+        {
+          "id": "ccb9d296-fc2c-400e-8501-86ff3d94b429",
+          "label": "Study Glowing Blade",
+          "effectText": "Gain Curved Blade",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to replace.",
+          "effectKind": "gain-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "fixed",
+          "dreamsignId": "246ac924-74dd-4387-9fd6-5bc8e563907a"
+        },
+        {
+          "id": "8e31bd08-b5d9-48c6-9772-4a1aa7c26281",
+          "label": "Feed the Fire",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "9b9c2743-75b3-499d-b5fb-c3429c92d420",
+      "prose": "A flame-antlered stag crowns a stone rise beneath a luminous crescent amid burning trees.",
+      "action": [
+        {
+          "id": "d00b1861-631c-4990-8a64-0fd1f0aacf2b",
+          "label": "Stand Within Crescent",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "f13f121e-f02d-4bff-adb6-d42276e218f9",
+          "label": "Scatter Crownfire",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "ea118471-164b-4d7f-bb02-044c862ed07e",
+      "prose": "A red-suited survivor stands beside a shattered rover as windblown debris fills a crimson sky.",
+      "action": [
+        {
+          "id": "c5c130f0-2f52-44be-9cb4-57a9297a331d",
+          "label": "Search Emergency Signal",
+          "effectText": "Draft a Survivor from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Survivor.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "survivor",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "daf9c800-5a82-4af4-8ecc-ca97fe78ba77",
+          "label": "Honor Fallen Crew",
+          "effectText": "Purge a random Survivor. Every other Survivor in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Survivor",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c",
+      "prose": "A spear-bearing guard wades through luminous blossoms while blue motes circle beneath an ember sky.",
+      "action": [
+        {
+          "id": "e09c6663-67e5-40e3-9e8b-6b2d50c74d46",
+          "label": "Release Fading Bloom",
+          "effectText": "Purge a chosen Character card and gain a random Character replacement",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to return through new growth.",
+          "effectKind": "replace-selected",
+          "canonicalMechanicId": "replace-deck-entry",
+          "selectionPolicyId": "card-fit-quality",
+          "predicate": "character"
+        },
+        {
+          "id": "4537457b-2ace-4d85-ac22-194cb001e5f2",
+          "label": "Gather Returning Petals",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one revealed card to let bloom again.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "7ecc1da1-dc39-4596-9a1d-262a261ffeea",
+      "prose": "A samurai raises a long spear beneath windblown amber leaves.",
+      "action": [
+        {
+          "id": "9408d015-fdec-4a6e-84e9-75548713d682",
+          "label": "Follow the raised spear",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Warrior.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "c19aed98-18f8-4fb6-a7fa-9b84f210c218",
+          "label": "Study the samurai's stance",
+          "effectText": "Change a chosen character card to be a Warrior",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to become a Warrior.",
+          "effectKind": "change-subtype-selected",
+          "canonicalMechanicId": "change-entry-subtype",
+          "selectionPolicyId": "deck-entry-centrality",
+          "predicate": "character",
+          "subtype": "Warrior",
+          "deckTarget": "chosen"
+        }
+      ]
     }
   ],
-  "contentHash": "6945cef87697cf4c68c3bd587e874c5f72fee560335f88484125a94937a900a1",
-  "foldHash": "6945cef87697cf4c68c3bd587e874c5f72fee560335f88484125a94937a900a1"
+  "contentHash": "51f6a349bd7284c26d698c9fc1503702a1c3f73223f13cfceb6001770af5c247",
+  "foldHash": "51f6a349bd7284c26d698c9fc1503702a1c3f73223f13cfceb6001770af5c247"
 }

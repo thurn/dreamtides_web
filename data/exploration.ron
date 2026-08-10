@@ -6025,4 +6025,143 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "3fab0780-59d4-45f1-8aac-a870ad8729ac",
+    prose: "An armored swordsman grips a glowing blade amid fire, a red cloak streaming sideways.",
+    actions: [
+      ActionDefinition(
+        label: "Study Glowing Blade",
+        id: "ccb9d296-fc2c-400e-8501-86ff3d94b429",
+        presentation: ActionPresentation(
+          effect_text: "Gain Curved Blade",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
+        ),
+        effect: GainDreamsign(dreamsign_id: "246ac924-74dd-4387-9fd6-5bc8e563907a"),
+      ),
+
+      ActionDefinition(
+        label: "Feed the Fire",
+        id: "8e31bd08-b5d9-48c6-9772-4a1aa7c26281",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "9b9c2743-75b3-499d-b5fb-c3429c92d420",
+    prose: "A flame-antlered stag crowns a stone rise beneath a luminous crescent amid burning trees.",
+    actions: [
+      ActionDefinition(
+        label: "Stand Within Crescent",
+        id: "d00b1861-631c-4990-8a64-0fd1f0aacf2b",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Scatter Crownfire",
+        id: "f13f121e-f02d-4bff-adb6-d42276e218f9",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "ea118471-164b-4d7f-bb02-044c862ed07e",
+    prose: "A red-suited survivor stands beside a shattered rover as windblown debris fills a crimson sky.",
+    actions: [
+      ActionDefinition(
+        label: "Search Emergency Signal",
+        id: "c5c130f0-2f52-44be-9cb4-57a9297a331d",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Survivor from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Survivor."),
+        ),
+        effect: DraftCard(predicate: Survivor, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Honor Fallen Crew",
+        id: "daf9c800-5a82-4af4-8ecc-ca97fe78ba77",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Survivor. Every other Survivor in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Survivor", spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c",
+    prose: "A spear-bearing guard wades through luminous blossoms while blue motes circle beneath an ember sky.",
+    actions: [
+      ActionDefinition(
+        label: "Release Fading Bloom",
+        id: "e09c6663-67e5-40e3-9e8b-6b2d50c74d46",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen Character card and gain a random Character replacement",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to return through new growth.",
+          ),
+        ),
+        effect: ReplaceSelected(predicate: Character),
+      ),
+
+      ActionDefinition(
+        label: "Gather Returning Petals",
+        id: "4537457b-2ace-4d85-ac22-194cb001e5f2",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one revealed card to let bloom again.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "7ecc1da1-dc39-4596-9a1d-262a261ffeea",
+    prose: "A samurai raises a long spear beneath windblown amber leaves.",
+    actions: [
+      ActionDefinition(
+        label: "Follow the raised spear",
+        id: "9408d015-fdec-4a6e-84e9-75548713d682",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Study the samurai's stance",
+        id: "c19aed98-18f8-4fb6-a7fa-9b84f210c218",
+        presentation: ActionPresentation(
+          effect_text: "Change a chosen character card to be a Warrior",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to become a Warrior.",
+          ),
+        ),
+        effect: ChangeSubtypeSelected(predicate: Character, subtype: "Warrior", target: Chosen),
+      ),
+    ],
+  ),
 ]
