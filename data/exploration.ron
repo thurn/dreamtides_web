@@ -13210,4 +13210,146 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "be7cf049-29df-4801-9ca6-0e39dc1101af",
+    prose: "A lone runner scrambles uphill as flaming boulders burst through smoke and cascading debris.",
+    actions: [
+      ActionDefinition(
+        label: "Sprint Through Ruin",
+        id: "48294bf5-bf99-47c8-8e12-f8e1e4d8c63d",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+
+      ActionDefinition(
+        label: "Sacrifice to Collapse",
+        id: "152bca95-9922-4f50-b248-458c38e1893f",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one card to surrender for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "6af8cf81-9e9e-481f-b518-f5dadad99b27",
+    prose: "A solitary child faces a towering machine graveyard threaded with warm lights.",
+    actions: [
+      ActionDefinition(
+        label: "Rebuild One Machine",
+        id: "4deb4384-74af-417b-90d7-c6b8b5d91e16",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to purge, then choose a different card to copy.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+
+      ActionDefinition(
+        label: "Illuminate Entire Heap",
+        id: "f757e8c1-b6e0-44d5-abc1-00305cd3387c",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed",
+    prose: "A lone archer balances above glowing runes as golden light exposes hidden paths.",
+    actions: [
+      ActionDefinition(
+        label: "Survey Hidden Paths",
+        id: "fca79f5e-194d-4468-9c0d-3b0f103bdf8e",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+
+      ActionDefinition(
+        label: "Leap Before Dawn",
+        id: "8e112255-2140-4e46-bb60-d30d286fc8ac",
+        presentation: ActionPresentation(
+          effect_text: "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
+          followup: None,
+        ),
+        effect: NextBattleSmallerHandAndCostDiscount,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "455ef341-8a26-44e1-b287-19e53bdc6158",
+    prose: "An antlered sovereign towers above a solitary child amid blue mist and ember-lit trees.",
+    actions: [
+      ActionDefinition(
+        label: "Accept Eternal Audience",
+        id: "f625f09b-76cf-4523-a494-0fb8a0abcfb0",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 {nightmare_card} cards. Gain {fixed_card}.",
+          followup: None,
+        ),
+        effect: GainNightmareAndCard(
+          card_id: "041fafeb-f159-4aba-90c2-3ce4b3038bdc",
+          nightmare_count: 2,
+        ),
+      ),
+
+      ActionDefinition(
+        label: "Carry Ancient Command",
+        id: "b67c6bdf-5017-4352-9958-4c1c6fe17c14",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "435ed83c-f7a6-4a73-a684-67fcc4e49bc4",
+    prose: "A lone swimmer tumbles beneath bright surface water, bubbles streaming toward distant light.",
+    actions: [
+      ActionDefinition(
+        label: "Shed a Sinking Memory",
+        id: "726017bd-f694-466e-942c-918ac8a828e9",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "First choose a card to sink, then choose a different card to echo.",
+          ),
+        ),
+        effect: PurgeAndCopy,
+      ),
+
+      ActionDefinition(
+        label: "Reach Surface Light",
+        id: "abc400a3-066d-47c4-8466-6c7a021d94ff",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
 ]
