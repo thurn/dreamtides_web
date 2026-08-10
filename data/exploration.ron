@@ -2773,4 +2773,149 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "ac2b2fc5-90d3-47e0-8332-25f7ba767035",
+    prose: "A pale winged figure crouches amid blackened ruins as orange fire illuminates torn feathers.",
+    actions: [
+      ActionDefinition(
+        label: "Forsake Fallen Shape",
+        id: "9ac0ef87-8d42-4306-8f13-3879a59f3d3f",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen ≤2● cost Character card and gain a random ≤2● cost Character replacement",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a ≤2● cost Character to replace.",
+          ),
+        ),
+        effect: ReplaceSelected(predicate: CheapCharacter),
+      ),
+
+      ActionDefinition(
+        label: "Embrace Ruinous Wings",
+        id: "7f2cf279-7d99-43ea-b17a-a9a4b379dc7a",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+    prose: "A rune-marked warrior floats barefoot before a crimson moon, gripping a luminous blade above dawnlit clouds.",
+    actions: [
+      ActionDefinition(
+        label: "Accept Lunar Runes",
+        id: "eaea4461-7783-4da1-83f1-4d54c19c85ee",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+
+      ActionDefinition(
+        label: "Descend With Dawn",
+        id: "87efe01b-525e-41b4-80d4-db4c4bf3e656",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "956aaeb1-5280-4294-bf80-73079f35c5f6",
+    prose: "A horned shadow gathers red flame above shattered towers as airborne embers swarm.",
+    actions: [
+      ActionDefinition(
+        label: "Conjure Twin Warriors",
+        id: "b714b25d-81bd-4a35-ac9e-3977b6f3d85a",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices and gain 2 copies of it",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 2, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Consecrate Fallen Warrior",
+        id: "bf8e314f-074a-422a-beb4-d55092114bb4",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "be6a2712-cfe3-4d61-b62c-fab8990786a1",
+    prose: "A spear-bearing chieftain watches sunset beside three wolves gathered along a rocky shore.",
+    actions: [
+      ActionDefinition(
+        label: "Rally Sunset Warpack",
+        id: "7eaec003-e8f7-45b0-aabf-dc948d480f3a",
+        presentation: ActionPresentation(
+          effect_text: "Choose one of 2 packs of 3 Warrior cards to add to your deck",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one Warrior pack to add to your deck.",
+          ),
+        ),
+        effect: ChoosePack(predicate: Warrior, pack_count: 2, pack_size: 3),
+      ),
+
+      ActionDefinition(
+        label: "Join Wolfbound Clan",
+        id: "cc63a163-3e80-4f63-a252-2d89a4c7270f",
+        presentation: ActionPresentation(
+          effect_text: "Change a chosen character card to be a Warrior",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a Character to become a Warrior.",
+          ),
+        ),
+        effect: ChangeSubtypeSelected(predicate: Character, subtype: "Warrior", target: Chosen),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "920ef495-5560-4fa6-9a95-b9584ef6a4cf",
+    prose: "A warrior grips a crescent axe, glowing markings winding across her arms.",
+    actions: [
+      ActionDefinition(
+        label: "Touch crescent axe",
+        id: "e3eb4558-53cb-41e5-b02f-0eb03eec3b51",
+        presentation: ActionPresentation(
+          effect_text: "Gain Curved Blade",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
+        ),
+        effect: GainDreamsign(dreamsign_id: "246ac924-74dd-4387-9fd6-5bc8e563907a"),
+      ),
+
+      ActionDefinition(
+        label: "Trace glowing markings",
+        id: "cc4671b7-8fde-457b-a706-d41980972450",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+    ],
+  ),
 ]
