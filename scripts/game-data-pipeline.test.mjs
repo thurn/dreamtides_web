@@ -35,6 +35,19 @@ function fixture() {
 }
 
 describe("game-data publication", () => {
+  it("explains the Rust prerequisite when Cargo is unavailable", () => {
+    const { root } = fixture();
+    const originalPath = process.env.PATH;
+    process.env.PATH = root;
+    try {
+      expect(() => gameDataPipelineInternals.ensureCompiler(root)).toThrow(
+        "Cargo is required to compile the canonical RON game data. Install a Rust toolchain",
+      );
+    } finally {
+      process.env.PATH = originalPath;
+    }
+  });
+
   it("applies the repository RON formatter to staged editor sources", () => {
     const { root, stage } = fixture();
     writeFileSync(join(root, ".ronfmt.json"), JSON.stringify({ indentWidth: 2, printWidth: 120 }));

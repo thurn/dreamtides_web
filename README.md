@@ -10,6 +10,8 @@ use the Firebase emulator, and cloud RTDB rooms use `?realtime=1`.
 
 - Node 24 and npm. CI uses Node 24.16.0. The dependency set also supports
   Node 20.19+ and Node 22.12+, but not Node 26.
+- A Rust toolchain with Cargo, used to compile the canonical RON game data. On
+  macOS with Homebrew, install it with `brew install rust`.
 - JDK 21, used by the local Firebase Realtime Database emulator. On macOS with
   Homebrew, install it with `brew install openjdk@21`; the start script finds
   Homebrew's keg-only installation without requiring a system-wide symlink.
@@ -26,12 +28,12 @@ this repo, so no sibling dreamtides checkout is required.
 
 ## Setup On A New Machine
 
-From the repository root, install the Java prerequisite and the project's npm
-dependencies, then start the development stack:
+From the repository root, install the Java and Rust prerequisites and the
+project's npm dependencies, then start the development stack:
 
 ```bash
 # macOS only; use any JDK 21 distribution on other platforms
-brew install openjdk@21
+brew install openjdk@21 rust
 
 cd /path/to/journey_prototype
 npm install
@@ -80,6 +82,8 @@ For an all-in-one command after installing JDK 21, `npm run launch` runs
   `brew install openjdk@21` and retry `npm start`.
 - `Unsupported engine` during `npm install`: switch to Node 24. CI uses
   24.16.0.
+- `Cargo is required`: install a Rust toolchain. On macOS, run
+  `brew install rust` and retry `npm start`.
 - `Port 5173 is already in use`: stop the process using it or pass a different
   port as shown above.
 - Many `missing ... art` warnings: the optional local image libraries are not

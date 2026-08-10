@@ -38,11 +38,23 @@ function cargoManifestPath(rootDir) {
 }
 
 function ensureCompiler(rootDir) {
-  execFileSync(
-    "cargo",
-    ["build", "--locked", "--quiet", "--manifest-path", cargoManifestPath(rootDir)],
-    { cwd: rootDir, stdio: ["ignore", "pipe", "pipe"] },
-  );
+  try {
+    execFileSync(
+      "cargo",
+      ["build", "--locked", "--quiet", "--manifest-path", cargoManifestPath(rootDir)],
+      { cwd: rootDir, stdio: ["ignore", "pipe", "pipe"] },
+    );
+  } catch (error) {
+    if (error?.code === "ENOENT") {
+      const wrapped = new Error(
+        "Cargo is required to compile the canonical RON game data. Install a Rust toolchain (on macOS: `brew install rust`) and retry.",
+      );
+      wrapped.code = "CARGO_NOT_FOUND";
+      wrapped.cause = error;
+      throw wrapped;
+    }
+    throw error;
+  }
   return binaryPath(rootDir);
 }
 
@@ -552,7 +564,7 @@ export async function stageAndPublishCompatibilityEdit({
   }
 }
 
-export const gameDataPipelineInternals = { formatStagedRonSources, publish };
+export const gameDataPipelineInternals = { ensureCompiler, formatStagedRonSources, publish };
 
 async function main() {
   const command = process.argv[2] ?? "compile";

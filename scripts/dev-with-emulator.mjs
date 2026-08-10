@@ -142,7 +142,6 @@ function shutdown(code = 0, signal = "SIGTERM") {
       process.exit(code);
     }
   }, 100);
-  timer.unref();
 }
 
 export function formatChildExit(code, signal) {
