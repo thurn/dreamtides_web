@@ -11850,8 +11850,140 @@
           "count": 2
         }
       ]
+    },
+    {
+      "cardId": "4124a05c-b6dd-4334-b202-59fa17d77668",
+      "prose": "A solitary warrior stands amid burning wreckage as embers drift across a cold blue sky.",
+      "action": [
+        {
+          "id": "effdbc50-7843-4965-a603-df0d5de2faa6",
+          "label": "Feed Flames a Memory",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to burn for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "26a4b37c-865c-4cb8-9105-879709f23ae5",
+          "label": "Stand Through Fire",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "ed4d5342-0690-40b7-ab48-6b76035466f2",
+      "prose": "A shadowy beast bursts from a cyan rupture through a smoke-filled city alley.",
+      "action": [
+        {
+          "id": "e227f409-c792-42bf-bb2f-582693acba06",
+          "label": "Enter Shattering Portal",
+          "effectText": "Purge a chosen Character card and gain a random Character replacement",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to send through.",
+          "effectKind": "replace-selected",
+          "canonicalMechanicId": "replace-deck-entry",
+          "selectionPolicyId": "card-fit-quality",
+          "predicate": "character"
+        },
+        {
+          "id": "8e010cae-a23c-441c-b807-ac4186f49c55",
+          "label": "Chase Escaping Apparition",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        }
+      ]
+    },
+    {
+      "cardId": "742a376f-68db-466a-b087-405188634ba4",
+      "prose": "An armored warrior charges through smoke and flying debris, swinging a fire-ringed axe.",
+      "action": [
+        {
+          "id": "3f64cb29-ac6e-4a56-a69c-4794919c778b",
+          "label": "Rally another warrior",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Warrior.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "730a3c57-a309-45a6-acd4-aea3b99664b2",
+          "label": "Seize the dawnfire",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a",
+      "prose": "A lone fighter leaps across writhing black tendrils toward a burning, many-limbed foe.",
+      "action": [
+        {
+          "id": "6a10405a-9d95-45ed-914b-c3a8ef58eeff",
+          "label": "Sacrifice a fighting memory",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "7433289d-5cc3-4023-852a-2ae9635ab213",
+          "label": "Embrace monstrous power",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
+    },
+    {
+      "cardId": "8a6fc6ea-9a88-441e-bdc2-d40dfec37481",
+      "prose": "A red-cloaked traveler approaches a green doorway through a rain-darkened alley of towering walls.",
+      "action": [
+        {
+          "id": "de76b512-463a-4b51-9af3-d3deae1a19cb",
+          "label": "Enter green doorway",
+          "effectText": "Draft a Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "58c79d65-c87d-46a5-8fe9-f050fdbeaada",
+          "label": "Trace red reflection",
+          "effectText": "Gain a copy of a chosen Character card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Character to copy.",
+          "effectKind": "copy-selected-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "predicate": "character",
+          "count": 1,
+          "deckTarget": "chosen"
+        }
+      ]
     }
   ],
-  "contentHash": "4ebe870e61993a65b516ee5ed561864eb8e0d33bcc0675ce4742ef9f89a311b0",
-  "foldHash": "4ebe870e61993a65b516ee5ed561864eb8e0d33bcc0675ce4742ef9f89a311b0"
+  "contentHash": "fe915ebe54c70877dd45858a62c1cc68bb796d8a5c47515eeb4ff811cd2fd498",
+  "foldHash": "fe915ebe54c70877dd45858a62c1cc68bb796d8a5c47515eeb4ff811cd2fd498"
 }
