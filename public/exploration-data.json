@@ -5886,8 +5886,134 @@
           "essencePerSpark": 20
         }
       ]
+    },
+    {
+      "cardId": "2931e20b-1a80-4ddd-8944-20e68d182886",
+      "prose": "A lone diver descends through flooded wreckage toward orange radiance beneath blue water.",
+      "action": [
+        {
+          "id": "276bbcc5-bccb-4855-9b8a-16088ef85623",
+          "label": "Examine Radiant Debris",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "6ee67ce7-310f-4bb9-bd14-d251026902db",
+          "label": "Release Sunken Weight",
+          "effectText": "Purge up to 2 chosen cards",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose up to two cards to purge.",
+          "effectKind": "purge-selected",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "purge-misfit",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "f3282494-2fcf-4c06-bfbe-3474b28aa87a",
+      "prose": "A child and wolf face a radiant oathstone, their shadows joined beneath waking boughs.",
+      "action": [
+        {
+          "id": "3fd7101f-f88b-4025-a708-291934eeea31",
+          "label": "Swear Shared Strength",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        },
+        {
+          "id": "ea735020-8e3b-4528-92b1-16863df33cd9",
+          "label": "Bind One Fate",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        }
+      ]
+    },
+    {
+      "cardId": "128d1878-a505-4766-91a2-e5a29498bc4e",
+      "prose": "A horned conjurer checks a vast curling wave with one raised hand.",
+      "action": [
+        {
+          "count": 1,
+          "id": "e706265f-3f46-4db5-baf1-f44cfa4cd1f6",
+          "label": "Dismiss the curling wave",
+          "effectText": "Purge a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to purge.",
+          "effectKind": "purge-selected",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "purge-misfit"
+        },
+        {
+          "id": "989ee0ec-7d3d-40a7-9648-8aab5e9d9528",
+          "label": "Turn the wave aside",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        }
+      ]
+    },
+    {
+      "cardId": "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc",
+      "prose": "A battered machine looms above factory gantries, cyan lights burning across layered rust-red armor.",
+      "action": [
+        {
+          "id": "67b15aa1-5b28-4da5-9830-86617b90a934",
+          "label": "Read Its Cyan Lights",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        },
+        {
+          "id": "e5744f9a-87bf-48b2-ba58-9b995979af72",
+          "label": "Strip Its Layered Armor",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        }
+      ]
+    },
+    {
+      "cardId": "ae90a3e1-c650-4f21-83af-de3208151b11",
+      "prose": "A suited explorer surveys floating rocks from a green hillside beneath radiant planetary rings.",
+      "action": [
+        {
+          "id": "b8008fef-a41c-4741-8141-b924b21412da",
+          "label": "Survey ringlit fragments",
+          "effectText": "Draft a transfigured ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered transfigured card.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        },
+        {
+          "id": "ea92b9ab-1dde-4903-90b7-30a52491b7ae",
+          "label": "Cross the radiant ridge",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
     }
   ],
-  "contentHash": "563b48e71f7a19b600b225235fd01a4c661beee608a4ded707eed8bb03ecc4f4",
-  "foldHash": "563b48e71f7a19b600b225235fd01a4c661beee608a4ded707eed8bb03ecc4f4"
+  "contentHash": "7cf620f49de3dd355915a5821f0f17ee2f7bdaf69ef32e1ca9d97b54434af0dc",
+  "foldHash": "7cf620f49de3dd355915a5821f0f17ee2f7bdaf69ef32e1ca9d97b54434af0dc"
 }
