@@ -1229,4 +1229,146 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "7def28c4-d75a-47e1-ae86-5b7093cc0419",
+    prose: "A lone delver wades through flooded machinery as pale light gleams beyond hanging cables.",
+    actions: [
+      ActionDefinition(
+        label: "Search Flooded Passage",
+        id: "61969a71-f6a7-41b3-8a3e-0325c0701550",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Survivor from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: Survivor, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Siphon Emergency Power",
+        id: "a56f8765-f859-445a-896f-e9377526ab03",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "20fd609a-7529-4582-a362-b8151b0ae011",
+    prose: "A lone duelist stands within a blazing circle as horned shadows gather.",
+    actions: [
+      ActionDefinition(
+        label: "Complete the Summoning",
+        id: "7bdc43df-0b87-43ce-b96f-b8af1b28e3a5",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+
+      ActionDefinition(
+        label: "Sever the Circle",
+        id: "86f613c2-6f0e-43cb-a4ad-7385158656ba",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "5a27e236-86d7-442f-81d2-fb29a2b7f12a",
+    prose: "Embers whirl around a ragged wight advancing between scorched graves beneath a burning sky.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Twin Embers",
+        id: "08415e98-649b-491c-a03f-23c97589c321",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Character from 4 choices and gain 2 copies of it",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: Character, count: 2, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Feed Funeral Flames",
+        id: "b4270854-dfd9-465b-a2d3-7258e957a153",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to burn for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "22239029-f53c-4ba9-b9b6-29f6592bb722",
+    prose: "A lone pilgrim wades beside an empty skiff beneath stars mirrored in still water.",
+    actions: [
+      ActionDefinition(
+        label: "Search Skiff's Reflection",
+        id: "c610f2e1-d07b-4834-a4b7-4817964b0e82",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one reflected card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Cross Inverted Horizon",
+        id: "26b8cbe3-2dc9-4d55-a512-c36966fb8f05",
+        presentation: ActionPresentation(
+          effect_text: "Apply a transfiguration to a chosen card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card, then choose its transfiguration.",
+          ),
+        ),
+        effect: TransfigureSelected(count: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "eae928f6-aab2-415e-b4b1-b9c3ed8e6818",
+    prose: "A radiant jellyfish sovereign rises above a drifting neon shoal.",
+    actions: [
+      ActionDefinition(
+        label: "Join luminous procession",
+        id: "a4c16b89-caee-43c5-ae6b-231fa8764dcb",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Spirit Animal cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered cards.",
+          ),
+        ),
+        effect: TakeCards(predicate: SpiritAnimal, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Enter sovereign current",
+        id: "20cfd197-f247-431b-8335-9c7d401806da",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
 ]

@@ -1167,8 +1167,142 @@
           "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
         }
       ]
+    },
+    {
+      "cardId": "7def28c4-d75a-47e1-ae86-5b7093cc0419",
+      "prose": "A lone delver wades through flooded machinery as pale light gleams beyond hanging cables.",
+      "action": [
+        {
+          "id": "61969a71-f6a7-41b3-8a3e-0325c0701550",
+          "label": "Search Flooded Passage",
+          "effectText": "Draft a Survivor from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "survivor",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "a56f8765-f859-445a-896f-e9377526ab03",
+          "label": "Siphon Emergency Power",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "20fd609a-7529-4582-a362-b8151b0ae011",
+      "prose": "A lone duelist stands within a blazing circle as horned shadows gather.",
+      "action": [
+        {
+          "id": "7bdc43df-0b87-43ce-b96f-b8af1b28e3a5",
+          "label": "Complete the Summoning",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        },
+        {
+          "id": "86f613c2-6f0e-43cb-a4ad-7385158656ba",
+          "label": "Sever the Circle",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "5a27e236-86d7-442f-81d2-fb29a2b7f12a",
+      "prose": "Embers whirl around a ragged wight advancing between scorched graves beneath a burning sky.",
+      "action": [
+        {
+          "id": "08415e98-649b-491c-a03f-23c97589c321",
+          "label": "Follow Twin Embers",
+          "effectText": "Draft a Character from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "b4270854-dfd9-465b-a2d3-7258e957a153",
+          "label": "Feed Funeral Flames",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to burn for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        }
+      ]
+    },
+    {
+      "cardId": "22239029-f53c-4ba9-b9b6-29f6592bb722",
+      "prose": "A lone pilgrim wades beside an empty skiff beneath stars mirrored in still water.",
+      "action": [
+        {
+          "id": "c610f2e1-d07b-4834-a4b7-4817964b0e82",
+          "label": "Search Skiff's Reflection",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one reflected card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "26b8cbe3-2dc9-4d55-a512-c36966fb8f05",
+          "label": "Cross Inverted Horizon",
+          "effectText": "Apply a transfiguration to a chosen card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card, then choose its transfiguration.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "cardId": "eae928f6-aab2-415e-b4b1-b9c3ed8e6818",
+      "prose": "A radiant jellyfish sovereign rises above a drifting neon shoal.",
+      "action": [
+        {
+          "id": "a4c16b89-caee-43c5-ae6b-231fa8764dcb",
+          "label": "Join luminous procession",
+          "effectText": "Take any number of Spirit Animal cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any number of offered cards.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "spirit-animal",
+          "offerCount": 4
+        },
+        {
+          "id": "20cfd197-f247-431b-8335-9c7d401806da",
+          "label": "Enter sovereign current",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
     }
   ],
-  "contentHash": "2b7ed334889382da45725c27a504b73995bf1f75c28c8a25fc5f969ac683307a",
-  "foldHash": "2b7ed334889382da45725c27a504b73995bf1f75c28c8a25fc5f969ac683307a"
+  "contentHash": "ac6859779e4c146e2badb938e56487a1293018a6a6e94be614a02613cd68e2fa",
+  "foldHash": "ac6859779e4c146e2badb938e56487a1293018a6a6e94be614a02613cd68e2fa"
 }

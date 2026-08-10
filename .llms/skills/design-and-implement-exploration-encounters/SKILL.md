@@ -158,15 +158,34 @@ the worktree. Exclude scratch artifacts and images. Inspect the staged diff and 
 for approval to promote through the `wt` workflow. Commit and promotion happen only
 after that approval.
 
-## Stop conditions
+## Repair failures proactively
 
-Stop and report the blocker when:
+Treat validation failures as repair-loop inputs, not automatic stopping points.
+Diagnose the concrete mismatch, fix every in-scope cause, regenerate affected
+scratch or compatibility artifacts, and rerun the failed gate plus every
+downstream gate. Never commit a partially valid batch.
 
-- a requested UUID is absent from canonical card data or is already represented;
-- full-size art is missing or ambiguous;
-- the source manifest changes during design;
-- a designer cannot produce schema-valid output after one repair attempt;
-- canonical compilation fails;
-- the live verifier fails;
-- deterministic tests, browser QA, or diff-aware review fail; or
-- a vertical slice cannot be made replayable and reconstructable within scope.
+- If a result is invalid, return it to its designer for one focused repair. If
+  that fails, replace the result with a fresh independent design that preserves
+  the request's immutable card and action UUIDs.
+- If assembly exposes a design/runtime contract mismatch, revise the result JSON
+  and rerun atomic assembly. Do not patch an assembled workset in place.
+- If canonical compilation, the live verifier, deterministic tests, browser QA,
+  or diff-aware review fails, inspect the authoritative source and error, repair
+  the design or implementation, regenerate outputs, and retry.
+- If this pipeline's own implementation changes make a manifest stale, restore
+  the last valid canonical batch state, preserve the request UUIDs when safe,
+  and regenerate the scratch workset from valid results. Restart selection only
+  when the immutable request itself can no longer be validated.
+- Preserve completed batch commits while repairing the current uncommitted
+  batch. Record unrelated pre-existing defects through repository policy and
+  continue whenever they do not prevent this batch.
+
+Stop and report a blocker only after proactive repair is exhausted and no
+in-scope solution remains, for example when an explicitly requested UUID is
+absent or already represented, full-size art is irretrievably missing or
+ambiguous, an external source change cannot be reconciled safely, required
+infrastructure remains unavailable, or a vertical slice cannot be made
+replayable and reconstructable after reasonable implementation attempts. Do not
+stop merely because compilation, verification, tests, review, or browser QA
+fails on an actionable issue.
