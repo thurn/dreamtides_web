@@ -2361,8 +2361,134 @@
           "offerCount": 4
         }
       ]
+    },
+    {
+      "cardId": "acefcfcf-cba5-46ec-913e-32f1091afbda",
+      "prose": "A seated traveler and watchful companion study luminous star trails spiraling above a ruined skyline.",
+      "action": [
+        {
+          "id": "7ed9871c-bec6-4366-bc55-63889a812ead",
+          "label": "Offer One Memory",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "9f3a1823-df4f-457f-80f6-a8745ec38334",
+          "label": "Trace Coming Dawn",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "82749215-ed35-44e3-a745-72ca76036c7c",
+      "prose": "A shadowed rider raises a lightning spear above a burning horned skull beneath green stormclouds.",
+      "action": [
+        {
+          "id": "0c0a703f-e39b-401a-800e-ac459511d6fa",
+          "label": "Burn Worthy Tribute",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to burn for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "910acca3-f35d-4fe7-9a5d-b7d91fdc2818",
+          "label": "Bind Fallen Cavalry",
+          "effectText": "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "848b41b3-9f87-45fb-b86f-b52fc913d201",
+      "prose": "An astronaut cradles a green sprout as luminous vines erupt and shattered earth rises.",
+      "action": [
+        {
+          "id": "eb1ee394-bde7-4b44-8617-61ff7b2a7bb7",
+          "label": "Cultivate Alien Seed",
+          "effectText": "Draft a transfigured Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered transfigured Character.",
+          "effectKind": "transfigured-card-draft",
+          "canonicalMechanicId": "transfigured-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "character",
+          "offerCount": 4
+        },
+        {
+          "id": "a941007e-380a-4943-993a-2a1ea23162f1",
+          "label": "Channel Emerald Burst",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "c73f978e-8196-4589-a432-845265115555",
+      "prose": "A stormbound warrior channels forked lightning beneath a ruptured sky and hovering monolith.",
+      "action": [
+        {
+          "id": "bbf77c1f-5f24-4e37-8062-ca2b30dc65d8",
+          "label": "Ground Forked Lightning",
+          "effectText": "Purge a random Warrior character. Every other Warrior character in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        },
+        {
+          "id": "8271a330-b4f0-4931-ba41-08b268d6edd1",
+          "label": "Capture Stormfire",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "4f29a241-9265-4669-a189-5a2a91923e12",
+      "prose": "A wide-brimmed stranger touches his smoke-darkened face while a cigarette ember glows.",
+      "action": [
+        {
+          "id": "2f2ea60d-dd62-48c7-a09f-bde52c2e7ae2",
+          "label": "Offer Lit Cigarette",
+          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
+          "effectKind": "purge-and-copy",
+          "canonicalMechanicId": "purge-and-duplicate"
+        },
+        {
+          "id": "36077aa0-e550-4d9d-a2dc-f2189ec3255d",
+          "label": "Study Drifting Smoke",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one revealed card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        }
+      ]
     }
   ],
-  "contentHash": "d57a2eb29c33b989d81d01ed4ebdfeea812b6f2b0773a4b64bee2bf9a77b9546",
-  "foldHash": "d57a2eb29c33b989d81d01ed4ebdfeea812b6f2b0773a4b64bee2bf9a77b9546"
+  "contentHash": "c3832ce6aa34d59af03f18130e2f544e6d26919fa85749099b459d915b3fb961",
+  "foldHash": "c3832ce6aa34d59af03f18130e2f544e6d26919fa85749099b459d915b3fb961"
 }
