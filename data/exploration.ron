@@ -1658,4 +1658,140 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "8a5d7d67-91c9-41c4-b22e-8287954efa09",
+    prose: "A masked warrior advances through shattered machinery as suspended debris circles paired luminous weapons.",
+    actions: [
+      ActionDefinition(
+        label: "Rally Consumed Warriors",
+        id: "52301f58-32fe-4597-86f6-02c8e6d10dfd",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices and gain 2 copies of it",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 2, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Name One Consumed",
+        id: "72ab2b5b-cf89-4981-8398-acccbe026886",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "20a6474c-55b8-4b1b-9155-baac62a06f1e",
+    prose: "A lone ballerina balances beside a radiant crescent while emberlike lights drift across clouds.",
+    actions: [
+      ActionDefinition(
+        label: "Complete Final Solo",
+        id: "8f3c1320-83e9-4198-9927-00d9345cdcad",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Monster character. Every other Monster character in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Monster", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Gather Firefly Chorus",
+        id: "4ccc4168-ef52-40d8-8c2d-caeb5cafbd56",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of ≤2● cost Character cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered cards.",
+          ),
+        ),
+        effect: TakeCards(predicate: CheapCharacter, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "96e2c30c-930c-47af-abb0-d4fbab454d56",
+    prose: "Warm crescent light guides a cloaked traveler across reflective snow among bare winter trunks.",
+    actions: [
+      ActionDefinition(
+        label: "Follow Crescent Light",
+        id: "1b603e4f-1f8f-4dec-9908-20fbed78bb69",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Cross Frozen Reflection",
+        id: "e1b947b6-a2a0-4f54-9722-de5a3d9d9274",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen Warrior card and gain a random Warrior replacement",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Warrior to send across."),
+        ),
+        effect: ReplaceSelected(predicate: Warrior),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "f3f97e2c-3bb6-4a20-9880-f59c50e5af93",
+    prose: "A colossal tendriled horror advances through burning wreckage as a lone gunner braces.",
+    actions: [
+      ActionDefinition(
+        label: "Feed Its Hunger",
+        id: "c175fe3f-cd95-4dde-ba0b-fbdd28cecc50",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to abandon for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Rally Beneath Its Shadow",
+        id: "867723b0-3489-412a-813a-1c0ef8098be2",
+        presentation: ActionPresentation(
+          effect_text: "All characters in your deck gain +1✦",
+          followup: None,
+        ),
+        effect: IncreaseSparkAll(spark_bonus: 1),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "f256a0e7-e396-492b-8881-284ecd36025b",
+    prose: "A hooded warrior rests a radiant spear across her shoulders amid scarlet ribbons.",
+    actions: [
+      ActionDefinition(
+        label: "Answer her challenge",
+        id: "3215a5b4-28b2-432f-89b2-6c0912fc3b5c",
+        presentation: ActionPresentation(
+          effect_text: "Draft a Warrior from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+        ),
+        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Receive her spear-light",
+        id: "665a94ac-2e17-4450-9ae3-3a7549bffe1c",
+        presentation: ActionPresentation(
+          effect_text: "Gain 2 additional energy at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleStartingEnergy(count: 2),
+      ),
+    ],
+  ),
 ]

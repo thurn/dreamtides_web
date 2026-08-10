@@ -1570,8 +1570,147 @@
           "count": 2
         }
       ]
+    },
+    {
+      "cardId": "8a5d7d67-91c9-41c4-b22e-8287954efa09",
+      "prose": "A masked warrior advances through shattered machinery as suspended debris circles paired luminous weapons.",
+      "action": [
+        {
+          "id": "52301f58-32fe-4597-86f6-02c8e6d10dfd",
+          "label": "Rally Consumed Warriors",
+          "effectText": "Draft a Warrior from 4 choices and gain 2 copies of it",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 2,
+          "offerCount": 4
+        },
+        {
+          "id": "72ab2b5b-cf89-4981-8398-acccbe026886",
+          "label": "Name One Consumed",
+          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "20a6474c-55b8-4b1b-9155-baac62a06f1e",
+      "prose": "A lone ballerina balances beside a radiant crescent while emberlike lights drift across clouds.",
+      "action": [
+        {
+          "id": "8f3c1320-83e9-4198-9927-00d9345cdcad",
+          "label": "Complete Final Solo",
+          "effectText": "Purge a random Monster character. Every other Monster character in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Monster",
+          "sparkBonus": 1
+        },
+        {
+          "id": "4ccc4168-ef52-40d8-8c2d-caeb5cafbd56",
+          "label": "Gather Firefly Chorus",
+          "effectText": "Take any number of ≤2● cost Character cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any number of offered cards.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "96e2c30c-930c-47af-abb0-d4fbab454d56",
+      "prose": "Warm crescent light guides a cloaked traveler across reflective snow among bare winter trunks.",
+      "action": [
+        {
+          "id": "1b603e4f-1f8f-4dec-9908-20fbed78bb69",
+          "label": "Follow Crescent Light",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "e1b947b6-a2a0-4f54-9722-de5a3d9d9274",
+          "label": "Cross Frozen Reflection",
+          "effectText": "Purge a chosen Warrior card and gain a random Warrior replacement",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Warrior to send across.",
+          "effectKind": "replace-selected",
+          "canonicalMechanicId": "replace-deck-entry",
+          "selectionPolicyId": "card-fit-quality",
+          "predicate": "warrior"
+        }
+      ]
+    },
+    {
+      "cardId": "f3f97e2c-3bb6-4a20-9880-f59c50e5af93",
+      "prose": "A colossal tendriled horror advances through burning wreckage as a lone gunner braces.",
+      "action": [
+        {
+          "id": "c175fe3f-cd95-4dde-ba0b-fbdd28cecc50",
+          "label": "Feed Its Hunger",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to abandon for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "867723b0-3489-412a-813a-1c0ef8098be2",
+          "label": "Rally Beneath Its Shadow",
+          "effectText": "All characters in your deck gain +1✦",
+          "effectKind": "increase-spark-all",
+          "canonicalMechanicId": "increase-deck-spark",
+          "sparkBonus": 1
+        }
+      ]
+    },
+    {
+      "cardId": "f256a0e7-e396-492b-8881-284ecd36025b",
+      "prose": "A hooded warrior rests a radiant spear across her shoulders amid scarlet ribbons.",
+      "action": [
+        {
+          "id": "3215a5b4-28b2-432f-89b2-6c0912fc3b5c",
+          "label": "Answer her challenge",
+          "effectText": "Draft a Warrior from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Warrior.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "665a94ac-2e17-4450-9ae3-3a7549bffe1c",
+          "label": "Receive her spear-light",
+          "effectText": "Gain 2 additional energy at the start of your next battle",
+          "effectKind": "next-battle-starting-energy",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
     }
   ],
-  "contentHash": "da651fbf03f39f481ae42bcc3a24cd76ce4828dbe15d2b6cc1f04dfef8caa308",
-  "foldHash": "da651fbf03f39f481ae42bcc3a24cd76ce4828dbe15d2b6cc1f04dfef8caa308"
+  "contentHash": "9bd3a5e4cf5b4917c30fc15cf2fc0204ffadd8bc1cae782bc3768cad315c4be2",
+  "foldHash": "9bd3a5e4cf5b4917c30fc15cf2fc0204ffadd8bc1cae782bc3768cad315c4be2"
 }
