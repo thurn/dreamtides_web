@@ -12990,8 +12990,136 @@
           "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
         }
       ]
+    },
+    {
+      "cardId": "0269e363-5567-47a4-80cd-8ebc061fe7e1",
+      "prose": "A masked gunman crosses burning wreckage beneath collapsed machinery and a smoke-red sky.",
+      "action": [
+        {
+          "id": "55d47fc9-f9d4-4564-8b6d-8bbea859b8ca",
+          "label": "Salvage Fallen Strength",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had.",
+          "followupTitle": "Salvage Fallen Strength",
+          "followupSubtitle": "Choose a card to salvage for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "acbc59d0-9f17-4ce1-b560-3cd841355a2b",
+          "label": "Signal Hidden Survivors",
+          "effectText": "Take any number of Survivors from 4 choices.",
+          "followupTitle": "Signal Hidden Survivors",
+          "followupSubtitle": "Choose any offered Survivors to rally.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "survivor",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "18979c10-39b8-42fb-ac1d-dd784da498d1",
+      "prose": "A vast black eagle dives toward a lone swordsman across tall grass as feathers scatter.",
+      "action": [
+        {
+          "count": 1,
+          "id": "0ab85e32-a126-4359-9cde-7e917b1916f5",
+          "label": "Offer Weakened Prey",
+          "effectText": "Purge a chosen ≤1✦ Character card",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a ≤1✦ Character for the eagle to seize.",
+          "effectKind": "purge-selected",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "purge-misfit",
+          "predicate": "cheap-character"
+        },
+        {
+          "id": "d449caaa-9d41-4d63-af5c-23b6aa9d6ce5",
+          "label": "Ride Eagle's Wake",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        }
+      ]
+    },
+    {
+      "cardId": "41044897-b70a-4e2b-8eb6-baf843a14a43",
+      "prose": "A robed conjurer raises a glowing staff as runes and mossy stones circle overhead.",
+      "action": [
+        {
+          "id": "008c0224-5be4-4b37-b0b6-c05213a3af0b",
+          "label": "Feed the Rune Ring",
+          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          "effectKind": "purge-random-subtype-and-increase-spark",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform",
+          "subtype": "Warrior",
+          "sparkBonus": 1
+        },
+        {
+          "id": "4dbd6870-bbe2-40d5-a2f3-47c30b34dda0",
+          "label": "Open the Soul Ring",
+          "effectText": "Take any number of Warrior cards from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose any number of offered Warriors.",
+          "effectKind": "take-cards",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "warrior",
+          "offerCount": 4
+        }
+      ]
+    },
+    {
+      "cardId": "9d63ba3e-fafb-466e-8418-ce5f8941ba30",
+      "prose": "A solitary mariner rows through blue-lit rain as a towering white wave curls overhead.",
+      "action": [
+        {
+          "id": "90d2a24d-5eb8-44bb-85dc-97cc700497e3",
+          "label": "Ride Breaking Crest",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        },
+        {
+          "id": "6589c495-c09e-4eed-a502-1db46ee6b263",
+          "label": "Dismiss Familiar Ghosts",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "97b359ee-5a7a-4f54-bd65-e6221a893208",
+      "prose": "A young caster braces against a torrent of burning shadow tendrils and airborne rubble.",
+      "action": [
+        {
+          "id": "3c8e0e63-24a5-441c-87e9-2bad26c56e70",
+          "label": "Feed Blazing Shadows",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to burn for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "9163853b-42a6-4465-8e7a-11c60d92959b",
+          "label": "Unleash Nightmare Surge",
+          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          "effectKind": "reduce-cost-all-and-gain-nightmares",
+          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
+          "energyCostReduction": 1,
+          "nightmareCount": 3
+        }
+      ]
     }
   ],
-  "contentHash": "a79ce502ee552434e2f6c90d4c3c7c7c9681a3ef9691c4110bb3f6234485883e",
-  "foldHash": "a79ce502ee552434e2f6c90d4c3c7c7c9681a3ef9691c4110bb3f6234485883e"
+  "contentHash": "a91560c671df47daf9ca1153058d8350897837aaa9769be24ced541c2a22a50d",
+  "foldHash": "a91560c671df47daf9ca1153058d8350897837aaa9769be24ced541c2a22a50d"
 }

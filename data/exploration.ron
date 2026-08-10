@@ -14043,4 +14043,149 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "0269e363-5567-47a4-80cd-8ebc061fe7e1",
+    prose: "A masked gunman crosses burning wreckage beneath collapsed machinery and a smoke-red sky.",
+    actions: [
+      ActionDefinition(
+        label: "Salvage Fallen Strength",
+        id: "55d47fc9-f9d4-4564-8b6d-8bbea859b8ca",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had.",
+          followup: Followup(
+            title: "Salvage Fallen Strength",
+            subtitle: "Choose a card to salvage for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Signal Hidden Survivors",
+        id: "acbc59d0-9f17-4ce1-b560-3cd841355a2b",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Survivors from 4 choices.",
+          followup: Followup(
+            title: "Signal Hidden Survivors",
+            subtitle: "Choose any offered Survivors to rally.",
+          ),
+        ),
+        effect: TakeCards(predicate: Survivor, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "18979c10-39b8-42fb-ac1d-dd784da498d1",
+    prose: "A vast black eagle dives toward a lone swordsman across tall grass as feathers scatter.",
+    actions: [
+      ActionDefinition(
+        label: "Offer Weakened Prey",
+        id: "0ab85e32-a126-4359-9cde-7e917b1916f5",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen ≤1✦ Character card",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a ≤1✦ Character for the eagle to seize.",
+          ),
+        ),
+        effect: PurgeSelected(predicate: CheapCharacter, count: None),
+      ),
+
+      ActionDefinition(
+        label: "Ride Eagle's Wake",
+        id: "d449caaa-9d41-4d63-af5c-23b6aa9d6ce5",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "41044897-b70a-4e2b-8eb6-baf843a14a43",
+    prose: "A robed conjurer raises a glowing staff as runes and mossy stones circle overhead.",
+    actions: [
+      ActionDefinition(
+        label: "Feed the Rune Ring",
+        id: "008c0224-5be4-4b37-b0b6-c05213a3af0b",
+        presentation: ActionPresentation(
+          effect_text: "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          followup: None,
+        ),
+        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+      ),
+
+      ActionDefinition(
+        label: "Open the Soul Ring",
+        id: "4dbd6870-bbe2-40d5-a2f3-47c30b34dda0",
+        presentation: ActionPresentation(
+          effect_text: "Take any number of Warrior cards from 4 choices",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose any number of offered Warriors.",
+          ),
+        ),
+        effect: TakeCards(predicate: Warrior, offer_count: 4),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "9d63ba3e-fafb-466e-8418-ce5f8941ba30",
+    prose: "A solitary mariner rows through blue-lit rain as a towering white wave curls overhead.",
+    actions: [
+      ActionDefinition(
+        label: "Ride Breaking Crest",
+        id: "90d2a24d-5eb8-44bb-85dc-97cc700497e3",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+
+      ActionDefinition(
+        label: "Dismiss Familiar Ghosts",
+        id: "6589c495-c09e-4eed-a502-1db46ee6b263",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "97b359ee-5a7a-4f54-bd65-e6221a893208",
+    prose: "A young caster braces against a torrent of burning shadow tendrils and airborne rubble.",
+    actions: [
+      ActionDefinition(
+        label: "Feed Blazing Shadows",
+        id: "3c8e0e63-24a5-441c-87e9-2bad26c56e70",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to burn for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Unleash Nightmare Surge",
+        id: "9163853b-42a6-4465-8e7a-11c60d92959b",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          followup: None,
+        ),
+        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+      ),
+    ],
+  ),
 ]
