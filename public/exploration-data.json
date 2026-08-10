@@ -2237,8 +2237,132 @@
           "offerCount": 4
         }
       ]
+    },
+    {
+      "cardId": "6e019832-2e0c-4166-81c3-54f7995425df",
+      "prose": "A floating monolith fractures above mirrored shallows while blue lightning scatters black shards.",
+      "action": [
+        {
+          "id": "0b596a61-2355-4932-b6d7-e174a38bf85a",
+          "label": "Sever Reflected Copies",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        },
+        {
+          "id": "75a6bd0b-714b-46ed-b5c4-9485f8319959",
+          "label": "Bind Fracture Lightning",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        }
+      ]
+    },
+    {
+      "cardId": "570895fe-cd21-45d2-89ff-162f46978776",
+      "prose": "A lone guitarist approaches a moonlit tree as concentric stars circle through violet night.",
+      "action": [
+        {
+          "id": "1b4f564c-c1d1-4949-803a-b43a2c260faa",
+          "label": "Repeat Cosmic Refrain",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card to echo.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "7fe9453a-3e29-443f-bf5d-72c779b4def3",
+          "label": "Silence Every Echo",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "017a7b4b-3ccf-4635-9956-28a72b22274e",
+      "prose": "A lone crawler combs rusted dunes, smoke curling beneath a swollen moon.",
+      "action": [
+        {
+          "id": "f2e2bd49-c3f7-4873-bf75-f6ed62795758",
+          "label": "Recover Compact Frames",
+          "effectText": "Draft a ≤2● cost Character from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered card.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "cheap-character",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "7857fba4-7673-4b07-aac4-bd53d727ce9c",
+          "label": "Feed Salvage Furnace",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to burn for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        }
+      ]
+    },
+    {
+      "cardId": "8f69312f-4bec-4671-99da-e752ec6d4cbc",
+      "prose": "A young seeker climbs moss-covered stairs toward a red gate suspended among clouds.",
+      "action": [
+        {
+          "id": "e0cabb03-1565-4aea-b51f-f6d78e0137b7",
+          "label": "Read Four Answers",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one revealed card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "1772a373-b690-4dff-a903-88d26bd5d006",
+          "label": "Cross Vermilion Gate",
+          "effectText": "The next draft or shop site you visit will contain transfigured cards",
+          "effectKind": "transfigure-next-draft-or-shop",
+          "canonicalMechanicId": "next-site-transfiguration"
+        }
+      ]
+    },
+    {
+      "cardId": "680abf68-d7bb-47cf-885a-d808dc0a8e09",
+      "prose": "A cloaked traveler raises a blazing staff from a narrow bridge above orange smoke.",
+      "action": [
+        {
+          "id": "44246e47-ae7d-4a3e-92ab-1e4942300473",
+          "label": "Raise Blazing Staff",
+          "effectText": "Gain {fixed_card}",
+          "effectKind": "gain-card",
+          "canonicalMechanicId": "gain-card",
+          "selectionPolicyId": "fixed",
+          "cardId": "5a27e236-86d7-442f-81d2-fb29a2b7f12a"
+        },
+        {
+          "id": "f9eb3687-2281-473f-8222-d17797a9c87e",
+          "label": "Follow Orange Smoke",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one revealed card to copy.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        }
+      ]
     }
   ],
-  "contentHash": "077f1a4e34820de0333af3b027d81072067019dae6bb6699e9726286735db427",
-  "foldHash": "077f1a4e34820de0333af3b027d81072067019dae6bb6699e9726286735db427"
+  "contentHash": "d57a2eb29c33b989d81d01ed4ebdfeea812b6f2b0773a4b64bee2bf9a77b9546",
+  "foldHash": "d57a2eb29c33b989d81d01ed4ebdfeea812b6f2b0773a4b64bee2bf9a77b9546"
 }

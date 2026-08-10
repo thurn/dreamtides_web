@@ -2350,4 +2350,140 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "6e019832-2e0c-4166-81c3-54f7995425df",
+    prose: "A floating monolith fractures above mirrored shallows while blue lightning scatters black shards.",
+    actions: [
+      ActionDefinition(
+        label: "Sever Reflected Copies",
+        id: "0b596a61-2355-4932-b6d7-e174a38bf85a",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+
+      ActionDefinition(
+        label: "Bind Fracture Lightning",
+        id: "75a6bd0b-714b-46ed-b5c4-9485f8319959",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "570895fe-cd21-45d2-89ff-162f46978776",
+    prose: "A lone guitarist approaches a moonlit tree as concentric stars circle through violet night.",
+    actions: [
+      ActionDefinition(
+        label: "Repeat Cosmic Refrain",
+        id: "1b4f564c-c1d1-4949-803a-b43a2c260faa",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card to echo."),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Silence Every Echo",
+        id: "7fe9453a-3e29-443f-bf5d-72c779b4def3",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "017a7b4b-3ccf-4635-9956-28a72b22274e",
+    prose: "A lone crawler combs rusted dunes, smoke curling beneath a swollen moon.",
+    actions: [
+      ActionDefinition(
+        label: "Recover Compact Frames",
+        id: "f2e2bd49-c3f7-4873-bf75-f6ed62795758",
+        presentation: ActionPresentation(
+          effect_text: "Draft a ≤2● cost Character from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+        ),
+        effect: DraftCard(predicate: CheapCharacter, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Feed Salvage Furnace",
+        id: "7857fba4-7673-4b07-aac4-bd53d727ce9c",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to burn for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "8f69312f-4bec-4671-99da-e752ec6d4cbc",
+    prose: "A young seeker climbs moss-covered stairs toward a red gate suspended among clouds.",
+    actions: [
+      ActionDefinition(
+        label: "Read Four Answers",
+        id: "e0cabb03-1565-4aea-b51f-f6d78e0137b7",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one revealed card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Cross Vermilion Gate",
+        id: "1772a373-b690-4dff-a903-88d26bd5d006",
+        presentation: ActionPresentation(
+          effect_text: "The next draft or shop site you visit will contain transfigured cards",
+          followup: None,
+        ),
+        effect: TransfigureNextDraftOrShop,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "680abf68-d7bb-47cf-885a-d808dc0a8e09",
+    prose: "A cloaked traveler raises a blazing staff from a narrow bridge above orange smoke.",
+    actions: [
+      ActionDefinition(
+        label: "Raise Blazing Staff",
+        id: "44246e47-ae7d-4a3e-92ab-1e4942300473",
+        presentation: ActionPresentation(effect_text: "Gain {fixed_card}", followup: None),
+        effect: GainNamedCard(card_id: "5a27e236-86d7-442f-81d2-fb29a2b7f12a"),
+      ),
+
+      ActionDefinition(
+        label: "Follow Orange Smoke",
+        id: "f9eb3687-2281-473f-8222-d17797a9c87e",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one revealed card to copy.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+    ],
+  ),
 ]
