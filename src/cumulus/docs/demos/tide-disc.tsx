@@ -6,7 +6,7 @@
 
 import { TideDisc } from "../../components/hud/TideDisc";
 import { token } from "../../primitives/tokens";
-import { tideAlignments } from "../../components/hud/tide-spec";
+import { resonances } from "../../components/hud/tide-spec";
 import type { CumulusComponent } from "../registry";
 
 function TideDiscDemo() {
@@ -21,13 +21,13 @@ function TideDiscDemo() {
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        {tideAlignments().map((alignment) => (
+        {resonances().map((resonance) => (
           <TideDisc
-            key={alignment.id}
-            tide={alignment.id}
-            id={`demo-sm-${alignment.id}`}
-            label={alignment.displayName}
-            description={alignment.accessibilityName}
+            key={resonance.id}
+            tide={resonance.id}
+            id={`demo-sm-${resonance.id}`}
+            label={resonance.displayName}
+            description={resonance.accessibilityName}
           />
         ))}
       </div>
@@ -51,7 +51,7 @@ export const tideDiscDemo: CumulusComponent = {
   callout:
     "The tide-identity palette lives in src/cumulus/components/hud/tide-spec.ts.",
   details: [
-    "The canonical tide-alignment catalog supplies each fixed accent, glyph, display name, and accessibility name to TideDisc and InfoCard.",
+    "The canonical resonance catalog supplies each fixed accent, glyph, display name, and accessibility name to TideDisc and InfoCard.",
     "Selection-provenance controls use role colors instead. tide-spec has no renderable component of its own, so it is documented here on its canonical renderer.",
   ],
   group: "Components",

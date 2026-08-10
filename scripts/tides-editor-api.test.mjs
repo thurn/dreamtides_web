@@ -30,7 +30,7 @@ function fixture() {
         id: TIDE_ID,
         displayName: "Fixture",
         displayDescription: "Description",
-        color: "purple",
+        resonance: "shadow",
         role: "signature",
         cards: [{ id: "00000000-0000-4000-8000-000000000011", copies: 2 }],
       },
@@ -144,8 +144,8 @@ describe("canonical tides editor API", () => {
       `/api/editor/tide-decks/${TIDE_ID}`,
       {
         id: TIDE_ID,
-        field: "color",
-        value: "blue",
+        field: "resonance",
+        value: "vision",
         expectedSourceRevision: "revision-old",
       },
     );
@@ -168,7 +168,7 @@ describe("canonical tides editor API", () => {
       middleware,
       "PATCH",
       `/api/editor/tide-decks/${TIDE_ID}`,
-      { id: TIDE_ID, field: "color", value: "blue" },
+      { id: TIDE_ID, field: "resonance", value: "vision" },
     );
     expect(result.status).toBe(400);
     expect(publishEdit).not.toHaveBeenCalled();

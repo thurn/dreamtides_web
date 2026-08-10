@@ -7,6 +7,8 @@ use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
+use super::resonance::Resonance;
+
 pub type TidesCatalog = Vec<TideDefinition>;
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -15,31 +17,10 @@ pub struct TideDefinition {
     pub id: TideId,
     pub display_name: String,
     pub display_description: String,
-    pub color: TideColor,
+    pub resonance: Resonance,
     pub kind: TideKind,
     #[serde(deserialize_with = "super::card_counts::deserialize")]
     pub cards: IndexMap<CardId, u32>,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum TideColor {
-    Purple,
-    Green,
-    Yellow,
-    Blue,
-    Orange,
-}
-
-impl TideColor {
-    fn as_compat(self) -> &'static str {
-        match self {
-            Self::Purple => "purple",
-            Self::Green => "green",
-            Self::Yellow => "yellow",
-            Self::Blue => "blue",
-            Self::Orange => "orange",
-        }
-    }
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
@@ -174,7 +155,7 @@ pub fn lower(catalog: TidesCatalog) -> Result<toml::Value> {
                         "display-description".into(),
                         tide.display_description.into(),
                     );
-                    table.insert("color".into(), tide.color.as_compat().into());
+                    table.insert("resonance".into(), tide.resonance.as_compat().into());
                     table.insert("role".into(), tide.kind.as_compat().into());
                     table.insert(
                         "card".into(),
@@ -215,17 +196,17 @@ mod tests {
 
     fn catalog() -> TidesCatalog {
         let kinds = [TideKind::Signature, TideKind::Facet, TideKind::Neutral];
-        let colors = [TideColor::Purple, TideColor::Blue, TideColor::Orange];
+        let resonances = [Resonance::Shadow, Resonance::Vision, Resonance::Ember];
         TIDE_IDS
             .into_iter()
             .zip(CARD_IDS)
             .zip(kinds)
-            .zip(colors)
-            .map(|(((tide_id, card_id), kind), color)| TideDefinition {
+            .zip(resonances)
+            .map(|(((tide_id, card_id), kind), resonance)| TideDefinition {
                 id: TideId::parse(tide_id).unwrap(),
                 display_name: format!("Display {tide_id}"),
                 display_description: "Unicode tide — exact copy".into(),
-                color,
+                resonance,
                 kind,
                 cards: IndexMap::from_iter([(CardId::parse(card_id).unwrap(), 2)]),
             })
@@ -239,7 +220,7 @@ mod tests {
         assert_eq!(lowered["tide"][0]["role"].as_str(), Some("signature"));
         assert_eq!(lowered["tide"][1]["role"].as_str(), Some("facet"));
         assert_eq!(lowered["tide"][2]["role"].as_str(), Some("neutral"));
-        assert_eq!(lowered["tide"][1]["color"].as_str(), Some("blue"));
+        assert_eq!(lowered["tide"][1]["resonance"].as_str(), Some("vision"));
         assert_eq!(
             lowered["tide"][0]["card"][0]["id"].as_str(),
             Some(CARD_IDS[0])

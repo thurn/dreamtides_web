@@ -64,7 +64,7 @@ function readTides4(rootDir, tides4Path, tidePoolsPath) {
 
 /**
  * The available tide identities, in source order, stripped of their (large)
- * card lists. The editor's tide picker only needs each tide's id, role, color,
+ * card lists. The editor's tide picker only needs each tide's id, role, resonance,
  * and the names it renders to the user.
  */
 export function readTideCatalog({
@@ -77,7 +77,7 @@ export function readTideCatalog({
   return tides.map((tide) => ({
     id: tide.id,
     displayName: typeof tide.displayName === "string" ? tide.displayName : "",
-    color: tide.color,
+    resonance: tide.resonance,
     role: tide.role,
   }));
 }

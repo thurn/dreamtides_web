@@ -40,7 +40,7 @@ function makeTides4(
       displayName: "Sig 1",
       displayDescription: "Signature description",
       role: "signature",
-      color: "purple",
+      resonance: "shadow",
       cards: mkCards("tide-sig-1"),
     },
     ...Array.from({ length: facetCount }, (_, f) => ({
@@ -48,7 +48,7 @@ function makeTides4(
       displayName: `Facet ${String(f + 1)}`,
       displayDescription: `Facet ${String(f + 1)} description`,
       role: "facet" as const,
-      color: "green" as const,
+      resonance: "wild" as const,
       cards: mkCards(`tide-fac-${String(f + 1)}`),
     })),
     ...Array.from({ length: neutralCount }, (_, n) => ({
@@ -56,7 +56,7 @@ function makeTides4(
       displayName: `Neutral ${String(n + 1)}`,
       displayDescription: `Neutral ${String(n + 1)} description`,
       role: "neutral" as const,
-      color: "blue" as const,
+      resonance: "vision" as const,
       cards: mkCards(`tide-neu-${String(n + 1)}`),
     })),
   ];
@@ -182,7 +182,7 @@ describe("generateTides4", () => {
       displayName: "Sig 2",
       displayDescription: "Second signature description",
       role: "signature",
-      color: "yellow",
+      resonance: "valor",
       cards: Array.from({ length: 30 }, (_, i) => ({
         id: `tide-sig-2-card-${String(i)}`,
         copies: 2,
@@ -214,7 +214,7 @@ describe("generateTides4", () => {
       displayName: "Lexicographically First",
       displayDescription: "Second authored archetype",
       role: "signature" as const,
-      color: "yellow" as const,
+      resonance: "valor" as const,
       cards: [{ id: "second-signature-card", copies: 2 }],
     };
     data.tides.push(second);

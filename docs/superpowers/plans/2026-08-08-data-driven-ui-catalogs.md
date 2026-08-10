@@ -10,10 +10,10 @@ Move five families of repeated authored UI and rules metadata out of TypeScript 
 1. Gamble rules, tuning, outcomes, and presentation live in `data/gamble.ron`.
 2. Transfiguration rules, tuning, forms, and presentation live in `data/transfiguration.ron`.
 3. Dreamwell automation prompts live beside their owning cards in `data/dreamwell.ron`.
-4. The five tide alignments live in `data/tide_alignments.ron`.
+4. The five resonances live in `data/resonance.ron`.
 5. Rules-text symbol labels and presentation metadata live on their concepts in `data/glossary.ron`.
 
-The migration preserves the exact source-English experience. TypeScript remains responsible for generic algorithms, state transitions, rendering, and closed interpreters. It must not contain per-game, per-form, per-alignment, per-symbol, or per-prompt content tables after cutover.
+The migration preserves the exact source-English experience. TypeScript remains responsible for generic algorithms, state transitions, rendering, and closed interpreters. It must not contain per-game, per-form, per-resonance, per-symbol, or per-prompt content tables after cutover.
 
 ## Why This Boundary
 
@@ -71,7 +71,7 @@ The generic reward-selection blend remains in `reward_selection.ron`. Transfigur
 
 Dreamwell card identity and authored card text live in `dreamwell.ron`, while automation prompts live in `battle-prompts.ftl`. The effect table maps card UUIDs to descriptors, and lifecycle compatibility code also contains a large legacy prompt lookup. Prompt wording is therefore detached from the card definition that owns the interaction.
 
-### Tide alignments
+### Resonances
 
 The five tide names exist in visible and accessible Fluent branches while icon and color metadata lives in `tide-spec.ts`. Some consumers title-case identifiers rather than reading authored display names.
 
@@ -170,9 +170,9 @@ The existing TypeScript effect registry remains responsible for automation behav
 
 Legacy persisted Fluent descriptors remain readable through a narrowly scoped compatibility decoder. New gameplay state does not emit them. Compatibility must be tested with synthetic legacy fixtures rather than mutable production catalogs.
 
-### 4. `data/tide_alignments.ron`
+### 4. `data/resonance.ron`
 
-This presentation catalog contains exactly the five stable tide alignment IDs. Each record owns its display name, glyph token, accent color, and accessibility name inputs. Complete grammatical accessibility shells such as an alignment announcement may remain Fluent and receive the authored name as an argument.
+This presentation catalog contains exactly the five stable resonance IDs. Each record owns its display name, glyph token, accent color, and accessibility name inputs. Complete grammatical accessibility shells such as a resonance announcement may remain Fluent and receive the authored name as an argument.
 
 The runtime and editor consume the same generated data. `tide-spec.ts` becomes a loader-backed accessor rather than an authored table, and consumers stop deriving display names by title-casing IDs.
 
@@ -194,13 +194,13 @@ Fluent remains the owner of messages that need plural/select logic, grammatical 
 
 The cutover uses an explicit parity fixture during development to compare normalized old output with new output. Committed tests assert structural coverage, semantic arguments, and resolver behavior; they do not assert specific UI strings.
 
-Translator descriptions are updated for any remaining Fluent shell whose arguments now come from a RON catalog. Arguments use semantic names such as `alignmentName`, `formName`, or `attemptCount`, and descriptions explain the complete rendered sentence.
+Translator descriptions are updated for any remaining Fluent shell whose arguments now come from a RON catalog. Arguments use semantic names such as `resonanceName`, `formName`, or `attemptCount`, and descriptions explain the complete rendered sentence.
 
 ## Runtime and Persistence Contract
 
 ### Generated data and loaders
 
-The pipeline adds generated `gamble-data.json`, `transfiguration-data.json`, and `tide-alignments-data.json` outputs and extends glossary and Dreamwell outputs with their new metadata. Runtime validators fail closed on malformed payloads.
+The pipeline adds generated `gamble-data.json`, `transfiguration-data.json`, and `resonances-data.json` outputs and extends glossary and Dreamwell outputs with their new metadata. Runtime validators fail closed on malformed payloads.
 
 `JourneyContent` gains typed Gamble and Transfiguration data. Code must accept these dependencies explicitly rather than importing mutable module-level production fixtures in reducers or tests.
 
@@ -271,7 +271,7 @@ Tests use synthetic catalog fixtures and stable IDs. They do not assert particul
 **Green**
 
 - Add typed Rust source models, validators, and lowerers.
-- Register `gamble`, `transfiguration`, and `tide-alignments` in `data/game-data-manifest.ron` with explicit dependencies and refresh owners.
+- Register `gamble`, `transfiguration`, and `resonances` in `data/game-data-manifest.ron` with explicit dependencies and refresh owners.
 - Extend Dreamwell and glossary models for prompts and rules-symbol metadata.
 - Generate deterministic compatibility TOML and runtime JSON.
 
@@ -413,7 +413,7 @@ Tests use synthetic catalog fixtures and stable IDs. They do not assert particul
 
 **Done when:** prompt copy is found by starting from the Dreamwell card UUID, and new state never emits a prompt Fluent ID.
 
-### Task 8: Centralize tide alignment presentation
+### Task 8: Centralize resonance presentation
 
 **Bug class:** tide names, icons, colors, and accessibility branches can disagree across runtime and editor surfaces.
 
@@ -424,7 +424,7 @@ Tests use synthetic catalog fixtures and stable IDs. They do not assert particul
 
 **Green**
 
-- Author `data/tide_alignments.ron` with current exact presentation.
+- Author `data/resonance.ron` with current exact presentation.
 - Add a generated loader used by runtime, Cumulus, and editor consumers.
 - Replace `tide-spec.ts` authored constants with accessors.
 - Consolidate visible and accessible Fluent branches into complete shells where grammar requires Fluent.
@@ -434,7 +434,7 @@ Tests use synthetic catalog fixtures and stable IDs. They do not assert particul
 - `npm run game-data:compile`
 - `npm test -- src/cumulus/components/hud/tide-spec.test.ts`
 
-**Done when:** one alignment record supplies every surface's name, glyph, and color.
+**Done when:** one resonance record supplies every surface's name, glyph, and color.
 
 ### Task 9: Make glossary concepts own rules-symbol metadata
 
@@ -541,7 +541,7 @@ Each task should land as its own reviewable commit and be pushed immediately. Pr
 5. Transfiguration canonical data extraction.
 6. Transfiguration interpreter cutover.
 7. Dreamwell prompt ownership.
-8. Tide alignment catalog.
+8. Resonance catalog.
 9. Glossary rules-symbol metadata.
 10. Co-op hashes and reconstruction logging.
 11. Zero-baseline cleanup.
@@ -554,9 +554,9 @@ Do not combine schema introduction and removal of the old runtime path in one un
 - `gamble.ron` is the only canonical owner of all five Gamble games' rules, tuning, economic values, rules versions, outcomes, and repeated presentation.
 - `transfiguration.ron` is the only canonical owner of all nine forms' rules, eligibility, tuning, pricing, selection metadata, visual metadata, and repeated presentation.
 - Dreamwell card records own every card-specific automation prompt through stable semantic prompt keys.
-- `tide_alignments.ron` owns all five alignments' names, glyphs, colors, and accessibility-name inputs.
+- `resonance.ron` owns all five resonances' names, glyphs, colors, and accessibility-name inputs.
 - Glossary records own the six supported rules symbols' token, glyph, and accessible label.
-- TypeScript contains no per-game, per-form, per-alignment, per-symbol, or per-prompt authored lookup table in scope.
+- TypeScript contains no per-game, per-form, per-resonance, per-symbol, or per-prompt authored lookup table in scope.
 - Remaining Fluent messages are complete grammatical shells or one-off UI strings, not alternate content databases.
 - Source-English behavior and presentation are unchanged.
 - Persisted identity remains UUID- or stable-ID-based and never name-based.

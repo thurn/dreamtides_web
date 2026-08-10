@@ -2881,7 +2881,7 @@
     },
     {
       "name": "tide",
-      "tsType": "TideAlignmentId",
+      "tsType": "Resonance",
       "unionMembers": [
         "shadow",
         "ember",
@@ -2891,7 +2891,7 @@
       ],
       "required": true,
       "defaultValue": null,
-      "description": "Which of the five tides. Fixes the disc color/mark and the alignment label."
+      "description": "Which of the five tides. Fixes the disc color/mark and the resonance label."
     }
   ],
   "InlineGlyph": [
@@ -4398,7 +4398,7 @@
   "TideDisc": [
     {
       "name": "tide",
-      "tsType": "TideAlignmentId",
+      "tsType": "Resonance",
       "unionMembers": [
         "shadow",
         "ember",

@@ -26,7 +26,7 @@ function makeDeck(cards: Tides4DeckJson["cards"]): Tides4DeckJson {
     id: "tide-fac-01",
     displayName: "Test tide",
     displayDescription: "Test description",
-    color: "purple",
+    resonance: "shadow",
     role: "facet",
     cards,
   };

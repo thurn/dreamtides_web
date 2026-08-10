@@ -1,15 +1,12 @@
-import {
-  TIDE_ALIGNMENTS_DATA,
-  tideAlignment,
-} from "../../../data/tide-alignments-data";
+import { RESONANCE_DATA, resonance } from "../../../data/resonance-data";
 import type {
-  TideAlignmentDefinition,
-  TideAlignmentId,
-  TideAlignmentsData,
-} from "../../../types/tide-alignments-data";
+  Resonance,
+  ResonanceData,
+  ResonanceDefinition,
+} from "../../../types/resonance-data";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 
-export type Tide = TideAlignmentId;
+export type Tide = Resonance;
 
 export interface TideSpec {
   icon: Glyph;
@@ -18,10 +15,10 @@ export interface TideSpec {
   bd: string;
 }
 
-function visualFromAlignment(alignment: TideAlignmentDefinition): TideSpec {
-  const accent = alignment.accentColor;
+function visualFromResonance(definition: ResonanceDefinition): TideSpec {
+  const accent = definition.accentColor;
   return {
-    icon: GLYPHS[alignment.glyph],
+    icon: GLYPHS[definition.glyph],
     fg: accent,
     bg: `color-mix(in srgb, ${accent} 18%, transparent)`,
     bd: `color-mix(in srgb, ${accent} 45%, transparent)`,
@@ -30,25 +27,25 @@ function visualFromAlignment(alignment: TideAlignmentDefinition): TideSpec {
 
 export function tideVisual(
   tide: Tide,
-  data: TideAlignmentsData = TIDE_ALIGNMENTS_DATA,
+  data: ResonanceData = RESONANCE_DATA,
 ): TideSpec {
-  return visualFromAlignment(tideAlignment(tide, data));
+  return visualFromResonance(resonance(tide, data));
 }
 
-export function tideAlignmentLabel(
+export function tideResonanceLabel(
   tide: Tide,
-  data: TideAlignmentsData = TIDE_ALIGNMENTS_DATA,
+  data: ResonanceData = RESONANCE_DATA,
 ): string {
-  return tideAlignment(tide, data).displayName;
+  return resonance(tide, data).displayName;
 }
 
 export function tideAccessibilityName(
   tide: Tide,
-  data: TideAlignmentsData = TIDE_ALIGNMENTS_DATA,
+  data: ResonanceData = RESONANCE_DATA,
 ): string {
-  return tideAlignment(tide, data).accessibilityName;
+  return resonance(tide, data).accessibilityName;
 }
 
-export function tideAlignments(): readonly TideAlignmentDefinition[] {
-  return TIDE_ALIGNMENTS_DATA.alignments;
+export function resonances(): readonly ResonanceDefinition[] {
+  return RESONANCE_DATA.resonances;
 }

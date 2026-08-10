@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import { DreamAvatarPortrait } from "../cumulus/components/hud/DreamAvatarPortrait";
 import { RulesText } from "../cumulus/components/card/RulesText";
 import EditableField from "./EditableField";
-import { TIDE_DOT_COLOR } from "./TidePoolModal";
+import { tideDotColor } from "./TidePoolModal";
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
 import type {
   EditableDreamAvatarField,
@@ -304,7 +304,7 @@ export default function EditableDreamAvatar({
                   gap: "5px",
                   padding: "2px 8px",
                   borderRadius: "999px",
-                  border: `1px solid ${TIDE_DOT_COLOR[starterTide.color]}`,
+                  border: `1px solid ${tideDotColor(starterTide.resonance)}`,
                   fontSize: "0.72rem",
                   fontWeight: 700,
                   color: "#eef4f1",
@@ -316,7 +316,7 @@ export default function EditableDreamAvatar({
                     width: "8px",
                     height: "8px",
                     borderRadius: "50%",
-                    background: TIDE_DOT_COLOR[starterTide.color],
+                    background: tideDotColor(starterTide.resonance),
                   }}
                 />
                 {tideLabel(starterTide.id)}

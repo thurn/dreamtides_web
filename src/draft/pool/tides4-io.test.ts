@@ -18,7 +18,7 @@ function makeArtifact(): Tides4DecksJson {
         displayName: "Rael signature",
         displayDescription: "Signature description",
         role: "signature",
-        color: "purple",
+        resonance: "shadow",
         cards: [
           { id: "11111111-1111-1111-1111-111111111111", copies: 2 },
           { id: "22222222-2222-2222-2222-222222222222", copies: 1 },
@@ -29,7 +29,7 @@ function makeArtifact(): Tides4DecksJson {
         displayName: "Lean: Card A",
         displayDescription: "Facet description",
         role: "facet",
-        color: "green",
+        resonance: "wild",
         cards: [
           { id: "11111111-1111-1111-1111-111111111111", copies: 2 },
           { id: "44444444-4444-4444-4444-444444444444", copies: 1 },
@@ -40,7 +40,7 @@ function makeArtifact(): Tides4DecksJson {
         displayName: "Broad: Card C / Card D",
         displayDescription: "Neutral description",
         role: "neutral",
-        color: "blue",
+        resonance: "vision",
         cards: [
           { id: "33333333-3333-3333-3333-333333333333", copies: 1 },
         ],
@@ -92,16 +92,16 @@ describe("validateTides4Decks", () => {
     expect(() => validateTides4Decks(data)).toThrow(/unknown role/);
   });
 
-  it("rejects an unknown color", () => {
+  it("rejects an unknown resonance", () => {
     const data = clone(makeArtifact()) as Tides4DecksJson;
-    (data.tides[0] as { color: string }).color = "teal";
-    expect(() => validateTides4Decks(data)).toThrow(/unknown color/);
+    (data.tides[0] as { resonance: string }).resonance = "harmony";
+    expect(() => validateTides4Decks(data)).toThrow(/unknown resonance/);
   });
 
-  it("rejects a tide with a missing color", () => {
+  it("rejects a tide with a missing resonance", () => {
     const data = clone(makeArtifact()) as Tides4DecksJson;
-    delete (data.tides[0] as { color?: string }).color;
-    expect(() => validateTides4Decks(data)).toThrow(/unknown color/);
+    delete (data.tides[0] as { resonance?: string }).resonance;
+    expect(() => validateTides4Decks(data)).toThrow(/unknown resonance/);
   });
 
   it("rejects a tide with no cards", () => {

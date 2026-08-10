@@ -16,11 +16,11 @@ export const DREAM_AVATAR_TIDE_POOLS_TOML_PATH = join(
   DATA_DIR,
   "dream_avatar_tide_pools.toml",
 );
-export const TIDES_COLORS = ["purple", "green", "yellow", "blue", "orange"];
+export const RESONANCES = ["ember", "valor", "vision", "wild", "shadow"];
 export const EDITABLE_TIDE_FIELDS = new Set([
   "displayName",
   "displayDescription",
-  "color",
+  "resonance",
 ]);
 
 export function resolveTidesFile(rootDir, requested) {
@@ -56,14 +56,14 @@ export function validateTideEdit(field, rawValue) {
   if (!EDITABLE_TIDE_FIELDS.has(field)) {
     return { ok: false, field, message: "This field is not editable." };
   }
-  if (field === "color") {
+  if (field === "resonance") {
     const value =
       typeof rawValue === "string" ? rawValue.trim().toLowerCase() : "";
-    if (!TIDES_COLORS.includes(value)) {
+    if (!RESONANCES.includes(value)) {
       return {
         ok: false,
         field,
-        message: `Color must be one of: ${TIDES_COLORS.join(", ")}.`,
+        message: `Resonance must be one of: ${RESONANCES.join(", ")}.`,
       };
     }
     return { ok: true, field, value };

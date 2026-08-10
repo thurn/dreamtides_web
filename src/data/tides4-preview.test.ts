@@ -25,7 +25,7 @@ function makeTides4(): Tides4DecksJson {
       displayName: "Sig 1",
       displayDescription: "Signature description",
       role: "signature",
-      color: "purple",
+      resonance: "shadow",
       cards: mkCards("tide-sig-1"),
     },
     ...Array.from({ length: 6 }, (_, f) => ({
@@ -33,7 +33,7 @@ function makeTides4(): Tides4DecksJson {
       displayName: `Facet ${String(f + 1)}`,
       displayDescription: `Facet ${String(f + 1)} description`,
       role: "facet" as const,
-      color: "green" as const,
+      resonance: "wild" as const,
       cards: mkCards(`tide-fac-${String(f + 1)}`),
     })),
     ...Array.from({ length: 2 }, (_, n) => ({
@@ -41,7 +41,7 @@ function makeTides4(): Tides4DecksJson {
       displayName: `Neutral ${String(n + 1)}`,
       displayDescription: `Neutral ${String(n + 1)} description`,
       role: "neutral" as const,
-      color: "blue" as const,
+      resonance: "vision" as const,
       cards: mkCards(`tide-neu-${String(n + 1)}`),
     })),
   ];

@@ -5,17 +5,17 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct TideAlignmentCatalog {
-    pub ember: TideAlignmentPresentation,
-    pub valor: TideAlignmentPresentation,
-    pub vision: TideAlignmentPresentation,
-    pub wild: TideAlignmentPresentation,
-    pub shadow: TideAlignmentPresentation,
+pub struct ResonanceCatalog {
+    pub ember: ResonancePresentation,
+    pub valor: ResonancePresentation,
+    pub vision: ResonancePresentation,
+    pub wild: ResonancePresentation,
+    pub shadow: ResonancePresentation,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct TideAlignmentPresentation {
+pub struct ResonancePresentation {
     pub display_name: String,
     pub accent_color: String,
     pub chip_background: String,
@@ -24,30 +24,7 @@ pub struct TideAlignmentPresentation {
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Ord, PartialOrd)]
-#[serde(rename_all = "snake_case")]
-pub enum TideDeckColor {
-    Orange,
-    Yellow,
-    Blue,
-    Green,
-    Purple,
-}
-
-impl TideDeckColor {
-    fn as_compat(self) -> &'static str {
-        match self {
-            Self::Orange => "orange",
-            Self::Yellow => "yellow",
-            Self::Blue => "blue",
-            Self::Green => "green",
-            Self::Purple => "purple",
-        }
-    }
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Ord, PartialOrd)]
-#[serde(rename_all = "snake_case")]
-pub enum TideAlignmentId {
+pub enum Resonance {
     Ember,
     Valor,
     Vision,
@@ -55,8 +32,8 @@ pub enum TideAlignmentId {
     Shadow,
 }
 
-impl TideAlignmentId {
-    fn as_compat(self) -> &'static str {
+impl Resonance {
+    pub(crate) fn as_compat(self) -> &'static str {
         match self {
             Self::Ember => "ember",
             Self::Valor => "valor",
@@ -90,15 +67,12 @@ impl TideGlyph {
 
 #[derive(Serialize)]
 struct CompatibilityCatalog {
-    #[serde(rename = "tide-alignments")]
-    alignments: Vec<CompatibilityAlignment>,
+    resonances: Vec<CompatibilityResonance>,
 }
 
 #[derive(Serialize)]
-struct CompatibilityAlignment {
+struct CompatibilityResonance {
     id: &'static str,
-    #[serde(rename = "deck-color")]
-    deck_color: &'static str,
     #[serde(rename = "display-name")]
     display_name: String,
     glyph: &'static str,
@@ -112,62 +86,34 @@ struct CompatibilityAlignment {
     accessibility_name: String,
 }
 
-pub fn lower(source: TideAlignmentCatalog) -> Result<toml::Value> {
+pub fn lower(source: ResonanceCatalog) -> Result<toml::Value> {
     validate(&source)?;
-    let alignments = [
-        (
-            TideAlignmentId::Ember,
-            TideDeckColor::Orange,
-            TideGlyph::TideEmber,
-            source.ember,
-        ),
-        (
-            TideAlignmentId::Valor,
-            TideDeckColor::Yellow,
-            TideGlyph::TideValor,
-            source.valor,
-        ),
-        (
-            TideAlignmentId::Vision,
-            TideDeckColor::Blue,
-            TideGlyph::TideVision,
-            source.vision,
-        ),
-        (
-            TideAlignmentId::Wild,
-            TideDeckColor::Green,
-            TideGlyph::TideWild,
-            source.wild,
-        ),
-        (
-            TideAlignmentId::Shadow,
-            TideDeckColor::Purple,
-            TideGlyph::TideShadow,
-            source.shadow,
-        ),
+    let resonances = [
+        (Resonance::Ember, TideGlyph::TideEmber, source.ember),
+        (Resonance::Valor, TideGlyph::TideValor, source.valor),
+        (Resonance::Vision, TideGlyph::TideVision, source.vision),
+        (Resonance::Wild, TideGlyph::TideWild, source.wild),
+        (Resonance::Shadow, TideGlyph::TideShadow, source.shadow),
     ];
     Ok(toml::Value::try_from(CompatibilityCatalog {
-        alignments: alignments
+        resonances: resonances
             .into_iter()
-            .map(
-                |(id, deck_color, glyph, presentation)| CompatibilityAlignment {
-                    id: id.as_compat(),
-                    deck_color: deck_color.as_compat(),
-                    display_name: presentation.display_name,
-                    glyph: glyph.as_compat(),
-                    accent_color: presentation.accent_color,
-                    chip_background: presentation.chip_background,
-                    chip_border: presentation.chip_border,
-                    accessibility_name: presentation.accessibility_name,
-                },
-            )
+            .map(|(id, glyph, presentation)| CompatibilityResonance {
+                id: id.as_compat(),
+                display_name: presentation.display_name,
+                glyph: glyph.as_compat(),
+                accent_color: presentation.accent_color,
+                chip_background: presentation.chip_background,
+                chip_border: presentation.chip_border,
+                accessibility_name: presentation.accessibility_name,
+            })
             .collect(),
     })?)
 }
 
-pub(crate) fn validate(source: &TideAlignmentCatalog) -> Result<()> {
+pub(crate) fn validate(source: &ResonanceCatalog) -> Result<()> {
     let mut names = BTreeSet::new();
-    for (id, alignment) in [
+    for (id, resonance) in [
         ("ember", &source.ember),
         ("valor", &source.valor),
         ("vision", &source.vision),
@@ -176,21 +122,21 @@ pub(crate) fn validate(source: &TideAlignmentCatalog) -> Result<()> {
     ] {
         let path = format!("{id}");
         ensure!(
-            !alignment.display_name.trim().is_empty(),
+            !resonance.display_name.trim().is_empty(),
             "{path}.display_name must not be blank"
         );
         ensure!(
-            !alignment.accessibility_name.trim().is_empty(),
+            !resonance.accessibility_name.trim().is_empty(),
             "{path}.accessibility_name must not be blank"
         );
         ensure!(
-            names.insert(alignment.display_name.to_lowercase()),
-            "{path}.display_name duplicates another alignment"
+            names.insert(resonance.display_name.to_lowercase()),
+            "{path}.display_name duplicates another resonance"
         );
-        validate_color(&path, &alignment.accent_color)?;
-        validate_color(&path, &alignment.chip_background)?;
+        validate_color(&path, &resonance.accent_color)?;
+        validate_color(&path, &resonance.chip_background)?;
         ensure!(
-            alignment.chip_border.starts_with("rgba(") && alignment.chip_border.ends_with(')'),
+            resonance.chip_border.starts_with("rgba(") && resonance.chip_border.ends_with(')'),
             "{path}.chip_border must be an rgba() CSS color"
         );
     }
@@ -210,18 +156,18 @@ fn validate_color(path: &str, color: &str) -> Result<()> {
 mod tests {
     use super::*;
 
-    fn presentation(name: &str, color: &str) -> TideAlignmentPresentation {
-        TideAlignmentPresentation {
+    fn presentation(name: &str, color: &str) -> ResonancePresentation {
+        ResonancePresentation {
             display_name: name.into(),
             accent_color: color.into(),
             chip_background: "#111111".into(),
             chip_border: "rgba(1, 2, 3, 0.5)".into(),
-            accessibility_name: format!("{name} alignment"),
+            accessibility_name: format!("{name} resonance"),
         }
     }
 
-    fn catalog() -> TideAlignmentCatalog {
-        TideAlignmentCatalog {
+    fn catalog() -> ResonanceCatalog {
+        ResonanceCatalog {
             ember: presentation("Ember", "#fb923c"),
             valor: presentation("Valor", "#facc15"),
             vision: presentation("Vision", "#60a5fa"),

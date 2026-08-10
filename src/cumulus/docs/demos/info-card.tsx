@@ -111,7 +111,7 @@ import { richText } from "src/cumulus/components/card/rich-text";
     },
     {
       label: "Tide variant",
-      note: "A named `tide` on its OWN colored disc, with the tide's alignment name (Valor, Shadow, …) in that tide's color below the title. The color comes from the named tide, never a raw value, so the card reads identically to that tide's disc on screen.",
+      note: "A named `tide` on its OWN colored disc, with the tide's resonance name (Valor, Shadow, …) in that tide's color below the title. The color comes from the named tide, never a raw value, so the card reads identically to that tide's disc on screen.",
       code: `<InfoCard
   variant="tide"
   tide="valor"
@@ -142,7 +142,7 @@ const scale = infoCardTextScale(window.innerWidth); // 0.86 below ~551px; otherw
       frame: true,
       glyph: glyph("bxf bx-store-alt-2"),
       // Seeds the tide-disc variant so switching `variant` to tide renders a
-      // real colored disc + alignment label rather than an empty card.
+      // real colored disc + resonance label rather than an empty card.
       tide: "valor",
     },
     sampleContent: {

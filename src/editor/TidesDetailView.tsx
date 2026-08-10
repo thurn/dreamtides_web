@@ -6,12 +6,10 @@ import { CardView } from "../cumulus/components/card/CardView";
 import CardBrowserGrid from "./card-browser/CardBrowserGrid";
 import { StandaloneGlyph } from "../cumulus/components/controls/StandaloneGlyph";
 import { GLYPHS, glyph } from "../cumulus/primitives/glyph";
+import { RESONANCE_DATA } from "../data/resonance-data";
 import { tideAccentColor, tideColorChip } from "./tide-visuals";
-import {
-  TIDES4_COLORS,
-  type Tides4Color,
-  type Tides4DeckJson,
-} from "../draft/pool/tides4-io";
+import type { Tides4DeckJson } from "../draft/pool/tides4-io";
+import type { Resonance } from "../types/resonance-data";
 import type { EditableTideField, EditorDreamAvatar } from "./tides-types";
 
 export type TideSaveStatus =
@@ -102,26 +100,27 @@ function FeaturedSource({
   return null;
 }
 
-function ColorPicker({
+function ResonancePicker({
   value,
   onChange,
 }: {
-  value: Tides4Color;
-  onChange: (color: Tides4Color) => void;
+  value: Resonance;
+  onChange: (resonance: Resonance) => void;
 }) {
   return (
     <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-      {TIDES4_COLORS.map((color) => {
-        const chip = tideColorChip(color);
-        const selected = color === value;
+      {RESONANCE_DATA.resonances.map((definition) => {
+        const resonance = definition.id;
+        const chip = tideColorChip(resonance);
+        const selected = resonance === value;
         return (
           <button
-            key={color}
+            key={resonance}
             type="button"
             aria-pressed={selected}
-            data-tide-color-option={color}
-            onClick={() => onChange(color)}
-            title={color}
+            data-tide-resonance-option={resonance}
+            onClick={() => onChange(resonance)}
+            title={definition.displayName}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -135,13 +134,13 @@ function ColorPicker({
               color: "#ffffff",
               background: chip.background,
               border: selected
-                ? `2px solid ${tideAccentColor(color)}`
+                ? `2px solid ${tideAccentColor(resonance)}`
                 : `1px solid ${chip.border}`,
               boxShadow: selected ? `0 0 0 2px rgba(0,0,0,0.4)` : "none",
             }}
           >
             <StandaloneGlyph glyph={chip.icon} color="white" />
-            {color}
+            {definition.displayName}
           </button>
         );
       })}
@@ -177,7 +176,7 @@ export default function TidesDetailView({
   onSaveField,
   onBack,
 }: TidesDetailViewProps) {
-  const chip = tideColorChip(tide.color);
+  const chip = tideColorChip(tide.resonance);
   const [displayName, setDisplayName] = useState(tide.displayName ?? "");
   const [displayDescription, setDisplayDescription] = useState(
     tide.displayDescription ?? "",
@@ -326,10 +325,12 @@ export default function TidesDetailView({
               />
             </div>
             <div>
-              <span style={FIELD_LABEL_STYLE}>Color</span>
-              <ColorPicker
-                value={tide.color}
-                onChange={(color) => onSaveField("color", color)}
+              <span style={FIELD_LABEL_STYLE}>Resonance</span>
+              <ResonancePicker
+                value={tide.resonance}
+                onChange={(resonance) =>
+                  onSaveField("resonance", resonance)
+                }
               />
             </div>
           </div>

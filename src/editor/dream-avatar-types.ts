@@ -1,4 +1,5 @@
-import type { Tides4Color, Tides4Role } from "../draft/pool/tides4-io";
+import type { Tides4Role } from "../draft/pool/tides4-io";
+import type { Resonance } from "../types/resonance-data";
 
 /** The inline-editable text fields on a DreamAvatar record. */
 export type EditableDreamAvatarField =
@@ -14,7 +15,7 @@ export type DreamAvatarSearchScope = "name" | "all";
 export interface EditorTideOption {
   id: string;
   displayName: string;
-  color: Tides4Color;
+  resonance: Resonance;
   role: Tides4Role;
 }
 

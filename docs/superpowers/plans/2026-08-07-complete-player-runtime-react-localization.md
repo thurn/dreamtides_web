@@ -291,7 +291,7 @@ must be added to that inventory before acceptance.
 ### Reveal accessibility
 
 `src/cumulus/internal/reveal/context.tsx` creates hidden descriptions by joining
-English fragments. It constructs definition sentences, Tide alignment, Energy
+English fragments. It constructs definition sentences, Resonance, Energy
 alternatives joined with `and`, Spark, Fast, Interrupt, Reclaim, and punctuation
 between card traits and authored rules text. The reveal model should carry
 semantic variants; one display formatter should create a complete description

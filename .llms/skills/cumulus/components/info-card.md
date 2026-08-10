@@ -30,7 +30,7 @@ InfoCardProps is a discriminated union. The flattened table combines every varia
 | `figure` | `ArtRef` | no | — | An optional foreground character render (a transparent full-body cutout — a Dream Guide, the boss) laid centered and prominent OVER the hero image, standing above the glass text card. Its own subject of the card; omit for a scene-only hero. An {@link ArtRef}, resolved by the component. Optional transparent full-body figure standing on the card's right side. |
 | `subtitle` | `string` | no | — | An epithet under the name — a smaller serif line in white, mirroring the Dream Avatar-select name/epithet pairing. Resolve before display; rules symbols render as icons. The resident guide / boss title; rules symbols render as icons. An epithet under the name — a smaller serif subtitle in white, mirroring the Dream Avatar-select name/epithet pairing. Resolve before display; rules symbols render as icons. |
 | `glyph` | `Glyph` | yes | — | The {@link Glyph} the disc renders. Required. |
-| `tide` | `TideAlignmentId` = `"shadow" \| "ember" \| "valor" \| "vision" \| "wild"` | yes | — | Which of the five tides. Fixes the disc color/mark and the alignment label. |
+| `tide` | `Resonance` = `"shadow" \| "ember" \| "valor" \| "vision" \| "wild"` | yes | — | Which of the five tides. Fixes the disc color/mark and the resonance label. |
 
 ### `titleDescriptor`: the `FluentMessageDescriptor` model
 
@@ -140,7 +140,7 @@ A `glyph` on a disc — used for site / place descriptions.
 
 ### Tide variant
 
-A named `tide` on its OWN colored disc, with the tide's alignment name (Valor, Shadow, …) in that tide's color below the title. The color comes from the named tide, never a raw value, so the card reads identically to that tide's disc on screen.
+A named `tide` on its OWN colored disc, with the tide's resonance name (Valor, Shadow, …) in that tide's color below the title. The color comes from the named tide, never a raw value, so the card reads identically to that tide's disc on screen.
 
 ```tsx
 <InfoCard

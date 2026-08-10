@@ -146,7 +146,7 @@ function actualLegacyMessages(
   if (family === "tides")
     return [...allIds]
       .filter(
-        (id) => id === "tide-alignment-name" || id === "reveal-tide-alignment",
+        (id) => id === "resonance-name" || id === "reveal-resonance",
       )
       .sort();
   if (family === "rulesSymbols")

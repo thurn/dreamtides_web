@@ -1,18 +1,17 @@
 import { describe, expect, it } from "vitest";
-import type { TideAlignmentsData } from "../../../types/tide-alignments-data";
+import type { ResonanceData } from "../../../types/resonance-data";
 import {
   tideAccessibilityName,
-  tideAlignmentLabel,
+  tideResonanceLabel,
   tideVisual,
 } from "./tide-spec";
 
 const SYNTHETIC_DATA = {
   schemaVersion: 1,
   contentHash: "a".repeat(64),
-  alignments: [
+  resonances: [
     {
       id: "ember",
-      deckColor: "orange",
       displayName: "Synthetic Name",
       glyph: "tideEmber",
       accentColor: "#123456",
@@ -21,18 +20,18 @@ const SYNTHETIC_DATA = {
       accessibilityName: "Synthetic accessibility name",
     },
   ],
-} as TideAlignmentsData;
+} as ResonanceData;
 
 describe("tide-spec", () => {
   it("projects names, accessibility, glyphs, and colors from injected data", () => {
-    expect(tideAlignmentLabel("ember", SYNTHETIC_DATA)).toBe(
-      SYNTHETIC_DATA.alignments[0].displayName,
+    expect(tideResonanceLabel("ember", SYNTHETIC_DATA)).toBe(
+      SYNTHETIC_DATA.resonances[0].displayName,
     );
     expect(tideAccessibilityName("ember", SYNTHETIC_DATA)).toBe(
-      SYNTHETIC_DATA.alignments[0].accessibilityName,
+      SYNTHETIC_DATA.resonances[0].accessibilityName,
     );
     expect(tideVisual("ember", SYNTHETIC_DATA).fg).toBe(
-      SYNTHETIC_DATA.alignments[0].accentColor,
+      SYNTHETIC_DATA.resonances[0].accentColor,
     );
   });
 });

@@ -12,7 +12,7 @@ describe("compileTidesData", () => {
             id: "00000000-0000-4000-8000-000000000001",
             "display-name": "Fixture Tide",
             "display-description": "A stable synthetic description.",
-            color: "purple",
+            resonance: "shadow",
             role: "signature",
             card: [
               {
@@ -42,7 +42,7 @@ describe("compileTidesData", () => {
           id: "00000000-0000-4000-8000-000000000001",
           displayName: "Fixture Tide",
           displayDescription: "A stable synthetic description.",
-          color: "purple",
+          resonance: "shadow",
           role: "signature",
           cards: [
             {

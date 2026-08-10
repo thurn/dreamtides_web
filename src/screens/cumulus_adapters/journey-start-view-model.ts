@@ -9,7 +9,6 @@ import { selectDreamAvatarOfferForReroll } from "../../data/dream-avatar-selecti
 import type { RunPoolContext } from "../../data/journey-content";
 import type { DreamAvatarContent } from "../../types/content";
 import type { Tides4DeckJson } from "../../draft/pool/tides4-io";
-import { tideAlignmentForDeckColor } from "../../data/tide-alignments-data";
 import type {
   TutorialJourneyPool,
   TutorialJourneyTide,
@@ -97,7 +96,7 @@ function toTideView(tide: Tides4DeckJson): DreamAvatarTideView {
     id: tide.id,
     label: tide.displayName !== "" ? tide.displayName : tide.id,
     description: tide.displayDescription,
-    tide: tideAlignmentForDeckColor(tide.color).id,
+    tide: tide.resonance,
   };
 }
 

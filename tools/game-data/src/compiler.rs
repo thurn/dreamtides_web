@@ -13,7 +13,7 @@ use crate::models::{
     affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft,
     dream_avatar_tide_pools, dream_avatars, dream_guides, dreamscapes, dreamsign_profiles,
     dreamsign_signatures, dreamsigns, dreamwell, economy, exploration, figments, gamble, glossary,
-    internal_card_metadata, journey, opponents, reward_selection, sites, tide_alignments, tides,
+    internal_card_metadata, journey, opponents, resonance, reward_selection, sites, tides,
     transfiguration, tutorial, tutorial_journey_pool,
 };
 
@@ -290,7 +290,7 @@ fn adapt(
             )?;
             tutorial_journey_pool::lower(catalog)
         }
-        "tide_alignments_v1" => tide_alignments::lower(parse_ron(source, dataset)?),
+        "resonance_v1" => resonance::lower(parse_ron(source, dataset)?),
         "tides_v1" => {
             let catalog: tides::TidesCatalog = parse_ron(source, dataset)?;
             let cards_dataset = manifest.dataset("cards")?;
@@ -683,8 +683,8 @@ mod tests {
                 "tutorial_journey_pool_v1" => {
                     canonical::<tutorial_journey_pool::TutorialJourneyDraftPool>(&source, true);
                 }
-                "tide_alignments_v1" => {
-                    canonical::<tide_alignments::TideAlignmentCatalog>(&source, false);
+                "resonance_v1" => {
+                    canonical::<resonance::ResonanceCatalog>(&source, false);
                 }
                 "tides_v1" => {
                     canonical::<tides::TidesCatalog>(&source, true);

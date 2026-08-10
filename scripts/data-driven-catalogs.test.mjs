@@ -6,7 +6,7 @@ import { parse } from "smol-toml";
 import { describe, expect, it } from "vitest";
 import {
   compileGambleData,
-  compileTideAlignmentsData,
+  compileResonanceData,
   compileTransfigurationData,
 } from "./data-driven-catalogs.mjs";
 
@@ -66,8 +66,8 @@ describe("data-driven catalog runtime generation", () => {
   });
 
   it("keeps presentation-only tide metadata outside gameplay folds", () => {
-    const result = compileTideAlignmentsData(parsed("tide_alignments.toml"));
-    expect(result.alignments.map((alignment) => alignment.id)).toEqual([
+    const result = compileResonanceData(parsed("resonance.toml"));
+    expect(result.resonances.map((resonance) => resonance.id)).toEqual([
       "ember",
       "valor",
       "vision",

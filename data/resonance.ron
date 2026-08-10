@@ -1,41 +1,41 @@
-TideAlignmentCatalog(
-  ember: TideAlignmentPresentation(
+ResonanceCatalog(
+  ember: ResonancePresentation(
     display_name: "Ember",
     accent_color: "#fb923c",
     chip_background: "#5c2c0f",
     chip_border: "rgba(251, 146, 60, 0.55)",
-    accessibility_name: "Ember tide alignment",
+    accessibility_name: "Ember resonance",
   ),
 
-  valor: TideAlignmentPresentation(
+  valor: ResonancePresentation(
     display_name: "Valor",
     accent_color: "#facc15",
     chip_background: "#4a3a00",
     chip_border: "rgba(250, 204, 21, 0.55)",
-    accessibility_name: "Valor tide alignment",
+    accessibility_name: "Valor resonance",
   ),
 
-  vision: TideAlignmentPresentation(
+  vision: ResonancePresentation(
     display_name: "Vision",
     accent_color: "#60a5fa",
     chip_background: "#13315c",
     chip_border: "rgba(96, 165, 250, 0.55)",
-    accessibility_name: "Vision tide alignment",
+    accessibility_name: "Vision resonance",
   ),
 
-  wild: TideAlignmentPresentation(
+  wild: ResonancePresentation(
     display_name: "Wild",
     accent_color: "#4ade80",
     chip_background: "#0f3d22",
     chip_border: "rgba(74, 222, 128, 0.55)",
-    accessibility_name: "Wild tide alignment",
+    accessibility_name: "Wild resonance",
   ),
 
-  shadow: TideAlignmentPresentation(
+  shadow: ResonancePresentation(
     display_name: "Shadow",
     accent_color: "#c084fc",
     chip_background: "#3b1259",
     chip_border: "rgba(192, 132, 252, 0.55)",
-    accessibility_name: "Shadow tide alignment",
+    accessibility_name: "Shadow resonance",
   ),
 )

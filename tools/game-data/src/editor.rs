@@ -41,7 +41,8 @@ use crate::models::glossary::{self, GlossaryDefinition, GlossaryId, TermPresenta
 use crate::models::internal_card_metadata::{
     self, CardMetadataCatalog, CardMetadataDefinition, FacetDefinition,
 };
-use crate::models::tides::{self, TideColor, TideDefinition, TideId, TidesCatalog};
+use crate::models::resonance::Resonance;
+use crate::models::tides::{self, TideDefinition, TideId, TidesCatalog};
 use crate::models::tutorial::{self, TutorialActionDefinition, TutorialCatalog};
 
 #[derive(Debug, Deserialize)]
@@ -351,14 +352,14 @@ fn set_tide_field(tide: &mut TideDefinition, field: &str, value: JsonValue) -> R
         "display_description" | "displayDescription" => {
             tide.display_description = json_string(value, field)?
         }
-        "color" => {
-            tide.color = match json_string(value, field)?.as_str() {
-                "purple" => TideColor::Purple,
-                "green" => TideColor::Green,
-                "yellow" => TideColor::Yellow,
-                "blue" => TideColor::Blue,
-                "orange" => TideColor::Orange,
-                other => bail!("INVALID_EDIT: unsupported tide color {other}"),
+        "resonance" => {
+            tide.resonance = match json_string(value, field)?.as_str() {
+                "ember" => Resonance::Ember,
+                "valor" => Resonance::Valor,
+                "vision" => Resonance::Vision,
+                "wild" => Resonance::Wild,
+                "shadow" => Resonance::Shadow,
+                other => bail!("INVALID_EDIT: unsupported tide resonance {other}"),
             }
         }
         _ => bail!("INVALID_EDIT: unsupported tide field {field}"),
@@ -370,7 +371,7 @@ fn patch_tide_field(source: &str, tide: &TideDefinition, field: &str) -> Result<
     let source_field = match field {
         "display_name" | "displayName" => "display_name",
         "display_description" | "displayDescription" => "display_description",
-        "color" => "color",
+        "resonance" => "resonance",
         _ => bail!("INVALID_EDIT: unsupported tide field {field}"),
     };
     let record =
@@ -378,7 +379,7 @@ fn patch_tide_field(source: &str, tide: &TideDefinition, field: &str) -> Result<
     let replacement = match source_field {
         "display_name" => ron::to_string(&tide.display_name)?,
         "display_description" => ron::to_string(&tide.display_description)?,
-        "color" => ron::to_string(&tide.color)?,
+        "resonance" => ron::to_string(&tide.resonance)?,
         _ => unreachable!(),
     };
     patch_field_value(source, record, source_field, &replacement)
@@ -3722,7 +3723,7 @@ mod tests {
     id: "00000000-0000-4000-8000-000000000041",
     display_name: r#"Raw Tide"#,
     display_description: "First description",
-    color: Purple,
+    resonance: Shadow,
     kind: Signature,
     cards: {"00000000-0000-4000-8000-000000000051": 2},
   ),
@@ -3732,7 +3733,7 @@ mod tests {
     id: "00000000-0000-4000-8000-000000000042",
     display_name: "Facet Tide",
     display_description: "Second description",
-    color: Green,
+    resonance: Wild,
     kind: Facet,
     cards: {"00000000-0000-4000-8000-000000000052": 1},
   ),
@@ -3741,7 +3742,7 @@ mod tests {
     id: "00000000-0000-4000-8000-000000000043",
     display_name: "Neutral Tide",
     display_description: "Third description",
-    color: Blue,
+    resonance: Vision,
     kind: Neutral,
     cards: {"00000000-0000-4000-8000-000000000053": 1},
   ),
@@ -4787,12 +4788,7 @@ CardMetadataCatalog(
     fn tide_scalar_edit_is_operation_sized_and_preserves_unrelated_source() {
         let mut catalog: TidesCatalog = ron::from_str(TIDES_SOURCE).unwrap();
         let index = unique_tide_index(&catalog, TIDE_ID).unwrap();
-        set_tide_field(
-            &mut catalog[index],
-            "displayName",
-            json!("Edited Tide"),
-        )
-        .unwrap();
+        set_tide_field(&mut catalog[index], "displayName", json!("Edited Tide")).unwrap();
         let patched = patch_tide_field(TIDES_SOURCE, &catalog[index], "displayName").unwrap();
 
         assert_eq!(ron::from_str::<TidesCatalog>(&patched).unwrap(), catalog);
@@ -4812,21 +4808,20 @@ CardMetadataCatalog(
     }
 
     #[test]
-    fn tide_editor_round_trips_color() {
+    fn tide_editor_round_trips_resonance() {
         let mut catalog: TidesCatalog = ron::from_str(TIDES_SOURCE).unwrap();
         let index = unique_tide_index(&catalog, TIDE_ID).unwrap();
-        set_tide_field(&mut catalog[index], "color", json!("orange")).unwrap();
-        let patched = patch_tide_field(TIDES_SOURCE, &catalog[index], "color").unwrap();
+        set_tide_field(&mut catalog[index], "resonance", json!("ember")).unwrap();
+        let patched = patch_tide_field(TIDES_SOURCE, &catalog[index], "resonance").unwrap();
 
         assert_eq!(ron::from_str::<TidesCatalog>(&patched).unwrap(), catalog);
-        assert!(patched.contains("color: Orange"));
+        assert!(patched.contains("resonance: Ember"));
         assert!(patched.contains("display_name: \"Facet Tide\""));
     }
 
     #[test]
     fn tide_pool_editor_round_trips_optional_and_list_shapes() {
-        let mut catalog: DreamAvatarTidePoolsCatalog =
-            ron::from_str(TIDE_POOLS_SOURCE).unwrap();
+        let mut catalog: DreamAvatarTidePoolsCatalog = ron::from_str(TIDE_POOLS_SOURCE).unwrap();
 
         let before = catalog[0].clone();
         let after = DreamAvatarPool {
@@ -4852,11 +4847,10 @@ CardMetadataCatalog(
         assert!(unique_tide_index(&catalog, "not-a-uuid").is_err());
         assert!(unique_tide_index(&catalog, "00000000-0000-4000-8000-000000000099").is_err());
         let index = unique_tide_index(&catalog, TIDE_ID).unwrap();
-        assert!(set_tide_field(&mut catalog[index], "color", json!("teal")).is_err());
+        assert!(set_tide_field(&mut catalog[index], "resonance", json!("harmony")).is_err());
         assert!(set_tide_field(&mut catalog[index], "kind", json!("neutral")).is_err());
 
-        let mut pools: DreamAvatarTidePoolsCatalog =
-            ron::from_str(TIDE_POOLS_SOURCE).unwrap();
+        let mut pools: DreamAvatarTidePoolsCatalog = ron::from_str(TIDE_POOLS_SOURCE).unwrap();
         pools[0].facets = vec![TideId::parse(TIDE_ID).unwrap()];
         assert!(
             dream_avatar_tide_pools::validate(&pools, &tides::tide_kinds(&catalog).unwrap())
@@ -4901,10 +4895,9 @@ CardMetadataCatalog(
                 ("packSize", json!(3)),
             ],
             EffectKind::IncreaseSparkAll => &[("sparkBonus", json!(1))],
-            EffectKind::PurgeRandomSubtypeAndIncreaseSpark => &[
-                ("subtype", json!("Warrior")),
-                ("sparkBonus", json!(1)),
-            ],
+            EffectKind::PurgeRandomSubtypeAndIncreaseSpark => {
+                &[("subtype", json!("Warrior")), ("sparkBonus", json!(1))]
+            }
             EffectKind::ReduceCostAllAndGainNightmares => &[
                 ("energyCostReduction", json!(1)),
                 ("nightmareCount", json!(1)),

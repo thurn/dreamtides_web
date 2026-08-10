@@ -22,7 +22,7 @@ export function compileTidesData(tidesSource, poolsSource) {
     id: tide.id,
     displayName: tide["display-name"],
     displayDescription: tide["display-description"],
-    color: tide.color,
+    resonance: tide.resonance,
     role: tide.role,
     cards: (tide.card ?? []).map((card) => ({
       id: card.id,

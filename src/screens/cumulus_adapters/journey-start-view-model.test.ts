@@ -16,7 +16,7 @@ function tide(id: string, cardCount: number): Tides4DeckJson {
     displayName: id,
     displayDescription: `${id} description`,
     role: "facet",
-    color: "purple",
+    resonance: "shadow",
     cards: Array.from({ length: cardCount }, (_, index) => ({
       id: `${id}-card-${String(index)}`,
       copies: 1,
@@ -63,7 +63,7 @@ describe("largestTides", () => {
       displayName: "big",
       displayDescription: "big description",
       role: "facet",
-      color: "purple",
+      resonance: "shadow",
       cards: [{ id: "x", copies: 20 }],
     };
     const tides = [tide("a", 5), tide("b", 5), tide("c", 5), tide("d", 5), big];

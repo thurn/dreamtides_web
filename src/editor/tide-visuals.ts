@@ -1,5 +1,5 @@
-import { tideAlignmentForDeckColor } from "../data/tide-alignments-data";
-import type { Tides4Color } from "../draft/pool/tides4-io";
+import { resonance } from "../data/resonance-data";
+import type { Resonance } from "../types/resonance-data";
 import { GLYPHS, type Glyph } from "../cumulus/primitives/glyph";
 
 export interface TideColorChip {
@@ -8,15 +8,15 @@ export interface TideColorChip {
   readonly icon: Glyph;
 }
 
-export function tideColorChip(color: Tides4Color): TideColorChip {
-  const alignment = tideAlignmentForDeckColor(color);
+export function tideColorChip(id: Resonance): TideColorChip {
+  const definition = resonance(id);
   return {
-    background: alignment.chipBackground,
-    border: alignment.chipBorder,
-    icon: GLYPHS[alignment.glyph],
+    background: definition.chipBackground,
+    border: definition.chipBorder,
+    icon: GLYPHS[definition.glyph],
   };
 }
 
-export function tideAccentColor(color: Tides4Color): string {
-  return tideAlignmentForDeckColor(color).accentColor;
+export function tideAccentColor(id: Resonance): string {
+  return resonance(id).accentColor;
 }

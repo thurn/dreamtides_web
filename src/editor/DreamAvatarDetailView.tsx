@@ -8,7 +8,7 @@ import type { CardData } from "../types/cards";
 import type { JourneyContent } from "../data/journey-content";
 import type { Tides4DeckJson, Tides4DecksJson } from "../draft/pool/tides4-io";
 import { resolveTideDeck, type TideDeckResolution } from "./tide-deck-resolution";
-import { TIDE_DOT_COLOR } from "./TidePoolModal";
+import { tideDotColor } from "./TidePoolModal";
 import type {
   EditorDreamAvatarRecord,
   EditorTideOption,
@@ -103,7 +103,7 @@ function resolveTides(
     return {
       id,
       label: tideOptionLabel(tide),
-      color: TIDE_DOT_COLOR[tide.color],
+      color: tideDotColor(tide.resonance),
       known: true,
     };
   });
@@ -464,7 +464,9 @@ export default function DreamAvatarDetailView({
   const selectedTideLabel =
     selectedTideMeta !== null ? tideOptionLabel(selectedTideMeta) : (selectedTideId ?? "");
   const selectedTideColor =
-    selectedTideMeta !== null ? TIDE_DOT_COLOR[selectedTideMeta.color] : "#94a3b8";
+    selectedTideMeta !== null
+      ? tideDotColor(selectedTideMeta.resonance)
+      : "#94a3b8";
   // The decklist needs both the card database (for renderable cards) and the
   // tides4 artifact (for the tide -> card mapping); we are loading until both
   // arrive, and only surface an error once a selection actually needs them.

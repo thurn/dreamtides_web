@@ -52,7 +52,7 @@ function TideTile({
   cardById: ReadonlyMap<string, CardData>;
   onSelectTide: (tideId: string) => void;
 }) {
-  const chip = tideColorChip(tide.color);
+  const chip = tideColorChip(tide.resonance);
   const label = tideLabel(tide);
   const thumbSize = tide.role === "signature" ? 48 : 64;
 

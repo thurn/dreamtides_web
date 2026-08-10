@@ -104,7 +104,7 @@ impl Manifest {
             "gamble_v1",
             "glossary_v1",
             "sites_v1",
-            "tide_alignments_v1",
+            "resonance_v1",
             "tides_v1",
             "dream_avatar_tide_pools_v1",
             "transfiguration_v1",

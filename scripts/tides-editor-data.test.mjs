@@ -16,16 +16,16 @@ afterEach(() => {
 });
 
 describe("validateTideEdit", () => {
-  it("accepts the five deck colors and rejects others", () => {
-    expect(validateTideEdit("color", "blue")).toMatchObject({
+  it("accepts the five resonances and rejects others", () => {
+    expect(validateTideEdit("resonance", "vision")).toMatchObject({
       ok: true,
-      value: "blue",
+      value: "vision",
     });
-    expect(validateTideEdit("color", "Orange")).toMatchObject({
+    expect(validateTideEdit("resonance", "Ember")).toMatchObject({
       ok: true,
-      value: "orange",
+      value: "ember",
     });
-    expect(validateTideEdit("color", "teal").ok).toBe(false);
+    expect(validateTideEdit("resonance", "harmony").ok).toBe(false);
   });
 
   it("trims display text and refuses non-editable fields", () => {
@@ -52,7 +52,7 @@ describe("readTidesArtifact", () => {
         'id = "00000000-0000-4000-8000-000000000001"',
         'display-name = "Fixture"',
         'display-description = "Description"',
-        'color = "purple"',
+        'resonance = "shadow"',
         'role = "signature"',
         "[[tide.card]]",
         'id = "00000000-0000-4000-8000-000000000011"',

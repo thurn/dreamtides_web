@@ -21,6 +21,9 @@
 // Cards and tides are keyed by stable UUID. Display copy is retained only for
 // tide labels; card display data resolves from the card catalog at render time.
 
+import { isResonance } from "../../data/resonance-data";
+import type { Resonance } from "../../types/resonance-data";
+
 /** One card entry in a committed tide deck. */
 export interface TideDeckCardJson {
   id: string;
@@ -29,18 +32,6 @@ export interface TideDeckCardJson {
 
 /** The role a tide plays in pool construction. */
 export type Tides4Role = "signature" | "facet" | "neutral";
-
-/** The deck color a tide's mechanical identity belongs to. */
-export type Tides4Color = "purple" | "green" | "yellow" | "blue" | "orange";
-
-/** Every valid {@link Tides4Color}, for validation. */
-export const TIDES4_COLORS: readonly Tides4Color[] = [
-  "purple",
-  "green",
-  "yellow",
-  "blue",
-  "orange",
-];
 
 /** One preconstructed `tides4` deck. */
 export interface Tides4DeckJson {
@@ -51,11 +42,11 @@ export interface Tides4DeckJson {
   /** Player-facing explanation of the tide's mechanical identity. */
   displayDescription: string;
   /**
-   * The deck color this tide's mechanical identity belongs to. Every tide is
-   * assigned one. A tide without a valid color is rejected by
+   * The resonance this tide's mechanical identity belongs to. Every tide is
+   * assigned one. A tide without a valid resonance is rejected by
    * {@link validateTides4Decks}.
    */
-  color: Tides4Color;
+  resonance: Resonance;
   /** Whether this is a signature floor, a directional facet, or a broad tide. */
   role: Tides4Role;
   /** The decklist as UUID + copies entries. */
@@ -130,8 +121,10 @@ export function validateTides4Decks(json: unknown): Tides4DecksJson {
     ) {
       fail(`tide "${tide.id}" has an unknown role "${String(tide.role)}"`);
     }
-    if (!TIDES4_COLORS.includes(tide.color)) {
-      fail(`tide "${tide.id}" has an unknown color "${String(tide.color)}"`);
+    if (!isResonance(tide.resonance)) {
+      fail(
+        `tide "${tide.id}" has an unknown resonance "${String(tide.resonance)}"`,
+      );
     }
     if (!Array.isArray(tide.cards) || tide.cards.length === 0) {
       fail(`tide "${tide.id}" without cards`);

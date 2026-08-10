@@ -4,7 +4,10 @@ import type {
 } from "../draft/pool/tides4-io";
 
 /** The annotation fields the tides editor can change on a tide. */
-export type EditableTideField = "displayName" | "displayDescription" | "color";
+export type EditableTideField =
+  | "displayName"
+  | "displayDescription"
+  | "resonance";
 
 /**
  * The full committed tides artifact as returned by the tides editor API

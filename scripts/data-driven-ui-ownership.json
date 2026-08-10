@@ -108,10 +108,10 @@
     },
     "tides": {
       "identities": ["ember", "valor", "vision", "wild", "shadow"],
-      "targetOwner": "data/tide_alignments.ron",
+      "targetOwner": "data/resonance.ron",
       "currentSources": [
         {
-          "path": "data/tide_alignments.ron",
+          "path": "data/resonance.ron",
           "fields": ["display_name", "accent_color", "accessibility_name"]
         }
       ],
@@ -178,9 +178,9 @@
       "rationale": "The broader glossary semantic-ID registry supports non-symbol information cards."
     },
     {
-      "id": "src/data/tide-alignments-data.ts#ALIGNMENT_CONTRACT#tides",
+      "id": "src/data/resonance-data.ts#RESONANCE_CONTRACT#tides",
       "classification": "persisted-compatibility",
-      "rationale": "The loader validates compiler-derived alignment identities, deck colors, and glyphs at the generated JSON boundary."
+      "rationale": "The loader validates compiler-derived resonance identities and glyphs at the generated JSON boundary."
     },
     {
       "id": "src/rules/battle/dreamwell-effects-table.ts#DREAMWELL_EFFECTS#dreamwellPrompts",

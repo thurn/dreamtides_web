@@ -176,12 +176,12 @@ export function compileTransfigurationData(source) {
   return catalog({ site, forms }, true);
 }
 
-export function compileTideAlignmentsData(source) {
-  const records = source?.["tide-alignments"];
+export function compileResonanceData(source) {
+  const records = source?.resonances;
   if (!Array.isArray(records) || records.length !== 5) {
     throw new Error(
-      "tide_alignments.toml tide-alignments: expected the five compiler-validated alignments",
+      "resonance.toml resonances: expected the five compiler-validated resonances",
     );
   }
-  return catalog({ alignments: normalize(records) }, false);
+  return catalog({ resonances: normalize(records) }, false);
 }

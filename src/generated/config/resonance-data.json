@@ -1,56 +1,51 @@
 {
   "schemaVersion": 1,
-  "alignments": [
+  "resonances": [
     {
       "id": "ember",
-      "deckColor": "orange",
       "displayName": "Ember",
       "glyph": "tideEmber",
       "accentColor": "#fb923c",
       "chipBackground": "#5c2c0f",
       "chipBorder": "rgba(251, 146, 60, 0.55)",
-      "accessibilityName": "Ember tide alignment"
+      "accessibilityName": "Ember resonance"
     },
     {
       "id": "valor",
-      "deckColor": "yellow",
       "displayName": "Valor",
       "glyph": "tideValor",
       "accentColor": "#facc15",
       "chipBackground": "#4a3a00",
       "chipBorder": "rgba(250, 204, 21, 0.55)",
-      "accessibilityName": "Valor tide alignment"
+      "accessibilityName": "Valor resonance"
     },
     {
       "id": "vision",
-      "deckColor": "blue",
       "displayName": "Vision",
       "glyph": "tideVision",
       "accentColor": "#60a5fa",
       "chipBackground": "#13315c",
       "chipBorder": "rgba(96, 165, 250, 0.55)",
-      "accessibilityName": "Vision tide alignment"
+      "accessibilityName": "Vision resonance"
     },
     {
       "id": "wild",
-      "deckColor": "green",
       "displayName": "Wild",
       "glyph": "tideWild",
       "accentColor": "#4ade80",
       "chipBackground": "#0f3d22",
       "chipBorder": "rgba(74, 222, 128, 0.55)",
-      "accessibilityName": "Wild tide alignment"
+      "accessibilityName": "Wild resonance"
     },
     {
       "id": "shadow",
-      "deckColor": "purple",
       "displayName": "Shadow",
       "glyph": "tideShadow",
       "accentColor": "#c084fc",
       "chipBackground": "#3b1259",
       "chipBorder": "rgba(192, 132, 252, 0.55)",
-      "accessibilityName": "Shadow tide alignment"
+      "accessibilityName": "Shadow resonance"
     }
   ],
-  "contentHash": "17ecd16ef7ac950a8d63538b32c66898017a1f161c7ea00291e5d4ff21b178f2"
+  "contentHash": "9892a2c42c034c347eeccb0bfd7dab1b8b6f14763f6abf27e67c6397261e5bd1"
 }

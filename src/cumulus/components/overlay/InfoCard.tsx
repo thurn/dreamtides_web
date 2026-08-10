@@ -14,7 +14,7 @@
 //   - atlasReveal — the large desktop Dream Atlas reveal: scene hero, prominent
 //                   right-side figure, and place / guide / bonus glass panel
 //   - icon        — a glyph disc beside the title
-//   - tide        — a tide's own colored disc + alignment label
+//   - tide        — a tide's own colored disc + resonance label
 //   - text        — a title with an optional epithet
 //                   (a smaller serif subtitle in white) under the name
 //
@@ -28,7 +28,7 @@ import { renderRulesSymbolsInline } from "../card/RulesText";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { controlChrome } from "../../internal/control-treatment";
 import { applySymbolReplacements } from "../../primitives/symbol-replacements";
-import { tideAlignmentLabel, tideVisual, type Tide } from "../hud/tide-spec";
+import { tideResonanceLabel, tideVisual, type Tide } from "../hud/tide-spec";
 import { formatMessageDescriptor, useMessages } from "../../hooks/use-messages";
 import type { FluentMessageDescriptor } from "../../../data/localization-messages";
 
@@ -316,14 +316,14 @@ export interface InfoCardIconProps extends InfoCardCommonProps {
 
 /**
  * tide variant — a tide's own colored disc beside the title, the tide's
- * alignment name (Valor, Shadow, …) in that tide's color below the title, then
- * the body. The named `tide` fixes the disc color, mark, and alignment label —
+ * resonance name (Valor, Shadow, …) in that tide's color below the title, then
+ * the body. The named `tide` fixes the disc color, mark, and resonance label —
  * the caller picks a tide, never a raw color — so every tide reveal reads
  * identically to that tide's disc on screen.
  */
 export interface InfoCardTideProps extends InfoCardCommonProps {
   variant: "tide";
-  /** Which of the five tides. Fixes the disc color/mark and the alignment label. */
+  /** Which of the five tides. Fixes the disc color/mark and the resonance label. */
   tide: Tide;
 }
 
@@ -381,12 +381,12 @@ interface InfoCardContentOverride {
   readonly body?: React.ReactNode;
 }
 
-function TideAlignmentName({
+function TideResonanceName({
   tide,
 }: {
   readonly tide: Tide;
 }): React.ReactElement {
-  return <>{tideAlignmentLabel(tide)}</>;
+  return <>{tideResonanceLabel(tide)}</>;
 }
 
 function InfoCardBody(
@@ -744,7 +744,7 @@ function InfoCardBody(
   }
 
   /* --- tide: the tide's OWN colored disc + mark beside the title, the tide's
-     alignment name in its color below, description below that --- */
+     resonance name in its color below, description below that --- */
   if (props.variant === "tide") {
     const { tide } = props;
     const v = tideVisual(tide);
@@ -788,7 +788,7 @@ function InfoCardBody(
             <div
               style={{ ...tMeta, color: v.fg, marginTop: token("--space-xs") }}
             >
-              <TideAlignmentName tide={tide} />
+              <TideResonanceName tide={tide} />
             </div>
           </div>
         </div>

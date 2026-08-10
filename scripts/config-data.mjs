@@ -25,7 +25,7 @@ import { compileRewardSelectionData } from "./reward-selection-data.mjs";
 import { compileAuguryData } from "./augury-data.mjs";
 import {
   compileGambleData,
-  compileTideAlignmentsData,
+  compileResonanceData,
   compileTransfigurationData,
 } from "./data-driven-catalogs.mjs";
 import {
@@ -155,10 +155,10 @@ export const SIMPLE_CONFIGS = [
     transform: compileTransfigurationData,
   },
   {
-    tomlFile: "tide_alignments.toml",
-    jsonFile: "tide-alignments-data.json",
+    tomlFile: "resonance.toml",
+    jsonFile: "resonance-data.json",
     arrayKey: null,
-    transform: compileTideAlignmentsData,
+    transform: compileResonanceData,
   },
   {
     tomlFile: "dreamscapes.toml",

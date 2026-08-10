@@ -1,19 +1,16 @@
 import { useMemo, useState } from "react";
 import type { CSSProperties } from "react";
-import type { Tides4Color } from "../draft/pool/tides4-io";
+import { resonance } from "../data/resonance-data";
+import type { Resonance } from "../types/resonance-data";
 import type {
   EditorDreamAvatarRecord,
   EditorTideOption,
   EditorTidePool,
 } from "./dream-avatar-types";
 
-export const TIDE_DOT_COLOR: Record<Tides4Color, string> = {
-  purple: "#c084fc",
-  green: "#4ade80",
-  yellow: "#facc15",
-  blue: "#60a5fa",
-  orange: "#fb923c",
-};
+export function tideDotColor(id: Resonance): string {
+  return resonance(id).accentColor;
+}
 
 export interface TidePoolModalProps {
   dreamAvatar: EditorDreamAvatarRecord;
@@ -180,9 +177,9 @@ export default function TidePoolModal({
                   aria-pressed={starter === tide.id}
                   title={`${tide.displayName} (${tide.id})`}
                   onClick={() => setStarter(starter === tide.id ? null : tide.id)}
-                  style={tideChipStyle(starter === tide.id, TIDE_DOT_COLOR[tide.color])}
+                  style={tideChipStyle(starter === tide.id, tideDotColor(tide.resonance))}
                 >
-                  <ColorDot color={TIDE_DOT_COLOR[tide.color]} />
+                  <ColorDot color={tideDotColor(tide.resonance)} />
                   <span>{tideLabel(tide)}</span>
                 </button>
               ))}
@@ -208,9 +205,9 @@ export default function TidePoolModal({
                     aria-pressed={active}
                     title={`${tide.displayName} (${tide.id})`}
                     onClick={() => setFacets((current) => toggle(current, tide.id))}
-                    style={tideChipStyle(active, TIDE_DOT_COLOR[tide.color])}
+                    style={tideChipStyle(active, tideDotColor(tide.resonance))}
                   >
-                    <ColorDot color={TIDE_DOT_COLOR[tide.color]} />
+                    <ColorDot color={tideDotColor(tide.resonance)} />
                     <span>{tideLabel(tide)}</span>
                   </button>
                 );
@@ -230,9 +227,9 @@ export default function TidePoolModal({
                     aria-pressed={active}
                     title={`${tide.displayName} (${tide.id})`}
                     onClick={() => setNeutral((current) => toggle(current, tide.id))}
-                    style={tideChipStyle(active, TIDE_DOT_COLOR[tide.color])}
+                    style={tideChipStyle(active, tideDotColor(tide.resonance))}
                   >
-                    <ColorDot color={TIDE_DOT_COLOR[tide.color]} />
+                    <ColorDot color={tideDotColor(tide.resonance)} />
                     <span>{tideLabel(tide)}</span>
                   </button>
                 );

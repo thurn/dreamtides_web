@@ -80,7 +80,7 @@ function tidesContext(
           displayDescription:
             "Gather strength before releasing a decisive surge.",
           role: "signature",
-          color: "orange",
+          resonance: "ember",
           cards: Array.from({ length: 80 }, (_, index) => ({
             id: `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
             copies: 2,

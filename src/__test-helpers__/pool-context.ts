@@ -106,7 +106,7 @@ export function makeTestPoolContext(
       displayName: `Test Tide ${String(index + 1)}`,
       displayDescription: `Test Tide ${String(index + 1)} description`,
       role: index === 0 ? "signature" : index === 1 ? "facet" : "neutral",
-      color: index === 0 ? "purple" : index === 1 ? "green" : "blue",
+      resonance: index === 0 ? "shadow" : index === 1 ? "wild" : "vision",
       cards: ids.map((id) => ({
         id,
         copies: 2,

@@ -42,7 +42,7 @@ import { EXPLORATION_EFFECT_KINDS } from "./exploration-effect-kinds.mjs";
 import { amplifiedStructuralErrors } from "./lib/amplified-validation.mjs";
 import {
   compileGambleData,
-  compileTideAlignmentsData,
+  compileResonanceData,
   compileTransfigurationData,
 } from "./data-driven-catalogs.mjs";
 import { compileTidesData } from "./tides-data.mjs";
@@ -1541,7 +1541,7 @@ export function setupAssets({
   glossaryTomlPath = join(DATA_DIR, "glossary.toml"),
   gambleTomlPath = join(DATA_DIR, "gamble.toml"),
   transfigurationTomlPath = join(DATA_DIR, "transfiguration.toml"),
-  tideAlignmentsTomlPath = join(DATA_DIR, "tide_alignments.toml"),
+  resonanceTomlPath = join(DATA_DIR, "resonance.toml"),
   apollyonIncarnationsTomlPath = join(DATA_DIR, "apollyon_incarnations.toml"),
   figmentTomlPath = join(DATA_DIR, "figments.toml"),
   tutorialTomlPath = join(DATA_DIR, "tutorial.toml"),
@@ -1620,15 +1620,15 @@ export function setupAssets({
   const economyJsonPath = join(publicDir, "economy-data.json");
   const gambleJsonPath = join(publicDir, "gamble-data.json");
   const transfigurationJsonPath = join(publicDir, "transfiguration-data.json");
-  const tideAlignmentsJsonPath = join(publicDir, "tide-alignments-data.json");
+  const resonanceJsonPath = join(publicDir, "resonance-data.json");
   const generatedGambleJsonPath = join(generatedConfigDir, "gamble-data.json");
   const generatedTransfigurationJsonPath = join(
     generatedConfigDir,
     "transfiguration-data.json",
   );
-  const generatedTideAlignmentsJsonPath = join(
+  const generatedResonanceJsonPath = join(
     generatedConfigDir,
-    "tide-alignments-data.json",
+    "resonance-data.json",
   );
   const draftJsonPath = join(publicDir, "draft-data.json");
   const journeyJsonPath = join(publicDir, "journey-data.json");
@@ -2066,11 +2066,11 @@ export function setupAssets({
       compileTransfigurationData,
     ],
     [
-      "Tide alignments",
-      tideAlignmentsTomlPath,
-      tideAlignmentsJsonPath,
-      generatedTideAlignmentsJsonPath,
-      compileTideAlignmentsData,
+      "Resonance",
+      resonanceTomlPath,
+      resonanceJsonPath,
+      generatedResonanceJsonPath,
+      compileResonanceData,
     ],
   ];
   mkdirSync(generatedConfigDir, { recursive: true });

@@ -442,7 +442,7 @@ canonical renderer).
       `tide-spec` as the palette's home: the five tides (Ember `#fb923c`, Valor
       `#facc15`, Vision `#60a5fa`, Wild `#4ade80`, Shadow `#c084fc`) and their fixed
       glyphs live in `src/cumulus/components/hud/tide-spec.ts` (`TIDES` / `tideVisual`
-      / `tideAlignmentLabel`); `TideDisc`, InfoCard's tide variant, and any tide chip
+      / `tideResonanceLabel`); `TideDisc`, InfoCard's tide variant, and any tide chip
       read that one table so a tide reads identically everywhere.
 - [ ] If the live demo `Component` currently renders only bare discs, wire one disc
       through `InfoCard.PressInfo` with a `stageRef` (site-node pattern) so the
