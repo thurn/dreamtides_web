@@ -19,10 +19,6 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function isNonBlank(value: unknown): value is string {
-  return typeof value === "string" && value.trim().length > 0;
-}
-
 function isGambleData(value: unknown): value is GambleData {
   if (
     !isRecord(value) ||
@@ -38,14 +34,16 @@ function isGambleData(value: unknown): value is GambleData {
   const ids = new Set<string>();
   return (
     value.games.every((game) => {
-      const gameId = isRecord(game) && typeof game.id === "string"
-        ? game.id as GambleGameId
-        : null;
+      const gameId =
+        isRecord(game) && typeof game.id === "string"
+          ? (game.id as GambleGameId)
+          : null;
       const ruleKind = gameId === null ? undefined : GAME_RULE_KIND[gameId];
       if (
         !isRecord(game) ||
-        gameId === null || ruleKind === undefined || ids.has(gameId) ||
-        !isNonBlank(game.rulesVersion) ||
+        gameId === null ||
+        ruleKind === undefined ||
+        ids.has(gameId) ||
         !isRecord(game.selection) ||
         typeof game.selection.weight !== "number" ||
         game.selection.weight <= 0 ||
@@ -53,13 +51,7 @@ function isGambleData(value: unknown): value is GambleData {
         !isRecord(game.economy) ||
         !isRecord(game.rules) ||
         game.economy.kind !== ruleKind ||
-        game.rules.kind !== ruleKind ||
-        !isRecord(game.presentation) ||
-        !isNonBlank(game.presentation.title) ||
-        !isNonBlank(game.presentation.rulesDisclosure) ||
-        !isNonBlank(game.presentation.accessibilityDescription) ||
-        !Array.isArray(game.presentation.actionLabels) ||
-        !Array.isArray(game.presentation.outcomeLabels)
+        game.rules.kind !== ruleKind
       ) {
         return false;
       }
@@ -75,7 +67,7 @@ function isGambleData(value: unknown): value is GambleData {
   );
 }
 
-/** Load the compiler-validated Gamble gameplay and presentation catalog. */
+/** Load the compiler-validated Gamble gameplay catalog. */
 export async function loadGambleData(): Promise<GambleData> {
   const response = await fetch(GAMBLE_DATA_JSON_PATH);
   if (!response.ok) {

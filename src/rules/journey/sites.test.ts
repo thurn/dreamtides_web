@@ -238,7 +238,6 @@ const fakeProvider: SiteContentProvider = {
           runtime: {
             kind: "gamble",
             gameId: "gravok-three-gate-wager",
-            rulesVersion: "fixture-rules",
             roundNumber: 1,
             isFarpoint: site.isEnhanced,
             wagerCost: site.isEnhanced ? 0 : 50,

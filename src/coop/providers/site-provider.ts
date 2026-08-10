@@ -183,7 +183,6 @@ function buildGravokWagerRuntime(
   return {
     kind: "gamble",
     gameId: "gravok-three-gate-wager",
-    rulesVersion: game.rulesVersion,
     roundNumber: 1,
     isFarpoint: site.isEnhanced,
     wagerCost: gravokWagerCost(game.economy, site.isEnhanced),
@@ -237,7 +236,6 @@ function buildTidemarkLadderClimbRuntime(
   return {
     kind: "gamble",
     gameId: "tidemark-ladder-climb",
-    rulesVersion: game.rulesVersion,
     isFarpoint: site.isEnhanced,
     shuffleCommitments: commitments.map((entry) => entry.shuffleCommitment),
     committedCards: commitments.map((entry) => entry.card),
@@ -263,7 +261,6 @@ function buildStarwayStairsRuntime(
   return {
     kind: "gamble",
     gameId: "starway-stairs",
-    rulesVersion: game.rulesVersion,
     roundNumber: 1,
     isFarpoint: site.isEnhanced,
     wagerAmount: starwayStairsWagerAmount(game.economy, site.isEnhanced),
@@ -323,7 +320,6 @@ function buildFourSuitRepriseRuntime(
   return {
     kind: "gamble",
     gameId: "four-suit-reprise",
-    rulesVersion: game.rulesVersion,
     isFarpoint: site.isEnhanced,
     drawCost: fourSuitRepriseDrawCost(game.economy, site.isEnhanced),
     shuffleCommitments: commitments.map((entry) => entry.shuffleCommitment),
@@ -343,7 +339,6 @@ function buildBlackjackRuntime(
   return {
     kind: "gamble",
     gameId: "blackjack",
-    rulesVersion: game.rulesVersion,
     isFarpoint: site.isEnhanced,
     wagerCost: blackjackWagerCost(economy, site.isEnhanced),
     prizeEssence: economy.prizeEssence,

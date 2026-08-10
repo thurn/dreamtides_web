@@ -51,7 +51,6 @@ function runtime(
   return {
     kind: "gamble",
     gameId: "gravok-three-gate-wager",
-    rulesVersion: "fixture-rules",
     roundNumber: 1,
     isFarpoint: false,
     wagerCost: 50,
@@ -428,7 +427,6 @@ function ladderRuntime(
   return {
     kind: "gamble",
     gameId: "tidemark-ladder-climb",
-    rulesVersion: "fixture-ladder-rules",
     isFarpoint: false,
     shuffleCommitments: ["attempt-1", "attempt-2", "attempt-3", "attempt-4"],
     committedCards: [...cards],
@@ -640,7 +638,6 @@ function starwayRuntime(
   return {
     kind: "gamble",
     gameId: "starway-stairs",
-    rulesVersion: "fixture-starway-rules",
     roundNumber: 1,
     isFarpoint: false,
     wagerAmount: 30,
@@ -940,7 +937,6 @@ function fourSuitRuntime(
   return {
     kind: "gamble",
     gameId: "four-suit-reprise",
-    rulesVersion: "fixture-four-suit-rules",
     isFarpoint: false,
     drawCost: 25,
     shuffleCommitments: ["round-1", "round-2", "round-3"],
@@ -1171,7 +1167,6 @@ function blackjackRuntime(
   return {
     kind: "gamble",
     gameId: "blackjack",
-    rulesVersion: "fixture-blackjack-rules",
     isFarpoint: false,
     wagerCost: 50,
     prizeEssence: 300,

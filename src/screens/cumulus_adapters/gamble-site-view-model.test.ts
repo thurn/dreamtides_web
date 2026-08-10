@@ -63,7 +63,6 @@ const GAMBLE_SITE: SiteState & { type: "Gamble" } = {
 const RUNTIME: GravokWagerSiteRuntime = {
   kind: "gamble",
   gameId: "gravok-three-gate-wager",
-  rulesVersion: "fixture-rules",
   roundNumber: 1,
   isFarpoint: false,
   wagerCost: 50,
@@ -287,7 +286,6 @@ describe("gamble-site-view-model", () => {
 const LADDER_RUNTIME: TidemarkLadderClimbSiteRuntime = {
   kind: "gamble",
   gameId: "tidemark-ladder-climb",
-  rulesVersion: "fixture-ladder-rules",
   isFarpoint: false,
   shuffleCommitments: ["attempt-1", "attempt-2", "attempt-3", "attempt-4"],
   committedCards: [
@@ -457,8 +455,14 @@ describe("gamble-site-view-model — Ladder Climb", () => {
         game.rules.kind === "ladderClimb" && game.economy.kind === "ladderClimb"
           ? {
               ...game,
-              rules: { ...game.rules, attempts: game.rules.attempts.slice(0, 2) },
-              economy: { ...game.economy, attempts: game.economy.attempts.slice(0, 2) },
+              rules: {
+                ...game.rules,
+                attempts: game.rules.attempts.slice(0, 2),
+              },
+              economy: {
+                ...game.economy,
+                attempts: game.economy.attempts.slice(0, 2),
+              },
             }
           : game,
       ),
@@ -506,7 +510,6 @@ describe("gamble-site-view-model — Ladder Climb", () => {
 const STARWAY_RUNTIME: StarwayStairsSiteRuntime = {
   kind: "gamble",
   gameId: "starway-stairs",
-  rulesVersion: "fixture-starway-rules",
   roundNumber: 1,
   isFarpoint: false,
   wagerAmount: 30,
@@ -773,7 +776,6 @@ describe("gamble-site-view-model — Four-Suit Reprise", () => {
     const runtime: FourSuitRepriseSiteRuntime = {
       kind: "gamble",
       gameId: "four-suit-reprise",
-      rulesVersion: "fixture-four-suit-rules",
       isFarpoint: false,
       drawCost: 25,
       shuffleCommitments: ["round-1", "round-2", "round-3"],
@@ -870,7 +872,6 @@ describe("gamble-site-view-model — Blackjack", () => {
   const runtime: BlackjackSiteRuntime = {
     kind: "gamble",
     gameId: "blackjack",
-    rulesVersion: "fixture-blackjack-rules",
     isFarpoint: false,
     wagerCost: 50,
     prizeEssence: 300,

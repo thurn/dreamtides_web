@@ -10,19 +10,9 @@ import type {
 export type FourSuitRepriseOutcome =
   "transfiguration" | "essence" | "duplication" | "purge";
 
-export interface GamblePresentation {
-  title: string;
-  rulesDisclosure: string;
-  accessibilityDescription: string;
-  actionLabels: readonly { key: string; text: string }[];
-  outcomeLabels: readonly { key: string; text: string }[];
-}
-
 interface GambleGameBase {
   id: GambleGameId;
-  rulesVersion: string;
   selection: { weight: number; fallback: boolean };
-  presentation: GamblePresentation;
 }
 
 export interface ThreeGateGame extends GambleGameBase {
@@ -38,7 +28,6 @@ export interface ThreeGateGame extends GambleGameBase {
     maxRetries: number;
     gates: readonly {
       gate: GravokGateId;
-      label: string;
       threshold: StandardPlayingCardRank;
       winningCardCount: number;
       awardsDreamsign: boolean;

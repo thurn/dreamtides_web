@@ -13,10 +13,8 @@ pub struct GambleCatalog {
 #[serde(deny_unknown_fields)]
 pub struct GambleGameDefinition {
     pub id: GambleGameId,
-    pub rules_version: String,
     pub selection: GambleSelection,
     pub economy: GambleEconomy,
-    pub presentation: GamblePresentation,
     pub rules: GambleGameRules,
 }
 
@@ -98,23 +96,6 @@ pub struct TierReward {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct GamblePresentation {
-    pub title: String,
-    pub rules_disclosure: String,
-    pub action_labels: Vec<AuthoredText>,
-    pub outcome_labels: Vec<AuthoredText>,
-    pub accessibility_description: String,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct AuthoredText {
-    pub key: String,
-    pub text: String,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub enum GambleGameRules {
     ThreeGate {
         standard_deck_size: u32,
@@ -149,7 +130,6 @@ pub enum GambleGameRules {
 #[serde(deny_unknown_fields)]
 pub struct GateDefinition {
     pub gate: GateId,
-    pub label: String,
     pub threshold: CardRank,
     pub winning_card_count: u32,
     pub awards_dreamsign: bool,
@@ -248,90 +228,15 @@ pub(crate) fn validate(source: &GambleCatalog) -> Result<()> {
     for (index, game) in source.games.iter().enumerate() {
         let path = format!("games[{index}]");
         ensure!(
-            !game.rules_version.trim().is_empty(),
-            "{path}.rules_version must not be blank"
-        );
-        ensure!(
             game.selection.weight.is_finite() && game.selection.weight > 0.0,
             "{path}.selection.weight must be positive and finite"
         );
-        validate_presentation(&path, &game.presentation, expected_outcome_keys(game.id))?;
         validate_variant_pairing(&path, game)?;
         validate_rules(&path, &game.rules)?;
         validate_economy(&path, &game.economy)?;
         validate_rules_economy_alignment(&path, &game.rules, &game.economy)?;
     }
     Ok(())
-}
-
-fn validate_presentation(
-    path: &str,
-    presentation: &GamblePresentation,
-    expected_outcomes: &[&str],
-) -> Result<()> {
-    ensure!(
-        !presentation.title.trim().is_empty(),
-        "{path}.presentation.title must not be blank"
-    );
-    ensure!(
-        !presentation.rules_disclosure.trim().is_empty(),
-        "{path}.presentation.rules_disclosure must not be blank"
-    );
-    ensure!(
-        !presentation.accessibility_description.trim().is_empty(),
-        "{path}.presentation.accessibility_description must not be blank"
-    );
-    ensure!(
-        !presentation.action_labels.is_empty(),
-        "{path}.presentation.action_labels must not be empty"
-    );
-    validate_text_records(path, "action_labels", &presentation.action_labels)?;
-    validate_text_records(path, "outcome_labels", &presentation.outcome_labels)?;
-    let actual = presentation
-        .outcome_labels
-        .iter()
-        .map(|label| label.key.as_str())
-        .collect::<Vec<_>>();
-    ensure!(
-        actual.iter().copied().collect::<BTreeSet<_>>()
-            == expected_outcomes.iter().copied().collect::<BTreeSet<_>>()
-            && actual.len() == expected_outcomes.len(),
-        "{path}.presentation.outcome_labels must cover every emitted outcome exactly once"
-    );
-    Ok(())
-}
-
-fn validate_text_records(path: &str, field: &str, records: &[AuthoredText]) -> Result<()> {
-    let mut keys = BTreeSet::new();
-    for record in records {
-        ensure!(
-            !record.key.trim().is_empty() && !record.text.trim().is_empty(),
-            "{path}.presentation.{field} keys and text must not be blank"
-        );
-        ensure!(
-            keys.insert(&record.key),
-            "{path}.presentation.{field} contains duplicate key {}",
-            record.key
-        );
-    }
-    Ok(())
-}
-
-fn expected_outcome_keys(id: GambleGameId) -> &'static [&'static str] {
-    match id {
-        GambleGameId::GravokThreeGateWager => &["won", "bust"],
-        GambleGameId::TidemarkLadderClimb => &["won", "miss"],
-        GambleGameId::StarwayStairs => &["safe", "bust", "prize-at-stake"],
-        GambleGameId::FourSuitReprise => &["transfiguration", "essence", "duplication", "purge"],
-        GambleGameId::Blackjack => &[
-            "player-win",
-            "dealer-win",
-            "push",
-            "bust",
-            "wager-returned",
-            "wins",
-        ],
-    }
 }
 
 fn validate_variant_pairing(path: &str, game: &GambleGameDefinition) -> Result<()> {
@@ -381,10 +286,6 @@ fn validate_rules(path: &str, rules: &GambleGameRules) -> Result<()> {
                 gates.iter().map(|gate| gate.gate).collect::<Vec<_>>()
                     == [GateId::Six, GateId::Nine, GateId::Jack],
                 "{path}.rules.gates must contain six, nine, and jack in order"
-            );
-            ensure!(
-                gates.iter().all(|gate| !gate.label.trim().is_empty()),
-                "{path}.rules.gates labels must not be blank"
             );
             let counts = gates
                 .iter()
@@ -586,23 +487,6 @@ fn validate_rules_economy_alignment(
 mod tests {
     use super::*;
 
-    fn text(keys: &[&str]) -> Vec<AuthoredText> {
-        keys.iter()
-            .map(|key| AuthoredText {
-                key: (*key).into(),
-                text: format!("{key} text"),
-            })
-            .collect()
-    }
-    fn presentation(id: GambleGameId) -> GamblePresentation {
-        GamblePresentation {
-            title: "Title".into(),
-            rules_disclosure: "Rules".into(),
-            action_labels: text(&["play"]),
-            outcome_labels: text(expected_outcome_keys(id)),
-            accessibility_description: "Description".into(),
-        }
-    }
     fn game(id: GambleGameId) -> GambleGameDefinition {
         let (rules, economy) = match id {
             GambleGameId::GravokThreeGateWager => (
@@ -612,21 +496,18 @@ mod tests {
                     gates: vec![
                         GateDefinition {
                             gate: GateId::Six,
-                            label: "Six Gate".into(),
                             threshold: CardRank::Six,
                             winning_card_count: 36,
                             awards_dreamsign: false,
                         },
                         GateDefinition {
                             gate: GateId::Nine,
-                            label: "Nine Gate".into(),
                             threshold: CardRank::Nine,
                             winning_card_count: 24,
                             awards_dreamsign: false,
                         },
                         GateDefinition {
                             gate: GateId::Jack,
-                            label: "Jack Gate".into(),
                             threshold: CardRank::Jack,
                             winning_card_count: 16,
                             awards_dreamsign: true,
@@ -754,13 +635,11 @@ mod tests {
         };
         GambleGameDefinition {
             id,
-            rules_version: "v1".into(),
             selection: GambleSelection {
                 weight: 1.0,
                 fallback: id == GambleGameId::GravokThreeGateWager,
             },
             economy,
-            presentation: presentation(id),
             rules,
         }
     }
@@ -818,14 +697,6 @@ mod tests {
                 .to_string()
                 .contains("winning ranges")
         );
-        let mut presentation = catalog();
-        presentation.games[4].presentation.outcome_labels.pop();
-        assert!(
-            validate(&presentation)
-                .unwrap_err()
-                .to_string()
-                .contains("every emitted outcome")
-        );
     }
 
     #[test]
@@ -834,7 +705,9 @@ mod tests {
         for game in &mut source.games {
             match (&mut game.rules, &mut game.economy) {
                 (
-                    GambleGameRules::LadderClimb { attempts: rules, .. },
+                    GambleGameRules::LadderClimb {
+                        attempts: rules, ..
+                    },
                     GambleEconomy::LadderClimb {
                         attempts: economy, ..
                     },
@@ -849,17 +722,15 @@ mod tests {
                     tiers.truncate(2);
                     rewards.truncate(2);
                 }
-                (
-                    GambleGameRules::ThreeGate { .. },
-                    GambleEconomy::ThreeGate { rewards, .. },
-                ) => rewards.reverse(),
+                (GambleGameRules::ThreeGate { .. }, GambleEconomy::ThreeGate { rewards, .. }) => {
+                    rewards.reverse()
+                }
                 (
                     GambleGameRules::FourSuitReprise { outcomes, .. },
                     GambleEconomy::FourSuitReprise { .. },
                 ) => outcomes.reverse(),
                 _ => {}
             }
-            game.presentation.outcome_labels.reverse();
         }
         validate(&source).unwrap();
     }

@@ -952,7 +952,6 @@ describe("ScreenRouter site-dispatch completeness", () => {
           [site.id]: {
             kind: "gamble",
             gameId: "gravok-three-gate-wager",
-            rulesVersion: "fixture-rules",
             roundNumber: 1,
             isFarpoint: false,
             wagerCost: 50,

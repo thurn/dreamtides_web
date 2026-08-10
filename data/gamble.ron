@@ -2,7 +2,11 @@ GambleCatalog(
   games: [
     GambleGameDefinition(
       id: GravokThreeGateWager,
-      rules_version: "three-gate-v2",
+      // Selection controls which Gamble game a newly opened site receives.
+      // Weight is this game's relative chance in the deterministic weighted draw.
+      // Exactly one game is the fallback: the safe game used when the selected
+      // game has no legal setup for the current journey, and the deterministic
+      // default before the weighted draw resolves.
       selection: GambleSelection(weight: 1.0, fallback: true),
       economy: ThreeGate(
         standard_wager: 50,
@@ -13,26 +17,12 @@ GambleCatalog(
           GateReward(gate: jack, essence: 200),
         ],
       ),
-      presentation: GamblePresentation(
-        title: "Gravok's Three-Gate Wager",
-        rules_disclosure: "Choose a gate, then draw. Higher gates are harder and pay more.",
-        action_labels: [
-          AuthoredText(key: "bet", text: "Bet"),
-          AuthoredText(key: "leave", text: "Leave"),
-        ],
-        outcome_labels: [
-          AuthoredText(key: "won", text: "Won!"),
-          AuthoredText(key: "bust", text: "Bust!"),
-        ],
-        accessibility_description: "Choose one of three gates and draw a card to resolve the wager.",
-      ),
       rules: ThreeGate(
         standard_deck_size: 52,
         max_retries: 2,
         gates: [
           GateDefinition(
             gate: six,
-            label: "Six Gate",
             threshold: Six,
             winning_card_count: 36,
             awards_dreamsign: false,
@@ -40,7 +30,6 @@ GambleCatalog(
 
           GateDefinition(
             gate: nine,
-            label: "Nine Gate",
             threshold: Nine,
             winning_card_count: 24,
             awards_dreamsign: false,
@@ -48,7 +37,6 @@ GambleCatalog(
 
           GateDefinition(
             gate: jack,
-            label: "Jack Gate",
             threshold: Jack,
             winning_card_count: 16,
             awards_dreamsign: true,
@@ -59,7 +47,6 @@ GambleCatalog(
 
     GambleGameDefinition(
       id: TidemarkLadderClimb,
-      rules_version: "tidemark-ladder-climb-v2",
       selection: GambleSelection(weight: 1.0, fallback: false),
       economy: LadderClimb(
         win_essence: 25,
@@ -69,19 +56,6 @@ GambleCatalog(
           AttemptPrice(attempt: 3, standard_cost: 10, enhanced_cost: 0),
           AttemptPrice(attempt: 4, standard_cost: 15, enhanced_cost: 0),
         ],
-      ),
-      presentation: GamblePresentation(
-        title: "Tidemark Ladder Climb",
-        rules_disclosure: "Draw against four successively easier targets. Each success gains essence.",
-        action_labels: [
-          AuthoredText(key: "draw", text: "Draw"),
-          AuthoredText(key: "leave", text: "Leave"),
-        ],
-        outcome_labels: [
-          AuthoredText(key: "won", text: "Won"),
-          AuthoredText(key: "miss", text: "Miss"),
-        ],
-        accessibility_description: "Draw a card on each rung of a four-step ladder.",
       ),
       rules: LadderClimb(
         standard_deck_size: 52,
@@ -97,7 +71,6 @@ GambleCatalog(
 
     GambleGameDefinition(
       id: StarwayStairs,
-      rules_version: "starway-stairs-v4",
       selection: GambleSelection(weight: 1.0, fallback: false),
       economy: StarwayStairs(
         standard_wager: 30,
@@ -107,21 +80,6 @@ GambleCatalog(
           TierReward(tier: 2, essence: 140),
           TierReward(tier: 3, essence: 300),
         ],
-      ),
-      presentation: GamblePresentation(
-        title: "Starway Stairs",
-        rules_disclosure: "Climb for a larger prize, but a low draw loses the wager.",
-        action_labels: [
-          AuthoredText(key: "bet", text: "Bet"),
-          AuthoredText(key: "climb", text: "Climb"),
-          AuthoredText(key: "take", text: "Take"),
-        ],
-        outcome_labels: [
-          AuthoredText(key: "safe", text: "Safe!"),
-          AuthoredText(key: "bust", text: "Bust!"),
-          AuthoredText(key: "prize-at-stake", text: "Prize at stake"),
-        ],
-        accessibility_description: "Choose whether to climb for a larger prize or take the current prize.",
       ),
       rules: StarwayStairs(
         standard_deck_size: 52,
@@ -136,27 +94,11 @@ GambleCatalog(
 
     GambleGameDefinition(
       id: FourSuitReprise,
-      rules_version: "four-suit-reprise-v1",
       selection: GambleSelection(weight: 1.0, fallback: false),
       economy: FourSuitReprise(
         standard_draw_price: 25,
         enhanced_draw_price: 15,
         essence_reward: 100,
-      ),
-      presentation: GamblePresentation(
-        title: "Four-Suit Reprise",
-        rules_disclosure: "Choose a card to wager",
-        action_labels: [
-          AuthoredText(key: "draw", text: "Draw"),
-          AuthoredText(key: "choose-another", text: "Choose Another Card"),
-        ],
-        outcome_labels: [
-          AuthoredText(key: "transfiguration", text: "Transfigure"),
-          AuthoredText(key: "essence", text: "Gained"),
-          AuthoredText(key: "duplication", text: "Duplicated"),
-          AuthoredText(key: "purge", text: "Purged"),
-        ],
-        accessibility_description: "Choose a card to wager, then draw one of four suit outcomes.",
       ),
       rules: FourSuitReprise(
         standard_deck_size: 52,
@@ -173,27 +115,8 @@ GambleCatalog(
 
     GambleGameDefinition(
       id: Blackjack,
-      rules_version: "blackjack-v4",
       selection: GambleSelection(weight: 1.0, fallback: false),
       economy: Blackjack(standard_wager: 90, enhanced_wager: 40, prize_essence: 300),
-      presentation: GamblePresentation(
-        title: "Blackjack",
-        rules_disclosure: "Closest to 21 Without Going Over",
-        action_labels: [
-          AuthoredText(key: "deal", text: "Deal"),
-          AuthoredText(key: "hit", text: "Hit"),
-          AuthoredText(key: "stand", text: "Stand"),
-        ],
-        outcome_labels: [
-          AuthoredText(key: "player-win", text: "You Win!"),
-          AuthoredText(key: "dealer-win", text: "Dealer Wins"),
-          AuthoredText(key: "push", text: "Push"),
-          AuthoredText(key: "bust", text: "Bust!"),
-          AuthoredText(key: "wager-returned", text: "Wager Returned"),
-          AuthoredText(key: "wins", text: "Wins"),
-        ],
-        accessibility_description: "Deal, hit, or stand against the dealer without going over 21.",
-      ),
       rules: Blackjack(
         standard_deck_size: 52,
         max_attempts: 3,

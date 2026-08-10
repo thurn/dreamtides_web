@@ -1,17 +1,4 @@
-import type { GambleData, GamblePresentation } from "../types/gamble-data";
-
-function presentation(
-  actionKeys: readonly string[],
-  outcomeKeys: readonly string[],
-): GamblePresentation {
-  return {
-    title: "Fixture game",
-    rulesDisclosure: "Fixture rules",
-    accessibilityDescription: "Fixture accessible description",
-    actionLabels: actionKeys.map((key) => ({ key, text: `Action ${key}` })),
-    outcomeLabels: outcomeKeys.map((key) => ({ key, text: `Outcome ${key}` })),
-  };
-}
+import type { GambleData } from "../types/gamble-data";
 
 const FIXTURE: GambleData = {
   schemaVersion: 1,
@@ -20,9 +7,7 @@ const FIXTURE: GambleData = {
   games: [
     {
       id: "gravok-three-gate-wager",
-      rulesVersion: "fixture-three-gate-rules",
       selection: { weight: 1, fallback: true },
-      presentation: presentation(["bet", "leave"], ["won", "bust"]),
       economy: {
         kind: "threeGate",
         standardWager: 50,
@@ -40,21 +25,18 @@ const FIXTURE: GambleData = {
         gates: [
           {
             gate: "six",
-            label: "Fixture Six",
             threshold: "6",
             winningCardCount: 36,
             awardsDreamsign: false,
           },
           {
             gate: "nine",
-            label: "Fixture Nine",
             threshold: "9",
             winningCardCount: 24,
             awardsDreamsign: false,
           },
           {
             gate: "jack",
-            label: "Fixture Jack",
             threshold: "J",
             winningCardCount: 16,
             awardsDreamsign: true,
@@ -64,9 +46,7 @@ const FIXTURE: GambleData = {
     },
     {
       id: "tidemark-ladder-climb",
-      rulesVersion: "fixture-ladder-rules",
       selection: { weight: 1, fallback: false },
-      presentation: presentation(["draw", "leave"], ["won", "miss"]),
       economy: {
         kind: "ladderClimb",
         winEssence: 25,
@@ -91,12 +71,7 @@ const FIXTURE: GambleData = {
     },
     {
       id: "starway-stairs",
-      rulesVersion: "fixture-starway-rules",
       selection: { weight: 1, fallback: false },
-      presentation: presentation(
-        ["bet", "climb", "take"],
-        ["safe", "bust", "prize-at-stake"],
-      ),
       economy: {
         kind: "starwayStairs",
         standardWager: 30,
@@ -120,12 +95,7 @@ const FIXTURE: GambleData = {
     },
     {
       id: "four-suit-reprise",
-      rulesVersion: "fixture-four-suit-rules",
       selection: { weight: 1, fallback: false },
-      presentation: presentation(
-        ["draw", "choose-another"],
-        ["transfiguration", "essence", "duplication", "purge"],
-      ),
       economy: {
         kind: "fourSuitReprise",
         standardDrawPrice: 25,
@@ -147,12 +117,7 @@ const FIXTURE: GambleData = {
     },
     {
       id: "blackjack",
-      rulesVersion: "fixture-blackjack-rules",
       selection: { weight: 1, fallback: false },
-      presentation: presentation(
-        ["deal", "hit", "stand"],
-        ["player-win", "dealer-win", "push", "bust", "wager-returned", "wins"],
-      ),
       economy: {
         kind: "blackjack",
         standardWager: 90,

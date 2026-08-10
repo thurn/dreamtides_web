@@ -9,7 +9,6 @@ import { artRef } from "../primitives/art";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { PLAYING_CARD_DESIGN } from "../components/card/PlayingCard";
-import type { GamblePresentation } from "../../types/gamble-data";
 import {
   GambleSiteScreen,
   type FourSuitRepriseSiteView,
@@ -21,39 +20,6 @@ import {
 import { transfigurationFormFixture } from "../test-helpers/transfiguration-fixture";
 import { JOURNEY_PRESENTATION } from "../test-helpers/presentation-fixtures";
 
-const PRESENTATION: GamblePresentation = {
-  title: "Fixture game",
-  rulesDisclosure: "Fixture rules",
-  accessibilityDescription: "Fixture accessible description",
-  actionLabels: [
-    "bet",
-    "leave",
-    "draw",
-    "climb",
-    "take",
-    "choose-another",
-    "deal",
-    "hit",
-    "stand",
-  ].map((key) => ({ key, text: `Action ${key}` })),
-  outcomeLabels: [
-    "won",
-    "miss",
-    "bust",
-    "safe",
-    "prize-at-stake",
-    "transfiguration",
-    "essence",
-    "duplication",
-    "purge",
-    "player-win",
-    "dealer-win",
-    "push",
-    "wager-returned",
-    "wins",
-  ].map((key) => ({ key, text: `Outcome ${key}` })),
-};
-
 const JACKPOT_DREAMSIGN = {
   id: "00000000-0000-4000-8000-000000000041",
   name: "Fixture Jackpot",
@@ -63,7 +29,6 @@ const JACKPOT_DREAMSIGN = {
 
 const VIEW: GravokWagerSiteView = {
   gameId: "gravok-three-gate-wager",
-  presentation: PRESENTATION,
   siteId: "fixture-gamble-site",
   scene: null,
   isFarpoint: false,
@@ -75,7 +40,6 @@ const VIEW: GravokWagerSiteView = {
   gates: [
     {
       id: "six",
-      name: "Six Gate",
       targetLabel: "6-A",
       chanceLabel: "69.23%",
       oddsNumerator: 36,
@@ -86,7 +50,6 @@ const VIEW: GravokWagerSiteView = {
     },
     {
       id: "nine",
-      name: "Nine Gate",
       targetLabel: "9-A",
       chanceLabel: "46.15%",
       oddsNumerator: 24,
@@ -97,7 +60,6 @@ const VIEW: GravokWagerSiteView = {
     },
     {
       id: "jack",
-      name: "Jack Gate",
       targetLabel: "J-A",
       chanceLabel: "30.77%",
       oddsNumerator: 16,
@@ -119,7 +81,6 @@ const VIEW: GravokWagerSiteView = {
 
 const STARWAY_VIEW: StarwayStairsSiteView = {
   gameId: "starway-stairs",
-  presentation: PRESENTATION,
   siteId: "fixture-gamble-site",
   scene: null,
   isFarpoint: false,
@@ -191,7 +152,6 @@ function fourSuitCardView(index: number) {
 
 const FOUR_SUIT_VIEW: FourSuitRepriseSiteView = {
   gameId: "four-suit-reprise",
-  presentation: PRESENTATION,
   siteId: "fixture-gamble-site",
   scene: null,
   isFarpoint: false,
@@ -202,10 +162,10 @@ const FOUR_SUIT_VIEW: FourSuitRepriseSiteView = {
   maxRounds: 3,
   essenceReward: 100,
   outcomes: [
-    { suit: "spades", outcome: "transfiguration", label: "Fixture A" },
-    { suit: "diamonds", outcome: "essence", label: "Fixture B" },
-    { suit: "hearts", outcome: "duplication", label: "Fixture C" },
-    { suit: "clubs", outcome: "purge", label: "Fixture D" },
+    { suit: "spades", outcome: "transfiguration" },
+    { suit: "diamonds", outcome: "essence" },
+    { suit: "hearts", outcome: "duplication" },
+    { suit: "clubs", outcome: "purge" },
   ],
   phase: "choose",
   cards: [fourSuitCardView(1), fourSuitCardView(2)],
@@ -221,7 +181,6 @@ const FOUR_SUIT_VIEW: FourSuitRepriseSiteView = {
 
 const BLACKJACK_VIEW: BlackjackSiteView = {
   gameId: "blackjack",
-  presentation: PRESENTATION,
   siteId: "fixture-gamble-site",
   handId: "fixture-blackjack-hand",
   scene: null,
@@ -697,7 +656,6 @@ describe("GambleSiteScreen", () => {
 
 const LADDER_VIEW: LadderClimbSiteView = {
   gameId: "tidemark-ladder-climb",
-  presentation: PRESENTATION,
   siteId: "fixture-gamble-site",
   scene: null,
   isFarpoint: false,

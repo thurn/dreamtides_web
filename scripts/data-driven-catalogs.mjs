@@ -115,10 +115,8 @@ export function compileGambleData(source) {
       throw new Error(`gamble.toml games[${String(index)}].id: unknown game`);
     return {
       id,
-      rulesVersion: game.rules_version,
       selection: normalize(game.selection),
       economy: variant(game.economy, `games[${String(index)}].economy`),
-      presentation: normalize(game.presentation),
       rules: normalizeGambleRules(game.rules, `games[${String(index)}].rules`),
     };
   });

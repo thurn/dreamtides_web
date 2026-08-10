@@ -16,7 +16,6 @@ function gambleCatalogLogFields(
 ) {
   return {
     gameId: runtime.gameId,
-    rulesVersion: runtime.rulesVersion,
     gambleFoldHash: gambleData.foldHash,
     selectionTrace: runtime.selectionTrace ?? null,
   };

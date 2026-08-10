@@ -86,7 +86,6 @@ export function buildGambleGateViews(
 ): readonly GambleGateView[] {
   return game.rules.gates.map((gate) => ({
     id: gate.gate,
-    name: gate.label,
     targetLabel: `${gate.threshold}-A`,
     chanceLabel: gravokGateChanceLabel(game, gate),
     oddsNumerator: gate.winningCardCount,
@@ -138,7 +137,6 @@ function buildGravokWagerSiteView(params: {
 
   return {
     gameId: "gravok-three-gate-wager",
-    presentation: params.game.presentation,
     siteId: params.site.id,
     ...commonGambleView({
       sceneNode: params.sceneNode,
@@ -215,7 +213,6 @@ function buildLadderClimbSiteView(params: {
 
   return {
     gameId: "tidemark-ladder-climb",
-    presentation: params.game.presentation,
     siteId: params.site.id,
     ...commonGambleView({
       sceneNode: params.sceneNode,
@@ -295,7 +292,6 @@ function buildStarwayStairsSiteView(params: {
 
   return {
     gameId: "starway-stairs",
-    presentation: params.game.presentation,
     siteId: params.site.id,
     ...commonGambleView({
       sceneNode: params.sceneNode,
@@ -382,7 +378,6 @@ function buildBlackjackSiteView(params: {
         );
   return {
     gameId: "blackjack",
-    presentation: params.game.presentation,
     siteId: params.site.id,
     handId: runtime.shuffleCommitment,
     ...commonGambleView({
@@ -522,7 +517,6 @@ function buildFourSuitRepriseSiteView(params: {
 
   return {
     gameId: "four-suit-reprise",
-    presentation: params.game.presentation,
     siteId: params.site.id,
     ...commonGambleView({
       sceneNode: params.sceneNode,
@@ -536,13 +530,7 @@ function buildFourSuitRepriseSiteView(params: {
     roundNumber,
     maxRounds: params.game.rules.maxRounds,
     essenceReward: params.game.economy.essenceReward,
-    outcomes: params.game.rules.outcomes.map((outcome) => ({
-      ...outcome,
-      label:
-        params.game.presentation.outcomeLabels.find(
-          (label) => label.key === outcome.outcome,
-        )?.text ?? outcome.outcome,
-    })),
+    outcomes: params.game.rules.outcomes,
     phase: runtime.phase,
     cards,
     result:

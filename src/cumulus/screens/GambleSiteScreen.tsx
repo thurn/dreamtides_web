@@ -16,10 +16,7 @@ import type {
 } from "../../types/journey";
 import type { FourSuitRepriseOutcome } from "../../data/four-suit-reprise";
 import { blackjackHandTotal } from "../../data/blackjack";
-import type {
-  FourSuitRepriseGame,
-  GamblePresentation,
-} from "../../types/gamble-data";
+import type { FourSuitRepriseGame } from "../../types/gamble-data";
 import {
   PlayingCard,
   PLAYING_CARD_DESIGN,
@@ -43,7 +40,7 @@ import type { ArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
-import { useMessages } from "../hooks/use-messages";
+import { useMessages, type MessageFormatter } from "../hooks/use-messages";
 import { DreamsignReplacementDialog } from "./DreamsignReplacementDialog";
 import type { DreamsignReplacementView } from "./DreamsignReplacementDialog";
 import {
@@ -58,8 +55,6 @@ import {
 export interface GambleGateView {
   /** Stable gate id used by the wager intent. */
   id: GravokGateId;
-  /** Literary gate name used in accessible labels. */
-  name: string;
   /** Inclusive winning rank range shown as compact card notation. */
   targetLabel: string;
   /** Exact winning probability. */
@@ -97,7 +92,6 @@ export interface GambleResultView {
 
 export interface GravokWagerSiteView {
   gameId: "gravok-three-gate-wager";
-  presentation: GamblePresentation;
   /** Stable journey site id. */
   siteId: string;
   /** Current dreamscape scene art behind the site, if resolved. */
@@ -146,7 +140,6 @@ export interface LadderClimbResultView {
 
 export interface LadderClimbSiteView {
   gameId: "tidemark-ladder-climb";
-  presentation: GamblePresentation;
   siteId: string;
   scene: ArtRef | null;
   isFarpoint: boolean;
@@ -186,7 +179,6 @@ export interface StarwayStairsResultView {
 
 export interface StarwayStairsSiteView {
   gameId: "starway-stairs";
-  presentation: GamblePresentation;
   siteId: string;
   scene: ArtRef | null;
   isFarpoint: boolean;
@@ -225,7 +217,6 @@ export interface FourSuitRepriseResultView {
 
 export interface FourSuitRepriseSiteView {
   gameId: "four-suit-reprise";
-  presentation: GamblePresentation;
   siteId: string;
   scene: ArtRef | null;
   isFarpoint: boolean;
@@ -235,9 +226,7 @@ export interface FourSuitRepriseSiteView {
   roundNumber: 1 | 2 | 3;
   maxRounds: number;
   essenceReward: number;
-  outcomes: readonly (FourSuitRepriseGame["rules"]["outcomes"][number] & {
-    label: string;
-  })[];
+  outcomes: FourSuitRepriseGame["rules"]["outcomes"];
   phase: "choose" | "result";
   cards: readonly FourSuitRepriseCardView[];
   guide: GuideGalleryGuideView;
@@ -247,7 +236,6 @@ export interface FourSuitRepriseSiteView {
 
 export interface BlackjackSiteView {
   gameId: "blackjack";
-  presentation: GamblePresentation;
   siteId: string;
   /** Stable committed-shoe identity for one animated hand. */
   handId: string;
@@ -326,23 +314,154 @@ export interface GambleSiteScreenProps {
   onReplaceDreamsign: (dreamsignId: string) => void;
 }
 
-function gamblePresentationLabel(
-  labels: readonly { key: string; text: string }[],
-  key: string,
+function gambleActionLabel(
+  t: MessageFormatter,
+  key:
+    | "bet"
+    | "draw"
+    | "climb"
+    | "take"
+    | "choose-another"
+    | "deal"
+    | "hit"
+    | "stand",
 ): string {
-  const label = labels.find((candidate) => candidate.key === key)?.text;
-  if (label === undefined) {
-    throw new Error(`Missing Gamble presentation label: ${key}`);
+  switch (key) {
+    case "bet":
+      return t("gamble-bet-action");
+    case "draw":
+      return t("gamble-draw-action");
+    case "climb":
+      return t("gamble-climb-action");
+    case "take":
+      return t("gamble-take-action");
+    case "choose-another":
+      return t("gamble-choose-another-card-action");
+    case "deal":
+      return t("gamble-deal-action");
+    case "hit":
+      return t("gamble-hit-action");
+    case "stand":
+      return t("gamble-stand-action");
   }
-  return label;
 }
 
-function gambleActionLabel(view: GambleSiteView, key: string): string {
-  return gamblePresentationLabel(view.presentation.actionLabels, key);
+function gambleOutcomeLabel(
+  t: MessageFormatter,
+  view: GambleSiteView,
+  key:
+    | "won"
+    | "miss"
+    | "safe"
+    | "bust"
+    | "prize-at-stake"
+    | "transfiguration"
+    | "essence"
+    | "duplication"
+    | "purge"
+    | "player-win"
+    | "dealer-win"
+    | "push"
+    | "wager-returned"
+    | "wins",
+): string {
+  switch (key) {
+    case "won":
+      return view.gameId === "gravok-three-gate-wager"
+        ? t("gamble-gravok-won-outcome")
+        : t("gamble-ladder-won-outcome");
+    case "miss":
+      return t("gamble-miss-outcome");
+    case "safe":
+      return t("gamble-safe-outcome");
+    case "bust":
+      return t("gamble-bust-outcome");
+    case "prize-at-stake":
+      return t("gamble-prize-at-stake-outcome");
+    case "transfiguration":
+      return t("gamble-transfigure-outcome");
+    case "essence":
+      return t("gamble-gained-outcome");
+    case "duplication":
+      return t("gamble-duplicated-outcome");
+    case "purge":
+      return t("gamble-purged-outcome");
+    case "player-win":
+      return t("gamble-player-win-outcome");
+    case "dealer-win":
+      return t("gamble-dealer-win-outcome");
+    case "push":
+      return t("gamble-push-outcome");
+    case "wager-returned":
+      return t("gamble-wager-returned-outcome");
+    case "wins":
+      return t("gamble-wins-outcome");
+  }
 }
 
-function gambleOutcomeLabel(view: GambleSiteView, key: string): string {
-  return gamblePresentationLabel(view.presentation.outcomeLabels, key);
+function gambleRulesDisclosure(
+  t: MessageFormatter,
+  gameId: GambleSiteView["gameId"],
+): string {
+  switch (gameId) {
+    case "gravok-three-gate-wager":
+      return t("gamble-gravok-rules");
+    case "tidemark-ladder-climb":
+      return t("gamble-ladder-rules");
+    case "starway-stairs":
+      return t("gamble-starway-rules");
+    case "four-suit-reprise":
+      return t("gamble-four-suit-rules");
+    case "blackjack":
+      return t("gamble-blackjack-rules");
+  }
+}
+
+function gambleTitle(
+  t: MessageFormatter,
+  gameId: GambleSiteView["gameId"],
+): string {
+  switch (gameId) {
+    case "gravok-three-gate-wager":
+      return t("gamble-gravok-title");
+    case "tidemark-ladder-climb":
+      return t("gamble-ladder-title");
+    case "starway-stairs":
+      return t("gamble-starway-title");
+    case "four-suit-reprise":
+      return t("gamble-four-suit-title");
+    case "blackjack":
+      return t("gamble-blackjack-title");
+  }
+}
+
+function gambleAccessibilityDescription(
+  t: MessageFormatter,
+  gameId: GambleSiteView["gameId"],
+): string {
+  switch (gameId) {
+    case "gravok-three-gate-wager":
+      return t("gamble-gravok-accessibility-description");
+    case "tidemark-ladder-climb":
+      return t("gamble-ladder-accessibility-description");
+    case "starway-stairs":
+      return t("gamble-starway-accessibility-description");
+    case "four-suit-reprise":
+      return t("gamble-four-suit-accessibility-description");
+    case "blackjack":
+      return t("gamble-blackjack-accessibility-description");
+  }
+}
+
+function gravokGateName(t: MessageFormatter, gateId: GravokGateId): string {
+  switch (gateId) {
+    case "six":
+      return t("gamble-gravok-six-gate");
+    case "nine":
+      return t("gamble-gravok-nine-gate");
+    case "jack":
+      return t("gamble-gravok-jack-gate");
+  }
 }
 
 const DESKTOP_GAMBLE_REGION_MAX_WIDTH = 650;
@@ -918,9 +1037,9 @@ function GambleBetButton({
   const t = useMessages();
   const button = (
     <GlassButton
-      label={gambleActionLabel(view, "bet")}
+      label={gambleActionLabel(t, "bet")}
       accessibilityLabel={t("gamble-gate-bet-accessible-name", {
-        gateName: gate.name,
+        gateName: gravokGateName(t, gate.id),
         essenceCost: view.wagerCost,
       })}
       essenceCost={view.wagerCost}
@@ -972,10 +1091,11 @@ function GambleOutcome({
   result: GambleResultView;
   layout: "mobile" | "desktop";
 }) {
+  const t = useMessages();
   return (
     <RadialAnnouncement
       announcementId={result.id}
-      headline={gambleOutcomeLabel(view, result.won ? "won" : "bust")}
+      headline={gambleOutcomeLabel(t, view, result.won ? "won" : "bust")}
       detail={result.won ? result.rewardDreamsign?.name : undefined}
       essenceGained={result.won ? result.essenceGained : undefined}
       tone={result.won ? "reward" : "danger"}
@@ -1220,7 +1340,7 @@ function GravokWagerScreen({
             }}
           >
             <section
-              aria-label={view.presentation.accessibilityDescription}
+              aria-label={gambleAccessibilityDescription(t, view.gameId)}
               data-gamble-gates=""
               style={{
                 position: "relative",
@@ -1547,7 +1667,7 @@ function LadderClimbScreen({
             }}
           >
             <section
-              aria-label={view.presentation.accessibilityDescription}
+              aria-label={gambleAccessibilityDescription(t, view.gameId)}
               data-ladder-climb-stage=""
               style={{
                 position: "relative",
@@ -1577,6 +1697,7 @@ function LadderClimbScreen({
                   <RadialAnnouncement
                     announcementId={result.id}
                     headline={gambleOutcomeLabel(
+                      t,
                       view,
                       result.won ? "won" : "miss",
                     )}
@@ -1651,7 +1772,7 @@ function LadderClimbScreen({
               >
                 {view.nextDraw !== null && (
                   <GlassButton
-                    label={gambleActionLabel(view, "draw")}
+                    label={gambleActionLabel(t, "draw")}
                     accessibilityLabel={t(
                       "gamble-draw-attempt-accessible-name",
                       {
@@ -1847,7 +1968,7 @@ function StarwayStairsScreen({
             }}
           >
             <section
-              aria-label={view.presentation.accessibilityDescription}
+              aria-label={gambleAccessibilityDescription(t, view.gameId)}
               data-starway-stairs-tiers=""
               style={{
                 position: "relative",
@@ -1922,13 +2043,14 @@ function StarwayStairsScreen({
                           <RadialAnnouncement
                             announcementId={view.result.id}
                             headline={gambleOutcomeLabel(
+                              t,
                               view,
                               view.result.busted ? "bust" : "safe",
                             )}
                             detail={
                               view.result.busted
                                 ? undefined
-                                : gambleOutcomeLabel(view, "prize-at-stake")
+                                : gambleOutcomeLabel(t, view, "prize-at-stake")
                             }
                             essenceGained={
                               !view.result.busted &&
@@ -1965,7 +2087,7 @@ function StarwayStairsScreen({
                 <div data-starway-tier-button={currentTier.tierNumber}>
                   <GlassButton
                     label={gambleActionLabel(
-                      view,
+                      t,
                       currentTier.tierNumber === 1 ? "bet" : "climb",
                     )}
                     accessibilityLabel={t(
@@ -1995,7 +2117,7 @@ function StarwayStairsScreen({
               )}
               {view.cashOutReward !== null && (
                 <GlassButton
-                  label={gambleActionLabel(view, "take")}
+                  label={gambleActionLabel(t, "take")}
                   accessibilityLabel={t("gamble-cash-out-accessible-name", {
                     essenceAmount: view.cashOutReward,
                   })}
@@ -2608,10 +2730,10 @@ function BlackjackScreen({
                   }}
                 >
                   <h2 style={{ margin: 0, font: token("--t-title-sm") }}>
-                    {view.presentation.rulesDisclosure}
+                    {gambleRulesDisclosure(t, view.gameId)}
                   </h2>
                   <p style={{ margin: 0, font: token("--t-body-sm") }}>
-                    {gambleOutcomeLabel(view, "wins")}{" "}
+                    {gambleOutcomeLabel(t, view, "wins")}{" "}
                     <EssenceValue amount={view.prizeEssence} tone="inherit" />
                   </p>
                 </div>
@@ -2639,6 +2761,7 @@ function BlackjackScreen({
                   <RadialAnnouncement
                     announcementId={view.resultId}
                     headline={gambleOutcomeLabel(
+                      t,
                       view,
                       view.outcome === "player-win"
                         ? "player-win"
@@ -2650,7 +2773,7 @@ function BlackjackScreen({
                     )}
                     detail={
                       view.outcome === "push"
-                        ? gambleOutcomeLabel(view, "wager-returned")
+                        ? gambleOutcomeLabel(t, view, "wager-returned")
                         : undefined
                     }
                     essenceGained={
@@ -2694,7 +2817,7 @@ function BlackjackScreen({
             {!view.playerCards.length ? (
               <>
                 <GlassButton
-                  label={gambleActionLabel(view, "deal")}
+                  label={gambleActionLabel(t, "deal")}
                   essenceCost={view.wagerCost}
                   variant="accent"
                   disabled={
@@ -2717,7 +2840,7 @@ function BlackjackScreen({
             ) : view.outcome === null ? (
               <>
                 <GlassButton
-                  label={gambleActionLabel(view, "hit")}
+                  label={gambleActionLabel(t, "hit")}
                   variant="accent"
                   disabled={decisionPending}
                   testId="gamble-blackjack-hit"
@@ -2727,7 +2850,7 @@ function BlackjackScreen({
                   }}
                 />
                 <GlassButton
-                  label={gambleActionLabel(view, "stand")}
+                  label={gambleActionLabel(t, "stand")}
                   testId="gamble-blackjack-stand"
                   disabled={decisionPending}
                   onPress={() => {
@@ -2934,8 +3057,8 @@ function FourSuitRepriseScreen({
               }}
             >
               <CardPickerPanel
-                title={view.presentation.title}
-                subtitle={view.presentation.rulesDisclosure}
+                title={gambleTitle(t, view.gameId)}
+                subtitle={gambleRulesDisclosure(t, view.gameId)}
                 footerActions={[
                   {
                     label: t("gamble-leave-action"),
@@ -3039,7 +3162,7 @@ function FourSuitRepriseScreen({
             }}
           >
             <section
-              aria-label={view.presentation.accessibilityDescription}
+              aria-label={gambleAccessibilityDescription(t, view.gameId)}
               data-four-suit-stage=""
               style={{
                 position: "relative",
@@ -3132,7 +3255,11 @@ function FourSuitRepriseScreen({
                         data-four-suit-outcome={outcome.suit}
                         aria-label={t("gamble-suit-outcome-accessible-name", {
                           suit: outcome.suit,
-                          outcomeLabel: outcome.label,
+                          outcomeLabel: gambleOutcomeLabel(
+                            t,
+                            view,
+                            outcome.outcome,
+                          ),
                         })}
                         style={{
                           display: "grid",
@@ -3159,12 +3286,12 @@ function FourSuitRepriseScreen({
                         />
                         <span>
                           {outcome.outcome === "transfiguration"
-                            ? gambleOutcomeLabel(view, "transfiguration")
+                            ? gambleOutcomeLabel(t, view, "transfiguration")
                             : outcome.outcome === "essence"
                               ? t("gamble-essence-outcome", {
                                   essenceAmount: view.essenceReward,
                                 })
-                              : outcome.label}
+                              : gambleOutcomeLabel(t, view, outcome.outcome)}
                         </span>
                       </div>
                     ))}
@@ -3185,7 +3312,7 @@ function FourSuitRepriseScreen({
                 >
                   <RadialAnnouncement
                     announcementId={activeResult.id}
-                    headline={gambleOutcomeLabel(view, activeResult.outcome)}
+                    headline={gambleOutcomeLabel(t, view, activeResult.outcome)}
                     essenceGained={
                       activeResult.essenceGained > 0
                         ? activeResult.essenceGained
@@ -3225,7 +3352,7 @@ function FourSuitRepriseScreen({
                 >
                   <IconButton
                     glyph={GLYPHS.refreshCcw}
-                    label={gambleActionLabel(view, "choose-another")}
+                    label={gambleActionLabel(t, "choose-another")}
                     size="sm"
                     disabled={decisionPending}
                     testId="gamble-four-suit-choose-again"
@@ -3246,7 +3373,7 @@ function FourSuitRepriseScreen({
                 {view.phase === "choose" && selectedCard !== null ? (
                   <>
                     <GlassButton
-                      label={gambleActionLabel(view, "draw")}
+                      label={gambleActionLabel(t, "draw")}
                       accessibilityLabel={t("gamble-draw-accessible-name", {
                         essenceCost: view.drawCost,
                       })}

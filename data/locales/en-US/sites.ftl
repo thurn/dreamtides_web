@@ -119,6 +119,50 @@ gamble-leave-action = Leave
 gamble-choose-replacement-action = Choose Replacement
 # Visible command that postpones choosing a Dreamsign replacement.
 gamble-replacement-not-yet-action = Not Yet
+
+## Gamble game presentation
+
+gamble-gravok-title = Gravok's Three-Gate Wager
+gamble-gravok-rules = Choose a gate, then draw. Higher gates are harder and pay more.
+gamble-gravok-accessibility-description = Choose one of three gates and draw a card to resolve the wager.
+gamble-gravok-six-gate = Six Gate
+gamble-gravok-nine-gate = Nine Gate
+gamble-gravok-jack-gate = Jack Gate
+gamble-ladder-title = Tidemark Ladder Climb
+gamble-ladder-rules = Draw against four successively easier targets. Each success gains essence.
+gamble-ladder-accessibility-description = Draw a card on each rung of a four-step ladder.
+gamble-starway-title = Starway Stairs
+gamble-starway-rules = Climb for a larger prize, but a low draw loses the wager.
+gamble-starway-accessibility-description = Choose whether to climb for a larger prize or take the current prize.
+gamble-four-suit-title = Four-Suit Reprise
+gamble-four-suit-rules = Choose a card to wager
+gamble-four-suit-accessibility-description = Choose a card to wager, then draw one of four suit outcomes.
+gamble-blackjack-title = Blackjack
+gamble-blackjack-rules = Closest to 21 Without Going Over
+gamble-blackjack-accessibility-description = Deal, hit, or stand against the dealer without going over 21.
+gamble-bet-action = Bet
+gamble-draw-action = Draw
+gamble-climb-action = Climb
+gamble-take-action = Take
+gamble-choose-another-card-action = Choose Another Card
+gamble-deal-action = Deal
+gamble-hit-action = Hit
+gamble-stand-action = Stand
+gamble-gravok-won-outcome = Won!
+gamble-ladder-won-outcome = Won
+gamble-miss-outcome = Miss
+gamble-safe-outcome = Safe!
+gamble-bust-outcome = Bust!
+gamble-prize-at-stake-outcome = Prize at stake
+gamble-transfigure-outcome = Transfigure
+gamble-gained-outcome = Gained
+gamble-duplicated-outcome = Duplicated
+gamble-purged-outcome = Purged
+gamble-player-win-outcome = You Win!
+gamble-dealer-win-outcome = Dealer Wins
+gamble-push-outcome = Push
+gamble-wager-returned-outcome = Wager Returned
+gamble-wins-outcome = Wins
 # Title of the card picker at a Transfiguration site.
 transfiguration-picker-title = Transfiguration
 # Picker instruction or loading status. $state is "standard" for the normal

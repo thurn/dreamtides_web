@@ -430,7 +430,6 @@ export interface GambleSelectionTrace {
 export interface GravokWagerSiteRuntime {
   kind: "gamble";
   gameId: "gravok-three-gate-wager";
-  rulesVersion: string;
   /** Absent only on persisted runtimes created before catalog tracing. */
   selectionTrace?: GambleSelectionTrace;
   /** One-based wager number within this site visit. */
@@ -558,7 +557,6 @@ export interface TidemarkLadderClimbResult {
 export interface TidemarkLadderClimbSiteRuntime {
   kind: "gamble";
   gameId: "tidemark-ladder-climb";
-  rulesVersion: string;
   /** Absent only on persisted runtimes created before catalog tracing. */
   selectionTrace?: GambleSelectionTrace;
   isFarpoint: boolean;
@@ -593,7 +591,6 @@ export type StarwayStairsTerminalReason = "bust" | "cashed-out" | "top";
 export interface StarwayStairsSiteRuntime {
   kind: "gamble";
   gameId: "starway-stairs";
-  rulesVersion: string;
   /** Absent only on persisted runtimes created before catalog tracing. */
   selectionTrace?: GambleSelectionTrace;
   /** One-based game number within this site visit. */
@@ -640,7 +637,6 @@ export interface FourSuitRepriseRound {
 export interface FourSuitRepriseSiteRuntime {
   kind: "gamble";
   gameId: "four-suit-reprise";
-  rulesVersion: string;
   /** Absent only on persisted runtimes created before catalog tracing. */
   selectionTrace?: GambleSelectionTrace;
   isFarpoint: boolean;
@@ -657,7 +653,6 @@ export interface FourSuitRepriseSiteRuntime {
 export interface BlackjackSiteRuntime {
   kind: "gamble";
   gameId: "blackjack";
-  rulesVersion: string;
   /** Absent only on persisted runtimes created before catalog tracing. */
   selectionTrace?: GambleSelectionTrace;
   isFarpoint: boolean;

@@ -15,7 +15,7 @@ const parsed = (file) =>
   parse(readFileSync(resolve(ROOT, "data", file), "utf8"));
 
 describe("data-driven catalog runtime generation", () => {
-  it("emits deterministic gameplay hashes and stable Gamble identities", () => {
+  it("emits deterministic gameplay-only Gamble data with stable identities", () => {
     const source = parsed("gamble.toml");
     const first = compileGambleData(source);
     expect(compileGambleData(source)).toEqual(first);
@@ -27,6 +27,10 @@ describe("data-driven catalog runtime generation", () => {
       "blackjack",
     ]);
     expect(first.foldHash).toBe(first.contentHash);
+    for (const game of first.games) {
+      expect(game).not.toHaveProperty("rulesVersion");
+      expect(game).not.toHaveProperty("presentation");
+    }
   });
 
   it("preserves a configured Gamble subset and order", () => {

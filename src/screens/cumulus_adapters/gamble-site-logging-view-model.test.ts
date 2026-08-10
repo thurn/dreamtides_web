@@ -6,7 +6,6 @@ import type {
   BlackjackSiteView,
 } from "../../cumulus/screens/GambleSiteScreen";
 import { getLogEntries, resetLog } from "../../logging";
-import { gambleGame } from "../../data/gamble-data";
 import { gambleFixture } from "../../testing/gamble-fixture";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
@@ -30,7 +29,6 @@ const REWARD_DREAMSIGN = {
 const RUNTIME: TidemarkLadderClimbSiteRuntime = {
   kind: "gamble",
   gameId: "tidemark-ladder-climb",
-  rulesVersion: "fixture-ladder-rules",
   isFarpoint: false,
   shuffleCommitments: ["attempt-1", "attempt-2", "attempt-3", "attempt-4"],
   committedCards: [
@@ -59,8 +57,6 @@ const RUNTIME: TidemarkLadderClimbSiteRuntime = {
 
 const VIEW: LadderClimbSiteView = {
   gameId: "tidemark-ladder-climb",
-  presentation: gambleGame(gambleFixture(), "tidemark-ladder-climb")
-    .presentation,
   siteId: "fixture-site",
   scene: null,
   isFarpoint: false,
@@ -96,7 +92,6 @@ describe("gamble-site-logging-view-model", () => {
     expect(getLogEntries()[0]).toMatchObject({
       event: "gamble_wager_settled",
       gameId: "tidemark-ladder-climb",
-      rulesVersion: RUNTIME.rulesVersion,
       gambleFoldHash: gambleFixture().foldHash,
       attemptNumber: 1,
       cumulativeCost: 0,
@@ -126,7 +121,6 @@ describe("gamble-site-logging-view-model", () => {
     const runtime: FourSuitRepriseSiteRuntime = {
       kind: "gamble",
       gameId: "four-suit-reprise",
-      rulesVersion: "fixture-four-suit-rules",
       isFarpoint: false,
       drawCost: 25,
       shuffleCommitments: ["round-1", "round-2", "round-3"],
@@ -201,7 +195,6 @@ describe("gamble-site-logging-view-model", () => {
     });
     expect(getLogEntries()[2]).toMatchObject({
       event: "gamble_wager_settled",
-      rulesVersion: runtime.rulesVersion,
       gambleFoldHash: gambleFixture().foldHash,
       finalEffect: "duplication",
       duplicatedEntryId: "duplicate-101",
@@ -212,7 +205,6 @@ describe("gamble-site-logging-view-model", () => {
     const runtime: BlackjackSiteRuntime = {
       kind: "gamble",
       gameId: "blackjack",
-      rulesVersion: "fixture-blackjack-rules",
       isFarpoint: false,
       wagerCost: 50,
       prizeEssence: 300,
@@ -265,7 +257,6 @@ describe("gamble-site-logging-view-model", () => {
     });
     expect(getLogEntries()[2]).toMatchObject({
       event: "gamble_wager_settled",
-      rulesVersion: runtime.rulesVersion,
       gambleFoldHash: gambleFixture().foldHash,
       playerTotal: 19,
       dealerTotal: 18,

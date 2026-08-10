@@ -239,6 +239,47 @@ export const FLUENT_MESSAGE_IDS = [
   "gamble-leave-action",
   "gamble-choose-replacement-action",
   "gamble-replacement-not-yet-action",
+  "gamble-gravok-title",
+  "gamble-gravok-rules",
+  "gamble-gravok-accessibility-description",
+  "gamble-gravok-six-gate",
+  "gamble-gravok-nine-gate",
+  "gamble-gravok-jack-gate",
+  "gamble-ladder-title",
+  "gamble-ladder-rules",
+  "gamble-ladder-accessibility-description",
+  "gamble-starway-title",
+  "gamble-starway-rules",
+  "gamble-starway-accessibility-description",
+  "gamble-four-suit-title",
+  "gamble-four-suit-rules",
+  "gamble-four-suit-accessibility-description",
+  "gamble-blackjack-title",
+  "gamble-blackjack-rules",
+  "gamble-blackjack-accessibility-description",
+  "gamble-bet-action",
+  "gamble-draw-action",
+  "gamble-climb-action",
+  "gamble-take-action",
+  "gamble-choose-another-card-action",
+  "gamble-deal-action",
+  "gamble-hit-action",
+  "gamble-stand-action",
+  "gamble-gravok-won-outcome",
+  "gamble-ladder-won-outcome",
+  "gamble-miss-outcome",
+  "gamble-safe-outcome",
+  "gamble-bust-outcome",
+  "gamble-prize-at-stake-outcome",
+  "gamble-transfigure-outcome",
+  "gamble-gained-outcome",
+  "gamble-duplicated-outcome",
+  "gamble-purged-outcome",
+  "gamble-player-win-outcome",
+  "gamble-dealer-win-outcome",
+  "gamble-push-outcome",
+  "gamble-wager-returned-outcome",
+  "gamble-wins-outcome",
   "transfiguration-picker-title",
   "transfiguration-picker-instruction",
   "transfiguration-reforged-card-caption",
@@ -773,6 +814,47 @@ export interface FluentMessageArgumentsById {
   readonly "gamble-leave-action": never;
   readonly "gamble-choose-replacement-action": never;
   readonly "gamble-replacement-not-yet-action": never;
+  readonly "gamble-gravok-title": never;
+  readonly "gamble-gravok-rules": never;
+  readonly "gamble-gravok-accessibility-description": never;
+  readonly "gamble-gravok-six-gate": never;
+  readonly "gamble-gravok-nine-gate": never;
+  readonly "gamble-gravok-jack-gate": never;
+  readonly "gamble-ladder-title": never;
+  readonly "gamble-ladder-rules": never;
+  readonly "gamble-ladder-accessibility-description": never;
+  readonly "gamble-starway-title": never;
+  readonly "gamble-starway-rules": never;
+  readonly "gamble-starway-accessibility-description": never;
+  readonly "gamble-four-suit-title": never;
+  readonly "gamble-four-suit-rules": never;
+  readonly "gamble-four-suit-accessibility-description": never;
+  readonly "gamble-blackjack-title": never;
+  readonly "gamble-blackjack-rules": never;
+  readonly "gamble-blackjack-accessibility-description": never;
+  readonly "gamble-bet-action": never;
+  readonly "gamble-draw-action": never;
+  readonly "gamble-climb-action": never;
+  readonly "gamble-take-action": never;
+  readonly "gamble-choose-another-card-action": never;
+  readonly "gamble-deal-action": never;
+  readonly "gamble-hit-action": never;
+  readonly "gamble-stand-action": never;
+  readonly "gamble-gravok-won-outcome": never;
+  readonly "gamble-ladder-won-outcome": never;
+  readonly "gamble-miss-outcome": never;
+  readonly "gamble-safe-outcome": never;
+  readonly "gamble-bust-outcome": never;
+  readonly "gamble-prize-at-stake-outcome": never;
+  readonly "gamble-transfigure-outcome": never;
+  readonly "gamble-gained-outcome": never;
+  readonly "gamble-duplicated-outcome": never;
+  readonly "gamble-purged-outcome": never;
+  readonly "gamble-player-win-outcome": never;
+  readonly "gamble-dealer-win-outcome": never;
+  readonly "gamble-push-outcome": never;
+  readonly "gamble-wager-returned-outcome": never;
+  readonly "gamble-wins-outcome": never;
   readonly "transfiguration-picker-title": never;
   readonly "transfiguration-picker-instruction": {
     readonly state: FluentVariable;
@@ -1498,6 +1580,47 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "gamble-leave-action": [] as const,
   "gamble-choose-replacement-action": [] as const,
   "gamble-replacement-not-yet-action": [] as const,
+  "gamble-gravok-title": [] as const,
+  "gamble-gravok-rules": [] as const,
+  "gamble-gravok-accessibility-description": [] as const,
+  "gamble-gravok-six-gate": [] as const,
+  "gamble-gravok-nine-gate": [] as const,
+  "gamble-gravok-jack-gate": [] as const,
+  "gamble-ladder-title": [] as const,
+  "gamble-ladder-rules": [] as const,
+  "gamble-ladder-accessibility-description": [] as const,
+  "gamble-starway-title": [] as const,
+  "gamble-starway-rules": [] as const,
+  "gamble-starway-accessibility-description": [] as const,
+  "gamble-four-suit-title": [] as const,
+  "gamble-four-suit-rules": [] as const,
+  "gamble-four-suit-accessibility-description": [] as const,
+  "gamble-blackjack-title": [] as const,
+  "gamble-blackjack-rules": [] as const,
+  "gamble-blackjack-accessibility-description": [] as const,
+  "gamble-bet-action": [] as const,
+  "gamble-draw-action": [] as const,
+  "gamble-climb-action": [] as const,
+  "gamble-take-action": [] as const,
+  "gamble-choose-another-card-action": [] as const,
+  "gamble-deal-action": [] as const,
+  "gamble-hit-action": [] as const,
+  "gamble-stand-action": [] as const,
+  "gamble-gravok-won-outcome": [] as const,
+  "gamble-ladder-won-outcome": [] as const,
+  "gamble-miss-outcome": [] as const,
+  "gamble-safe-outcome": [] as const,
+  "gamble-bust-outcome": [] as const,
+  "gamble-prize-at-stake-outcome": [] as const,
+  "gamble-transfigure-outcome": [] as const,
+  "gamble-gained-outcome": [] as const,
+  "gamble-duplicated-outcome": [] as const,
+  "gamble-purged-outcome": [] as const,
+  "gamble-player-win-outcome": [] as const,
+  "gamble-dealer-win-outcome": [] as const,
+  "gamble-push-outcome": [] as const,
+  "gamble-wager-returned-outcome": [] as const,
+  "gamble-wins-outcome": [] as const,
   "transfiguration-picker-title": [] as const,
   "transfiguration-picker-instruction": ["state"] as const,
   "transfiguration-reforged-card-caption": ["form"] as const,
@@ -1996,6 +2119,47 @@ export type FluentMessageIdsWithoutVariables = [
   "gamble-leave-action",
   "gamble-choose-replacement-action",
   "gamble-replacement-not-yet-action",
+  "gamble-gravok-title",
+  "gamble-gravok-rules",
+  "gamble-gravok-accessibility-description",
+  "gamble-gravok-six-gate",
+  "gamble-gravok-nine-gate",
+  "gamble-gravok-jack-gate",
+  "gamble-ladder-title",
+  "gamble-ladder-rules",
+  "gamble-ladder-accessibility-description",
+  "gamble-starway-title",
+  "gamble-starway-rules",
+  "gamble-starway-accessibility-description",
+  "gamble-four-suit-title",
+  "gamble-four-suit-rules",
+  "gamble-four-suit-accessibility-description",
+  "gamble-blackjack-title",
+  "gamble-blackjack-rules",
+  "gamble-blackjack-accessibility-description",
+  "gamble-bet-action",
+  "gamble-draw-action",
+  "gamble-climb-action",
+  "gamble-take-action",
+  "gamble-choose-another-card-action",
+  "gamble-deal-action",
+  "gamble-hit-action",
+  "gamble-stand-action",
+  "gamble-gravok-won-outcome",
+  "gamble-ladder-won-outcome",
+  "gamble-miss-outcome",
+  "gamble-safe-outcome",
+  "gamble-bust-outcome",
+  "gamble-prize-at-stake-outcome",
+  "gamble-transfigure-outcome",
+  "gamble-gained-outcome",
+  "gamble-duplicated-outcome",
+  "gamble-purged-outcome",
+  "gamble-player-win-outcome",
+  "gamble-dealer-win-outcome",
+  "gamble-push-outcome",
+  "gamble-wager-returned-outcome",
+  "gamble-wins-outcome",
   "transfiguration-picker-title",
   "transfiguration-form-picker-title",
   "transfiguration-choose-again-action",
