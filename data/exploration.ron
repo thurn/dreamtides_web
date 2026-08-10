@@ -13070,4 +13070,144 @@
       ),
     ],
   ),
+
+  EncounterDefinition(
+    card_id: "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9",
+    prose: "A lone woman faces a crimson engine surrounded by hanging gears, chains, sparks, and wreckage.",
+    actions: [
+      ActionDefinition(
+        label: "Replicate a Gearwork",
+        id: "a059b0a1-bf8e-4a26-b393-61f631e66c67",
+        presentation: ActionPresentation(
+          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose one revealed card to replicate.",
+          ),
+        ),
+        effect: CopyOfferedDeckCard(offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Break Vengeful Cycle",
+        id: "becc81bd-e2d4-4f50-a334-9b673dba825c",
+        presentation: ActionPresentation(
+          effect_text: "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          followup: None,
+        ),
+        effect: PurgeDuplicatesAndGrantReclaim,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "69552516-14bc-42b9-b4b6-3a0cdc29686b",
+    prose: "An astronaut studies luminous geometric records cascading across a cavern wall above amber mist.",
+    actions: [
+      ActionDefinition(
+        label: "Decode Luminous Archive",
+        id: "e5f2e331-7220-4cec-9e4f-eff5f3c1327b",
+        presentation: ActionPresentation(
+          effect_text: "Draft an Event from 4 choices",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one recovered Event."),
+        ),
+        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+      ),
+
+      ActionDefinition(
+        label: "Enter Patterned Threshold",
+        id: "e6bfa9e2-7525-4fdb-aa7e-3562b0929bcb",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "8951e112-92d2-4246-9859-39320620231b",
+    prose: "Spirit of Smoldering Echoes leans from molten stone, shedding sparks into cavern smoke.",
+    actions: [
+      ActionDefinition(
+        label: "Gather Fallen Sparks",
+        id: "ed821bbf-cf8c-4481-b038-d68c7e444036",
+        presentation: ActionPresentation(
+          effect_text: "Gain 15 essence for each Event card in your deck",
+          followup: None,
+        ),
+        effect: GainEssencePerCard(predicate: Event, essence_per_card: 15),
+      ),
+
+      ActionDefinition(
+        label: "Rekindle Every Echo",
+        id: "79e14a4d-0350-4756-be75-04a2dc62d121",
+        presentation: ActionPresentation(
+          effect_text: "Lose 100 essence. Apply Inspired to every eligible Event card in your deck.",
+          followup: None,
+        ),
+        effect: TransfigureAllForEssence(
+          essence: 100,
+          predicate: Event,
+          transfiguration: "Inspired",
+        ),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "2a230602-a39b-4ec2-a467-97b92b389aff",
+    prose: "A lone corsair surveys burning shipwrecks from a hoard beneath an ember-filled sunset.",
+    actions: [
+      ActionDefinition(
+        label: "Scuttle One Last Prize",
+        id: "5accb9e6-798a-4e1d-a1ff-92ad819fbc22",
+        presentation: ActionPresentation(
+          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose a card to scuttle for 20 essence per ✦.",
+          ),
+        ),
+        effect: PurgeForEssence(essence_per_spark: 20),
+      ),
+
+      ActionDefinition(
+        label: "Count the Lost Crew",
+        id: "0fca674c-72cd-4774-b6d4-587edff1f57a",
+        presentation: ActionPresentation(
+          effect_text: "Draw 2 additional cards at the start of your next battle",
+          followup: None,
+        ),
+        effect: NextBattleOpeningHand(count: 2),
+      ),
+    ],
+  ),
+
+  EncounterDefinition(
+    card_id: "e3431bd0-5a81-497f-9ec9-18275b568c00",
+    prose: "A lone car approaches a crumbling road beneath an inverted city and weightless rubble.",
+    actions: [
+      ActionDefinition(
+        label: "Floor the accelerator",
+        id: "bac27741-0ac8-448b-a838-0e624b5b5846",
+        presentation: ActionPresentation(
+          effect_text: "All cards in your deck become ❖ (fast)",
+          followup: None,
+        ),
+        effect: MakeFastAll,
+      ),
+
+      ActionDefinition(
+        label: "Chart floating roadway",
+        id: "3daff8e3-a006-47aa-ac08-6d6f581abaf5",
+        presentation: ActionPresentation(
+          effect_text: "Add a disclosed site to this Dreamscape",
+          followup: None,
+        ),
+        effect: AddSite,
+      ),
+    ],
+  ),
 ]

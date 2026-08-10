@@ -12118,8 +12118,130 @@
           "count": 1
         }
       ]
+    },
+    {
+      "cardId": "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9",
+      "prose": "A lone woman faces a crimson engine surrounded by hanging gears, chains, sparks, and wreckage.",
+      "action": [
+        {
+          "id": "a059b0a1-bf8e-4a26-b393-61f631e66c67",
+          "label": "Replicate a Gearwork",
+          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one revealed card to replicate.",
+          "effectKind": "copy-offered-deck-card",
+          "canonicalMechanicId": "duplicate-deck-entry",
+          "selectionPolicyId": "duplicate-value",
+          "offerCount": 4
+        },
+        {
+          "id": "becc81bd-e2d4-4f50-a334-9b673dba825c",
+          "label": "Break Vengeful Cycle",
+          "effectText": "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          "effectKind": "purge-duplicates-and-grant-reclaim",
+          "canonicalMechanicId": "purge-duplicates-and-grant-reclaim"
+        }
+      ]
+    },
+    {
+      "cardId": "69552516-14bc-42b9-b4b6-3a0cdc29686b",
+      "prose": "An astronaut studies luminous geometric records cascading across a cavern wall above amber mist.",
+      "action": [
+        {
+          "id": "e5f2e331-7220-4cec-9e4f-eff5f3c1327b",
+          "label": "Decode Luminous Archive",
+          "effectText": "Draft an Event from 4 choices",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one recovered Event.",
+          "effectKind": "draft-card",
+          "canonicalMechanicId": "catalog-card-chooser",
+          "selectionPolicyId": "card-fit",
+          "predicate": "event",
+          "count": 1,
+          "offerCount": 4
+        },
+        {
+          "id": "e6bfa9e2-7525-4fdb-aa7e-3562b0929bcb",
+          "label": "Enter Patterned Threshold",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        }
+      ]
+    },
+    {
+      "cardId": "8951e112-92d2-4246-9859-39320620231b",
+      "prose": "Spirit of Smoldering Echoes leans from molten stone, shedding sparks into cavern smoke.",
+      "action": [
+        {
+          "id": "ed821bbf-cf8c-4481-b038-d68c7e444036",
+          "label": "Gather Fallen Sparks",
+          "effectText": "Gain 15 essence for each Event card in your deck",
+          "effectKind": "gain-essence-per-card",
+          "canonicalMechanicId": "gain-essence-by-deck-predicate",
+          "predicate": "event",
+          "essencePerCard": 15
+        },
+        {
+          "id": "79e14a4d-0350-4756-be75-04a2dc62d121",
+          "label": "Rekindle Every Echo",
+          "effectText": "Lose 100 essence. Apply Inspired to every eligible Event card in your deck.",
+          "effectKind": "transfigure-all-for-essence",
+          "canonicalMechanicId": "transfigure-deck-for-essence",
+          "essence": 100,
+          "predicate": "event",
+          "transfiguration": "Inspired"
+        }
+      ]
+    },
+    {
+      "cardId": "2a230602-a39b-4ec2-a467-97b92b389aff",
+      "prose": "A lone corsair surveys burning shipwrecks from a hoard beneath an ember-filled sunset.",
+      "action": [
+        {
+          "id": "5accb9e6-798a-4e1d-a1ff-92ad819fbc22",
+          "label": "Scuttle One Last Prize",
+          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a card to scuttle for 20 essence per ✦.",
+          "effectKind": "purge-for-essence",
+          "canonicalMechanicId": "purge-for-essence",
+          "selectionPolicyId": "purge-misfit",
+          "essencePerSpark": 20
+        },
+        {
+          "id": "0fca674c-72cd-4774-b6d4-587edff1f57a",
+          "label": "Count the Lost Crew",
+          "effectText": "Draw 2 additional cards at the start of your next battle",
+          "effectKind": "next-battle-opening-hand",
+          "canonicalMechanicId": "next-battle-modifier",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "cardId": "e3431bd0-5a81-497f-9ec9-18275b568c00",
+      "prose": "A lone car approaches a crumbling road beneath an inverted city and weightless rubble.",
+      "action": [
+        {
+          "id": "bac27741-0ac8-448b-a838-0e624b5b5846",
+          "label": "Floor the accelerator",
+          "effectText": "All cards in your deck become ❖ (fast)",
+          "effectKind": "make-fast-all",
+          "canonicalMechanicId": "make-deck-fast"
+        },
+        {
+          "id": "3daff8e3-a006-47aa-ac08-6d6f581abaf5",
+          "label": "Chart floating roadway",
+          "effectText": "Add a disclosed site to this Dreamscape",
+          "effectKind": "add-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform"
+        }
+      ]
     }
   ],
-  "contentHash": "8dc5ac2b5634783f011d83bead8f8999c45fda96f9a79a50d5312c13d706e31f",
-  "foldHash": "8dc5ac2b5634783f011d83bead8f8999c45fda96f9a79a50d5312c13d706e31f"
+  "contentHash": "e2f849017a82c8d1213a328458a0e0ad5df9e0b4c770a0fe6846815791390f78",
+  "foldHash": "e2f849017a82c8d1213a328458a0e0ad5df9e0b4c770a0fe6846815791390f78"
 }
