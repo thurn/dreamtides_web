@@ -108,6 +108,10 @@ name = "Empowered"
     GainNamedCard {
         card_id: String,
     },
+    ReduceCostAllAndGainNightmares {
+        energy_cost_reduction: i64,
+        nightmare_count: i64,
+    },
 }
 ''',
             encoding="utf-8",
@@ -137,6 +141,16 @@ name = "Empowered"
                                 "status": "reuse",
                                 "effect_variant": "GainNamedCard",
                                 "runtime_effect_kind": "gain-card",
+                            },
+                        },
+                        {
+                            "id": 65,
+                            "concept": "Reduce all costs and gain Nightmares",
+                            "balance_class": "unique_effect",
+                            "implementation": {
+                                "status": "reuse",
+                                "effect_variant": "ReduceCostAllAndGainNightmares",
+                                "runtime_effect_kind": "reduce-cost-all-and-gain-nightmares",
                             },
                         },
                         {
@@ -339,6 +353,29 @@ class OnePassPipelineTests(unittest.TestCase):
             self.assertTrue(all(uuid.UUID(value).version == 4 for value in request["action_ids"]))
             self.assertEqual(set(request["repository"]), set(SOURCE_KEYS))
 
+    def test_selects_a_card_with_intentionally_empty_ability_text(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = PipelineFixture(Path(temporary))
+            fixture.cards_compat.write_text(
+                fixture.cards_compat.read_text().replace(
+                    'rendered-text = "New ability."', 'rendered-text = ""'
+                ),
+                encoding="utf-8",
+            )
+            report = create_batch(
+                run_dir=fixture.run_dir,
+                batch_size=5,
+                seed=None,
+                requested_card_ids=[NEW_CARD_ID],
+                source_paths=fixture.source_paths,
+                images_dir=fixture.images,
+            )
+            request = json.loads(
+                (fixture.run_dir / "requests" / f"{NEW_CARD_ID}.json").read_text()
+            )
+            self.assertEqual(report["card_ids"], [NEW_CARD_ID])
+            self.assertEqual(request["card"]["ability"], "")
+
     def test_rejects_an_explicit_live_uuid(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             fixture = PipelineFixture(Path(temporary))
@@ -398,6 +435,29 @@ class OnePassPipelineTests(unittest.TestCase):
             }
             fixture.write_result(result)
             with self.assertRaisesRegex(AssemblyError, "must equal DraftCard"):
+                fixture.assemble()
+
+    def test_rejects_a_missing_required_presentation_token(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            fixture = PipelineFixture(Path(temporary))
+            fixture.select()
+            result = fixture.valid_result()
+            result["actions"][1].update(
+                {
+                    "mechanic_id": 65,
+                    "presentation": {
+                        "effect_text": "All cards cost 1 less. Gain 3 Nightmare cards.",
+                        "followup": None,
+                    },
+                    "effect": {
+                        "variant": "ReduceCostAllAndGainNightmares",
+                        "fields": {"energy_cost_reduction": 1, "nightmare_count": 3},
+                        "runtime_effect_kind": "reduce-cost-all-and-gain-nightmares",
+                    },
+                }
+            )
+            fixture.write_result(result)
+            with self.assertRaisesRegex(AssemblyError, r"must present \{nightmare_card\}"):
                 fixture.assemble()
 
     def test_accepts_a_vertical_slice_that_extends_a_current_variant(self) -> None:

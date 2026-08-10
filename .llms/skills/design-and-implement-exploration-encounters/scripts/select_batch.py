@@ -111,8 +111,10 @@ def load_cards(path: Path) -> list[dict[str, Any]]:
         }
         if not all(
             isinstance(card[key], str) and card[key].strip()
-            for key in ("id", "name", "ability", "card_type")
+            for key in ("id", "name", "card_type")
         ):
+            continue
+        if not isinstance(card["ability"], str):
             continue
         if not isinstance(card["subtype"], str):
             continue

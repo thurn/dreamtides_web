@@ -30,6 +30,7 @@ PLAYER_REFERENCE_RE = re.compile(
 DEFINITE_ARTICLE_RE = re.compile(r"\bthe\b", re.IGNORECASE)
 ONE_INTRO_RE = re.compile(r"^\s*one\b", re.IGNORECASE)
 SNAKE_CASE_RE = re.compile(r"^[a-z][a-z0-9_]*$")
+PRESENTATION_SLOT_RE = re.compile(r"\{[a-z][a-z0-9_]*\}")
 IMPLEMENTATION_NOTE_KEYS = {
     "state_transition",
     "offer_or_selection",
@@ -308,7 +309,9 @@ def validate_result(
         presentation = require_object(action.get("presentation"), f"{path}.presentation")
         if set(presentation) != {"effect_text", "followup"}:
             fail(f"{path}.presentation", "must contain exactly effect_text and followup")
-        require_string(presentation.get("effect_text"), f"{path}.presentation.effect_text")
+        effect_text = require_string(
+            presentation.get("effect_text"), f"{path}.presentation.effect_text"
+        )
         followup = presentation.get("followup")
         if followup is not None:
             followup = require_object(followup, f"{path}.presentation.followup")
@@ -354,6 +357,36 @@ def validate_result(
             transfigurations=transfigurations,
             source_card_id=source_card_id,
         )
+        allowed_presentation_slots: set[str] = set()
+        required_presentation_slots: set[str] = set()
+        if runtime_effect_kind == "gain-offered-card":
+            allowed_presentation_slots.add("{offered_card}")
+            required_presentation_slots.add("{offered_card}")
+        if fields.get("target") == "Offered":
+            allowed_presentation_slots.add("{deck_card}")
+            required_presentation_slots.add("{deck_card}")
+        if "card_id" in fields:
+            allowed_presentation_slots.add("{fixed_card}")
+            required_presentation_slots.add("{fixed_card}")
+        if runtime_effect_kind in {
+            "gain-nightmare-and-card",
+            "reduce-cost-all-and-gain-nightmares",
+        }:
+            allowed_presentation_slots.add("{nightmare_card}")
+            required_presentation_slots.add("{nightmare_card}")
+        presentation_slots = set(PRESENTATION_SLOT_RE.findall(effect_text))
+        unsupported_slots = presentation_slots - allowed_presentation_slots
+        if unsupported_slots:
+            fail(
+                f"{path}.presentation.effect_text",
+                f"contains unsupported presentation slots {sorted(unsupported_slots)}",
+            )
+        missing_slots = required_presentation_slots - presentation_slots
+        if missing_slots:
+            fail(
+                f"{path}.presentation.effect_text",
+                f"must present {', '.join(sorted(missing_slots))}",
+            )
 
         predicate = fields.get("predicate")
         rationale = action.get("predicate_exception_rationale")
