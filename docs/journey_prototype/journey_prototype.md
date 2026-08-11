@@ -30,12 +30,15 @@ validated, generated compatibility TOML. It is idempotent and then:
 6. Compiles and cross-validates the canonical Dream Guide and Site catalogs,
    derives Dreamscape assignments, and emits `public/dream-guides-data.json`,
    `public/dreamscapes-data.json`, and `public/sites-data.json`.
-7. Compiles generated `data/opponents.toml` into validated
+7. Compiles generated `data/exploration.toml` into validated
+   `public/exploration-data.json`.
+8. Compiles generated `data/opponents.toml` into validated
    `public/opponents-data.json`.
 
 The generated `public/cards/`, `public/card-data.json`,
-`public/dream-avatars-v2-data.json`, `public/tides4-data.json`, and
-`public/opponents-data.json` paths are gitignored.
+`public/dream-avatars-v2-data.json`, `public/tides4-data.json`,
+`public/exploration-data.json`, and `public/opponents-data.json` paths are
+gitignored.
 
 Battle and opponent tuning is documented in
 [Opponent Data](opponents_data.md). Core battle setup is authored in
