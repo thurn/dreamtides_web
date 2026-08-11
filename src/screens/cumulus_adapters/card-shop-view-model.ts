@@ -31,6 +31,10 @@ import type {
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import { projectGuideView } from "./guide-view-model";
+import {
+  buildShopFreePurchaseStatus,
+  hasFreePurchase,
+} from "./shop-free-purchase-view-model";
 
 /** Resolve Tobias, the resident Dream Guide for Card Shops. */
 export function resolveCardShopGuide(
@@ -164,6 +168,7 @@ export function buildCardShopSiteView(params: {
 }): CardShopSiteView {
   const priceModifiers: ShopPriceModifiers = {
     essenceDiscountPercent: params.state.shopModifiers.essenceDiscountPercent,
+    freePurchase: hasFreePurchase(params.runtime, params.state.shopModifiers),
   };
   const scene: ArtRef | null =
     params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
@@ -187,6 +192,10 @@ export function buildCardShopSiteView(params: {
       params.runtime,
       params.site,
       params.state.essence,
+    ),
+    freePurchaseStatus: buildShopFreePurchaseStatus(
+      params.runtime,
+      params.state.shopModifiers,
     ),
   };
 }

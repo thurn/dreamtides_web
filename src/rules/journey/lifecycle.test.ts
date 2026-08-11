@@ -824,6 +824,39 @@ describe("LOAD_STATE", () => {
     expect(loaded.journey.runId).toBe("journey:44");
   });
 
+  it("loads a legacy snapshot with empty Wave 6 shop queues and history", () => {
+    const start = genesis();
+    const {
+      freeNextShopModifiers: _freeNextShopModifiers,
+      freePurchaseModifiers: _freePurchaseModifiers,
+      ...legacyShopModifiers
+    } = start.journey.shopModifiers;
+    const snapshot = {
+      ...start.journey,
+      shopModifiers: legacyShopModifiers,
+      siteRuntime: {
+        "legacy-shop": {
+          kind: "shop",
+          slots: [],
+          rerollCount: 0,
+          remainingDreamsignPoolIds: [],
+        },
+      },
+    };
+
+    const loaded = apply(start, "LOAD_STATE", { snapshot }, ctx({ seq: 45 }));
+
+    expect(loaded.journey.shopModifiers).toEqual({
+      ...legacyShopModifiers,
+      freeNextShopModifiers: [],
+      freePurchaseModifiers: [],
+    });
+    expect(loaded.journey.siteRuntime["legacy-shop"]).toMatchObject({
+      kind: "shop",
+      purchaseHistory: [],
+    });
+  });
+
   it("normalizes historical Bane fields specifically to Nightmare", () => {
     const start = genesis();
     const snapshot = {

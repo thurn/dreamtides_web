@@ -123,4 +123,99 @@ describe("applyJourneyRewardEffect", () => {
     expect(state.essence).toBe(3);
     expect(state.deck).toHaveLength(2);
   });
+
+  it("inserts one exact prepared site and rejects stale or forged preconditions", () => {
+    const { journeyContent, state: partialState } = fixture();
+    const sourceSite = {
+      id: "source-exploration",
+      type: "Exploration" as const,
+      isEnhanced: false,
+      isVisited: false,
+    };
+    const battleSite = {
+      id: "battle",
+      type: "Battle" as const,
+      isEnhanced: false,
+      isVisited: false,
+    };
+    const state = {
+      ...partialState,
+      currentDreamscape: "node-a",
+      atlas: {
+        currentNodeId: "node-a",
+        nodes: {
+          "node-a": { sites: [sourceSite, battleSite] },
+        },
+      },
+    } as unknown as JourneyState;
+    const effect = {
+      kind: "insert_site" as const,
+      targetNodeId: "node-a",
+      insertionIndex: 2,
+      siblingSiteIdsBefore: [sourceSite.id, battleSite.id],
+      site: {
+        id: "site-exploration-source-exploration-action-a",
+        type: "Shop" as const,
+        isEnhanced: false,
+        isVisited: false,
+      },
+    };
+
+    const next = applyJourneyRewardEffect({
+      state,
+      journeyContent,
+      effect,
+    });
+    expect(next?.atlas.nodes["node-a"]?.sites).toEqual([
+      sourceSite,
+      battleSite,
+      effect.site,
+    ]);
+    expect(state.atlas.nodes["node-a"]?.sites).toHaveLength(2);
+
+    const invalidEffects = [
+      { ...effect, targetNodeId: "node-b" },
+      { ...effect, insertionIndex: 1 },
+      { ...effect, siblingSiteIdsBefore: [battleSite.id, sourceSite.id] },
+      { ...effect, site: { ...effect.site, id: sourceSite.id } },
+      { ...effect, site: { ...effect.site, isEnhanced: true } },
+      { ...effect, site: { ...effect.site, isVisited: true } },
+    ];
+    for (const invalidEffect of invalidEffects) {
+      expect(
+        applyJourneyRewardEffect({
+          state,
+          journeyContent,
+          effect: invalidEffect,
+        }),
+      ).toBeNull();
+    }
+  });
+
+  it("preserves the existing random add_site reward path", () => {
+    const { journeyContent, state: partialState } = fixture();
+    const state = {
+      ...partialState,
+      currentDreamscape: "node-a",
+      atlas: {
+        currentNodeId: "node-a",
+        nodes: { "node-a": { sites: [] } },
+      },
+    } as unknown as JourneyState;
+
+    const next = applyJourneyRewardEffect({
+      state,
+      journeyContent,
+      effect: { kind: "add_site", siteType: "Duplication" },
+    });
+
+    expect(next?.atlas.nodes["node-a"]?.sites).toEqual([
+      {
+        id: "site-merchant-Duplication-0",
+        type: "Duplication",
+        isEnhanced: false,
+        isVisited: false,
+      },
+    ]);
+  });
 });

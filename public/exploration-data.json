@@ -319,6 +319,7 @@
           "canonicalMechanicId": "purge-and-duplicate"
         },
         {
+          "count": 1,
           "id": "256aa43c-dafb-4ae9-abfc-265a8c38d549",
           "label": "Present a Written Charm",
           "effectText": "Apply Inspired to {deck_card}",
@@ -351,6 +352,7 @@
           "offerCount": 4
         },
         {
+          "count": 1,
           "id": "8fc73cd9-b477-492c-bb4d-5b5fa5a2b861",
           "label": "Request Field Training",
           "effectText": "Apply Kindled to {deck_card}",
@@ -466,12 +468,14 @@
           "dreamsignId": "eb55b141-82f8-4ba4-b319-420f762e9ee4"
         },
         {
-          "id": "326062b2-aef4-47ab-b835-149bb6f7f8fd",
-          "label": "Hold the hollow gaze",
-          "effectText": "Draw 2 additional cards at the start of your next battle",
-          "effectKind": "next-battle-opening-hand",
-          "canonicalMechanicId": "next-battle-modifier",
-          "count": 2
+          "id": "574dc85e-37a9-4888-80a2-afec6ee24209",
+          "label": "Feed the Reaching Giant",
+          "effectText": "Purge a random Character card and replace it with {fixed_card}",
+          "effectKind": "replace-random-with-card",
+          "canonicalMechanicId": "replace-deck-entry",
+          "selectionPolicyId": "uniform",
+          "predicate": "character",
+          "cardId": "ffec9fdd-d948-4756-b7df-39b9e982613e"
         }
       ]
     },
@@ -642,6 +646,7 @@
       "prose": "An immense creature crouches between slender trunks, rough limbs glowing with narrow lines.",
       "action": [
         {
+          "count": 1,
           "id": "dbad4bb7-e8ee-4f54-8038-896c2ee4cad4",
           "label": "Touch a luminous seam",
           "effectText": "Apply Empowered to a chosen card",
@@ -813,6 +818,7 @@
       "prose": "A lone diver hovers beside a colossal radiant jellyfish, pale tendrils unfurling through dark water.",
       "action": [
         {
+          "count": 1,
           "id": "a6f4aa8d-c110-4f58-b995-fa94c7a8a3bf",
           "label": "Touch Its Tendrils",
           "effectText": "Purge a chosen Character card and gain a random Character replacement",
@@ -967,17 +973,13 @@
       "prose": "Sunlit feathers stir beneath a vast woven circle as a lone wanderer approaches.",
       "action": [
         {
-          "id": "01f4ce1b-b187-4bfc-9ac1-7ac9f17a331b",
-          "label": "Follow Falling Feathers",
-          "effectText": "Draft a Character from 4 choices",
-          "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose one offered card.",
-          "effectKind": "draft-card",
-          "canonicalMechanicId": "catalog-card-chooser",
-          "selectionPolicyId": "card-fit",
-          "predicate": "character",
-          "count": 1,
-          "offerCount": 4
+          "id": "be5b6030-686a-475f-b14c-9aea6709439e",
+          "label": "Retie the First Threads",
+          "effectText": "Transfigure 2 random starter cards",
+          "effectKind": "transfigure-random-starter-cards",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "uniform",
+          "count": 2
         },
         {
           "id": "3a534e36-c493-4304-90a4-337394810621",
@@ -1010,12 +1012,14 @@
           "deckTarget": "chosen"
         },
         {
-          "id": "eb2c3aa6-6622-4d15-b5b7-c6c07004393f",
-          "label": "Meet Its Burning Gaze",
-          "effectText": "All characters in your deck gain +1✦",
-          "effectKind": "increase-spark-all",
-          "canonicalMechanicId": "increase-deck-spark",
-          "sparkBonus": 1
+          "id": "b59b7e6a-aa32-428a-9397-06766ebe9b7d",
+          "label": "Heed the Living Sign",
+          "effectText": "Change {deck_card} to become a {card_type}",
+          "effectKind": "change-card-type-selected",
+          "canonicalMechanicId": "change-entry-card-type",
+          "selectionPolicyId": "deck-entry-centrality",
+          "cardType": "Character",
+          "deckTarget": "offered"
         }
       ]
     },
@@ -1056,12 +1060,12 @@
           "selectionPolicyId": "site-uniform"
         },
         {
-          "id": "a19de2d0-b8f1-41f9-ba8b-65db01ce304e",
-          "label": "Catch Golden Fragments",
-          "effectText": "Draw 2 additional cards at the start of your next battle",
-          "effectKind": "next-battle-opening-hand",
-          "canonicalMechanicId": "next-battle-modifier",
-          "count": 2
+          "id": "aec3a618-f12f-4cb1-bfe8-eac3ac77d2c7",
+          "label": "Pocket Golden Fragments",
+          "effectText": "Gain 100 essence",
+          "effectKind": "gain-essence",
+          "canonicalMechanicId": "essence-mutation",
+          "essence": 100
         }
       ]
     },
@@ -1094,28 +1098,26 @@
       "prose": "Three lights orbit a levitating girl while shattered towers rise around her.",
       "action": [
         {
-          "id": "23267320-5d47-4a21-962d-57b38d663726",
-          "label": "Channel Three Lights",
-          "effectText": "Draft an Event from 3 choices",
+          "id": "a63032ab-b2ef-4f3f-8d2c-d16f1c0524d2",
+          "label": "Claim an Orbiting Light",
+          "effectText": "Gain one of 3 offered dreamsigns",
           "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose one offered card.",
-          "effectKind": "draft-card",
-          "canonicalMechanicId": "catalog-card-chooser",
-          "selectionPolicyId": "card-fit",
-          "predicate": "event",
-          "count": 1,
+          "followupSubtitle": "Choose one offered Dreamsign.",
+          "effectKind": "gain-offered-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "dreamsign-match",
           "offerCount": 3
         },
         {
-          "id": "fc11e676-82eb-42cd-bc3c-7774e1f6ad06",
-          "label": "Feed Rising Ruin",
-          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
-          "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose a card to dissolve for 20 essence per ✦.",
-          "effectKind": "purge-for-essence",
-          "canonicalMechanicId": "purge-for-essence",
-          "selectionPolicyId": "purge-misfit",
-          "essencePerSpark": 20
+          "id": "46c79bb8-2001-415e-82ae-98864e2c1e51",
+          "label": "Shape Three Futures",
+          "effectText": "Choose 1 of 3 offered site types to add to this Dreamscape",
+          "followupTitle": "Choose a Future Site",
+          "followupSubtitle": "Choose one offered site to add to this Dreamscape.",
+          "effectKind": "choose-site-type",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "site-uniform",
+          "offerCount": 3
         }
       ]
     },
@@ -1152,12 +1154,12 @@
       "prose": "A rusted colossus stands among wildflowers as petals drift through mist.",
       "action": [
         {
-          "id": "318bc9a6-362a-426d-9faa-f3ca025fb3c8",
-          "label": "Rekindle buried circuits",
-          "effectText": "All characters in your deck gain +1✦",
-          "effectKind": "increase-spark-all",
-          "canonicalMechanicId": "increase-deck-spark",
-          "sparkBonus": 1
+          "id": "6d0e7bdc-277d-4f6a-a08d-ef137551dfa6",
+          "label": "Wake the Last Survivor",
+          "effectText": "Purge a random starter card. Gain a random Survivor.",
+          "effectKind": "purge-random-starter-and-gain-card",
+          "canonicalMechanicId": "replace-deck-entry",
+          "predicate": "survivor"
         },
         {
           "id": "be14d140-b1b2-4372-b0a6-c4228d463627",
@@ -1200,13 +1202,16 @@
       "prose": "A lone duelist stands within a blazing circle as horned shadows gather.",
       "action": [
         {
-          "id": "7bdc43df-0b87-43ce-b96f-b8af1b28e3a5",
-          "label": "Complete the Summoning",
-          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
-          "effectKind": "reduce-cost-all-and-gain-nightmares",
-          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
-          "energyCostReduction": 1,
-          "nightmareCount": 3
+          "id": "44b53bf6-23cc-46d4-aa88-da64f8817d69",
+          "label": "Complete the Dark Bargain",
+          "effectText": "Gain 2 {nightmare_card} cards. Gain one of 3 offered Dreamsigns.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose one offered Dreamsign.",
+          "effectKind": "gain-nightmare-and-offered-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "dreamsign-match",
+          "offerCount": 3,
+          "nightmareCount": 2
         },
         {
           "id": "86f613c2-6f0e-43cb-a4ad-7385158656ba",
@@ -1361,15 +1366,12 @@
       "prose": "A pale child traces a luminous circle across dusty boards inside a ruined hall.",
       "action": [
         {
-          "id": "07bb2b3e-1f58-4396-8d82-6e18e316a0a9",
-          "label": "Erase a Memory",
-          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
-          "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose a card to erase for 20 essence per ✦.",
-          "effectKind": "purge-for-essence",
-          "canonicalMechanicId": "purge-for-essence",
-          "selectionPolicyId": "purge-misfit",
-          "essencePerSpark": 20
+          "id": "e1dd0150-24c6-4fcd-90bc-30e5d2e172bc",
+          "label": "Erase the First Sigil",
+          "effectText": "Purge {starter_card}",
+          "effectKind": "purge-starter-card",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform"
         },
         {
           "id": "80aaf221-b037-420a-ada7-19e012628ffc",
@@ -1646,6 +1648,7 @@
           "offerCount": 4
         },
         {
+          "count": 1,
           "id": "e1b947b6-a2a0-4f54-9722-de5a3d9d9274",
           "label": "Cross Frozen Reflection",
           "effectText": "Purge a chosen Warrior card and gain a random Warrior replacement",
@@ -1776,17 +1779,18 @@
           "sparkBonus": 1
         },
         {
-          "id": "b7ee400f-1516-4d59-acf2-7a201ef256fb",
-          "label": "Call Warriors Home",
-          "effectText": "Draft a Warrior from 4 choices",
+          "id": "3ac54fa8-0634-4feb-8930-2caf30f6cfc8",
+          "label": "Share the Spirit-Fire",
+          "effectText": "Apply Kindled to 2 chosen Warrior cards",
           "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose one offered card.",
-          "effectKind": "draft-card",
-          "canonicalMechanicId": "catalog-card-chooser",
-          "selectionPolicyId": "card-fit",
+          "followupSubtitle": "Choose exactly two Warrior cards.",
+          "effectKind": "transfigure-fixed-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
           "predicate": "warrior",
-          "count": 1,
-          "offerCount": 4
+          "count": 2,
+          "transfiguration": "Kindled",
+          "deckTarget": "chosen"
         }
       ]
     },
@@ -1876,16 +1880,14 @@
       "prose": "An engineer welds a colossal translucent machine as green light floods tangled cables.",
       "action": [
         {
-          "id": "9e4b23ef-8f2e-47d8-b74a-0b30f8bf6e16",
-          "label": "Splice New Synapses",
-          "effectText": "Take any number of Event cards from 4 choices",
-          "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose any number of offered Events.",
-          "effectKind": "take-cards",
-          "canonicalMechanicId": "catalog-card-chooser",
-          "selectionPolicyId": "card-fit",
-          "predicate": "event",
-          "offerCount": 4
+          "id": "f2a61678-17b0-4d50-b75c-f1de61fa0d5c",
+          "label": "Rewire Tangled Synapses",
+          "effectText": "Modify 2 random cards to become Event cards",
+          "effectKind": "change-random-card-type",
+          "canonicalMechanicId": "change-entry-card-type",
+          "selectionPolicyId": "uniform",
+          "count": 2,
+          "cardType": "Event"
         },
         {
           "id": "4aebb9cc-8d9f-4ecc-a438-5873ff59e765",
@@ -2127,12 +2129,13 @@
           "selectionPolicyId": "site-uniform"
         },
         {
-          "id": "2567fc2d-d519-4442-a55d-ceff6fd13d04",
-          "label": "Draw Power From Rim",
-          "effectText": "Gain 2 additional energy at the start of your next battle",
-          "effectKind": "next-battle-starting-energy",
-          "canonicalMechanicId": "next-battle-modifier",
-          "count": 2
+          "id": "6937ba6d-2d29-45ee-ac65-65bd91162341",
+          "label": "Mirror the Turbine",
+          "effectText": "Add a duplication site to this Dreamscape",
+          "effectKind": "add-fixed-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "fixed",
+          "siteType": "Duplication"
         }
       ]
     },
@@ -2429,12 +2432,12 @@
           "offerCount": 4
         },
         {
-          "id": "a941007e-380a-4943-993a-2a1ea23162f1",
-          "label": "Channel Emerald Burst",
-          "effectText": "Gain 2 additional energy at the start of your next battle",
-          "effectKind": "next-battle-starting-energy",
-          "canonicalMechanicId": "next-battle-modifier",
-          "count": 2
+          "id": "7b390b9d-5d57-4a70-b25b-aaa5f842a1ca",
+          "label": "Release Genesis Bloom",
+          "effectText": "Transfigure all cards in your deck",
+          "effectKind": "transfigure-all-cards",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "uniform"
         }
       ]
     },
@@ -2629,6 +2632,7 @@
       "prose": "A pale winged figure crouches amid blackened ruins as orange fire illuminates torn feathers.",
       "action": [
         {
+          "count": 1,
           "id": "9ac0ef87-8d42-4306-8f13-3879a59f3d3f",
           "label": "Forsake Fallen Shape",
           "effectText": "Purge a chosen ≤2● cost Character card and gain a random ≤2● cost Character replacement",
@@ -2855,6 +2859,7 @@
       "prose": "A lone survivor confronts a burning translucent wall as stones drift beyond its frame.",
       "action": [
         {
+          "count": 1,
           "id": "02cd4cba-658c-4c99-8d9a-e0ae01067d65",
           "label": "Send Someone Beyond",
           "effectText": "Purge a chosen Character card and gain a random Character replacement",
@@ -2991,12 +2996,11 @@
           "deckTarget": "chosen"
         },
         {
-          "id": "4568fc2d-c53c-4644-8b54-53ff5a9dbb71",
-          "label": "Welcome Azure Dawn",
-          "effectText": "Gain 2 additional energy at the start of your next battle",
-          "effectKind": "next-battle-starting-energy",
-          "canonicalMechanicId": "next-battle-modifier",
-          "count": 2
+          "id": "2066cc54-8486-4ca6-831b-795ba42bb71b",
+          "label": "Balance With the Reflection",
+          "effectText": "Double your current essence",
+          "effectKind": "double-essence",
+          "canonicalMechanicId": "essence-mutation"
         }
       ]
     },
@@ -3230,12 +3234,12 @@
           "canonicalMechanicId": "purge-and-duplicate"
         },
         {
-          "id": "77e5e76a-f4cc-4a59-acb8-1e9260fc22e2",
-          "label": "Stand Beneath Halo",
-          "effectText": "Draw 2 additional cards at the start of your next battle",
-          "effectKind": "next-battle-opening-hand",
-          "canonicalMechanicId": "next-battle-modifier",
-          "count": 2
+          "id": "06adf5f9-cb11-4c97-9335-abbfc95c71dc",
+          "label": "Enter the Recasting Halo",
+          "effectText": "Replace all of your Dreamsigns with random Dreamsigns",
+          "effectKind": "replace-all-dreamsigns-random",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "uniform"
         }
       ]
     },
@@ -3255,12 +3259,13 @@
           "dreamsignId": "ede46f71-aa77-4b12-9824-0d3706da6a22"
         },
         {
-          "id": "81b35c0b-1eff-44eb-9d7d-308e67b31736",
-          "label": "Channel orb's lightning",
-          "effectText": "Gain 2 additional energy at the start of your next battle",
-          "effectKind": "next-battle-starting-energy",
-          "canonicalMechanicId": "next-battle-modifier",
-          "count": 2
+          "id": "644222aa-e1ce-44a7-8f54-e3acc604399f",
+          "label": "Reawaken Monster Foundry",
+          "effectText": "Add a Transfiguration site to this Dreamscape",
+          "effectKind": "add-fixed-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "fixed",
+          "siteType": "Transfiguration"
         }
       ]
     },
@@ -3461,15 +3466,16 @@
       "prose": "A red-coated child studies five rune-lit monoliths drifting above a broken stone path.",
       "action": [
         {
-          "id": "4ccb1862-58b1-4541-bbeb-bc7e75bd9087",
-          "label": "Gather Four Fragments",
-          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "id": "8eb89438-d367-4c52-be5b-abd76324cd80",
+          "label": "Exchange Broken Visions",
+          "effectText": "Purge up to 2 chosen Event cards and gain a random Event replacement for each card purged",
           "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose one revealed fragment to copy.",
-          "effectKind": "copy-offered-deck-card",
-          "canonicalMechanicId": "duplicate-deck-entry",
-          "selectionPolicyId": "duplicate-value",
-          "offerCount": 4
+          "followupSubtitle": "Choose one or two Event cards to exchange.",
+          "effectKind": "replace-selected",
+          "canonicalMechanicId": "replace-deck-entry",
+          "selectionPolicyId": "card-fit-quality",
+          "predicate": "event",
+          "count": 2
         },
         {
           "id": "564b95e4-804e-411e-baad-c847f8b96e51",
@@ -3680,6 +3686,7 @@
       "prose": "A lone scavenger surveys piled machinery beneath towering cyan-lit ruins and drifting dust.",
       "action": [
         {
+          "count": 1,
           "id": "12e8d8cb-0674-401c-ad99-bdc40a9b75d1",
           "label": "Rebuild a Companion",
           "effectText": "Purge a chosen Character card and gain a random Character replacement",
@@ -4639,13 +4646,15 @@
       "prose": "A helmeted visitor raises a hand between flowering grass and towers of floating neon panels.",
       "action": [
         {
-          "id": "e5a727c5-d7e4-4d63-bc31-0a569297ba1d",
-          "label": "Trade a Memory",
-          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
+          "id": "711dab84-0b2a-4f54-8c55-5540aa7ec228",
+          "label": "Trade a Dreamsign",
+          "effectText": "Replace a chosen dreamsign with one of 3 offered dreamsigns",
           "followupTitle": "{action-label}",
-          "followupSubtitle": "First choose a card to purge, then choose a different card to copy.",
-          "effectKind": "purge-and-copy",
-          "canonicalMechanicId": "purge-and-duplicate"
+          "followupSubtitle": "Choose a Dreamsign to trade, then choose one of three offered Dreamsigns.",
+          "effectKind": "replace-selected-dreamsign-with-offered",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "dreamsign-match",
+          "offerCount": 3
         },
         {
           "id": "ae385aff-6eb4-4035-8875-0edb357c3205",
@@ -4774,6 +4783,7 @@
       "prose": "Black cables consume a cybernetic marksman aiming across burning wreckage beneath falling ash.",
       "action": [
         {
+          "count": 1,
           "id": "fad87e00-bfac-4ec4-8047-752814b91ebe",
           "label": "Yield to Black Cables",
           "effectText": "Purge a chosen Warrior card and gain a random Warrior replacement",
@@ -4798,6 +4808,7 @@
       "prose": "An armored runner races from a white-blue blast as burning projectiles tear through smoke.",
       "action": [
         {
+          "count": 1,
           "id": "ccd5b997-cf13-4519-ac40-bb515fef6cb5",
           "label": "Call Extraction Protocol",
           "effectText": "Purge a chosen Character card and gain a random Character replacement",
@@ -4877,6 +4888,7 @@
       "prose": "A skeletal sorcerer raises a red-lit staff amid hooked black tendrils.",
       "action": [
         {
+          "count": 1,
           "id": "4fababcc-bf4e-4512-bc31-9cd292d844dc",
           "label": "Touch red-lit staff",
           "effectText": "Apply Inspired to a chosen Event",
@@ -4965,6 +4977,7 @@
       "prose": "A shadowed shopkeeper stands behind a counter, one hand lifted toward shelves packed with glowing curios.",
       "action": [
         {
+          "count": 1,
           "id": "1c5991fd-d12b-4e1f-9df7-9284057fb6d3",
           "label": "Trade across the counter",
           "effectText": "Purge a chosen Character card and gain a random Character replacement",
@@ -5531,16 +5544,12 @@
       "prose": "Rain lashes a shattered crimson vessel while a scientist confronts its colossal captive.",
       "action": [
         {
-          "id": "60926e48-c8f4-4680-963f-f8b82be32c0c",
-          "label": "Release Stolen Life",
-          "effectText": "Draft a transfigured Character from 4 choices",
-          "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose one offered transfigured Character.",
-          "effectKind": "transfigured-card-draft",
-          "canonicalMechanicId": "transfigured-card-chooser",
-          "selectionPolicyId": "card-fit",
-          "predicate": "character",
-          "offerCount": 4
+          "id": "c34c1e6d-e056-4ff4-ae3f-71de2a6b78ba",
+          "label": "Rewrite Every Origin",
+          "effectText": "Purge all starter cards and replace each one with a Character card",
+          "effectKind": "replace-all-starter-cards",
+          "canonicalMechanicId": "replace-deck-entry",
+          "predicate": "character"
         },
         {
           "id": "44a0d3e8-1193-4b4f-adb2-41a8a6169844",
@@ -5709,6 +5718,7 @@
       "prose": "A spear-bearing guard wades through luminous blossoms while blue motes circle beneath an ember sky.",
       "action": [
         {
+          "count": 1,
           "id": "e09c6663-67e5-40e3-9e8b-6b2d50c74d46",
           "label": "Release Fading Bloom",
           "effectText": "Purge a chosen Character card and gain a random Character replacement",
@@ -5838,6 +5848,7 @@
       "prose": "A mounted archer looses an arrow while fire engulfs a shattered ridge.",
       "action": [
         {
+          "count": 1,
           "id": "8ebf20ca-56e0-4dd5-b60e-0fcf294e94dc",
           "label": "Signal a Rider Exchange",
           "effectText": "Purge a chosen Warrior card and gain a random Warrior replacement",
@@ -6095,17 +6106,16 @@
       "prose": "A solitary man faces a radiant circle, red glyphs blazing above fractured stone.",
       "action": [
         {
-          "id": "87c8e0cb-f9b7-4cf4-a4c0-69db684b2601",
-          "label": "Read the Glyphs",
-          "effectText": "Draft an Event from 4 choices",
+          "id": "e7cd94ef-d9c6-4f18-8120-dd568eba6e32",
+          "label": "Rewrite Two Rites",
+          "effectText": "Apply a transfiguration to 2 chosen Event cards",
           "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose one offered Event.",
-          "effectKind": "draft-card",
-          "canonicalMechanicId": "catalog-card-chooser",
-          "selectionPolicyId": "card-fit",
+          "followupSubtitle": "Choose exactly two Event cards, then one transfiguration for each.",
+          "effectKind": "transfigure-selected",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "transfiguration-value",
           "predicate": "event",
-          "count": 1,
-          "offerCount": 4
+          "count": 2
         },
         {
           "id": "64f25dd3-dac8-4694-b4f3-24176287fcc2",
@@ -6243,6 +6253,7 @@
       "prose": "A burning helicopter breaks apart amid orange smoke and airborne debris.",
       "action": [
         {
+          "count": 1,
           "id": "5fa9d0a1-115e-4a02-a110-91e9b4d6f1b8",
           "label": "Salvage the airborne debris",
           "effectText": "Purge a chosen Event card and gain a random Event replacement",
@@ -6492,17 +6503,14 @@
           "count": 2
         },
         {
-          "id": "d0644f5b-63f9-43cf-9f71-51d1bd3b8685",
-          "label": "Study Falling Shards",
-          "effectText": "Draft an Event from 4 choices",
-          "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose one offered card.",
-          "effectKind": "draft-card",
-          "canonicalMechanicId": "catalog-card-chooser",
-          "selectionPolicyId": "card-fit",
+          "id": "609937bd-e3e9-4494-8266-845344270518",
+          "label": "Catch Falling Shards",
+          "effectText": "Apply a transfiguration to 2 random Event cards",
+          "effectKind": "transfigure-random-cards",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "uniform",
           "predicate": "event",
-          "count": 1,
-          "offerCount": 4
+          "count": 2
         }
       ]
     },
@@ -6603,12 +6611,15 @@
           "dreamsignId": "dec81fa2-7865-448c-95bc-622b884cea9e"
         },
         {
-          "id": "2b610f6c-0249-4aad-b79f-ae6fddadc233",
-          "label": "Follow His Luminous Wake",
-          "effectText": "All characters in your deck gain +1✦",
-          "effectKind": "increase-spark-all",
-          "canonicalMechanicId": "increase-deck-spark",
-          "sparkBonus": 1
+          "id": "b0e90ae4-a863-41df-ba97-d47f68e4ca75",
+          "label": "Offer a Sign as Fare",
+          "effectText": "Purge a chosen Dreamsign. Gain 3 random Dreamsigns.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to purge.",
+          "effectKind": "purge-selected-dreamsign-and-gain-random",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "uniform",
+          "count": 3
         }
       ]
     },
@@ -7081,6 +7092,7 @@
       "prose": "A crouched hunter faces a burning metal aperture as sparks drift through tangled forest.",
       "action": [
         {
+          "count": 1,
           "id": "7ba9c54a-04ba-40bc-bc2d-750531b02e46",
           "label": "Send a Warrior Through",
           "effectText": "Purge a chosen Warrior card and gain a random Warrior replacement",
@@ -7328,13 +7340,13 @@
           "transfiguration": "Inspired"
         },
         {
-          "id": "ac08f8f4-8a6b-43f3-b3a9-0212d9371a16",
-          "label": "Accept the Swarm",
-          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
-          "effectKind": "reduce-cost-all-and-gain-nightmares",
-          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
-          "energyCostReduction": 1,
-          "nightmareCount": 3
+          "id": "fcce63dc-f8c5-4183-be2a-9de4929ca8c2",
+          "label": "Ride the Swarming Rift",
+          "effectText": "Every Event card in your deck becomes ❖ (fast). Gain 2 {nightmare_card} cards.",
+          "effectKind": "make-predicate-fast-and-gain-nightmares",
+          "canonicalMechanicId": "make-deck-fast",
+          "predicate": "event",
+          "nightmareCount": 2
         }
       ]
     },
@@ -7828,17 +7840,14 @@
       "prose": "A young traveler rests beneath a glowing umbrella as celestial sparks cross ruined towers.",
       "action": [
         {
-          "id": "d15d75f3-e054-4c9c-8bdb-0ecf9a3b6d7f",
-          "label": "Catch Falling Sparks",
-          "effectText": "Draft an Event from 4 choices",
-          "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose one offered Event.",
-          "effectKind": "draft-card",
-          "canonicalMechanicId": "catalog-card-chooser",
-          "selectionPolicyId": "card-fit",
-          "predicate": "event",
-          "count": 1,
-          "offerCount": 4
+          "id": "093b142d-e1fd-4713-9467-7a4b0a060aad",
+          "label": "Harvest Falling Sparks",
+          "effectText": "Gain a random amount of essence between 50 and 150",
+          "effectKind": "gain-random-essence",
+          "canonicalMechanicId": "essence-mutation",
+          "selectionPolicyId": "uniform",
+          "minimumEssence": 50,
+          "maximumEssence": 150
         },
         {
           "id": "5475c405-917b-4384-8d16-08f819fe2d2c",
@@ -8120,13 +8129,13 @@
       "prose": "A tethered Synth kneels among broken machines while cold monitors flood a ruined factory with light.",
       "action": [
         {
-          "id": "535a143b-d2a5-4f00-8e57-483d8f6dc794",
-          "label": "Harvest Hidden Pattern",
-          "effectText": "Purge a chosen card and gain a copy of another chosen card in your deck",
-          "followupTitle": "{action-label}",
-          "followupSubtitle": "First choose a card to erase, then choose a different pattern to copy.",
-          "effectKind": "purge-and-copy",
-          "canonicalMechanicId": "purge-and-duplicate"
+          "id": "7c4aa242-8a27-4835-8ad0-4abc08b18e60",
+          "label": "Broadcast Stolen Signal",
+          "effectText": "Purge {deck_card}. Apply Resonant to every other eligible card in your deck with the same card type.",
+          "effectKind": "purge-disclosed-and-transfigure-same-type",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "purge-misfit",
+          "transfiguration": "Resonant"
         },
         {
           "id": "47171f27-08de-4baf-a409-4e1ddacd96ff",
@@ -8816,25 +8825,20 @@
       "prose": "A cloaked warden raises a blue lantern above shadowed ships in a radiant harbor.",
       "action": [
         {
-          "id": "e7adc30c-f167-41e9-9f88-b3990d429261",
-          "label": "Summon a harbor guard",
-          "effectText": "Draft a Warrior from 4 choices",
-          "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose one offered Warrior.",
-          "effectKind": "draft-card",
-          "canonicalMechanicId": "catalog-card-chooser",
-          "selectionPolicyId": "card-fit",
-          "predicate": "warrior",
-          "count": 1,
-          "offerCount": 4
+          "id": "424f9916-1ab1-4b7c-9798-1c2aa4bdf192",
+          "label": "Call the Market Fleet",
+          "effectText": "Add a card market site to this Dreamscape",
+          "effectKind": "add-fixed-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "fixed",
+          "siteType": "Shop"
         },
         {
-          "id": "10f63eba-ac1f-4150-8919-9def8d3ccf8a",
-          "label": "Scan glowing horizons",
-          "effectText": "Draw 2 additional cards at the start of your next battle",
-          "effectKind": "next-battle-opening-hand",
-          "canonicalMechanicId": "next-battle-modifier",
-          "count": 2
+          "id": "0e0d5d1d-5c79-4352-b03a-2abe039680e5",
+          "label": "Raise the Harbor Writ",
+          "effectText": "All items in the next shop you visit are free",
+          "effectKind": "free-next-shop",
+          "canonicalMechanicId": "shop-purchase-modifier"
         }
       ]
     },
@@ -9047,17 +9051,16 @@
           "offerCount": 4
         },
         {
-          "id": "f2c32564-7c99-42d8-8dda-477cb48e6e67",
-          "label": "Join Armed Escort",
-          "effectText": "Draft a Warrior from 4 choices",
+          "id": "67d8737b-78ba-457f-8e4a-aed72b8dfc40",
+          "label": "Stand Down the Escort",
+          "effectText": "Purge up to 2 chosen Warrior cards",
           "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose one offered Warrior.",
-          "effectKind": "draft-card",
-          "canonicalMechanicId": "catalog-card-chooser",
-          "selectionPolicyId": "card-fit",
+          "followupSubtitle": "Choose up to two Warrior cards to purge.",
+          "effectKind": "purge-selected",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "purge-misfit",
           "predicate": "warrior",
-          "count": 1,
-          "offerCount": 4
+          "count": 2
         }
       ]
     },
@@ -9121,16 +9124,13 @@
       "prose": "A neon-eyed visitor raises a glowing umbrella as rain and colored fragments orbit a ruined street.",
       "action": [
         {
-          "id": "821fbcd1-95a9-435e-a4bb-4f6571b09769",
-          "label": "Gather neon fragments",
-          "effectText": "Take any number of Event cards from 4 choices",
-          "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose any number of offered Events.",
-          "effectKind": "take-cards",
-          "canonicalMechanicId": "catalog-card-chooser",
-          "selectionPolicyId": "card-fit",
-          "predicate": "event",
-          "offerCount": 4
+          "id": "a9335699-7a01-4626-ba0d-84541218845d",
+          "label": "Rekindle Neon Bazaar",
+          "effectText": "Add a Dreamsign Bazaar site to this Dreamscape",
+          "effectKind": "add-fixed-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "fixed",
+          "siteType": "DreamsignBazaar"
         },
         {
           "id": "8363b7c3-88d3-4404-a0b2-69b44ed15df4",
@@ -9481,13 +9481,16 @@
           "selectionPolicyId": "purge-misfit"
         },
         {
-          "id": "e96cec7f-511a-4eae-8522-9c5b2b25bbed",
-          "label": "Accept Its Nightmare Bargain",
-          "effectText": "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
-          "effectKind": "reduce-cost-all-and-gain-nightmares",
-          "canonicalMechanicId": "reduce-deck-cost-and-add-nightmares",
-          "energyCostReduction": 1,
-          "nightmareCount": 3
+          "id": "a8176e9f-a129-4fc6-846c-1ed06bb5929c",
+          "label": "Take the Haunted Candle",
+          "effectText": "Gain 2 {nightmare_card} cards. Gain Candle.",
+          "followupTitle": "{action-label}",
+          "followupSubtitle": "Choose a Dreamsign to replace.",
+          "effectKind": "gain-nightmare-and-dreamsign",
+          "canonicalMechanicId": "gain-dreamsign",
+          "selectionPolicyId": "fixed",
+          "dreamsignId": "89c83d7e-5617-49b4-b6cd-214680fe0627",
+          "nightmareCount": 2
         }
       ]
     },
@@ -9531,6 +9534,7 @@
           "offerCount": 4
         },
         {
+          "count": 1,
           "id": "eddcf564-381b-41e9-bfc8-7309c2fecb3f",
           "label": "Trade Places in Fire",
           "effectText": "Purge a chosen Character card and gain a random Character replacement",
@@ -10038,6 +10042,7 @@
       "prose": "Emerald radiance floods a vinebound gate as a lone mage raises conjured flame.",
       "action": [
         {
+          "count": 1,
           "id": "5891b1c2-d6ed-4b62-94db-c71c01f4f97c",
           "label": "Cross in Another Shape",
           "effectText": "Purge a chosen ≤2● cost Character and gain a random ≤2● cost Character replacement",
@@ -10234,16 +10239,18 @@
       "prose": "Golden loops suspend one figure while another stands amid a storm of shards.",
       "action": [
         {
-          "id": "e008836b-1268-4f60-bec8-25b45004cddd",
-          "label": "Collect Broken Fragments",
-          "effectText": "Take any number of Event cards from 4 choices",
+          "id": "2352e33a-f5a3-461e-ab6d-d1d6eb15c6b9",
+          "label": "Bind the Broken Loop",
+          "effectText": "Gain any number of Event cards from 4 choices. Apply Enduring to each eligible card gained. Gain 2 {nightmare_card} cards.",
           "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose any number of offered cards.",
-          "effectKind": "take-cards",
-          "canonicalMechanicId": "catalog-card-chooser",
+          "followupSubtitle": "Choose any number of offered Events, including none. You will gain 2 Nightmares.",
+          "effectKind": "take-transfigured-cards-and-gain-nightmares",
+          "canonicalMechanicId": "transfigured-card-chooser",
           "selectionPolicyId": "card-fit",
           "predicate": "event",
-          "offerCount": 4
+          "offerCount": 4,
+          "transfiguration": "Enduring",
+          "nightmareCount": 2
         },
         {
           "id": "9f73489e-d41f-4883-b2cb-d571ef95fd2d",
@@ -11353,6 +11360,7 @@
       "prose": "A solitary figure crosses a broken bridge beneath an upside-down sea and fractured reflections.",
       "action": [
         {
+          "count": 1,
           "id": "01f98df4-d453-4039-8271-40616328a26d",
           "label": "Invert a Known Event",
           "effectText": "Purge a chosen Event card and gain a random Event replacement",
@@ -11582,15 +11590,14 @@
       "prose": "A solitary runner races toward white light through a tunnel of suspended cyan screens.",
       "action": [
         {
-          "id": "c80a360f-9d3b-4bf6-b22d-0588a58e63af",
-          "label": "Capture a Screen Echo",
-          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of",
-          "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose one projected deck card.",
-          "effectKind": "copy-offered-deck-card",
+          "id": "979618b2-de06-40fa-9910-488dee6b3c24",
+          "label": "Capture Two Screen Echoes",
+          "effectText": "Gain one copy of each of 2 random Character cards in your deck",
+          "effectKind": "copy-random-cards",
           "canonicalMechanicId": "duplicate-deck-entry",
-          "selectionPolicyId": "duplicate-value",
-          "offerCount": 4
+          "selectionPolicyId": "uniform",
+          "predicate": "character",
+          "count": 2
         },
         {
           "id": "c9b12011-3160-443e-ae04-ff36762059a4",
@@ -11881,6 +11888,7 @@
       "prose": "A shadowy beast bursts from a cyan rupture through a smoke-filled city alley.",
       "action": [
         {
+          "count": 1,
           "id": "e227f409-c792-42bf-bb2f-582693acba06",
           "label": "Enter Shattering Portal",
           "effectText": "Purge a chosen Character card and gain a random Character replacement",
@@ -12025,15 +12033,12 @@
           "offerCount": 4
         },
         {
-          "id": "a311186c-5992-4af4-b982-4bd2eef339a2",
-          "label": "Cast Away a Memory",
-          "effectText": "Purge a chosen card and gain 20 essence for each ✦ it had",
-          "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose a card to cast away for 20 essence per ✦.",
-          "effectKind": "purge-for-essence",
-          "canonicalMechanicId": "purge-for-essence",
-          "selectionPolicyId": "purge-misfit",
-          "essencePerSpark": 20
+          "id": "94650c5a-98b0-4b19-bfc9-0653d6785cfd",
+          "label": "Release a Founding Page",
+          "effectText": "Purge a random starter card",
+          "effectKind": "purge-random-starter-card",
+          "canonicalMechanicId": "purge-deck-entry",
+          "selectionPolicyId": "uniform"
         }
       ]
     },
@@ -12148,17 +12153,12 @@
       "prose": "An astronaut studies luminous geometric records cascading across a cavern wall above amber mist.",
       "action": [
         {
-          "id": "e5f2e331-7220-4cec-9e4f-eff5f3c1327b",
-          "label": "Decode Luminous Archive",
-          "effectText": "Draft an Event from 4 choices",
-          "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose one recovered Event.",
-          "effectKind": "draft-card",
-          "canonicalMechanicId": "catalog-card-chooser",
-          "selectionPolicyId": "card-fit",
-          "predicate": "event",
-          "count": 1,
-          "offerCount": 4
+          "id": "e7f0988a-ef85-44d5-a9ec-2e29a66dfd7c",
+          "label": "Rewrite Founding Records",
+          "effectText": "Transfigure all starter cards",
+          "effectKind": "transfigure-all-starter-cards",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "uniform"
         },
         {
           "id": "e6bfa9e2-7525-4fdb-aa7e-3562b0929bcb",
@@ -12325,12 +12325,14 @@
           "nightmareCount": 2
         },
         {
-          "id": "b67c6bdf-5017-4352-9958-4c1c6fe17c14",
-          "label": "Carry Ancient Command",
-          "effectText": "All characters in your deck gain +1✦",
-          "effectKind": "increase-spark-all",
-          "canonicalMechanicId": "increase-deck-spark",
-          "sparkBonus": 1
+          "id": "fbd70c5d-9c4a-4af7-9ace-41f52ab00976",
+          "label": "Seek Eternal Aid",
+          "effectText": "Gain a random legendary card",
+          "effectKind": "gain-random-cards",
+          "canonicalMechanicId": "gain-card",
+          "selectionPolicyId": "card-bundle",
+          "predicate": "legendary",
+          "count": 1
         }
       ]
     },
@@ -12393,6 +12395,7 @@
       "prose": "A spear-bearing rider crosses burning grass atop a black panther beneath starry skies.",
       "action": [
         {
+          "count": 1,
           "id": "6f5e2dcb-e9ca-488c-8b61-d9f33ff92e79",
           "label": "Release Black Panther",
           "effectText": "Purge a chosen Spirit Animal card and gain a random Spirit Animal replacement",
@@ -12470,17 +12473,15 @@
       "prose": "A masked renegade descends burning stairs as sparks and shattered beams erupt through smoke.",
       "action": [
         {
-          "id": "676694a1-81de-4dc8-b9ed-3249e59e1a55",
-          "label": "Descend burning stairs",
-          "effectText": "Draft a ≤2● cost Character from 4 choices",
-          "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose one offered card.",
-          "effectKind": "draft-card",
-          "canonicalMechanicId": "catalog-card-chooser",
-          "selectionPolicyId": "card-fit",
+          "id": "93eb9f16-366c-4f8e-8fae-c32c980b1a94",
+          "label": "Temper Two in Flame",
+          "effectText": "Apply Kindled to 2 random eligible ≤2● cost Character cards in your deck",
+          "effectKind": "transfigure-fixed-random-cards",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "uniform",
           "predicate": "cheap-character",
-          "count": 1,
-          "offerCount": 4
+          "count": 2,
+          "transfiguration": "Kindled"
         },
         {
           "id": "0cc50ca6-38d1-4bbe-a752-23f31e376898",
@@ -12748,15 +12749,16 @@
       "prose": "A solitary girl studies countless keys glowing across a chained cavern wall.",
       "action": [
         {
-          "id": "1680c896-8158-4a26-818c-6cbcf7991634",
-          "label": "Test Four Keys",
-          "effectText": "Draw 4 cards from your deck and choose one to gain a copy of.",
+          "id": "e01fd10a-0e68-4bf4-b0fb-9859ba0d6443",
+          "label": "Turn Four Keys",
+          "effectText": "Select 4 random cards from your deck and choose one to purge. Apply Attuned to the other 3 eligible cards, then gain a copy of each.",
           "followupTitle": "{action-label}",
-          "followupSubtitle": "Choose one revealed pattern to copy.",
-          "effectKind": "copy-offered-deck-card",
-          "canonicalMechanicId": "duplicate-deck-entry",
-          "selectionPolicyId": "duplicate-value",
-          "offerCount": 4
+          "followupSubtitle": "Choose one revealed pattern to discard. The other three become Attuned and are copied.",
+          "effectKind": "purge-one-transfigure-and-copy-others",
+          "canonicalMechanicId": "transfigure-deck-entry",
+          "selectionPolicyId": "uniform",
+          "offerCount": 4,
+          "transfiguration": "Attuned"
         },
         {
           "id": "3a0711f3-7d76-408f-82fa-22ea9a1c0a24",
@@ -12810,12 +12812,13 @@
           "packSize": 3
         },
         {
-          "id": "8e534371-4c70-4a3f-b233-ddbab1f36122",
-          "label": "Focus Mirrorlight Core",
-          "effectText": "All characters in your deck gain +1✦",
-          "effectKind": "increase-spark-all",
-          "canonicalMechanicId": "increase-deck-spark",
-          "sparkBonus": 1
+          "id": "4d5f2648-caf2-43ee-a07a-178cf3a77bfd",
+          "label": "Cleanse Blight Gate",
+          "effectText": "Add a purge site to this Dreamscape",
+          "effectKind": "add-fixed-site",
+          "canonicalMechanicId": "add-site",
+          "selectionPolicyId": "fixed",
+          "siteType": "Purge"
         }
       ]
     },
@@ -13231,6 +13234,7 @@
       "prose": "A horned machine broker coils bladed cables around an orange mask and glowing circuitry.",
       "action": [
         {
+          "count": 1,
           "id": "b3959b4f-713f-44c8-ae28-964d48e0ce89",
           "label": "Trade one warrior",
           "effectText": "Purge a chosen Warrior and gain a random Warrior replacement",
@@ -13242,14 +13246,12 @@
           "predicate": "warrior"
         },
         {
-          "id": "2d3e332c-0017-4e62-b174-e6def2476529",
-          "label": "Collect blood tithe",
-          "effectText": "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
-          "effectKind": "purge-random-subtype-and-increase-spark",
-          "canonicalMechanicId": "purge-deck-entry",
-          "selectionPolicyId": "uniform",
-          "subtype": "Warrior",
-          "sparkBonus": 1
+          "id": "c884d8d4-2f30-4dff-a59a-1823791c2189",
+          "label": "Pay the Broker's Price",
+          "effectText": "Lose half your current essence. The next 3 items you purchase are free.",
+          "effectKind": "lose-half-essence-and-free-purchases",
+          "canonicalMechanicId": "shop-purchase-modifier",
+          "count": 3
         }
       ]
     },
@@ -13541,6 +13543,6 @@
       ]
     }
   ],
-  "contentHash": "9196bfd9e7a11a72c22ba8a64b87bc783154e2de4358cd88c96934fe18182a2c",
-  "foldHash": "9196bfd9e7a11a72c22ba8a64b87bc783154e2de4358cd88c96934fe18182a2c"
+  "contentHash": "69f4d1a630998d648290c85a043aadadd34eedd4c0769b92367274d9ff8f5add",
+  "foldHash": "69f4d1a630998d648290c85a043aadadd34eedd4c0769b92367274d9ff8f5add"
 }

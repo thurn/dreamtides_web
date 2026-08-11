@@ -31,6 +31,10 @@ import {
   CARD_CORNER_RADIUS,
 } from "../components/card/card-aspect";
 import { CardBack } from "../components/battle/CardBack";
+import {
+  SiteNode,
+  type DreamscapeSiteModel,
+} from "../components/dreamscape/SiteNode";
 import { GlassButton } from "../components/controls/GlassButton";
 import { StandaloneGlyph } from "../components/controls/StandaloneGlyph";
 import { IconButton } from "../components/controls/IconButton";
@@ -38,10 +42,7 @@ import {
   JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
   JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP,
 } from "../components/hud/JourneyStatusBar";
-import {
-  Dreamsign,
-  dreamsignRevealSpec,
-} from "../components/hud/Dreamsign";
+import { Dreamsign, dreamsignRevealSpec } from "../components/hud/Dreamsign";
 import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { GlassPanel } from "../components/overlay/GlassPanel";
@@ -75,12 +76,15 @@ import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 import { useIsDesktop } from "./use-is-desktop";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
-import type { FrozenCardData } from "../../types/cards";
+import type { CardType, FrozenCardData } from "../../types/cards";
 import type {
+  CardKeywordModification,
+  CardTypeChange,
   Dreamsign as DreamsignData,
   DreamAvatar,
   TransfigurationType,
 } from "../../types/journey";
+import type { ExplorationChoosableSiteType } from "../../data/exploration";
 import { useRevealSource } from "../internal/reveal/context";
 import { revealEntityId } from "../internal/reveal/identity";
 
@@ -106,10 +110,41 @@ export interface ExplorationSiteView {
   /** Semantic outcome variant presented for logging and browser QA. */
   outcomeKind: string | null;
 }
+
+export interface ExplorationTransfigurationChangeView {
+  readonly entryId: string;
+  readonly cardId: string;
+  readonly beforeTransfiguration: null;
+  readonly afterTransfiguration: TransfigurationType;
+  readonly before: ExplorationCardChoiceView;
+  readonly after: ExplorationCardChoiceView & {
+    readonly model: ExplorationCardChoiceView["model"] & {
+      readonly transfiguration: NonNullable<
+        ExplorationCardChoiceView["model"]["transfiguration"]
+      >;
+    };
+  };
+}
+
+export interface ExplorationKeywordChangeView {
+  readonly entryId: string;
+  readonly cardId: string;
+  readonly beforeKeywordModification: CardKeywordModification | null;
+  readonly afterKeywordModification: CardKeywordModification;
+  readonly before: ExplorationCardChoiceView;
+  readonly after: ExplorationCardChoiceView;
+}
+
+export interface ExplorationCardCopyPairView {
+  readonly source: ExplorationCardChoiceView;
+  readonly copy: ExplorationCardChoiceView;
+}
+
 export type ExplorationRewardView =
   | {
       /** Tangible objects granted by the resolution. */
-      readonly semanticKind?: "card-acquisition" | "card-replacement" | "objects";
+      readonly semanticKind?:
+        "card-acquisition" | "card-replacement" | "card-purge" | "objects";
       readonly objects: {
         readonly cards: readonly GameCardModel[];
         readonly purgedCards: readonly ExplorationCardChoiceView[];
@@ -117,6 +152,22 @@ export type ExplorationRewardView =
       };
       /** Persisted mutation applied to every affected UUID-keyed deck entry. */
       readonly deckModification: ExplorationDeckModificationView | null;
+    }
+  | {
+      readonly kind: "direct-essence";
+      /** Typed source effect whose persisted resolution produced this outcome. */
+      readonly sourceKind:
+        "gain-essence" | "gain-random-essence" | "double-essence";
+      /** Exact shared Essence balance immediately before resolution. */
+      readonly essenceBefore: number;
+      /** Exact amount added by the persisted resolution, including zero. */
+      readonly essenceGained: number;
+      /** Exact shared Essence balance immediately after resolution. */
+      readonly essenceAfter: number;
+      /** Inclusive prepared random lower bound, when the source was random. */
+      readonly minimumEssence?: number;
+      /** Inclusive prepared random upper bound, when the source was random. */
+      readonly maximumEssence?: number;
     }
   | {
       readonly kind: "transfiguration";
@@ -202,6 +253,173 @@ export type ExplorationRewardView =
       readonly modifier: "transfigure-next-draft-or-shop";
       readonly sourceSiteId: string;
       readonly sourceActionId: string;
+    }
+  | {
+      readonly kind: "shop-modifier";
+      readonly modifier: "free-next-shop" | "free-purchases";
+      readonly sourceSiteId: string;
+      readonly sourceActionId: string;
+      readonly freePurchaseCount?: number;
+      readonly essenceBefore?: number;
+      readonly essenceSpent?: number;
+      readonly essenceAfter?: number;
+    }
+  | {
+      readonly kind: "site-insertion";
+      readonly sourceKind: "add-fixed-site" | "choose-site-type";
+      readonly targetNodeId: string;
+      readonly insertionIndex: number;
+      readonly siblingSiteIdsBefore: readonly string[];
+      /** Display-edge projection of the exact site persisted in the Atlas. */
+      readonly model: DreamscapeSiteModel;
+    }
+  | {
+      readonly kind: "dreamsign-mutation";
+      /** Typed Dreamsign effect whose persisted resolution produced this outcome. */
+      readonly sourceKind:
+        | "gain-offered-dreamsign"
+        | "replace-selected-dreamsign-with-offered"
+        | "replace-all-dreamsigns-random"
+        | "purge-selected-dreamsign-and-gain-random";
+      /** Exact collection snapshots surrounding the atomic persisted mutation. */
+      readonly before: readonly (DreamsignData & { readonly id: string })[];
+      readonly after: readonly (DreamsignData & { readonly id: string })[];
+      /** Offered choices revealed before resolution, when the effect had offers. */
+      readonly offered: readonly (DreamsignData & { readonly id: string })[];
+      /** Persisted gained and purged identities, including random outcomes. */
+      readonly gained: readonly (DreamsignData & { readonly id: string })[];
+      readonly purged: readonly (DreamsignData & { readonly id: string })[];
+      /** Exact persisted replacement pairings in mutation order. */
+      readonly replacements: readonly {
+        readonly removed: DreamsignData & { readonly id: string };
+        readonly gained: DreamsignData & { readonly id: string };
+      }[];
+      readonly poolRegenerated: boolean;
+    }
+  | {
+      readonly kind: "nightmare-dreamsign-bundle";
+      /** Typed compound effect whose two reward halves resolved atomically. */
+      readonly sourceKind:
+        "gain-nightmare-and-dreamsign" | "gain-nightmare-and-offered-dreamsign";
+      /** Exact minted Nightmare deck entries, in persisted insertion order. */
+      readonly nightmares: readonly ExplorationCardChoiceView[];
+      /** Exact collection snapshots surrounding the persisted Dreamsign gain. */
+      readonly before: readonly (DreamsignData & { readonly id: string })[];
+      readonly after: readonly (DreamsignData & { readonly id: string })[];
+      readonly offered: readonly (DreamsignData & { readonly id: string })[];
+      readonly gained: readonly (DreamsignData & { readonly id: string })[];
+      readonly purged: readonly (DreamsignData & { readonly id: string })[];
+      readonly replacements: readonly {
+        readonly removed: DreamsignData & { readonly id: string };
+        readonly gained: DreamsignData & { readonly id: string };
+      }[];
+      readonly poolRegenerated: boolean;
+    }
+  | {
+      readonly kind: "starter-card-mutation";
+      /** Typed starter-card effect whose persisted mutation produced this outcome. */
+      readonly sourceKind:
+        | "purge-starter-card"
+        | "purge-random-starter-card"
+        | "purge-random-starter-and-gain-card"
+        | "replace-all-starter-cards";
+      readonly mode: "purge" | "replace";
+      /** Exact removed deck-entry snapshots in persisted mutation order. */
+      readonly purged: readonly ExplorationCardChoiceView[];
+      /** Exact persisted before-to-after deck-entry pairings. */
+      readonly replacements: readonly {
+        readonly purged: ExplorationCardChoiceView;
+        readonly gained: ExplorationCardChoiceView;
+      }[];
+    }
+  | {
+      readonly kind: "card-replacements";
+      readonly sourceKind: "replace-selected" | "replace-random-with-card";
+      /** Exact persisted source-to-replacement mappings in committed order. */
+      readonly replacements: readonly {
+        readonly purged: ExplorationCardChoiceView;
+        readonly gained: ExplorationCardChoiceView;
+      }[];
+    }
+  | {
+      readonly kind: "starter-card-transfiguration";
+      /** Typed starter-card effect whose signed plan produced this outcome. */
+      readonly sourceKind:
+        "transfigure-random-starter-cards" | "transfigure-all-starter-cards";
+      /** Exact persisted base-to-form mappings in prepared target order. */
+      readonly transfigurations: readonly {
+        readonly entryId: string;
+        readonly cardId: string;
+        readonly beforeTransfiguration: null;
+        readonly afterTransfiguration: TransfigurationType;
+        readonly before: ExplorationCardChoiceView;
+        readonly after: ExplorationCardChoiceView & {
+          readonly model: ExplorationCardChoiceView["model"] & {
+            readonly transfiguration: NonNullable<
+              ExplorationCardChoiceView["model"]["transfiguration"]
+            >;
+          };
+        };
+      }[];
+    }
+  | {
+      readonly kind: "multi-card-transfiguration";
+      /** Typed general-deck effect whose signed plan produced this outcome. */
+      readonly sourceKind:
+        | "transfigure-selected"
+        | "transfigure-fixed-selected"
+        | "transfigure-random-cards"
+        | "transfigure-fixed-random-cards"
+        | "transfigure-all-cards";
+      /** Exact persisted base-to-form mappings in committed target order. */
+      readonly transfigurations: readonly {
+        readonly entryId: string;
+        readonly cardId: string;
+        readonly beforeTransfiguration: null;
+        readonly afterTransfiguration: TransfigurationType;
+        readonly before: ExplorationCardChoiceView;
+        readonly after: ExplorationCardChoiceView & {
+          readonly model: ExplorationCardChoiceView["model"] & {
+            readonly transfiguration: NonNullable<
+              ExplorationCardChoiceView["model"]["transfiguration"]
+            >;
+          };
+        };
+      }[];
+    }
+  | {
+      readonly kind: "compound-card-mutation";
+      readonly sourceKind:
+        | "purge-disclosed-and-transfigure-same-type"
+        | "make-predicate-fast-and-gain-nightmares"
+        | "take-transfigured-cards-and-gain-nightmares"
+        | "purge-one-transfigure-and-copy-others";
+      /** Exact removed card snapshots, in persisted mutation order. */
+      readonly purged: readonly ExplorationCardChoiceView[];
+      /** Exact persisted before-to-after form mappings. */
+      readonly transfigurations: readonly ExplorationTransfigurationChangeView[];
+      /** Exact persisted before-to-after keyword mappings. */
+      readonly keywordChanges: readonly ExplorationKeywordChangeView[];
+      /** Minted Nightmare entries, reconstructed by entry UUID. */
+      readonly nightmares: readonly ExplorationCardChoiceView[];
+      /** Exact source-to-minted copy pairs. */
+      readonly copies: readonly ExplorationCardCopyPairView[];
+    }
+  | {
+      readonly kind: "card-type-changes";
+      readonly sourceKind:
+        "change-random-card-type" | "change-card-type-selected";
+      /** Exact persisted before-to-after type changes in prepared target order. */
+      readonly changes: readonly {
+        readonly entryId: string;
+        readonly cardId: string;
+        readonly beforeCardType: CardType;
+        readonly afterCardType: CardType;
+        readonly beforeTypeChange: CardTypeChange | null;
+        readonly afterTypeChange: CardTypeChange;
+        readonly before: ExplorationCardChoiceView;
+        readonly after: ExplorationCardChoiceView;
+      }[];
     };
 
 interface ExplorationDeckModificationViewBase {
@@ -263,6 +481,13 @@ export type ExplorationFollowupView =
       readonly candidates: readonly TransfigurationCandidateView[];
     }
   | {
+      readonly kind: "multi-card-transfiguration";
+      readonly title: string;
+      readonly subtitle: string;
+      readonly count: number;
+      readonly candidates: readonly TransfigurationCandidateView[];
+    }
+  | {
       readonly kind: "cards";
       readonly title: string;
       readonly subtitle: string;
@@ -297,10 +522,32 @@ export type ExplorationFollowupView =
       readonly dreamsigns: readonly (DreamsignData & { readonly id: string })[];
     }
   | {
+      readonly kind: "dreamsign-flow";
+      readonly title: string;
+      readonly subtitle: string;
+      readonly mode:
+        "gain-offered" | "replace-with-offered" | "purge-and-gain-random";
+      /** Prepared player-visible offers. Random results are never included here. */
+      readonly offered: readonly (DreamsignData & { readonly id: string })[];
+      /** UUID-keyed collection snapshot from which purge/replacement choices come. */
+      readonly held: readonly (DreamsignData & { readonly id: string })[];
+      /** Exact number of additional held Dreamsigns that must leave for capacity. */
+      readonly requiredOverflowReplacementCount: number;
+    }
+  | {
       readonly kind: "dreamAvatars";
       readonly title: string;
       readonly subtitle: string;
       readonly dreamAvatars: readonly DreamAvatar[];
+    }
+  | {
+      readonly kind: "site-types";
+      readonly title: string;
+      readonly subtitle: string;
+      readonly choices: readonly {
+        readonly siteType: ExplorationChoosableSiteType;
+        readonly model: DreamscapeSiteModel;
+      }[];
     };
 
 export interface ExplorationActionView {
@@ -325,6 +572,8 @@ export type ExplorationEntityView =
   | {
       readonly kind: "card";
       readonly card: FrozenCardData;
+      /** Prepared deck-entry UUID when this entity discloses a concrete deck object. */
+      readonly entryId?: string;
       readonly copies?: number;
       readonly transfiguration?: CardTransfigurationDisplay;
     }
@@ -335,6 +584,7 @@ export type ExplorationEntityView =
 
 export type ExplorationActionEffectPart =
   | { readonly kind: "text"; readonly text: string }
+  | { readonly kind: "card-type"; readonly cardType: CardType }
   | { readonly kind: "entity"; readonly entity: ExplorationEntityView };
 
 export type ExplorationEffectDisclosure =
@@ -346,9 +596,10 @@ export type ExplorationEffectDisclosure =
   | { readonly kind: "offered-site"; readonly siteType: string };
 
 export interface ExplorationEffectFallback {
-  readonly kind: "missing-deck-card";
+  readonly kind: "missing-deck-card" | "missing-starter-card";
   readonly before: string;
   readonly after: string;
+  readonly cardType?: CardType;
 }
 
 export interface ExplorationSiteScreenProps {
@@ -378,7 +629,8 @@ interface CardTrajectory {
 interface RewardTrajectory {
   readonly source: RectSnapshot;
   readonly target: RectSnapshot;
-  readonly destinationKind: "journey-deck" | "journey-dreamsign" | "viewport-corner";
+  readonly destinationKind:
+    "journey-deck" | "journey-dreamsign" | "viewport-corner";
 }
 
 function previewEntityForAction(
@@ -392,6 +644,7 @@ function previewEntityForAction(
 
 interface ExplorationEntityDetails {
   readonly id: string;
+  readonly entryId?: string;
   readonly name: string;
   readonly copies: number;
 }
@@ -408,6 +661,7 @@ function explorationEntityDetails(
   return entity.kind === "card"
     ? {
         id: entity.card.id,
+        ...(entity.entryId === undefined ? {} : { entryId: entity.entryId }),
         name: entity.card.name,
         copies: normalizedEntityCopies(entity.copies),
       }
@@ -431,14 +685,16 @@ function explorationEntityRevealRegistration(entity: ExplorationEntityView) {
     return {
       details,
       identity: {
-        entityType: details.copies === 1
-          ? "game-card" as const
-          : "game-card-copies" as const,
+        entityType:
+          details.copies === 1
+            ? ("game-card" as const)
+            : ("game-card-copies" as const),
         entityId: entity.card.id,
       },
-      spec: details.copies === 1
-        ? spec
-        : { ...spec, primary: { ...spec.primary, copies: details.copies } },
+      spec:
+        details.copies === 1
+          ? spec
+          : { ...spec, primary: { ...spec.primary, copies: details.copies } },
     };
   }
   return {
@@ -495,15 +751,21 @@ function explorationDeckModificationHeadline(
 ): string {
   switch (modification.kind) {
     case "spark":
-      return t("exploration-deck-modification-spark", { amount: modification.amount });
+      return t("exploration-deck-modification-spark", {
+        amount: modification.amount,
+      });
     case "fast":
       return t("exploration-deck-modification-fast");
     case "energy-cost":
-      return t("exploration-deck-modification-energy-cost", { amount: modification.amount });
+      return t("exploration-deck-modification-energy-cost", {
+        amount: modification.amount,
+      });
     case "subtype":
       return modification.subtype === null
         ? t("exploration-deck-modification-subtype-unavailable")
-        : t("exploration-deck-modification-subtype", { subtype: modification.subtype });
+        : t("exploration-deck-modification-subtype", {
+            subtype: modification.subtype,
+          });
     case "reclaim":
       return t("exploration-deck-modification-reclaim");
     case "transfiguration":
@@ -522,39 +784,68 @@ function ExplorationChoiceContents({
   readonly index: number;
 }) {
   const t = useMessages();
-  const effectDescription = action.effectFallback === undefined
-    ? action.effectParts === undefined
-      ? renderRulesSymbolsInline(action.effectText)
-      : action.effectParts.map((part, partIndex) =>
-          part.kind === "text" ? (
-            <span key={`text-${String(partIndex)}`}>
-              {renderRulesSymbolsInline(part.text)}
-            </span>
-          ) : (
-            <ExplorationEntityLabel
-              key={`entity-${String(partIndex)}`}
-              entity={part.entity}
-              data-testid={`cumulus-exploration-choice-${String(index)}-entity-${String(partIndex)}`}
-            />
-          ),
-        )
-    : renderRulesSymbolsInline(
-        formatMessageDescriptor(t, {
-          id: "exploration-effect-missing-deck-card",
-          variables: {
-            before: action.effectFallback.before,
-            after: action.effectFallback.after,
-          },
-        }),
-      );
-  const disclosure = action.effectDisclosure === undefined
-    ? null
-    : action.effectDisclosure.kind === "fixed-transfiguration"
-      ? `(${action.effectDisclosure.effectDisclosure})`
-      : formatMessageDescriptor(t, {
-          id: "exploration-offered-site-disclosure",
-          variables: { siteType: action.effectDisclosure.siteType },
-        });
+  const cardTypeLabel = (cardType: CardType): string =>
+    t(
+      cardType === "Character"
+        ? "loading-card-character-label"
+        : "loading-card-event-label",
+    );
+  const effectDescription =
+    action.effectFallback === undefined
+      ? action.effectParts === undefined
+        ? renderRulesSymbolsInline(action.effectText)
+        : action.effectParts.map((part, partIndex) =>
+            part.kind === "text" ? (
+              <span key={`text-${String(partIndex)}`}>
+                {renderRulesSymbolsInline(part.text)}
+              </span>
+            ) : part.kind === "card-type" ? (
+              <span
+                key={`card-type-${String(partIndex)}`}
+                data-exploration-card-type-variable=""
+                data-card-type={part.cardType}
+              >
+                {cardTypeLabel(part.cardType)}
+              </span>
+            ) : (
+              <ExplorationEntityLabel
+                key={`entity-${String(partIndex)}`}
+                entity={part.entity}
+                data-testid={`cumulus-exploration-choice-${String(index)}-entity-${String(partIndex)}`}
+              />
+            ),
+          )
+      : renderRulesSymbolsInline(
+          formatMessageDescriptor(t, {
+            id:
+              action.effectFallback.kind === "missing-starter-card"
+                ? "exploration-effect-missing-starter-card"
+                : "exploration-effect-missing-deck-card",
+            variables: {
+              before:
+                action.effectFallback.cardType === undefined
+                  ? action.effectFallback.before
+                  : action.effectFallback.before
+                      .split("{card_type}")
+                      .join(cardTypeLabel(action.effectFallback.cardType)),
+              after:
+                action.effectFallback.cardType === undefined
+                  ? action.effectFallback.after
+                  : action.effectFallback.after
+                      .split("{card_type}")
+                      .join(cardTypeLabel(action.effectFallback.cardType)),
+            },
+          }),
+        );
+  const disclosure =
+    action.effectDisclosure === undefined
+      ? null
+      : action.effectDisclosure.kind === "fixed-transfiguration"
+        ? `(${action.effectDisclosure.effectDisclosure})`
+        : formatMessageDescriptor(t, {
+            id: "exploration-offered-site-disclosure",
+            variables: { siteType: action.effectDisclosure.siteType },
+          });
   return (
     <>
       <span style={{ minWidth: 0, display: "grid", gap: token("--space-xxs") }}>
@@ -588,6 +879,7 @@ function ExplorationEntityLabel({
     <span
       data-exploration-entity-label={entity.kind}
       data-entity-id={details.id}
+      data-exploration-deck-entry-id={details.entryId}
       data-entity-copies={details.copies}
       data-testid={testId}
     >
@@ -612,6 +904,8 @@ function PlainExplorationChoice({
       as="button"
       disabled={!action.available}
       aria-describedby={`exploration-effect-${String(index)}`}
+      data-exploration-action-id={action.id}
+      data-exploration-effect-kind={action.effectKind}
       data-testid={`cumulus-exploration-choice-${String(index)}`}
       onClick={onActivate}
       style={explorationChoiceStyle(action.available)}
@@ -642,8 +936,11 @@ function EntityExplorationChoice({
       {...binding.sourceProps}
       disabled={!action.available}
       aria-describedby={`${revealDescriptionId ?? ""} exploration-effect-${String(index)}`.trim()}
+      data-exploration-action-id={action.id}
+      data-exploration-effect-kind={action.effectKind}
       data-exploration-entity-preview={entity.kind}
       data-entity-id={details.id}
+      data-exploration-deck-entry-id={details.entryId}
       data-entity-copies={details.copies}
       data-reveal-source-retain="true"
       data-testid={`cumulus-exploration-choice-${String(index)}`}
@@ -709,14 +1006,13 @@ interface FullArtDimensions {
 }
 
 type FrameBreakPhase =
-  | "idle"
-  | "fracturing"
-  | "open"
-  | "collapsing"
-  | "returning";
+  "idle" | "fracturing" | "open" | "collapsing" | "returning";
 type CollapseIntent = "preview" | "exit";
 type CardCopiesPhase = "original" | "copies" | "travel";
 type PurgeAndCopyPhase = "purging" | "copying";
+type DreamsignMutationPhase = "purging" | "gaining";
+type StarterCardMutationPhase = "purging" | "replacing" | "terminal";
+type StarterCardTransfigurationPhase = "original" | "transfigured" | "terminal";
 type CardCopiesReward = Extract<
   ExplorationRewardView,
   { readonly kind: "card-copies" | "card-copies-multiple" }
@@ -755,6 +1051,8 @@ const DESKTOP_TRANSFIGURATION_CARD_WIDTH = 240;
 const MOBILE_TRANSFIGURATION_CARD_WIDTH = "min(58vw, 240px)";
 const DESKTOP_REWARD_DREAMSIGN_SIZE = 240;
 const MOBILE_REWARD_DREAMSIGN_SIZE = 180;
+const DESKTOP_REPLACEMENT_DREAMSIGN_SIZE = 154;
+const MOBILE_REPLACEMENT_DREAMSIGN_SIZE = 112;
 const MOBILE_CARD_COPY_WIDTH = "min(40vw, 180px)";
 // Copy cards fan far enough to expose their faces while remaining a single
 // physical group that can collapse into the deck target together.
@@ -773,8 +1071,7 @@ const MOBILE_DECK_MODIFICATION_RADIUS_Y = 205;
 const DESKTOP_ESSENCE_CARD_WIDTH = 156;
 const MOBILE_ESSENCE_CARD_WIDTH = "min(28vw, 112px)";
 const ESSENCE_CHIP_LAYER = 12;
-const DESKTOP_FLOATING_PANEL_BOTTOM =
-  `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-3xl")})`;
+const DESKTOP_FLOATING_PANEL_BOTTOM = `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-3xl")})`;
 // The card preview cache appends a 21px watermark strip to a 259px-tall
 // content image. Licensed originals contain the 259px content region only.
 const CARD_PREVIEW_CONTENT_FRACTION = 259 / 280;
@@ -815,9 +1112,12 @@ function ExplorationNarrativeChoices({
     const durationMs = TYPEWRITER_SECONDS * 1_000;
     const timers = characters.map((_, index) => {
       const nextCount = index + 1;
-      return window.setTimeout(() => {
-        setVisibleCharacterCount(nextCount);
-      }, (durationMs * nextCount) / characters.length);
+      return window.setTimeout(
+        () => {
+          setVisibleCharacterCount(nextCount);
+        },
+        (durationMs * nextCount) / characters.length,
+      );
     });
     return () => {
       for (const timer of timers) window.clearTimeout(timer);
@@ -843,9 +1143,7 @@ function ExplorationNarrativeChoices({
     return () => window.clearTimeout(timer);
   }, [actions.length, reduceMotion, typewriterComplete]);
 
-  const visibleNarrative = characters
-    .slice(0, visibleCharacterCount)
-    .join("");
+  const visibleNarrative = characters.slice(0, visibleCharacterCount).join("");
 
   return (
     <>
@@ -909,9 +1207,7 @@ function ExplorationNarrativeChoices({
                 y: visible || reduceMotion ? 0 : token("--space-xs"),
               }}
               transition={{
-                duration: reduceMotion
-                  ? 0
-                  : motionTimeSeconds("--dur-base"),
+                duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
                 ease: DREAM_EASE,
               }}
               style={{
@@ -1121,8 +1417,23 @@ function explorationRewardIdentity(
     ].join("|");
   }
   switch (reward.kind) {
+    case "direct-essence":
+      return [
+        actionId,
+        reward.kind,
+        reward.sourceKind,
+        reward.essenceBefore,
+        reward.essenceGained,
+        reward.essenceAfter,
+        reward.minimumEssence ?? "fixed",
+        reward.maximumEssence ?? "fixed",
+      ].join("|");
     case "essence":
-      return [actionId, reward.kind, ...reward.cards.map((card) => card.entryId)].join("|");
+      return [
+        actionId,
+        reward.kind,
+        ...reward.cards.map((card) => card.entryId),
+      ].join("|");
     case "transfiguration":
       return [
         actionId,
@@ -1190,6 +1501,127 @@ function explorationRewardIdentity(
         reward.modifier,
         reward.sourceSiteId,
         reward.sourceActionId,
+      ].join("|");
+    case "shop-modifier":
+      return [
+        actionId,
+        reward.kind,
+        reward.modifier,
+        reward.sourceSiteId,
+        reward.sourceActionId,
+        reward.freePurchaseCount ?? "visit",
+        reward.essenceBefore ?? "unchanged",
+        reward.essenceSpent ?? "unchanged",
+        reward.essenceAfter ?? "unchanged",
+      ].join("|");
+    case "site-insertion":
+      return [
+        actionId,
+        reward.kind,
+        reward.targetNodeId,
+        reward.insertionIndex,
+        ...reward.siblingSiteIdsBefore,
+        reward.model.site.id,
+        reward.model.site.type,
+      ].join("|");
+    case "dreamsign-mutation":
+      return [
+        actionId,
+        reward.kind,
+        reward.sourceKind,
+        ...reward.before.map((dreamsign) => `before:${dreamsign.id}`),
+        ...reward.after.map((dreamsign) => `after:${dreamsign.id}`),
+        ...reward.replacements.flatMap((pair) => [
+          `removed:${pair.removed.id}`,
+          `gained:${pair.gained.id}`,
+        ]),
+      ].join("|");
+    case "nightmare-dreamsign-bundle":
+      return [
+        actionId,
+        reward.kind,
+        reward.sourceKind,
+        ...reward.nightmares.map(
+          (card) => `nightmare:${card.entryId}:${card.model.cardId}`,
+        ),
+        ...reward.before.map((dreamsign) => `before:${dreamsign.id}`),
+        ...reward.after.map((dreamsign) => `after:${dreamsign.id}`),
+        ...reward.replacements.flatMap((pair) => [
+          `removed:${pair.removed.id}`,
+          `gained:${pair.gained.id}`,
+        ]),
+      ].join("|");
+    case "starter-card-mutation":
+      return [
+        actionId,
+        reward.kind,
+        reward.sourceKind,
+        reward.mode,
+        ...reward.purged.map(
+          (card) => `purged:${card.entryId}:${card.model.cardId}`,
+        ),
+        ...reward.replacements.flatMap((pair) => [
+          `before:${pair.purged.entryId}:${pair.purged.model.cardId}`,
+          `after:${pair.gained.entryId}:${pair.gained.model.cardId}`,
+        ]),
+      ].join("|");
+    case "card-replacements":
+      return [
+        actionId,
+        reward.kind,
+        reward.sourceKind,
+        ...reward.replacements.flatMap((pair) => [
+          `before:${pair.purged.entryId}:${pair.purged.model.cardId}`,
+          `after:${pair.gained.entryId}:${pair.gained.model.cardId}`,
+        ]),
+      ].join("|");
+    case "starter-card-transfiguration":
+    case "multi-card-transfiguration":
+      return [
+        actionId,
+        reward.kind,
+        reward.sourceKind,
+        ...reward.transfigurations.flatMap((mapping) => [
+          mapping.entryId,
+          mapping.cardId,
+          mapping.beforeTransfiguration ?? "base",
+          mapping.afterTransfiguration,
+        ]),
+      ].join("|");
+    case "compound-card-mutation":
+      return [
+        actionId,
+        reward.kind,
+        reward.sourceKind,
+        ...reward.purged.map(
+          (card) => `purged:${card.entryId}:${card.model.cardId}`,
+        ),
+        ...reward.transfigurations.flatMap((mapping) => [
+          `transfigured:${mapping.entryId}:${mapping.cardId}:${mapping.afterTransfiguration}`,
+        ]),
+        ...reward.keywordChanges.flatMap((mapping) => [
+          `keyword:${mapping.entryId}:${mapping.cardId}:${JSON.stringify(mapping.afterKeywordModification)}`,
+        ]),
+        ...reward.nightmares.map(
+          (card) => `nightmare:${card.entryId}:${card.model.cardId}`,
+        ),
+        ...reward.copies.flatMap((pair) => [
+          `copy:${pair.source.entryId}:${pair.copy.entryId}:${pair.copy.model.cardId}`,
+        ]),
+      ].join("|");
+    case "card-type-changes":
+      return [
+        actionId,
+        reward.kind,
+        reward.sourceKind,
+        ...reward.changes.flatMap((change) => [
+          change.entryId,
+          change.cardId,
+          change.beforeCardType,
+          change.afterCardType,
+          JSON.stringify(change.beforeTypeChange),
+          JSON.stringify(change.afterTypeChange),
+        ]),
       ].join("|");
   }
 }
@@ -1368,6 +1800,766 @@ function PurgedCardPresentation({
   );
 }
 
+function CardReplacementPresentation({
+  pair,
+  index,
+  isDesktop,
+  reduceMotion,
+  scope,
+}: {
+  readonly pair: Extract<
+    ExplorationRewardView,
+    { readonly kind: "starter-card-mutation" | "card-replacements" }
+  >["replacements"][number];
+  readonly index: number;
+  readonly isDesktop: boolean;
+  readonly reduceMotion: boolean;
+  readonly scope: "starter" | "multi";
+}) {
+  const t = useMessages();
+  const cardWidth = isDesktop
+    ? DESKTOP_ESSENCE_CARD_WIDTH
+    : MOBILE_ESSENCE_CARD_WIDTH;
+  return (
+    <motion.div
+      data-exploration-card-replacement=""
+      data-exploration-starter-card-replacement={
+        scope === "starter" ? "" : undefined
+      }
+      data-exploration-multi-card-replacement={
+        scope === "multi" ? "" : undefined
+      }
+      data-purged-entry-id={pair.purged.entryId}
+      data-purged-card-id={pair.purged.model.cardId}
+      data-gained-entry-id={pair.gained.entryId}
+      data-gained-card-id={pair.gained.model.cardId}
+      role="group"
+      aria-label={t(
+        scope === "starter"
+          ? "exploration-starter-card-replacement-accessible-name"
+          : "exploration-card-replacement-accessible-name",
+        {
+          purgedCardName: pair.purged.model.displaySnapshot.name,
+          gainedCardName: pair.gained.model.displaySnapshot.name,
+        },
+      )}
+      initial={{
+        opacity: reduceMotion ? 1 : 0,
+        scale: reduceMotion ? 1 : 0.86,
+        y: reduceMotion ? 0 : token("--space-l"),
+      }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{
+        delay: reduceMotion ? 0 : index * REWARD_STAGGER_SECONDS,
+        duration: reduceMotion ? 0 : motionTimeSeconds("--dur-slow"),
+        ease: DREAM_EASE,
+      }}
+      style={{ width: "fit-content", maxWidth: "100%" }}
+    >
+      <GlassPanel
+        radius="popover"
+        testId={`cumulus-exploration-${scope}-card-replacement-${String(index)}`}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: isDesktop ? token("--space-m") : token("--space-xs"),
+            padding: isDesktop ? token("--space-m") : token("--space-s"),
+          }}
+        >
+          <div
+            data-exploration-card-replacement-object="purged"
+            data-exploration-starter-card-mutation-object={
+              scope === "starter" ? "purged" : undefined
+            }
+            data-exploration-deck-entry-id={pair.purged.entryId}
+            data-card-id={pair.purged.model.cardId}
+            style={{ width: cardWidth, aspectRatio: CARD_ASPECT_RATIO }}
+          >
+            <GameCard
+              model={pair.purged.model}
+              selection="danger"
+              testId={`cumulus-exploration-${scope}-card-purged-${pair.purged.entryId}`}
+            />
+          </div>
+          <span
+            data-exploration-card-replacement-arrow=""
+            data-exploration-starter-card-replacement-arrow={
+              scope === "starter" ? "" : undefined
+            }
+            aria-hidden="true"
+            style={{
+              display: "grid",
+              placeItems: "center",
+              flexShrink: 0,
+              fontSize: isDesktop ? 30 : 24,
+            }}
+          >
+            <StandaloneGlyph glyph={GLYPHS.arrowRightFilled} color="white" />
+          </span>
+          <div
+            data-exploration-card-replacement-object="gained"
+            data-exploration-starter-card-mutation-object={
+              scope === "starter" ? "gained" : undefined
+            }
+            data-exploration-deck-entry-id={pair.gained.entryId}
+            data-card-id={pair.gained.model.cardId}
+            style={{ width: cardWidth, aspectRatio: CARD_ASPECT_RATIO }}
+          >
+            <GameCard
+              model={pair.gained.model}
+              selection="changed"
+              testId={`cumulus-exploration-${scope}-card-gained-${pair.gained.entryId}`}
+            />
+          </div>
+        </div>
+      </GlassPanel>
+    </motion.div>
+  );
+}
+
+function CardTransfigurationPairPresentation({
+  mapping,
+  index,
+  phase,
+  isDesktop,
+  reduceMotion,
+  scope,
+}: {
+  readonly mapping: Extract<
+    ExplorationRewardView,
+    {
+      readonly kind:
+        | "starter-card-transfiguration"
+        | "multi-card-transfiguration"
+        | "compound-card-mutation";
+    }
+  >["transfigurations"][number];
+  readonly index: number;
+  readonly phase: StarterCardTransfigurationPhase;
+  readonly isDesktop: boolean;
+  readonly reduceMotion: boolean;
+  readonly scope: "starter" | "multi" | "compound";
+}) {
+  const t = useMessages();
+  const cardWidth = isDesktop
+    ? DESKTOP_ESSENCE_CARD_WIDTH
+    : MOBILE_ESSENCE_CARD_WIDTH;
+  const revealAfter = phase !== "original";
+  return (
+    <motion.div
+      data-exploration-card-transfiguration-pair=""
+      data-exploration-starter-card-transfiguration-pair={
+        scope === "starter" ? "" : undefined
+      }
+      data-exploration-multi-card-transfiguration-pair={
+        scope === "multi" ? "" : undefined
+      }
+      data-exploration-compound-card-transfiguration-pair={
+        scope === "compound" ? "" : undefined
+      }
+      data-exploration-deck-entry-id={mapping.entryId}
+      data-card-id={mapping.cardId}
+      data-before-transfiguration="none"
+      data-after-transfiguration={mapping.afterTransfiguration}
+      data-after-form-name={mapping.after.model.transfiguration.form.name}
+      role="group"
+      aria-label={t(
+        scope === "starter"
+          ? "exploration-starter-card-transfiguration-pair-accessible-name"
+          : "exploration-card-transfiguration-pair-accessible-name",
+        {
+          cardName: mapping.before.model.displaySnapshot.name,
+          formName: mapping.after.model.transfiguration.form.name,
+        },
+      )}
+      initial={{
+        opacity: reduceMotion ? 1 : 0,
+        y: reduceMotion ? 0 : token("--space-l"),
+      }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        delay: reduceMotion ? 0 : index * REWARD_STAGGER_SECONDS,
+        duration: reduceMotion ? 0 : motionTimeSeconds("--dur-slow"),
+        ease: DREAM_EASE,
+      }}
+      style={{ width: "fit-content", maxWidth: "100%" }}
+    >
+      <GlassPanel
+        radius="popover"
+        testId={`cumulus-exploration-${scope}-card-transfiguration-${String(index)}`}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: isDesktop ? token("--space-m") : token("--space-xs"),
+            padding: isDesktop ? token("--space-m") : token("--space-s"),
+          }}
+        >
+          <div
+            data-exploration-card-transfiguration-face="before"
+            data-exploration-starter-card-transfiguration-face={
+              scope === "starter" ? "before" : undefined
+            }
+            data-exploration-deck-entry-id={mapping.entryId}
+            data-card-id={mapping.cardId}
+            data-transfiguration="none"
+            style={{ width: cardWidth, aspectRatio: CARD_ASPECT_RATIO }}
+          >
+            <GameCard
+              model={mapping.before.model}
+              testId={`cumulus-exploration-${scope}-card-before-${mapping.entryId}`}
+            />
+          </div>
+          <span
+            data-exploration-card-transfiguration-arrow=""
+            data-exploration-starter-card-transfiguration-arrow={
+              scope === "starter" ? "" : undefined
+            }
+            aria-hidden="true"
+            style={{
+              display: "grid",
+              placeItems: "center",
+              flexShrink: 0,
+              fontSize: isDesktop ? 30 : 24,
+            }}
+          >
+            <StandaloneGlyph glyph={GLYPHS.arrowRightFilled} color="white" />
+          </span>
+          <motion.div
+            data-exploration-card-transfiguration-face="after"
+            data-exploration-starter-card-transfiguration-face={
+              scope === "starter" ? "after" : undefined
+            }
+            data-exploration-deck-entry-id={mapping.entryId}
+            data-card-id={mapping.cardId}
+            data-transfiguration={mapping.afterTransfiguration}
+            initial={false}
+            animate={{ rotateY: revealAfter ? 180 : 0 }}
+            transition={{
+              delay: reduceMotion ? 0 : index * REWARD_STAGGER_SECONDS,
+              duration: reduceMotion ? 0 : FLIP_SECONDS,
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "relative",
+              width: cardWidth,
+              aspectRatio: CARD_ASPECT_RATIO,
+              transformStyle: "preserve-3d",
+              perspective: 1200,
+            }}
+          >
+            <div
+              data-exploration-card-transfiguration-side="concealed"
+              data-exploration-starter-card-transfiguration-side={
+                scope === "starter" ? "concealed" : undefined
+              }
+              aria-hidden={revealAfter}
+              style={{
+                position: "absolute",
+                inset: 0,
+                backfaceVisibility: "hidden",
+              }}
+            >
+              <CardBack
+                label={t("exploration-card-face-down")}
+                testId={`cumulus-exploration-${scope}-card-concealed-${mapping.entryId}`}
+              />
+            </div>
+            <div
+              data-exploration-card-transfiguration-side="revealed"
+              data-exploration-starter-card-transfiguration-side={
+                scope === "starter" ? "revealed" : undefined
+              }
+              style={{
+                position: "absolute",
+                inset: 0,
+                transform: "rotateY(180deg)",
+                backfaceVisibility: "hidden",
+              }}
+            >
+              <GameCard
+                model={mapping.after.model}
+                selection="transfigured"
+                testId={`cumulus-exploration-${scope}-card-after-${mapping.entryId}`}
+              />
+            </div>
+          </motion.div>
+        </div>
+      </GlassPanel>
+    </motion.div>
+  );
+}
+
+function CompoundCardPairPresentation({
+  before,
+  after,
+  index,
+  kind,
+  isDesktop,
+  reduceMotion,
+}: {
+  readonly before: ExplorationCardChoiceView;
+  readonly after: ExplorationCardChoiceView;
+  readonly index: number;
+  readonly kind: "keyword" | "copy";
+  readonly isDesktop: boolean;
+  readonly reduceMotion: boolean;
+}) {
+  const t = useMessages();
+  const cardWidth = isDesktop
+    ? DESKTOP_ESSENCE_CARD_WIDTH
+    : MOBILE_ESSENCE_CARD_WIDTH;
+  return (
+    <motion.div
+      data-exploration-compound-card-pair={kind}
+      data-source-entry-id={before.entryId}
+      data-source-card-id={before.model.cardId}
+      data-result-entry-id={after.entryId}
+      data-result-card-id={after.model.cardId}
+      role="group"
+      aria-label={t(
+        kind === "keyword"
+          ? "exploration-compound-fast-pair-accessible-name"
+          : "exploration-compound-copy-pair-accessible-name",
+        {
+          sourceCardName: before.model.displaySnapshot.name,
+          resultCardName: after.model.displaySnapshot.name,
+        },
+      )}
+      initial={{
+        opacity: reduceMotion ? 1 : 0,
+        y: reduceMotion ? 0 : token("--space-l"),
+      }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        delay: reduceMotion ? 0 : index * REWARD_STAGGER_SECONDS,
+        duration: reduceMotion ? 0 : motionTimeSeconds("--dur-slow"),
+        ease: DREAM_EASE,
+      }}
+      style={{ width: "fit-content", maxWidth: "100%" }}
+    >
+      <GlassPanel
+        radius="popover"
+        testId={`cumulus-exploration-compound-${kind}-pair-${String(index)}`}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: isDesktop ? token("--space-m") : token("--space-xs"),
+            padding: isDesktop ? token("--space-m") : token("--space-s"),
+          }}
+        >
+          <div
+            data-exploration-compound-card-face="before"
+            data-exploration-deck-entry-id={before.entryId}
+            data-card-id={before.model.cardId}
+            style={{ width: cardWidth, aspectRatio: CARD_ASPECT_RATIO }}
+          >
+            <GameCard model={before.model} />
+          </div>
+          <span
+            aria-hidden="true"
+            style={{
+              display: "grid",
+              placeItems: "center",
+              flexShrink: 0,
+              fontSize: isDesktop ? 30 : 24,
+            }}
+          >
+            <StandaloneGlyph glyph={GLYPHS.arrowRightFilled} color="white" />
+          </span>
+          <div
+            data-exploration-compound-card-face="after"
+            data-exploration-deck-entry-id={after.entryId}
+            data-card-id={after.model.cardId}
+            style={{ width: cardWidth, aspectRatio: CARD_ASPECT_RATIO }}
+          >
+            <GameCard
+              model={after.model}
+              selection={kind === "keyword" ? "changed" : "copied"}
+            />
+          </div>
+        </div>
+      </GlassPanel>
+    </motion.div>
+  );
+}
+
+function CardTypeChangePairPresentation({
+  change,
+  index,
+  phase,
+  isDesktop,
+  reduceMotion,
+}: {
+  readonly change: Extract<
+    ExplorationRewardView,
+    { readonly kind: "card-type-changes" }
+  >["changes"][number];
+  readonly index: number;
+  readonly phase: StarterCardTransfigurationPhase;
+  readonly isDesktop: boolean;
+  readonly reduceMotion: boolean;
+}) {
+  const t = useMessages();
+  const cardWidth = isDesktop
+    ? DESKTOP_ESSENCE_CARD_WIDTH
+    : MOBILE_ESSENCE_CARD_WIDTH;
+  const revealAfter = phase !== "original";
+  return (
+    <motion.div
+      data-exploration-card-type-change-pair=""
+      data-exploration-deck-entry-id={change.entryId}
+      data-card-id={change.cardId}
+      data-before-card-type={change.beforeCardType}
+      data-after-card-type={change.afterCardType}
+      data-before-type-change-predicate-id={
+        change.beforeTypeChange?.predicateId ?? "none"
+      }
+      data-after-type-change-predicate-id={change.afterTypeChange.predicateId}
+      role="group"
+      aria-label={t("exploration-card-type-change-pair-accessible-name", {
+        cardName: change.before.model.displaySnapshot.name,
+        beforeCardType: change.beforeCardType,
+        afterCardType: change.afterCardType,
+      })}
+      initial={{
+        opacity: reduceMotion ? 1 : 0,
+        y: reduceMotion ? 0 : token("--space-l"),
+      }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        delay: reduceMotion ? 0 : index * REWARD_STAGGER_SECONDS,
+        duration: reduceMotion ? 0 : motionTimeSeconds("--dur-slow"),
+        ease: DREAM_EASE,
+      }}
+      style={{ width: "fit-content", maxWidth: "100%" }}
+    >
+      <GlassPanel
+        radius="popover"
+        testId={`cumulus-exploration-card-type-change-${String(index)}`}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: isDesktop ? token("--space-m") : token("--space-xs"),
+            padding: isDesktop ? token("--space-m") : token("--space-s"),
+          }}
+        >
+          <div
+            data-exploration-card-type-change-face="before"
+            data-exploration-deck-entry-id={change.entryId}
+            data-card-id={change.cardId}
+            data-card-type={change.beforeCardType}
+            style={{ width: cardWidth, aspectRatio: CARD_ASPECT_RATIO }}
+          >
+            <GameCard
+              model={change.before.model}
+              testId={`cumulus-exploration-card-type-before-${change.entryId}`}
+            />
+          </div>
+          <span
+            data-exploration-card-type-change-arrow=""
+            aria-hidden="true"
+            style={{
+              display: "grid",
+              placeItems: "center",
+              flexShrink: 0,
+              fontSize: isDesktop ? 30 : 24,
+            }}
+          >
+            <StandaloneGlyph glyph={GLYPHS.arrowRightFilled} color="white" />
+          </span>
+          <motion.div
+            data-exploration-card-type-change-face="after"
+            data-exploration-deck-entry-id={change.entryId}
+            data-card-id={change.cardId}
+            data-card-type={change.afterCardType}
+            initial={false}
+            animate={{ rotateY: revealAfter ? 180 : 0 }}
+            transition={{
+              delay: reduceMotion ? 0 : index * REWARD_STAGGER_SECONDS,
+              duration: reduceMotion ? 0 : FLIP_SECONDS,
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "relative",
+              width: cardWidth,
+              aspectRatio: CARD_ASPECT_RATIO,
+              transformStyle: "preserve-3d",
+              perspective: 1200,
+            }}
+          >
+            <div
+              data-exploration-card-type-change-side="concealed"
+              aria-hidden={revealAfter}
+              style={{
+                position: "absolute",
+                inset: 0,
+                backfaceVisibility: "hidden",
+              }}
+            >
+              <CardBack
+                label={t("exploration-card-face-down")}
+                testId={`cumulus-exploration-card-type-concealed-${change.entryId}`}
+              />
+            </div>
+            <div
+              data-exploration-card-type-change-side="revealed"
+              style={{
+                position: "absolute",
+                inset: 0,
+                transform: "rotateY(180deg)",
+                backfaceVisibility: "hidden",
+              }}
+            >
+              <GameCard
+                model={change.after.model}
+                selection="changed"
+                testId={`cumulus-exploration-card-type-after-${change.entryId}`}
+              />
+            </div>
+          </motion.div>
+        </div>
+      </GlassPanel>
+    </motion.div>
+  );
+}
+
+function DreamsignReplacementPresentation({
+  removed,
+  gained,
+  index,
+  isDesktop,
+  reduceMotion,
+}: {
+  readonly removed: DreamsignData & { readonly id: string };
+  readonly gained: DreamsignData & { readonly id: string };
+  readonly index: number;
+  readonly isDesktop: boolean;
+  readonly reduceMotion: boolean;
+}) {
+  const t = useMessages();
+  const dreamsignSize = isDesktop
+    ? DESKTOP_REPLACEMENT_DREAMSIGN_SIZE
+    : MOBILE_REPLACEMENT_DREAMSIGN_SIZE;
+  return (
+    <motion.div
+      data-exploration-dreamsign-replacement=""
+      data-removed-dreamsign-id={removed.id}
+      data-gained-dreamsign-id={gained.id}
+      role="group"
+      aria-label={t("exploration-dreamsign-replacement-pair-accessible-name", {
+        removedDreamsignName: removed.name,
+        gainedDreamsignName: gained.name,
+      })}
+      initial={{
+        opacity: reduceMotion ? 1 : 0,
+        scale: reduceMotion ? 1 : 0.86,
+        y: reduceMotion ? 0 : token("--space-l"),
+      }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{
+        delay: reduceMotion ? 0 : index * REWARD_STAGGER_SECONDS,
+        duration: reduceMotion ? 0 : motionTimeSeconds("--dur-slow"),
+        ease: DREAM_EASE,
+      }}
+      style={{
+        width: "fit-content",
+        maxWidth: "100%",
+      }}
+    >
+      <GlassPanel
+        radius="popover"
+        testId={`cumulus-exploration-dreamsign-replacement-${String(index)}`}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: isDesktop ? token("--space-m") : token("--space-xs"),
+            padding: isDesktop ? token("--space-m") : token("--space-s"),
+          }}
+        >
+          <div
+            style={{
+              width: dreamsignSize,
+              minWidth: 0,
+              display: "grid",
+              justifyItems: "center",
+              gap: token("--space-xs"),
+            }}
+          >
+            <div
+              data-exploration-dreamsign-mutation-object="removed"
+              data-dreamsign-id={removed.id}
+              style={{ width: dreamsignSize, height: dreamsignSize }}
+            >
+              <Dreamsign
+                dreamsign={removed}
+                variant="revelation"
+                testid={`cumulus-exploration-dreamsign-mutation-removed-${removed.id}`}
+              />
+            </div>
+            <strong
+              aria-hidden="true"
+              style={{
+                width: "100%",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                textAlign: "center",
+                font: token("--t-caption"),
+                color: token("--text-on-glass"),
+              }}
+            >
+              {removed.name}
+            </strong>
+          </div>
+          <span
+            data-exploration-dreamsign-replacement-arrow=""
+            aria-hidden="true"
+            style={{
+              display: "grid",
+              placeItems: "center",
+              flexShrink: 0,
+              fontSize: isDesktop ? 30 : 24,
+            }}
+          >
+            <StandaloneGlyph glyph={GLYPHS.arrowRightFilled} color="white" />
+          </span>
+          <div
+            style={{
+              width: dreamsignSize,
+              minWidth: 0,
+              display: "grid",
+              justifyItems: "center",
+              gap: token("--space-xs"),
+            }}
+          >
+            <div
+              data-exploration-dreamsign-mutation-object="gained"
+              data-dreamsign-id={gained.id}
+              style={{ width: dreamsignSize, height: dreamsignSize }}
+            >
+              <Dreamsign
+                dreamsign={gained}
+                variant="revelation"
+                testid={`cumulus-exploration-dreamsign-mutation-gained-${gained.id}`}
+              />
+            </div>
+            <strong
+              aria-hidden="true"
+              style={{
+                width: "100%",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                textAlign: "center",
+                font: token("--t-caption"),
+                color: token("--text-on-glass"),
+              }}
+            >
+              {gained.name}
+            </strong>
+          </div>
+        </div>
+      </GlassPanel>
+    </motion.div>
+  );
+}
+
+function ExplorationDreamsignChoiceGroup({
+  heading,
+  role,
+  dreamsigns,
+  selectedIds,
+  isDesktop,
+  onChoose,
+}: {
+  readonly heading: string;
+  readonly role: "offered" | "exchange" | "purge" | "replacement";
+  readonly dreamsigns: readonly (DreamsignData & { readonly id: string })[];
+  readonly selectedIds: readonly string[];
+  readonly isDesktop: boolean;
+  readonly onChoose: (dreamsignId: string) => void;
+}) {
+  return (
+    <section
+      data-dreamsign-choice-role={role}
+      aria-label={heading}
+      style={{
+        display: "grid",
+        gap: token("--space-s"),
+        minWidth: 0,
+      }}
+    >
+      <strong
+        style={{
+          font: token("--t-caption"),
+          color: token("--text-on-glass"),
+          textAlign: "center",
+        }}
+      >
+        {heading}
+      </strong>
+      <div
+        role="group"
+        aria-label={heading}
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(auto-fit, minmax(${String(isDesktop ? DESKTOP_DREAMSIGN_CHOICE_SIZE : MOBILE_DREAMSIGN_CHOICE_SIZE)}px, 1fr))`,
+          gap: isDesktop ? token("--space-xl") : token("--space-m"),
+          placeItems: "center",
+          minWidth: 0,
+        }}
+      >
+        {dreamsigns.map((dreamsign) => {
+          const selected = selectedIds.includes(dreamsign.id);
+          return (
+            <div
+              key={dreamsign.id}
+              data-dreamsign-choice-id={dreamsign.id}
+              data-dreamsign-choice-selected={selected ? "true" : "false"}
+              style={{
+                width: isDesktop
+                  ? DESKTOP_DREAMSIGN_CHOICE_SIZE
+                  : MOBILE_DREAMSIGN_CHOICE_SIZE,
+                height: isDesktop
+                  ? DESKTOP_DREAMSIGN_CHOICE_SIZE
+                  : MOBILE_DREAMSIGN_CHOICE_SIZE,
+                padding: token("--space-xs"),
+                borderRadius: token("--radius-panel"),
+                background: selected
+                  ? token("--glass-on-glass-fill")
+                  : "transparent",
+                boxShadow: selected ? token("--glow-accent-soft") : "none",
+              }}
+            >
+              <Dreamsign
+                dreamsign={dreamsign}
+                variant="revelation"
+                testid={`cumulus-exploration-dreamsign-${role}-${dreamsign.id}`}
+                onPress={() => onChoose(dreamsign.id)}
+              />
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 function useCardTrajectory(
   targetRef: RefObject<HTMLDivElement | null>,
   cardId: string,
@@ -1418,6 +2610,9 @@ export function ExplorationSiteScreen({
   const rewardItemRefs = useRef(new Map<string, HTMLDivElement>());
   const cardCopyRefs = useRef(new Map<string, HTMLDivElement>());
   const transfigurationCardRef = useRef<HTMLDivElement>(null);
+  const starterCardTransfigurationPairsRef = useRef<HTMLElement>(null);
+  const cardReplacementPairsRef = useRef<HTMLElement>(null);
+  const dreamsignFlowRef = useRef<HTMLDivElement>(null);
   const completedRewardItemsRef = useRef(new Set<string>());
   const completedCardCopyItemsRef = useRef(new Set<string>());
   const [revealed, setRevealed] = useState(reduceMotion);
@@ -1432,24 +2627,40 @@ export function ExplorationSiteScreen({
     useState<CardTrajectory | null>(null);
   const [activeActionId, setActiveActionId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<readonly string[]>([]);
+  const [selectedOfferedDreamsignId, setSelectedOfferedDreamsignId] = useState<
+    string | null
+  >(null);
+  const [selectedPurgedDreamsignId, setSelectedPurgedDreamsignId] = useState<
+    string | null
+  >(null);
+  const [selectedDreamsignReplacementIds, setSelectedDreamsignReplacementIds] =
+    useState<readonly string[]>([]);
   const [purgeEntryId, setPurgeEntryId] = useState<string | null>(null);
   const [selectedSubtype, setSelectedSubtype] = useState<string | null>(null);
   const [selectedTransfigurationEntryId, setSelectedTransfigurationEntryId] =
     useState<string | null>(null);
   const [selectedTransfigurationFormType, setSelectedTransfigurationFormType] =
     useState<TransfigurationType | null>(null);
+  const [multiTransfigurationStep, setMultiTransfigurationStep] = useState<
+    number | null
+  >(null);
+  const [multiTransfigurationForms, setMultiTransfigurationForms] = useState<
+    Readonly<Record<string, TransfigurationType>>
+  >({});
   const [transfigurationConfirming, setTransfigurationConfirming] =
     useState(false);
-  const [rewardTrajectories, setRewardTrajectories] = useState<
-    ReadonlyMap<string, RewardTrajectory> | null
-  >(null);
+  const [rewardTrajectories, setRewardTrajectories] = useState<ReadonlyMap<
+    string,
+    RewardTrajectory
+  > | null>(null);
   const [cardCopiesPhase, setCardCopiesPhase] =
     useState<CardCopiesPhase>("original");
   const [purgeAndCopyPhase, setPurgeAndCopyPhase] =
     useState<PurgeAndCopyPhase>("purging");
-  const [cardCopyTrajectories, setCardCopyTrajectories] = useState<
-    ReadonlyMap<string, RewardTrajectory> | null
-  >(null);
+  const [cardCopyTrajectories, setCardCopyTrajectories] = useState<ReadonlyMap<
+    string,
+    RewardTrajectory
+  > | null>(null);
   const [essenceRewardPhase, setEssenceRewardPhase] = useState<
     "cards" | "announcement"
   >("cards");
@@ -1459,11 +2670,21 @@ export function ExplorationSiteScreen({
   const [cardPurgeRewardPhase, setCardPurgeRewardPhase] = useState<
     "purging" | "announcement"
   >("purging");
+  const [dreamsignMutationPhase, setDreamsignMutationPhase] =
+    useState<DreamsignMutationPhase>("purging");
+  const [starterCardMutationPhase, setStarterCardMutationPhase] =
+    useState<StarterCardMutationPhase>("purging");
+  const [cardReplacementReviewed, setCardReplacementReviewed] = useState(false);
+  const [starterCardTransfigurationPhase, setStarterCardTransfigurationPhase] =
+    useState<StarterCardTransfigurationPhase>("original");
+  const [
+    starterCardTransfigurationReviewed,
+    setStarterCardTransfigurationReviewed,
+  ] = useState(false);
   const [deckModificationPresented, setDeckModificationPresented] =
     useState(false);
   const [purgedCardsPresented, setPurgedCardsPresented] = useState(false);
-  const [transfigurationRevealed, setTransfigurationRevealed] =
-    useState(false);
+  const [transfigurationRevealed, setTransfigurationRevealed] = useState(false);
   const [transfigurationReturn, setTransfigurationReturn] =
     useState<RewardTrajectory | null>(null);
   const [fullArtDimensions, setFullArtDimensions] =
@@ -1485,8 +2706,9 @@ export function ExplorationSiteScreen({
   const objectReward = resolvedReward?.objects ?? null;
   const purgedRewardCards = objectReward?.purgedCards ?? [];
   const deckModification = resolvedReward?.deckModification ?? null;
-  const essenceReward =
-    effectReward?.kind === "essence" ? effectReward : null;
+  const essenceReward = effectReward?.kind === "essence" ? effectReward : null;
+  const directEssenceReward =
+    effectReward?.kind === "direct-essence" ? effectReward : null;
   const dreamsignPurgeReward =
     effectReward?.kind === "purged-dreamsign-essence" ? effectReward : null;
   const cardPurgeReward =
@@ -1509,25 +2731,22 @@ export function ExplorationSiteScreen({
           count: purgeAndCopyReward.count,
         }
       : null);
-  const cardCopyItems = useMemo(
-    () => {
-      if (cardCopiesReward === null) return [];
-      if (cardCopiesReward.kind === "card-copies") {
-        return [
-          { card: cardCopiesReward.source, role: "original" as const },
-          ...cardCopiesReward.cards.map((card) => ({
-            card,
-            role: "copy" as const,
-          })),
-        ];
-      }
-      return cardCopiesReward.pairs.flatMap((pair) => [
-        { card: pair.source, role: "original" as const },
-        { card: pair.copy, role: "copy" as const },
-      ]);
-    },
-    [cardCopiesReward],
-  );
+  const cardCopyItems = useMemo(() => {
+    if (cardCopiesReward === null) return [];
+    if (cardCopiesReward.kind === "card-copies") {
+      return [
+        { card: cardCopiesReward.source, role: "original" as const },
+        ...cardCopiesReward.cards.map((card) => ({
+          card,
+          role: "copy" as const,
+        })),
+      ];
+    }
+    return cardCopiesReward.pairs.flatMap((pair) => [
+      { card: pair.source, role: "original" as const },
+      { card: pair.copy, role: "copy" as const },
+    ]);
+  }, [cardCopiesReward]);
   const battleModifierReward =
     effectReward?.kind === "battle-modifier" ? effectReward : null;
   const smallerHandDiscountReward =
@@ -1538,6 +2757,64 @@ export function ExplorationSiteScreen({
     effectReward?.kind === "dream-avatar" ? effectReward : null;
   const siteOfferModifierReward =
     effectReward?.kind === "site-offer-modifier" ? effectReward : null;
+  const shopModifierReward =
+    effectReward?.kind === "shop-modifier" ? effectReward : null;
+  const siteInsertionReward =
+    effectReward?.kind === "site-insertion" ? effectReward : null;
+  const dreamsignMutationReward =
+    effectReward?.kind === "dreamsign-mutation" ? effectReward : null;
+  const nightmareDreamsignBundleReward =
+    effectReward?.kind === "nightmare-dreamsign-bundle" ? effectReward : null;
+  const starterCardMutationReward =
+    effectReward?.kind === "starter-card-mutation" ? effectReward : null;
+  const cardReplacementReward =
+    effectReward?.kind === "card-replacements" ? effectReward : null;
+  const compoundCardReplacementReward =
+    starterCardMutationReward?.mode === "replace"
+      ? starterCardMutationReward
+      : cardReplacementReward;
+  const starterCardTransfigurationReward =
+    effectReward?.kind === "starter-card-transfiguration" ? effectReward : null;
+  const multiCardTransfigurationReward =
+    effectReward?.kind === "multi-card-transfiguration" ? effectReward : null;
+  const compoundCardMutationReward =
+    effectReward?.kind === "compound-card-mutation" ? effectReward : null;
+  const compoundTransfigurationReward =
+    starterCardTransfigurationReward ?? multiCardTransfigurationReward;
+  const cardTypeChangesReward =
+    effectReward?.kind === "card-type-changes" ? effectReward : null;
+  const compoundCardChangeReward =
+    compoundTransfigurationReward ?? cardTypeChangesReward;
+  const compoundReviewReward =
+    compoundCardChangeReward ?? compoundCardMutationReward;
+  const compoundCardChangeCount =
+    compoundCardMutationReward !== null
+      ? compoundCardMutationReward.purged.length +
+        compoundCardMutationReward.transfigurations.length +
+        compoundCardMutationReward.keywordChanges.length +
+        compoundCardMutationReward.nightmares.length +
+        compoundCardMutationReward.copies.length
+      : compoundCardChangeReward?.kind === "card-type-changes"
+        ? compoundCardChangeReward.changes.length
+        : (compoundCardChangeReward?.transfigurations.length ?? 0);
+  const unpairedDreamsignGains = useMemo(() => {
+    if (dreamsignMutationReward === null) return [];
+    const replacementGainedIds = new Set(
+      dreamsignMutationReward.replacements.map((pair) => pair.gained.id),
+    );
+    return dreamsignMutationReward.gained.filter(
+      (dreamsign) => !replacementGainedIds.has(dreamsign.id),
+    );
+  }, [dreamsignMutationReward]);
+  const unpairedBundleDreamsignGains = useMemo(() => {
+    if (nightmareDreamsignBundleReward === null) return [];
+    const replacementGainedIds = new Set(
+      nightmareDreamsignBundleReward.replacements.map((pair) => pair.gained.id),
+    );
+    return nightmareDreamsignBundleReward.gained.filter(
+      (dreamsign) => !replacementGainedIds.has(dreamsign.id),
+    );
+  }, [nightmareDreamsignBundleReward]);
   const rewardItems = useMemo(() => rewardItemsFor(view.reward), [view.reward]);
   const purgeBeforeDeckModification =
     deckModification !== null && purgedRewardCards.length > 0;
@@ -1555,6 +2832,10 @@ export function ExplorationSiteScreen({
     resolvedReward.deckModification === null &&
     rewardItems.length === 0 &&
     purgedRewardCards.length === 0;
+  const emptyObjectOutcomeMessage =
+    resolvedReward?.semanticKind === "card-purge"
+      ? "exploration-no-cards-purged"
+      : "exploration-no-cards-taken";
   const rewardStageAnnouncement =
     purgedRewardCards.length === 0
       ? t("exploration-outcome-rewards-gained", {
@@ -1576,19 +2857,22 @@ export function ExplorationSiteScreen({
     fullArtDimensions !== null &&
     fullArtDimensions.height > fullArtDimensions.width;
   const expandedArtRect =
-    frameBreakGeometry !== null &&
-    portraitFullArt &&
-    fullArtDimensions !== null
+    frameBreakGeometry !== null && portraitFullArt && fullArtDimensions !== null
       ? containedArtRect(frameBreakGeometry.viewport, fullArtDimensions)
       : frameBreakGeometry?.viewport;
   useEffect(() => {
     if (view.resolvedActionId === null) return;
     setActiveActionId(null);
     setSelectedIds([]);
+    setSelectedOfferedDreamsignId(null);
+    setSelectedPurgedDreamsignId(null);
+    setSelectedDreamsignReplacementIds([]);
     setPurgeEntryId(null);
     setSelectedSubtype(null);
     setSelectedTransfigurationEntryId(null);
     setSelectedTransfigurationFormType(null);
+    setMultiTransfigurationStep(null);
+    setMultiTransfigurationForms({});
     setTransfigurationConfirming(false);
   }, [view.resolvedActionId]);
 
@@ -1604,10 +2888,33 @@ export function ExplorationSiteScreen({
     setEssenceRewardPhase("cards");
     setDreamsignPurgeRewardPhase("purging");
     setCardPurgeRewardPhase("purging");
+    setDreamsignMutationPhase(
+      reduceMotion || dreamsignMutationReward?.purged.length === 0
+        ? "gaining"
+        : "purging",
+    );
+    setStarterCardMutationPhase(
+      reduceMotion
+        ? "terminal"
+        : cardReplacementReward === null
+          ? "purging"
+          : "replacing",
+    );
+    setStarterCardTransfigurationPhase(reduceMotion ? "terminal" : "original");
     setDeckModificationPresented(false);
     setPurgedCardsPresented(false);
     setTransfigurationRevealed(false);
     setTransfigurationReturn(null);
+  }, [
+    cardReplacementReward,
+    dreamsignMutationReward?.purged.length,
+    reduceMotion,
+    rewardIdentity,
+  ]);
+
+  useLayoutEffect(() => {
+    setCardReplacementReviewed(false);
+    setStarterCardTransfigurationReviewed(false);
   }, [reduceMotion, rewardIdentity]);
 
   useLayoutEffect(() => {
@@ -1663,9 +2970,14 @@ export function ExplorationSiteScreen({
       if (activeAction !== null) {
         setActiveActionId(null);
         setSelectedIds([]);
+        setSelectedOfferedDreamsignId(null);
+        setSelectedPurgedDreamsignId(null);
+        setSelectedDreamsignReplacementIds([]);
         setPurgeEntryId(null);
         setSelectedTransfigurationEntryId(null);
         setSelectedTransfigurationFormType(null);
+        setMultiTransfigurationStep(null);
+        setMultiTransfigurationForms({});
         setTransfigurationConfirming(false);
         return;
       }
@@ -1680,7 +2992,14 @@ export function ExplorationSiteScreen({
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [activeAction, frameBreakGeometry, frameBreakPhase, reduceMotion, view.resolvedActionId, view.reward]);
+  }, [
+    activeAction,
+    frameBreakGeometry,
+    frameBreakPhase,
+    reduceMotion,
+    view.resolvedActionId,
+    view.reward,
+  ]);
 
   const startFrameBreak = (): void => {
     const geometry = measureFrameBreak(cardTargetRef.current);
@@ -1708,6 +3027,15 @@ export function ExplorationSiteScreen({
     exitCompletedRef.current = true;
     onExit();
   }, [onExit]);
+
+  useEffect(() => {
+    if (siteInsertionReward === null || frameBreakPhase !== "open") return;
+    const timer = window.setTimeout(
+      completeExit,
+      REWARD_READING_SECONDS * 1_000,
+    );
+    return () => window.clearTimeout(timer);
+  }, [completeExit, frameBreakPhase, siteInsertionReward]);
 
   useEffect(() => {
     if (
@@ -1745,25 +3073,28 @@ export function ExplorationSiteScreen({
     ) {
       return;
     }
-    const timer = window.setTimeout(() => {
-      const sourceRect =
-        transfigurationCardRef.current?.getBoundingClientRect();
-      if (
-        sourceRect === undefined ||
-        sourceRect.width <= 0 ||
-        sourceRect.height <= 0
-      ) {
-        completeExit();
-        return;
-      }
-      const source = snapshotRect(sourceRect);
-      const destination = sourceRectFor(source);
-      setTransfigurationReturn({
-        source,
-        target: destination.rect,
-        destinationKind: destination.kind,
-      });
-    }, (TRANSFIGURATION_FLIP_SECONDS + TRANSFIGURATION_READING_SECONDS) * 1_000);
+    const timer = window.setTimeout(
+      () => {
+        const sourceRect =
+          transfigurationCardRef.current?.getBoundingClientRect();
+        if (
+          sourceRect === undefined ||
+          sourceRect.width <= 0 ||
+          sourceRect.height <= 0
+        ) {
+          completeExit();
+          return;
+        }
+        const source = snapshotRect(sourceRect);
+        const destination = sourceRectFor(source);
+        setTransfigurationReturn({
+          source,
+          target: destination.rect,
+          destinationKind: destination.kind,
+        });
+      },
+      (TRANSFIGURATION_FLIP_SECONDS + TRANSFIGURATION_READING_SECONDS) * 1_000,
+    );
     return () => window.clearTimeout(timer);
   }, [
     completeExit,
@@ -1909,6 +3240,15 @@ export function ExplorationSiteScreen({
   ]);
 
   useEffect(() => {
+    if (directEssenceReward === null || frameBreakPhase !== "open") return;
+    const timer = window.setTimeout(
+      completeExit,
+      RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
+    );
+    return () => window.clearTimeout(timer);
+  }, [completeExit, directEssenceReward, frameBreakPhase]);
+
+  useEffect(() => {
     if (
       essenceReward === null ||
       frameBreakPhase !== "open" ||
@@ -1935,12 +3275,7 @@ export function ExplorationSiteScreen({
       RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
     );
     return () => window.clearTimeout(timer);
-  }, [
-    completeExit,
-    essenceReward,
-    essenceRewardPhase,
-    frameBreakPhase,
-  ]);
+  }, [completeExit, essenceReward, essenceRewardPhase, frameBreakPhase]);
 
   useEffect(() => {
     if (
@@ -1964,6 +3299,219 @@ export function ExplorationSiteScreen({
 
   useEffect(() => {
     if (
+      dreamsignMutationReward === null ||
+      dreamsignMutationReward.purged.length === 0 ||
+      frameBreakPhase !== "open" ||
+      dreamsignMutationPhase !== "purging"
+    ) {
+      return;
+    }
+    const timer = window.setTimeout(
+      () => setDreamsignMutationPhase("gaining"),
+      reduceMotion ? 0 : DREAMSIGN_PURGE_SECONDS * 1_000,
+    );
+    return () => window.clearTimeout(timer);
+  }, [
+    dreamsignMutationPhase,
+    dreamsignMutationReward,
+    frameBreakPhase,
+    reduceMotion,
+  ]);
+
+  useEffect(() => {
+    if (
+      dreamsignMutationReward === null ||
+      frameBreakPhase !== "open" ||
+      dreamsignMutationPhase !== "gaining"
+    ) {
+      return;
+    }
+    const timer = window.setTimeout(
+      completeExit,
+      REWARD_READING_SECONDS * 1_000,
+    );
+    return () => window.clearTimeout(timer);
+  }, [
+    completeExit,
+    dreamsignMutationPhase,
+    dreamsignMutationReward,
+    frameBreakPhase,
+  ]);
+
+  useEffect(() => {
+    if (nightmareDreamsignBundleReward === null || frameBreakPhase !== "open") {
+      return;
+    }
+    const timer = window.setTimeout(
+      completeExit,
+      REWARD_READING_SECONDS * 1_000,
+    );
+    return () => window.clearTimeout(timer);
+  }, [completeExit, frameBreakPhase, nightmareDreamsignBundleReward]);
+
+  useEffect(() => {
+    if (
+      starterCardMutationReward === null ||
+      frameBreakPhase !== "open" ||
+      starterCardMutationPhase !== "purging"
+    ) {
+      return;
+    }
+    const timer = window.setTimeout(
+      () =>
+        setStarterCardMutationPhase(
+          starterCardMutationReward.replacements.length > 0
+            ? "replacing"
+            : "terminal",
+        ),
+      reduceMotion ? 0 : REWARD_READING_SECONDS * 1_000,
+    );
+    return () => window.clearTimeout(timer);
+  }, [
+    frameBreakPhase,
+    reduceMotion,
+    starterCardMutationPhase,
+    starterCardMutationReward,
+  ]);
+
+  useEffect(() => {
+    if (
+      compoundReviewReward === null ||
+      frameBreakPhase !== "open" ||
+      starterCardTransfigurationPhase !== "original"
+    ) {
+      return;
+    }
+    const timer = window.setTimeout(
+      () => setStarterCardTransfigurationPhase("transfigured"),
+      reduceMotion ? 0 : TRANSFIGURATION_ORIGINAL_SECONDS * 1_000,
+    );
+    return () => window.clearTimeout(timer);
+  }, [
+    frameBreakPhase,
+    reduceMotion,
+    starterCardTransfigurationPhase,
+    compoundReviewReward,
+  ]);
+
+  useLayoutEffect(() => {
+    if (compoundReviewReward === null || frameBreakPhase !== "open") {
+      return;
+    }
+    const animationFrame = window.requestAnimationFrame(() => {
+      const pairs = starterCardTransfigurationPairsRef.current;
+      if (pairs === null) return;
+      setStarterCardTransfigurationReviewed(
+        pairs.scrollHeight <= pairs.clientHeight + 1,
+      );
+    });
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [frameBreakPhase, compoundReviewReward, starterCardTransfigurationPhase]);
+
+  useEffect(() => {
+    if (
+      compoundReviewReward === null ||
+      frameBreakPhase !== "open" ||
+      starterCardTransfigurationPhase === "original" ||
+      !starterCardTransfigurationReviewed
+    ) {
+      return;
+    }
+    const finalStagger =
+      Math.max(0, compoundCardChangeCount - 1) * REWARD_STAGGER_SECONDS;
+    const timer = window.setTimeout(
+      completeExit,
+      (reduceMotion
+        ? REWARD_READING_SECONDS
+        : Math.min(finalStagger, REWARD_STAGGER_SECONDS * 3) +
+          FLIP_SECONDS +
+          REWARD_READING_SECONDS) * 1_000,
+    );
+    return () => window.clearTimeout(timer);
+  }, [
+    completeExit,
+    frameBreakPhase,
+    reduceMotion,
+    starterCardTransfigurationReviewed,
+    starterCardTransfigurationPhase,
+    compoundCardChangeCount,
+    compoundReviewReward,
+  ]);
+
+  useEffect(() => {
+    if (
+      starterCardMutationReward === null ||
+      frameBreakPhase !== "open" ||
+      starterCardMutationPhase === "purging" ||
+      starterCardMutationReward.replacements.length > 0
+    ) {
+      return;
+    }
+    const timer = window.setTimeout(
+      completeExit,
+      REWARD_READING_SECONDS * 1_000,
+    );
+    return () => window.clearTimeout(timer);
+  }, [
+    completeExit,
+    frameBreakPhase,
+    starterCardMutationPhase,
+    starterCardMutationReward,
+  ]);
+
+  useLayoutEffect(() => {
+    if (
+      compoundCardReplacementReward === null ||
+      frameBreakPhase !== "open" ||
+      starterCardMutationPhase === "purging"
+    ) {
+      return;
+    }
+    const animationFrame = window.requestAnimationFrame(() => {
+      const pairs = cardReplacementPairsRef.current;
+      if (pairs === null) return;
+      setCardReplacementReviewed(pairs.scrollHeight <= pairs.clientHeight + 1);
+    });
+    return () => window.cancelAnimationFrame(animationFrame);
+  }, [
+    compoundCardReplacementReward,
+    frameBreakPhase,
+    starterCardMutationPhase,
+  ]);
+
+  useEffect(() => {
+    if (
+      compoundCardReplacementReward === null ||
+      frameBreakPhase !== "open" ||
+      starterCardMutationPhase === "purging" ||
+      !cardReplacementReviewed
+    ) {
+      return;
+    }
+    const finalStagger =
+      Math.max(0, compoundCardReplacementReward.replacements.length - 1) *
+      REWARD_STAGGER_SECONDS;
+    const timer = window.setTimeout(
+      completeExit,
+      (reduceMotion
+        ? REWARD_READING_SECONDS *
+          compoundCardReplacementReward.replacements.length
+        : finalStagger +
+          REWARD_READING_SECONDS *
+            compoundCardReplacementReward.replacements.length) * 1_000,
+    );
+    return () => window.clearTimeout(timer);
+  }, [
+    cardReplacementReviewed,
+    completeExit,
+    compoundCardReplacementReward,
+    frameBreakPhase,
+    reduceMotion,
+    starterCardMutationPhase,
+  ]);
+
+  useEffect(() => {
+    if (
       cardPurgeReward === null ||
       frameBreakPhase !== "open" ||
       cardPurgeRewardPhase !== "announcement"
@@ -1975,12 +3523,7 @@ export function ExplorationSiteScreen({
       RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS,
     );
     return () => window.clearTimeout(timer);
-  }, [
-    cardPurgeReward,
-    cardPurgeRewardPhase,
-    completeExit,
-    frameBreakPhase,
-  ]);
+  }, [cardPurgeReward, cardPurgeRewardPhase, completeExit, frameBreakPhase]);
 
   useEffect(() => {
     if (
@@ -1989,6 +3532,7 @@ export function ExplorationSiteScreen({
         smallerHandDiscountReward === null &&
         dreamAvatarReward === null &&
         siteOfferModifierReward === null &&
+        shopModifierReward === null &&
         !emptyObjectOutcome)
     ) {
       return;
@@ -2005,6 +3549,7 @@ export function ExplorationSiteScreen({
     emptyObjectOutcome,
     frameBreakPhase,
     siteOfferModifierReward,
+    shopModifierReward,
     smallerHandDiscountReward,
   ]);
 
@@ -2191,14 +3736,36 @@ export function ExplorationSiteScreen({
     }
     setActiveActionId(action.id);
     setSelectedIds([]);
+    setSelectedOfferedDreamsignId(null);
+    setSelectedPurgedDreamsignId(null);
+    setSelectedDreamsignReplacementIds([]);
     setPurgeEntryId(null);
     setSelectedSubtype(null);
     setSelectedTransfigurationEntryId(null);
     setSelectedTransfigurationFormType(null);
+    setMultiTransfigurationStep(null);
+    setMultiTransfigurationForms({});
     setTransfigurationConfirming(false);
   };
 
   const toggleCard = (entryId: string): void => {
+    if (activeAction?.followup.kind === "multi-card-transfiguration") {
+      if (multiTransfigurationStep !== null) return;
+      const followup = activeAction.followup;
+      if (selectedIds.includes(entryId)) {
+        setSelectedIds((current) =>
+          current.filter((candidate) => candidate !== entryId),
+        );
+        setMultiTransfigurationForms((forms) => {
+          const remaining = { ...forms };
+          delete remaining[entryId];
+          return remaining;
+        });
+      } else if (selectedIds.length < followup.count) {
+        setSelectedIds((current) => [...current, entryId]);
+      }
+      return;
+    }
     if (activeAction?.followup.kind !== "cards") return;
     const followup = activeAction.followup;
     if (followup.mode === "purge-and-copy") {
@@ -2235,8 +3802,22 @@ export function ExplorationSiteScreen({
         onResolve(activeAction.id, { purgeEntryId, copyEntryId });
         return;
       }
-      if (selectedIds.length < followup.min || selectedIds.length > followup.max) return;
+      if (
+        selectedIds.length < followup.min ||
+        selectedIds.length > followup.max
+      )
+        return;
       onResolve(activeAction.id, { [followup.selectionKey]: selectedIds });
+      return;
+    }
+    if (followup.kind === "multi-card-transfiguration") {
+      if (
+        multiTransfigurationStep !== null ||
+        selectedIds.length !== followup.count
+      ) {
+        return;
+      }
+      setMultiTransfigurationStep(0);
       return;
     }
     if (followup.kind === "subtypes") {
@@ -2253,34 +3834,188 @@ export function ExplorationSiteScreen({
     });
   };
 
+  const dreamsignFlow =
+    activeAction?.followup.kind === "dreamsign-flow"
+      ? activeAction.followup
+      : null;
+  const dreamsignFlowStep =
+    dreamsignFlow?.mode === "gain-offered"
+      ? selectedOfferedDreamsignId === null
+        ? "offered"
+        : "replacement"
+      : dreamsignFlow?.mode === "purge-and-gain-random"
+        ? selectedPurgedDreamsignId === null
+          ? "purge"
+          : "overflow"
+        : dreamsignFlow?.mode === "replace-with-offered"
+          ? "exchange"
+          : null;
+
+  useEffect(() => {
+    if (dreamsignFlowStep === null) return;
+    const frame = window.requestAnimationFrame(() => {
+      const role =
+        dreamsignFlowStep === "replacement" || dreamsignFlowStep === "overflow"
+          ? "replacement"
+          : dreamsignFlowStep;
+      dreamsignFlowRef.current
+        ?.querySelector<HTMLElement>(
+          `[data-dreamsign-choice-role="${role}"] [role="button"]`,
+        )
+        ?.focus();
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [dreamsignFlowStep]);
+
+  const chooseOfferedDreamsign = (dreamsignId: string): void => {
+    if (activeAction === null || dreamsignFlow === null) return;
+    if (
+      dreamsignFlow.mode === "gain-offered" &&
+      dreamsignFlow.requiredOverflowReplacementCount === 0
+    ) {
+      onResolve(activeAction.id, { offeredDreamsignId: dreamsignId });
+      return;
+    }
+    setSelectedOfferedDreamsignId((current) =>
+      current === dreamsignId ? null : dreamsignId,
+    );
+  };
+
+  const chooseHeldDreamsign = (dreamsignId: string): void => {
+    if (activeAction === null || dreamsignFlow === null) return;
+    if (
+      dreamsignFlow.mode === "purge-and-gain-random" &&
+      selectedPurgedDreamsignId === null
+    ) {
+      if (dreamsignFlow.requiredOverflowReplacementCount === 0) {
+        onResolve(activeAction.id, {
+          purgedDreamsignId: dreamsignId,
+          overflowReplacementDreamsignIds: [],
+        });
+        return;
+      }
+      setSelectedPurgedDreamsignId(dreamsignId);
+      setSelectedDreamsignReplacementIds([]);
+      return;
+    }
+    const required =
+      dreamsignFlow.mode === "replace-with-offered"
+        ? 1
+        : dreamsignFlow.requiredOverflowReplacementCount;
+    setSelectedDreamsignReplacementIds((current) => {
+      if (current.includes(dreamsignId)) {
+        return current.filter((candidate) => candidate !== dreamsignId);
+      }
+      if (current.length >= required) return current;
+      return [...current, dreamsignId];
+    });
+  };
+
+  const commitDreamsignFlow = (): void => {
+    if (activeAction === null || dreamsignFlow === null) return;
+    if (
+      dreamsignFlow.mode === "gain-offered" ||
+      dreamsignFlow.mode === "replace-with-offered"
+    ) {
+      const replacedDreamsignId = selectedDreamsignReplacementIds[0];
+      if (
+        selectedOfferedDreamsignId === null ||
+        (dreamsignFlow.mode === "replace-with-offered" &&
+          replacedDreamsignId === undefined) ||
+        (dreamsignFlow.mode === "gain-offered" &&
+          dreamsignFlow.requiredOverflowReplacementCount > 0 &&
+          replacedDreamsignId === undefined)
+      ) {
+        return;
+      }
+      onResolve(activeAction.id, {
+        offeredDreamsignId: selectedOfferedDreamsignId,
+        ...(replacedDreamsignId === undefined ? {} : { replacedDreamsignId }),
+      });
+      return;
+    }
+    if (
+      selectedPurgedDreamsignId === null ||
+      selectedDreamsignReplacementIds.length !==
+        dreamsignFlow.requiredOverflowReplacementCount
+    ) {
+      return;
+    }
+    onResolve(activeAction.id, {
+      purgedDreamsignId: selectedPurgedDreamsignId,
+      overflowReplacementDreamsignIds: selectedDreamsignReplacementIds,
+    });
+  };
+
   const canCommitFollowup = (() => {
     const followup = activeAction?.followup;
     if (followup === undefined || followup.kind === "none") return false;
     if (followup.kind === "transfiguration") return false;
+    if (followup.kind === "multi-card-transfiguration") {
+      return (
+        multiTransfigurationStep === null &&
+        selectedIds.length === followup.count
+      );
+    }
     if (followup.kind === "cards") {
       return followup.mode === "purge-and-copy"
         ? purgeEntryId !== null && selectedIds.length === 1
-        : selectedIds.length >= followup.min && selectedIds.length <= followup.max;
+        : selectedIds.length >= followup.min &&
+            selectedIds.length <= followup.max;
     }
     if (followup.kind === "packs") return false;
     if (followup.kind === "subtypes") return selectedSubtype !== null;
+    if (followup.kind === "dreamsign-flow") {
+      if (followup.mode === "replace-with-offered") {
+        return (
+          selectedOfferedDreamsignId !== null &&
+          selectedDreamsignReplacementIds.length === 1
+        );
+      }
+      if (followup.mode === "gain-offered") {
+        return (
+          selectedOfferedDreamsignId !== null &&
+          selectedDreamsignReplacementIds.length ===
+            followup.requiredOverflowReplacementCount
+        );
+      }
+      return (
+        selectedPurgedDreamsignId !== null &&
+        selectedDreamsignReplacementIds.length ===
+          followup.requiredOverflowReplacementCount
+      );
+    }
     return false;
   })();
   const dreamsignChoiceColumns =
     activeAction?.followup.kind === "dreamsigns"
       ? Math.min(4, Math.max(1, activeAction.followup.dreamsigns.length))
-      : 0;
+      : activeAction?.followup.kind === "dreamsign-flow"
+        ? Math.min(
+            4,
+            Math.max(
+              1,
+              activeAction.followup.offered.length,
+              activeAction.followup.held.length,
+            ),
+          )
+        : 0;
   const centeredFollowupWidth =
     activeAction?.followup.kind === "packs"
       ? "min(1280px, calc(100vw - 64px))"
-      : activeAction?.followup.kind === "cards" &&
-          activeAction.followup.selectionKey === "cardIds"
-        ? "min(1120px, calc(100vw - 64px))"
-        : activeAction?.followup.kind === "dreamsigns"
-          ? `min(max(420px, calc(${String(dreamsignChoiceColumns)} * ${String(DESKTOP_DREAMSIGN_CHOICE_SIZE)}px + ${String(dreamsignChoiceColumns - 1)} * ${token("--space-3xl")} + 2 * ${token("--space-2xl")})), calc(100vw - 64px))`
-          : activeAction?.followup.kind === "dreamAvatars"
-            ? "min(960px, calc(100vw - 64px))"
-            : null;
+      : activeAction?.followup.kind === "site-types"
+        ? "min(720px, calc(100vw - 64px))"
+        : activeAction?.followup.kind === "cards" &&
+            activeAction.followup.selectionKey === "cardIds"
+          ? "min(1120px, calc(100vw - 64px))"
+          : activeAction?.followup.kind === "multi-card-transfiguration"
+            ? "min(1120px, calc(100vw - 64px))"
+            : activeAction?.followup.kind === "dreamsigns" ||
+                activeAction?.followup.kind === "dreamsign-flow"
+              ? `min(max(420px, calc(${String(dreamsignChoiceColumns)} * ${String(DESKTOP_DREAMSIGN_CHOICE_SIZE)}px + ${String(dreamsignChoiceColumns - 1)} * ${token("--space-3xl")} + 2 * ${token("--space-2xl")})), calc(100vw - 64px))`
+              : activeAction?.followup.kind === "dreamAvatars"
+                ? "min(960px, calc(100vw - 64px))"
+                : null;
 
   return (
     <GuideGallerySiteLayout
@@ -2327,9 +4062,7 @@ export function ExplorationSiteScreen({
               style={{
                 position: "relative",
                 width:
-                  layout === "desktop"
-                    ? DESKTOP_CARD_WIDTH
-                    : MOBILE_CARD_WIDTH,
+                  layout === "desktop" ? DESKTOP_CARD_WIDTH : MOBILE_CARD_WIDTH,
                 aspectRatio: CARD_ASPECT_RATIO,
               }}
             >
@@ -2400,74 +4133,74 @@ export function ExplorationSiteScreen({
         !revealed &&
         returnTrajectory === null &&
         trajectory !== null && (
-        <motion.div
-          data-exploration-card-travel=""
-          data-card-id={view.card.cardId}
-          data-exploration-source={trajectory.sourceKind}
-          initial={{
-            x: trajectory.source.left,
-            y: trajectory.source.top,
-            width: trajectory.source.width,
-            height: trajectory.source.height,
-          }}
-          animate={{
-            x: trajectory.target.left,
-            y: trajectory.target.top,
-            width: trajectory.target.width,
-            height: trajectory.target.height,
-          }}
-          transition={{
-            duration: TRAVEL_SECONDS,
-            ease: DREAM_EASE,
-          }}
-          onAnimationComplete={() => setRevealed(true)}
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            zIndex: token("--layer-reveal"),
-            pointerEvents: "none",
-            perspective: 1200,
-          }}
-        >
           <motion.div
-            data-exploration-card-flip=""
-            initial={{ rotateY: 0 }}
-            animate={{ rotateY: 180 }}
+            data-exploration-card-travel=""
+            data-card-id={view.card.cardId}
+            data-exploration-source={trajectory.sourceKind}
+            initial={{
+              x: trajectory.source.left,
+              y: trajectory.source.top,
+              width: trajectory.source.width,
+              height: trajectory.source.height,
+            }}
+            animate={{
+              x: trajectory.target.left,
+              y: trajectory.target.top,
+              width: trajectory.target.width,
+              height: trajectory.target.height,
+            }}
             transition={{
-              delay: FLIP_DELAY_SECONDS,
-              duration: FLIP_SECONDS,
+              duration: TRAVEL_SECONDS,
               ease: DREAM_EASE,
             }}
+            onAnimationComplete={() => setRevealed(true)}
             style={{
-              position: "relative",
-              width: "100%",
-              height: "100%",
-              transformStyle: "preserve-3d",
+              position: "fixed",
+              top: 0,
+              left: 0,
+              zIndex: token("--layer-reveal"),
+              pointerEvents: "none",
+              perspective: 1200,
             }}
           >
-            <div
+            <motion.div
+              data-exploration-card-flip=""
+              initial={{ rotateY: 0 }}
+              animate={{ rotateY: 180 }}
+              transition={{
+                delay: FLIP_DELAY_SECONDS,
+                duration: FLIP_SECONDS,
+                ease: DREAM_EASE,
+              }}
               style={{
-                position: "absolute",
-                inset: 0,
-                backfaceVisibility: "hidden",
+                position: "relative",
+                width: "100%",
+                height: "100%",
+                transformStyle: "preserve-3d",
               }}
             >
-              <CardBack label={t("exploration-card-face-down")} />
-            </div>
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                transform: "rotateY(180deg)",
-                backfaceVisibility: "hidden",
-              }}
-            >
-              <GameCard model={view.card} />
-            </div>
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  backfaceVisibility: "hidden",
+                }}
+              >
+                <CardBack label={t("exploration-card-face-down")} />
+              </div>
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  transform: "rotateY(180deg)",
+                  backfaceVisibility: "hidden",
+                }}
+              >
+                <GameCard model={view.card} />
+              </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
+        )}
       {!reduceMotion && returnTrajectory !== null && (
         <motion.div
           data-exploration-card-return=""
@@ -2851,51 +4584,49 @@ export function ExplorationSiteScreen({
         frameBreakPhase === "open" &&
         transfigurationReward !== null &&
         transfigurationReturn !== null && (
-        <motion.div
-          data-exploration-transfiguration-return=""
-          data-exploration-deck-entry-id={transfigurationReward.entryId}
-          data-exploration-destination={
-            transfigurationReturn.destinationKind
-          }
-          initial={{
-            x: transfigurationReturn.source.left,
-            y: transfigurationReturn.source.top,
-            scale: 1,
-            opacity: 1,
-          }}
-          animate={{
-            x: transfigurationReturn.target.left,
-            y: transfigurationReturn.target.top,
-            scale: Math.min(
-              transfigurationReturn.target.width /
-                transfigurationReturn.source.width,
-              transfigurationReturn.target.height /
-                transfigurationReturn.source.height,
-            ),
-            opacity: 1,
-          }}
-          transition={{
-            duration: REWARD_TRAVEL_SECONDS,
-            ease: DREAM_EASE,
-          }}
-          onAnimationComplete={completeExit}
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            zIndex: FRAME_BREAK_EXIT_LAYER + 2,
-            width: transfigurationReturn.source.width,
-            height: transfigurationReturn.source.height,
-            transformOrigin: "top left",
-            pointerEvents: "none",
-          }}
-        >
-          <GameCard
-            model={transfigurationReward.after}
-            selection="transfigured"
-          />
-        </motion.div>
-      )}
+          <motion.div
+            data-exploration-transfiguration-return=""
+            data-exploration-deck-entry-id={transfigurationReward.entryId}
+            data-exploration-destination={transfigurationReturn.destinationKind}
+            initial={{
+              x: transfigurationReturn.source.left,
+              y: transfigurationReturn.source.top,
+              scale: 1,
+              opacity: 1,
+            }}
+            animate={{
+              x: transfigurationReturn.target.left,
+              y: transfigurationReturn.target.top,
+              scale: Math.min(
+                transfigurationReturn.target.width /
+                  transfigurationReturn.source.width,
+                transfigurationReturn.target.height /
+                  transfigurationReturn.source.height,
+              ),
+              opacity: 1,
+            }}
+            transition={{
+              duration: REWARD_TRAVEL_SECONDS,
+              ease: DREAM_EASE,
+            }}
+            onAnimationComplete={completeExit}
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              zIndex: FRAME_BREAK_EXIT_LAYER + 2,
+              width: transfigurationReturn.source.width,
+              height: transfigurationReturn.source.height,
+              transformOrigin: "top left",
+              pointerEvents: "none",
+            }}
+          >
+            <GameCard
+              model={transfigurationReward.after}
+              selection="transfigured"
+            />
+          </motion.div>
+        )}
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&
         activeAction === null &&
@@ -2907,9 +4638,7 @@ export function ExplorationSiteScreen({
             data-exploration-purged-entry-id={
               purgeAndCopyReward.purgedCard.entryId
             }
-            data-exploration-source-entry-id={
-              purgeAndCopyReward.sourceEntryId
-            }
+            data-exploration-source-entry-id={purgeAndCopyReward.sourceEntryId}
             data-exploration-copy-count={purgeAndCopyReward.count}
             role="status"
             aria-label={t("exploration-purge-before-copy", {
@@ -3142,8 +4871,12 @@ export function ExplorationSiteScreen({
           <section
             data-exploration-outcome="battle-modifier"
             data-exploration-battle-modifier={battleModifierReward.modifier}
-            data-exploration-battle-modifier-amount={battleModifierReward.amount}
-            data-exploration-battles-remaining={battleModifierReward.battlesRemaining}
+            data-exploration-battle-modifier-amount={
+              battleModifierReward.amount
+            }
+            data-exploration-battles-remaining={
+              battleModifierReward.battlesRemaining
+            }
             role="status"
             aria-label={t("exploration-next-battle-modifier", {
               amount: battleModifierReward.amount,
@@ -3265,7 +4998,12 @@ export function ExplorationSiteScreen({
               <strong style={{ font: token("--t-title") }}>
                 {dreamAvatarReward.current.name}
               </strong>
-              <span style={{ font: token("--t-body"), color: token("--text-secondary") }}>
+              <span
+                style={{
+                  font: token("--t-body"),
+                  color: token("--text-secondary"),
+                }}
+              >
                 {dreamAvatarReward.current.title}
               </span>
             </div>
@@ -3274,12 +5012,81 @@ export function ExplorationSiteScreen({
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&
         activeAction === null &&
+        shopModifierReward !== null && (
+          <section
+            data-exploration-outcome="shop-modifier"
+            data-exploration-shop-modifier={shopModifierReward.modifier}
+            data-exploration-source-site-id={shopModifierReward.sourceSiteId}
+            data-exploration-source-action-id={
+              shopModifierReward.sourceActionId
+            }
+            data-exploration-free-purchase-count={
+              shopModifierReward.freePurchaseCount
+            }
+            data-exploration-essence-before={shopModifierReward.essenceBefore}
+            data-exploration-essence-spent={shopModifierReward.essenceSpent}
+            data-exploration-essence-after={shopModifierReward.essenceAfter}
+            role="status"
+            aria-label={
+              shopModifierReward.modifier === "free-next-shop"
+                ? t("exploration-free-next-shop-accessible-name")
+                : t("exploration-free-purchases-accessible-name", {
+                    freePurchaseCount:
+                      shopModifierReward.freePurchaseCount ?? 0,
+                    essenceBefore: shopModifierReward.essenceBefore ?? 0,
+                    essenceSpent: shopModifierReward.essenceSpent ?? 0,
+                    essenceAfter: shopModifierReward.essenceAfter ?? 0,
+                  })
+            }
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: FRAME_BREAK_EXIT_LAYER + 1,
+              display: "grid",
+              placeItems: "center",
+              pointerEvents: "none",
+            }}
+          >
+            <RadialAnnouncement
+              headline={
+                shopModifierReward.modifier === "free-next-shop"
+                  ? t("exploration-free-next-shop-title")
+                  : t("exploration-free-purchases-title", {
+                      freePurchaseCount:
+                        shopModifierReward.freePurchaseCount ?? 0,
+                    })
+              }
+              detail={
+                shopModifierReward.modifier === "free-next-shop"
+                  ? t("exploration-free-next-shop-detail")
+                  : t("exploration-free-purchases-detail", {
+                      essenceBefore: shopModifierReward.essenceBefore ?? 0,
+                      essenceSpent: shopModifierReward.essenceSpent ?? 0,
+                      essenceAfter: shopModifierReward.essenceAfter ?? 0,
+                    })
+              }
+              tone="reward"
+              size={isDesktop ? "compact" : "mini"}
+              duration="extended"
+              announcementId={`exploration-shop-modifier:${shopModifierReward.sourceActionId}`}
+            />
+          </section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
         siteOfferModifierReward !== null && (
           <section
             data-exploration-outcome="site-offer-modifier"
-            data-exploration-site-offer-modifier={siteOfferModifierReward.modifier}
-            data-exploration-source-site-id={siteOfferModifierReward.sourceSiteId}
-            data-exploration-source-action-id={siteOfferModifierReward.sourceActionId}
+            data-exploration-site-offer-modifier={
+              siteOfferModifierReward.modifier
+            }
+            data-exploration-source-site-id={
+              siteOfferModifierReward.sourceSiteId
+            }
+            data-exploration-source-action-id={
+              siteOfferModifierReward.sourceActionId
+            }
             role="status"
             aria-label={t("exploration-site-offer-modifier-accessible-name")}
             style={{
@@ -3304,13 +5111,78 @@ export function ExplorationSiteScreen({
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&
         activeAction === null &&
+        siteInsertionReward !== null && (
+          <motion.section
+            data-exploration-outcome="site-insertion"
+            data-exploration-site-insertion-phase={
+              reduceMotion ? "terminal" : "scale-fade"
+            }
+            data-exploration-site-insertion-source={
+              siteInsertionReward.sourceKind
+            }
+            data-exploration-site-id={siteInsertionReward.model.site.id}
+            data-exploration-site-type={siteInsertionReward.model.site.type}
+            data-exploration-target-node-id={siteInsertionReward.targetNodeId}
+            data-exploration-insertion-index={
+              siteInsertionReward.insertionIndex
+            }
+            role="status"
+            aria-live="polite"
+            aria-label={t("exploration-site-insertion-accessible-name", {
+              siteType: siteInsertionReward.model.label,
+            })}
+            initial={
+              reduceMotion
+                ? { opacity: 1, scale: 1 }
+                : { opacity: 0, scale: 0.72 }
+            }
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: reduceMotion ? 0 : motionTimeSeconds("--dur-slow"),
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "fixed",
+              inset: `${safeAreaInsetAtLeast("top", "--space-xl")} ${token("--space-m")} ${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE}`,
+              zIndex: FRAME_BREAK_EXIT_LAYER + 1,
+              display: "grid",
+              placeContent: "center",
+              justifyItems: "center",
+              gap: token("--space-l"),
+              pointerEvents: "none",
+            }}
+          >
+            <RadialAnnouncement
+              headline={t("exploration-site-insertion-title")}
+              detail={siteInsertionReward.model.label}
+              tone="reward"
+              size={isDesktop ? "compact" : "mini"}
+              duration="extended"
+              announcementId={`exploration-site-insertion:${siteInsertionReward.model.site.id}`}
+            />
+            <div
+              data-exploration-site-insertion-node=""
+              style={{ position: "relative", width: 220, height: 220 }}
+            >
+              <SiteNode
+                model={siteInsertionReward.model}
+                motion={!reduceMotion}
+                presentation="reward"
+                onSelect={() => undefined}
+              />
+            </div>
+          </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
         emptyObjectOutcome &&
         resolvedReward !== null && (
           <section
             data-exploration-outcome={resolvedReward.semanticKind ?? "objects"}
             data-exploration-reward-count="0"
             role="status"
-            aria-label={t("exploration-no-cards-taken")}
+            aria-label={t(emptyObjectOutcomeMessage)}
             style={{
               position: "fixed",
               inset: 0,
@@ -3321,11 +5193,11 @@ export function ExplorationSiteScreen({
             }}
           >
             <RadialAnnouncement
-              headline={t("exploration-no-cards-taken")}
+              headline={t(emptyObjectOutcomeMessage)}
               tone="reward"
               size={isDesktop ? "compact" : "mini"}
               duration="extended"
-              announcementId={`exploration-empty-card-acquisition:${view.resolvedActionId ?? "resolved"}`}
+              announcementId={`exploration-empty-${resolvedReward.semanticKind ?? "objects"}:${view.resolvedActionId ?? "resolved"}`}
             />
           </section>
         )}
@@ -3450,7 +5322,9 @@ export function ExplorationSiteScreen({
           <motion.section
             data-exploration-deck-modification-reward=""
             data-exploration-deck-modification-kind={deckModification.kind}
-            data-exploration-deck-modification-count={deckModification.cards.length}
+            data-exploration-deck-modification-count={
+              deckModification.cards.length
+            }
             role="status"
             aria-label={
               deckModification.kind === "transfiguration"
@@ -3566,7 +5440,10 @@ export function ExplorationSiteScreen({
               );
             })}
             <RadialAnnouncement
-              headline={explorationDeckModificationHeadline(t, deckModification)}
+              headline={explorationDeckModificationHeadline(
+                t,
+                deckModification,
+              )}
               headlineGlyph={
                 deckModification.kind === "fast" ? GLYPHS.bolt : undefined
               }
@@ -3580,6 +5457,42 @@ export function ExplorationSiteScreen({
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&
         activeAction === null &&
+        directEssenceReward !== null && (
+          <section
+            data-exploration-outcome="direct-essence"
+            data-exploration-essence-source={directEssenceReward.sourceKind}
+            data-exploration-essence-before={directEssenceReward.essenceBefore}
+            data-exploration-essence-gained={directEssenceReward.essenceGained}
+            data-exploration-essence-after={directEssenceReward.essenceAfter}
+            data-exploration-minimum-essence={
+              directEssenceReward.minimumEssence
+            }
+            data-exploration-maximum-essence={
+              directEssenceReward.maximumEssence
+            }
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: FRAME_BREAK_EXIT_LAYER + 2,
+              pointerEvents: "none",
+            }}
+          >
+            <RadialAnnouncement
+              announcementId={`exploration:${view.siteId}:${view.resolvedActionId ?? "direct-essence"}`}
+              headline={t("exploration-essence-gained-title")}
+              detail={t("exploration-essence-current-total", {
+                essenceAfter: directEssenceReward.essenceAfter,
+              })}
+              essenceGained={directEssenceReward.essenceGained}
+              tone="reward"
+              size={isDesktop ? "standard" : "compact"}
+              duration="extended"
+            />
+          </section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
         cardPurgeReward !== null &&
         cardPurgeRewardPhase === "purging" && (
           <section
@@ -3588,9 +5501,7 @@ export function ExplorationSiteScreen({
             data-exploration-deck-entry-id={cardPurgeReward.card.entryId}
             data-card-id={cardPurgeReward.card.model.cardId}
             data-exploration-purged-card-spark={cardPurgeReward.spark}
-            data-exploration-essence-per-spark={
-              cardPurgeReward.essencePerSpark
-            }
+            data-exploration-essence-per-spark={cardPurgeReward.essencePerSpark}
             data-exploration-essence-gained={cardPurgeReward.totalEssence}
             role="status"
             aria-label={t("exploration-card-purge-for-essence", {
@@ -3651,9 +5562,7 @@ export function ExplorationSiteScreen({
             data-exploration-deck-entry-id={cardPurgeReward.card.entryId}
             data-card-id={cardPurgeReward.card.model.cardId}
             data-exploration-purged-card-spark={cardPurgeReward.spark}
-            data-exploration-essence-per-spark={
-              cardPurgeReward.essencePerSpark
-            }
+            data-exploration-essence-per-spark={cardPurgeReward.essencePerSpark}
             data-exploration-essence-gained={cardPurgeReward.totalEssence}
             style={{
               position: "fixed",
@@ -3718,8 +5627,12 @@ export function ExplorationSiteScreen({
                 setDreamsignPurgeRewardPhase("announcement")
               }
               style={{
-                width: isDesktop ? DESKTOP_REWARD_DREAMSIGN_SIZE : MOBILE_REWARD_DREAMSIGN_SIZE,
-                height: isDesktop ? DESKTOP_REWARD_DREAMSIGN_SIZE : MOBILE_REWARD_DREAMSIGN_SIZE,
+                width: isDesktop
+                  ? DESKTOP_REWARD_DREAMSIGN_SIZE
+                  : MOBILE_REWARD_DREAMSIGN_SIZE,
+                height: isDesktop
+                  ? DESKTOP_REWARD_DREAMSIGN_SIZE
+                  : MOBILE_REWARD_DREAMSIGN_SIZE,
               }}
             >
               <Dreamsign
@@ -3756,13 +5669,1189 @@ export function ExplorationSiteScreen({
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&
         activeAction === null &&
+        compoundTransfigurationReward !== null && (
+          <motion.section
+            data-exploration-outcome={compoundTransfigurationReward.kind}
+            data-exploration-card-transfiguration-source={
+              compoundTransfigurationReward.sourceKind
+            }
+            data-exploration-card-transfiguration-phase={
+              starterCardTransfigurationPhase
+            }
+            data-exploration-card-transfiguration-count={
+              compoundTransfigurationReward.transfigurations.length
+            }
+            data-exploration-card-transfiguration-entry-ids={compoundTransfigurationReward.transfigurations
+              .map((mapping) => mapping.entryId)
+              .join(",")}
+            data-exploration-card-transfiguration-card-ids={compoundTransfigurationReward.transfigurations
+              .map((mapping) => mapping.cardId)
+              .join(",")}
+            data-exploration-card-transfiguration-forms={compoundTransfigurationReward.transfigurations
+              .map((mapping) => mapping.afterTransfiguration)
+              .join(",")}
+            data-exploration-starter-card-transfiguration-source={
+              starterCardTransfigurationReward?.sourceKind
+            }
+            data-exploration-starter-card-transfiguration-phase={
+              starterCardTransfigurationReward === null
+                ? undefined
+                : starterCardTransfigurationPhase
+            }
+            data-exploration-starter-card-transfiguration-count={
+              starterCardTransfigurationReward?.transfigurations.length
+            }
+            data-exploration-starter-card-transfiguration-entry-ids={starterCardTransfigurationReward?.transfigurations
+              .map((mapping) => mapping.entryId)
+              .join(",")}
+            data-exploration-starter-card-transfiguration-card-ids={starterCardTransfigurationReward?.transfigurations
+              .map((mapping) => mapping.cardId)
+              .join(",")}
+            data-exploration-starter-card-transfiguration-forms={starterCardTransfigurationReward?.transfigurations
+              .map((mapping) => mapping.afterTransfiguration)
+              .join(",")}
+            data-exploration-starter-card-transfiguration-reviewed={
+              starterCardTransfigurationReward === null
+                ? undefined
+                : starterCardTransfigurationReviewed
+                  ? "true"
+                  : "false"
+            }
+            data-exploration-card-transfiguration-reviewed={
+              starterCardTransfigurationReviewed ? "true" : "false"
+            }
+            data-exploration-multi-card-transfiguration-reviewed={
+              multiCardTransfigurationReward === null
+                ? undefined
+                : starterCardTransfigurationReviewed
+                  ? "true"
+                  : "false"
+            }
+            role="status"
+            aria-live="polite"
+            aria-label={t(
+              starterCardTransfigurationReward === null
+                ? "exploration-card-transfiguration-accessible-name"
+                : "exploration-starter-card-transfiguration-accessible-name",
+              {
+                cardCount:
+                  compoundTransfigurationReward.transfigurations.length,
+              },
+            )}
+            initial={{ opacity: reduceMotion ? 1 : 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "fixed",
+              top: safeAreaInsetAtLeast("top", "--space-3xl"),
+              right: token("--space-l"),
+              bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+              left: token("--space-l"),
+              zIndex: FRAME_BREAK_EXIT_LAYER + 2,
+              display: "grid",
+              gridTemplateRows: "auto minmax(0, 1fr)",
+              alignItems: "center",
+              justifyItems: "center",
+              gap: token("--space-xl"),
+              overflow: "hidden",
+              pointerEvents: "none",
+            }}
+          >
+            <RadialAnnouncement
+              headline={t(
+                starterCardTransfigurationReward === null
+                  ? "exploration-card-transfiguration-title"
+                  : "exploration-starter-card-transfiguration-title",
+              )}
+              tone="reward"
+              size={isDesktop ? "compact" : "mini"}
+              duration="extended"
+              announcementId={`exploration-${starterCardTransfigurationReward === null ? "card" : "starter-card"}-transfiguration:${view.resolvedActionId ?? "resolved"}`}
+            />
+            <Pressable
+              as="div"
+              ref={starterCardTransfigurationPairsRef}
+              data-exploration-card-transfiguration-pairs=""
+              data-exploration-starter-card-transfiguration-pairs={
+                starterCardTransfigurationReward === null ? undefined : ""
+              }
+              data-exploration-multi-card-transfiguration-pairs={
+                multiCardTransfigurationReward === null ? undefined : ""
+              }
+              role="region"
+              tabIndex={0}
+              pressFeedback="stationary"
+              hoverFeedback="stationary"
+              aria-label={t(
+                starterCardTransfigurationReward === null
+                  ? "exploration-card-transfiguration-accessible-name"
+                  : "exploration-starter-card-transfiguration-accessible-name",
+                {
+                  cardCount:
+                    compoundTransfigurationReward.transfigurations.length,
+                },
+              )}
+              onScroll={(event) => {
+                const pairs = event.currentTarget;
+                setStarterCardTransfigurationReviewed(
+                  pairs.scrollTop + pairs.clientHeight >=
+                    pairs.scrollHeight - 1,
+                );
+              }}
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "center",
+                alignContent: "start",
+                justifyContent: "center",
+                gap: isDesktop ? token("--space-xl") : token("--space-m"),
+                width: "100%",
+                height: "fit-content",
+                maxHeight: "100%",
+                minHeight: 0,
+                overflow: "auto",
+                overscrollBehavior: "contain",
+                touchAction: "pan-y",
+                cursor: "default",
+                pointerEvents: "auto",
+              }}
+            >
+              {compoundTransfigurationReward.transfigurations.map(
+                (mapping, index) => (
+                  <CardTransfigurationPairPresentation
+                    key={mapping.entryId}
+                    mapping={mapping}
+                    index={index}
+                    phase={starterCardTransfigurationPhase}
+                    isDesktop={isDesktop}
+                    reduceMotion={reduceMotion}
+                    scope={
+                      starterCardTransfigurationReward === null
+                        ? "multi"
+                        : "starter"
+                    }
+                  />
+                ),
+              )}
+            </Pressable>
+          </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
+        compoundCardMutationReward !== null && (
+          <motion.section
+            data-exploration-outcome="compound-card-mutation"
+            data-exploration-compound-source={
+              compoundCardMutationReward.sourceKind
+            }
+            data-exploration-compound-card-mutation-source={
+              compoundCardMutationReward.sourceKind
+            }
+            data-exploration-compound-card-mutation-phase={
+              starterCardTransfigurationPhase
+            }
+            data-exploration-compound-card-mutation-reviewed={
+              starterCardTransfigurationReviewed ? "true" : "false"
+            }
+            data-exploration-purged-entry-ids={compoundCardMutationReward.purged
+              .map((card) => card.entryId)
+              .join(",")}
+            data-exploration-transfigured-entry-ids={compoundCardMutationReward.transfigurations
+              .map((mapping) => mapping.entryId)
+              .join(",")}
+            data-exploration-fast-entry-ids={compoundCardMutationReward.keywordChanges
+              .map((mapping) => mapping.entryId)
+              .join(",")}
+            data-exploration-nightmare-entry-ids={compoundCardMutationReward.nightmares
+              .map((card) => card.entryId)
+              .join(",")}
+            data-exploration-copy-entry-ids={compoundCardMutationReward.copies
+              .map((pair) => pair.copy.entryId)
+              .join(",")}
+            data-exploration-copy-entry-mappings={compoundCardMutationReward.copies
+              .map((pair) => `${pair.source.entryId}:${pair.copy.entryId}`)
+              .join(",")}
+            role="status"
+            aria-live="polite"
+            aria-label={t(
+              compoundCardMutationReward.sourceKind ===
+                "purge-disclosed-and-transfigure-same-type"
+                ? "exploration-compound-same-type-accessible-name"
+                : compoundCardMutationReward.sourceKind ===
+                    "make-predicate-fast-and-gain-nightmares"
+                  ? "exploration-compound-fast-nightmares-accessible-name"
+                  : compoundCardMutationReward.sourceKind ===
+                      "take-transfigured-cards-and-gain-nightmares"
+                    ? "exploration-compound-take-transfigured-accessible-name"
+                    : "exploration-compound-purge-copy-accessible-name",
+              {
+                purgedCardCount: compoundCardMutationReward.purged.length,
+                transfiguredCardCount:
+                  compoundCardMutationReward.transfigurations.length,
+                fastCardCount: compoundCardMutationReward.keywordChanges.length,
+                nightmareCount: compoundCardMutationReward.nightmares.length,
+                copyCount: compoundCardMutationReward.copies.length,
+              },
+            )}
+            initial={{ opacity: reduceMotion ? 1 : 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "fixed",
+              top: safeAreaInsetAtLeast("top", "--space-3xl"),
+              right: token("--space-l"),
+              bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+              left: token("--space-l"),
+              zIndex: FRAME_BREAK_EXIT_LAYER + 2,
+              display: "grid",
+              gridTemplateRows: "auto minmax(0, 1fr)",
+              alignItems: "center",
+              justifyItems: "center",
+              gap: token("--space-xl"),
+              overflow: "hidden",
+              pointerEvents: "none",
+            }}
+          >
+            <RadialAnnouncement
+              headline={t(
+                compoundCardMutationReward.sourceKind ===
+                  "purge-disclosed-and-transfigure-same-type"
+                  ? "exploration-compound-same-type-title"
+                  : compoundCardMutationReward.sourceKind ===
+                      "make-predicate-fast-and-gain-nightmares"
+                    ? "exploration-compound-fast-nightmares-title"
+                    : compoundCardMutationReward.sourceKind ===
+                        "take-transfigured-cards-and-gain-nightmares"
+                      ? "exploration-compound-take-transfigured-title"
+                      : "exploration-compound-purge-copy-title",
+              )}
+              tone="reward"
+              size={isDesktop ? "compact" : "mini"}
+              duration="extended"
+              announcementId={`exploration-compound-card-mutation:${view.resolvedActionId ?? "resolved"}`}
+            />
+            <Pressable
+              as="div"
+              ref={starterCardTransfigurationPairsRef}
+              data-exploration-compound-card-mutation-review=""
+              role="region"
+              tabIndex={0}
+              pressFeedback="stationary"
+              hoverFeedback="stationary"
+              aria-label={t("exploration-compound-review-accessible-name", {
+                cardCount: compoundCardChangeCount,
+              })}
+              onScroll={(event) => {
+                const review = event.currentTarget;
+                setStarterCardTransfigurationReviewed(
+                  review.scrollTop + review.clientHeight >=
+                    review.scrollHeight - 1,
+                );
+              }}
+              style={{
+                display: "grid",
+                gap: isDesktop ? token("--space-xl") : token("--space-m"),
+                width: "100%",
+                height: "fit-content",
+                maxHeight: "100%",
+                minHeight: 0,
+                overflow: "auto",
+                overscrollBehavior: "contain",
+                touchAction: "pan-y",
+                cursor: "default",
+                pointerEvents: "auto",
+              }}
+            >
+              {compoundCardMutationReward.purged.length > 0 && (
+                <section
+                  data-exploration-compound-section="purged"
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                    gap: token("--space-m"),
+                  }}
+                >
+                  <h2
+                    style={{
+                      width: "100%",
+                      margin: 0,
+                      textAlign: "center",
+                      font: token("--t-title-sm"),
+                      color: token("--text-primary"),
+                    }}
+                  >
+                    {t("exploration-compound-purged-section")}
+                  </h2>
+                  {compoundCardMutationReward.purged.map((card) => (
+                    <div
+                      key={card.entryId}
+                      data-exploration-compound-purged-card=""
+                      data-exploration-deck-entry-id={card.entryId}
+                      data-card-id={card.model.cardId}
+                      style={{
+                        width: isDesktop
+                          ? DESKTOP_ESSENCE_CARD_WIDTH
+                          : MOBILE_ESSENCE_CARD_WIDTH,
+                        aspectRatio: CARD_ASPECT_RATIO,
+                      }}
+                    >
+                      <GameCard model={card.model} selection="danger" />
+                    </div>
+                  ))}
+                </section>
+              )}
+              {compoundCardMutationReward.transfigurations.length > 0 && (
+                <section
+                  data-exploration-compound-section="transfigured"
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                    gap: token("--space-m"),
+                  }}
+                >
+                  <h2
+                    style={{
+                      width: "100%",
+                      margin: 0,
+                      textAlign: "center",
+                      font: token("--t-title-sm"),
+                      color: token("--text-primary"),
+                    }}
+                  >
+                    {t("exploration-compound-transfigured-section")}
+                  </h2>
+                  {compoundCardMutationReward.transfigurations.map(
+                    (mapping, index) => (
+                      <CardTransfigurationPairPresentation
+                        key={mapping.entryId}
+                        mapping={mapping}
+                        index={index}
+                        phase={starterCardTransfigurationPhase}
+                        isDesktop={isDesktop}
+                        reduceMotion={reduceMotion}
+                        scope="compound"
+                      />
+                    ),
+                  )}
+                </section>
+              )}
+              {compoundCardMutationReward.keywordChanges.length > 0 && (
+                <section
+                  data-exploration-compound-section="fast"
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                    gap: token("--space-m"),
+                  }}
+                >
+                  <h2
+                    style={{
+                      width: "100%",
+                      margin: 0,
+                      textAlign: "center",
+                      font: token("--t-title-sm"),
+                      color: token("--text-primary"),
+                    }}
+                  >
+                    {t("exploration-compound-fast-section")}
+                  </h2>
+                  {compoundCardMutationReward.keywordChanges.map(
+                    (mapping, index) => (
+                      <CompoundCardPairPresentation
+                        key={mapping.entryId}
+                        before={mapping.before}
+                        after={mapping.after}
+                        index={index}
+                        kind="keyword"
+                        isDesktop={isDesktop}
+                        reduceMotion={reduceMotion}
+                      />
+                    ),
+                  )}
+                </section>
+              )}
+              {compoundCardMutationReward.nightmares.length > 0 && (
+                <section
+                  data-exploration-compound-section="nightmares"
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                    gap: token("--space-m"),
+                  }}
+                >
+                  <h2
+                    style={{
+                      width: "100%",
+                      margin: 0,
+                      textAlign: "center",
+                      font: token("--t-title-sm"),
+                      color: token("--text-primary"),
+                    }}
+                  >
+                    {t("exploration-compound-nightmares-section")}
+                  </h2>
+                  {compoundCardMutationReward.nightmares.map((card) => (
+                    <div
+                      key={card.entryId}
+                      data-exploration-compound-nightmare-card=""
+                      data-exploration-deck-entry-id={card.entryId}
+                      data-card-id={card.model.cardId}
+                      style={{
+                        width: isDesktop
+                          ? DESKTOP_ESSENCE_CARD_WIDTH
+                          : MOBILE_ESSENCE_CARD_WIDTH,
+                        aspectRatio: CARD_ASPECT_RATIO,
+                      }}
+                    >
+                      <GameCard model={card.model} selection="reward" />
+                    </div>
+                  ))}
+                </section>
+              )}
+              {compoundCardMutationReward.copies.length > 0 && (
+                <section
+                  data-exploration-compound-section="copies"
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                    gap: token("--space-m"),
+                  }}
+                >
+                  <h2
+                    style={{
+                      width: "100%",
+                      margin: 0,
+                      textAlign: "center",
+                      font: token("--t-title-sm"),
+                      color: token("--text-primary"),
+                    }}
+                  >
+                    {t("exploration-compound-copies-section")}
+                  </h2>
+                  {compoundCardMutationReward.copies.map((pair, index) => (
+                    <CompoundCardPairPresentation
+                      key={pair.copy.entryId}
+                      before={pair.source}
+                      after={pair.copy}
+                      index={index}
+                      kind="copy"
+                      isDesktop={isDesktop}
+                      reduceMotion={reduceMotion}
+                    />
+                  ))}
+                </section>
+              )}
+            </Pressable>
+          </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
+        cardTypeChangesReward !== null && (
+          <motion.section
+            data-exploration-outcome="card-type-changes"
+            data-exploration-card-type-change-source={
+              cardTypeChangesReward.sourceKind
+            }
+            data-exploration-card-type-change-phase={
+              starterCardTransfigurationPhase
+            }
+            data-exploration-card-type-change-count={
+              cardTypeChangesReward.changes.length
+            }
+            data-exploration-card-type-change-entry-ids={cardTypeChangesReward.changes
+              .map((change) => change.entryId)
+              .join(",")}
+            data-exploration-card-type-change-card-ids={cardTypeChangesReward.changes
+              .map((change) => change.cardId)
+              .join(",")}
+            data-exploration-card-type-change-before-types={cardTypeChangesReward.changes
+              .map((change) => change.beforeCardType)
+              .join(",")}
+            data-exploration-card-type-change-after-types={cardTypeChangesReward.changes
+              .map((change) => change.afterCardType)
+              .join(",")}
+            data-exploration-card-type-change-reviewed={
+              starterCardTransfigurationReviewed ? "true" : "false"
+            }
+            role="status"
+            aria-live="polite"
+            aria-label={t("exploration-card-type-changes-accessible-name", {
+              cardCount: cardTypeChangesReward.changes.length,
+            })}
+            initial={{ opacity: reduceMotion ? 1 : 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "fixed",
+              top: safeAreaInsetAtLeast("top", "--space-3xl"),
+              right: token("--space-l"),
+              bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+              left: token("--space-l"),
+              zIndex: FRAME_BREAK_EXIT_LAYER + 2,
+              display: "grid",
+              gridTemplateRows: "auto minmax(0, 1fr)",
+              alignItems: "center",
+              justifyItems: "center",
+              gap: token("--space-xl"),
+              overflow: "hidden",
+              pointerEvents: "none",
+            }}
+          >
+            <RadialAnnouncement
+              headline={t("exploration-card-type-changes-title")}
+              tone="reward"
+              size={isDesktop ? "compact" : "mini"}
+              duration="extended"
+              announcementId={`exploration-card-type-changes:${view.resolvedActionId ?? "resolved"}`}
+            />
+            <Pressable
+              as="div"
+              ref={starterCardTransfigurationPairsRef}
+              data-exploration-card-type-change-pairs=""
+              role="region"
+              tabIndex={0}
+              pressFeedback="stationary"
+              hoverFeedback="stationary"
+              aria-label={t("exploration-card-type-changes-accessible-name", {
+                cardCount: cardTypeChangesReward.changes.length,
+              })}
+              onScroll={(event) => {
+                const pairs = event.currentTarget;
+                setStarterCardTransfigurationReviewed(
+                  pairs.scrollTop + pairs.clientHeight >=
+                    pairs.scrollHeight - 1,
+                );
+              }}
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "center",
+                alignContent: "start",
+                justifyContent: "center",
+                gap: isDesktop ? token("--space-xl") : token("--space-m"),
+                width: "100%",
+                height: "fit-content",
+                maxHeight: "100%",
+                minHeight: 0,
+                overflow: "auto",
+                overscrollBehavior: "contain",
+                touchAction: "pan-y",
+                cursor: "default",
+                pointerEvents: "auto",
+              }}
+            >
+              {cardTypeChangesReward.changes.map((change, index) => (
+                <CardTypeChangePairPresentation
+                  key={change.entryId}
+                  change={change}
+                  index={index}
+                  phase={starterCardTransfigurationPhase}
+                  isDesktop={isDesktop}
+                  reduceMotion={reduceMotion}
+                />
+              ))}
+            </Pressable>
+          </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
+        cardReplacementReward !== null && (
+          <motion.section
+            data-exploration-outcome="card-replacements"
+            data-exploration-card-replacement-source={
+              cardReplacementReward.sourceKind
+            }
+            data-exploration-card-replacement-phase={starterCardMutationPhase}
+            data-exploration-card-replacement-count={
+              cardReplacementReward.replacements.length
+            }
+            data-exploration-card-replacement-purged-entry-ids={cardReplacementReward.replacements
+              .map((pair) => pair.purged.entryId)
+              .join(",")}
+            data-exploration-card-replacement-purged-card-ids={cardReplacementReward.replacements
+              .map((pair) => pair.purged.model.cardId)
+              .join(",")}
+            data-exploration-card-replacement-gained-entry-ids={cardReplacementReward.replacements
+              .map((pair) => pair.gained.entryId)
+              .join(",")}
+            data-exploration-card-replacement-gained-card-ids={cardReplacementReward.replacements
+              .map((pair) => pair.gained.model.cardId)
+              .join(",")}
+            data-exploration-card-replacement-reviewed={
+              cardReplacementReviewed ? "true" : "false"
+            }
+            role="status"
+            aria-live="polite"
+            aria-label={t("exploration-card-replacements-accessible-name", {
+              replacementCount: cardReplacementReward.replacements.length,
+            })}
+            initial={{ opacity: reduceMotion ? 1 : 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "fixed",
+              top: safeAreaInsetAtLeast("top", "--space-3xl"),
+              right: token("--space-l"),
+              bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+              left: token("--space-l"),
+              zIndex: FRAME_BREAK_EXIT_LAYER + 2,
+              display: "grid",
+              gridTemplateRows: "auto minmax(0, 1fr)",
+              alignItems: "center",
+              justifyItems: "center",
+              gap: token("--space-xl"),
+              overflow: "hidden",
+              pointerEvents: "none",
+            }}
+          >
+            <RadialAnnouncement
+              headline={t("exploration-card-replacements-title")}
+              tone="reward"
+              size={isDesktop ? "compact" : "mini"}
+              duration="extended"
+              announcementId={`exploration-card-replacements:${view.resolvedActionId ?? "resolved"}`}
+            />
+            <Pressable
+              as="div"
+              ref={cardReplacementPairsRef}
+              data-exploration-card-replacement-pairs=""
+              role="region"
+              tabIndex={0}
+              pressFeedback="stationary"
+              hoverFeedback="stationary"
+              aria-label={t("exploration-card-replacements-accessible-name", {
+                replacementCount: cardReplacementReward.replacements.length,
+              })}
+              onScroll={(event) => {
+                const pairs = event.currentTarget;
+                setCardReplacementReviewed(
+                  pairs.scrollTop + pairs.clientHeight >=
+                    pairs.scrollHeight - 1,
+                );
+              }}
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "center",
+                alignContent: "start",
+                justifyContent: "center",
+                gap: isDesktop ? token("--space-xl") : token("--space-m"),
+                width: "100%",
+                height: "fit-content",
+                maxHeight: "100%",
+                minHeight: 0,
+                overflow: "auto",
+                overscrollBehavior: "contain",
+                touchAction: "pan-y",
+                cursor: "default",
+                pointerEvents: "auto",
+              }}
+            >
+              {cardReplacementReward.replacements.map((pair, index) => (
+                <CardReplacementPresentation
+                  key={`${pair.purged.entryId}:${pair.gained.entryId}`}
+                  pair={pair}
+                  index={index}
+                  isDesktop={isDesktop}
+                  reduceMotion={reduceMotion}
+                  scope="multi"
+                />
+              ))}
+            </Pressable>
+          </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
+        starterCardMutationReward !== null && (
+          <motion.section
+            data-exploration-outcome="starter-card-mutation"
+            data-exploration-starter-card-source={
+              starterCardMutationReward.sourceKind
+            }
+            data-exploration-starter-card-mode={starterCardMutationReward.mode}
+            data-exploration-starter-card-phase={starterCardMutationPhase}
+            data-exploration-starter-card-purged-entry-ids={starterCardMutationReward.purged
+              .map((card) => card.entryId)
+              .join(",")}
+            data-exploration-starter-card-purged-card-ids={starterCardMutationReward.purged
+              .map((card) => card.model.cardId)
+              .join(",")}
+            data-exploration-starter-card-gained-entry-ids={starterCardMutationReward.replacements
+              .map((pair) => pair.gained.entryId)
+              .join(",")}
+            data-exploration-starter-card-gained-card-ids={starterCardMutationReward.replacements
+              .map((pair) => pair.gained.model.cardId)
+              .join(",")}
+            data-exploration-starter-card-replacement-count={
+              starterCardMutationReward.replacements.length
+            }
+            role="status"
+            aria-live="polite"
+            aria-label={t("exploration-starter-card-mutation-accessible-name", {
+              purgedCardCount: starterCardMutationReward.purged.length,
+              gainedCardCount: starterCardMutationReward.replacements.length,
+              replacementCount: starterCardMutationReward.replacements.length,
+            })}
+            initial={{ opacity: reduceMotion ? 1 : 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "fixed",
+              top: safeAreaInsetAtLeast("top", "--space-3xl"),
+              right: token("--space-l"),
+              bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+              left: token("--space-l"),
+              zIndex: FRAME_BREAK_EXIT_LAYER + 2,
+              display: "grid",
+              placeContent: "center",
+              justifyItems: "center",
+              gap: token("--space-xl"),
+              pointerEvents: "none",
+            }}
+          >
+            <RadialAnnouncement
+              headline={t("exploration-starter-card-mutation-title")}
+              tone={
+                starterCardMutationReward.mode === "purge" ? "danger" : "reward"
+              }
+              size={isDesktop ? "compact" : "mini"}
+              duration="extended"
+              announcementId={`exploration-starter-card-mutation:${view.resolvedActionId ?? "resolved"}`}
+            />
+            <Pressable
+              as="div"
+              ref={cardReplacementPairsRef}
+              data-exploration-starter-card-mutation-objects=""
+              role="region"
+              tabIndex={0}
+              pressFeedback="stationary"
+              hoverFeedback="stationary"
+              aria-label={t("exploration-card-replacements-accessible-name", {
+                replacementCount: starterCardMutationReward.replacements.length,
+              })}
+              onScroll={(event) => {
+                const pairs = event.currentTarget;
+                setCardReplacementReviewed(
+                  pairs.scrollTop + pairs.clientHeight >=
+                    pairs.scrollHeight - 1,
+                );
+              }}
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: isDesktop ? token("--space-xl") : token("--space-m"),
+                maxHeight: "min(65dvh, 620px)",
+                overflow: "auto",
+                cursor: "default",
+                pointerEvents: "auto",
+              }}
+            >
+              {starterCardMutationPhase === "purging" ||
+              (reduceMotion &&
+                starterCardMutationPhase === "terminal" &&
+                starterCardMutationReward.replacements.length === 0)
+                ? starterCardMutationReward.purged.map((card, index) => (
+                    <PurgedCardPresentation
+                      key={card.entryId}
+                      card={card}
+                      cardWidth={
+                        isDesktop
+                          ? DESKTOP_REWARD_CARD_WIDTH
+                          : MOBILE_ESSENCE_CARD_WIDTH
+                      }
+                      index={index}
+                      reduceMotion={reduceMotion}
+                    />
+                  ))
+                : null}
+              {starterCardMutationPhase === "replacing" ||
+              (reduceMotion && starterCardMutationPhase === "terminal")
+                ? starterCardMutationReward.replacements.map((pair, index) => (
+                    <CardReplacementPresentation
+                      key={`${pair.purged.entryId}:${pair.gained.entryId}`}
+                      pair={pair}
+                      index={index}
+                      isDesktop={isDesktop}
+                      reduceMotion={reduceMotion}
+                      scope="starter"
+                    />
+                  ))
+                : null}
+            </Pressable>
+          </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
+        nightmareDreamsignBundleReward !== null && (
+          <motion.section
+            data-exploration-outcome="nightmare-dreamsign-bundle"
+            data-exploration-nightmare-dreamsign-source={
+              nightmareDreamsignBundleReward.sourceKind
+            }
+            data-exploration-nightmare-count={
+              nightmareDreamsignBundleReward.nightmares.length
+            }
+            data-exploration-nightmare-card-ids={nightmareDreamsignBundleReward.nightmares
+              .map((card) => card.model.cardId)
+              .join(",")}
+            data-exploration-nightmare-entry-ids={nightmareDreamsignBundleReward.nightmares
+              .map((card) => card.entryId)
+              .join(",")}
+            data-exploration-dreamsign-gained-ids={nightmareDreamsignBundleReward.gained
+              .map((dreamsign) => dreamsign.id)
+              .join(",")}
+            data-exploration-dreamsign-purged-ids={nightmareDreamsignBundleReward.purged
+              .map((dreamsign) => dreamsign.id)
+              .join(",")}
+            data-exploration-dreamsign-replacement-count={
+              nightmareDreamsignBundleReward.replacements.length
+            }
+            data-exploration-dreamsign-pool-regenerated={
+              nightmareDreamsignBundleReward.poolRegenerated ? "true" : "false"
+            }
+            role="status"
+            aria-live="polite"
+            aria-label={t(
+              "exploration-nightmare-dreamsign-bundle-accessible-name",
+              {
+                nightmareCount:
+                  nightmareDreamsignBundleReward.nightmares.length,
+                dreamsignCount: nightmareDreamsignBundleReward.gained.length,
+                replacementCount:
+                  nightmareDreamsignBundleReward.replacements.length,
+              },
+            )}
+            initial={{ opacity: reduceMotion ? 1 : 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "fixed",
+              top: safeAreaInsetAtLeast("top", "--space-3xl"),
+              right: token("--space-l"),
+              bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+              left: token("--space-l"),
+              zIndex: FRAME_BREAK_EXIT_LAYER + 2,
+              display: "grid",
+              placeContent: "center",
+              justifyItems: "center",
+              gap: token("--space-xl"),
+              pointerEvents: "none",
+            }}
+          >
+            <RadialAnnouncement
+              headline={t("exploration-nightmare-dreamsign-bundle-title")}
+              tone="reward"
+              size={isDesktop ? "compact" : "mini"}
+              duration="extended"
+              announcementId={`exploration-nightmare-dreamsign:${view.resolvedActionId ?? "resolved"}`}
+            />
+            <div
+              data-exploration-nightmare-dreamsign-objects=""
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: isDesktop ? token("--space-xl") : token("--space-m"),
+                maxHeight: "min(65dvh, 620px)",
+                overflow: "auto",
+                pointerEvents: "auto",
+              }}
+            >
+              <div
+                data-exploration-nightmare-stack=""
+                role="group"
+                aria-label={t("exploration-nightmare-stack-accessible-name", {
+                  nightmareCount:
+                    nightmareDreamsignBundleReward.nightmares.length,
+                })}
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                  gap: token("--space-s"),
+                }}
+              >
+                {nightmareDreamsignBundleReward.nightmares.map(
+                  (card, index) => (
+                    <motion.div
+                      key={card.entryId}
+                      data-exploration-nightmare-stack-card=""
+                      data-exploration-nightmare-index={index}
+                      data-exploration-entry-id={card.entryId}
+                      data-card-id={card.model.cardId}
+                      initial={{
+                        opacity: reduceMotion ? 1 : 0,
+                        scale: reduceMotion ? 1 : 0.82,
+                        y: reduceMotion ? 0 : token("--space-l"),
+                      }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      transition={{
+                        delay: reduceMotion
+                          ? 0
+                          : index * REWARD_STAGGER_SECONDS,
+                        duration: reduceMotion
+                          ? 0
+                          : motionTimeSeconds("--dur-slow"),
+                        ease: DREAM_EASE,
+                      }}
+                      style={{
+                        width: isDesktop
+                          ? DESKTOP_REWARD_CARD_WIDTH
+                          : MOBILE_CARD_COPY_WIDTH,
+                        aspectRatio: CARD_ASPECT_RATIO,
+                      }}
+                    >
+                      <GameCard
+                        model={card.model}
+                        selection="danger"
+                        testId={`cumulus-exploration-nightmare-${card.entryId}`}
+                      />
+                    </motion.div>
+                  ),
+                )}
+              </div>
+              {nightmareDreamsignBundleReward.replacements.map(
+                (pair, index) => (
+                  <DreamsignReplacementPresentation
+                    key={`${pair.removed.id}:${pair.gained.id}`}
+                    removed={pair.removed}
+                    gained={pair.gained}
+                    index={
+                      nightmareDreamsignBundleReward.nightmares.length + index
+                    }
+                    isDesktop={isDesktop}
+                    reduceMotion={reduceMotion}
+                  />
+                ),
+              )}
+              {unpairedBundleDreamsignGains.map((dreamsign, index) => (
+                <motion.div
+                  key={dreamsign.id}
+                  data-exploration-dreamsign-mutation-object="gained"
+                  data-dreamsign-id={dreamsign.id}
+                  initial={{
+                    opacity: reduceMotion ? 1 : 0,
+                    scale: reduceMotion ? 1 : 0.72,
+                    y: reduceMotion ? 0 : token("--space-l"),
+                  }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{
+                    delay: reduceMotion
+                      ? 0
+                      : (nightmareDreamsignBundleReward.nightmares.length +
+                          nightmareDreamsignBundleReward.replacements.length +
+                          index) *
+                        REWARD_STAGGER_SECONDS,
+                    duration: reduceMotion
+                      ? 0
+                      : motionTimeSeconds("--dur-slow"),
+                    ease: DREAM_EASE,
+                  }}
+                  style={{
+                    width: isDesktop
+                      ? DESKTOP_REWARD_DREAMSIGN_SIZE
+                      : MOBILE_REWARD_DREAMSIGN_SIZE,
+                    height: isDesktop
+                      ? DESKTOP_REWARD_DREAMSIGN_SIZE
+                      : MOBILE_REWARD_DREAMSIGN_SIZE,
+                  }}
+                >
+                  <Dreamsign
+                    dreamsign={dreamsign}
+                    variant="revelation"
+                    testid={`cumulus-exploration-nightmare-dreamsign-${dreamsign.id}`}
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
+        dreamsignMutationReward !== null && (
+          <motion.section
+            data-exploration-outcome="dreamsign-mutation"
+            data-exploration-dreamsign-mutation-source={
+              dreamsignMutationReward.sourceKind
+            }
+            data-exploration-dreamsign-mutation-phase={dreamsignMutationPhase}
+            data-exploration-dreamsign-before-ids={dreamsignMutationReward.before
+              .map((dreamsign) => dreamsign.id)
+              .join(",")}
+            data-exploration-dreamsign-after-ids={dreamsignMutationReward.after
+              .map((dreamsign) => dreamsign.id)
+              .join(",")}
+            data-exploration-dreamsign-offered-ids={dreamsignMutationReward.offered
+              .map((dreamsign) => dreamsign.id)
+              .join(",")}
+            data-exploration-dreamsign-gained-ids={dreamsignMutationReward.gained
+              .map((dreamsign) => dreamsign.id)
+              .join(",")}
+            data-exploration-dreamsign-purged-ids={dreamsignMutationReward.purged
+              .map((dreamsign) => dreamsign.id)
+              .join(",")}
+            data-exploration-dreamsign-replacement-count={
+              dreamsignMutationReward.replacements.length
+            }
+            data-exploration-dreamsign-pool-regenerated={
+              dreamsignMutationReward.poolRegenerated ? "true" : "false"
+            }
+            role="status"
+            aria-live="polite"
+            aria-label={t("exploration-dreamsign-mutation-accessible-name", {
+              purgedCount: dreamsignMutationReward.purged.length,
+              gainedCount: dreamsignMutationReward.gained.length,
+              replacementCount: dreamsignMutationReward.replacements.length,
+            })}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "fixed",
+              top: safeAreaInsetAtLeast("top", "--space-3xl"),
+              right: token("--space-l"),
+              bottom: JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+              left: token("--space-l"),
+              zIndex: FRAME_BREAK_EXIT_LAYER + 2,
+              display: "grid",
+              placeContent: "center",
+              justifyItems: "center",
+              gap: token("--space-xl"),
+              pointerEvents: "none",
+            }}
+          >
+            <RadialAnnouncement
+              headline={t("exploration-dreamsigns-changed-title")}
+              tone="reward"
+              size={isDesktop ? "compact" : "mini"}
+              duration="extended"
+              announcementId={`exploration-dreamsign-mutation:${view.resolvedActionId ?? "resolved"}`}
+            />
+            <div
+              data-exploration-dreamsign-mutation-objects=""
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: isDesktop ? token("--space-xl") : token("--space-m"),
+                pointerEvents: "auto",
+              }}
+            >
+              {dreamsignMutationPhase === "gaining" &&
+                dreamsignMutationReward.replacements.map((pair, index) => (
+                  <DreamsignReplacementPresentation
+                    key={`${pair.removed.id}:${pair.gained.id}`}
+                    removed={pair.removed}
+                    gained={pair.gained}
+                    index={index}
+                    isDesktop={isDesktop}
+                    reduceMotion={reduceMotion}
+                  />
+                ))}
+              {(dreamsignMutationPhase === "purging"
+                ? dreamsignMutationReward.purged
+                : unpairedDreamsignGains
+              ).map((dreamsign, index) => (
+                <motion.div
+                  key={`${dreamsignMutationPhase}:${dreamsign.id}`}
+                  data-exploration-dreamsign-mutation-object={
+                    dreamsignMutationPhase === "purging" ? "purged" : "gained"
+                  }
+                  data-dreamsign-id={dreamsign.id}
+                  initial={
+                    dreamsignMutationPhase === "purging"
+                      ? { opacity: 1, scale: 1, rotate: 0 }
+                      : {
+                          opacity: reduceMotion ? 1 : 0,
+                          scale: reduceMotion ? 1 : 0.72,
+                          y: reduceMotion ? 0 : token("--space-l"),
+                        }
+                  }
+                  animate={
+                    dreamsignMutationPhase === "purging"
+                      ? reduceMotion
+                        ? { opacity: 0 }
+                        : {
+                            opacity: [1, 1, 0],
+                            scale: [1, 1.04, 0.24],
+                            rotate: [0, -2, 8],
+                          }
+                      : { opacity: 1, scale: 1, y: 0 }
+                  }
+                  transition={{
+                    delay:
+                      dreamsignMutationPhase === "gaining" && !reduceMotion
+                        ? index * REWARD_STAGGER_SECONDS
+                        : 0,
+                    duration: reduceMotion
+                      ? 0
+                      : dreamsignMutationPhase === "purging"
+                        ? DREAMSIGN_PURGE_SECONDS
+                        : motionTimeSeconds("--dur-slow"),
+                    ease: DREAM_EASE,
+                  }}
+                  style={{
+                    width: isDesktop
+                      ? DESKTOP_REWARD_DREAMSIGN_SIZE
+                      : MOBILE_REWARD_DREAMSIGN_SIZE,
+                    height: isDesktop
+                      ? DESKTOP_REWARD_DREAMSIGN_SIZE
+                      : MOBILE_REWARD_DREAMSIGN_SIZE,
+                  }}
+                >
+                  <Dreamsign
+                    dreamsign={dreamsign}
+                    variant="revelation"
+                    testid={`cumulus-exploration-dreamsign-mutation-${dreamsign.id}`}
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction === null &&
         essenceReward !== null &&
         essenceRewardPhase === "cards" && (
           <motion.section
             data-exploration-essence-cards=""
-            data-exploration-essence-card-count={
-              essenceReward.cards.length
-            }
+            data-exploration-essence-card-count={essenceReward.cards.length}
             role="status"
             aria-label={t("exploration-spirit-animal-essence-summary", {
               cardCount: essenceReward.cards.length,
@@ -3805,9 +6894,7 @@ export function ExplorationSiteScreen({
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{
                   delay: reduceMotion ? 0 : index * REWARD_STAGGER_SECONDS,
-                  duration: reduceMotion
-                    ? 0
-                    : motionTimeSeconds("--dur-slow"),
+                  duration: reduceMotion ? 0 : motionTimeSeconds("--dur-slow"),
                   ease: DREAM_EASE,
                 }}
                 style={{
@@ -3892,7 +6979,8 @@ export function ExplorationSiteScreen({
           if (trajectoryForReward === undefined) return null;
           const scale = Math.min(
             trajectoryForReward.target.width / trajectoryForReward.source.width,
-            trajectoryForReward.target.height / trajectoryForReward.source.height,
+            trajectoryForReward.target.height /
+              trajectoryForReward.source.height,
           );
           return (
             <motion.div
@@ -3932,10 +7020,7 @@ export function ExplorationSiteScreen({
               {item.kind === "card" ? (
                 <GameCard model={item.card} />
               ) : (
-                <Dreamsign
-                  dreamsign={item.dreamsign}
-                  variant="revelation"
-                />
+                <Dreamsign dreamsign={item.dreamsign} variant="revelation" />
               )}
             </motion.div>
           );
@@ -3945,160 +7030,516 @@ export function ExplorationSiteScreen({
         activeAction === null &&
         view.resolvedActionId === null &&
         view.reward === null && (
-        <motion.section
-          data-exploration-narrative=""
-          data-cumulus-reveal-anchor=""
-          data-tutorial-guidance-concept="exploration-actions"
-          data-tutorial-guidance-anchor=""
-          data-tutorial-guidance-obstacle=""
-          initial={{ opacity: 0, y: reduceMotion ? 0 : 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
-            ease: DREAM_EASE,
-          }}
-          style={{
-            position: "fixed",
-            left: `max(var(--safe-area-inset-left), ${token("--space-m")})`,
-            bottom: isDesktop
-              ? DESKTOP_FLOATING_PANEL_BOTTOM
-              : JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
-            zIndex: FRAME_BREAK_EXIT_LAYER,
-            width: isDesktop
-              ? "min(400px, calc(100vw - 48px))"
-              : `calc(100vw - ${token("--space-m")} - ${token("--space-m")})`,
-            maxHeight: "calc(100vh - 96px)",
-            pointerEvents: "auto",
-          }}
-        >
-          <GlassPanel
-            testId="cumulus-exploration-narrative-panel"
+          <motion.section
+            data-exploration-narrative=""
+            data-cumulus-reveal-anchor=""
+            data-tutorial-guidance-concept="exploration-actions"
+            data-tutorial-guidance-anchor=""
+            data-tutorial-guidance-obstacle=""
+            initial={{ opacity: 0, y: reduceMotion ? 0 : 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "fixed",
+              left: `max(var(--safe-area-inset-left), ${token("--space-m")})`,
+              bottom: isDesktop
+                ? DESKTOP_FLOATING_PANEL_BOTTOM
+                : JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+              zIndex: FRAME_BREAK_EXIT_LAYER,
+              width: isDesktop
+                ? "min(400px, calc(100vw - 48px))"
+                : `calc(100vw - ${token("--space-m")} - ${token("--space-m")})`,
+              maxHeight: "calc(100vh - 96px)",
+              pointerEvents: "auto",
+            }}
           >
-            <div
-              style={{
-                display: "grid",
-                gap: token("--space-m"),
-                padding: token("--space-l"),
-                paddingTop: token("--space-m"),
-              }}
-            >
-              <ExplorationNarrativeChoices
-                narrative={view.narrative}
-                actions={view.actions}
-                reduceMotion={reduceMotion}
-                onActivate={openAction}
-              />
-            </div>
-          </GlassPanel>
-        </motion.section>
-      )}
-      {frameBreakGeometry !== null && frameBreakPhase === "open" && activeAction !== null && (
-        <motion.section
-          data-exploration-followup={activeAction.followup.kind}
-          initial={{ opacity: 0, y: reduceMotion ? 0 : 14, scale: reduceMotion ? 1 : 0.985 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"), ease: DREAM_EASE }}
-          style={{
-            position: "fixed",
-            zIndex: FRAME_BREAK_EXIT_LAYER + 1,
-            top: isDesktop
-              ? safeAreaInsetAtLeast("top", "--space-2xl")
-              : `calc(max(var(--safe-area-inset-top), ${token("--space-s")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-xs")})`,
-            right: isDesktop
-              ? centeredFollowupWidth !== null
-                ? 0
-                : `calc(max(var(--safe-area-inset-right), ${token("--space-2xl")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-xs")})`
-              : `max(var(--safe-area-inset-right), ${token("--space-s")})`,
-            bottom: isDesktop
-              ? DESKTOP_FLOATING_PANEL_BOTTOM
-              : JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
-            left: isDesktop
-              ? centeredFollowupWidth !== null
-                ? 0
-                : "auto"
-              : `max(var(--safe-area-inset-left), ${token("--space-s")})`,
-            width:
-              isDesktop && centeredFollowupWidth !== null
-                ? centeredFollowupWidth
-                : isDesktop
-                  ? "min(920px, calc(100vw - 64px))"
+            <GlassPanel testId="cumulus-exploration-narrative-panel">
+              <div
+                style={{
+                  display: "grid",
+                  gap: token("--space-m"),
+                  padding: token("--space-l"),
+                  paddingTop: token("--space-m"),
+                }}
+              >
+                <ExplorationNarrativeChoices
+                  narrative={view.narrative}
+                  actions={view.actions}
+                  reduceMotion={reduceMotion}
+                  onActivate={openAction}
+                />
+              </div>
+            </GlassPanel>
+          </motion.section>
+        )}
+      {frameBreakGeometry !== null &&
+        frameBreakPhase === "open" &&
+        activeAction !== null && (
+          <motion.section
+            data-exploration-followup={activeAction.followup.kind}
+            data-exploration-action-id={activeAction.id}
+            data-exploration-effect-kind={activeAction.effectKind}
+            initial={{
+              opacity: 0,
+              y: reduceMotion ? 0 : 14,
+              scale: reduceMotion ? 1 : 0.985,
+            }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{
+              duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "fixed",
+              zIndex: FRAME_BREAK_EXIT_LAYER + 1,
+              top: isDesktop
+                ? safeAreaInsetAtLeast("top", "--space-2xl")
+                : `calc(max(var(--safe-area-inset-top), ${token("--space-s")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-xs")})`,
+              right: isDesktop
+                ? centeredFollowupWidth !== null
+                  ? 0
+                  : `calc(max(var(--safe-area-inset-right), ${token("--space-2xl")}) + ${String(MENU_BUTTON_PX)}px + ${token("--space-xs")})`
+                : `max(var(--safe-area-inset-right), ${token("--space-s")})`,
+              bottom: isDesktop
+                ? DESKTOP_FLOATING_PANEL_BOTTOM
+                : JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+              left: isDesktop
+                ? centeredFollowupWidth !== null
+                  ? 0
+                  : "auto"
+                : `max(var(--safe-area-inset-left), ${token("--space-s")})`,
+              width:
+                isDesktop && centeredFollowupWidth !== null
+                  ? centeredFollowupWidth
+                  : isDesktop
+                    ? "min(920px, calc(100vw - 64px))"
+                    : undefined,
+              marginInline:
+                isDesktop && centeredFollowupWidth !== null
+                  ? "auto"
                   : undefined,
-            marginInline:
-              isDesktop && centeredFollowupWidth !== null ? "auto" : undefined,
-            minHeight: 0,
-            display: "grid",
-            alignItems: "center",
-            pointerEvents: "auto",
-          }}
-        >
-          {activeAction.followup.kind === "transfiguration" &&
-            (() => {
-              const candidate =
-                activeAction.followup.candidates.find(
-                  (choice) =>
-                    choice.entryId === selectedTransfigurationEntryId,
-                ) ?? null;
-              return candidate === null ? (
-                <TransfigurationPickerPanel
-                  layout={isDesktop ? "desktop" : "mobile"}
-                  ready
-                  isEnhanced
-                  candidates={activeAction.followup.candidates}
-                  onClose={() => setActiveActionId(null)}
-                  onPick={(entryId) => {
-                    setSelectedTransfigurationEntryId(entryId);
-                    setSelectedTransfigurationFormType(null);
+              minHeight: 0,
+              display: "grid",
+              alignItems: "center",
+              pointerEvents: "auto",
+            }}
+          >
+            {activeAction.followup.kind === "transfiguration" &&
+              (() => {
+                const candidate =
+                  activeAction.followup.candidates.find(
+                    (choice) =>
+                      choice.entryId === selectedTransfigurationEntryId,
+                  ) ?? null;
+                return candidate === null ? (
+                  <TransfigurationPickerPanel
+                    layout={isDesktop ? "desktop" : "mobile"}
+                    ready
+                    isEnhanced
+                    candidates={activeAction.followup.candidates}
+                    onClose={() => setActiveActionId(null)}
+                    onPick={(entryId) => {
+                      setSelectedTransfigurationEntryId(entryId);
+                      setSelectedTransfigurationFormType(null);
+                    }}
+                  />
+                ) : (
+                  <TransfigurationDetailPanel
+                    layout={isDesktop ? "desktop" : "mobile"}
+                    candidate={candidate}
+                    selectedFormType={selectedTransfigurationFormType}
+                    confirming={transfigurationConfirming}
+                    alreadyAccepted={false}
+                    onBack={() => {
+                      setSelectedTransfigurationEntryId(null);
+                      setSelectedTransfigurationFormType(null);
+                    }}
+                    onSelectForm={(type) =>
+                      setSelectedTransfigurationFormType((current) =>
+                        current === type ? null : type,
+                      )
+                    }
+                    onConfirm={(form) => {
+                      setTransfigurationConfirming(true);
+                      onResolve(activeAction.id, {
+                        entryIds: [candidate.entryId],
+                        transfiguration: form.type,
+                      });
+                    }}
+                  />
+                );
+              })()}
+            {activeAction.followup.kind === "multi-card-transfiguration" &&
+              (() => {
+                const followup = activeAction.followup;
+                if (multiTransfigurationStep === null) {
+                  return (
+                    <div
+                      data-exploration-multi-transfiguration-step="cards"
+                      data-exploration-multi-transfiguration-required-count={
+                        followup.count
+                      }
+                      data-exploration-multi-transfiguration-selected-entry-ids={selectedIds.join(
+                        ",",
+                      )}
+                      style={{ width: "100%", minHeight: 0 }}
+                    >
+                      <CardPickerPanel
+                        title={followup.title}
+                        subtitle={followup.subtitle}
+                        footerActions={[
+                          {
+                            label: t("exploration-confirm-choice-action"),
+                            onPress: commitFollowup,
+                            disabled: !canCommitFollowup,
+                            variant: "accent",
+                            testId:
+                              "cumulus-exploration-multi-transfiguration-cards-confirm",
+                          },
+                        ]}
+                        cards={followup.candidates.map((candidate) => ({
+                          entryId: candidate.entryId,
+                          model: candidate.model,
+                          selection: selectedIds.includes(candidate.entryId)
+                            ? "selected"
+                            : undefined,
+                          operation: selectedIds.includes(candidate.entryId)
+                            ? "transfigure"
+                            : undefined,
+                          testId: `cumulus-exploration-multi-transfiguration-card-${candidate.entryId}`,
+                        }))}
+                        emptyLabel={t("exploration-empty-card-state")}
+                        testId="cumulus-exploration-multi-transfiguration-card-picker"
+                        onCardPress={toggleCard}
+                      />
+                    </div>
+                  );
+                }
+                const entryId = selectedIds[multiTransfigurationStep];
+                const candidate = followup.candidates.find(
+                  (choice) => choice.entryId === entryId,
+                );
+                if (entryId === undefined || candidate === undefined)
+                  return null;
+                const selectedForm = multiTransfigurationForms[entryId] ?? null;
+                return (
+                  <div
+                    data-exploration-multi-transfiguration-step="form"
+                    data-exploration-multi-transfiguration-current-index={
+                      multiTransfigurationStep
+                    }
+                    data-exploration-multi-transfiguration-current-entry-id={
+                      entryId
+                    }
+                    data-exploration-multi-transfiguration-current-card-id={
+                      candidate.model.cardId
+                    }
+                    data-exploration-multi-transfiguration-current-form={
+                      selectedForm ?? undefined
+                    }
+                    data-exploration-multi-transfiguration-selected-entry-ids={selectedIds.join(
+                      ",",
+                    )}
+                    data-exploration-multi-transfiguration-selected-forms={selectedIds
+                      .map(
+                        (selectedEntryId) =>
+                          multiTransfigurationForms[selectedEntryId] ?? "",
+                      )
+                      .join(",")}
+                    role="region"
+                    aria-label={t(
+                      "exploration-multi-transfiguration-progress-accessible-name",
+                      {
+                        currentCardNumber: multiTransfigurationStep + 1,
+                        cardCount: followup.count,
+                        cardName: candidate.model.displaySnapshot.name,
+                      },
+                    )}
+                    style={{ width: "100%", minHeight: 0 }}
+                  >
+                    <TransfigurationDetailPanel
+                      layout={isDesktop ? "desktop" : "mobile"}
+                      candidate={candidate}
+                      selectedFormType={selectedForm}
+                      confirming={transfigurationConfirming}
+                      alreadyAccepted={false}
+                      showConfirmEssenceCost={false}
+                      onBack={() => {
+                        setTransfigurationConfirming(false);
+                        setMultiTransfigurationStep((current) =>
+                          current === null || current === 0
+                            ? null
+                            : current - 1,
+                        );
+                      }}
+                      onSelectForm={(type) =>
+                        setMultiTransfigurationForms((current) => ({
+                          ...current,
+                          [entryId]: type,
+                        }))
+                      }
+                      onConfirm={(form) => {
+                        const nextForms = {
+                          ...multiTransfigurationForms,
+                          [entryId]: form.type,
+                        };
+                        setMultiTransfigurationForms(nextForms);
+                        if (multiTransfigurationStep + 1 < followup.count) {
+                          setMultiTransfigurationStep(
+                            multiTransfigurationStep + 1,
+                          );
+                          return;
+                        }
+                        const transfigurations = selectedIds.flatMap(
+                          (selectedEntryId) => {
+                            const type = nextForms[selectedEntryId];
+                            return type === undefined ? [] : [type];
+                          },
+                        );
+                        if (transfigurations.length !== selectedIds.length)
+                          return;
+                        setTransfigurationConfirming(true);
+                        onResolve(activeAction.id, {
+                          entryIds: selectedIds,
+                          transfigurations,
+                        });
+                      }}
+                    />
+                  </div>
+                );
+              })()}
+            {activeAction.followup.kind === "cards" &&
+              activeAction.followup.selectionKey === "cardIds" && (
+                <article
+                  data-exploration-card-offer=""
+                  style={{
+                    width: "100%",
+                    maxHeight: isDesktop ? "min(660px, 100%)" : "100%",
+                    minHeight: 0,
                   }}
+                >
+                  <GlassPanel
+                    title={activeAction.followup.title}
+                    subtitle={activeAction.followup.subtitle}
+                    headingLevel="h1"
+                    headerSpacing="medium"
+                    footer={
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          padding: isDesktop
+                            ? `0 ${token("--space-2xl")} ${token("--space-l")}`
+                            : `0 ${token("--space-s")} ${token("--space-s")}`,
+                        }}
+                      >
+                        <GlassButton
+                          label={t("exploration-confirm-choice-action")}
+                          variant="accent"
+                          placement="onGlass"
+                          disabled={!canCommitFollowup}
+                          onPress={commitFollowup}
+                          testId="cumulus-exploration-followup-confirm"
+                        />
+                      </div>
+                    }
+                  >
+                    <div
+                      style={{
+                        flex: "1 1 auto",
+                        minWidth: 0,
+                        minHeight: 0,
+                        overflow: "hidden",
+                        // The floating GlassPanel hugs its contents, so block-size
+                        // containment would make this fitter's intrinsic height zero
+                        // and collapse every cqh-sized card to 0x0.
+                        containerType: "inline-size",
+                        display: "grid",
+                        placeItems: "center",
+                        padding: isDesktop
+                          ? token("--space-xl")
+                          : token("--space-s"),
+                        boxSizing: "border-box",
+                      }}
+                    >
+                      <CardChoiceGrid
+                        cards={activeAction.followup.cards.map((card) => ({
+                          entryId: card.entryId,
+                          model: card.model,
+                          selection: selectedIds.includes(card.entryId)
+                            ? "highlighted"
+                            : undefined,
+                          testId: `cumulus-exploration-card-${card.entryId}`,
+                        }))}
+                        columns={cardChoiceColumns(
+                          activeAction.followup.cards.length,
+                          isDesktop ? "desktop" : "mobile",
+                        )}
+                        layout={{
+                          kind: "site",
+                          viewport: isDesktop ? "desktop" : "mobile",
+                          fit: "choice",
+                        }}
+                        onCardPress={toggleCard}
+                      />
+                    </div>
+                  </GlassPanel>
+                </article>
+              )}
+            {activeAction.followup.kind === "cards" &&
+              activeAction.followup.selectionKey === "entryIds" && (
+                <CardPickerPanel
+                  title={activeAction.followup.title}
+                  subtitle={activeAction.followup.subtitle}
+                  footerActions={[
+                    {
+                      label:
+                        activeAction.followup.mode === "purge-and-copy" &&
+                        purgeEntryId === null
+                          ? t("exploration-followup-choice-purge")
+                          : activeAction.followup.mode === "purge-and-copy" &&
+                              selectedIds.length === 0
+                            ? t("exploration-followup-choice-copy")
+                            : t("exploration-confirm-choice-action"),
+                      onPress: commitFollowup,
+                      disabled: !canCommitFollowup,
+                      variant: "accent",
+                      testId: "cumulus-exploration-followup-confirm",
+                    },
+                  ]}
+                  cards={activeAction.followup.cards.map((card) => ({
+                    entryId: card.entryId,
+                    model: card.model,
+                    selection:
+                      card.entryId === purgeEntryId
+                        ? "danger"
+                        : selectedIds.includes(card.entryId)
+                          ? "selected"
+                          : undefined,
+                    emphasis: card.isBane ? "danger" : undefined,
+                    operation: selectedCardOperation(
+                      card.entryId,
+                      activeAction.followup,
+                      selectedIds,
+                      purgeEntryId,
+                    ),
+                    testId: `cumulus-exploration-card-${card.entryId}`,
+                  }))}
+                  emptyLabel={t("exploration-empty-card-state")}
+                  testId="cumulus-exploration-card-followup"
+                  onCardPress={toggleCard}
                 />
-              ) : (
-                <TransfigurationDetailPanel
-                  layout={isDesktop ? "desktop" : "mobile"}
-                  candidate={candidate}
-                  selectedFormType={selectedTransfigurationFormType}
-                  confirming={transfigurationConfirming}
-                  alreadyAccepted={false}
-                  onBack={() => {
-                    setSelectedTransfigurationEntryId(null);
-                    setSelectedTransfigurationFormType(null);
-                  }}
-                  onSelectForm={(type) =>
-                    setSelectedTransfigurationFormType((current) =>
-                      current === type ? null : type,
-                    )
-                  }
-                  onConfirm={(form) => {
-                    setTransfigurationConfirming(true);
-                    onResolve(activeAction.id, {
-                      entryIds: [candidate.entryId],
-                      transfiguration: form.type,
-                    });
-                  }}
-                />
-              );
-            })()}
-          {activeAction.followup.kind === "cards" &&
-            activeAction.followup.selectionKey === "cardIds" && (
-            <article
-              data-exploration-card-offer=""
-              style={{
-                width: "100%",
-                maxHeight: isDesktop ? "min(660px, 100%)" : "100%",
-                minHeight: 0,
-              }}
-            >
+              )}
+            {activeAction.followup.kind === "packs" && (
+              <article
+                data-exploration-pack-offer=""
+                style={{ width: "100%", minHeight: 0, maxHeight: "100%" }}
+              >
+                <GlassPanel
+                  eyebrow="Exploration"
+                  title={activeAction.followup.title}
+                  subtitle={activeAction.followup.subtitle}
+                  headingLevel="h1"
+                  headerSpacing="medium"
+                >
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: isDesktop
+                        ? "repeat(2, minmax(0, 1fr))"
+                        : "1fr",
+                      gap: token("--space-l"),
+                      padding: token("--space-l"),
+                      overflow: "auto",
+                    }}
+                  >
+                    {activeAction.followup.packs.map((pack) => (
+                      <section
+                        key={pack.index}
+                        data-testid={`cumulus-exploration-pack-${String(pack.index)}`}
+                        style={{
+                          display: "grid",
+                          gap: 0,
+                          padding: token("--space-m"),
+                          borderRadius: token("--radius-panel"),
+                          border: `2px solid ${token("--border-soft")}`,
+                          background: token("--glass-on-glass-fill"),
+                          color: token("--text-on-glass"),
+                        }}
+                      >
+                        <strong
+                          data-exploration-pack-title=""
+                          style={{
+                            font: token("--t-button"),
+                            textAlign: "left",
+                            margin: isDesktop
+                              ? `${token("--space-xl")} ${token("--space-2xl")} ${token("--space-2xl")}`
+                              : `${token("--space-xs")} 0 ${token("--space-s")}`,
+                          }}
+                        >
+                          {t("exploration-pack-title", {
+                            packNumber: pack.index + 1,
+                          })}
+                        </strong>
+                        <span
+                          data-exploration-pack-cards=""
+                          style={{
+                            display: "grid",
+                            gridTemplateColumns: `repeat(${String(pack.cards.length)}, minmax(0, 1fr))`,
+                            gap: token("--space-xs"),
+                          }}
+                        >
+                          {pack.cards.map((card) => (
+                            <GameCard key={card.entryId} model={card.model} />
+                          ))}
+                        </span>
+                        <div
+                          data-exploration-pack-action=""
+                          style={{
+                            display: isDesktop ? "flex" : "grid",
+                            justifyContent: isDesktop ? "center" : undefined,
+                            margin: isDesktop
+                              ? `${token("--space-2xl")} ${token("--space-2xl")} ${token("--space-xl")}`
+                              : `${token("--space-s")} 0 ${token("--space-xs")}`,
+                          }}
+                        >
+                          <GlassButton
+                            label={t("exploration-pack-choose-action")}
+                            accessibilityLabel={t(
+                              "exploration-pack-choose-accessible-name",
+                              { packNumber: pack.index + 1 },
+                            )}
+                            variant="accent"
+                            placement="onGlass"
+                            onPress={() =>
+                              onResolve(activeAction.id, {
+                                packIndex: pack.index,
+                              })
+                            }
+                            testId={`cumulus-exploration-pack-${String(pack.index)}-choose`}
+                          />
+                        </div>
+                      </section>
+                    ))}
+                  </div>
+                </GlassPanel>
+              </article>
+            )}
+            {activeAction.followup.kind === "subtypes" && (
               <GlassPanel
+                eyebrow={t("exploration-site-eyebrow")}
                 title={activeAction.followup.title}
                 subtitle={activeAction.followup.subtitle}
                 headingLevel="h1"
-                headerSpacing="medium"
                 footer={
                   <div
                     style={{
                       display: "flex",
                       justifyContent: "flex-end",
-                      padding: isDesktop
-                        ? `0 ${token("--space-2xl")} ${token("--space-l")}`
-                        : `0 ${token("--space-s")} ${token("--space-s")}`,
+                      padding: token("--space-m"),
                     }}
                   >
                     <GlassButton
@@ -4113,319 +7554,402 @@ export function ExplorationSiteScreen({
                 }
               >
                 <div
+                  role="radiogroup"
                   style={{
-                    flex: "1 1 auto",
-                    minWidth: 0,
-                    minHeight: 0,
-                    overflow: "hidden",
-                    // The floating GlassPanel hugs its contents, so block-size
-                    // containment would make this fitter's intrinsic height zero
-                    // and collapse every cqh-sized card to 0x0.
-                    containerType: "inline-size",
                     display: "grid",
-                    placeItems: "center",
-                    padding: isDesktop
-                      ? token("--space-xl")
-                      : token("--space-s"),
-                    boxSizing: "border-box",
+                    gap: token("--space-xs"),
+                    padding: token("--space-m"),
                   }}
                 >
-                  <CardChoiceGrid
-                    cards={activeAction.followup.cards.map((card) => ({
-                      entryId: card.entryId,
-                      model: card.model,
-                      selection: selectedIds.includes(card.entryId)
-                        ? "highlighted"
-                        : undefined,
-                      testId: `cumulus-exploration-card-${card.entryId}`,
-                    }))}
-                    columns={cardChoiceColumns(
-                      activeAction.followup.cards.length,
-                      isDesktop ? "desktop" : "mobile",
-                    )}
-                    layout={{
-                      kind: "site",
-                      viewport: isDesktop ? "desktop" : "mobile",
-                      fit: "choice",
-                    }}
-                    onCardPress={toggleCard}
-                  />
+                  {activeAction.followup.options.map((option) => (
+                    <Pressable
+                      key={option}
+                      as="button"
+                      role="radio"
+                      aria-checked={selectedSubtype === option}
+                      onClick={() => setSelectedSubtype(option)}
+                      style={{
+                        minHeight: token("--touch-min"),
+                        padding: token("--space-s"),
+                        borderRadius: token("--radius-control"),
+                        border: `2px solid ${selectedSubtype === option ? token("--selected") : token("--border-soft")}`,
+                        background: token("--glass-on-glass-fill"),
+                        color: token("--text-on-glass"),
+                        textAlign: "left",
+                        font: token("--t-button"),
+                      }}
+                    >
+                      {option}
+                    </Pressable>
+                  ))}
                 </div>
               </GlassPanel>
-            </article>
-          )}
-          {activeAction.followup.kind === "cards" &&
-            activeAction.followup.selectionKey === "entryIds" && (
-            <CardPickerPanel
-              title={activeAction.followup.title}
-              subtitle={activeAction.followup.subtitle}
-              footerActions={[
-                {
-                    label:
-                      activeAction.followup.mode === "purge-and-copy" && purgeEntryId === null
-                      ? t("exploration-followup-choice-purge")
-                      : activeAction.followup.mode === "purge-and-copy" && selectedIds.length === 0
-                        ? t("exploration-followup-choice-copy")
-                        : t("exploration-confirm-choice-action"),
-                  onPress: commitFollowup,
-                  disabled: !canCommitFollowup,
-                  variant: "accent",
-                  testId: "cumulus-exploration-followup-confirm",
-                },
-              ]}
-              cards={activeAction.followup.cards.map((card) => ({
-                entryId: card.entryId,
-                model: card.model,
-                selection:
-                  card.entryId === purgeEntryId
-                    ? "danger"
-                    : selectedIds.includes(card.entryId)
-                      ? "selected"
-                      : undefined,
-                emphasis: card.isBane ? "danger" : undefined,
-                operation: selectedCardOperation(
-                  card.entryId,
-                  activeAction.followup,
-                  selectedIds,
-                  purgeEntryId,
-                ),
-                testId: `cumulus-exploration-card-${card.entryId}`,
-              }))}
-              emptyLabel={t("exploration-empty-card-state")}
-              testId="cumulus-exploration-card-followup"
-              onCardPress={toggleCard}
-            />
-          )}
-          {activeAction.followup.kind === "packs" && (
-            <article
-              data-exploration-pack-offer=""
-              style={{ width: "100%", minHeight: 0, maxHeight: "100%" }}
-            >
+            )}
+            {activeAction.followup.kind === "site-types" && (
+              <GlassPanel
+                eyebrow={t("exploration-site-eyebrow")}
+                title={activeAction.followup.title}
+                subtitle={activeAction.followup.subtitle}
+                headingLevel="h1"
+              >
+                <div
+                  data-exploration-site-type-choices=""
+                  role="group"
+                  aria-label={t(
+                    "exploration-site-type-choices-accessible-name",
+                  )}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: isDesktop
+                      ? `repeat(${String(activeAction.followup.choices.length)}, minmax(0, 1fr))`
+                      : "1fr",
+                    placeItems: "center",
+                    gap: isDesktop ? token("--space-xl") : token("--space-m"),
+                    padding: isDesktop
+                      ? token("--space-2xl")
+                      : token("--space-l"),
+                  }}
+                >
+                  {activeAction.followup.choices.map((choice, index) => (
+                    <motion.div
+                      key={choice.siteType}
+                      data-exploration-site-type-choice={choice.siteType}
+                      initial={
+                        reduceMotion
+                          ? { opacity: 1, scale: 1 }
+                          : { opacity: 0, scale: 0.88 }
+                      }
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{
+                        delay: reduceMotion
+                          ? 0
+                          : index * REWARD_STAGGER_SECONDS,
+                        duration: reduceMotion
+                          ? 0
+                          : motionTimeSeconds("--dur-base"),
+                        ease: DREAM_EASE,
+                      }}
+                      style={{
+                        position: "relative",
+                        width: 180,
+                        height: 180,
+                      }}
+                    >
+                      <SiteNode
+                        model={choice.model}
+                        motion={!reduceMotion}
+                        presentation="choice"
+                        onSelect={() =>
+                          onResolve(activeAction.id, {
+                            siteType: choice.siteType,
+                          })
+                        }
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+              </GlassPanel>
+            )}
+            {activeAction.followup.kind === "dreamsign-flow" &&
+              (() => {
+                const followup = activeAction.followup;
+                const showOffered =
+                  followup.mode === "replace-with-offered" ||
+                  (followup.mode === "gain-offered" &&
+                    selectedOfferedDreamsignId === null);
+                const showHeld =
+                  followup.mode === "replace-with-offered" ||
+                  (followup.mode === "gain-offered" &&
+                    selectedOfferedDreamsignId !== null) ||
+                  followup.mode === "purge-and-gain-random";
+                const choosingPurge =
+                  followup.mode === "purge-and-gain-random" &&
+                  selectedPurgedDreamsignId === null;
+                const heldChoices =
+                  choosingPurge || selectedPurgedDreamsignId === null
+                    ? followup.held
+                    : followup.held.filter(
+                        (dreamsign) =>
+                          dreamsign.id !== selectedPurgedDreamsignId,
+                      );
+                const showConfirm =
+                  followup.mode === "replace-with-offered" ||
+                  (followup.mode === "gain-offered" &&
+                    selectedOfferedDreamsignId !== null) ||
+                  (followup.mode === "purge-and-gain-random" &&
+                    selectedPurgedDreamsignId !== null);
+                const requiredSelections =
+                  followup.mode === "replace-with-offered"
+                    ? 2
+                    : followup.mode === "gain-offered"
+                      ? 1 + followup.requiredOverflowReplacementCount
+                      : 1 + followup.requiredOverflowReplacementCount;
+                const selectedSelections =
+                  (selectedOfferedDreamsignId === null ? 0 : 1) +
+                  (selectedPurgedDreamsignId === null ? 0 : 1) +
+                  selectedDreamsignReplacementIds.length;
+                return (
+                  <div
+                    ref={dreamsignFlowRef}
+                    data-exploration-dreamsign-flow={followup.mode}
+                    data-exploration-dreamsign-flow-step={dreamsignFlowStep}
+                    data-exploration-required-overflow-replacements={
+                      followup.requiredOverflowReplacementCount
+                    }
+                    style={{ width: "100%", minHeight: 0 }}
+                  >
+                    <GlassPanel
+                      eyebrow={t("exploration-site-eyebrow")}
+                      title={followup.title}
+                      subtitle={followup.subtitle}
+                      headingLevel="h1"
+                      footer={
+                        showConfirm ? (
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "flex-end",
+                              padding: token("--space-m"),
+                            }}
+                          >
+                            <GlassButton
+                              label={t("exploration-confirm-choice-action")}
+                              variant="accent"
+                              placement="onGlass"
+                              disabled={!canCommitFollowup}
+                              onPress={commitDreamsignFlow}
+                              testId="cumulus-exploration-followup-confirm"
+                            />
+                          </div>
+                        ) : undefined
+                      }
+                    >
+                      <span
+                        role="status"
+                        aria-live="polite"
+                        aria-label={t(
+                          "exploration-dreamsign-selection-progress",
+                          {
+                            selectedCount: selectedSelections,
+                            requiredCount: requiredSelections,
+                          },
+                        )}
+                      />
+                      <div
+                        data-exploration-dreamsign-choice-groups=""
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns:
+                            isDesktop && showOffered && showHeld
+                              ? "repeat(2, minmax(0, 1fr))"
+                              : "minmax(0, 1fr)",
+                          gap: isDesktop
+                            ? token("--space-2xl")
+                            : token("--space-l"),
+                          maxHeight: "min(64dvh, 620px)",
+                          overflow: "auto",
+                          padding: isDesktop
+                            ? token("--space-2xl")
+                            : token("--space-m"),
+                        }}
+                      >
+                        {showOffered && (
+                          <ExplorationDreamsignChoiceGroup
+                            heading={t(
+                              "exploration-dreamsign-offered-group-title",
+                            )}
+                            role="offered"
+                            dreamsigns={followup.offered}
+                            selectedIds={
+                              selectedOfferedDreamsignId === null
+                                ? []
+                                : [selectedOfferedDreamsignId]
+                            }
+                            isDesktop={isDesktop}
+                            onChoose={chooseOfferedDreamsign}
+                          />
+                        )}
+                        {showHeld && (
+                          <ExplorationDreamsignChoiceGroup
+                            heading={t(
+                              choosingPurge
+                                ? "exploration-dreamsign-purge-group-title"
+                                : "exploration-dreamsign-replacement-group-title",
+                            )}
+                            role={
+                              choosingPurge
+                                ? "purge"
+                                : followup.mode === "replace-with-offered"
+                                  ? "exchange"
+                                  : "replacement"
+                            }
+                            dreamsigns={heldChoices}
+                            selectedIds={
+                              choosingPurge
+                                ? selectedPurgedDreamsignId === null
+                                  ? []
+                                  : [selectedPurgedDreamsignId]
+                                : selectedDreamsignReplacementIds
+                            }
+                            isDesktop={isDesktop}
+                            onChoose={chooseHeldDreamsign}
+                          />
+                        )}
+                      </div>
+                    </GlassPanel>
+                  </div>
+                );
+              })()}
+            {activeAction.followup.kind === "dreamsigns" && (
               <GlassPanel
                 eyebrow="Exploration"
                 title={activeAction.followup.title}
                 subtitle={activeAction.followup.subtitle}
                 headingLevel="h1"
-                headerSpacing="medium"
               >
-                <div style={{ display: "grid", gridTemplateColumns: isDesktop ? "repeat(2, minmax(0, 1fr))" : "1fr", gap: token("--space-l"), padding: token("--space-l"), overflow: "auto" }}>
-                  {activeAction.followup.packs.map((pack) => (
-                    <section
-                      key={pack.index}
-                      data-testid={`cumulus-exploration-pack-${String(pack.index)}`}
+                <div
+                  role="group"
+                  aria-label={activeAction.followup.subtitle}
+                  data-exploration-dreamsign-choices=""
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: `repeat(auto-fit, minmax(${String(isDesktop ? DESKTOP_DREAMSIGN_CHOICE_SIZE : MOBILE_DREAMSIGN_CHOICE_SIZE)}px, 1fr))`,
+                    gap: isDesktop ? token("--space-3xl") : token("--space-m"),
+                    placeItems: "center",
+                    minHeight: 0,
+                    maxHeight: "min(70dvh, 620px)",
+                    overflow: "auto",
+                    padding: isDesktop
+                      ? token("--space-2xl")
+                      : token("--space-m"),
+                  }}
+                >
+                  {activeAction.followup.dreamsigns.map((dreamsign) => (
+                    <div
+                      key={dreamsign.id}
                       style={{
-                        display: "grid",
-                        gap: 0,
-                        padding: token("--space-m"),
-                        borderRadius: token("--radius-panel"),
-                        border: `2px solid ${token("--border-soft")}`,
-                        background: token("--glass-on-glass-fill"),
-                        color: token("--text-on-glass"),
+                        width: isDesktop
+                          ? DESKTOP_DREAMSIGN_CHOICE_SIZE
+                          : MOBILE_DREAMSIGN_CHOICE_SIZE,
+                        height: isDesktop
+                          ? DESKTOP_DREAMSIGN_CHOICE_SIZE
+                          : MOBILE_DREAMSIGN_CHOICE_SIZE,
                       }}
                     >
-                      <strong
-                        data-exploration-pack-title=""
-                        style={{
-                          font: token("--t-button"),
-                          textAlign: "left",
-                          margin: isDesktop
-                            ? `${token("--space-xl")} ${token("--space-2xl")} ${token("--space-2xl")}`
-                            : `${token("--space-xs")} 0 ${token("--space-s")}`,
-                        }}
-                      >
-                        {t("exploration-pack-title", {
-                          packNumber: pack.index + 1,
-                        })}
-                      </strong>
-                      <span data-exploration-pack-cards="" style={{ display: "grid", gridTemplateColumns: `repeat(${String(pack.cards.length)}, minmax(0, 1fr))`, gap: token("--space-xs") }}>
-                        {pack.cards.map((card) => <GameCard key={card.entryId} model={card.model} />)}
-                      </span>
-                      <div
-                        data-exploration-pack-action=""
-                        style={{
-                          display: isDesktop ? "flex" : "grid",
-                          justifyContent: isDesktop ? "center" : undefined,
-                          margin: isDesktop
-                            ? `${token("--space-2xl")} ${token("--space-2xl")} ${token("--space-xl")}`
-                            : `${token("--space-s")} 0 ${token("--space-xs")}`,
-                        }}
-                      >
-                        <GlassButton
-                          label={t("exploration-pack-choose-action")}
-                          accessibilityLabel={t(
-                            "exploration-pack-choose-accessible-name",
-                            { packNumber: pack.index + 1 },
-                          )}
-                          variant="accent"
-                          placement="onGlass"
-                          onPress={() => onResolve(activeAction.id, { packIndex: pack.index })}
-                          testId={`cumulus-exploration-pack-${String(pack.index)}-choose`}
-                        />
-                      </div>
-                    </section>
+                      <Dreamsign
+                        dreamsign={dreamsign}
+                        testid={`cumulus-exploration-dreamsign-${dreamsign.id}`}
+                        onPress={() => chooseDreamsign(dreamsign.id)}
+                      />
+                    </div>
                   ))}
                 </div>
               </GlassPanel>
-            </article>
-          )}
-          {activeAction.followup.kind === "subtypes" && (
-            <GlassPanel
-              eyebrow={t("exploration-site-eyebrow")}
-              title={activeAction.followup.title}
-              subtitle={activeAction.followup.subtitle}
-              headingLevel="h1"
-              footer={
-                <div style={{ display: "flex", justifyContent: "flex-end", padding: token("--space-m") }}>
-                  <GlassButton label={t("exploration-confirm-choice-action")} variant="accent" placement="onGlass" disabled={!canCommitFollowup} onPress={commitFollowup} testId="cumulus-exploration-followup-confirm" />
-                </div>
-              }
-            >
-              <div role="radiogroup" style={{ display: "grid", gap: token("--space-xs"), padding: token("--space-m") }}>
-                {activeAction.followup.options.map((option) => (
-                  <Pressable
-                    key={option}
-                    as="button"
-                    role="radio"
-                    aria-checked={selectedSubtype === option}
-                    onClick={() => setSelectedSubtype(option)}
-                    style={{ minHeight: token("--touch-min"), padding: token("--space-s"), borderRadius: token("--radius-control"), border: `2px solid ${selectedSubtype === option ? token("--selected") : token("--border-soft")}`, background: token("--glass-on-glass-fill"), color: token("--text-on-glass"), textAlign: "left", font: token("--t-button") }}
-                  >
-                    {option}
-                  </Pressable>
-                ))}
-              </div>
-            </GlassPanel>
-          )}
-          {activeAction.followup.kind === "dreamsigns" && (
-            <GlassPanel
-              eyebrow="Exploration"
-              title={activeAction.followup.title}
-              subtitle={activeAction.followup.subtitle}
-              headingLevel="h1"
-            >
-              <div
-                role="group"
-                aria-label={activeAction.followup.subtitle}
-                data-exploration-dreamsign-choices=""
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: `repeat(auto-fit, minmax(${String(isDesktop ? DESKTOP_DREAMSIGN_CHOICE_SIZE : MOBILE_DREAMSIGN_CHOICE_SIZE)}px, 1fr))`,
-                  gap: isDesktop ? token("--space-3xl") : token("--space-m"),
-                  placeItems: "center",
-                  minHeight: 0,
-                  maxHeight: "min(70dvh, 620px)",
-                  overflow: "auto",
-                  padding: isDesktop ? token("--space-2xl") : token("--space-m"),
-                }}
+            )}
+            {activeAction.followup.kind === "dreamAvatars" && (
+              <GlassPanel
+                eyebrow="Exploration"
+                title={activeAction.followup.title}
+                subtitle={activeAction.followup.subtitle}
+                headingLevel="h1"
               >
-                {activeAction.followup.dreamsigns.map((dreamsign) => (
-                  <div key={dreamsign.id} style={{ width: isDesktop ? DESKTOP_DREAMSIGN_CHOICE_SIZE : MOBILE_DREAMSIGN_CHOICE_SIZE, height: isDesktop ? DESKTOP_DREAMSIGN_CHOICE_SIZE : MOBILE_DREAMSIGN_CHOICE_SIZE }}>
-                    <Dreamsign dreamsign={dreamsign} testid={`cumulus-exploration-dreamsign-${dreamsign.id}`} onPress={() => chooseDreamsign(dreamsign.id)} />
-                  </div>
-                ))}
-              </div>
-            </GlassPanel>
-          )}
-          {activeAction.followup.kind === "dreamAvatars" && (
-            <GlassPanel
-              eyebrow="Exploration"
-              title={activeAction.followup.title}
-              subtitle={activeAction.followup.subtitle}
-              headingLevel="h1"
-            >
-              <div
-                data-exploration-dream-avatar-choices=""
-                role="group"
-                aria-label={activeAction.followup.subtitle}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: isDesktop
-                    ? "repeat(3, minmax(0, 1fr))"
-                    : "repeat(auto-fit, minmax(150px, 1fr))",
-                  gap: isDesktop ? token("--space-xl") : token("--space-m"),
-                  placeItems: "center",
-                  padding: isDesktop ? token("--space-2xl") : token("--space-m"),
-                  overflow: "auto",
-                }}
-              >
-                {activeAction.followup.dreamAvatars.map((dreamAvatar) => (
-                  <div
-                    key={dreamAvatar.id}
-                    data-exploration-dream-avatar-choice={dreamAvatar.id}
-                    style={{
-                      display: "grid",
-                      justifyItems: "center",
-                      gap: token("--space-xs"),
-                      color: token("--text-on-glass"),
-                      textAlign: "center",
-                    }}
-                  >
-                    <div style={{ width: isDesktop ? 196 : 150 }}>
-                      <DreamAvatarPortrait
-                        dreamAvatar={dreamAvatar}
-                        variant="panel"
-                        profile={{
-                          id: dreamAvatar.id,
-                          ability: dreamAvatar.renderedText,
-                        }}
-                        onPress={() =>
-                          onResolve(activeAction.id, {
-                            dreamAvatarId: dreamAvatar.id,
-                          })
-                        }
-                      />
-                    </div>
-                    <div style={{ display: "grid", gap: token("--space-xxs") }}>
-                      <strong style={{ font: token("--t-button") }}>
-                        {dreamAvatar.name}
-                      </strong>
-                      <span
-                        style={{
-                          font: token("--t-caption"),
-                          color: token("--text-on-glass-muted"),
-                        }}
+                <div
+                  data-exploration-dream-avatar-choices=""
+                  role="group"
+                  aria-label={activeAction.followup.subtitle}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: isDesktop
+                      ? "repeat(3, minmax(0, 1fr))"
+                      : "repeat(auto-fit, minmax(150px, 1fr))",
+                    gap: isDesktop ? token("--space-xl") : token("--space-m"),
+                    placeItems: "center",
+                    padding: isDesktop
+                      ? token("--space-2xl")
+                      : token("--space-m"),
+                    overflow: "auto",
+                  }}
+                >
+                  {activeAction.followup.dreamAvatars.map((dreamAvatar) => (
+                    <div
+                      key={dreamAvatar.id}
+                      data-exploration-dream-avatar-choice={dreamAvatar.id}
+                      style={{
+                        display: "grid",
+                        justifyItems: "center",
+                        gap: token("--space-xs"),
+                        color: token("--text-on-glass"),
+                        textAlign: "center",
+                      }}
+                    >
+                      <div style={{ width: isDesktop ? 196 : 150 }}>
+                        <DreamAvatarPortrait
+                          dreamAvatar={dreamAvatar}
+                          variant="panel"
+                          profile={{
+                            id: dreamAvatar.id,
+                            ability: dreamAvatar.renderedText,
+                          }}
+                          onPress={() =>
+                            onResolve(activeAction.id, {
+                              dreamAvatarId: dreamAvatar.id,
+                            })
+                          }
+                        />
+                      </div>
+                      <div
+                        style={{ display: "grid", gap: token("--space-xxs") }}
                       >
-                        {dreamAvatar.title}
-                      </span>
+                        <strong style={{ font: token("--t-button") }}>
+                          {dreamAvatar.name}
+                        </strong>
+                        <span
+                          style={{
+                            font: token("--t-caption"),
+                            color: token("--text-on-glass-muted"),
+                          }}
+                        >
+                          {dreamAvatar.title}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </GlassPanel>
-          )}
-        </motion.section>
-      )}
+                  ))}
+                </div>
+              </GlassPanel>
+            )}
+          </motion.section>
+        )}
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&
         activeAction === null &&
         view.resolvedActionId === null &&
         view.reward === null && (
-        <motion.div
-          data-exploration-exit-control=""
-          data-tutorial-guidance-obstacle=""
-          initial={{ opacity: 0, scale: 0.92 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{
-            duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
-            ease: DREAM_EASE,
-          }}
-          style={{
-            position: "fixed",
-            top: `max(var(--safe-area-inset-top), ${String(exitEdgeInset)}px)`,
-            right: isDesktop
-              ? `calc(max(var(--safe-area-inset-right), ${String(exitEdgeInset)}px) + ${String(MENU_BUTTON_PX)}px + ${token("--space-xs")})`
-              : `max(var(--safe-area-inset-right), ${String(exitEdgeInset)}px)`,
-            zIndex: FRAME_BREAK_EXIT_LAYER,
-          }}
-        >
+          <motion.div
+            data-exploration-exit-control=""
+            data-tutorial-guidance-obstacle=""
+            initial={{ opacity: 0, scale: 0.92 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
+              ease: DREAM_EASE,
+            }}
+            style={{
+              position: "fixed",
+              top: `max(var(--safe-area-inset-top), ${String(exitEdgeInset)}px)`,
+              right: isDesktop
+                ? `calc(max(var(--safe-area-inset-right), ${String(exitEdgeInset)}px) + ${String(MENU_BUTTON_PX)}px + ${token("--space-xs")})`
+                : `max(var(--safe-area-inset-right), ${String(exitEdgeInset)}px)`,
+              zIndex: FRAME_BREAK_EXIT_LAYER,
+            }}
+          >
             <IconButton
               glyph={GLYPHS.close}
-            label={t("exploration-return-action")}
-            onPress={collapseFrameBreak}
-            testId="cumulus-exploration-exit"
-          />
-        </motion.div>
-      )}
+              label={t("exploration-return-action")}
+              onPress={collapseFrameBreak}
+              testId="cumulus-exploration-exit"
+            />
+          </motion.div>
+        )}
     </GuideGallerySiteLayout>
   );
 }

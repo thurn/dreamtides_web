@@ -15,6 +15,10 @@ import {
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
 import { useMessages } from "../hooks/use-messages";
+import {
+  ShopFreePurchaseStatus,
+  type ShopFreePurchaseStatusView,
+} from "./ShopFreePurchaseStatus";
 
 export interface CardShopOfferView {
   /** Stable UUID-derived tile id. */
@@ -53,6 +57,8 @@ export interface CardShopSiteView {
   offers: readonly CardShopOfferView[];
   /** The one-use restock action. */
   restock: CardShopRestockView;
+  /** Exploration benefits currently making successful purchases free. */
+  freePurchaseStatus: ShopFreePurchaseStatusView;
 }
 
 export interface CardShopSiteScreenProps {
@@ -87,6 +93,7 @@ export function CardShopSiteScreen({
           presentation={view.presentation}
           offers={view.offers}
           restock={view.restock}
+          freePurchaseStatus={view.freePurchaseStatus}
           onBuy={onBuy}
           onRestock={onRestock}
           onClose={onClose}
@@ -101,6 +108,7 @@ function CardShopGallery({
   presentation,
   offers,
   restock,
+  freePurchaseStatus,
   onBuy,
   onRestock,
   onClose,
@@ -109,6 +117,7 @@ function CardShopGallery({
   readonly presentation: CardShopSiteView["presentation"];
   readonly offers: readonly CardShopOfferView[];
   readonly restock: CardShopRestockView;
+  readonly freePurchaseStatus: ShopFreePurchaseStatusView;
   readonly onBuy: (slotIndex: number) => void;
   readonly onRestock: () => void;
   readonly onClose: () => void;
@@ -184,6 +193,14 @@ function CardShopGallery({
     <section
       data-card-shop-gallery-region=""
       data-card-shop-layout={layout}
+      data-shop-free-source={
+        freePurchaseStatus.freeNextShopSource === null ? undefined : "next-shop"
+      }
+      data-shop-free-purchases-remaining={
+        freePurchaseStatus.freePurchasesRemaining > 0
+          ? freePurchaseStatus.freePurchasesRemaining
+          : undefined
+      }
       style={{
         position: "relative",
         zIndex: 10,
@@ -195,10 +212,13 @@ function CardShopGallery({
         pointerEvents: "auto",
         alignSelf: desktop ? "stretch" : "start",
         justifySelf: desktop ? undefined : "center",
-        display: desktop ? "grid" : undefined,
+        display: "grid",
+        alignContent: desktop ? "center" : "start",
         alignItems: desktop ? "center" : undefined,
+        gap: token("--space-s"),
       }}
     >
+      <ShopFreePurchaseStatus status={freePurchaseStatus} />
       <CardPickerPanel
         title={presentation.title}
         rightAccessory={{

@@ -1,7 +1,7 @@
 const LOW_COST_CARD_PATTERN = /^≤(\d+)● cost (Character|Event)$/u;
 const SIMULATED_PLAYER_DECK_SIZE = 30;
 const NIGHTMARE_CARD_ID = "b0a2c3d4-e5f6-4789-8abc-0def12345678";
-const PRESENTATION_CARD_SLOT_PATTERN = /\{(offered_card|deck_card|fixed_card|nightmare_card)\}/gu;
+const PRESENTATION_SLOT_PATTERN = /\{(offered_card|deck_card|fixed_card|nightmare_card|starter_card|card_type)\}/gu;
 
 function randomIndex(length, random) {
   if (length < 1) throw new Error("Cannot select from an empty card list.");
@@ -41,6 +41,7 @@ function matchesPredicate(card, predicate) {
   if (predicate === "cheap-character") {
     return card.cardType === "Character" && card.energyCost !== null && card.energyCost <= 2;
   }
+  if (predicate === "legendary") return card.rarity === "Legendary";
   const displayPredicate = predicate
     .split("-")
     .map((word) => `${word.slice(0, 1).toUpperCase()}${word.slice(1)}`)
@@ -70,45 +71,62 @@ function chooseCard(action, slot, cards, playerDeck, random) {
   }
   const candidates = slot === "offered_card"
     ? cards.filter((card) => card.isOfferable && matchesPredicate(card, action.predicate))
-    : playerDeck.filter((card) => matchesPredicate(card, action.predicate));
+    : slot === "starter_card"
+      ? playerDeck.filter((card) => card.isStarter)
+      : playerDeck.filter((card) => matchesPredicate(card, action.predicate));
   const fallback = slot === "deck_card"
     ? cards.filter((card) => matchesPredicate(card, action.predicate))
-    : candidates;
+    : slot === "starter_card" ? cards.filter((card) => card.isStarter) : candidates;
   const pool = candidates.length === 0 ? fallback : candidates;
   if (pool.length === 0) throw new Error(`No card matches {${slot}}.`);
   const card = pool[randomIndex(pool.length, random)];
   return {
     placeholder: `{${slot}}`,
-    predicate: action.predicate ?? null,
+    predicate: slot === "starter_card" ? null : action.predicate ?? null,
     cardId: card.id,
     cardName: card.name,
     source: slot === "offered_card"
       ? "offer_pool"
-      : candidates.length === 0 ? "catalog_fallback" : "player_deck",
+      : slot === "starter_card"
+        ? candidates.length === 0 ? "catalog_fallback" : "starter_deck"
+        : candidates.length === 0 ? "catalog_fallback" : "player_deck",
   };
 }
 
 /** Render action-local presentation slots with simulated UUID-backed entities. */
 export function renderActionPresentation(action, cards, playerDeck, random) {
   const slots = [...new Set(
-    [...action.effectText.matchAll(PRESENTATION_CARD_SLOT_PATTERN)].map((match) => match[1]),
+    [...action.effectText.matchAll(PRESENTATION_SLOT_PATTERN)].map((match) => match[1]),
   )];
-  const runtimeCardSelections = slots.map((slot) =>
+  const runtimeCardSelections = slots.filter((slot) => slot !== "card_type").map((slot) =>
     chooseCard(action, slot, cards, playerDeck, random));
   const selections = new Map(runtimeCardSelections.map((entry) => [entry.placeholder, entry]));
   const renderedEffectParts = [];
   let cursor = 0;
-  for (const match of action.effectText.matchAll(PRESENTATION_CARD_SLOT_PATTERN)) {
+  for (const match of action.effectText.matchAll(PRESENTATION_SLOT_PATTERN)) {
     if (match.index > cursor) {
       renderedEffectParts.push({ kind: "text", text: action.effectText.slice(cursor, match.index) });
     }
-    const selection = selections.get(match[0]);
-    renderedEffectParts.push({
-      kind: "card",
-      placeholder: match[0],
-      cardId: selection.cardId,
-      cardName: selection.cardName,
-    });
+    if (match[1] === "card_type") {
+      if (action.cardType !== "Character" && action.cardType !== "Event") {
+        throw new Error("{card_type} requires a Character or Event cardType.");
+      }
+      renderedEffectParts.push({
+        kind: "variable",
+        placeholder: match[0],
+        variableName: "card_type",
+        value: action.cardType,
+        text: action.cardType,
+      });
+    } else {
+      const selection = selections.get(match[0]);
+      renderedEffectParts.push({
+        kind: "card",
+        placeholder: match[0],
+        cardId: selection.cardId,
+        cardName: selection.cardName,
+      });
+    }
     cursor = match.index + match[0].length;
   }
   if (cursor < action.effectText.length) {

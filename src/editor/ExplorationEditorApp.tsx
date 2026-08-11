@@ -156,8 +156,22 @@ const EFFECT_FIELD_KEYS = [
   "predicate", "count", "cardId", "dreamsignId", "packCount", "packSize",
   "offerCount", "essencePerSpark", "essencePerCard", "sparkBonus", "essence",
   "energyCostReduction", "subtype", "subtypeOptions", "nightmareCount",
-  "transfiguration", "deckTarget",
+  "transfiguration", "deckTarget", "cardType", "siteType",
 ] as const;
+
+const FOLLOWUP_EFFECT_KINDS: ReadonlySet<ExplorationEditorAction["effectKind"]> =
+  new Set([
+    "purge-and-copy", "transfigure-selected", "purge-selected", "purge-for-essence",
+    "change-subtype-selected", "change-card-type-selected", "copy-selected-card", "copy-selected-cards",
+    "copy-offered-deck-card", "replace-selected", "replace-selected-with-card",
+    "transfigure-fixed-selected", "draft-card", "transfigured-card-draft", "take-cards",
+    "choose-pack", "change-subtype-all", "gain-dreamsign", "gain-random-dreamsign",
+    "gain-offered-dreamsign", "gain-nightmare-and-offered-dreamsign",
+    "replace-selected-dreamsign-with-offered", "purge-selected-dreamsign-and-gain-random",
+    "gain-nightmare-and-dreamsign", "purge-dreamsign-for-essence", "choose-dream-avatar",
+    "choose-site-type", "take-transfigured-cards-and-gain-nightmares",
+    "purge-one-transfigure-and-copy-others",
+  ]);
 
 function ExplorationCardPicker({
   cards,
@@ -387,7 +401,7 @@ function ExplorationEditorRow({
 
   async function saveActionText(
     slot: number,
-    field: "label" | "effectText",
+    field: "label" | "effectText" | "followupTitle" | "followupSubtitle",
     value: string,
     revision: number,
   ) {
@@ -402,7 +416,11 @@ function ExplorationEditorRow({
     onServerData(response.data);
     logEvent(field === "label"
       ? "exploration_editor_label_saved"
-      : "exploration_editor_effect_text_saved", { cardId: encounter.cardId, slot });
+      : field === "effectText"
+        ? "exploration_editor_effect_text_saved"
+        : "exploration_editor_followup_text_saved", {
+      cardId: encounter.cardId, slot, field,
+    });
   }
 
   function updateField(
@@ -426,7 +444,9 @@ function ExplorationEditorRow({
   ) {
     const key = `${action.id}:${field.key}`;
     if (field.control === "number") {
-      const value = typeof action[field.key] === "number" ? action[field.key] as number : 0;
+      const value = typeof action[field.key] === "number"
+        ? action[field.key] as number
+        : typeof field.defaultValue === "number" ? field.defaultValue : 0;
       const step = field.step ?? 1;
       return (
         <NumberStepper
@@ -438,6 +458,7 @@ function ExplorationEditorRow({
           decrementLabel={`Decrease ${field.label}`}
           incrementLabel={`Increase ${field.label}`}
           decrementDisabled={value - step < (field.min ?? 1)}
+          incrementDisabled={field.max !== undefined && value + step > field.max}
           testId={`exploration-${field.key}-${encounter.cardId}-${String(slot)}`}
           onDecrement={() => updateField(slot, field.key, value - step)}
           onIncrement={() => updateField(slot, field.key, value + step)}
@@ -471,6 +492,47 @@ function ExplorationEditorRow({
             ariaLabel={field.label}
             options={data.transfigurations.map((value) => ({ value, label: value }))}
             value={String(action.transfiguration ?? "")}
+            onChange={(value) => updateField(slot, field.key, value)}
+          />
+        </label>
+      );
+    }
+    if (field.control === "card-type") {
+      return (
+        <label
+          className="exploration-editor-select-field"
+          data-exploration-field-control="cardType"
+          key={key}
+        >
+          <span>{field.label}</span>
+          <Select
+            full
+            size="sm"
+            ariaLabel={field.label}
+            options={[
+              { value: "Character", label: "Character" },
+              { value: "Event", label: "Event" },
+            ]}
+            value={String(action.cardType ?? "Character")}
+            onChange={(value) => updateField(slot, field.key, value)}
+          />
+        </label>
+      );
+    }
+    if (field.control === "site-type") {
+      return (
+        <label
+          className="exploration-editor-select-field"
+          data-exploration-field-control="siteType"
+          key={key}
+        >
+          <span>{field.label}</span>
+          <Select
+            full
+            size="sm"
+            ariaLabel={field.label}
+            options={field.options ?? []}
+            value={String(action.siteType ?? field.defaultValue ?? "Shop")}
             onChange={(value) => updateField(slot, field.key, value)}
           />
         </label>
@@ -600,7 +662,10 @@ function ExplorationEditorRow({
           (value, revision) => saveActionText(slot, "effectText", value, revision),
         )}
         <div className="exploration-editor-action-selects">
-          <label className="exploration-editor-select-field">
+          <label
+            className="exploration-editor-select-field"
+            data-exploration-field-control="effectKind"
+          >
             <span>Effect</span>
             <Select
               full
@@ -614,9 +679,25 @@ function ExplorationEditorRow({
                 );
                 if (nextDefinition === undefined) return;
                 const nextAction = { ...action };
+                const currentFieldKeys = new Set(
+                  definitions.get(action.effectKind)?.fields.map((field) => field.key) ?? [],
+                );
                 for (const key of EFFECT_FIELD_KEYS) delete nextAction[key];
                 for (const field of nextDefinition.fields) {
-                  const retained = action[field.key];
+                  const candidate = currentFieldKeys.has(field.key)
+                    ? action[field.key]
+                    : undefined;
+                  const retained =
+                    field.control === "number" &&
+                    typeof candidate === "number" &&
+                    ((field.min !== undefined && candidate < field.min) ||
+                      (field.max !== undefined && candidate > field.max))
+                      ? undefined
+                      : field.control === "predicate" &&
+                          candidate === "" &&
+                          field.optional !== true
+                        ? undefined
+                        : candidate;
                   const fallback = field.key === "cardId"
                     ? encounter.cardId
                     : field.key === "dreamsignId"
@@ -625,9 +706,30 @@ function ExplorationEditorRow({
                         ? data.subtypes[0]
                         : field.key === "subtypeOptions"
                           ? data.subtypes
-                          : field.defaultValue;
+                          : field.key === "siteType"
+                            ? field.defaultValue ?? "Shop"
+                            : field.defaultValue ??
+                              (field.control === "predicate"
+                                ? data.predicates.find(({ value }) => value !== "")?.value
+                                : field.control === "transfiguration"
+                                  ? data.transfigurations[0]
+                                  : field.control === "number"
+                                    ? field.min
+                                    : undefined);
                   const fieldValue = retained ?? fallback;
                   if (fieldValue !== undefined) nextAction[field.key] = fieldValue;
+                }
+                const hasPairedFollowup =
+                  typeof action.followupTitle === "string" &&
+                  action.followupTitle.trim() !== "" &&
+                  typeof action.followupSubtitle === "string" &&
+                  action.followupSubtitle.trim() !== "";
+                if (nextDefinition.requiresFollowup && !hasPairedFollowup) {
+                  nextAction.followupTitle = action.label;
+                  nextAction.followupSubtitle = action.effectText;
+                } else if (!FOLLOWUP_EFFECT_KINDS.has(nextDefinition.kind)) {
+                  delete nextAction.followupTitle;
+                  delete nextAction.followupSubtitle;
                 }
                 void saveAction(
                   slot,
@@ -650,6 +752,26 @@ function ExplorationEditorRow({
         {definition.fields.length > 0 && (
           <div className="exploration-editor-fields">
             {definition.fields.map((field) => controlFor(slot, action, field))}
+          </div>
+        )}
+        {definition.requiresFollowup && (
+          <div
+            className="exploration-editor-fields"
+            data-exploration-field-control="siteTypeFollowup"
+          >
+            {editable(
+              { cardId: `${encounter.cardId}:${String(slot)}`, field: "followupTitle" },
+              action.followupTitle ?? action.label,
+              <span>{action.followupTitle ?? action.label}</span>,
+              (value, revision) => saveActionText(slot, "followupTitle", value, revision),
+              "single-line",
+            )}
+            {editable(
+              { cardId: `${encounter.cardId}:${String(slot)}`, field: "followupSubtitle" },
+              action.followupSubtitle ?? action.effectText,
+              <span>{action.followupSubtitle ?? action.effectText}</span>,
+              (value, revision) => saveActionText(slot, "followupSubtitle", value, revision),
+            )}
           </div>
         )}
         <span

@@ -21,11 +21,7 @@ export type { BattleFoldState, PendingPrompt } from "./battle/fold";
 import type { BattleFoldState } from "./battle/fold";
 
 export type FrontDoorPhase =
-  | "main"
-  | "mainExiting"
-  | "loading"
-  | "tutorial"
-  | "journey";
+  "main" | "mainExiting" | "loading" | "tutorial" | "journey";
 
 export interface FrontDoorState {
   readonly phase: FrontDoorPhase;
@@ -90,7 +86,8 @@ export function genesisFoldState(genesis: Genesis): FoldState {
 function genesisJourneyState(genesis: Genesis): JourneyState {
   // These literals are compatibility defaults for historical rooms whose
   // genesis predates economy pinning.
-  const defaultStartingEssence = genesis.contentConfig?.defaultStartingEssence ?? 200;
+  const defaultStartingEssence =
+    genesis.contentConfig?.defaultStartingEssence ?? 200;
   const dreamsignCap = genesis.contentConfig?.dreamsignCap ?? 12;
   return {
     runId: null,
@@ -125,6 +122,8 @@ function genesisJourneyState(genesis: Genesis): JourneyState {
     shopModifiers: {
       freeRerolls: 0,
       essenceDiscountPercent: 0,
+      freeNextShopModifiers: [],
+      freePurchaseModifiers: [],
     },
     siteOfferModifiers: [],
     dreamscapeModifiers: [],

@@ -3,13 +3,17 @@ import { createDreamsign } from "../../data/dreamsigns";
 import type { JourneyContent } from "../../data/journey-content";
 import { isNightmareCardId } from "../../data/nightmare";
 import { deriveEntryIdCounter } from "../../state/deck-entry-ids";
-import { addSiteToCurrentDreamscape } from "../../state/journey-state-actions";
+import {
+  addSiteToCurrentDreamscape,
+  insertPreparedSiteInJourneyState,
+} from "../../state/journey-state-actions";
 import type { DreamsignTemplate } from "../../types/content";
 import type {
   CardKeywordModification,
   CardTypeChange,
   DeckEntry,
   JourneyState,
+  SiteState,
   SiteType,
   TransfigurationType,
 } from "../../types/journey";
@@ -81,6 +85,13 @@ export type JourneyRewardEffect =
   | {
       kind: "add_site";
       siteType: SiteType;
+    }
+  | {
+      kind: "insert_site";
+      targetNodeId: string;
+      insertionIndex: number;
+      siblingSiteIdsBefore: readonly string[];
+      site: SiteState;
     }
   | {
       kind: "composite";
@@ -249,7 +260,11 @@ function applyEffect(
     }
     case "reduce_deck_entry_energy_cost": {
       const target = validateDeckTarget(state, journeyContent, effect);
-      if (target === null || !Number.isFinite(effect.amount) || effect.amount <= 0) {
+      if (
+        target === null ||
+        !Number.isFinite(effect.amount) ||
+        effect.amount <= 0
+      ) {
         return null;
       }
       const keywordModification = mergeCardKeywordModification(
@@ -275,6 +290,8 @@ function applyEffect(
         effect.siteType,
         effect.siteType,
       );
+    case "insert_site":
+      return insertPreparedSiteInJourneyState(state, effect);
     case "composite": {
       let next: JourneyState | null = state;
       for (const child of effect.children) {

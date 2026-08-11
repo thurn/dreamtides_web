@@ -29,11 +29,13 @@ import type {
 
 export { deriveEntryIdCounter };
 
-
 /** Mutation functions exposed by the journey context. */
 export interface JourneyMutations {
   changeEssence: (delta: number, source: string) => void;
-  startJourney: (dreamAvatar: DreamAvatarContent, seedOverride?: string) => void;
+  startJourney: (
+    dreamAvatar: DreamAvatarContent,
+    seedOverride?: string,
+  ) => void;
   /** Request a shared debug reroll of the journey-start DreamAvatar offer. */
   rerollDreamAvatarOffer: () => void;
   completeSite: (siteId: string, source: string) => void;
@@ -149,11 +151,7 @@ export interface JourneyMutations {
    * replace; without it the mutation no-ops at the cap so the UI can prompt a
    * purge.
    */
-  buyShopSlot: (
-    siteId: string,
-    slotIndex: number,
-    purgeIndex?: number,
-  ) => void;
+  buyShopSlot: (siteId: string, slotIndex: number, purgeIndex?: number) => void;
   rerollShop: (site: SiteState) => void;
   ensureCardChoiceRuntime: (
     siteId: string,
@@ -228,7 +226,9 @@ export interface JourneyMutations {
     effectDescription: string,
     effectDetails: Record<string, unknown>,
   ) => void;
-  setDreamAvatarSelection: (resolvedPackage: ResolvedDreamAvatarPackage) => void;
+  setDreamAvatarSelection: (
+    resolvedPackage: ResolvedDreamAvatarPackage,
+  ) => void;
   setCardSourceDebug: (
     cardSourceDebug: CardSourceDebugState | null,
     source: string,
@@ -271,6 +271,9 @@ export interface JourneyMutations {
   bootstrapQaScene?: (
     sceneId: string,
     explorationCardId?: string | null,
+    explorationDreamsignCount?: number | null,
+    explorationDreamsignCap?: number | null,
+    explorationStarterCount?: number | null,
   ) => void;
   /**
    * Debug-only: replaces the entire journey state with a previously saved
@@ -384,11 +387,7 @@ export interface JourneyMutations {
    * Swap one unvisited site of `from` for a fresh site of `to` in the
    * current dreamscape. No-ops when no eligible site exists.
    */
-  replaceSiteType: (
-    from: SiteType,
-    to: SiteType,
-    source: string,
-  ) => void;
+  replaceSiteType: (from: SiteType, to: SiteType, source: string) => void;
   /**
    * Stack a dreamscape-window modifier that hides every site of `siteType`
    * for the next `dreamscapes` dreamscapes the player enters. The atlas
@@ -480,6 +479,8 @@ export function createDefaultState(
     shopModifiers: {
       freeRerolls: 0,
       essenceDiscountPercent: 0,
+      freeNextShopModifiers: [],
+      freePurchaseModifiers: [],
     },
     siteOfferModifiers: [],
     dreamscapeModifiers: [],
@@ -518,9 +519,9 @@ export function applyCardSourceDebug(
       cardSourceDebug === null
         ? null
         : {
-          ...cardSourceDebug,
-          entries: cardSourceDebug.entries.map((entry) => ({ ...entry })),
-        },
+            ...cardSourceDebug,
+            entries: cardSourceDebug.entries.map((entry) => ({ ...entry })),
+          },
   };
 }
 

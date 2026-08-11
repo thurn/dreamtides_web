@@ -335,6 +335,7 @@ function siteProvider(): SiteContentProvider {
           slots: [slot],
           rerollCount: 0,
           remainingDreamsignPoolIds: [],
+          purchaseHistory: [],
         },
       };
     },

@@ -129,10 +129,16 @@ export function JourneyApp({
     mutations.bootstrapQaScene(
       gotoScene,
       runtimeConfig.explorationCardId ?? null,
+      runtimeConfig.explorationDreamsignCount ?? null,
+      runtimeConfig.explorationDreamsignCap ?? null,
+      runtimeConfig.explorationStarterCount ?? null,
     );
   }, [
     confirmedHead,
     runtimeConfig.explorationCardId,
+    runtimeConfig.explorationDreamsignCap,
+    runtimeConfig.explorationDreamsignCount,
+    runtimeConfig.explorationStarterCount,
     runtimeConfig.gotoScene,
     state.dreamAvatar,
     mutations,

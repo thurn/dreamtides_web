@@ -59,6 +59,7 @@ function runtime(): ShopSiteRuntime {
     ],
     rerollCount: 0,
     remainingDreamsignPoolIds: [],
+    purchaseHistory: [],
   };
 }
 
@@ -155,6 +156,10 @@ describe("buildCardShopOffers", () => {
           },
           offers,
           restock: { entryId: "restock", price: 0, state: "available" },
+          freePurchaseStatus: {
+            freeNextShopSource: null,
+            freePurchasesRemaining: 0,
+          },
         },
         { siteId: "exploration-site", actionId: "exploration-action" },
       ),
@@ -241,5 +246,63 @@ describe("buildCardShopSiteView", () => {
       line: "A chosen greeting.",
     });
     expect(view.offers).toHaveLength(3);
+  });
+
+  it("projects overlapping Exploration benefits into zero-price offers and status", () => {
+    const state = {
+      ...createDefaultState(),
+      essence: 0,
+      shopModifiers: {
+        ...createDefaultState().shopModifiers,
+        freePurchaseModifiers: [
+          {
+            kind: "free-purchases" as const,
+            sourceSiteId: "exploration-counted",
+            sourceActionId: "counted-action",
+            initialCount: 3,
+            remainingCount: 2,
+          },
+        ],
+      },
+    };
+    const view = buildCardShopSiteView({
+      state,
+      sceneNode: null,
+      site,
+      runtime: {
+        ...runtime(),
+        freePurchaseSource: {
+          sourceSiteId: "exploration-visit",
+          sourceActionId: "visit-action",
+        },
+      },
+      cardDatabase: database(),
+      guide: {
+        id: "fixture-tobias",
+        name: "Tobias Fixture",
+        homeDreamscapeId: "fixture-dream",
+        siteType: "Shop",
+        portraitSource: "fixture-guide.png",
+        dialogue: { site: ["Browse a while."] },
+        homeSpecialty: "Fixture specialty.",
+      },
+      guideLine: "A chosen greeting.",
+      economyData: economyFixture(),
+      transfigurationData: transfigurationFixture(),
+      sitesData: MINIMAL_SITES_DATA,
+    });
+
+    expect(view.offers.map((offer) => offer.price)).toEqual([0, 0, 0]);
+    expect(
+      view.offers.slice(0, 2).every((offer) => offer.state === "available"),
+    ).toBe(true);
+    expect(view.freePurchaseStatus).toEqual({
+      freeNextShopSource: {
+        sourceSiteId: "exploration-visit",
+        sourceActionId: "visit-action",
+      },
+      freePurchasesRemaining: 2,
+    });
+    expect(view.restock.price).toBeGreaterThan(0);
   });
 });

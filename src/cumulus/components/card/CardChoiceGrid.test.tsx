@@ -69,22 +69,24 @@ describe("CardChoiceGrid", () => {
     const root = createRoot(container);
     act(() =>
       root.render(
-        <CumulusRoot><CardChoiceGrid
-          cards={[
-            { entryId: "choice-a", model: model("A"), testId: "choice-a" },
-            {
-              entryId: "choice-b",
-              model: model("B"),
-              testId: "choice-b",
-              selection: "highlighted",
-              quantityBadge: { count: 2 },
-              operation: "copy",
-            },
-          ]}
-          columns="two"
-          layout={{ kind: "site", viewport: "desktop", fit: "choice" }}
-          onCardPress={choose}
-        /></CumulusRoot>,
+        <CumulusRoot>
+          <CardChoiceGrid
+            cards={[
+              { entryId: "choice-a", model: model("A"), testId: "choice-a" },
+              {
+                entryId: "choice-b",
+                model: model("B"),
+                testId: "choice-b",
+                selection: "highlighted",
+                quantityBadge: { count: 2 },
+                operation: "copy",
+              },
+            ]}
+            columns="two"
+            layout={{ kind: "site", viewport: "desktop", fit: "choice" }}
+            onCardPress={choose}
+          />
+        </CumulusRoot>,
       ),
     );
 
@@ -93,6 +95,11 @@ describe("CardChoiceGrid", () => {
         .querySelector("[data-card-choice-grid-columns]")
         ?.getAttribute("data-card-choice-grid-columns"),
     ).toBe("2");
+    expect(
+      Array.from(
+        container.querySelectorAll<HTMLElement>("[data-entry-id]"),
+      ).map((entry) => entry.dataset.entryId),
+    ).toEqual(["choice-a", "choice-b"]);
     expect(
       container.querySelector("[data-card-choice-quantity-badge]")?.textContent,
     ).not.toBe("");
@@ -121,24 +128,26 @@ describe("CardChoiceGrid", () => {
     const root = createRoot(container);
     act(() =>
       root.render(
-        <CumulusRoot><CardChoiceGrid
-          cards={[
-            {
-              entryId: "disabled-card",
-              model: model("Disabled"),
-              testId: "disabled-card",
-              disabled: true,
-              draggable: true,
-              emphasis: "danger",
-            },
-          ]}
-          columns="one"
-          layout={{ kind: "site", viewport: "desktop", fit: "choice" }}
-          onCardPress={choose}
-          onCardDragStart={dragStart}
-          onCardDragEnd={dragEnd}
-          onCardContextMenu={contextMenu}
-        /></CumulusRoot>,
+        <CumulusRoot>
+          <CardChoiceGrid
+            cards={[
+              {
+                entryId: "disabled-card",
+                model: model("Disabled"),
+                testId: "disabled-card",
+                disabled: true,
+                draggable: true,
+                emphasis: "danger",
+              },
+            ]}
+            columns="one"
+            layout={{ kind: "site", viewport: "desktop", fit: "choice" }}
+            onCardPress={choose}
+            onCardDragStart={dragStart}
+            onCardDragEnd={dragEnd}
+            onCardContextMenu={contextMenu}
+          />
+        </CumulusRoot>,
       ),
     );
 
@@ -181,24 +190,26 @@ describe("CardChoiceGrid", () => {
     const root = createRoot(container);
     act(() =>
       root.render(
-        <CumulusRoot><CardChoiceGrid
-          cards={[
-            { entryId: "purge", model: model("Purge"), operation: "purge" },
-            { entryId: "copy", model: model("Copy"), operation: "copy" },
-            {
-              entryId: "transfigure",
-              model: model("Transfigure"),
-              operation: "transfigure",
-            },
-            {
-              entryId: "change",
-              model: model("Change"),
-              operation: "change",
-            },
-          ]}
-          columns="four"
-          layout={{ kind: "site", viewport: "desktop", fit: "choice" }}
-        /></CumulusRoot>,
+        <CumulusRoot>
+          <CardChoiceGrid
+            cards={[
+              { entryId: "purge", model: model("Purge"), operation: "purge" },
+              { entryId: "copy", model: model("Copy"), operation: "copy" },
+              {
+                entryId: "transfigure",
+                model: model("Transfigure"),
+                operation: "transfigure",
+              },
+              {
+                entryId: "change",
+                model: model("Change"),
+                operation: "change",
+              },
+            ]}
+            columns="four"
+            layout={{ kind: "site", viewport: "desktop", fit: "choice" }}
+          />
+        </CumulusRoot>,
       ),
     );
 

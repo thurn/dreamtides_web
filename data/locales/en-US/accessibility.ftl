@@ -107,6 +107,18 @@ exploration-spirit-animal-essence-summary =
         [one] { $cardCount } Spirit Animal card grants { $totalEssence } { -essence } total, { $essencePerCard } for that card
        *[other] { $cardCount } Spirit Animal cards grant { $totalEssence } { -essence } total, { $essencePerCard } each
     }
+# Accessible announcement after Exploration queues the T56 visit-wide future
+# Card Shop benefit.
+exploration-free-next-shop-accessible-name = Every item in your next Card Shop will be free.
+# Accessible announcement after Exploration grants a T82 purchase counter.
+# $freePurchaseCount is the positive initial grant; $essenceBefore,
+# $essenceSpent, and $essenceAfter are the exact non-negative values persisted
+# by the same atomic resolution.
+exploration-free-purchases-accessible-name =
+    { $freePurchaseCount ->
+        [one] Lost { $essenceSpent } { -essence }, from { $essenceBefore } to { $essenceAfter }, and gained { $freePurchaseCount } free purchase.
+       *[other] Lost { $essenceSpent } { -essence }, from { $essenceBefore } to { $essenceAfter }, and gained { $freePurchaseCount } free purchases.
+    }
 # Accessible announcement after Exploration duplicates one or more selected
 # cards without purging another card. $copyCount is a positive integer count of
 # newly added physical deck entries.
@@ -149,6 +161,153 @@ exploration-dream-avatar-changed = { $dreamAvatarName } is now your Dream Avatar
 # Accessible announcement while an Exploration outcome purges a Dreamsign.
 # $dreamsignName is its canonical display name with unknown grammatical gender.
 exploration-dreamsign-purging = Purging { $dreamsignName }
+# Polite status for a compound Exploration Dreamsign picker. $selectedCount is
+# the non-negative number of UUID-backed choices currently selected and
+# $requiredCount is the positive exact total required before confirmation.
+exploration-dreamsign-selection-progress = { $selectedCount } of { $requiredCount } Dreamsign choices selected
+# Accessible completed-event summary for a persisted Exploration Dreamsign
+# mutation. $purgedCount, $gainedCount, and $replacementCount are non-negative
+# exact counts; random identities have already been committed before this
+# message is presented.
+exploration-dreamsign-mutation-accessible-name =
+    { $purgedCount ->
+        [one] { $purgedCount } Dreamsign purged
+       *[other] { $purgedCount } Dreamsigns purged
+    }; { $gainedCount ->
+        [one] { $gainedCount } Dreamsign gained
+       *[other] { $gainedCount } Dreamsigns gained
+    }; { $replacementCount ->
+        [one] { $replacementCount } Dreamsign replacement
+       *[other] { $replacementCount } Dreamsign replacements
+    }
+# Accessible name for one persisted Exploration Dreamsign replacement pair.
+# $removedDreamsignName and $gainedDreamsignName are canonical display names
+# with unknown grammatical gender.
+exploration-dreamsign-replacement-pair-accessible-name = { $removedDreamsignName } replaced by { $gainedDreamsignName }
+# Accessible completed-event summary for one persisted compound Exploration
+# reward. $nightmareCount is the positive number of concrete Nightmare deck
+# entries minted by the resolution; $dreamsignCount is the positive number of
+# Dreamsigns gained; $replacementCount is the non-negative number of held
+# Dreamsign slots replaced by those gains.
+exploration-nightmare-dreamsign-bundle-accessible-name =
+    { $nightmareCount ->
+        [one] { $nightmareCount } Nightmare gained
+       *[other] { $nightmareCount } Nightmares gained
+    }; { $dreamsignCount ->
+        [one] { $dreamsignCount } Dreamsign gained
+       *[other] { $dreamsignCount } Dreamsigns gained
+    }; { $replacementCount ->
+        [one] { $replacementCount } Dreamsign replacement
+       *[other] { $replacementCount } Dreamsign replacements
+    }
+# Accessible name for the complete UUID-backed Nightmare card group in one
+# compound Exploration outcome. $nightmareCount is a positive exact count.
+exploration-nightmare-stack-accessible-name =
+    { $nightmareCount ->
+        [one] { $nightmareCount } Nightmare card
+       *[other] { $nightmareCount } Nightmare cards
+    }
+# Accessible completed-event summary for a persisted Exploration starter-card
+# mutation. $purgedCardCount, $gainedCardCount, and $replacementCount are exact
+# non-negative deck-entry counts reconstructed from the committed resolution.
+exploration-starter-card-mutation-accessible-name =
+    { $purgedCardCount ->
+        [one] { $purgedCardCount } starter card purged
+       *[other] { $purgedCardCount } starter cards purged
+    }; { $gainedCardCount ->
+        [one] { $gainedCardCount } card gained
+       *[other] { $gainedCardCount } cards gained
+    }; { $replacementCount ->
+        [one] { $replacementCount } starter-card replacement
+       *[other] { $replacementCount } starter-card replacements
+    }
+# Accessible name for one persisted starter-card replacement pair.
+# $purgedCardName and $gainedCardName are canonical UUID-resolved card display
+# names with unknown grammatical gender.
+exploration-starter-card-replacement-accessible-name = { $purgedCardName } replaced by { $gainedCardName }
+# Accessible completed-event summary for a persisted Exploration starter-card
+# transfiguration. $cardCount is the positive exact number of UUID-backed deck
+# entries whose base forms changed into their committed Transfiguration forms.
+exploration-starter-card-transfiguration-accessible-name =
+    { $cardCount ->
+        [one] { $cardCount } starter card transfigured
+       *[other] { $cardCount } starter cards transfigured
+    }
+# Accessible name for one persisted starter-card base-to-form mapping.
+# $cardName is the canonical UUID-resolved card display name and $formName is
+# the committed Transfiguration form's canonical source display name.
+exploration-starter-card-transfiguration-pair-accessible-name = { $cardName } transfigured from its base form into its { $formName } form
+# Accessible completed-event summary for an Exploration action that atomically
+# transfigures multiple ordinary deck entries. $cardCount is the positive exact
+# number of concrete UUID-backed entries in the persisted mapping.
+exploration-card-transfiguration-accessible-name =
+    { $cardCount ->
+        [one] { $cardCount } card transfigured
+       *[other] { $cardCount } cards transfigured
+    }
+# Accessible name for one persisted ordinary deck-entry base-to-form mapping.
+# $cardName is the canonical UUID-resolved card display name and $formName is
+# the committed Transfiguration form's canonical source display name.
+exploration-card-transfiguration-pair-accessible-name = { $cardName } transfigured from its base form into its { $formName } form
+# Accessible summary for the complete T75 compound result. Every count is an
+# exact non-negative persisted deck-entry count; zero is valid for an empty
+# companion set. The remaining counts identify empty result sections.
+exploration-compound-same-type-accessible-name = Purged: { $purgedCardCount }. Transfigured: { $transfiguredCardCount }. Made Fast: { $fastCardCount }. Nightmares gained: { $nightmareCount }. Copies gained: { $copyCount }.
+# Accessible summary for the complete T77 compound result. Every count is an
+# exact non-negative persisted deck-entry count; unrelated result sections are
+# represented by zero so the message remains one reconstructable utterance.
+exploration-compound-fast-nightmares-accessible-name = Purged: { $purgedCardCount }. Transfigured: { $transfiguredCardCount }. Made Fast: { $fastCardCount }. Nightmares gained: { $nightmareCount }. Copies gained: { $copyCount }.
+# Accessible summary for the complete T78 compound result. Every count is an
+# exact non-negative persisted deck-entry count, including a deliberate zero
+# selected-card outcome.
+exploration-compound-take-transfigured-accessible-name = Purged: { $purgedCardCount }. Transfigured: { $transfiguredCardCount }. Made Fast: { $fastCardCount }. Nightmares gained: { $nightmareCount }. Copies gained: { $copyCount }.
+# Accessible summary for the complete T80 compound result. Every count is an
+# exact non-negative persisted deck-entry count reconstructed from the atomic
+# purge, transfiguration, and copy mappings.
+exploration-compound-purge-copy-accessible-name = Purged: { $purgedCardCount }. Transfigured: { $transfiguredCardCount }. Made Fast: { $fastCardCount }. Nightmares gained: { $nightmareCount }. Copies gained: { $copyCount }.
+# Accessible name for the bounded focusable scroll region containing every
+# persisted card object or pair in a compound Exploration outcome.
+exploration-compound-review-accessible-name =
+    Review { $cardCount } { $cardCount ->
+        [one] card change
+       *[other] card changes
+    }
+# Accessible name for one before/after Fast keyword mutation. Both variables
+# are UUID-resolved display names and may be identical because one deck entry
+# changes in place.
+exploration-compound-fast-pair-accessible-name = { $sourceCardName } became Fast as { $resultCardName }
+# Accessible name for one source-to-minted copy mapping. Both variables are
+# UUID-resolved display names; identity remains carried by DOM UUID attributes.
+exploration-compound-copy-pair-accessible-name = { $resultCardName } copied from { $sourceCardName }
+# Accessible completed-event summary for an Exploration action that atomically
+# replaces ordinary deck entries. $replacementCount is the positive exact
+# number of source-to-minted mappings in the committed resolution.
+exploration-card-replacements-accessible-name =
+    { $replacementCount ->
+        [one] { $replacementCount } card replaced
+       *[other] { $replacementCount } cards replaced
+    }
+# Accessible name for one persisted ordinary deck-entry replacement pair.
+# $purgedCardName and $gainedCardName are canonical UUID-resolved display names
+# with unknown grammatical gender.
+exploration-card-replacement-accessible-name = { $purgedCardName } replaced by { $gainedCardName }
+# Accessible completed-event summary for an Exploration action that atomically
+# changes effective card types. $cardCount is the positive exact number of
+# UUID-backed entries in the committed mapping.
+exploration-card-type-changes-accessible-name =
+    { $cardCount ->
+        [one] { $cardCount } card type changed
+       *[other] { $cardCount } card types changed
+    }
+# Accessible name for one persisted card-type mapping. $cardName is the
+# canonical UUID-resolved display name; $beforeCardType and $afterCardType are
+# the closed Character or Event card-type values.
+exploration-card-type-change-pair-accessible-name = { $cardName } changed from { $beforeCardType } to { $afterCardType }
+# Accessible progress for the sequential form chooser after the player has
+# selected an exact multi-card set. $currentCardNumber is the positive one-based
+# position, $cardCount is the positive exact total, and $cardName is the
+# canonical UUID-resolved display name of the current deck entry.
+exploration-multi-transfiguration-progress-accessible-name = Choosing a form for card { $currentCardNumber } of { $cardCount }: { $cardName }
 # Accessible name for the Memory status badge on a battle card. $count is the
 # positive integer number of Memory counters currently stored on that card.
 battle-card-memory-counter-count =
@@ -463,9 +622,17 @@ exploration-smaller-hand-cost-accessible-name =
 # Accessible completed-event summary for an Exploration reward that causes the
 # next Draft or Shop offered to the current player to contain transfigured cards.
 exploration-site-offer-modifier-accessible-name = Your next Draft or Shop will contain transfigured cards
+# Accessible completed-event summary after an Exploration action adds a site to
+# the current Dreamscape. $siteType is the configured display name of the exact
+# persisted site type and has unknown grammatical gender.
+exploration-site-insertion-accessible-name = { $siteType } added to this Dreamscape
+exploration-site-type-choices-accessible-name = Choose a site to add to this Dreamscape
 # Accessible completed-event summary shown when the current player deliberately
 # resolves a card-acquisition Exploration outcome without taking any cards.
 exploration-no-cards-taken = No Cards Taken
+# Accessible completed-event summary shown when the current player deliberately
+# resolves an optional-card-count Exploration purge without removing any cards.
+exploration-no-cards-purged = No Cards Purged
 gamble-playing-card-hand-accessible-name =
     { $owner ->
         [dealer] Dealer hand

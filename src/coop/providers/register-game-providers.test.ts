@@ -523,6 +523,76 @@ describe("registerGameProviders (real content providers)", () => {
     );
   });
 
+  it("binds one queued T56 modifier only to a Card Shop and leaves Bazaar opens ineligible", () => {
+    const content = makeJourneyContent();
+    const started = replayLog({
+      genesis: GENESIS,
+      events: [
+        ev(1, "START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }),
+        ev(2, "SELECT_DREAM_AVATAR", { dreamAvatarId: DREAM_AVATAR_ID }),
+      ],
+    }).finalState.journey;
+    const firstModifier = {
+      kind: "free-next-shop" as const,
+      sourceSiteId: "exploration-one",
+      sourceActionId: "action-one",
+    };
+    const secondModifier = {
+      kind: "free-next-shop" as const,
+      sourceSiteId: "exploration-two",
+      sourceActionId: "action-two",
+    };
+    const journey: JourneyState = {
+      ...started,
+      shopModifiers: {
+        ...started.shopModifiers,
+        freeNextShopModifiers: [firstModifier, secondModifier],
+      },
+    };
+    const provider = createSiteContentProvider(content);
+    const bazaar = provider.openSite({
+      journey,
+      site: {
+        id: "bazaar",
+        type: "DreamsignBazaar",
+        isEnhanced: false,
+        isVisited: false,
+      },
+      rng: () => 0,
+    });
+    expect(bazaar?.runtime).toMatchObject({
+      kind: "shop",
+      purchaseHistory: [],
+    });
+    expect(bazaar?.runtime).not.toHaveProperty("freePurchaseSource");
+    expect(bazaar?.shopModifiers).toBeUndefined();
+
+    const shopResult = provider.openSite({
+      journey,
+      site: {
+        id: "shop",
+        type: "Shop",
+        isEnhanced: false,
+        isVisited: false,
+      },
+      rng: () => 0,
+    });
+    expect(shopResult?.runtime).toMatchObject({
+      kind: "shop",
+      purchaseHistory: [],
+      freePurchaseSource: {
+        sourceSiteId: firstModifier.sourceSiteId,
+        sourceActionId: firstModifier.sourceActionId,
+      },
+    });
+    expect(shopResult?.shopModifiers?.freeNextShopModifiers).toEqual([
+      secondModifier,
+    ]);
+    expect(shopResult?.shopModifiers?.freePurchaseModifiers).toEqual(
+      journey.shopModifiers.freePurchaseModifiers,
+    );
+  });
+
   it("rebuilds debug progress as one consistent Atlas transition", () => {
     const events = [
       ev(1, "START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }),

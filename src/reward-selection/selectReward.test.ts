@@ -47,6 +47,33 @@ function context(reverse = false): RewardSelectionContext {
   });
 }
 
+function legendaryContext(reverse = false): RewardSelectionContext {
+  const cards = ids.slice(0, 6).map((id, index) => makeMerchantTestCard({
+    id,
+    cardNumber: index + 1,
+    name: asCardName(index === 1 ? "Legendary" : `Synthetic card ${String(index)}`),
+    ...(index === 1 ? {} : { rarity: "Legendary" as const }),
+  }));
+  const journey = makeMerchantTestJourneyState({
+    seed: "selection-seed",
+    deck: [makeMerchantTestDeckEntry({ entryId: "owned-entry", cardNumber: 6 })],
+    resolvedPackage: makeMerchantTestResolvedPackage({
+      draftPoolCopiesByCard: Object.fromEntries(
+        cards
+          .filter((_, index) => index !== 3)
+          .map((card) => [String(card.cardNumber), 1]),
+      ),
+    }),
+  });
+  return buildRewardSelectionContext({
+    journeyState: journey,
+    journeyContent: makeMerchantTestContent({
+      cards: reverse ? [...cards].reverse() : cards,
+    }),
+    site: makeMerchantTestSite({ id: "selection-site", type: "Exploration" }),
+  });
+}
+
 function request(overrides: Partial<RewardSelectionRequest> = {}): RewardSelectionRequest {
   return {
     mechanicId: "catalog-card-chooser",
@@ -214,6 +241,32 @@ describe("shared reward selection", () => {
       .toEqual(["candidate", "bundle-growth"]);
   });
 
+  it("bundles legendary gain-card rewards within draft-pool and UUID exclusions", () => {
+    const legendaryRequest = request({
+      mechanicId: "gain-card",
+      policyId: "card-bundle",
+      count: 2,
+      constraints: {
+        predicate: "legendary",
+        excludeOwned: true,
+        excludedCardUuids: [ids[4]],
+      },
+    });
+    const forward = selectReward(legendaryContext(), legendaryRequest);
+    const replay = selectReward(legendaryContext(true), legendaryRequest);
+
+    expect(forward).toEqual(replay);
+    expect(forward.ok).toBe(true);
+    if (!forward.ok) return;
+    expect(new Set(forward.bindings.cardUuids)).toEqual(new Set([ids[0], ids[2]]));
+    expect(forward.trace.candidateCount).toBe(2);
+    expect(forward.trace.constraints).toMatchObject({
+      predicate: "legendary",
+      excludeOwned: true,
+      excludedCardUuids: [ids[4]],
+    });
+  });
+
   it("samples duplicate targets by deck-entry UUID", () => {
     const result = selectReward(context(), request({
       mechanicId: "duplicate-deck-entry",
@@ -225,6 +278,70 @@ describe("shared reward selection", () => {
     expect(new Set(result.bindings.deckEntryIds)).toEqual(
       new Set(["entry-a", "entry-b", "entry-c"]),
     );
+  });
+
+  it("routes card-type changes through deterministic uniform entry selection", () => {
+    const typeChangeRequest = request({
+      mechanicId: "change-entry-card-type",
+      policyId: "uniform",
+      count: 2,
+      constraints: {
+        allowStarters: true,
+        allowNightmare: true,
+        distinctDeckEntries: true,
+        excludedDeckEntryIds: ["entry-c"],
+      },
+    });
+    const forward = selectReward(context(), typeChangeRequest);
+    const replay = selectReward(context(true), typeChangeRequest);
+
+    expect(forward).toEqual(replay);
+    expect(forward.ok).toBe(true);
+    if (!forward.ok) return;
+    expect(forward.bindings.deckEntryIds).toHaveLength(2);
+    expect(new Set(forward.bindings.deckEntryIds).size).toBe(2);
+    expect(forward.bindings.deckEntryIds).not.toContain("entry-c");
+    expect(forward.trace).toMatchObject({
+      mechanicId: "change-entry-card-type",
+      policyId: "uniform",
+      keyKind: "entryId",
+      candidateCount: 2,
+      selectedKeys: forward.bindings.deckEntryIds,
+    });
+
+    const incompatible = selectReward(context(), {
+      ...typeChangeRequest,
+      policyId: "fixed",
+    });
+    expect(incompatible).toMatchObject({ ok: false, reason: "invalid_request" });
+  });
+
+  it("routes card-type changes through centrality after effective-type exclusions", () => {
+    const typeChangeRequest = request({
+      mechanicId: "change-entry-card-type",
+      policyId: "deck-entry-centrality",
+      count: 1,
+      constraints: {
+        allowStarters: true,
+        allowNightmare: true,
+        distinctDeckEntries: true,
+        excludedDeckEntryIds: ["entry-a", "entry-b"],
+      },
+    });
+    const forward = selectReward(context(), typeChangeRequest);
+    const replay = selectReward(context(true), typeChangeRequest);
+
+    expect(forward).toEqual(replay);
+    expect(forward.ok).toBe(true);
+    if (!forward.ok) return;
+    expect(forward.bindings.deckEntryIds).toEqual(["entry-c"]);
+    expect(forward.trace).toMatchObject({
+      mechanicId: "change-entry-card-type",
+      policyId: "deck-entry-centrality",
+      keyKind: "entryId",
+      candidateCount: 1,
+      selectedKeys: ["entry-c"],
+    });
   });
 
   it("isolates selection keys and limits add-site rewards to the canonical pool", () => {

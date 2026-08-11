@@ -15,7 +15,9 @@ import { asCardId, asCardName } from "../types/card-identity";
 import { economyFixture } from "../testing/economy-fixture";
 
 const ECONOMY = economyFixture();
-function generateShopInventory(options: Omit<ShopGenerationOptions, "economy">) {
+function generateShopInventory(
+  options: Omit<ShopGenerationOptions, "economy">,
+) {
   return generateShopInventoryRaw({ ...options, economy: ECONOMY.shop });
 }
 
@@ -162,9 +164,27 @@ describe("effectivePrice", () => {
         discountPercent: 0,
         purchased: false,
       },
-      { },
+      {},
     );
     expect(result).toBe(0);
+  });
+
+  it("makes a purchase free after preserving ordinary discount pricing", () => {
+    const slot = {
+      itemType: "card" as const,
+      card: null,
+      dreamsign: null,
+      basePrice: 200,
+      discountPercent: 10,
+      purchased: false,
+    };
+    expect(effectivePrice(slot, { essenceDiscountPercent: 15 })).toBe(150);
+    expect(
+      effectivePrice(slot, {
+        essenceDiscountPercent: 15,
+        freePurchase: true,
+      }),
+    ).toBe(0);
   });
 });
 
@@ -223,7 +243,9 @@ describe("shop runtime conversion", () => {
         purchased: true,
       },
     ]);
-    expect(runtimeSlotsToShopSlots(runtime, makeDatabase([card]))).toEqual(slots);
+    expect(runtimeSlotsToShopSlots(runtime, makeDatabase([card]))).toEqual(
+      slots,
+    );
   });
 });
 
@@ -251,7 +273,9 @@ describe("generateShopInventory", () => {
     });
 
     expect(result.slots).toHaveLength(3);
-    expect(result.slots.map((slot) => slot.discountPercent)).toEqual([77, 77, 77]);
+    expect(result.slots.map((slot) => slot.discountPercent)).toEqual([
+      77, 77, 77,
+    ]);
   });
 
   it("generates a Card Shop of card slots with no dreamsigns by default", () => {
@@ -354,7 +378,10 @@ describe("generateShopInventory", () => {
       rng: () => 0.25,
     };
     const first = generateShopInventory(options);
-    const second = generateShopInventory({ ...options, draftState: structuredClone(options.draftState) });
+    const second = generateShopInventory({
+      ...options,
+      draftState: structuredClone(options.draftState),
+    });
     expect(first.slots).toEqual(second.slots);
   });
 
@@ -373,7 +400,9 @@ describe("generateShopInventory", () => {
     expect(result.reconstructionLog.event).toBe("shop_inventory_generated");
     expect(result.reconstructionLog.cardSlotCount).toBe(result.slots.length);
     expect(
-      getLogEntries().some((entry) => entry.event === "shop_inventory_generated"),
+      getLogEntries().some(
+        (entry) => entry.event === "shop_inventory_generated",
+      ),
     ).toBe(false);
   });
 
@@ -408,7 +437,8 @@ describe("generateShopInventory", () => {
     expect(draftState.remainingCopiesByCard).toEqual(before);
     expect(result.draftState).toBeDefined();
     expect(result.draftState?.mode).toBe("tides4");
-    if (result.draftState?.mode !== "tides4") throw new Error("expected pool state");
+    if (result.draftState?.mode !== "tides4")
+      throw new Error("expected pool state");
     expect(result.draftState.remainingCopiesByCard).not.toEqual(before);
   });
 
@@ -441,9 +471,7 @@ describe("generateShopInventory", () => {
     }
     // The regular shop spends drawn cards from the draft multiset.
     expect(
-      Object.keys(
-        result.draftState?.remainingCopiesByCard ?? {},
-      ).length,
+      Object.keys(result.draftState?.remainingCopiesByCard ?? {}).length,
     ).toBeLessThan(Object.keys(draftState.remainingCopiesByCard).length);
   });
 

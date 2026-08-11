@@ -367,6 +367,90 @@ export function addSiteToCurrentDreamscape(
   };
 }
 
+function siteRecordsEqual(left: SiteState, right: SiteState): boolean {
+  const exactKeys = ["id", "isEnhanced", "isVisited", "type"];
+  return (
+    Object.keys(left).sort().join("|") === exactKeys.join("|") &&
+    Object.keys(right).sort().join("|") === exactKeys.join("|") &&
+    left.id === right.id &&
+    left.type === right.type &&
+    left.isEnhanced === right.isEnhanced &&
+    left.isVisited === right.isVisited &&
+    left.randomSite === right.randomSite &&
+    left.guideIdOverride === right.guideIdOverride &&
+    left.data === right.data
+  );
+}
+
+/**
+ * Commit an already-prepared site at one exact atlas position. Every
+ * precondition is rechecked so a stale or forged reward cannot move, replace,
+ * enhance, revisit, or duplicate a site.
+ */
+export function insertPreparedSiteInJourneyState(
+  prev: JourneyState,
+  input: {
+    targetNodeId: string;
+    insertionIndex: number;
+    siblingSiteIdsBefore: readonly string[];
+    site: SiteState;
+  },
+): JourneyState | null {
+  if (
+    prev.currentDreamscape !== input.targetNodeId ||
+    prev.atlas.currentNodeId !== input.targetNodeId ||
+    !Number.isInteger(input.insertionIndex) ||
+    input.insertionIndex < 0 ||
+    input.site.isEnhanced ||
+    input.site.isVisited ||
+    input.site.randomSite !== undefined ||
+    input.site.guideIdOverride !== undefined ||
+    input.site.data !== undefined
+  ) {
+    return null;
+  }
+  const node = prev.atlas.nodes[input.targetNodeId];
+  if (node === undefined || input.insertionIndex !== node.sites.length) {
+    return null;
+  }
+  const actualSiblingIds = node.sites.map(({ id }) => id);
+  if (
+    actualSiblingIds.length !== input.siblingSiteIdsBefore.length ||
+    actualSiblingIds.some(
+      (siteId, index) => siteId !== input.siblingSiteIdsBefore[index],
+    ) ||
+    Object.values(prev.atlas.nodes).some((candidateNode) =>
+      candidateNode.sites.some((site) => site.id === input.site.id),
+    )
+  ) {
+    return null;
+  }
+  const insertedSite: SiteState = {
+    id: input.site.id,
+    type: input.site.type,
+    isEnhanced: false,
+    isVisited: false,
+  };
+  if (!siteRecordsEqual(input.site, insertedSite)) return null;
+  return {
+    ...prev,
+    atlas: {
+      ...prev.atlas,
+      nodes: {
+        ...prev.atlas.nodes,
+        [input.targetNodeId]: {
+          ...node,
+          sites: [
+            ...node.sites.slice(0, input.insertionIndex),
+            insertedSite,
+            ...node.sites.slice(input.insertionIndex),
+          ],
+        },
+      },
+    },
+  };
+}
+
 /**
  * Generate a fresh per-journey seed. Uses `crypto.randomUUID()` when available
  * (modern browsers, Node 19+, jsdom). Falls back to a `Math.random()`-derived

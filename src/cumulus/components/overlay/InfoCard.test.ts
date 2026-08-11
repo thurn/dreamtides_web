@@ -4,6 +4,7 @@ import * as React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { artRef } from "../../primitives/art";
+import { GLYPHS } from "../../primitives/glyph";
 import { richText } from "../card/rich-text";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { TOKENS } from "../../primitives/tokens";
@@ -63,6 +64,19 @@ describe("infoCardTextScale — the shared mobile typography multiplier", () => 
 });
 
 describe("InfoCard shell treatment", () => {
+  it("wraps an unbroken icon title within the narrow mobile flex slot", () => {
+    const html = renderToStaticMarkup(
+      React.createElement(InfoCard, {
+        variant: "icon",
+        glyph: GLYPHS.copy,
+        title: "X".repeat(40),
+      }),
+    );
+
+    expect(html).toContain("min-width:0");
+    expect(html).toContain("overflow-wrap:anywhere");
+  });
+
   it("uses the shared liquid-glass material at the fixed fill opacity", () => {
     const html = renderToStaticMarkup(
       React.createElement(InfoCard, { title: "Essence" }),
@@ -192,10 +206,14 @@ describe("InfoCard shell treatment", () => {
 
     expect(fullBleed).not.toMatch(SUBSTITUTED_RULES_SYMBOL_PATTERN);
     expect(atlasReveal).not.toMatch(SUBSTITUTED_RULES_SYMBOL_PATTERN);
-    expect(fullBleed.match(/aria-label="[^"]+"/g)?.length).toBeGreaterThanOrEqual(4);
+    expect(
+      fullBleed.match(/aria-label="[^"]+"/g)?.length,
+    ).toBeGreaterThanOrEqual(4);
     expect(atlasReveal).toContain("<span>▸</span><span>Dawn</span>");
     expect(atlasReveal).not.toContain("bxf bx-caret-right");
-    expect(atlasReveal.match(/aria-label="[^"]+"/g)?.length).toBeGreaterThanOrEqual(2);
+    expect(
+      atlasReveal.match(/aria-label="[^"]+"/g)?.length,
+    ).toBeGreaterThanOrEqual(2);
   });
 });
 

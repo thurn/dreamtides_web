@@ -82,7 +82,8 @@ describe("transformExplorationData", () => {
     expect(
       actions
         .filter((action) => action.effectText.includes("{deck_card}"))
-        .every((action) => action.deckTarget === "offered"),
+        .every((action) => action.deckTarget === "offered" ||
+          action.effectKind === "purge-disclosed-and-transfigure-same-type"),
     ).toBe(true);
     expect(
       actions
@@ -91,7 +92,10 @@ describe("transformExplorationData", () => {
     ).toBe(true);
     expect(
       actions
-        .filter((action) => action.nightmareCount !== undefined)
+        .filter((action) => action.nightmareCount !== undefined && ![
+          "make-predicate-fast-and-gain-nightmares",
+          "take-transfigured-cards-and-gain-nightmares",
+        ].includes(action.effectKind))
         .every((action) => action.effectText.includes("{nightmare_card}")),
     ).toBe(true);
     expect(actions.map((action) => action.effectKind)).toEqual(
@@ -160,6 +164,793 @@ describe("transformExplorationData", () => {
     expect(effectKinds).toContain("gain-essence-per-card");
     expect(effectKinds).toContain("increase-spark-all");
     expect(effectKinds).toContain("purge-random-subtype-and-increase-spark");
+  });
+
+  it("compiles the five exact Wave 8 compound contracts", () => {
+    const source = syntheticExplorationSource();
+    const actions = [
+      { id: "w8-40", label: "Synthetic", "effect-text": "Transfigure every card",
+        "effect-kind": "transfigure-all-cards" },
+      { id: "w8-75", label: "Synthetic",
+        "effect-text": "Purge {deck_card} and transfigure matching cards",
+        "effect-kind": "purge-disclosed-and-transfigure-same-type",
+        transfiguration: "Inspired" },
+      { id: "w8-77", label: "Synthetic",
+        "effect-text": "Make Events fast and gain 2 Nightmares",
+        "effect-kind": "make-predicate-fast-and-gain-nightmares",
+        predicate: "event", "nightmare-count": 2 },
+      { id: "w8-78", label: "Synthetic",
+        "effect-text": "Take transfigured cards and gain a Nightmare",
+        "followup-title": "Choose rewards", "followup-subtitle": "Take cards",
+        "effect-kind": "take-transfigured-cards-and-gain-nightmares",
+        predicate: "character", "offer-count": 4, transfiguration: "Empowered",
+        "nightmare-count": 1 },
+      { id: "w8-80", label: "Synthetic",
+        "effect-text": "Purge one, transfigure and copy the others",
+        "followup-title": "Choose one", "followup-subtitle": "Purge one card",
+        "effect-kind": "purge-one-transfigure-and-copy-others",
+        "offer-count": 4, transfiguration: "Kindled" },
+    ];
+    source.encounter[0].action = actions.slice(0, 3);
+    source.encounter[1].action = actions.slice(3);
+    const compiled = transformExplorationData(source).encounters.flatMap(
+      (encounter) => encounter.action);
+    expect(compiled.map(({ canonicalMechanicId, selectionPolicyId }) =>
+      [canonicalMechanicId, selectionPolicyId])).toEqual([
+      ["transfigure-deck-entry", "uniform"],
+      ["purge-deck-entry", "purge-misfit"],
+      ["make-deck-fast", undefined],
+      ["transfigured-card-chooser", "card-fit"],
+      ["transfigure-deck-entry", "uniform"],
+    ]);
+  });
+
+  it("rejects malformed Wave 8 compound compatibility fields", () => {
+    const base = { id: "w8-invalid", label: "Synthetic",
+      "effect-text": "Synthetic effect" };
+    const invalidActions = [
+      { ...base, "effect-kind": "transfigure-all-cards", count: 1 },
+      { ...base, "effect-kind": "purge-disclosed-and-transfigure-same-type",
+        transfiguration: "Inspired" },
+      { ...base, "effect-kind": "purge-disclosed-and-transfigure-same-type",
+        "effect-text": "Purge {deck_card} and copy {deck_card}",
+        transfiguration: "Inspired" },
+      { ...base, "effect-kind": "make-predicate-fast-and-gain-nightmares",
+        predicate: "event", "nightmare-count": 0 },
+      { ...base, "effect-kind": "make-predicate-fast-and-gain-nightmares",
+        "selection-policy-id": "uniform", predicate: "event", "nightmare-count": 1 },
+      { ...base, "effect-kind": "take-transfigured-cards-and-gain-nightmares",
+        predicate: "event", "offer-count": 3, transfiguration: "Empowered",
+        "nightmare-count": 1, "followup-title": "Choose",
+        "followup-subtitle": "Cards" },
+      { ...base, "effect-kind": "purge-one-transfigure-and-copy-others",
+        "offer-count": 4, transfiguration: "Kindled", "followup-title": "Choose" },
+    ];
+    for (const action of invalidActions) {
+      const source = syntheticExplorationSource();
+      source.encounter[0].action[0] = action;
+      expect(() => transformExplorationData(source)).toThrow();
+    }
+  });
+
+  it("compiles fixed site insertion and rejects malformed compatibility fields", () => {
+    const source = syntheticExplorationSource();
+    source.encounter[0].action[0] = {
+      id: "fixed-site-action",
+      label: "Synthetic fixed site",
+      "effect-text": "Add a duplication site",
+      "effect-kind": "add-fixed-site",
+      "canonical-mechanic-id": "add-site",
+      "selection-policy-id": "fixed",
+      "site-type": "Duplication",
+    };
+
+    const [action] = transformExplorationData(source).encounters[0].action;
+    expect(action).toEqual({
+      id: "fixed-site-action",
+      label: "Synthetic fixed site",
+      effectText: "Add a duplication site",
+      effectKind: "add-fixed-site",
+      canonicalMechanicId: "add-site",
+      selectionPolicyId: "fixed",
+      siteType: "Duplication",
+    });
+
+    for (const [field, value, message] of [
+      ["site-type", undefined, /requires a supported site-type/u],
+      ["site-type", "UnknownSite", /requires a supported site-type/u],
+      ["count", 1, /field count does not apply/u],
+      ["followup-title", "Choose", /does not support a followup/u],
+      ["effect-text", "Add {site_type}", /does not support presentation tokens/u],
+      ["effect-text", "Add $SITE_TYPE", /does not support presentation tokens/u],
+    ]) {
+      const malformed = structuredClone(source);
+      if (value === undefined) delete malformed.encounter[0].action[0][field];
+      else malformed.encounter[0].action[0][field] = value;
+      if (field === "followup-title") malformed.encounter[0].action[0]["followup-subtitle"] = value;
+      expect(() => transformExplorationData(malformed)).toThrow(message);
+    }
+
+    const randomSite = structuredClone(source);
+    randomSite.encounter[0].action[0]["effect-kind"] = "add-site";
+    randomSite.encounter[0].action[0]["selection-policy-id"] = "site-uniform";
+    expect(() => transformExplorationData(randomSite)).toThrow(
+      /field siteType does not apply/u,
+    );
+
+    const purgeSite = structuredClone(source);
+    purgeSite.encounter[0].action[0]["site-type"] = "Purge";
+    expect(transformExplorationData(purgeSite).encounters[0].action[0])
+      .toMatchObject({ effectKind: "add-fixed-site", siteType: "Purge" });
+  });
+
+  it("compiles the exact site-type chooser and rejects malformed fields", () => {
+    const source = syntheticExplorationSource();
+    source.encounter[0].action[0] = {
+      id: "site-type-chooser",
+      label: "Synthetic chooser",
+      "effect-text": "Choose a destination",
+      "followup-title": "Choose a destination",
+      "followup-subtitle": "Choose one of the offered destinations",
+      "effect-kind": "choose-site-type",
+      "canonical-mechanic-id": "add-site",
+      "selection-policy-id": "site-uniform",
+      "offer-count": 3,
+    };
+
+    expect(transformExplorationData(source).encounters[0].action[0]).toMatchObject({
+      effectKind: "choose-site-type",
+      canonicalMechanicId: "add-site",
+      selectionPolicyId: "site-uniform",
+      offerCount: 3,
+    });
+    for (const [field, value, message] of [
+      ["offer-count", undefined, /explicit offer-count 3/u],
+      ["offer-count", 2, /explicit offer-count 3/u],
+      ["offer-count", 4, /explicit offer-count 3/u],
+      ["followup-title", undefined, /requires a paired followup/u],
+      ["followup-subtitle", "", /requires a paired followup/u],
+      ["site-type", "Shop", /field siteType does not apply/u],
+      ["count", 1, /field count does not apply/u],
+      ["effect-text", "Choose {site_type}", /does not support presentation tokens/u],
+    ]) {
+      const malformed = structuredClone(source);
+      if (value === undefined) delete malformed.encounter[0].action[0][field];
+      else malformed.encounter[0].action[0][field] = value;
+      expect(() => transformExplorationData(malformed)).toThrow(message);
+    }
+  });
+
+  it("compiles strict fieldless and counted shop purchase modifiers", () => {
+    const source = syntheticExplorationSource();
+    source.encounter[0].action = [
+      {
+        id: "free-next-shop-action",
+        label: "Synthetic free shop",
+        "effect-text": "All items in the next shop are free",
+        "effect-kind": "free-next-shop",
+        "canonical-mechanic-id": "shop-purchase-modifier",
+      },
+      {
+        id: "free-purchases-action",
+        label: "Synthetic free purchases",
+        "effect-text": "Lose half your essence and gain three free purchases",
+        "effect-kind": "lose-half-essence-and-free-purchases",
+        "canonical-mechanic-id": "shop-purchase-modifier",
+        count: 3,
+      },
+    ];
+
+    const actions = transformExplorationData(source).encounters[0].action;
+    expect(actions).toEqual([
+      expect.objectContaining({
+        effectKind: "free-next-shop",
+        canonicalMechanicId: "shop-purchase-modifier",
+      }),
+      expect.objectContaining({
+        effectKind: "lose-half-essence-and-free-purchases",
+        canonicalMechanicId: "shop-purchase-modifier",
+        count: 3,
+      }),
+    ]);
+    expect(actions.every((action) => action.selectionPolicyId === undefined)).toBe(true);
+    expect(actions[0]).not.toHaveProperty("count");
+
+    for (const [actionIndex, field, value, message] of [
+      [0, "count", 1, /field count does not apply/u],
+      [0, "predicate", "event", /field predicate does not apply/u],
+      [0, "selection-policy-id", "fixed", /without a selection policy/u],
+      [0, "effect-text", "Free {shop_item}", /does not support presentation tokens/u],
+      [1, "count", undefined, /requires count/u],
+      [1, "count", 0, /positive whole-number count/u],
+      [1, "count", 1.5, /positive whole-number count/u],
+      [1, "followup-title", "Choose", /does not support a followup/u],
+      [1, "site-type", "Shop", /field siteType does not apply/u],
+    ]) {
+      const malformed = structuredClone(source);
+      if (value === undefined) delete malformed.encounter[0].action[actionIndex][field];
+      else malformed.encounter[0].action[actionIndex][field] = value;
+      if (field === "followup-title") {
+        malformed.encounter[0].action[actionIndex]["followup-subtitle"] = value;
+      }
+      expect(() => transformExplorationData(malformed)).toThrow(message);
+    }
+  });
+
+  it("compiles exact starter-card effects and rejects foreign fields", () => {
+    const source = syntheticExplorationSource();
+    const starterActions = [
+      { kind: "purge-starter-card", effectText: "Purge {starter_card}", fields: {}, policy: "uniform" },
+      { kind: "purge-random-starter-card", effectText: "Purge a random starter card", fields: {}, policy: "uniform" },
+      {
+        kind: "purge-random-starter-and-gain-card",
+        effectText: "Replace a random starter card",
+        fields: { predicate: "character" },
+        policy: undefined,
+      },
+      {
+        kind: "replace-all-starter-cards",
+        effectText: "Replace all starter cards",
+        fields: { predicate: "event" },
+        policy: undefined,
+      },
+    ];
+    source.encounter.flatMap((encounter) => encounter.action)
+      .forEach((action, index) => {
+        const definition = starterActions[index];
+        Object.keys(action).forEach((key) => delete action[key]);
+        Object.assign(action, {
+          id: `starter-action-${String(index)}`,
+          label: "Synthetic starter action",
+          "effect-text": definition.effectText,
+          "effect-kind": definition.kind,
+          ...definition.fields,
+        });
+      });
+
+    const actions = transformExplorationData(source).encounters.flatMap(
+      (encounter) => encounter.action,
+    );
+    expect(actions.map((action) => ({
+      kind: action.effectKind,
+      mechanic: action.canonicalMechanicId,
+      policy: action.selectionPolicyId,
+      predicate: action.predicate,
+    }))).toEqual(starterActions.map((definition) => ({
+      kind: definition.kind,
+      mechanic: definition.kind.startsWith("purge-") &&
+        !definition.kind.includes("gain-card")
+        ? "purge-deck-entry"
+        : "replace-deck-entry",
+      policy: definition.policy,
+      predicate: definition.fields.predicate,
+    })));
+
+    source.encounter[0].action[0].predicate = "character";
+    expect(() => transformExplorationData(source)).toThrow(/field predicate does not apply/u);
+    delete source.encounter[0].action[0].predicate;
+    source.encounter[1].action[0].predicate = "any";
+    expect(() => transformExplorationData(source)).toThrow(/requires a non-Any predicate/u);
+    source.encounter[1].action[0].predicate = "character";
+    source.encounter[1].action[0]["selection-policy-id"] = "card-fit-quality";
+    expect(() => transformExplorationData(source)).toThrow(/top-level selection-policy-id/u);
+    delete source.encounter[1].action[0]["selection-policy-id"];
+    source.encounter[1].action[1]["card-id"] = "00000000-0000-4000-8000-000000000001";
+    expect(() => transformExplorationData(source)).toThrow(/field cardId does not apply/u);
+    delete source.encounter[1].action[1]["card-id"];
+    source.encounter[0].action[0]["effect-text"] = "Purge a starter card";
+    expect(() => transformExplorationData(source)).toThrow(/must present \{starter_card\}/u);
+  });
+
+  it("compiles automatic starter transfigurations with exact generated fields", () => {
+    const source = syntheticExplorationSource();
+    source.encounter[0].action = [
+      {
+        id: "random-starter-transfiguration",
+        label: "Synthetic action",
+        "effect-text": "Transfigure random starter cards",
+        "effect-kind": "transfigure-random-starter-cards",
+        count: 3,
+      },
+      {
+        id: "all-starter-transfiguration",
+        label: "Synthetic action",
+        "effect-text": "Transfigure all starter cards",
+        "effect-kind": "transfigure-all-starter-cards",
+      },
+    ];
+
+    const [random, all] = transformExplorationData(source).encounters[0].action;
+
+    expect(random).toMatchObject({
+      effectKind: "transfigure-random-starter-cards",
+      canonicalMechanicId: "transfigure-deck-entry",
+      selectionPolicyId: "uniform",
+      count: 3,
+    });
+    expect(all).toMatchObject({
+      effectKind: "transfigure-all-starter-cards",
+      canonicalMechanicId: "transfigure-deck-entry",
+      selectionPolicyId: "uniform",
+    });
+    expect(all).not.toHaveProperty("count");
+
+    const defaulted = structuredClone(source);
+    delete defaulted.encounter[0].action[0].count;
+    expect(transformExplorationData(defaulted).encounters[0].action[0].count).toBe(2);
+  });
+
+  it.each([
+    ["random non-positive count", 0, "count", /positive whole-number count/u],
+    ["random predicate", "character", "predicate", /field predicate does not apply/u],
+    ["random fixed transfiguration", "Inspired", "transfiguration", /field transfiguration does not apply/u],
+    ["all count", 2, "count", /field count does not apply/u],
+    ["all card reference", "fixed-card-id", "card-id", /field cardId does not apply/u],
+    ["all followup", "Choose", "followup-title", /does not support a followup/u],
+  ])("rejects foreign starter transfiguration data: %s", (_label, value, key, message) => {
+    const source = syntheticExplorationSource();
+    source.encounter[0].action[0] = {
+      id: "starter-transfiguration",
+      label: "Synthetic action",
+      "effect-text": "Transfigure starter cards",
+      "effect-kind": key === "count" && value === 0
+        ? "transfigure-random-starter-cards"
+        : key === "predicate" || key === "transfiguration"
+          ? "transfigure-random-starter-cards"
+          : "transfigure-all-starter-cards",
+      ...(key === "predicate" || key === "transfiguration" ? { count: 2 } : {}),
+      [key]: value,
+      ...(key === "followup-title" ? { "followup-subtitle": "Choose" } : {}),
+    };
+
+    expect(() => transformExplorationData(source)).toThrow(message);
+  });
+
+  it.each(["Transfigure {starter_card}", "Transfigure $DECK_CARD"])(
+    "rejects starter transfiguration presentation token %s",
+    (effectText) => {
+      const source = syntheticExplorationSource();
+      source.encounter[0].action[0] = {
+        id: "starter-transfiguration",
+        label: "Synthetic action",
+        "effect-text": effectText,
+        "effect-kind": "transfigure-all-starter-cards",
+      };
+
+      expect(() => transformExplorationData(source)).toThrow(/presentation/u);
+    },
+  );
+
+  it("compiles chosen and automatic multi-card transfigurations", () => {
+    const source = syntheticExplorationSource();
+    source.encounter[0].action = [
+      {
+        id: "chosen-multi-transfiguration",
+        label: "Synthetic action",
+        "effect-text": "Transfigure two chosen Events",
+        "followup-title": "Choose cards",
+        "followup-subtitle": "Choose two Events and a form for each",
+        "effect-kind": "transfigure-selected",
+        predicate: "event",
+        count: 2,
+      },
+      {
+        id: "random-multi-transfiguration",
+        label: "Synthetic action",
+        "effect-text": "Transfigure two random Events",
+        "effect-kind": "transfigure-random-cards",
+        predicate: "event",
+        count: 2,
+      },
+      {
+        id: "fixed-random-multi-transfiguration",
+        label: "Synthetic action",
+        "effect-text": "Kindle two random Events",
+        "effect-kind": "transfigure-fixed-random-cards",
+        predicate: "event",
+        count: 2,
+        transfiguration: "Kindled",
+      },
+    ];
+
+    const [chosen, random, fixed] = transformExplorationData(source)
+      .encounters[0].action;
+    expect(chosen).toMatchObject({
+      effectKind: "transfigure-selected",
+      canonicalMechanicId: "transfigure-deck-entry",
+      selectionPolicyId: "transfiguration-value",
+      predicate: "event",
+      count: 2,
+    });
+    expect(random).toMatchObject({
+      effectKind: "transfigure-random-cards",
+      canonicalMechanicId: "transfigure-deck-entry",
+      selectionPolicyId: "uniform",
+      predicate: "event",
+      count: 2,
+    });
+    expect(fixed).toMatchObject({
+      effectKind: "transfigure-fixed-random-cards",
+      canonicalMechanicId: "transfigure-deck-entry",
+      selectionPolicyId: "uniform",
+      predicate: "event",
+      count: 2,
+      transfiguration: "Kindled",
+    });
+
+    const single = structuredClone(source);
+    single.encounter[0].action = [{
+      id: "single-transfiguration",
+      label: "Synthetic action",
+      "effect-text": "Transfigure a chosen card",
+      "effect-kind": "transfigure-selected",
+      count: 1,
+    }];
+    const singleAction = transformExplorationData(single).encounters[0].action[0];
+    expect(singleAction.count).toBe(1);
+    expect(singleAction).not.toHaveProperty("predicate");
+  });
+
+  it.each([
+    ["chosen non-positive count", "transfigure-selected", { count: 0 }, /positive whole-number count/u],
+    ["chosen multi without predicate", "transfigure-selected", { count: 2 }, /requires predicate/u],
+    ["chosen multi without followup", "transfigure-selected", { count: 2, predicate: "event" }, /paired followup/u],
+    ["random without predicate", "transfigure-random-cards", { count: 2 }, /requires predicate/u],
+    ["random fixed field", "transfigure-random-cards", { count: 2, predicate: "event", transfiguration: "Kindled" }, /does not apply/u],
+    ["fixed without transfiguration", "transfigure-fixed-random-cards", { count: 2, predicate: "event" }, /requires transfiguration/u],
+    ["fixed deck target", "transfigure-fixed-random-cards", { count: 2, predicate: "event", transfiguration: "Kindled", "deck-target": "chosen" }, /does not apply/u],
+    ["automatic followup", "transfigure-random-cards", { count: 2, predicate: "event", "followup-title": "Choose", "followup-subtitle": "Choose" }, /does not support a followup/u],
+    ["automatic token", "transfigure-random-cards", { count: 2, predicate: "event", "effect-text": "Transfigure {deck_card}" }, /does not support presentation tokens/u],
+  ])("rejects malformed multi-card transfiguration data: %s", (
+    _label, effectKind, fields, message,
+  ) => {
+    const source = syntheticExplorationSource();
+    source.encounter[0].action[0] = {
+      id: "multi-card-transfiguration",
+      label: "Synthetic action",
+      "effect-text": "Synthetic transfiguration",
+      "effect-kind": effectKind,
+      ...fields,
+    };
+    expect(() => transformExplorationData(source)).toThrow(message);
+  });
+
+  it("compiles counted replacement, fixed transfiguration, copying, and card-type effects", () => {
+    const source = syntheticExplorationSource();
+    source.encounter[0].action = [
+      {
+        id: "replace-selected-multiple",
+        label: "Synthetic action",
+        "effect-text": "Replace up to two Events",
+        "followup-title": "Choose cards",
+        "followup-subtitle": "Choose up to two Events",
+        "effect-kind": "replace-selected",
+        predicate: "event",
+        count: 2,
+      },
+      {
+        id: "transfigure-fixed-selected-multiple",
+        label: "Synthetic action",
+        "effect-text": "Kindle two chosen Events",
+        "followup-title": "Choose cards",
+        "followup-subtitle": "Choose exactly two Events",
+        "effect-kind": "transfigure-fixed-selected",
+        predicate: "event",
+        count: 2,
+        transfiguration: "Kindled",
+        "deck-target": "chosen",
+      },
+      {
+        id: "copy-random-cards",
+        label: "Synthetic action",
+        "effect-text": "Copy two random Events",
+        "effect-kind": "copy-random-cards",
+        predicate: "event",
+        count: 2,
+      },
+      {
+        id: "change-random-card-type",
+        label: "Synthetic action",
+        "effect-text": "Change two random cards into {card_type} cards",
+        "effect-kind": "change-random-card-type",
+        count: 2,
+        "card-type": "Character",
+      },
+    ];
+
+    const [replacement, fixed, copy, cardType] = transformExplorationData(source)
+      .encounters[0].action;
+    expect(replacement).toMatchObject({
+      canonicalMechanicId: "replace-deck-entry",
+      selectionPolicyId: "card-fit-quality",
+      predicate: "event",
+      count: 2,
+    });
+    expect(fixed).toMatchObject({
+      canonicalMechanicId: "transfigure-deck-entry",
+      selectionPolicyId: "transfiguration-value",
+      predicate: "event",
+      count: 2,
+      transfiguration: "Kindled",
+      deckTarget: "chosen",
+    });
+    expect(copy).toMatchObject({
+      effectKind: "copy-random-cards",
+      canonicalMechanicId: "duplicate-deck-entry",
+      selectionPolicyId: "uniform",
+      predicate: "event",
+      count: 2,
+    });
+    expect(cardType).toMatchObject({
+      effectKind: "change-random-card-type",
+      canonicalMechanicId: "change-entry-card-type",
+      selectionPolicyId: "uniform",
+      count: 2,
+      cardType: "Character",
+    });
+
+    const legacy = syntheticExplorationSource();
+    legacy.encounter[0].action = [
+      {
+        id: "legacy-replacement",
+        label: "Synthetic action",
+        "effect-text": "Replace one Event",
+        "followup-title": "Choose a card",
+        "followup-subtitle": "Choose one Event",
+        "effect-kind": "replace-selected",
+        predicate: "event",
+      },
+      {
+        id: "legacy-fixed-transfiguration",
+        label: "Synthetic action",
+        "effect-text": "Kindle one card",
+        "followup-title": "Choose a card",
+        "followup-subtitle": "Choose one card",
+        "effect-kind": "transfigure-fixed-selected",
+        transfiguration: "Kindled",
+        "deck-target": "chosen",
+      },
+    ];
+    expect(transformExplorationData(legacy).encounters[0].action.map((action) =>
+      action.count)).toEqual([1, 1]);
+  });
+
+  it.each([
+    ["replacement count", "replace-selected", { predicate: "event", count: 0 }, /positive whole-number count/u],
+    ["replacement followup", "replace-selected", { predicate: "event", count: 2 }, /paired followup/u],
+    ["fixed offered multi", "transfigure-fixed-selected", { predicate: "event", count: 2, transfiguration: "Kindled", "deck-target": "offered", "followup-title": "Choose", "followup-subtitle": "Choose" }, /chosen deck-target/u],
+    ["fixed missing predicate", "transfigure-fixed-selected", { count: 2, transfiguration: "Kindled", "deck-target": "chosen", "followup-title": "Choose", "followup-subtitle": "Choose" }, /predicate/u],
+    ["copy predicate", "copy-random-cards", { count: 2 }, /requires predicate/u],
+    ["copy count", "copy-random-cards", { predicate: "event", count: 0 }, /positive whole-number count/u],
+    ["copy followup", "copy-random-cards", { predicate: "event", count: 2, "followup-title": "Choose", "followup-subtitle": "Choose" }, /does not support a followup/u],
+    ["copy target token", "copy-random-cards", { predicate: "event", count: 2, "effect-text": "Copy {deck_card}" }, /target-disclosing/u],
+    ["card type missing count", "change-random-card-type", { "card-type": "Event" }, /requires count/u],
+    ["card type invalid", "change-random-card-type", { count: 2, "card-type": "Dreamwell" }, /Character or Event/u],
+    ["card type predicate", "change-random-card-type", { count: 2, "card-type": "Event", predicate: "event" }, /does not apply/u],
+    ["card type target token", "change-random-card-type", { count: 2, "card-type": "Event", "effect-text": "Change {deck_card}" }, /target-disclosing/u],
+  ])("rejects malformed Wave4b generated data: %s", (
+    _label, effectKind, fields, message,
+  ) => {
+    const source = syntheticExplorationSource();
+    source.encounter[0].action[0] = {
+      id: "wave4b-action",
+      label: "Synthetic action",
+      "effect-text": "Synthetic effect",
+      "effect-kind": effectKind,
+      ...fields,
+    };
+    expect(() => transformExplorationData(source)).toThrow(message);
+  });
+
+  it("compiles Wave7 replacement and chosen/offered card-type contracts", () => {
+    const source = syntheticExplorationSource();
+    source.encounter.flatMap((encounter) => encounter.action).forEach((action, index) => {
+      const definitions = [
+        {
+          kind: "replace-random-with-card",
+          effectText: "Replace a random legendary card with {fixed_card}",
+          fields: {
+            predicate: "legendary",
+            "card-id": "00000000-0000-4000-8000-000000000001",
+          },
+        },
+        {
+          kind: "change-card-type-selected",
+          effectText: "Change {deck_card} into an {card_type}",
+          fields: { "card-type": "Event", "deck-target": "offered" },
+        },
+        {
+          kind: "change-card-type-selected",
+          effectText: "Change a chosen card into a {card_type}",
+          fields: { "card-type": "Character", "deck-target": "chosen" },
+        },
+        {
+          kind: "make-fast-all",
+          effectText: "Make every card fast",
+          fields: {},
+        },
+      ];
+      const definition = definitions[index];
+      Object.keys(action).forEach((key) => delete action[key]);
+      Object.assign(action, {
+        id: `wave7-action-${String(index)}`,
+        label: "Synthetic action",
+        "effect-text": definition.effectText,
+        "effect-kind": definition.kind,
+        ...definition.fields,
+      });
+    });
+
+    const [replacement, offered, chosen] = transformExplorationData(source).encounters
+      .flatMap((encounter) => encounter.action);
+    expect(replacement).toMatchObject({
+      effectKind: "replace-random-with-card",
+      canonicalMechanicId: "replace-deck-entry",
+      selectionPolicyId: "uniform",
+      predicate: "legendary",
+      cardId: "00000000-0000-4000-8000-000000000001",
+    });
+    expect(offered).toMatchObject({
+      effectKind: "change-card-type-selected",
+      canonicalMechanicId: "change-entry-card-type",
+      selectionPolicyId: "deck-entry-centrality",
+      cardType: "Event",
+      deckTarget: "offered",
+    });
+    expect(chosen).toMatchObject({
+      effectKind: "change-card-type-selected",
+      canonicalMechanicId: "change-entry-card-type",
+      selectionPolicyId: "deck-entry-centrality",
+      cardType: "Character",
+      deckTarget: "chosen",
+    });
+  });
+
+  it.each([
+    ["replacement predicate", "replace-random-with-card", { "card-id": "00000000-0000-4000-8000-000000000001" }, /requires predicate/u],
+    ["replacement card", "replace-random-with-card", { predicate: "legendary" }, /requires cardId/u],
+    ["replacement foreign count", "replace-random-with-card", { predicate: "legendary", "card-id": "00000000-0000-4000-8000-000000000001", count: 1 }, /count does not apply/u],
+    ["replacement followup", "replace-random-with-card", { predicate: "legendary", "card-id": "00000000-0000-4000-8000-000000000001", "followup-title": "Choose", "followup-subtitle": "Choose" }, /does not support a followup/u],
+    ["selected card type", "change-card-type-selected", { "deck-target": "offered", "card-type": "Dreamwell" }, /Character or Event/u],
+    ["selected target", "change-card-type-selected", { "card-type": "Event", "deck-target": "random" }, /chosen or offered/u],
+    ["selected foreign predicate", "change-card-type-selected", { "card-type": "Event", "deck-target": "offered", predicate: "legendary" }, /predicate does not apply/u],
+    ["chosen target token", "change-card-type-selected", { "card-type": "Event", "deck-target": "chosen", "effect-text": "Change {deck_card}" }, /unsupported presentation token/u],
+  ])("rejects malformed Wave7 generated data: %s", (
+    _label, effectKind, fields, message,
+  ) => {
+    const source = syntheticExplorationSource();
+    source.encounter[0].action[0] = {
+      id: "wave7-action",
+      label: "Synthetic action",
+      "effect-text": "Synthetic effect",
+      "effect-kind": effectKind,
+      ...fields,
+    };
+    expect(() => transformExplorationData(source)).toThrow(message);
+  });
+
+  it("compiles explicit Dreamsign mutations and rejects non-positive fields", () => {
+    const source = syntheticExplorationSource();
+    const dreamsignActions = [
+      {
+        kind: "gain-offered-dreamsign",
+        fields: { "offer-count": 3 },
+        policy: "dreamsign-match",
+      },
+      {
+        kind: "replace-selected-dreamsign-with-offered",
+        fields: { "offer-count": 4 },
+        policy: "dreamsign-match",
+      },
+      {
+        kind: "replace-all-dreamsigns-random",
+        fields: {},
+        policy: "uniform",
+      },
+      {
+        kind: "purge-selected-dreamsign-and-gain-random",
+        fields: { count: 2 },
+        policy: "uniform",
+      },
+    ];
+    source.encounter.flatMap((encounter) => encounter.action)
+      .forEach((action, index) => {
+        const definition = dreamsignActions[index];
+        Object.keys(action).forEach((key) => delete action[key]);
+        Object.assign(action, {
+          id: `dreamsign-action-${String(index)}`,
+          label: "Synthetic Dreamsign action",
+          "effect-text": "Synthetic Dreamsign effect",
+          "effect-kind": definition.kind,
+          ...definition.fields,
+        });
+      });
+
+    const actions = transformExplorationData(source).encounters.flatMap(
+      (encounter) => encounter.action,
+    );
+    expect(actions.map((action) => ({
+      kind: action.effectKind,
+      mechanic: action.canonicalMechanicId,
+      policy: action.selectionPolicyId,
+    }))).toEqual(dreamsignActions.map((definition) => ({
+      kind: definition.kind,
+      mechanic: "gain-dreamsign",
+      policy: definition.policy,
+    })));
+    expect(actions[2]).not.toHaveProperty("offerCount");
+    expect(actions[2]).not.toHaveProperty("count");
+
+    source.encounter[0].action[0]["offer-count"] = 0;
+    expect(() => transformExplorationData(source)).toThrow(
+      /requires a positive whole-number offer-count/u,
+    );
+    source.encounter[0].action[0]["offer-count"] = 3;
+    source.encounter[1].action[1].count = 0;
+    expect(() => transformExplorationData(source)).toThrow(
+      /requires a positive whole-number count/u,
+    );
+  });
+
+  it("compiles Nightmare Dreamsign variants with exact positive-integer fields", () => {
+    const source = syntheticExplorationSource();
+    source.encounter[0].action[0] = {
+      ...source.encounter[0].action[0],
+      "effect-kind": "gain-nightmare-and-dreamsign",
+      "effect-text": "Gain {nightmare_card} and a fixed Dreamsign",
+      "dreamsign-id": "00000000-0000-4000-8000-000000000002",
+      "nightmare-count": 2,
+    };
+    delete source.encounter[0].action[0].predicate;
+    source.encounter[0].action[1] = {
+      ...source.encounter[0].action[1],
+      "effect-kind": "gain-nightmare-and-offered-dreamsign",
+      "effect-text": "Gain {nightmare_card} and an offered Dreamsign",
+      "offer-count": 3,
+      "nightmare-count": 1,
+    };
+    delete source.encounter[0].action[1]["essence-per-card"];
+
+    const [fixed, offered] = transformExplorationData(source).encounters[0].action;
+    expect(fixed).toMatchObject({
+      effectKind: "gain-nightmare-and-dreamsign",
+      canonicalMechanicId: "gain-dreamsign",
+      selectionPolicyId: "fixed",
+      dreamsignId: "00000000-0000-4000-8000-000000000002",
+      nightmareCount: 2,
+    });
+    expect(fixed).not.toHaveProperty("offerCount");
+    expect(offered).toMatchObject({
+      effectKind: "gain-nightmare-and-offered-dreamsign",
+      canonicalMechanicId: "gain-dreamsign",
+      selectionPolicyId: "dreamsign-match",
+      offerCount: 3,
+      nightmareCount: 1,
+    });
+    expect(offered).not.toHaveProperty("dreamsignId");
+
+    for (const [field, value, message] of [
+      ["nightmare-count", 0, /positive whole-number nightmare-count/u],
+      ["nightmare-count", 1.5, /positive whole-number nightmare-count/u],
+      ["offer-count", 0, /positive whole-number offer-count/u],
+      ["offer-count", 1.5, /positive whole-number offer-count/u],
+    ]) {
+      const malformed = structuredClone(source);
+      malformed.encounter[0].action[1][field] = value;
+      expect(() => transformExplorationData(malformed)).toThrow(message);
+    }
+
+    const foreignOffer = structuredClone(source);
+    foreignOffer.encounter[0].action[0]["offer-count"] = 3;
+    expect(() => transformExplorationData(foreignOffer)).toThrow(
+      /field offerCount does not apply/u,
+    );
+    const foreignDreamsign = structuredClone(source);
+    foreignDreamsign.encounter[0].action[1]["dreamsign-id"] =
+      "00000000-0000-4000-8000-000000000002";
+    expect(() => transformExplorationData(foreignDreamsign)).toThrow(
+      /field dreamsignId does not apply/u,
+    );
   });
 
   it("compiles Exploration encounters with one through four actions", () => {
@@ -323,7 +1114,9 @@ describe("transformExplorationData", () => {
       "card-id": "fixed-card-id",
     };
     offered.encounter[1].action[0] = {
-      ...offered.encounter[1].action[0],
+      id: offered.encounter[1].action[0].id,
+      label: offered.encounter[1].action[0].label,
+      "effect-text": offered.encounter[1].action[0]["effect-text"],
       "effect-kind": "transfigure-fixed-selected",
       "deck-target": "chosen",
       transfiguration: "Empowered",

@@ -28,7 +28,10 @@ import { compileEconomyData } from "./economy-data.mjs";
 import { compileDraftData } from "./draft-data.mjs";
 import { compileRewardSelectionData } from "./reward-selection-data.mjs";
 import { compileAuguryData } from "./augury-data.mjs";
-import { isRewardCardPredicate } from "./reward-selection-contracts.mjs";
+import {
+  isRewardCardPredicate,
+  REWARD_CARD_PREDICATES,
+} from "./reward-selection-contracts.mjs";
 import { compileOpponentsData } from "./opponents-data.mjs";
 import {
   collectGuidePortraitSources,
@@ -36,8 +39,17 @@ import {
   compileSitesData,
   deriveDreamscapesData,
 } from "./guide-sites-data.mjs";
-import { EXPLORATION_EFFECT_SCHEMAS } from "./exploration-effect-editor-schema.mjs";
+import {
+  EXPLORATION_EFFECT_SCHEMAS,
+  EXPLORATION_FIXED_SITE_TYPES,
+  EXPLORATION_TRANSFIGURATIONS,
+} from "./exploration-effect-editor-schema.mjs";
 import { EXPLORATION_EFFECT_KINDS } from "./exploration-effect-kinds.mjs";
+import {
+  SHARED_EXPLORATION_EFFECT_VALIDATION_KINDS,
+  validateExplorationEffectAction,
+  validateExplorationEffectAuthoredFields,
+} from "./exploration-effect-validation.mjs";
 import { amplifiedStructuralErrors } from "./lib/amplified-validation.mjs";
 import {
   compileGambleData,
@@ -711,6 +723,9 @@ export function transformExplorationData(source) {
     );
   }
   const effectKindSet = new Set(EXPLORATION_EFFECT_KINDS);
+  const fixedSiteTypeSet = new Set(
+    EXPLORATION_FIXED_SITE_TYPES.map(({ value }) => value),
+  );
   const customCards = (source["custom-card"] ?? []).map((raw) => {
     const card = transformTomlRecord(raw);
     return {
@@ -754,6 +769,23 @@ export function transformExplorationData(source) {
           effectKind,
           ...effectFields,
         };
+        validateExplorationEffectAuthoredFields(action, {
+          fail(message) {
+            if (action.effectKind === "add-fixed-site") {
+              throw new Error(
+                `exploration.toml: action ${action.id} effect-kind add-fixed-site requires a supported site-type`,
+              );
+            }
+            if (action.effectKind === "choose-site-type") {
+              throw new Error(
+                `exploration.toml: action ${action.id} effect-kind choose-site-type requires explicit offer-count 3`,
+              );
+            }
+            throw new Error(
+              `exploration.toml: action ${action.id} effect-kind ${message}`,
+            );
+          },
+        });
         const definition = effectSchemaByKind.get(action.effectKind);
         const defaults = Object.fromEntries(
           (definition?.fields ?? []).flatMap((entry) =>
@@ -832,269 +864,374 @@ export function transformExplorationData(source) {
           );
         }
       }
-      if (
-        [
-          "gain-offered-card",
-          "draft-card",
-          "take-cards",
-          "transfigured-card-draft",
-        ].includes(action.effectKind) &&
-        (typeof action.predicate !== "string" || action.predicate.length === 0)
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} requires predicate`,
-        );
-      }
-      if (
-        action.predicate !== undefined &&
-        action.predicate !== "" &&
-        !isRewardCardPredicate(action.predicate)
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} has unsupported predicate ${String(action.predicate)}`,
-        );
-      }
-      const invalidCount =
-        typeof action.count !== "number" ||
-        !Number.isInteger(action.count) ||
-        action.count <= 0;
-      if (
-        (action.effectKind === "draft-card" && invalidCount) ||
-        (action.effectKind === "gain-offered-card" &&
-          action.count !== undefined &&
-          invalidCount)
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} requires a positive whole-number count`,
-        );
-      }
-      if (
-        ["draft-card", "take-cards", "transfigured-card-draft"].includes(
-          action.effectKind,
-        ) &&
-        (typeof action.offerCount !== "number" ||
-          !Number.isInteger(action.offerCount) ||
-          action.offerCount <= 0)
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} requires a positive whole-number offer-count`,
-        );
-      }
-      if (
-        [
-          "gain-card",
-          "replace-selected-with-card",
-          "gain-nightmare-and-card",
-        ].includes(action.effectKind) &&
-        (typeof action.cardId !== "string" || action.cardId.length === 0)
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} requires card-id`,
-        );
-      }
-      if (
-        action.effectKind === "transfigure-fixed-selected" &&
-        (typeof action.transfiguration !== "string" ||
-          action.transfiguration.length === 0)
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} requires transfiguration`,
-        );
-      }
-      if (
-        action.effectKind === "transfigure-all-for-essence" &&
-        (typeof action.essence !== "number" ||
-          !Number.isInteger(action.essence) ||
-          action.essence <= 0 ||
-          typeof action.predicate !== "string" ||
-          action.predicate.length === 0 ||
-          typeof action.transfiguration !== "string" ||
-          action.transfiguration.length === 0)
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} requires positive whole-number essence, predicate, and transfiguration`,
-        );
-      }
-      if (
-        action.effectKind === "gain-essence-per-card" &&
-        (typeof action.essencePerCard !== "number" ||
-          action.essencePerCard <= 0)
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} requires positive essence-per-card`,
-        );
-      }
-      if (
-        action.effectKind === "increase-spark-all" &&
-        (typeof action.sparkBonus !== "number" || action.sparkBonus <= 0)
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} requires positive spark-bonus`,
-        );
-      }
-      if (
-        action.effectKind === "purge-random-subtype-and-increase-spark" &&
-        (typeof action.subtype !== "string" || action.subtype.trim().length === 0 ||
-          typeof action.sparkBonus !== "number" || action.sparkBonus <= 0)
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} requires subtype and positive spark-bonus`,
-        );
-      }
-      if (
-        action.effectKind === "purge-dreamsign-for-essence" &&
-        (typeof action.essence !== "number" || action.essence <= 0)
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} requires positive essence`,
-        );
-      }
-      if (
-        [
-          "gain-nightmare-and-card",
-          "reduce-cost-all-and-gain-nightmares",
-        ].includes(action.effectKind) &&
-        ((action.effectKind === "reduce-cost-all-and-gain-nightmares" &&
-          (typeof action.energyCostReduction !== "number" ||
-            action.energyCostReduction <= 0)) ||
-          typeof action.nightmareCount !== "number" ||
-          action.nightmareCount <= 0)
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} requires cost reduction and Nightmares`,
-        );
-      }
-      if (
-        [
-          "copy-selected-card",
-          "copy-selected-cards",
-          "next-battle-opening-hand",
-          "next-battle-starting-energy",
-        ].includes(action.effectKind) &&
-        (typeof action.count !== "number" ||
+      validateExplorationEffectAction(action, {
+        predicates: new Set(
+          REWARD_CARD_PREDICATES.filter((predicate) => predicate !== "any"),
+        ),
+        transfigurations: new Set(EXPLORATION_TRANSFIGURATIONS),
+        fixedSiteTypes: fixedSiteTypeSet,
+        fail(message) {
+          if (message.includes("incompatible mechanic or selection policy")) {
+            if (
+              [
+                "free-next-shop",
+                "lose-half-essence-and-free-purchases",
+              ].includes(action.effectKind)
+            ) {
+              throw new Error(
+                `exploration.toml: action ${action.id} effect-kind ${action.effectKind} must compile without a selection policy`,
+              );
+            }
+            if (
+              [
+                "purge-random-starter-and-gain-card",
+                "replace-all-starter-cards",
+              ].includes(action.effectKind)
+            ) {
+              throw new Error(
+                `exploration.toml: action ${action.id} effect-kind ${action.effectKind} does not support a top-level selection-policy-id`,
+              );
+            }
+          }
+          throw new Error(`exploration.toml: action ${action.id} ${message}`);
+        },
+        terminology: {
+          effectKind: "effect-kind",
+          offerCount: "explicit offer-count",
+          positiveInteger: "positive whole-number",
+          predicateRequirement:
+            "requires predicate and requires a non-Any predicate",
+          siteType: "site-type",
+        },
+      });
+      if (!SHARED_EXPLORATION_EFFECT_VALIDATION_KINDS.has(action.effectKind)) {
+        if (
+          [
+            "gain-offered-card",
+            "draft-card",
+            "take-cards",
+            "transfigured-card-draft",
+          ].includes(action.effectKind) &&
+          (typeof action.predicate !== "string" ||
+            action.predicate.length === 0)
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} requires predicate`,
+          );
+        }
+        if (
+          action.predicate !== undefined &&
+          action.predicate !== "" &&
+          !isRewardCardPredicate(action.predicate)
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} has unsupported predicate ${String(action.predicate)}`,
+          );
+        }
+        if (action.cardType !== undefined) {
+          throw new Error(
+            `exploration.toml: action ${action.id} field cardType does not apply to effect-kind ${action.effectKind}`,
+          );
+        }
+        if (action.siteType !== undefined) {
+          throw new Error(
+            `exploration.toml: action ${action.id} field siteType does not apply to effect-kind ${action.effectKind}`,
+          );
+        }
+        const invalidCount =
+          typeof action.count !== "number" ||
           !Number.isInteger(action.count) ||
-          action.count <= 0)
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} requires a positive whole-number count`,
-        );
-      }
-      if (
-        action.effectKind === "purge-for-essence" &&
-        (typeof action.essencePerSpark !== "number" ||
-          !Number.isFinite(action.essencePerSpark) ||
-          action.essencePerSpark <= 0)
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} requires positive essence-per-spark`,
-        );
-      }
-      if (
-        ["copy-offered-deck-card", "choose-dream-avatar"].includes(
-          action.effectKind,
-        ) &&
-        (typeof action.offerCount !== "number" ||
-          !Number.isInteger(action.offerCount) ||
-          action.offerCount <= 0)
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} requires a positive whole-number offer-count`,
-        );
-      }
-      if (
-        action.effectKind === "change-subtype-selected" &&
-        (typeof action.subtype !== "string" || action.subtype.trim() === "")
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} requires a non-empty subtype`,
-        );
-      }
-      const targetedKinds = new Set([
-        "change-subtype-selected",
-        "transfigure-fixed-selected",
-        "copy-selected-card",
-      ]);
-      if (targetedKinds.has(action.effectKind)) {
-        if (action.deckTarget !== "chosen" && action.deckTarget !== "offered") {
+          action.count <= 0;
+        if (
+          (action.effectKind === "draft-card" && invalidCount) ||
+          (action.effectKind === "gain-offered-card" &&
+            action.count !== undefined &&
+            invalidCount)
+        ) {
           throw new Error(
-            `exploration.toml: action ${action.id} requires deck-target`,
+            `exploration.toml: action ${action.id} requires a positive whole-number count`,
           );
         }
-      } else if (action.deckTarget !== undefined) {
-        throw new Error(
-          `exploration.toml: action ${action.id} has unsupported deck-target`,
-        );
-      }
-      if (
-        (action.followupTitle === undefined) !==
-        (action.followupSubtitle === undefined)
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} requires both followup fields`,
-        );
-      }
-      if (/\$[A-Z][A-Z0-9_]*/u.test(action.effectText)) {
-        throw new Error(
-          `exploration.toml: action ${action.id} uses an untyped presentation token`,
-        );
-      }
-      const presentationSlots = [
-        ...new Set(action.effectText.match(/\{([a-z][a-z0-9_]*)\}/gu) ?? []),
-      ];
-      const allowedSlots = new Set([
-        ...(action.effectKind === "gain-offered-card"
-          ? ["{offered_card}"]
-          : []),
-        ...(action.deckTarget === "offered" ? ["{deck_card}"] : []),
-        ...(action.cardId === undefined ? [] : ["{fixed_card}"]),
-        ...([
-          "gain-nightmare-and-card",
-          "reduce-cost-all-and-gain-nightmares",
-        ].includes(action.effectKind)
-          ? ["{nightmare_card}"]
-          : []),
-      ]);
-      for (const slot of presentationSlots) {
-        if (!allowedSlots.has(slot)) {
+        if (
+          [
+            "draft-card",
+            "take-cards",
+            "transfigured-card-draft",
+            "gain-nightmare-and-offered-dreamsign",
+            "gain-offered-dreamsign",
+            "replace-selected-dreamsign-with-offered",
+          ].includes(action.effectKind) &&
+          (typeof action.offerCount !== "number" ||
+            !Number.isInteger(action.offerCount) ||
+            action.offerCount <= 0)
+        ) {
           throw new Error(
-            `exploration.toml: action ${action.id} has unsupported presentation slot ${slot}`,
+            `exploration.toml: action ${action.id} requires a positive whole-number offer-count`,
           );
         }
-      }
-      if (
-        action.effectKind === "gain-offered-card" &&
-        !presentationSlots.includes("{offered_card}")
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} must present {offered_card}`,
-        );
-      }
-      if (
-        action.deckTarget === "offered" &&
-        !presentationSlots.includes("{deck_card}")
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} must present {deck_card}`,
-        );
-      }
-      if (
-        action.cardId !== undefined &&
-        !presentationSlots.includes("{fixed_card}")
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} must present {fixed_card}`,
-        );
-      }
-      if (
-        [
-          "gain-nightmare-and-card",
-          "reduce-cost-all-and-gain-nightmares",
-        ].includes(action.effectKind) &&
-        !presentationSlots.includes("{nightmare_card}")
-      ) {
-        throw new Error(
-          `exploration.toml: action ${action.id} must present {nightmare_card}`,
-        );
+        if (
+          [
+            "gain-card",
+            "replace-selected-with-card",
+            "gain-nightmare-and-card",
+          ].includes(action.effectKind) &&
+          (typeof action.cardId !== "string" || action.cardId.length === 0)
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} requires card-id`,
+          );
+        }
+        if (
+          action.effectKind === "gain-nightmare-and-dreamsign" &&
+          (typeof action.dreamsignId !== "string" ||
+            action.dreamsignId.trim().length === 0)
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} requires dreamsign-id`,
+          );
+        }
+        if (
+          action.effectKind === "transfigure-all-for-essence" &&
+          (typeof action.essence !== "number" ||
+            !Number.isInteger(action.essence) ||
+            action.essence <= 0 ||
+            typeof action.predicate !== "string" ||
+            action.predicate.length === 0 ||
+            typeof action.transfiguration !== "string" ||
+            action.transfiguration.length === 0)
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} requires positive whole-number essence, predicate, and transfiguration`,
+          );
+        }
+        if (
+          action.effectKind === "gain-essence-per-card" &&
+          (typeof action.essencePerCard !== "number" ||
+            action.essencePerCard <= 0)
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} requires positive essence-per-card`,
+          );
+        }
+        if (
+          action.effectKind === "increase-spark-all" &&
+          (typeof action.sparkBonus !== "number" || action.sparkBonus <= 0)
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} requires positive spark-bonus`,
+          );
+        }
+        if (
+          action.effectKind === "purge-random-subtype-and-increase-spark" &&
+          (typeof action.subtype !== "string" ||
+            action.subtype.trim().length === 0 ||
+            typeof action.sparkBonus !== "number" ||
+            action.sparkBonus <= 0)
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} requires subtype and positive spark-bonus`,
+          );
+        }
+        if (
+          action.effectKind === "purge-dreamsign-for-essence" &&
+          (typeof action.essence !== "number" || action.essence <= 0)
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} requires positive essence`,
+          );
+        }
+        if (
+          [
+            "gain-nightmare-and-dreamsign",
+            "gain-nightmare-and-offered-dreamsign",
+            "gain-nightmare-and-card",
+            "reduce-cost-all-and-gain-nightmares",
+          ].includes(action.effectKind) &&
+          ((action.effectKind === "reduce-cost-all-and-gain-nightmares" &&
+            (typeof action.energyCostReduction !== "number" ||
+              action.energyCostReduction <= 0)) ||
+            typeof action.nightmareCount !== "number" ||
+            !Number.isInteger(action.nightmareCount) ||
+            action.nightmareCount <= 0)
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} requires a positive whole-number nightmare-count`,
+          );
+        }
+        const nightmareDreamsignFields = [
+          ["dreamsignId", ["gain-dreamsign", "gain-nightmare-and-dreamsign"]],
+          [
+            "offerCount",
+            [
+              "draft-card",
+              "take-cards",
+              "transfigured-card-draft",
+              "gain-nightmare-and-offered-dreamsign",
+              "gain-offered-dreamsign",
+              "replace-selected-dreamsign-with-offered",
+              "copy-offered-deck-card",
+              "choose-dream-avatar",
+            ],
+          ],
+          [
+            "nightmareCount",
+            [
+              "gain-nightmare-and-dreamsign",
+              "gain-nightmare-and-offered-dreamsign",
+              "gain-nightmare-and-card",
+              "reduce-cost-all-and-gain-nightmares",
+            ],
+          ],
+        ];
+        for (const [field, applicableKinds] of nightmareDreamsignFields) {
+          if (
+            action[field] !== undefined &&
+            !applicableKinds.includes(action.effectKind)
+          ) {
+            throw new Error(
+              `exploration.toml: action ${action.id} field ${field} does not apply to effect-kind ${action.effectKind}`,
+            );
+          }
+        }
+        if (
+          [
+            "copy-selected-card",
+            "copy-selected-cards",
+            "next-battle-opening-hand",
+            "next-battle-starting-energy",
+            "purge-selected-dreamsign-and-gain-random",
+          ].includes(action.effectKind) &&
+          (typeof action.count !== "number" ||
+            !Number.isInteger(action.count) ||
+            action.count <= 0)
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} requires a positive whole-number count`,
+          );
+        }
+        if (
+          action.effectKind === "purge-for-essence" &&
+          (typeof action.essencePerSpark !== "number" ||
+            !Number.isFinite(action.essencePerSpark) ||
+            action.essencePerSpark <= 0)
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} requires positive essence-per-spark`,
+          );
+        }
+        if (
+          ["copy-offered-deck-card", "choose-dream-avatar"].includes(
+            action.effectKind,
+          ) &&
+          (typeof action.offerCount !== "number" ||
+            !Number.isInteger(action.offerCount) ||
+            action.offerCount <= 0)
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} requires a positive whole-number offer-count`,
+          );
+        }
+        if (
+          action.effectKind === "change-subtype-selected" &&
+          (typeof action.subtype !== "string" || action.subtype.trim() === "")
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} requires a non-empty subtype`,
+          );
+        }
+        const targetedKinds = new Set([
+          "change-subtype-selected",
+          "copy-selected-card",
+        ]);
+        if (targetedKinds.has(action.effectKind)) {
+          if (
+            action.deckTarget !== "chosen" &&
+            action.deckTarget !== "offered"
+          ) {
+            throw new Error(
+              `exploration.toml: action ${action.id} requires deck-target`,
+            );
+          }
+        } else if (action.deckTarget !== undefined) {
+          throw new Error(
+            `exploration.toml: action ${action.id} has unsupported deck-target`,
+          );
+        }
+        if (
+          (action.followupTitle === undefined) !==
+          (action.followupSubtitle === undefined)
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} requires both followup fields`,
+          );
+        }
+        if (/\$[A-Z][A-Z0-9_]*/u.test(action.effectText)) {
+          throw new Error(
+            `exploration.toml: action ${action.id} uses an untyped presentation token`,
+          );
+        }
+        const presentationSlots = [
+          ...new Set(action.effectText.match(/\{([a-z][a-z0-9_]*)\}/gu) ?? []),
+        ];
+        const allowedSlots = new Set([
+          ...(action.effectKind === "gain-offered-card"
+            ? ["{offered_card}"]
+            : []),
+          ...(action.deckTarget === "offered" ? ["{deck_card}"] : []),
+          ...(action.cardId === undefined ? [] : ["{fixed_card}"]),
+          ...([
+            "gain-nightmare-and-dreamsign",
+            "gain-nightmare-and-offered-dreamsign",
+            "gain-nightmare-and-card",
+            "reduce-cost-all-and-gain-nightmares",
+          ].includes(action.effectKind)
+            ? ["{nightmare_card}"]
+            : []),
+        ]);
+        for (const slot of presentationSlots) {
+          if (!allowedSlots.has(slot)) {
+            throw new Error(
+              `exploration.toml: action ${action.id} has unsupported presentation slot ${slot}`,
+            );
+          }
+        }
+        if (
+          action.effectKind === "gain-offered-card" &&
+          !presentationSlots.includes("{offered_card}")
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} must present {offered_card}`,
+          );
+        }
+        if (
+          action.deckTarget === "offered" &&
+          !presentationSlots.includes("{deck_card}")
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} must present {deck_card}`,
+          );
+        }
+        if (
+          action.cardId !== undefined &&
+          !presentationSlots.includes("{fixed_card}")
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} must present {fixed_card}`,
+          );
+        }
+        if (
+          [
+            "gain-nightmare-and-dreamsign",
+            "gain-nightmare-and-offered-dreamsign",
+            "gain-nightmare-and-card",
+            "reduce-cost-all-and-gain-nightmares",
+          ].includes(action.effectKind) &&
+          !presentationSlots.includes("{nightmare_card}")
+        ) {
+          throw new Error(
+            `exploration.toml: action ${action.id} must present {nightmare_card}`,
+          );
+        }
       }
       const followupSlots = [
         ...new Set(

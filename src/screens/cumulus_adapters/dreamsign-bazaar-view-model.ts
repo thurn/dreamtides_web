@@ -26,6 +26,10 @@ import type {
 } from "../../cumulus/screens/DreamsignBazaarSiteScreen";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
+import {
+  buildShopFreePurchaseStatus,
+  hasFreePurchase,
+} from "./shop-free-purchase-view-model";
 
 /** Resolve Amunet, the resident Dream Guide for Dreamsign Bazaars. */
 export function resolveDreamsignBazaarGuide(
@@ -122,6 +126,7 @@ export function buildDreamsignBazaarSiteView(params: {
 }): DreamsignBazaarSiteView {
   const priceModifiers: ShopPriceModifiers = {
     essenceDiscountPercent: params.state.shopModifiers.essenceDiscountPercent,
+    freePurchase: hasFreePurchase(params.runtime, params.state.shopModifiers),
   };
   const scene: ArtRef | null =
     params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
@@ -146,5 +151,9 @@ export function buildDreamsignBazaarSiteView(params: {
       params.state.essence,
     ),
     purge: buildDreamsignBazaarPurgeView(params.state, params.pendingDreamsign),
+    freePurchaseStatus: buildShopFreePurchaseStatus(
+      params.runtime,
+      params.state.shopModifiers,
+    ),
   };
 }

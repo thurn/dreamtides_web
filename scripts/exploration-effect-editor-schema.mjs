@@ -13,6 +13,7 @@ export const EXPLORATION_PREDICATES = [
   { value: "spirit-animal", label: "Spirit Animal" },
   { value: "survivor", label: "Survivor" },
   { value: "warrior", label: "Warrior" },
+  { value: "legendary", label: "Legendary" },
 ];
 
 if (!EXPLORATION_PREDICATES.every(({ value }) =>
@@ -25,6 +26,14 @@ export const EXPLORATION_TRANSFIGURATIONS = [
   "Hastened", "Resonant", "Attuned", "Perfected",
 ];
 
+export const EXPLORATION_FIXED_SITE_TYPES = [
+  { value: "Duplication", label: "Duplication" },
+  { value: "Purge", label: "Purge" },
+  { value: "Shop", label: "Shop" },
+  { value: "DreamsignBazaar", label: "Dreamsign Bazaar" },
+  { value: "Transfiguration", label: "Transfiguration" },
+];
+
 /** Code-owned editor schema for the closed typed Exploration effect variants. */
 export const EXPLORATION_EFFECT_SCHEMAS = [
   {
@@ -32,6 +41,18 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
     "label": "Purge and copy",
     "canonicalMechanicId": "purge-and-duplicate",
     "fields": []
+  },
+  {
+    "kind": "purge-one-transfigure-and-copy-others",
+    "label": "Purge one, transfigure and copy the others",
+    "canonicalMechanicId": "transfigure-deck-entry",
+    "defaultSelectionPolicyId": "uniform",
+    "allowedSelectionPolicyIds": ["uniform"],
+    "fields": [
+      { "key": "offerCount", "label": "Offer count", "control": "number", "min": 4, "max": 4 },
+      { "key": "transfiguration", "label": "Transfiguration", "control": "transfiguration" }
+    ],
+    "requiresFollowup": true
   },
   {
     "kind": "gain-dreamsign",
@@ -46,6 +67,55 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
         "key": "dreamsignId",
         "label": "Dreamsign",
         "control": "dreamsign"
+      }
+    ]
+  },
+  {
+    "kind": "gain-nightmare-and-dreamsign",
+    "label": "Gain Nightmares and a Dreamsign",
+    "canonicalMechanicId": "gain-dreamsign",
+    "defaultSelectionPolicyId": "fixed",
+    "allowedSelectionPolicyIds": [
+      "fixed"
+    ],
+    "fields": [
+      {
+        "key": "dreamsignId",
+        "label": "Dreamsign",
+        "control": "dreamsign"
+      },
+      {
+        "key": "nightmareCount",
+        "label": "Nightmare count",
+        "control": "number",
+        "defaultValue": 1,
+        "min": 1
+      }
+    ]
+  },
+  {
+    "kind": "gain-nightmare-and-offered-dreamsign",
+    "label": "Gain Nightmares and an offered Dreamsign",
+    "canonicalMechanicId": "gain-dreamsign",
+    "defaultSelectionPolicyId": "dreamsign-match",
+    "allowedSelectionPolicyIds": [
+      "uniform",
+      "dreamsign-match"
+    ],
+    "fields": [
+      {
+        "key": "offerCount",
+        "label": "Offer count",
+        "control": "number",
+        "defaultValue": 3,
+        "min": 1
+      },
+      {
+        "key": "nightmareCount",
+        "label": "Nightmare count",
+        "control": "number",
+        "defaultValue": 1,
+        "min": 1
       }
     ]
   },
@@ -80,6 +150,67 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
         "label": "Card predicate",
         "control": "predicate",
         "optional": true
+      },
+      {
+        "key": "count",
+        "label": "Count",
+        "control": "number",
+        "defaultValue": 1,
+        "min": 1
+      }
+    ]
+  },
+  {
+    "kind": "transfigure-random-cards",
+    "label": "Transfigure random cards",
+    "canonicalMechanicId": "transfigure-deck-entry",
+    "defaultSelectionPolicyId": "uniform",
+    "allowedSelectionPolicyIds": [
+      "uniform"
+    ],
+    "fields": [
+      {
+        "key": "predicate",
+        "label": "Card predicate",
+        "control": "predicate",
+        "defaultValue": "character"
+      },
+      {
+        "key": "count",
+        "label": "Count",
+        "control": "number",
+        "defaultValue": 2,
+        "min": 1
+      }
+    ]
+  },
+  {
+    "kind": "transfigure-fixed-random-cards",
+    "label": "Apply a fixed transfiguration to random cards",
+    "canonicalMechanicId": "transfigure-deck-entry",
+    "defaultSelectionPolicyId": "uniform",
+    "allowedSelectionPolicyIds": [
+      "uniform"
+    ],
+    "fields": [
+      {
+        "key": "predicate",
+        "label": "Card predicate",
+        "control": "predicate",
+        "defaultValue": "character"
+      },
+      {
+        "key": "count",
+        "label": "Count",
+        "control": "number",
+        "defaultValue": 2,
+        "min": 1
+      },
+      {
+        "key": "transfiguration",
+        "label": "Transfiguration",
+        "control": "transfiguration",
+        "defaultValue": "Empowered"
       }
     ]
   },
@@ -107,6 +238,88 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
         "min": 1
       }
     ]
+  },
+  {
+    "kind": "purge-starter-card",
+    "label": "Purge disclosed starter card",
+    "canonicalMechanicId": "purge-deck-entry",
+    "defaultSelectionPolicyId": "uniform",
+    "allowedSelectionPolicyIds": [
+      "uniform"
+    ],
+    "fields": []
+  },
+  {
+    "kind": "purge-random-starter-card",
+    "label": "Purge random starter card",
+    "canonicalMechanicId": "purge-deck-entry",
+    "defaultSelectionPolicyId": "uniform",
+    "allowedSelectionPolicyIds": [
+      "uniform"
+    ],
+    "fields": []
+  },
+  {
+    "kind": "purge-random-starter-and-gain-card",
+    "label": "Replace random starter card",
+    "canonicalMechanicId": "replace-deck-entry",
+    "fields": [
+      {
+        "key": "predicate",
+        "label": "Card predicate",
+        "control": "predicate",
+        "defaultValue": "character"
+      }
+    ]
+  },
+  {
+    "kind": "replace-all-starter-cards",
+    "label": "Replace all starter cards",
+    "canonicalMechanicId": "replace-deck-entry",
+    "fields": [
+      {
+        "key": "predicate",
+        "label": "Card predicate",
+        "control": "predicate",
+        "defaultValue": "character"
+      }
+    ]
+  },
+  {
+    "kind": "transfigure-random-starter-cards",
+    "label": "Transfigure random starter cards",
+    "canonicalMechanicId": "transfigure-deck-entry",
+    "defaultSelectionPolicyId": "uniform",
+    "allowedSelectionPolicyIds": [
+      "uniform"
+    ],
+    "fields": [
+      {
+        "key": "count",
+        "label": "Count",
+        "control": "number",
+        "defaultValue": 2,
+        "min": 1
+      }
+    ]
+  },
+  {
+    "kind": "transfigure-all-starter-cards",
+    "label": "Transfigure all starter cards",
+    "canonicalMechanicId": "transfigure-deck-entry",
+    "defaultSelectionPolicyId": "uniform",
+    "allowedSelectionPolicyIds": [
+      "uniform"
+    ],
+    "fields": []
+  },
+  {
+    "kind": "transfigure-all-cards",
+    "label": "Transfigure all cards",
+    "canonicalMechanicId": "transfigure-deck-entry",
+    "defaultSelectionPolicyId": "uniform",
+    "allowedSelectionPolicyIds": ["uniform"],
+    "fields": []
   },
   {
     "kind": "choose-pack",
@@ -225,6 +438,53 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
     ]
   },
   {
+    "kind": "change-card-type-selected",
+    "label": "Change selected card type",
+    "canonicalMechanicId": "change-entry-card-type",
+    "defaultSelectionPolicyId": "deck-entry-centrality",
+    "allowedSelectionPolicyIds": [
+      "deck-entry-centrality"
+    ],
+    "fields": [
+      {
+        "key": "cardType",
+        "label": "Card type",
+        "control": "card-type",
+        "defaultValue": "Character"
+      },
+      {
+        "key": "deckTarget",
+        "label": "Deck target",
+        "control": "deck-target",
+        "defaultValue": "chosen"
+      }
+    ]
+  },
+  {
+    "kind": "change-random-card-type",
+    "label": "Change random card types",
+    "canonicalMechanicId": "change-entry-card-type",
+    "defaultSelectionPolicyId": "uniform",
+    "allowedSelectionPolicyIds": [
+      "uniform"
+    ],
+    "fields": [
+      {
+        "key": "count",
+        "label": "Count",
+        "control": "number",
+        "defaultValue": 2,
+        "min": 1
+      },
+      {
+        "key": "cardType",
+        "label": "Card type",
+        "control": "card-type",
+        "defaultValue": "Character"
+      }
+    ]
+  },
+  {
     "kind": "change-subtype-all",
     "label": "Choose subtype for all characters",
     "canonicalMechanicId": "change-deck-subtype",
@@ -263,6 +523,20 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
     ]
   },
   {
+    "kind": "take-transfigured-cards-and-gain-nightmares",
+    "label": "Take transfigured cards and gain Nightmares",
+    "canonicalMechanicId": "transfigured-card-chooser",
+    "defaultSelectionPolicyId": "card-fit",
+    "allowedSelectionPolicyIds": ["card-fit"],
+    "fields": [
+      { "key": "predicate", "label": "Card predicate", "control": "predicate" },
+      { "key": "offerCount", "label": "Offer count", "control": "number", "min": 4, "max": 4 },
+      { "key": "transfiguration", "label": "Transfiguration", "control": "transfiguration" },
+      { "key": "nightmareCount", "label": "Nightmare count", "control": "number", "min": 1 }
+    ],
+    "requiresFollowup": true
+  },
+  {
     "kind": "replace-selected-with-card",
     "label": "Replace selected card with a fixed card",
     "canonicalMechanicId": "replace-deck-entry",
@@ -276,6 +550,28 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
         "label": "Card predicate",
         "control": "predicate",
         "optional": true
+      },
+      {
+        "key": "cardId",
+        "label": "Replacement card",
+        "control": "card"
+      }
+    ]
+  },
+  {
+    "kind": "replace-random-with-card",
+    "label": "Replace random card with a fixed card",
+    "canonicalMechanicId": "replace-deck-entry",
+    "defaultSelectionPolicyId": "uniform",
+    "allowedSelectionPolicyIds": [
+      "uniform"
+    ],
+    "fields": [
+      {
+        "key": "predicate",
+        "label": "Card predicate",
+        "control": "predicate",
+        "defaultValue": "character"
       },
       {
         "key": "cardId",
@@ -299,6 +595,13 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
         "label": "Replacement predicate",
         "control": "predicate",
         "defaultValue": "character"
+      },
+      {
+        "key": "count",
+        "label": "Maximum replacements",
+        "control": "number",
+        "defaultValue": 1,
+        "min": 1
       }
     ]
   },
@@ -363,22 +666,29 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
     ],
     "fields": [
       {
-        "key": "deckTarget",
-        "label": "Deck target",
-        "control": "deck-target",
-        "defaultValue": "chosen"
-      },
-      {
         "key": "predicate",
         "label": "Card predicate",
         "control": "predicate",
         "optional": true
       },
       {
+        "key": "count",
+        "label": "Count",
+        "control": "number",
+        "defaultValue": 1,
+        "min": 1
+      },
+      {
         "key": "transfiguration",
         "label": "Transfiguration",
         "control": "transfiguration",
         "defaultValue": "Empowered"
+      },
+      {
+        "key": "deckTarget",
+        "label": "Deck target",
+        "control": "deck-target",
+        "defaultValue": "chosen"
       }
     ]
   },
@@ -437,6 +747,16 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
     ]
   },
   {
+    "kind": "purge-disclosed-and-transfigure-same-type",
+    "label": "Purge disclosed card and transfigure its type",
+    "canonicalMechanicId": "purge-deck-entry",
+    "defaultSelectionPolicyId": "purge-misfit",
+    "allowedSelectionPolicyIds": ["purge-misfit"],
+    "fields": [
+      { "key": "transfiguration", "label": "Transfiguration", "control": "transfiguration" }
+    ]
+  },
+  {
     "kind": "transfigure-next-draft-or-shop",
     "label": "Transfigure the next Draft or Shop",
     "canonicalMechanicId": "next-site-transfiguration",
@@ -478,6 +798,57 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
         "resource": "spark"
       }
     ]
+  },
+  {
+    "kind": "gain-essence",
+    "label": "Gain essence",
+    "canonicalMechanicId": "essence-mutation",
+    "fields": [
+      {
+        "key": "essence",
+        "label": "Essence",
+        "control": "number",
+        "defaultValue": 100,
+        "min": 1,
+        "step": 10,
+        "resource": "essence"
+      }
+    ]
+  },
+  {
+    "kind": "gain-random-essence",
+    "label": "Gain random essence",
+    "canonicalMechanicId": "essence-mutation",
+    "defaultSelectionPolicyId": "uniform",
+    "allowedSelectionPolicyIds": [
+      "uniform"
+    ],
+    "fields": [
+      {
+        "key": "minimumEssence",
+        "label": "Minimum essence",
+        "control": "number",
+        "defaultValue": 50,
+        "min": 1,
+        "step": 10,
+        "resource": "essence"
+      },
+      {
+        "key": "maximumEssence",
+        "label": "Maximum essence",
+        "control": "number",
+        "defaultValue": 150,
+        "min": 1,
+        "step": 10,
+        "resource": "essence"
+      }
+    ]
+  },
+  {
+    "kind": "double-essence",
+    "label": "Double essence",
+    "canonicalMechanicId": "essence-mutation",
+    "fields": []
   },
   {
     "kind": "purge-random-subtype-and-increase-spark",
@@ -531,10 +902,85 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
     ]
   },
   {
+    "kind": "gain-offered-dreamsign",
+    "label": "Gain an offered Dreamsign",
+    "canonicalMechanicId": "gain-dreamsign",
+    "defaultSelectionPolicyId": "dreamsign-match",
+    "allowedSelectionPolicyIds": [
+      "uniform",
+      "dreamsign-match"
+    ],
+    "fields": [
+      {
+        "key": "offerCount",
+        "label": "Offer count",
+        "control": "number",
+        "defaultValue": 3,
+        "min": 1
+      }
+    ]
+  },
+  {
+    "kind": "replace-selected-dreamsign-with-offered",
+    "label": "Replace a selected Dreamsign with an offered Dreamsign",
+    "canonicalMechanicId": "gain-dreamsign",
+    "defaultSelectionPolicyId": "dreamsign-match",
+    "allowedSelectionPolicyIds": [
+      "uniform",
+      "dreamsign-match"
+    ],
+    "fields": [
+      {
+        "key": "offerCount",
+        "label": "Offer count",
+        "control": "number",
+        "defaultValue": 3,
+        "min": 1
+      }
+    ]
+  },
+  {
+    "kind": "replace-all-dreamsigns-random",
+    "label": "Replace all Dreamsigns randomly",
+    "canonicalMechanicId": "gain-dreamsign",
+    "defaultSelectionPolicyId": "uniform",
+    "allowedSelectionPolicyIds": [
+      "uniform"
+    ],
+    "fields": []
+  },
+  {
+    "kind": "purge-selected-dreamsign-and-gain-random",
+    "label": "Purge selected Dreamsigns and gain random Dreamsigns",
+    "canonicalMechanicId": "gain-dreamsign",
+    "defaultSelectionPolicyId": "uniform",
+    "allowedSelectionPolicyIds": [
+      "uniform"
+    ],
+    "fields": [
+      {
+        "key": "count",
+        "label": "Dreamsign count",
+        "control": "number",
+        "defaultValue": 1,
+        "min": 1
+      }
+    ]
+  },
+  {
     "kind": "make-fast-all",
     "label": "Make all cards fast",
     "canonicalMechanicId": "make-deck-fast",
     "fields": []
+  },
+  {
+    "kind": "make-predicate-fast-and-gain-nightmares",
+    "label": "Make matching cards fast and gain Nightmares",
+    "canonicalMechanicId": "make-deck-fast",
+    "fields": [
+      { "key": "predicate", "label": "Card predicate", "control": "predicate" },
+      { "key": "nightmareCount", "label": "Nightmare count", "control": "number", "min": 1 }
+    ]
   },
   {
     "kind": "reduce-cost-all-and-gain-nightmares",
@@ -599,6 +1045,30 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
       "duplicate-value"
     ],
     "fields": [
+      {
+        "key": "count",
+        "label": "Cards to copy",
+        "control": "number",
+        "defaultValue": 2,
+        "min": 1
+      }
+    ]
+  },
+  {
+    "kind": "copy-random-cards",
+    "label": "Copy random deck cards",
+    "canonicalMechanicId": "duplicate-deck-entry",
+    "defaultSelectionPolicyId": "uniform",
+    "allowedSelectionPolicyIds": [
+      "uniform"
+    ],
+    "fields": [
+      {
+        "key": "predicate",
+        "label": "Card predicate",
+        "control": "predicate",
+        "defaultValue": "character"
+      },
       {
         "key": "count",
         "label": "Cards to copy",
@@ -713,6 +1183,44 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
     ]
   },
   {
+    "kind": "add-fixed-site",
+    "label": "Add a fixed site",
+    "canonicalMechanicId": "add-site",
+    "defaultSelectionPolicyId": "fixed",
+    "allowedSelectionPolicyIds": [
+      "fixed"
+    ],
+    "fields": [
+      {
+        "key": "siteType",
+        "label": "Site type",
+        "control": "site-type",
+        "defaultValue": "Shop",
+        "options": EXPLORATION_FIXED_SITE_TYPES
+      }
+    ]
+  },
+  {
+    "kind": "choose-site-type",
+    "label": "Choose a site type",
+    "canonicalMechanicId": "add-site",
+    "defaultSelectionPolicyId": "site-uniform",
+    "allowedSelectionPolicyIds": [
+      "site-uniform"
+    ],
+    "fields": [
+      {
+        "key": "offerCount",
+        "label": "Offer count",
+        "control": "number",
+        "defaultValue": 3,
+        "min": 3,
+        "max": 3
+      }
+    ],
+    "requiresFollowup": true
+  },
+  {
     "kind": "add-site",
     "label": "Add a disclosed site",
     "canonicalMechanicId": "add-site",
@@ -721,8 +1229,32 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
       "site-uniform"
     ],
     "fields": []
+  },
+  {
+    "kind": "free-next-shop",
+    "label": "Make the next shop free",
+    "canonicalMechanicId": "shop-purchase-modifier",
+    "fields": []
+  },
+  {
+    "kind": "lose-half-essence-and-free-purchases",
+    "label": "Lose half essence and grant free purchases",
+    "canonicalMechanicId": "shop-purchase-modifier",
+    "fields": [
+      {
+        "key": "count",
+        "label": "Free purchase count",
+        "control": "number",
+        "defaultValue": 3,
+        "min": 1
+      }
+    ]
   }
 ];
+
+export const EXPLORATION_EFFECT_SCHEMA_BY_KIND = new Map(
+  EXPLORATION_EFFECT_SCHEMAS.map((definition) => [definition.kind, definition]),
+);
 
 for (const definition of EXPLORATION_EFFECT_SCHEMAS) {
   if (!isRewardMechanicId(definition.canonicalMechanicId)) {

@@ -12,20 +12,32 @@ import {
   EXPLORATION_PREDICATES,
   EXPLORATION_TRANSFIGURATIONS,
 } from "./exploration-editor-schema.mjs";
-import { transformCard, transformDreamsign, transformExplorationData } from "./setup-assets.mjs";
+import { EXPLORATION_FIXED_SITE_TYPES } from "./exploration-effect-editor-schema.mjs";
+import { validateExplorationEffectAction } from "./exploration-effect-validation.mjs";
+import {
+  transformCard,
+  transformDreamsign,
+  transformExplorationData,
+} from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 export const DEFAULT_EXPLORATION_TOML_PATH = join("data", "exploration.toml");
 export const DEFAULT_EXPLORATION_CARDS_PATH = join("data", "cards.toml");
-export const DEFAULT_EXPLORATION_DREAMSIGNS_PATH = join("data", "dreamsigns.toml");
+export const DEFAULT_EXPLORATION_DREAMSIGNS_PATH = join(
+  "data",
+  "dreamsigns.toml",
+);
 
-const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
 const CONFIG_KEYS = [
   ["canonical-mechanic-id", "canonicalMechanicId"],
   ["selection-policy-id", "selectionPolicyId"],
   ["deck-target", "deckTarget"],
   ["predicate", "predicate"],
   ["count", "count"],
+  ["card-type", "cardType"],
+  ["site-type", "siteType"],
   ["card-id", "cardId"],
   ["dreamsign-id", "dreamsignId"],
   ["pack-count", "packCount"],
@@ -41,6 +53,26 @@ const CONFIG_KEYS = [
   ["nightmare-count", "nightmareCount"],
   ["transfiguration", "transfiguration"],
 ];
+const NIGHTMARE_DREAMSIGN_FIELDS = [
+  "dreamsignId",
+  "offerCount",
+  "nightmareCount",
+];
+const SUPPORTED_NON_ANY_PREDICATES = new Set(
+  EXPLORATION_PREDICATES.map(({ value }) => value).filter(
+    (value) => value !== "",
+  ),
+);
+const EXPLORATION_FIXED_SITE_TYPE_VALUES = new Set(
+  EXPLORATION_FIXED_SITE_TYPES.map(({ value }) => value),
+);
+const WAVE8_STRICT_METADATA_EFFECT_KINDS = new Set([
+  "transfigure-all-cards",
+  "purge-disclosed-and-transfigure-same-type",
+  "make-predicate-fast-and-gain-nightmares",
+  "take-transfigured-cards-and-gain-nightmares",
+  "purge-one-transfigure-and-copy-others",
+]);
 
 function editorError(code, message) {
   const error = new Error(message);
@@ -57,7 +89,8 @@ function requiredString(value, label) {
 
 function canonicalUuid(value, label) {
   const uuid = requiredString(value, label);
-  if (!UUID_PATTERN.test(uuid)) throw editorError("INVALID_REFERENCE", `${label} must be a UUID.`);
+  if (!UUID_PATTERN.test(uuid))
+    throw editorError("INVALID_REFERENCE", `${label} must be a UUID.`);
   return uuid;
 }
 
@@ -74,8 +107,12 @@ function camelAction(raw) {
     id: raw.id,
     label: raw.label,
     effectText: raw["effect-text"],
-    ...(raw["followup-title"] === undefined ? {} : { followupTitle: raw["followup-title"] }),
-    ...(raw["followup-subtitle"] === undefined ? {} : { followupSubtitle: raw["followup-subtitle"] }),
+    ...(raw["followup-title"] === undefined
+      ? {}
+      : { followupTitle: raw["followup-title"] }),
+    ...(raw["followup-subtitle"] === undefined
+      ? {}
+      : { followupSubtitle: raw["followup-subtitle"] }),
     effectKind: raw["effect-kind"],
   };
   for (const [tomlKey, camelKey] of CONFIG_KEYS) {
@@ -86,33 +123,48 @@ function camelAction(raw) {
 
 function readCatalogs(rootDir, paths) {
   const cardsDocument = parse(readFileSync(join(rootDir, paths.cards), "utf8"));
-  const dreamsignDocument = parse(readFileSync(join(rootDir, paths.dreamsigns), "utf8"));
+  const dreamsignDocument = parse(
+    readFileSync(join(rootDir, paths.dreamsigns), "utf8"),
+  );
   const cards = new Map();
   for (const raw of cardsDocument.cards ?? []) {
     const id = canonicalUuid(raw.id, "card id");
     cards.set(id.toLowerCase(), {
       id,
       name: requiredString(raw.name, "card name"),
-      renderedText: typeof raw["rendered-text"] === "string" ? raw["rendered-text"] : "",
-      imageNumber: Number.isInteger(raw["image-number"]) ? raw["image-number"] : null,
+      renderedText:
+        typeof raw["rendered-text"] === "string" ? raw["rendered-text"] : "",
+      imageNumber: Number.isInteger(raw["image-number"])
+        ? raw["image-number"]
+        : null,
       cardType: typeof raw["card-type"] === "string" ? raw["card-type"] : "",
       subtype: typeof raw.subtype === "string" ? raw.subtype : "",
-      energyCost: Number.isInteger(raw["energy-cost"]) ? raw["energy-cost"] : null,
+      energyCost: Number.isInteger(raw["energy-cost"])
+        ? raw["energy-cost"]
+        : null,
       isStarter: raw.rarity === "Starter",
       isOfferable: raw.rarity !== "Starter" && raw.rarity !== "Special",
     });
   }
-  const subtypes = [...new Set([...cards.values()]
-    .filter((card) => card.cardType === "Character" && card.subtype !== "")
-    .map((card) => card.subtype))].sort((left, right) => left.localeCompare(right));
+  const subtypes = [
+    ...new Set(
+      [...cards.values()]
+        .filter((card) => card.cardType === "Character" && card.subtype !== "")
+        .map((card) => card.subtype),
+    ),
+  ].sort((left, right) => left.localeCompare(right));
   return {
     cards,
-    dreamsignIds: new Set((dreamsignDocument.dreamsign ?? []).map((dreamsign) =>
-      canonicalUuid(dreamsign.id, "Dreamsign id").toLowerCase())),
+    dreamsignIds: new Set(
+      (dreamsignDocument.dreamsign ?? []).map((dreamsign) =>
+        canonicalUuid(dreamsign.id, "Dreamsign id").toLowerCase(),
+      ),
+    ),
     subtypes,
     runtimeCards: (cardsDocument.cards ?? []).map(transformCard),
     runtimeDreamsigns: (dreamsignDocument.dreamsign ?? []).map((dreamsign) =>
-      transformDreamsign(dreamsign, new Map())),
+      transformDreamsign(dreamsign, new Map()),
+    ),
   };
 }
 
@@ -120,7 +172,8 @@ function pathsFor(options) {
   return {
     exploration: options.explorationTomlPath ?? DEFAULT_EXPLORATION_TOML_PATH,
     cards: options.cardsTomlPath ?? DEFAULT_EXPLORATION_CARDS_PATH,
-    dreamsigns: options.dreamsignsTomlPath ?? DEFAULT_EXPLORATION_DREAMSIGNS_PATH,
+    dreamsigns:
+      options.dreamsignsTomlPath ?? DEFAULT_EXPLORATION_DREAMSIGNS_PATH,
   };
 }
 
@@ -128,7 +181,30 @@ export function normalizeExplorationAction(rawAction, references = undefined) {
   const effectKind = requiredString(rawAction.effectKind, "effect kind");
   const definition = EXPLORATION_EFFECT_SCHEMA_BY_KIND.get(effectKind);
   if (definition === undefined) {
-    throw editorError("INVALID_EFFECT_KIND", `Unknown Exploration effect kind ${effectKind}.`);
+    throw editorError(
+      "INVALID_EFFECT_KIND",
+      `Unknown Exploration effect kind ${effectKind}.`,
+    );
+  }
+  if (WAVE8_STRICT_METADATA_EFFECT_KINDS.has(effectKind)) {
+    if (
+      rawAction.canonicalMechanicId !== undefined &&
+      rawAction.canonicalMechanicId !== definition.canonicalMechanicId
+    ) {
+      throw editorError(
+        "INVALID_EFFECT_FIELD",
+        `${effectKind} has an incompatible canonicalMechanicId.`,
+      );
+    }
+    if (
+      rawAction.selectionPolicyId !== undefined &&
+      rawAction.selectionPolicyId !== definition.defaultSelectionPolicyId
+    ) {
+      throw editorError(
+        "INVALID_EFFECT_FIELD",
+        `${effectKind} has an incompatible selectionPolicyId.`,
+      );
+    }
   }
   const action = {
     ...rawAction,
@@ -138,15 +214,95 @@ export function normalizeExplorationAction(rawAction, references = undefined) {
     effectKind,
     canonicalMechanicId: definition.canonicalMechanicId,
   };
-  if (definition.defaultSelectionPolicyId === undefined) delete action.selectionPolicyId;
-  else if (!definition.allowedSelectionPolicyIds.includes(action.selectionPolicyId)) {
+  if (definition.defaultSelectionPolicyId === undefined)
+    delete action.selectionPolicyId;
+  else if (
+    !definition.allowedSelectionPolicyIds.includes(action.selectionPolicyId)
+  ) {
     action.selectionPolicyId = definition.defaultSelectionPolicyId;
   }
-  if ((action.followupTitle === undefined) !== (action.followupSubtitle === undefined)) {
-    throw editorError("INVALID_EFFECT_FIELD", "Followup title and subtitle must be authored together.");
+  if (
+    (action.followupTitle === undefined) !==
+    (action.followupSubtitle === undefined)
+  ) {
+    throw editorError(
+      "INVALID_EFFECT_FIELD",
+      "Followup title and subtitle must be authored together.",
+    );
+  }
+  const applicableFields = new Set(definition.fields.map((field) => field.key));
+  validateExplorationEffectAction(action, {
+    predicates: SUPPORTED_NON_ANY_PREDICATES,
+    transfigurations: new Set(EXPLORATION_TRANSFIGURATIONS),
+    fixedSiteTypes: EXPLORATION_FIXED_SITE_TYPE_VALUES,
+    fail(message) {
+      throw editorError("INVALID_EFFECT_FIELD", `${message}.`);
+    },
+  });
+  if (
+    action.cardType !== undefined &&
+    effectKind !== "change-random-card-type" &&
+    effectKind !== "change-card-type-selected"
+  ) {
+    throw editorError(
+      "INVALID_EFFECT_FIELD",
+      `cardType does not apply to Exploration effect kind ${effectKind}.`,
+    );
+  }
+  if (action.siteType !== undefined && effectKind !== "add-fixed-site") {
+    throw editorError(
+      "INVALID_EFFECT_FIELD",
+      `siteType does not apply to Exploration effect kind ${effectKind}.`,
+    );
+  }
+  for (const field of NIGHTMARE_DREAMSIGN_FIELDS) {
+    if (action[field] !== undefined && !applicableFields.has(field)) {
+      throw editorError(
+        "INVALID_EFFECT_FIELD",
+        `${field} does not apply to Exploration effect kind ${effectKind}.`,
+      );
+    }
+  }
+  if (effectKind === "gain-nightmare-and-dreamsign") {
+    if (action.dreamsignId === undefined) {
+      throw editorError(
+        "INVALID_EFFECT_FIELD",
+        "gain-nightmare-and-dreamsign requires dreamsignId.",
+      );
+    }
+    if (
+      !Number.isInteger(action.nightmareCount) ||
+      action.nightmareCount <= 0
+    ) {
+      throw editorError(
+        "INVALID_EFFECT_FIELD",
+        "gain-nightmare-and-dreamsign requires a positive integer nightmareCount.",
+      );
+    }
+  }
+  if (effectKind === "gain-nightmare-and-offered-dreamsign") {
+    if (!Number.isInteger(action.offerCount) || action.offerCount <= 0) {
+      throw editorError(
+        "INVALID_EFFECT_FIELD",
+        "gain-nightmare-and-offered-dreamsign requires a positive integer offerCount.",
+      );
+    }
+    if (
+      !Number.isInteger(action.nightmareCount) ||
+      action.nightmareCount <= 0
+    ) {
+      throw editorError(
+        "INVALID_EFFECT_FIELD",
+        "gain-nightmare-and-offered-dreamsign requires a positive integer nightmareCount.",
+      );
+    }
   }
   if (action.cardId !== undefined) {
-    action.cardId = validateReference(action.cardId, "card reference", references?.cardIds);
+    action.cardId = validateReference(
+      action.cardId,
+      "card reference",
+      references?.cardIds,
+    );
   }
   if (action.dreamsignId !== undefined) {
     action.dreamsignId = validateReference(
@@ -161,7 +317,9 @@ export function normalizeExplorationAction(rawAction, references = undefined) {
 export function readExplorationEditorData(options = {}) {
   const rootDir = options.rootDir ?? ROOT;
   const paths = pathsFor(options);
-  const document = parse(readFileSync(join(rootDir, paths.exploration), "utf8"));
+  const document = parse(
+    readFileSync(join(rootDir, paths.exploration), "utf8"),
+  );
   transformExplorationData(document);
   const catalogs = readCatalogs(rootDir, paths);
   const references = {
@@ -174,7 +332,11 @@ export function readExplorationEditorData(options = {}) {
   const encounters = (document.encounter ?? []).map((encounter) => {
     const cardId = canonicalUuid(encounter["card-id"], "encounter card-id");
     const card = catalogs.cards.get(cardId.toLowerCase());
-    if (card === undefined) throw editorError("INVALID_REFERENCE", `Unknown encounter card ${cardId}.`);
+    if (card === undefined)
+      throw editorError(
+        "INVALID_REFERENCE",
+        `Unknown encounter card ${cardId}.`,
+      );
     return {
       cardId,
       prose: requiredString(encounter.prose, "encounter prose"),
@@ -182,8 +344,14 @@ export function readExplorationEditorData(options = {}) {
       cardAbilityText: card.renderedText,
       imageNumber: card.imageNumber,
       actions: (encounter.action ?? []).map((rawAction) => {
-        const action = normalizeExplorationAction(camelAction(rawAction), references);
-        return { ...action, ...renderActionPresentation(action, catalog, playerDeck, random) };
+        const action = normalizeExplorationAction(
+          camelAction(rawAction),
+          references,
+        );
+        return {
+          ...action,
+          ...renderActionPresentation(action, catalog, playerDeck, random),
+        };
       }),
     };
   });

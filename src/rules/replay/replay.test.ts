@@ -218,6 +218,42 @@ describe("replay fixtures", () => {
     ]);
   });
 
+  it("normalizes pre-Wave-6 shop state during compaction replay", () => {
+    const state = GAME_ENGINE_CONFIG.genesisState(journeyOnly.genesis);
+    const {
+      freeNextShopModifiers: _freeNextShopModifiers,
+      freePurchaseModifiers: _freePurchaseModifiers,
+      ...legacyShopModifiers
+    } = state.journey.shopModifiers;
+    const decoded = GAME_ENGINE_CONFIG.decode(
+      JSON.stringify({
+        ...state,
+        journey: {
+          ...state.journey,
+          shopModifiers: legacyShopModifiers,
+          siteRuntime: {
+            "legacy-shop": {
+              kind: "shop",
+              slots: [],
+              rerollCount: 0,
+              remainingDreamsignPoolIds: [],
+            },
+          },
+        },
+      }),
+    );
+
+    expect(decoded.journey.shopModifiers).toEqual({
+      ...legacyShopModifiers,
+      freeNextShopModifiers: [],
+      freePurchaseModifiers: [],
+    });
+    expect(decoded.journey.siteRuntime["legacy-shop"]).toMatchObject({
+      kind: "shop",
+      purchaseHistory: [],
+    });
+  });
+
   it.each(FIXTURES)("$name replays to its stamped finalHash", ({ fixture }) => {
     expect(fixture.providerSet).toBe(FIXTURE_PROVIDER_SET);
     const result = replayLog({

@@ -75,6 +75,8 @@ function matchesPredicate(card: CardData, predicate: RewardCardPredicate): boole
       return card.cardType === "Character" && card.subtype === "Survivor";
     case "warrior":
       return card.cardType === "Character" && card.subtype === "Warrior";
+    case "legendary":
+      return card.rarity === "Legendary";
   }
 }
 
@@ -632,6 +634,7 @@ function candidatesFor(
     case "replace-deck-entry":
     case "duplicate-deck-entry":
     case "change-entry-subtype":
+    case "change-entry-card-type":
       return deckEntryCandidates(context, request);
     case "choose-dream-avatar":
     case "add-site":
@@ -648,6 +651,8 @@ function candidatesFor(
     case "reduce-deck-cost-and-add-nightmares":
     case "next-battle-modifier":
     case "purge-duplicates-and-grant-reclaim":
+    case "essence-mutation":
+    case "shop-purchase-modifier":
       return failure(request, "unsupported_mechanic_policy");
   }
 }
@@ -670,6 +675,7 @@ function keyKind(request: RewardSelectionRequest): RewardCandidateKeyKind {
     case "replace-deck-entry":
     case "duplicate-deck-entry":
     case "change-entry-subtype":
+    case "change-entry-card-type":
       return "entryId";
     case "change-deck-subtype":
     case "next-site-transfiguration":
@@ -689,6 +695,10 @@ function keyKind(request: RewardSelectionRequest): RewardCandidateKeyKind {
       return "dreamAvatarId";
     case "add-site":
       return "siteType";
+    case "essence-mutation":
+      throw new Error("Essence mutation does not select a reward candidate");
+    case "shop-purchase-modifier":
+      throw new Error("Shop purchase modifiers do not select a reward candidate");
   }
 }
 

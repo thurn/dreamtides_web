@@ -17,6 +17,7 @@ import { hashState } from "../../eventlog/hash";
 import type { EngineConfig, GameEvent, Genesis } from "../../eventlog/types";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { normalizePersistedNightmareState } from "../nightmare-migration";
+import { normalizePersistedShopPurchaseState } from "../shop-purchase-migration";
 import { reduceGameEvent } from "../reducer";
 
 /**
@@ -38,7 +39,9 @@ export const GAME_ENGINE_CONFIG: EngineConfig<FoldState> = {
   genesisState: genesisFoldState,
   encode: (state) => JSON.stringify(state),
   decode: (raw) =>
-    normalizePersistedNightmareState(JSON.parse(raw)) as FoldState,
+    normalizePersistedShopPurchaseState(
+      normalizePersistedNightmareState(JSON.parse(raw)),
+    ) as FoldState,
   hash: hashState,
 };
 
@@ -72,9 +75,15 @@ export interface ReplayResult {
  */
 export function replayLog({ genesis, events }: ReplayInput): ReplayResult {
   const base = { seq: 0, state: GAME_ENGINE_CONFIG.genesisState(genesis) };
-  const { state, outcomes } = foldEvents(GAME_ENGINE_CONFIG, genesis, base, events, {
-    devMode: false,
-  });
+  const { state, outcomes } = foldEvents(
+    GAME_ENGINE_CONFIG,
+    genesis,
+    base,
+    events,
+    {
+      devMode: false,
+    },
+  );
   return {
     finalState: state,
     finalHash: GAME_ENGINE_CONFIG.hash(state),

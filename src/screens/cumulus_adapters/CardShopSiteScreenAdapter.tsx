@@ -12,6 +12,10 @@ import {
   resolveCardShopGuide,
 } from "./card-shop-view-model";
 import { useGuideDialogue } from "./guide-dialogue-view-model";
+import {
+  buildShopPurchaseLogs,
+  buildShopSiteEntryLog,
+} from "./shop-purchase-logging-view-model";
 
 export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
   const { state, mutations, journeyContent } = useJourney();
@@ -50,6 +54,7 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
       state.dreamAvatar,
       state.dreamsigns,
       state.shopModifiers.essenceDiscountPercent,
+      state.shopModifiers.freePurchaseModifiers,
       node,
       site,
       shopRuntime,
@@ -80,12 +85,18 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
   );
 
   useEffect(() => {
-    if (site === null || view === null) return;
+    if (site === null || shopRuntime === null || view === null) return;
     logEventOnce(`shop:${site.id}:site-entered`, "site_entered", {
+      siteId: site.id,
       siteType: site.type,
       isEnhanced: site.isEnhanced,
       wareCount: view.offers.length,
       essence: state.essence,
+      ...buildShopSiteEntryLog(
+        shopRuntime,
+        state.shopModifiers,
+        journeyContent.cardDatabase,
+      ),
       ...(shopRuntime?.transfiguredOfferSource === undefined
         ? {}
         : buildCardShopTransfiguredOfferLog(
@@ -93,7 +104,28 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
             shopRuntime.transfiguredOfferSource,
           )),
     });
-  }, [shopRuntime?.transfiguredOfferSource, site, state.essence, view]);
+  }, [
+    journeyContent.cardDatabase,
+    shopRuntime,
+    site,
+    state.essence,
+    state.shopModifiers,
+    view,
+  ]);
+
+  useEffect(() => {
+    if (site === null || shopRuntime === null) return;
+    buildShopPurchaseLogs(
+      shopRuntime.purchaseHistory ?? [],
+      journeyContent.cardDatabase,
+    ).forEach((purchase) => {
+      logEventOnce(
+        `shop:${site.id}:purchase:${String(purchase.eventSeq)}`,
+        "shop_item_purchased",
+        { siteType: site.type, ...purchase },
+      );
+    });
+  }, [journeyContent.cardDatabase, shopRuntime, site]);
 
   useEffect(() => {
     if (guide === null || site === null) return;

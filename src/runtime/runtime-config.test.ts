@@ -24,6 +24,9 @@ describe("parseRuntimeConfig", () => {
       loadJourneyName: null,
       gotoScene: null,
       explorationCardId: null,
+      explorationDreamsignCount: null,
+      explorationDreamsignCap: null,
+      explorationStarterCount: null,
       viewLogs: null,
       gambleGameId: null,
     });
@@ -93,6 +96,59 @@ describe("parseRuntimeConfig", () => {
           .explorationCardId,
       ).toBeNull();
     });
+  });
+
+  describe("Exploration Dreamsign QA counts", () => {
+    it("parses bounded nonnegative integer counts and caps", () => {
+      const config = parseRuntimeConfig(
+        "?goto=exploration&dreamsignCount=4&dreamsignCap=12",
+      );
+
+      expect(config.explorationDreamsignCount).toBe(4);
+      expect(config.explorationDreamsignCap).toBe(12);
+      expect(parseRuntimeConfig("?dreamsignCount=0").explorationDreamsignCount).toBe(
+        0,
+      );
+    });
+
+    it.each([
+      "",
+      "-1",
+      "1.5",
+      "1e2",
+      "101",
+      "not-a-count",
+    ])("rejects an invalid QA Dreamsign integer %j", (value) => {
+      const config = parseRuntimeConfig(
+        `?dreamsignCount=${encodeURIComponent(value)}&dreamsignCap=${encodeURIComponent(value)}`,
+      );
+
+      expect(config.explorationDreamsignCount).toBeNull();
+      expect(config.explorationDreamsignCap).toBeNull();
+    });
+  });
+
+  describe("Exploration starter-card QA count", () => {
+    it("parses a bounded nonnegative integer", () => {
+      expect(
+        parseRuntimeConfig("?goto=exploration&starterCount=4")
+          .explorationStarterCount,
+      ).toBe(4);
+      expect(
+        parseRuntimeConfig("?goto=exploration&starterCount=0")
+          .explorationStarterCount,
+      ).toBe(0);
+    });
+
+    it.each(["", "-1", "1.5", "1e2", "101", "not-a-count"])(
+      "rejects an invalid QA starter-card count %j",
+      (value) => {
+        expect(
+          parseRuntimeConfig(`?starterCount=${encodeURIComponent(value)}`)
+            .explorationStarterCount,
+        ).toBeNull();
+      },
+    );
   });
 
   describe("loadJourneyName", () => {

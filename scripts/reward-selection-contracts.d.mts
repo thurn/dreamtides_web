@@ -8,16 +8,19 @@ export const REWARD_MECHANIC_IDS: readonly [
   "gain-dreamsign", "transfigure-deck-entry", "transfigure-deck-for-essence",
   "purge-deck-entry",
   "purge-for-essence", "purge-and-duplicate", "replace-deck-entry",
-  "duplicate-deck-entry", "change-entry-subtype", "change-deck-subtype",
+  "duplicate-deck-entry", "change-entry-subtype", "change-entry-card-type",
+  "change-deck-subtype",
   "gain-nightmare-and-card", "next-site-transfiguration",
+  "essence-mutation",
   "gain-essence-by-deck-predicate", "increase-deck-spark",
   "purge-dreamsign-for-essence", "make-deck-fast",
   "reduce-deck-cost-and-add-nightmares", "next-battle-modifier",
   "choose-dream-avatar", "purge-duplicates-and-grant-reclaim", "add-site",
+  "shop-purchase-modifier",
 ];
 export const REWARD_CARD_PREDICATES: readonly [
   "any", "character", "event", "cheap-character", "spirit-animal",
-  "survivor", "warrior",
+  "survivor", "warrior", "legendary",
 ];
 export function isRewardSelectionPolicyId(value: unknown): value is typeof REWARD_SELECTION_POLICY_IDS[number];
 export function isRewardMechanicId(value: unknown): value is typeof REWARD_MECHANIC_IDS[number];

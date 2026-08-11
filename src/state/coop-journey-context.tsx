@@ -134,9 +134,30 @@ export function CoopJourneyProvider({
       // live room seed keeps every derived generator convergent for both clients.
       loadJourneyState: (snapshot) =>
         dispatch(actions.loadState({ ...snapshot, seed: stateRef.current.seed })),
-      bootstrapQaScene: (sceneId, explorationCardId) => {
+      bootstrapQaScene: (
+        sceneId,
+        explorationCardId,
+        explorationDreamsignCount,
+        explorationDreamsignCap,
+        explorationStarterCount,
+      ) => {
         const snapshot = buildQaScene(sceneId, journeyContent, {
           explorationCardId,
+          ...(explorationDreamsignCount === null ||
+          explorationDreamsignCount === undefined
+            ? {}
+            : {
+                explorationHeldDreamsignCount: explorationDreamsignCount,
+              }),
+          ...(explorationDreamsignCap === null ||
+          explorationDreamsignCap === undefined
+            ? {}
+            : { explorationMaxDreamsigns: explorationDreamsignCap }),
+          ...(explorationStarterCount === null ||
+          explorationStarterCount === undefined
+            ? {}
+            : { explorationStarterCount }),
+          journeySeed: stateRef.current.seed,
         });
         if (snapshot === null) return;
         const seededSnapshot = { ...snapshot, seed: stateRef.current.seed };

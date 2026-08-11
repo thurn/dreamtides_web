@@ -51,6 +51,7 @@ function runtime(): ShopSiteRuntime {
     ],
     rerollCount: 0,
     remainingDreamsignPoolIds: [],
+    purchaseHistory: [],
   };
 }
 
@@ -196,5 +197,50 @@ describe("buildDreamsignBazaarSiteView", () => {
     });
     expect(view.offers).toHaveLength(3);
     expect(view.purge?.pendingDreamsign.id).toBe("pending-uuid");
+  });
+
+  it("uses counted free purchases for Bazaar wares while preserving reroll pricing", () => {
+    const state = {
+      ...createDefaultState(),
+      essence: 0,
+      shopModifiers: {
+        ...createDefaultState().shopModifiers,
+        freePurchaseModifiers: [
+          {
+            kind: "free-purchases" as const,
+            sourceSiteId: "exploration-site",
+            sourceActionId: "exploration-action",
+            initialCount: 4,
+            remainingCount: 3,
+          },
+        ],
+      },
+    };
+    const view = buildDreamsignBazaarSiteView({
+      state,
+      sceneNode: null,
+      site,
+      runtime: runtime(),
+      guide: {
+        id: "fixture-amunet",
+        name: "Amunet Fixture",
+        homeDreamscapeId: "fixture-dream",
+        siteType: "DreamsignBazaar",
+        portraitSource: "fixture-guide.png",
+        dialogue: { site: ["Choose carefully."] },
+        homeSpecialty: "Fixture specialty.",
+      },
+      guideLine: "A chosen greeting.",
+      pendingDreamsign: null,
+      economyData: economyFixture(),
+      sitesData: MINIMAL_SITES_DATA,
+    });
+
+    expect(view.offers.map((offer) => offer.price)).toEqual([0, 0, 0]);
+    expect(view.freePurchaseStatus).toEqual({
+      freeNextShopSource: null,
+      freePurchasesRemaining: 3,
+    });
+    expect(view.restock.price).toBeGreaterThan(0);
   });
 });

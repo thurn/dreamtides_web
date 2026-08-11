@@ -23,12 +23,15 @@ export interface ShopSlot {
 
 export interface ShopPriceModifiers {
   essenceDiscountPercent?: number;
+  /** Whether a visit-wide or per-purchase modifier makes this item free. */
+  freePurchase?: boolean;
 }
 
 type ShopPricedSlot = Pick<
   ShopSlot,
   "itemType" | "basePrice" | "discountPercent"
-> & Partial<Pick<ShopSlot, "card" | "dreamsign" | "purchased">>;
+> &
+  Partial<Pick<ShopSlot, "card" | "dreamsign" | "purchased">>;
 
 export interface ShopGenerationOptions {
   economy: EconomyData["shop"];
@@ -68,7 +71,10 @@ export interface ShopGenerationOptions {
   rng?: () => number;
 }
 
-function weightedValue(entries: readonly EconomyWeightedValue[], rng: () => number): number {
+function weightedValue(
+  entries: readonly EconomyWeightedValue[],
+  rng: () => number,
+): number {
   const total = entries.reduce((sum, entry) => sum + entry.weight, 0);
   const target = rng() * total;
   let cumulative = 0;
@@ -137,6 +143,7 @@ export function effectivePrice(
   slot: ShopPricedSlot,
   modifiers: ShopPriceModifiers = {},
 ): number {
+  if (modifiers.freePurchase === true) return 0;
   const discountPercent = effectiveDiscountPercent(slot, modifiers);
   return discountPercent === 0
     ? slot.basePrice
@@ -212,9 +219,11 @@ export function runtimeSlotsToShopSlots(
  * distinguishes a genuinely exhausted pool from a missing card source when a
  * shop renders empty.
  */
-function summarizeDraftPool(
-  state: DraftState | null,
-): { mode: string | null; distinctRemaining?: number; copiesRemaining?: number } {
+function summarizeDraftPool(state: DraftState | null): {
+  mode: string | null;
+  distinctRemaining?: number;
+  copiesRemaining?: number;
+} {
   if (state === null) return { mode: null };
   const entries = Object.values(state.remainingCopiesByCard);
   let distinctRemaining = 0;
@@ -261,7 +270,9 @@ export function generateShopInventory(
     rng = Math.random,
   } = options;
 
-  const cardPrice = isSpecialty ? economy.prices.specialtyCard : economy.prices.standardCard;
+  const cardPrice = isSpecialty
+    ? economy.prices.specialtyCard
+    : economy.prices.standardCard;
 
   const nextDraftState =
     draftState === null ? null : structuredClone(draftState);
@@ -349,9 +360,7 @@ export function generateShopInventory(
       });
     }
     spentDreamsignPoolIds.push(...draw.offeredIds);
-    remainingPool = remainingPool.filter(
-      (id) => !draw.offeredIds.includes(id),
-    );
+    remainingPool = remainingPool.filter((id) => !draw.offeredIds.includes(id));
   }
 
   const discountCount = weightedValue(economy.discounts.slotCounts, rng);

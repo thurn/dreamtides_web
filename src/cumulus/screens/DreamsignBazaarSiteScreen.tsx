@@ -16,6 +16,10 @@ import {
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
 import { useMessages } from "../hooks/use-messages";
+import {
+  ShopFreePurchaseStatus,
+  type ShopFreePurchaseStatusView,
+} from "./ShopFreePurchaseStatus";
 
 // Four 126px items, three 16px gaps, and the panel's 64px horizontal padding
 // occupy 616px; this cap keeps a deliberate 32px breathing edge per side.
@@ -69,6 +73,8 @@ export interface DreamsignBazaarSiteView {
   offers: readonly DreamsignBazaarOfferView[];
   /** The one-use restock action. */
   restock: DreamsignBazaarRestockView;
+  /** Exploration benefits currently making successful purchases free. */
+  freePurchaseStatus: ShopFreePurchaseStatusView;
   /** Replacement state while purchasing at the Dreamsign cap. */
   purge: DreamsignBazaarPurgeView | null;
 }
@@ -111,6 +117,7 @@ export function DreamsignBazaarSiteScreen({
           presentation={view.presentation}
           offers={view.offers}
           restock={view.restock}
+          freePurchaseStatus={view.freePurchaseStatus}
           onBuy={onBuy}
           onRestock={onRestock}
           onClose={onClose}
@@ -134,6 +141,7 @@ function DreamsignBazaarGallery({
   presentation,
   offers,
   restock,
+  freePurchaseStatus,
   onBuy,
   onRestock,
   onClose,
@@ -142,6 +150,7 @@ function DreamsignBazaarGallery({
   readonly presentation: DreamsignBazaarSiteView["presentation"];
   readonly offers: readonly DreamsignBazaarOfferView[];
   readonly restock: DreamsignBazaarRestockView;
+  readonly freePurchaseStatus: ShopFreePurchaseStatusView;
   readonly onBuy: (slotIndex: number) => void;
   readonly onRestock: () => void;
   readonly onClose: () => void;
@@ -207,6 +216,14 @@ function DreamsignBazaarGallery({
     <section
       data-dreamsign-bazaar-gallery-region=""
       data-dreamsign-bazaar-layout={layout}
+      data-shop-free-source={
+        freePurchaseStatus.freeNextShopSource === null ? undefined : "next-shop"
+      }
+      data-shop-free-purchases-remaining={
+        freePurchaseStatus.freePurchasesRemaining > 0
+          ? freePurchaseStatus.freePurchasesRemaining
+          : undefined
+      }
       style={{
         position: "relative",
         zIndex: 10,
@@ -219,10 +236,12 @@ function DreamsignBazaarGallery({
         pointerEvents: "auto",
         alignSelf: desktop ? "stretch" : "start",
         justifySelf: "center",
-        display: desktop ? "grid" : undefined,
-        alignItems: desktop ? "center" : undefined,
+        display: "grid",
+        alignContent: desktop ? "center" : "start",
+        gap: token("--space-s"),
       }}
     >
+      <ShopFreePurchaseStatus status={freePurchaseStatus} />
       <DreamsignGalleryPanel
         title={presentation.title}
         entries={offers.map((offer) => ({

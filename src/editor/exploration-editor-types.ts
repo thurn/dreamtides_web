@@ -1,7 +1,8 @@
-import type { CardData } from "../types/cards";
+import type { CardData, CardType } from "../types/cards";
 import type { Dreamsign, TransfigurationType } from "../types/journey";
 import type {
   ExplorationEffectKind,
+  ExplorationFixedSiteType,
   ExplorationPredicate,
 } from "../data/exploration";
 import type {
@@ -47,7 +48,14 @@ export type ExplorationEditorControl =
   | "subtype"
   | "subtype-options"
   | "transfiguration"
+  | "card-type"
+  | "site-type"
   | "deck-target";
+
+export interface ExplorationEditorFieldOption {
+  value: string;
+  label: string;
+}
 
 export interface ExplorationEditorFieldDefinition {
   key: string;
@@ -55,7 +63,9 @@ export interface ExplorationEditorFieldDefinition {
   control: ExplorationEditorControl;
   defaultValue?: string | number;
   optional?: boolean;
+  options?: ExplorationEditorFieldOption[];
   min?: number;
+  max?: number;
   step?: number;
   resource?: "essence" | "energy" | "spark";
 }
@@ -67,6 +77,7 @@ export interface ExplorationEditorEffectSchema {
   canonicalMechanicId?: RewardMechanicId;
   defaultSelectionPolicyId?: RewardSelectionPolicyId;
   allowedSelectionPolicyIds?: RewardSelectionPolicyId[];
+  requiresFollowup?: boolean;
 }
 
 export interface ExplorationEditorAction {
@@ -83,6 +94,7 @@ export interface ExplorationEditorAction {
   selectionPolicyId?: RewardSelectionPolicyId;
   predicate?: ExplorationPredicate;
   count?: number;
+  cardType?: CardType;
   cardId?: string;
   dreamsignId?: string;
   packCount?: number;
@@ -98,6 +110,7 @@ export interface ExplorationEditorAction {
   nightmareCount?: number;
   transfiguration?: TransfigurationType;
   deckTarget?: "chosen" | "offered";
+  siteType?: ExplorationFixedSiteType;
   [key: string]: unknown;
 }
 

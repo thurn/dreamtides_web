@@ -7,10 +7,19 @@ import { createDreamsign } from "../data/dreamsigns";
 import { createQaJourneyFoundation } from "./qa-journey-foundation";
 import { buildExplorationRuntime } from "../coop/providers/exploration-provider";
 import { initializeDraftState } from "../draft/draft-engine";
+import { eligibleTransfigurations } from "../transfiguration/transfiguration-logic";
 
 export interface QaSceneBuildOptions {
   /** Exact authored encounter source-card UUID for Exploration QA scenes. */
   explorationCardId?: string | null;
+  /** Number of catalog Dreamsigns held before an Exploration offer is prepared. */
+  explorationHeldDreamsignCount?: number;
+  /** Dreamsign capacity in the parked Exploration state. */
+  explorationMaxDreamsigns?: number;
+  /** Number of authentic foundation starter-card entries retained in the deck. */
+  explorationStarterCount?: number;
+  /** Live room seed used by deterministic runtime offers in a QA snapshot. */
+  journeySeed?: string;
 }
 
 /**
@@ -655,42 +664,130 @@ function parkOnSite(siteType: SiteType, isEnhanced: boolean): QaScene["build"] {
   };
 }
 
+/**
+ * Gives a parked Exploration scene an ordinary Shop and Dreamsign Bazaar in the
+ * same Dreamscape. The active Exploration site stays unchanged; one sibling is
+ * repurposed as the Shop and the Bazaar is inserted immediately before Battle.
+ * This leaves the player one interaction before the purchase-modifier action and
+ * supports the authentic Exploration -> Dreamscape -> Shop/Bazaar workflow.
+ */
+function addExplorationPurchasePath(state: JourneyState): JourneyState | null {
+  if (state.currentDreamscape === null || state.activeSiteId === null) {
+    return null;
+  }
+  const node = state.atlas.nodes[state.currentDreamscape];
+  if (node === undefined) return null;
+  const shopSlot = node.sites.find(
+    (site) => site.id !== state.activeSiteId && site.type !== "Battle",
+  );
+  if (shopSlot === undefined) return null;
+
+  const bazaarId = `${state.activeSiteId}-qa-dreamsign-bazaar`;
+  if (
+    Object.values(state.atlas.nodes).some((candidate) =>
+      candidate.sites.some((site) => site.id === bazaarId),
+    )
+  ) {
+    return null;
+  }
+
+  const sites = node.sites.flatMap((site) => {
+    if (site.id === shopSlot.id) {
+      return [
+        {
+          id: site.id,
+          type: "Shop" as const,
+          isEnhanced: false,
+          isVisited: false,
+        },
+      ];
+    }
+    if (site.type === "Battle") {
+      return [
+        {
+          id: bazaarId,
+          type: "DreamsignBazaar" as const,
+          isEnhanced: false,
+          isVisited: false,
+        },
+        site,
+      ];
+    }
+    return [site];
+  });
+
+  return {
+    ...state,
+    // Odd Essence makes T82's floor-spent/ceil-retained contract observable.
+    essence: 101,
+    atlas: {
+      ...state.atlas,
+      nodes: {
+        ...state.atlas.nodes,
+        [node.id]: { ...node, sites },
+      },
+    },
+  };
+}
+
 /** Exploration scene with enough eligible cards to exercise every follow-up. */
 function explorationScene(
   isEnhanced: boolean,
-  deckPreset: "unique" | "duplicates" = "unique",
+  preset: "unique" | "duplicates" | "purchases" = "unique",
 ): QaScene {
-  const hasDuplicates = deckPreset === "duplicates";
+  const hasDuplicates = preset === "duplicates";
+  const hasPurchasePath = preset === "purchases";
   return {
     id: hasDuplicates
       ? "exploration-duplicates"
-      : isEnhanced
-        ? "exploration-enhanced"
-        : "exploration",
+      : hasPurchasePath
+        ? "exploration-purchases"
+        : isEnhanced
+          ? "exploration-enhanced"
+          : "exploration",
     label: hasDuplicates
       ? "Exploration (Duplicate Deck)"
-      : isEnhanced
-        ? "Exploration (Enhanced)"
-        : "Exploration",
+      : hasPurchasePath
+        ? "Exploration (Purchase Path)"
+        : isEnhanced
+          ? "Exploration (Enhanced)"
+          : "Exploration",
     description:
       "The Exploration site with Event, Survivor, Warrior, cheap Character, and Spirit Animal cards available for interaction QA" +
-      (hasDuplicates ? ", including two duplicated card UUIDs." : "."),
+      (hasDuplicates
+        ? ", including two duplicated card UUIDs."
+        : hasPurchasePath
+          ? ", with an ordinary Shop and Dreamsign Bazaar ready afterward."
+          : "."),
     build: (journeyContent, options) => {
-      const state = parkOnSite("Exploration", isEnhanced)(journeyContent);
+      const parkedState = parkOnSite("Exploration", isEnhanced)(journeyContent);
+      const state =
+        parkedState === null || !hasPurchasePath
+          ? parkedState
+          : addExplorationPurchasePath(parkedState);
       if (state === null) return null;
       const cards = [...journeyContent.cardDatabase.values()];
+      const authenticStarterCardNumbers = new Set(
+        journeyContent.poolContext?.starterCardNumbers ?? [],
+      );
       const selected = new Map<number, (typeof cards)[number]>();
       const add = (
         matches: (card: (typeof cards)[number]) => boolean,
         count: number,
       ): void => {
         for (const card of cards) {
-          if (!matches(card) || selected.has(card.cardNumber)) continue;
+          if (
+            authenticStarterCardNumbers.has(card.cardNumber) ||
+            !matches(card) ||
+            selected.has(card.cardNumber)
+          ) {
+            continue;
+          }
           selected.set(card.cardNumber, card);
           if ([...selected.values()].filter(matches).length >= count) return;
         }
       };
-      add((card) => card.cardType === "Event", 1);
+      add((card) => card.cardType === "Event", 2);
       add(
         (card) => card.cardType === "Character" && card.subtype === "Survivor",
         2,
@@ -713,21 +810,90 @@ function explorationScene(
           card.cardType === "Character" && card.subtype === "Spirit Animal",
         6,
       );
-      const heldDreamsignTemplate = journeyContent.dreamsignTemplates[0];
-      const uniqueDeck = [...selected.values()].map((card, index) => ({
-        entryId: `exploration-qa-${String(index + 1)}`,
-        cardNumber: card.cardNumber,
-        transfiguration: null,
-        isBane: false,
-      }));
+      const dreamsignTemplatesById = new Map(
+        journeyContent.dreamsignTemplates.map((template) => [
+          template.id.toLowerCase(),
+          template,
+        ]),
+      );
+      const heldDreamsignTemplates = state.remainingDreamsignPool.flatMap(
+        (dreamsignId) => {
+          const template = dreamsignTemplatesById.get(dreamsignId.toLowerCase());
+          return template === undefined ? [] : [template];
+        },
+      );
+      const heldDreamsignCount =
+        options?.explorationHeldDreamsignCount ??
+        (heldDreamsignTemplates.length > 0 ? 1 : 0);
+      const maxDreamsigns =
+        options?.explorationMaxDreamsigns ?? state.maxDreamsigns;
+      if (
+        !Number.isInteger(heldDreamsignCount) ||
+        heldDreamsignCount < 0 ||
+        heldDreamsignCount > heldDreamsignTemplates.length ||
+        !Number.isInteger(maxDreamsigns) ||
+        maxDreamsigns < 0 ||
+        heldDreamsignCount > maxDreamsigns
+      ) {
+        return null;
+      }
+      const heldDreamsigns = heldDreamsignTemplates
+        .slice(0, heldDreamsignCount)
+        .map((template) => createDreamsign(template));
+      const heldDreamsignIds = new Set(
+        heldDreamsignTemplates
+          .slice(0, heldDreamsignCount)
+          .map((template) => template.id.toLowerCase()),
+      );
+      let seededFastEvent = false;
+      const uniqueDeck = [...selected.values()].map((card, index) => {
+        const startsFast = card.cardType === "Event" && !seededFastEvent;
+        if (startsFast) seededFastEvent = true;
+        return {
+          entryId: `exploration-qa-${String(index + 1)}`,
+          cardNumber: card.cardNumber,
+          transfiguration: null,
+          isBane: false,
+          ...(startsFast ? { keywordModification: { fast: true } } : {}),
+        };
+      });
+      const attunedEligibleEntries = uniqueDeck.filter((entry) => {
+        const card = journeyContent.cardDatabase.get(entry.cardNumber);
+        return (
+          card !== undefined &&
+          eligibleTransfigurations(
+            journeyContent.transfigurationData,
+            card,
+          ).includes("Attuned")
+        );
+      });
+      const duplicateSources =
+        attunedEligibleEntries.length >= 2
+          ? attunedEligibleEntries.slice(0, 2)
+          : uniqueDeck.slice(0, 2);
       const duplicateEntries = hasDuplicates
-        ? uniqueDeck.slice(0, 2).map((entry, index) => ({
+        ? duplicateSources.map((entry, index) => ({
             ...entry,
             entryId: `exploration-qa-duplicate-${String(index + 1)}`,
           }))
         : [];
+      const authenticStarterDeck = state.deck.filter((entry) =>
+        authenticStarterCardNumbers.has(entry.cardNumber),
+      );
+      const starterCount =
+        options?.explorationStarterCount ?? authenticStarterDeck.length;
+      if (
+        !Number.isInteger(starterCount) ||
+        starterCount < 0 ||
+        starterCount > authenticStarterDeck.length
+      ) {
+        return null;
+      }
+      const qaDraftPoolCards = cards.filter(
+        (card) => !authenticStarterCardNumbers.has(card.cardNumber),
+      );
       const qaDraftPoolCopiesByCard = Object.fromEntries(
-        cards.map((card) => [String(card.cardNumber), 1]),
+        qaDraftPoolCards.map((card) => [String(card.cardNumber), 1]),
       );
       const qaResolvedPackage =
         state.resolvedPackage === null
@@ -735,11 +901,19 @@ function explorationScene(
           : {
               ...state.resolvedPackage,
               draftPoolCopiesByCard: qaDraftPoolCopiesByCard,
-              draftPoolSize: cards.length,
+              draftPoolSize: qaDraftPoolCards.length,
             };
       const qaState: JourneyState = {
         ...state,
-        deck: [...uniqueDeck, ...duplicateEntries],
+        ...(options?.journeySeed === undefined
+          ? {}
+          : { seed: options.journeySeed }),
+        maxDreamsigns,
+        deck: [
+          ...authenticStarterDeck.slice(0, starterCount),
+          ...uniqueDeck,
+          ...duplicateEntries,
+        ],
         resolvedPackage: qaResolvedPackage,
         draftState:
           qaResolvedPackage === null
@@ -748,16 +922,29 @@ function explorationScene(
                 journeyContent.cardDatabase,
                 qaResolvedPackage,
               ),
-        dreamsigns:
-          heldDreamsignTemplate === undefined
-            ? state.dreamsigns
-            : [createDreamsign(heldDreamsignTemplate)],
+        dreamsigns: heldDreamsigns,
+        remainingDreamsignPool: state.remainingDreamsignPool.filter(
+          (dreamsignId) => !heldDreamsignIds.has(dreamsignId.toLowerCase()),
+        ),
       };
       const requestedCardId = options?.explorationCardId ?? null;
       if (requestedCardId === null) return qaState;
 
-      const node = qaState.atlas.nodes[qaState.currentDreamscape ?? ""];
-      const site = node?.sites.find(
+      const currentNodeId = qaState.atlas.currentNodeId;
+      if (
+        currentNodeId === null ||
+        qaState.currentDreamscape !== currentNodeId
+      ) {
+        return null;
+      }
+      const node = qaState.atlas.nodes[currentNodeId];
+      const siteOwners = Object.values(qaState.atlas.nodes).filter((candidate) =>
+        candidate.sites.some((site) => site.id === qaState.activeSiteId),
+      );
+      if (node === undefined || siteOwners.length !== 1 || siteOwners[0] !== node) {
+        return null;
+      }
+      const site = node.sites.find(
         (candidate) => candidate.id === qaState.activeSiteId,
       );
       if (site === undefined) return null;
@@ -1021,6 +1208,7 @@ export const QA_SCENES: readonly QaScene[] = [
   explorationScene(false),
   explorationScene(true),
   explorationScene(false, "duplicates"),
+  explorationScene(false, "purchases"),
   siteScene(
     "dreamsign-revelation",
     "Dreamsign Revelation",

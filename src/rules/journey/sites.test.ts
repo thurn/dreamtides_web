@@ -9,6 +9,7 @@ import type {
   Dreamsign,
   DreamscapeNode,
   JourneyState,
+  ShopSiteRuntime,
   SiteRuntimeState,
   SiteState,
   SiteType,
@@ -203,6 +204,7 @@ const fakeProvider: SiteContentProvider = {
             ],
             rerollCount: 0,
             remainingDreamsignPoolIds: [],
+            purchaseHistory: [],
           },
         };
       case "Transfiguration":
@@ -451,6 +453,64 @@ describe("OPEN_SITE generation determinism", () => {
     registerSiteContentProvider(fakeProvider);
     const out = reduce(siteState("Reward"), "OPEN_SITE", { siteId: "ghost" });
     expect(out.outcome).toBe("bounced");
+  });
+
+  it("applies a provider's T56 queue shift atomically with the Shop runtime", () => {
+    const firstModifier = {
+      kind: "free-next-shop" as const,
+      sourceSiteId: "exploration-one",
+      sourceActionId: "action-one",
+    };
+    const secondModifier = {
+      kind: "free-next-shop" as const,
+      sourceSiteId: "exploration-two",
+      sourceActionId: "action-two",
+    };
+    registerSiteContentProvider({
+      ...fakeProvider,
+      openSite(input) {
+        const generated = fakeProvider.openSite(input);
+        if (generated === null || input.site.type !== "Shop") return generated;
+        return {
+          ...generated,
+          runtime: {
+            ...(generated.runtime as ShopSiteRuntime),
+            freePurchaseSource: {
+              sourceSiteId: firstModifier.sourceSiteId,
+              sourceActionId: firstModifier.sourceActionId,
+            },
+          },
+          shopModifiers: {
+            ...input.journey.shopModifiers,
+            freeNextShopModifiers: [secondModifier],
+          },
+        };
+      },
+    });
+    const initial = siteState("Shop", {
+      shopModifiers: {
+        ...siteState("Shop").journey.shopModifiers,
+        freeNextShopModifiers: [firstModifier, secondModifier],
+      },
+    });
+
+    const opened = reduce(initial, "OPEN_SITE", { siteId: SITE_ID });
+    const duplicate = reduce(opened.state, "OPEN_SITE", { siteId: SITE_ID });
+
+    expect(opened.outcome).toBe("applied");
+    expect(opened.state.journey.siteRuntime[SITE_ID]).toMatchObject({
+      kind: "shop",
+      purchaseHistory: [],
+      freePurchaseSource: {
+        sourceSiteId: firstModifier.sourceSiteId,
+        sourceActionId: firstModifier.sourceActionId,
+      },
+    });
+    expect(opened.state.journey.shopModifiers.freeNextShopModifiers).toEqual([
+      secondModifier,
+    ]);
+    expect(duplicate.outcome).toBe("bounced");
+    expect(duplicate.state).toEqual(opened.state);
   });
 });
 

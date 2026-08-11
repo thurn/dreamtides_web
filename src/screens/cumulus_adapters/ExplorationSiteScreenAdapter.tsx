@@ -4,7 +4,12 @@ import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";
 import { selectCurrentSite } from "../../state/journey-selectors";
 import { buildExplorationSiteView, resolveExplorationGuide } from "./exploration-view-model";
-import { buildExplorationCompletionLog, buildExplorationEntryLog, buildExplorationResolutionLog } from "./exploration-logging-view-model";
+import {
+  buildExplorationActionLog,
+  buildExplorationCompletionLog,
+  buildExplorationEntryLog,
+  buildExplorationResolutionLog,
+} from "./exploration-logging-view-model";
 import { useGuideDialogue } from "./guide-dialogue-view-model";
 
 export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
@@ -42,6 +47,7 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
   useEffect(() => {
     if (site === null || explorationRuntime === null || view === null) return;
     logEventOnce(`exploration:${site.id}:site-entered`, "site_entered", {
+      siteId: site.id,
       siteType: site.type,
       isEnhanced: site.isEnhanced,
       ...buildExplorationEntryLog(view, explorationRuntime),
@@ -76,16 +82,19 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
 
   const handleResolve = useCallback(
     (actionId: string, selection?: unknown) => {
-      if (site === null || explorationRuntime === null) return;
+      if (site === null || explorationRuntime === null || view === null) return;
       logEvent("exploration_choice_requested", {
         siteId: site.id,
-        presentedCardId: explorationRuntime.encounterCardId,
-        actionId,
-        selection,
+        ...buildExplorationActionLog(
+          view,
+          explorationRuntime,
+          actionId,
+          selection,
+        ),
       });
       mutations.resolveExplorationChoice(site.id, actionId, selection);
     },
-    [explorationRuntime, mutations, site],
+    [explorationRuntime, mutations, site, view],
   );
 
   const handleExit = useCallback(() => {

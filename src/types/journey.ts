@@ -21,6 +21,15 @@ import type {
   TidemarkLadderClimbAttemptNumber,
 } from "./gamble";
 import type { RandomSiteDestinationType, SiteType } from "./site-type";
+import type { ExplorationMultiCardTransfigurationPreparation } from "../exploration/multi-card-transfiguration-plan";
+import type { MultiCardReplacementPreparation } from "../exploration/multi-card-replacement-plan";
+import type { ExplorationRandomDeckTargetPreparation } from "../exploration/random-deck-target-plan";
+import type { ExplorationDisclosedDeckTargetPreparation } from "../exploration/disclosed-deck-target-plan";
+import type { ExplorationCompoundActionPreparation } from "../exploration/compound-action-plan";
+import type {
+  ExplorationChoosableSiteType,
+  ExplorationFixedSiteType,
+} from "../data/exploration";
 export type { SiteType } from "./site-type";
 export type { RandomSiteDestinationType } from "./site-type";
 export type { AtlasData } from "./atlas-data";
@@ -274,6 +283,56 @@ export interface JourneyFailureSummary {
   enemyScore: number;
 }
 
+/** Canonical provenance for a queued Exploration shop modifier. */
+export interface ExplorationModifierSource {
+  readonly sourceSiteId: string;
+  readonly sourceActionId: string;
+}
+
+/** One queued modifier that makes every item in the next Card Shop free. */
+export interface FreeNextShopModifier extends ExplorationModifierSource {
+  readonly kind: "free-next-shop";
+}
+
+/** One FIFO purchase counter granted by an Exploration action. */
+export interface FreePurchaseModifier extends ExplorationModifierSource {
+  readonly kind: "free-purchases";
+  readonly initialCount: number;
+  readonly remainingCount: number;
+}
+
+/** Exact persisted result of one successful Shop or Dreamsign Bazaar buy. */
+export interface ShopPurchaseResult {
+  readonly eventSeq: number;
+  readonly siteId: string;
+  readonly slotIndex: number;
+  readonly item:
+    | {
+        readonly kind: "card";
+        readonly cardNumber: number;
+        readonly gainedEntryId: string;
+      }
+    | {
+        readonly kind: "dreamsign";
+        readonly dreamsignId: string;
+        readonly replacedDreamsignId?: string;
+      };
+  /** Effective price after ordinary discounts but before a free modifier. */
+  readonly priceBeforeFree: number;
+  /** Exact Essence charged by this purchase. */
+  readonly pricePaid: number;
+  readonly essenceBefore: number;
+  readonly essenceAfter: number;
+  /** Visit-wide T56 provenance, when this Card Shop was bound as free. */
+  readonly freeNextShopSource?: ExplorationModifierSource;
+  /** Exact T82 FIFO counter transition, even when another effect made it free. */
+  readonly freePurchaseModifier?: ExplorationModifierSource & {
+    readonly initialCount: number;
+    readonly remainingBefore: number;
+    readonly remainingAfter: number;
+  };
+}
+
 /** Runtime state for one purchasable slot in a shop site. */
 export type RuntimeShopSlot =
   | {
@@ -299,6 +358,10 @@ export interface ShopSiteRuntime {
   slots: RuntimeShopSlot[];
   rerollCount: number;
   remainingDreamsignPoolIds: string[];
+  /** Exact successful purchase history, retained when rerolls replace slots. */
+  purchaseHistory: readonly ShopPurchaseResult[];
+  /** T56 source bound when this exact Card Shop visit opened. */
+  freePurchaseSource?: ExplorationModifierSource;
   /** Exploration action whose one-use modifier transfigures this Shop visit. */
   transfiguredOfferSource?: {
     siteId: string;
@@ -444,6 +507,193 @@ export interface GravokWagerSiteRuntime {
 }
 
 /** Deterministic follow-up offers prepared when an Exploration site opens. */
+export interface ExplorationEssencePreparation {
+  minimumEssence: number;
+  maximumEssence: number;
+  purpose: "essence-amount";
+  saltParts: string[];
+  drawsConsumed: number;
+}
+
+export type ExplorationDreamsignPreparationKind =
+  | "fixed-gain"
+  | "offered-gain"
+  | "offered-replacement"
+  | "replace-all-random"
+  | "purge-and-gain-random";
+
+export type DreamsignActionUnavailableReason =
+  | "invalid-authored-count"
+  | "invalid-held-dreamsigns"
+  | "invalid-capacity"
+  | "requires-held-dreamsign"
+  | "capacity-too-small"
+  | "insufficient-candidates";
+
+/** Signed, replayable Dreamsign plan prepared without spending the run pool. */
+export interface ExplorationDreamsignPreparation {
+  kind: ExplorationDreamsignPreparationKind;
+  requestedCount: number;
+  /** Authored Nightmare bundle size signed with compound Dreamsign plans. */
+  nightmareCount?: number;
+  heldIdsAtPreparation: string[];
+  maxDreamsignsAtPreparation: number;
+  poolBeforeIds: string[];
+  poolBasisIds: string[];
+  poolRegenerated: boolean;
+  preparedDreamsignIds: string[];
+  requiredOverflowReplacementCount: number;
+  unavailableReason?: DreamsignActionUnavailableReason;
+  planSignature: string;
+}
+
+export interface ExplorationDreamsignReplacement {
+  removedDreamsignId: string;
+  gainedDreamsignId: string;
+}
+
+/** Complete Dreamsign state and pool transition persisted by a resolution. */
+export interface ExplorationDreamsignMutationResolution {
+  beforeIds: string[];
+  afterIds: string[];
+  offeredIds: string[];
+  gainedIds: string[];
+  purgedIds: string[];
+  replacements: ExplorationDreamsignReplacement[];
+  poolBeforeIds: string[];
+  poolAfterIds: string[];
+  poolRegenerated: boolean;
+}
+
+export type ExplorationStarterCardEffectKind =
+  | "purge-starter-card"
+  | "purge-random-starter-card"
+  | "purge-random-starter-and-gain-card"
+  | "replace-all-starter-cards";
+
+export type ExplorationStarterCardUnavailableReason =
+  "requires-starter-card" | "insufficient-replacement-cards";
+
+/** Canonical base-card identity paired with one concrete starter deck entry. */
+export interface ExplorationStarterCardBinding {
+  entryId: string;
+  cardId: string;
+}
+
+/** Signed, replayable starter-card plan prepared when an Exploration site opens. */
+export interface ExplorationStarterCardPreparation {
+  kind: ExplorationStarterCardEffectKind;
+  eligibleStarterCards: ExplorationStarterCardBinding[];
+  purgedEntryIds: string[];
+  purgedCardIds: string[];
+  replacementCardIdByEntryId: Record<string, string>;
+  selectionRulesVersion: string;
+  selectionContentRevision: string;
+  selectionKey: string;
+  selectorSignatures: string[];
+  selectorTraces: RewardSelectionTrace[];
+  unavailableReason?: ExplorationStarterCardUnavailableReason;
+  planSignature: string;
+}
+
+/** Exact persisted identity mapping for one atomic starter-card replacement. */
+export interface ExplorationStarterCardReplacement {
+  purgedEntryId: string;
+  purgedCardId: string;
+  gainedEntryId: string;
+  gainedCardId: string;
+}
+
+export type ExplorationStarterCardTransfigurationEffectKind =
+  "transfigure-random-starter-cards" | "transfigure-all-starter-cards";
+
+export type ExplorationStarterCardTransfigurationUnavailableReason =
+  | "requires-starter-card"
+  | "insufficient-transfigurable-starter-cards"
+  | "all-starter-cards-must-be-transfigurable";
+
+/** Canonical base-card identity paired with one concrete starter deck entry. */
+export interface ExplorationStarterCardTransfigurationBinding {
+  entryId: string;
+  cardId: string;
+}
+
+/** One prepared starter entry and its independently selected positive form. */
+export interface ExplorationStarterCardTransfigurationTarget extends ExplorationStarterCardTransfigurationBinding {
+  transfiguration: TransfigurationType;
+}
+
+/** Signed automatic transfiguration plan prepared when an Exploration site opens. */
+export interface ExplorationStarterCardTransfigurationPreparation {
+  kind: "random-count" | "all";
+  starterCards: readonly ExplorationStarterCardTransfigurationBinding[];
+  eligibleStarterCards: readonly ExplorationStarterCardTransfigurationBinding[];
+  targets: readonly ExplorationStarterCardTransfigurationTarget[];
+  selectionRulesVersion: string;
+  selectionContentRevision: string;
+  selectionKey: string;
+  selectorSignatures: readonly string[];
+  selectorTraces: readonly RewardSelectionTrace[];
+  unavailableReason?: ExplorationStarterCardTransfigurationUnavailableReason;
+  planSignature: string;
+}
+
+/** Exact persisted before/after mapping for one starter-card transfiguration. */
+export interface ExplorationStarterCardTransfiguration {
+  entryId: string;
+  cardId: string;
+  beforeTransfiguration: null;
+  afterTransfiguration: TransfigurationType;
+}
+
+/** Exact persisted before/after mapping for one general deck transfiguration. */
+export interface ExplorationCardTransfiguration {
+  entryId: string;
+  cardId: string;
+  beforeTransfiguration: null;
+  afterTransfiguration: TransfigurationType;
+}
+
+/** Exact source-to-minted mapping for one chosen card replacement. */
+export interface ExplorationCardReplacement {
+  sourceEntryId: string;
+  sourceCardId: string;
+  replacementEntryId: string;
+  replacementCardId: string;
+}
+
+/** Exact source-to-minted mapping for one copied concrete deck entry. */
+export interface ExplorationCardCopy {
+  sourceEntryId: string;
+  sourceCardId: string;
+  mintedEntryId: string;
+  mintedCardId: string;
+}
+
+/** Exact persisted type override applied to one concrete deck entry. */
+export interface ExplorationCardTypeChange {
+  entryId: string;
+  cardId: string;
+  beforeCardType: CardType;
+  afterCardType: CardType;
+  beforeTypeChange: CardTypeChange | null;
+  afterTypeChange: CardTypeChange;
+}
+
+/** Exact persisted keyword mutation applied to one concrete deck entry. */
+export interface ExplorationCardKeywordChange {
+  entryId: string;
+  cardId: string;
+  before: CardKeywordModification | null;
+  after: CardKeywordModification;
+}
+
+/** Exact Nightmare card minted by one compound Exploration action. */
+export interface ExplorationNightmareGain {
+  entryId: string;
+  cardId: string;
+}
+
 export interface ExplorationActionOfferRuntime {
   actionId: string;
   /** Canonical internal mechanic and policy; omitted on legacy runtimes. */
@@ -456,6 +706,30 @@ export interface ExplorationActionOfferRuntime {
   selectionTrace?: RewardSelectionTrace;
   /** Every trace when one action prepares independent targets per deck entry. */
   selectionTraces?: RewardSelectionTrace[];
+  /** Exact random Essence result prepared once when the site opens. */
+  preparedEssenceAmount?: number;
+  /** Reconstructable deterministic stream and inclusive bounds for that result. */
+  essencePreparation?: ExplorationEssencePreparation;
+  /** Exact signed Dreamsign offer/replacement plan prepared at site opening. */
+  dreamsignPreparation?: ExplorationDreamsignPreparation;
+  /** Exact signed starter purge/replacement plan prepared at site opening. */
+  starterCardPreparation?: ExplorationStarterCardPreparation;
+  /** Exact signed starter transfiguration plan prepared at site opening. */
+  starterCardTransfigurationPreparation?: ExplorationStarterCardTransfigurationPreparation;
+  /** Exact signed multi-card transfiguration plan prepared at site opening. */
+  multiCardTransfigurationPreparation?: ExplorationMultiCardTransfigurationPreparation;
+  /** Exact signed chosen multi-card replacement plan prepared at site opening. */
+  multiCardReplacementPreparation?: MultiCardReplacementPreparation;
+  /** Exact signed automatic random deck-target plan prepared at site opening. */
+  randomDeckTargetPreparation?: ExplorationRandomDeckTargetPreparation;
+  /** Exact signed concrete deck target disclosed before an automatic action. */
+  disclosedDeckTargetPreparation?: ExplorationDisclosedDeckTargetPreparation;
+  /** Exact signed plan for a compound deck mutation prepared at site opening. */
+  compoundActionPreparation?: ExplorationCompoundActionPreparation;
+  /** Exact signed fixed-site append plan prepared at site opening. */
+  siteInsertionPreparation?: ExplorationSiteInsertionPreparation;
+  /** Exact signed player-facing site-type offer and append plan. */
+  siteTypeChoicePreparation?: ExplorationSiteTypeChoicePreparation;
   offeredCardIds: string[];
   offeredDreamsignIds?: string[];
   /** Randomly minted concrete deck-entry UUIDs for deck-card effects. */
@@ -469,6 +743,43 @@ export interface ExplorationActionOfferRuntime {
   transfigurationByEntryId: Record<string, TransfigurationType>;
   transfigurationByCardId?: Record<string, TransfigurationType>;
   offeredSiteType?: SiteType;
+}
+
+/** Signed append-only fixed-site plan prepared when an Exploration site opens. */
+export interface ExplorationSiteInsertionPreparation {
+  sourceSiteId: string;
+  sourceActionId: string;
+  targetNodeId: string;
+  insertionIndex: number;
+  siblingSiteIdsBefore: readonly string[];
+  insertedSite: SiteState & { type: ExplorationFixedSiteType };
+  planSignature: string;
+}
+
+/** One offered destination and the exact site record it would append. */
+export interface ExplorationPreparedSiteChoice {
+  siteType: ExplorationChoosableSiteType;
+  insertedSite: SiteState & { type: ExplorationChoosableSiteType };
+}
+
+/** Signed site-type chooser prepared when an Exploration site opens. */
+export interface ExplorationSiteTypeChoicePreparation {
+  sourceSiteId: string;
+  sourceActionId: string;
+  targetNodeId: string;
+  insertionIndex: number;
+  siblingSiteIdsBefore: readonly string[];
+  choices: readonly ExplorationPreparedSiteChoice[];
+  selectorSignature: string;
+  planSignature: string;
+}
+
+/** Exact site insertion persisted by a resolved Exploration action. */
+export interface ExplorationSiteInsertionResolution {
+  targetNodeId: string;
+  insertionIndex: number;
+  siblingSiteIdsBefore: readonly string[];
+  insertedSite: SiteState & { type: ExplorationFixedSiteType };
 }
 
 /** Persisted result shown with the authored response before leaving the site. */
@@ -490,17 +801,42 @@ export interface ExplorationResolution {
   /** Exact pre-resolution deck entries needed to replay and present purges. */
   purgedEntrySnapshots?: DeckEntry[];
   purgedDreamsignIds?: string[];
+  /** Authoritative structured Dreamsign transition for compound effects. */
+  dreamsignMutation?: ExplorationDreamsignMutationResolution;
+  /** Exact removed-to-minted mappings for starter-card replacement effects. */
+  starterCardReplacements?: ExplorationStarterCardReplacement[];
+  /** Exact ordered starter-card transfigurations applied by this resolution. */
+  starterCardTransfigurations?: readonly ExplorationStarterCardTransfiguration[];
+  /** Exact ordered general deck-card transfigurations applied by this resolution. */
+  cardTransfigurations?: readonly ExplorationCardTransfiguration[];
+  /** Exact ordered source-to-minted chosen card replacements. */
+  cardReplacements?: readonly ExplorationCardReplacement[];
+  /** Exact ordered source-to-minted concrete card copies. */
+  cardCopies?: readonly ExplorationCardCopy[];
+  /** Exact ordered effective card-type transitions. */
+  cardTypeChanges?: readonly ExplorationCardTypeChange[];
+  /** Exact ordered keyword transitions applied by a compound action. */
+  cardKeywordChanges?: readonly ExplorationCardKeywordChange[];
+  /** Exact ordered Nightmare entries minted by a compound action. */
+  nightmareGains?: readonly ExplorationNightmareGain[];
   affectedEntryIds: string[];
   /** Exact resolved spark values before and after a persisted deck mutation. */
   sparkBeforeByEntryId?: Record<string, number>;
   sparkAfterByEntryId?: Record<string, number>;
   essenceGained: number;
+  /** Exact shared Essence balance immediately before and after the mutation. */
+  essenceBefore?: number;
+  essenceAfter?: number;
+  /** Preparation metadata copied from a random-Essence offer for replay. */
+  essencePreparation?: ExplorationEssencePreparation;
   /** Exact Essence deducted by the resolved action. */
   essenceSpent?: number;
   chosenTransfiguration?: TransfigurationType;
   /** Exact typed card predicate used to select a persisted bulk result. */
   resolvedPredicate?: Exclude<RewardCardPredicate, "any">;
   chosenSubtype?: string;
+  /** Exact authored card type applied by a random type-change action. */
+  resolvedCardType?: CardType;
   /** Exact Reclaim cost applied to each surviving concrete deck entry. */
   reclaimCostByEntryId?: Record<string, number>;
   /** Exact one-battle modifier created by the resolution. */
@@ -520,6 +856,10 @@ export interface ExplorationResolution {
   chosenDreamAvatarId?: string;
   /** Exact one-use future-site modifier created by the resolution. */
   siteOfferModifier?: TransfiguredSiteOfferModifier;
+  /** Exact FIFO shop modifier appended by this resolution. */
+  shopModifier?: FreeNextShopModifier | FreePurchaseModifier;
+  /** Exact append-only site mutation produced by a site-insertion action. */
+  siteInsertion?: ExplorationSiteInsertionResolution;
 }
 
 /** Shared, replayable runtime for one Exploration encounter. */
@@ -794,13 +1134,19 @@ export type DreamscapeModifier =
     };
 
 /**
- * Shop-side modifiers stacked by Augury rewards. Free-reroll grants
- * stack additively and are consumed by `rerollShop`; `essenceDiscountPercent`
- * is a permanent additive discount on essence-priced shop slots.
+ * Shop-side modifiers stacked by rewards and Exploration resolutions.
+ * Free-reroll grants stack additively and are consumed by `rerollShop`;
+ * `essenceDiscountPercent` is a permanent additive discount on
+ * essence-priced shop slots; free-shop and free-purchase modifiers remain in
+ * FIFO order until their eligible site open or purchase consumes them.
  */
 export interface ShopModifiers {
   readonly freeRerolls: number;
   readonly essenceDiscountPercent: number;
+  /** FIFO T56 modifiers awaiting an eligible Card Shop open. */
+  readonly freeNextShopModifiers: readonly FreeNextShopModifier[];
+  /** FIFO T82 counters consumed by successful Shop and Bazaar purchases. */
+  readonly freePurchaseModifiers: readonly FreePurchaseModifier[];
 }
 
 /** A one-use Exploration modifier consumed by the next eligible Draft or Shop. */
@@ -861,9 +1207,9 @@ export interface JourneyState {
    */
   readonly battleModifiers: readonly BattleModifier[];
   /**
-   * Modifiers consumed at shop sites. Free-reroll grants stack additively, and
-   * the essence discount is a permanent additive percentage applied to every
-   * essence-priced shop purchase.
+   * Modifiers consumed at shop sites. Free-reroll grants stack additively, the
+   * essence discount is a permanent additive percentage, and Exploration
+   * free-shop/free-purchase modifiers are retained in FIFO queues.
    */
   readonly shopModifiers: ShopModifiers;
   /** One-use modifiers waiting for the next eligible Draft or Shop visit. */

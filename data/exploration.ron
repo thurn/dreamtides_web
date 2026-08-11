@@ -464,13 +464,16 @@
       ),
 
       ActionDefinition(
-        label: "Hold the hollow gaze",
-        id: "326062b2-aef4-47ab-b835-149bb6f7f8fd",
+        label: "Feed the Reaching Giant",
+        id: "574dc85e-37a9-4888-80a2-afec6ee24209",
         presentation: ActionPresentation(
-          effect_text: "Draw 2 additional cards at the start of your next battle",
+          effect_text: "Purge a random Character card and replace it with {fixed_card}",
           followup: None,
         ),
-        effect: NextBattleOpeningHand(count: 2),
+        effect: ReplaceRandomWithCard(
+          predicate: Character,
+          card_id: "ffec9fdd-d948-4756-b7df-39b9e982613e",
+        ),
       ),
     ],
   ),
@@ -1008,13 +1011,13 @@
     prose: "Sunlit feathers stir beneath a vast woven circle as a lone wanderer approaches.",
     actions: [
       ActionDefinition(
-        label: "Follow Falling Feathers",
-        id: "01f4ce1b-b187-4bfc-9ac1-7ac9f17a331b",
+        label: "Retie the First Threads",
+        id: "be5b6030-686a-475f-b14c-9aea6709439e",
         presentation: ActionPresentation(
-          effect_text: "Draft a Character from 4 choices",
-          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+          effect_text: "Transfigure 2 random starter cards",
+          followup: None,
         ),
-        effect: DraftCard(predicate: Character, count: 1, offer_count: 4),
+        effect: TransfigureRandomStarterCards(count: 2),
       ),
 
       ActionDefinition(
@@ -1054,13 +1057,13 @@
       ),
 
       ActionDefinition(
-        label: "Meet Its Burning Gaze",
-        id: "eb2c3aa6-6622-4d15-b5b7-c6c07004393f",
+        label: "Heed the Living Sign",
+        id: "b59b7e6a-aa32-428a-9397-06766ebe9b7d",
         presentation: ActionPresentation(
-          effect_text: "All characters in your deck gain +1✦",
+          effect_text: "Change {deck_card} to become a {card_type}",
           followup: None,
         ),
-        effect: IncreaseSparkAll(spark_bonus: 1),
+        effect: ChangeCardTypeSelected(card_type: Character, target: Offered),
       ),
     ],
   ),
@@ -1109,13 +1112,10 @@
       ),
 
       ActionDefinition(
-        label: "Catch Golden Fragments",
-        id: "a19de2d0-b8f1-41f9-ba8b-65db01ce304e",
-        presentation: ActionPresentation(
-          effect_text: "Draw 2 additional cards at the start of your next battle",
-          followup: None,
-        ),
-        effect: NextBattleOpeningHand(count: 2),
+        label: "Pocket Golden Fragments",
+        id: "aec3a618-f12f-4cb1-bfe8-eac3ac77d2c7",
+        presentation: ActionPresentation(effect_text: "Gain 100 essence", followup: None),
+        effect: GainEssence(essence: 100),
       ),
     ],
   ),
@@ -1151,26 +1151,26 @@
     prose: "Three lights orbit a levitating girl while shattered towers rise around her.",
     actions: [
       ActionDefinition(
-        label: "Channel Three Lights",
-        id: "23267320-5d47-4a21-962d-57b38d663726",
+        label: "Claim an Orbiting Light",
+        id: "a63032ab-b2ef-4f3f-8d2c-d16f1c0524d2",
         presentation: ActionPresentation(
-          effect_text: "Draft an Event from 3 choices",
-          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+          effect_text: "Gain one of 3 offered dreamsigns",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Dreamsign."),
         ),
-        effect: DraftCard(predicate: Event, count: 1, offer_count: 3),
+        effect: GainOfferedDreamsign(offer_count: 3),
       ),
 
       ActionDefinition(
-        label: "Feed Rising Ruin",
-        id: "fc11e676-82eb-42cd-bc3c-7774e1f6ad06",
+        label: "Shape Three Futures",
+        id: "46c79bb8-2001-415e-82ae-98864e2c1e51",
         presentation: ActionPresentation(
-          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
+          effect_text: "Choose 1 of 3 offered site types to add to this Dreamscape",
           followup: Followup(
-            title: "{action-label}",
-            subtitle: "Choose a card to dissolve for 20 essence per ✦.",
+            title: "Choose a Future Site",
+            subtitle: "Choose one offered site to add to this Dreamscape.",
           ),
         ),
-        effect: PurgeForEssence(essence_per_spark: 20),
+        effect: ChooseSiteType(offer_count: 3),
       ),
     ],
   ),
@@ -1209,13 +1209,13 @@
     prose: "A rusted colossus stands among wildflowers as petals drift through mist.",
     actions: [
       ActionDefinition(
-        label: "Rekindle buried circuits",
-        id: "318bc9a6-362a-426d-9faa-f3ca025fb3c8",
+        label: "Wake the Last Survivor",
+        id: "6d0e7bdc-277d-4f6a-a08d-ef137551dfa6",
         presentation: ActionPresentation(
-          effect_text: "All characters in your deck gain +1✦",
+          effect_text: "Purge a random starter card. Gain a random Survivor.",
           followup: None,
         ),
-        effect: IncreaseSparkAll(spark_bonus: 1),
+        effect: PurgeRandomStarterAndGainCard(predicate: Survivor),
       ),
 
       ActionDefinition(
@@ -1261,13 +1261,13 @@
     prose: "A lone duelist stands within a blazing circle as horned shadows gather.",
     actions: [
       ActionDefinition(
-        label: "Complete the Summoning",
-        id: "7bdc43df-0b87-43ce-b96f-b8af1b28e3a5",
+        label: "Complete the Dark Bargain",
+        id: "44b53bf6-23cc-46d4-aa88-da64f8817d69",
         presentation: ActionPresentation(
-          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
-          followup: None,
+          effect_text: "Gain 2 {nightmare_card} cards. Gain one of 3 offered Dreamsigns.",
+          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Dreamsign."),
         ),
-        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+        effect: GainNightmareAndOfferedDreamsign(offer_count: 3, nightmare_count: 2),
       ),
 
       ActionDefinition(
@@ -1435,16 +1435,10 @@
     prose: "A pale child traces a luminous circle across dusty boards inside a ruined hall.",
     actions: [
       ActionDefinition(
-        label: "Erase a Memory",
-        id: "07bb2b3e-1f58-4396-8d82-6e18e316a0a9",
-        presentation: ActionPresentation(
-          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
-          followup: Followup(
-            title: "{action-label}",
-            subtitle: "Choose a card to erase for 20 essence per ✦.",
-          ),
-        ),
-        effect: PurgeForEssence(essence_per_spark: 20),
+        label: "Erase the First Sigil",
+        id: "e1dd0150-24c6-4fcd-90bc-30e5d2e172bc",
+        presentation: ActionPresentation(effect_text: "Purge {starter_card}", followup: None),
+        effect: PurgeStarterCard,
       ),
 
       ActionDefinition(
@@ -1865,13 +1859,21 @@
       ),
 
       ActionDefinition(
-        label: "Call Warriors Home",
-        id: "b7ee400f-1516-4d59-acf2-7a201ef256fb",
+        label: "Share the Spirit-Fire",
+        id: "3ac54fa8-0634-4feb-8930-2caf30f6cfc8",
         presentation: ActionPresentation(
-          effect_text: "Draft a Warrior from 4 choices",
-          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+          effect_text: "Apply Kindled to 2 chosen Warrior cards",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose exactly two Warrior cards.",
+          ),
         ),
-        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+        effect: TransfigureFixedSelected(
+          predicate: Warrior,
+          transfiguration: "Kindled",
+          target: Chosen,
+          count: 2,
+        ),
       ),
     ],
   ),
@@ -1965,16 +1967,13 @@
     prose: "An engineer welds a colossal translucent machine as green light floods tangled cables.",
     actions: [
       ActionDefinition(
-        label: "Splice New Synapses",
-        id: "9e4b23ef-8f2e-47d8-b74a-0b30f8bf6e16",
+        label: "Rewire Tangled Synapses",
+        id: "f2a61678-17b0-4d50-b75c-f1de61fa0d5c",
         presentation: ActionPresentation(
-          effect_text: "Take any number of Event cards from 4 choices",
-          followup: Followup(
-            title: "{action-label}",
-            subtitle: "Choose any number of offered Events.",
-          ),
+          effect_text: "Modify 2 random cards to become Event cards",
+          followup: None,
         ),
-        effect: TakeCards(predicate: Event, offer_count: 4),
+        effect: ChangeRandomCardType(count: 2, card_type: Event),
       ),
 
       ActionDefinition(
@@ -2227,13 +2226,13 @@
       ),
 
       ActionDefinition(
-        label: "Draw Power From Rim",
-        id: "2567fc2d-d519-4442-a55d-ceff6fd13d04",
+        label: "Mirror the Turbine",
+        id: "6937ba6d-2d29-45ee-ac65-65bd91162341",
         presentation: ActionPresentation(
-          effect_text: "Gain 2 additional energy at the start of your next battle",
+          effect_text: "Add a duplication site to this Dreamscape",
           followup: None,
         ),
-        effect: NextBattleStartingEnergy(count: 2),
+        effect: AddFixedSite(site_type: Duplication),
       ),
     ],
   ),
@@ -2563,13 +2562,13 @@
       ),
 
       ActionDefinition(
-        label: "Channel Emerald Burst",
-        id: "a941007e-380a-4943-993a-2a1ea23162f1",
+        label: "Release Genesis Bloom",
+        id: "7b390b9d-5d57-4a70-b25b-aaa5f842a1ca",
         presentation: ActionPresentation(
-          effect_text: "Gain 2 additional energy at the start of your next battle",
+          effect_text: "Transfigure all cards in your deck",
           followup: None,
         ),
-        effect: NextBattleStartingEnergy(count: 2),
+        effect: TransfigureAllCards,
       ),
     ],
   ),
@@ -3166,13 +3165,13 @@
       ),
 
       ActionDefinition(
-        label: "Welcome Azure Dawn",
-        id: "4568fc2d-c53c-4644-8b54-53ff5a9dbb71",
+        label: "Balance With the Reflection",
+        id: "2066cc54-8486-4ca6-831b-795ba42bb71b",
         presentation: ActionPresentation(
-          effect_text: "Gain 2 additional energy at the start of your next battle",
+          effect_text: "Double your current essence",
           followup: None,
         ),
-        effect: NextBattleStartingEnergy(count: 2),
+        effect: DoubleEssence,
       ),
     ],
   ),
@@ -3447,13 +3446,13 @@
       ),
 
       ActionDefinition(
-        label: "Stand Beneath Halo",
-        id: "77e5e76a-f4cc-4a59-acb8-1e9260fc22e2",
+        label: "Enter the Recasting Halo",
+        id: "06adf5f9-cb11-4c97-9335-abbfc95c71dc",
         presentation: ActionPresentation(
-          effect_text: "Draw 2 additional cards at the start of your next battle",
+          effect_text: "Replace all of your Dreamsigns with random Dreamsigns",
           followup: None,
         ),
-        effect: NextBattleOpeningHand(count: 2),
+        effect: ReplaceAllDreamsignsRandom,
       ),
     ],
   ),
@@ -3473,13 +3472,13 @@
       ),
 
       ActionDefinition(
-        label: "Channel orb's lightning",
-        id: "81b35c0b-1eff-44eb-9d7d-308e67b31736",
+        label: "Reawaken Monster Foundry",
+        id: "644222aa-e1ce-44a7-8f54-e3acc604399f",
         presentation: ActionPresentation(
-          effect_text: "Gain 2 additional energy at the start of your next battle",
+          effect_text: "Add a Transfiguration site to this Dreamscape",
           followup: None,
         ),
-        effect: NextBattleStartingEnergy(count: 2),
+        effect: AddFixedSite(site_type: Transfiguration),
       ),
     ],
   ),
@@ -3706,16 +3705,16 @@
     prose: "A red-coated child studies five rune-lit monoliths drifting above a broken stone path.",
     actions: [
       ActionDefinition(
-        label: "Gather Four Fragments",
-        id: "4ccb1862-58b1-4541-bbeb-bc7e75bd9087",
+        label: "Exchange Broken Visions",
+        id: "8eb89438-d367-4c52-be5b-abd76324cd80",
         presentation: ActionPresentation(
-          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          effect_text: "Purge up to 2 chosen Event cards and gain a random Event replacement for each card purged",
           followup: Followup(
             title: "{action-label}",
-            subtitle: "Choose one revealed fragment to copy.",
+            subtitle: "Choose one or two Event cards to exchange.",
           ),
         ),
-        effect: CopyOfferedDeckCard(offer_count: 4),
+        effect: ReplaceSelected(predicate: Event, count: 2),
       ),
 
       ActionDefinition(
@@ -4961,16 +4960,16 @@
     prose: "A helmeted visitor raises a hand between flowering grass and towers of floating neon panels.",
     actions: [
       ActionDefinition(
-        label: "Trade a Memory",
-        id: "e5a727c5-d7e4-4d63-bc31-0a569297ba1d",
+        label: "Trade a Dreamsign",
+        id: "711dab84-0b2a-4f54-8c55-5540aa7ec228",
         presentation: ActionPresentation(
-          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
+          effect_text: "Replace a chosen dreamsign with one of 3 offered dreamsigns",
           followup: Followup(
             title: "{action-label}",
-            subtitle: "First choose a card to purge, then choose a different card to copy.",
+            subtitle: "Choose a Dreamsign to trade, then choose one of three offered Dreamsigns.",
           ),
         ),
-        effect: PurgeAndCopy,
+        effect: ReplaceSelectedDreamsignWithOffered(offer_count: 3),
       ),
 
       ActionDefinition(
@@ -5918,16 +5917,13 @@
     prose: "Rain lashes a shattered crimson vessel while a scientist confronts its colossal captive.",
     actions: [
       ActionDefinition(
-        label: "Release Stolen Life",
-        id: "60926e48-c8f4-4680-963f-f8b82be32c0c",
+        label: "Rewrite Every Origin",
+        id: "c34c1e6d-e056-4ff4-ae3f-71de2a6b78ba",
         presentation: ActionPresentation(
-          effect_text: "Draft a transfigured Character from 4 choices",
-          followup: Followup(
-            title: "{action-label}",
-            subtitle: "Choose one offered transfigured Character.",
-          ),
+          effect_text: "Purge all starter cards and replace each one with a Character card",
+          followup: None,
         ),
-        effect: TransfiguredCardDraft(predicate: Character, offer_count: 4),
+        effect: ReplaceAllStarterCards(predicate: Character),
       ),
 
       ActionDefinition(
@@ -6535,13 +6531,16 @@
     prose: "A solitary man faces a radiant circle, red glyphs blazing above fractured stone.",
     actions: [
       ActionDefinition(
-        label: "Read the Glyphs",
-        id: "87c8e0cb-f9b7-4cf4-a4c0-69db684b2601",
+        label: "Rewrite Two Rites",
+        id: "e7cd94ef-d9c6-4f18-8120-dd568eba6e32",
         presentation: ActionPresentation(
-          effect_text: "Draft an Event from 4 choices",
-          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Event."),
+          effect_text: "Apply a transfiguration to 2 chosen Event cards",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose exactly two Event cards, then one transfiguration for each.",
+          ),
         ),
-        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+        effect: TransfigureSelected(predicate: Event, count: 2),
       ),
 
       ActionDefinition(
@@ -6957,13 +6956,13 @@
       ),
 
       ActionDefinition(
-        label: "Study Falling Shards",
-        id: "d0644f5b-63f9-43cf-9f71-51d1bd3b8685",
+        label: "Catch Falling Shards",
+        id: "609937bd-e3e9-4494-8266-845344270518",
         presentation: ActionPresentation(
-          effect_text: "Draft an Event from 4 choices",
-          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+          effect_text: "Apply a transfiguration to 2 random Event cards",
+          followup: None,
         ),
-        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+        effect: TransfigureRandomCards(predicate: Event, count: 2),
       ),
     ],
   ),
@@ -7067,13 +7066,13 @@
       ),
 
       ActionDefinition(
-        label: "Follow His Luminous Wake",
-        id: "2b610f6c-0249-4aad-b79f-ae6fddadc233",
+        label: "Offer a Sign as Fare",
+        id: "b0e90ae4-a863-41df-ba97-d47f68e4ca75",
         presentation: ActionPresentation(
-          effect_text: "All characters in your deck gain +1✦",
-          followup: None,
+          effect_text: "Purge a chosen Dreamsign. Gain 3 random Dreamsigns.",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to purge."),
         ),
-        effect: IncreaseSparkAll(spark_bonus: 1),
+        effect: PurgeSelectedDreamsignAndGainRandom(count: 3),
       ),
     ],
   ),
@@ -7848,13 +7847,13 @@
       ),
 
       ActionDefinition(
-        label: "Accept the Swarm",
-        id: "ac08f8f4-8a6b-43f3-b3a9-0212d9371a16",
+        label: "Ride the Swarming Rift",
+        id: "fcce63dc-f8c5-4183-be2a-9de4929ca8c2",
         presentation: ActionPresentation(
-          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
+          effect_text: "Every Event card in your deck becomes ❖ (fast). Gain 2 {nightmare_card} cards.",
           followup: None,
         ),
-        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+        effect: MakePredicateFastAndGainNightmares(predicate: Event, nightmare_count: 2),
       ),
     ],
   ),
@@ -8389,13 +8388,13 @@
     prose: "A young traveler rests beneath a glowing umbrella as celestial sparks cross ruined towers.",
     actions: [
       ActionDefinition(
-        label: "Catch Falling Sparks",
-        id: "d15d75f3-e054-4c9c-8bdb-0ecf9a3b6d7f",
+        label: "Harvest Falling Sparks",
+        id: "093b142d-e1fd-4713-9467-7a4b0a060aad",
         presentation: ActionPresentation(
-          effect_text: "Draft an Event from 4 choices",
-          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Event."),
+          effect_text: "Gain a random amount of essence between 50 and 150",
+          followup: None,
         ),
-        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+        effect: GainRandomEssence(minimum_essence: 50, maximum_essence: 150),
       ),
 
       ActionDefinition(
@@ -8707,16 +8706,13 @@
     prose: "A tethered Synth kneels among broken machines while cold monitors flood a ruined factory with light.",
     actions: [
       ActionDefinition(
-        label: "Harvest Hidden Pattern",
-        id: "535a143b-d2a5-4f00-8e57-483d8f6dc794",
+        label: "Broadcast Stolen Signal",
+        id: "7c4aa242-8a27-4835-8ad0-4abc08b18e60",
         presentation: ActionPresentation(
-          effect_text: "Purge a chosen card and gain a copy of another chosen card in your deck",
-          followup: Followup(
-            title: "{action-label}",
-            subtitle: "First choose a card to erase, then choose a different pattern to copy.",
-          ),
+          effect_text: "Purge {deck_card}. Apply Resonant to every other eligible card in your deck with the same card type.",
+          followup: None,
         ),
-        effect: PurgeAndCopy,
+        effect: PurgeDisclosedAndTransfigureSameType(transfiguration: "Resonant"),
       ),
 
       ActionDefinition(
@@ -9458,23 +9454,23 @@
     prose: "A cloaked warden raises a blue lantern above shadowed ships in a radiant harbor.",
     actions: [
       ActionDefinition(
-        label: "Summon a harbor guard",
-        id: "e7adc30c-f167-41e9-9f88-b3990d429261",
+        label: "Call the Market Fleet",
+        id: "424f9916-1ab1-4b7c-9798-1c2aa4bdf192",
         presentation: ActionPresentation(
-          effect_text: "Draft a Warrior from 4 choices",
-          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+          effect_text: "Add a card market site to this Dreamscape",
+          followup: None,
         ),
-        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+        effect: AddFixedSite(site_type: Shop),
       ),
 
       ActionDefinition(
-        label: "Scan glowing horizons",
-        id: "10f63eba-ac1f-4150-8919-9def8d3ccf8a",
+        label: "Raise the Harbor Writ",
+        id: "0e0d5d1d-5c79-4352-b03a-2abe039680e5",
         presentation: ActionPresentation(
-          effect_text: "Draw 2 additional cards at the start of your next battle",
+          effect_text: "All items in the next shop you visit are free",
           followup: None,
         ),
-        effect: NextBattleOpeningHand(count: 2),
+        effect: FreeNextShop,
       ),
     ],
   ),
@@ -9717,13 +9713,16 @@
       ),
 
       ActionDefinition(
-        label: "Join Armed Escort",
-        id: "f2c32564-7c99-42d8-8dda-477cb48e6e67",
+        label: "Stand Down the Escort",
+        id: "67d8737b-78ba-457f-8e4a-aed72b8dfc40",
         presentation: ActionPresentation(
-          effect_text: "Draft a Warrior from 4 choices",
-          followup: Followup(title: "{action-label}", subtitle: "Choose one offered Warrior."),
+          effect_text: "Purge up to 2 chosen Warrior cards",
+          followup: Followup(
+            title: "{action-label}",
+            subtitle: "Choose up to two Warrior cards to purge.",
+          ),
         ),
-        effect: DraftCard(predicate: Warrior, count: 1, offer_count: 4),
+        effect: PurgeSelected(predicate: Warrior, count: 2),
       ),
     ],
   ),
@@ -9794,16 +9793,13 @@
     prose: "A neon-eyed visitor raises a glowing umbrella as rain and colored fragments orbit a ruined street.",
     actions: [
       ActionDefinition(
-        label: "Gather neon fragments",
-        id: "821fbcd1-95a9-435e-a4bb-4f6571b09769",
+        label: "Rekindle Neon Bazaar",
+        id: "a9335699-7a01-4626-ba0d-84541218845d",
         presentation: ActionPresentation(
-          effect_text: "Take any number of Event cards from 4 choices",
-          followup: Followup(
-            title: "{action-label}",
-            subtitle: "Choose any number of offered Events.",
-          ),
+          effect_text: "Add a Dreamsign Bazaar site to this Dreamscape",
+          followup: None,
         ),
-        effect: TakeCards(predicate: Event, offer_count: 4),
+        effect: AddFixedSite(site_type: DreamsignBazaar),
       ),
 
       ActionDefinition(
@@ -10172,13 +10168,16 @@
       ),
 
       ActionDefinition(
-        label: "Accept Its Nightmare Bargain",
-        id: "e96cec7f-511a-4eae-8522-9c5b2b25bbed",
+        label: "Take the Haunted Candle",
+        id: "a8176e9f-a129-4fc6-846c-1ed06bb5929c",
         presentation: ActionPresentation(
-          effect_text: "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.",
-          followup: None,
+          effect_text: "Gain 2 {nightmare_card} cards. Gain Candle.",
+          followup: Followup(title: "{action-label}", subtitle: "Choose a Dreamsign to replace."),
         ),
-        effect: ReduceCostAllAndGainNightmares(energy_cost_reduction: 1, nightmare_count: 3),
+        effect: GainNightmareAndDreamsign(
+          dreamsign_id: "89c83d7e-5617-49b4-b6cd-214680fe0627",
+          nightmare_count: 2,
+        ),
       ),
     ],
   ),
@@ -10973,16 +10972,21 @@
     prose: "Golden loops suspend one figure while another stands amid a storm of shards.",
     actions: [
       ActionDefinition(
-        label: "Collect Broken Fragments",
-        id: "e008836b-1268-4f60-bec8-25b45004cddd",
+        label: "Bind the Broken Loop",
+        id: "2352e33a-f5a3-461e-ab6d-d1d6eb15c6b9",
         presentation: ActionPresentation(
-          effect_text: "Take any number of Event cards from 4 choices",
+          effect_text: "Gain any number of Event cards from 4 choices. Apply Enduring to each eligible card gained. Gain 2 {nightmare_card} cards.",
           followup: Followup(
             title: "{action-label}",
-            subtitle: "Choose any number of offered cards.",
+            subtitle: "Choose any number of offered Events, including none. You will gain 2 Nightmares.",
           ),
         ),
-        effect: TakeCards(predicate: Event, offer_count: 4),
+        effect: TakeTransfiguredCardsAndGainNightmares(
+          predicate: Event,
+          offer_count: 4,
+          transfiguration: "Enduring",
+          nightmare_count: 2,
+        ),
       ),
 
       ActionDefinition(
@@ -12481,13 +12485,13 @@
     prose: "A solitary runner races toward white light through a tunnel of suspended cyan screens.",
     actions: [
       ActionDefinition(
-        label: "Capture a Screen Echo",
-        id: "c80a360f-9d3b-4bf6-b22d-0588a58e63af",
+        label: "Capture Two Screen Echoes",
+        id: "979618b2-de06-40fa-9910-488dee6b3c24",
         presentation: ActionPresentation(
-          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of",
-          followup: Followup(title: "{action-label}", subtitle: "Choose one projected deck card."),
+          effect_text: "Gain one copy of each of 2 random Character cards in your deck",
+          followup: None,
         ),
-        effect: CopyOfferedDeckCard(offer_count: 4),
+        effect: CopyRandomCards(predicate: Character, count: 2),
       ),
 
       ActionDefinition(
@@ -12963,16 +12967,13 @@
       ),
 
       ActionDefinition(
-        label: "Cast Away a Memory",
-        id: "a311186c-5992-4af4-b982-4bd2eef339a2",
+        label: "Release a Founding Page",
+        id: "94650c5a-98b0-4b19-bfc9-0653d6785cfd",
         presentation: ActionPresentation(
-          effect_text: "Purge a chosen card and gain 20 essence for each ✦ it had",
-          followup: Followup(
-            title: "{action-label}",
-            subtitle: "Choose a card to cast away for 20 essence per ✦.",
-          ),
+          effect_text: "Purge a random starter card",
+          followup: None,
         ),
-        effect: PurgeForEssence(essence_per_spark: 20),
+        effect: PurgeRandomStarterCard,
       ),
     ],
   ),
@@ -13105,13 +13106,13 @@
     prose: "An astronaut studies luminous geometric records cascading across a cavern wall above amber mist.",
     actions: [
       ActionDefinition(
-        label: "Decode Luminous Archive",
-        id: "e5f2e331-7220-4cec-9e4f-eff5f3c1327b",
+        label: "Rewrite Founding Records",
+        id: "e7f0988a-ef85-44d5-a9ec-2e29a66dfd7c",
         presentation: ActionPresentation(
-          effect_text: "Draft an Event from 4 choices",
-          followup: Followup(title: "{action-label}", subtitle: "Choose one recovered Event."),
+          effect_text: "Transfigure all starter cards",
+          followup: None,
         ),
-        effect: DraftCard(predicate: Event, count: 1, offer_count: 4),
+        effect: TransfigureAllStarterCards,
       ),
 
       ActionDefinition(
@@ -13313,13 +13314,13 @@
       ),
 
       ActionDefinition(
-        label: "Carry Ancient Command",
-        id: "b67c6bdf-5017-4352-9958-4c1c6fe17c14",
+        label: "Seek Eternal Aid",
+        id: "fbd70c5d-9c4a-4af7-9ace-41f52ab00976",
         presentation: ActionPresentation(
-          effect_text: "All characters in your deck gain +1✦",
+          effect_text: "Gain a random legendary card",
           followup: None,
         ),
-        effect: IncreaseSparkAll(spark_bonus: 1),
+        effect: GainRandomCards(predicate: Legendary, count: 1),
       ),
     ],
   ),
@@ -13468,13 +13469,17 @@
     prose: "A masked renegade descends burning stairs as sparks and shattered beams erupt through smoke.",
     actions: [
       ActionDefinition(
-        label: "Descend burning stairs",
-        id: "676694a1-81de-4dc8-b9ed-3249e59e1a55",
+        label: "Temper Two in Flame",
+        id: "93eb9f16-366c-4f8e-8fae-c32c980b1a94",
         presentation: ActionPresentation(
-          effect_text: "Draft a ≤2● cost Character from 4 choices",
-          followup: Followup(title: "{action-label}", subtitle: "Choose one offered card."),
+          effect_text: "Apply Kindled to 2 random eligible ≤2● cost Character cards in your deck",
+          followup: None,
         ),
-        effect: DraftCard(predicate: CheapCharacter, count: 1, offer_count: 4),
+        effect: TransfigureFixedRandomCards(
+          predicate: CheapCharacter,
+          count: 2,
+          transfiguration: "Kindled",
+        ),
       ),
 
       ActionDefinition(
@@ -13771,16 +13776,16 @@
     prose: "A solitary girl studies countless keys glowing across a chained cavern wall.",
     actions: [
       ActionDefinition(
-        label: "Test Four Keys",
-        id: "1680c896-8158-4a26-818c-6cbcf7991634",
+        label: "Turn Four Keys",
+        id: "e01fd10a-0e68-4bf4-b0fb-9859ba0d6443",
         presentation: ActionPresentation(
-          effect_text: "Draw 4 cards from your deck and choose one to gain a copy of.",
+          effect_text: "Select 4 random cards from your deck and choose one to purge. Apply Attuned to the other 3 eligible cards, then gain a copy of each.",
           followup: Followup(
             title: "{action-label}",
-            subtitle: "Choose one revealed pattern to copy.",
+            subtitle: "Choose one revealed pattern to discard. The other three become Attuned and are copied.",
           ),
         ),
-        effect: CopyOfferedDeckCard(offer_count: 4),
+        effect: PurgeOneTransfigureAndCopyOthers(offer_count: 4, transfiguration: "Attuned"),
       ),
 
       ActionDefinition(
@@ -13842,13 +13847,13 @@
       ),
 
       ActionDefinition(
-        label: "Focus Mirrorlight Core",
-        id: "8e534371-4c70-4a3f-b233-ddbab1f36122",
+        label: "Cleanse Blight Gate",
+        id: "4d5f2648-caf2-43ee-a07a-178cf3a77bfd",
         presentation: ActionPresentation(
-          effect_text: "All characters in your deck gain +1✦",
+          effect_text: "Add a purge site to this Dreamscape",
           followup: None,
         ),
-        effect: IncreaseSparkAll(spark_bonus: 1),
+        effect: AddFixedSite(site_type: Purge),
       ),
     ],
   ),
@@ -14320,13 +14325,13 @@
       ),
 
       ActionDefinition(
-        label: "Collect blood tithe",
-        id: "2d3e332c-0017-4e62-b174-e6def2476529",
+        label: "Pay the Broker's Price",
+        id: "c884d8d4-2f30-4dff-a59a-1823791c2189",
         presentation: ActionPresentation(
-          effect_text: "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+          effect_text: "Lose half your current essence. The next 3 items you purchase are free.",
           followup: None,
         ),
-        effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
+        effect: LoseHalfEssenceAndFreePurchases(count: 3),
       ),
     ],
   ),

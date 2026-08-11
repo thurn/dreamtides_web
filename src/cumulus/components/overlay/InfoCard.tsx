@@ -153,12 +153,14 @@ const shell: React.CSSProperties = {
 };
 const tHeadline: React.CSSProperties = {
   margin: 0,
+  minWidth: 0,
   fontFamily: token("--font-title"),
   fontSize: "calc(19px * var(--info-card-text-scale, 1))",
   fontWeight: 600,
   lineHeight: 1.18,
   color: token("--text-primary"),
   letterSpacing: "-0.01em",
+  overflowWrap: "anywhere",
 };
 const tEpithet: React.CSSProperties = {
   margin: 0,

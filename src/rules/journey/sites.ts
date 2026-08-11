@@ -36,6 +36,7 @@ import type {
   AugurySiteRuntime,
   JourneyState,
   RuntimeShopSlot,
+  ShopModifiers,
   SiteRuntimeState,
   SiteState,
   TransfigurationType,
@@ -62,6 +63,8 @@ import { SELECTION_RULES_VERSION } from "../../reward-selection";
 export interface SiteOpenResult {
   runtime: SiteRuntimeState;
   remainingDreamsignPool?: string[];
+  /** Updated shop modifier queues when this open consumed an entry. */
+  shopModifiers?: ShopModifiers;
   /** Updated one-use modifier queue when this site consumed an entry. */
   siteOfferModifiers?: readonly TransfiguredSiteOfferModifier[];
 }
@@ -449,6 +452,9 @@ export function openSite(
         ...(result.siteOfferModifiers === undefined
           ? {}
           : { siteOfferModifiers: [...result.siteOfferModifiers] }),
+        ...(result.shopModifiers === undefined
+          ? {}
+          : { shopModifiers: result.shopModifiers }),
       };
     }
     default:

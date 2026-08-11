@@ -742,6 +742,24 @@ export function createSiteContentProvider(
             modifierIndex < 0
               ? undefined
               : journey.siteOfferModifiers[modifierIndex];
+          const freeNextShopModifiers =
+            journey.shopModifiers.freeNextShopModifiers ?? [];
+          const freePurchaseModifierIndex =
+            site.type === "Shop" && freeNextShopModifiers.length > 0 ? 0 : -1;
+          const freePurchaseModifier =
+            freePurchaseModifierIndex < 0
+              ? undefined
+              : freeNextShopModifiers[freePurchaseModifierIndex];
+          if (
+            freePurchaseModifier !== undefined &&
+            (freePurchaseModifier.kind !== "free-next-shop" ||
+              typeof freePurchaseModifier.sourceSiteId !== "string" ||
+              freePurchaseModifier.sourceSiteId.length === 0 ||
+              typeof freePurchaseModifier.sourceActionId !== "string" ||
+              freePurchaseModifier.sourceActionId.length === 0)
+          ) {
+            return null;
+          }
           const runtime: SiteRuntimeState = {
             kind: "shop",
             slots:
@@ -750,6 +768,15 @@ export function createSiteContentProvider(
                 : transfigureShopSlots(baseSlots, content, stream),
             rerollCount: 0,
             remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
+            purchaseHistory: [],
+            ...(freePurchaseModifier === undefined
+              ? {}
+              : {
+                  freePurchaseSource: {
+                    sourceSiteId: freePurchaseModifier.sourceSiteId,
+                    sourceActionId: freePurchaseModifier.sourceActionId,
+                  },
+                }),
             ...(modifier === undefined
               ? {}
               : {
@@ -773,6 +800,16 @@ export function createSiteContentProvider(
                   siteOfferModifiers: journey.siteOfferModifiers.filter(
                     (_modifier, index) => index !== modifierIndex,
                   ),
+                }),
+            ...(freePurchaseModifierIndex < 0
+              ? {}
+              : {
+                  shopModifiers: {
+                    ...journey.shopModifiers,
+                    freeNextShopModifiers: freeNextShopModifiers.filter(
+                      (_modifier, index) => index !== freePurchaseModifierIndex,
+                    ),
+                  },
                 }),
           };
         }

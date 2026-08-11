@@ -47,6 +47,10 @@ function view(): DreamsignBazaarSiteView {
       state: "available",
     },
     purge: null,
+    freePurchaseStatus: {
+      freeNextShopSource: null,
+      freePurchasesRemaining: 0,
+    },
   };
 }
 
@@ -245,6 +249,42 @@ describe("DreamsignBazaarSiteScreen", () => {
         ?.click();
     });
     expect(onPurge).toHaveBeenCalledWith(1);
+
+    act(() => root.unmount());
+  });
+
+  it("announces the counted free-purchase benefit on the responsive shelf", () => {
+    const benefitView = view();
+    benefitView.freePurchaseStatus = {
+      freeNextShopSource: null,
+      freePurchasesRemaining: 3,
+    };
+    benefitView.offers = benefitView.offers.map((offer) => ({
+      ...offer,
+      price: 0,
+      state: offer.state === "purchased" ? offer.state : "available",
+    }));
+    const { container, root } = mount(
+      <DreamsignBazaarSiteScreen
+        view={benefitView}
+        onBuy={vi.fn()}
+        onRestock={vi.fn()}
+        onClose={vi.fn()}
+        onPurge={vi.fn()}
+        onCancelPurge={vi.fn()}
+      />,
+    );
+
+    const region = container.querySelector<HTMLElement>(
+      "[data-dreamsign-bazaar-gallery-region]",
+    );
+    const status = container.querySelector<HTMLElement>(
+      "[data-shop-free-purchase-status]",
+    );
+    expect(region?.dataset.shopFreeSource).toBeUndefined();
+    expect(region?.dataset.shopFreePurchasesRemaining).toBe("3");
+    expect(status?.getAttribute("role")).toBe("status");
+    expect(status?.textContent?.trim()).not.toBe("");
 
     act(() => root.unmount());
   });

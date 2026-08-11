@@ -107,6 +107,8 @@ function makeState(): JourneyState {
     shopModifiers: {
       freeRerolls: 0,
       essenceDiscountPercent: 0,
+      freeNextShopModifiers: [],
+      freePurchaseModifiers: [],
     },
     siteOfferModifiers: [],
     dreamscapeModifiers: [],

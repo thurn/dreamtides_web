@@ -67,6 +67,25 @@ exploration-battle-modifier-announcement =
 exploration-next-battle-label = Next Battle
 # Headline on an Exploration reward announcement that grants Essence.
 exploration-essence-gained-title = Essence Gained
+# Detail below a direct Exploration Essence reward. $essenceAfter is the
+# non-negative shared Essence balance persisted after the reward resolves.
+exploration-essence-current-total = { $essenceAfter } { -essence } total
+# Compact outcome headline after Exploration queues a visit-wide free Card Shop.
+exploration-free-next-shop-title = Next Shop Free
+# Detail beneath the queued free-shop outcome headline. The benefit applies to
+# successful item purchases during one future Card Shop visit.
+exploration-free-next-shop-detail = Every item in your next Card Shop is free.
+# Compact outcome headline after Exploration grants counted free purchases.
+# $freePurchaseCount is the positive initial count persisted by the action.
+exploration-free-purchases-title =
+    { $freePurchaseCount ->
+        [one] { $freePurchaseCount } Free Purchase
+       *[other] { $freePurchaseCount } Free Purchases
+    }
+# Detail beneath the counted free-purchase outcome. The three values are the
+# exact non-negative shared Essence balances and amount spent by the same atomic
+# resolution; the arrows expose the persisted before/after transition directly.
+exploration-free-purchases-detail = { $essenceBefore } → { $essenceAfter } { -essence } · { $essenceSpent } spent
 # Calculation detail for Essence gained by purging a card. $essencePerSpark is
 # a non-negative Essence rate and $spark is the purged card's non-negative
 # Spark value; the total Essence payout is rendered separately.
@@ -84,6 +103,55 @@ exploration-delve-action = Delve
 exploration-card-face-down = Exploration card, face down
 exploration-card-returning-face-down = Exploration card returning face down
 exploration-confirm-choice-action = Confirm Choice
+# Visible heading above Dreamsigns prepared as player-selectable Exploration
+# offers. Each item is a complete UUID-backed Dreamsign object.
+exploration-dreamsign-offered-group-title = Offered Dreamsigns
+# Visible heading above the current player's held Dreamsigns when one must be
+# purged before an Exploration random gain resolves.
+exploration-dreamsign-purge-group-title = Choose One to Purge
+# Visible heading above held Dreamsigns that may leave the collection so an
+# Exploration Dreamsign gain can remain within capacity.
+exploration-dreamsign-replacement-group-title = Choose Replacements
+# Headline shown with the persisted before/after result of an Exploration
+# Dreamsign mutation, after any random identities are committed.
+exploration-dreamsigns-changed-title = Dreamsigns Changed
+# Headline shown while an Exploration compound outcome presents the exact
+# persisted Nightmare cards together with its Dreamsign gain or replacement.
+exploration-nightmare-dreamsign-bundle-title = Nightmares and Dreamsign Gained
+# Headline shown with the exact persisted purge or replacement of starter deck
+# entries after an Exploration action resolves.
+exploration-starter-card-mutation-title = Starter Cards Changed
+# Headline shown with the exact persisted base-to-form mappings after an
+# Exploration action transfigures random or all starter deck entries.
+exploration-starter-card-transfiguration-title = Starter Cards Transfigured
+# Headline shown with exact persisted before-to-after mappings after one
+# Exploration action transfigures multiple ordinary deck entries atomically.
+exploration-card-transfiguration-title = Cards Transfigured
+# Headline shown with exact persisted source-to-replacement mappings after one
+# Exploration action atomically replaces multiple ordinary deck entries.
+exploration-card-replacements-title = Cards Replaced
+# Headline shown with exact persisted before-to-after mappings after one
+# Exploration action changes the effective card type of multiple deck entries.
+exploration-card-type-changes-title = Card Types Changed
+# Headline for the persisted T75 outcome: one disclosed deck entry is purged
+# and every eligible companion with its effective card type is transfigured.
+exploration-compound-same-type-title = Kindred Forms Recast
+# Headline for the persisted T77 outcome: matching deck entries become Fast and
+# the authored number of Nightmare cards enters the deck.
+exploration-compound-fast-nightmares-title = Swiftness at a Price
+# Headline for the persisted T78 outcome: the player's selected offered cards
+# enter in their authored Transfiguration form alongside Nightmare cards.
+exploration-compound-take-transfigured-title = Chosen Forms Awakened
+# Headline for the persisted T80 outcome: one prepared entry is purged, the
+# other prepared entries transfigure, and exact copies enter the deck.
+exploration-compound-purge-copy-title = Three Reflections Remain
+# Section headings within a compound Exploration outcome review. Each section
+# contains complete UUID-backed card objects or before/after pairs.
+exploration-compound-purged-section = Purged
+exploration-compound-transfigured-section = Transfigured
+exploration-compound-fast-section = Made Fast
+exploration-compound-nightmares-section = Nightmares Gained
+exploration-compound-copies-section = Copies Gained
 exploration-followup-choice-purge = Choose a card to purge
 exploration-followup-choice-copy = Choose a card to copy
 exploration-empty-card-state = No eligible cards are available.
@@ -102,6 +170,9 @@ exploration-next-battle-card-cost-reduction = Next Battle · Cards cost { $energ
 exploration-site-offer-modifier-title = Transfigured Cards
 # Compact detail naming where that reward takes effect.
 exploration-site-offer-modifier-detail = Next Draft or Shop
+# Visible reward announcement after an Exploration action adds one persisted
+# site to the current Dreamscape.
+exploration-site-insertion-title = Site Added
 # Empty state in that picker when the current player owns no cards eligible for
 # the wager.
 gamble-card-picker-empty-state = No eligible cards remain.
@@ -247,6 +318,25 @@ augury-error-visions-shifted = The visions shifted. Choose again.
 augury-error-path-closed = That path is closed. Choose again.
 card-shop-leave-action = Leave card shop
 dreamsign-bazaar-leave-action = Leave Dreamsign Bazaar
+# Persistent live status above a Card Shop shelf when its T56 visit-wide
+# Exploration benefit is bound to this exact visit.
+shop-free-next-shop-status = Exploration boon: every item in this shop is free.
+# Persistent live status above a Shop or Dreamsign Bazaar shelf when T82 free
+# purchases are queued. $remainingCount is the positive total across all FIFO
+# counters.
+shop-free-purchases-status =
+    { $remainingCount ->
+        [one] Exploration boon: { $remainingCount } free purchase remains.
+       *[other] Exploration boon: { $remainingCount } free purchases remain.
+    }
+# Persistent live status above a Card Shop shelf when T56 and T82 overlap.
+# $remainingCount is the positive total of successful T82 purchases remaining;
+# those counters are consumed even while T56 also makes the visit free.
+shop-overlapping-free-purchase-status =
+    { $remainingCount ->
+        [one] Exploration boons: every item in this shop is free, with { $remainingCount } free purchase remaining.
+       *[other] Exploration boons: every item in this shop is free, with { $remainingCount } free purchases remaining.
+    }
 purge-site-decline-action = Decline
 dreamsign-bazaar-replacement-full = Your collection is full at { $count } Dreamsigns.
 dreamsign-bazaar-replacement-cancel = Cancel
@@ -255,6 +345,10 @@ dreamsign-bazaar-replacement-cancel = Cancel
 # authored effect-text fragments; the complete sentence and inserted noun stay
 # together here so the adapter never supplies English grammar.
 exploration-effect-missing-deck-card = { $before }an eligible card{ $after }
+# Exploration effect fallback that replaces the authored {starter_card} slot
+# when its signed target is unavailable. $before and $after are opaque authored
+# effect-text fragments; the complete sentence stays together in Fluent.
+exploration-effect-missing-starter-card = { $before }a Starter card{ $after }
 # Complete site disclosure appended after an authored Exploration effect.
 # $siteType is an opaque configured site-type name.
 exploration-offered-site-disclosure = { $siteType }.

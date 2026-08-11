@@ -32,6 +32,7 @@ import {
   changeJourneyEssence,
   commitPreparedDraftCardPickInJourneyState,
   completeJourneySite,
+  insertPreparedSiteInJourneyState,
   nextDeckEntryId,
   pickDraftCardInJourneyState,
   prepareDraftCardPickInJourneyState,
@@ -143,6 +144,40 @@ beforeEach(() => {
 });
 
 describe("journey state actions", () => {
+  it("commits a prepared append only against the exact current sibling order", () => {
+    const state: JourneyState = {
+      ...createDefaultState(),
+      currentDreamscape: "dreamscape-1",
+      atlas: makeAtlas(),
+    };
+    const site = {
+      id: "site-exploration-source-action",
+      type: "Shop" as const,
+      isEnhanced: false,
+      isVisited: false,
+    };
+    const prepared = {
+      targetNodeId: "dreamscape-1",
+      insertionIndex: 2,
+      siblingSiteIdsBefore: ["site-1", "site-2"],
+      site,
+    };
+
+    const inserted = insertPreparedSiteInJourneyState(state, prepared);
+    if (inserted === null) throw new Error("Expected prepared site insertion");
+    expect(inserted.atlas.nodes["dreamscape-1"]?.sites).toEqual([
+      ...(makeAtlas().nodes["dreamscape-1"]?.sites ?? []),
+      site,
+    ]);
+    expect(
+      insertPreparedSiteInJourneyState(state, {
+        ...prepared,
+        siblingSiteIdsBefore: ["site-2", "site-1"],
+      }),
+    ).toBeNull();
+    expect(insertPreparedSiteInJourneyState(inserted, prepared)).toBeNull();
+  });
+
   it("derives the next deck entry id from the high-water deck id", () => {
     expect(
       nextDeckEntryId([

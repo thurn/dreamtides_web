@@ -12,6 +12,10 @@ import {
   resolveDreamsignBazaarGuide,
 } from "./dreamsign-bazaar-view-model";
 import { useGuideDialogue } from "./guide-dialogue-view-model";
+import {
+  buildShopPurchaseLogs,
+  buildShopSiteEntryLog,
+} from "./shop-purchase-logging-view-model";
 
 export function DreamsignBazaarSiteScreenAdapter({
   siteId,
@@ -70,8 +74,9 @@ export function DreamsignBazaarSiteScreenAdapter({
       mutations.ensureShopRuntime(site);
   }, [mutations, runtime, site]);
   useEffect(() => {
-    if (site === null || view === null) return;
+    if (site === null || shopRuntime === null || view === null) return;
     logEventOnce(`dreamsign-bazaar:${site.id}:site-entered`, "site_entered", {
+      siteId: site.id,
       siteType: site.type,
       isEnhanced: site.isEnhanced,
       essence: state.essence,
@@ -80,8 +85,33 @@ export function DreamsignBazaarSiteScreenAdapter({
       ),
       offerPrices: view.offers.map((offer) => offer.price),
       restockPrice: view.restock.price,
+      ...buildShopSiteEntryLog(
+        shopRuntime,
+        state.shopModifiers,
+        journeyContent.cardDatabase,
+      ),
     });
-  }, [site, state.essence, view]);
+  }, [
+    journeyContent.cardDatabase,
+    shopRuntime,
+    site,
+    state.essence,
+    state.shopModifiers,
+    view,
+  ]);
+  useEffect(() => {
+    if (site === null || shopRuntime === null) return;
+    buildShopPurchaseLogs(
+      shopRuntime.purchaseHistory ?? [],
+      journeyContent.cardDatabase,
+    ).forEach((purchase) => {
+      logEventOnce(
+        `shop:${site.id}:purchase:${String(purchase.eventSeq)}`,
+        "shop_item_purchased",
+        { siteType: site.type, ...purchase },
+      );
+    });
+  }, [journeyContent.cardDatabase, shopRuntime, site]);
   useEffect(() => {
     if (guide === null || site === null) return;
     logEventOnce(

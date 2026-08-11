@@ -32,8 +32,8 @@ use crate::models::dreamwell::{
     self, ArtCrop, DeckTier, DreamwellCardDefinition, DreamwellCatalog,
 };
 use crate::models::exploration::{
-    ActionDefinition, ActionEffect, ActionId, ActionPresentation, DeckTarget, EffectKind,
-    ExplorationCatalog, Followup, Predicate,
+    ActionDefinition, ActionEffect, ActionId, ActionPresentation, CardTypeTarget, DeckTarget,
+    EffectKind, ExplorationCatalog, FixedSiteType, Followup, Predicate,
 };
 use crate::models::figments::{
     ArtCrop as FigmentArtCrop, CharacterType as FigmentCharacterType, FigmentBehavior,
@@ -2385,6 +2385,18 @@ fn edit_exploration(
     let original: ExplorationCatalog = ron::from_str(&original_text)
         .context("MALFORMED_SOURCE: staged Exploration RON is invalid")?;
     reject_duplicate_exploration_ids(&original)?;
+    let dreamsigns_dataset = manifest.dataset("dreamsigns")?;
+    let dreamsigns_text = fs::read_to_string(staging_root.join(&dreamsigns_dataset.source))?;
+    let dreamsigns: Vec<DreamsignDefinition> = ron::from_str(&dreamsigns_text)
+        .context("MALFORMED_SOURCE: staged Dreamsign RON is invalid")?;
+    dreamsigns::validate_definitions(&dreamsigns)
+        .context("MALFORMED_SOURCE: staged Dreamsign catalog is invalid")?;
+    let dreamsign_ids = dreamsigns
+        .into_iter()
+        .map(|dreamsign| dreamsign.id)
+        .collect::<BTreeSet<_>>();
+    validate_exploration_dreamsign_references(&original, &dreamsign_ids)
+        .context("MALFORMED_SOURCE: staged Exploration references are invalid")?;
     let mut catalog = original.clone();
     let mut source_text = original_text.clone();
     for operation in operations {
@@ -2410,6 +2422,8 @@ fn edit_exploration(
         }
     }
     reject_duplicate_exploration_ids(&catalog)?;
+    validate_exploration_dreamsign_references(&catalog, &dreamsign_ids)
+        .context("INVALID_EDIT: Exploration edit has invalid references")?;
     let changed = catalog != original;
     if changed {
         verify_round_trip::<ExplorationCatalog>(&source_text, &catalog)?;
@@ -2568,6 +2582,37 @@ fn reject_duplicate_exploration_ids(catalog: &ExplorationCatalog) -> Result<()> 
     Ok(())
 }
 
+fn validate_exploration_dreamsign_references(
+    catalog: &ExplorationCatalog,
+    known_dreamsign_ids: &BTreeSet<DreamsignId>,
+) -> Result<()> {
+    for encounter in catalog {
+        for action in &encounter.actions {
+            let dreamsign_id = match &action.effect {
+                ActionEffect::GainDreamsign { dreamsign_id }
+                | ActionEffect::GainNightmareAndDreamsign { dreamsign_id, .. } => dreamsign_id,
+                _ => continue,
+            };
+            let parsed = parse_dreamsign_reference(dreamsign_id)?;
+            if !known_dreamsign_ids.contains(&parsed) {
+                bail!(
+                    "RECORD_NOT_FOUND: Exploration action {} references unknown Dreamsign UUID {}",
+                    action.id,
+                    dreamsign_id
+                );
+            }
+        }
+    }
+    Ok(())
+}
+
+fn parse_dreamsign_reference(value: &str) -> Result<DreamsignId> {
+    let literal = ron::to_string(value)?;
+    ron::from_str(&literal).with_context(|| {
+        format!("INVALID_EDIT: Dreamsign reference {value} must be a canonical UUIDv4")
+    })
+}
+
 fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
     let object = value
         .as_object()
@@ -2595,12 +2640,35 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
             count: optional_positive_int(object, "count")?,
         },
         EffectKind::TransfigureSelected => ActionEffect::TransfigureSelected {
+            predicate: optional_predicate(object, "predicate")?,
             count: positive_int(object, "count")?,
+        },
+        EffectKind::TransfigureRandomCards => ActionEffect::TransfigureRandomCards {
+            predicate: json_predicate(object, "predicate")?,
+            count: positive_int(object, "count")?,
+        },
+        EffectKind::TransfigureFixedRandomCards => ActionEffect::TransfigureFixedRandomCards {
+            predicate: json_predicate(object, "predicate")?,
+            count: positive_int(object, "count")?,
+            transfiguration: required_json_string(object, "transfiguration")?,
         },
         EffectKind::PurgeSelected => ActionEffect::PurgeSelected {
             predicate: optional_predicate(object, "predicate")?,
             count: optional_positive_int(object, "count")?,
         },
+        EffectKind::PurgeStarterCard => ActionEffect::PurgeStarterCard,
+        EffectKind::PurgeRandomStarterCard => ActionEffect::PurgeRandomStarterCard,
+        EffectKind::PurgeRandomStarterAndGainCard => ActionEffect::PurgeRandomStarterAndGainCard {
+            predicate: json_predicate(object, "predicate")?,
+        },
+        EffectKind::ReplaceAllStarterCards => ActionEffect::ReplaceAllStarterCards {
+            predicate: json_predicate(object, "predicate")?,
+        },
+        EffectKind::TransfigureRandomStarterCards => ActionEffect::TransfigureRandomStarterCards {
+            count: positive_int(object, "count")?,
+        },
+        EffectKind::TransfigureAllStarterCards => ActionEffect::TransfigureAllStarterCards,
+        EffectKind::TransfigureAllCards => ActionEffect::TransfigureAllCards,
         EffectKind::GainRandomCards => ActionEffect::GainRandomCards {
             predicate: json_predicate(object, "predicate")?,
             count: positive_int(object, "count")?,
@@ -2615,6 +2683,14 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
             subtype: required_json_string(object, "subtype")?,
             target: json_deck_target(object)?,
         },
+        EffectKind::ChangeCardTypeSelected => ActionEffect::ChangeCardTypeSelected {
+            card_type: json_card_type_target(object)?,
+            target: json_deck_target(object)?,
+        },
+        EffectKind::ChangeRandomCardType => ActionEffect::ChangeRandomCardType {
+            count: positive_int(object, "count")?,
+            card_type: json_card_type_target(object)?,
+        },
         EffectKind::ChangeSubtypeAll => ActionEffect::ChangeSubtypeAll {
             subtype_options: string_array(object, "subtypeOptions")?,
         },
@@ -2622,12 +2698,37 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
             card_id: required_json_string(object, "cardId")?,
         },
         EffectKind::GainDreamsign => ActionEffect::GainDreamsign {
-            dreamsign_id: required_json_string(object, "dreamsignId")?,
+            dreamsign_id: required_dreamsign_reference(object, "dreamsignId")?,
         },
+        EffectKind::GainNightmareAndDreamsign => ActionEffect::GainNightmareAndDreamsign {
+            dreamsign_id: required_dreamsign_reference(object, "dreamsignId")?,
+            nightmare_count: positive_int(object, "nightmareCount")?,
+        },
+        EffectKind::GainNightmareAndOfferedDreamsign => {
+            ActionEffect::GainNightmareAndOfferedDreamsign {
+                offer_count: positive_int(object, "offerCount")?,
+                nightmare_count: positive_int(object, "nightmareCount")?,
+            }
+        }
         EffectKind::GainEssencePerCard => ActionEffect::GainEssencePerCard {
             predicate: json_predicate(object, "predicate")?,
             essence_per_card: positive_int(object, "essencePerCard")?,
         },
+        EffectKind::GainEssence => ActionEffect::GainEssence {
+            essence: positive_int(object, "essence")?,
+        },
+        EffectKind::GainRandomEssence => {
+            let minimum_essence = positive_int(object, "minimumEssence")?;
+            let maximum_essence = positive_int(object, "maximumEssence")?;
+            if minimum_essence > maximum_essence {
+                bail!("INVALID_EDIT: minimumEssence must not exceed maximumEssence");
+            }
+            ActionEffect::GainRandomEssence {
+                minimum_essence,
+                maximum_essence,
+            }
+        }
+        EffectKind::DoubleEssence => ActionEffect::DoubleEssence,
         EffectKind::ChoosePack => ActionEffect::ChoosePack {
             predicate: json_predicate(object, "predicate")?,
             pack_count: positive_int(object, "packCount")?,
@@ -2643,6 +2744,12 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
             }
         }
         EffectKind::MakeFastAll => ActionEffect::MakeFastAll,
+        EffectKind::MakePredicateFastAndGainNightmares => {
+            ActionEffect::MakePredicateFastAndGainNightmares {
+                predicate: json_predicate(object, "predicate")?,
+                nightmare_count: positive_int(object, "nightmareCount")?,
+            }
+        }
         EffectKind::ReduceCostAllAndGainNightmares => {
             ActionEffect::ReduceCostAllAndGainNightmares {
                 energy_cost_reduction: positive_int(object, "energyCostReduction")?,
@@ -2650,26 +2757,60 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
             }
         }
         EffectKind::PurgeAndCopy => ActionEffect::PurgeAndCopy,
+        EffectKind::PurgeOneTransfigureAndCopyOthers => {
+            let offer_count = positive_int(object, "offerCount")?;
+            if offer_count != 4 {
+                bail!("INVALID_EDIT: offerCount must be exactly 4");
+            }
+            ActionEffect::PurgeOneTransfigureAndCopyOthers {
+                offer_count,
+                transfiguration: required_json_string(object, "transfiguration")?,
+            }
+        }
         EffectKind::TransfigureFixedSelected => ActionEffect::TransfigureFixedSelected {
             predicate: optional_predicate(object, "predicate")?,
             transfiguration: required_json_string(object, "transfiguration")?,
             target: json_deck_target(object)?,
+            count: optional_positive_int(object, "count")?,
         },
         EffectKind::TransfigureAllForEssence => ActionEffect::TransfigureAllForEssence {
             essence: positive_int(object, "essence")?,
             predicate: json_predicate(object, "predicate")?,
             transfiguration: required_json_string(object, "transfiguration")?,
         },
+        EffectKind::PurgeDisclosedAndTransfigureSameType => {
+            ActionEffect::PurgeDisclosedAndTransfigureSameType {
+                transfiguration: required_json_string(object, "transfiguration")?,
+            }
+        }
         EffectKind::GainRandomDreamsign => ActionEffect::GainRandomDreamsign,
         EffectKind::PurgeDreamsignForEssence => ActionEffect::PurgeDreamsignForEssence {
             essence: positive_int(object, "essence")?,
         },
+        EffectKind::GainOfferedDreamsign => ActionEffect::GainOfferedDreamsign {
+            offer_count: positive_int(object, "offerCount")?,
+        },
+        EffectKind::ReplaceSelectedDreamsignWithOffered => {
+            ActionEffect::ReplaceSelectedDreamsignWithOffered {
+                offer_count: positive_int(object, "offerCount")?,
+            }
+        }
+        EffectKind::ReplaceAllDreamsignsRandom => ActionEffect::ReplaceAllDreamsignsRandom,
+        EffectKind::PurgeSelectedDreamsignAndGainRandom => {
+            ActionEffect::PurgeSelectedDreamsignAndGainRandom {
+                count: positive_int(object, "count")?,
+            }
+        }
         EffectKind::CopySelectedCard => ActionEffect::CopySelectedCard {
             predicate: optional_predicate(object, "predicate")?,
             count: positive_int(object, "count")?,
             target: json_deck_target(object)?,
         },
         EffectKind::CopySelectedCards => ActionEffect::CopySelectedCards {
+            count: positive_int(object, "count")?,
+        },
+        EffectKind::CopyRandomCards => ActionEffect::CopyRandomCards {
+            predicate: json_predicate(object, "predicate")?,
             count: positive_int(object, "count")?,
         },
         EffectKind::CopyOfferedDeckCard => ActionEffect::CopyOfferedDeckCard {
@@ -2692,11 +2833,28 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
             predicate: json_predicate(object, "predicate")?,
             offer_count: positive_int(object, "offerCount")?,
         },
+        EffectKind::TakeTransfiguredCardsAndGainNightmares => {
+            let offer_count = positive_int(object, "offerCount")?;
+            if offer_count != 4 {
+                bail!("INVALID_EDIT: offerCount must be exactly 4");
+            }
+            ActionEffect::TakeTransfiguredCardsAndGainNightmares {
+                predicate: json_predicate(object, "predicate")?,
+                offer_count,
+                transfiguration: required_json_string(object, "transfiguration")?,
+                nightmare_count: positive_int(object, "nightmareCount")?,
+            }
+        }
         EffectKind::ReplaceSelectedWithCard => ActionEffect::ReplaceSelectedWithCard {
+            card_id: required_json_string(object, "cardId")?,
+        },
+        EffectKind::ReplaceRandomWithCard => ActionEffect::ReplaceRandomWithCard {
+            predicate: json_predicate(object, "predicate")?,
             card_id: required_json_string(object, "cardId")?,
         },
         EffectKind::ReplaceSelected => ActionEffect::ReplaceSelected {
             predicate: json_predicate(object, "predicate")?,
+            count: optional_positive_int(object, "count")?,
         },
         EffectKind::GainNightmareAndCard => ActionEffect::GainNightmareAndCard {
             card_id: required_json_string(object, "cardId")?,
@@ -2710,8 +2868,42 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
         EffectKind::PurgeForEssence => ActionEffect::PurgeForEssence {
             essence_per_spark: positive_int(object, "essencePerSpark")?,
         },
+        EffectKind::AddFixedSite => ActionEffect::AddFixedSite {
+            site_type: json_fixed_site_type(object)?,
+        },
+        EffectKind::ChooseSiteType => ActionEffect::ChooseSiteType {
+            offer_count: positive_int(object, "offerCount")?,
+        },
         EffectKind::AddSite => ActionEffect::AddSite,
+        EffectKind::FreeNextShop => ActionEffect::FreeNextShop,
+        EffectKind::LoseHalfEssenceAndFreePurchases => {
+            ActionEffect::LoseHalfEssenceAndFreePurchases {
+                count: positive_int(object, "count")?,
+            }
+        }
     };
+    if matches!(
+        &effect,
+        ActionEffect::TransfigureSelected {
+            predicate: None,
+            count,
+        } if *count > 1
+    ) {
+        bail!("INVALID_EDIT: transfigure-selected requires predicate when count exceeds one");
+    }
+    if matches!(
+        &effect,
+        ActionEffect::TransfigureFixedSelected {
+            predicate,
+            target,
+            count: Some(count),
+            ..
+        } if *count > 1 && (predicate.is_none() || *target != DeckTarget::Chosen)
+    ) {
+        bail!(
+            "INVALID_EDIT: transfigure-fixed-selected with count greater than one requires a chosen target and predicate"
+        );
+    }
     let followup_title = optional_json_string(object, "followupTitle")?;
     let followup_subtitle = optional_json_string(object, "followupSubtitle")?;
     if followup_title.is_some() != followup_subtitle.is_some() {
@@ -2750,41 +2942,80 @@ fn validate_action_fields(
     ]);
     let variant: &[&str] = match kind {
         EffectKind::GainOfferedCard => &["predicate", "count"],
-        EffectKind::TransfigureSelected => &["count"],
+        EffectKind::TransfigureSelected => &["predicate", "count"],
+        EffectKind::TransfigureRandomCards => &["predicate", "count"],
+        EffectKind::TransfigureFixedRandomCards => &["predicate", "count", "transfiguration"],
         EffectKind::PurgeSelected => &["predicate", "count"],
+        EffectKind::TransfigureRandomStarterCards => &["count"],
+        EffectKind::PurgeRandomStarterAndGainCard | EffectKind::ReplaceAllStarterCards => {
+            &["predicate"]
+        }
         EffectKind::GainRandomCards => &["predicate", "count"],
         EffectKind::DraftCard => &["predicate", "count", "offerCount"],
         EffectKind::ChangeSubtypeSelected => &["predicate", "subtype", "deckTarget"],
+        EffectKind::ChangeCardTypeSelected => &["cardType", "deckTarget"],
+        EffectKind::ChangeRandomCardType => &["count", "cardType"],
         EffectKind::ChangeSubtypeAll => &["subtypeOptions"],
         EffectKind::GainCard => &["cardId"],
         EffectKind::GainDreamsign => &["dreamsignId"],
+        EffectKind::GainNightmareAndDreamsign => &["dreamsignId", "nightmareCount"],
+        EffectKind::GainNightmareAndOfferedDreamsign => &["offerCount", "nightmareCount"],
         EffectKind::GainEssencePerCard => &["predicate", "essencePerCard"],
+        EffectKind::GainEssence => &["essence"],
+        EffectKind::GainRandomEssence => &["minimumEssence", "maximumEssence"],
         EffectKind::ChoosePack => &["predicate", "packCount", "packSize"],
         EffectKind::IncreaseSparkAll => &["sparkBonus"],
         EffectKind::PurgeRandomSubtypeAndIncreaseSpark => &["subtype", "sparkBonus"],
         EffectKind::ReduceCostAllAndGainNightmares => &["energyCostReduction", "nightmareCount"],
-        EffectKind::TransfigureFixedSelected => &["predicate", "transfiguration", "deckTarget"],
+        EffectKind::TransfigureFixedSelected => {
+            &["predicate", "count", "transfiguration", "deckTarget"]
+        }
         EffectKind::TransfigureAllForEssence => &["essence", "predicate", "transfiguration"],
+        EffectKind::PurgeDisclosedAndTransfigureSameType => &["transfiguration"],
         EffectKind::PurgeDreamsignForEssence => &["essence"],
+        EffectKind::GainOfferedDreamsign | EffectKind::ReplaceSelectedDreamsignWithOffered => {
+            &["offerCount"]
+        }
+        EffectKind::PurgeSelectedDreamsignAndGainRandom => &["count"],
         EffectKind::CopySelectedCard => &["predicate", "count", "deckTarget"],
         EffectKind::CopySelectedCards => &["count"],
+        EffectKind::CopyRandomCards => &["predicate", "count"],
         EffectKind::CopyOfferedDeckCard => &["offerCount"],
         EffectKind::NextBattleOpeningHand => &["count"],
         EffectKind::NextBattleStartingEnergy => &["count"],
         EffectKind::ChooseDreamAvatar => &["offerCount"],
         EffectKind::TakeCards => &["predicate", "offerCount"],
+        EffectKind::TakeTransfiguredCardsAndGainNightmares => &[
+            "predicate",
+            "offerCount",
+            "transfiguration",
+            "nightmareCount",
+        ],
         EffectKind::ReplaceSelectedWithCard => &["cardId"],
-        EffectKind::ReplaceSelected => &["predicate"],
+        EffectKind::ReplaceRandomWithCard => &["predicate", "cardId"],
+        EffectKind::ReplaceSelected => &["predicate", "count"],
         EffectKind::GainNightmareAndCard => &["cardId", "nightmareCount"],
         EffectKind::TransfiguredCardDraft => &["predicate", "offerCount"],
         EffectKind::PurgeForEssence => &["essencePerSpark"],
+        EffectKind::AddFixedSite => &["siteType"],
+        EffectKind::ChooseSiteType => &["offerCount"],
+        EffectKind::LoseHalfEssenceAndFreePurchases => &["count"],
+        EffectKind::MakePredicateFastAndGainNightmares => &["predicate", "nightmareCount"],
+        EffectKind::PurgeOneTransfigureAndCopyOthers => &["offerCount", "transfiguration"],
         EffectKind::MakeFastAll
+        | EffectKind::DoubleEssence
         | EffectKind::PurgeAndCopy
+        | EffectKind::PurgeStarterCard
+        | EffectKind::PurgeRandomStarterCard
+        | EffectKind::TransfigureAllStarterCards
+        | EffectKind::TransfigureAllCards
         | EffectKind::GainRandomDreamsign
+        | EffectKind::ReplaceAllDreamsignsRandom
         | EffectKind::NextBattleSmallerHandAndCostDiscount
         | EffectKind::PurgeDuplicatesAndGrantReclaim
         | EffectKind::TransfigureNextDraftOrShop
-        | EffectKind::AddSite => &[],
+        | EffectKind::AddSite
+        | EffectKind::FreeNextShop => &[],
     };
     allowed.extend(variant.iter().copied());
     for field in object.keys() {
@@ -2804,6 +3035,15 @@ fn required_json_string(object: &serde_json::Map<String, JsonValue>, key: &str) 
         .and_then(JsonValue::as_str)
         .map(str::to_owned)
         .with_context(|| format!("INVALID_EDIT: Exploration action requires string field {key}"))
+}
+
+fn required_dreamsign_reference(
+    object: &serde_json::Map<String, JsonValue>,
+    key: &str,
+) -> Result<String> {
+    let value = required_json_string(object, key)?;
+    parse_dreamsign_reference(&value)?;
+    Ok(value)
 }
 
 fn optional_json_string(
@@ -2865,6 +3105,18 @@ fn json_deck_target(object: &serde_json::Map<String, JsonValue>) -> Result<DeckT
     let value = required_json_string(object, "deckTarget")?;
     DeckTarget::from_compat(&value)
         .with_context(|| format!("INVALID_EDIT: unknown deck target {value}"))
+}
+
+fn json_card_type_target(object: &serde_json::Map<String, JsonValue>) -> Result<CardTypeTarget> {
+    let value = required_json_string(object, "cardType")?;
+    CardTypeTarget::from_compat(&value)
+        .with_context(|| format!("INVALID_EDIT: unknown card type {value}"))
+}
+
+fn json_fixed_site_type(object: &serde_json::Map<String, JsonValue>) -> Result<FixedSiteType> {
+    let value = required_json_string(object, "siteType")?;
+    FixedSiteType::from_compat(&value)
+        .with_context(|| format!("INVALID_EDIT: unknown fixed site type {value}"))
 }
 
 fn string_array(object: &serde_json::Map<String, JsonValue>, key: &str) -> Result<Vec<String>> {
@@ -4889,7 +5141,19 @@ DreamwellCatalog(
         let fields: &[(&str, JsonValue)] = match kind {
             EffectKind::GainOfferedCard => &[("predicate", json!("character"))],
             EffectKind::TransfigureSelected => &[("count", json!(1))],
+            EffectKind::TransfigureRandomCards => {
+                &[("predicate", json!("event")), ("count", json!(2))]
+            }
+            EffectKind::TransfigureFixedRandomCards => &[
+                ("predicate", json!("event")),
+                ("count", json!(2)),
+                ("transfiguration", json!("Kindled")),
+            ],
             EffectKind::PurgeSelected => &[],
+            EffectKind::TransfigureRandomStarterCards => &[("count", json!(2))],
+            EffectKind::PurgeRandomStarterAndGainCard | EffectKind::ReplaceAllStarterCards => {
+                &[("predicate", json!("character"))]
+            }
             EffectKind::GainRandomCards => &[("predicate", json!("event")), ("count", json!(1))],
             EffectKind::DraftCard => &[
                 ("predicate", json!("character")),
@@ -4899,14 +5163,33 @@ DreamwellCatalog(
             EffectKind::ChangeSubtypeSelected => {
                 &[("subtype", json!("Guide")), ("deckTarget", json!("chosen"))]
             }
+            EffectKind::ChangeCardTypeSelected => &[
+                ("cardType", json!("Event")),
+                ("deckTarget", json!("offered")),
+            ],
+            EffectKind::ChangeRandomCardType => {
+                &[("count", json!(2)), ("cardType", json!("Character"))]
+            }
             EffectKind::ChangeSubtypeAll => &[("subtypeOptions", json!(["Guide", "Warrior"]))],
             EffectKind::GainCard => &[("cardId", json!("00000000-0000-4000-8000-000000000001"))],
             EffectKind::GainDreamsign => {
                 &[("dreamsignId", json!("00000000-0000-4000-8000-000000000002"))]
             }
+            EffectKind::GainNightmareAndDreamsign => &[
+                ("dreamsignId", json!("00000000-0000-4000-8000-000000000002")),
+                ("nightmareCount", json!(1)),
+            ],
+            EffectKind::GainNightmareAndOfferedDreamsign => {
+                &[("offerCount", json!(3)), ("nightmareCount", json!(1))]
+            }
             EffectKind::GainEssencePerCard => &[
                 ("predicate", json!("character")),
                 ("essencePerCard", json!(1)),
+            ],
+            EffectKind::GainEssence => &[("essence", json!(100))],
+            EffectKind::GainRandomEssence => &[
+                ("minimumEssence", json!(50)),
+                ("maximumEssence", json!(150)),
             ],
             EffectKind::ChoosePack => &[
                 ("predicate", json!("character")),
@@ -4921,6 +5204,13 @@ DreamwellCatalog(
                 ("energyCostReduction", json!(1)),
                 ("nightmareCount", json!(1)),
             ],
+            EffectKind::MakePredicateFastAndGainNightmares => {
+                &[("predicate", json!("event")), ("nightmareCount", json!(2))]
+            }
+            EffectKind::PurgeOneTransfigureAndCopyOthers => &[
+                ("offerCount", json!(4)),
+                ("transfiguration", json!("Kindled")),
+            ],
             EffectKind::TransfigureFixedSelected => &[
                 ("transfiguration", json!("DoubledSpark")),
                 ("deckTarget", json!("chosen")),
@@ -4930,17 +5220,35 @@ DreamwellCatalog(
                 ("predicate", json!("event")),
                 ("transfiguration", json!("Inspired")),
             ],
+            EffectKind::PurgeDisclosedAndTransfigureSameType => {
+                &[("transfiguration", json!("Inspired"))]
+            }
             EffectKind::PurgeDreamsignForEssence => &[("essence", json!(5))],
+            EffectKind::GainOfferedDreamsign | EffectKind::ReplaceSelectedDreamsignWithOffered => {
+                &[("offerCount", json!(3))]
+            }
+            EffectKind::PurgeSelectedDreamsignAndGainRandom => &[("count", json!(1))],
             EffectKind::CopySelectedCard => &[("count", json!(1)), ("deckTarget", json!("chosen"))],
             EffectKind::CopySelectedCards => &[("count", json!(2))],
+            EffectKind::CopyRandomCards => &[("predicate", json!("event")), ("count", json!(2))],
             EffectKind::CopyOfferedDeckCard => &[("offerCount", json!(3))],
             EffectKind::NextBattleOpeningHand => &[("count", json!(1))],
             EffectKind::NextBattleStartingEnergy => &[("count", json!(1))],
             EffectKind::ChooseDreamAvatar => &[("offerCount", json!(2))],
             EffectKind::TakeCards => &[("predicate", json!("character")), ("offerCount", json!(2))],
+            EffectKind::TakeTransfiguredCardsAndGainNightmares => &[
+                ("predicate", json!("character")),
+                ("offerCount", json!(4)),
+                ("transfiguration", json!("Inspired")),
+                ("nightmareCount", json!(2)),
+            ],
             EffectKind::ReplaceSelectedWithCard => {
                 &[("cardId", json!("00000000-0000-4000-8000-000000000001"))]
             }
+            EffectKind::ReplaceRandomWithCard => &[
+                ("predicate", json!("legendary")),
+                ("cardId", json!("00000000-0000-4000-8000-000000000001")),
+            ],
             EffectKind::ReplaceSelected => &[("predicate", json!("event"))],
             EffectKind::GainNightmareAndCard => &[
                 ("cardId", json!("00000000-0000-4000-8000-000000000001")),
@@ -4950,13 +5258,23 @@ DreamwellCatalog(
                 &[("predicate", json!("character")), ("offerCount", json!(2))]
             }
             EffectKind::PurgeForEssence => &[("essencePerSpark", json!(2))],
+            EffectKind::AddFixedSite => &[("siteType", json!("Duplication"))],
+            EffectKind::ChooseSiteType => &[("offerCount", json!(3))],
+            EffectKind::LoseHalfEssenceAndFreePurchases => &[("count", json!(3))],
             EffectKind::MakeFastAll
+            | EffectKind::DoubleEssence
             | EffectKind::PurgeAndCopy
+            | EffectKind::PurgeStarterCard
+            | EffectKind::PurgeRandomStarterCard
+            | EffectKind::TransfigureAllStarterCards
+            | EffectKind::TransfigureAllCards
             | EffectKind::GainRandomDreamsign
+            | EffectKind::ReplaceAllDreamsignsRandom
             | EffectKind::NextBattleSmallerHandAndCostDiscount
             | EffectKind::PurgeDuplicatesAndGrantReclaim
             | EffectKind::TransfigureNextDraftOrShop
-            | EffectKind::AddSite => &[],
+            | EffectKind::AddSite
+            | EffectKind::FreeNextShop => &[],
         };
         value.extend(
             fields
@@ -4982,6 +5300,1270 @@ DreamwellCatalog(
                 .unwrap_err()
                 .to_string()
                 .contains("does not apply")
+        );
+    }
+
+    #[test]
+    fn wave8_editor_maps_camel_case_fields_and_enforces_fixed_offer_counts() {
+        assert!(matches!(
+            action_from_compat(action(EffectKind::TransfigureAllCards))
+                .unwrap()
+                .effect,
+            ActionEffect::TransfigureAllCards
+        ));
+        assert!(matches!(
+            action_from_compat(action(EffectKind::PurgeDisclosedAndTransfigureSameType))
+                .unwrap()
+                .effect,
+            ActionEffect::PurgeDisclosedAndTransfigureSameType { transfiguration }
+                if transfiguration == "Inspired"
+        ));
+        assert!(matches!(
+            action_from_compat(action(EffectKind::MakePredicateFastAndGainNightmares))
+                .unwrap()
+                .effect,
+            ActionEffect::MakePredicateFastAndGainNightmares {
+                predicate: Predicate::Event,
+                nightmare_count: 2,
+            }
+        ));
+        assert!(matches!(
+            action_from_compat(action(EffectKind::TakeTransfiguredCardsAndGainNightmares))
+                .unwrap()
+                .effect,
+            ActionEffect::TakeTransfiguredCardsAndGainNightmares {
+                predicate: Predicate::Character,
+                offer_count: 4,
+                transfiguration,
+                nightmare_count: 2,
+            } if transfiguration == "Inspired"
+        ));
+        assert!(matches!(
+            action_from_compat(action(EffectKind::PurgeOneTransfigureAndCopyOthers))
+                .unwrap()
+                .effect,
+            ActionEffect::PurgeOneTransfigureAndCopyOthers {
+                offer_count: 4,
+                transfiguration,
+            } if transfiguration == "Kindled"
+        ));
+
+        for kind in [
+            EffectKind::TakeTransfiguredCardsAndGainNightmares,
+            EffectKind::PurgeOneTransfigureAndCopyOthers,
+        ] {
+            let mut invalid = action(kind);
+            invalid
+                .as_object_mut()
+                .unwrap()
+                .insert("offerCount".into(), json!(3));
+            assert!(
+                action_from_compat(invalid)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("offerCount must be exactly 4")
+            );
+        }
+
+        for kind in [
+            EffectKind::MakePredicateFastAndGainNightmares,
+            EffectKind::TakeTransfiguredCardsAndGainNightmares,
+        ] {
+            let mut invalid = action(kind);
+            invalid
+                .as_object_mut()
+                .unwrap()
+                .insert("nightmareCount".into(), json!(0));
+            assert!(
+                action_from_compat(invalid)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("must be positive")
+            );
+        }
+
+        for kind in [
+            EffectKind::TransfigureAllCards,
+            EffectKind::PurgeDisclosedAndTransfigureSameType,
+            EffectKind::MakePredicateFastAndGainNightmares,
+            EffectKind::TakeTransfiguredCardsAndGainNightmares,
+            EffectKind::PurgeOneTransfigureAndCopyOthers,
+        ] {
+            let mut invalid = action(kind);
+            invalid
+                .as_object_mut()
+                .unwrap()
+                .insert("foreignField".into(), json!(true));
+            assert!(
+                action_from_compat(invalid)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("does not apply")
+            );
+        }
+    }
+
+    #[test]
+    fn wave8_effects_round_trip_through_source_patching_without_touching_other_actions() {
+        for effect in [
+            ActionEffect::TransfigureAllCards,
+            ActionEffect::PurgeDisclosedAndTransfigureSameType {
+                transfiguration: "Inspired".into(),
+            },
+            ActionEffect::MakePredicateFastAndGainNightmares {
+                predicate: Predicate::Event,
+                nightmare_count: 2,
+            },
+            ActionEffect::TakeTransfiguredCardsAndGainNightmares {
+                predicate: Predicate::Character,
+                offer_count: 4,
+                transfiguration: "Kindled".into(),
+                nightmare_count: 1,
+            },
+            ActionEffect::PurgeOneTransfigureAndCopyOthers {
+                offer_count: 4,
+                transfiguration: "DoubledSpark".into(),
+            },
+        ] {
+            let mut catalog: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
+            let untouched_action = catalog[0].actions[1].clone();
+            catalog[0].actions[0].effect = effect.clone();
+            let patched =
+                patch_exploration_action(EXPLORATION_SOURCE, &catalog[0].actions[0]).unwrap();
+            let reparsed: ExplorationCatalog = ron::from_str(&patched).unwrap();
+            assert_eq!(reparsed[0].actions[0].effect, effect);
+            assert_eq!(reparsed[0].actions[1], untouched_action);
+            assert!(patched.contains("/* Unrelated encounter comment. */"));
+        }
+    }
+
+    #[test]
+    fn shop_purchase_modifier_editor_maps_exact_fields_and_derived_metadata() {
+        let mut free_next_shop = action(EffectKind::FreeNextShop);
+        free_next_shop.as_object_mut().unwrap().insert(
+            "canonicalMechanicId".into(),
+            json!("shop-purchase-modifier"),
+        );
+        assert!(matches!(
+            action_from_compat(free_next_shop).unwrap().effect,
+            ActionEffect::FreeNextShop
+        ));
+
+        let counted =
+            action_from_compat(action(EffectKind::LoseHalfEssenceAndFreePurchases)).unwrap();
+        assert!(matches!(
+            counted.effect,
+            ActionEffect::LoseHalfEssenceAndFreePurchases { count: 3 }
+        ));
+
+        let mut nonpositive = action(EffectKind::LoseHalfEssenceAndFreePurchases);
+        nonpositive
+            .as_object_mut()
+            .unwrap()
+            .insert("count".into(), json!(0));
+        assert!(
+            action_from_compat(nonpositive)
+                .unwrap_err()
+                .to_string()
+                .contains("count must be positive")
+        );
+
+        let mut foreign = action(EffectKind::FreeNextShop);
+        foreign
+            .as_object_mut()
+            .unwrap()
+            .insert("count".into(), json!(1));
+        assert!(
+            action_from_compat(foreign)
+                .unwrap_err()
+                .to_string()
+                .contains("does not apply")
+        );
+
+        let mut invalid_policy = action(EffectKind::FreeNextShop);
+        invalid_policy
+            .as_object_mut()
+            .unwrap()
+            .insert("selectionPolicyId".into(), json!("uniform"));
+        assert!(
+            action_from_compat(invalid_policy)
+                .unwrap_err()
+                .to_string()
+                .contains("FIELD_NOT_APPLICABLE")
+        );
+    }
+
+    #[test]
+    fn fixed_site_editor_maps_closed_site_types_and_preserves_add_site_metadata() {
+        for (site_type, expected) in [
+            ("Duplication", FixedSiteType::Duplication),
+            ("Shop", FixedSiteType::Shop),
+            ("DreamsignBazaar", FixedSiteType::DreamsignBazaar),
+            ("Transfiguration", FixedSiteType::Transfiguration),
+            ("Purge", FixedSiteType::Purge),
+        ] {
+            let mut fixed = action(EffectKind::AddFixedSite);
+            fixed
+                .as_object_mut()
+                .unwrap()
+                .insert("siteType".into(), json!(site_type));
+            assert_eq!(
+                action_from_compat(fixed).unwrap().effect,
+                ActionEffect::AddFixedSite {
+                    site_type: expected,
+                }
+            );
+        }
+
+        let mut fixed_metadata = action(EffectKind::AddFixedSite);
+        fixed_metadata
+            .as_object_mut()
+            .unwrap()
+            .insert("canonicalMechanicId".into(), json!("add-site"));
+        fixed_metadata
+            .as_object_mut()
+            .unwrap()
+            .insert("selectionPolicyId".into(), json!("fixed"));
+        assert!(action_from_compat(fixed_metadata).is_ok());
+
+        let mut uniform_metadata = action(EffectKind::AddSite);
+        uniform_metadata
+            .as_object_mut()
+            .unwrap()
+            .insert("canonicalMechanicId".into(), json!("add-site"));
+        uniform_metadata
+            .as_object_mut()
+            .unwrap()
+            .insert("selectionPolicyId".into(), json!("site-uniform"));
+        assert_eq!(
+            action_from_compat(uniform_metadata).unwrap().effect,
+            ActionEffect::AddSite
+        );
+    }
+
+    #[test]
+    fn fixed_site_editor_rejects_missing_foreign_and_unknown_site_types() {
+        let mut missing = action(EffectKind::AddFixedSite);
+        missing.as_object_mut().unwrap().remove("siteType");
+        assert!(
+            action_from_compat(missing)
+                .unwrap_err()
+                .to_string()
+                .contains("requires string field siteType")
+        );
+
+        for unknown in ["Battle", "duplication", "dreamsign-bazaar"] {
+            let mut invalid = action(EffectKind::AddFixedSite);
+            invalid
+                .as_object_mut()
+                .unwrap()
+                .insert("siteType".into(), json!(unknown));
+            assert!(
+                action_from_compat(invalid)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("unknown fixed site type")
+            );
+        }
+
+        let mut foreign = action(EffectKind::AddFixedSite);
+        foreign
+            .as_object_mut()
+            .unwrap()
+            .insert("count".into(), json!(1));
+        assert!(
+            action_from_compat(foreign)
+                .unwrap_err()
+                .to_string()
+                .contains("does not apply")
+        );
+
+        let mut fieldful_add_site = action(EffectKind::AddSite);
+        fieldful_add_site
+            .as_object_mut()
+            .unwrap()
+            .insert("siteType".into(), json!("Shop"));
+        assert!(
+            action_from_compat(fieldful_add_site)
+                .unwrap_err()
+                .to_string()
+                .contains("does not apply")
+        );
+    }
+
+    #[test]
+    fn site_type_chooser_editor_maps_default_offer_count_and_derived_metadata() {
+        let chooser = action(EffectKind::ChooseSiteType);
+        assert_eq!(chooser["offerCount"], json!(3));
+        assert_eq!(
+            action_from_compat(chooser).unwrap().effect,
+            ActionEffect::ChooseSiteType { offer_count: 3 }
+        );
+
+        let mut chooser_metadata = action(EffectKind::ChooseSiteType);
+        chooser_metadata
+            .as_object_mut()
+            .unwrap()
+            .insert("canonicalMechanicId".into(), json!("add-site"));
+        chooser_metadata
+            .as_object_mut()
+            .unwrap()
+            .insert("selectionPolicyId".into(), json!("site-uniform"));
+        assert!(action_from_compat(chooser_metadata).is_ok());
+    }
+
+    #[test]
+    fn site_type_chooser_editor_rejects_missing_nonpositive_and_foreign_fields() {
+        let mut missing = action(EffectKind::ChooseSiteType);
+        missing.as_object_mut().unwrap().remove("offerCount");
+        assert!(
+            action_from_compat(missing)
+                .unwrap_err()
+                .to_string()
+                .contains("requires integer field offerCount")
+        );
+
+        for invalid_count in [0, -1] {
+            let mut nonpositive = action(EffectKind::ChooseSiteType);
+            nonpositive
+                .as_object_mut()
+                .unwrap()
+                .insert("offerCount".into(), json!(invalid_count));
+            assert!(
+                action_from_compat(nonpositive)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("offerCount must be positive")
+            );
+        }
+
+        let mut foreign = action(EffectKind::ChooseSiteType);
+        foreign
+            .as_object_mut()
+            .unwrap()
+            .insert("siteType".into(), json!("Shop"));
+        assert!(
+            action_from_compat(foreign)
+                .unwrap_err()
+                .to_string()
+                .contains("does not apply")
+        );
+    }
+
+    #[test]
+    fn validates_starter_card_effect_editor_contracts() {
+        assert_eq!(
+            action_from_compat(action(EffectKind::PurgeStarterCard))
+                .unwrap()
+                .effect,
+            ActionEffect::PurgeStarterCard
+        );
+        assert_eq!(
+            action_from_compat(action(EffectKind::PurgeRandomStarterCard))
+                .unwrap()
+                .effect,
+            ActionEffect::PurgeRandomStarterCard
+        );
+        assert_eq!(
+            action_from_compat(action(EffectKind::PurgeRandomStarterAndGainCard))
+                .unwrap()
+                .effect,
+            ActionEffect::PurgeRandomStarterAndGainCard {
+                predicate: Predicate::Character,
+            }
+        );
+        assert_eq!(
+            action_from_compat(action(EffectKind::ReplaceAllStarterCards))
+                .unwrap()
+                .effect,
+            ActionEffect::ReplaceAllStarterCards {
+                predicate: Predicate::Character,
+            }
+        );
+
+        for kind in [
+            EffectKind::PurgeStarterCard,
+            EffectKind::PurgeRandomStarterCard,
+        ] {
+            let mut foreign = action(kind);
+            foreign
+                .as_object_mut()
+                .unwrap()
+                .insert("predicate".into(), json!("character"));
+            assert!(
+                action_from_compat(foreign)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("does not apply")
+            );
+        }
+
+        for kind in [
+            EffectKind::PurgeRandomStarterAndGainCard,
+            EffectKind::ReplaceAllStarterCards,
+        ] {
+            let mut missing = action(kind);
+            missing.as_object_mut().unwrap().remove("predicate");
+            assert!(
+                action_from_compat(missing)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("requires string field predicate")
+            );
+
+            let mut unsupported = action(kind);
+            unsupported
+                .as_object_mut()
+                .unwrap()
+                .insert("predicate".into(), json!("any"));
+            assert!(
+                action_from_compat(unsupported)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("unknown predicate")
+            );
+
+            let mut foreign = action(kind);
+            foreign
+                .as_object_mut()
+                .unwrap()
+                .insert("count".into(), json!(1));
+            assert!(
+                action_from_compat(foreign)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("does not apply")
+            );
+
+            let mut top_level_policy = action(kind);
+            top_level_policy.as_object_mut().unwrap().insert(
+                "selectionPolicyId".into(),
+                json!(if kind == EffectKind::PurgeRandomStarterAndGainCard {
+                    "card-fit-quality"
+                } else {
+                    "card-bundle"
+                }),
+            );
+            assert!(
+                action_from_compat(top_level_policy)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("FIELD_NOT_APPLICABLE")
+            );
+        }
+    }
+
+    #[test]
+    fn validates_starter_card_transfiguration_editor_contracts() {
+        assert_eq!(
+            action_from_compat(action(EffectKind::TransfigureRandomStarterCards))
+                .unwrap()
+                .effect,
+            ActionEffect::TransfigureRandomStarterCards { count: 2 }
+        );
+        assert_eq!(
+            action_from_compat(action(EffectKind::TransfigureAllStarterCards))
+                .unwrap()
+                .effect,
+            ActionEffect::TransfigureAllStarterCards
+        );
+
+        let mut missing_count = action(EffectKind::TransfigureRandomStarterCards);
+        missing_count.as_object_mut().unwrap().remove("count");
+        assert!(
+            action_from_compat(missing_count)
+                .unwrap_err()
+                .to_string()
+                .contains("requires integer field count")
+        );
+
+        let mut nonpositive_count = action(EffectKind::TransfigureRandomStarterCards);
+        nonpositive_count
+            .as_object_mut()
+            .unwrap()
+            .insert("count".into(), json!(0));
+        assert!(
+            action_from_compat(nonpositive_count)
+                .unwrap_err()
+                .to_string()
+                .contains("count must be positive")
+        );
+
+        let mut foreign = action(EffectKind::TransfigureAllStarterCards);
+        foreign
+            .as_object_mut()
+            .unwrap()
+            .insert("count".into(), json!(1));
+        assert!(
+            action_from_compat(foreign)
+                .unwrap_err()
+                .to_string()
+                .contains("does not apply")
+        );
+
+        for kind in [
+            EffectKind::TransfigureRandomStarterCards,
+            EffectKind::TransfigureAllStarterCards,
+        ] {
+            let mut explicit_metadata = action(kind);
+            explicit_metadata.as_object_mut().unwrap().insert(
+                "canonicalMechanicId".into(),
+                json!("transfigure-deck-entry"),
+            );
+            explicit_metadata
+                .as_object_mut()
+                .unwrap()
+                .insert("selectionPolicyId".into(), json!("uniform"));
+            assert!(action_from_compat(explicit_metadata).is_ok());
+        }
+    }
+
+    #[test]
+    fn validates_multi_card_transfiguration_editor_contracts() {
+        assert_eq!(
+            action_from_compat(action(EffectKind::TransfigureSelected))
+                .unwrap()
+                .effect,
+            ActionEffect::TransfigureSelected {
+                predicate: None,
+                count: 1,
+            }
+        );
+        assert_eq!(
+            action_from_compat(action(EffectKind::TransfigureRandomCards))
+                .unwrap()
+                .effect,
+            ActionEffect::TransfigureRandomCards {
+                predicate: Predicate::Event,
+                count: 2,
+            }
+        );
+        assert_eq!(
+            action_from_compat(action(EffectKind::TransfigureFixedRandomCards))
+                .unwrap()
+                .effect,
+            ActionEffect::TransfigureFixedRandomCards {
+                predicate: Predicate::Event,
+                count: 2,
+                transfiguration: "Kindled".into(),
+            }
+        );
+
+        let mut chosen_pair = action(EffectKind::TransfigureSelected);
+        chosen_pair
+            .as_object_mut()
+            .unwrap()
+            .insert("count".into(), json!(2));
+        assert!(
+            action_from_compat(chosen_pair.clone())
+                .unwrap_err()
+                .to_string()
+                .contains("requires predicate when count exceeds one")
+        );
+        chosen_pair
+            .as_object_mut()
+            .unwrap()
+            .insert("predicate".into(), json!("event"));
+        assert_eq!(
+            action_from_compat(chosen_pair).unwrap().effect,
+            ActionEffect::TransfigureSelected {
+                predicate: Some(Predicate::Event),
+                count: 2,
+            }
+        );
+
+        for kind in [
+            EffectKind::TransfigureRandomCards,
+            EffectKind::TransfigureFixedRandomCards,
+        ] {
+            let mut missing_predicate = action(kind);
+            missing_predicate
+                .as_object_mut()
+                .unwrap()
+                .remove("predicate");
+            assert!(
+                action_from_compat(missing_predicate)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("requires string field predicate")
+            );
+
+            let mut explicit_metadata = action(kind);
+            explicit_metadata.as_object_mut().unwrap().insert(
+                "canonicalMechanicId".into(),
+                json!("transfigure-deck-entry"),
+            );
+            explicit_metadata
+                .as_object_mut()
+                .unwrap()
+                .insert("selectionPolicyId".into(), json!("uniform"));
+            assert!(action_from_compat(explicit_metadata).is_ok());
+        }
+
+        let mut missing_transfiguration = action(EffectKind::TransfigureFixedRandomCards);
+        missing_transfiguration
+            .as_object_mut()
+            .unwrap()
+            .remove("transfiguration");
+        assert!(
+            action_from_compat(missing_transfiguration)
+                .unwrap_err()
+                .to_string()
+                .contains("requires string field transfiguration")
+        );
+    }
+
+    #[test]
+    fn validates_multi_entry_deck_mutation_editor_contracts() {
+        assert_eq!(
+            action_from_compat(action(EffectKind::ReplaceSelected))
+                .unwrap()
+                .effect,
+            ActionEffect::ReplaceSelected {
+                predicate: Predicate::Event,
+                count: None,
+            }
+        );
+        assert_eq!(
+            action_from_compat(action(EffectKind::TransfigureFixedSelected))
+                .unwrap()
+                .effect,
+            ActionEffect::TransfigureFixedSelected {
+                predicate: None,
+                transfiguration: "DoubledSpark".into(),
+                target: DeckTarget::Chosen,
+                count: None,
+            }
+        );
+        assert_eq!(
+            action_from_compat(action(EffectKind::CopyRandomCards))
+                .unwrap()
+                .effect,
+            ActionEffect::CopyRandomCards {
+                predicate: Predicate::Event,
+                count: 2,
+            }
+        );
+        assert_eq!(
+            action_from_compat(action(EffectKind::ChangeRandomCardType))
+                .unwrap()
+                .effect,
+            ActionEffect::ChangeRandomCardType {
+                count: 2,
+                card_type: CardTypeTarget::Character,
+            }
+        );
+
+        let mut replace_many = action(EffectKind::ReplaceSelected);
+        replace_many
+            .as_object_mut()
+            .unwrap()
+            .insert("count".into(), json!(2));
+        assert_eq!(
+            action_from_compat(replace_many).unwrap().effect,
+            ActionEffect::ReplaceSelected {
+                predicate: Predicate::Event,
+                count: Some(2),
+            }
+        );
+
+        let mut fixed_many = action(EffectKind::TransfigureFixedSelected);
+        fixed_many.as_object_mut().unwrap().extend(Map::from_iter([
+            ("predicate".into(), json!("event")),
+            ("count".into(), json!(2)),
+        ]));
+        assert!(action_from_compat(fixed_many.clone()).is_ok());
+        fixed_many
+            .as_object_mut()
+            .unwrap()
+            .insert("deckTarget".into(), json!("offered"));
+        assert!(
+            action_from_compat(fixed_many)
+                .unwrap_err()
+                .to_string()
+                .contains("requires a chosen target and predicate")
+        );
+
+        let mut fixed_without_predicate = action(EffectKind::TransfigureFixedSelected);
+        fixed_without_predicate
+            .as_object_mut()
+            .unwrap()
+            .insert("count".into(), json!(2));
+        assert!(
+            action_from_compat(fixed_without_predicate)
+                .unwrap_err()
+                .to_string()
+                .contains("requires a chosen target and predicate")
+        );
+
+        for kind in [
+            EffectKind::ReplaceSelected,
+            EffectKind::TransfigureFixedSelected,
+            EffectKind::CopyRandomCards,
+            EffectKind::ChangeRandomCardType,
+        ] {
+            let mut nonpositive = action(kind);
+            nonpositive
+                .as_object_mut()
+                .unwrap()
+                .insert("count".into(), json!(0));
+            assert!(
+                action_from_compat(nonpositive)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("count must be positive")
+            );
+        }
+
+        let mut unknown_type = action(EffectKind::ChangeRandomCardType);
+        unknown_type
+            .as_object_mut()
+            .unwrap()
+            .insert("cardType".into(), json!("Warrior"));
+        assert!(
+            action_from_compat(unknown_type)
+                .unwrap_err()
+                .to_string()
+                .contains("unknown card type")
+        );
+
+        for (kind, mechanic) in [
+            (EffectKind::CopyRandomCards, "duplicate-deck-entry"),
+            (EffectKind::ChangeRandomCardType, "change-entry-card-type"),
+        ] {
+            let mut explicit_metadata = action(kind);
+            explicit_metadata
+                .as_object_mut()
+                .unwrap()
+                .insert("canonicalMechanicId".into(), json!(mechanic));
+            explicit_metadata
+                .as_object_mut()
+                .unwrap()
+                .insert("selectionPolicyId".into(), json!("uniform"));
+            assert!(action_from_compat(explicit_metadata).is_ok());
+        }
+    }
+
+    #[test]
+    fn validates_wave7_editor_fields_metadata_and_foreign_field_rejection() {
+        assert_eq!(
+            action_from_compat(action(EffectKind::ReplaceRandomWithCard))
+                .unwrap()
+                .effect,
+            ActionEffect::ReplaceRandomWithCard {
+                predicate: Predicate::Legendary,
+                card_id: "00000000-0000-4000-8000-000000000001".into(),
+            }
+        );
+        assert_eq!(
+            action_from_compat(action(EffectKind::ChangeCardTypeSelected))
+                .unwrap()
+                .effect,
+            ActionEffect::ChangeCardTypeSelected {
+                card_type: CardTypeTarget::Event,
+                target: DeckTarget::Offered,
+            }
+        );
+
+        for (kind, mechanic, policy) in [
+            (
+                EffectKind::ReplaceRandomWithCard,
+                "replace-deck-entry",
+                "uniform",
+            ),
+            (
+                EffectKind::ChangeCardTypeSelected,
+                "change-entry-card-type",
+                "deck-entry-centrality",
+            ),
+        ] {
+            let mut explicit_metadata = action(kind);
+            explicit_metadata
+                .as_object_mut()
+                .unwrap()
+                .insert("canonicalMechanicId".into(), json!(mechanic));
+            explicit_metadata
+                .as_object_mut()
+                .unwrap()
+                .insert("selectionPolicyId".into(), json!(policy));
+            assert!(action_from_compat(explicit_metadata).is_ok());
+        }
+
+        for (kind, field, value) in [
+            (EffectKind::ReplaceRandomWithCard, "count", json!(1)),
+            (
+                EffectKind::ChangeCardTypeSelected,
+                "predicate",
+                json!("legendary"),
+            ),
+            (
+                EffectKind::ChangeCardTypeSelected,
+                "cardId",
+                json!("00000000-0000-4000-8000-000000000001"),
+            ),
+        ] {
+            let mut invalid = action(kind);
+            invalid.as_object_mut().unwrap().insert(field.into(), value);
+            assert!(
+                action_from_compat(invalid)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("does not apply")
+            );
+        }
+
+        for (kind, field) in [
+            (EffectKind::ReplaceRandomWithCard, "predicate"),
+            (EffectKind::ReplaceRandomWithCard, "cardId"),
+            (EffectKind::ChangeCardTypeSelected, "cardType"),
+            (EffectKind::ChangeCardTypeSelected, "deckTarget"),
+        ] {
+            let mut invalid = action(kind);
+            invalid.as_object_mut().unwrap().remove(field);
+            assert!(action_from_compat(invalid).is_err());
+        }
+    }
+
+    #[test]
+    fn starter_card_effects_round_trip_through_source_patching() {
+        for effect in [
+            ActionEffect::PurgeStarterCard,
+            ActionEffect::PurgeRandomStarterCard,
+            ActionEffect::PurgeRandomStarterAndGainCard {
+                predicate: Predicate::Character,
+            },
+            ActionEffect::ReplaceAllStarterCards {
+                predicate: Predicate::Event,
+            },
+            ActionEffect::TransfigureRandomStarterCards { count: 2 },
+            ActionEffect::TransfigureAllStarterCards,
+        ] {
+            let mut catalog: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
+            catalog[0].actions[0].effect = effect.clone();
+            let patched =
+                patch_exploration_action(EXPLORATION_SOURCE, &catalog[0].actions[0]).unwrap();
+            let reparsed: ExplorationCatalog = ron::from_str(&patched).unwrap();
+            assert_eq!(reparsed[0].actions[0].effect, effect);
+        }
+    }
+
+    #[test]
+    fn multi_card_transfigurations_round_trip_through_source_patching() {
+        for effect in [
+            ActionEffect::TransfigureSelected {
+                predicate: Some(Predicate::Event),
+                count: 2,
+            },
+            ActionEffect::TransfigureRandomCards {
+                predicate: Predicate::Event,
+                count: 2,
+            },
+            ActionEffect::TransfigureFixedRandomCards {
+                predicate: Predicate::Event,
+                count: 2,
+                transfiguration: "Kindled".into(),
+            },
+        ] {
+            let mut catalog: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
+            catalog[0].actions[0].effect = effect.clone();
+            let patched =
+                patch_exploration_action(EXPLORATION_SOURCE, &catalog[0].actions[0]).unwrap();
+            let reparsed: ExplorationCatalog = ron::from_str(&patched).unwrap();
+            assert_eq!(reparsed[0].actions[0].effect, effect);
+        }
+    }
+
+    #[test]
+    fn multi_entry_deck_mutations_round_trip_through_source_patching() {
+        for effect in [
+            ActionEffect::ReplaceSelected {
+                predicate: Predicate::Event,
+                count: Some(2),
+            },
+            ActionEffect::TransfigureFixedSelected {
+                predicate: Some(Predicate::Event),
+                transfiguration: "Kindled".into(),
+                target: DeckTarget::Chosen,
+                count: Some(2),
+            },
+            ActionEffect::CopyRandomCards {
+                predicate: Predicate::Event,
+                count: 2,
+            },
+            ActionEffect::ChangeRandomCardType {
+                count: 2,
+                card_type: CardTypeTarget::Event,
+            },
+        ] {
+            let mut catalog: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
+            catalog[0].actions[0].effect = effect.clone();
+            let patched =
+                patch_exploration_action(EXPLORATION_SOURCE, &catalog[0].actions[0]).unwrap();
+            let reparsed: ExplorationCatalog = ron::from_str(&patched).unwrap();
+            assert_eq!(reparsed[0].actions[0].effect, effect);
+        }
+    }
+
+    #[test]
+    fn wave7_deck_mutations_round_trip_through_source_patching() {
+        for effect in [
+            ActionEffect::ReplaceRandomWithCard {
+                predicate: Predicate::Legendary,
+                card_id: "00000000-0000-4000-8000-000000000001".into(),
+            },
+            ActionEffect::ChangeCardTypeSelected {
+                card_type: CardTypeTarget::Event,
+                target: DeckTarget::Offered,
+            },
+            ActionEffect::ChangeCardTypeSelected {
+                card_type: CardTypeTarget::Character,
+                target: DeckTarget::Chosen,
+            },
+        ] {
+            let mut catalog: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
+            catalog[0].actions[0].effect = effect.clone();
+            let patched =
+                patch_exploration_action(EXPLORATION_SOURCE, &catalog[0].actions[0]).unwrap();
+            let reparsed: ExplorationCatalog = ron::from_str(&patched).unwrap();
+            assert_eq!(reparsed[0].actions[0].effect, effect);
+        }
+    }
+
+    #[test]
+    fn fixed_site_effects_round_trip_without_rewriting_unrelated_source() {
+        let original: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
+        let original_action = typed_record_range_at_indent(
+            EXPLORATION_SOURCE,
+            "ActionDefinition",
+            "id",
+            "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            6,
+        )
+        .unwrap();
+
+        for site_type in [
+            FixedSiteType::Duplication,
+            FixedSiteType::Shop,
+            FixedSiteType::DreamsignBazaar,
+            FixedSiteType::Transfiguration,
+            FixedSiteType::Purge,
+        ] {
+            let mut catalog = original.clone();
+            let expected = ActionEffect::AddFixedSite { site_type };
+            catalog[0].actions[0].effect = expected.clone();
+            let patched =
+                patch_exploration_action(EXPLORATION_SOURCE, &catalog[0].actions[0]).unwrap();
+            let patched_action = typed_record_range_at_indent(
+                &patched,
+                "ActionDefinition",
+                "id",
+                "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                6,
+            )
+            .unwrap();
+
+            assert_eq!(
+                &EXPLORATION_SOURCE[..original_action.start],
+                &patched[..patched_action.start]
+            );
+            assert_eq!(
+                &EXPLORATION_SOURCE[original_action.end..],
+                &patched[patched_action.end..]
+            );
+            let reparsed: ExplorationCatalog = ron::from_str(&patched).unwrap();
+            assert_eq!(reparsed[0].actions[0].effect, expected);
+            assert_eq!(reparsed[0].actions[1], original[0].actions[1]);
+            assert_eq!(reparsed[1], original[1]);
+        }
+    }
+
+    #[test]
+    fn site_type_chooser_round_trips_without_rewriting_unrelated_source() {
+        let original: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
+        let original_action = typed_record_range_at_indent(
+            EXPLORATION_SOURCE,
+            "ActionDefinition",
+            "id",
+            "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            6,
+        )
+        .unwrap();
+        let mut catalog = original.clone();
+        let expected = ActionEffect::ChooseSiteType { offer_count: 3 };
+        catalog[0].actions[0].effect = expected.clone();
+        let patched = patch_exploration_action(EXPLORATION_SOURCE, &catalog[0].actions[0]).unwrap();
+        let patched_action = typed_record_range_at_indent(
+            &patched,
+            "ActionDefinition",
+            "id",
+            "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            6,
+        )
+        .unwrap();
+
+        assert_eq!(
+            &EXPLORATION_SOURCE[..original_action.start],
+            &patched[..patched_action.start]
+        );
+        assert_eq!(
+            &EXPLORATION_SOURCE[original_action.end..],
+            &patched[patched_action.end..]
+        );
+        let reparsed: ExplorationCatalog = ron::from_str(&patched).unwrap();
+        assert_eq!(reparsed[0].actions[0].effect, expected);
+        assert_eq!(reparsed[0].actions[1], original[0].actions[1]);
+        assert_eq!(reparsed[1], original[1]);
+    }
+
+    #[test]
+    fn shop_purchase_modifiers_round_trip_without_rewriting_unrelated_source() {
+        let original: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
+        let original_action = typed_record_range_at_indent(
+            EXPLORATION_SOURCE,
+            "ActionDefinition",
+            "id",
+            "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+            6,
+        )
+        .unwrap();
+
+        for effect in [
+            ActionEffect::FreeNextShop,
+            ActionEffect::LoseHalfEssenceAndFreePurchases { count: 3 },
+        ] {
+            let mut catalog = original.clone();
+            catalog[0].actions[0].effect = effect.clone();
+            let patched =
+                patch_exploration_action(EXPLORATION_SOURCE, &catalog[0].actions[0]).unwrap();
+            let patched_action = typed_record_range_at_indent(
+                &patched,
+                "ActionDefinition",
+                "id",
+                "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                6,
+            )
+            .unwrap();
+
+            assert_eq!(
+                &EXPLORATION_SOURCE[..original_action.start],
+                &patched[..patched_action.start]
+            );
+            assert_eq!(
+                &EXPLORATION_SOURCE[original_action.end..],
+                &patched[patched_action.end..]
+            );
+            let reparsed: ExplorationCatalog = ron::from_str(&patched).unwrap();
+            assert_eq!(reparsed[0].actions[0].effect, effect);
+            assert_eq!(reparsed[0].actions[1], original[0].actions[1]);
+            assert_eq!(reparsed[1], original[1]);
+        }
+    }
+
+    #[test]
+    fn validates_essence_effect_editor_fields() {
+        let mut fixed = action(EffectKind::GainEssence);
+        fixed
+            .as_object_mut()
+            .unwrap()
+            .insert("essence".into(), json!(0));
+        assert!(
+            action_from_compat(fixed)
+                .unwrap_err()
+                .to_string()
+                .contains("essence must be positive")
+        );
+
+        let mut reversed = action(EffectKind::GainRandomEssence);
+        reversed
+            .as_object_mut()
+            .unwrap()
+            .insert("minimumEssence".into(), json!(151));
+        assert!(
+            action_from_compat(reversed)
+                .unwrap_err()
+                .to_string()
+                .contains("minimumEssence must not exceed maximumEssence")
+        );
+
+        let mut maximum_zero = action(EffectKind::GainRandomEssence);
+        maximum_zero
+            .as_object_mut()
+            .unwrap()
+            .insert("maximumEssence".into(), json!(0));
+        assert!(
+            action_from_compat(maximum_zero)
+                .unwrap_err()
+                .to_string()
+                .contains("maximumEssence must be positive")
+        );
+
+        let mut fieldful_double = action(EffectKind::DoubleEssence);
+        fieldful_double
+            .as_object_mut()
+            .unwrap()
+            .insert("essence".into(), json!(1));
+        assert!(
+            action_from_compat(fieldful_double)
+                .unwrap_err()
+                .to_string()
+                .contains("does not apply")
+        );
+    }
+
+    #[test]
+    fn validates_explicit_dreamsign_effect_editor_fields() {
+        for kind in [
+            EffectKind::GainOfferedDreamsign,
+            EffectKind::ReplaceSelectedDreamsignWithOffered,
+        ] {
+            let mut invalid = action(kind);
+            invalid
+                .as_object_mut()
+                .unwrap()
+                .insert("offerCount".into(), json!(0));
+            assert!(
+                action_from_compat(invalid)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("offerCount must be positive")
+            );
+        }
+
+        let mut invalid_count = action(EffectKind::PurgeSelectedDreamsignAndGainRandom);
+        invalid_count
+            .as_object_mut()
+            .unwrap()
+            .insert("count".into(), json!(0));
+        assert!(
+            action_from_compat(invalid_count)
+                .unwrap_err()
+                .to_string()
+                .contains("count must be positive")
+        );
+
+        let mut foreign = action(EffectKind::ReplaceAllDreamsignsRandom);
+        foreign
+            .as_object_mut()
+            .unwrap()
+            .insert("offerCount".into(), json!(3));
+        assert!(
+            action_from_compat(foreign)
+                .unwrap_err()
+                .to_string()
+                .contains("does not apply")
+        );
+    }
+
+    #[test]
+    fn validates_nightmare_dreamsign_editor_fields_and_derived_contracts() {
+        let fixed = action_from_compat(action(EffectKind::GainNightmareAndDreamsign)).unwrap();
+        assert_eq!(
+            fixed.effect,
+            ActionEffect::GainNightmareAndDreamsign {
+                dreamsign_id: "00000000-0000-4000-8000-000000000002".into(),
+                nightmare_count: 1,
+            }
+        );
+
+        let offered =
+            action_from_compat(action(EffectKind::GainNightmareAndOfferedDreamsign)).unwrap();
+        assert_eq!(
+            offered.effect,
+            ActionEffect::GainNightmareAndOfferedDreamsign {
+                offer_count: 3,
+                nightmare_count: 1,
+            }
+        );
+
+        for (kind, field) in [
+            (EffectKind::GainNightmareAndDreamsign, "nightmareCount"),
+            (EffectKind::GainNightmareAndOfferedDreamsign, "offerCount"),
+            (
+                EffectKind::GainNightmareAndOfferedDreamsign,
+                "nightmareCount",
+            ),
+        ] {
+            let mut invalid = action(kind);
+            invalid
+                .as_object_mut()
+                .unwrap()
+                .insert(field.into(), json!(0));
+            assert!(
+                action_from_compat(invalid)
+                    .unwrap_err()
+                    .to_string()
+                    .contains("must be positive")
+            );
+        }
+
+        let mut foreign_fixed = action(EffectKind::GainNightmareAndDreamsign);
+        foreign_fixed
+            .as_object_mut()
+            .unwrap()
+            .insert("offerCount".into(), json!(3));
+        assert!(
+            action_from_compat(foreign_fixed)
+                .unwrap_err()
+                .to_string()
+                .contains("does not apply")
+        );
+
+        let mut foreign_offered = action(EffectKind::GainNightmareAndOfferedDreamsign);
+        foreign_offered.as_object_mut().unwrap().insert(
+            "dreamsignId".into(),
+            json!("00000000-0000-4000-8000-000000000002"),
+        );
+        assert!(
+            action_from_compat(foreign_offered)
+                .unwrap_err()
+                .to_string()
+                .contains("does not apply")
+        );
+
+        let mut malformed_reference = action(EffectKind::GainNightmareAndDreamsign);
+        malformed_reference
+            .as_object_mut()
+            .unwrap()
+            .insert("dreamsignId".into(), json!("not-a-uuid"));
+        assert!(
+            action_from_compat(malformed_reference)
+                .unwrap_err()
+                .to_string()
+                .contains("canonical UUIDv4")
+        );
+    }
+
+    #[test]
+    fn validates_fixed_exploration_dreamsign_references_against_the_catalog() {
+        let known_id = parse_dreamsign_reference("00000000-0000-4000-8000-000000000002").unwrap();
+        let known = BTreeSet::from([known_id]);
+        let mut catalog: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
+
+        catalog[0].actions[0].effect = ActionEffect::GainNightmareAndDreamsign {
+            dreamsign_id: "00000000-0000-4000-8000-000000000002".into(),
+            nightmare_count: 1,
+        };
+        validate_exploration_dreamsign_references(&catalog, &known).unwrap();
+
+        catalog[0].actions[0].effect = ActionEffect::GainDreamsign {
+            dreamsign_id: "00000000-0000-4000-8000-000000000099".into(),
+        };
+        assert!(
+            validate_exploration_dreamsign_references(&catalog, &known)
+                .unwrap_err()
+                .to_string()
+                .contains("unknown Dreamsign UUID")
+        );
+
+        catalog[0].actions[0].effect = ActionEffect::GainNightmareAndDreamsign {
+            dreamsign_id: "not-a-uuid".into(),
+            nightmare_count: 1,
+        };
+        assert!(
+            validate_exploration_dreamsign_references(&catalog, &known)
+                .unwrap_err()
+                .to_string()
+                .contains("canonical UUIDv4")
         );
     }
 
@@ -5037,6 +6619,63 @@ DreamwellCatalog(
         assert!(!patched.contains("Some("));
         assert_eq!(
             ron::from_str::<ExplorationCatalog>(&patched).unwrap(),
+            catalog
+        );
+    }
+
+    #[test]
+    fn exploration_editor_serializes_fieldless_double_essence() {
+        let mut catalog: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
+        catalog[0].actions[0].effect = ActionEffect::DoubleEssence;
+        let patched = patch_exploration_action(EXPLORATION_SOURCE, &catalog[0].actions[0]).unwrap();
+
+        assert!(patched.contains("effect: DoubleEssence,"));
+        assert_eq!(
+            ron::from_str::<ExplorationCatalog>(&patched).unwrap(),
+            catalog
+        );
+    }
+
+    #[test]
+    fn exploration_editor_serializes_fieldless_dreamsign_replacement_as_a_unit_variant() {
+        let mut catalog: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
+        catalog[0].actions[0].effect = ActionEffect::ReplaceAllDreamsignsRandom;
+        let patched = patch_exploration_action(EXPLORATION_SOURCE, &catalog[0].actions[0]).unwrap();
+
+        assert!(patched.contains("effect: ReplaceAllDreamsignsRandom,"));
+        assert!(!patched.contains("ReplaceAllDreamsignsRandom("));
+        assert_eq!(
+            ron::from_str::<ExplorationCatalog>(&patched).unwrap(),
+            catalog
+        );
+    }
+
+    #[test]
+    fn exploration_editor_serializes_nightmare_dreamsign_variants_exactly() {
+        let mut catalog: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
+        catalog[0].actions[0].effect = ActionEffect::GainNightmareAndDreamsign {
+            dreamsign_id: "00000000-0000-4000-8000-000000000002".into(),
+            nightmare_count: 2,
+        };
+        let fixed = patch_exploration_action(EXPLORATION_SOURCE, &catalog[0].actions[0]).unwrap();
+        assert!(fixed.contains("effect: GainNightmareAndDreamsign("));
+        assert!(fixed.contains("dreamsign_id: \"00000000-0000-4000-8000-000000000002\""));
+        assert!(fixed.contains("nightmare_count: 2"));
+        assert_eq!(
+            ron::from_str::<ExplorationCatalog>(&fixed).unwrap(),
+            catalog
+        );
+
+        catalog[0].actions[0].effect = ActionEffect::GainNightmareAndOfferedDreamsign {
+            offer_count: 3,
+            nightmare_count: 1,
+        };
+        let offered = patch_exploration_action(EXPLORATION_SOURCE, &catalog[0].actions[0]).unwrap();
+        assert!(offered.contains("effect: GainNightmareAndOfferedDreamsign("));
+        assert!(offered.contains("offer_count: 3"));
+        assert!(offered.contains("nightmare_count: 1"));
+        assert_eq!(
+            ron::from_str::<ExplorationCatalog>(&offered).unwrap(),
             catalog
         );
     }

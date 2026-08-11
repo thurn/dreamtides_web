@@ -50,6 +50,12 @@ export interface RuntimeConfig {
    * or malformed.
    */
   explorationCardId?: CardId | null;
+  /** QA-only held Dreamsign count for forced Exploration scenes. */
+  explorationDreamsignCount?: number | null;
+  /** QA-only Dreamsign capacity for forced Exploration scenes. */
+  explorationDreamsignCap?: number | null;
+  /** QA-only authentic starter-card count for forced Exploration scenes. */
+  explorationStarterCount?: number | null;
   /**
    * Room id whose persisted journey log should be displayed, from
    * `?viewLogs=<roomId>`. When set, the app renders the read-only log viewer
@@ -151,9 +157,35 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     loadJourneyName: parseLoadJourneyName(params.get("loadJourney")),
     gotoScene: parseGotoScene(params.get("goto")),
     explorationCardId: parseExplorationCardId(params.get("card")),
+    explorationDreamsignCount: parseQaDreamsignInteger(
+      params.get("dreamsignCount"),
+    ),
+    explorationDreamsignCap: parseQaDreamsignInteger(
+      params.get("dreamsignCap"),
+    ),
+    explorationStarterCount: parseQaStarterInteger(params.get("starterCount")),
     viewLogs: normalizeRoomId(params.get("viewLogs")),
     gambleGameId: parseGambleGameId(params.get("gambleGame")),
   };
+}
+
+const MAX_QA_DREAMSIGN_INTEGER = 100;
+const MAX_QA_STARTER_INTEGER = 100;
+
+function parseQaDreamsignInteger(rawValue: string | null): number | null {
+  if (rawValue === null || !/^\d+$/u.test(rawValue)) return null;
+  const value = Number(rawValue);
+  return Number.isSafeInteger(value) && value <= MAX_QA_DREAMSIGN_INTEGER
+    ? value
+    : null;
+}
+
+function parseQaStarterInteger(rawValue: string | null): number | null {
+  if (rawValue === null || !/^\d+$/u.test(rawValue)) return null;
+  const value = Number(rawValue);
+  return Number.isSafeInteger(value) && value <= MAX_QA_STARTER_INTEGER
+    ? value
+    : null;
 }
 
 function parseExplorationCardId(rawCardId: string | null): CardId | null {

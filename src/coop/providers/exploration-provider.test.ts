@@ -24,12 +24,17 @@ import { createDefaultState } from "../../state/journey-context";
 import { LayerName } from "../../types/layer-name";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
-import type { JourneyState, SiteState } from "../../types/journey";
+import type {
+  ExplorationResolution,
+  JourneyState,
+  SiteState,
+} from "../../types/journey";
 import { SELECTION_RULES_VERSION } from "../../reward-selection";
 import { makeActions } from "../actions";
 import {
   buildExplorationRuntime,
   buildLegacyExplorationRuntime,
+  mapDeterministicDrawToInclusiveInteger,
   resolveExplorationChoice,
 } from "./exploration-provider";
 import { createSiteContentProvider } from "./site-provider";
@@ -171,6 +176,34 @@ const site: SiteState = {
   isVisited: false,
 };
 
+function explorationFoldJourney(journey: JourneyState): JourneyState {
+  return {
+    ...journey,
+    currentDreamscape: "exploration-node",
+    atlas: {
+      ...journey.atlas,
+      nodes: {
+        "exploration-node": {
+          id: "exploration-node",
+          layer: LayerName.Two,
+          indexInLayer: 0,
+          dreamscapeId: "fixture-dreamscape",
+          biomeName: "Fixture biome",
+          sites: [site],
+          position: { x: 0, y: 0 },
+          state: "available",
+          enhancedSiteType: null,
+          forwardIds: [],
+          backwardIds: [],
+          knownDreamsignId: null,
+        },
+      },
+      startingNodeId: "exploration-node",
+      currentNodeId: "exploration-node",
+    },
+  };
+}
+
 function buildState(
   content: JourneyContent,
   journey = journeyFixture(content),
@@ -212,6 +245,120 @@ function resolve(
   });
   if (result === null) throw new Error(`Expected ${actionId} to resolve`);
   return result;
+}
+
+function explorationResolutionFor(
+  journey: JourneyState,
+): ExplorationResolution {
+  const runtime = journey.siteRuntime[site.id];
+  if (runtime?.kind !== "exploration" || runtime.resolution === null) {
+    throw new Error("Expected a resolved Exploration runtime");
+  }
+  return runtime.resolution;
+}
+
+function dreamsignId(index: number): string {
+  return `d0000000-0000-4000-8000-${String(index).padStart(12, "0")}`;
+}
+
+function dreamsignContent(
+  action: ExplorationActionContent,
+  dreamsignCount = 10,
+): JourneyContent {
+  const fallback: ExplorationActionContent = {
+    id: `${action.id}-fallback`,
+    label: "Gain the source card",
+    effectText: "Gain a card",
+    effectKind: "gain-card",
+    cardId: SOURCE_CARD_ID,
+  };
+  const base = contentFixture([action, fallback]);
+  return {
+    ...base,
+    dreamsignTemplates: Array.from({ length: dreamsignCount }, (_, index) => ({
+      id: dreamsignId(index + 1),
+      name: `Dreamsign ${String(index + 1)}`,
+      effectDescription: `Synthetic Dreamsign ${String(index + 1)}.`,
+    })),
+  };
+}
+
+function withDreamsignPool(
+  content: JourneyContent,
+  options: {
+    heldCount?: number;
+    maxDreamsigns?: number;
+    remainingIds?: readonly string[];
+    packageIds?: readonly string[];
+  } = {},
+): JourneyState {
+  const heldCount = options.heldCount ?? 0;
+  const heldTemplates = content.dreamsignTemplates.slice(0, heldCount);
+  const allIds = content.dreamsignTemplates.map(({ id }) => id);
+  const remainingIds = options.remainingIds ?? allIds.slice(heldCount);
+  const packageIds = options.packageIds ?? allIds;
+  const dreamAvatar = content.dreamAvatars[0];
+  if (dreamAvatar === undefined)
+    throw new Error("Expected a Dream Avatar fixture");
+  return {
+    ...journeyFixture(content),
+    maxDreamsigns: options.maxDreamsigns ?? 12,
+    dreamsigns: heldTemplates.map((template) => ({ ...template })),
+    remainingDreamsignPool: [...remainingIds],
+    resolvedPackage: {
+      dreamAvatar,
+      draftPoolCopiesByCard: {},
+      dreamsignPoolIds: [...packageIds],
+      mandatoryOnlyPoolSize: 0,
+      draftPoolSize: 0,
+      doubledCardCount: 0,
+      legalSubsetCount: 1,
+      preferredSubsetCount: 1,
+    },
+  };
+}
+
+function starterContent(
+  actions: readonly [ExplorationActionContent, ExplorationActionContent],
+): JourneyContent {
+  const base = contentFixture(actions);
+  return {
+    ...base,
+    cardDatabase: new Map(
+      [...base.cardDatabase].map(([cardNumber, value]) => [
+        cardNumber,
+        cardNumber === 101 || cardNumber === 130
+          ? {
+              ...value,
+              isStarter: true,
+              roles: ["starter-deck" as const],
+              rarity: "Starter" as const,
+            }
+          : value,
+      ]),
+    ),
+  };
+}
+
+function starterJourney(
+  content: JourneyContent,
+  starterCount: number,
+): JourneyState {
+  const starterNumbers = [...content.cardDatabase.values()]
+    .filter((value) => value.isStarter)
+    .map((value) => value.cardNumber);
+  if (starterNumbers.length === 0) {
+    throw new Error("Expected starter cards in synthetic content");
+  }
+  return {
+    ...journeyFixture(content),
+    deck: Array.from({ length: starterCount }, (_, index) => ({
+      entryId: `starter-entry-${String(index + 1)}`,
+      cardNumber: starterNumbers[index % starterNumbers.length],
+      transfiguration: null,
+      isBane: false,
+    })),
+  };
 }
 
 describe("Exploration provider", () => {
@@ -292,6 +439,561 @@ describe("Exploration provider", () => {
         selectionRulesVersion: "unsupported-selection-version",
       }),
     ).toBeNull();
+  });
+
+  it("maps deterministic draws to both endpoints of an inclusive integer range", () => {
+    expect(mapDeterministicDrawToInclusiveInteger(0, 50, 150)).toBe(50);
+    expect(mapDeterministicDrawToInclusiveInteger(1, 50, 150)).toBe(150);
+    expect(
+      mapDeterministicDrawToInclusiveInteger(0.9999999999999999, 50, 150),
+    ).toBe(150);
+  });
+
+  it("adds authored Essence once and persists the exact balance transition", () => {
+    const gainEssence: ExplorationActionContent = {
+      id: "fixed-essence",
+      label: "Gather light",
+      effectText: "Gain 100 essence",
+      effectKind: "gain-essence",
+      essence: 100,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([gainEssence, fallback]);
+    const state = buildState(content);
+    expect(state.runtime.actionOffers[0]).toMatchObject({
+      canonicalMechanicId: "essence-mutation",
+      selectionRulesVersion: SELECTION_RULES_VERSION,
+      selectionKey: `${SOURCE_CARD_ID}:${gainEssence.id}`,
+    });
+
+    const result = resolve(content, state.journey, gainEssence.id);
+    expect(result.essence).toBe(200);
+    expect(result.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        selection: {},
+        essenceBefore: 100,
+        essenceGained: 100,
+        essenceAfter: 200,
+        selectionSignature: state.runtime.actionOffers[0]?.selectionSignature,
+      },
+    });
+    expect(
+      resolveExplorationChoice({
+        journey: state.journey,
+        site,
+        payload: {
+          actionId: gainEssence.id,
+          selection: { cardIds: [] },
+          selectionRulesVersion: state.runtime.selectionRulesVersion,
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+  });
+
+  it("prepares random Essence once, replays it stably, and rejects tampering", () => {
+    const gainRandomEssence: ExplorationActionContent = {
+      id: "random-essence",
+      label: "Gather sparks",
+      effectText: "Gain a random amount of essence between 50 and 150",
+      effectKind: "gain-random-essence",
+      minimumEssence: 50,
+      maximumEssence: 150,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([gainRandomEssence, fallback]);
+    const first = buildState(content);
+    const replay = buildState(content);
+    const offer = first.runtime.actionOffers[0];
+    expect(replay.runtime.actionOffers[0]).toEqual(offer);
+    expect(offer).toMatchObject({
+      canonicalMechanicId: "essence-mutation",
+      selectionPolicyId: "uniform",
+      selectionKey: `${SOURCE_CARD_ID}:${gainRandomEssence.id}`,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
+      essencePreparation: {
+        minimumEssence: 50,
+        maximumEssence: 150,
+        purpose: "essence-amount",
+        drawsConsumed: 1,
+      },
+    });
+    expect(offer?.essencePreparation?.saltParts).toEqual([
+      SELECTION_RULES_VERSION,
+      first.journey.seed,
+      site.id,
+      `${SOURCE_CARD_ID}:${gainRandomEssence.id}`,
+      "uniform",
+      "essence-amount",
+    ]);
+    expect(offer?.preparedEssenceAmount).toBeGreaterThanOrEqual(50);
+    expect(offer?.preparedEssenceAmount).toBeLessThanOrEqual(150);
+
+    const result = resolve(content, first.journey, gainRandomEssence.id);
+    const replayed = resolve(content, first.journey, gainRandomEssence.id);
+    expect(replayed).toEqual(result);
+    expect(result.essence).toBe(
+      first.journey.essence + (offer?.preparedEssenceAmount ?? 0),
+    );
+    expect(result.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        selection: {},
+        essenceBefore: 100,
+        essenceGained: offer?.preparedEssenceAmount,
+        essenceAfter: result.essence,
+        essencePreparation: offer?.essencePreparation,
+        selectionContentRevision: offer?.selectionContentRevision,
+        selectionSignature: offer?.selectionSignature,
+      },
+    });
+
+    const originalAmount = offer?.preparedEssenceAmount;
+    if (originalAmount === undefined) {
+      throw new Error("Expected a prepared Essence amount");
+    }
+    const tamperedAmount = originalAmount === 50 ? 51 : originalAmount - 1;
+    const tamperedRuntime = {
+      ...first.runtime,
+      actionOffers: [
+        { ...offer, preparedEssenceAmount: tamperedAmount },
+        ...first.runtime.actionOffers.slice(1),
+      ],
+    };
+    expect(
+      resolveExplorationChoice({
+        journey: {
+          ...first.journey,
+          siteRuntime: {
+            ...first.journey.siteRuntime,
+            [site.id]: tamperedRuntime,
+          },
+        },
+        site,
+        payload: {
+          actionId: gainRandomEssence.id,
+          selection: {},
+          selectionRulesVersion: first.runtime.selectionRulesVersion,
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+  });
+
+  it("doubles positive and zero Essence as persisted successful resolutions", () => {
+    const doubleEssence: ExplorationActionContent = {
+      id: "double-essence",
+      label: "Mirror the light",
+      effectText: "Double your current essence",
+      effectKind: "double-essence",
+    };
+    const fallback: ExplorationActionContent = {
+      id: "fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([doubleEssence, fallback]);
+    for (const [before, after] of [
+      [125, 250],
+      [0, 0],
+    ] as const) {
+      const state = buildState(content, {
+        ...journeyFixture(content),
+        essence: before,
+      });
+      const result = resolve(content, state.journey, doubleEssence.id);
+      expect(result.essence).toBe(after);
+      expect(result.siteRuntime[site.id]).toMatchObject({
+        kind: "exploration",
+        resolution: {
+          selection: {},
+          essenceBefore: before,
+          essenceGained: before,
+          essenceAfter: after,
+        },
+      });
+    }
+  });
+
+  it("queues T56 modifiers in FIFO order and rejects a tampered persisted offer", () => {
+    const freeNextShop: ExplorationActionContent = {
+      id: "free-next-shop-action",
+      label: "Carry the market's favor",
+      effectText: "All items in the next shop you visit are free",
+      effectKind: "free-next-shop",
+      canonicalMechanicId: "shop-purchase-modifier",
+    };
+    const fallback: ExplorationActionContent = {
+      id: "free-next-shop-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([freeNextShop, fallback]);
+    const earlier = {
+      kind: "free-next-shop" as const,
+      sourceSiteId: "earlier-site",
+      sourceActionId: "earlier-action",
+    };
+    const state = buildState(content, {
+      ...journeyFixture(content),
+      shopModifiers: {
+        ...journeyFixture(content).shopModifiers,
+        freeNextShopModifiers: [earlier],
+      },
+    });
+    expect(state.runtime.actionOffers[0]).toEqual({
+      actionId: freeNextShop.id,
+      canonicalMechanicId: "shop-purchase-modifier",
+      offeredCardIds: [],
+      offeredDreamsignIds: [],
+      offeredDeckEntryIds: [],
+      offeredDreamAvatarIds: [],
+      packCardIds: [],
+      replacementCardIdByEntryId: {},
+      transfigurationByEntryId: {},
+    });
+
+    const result = resolve(content, state.journey, freeNextShop.id);
+    const appended = {
+      kind: "free-next-shop" as const,
+      sourceSiteId: site.id,
+      sourceActionId: freeNextShop.id,
+    };
+    expect(result.shopModifiers.freeNextShopModifiers).toEqual([
+      earlier,
+      appended,
+    ]);
+    expect(explorationResolutionFor(result)).toMatchObject({
+      selection: {},
+      shopModifier: appended,
+    });
+
+    const offer = state.runtime.actionOffers[0];
+    const tamperedRuntime = {
+      ...state.runtime,
+      actionOffers: [
+        { ...offer, preparedEssenceAmount: 1 },
+        ...state.runtime.actionOffers.slice(1),
+      ],
+    };
+    expect(
+      resolveExplorationChoice({
+        journey: {
+          ...state.journey,
+          siteRuntime: {
+            ...state.journey.siteRuntime,
+            [site.id]: tamperedRuntime,
+          },
+        },
+        site,
+        payload: {
+          actionId: freeNextShop.id,
+          selection: {},
+          selectionRulesVersion: state.runtime.selectionRulesVersion,
+        },
+        seq: 92,
+        content,
+      }),
+    ).toBeNull();
+  });
+
+  it("loses floor-half Essence, retains ceil-half, and appends T82 counters", () => {
+    const freePurchases: ExplorationActionContent = {
+      id: "half-essence-free-purchases",
+      label: "Offer half the light",
+      effectText: "Lose half your current essence. The next 3 items are free",
+      effectKind: "lose-half-essence-and-free-purchases",
+      canonicalMechanicId: "shop-purchase-modifier",
+      count: 3,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "half-essence-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([freePurchases, fallback]);
+    const earlier = {
+      kind: "free-purchases" as const,
+      sourceSiteId: "earlier-site",
+      sourceActionId: "earlier-action",
+      initialCount: 1,
+      remainingCount: 1,
+    };
+
+    for (const [before, spent, after] of [
+      [0, 0, 0],
+      [1, 0, 1],
+      [2, 1, 1],
+      [5, 2, 3],
+    ] as const) {
+      const baseJourney = journeyFixture(content);
+      const state = buildState(content, {
+        ...baseJourney,
+        essence: before,
+        shopModifiers: {
+          ...baseJourney.shopModifiers,
+          freePurchaseModifiers: [earlier],
+        },
+      });
+      const result = resolve(content, state.journey, freePurchases.id);
+      const appended = {
+        kind: "free-purchases" as const,
+        sourceSiteId: site.id,
+        sourceActionId: freePurchases.id,
+        initialCount: 3,
+        remainingCount: 3,
+      };
+      expect(result.essence).toBe(after);
+      expect(result.shopModifiers.freePurchaseModifiers).toEqual([
+        earlier,
+        appended,
+      ]);
+      expect(explorationResolutionFor(result)).toMatchObject({
+        selection: {},
+        essenceBefore: before,
+        essenceSpent: spent,
+        essenceAfter: after,
+        shopModifier: appended,
+      });
+      expect(JSON.parse(JSON.stringify(result))).toEqual(result);
+    }
+  });
+
+  it("folds one T82 resolution once and replays the persisted counter byte-for-byte", () => {
+    const action: ExplorationActionContent = {
+      id: "folded-free-purchases",
+      label: "Offer half the light",
+      effectText: "Lose half your current essence. The next 2 items are free",
+      effectKind: "lose-half-essence-and-free-purchases",
+      canonicalMechanicId: "shop-purchase-modifier",
+      count: 2,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "folded-free-purchases-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const initialJourney = explorationFoldJourney(journeyFixture(content));
+    const genesis: Genesis = {
+      seed: "free-purchases-fold",
+      reducerVersion: "test",
+      createdAt: 0,
+      contentConfig: { poolVariant: "tides4" },
+    };
+    const payload = {
+      siteId: site.id,
+      actionId: action.id,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
+      selection: {},
+    };
+    const events = [
+      {
+        seq: 1,
+        event: {
+          type: "OPEN_SITE",
+          payload: {
+            siteId: site.id,
+            selectionRulesVersion: SELECTION_RULES_VERSION,
+          },
+          actor: "client-a",
+          clientTimestamp: "1970-01-01T00:00:00.000Z",
+          basedOnSeq: 0,
+        },
+      },
+      {
+        seq: 2,
+        event: {
+          type: "RESOLVE_EXPLORATION_CHOICE",
+          payload,
+          actor: "client-a",
+          clientTimestamp: "1970-01-01T00:00:01.000Z",
+          basedOnSeq: 1,
+        },
+      },
+      {
+        seq: 3,
+        event: {
+          type: "RESOLVE_EXPLORATION_CHOICE",
+          payload,
+          actor: "client-b",
+          clientTimestamp: "1970-01-01T00:00:02.000Z",
+          basedOnSeq: 2,
+        },
+      },
+    ] satisfies Array<{ seq: number; event: GameEvent }>;
+
+    registerSiteContentProvider(createSiteContentProvider(content));
+    try {
+      const fold = () =>
+        foldEvents(
+          GAME_ENGINE_CONFIG,
+          genesis,
+          {
+            seq: 0,
+            state: {
+              ...GAME_ENGINE_CONFIG.genesisState(genesis),
+              journey: initialJourney,
+            },
+          },
+          events,
+          { devMode: true },
+        );
+      const first = fold();
+      const replay = fold();
+      expect(first.outcomes.map(({ outcome }) => outcome)).toEqual([
+        "applied",
+        "applied",
+        "bounced",
+      ]);
+      expect(replay.state).toEqual(first.state);
+      expect(JSON.parse(JSON.stringify(first.state))).toEqual(first.state);
+      expect(first.state.journey.essence).toBe(50);
+      expect(first.state.journey.shopModifiers.freePurchaseModifiers).toEqual([
+        {
+          kind: "free-purchases",
+          sourceSiteId: site.id,
+          sourceActionId: action.id,
+          initialCount: 2,
+          remainingCount: 2,
+        },
+      ]);
+    } finally {
+      registerSiteContentProvider(null);
+    }
+  });
+
+  it("applies an Essence mutation only once when duplicate intents are folded", () => {
+    const gainEssence: ExplorationActionContent = {
+      id: "folded-essence",
+      label: "Gather light",
+      effectText: "Gain 75 essence",
+      effectKind: "gain-essence",
+      essence: 75,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([gainEssence, fallback]);
+    const prepared = buildState(content);
+    const foldJourney: JourneyState = {
+      ...prepared.journey,
+      currentDreamscape: "exploration-node",
+      atlas: {
+        ...prepared.journey.atlas,
+        nodes: {
+          "exploration-node": {
+            id: "exploration-node",
+            layer: LayerName.Two,
+            indexInLayer: 0,
+            dreamscapeId: "fixture-dreamscape",
+            biomeName: "Fixture biome",
+            sites: [site],
+            position: { x: 0, y: 0 },
+            state: "available",
+            enhancedSiteType: null,
+            forwardIds: [],
+            backwardIds: [],
+            knownDreamsignId: null,
+          },
+        },
+        startingNodeId: "exploration-node",
+        currentNodeId: "exploration-node",
+      },
+    };
+    const genesis: Genesis = {
+      seed: "essence-mutation-fold",
+      reducerVersion: "test",
+      createdAt: 0,
+      contentConfig: { poolVariant: "tides4" },
+    };
+    const payload = {
+      siteId: site.id,
+      actionId: gainEssence.id,
+      selection: {},
+      selectionRulesVersion: prepared.runtime.selectionRulesVersion,
+    };
+    const events = [
+      {
+        seq: 1,
+        event: {
+          type: "RESOLVE_EXPLORATION_CHOICE",
+          payload,
+          actor: "client-a",
+          clientTimestamp: "1970-01-01T00:00:00.000Z",
+          basedOnSeq: 0,
+        },
+      },
+      {
+        seq: 2,
+        event: {
+          type: "RESOLVE_EXPLORATION_CHOICE",
+          payload,
+          actor: "client-a",
+          clientTimestamp: "1970-01-01T00:00:01.000Z",
+          basedOnSeq: 1,
+        },
+      },
+    ] satisfies Array<{ seq: number; event: GameEvent }>;
+
+    registerSiteContentProvider(createSiteContentProvider(content));
+    try {
+      const folded = foldEvents(
+        GAME_ENGINE_CONFIG,
+        genesis,
+        {
+          seq: 0,
+          state: {
+            ...GAME_ENGINE_CONFIG.genesisState(genesis),
+            journey: foldJourney,
+          },
+        },
+        events,
+        { devMode: true },
+      );
+      expect(folded.outcomes.map(({ outcome }) => outcome)).toEqual([
+        "applied",
+        "bounced",
+      ]);
+      expect(folded.state.journey.essence).toBe(175);
+      expect(folded.state.journey.siteRuntime[site.id]).toMatchObject({
+        kind: "exploration",
+        resolution: {
+          essenceBefore: 100,
+          essenceGained: 75,
+          essenceAfter: 175,
+        },
+      });
+    } finally {
+      registerSiteContentProvider(null);
+    }
   });
 
   it("builds and resolves the offered-card and unrestricted transfiguration effects", () => {
@@ -416,12 +1118,7 @@ describe("Exploration provider", () => {
 
     expect(offer).toMatchObject({
       canonicalMechanicId: "transfigure-deck-for-essence",
-      eligibleDeckEntryIds: [
-        "entry-0",
-        "entry-4",
-        "entry-6",
-        "entry-source",
-      ],
+      eligibleDeckEntryIds: ["entry-0", "entry-4", "entry-6", "entry-source"],
       selectionKey: transfigureAllAction.id,
       selectionRulesVersion: SELECTION_RULES_VERSION,
     });
@@ -480,12 +1177,7 @@ describe("Exploration provider", () => {
     expect(result.siteRuntime[site.id]).toMatchObject({
       kind: "exploration",
       resolution: {
-        affectedEntryIds: [
-          "entry-0",
-          "entry-4",
-          "entry-6",
-          "entry-source",
-        ],
+        affectedEntryIds: ["entry-0", "entry-4", "entry-6", "entry-source"],
         chosenTransfiguration: "Inspired",
         resolvedPredicate: "event",
         essenceGained: 0,
@@ -1065,8 +1757,1058 @@ describe("Exploration provider", () => {
     ).toBe(false);
     expect(result.siteRuntime[site.id]).toMatchObject({
       kind: "exploration",
-      resolution: { affectedEntryIds: [], purgedCardIds: [purgedCardId] },
+      resolution: {
+        affectedEntryIds: [],
+        purgedCardIds: [purgedCardId],
+        purgedEntryIds: [selectedEntry.entryId],
+        purgedEntrySnapshots: [selectedEntry],
+      },
     });
+  });
+
+  it("replays zero, one, or two distinct selected Warriors for a bounded purge", () => {
+    const purgeAction: ExplorationActionContent = {
+      id: "purge-up-to-two-warriors",
+      label: "Stand Down the Escort",
+      effectText: "Purge up to 2 chosen Warrior cards",
+      effectKind: "purge-selected",
+      predicate: "warrior",
+      count: 2,
+    };
+    const fallbackAction: ExplorationActionContent = {
+      id: "gain-source",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([purgeAction, fallbackAction]);
+    const warriorEntries = [120, 121].map((cardNumber, index) => ({
+      entryId: `warrior-entry-${String(index)}`,
+      cardNumber,
+      transfiguration: null,
+      isBane: false,
+    }));
+    const eventEntry = {
+      entryId: "event-entry",
+      cardNumber: 101,
+      transfiguration: null,
+      isBane: false,
+    };
+    const state = buildState(content, {
+      ...journeyFixture(content),
+      deck: [...warriorEntries, eventEntry],
+    });
+
+    const none = resolve(content, state.journey, purgeAction.id, {
+      entryIds: [],
+    });
+    expect(none.deck).toEqual(state.journey.deck);
+    expect(none.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        selection: { entryIds: [] },
+        purgedCardIds: [],
+        purgedEntryIds: [],
+        purgedEntrySnapshots: [],
+      },
+    });
+
+    const selectedEntryIds = warriorEntries.map((entry) => entry.entryId);
+    const both = resolve(content, state.journey, purgeAction.id, {
+      entryIds: selectedEntryIds,
+    });
+    const replayed = resolve(content, state.journey, purgeAction.id, {
+      entryIds: selectedEntryIds,
+    });
+    expect(both.deck).toEqual([eventEntry]);
+    expect(replayed).toEqual(both);
+    expect(both.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        selection: { entryIds: selectedEntryIds },
+        purgedEntryIds: selectedEntryIds,
+        purgedEntrySnapshots: warriorEntries,
+      },
+    });
+
+    for (const entryIds of [
+      [warriorEntries[0]?.entryId, warriorEntries[0]?.entryId],
+      [...selectedEntryIds, eventEntry.entryId],
+      [eventEntry.entryId],
+    ]) {
+      expect(
+        resolveExplorationChoice({
+          journey: state.journey,
+          site,
+          payload: {
+            actionId: purgeAction.id,
+            selection: { entryIds },
+            selectionRulesVersion: SELECTION_RULES_VERSION,
+          },
+          seq: 91,
+          content,
+        }),
+      ).toBeNull();
+    }
+  });
+
+  it("prepares an offered Dreamsign plan without spending the pool and resolves append or cap replacement", () => {
+    const action: ExplorationActionContent = {
+      id: "offered-dreamsign",
+      label: "Choose a sign",
+      effectText: "Choose one of three Dreamsigns",
+      effectKind: "gain-offered-dreamsign",
+      offerCount: 3,
+    };
+    const content = dreamsignContent(action);
+    const stalePool = [
+      dreamsignId(5).toUpperCase(),
+      dreamsignId(3),
+      dreamsignId(5),
+      "not-a-dreamsign",
+      dreamsignId(4),
+      dreamsignId(6),
+    ];
+    const state = buildState(
+      content,
+      withDreamsignPool(content, {
+        heldCount: 1,
+        maxDreamsigns: 4,
+        remainingIds: stalePool,
+      }),
+    );
+    const offer = state.runtime.actionOffers[0];
+    const plan = offer?.dreamsignPreparation;
+    expect(plan).toMatchObject({
+      kind: "offered-gain",
+      requestedCount: 3,
+      heldIdsAtPreparation: [dreamsignId(1)],
+      maxDreamsignsAtPreparation: 4,
+      poolBeforeIds: [
+        dreamsignId(3),
+        dreamsignId(4),
+        dreamsignId(5),
+        dreamsignId(6),
+      ],
+      poolRegenerated: false,
+      requiredOverflowReplacementCount: 0,
+    });
+    expect(plan?.preparedDreamsignIds).toHaveLength(3);
+    expect(new Set(plan?.preparedDreamsignIds).size).toBe(3);
+    expect(offer?.offeredDreamsignIds).toEqual(plan?.preparedDreamsignIds);
+    expect(state.journey.remainingDreamsignPool).toEqual(stalePool);
+    expect(JSON.parse(JSON.stringify(state.runtime))).toEqual(state.runtime);
+    expect(() =>
+      assertJsonSafe(state.runtime, "exploration-runtime"),
+    ).not.toThrow();
+
+    const offeredDreamsignId = plan?.preparedDreamsignIds[0];
+    if (offeredDreamsignId === undefined) throw new Error("Expected an offer");
+    const appended = resolve(content, state.journey, action.id, {
+      offeredDreamsignId,
+    });
+    const replayed = resolve(content, state.journey, action.id, {
+      offeredDreamsignId,
+    });
+    expect(replayed).toEqual(appended);
+    expect(appended.dreamsigns.map(({ id }) => id)).toEqual([
+      dreamsignId(1),
+      offeredDreamsignId,
+    ]);
+    expect(appended.remainingDreamsignPool).toEqual(
+      plan?.poolBasisIds.filter((id) => id !== offeredDreamsignId),
+    );
+    expect(appended.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        selection: { offeredDreamsignId },
+        gainedDreamsignIds: [offeredDreamsignId],
+        purgedDreamsignIds: [],
+        dreamsignMutation: {
+          beforeIds: [dreamsignId(1)],
+          afterIds: [dreamsignId(1), offeredDreamsignId],
+          offeredIds: plan?.preparedDreamsignIds,
+          gainedIds: [offeredDreamsignId],
+          purgedIds: [],
+          replacements: [],
+        },
+      },
+    });
+
+    const cappedState = buildState(
+      content,
+      withDreamsignPool(content, { heldCount: 2, maxDreamsigns: 2 }),
+    );
+    const cappedOffer = cappedState.runtime.actionOffers[0];
+    const cappedGain =
+      cappedOffer?.dreamsignPreparation?.preparedDreamsignIds[0];
+    if (cappedGain === undefined) throw new Error("Expected a capped offer");
+    expect(
+      resolveExplorationChoice({
+        journey: cappedState.journey,
+        site,
+        payload: {
+          actionId: action.id,
+          selection: { offeredDreamsignId: cappedGain },
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+    const replaced = resolve(content, cappedState.journey, action.id, {
+      offeredDreamsignId: cappedGain,
+      replacedDreamsignId: dreamsignId(2),
+    });
+    expect(replaced.dreamsigns.map(({ id }) => id)).toEqual([
+      dreamsignId(1),
+      cappedGain,
+    ]);
+    expect(
+      explorationResolutionFor(replaced).dreamsignMutation?.replacements,
+    ).toEqual([
+      {
+        removedDreamsignId: dreamsignId(2),
+        gainedDreamsignId: cappedGain,
+      },
+    ]);
+  });
+
+  it("atomically gains exact Nightmares with a fixed global or custom Dreamsign", () => {
+    const fixedDreamsignId = dreamsignId(4);
+    const action: ExplorationActionContent = {
+      id: "nightmares-and-fixed-dreamsign",
+      label: "Take the marked sign",
+      effectText: "Gain two Nightmares and a fixed Dreamsign",
+      effectKind: "gain-nightmare-and-dreamsign",
+      dreamsignId: fixedDreamsignId,
+      nightmareCount: 2,
+    };
+    const content = dreamsignContent(action, 8);
+    const state = buildState(
+      content,
+      withDreamsignPool(content, { heldCount: 1, maxDreamsigns: 3 }),
+    );
+    const offer = state.runtime.actionOffers[0];
+    expect(offer).toMatchObject({
+      canonicalMechanicId: "gain-dreamsign",
+      selectionPolicyId: "fixed",
+      offeredDreamsignIds: [],
+      dreamsignPreparation: {
+        kind: "fixed-gain",
+        requestedCount: 1,
+        nightmareCount: 2,
+        preparedDreamsignIds: [fixedDreamsignId],
+        requiredOverflowReplacementCount: 0,
+      },
+    });
+    expect(state.journey.remainingDreamsignPool).toContain(fixedDreamsignId);
+
+    const resolved = resolve(content, state.journey, action.id);
+    const replayed = resolve(content, state.journey, action.id);
+    expect(replayed).toEqual(resolved);
+    expect(resolved.deck).toHaveLength(state.journey.deck.length + 2);
+    expect(resolved.dreamsigns.map(({ id }) => id)).toEqual([
+      dreamsignId(1),
+      fixedDreamsignId,
+    ]);
+    expect(resolved.remainingDreamsignPool).not.toContain(fixedDreamsignId);
+    expect(explorationResolutionFor(resolved)).toMatchObject({
+      selection: {},
+      gainedCardIds: [NIGHTMARE_ID, NIGHTMARE_ID],
+      gainedEntryIds: ["deck-91-0", "deck-91-1"],
+      gainedDreamsignIds: [fixedDreamsignId],
+      dreamsignMutation: {
+        beforeIds: [dreamsignId(1)],
+        afterIds: [dreamsignId(1), fixedDreamsignId],
+        offeredIds: [],
+        gainedIds: [fixedDreamsignId],
+        purgedIds: [],
+        replacements: [],
+      },
+    });
+    const resolvedRuntime = resolved.siteRuntime[site.id];
+    expect(JSON.parse(JSON.stringify(resolvedRuntime))).toEqual(
+      resolvedRuntime,
+    );
+    expect(() =>
+      assertJsonSafe(resolvedRuntime, "fixed-nightmare-bundle"),
+    ).not.toThrow();
+
+    const capped = buildState(
+      content,
+      withDreamsignPool(content, { heldCount: 2, maxDreamsigns: 2 }),
+    );
+    expect(capped.runtime.actionOffers[0]?.dreamsignPreparation).toMatchObject({
+      requiredOverflowReplacementCount: 1,
+    });
+    for (const replacedDreamsignId of [undefined, "not-held"]) {
+      expect(
+        resolveExplorationChoice({
+          journey: capped.journey,
+          site,
+          payload: {
+            actionId: action.id,
+            selection:
+              replacedDreamsignId === undefined ? {} : { replacedDreamsignId },
+            selectionRulesVersion: SELECTION_RULES_VERSION,
+          },
+          seq: 91,
+          content,
+        }),
+      ).toBeNull();
+    }
+    const replaced = resolve(content, capped.journey, action.id, {
+      replacedDreamsignId: dreamsignId(2),
+    });
+    expect(replaced.dreamsigns.map(({ id }) => id)).toEqual([
+      dreamsignId(1),
+      fixedDreamsignId,
+    ]);
+    expect(
+      explorationResolutionFor(replaced).dreamsignMutation?.replacements,
+    ).toEqual([
+      {
+        removedDreamsignId: dreamsignId(2),
+        gainedDreamsignId: fixedDreamsignId,
+      },
+    ]);
+
+    const customDreamsignId = "custom-nightmare-dreamsign";
+    const customAction: ExplorationActionContent = {
+      ...action,
+      id: "nightmares-and-custom-dreamsign",
+      dreamsignId: customDreamsignId,
+    };
+    const customBase = dreamsignContent(customAction, 4);
+    if (customBase.exploration === undefined)
+      throw new Error("Expected Exploration content");
+    const customContent: JourneyContent = {
+      ...customBase,
+      exploration: {
+        ...customBase.exploration,
+        customDreamsigns: [
+          {
+            id: customDreamsignId,
+            name: "Custom Nightmare Sign",
+            effectDescription: "A synthetic custom effect.",
+          },
+        ],
+      },
+    };
+    const customState = buildState(customContent);
+    const custom = resolve(customContent, customState.journey, customAction.id);
+    expect(custom.dreamsigns).toContainEqual({
+      id: customDreamsignId,
+      name: "Custom Nightmare Sign",
+      effectDescription: "A synthetic custom effect.",
+    });
+    expect(custom.remainingDreamsignPool).toEqual(
+      customState.journey.remainingDreamsignPool,
+    );
+  });
+
+  it("rejects unavailable or tampered fixed Nightmare bundles without partial mutation", () => {
+    const fixedDreamsignId = dreamsignId(1);
+    const action: ExplorationActionContent = {
+      id: "guarded-nightmare-and-fixed-dreamsign",
+      label: "Take the marked sign",
+      effectText: "Gain a Nightmare and a fixed Dreamsign",
+      effectKind: "gain-nightmare-and-dreamsign",
+      dreamsignId: fixedDreamsignId,
+      nightmareCount: 1,
+    };
+    const content = dreamsignContent(action, 5);
+    const alreadyHeld = buildState(
+      content,
+      withDreamsignPool(content, { heldCount: 1 }),
+    );
+    expect(
+      alreadyHeld.runtime.actionOffers[0]?.dreamsignPreparation,
+    ).toMatchObject({ unavailableReason: "insufficient-candidates" });
+    expect(
+      resolveExplorationChoice({
+        journey: alreadyHeld.journey,
+        site,
+        payload: {
+          actionId: action.id,
+          selection: {},
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+
+    const zeroCapacity = buildState(
+      content,
+      withDreamsignPool(content, { heldCount: 0, maxDreamsigns: 0 }),
+    );
+    expect(
+      zeroCapacity.runtime.actionOffers[0]?.dreamsignPreparation,
+    ).toMatchObject({ unavailableReason: "capacity-too-small" });
+
+    const validAction = { ...action, dreamsignId: dreamsignId(3) };
+    const validContent = dreamsignContent(validAction, 6);
+    const prepared = buildState(validContent);
+    const tamperedContent: JourneyContent = {
+      ...validContent,
+      exploration: {
+        ...validContent.exploration!,
+        encounters: validContent.exploration!.encounters.map((encounter) => ({
+          ...encounter,
+          actions: encounter.actions.map((candidate) =>
+            candidate.id === validAction.id
+              ? { ...candidate, nightmareCount: 2 }
+              : candidate,
+          ),
+        })),
+      },
+    };
+    expect(
+      resolveExplorationChoice({
+        journey: prepared.journey,
+        site,
+        payload: {
+          actionId: validAction.id,
+          selection: {},
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+        },
+        seq: 91,
+        content: tamperedContent,
+      }),
+    ).toBeNull();
+
+    const cardsWithoutNightmare = new Map(
+      [...validContent.cardDatabase].filter(
+        ([, candidate]) => candidate.id !== NIGHTMARE_ID,
+      ),
+    );
+    const missingNightmareContent = {
+      ...validContent,
+      cardDatabase: cardsWithoutNightmare,
+    };
+    const missingNightmare = buildState(missingNightmareContent);
+    const before = structuredClone(missingNightmare.journey);
+    expect(
+      resolveExplorationChoice({
+        journey: missingNightmare.journey,
+        site,
+        payload: {
+          actionId: validAction.id,
+          selection: {},
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+        },
+        seq: 91,
+        content: missingNightmareContent,
+      }),
+    ).toBeNull();
+    expect(missingNightmare.journey).toEqual(before);
+  });
+
+  it("prepares a non-spending offered Nightmare bundle and spends only the chosen Dreamsign", () => {
+    const action: ExplorationActionContent = {
+      id: "nightmares-and-offered-dreamsign",
+      label: "Choose a dark sign",
+      effectText: "Gain two Nightmares and one of three Dreamsigns",
+      effectKind: "gain-nightmare-and-offered-dreamsign",
+      offerCount: 3,
+      nightmareCount: 2,
+    };
+    const content = dreamsignContent(action, 9);
+    const originalPool = [
+      dreamsignId(3),
+      dreamsignId(4),
+      dreamsignId(5),
+      dreamsignId(6),
+    ];
+    const state = buildState(
+      content,
+      withDreamsignPool(content, {
+        heldCount: 2,
+        maxDreamsigns: 4,
+        remainingIds: originalPool,
+      }),
+    );
+    const offer = state.runtime.actionOffers[0];
+    const plan = offer?.dreamsignPreparation;
+    expect(offer).toMatchObject({
+      canonicalMechanicId: "gain-dreamsign",
+      selectionPolicyId: "dreamsign-match",
+      dreamsignPreparation: {
+        kind: "offered-gain",
+        requestedCount: 3,
+        nightmareCount: 2,
+        requiredOverflowReplacementCount: 0,
+      },
+    });
+    expect(offer?.offeredDreamsignIds).toEqual(plan?.preparedDreamsignIds);
+    expect(state.journey.remainingDreamsignPool).toEqual(originalPool);
+    const selected = plan?.preparedDreamsignIds[1];
+    if (selected === undefined) throw new Error("Expected a Dreamsign offer");
+    const resolved = resolve(content, state.journey, action.id, {
+      offeredDreamsignId: selected,
+    });
+    expect(resolved.remainingDreamsignPool).toEqual(
+      plan?.poolBasisIds.filter((id) => id !== selected),
+    );
+    for (const unchosen of plan?.preparedDreamsignIds ?? []) {
+      if (unchosen !== selected) {
+        expect(resolved.remainingDreamsignPool).toContain(unchosen);
+      }
+    }
+    expect(explorationResolutionFor(resolved)).toMatchObject({
+      selection: { offeredDreamsignId: selected },
+      gainedCardIds: [NIGHTMARE_ID, NIGHTMARE_ID],
+      gainedEntryIds: ["deck-91-0", "deck-91-1"],
+      gainedDreamsignIds: [selected],
+      dreamsignMutation: {
+        offeredIds: plan?.preparedDreamsignIds,
+        gainedIds: [selected],
+      },
+    });
+    expect(
+      resolve(content, state.journey, action.id, {
+        offeredDreamsignId: selected,
+      }),
+    ).toEqual(resolved);
+    expect(JSON.parse(JSON.stringify(resolved))).toEqual(resolved);
+
+    const capped = buildState(
+      content,
+      withDreamsignPool(content, { heldCount: 2, maxDreamsigns: 2 }),
+    );
+    const cappedPlan = capped.runtime.actionOffers[0]?.dreamsignPreparation;
+    const cappedSelected = cappedPlan?.preparedDreamsignIds[0];
+    if (cappedSelected === undefined)
+      throw new Error("Expected a capped Dreamsign offer");
+    expect(cappedPlan?.requiredOverflowReplacementCount).toBe(1);
+    expect(
+      resolveExplorationChoice({
+        journey: capped.journey,
+        site,
+        payload: {
+          actionId: action.id,
+          selection: { offeredDreamsignId: cappedSelected },
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+    const replaced = resolve(content, capped.journey, action.id, {
+      offeredDreamsignId: cappedSelected,
+      replacedDreamsignId: dreamsignId(1),
+    });
+    expect(replaced.dreamsigns.map(({ id }) => id)).toEqual([
+      cappedSelected,
+      dreamsignId(2),
+    ]);
+
+    const cappedOffer = capped.runtime.actionOffers[0];
+    if (cappedOffer === undefined || cappedPlan === undefined)
+      throw new Error("Expected a signed capped plan");
+    const tamperedJourney: JourneyState = {
+      ...capped.journey,
+      siteRuntime: {
+        ...capped.journey.siteRuntime,
+        [site.id]: {
+          ...capped.runtime,
+          actionOffers: [
+            {
+              ...cappedOffer,
+              dreamsignPreparation: {
+                ...cappedPlan,
+                requiredOverflowReplacementCount: 0,
+              },
+            },
+            ...capped.runtime.actionOffers.slice(1),
+          ],
+        },
+      },
+    };
+    expect(
+      resolveExplorationChoice({
+        journey: tamperedJourney,
+        site,
+        payload: {
+          actionId: action.id,
+          selection: {
+            offeredDreamsignId: cappedSelected,
+            replacedDreamsignId: dreamsignId(1),
+          },
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+  });
+
+  it("replays one compound Nightmare and Dreamsign intent byte-identically and rejects its duplicate", () => {
+    const action: ExplorationActionContent = {
+      id: "replayed-nightmares-and-dreamsign",
+      label: "Choose a dark sign",
+      effectText: "Gain two Nightmares and one of three Dreamsigns",
+      effectKind: "gain-nightmare-and-offered-dreamsign",
+      offerCount: 3,
+      nightmareCount: 2,
+    };
+    const content = dreamsignContent(action, 8);
+    const prepared = buildState(
+      content,
+      withDreamsignPool(content, { heldCount: 0, maxDreamsigns: 4 }),
+    );
+    const offeredDreamsignId =
+      prepared.runtime.actionOffers[0]?.dreamsignPreparation
+        ?.preparedDreamsignIds[0];
+    if (offeredDreamsignId === undefined)
+      throw new Error("Expected a prepared Dreamsign");
+    const foldJourney: JourneyState = {
+      ...prepared.journey,
+      currentDreamscape: "exploration-node",
+      atlas: {
+        ...prepared.journey.atlas,
+        nodes: {
+          "exploration-node": {
+            id: "exploration-node",
+            layer: LayerName.Two,
+            indexInLayer: 0,
+            dreamscapeId: "fixture-dreamscape",
+            biomeName: "Fixture biome",
+            sites: [site],
+            position: { x: 0, y: 0 },
+            state: "available",
+            enhancedSiteType: null,
+            forwardIds: [],
+            backwardIds: [],
+            knownDreamsignId: null,
+          },
+        },
+        startingNodeId: "exploration-node",
+        currentNodeId: "exploration-node",
+      },
+    };
+    const genesis: Genesis = {
+      seed: "nightmare-dreamsign-fold",
+      reducerVersion: "test",
+      createdAt: 0,
+      contentConfig: { poolVariant: "tides4" },
+    };
+    const payload = {
+      siteId: site.id,
+      actionId: action.id,
+      selection: { offeredDreamsignId },
+      selectionRulesVersion: prepared.runtime.selectionRulesVersion,
+    };
+    const event: GameEvent = {
+      type: "RESOLVE_EXPLORATION_CHOICE",
+      payload,
+      actor: "client-a",
+      clientTimestamp: "1970-01-01T00:00:00.000Z",
+      basedOnSeq: 0,
+    };
+    const duplicate: GameEvent = {
+      ...event,
+      clientTimestamp: "1970-01-01T00:00:01.000Z",
+      basedOnSeq: 1,
+    };
+    const base = {
+      seq: 0,
+      state: {
+        ...GAME_ENGINE_CONFIG.genesisState(genesis),
+        journey: foldJourney,
+      },
+    };
+    expect(JSON.parse(JSON.stringify(event))).toEqual(event);
+    expect(() =>
+      assertJsonSafe(event, "nightmare-dreamsign-event"),
+    ).not.toThrow();
+
+    registerSiteContentProvider(createSiteContentProvider(content));
+    try {
+      const first = foldEvents(
+        GAME_ENGINE_CONFIG,
+        genesis,
+        base,
+        [{ seq: 1, event }],
+        { devMode: true },
+      );
+      const replay = foldEvents(
+        GAME_ENGINE_CONFIG,
+        genesis,
+        base,
+        [{ seq: 1, event }],
+        { devMode: true },
+      );
+      const duplicateFold = foldEvents(
+        GAME_ENGINE_CONFIG,
+        genesis,
+        base,
+        [
+          { seq: 1, event },
+          { seq: 2, event: duplicate },
+        ],
+        { devMode: true },
+      );
+      expect(first.outcomes[0]?.outcome).toBe("applied");
+      expect(replay.state).toEqual(first.state);
+      expect(duplicateFold.outcomes.map(({ outcome }) => outcome)).toEqual([
+        "applied",
+        "bounced",
+      ]);
+      expect(duplicateFold.state.journey).toEqual(first.state.journey);
+      expect(first.state.journey.siteRuntime[site.id]).toMatchObject({
+        kind: "exploration",
+        resolution: {
+          gainedCardIds: [NIGHTMARE_ID, NIGHTMARE_ID],
+          gainedEntryIds: ["deck-1-0", "deck-1-1"],
+          gainedDreamsignIds: [offeredDreamsignId],
+        },
+      });
+    } finally {
+      registerSiteContentProvider(null);
+    }
+  });
+
+  it("replaces one chosen held Dreamsign atomically even with free capacity", () => {
+    const action: ExplorationActionContent = {
+      id: "offered-dreamsign-replacement",
+      label: "Exchange a sign",
+      effectText: "Replace a Dreamsign with one of three",
+      effectKind: "replace-selected-dreamsign-with-offered",
+      offerCount: 3,
+    };
+    const content = dreamsignContent(action);
+    const state = buildState(
+      content,
+      withDreamsignPool(content, { heldCount: 2, maxDreamsigns: 8 }),
+    );
+    const plan = state.runtime.actionOffers[0]?.dreamsignPreparation;
+    const offeredDreamsignId = plan?.preparedDreamsignIds[1];
+    if (offeredDreamsignId === undefined) throw new Error("Expected an offer");
+    expect(plan).toMatchObject({
+      kind: "offered-replacement",
+      heldIdsAtPreparation: [dreamsignId(1), dreamsignId(2)],
+    });
+
+    const result = resolve(content, state.journey, action.id, {
+      offeredDreamsignId,
+      replacedDreamsignId: dreamsignId(1),
+    });
+    expect(result.dreamsigns.map(({ id }) => id)).toEqual([
+      offeredDreamsignId,
+      dreamsignId(2),
+    ]);
+    for (const selection of [
+      { offeredDreamsignId },
+      {
+        offeredDreamsignId: dreamsignId(1),
+        replacedDreamsignId: dreamsignId(2),
+      },
+      {
+        offeredDreamsignId,
+        replacedDreamsignId: "not-held",
+      },
+      {
+        offeredDreamsignId,
+        replacedDreamsignId: dreamsignId(1),
+        purgedDreamsignId: dreamsignId(2),
+      },
+    ]) {
+      expect(
+        resolveExplorationChoice({
+          journey: state.journey,
+          site,
+          payload: {
+            actionId: action.id,
+            selection,
+            selectionRulesVersion: SELECTION_RULES_VERSION,
+          },
+          seq: 91,
+          content,
+        }),
+      ).toBeNull();
+    }
+  });
+
+  it("renews once and replaces all held Dreamsigns in stable slot order", () => {
+    const action: ExplorationActionContent = {
+      id: "replace-all-dreamsigns",
+      label: "Recast every sign",
+      effectText: "Replace all Dreamsigns randomly",
+      effectKind: "replace-all-dreamsigns-random",
+    };
+    const content = dreamsignContent(action, 8);
+    const state = buildState(
+      content,
+      withDreamsignPool(content, {
+        heldCount: 3,
+        maxDreamsigns: 5,
+        remainingIds: [dreamsignId(4)],
+      }),
+    );
+    const offer = state.runtime.actionOffers[0];
+    const plan = offer?.dreamsignPreparation;
+    expect(plan).toMatchObject({
+      kind: "replace-all-random",
+      requestedCount: 3,
+      heldIdsAtPreparation: [dreamsignId(1), dreamsignId(2), dreamsignId(3)],
+      poolBeforeIds: [dreamsignId(4)],
+      poolRegenerated: true,
+      poolBasisIds: [
+        dreamsignId(4),
+        dreamsignId(5),
+        dreamsignId(6),
+        dreamsignId(7),
+        dreamsignId(8),
+      ],
+    });
+    expect(offer?.offeredDreamsignIds).toEqual([]);
+    expect(state.journey.remainingDreamsignPool).toEqual([dreamsignId(4)]);
+
+    const result = resolve(content, state.journey, action.id);
+    expect(result.dreamsigns.map(({ id }) => id)).toEqual(
+      plan?.preparedDreamsignIds,
+    );
+    const mutation = explorationResolutionFor(result).dreamsignMutation;
+    expect(mutation?.replacements).toEqual(
+      [dreamsignId(1), dreamsignId(2), dreamsignId(3)].map(
+        (removedDreamsignId, index) => ({
+          removedDreamsignId,
+          gainedDreamsignId: plan?.preparedDreamsignIds[index],
+        }),
+      ),
+    );
+    expect(mutation?.purgedIds).toEqual([]);
+    expect(mutation?.poolRegenerated).toBe(true);
+    expect(mutation?.poolAfterIds).not.toContain(dreamsignId(1));
+  });
+
+  it("purges exactly one Dreamsign and handles zero, one, or two overflow replacements", () => {
+    const action: ExplorationActionContent = {
+      id: "purge-and-gain-dreamsigns",
+      label: "Break and gather signs",
+      effectText: "Purge one Dreamsign and gain three random Dreamsigns",
+      effectKind: "purge-selected-dreamsign-and-gain-random",
+      count: 3,
+    };
+    const content = dreamsignContent(action, 12);
+    for (const heldCount of [1, 2, 3]) {
+      const state = buildState(
+        content,
+        withDreamsignPool(content, { heldCount, maxDreamsigns: 3 }),
+      );
+      const plan = state.runtime.actionOffers[0]?.dreamsignPreparation;
+      const overflowCount = heldCount - 1;
+      expect(plan).toMatchObject({
+        kind: "purge-and-gain-random",
+        requestedCount: 3,
+        requiredOverflowReplacementCount: overflowCount,
+      });
+      expect(state.runtime.actionOffers[0]?.offeredDreamsignIds).toEqual([]);
+      const purgedDreamsignId = dreamsignId(1);
+      const overflowReplacementDreamsignIds = Array.from(
+        { length: overflowCount },
+        (_, index) => dreamsignId(index + 2),
+      ).reverse();
+      const result = resolve(content, state.journey, action.id, {
+        purgedDreamsignId,
+        overflowReplacementDreamsignIds,
+      });
+      const resolution = explorationResolutionFor(result);
+      const mutation = resolution.dreamsignMutation;
+      expect(result.dreamsigns).toHaveLength(3);
+      expect(mutation?.gainedIds).toHaveLength(3);
+      expect(mutation?.purgedIds).toEqual([purgedDreamsignId]);
+      expect(mutation?.replacements).toEqual(
+        Array.from({ length: overflowCount }, (_, index) => ({
+          removedDreamsignId: dreamsignId(index + 2),
+          gainedDreamsignId: plan?.preparedDreamsignIds[index],
+        })),
+      );
+      expect(resolution.purgedDreamsignIds).toEqual([purgedDreamsignId]);
+      if (heldCount === 3) {
+        for (const invalidSelection of [
+          {
+            purgedDreamsignId,
+            overflowReplacementDreamsignIds: [dreamsignId(2)],
+          },
+          {
+            purgedDreamsignId,
+            overflowReplacementDreamsignIds: [dreamsignId(2), dreamsignId(2)],
+          },
+          {
+            purgedDreamsignId,
+            overflowReplacementDreamsignIds: [
+              purgedDreamsignId,
+              dreamsignId(2),
+            ],
+          },
+        ]) {
+          expect(
+            resolveExplorationChoice({
+              journey: state.journey,
+              site,
+              payload: {
+                actionId: action.id,
+                selection: invalidSelection,
+                selectionRulesVersion: SELECTION_RULES_VERSION,
+              },
+              seq: 91,
+              content,
+            }),
+          ).toBeNull();
+        }
+      }
+    }
+  });
+
+  it("persists action-level Dreamsign unavailability and rejects stale or tampered plans", () => {
+    const replaceAll: ExplorationActionContent = {
+      id: "unavailable-replace-all",
+      label: "Recast every sign",
+      effectText: "Replace all Dreamsigns randomly",
+      effectKind: "replace-all-dreamsigns-random",
+    };
+    const emptyContent = dreamsignContent(replaceAll, 2);
+    const emptyState = buildState(
+      emptyContent,
+      withDreamsignPool(emptyContent, { heldCount: 0 }),
+    );
+    expect(
+      emptyState.runtime.actionOffers[0]?.dreamsignPreparation,
+    ).toMatchObject({
+      unavailableReason: "requires-held-dreamsign",
+    });
+    expect(
+      resolveExplorationChoice({
+        journey: emptyState.journey,
+        site,
+        payload: {
+          actionId: replaceAll.id,
+          selection: {},
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+        },
+        seq: 91,
+        content: emptyContent,
+      }),
+    ).toBeNull();
+
+    const offered: ExplorationActionContent = {
+      id: "insufficient-offer",
+      label: "Choose a sign",
+      effectText: "Choose one of three Dreamsigns",
+      effectKind: "gain-offered-dreamsign",
+      offerCount: 3,
+    };
+    const insufficientContent = dreamsignContent(offered, 2);
+    const insufficientState = buildState(
+      insufficientContent,
+      withDreamsignPool(insufficientContent, {
+        packageIds: [dreamsignId(1), dreamsignId(2)],
+      }),
+    );
+    expect(insufficientState.runtime.actionOffers).toHaveLength(2);
+    expect(
+      insufficientState.runtime.actionOffers[0]?.dreamsignPreparation,
+    ).toMatchObject({
+      poolRegenerated: true,
+      unavailableReason: "insufficient-candidates",
+      preparedDreamsignIds: [],
+    });
+    expect(
+      resolveExplorationChoice({
+        journey: insufficientState.journey,
+        site,
+        payload: {
+          actionId: offered.id,
+          selection: { offeredDreamsignId: dreamsignId(1) },
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+        },
+        seq: 91,
+        content: insufficientContent,
+      }),
+    ).toBeNull();
+
+    const purgeAndGain: ExplorationActionContent = {
+      id: "capacity-too-small",
+      label: "Break and gather signs",
+      effectText: "Purge one and gain three",
+      effectKind: "purge-selected-dreamsign-and-gain-random",
+      count: 3,
+    };
+    const capacityContent = dreamsignContent(purgeAndGain, 8);
+    const capacityState = buildState(
+      capacityContent,
+      withDreamsignPool(capacityContent, {
+        heldCount: 1,
+        maxDreamsigns: 2,
+      }),
+    );
+    expect(
+      capacityState.runtime.actionOffers[0]?.dreamsignPreparation,
+    ).toMatchObject({ unavailableReason: "capacity-too-small" });
+
+    const content = dreamsignContent(offered, 8);
+    const prepared = buildState(content, withDreamsignPool(content));
+    const offer = prepared.runtime.actionOffers[0];
+    const originalPlan = offer?.dreamsignPreparation;
+    if (offer === undefined || originalPlan === undefined) {
+      throw new Error("Expected a signed Dreamsign plan");
+    }
+    const offeredDreamsignId = originalPlan.preparedDreamsignIds[0];
+    if (offeredDreamsignId === undefined) throw new Error("Expected an offer");
+    const resolveRaw = (journey: JourneyState) =>
+      resolveExplorationChoice({
+        journey,
+        site,
+        payload: {
+          actionId: offered.id,
+          selection: { offeredDreamsignId },
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+        },
+        seq: 91,
+        content,
+      });
+    expect(
+      resolveRaw({
+        ...prepared.journey,
+        maxDreamsigns: prepared.journey.maxDreamsigns - 1,
+      }),
+    ).toBeNull();
+    expect(
+      resolveRaw({
+        ...prepared.journey,
+        remainingDreamsignPool:
+          prepared.journey.remainingDreamsignPool.slice(1),
+      }),
+    ).toBeNull();
+    expect(
+      resolveRaw({
+        ...prepared.journey,
+        siteRuntime: {
+          ...prepared.journey.siteRuntime,
+          [site.id]: {
+            ...prepared.runtime,
+            actionOffers: [
+              {
+                ...offer,
+                dreamsignPreparation: {
+                  ...originalPlan,
+                  preparedDreamsignIds: [
+                    dreamsignId(8),
+                    ...originalPlan.preparedDreamsignIds.slice(1),
+                  ],
+                },
+              },
+              ...prepared.runtime.actionOffers.slice(1),
+            ],
+          },
+        },
+      }),
+    ).toBeNull();
   });
 
   it("mints a random Dreamsign offer and purges a UUID-selected Dreamsign for essence", () => {
@@ -1982,5 +3724,3137 @@ describe("Exploration provider", () => {
       runtime?.kind === "exploration" ? runtime.resolution : null,
     ).not.toHaveProperty("selectionSignature");
     expect(() => assertJsonSafe(result, "journey")).not.toThrow();
+  });
+
+  it("discloses the prepared named starter purge while concealing the random purge", () => {
+    const disclosed: ExplorationActionContent = {
+      id: "purge-starter-disclosed",
+      label: "Release the first lesson",
+      effectText: "Purge {starter_card}",
+      effectKind: "purge-starter-card",
+    };
+    const concealed: ExplorationActionContent = {
+      id: "purge-starter-random",
+      label: "Let one lesson fade",
+      effectText: "Purge a random starter card",
+      effectKind: "purge-random-starter-card",
+    };
+    const content = starterContent([disclosed, concealed]);
+    const state = buildState(content, starterJourney(content, 3));
+    const disclosedOffer = state.runtime.actionOffers[0];
+    const concealedOffer = state.runtime.actionOffers[1];
+
+    expect(disclosedOffer?.starterCardPreparation).toMatchObject({
+      kind: "purge-starter-card",
+      eligibleStarterCards: [
+        { entryId: "starter-entry-1" },
+        { entryId: "starter-entry-2" },
+        { entryId: "starter-entry-3" },
+      ],
+    });
+    expect(
+      disclosedOffer?.starterCardPreparation?.unavailableReason,
+    ).toBeUndefined();
+    expect(disclosedOffer?.offeredDeckEntryIds).toEqual(
+      disclosedOffer?.starterCardPreparation?.purgedEntryIds,
+    );
+    expect(concealedOffer?.starterCardPreparation).toMatchObject({
+      kind: "purge-random-starter-card",
+    });
+    expect(
+      concealedOffer?.starterCardPreparation?.unavailableReason,
+    ).toBeUndefined();
+    expect(concealedOffer?.offeredDeckEntryIds).toEqual([]);
+
+    const purgedEntryId =
+      disclosedOffer?.starterCardPreparation?.purgedEntryIds[0];
+    if (purgedEntryId === undefined)
+      throw new Error("Expected prepared starter");
+    const resolved = resolve(content, state.journey, disclosed.id);
+    expect(resolved.deck.some((entry) => entry.entryId === purgedEntryId)).toBe(
+      false,
+    );
+    expect(explorationResolutionFor(resolved)).toMatchObject({
+      selection: {},
+      purgedEntryIds: [purgedEntryId],
+      gainedCardIds: [],
+      starterCardReplacements: [],
+    });
+    expect(
+      resolveExplorationChoice({
+        journey: state.journey,
+        site,
+        payload: {
+          actionId: disclosed.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: { entryIds: [purgedEntryId] },
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+  });
+
+  it("atomically replaces one prepared starter and rejects tampering, replay, and stale state", () => {
+    const action: ExplorationActionContent = {
+      id: "replace-random-starter",
+      label: "Trade the old lesson",
+      effectText: "Purge a random starter card and gain a Warrior",
+      effectKind: "purge-random-starter-and-gain-card",
+      predicate: "warrior",
+    };
+    const fallback: ExplorationActionContent = {
+      id: "fallback-starter-replacement",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = starterContent([action, fallback]);
+    const state = buildState(content, starterJourney(content, 2));
+    const preparation = state.runtime.actionOffers[0]?.starterCardPreparation;
+    if (preparation === undefined) throw new Error("Expected starter plan");
+    expect(preparation.unavailableReason).toBeUndefined();
+    expect(state.runtime.actionOffers[0]?.offeredDeckEntryIds).toEqual([]);
+
+    const resolved = resolve(content, state.journey, action.id);
+    const resolution = explorationResolutionFor(resolved);
+    expect(resolved.deck).toHaveLength(state.journey.deck.length);
+    expect(resolution).toMatchObject({
+      selection: {},
+      purgedEntryIds: preparation.purgedEntryIds,
+      purgedCardIds: preparation.purgedCardIds,
+      gainedCardIds: Object.values(preparation.replacementCardIdByEntryId),
+      gainedEntryIds: ["deck-91-0"],
+      resolvedPredicate: "warrior",
+      starterCardReplacements: [
+        {
+          purgedEntryId: preparation.purgedEntryIds[0],
+          purgedCardId: preparation.purgedCardIds[0],
+          gainedEntryId: "deck-91-0",
+          gainedCardId: Object.values(
+            preparation.replacementCardIdByEntryId,
+          )[0],
+        },
+      ],
+    });
+    expect(
+      resolveExplorationChoice({
+        journey: resolved,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {},
+        },
+        seq: 92,
+        content,
+      }),
+    ).toBeNull();
+
+    const firstOffer = state.runtime.actionOffers[0];
+    if (firstOffer?.starterCardPreparation === undefined) {
+      throw new Error("Expected starter preparation");
+    }
+    const tamperedRuntime = {
+      ...state.runtime,
+      actionOffers: [
+        {
+          ...firstOffer,
+          starterCardPreparation: {
+            ...firstOffer.starterCardPreparation,
+            planSignature: "tampered-plan",
+          },
+        },
+        state.runtime.actionOffers[1],
+      ],
+    };
+    const tamperedState = {
+      ...state.journey,
+      siteRuntime: { [site.id]: tamperedRuntime },
+    };
+    expect(
+      resolveExplorationChoice({
+        journey: tamperedState,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {},
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+    expect(tamperedState.deck).toEqual(state.journey.deck);
+
+    const preparedEntryId = firstOffer.starterCardPreparation.purgedEntryIds[0];
+    const forgedReplacementId = content.cardDatabase.get(121)?.id;
+    if (preparedEntryId === undefined || forgedReplacementId === undefined) {
+      throw new Error("Expected replacement-tamper fixtures");
+    }
+    const forgedReplacementMap = {
+      ...firstOffer.starterCardPreparation.replacementCardIdByEntryId,
+      [preparedEntryId]: forgedReplacementId,
+    };
+    const mappingTamperedRuntime = {
+      ...state.runtime,
+      actionOffers: [
+        {
+          ...firstOffer,
+          replacementCardIdByEntryId: forgedReplacementMap,
+          starterCardPreparation: {
+            ...firstOffer.starterCardPreparation,
+            replacementCardIdByEntryId: forgedReplacementMap,
+          },
+        },
+        state.runtime.actionOffers[1],
+      ],
+    };
+    const mappingTamperedState = {
+      ...state.journey,
+      siteRuntime: { [site.id]: mappingTamperedRuntime },
+    };
+    expect(
+      resolveExplorationChoice({
+        journey: mappingTamperedState,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {},
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+    expect(mappingTamperedState.deck).toEqual(state.journey.deck);
+
+    const staleEntryId = preparation.purgedEntryIds[0];
+    const ordinary = content.cardDatabase.get(120);
+    if (staleEntryId === undefined || ordinary === undefined) {
+      throw new Error("Expected stale-state fixtures");
+    }
+    const staleState = {
+      ...state.journey,
+      deck: state.journey.deck.map((entry) =>
+        entry.entryId === staleEntryId
+          ? { ...entry, cardNumber: ordinary.cardNumber }
+          : entry,
+      ),
+    };
+    expect(
+      resolveExplorationChoice({
+        journey: staleState,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {},
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+    expect(staleState.deck).toHaveLength(state.journey.deck.length);
+  });
+
+  it("replaces every sorted starter with an exact distinct persisted bundle", () => {
+    const action: ExplorationActionContent = {
+      id: "replace-all-starters",
+      label: "Graduate the old guard",
+      effectText: "Replace all starter cards with Warriors",
+      effectKind: "replace-all-starter-cards",
+      predicate: "warrior",
+    };
+    const fallback: ExplorationActionContent = {
+      id: "fallback-all-starters",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = starterContent([action, fallback]);
+    const state = buildState(content, starterJourney(content, 4));
+    const preparation = state.runtime.actionOffers[0]?.starterCardPreparation;
+    if (preparation === undefined) throw new Error("Expected starter plan");
+    expect(preparation.purgedEntryIds).toEqual([
+      "starter-entry-1",
+      "starter-entry-2",
+      "starter-entry-3",
+      "starter-entry-4",
+    ]);
+    expect(
+      new Set(Object.values(preparation.replacementCardIdByEntryId)),
+    ).toHaveProperty("size", 4);
+
+    const resolved = resolve(content, state.journey, action.id);
+    const resolution = explorationResolutionFor(resolved);
+    expect(resolved.deck).toHaveLength(4);
+    expect(
+      resolved.deck.some((entry) =>
+        preparation.purgedEntryIds.includes(entry.entryId),
+      ),
+    ).toBe(false);
+    expect(resolution.gainedEntryIds).toEqual([
+      "deck-91-0",
+      "deck-91-1",
+      "deck-91-2",
+      "deck-91-3",
+    ]);
+    expect(resolution.starterCardReplacements).toHaveLength(4);
+    expect(resolution.starterCardReplacements).toEqual(
+      preparation.purgedEntryIds.map((purgedEntryId, index) => ({
+        purgedEntryId,
+        purgedCardId: preparation.purgedCardIds[index],
+        gainedEntryId: `deck-91-${String(index)}`,
+        gainedCardId: preparation.replacementCardIdByEntryId[purgedEntryId],
+      })),
+    );
+  });
+
+  it("keeps unavailable starter plans signed without discarding the encounter", () => {
+    const purgeAction: ExplorationActionContent = {
+      id: "unavailable-starter-purge",
+      label: "Release a lesson",
+      effectText: "Purge a starter card",
+      effectKind: "purge-random-starter-card",
+    };
+    const replaceAction: ExplorationActionContent = {
+      id: "unavailable-starter-bundle",
+      label: "Graduate the old guard",
+      effectText: "Replace all starter cards with Warriors",
+      effectKind: "replace-all-starter-cards",
+      predicate: "warrior",
+    };
+    const noStarterContent = contentFixture([purgeAction, replaceAction]);
+    const noStarter = buildState(noStarterContent);
+    expect(noStarter.runtime.actionOffers).toHaveLength(2);
+    expect(
+      noStarter.runtime.actionOffers[0]?.starterCardPreparation,
+    ).toMatchObject({
+      unavailableReason: "requires-starter-card",
+      purgedEntryIds: [],
+    });
+    expect(
+      resolveExplorationChoice({
+        journey: noStarter.journey,
+        site,
+        payload: {
+          actionId: purgeAction.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {},
+        },
+        seq: 91,
+        content: noStarterContent,
+      }),
+    ).toBeNull();
+
+    const limitedContent = starterContent([replaceAction, purgeAction]);
+    const packageJourney = withDreamsignPool(limitedContent);
+    const limitedJourney = {
+      ...starterJourney(limitedContent, 2),
+      resolvedPackage: {
+        ...(packageJourney.resolvedPackage as NonNullable<
+          JourneyState["resolvedPackage"]
+        >),
+        draftPoolCopiesByCard: { "120": 1 },
+      },
+    };
+    const limited = buildState(limitedContent, limitedJourney);
+    expect(limited.runtime.actionOffers).toHaveLength(2);
+    expect(
+      limited.runtime.actionOffers[0]?.starterCardPreparation,
+    ).toMatchObject({
+      unavailableReason: "insufficient-replacement-cards",
+      purgedEntryIds: ["starter-entry-1", "starter-entry-2"],
+      replacementCardIdByEntryId: {},
+    });
+  });
+
+  it("prepares concealed random starter transfigurations and persists their exact ordered forms", () => {
+    const action: ExplorationActionContent = {
+      id: "transfigure-random-starters",
+      label: "Rewrite two lessons",
+      effectText: "Transfigure 2 random starter cards",
+      effectKind: "transfigure-random-starter-cards",
+      count: 2,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "fallback-random-starter-transfiguration",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = starterContent([action, fallback]);
+    const state = buildState(content, starterJourney(content, 4));
+    const offer = state.runtime.actionOffers[0];
+    const preparation = offer?.starterCardTransfigurationPreparation;
+    if (offer === undefined || preparation === undefined) {
+      throw new Error("Expected starter transfiguration plan");
+    }
+
+    expect(preparation).toMatchObject({
+      kind: "random-count",
+      starterCards: [
+        { entryId: "starter-entry-1" },
+        { entryId: "starter-entry-2" },
+        { entryId: "starter-entry-3" },
+        { entryId: "starter-entry-4" },
+      ],
+    });
+    expect(preparation.unavailableReason).toBeUndefined();
+    expect(preparation.targets).toHaveLength(2);
+    expect(offer).toMatchObject({
+      canonicalMechanicId: "transfigure-deck-entry",
+      selectionPolicyId: "uniform",
+      selectionKey: action.id,
+      selectionSignature: preparation.planSignature,
+      offeredDeckEntryIds: [],
+    });
+    expect(offer.transfigurationByEntryId).toEqual(
+      Object.fromEntries(
+        preparation.targets.map((target) => [
+          target.entryId,
+          target.transfiguration,
+        ]),
+      ),
+    );
+
+    const resolved = resolve(content, state.journey, action.id);
+    const resolution = explorationResolutionFor(resolved);
+    expect(resolution.selection).toEqual({});
+    expect(resolution.starterCardTransfigurations).toEqual(
+      preparation.targets.map((target) => ({
+        entryId: target.entryId,
+        cardId: target.cardId,
+        beforeTransfiguration: null,
+        afterTransfiguration: target.transfiguration,
+      })),
+    );
+    expect(resolution.affectedEntryIds).toEqual(
+      preparation.targets.map(({ entryId }) => entryId),
+    );
+    for (const target of preparation.targets) {
+      expect(
+        resolved.deck.find((entry) => entry.entryId === target.entryId)
+          ?.transfiguration,
+      ).toBe(target.transfiguration);
+    }
+    expect(() => assertJsonSafe(resolved, "journey")).not.toThrow();
+
+    expect(
+      resolveExplorationChoice({
+        journey: state.journey,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {
+            entryIds: preparation.targets.map(({ entryId }) => entryId),
+          },
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+  });
+
+  it("replays starter transfigurations as one deterministic event-log fold", async () => {
+    const action: ExplorationActionContent = {
+      id: "fold-starter-transfigurations",
+      label: "Rewrite two lessons",
+      effectText: "Transfigure 2 random starter cards",
+      effectKind: "transfigure-random-starter-cards",
+      count: 2,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "fallback-fold-starter-transfigurations",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = starterContent([action, fallback]);
+    const prepared = buildState(content, starterJourney(content, 4));
+    const targets =
+      prepared.runtime.actionOffers[0]?.starterCardTransfigurationPreparation
+        ?.targets;
+    if (targets === undefined) {
+      throw new Error("Expected fold starter transfiguration targets");
+    }
+
+    const drafts: EventDraft[] = [];
+    const actions = makeActions((draft) => {
+      drafts.push(draft);
+      return Promise.resolve(drafts.length);
+    });
+    await actions.resolveExplorationChoice(site.id, action.id);
+    const draft = drafts[0];
+    if (draft === undefined) throw new Error("Expected a coop intent");
+    const genesis: Genesis = {
+      seed: "starter-transfiguration-fold",
+      reducerVersion: "test",
+      createdAt: 0,
+      contentConfig: { poolVariant: "tides4" },
+    };
+    const event: GameEvent = {
+      type: draft.type,
+      payload: draft.payload,
+      actor: "client-a",
+      clientTimestamp: "1970-01-01T00:00:00.000Z",
+      basedOnSeq: 0,
+      ...(draft.intentKey === undefined ? {} : { intentKey: draft.intentKey }),
+    };
+    const duplicate: GameEvent = {
+      ...event,
+      clientTimestamp: "1970-01-01T00:00:01.000Z",
+      basedOnSeq: 1,
+    };
+    const base = {
+      seq: 0,
+      state: {
+        ...GAME_ENGINE_CONFIG.genesisState(genesis),
+        journey: explorationFoldJourney(prepared.journey),
+      },
+    };
+
+    registerSiteContentProvider(createSiteContentProvider(content));
+    try {
+      const first = foldEvents(
+        GAME_ENGINE_CONFIG,
+        genesis,
+        base,
+        [{ seq: 1, event }],
+        { devMode: true },
+      );
+      const replay = foldEvents(
+        GAME_ENGINE_CONFIG,
+        genesis,
+        base,
+        [{ seq: 1, event }],
+        { devMode: true },
+      );
+      const duplicateFold = foldEvents(
+        GAME_ENGINE_CONFIG,
+        genesis,
+        base,
+        [
+          { seq: 1, event },
+          { seq: 2, event: duplicate },
+        ],
+        { devMode: true },
+      );
+
+      expect(first.outcomes[0]?.outcome).toBe("applied");
+      expect(replay.state).toEqual(first.state);
+      expect(duplicateFold.outcomes.map(({ outcome }) => outcome)).toEqual([
+        "applied",
+        "bounced",
+      ]);
+      expect(first.state.journey.siteRuntime[site.id]).toMatchObject({
+        kind: "exploration",
+        resolution: {
+          selection: {},
+          affectedEntryIds: targets.map(({ entryId }) => entryId),
+          starterCardTransfigurations: targets.map((target) => ({
+            entryId: target.entryId,
+            cardId: target.cardId,
+            beforeTransfiguration: null,
+            afterTransfiguration: target.transfiguration,
+          })),
+        },
+      });
+    } finally {
+      registerSiteContentProvider(null);
+    }
+  });
+
+  it("transfigures literally every starter atomically in stable entry order", () => {
+    const action: ExplorationActionContent = {
+      id: "transfigure-all-starters",
+      label: "Rewrite every lesson",
+      effectText: "Transfigure all starter cards",
+      effectKind: "transfigure-all-starter-cards",
+    };
+    const fallback: ExplorationActionContent = {
+      id: "fallback-all-starter-transfiguration",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = starterContent([action, fallback]);
+    const state = buildState(content, starterJourney(content, 3));
+    const preparation =
+      state.runtime.actionOffers[0]?.starterCardTransfigurationPreparation;
+    if (preparation === undefined) {
+      throw new Error("Expected all-starter transfiguration plan");
+    }
+
+    expect(preparation.kind).toBe("all");
+    expect(preparation.targets.map(({ entryId }) => entryId)).toEqual([
+      "starter-entry-1",
+      "starter-entry-2",
+      "starter-entry-3",
+    ]);
+    const resolved = resolve(content, state.journey, action.id);
+    const resolution = explorationResolutionFor(resolved);
+    expect(resolution.starterCardTransfigurations).toEqual(
+      preparation.targets.map((target) => ({
+        entryId: target.entryId,
+        cardId: target.cardId,
+        beforeTransfiguration: null,
+        afterTransfiguration: target.transfiguration,
+      })),
+    );
+    expect(resolved.deck).toHaveLength(3);
+    expect(resolved.deck.every((entry) => entry.transfiguration !== null)).toBe(
+      true,
+    );
+  });
+
+  it("rejects starter transfiguration replay, tampering, stale state, and partial application", () => {
+    const action: ExplorationActionContent = {
+      id: "guarded-starter-transfiguration",
+      label: "Rewrite two lessons",
+      effectText: "Transfigure 2 random starter cards",
+      effectKind: "transfigure-random-starter-cards",
+      count: 2,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "fallback-guarded-starter-transfiguration",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = starterContent([action, fallback]);
+    const state = buildState(content, starterJourney(content, 3));
+    const firstOffer = state.runtime.actionOffers[0];
+    const preparation = firstOffer?.starterCardTransfigurationPreparation;
+    const firstTarget = preparation?.targets[0];
+    const lastTarget =
+      preparation?.targets[(preparation?.targets.length ?? 0) - 1];
+    if (
+      firstOffer === undefined ||
+      preparation === undefined ||
+      firstTarget === undefined ||
+      lastTarget === undefined
+    ) {
+      throw new Error("Expected guarded starter transfiguration targets");
+    }
+
+    const tamperedPreparation = {
+      ...preparation,
+      targets: [
+        { ...firstTarget, transfiguration: "Perfected" as const },
+        ...preparation.targets.slice(1),
+      ],
+    };
+    const tamperedRuntime = {
+      ...state.runtime,
+      actionOffers: [
+        {
+          ...firstOffer,
+          starterCardTransfigurationPreparation: tamperedPreparation,
+          transfigurationByEntryId: {
+            ...firstOffer.transfigurationByEntryId,
+            [firstTarget.entryId]: "Perfected" as const,
+          },
+        },
+        state.runtime.actionOffers[1],
+      ],
+    };
+    const tamperedState = {
+      ...state.journey,
+      siteRuntime: { [site.id]: tamperedRuntime },
+    };
+    expect(
+      resolveExplorationChoice({
+        journey: tamperedState,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {},
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+    expect(tamperedState.deck).toEqual(state.journey.deck);
+
+    const staleState = {
+      ...state.journey,
+      deck: state.journey.deck.map((entry) =>
+        entry.entryId === lastTarget.entryId
+          ? { ...entry, transfiguration: "Empowered" as const }
+          : entry,
+      ),
+    };
+    const staleBefore = staleState.deck.map((entry) => ({ ...entry }));
+    expect(
+      resolveExplorationChoice({
+        journey: staleState,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {},
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+    expect(staleState.deck).toEqual(staleBefore);
+    expect(
+      staleState.deck.find((entry) => entry.entryId === firstTarget.entryId)
+        ?.transfiguration,
+    ).toBeNull();
+
+    const resolved = resolve(content, state.journey, action.id);
+    expect(
+      resolveExplorationChoice({
+        journey: resolved,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {},
+        },
+        seq: 92,
+        content,
+      }),
+    ).toBeNull();
+  });
+
+  it("keeps signed unavailable starter transfiguration offers alongside their companion action", () => {
+    const randomAction: ExplorationActionContent = {
+      id: "unavailable-random-starter-transfiguration",
+      label: "Rewrite two lessons",
+      effectText: "Transfigure 2 random starter cards",
+      effectKind: "transfigure-random-starter-cards",
+      count: 2,
+    };
+    const allAction: ExplorationActionContent = {
+      id: "unavailable-all-starter-transfiguration",
+      label: "Rewrite every lesson",
+      effectText: "Transfigure all starter cards",
+      effectKind: "transfigure-all-starter-cards",
+    };
+    const content = starterContent([randomAction, allAction]);
+    const insufficient = buildState(content, starterJourney(content, 1));
+    expect(insufficient.runtime.actionOffers).toHaveLength(2);
+    expect(
+      insufficient.runtime.actionOffers[0]
+        ?.starterCardTransfigurationPreparation,
+    ).toMatchObject({
+      unavailableReason: "insufficient-transfigurable-starter-cards",
+      targets: [],
+    });
+
+    const partiallyTransfigured = starterJourney(content, 2);
+    partiallyTransfigured.deck = partiallyTransfigured.deck.map(
+      (entry, index) =>
+        index === 0
+          ? { ...entry, transfiguration: "Empowered" as const }
+          : entry,
+    );
+    const allUnavailable = buildState(content, partiallyTransfigured);
+    const allPreparation =
+      allUnavailable.runtime.actionOffers[1]
+        ?.starterCardTransfigurationPreparation;
+    expect(allPreparation).toMatchObject({
+      unavailableReason: "all-starter-cards-must-be-transfigurable",
+      targets: [],
+    });
+    expect(allPreparation?.planSignature).not.toHaveLength(0);
+    expect(
+      resolveExplorationChoice({
+        journey: allUnavailable.journey,
+        site,
+        payload: {
+          actionId: allAction.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {},
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+  });
+
+  it("preserves the legacy count-one transfiguration payload and runtime", () => {
+    const action: ExplorationActionContent = {
+      id: "single-chosen-transfiguration",
+      label: "Rewrite one thread",
+      effectText: "Transfigure a chosen card",
+      effectKind: "transfigure-selected",
+      count: 1,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "single-chosen-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const journey = journeyFixture(content);
+    journey.deck = journey.deck.map((entry, index) =>
+      index === 0 ? { ...entry, keywordModification: { reclaim: 2 } } : entry,
+    );
+    const state = buildState(content, journey);
+    const entryId = state.journey.deck[1]?.entryId;
+    if (entryId === undefined) throw new Error("Expected chosen entry");
+
+    expect(
+      state.runtime.actionOffers[0]?.multiCardTransfigurationPreparation,
+    ).toBeUndefined();
+    const resolved = resolve(content, state.journey, action.id, {
+      entryIds: [entryId],
+      transfiguration: "Empowered",
+    });
+    expect(
+      resolved.deck.find((entry) => entry.entryId === entryId)?.transfiguration,
+    ).toBe("Empowered");
+    expect(explorationResolutionFor(resolved)).toMatchObject({
+      affectedEntryIds: [entryId],
+      chosenTransfiguration: "Empowered",
+    });
+  });
+
+  it("signs every eligible chosen form and atomically resolves exact zipped multi-card intent", () => {
+    const action: ExplorationActionContent = {
+      id: "chosen-multi-transfiguration",
+      label: "Rewrite two threads",
+      effectText: "Transfigure 2 chosen Characters",
+      effectKind: "transfigure-selected",
+      predicate: "character",
+      count: 2,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "chosen-multi-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const state = buildState(content);
+    const offer = state.runtime.actionOffers[0];
+    const preparation = offer?.multiCardTransfigurationPreparation;
+    if (offer === undefined || preparation === undefined) {
+      throw new Error("Expected chosen multi-card plan");
+    }
+    const bindings = preparation.eligibleCards.slice(0, 2);
+    const repeatedForm = bindings[0]?.transfigurations.find((form) =>
+      bindings[1]?.transfigurations.includes(form),
+    );
+    if (bindings.length !== 2 || repeatedForm === undefined) {
+      throw new Error("Expected two candidates with one shared form");
+    }
+    const entryIds = bindings.map(({ entryId }) => entryId);
+    const transfigurations = [repeatedForm, repeatedForm];
+
+    expect(preparation).toMatchObject({
+      mode: "chosen-flexible",
+      targets: [],
+    });
+    expect(preparation.unavailableReason).toBeUndefined();
+    expect(offer).toMatchObject({
+      canonicalMechanicId: "transfigure-deck-entry",
+      selectionPolicyId: "transfiguration-value",
+      selectionSignature: preparation.planSignature,
+      offeredDeckEntryIds: [],
+    });
+    const resolved = resolve(content, state.journey, action.id, {
+      entryIds,
+      transfigurations,
+    });
+    expect(explorationResolutionFor(resolved)).toMatchObject({
+      selection: { entryIds, transfigurations },
+      affectedEntryIds: entryIds,
+      cardTransfigurations: bindings.map(({ entryId, cardId }) => ({
+        entryId,
+        cardId,
+        beforeTransfiguration: null,
+        afterTransfiguration: repeatedForm,
+      })),
+    });
+    expect(
+      entryIds.map(
+        (entryId) =>
+          resolved.deck.find((entry) => entry.entryId === entryId)
+            ?.transfiguration,
+      ),
+    ).toEqual(transfigurations);
+    expect(() => assertJsonSafe(resolved, "journey")).not.toThrow();
+
+    for (const invalidSelection of [
+      { entryIds: [entryIds[0]], transfigurations: [repeatedForm] },
+      {
+        entryIds: [entryIds[0], entryIds[0]],
+        transfigurations,
+      },
+      {
+        entryIds,
+        transfigurations: [repeatedForm],
+      },
+      {
+        entryIds,
+        transfigurations: [repeatedForm, "foreign-form"],
+      },
+      {
+        entryIds: [entryIds[0], "foreign-entry-id"],
+        transfigurations,
+      },
+      {
+        entryIds,
+        transfigurations,
+        transfiguration: repeatedForm,
+      },
+    ]) {
+      expect(
+        resolveExplorationChoice({
+          journey: state.journey,
+          site,
+          payload: {
+            actionId: action.id,
+            selectionRulesVersion: SELECTION_RULES_VERSION,
+            selection: invalidSelection,
+          },
+          seq: 91,
+          content,
+        }),
+      ).toBeNull();
+    }
+    expect(
+      state.journey.deck.every((entry) => entry.transfiguration === null),
+    ).toBe(true);
+  });
+
+  it("replays one multi-card transfiguration event deterministically and bounces its duplicate", async () => {
+    const action: ExplorationActionContent = {
+      id: "fold-multi-transfiguration",
+      label: "Rewrite two threads",
+      effectText: "Transfigure 2 chosen Characters",
+      effectKind: "transfigure-selected",
+      predicate: "character",
+      count: 2,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "fold-multi-transfiguration-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const prepared = buildState(content);
+    const bindings =
+      prepared.runtime.actionOffers[0]?.multiCardTransfigurationPreparation
+        ?.eligibleCards;
+    const selected = bindings?.slice(0, 2);
+    const sharedForm = selected?.[0]?.transfigurations.find((form) =>
+      selected[1]?.transfigurations.includes(form),
+    );
+    if (selected?.length !== 2 || sharedForm === undefined) {
+      throw new Error("Expected fold candidates");
+    }
+    const selection = {
+      entryIds: selected.map(({ entryId }) => entryId),
+      transfigurations: [sharedForm, sharedForm],
+    };
+    const drafts: EventDraft[] = [];
+    const actions = makeActions((draft) => {
+      drafts.push(draft);
+      return Promise.resolve(drafts.length);
+    });
+    await actions.resolveExplorationChoice(site.id, action.id, selection);
+    const draft = drafts[0];
+    if (draft === undefined) throw new Error("Expected a coop intent");
+    const genesis: Genesis = {
+      seed: "multi-card-transfiguration-fold",
+      reducerVersion: "test",
+      createdAt: 0,
+      contentConfig: { poolVariant: "tides4" },
+    };
+    const event: GameEvent = {
+      type: draft.type,
+      payload: draft.payload,
+      actor: "client-a",
+      clientTimestamp: "1970-01-01T00:00:00.000Z",
+      basedOnSeq: 0,
+      ...(draft.intentKey === undefined ? {} : { intentKey: draft.intentKey }),
+    };
+    const duplicate: GameEvent = {
+      ...event,
+      clientTimestamp: "1970-01-01T00:00:01.000Z",
+      basedOnSeq: 1,
+    };
+    const base = {
+      seq: 0,
+      state: {
+        ...GAME_ENGINE_CONFIG.genesisState(genesis),
+        journey: explorationFoldJourney(prepared.journey),
+      },
+    };
+
+    registerSiteContentProvider(createSiteContentProvider(content));
+    try {
+      const first = foldEvents(
+        GAME_ENGINE_CONFIG,
+        genesis,
+        base,
+        [{ seq: 1, event }],
+        { devMode: true },
+      );
+      const replay = foldEvents(
+        GAME_ENGINE_CONFIG,
+        genesis,
+        base,
+        [{ seq: 1, event }],
+        { devMode: true },
+      );
+      const duplicateFold = foldEvents(
+        GAME_ENGINE_CONFIG,
+        genesis,
+        base,
+        [
+          { seq: 1, event },
+          { seq: 2, event: duplicate },
+        ],
+        { devMode: true },
+      );
+
+      expect(first.outcomes[0]?.outcome).toBe("applied");
+      expect(replay.state).toEqual(first.state);
+      expect(duplicateFold.outcomes.map(({ outcome }) => outcome)).toEqual([
+        "applied",
+        "bounced",
+      ]);
+      expect(first.state.journey.siteRuntime[site.id]).toMatchObject({
+        kind: "exploration",
+        resolution: {
+          selection,
+          affectedEntryIds: selection.entryIds,
+          cardTransfigurations: selected.map(({ entryId, cardId }) => ({
+            entryId,
+            cardId,
+            beforeTransfiguration: null,
+            afterTransfiguration: sharedForm,
+          })),
+        },
+      });
+    } finally {
+      registerSiteContentProvider(null);
+    }
+  });
+
+  it("prepares concealed flexible random targets and rejects plan, intent, and stale-state tampering", () => {
+    const action: ExplorationActionContent = {
+      id: "random-multi-transfiguration",
+      label: "Rewrite two wandering threads",
+      effectText: "Transfigure 2 random Characters",
+      effectKind: "transfigure-random-cards",
+      predicate: "character",
+      count: 2,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "random-multi-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const state = buildState(content);
+    const offer = state.runtime.actionOffers[0];
+    const preparation = offer?.multiCardTransfigurationPreparation;
+    if (offer === undefined || preparation === undefined) {
+      throw new Error("Expected random multi-card plan");
+    }
+    expect(preparation).toMatchObject({
+      mode: "random-flexible",
+    });
+    expect(preparation.unavailableReason).toBeUndefined();
+    expect(preparation.targets).toHaveLength(2);
+    expect(
+      new Set(preparation.targets.map(({ entryId }) => entryId)).size,
+    ).toBe(2);
+    expect(preparation.selectorTraces).toHaveLength(3);
+    expect(offer.offeredDeckEntryIds).toEqual([]);
+
+    const replay = buildState(content);
+    expect(
+      replay.runtime.actionOffers[0]?.multiCardTransfigurationPreparation,
+    ).toEqual(preparation);
+    const resolved = resolve(content, state.journey, action.id);
+    expect(explorationResolutionFor(resolved)).toMatchObject({
+      selection: {},
+      affectedEntryIds: preparation.targets.map(({ entryId }) => entryId),
+      cardTransfigurations: preparation.targets.map((target) => ({
+        entryId: target.entryId,
+        cardId: target.cardId,
+        beforeTransfiguration: null,
+        afterTransfiguration: target.transfiguration,
+      })),
+    });
+
+    expect(
+      resolveExplorationChoice({
+        journey: state.journey,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {
+            entryIds: preparation.targets.map(({ entryId }) => entryId),
+          },
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+
+    const tamperedOffer = {
+      ...offer,
+      multiCardTransfigurationPreparation: {
+        ...preparation,
+        planSignature: "tampered-plan",
+      },
+    };
+    const tamperedState = {
+      ...state.journey,
+      siteRuntime: {
+        [site.id]: {
+          ...state.runtime,
+          actionOffers: [tamperedOffer, state.runtime.actionOffers[1]],
+        },
+      },
+    };
+    expect(
+      resolveExplorationChoice({
+        journey: tamperedState,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {},
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+
+    const staleEntryId = preparation.targets[1]?.entryId;
+    if (staleEntryId === undefined) throw new Error("Expected second target");
+    const staleState = {
+      ...state.journey,
+      deck: state.journey.deck.map((entry) =>
+        entry.entryId === staleEntryId
+          ? { ...entry, transfiguration: "Empowered" as const }
+          : entry,
+      ),
+    };
+    expect(
+      resolveExplorationChoice({
+        journey: staleState,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {},
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+    expect(
+      staleState.deck.find(
+        (entry) => entry.entryId === preparation.targets[0]?.entryId,
+      )?.transfiguration,
+    ).toBeNull();
+  });
+
+  it("prepares exact fixed-form random targets and keeps insufficient plans signed", () => {
+    const action: ExplorationActionContent = {
+      id: "fixed-random-multi-transfiguration",
+      label: "Empower two wandering threads",
+      effectText: "Apply Empowered to 2 random Characters",
+      effectKind: "transfigure-fixed-random-cards",
+      predicate: "character",
+      count: 2,
+      transfiguration: "Empowered",
+    };
+    const fallback: ExplorationActionContent = {
+      id: "fixed-random-multi-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const state = buildState(content);
+    const preparation =
+      state.runtime.actionOffers[0]?.multiCardTransfigurationPreparation;
+    if (preparation === undefined) {
+      throw new Error("Expected fixed random multi-card plan");
+    }
+    expect(preparation.mode).toBe("random-fixed");
+    expect(preparation.selectorTraces).toHaveLength(1);
+    expect(
+      preparation.targets.every(
+        ({ transfiguration }) => transfiguration === "Empowered",
+      ),
+    ).toBe(true);
+    const resolved = resolve(content, state.journey, action.id);
+    expect(explorationResolutionFor(resolved).cardTransfigurations).toEqual(
+      preparation.targets.map((target) => ({
+        entryId: target.entryId,
+        cardId: target.cardId,
+        beforeTransfiguration: null,
+        afterTransfiguration: "Empowered",
+      })),
+    );
+
+    const insufficientAction: ExplorationActionContent = {
+      ...action,
+      id: "insufficient-fixed-random-multi-transfiguration",
+      count: 5,
+    };
+    const insufficientContent = contentFixture([insufficientAction, fallback]);
+    const insufficientJourney = {
+      ...journeyFixture(insufficientContent),
+      deck: journeyFixture(insufficientContent).deck.slice(0, 4),
+    };
+    const insufficient = buildState(insufficientContent, insufficientJourney);
+    expect(
+      insufficient.runtime.actionOffers[0]?.multiCardTransfigurationPreparation,
+    ).toMatchObject({
+      mode: "random-fixed",
+      unavailableReason: "insufficient-eligible-cards",
+      targets: [],
+    });
+    expect(
+      resolveExplorationChoice({
+        journey: insufficient.journey,
+        site,
+        payload: {
+          actionId: insufficientAction.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {},
+        },
+        seq: 91,
+        content: insufficientContent,
+      }),
+    ).toBeNull();
+  });
+
+  it("replaces one or two chosen entries from concealed signed source-bound replacements", () => {
+    const action: ExplorationActionContent = {
+      id: "replace-up-to-two-events",
+      label: "Rewrite up to two events",
+      effectText: "Replace up to 2 Events with Events",
+      effectKind: "replace-selected",
+      predicate: "event",
+      count: 2,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "replace-up-to-two-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const state = buildState(content);
+    const offer = state.runtime.actionOffers[0];
+    const preparation = offer?.multiCardReplacementPreparation;
+    if (offer === undefined || preparation === undefined) {
+      throw new Error("Expected multi-card replacement plan");
+    }
+    expect(preparation.unavailableReason).toBeUndefined();
+    expect(preparation.bindings.length).toBeGreaterThanOrEqual(2);
+    expect(offer).toMatchObject({
+      canonicalMechanicId: "replace-deck-entry",
+      selectionPolicyId: "card-fit-quality",
+      selectionSignature: preparation.planSignature,
+      offeredDeckEntryIds: [],
+      replacementCardIdByEntryId: {},
+    });
+    const chosen = [preparation.bindings[1], preparation.bindings[0]].filter(
+      (binding): binding is NonNullable<typeof binding> =>
+        binding !== undefined,
+    );
+    const entryIds = chosen.map(({ sourceEntryId }) => sourceEntryId);
+    const resolved = resolve(content, state.journey, action.id, { entryIds });
+    const resolution = explorationResolutionFor(resolved);
+    expect(resolution.selection).toEqual({ entryIds });
+    expect(resolution.purgedEntryIds).toEqual(entryIds);
+    expect(
+      resolution.purgedEntrySnapshots?.map(({ entryId }) => entryId),
+    ).toEqual(entryIds);
+    expect(resolution.gainedEntryIds).toEqual(["deck-91-0", "deck-91-1"]);
+    expect(resolution.cardReplacements).toEqual(
+      chosen.map((binding, index) => ({
+        sourceEntryId: binding.sourceEntryId,
+        sourceCardId: binding.sourceCardId,
+        replacementEntryId: `deck-91-${String(index)}`,
+        replacementCardId: binding.replacementCardId,
+      })),
+    );
+    expect(
+      entryIds.every(
+        (entryId) => !resolved.deck.some((entry) => entry.entryId === entryId),
+      ),
+    ).toBe(true);
+    expect(() => assertJsonSafe(resolved, "journey")).not.toThrow();
+
+    const one = resolve(content, buildState(content).journey, action.id, {
+      entryIds: [preparation.bindings[0]?.sourceEntryId],
+    });
+    expect(explorationResolutionFor(one).cardReplacements).toHaveLength(1);
+    for (const invalidSelection of [
+      { entryIds: [] },
+      { entryIds: [entryIds[0], entryIds[0]] },
+      { entryIds: [...entryIds, preparation.bindings[2]?.sourceEntryId] },
+      { entryIds: ["foreign-entry-id"] },
+      { entryIds, cardIds: [] },
+    ]) {
+      expect(
+        resolveExplorationChoice({
+          journey: state.journey,
+          site,
+          payload: {
+            actionId: action.id,
+            selectionRulesVersion: SELECTION_RULES_VERSION,
+            selection: invalidSelection,
+          },
+          seq: 91,
+          content,
+        }),
+      ).toBeNull();
+    }
+    expect(state.journey.deck).toHaveLength(8);
+  });
+
+  it("rejects tampered and stale chosen replacement plans without partial mutation", () => {
+    const action: ExplorationActionContent = {
+      id: "guarded-multi-replacement",
+      label: "Rewrite up to two events",
+      effectText: "Replace up to 2 Events with Events",
+      effectKind: "replace-selected",
+      predicate: "event",
+      count: 2,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "guarded-multi-replacement-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const state = buildState(content);
+    const offer = state.runtime.actionOffers[0];
+    const preparation = offer?.multiCardReplacementPreparation;
+    if (offer === undefined || preparation === undefined) {
+      throw new Error("Expected guarded replacement plan");
+    }
+    const entryIds = preparation.bindings
+      .slice(0, 2)
+      .map(({ sourceEntryId }) => sourceEntryId);
+    const tamperedState = {
+      ...state.journey,
+      siteRuntime: {
+        [site.id]: {
+          ...state.runtime,
+          actionOffers: [
+            {
+              ...offer,
+              multiCardReplacementPreparation: {
+                ...preparation,
+                bindings: preparation.bindings.map((binding, index) =>
+                  index === 1
+                    ? { ...binding, replacementCardId: SOURCE_CARD_ID }
+                    : binding,
+                ),
+              },
+            },
+            state.runtime.actionOffers[1],
+          ],
+        },
+      },
+    };
+    expect(
+      resolveExplorationChoice({
+        journey: tamperedState,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: { entryIds },
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+
+    const staleEntryId = entryIds[1];
+    const staleState = {
+      ...state.journey,
+      deck: state.journey.deck.map((entry) =>
+        entry.entryId === staleEntryId ? { ...entry, cardNumber: 130 } : entry,
+      ),
+    };
+    expect(
+      resolveExplorationChoice({
+        journey: staleState,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: { entryIds },
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+    expect(
+      staleState.deck.find((entry) => entry.entryId === entryIds[0]),
+    ).toEqual(
+      state.journey.deck.find((entry) => entry.entryId === entryIds[0]),
+    );
+  });
+
+  it("applies one fixed form to an exact signed multi-card chosen selection", () => {
+    const action: ExplorationActionContent = {
+      id: "fixed-chosen-multi-transfiguration",
+      label: "Empower two characters",
+      effectText: "Apply Empowered to 2 chosen Characters",
+      effectKind: "transfigure-fixed-selected",
+      predicate: "character",
+      count: 2,
+      transfiguration: "Empowered",
+    };
+    const fallback: ExplorationActionContent = {
+      id: "fixed-chosen-multi-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const state = buildState(content);
+    const preparation =
+      state.runtime.actionOffers[0]?.multiCardTransfigurationPreparation;
+    if (preparation === undefined) {
+      throw new Error("Expected chosen fixed transfiguration plan");
+    }
+    expect(preparation.mode).toBe("chosen-fixed");
+    expect(preparation.targets).toEqual([]);
+    expect(
+      preparation.eligibleCards.every(
+        ({ transfigurations }) =>
+          transfigurations.length === 1 && transfigurations[0] === "Empowered",
+      ),
+    ).toBe(true);
+    const entryIds = preparation.eligibleCards
+      .slice(0, 2)
+      .map(({ entryId }) => entryId);
+    const resolved = resolve(content, state.journey, action.id, { entryIds });
+    expect(explorationResolutionFor(resolved)).toMatchObject({
+      selection: { entryIds },
+      affectedEntryIds: entryIds,
+      cardTransfigurations: preparation.eligibleCards
+        .slice(0, 2)
+        .map(({ entryId, cardId }) => ({
+          entryId,
+          cardId,
+          beforeTransfiguration: null,
+          afterTransfiguration: "Empowered",
+        })),
+    });
+    expect(
+      entryIds.map(
+        (entryId) =>
+          resolved.deck.find((entry) => entry.entryId === entryId)
+            ?.transfiguration,
+      ),
+    ).toEqual(["Empowered", "Empowered"]);
+    for (const invalidSelection of [
+      { entryIds: [entryIds[0]] },
+      { entryIds: [entryIds[0], entryIds[0]] },
+      { entryIds, transfiguration: "Empowered" },
+    ]) {
+      expect(
+        resolveExplorationChoice({
+          journey: state.journey,
+          site,
+          payload: {
+            actionId: action.id,
+            selectionRulesVersion: SELECTION_RULES_VERSION,
+            selection: invalidSelection,
+          },
+          seq: 91,
+          content,
+        }),
+      ).toBeNull();
+    }
+  });
+
+  it("copies exact concealed random entries while preserving every source modification", () => {
+    const action: ExplorationActionContent = {
+      id: "copy-two-random-events",
+      label: "Echo two events",
+      effectText: "Copy 2 random Events",
+      effectKind: "copy-random-cards",
+      predicate: "event",
+      count: 2,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "copy-two-random-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const journey = {
+      ...journeyFixture(content),
+      deck: journeyFixture(content).deck.map((entry, index) =>
+        index % 2 === 0
+          ? {
+              ...entry,
+              transfiguration: "Empowered" as const,
+              keywordModification: { reclaim: index + 1 },
+              sparkBonus: index,
+            }
+          : entry,
+      ),
+    };
+    const state = buildState(content, journey);
+    const offer = state.runtime.actionOffers[0];
+    const preparation = offer?.randomDeckTargetPreparation;
+    if (offer === undefined || preparation === undefined) {
+      throw new Error("Expected random copy plan");
+    }
+    expect(preparation.effectKind).toBe("copy-random-cards");
+    expect(preparation.targets).toHaveLength(2);
+    expect(offer.offeredDeckEntryIds).toEqual([]);
+    const sources = preparation.targets.map((target) => {
+      const entry = state.journey.deck.find(
+        (candidate) => candidate.entryId === target.entryId,
+      );
+      if (entry === undefined) throw new Error("Expected copy source");
+      return entry;
+    });
+    const resolved = resolve(content, state.journey, action.id);
+    const resolution = explorationResolutionFor(resolved);
+    expect(resolution.selection).toEqual({});
+    expect(resolution.cardCopies).toEqual(
+      preparation.targets.map((target, index) => ({
+        sourceEntryId: target.entryId,
+        sourceCardId: target.cardId,
+        mintedEntryId: `deck-91-${String(index)}`,
+        mintedCardId: target.cardId,
+      })),
+    );
+    expect(
+      resolution.gainedEntryIds?.map((entryId) =>
+        resolved.deck.find((entry) => entry.entryId === entryId),
+      ),
+    ).toEqual(
+      sources.map((source, index) => ({
+        ...source,
+        entryId: `deck-91-${String(index)}`,
+      })),
+    );
+    expect(
+      buildState(content, journey).runtime.actionOffers[0]
+        ?.randomDeckTargetPreparation,
+    ).toEqual(preparation);
+    expect(
+      resolveExplorationChoice({
+        journey: resolved,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {},
+        },
+        seq: 92,
+        content,
+      }),
+    ).toBeNull();
+    expect(
+      resolveExplorationChoice({
+        journey: state.journey,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {
+            entryIds: preparation.targets.map(({ entryId }) => entryId),
+          },
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+
+    const tamperedState = {
+      ...state.journey,
+      siteRuntime: {
+        [site.id]: {
+          ...state.runtime,
+          actionOffers: [
+            {
+              ...offer,
+              randomDeckTargetPreparation: {
+                ...preparation,
+                targets: preparation.targets.map((target, index) =>
+                  index === 1 ? { ...target, cardId: SOURCE_CARD_ID } : target,
+                ),
+              },
+            },
+            state.runtime.actionOffers[1],
+          ],
+        },
+      },
+    };
+    expect(
+      resolveExplorationChoice({
+        journey: tamperedState,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {},
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+
+    const staleEntryId = preparation.targets[1]?.entryId;
+    if (staleEntryId === undefined) throw new Error("Expected stale target");
+    const staleState = {
+      ...state.journey,
+      deck: state.journey.deck.map((entry) =>
+        entry.entryId === staleEntryId ? { ...entry, cardNumber: 130 } : entry,
+      ),
+    };
+    expect(
+      resolveExplorationChoice({
+        journey: staleState,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {},
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+    const firstTargetId = preparation.targets[0]?.entryId;
+    expect(
+      staleState.deck.find((entry) => entry.entryId === firstTargetId),
+    ).toEqual(
+      state.journey.deck.find((entry) => entry.entryId === firstTargetId),
+    );
+  });
+
+  it("changes exact random effective non-target types and persists complete before/after overrides", () => {
+    const action: ExplorationActionContent = {
+      id: "change-two-random-types",
+      label: "Make two Characters",
+      effectText: "Change 2 random non-Characters into Characters",
+      effectKind: "change-random-card-type",
+      count: 2,
+      cardType: "Character",
+    };
+    const fallback: ExplorationActionContent = {
+      id: "change-two-random-types-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const beforeOverride = {
+      predicateId: "fixture:event",
+      cardType: "Event" as const,
+      subtype: "",
+      label: "Event",
+    };
+    const journey = {
+      ...journeyFixture(content),
+      deck: journeyFixture(content).deck.map((entry, index) =>
+        index % 2 === 0 ? { ...entry, typeChange: beforeOverride } : entry,
+      ),
+    };
+    const state = buildState(content, journey);
+    const offer = state.runtime.actionOffers[0];
+    const preparation = offer?.randomDeckTargetPreparation;
+    if (offer === undefined || preparation === undefined) {
+      throw new Error("Expected random card-type plan");
+    }
+    expect(preparation.effectKind).toBe("change-random-card-type");
+    expect(preparation.cardType).toBe("Character");
+    expect(preparation.targets).toHaveLength(2);
+    const resolved = resolve(content, state.journey, action.id);
+    const resolution = explorationResolutionFor(resolved);
+    expect(resolution.selection).toEqual({});
+    expect(resolution.resolvedCardType).toBe("Character");
+    expect(resolution.cardTypeChanges).toEqual(
+      preparation.targets.map((target) => ({
+        entryId: target.entryId,
+        cardId: target.cardId,
+        beforeCardType: "Event",
+        afterCardType: "Character",
+        beforeTypeChange: beforeOverride,
+        afterTypeChange: {
+          predicateId: "exploration:card-type:character",
+          cardType: "Character",
+          subtype: "",
+          label: "Character",
+        },
+      })),
+    );
+    for (const target of preparation.targets) {
+      const entry = resolved.deck.find(
+        (candidate) => candidate.entryId === target.entryId,
+      );
+      expect(entry?.typeChange).toEqual({
+        predicateId: "exploration:card-type:character",
+        cardType: "Character",
+        subtype: "",
+        label: "Character",
+      });
+      if (entry === undefined)
+        throw new Error("resolved target entry is missing");
+      const base = content.cardDatabase.get(entry.cardNumber);
+      expect(
+        base === undefined
+          ? undefined
+          : resolveDeckEntryCard(content.transfigurationData, base, entry)
+              .cardType,
+      ).toBe("Character");
+    }
+    expect(() => assertJsonSafe(resolved, "journey")).not.toThrow();
+  });
+
+  it("atomically replaces one signed random target with a clean fixed catalog entry", () => {
+    const replacementCardId = asCardId("f0000000-0000-4000-8000-000000000001");
+    const action: ExplorationActionContent = {
+      id: "replace-random-character-with-fixed",
+      label: "Trade one creature",
+      effectText: "Replace a random Character with {fixed_card}",
+      effectKind: "replace-random-with-card",
+      canonicalMechanicId: "replace-deck-entry",
+      selectionPolicyId: "uniform",
+      predicate: "character",
+      cardId: replacementCardId,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "replace-random-character-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const journey = {
+      ...journeyFixture(content),
+      deck: journeyFixture(content).deck.map((entry) => ({
+        ...entry,
+        transfiguration: "Empowered" as const,
+        typeChange: {
+          predicateId: "fixture:changed",
+          cardType: "Character" as const,
+          subtype: "Warrior",
+          label: "Warrior",
+        },
+        keywordModification: { reclaim: 2 },
+        sparkBonus: 3,
+      })),
+    };
+    const state = buildState(content, journey);
+    const offer = state.runtime.actionOffers[0];
+    const preparation = offer?.randomDeckTargetPreparation;
+    const target = preparation?.targets[0];
+    if (
+      offer === undefined ||
+      preparation === undefined ||
+      target === undefined
+    ) {
+      throw new Error("Expected fixed replacement plan");
+    }
+    expect(preparation).toMatchObject({
+      effectKind: "replace-random-with-card",
+      count: 1,
+      predicate: "character",
+      replacementCardId,
+    });
+    expect(offer.offeredDeckEntryIds).toEqual([]);
+
+    const before = state.journey.deck.find(
+      (entry) => entry.entryId === target.entryId,
+    );
+    const resolved = resolve(content, state.journey, action.id);
+    const resolution = explorationResolutionFor(resolved);
+    expect(resolution).toMatchObject({
+      selection: {},
+      affectedEntryIds: [target.entryId],
+      purgedEntryIds: [target.entryId],
+      purgedCardIds: [target.cardId],
+      purgedEntrySnapshots: [before],
+      gainedCardIds: [replacementCardId],
+      gainedEntryIds: ["deck-91-0"],
+      resolvedPredicate: "character",
+      cardReplacements: [
+        {
+          sourceEntryId: target.entryId,
+          sourceCardId: target.cardId,
+          replacementEntryId: "deck-91-0",
+          replacementCardId,
+        },
+      ],
+    });
+    const gainedEntry = resolved.deck.find(
+      (entry) => entry.entryId === "deck-91-0",
+    );
+    expect(gainedEntry).toMatchObject({
+      cardNumber: 101,
+      transfiguration: null,
+    });
+    expect(gainedEntry).not.toHaveProperty("typeChange");
+    expect(gainedEntry).not.toHaveProperty("keywordModification");
+    expect(gainedEntry).not.toHaveProperty("sparkBonus");
+    expect(() => assertJsonSafe(resolved, "journey")).not.toThrow();
+
+    const tampered = {
+      ...state.journey,
+      siteRuntime: {
+        [site.id]: {
+          ...state.runtime,
+          actionOffers: [
+            {
+              ...offer,
+              randomDeckTargetPreparation: {
+                ...preparation,
+                replacementCardId: SOURCE_CARD_ID,
+              },
+            },
+            state.runtime.actionOffers[1],
+          ],
+        },
+      },
+    };
+    expect(
+      resolveExplorationChoice({
+        journey: tampered,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {},
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+  });
+
+  it("changes the exact disclosed deck target and rejects forged or extra intent", () => {
+    const action: ExplorationActionContent = {
+      id: "change-disclosed-event-to-character",
+      label: "Rewrite the revealed card",
+      effectText: "Change {deck_card} to become a Character",
+      effectKind: "change-card-type-selected",
+      canonicalMechanicId: "change-entry-card-type",
+      selectionPolicyId: "deck-entry-centrality",
+      cardType: "Character",
+      deckTarget: "offered",
+    };
+    const fallback: ExplorationActionContent = {
+      id: "change-disclosed-type-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const state = buildState(content);
+    const offer = state.runtime.actionOffers[0];
+    const preparation = offer?.disclosedDeckTargetPreparation;
+    const target = preparation?.target;
+    if (
+      offer === undefined ||
+      preparation === undefined ||
+      target === null ||
+      target === undefined
+    ) {
+      throw new Error("Expected a disclosed card-type target");
+    }
+    expect(offer.offeredDeckEntryIds).toEqual([target.entryId]);
+    expect(preparation).toMatchObject({
+      effectKind: "change-card-type-selected",
+      cardType: "Character",
+      target,
+    });
+
+    const resolved = resolve(content, state.journey, action.id, {
+      entryIds: [target.entryId],
+    });
+    expect(explorationResolutionFor(resolved)).toMatchObject({
+      selection: { entryIds: [target.entryId] },
+      affectedEntryIds: [target.entryId],
+      resolvedCardType: "Character",
+      cardTypeChanges: [
+        {
+          entryId: target.entryId,
+          cardId: target.cardId,
+          beforeCardType: "Event",
+          afterCardType: "Character",
+          beforeTypeChange: null,
+          afterTypeChange: {
+            predicateId: "exploration:card-type:character",
+            cardType: "Character",
+          },
+        },
+      ],
+    });
+    expect(() => assertJsonSafe(resolved, "journey")).not.toThrow();
+
+    for (const selection of [
+      {},
+      { entryIds: [state.journey.deck[1]?.entryId] },
+      { entryIds: [target.entryId], extra: "forged" },
+    ]) {
+      expect(
+        resolveExplorationChoice({
+          journey: state.journey,
+          site,
+          payload: {
+            actionId: action.id,
+            selectionRulesVersion: SELECTION_RULES_VERSION,
+            selection,
+          },
+          seq: 91,
+          content,
+        }),
+      ).toBeNull();
+    }
+  });
+
+  it.each([
+    "Duplication",
+    "Purge",
+    "Shop",
+    "DreamsignBazaar",
+    "Transfiguration",
+  ] as const)(
+    "prepares and resolves one signed fixed %s insertion",
+    (siteType) => {
+      const action: ExplorationActionContent = {
+        id: `fixed-${siteType}`,
+        label: "Open a passage",
+        effectText: `Add a ${siteType} site`,
+        effectKind: "add-fixed-site",
+        canonicalMechanicId: "add-site",
+        selectionPolicyId: "fixed",
+        siteType,
+      };
+      const fallback: ExplorationActionContent = {
+        id: `fixed-${siteType}-fallback`,
+        label: "Gain a card",
+        effectText: "Gain a card",
+        effectKind: "gain-card",
+        cardId: SOURCE_CARD_ID,
+      };
+      const content = contentFixture([action, fallback]);
+      const startingJourney = explorationFoldJourney(journeyFixture(content));
+      const first = buildState(content, startingJourney);
+      const replayRuntime = buildExplorationRuntime(
+        startingJourney,
+        site,
+        content,
+        () => 0.99,
+        SOURCE_CARD_ID,
+      );
+      const legacyRuntime = buildLegacyExplorationRuntime(
+        startingJourney,
+        site,
+        content,
+        () => 0.01,
+        SOURCE_CARD_ID,
+      );
+      const offer = first.runtime.actionOffers[0];
+      const preparation = offer?.siteInsertionPreparation;
+      if (offer === undefined || preparation === undefined) {
+        throw new Error("Expected a fixed-site preparation");
+      }
+      expect(replayRuntime?.actionOffers[0]).toEqual(offer);
+      expect(legacyRuntime?.actionOffers[0]?.siteInsertionPreparation).toEqual(
+        preparation,
+      );
+      if (siteType === "Duplication" && legacyRuntime !== null) {
+        const legacyResolved = resolveExplorationChoice({
+          journey: {
+            ...startingJourney,
+            siteRuntime: { [site.id]: legacyRuntime },
+          },
+          site,
+          payload: { actionId: action.id },
+          seq: 90,
+          content,
+        });
+        expect(
+          legacyResolved?.atlas.nodes["exploration-node"]?.sites[1],
+        ).toEqual(preparation.insertedSite);
+        expect(
+          legacyResolved === null
+            ? undefined
+            : explorationResolutionFor(legacyResolved).selectionSignature,
+        ).toBe(preparation.planSignature);
+      }
+      expect(offer).toMatchObject({
+        canonicalMechanicId: "add-site",
+        selectionPolicyId: "fixed",
+        selectionRulesVersion: SELECTION_RULES_VERSION,
+        selectionKey: action.id,
+        selectionSignature: preparation.planSignature,
+        siteInsertionPreparation: {
+          sourceSiteId: site.id,
+          sourceActionId: action.id,
+          targetNodeId: "exploration-node",
+          insertionIndex: 1,
+          siblingSiteIdsBefore: [site.id],
+          insertedSite: {
+            id: `site-exploration-${site.id}-${action.id}`,
+            type: siteType,
+            isEnhanced: false,
+            isVisited: false,
+          },
+        },
+      });
+
+      const resolved = resolve(content, first.journey, action.id);
+      const inserted = resolved.atlas.nodes["exploration-node"]?.sites[1];
+      expect(inserted).toEqual(preparation.insertedSite);
+      expect(explorationResolutionFor(resolved)).toMatchObject({
+        selection: {},
+        selectionRulesVersion: SELECTION_RULES_VERSION,
+        selectionContentRevision: offer.selectionContentRevision,
+        selectionSignature: preparation.planSignature,
+        siteInsertion: {
+          targetNodeId: "exploration-node",
+          insertionIndex: 1,
+          siblingSiteIdsBefore: [site.id],
+          insertedSite: preparation.insertedSite,
+        },
+      });
+      expect(() => assertJsonSafe(resolved, "journey")).not.toThrow();
+
+      const route = createSiteContentProvider(content).openSite({
+        journey: resolved,
+        site: preparation.insertedSite,
+        rng: () => 0.25,
+      });
+      if (siteType === "Purge") {
+        expect(route).toBeNull();
+      } else {
+        expect(route?.runtime.kind).toBe(
+          siteType === "Shop" || siteType === "DreamsignBazaar"
+            ? "shop"
+            : "cardChoice",
+        );
+      }
+      if (route?.runtime.kind === "cardChoice") {
+        expect(route.runtime.choiceKind).toBe(
+          siteType === "Duplication" ? "duplication" : "transfiguration",
+        );
+      }
+    },
+  );
+
+  it("rejects fixed-site plan tampering, stale atlas state, and nonempty intent", () => {
+    const action: ExplorationActionContent = {
+      id: "guarded-fixed-site",
+      label: "Open a passage",
+      effectText: "Add a Shop site",
+      effectKind: "add-fixed-site",
+      canonicalMechanicId: "add-site",
+      selectionPolicyId: "fixed",
+      siteType: "Shop",
+    };
+    const fallback: ExplorationActionContent = {
+      id: "guarded-fixed-site-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const fresh = () =>
+      buildState(content, explorationFoldJourney(journeyFixture(content)));
+    const initial = fresh();
+    const offer = initial.runtime.actionOffers[0];
+    const preparation = offer?.siteInsertionPreparation;
+    if (offer === undefined || preparation === undefined) {
+      throw new Error("Expected a fixed-site preparation");
+    }
+    const tamper = (
+      mutate: (
+        plan: NonNullable<typeof preparation>,
+      ) => NonNullable<typeof preparation>,
+    ): JourneyState => ({
+      ...initial.journey,
+      siteRuntime: {
+        ...initial.journey.siteRuntime,
+        [site.id]: {
+          ...initial.runtime,
+          actionOffers: [
+            {
+              ...offer,
+              siteInsertionPreparation: mutate(preparation),
+            },
+            ...initial.runtime.actionOffers.slice(1),
+          ],
+        },
+      },
+    });
+    expect(offer.offeredSiteType).toBeUndefined();
+    expect(offer.selectionTrace).toBeUndefined();
+    const tamperedStates = [
+      tamper((plan) => ({ ...plan, planSignature: "forged" })),
+      tamper((plan) => ({ ...plan, targetNodeId: "forged" })),
+      tamper((plan) => ({
+        ...plan,
+        siblingSiteIdsBefore: ["forged-sibling"],
+      })),
+      tamper((plan) => ({ ...plan, insertionIndex: 2 })),
+      tamper((plan) => ({
+        ...plan,
+        insertedSite: { ...plan.insertedSite, id: "forged" },
+      })),
+      tamper((plan) => ({
+        ...plan,
+        insertedSite: { ...plan.insertedSite, type: "Duplication" },
+      })),
+    ];
+    for (const journey of tamperedStates) {
+      expect(
+        resolveExplorationChoice({
+          journey,
+          site,
+          payload: {
+            actionId: action.id,
+            selectionRulesVersion: SELECTION_RULES_VERSION,
+          },
+          seq: 91,
+          content,
+        }),
+      ).toBeNull();
+    }
+
+    const stale = fresh();
+    const node = stale.journey.atlas.nodes["exploration-node"];
+    if (node === undefined) throw new Error("Expected current node");
+    node.sites.unshift({
+      id: "new-sibling",
+      type: "Essence",
+      isEnhanced: false,
+      isVisited: false,
+    });
+    expect(
+      resolveExplorationChoice({
+        journey: stale.journey,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+    expect(
+      resolveExplorationChoice({
+        journey: fresh().journey,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: { siteType: "Shop" },
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+  });
+
+  it("prepares three distinct signed site choices and inserts exactly the selected type", () => {
+    const action: ExplorationActionContent = {
+      id: "choose-site-type",
+      label: "Choose a destination",
+      effectText: "Choose one of three sites to add",
+      followupTitle: "Choose a site",
+      followupSubtitle: "Select one destination",
+      effectKind: "choose-site-type",
+      canonicalMechanicId: "add-site",
+      selectionPolicyId: "site-uniform",
+      offerCount: 3,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "choose-site-type-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const startingJourney = explorationFoldJourney(journeyFixture(content));
+    const first = buildState(content, startingJourney);
+    const replay = buildExplorationRuntime(
+      startingJourney,
+      site,
+      content,
+      () => 0.99,
+      SOURCE_CARD_ID,
+    );
+    const legacy = buildLegacyExplorationRuntime(
+      startingJourney,
+      site,
+      content,
+      () => 0.01,
+      SOURCE_CARD_ID,
+    );
+    const offer = first.runtime.actionOffers[0];
+    const preparation = offer?.siteTypeChoicePreparation;
+    if (offer === undefined || preparation === undefined) {
+      throw new Error("Expected a site-type choice preparation");
+    }
+    expect(replay?.actionOffers[0]).toEqual(offer);
+    expect(legacy?.actionOffers[0]).toEqual(offer);
+    expect(offer).toMatchObject({
+      canonicalMechanicId: "add-site",
+      selectionPolicyId: "site-uniform",
+      selectionRulesVersion: SELECTION_RULES_VERSION,
+      selectionKey: action.id,
+      selectionSignature: preparation.planSignature,
+      siteTypeChoicePreparation: {
+        sourceSiteId: site.id,
+        sourceActionId: action.id,
+        targetNodeId: "exploration-node",
+        insertionIndex: 1,
+        siblingSiteIdsBefore: [site.id],
+      },
+    });
+    expect(offer.selectionTrace).toBeDefined();
+    expect(offer.offeredSiteType).toBeUndefined();
+    expect(offer.siteInsertionPreparation).toBeUndefined();
+    expect(preparation.selectorSignature).not.toBe(preparation.planSignature);
+    expect(preparation.choices).toHaveLength(3);
+    expect(
+      new Set(preparation.choices.map(({ siteType }) => siteType)).size,
+    ).toBe(3);
+    expect(
+      preparation.choices.every(
+        ({ siteType }) =>
+          siteType === "Shop" ||
+          siteType === "Purge" ||
+          siteType === "Transfiguration" ||
+          siteType === "Duplication",
+      ),
+    ).toBe(true);
+    expect(
+      new Set(preparation.choices.map(({ insertedSite }) => insertedSite.id)),
+    ).toEqual(new Set([`site-exploration-${site.id}-${action.id}`]));
+
+    const chosen = preparation.choices[1];
+    if (chosen === undefined) throw new Error("Expected a prepared choice");
+    const resolved = resolve(content, first.journey, action.id, {
+      siteType: chosen.siteType,
+    });
+    expect(resolved.atlas.nodes["exploration-node"]?.sites[1]).toEqual(
+      chosen.insertedSite,
+    );
+    expect(explorationResolutionFor(resolved)).toMatchObject({
+      selection: { siteType: chosen.siteType },
+      selectionRulesVersion: SELECTION_RULES_VERSION,
+      selectionContentRevision: offer.selectionContentRevision,
+      selectionSignature: preparation.planSignature,
+      siteInsertion: {
+        targetNodeId: "exploration-node",
+        insertionIndex: 1,
+        siblingSiteIdsBefore: [site.id],
+        insertedSite: chosen.insertedSite,
+      },
+    });
+    expect(() => assertJsonSafe(resolved, "journey")).not.toThrow();
+  });
+
+  it("rejects forged site-choice plans, selector traces, stale topology, and invalid intents", () => {
+    const action: ExplorationActionContent = {
+      id: "guarded-site-choice",
+      label: "Choose a destination",
+      effectText: "Choose one of three sites to add",
+      followupTitle: "Choose a site",
+      followupSubtitle: "Select one destination",
+      effectKind: "choose-site-type",
+      canonicalMechanicId: "add-site",
+      selectionPolicyId: "site-uniform",
+      offerCount: 3,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "guarded-site-choice-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const fresh = () =>
+      buildState(content, explorationFoldJourney(journeyFixture(content)));
+    const initial = fresh();
+    const offer = initial.runtime.actionOffers[0];
+    const preparation = offer?.siteTypeChoicePreparation;
+    const selectedType = preparation?.choices[0]?.siteType;
+    if (
+      offer === undefined ||
+      preparation === undefined ||
+      selectedType === undefined
+    ) {
+      throw new Error("Expected a guarded site-type choice preparation");
+    }
+    const replaceOffer = (
+      changed: typeof offer,
+      journey = initial.journey,
+    ): JourneyState => ({
+      ...journey,
+      siteRuntime: {
+        ...journey.siteRuntime,
+        [site.id]: {
+          ...initial.runtime,
+          actionOffers: [changed, ...initial.runtime.actionOffers.slice(1)],
+        },
+      },
+    });
+    const mutatePlan = (
+      mutate: (
+        plan: NonNullable<typeof preparation>,
+      ) => NonNullable<typeof preparation>,
+    ): JourneyState =>
+      replaceOffer({
+        ...offer,
+        siteTypeChoicePreparation: mutate(preparation),
+      });
+    const firstChoice = preparation.choices[0];
+    if (firstChoice === undefined) throw new Error("Expected first choice");
+    const forgedStates = [
+      mutatePlan((plan) => ({ ...plan, planSignature: "forged" })),
+      mutatePlan((plan) => ({ ...plan, selectorSignature: "forged" })),
+      mutatePlan((plan) => ({ ...plan, targetNodeId: "forged" })),
+      mutatePlan((plan) => ({ ...plan, insertionIndex: 2 })),
+      mutatePlan((plan) => ({
+        ...plan,
+        siblingSiteIdsBefore: ["forged"],
+      })),
+      mutatePlan((plan) => ({ ...plan, choices: [...plan.choices].reverse() })),
+      mutatePlan((plan) => ({
+        ...plan,
+        choices: [
+          {
+            ...firstChoice,
+            insertedSite: { ...firstChoice.insertedSite, id: "forged" },
+          },
+          ...plan.choices.slice(1),
+        ],
+      })),
+      replaceOffer({ ...offer, selectionSignature: "forged" }),
+      replaceOffer({
+        ...offer,
+        selectionTrace: {
+          ...offer.selectionTrace!,
+          selectedKeys: [...offer.selectionTrace!.selectedKeys].reverse(),
+        },
+      }),
+      replaceOffer({ ...offer, offeredSiteType: selectedType }),
+      replaceOffer({
+        ...offer,
+        siteInsertionPreparation: {
+          sourceSiteId: site.id,
+          sourceActionId: action.id,
+          targetNodeId: "exploration-node",
+          insertionIndex: 1,
+          siblingSiteIdsBefore: [site.id],
+          insertedSite: firstChoice.insertedSite,
+          planSignature: "forged",
+        },
+      }),
+    ];
+    for (const journey of forgedStates) {
+      expect(
+        resolveExplorationChoice({
+          journey,
+          site,
+          payload: {
+            actionId: action.id,
+            selectionRulesVersion: SELECTION_RULES_VERSION,
+            selection: { siteType: selectedType },
+          },
+          seq: 92,
+          content,
+        }),
+      ).toBeNull();
+    }
+
+    const stale = fresh();
+    stale.journey.atlas.nodes["exploration-node"]?.sites.push({
+      id: "new-sibling",
+      type: "Essence",
+      isEnhanced: false,
+      isVisited: false,
+    });
+    const invalidSelections = [
+      undefined,
+      {},
+      { siteType: "DreamsignBazaar" },
+      { siteType: selectedType, extra: "forged" },
+      { siteType: [selectedType] },
+    ];
+    for (const selection of invalidSelections) {
+      expect(
+        resolveExplorationChoice({
+          journey: fresh().journey,
+          site,
+          payload: {
+            actionId: action.id,
+            selectionRulesVersion: SELECTION_RULES_VERSION,
+            ...(selection === undefined ? {} : { selection }),
+          },
+          seq: 92,
+          content,
+        }),
+      ).toBeNull();
+    }
+    expect(
+      resolveExplorationChoice({
+        journey: stale.journey,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: { siteType: selectedType },
+        },
+        seq: 92,
+        content,
+      }),
+    ).toBeNull();
+
+    const staleContent: JourneyContent = {
+      ...content,
+      rewardSelectionData: {
+        ...content.rewardSelectionData,
+        foldHash: `${content.rewardSelectionData.foldHash}-changed`,
+      },
+    };
+    expect(
+      resolveExplorationChoice({
+        journey: fresh().journey,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: { siteType: selectedType },
+        },
+        seq: 92,
+        content: staleContent,
+      }),
+    ).toBeNull();
+  });
+
+  it("isolates site choices by action key and replays one chosen insertion once", () => {
+    const action = (id: string): ExplorationActionContent => ({
+      id,
+      label: "Choose a destination",
+      effectText: "Choose one of three sites to add",
+      followupTitle: "Choose a site",
+      followupSubtitle: "Select one destination",
+      effectKind: "choose-site-type",
+      canonicalMechanicId: "add-site",
+      selectionPolicyId: "site-uniform",
+      offerCount: 3,
+    });
+    const firstAction = action("site-choice-one");
+    const secondAction = action("site-choice-two");
+    const content = contentFixture([firstAction, secondAction]);
+    const startingJourney = explorationFoldJourney(journeyFixture(content));
+    const opened = buildState(content, startingJourney);
+    const firstOffer = opened.runtime.actionOffers[0];
+    const secondOffer = opened.runtime.actionOffers[1];
+    expect(firstOffer?.selectionTrace?.selectionKey).toBe(firstAction.id);
+    expect(secondOffer?.selectionTrace?.selectionKey).toBe(secondAction.id);
+    expect(firstOffer?.siteTypeChoicePreparation?.planSignature).not.toBe(
+      secondOffer?.siteTypeChoicePreparation?.planSignature,
+    );
+    const chosen = firstOffer?.siteTypeChoicePreparation?.choices[0];
+    if (chosen === undefined) throw new Error("Expected a prepared choice");
+    const once = resolve(content, opened.journey, firstAction.id, {
+      siteType: chosen.siteType,
+    });
+    expect(
+      resolveExplorationChoice({
+        journey: once,
+        site,
+        payload: {
+          actionId: firstAction.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: { siteType: chosen.siteType },
+        },
+        seq: 93,
+        content,
+      }),
+    ).toBeNull();
+    expect(JSON.parse(JSON.stringify(once))).toEqual(once);
+    expect(once.atlas.nodes["exploration-node"]?.sites).toEqual([
+      site,
+      chosen.insertedSite,
+    ]);
+  });
+
+  it("folds a chosen site insertion deterministically and bounces a duplicate intent", () => {
+    const action: ExplorationActionContent = {
+      id: "folded-site-choice",
+      label: "Choose a destination",
+      effectText: "Choose one of three sites to add",
+      followupTitle: "Choose a site",
+      followupSubtitle: "Select one destination",
+      effectKind: "choose-site-type",
+      canonicalMechanicId: "add-site",
+      selectionPolicyId: "site-uniform",
+      offerCount: 3,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "folded-site-choice-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const initialJourney = explorationFoldJourney(journeyFixture(content));
+    const prepared = buildExplorationRuntime(
+      initialJourney,
+      site,
+      content,
+      () => 0.37,
+      SOURCE_CARD_ID,
+    );
+    const chosen =
+      prepared?.actionOffers[0]?.siteTypeChoicePreparation?.choices[0];
+    if (chosen === undefined) throw new Error("Expected a folded site choice");
+    const genesis: Genesis = {
+      seed: "site-choice-fold",
+      reducerVersion: "test",
+      createdAt: 0,
+      contentConfig: { poolVariant: "tides4" },
+    };
+    const resolvePayload = {
+      siteId: site.id,
+      actionId: action.id,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
+      selection: { siteType: chosen.siteType },
+    };
+    const events = [
+      {
+        seq: 1,
+        event: {
+          type: "OPEN_SITE",
+          payload: {
+            siteId: site.id,
+            selectionRulesVersion: SELECTION_RULES_VERSION,
+          },
+          actor: "client-a",
+          clientTimestamp: "1970-01-01T00:00:00.000Z",
+          basedOnSeq: 0,
+        },
+      },
+      {
+        seq: 2,
+        event: {
+          type: "RESOLVE_EXPLORATION_CHOICE",
+          payload: resolvePayload,
+          actor: "client-a",
+          clientTimestamp: "1970-01-01T00:00:01.000Z",
+          basedOnSeq: 1,
+        },
+      },
+      {
+        seq: 3,
+        event: {
+          type: "RESOLVE_EXPLORATION_CHOICE",
+          payload: resolvePayload,
+          actor: "client-b",
+          clientTimestamp: "1970-01-01T00:00:02.000Z",
+          basedOnSeq: 2,
+        },
+      },
+    ] satisfies Array<{ seq: number; event: GameEvent }>;
+
+    registerSiteContentProvider(createSiteContentProvider(content));
+    try {
+      const fold = () =>
+        foldEvents(
+          GAME_ENGINE_CONFIG,
+          genesis,
+          {
+            seq: 0,
+            state: {
+              ...GAME_ENGINE_CONFIG.genesisState(genesis),
+              journey: initialJourney,
+            },
+          },
+          events,
+          { devMode: true },
+        );
+      const first = fold();
+      const replay = fold();
+      expect(first.outcomes.map(({ outcome }) => outcome)).toEqual([
+        "applied",
+        "applied",
+        "bounced",
+      ]);
+      expect(replay.state).toEqual(first.state);
+      expect(JSON.parse(JSON.stringify(first.state))).toEqual(first.state);
+      expect(
+        first.state.journey.atlas.nodes["exploration-node"]?.sites,
+      ).toEqual([site, chosen.insertedSite]);
+      expect(explorationResolutionFor(first.state.journey).selection).toEqual({
+        siteType: chosen.siteType,
+      });
+    } finally {
+      registerSiteContentProvider(null);
+    }
+  });
+
+  it("folds one fixed-site resolution once and survives JSON save/load", () => {
+    const action: ExplorationActionContent = {
+      id: "replayed-fixed-site",
+      label: "Open a passage",
+      effectText: "Add a Duplication site",
+      effectKind: "add-fixed-site",
+      canonicalMechanicId: "add-site",
+      selectionPolicyId: "fixed",
+      siteType: "Duplication",
+    };
+    const fallback: ExplorationActionContent = {
+      id: "replayed-fixed-site-fallback",
+      label: "Gain a card",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const genesis: Genesis = {
+      seed: "fixed-site-fold",
+      reducerVersion: "test",
+      createdAt: 0,
+      contentConfig: { poolVariant: "tides4" },
+    };
+    const payload = {
+      siteId: site.id,
+      actionId: action.id,
+      selectionRulesVersion: SELECTION_RULES_VERSION,
+    };
+    const events = [
+      {
+        seq: 1,
+        event: {
+          type: "OPEN_SITE",
+          payload: {
+            siteId: site.id,
+            selectionRulesVersion: SELECTION_RULES_VERSION,
+          },
+          actor: "client-a",
+          clientTimestamp: "1970-01-01T00:00:00.000Z",
+          basedOnSeq: 0,
+        },
+      },
+      {
+        seq: 2,
+        event: {
+          type: "RESOLVE_EXPLORATION_CHOICE",
+          payload,
+          actor: "client-a",
+          clientTimestamp: "1970-01-01T00:00:01.000Z",
+          basedOnSeq: 1,
+        },
+      },
+      {
+        seq: 3,
+        event: {
+          type: "RESOLVE_EXPLORATION_CHOICE",
+          payload,
+          actor: "client-b",
+          clientTimestamp: "1970-01-01T00:00:02.000Z",
+          basedOnSeq: 2,
+        },
+      },
+      {
+        seq: 4,
+        event: {
+          type: "COMPLETE_SITE",
+          payload: { siteId: site.id },
+          actor: "client-a",
+          clientTimestamp: "1970-01-01T00:00:03.000Z",
+          basedOnSeq: 3,
+        },
+      },
+    ] satisfies Array<{ seq: number; event: GameEvent }>;
+    const initialJourney = explorationFoldJourney(journeyFixture(content));
+
+    registerSiteContentProvider(createSiteContentProvider(content));
+    try {
+      const fold = () =>
+        foldEvents(
+          GAME_ENGINE_CONFIG,
+          genesis,
+          {
+            seq: 0,
+            state: {
+              ...GAME_ENGINE_CONFIG.genesisState(genesis),
+              journey: initialJourney,
+            },
+          },
+          events,
+          { devMode: true },
+        );
+      const first = fold();
+      const replay = fold();
+      expect(first.outcomes.map(({ outcome }) => outcome)).toEqual([
+        "applied",
+        "applied",
+        "bounced",
+        "applied",
+      ]);
+      expect(replay.state).toEqual(first.state);
+      expect(JSON.parse(JSON.stringify(first.state))).toEqual(first.state);
+      const node = first.state.journey.atlas.nodes["exploration-node"];
+      expect(node?.sites.map(({ id }) => id)).toEqual([
+        site.id,
+        `site-exploration-${site.id}-${action.id}`,
+      ]);
+      expect(node?.sites[1]).toEqual({
+        id: `site-exploration-${site.id}-${action.id}`,
+        type: "Duplication",
+        isEnhanced: false,
+        isVisited: false,
+      });
+      expect(node?.sites[0]?.isVisited).toBe(true);
+    } finally {
+      registerSiteContentProvider(null);
+    }
+  });
+
+  it("resolves all-card and disclosed same-type compound mutations exactly", () => {
+    const fallback: ExplorationActionContent = {
+      id: "wave8-fallback",
+      label: "Take the source",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const allAction: ExplorationActionContent = {
+      id: "wave8-transfigure-all",
+      label: "Rewrite every current",
+      effectText: "Transfigure all cards in your deck",
+      effectKind: "transfigure-all-cards",
+    };
+    const allContent = contentFixture([allAction, fallback]);
+    const allState = buildState(allContent);
+    const allOffer = allState.runtime.actionOffers[0];
+    const allPlan = allOffer?.compoundActionPreparation;
+    if (
+      allOffer === undefined ||
+      allPlan?.kind !== "all-card-transfiguration"
+    ) {
+      throw new Error("Expected an all-card compound plan");
+    }
+    const allResolved = resolve(allContent, allState.journey, allAction.id);
+    expect(explorationResolutionFor(allResolved).cardTransfigurations).toEqual(
+      allPlan.targets.map((target) => ({
+        entryId: target.entryId,
+        cardId: target.cardId,
+        beforeTransfiguration: null,
+        afterTransfiguration: target.transfiguration,
+      })),
+    );
+    expect(
+      allResolved.deck.every(({ transfiguration }) => transfiguration !== null),
+    ).toBe(true);
+    const replayed = resolve(
+      allContent,
+      buildState(allContent).journey,
+      allAction.id,
+    );
+    expect(replayed).toEqual(allResolved);
+    expect(JSON.parse(JSON.stringify(allResolved))).toEqual(allResolved);
+    expect(
+      resolveExplorationChoice({
+        journey: allResolved,
+        site,
+        payload: {
+          actionId: allAction.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {},
+        },
+        seq: 92,
+        content: allContent,
+      }),
+    ).toBeNull();
+
+    const tampered = {
+      ...allState.journey,
+      siteRuntime: {
+        [site.id]: {
+          ...allState.runtime,
+          actionOffers: [
+            {
+              ...allOffer,
+              compoundActionPreparation: {
+                ...allPlan,
+                targets: allPlan.targets.slice(1),
+              },
+            },
+            allState.runtime.actionOffers[1],
+          ],
+        },
+      },
+    };
+    expect(
+      resolveExplorationChoice({
+        journey: tampered,
+        site,
+        payload: {
+          actionId: allAction.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: {},
+        },
+        seq: 91,
+        content: allContent,
+      }),
+    ).toBeNull();
+    expect(
+      tampered.deck.every(({ transfiguration }) => transfiguration === null),
+    ).toBe(true);
+
+    const purgeAction: ExplorationActionContent = {
+      id: "wave8-purge-same-type",
+      label: "Cut the dimmest thread",
+      effectText: "Purge {deck_card} and Empower every other card of its type",
+      effectKind: "purge-disclosed-and-transfigure-same-type",
+      transfiguration: "Empowered",
+    };
+    const purgeBaseContent = contentFixture([purgeAction, fallback]);
+    const purgeContent: JourneyContent = {
+      ...purgeBaseContent,
+      cardDatabase: new Map(
+        [...purgeBaseContent.cardDatabase].map(([cardNumber, fixtureCard]) => [
+          cardNumber,
+          cardNumber === 101
+            ? {
+                ...fixtureCard,
+                isStarter: true,
+                roles: ["starter-deck" as const],
+                rarity: "Starter" as const,
+              }
+            : fixtureCard,
+        ]),
+      ),
+    };
+    const purgeJourney = journeyFixture(purgeContent);
+    purgeJourney.deck = [101, 101, 110, 111, 120, 121, 122, 130].map(
+      (cardNumber, index) => ({
+        entryId: `purge-entry-${String(index)}`,
+        cardNumber,
+        transfiguration: null,
+        isBane: false,
+      }),
+    );
+    const purgeState = buildState(purgeContent, purgeJourney);
+    const purgePlan =
+      purgeState.runtime.actionOffers[0]?.compoundActionPreparation;
+    expect(purgePlan?.unavailableReason).toBeUndefined();
+    if (
+      purgePlan?.kind !== "purge-disclosed-transfigure-same-type" ||
+      purgePlan.target === null
+    ) {
+      throw new Error("Expected a disclosed same-type compound plan");
+    }
+    const purged = resolve(purgeContent, purgeState.journey, purgeAction.id, {
+      entryIds: [purgePlan.target.entryId],
+    });
+    const purgeResolution = explorationResolutionFor(purged);
+    expect(purgeResolution.purgedEntryIds).toEqual([purgePlan.target.entryId]);
+    expect(purgeResolution.purgedEntrySnapshots?.[0]?.entryId).toBe(
+      purgePlan.target.entryId,
+    );
+    expect(purgeResolution.cardTransfigurations).toEqual(
+      purgePlan.companionTargets.map((target) => ({
+        entryId: target.entryId,
+        cardId: target.cardId,
+        beforeTransfiguration: null,
+        afterTransfiguration: target.transfiguration,
+      })),
+    );
+  });
+
+  it("persists exact fast keyword transitions and minted Nightmares", () => {
+    const action: ExplorationActionContent = {
+      id: "wave8-fast-nightmares",
+      label: "Outrun the dark",
+      effectText: "Every Event becomes fast. Gain 2 Nightmares.",
+      effectKind: "make-predicate-fast-and-gain-nightmares",
+      predicate: "event",
+      nightmareCount: 2,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "wave8-fast-nightmares-fallback",
+      label: "Take the source",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const journey = journeyFixture(content);
+    journey.deck = journey.deck.map((entry, index) =>
+      index === 0 ? { ...entry, keywordModification: { reclaim: 2 } } : entry,
+    );
+    const state = buildState(content, journey);
+    const plan = state.runtime.actionOffers[0]?.compoundActionPreparation;
+    if (plan?.kind !== "predicate-fast-nightmares") {
+      throw new Error("Expected a fast-and-Nightmare compound plan");
+    }
+    const resolved = resolve(content, state.journey, action.id);
+    const resolution = explorationResolutionFor(resolved);
+    expect(resolution.cardKeywordChanges).toEqual(
+      plan.targets.map((target) => ({
+        entryId: target.entryId,
+        cardId: target.cardId,
+        before:
+          state.journey.deck.find(({ entryId }) => entryId === target.entryId)
+            ?.keywordModification ?? null,
+        after: {
+          ...(state.journey.deck.find(
+            ({ entryId }) => entryId === target.entryId,
+          )?.keywordModification ?? {}),
+          fast: true,
+        },
+      })),
+    );
+    expect(resolution.nightmareGains).toEqual([
+      { entryId: "deck-91-0", cardId: NIGHTMARE_ID },
+      { entryId: "deck-91-1", cardId: NIGHTMARE_ID },
+    ]);
+    expect(resolution.gainedCardIds).toEqual([NIGHTMARE_ID, NIGHTMARE_ID]);
+    expect(() => assertJsonSafe(resolved, "journey")).not.toThrow();
+  });
+
+  it("mints selected fixed-form offers before its exact Nightmares", () => {
+    const action: ExplorationActionContent = {
+      id: "wave8-take-transfigured",
+      label: "Gather bright fragments",
+      effectText: "Take Characters and Empower them. Gain 2 Nightmares.",
+      followupTitle: "Choose fragments",
+      followupSubtitle: "Take any number.",
+      effectKind: "take-transfigured-cards-and-gain-nightmares",
+      predicate: "character",
+      offerCount: 4,
+      transfiguration: "Empowered",
+      nightmareCount: 2,
+    };
+    const fallback: ExplorationActionContent = {
+      id: "wave8-take-transfigured-fallback",
+      label: "Take the source",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const state = buildState(content);
+    const plan = state.runtime.actionOffers[0]?.compoundActionPreparation;
+    if (plan?.kind !== "take-transfigured-nightmares") {
+      throw new Error("Expected a take-transfigured compound plan");
+    }
+    const cardIds = [
+      plan.offeredCards[2]?.cardId,
+      plan.offeredCards[0]?.cardId,
+    ].filter((cardId): cardId is string => cardId !== undefined);
+    const resolved = resolve(content, state.journey, action.id, { cardIds });
+    const resolution = explorationResolutionFor(resolved);
+    expect(resolution.gainedCardIds).toEqual([
+      ...cardIds,
+      NIGHTMARE_ID,
+      NIGHTMARE_ID,
+    ]);
+    expect(
+      resolution.cardTransfigurations?.map(({ cardId }) => cardId),
+    ).toEqual(cardIds);
+    expect(resolution.nightmareGains?.map(({ entryId }) => entryId)).toEqual([
+      "deck-91-2",
+      "deck-91-3",
+    ]);
+    expect(
+      resolution.gainedEntryIds?.map(
+        (entryId) =>
+          resolved.deck.find((entry) => entry.entryId === entryId)
+            ?.transfiguration,
+      ),
+    ).toEqual(["Empowered", "Empowered", null, null]);
+
+    const none = resolve(content, buildState(content).journey, action.id, {
+      cardIds: [],
+    });
+    expect(explorationResolutionFor(none)).toMatchObject({
+      selection: { cardIds: [] },
+      gainedCardIds: [NIGHTMARE_ID, NIGHTMARE_ID],
+      cardTransfigurations: [],
+    });
+    expect(
+      resolveExplorationChoice({
+        journey: state.journey,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: { cardIds: [cardIds[0], cardIds[0]] },
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+  });
+
+  it("purges one prepared entry then transfigures and copies the other three", () => {
+    const action: ExplorationActionContent = {
+      id: "wave8-purge-transfigure-copy",
+      label: "Choose the severed echo",
+      effectText: "Purge one card. Empower and copy the other three.",
+      followupTitle: "Choose a card",
+      followupSubtitle: "The other three will be Empowered and copied.",
+      effectKind: "purge-one-transfigure-and-copy-others",
+      offerCount: 4,
+      transfiguration: "Empowered",
+    };
+    const fallback: ExplorationActionContent = {
+      id: "wave8-purge-transfigure-copy-fallback",
+      label: "Take the source",
+      effectText: "Gain a card",
+      effectKind: "gain-card",
+      cardId: SOURCE_CARD_ID,
+    };
+    const content = contentFixture([action, fallback]);
+    const journey = journeyFixture(content);
+    journey.deck = journey.deck.map((entry, index) => ({
+      ...entry,
+      keywordModification: { reclaim: index + 1 },
+      sparkBonus: index,
+    }));
+    const state = buildState(content, journey);
+    const plan = state.runtime.actionOffers[0]?.compoundActionPreparation;
+    if (plan?.kind !== "purge-transfigure-copy") {
+      throw new Error("Expected a purge/transfigure/copy compound plan");
+    }
+    const purged = plan.targets[1];
+    if (purged === undefined) throw new Error("Expected a purge choice");
+    const companions = plan.targets.filter(
+      ({ entryId }) => entryId !== purged.entryId,
+    );
+    const resolved = resolve(content, state.journey, action.id, {
+      entryIds: [purged.entryId],
+    });
+    const resolution = explorationResolutionFor(resolved);
+    expect(resolution.purgedEntryIds).toEqual([purged.entryId]);
+    expect(resolution.cardTransfigurations).toEqual(
+      companions.map((target) => ({
+        entryId: target.entryId,
+        cardId: target.cardId,
+        beforeTransfiguration: null,
+        afterTransfiguration: target.transfiguration,
+      })),
+    );
+    expect(resolution.cardCopies).toEqual(
+      companions.map((target, index) => ({
+        sourceEntryId: target.entryId,
+        sourceCardId: target.cardId,
+        mintedEntryId: `deck-91-${String(index)}`,
+        mintedCardId: target.cardId,
+      })),
+    );
+    expect(
+      resolution.gainedEntryIds?.map((entryId, index) => {
+        const minted = resolved.deck.find((entry) => entry.entryId === entryId);
+        const source = state.journey.deck.find(
+          (entry) => entry.entryId === companions[index]?.entryId,
+        );
+        return {
+          transfiguration: minted?.transfiguration,
+          keywordModification: minted?.keywordModification,
+          sparkBonus: minted?.sparkBonus,
+          sourceKeywordModification: source?.keywordModification,
+          sourceSparkBonus: source?.sparkBonus,
+        };
+      }),
+    ).toEqual(
+      companions.map((target) => {
+        const source = state.journey.deck.find(
+          (entry) => entry.entryId === target.entryId,
+        );
+        return {
+          transfiguration: "Empowered",
+          keywordModification: source?.keywordModification,
+          sparkBonus: source?.sparkBonus,
+          sourceKeywordModification: source?.keywordModification,
+          sourceSparkBonus: source?.sparkBonus,
+        };
+      }),
+    );
+
+    const staleTarget = plan.targets[3];
+    if (staleTarget === undefined) throw new Error("Expected a stale target");
+    const stale = {
+      ...state.journey,
+      deck: state.journey.deck.map((entry) =>
+        entry.entryId === staleTarget.entryId
+          ? { ...entry, transfiguration: "Empowered" as const }
+          : entry,
+      ),
+    };
+    expect(
+      resolveExplorationChoice({
+        journey: stale,
+        site,
+        payload: {
+          actionId: action.id,
+          selectionRulesVersion: SELECTION_RULES_VERSION,
+          selection: { entryIds: [purged.entryId] },
+        },
+        seq: 91,
+        content,
+      }),
+    ).toBeNull();
+    expect(
+      stale.deck.find(({ entryId }) => entryId === companions[0]?.entryId)
+        ?.transfiguration,
+    ).toBeNull();
   });
 });

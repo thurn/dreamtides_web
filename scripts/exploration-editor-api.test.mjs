@@ -42,7 +42,7 @@ describe("exploration editor API", () => {
     const result = await call("GET", "/api/editor/exploration");
     expect(result.status).toBe(200);
     expect(result.body.encounters.length).toBeGreaterThan(0);
-    expect(result.body.effectSchemas).toHaveLength(36);
+    expect(result.body.effectSchemas).toHaveLength(66);
     expect(result.body).not.toHaveProperty("templates");
     expect(result.body.sourceRevision).toMatch(/^[0-9a-f]{64}$/u);
   });
@@ -79,6 +79,157 @@ describe("exploration editor API", () => {
     expect(result).toMatchObject({
       status: 400,
       body: { error: { code: "INVALID_REFERENCE" } },
+    });
+  });
+
+  it("rejects malformed automatic multi-card transfigurations before staging", async () => {
+    const loaded = await call("GET", "/api/editor/exploration");
+    const encounter = loaded.body.encounters[0];
+    const action = {
+      ...encounter.actions[0],
+      effectKind: "transfigure-random-cards",
+      predicate: "event",
+      count: 2,
+      followupTitle: "Choose cards",
+      followupSubtitle: "Choose cards",
+    };
+    const result = await call(
+      "PATCH",
+      `/api/editor/exploration/encounters/${encounter.cardId}/actions/0`,
+      { action, expectedSourceRevision: loaded.body.sourceRevision },
+    );
+
+    expect(result).toMatchObject({
+      status: 400,
+      body: { error: { code: "INVALID_EFFECT_FIELD" } },
+    });
+  });
+
+  it("rejects malformed random card-type edits before staging", async () => {
+    const loaded = await call("GET", "/api/editor/exploration");
+    const encounter = loaded.body.encounters[0];
+    const action = {
+      ...encounter.actions[0],
+      effectKind: "change-random-card-type",
+      count: 2,
+      cardType: "Dreamwell",
+    };
+    const result = await call(
+      "PATCH",
+      `/api/editor/exploration/encounters/${encounter.cardId}/actions/0`,
+      { action, expectedSourceRevision: loaded.body.sourceRevision },
+    );
+
+    expect(result).toMatchObject({
+      status: 400,
+      body: { error: { code: "INVALID_EFFECT_FIELD" } },
+    });
+  });
+
+  it("rejects malformed Wave7 deck-mutation edits before staging", async () => {
+    const loaded = await call("GET", "/api/editor/exploration");
+    const encounter = loaded.body.encounters[0];
+    for (const action of [
+      {
+        ...encounter.actions[0],
+        effectKind: "replace-random-with-card",
+        predicate: "legendary",
+        cardId: undefined,
+      },
+      {
+        ...encounter.actions[0],
+        effectKind: "change-card-type-selected",
+        cardType: "Event",
+        deckTarget: "random",
+      },
+    ]) {
+      const result = await call(
+        "PATCH",
+        `/api/editor/exploration/encounters/${encounter.cardId}/actions/0`,
+        { action, expectedSourceRevision: loaded.body.sourceRevision },
+      );
+
+      expect(result).toMatchObject({
+        status: 400,
+        body: { error: { code: "INVALID_EFFECT_FIELD" } },
+      });
+    }
+  });
+
+  it("rejects malformed Wave8 compound edits before staging", async () => {
+    const loaded = await call("GET", "/api/editor/exploration");
+    const encounter = loaded.body.encounters[0];
+    const action = { ...encounter.actions[0],
+      effectKind: "take-transfigured-cards-and-gain-nightmares",
+      predicate: "event", offerCount: 3, transfiguration: "Inspired",
+      nightmareCount: 1, followupTitle: "Choose rewards",
+      followupSubtitle: "Take any number of cards" };
+    const result = await call("PATCH",
+      `/api/editor/exploration/encounters/${encounter.cardId}/actions/0`,
+      { action, expectedSourceRevision: loaded.body.sourceRevision });
+    expect(result).toMatchObject({ status: 400,
+      body: { error: { code: "INVALID_EFFECT_FIELD" } } });
+  });
+
+  it("rejects malformed fixed-site edits before staging", async () => {
+    const loaded = await call("GET", "/api/editor/exploration");
+    const encounter = loaded.body.encounters[0];
+    const action = {
+      ...encounter.actions[0],
+      effectKind: "add-fixed-site",
+      siteType: "UnknownSite",
+    };
+    const result = await call(
+      "PATCH",
+      `/api/editor/exploration/encounters/${encounter.cardId}/actions/0`,
+      { action, expectedSourceRevision: loaded.body.sourceRevision },
+    );
+
+    expect(result).toMatchObject({
+      status: 400,
+      body: { error: { code: "INVALID_EFFECT_FIELD" } },
+    });
+  });
+
+  it("rejects malformed site-type chooser edits before staging", async () => {
+    const loaded = await call("GET", "/api/editor/exploration");
+    const encounter = loaded.body.encounters[0];
+    const action = {
+      ...encounter.actions[0],
+      effectKind: "choose-site-type",
+      offerCount: 2,
+      followupTitle: "Choose a destination",
+      followupSubtitle: "Choose one of the offered destinations",
+    };
+    const result = await call(
+      "PATCH",
+      `/api/editor/exploration/encounters/${encounter.cardId}/actions/0`,
+      { action, expectedSourceRevision: loaded.body.sourceRevision },
+    );
+
+    expect(result).toMatchObject({
+      status: 400,
+      body: { error: { code: "INVALID_EFFECT_FIELD" } },
+    });
+  });
+
+  it("rejects malformed shop purchase modifier edits before staging", async () => {
+    const loaded = await call("GET", "/api/editor/exploration");
+    const encounter = loaded.body.encounters[0];
+    const action = {
+      ...encounter.actions[0],
+      effectKind: "lose-half-essence-and-free-purchases",
+      count: 0,
+    };
+    const result = await call(
+      "PATCH",
+      `/api/editor/exploration/encounters/${encounter.cardId}/actions/0`,
+      { action, expectedSourceRevision: loaded.body.sourceRevision },
+    );
+
+    expect(result).toMatchObject({
+      status: 400,
+      body: { error: { code: "INVALID_EFFECT_FIELD" } },
     });
   });
 });

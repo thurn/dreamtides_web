@@ -230,12 +230,36 @@ export const FLUENT_MESSAGE_IDS = [
   "exploration-battle-modifier-announcement",
   "exploration-next-battle-label",
   "exploration-essence-gained-title",
+  "exploration-essence-current-total",
+  "exploration-free-next-shop-title",
+  "exploration-free-next-shop-detail",
+  "exploration-free-purchases-title",
+  "exploration-free-purchases-detail",
   "exploration-purge-essence-calculation",
   "exploration-spirit-animal-essence-calculation",
   "exploration-delve-action",
   "exploration-card-face-down",
   "exploration-card-returning-face-down",
   "exploration-confirm-choice-action",
+  "exploration-dreamsign-offered-group-title",
+  "exploration-dreamsign-purge-group-title",
+  "exploration-dreamsign-replacement-group-title",
+  "exploration-dreamsigns-changed-title",
+  "exploration-nightmare-dreamsign-bundle-title",
+  "exploration-starter-card-mutation-title",
+  "exploration-starter-card-transfiguration-title",
+  "exploration-card-transfiguration-title",
+  "exploration-card-replacements-title",
+  "exploration-card-type-changes-title",
+  "exploration-compound-same-type-title",
+  "exploration-compound-fast-nightmares-title",
+  "exploration-compound-take-transfigured-title",
+  "exploration-compound-purge-copy-title",
+  "exploration-compound-purged-section",
+  "exploration-compound-transfigured-section",
+  "exploration-compound-fast-section",
+  "exploration-compound-nightmares-section",
+  "exploration-compound-copies-section",
   "exploration-followup-choice-purge",
   "exploration-followup-choice-copy",
   "exploration-empty-card-state",
@@ -244,6 +268,7 @@ export const FLUENT_MESSAGE_IDS = [
   "exploration-next-battle-card-cost-reduction",
   "exploration-site-offer-modifier-title",
   "exploration-site-offer-modifier-detail",
+  "exploration-site-insertion-title",
   "gamble-card-picker-empty-state",
   "gamble-essence-outcome",
   "gamble-play-again-action",
@@ -316,10 +341,14 @@ export const FLUENT_MESSAGE_IDS = [
   "augury-error-path-closed",
   "card-shop-leave-action",
   "dreamsign-bazaar-leave-action",
+  "shop-free-next-shop-status",
+  "shop-free-purchases-status",
+  "shop-overlapping-free-purchase-status",
   "purge-site-decline-action",
   "dreamsign-bazaar-replacement-full",
   "dreamsign-bazaar-replacement-cancel",
   "exploration-effect-missing-deck-card",
+  "exploration-effect-missing-starter-card",
   "exploration-offered-site-disclosure",
   "exploration-effect-resolved-fallback",
   "battle-zone-browser-viewer-title",
@@ -443,6 +472,8 @@ export const FLUENT_MESSAGE_IDS = [
   "exploration-next-battle-modifier",
   "exploration-card-purge-for-essence",
   "exploration-spirit-animal-essence-summary",
+  "exploration-free-next-shop-accessible-name",
+  "exploration-free-purchases-accessible-name",
   "exploration-card-copies-gained",
   "exploration-purge-and-copy-complete",
   "exploration-card-transfiguring",
@@ -450,6 +481,29 @@ export const FLUENT_MESSAGE_IDS = [
   "exploration-purge-before-copy",
   "exploration-dream-avatar-changed",
   "exploration-dreamsign-purging",
+  "exploration-dreamsign-selection-progress",
+  "exploration-dreamsign-mutation-accessible-name",
+  "exploration-dreamsign-replacement-pair-accessible-name",
+  "exploration-nightmare-dreamsign-bundle-accessible-name",
+  "exploration-nightmare-stack-accessible-name",
+  "exploration-starter-card-mutation-accessible-name",
+  "exploration-starter-card-replacement-accessible-name",
+  "exploration-starter-card-transfiguration-accessible-name",
+  "exploration-starter-card-transfiguration-pair-accessible-name",
+  "exploration-card-transfiguration-accessible-name",
+  "exploration-card-transfiguration-pair-accessible-name",
+  "exploration-compound-same-type-accessible-name",
+  "exploration-compound-fast-nightmares-accessible-name",
+  "exploration-compound-take-transfigured-accessible-name",
+  "exploration-compound-purge-copy-accessible-name",
+  "exploration-compound-review-accessible-name",
+  "exploration-compound-fast-pair-accessible-name",
+  "exploration-compound-copy-pair-accessible-name",
+  "exploration-card-replacements-accessible-name",
+  "exploration-card-replacement-accessible-name",
+  "exploration-card-type-changes-accessible-name",
+  "exploration-card-type-change-pair-accessible-name",
+  "exploration-multi-transfiguration-progress-accessible-name",
   "battle-card-memory-counter-count",
   "battle-banished-cards-open",
   "battle-figment-merge-announcement",
@@ -498,7 +552,10 @@ export const FLUENT_MESSAGE_IDS = [
   "exploration-return-action",
   "exploration-smaller-hand-cost-accessible-name",
   "exploration-site-offer-modifier-accessible-name",
+  "exploration-site-insertion-accessible-name",
+  "exploration-site-type-choices-accessible-name",
   "exploration-no-cards-taken",
+  "exploration-no-cards-purged",
   "gamble-playing-card-hand-accessible-name",
   "gamble-replacement-close-action",
   "battle-card-exhausted-accessible-name",
@@ -806,6 +863,19 @@ export interface FluentMessageArgumentsById {
   };
   readonly "exploration-next-battle-label": never;
   readonly "exploration-essence-gained-title": never;
+  readonly "exploration-essence-current-total": {
+    readonly essenceAfter: FluentVariable;
+  };
+  readonly "exploration-free-next-shop-title": never;
+  readonly "exploration-free-next-shop-detail": never;
+  readonly "exploration-free-purchases-title": {
+    readonly freePurchaseCount: FluentVariable;
+  };
+  readonly "exploration-free-purchases-detail": {
+    readonly essenceAfter: FluentVariable;
+    readonly essenceBefore: FluentVariable;
+    readonly essenceSpent: FluentVariable;
+  };
   readonly "exploration-purge-essence-calculation": {
     readonly essencePerSpark: FluentVariable;
     readonly spark: FluentVariable;
@@ -818,6 +888,25 @@ export interface FluentMessageArgumentsById {
   readonly "exploration-card-face-down": never;
   readonly "exploration-card-returning-face-down": never;
   readonly "exploration-confirm-choice-action": never;
+  readonly "exploration-dreamsign-offered-group-title": never;
+  readonly "exploration-dreamsign-purge-group-title": never;
+  readonly "exploration-dreamsign-replacement-group-title": never;
+  readonly "exploration-dreamsigns-changed-title": never;
+  readonly "exploration-nightmare-dreamsign-bundle-title": never;
+  readonly "exploration-starter-card-mutation-title": never;
+  readonly "exploration-starter-card-transfiguration-title": never;
+  readonly "exploration-card-transfiguration-title": never;
+  readonly "exploration-card-replacements-title": never;
+  readonly "exploration-card-type-changes-title": never;
+  readonly "exploration-compound-same-type-title": never;
+  readonly "exploration-compound-fast-nightmares-title": never;
+  readonly "exploration-compound-take-transfigured-title": never;
+  readonly "exploration-compound-purge-copy-title": never;
+  readonly "exploration-compound-purged-section": never;
+  readonly "exploration-compound-transfigured-section": never;
+  readonly "exploration-compound-fast-section": never;
+  readonly "exploration-compound-nightmares-section": never;
+  readonly "exploration-compound-copies-section": never;
   readonly "exploration-followup-choice-purge": never;
   readonly "exploration-followup-choice-copy": never;
   readonly "exploration-empty-card-state": never;
@@ -830,6 +919,7 @@ export interface FluentMessageArgumentsById {
   };
   readonly "exploration-site-offer-modifier-title": never;
   readonly "exploration-site-offer-modifier-detail": never;
+  readonly "exploration-site-insertion-title": never;
   readonly "gamble-card-picker-empty-state": never;
   readonly "gamble-essence-outcome": { readonly essenceAmount: FluentVariable };
   readonly "gamble-play-again-action": never;
@@ -912,12 +1002,23 @@ export interface FluentMessageArgumentsById {
   readonly "augury-error-path-closed": never;
   readonly "card-shop-leave-action": never;
   readonly "dreamsign-bazaar-leave-action": never;
+  readonly "shop-free-next-shop-status": never;
+  readonly "shop-free-purchases-status": {
+    readonly remainingCount: FluentVariable;
+  };
+  readonly "shop-overlapping-free-purchase-status": {
+    readonly remainingCount: FluentVariable;
+  };
   readonly "purge-site-decline-action": never;
   readonly "dreamsign-bazaar-replacement-full": {
     readonly count: FluentVariable;
   };
   readonly "dreamsign-bazaar-replacement-cancel": never;
   readonly "exploration-effect-missing-deck-card": {
+    readonly after: FluentVariable;
+    readonly before: FluentVariable;
+  };
+  readonly "exploration-effect-missing-starter-card": {
     readonly after: FluentVariable;
     readonly before: FluentVariable;
   };
@@ -1115,6 +1216,13 @@ export interface FluentMessageArgumentsById {
     readonly essencePerCard: FluentVariable;
     readonly totalEssence: FluentVariable;
   };
+  readonly "exploration-free-next-shop-accessible-name": never;
+  readonly "exploration-free-purchases-accessible-name": {
+    readonly essenceAfter: FluentVariable;
+    readonly essenceBefore: FluentVariable;
+    readonly essenceSpent: FluentVariable;
+    readonly freePurchaseCount: FluentVariable;
+  };
   readonly "exploration-card-copies-gained": {
     readonly copyCount: FluentVariable;
   };
@@ -1141,6 +1249,109 @@ export interface FluentMessageArgumentsById {
   };
   readonly "exploration-dreamsign-purging": {
     readonly dreamsignName: FluentVariable;
+  };
+  readonly "exploration-dreamsign-selection-progress": {
+    readonly requiredCount: FluentVariable;
+    readonly selectedCount: FluentVariable;
+  };
+  readonly "exploration-dreamsign-mutation-accessible-name": {
+    readonly gainedCount: FluentVariable;
+    readonly purgedCount: FluentVariable;
+    readonly replacementCount: FluentVariable;
+  };
+  readonly "exploration-dreamsign-replacement-pair-accessible-name": {
+    readonly gainedDreamsignName: FluentVariable;
+    readonly removedDreamsignName: FluentVariable;
+  };
+  readonly "exploration-nightmare-dreamsign-bundle-accessible-name": {
+    readonly dreamsignCount: FluentVariable;
+    readonly nightmareCount: FluentVariable;
+    readonly replacementCount: FluentVariable;
+  };
+  readonly "exploration-nightmare-stack-accessible-name": {
+    readonly nightmareCount: FluentVariable;
+  };
+  readonly "exploration-starter-card-mutation-accessible-name": {
+    readonly gainedCardCount: FluentVariable;
+    readonly purgedCardCount: FluentVariable;
+    readonly replacementCount: FluentVariable;
+  };
+  readonly "exploration-starter-card-replacement-accessible-name": {
+    readonly gainedCardName: FluentVariable;
+    readonly purgedCardName: FluentVariable;
+  };
+  readonly "exploration-starter-card-transfiguration-accessible-name": {
+    readonly cardCount: FluentVariable;
+  };
+  readonly "exploration-starter-card-transfiguration-pair-accessible-name": {
+    readonly cardName: FluentVariable;
+    readonly formName: FluentVariable;
+  };
+  readonly "exploration-card-transfiguration-accessible-name": {
+    readonly cardCount: FluentVariable;
+  };
+  readonly "exploration-card-transfiguration-pair-accessible-name": {
+    readonly cardName: FluentVariable;
+    readonly formName: FluentVariable;
+  };
+  readonly "exploration-compound-same-type-accessible-name": {
+    readonly copyCount: FluentVariable;
+    readonly fastCardCount: FluentVariable;
+    readonly nightmareCount: FluentVariable;
+    readonly purgedCardCount: FluentVariable;
+    readonly transfiguredCardCount: FluentVariable;
+  };
+  readonly "exploration-compound-fast-nightmares-accessible-name": {
+    readonly copyCount: FluentVariable;
+    readonly fastCardCount: FluentVariable;
+    readonly nightmareCount: FluentVariable;
+    readonly purgedCardCount: FluentVariable;
+    readonly transfiguredCardCount: FluentVariable;
+  };
+  readonly "exploration-compound-take-transfigured-accessible-name": {
+    readonly copyCount: FluentVariable;
+    readonly fastCardCount: FluentVariable;
+    readonly nightmareCount: FluentVariable;
+    readonly purgedCardCount: FluentVariable;
+    readonly transfiguredCardCount: FluentVariable;
+  };
+  readonly "exploration-compound-purge-copy-accessible-name": {
+    readonly copyCount: FluentVariable;
+    readonly fastCardCount: FluentVariable;
+    readonly nightmareCount: FluentVariable;
+    readonly purgedCardCount: FluentVariable;
+    readonly transfiguredCardCount: FluentVariable;
+  };
+  readonly "exploration-compound-review-accessible-name": {
+    readonly cardCount: FluentVariable;
+  };
+  readonly "exploration-compound-fast-pair-accessible-name": {
+    readonly resultCardName: FluentVariable;
+    readonly sourceCardName: FluentVariable;
+  };
+  readonly "exploration-compound-copy-pair-accessible-name": {
+    readonly resultCardName: FluentVariable;
+    readonly sourceCardName: FluentVariable;
+  };
+  readonly "exploration-card-replacements-accessible-name": {
+    readonly replacementCount: FluentVariable;
+  };
+  readonly "exploration-card-replacement-accessible-name": {
+    readonly gainedCardName: FluentVariable;
+    readonly purgedCardName: FluentVariable;
+  };
+  readonly "exploration-card-type-changes-accessible-name": {
+    readonly cardCount: FluentVariable;
+  };
+  readonly "exploration-card-type-change-pair-accessible-name": {
+    readonly afterCardType: FluentVariable;
+    readonly beforeCardType: FluentVariable;
+    readonly cardName: FluentVariable;
+  };
+  readonly "exploration-multi-transfiguration-progress-accessible-name": {
+    readonly cardCount: FluentVariable;
+    readonly cardName: FluentVariable;
+    readonly currentCardNumber: FluentVariable;
   };
   readonly "battle-card-memory-counter-count": {
     readonly count: FluentVariable;
@@ -1284,7 +1495,12 @@ export interface FluentMessageArgumentsById {
     readonly openingHandDelta: FluentVariable;
   };
   readonly "exploration-site-offer-modifier-accessible-name": never;
+  readonly "exploration-site-insertion-accessible-name": {
+    readonly siteType: FluentVariable;
+  };
+  readonly "exploration-site-type-choices-accessible-name": never;
   readonly "exploration-no-cards-taken": never;
+  readonly "exploration-no-cards-purged": never;
   readonly "gamble-playing-card-hand-accessible-name": {
     readonly owner: FluentVariable;
   };
@@ -1585,6 +1801,15 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "exploration-battle-modifier-announcement": ["amount", "modifier"] as const,
   "exploration-next-battle-label": [] as const,
   "exploration-essence-gained-title": [] as const,
+  "exploration-essence-current-total": ["essenceAfter"] as const,
+  "exploration-free-next-shop-title": [] as const,
+  "exploration-free-next-shop-detail": [] as const,
+  "exploration-free-purchases-title": ["freePurchaseCount"] as const,
+  "exploration-free-purchases-detail": [
+    "essenceAfter",
+    "essenceBefore",
+    "essenceSpent",
+  ] as const,
   "exploration-purge-essence-calculation": [
     "essencePerSpark",
     "spark",
@@ -1597,6 +1822,25 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "exploration-card-face-down": [] as const,
   "exploration-card-returning-face-down": [] as const,
   "exploration-confirm-choice-action": [] as const,
+  "exploration-dreamsign-offered-group-title": [] as const,
+  "exploration-dreamsign-purge-group-title": [] as const,
+  "exploration-dreamsign-replacement-group-title": [] as const,
+  "exploration-dreamsigns-changed-title": [] as const,
+  "exploration-nightmare-dreamsign-bundle-title": [] as const,
+  "exploration-starter-card-mutation-title": [] as const,
+  "exploration-starter-card-transfiguration-title": [] as const,
+  "exploration-card-transfiguration-title": [] as const,
+  "exploration-card-replacements-title": [] as const,
+  "exploration-card-type-changes-title": [] as const,
+  "exploration-compound-same-type-title": [] as const,
+  "exploration-compound-fast-nightmares-title": [] as const,
+  "exploration-compound-take-transfigured-title": [] as const,
+  "exploration-compound-purge-copy-title": [] as const,
+  "exploration-compound-purged-section": [] as const,
+  "exploration-compound-transfigured-section": [] as const,
+  "exploration-compound-fast-section": [] as const,
+  "exploration-compound-nightmares-section": [] as const,
+  "exploration-compound-copies-section": [] as const,
   "exploration-followup-choice-purge": [] as const,
   "exploration-followup-choice-copy": [] as const,
   "exploration-empty-card-state": [] as const,
@@ -1607,6 +1851,7 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   ] as const,
   "exploration-site-offer-modifier-title": [] as const,
   "exploration-site-offer-modifier-detail": [] as const,
+  "exploration-site-insertion-title": [] as const,
   "gamble-card-picker-empty-state": [] as const,
   "gamble-essence-outcome": ["essenceAmount"] as const,
   "gamble-play-again-action": [] as const,
@@ -1679,10 +1924,14 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   "augury-error-path-closed": [] as const,
   "card-shop-leave-action": [] as const,
   "dreamsign-bazaar-leave-action": [] as const,
+  "shop-free-next-shop-status": [] as const,
+  "shop-free-purchases-status": ["remainingCount"] as const,
+  "shop-overlapping-free-purchase-status": ["remainingCount"] as const,
   "purge-site-decline-action": [] as const,
   "dreamsign-bazaar-replacement-full": ["count"] as const,
   "dreamsign-bazaar-replacement-cancel": [] as const,
   "exploration-effect-missing-deck-card": ["after", "before"] as const,
+  "exploration-effect-missing-starter-card": ["after", "before"] as const,
   "exploration-offered-site-disclosure": ["siteType"] as const,
   "exploration-effect-resolved-fallback": [] as const,
   "battle-zone-browser-viewer-title": ["zone"] as const,
@@ -1826,6 +2075,13 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
     "essencePerCard",
     "totalEssence",
   ] as const,
+  "exploration-free-next-shop-accessible-name": [] as const,
+  "exploration-free-purchases-accessible-name": [
+    "essenceAfter",
+    "essenceBefore",
+    "essenceSpent",
+    "freePurchaseCount",
+  ] as const,
   "exploration-card-copies-gained": ["copyCount"] as const,
   "exploration-purge-and-copy-complete": [
     "copyCount",
@@ -1844,6 +2100,101 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
   ] as const,
   "exploration-dream-avatar-changed": ["dreamAvatarName"] as const,
   "exploration-dreamsign-purging": ["dreamsignName"] as const,
+  "exploration-dreamsign-selection-progress": [
+    "requiredCount",
+    "selectedCount",
+  ] as const,
+  "exploration-dreamsign-mutation-accessible-name": [
+    "gainedCount",
+    "purgedCount",
+    "replacementCount",
+  ] as const,
+  "exploration-dreamsign-replacement-pair-accessible-name": [
+    "gainedDreamsignName",
+    "removedDreamsignName",
+  ] as const,
+  "exploration-nightmare-dreamsign-bundle-accessible-name": [
+    "dreamsignCount",
+    "nightmareCount",
+    "replacementCount",
+  ] as const,
+  "exploration-nightmare-stack-accessible-name": ["nightmareCount"] as const,
+  "exploration-starter-card-mutation-accessible-name": [
+    "gainedCardCount",
+    "purgedCardCount",
+    "replacementCount",
+  ] as const,
+  "exploration-starter-card-replacement-accessible-name": [
+    "gainedCardName",
+    "purgedCardName",
+  ] as const,
+  "exploration-starter-card-transfiguration-accessible-name": [
+    "cardCount",
+  ] as const,
+  "exploration-starter-card-transfiguration-pair-accessible-name": [
+    "cardName",
+    "formName",
+  ] as const,
+  "exploration-card-transfiguration-accessible-name": ["cardCount"] as const,
+  "exploration-card-transfiguration-pair-accessible-name": [
+    "cardName",
+    "formName",
+  ] as const,
+  "exploration-compound-same-type-accessible-name": [
+    "copyCount",
+    "fastCardCount",
+    "nightmareCount",
+    "purgedCardCount",
+    "transfiguredCardCount",
+  ] as const,
+  "exploration-compound-fast-nightmares-accessible-name": [
+    "copyCount",
+    "fastCardCount",
+    "nightmareCount",
+    "purgedCardCount",
+    "transfiguredCardCount",
+  ] as const,
+  "exploration-compound-take-transfigured-accessible-name": [
+    "copyCount",
+    "fastCardCount",
+    "nightmareCount",
+    "purgedCardCount",
+    "transfiguredCardCount",
+  ] as const,
+  "exploration-compound-purge-copy-accessible-name": [
+    "copyCount",
+    "fastCardCount",
+    "nightmareCount",
+    "purgedCardCount",
+    "transfiguredCardCount",
+  ] as const,
+  "exploration-compound-review-accessible-name": ["cardCount"] as const,
+  "exploration-compound-fast-pair-accessible-name": [
+    "resultCardName",
+    "sourceCardName",
+  ] as const,
+  "exploration-compound-copy-pair-accessible-name": [
+    "resultCardName",
+    "sourceCardName",
+  ] as const,
+  "exploration-card-replacements-accessible-name": [
+    "replacementCount",
+  ] as const,
+  "exploration-card-replacement-accessible-name": [
+    "gainedCardName",
+    "purgedCardName",
+  ] as const,
+  "exploration-card-type-changes-accessible-name": ["cardCount"] as const,
+  "exploration-card-type-change-pair-accessible-name": [
+    "afterCardType",
+    "beforeCardType",
+    "cardName",
+  ] as const,
+  "exploration-multi-transfiguration-progress-accessible-name": [
+    "cardCount",
+    "cardName",
+    "currentCardNumber",
+  ] as const,
   "battle-card-memory-counter-count": ["count"] as const,
   "battle-banished-cards-open": ["count"] as const,
   "battle-figment-merge-announcement": ["figmentName", "sparkCount"] as const,
@@ -1935,7 +2286,10 @@ export const FLUENT_MESSAGE_VARIABLE_NAMES = {
     "openingHandDelta",
   ] as const,
   "exploration-site-offer-modifier-accessible-name": [] as const,
+  "exploration-site-insertion-accessible-name": ["siteType"] as const,
+  "exploration-site-type-choices-accessible-name": [] as const,
   "exploration-no-cards-taken": [] as const,
+  "exploration-no-cards-purged": [] as const,
   "gamble-playing-card-hand-accessible-name": ["owner"] as const,
   "gamble-replacement-close-action": [] as const,
   "battle-card-exhausted-accessible-name": [] as const,
@@ -2148,16 +2502,38 @@ export type FluentMessageIdsWithoutVariables = [
   "exploration-pack-choose-action",
   "exploration-next-battle-label",
   "exploration-essence-gained-title",
+  "exploration-free-next-shop-title",
+  "exploration-free-next-shop-detail",
   "exploration-delve-action",
   "exploration-card-face-down",
   "exploration-card-returning-face-down",
   "exploration-confirm-choice-action",
+  "exploration-dreamsign-offered-group-title",
+  "exploration-dreamsign-purge-group-title",
+  "exploration-dreamsign-replacement-group-title",
+  "exploration-dreamsigns-changed-title",
+  "exploration-nightmare-dreamsign-bundle-title",
+  "exploration-starter-card-mutation-title",
+  "exploration-starter-card-transfiguration-title",
+  "exploration-card-transfiguration-title",
+  "exploration-card-replacements-title",
+  "exploration-card-type-changes-title",
+  "exploration-compound-same-type-title",
+  "exploration-compound-fast-nightmares-title",
+  "exploration-compound-take-transfigured-title",
+  "exploration-compound-purge-copy-title",
+  "exploration-compound-purged-section",
+  "exploration-compound-transfigured-section",
+  "exploration-compound-fast-section",
+  "exploration-compound-nightmares-section",
+  "exploration-compound-copies-section",
   "exploration-followup-choice-purge",
   "exploration-followup-choice-copy",
   "exploration-empty-card-state",
   "exploration-site-eyebrow",
   "exploration-site-offer-modifier-title",
   "exploration-site-offer-modifier-detail",
+  "exploration-site-insertion-title",
   "gamble-card-picker-empty-state",
   "gamble-play-again-action",
   "gamble-leave-action",
@@ -2220,6 +2596,7 @@ export type FluentMessageIdsWithoutVariables = [
   "augury-error-path-closed",
   "card-shop-leave-action",
   "dreamsign-bazaar-leave-action",
+  "shop-free-next-shop-status",
   "purge-site-decline-action",
   "dreamsign-bazaar-replacement-cancel",
   "exploration-effect-resolved-fallback",
@@ -2303,6 +2680,7 @@ export type FluentMessageIdsWithoutVariables = [
   "deck-sort-ascending-accessible-name",
   "deck-sort-descending-accessible-name",
   "deck-browser-close",
+  "exploration-free-next-shop-accessible-name",
   "card-pool-subtype-filter-label",
   "card-pool-cost-filter-label",
   "card-pool-close-action",
@@ -2313,7 +2691,9 @@ export type FluentMessageIdsWithoutVariables = [
   "exploration-choices-accessible-name",
   "exploration-return-action",
   "exploration-site-offer-modifier-accessible-name",
+  "exploration-site-type-choices-accessible-name",
   "exploration-no-cards-taken",
+  "exploration-no-cards-purged",
   "gamble-replacement-close-action",
   "battle-card-exhausted-accessible-name",
   "battle-targeting-card-accessible-name",
@@ -2372,6 +2752,9 @@ export type FluentMessageIdsWithVariables = [
   "gamble-wager-prize-description",
   "exploration-pack-title",
   "exploration-battle-modifier-announcement",
+  "exploration-essence-current-total",
+  "exploration-free-purchases-title",
+  "exploration-free-purchases-detail",
   "exploration-purge-essence-calculation",
   "exploration-spirit-animal-essence-calculation",
   "exploration-opening-hand-change-announcement",
@@ -2386,8 +2769,11 @@ export type FluentMessageIdsWithVariables = [
   "duplication-picker-empty-state",
   "duplication-decline-action",
   "duplication-confirm-action",
+  "shop-free-purchases-status",
+  "shop-overlapping-free-purchase-status",
   "dreamsign-bazaar-replacement-full",
   "exploration-effect-missing-deck-card",
+  "exploration-effect-missing-starter-card",
   "exploration-offered-site-disclosure",
   "battle-zone-browser-viewer-title",
   "battle-zone-browser-opponent-title",
@@ -2430,6 +2816,7 @@ export type FluentMessageIdsWithVariables = [
   "exploration-next-battle-modifier",
   "exploration-card-purge-for-essence",
   "exploration-spirit-animal-essence-summary",
+  "exploration-free-purchases-accessible-name",
   "exploration-card-copies-gained",
   "exploration-purge-and-copy-complete",
   "exploration-card-transfiguring",
@@ -2437,6 +2824,29 @@ export type FluentMessageIdsWithVariables = [
   "exploration-purge-before-copy",
   "exploration-dream-avatar-changed",
   "exploration-dreamsign-purging",
+  "exploration-dreamsign-selection-progress",
+  "exploration-dreamsign-mutation-accessible-name",
+  "exploration-dreamsign-replacement-pair-accessible-name",
+  "exploration-nightmare-dreamsign-bundle-accessible-name",
+  "exploration-nightmare-stack-accessible-name",
+  "exploration-starter-card-mutation-accessible-name",
+  "exploration-starter-card-replacement-accessible-name",
+  "exploration-starter-card-transfiguration-accessible-name",
+  "exploration-starter-card-transfiguration-pair-accessible-name",
+  "exploration-card-transfiguration-accessible-name",
+  "exploration-card-transfiguration-pair-accessible-name",
+  "exploration-compound-same-type-accessible-name",
+  "exploration-compound-fast-nightmares-accessible-name",
+  "exploration-compound-take-transfigured-accessible-name",
+  "exploration-compound-purge-copy-accessible-name",
+  "exploration-compound-review-accessible-name",
+  "exploration-compound-fast-pair-accessible-name",
+  "exploration-compound-copy-pair-accessible-name",
+  "exploration-card-replacements-accessible-name",
+  "exploration-card-replacement-accessible-name",
+  "exploration-card-type-changes-accessible-name",
+  "exploration-card-type-change-pair-accessible-name",
+  "exploration-multi-transfiguration-progress-accessible-name",
   "battle-card-memory-counter-count",
   "battle-banished-cards-open",
   "battle-figment-merge-announcement",
@@ -2475,6 +2885,7 @@ export type FluentMessageIdsWithVariables = [
   "battle-dreamwell-reveal-description",
   "playing-card-accessible-name",
   "exploration-smaller-hand-cost-accessible-name",
+  "exploration-site-insertion-accessible-name",
   "gamble-playing-card-hand-accessible-name",
   "journey-start-carousel-navigation-action",
   "reveal-description-join",

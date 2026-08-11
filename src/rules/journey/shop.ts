@@ -26,13 +26,13 @@ import type { EventContext } from "../../eventlog/types";
 import { isNightmareCardId } from "../../data/nightmare";
 import { getDeckContentProvider } from "./deck";
 import { rerollCost } from "../../shop/shop-pricing";
+import { effectivePrice } from "../../shop/shop-generator";
 import type {
   BattleModifier,
   DeckEntry,
   DreamscapeModifier,
   DreamAtlas,
   JourneyState,
-  RuntimeShopSlot,
   ShopSiteRuntime,
   SiteState,
   SiteType,
@@ -67,26 +67,6 @@ function asSiteType(value: unknown): SiteType | null {
 
 function clampEssence(value: number): number {
   return Math.max(0, value);
-}
-
-/**
- * The essence a shop slot costs after discount (the documented {@link
- * ShopModifiers} contract): the slot's own `discountPercent` and the permanent
- * `essenceDiscountPercent` add, clamp to 100, and scale the base price with a
- * rounded `basePrice * (1 - pct/100)`. A zero total discount pays the base
- * price exactly.
- */
-function discountedSlotPrice(
-  slot: RuntimeShopSlot,
-  essenceDiscountPercent: number,
-): number {
-  const totalPercent = Math.min(
-    100,
-    Math.max(0, slot.discountPercent) + Math.max(0, essenceDiscountPercent),
-  );
-  return totalPercent === 0
-    ? slot.basePrice
-    : Math.round(slot.basePrice * (1 - totalPercent / 100));
 }
 
 /** Store `runtime` for `siteId`, replacing any existing entry for that key. */
@@ -157,14 +137,16 @@ function debugSite(
 
 /**
  * `BUY_SHOP_SLOT { siteId, slotIndex, purgeIndex? }` — legacy `buyShopSlot`.
- * Charges the DISCOUNTED essence price (slot + shop discount, per the {@link
- * ShopModifiers} contract), grants the item (a card appended to the deck via a
+ * Computes the canonical discounted price, applies any visit-wide or queued
+ * free-purchase modifier, grants the item (a card appended to the deck via a
  * seq-deterministic entry id, or a Dreamsign appended / replacing the
- * `purgeIndex` slot), and marks the slot purchased.
+ * `purgeIndex` slot), marks the slot purchased, and appends a replay-safe
+ * purchase receipt. A successful purchase consumes one queued free-purchase
+ * count even when another modifier already reduced the price to zero.
  *
  * Bounces on a malformed payload, an unknown / already-visited site, a non-shop
  * runtime, an out-of-range slot, an already-purchased slot (the coop
- * double-buy race), a discounted price above current essence (the
+ * double-buy race), an effective price above current essence (the
  * insufficient-essence guard, essence unchanged), or a Dreamsign purchase at the
  * `maxDreamsigns` limit with no valid purge slot.
  */
@@ -177,26 +159,64 @@ export function buyShopSlot(
   const slotIndex = integer(payload.slotIndex);
   if (siteId === null || slotIndex === null) return null;
   if (journey.visitedSites.includes(siteId)) return null;
+  const site = findSite(journey, siteId);
+  if (
+    site === null ||
+    (site.type !== "Shop" && site.type !== "DreamsignBazaar")
+  ) {
+    return null;
+  }
 
   const runtime = journey.siteRuntime[siteId];
   if (runtime === undefined || runtime.kind !== "shop") return null;
+  if (
+    site.type === "DreamsignBazaar" &&
+    runtime.freePurchaseSource !== undefined
+  ) {
+    return null;
+  }
+  if (
+    runtime.freePurchaseSource !== undefined &&
+    (asString(runtime.freePurchaseSource.sourceSiteId) === null ||
+      asString(runtime.freePurchaseSource.sourceActionId) === null)
+  ) {
+    return null;
+  }
   const slot = runtime.slots[slotIndex];
   if (slot === undefined || slot.purchased) return null;
-
-  const price = discountedSlotPrice(
-    slot,
-    journey.shopModifiers.essenceDiscountPercent,
-  );
-  if (price > journey.essence) return null;
 
   const purgeIndex =
     payload.purgeIndex === undefined ? undefined : integer(payload.purgeIndex);
   if (payload.purgeIndex !== undefined && purgeIndex === null) return null;
 
-  let next: JourneyState = {
-    ...journey,
-    essence: clampEssence(journey.essence - price),
-  };
+  const queuedFreePurchases = journey.shopModifiers.freePurchaseModifiers ?? [];
+  const freePurchaseModifier = queuedFreePurchases[0];
+  if (
+    freePurchaseModifier !== undefined &&
+    (freePurchaseModifier.kind !== "free-purchases" ||
+      !Number.isInteger(freePurchaseModifier.initialCount) ||
+      !Number.isInteger(freePurchaseModifier.remainingCount) ||
+      freePurchaseModifier.initialCount <= 0 ||
+      freePurchaseModifier.remainingCount <= 0 ||
+      freePurchaseModifier.remainingCount > freePurchaseModifier.initialCount ||
+      asString(freePurchaseModifier.sourceSiteId) === null ||
+      asString(freePurchaseModifier.sourceActionId) === null)
+  ) {
+    return null;
+  }
+  const freeNextShopSource = runtime.freePurchaseSource;
+  const priceBeforeFree = effectivePrice(slot, {
+    essenceDiscountPercent: journey.shopModifiers.essenceDiscountPercent,
+  });
+  const pricePaid = effectivePrice(slot, {
+    essenceDiscountPercent: journey.shopModifiers.essenceDiscountPercent,
+    freePurchase:
+      freeNextShopSource !== undefined || freePurchaseModifier !== undefined,
+  });
+  if (pricePaid > journey.essence) return null;
+
+  let next: JourneyState;
+  let item: ShopSiteRuntime["purchaseHistory"][number]["item"];
 
   if (slot.itemType === "card") {
     const entry: DeckEntry = {
@@ -205,8 +225,19 @@ export function buyShopSlot(
       transfiguration: slot.transfiguration ?? null,
       isBane: false,
     };
-    next = { ...next, deck: [...next.deck, entry] };
+    item = {
+      kind: "card",
+      cardNumber: slot.cardNumber,
+      gainedEntryId: entry.entryId,
+    };
+    next = {
+      ...journey,
+      essence: clampEssence(journey.essence - pricePaid),
+      deck: [...journey.deck, entry],
+    };
   } else {
+    const purchasedDreamsignId = asString(slot.dreamsign.id);
+    if (purchasedDreamsignId === null) return null;
     const purgedDreamsign =
       purgeIndex === undefined || purgeIndex === null
         ? null
@@ -220,22 +251,79 @@ export function buyShopSlot(
     ) {
       return null;
     }
+    let replacedDreamsignId: string | undefined;
+    if (purgedDreamsign !== null) {
+      const resolvedReplacedDreamsignId = asString(purgedDreamsign.id);
+      if (resolvedReplacedDreamsignId === null) return null;
+      replacedDreamsignId = resolvedReplacedDreamsignId;
+    }
+    item = {
+      kind: "dreamsign",
+      dreamsignId: purchasedDreamsignId,
+      ...(replacedDreamsignId === undefined ? {} : { replacedDreamsignId }),
+    };
     next = {
-      ...next,
+      ...journey,
+      essence: clampEssence(journey.essence - pricePaid),
       dreamsigns:
         purgeIndex === undefined || purgeIndex === null
-          ? [...next.dreamsigns, slot.dreamsign]
-          : next.dreamsigns.map((existing, index) =>
+          ? [...journey.dreamsigns, slot.dreamsign]
+          : journey.dreamsigns.map((existing, index) =>
               index === purgeIndex ? slot.dreamsign : existing,
             ),
     };
   }
+
+  let shopModifiers = journey.shopModifiers;
+  let freePurchaseModifierResult:
+    | NonNullable<
+        ShopSiteRuntime["purchaseHistory"][number]["freePurchaseModifier"]
+      >
+    | undefined;
+  if (freePurchaseModifier !== undefined) {
+    const remainingAfter = freePurchaseModifier.remainingCount - 1;
+    shopModifiers = {
+      ...journey.shopModifiers,
+      freePurchaseModifiers:
+        remainingAfter === 0
+          ? queuedFreePurchases.slice(1)
+          : [
+              { ...freePurchaseModifier, remainingCount: remainingAfter },
+              ...queuedFreePurchases.slice(1),
+            ],
+    };
+    freePurchaseModifierResult = {
+      sourceSiteId: freePurchaseModifier.sourceSiteId,
+      sourceActionId: freePurchaseModifier.sourceActionId,
+      initialCount: freePurchaseModifier.initialCount,
+      remainingBefore: freePurchaseModifier.remainingCount,
+      remainingAfter,
+    };
+  }
+  next = { ...next, shopModifiers };
 
   const nextRuntime: ShopSiteRuntime = {
     ...runtime,
     slots: runtime.slots.map((candidate, index) =>
       index === slotIndex ? { ...candidate, purchased: true } : candidate,
     ),
+    purchaseHistory: [
+      ...(runtime.purchaseHistory ?? []),
+      {
+        eventSeq: ctx.seq,
+        siteId,
+        slotIndex,
+        item,
+        priceBeforeFree,
+        pricePaid,
+        essenceBefore: journey.essence,
+        essenceAfter: next.essence,
+        ...(freeNextShopSource === undefined ? {} : { freeNextShopSource }),
+        ...(freePurchaseModifierResult === undefined
+          ? {}
+          : { freePurchaseModifier: freePurchaseModifierResult }),
+      },
+    ],
   };
   return withShopRuntime(next, siteId, nextRuntime);
 }

@@ -10,8 +10,12 @@ import {
   ENERGY_ICON_COLOR,
   SPARK_ICON_COLOR,
 } from "../components/controls/StandaloneGlyph";
-import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP } from "../components/hud/JourneyStatusBar";
+import {
+  JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+  JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP,
+} from "../components/hud/JourneyStatusBar";
 import { artRef } from "../primitives/art";
+import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import {
   ExplorationSiteScreen,
@@ -121,6 +125,584 @@ function view(resolved = false): ExplorationSiteView {
     resolvedActionId: resolved ? "choice-a" : null,
     reward: null,
     outcomeKind: null,
+  };
+}
+
+function siteInsertionRewardView(): ExplorationSiteView {
+  const base = view(true);
+  return {
+    ...base,
+    outcomeKind: "site-insertion",
+    reward: {
+      kind: "site-insertion",
+      sourceKind: "add-fixed-site",
+      targetNodeId: "current-atlas-node",
+      insertionIndex: 3,
+      siblingSiteIdsBefore: ["site-a", "site-b", "exploration-site"],
+      model: {
+        site: {
+          id: "site-exploration-source-action",
+          type: "Duplication",
+          isEnhanced: false,
+          isVisited: false,
+        },
+        pos: { x: 50, y: 50 },
+        index: 3,
+        isBattle: false,
+        isLocked: false,
+        isInteractive: false,
+        label: "Synthetic Duplication Site",
+        lockedGuidance: "",
+        blurb: "A synthetic site reward.",
+        icon: GLYPHS.copy,
+      },
+    },
+  };
+}
+
+function fixtureDreamsign(id: string, label: string) {
+  return {
+    id,
+    name: label,
+    effectDescription: `Synthetic effect for ${label}.`,
+    imageName: `${label.toLowerCase().replace(/ /gu, "-")}.webp`,
+    imageAlt: `${label} art`,
+  };
+}
+
+function dreamsignMutationRewardView(
+  sourceKind:
+    | "replace-selected-dreamsign-with-offered"
+    | "replace-all-dreamsigns-random"
+    | "purge-selected-dreamsign-and-gain-random" = "purge-selected-dreamsign-and-gain-random",
+): ExplorationSiteView {
+  const base = view(true);
+  const held = [
+    fixtureDreamsign("10000000-0000-4000-8000-000000000001", "Held One"),
+    fixtureDreamsign("10000000-0000-4000-8000-000000000002", "Held Two"),
+  ];
+  const gained = [
+    fixtureDreamsign("30000000-0000-4000-8000-000000000001", "Random One"),
+    fixtureDreamsign("30000000-0000-4000-8000-000000000002", "Random Two"),
+  ];
+  const mutation =
+    sourceKind === "replace-selected-dreamsign-with-offered"
+      ? {
+          before: held,
+          after: [held[0], gained[0]],
+          offered: [gained[0]],
+          gained: [gained[0]],
+          purged: [held[1]],
+          replacements: [{ removed: held[1], gained: gained[0] }],
+        }
+      : sourceKind === "replace-all-dreamsigns-random"
+        ? {
+            before: held,
+            after: gained,
+            offered: [],
+            gained,
+            purged: held,
+            replacements: [
+              { removed: held[0], gained: gained[0] },
+              { removed: held[1], gained: gained[1] },
+            ],
+          }
+        : {
+            before: held,
+            after: gained,
+            offered: [],
+            gained,
+            purged: held,
+            replacements: [{ removed: held[1], gained: gained[1] }],
+          };
+  return {
+    ...base,
+    outcomeKind: "dreamsign-mutation",
+    reward: {
+      kind: "dreamsign-mutation",
+      sourceKind,
+      ...mutation,
+      poolRegenerated: false,
+    },
+  };
+}
+
+function nightmareDreamsignBundleRewardView(): ExplorationSiteView {
+  const base = view(true);
+  const removed = fixtureDreamsign(
+    "50000000-0000-4000-8000-000000000001",
+    "Removed Dreamsign",
+  );
+  const gained = fixtureDreamsign(
+    "50000000-0000-4000-8000-000000000002",
+    "Gained Dreamsign",
+  );
+  return {
+    ...base,
+    outcomeKind: "nightmare-dreamsign-bundle",
+    reward: {
+      kind: "nightmare-dreamsign-bundle",
+      sourceKind: "gain-nightmare-and-dreamsign",
+      nightmares: [
+        { entryId: "nightmare-entry-a", model: base.card, isBane: true },
+        { entryId: "nightmare-entry-b", model: base.card, isBane: true },
+      ],
+      before: [removed],
+      after: [gained],
+      offered: [],
+      gained: [gained],
+      purged: [removed],
+      replacements: [{ removed, gained }],
+      poolRegenerated: false,
+    },
+  };
+}
+
+function starterCardMutationRewardView(
+  mode: "purge" | "replace",
+): ExplorationSiteView {
+  const base = view(true);
+  const secondPurged = {
+    ...base.card,
+    cardId: asCardId("00000000-0000-4000-8000-000000000032"),
+    displaySnapshot: {
+      ...base.card.displaySnapshot,
+      id: asCardId("00000000-0000-4000-8000-000000000032"),
+      name: asCardName("Second Starter Fixture"),
+      cardNumber: 32,
+      imageNumber: 32,
+      isStarter: true,
+    },
+  };
+  const firstGained = {
+    ...base.card,
+    cardId: asCardId("00000000-0000-4000-8000-000000000034"),
+    displaySnapshot: {
+      ...base.card.displaySnapshot,
+      id: asCardId("00000000-0000-4000-8000-000000000034"),
+      name: asCardName("First Gained Fixture"),
+      cardNumber: 34,
+      imageNumber: 34,
+    },
+  };
+  const secondGained = {
+    ...base.card,
+    cardId: asCardId("00000000-0000-4000-8000-000000000035"),
+    displaySnapshot: {
+      ...base.card.displaySnapshot,
+      id: asCardId("00000000-0000-4000-8000-000000000035"),
+      name: asCardName("Second Gained Fixture"),
+      cardNumber: 35,
+      imageNumber: 35,
+    },
+  };
+  const purged = [
+    { entryId: "starter-entry-a", model: base.card, isBane: false },
+    { entryId: "starter-entry-b", model: secondPurged, isBane: false },
+  ];
+  const replacements =
+    mode === "purge"
+      ? []
+      : [
+          {
+            purged: purged[0],
+            gained: {
+              entryId: "gained-entry-a",
+              model: firstGained,
+              isBane: false,
+            },
+          },
+          {
+            purged: purged[1],
+            gained: {
+              entryId: "gained-entry-b",
+              model: secondGained,
+              isBane: false,
+            },
+          },
+        ];
+  return {
+    ...base,
+    outcomeKind: "starter-card-mutation",
+    reward: {
+      kind: "starter-card-mutation",
+      sourceKind:
+        mode === "purge"
+          ? "purge-random-starter-card"
+          : "replace-all-starter-cards",
+      mode,
+      purged: mode === "purge" ? [purged[0]] : purged,
+      replacements,
+    },
+  };
+}
+
+function starterCardTransfigurationRewardView(count = 2): ExplorationSiteView {
+  const base = view(true);
+  const suffixes = ["a", "b", "c", "d"] as const;
+  const cardIds = [
+    base.card.cardId,
+    asCardId("00000000-0000-4000-8000-000000000025"),
+    asCardId("00000000-0000-4000-8000-000000000026"),
+    asCardId("00000000-0000-4000-8000-000000000027"),
+  ] as const;
+  const forms = ["Empowered", "Kindled", "Inspired", "Enduring"] as const;
+  const beforeCards = Array.from({ length: count }, (_, index) => {
+    const suffix = suffixes[index];
+    const cardId = cardIds[index];
+    if (suffix === undefined || cardId === undefined) {
+      throw new Error("starter transfiguration fixture supports four cards");
+    }
+    const cardNumber = index === 0 ? 17 : 24 + index;
+    return {
+      entryId: `starter-transfiguration-entry-${suffix}`,
+      model: {
+        ...base.card,
+        cardId,
+        displaySnapshot: {
+          ...base.card.displaySnapshot,
+          id: cardId,
+          name: asCardName(`Starter Transfiguration Fixture ${suffix}`),
+          cardNumber,
+          imageNumber: cardNumber,
+          isStarter: true,
+        },
+      },
+      isBane: false,
+    };
+  });
+  return {
+    ...base,
+    outcomeKind: "starter-card-transfiguration",
+    reward: {
+      kind: "starter-card-transfiguration",
+      sourceKind: "transfigure-random-starter-cards",
+      transfigurations: beforeCards.map((before, index) => {
+        const form = forms[index];
+        if (form === undefined) throw new Error("fixture form is required");
+        return {
+          entryId: before.entryId,
+          cardId: before.model.cardId,
+          beforeTransfiguration: null,
+          afterTransfiguration: form,
+          before,
+          after: {
+            ...before,
+            model: {
+              ...before.model,
+              transfiguration: {
+                type: form,
+                form: transfigurationFormFixture(form),
+                markedText: before.model.displaySnapshot.renderedText,
+                energyChanged: form === "Empowered",
+                energyChangeName:
+                  form === "Empowered" ? "Fixture energy form" : null,
+                sparkChanged: form === "Kindled",
+                sparkChangeName:
+                  form === "Kindled" ? "Fixture spark form" : null,
+                fastChanged: false,
+              },
+            },
+          },
+        };
+      }),
+    },
+  };
+}
+
+function multiCardTransfigurationRewardView(): ExplorationSiteView {
+  const starterView = starterCardTransfigurationRewardView();
+  if (
+    starterView.reward === null ||
+    !("kind" in starterView.reward) ||
+    starterView.reward.kind !== "starter-card-transfiguration"
+  ) {
+    throw new Error("expected transfiguration reward fixture");
+  }
+  return {
+    ...starterView,
+    outcomeKind: "multi-card-transfiguration",
+    reward: {
+      kind: "multi-card-transfiguration",
+      sourceKind: "transfigure-selected",
+      transfigurations: starterView.reward.transfigurations.map((mapping) => ({
+        ...mapping,
+        before: {
+          ...mapping.before,
+          model: {
+            ...mapping.before.model,
+            displaySnapshot: {
+              ...mapping.before.model.displaySnapshot,
+              isStarter: false,
+            },
+          },
+        },
+        after: {
+          ...mapping.after,
+          model: {
+            ...mapping.after.model,
+            displaySnapshot: {
+              ...mapping.after.model.displaySnapshot,
+              isStarter: false,
+            },
+          },
+        },
+      })),
+    },
+  };
+}
+
+function compoundCardMutationRewardView(
+  sourceKind:
+    | "make-predicate-fast-and-gain-nightmares"
+    | "purge-one-transfigure-and-copy-others",
+): ExplorationSiteView {
+  const base = starterCardTransfigurationRewardView(3);
+  if (
+    base.reward === null ||
+    !("kind" in base.reward) ||
+    base.reward.kind !== "starter-card-transfiguration"
+  ) {
+    throw new Error("expected transfiguration reward fixture");
+  }
+  const originals = base.reward.transfigurations.map(
+    (mapping) => mapping.before,
+  );
+  const after = base.reward.transfigurations.map((mapping) => mapping.after);
+  const nightmares = originals.slice(0, 2).map((card, index) => ({
+    ...card,
+    entryId: `nightmare-entry-${String(index)}`,
+    model: {
+      ...card.model,
+      cardId: asCardId("ffffffff-ffff-4fff-8fff-ffffffffffff"),
+      displaySnapshot: {
+        ...card.model.displaySnapshot,
+        id: asCardId("ffffffff-ffff-4fff-8fff-ffffffffffff"),
+        name: asCardName("Nightmare"),
+      },
+    },
+    isBane: true,
+  }));
+  return {
+    ...base,
+    outcomeKind: "compound-card-mutation",
+    reward: {
+      kind: "compound-card-mutation",
+      sourceKind,
+      purged:
+        sourceKind === "purge-one-transfigure-and-copy-others"
+          ? originals.slice(0, 1)
+          : [],
+      transfigurations:
+        sourceKind === "purge-one-transfigure-and-copy-others"
+          ? base.reward.transfigurations
+          : [],
+      keywordChanges:
+        sourceKind === "make-predicate-fast-and-gain-nightmares"
+          ? originals.slice(0, 2).map((card) => ({
+              entryId: card.entryId,
+              cardId: card.model.cardId,
+              beforeKeywordModification: null,
+              afterKeywordModification: { fast: true },
+              before: card,
+              after: {
+                ...card,
+                model: {
+                  ...card.model,
+                  displaySnapshot: {
+                    ...card.model.displaySnapshot,
+                    isFast: true,
+                  },
+                },
+              },
+            }))
+          : [],
+      nightmares:
+        sourceKind === "make-predicate-fast-and-gain-nightmares"
+          ? nightmares
+          : [],
+      copies:
+        sourceKind === "purge-one-transfigure-and-copy-others"
+          ? after.map((card, index) => ({
+              source: card,
+              copy: {
+                ...card,
+                entryId: `compound-copy-${String(index)}`,
+              },
+            }))
+          : [],
+    },
+  };
+}
+
+function multiCardReplacementRewardView(
+  sourceKind:
+    "replace-selected" | "replace-random-with-card" = "replace-selected",
+  count = 2,
+): ExplorationSiteView {
+  const starterView = starterCardMutationRewardView("replace");
+  if (
+    starterView.reward === null ||
+    !("kind" in starterView.reward) ||
+    starterView.reward.kind !== "starter-card-mutation"
+  ) {
+    throw new Error("expected starter replacement fixture");
+  }
+  return {
+    ...starterView,
+    outcomeKind: "card-replacements",
+    reward: {
+      kind: "card-replacements",
+      sourceKind,
+      replacements: starterView.reward.replacements
+        .slice(0, count)
+        .map((pair) => ({
+          purged: {
+            ...pair.purged,
+            model: {
+              ...pair.purged.model,
+              displaySnapshot: {
+                ...pair.purged.model.displaySnapshot,
+                isStarter: false,
+              },
+            },
+          },
+          gained: pair.gained,
+        })),
+    },
+  };
+}
+
+function cardTypeChangesRewardView(
+  sourceKind:
+    | "change-random-card-type"
+    | "change-card-type-selected" = "change-random-card-type",
+  count = 2,
+): ExplorationSiteView {
+  const base = view(true);
+  const secondId = asCardId("00000000-0000-4000-8000-000000000029");
+  const before = [
+    base.card,
+    {
+      ...base.card,
+      cardId: secondId,
+      displaySnapshot: {
+        ...base.card.displaySnapshot,
+        id: secondId,
+        name: asCardName("Second Type Change Fixture"),
+        cardNumber: 29,
+        imageNumber: 29,
+      },
+    },
+  ];
+  const afterTypeChange = {
+    predicateId: "exploration:card-type:Event",
+    cardType: "Event" as const,
+    subtype: "",
+    label: "Event",
+  };
+  return {
+    ...base,
+    outcomeKind: "card-type-changes",
+    reward: {
+      kind: "card-type-changes",
+      sourceKind,
+      changes: before.slice(0, count).map((model, index) => ({
+        entryId: `type-change-entry-${String(index + 1)}`,
+        cardId: model.cardId,
+        beforeCardType: "Character" as const,
+        afterCardType: "Event" as const,
+        beforeTypeChange: null,
+        afterTypeChange,
+        before: {
+          entryId: `type-change-entry-${String(index + 1)}`,
+          model,
+          isBane: false,
+        },
+        after: {
+          entryId: `type-change-entry-${String(index + 1)}`,
+          model: {
+            ...model,
+            displaySnapshot: {
+              ...model.displaySnapshot,
+              cardType: "Event" as const,
+              subtype: "",
+            },
+          },
+          isBane: false,
+        },
+      })),
+    },
+  };
+}
+
+function multiTransfigurationFollowupView(): ExplorationSiteView {
+  const base = view();
+  const secondCard = {
+    ...base.card,
+    cardId: asCardId("00000000-0000-4000-8000-000000000028"),
+    displaySnapshot: {
+      ...base.card.displaySnapshot,
+      id: asCardId("00000000-0000-4000-8000-000000000028"),
+      name: asCardName("Second Transfiguration Fixture"),
+      cardNumber: 28,
+      imageNumber: 28,
+    },
+  };
+  const candidate = (
+    entryId: string,
+    model: typeof base.card,
+    types: readonly ("Empowered" | "Kindled")[],
+  ) => ({
+    entryId,
+    model,
+    availability: "available" as const,
+    reforgedType: null,
+    forms: types.map((type) => ({
+      type,
+      presentation: transfigurationFormFixture(type),
+      effectDetails: { entryId, type },
+      essenceCost: 0,
+      affordable: true,
+      previewModel: {
+        ...model,
+        transfiguration: {
+          type,
+          form: transfigurationFormFixture(type),
+          markedText: model.displaySnapshot.renderedText,
+          energyChanged: type === "Empowered",
+          energyChangeName: type === "Empowered" ? "Fixture energy form" : null,
+          sparkChanged: type === "Kindled",
+          sparkChangeName: type === "Kindled" ? "Fixture spark form" : null,
+          fastChanged: false,
+        },
+      },
+    })),
+  });
+  return {
+    ...base,
+    actions: [
+      {
+        ...base.actions[0],
+        effectKind: "transfigure-selected",
+        mechanics: {
+          effectKind: "transfigure-selected",
+          predicate: "event",
+          count: 2,
+        },
+        followup: {
+          kind: "multi-card-transfiguration",
+          title: "Fixture multi-card choice",
+          subtitle: "Fixture exact selection",
+          count: 2,
+          candidates: [
+            candidate("multi-entry-a", base.card, ["Empowered", "Kindled"]),
+            candidate("multi-entry-b", secondCard, ["Empowered", "Kindled"]),
+          ],
+        },
+      },
+      base.actions[1],
+    ],
   };
 }
 
@@ -303,10 +885,11 @@ function bulkTransfigurationRewardView(): ExplorationSiteView {
         formName: "Fixture Inspired",
         essenceSpent: 100,
         announcement: "Authored bulk transfiguration outcome.",
-        cards: base.reward.deckModification?.cards.map((card) => ({
-          ...card,
-          model: { ...card.model, transfiguration },
-        })) ?? [],
+        cards:
+          base.reward.deckModification?.cards.map((card) => ({
+            ...card,
+            model: { ...card.model, transfiguration },
+          })) ?? [],
       },
     },
   };
@@ -341,6 +924,37 @@ function essenceRewardView(): ExplorationSiteView {
       cards,
       essencePerCard: 15,
       totalEssence: 90,
+    },
+  };
+}
+
+function directEssenceRewardView(
+  sourceKind: "gain-essence" | "gain-random-essence" | "double-essence",
+  essenceBefore: number,
+  essenceGained: number,
+  essenceAfter: number,
+): ExplorationSiteView {
+  const base = view(true);
+  return {
+    ...base,
+    actions: [
+      {
+        ...base.actions[0],
+        effectKind: sourceKind,
+        mechanics: { effectKind: sourceKind },
+      },
+      base.actions[1],
+    ],
+    outcomeKind: "direct-essence",
+    reward: {
+      kind: "direct-essence",
+      sourceKind,
+      essenceBefore,
+      essenceGained,
+      essenceAfter,
+      ...(sourceKind === "gain-random-essence"
+        ? { minimumEssence: 50, maximumEssence: 150 }
+        : {}),
     },
   };
 }
@@ -491,6 +1105,33 @@ function siteOfferModifierRewardView(): ExplorationSiteView {
       sourceSiteId: "exploration-site",
       sourceActionId: "choice-a",
     },
+  };
+}
+
+function shopModifierRewardView(
+  modifier: "free-next-shop" | "free-purchases",
+): ExplorationSiteView {
+  return {
+    ...view(true),
+    outcomeKind: "shop-modifier",
+    reward:
+      modifier === "free-next-shop"
+        ? {
+            kind: "shop-modifier",
+            modifier,
+            sourceSiteId: "exploration-site",
+            sourceActionId: "choice-a",
+          }
+        : {
+            kind: "shop-modifier",
+            modifier,
+            sourceSiteId: "exploration-site",
+            sourceActionId: "choice-a",
+            freePurchaseCount: 3,
+            essenceBefore: 255,
+            essenceSpent: 127,
+            essenceAfter: 128,
+          },
   };
 }
 
@@ -736,9 +1377,10 @@ describe("ExplorationSiteScreen", () => {
       new DOMRect(100, 100, 240, 336),
     );
     const onResolve = vi.fn();
+    const directView = view();
     const { container, root } = mount(
       <ExplorationSiteScreen
-        view={view()}
+        view={directView}
         onChannel={vi.fn()}
         onResolve={onResolve}
         onExit={vi.fn()}
@@ -774,13 +1416,14 @@ describe("ExplorationSiteScreen", () => {
         .querySelector('[data-testid="cumulus-exploration-narrative-panel"]')
         ?.querySelector("[data-glass-panel-header]"),
     ).toBeNull();
-    act(() =>
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
-        )
-        ?.click(),
+    const action = container.querySelector<HTMLButtonElement>(
+      '[data-testid="cumulus-exploration-choice-0"]',
     );
+    expect(action?.dataset.explorationActionId).toBe(directView.actions[0].id);
+    expect(action?.dataset.explorationEffectKind).toBe(
+      directView.actions[0].effectKind,
+    );
+    act(() => action?.click());
     expect(onResolve).toHaveBeenCalledWith("choice-a");
     act(() => root.unmount());
   });
@@ -829,6 +1472,67 @@ describe("ExplorationSiteScreen", () => {
     expect(onResolve).toHaveBeenCalledWith("choice-a", {
       entryIds: ["minted-entry"],
     });
+    act(() => root.unmount());
+  });
+
+  it("exposes the prepared starter entity by UUID and submits an empty automatic selection", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const onResolve = vi.fn();
+    const base = view();
+    const starterEntryId = "prepared-starter-entry";
+    const starterView: ExplorationSiteView = {
+      ...base,
+      actions: [
+        {
+          ...base.actions[0],
+          effectKind: "purge-starter-card",
+          mechanics: { effectKind: "purge-starter-card" },
+          effectParts: [
+            { kind: "text", text: "Purge " },
+            {
+              kind: "entity",
+              entity: {
+                kind: "card",
+                card: base.card.displaySnapshot,
+                entryId: starterEntryId,
+              },
+            },
+          ],
+          automaticSelection: {},
+        },
+        base.actions[1],
+      ],
+    };
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={starterView}
+        onChannel={vi.fn()}
+        onResolve={onResolve}
+        onExit={vi.fn()}
+      />,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    const choice = container.querySelector<HTMLElement>(
+      '[data-testid="cumulus-exploration-choice-0"]',
+    );
+    expect(choice?.dataset.explorationEntityPreview).toBe("card");
+    expect(choice?.dataset.explorationDeckEntryId).toBe(starterEntryId);
+    expect(choice?.dataset.entityId).toBe(base.card.cardId);
+    expect(
+      choice?.querySelector<HTMLElement>("[data-exploration-entity-label]")
+        ?.dataset.explorationDeckEntryId,
+    ).toBe(starterEntryId);
+    act(() => choice?.click());
+    expect(onResolve).toHaveBeenCalledWith("choice-a", {});
     act(() => root.unmount());
   });
 
@@ -883,6 +1587,56 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(sparkGlyph?.querySelector("i")?.className).toContain("bx-sparkle");
     expect(sparkGlyph?.parentElement?.style.color).toContain(SPARK_ICON_COLOR);
+
+    act(() => root.unmount());
+  });
+
+  it("renders a structured card-type variable without exposing its authored token", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const base = view();
+    const cardTypeView: ExplorationSiteView = {
+      ...base,
+      actions: [
+        {
+          ...base.actions[0],
+          effectText: "Resolved card-type fixture",
+          effectParts: [
+            { kind: "text", text: "Change " },
+            { kind: "entity", entity: { kind: "card", card: makeCard() } },
+            { kind: "text", text: " to become a " },
+            { kind: "card-type", cardType: "Character" },
+          ],
+        },
+        base.actions[1],
+      ],
+    };
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={cardTypeView}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={vi.fn()}
+      />,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    const effect = container.querySelector<HTMLElement>(
+      "#exploration-effect-0",
+    );
+    const cardType = effect?.querySelector<HTMLElement>(
+      "[data-exploration-card-type-variable]",
+    );
+    expect(cardType?.dataset.cardType).toBe("Character");
+    expect(cardType?.textContent?.trim()).not.toBe("");
+    expect(effect?.textContent).not.toContain("{card_type}");
 
     act(() => root.unmount());
   });
@@ -1225,6 +1979,12 @@ describe("ExplorationSiteScreen", () => {
       '[data-exploration-followup="cards"]',
     );
     expect(followup).not.toBeNull();
+    expect(followup?.dataset.explorationActionId).toBe(
+      followupView.actions[0].id,
+    );
+    expect(followup?.dataset.explorationEffectKind).toBe(
+      followupView.actions[0].effectKind,
+    );
     expect(followup?.style.bottom).toBe(
       `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP} + ${token("--space-3xl")})`,
     );
@@ -1249,6 +2009,128 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(onResolve).toHaveBeenCalledWith("choice-a", {
       entryIds: ["entry-fixture"],
+    });
+    act(() => root.unmount());
+  });
+
+  it("collects an exact multi-card set, preserves per-card forms across back navigation, and dispatches once", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={multiTransfigurationFollowupView()}
+        onChannel={vi.fn()}
+        onResolve={onResolve}
+        onExit={vi.fn()}
+      />,
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+    expect(
+      container.querySelector(
+        '[data-exploration-multi-transfiguration-step="cards"]',
+      ),
+    ).not.toBeNull();
+    for (const entryId of ["multi-entry-a", "multi-entry-b"]) {
+      act(() =>
+        container
+          .querySelector<HTMLElement>(
+            `[data-testid="cumulus-exploration-multi-transfiguration-card-${entryId}"]`,
+          )
+          ?.click(),
+      );
+    }
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-multi-transfiguration-cards-confirm"]',
+        )
+        ?.click(),
+    );
+    const formStep = () =>
+      container.querySelector<HTMLElement>(
+        '[data-exploration-multi-transfiguration-step="form"]',
+      );
+    expect(
+      formStep()?.dataset.explorationMultiTransfigurationCurrentEntryId,
+    ).toBe("multi-entry-a");
+    expect(formStep()?.getAttribute("aria-label")?.trim()).not.toBe("");
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-transfiguration-form-Empowered"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-transfiguration-confirm"]',
+        )
+        ?.click(),
+    );
+    expect(
+      formStep()?.dataset.explorationMultiTransfigurationCurrentEntryId,
+    ).toBe("multi-entry-b");
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-transfiguration-form-Kindled"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-transfiguration-choose-again"]',
+        )
+        ?.click(),
+    );
+    expect(
+      formStep()?.dataset.explorationMultiTransfigurationCurrentEntryId,
+    ).toBe("multi-entry-a");
+    expect(formStep()?.dataset.explorationMultiTransfigurationCurrentForm).toBe(
+      "Empowered",
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-transfiguration-confirm"]',
+        )
+        ?.click(),
+    );
+    expect(
+      formStep()?.dataset.explorationMultiTransfigurationCurrentEntryId,
+    ).toBe("multi-entry-b");
+    expect(formStep()?.dataset.explorationMultiTransfigurationCurrentForm).toBe(
+      "Kindled",
+    );
+    expect(onResolve).not.toHaveBeenCalled();
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-transfiguration-confirm"]',
+        )
+        ?.click(),
+    );
+    expect(onResolve).toHaveBeenCalledOnce();
+    expect(onResolve).toHaveBeenCalledWith("choice-a", {
+      entryIds: ["multi-entry-a", "multi-entry-b"],
+      transfigurations: ["Empowered", "Kindled"],
     });
     act(() => root.unmount());
   });
@@ -1331,6 +2213,1305 @@ describe("ExplorationSiteScreen", () => {
       dreamsignId,
     });
     act(() => root.unmount());
+  });
+
+  it("chooses the compound offered Dreamsign before the exact persisted capacity replacement", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const base = view();
+    const offered = fixtureDreamsign(
+      "20000000-0000-4000-8000-000000000001",
+      "Offered One",
+    );
+    const held = fixtureDreamsign(
+      "10000000-0000-4000-8000-000000000001",
+      "Held One",
+    );
+    const flowView: ExplorationSiteView = {
+      ...base,
+      actions: [
+        {
+          ...base.actions[0],
+          effectKind: "gain-nightmare-and-offered-dreamsign",
+          followup: {
+            kind: "dreamsign-flow",
+            title: "Read the offered patterns",
+            subtitle: "Choose one sign, then make room for it.",
+            mode: "gain-offered",
+            offered: [offered],
+            held: [held],
+            requiredOverflowReplacementCount: 1,
+          },
+        },
+        base.actions[1],
+      ],
+    };
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={flowView}
+        onChannel={vi.fn()}
+        onResolve={onResolve}
+        onExit={vi.fn()}
+      />,
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+
+    expect(
+      container.querySelector("[data-dreamsign-choice-role='offered']"),
+    ).not.toBeNull();
+    expect(document.activeElement?.getAttribute("data-testid")).toBe(
+      `cumulus-exploration-dreamsign-offered-${offered.id}`,
+    );
+    act(() =>
+      container
+        .querySelector<HTMLElement>(
+          `[data-testid="cumulus-exploration-dreamsign-offered-${offered.id}"]`,
+        )
+        ?.click(),
+    );
+    expect(onResolve).not.toHaveBeenCalled();
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-exploration-dreamsign-flow="gain-offered"]',
+      )?.dataset.explorationDreamsignFlowStep,
+    ).toBe("replacement");
+    expect(document.activeElement?.getAttribute("data-testid")).toBe(
+      `cumulus-exploration-dreamsign-replacement-${held.id}`,
+    );
+    act(() =>
+      container
+        .querySelector<HTMLElement>(
+          `[data-testid="cumulus-exploration-dreamsign-replacement-${held.id}"]`,
+        )
+        ?.click(),
+    );
+    const confirm = container.querySelector<HTMLButtonElement>(
+      '[data-testid="cumulus-exploration-followup-confirm"]',
+    );
+    expect(confirm?.disabled).toBe(false);
+    act(() => confirm?.click());
+    expect(onResolve).toHaveBeenCalledOnce();
+    expect(onResolve).toHaveBeenCalledWith("choice-a", {
+      offeredDreamsignId: offered.id,
+      replacedDreamsignId: held.id,
+    });
+    act(() => root.unmount());
+
+    const capacityFollowup = flowView.actions[0].followup;
+    if (capacityFollowup.kind !== "dreamsign-flow") {
+      throw new Error("Expected compound Dreamsign follow-up fixture");
+    }
+    const belowCapacityResolve = vi.fn();
+    const belowCapacity = mount(
+      <ExplorationSiteScreen
+        view={{
+          ...flowView,
+          actions: [
+            {
+              ...flowView.actions[0],
+              followup: {
+                ...capacityFollowup,
+                requiredOverflowReplacementCount: 0,
+              },
+            },
+            flowView.actions[1],
+          ],
+        }}
+        onChannel={vi.fn()}
+        onResolve={belowCapacityResolve}
+        onExit={vi.fn()}
+      />,
+    );
+    act(() =>
+      belowCapacity.container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      belowCapacity.container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      belowCapacity.container
+        .querySelector<HTMLElement>(
+          `[data-testid="cumulus-exploration-dreamsign-offered-${offered.id}"]`,
+        )
+        ?.click(),
+    );
+    expect(belowCapacityResolve).toHaveBeenCalledWith("choice-a", {
+      offeredDreamsignId: offered.id,
+    });
+    expect(
+      belowCapacity.container.querySelector(
+        '[data-dreamsign-choice-role="replacement"]',
+      ),
+    ).toBeNull();
+    act(() => belowCapacity.root.unmount());
+  });
+
+  it("resolves the fixed compound bundle directly below cap and chooses one held replacement at cap", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const base = view();
+    const held = fixtureDreamsign(
+      "10000000-0000-4000-8000-000000000001",
+      "Held One",
+    );
+    const belowCapResolve = vi.fn();
+    const belowCap = mount(
+      <ExplorationSiteScreen
+        view={{
+          ...base,
+          actions: [
+            {
+              ...base.actions[0],
+              effectKind: "gain-nightmare-and-dreamsign",
+              followup: { kind: "none" },
+            },
+            base.actions[1],
+          ],
+        }}
+        onChannel={vi.fn()}
+        onResolve={belowCapResolve}
+        onExit={vi.fn()}
+      />,
+    );
+    act(() =>
+      belowCap.container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      belowCap.container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+    expect(belowCapResolve).toHaveBeenCalledWith("choice-a");
+    expect(
+      belowCap.container.querySelector("[data-exploration-dreamsign-choices]"),
+    ).toBeNull();
+    act(() => belowCap.root.unmount());
+
+    const atCapResolve = vi.fn();
+    const atCap = mount(
+      <ExplorationSiteScreen
+        view={{
+          ...base,
+          actions: [
+            {
+              ...base.actions[0],
+              effectKind: "gain-nightmare-and-dreamsign",
+              followup: {
+                kind: "dreamsigns",
+                title: "Make room",
+                subtitle: "Choose one held Dreamsign.",
+                selectionKey: "replacedDreamsignId",
+                dreamsigns: [held],
+              },
+            },
+            base.actions[1],
+          ],
+        }}
+        onChannel={vi.fn()}
+        onResolve={atCapResolve}
+        onExit={vi.fn()}
+      />,
+    );
+    act(() =>
+      atCap.container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      atCap.container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      atCap.container
+        .querySelector<HTMLElement>(
+          `[data-testid="cumulus-exploration-dreamsign-${held.id}"]`,
+        )
+        ?.click(),
+    );
+    expect(atCapResolve).toHaveBeenCalledWith("choice-a", {
+      replacedDreamsignId: held.id,
+    });
+    act(() => atCap.root.unmount());
+  });
+
+  it("commits held and offered Dreamsign selections as one replacement intent", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const base = view();
+    const offered = fixtureDreamsign(
+      "20000000-0000-4000-8000-000000000001",
+      "Offered One",
+    );
+    const held = fixtureDreamsign(
+      "10000000-0000-4000-8000-000000000001",
+      "Held One",
+    );
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={{
+          ...base,
+          actions: [
+            {
+              ...base.actions[0],
+              effectKind: "replace-selected-dreamsign-with-offered",
+              followup: {
+                kind: "dreamsign-flow",
+                title: "Exchange the pattern",
+                subtitle: "Choose one held sign and one offered sign.",
+                mode: "replace-with-offered",
+                offered: [offered],
+                held: [held],
+                requiredOverflowReplacementCount: 0,
+              },
+            },
+            base.actions[1],
+          ],
+        }}
+        onChannel={vi.fn()}
+        onResolve={onResolve}
+        onExit={vi.fn()}
+      />,
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+    act(() => {
+      container
+        .querySelector<HTMLElement>(
+          `[data-testid="cumulus-exploration-dreamsign-offered-${offered.id}"]`,
+        )
+        ?.dispatchEvent(
+          new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+        );
+    });
+    act(() => {
+      container
+        .querySelector<HTMLElement>(
+          `[data-testid="cumulus-exploration-dreamsign-exchange-${held.id}"]`,
+        )
+        ?.dispatchEvent(
+          new KeyboardEvent("keydown", { key: " ", bubbles: true }),
+        );
+    });
+    expect(onResolve).not.toHaveBeenCalled();
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-followup-confirm"]',
+        )
+        ?.click(),
+    );
+    expect(onResolve).toHaveBeenCalledWith("choice-a", {
+      offeredDreamsignId: offered.id,
+      replacedDreamsignId: held.id,
+    });
+    act(() => root.unmount());
+  });
+
+  it("purges first, then requires exact overflow targets without exposing random gains", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const base = view();
+    const held = [
+      fixtureDreamsign("10000000-0000-4000-8000-000000000001", "Held One"),
+      fixtureDreamsign("10000000-0000-4000-8000-000000000002", "Held Two"),
+      fixtureDreamsign("10000000-0000-4000-8000-000000000003", "Held Three"),
+      fixtureDreamsign("10000000-0000-4000-8000-000000000004", "Held Four"),
+    ];
+    const randomDreamsignId = "30000000-0000-4000-8000-000000000001";
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={{
+          ...base,
+          actions: [
+            {
+              ...base.actions[0],
+              effectKind: "purge-selected-dreamsign-and-gain-random",
+              effectText: "Purge one sign and gain three at random.",
+              followup: {
+                kind: "dreamsign-flow",
+                title: "Break the pattern",
+                subtitle: "Choose the signs that leave your collection.",
+                mode: "purge-and-gain-random",
+                offered: [],
+                held,
+                requiredOverflowReplacementCount: 2,
+              },
+            },
+            base.actions[1],
+          ],
+        }}
+        onChannel={vi.fn()}
+        onResolve={onResolve}
+        onExit={vi.fn()}
+      />,
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+    expect(container.textContent).not.toContain(randomDreamsignId);
+    act(() =>
+      container
+        .querySelector<HTMLElement>(
+          `[data-testid="cumulus-exploration-dreamsign-purge-${held[0].id}"]`,
+        )
+        ?.click(),
+    );
+    expect(
+      container.querySelector<HTMLElement>(
+        '[data-exploration-dreamsign-flow="purge-and-gain-random"]',
+      )?.dataset.explorationDreamsignFlowStep,
+    ).toBe("overflow");
+    for (const item of held.slice(1)) {
+      act(() =>
+        container
+          .querySelector<HTMLElement>(
+            `[data-testid="cumulus-exploration-dreamsign-replacement-${item.id}"]`,
+          )
+          ?.click(),
+      );
+    }
+    expect(
+      container.querySelectorAll(
+        '[data-dreamsign-choice-role="replacement"] [data-dreamsign-choice-selected="true"]',
+      ),
+    ).toHaveLength(2);
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-followup-confirm"]',
+        )
+        ?.click(),
+    );
+    expect(onResolve).toHaveBeenCalledWith("choice-a", {
+      purgedDreamsignId: held[0].id,
+      overflowReplacementDreamsignIds: [held[1].id, held[2].id],
+    });
+    act(() => root.unmount());
+  });
+
+  it("resolves replace-all directly and reveals persisted random Dreamsign outcomes under reduced motion", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const directBase = view();
+    const directResolve = vi.fn();
+    const direct = mount(
+      <ExplorationSiteScreen
+        view={{
+          ...directBase,
+          actions: [
+            {
+              ...directBase.actions[0],
+              effectKind: "replace-all-dreamsigns-random",
+            },
+            directBase.actions[1],
+          ],
+        }}
+        onChannel={vi.fn()}
+        onResolve={directResolve}
+        onExit={vi.fn()}
+      />,
+    );
+    act(() =>
+      direct.container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      direct.container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+    expect(directResolve).toHaveBeenCalledWith("choice-a");
+    act(() => direct.root.unmount());
+
+    const onExit = vi.fn();
+    const outcome = mount(
+      <ExplorationSiteScreen
+        view={dreamsignMutationRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+    const mutation = outcome.container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="dreamsign-mutation"]',
+    );
+    expect(mutation?.dataset.explorationDreamsignMutationPhase).toBe("gaining");
+    expect(mutation?.dataset.explorationDreamsignGainedIds).toBe(
+      "30000000-0000-4000-8000-000000000001,30000000-0000-4000-8000-000000000002",
+    );
+    expect(mutation?.dataset.explorationDreamsignReplacementCount).toBe("1");
+    expect(
+      mutation?.querySelectorAll(
+        '[data-exploration-dreamsign-mutation-object="gained"]',
+      ),
+    ).toHaveLength(2);
+    const replacement = mutation?.querySelector<HTMLElement>(
+      "[data-exploration-dreamsign-replacement]",
+    );
+    expect(replacement?.dataset.removedDreamsignId).toBe(
+      "10000000-0000-4000-8000-000000000002",
+    );
+    expect(replacement?.dataset.gainedDreamsignId).toBe(
+      "30000000-0000-4000-8000-000000000002",
+    );
+    expect(replacement?.getAttribute("role")).toBe("group");
+    expect(replacement?.getAttribute("aria-label")).toBeTruthy();
+    expect(
+      replacement?.querySelector(
+        '[data-exploration-dreamsign-mutation-object="removed"]',
+      ),
+    ).not.toBeNull();
+    expect(
+      replacement?.querySelector(
+        '[data-exploration-dreamsign-mutation-object="gained"]',
+      ),
+    ).not.toBeNull();
+    expect(
+      replacement?.querySelector(
+        "[data-exploration-dreamsign-replacement-arrow]",
+      ),
+    ).not.toBeNull();
+    expect(onExit).not.toHaveBeenCalled();
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => outcome.root.unmount());
+  });
+
+  it("immediately renders the exact persisted Nightmare stack and Dreamsign replacement under reduced motion", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={nightmareDreamsignBundleRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    const outcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="nightmare-dreamsign-bundle"]',
+    );
+    expect(outcome?.dataset.explorationNightmareDreamsignSource).toBe(
+      "gain-nightmare-and-dreamsign",
+    );
+    expect(outcome?.dataset.explorationNightmareCount).toBe("2");
+    expect(outcome?.dataset.explorationNightmareEntryIds).toBe(
+      "nightmare-entry-a,nightmare-entry-b",
+    );
+    expect(outcome?.dataset.explorationDreamsignGainedIds).toBe(
+      "50000000-0000-4000-8000-000000000002",
+    );
+    expect(outcome?.dataset.explorationDreamsignReplacementCount).toBe("1");
+    expect(outcome?.getAttribute("role")).toBe("status");
+    expect(outcome?.getAttribute("aria-label")).toBeTruthy();
+    const nightmareCards = outcome?.querySelectorAll<HTMLElement>(
+      "[data-exploration-nightmare-stack-card]",
+    );
+    expect(nightmareCards).toHaveLength(2);
+    expect(nightmareCards?.item(0).dataset.explorationEntryId).toBe(
+      "nightmare-entry-a",
+    );
+    expect(nightmareCards?.item(1).dataset.explorationEntryId).toBe(
+      "nightmare-entry-b",
+    );
+    const replacement = outcome?.querySelector<HTMLElement>(
+      "[data-exploration-dreamsign-replacement]",
+    );
+    expect(replacement?.dataset.removedDreamsignId).toBe(
+      "50000000-0000-4000-8000-000000000001",
+    );
+    expect(replacement?.dataset.gainedDreamsignId).toBe(
+      "50000000-0000-4000-8000-000000000002",
+    );
+    expect(onExit).not.toHaveBeenCalled();
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
+  it("immediately presents persisted starter-card pairs with semantic UUIDs under reduced motion", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = true;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={starterCardMutationRewardView("replace")}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    const outcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="starter-card-mutation"]',
+    );
+    expect(outcome?.dataset.explorationStarterCardSource).toBe(
+      "replace-all-starter-cards",
+    );
+    expect(outcome?.dataset.explorationStarterCardMode).toBe("replace");
+    expect(outcome?.dataset.explorationStarterCardPhase).toBe("terminal");
+    expect(outcome?.dataset.explorationStarterCardPurgedEntryIds).toBe(
+      "starter-entry-a,starter-entry-b",
+    );
+    expect(outcome?.dataset.explorationStarterCardGainedEntryIds).toBe(
+      "gained-entry-a,gained-entry-b",
+    );
+    expect(outcome?.dataset.explorationStarterCardReplacementCount).toBe("2");
+    expect(outcome?.getAttribute("role")).toBe("status");
+    expect(outcome?.getAttribute("aria-label")?.trim()).not.toBe("");
+    const pairs = outcome?.querySelectorAll<HTMLElement>(
+      "[data-exploration-starter-card-replacement]",
+    );
+    expect(pairs).toHaveLength(2);
+    expect(pairs?.item(0).dataset.purgedEntryId).toBe("starter-entry-a");
+    expect(pairs?.item(0).dataset.gainedEntryId).toBe("gained-entry-a");
+    expect(pairs?.item(1).dataset.purgedEntryId).toBe("starter-entry-b");
+    expect(pairs?.item(1).dataset.gainedEntryId).toBe("gained-entry-b");
+    expect(
+      outcome?.querySelectorAll(
+        '[data-exploration-starter-card-mutation-object="purged"]',
+      ),
+    ).toHaveLength(2);
+    expect(
+      outcome?.querySelectorAll(
+        '[data-exploration-starter-card-mutation-object="gained"]',
+      ),
+    ).toHaveLength(2);
+    expect(onExit).not.toHaveBeenCalled();
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
+  it("presents starter-card purges before persisted replacements", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = false;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={starterCardMutationRewardView("replace")}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    const outcome = () =>
+      container.querySelector<HTMLElement>(
+        '[data-exploration-outcome="starter-card-mutation"]',
+      );
+    expect(outcome()?.dataset.explorationStarterCardPhase).toBe("purging");
+    expect(
+      outcome()?.querySelectorAll("[data-exploration-purge-card]"),
+    ).toHaveLength(2);
+    expect(
+      outcome()?.querySelectorAll(
+        "[data-exploration-starter-card-replacement]",
+      ),
+    ).toHaveLength(0);
+    act(() => {
+      vi.advanceTimersByTime(5_000);
+    });
+    expect(outcome()?.dataset.explorationStarterCardPhase).toBe("replacing");
+    expect(
+      outcome()?.querySelectorAll("[data-exploration-purge-card]"),
+    ).toHaveLength(0);
+    expect(
+      outcome()?.querySelectorAll(
+        "[data-exploration-starter-card-replacement]",
+      ),
+    ).toHaveLength(2);
+    expect(onExit).not.toHaveBeenCalled();
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
+  it("presents a persisted starter-card purge without a replacement pair", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = true;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={starterCardMutationRewardView("purge")}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={vi.fn()}
+      />,
+    );
+    const outcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="starter-card-mutation"]',
+    );
+    expect(outcome?.dataset.explorationStarterCardMode).toBe("purge");
+    expect(outcome?.dataset.explorationStarterCardReplacementCount).toBe("0");
+    expect(outcome?.dataset.explorationStarterCardPurgedEntryIds).toBe(
+      "starter-entry-a",
+    );
+    expect(
+      outcome?.querySelectorAll("[data-exploration-purge-card]"),
+    ).toHaveLength(1);
+    expect(
+      outcome?.querySelectorAll("[data-exploration-starter-card-replacement]"),
+    ).toHaveLength(0);
+    act(() => root.unmount());
+  });
+
+  it("presents persisted starter-card base-to-form mappings immediately under reduced motion", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = true;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={starterCardTransfigurationRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+
+    const outcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="starter-card-transfiguration"]',
+    );
+    expect(outcome?.dataset.explorationStarterCardTransfigurationSource).toBe(
+      "transfigure-random-starter-cards",
+    );
+    expect(outcome?.dataset.explorationStarterCardTransfigurationPhase).toBe(
+      "terminal",
+    );
+    expect(outcome?.dataset.explorationStarterCardTransfigurationCount).toBe(
+      "2",
+    );
+    expect(outcome?.dataset.explorationStarterCardTransfigurationEntryIds).toBe(
+      "starter-transfiguration-entry-a,starter-transfiguration-entry-b",
+    );
+    expect(outcome?.dataset.explorationStarterCardTransfigurationForms).toBe(
+      "Empowered,Kindled",
+    );
+    expect(outcome?.getAttribute("role")).toBe("status");
+    expect(outcome?.getAttribute("aria-label")?.trim()).not.toBe("");
+    const pairs = outcome?.querySelectorAll<HTMLElement>(
+      "[data-exploration-starter-card-transfiguration-pair]",
+    );
+    expect(pairs).toHaveLength(2);
+    expect(pairs?.item(0).dataset.explorationDeckEntryId).toBe(
+      "starter-transfiguration-entry-a",
+    );
+    expect(pairs?.item(0).dataset.cardId).toBe(
+      "00000000-0000-4000-8000-000000000017",
+    );
+    expect(pairs?.item(0).dataset.beforeTransfiguration).toBe("none");
+    expect(pairs?.item(0).dataset.afterTransfiguration).toBe("Empowered");
+    expect(pairs?.item(0).getAttribute("aria-label")?.trim()).not.toBe("");
+    expect(pairs?.item(1).dataset.explorationDeckEntryId).toBe(
+      "starter-transfiguration-entry-b",
+    );
+    expect(pairs?.item(1).dataset.cardId).toBe(
+      "00000000-0000-4000-8000-000000000025",
+    );
+    expect(pairs?.item(1).dataset.afterTransfiguration).toBe("Kindled");
+    expect(
+      outcome?.querySelectorAll(
+        '[data-exploration-starter-card-transfiguration-face="before"]',
+      ),
+    ).toHaveLength(2);
+    expect(
+      outcome?.querySelectorAll(
+        '[data-exploration-starter-card-transfiguration-face="after"]',
+      ),
+    ).toHaveLength(2);
+    const pairContainer = outcome?.querySelector<HTMLElement>(
+      "[data-exploration-starter-card-transfiguration-pairs]",
+    );
+    expect(pairContainer?.style.flexWrap).toBe("wrap");
+    expect(pairContainer?.style.overflow).toBe("auto");
+    expect(onExit).not.toHaveBeenCalled();
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
+  it("presents generic persisted multi-card mappings in a bounded reduced-motion review region", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = true;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={multiCardTransfigurationRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={vi.fn()}
+      />,
+    );
+    const outcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="multi-card-transfiguration"]',
+    );
+    expect(outcome?.dataset.explorationCardTransfigurationSource).toBe(
+      "transfigure-selected",
+    );
+    expect(outcome?.dataset.explorationCardTransfigurationPhase).toBe(
+      "terminal",
+    );
+    expect(outcome?.dataset.explorationCardTransfigurationCount).toBe("2");
+    expect(outcome?.dataset.explorationCardTransfigurationEntryIds).toBe(
+      "starter-transfiguration-entry-a,starter-transfiguration-entry-b",
+    );
+    expect(outcome?.dataset.explorationStarterCardTransfigurationSource).toBe(
+      undefined,
+    );
+    expect(outcome?.getAttribute("aria-label")?.trim()).not.toBe("");
+    const reviewRegion = outcome?.querySelector<HTMLElement>(
+      "[data-exploration-multi-card-transfiguration-pairs]",
+    );
+    expect(reviewRegion?.style.maxHeight).toBe("100%");
+    expect(reviewRegion?.style.overflow).toBe("auto");
+    expect(outcome?.style.bottom).toBe(
+      JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+    );
+    const pairs = outcome?.querySelectorAll<HTMLElement>(
+      "[data-exploration-multi-card-transfiguration-pair]",
+    );
+    expect(pairs).toHaveLength(2);
+    expect(pairs?.item(0).dataset.explorationDeckEntryId).toBe(
+      "starter-transfiguration-entry-a",
+    );
+    expect(pairs?.item(0).dataset.afterTransfiguration).toBe("Empowered");
+    expect(
+      outcome?.querySelectorAll(
+        '[data-exploration-card-transfiguration-face="before"]',
+      ),
+    ).toHaveLength(2);
+    expect(
+      outcome?.querySelectorAll(
+        '[data-exploration-card-transfiguration-face="after"]',
+      ),
+    ).toHaveLength(2);
+    expect(
+      outcome?.querySelectorAll(
+        "[data-exploration-starter-card-transfiguration-pair]",
+      ),
+    ).toHaveLength(0);
+    act(() => root.unmount());
+  });
+
+  it("presents nonstarter replacement mappings in a bounded reduced-motion review region", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = true;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={multiCardReplacementRewardView("replace-random-with-card")}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={vi.fn()}
+      />,
+    );
+    const outcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="card-replacements"]',
+    );
+    expect(outcome?.dataset.explorationCardReplacementSource).toBe(
+      "replace-random-with-card",
+    );
+    expect(outcome?.dataset.explorationCardReplacementPhase).toBe("terminal");
+    expect(outcome?.dataset.explorationCardReplacementCount).toBe("2");
+    expect(outcome?.dataset.explorationCardReplacementPurgedEntryIds).toBe(
+      "starter-entry-a,starter-entry-b",
+    );
+    expect(outcome?.dataset.explorationCardReplacementGainedEntryIds).toBe(
+      "gained-entry-a,gained-entry-b",
+    );
+    expect(outcome?.getAttribute("aria-label")?.trim()).not.toBe("");
+    const region = outcome?.querySelector<HTMLElement>(
+      "[data-exploration-card-replacement-pairs]",
+    );
+    expect(region?.style.maxHeight).toBe("100%");
+    expect(region?.style.overflow).toBe("auto");
+    expect(outcome?.style.bottom).toBe(
+      JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+    );
+    const pairs = outcome?.querySelectorAll<HTMLElement>(
+      "[data-exploration-multi-card-replacement]",
+    );
+    expect(pairs).toHaveLength(2);
+    expect(pairs?.item(0).dataset.purgedEntryId).toBe("starter-entry-a");
+    expect(pairs?.item(0).dataset.gainedEntryId).toBe("gained-entry-a");
+    expect(
+      outcome?.querySelectorAll("[data-exploration-starter-card-replacement]"),
+    ).toHaveLength(0);
+    act(() => root.unmount());
+  });
+
+  it("dismisses a fully visible T48 replacement outcome under normal motion", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = false;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockImplementation(
+      function clientHeight(this: HTMLElement) {
+        return this.hasAttribute("data-exploration-card-replacement-pairs")
+          ? 244
+          : 0;
+      },
+    );
+    vi.spyOn(HTMLElement.prototype, "scrollHeight", "get").mockImplementation(
+      function scrollHeight(this: HTMLElement) {
+        return this.hasAttribute("data-exploration-card-replacement-pairs")
+          ? 244
+          : 0;
+      },
+    );
+    const onExit = vi.fn();
+    const onChannel = vi.fn();
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={multiCardReplacementRewardView("replace-random-with-card", 1)}
+        onChannel={onChannel}
+        onResolve={onResolve}
+        onExit={onExit}
+      />,
+    );
+    const outcome = () =>
+      container.querySelector<HTMLElement>(
+        '[data-exploration-outcome="card-replacements"]',
+      );
+
+    expect(outcome()?.dataset.explorationCardReplacementReviewed).toBe("true");
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <ExplorationSiteScreen
+            view={multiCardReplacementRewardView("replace-random-with-card", 1)}
+            onChannel={onChannel}
+            onResolve={onResolve}
+            onExit={onExit}
+          />
+        </CumulusRoot>,
+      );
+    });
+    expect(outcome()?.dataset.explorationCardReplacementReviewed).toBe("true");
+    expect(onExit).not.toHaveBeenCalled();
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
+  it("presents exact card-type mappings in a bounded reduced-motion review region", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = true;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={cardTypeChangesRewardView("change-card-type-selected")}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={vi.fn()}
+      />,
+    );
+    const outcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="card-type-changes"]',
+    );
+    expect(outcome?.dataset.explorationCardTypeChangeSource).toBe(
+      "change-card-type-selected",
+    );
+    expect(outcome?.dataset.explorationCardTypeChangePhase).toBe("terminal");
+    expect(outcome?.dataset.explorationCardTypeChangeCount).toBe("2");
+    expect(outcome?.dataset.explorationCardTypeChangeEntryIds).toBe(
+      "type-change-entry-1,type-change-entry-2",
+    );
+    expect(outcome?.dataset.explorationCardTypeChangeBeforeTypes).toBe(
+      "Character,Character",
+    );
+    expect(outcome?.dataset.explorationCardTypeChangeAfterTypes).toBe(
+      "Event,Event",
+    );
+    expect(outcome?.getAttribute("aria-label")?.trim()).not.toBe("");
+    const region = outcome?.querySelector<HTMLElement>(
+      "[data-exploration-card-type-change-pairs]",
+    );
+    expect(region?.style.maxHeight).toBe("100%");
+    expect(region?.style.overflow).toBe("auto");
+    expect(outcome?.style.bottom).toBe(
+      JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+    );
+    const pairs = outcome?.querySelectorAll<HTMLElement>(
+      "[data-exploration-card-type-change-pair]",
+    );
+    expect(pairs).toHaveLength(2);
+    expect(pairs?.item(0).dataset.explorationDeckEntryId).toBe(
+      "type-change-entry-1",
+    );
+    expect(pairs?.item(0).dataset.cardId).toBe(
+      "00000000-0000-4000-8000-000000000017",
+    );
+    expect(pairs?.item(0).dataset.beforeCardType).toBe("Character");
+    expect(pairs?.item(0).dataset.afterCardType).toBe("Event");
+    expect(pairs?.item(0).dataset.beforeTypeChangePredicateId).toBe("none");
+    expect(pairs?.item(0).dataset.afterTypeChangePredicateId).toBe(
+      "exploration:card-type:Event",
+    );
+    expect(
+      outcome?.querySelectorAll(
+        '[data-exploration-card-type-change-face="before"][data-card-type="Character"]',
+      ),
+    ).toHaveLength(2);
+    expect(
+      outcome?.querySelectorAll(
+        '[data-exploration-card-type-change-face="after"][data-card-type="Event"]',
+      ),
+    ).toHaveLength(2);
+    act(() => root.unmount());
+  });
+
+  it("dismisses a fully visible T53 type-change outcome under normal motion", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = false;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockImplementation(
+      function clientHeight(this: HTMLElement) {
+        return this.hasAttribute("data-exploration-card-type-change-pairs")
+          ? 244
+          : 0;
+      },
+    );
+    vi.spyOn(HTMLElement.prototype, "scrollHeight", "get").mockImplementation(
+      function scrollHeight(this: HTMLElement) {
+        return this.hasAttribute("data-exploration-card-type-change-pairs")
+          ? 244
+          : 0;
+      },
+    );
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={cardTypeChangesRewardView("change-card-type-selected", 1)}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+    const outcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="card-type-changes"]',
+    );
+
+    expect(outcome?.dataset.explorationCardTypeChangeReviewed).toBe("true");
+    expect(onExit).not.toHaveBeenCalled();
+    act(() => {
+      vi.advanceTimersByTime(2_000);
+    });
+    expect(outcome?.dataset.explorationCardTypeChangePhase).toBe(
+      "transfigured",
+    );
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
+  it("keeps an overflowing narrow transfiguration outcome in the HUD-safe region until every pair is reviewed", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = true;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    vi.spyOn(HTMLElement.prototype, "clientHeight", "get").mockImplementation(
+      function clientHeight(this: HTMLElement) {
+        return this.hasAttribute(
+          "data-exploration-starter-card-transfiguration-pairs",
+        )
+          ? 500
+          : 0;
+      },
+    );
+    vi.spyOn(HTMLElement.prototype, "scrollHeight", "get").mockImplementation(
+      function scrollHeight(this: HTMLElement) {
+        return this.hasAttribute(
+          "data-exploration-starter-card-transfiguration-pairs",
+        )
+          ? 720
+          : 0;
+      },
+    );
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={starterCardTransfigurationRewardView(4)}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+    const outcome = container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="starter-card-transfiguration"]',
+    );
+    const pairContainer = outcome?.querySelector<HTMLElement>(
+      "[data-exploration-starter-card-transfiguration-pairs]",
+    );
+
+    expect(
+      outcome?.querySelectorAll(
+        "[data-exploration-starter-card-transfiguration-pair]",
+      ),
+    ).toHaveLength(4);
+    expect(outcome?.style.gridTemplateRows).toBe("auto minmax(0, 1fr)");
+    expect(outcome?.style.bottom).toBe(
+      JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+    );
+    expect(outcome?.style.overflow).toBe("hidden");
+    expect(pairContainer?.style.maxHeight).toBe("100%");
+    expect(pairContainer?.style.overflow).toBe("auto");
+    expect(pairContainer?.getAttribute("role")).toBe("region");
+    expect(pairContainer?.tabIndex).toBe(0);
+    expect(outcome?.dataset.explorationStarterCardTransfigurationReviewed).toBe(
+      "false",
+    );
+
+    act(() => {
+      vi.advanceTimersByTime(30_000);
+    });
+    expect(onExit).not.toHaveBeenCalled();
+
+    if (pairContainer === undefined || pairContainer === null) {
+      throw new Error("starter transfiguration pair container is required");
+    }
+    Object.defineProperty(pairContainer, "scrollTop", {
+      configurable: true,
+      value: 220,
+    });
+    act(() => {
+      pairContainer.dispatchEvent(new Event("scroll", { bubbles: true }));
+    });
+    expect(outcome?.dataset.explorationStarterCardTransfigurationReviewed).toBe(
+      "true",
+    );
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
+  it("stages starter-card transfiguration from original cards into staggered form reveals", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = false;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const onExit = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={starterCardTransfigurationRewardView()}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={onExit}
+      />,
+    );
+    const outcome = () =>
+      container.querySelector<HTMLElement>(
+        '[data-exploration-outcome="starter-card-transfiguration"]',
+      );
+    expect(outcome()?.dataset.explorationStarterCardTransfigurationPhase).toBe(
+      "original",
+    );
+    expect(
+      outcome()?.querySelectorAll(
+        '[data-exploration-starter-card-transfiguration-side="concealed"]',
+      ),
+    ).toHaveLength(2);
+    expect(onExit).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(2_000);
+    });
+    expect(outcome()?.dataset.explorationStarterCardTransfigurationPhase).toBe(
+      "transfigured",
+    );
+    expect(
+      outcome()?.querySelectorAll(
+        '[data-exploration-starter-card-transfiguration-side="revealed"]',
+      ),
+    ).toHaveLength(2);
+    expect(onExit).not.toHaveBeenCalled();
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(onExit).toHaveBeenCalledOnce();
+    act(() => root.unmount());
+  });
+
+  it("renders persisted T30 and T63 Dreamsign replacement mappings", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const cases = [
+      {
+        sourceKind: "replace-selected-dreamsign-with-offered" as const,
+        pairs: [
+          [
+            "10000000-0000-4000-8000-000000000002",
+            "30000000-0000-4000-8000-000000000001",
+          ],
+        ],
+      },
+      {
+        sourceKind: "replace-all-dreamsigns-random" as const,
+        pairs: [
+          [
+            "10000000-0000-4000-8000-000000000001",
+            "30000000-0000-4000-8000-000000000001",
+          ],
+          [
+            "10000000-0000-4000-8000-000000000002",
+            "30000000-0000-4000-8000-000000000002",
+          ],
+        ],
+      },
+    ] as const;
+
+    for (const fixture of cases) {
+      const outcome = mount(
+        <ExplorationSiteScreen
+          view={dreamsignMutationRewardView(fixture.sourceKind)}
+          onChannel={vi.fn()}
+          onResolve={vi.fn()}
+          onExit={vi.fn()}
+        />,
+      );
+      const mutation = outcome.container.querySelector<HTMLElement>(
+        '[data-exploration-outcome="dreamsign-mutation"]',
+      );
+      expect(mutation?.dataset.explorationDreamsignMutationSource).toBe(
+        fixture.sourceKind,
+      );
+      expect(mutation?.dataset.explorationDreamsignReplacementCount).toBe(
+        String(fixture.pairs.length),
+      );
+      const renderedPairs = mutation?.querySelectorAll<HTMLElement>(
+        "[data-exploration-dreamsign-replacement]",
+      );
+      expect(renderedPairs).toHaveLength(fixture.pairs.length);
+      fixture.pairs.forEach(([removedId, gainedId], index) => {
+        const pair = renderedPairs?.item(index);
+        expect(pair?.dataset.removedDreamsignId).toBe(removedId);
+        expect(pair?.dataset.gainedDreamsignId).toBe(gainedId);
+        expect(
+          pair?.querySelector(
+            `[data-exploration-dreamsign-mutation-object="removed"][data-dreamsign-id="${removedId}"]`,
+          ),
+        ).not.toBeNull();
+        expect(
+          pair?.querySelector(
+            `[data-exploration-dreamsign-mutation-object="gained"][data-dreamsign-id="${gainedId}"]`,
+          ),
+        ).not.toBeNull();
+      });
+      act(() => outcome.root.unmount());
+    }
   });
 
   it("uses the standard transfiguration picker and commits the chosen free form", () => {
@@ -1672,6 +3853,11 @@ describe("ExplorationSiteScreen", () => {
         )
         ?.click(),
     );
+    expect(
+      Array.from(
+        container.querySelectorAll<HTMLElement>("[data-entry-id]"),
+      ).map((entry) => entry.dataset.entryId),
+    ).toEqual(["entry-a", "entry-b"]);
     const purgeCard = container.querySelector<HTMLElement>(
       '[data-testid="cumulus-exploration-card-entry-a"]',
     );
@@ -1785,6 +3971,282 @@ describe("ExplorationSiteScreen", () => {
 
     expect(onResolve).toHaveBeenCalledWith("choice-a", {
       entryIds: ["entry-a", "entry-b"],
+    });
+    act(() => root.unmount());
+  });
+
+  it("submits zero to two UUID-selected cards for an optional bounded purge", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const base = view();
+    const followupView: ExplorationSiteView = {
+      ...base,
+      actions: [
+        {
+          ...base.actions[0],
+          effectKind: "purge-selected",
+          followup: {
+            kind: "cards",
+            title: "Stand Down the Escort",
+            subtitle: "Choose up to two Warrior cards to purge.",
+            cards: ["entry-a", "entry-b", "entry-c"].map((entryId) => ({
+              entryId,
+              model: base.card,
+              isBane: false,
+            })),
+            mode: "exact",
+            selectionKey: "entryIds",
+            selectionOperation: "purge",
+            min: 0,
+            max: 2,
+          },
+        },
+        base.actions[1],
+      ],
+    };
+    const openChoice = (container: HTMLElement): void => {
+      act(() =>
+        container
+          .querySelector<HTMLButtonElement>(
+            '[data-testid="cumulus-exploration-channel"]',
+          )
+          ?.click(),
+      );
+      act(() =>
+        container
+          .querySelector<HTMLButtonElement>(
+            '[data-testid="cumulus-exploration-choice-0"]',
+          )
+          ?.click(),
+      );
+    };
+
+    const resolveNone = vi.fn();
+    const empty = mount(
+      <ExplorationSiteScreen
+        view={followupView}
+        onChannel={vi.fn()}
+        onResolve={resolveNone}
+        onExit={vi.fn()}
+      />,
+    );
+    openChoice(empty.container);
+    const emptyConfirm = empty.container.querySelector<HTMLButtonElement>(
+      '[data-testid="cumulus-exploration-followup-confirm"]',
+    );
+    expect(emptyConfirm?.disabled).toBe(false);
+    act(() => emptyConfirm?.click());
+    expect(resolveNone).toHaveBeenCalledWith("choice-a", { entryIds: [] });
+    act(() => empty.root.unmount());
+
+    const resolveTwo = vi.fn();
+    const selected = mount(
+      <ExplorationSiteScreen
+        view={followupView}
+        onChannel={vi.fn()}
+        onResolve={resolveTwo}
+        onExit={vi.fn()}
+      />,
+    );
+    openChoice(selected.container);
+    for (const entryId of ["entry-a", "entry-b", "entry-c"]) {
+      act(() =>
+        selected.container
+          .querySelector<HTMLElement>(
+            `[data-testid="cumulus-exploration-card-${entryId}"]`,
+          )
+          ?.click(),
+      );
+    }
+    expect(
+      selected.container.querySelectorAll(
+        '[data-card-choice-operation="purge"]',
+      ),
+    ).toHaveLength(2);
+    act(() =>
+      selected.container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-followup-confirm"]',
+        )
+        ?.click(),
+    );
+    expect(resolveTwo).toHaveBeenCalledWith("choice-a", {
+      entryIds: ["entry-a", "entry-b"],
+    });
+    act(() => selected.root.unmount());
+  });
+
+  it("requires one concealed multi-replacement source and submits only selected entry UUIDs", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const base = view();
+    const replacementView: ExplorationSiteView = {
+      ...base,
+      actions: [
+        {
+          ...base.actions[0],
+          effectKind: "replace-selected",
+          mechanics: {
+            effectKind: "replace-selected",
+            predicate: "event",
+            count: 2,
+          },
+          followup: {
+            kind: "cards",
+            title: "Choose echoes",
+            subtitle: "Choose one or two Events.",
+            cards: ["replacement-source-a", "replacement-source-b"].map(
+              (entryId) => ({ entryId, model: base.card, isBane: false }),
+            ),
+            mode: "exact",
+            selectionKey: "entryIds",
+            selectionOperation: "purge",
+            min: 1,
+            max: 2,
+          },
+        },
+        base.actions[1],
+      ],
+    };
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={replacementView}
+        onChannel={vi.fn()}
+        onResolve={onResolve}
+        onExit={vi.fn()}
+      />,
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+    const confirm = container.querySelector<HTMLButtonElement>(
+      '[data-testid="cumulus-exploration-followup-confirm"]',
+    );
+    expect(confirm?.getAttribute("aria-disabled")).toBe("true");
+    expect(
+      container.querySelector("[data-exploration-card-replacement]"),
+    ).toBeNull();
+    act(() =>
+      container
+        .querySelector<HTMLElement>(
+          '[data-testid="cumulus-exploration-card-replacement-source-a"]',
+        )
+        ?.click(),
+    );
+    expect(confirm?.getAttribute("aria-disabled")).toBeNull();
+    expect(
+      container.querySelectorAll('[data-card-choice-operation="purge"]'),
+    ).toHaveLength(1);
+    act(() => confirm?.click());
+    expect(onResolve).toHaveBeenCalledOnce();
+    expect(onResolve).toHaveBeenCalledWith("choice-a", {
+      entryIds: ["replacement-source-a"],
+    });
+    act(() => root.unmount());
+  });
+
+  it("submits an exact fixed-form multi-transfiguration without a form step", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const base = view();
+    const fixedView: ExplorationSiteView = {
+      ...base,
+      actions: [
+        {
+          ...base.actions[0],
+          effectKind: "transfigure-fixed-selected",
+          mechanics: {
+            effectKind: "transfigure-fixed-selected",
+            transfiguration: "Kindled",
+            count: 2,
+          },
+          effectDisclosure: {
+            kind: "fixed-transfiguration",
+            transfiguration: "Kindled",
+            effectDisclosure: "Fixture fixed form disclosure.",
+          },
+          followup: {
+            kind: "cards",
+            title: "Share the fire",
+            subtitle: "Choose exactly two Warriors.",
+            cards: ["fixed-source-a", "fixed-source-b"].map((entryId) => ({
+              entryId,
+              model: base.card,
+              isBane: false,
+            })),
+            mode: "exact",
+            selectionKey: "entryIds",
+            selectionOperation: "transfigure",
+            min: 2,
+            max: 2,
+          },
+        },
+        base.actions[1],
+      ],
+    };
+    const onResolve = vi.fn();
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={fixedView}
+        onChannel={vi.fn()}
+        onResolve={onResolve}
+        onExit={vi.fn()}
+      />,
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        )
+        ?.click(),
+    );
+    const confirm = container.querySelector<HTMLButtonElement>(
+      '[data-testid="cumulus-exploration-followup-confirm"]',
+    );
+    expect(confirm?.getAttribute("aria-disabled")).toBe("true");
+    for (const entryId of ["fixed-source-a", "fixed-source-b"]) {
+      act(() =>
+        container
+          .querySelector<HTMLElement>(
+            `[data-testid="cumulus-exploration-card-${entryId}"]`,
+          )
+          ?.click(),
+      );
+    }
+    expect(confirm?.getAttribute("aria-disabled")).toBeNull();
+    expect(
+      container.querySelectorAll('[data-card-choice-operation="transfigure"]'),
+    ).toHaveLength(2);
+    expect(
+      container.querySelector(
+        '[data-exploration-multi-transfiguration-step="form"]',
+      ),
+    ).toBeNull();
+    act(() => confirm?.click());
+    expect(onResolve).toHaveBeenCalledWith("choice-a", {
+      entryIds: ["fixed-source-a", "fixed-source-b"],
     });
     act(() => root.unmount());
   });
@@ -2310,8 +4772,7 @@ describe("ExplorationSiteScreen", () => {
       "exploration-bulk-transfiguration-complete",
     );
     expect(
-      reward?.querySelector("[data-radial-announcement-headline]")
-        ?.textContent,
+      reward?.querySelector("[data-radial-announcement-headline]")?.textContent,
     ).not.toBe("");
     const cards = reward?.querySelectorAll<HTMLElement>(
       "[data-exploration-deck-modification-card]",
@@ -2336,7 +4797,7 @@ describe("ExplorationSiteScreen", () => {
     ]);
     expect(
       reward?.querySelectorAll(
-        '[data-exploration-deck-modification-card] i[aria-label]',
+        "[data-exploration-deck-modification-card] i[aria-label]",
       ),
     ).toHaveLength(2);
     act(() => root.unmount());
@@ -2815,6 +5276,74 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
+  it("immediately presents persisted direct Essence amounts and exits at zero under reduced motion", () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    reducedMotionPreference.value = true;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const randomExit = vi.fn();
+    const random = mount(
+      <ExplorationSiteScreen
+        view={directEssenceRewardView("gain-random-essence", 250, 87, 337)}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={randomExit}
+      />,
+    );
+
+    const randomOutcome = random.container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="direct-essence"]',
+    );
+    expect(randomOutcome?.dataset.explorationEssenceSource).toBe(
+      "gain-random-essence",
+    );
+    expect(randomOutcome?.dataset.explorationEssenceBefore).toBe("250");
+    expect(randomOutcome?.dataset.explorationEssenceGained).toBe("87");
+    expect(randomOutcome?.dataset.explorationEssenceAfter).toBe("337");
+    expect(randomOutcome?.dataset.explorationMinimumEssence).toBe("50");
+    expect(randomOutcome?.dataset.explorationMaximumEssence).toBe("150");
+    expect(
+      randomOutcome?.querySelector("[data-radial-announcement-essence]"),
+    ).not.toBeNull();
+    expect(
+      randomOutcome
+        ?.querySelector("[data-radial-announcement-detail]")
+        ?.textContent?.trim(),
+    ).not.toBe("");
+    expect(randomExit).not.toHaveBeenCalled();
+    act(() => random.root.unmount());
+
+    const zeroExit = vi.fn();
+    const zero = mount(
+      <ExplorationSiteScreen
+        view={directEssenceRewardView("double-essence", 0, 0, 0)}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={zeroExit}
+      />,
+    );
+    const zeroOutcome = zero.container.querySelector<HTMLElement>(
+      '[data-exploration-outcome="direct-essence"]',
+    );
+    expect(zeroOutcome?.dataset.explorationEssenceSource).toBe(
+      "double-essence",
+    );
+    expect(zeroOutcome?.dataset.explorationEssenceBefore).toBe("0");
+    expect(zeroOutcome?.dataset.explorationEssenceGained).toBe("0");
+    expect(zeroOutcome?.dataset.explorationEssenceAfter).toBe("0");
+    expect(
+      zeroOutcome?.querySelector("[data-radial-announcement-essence]")
+        ?.textContent,
+    ).toContain("0");
+    expect(zeroExit).not.toHaveBeenCalled();
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(zeroExit).toHaveBeenCalledOnce();
+    act(() => zero.root.unmount());
+  });
+
   it("purges the chosen Dreamsign before announcing the gained Essence", () => {
     vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
     reducedMotionPreference.value = false;
@@ -3215,6 +5744,145 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
+  it.each([
+    ["free-next-shop", undefined, undefined, undefined, undefined],
+    ["free-purchases", "3", "255", "127", "128"],
+  ] as const)(
+    "presents the persisted %s shop benefit under reduced motion",
+    (modifier, count, essenceBefore, essenceSpent, essenceAfter) => {
+      vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+      reducedMotionPreference.value = true;
+      vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+        new DOMRect(100, 100, 240, 336),
+      );
+      const onExit = vi.fn();
+      const { container, root } = mount(
+        <ExplorationSiteScreen
+          view={shopModifierRewardView(modifier)}
+          onChannel={vi.fn()}
+          onResolve={vi.fn()}
+          onExit={onExit}
+        />,
+      );
+
+      const outcome = container.querySelector<HTMLElement>(
+        '[data-exploration-outcome="shop-modifier"]',
+      );
+      expect(outcome?.dataset.explorationShopModifier).toBe(modifier);
+      expect(outcome?.dataset.explorationSourceSiteId).toBe("exploration-site");
+      expect(outcome?.dataset.explorationSourceActionId).toBe("choice-a");
+      expect(outcome?.dataset.explorationFreePurchaseCount).toBe(count);
+      expect(outcome?.dataset.explorationEssenceBefore).toBe(essenceBefore);
+      expect(outcome?.dataset.explorationEssenceSpent).toBe(essenceSpent);
+      expect(outcome?.dataset.explorationEssenceAfter).toBe(essenceAfter);
+      expect(outcome?.getAttribute("aria-label")?.trim()).not.toBe("");
+      expect(outcome?.textContent?.trim()).not.toBe("");
+      expect(onExit).not.toHaveBeenCalled();
+
+      act(() => {
+        vi.advanceTimersByTime(10_000);
+      });
+      expect(onExit).toHaveBeenCalledOnce();
+      act(() => root.unmount());
+    },
+  );
+
+  it.each([
+    {
+      sourceKind: "make-predicate-fast-and-gain-nightmares" as const,
+      expectedSections: ["fast", "nightmares"],
+      expectedFastEntries: 2,
+      expectedNightmares: 2,
+      expectedCopies: 0,
+    },
+    {
+      sourceKind: "purge-one-transfigure-and-copy-others" as const,
+      expectedSections: ["purged", "transfigured", "copies"],
+      expectedFastEntries: 0,
+      expectedNightmares: 0,
+      expectedCopies: 3,
+    },
+  ])(
+    "presents the persisted $sourceKind compound review under reduced motion",
+    ({
+      sourceKind,
+      expectedSections,
+      expectedFastEntries,
+      expectedNightmares,
+      expectedCopies,
+    }) => {
+      vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+      reducedMotionPreference.value = true;
+      vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+        new DOMRect(100, 100, 240, 336),
+      );
+      const onExit = vi.fn();
+      const { container, root } = mount(
+        <ExplorationSiteScreen
+          view={compoundCardMutationRewardView(sourceKind)}
+          onChannel={vi.fn()}
+          onResolve={vi.fn()}
+          onExit={onExit}
+        />,
+      );
+      act(() => {
+        vi.advanceTimersByTime(0);
+      });
+
+      const outcome = container.querySelector<HTMLElement>(
+        '[data-exploration-outcome="compound-card-mutation"]',
+      );
+      expect(outcome?.dataset.explorationCompoundCardMutationSource).toBe(
+        sourceKind,
+      );
+      expect(outcome?.dataset.explorationCompoundSource).toBe(sourceKind);
+      expect(outcome?.dataset.explorationCompoundCardMutationPhase).toBe(
+        "terminal",
+      );
+      expect(outcome?.getAttribute("role")).toBe("status");
+      expect(outcome?.getAttribute("aria-live")).toBe("polite");
+      expect(outcome?.getAttribute("aria-label")?.trim()).not.toBe("");
+      expect(
+        Array.from(
+          outcome?.querySelectorAll<HTMLElement>(
+            "[data-exploration-compound-section]",
+          ) ?? [],
+        ).map((section) => section.dataset.explorationCompoundSection),
+      ).toEqual(expectedSections);
+      expect(
+        outcome?.querySelectorAll(
+          '[data-exploration-compound-card-pair="keyword"]',
+        ),
+      ).toHaveLength(expectedFastEntries);
+      expect(
+        outcome?.querySelectorAll("[data-exploration-compound-nightmare-card]"),
+      ).toHaveLength(expectedNightmares);
+      expect(
+        outcome?.querySelectorAll(
+          '[data-exploration-compound-card-pair="copy"]',
+        ),
+      ).toHaveLength(expectedCopies);
+      expect(
+        outcome?.dataset.explorationCopyEntryMappings
+          ?.split(",")
+          .filter(Boolean),
+      ).toHaveLength(expectedCopies);
+      const review = outcome?.querySelector<HTMLElement>(
+        "[data-exploration-compound-card-mutation-review]",
+      );
+      review?.focus();
+      expect(document.activeElement).toBe(review);
+      expect(review?.getAttribute("aria-label")?.trim()).not.toBe("");
+      expect(onExit).not.toHaveBeenCalled();
+
+      act(() => {
+        vi.advanceTimersByTime(10_000);
+      });
+      expect(onExit).toHaveBeenCalledOnce();
+      act(() => root.unmount());
+    },
+  );
+
   it("presents an exact zero-card acquisition under reduced motion", () => {
     vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
     reducedMotionPreference.value = true;
@@ -3237,4 +5905,225 @@ describe("ExplorationSiteScreen", () => {
     expect(outcome?.textContent?.trim()).not.toBe("");
     act(() => root.unmount());
   });
+
+  it.each([
+    { reduceMotion: false, activation: "click" as const },
+    { reduceMotion: true, activation: "keyboard" as const },
+  ])(
+    "renders only prepared site choices and submits the typed choice ($activation)",
+    ({ reduceMotion, activation }) => {
+      if (!reduceMotion) {
+        vi.useFakeTimers();
+        window.requestAnimationFrame = (callback) => {
+          callback(0);
+          return 1;
+        };
+      }
+      reducedMotionPreference.value = reduceMotion;
+      vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+        new DOMRect(100, 100, 240, 336),
+      );
+      const base = view();
+      const siteTypes = ["Shop", "Purge", "Transfiguration"] as const;
+      const choiceView: ExplorationSiteView = {
+        ...base,
+        narrative: "",
+        actions: [
+          {
+            ...base.actions[0],
+            effectKind: "choose-site-type",
+            mechanics: { effectKind: "choose-site-type", offerCount: 3 },
+            followup: {
+              kind: "site-types",
+              title: "Synthetic Site Choice",
+              subtitle: "Choose one synthetic site.",
+              choices: siteTypes.map((siteType, index) => ({
+                siteType,
+                model: {
+                  site: {
+                    id: `prepared-site-${String(index)}`,
+                    type: siteType,
+                    isEnhanced: false,
+                    isVisited: false,
+                  },
+                  pos: { x: 50, y: 50 },
+                  index,
+                  isBattle: false,
+                  isLocked: false,
+                  isInteractive: true,
+                  label: `Synthetic site ${String(index)}`,
+                  lockedGuidance: "",
+                  blurb: `Synthetic description ${String(index)}`,
+                  icon: GLYPHS.copy,
+                },
+              })),
+            },
+          },
+        ],
+      };
+      const onResolve = vi.fn();
+      const onChannel = vi.fn();
+      const { container, root } = mount(
+        <ExplorationSiteScreen
+          view={choiceView}
+          onChannel={onChannel}
+          onResolve={onResolve}
+          onExit={vi.fn()}
+        />,
+      );
+
+      if (!reduceMotion) {
+        const cardTravel = container.querySelector<HTMLElement>(
+          "[data-exploration-card-travel]",
+        );
+        expect(cardTravel).not.toBeNull();
+        act(() => {
+          cardTravel?.dispatchEvent(
+            new MouseEvent("contextmenu", { bubbles: true }),
+          );
+        });
+      }
+
+      const channel = container.querySelector<HTMLButtonElement>(
+        '[data-testid="cumulus-exploration-channel"]',
+      );
+      expect(channel).not.toBeNull();
+      expect(channel?.disabled).toBe(false);
+      act(() => channel?.click());
+      expect(onChannel).toHaveBeenCalledOnce();
+      if (!reduceMotion) {
+        act(() => {
+          container
+            .querySelector<HTMLElement>("[data-exploration-frame-break]")
+            ?.dispatchEvent(new MouseEvent("contextmenu", { bubbles: true }));
+        });
+        expect(
+          container.querySelector<HTMLElement>("[data-exploration-frame-break]")
+            ?.dataset.explorationFrameBreakPhase,
+        ).toBe("open");
+      }
+      const openChooser = (): void => {
+        const action = container.querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-choice-0"]',
+        );
+        expect(action).not.toBeNull();
+        expect(action?.disabled).toBe(false);
+        act(() => action?.click());
+      };
+      openChooser();
+
+      const group = container.querySelector<HTMLElement>(
+        "[data-exploration-site-type-choices]",
+      );
+      expect(group?.getAttribute("role")).toBe("group");
+      expect(group?.getAttribute("aria-label")?.trim()).not.toBe("");
+      const choices = Array.from(
+        group?.querySelectorAll<HTMLButtonElement>(
+          '[data-site-node-presentation="choice"]',
+        ) ?? [],
+      );
+      expect(choices).toHaveLength(3);
+      expect(choices.map((choice) => choice.dataset.siteType)).toEqual(
+        siteTypes,
+      );
+      expect(choices.map((choice) => choice.dataset.siteId)).toEqual([
+        "prepared-site-0",
+        "prepared-site-1",
+        "prepared-site-2",
+      ]);
+      for (const choice of choices) {
+        expect(choice.dataset.interactive).toBe("true");
+        expect(choice.getAttribute("aria-disabled")).toBe("false");
+        expect(choice.getAttribute("aria-label")?.trim()).not.toBe("");
+        expect(choice.classList.contains("floaty")).toBe(!reduceMotion);
+        choice.focus();
+        expect(document.activeElement).toBe(choice);
+      }
+
+      act(() => {
+        window.dispatchEvent(
+          new KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
+        );
+      });
+      expect(
+        container.querySelector('[data-exploration-followup="site-types"]'),
+      ).toBeNull();
+      openChooser();
+      const selected = container.querySelector<HTMLButtonElement>(
+        activation === "click"
+          ? '[data-exploration-site-type-choice="Shop"] [data-site-node-presentation="choice"]'
+          : '[data-exploration-site-type-choice="Purge"] [data-site-node-presentation="choice"]',
+      );
+      act(() => {
+        if (activation === "click") {
+          selected?.click();
+        } else {
+          selected?.dispatchEvent(
+            new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+          );
+        }
+      });
+      expect(onResolve).toHaveBeenCalledOnce();
+      expect(onResolve).toHaveBeenCalledWith("choice-a", {
+        siteType: activation === "click" ? "Shop" : "Purge",
+      });
+      act(() => root.unmount());
+    },
+  );
+
+  it.each([
+    { reduceMotion: false, phase: "scale-fade", floats: true },
+    { reduceMotion: true, phase: "terminal", floats: false },
+  ])(
+    "presents the persisted site insertion as a centered noninteractive reward ($phase)",
+    ({ reduceMotion, phase, floats }) => {
+      vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+      reducedMotionPreference.value = reduceMotion;
+      vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+        new DOMRect(100, 100, 240, 336),
+      );
+      const onExit = vi.fn();
+      const { container, root } = mount(
+        <ExplorationSiteScreen
+          view={siteInsertionRewardView()}
+          onChannel={vi.fn()}
+          onResolve={vi.fn()}
+          onExit={onExit}
+        />,
+      );
+      const outcome = container.querySelector<HTMLElement>(
+        '[data-exploration-outcome="site-insertion"]',
+      );
+      const siteNode = outcome?.querySelector<HTMLButtonElement>(
+        '[data-site-node-presentation="reward"]',
+      );
+
+      expect(outcome?.dataset.explorationSiteInsertionPhase).toBe(phase);
+      expect(outcome?.dataset.explorationSiteInsertionSource).toBe(
+        "add-fixed-site",
+      );
+      expect(outcome?.dataset.explorationSiteId).toBe(
+        "site-exploration-source-action",
+      );
+      expect(outcome?.dataset.explorationSiteType).toBe("Duplication");
+      expect(outcome?.dataset.explorationTargetNodeId).toBe(
+        "current-atlas-node",
+      );
+      expect(outcome?.dataset.explorationInsertionIndex).toBe("3");
+      expect(outcome?.getAttribute("role")).toBe("status");
+      expect(outcome?.getAttribute("aria-live")).toBe("polite");
+      expect(outcome?.getAttribute("aria-label")?.trim()).not.toBe("");
+      expect(siteNode?.dataset.siteId).toBe("site-exploration-source-action");
+      expect(siteNode?.dataset.siteType).toBe("Duplication");
+      expect(siteNode?.dataset.interactive).toBe("false");
+      expect(siteNode?.getAttribute("aria-disabled")).toBe("true");
+      expect(siteNode?.classList.contains("floaty")).toBe(floats);
+      expect(onExit).not.toHaveBeenCalled();
+      act(() => {
+        vi.advanceTimersByTime(10_000);
+      });
+      expect(onExit).toHaveBeenCalledOnce();
+      act(() => root.unmount());
+    },
+  );
 });

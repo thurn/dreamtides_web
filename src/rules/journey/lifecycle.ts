@@ -24,6 +24,7 @@ import type { EffectRun, ScriptRef } from "../battle/fold";
 import type { ChallengeCursor } from "../battle/fold";
 import type { EventContext } from "../../eventlog/types";
 import { normalizePersistedNightmareJourney } from "../nightmare-migration";
+import { normalizePersistedShopPurchaseJourney } from "../shop-purchase-migration";
 import { cloneBattleMutableState } from "../../battle/state/create-initial-state";
 import { FRONT_RANK_SLOTS } from "../../battle/types";
 import { isTutorialBattleAiActionOverrides } from "../../types/tutorial-ai-action-overrides";
@@ -477,7 +478,9 @@ export function validateLoadedState(
   state: FoldState,
   payload: Record<string, unknown>,
 ): FoldState | null {
-  const snapshot = normalizePersistedNightmareJourney(payload.snapshot);
+  const snapshot = normalizePersistedShopPurchaseJourney(
+    normalizePersistedNightmareJourney(payload.snapshot),
+  );
   if (!isJourneyStateShape(snapshot)) return null;
   if (snapshot.seed !== state.journey.seed) return null;
 
@@ -567,7 +570,27 @@ function isJourneyStateShape(value: unknown): value is JourneyState {
   if (!isRecord(value.atlas) || !hasValidAtlasSites(value.atlas)) return false;
   if (!isRecord(value.screen)) return false;
   if (!isRecord(value.siteRuntime)) return false;
+  for (const runtime of Object.values(value.siteRuntime)) {
+    if (
+      isRecord(runtime) &&
+      runtime.kind === "shop" &&
+      !Array.isArray(runtime.purchaseHistory)
+    ) {
+      return false;
+    }
+  }
   if (!Array.isArray(value.battleModifiers)) return false;
+  if (
+    !isRecord(value.shopModifiers) ||
+    typeof value.shopModifiers.freeRerolls !== "number" ||
+    !Number.isFinite(value.shopModifiers.freeRerolls) ||
+    typeof value.shopModifiers.essenceDiscountPercent !== "number" ||
+    !Number.isFinite(value.shopModifiers.essenceDiscountPercent) ||
+    !Array.isArray(value.shopModifiers.freeNextShopModifiers) ||
+    !Array.isArray(value.shopModifiers.freePurchaseModifiers)
+  ) {
+    return false;
+  }
   // Nullable structural fields: null or an object.
   for (const key of ["dreamAvatar", "resolvedPackage", "draftState"]) {
     const field = value[key];

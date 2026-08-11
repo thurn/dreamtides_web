@@ -56,6 +56,10 @@ function view(): CardShopSiteView {
       price: 50,
       state: "available",
     },
+    freePurchaseStatus: {
+      freeNextShopSource: null,
+      freePurchasesRemaining: 0,
+    },
   };
 }
 
@@ -252,6 +256,49 @@ describe("CardShopSiteScreen", () => {
     });
     expect(onBuy).toHaveBeenCalledTimes(1);
     expect(onRestock).toHaveBeenCalledTimes(1);
+
+    act(() => root.unmount());
+  });
+
+  it("announces overlapping free-purchase benefits with semantic provenance", () => {
+    const benefitView = view();
+    benefitView.freePurchaseStatus = {
+      freeNextShopSource: {
+        sourceSiteId: "exploration-site",
+        sourceActionId: "exploration-action",
+      },
+      freePurchasesRemaining: 2,
+    };
+    benefitView.offers = benefitView.offers.map((offer) => ({
+      ...offer,
+      price: 0,
+      state: offer.state === "purchased" ? offer.state : "available",
+    }));
+    const { container, root } = mount(
+      <CardShopSiteScreen
+        view={benefitView}
+        onBuy={vi.fn()}
+        onRestock={vi.fn()}
+        onClose={vi.fn()}
+      />,
+    );
+
+    const region = container.querySelector<HTMLElement>(
+      "[data-card-shop-gallery-region]",
+    );
+    const status = container.querySelector<HTMLElement>(
+      "[data-shop-free-purchase-status]",
+    );
+    expect(region?.dataset.shopFreeSource).toBe("next-shop");
+    expect(region?.dataset.shopFreePurchasesRemaining).toBe("2");
+    expect(status?.getAttribute("role")).toBe("status");
+    expect(status?.getAttribute("aria-live")).toBe("polite");
+    expect(status?.dataset.shopFreeSourceSiteId).toBe("exploration-site");
+    expect(status?.dataset.shopFreeSourceActionId).toBe("exploration-action");
+    expect(status?.textContent?.trim()).not.toBe("");
+    expect(
+      container.querySelectorAll('[data-gallery-caption="essence"]'),
+    ).toHaveLength(6);
 
     act(() => root.unmount());
   });

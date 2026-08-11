@@ -341,6 +341,7 @@ function CardChoiceGridItem({
   return (
     <div
       data-gallery-entry-id={card.entryId}
+      data-entry-id={card.entryId}
       data-gallery-reserved={reserved || undefined}
       data-gallery-draggable={draggable || undefined}
       aria-hidden={reserved || undefined}

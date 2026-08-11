@@ -202,6 +202,7 @@ function lifecycleProvider(): JourneyLifecycleContentProvider {
             slots: [],
             rerollCount: 0,
             remainingDreamsignPoolIds: [],
+            purchaseHistory: [],
           },
         },
         screen: { type: "dreamscape" },
