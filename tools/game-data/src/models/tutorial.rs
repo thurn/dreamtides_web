@@ -615,8 +615,12 @@ fn validate_battle(battle: &TutorialBattleConfiguration) -> Result<()> {
         "Tutorial starter deck must not be empty"
     );
     ensure!(
-        battle.tutorial_card_constants.loading_screen_character_card_id
-            != battle.tutorial_card_constants.handoff_enemy_character_card_id,
+        battle
+            .tutorial_card_constants
+            .loading_screen_character_card_id
+            != battle
+                .tutorial_card_constants
+                .handoff_enemy_character_card_id,
         "Tutorial loading-screen and handoff enemy characters must use different card UUIDs"
     );
     for copies in battle.starter_deck.values() {

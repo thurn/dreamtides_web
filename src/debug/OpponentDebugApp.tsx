@@ -200,6 +200,19 @@ export default function OpponentDebugApp() {
   );
   const [nonce, setNonce] = useState(initialParams.nonce);
   const [copied, setCopied] = useState(false);
+  const [isNarrowViewport, setIsNarrowViewport] = useState(
+    window.innerWidth < 640,
+  );
+
+  useEffect(() => {
+    const updateViewport = () => {
+      setIsNarrowViewport(window.innerWidth < 640);
+    };
+    window.addEventListener("resize", updateViewport);
+    return () => {
+      window.removeEventListener("resize", updateViewport);
+    };
+  }, []);
 
   // Keep the address bar in sync with the current parameters (no history spam:
   // replaceState, not pushState) so the URL is always a shareable debug link.
@@ -438,7 +451,8 @@ export default function OpponentDebugApp() {
                   display: "flex",
                   flexDirection: "column",
                   gap: 4,
-                  minWidth: 280,
+                  minWidth: isNarrowViewport ? 0 : 280,
+                  width: isNarrowViewport ? "100%" : undefined,
                 }}
               >
                 <span style={labelStyle}>
@@ -497,7 +511,9 @@ export default function OpponentDebugApp() {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "240px 1fr",
+                gridTemplateColumns: isNarrowViewport
+                  ? "minmax(0, 1fr)"
+                  : "240px minmax(0, 1fr)",
                 gap: 16,
                 alignItems: "start",
               }}

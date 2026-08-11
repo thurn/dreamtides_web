@@ -10,7 +10,6 @@ import { createDefaultState } from "../state/journey-context";
 import type { JourneyContent } from "../data/journey-content";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
-import { JOURNEY_DATA_FIXTURE } from "../testing/journey-data-fixture";
 import { economyFixture } from "../testing/economy-fixture";
 import { opponentsFixture } from "../testing/opponents-fixture";
 import {
@@ -60,7 +59,6 @@ function contentFixture(): JourneyContent {
   return {
     ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
-    journeyData: JOURNEY_DATA_FIXTURE,
     cardDatabase: new Map(cards.map((entry) => [entry.cardNumber, entry])),
     dreamAvatars: [],
     dreamwellCards: [],

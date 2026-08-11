@@ -1,6 +1,6 @@
 use std::collections::BTreeSet;
 
-use anyhow::{ensure, Result};
+use anyhow::{Result, ensure};
 use serde::{Deserialize, Serialize};
 use uuid::{Uuid, Variant, Version};
 
@@ -409,28 +409,36 @@ mod tests {
         assert!(validate(&subset).is_ok());
         let mut empty = catalog();
         empty.forms.clear();
-        assert!(validate(&empty)
-            .unwrap_err()
-            .to_string()
-            .contains("at least one form"));
+        assert!(
+            validate(&empty)
+                .unwrap_err()
+                .to_string()
+                .contains("at least one form")
+        );
         let mut duplicate = catalog();
         duplicate.forms[1].glossary_uuid = duplicate.forms[0].glossary_uuid.clone();
-        assert!(validate(&duplicate)
-            .unwrap_err()
-            .to_string()
-            .contains("glossary_uuid duplicates"));
+        assert!(
+            validate(&duplicate)
+                .unwrap_err()
+                .to_string()
+                .contains("glossary_uuid duplicates")
+        );
         let mut color = catalog();
         color.forms[0].accent_color = "green".into();
-        assert!(validate(&color)
-            .unwrap_err()
-            .to_string()
-            .contains("accent_color"));
+        assert!(
+            validate(&color)
+                .unwrap_err()
+                .to_string()
+                .contains("accent_color")
+        );
         let mut illegal = catalog();
         illegal.forms[0].pricing = TransfigurationFormPricing::Free;
-        assert!(validate(&illegal)
-            .unwrap_err()
-            .to_string()
-            .contains("incompatible"));
+        assert!(
+            validate(&illegal)
+                .unwrap_err()
+                .to_string()
+                .contains("incompatible")
+        );
     }
 
     #[test]
@@ -448,9 +456,11 @@ mod tests {
         validate(&source).unwrap();
 
         source.site.enhanced_choice_limit = TransfigurationChoiceLimit::Count(0);
-        assert!(validate(&source)
-            .unwrap_err()
-            .to_string()
-            .contains("positive"));
+        assert!(
+            validate(&source)
+                .unwrap_err()
+                .to_string()
+                .contains("positive")
+        );
     }
 }

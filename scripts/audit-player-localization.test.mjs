@@ -9,7 +9,9 @@ describe("player localization audit", () => {
     expect(classify("src/runtime/example.ts", "throw new Error(\"diagnostic\")")).toBe("machine-or-diagnostic-value");
     expect(classify("src/editor/example.tsx", "label=\"Developer\"")).toBe("excluded-developer-surface");
     expect(classify("src/battle/ai/example.ts", "label: \"AI\"")).toBe("excluded-developer-surface");
+    expect(classify("src/testing/example.ts", "description: \"Fixture\"")).toBe("excluded-developer-surface");
     expect(classify("src/cumulus/screens/TutorialEditorRail.tsx", "label: \"Edit\"")).toBe("excluded-developer-surface");
+    expect(classify("src/screens/cumulus_adapters/journey-debug-view-model.ts", "label: \"None\"")).toBe("excluded-developer-surface");
     expect(classify("src/battle/integration/example.ts", "subtitle: \"Projection\"")).toBe("machine-or-diagnostic-value");
   });
 

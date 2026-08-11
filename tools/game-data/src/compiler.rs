@@ -13,8 +13,8 @@ use crate::models::{
     affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft,
     dream_avatar_tide_pools, dream_avatars, dream_guides, dreamscapes, dreamsign_profiles,
     dreamsign_signatures, dreamsigns, dreamwell, economy, exploration, figments, gamble, glossary,
-    internal_card_metadata, opponents, resonance, reward_selection, sites, tides,
-    transfiguration, tutorial, tutorial_journey_pool,
+    internal_card_metadata, opponents, resonance, reward_selection, sites, tides, transfiguration,
+    tutorial, tutorial_journey_pool,
 };
 
 pub const BUILD_VERSION: &str = env!("GAME_DATA_BUILD_VERSION");

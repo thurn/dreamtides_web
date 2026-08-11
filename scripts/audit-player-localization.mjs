@@ -26,12 +26,14 @@ const EXCLUDED_PREFIXES = [
   "src/cumulus/screens/battle-overlays/BattleFigmentCreatorOverlay.tsx",
   "src/cumulus/screens/battle-overlays/BattleLogOverlay.tsx",
   "src/screens/cumulus_adapters/card-source-view-model.ts",
+  "src/screens/cumulus_adapters/journey-debug-view-model.ts",
 ];
 
 const EXCLUDED_CONTAINERS = [
   "src/battle/ai/",
   "src/battle/debug/",
   "src/journey_v2/testing/",
+  "src/testing/",
   "src/state/use-tutorial-editor.ts",
   "src/state/use-tutorial-presentation-logging.ts",
 ];

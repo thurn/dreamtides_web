@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 use std::fmt;
 use std::str::FromStr;
 
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 use indexmap::IndexMap;
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
@@ -895,10 +895,12 @@ mod tests {
     fn rejects_invalid_collections_and_preset_references() {
         let mut source = dreamwell_rules();
         source.recurring_orders.push(8);
-        assert!(dreamwell::validate_rules(&source)
-            .unwrap_err()
-            .to_string()
-            .contains("appears in opening and recurring"));
+        assert!(
+            dreamwell::validate_rules(&source)
+                .unwrap_err()
+                .to_string()
+                .contains("appears in opening and recurring")
+        );
 
         let mut source = internal_ai();
         source.journey_ai_deck[1].card_id = source.journey_ai_deck[0].card_id;
@@ -920,10 +922,12 @@ mod tests {
         validate_card_references(&source, &known).unwrap();
 
         let incomplete = BTreeSet::from([CARD_ONE.parse().unwrap()]);
-        assert!(validate_card_references(&source, &incomplete)
-            .unwrap_err()
-            .to_string()
-            .contains(CARD_TWO));
+        assert!(
+            validate_card_references(&source, &incomplete)
+                .unwrap_err()
+                .to_string()
+                .contains(CARD_TWO)
+        );
     }
 
     fn assert_internal_ai_error_contains(source: InternalAiCatalog, expected: &str) {

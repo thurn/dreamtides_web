@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "exploration_sha256": "823dd780336bb661cbc4ccf2a597bb94fbcb967a84d5772eec612ae8a19dd680",
+  "exploration_sha256": "0d2ba371c1d2d9938020f1b98dcee5f7eb927989100dcd953821cf60b891c65e",
   "assignments": [
     {"action_id":"6662e7ce-9ea7-49bf-85fe-4bbe6728f282","card_id":"161482b6-af07-4d9e-822d-8c738672beb9","template_id":11},
     {"action_id":"3db8188a-e2f8-4b86-a6fa-a19bed59e0b1","card_id":"161482b6-af07-4d9e-822d-8c738672beb9","template_id":17},
