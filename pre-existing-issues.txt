@@ -7,3 +7,5 @@ The Exploration template-assignment ledger initially contained a stale `explorat
 The Exploration provider's bulk-target eligibility test attempted to override Transfiguration eligibility on presentation data, but runtime eligibility is defined by the closed typed mechanic. The mechanic-coverage work repaired the fixture to use the existing Hastened mechanic whose production eligibility excludes fast Events.
 
 `npm run audit:player-localization` exits nonzero on the repository's existing unclassified player-copy baseline, including journey debug and test fixtures. The Wave 0 Exploration purge message is localized and does not appear among the audit findings.
+
+`npm run review` fails during the existing TypeScript test typecheck because `src/exploration/compound-action-plan.test.ts`, `multi-card-replacement-plan.test.ts`, `multi-card-transfiguration-plan.test.ts`, and `starter-card-transfiguration-plan.test.ts` import the absent `src/testing/journey-data-fixture` module and provide a `journeyData` property which is not part of `JourneyContent`. These test files and errors predate the Trox migration plan and are outside this documentation task.
