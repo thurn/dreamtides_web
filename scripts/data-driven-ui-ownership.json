@@ -13,13 +13,7 @@
       "currentSources": [
         {
           "path": "data/gamble.ron",
-          "fields": [
-            "rules_version",
-            "selection",
-            "economy",
-            "presentation",
-            "rules"
-          ]
+          "fields": ["selection", "economy", "rules"]
         }
       ],
       "consumers": [
@@ -168,6 +162,11 @@
       "rationale": "The generic glyph vocabulary remains closed in TypeScript."
     },
     {
+      "id": "src/data/exploration.ts#TRANSFIGURATION_SET#transfiguration",
+      "classification": "closed-identity",
+      "rationale": "Exploration loader validation retains the closed Transfiguration form identity vocabulary."
+    },
+    {
       "id": "src/data/gamble-data.ts#GAME_RULE_KIND#gamble",
       "classification": "closed-behavior-registry",
       "rationale": "The loader validates each stable game identity against its generated rules variant."
@@ -199,7 +198,24 @@
     }
   ],
   "legacyFluentMessages": {
-    "gamble": [],
+    "gamble": [
+      "gamble-blackjack-accessibility-description",
+      "gamble-blackjack-rules",
+      "gamble-blackjack-title",
+      "gamble-four-suit-accessibility-description",
+      "gamble-four-suit-rules",
+      "gamble-four-suit-title",
+      "gamble-gravok-accessibility-description",
+      "gamble-gravok-jack-gate",
+      "gamble-gravok-nine-gate",
+      "gamble-gravok-rules",
+      "gamble-gravok-six-gate",
+      "gamble-gravok-title",
+      "gamble-gravok-won-outcome",
+      "gamble-starway-accessibility-description",
+      "gamble-starway-rules",
+      "gamble-starway-title"
+    ],
     "transfiguration": [],
     "dreamwellPrompts": [
       "battle-prompt-discover-character",
