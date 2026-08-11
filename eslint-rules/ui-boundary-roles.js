@@ -21,6 +21,7 @@ export const OUTER_UI_ROLES = Object.freeze({
 const fileRoles = {
   "src/App.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/main.tsx": OUTER_UI_ROLES.APP_SHELL,
+  "src/runtime/localization/context.tsx": OUTER_UI_ROLES.EMERGENCY_FALLBACK,
   // The entry sheet owns only the app-wide reset, cursor affordance, and
   // globally inherited legacy color bridge; product presentation belongs to
   // Cumulus closures.

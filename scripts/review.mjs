@@ -238,6 +238,9 @@ function commandFor(step, extraArgs = []) {
   if (step === "clean-game-data") {
     return [process.execPath, [join(root, "scripts", "game-data-clean-checkout-test.mjs")]];
   }
+  if (step === "trox-generated-check") {
+    return [process.execPath, [join(root, "scripts", "trox-generated-check.mjs")]];
+  }
   if (step === "game-data-compile") {
     return [process.execPath, [join(root, "scripts", "game-data-pipeline.mjs"), "compile"]];
   }
@@ -288,6 +291,7 @@ function executionPlan() {
       { step: "ron-format-check", args: [] },
       { step: "rust-test", args: [] },
       { step: "clean-game-data", args: [] },
+      { step: "trox-generated-check", args: [] },
       { step: "lint-localization", args: [] },
       { step: "lint", args: [] },
       { step: "typecheck", args: [] },

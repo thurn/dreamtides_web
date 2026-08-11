@@ -1,0 +1,13 @@
+(
+  locale: "es",
+
+  direction: Ltr,
+
+  isolation: Isolate,
+
+  fallbacks: ["en-US"],
+
+  facets: {},
+
+  term_facets: {},
+)

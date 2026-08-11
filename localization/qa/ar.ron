@@ -1,0 +1,13 @@
+(
+  locale: "ar",
+
+  direction: Rtl,
+
+  isolation: Isolate,
+
+  fallbacks: ["en-US"],
+
+  facets: {},
+
+  term_facets: {},
+)

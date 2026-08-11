@@ -35,7 +35,22 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24.16.0
+      - name: Check out pinned Trox CLI
+        run: |
+          git clone --no-checkout https://github.com/thurn/trox.git "$RUNNER_TEMP/trox"
+          git -C "$RUNNER_TEMP/trox" checkout "$(cat .trox-revision)"
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: ${{ runner.temp }}/trox
+          shared-key: trox-cli
       - run: npm ci
+      - run: npm run trox:check -- --deny warnings
+        env:
+          TROX_ROOT: ${{ runner.temp }}/trox
+      - run: npm run trox:check-runtime
+        env:
+          TROX_ROOT: ${{ runner.temp }}/trox
       - run: npm run review:full
         env:
           JOURNEY_TEST_WORKERS: "4"
+          TROX_ROOT: ${{ runner.temp }}/trox

@@ -23,7 +23,7 @@ Object.defineProperty(window, "matchMedia", {
 });
 
 const card = { id: asCardId("00000000-0000-4000-8000-000000000001"), cardNumber: 1, name: asCardName("Pool Card"), cardType: "Character" as const, subtype: "Fixture", isStarter: false, energyCost: 1, spark: 1, isFast: false, renderedText: "Fixture rules", imageNumber: 1, artOwned: true };
-const view: PoolViewerView = { title: "pool", frame: "fullScreen", source: "run", sourceOptions: ["run", "catalog"], filters: { query: "", sort: "name", direction: "asc", type: "all", subtype: "", cost: "all" }, cards: [{ entryId: "run:pool-card", model: { cardId: card.id, displaySnapshot: card } }], totalCount: 1, visibleCount: 1, sortOptions: ["name"], subtypeOptions: [{ value: "Fixture", label: "Fixture" }], disclosures: [{ id: "algorithm", variant: "fixture" }], error: null };
+const view: PoolViewerView = { title: "pool", frame: "fullScreen", source: "run", sourceOptions: ["run", "catalog"], filters: { query: "", sort: "name", direction: "asc", type: "all", subtype: "", cost: "all" }, cards: [{ entryId: "run:pool-card", model: { cardId: card.id, displaySnapshot: card } }], totalCount: 1, visibleCount: 1, sortOptions: ["name"], subtypeOptions: [{ value: "Fixture", label: "Fixture" }], disclosures: [{ id: "algorithm", variant: "fixture" }] };
 
 describe("PoolViewerScreen", () => {
   it("uses Cumulus controls and reports stable source/filter/card ids", () => {

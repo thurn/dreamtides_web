@@ -1,0 +1,51 @@
+(
+  source_locale: "en-US",
+
+  terms: "localization/terms.ron",
+
+  source_bundle: "src/generated/localization/en-US.trox.json",
+
+  source_report: "localization/reports/en-US.csv",
+
+  sources: [
+    (
+      language: TypeScript,
+      include: ["src/**/*.ts", "src/**/*.tsx"],
+      exclude: [
+        "src/**/*.test.ts",
+        "src/**/*.test.tsx",
+        "src/**/*.d.ts",
+        "src/generated/**",
+        "src/editor/**",
+        "src/debug/**",
+        "src/battle/debug/**",
+        "src/cumulus/docs/**",
+      ],
+    ),
+  ],
+
+  locales: {
+    "ar": (
+      profile: "localization/qa/ar.ron",
+      csv: "localization/qa/ar.csv",
+      bundle: "src/generated/localization/ar.trox.json",
+    ),
+    "es": (
+      profile: "localization/qa/es.ron",
+      csv: "localization/qa/es.csv",
+      bundle: "src/generated/localization/es.trox.json",
+    ),
+    "ja": (
+      profile: "localization/qa/ja.ron",
+      csv: "localization/qa/ja.csv",
+      bundle: "src/generated/localization/ja.trox.json",
+    ),
+    "ru": (
+      profile: "localization/qa/ru.ron",
+      csv: "localization/qa/ru.csv",
+      bundle: "src/generated/localization/ru.trox.json",
+    ),
+  },
+
+  max_expanded_rows_per_entry: 256,
+)

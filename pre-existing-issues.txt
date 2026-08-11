@@ -1,0 +1,12 @@
+Pool Viewer Energy-cost filter values "0" through "4" are strings, while the
+current Fluent catalog declares numeric selector keys. Each exact-digit option
+therefore renders the fallback "All costs" label. The Trox migration preserves
+that source-English output; correcting the labels requires a separately
+authorized copy/behavior change.
+
+`npm run review:full` has three pre-existing failures in
+`scripts/data-driven-ui-ownership.test.ts`. The ownership inventory expects a
+`rules_version` field absent from `data/gamble.ron`, omits the production
+`TRANSFIGURATION_SET` table in `src/data/exploration.ts`, and declares no Gamble
+Fluent messages while 16 Gamble IDs remain in the en-US catalog. None of those
+source, inventory, or test paths differs from the pinned base commit.

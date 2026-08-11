@@ -3,7 +3,7 @@ import type { CardData } from "../../types/cards";
 import type { ResolvedDreamAvatarPackage, Tides4ProvenanceSummary } from "../../types/content";
 import type { DraftState } from "../../types/draft";
 import type { CardChoiceGridCardView as CardGalleryCardView } from "../../cumulus/components/card/CardChoiceGrid";
-import type { PoolViewerCostFilter, PoolViewerDisclosureView, PoolViewerFilterView, PoolViewerSourceId, PoolViewerTitleKind, PoolViewerView } from "../../cumulus/screens/PoolViewerScreen";
+import type { PoolViewerCostFilter, PoolViewerDisclosureView, PoolViewerFilterView, PoolViewerSortId, PoolViewerSourceId, PoolViewerTitleKind, PoolViewerView } from "../../cumulus/screens/PoolViewerScreen";
 
 export const DEFAULT_POOL_VIEWER_FILTERS: PoolViewerFilterView = {
   query: "",
@@ -68,7 +68,6 @@ export function buildPoolViewerView(input: BuildPoolViewerViewInput): PoolViewer
     sortOptions: ["name", "cardNumber", "cost", "type", "subtype", "spark"],
     subtypeOptions: subtypeOptions(entries),
     disclosures,
-    error: null,
   };
 }
 
@@ -113,7 +112,7 @@ function filterEntries(entries: readonly PoolEntry[], filters: PoolViewerFilterV
 }
 
 function matchesCost(cost: number | null, filter: PoolViewerCostFilter): boolean { return filter === "all" || (filter === "x" ? cost === null : filter === "5plus" ? cost !== null && cost >= 5 : cost === Number(filter)); }
-function compareEntry(left: CardData, right: CardData, sort: string, direction: PoolViewerFilterView["direction"]): number {
+function compareEntry(left: CardData, right: CardData, sort: PoolViewerSortId, direction: PoolViewerFilterView["direction"]): number {
   const value = (card: CardData): string | number => sort === "cardNumber" ? card.cardNumber : sort === "cost" ? card.energyCost ?? Number.POSITIVE_INFINITY : sort === "type" ? card.cardType : sort === "subtype" ? card.subtype : sort === "spark" ? card.spark ?? Number.POSITIVE_INFINITY : card.name;
   const a = value(left); const b = value(right); const result = typeof a === "number" && typeof b === "number" ? a - b : String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" });
   return direction === "asc" ? result : -result;
