@@ -1,5 +1,4 @@
 import { readdirSync, readFileSync } from "node:fs";
-import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const SCREENS_DIR = new URL("../src/cumulus/screens/", import.meta.url);
@@ -9,7 +8,7 @@ describe("Cumulus product-screen chrome ownership", () => {
     const offenders = readdirSync(SCREENS_DIR)
       .filter((name) => name.endsWith(".tsx") && !name.endsWith(".test.tsx"))
       .flatMap((name) => {
-        const source = readFileSync(join(SCREENS_DIR.pathname, name), "utf8");
+        const source = readFileSync(new URL(name, SCREENS_DIR), "utf8");
         return source.includes("<JourneyStatusBar") ||
           source.includes("<DreamscapeJourneyMenu")
           ? [name]
