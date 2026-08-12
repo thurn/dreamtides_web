@@ -1,11 +1,25 @@
 // @vitest-environment jsdom
 
+import { localizationTodo } from "@trox/runtime";
 import { act } from "react";
-import { createRoot } from "react-dom/client";
+import { createRoot as createReactRoot } from "react-dom/client";
+import { isValidElement, type ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { GLYPHS } from "../../primitives/glyph";
 import { CumulusRoot } from "../../CumulusRoot";
 import { GlassPanel } from "./GlassPanel";
+
+function createRoot(container: Element) {
+  const root = createReactRoot(container);
+  return {
+    render: (node: ReactNode) => root.render(
+      isValidElement(node) && node.type === CumulusRoot
+        ? node
+        : <CumulusRoot>{node}</CumulusRoot>,
+    ),
+    unmount: () => root.unmount(),
+  };
+}
 
 beforeEach(() => {
   (
@@ -36,8 +50,8 @@ describe("GlassPanel", () => {
       root.render(
         <CumulusRoot>
           <GlassPanel
-            eyebrow="Vision I"
-            title="Transfigure Your Starters"
+            eyebrow={localizationTodo("Vision I")}
+            title={localizationTodo("Transfigure Your Starters")}
             structuredSubtitle={[
               { kind: "text", text: "Transfigure " },
               { kind: "entity", text: "A Thread Rewoven" },
@@ -47,7 +61,7 @@ describe("GlassPanel", () => {
               button: {
                 glyph: GLYPHS.close,
                 overlayGlyph: GLYPHS.check,
-                label: "Close",
+                label: localizationTodo("Close"),
                 onPress: onClose,
                 ariaExpanded: true,
                 ariaControls: "controlled-panel",
@@ -109,7 +123,7 @@ describe("GlassPanel", () => {
     act(() => {
       root.render(
         <GlassPanel
-          title="Cards"
+          title={localizationTodo("Cards")}
           frame="fullBleed"
           radius="popover"
           tint="popover"

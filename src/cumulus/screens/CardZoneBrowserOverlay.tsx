@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import {
   useEffect,
   useLayoutEffect,
@@ -148,7 +149,7 @@ export function CardZoneBrowserOverlay({
   );
   const sortOptions = SORT_OPTIONS.map((option) => ({
     value: option.value,
-    label:
+    label: localizationTodo(
       option.value === "current"
         ? t("deck-sort-acquired")
         : option.value === "cost"
@@ -156,15 +157,17 @@ export function CardZoneBrowserOverlay({
           : option.value === "spark"
             ? t("deck-sort-spark")
             : t("deck-sort-name"),
+    ),
   }));
   const filterOptions = FILTER_OPTIONS.map((option) => ({
     value: option.value,
-    label:
+    label: localizationTodo(
       option.value === "all"
         ? t("deck-filter-all")
         : option.value === "character"
           ? t("deck-filter-characters")
           : t("deck-filter-events"),
+    ),
   }));
 
   useEffect(() => {
@@ -224,15 +227,15 @@ export function CardZoneBrowserOverlay({
         options: [
           {
             value: "viewer",
-            label: t("battle-zone-browser-viewer-option", {
+            label: localizationTodo(t("battle-zone-browser-viewer-option", {
               count: ownerSwitch.viewerCount,
-            }),
+            })),
           },
           {
             value: "opponent",
-            label: t("battle-zone-browser-opponent-option", {
+            label: localizationTodo(t("battle-zone-browser-opponent-option", {
               count: ownerSwitch.opponentCount,
-            }),
+            })),
           },
         ],
         value: ownerSwitch.value,
@@ -243,7 +246,7 @@ export function CardZoneBrowserOverlay({
     ? {
         segmented,
         sort: {
-          ariaLabel: t("battle-zone-browser-sort-accessible-name"),
+          ariaLabel: localizationTodo(t("battle-zone-browser-sort-accessible-name")),
           options: sortOptions,
           value: sort,
           onChange: (value) => setSort(value as CardZoneBrowserSort),
@@ -252,21 +255,21 @@ export function CardZoneBrowserOverlay({
     : {
         segmented,
         search: {
-          label: t("battle-zone-browser-search-label"),
+          label: localizationTodo(t("battle-zone-browser-search-label")),
           value: query,
           onChange: setQuery,
-          placeholder: t("battle-zone-browser-search-placeholder"),
+          placeholder: localizationTodo(t("battle-zone-browser-search-placeholder")),
           testId: "card-zone-browser-search",
           inputRef: searchInputRef,
         },
         sort: {
-          ariaLabel: t("battle-zone-browser-sort-accessible-name"),
+          ariaLabel: localizationTodo(t("battle-zone-browser-sort-accessible-name")),
           options: sortOptions,
           value: sort,
           onChange: (value) => setSort(value as CardZoneBrowserSort),
         },
         filter: {
-          ariaLabel: t("battle-zone-browser-filter-accessible-name"),
+          ariaLabel: localizationTodo(t("battle-zone-browser-filter-accessible-name")),
           options: filterOptions,
           value: filter,
           onChange: (value) => setFilter(value as CardZoneBrowserFilter),
@@ -323,22 +326,22 @@ export function CardZoneBrowserOverlay({
         }}
       >
         <CardBrowserPanel
-          title={title}
-          subtitle={subtitle}
+          title={localizationTodo(title)}
+          subtitle={localizationTodo(subtitle)}
           rightAccessory={{
             kind: "iconButton",
             button: {
               glyph: GLYPHS.close,
-              label: t("battle-zone-browser-close", { zone }),
+              label: localizationTodo(t("battle-zone-browser-close", { zone })),
               onPress: onClose,
             },
           }}
           toolbar={toolbar}
           cards={galleryCards}
           emptyLabel={
-            cards.length === 0
+            localizationTodo(cards.length === 0
               ? t("battle-zone-browser-empty")
-              : t("battle-zone-browser-no-filter-matches")
+              : t("battle-zone-browser-no-filter-matches"))
           }
           presentation="overlay"
           onCardDragStart={onCardDragStart}

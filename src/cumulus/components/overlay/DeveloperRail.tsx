@@ -1,3 +1,5 @@
+import { localizationTodo } from "@trox/runtime";
+import type { LocalizedString } from "@trox/runtime";
 import type { ReactElement, ReactNode } from "react";
 import { GLYPHS } from "../../primitives/glyph";
 import type { Glyph } from "../../primitives/glyph";
@@ -8,17 +10,19 @@ export interface DeveloperRailProps {
   /** DOM id targeted by the rail disclosure trigger. */
   readonly id: string;
   /** Developer tool name shown in the rail header. */
-  readonly title: string;
+  readonly title: LocalizedString;
   /** Optional concise tool context. */
-  readonly subtitle?: string;
+  readonly subtitle?: LocalizedString;
   /** Physical screen edge occupied by the docked rail. */
   readonly side: "left" | "right";
   /** Accessible close action. */
   readonly onClose: () => void;
+  /** Accessible name for the close action. */
+  readonly closeLabel: LocalizedString;
   /** Optional tool action placed before the close disc. */
   readonly headerAction?: {
     readonly glyph: Glyph;
-    readonly label: string;
+    readonly label: LocalizedString;
     readonly onPress: () => void;
     readonly disabled?: boolean;
     readonly testId?: string;
@@ -38,6 +42,7 @@ export function DeveloperRail({
   subtitle,
   side,
   onClose,
+  closeLabel,
   headerAction,
   children,
   footer,
@@ -57,7 +62,7 @@ export function DeveloperRail({
     >
       <GlassPanel
         frame="edgeRail"
-        eyebrow="Developer Tools"
+        eyebrow={localizationTodo("Developer Tools")}
         title={title}
         subtitle={subtitle}
         headerSpacing="compact"
@@ -67,7 +72,7 @@ export function DeveloperRail({
                 kind: "iconButton",
                 button: {
                   glyph: GLYPHS.close,
-                  label: `Close ${title.toLowerCase()}`,
+                  label: closeLabel,
                   onPress: onClose,
                   size: "sm",
                 },
@@ -78,7 +83,7 @@ export function DeveloperRail({
                   { ...headerAction, size: "sm" },
                   {
                     glyph: GLYPHS.close,
-                    label: `Close ${title.toLowerCase()}`,
+                    label: closeLabel,
                     onPress: onClose,
                     size: "sm",
                   },

@@ -1,11 +1,13 @@
 // @vitest-environment jsdom
 
+import { localizationTodo } from "@trox/runtime";
 import { act } from "react";
 import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { IconButton } from "./IconButton";
 import { GLYPHS } from "../../primitives/glyph";
+import { CumulusRoot } from "../../CumulusRoot";
 
 function mount(element: ReactElement): {
   container: HTMLDivElement;
@@ -15,7 +17,7 @@ function mount(element: ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(element);
+    root.render(<CumulusRoot>{element}</CumulusRoot>);
   });
   return { container, root };
 }
@@ -48,7 +50,7 @@ afterEach(() => {
 describe("IconButton", () => {
   it("renders an accessible button labelled by `label`, carrying the glyph class", () => {
     const { container, root } = mount(
-      <IconButton glyph={GLYPHS.close} label="Close deck" onPress={() => {}} />,
+      <IconButton glyph={GLYPHS.close} label={localizationTodo("Close deck")} onPress={() => {}} />,
     );
 
     const button = container.querySelector("button");
@@ -69,7 +71,7 @@ describe("IconButton", () => {
       <IconButton
         glyph={GLYPHS.refresh}
         overlayGlyph={GLYPHS.bug}
-        label="Reroll offers"
+        label={localizationTodo("Reroll offers")}
         onPress={() => {}}
       />,
     );
@@ -88,7 +90,7 @@ describe("IconButton", () => {
       <IconButton
         glyph={GLYPHS.close}
         size="sm"
-        label="Close"
+        label={localizationTodo("Close")}
         onPress={() => {}}
       />,
     );
@@ -109,7 +111,7 @@ describe("IconButton", () => {
       <IconButton
         glyph={GLYPHS.close}
         size="md"
-        label="Close"
+        label={localizationTodo("Close")}
         onPress={() => {}}
       />,
     );
@@ -127,7 +129,7 @@ describe("IconButton", () => {
 
   it("defaults to the `md` size", () => {
     const { container, root } = mount(
-      <IconButton glyph={GLYPHS.close} label="Close" onPress={() => {}} />,
+      <IconButton glyph={GLYPHS.close} label={localizationTodo("Close")} onPress={() => {}} />,
     );
 
     const style =
@@ -144,7 +146,7 @@ describe("IconButton", () => {
     const { container, root } = mount(
       <IconButton
         glyph={GLYPHS.close}
-        label="Close"
+        label={localizationTodo("Close")}
         placement="onGlass"
         onPress={() => {}}
       />,
@@ -163,7 +165,7 @@ describe("IconButton", () => {
   it("fires `onPress` on click", () => {
     const onPress = vi.fn();
     const { container, root } = mount(
-      <IconButton glyph={GLYPHS.close} label="Close" onPress={onPress} />,
+      <IconButton glyph={GLYPHS.close} label={localizationTodo("Close")} onPress={onPress} />,
     );
 
     act(() => {
@@ -181,7 +183,7 @@ describe("IconButton", () => {
     const { container, root } = mount(
       <IconButton
         glyph={GLYPHS.close}
-        label="Close"
+        label={localizationTodo("Close")}
         onPress={onPress}
         disabled
       />,

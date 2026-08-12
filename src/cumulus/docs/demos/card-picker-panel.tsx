@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { useEffect, useState } from "react";
 import { loadCardDatabase } from "../../../data/card-database";
 import type { CardData } from "../../../types/cards";
@@ -49,8 +50,8 @@ function CardPickerPanelDemo() {
   return (
     <div style={{ width: "min(940px, 100%)", maxHeight: 700 }}>
       <CardPickerPanel
-        title="Purge Cards"
-        subtitle="Choose a card to remove from your deck"
+        title={localizationTodo("Purge Cards")}
+        subtitle={localizationTodo("Choose a card to remove from your deck")}
         cards={cards}
         rightAccessory={{
           kind: "glassButton",

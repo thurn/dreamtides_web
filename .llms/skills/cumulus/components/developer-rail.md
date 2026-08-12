@@ -19,11 +19,12 @@ Place it in a rail track that defines its position and responsive takeover behav
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `id` | `string` | yes | — | DOM id targeted by the rail disclosure trigger. |
-| `title` | `string` | yes | — | Developer tool name shown in the rail header. |
-| `subtitle` | `string` | no | — | Optional concise tool context. |
+| `title` | `LocalizedString` | yes | — | Developer tool name shown in the rail header. |
+| `subtitle` | `LocalizedString` | no | — | Optional concise tool context. |
 | `side` | `"left" \| "right"` | yes | — | Physical screen edge occupied by the docked rail. |
 | `onClose` | `() => void` | yes | — | Accessible close action. |
-| `headerAction` | `{ readonly glyph: Glyph; readonly label: string; readonly onPress: () => void; readonly disabled?: boolean \| undefined; readonly testId?: string \| undefined; }` | no | — | Optional tool action placed before the close disc. |
+| `closeLabel` | `LocalizedString` | yes | — | Accessible name for the close action. |
+| `headerAction` | `{ readonly glyph: Glyph; readonly label: LocalizedString; readonly onPress: () => void; readonly disabled?: boolean \| undefined; readonly testId?: string \| undefined; }` | no | — | Optional tool action placed before the close disc. |
 | `children` | `ReactNode` | yes | — | Scrollable tool content. |
 | `footer` | `ReactNode` | no | — | Optional fixed rail footer. |
 | `testId` | `string` | no | — | Stable test id for product QA. |

@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import {
   useCallback,
   useEffect,
@@ -379,8 +380,8 @@ export function TutorialBattleScreen({
           }}
         >
           <GlassPanel
-            title={t("battle-tutorial-target-selection-title")}
-            subtitle={t("battle-tutorial-target-selection-instruction")}
+            title={localizationTodo(t("battle-tutorial-target-selection-title"))}
+            subtitle={localizationTodo(t("battle-tutorial-target-selection-instruction"))}
             headerSpacing="compact"
             headerDivider={false}
             radius="control"

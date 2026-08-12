@@ -13,6 +13,7 @@ import {
   type ReactElement,
   type Ref,
 } from "react";
+import { localizationTodo, type LocalizedString } from "@trox/runtime";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
 import type { Glyph } from "../../primitives/glyph";
 import { GLYPHS } from "../../primitives/glyph";
@@ -37,6 +38,7 @@ import {
 } from "../overlay/GlassPanel";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import { useMessages } from "../../hooks/use-messages";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import {
   CardChoiceGrid,
   type CardChoiceGridActionView,
@@ -70,14 +72,14 @@ export interface CardPickerFooterAction
 
 /** Controlled search field shown in the gallery's browser toolbar. */
 export interface CardBrowserSearchControl {
-  /** Visible label for the search field. */
-  label: string;
+  /** Localized visible label for the search field. */
+  label: LocalizedString;
   /** Current search text. */
   value: string;
   /** Reports search edits. */
   onChange: (value: string) => void;
   /** Optional empty-field hint. */
-  placeholder?: string;
+  placeholder?: LocalizedString;
   /** Optional stable test id for the native input. */
   testId?: string;
   /** Optional ref used by an overlay to focus search on open. */
@@ -86,8 +88,8 @@ export interface CardBrowserSearchControl {
 
 /** Controlled dropdown shown in the gallery's browser toolbar. */
 export interface CardBrowserSelectControl {
-  /** Accessible name for the dropdown trigger. */
-  ariaLabel: string;
+  /** Localized accessible name for the dropdown trigger. */
+  ariaLabel: LocalizedString;
   /** Current option value. */
   value: string;
   /** Dropdown choices. */
@@ -99,7 +101,7 @@ export interface CardBrowserSelectControl {
 /** Controlled mode switch shown across the top of a browser gallery. */
 export interface CardBrowserSegmentedControl {
   /** Segments represented by stable values and visible labels. */
-  options: readonly (string | SegmentedOption)[];
+  options: readonly SegmentedOption[];
   /** Currently selected segment value. */
   value: string;
   /** Reports segment changes. */
@@ -129,15 +131,15 @@ export type CardPickerPresentation = "embedded" | "overlay";
 
 interface CardPanelBaseProps {
   /** Header title, rendered as an `<h2>`. */
-  title: string;
+  title: LocalizedString;
   /** Optional intro line under the title. */
-  subtitle?: string;
+  subtitle?: LocalizedString;
   /** Optional trailing header action. */
   rightAccessory?: CardPanelAccessory;
   /** Resolved cards rendered in order. */
   cards: readonly CardGalleryCardView[];
   /** Empty-state copy shown when `cards` is empty. */
-  emptyLabel?: string;
+  emptyLabel?: LocalizedString;
   /** Test id for the panel root. */
   testId?: string;
 }
@@ -515,7 +517,7 @@ function CardGallerySurface({
   onEndActionPress,
 }: CardGallerySurfaceProps): ReactElement {
   const t = useMessages();
-  const resolvedEmptyLabel = emptyLabel ?? t("card-gallery-empty-default");
+  const resolve = useLocalizer();
   const pendingCardTapsRef = useRef(new Map<string, number>());
   const cancelPendingCardTap = (entryId: string): void => {
     const timer = pendingCardTapsRef.current.get(entryId);
@@ -772,7 +774,7 @@ function CardGallerySurface({
                   color: token("--text-on-glass"),
                 }}
               >
-                {resolvedEmptyLabel}
+                {resolve(emptyLabel ?? localizationTodo(t("card-gallery-empty-default")))}
               </p>
             </div>
           ) : (

@@ -18,7 +18,7 @@ The shared liquid-glass track and neutral frosted selection pair cleanly with ad
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `options` | `(string \| SegmentedOption)[]` | yes | — | Segments to render: plain strings (value === label), or `{ value, label }` pairs. |
+| `options` | `readonly RenderedSegmentedOption[]` | yes | — | Localized labels or language-neutral symbols represented by stable values. |
 | `value` | `string` | yes | — | The currently-selected segment's value. |
 | `onChange` | `((value: string) => void)` | no | — | Fires with the newly-selected segment's value when the user switches. |
 | `size` | `SegmentedControlSize` = `"sm" \| "md"` | no | `md` | Height/scale. Default 'md'. |

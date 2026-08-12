@@ -17,8 +17,17 @@ description: Use when adding, editing, reviewing, or migrating player-facing Dre
 Trox extracts complete English messages from Rust, TypeScript/TSX, and static
 RON, expands target-locale translation rows, and builds deterministic source
 and target bundles. Application code carries immutable, locale-independent
-`LocalizedString` values until an explicit `Localizer` resolves them at the
-presentation boundary.
+`LocalizedString` values everywhere code-authored player-facing text travels.
+An explicit `Localizer` resolves them only when the resulting string is passed
+directly to the final platform primitive which displays or announces it.
+
+> [!WARNING]
+> A React component, screen, adapter, controller, view model, option builder, or
+> accessibility model is not a localization boundary. Do not call
+> `resolve(tx(...))` to satisfy a string-typed component prop. Change that prop
+> and every intermediate text-bearing contract to `LocalizedString`, then
+> resolve inside the leaf which assigns the intrinsic DOM or platform text
+> primitive.
 
 Treat every placeholder as a semantic API. Trox checks syntax and structure;
 it cannot prove that the input code supplies the value the message actually
@@ -299,15 +308,73 @@ invent meaning keys merely to retain call-site-specific descriptions or silence
 `trox.multiple-descriptions`; first determine whether translators actually need
 different target text.
 
-## Integrate at the presentation boundary
+## Keep `LocalizedString` to the final platform primitive
 
-Keep `LocalizedString` values unresolved through view models and events.
-Serialize them with Trox's canonical wire format, and decode imported, saved,
+Use `LocalizedString` for code-authored player-facing copy at every in-memory
+layer: helpers, view models, adapters, controllers, screen models, component
+props, nested option/menu/accessory/dialog models, overlays, events, accessible
+names and descriptions, placeholders, tooltips, errors, notifications, and
+announcements. Label and message helpers return `LocalizedString`, never a
+resolved `string`. Composite components forward localized values unchanged.
+
+Every production component prop representing code-authored player-facing text
+must accept `LocalizedString`. This includes static copy and nested fields such
+as `options[].label`, `rightAccessory.button.label`, dialog titles, empty-state
+labels, placeholders, alt text, and `aria-*` content. A string-typed child API
+is a contract defect to migrate, not permission for the caller to resolve
+early. Do not add `string | LocalizedString`, a generic `TextLike`, implicit
+coercion, or a compatibility formatter. Tests, fixtures, and documentation
+demos adapt to the production localized contract rather than widening it.
+
+During an incremental migration, import Trox's shipped
+`localizationTodo(sourceText): LocalizedString` directly from `@trox/runtime`
+only at the semantic source of code-authored player copy which has not received
+its proper `tx`/`txa` authoring pass. It is explicit, searchable localization
+debt: preserve the source text, keep the returned value unresolved through
+every component layer, report every production call in localization audits,
+and drive the call count to zero. Do not alias or wrap it, and do not use it
+inside a component to hide a string-typed prop. Projects must pin and vendor a
+Trox revision which exports the helper; never create an application-owned
+version.
+
+Never use `localizationTodo` for canonical RON-authored content, user-authored
+text, stable IDs, URLs, or technical diagnostics. Those are deliberately raw
+semantic values and retain separately named raw contracts.
+
+Resolve only in the same expression which hands the result to the final
+platform primitive. In browser TypeScript this means an intrinsic DOM text node
+or attribute, a browser API such as `document.title` or `window.prompt`, or a
+browser-owned canvas/accessibility text sink. A component which renders both
+intrinsic DOM and child components may resolve only the values assigned to its
+own intrinsic elements; values passed to children remain `LocalizedString`.
+Equivalent native or Rust UI code resolves only when assigning the final native
+text property.
+
+Never store resolved player-facing text in a local variable, object field,
+option model, view model, event, callback payload, cache, or return value. Never
+resolve merely because code runs in React or in a file named `screen`,
+`component`, or `presentation`. Never return resolved text from a helper or
+pass it to another component. If a third-party widget only accepts strings,
+isolate it behind a leaf adapter and resolve at the exact call which hands text
+to that final renderer.
+
+Canonical RON-authored content, user-authored text, stable IDs, URLs, technical
+diagnostics, and other deliberately non-localized data remain raw semantic
+values. Keep them in distinct, explicitly named contracts so their `string`
+paths cannot become an escape hatch for code-authored UI copy. When a reusable
+leaf must accept both localized chrome and raw authored content, model those as
+separate props or explicit discriminated ownership cases, never a bare
+`string | LocalizedString` union.
+
+When a localized value intentionally crosses persistence or a network boundary,
+serialize it with Trox's canonical wire format and decode imported, saved,
 replayed, or network values only through the configured `Localizer` or
 `SourceCatalog`; generic JSON decoding cannot authorize entries, terms, or
-opaque values. Load the configured source and target bundles explicitly,
-construct a `Localizer` in the application context, and resolve immediately
-before display.
+opaque values. Prefer stable semantic references in gameplay state when copy
+identity should not be persisted, then map those references to
+`LocalizedString` in the presentation layer. Load the configured source and
+target bundles explicitly and construct a `Localizer` in the application
+context.
 
 Use `resolveChecked` or `resolve_checked` when target-resolution failures must
 remain explicit, and inspect structured diagnostics from recovering resolution.
@@ -329,7 +396,8 @@ source bundle.
 Do not concatenate, template-interpolate, parse, compare, or implicitly coerce
 localized values. Do not use resolved text as an identifier, map key,
 control-flow signal, analytics dimension, or test selector. Keep UUIDs and
-other stable semantic IDs in game logic and resolve names only for display.
+other stable semantic IDs in game logic and resolve names only at the final
+display primitive.
 
 ## Run the Trox workflow
 
@@ -391,5 +459,14 @@ Before finishing, confirm that:
 - every leaf is a complete translation unit;
 - every description lets a translator understand meaning, variables,
   grammatical relationships, and real constraints without reading code;
+- every code-authored player-facing text contract, including nested component
+  prop models, uses `LocalizedString` rather than `string` or
+  `string | LocalizedString`;
+- every resolver call directly assigns the final DOM/browser/native text
+  primitive, with no resolved local, object field, helper return, composite
+  component prop, event, or cache between resolution and display;
+- every remaining raw player-visible `string` is classified as canonical
+  authored content, user content, technical detail, or another deliberate
+  non-localized semantic value and has a distinct contract; and
 - current CSVs and bundles were generated and validated by the configured
   Trox toolchain.

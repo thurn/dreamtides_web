@@ -25,11 +25,11 @@ The optional stacked-copy card model reserves its complete fanned footprint befo
 | `onCardPress` | `((entryId: string) => void)` | no | — | Fires when an enabled card tile is activated. |
 | `endAction` | `CardChoiceGridActionView` | no | — | Optional card-sized action appended after the cards. |
 | `onEndActionPress` | `((entryId: string) => void)` | no | — | Fires with the appended action's stable id when it is activated. |
-| `title` | `string` | yes | — | Header title, rendered as an `<h2>`. |
-| `subtitle` | `string` | no | — | Optional intro line under the title. |
+| `title` | `LocalizedString` | yes | — | Header title, rendered as an `<h2>`. |
+| `subtitle` | `LocalizedString` | no | — | Optional intro line under the title. |
 | `rightAccessory` | `CardPanelAccessory` | no | — | Optional trailing header action. |
 | `cards` | `readonly CardChoiceGridCardView[]` | yes | — | Resolved cards rendered in order. |
-| `emptyLabel` | `string` | no | — | Empty-state copy shown when `cards` is empty. |
+| `emptyLabel` | `LocalizedString` | no | — | Empty-state copy shown when `cards` is empty. |
 | `testId` | `string` | no | — | Test id for the panel root. |
 
 ### `endAction`: the `CardChoiceGridActionView` model

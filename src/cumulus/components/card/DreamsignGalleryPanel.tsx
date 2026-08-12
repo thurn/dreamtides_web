@@ -2,6 +2,7 @@
 // Dreamsigns. It keeps the Dream Market's header and captions while rendering
 // both the collectible art and the restock glyph without object backgrounds.
 
+import { localizationTodo } from "@trox/runtime";
 import { useRef, type ReactElement } from "react";
 import type { Dreamsign as DreamsignData } from "../../../types/journey";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
@@ -229,7 +230,7 @@ export function DreamsignGalleryPanel({
         </h2>
         <IconButton
           glyph={GLYPHS.close}
-          label={closeLabel}
+          label={localizationTodo(closeLabel)}
           placement="onGlass"
           onPress={onClose}
           testId="cumulus-dreamsign-bazaar-leave"

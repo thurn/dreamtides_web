@@ -1,5 +1,6 @@
 // TransfigurationSiteScreen — Durgan Forgehammer's standard desktop forge.
 
+import { localizationTodo } from "@trox/runtime";
 import { motion } from "framer-motion";
 import { useCallback, useState } from "react";
 import type { GameCardModel } from "../components/card/CardView";
@@ -368,10 +369,10 @@ export function TransfigurationPickerPanel({
   const enhanced = isEnhanced;
   return (
     <CardPickerPanel
-      title={t("transfiguration-picker-title")}
-      subtitle={t("transfiguration-picker-instruction", {
+      title={localizationTodo(t("transfiguration-picker-title"))}
+      subtitle={localizationTodo(t("transfiguration-picker-instruction", {
         state: ready ? (enhanced ? "enhanced" : "standard") : "loading",
-      })}
+      }))}
       rightAccessory={
         enhanced || !desktop
           ? {
@@ -414,9 +415,9 @@ export function TransfigurationPickerPanel({
                 }),
               },
       }))}
-      emptyLabel={t("transfiguration-picker-empty-state", {
+      emptyLabel={localizationTodo(t("transfiguration-picker-empty-state", {
         state: ready ? "empty" : "loading",
-      })}
+      }))}
       testId="cumulus-transfiguration-picker"
       onCardPress={onPick}
     />
@@ -472,7 +473,7 @@ export function TransfigurationDetailPanel({
       }}
     >
       <GlassPanel
-        title={t("transfiguration-form-picker-title")}
+        title={localizationTodo(t("transfiguration-form-picker-title"))}
         headerSpacing={mobile ? "compact" : "medium"}
         footer={
           <div

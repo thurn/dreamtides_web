@@ -2,6 +2,7 @@
 // These are interactive overlays, deliberately separate from InfoCard's
 // pointer-transparent entity-reveal contract.
 
+import { localizationTodo } from "@trox/runtime";
 import {
   type CSSProperties,
   type KeyboardEvent as ReactKeyboardEvent,
@@ -215,7 +216,7 @@ function AppChromeCommandMenu({ model }: { model: CommandMenuAppChromeModel }): 
     >
       <IconButton
         glyph={trigger.glyph}
-        label={formatCommandMenuCopy(t, trigger.label)}
+        label={localizationTodo(formatCommandMenuCopy(t, trigger.label))}
         ariaExpanded={open}
         ariaControls={menuId}
         testId={testId}
@@ -297,9 +298,9 @@ function ContextCommandMenu({ model }: { model: CommandMenuContextModel }): Reac
   if (!isDesktop) {
     return createPortal(
       <GlassDialog
-        title={title}
-        subtitle={subtitle}
-        closeLabel={t("command-menu-close-actions")}
+        title={localizationTodo(title)}
+        subtitle={(subtitle) === undefined ? undefined : localizationTodo(subtitle)}
+        closeLabel={localizationTodo(t("command-menu-close-actions"))}
         onClose={onDismiss}
       >
         <HierarchicalMenu items={actions} mobile onDismiss={onDismiss} />
@@ -516,14 +517,14 @@ function SignedIntegerCommand({
       }}
     >
       <TextField
-        label={item.label}
+        label={localizationTodo(item.label)}
         value={draft}
         onChange={(value) => {
           setDraft(value);
           setError(undefined);
         }}
-        placeholder={item.placeholder}
-        error={error}
+        placeholder={(item.placeholder) === undefined ? undefined : localizationTodo(item.placeholder)}
+        error={(error) === undefined ? undefined : localizationTodo(error)}
         testId="command-menu-signed-integer-input"
       />
       <div style={{ display: "grid" }}>

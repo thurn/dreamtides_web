@@ -1,22 +1,22 @@
 import type { ReactElement, ReactNode } from "react";
+import type { LocalizedString } from "@trox/runtime";
 import { glassContentControlSurface } from "../../internal/control-treatment";
 import { Pressable } from "../../primitives/Pressable";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { StandaloneGlyph } from "./StandaloneGlyph";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export interface DisclosureSectionProps {
-  /** Section heading shown in the disclosure trigger. */
-  title: string;
-  /** Optional concise context shown beside the heading. */
-  summary?: string;
+  /** Localized heading shown in the disclosure trigger. */
+  title: LocalizedString;
+  /** Optional localized context shown beside the heading. */
+  summary?: LocalizedString;
   /** Controlled open state. */
   expanded: boolean;
   /** Reports the requested open state. */
   onExpandedChange: (expanded: boolean) => void;
-  /** Content revealed beneath the trigger. */
-  children: ReactNode;
   /**
    * Surface beneath the section. `onMedia` gives the section its own liquid
    * glass boundary; `onGlass` uses a lighter tonal lens inside an existing
@@ -25,6 +25,8 @@ export interface DisclosureSectionProps {
   placement?: GlassControlPlacement;
   /** Stable test id for the section. */
   testId?: string;
+  /** Content revealed beneath the trigger. */
+  children: ReactNode;
 }
 
 /** A dense information section with a Cumulus-owned disclosure trigger. */
@@ -37,6 +39,7 @@ export function DisclosureSection({
   placement = "onMedia",
   testId,
 }: DisclosureSectionProps): ReactElement {
+  const resolve = useLocalizer();
   return (
     <section
       data-testid={testId}
@@ -67,7 +70,7 @@ export function DisclosureSection({
       >
         <span style={{ minWidth: 0 }}>
           <span style={{ display: "block", font: token("--t-button-sm") }}>
-            {title}
+            {resolve(title)}
           </span>
           {summary === undefined ? null : (
             <span
@@ -78,7 +81,7 @@ export function DisclosureSection({
                 font: token("--t-caption"),
               }}
             >
-              {summary}
+              {resolve(summary)}
             </span>
           )}
         </span>

@@ -1,13 +1,15 @@
 // @vitest-environment jsdom
 
+import { localizationTodo } from "@trox/runtime";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { CumulusRoot } from "../../CumulusRoot";
 import { Select, type SelectOption } from "./Select";
 
 const OPTIONS: SelectOption[] = Array.from({ length: 10 }, (_, index) => ({
   value: String(index),
-  label: `Option ${String(index + 1)}`,
+  label: localizationTodo(`Option ${String(index + 1)}`),
 }));
 
 function mount(element: ReactElement): {
@@ -17,7 +19,7 @@ function mount(element: ReactElement): {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
-  act(() => root.render(element));
+  act(() => root.render(<CumulusRoot>{element}</CumulusRoot>));
   return { container, root };
 }
 
@@ -73,7 +75,7 @@ describe("Select", () => {
       value: 720,
     });
     const { container, root } = mount(
-      <Select options={OPTIONS} value="" ariaLabel="Action" />,
+      <Select options={OPTIONS} value="" ariaLabel={localizationTodo("Action")} />,
     );
     const trigger = container.querySelector<HTMLButtonElement>("button");
     if (trigger === null) throw new Error("Select trigger did not render");
@@ -102,7 +104,7 @@ describe("Select", () => {
       value: 720,
     });
     const { container, root } = mount(
-      <Select options={OPTIONS} value="" ariaLabel="Action" />,
+      <Select options={OPTIONS} value="" ariaLabel={localizationTodo("Action")} />,
     );
     const trigger = container.querySelector<HTMLButtonElement>("button");
     if (trigger === null) throw new Error("Select trigger did not render");
@@ -124,7 +126,7 @@ describe("Select", () => {
 
   it("keeps the menu open while its options scroll", () => {
     const { container, root } = mount(
-      <Select options={OPTIONS} value="" ariaLabel="Action" />,
+      <Select options={OPTIONS} value="" ariaLabel={localizationTodo("Action")} />,
     );
     const trigger = container.querySelector<HTMLButtonElement>("button");
     if (trigger === null) throw new Error("Select trigger did not render");

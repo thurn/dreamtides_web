@@ -14,12 +14,12 @@ A labeled, accessible decrement/value/increment row with optional canonical reso
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `label` | `string` | yes | — | Visible label for the numeric value. |
+| `label` | `LocalizedString` | yes | — | Visible label for the numeric value. |
 | `value` | `number` | yes | — | Current numeric value. |
-| `displayValue` | `string` | no | — | Optional formatted value while `value` remains the numeric state contract. |
+| `displayValue` | `LocalizedString` | no | — | Optional formatted value while `value` remains the numeric state contract. |
 | `resource` | `NumberStepperResource` = `"essence" \| "energy" \| "spark" \| "points"` | no | — | Optional economy mark paired with the value. |
-| `decrementLabel` | `string` | yes | — | Accessible label for the decrement action. |
-| `incrementLabel` | `string` | yes | — | Accessible label for the increment action. |
+| `decrementLabel` | `LocalizedString` | yes | — | Accessible label for the decrement action. |
+| `incrementLabel` | `LocalizedString` | yes | — | Accessible label for the increment action. |
 | `onDecrement` | `() => void` | yes | — | Fires when the decrement disc is pressed. |
 | `onIncrement` | `() => void` | yes | — | Fires when the increment disc is pressed. |
 | `decrementDisabled` | `boolean` | no | `false` | Prevent decrementing while preserving the control's layout. |

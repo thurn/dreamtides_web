@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { GlassPanel } from "../../components/overlay/GlassPanel";
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
@@ -6,9 +7,9 @@ function GlassPanelDemo() {
   return (
     <div style={{ width: "min(620px, 100%)" }}>
       <GlassPanel
-        eyebrow="Shop"
-        title="Dream Market"
-        subtitle="Spend Essence to add cards to your deck."
+        eyebrow={localizationTodo("Shop")}
+        title={localizationTodo("Dream Market")}
+        subtitle={localizationTodo("Spend Essence to add cards to your deck.")}
         rightAccessory={{
           kind: "glassButton",
           button: {

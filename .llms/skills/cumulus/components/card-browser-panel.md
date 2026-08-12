@@ -27,11 +27,11 @@ Toolbar controls and drag, context-menu, and mobile double-tap gestures belong t
 | `onCardDragEnd` | `((entryId: string, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when a draggable card entry's native drag ends. |
 | `onCardContextMenu` | `((entryId: string, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)` | no | — | Fires when a card entry requests its contextual actions. |
 | `onCardDoubleTap` | `((entryId: string) => void)` | no | — | Fires when a card receives two quick activations. While present, a primary card press waits briefly so a second tap can take precedence. |
-| `title` | `string` | yes | — | Header title, rendered as an `<h2>`. |
-| `subtitle` | `string` | no | — | Optional intro line under the title. |
+| `title` | `LocalizedString` | yes | — | Header title, rendered as an `<h2>`. |
+| `subtitle` | `LocalizedString` | no | — | Optional intro line under the title. |
 | `rightAccessory` | `CardPanelAccessory` | no | — | Optional trailing header action. |
 | `cards` | `readonly CardChoiceGridCardView[]` | yes | — | Resolved cards rendered in order. |
-| `emptyLabel` | `string` | no | — | Empty-state copy shown when `cards` is empty. |
+| `emptyLabel` | `LocalizedString` | no | — | Empty-state copy shown when `cards` is empty. |
 | `testId` | `string` | no | — | Test id for the panel root. |
 
 ### `toolbar`: the `CardBrowserToolbar` model

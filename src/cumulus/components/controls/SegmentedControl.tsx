@@ -18,24 +18,34 @@
 // (components/pills/SegmentedControl.jsx / .d.ts).
 
 import type { ReactElement } from "react";
+import type { LocalizedString } from "@trox/runtime";
 import { HOVER_SCALE, PRESS_SCALE, usePress } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { type ControlChrome, controlChrome } from "../../internal/control-treatment";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** Height/scale variants. */
 type SegmentedControlSize = "sm" | "md";
 
-/** One selectable segment: an explicit `{ value, label }` pair. */
+/** One code-authored segment whose player-facing copy stays localized. */
 export interface SegmentedOption {
   value: string;
-  label: string;
-  /** Accessible name when the visible label is symbolic, such as an arrow. */
-  ariaLabel?: string;
+  label: LocalizedString;
+  ariaLabel?: LocalizedString;
 }
 
+/** A language-neutral symbol with a localized accessible name. */
+export interface SymbolSegmentedOption {
+  value: string;
+  symbol: string;
+  ariaLabel: LocalizedString;
+}
+
+type RenderedSegmentedOption = SegmentedOption | SymbolSegmentedOption;
+
 export interface SegmentedControlProps {
-  /** Segments to render: plain strings (value === label), or `{ value, label }` pairs. */
-  options: (string | SegmentedOption)[];
+  /** Localized labels or language-neutral symbols represented by stable values. */
+  options: readonly RenderedSegmentedOption[];
   /** The currently-selected segment's value. */
   value: string;
   /** Fires with the newly-selected segment's value when the user switches. */
@@ -56,15 +66,8 @@ const SIZES: Record<SegmentedControlSize, SizeSpec> = {
   md: { height: 42, font: 14 },
 };
 
-/** Normalizes a plain-string option to its `{ value, label }` form. */
-function normalizeOption(
-  option: string | SegmentedOption,
-): SegmentedOption {
-  return typeof option === "string" ? { value: option, label: option } : option;
-}
-
 interface SegmentProps {
-  option: SegmentedOption;
+  option: RenderedSegmentedOption;
   active: boolean;
   full: boolean;
   font: number;
@@ -88,12 +91,13 @@ function Segment({
   onSelect,
 }: SegmentProps): ReactElement {
   const { pressed, hovered, bind } = usePress();
+  const resolve = useLocalizer();
 
   return (
     <button
       type="button"
       role="tab"
-      aria-label={option.ariaLabel}
+      aria-label={option.ariaLabel === undefined ? undefined : resolve(option.ariaLabel)}
       aria-selected={active}
       onClick={() => onSelect(option.value)}
       {...bind}
@@ -122,7 +126,7 @@ function Segment({
         ...(active ? chrome.segmentActive : chrome.segmentInactive),
       }}
     >
-      {option.label}
+      {"symbol" in option ? option.symbol : resolve(option.label)}
     </button>
   );
 }
@@ -141,7 +145,6 @@ export function SegmentedControl({
   size = "md",
   full = false,
 }: SegmentedControlProps): ReactElement {
-  const normalized = options.map(normalizeOption);
   const spec = SIZES[size];
   const chrome = controlChrome();
 
@@ -160,7 +163,7 @@ export function SegmentedControl({
         height: spec.height,
       }}
     >
-      {normalized.map((option) => (
+      {options.map((option) => (
         <Segment
           key={option.value}
           option={option}

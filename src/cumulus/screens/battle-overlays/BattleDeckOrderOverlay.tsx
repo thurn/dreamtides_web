@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { useEffect, useRef, useState, type ReactElement } from "react";
 import {
   CardOrderEditor,
@@ -65,9 +66,9 @@ export function BattleDeckOrderOverlay({
 
   return (
     <GlassDialog
-      title={titleText}
-      subtitle={t("battle-deck-order-subtitle")}
-      closeLabel={t("battle-deck-order-close-action")}
+      title={localizationTodo(titleText)}
+      subtitle={localizationTodo(t("battle-deck-order-subtitle"))}
+      closeLabel={localizationTodo(t("battle-deck-order-close-action"))}
       onClose={onCancel}
     >
       <div

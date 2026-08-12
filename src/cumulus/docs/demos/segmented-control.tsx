@@ -6,6 +6,7 @@
 // `onChange`; `docName` still points at the real SegmentedControl, so the
 // props table stays accurate to its actual (undecorated) API.
 
+import { localizationTodo } from "@trox/runtime";
 import { useEffect, useState } from "react";
 import {
   SegmentedControl,
@@ -14,19 +15,19 @@ import {
 import type { CumulusComponent } from "../registry";
 
 const OPTIONS: SegmentedOption[] = [
-  { value: "All", label: "All" },
-  { value: "Characters", label: "Characters" },
-  { value: "Events", label: "Events" },
+  { value: "All", label: localizationTodo("All") },
+  { value: "Characters", label: localizationTodo("Characters") },
+  { value: "Events", label: localizationTodo("Events") },
 ];
 
-function firstValue(options: (string | SegmentedOption)[]): string {
+function firstValue(options: SegmentedOption[]): string {
   const first = options[0];
-  return typeof first === "string" ? first : (first?.value ?? "");
+  return first?.value ?? "";
 }
 
 interface SegmentedControlDemoArgs {
   /** Segments to render; defaults to a representative All/Characters/Events set. */
-  options?: (string | SegmentedOption)[];
+  options?: SegmentedOption[];
   /** Seeds (and, if edited via the control panel, re-seeds) the initially-selected segment. */
   value?: string;
   size?: "sm" | "md";

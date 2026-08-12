@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import {
   useCallback,
   useEffect,
@@ -3057,8 +3058,8 @@ function FourSuitRepriseScreen({
               }}
             >
               <CardPickerPanel
-                title={gambleTitle(t, view.gameId)}
-                subtitle={gambleRulesDisclosure(t, view.gameId)}
+                title={localizationTodo(gambleTitle(t, view.gameId))}
+                subtitle={localizationTodo(gambleRulesDisclosure(t, view.gameId))}
                 footerActions={[
                   {
                     label: t("gamble-leave-action"),
@@ -3071,7 +3072,7 @@ function FourSuitRepriseScreen({
                   model: card.model,
                   testId: `gamble-four-suit-card-${card.entryId}`,
                 }))}
-                emptyLabel={t("gamble-card-picker-empty-state")}
+                emptyLabel={localizationTodo(t("gamble-card-picker-empty-state"))}
                 testId="gamble-four-suit-card-gallery"
                 onCardPress={setSelectedEntryId}
               />
@@ -3352,7 +3353,7 @@ function FourSuitRepriseScreen({
                 >
                   <IconButton
                     glyph={GLYPHS.refreshCcw}
-                    label={gambleActionLabel(t, "choose-another")}
+                    label={localizationTodo(gambleActionLabel(t, "choose-another"))}
                     size="sm"
                     disabled={decisionPending}
                     testId="gamble-four-suit-choose-again"

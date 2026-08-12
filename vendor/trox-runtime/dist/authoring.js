@@ -6,6 +6,8 @@ export const MAX_SAFE_SELECTOR_INTEGER = 9_007_199_254_740_991;
 const STABLE_ID = /^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*$/;
 export const PLACEHOLDER = /^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/;
 export const CATEGORIES = ["zero", "one", "two", "few", "many", "other"];
+/** @internal */
+export const LOCALIZATION_TODO_MEANING = "trox.localization-todo";
 export function assertStableId(value, label) {
     if (typeof value !== "string" || new TextEncoder().encode(value).length > 96 || !STABLE_ID.test(value)) {
         throw new TroxValueError("trox.invalid-stable-id", `invalid ${label} \`${String(value)}\``);
@@ -182,7 +184,7 @@ export class LocalizedString {
     #wire;
     constructor(wire, token) {
         if (token !== CONSTRUCTION_TOKEN)
-            throw new TroxValueError("trox.constructor", "use tx or txa to construct LocalizedString");
+            throw new TroxValueError("trox.constructor", "use tx, txa, or localizationTodo to construct LocalizedString");
         this.#wire = deepFreeze(wire);
         Object.freeze(this);
     }
@@ -218,6 +220,13 @@ export function txa(pattern, inputs, description) {
     }
     return construct(patternValue(pattern), args, description);
 }
+/** Wraps unlocalized runtime text without making it extractable or translatable. */
+export function localizationTodo(rawString) {
+    const normalized = typeof rawString === "string" ? rawString.normalize("NFC") : rawString;
+    assertNfc(normalized, "localization TODO text");
+    const text = normalized.replaceAll("{", "{{").replaceAll("}", "}}");
+    return constructValidated({ pattern: { kind: "text", text }, selectors: [], meaning: LOCALIZATION_TODO_MEANING }, {});
+}
 function argumentFrom(value) {
     if (typeof value === "string") {
         assertNfc(value, "argument text");
@@ -242,6 +251,9 @@ function construct(value, args, description) {
         throw new TroxValueError("trox.description", "description must not be empty");
     validatePattern(value.pattern);
     validateArgumentMap(value.pattern, args);
+    return constructValidated(value, args);
+}
+function constructValidated(value, args) {
     const identity = { identity_version: 1, meaning: value.meaning, pattern: value.pattern };
     let digest;
     const identityDigest = () => {
@@ -259,6 +271,15 @@ function construct(value, args, description) {
     };
     validateSelectorRecords(wire.identity.pattern, wire.selectors);
     return LocalizedString.fromValidatedWire(wire, CONSTRUCTION_TOKEN);
+}
+/** @internal */
+export function localizationTodoPattern(value) {
+    return value.identity.meaning === LOCALIZATION_TODO_MEANING
+        && value.identity.pattern.kind === "text"
+        && Object.keys(value.arguments).length === 0
+        && value.selectors.length === 0
+        ? value.identity.pattern.text
+        : undefined;
 }
 export function validateArgumentMap(pattern, argumentsValue) {
     const actual = Object.keys(argumentsValue).sort();

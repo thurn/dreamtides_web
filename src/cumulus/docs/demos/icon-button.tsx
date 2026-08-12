@@ -6,6 +6,7 @@
 // component. `docName` still points at IconButton so the props table stays
 // accurate to its actual API.
 
+import { localizationTodo } from "@trox/runtime";
 import {
   IconButton,
   type IconButtonSize,
@@ -37,7 +38,7 @@ function IconButtonDemo({
       size={size}
       placement={placement}
       disabled={disabled}
-      label="Close"
+      label={localizationTodo("Close")}
       onPress={() => {}}
     />
   );

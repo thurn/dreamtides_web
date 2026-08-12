@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { useEffect, useRef, type ReactNode } from "react";
 import { GlassButton } from "../cumulus/components/controls/GlassButton";
 import { GlassPanel } from "../cumulus/components/overlay/GlassPanel";
@@ -95,7 +96,7 @@ export function HostedPlaytestShell({
       {canTakeControl ? (
         <div className="cumulus hosted-playtest-shell__status">
           <GlassPanel
-            title={t("coop-player-disconnected-title")}
+            title={localizationTodo(t("coop-player-disconnected-title"))}
             headerSpacing="compact"
             footer={
               <GlassButton

@@ -348,7 +348,7 @@
     },
     {
       "name": "title",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -356,7 +356,7 @@
     },
     {
       "name": "subtitle",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -419,7 +419,7 @@
     },
     {
       "name": "emptyLabel",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -690,7 +690,7 @@
     },
     {
       "name": "title",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -698,7 +698,7 @@
     },
     {
       "name": "subtitle",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -761,7 +761,7 @@
     },
     {
       "name": "emptyLabel",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -1329,7 +1329,7 @@
     },
     {
       "name": "title",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -1337,7 +1337,7 @@
     },
     {
       "name": "subtitle",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -1363,8 +1363,16 @@
       "description": "Accessible close action."
     },
     {
+      "name": "closeLabel",
+      "tsType": "LocalizedString",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Accessible name for the close action."
+    },
+    {
       "name": "headerAction",
-      "tsType": "{ readonly glyph: Glyph; readonly label: string; readonly onPress: () => void; readonly disabled?: boolean | undefined; readonly testId?: string | undefined; }",
+      "tsType": "{ readonly glyph: Glyph; readonly label: LocalizedString; readonly onPress: () => void; readonly disabled?: boolean | undefined; readonly testId?: string | undefined; }",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -1398,19 +1406,19 @@
   "DisclosureSection": [
     {
       "name": "title",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Section heading shown in the disclosure trigger."
+      "description": "Localized heading shown in the disclosure trigger."
     },
     {
       "name": "summary",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Optional concise context shown beside the heading."
+      "description": "Optional localized context shown beside the heading."
     },
     {
       "name": "expanded",
@@ -1427,14 +1435,6 @@
       "required": true,
       "defaultValue": null,
       "description": "Reports the requested open state."
-    },
-    {
-      "name": "children",
-      "tsType": "ReactNode",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Content revealed beneath the trigger."
     },
     {
       "name": "placement",
@@ -1454,6 +1454,14 @@
       "required": false,
       "defaultValue": null,
       "description": "Stable test id for the section."
+    },
+    {
+      "name": "children",
+      "tsType": "ReactNode",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Content revealed beneath the trigger."
     }
   ],
   "DreamAvatarPortrait": [
@@ -2277,7 +2285,7 @@
   "GlassDialog": [
     {
       "name": "title",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -2285,7 +2293,7 @@
     },
     {
       "name": "subtitle",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -2301,10 +2309,10 @@
     },
     {
       "name": "closeLabel",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
-      "defaultValue": "Close",
+      "defaultValue": "localizationTodo(\"Close\")",
       "description": "Accessible name for the close disc. Defaults to `\"Close\"`."
     },
     {
@@ -2376,7 +2384,7 @@
   "GlassPanel": [
     {
       "name": "eyebrow",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -2384,7 +2392,7 @@
     },
     {
       "name": "title",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -2392,7 +2400,7 @@
     },
     {
       "name": "subtitle",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -2684,14 +2692,6 @@
       "description": "Disc size — `sm` (40/22) or `md` (48/26). Defaults to `md`."
     },
     {
-      "name": "label",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "The disc's accessible name (`aria-label`); the disc shows only its glyph."
-    },
-    {
       "name": "onPress",
       "tsType": "() => void",
       "unionMembers": [],
@@ -2741,6 +2741,14 @@
       "required": false,
       "defaultValue": null,
       "description": "A `data-testid` for selecting the disc in tests."
+    },
+    {
+      "name": "label",
+      "tsType": "LocalizedString",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Localized accessible name forwarded unresolved to the final button."
     }
   ],
   "InfoCard": [
@@ -3155,7 +3163,7 @@
   "NumberStepper": [
     {
       "name": "label",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -3171,7 +3179,7 @@
     },
     {
       "name": "displayValue",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -3192,7 +3200,7 @@
     },
     {
       "name": "decrementLabel",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -3200,7 +3208,7 @@
     },
     {
       "name": "incrementLabel",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -3664,6 +3672,14 @@
       "description": "Whether ending hover or press immediately restores the original scale.\nPhysical cards use this to avoid a stale transformed hit target."
     },
     {
+      "name": "ariaLabelMessage",
+      "tsType": "LocalizedString",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Localized accessible name resolved onto the final intrinsic element."
+    },
+    {
       "name": "children",
       "tsType": "ReactNode",
       "unionMembers": [],
@@ -3880,11 +3896,11 @@
   "SegmentedControl": [
     {
       "name": "options",
-      "tsType": "(string | SegmentedOption)[]",
+      "tsType": "readonly RenderedSegmentedOption[]",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Segments to render: plain strings (value === label), or `{ value, label }` pairs."
+      "description": "Localized labels or language-neutral symbols represented by stable values."
     },
     {
       "name": "value",
@@ -3932,24 +3948,52 @@
       "description": "The choices shown in the menu.",
       "nested": {
         "name": "SelectOption",
-        "fields": [
+        "variants": [
           {
-            "name": "value",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
+            "name": "LocalizedSelectOption",
+            "fields": [
+              {
+                "name": "value",
+                "tsType": "string",
+                "optional": false,
+                "description": ""
+              },
+              {
+                "name": "label",
+                "tsType": "LocalizedString",
+                "optional": false,
+                "description": ""
+              },
+              {
+                "name": "triggerLabel",
+                "tsType": "LocalizedString",
+                "optional": true,
+                "description": ""
+              }
+            ]
           },
           {
-            "name": "label",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "triggerLabel",
-            "tsType": "string",
-            "optional": true,
-            "description": ""
+            "name": "AuthoredSelectOption",
+            "fields": [
+              {
+                "name": "value",
+                "tsType": "string",
+                "optional": false,
+                "description": ""
+              },
+              {
+                "name": "authoredLabel",
+                "tsType": "string",
+                "optional": false,
+                "description": ""
+              },
+              {
+                "name": "authoredTriggerLabel",
+                "tsType": "string",
+                "optional": true,
+                "description": ""
+              }
+            ]
           }
         ]
       }
@@ -4010,7 +4054,7 @@
     },
     {
       "name": "ariaLabel",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -4018,7 +4062,7 @@
     },
     {
       "name": "placeholder",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -4305,11 +4349,11 @@
   "TextField": [
     {
       "name": "label",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Visible field label."
+      "description": "Localized field label."
     },
     {
       "name": "value",
@@ -4348,7 +4392,7 @@
     },
     {
       "name": "placeholder",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -4356,7 +4400,7 @@
     },
     {
       "name": "supportingText",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -4364,7 +4408,7 @@
     },
     {
       "name": "error",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,

@@ -1,11 +1,13 @@
 // @vitest-environment jsdom
 
+import { localizationTodo } from "@trox/runtime";
 import { act } from "react";
 import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GlassBackdrop, GlassDialog } from "./GlassDialog";
 import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
+import { CumulusRoot } from "../../CumulusRoot";
 
 vi.mock("../../../runtime/device-frame", () => ({
   hasInjectedDisplayCutout: vi.fn(() => false),
@@ -19,7 +21,7 @@ function mount(element: ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(element);
+    root.render(<CumulusRoot>{element}</CumulusRoot>);
   });
   return { container, root };
 }
@@ -75,7 +77,7 @@ describe("GlassBackdrop", () => {
 describe("GlassDialog", () => {
   it("omits the close control when the dialog is commit-gated", () => {
     const { container, root } = mount(
-      <GlassDialog title="Foresee 2">
+      <GlassDialog title={localizationTodo("Foresee 2")}>
         <div>content</div>
       </GlassDialog>,
     );
@@ -92,8 +94,8 @@ describe("GlassDialog", () => {
     const onClose = vi.fn();
     const { container, root } = mount(
       <GlassDialog
-        title="Starting Deck"
-        subtitle="An intro line"
+        title={localizationTodo("Starting Deck")}
+        subtitle={localizationTodo("An intro line")}
         onClose={onClose}
       >
         <p data-testid="body">body content</p>
@@ -135,7 +137,7 @@ describe("GlassDialog", () => {
 
   it("uses a custom closeLabel as the close control's aria-label", () => {
     const { container, root } = mount(
-      <GlassDialog title="Title" onClose={() => {}} closeLabel="Dismiss deck">
+      <GlassDialog title={localizationTodo("Title")} onClose={() => {}} closeLabel={localizationTodo("Dismiss deck")}>
         <div>content</div>
       </GlassDialog>,
     );
@@ -152,7 +154,7 @@ describe("GlassDialog", () => {
 
   it("renders no subtitle <p> in the header when subtitle is omitted", () => {
     const { container, root } = mount(
-      <GlassDialog title="Title" onClose={() => {}}>
+      <GlassDialog title={localizationTodo("Title")} onClose={() => {}}>
         <div data-testid="only-body">content</div>
       </GlassDialog>,
     );
@@ -169,7 +171,7 @@ describe("GlassDialog", () => {
   it("renders the desktop dialog without a full-screen frosted backdrop", () => {
     stubMatchMedia(true);
     const { container, root } = mount(
-      <GlassDialog title="Title" onClose={() => {}}>
+      <GlassDialog title={localizationTodo("Title")} onClose={() => {}}>
         <div>content</div>
       </GlassDialog>,
     );
@@ -188,7 +190,7 @@ describe("GlassDialog", () => {
 
   it("keeps the popup presentation bounded and content-sized on mobile", () => {
     const { container, root } = mount(
-      <GlassDialog title="How to Play" presentation="popup" onClose={() => {}}>
+      <GlassDialog title={localizationTodo("How to Play")} presentation="popup" onClose={() => {}}>
         <div data-testid="popup-content">content</div>
       </GlassDialog>,
     );
@@ -217,7 +219,7 @@ describe("GlassDialog", () => {
     stubMatchMedia(true);
     const { container, root } = mount(
       <GlassDialog
-        title="How to Play"
+        title={localizationTodo("How to Play")}
         presentation="popup"
         companion={<div data-testid="companion">card</div>}
         onClose={() => {}}
@@ -249,7 +251,7 @@ describe("GlassDialog", () => {
   it("centers a narrower companion above the prose panel on mobile", () => {
     const { container, root } = mount(
       <GlassDialog
-        title="How to Play"
+        title={localizationTodo("How to Play")}
         presentation="popup"
         companion={<div data-testid="companion">card</div>}
         onClose={() => {}}
@@ -283,7 +285,7 @@ describe("GlassDialog", () => {
   it("floats the close disc in body flow for prose wrapping", () => {
     const { container, root } = mount(
       <GlassDialog
-        title="How to Play"
+        title={localizationTodo("How to Play")}
         presentation="popup"
         chrome="flowing-close"
         onClose={() => {}}
@@ -336,7 +338,7 @@ describe("GlassDialog", () => {
     document.body.append(battlefield);
 
     const { container, root } = mount(
-      <GlassDialog title="Foresee 2" desktopCenterTarget="battlefield">
+      <GlassDialog title={localizationTodo("Foresee 2")} desktopCenterTarget="battlefield">
         <div>content</div>
       </GlassDialog>,
     );
@@ -359,7 +361,7 @@ describe("GlassDialog", () => {
     // Default: hasInjectedDisplayCutout() is false, so even on mobile the disc
     // stays on the header's trailing edge.
     const { container, root } = mount(
-      <GlassDialog title="Title" onClose={() => {}} cutoutAwareClose>
+      <GlassDialog title={localizationTodo("Title")} onClose={() => {}} cutoutAwareClose>
         <div>content</div>
       </GlassDialog>,
     );
@@ -378,7 +380,7 @@ describe("GlassDialog", () => {
     vi.mocked(hasInjectedDisplayCutout).mockReturnValue(true);
     const onClose = vi.fn();
     const { container, root } = mount(
-      <GlassDialog title="Title" onClose={onClose} cutoutAwareClose>
+      <GlassDialog title={localizationTodo("Title")} onClose={onClose} cutoutAwareClose>
         <div>content</div>
       </GlassDialog>,
     );

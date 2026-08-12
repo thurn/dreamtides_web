@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   glossaryDefinitionUsesRulesText,
@@ -348,19 +349,19 @@ export default function GlossaryEditorApp({
         <div className="glossary-editor-layout">
           <aside className="glossary-editor-catalog">
             <GlassPanel
-              eyebrow={`${String(filteredEntries.length)} of ${String(loadState.entries.length)}`}
-              title="Definitions"
-              subtitle="Select a term to edit"
+              eyebrow={localizationTodo(`${String(filteredEntries.length)} of ${String(loadState.entries.length)}`)}
+              title={localizationTodo("Definitions")}
+              subtitle={localizationTodo("Select a term to edit")}
               frame="floating"
               testId="glossary-editor-catalog"
             >
               <div className="glossary-editor-catalog-body">
                 <TextField
-                  label="Search"
+                  label={localizationTodo("Search")}
                   kind="search"
                   value={search}
                   onChange={setSearch}
-                  placeholder="Term, category, or copy"
+                  placeholder={localizationTodo("Term, category, or copy")}
                   testId="glossary-search"
                 />
                 <div className="glossary-editor-term-list">
@@ -463,9 +464,9 @@ export default function GlossaryEditorApp({
 
               <div className="glossary-editor-details">
                 <GlassPanel
-                  eyebrow={selectedEntry.category}
-                  title="Definition Details"
-                  subtitle={`Stable id: ${selectedEntry.id}`}
+                  eyebrow={localizationTodo(selectedEntry.category)}
+                  title={localizationTodo("Definition Details")}
+                  subtitle={localizationTodo(`Stable id: ${selectedEntry.id}`)}
                   frame="floating"
                   testId="glossary-editor-details"
                 >
@@ -474,10 +475,10 @@ export default function GlossaryEditorApp({
                       <p>Term Presentation</p>
                       <Select
                         full
-                        options={TERM_PRESENTATION_OPTIONS}
+                        options={TERM_PRESENTATION_OPTIONS.map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
                         value={presentationDraft}
                         onChange={selectTermPresentation}
-                        ariaLabel="Term Presentation"
+                        ariaLabel={localizationTodo("Term Presentation")}
                       />
                       <span>
                         Definition Only hides the term heading while keeping its
@@ -486,13 +487,13 @@ export default function GlossaryEditorApp({
                     </div>
                     {presentationDraft === "definitionOnly" ? (
                       <TextField
-                        label="Catalog Term"
+                        label={localizationTodo("Catalog Term")}
                         value={termDraft}
                         onChange={(value) => {
                           setTermDraft(value);
                           setSaveState({ kind: "idle" });
                         }}
-                        supportingText="Used for matching and catalog search; hidden from the Info Card."
+                        supportingText={localizationTodo("Used for matching and catalog search; hidden from the Info Card.")}
                         testId="glossary-term-input"
                       />
                     ) : null}
@@ -501,13 +502,13 @@ export default function GlossaryEditorApp({
                         onBlur={() => persistDraft("variants", variantsDraft)}
                       >
                         <TextField
-                          label="Additional Rules-Text Forms"
+                          label={localizationTodo("Additional Rules-Text Forms")}
                           value={variantsDraft}
                           onChange={(value) => {
                             setVariantsDraft(value);
                             setSaveState({ kind: "idle" });
                           }}
-                          supportingText="Comma-separated plurals, tenses, or trigger forms."
+                          supportingText={localizationTodo("Comma-separated plurals, tenses, or trigger forms.")}
                           testId="glossary-variants-input"
                         />
                       </div>

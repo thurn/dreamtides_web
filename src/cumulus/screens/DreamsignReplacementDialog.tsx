@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
 import { GlassButton } from "../components/controls/GlassButton";
@@ -32,12 +33,12 @@ export function DreamsignReplacementDialog({
   const t = useMessages();
   return (
     <GlassDialog
-      title={t("dreamsign-replacement-title")}
-      subtitle={t("dreamsign-replacement-capacity", {
+      title={localizationTodo(t("dreamsign-replacement-title"))}
+      subtitle={localizationTodo(t("dreamsign-replacement-capacity", {
         count: view.maxDreamsigns,
-      })}
+      }))}
       onClose={onCancel}
-      closeLabel={closeLabel}
+      closeLabel={localizationTodo(closeLabel)}
     >
       <div
         data-dreamsign-replacement-dialog=""

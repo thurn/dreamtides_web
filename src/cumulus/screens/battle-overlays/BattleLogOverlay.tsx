@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { useEffect, useMemo, useRef, useState, type ReactElement } from "react";
 import { GlassButton } from "../../components/controls/GlassButton";
 import { DisclosureSection } from "../../components/controls/DisclosureSection";
@@ -86,9 +87,9 @@ export function BattleLogOverlay({
 
   return (
     <GlassDialog
-      title="Battle Log"
-      subtitle="Folded battle history and raw diagnostic events."
-      closeLabel="Close battle log"
+      title={localizationTodo("Battle Log")}
+      subtitle={localizationTodo("Folded battle history and raw diagnostic events.")}
+      closeLabel={localizationTodo("Close battle log")}
       onClose={onClose}
       desktopCenterTarget="battlefield"
     >
@@ -141,8 +142,8 @@ export function BattleLogOverlay({
               return (
                 <DisclosureSection
                   key={turnKey}
-                  title={`Turn ${turnKey}`}
-                  summary={`${String(turn.entries.length)} entries`}
+                  title={localizationTodo(`Turn ${turnKey}`)}
+                  summary={localizationTodo(`${String(turn.entries.length)} entries`)}
                   expanded={isTurnExpanded}
                   placement="onGlass"
                   onExpandedChange={(expanded) =>
@@ -165,8 +166,8 @@ export function BattleLogOverlay({
                       return (
                         <DisclosureSection
                           key={entry.id}
-                          title={entry.title}
-                          summary={entry.kind}
+                          title={localizationTodo(entry.title)}
+                          summary={localizationTodo(entry.kind)}
                           expanded={isExpanded}
                           placement="onGlass"
                           onExpandedChange={(expanded) =>
@@ -216,8 +217,8 @@ export function BattleLogOverlay({
             })
           )}
           <DisclosureSection
-            title="Raw Events"
-            summary={`${String(rawEntries.length)} captured`}
+            title={localizationTodo("Raw Events")}
+            summary={localizationTodo(`${String(rawEntries.length)} captured`)}
             expanded={expandedRaw}
             placement="onGlass"
             onExpandedChange={setExpandedRaw}

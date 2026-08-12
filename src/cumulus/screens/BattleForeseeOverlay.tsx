@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import {
   useRef,
   useState,
@@ -344,7 +345,7 @@ export function BattleForeseeOverlay({
 
   return (
     <GlassDialog
-      title={t("battle-foresee-title", { count })}
+      title={localizationTodo(t("battle-foresee-title", { count }))}
       desktopCenterTarget="battlefield"
     >
       <div
@@ -387,7 +388,7 @@ export function BattleForeseeOverlay({
           <IconButton
             glyph={GLYPHS.minus}
             size="sm"
-            label={t("battle-foresee-less-action")}
+            label={localizationTodo(t("battle-foresee-less-action"))}
             placement="onGlass"
             disabled={count <= minimumCount}
             onPress={decrementCount}
@@ -395,7 +396,7 @@ export function BattleForeseeOverlay({
           <IconButton
             glyph={GLYPHS.plus}
             size="sm"
-            label={t("battle-foresee-more-action")}
+            label={localizationTodo(t("battle-foresee-more-action"))}
             placement="onGlass"
             disabled={count >= allCardIds.length}
             onPress={incrementCount}

@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties, ReactElement } from "react";
 import type { GameCardModel } from "../components/card/CardView";
@@ -143,8 +144,8 @@ export function JourneyDebugEditorScreen(
       style={{ minHeight: "100vh" }}
     >
       <GlassDialog
-        title="Edit Journey State"
-        subtitle="Make explicit diagnostic changes to the active run."
+        title={localizationTodo("Edit Journey State")}
+        subtitle={localizationTodo("Make explicit diagnostic changes to the active run.")}
         onClose={props.onClose}
         fullScreen
       >
@@ -157,8 +158,8 @@ export function JourneyDebugEditorScreen(
             />
           </section>
           <DisclosureSection
-            title="Dreamsigns"
-            summary={`${String(props.view.dreamsigns.length)} / ${String(props.view.maxDreamsigns)}`}
+            title={localizationTodo("Dreamsigns")}
+            summary={localizationTodo(`${String(props.view.dreamsigns.length)} / ${String(props.view.maxDreamsigns)}`)}
             expanded={expanded.dreamsigns ?? true}
             onExpandedChange={(value) =>
               setExpanded((current) => ({ ...current, dreamsigns: value }))
@@ -198,20 +199,20 @@ export function JourneyDebugEditorScreen(
                 ))
               )}
               <TextField
-                label="Add dreamsign"
+                label={localizationTodo("Add dreamsign")}
                 value={dreamsignQuery}
                 onChange={setDreamsignQuery}
                 kind="search"
                 disabled={!canAddDreamsign}
                 placeholder={
-                  canAddDreamsign
+                  localizationTodo(canAddDreamsign
                     ? "Search by name or ID"
-                    : "Dreamsign cap reached"
+                    : "Dreamsign cap reached")
                 }
                 supportingText={
-                  canAddDreamsign
+                  localizationTodo(canAddDreamsign
                     ? "Choose a matching Dreamsign below."
-                    : "Remove one before adding another."
+                    : "Remove one before adding another.")
                 }
                 testId="journey-debug-dreamsign-search"
               />
@@ -236,8 +237,8 @@ export function JourneyDebugEditorScreen(
             </div>
           </DisclosureSection>
           <DisclosureSection
-            title="Deck"
-            summary={`${String(props.view.deck.length)} entries`}
+            title={localizationTodo("Deck")}
+            summary={localizationTodo(`${String(props.view.deck.length)} entries`)}
             expanded={expanded.deck ?? true}
             onExpandedChange={(value) =>
               setExpanded((current) => ({ ...current, deck: value }))
@@ -247,11 +248,11 @@ export function JourneyDebugEditorScreen(
           >
             <div style={stackStyle}>
               <TextField
-                label="Add card"
+                label={localizationTodo("Add card")}
                 value={query}
                 onChange={setQuery}
                 kind="search"
-                placeholder="Search by name or UUID"
+                placeholder={localizationTodo("Search by name or UUID")}
                 testId="journey-debug-card-search"
               />
               {matches.map((card) => (
@@ -336,10 +337,10 @@ function ResourceSteppers({
       {resources.map(([id, label, value]) => (
         <NumberStepper
           key={id}
-          label={label}
+          label={localizationTodo(label)}
           value={value}
-          decrementLabel={`Decrease ${label}`}
-          incrementLabel={`Increase ${label}`}
+          decrementLabel={localizationTodo(`Decrease ${label}`)}
+          incrementLabel={localizationTodo(`Increase ${label}`)}
           onDecrement={() => onChange(id, -1)}
           onIncrement={() => onChange(id, 1)}
           testId={`journey-debug-${id}`}
@@ -369,8 +370,8 @@ function DeckEntryEditor({
   const [expanded, setExpanded] = useState(false);
   return (
     <DisclosureSection
-      title={entry.name}
-      summary={`${entry.detail}${entry.isBane ? " · Nightmare" : ""}`}
+      title={localizationTodo(entry.name)}
+      summary={localizationTodo(`${entry.detail}${entry.isBane ? " · Nightmare" : ""}`)}
       expanded={expanded}
       onExpandedChange={setExpanded}
       placement="onGlass"
@@ -496,17 +497,17 @@ function DeckEditControls({
   return (
     <div style={stackStyle}>
       <TextField
-        label="Energy override"
+        label={localizationTodo("Energy override")}
         value={energy}
         onChange={setEnergy}
-        placeholder="Use printed energy"
+        placeholder={localizationTodo("Use printed energy")}
         testId={`journey-debug-energy-${entry.entryId}`}
       />
       <TextField
-        label="Spark override"
+        label={localizationTodo("Spark override")}
         value={spark}
         onChange={setSpark}
-        placeholder="Use printed spark"
+        placeholder={localizationTodo("Use printed spark")}
         testId={`journey-debug-spark-${entry.entryId}`}
       />
       <div
@@ -526,10 +527,10 @@ function DeckEditControls({
         />
       </div>
       <Select
-        options={[...transfigurationOptions]}
+        options={[...transfigurationOptions].map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
         value={transfiguration}
         onChange={setTransfiguration}
-        ariaLabel="Transfiguration"
+        ariaLabel={localizationTodo("Transfiguration")}
       />
       <GlassButton
         label="Commit transfiguration"
@@ -545,13 +546,13 @@ function DeckEditControls({
         testId={`journey-debug-commit-transfiguration-${entry.entryId}`}
       />
       <Select
-        options={CARD_TYPES}
+        options={CARD_TYPES.map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
         value={cardType}
         onChange={setCardType}
-        ariaLabel="Card type"
+        ariaLabel={localizationTodo("Card type")}
       />
       <TextField
-        label="Subtype"
+        label={localizationTodo("Subtype")}
         value={subtype}
         onChange={setSubtype}
         testId={`journey-debug-subtype-${entry.entryId}`}
@@ -571,18 +572,18 @@ function DeckEditControls({
       />
       <SegmentedControl
         options={[
-          { value: "normal", label: "Normal" },
-          { value: "fast", label: "Fast" },
+          { value: "normal", label: localizationTodo("Normal") },
+          { value: "fast", label: localizationTodo("Fast") },
         ]}
         value={fast}
         onChange={setFast}
         full
       />
       <TextField
-        label="Reclaim"
+        label={localizationTodo("Reclaim")}
         value={reclaim}
         onChange={setReclaim}
-        placeholder="None"
+        placeholder={localizationTodo("None")}
         testId={`journey-debug-reclaim-${entry.entryId}`}
       />
       <div

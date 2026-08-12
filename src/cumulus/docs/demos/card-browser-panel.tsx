@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { useEffect, useState } from "react";
 import { loadCardDatabase } from "../../../data/card-database";
 import type { CardData } from "../../../types/cards";
@@ -47,27 +48,27 @@ function CardBrowserPanelDemo() {
   return (
     <div style={{ width: "min(1040px, 100%)", height: 700 }}>
       <CardBrowserPanel
-        title="Your Deck"
-        subtitle="Four cards"
+        title={localizationTodo("Your Deck")}
+        subtitle={localizationTodo("Four cards")}
         cards={cards}
         toolbar={{
-          search: { label: "Search Cards", value: query, onChange: setQuery },
+          search: { label: localizationTodo("Search Cards"), value: query, onChange: setQuery },
           sort: {
-            ariaLabel: "Sort cards",
+            ariaLabel: localizationTodo("Sort cards"),
             value: sort,
             options: [
-              { value: "current", label: "Current Order" },
-              { value: "name", label: "Name" },
+              { value: "current", label: localizationTodo("Current Order") },
+              { value: "name", label: localizationTodo("Name") },
             ],
             onChange: setSort,
           },
           filter: {
-            ariaLabel: "Filter cards",
+            ariaLabel: localizationTodo("Filter cards"),
             value: filter,
             options: [
-              { value: "all", label: "All Types" },
-              { value: "character", label: "Characters" },
-              { value: "event", label: "Events" },
+              { value: "all", label: localizationTodo("All Types") },
+              { value: "character", label: localizationTodo("Characters") },
+              { value: "event", label: localizationTodo("Events") },
             ],
             onChange: setFilter,
           },

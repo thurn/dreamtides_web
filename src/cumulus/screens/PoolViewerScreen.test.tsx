@@ -32,6 +32,18 @@ describe("PoolViewerScreen", () => {
     act(() => root.render(<CumulusRoot><PoolViewerScreen view={view} onClose={vi.fn()} onSourceChange={onSourceChange} onFiltersChange={onFiltersChange} onCardPress={onCardPress} /></CumulusRoot>));
     expect(container.querySelector('[data-pool-viewer="overlay"]')).not.toBeNull();
     expect(container.querySelector('[data-testid="pool-viewer-gallery"]')).not.toBeNull();
+    const searchInput = container.querySelector('[data-testid="pool-viewer-search"]');
+    const localizedSinkValues = [
+      container.querySelector("h2")?.textContent,
+      container.querySelector('[data-testid="pool-viewer-close"]')?.getAttribute("aria-label"),
+      searchInput?.closest("label")?.querySelector("span")?.textContent,
+      ...Array.from(container.querySelectorAll('button[aria-haspopup="listbox"]'))
+        .map((button) => button.getAttribute("aria-label")),
+    ];
+    expect(localizedSinkValues.length).toBeGreaterThan(3);
+    expect(localizedSinkValues.every((value) => (
+      value !== null && value !== undefined && value.trim() !== "" && !value.includes("tx1_")
+    ))).toBe(true);
     act(() => (container.querySelector('button[role="tab"][aria-selected="false"]') as HTMLButtonElement).click());
     expect(onSourceChange).toHaveBeenCalledWith("catalog");
     act(() => (container.querySelector('[data-gallery-entry-id="run:pool-card"] .card-view') as HTMLElement).click());

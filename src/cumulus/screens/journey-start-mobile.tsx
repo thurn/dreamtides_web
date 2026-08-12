@@ -6,6 +6,7 @@
 // source; `JourneyStartScreen` picks between the two by viewport.
 // PURE: renders from a view-model and reports the chosen DreamAvatar via `onPick`.
 
+import { localizationTodo } from "@trox/runtime";
 import { useRef, useState } from "react";
 import { Motes } from "../components/hud/Motes";
 import { GlassButton } from "../components/controls/GlassButton";
@@ -173,9 +174,9 @@ function EdgeChevron({
       <IconButton
         size="sm"
         glyph={dir === "left" ? GLYPHS.chevronLeft : GLYPHS.chevronRight}
-        label={t("journey-start-carousel-navigation-action", {
+        label={localizationTodo(t("journey-start-carousel-navigation-action", {
           direction: dir === "left" ? "previous" : "next",
-        })}
+        }))}
         onPress={onClick}
       />
     </div>

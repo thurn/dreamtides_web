@@ -14,14 +14,14 @@ The reusable labeled text and search input on Cumulus control chrome, with suppo
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `label` | `string` | yes | — | Visible field label. |
+| `label` | `LocalizedString` | yes | — | Localized field label. |
 | `value` | `string` | yes | — | Controlled value. |
 | `onChange` | `(value: string) => void` | yes | — | Reports edited text. |
 | `onCommit` | `((value: string) => void)` | no | — | Commits the current value on blur or Enter. |
 | `kind` | `TextFieldKind` = `"text" \| "search"` | no | `text` | Text or search semantics. Defaults to text. |
-| `placeholder` | `string` | no | — | Optional placeholder. |
-| `supportingText` | `string` | no | — | Optional supporting copy beneath the control. |
-| `error` | `string` | no | — | Validation copy; also marks the input invalid. |
+| `placeholder` | `LocalizedString` | no | — | Optional placeholder. |
+| `supportingText` | `LocalizedString` | no | — | Optional supporting copy beneath the control. |
+| `error` | `LocalizedString` | no | — | Validation copy; also marks the input invalid. |
 | `disabled` | `boolean` | no | `false` | Prevent editing. |
 | `testId` | `string` | no | — | Stable test id for the input. |
 | `inputRef` | `Ref<HTMLInputElement>` | no | — | Optional ref to the native input for focus orchestration. |

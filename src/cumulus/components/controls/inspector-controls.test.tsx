@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 
+import { localizationTodo } from "@trox/runtime";
 import { act, useState, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -28,7 +29,7 @@ describe("inspector Cumulus controls", () => {
   it("exposes labeled NumberStepper actions and formatted output", () => {
     const decrement = vi.fn();
     const increment = vi.fn();
-    const { container, root } = mount(<NumberStepper label="Energy" value={2} displayValue="2/4" resource="energy" decrementLabel="Decrease energy" incrementLabel="Increase energy" onDecrement={decrement} onIncrement={increment} />);
+    const { container, root } = mount(<NumberStepper label={localizationTodo("Energy")} value={2} displayValue={localizationTodo("2/4")} resource="energy" decrementLabel={localizationTodo("Decrease energy")} incrementLabel={localizationTodo("Increase energy")} onDecrement={decrement} onIncrement={increment} />);
     expect(container.querySelector('[role="group"]')?.getAttribute("aria-label")).toBe("Energy");
     expect(container.querySelector("i.bxf.bx-fire-alt")).not.toBeNull();
     act(() => { (container.querySelector('button[aria-label="Decrease energy"]') as HTMLButtonElement).click(); (container.querySelector('button[aria-label="Increase energy"]') as HTMLButtonElement).click(); });
@@ -38,7 +39,7 @@ describe("inspector Cumulus controls", () => {
   });
 
   it("keeps DisclosureSection controlled", () => {
-    function Fixture(): ReactElement { const [open, setOpen] = useState(false); return <DisclosureSection title="Details" expanded={open} onExpandedChange={setOpen}><span>Hidden body</span></DisclosureSection>; }
+    function Fixture(): ReactElement { const [open, setOpen] = useState(false); return <DisclosureSection title={localizationTodo("Details")} expanded={open} onExpandedChange={setOpen}><span>Hidden body</span></DisclosureSection>; }
     const { container, root } = mount(<Fixture />);
     expect(container.textContent).not.toContain("Hidden body");
     act(() => (container.querySelector("button") as HTMLButtonElement).click());
@@ -47,7 +48,7 @@ describe("inspector Cumulus controls", () => {
   });
 
   it("owns placement-aware DisclosureSection surface chrome", () => {
-    const { container, root } = mount(<DisclosureSection title="Details" expanded={false} onExpandedChange={vi.fn()} placement="onGlass"><span>Hidden body</span></DisclosureSection>);
+    const { container, root } = mount(<DisclosureSection title={localizationTodo("Details")} expanded={false} onExpandedChange={vi.fn()} placement="onGlass"><span>Hidden body</span></DisclosureSection>);
     const section = container.querySelector<HTMLElement>("section");
     expect(section?.dataset.glassPlacement).toBe("onGlass");
     expect(section?.style.background).toContain("var(--glass-on-glass-fill)");
@@ -57,7 +58,7 @@ describe("inspector Cumulus controls", () => {
 
   it("labels TextField and reports changes", () => {
     const onChange = vi.fn();
-    const { container, root } = mount(<TextField label="Search cards" kind="search" value="moth" onChange={onChange} />);
+    const { container, root } = mount(<TextField label={localizationTodo("Search cards")} kind="search" value="moth" onChange={onChange} />);
     const input = container.querySelector("input") as HTMLInputElement;
     expect(input.type).toBe("search");
     act(() => {

@@ -4,17 +4,18 @@
 // forwards picks into `onChange`; `docName` still points at the real Select so
 // the props table documents its actual API.
 
+import { localizationTodo } from "@trox/runtime";
 import { useEffect, useState } from "react";
 import { Select, type SelectOption } from "../../components/controls/Select";
 import { GLYPHS } from "../../primitives/glyph";
 import type { CumulusComponent } from "../registry";
 
 const OPTIONS: SelectOption[] = [
-  { value: "name", label: "Name" },
-  { value: "drafted", label: "Drafted" },
-  { value: "cost", label: "Cost" },
-  { value: "spark", label: "Spark" },
-  { value: "subtype", label: "Subtype" },
+  { value: "name", label: localizationTodo("Name") },
+  { value: "drafted", label: localizationTodo("Drafted") },
+  { value: "cost", label: localizationTodo("Cost") },
+  { value: "spark", label: localizationTodo("Spark") },
+  { value: "subtype", label: localizationTodo("Subtype") },
 ];
 
 interface SelectDemoArgs {

@@ -1,5 +1,6 @@
 // PurgeSiteScreen — the Cumulus rendering of Master Takeshi's purge site.
 
+import { localizationTodo } from "@trox/runtime";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { DeckCardView } from "./MobileDeckViewer";
 import { CardPickerPanel } from "../components/card/CardPickerPanel";
@@ -232,8 +233,8 @@ function PurgeGallery({
       }}
     >
       <CardPickerPanel
-        title={presentation.title}
-        subtitle={presentation.instruction}
+        title={localizationTodo(presentation.title)}
+        subtitle={localizationTodo(presentation.instruction)}
         rightAccessory={{
           kind: "glassButton",
           button: {

@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   useCallback,
@@ -322,7 +323,7 @@ export function AugurySiteScreen({
           <IconButton
             glyph={GLYPHS.refresh}
             overlayGlyph={GLYPHS.bug}
-            label={t("augury-reroll-offers")}
+            label={localizationTodo(t("augury-reroll-offers"))}
             onPress={onReroll}
             testId="reroll-augury-offers"
           />
@@ -360,8 +361,8 @@ function OfferDetailPanel({
       style={{ width: "100%", height: "100%", minWidth: 0, minHeight: 0, pointerEvents: "auto" }}
     >
       <GlassPanel
-        title={auguryOfferHeadline(offer.tile, offer.presentation)}
-        subtitle={offerTileDescription(offer.tile, offer.presentation)}
+        title={localizationTodo(auguryOfferHeadline(offer.tile, offer.presentation))}
+        subtitle={localizationTodo(offerTileDescription(offer.tile, offer.presentation))}
         headerSpacing="medium"
         footer={
           <div

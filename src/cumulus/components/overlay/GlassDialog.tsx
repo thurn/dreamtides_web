@@ -30,6 +30,8 @@
 // exactly one close owner — the disc simply moves — so this is a non-breaking,
 // additive extension.
 
+import { localizationTodo } from "@trox/runtime";
+import type { LocalizedString } from "@trox/runtime";
 import { useEffect, useLayoutEffect, useState } from "react";
 import type { CSSProperties, ReactElement, ReactNode } from "react";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
@@ -38,6 +40,7 @@ import { IconButton } from "../controls/IconButton";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** Diameter (px) of the `md` IconButton close disc, for cutout-relative placement. */
 const CLOSE_DISC_PX = 48;
@@ -81,16 +84,16 @@ export function GlassBackdrop(): ReactElement {
 /** Props for {@link GlassDialog}. */
 export interface GlassDialogProps {
   /** The dialog's heading, rendered as an `<h2>`. */
-  title: string;
+  title: LocalizedString;
   /** Optional intro line under the title. */
-  subtitle?: string;
+  subtitle?: LocalizedString;
   /**
    * Dismisses the dialog from its close disc. Omit for a commit-gated dialog
    * that intentionally exposes no dismissal control.
    */
   onClose?: () => void;
   /** Accessible name for the close disc. Defaults to `"Close"`. */
-  closeLabel?: string;
+  closeLabel?: LocalizedString;
   /**
    * When true, on a full-bleed mobile overlay whose screen-cutout box is known
    * (a device-screenshot mock-up) the close disc floats up beside the device
@@ -154,7 +157,7 @@ export function GlassDialog({
   title,
   subtitle,
   onClose,
-  closeLabel = "Close",
+  closeLabel = localizationTodo("Close"),
   cutoutAwareClose = false,
   fullScreen = false,
   presentation = "responsive",
@@ -163,6 +166,7 @@ export function GlassDialog({
   companion,
   children,
 }: GlassDialogProps): ReactElement {
+  const resolve = useLocalizer();
   const isDesktop = useIsDesktop();
   const glass = glassSurfaceStyle();
   const popup = presentation === "popup" && !fullScreen;
@@ -316,7 +320,7 @@ export function GlassDialog({
                 color: token("--text-primary"),
               }}
             >
-              {title}
+              {resolve(title)}
             </h2>
             {subtitle !== undefined && (
               <p
@@ -326,7 +330,7 @@ export function GlassDialog({
                   color: token("--text-on-glass-muted"),
                 }}
               >
-                {subtitle}
+                {resolve(subtitle)}
               </p>
             )}
           </div>
@@ -366,7 +370,7 @@ export function GlassDialog({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={title}
+      aria-label={resolve(title)}
       className="cumulus"
       data-glass-dialog-desktop-center-target={desktopCenterTarget}
       data-glass-dialog-presentation={presentation}

@@ -4,6 +4,7 @@
 // console hairline, while both compose the canonical RulesText source.
 // PURE: no state ownership; the adapter owns the offer, the seed, and startJourney.
 
+import { localizationTodo } from "@trox/runtime";
 import { useEffect } from "react";
 import { RulesText } from "../components/card/RulesText";
 import { EssenceValue } from "../components/hud/EssenceValue";
@@ -273,7 +274,7 @@ export function JourneyStartRerollControl({
     >
       <IconButton
         glyph={GLYPHS.refresh}
-        label={label}
+        label={localizationTodo(label)}
         onPress={onReroll}
         testId="reroll-dream-avatars"
       />

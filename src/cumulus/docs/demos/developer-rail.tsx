@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { DeveloperRail } from "../../components/overlay/DeveloperRail";
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
@@ -13,8 +14,9 @@ function Demo({
     <div style={{ width: 380, height: 560 }}>
       <DeveloperRail
         id="demo-developer-rail"
-        title={title}
-        subtitle={subtitle}
+        title={localizationTodo(title)}
+        subtitle={localizationTodo(subtitle)}
+        closeLabel={localizationTodo("Close tutorial editor")}
         side="left"
         onClose={() => undefined}
       >

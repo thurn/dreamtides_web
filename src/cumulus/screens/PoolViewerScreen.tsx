@@ -2,7 +2,7 @@
 //
 // The app overlay and floating battle inspector use this same pure screen.  The
 // outer controller owns visibility, stateful domain integration, and (for the
-// battle) window dragging; this file only renders resolved view data and
+// battle) window dragging; this file only renders semantic view data and
 // reports stable entry ids through callbacks.
 
 import type { CSSProperties, DragEvent, ReactElement } from "react";
@@ -118,9 +118,8 @@ export function PoolViewerScreen({
 
   const sourceOptions = view.sourceOptions.map((source) => ({
     value: source,
-    label: resolve(sourceOptionLabel(source)),
+    label: sourceOptionLabel(source),
   }));
-  const emptyLabel = resolve(emptySourceLabel(view.source));
   const galleryCards = view.cards.map((card) => ({
     ...card,
     draggable: onCardDragStart !== undefined,
@@ -143,7 +142,7 @@ export function PoolViewerScreen({
           size="sm"
           options={(["all", "character", "event"] as const).map((card_type) => ({
             value: card_type,
-            label: resolve(typeFilterLabel(card_type)),
+            label: typeFilterLabel(card_type),
           }))}
           value={view.filters.type}
           onChange={(type) => onFiltersChange({ type: type as PoolViewerTypeFilter })}
@@ -152,10 +151,10 @@ export function PoolViewerScreen({
           size="sm"
           options={(["asc", "desc"] as const).map((direction) => ({
             value: direction,
-            label: direction === "asc"
+            symbol: direction === "asc"
               ? /* localization-ignore: icon-only sort glyph; the adjacent ariaLabel is localized. */ "↑"
               : /* localization-ignore: icon-only sort glyph; the adjacent ariaLabel is localized. */ "↓",
-            ariaLabel: resolve(sortDirectionLabel(direction)),
+            ariaLabel: sortDirectionLabel(direction),
           }))}
           value={view.filters.direction}
           onChange={(direction) => onFiltersChange({ direction: direction as PoolViewerSortDirection })}
@@ -163,28 +162,31 @@ export function PoolViewerScreen({
         <Select
           size="sm"
           leadingGlyph={GLYPHS.filter}
-          ariaLabel={resolve(tx(
+          ariaLabel={tx(
             "Filter card subtype",
             "Accessible name for the Pool Viewer selector that filters Character cards by their authored subtype.",
-          ))}
-          options={[{ value: "", label: resolve(tx(
+          )}
+          options={[{ value: "", label: tx(
             "All subtypes",
             "Visible Pool Viewer subtype option that clears the authored Character-subtype filter.",
-          )) }, ...view.subtypeOptions]}
+          ) }, ...view.subtypeOptions.map((option) => ({
+            value: option.value,
+            authoredLabel: option.label,
+          }))]}
           value={view.filters.subtype}
           onChange={(subtype) => onFiltersChange({ subtype })}
         />
         <Select
           size="sm"
           leadingGlyph={GLYPHS.energy}
-          ariaLabel={resolve(tx(
+          ariaLabel={tx(
             "Filter card cost",
             "Accessible name for the Pool Viewer selector that filters cards by their Energy-cost category.",
-          ))}
+          )}
           options={(["all", "0", "1", "2", "3", "4", "5plus", "x"] as const).map((cost) => {
             return {
               value: cost,
-              label: resolve(costFilterLabel(cost)),
+              label: costFilterLabel(cost),
             };
           })}
           value={view.filters.cost}
@@ -196,30 +198,30 @@ export function PoolViewerScreen({
           key={disclosure.id}
           title={
             disclosure.id === "tides"
-              ? resolve(tx(
+              ? tx(
                   "Tide provenance",
                   "Visible title of the Pool Viewer disclosure explaining which Tides constructed the run pool.",
-                ))
-              : resolve(tx(
+                )
+              : tx(
                   "Pool construction",
                   "Visible title of the Pool Viewer disclosure identifying the active pool-construction algorithm.",
-                ))
+                )
           }
           summary={
             disclosure.id === "tides"
-              ? resolve(txa(
+              ? txa(
                   plural(disclosure.tideCount, [
                     one("{tide_count} Tide"),
                     other("{tide_count} Tides"),
                   ]),
                   { tide_count: disclosure.tideCount },
                   "Visible Pool Viewer disclosure summary showing the number of Tides used to construct the pool. tide_count is a visible nonnegative safe integer, can be zero in synthetic or incomplete data, and governs Tide number grammar.",
-                ))
-              : resolve(txa(
+                )
+              : txa(
                   "Algorithm: {algorithm_id}",
                   { algorithm_id: disclosure.variant },
                   "Visible Pool Viewer diagnostic summary naming the pool-construction algorithm. algorithm_id is a stable raw internal identifier such as tides4; translators may reorder it but the identifier itself remains unchanged.",
-                ))
+                )
           }
           expanded={expandedDisclosures[disclosure.id] ?? true}
           onExpandedChange={(expanded) => setExpandedDisclosures((current) => ({ ...current, [disclosure.id]: expanded }))}
@@ -248,33 +250,33 @@ export function PoolViewerScreen({
         </DisclosureSection>
       ))}
       <CardBrowserPanel
-          title={resolve(viewerTitle(view.title))}
-          subtitle={resolve(txa(
+          title={viewerTitle(view.title)}
+          subtitle={txa(
             plural(view.totalCount, [
               one("{visible_count} of {total_count} Card"),
               other("{visible_count} of {total_count} Cards"),
             ]),
             { visible_count: view.visibleCount, total_count: view.totalCount },
             "Visible Pool Viewer result-count subtitle. visible_count is the nonnegative safe-integer number remaining after filters and may be smaller than total_count. total_count is the nonnegative safe-integer size of the selected source before filters and governs Card number grammar; both numbers are visible.",
-          ))}
-          rightAccessory={{ kind: "iconButton", button: { glyph: GLYPHS.close, label: resolve(tx(
+          )}
+          rightAccessory={{ kind: "iconButton", button: { glyph: GLYPHS.close, label: tx(
             "Close pool viewer",
             "Accessible command name for the button that closes the Pool Viewer overlay or floating panel.",
-          )), onPress: onClose, testId: "pool-viewer-close" } }}
+          ), onPress: onClose, testId: "pool-viewer-close" } }}
           toolbar={{
-            search: { label: resolve(tx(
+            search: { label: tx(
               "Search cards",
               "Visible label for the Pool Viewer field that searches authored card names and rules text.",
-            )), value: view.filters.query, onChange: (query) => onFiltersChange({ query }), testId: "pool-viewer-search" },
-            sort: { ariaLabel: resolve(tx(
+            ), value: view.filters.query, onChange: (query) => onFiltersChange({ query }), testId: "pool-viewer-search" },
+            sort: { ariaLabel: tx(
               "Sort cards",
               "Accessible name for the Pool Viewer selector that chooses the card property used for sorting.",
-            )), value: view.filters.sort, options: view.sortOptions.map((sort) => {
-              return { value: sort, label: resolve(sortFieldLabel(sort)) };
+            ), value: view.filters.sort, options: view.sortOptions.map((sort) => {
+              return { value: sort, label: sortFieldLabel(sort) };
             }), onChange: (sort) => onFiltersChange({ sort: sort as PoolViewerSortId }) },
           }}
           cards={galleryCards}
-          emptyLabel={emptyLabel}
+          emptyLabel={emptySourceLabel(view.source)}
           presentation={view.frame === "fullScreen" ? "fullScreen" : "embedded"}
           testId="pool-viewer-gallery"
           onCardPress={onCardPress}

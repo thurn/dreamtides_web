@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import type { CSSProperties, ReactElement } from "react";
 import { GlassButton } from "../components/controls/GlassButton";
 import { TextField } from "../components/controls/TextField";
@@ -55,14 +56,14 @@ export function PackageDebugDialog(props: PackageDebugDialogProps): ReactElement
   if (!props.isOpen) return null;
   return (
     <div className="cumulus" data-package-debug-dialog="" style={{ minHeight: "100vh" }}>
-      <GlassDialog title="Debug: Package State" subtitle="Inspect the active run and manage a portable journey save." onClose={props.onClose} fullScreen>
+      <GlassDialog title={localizationTodo("Debug: Package State")} subtitle={localizationTodo("Inspect the active run and manage a portable journey save.")} onClose={props.onClose} fullScreen>
         <div style={stackStyle}>
           <section data-package-debug-values="" style={{ display: "flex", flexWrap: "wrap", gap: token("--space-s") }}>
             {props.view.values.map((value) => <p key={value.id} style={{ ...mutedStyle, display: "grid", gap: token("--space-xxs") }}><span style={{ font: token("--t-eyebrow") }}>{value.label}</span><strong style={{ font: token("--t-lead"), color: token("--text-on-glass") }}>{value.value}</strong></p>)}
           </section>
           <section style={stackStyle} data-package-debug-save-file="">
             <h3 style={{ margin: 0, font: token("--t-title-sm"), color: token("--text-on-glass") }}>Journey Save File</h3>
-            <TextField label="Save name" value={props.saveName} onChange={props.onSaveNameChange} placeholder="e.g. warriors draft" disabled={props.busy || !props.canSave} testId="debug-save-journey-name" error={props.saveError ?? undefined} supportingText={props.saveStatus ?? "Download the active run as JSON, or load a journey file."} />
+            <TextField label={localizationTodo("Save name")} value={props.saveName} onChange={props.onSaveNameChange} placeholder={localizationTodo("e.g. warriors draft")} disabled={props.busy || !props.canSave} testId="debug-save-journey-name" error={props.saveError === null ? undefined : localizationTodo(props.saveError)} supportingText={localizationTodo(props.saveStatus ?? "Download the active run as JSON, or load a journey file.")} />
             <div style={{ display: "flex", flexWrap: "wrap", gap: token("--space-xs") }}><GlassButton label="Save Journey" onPress={props.onSave} disabled={props.busy || !props.canSave} placement="onGlass" variant="accent" testId="debug-save-journey" /><GlassButton label="Load Journey" onPress={props.onLoad} disabled={props.busy || !props.canLoad} placement="onGlass" testId="debug-load-journey" /></div>
           </section>
           <DiagnosticSection title="Avatar" entries={props.view.dreamAvatar === null ? [] : [{ id: "dreamAvatar", label: props.view.dreamAvatar }]} emptyLabel="No package data available yet." />

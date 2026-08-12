@@ -1,13 +1,15 @@
 import type { ChangeEvent, ReactElement, Ref } from "react";
+import type { LocalizedString } from "@trox/runtime";
 import { controlChrome } from "../../internal/control-treatment";
 import { token } from "../../primitives/tokens";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** Named input modes supported by the shared text field. */
 export type TextFieldKind = "text" | "search";
 
 export interface TextFieldProps {
-  /** Visible field label. */
-  label: string;
+  /** Localized field label. */
+  label: LocalizedString;
   /** Controlled value. */
   value: string;
   /** Reports edited text. */
@@ -17,11 +19,11 @@ export interface TextFieldProps {
   /** Text or search semantics. Defaults to text. */
   kind?: TextFieldKind;
   /** Optional placeholder. */
-  placeholder?: string;
+  placeholder?: LocalizedString;
   /** Optional supporting copy beneath the control. */
-  supportingText?: string;
+  supportingText?: LocalizedString;
   /** Validation copy; also marks the input invalid. */
-  error?: string;
+  error?: LocalizedString;
   /** Prevent editing. */
   disabled?: boolean;
   /** Stable test id for the input. */
@@ -44,6 +46,7 @@ export function TextField({
   testId,
   inputRef,
 }: TextFieldProps): ReactElement {
+  const resolve = useLocalizer();
   const message = error ?? supportingText;
   const chrome = controlChrome("onGlass");
   return (
@@ -55,13 +58,13 @@ export function TextField({
           textTransform: "uppercase",
         }}
       >
-        {label}
+        {resolve(label)}
       </span>
       <input
         ref={inputRef}
         type={kind}
         value={value}
-        placeholder={placeholder}
+        placeholder={placeholder === undefined ? undefined : resolve(placeholder)}
         disabled={disabled}
         aria-invalid={error === undefined ? undefined : true}
         data-testid={testId}
@@ -94,7 +97,7 @@ export function TextField({
             font: token("--t-caption"),
           }}
         >
-          {message}
+          {resolve(message)}
         </span>
       )}
     </label>

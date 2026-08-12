@@ -35,6 +35,7 @@
 // embedded as a data URI (150×233, rendered at 63px tall) so there is no
 // separate asset to load.
 
+import { localizationTodo } from "@trox/runtime";
 import * as React from "react";
 import type { CSSProperties, ReactElement } from "react";
 import { richText } from "../card/rich-text";
@@ -360,7 +361,7 @@ function QsbDreamsignWindow({
           <IconButton
             glyph={GLYPHS.close}
             size="sm"
-            label={t("journey-status-close-action")}
+            label={localizationTodo(t("journey-status-close-action"))}
             onPress={onClose}
           />
         </div>

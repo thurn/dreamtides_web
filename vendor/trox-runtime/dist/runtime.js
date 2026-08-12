@@ -4,7 +4,7 @@ import { formatNumber } from "./number-format.js";
 import { base32, canonicalJson, deepFreeze, hex } from "./canonical-json.js";
 import { CompiledPluralRules, compilePluralCondition } from "./plural-evaluation.js";
 import { assertDictionary, assertObjectKeys, deserializeBoundary, ownValue, parseCanonicalJson } from "./deserialization.js";
-import { CATEGORIES, CONSTRUCTION_TOKEN, LocalizedString, PLACEHOLDER, assertNfc, assertSelectorInteger, assertStableId, collectPatternPlaceholders, parsePlaceholders, validateArgumentMap, validateIdentity, validateSelectorRecords, } from "./authoring.js";
+import { CATEGORIES, CONSTRUCTION_TOKEN, LOCALIZATION_TODO_MEANING, LocalizedString, localizationTodoPattern, PLACEHOLDER, assertNfc, assertSelectorInteger, assertStableId, collectPatternPlaceholders, parsePlaceholders, validateArgumentMap, validateIdentity, validateSelectorRecords, } from "./authoring.js";
 export { TroxDeserializeError, TroxResolveError, TroxValueError } from "./errors.js";
 export { formatNumber } from "./number-format.js";
 export { canonicalJson } from "./canonical-json.js";
@@ -90,6 +90,12 @@ export class SourceCatalog {
             if (entryId !== wire.entry_id || signature !== wire.source_signature) {
                 throw new TroxDeserializeError("trox.identity-mismatch", "wire identity hash mismatch");
             }
+            if (wire.identity.meaning === LOCALIZATION_TODO_MEANING) {
+                const todo = LocalizedString.fromValidatedWire(wire, CONSTRUCTION_TOKEN);
+                if (localizationTodoPattern(todo) !== undefined)
+                    return todo;
+                throw new TroxDeserializeError("trox.unauthorized-entry", "invalid localization TODO value");
+            }
             const authorized = ownValue(this.#entries, entryId);
             if (authorized?.source_signature !== signature || canonicalJson(authorized.identity) !== canonicalJson(wire.identity)) {
                 throw new TroxDeserializeError("trox.unauthorized-entry", `entry ${entryId} is not authorized`);
@@ -166,10 +172,16 @@ export class Localizer {
     get sourceCatalog() { return this.#catalog; }
     localizedStringFromJSON(input) { return this.#catalog.localizedStringFromJSON(input); }
     resolveChecked(value) {
+        const todoPattern = localizationTodoPattern(value);
+        if (todoPattern !== undefined)
+            return this.interpolate(todoPattern, value, false);
         const row = this.targetRow(value);
         return this.interpolate(row.translation, value, true);
     }
     resolve(value) {
+        const todoPattern = localizationTodoPattern(value);
+        if (todoPattern !== undefined)
+            return this.interpolateRecovering(todoPattern, value);
         try {
             return this.interpolateRecovering(this.targetRow(value).translation, value, true);
         }

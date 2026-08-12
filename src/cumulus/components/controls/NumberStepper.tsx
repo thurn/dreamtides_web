@@ -1,4 +1,6 @@
+import type { LocalizedString } from "@trox/runtime";
 import type { ReactElement } from "react";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { InlineGlyph } from "../typography/InlineGlyph";
@@ -15,17 +17,17 @@ export type NumberStepperResource =
 
 export interface NumberStepperProps {
   /** Visible label for the numeric value. */
-  label: string;
+  label: LocalizedString;
   /** Current numeric value. */
   value: number;
   /** Optional formatted value while `value` remains the numeric state contract. */
-  displayValue?: string;
+  displayValue?: LocalizedString;
   /** Optional economy mark paired with the value. */
   resource?: NumberStepperResource;
   /** Accessible label for the decrement action. */
-  decrementLabel: string;
+  decrementLabel: LocalizedString;
   /** Accessible label for the increment action. */
-  incrementLabel: string;
+  incrementLabel: LocalizedString;
   /** Fires when the decrement disc is pressed. */
   onDecrement: () => void;
   /** Fires when the increment disc is pressed. */
@@ -59,10 +61,11 @@ export function NumberStepper({
   testId,
 }: NumberStepperProps): ReactElement {
   const compact = size === "sm";
+  const resolve = useLocalizer();
   return (
     <div
       role="group"
-      aria-label={label}
+      aria-label={resolve(label)}
       data-testid={testId}
       style={{
         display: "grid",
@@ -79,7 +82,7 @@ export function NumberStepper({
           font: token(compact ? "--t-caption" : "--t-body-sm"),
         }}
       >
-        {label}
+        {resolve(label)}
       </span>
       <IconButton
         glyph={GLYPHS.minus}
@@ -100,7 +103,7 @@ export function NumberStepper({
           fontVariantNumeric: "tabular-nums",
         }}
       >
-        <span>{displayValue ?? String(value)}</span>
+        <span>{displayValue === undefined ? String(value) : resolve(displayValue)}</span>
         {resource === undefined ? null : (
           <InlineGlyph glyph={GLYPHS[resource]} />
         )}

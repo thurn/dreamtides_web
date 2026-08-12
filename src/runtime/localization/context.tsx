@@ -99,9 +99,14 @@ function ActiveTroxLocalizationProvider({
 }
 
 export function useLocalizationContext(): LocalizationContextValue {
-  const value = useContext(LocalizationContext);
+  const value = useOptionalLocalizationContext();
   if (value === null) {
     throw new Error("useLocalizer requires a mounted TroxLocalizationProvider.");
   }
   return value;
+}
+
+/** Reads localization when a leaf also supports deliberately raw text. */
+export function useOptionalLocalizationContext(): LocalizationContextValue | null {
+  return useContext(LocalizationContext);
 }

@@ -10,11 +10,13 @@
 > represented in Trox without changing its source-English output, stop and
 > report that conflict instead of weakening the message design.
 
-**Status:** Proposed implementation plan for a Luna implementation agent
+**Status:** Tasks 1–4 of the original plan are complete. This document plans
+the remaining migration from the accepted Trox foundation and Pool Viewer
+slice.
 
 **Audited quest commit:** `ee2b487b8` (`master` on 2026-08-10)
 
-**Audited Trox commit:** `f70bdd1ae7707fb294dd7051a8f7a369ca3c6805`
+**Audited Trox commit:** `d8428631e1a3f6c4d9d66c80737172c9941c14c7`
 
 **Trox source:** `~/trox`
 
@@ -35,8 +37,12 @@ runtime or parser dependency, Fluent formatter/generator/validator, Fluent
 message ID, or `FluentMessageDescriptor` state. Player-runtime TypeScript and
 TSX author complete source-English messages at their semantic use sites with
 Trox `tx`, `txa`, `plural`, `ordinal`, and `select` calls. Those calls return
-immutable `LocalizedString` values which remain unresolved through view models
-and resolve only at React or another explicit presentation boundary.
+immutable `LocalizedString` values which remain unresolved through view models,
+screen composition, Cumulus component props, option and accessory models,
+overlays, and events. Resolution occurs only at a browser primitive: an
+intrinsic DOM text node or attribute, a browser API such as `document.title` or
+`window.prompt`, or a browser-owned drawing/accessibility API which accepts
+only strings.
 
 Trox owns extraction, source reports, locale-specific row expansion, canonical
 bundles, source fallback, target number formatting, placeholder isolation, and
@@ -62,9 +68,11 @@ The implementing Luna agent must do this before editing:
    `docs/journey_prototype/localization-grammar-audit.md`, and
    `docs/journey_prototype/firebase_multiplayer.md`.
 2. Read `~/trox/README.md` completely and verify `~/trox` is at the audited
-   revision. At this revision the authoritative contract is the consolidated
-   README, implementation, and tests; the design/evolution/syntax paths named
-   by the localization skill are absent from the repository.
+   revision. This revision includes the exported
+   `localizationTodo(sourceText): LocalizedString` migration constructor. The
+   authoritative contract is the consolidated README, implementation, and
+   tests; the design/evolution/syntax paths named by the localization skill are
+   absent from the repository.
    If the revision differs, compare the TypeScript authoring API, scanner,
    bundle schema, `SourceCatalog`, `Localizer`, CLI commands, and tests before
    following this plan; update the pinned runtime snapshot and this document if
@@ -73,20 +81,24 @@ The implementing Luna agent must do this before editing:
    `npm install`, and run `scripts/regenerate-assets.sh` once from that
    worktree. Record any pre-existing failure in `pre-existing-issues.txt` as
    required by `AGENTS.md`.
-4. Record the quest starting commit as the immutable parity baseline. Build the
-   parity ledger in Task 1 before changing the first Fluent resource or
-   callsite.
+4. Treat the existing parity ledger and the quest commit recorded in it as the
+   immutable source-English baseline. Extend its callsite and
+   component-boundary coverage before migrating each remaining family.
 5. Keep Fluent and Trox providers side by side only while migration tasks are
    in progress. The final cutover task deletes every Fluent path and verifies
    that the application mounts only the Trox provider.
-6. Run focused tests after each task. Run `npm run review` after each stable
+6. Begin with Remaining Task 1. The Pool Viewer slice is the first correction
+   target: remove every early `resolve(...)` introduced by the completed slice
+   and use it to prove the stricter component contracts before migrating
+   another family.
+7. Run focused tests after each task. Run `npm run review` after each stable
    batch. This is cross-cutting runtime, lint, generated-data, persistence, and
    accessibility work, so the final acceptance pass also runs
    `npm run review:full` and one independent review.
 
-## Current Baseline
+## Original Audited Baseline
 
-The audited tree has:
+The immutable parity baseline recorded before the completed foundation had:
 
 - 9 Fluent resources under `data/locales/en-US/`, totaling 1,952 lines;
 - 577 Fluent messages and 27 Fluent terms;
@@ -123,9 +135,9 @@ units.
 
 ## Target Architecture
 
-### Runtime and presentation boundary
+### Runtime and browser-sink boundary
 
-Add a small quest-owned Trox integration under `src/localization/`:
+The quest-owned Trox integration under `src/localization/` provides:
 
 - `runtime.ts` loads the generated source bundle, constructs the source-locale
   `Localizer`, exposes the `SourceCatalog`, and records structured bundle and
@@ -146,6 +158,74 @@ type ResolveMessage = (message: LocalizedString) => string;
 function useLocalizer(): ResolveMessage;
 function resolveChecked(message: LocalizedString): string;
 ```
+
+The resolver is a restricted sink capability, not a convenience formatter.
+Importing or calling it is valid only in a module which directly writes the
+result to an intrinsic DOM property or child, a browser API, or a browser-owned
+renderer. A call is too early if the resulting `string` is assigned to a local
+view-model field, returned from a label helper, placed in an option/accessory
+object, or passed to another React component. Being inside a screen or React
+component does not by itself make resolution legal.
+
+### Component API boundary
+
+Every production component prop representing code-authored player-facing copy
+uses `LocalizedString`, including nested option, menu-item, accessory, dialog,
+panel, overlay, toast, and accessibility models. Composite components forward
+those values without resolving them. The leaf component which creates the
+intrinsic element resolves the value at the exact `children`, `aria-*`,
+`title`, `placeholder`, `alt`, or equivalent DOM assignment.
+
+The minimum component contract is:
+
+```ts
+interface IconButtonProps {
+  readonly label: LocalizedString;
+}
+```
+
+`IconButton` resolves `label` only where it assigns the `<button>` accessible
+name. A screen therefore passes `tx(...)` to `IconButton`; it never passes
+`resolve(tx(...))`. The same rule applies recursively to structured props such
+as `rightAccessory.button.label` and `Select.options[].label`.
+
+This boundary has four explicit consequences:
+
+1. Shared controls and Cumulus components migrate bottom-up before broad
+   callsite migration. A string-typed child prop is a contract defect to repair,
+   not permission for its caller to resolve early.
+2. A component which both composes another component and directly emits DOM
+   may resolve only the values sent to its own intrinsic elements. Values sent
+   to child components remain `LocalizedString`.
+3. Code-authored copy, accessible copy, status messages, and error explanations
+   use `LocalizedString` even when they are currently static. Option values,
+   IDs, test IDs, URLs, CSS tokens, and control-flow enums remain raw semantic
+   values.
+4. Canonical RON text, user-authored text, and technical diagnostics remain raw
+   strings because they are outside Trox authoring in this migration. Components
+   which mix these with localized chrome expose distinct, semantically named
+   props; a raw authored-text prop is never reused for code-authored UI copy.
+
+Tests, fixtures, and Cumulus documentation must adapt to the production
+`LocalizedString` contracts rather than widening them back to `string`. Use the
+existing synthetic-catalog testing support or a clearly excluded demo-only
+adapter. Do not add `string | LocalizedString`, an implicit coercion, a generic
+`TextLike`, or a `resolveForProps` compatibility helper.
+
+The pinned Trox runtime supplies the migration bridge for code-authored strings:
+`localizationTodo(sourceText)` constructor which returns `LocalizedString` and
+preserves the supplied source text until that callsite receives a proper
+`tx`/`txa` authoring pass. Its name and source location make the debt searchable;
+the quest audit reports every production call, and the final cutover requires
+zero calls. It is not a translation API, does not make its input translatable,
+and must never wrap canonical RON content, user content, IDs, URLs, or technical
+diagnostics. Those values keep their separately named raw contracts.
+
+Quest pins and vendors the shipped Trox revision before converting shared
+component contracts. Do not reproduce, wrap, or alias the helper in quest code.
+Unmigrated code-authored callsites import it directly from `@trox/runtime` at
+their semantic source; shared components still receive only `LocalizedString`
+and therefore need no raw-copy compatibility branch.
 
 Do not create a quest wrapper around `tx`, `txa`, selector arms, argument maps,
 patterns, or descriptions. Trox scans source lexically. Every authoring call,
@@ -173,7 +253,7 @@ Pin the audited Trox revision in a small checked file and vendor the built
 declarations, license, and upstream revision marker. Point `package.json` at
 `file:vendor/trox-runtime`. Do not hand-edit vendored output.
 
-Add `scripts/sync-trox-runtime.mjs` which:
+`scripts/sync-trox-runtime.mjs`:
 
 1. resolves `TROX_ROOT` or defaults to `~/trox`;
 2. verifies the exact pinned commit;
@@ -182,7 +262,7 @@ Add `scripts/sync-trox-runtime.mjs` which:
 5. writes the upstream revision marker; and
 6. verifies a second sync is byte-identical.
 
-Add `scripts/trox.mjs` as the sole quest CLI entry. It resolves `TROX_ROOT`,
+`scripts/trox.mjs` is the sole quest CLI entry. It resolves `TROX_ROOT`,
 verifies the pin, and runs the pinned Rust CLI with `--locked` and the root
 `trox.ron`. Package scripts expose `trox:check`, `trox:extract`, and
 `trox:bundle`. GitHub Checks checks out `thurn/trox` at the pinned revision into
@@ -191,7 +271,7 @@ need only the vendored runtime and committed source bundle.
 
 ### Trox project files
 
-Add:
+The completed foundation includes:
 
 - `trox.ron` at the quest root;
 - `localization/terms.ron`, initially `{}`;
@@ -217,11 +297,12 @@ built without `--allow-missing`.
 
 ### In-memory localized values
 
-React view models and non-persisted controller values may carry
-`LocalizedString` directly. Rename fields from `*Descriptor` to `*Message` when
-that improves the contract. Resolve them only when assigning a DOM string,
-accessible name/description, canvas text, browser prompt, or another explicit
-presentation sink.
+React view models, non-persisted controller values, screen-local helpers, and
+component prop models carry `LocalizedString` directly. Rename fields from
+`*Descriptor`, `*Label`, or `*Text` to `*Message` when the stronger name makes
+the contract clear. Label helpers return `LocalizedString`; they never return
+resolved text. Resolve only on the same expression path that assigns a DOM
+text/attribute, canvas/browser-owned text sink, or browser prompt.
 
 Never compare, concatenate, template-interpolate, parse, serialize with generic
 JSON, use as a map key, or log the resolved text. Behavior continues to use
@@ -430,9 +511,10 @@ meaning discriminator.
 
 ## Source-Copy Parity Ledger
 
-Task 1 creates a task-local machine-readable ledger outside tracked source,
-plus a human audit view. One row represents one semantic callsite, not merely
-one Fluent ID. Record:
+The completed foundation created a task-local machine-readable ledger outside
+tracked source, plus a human audit view. Continue extending it during the
+remaining tasks. One row represents one semantic callsite, not merely one
+Fluent ID. Record:
 
 - source file and callsite anchor;
 - old Fluent ID and exact pre-migration source output;
@@ -453,354 +535,132 @@ explicit ledger domain. The ledger may assert English because it is temporary
 review evidence; committed application tests must remain semantic and
 locale-neutral.
 
-## Early Vertical-Slice Gate
+## Completed Foundation and Mandatory Boundary Correction
 
-The migration proves one real screen end to end before any parallel callsite
-batches begin. Use the Pool Viewer overlay reached through
-`?goto=poolviewer`. It is a bounded, directly bootable player screen with
-existing responsive tests and browser QA support, while still exercising the
-contracts most likely to expose a weak localization design:
+The original Tasks 1–4 established the parity ledger, pinned Trox toolchain,
+runtime/provider, generated artifacts, and Pool Viewer vertical slice. Those
+tasks are complete and are not repeated below. Their artifacts remain the
+starting contract for the remaining migration.
 
-- static visible labels and accessibility-only labels;
-- semantic selectors for viewer context, source, sort, type, direction, empty
-  state, and cost filter;
-- numeric-looking cost-filter enums which must not become plural selectors;
-- `visibleCount` and `totalCount`, where the total controls the noun grammar;
-- independent Tide, deal-size, copy-cap, drawn-count, and available-count
-  quantities;
-- a raw stable algorithm ID displayed inside a complete human message;
-- an error value whose producer must be classified before it crosses the
-  presentation boundary; and
-- source-authored card names and rules text which remain raw because RON
-  localization is outside this migration.
-
-This is retained production architecture, not a disposable spike. The slice
-uses the pinned CLI, committed config, source bundle, target profile, React
-provider, resolver, diagnostics, parity ledger, and ordinary regeneration
-path. Every later migration batch copies the proven authoring and presentation
-idioms.
-
-The slice generates `localization/qa/es.csv` as the first localizer-facing
-artifact. “Working CSV” means extraction creates canonical active rows for the
-screen; each row has understandable English, conditions, description,
-placeholder schema, source locations, and workflow state; translator edits and
-notes survive re-extraction; and an allow-missing development target bundle can
-be loaded. Checked resolution must report a missing target row, while the
-recovering path must produce source fallback. The implementation agent must not
-invent Spanish. Translation cells remain missing until a Spanish-speaking
-translation owner reviews them. Runtime reordering, repetition, omission,
-isolation, and failure behavior are proven with synthetic target fixtures
-rather than presenting machine-generated copy as a translation.
-
-Tasks 5–14 are blocked on the Task 4 go/no-go review. If the screen cannot
-preserve exact source English, the CSV makes a semantic input unclear, Trox
-cannot express a required contract, target loading emits an unexplained
-diagnostic, or the proof requires a quest-specific authoring wrapper, repair
-Tasks 1–4 before scaling the migration.
+The Pool Viewer implementation also exposed the shallow migration pattern this
+revision is designed to remove: screen code currently resolves Trox values to
+satisfy string-typed composite component props. That is boundary debt, not an
+approved idiom. Remaining Task 1 first migrates the shared component APIs and
+then rewrites Pool Viewer so `LocalizedString` reaches the leaf DOM sinks. No
+additional Fluent callsite family begins until that correction passes source
+parity, typechecking, lint, focused browser QA, and generated-metadata review.
 
 ## Detailed Task Breakdown
 
-### Task 1: Freeze the baseline and make the migration inventory executable
+### Remaining Task 1: Make `LocalizedString` the component API and enforce the sink boundary
 
-**Objective:** Establish complete, callsite-level proof of scope and source
-parity before either runtime changes.
+**Depends on:** the completed Trox runtime and Pool Viewer slice. This task
+first pins and vendors the Trox revision which ships
+`localizationTodo(sourceText)`, then performs the blocking architecture
+correction for every later migration task.
 
-**Files to inspect or change:**
-
-- all files under `data/locales/en-US/`;
-- `src/data/localization.ts`, `localization-messages.ts`, and
-  `localization-descriptors.ts`;
-- `src/cumulus/hooks/use-messages.ts` and `src/cumulus/CumulusRoot.tsx`;
-- `eslint-rules/ui-boundary-roles.js`,
-  `no-unlocalized-player-copy.js`, and `no-manual-count-copy.js`;
-- `scripts/audit-player-localization.mjs` and tests;
-- every production file reported by `useMessages`,
-  `createMessageDescriptor`, `FluentMessageDescriptor`, `appLocalization`, or
-  `@fluent/` searches; and
-- the temporary parity-ledger generator and output outside tracked source.
-
-**Implementation:**
-
-1. Record the starting quest and Trox commits in the ledger.
-2. Enumerate all 577 messages, 27 terms, every message reference, dynamic ID,
-   descriptor producer/consumer, formatter boundary, and persistent/logging
-   boundary. Record zero-reference and multi-reference messages explicitly.
-3. Make the inventory script classify direct formatting, descriptor transport,
-   accessibility-only output, browser APIs, persisted prompt state, logs,
-   RON-authored passthrough, and excluded developer surfaces.
-4. For each callsite, populate the semantic audit fields described above.
-   Resolve computed IDs such as Journey stat IDs and constant message maps to
-   their closed domains.
-5. Generate exact Fluent baseline output for every ledger case. Include
-   visible strings, placeholders, tooltips, live regions, `aria-label`,
-   `aria-describedby`, alt text, browser `prompt`, and error/detail regions.
-6. Add a temporary duplicate-English report and identify each duplicate as
-   shared semantics or a required Trox meaning discriminator.
-7. Add a temporary preformatted-value report for string joins, template
-   interpolation, resolved-message interpolation, display-name maps, and
-   values containing English articles, punctuation, units, lists, or number
-   formatting.
-
-**Focused verification:** run the inventory tests and compare the measured
-counts with the baseline above. The ledger must cover every generated Fluent ID
-and every production reference. A message with no live production reference is
-recorded as deletion-only, not silently omitted.
-
-**Done when:** every current Fluent unit and callsite has an owner, semantic
-domain, parity fixture, and target task in this plan; every duplicate and
-preformatted value is classified.
-
-### Task 2: Pin Trox and integrate its CLI, configuration, and generated artifacts
-
-**Depends on:** Task 1.
-
-**Objective:** Make Trox reproducible in worktrees, clean clones, CI, and
-Firebase builds before application callsites depend on it.
-
-**Files to add or change:**
-
-- pinned revision file;
-- `vendor/trox-runtime/`;
-- `scripts/sync-trox-runtime.mjs` and focused tests;
-- `scripts/trox.mjs` and focused tests;
-- `trox.ron`;
-- `localization/terms.ron`;
-- `localization/reports/en-US.csv`;
-- `localization/qa/{ar,es,ja,ru}.ron` and corresponding CSV paths;
-- `src/generated/localization/*.trox.json`;
-- `package.json` and `package-lock.json`;
-- `.github/workflows/checks.yml`; and
-- `.gitignore` only for untracked Trox build caches, never generated reports or
-  source bundles.
-
-**Implementation:**
-
-1. Pin `f70bdd1ae7707fb294dd7051a8f7a369ca3c6805`. Build and vendor
-   `@trox/runtime` from that exact revision. Preserve its license.
-   The sync wrapper runs `npm ci`, `npm run typecheck`, `npm test`, and
-   `npm run build` at `TROX_ROOT`, then copies only the package files allowed
-   by `packages/trox/package.json` plus the upstream license and revision
-   marker. The CLI wrapper executes the equivalent of
-   `cargo run --locked --manifest-path "$TROX_ROOT/Cargo.toml" -p trox-cli
-   --bin trox -- --config <quest-root>/trox.ron <arguments>`.
-2. Add deterministic sync and CLI wrappers with synthetic tests for a missing
-   repo, wrong revision, failed upstream build, successful argument forwarding,
-   and byte-identical second sync.
-3. Configure TypeScript/TSX source globs for the protected player runtime and
-   exact non-React producers. Exclude tests, generated output, vendored code,
-   RON, and developer surfaces.
-4. Start `terms.ron` as an empty map. A later task may add a term only after the
-   required runtime grammatical operation is documented.
-5. Add source and QA output paths. Profiles use locale-owned direction,
-   isolation, plural behavior, and facets; application code never imports a
-   target-language gender classification.
-6. Run `trox extract`, inspect the initial reports, and run
-   `trox check --deny warnings`. Build the source and development-only QA
-   bundles. Repeat extraction and bundling and require byte-identical output.
-7. Update Checks CI to obtain the pinned CLI. Cache its Cargo build separately
-   from `tools/game-data` without changing Firebase build inputs.
-
-**Tests:** wrapper behavior, config discovery, clean extraction, clean check,
-canonical bundle load through `bundleFromCanonicalJSON`, and deterministic
-second generation.
-
-**Done when:** `npm ci` and `npm run build` work without `~/trox`, localization
-authoring/check/regeneration works through the pinned `~/trox` CLI locally, and
-CI can run the same revision.
-
-### Task 3: Install the Trox runtime and presentation boundary
-
-**Depends on:** Task 2.
-
-**Objective:** Provide a checked resolver and React context while Fluent still
-serves unmigrated callsites.
-
-**Files to add or change:**
-
-- `src/localization/runtime.ts` and tests;
-- `src/localization/context.tsx` and tests;
-- `src/localization/use-localizer.ts`;
-- `src/localization/testing.ts`;
-- `src/cumulus/CumulusRoot.tsx`;
-- `src/main.tsx` if document language/direction belongs at the entry boundary;
-- `src/logging.ts` only as needed for structured Trox diagnostics; and
-- focused test fixtures for source, Russian plural, Arabic RTL/isolation,
-  Japanese reordering, and long translations.
-
-**Implementation:**
-
-1. Parse committed bundle JSON with Trox's canonical loader; do not trust a
-   generic JSON cast.
-2. Construct the source-mode localizer and provide a strict target-localizer
-   factory. Diagnostic callbacks must never throw.
-3. Log bundle locale, direction, catalog fingerprint, and load outcome. Log
-   resolution diagnostics with code and entry ID, never resolved player text.
-4. Mount the Trox provider beside Fluent temporarily. Expose locale and
-   direction through context and set document metadata.
-5. Add a hook that resolves only `LocalizedString`. Do not accept raw strings,
-   message IDs, patterns, or argument bags.
-6. Prove `LocalizedString` cannot be implicitly converted, compared as text, or
-   lost through an accidental generic JSON round trip.
-7. Add an error-boundary-safe source fallback for provider bootstrap failure
-   which uses a pre-resolved emergency string only at the final catastrophic
-   boundary; classify and document that narrow exception in the localization
-   lint inventory.
-
-**Tests:** source resolution, strict source/target compatibility, target
-placeholder reordering/repetition/omission, target number formatting, Arabic
-isolation and direction, missing target row recovery, malformed bundle failure,
-diagnostic hook non-throwing behavior, and React provider injection.
-
-**Done when:** a component can resolve an inline Trox value at presentation,
-synthetic target bundles exercise the portable checked contract, and unmigrated
-Fluent screens still render during the staged migration.
-
-### Task 4: Prove the complete workflow on the Pool Viewer screen
-
-**Depends on:** Tasks 1–3.
-
-**Objective:** Validate the retained Trox infrastructure, translator handoff,
-source fallback, exact-English parity, and browser presentation on one
-representative screen before broad migration work begins.
+**Objective:** Make early resolution structurally difficult. Production
+components accept `LocalizedString` for code-authored player copy, composite
+layers forward it unchanged, and only leaf browser sinks may call the resolver.
 
 **Primary files:**
 
-- `src/cumulus/screens/PoolViewerScreen.tsx` and its focused tests;
-- the Pool Viewer adapter/view-model and every producer of `view.error`;
-- `src/runtime/qa-scenes.ts` only if the existing `poolviewer` scene needs a
-  deterministic semantic state for a missing branch;
-- the Trox provider/bootstrap path for a development-only `qaLocale` override;
-- `localization/reports/en-US.csv` and `localization/qa/es.csv`;
-- generated source and allow-missing Spanish QA bundles;
-- the parity ledger rows owned by this screen; and
-- `docs/journey_prototype/qa_scenes.md` if the query contract changes.
-
-**Implementation:**
-
-1. Inventory every player-visible, tooltip, empty/error, accessible-name, and
-   accessible-description output rendered by `PoolViewerScreen`, including
-   values supplied through child-component props. Freeze every finite selector
-   arm and valid numeric boundary in the parity ledger before editing.
-2. Trace `view.error` to its producers. If it is player-facing source copy,
-   carry a semantic error kind or `LocalizedString` into the screen and include
-   its complete messages in this slice. Keep technical detail in a separate raw
-   field. Do not pass a preformatted English error through Trox as a scalar.
-3. Author the screen's complete messages directly with `tx` and `txa`. Keep
-   fixed Card and Tide vocabulary literal. Use the total count to select the
-   grammatical form in “visible of total cards,” while binding visible and
-   total as separately named numeric arguments. Independently audit Tide count
-   and deal size. Treat cost values `0`–`4`, `5plus`, and `x` as product enum
-   branches, not cardinal grammar.
-4. Give every selector and argument a translator-visible semantic contract.
-   Descriptions must explain why visible count can differ from total count,
-   what each source/sort/filter enum means, that algorithm ID is stable raw
-   diagnostic text, and which RON-authored names have unavailable grammatical
-   metadata. Add `meaning` only where identical English on another surface has
-   a genuinely different role.
-5. Resolve only while creating the concrete string props consumed by
-   `SegmentedControl`, `Select`, `DisclosureSection`, and `CardBrowserPanel`.
-   Leave the rest of the application on Fluent during this gate. The Pool
-   Viewer itself must contain no Fluent formatter call or message ID once the
-   slice is complete.
-6. Run scoped Trox extraction and inspect every active Pool Viewer row in the
-   source report and `localization/qa/es.csv`. Record the row count in the
-   parity ledger rather than this plan. Verify source, conditions, descriptions,
-   placeholders, source locations, row ordering, and status manually. Reject
-   vague placeholder names, fragmentary leaves, incomprehensible conditions,
-   accidental row cross-products, or duplicate-English identity collisions.
-7. Prove non-destructive CSV synchronization in a temporary test copy: add a
-   syntactically valid representative translation and translator note, rerun
-   extraction, and verify both survive byte-for-byte in their managed rows.
-   Also verify source changes mark the row stale with previous translation,
-   removed rows become obsolete, and a second unchanged extraction is
-   byte-identical. Do not commit the invented test translation to `es.csv`.
-8. Build and load the source bundle strictly. Build the Spanish QA bundle with
-   `--allow-missing` and load it through the target path. Verify checked
-   resolution reports the expected missing target row and recovering resolution
-   produces source fallback without a raw placeholder, entry ID, or recovery
-   marker. Use synthetic target fixtures to prove placeholder reordering,
-   repetition, omission diagnostics, target number formatting, long text, and
-   isolation.
-9. Add a development/test-only `?qaLocale=es` boot override if one does not
-   exist. It must use the same provider and bundle loader as a future locale
-   picker, be unavailable in production builds, and never enter game state or
-   event logs. Player locale selection remains outside this migration.
-10. Exercise `?goto=poolviewer` in source mode and
-    `?goto=poolviewer&qaLocale=es` in target-fallback mode at one desktop and
-    one narrow viewport. Cover each source/filter/sort/direction/cost branch,
-    zero/one/two/larger counts, disclosure expansion, search-empty results,
-    and close action. Assert URL and viewport before acting, inspect
-    `window.__caps`, and inspect both visible and accessibility output.
-11. Hold a go/no-go review of the generated CSV and the browser proof before
-    starting Task 5. Review the artifact as a localizer would: the reviewer
-    should be able to understand every row, condition, placeholder, grammatical
-    relationship, and UI constraint without opening TypeScript or Fluent.
-
-**Focused verification:** Pool Viewer component/view-model tests; Trox wrapper,
-extraction, CSV preservation, bundle-load, provider, and diagnostic tests;
-source parity comparison for every screen state; deterministic second
-extraction/bundle generation; and the two browser workflows above.
-
-**Proof artifacts:** the committed canonical source report, translator-ready
-`localization/qa/es.csv`, generated source and allow-missing QA bundles,
-task-local parity rows, captured structured diagnostics for the fallback run,
-and desktop/narrow screenshots used for review. The Spanish CSV has no claimed
-translation until its cells receive human review.
-
-**Done when:** the screen is entirely Trox-authored, exact source-English parity
-passes, the first CSV is localizer-ready and stable under re-extraction, both
-source and target-fallback paths work through the real provider, browser QA has
-no unexplained diagnostic or render error, and the go/no-go reviewer accepts
-the infrastructure and message contracts. Stop and repair the slice if any
-condition fails.
-
-### Task 5: Convert lint and audit rules to understand Trox authoring
-
-**Depends on:** Task 4. This task turns the accepted proof-slice idioms into
-repository-wide enforcement before more callsites migrate.
-
-**Objective:** Prevent new Fluent-style IDs, raw copy, hidden fragments, and
-manual count grammar while callsites migrate.
-
-**Files to change:**
-
+- quest's `.trox-revision`, Trox sync tooling, and vendored runtime snapshot;
+- `src/cumulus/components/controls/{IconButton,GlassButton,SegmentedControl,Select,TextField,TextArea,NumberStepper,DisclosureSection}.tsx`;
+- `src/cumulus/components/overlay/{GlassPanel,GlassDialog,CommandMenu,InfoCard}.tsx`;
+- card/gallery/HUD components and nested prop models used by Pool Viewer;
+- `src/cumulus/screens/PoolViewerScreen.tsx` and its adapter/tests;
+- Cumulus metadata generation, fixtures, demos, and focused contract tests;
 - `eslint-rules/no-unlocalized-player-copy.js` and test;
 - `eslint-rules/no-manual-count-copy.js` and test;
-- `scripts/audit-player-localization.mjs` and test;
-- `eslint.config.js`; and
-- `docs/journey_prototype/localization-grammar-audit.md` in the final docs task,
-  not yet.
+- a resolver-boundary rule and test, either new or factored from the existing
+  localization rules;
+- `scripts/audit-player-localization.mjs` and test; and
+- `eslint.config.js`.
 
 **Implementation:**
 
-1. Recognize direct, unaliased `tx`/`txa` patterns, their inline selector arms,
-   inline argument object, and literal descriptions as localized authoring.
-   Do not permit `localize("raw English")` or arbitrary strings merely because
-   a resolver appears above them.
-2. Reject wrapper authoring APIs, aliased Trox constructors, prebuilt patterns,
-   prebuilt/spread argument maps, computed descriptions, host interpolation in
-   source patterns, and localized-value concatenation.
-3. Update count diagnostics to require Trox cardinal or ordinal selection when
-   grammar depends on the value. Do not demand `plural` for numeric display
-   which does not govern grammar.
-4. Add targeted lint for resolving outside classified presentation boundaries,
-   implicit coercion, string comparison, and generic JSON serialization of a
-   `LocalizedString` where static analysis can prove it.
-5. Keep the current zero-baseline player-copy scope. A mixed developer/player
-   file receives narrow reason-bearing suppressions only around demonstrably
-   excluded nodes.
+1. Pin Trox commit `d8428631e1a3f6c4d9d66c80737172c9941c14c7`,
+   which exports
+   `localizationTodo(sourceText: string): LocalizedString` as an explicitly
+   temporary, source-preserving migration constructor. Verify its runtime,
+   declaration, extraction-ignore, arbitrary-source-text, and documentation
+   tests through `scripts/sync-trox-runtime.mjs`; regenerate the vendored
+   package only through that script. Its values remain unresolved through
+   application layers and resolve only at the ordinary final sink.
+2. Teach the quest audit to report every production `localizationTodo(...)`
+   call with its source location. Permit these calls only as migration debt for
+   code-authored player copy and ratchet their count downward by task; require
+   zero at final cutover. Reject aliases, wrappers around the helper, use on raw
+   authored/user/technical data paths, and use inside component implementations
+   as a substitute for a localized prop contract.
+3. Inventory every production text-bearing prop reachable from Pool Viewer and
+   the shared components used by the remaining migration. Classify each as
+   code-authored localized copy, RON-authored content, user-authored content,
+   technical detail, or a non-display semantic value. Record the classification
+   in the audit rather than relying on a `string` type to imply ownership.
+4. Change code-authored text props to `LocalizedString` bottom-up. This includes
+   nested option labels, empty labels, panel titles/subtitles, disclosure
+   titles, placeholders, icon-button accessible names, accessory models, toast
+   copy, and `aria-*` models. Keep option values, IDs, UUIDs, test IDs, and
+   callbacks semantic and raw.
+5. Resolve inside the leaf implementation only where the result is assigned to
+   an intrinsic DOM child/attribute or browser API. A composite component may
+   not resolve a value merely because a child still expects `string`; migrate
+   that child contract in the same change. Do not cache resolved strings, put
+   them into objects, or return them from helpers.
+6. Preserve distinct raw contracts for RON-authored text, user input, and
+   technical diagnostics. Where one component renders both raw authored
+   content and localized chrome, give the props distinct names and paths so a
+   code-authored message cannot accidentally enter the raw-string path.
+7. Rewrite Pool Viewer so its label helpers and option builders return
+   `LocalizedString`, and its `SegmentedControl`, `Select`,
+   `DisclosureSection`, `CardBrowserPanel`, panel header, search/sort controls,
+   and close accessory receive unresolved values. The screen may call
+   `resolve(...)` only for intrinsic DOM/browser sinks it owns directly.
+8. Adapt tests, fixtures, and Cumulus documentation to the stronger production
+   types through synthetic localized fixtures or an excluded demo-only adapter.
+   Do not weaken a production prop to `string | LocalizedString` for test or
+   documentation convenience. Regenerate and inspect Cumulus metadata so the
+   public contracts advertise `LocalizedString` throughout nested models.
+9. Recognize direct, unaliased `tx`/`txa` patterns, inline selector arms, inline
+   arguments, and literal descriptions as localized authoring. Continue to
+   reject wrapper authoring APIs, aliases, prebuilt/spread arguments, computed
+   descriptions, host interpolation, localized concatenation, and manual
+   count/ordinal grammar.
+10. Enforce resolver placement syntactically. Permit resolution only when its
+   result flows directly into an allowlisted intrinsic DOM/browser sink in the
+   same expression. Reject resolved
+   locals, resolved return values, resolved object fields, resolved composite
+   props, compatibility helpers, implicit coercion, string comparison, generic
+   JSON serialization, and resolver imports in non-presentation models.
+11. Keep the protected player-copy scope at a zero baseline. Mixed developer and
+   player files receive narrow, reason-bearing exclusions only around verified
+   developer nodes. The audit must separately report remaining player-facing
+   `string` props and resolver calls outside known sinks; neither report may be
+   converted into a permanent numeric baseline.
 
-**Tests:** valid direct `tx`/`txa`/nested selector examples and invalid raw JSX,
-fragments, concatenation, aliases, wrappers, spreads, prebuilt patterns,
-computed descriptions, manual plural/ordinal copy, and early resolution.
+**Tests:** valid leaf DOM text/`aria-*`/placeholder/browser API resolution;
+valid multi-level `LocalizedString` forwarding; valid separately named RON raw
+content; and invalid screen-to-component `resolve(tx(...))`, resolved option
+objects, resolved helpers, `string | LocalizedString`, fragments,
+concatenation, aliases, wrappers, spreads, computed descriptions, manual
+plural/ordinal copy, coercion, comparison, and serialization.
 
-**Done when:** the rule suite expresses the Trox authoring contract, still
-rejects every previously protected raw-copy construction, and adds no broad
-file or directory baseline.
+**Focused proof:** rerun Pool Viewer source and target-fallback tests, exact
+parity rows, extraction/bundle determinism, metadata generation, and desktop/
+narrow browser workflows. Inspect the code and audit output for zero early
+resolution in the slice; passing visual output alone is insufficient.
 
-### Task 6: Migrate application shell, cooperative gates, and non-persisted descriptors
+**Done when:** Pool Viewer contains no `resolve(tx(...))` or equivalent early
+resolution, all code-authored text survives through its composite component
+graph as `LocalizedString`, resolver calls are confined to verified browser
+sinks, public metadata reflects the stronger types, and the lint/audit suite
+prevents the shallow pattern from recurring.
 
-**Depends on:** Tasks 3–5.
+### Remaining Task 2: Migrate application shell, cooperative gates, and non-persisted descriptors
+
+**Depends on:** Remaining Task 1.
 
 **Primary files:**
 
@@ -819,9 +679,10 @@ file or directory baseline.
 
 **Implementation:**
 
-1. Replace each non-persisted descriptor with `LocalizedString` or, when the
-   screen already owns the full semantic state, keep only the state enum and
-   author the message in the screen.
+1. Replace each non-persisted descriptor with `LocalizedString` or, when a leaf
+   component already owns the full semantic state, keep only the state enum and
+   author the message at that leaf. Composite screen and adapter props remain
+   unresolved.
 2. Migrate bootstrap/loading/failure, Firebase configuration, battle-preview
    failure, ErrorBoundary, room creation/join/loading/failure, configuration
    comparisons, version/unreadable gates, bounce causes, hosted playtest, and
@@ -836,6 +697,10 @@ file or directory baseline.
    rather than reusing them by English coincidence.
 6. Replace bounce-message refs with in-memory `LocalizedString`; no fold state
    changes in this task.
+7. Migrate every text-bearing shell, gate, menu, toast, and presence component
+   contract encountered by this batch to `LocalizedString`. Resolve only at
+   intrinsic DOM/browser assignments; never resolve to satisfy an intermediate
+   `string` prop.
 
 **Semantic checks:** presence `0/1/2/5`; opaque room IDs; every config row kind;
 all application-state kinds; every bounce reason; all retry/new-game action
@@ -845,13 +710,14 @@ states; title/action duplicate meanings.
 synthetic target bundles, technical-detail separation, no raw ID leakage, and
 no English test selector.
 
-**Done when:** these surfaces have no Fluent import/ID/descriptor and resolve
-Trox values only at browser/React presentation sinks.
+**Done when:** these surfaces have no Fluent import/ID/descriptor, every
+code-authored message crosses composite APIs as `LocalizedString`, and every
+resolver call directly feeds a verified browser primitive.
 
-### Task 7: Migrate Journey chrome, decks, cards, pools, and shared controls
+### Remaining Task 3: Migrate Journey chrome, decks, cards, pools, and shared controls
 
-**Depends on:** Tasks 3–5. May run in parallel with Task 6 after shared
-runtime files settle.
+**Depends on:** Remaining Task 1. May run in parallel with Remaining Tasks 2
+and 4 after shared component contracts settle.
 
 **Primary files:**
 
@@ -861,7 +727,7 @@ runtime files settle.
 - `src/cumulus/components/hud/{JourneyStatusBar,DreamAvatarPortrait,DreamAvatarStage,Dreamsign,TideDisc,TidesInfoLabel}.tsx`;
 - `DesktopDeckViewer.tsx`, `MobileDeckViewer.tsx`,
   `CardZoneBrowserOverlay.tsx`, and deck filter/sort helpers; Pool Viewer is
-  already migrated by Task 4;
+  corrected by Remaining Task 1;
 - `CardChoiceGrid.tsx`, `CardStatOrb.tsx`, `CardView.tsx`, `PlayingCard.tsx`,
   `RulesText.tsx`, `card-gallery-surface.tsx`, and
   `glossary-info-card.ts`;
@@ -874,8 +740,9 @@ runtime files settle.
 
 1. Migrate menu, save/load, build SHA, Journey start/status/results, tutorial
    labels, remaining deck/pool diagnostics, card metadata, glossary fallbacks,
-   shared controls, and all accessible counterparts. Preserve the accepted
-   Pool Viewer contracts and rerun its focused proof after shared changes.
+   shared controls, and all accessible counterparts. Preserve the corrected
+   Pool Viewer component contracts and rerun its focused proof after shared
+   changes.
 2. Keep option values and behavior semantic. Filters whose keys are `"0"` to
    `"4"` remain string `select` branches. Sort/filter labels do not flow back
    into comparison or state logic.
@@ -887,19 +754,23 @@ runtime files settle.
    data as RON-owned scalar values. Do not add articles or infer agreement.
 5. Use `ordinal` for true ordered positions after verifying the callsite
    domain. Keep IDs and resource amounts cardinal.
-6. Replace message descriptor fields in `InfoCard` and tutorial specs with
-   `LocalizedString` fields. Preserve raw authored RichText separately.
+6. Replace message descriptor and code-authored `string` fields in `InfoCard`,
+   tutorial specs, option models, command models, HUD models, and child props
+   with `LocalizedString`. Preserve raw authored RichText separately. Resolve
+   only in leaf components at their intrinsic DOM/browser assignments.
 
 **Tests:** all semantic option unions, valid count probes, source/target number
 formatting, placeholder reorder, authored-data passthrough, accessible
 association, and UI behavior by IDs/data attributes.
 
 **Done when:** card/deck/Journey/shared-control production paths contain no
-Fluent reference and no preformatted player grammar in non-presentation models.
+Fluent reference, no preformatted player grammar in non-presentation models,
+no code-authored player `string` prop, and no resolver call above a browser
+primitive.
 
-### Task 8: Migrate site flows except Exploration
+### Remaining Task 4: Migrate site flows except Exploration
 
-**Depends on:** Tasks 3–5.
+**Depends on:** Remaining Task 1.
 
 **Primary files:**
 
@@ -918,8 +789,10 @@ Fluent reference and no preformatted player grammar in non-presentation models.
 
 1. Inventory each screen's loading, empty, selectable, invalid, confirming,
    pending, resolved, declined, and leaving states.
-2. Author static controls locally. Carry `LocalizedString` only when a
-   non-React adapter must choose the complete utterance.
+2. Author static controls at the semantic owner and carry every code-authored
+   message as `LocalizedString` through adapters, screen models, option models,
+   dialogs, and child components. Whether a value crosses React is irrelevant;
+   only the final browser primitive may receive resolved text.
 3. Use exact zero for free Transfiguration offers and cardinal selectors for
    free-purchase counts. Treat wager/draw attempt/tier/pack numbers according to
    their ordinal semantics and actual domain.
@@ -930,18 +803,23 @@ Fluent reference and no preformatted player grammar in non-presentation models.
    RON-owned scalars. Pass known owner/entity-kind facts separately when target
    agreement may depend on them.
 6. Convert Augury validation results from Fluent descriptors to
-   `LocalizedString` or stable error kinds selected by the screen.
+   `LocalizedString` or stable error kinds selected before the leaf renderer.
+7. Migrate any site-specific component string props encountered in the batch
+   to the shared `LocalizedString` contract. Keep RON-authored names and prose
+   on distinct raw fields and do not use those fields for localized chrome.
 
 **Tests:** every state and selector domain, count/ordinal boundaries, source
 parity for visible/accessibility strings, and unchanged mutation/action/logging
 semantics.
 
 **Done when:** every non-Exploration site callsite is Trox-authored without
-changing RON content or game behavior.
+changing RON content or game behavior, and localized values remain unresolved
+until intrinsic DOM/browser assignments.
 
-### Task 9: Migrate Exploration as a dedicated semantic batch
+### Remaining Task 5: Migrate Exploration as a dedicated semantic batch
 
-**Depends on:** Tasks 3–5. Complete after Task 8 establishes site idioms.
+**Depends on:** Remaining Tasks 1 and 4. Complete after the non-Exploration
+site batch establishes the component and message idioms.
 
 **Primary files:**
 
@@ -964,7 +842,8 @@ changing RON content or game behavior.
    RON-owned values. Code-authored disclosures become complete Trox messages in
    their own DOM units; do not append localized suffixes to authored prose.
 4. Replace `FluentMessageDescriptor` fallbacks and locally constructed
-   descriptor objects with direct Trox authoring.
+   descriptor objects with direct Trox authoring. Result-family helpers and
+   view models return `LocalizedString` fields rather than resolved strings.
 5. Model offered site type, card type/subtype changes, Transfiguration form,
    owner, and missing-target state semantically. Do not pass an English article
    or preformatted site phrase through a placeholder.
@@ -975,6 +854,9 @@ changing RON content or game behavior.
    represent a real grammatical relationship. Any entry above Trox's human-row
    expansion warning threshold needs an explicit translator-cost review and a
    reasoned lint policy, not a blanket suppression.
+8. Migrate Exploration-specific chips, badges, result rows, accessibility
+   models, and compound outcome component props to `LocalizedString`. Resolve
+   only in the leaf DOM nodes which render each complete unit.
 
 **Tests:** one semantic test per result family and finite branch; numeric probes
 for each independently governed count; authored text passthrough; UUID-based
@@ -982,12 +864,13 @@ interaction; synthetic Russian/Arabic/Japanese resolution; accessible names;
 and no raw placeholder/entry-ID leakage.
 
 **Done when:** all Exploration-localized grammar is direct Trox authoring,
-authored RON text is untouched, and the parity ledger covers every outcome and
-accessibility branch.
+authored RON text is untouched, every localized result remains unresolved to a
+browser primitive, and the parity ledger covers every outcome and accessibility
+branch.
 
-### Task 10: Rebuild reveal and accessibility composition from complete units
+### Remaining Task 6: Rebuild reveal and accessibility composition from complete units
 
-**Depends on:** Task 7 for shared message types.
+**Depends on:** Remaining Task 3 for shared message types.
 
 **Primary files:**
 
@@ -1004,9 +887,11 @@ accessibility branch.
 2. Define semantic reveal utterance models for source text, info-card title,
    subtitle, Tide identity, glossary definition entry, game-card traits, rules
    text, and secondary cards.
-3. Render an ordered set of independently complete hidden description nodes.
-   Each punctuation mark and conjunction belongs to a complete Trox message;
-   DOM ordering supplies only accessibility association, not English grammar.
+3. Carry an ordered set of independently complete `LocalizedString` description
+   nodes through the reveal model. Resolve each only in the hidden intrinsic DOM
+   node which owns it. Each punctuation mark and conjunction belongs to a
+   complete Trox message; DOM ordering supplies only accessibility association,
+   not English grammar.
 4. Keep arbitrary-length definition and secondary-card collections as repeated
    complete utterances. Do not create an exponential selector tree or pass a
    prejoined list scalar.
@@ -1025,12 +910,14 @@ secondaries; all card trait presence combinations which production can create;
 variable and alternative Energy; Spark/Reclaim zero and positive domains; RTL
 isolation; deterministic association order; and no host-language concatenation.
 
-**Done when:** reveal accessibility contains no localized fragment join and
-every hidden node is an independently valid translator unit.
+**Done when:** reveal accessibility contains no localized fragment join, every
+hidden node is an independently valid translator unit, and reveal models and
+composite components contain no resolved localized text.
 
-### Task 11: Replace persisted built-in battle messages with semantic prompt refs
+### Remaining Task 7: Replace persisted built-in battle messages with semantic prompt refs
 
-**Depends on:** Tasks 2–5. Complete before Task 12.
+**Depends on:** the completed Trox foundation and Remaining Task 1. Complete
+before Remaining Task 8.
 
 **Primary files:**
 
@@ -1043,7 +930,7 @@ every hidden node is an independently valid translator unit.
 - `src/coop/reducer-version.ts`, Room Gate compatibility tests, and coop
   fixtures;
 - `src/battle/components/battle-prompt-logging.ts`;
-- `docs/journey_prototype/firebase_multiplayer.md` in Task 13; and
+- `docs/journey_prototype/firebase_multiplayer.md` in Remaining Task 9; and
 - all prompt, fold, replay, lifecycle, and logging tests.
 
 **Implementation:**
@@ -1077,9 +964,9 @@ normalization, deterministic fold equality, and reconstruction logging.
 Fluent descriptor, v24 rooms gate, explicit imports normalize safely, and logs
 remain reconstructable without rendered text.
 
-### Task 12: Migrate battle presentation and overlays
+### Remaining Task 8: Migrate battle presentation and overlays
 
-**Depends on:** Tasks 7, 10, and 11.
+**Depends on:** Remaining Tasks 3, 6, and 7.
 
 **Primary files:**
 
@@ -1097,8 +984,11 @@ remain reconstructable without rendered text.
 1. Add a presentation-only function mapping `BuiltInBattlePromptRef` to direct
    `tx`/`txa` calls. RON Dreamwell prompt refs continue resolving through the
    pinned Dreamwell catalog and remain separate from Trox authoring.
-2. Keep prompt refs through the mobile view model. Resolve at the screen. Never
-   send resolved labels back through prompt actions or logs.
+2. Keep prompt refs through the mobile view model. Map built-in refs to
+   `LocalizedString` at the presentation owner and carry those values through
+   screen, overlay, picker, and control props. Resolve only where a leaf assigns
+   intrinsic DOM/browser text. Never send localized or resolved labels back
+   through prompt actions or logs.
 3. Redesign picker progress so a Trox value is never resolved and interpolated
    into another Trox message. Built-in prompts may use a complete combined
    message selected from the semantic ref. Dreamwell prompt instructions and
@@ -1115,18 +1005,23 @@ remain reconstructable without rendered text.
 7. Keep inspector, AI approval, context menu, figment creator, and developer
    controls within their existing exclusions. Mixed files use narrow
    reason-bearing lint suppressions.
+8. Replace every battle-player `string | FluentMessageDescriptor`, resolved
+   label helper, and string-typed nested option/accessory model with a
+   `LocalizedString` or a semantic ref. Do not introduce
+   `string | LocalizedString` during the transition.
 
 **Tests:** all battle phases/outcomes/owners/zones, prompt kinds and sides,
 counts and ordinals, source and target resolution, option resolution by index,
 card behavior by UUID/instance ID, replay/log invariants, accessible output,
 and no resolved string in actions/state/logs.
 
-**Done when:** every normal battle-player Fluent callsite is Trox-authored and
-the battle state/presentation separation remains deterministic.
+**Done when:** every normal battle-player Fluent callsite is Trox-authored, the
+battle state/presentation separation remains deterministic, and no resolved
+localized text exists above an intrinsic DOM/browser sink.
 
-### Task 13: Delete Fluent and make Trox the only localization workflow
+### Remaining Task 9: Delete Fluent and make Trox the only localization workflow
 
-**Depends on:** Tasks 6–12.
+**Depends on:** Remaining Tasks 2–8.
 
 **Files to delete:**
 
@@ -1174,7 +1069,9 @@ the battle state/presentation separation remains deterministic.
 5. Replace `legacyFluentMessages` ownership inventory with semantic built-in
    battle prompt refs and verify the exact closed set.
 6. Regenerate Cumulus metadata so public props describe `LocalizedString` or
-   semantic message fields rather than Fluent descriptors.
+   semantic message fields rather than Fluent descriptors. Run the final
+   component-contract audit and require zero unclassified code-authored
+   player-facing `string` props.
 7. Write documentation in current-state language: inline Trox authoring,
    semantic audit, RON boundary, CLI workflow, target CSV ownership, bundle
    loading, source fallback, diagnostics, testing, accessibility, v25 prompt
@@ -1192,13 +1089,18 @@ the battle state/presentation separation remains deterministic.
   src scripts eslint-rules` returns no maintained implementation match.
 - `rg -n 'format:fluent|localization-types|fluent-format' package.json scripts`
   returns no match.
+- the resolver-boundary audit reports no resolved local, return value, object
+  field, composite prop, or non-sink module; and
+- the text-prop audit reports no unclassified code-authored player-facing
+  `string` or `string | LocalizedString` contract.
 
 **Done when:** Trox is the only maintained localization runtime/toolchain and
-every `.ftl` resource is absent.
+every `.ftl` resource is absent, production component contracts carry
+`LocalizedString`, and resolver access is confined to browser sinks.
 
-### Task 14: Complete extraction, translator review, and integrated QA
+### Remaining Task 10: Complete extraction, translator review, and integrated QA
 
-**Depends on:** Task 13.
+**Depends on:** Remaining Task 9.
 
 **Objective:** Prove semantic sufficiency, source parity, deterministic
 artifacts, runtime behavior, responsive/accessibility behavior, and complete
@@ -1228,7 +1130,8 @@ Fluent removal.
 
 **Automated verification:**
 
-1. Run all focused tests named by Tasks 1–13.
+1. Run all focused tests named by the completed foundation and Remaining Tasks
+   1–9.
 2. Run `scripts/regenerate-assets.sh` and inspect every tracked artifact.
 3. Run `npm run review`.
 4. Run `npm run review:full` because this changes cross-cutting runtime,
@@ -1236,11 +1139,15 @@ Fluent removal.
 5. Run the v25 reducer-version, Room Gate, `LOAD_STATE`, compaction, replay,
    deterministic fold, and prompt logging suites.
 6. Run the final raw-copy audit with zero unclassified player-runtime result.
-7. Run the required Fluent-removal searches from Task 13.
+7. Run the required Fluent-removal, component-contract, and resolver-boundary
+   searches from Remaining Task 9.
 8. Complete every parity-ledger row. Any difference in source output or
    computed accessibility text is a release blocker even if Trox, TypeScript,
    lint, and tests pass.
 9. Run `git diff --check` and verify generated files are synchronized.
+10. Inspect every resolver call reported by the audit. Each call must directly
+    feed an intrinsic DOM/browser primitive; React component membership,
+    file-name allowlists, or an eventual downstream DOM use are insufficient.
 
 **Browser QA:** use `/opt/homebrew/bin/agent-browser` against a non-5173 Vite
 port and one unique session. Follow
@@ -1282,22 +1189,18 @@ and QA artifacts are deterministic, and no material review finding remains.
 
 ## Dependency and Parallelization Map
 
-| Task | Depends on | Safe parallel peers after dependency | Contract owner |
+| Remaining task | Depends on | Safe parallel peers after dependency | Contract owner |
 | --- | --- | --- | --- |
-| 1. Baseline/inventory | None | None | Scope and parity evidence |
-| 2. Pin/toolchain | 1 | None | Trox revision, CLI, config, artifacts |
-| 3. Runtime boundary | 2 | None before proof | Localizer and diagnostics |
-| 4. Pool Viewer proof | 1–3 | None; go/no-go gate | End-to-end contract |
-| 5. Lint/audit | 4 | migration batches | Authoring enforcement |
-| 6. App/coop/menu | 3–5 | 7, 8 | Non-persisted shell messages |
-| 7. Journey/cards/decks | 3–5 | 6, 8 | Shared component messages |
-| 8. Sites | 3–5 | 6, 7 | Non-Exploration site messages |
-| 9. Exploration | 3–5, idioms from 8 | 10, 11 | Exploration families |
-| 10. Reveal/accessibility | 7 | 9, 11 | Complete accessibility units |
-| 11. Prompt protocol | 2–5 | 9, 10 | v25 semantic prompt state |
-| 12. Battle UI | 7, 10, 11 | None on shared files | Battle display boundary |
-| 13. Fluent cutover | 6–12 | None | Sole Trox workflow |
-| 14. Acceptance | 13 | None | Integrated proof and review |
+| 1. Shipped Trox debt-helper pin, component API, and sink enforcement | Completed foundation | None; blocking gate | `LocalizedString` propagation and resolver policy |
+| 2. App/coop/menu | 1 | 3, 4 | Non-persisted shell messages |
+| 3. Journey/cards/decks | 1 | 2, 4 | Shared component messages |
+| 4. Sites | 1 | 2, 3 | Non-Exploration site messages |
+| 5. Exploration | 1, 4 | 6, 7 | Exploration families |
+| 6. Reveal/accessibility | 3 | 5, 7 | Complete accessibility units |
+| 7. Prompt protocol | Completed foundation, 1 | 5, 6 | v25 semantic prompt state |
+| 8. Battle UI | 3, 6, 7 | None on shared files | Battle display boundary |
+| 9. Fluent cutover | 2–8 | None | Sole Trox workflow and final boundary audit |
+| 10. Acceptance | 9 | None | Integrated proof and review |
 
 If parallel agents are used during implementation, one integration owner must
 serialize `trox extract`, QA CSV synchronization, bundle generation,
@@ -1307,20 +1210,19 @@ generated CSV or bundle rows.
 
 ## Suggested Commit Boundaries
 
-1. Pinned Trox runtime, CLI/config, generated source bundle, and runtime
-   provider.
-2. Pool Viewer vertical slice, translator-ready Spanish QA CSV, proof bundles,
-   and accepted go/no-go evidence.
-3. Trox-aware lint/audit rules derived from the accepted slice.
-4. Application/coop/main-menu migration.
-5. Journey/card/deck/shared-control migration.
-6. Site migration.
-7. Exploration migration.
-8. Reveal/accessibility migration.
-9. v25 semantic battle-prompt protocol and compatibility.
-10. Battle presentation migration.
-11. Fluent deletion, review/regeneration/docs cutover, generated artifacts.
-12. QA/remediation from the final independent review.
+1. Pin the shipped Trox `localizationTodo` runtime, `LocalizedString` component
+   contracts, Pool Viewer boundary correction, Cumulus metadata, and
+   resolver/text-prop enforcement.
+2. Application/coop/main-menu migration.
+3. Journey/card/deck/shared-control migration.
+4. Site migration.
+5. Exploration migration.
+6. Reveal/accessibility migration.
+7. v25 semantic battle-prompt protocol and compatibility.
+8. Battle presentation migration.
+9. Fluent deletion, review/regeneration/docs cutover, generated artifacts, and
+   final component-boundary audit.
+10. QA/remediation from the final independent review.
 
 Each commit must preserve a buildable branch, update the relevant parity-ledger
 rows, run focused tests, and regenerate Trox artifacts through the configured
@@ -1349,18 +1251,28 @@ promotion happens only after user approval.
   count, or facet operation; fixed vocabulary remains in complete messages.
 - Every `tx`/`txa` call has an actionable literal translator description and an
   intentional meaning identity.
-- `LocalizedString` remains unresolved through view models and resolves only at
-  presentation. Behavior, logging, equality, selectors, and tests use semantic
-  IDs/values.
+- No production `localizationTodo(...)` call remains at final cutover; each
+  temporary call was replaced by a semantically audited `tx`/`txa` family.
+- Every production component prop for code-authored player-facing text,
+  including nested option/accessory/accessibility models, uses
+  `LocalizedString`. Composite components forward it unchanged; raw RON,
+  user-authored, and technical strings use distinct named contracts.
+- `LocalizedString` remains unresolved through view models, helpers, screens,
+  composite components, overlays, and events. Each resolver call directly
+  assigns an intrinsic DOM/browser primitive; no resolved local, return value,
+  object field, compatibility helper, or composite prop exists. Behavior,
+  logging, equality, selectors, and tests use semantic IDs/values.
 - v25 battle state persists semantic prompt refs, v24 rooms gate before fold or
   append, explicit legacy `LOAD_STATE` imports normalize safely, and replay/
   compaction/logging remain deterministic and reconstructable.
 - Source and QA reports/bundles are current, canonical, byte-stable on a second
   run, and validated by the pinned Trox toolchain.
-- The Pool Viewer gate passes before bulk migration: its source English matches
-  the parity ledger, `localization/qa/es.csv` is understandable without source
-  code, translator edits survive extraction, and source plus target-fallback
-  browser paths use the real provider without unexplained diagnostics.
+- The corrected Pool Viewer gate passes before bulk migration: its source
+  English matches the parity ledger, `localization/qa/es.csv` is understandable
+  without source code, translator edits survive extraction, source plus
+  target-fallback browser paths use the real provider without unexplained
+  diagnostics, and no screen-level resolution exists merely to satisfy a
+  component prop.
 - QA covers Russian plural categories, Arabic RTL/isolation, Japanese
   placeholder order, long translations, source fallback, missing/malformed
   resource diagnostics, and all representative player workflows.

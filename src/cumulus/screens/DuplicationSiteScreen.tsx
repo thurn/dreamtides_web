@@ -1,5 +1,6 @@
 // DuplicationSiteScreen — Deacon Holt's Cumulus card-copying site.
 
+import { localizationTodo } from "@trox/runtime";
 import { useCallback, useState } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { CardPickerPanel } from "../components/card/CardPickerPanel";
@@ -106,14 +107,14 @@ export function DuplicationSiteScreen({
             }}
           >
             <CardPickerPanel
-              title={t("duplication-picker-title")}
-              subtitle={t("duplication-picker-instruction", {
+              title={localizationTodo(t("duplication-picker-title"))}
+              subtitle={localizationTodo(t("duplication-picker-instruction", {
                 state: view.ready
                   ? view.isEnhanced
                     ? "enhanced"
                     : "standard"
                   : "loading",
-              })}
+              }))}
               footerActions={[
                 {
                   label: t("duplication-decline-action", {
@@ -146,9 +147,9 @@ export function DuplicationSiteScreen({
                 },
                 disabled: locked,
               }))}
-              emptyLabel={t("duplication-picker-empty-state", {
+              emptyLabel={localizationTodo(t("duplication-picker-empty-state", {
                 state: view.ready ? "empty" : "loading",
-              })}
+              }))}
               testId="cumulus-duplication-card-gallery"
               onCardPress={toggleSelection}
             />

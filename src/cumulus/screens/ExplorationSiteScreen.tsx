@@ -1,6 +1,7 @@
 // ExplorationSiteScreen — Layaway draws one possibility from the player's
 // deck anchor, flips it face up, and holds it in the encounter panel.
 
+import { localizationTodo } from "@trox/runtime";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   useCallback,
@@ -7188,8 +7189,8 @@ export function ExplorationSiteScreen({
                       style={{ width: "100%", minHeight: 0 }}
                     >
                       <CardPickerPanel
-                        title={followup.title}
-                        subtitle={followup.subtitle}
+                        title={localizationTodo(followup.title)}
+                        subtitle={localizationTodo(followup.subtitle)}
                         footerActions={[
                           {
                             label: t("exploration-confirm-choice-action"),
@@ -7211,7 +7212,7 @@ export function ExplorationSiteScreen({
                             : undefined,
                           testId: `cumulus-exploration-multi-transfiguration-card-${candidate.entryId}`,
                         }))}
-                        emptyLabel={t("exploration-empty-card-state")}
+                        emptyLabel={localizationTodo(t("exploration-empty-card-state"))}
                         testId="cumulus-exploration-multi-transfiguration-card-picker"
                         onCardPress={toggleCard}
                       />
@@ -7322,8 +7323,8 @@ export function ExplorationSiteScreen({
                   }}
                 >
                   <GlassPanel
-                    title={activeAction.followup.title}
-                    subtitle={activeAction.followup.subtitle}
+                    title={localizationTodo(activeAction.followup.title)}
+                    subtitle={localizationTodo(activeAction.followup.subtitle)}
                     headingLevel="h1"
                     headerSpacing="medium"
                     footer={
@@ -7392,8 +7393,8 @@ export function ExplorationSiteScreen({
             {activeAction.followup.kind === "cards" &&
               activeAction.followup.selectionKey === "entryIds" && (
                 <CardPickerPanel
-                  title={activeAction.followup.title}
-                  subtitle={activeAction.followup.subtitle}
+                  title={localizationTodo(activeAction.followup.title)}
+                  subtitle={localizationTodo(activeAction.followup.subtitle)}
                   footerActions={[
                     {
                       label:
@@ -7428,7 +7429,7 @@ export function ExplorationSiteScreen({
                     ),
                     testId: `cumulus-exploration-card-${card.entryId}`,
                   }))}
-                  emptyLabel={t("exploration-empty-card-state")}
+                  emptyLabel={localizationTodo(t("exploration-empty-card-state"))}
                   testId="cumulus-exploration-card-followup"
                   onCardPress={toggleCard}
                 />
@@ -7439,9 +7440,9 @@ export function ExplorationSiteScreen({
                 style={{ width: "100%", minHeight: 0, maxHeight: "100%" }}
               >
                 <GlassPanel
-                  eyebrow="Exploration"
-                  title={activeAction.followup.title}
-                  subtitle={activeAction.followup.subtitle}
+                  eyebrow={localizationTodo("Exploration")}
+                  title={localizationTodo(activeAction.followup.title)}
+                  subtitle={localizationTodo(activeAction.followup.subtitle)}
                   headingLevel="h1"
                   headerSpacing="medium"
                 >
@@ -7530,9 +7531,9 @@ export function ExplorationSiteScreen({
             )}
             {activeAction.followup.kind === "subtypes" && (
               <GlassPanel
-                eyebrow={t("exploration-site-eyebrow")}
-                title={activeAction.followup.title}
-                subtitle={activeAction.followup.subtitle}
+                eyebrow={localizationTodo(t("exploration-site-eyebrow"))}
+                title={localizationTodo(activeAction.followup.title)}
+                subtitle={localizationTodo(activeAction.followup.subtitle)}
                 headingLevel="h1"
                 footer={
                   <div
@@ -7587,9 +7588,9 @@ export function ExplorationSiteScreen({
             )}
             {activeAction.followup.kind === "site-types" && (
               <GlassPanel
-                eyebrow={t("exploration-site-eyebrow")}
-                title={activeAction.followup.title}
-                subtitle={activeAction.followup.subtitle}
+                eyebrow={localizationTodo(t("exploration-site-eyebrow"))}
+                title={localizationTodo(activeAction.followup.title)}
+                subtitle={localizationTodo(activeAction.followup.subtitle)}
                 headingLevel="h1"
               >
                 <div
@@ -7699,9 +7700,9 @@ export function ExplorationSiteScreen({
                     style={{ width: "100%", minHeight: 0 }}
                   >
                     <GlassPanel
-                      eyebrow={t("exploration-site-eyebrow")}
-                      title={followup.title}
-                      subtitle={followup.subtitle}
+                      eyebrow={localizationTodo(t("exploration-site-eyebrow"))}
+                      title={localizationTodo(followup.title)}
+                      subtitle={localizationTodo(followup.subtitle)}
                       headingLevel="h1"
                       footer={
                         showConfirm ? (
@@ -7802,9 +7803,9 @@ export function ExplorationSiteScreen({
               })()}
             {activeAction.followup.kind === "dreamsigns" && (
               <GlassPanel
-                eyebrow="Exploration"
-                title={activeAction.followup.title}
-                subtitle={activeAction.followup.subtitle}
+                eyebrow={localizationTodo("Exploration")}
+                title={localizationTodo(activeAction.followup.title)}
+                subtitle={localizationTodo(activeAction.followup.subtitle)}
                 headingLevel="h1"
               >
                 <div
@@ -7848,9 +7849,9 @@ export function ExplorationSiteScreen({
             )}
             {activeAction.followup.kind === "dreamAvatars" && (
               <GlassPanel
-                eyebrow="Exploration"
-                title={activeAction.followup.title}
-                subtitle={activeAction.followup.subtitle}
+                eyebrow={localizationTodo("Exploration")}
+                title={localizationTodo(activeAction.followup.title)}
+                subtitle={localizationTodo(activeAction.followup.subtitle)}
                 headingLevel="h1"
               >
                 <div
@@ -7944,7 +7945,7 @@ export function ExplorationSiteScreen({
           >
             <IconButton
               glyph={GLYPHS.close}
-              label={t("exploration-return-action")}
+              label={localizationTodo(t("exploration-return-action"))}
               onPress={collapseFrameBreak}
               testId="cumulus-exploration-exit"
             />

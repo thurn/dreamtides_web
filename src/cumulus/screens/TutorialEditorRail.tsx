@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { Reorder, motion, useDragControls } from "framer-motion";
 import {
   type KeyboardEvent,
@@ -494,8 +495,8 @@ function SpeechBubbleEditor({
       <Select
         full
         size="sm"
-        ariaLabel={`Speech bubble speaker for action ${String(actionNumber)}`}
-        options={[...SPEECH_BUBBLE_SPEAKER_OPTIONS]}
+        ariaLabel={localizationTodo(`Speech bubble speaker for action ${String(actionNumber)}`)}
+        options={[...SPEECH_BUBBLE_SPEAKER_OPTIONS].map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
         value={speechBubble.speaker}
         onChange={(speaker) => {
           if (
@@ -522,12 +523,12 @@ function SpeechBubbleEditor({
         onCommit={(text) => onChange({ ...speechBubble, text }, true)}
       />
       <NumberStepper
-        label="Appearance Delay"
+        label={localizationTodo("Appearance Delay")}
         value={appearanceDelay}
-        displayValue={`${waitLabel(appearanceDelay)}s`}
+        displayValue={localizationTodo(`${waitLabel(appearanceDelay)}s`)}
         size="sm"
-        decrementLabel={`Decrease speech bubble delay for action ${String(actionNumber)}`}
-        incrementLabel={`Increase speech bubble delay for action ${String(actionNumber)}`}
+        decrementLabel={localizationTodo(`Decrease speech bubble delay for action ${String(actionNumber)}`)}
+        incrementLabel={localizationTodo(`Increase speech bubble delay for action ${String(actionNumber)}`)}
         decrementDisabled={appearanceDelay <= 0}
         onDecrement={() =>
           onChange(
@@ -549,12 +550,12 @@ function SpeechBubbleEditor({
         }
       />
       <NumberStepper
-        label="Visible Duration"
+        label={localizationTodo("Visible Duration")}
         value={visibleDuration}
-        displayValue={`${waitLabel(visibleDuration)}s`}
+        displayValue={localizationTodo(`${waitLabel(visibleDuration)}s`)}
         size="sm"
-        decrementLabel={`Decrease speech bubble duration for action ${String(actionNumber)}`}
-        incrementLabel={`Increase speech bubble duration for action ${String(actionNumber)}`}
+        decrementLabel={localizationTodo(`Decrease speech bubble duration for action ${String(actionNumber)}`)}
+        incrementLabel={localizationTodo(`Increase speech bubble duration for action ${String(actionNumber)}`)}
         decrementDisabled={visibleDuration <= 0}
         onDecrement={() =>
           onChange(
@@ -579,12 +580,12 @@ function SpeechBubbleEditor({
         }
       />
       <NumberStepper
-        label="Bubble Width"
+        label={localizationTodo("Bubble Width")}
         value={speechBubble.bubbleWidth}
-        displayValue={`${String(speechBubble.bubbleWidth)}px`}
+        displayValue={localizationTodo(`${String(speechBubble.bubbleWidth)}px`)}
         size="sm"
-        decrementLabel={`Narrow speech bubble for action ${String(actionNumber)}`}
-        incrementLabel={`Widen speech bubble for action ${String(actionNumber)}`}
+        decrementLabel={localizationTodo(`Narrow speech bubble for action ${String(actionNumber)}`)}
+        incrementLabel={localizationTodo(`Widen speech bubble for action ${String(actionNumber)}`)}
         decrementDisabled={
           speechBubble.bubbleWidth <= MINIMUM_SPEECH_BUBBLE_WIDTH
         }
@@ -617,12 +618,12 @@ function SpeechBubbleEditor({
         }
       />
       <NumberStepper
-        label="Horizontal Offset"
+        label={localizationTodo("Horizontal Offset")}
         value={speechBubble.horizontalOffset}
-        displayValue={`${waitLabel(speechBubble.horizontalOffset)}px`}
+        displayValue={localizationTodo(`${waitLabel(speechBubble.horizontalOffset)}px`)}
         size="sm"
-        decrementLabel={`Move speech bubble left for action ${String(actionNumber)}`}
-        incrementLabel={`Move speech bubble right for action ${String(actionNumber)}`}
+        decrementLabel={localizationTodo(`Move speech bubble left for action ${String(actionNumber)}`)}
+        incrementLabel={localizationTodo(`Move speech bubble right for action ${String(actionNumber)}`)}
         onDecrement={() =>
           onChange(
             {
@@ -643,12 +644,12 @@ function SpeechBubbleEditor({
         }
       />
       <NumberStepper
-        label="Vertical Offset"
+        label={localizationTodo("Vertical Offset")}
         value={speechBubble.verticalOffset}
-        displayValue={`${waitLabel(speechBubble.verticalOffset)}px`}
+        displayValue={localizationTodo(`${waitLabel(speechBubble.verticalOffset)}px`)}
         size="sm"
-        decrementLabel={`Move speech bubble up for action ${String(actionNumber)}`}
-        incrementLabel={`Move speech bubble down for action ${String(actionNumber)}`}
+        decrementLabel={localizationTodo(`Move speech bubble up for action ${String(actionNumber)}`)}
+        incrementLabel={localizationTodo(`Move speech bubble down for action ${String(actionNumber)}`)}
         onDecrement={() =>
           onChange(
             {
@@ -771,8 +772,8 @@ function TutorialActionRow({
             <Select
               full
               size="sm"
-              ariaLabel={`Action ${String(index + 1)} type`}
-              options={[...ACTION_OPTIONS]}
+              ariaLabel={localizationTodo(`Action ${String(index + 1)} type`)}
+              options={[...ACTION_OPTIONS].map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
               value={action.action}
               onChange={(value) => {
                 if (
@@ -798,7 +799,7 @@ function TutorialActionRow({
             glyph={GLYPHS.play}
             size="sm"
             placement="onGlass"
-            label={`Play tutorial from action ${String(index + 1)}`}
+            label={localizationTodo(`Play tutorial from action ${String(index + 1)}`)}
             testId={`tutorial-action-play-${action.id}`}
             onPress={() => onPlayFromAction(action.id)}
           />
@@ -806,7 +807,7 @@ function TutorialActionRow({
             glyph={GLYPHS.trash}
             size="sm"
             placement="onGlass"
-            label={`Delete action ${String(index + 1)}`}
+            label={localizationTodo(`Delete action ${String(index + 1)}`)}
             onPress={() =>
               onActionsChange(
                 actions.filter((candidate) => candidate.id !== action.id),
@@ -833,8 +834,8 @@ function TutorialActionRow({
             <Select
               full
               size="sm"
-              ariaLabel={`How to Play trigger for action ${String(index + 1)}`}
-              options={[...HOW_TO_PLAY_TRIGGER_OPTIONS]}
+              ariaLabel={localizationTodo(`How to Play trigger for action ${String(index + 1)}`)}
+              options={[...HOW_TO_PLAY_TRIGGER_OPTIONS].map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
               value={action.trigger ?? "player-turn-announcement-complete"}
               onChange={(trigger) => {
                 if (
@@ -850,8 +851,8 @@ function TutorialActionRow({
             <Select
               full
               size="sm"
-              ariaLabel={`How to Play companion for action ${String(index + 1)}`}
-              options={[...HOW_TO_PLAY_COMPANION_OPTIONS]}
+              ariaLabel={localizationTodo(`How to Play companion for action ${String(index + 1)}`)}
+              options={[...HOW_TO_PLAY_COMPANION_OPTIONS].map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
               value={action.companion ?? "none"}
               onChange={(companion) => {
                 if (companion === "dreamwell-card") {
@@ -875,12 +876,12 @@ function TutorialActionRow({
               }}
             />
             <NumberStepper
-              label="Card Width"
+              label={localizationTodo("Card Width")}
               value={action.cardWidth ?? DEFAULT_HOW_TO_PLAY_CARD_WIDTH}
-              displayValue={`${String(action.cardWidth ?? DEFAULT_HOW_TO_PLAY_CARD_WIDTH)}px`}
+              displayValue={localizationTodo(`${String(action.cardWidth ?? DEFAULT_HOW_TO_PLAY_CARD_WIDTH)}px`)}
               size="sm"
-              decrementLabel={`Narrow How to Play card for action ${String(index + 1)}`}
-              incrementLabel={`Widen How to Play card for action ${String(index + 1)}`}
+              decrementLabel={localizationTodo(`Narrow How to Play card for action ${String(index + 1)}`)}
+              incrementLabel={localizationTodo(`Widen How to Play card for action ${String(index + 1)}`)}
               decrementDisabled={
                 (action.cardWidth ?? DEFAULT_HOW_TO_PLAY_CARD_WIDTH) <=
                 MINIMUM_HOW_TO_PLAY_CARD_WIDTH
@@ -931,8 +932,8 @@ function TutorialActionRow({
             <Select
               full
               size="sm"
-              ariaLabel={`DreamAvatar owner for action ${String(index + 1)}`}
-              options={[...DREAM_AVATAR_OWNER_OPTIONS]}
+              ariaLabel={localizationTodo(`DreamAvatar owner for action ${String(index + 1)}`)}
+              options={[...DREAM_AVATAR_OWNER_OPTIONS].map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
               value={action.owner}
               onChange={(owner) => {
                 if (owner !== "player" && owner !== "enemy") return;
@@ -940,12 +941,12 @@ function TutorialActionRow({
               }}
             />
             <NumberStepper
-              label="Large Portrait Pause"
+              label={localizationTodo("Large Portrait Pause")}
               value={action.pause}
-              displayValue={`${waitLabel(action.pause)}s`}
+              displayValue={localizationTodo(`${waitLabel(action.pause)}s`)}
               size="sm"
-              decrementLabel={`Decrease large portrait pause for action ${String(index + 1)}`}
-              incrementLabel={`Increase large portrait pause for action ${String(index + 1)}`}
+              decrementLabel={localizationTodo(`Decrease large portrait pause for action ${String(index + 1)}`)}
+              incrementLabel={localizationTodo(`Increase large portrait pause for action ${String(index + 1)}`)}
               decrementDisabled={action.pause <= 0}
               onDecrement={() =>
                 update(
@@ -970,12 +971,12 @@ function TutorialActionRow({
               }
             />
             <NumberStepper
-              label="Scale & Travel Duration"
+              label={localizationTodo("Scale & Travel Duration")}
               value={action.duration}
-              displayValue={`${waitLabel(action.duration)}s`}
+              displayValue={localizationTodo(`${waitLabel(action.duration)}s`)}
               size="sm"
-              decrementLabel={`Decrease scale and travel duration for action ${String(index + 1)}`}
-              incrementLabel={`Increase scale and travel duration for action ${String(index + 1)}`}
+              decrementLabel={localizationTodo(`Decrease scale and travel duration for action ${String(index + 1)}`)}
+              incrementLabel={localizationTodo(`Increase scale and travel duration for action ${String(index + 1)}`)}
               decrementDisabled={action.duration <= 0}
               onDecrement={() =>
                 update(
@@ -1004,12 +1005,10 @@ function TutorialActionRow({
 
         {action.action === "draw-opponent-card" ? (
           <TextField
-            label="Drawn Opponent Card UUID"
+            label={localizationTodo("Drawn Opponent Card UUID")}
             value={action.cardId}
             error={
-              isCardId(action.cardId)
-                ? undefined
-                : "Enter an opponent card UUID."
+              isCardId(action.cardId) ? undefined : localizationTodo("Enter an opponent card UUID.")
             }
             testId={`tutorial-action-card-id-${action.id}`}
             onChange={(cardId) =>
@@ -1023,8 +1022,8 @@ function TutorialActionRow({
             <Select
               full
               size="sm"
-              ariaLabel={`Card owner for action ${String(index + 1)}`}
-              options={[...DREAM_AVATAR_OWNER_OPTIONS]}
+              ariaLabel={localizationTodo(`Card owner for action ${String(index + 1)}`)}
+              options={[...DREAM_AVATAR_OWNER_OPTIONS].map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
               value={action.owner}
               onChange={(owner) => {
                 if (owner !== "player" && owner !== "enemy") return;
@@ -1034,10 +1033,10 @@ function TutorialActionRow({
             <Select
               full
               size="sm"
-              ariaLabel={`Draw reason for action ${String(index + 1)}`}
+              ariaLabel={localizationTodo(`Draw reason for action ${String(index + 1)}`)}
               options={[
-                { value: "dreamwell-effect", label: "Dreamwell Effect" },
-                { value: "turn-draw", label: "Turn Draw" },
+                { value: "dreamwell-effect", label: localizationTodo("Dreamwell Effect") },
+                { value: "turn-draw", label: localizationTodo("Turn Draw") },
               ]}
               value={action.reason}
               onChange={(reason) => {
@@ -1048,9 +1047,9 @@ function TutorialActionRow({
               }}
             />
             <TextField
-              label="Drawn Card UUID"
+              label={localizationTodo("Drawn Card UUID")}
               value={action.cardId}
-              error={isCardId(action.cardId) ? undefined : "Enter a card UUID."}
+              error={isCardId(action.cardId) ? undefined : localizationTodo("Enter a card UUID.")}
               testId={`tutorial-action-card-id-${action.id}`}
               onChange={(cardId) =>
                 update({ ...action, cardId }, isCardId(cardId))
@@ -1062,12 +1061,10 @@ function TutorialActionRow({
         {action.action === "reveal-and-play-opponent-card" ? (
           <>
             <TextField
-              label="Revealed Opponent Card UUID"
+              label={localizationTodo("Revealed Opponent Card UUID")}
               value={action.cardId}
               error={
-                isCardId(action.cardId)
-                  ? undefined
-                  : "Enter an opponent card UUID."
+                isCardId(action.cardId) ? undefined : localizationTodo("Enter an opponent card UUID.")
               }
               testId={`tutorial-action-card-id-${action.id}`}
               onChange={(cardId) =>
@@ -1084,12 +1081,12 @@ function TutorialActionRow({
               }
             />
             <NumberStepper
-              label="Face-Up Reading Time"
+              label={localizationTodo("Face-Up Reading Time")}
               value={action.revealDuration}
-              displayValue={`${waitLabel(action.revealDuration)}s`}
+              displayValue={localizationTodo(`${waitLabel(action.revealDuration)}s`)}
               size="sm"
-              decrementLabel={`Decrease face-up reading time for action ${String(index + 1)}`}
-              incrementLabel={`Increase face-up reading time for action ${String(index + 1)}`}
+              decrementLabel={localizationTodo(`Decrease face-up reading time for action ${String(index + 1)}`)}
+              incrementLabel={localizationTodo(`Increase face-up reading time for action ${String(index + 1)}`)}
               decrementDisabled={action.revealDuration <= 0}
               onDecrement={() =>
                 update(
@@ -1122,8 +1119,8 @@ function TutorialActionRow({
             <Select
               full
               size="sm"
-              ariaLabel={`Dreamwell owner for action ${String(index + 1)}`}
-              options={[...DREAM_AVATAR_OWNER_OPTIONS]}
+              ariaLabel={localizationTodo(`Dreamwell owner for action ${String(index + 1)}`)}
+              options={[...DREAM_AVATAR_OWNER_OPTIONS].map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
               value={action.owner}
               onChange={(owner) => {
                 if (owner !== "player" && owner !== "enemy") return;
@@ -1131,12 +1128,10 @@ function TutorialActionRow({
               }}
             />
             <TextField
-              label="Dreamwell Card UUID"
+              label={localizationTodo("Dreamwell Card UUID")}
               value={action.cardId}
               error={
-                isCardId(action.cardId)
-                  ? undefined
-                  : "Enter a Dreamwell card UUID."
+                isCardId(action.cardId) ? undefined : localizationTodo("Enter a Dreamwell card UUID.")
               }
               testId={`tutorial-action-card-id-${action.id}`}
               onChange={(cardId) =>
@@ -1144,12 +1139,12 @@ function TutorialActionRow({
               }
             />
             <NumberStepper
-              label="Face-Up Reading Time"
+              label={localizationTodo("Face-Up Reading Time")}
               value={action.revealDuration ?? 0}
-              displayValue={`${waitLabel(action.revealDuration ?? 0)}s`}
+              displayValue={localizationTodo(`${waitLabel(action.revealDuration ?? 0)}s`)}
               size="sm"
-              decrementLabel={`Decrease Dreamwell reading time for action ${String(index + 1)}`}
-              incrementLabel={`Increase Dreamwell reading time for action ${String(index + 1)}`}
+              decrementLabel={localizationTodo(`Decrease Dreamwell reading time for action ${String(index + 1)}`)}
+              incrementLabel={localizationTodo(`Increase Dreamwell reading time for action ${String(index + 1)}`)}
               decrementDisabled={(action.revealDuration ?? 0) <= 0}
               onDecrement={() => {
                 const revealDuration = Math.max(
@@ -1169,12 +1164,10 @@ function TutorialActionRow({
 
         {action.action === "reposition-opponent-character" ? (
           <TextField
-            label="Opponent Character UUID"
+            label={localizationTodo("Opponent Character UUID")}
             value={action.cardId}
             error={
-              isCardId(action.cardId)
-                ? undefined
-                : "Enter an opponent character UUID."
+              isCardId(action.cardId) ? undefined : localizationTodo("Enter an opponent character UUID.")
             }
             testId={`tutorial-action-card-id-${action.id}`}
             onChange={(cardId) =>
@@ -1186,12 +1179,10 @@ function TutorialActionRow({
         {action.action === "reposition-player-character" ? (
           <>
             <TextField
-              label="Player Character UUID"
+              label={localizationTodo("Player Character UUID")}
               value={action.cardId}
               error={
-                isCardId(action.cardId)
-                  ? undefined
-                  : "Enter a player character UUID."
+                isCardId(action.cardId) ? undefined : localizationTodo("Enter a player character UUID.")
               }
               testId={`tutorial-action-card-id-${action.id}`}
               onChange={(cardId) =>
@@ -1199,12 +1190,10 @@ function TutorialActionRow({
               }
             />
             <TextField
-              label="Opposing Character UUID"
+              label={localizationTodo("Opposing Character UUID")}
               value={action.opposingCardId}
               error={
-                isCardId(action.opposingCardId)
-                  ? undefined
-                  : "Enter an opposing character UUID."
+                isCardId(action.opposingCardId) ? undefined : localizationTodo("Enter an opposing character UUID.")
               }
               testId={`tutorial-action-opposing-card-id-${action.id}`}
               onChange={(opposingCardId) =>
@@ -1217,12 +1206,10 @@ function TutorialActionRow({
         {action.action === "resolve-challenge" ? (
           <>
             <TextField
-              label="Challenger UUID"
+              label={localizationTodo("Challenger UUID")}
               value={action.challengerCardId}
               error={
-                isCardId(action.challengerCardId)
-                  ? undefined
-                  : "Enter a challenger UUID."
+                isCardId(action.challengerCardId) ? undefined : localizationTodo("Enter a challenger UUID.")
               }
               testId={`tutorial-action-challenger-card-id-${action.id}`}
               onChange={(challengerCardId) =>
@@ -1234,12 +1221,10 @@ function TutorialActionRow({
               }
             />
             <TextField
-              label="Blocker UUID"
+              label={localizationTodo("Blocker UUID")}
               value={action.blockerCardId}
               error={
-                isCardId(action.blockerCardId)
-                  ? undefined
-                  : "Enter a blocker UUID."
+                isCardId(action.blockerCardId) ? undefined : localizationTodo("Enter a blocker UUID.")
               }
               testId={`tutorial-action-blocker-card-id-${action.id}`}
               onChange={(blockerCardId) =>
@@ -1266,12 +1251,12 @@ function TutorialActionRow({
         ) : null}
 
         <NumberStepper
-          label="Wait"
+          label={localizationTodo("Wait")}
           value={action.wait}
-          displayValue={`${waitLabel(action.wait)}s`}
+          displayValue={localizationTodo(`${waitLabel(action.wait)}s`)}
           size="sm"
-          decrementLabel={`Decrease wait for action ${String(index + 1)}`}
-          incrementLabel={`Increase wait for action ${String(index + 1)}`}
+          decrementLabel={localizationTodo(`Decrease wait for action ${String(index + 1)}`)}
+          incrementLabel={localizationTodo(`Increase wait for action ${String(index + 1)}`)}
           decrementDisabled={action.wait <= 0}
           onDecrement={() =>
             update(
@@ -1414,9 +1399,9 @@ function TutorialEditorContent({
       </Reorder.Group>
       <Select
         full
-        ariaLabel="Add an action"
-        placeholder="Add an Action"
-        options={[...ACTION_OPTIONS]}
+        ariaLabel={localizationTodo("Add an action")}
+        placeholder={localizationTodo("Add an Action")}
+        options={[...ACTION_OPTIONS].map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
         value=""
         onChange={(value) => {
           if (
@@ -1478,8 +1463,9 @@ export function TutorialEditorRail({
     <DeveloperRail
       id="cumulus-tutorial-editor"
       side="left"
-      title="Tutorial Editor"
-      subtitle={`${String(actions.length)} ${actions.length === 1 ? "action" : "actions"}`}
+      title={localizationTodo("Tutorial Editor")}
+      subtitle={localizationTodo(`${String(actions.length)} ${actions.length === 1 ? "action" : "actions"}`)}
+      closeLabel={localizationTodo("Close tutorial editor")}
       onClose={onClose}
       footer={
         <TutorialEditorSaveFooter
@@ -1512,9 +1498,9 @@ export function TutorialEditorTakeover({
 }: TutorialEditorRailProps): ReactElement {
   return (
     <GlassDialog
-      title="Tutorial Editor"
-      subtitle={`Developer Tools · ${String(actions.length)} ${actions.length === 1 ? "action" : "actions"}`}
-      closeLabel="Close tutorial editor"
+      title={localizationTodo("Tutorial Editor")}
+      subtitle={localizationTodo(`Developer Tools · ${String(actions.length)} ${actions.length === 1 ? "action" : "actions"}`)}
+      closeLabel={localizationTodo("Close tutorial editor")}
       cutoutAwareClose
       fullScreen
       onClose={onClose}

@@ -1,6 +1,7 @@
 // CardShopSiteScreen — Tobias Tanglefur's Cumulus card shop. Five direct-buy
 // cards and one restock action share a two-row glass gallery.
 
+import { localizationTodo } from "@trox/runtime";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import type { GameCardModel } from "../components/card/CardView";
@@ -220,12 +221,12 @@ function CardShopGallery({
     >
       <ShopFreePurchaseStatus status={freePurchaseStatus} />
       <CardPickerPanel
-        title={presentation.title}
+        title={localizationTodo(presentation.title)}
         rightAccessory={{
           kind: "iconButton",
           button: {
             glyph: GLYPHS.close,
-            label: t("card-shop-leave-action"),
+            label: localizationTodo(t("card-shop-leave-action")),
             onPress: onClose,
             testId: "cumulus-card-shop-leave",
           },

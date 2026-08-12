@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import type { ReactElement } from "react";
 import { GlassButton } from "../../components/controls/GlassButton";
 import { NumberStepper } from "../../components/controls/NumberStepper";
@@ -49,9 +50,9 @@ export function BattleCardNoteOverlay({
 
   return (
     <GlassDialog
-      title={t("battle-card-note-title", { cardName })}
-      subtitle={t("battle-card-note-subtitle")}
-      closeLabel={t("battle-card-note-cancel")}
+      title={localizationTodo(t("battle-card-note-title", { cardName }))}
+      subtitle={localizationTodo(t("battle-card-note-subtitle"))}
+      closeLabel={localizationTodo(t("battle-card-note-cancel"))}
       onClose={onCancel}
       desktopCenterTarget="battlefield"
     >
@@ -63,12 +64,12 @@ export function BattleCardNoteOverlay({
       >
         <div data-battle-note-field="text">
           <TextField
-            label={t("battle-card-note-text-label")}
+            label={localizationTodo(t("battle-card-note-text-label"))}
             value={text}
             onChange={(value) => onTextChange(value.slice(0, 200))}
-            placeholder={t("battle-card-note-placeholder")}
-            supportingText={t("battle-card-note-character-count", { count: text.length })}
-            error={hasText ? undefined : t("battle-card-note-error")}
+            placeholder={localizationTodo(t("battle-card-note-placeholder"))}
+            supportingText={localizationTodo(t("battle-card-note-character-count", { count: text.length }))}
+            error={hasText ? undefined : localizationTodo(t("battle-card-note-error"))}
           />
         </div>
         <div
@@ -84,14 +85,14 @@ export function BattleCardNoteOverlay({
             {t("battle-card-note-expiry-label")}
           </span>
           <Select
-            ariaLabel={t("battle-card-note-expiry-accessible-name")}
+            ariaLabel={localizationTodo(t("battle-card-note-expiry-accessible-name"))}
             leadingGlyph={GLYPHS.duration}
             full
             options={[
-              { value: "end-of-next-turn", label: t("battle-card-note-expiry-next-turn") },
-              { value: "end-of-this-turn", label: t("battle-card-note-expiry-this-turn") },
-              { value: "after-n-turns", label: t("battle-card-note-expiry-numbered") },
-              { value: "manual", label: t("battle-card-note-expiry-manual") },
+              { value: "end-of-next-turn", label: localizationTodo(t("battle-card-note-expiry-next-turn")) },
+              { value: "end-of-this-turn", label: localizationTodo(t("battle-card-note-expiry-this-turn")) },
+              { value: "after-n-turns", label: localizationTodo(t("battle-card-note-expiry-numbered")) },
+              { value: "manual", label: localizationTodo(t("battle-card-note-expiry-manual")) },
             ]}
             value={expiryOption}
             onChange={(value) =>
@@ -102,10 +103,10 @@ export function BattleCardNoteOverlay({
         {expiryOption === "after-n-turns" ? (
           <div data-battle-note-field="after-n-turns">
             <NumberStepper
-              label={t("battle-card-note-turns-label")}
+              label={localizationTodo(t("battle-card-note-turns-label"))}
               value={afterNTurns}
-              decrementLabel={t("battle-card-note-fewer-turn")}
-              incrementLabel={t("battle-card-note-more-turn")}
+              decrementLabel={localizationTodo(t("battle-card-note-fewer-turn"))}
+              incrementLabel={localizationTodo(t("battle-card-note-more-turn"))}
               decrementDisabled={afterNTurns <= minimumTurns}
               incrementDisabled={afterNTurns >= maximumTurns}
               onDecrement={() =>

@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { motion, useReducedMotion } from "framer-motion";
 import { useCallback, useRef, useState } from "react";
 import type { RandomSiteDestinationType, SiteState } from "../../types/journey";
@@ -89,7 +90,7 @@ export function RandomSiteScreen({
           }}
         >
           <GlassPanel
-            title={view.title}
+            title={localizationTodo(view.title)}
             headerDivider={false}
             testId="cumulus-random-site-panel"
           >

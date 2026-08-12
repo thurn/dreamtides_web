@@ -27,16 +27,26 @@ The menu opens above or below according to the available viewport space and scro
 | `size` | `SelectSize` = `"sm" \| "md"` | no | `md` | Height/scale. Default 'md'. |
 | `full` | `boolean` | no | `false` | Stretch the trigger to fill the container width. |
 | `align` | `"start" \| "end"` | no | `start` | Which trigger edge the menu aligns to. 'start' (default) opens flush to the leading edge; 'end' opens flush to the trailing edge — use it when the Select sits against the right side of a bar so the menu stays on-screen. |
-| `ariaLabel` | `string` | no | — | Accessible label for the trigger. |
-| `placeholder` | `string` | no | — | Text shown when `value` does not match an option, for action-picker controls. |
+| `ariaLabel` | `LocalizedString` | no | — | Accessible label for the trigger. |
+| `placeholder` | `LocalizedString` | no | — | Text shown when `value` does not match an option, for action-picker controls. |
 
 ### `options`: the `SelectOption` model
+
+#### `LocalizedSelectOption`
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `value` | `string` | no |  |
-| `label` | `string` | no |  |
-| `triggerLabel` | `string` | yes |  |
+| `label` | `LocalizedString` | no |  |
+| `triggerLabel` | `LocalizedString` | yes |  |
+
+#### `AuthoredSelectOption`
+
+| Field | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | no |  |
+| `authoredLabel` | `string` | no |  |
+| `authoredTriggerLabel` | `string` | yes |  |
 
 ## Usage
 

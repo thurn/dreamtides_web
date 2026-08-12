@@ -2,6 +2,7 @@
 // sample puts the same labeled and icon controls directly on scene media and
 // inside a real glass panel so the effective tint can be judged side by side.
 
+import { localizationTodo } from "@trox/runtime";
 import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
 import { GlassButton } from "../../components/controls/GlassButton";
 import { IconButton } from "../../components/controls/IconButton";
@@ -57,7 +58,7 @@ function ControlPair({ placement }: { placement: GlassControlPlacement }) {
       />
       <IconButton
         glyph={GLYPHS.gear}
-        label="Settings"
+        label={localizationTodo("Settings")}
         placement={placement}
         onPress={() => {}}
       />

@@ -25,6 +25,7 @@
 // delegates finger-clearing placement and press recognition to the shared
 // reveal coordinator.
 
+import { localizationTodo } from "@trox/runtime";
 import { useEffect, useMemo, useState } from "react";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { IconButton } from "../components/controls/IconButton";
@@ -259,7 +260,7 @@ function TopBand({
             placement="onGlass"
             glyph={GLYPHS.close}
             size="md"
-            label={t("deck-browser-close")}
+            label={localizationTodo(t("deck-browser-close"))}
             testId="mobile-deck-close"
             onPress={onClose}
           />
@@ -337,13 +338,13 @@ function DeckControls({
         size="sm"
         leadingGlyph={GLYPHS.filter}
         align="start"
-        ariaLabel={t("deck-browser-filter-accessible-name", {
+        ariaLabel={localizationTodo(t("deck-browser-filter-accessible-name", {
           selection: selectedFilterLabel,
-        })}
+        }))}
         options={typeFilterOptions.map((option) => ({
           value: option.value,
           label: optionLabel(option),
-        }))}
+        })).map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
         value={filterSort.typeFilter}
         onChange={(value) =>
           onFilterSortChange({
@@ -356,13 +357,13 @@ function DeckControls({
         size="sm"
         leadingGlyph={GLYPHS.sort}
         align="end"
-        ariaLabel={t("deck-browser-sort-accessible-name", {
+        ariaLabel={localizationTodo(t("deck-browser-sort-accessible-name", {
           selection: sortOptionLabel(deckSortLabel(filterSort.sort)),
-        })}
+        }))}
         options={DECK_SORT_OPTIONS.map((option) => ({
           value: option.value,
           label: sortOptionLabel(option.value),
-        }))}
+        })).map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
         value={filterSort.sort}
         onChange={(value) =>
           onFilterSortChange({ ...filterSort, sort: value as DeckSortId })

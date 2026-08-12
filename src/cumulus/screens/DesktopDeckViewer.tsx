@@ -30,6 +30,7 @@
 // from "the whole deck + that state" to "the visible grid" lives in the pure,
 // tested `desktop-deck-filter` module.
 
+import { localizationTodo } from "@trox/runtime";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { requireDreamsignId } from "../../data/dreamsigns";
@@ -300,7 +301,7 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
         placement="onGlass"
         glyph={GLYPHS.close}
         size="sm"
-        label={t("deck-browser-close")}
+        label={localizationTodo(t("deck-browser-close"))}
         onPress={onClose}
       />
     </header>
@@ -539,7 +540,7 @@ function ControlBar({
         options={DECK_TYPE_TOGGLE_OPTIONS.map((option) => ({
           value: option.value,
           label: typeLabel(option.value),
-        }))}
+        })).map((option) => ({ ...option, label: localizationTodo(option.label), ...("ariaLabel" in option && typeof option.ariaLabel === "string" ? { ariaLabel: localizationTodo(option.ariaLabel) } : {}) }))}
         value={filterSort.type}
         onChange={(value) => {
           const type = value as DesktopDeckFilterSort["type"];
@@ -554,11 +555,11 @@ function ControlBar({
           size="sm"
           leadingGlyph={GLYPHS.filter}
           align="start"
-          ariaLabel={t("deck-filter-subtype-accessible-name")}
+          ariaLabel={localizationTodo(t("deck-filter-subtype-accessible-name"))}
           options={subtypeOptions.map((option) => ({
             value: option.value,
             label: option.authoredLabel ?? t("deck-filter-all-subtypes"),
-          }))}
+          })).map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
           value={filterSort.subtype}
           onChange={(value) => onChange({ subtype: value })}
         />
@@ -567,11 +568,11 @@ function ControlBar({
         size="sm"
         leadingGlyph={GLYPHS.sort}
         align="start"
-          ariaLabel={t("deck-sort-accessible-name")}
+          ariaLabel={localizationTodo(t("deck-sort-accessible-name"))}
         options={DECK_SORT_OPTIONS.map((option) => ({
           value: option.value,
           label: sortLabel(option.value),
-        }))}
+        })).map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
         value={filterSort.sort}
         onChange={(value) =>
           onChange({ sort: value as DesktopDeckFilterSort["sort"] })
@@ -582,13 +583,13 @@ function ControlBar({
         options={[
           {
             value: "asc",
-            label: "↑",
-            ariaLabel: t("deck-sort-ascending-accessible-name"),
+            label: localizationTodo("↑"),
+            ariaLabel: localizationTodo(t("deck-sort-ascending-accessible-name")),
           },
           {
             value: "desc",
-            label: "↓",
-            ariaLabel: t("deck-sort-descending-accessible-name"),
+            label: localizationTodo("↓"),
+            ariaLabel: localizationTodo(t("deck-sort-descending-accessible-name")),
           },
         ]}
         value={filterSort.direction}
@@ -604,7 +605,7 @@ function ControlBar({
           options={DECK_CARD_SIZE_OPTIONS.map((option) => ({
             value: option.value,
             label: sizeLabel(option.value),
-          }))}
+          })).map((option) => ({ ...option, label: localizationTodo(option.label), ...("ariaLabel" in option && typeof option.ariaLabel === "string" ? { ariaLabel: localizationTodo(option.ariaLabel) } : {}) }))}
           value={filterSort.size}
           onChange={(value) => onChange({ size: value as DeckCardSize })}
         />

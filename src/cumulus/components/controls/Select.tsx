@@ -39,6 +39,7 @@ import {
   useRef,
   useState,
 } from "react";
+import type { LocalizedString } from "@trox/runtime";
 import { createPortal } from "react-dom";
 import { HOVER_SCALE, PRESS_SCALE, usePress } from "../../primitives/Pressable";
 import { StandaloneGlyph } from "./StandaloneGlyph";
@@ -49,6 +50,7 @@ import {
   controlChrome,
   glassTrack,
 } from "../../internal/control-treatment";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** Height/scale variants, matching SegmentedControl's. */
 type SelectSize = "sm" | "md";
@@ -59,11 +61,23 @@ type SelectSize = "sm" | "md";
  * (High to Low)" → trigger "Cost ↓"), so a long menu entry stays readable while
  * the button stays narrow enough to share a line.
  */
-export interface SelectOption {
+/** Code-authored option copy which remains localized until its DOM text node. */
+export interface LocalizedSelectOption {
   value: string;
-  label: string;
-  triggerLabel?: string;
+  label: LocalizedString;
+  triggerLabel?: LocalizedString;
 }
+
+/** Canonical authored content which is intentionally outside localization. */
+export interface AuthoredSelectOption {
+  value: string;
+  authoredLabel: string;
+  authoredTriggerLabel?: string;
+}
+
+export type SelectOption =
+  | LocalizedSelectOption
+  | AuthoredSelectOption;
 
 export interface SelectProps {
   /** The choices shown in the menu. */
@@ -89,9 +103,9 @@ export interface SelectProps {
    */
   align?: "start" | "end";
   /** Accessible label for the trigger. */
-  ariaLabel?: string;
+  ariaLabel?: LocalizedString;
   /** Text shown when `value` does not match an option, for action-picker controls. */
-  placeholder?: string;
+  placeholder?: LocalizedString;
 }
 
 interface SizeSpec {
@@ -140,6 +154,7 @@ export function Select({
   const spec = SIZES[size];
   const chrome = controlChrome();
   const { pressed, hovered, bind } = usePress();
+  const resolve = useLocalizer();
 
   const [open, setOpen] = useState(false);
   const [anchor, setAnchor] = useState<MenuAnchor | null>(null);
@@ -230,7 +245,7 @@ export function Select({
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label={ariaLabel}
+        aria-label={ariaLabel === undefined ? undefined : resolve(ariaLabel)}
         onClick={() => (open ? close() : openMenu())}
         {...bind}
         style={{
@@ -291,7 +306,7 @@ export function Select({
                 color: token("--text-primary"),
               }}
             >
-              {placeholder}
+              {resolve(placeholder)}
             </span>
           )}
           {options.map((option) => (
@@ -306,7 +321,9 @@ export function Select({
                 color: token("--text-primary"),
               }}
             >
-              {option.triggerLabel ?? option.label}
+              {"authoredLabel" in option
+                  ? option.authoredTriggerLabel ?? option.authoredLabel
+                  : resolve(option.triggerLabel ?? option.label)}
             </span>
           ))}
         </span>
@@ -373,6 +390,7 @@ interface MenuItemProps {
  *  selected value. */
 function MenuItem({ option, active, onPick }: MenuItemProps): ReactElement {
   const { pressed, hovered, bind } = usePress();
+  const resolve = useLocalizer();
   const lit = active || hovered || pressed;
   return (
     <button
@@ -418,7 +436,9 @@ function MenuItem({ option, active, onPick }: MenuItemProps): ReactElement {
           <StandaloneGlyph glyph={GLYPHS.check} color="text-primary" />
         </span>
       </span>
-      {option.label}
+      {"authoredLabel" in option
+          ? option.authoredLabel
+          : resolve(option.label)}
     </button>
   );
 }

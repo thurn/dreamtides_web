@@ -39,7 +39,9 @@
 
 import * as React from "react";
 import { forwardRef, useEffect, useState } from "react";
+import type { LocalizedString } from "@trox/runtime";
 import { feedbackForRect } from "./press-feedback";
+import { useOptionalLocalizer } from "../../runtime/localization/use-localizer";
 
 /**
  * Lower bound for press-down feedback. Always < 1 (compress, never enlarge).
@@ -176,6 +178,8 @@ export interface PressableProps extends React.HTMLAttributes<HTMLElement> {
   /** Whether ending hover or press immediately restores the original scale.
    * Physical cards use this to avoid a stale transformed hit target. */
   snapFeedbackExit?: boolean;
+  /** Localized accessible name resolved onto the final intrinsic element. */
+  ariaLabelMessage?: LocalizedString;
   /** Content rendered inside the pressable element. */
   children?: React.ReactNode;
 }
@@ -199,6 +203,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
       pressFeedback = "scale",
       hoverFeedback = "scale",
       snapFeedbackExit = false,
+      ariaLabelMessage,
       style,
       onPointerEnter,
       onPointerDown,
@@ -210,6 +215,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
     },
     ref,
   ) {
+    const resolve = useOptionalLocalizer();
     const [measuredFeedback, setMeasuredFeedback] = useState(() =>
       feedbackForRect({ width: 1, height: 1 }, "scale"),
     );
@@ -267,6 +273,9 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
       Record<string, unknown>
     >;
     const typeProp = as === "button" ? { type: "button" } : {};
+    if (ariaLabelMessage !== undefined && typeof as !== "string") {
+      throw new Error("Pressable can resolve ariaLabelMessage only onto an intrinsic element.");
+    }
 
     return (
       <Element
@@ -274,6 +283,13 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
         {...typeProp}
         {...(disabled ? {} : bind)}
         {...rest}
+        {...(ariaLabelMessage === undefined
+          ? {}
+          : {
+              "aria-label": resolve === null
+                ? missingLocalizationProvider()
+                : resolve(ariaLabelMessage),
+            })}
         // `disabled` must make the element genuinely inert to interaction, not
         // just visually. Pressable is polymorphic via `as`, so forwarding a
         // native `disabled` attribute is wrong (invalid on a non-button and
@@ -321,3 +337,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
     );
   },
 );
+
+function missingLocalizationProvider(): never {
+  throw new Error("Localized Pressable copy requires a mounted TroxLocalizationProvider.");
+}

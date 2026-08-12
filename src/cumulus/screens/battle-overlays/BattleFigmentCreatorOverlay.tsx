@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import type { ReactElement, Ref } from "react";
 import { GlassButton } from "../../components/controls/GlassButton";
 import { NumberStepper } from "../../components/controls/NumberStepper";
@@ -96,9 +97,9 @@ export function BattleFigmentCreatorOverlay({
 
   return (
     <GlassDialog
-      title="Synthesize a Figment"
-      subtitle="Choose a figment type and a valid destination."
-      closeLabel="Cancel figment creation"
+      title={localizationTodo("Synthesize a Figment")}
+      subtitle={localizationTodo("Choose a figment type and a valid destination.")}
+      closeLabel={localizationTodo("Cancel figment creation")}
       onClose={onCancel}
       desktopCenterTarget="battlefield"
     >
@@ -109,11 +110,11 @@ export function BattleFigmentCreatorOverlay({
       >
         <div data-battle-figment-field="name">
           <TextField
-            label="Name"
+            label={localizationTodo("Name")}
             value={name}
             onChange={onNameChange}
             inputRef={nameInputRef}
-            supportingText="The displayed name for this created figment."
+            supportingText={localizationTodo("The displayed name for this created figment.")}
           />
         </div>
         <div
@@ -121,10 +122,10 @@ export function BattleFigmentCreatorOverlay({
           style={{ display: "grid", gap: token("--space-xs") }}
         >
           <Select
-            ariaLabel="Figment type"
+            ariaLabel={localizationTodo("Figment type")}
             leadingGlyph={GLYPHS.spark}
             full
-            options={[...typeOptions]}
+            options={[...typeOptions].map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
             value={typeId}
             onChange={onTypeChange}
           />
@@ -134,19 +135,19 @@ export function BattleFigmentCreatorOverlay({
         </div>
         <div data-battle-figment-field="spark">
           <TextField
-            label="Spark"
+            label={localizationTodo("Spark")}
             value={sparkText}
             onChange={onSparkChange}
-            error={sparkError}
-            supportingText={`Base spark ${String(baseSpark)} — editable.`}
+            error={(sparkError) === undefined ? undefined : localizationTodo(sparkError)}
+            supportingText={localizationTodo(`Base spark ${String(baseSpark)} — editable.`)}
           />
         </div>
         <div data-battle-figment-field="count">
           <NumberStepper
-            label="Quantity"
+            label={localizationTodo("Quantity")}
             value={count}
-            decrementLabel="Create fewer figments"
-            incrementLabel="Create more figments"
+            decrementLabel={localizationTodo("Create fewer figments")}
+            incrementLabel={localizationTodo("Create more figments")}
             decrementDisabled={count <= 1}
             incrementDisabled={count >= maxCount}
             testId="battle-figment-count"
@@ -161,8 +162,8 @@ export function BattleFigmentCreatorOverlay({
           <span style={fieldLabelStyle}>Side</span>
           <SegmentedControl
             options={[
-              { value: "player", label: "Player" },
-              { value: "enemy", label: "Enemy" },
+              { value: "player", label: localizationTodo("Player") },
+              { value: "enemy", label: localizationTodo("Enemy") },
             ]}
             value={side}
             onChange={(value) => onSideChange(value as BattleFigmentSide)}
@@ -175,12 +176,12 @@ export function BattleFigmentCreatorOverlay({
         >
           <span style={fieldLabelStyle}>Destination</span>
           <Select
-            ariaLabel="Figment destination"
+            ariaLabel={localizationTodo("Figment destination")}
             leadingGlyph={GLYPHS.grid}
             full
             options={(Object.keys(ZONE_LABELS) as BattleFigmentZone[]).map(
               (value) => ({ value, label: ZONE_LABELS[value] }),
-            )}
+            ).map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
             value={zone}
             onChange={(value) => onZoneChange(value as BattleFigmentZone)}
           />
@@ -193,8 +194,8 @@ export function BattleFigmentCreatorOverlay({
             <span style={fieldLabelStyle}>Deck Position</span>
             <SegmentedControl
               options={[
-                { value: "top", label: "Top" },
-                { value: "bottom", label: "Bottom" },
+                { value: "top", label: localizationTodo("Top") },
+                { value: "bottom", label: localizationTodo("Bottom") },
               ]}
               value={position}
               onChange={(value) =>
@@ -211,10 +212,10 @@ export function BattleFigmentCreatorOverlay({
           >
             <span style={fieldLabelStyle}>Slot</span>
             <Select
-              ariaLabel="Figment battlefield slot"
+              ariaLabel={localizationTodo("Figment battlefield slot")}
               leadingGlyph={GLYPHS.grid}
               full
-              options={slotOptions.map((value) => ({ value, label: value }))}
+              options={slotOptions.map((value) => ({ value, label: value })).map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
               value={slot}
               onChange={onSlotChange}
             />

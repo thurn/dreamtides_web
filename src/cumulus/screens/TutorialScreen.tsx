@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { MotionConfig, motion, useReducedMotion } from "framer-motion";
 import {
   useCallback,
@@ -393,8 +394,8 @@ function TutorialHowToPlayDialog({
       style={{ visibility: staged ? "hidden" : "visible" }}
     >
       <GlassDialog
-        title={t("tutorial-how-to-play-title")}
-        closeLabel={t("tutorial-how-to-play-close")}
+        title={localizationTodo(t("tutorial-how-to-play-title"))}
+        closeLabel={localizationTodo(t("tutorial-how-to-play-close"))}
         presentation="popup"
         chrome="flowing-close"
         companion={
@@ -3064,7 +3065,7 @@ export function TutorialScreen({
             <IconButton
               glyph={GLYPHS.sidebarLeft}
               size="sm"
-              label={/* localization-ignore: developer-only tutorial editor control. */ "Open tutorial editor"}
+              label={/* localization-ignore: developer-only tutorial editor control. */ localizationTodo("Open tutorial editor")}
               ariaExpanded={false}
               ariaControls="cumulus-tutorial-editor"
               testId="tutorial-editor-trigger"

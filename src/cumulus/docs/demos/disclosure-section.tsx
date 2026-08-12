@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { useState, type ReactNode } from "react";
 import { DisclosureSection } from "../../components/controls/DisclosureSection";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
@@ -17,8 +18,8 @@ function Demo({
   const [expanded, setExpanded] = useState(false);
   return (
     <DisclosureSection
-      title={title}
-      summary={summary}
+      title={localizationTodo(title)}
+      summary={localizationTodo(summary)}
       expanded={expanded}
       onExpandedChange={setExpanded}
       placement={placement}

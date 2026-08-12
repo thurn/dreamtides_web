@@ -19,13 +19,13 @@ The compact glyph-only glass disc, with placement-aware recipes for scene media 
 | `glyph` | `Glyph` | yes | — | The glyph painted centered in the disc (e.g. `GLYPHS.close`). |
 | `overlayGlyph` | `Glyph` | no | — | Optional smaller glyph superimposed at the center of the primary glyph. |
 | `size` | `IconButtonSize` = `"sm" \| "md"` | no | `md` | Disc size — `sm` (40/22) or `md` (48/26). Defaults to `md`. |
-| `label` | `string` | yes | — | The disc's accessible name (`aria-label`); the disc shows only its glyph. |
 | `onPress` | `() => void` | yes | — | Fires when the disc is activated (no-op while disabled). |
 | `disabled` | `boolean` | no | `false` | Detaches the click / press feedback and marks the disc `aria-disabled`. |
 | `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the control. `onMedia` uses the full liquid-glass recipe; `onGlass` uses a lighter tonal lens so an existing glass tint is not compounded. Defaults to `onMedia`. |
 | `ariaExpanded` | `boolean` | no | — | When the disc is a disclosure trigger, its `aria-expanded` state (whether the surface it controls is open). Omitted for a plain action button. |
 | `ariaControls` | `string` | no | — | Id of the disclosure surface controlled by this button. |
 | `testId` | `string` | no | — | A `data-testid` for selecting the disc in tests. |
+| `label` | `LocalizedString` | yes | — | Localized accessible name forwarded unresolved to the final button. |
 
 ## Usage
 

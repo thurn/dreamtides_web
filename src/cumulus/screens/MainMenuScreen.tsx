@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactElement } from "react";
 import { IconButton } from "../components/controls/IconButton";
@@ -183,7 +184,7 @@ export function MainMenuScreen({
           <IconButton
             key={social.id}
             glyph={social.glyph}
-            label={formatMessageDescriptor(t, social.label)}
+            label={localizationTodo(formatMessageDescriptor(t, social.label))}
             testId={`main-menu-social-${social.id}`}
             onPress={() => onSocial(social.id)}
           />

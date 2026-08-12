@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import type { ReactElement } from "react";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlassPanel } from "../components/overlay/GlassPanel";
@@ -101,9 +102,9 @@ export function ApplicationStateScreen({
     >
       <div style={{ width: "min(100%, 640px)" }}>
         <GlassPanel
-          eyebrow={formatMessageDescriptor(t, EYEBROW_FOR_KIND[view.kind])}
-          title={formatMessageDescriptor(t, view.title)}
-          subtitle={formatMessageDescriptor(t, view.message)}
+          eyebrow={localizationTodo(formatMessageDescriptor(t, EYEBROW_FOR_KIND[view.kind]))}
+          title={localizationTodo(formatMessageDescriptor(t, view.title))}
+          subtitle={localizationTodo(formatMessageDescriptor(t, view.message))}
           headingLevel="h1"
           titleVoice="hero"
           headerSpacing="spacious"

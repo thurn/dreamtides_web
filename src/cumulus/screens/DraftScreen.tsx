@@ -16,6 +16,7 @@
 // view types, and holds only the local pick latch that plays the pick-out
 // animation.
 
+import { localizationTodo } from "@trox/runtime";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
@@ -239,7 +240,7 @@ export function DraftScreen({
       >
         <IconButton
           glyph={GLYPHS.refresh}
-          label={t("draft-reroll-offer")}
+          label={localizationTodo(t("draft-reroll-offer"))}
           onPress={onReroll}
           testId="reroll-draft-offer"
         />

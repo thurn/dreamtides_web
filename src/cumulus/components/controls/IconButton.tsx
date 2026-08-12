@@ -14,6 +14,7 @@
 // shows only its glyph; `label` is its accessible name.
 
 import type { ReactElement } from "react";
+import type { LocalizedString } from "@trox/runtime";
 import { StandaloneGlyph } from "./StandaloneGlyph";
 import { Pressable } from "../../primitives/Pressable";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
@@ -49,8 +50,6 @@ export interface IconButtonProps {
   overlayGlyph?: Glyph;
   /** Disc size — `sm` (40/22) or `md` (48/26). Defaults to `md`. */
   size?: IconButtonSize;
-  /** The disc's accessible name (`aria-label`); the disc shows only its glyph. */
-  label: string;
   /** Fires when the disc is activated (no-op while disabled). */
   onPress: () => void;
   /** Detaches the click / press feedback and marks the disc `aria-disabled`. */
@@ -70,6 +69,8 @@ export interface IconButtonProps {
   ariaControls?: string;
   /** A `data-testid` for selecting the disc in tests. */
   testId?: string;
+  /** Localized accessible name forwarded unresolved to the final button. */
+  label: LocalizedString;
 }
 
 /**
@@ -94,7 +95,7 @@ export function IconButton({
   return (
     <Pressable
       as="button"
-      aria-label={label}
+      ariaLabelMessage={label}
       aria-expanded={ariaExpanded}
       aria-controls={ariaControls}
       data-glass-placement={placement}

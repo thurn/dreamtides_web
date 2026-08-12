@@ -1,12 +1,14 @@
 // GlassPanel — the shared titled liquid-glass content container.
 
 import { useEffect, useState, type ReactElement, type ReactNode } from "react";
+import type { LocalizedString } from "@trox/runtime";
 import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
 import { token } from "../../primitives/tokens";
 import { GlassButton, type GlassButtonProps } from "../controls/GlassButton";
 import { IconButton, type IconButtonProps } from "../controls/IconButton";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** GlassButton props available inside a panel-owned accessory placement. */
 export type GlassPanelGlassButtonProps = Omit<GlassButtonProps, "placement">;
@@ -67,11 +69,11 @@ export type GlassPanelTextSegment =
 
 export interface GlassPanelProps {
   /** Optional uppercase context line rendered above the title. */
-  eyebrow?: string;
+  eyebrow?: LocalizedString;
   /** Optional plain panel title. */
-  title?: string;
+  title?: LocalizedString;
   /** Optional supporting line rendered beneath the title. */
-  subtitle?: string;
+  subtitle?: LocalizedString;
   /** Optional structured subtitle whose entity runs receive the canonical underline. */
   structuredSubtitle?: readonly GlassPanelTextSegment[];
   /** Semantic heading element for the title. Defaults to `h2`. */
@@ -134,7 +136,7 @@ function accessoryNode(
         {accessory.buttons.map((button, index) => (
           <IconButton
             {...button}
-            key={button.testId ?? `${button.label}:${String(index)}`}
+            key={button.testId ?? String(index)}
             placement={placement}
           />
         ))}
@@ -181,6 +183,7 @@ export function GlassPanel({
   footer,
   testId,
 }: GlassPanelProps): ReactElement {
+  const resolve = useLocalizer();
   const [besideCutout, setBesideCutout] = useState(false);
   useEffect(() => {
     setBesideCutout(cutoutAwareAccessory && hasInjectedDisplayCutout());
@@ -292,7 +295,7 @@ export function GlassPanel({
                   textTransform: "uppercase",
                 }}
               >
-                {eyebrow}
+                {resolve(eyebrow)}
               </span>
             )}
             {title !== undefined && (
@@ -307,7 +310,7 @@ export function GlassPanel({
                   letterSpacing: 0,
                 }}
               >
-                {title}
+                {resolve(title)}
               </Heading>
             )}
             {(subtitle !== undefined || structuredSubtitle !== undefined) && (
@@ -323,7 +326,9 @@ export function GlassPanel({
                 }}
               >
                 {structuredSubtitle === undefined
-                  ? subtitle
+                  ? subtitle === undefined
+                    ? null
+                    : resolve(subtitle)
                   : structuredTextNode(structuredSubtitle)}
               </p>
             )}

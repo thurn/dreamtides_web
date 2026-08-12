@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import {
   useCallback,
   useEffect,
@@ -3525,8 +3526,8 @@ function CardPickerGallery({
         }}
       >
         <CardPickerPanel
-          title={promptLabel}
-          subtitle={promptSubtitle}
+          title={localizationTodo(promptLabel)}
+          subtitle={localizationTodo(promptSubtitle)}
           cards={cardPicker.candidates.map((candidate) => {
             const selected = selectedPickerCardIds.includes(
               candidate.instanceId,
@@ -3546,7 +3547,7 @@ function CardPickerGallery({
               testId: `battle-card-picker-candidate-${candidate.instanceId}`,
             };
           })}
-          emptyLabel={t("battle-card-picker-empty-state")}
+          emptyLabel={localizationTodo(t("battle-card-picker-empty-state"))}
           presentation="overlay"
           testId="battle-card-picker-gallery-panel"
           footerActions={
@@ -3715,7 +3716,7 @@ function ControlRow({
               <IconButton
                 glyph={GLYPHS.arrowLeft}
                 size="sm"
-                label={t("battle-previous-phase-action")}
+                label={localizationTodo(t("battle-previous-phase-action"))}
                 disabled={disabled}
                 onPress={() => interactions?.onPreviousPhase()}
               />
@@ -3781,7 +3782,7 @@ function ControlRow({
                   <IconButton
                     glyph={GLYPHS.close}
                     size="sm"
-                    label={t("battle-ai-reject-action")}
+                    label={localizationTodo(t("battle-ai-reject-action"))}
                     disabled={interactions?.onRejectAiProposal === undefined}
                     onPress={() => interactions?.onRejectAiProposal?.()}
                   />
@@ -3869,7 +3870,7 @@ function BattleDebugMenu({
       <IconButton
         glyph={GLYPHS.bug}
         size="sm"
-        label="Battle debug menu"
+        label={localizationTodo("Battle debug menu")}
         ariaExpanded={isOpen}
         testId="battle-debug-menu-trigger"
         onPress={() => setIsOpen((open) => !open)}
@@ -4137,8 +4138,8 @@ function BattleInspectorContent({
           <SegmentedControl
             full
             options={[
-              { value: "player", label: "You" },
-              { value: "enemy", label: "Enemy" },
+              { value: "player", label: localizationTodo("You") },
+              { value: "enemy", label: localizationTodo("Enemy") },
             ]}
             value={selectedSide}
             onChange={(value) => onSelectSide(value as MobileBattleOwner)}
@@ -4158,11 +4159,11 @@ function BattleInspectorContent({
             {side.heading} Resources
           </h3>
           <NumberStepper
-            label="Points"
+            label={localizationTodo("Points")}
             value={side.points}
             resource="points"
-            decrementLabel={`Decrease ${side.heading.toLowerCase()} points`}
-            incrementLabel={`Increase ${side.heading.toLowerCase()} points`}
+            decrementLabel={localizationTodo(`Decrease ${side.heading.toLowerCase()} points`)}
+            incrementLabel={localizationTodo(`Increase ${side.heading.toLowerCase()} points`)}
             decrementDisabled={side.points <= 0 || onAction === undefined}
             incrementDisabled={onAction === undefined}
             onDecrement={() =>
@@ -4183,11 +4184,11 @@ function BattleInspectorContent({
             }
           />
           <NumberStepper
-            label="Current energy"
+            label={localizationTodo("Current energy")}
             value={side.currentEnergy}
             resource="energy"
-            decrementLabel={`Decrease ${side.heading.toLowerCase()} current energy`}
-            incrementLabel={`Increase ${side.heading.toLowerCase()} current energy`}
+            decrementLabel={localizationTodo(`Decrease ${side.heading.toLowerCase()} current energy`)}
+            incrementLabel={localizationTodo(`Increase ${side.heading.toLowerCase()} current energy`)}
             decrementDisabled={
               side.currentEnergy <= 0 || onAction === undefined
             }
@@ -4210,11 +4211,11 @@ function BattleInspectorContent({
             }
           />
           <NumberStepper
-            label="Maximum energy"
+            label={localizationTodo("Maximum energy")}
             value={side.maxEnergy}
             resource="energy"
-            decrementLabel={`Decrease ${side.heading.toLowerCase()} maximum energy`}
-            incrementLabel={`Increase ${side.heading.toLowerCase()} maximum energy`}
+            decrementLabel={localizationTodo(`Decrease ${side.heading.toLowerCase()} maximum energy`)}
+            incrementLabel={localizationTodo(`Increase ${side.heading.toLowerCase()} maximum energy`)}
             decrementDisabled={side.maxEnergy <= 0 || onAction === undefined}
             incrementDisabled={onAction === undefined}
             onDecrement={() =>
@@ -4235,12 +4236,12 @@ function BattleInspectorContent({
             }
           />
           <NumberStepper
-            label="Current + maximum"
+            label={localizationTodo("Current + maximum")}
             value={side.currentEnergy}
-            displayValue={`${String(side.currentEnergy)}/${String(side.maxEnergy)}`}
+            displayValue={localizationTodo(`${String(side.currentEnergy)}/${String(side.maxEnergy)}`)}
             resource="energy"
-            decrementLabel={`Decrease ${side.heading.toLowerCase()} current and maximum energy`}
-            incrementLabel={`Increase ${side.heading.toLowerCase()} current and maximum energy`}
+            decrementLabel={localizationTodo(`Decrease ${side.heading.toLowerCase()} current and maximum energy`)}
+            incrementLabel={localizationTodo(`Increase ${side.heading.toLowerCase()} current and maximum energy`)}
             decrementDisabled={
               side.currentEnergy <= 0 ||
               side.maxEnergy <= 0 ||
@@ -4403,10 +4404,10 @@ function BattleInspectorContent({
             />
           </div>
           <NumberStepper
-            label="Erode count"
+            label={localizationTodo("Erode count")}
             value={erodeCount}
-            decrementLabel={`Decrease erode count for ${side.heading.toLowerCase()}`}
-            incrementLabel={`Increase erode count for ${side.heading.toLowerCase()}`}
+            decrementLabel={localizationTodo(`Decrease erode count for ${side.heading.toLowerCase()}`)}
+            incrementLabel={localizationTodo(`Increase erode count for ${side.heading.toLowerCase()}`)}
             decrementDisabled={erodeCount <= 1}
             onDecrement={() =>
               setErodeCount((current) => Math.max(1, current - 1))
@@ -4437,8 +4438,8 @@ function BattleInspectorContent({
       </InspectorSection>
 
       <DisclosureSection
-        title="View & Visibility"
-        summary="Pool and hidden hands"
+        title={localizationTodo("View & Visibility")}
+        summary={localizationTodo("Pool and hidden hands")}
         expanded={visibilityOpen}
         placement="onGlass"
         onExpandedChange={setVisibilityOpen}
@@ -4468,8 +4469,8 @@ function BattleInspectorContent({
 
       {inspector.ai !== null ? (
         <DisclosureSection
-          title="AI Analysis"
-          summary={inspector.ai.kind}
+          title={localizationTodo("AI Analysis")}
+          summary={localizationTodo(inspector.ai.kind)}
           expanded={aiOpen}
           placement="onGlass"
           onExpandedChange={setAiOpen}
@@ -4498,8 +4499,8 @@ function BattleInspectorContent({
       ) : null}
 
       <DisclosureSection
-        title="End Battle"
-        summary="Outcomes and local reset"
+        title={localizationTodo("End Battle")}
+        summary={localizationTodo("Outcomes and local reset")}
         expanded={endBattleOpen}
         placement="onGlass"
         onExpandedChange={setEndBattleOpen}
@@ -4560,8 +4561,9 @@ function BattleInspectorRail({
       <DeveloperRail
         id={INSPECTOR_ID}
         side="right"
-        title="Battle Inspector"
-        subtitle={`Opponent: ${inspector.opponentName} · Perspective: ${inspector.perspective}`}
+        title={localizationTodo("Battle Inspector")}
+        subtitle={localizationTodo(`Opponent: ${inspector.opponentName} · Perspective: ${inspector.perspective}`)}
+        closeLabel={localizationTodo("Close battle inspector")}
         onClose={onClose}
       >
         <BattleInspectorContent
@@ -5208,9 +5210,9 @@ export function MobileBattleScreen({
             <IconButton
               glyph={GLYPHS.block}
               size="sm"
-              label={t("battle-banished-cards-open", {
+              label={localizationTodo(t("battle-banished-cards-open", {
                 count: banishedCardCount,
-              })}
+              }))}
               testId="near-battle-banished"
               onPress={() =>
                 interactions.onZoneOpen?.({
@@ -5257,9 +5259,9 @@ export function MobileBattleScreen({
               size="sm"
               label={
                 /* localization-ignore: developer-only battle inspector control. */
-                isInspectorOpen
+                localizationTodo(isInspectorOpen
                   ? "Close battle inspector"
-                  : "Open battle inspector"
+                  : "Open battle inspector")
               }
               ariaExpanded={isInspectorOpen}
               ariaControls={INSPECTOR_ID}
@@ -5346,13 +5348,13 @@ export function MobileBattleScreen({
       {/* localization-ignore: developer-only battle inspector controls are outside the player path. */}
       {mergeConfirmation !== null ? (
         <GlassDialog
-          title={t("battle-figment-merge-confirmation-title", {
+          title={localizationTodo(t("battle-figment-merge-confirmation-title", {
             figmentName: mergeConfirmation.figmentLabel,
-          })}
+          }))}
           presentation="popup"
           desktopCenterTarget="battlefield"
           onClose={() => setMergeConfirmation(null)}
-          closeLabel={t("battle-figment-merge-cancel-action")}
+          closeLabel={localizationTodo(t("battle-figment-merge-cancel-action"))}
         >
           <div
             data-battle-figment-merge-confirmation=""
@@ -5404,13 +5406,13 @@ export function MobileBattleScreen({
       isInspectorOpen ? (
         <GlassDialog
           title={
-            /* localization-ignore: developer-only battle inspector control. */ "Battle Inspector"
+            /* localization-ignore: developer-only battle inspector control. */ localizationTodo("Battle Inspector")
           }
           subtitle={
-            /* localization-ignore: developer-only battle inspector control. */ `Developer Tools · Opponent: ${view.inspector.opponentName}`
+            /* localization-ignore: developer-only battle inspector control. */ localizationTodo(`Developer Tools · Opponent: ${view.inspector.opponentName}`)
           }
           closeLabel={
-            /* localization-ignore: developer-only battle inspector control. */ "Close battle inspector"
+            /* localization-ignore: developer-only battle inspector control. */ localizationTodo("Close battle inspector")
           }
           cutoutAwareClose
           fullScreen

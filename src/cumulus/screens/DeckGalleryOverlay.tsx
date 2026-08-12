@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { useEffect, type ReactElement } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { CardBrowserPanel } from "../components/card/CardBrowserPanel";
@@ -104,8 +105,8 @@ export function DeckGalleryOverlay({
             }}
           >
             <CardBrowserPanel
-              title={title}
-              subtitle={subtitle}
+              title={localizationTodo(title)}
+              subtitle={localizationTodo(subtitle)}
               rightAccessory={{
                 kind: "glassButton",
                 button: {
@@ -115,7 +116,7 @@ export function DeckGalleryOverlay({
                 },
               }}
               cards={cards}
-              emptyLabel={emptyLabel}
+              emptyLabel={localizationTodo(emptyLabel)}
               presentation="overlay"
             />
           </div>

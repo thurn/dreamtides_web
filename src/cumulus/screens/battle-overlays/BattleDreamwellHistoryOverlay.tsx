@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import type { ReactElement } from "react";
 import {
   DreamwellCard,
@@ -26,9 +27,9 @@ export function BattleDreamwellHistoryOverlay({
   const t = useMessages();
   return (
     <GlassDialog
-      title={t("battle-dreamwell-history-title")}
-      subtitle={t("battle-dreamwell-history-subtitle")}
-      closeLabel={t("battle-dreamwell-history-close-action")}
+      title={localizationTodo(t("battle-dreamwell-history-title"))}
+      subtitle={localizationTodo(t("battle-dreamwell-history-subtitle"))}
+      closeLabel={localizationTodo(t("battle-dreamwell-history-close-action"))}
       onClose={onClose}
       desktopCenterTarget="battlefield"
     >
