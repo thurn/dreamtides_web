@@ -8,14 +8,13 @@
 import type { CSSProperties, DragEvent, ReactElement } from "react";
 import { useEffect, useState } from "react";
 import {
+  meaning,
   one,
   other,
-  otherwise,
   plural,
-  select,
   tx,
   txa,
-  when,
+  type LocalizedString,
 } from "@trox/runtime";
 import { CardBrowserPanel } from "../components/card/CardBrowserPanel";
 import type { CardChoiceGridCardView as CardGalleryCardView } from "../components/card/CardChoiceGrid";
@@ -35,10 +34,8 @@ export type PoolViewerTitleKind = "pool" | "battle";
 
 export type PoolViewerSortDirection = "asc" | "desc";
 export type PoolViewerSortId = "name" | "cardNumber" | "cost" | "type" | "subtype" | "spark";
-type PoolViewerSortSelector = "sort-name" | "sort-card-number" | "sort-cost" | "sort-type" | "sort-subtype" | "sort-spark";
 export type PoolViewerTypeFilter = "all" | "character" | "event";
 export type PoolViewerCostFilter = "all" | "0" | "1" | "2" | "3" | "4" | "5plus" | "x";
-type PoolViewerCostSelector = "cost-all" | "cost-0" | "cost-1" | "cost-2" | "cost-3" | "cost-4" | "cost-5plus" | "cost-x";
 
 export interface PoolViewerFilterView {
   query: string;
@@ -120,31 +117,11 @@ export function PoolViewerScreen({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
 
-  const selected_source = view.source;
-  const viewer_context = view.title;
   const sourceOptions = view.sourceOptions.map((source) => ({
     value: source,
-    label: resolve(tx(
-      select(source, [
-        when("run", "Run Pool"),
-        when("tides", "Tide Decks"),
-        when("catalog", "All Cards"),
-        when("signature", "Signature Cards"),
-        otherwise("Pick History"),
-      ]),
-      "Visible Pool Viewer source-tab label. The source selector is the closed collection kind: run is the current remaining draft pool, tides is the Tide construction input, catalog is the full card catalog, and signature is the Dream Avatar's authored signature cards. The fallback preserves the existing label for an unrecognized future source.",
-    )),
+    label: resolve(sourceOptionLabel(source)),
   }));
-  const emptyLabel = resolve(tx(
-    select(selected_source, [
-      when("run", "No run pool cards are available."),
-      when("tides", "This run has no Tide decks."),
-      when("catalog", "No cards match the current filters."),
-      when("signature", "This avatar has no signature cards."),
-      otherwise("The replay record has no pick history."),
-    ]),
-    "Visible Pool Viewer empty-state sentence. The source selector identifies the selected semantic collection and determines why it is empty; the fallback preserves the existing explanation for an unrecognized future source.",
-  ));
+  const emptyLabel = resolve(emptySourceLabel(view.source));
   const galleryCards = view.cards.map((card) => ({
     ...card,
     draggable: onCardDragStart !== undefined,
@@ -167,15 +144,7 @@ export function PoolViewerScreen({
           size="sm"
           options={(["all", "character", "event"] as const).map((card_type) => ({
             value: card_type,
-            label: resolve(tx(
-              select(card_type, [
-                when("character", "Characters"),
-                when("event", "Events"),
-                when("all", "All"),
-                otherwise("All"),
-              ]),
-              "Compact visible Pool Viewer card-type filter label. The type selector is a closed product filter enum: all keeps both card types, character keeps Character cards, and event keeps Event cards.",
-            )),
+            label: resolve(typeFilterLabel(card_type)),
           }))}
           value={view.filters.type}
           onChange={(type) => onFiltersChange({ type: type as PoolViewerTypeFilter })}
@@ -187,10 +156,7 @@ export function PoolViewerScreen({
             label: direction === "asc"
               ? /* localization-ignore: icon-only sort glyph; the adjacent ariaLabel is localized. */ "↑"
               : /* localization-ignore: icon-only sort glyph; the adjacent ariaLabel is localized. */ "↓",
-            ariaLabel: resolve(tx(
-              select(direction, [when("desc", "Sort descending"), when("asc", "Sort ascending"), otherwise("Sort ascending")]),
-              "Accessible command name for the compact Pool Viewer sort-direction control. The direction selector is asc for ascending order or desc for descending order.",
-            )),
+            ariaLabel: resolve(sortDirectionLabel(direction)),
           }))}
           value={view.filters.direction}
           onChange={(direction) => onFiltersChange({ direction: direction as PoolViewerSortDirection })}
@@ -217,22 +183,9 @@ export function PoolViewerScreen({
             "Accessible name for the Pool Viewer selector that filters cards by their Energy-cost category.",
           ))}
           options={(["all", "0", "1", "2", "3", "4", "5plus", "x"] as const).map((cost) => {
-            const cost_filter = costSelector(cost);
             return {
               value: cost,
-              label: resolve(tx(
-              select(cost_filter, [
-                when("cost-0", "All costs"),
-                when("cost-1", "All costs"),
-                when("cost-2", "All costs"),
-                when("cost-3", "All costs"),
-                when("cost-4", "All costs"),
-                when("cost-5plus", "Cost 5+"),
-                when("cost-x", "Cost X"),
-                otherwise("All costs"),
-              ]),
-              "Compact visible Pool Viewer Energy-cost filter option. Cost is a product enum, not a quantity: 0 through 4 select exact printed costs, 5plus selects five or more, x selects variable cost, and all disables this filter. Source English for the exact-digit states is intentionally preserved as All costs by the immutable migration parity contract.",
-              )),
+              label: resolve(costFilterLabel(cost)),
             };
           })}
           value={view.filters.cost}
@@ -296,14 +249,7 @@ export function PoolViewerScreen({
         </DisclosureSection>
       ))}
       <CardBrowserPanel
-          title={resolve(tx(
-            select(viewer_context, [
-              when("battle", "Battle Pool Viewer"),
-              when("pool", "Pool Viewer"),
-              otherwise("Pool Viewer"),
-            ]),
-            "Visible Pool Viewer heading. The context selector distinguishes the floating Battle inspector from the Journey utility overlay.",
-          ))}
+          title={resolve(viewerTitle(view.title))}
           subtitle={resolve(txa(
             plural(view.totalCount, [
               one("{visible_count} of {total_count} Card"),
@@ -325,19 +271,7 @@ export function PoolViewerScreen({
               "Sort cards",
               "Accessible name for the Pool Viewer selector that chooses the card property used for sorting.",
             )), value: view.filters.sort, options: view.sortOptions.map((sort) => {
-              const sort_field = sortSelector(sort);
-              return { value: sort, label: resolve(tx(
-              select(sort_field, [
-                when("sort-name", "Name"),
-                when("sort-card-number", "Number"),
-                when("sort-cost", "Cost"),
-                when("sort-type", "Type"),
-                when("sort-subtype", "Subtype"),
-                when("sort-spark", "Spark"),
-                otherwise("Spark"),
-              ]),
-              "Compact visible Pool Viewer sort-field option. The sort selector is a stable card-property key: name, authored card number, Energy cost, card type, authored subtype, or Spark; the fallback preserves the existing label for an unrecognized future key.",
-              )) };
+              return { value: sort, label: resolve(sortFieldLabel(sort)) };
             }), onChange: (sort) => onFiltersChange({ sort: sort as PoolViewerSortId }) },
           }}
           cards={galleryCards}
@@ -352,26 +286,153 @@ export function PoolViewerScreen({
   );
 }
 
-function costSelector(value: PoolViewerCostFilter): PoolViewerCostSelector {
-  switch (value) {
-    case "all": return "cost-all";
-    case "0": return "cost-0";
-    case "1": return "cost-1";
-    case "2": return "cost-2";
-    case "3": return "cost-3";
-    case "4": return "cost-4";
-    case "5plus": return "cost-5plus";
-    case "x": return "cost-x";
+function sourceOptionLabel(source: PoolViewerSourceId): LocalizedString {
+  switch (source) {
+    case "run": return tx(
+      "Run Pool",
+      "Visible Pool Viewer source-tab label for the current remaining draft pool.",
+    );
+    case "tides": return tx(
+      "Tide Decks",
+      "Visible Pool Viewer source-tab label for the Tide construction input.",
+    );
+    case "catalog": return tx(
+      "All Cards",
+      "Visible Pool Viewer source-tab label for the full card catalog.",
+    );
+    case "signature": return tx(
+      "Signature Cards",
+      "Visible Pool Viewer source-tab label for the Dream Avatar's authored signature cards.",
+    );
   }
 }
 
-function sortSelector(value: PoolViewerSortId): PoolViewerSortSelector {
-  switch (value) {
-    case "name": return "sort-name";
-    case "cardNumber": return "sort-card-number";
-    case "cost": return "sort-cost";
-    case "type": return "sort-type";
-    case "subtype": return "sort-subtype";
-    case "spark": return "sort-spark";
+function emptySourceLabel(source: PoolViewerSourceId): LocalizedString {
+  switch (source) {
+    case "run": return tx(
+      "No run pool cards are available.",
+      "Visible Pool Viewer empty-state sentence for an empty current run pool.",
+    );
+    case "tides": return tx(
+      "This run has no Tide decks.",
+      "Visible Pool Viewer empty-state sentence when the run has no Tide construction inputs.",
+    );
+    case "catalog": return tx(
+      "No cards match the current filters.",
+      "Visible Pool Viewer empty-state sentence when filters hide every card in the full catalog.",
+    );
+    case "signature": return tx(
+      "This avatar has no signature cards.",
+      "Visible Pool Viewer empty-state sentence when the Dream Avatar has no authored signature cards.",
+    );
+  }
+}
+
+function typeFilterLabel(cardType: PoolViewerTypeFilter): LocalizedString {
+  switch (cardType) {
+    case "all": return tx(
+      "All",
+      "Compact visible Pool Viewer card-type filter label that keeps Character and Event cards.",
+    );
+    case "character": return tx(
+      "Characters",
+      "Compact visible Pool Viewer card-type filter label that keeps Character cards.",
+    );
+    case "event": return tx(
+      "Events",
+      "Compact visible Pool Viewer card-type filter label that keeps Event cards.",
+    );
+  }
+}
+
+function sortDirectionLabel(direction: PoolViewerSortDirection): LocalizedString {
+  switch (direction) {
+    case "asc": return tx(
+      "Sort ascending",
+      "Accessible command name for the compact Pool Viewer control that sorts in ascending order.",
+    );
+    case "desc": return tx(
+      "Sort descending",
+      "Accessible command name for the compact Pool Viewer control that sorts in descending order.",
+    );
+  }
+}
+
+function costFilterLabel(cost: PoolViewerCostFilter): LocalizedString {
+  switch (cost) {
+    case "all": return tx(
+      meaning("pool-cost-filter-all", "All costs"),
+      "Compact visible Pool Viewer Energy-cost filter option that disables the cost filter.",
+    );
+    case "0": return tx(
+      meaning("pool-cost-filter-zero", "All costs"),
+      "Compact visible Pool Viewer Energy-cost filter option that selects cards with an exact printed cost of zero. The displayed source label is All costs.",
+    );
+    case "1": return tx(
+      meaning("pool-cost-filter-one", "All costs"),
+      "Compact visible Pool Viewer Energy-cost filter option that selects cards with an exact printed cost of one. The displayed source label is All costs.",
+    );
+    case "2": return tx(
+      meaning("pool-cost-filter-two", "All costs"),
+      "Compact visible Pool Viewer Energy-cost filter option that selects cards with an exact printed cost of two. The displayed source label is All costs.",
+    );
+    case "3": return tx(
+      meaning("pool-cost-filter-three", "All costs"),
+      "Compact visible Pool Viewer Energy-cost filter option that selects cards with an exact printed cost of three. The displayed source label is All costs.",
+    );
+    case "4": return tx(
+      meaning("pool-cost-filter-four", "All costs"),
+      "Compact visible Pool Viewer Energy-cost filter option that selects cards with an exact printed cost of four. The displayed source label is All costs.",
+    );
+    case "5plus": return tx(
+      "Cost 5+",
+      "Compact visible Pool Viewer Energy-cost filter option that selects cards with a printed cost of five or more.",
+    );
+    case "x": return tx(
+      "Cost X",
+      "Compact visible Pool Viewer Energy-cost filter option that selects cards with a variable printed cost.",
+    );
+  }
+}
+
+function viewerTitle(title: PoolViewerTitleKind): LocalizedString {
+  switch (title) {
+    case "pool": return tx(
+      "Pool Viewer",
+      "Visible Pool Viewer heading for the Journey utility overlay.",
+    );
+    case "battle": return tx(
+      "Battle Pool Viewer",
+      "Visible Pool Viewer heading for the floating Battle inspector.",
+    );
+  }
+}
+
+function sortFieldLabel(sort: PoolViewerSortId): LocalizedString {
+  switch (sort) {
+    case "name": return tx(
+      "Name",
+      "Compact visible Pool Viewer sort-field option for authored card names.",
+    );
+    case "cardNumber": return tx(
+      "Number",
+      "Compact visible Pool Viewer sort-field option for authored card numbers.",
+    );
+    case "cost": return tx(
+      "Cost",
+      "Compact visible Pool Viewer sort-field option for Energy cost.",
+    );
+    case "type": return tx(
+      "Type",
+      "Compact visible Pool Viewer sort-field option for card type.",
+    );
+    case "subtype": return tx(
+      "Subtype",
+      "Compact visible Pool Viewer sort-field option for authored subtype.",
+    );
+    case "spark": return tx(
+      "Spark",
+      "Compact visible Pool Viewer sort-field option for Spark.",
+    );
   }
 }

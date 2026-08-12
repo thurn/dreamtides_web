@@ -118,6 +118,16 @@ boolean, or suspicious preformatted phrase.
 
 ## Design complete messages
 
+> [!WARNING]
+> Treat `select()` as an exceptional localization primitive, not as a convenient
+> way to map application values to UI copy. Use it only when the selector value
+> is strictly required as unresolved localization input: translators must see
+> the alternatives as one message family to preserve a grammatical or semantic
+> relationship that cannot be represented by independent complete messages.
+> If ordinary application control flow can choose the message before it is
+> constructed, use that control flow and return a separate `tx(...)` or
+> `txa(...)` value for each branch.
+
 - Make every message and every selector leaf a complete semantic utterance or
   complete UI label. Keep articles, verbs, nouns, pronouns, punctuation, and
   word order together.
@@ -125,17 +135,27 @@ boolean, or suspicious preformatted phrase.
   fragments, punctuation, articles, prepositions, conjugated verbs, or already
   pluralized labels as scalar arguments.
 - Use `tx(pattern, description)` when no visible placeholder appears, including
-  a selector whose input is not displayed.
+  a justified selector whose input is not displayed.
 - Use `txa(pattern, inline_arguments, description)` whenever any leaf contains
   a visible placeholder. The argument keys must exactly equal the union of
   placeholders across all leaves.
 - Use `meaning(...)` only to disambiguate identical English with distinct
   semantics, such as noun and verb senses. A meaning key never replaces a
   translator description.
-- Use ordinary host-language control flow for independent actions, screens,
-  outcomes, permissions, and game decisions. Use Trox `select` only when one
-  unresolved message must preserve a tight translator-visible grammatical or
-  semantic relationship.
+- Use ordinary host-language control flow for enum-to-label mappings,
+  independent actions, tabs, filters, sort choices, screens, outcomes,
+  permissions, and game decisions. Give each branch its own complete Trox call
+  and translator description. Do not use `select()` merely to consolidate
+  related labels, avoid a switch, share a fallback, or reduce call-site code.
+- Before authoring `select()`, state what unresolved selector input the locale
+  needs and what translator-visible relationship would be lost if host-language
+  control flow returned independent messages. If there is no concrete answer,
+  do not use `select()`.
+- A product enum choosing among self-contained labels or sentences is not, by
+  itself, localization input. A selector is justified only when the alternatives
+  form one translation unit whose grammar or meaning must remain coupled at
+  localization time. Prefer `plural()` or `ordinal()` over `select()` when the
+  relationship is locale-dependent numeric grammar.
 - Use `plural` and `ordinal` for locale-dependent numeric grammar, always with
   `other`. Use `exact(0, ...)` only when zero has deliberate product wording;
   exact zero is separate from plural grammar.
@@ -193,10 +213,12 @@ silence it.
 
 Bare scalars may be Unicode text, finite numbers, or booleans. Trox formats
 numbers with bundle data but provides no v1 currency, percentage, date, unit,
-list, rounding, or custom-number styles. Use semantic `select` rather than
-visible boolean interpolation. If a required formatter is outside Trox's
-contract, stop and design that boundary explicitly rather than smuggling
-preformatted English through a placeholder.
+list, rounding, or custom-number styles. Do not interpolate a visible boolean;
+use host-language control flow to choose complete messages. Use semantic
+`select()` for a boolean only when the boolean is strictly required as
+unresolved localization input under the exception above. If a required
+formatter is outside Trox's contract, stop and design that boundary explicitly
+rather than smuggling preformatted English through a placeholder.
 
 The extractor classifies every bare binding as the same coarse `scalar` schema;
 it does not infer whether host code supplies text, a number, or a boolean. Two
@@ -333,6 +355,8 @@ Before finishing, confirm that:
 
 - source English still matches the parity ledger;
 - every dynamic input was traced and its assumptions were verified;
+- every `select()` has a concrete, documented need for unresolved localization
+  input that independent complete messages cannot preserve;
 - selector, visible placeholder, and term-form values are semantically aligned;
 - every leaf is a complete translation unit;
 - every description lets a translator understand meaning, variables,
