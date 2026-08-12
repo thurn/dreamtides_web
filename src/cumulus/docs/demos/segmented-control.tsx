@@ -6,7 +6,7 @@
 // `onChange`; `docName` still points at the real SegmentedControl, so the
 // props table stays accurate to its actual (undecorated) API.
 
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { useEffect, useState } from "react";
 import {
   SegmentedControl,
@@ -15,9 +15,9 @@ import {
 import type { CumulusComponent } from "../registry";
 
 const OPTIONS: SegmentedOption[] = [
-  { value: "All", label: localizationTodo("All") },
-  { value: "Characters", label: localizationTodo("Characters") },
-  { value: "Events", label: localizationTodo("Events") },
+  { value: "All", label: assertLocalized("All") },
+  { value: "Characters", label: assertLocalized("Characters") },
+  { value: "Events", label: assertLocalized("Events") },
 ];
 
 function firstValue(options: SegmentedOption[]): string {

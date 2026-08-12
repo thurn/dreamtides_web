@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { TransientStatusToast } from "./TransientStatusToast";
@@ -35,8 +35,8 @@ describe("TransientStatusToast", () => {
         <CumulusRoot>
           <TransientStatusToast
             copy={{
-              title: localizationTodo("Action Not Applied"),
-              message: localizationTodo("Try again."),
+              title: assertLocalized("Action Not Applied"),
+              message: assertLocalized("Try again."),
             }}
             onDismiss={onDismiss}
           />

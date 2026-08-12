@@ -6,7 +6,7 @@
 // cards are shown, so the control's job (filtering a real view) is legible
 // rather than merely decorative.
 
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { useEffect, useState } from "react";
 import type { CardData } from "../../../types/cards";
 import { loadCardDatabase } from "../../../data/card-database";
@@ -31,9 +31,9 @@ const CARD_IDS = [
 ] as const;
 
 const OPTIONS: SegmentedOption[] = [
-  { value: "All", label: localizationTodo("All") },
-  { value: "Characters", label: localizationTodo("Characters") },
-  { value: "Events", label: localizationTodo("Events") },
+  { value: "All", label: assertLocalized("All") },
+  { value: "Characters", label: assertLocalized("Characters") },
+  { value: "Events", label: assertLocalized("Events") },
 ];
 
 function resolveCards(database: Map<number, CardData>, ids: readonly string[]): CardData[] {

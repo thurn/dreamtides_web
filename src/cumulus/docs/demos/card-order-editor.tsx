@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import {
   CardOrderEditor,
   type CardOrderEditorItem,
@@ -21,7 +21,7 @@ function Demo({
   const [items, setItems] = useState(INITIAL);
   return (
     <CardOrderEditor
-      label={localizationTodo(label)}
+      label={assertLocalized(label)}
       items={items}
       placement={placement}
       onOrderChange={(ids) =>

@@ -1,4 +1,4 @@
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { useEffect, useState } from "react";
 import { loadCardDatabase } from "../../../data/card-database";
 import type { CardData } from "../../../types/cards";
@@ -49,9 +49,9 @@ function CardChoiceGridDemo({
   return (
     <div style={{ width: "min(1100px, 100%)" }}>
       <GlassPanel
-        eyebrow={localizationTodo("Draft Site")}
-        title={localizationTodo("Choose a Card")}
-        subtitle={localizationTodo("Select one card to add to your deck.")}
+        eyebrow={assertLocalized("Draft Site")}
+        title={assertLocalized("Choose a Card")}
+        subtitle={assertLocalized("Select one card to add to your deck.")}
       >
         <div
           data-card-choice-grid-demo-surface=""

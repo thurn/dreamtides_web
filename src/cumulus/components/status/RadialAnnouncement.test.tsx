@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { createRoot } from "react-dom/client";
 import { describe, expect, it } from "vitest";
 import {
@@ -24,8 +24,8 @@ describe("RadialAnnouncement", () => {
       root.render(
         <CumulusRoot>
           <RadialAnnouncement
-            headline={localizationTodo("Won!")}
-            detail={localizationTodo("A locked Dreamsign")}
+            headline={assertLocalized("Won!")}
+            detail={assertLocalized("A locked Dreamsign")}
             essenceGained={200}
             tone="reward"
             size="compact"
@@ -65,7 +65,7 @@ describe("RadialAnnouncement", () => {
       root.render(
         <CumulusRoot>
           <RadialAnnouncement
-            headline={localizationTodo("Bust!")}
+            headline={assertLocalized("Bust!")}
             size="mini"
           />
         </CumulusRoot>,
@@ -202,7 +202,7 @@ describe("RadialAnnouncement", () => {
         <CumulusRoot>
           <RadialAnnouncement
             variant="victory"
-            headline={localizationTodo("Victory")}
+            headline={assertLocalized("Victory")}
             announcementId="fixture-victory"
           />
         </CumulusRoot>,
@@ -277,7 +277,7 @@ describe("RadialAnnouncement", () => {
       root.render(
         <CumulusRoot>
           <RadialAnnouncement
-            headline={localizationTodo("Fast")}
+            headline={assertLocalized("Fast")}
             headlineGlyph={GLYPHS.bolt}
           />
         </CumulusRoot>,
@@ -309,8 +309,8 @@ describe("RadialAnnouncement", () => {
       root.render(
         <CumulusRoot>
           <RadialAnnouncement
-            headline={localizationTodo("−1 ●")}
-            detail={localizationTodo("All characters gain +1 ✦")}
+            headline={assertLocalized("−1 ●")}
+            detail={assertLocalized("All characters gain +1 ✦")}
           />
         </CumulusRoot>,
       );

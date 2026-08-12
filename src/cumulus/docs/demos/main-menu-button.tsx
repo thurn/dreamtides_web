@@ -1,11 +1,11 @@
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { MainMenuButton } from "../../components/controls/MainMenuButton";
 import type { CumulusComponent } from "../registry";
 
 function MainMenuButtonDemo() {
   return (
     <div style={{ width: 280 }}>
-      <MainMenuButton label={localizationTodo("New Journey")} onPress={() => {}} />
+      <MainMenuButton label={assertLocalized("New Journey")} onPress={() => {}} />
     </div>
   );
 }

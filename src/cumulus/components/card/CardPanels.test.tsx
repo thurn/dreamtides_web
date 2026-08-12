@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { act, isValidElement, type ReactNode } from "react";
 import { createRoot as createReactRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -51,7 +51,7 @@ describe("CardBrowserPanel", () => {
   it("owns the canonical mobile overlay recipe", () => {
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CardBrowserPanel presentation="overlay" title={localizationTodo("Starting Deck")} subtitle={localizationTodo("Your cards")} cards={[{ entryId: "entry-a", model: model("Archive Sentry"), testId: "card-a" }]} />));
+    act(() => root.render(<CardBrowserPanel presentation="overlay" title={assertLocalized("Starting Deck")} subtitle={assertLocalized("Your cards")} cards={[{ entryId: "entry-a", model: model("Archive Sentry"), testId: "card-a" }]} />));
     const panel = container.querySelector<HTMLElement>("[data-gallery-role=browser]");
     expect(panel?.dataset.galleryColumns).toBe("4");
     expect(panel?.dataset.galleryCardSize).toBe("compact");
@@ -67,7 +67,7 @@ describe("CardBrowserPanel", () => {
     desktop = true;
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CardBrowserPanel presentation="fullScreen" title={localizationTodo("Pool")} cards={[]} />));
+    act(() => root.render(<CardBrowserPanel presentation="fullScreen" title={assertLocalized("Pool")} cards={[]} />));
     const panel = container.querySelector<HTMLElement>("[data-gallery-role=browser]");
     expect(panel?.dataset.galleryColumns).toBe("5");
     expect(panel?.dataset.galleryCardSize).toBe("standard");
@@ -81,7 +81,7 @@ describe("CardBrowserPanel", () => {
     const activate = vi.fn(); const doubleTap = vi.fn();
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CardBrowserPanel title={localizationTodo("Your Void")} cards={[{ entryId: "physical-card", model: model("Physical"), testId: "physical-card" }]} onCardPress={activate} onCardDoubleTap={doubleTap} />));
+    act(() => root.render(<CardBrowserPanel title={assertLocalized("Your Void")} cards={[{ entryId: "physical-card", model: model("Physical"), testId: "physical-card" }]} onCardPress={activate} onCardDoubleTap={doubleTap} />));
     const card = container.querySelector<HTMLButtonElement>('[data-testid="physical-card"]');
     act(() => { card?.click(); card?.click(); });
     expect(activate).not.toHaveBeenCalled();
@@ -96,13 +96,13 @@ describe("CardBrowserPanel", () => {
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
     act(() => root.render(<CumulusRoot><CardBrowserPanel
-      title={localizationTodo("Your Deck")}
+      title={assertLocalized("Your Deck")}
       cards={[{ entryId: "physical-card", model: model("Physical"), draggable: true }]}
       toolbar={{
-        segmented: { options: [{ value: "viewer", label: localizationTodo("Your Cards · 1") }, { value: "opponent", label: localizationTodo("Opponent Cards · 2") }], value: "viewer", onChange: ownerChange },
-        search: { label: localizationTodo("Search Cards"), value: "", onChange: vi.fn(), testId: "search" },
-        sort: { ariaLabel: localizationTodo("Sort cards"), value: "current", options: [{ value: "current", label: localizationTodo("Current Order") }], onChange: vi.fn() },
-        filter: { ariaLabel: localizationTodo("Filter cards"), value: "all", options: [{ value: "all", label: localizationTodo("All Types") }], onChange: vi.fn() },
+        segmented: { options: [{ value: "viewer", label: assertLocalized("Your Cards · 1") }, { value: "opponent", label: assertLocalized("Opponent Cards · 2") }], value: "viewer", onChange: ownerChange },
+        search: { label: assertLocalized("Search Cards"), value: "", onChange: vi.fn(), testId: "search" },
+        sort: { ariaLabel: assertLocalized("Sort cards"), value: "current", options: [{ value: "current", label: assertLocalized("Current Order") }], onChange: vi.fn() },
+        filter: { ariaLabel: assertLocalized("Filter cards"), value: "all", options: [{ value: "all", label: assertLocalized("All Types") }], onChange: vi.fn() },
       }}
       onCardDragStart={dragStart}
       onCardContextMenu={contextMenu}
@@ -125,7 +125,7 @@ describe("CardBrowserPanel", () => {
   it("supports a sort-only browser toolbar", () => {
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CumulusRoot><CardBrowserPanel title={localizationTodo("Your Void")} cards={[]} toolbar={{ sort: { ariaLabel: localizationTodo("Sort cards"), value: "current", options: [{ value: "current", label: localizationTodo("Current Order") }], onChange: vi.fn() } }} /></CumulusRoot>));
+    act(() => root.render(<CumulusRoot><CardBrowserPanel title={assertLocalized("Your Void")} cards={[]} toolbar={{ sort: { ariaLabel: assertLocalized("Sort cards"), value: "current", options: [{ value: "current", label: assertLocalized("Current Order") }], onChange: vi.fn() } }} /></CumulusRoot>));
     expect(container.querySelector("input[type=search]")).toBeNull();
     expect(container.querySelector('button[aria-label="Sort cards"]')).not.toBeNull();
     expect(container.querySelector('button[aria-label="Filter cards"]')).toBeNull();
@@ -139,7 +139,7 @@ describe("CardPickerPanel", () => {
     const activate = vi.fn();
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CardPickerPanel title={localizationTodo("Shop")} cards={[
+    act(() => root.render(<CardPickerPanel title={assertLocalized("Shop")} cards={[
       { entryId: "available", model: model("Available"), testId: "available" },
       { entryId: "locked", model: model("Locked"), testId: "locked", disabled: true },
       { entryId: "third", model: model("Third") },
@@ -161,7 +161,7 @@ describe("CardPickerPanel", () => {
   it("keeps reserved entries in the count-aware grid", () => {
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CardPickerPanel title={localizationTodo("Shop")} cards={[{ entryId: "reserved", model: model("Purchased"), reserved: true }]} />));
+    act(() => root.render(<CardPickerPanel title={assertLocalized("Shop")} cards={[{ entryId: "reserved", model: model("Purchased"), reserved: true }]} />));
     const slot = container.querySelector<HTMLElement>('[data-gallery-entry-id="reserved"]');
     expect(slot?.dataset.galleryReserved).toBe("true");
     expect(slot?.style.visibility).toBe("hidden");
@@ -172,7 +172,7 @@ describe("CardPickerPanel", () => {
     const close = vi.fn(); const restock = vi.fn();
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CumulusRoot><CardPickerPanel title={localizationTodo("Card Shop")} cards={[]} rightAccessory={{ kind: "iconButton", button: { glyph: GLYPHS.close, label: localizationTodo("Close"), onPress: close, testId: "close" } }} endAction={{ entryId: "restock", glyph: GLYPHS.refresh, label: localizationTodo("Restock"), caption: { kind: "essence", amount: 50 }, testId: "restock" }} onEndActionPress={restock} /></CumulusRoot>));
+    act(() => root.render(<CumulusRoot><CardPickerPanel title={assertLocalized("Card Shop")} cards={[]} rightAccessory={{ kind: "iconButton", button: { glyph: GLYPHS.close, label: assertLocalized("Close"), onPress: close, testId: "close" } }} endAction={{ entryId: "restock", glyph: GLYPHS.refresh, label: assertLocalized("Restock"), caption: { kind: "essence", amount: 50 }, testId: "restock" }} onEndActionPress={restock} /></CumulusRoot>));
     act(() => (container.querySelector('[data-testid="close"]') as HTMLButtonElement).click());
     act(() => (container.querySelector('[data-testid="restock"]') as HTMLButtonElement).click());
     expect(close).toHaveBeenCalledOnce(); expect(restock).toHaveBeenCalledWith("restock");
@@ -186,10 +186,10 @@ describe("CardPickerPanel", () => {
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
     act(() => root.render(<CumulusRoot><CardPickerPanel
-      title={localizationTodo("Transfiguration")}
+      title={assertLocalized("Transfiguration")}
       cards={[]}
       footerActions={[
-        { label: localizationTodo("Decline Offer"), onPress: decline, testId: "decline" },
+        { label: assertLocalized("Decline Offer"), onPress: decline, testId: "decline" },
       ]}
     /></CumulusRoot>));
     expect(container.querySelector("[data-gallery-footer-actions]")).toBeNull();
@@ -203,11 +203,11 @@ describe("CardPickerPanel", () => {
     const decline = vi.fn(); const confirm = vi.fn();
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    const render = (shown: boolean) => <CumulusRoot><CardPickerPanel title={localizationTodo("Duplication")} cards={[
+    const render = (shown: boolean) => <CumulusRoot><CardPickerPanel title={assertLocalized("Duplication")} cards={[
       { entryId: "selected", model: model("Selected"), stackedCopy: { shown, direction: "left" } },
     ]} footerActions={[
-      { label: localizationTodo("Decline Offer"), onPress: decline, testId: "decline" },
-      { label: localizationTodo("Duplicate"), onPress: confirm, variant: "accent", testId: "confirm" },
+      { label: assertLocalized("Decline Offer"), onPress: decline, testId: "decline" },
+      { label: assertLocalized("Duplicate"), onPress: confirm, variant: "accent", testId: "confirm" },
     ]} /></CumulusRoot>;
     act(() => root.render(render(false)));
     expect(container.querySelector<HTMLElement>("[data-gallery-role=picker]")?.dataset.galleryReservesStackedCopy).toBe("true");
@@ -221,7 +221,7 @@ describe("CardPickerPanel", () => {
   it("uses the two-column compact recipe for mobile overlay choices", () => {
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CardPickerPanel presentation="overlay" title={localizationTodo("Choose")} cards={Array.from({ length: 5 }, (_, index) => ({ entryId: String(index), model: model(String(index)) }))} />));
+    act(() => root.render(<CardPickerPanel presentation="overlay" title={assertLocalized("Choose")} cards={Array.from({ length: 5 }, (_, index) => ({ entryId: String(index), model: model(String(index)) }))} />));
     const panel = container.querySelector<HTMLElement>("[data-gallery-role=picker]");
     expect(panel?.dataset.galleryColumns).toBe("2");
     expect(panel?.dataset.galleryCardSize).toBe("compact");
@@ -233,7 +233,7 @@ describe("CardPickerPanel", () => {
     desktop = true;
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CardBrowserPanel presentation="overlay" title={localizationTodo("Your Void")} cards={[]} />));
+    act(() => root.render(<CardBrowserPanel presentation="overlay" title={assertLocalized("Your Void")} cards={[]} />));
     const panel = container.querySelector<HTMLElement>("[data-gallery-role=browser]");
     expect(panel?.dataset.galleryFrame).toBe("floating");
     expect(panel?.dataset.galleryHeightMode).toBe("fill");

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -30,10 +30,10 @@ describe("NumberStepper", () => {
       root.render(
         <CumulusRoot>
           <NumberStepper
-            label={localizationTodo("Quantity")}
+            label={assertLocalized("Quantity")}
             value={1}
-            decrementLabel={localizationTodo("Decrease")}
-            incrementLabel={localizationTodo("Increase")}
+            decrementLabel={assertLocalized("Decrease")}
+            incrementLabel={assertLocalized("Increase")}
             onDecrement={vi.fn()}
             onIncrement={vi.fn()}
             size={size}

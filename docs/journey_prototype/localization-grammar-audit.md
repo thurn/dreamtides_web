@@ -3,7 +3,8 @@
 This audit records the semantic review applied to the Trox source catalog. The
 source report contains 666 messages extracted from 577 TypeScript and TSX
 files. Every row has source text, translator context, stable identity,
-conditions, placeholder metadata, and source locations.
+condition context in its description, placeholder metadata, and source
+locations.
 
 ## Identity and meaning review
 

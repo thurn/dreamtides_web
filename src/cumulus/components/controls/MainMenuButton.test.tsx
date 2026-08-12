@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { act, type ReactElement } from "react";
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MainMenuButton } from "./MainMenuButton";
@@ -38,7 +38,7 @@ afterEach(() => {
 describe("MainMenuButton", () => {
   it("renders the shared neutral glass treatment on the press surface", () => {
     const { container, root } = mount(
-      <MainMenuButton label={localizationTodo("New Journey")} onPress={() => {}} />,
+      <MainMenuButton label={assertLocalized("New Journey")} onPress={() => {}} />,
     );
 
     const glassSurface = container.querySelector<HTMLElement>(
@@ -56,7 +56,7 @@ describe("MainMenuButton", () => {
   it("reports activation with its player-facing label intact", () => {
     const onPress = vi.fn();
     const { container, root } = mount(
-      <MainMenuButton label={localizationTodo("New Journey")} onPress={onPress} />,
+      <MainMenuButton label={assertLocalized("New Journey")} onPress={onPress} />,
     );
     const button = container.querySelector("button");
 

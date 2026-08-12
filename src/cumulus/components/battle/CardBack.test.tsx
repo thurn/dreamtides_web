@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it } from "vitest";
 import { CARD_ASPECT_RATIO } from "../card/card-aspect";
@@ -26,7 +26,7 @@ describe("CardBack", () => {
       root.render(
         <CumulusRoot>
           <CardBack
-            label={localizationTodo("Face-down enemy card")}
+            label={assertLocalized("Face-down enemy card")}
             testId="enemy-card"
           />
         </CumulusRoot>,

@@ -1,9 +1,9 @@
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { TransientStatusToast } from "../../components/status/TransientStatusToast";
 import type { CumulusComponent } from "../registry";
 
 function TransientStatusToastDemo() {
-  return <TransientStatusToast copy={{ title: localizationTodo("Action Not Applied"), message: localizationTodo("Try again when the game is ready.") }} onDismiss={() => undefined} />;
+  return <TransientStatusToast copy={{ title: assertLocalized("Action Not Applied"), message: assertLocalized("Try again when the game is ready.") }} onDismiss={() => undefined} />;
 }
 
 export const transientStatusToastDemo: CumulusComponent = {

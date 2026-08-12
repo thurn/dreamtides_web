@@ -1,4 +1,4 @@
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import { CardPile } from "../../components/battle/CardPile";
 import type { GameCardModel } from "../../components/card/CardView";
@@ -41,7 +41,7 @@ function CardPileDemo() {
             { face: "down", id: "demo-deck-middle" },
             { face: "down", id: "demo-deck-bottom" },
           ]}
-          label={localizationTodo("Face-down deck")}
+          label={assertLocalized("Face-down deck")}
         />
       </div>
       <div style={{ width }}>
@@ -51,16 +51,16 @@ function CardPileDemo() {
             { face: "up", id: "demo-void-middle", model: DEMO_CARD },
             { face: "up", id: "demo-void-bottom", model: DEMO_CARD },
           ]}
-          label={localizationTodo("Face-up void")}
+          label={assertLocalized("Face-up void")}
           onPress={() => undefined}
         />
       </div>
       <div style={{ width }}>
         <CardPile
           cards={[]}
-          label={localizationTodo("Empty void")}
+          label={assertLocalized("Empty void")}
           emptyState="outlined"
-          emptyLabel={localizationTodo("Void")}
+          emptyLabel={assertLocalized("Void")}
           onPress={() => undefined}
         />
       </div>

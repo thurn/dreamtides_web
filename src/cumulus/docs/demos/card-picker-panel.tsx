@@ -1,4 +1,4 @@
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { useEffect, useState } from "react";
 import { loadCardDatabase } from "../../../data/card-database";
 import type { CardData } from "../../../types/cards";
@@ -50,20 +50,20 @@ function CardPickerPanelDemo() {
   return (
     <div style={{ width: "min(940px, 100%)", maxHeight: 700 }}>
       <CardPickerPanel
-        title={localizationTodo("Purge Cards")}
-        subtitle={localizationTodo("Choose a card to remove from your deck")}
+        title={assertLocalized("Purge Cards")}
+        subtitle={assertLocalized("Choose a card to remove from your deck")}
         cards={cards}
         rightAccessory={{
           kind: "glassButton",
           button: {
-            label: localizationTodo(selected === null ? "Decline" : "Purge 1"),
+            label: assertLocalized(selected === null ? "Decline" : "Purge 1"),
             variant: selected === null ? "default" : "danger",
             onPress: () => setSelected(null),
           },
         }}
         footerActions={[
           {
-            label: localizationTodo("Confirm Choice"),
+            label: assertLocalized("Confirm Choice"),
             variant: "accent",
             disabled: selected === null,
             onPress: () => undefined,
@@ -73,7 +73,7 @@ function CardPickerPanelDemo() {
         endAction={{
           entryId: "restock",
           glyph: GLYPHS.refresh,
-          label: localizationTodo("Restock"),
+          label: assertLocalized("Restock"),
           caption: { kind: "essence", amount: 50 },
         }}
       />

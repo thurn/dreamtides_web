@@ -7,7 +7,7 @@ const STABLE_ID = /^[a-z][a-z0-9]*(?:[.-][a-z0-9]+)*$/;
 export const PLACEHOLDER = /^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/;
 export const CATEGORIES = ["zero", "one", "two", "few", "many", "other"];
 /** @internal */
-export const LOCALIZATION_TODO_MEANING = "trox.localization-todo";
+export const ASSERT_LOCALIZED_MEANING = "trox.assert-localized";
 export function assertStableId(value, label) {
     if (typeof value !== "string" || new TextEncoder().encode(value).length > 96 || !STABLE_ID.test(value)) {
         throw new TroxValueError("trox.invalid-stable-id", `invalid ${label} \`${String(value)}\``);
@@ -184,7 +184,7 @@ export class LocalizedString {
     #wire;
     constructor(wire, token) {
         if (token !== CONSTRUCTION_TOKEN)
-            throw new TroxValueError("trox.constructor", "use tx, txa, or localizationTodo to construct LocalizedString");
+            throw new TroxValueError("trox.constructor", "use tx, txa, or assertLocalized to construct LocalizedString");
         this.#wire = deepFreeze(wire);
         Object.freeze(this);
     }
@@ -220,12 +220,16 @@ export function txa(pattern, inputs, description) {
     }
     return construct(patternValue(pattern), args, description);
 }
-/** Wraps unlocalized runtime text without making it extractable or translatable. */
-export function localizationTodo(rawString) {
+/**
+ * Asserts that runtime text is appropriate to display without translation.
+ * Intended for migrations, verbatim user input, tests, and developer surfaces.
+ * Calls are ignored by source extraction.
+ */
+export function assertLocalized(rawString) {
     const normalized = typeof rawString === "string" ? rawString.normalize("NFC") : rawString;
-    assertNfc(normalized, "localization TODO text");
+    assertNfc(normalized, "asserted-localized text");
     const text = normalized.replaceAll("{", "{{").replaceAll("}", "}}");
-    return constructValidated({ pattern: { kind: "text", text }, selectors: [], meaning: LOCALIZATION_TODO_MEANING }, {});
+    return constructValidated({ pattern: { kind: "text", text }, selectors: [], meaning: ASSERT_LOCALIZED_MEANING }, {});
 }
 function argumentFrom(value) {
     if (typeof value === "string") {
@@ -273,8 +277,8 @@ function constructValidated(value, args) {
     return LocalizedString.fromValidatedWire(wire, CONSTRUCTION_TOKEN);
 }
 /** @internal */
-export function localizationTodoPattern(value) {
-    return value.identity.meaning === LOCALIZATION_TODO_MEANING
+export function assertedLocalizedPattern(value) {
+    return value.identity.meaning === ASSERT_LOCALIZED_MEANING
         && value.identity.pattern.kind === "text"
         && Object.keys(value.arguments).length === 0
         && value.selectors.length === 0

@@ -3,7 +3,7 @@
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { artRef } from "../primitives/art";
@@ -549,7 +549,7 @@ describe("AugurySiteScreen", () => {
     const container = mount(
       <AugurySiteScreen
         view={view()}
-        onChoose={() => ({ ok: false, message: localizationTodo("The visions shifted. Choose again.") })}
+        onChoose={() => ({ ok: false, message: assertLocalized("The visions shifted. Choose again.") })}
         onClose={() => undefined}
       />,
     );

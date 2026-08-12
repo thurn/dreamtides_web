@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -20,7 +20,7 @@ describe("TextField commit behavior", () => {
     document.body.append(host);
     const root = createRoot(host);
     const onCommit = vi.fn();
-    act(() => root.render(<CumulusRoot><TextField label={localizationTodo("Field")} value="draft" onChange={vi.fn()} onCommit={onCommit} /></CumulusRoot>));
+    act(() => root.render(<CumulusRoot><TextField label={assertLocalized("Field")} value="draft" onChange={vi.fn()} onCommit={onCommit} /></CumulusRoot>));
     const input = host.querySelector("input")!;
     input.focus();
     act(() => {
@@ -36,7 +36,7 @@ describe("TextField commit behavior", () => {
     document.body.append(host);
     const root = createRoot(host);
     const onCommit = vi.fn();
-    act(() => root.render(<CumulusRoot><TextField label={localizationTodo("Field")} value="draft" onChange={vi.fn()} onCommit={onCommit} /></CumulusRoot>));
+    act(() => root.render(<CumulusRoot><TextField label={assertLocalized("Field")} value="draft" onChange={vi.fn()} onCommit={onCommit} /></CumulusRoot>));
     const input = host.querySelector("input")!;
     input.focus();
     act(() => input.blur());

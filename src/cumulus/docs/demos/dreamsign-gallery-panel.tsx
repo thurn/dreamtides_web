@@ -1,4 +1,4 @@
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import type { Dreamsign as DreamsignData } from "../../../types/journey";
 import { DreamsignGalleryPanel } from "../../components/card/DreamsignGalleryPanel";
 import { GLYPHS } from "../../primitives/glyph";
@@ -56,7 +56,7 @@ function DreamsignGalleryPanelDemo() {
           text: "Restocked",
           disabled: true,
         }}
-        closeLabel={localizationTodo("Leave bazaar")}
+        closeLabel={assertLocalized("Leave bazaar")}
         onClose={() => undefined}
         onEntryPress={() => undefined}
         onEndActionPress={() => undefined}

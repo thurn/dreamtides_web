@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { act } from "react";
 import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
@@ -50,7 +50,7 @@ afterEach(() => {
 describe("IconButton", () => {
   it("renders an accessible button labelled by `label`, carrying the glyph class", () => {
     const { container, root } = mount(
-      <IconButton glyph={GLYPHS.close} label={localizationTodo("Close deck")} onPress={() => {}} />,
+      <IconButton glyph={GLYPHS.close} label={assertLocalized("Close deck")} onPress={() => {}} />,
     );
 
     const button = container.querySelector("button");
@@ -71,7 +71,7 @@ describe("IconButton", () => {
       <IconButton
         glyph={GLYPHS.refresh}
         overlayGlyph={GLYPHS.bug}
-        label={localizationTodo("Reroll offers")}
+        label={assertLocalized("Reroll offers")}
         onPress={() => {}}
       />,
     );
@@ -90,7 +90,7 @@ describe("IconButton", () => {
       <IconButton
         glyph={GLYPHS.close}
         size="sm"
-        label={localizationTodo("Close")}
+        label={assertLocalized("Close")}
         onPress={() => {}}
       />,
     );
@@ -111,7 +111,7 @@ describe("IconButton", () => {
       <IconButton
         glyph={GLYPHS.close}
         size="md"
-        label={localizationTodo("Close")}
+        label={assertLocalized("Close")}
         onPress={() => {}}
       />,
     );
@@ -129,7 +129,7 @@ describe("IconButton", () => {
 
   it("defaults to the `md` size", () => {
     const { container, root } = mount(
-      <IconButton glyph={GLYPHS.close} label={localizationTodo("Close")} onPress={() => {}} />,
+      <IconButton glyph={GLYPHS.close} label={assertLocalized("Close")} onPress={() => {}} />,
     );
 
     const style =
@@ -146,7 +146,7 @@ describe("IconButton", () => {
     const { container, root } = mount(
       <IconButton
         glyph={GLYPHS.close}
-        label={localizationTodo("Close")}
+        label={assertLocalized("Close")}
         placement="onGlass"
         onPress={() => {}}
       />,
@@ -165,7 +165,7 @@ describe("IconButton", () => {
   it("fires `onPress` on click", () => {
     const onPress = vi.fn();
     const { container, root } = mount(
-      <IconButton glyph={GLYPHS.close} label={localizationTodo("Close")} onPress={onPress} />,
+      <IconButton glyph={GLYPHS.close} label={assertLocalized("Close")} onPress={onPress} />,
     );
 
     act(() => {
@@ -183,7 +183,7 @@ describe("IconButton", () => {
     const { container, root } = mount(
       <IconButton
         glyph={GLYPHS.close}
-        label={localizationTodo("Close")}
+        label={assertLocalized("Close")}
         onPress={onPress}
         disabled
       />,

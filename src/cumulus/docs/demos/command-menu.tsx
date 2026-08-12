@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import {
   CommandMenu,
   type CommandMenuItem,
@@ -12,20 +12,20 @@ const demoActions: readonly CommandMenuItem[] = [
   {
     kind: "action",
     id: "save",
-    label: localizationTodo("Save Journey"),
+    label: assertLocalized("Save Journey"),
     glyph: GLYPHS.check,
     onCommand: () => undefined,
   },
   {
     kind: "group",
     id: "saved",
-    label: localizationTodo("Saved Journeys"),
+    label: assertLocalized("Saved Journeys"),
     glyph: GLYPHS.chevronRight,
     actions: [
       {
         kind: "action",
         id: "load",
-        label: localizationTodo("Load Firstlight"),
+        label: assertLocalized("Load Firstlight"),
         glyph: GLYPHS.arrowRight,
         onCommand: () => undefined,
       },
@@ -38,15 +38,15 @@ const contextDemoActions: readonly CommandMenuItem[] = [
   {
     kind: "group",
     id: "spark",
-    label: localizationTodo("Add Spark"),
+    label: assertLocalized("Add Spark"),
     glyph: GLYPHS.edit,
     actions: [
       {
         kind: "signed-integer",
         id: "spark-amount",
-        label: localizationTodo("Amount"),
-        placeholder: localizationTodo("+3 or -2"),
-        commitLabel: localizationTodo("Apply"),
+        label: assertLocalized("Amount"),
+        placeholder: assertLocalized("+3 or -2"),
+        commitLabel: assertLocalized("Apply"),
         onCommand: () => undefined,
       },
     ],
@@ -68,7 +68,7 @@ function CommandMenuDemo() {
           kind: "appChrome",
           trigger: {
             glyph: GLYPHS.gear,
-            label: localizationTodo(`Open app-chrome commands (${String(count)} selected)`),
+            label: assertLocalized(`Open app-chrome commands (${String(count)} selected)`),
             corner: "topEnd",
           },
           actions,

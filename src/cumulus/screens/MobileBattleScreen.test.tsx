@@ -3,7 +3,7 @@
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { CumulusRoot } from "../CumulusRoot";
@@ -2516,7 +2516,7 @@ describe("MobileBattleScreen", () => {
       ...view,
       cardPicker: {
         key: "prompt-42",
-        label: { kind: "message", message: localizationTodo("Choose an option") },
+        label: { kind: "message", message: assertLocalized("Choose an option") },
         side: "player",
         candidates: view.playerHand
           .slice(0, 2)
@@ -2613,7 +2613,7 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: "prompt-optional",
-          label: { kind: "message", message: localizationTodo("Choose an option") },
+          label: { kind: "message", message: assertLocalized("Choose an option") },
           side: "player",
           candidates: [
             makePickerCandidate(view.playerHand[0], "player", "hand"),
@@ -2658,10 +2658,10 @@ describe("MobileBattleScreen", () => {
         ...makeView(),
         choicePrompt: {
           key: "prompt-choice-42",
-          label: { kind: "message", message: localizationTodo("Choose an option") },
+          label: { kind: "message", message: assertLocalized("Choose an option") },
           options: [
-            { label: { kind: "message", message: localizationTodo("Yes") } },
-            { label: { kind: "message", message: localizationTodo("Skip") } },
+            { label: { kind: "message", message: assertLocalized("Yes") } },
+            { label: { kind: "message", message: assertLocalized("Skip") } },
           ],
           canResolve: true,
         },
@@ -2721,7 +2721,7 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: "prompt-enemy",
-          label: { kind: "message", message: localizationTodo("Choose an option") },
+          label: { kind: "message", message: assertLocalized("Choose an option") },
           side: "enemy",
           candidates: view.enemyHand.map((card) =>
             makePickerCandidate(card, "enemy", "hand"),
@@ -2812,7 +2812,7 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: "prompt-battlefield",
-          label: { kind: "message", message: localizationTodo("Choose an option") },
+          label: { kind: "message", message: assertLocalized("Choose an option") },
           side: "player",
           candidates: [
             makePickerCandidate(enemyCard, "enemy", "frontRank"),
@@ -2885,8 +2885,8 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: "prompt-gallery",
-          label: { kind: "message", message: localizationTodo("Choose an option") },
-          subtitle: { kind: "message", message: localizationTodo("Choose an available option to continue.") },
+          label: { kind: "message", message: assertLocalized("Choose an option") },
+          subtitle: { kind: "message", message: assertLocalized("Choose an available option to continue.") },
           side: "player",
           candidates,
           candidateIds: candidates.map((candidate) => candidate.instanceId),
@@ -2970,7 +2970,7 @@ describe("MobileBattleScreen", () => {
       ...view,
       cardPicker: {
         key: "prompt-mobile-gallery",
-        label: { kind: "message", message: localizationTodo("Choose an option") },
+        label: { kind: "message", message: assertLocalized("Choose an option") },
         side: "player",
         candidates: [candidate],
         candidateIds: [candidate.instanceId],
@@ -3006,7 +3006,7 @@ describe("MobileBattleScreen", () => {
       ...view,
       cardPicker: {
         key: "prompt-highlighted",
-        label: { kind: "message", message: localizationTodo("Choose an option") },
+        label: { kind: "message", message: assertLocalized("Choose an option") },
         side: "player",
         candidates: [makePickerCandidate(highlighted, "player", "hand", true)],
         candidateIds: [highlighted.id],
@@ -3052,7 +3052,7 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: "prompt-empty",
-          label: { kind: "message", message: localizationTodo("Choose an option") },
+          label: { kind: "message", message: assertLocalized("Choose an option") },
           side: "player",
           candidates: [],
           candidateIds: [],
@@ -4636,7 +4636,7 @@ describe("MobileBattleScreen", () => {
         owner: "player",
         rank: "front",
         slotId: "player-front-empty",
-        label: localizationTodo("Move this character here."),
+        label: assertLocalized("Move this character here."),
       },
     });
     const playArea = container.querySelector<HTMLElement>(

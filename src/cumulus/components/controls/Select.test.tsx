@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
@@ -9,7 +9,7 @@ import { Select, type SelectOption } from "./Select";
 
 const OPTIONS: SelectOption[] = Array.from({ length: 10 }, (_, index) => ({
   value: String(index),
-  label: localizationTodo(`Option ${String(index + 1)}`),
+  label: assertLocalized(`Option ${String(index + 1)}`),
 }));
 
 function mount(element: ReactElement): {
@@ -75,7 +75,7 @@ describe("Select", () => {
       value: 720,
     });
     const { container, root } = mount(
-      <Select options={OPTIONS} value="" ariaLabel={localizationTodo("Action")} />,
+      <Select options={OPTIONS} value="" ariaLabel={assertLocalized("Action")} />,
     );
     const trigger = container.querySelector<HTMLButtonElement>("button");
     if (trigger === null) throw new Error("Select trigger did not render");
@@ -104,7 +104,7 @@ describe("Select", () => {
       value: 720,
     });
     const { container, root } = mount(
-      <Select options={OPTIONS} value="" ariaLabel={localizationTodo("Action")} />,
+      <Select options={OPTIONS} value="" ariaLabel={assertLocalized("Action")} />,
     );
     const trigger = container.querySelector<HTMLButtonElement>("button");
     if (trigger === null) throw new Error("Select trigger did not render");
@@ -126,7 +126,7 @@ describe("Select", () => {
 
   it("keeps the menu open while its options scroll", () => {
     const { container, root } = mount(
-      <Select options={OPTIONS} value="" ariaLabel={localizationTodo("Action")} />,
+      <Select options={OPTIONS} value="" ariaLabel={assertLocalized("Action")} />,
     );
     const trigger = container.querySelector<HTMLButtonElement>("button");
     if (trigger === null) throw new Error("Select trigger did not render");

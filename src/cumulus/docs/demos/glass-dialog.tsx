@@ -7,7 +7,7 @@
 // body paragraph) whose own close disc dismisses it. `docName` points at
 // GlassDialog so the props table stays accurate to its actual API.
 
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { useState } from "react";
 import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { GlassButton } from "../../components/controls/GlassButton";
@@ -26,8 +26,8 @@ function GlassDialogDemo() {
       <GlassButton authoredLabel="Open dialog" onPress={() => setOpen(true)} />
       {open && (
         <GlassDialog
-          title={localizationTodo("Choose a Dreamsign to Replace")}
-          subtitle={localizationTodo("You can hold three dreamsigns.")}
+          title={assertLocalized("Choose a Dreamsign to Replace")}
+          subtitle={assertLocalized("You can hold three dreamsigns.")}
           onClose={() => setOpen(false)}
         >
           <p

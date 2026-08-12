@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { act } from "react";
 import { createRoot as createReactRoot } from "react-dom/client";
 import { isValidElement, type ReactNode } from "react";
@@ -50,8 +50,8 @@ describe("GlassPanel", () => {
       root.render(
         <CumulusRoot>
           <GlassPanel
-            eyebrow={localizationTodo("Vision I")}
-            title={localizationTodo("Transfigure Your Starters")}
+            eyebrow={assertLocalized("Vision I")}
+            title={assertLocalized("Transfigure Your Starters")}
             structuredSubtitle={[
               { kind: "text", text: "Transfigure " },
               { kind: "entity", text: "A Thread Rewoven" },
@@ -61,7 +61,7 @@ describe("GlassPanel", () => {
               button: {
                 glyph: GLYPHS.close,
                 overlayGlyph: GLYPHS.check,
-                label: localizationTodo("Close"),
+                label: assertLocalized("Close"),
                 onPress: onClose,
                 ariaExpanded: true,
                 ariaControls: "controlled-panel",
@@ -123,7 +123,7 @@ describe("GlassPanel", () => {
     act(() => {
       root.render(
         <GlassPanel
-          title={localizationTodo("Cards")}
+          title={assertLocalized("Cards")}
           frame="fullBleed"
           radius="popover"
           tint="popover"

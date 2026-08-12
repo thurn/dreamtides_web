@@ -1,4 +1,4 @@
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import {
   RadialAnnouncement,
   type RadialAnnouncementTone,
@@ -66,10 +66,10 @@ function RadialAnnouncementDemo(args: Record<string, unknown>) {
           />
         )
       ) : variant === "victory" ? (
-        <RadialAnnouncement variant="victory" headline={localizationTodo("Victory")} />
+        <RadialAnnouncement variant="victory" headline={assertLocalized("Victory")} />
       ) : (
         <RadialAnnouncement
-          headline={localizationTodo("Fast")}
+          headline={assertLocalized("Fast")}
           headlineGlyph={GLYPHS.bolt}
           essenceGained={tone === "reward" ? 150 : undefined}
           tone={tone}

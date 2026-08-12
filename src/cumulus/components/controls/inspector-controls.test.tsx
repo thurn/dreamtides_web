@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { act, useState, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -29,7 +29,7 @@ describe("inspector Cumulus controls", () => {
   it("exposes labeled NumberStepper actions and formatted output", () => {
     const decrement = vi.fn();
     const increment = vi.fn();
-    const { container, root } = mount(<NumberStepper label={localizationTodo("Energy")} value={2} displayValue={localizationTodo("2/4")} resource="energy" decrementLabel={localizationTodo("Decrease energy")} incrementLabel={localizationTodo("Increase energy")} onDecrement={decrement} onIncrement={increment} />);
+    const { container, root } = mount(<NumberStepper label={assertLocalized("Energy")} value={2} displayValue={assertLocalized("2/4")} resource="energy" decrementLabel={assertLocalized("Decrease energy")} incrementLabel={assertLocalized("Increase energy")} onDecrement={decrement} onIncrement={increment} />);
     expect(container.querySelector('[role="group"]')?.getAttribute("aria-label")).toBe("Energy");
     expect(container.querySelector("i.bxf.bx-fire-alt")).not.toBeNull();
     act(() => { (container.querySelector('button[aria-label="Decrease energy"]') as HTMLButtonElement).click(); (container.querySelector('button[aria-label="Increase energy"]') as HTMLButtonElement).click(); });
@@ -39,7 +39,7 @@ describe("inspector Cumulus controls", () => {
   });
 
   it("keeps DisclosureSection controlled", () => {
-    function Fixture(): ReactElement { const [open, setOpen] = useState(false); return <DisclosureSection title={localizationTodo("Details")} expanded={open} onExpandedChange={setOpen}><span>Hidden body</span></DisclosureSection>; }
+    function Fixture(): ReactElement { const [open, setOpen] = useState(false); return <DisclosureSection title={assertLocalized("Details")} expanded={open} onExpandedChange={setOpen}><span>Hidden body</span></DisclosureSection>; }
     const { container, root } = mount(<Fixture />);
     expect(container.textContent).not.toContain("Hidden body");
     act(() => (container.querySelector("button") as HTMLButtonElement).click());
@@ -48,7 +48,7 @@ describe("inspector Cumulus controls", () => {
   });
 
   it("owns placement-aware DisclosureSection surface chrome", () => {
-    const { container, root } = mount(<DisclosureSection title={localizationTodo("Details")} expanded={false} onExpandedChange={vi.fn()} placement="onGlass"><span>Hidden body</span></DisclosureSection>);
+    const { container, root } = mount(<DisclosureSection title={assertLocalized("Details")} expanded={false} onExpandedChange={vi.fn()} placement="onGlass"><span>Hidden body</span></DisclosureSection>);
     const section = container.querySelector<HTMLElement>("section");
     expect(section?.dataset.glassPlacement).toBe("onGlass");
     expect(section?.style.background).toContain("var(--glass-on-glass-fill)");
@@ -58,7 +58,7 @@ describe("inspector Cumulus controls", () => {
 
   it("labels TextField and reports changes", () => {
     const onChange = vi.fn();
-    const { container, root } = mount(<TextField label={localizationTodo("Search cards")} kind="search" value="moth" onChange={onChange} />);
+    const { container, root } = mount(<TextField label={assertLocalized("Search cards")} kind="search" value="moth" onChange={onChange} />);
     const input = container.querySelector("input") as HTMLInputElement;
     expect(input.type).toBe("search");
     act(() => {
@@ -71,7 +71,7 @@ describe("inspector Cumulus controls", () => {
 
   it("returns card instance ids from CardOrderEditor keyboard reordering", () => {
     const onOrderChange = vi.fn();
-    const { container, root } = mount(<CardOrderEditor label={localizationTodo("Deck order")} items={[{ id: "instance-a", authoredLabel: "A" }, { id: "instance-b", authoredLabel: "B" }]} onOrderChange={onOrderChange} />);
+    const { container, root } = mount(<CardOrderEditor label={assertLocalized("Deck order")} items={[{ id: "instance-a", authoredLabel: "A" }, { id: "instance-b", authoredLabel: "B" }]} onOrderChange={onOrderChange} />);
     const handle = container.querySelector<HTMLButtonElement>('[data-card-order-drag-handle="instance-b"]');
     expect(handle?.querySelector("i.fa-grip-vertical")).not.toBeNull();
     act(() => {
@@ -82,7 +82,7 @@ describe("inspector Cumulus controls", () => {
   });
 
   it("owns standalone CardOrderEditor surface chrome by default", () => {
-    const { container, root } = mount(<CardOrderEditor label={localizationTodo("Deck order")} items={[{ id: "instance-a", authoredLabel: "A" }]} onOrderChange={vi.fn()} />);
+    const { container, root } = mount(<CardOrderEditor label={assertLocalized("Deck order")} items={[{ id: "instance-a", authoredLabel: "A" }]} onOrderChange={vi.fn()} />);
     const editor = container.querySelector<HTMLElement>('[role="list"]');
     expect(editor?.dataset.glassPlacement).toBe("onMedia");
     expect(editor?.style.background).toContain("var(--glass-fill)");

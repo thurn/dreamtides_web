@@ -1,4 +1,4 @@
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { useEffect, useState } from "react";
 import { loadCardDatabase } from "../../../data/card-database";
 import type { CardData } from "../../../types/cards";
@@ -48,27 +48,27 @@ function CardBrowserPanelDemo() {
   return (
     <div style={{ width: "min(1040px, 100%)", height: 700 }}>
       <CardBrowserPanel
-        title={localizationTodo("Your Deck")}
-        subtitle={localizationTodo("Four cards")}
+        title={assertLocalized("Your Deck")}
+        subtitle={assertLocalized("Four cards")}
         cards={cards}
         toolbar={{
-          search: { label: localizationTodo("Search Cards"), value: query, onChange: setQuery },
+          search: { label: assertLocalized("Search Cards"), value: query, onChange: setQuery },
           sort: {
-            ariaLabel: localizationTodo("Sort cards"),
+            ariaLabel: assertLocalized("Sort cards"),
             value: sort,
             options: [
-              { value: "current", label: localizationTodo("Current Order") },
-              { value: "name", label: localizationTodo("Name") },
+              { value: "current", label: assertLocalized("Current Order") },
+              { value: "name", label: assertLocalized("Name") },
             ],
             onChange: setSort,
           },
           filter: {
-            ariaLabel: localizationTodo("Filter cards"),
+            ariaLabel: assertLocalized("Filter cards"),
             value: filter,
             options: [
-              { value: "all", label: localizationTodo("All Types") },
-              { value: "character", label: localizationTodo("Characters") },
-              { value: "event", label: localizationTodo("Events") },
+              { value: "all", label: assertLocalized("All Types") },
+              { value: "character", label: assertLocalized("Characters") },
+              { value: "event", label: assertLocalized("Events") },
             ],
             onChange: setFilter,
           },

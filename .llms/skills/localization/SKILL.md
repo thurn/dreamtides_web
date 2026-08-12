@@ -327,7 +327,7 @@ coercion, or a compatibility formatter. Tests, fixtures, and documentation
 demos adapt to the production localized contract rather than widening it.
 
 During an incremental migration, import Trox's shipped
-`localizationTodo(sourceText): LocalizedString` directly from `@trox/runtime`
+`assertLocalized(sourceText): LocalizedString` directly from `@trox/runtime`
 only at the semantic source of code-authored player copy which has not received
 its proper `tx`/`txa` authoring pass. It is explicit, searchable localization
 debt: preserve the source text, keep the returned value unresolved through
@@ -337,7 +337,7 @@ inside a component to hide a string-typed prop. Projects must pin and vendor a
 Trox revision which exports the helper; never create an application-owned
 version.
 
-Never use `localizationTodo` for canonical RON-authored content, user-authored
+Never use `assertLocalized` for canonical RON-authored content, user-authored
 text, stable IDs, URLs, or technical diagnostics. Those are deliberately raw
 semantic values and retain separately named raw contracts.
 
@@ -410,13 +410,16 @@ command or assume a global binary.
    `trox.csv-out-of-date` until extraction synchronizes affected CSVs.
 2. Run `trox extract`, or `trox extract --locale <locale>` for intentionally
    scoped work. Extraction synchronizes CSVs transactionally and preserves
-   translations, notes, workflow columns, stale suggestions, and obsolete rows.
-3. Inspect affected CSV rows. Pay special attention to `conditions`, `english`,
-   `description`, `placeholders`, `status`, `previous_translation`, and source
-   locations. Confirm branches, selector inputs, and term facets mean what the
-   application code claims. Treat `conditions` as translator-facing labels,
-   not executable logic or proof of semantic correctness; trace selector
-   expressions and predicates back to the application data model.
+   translations, notes, workflow columns, and stale suggestions. Target-locale
+   CSVs retain obsolete rows for explicit review; the source report contains
+   active rows only.
+3. Inspect affected CSV rows. Pay special attention to `english`, `description`
+   (including its `Conditions:` context), `placeholders`, `status`,
+   `previous_translation`, and source locations. Confirm branches, selector
+   inputs, and term facets mean what the application code claims. Treat the
+   condition context as translator-facing labels, not executable logic or proof
+   of semantic correctness; trace selector expressions and predicates back to
+   the application data model.
 4. Translators edit only `translation`, `translator_note`, and approved extra
    workflow columns. Trox owns the other columns. Editing a generated English
    report does not change source code.

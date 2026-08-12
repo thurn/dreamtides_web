@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import { localizationTodo } from "@trox/runtime";
+import { assertLocalized } from "@trox/runtime";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GLYPHS } from "../cumulus/primitives/glyph";
@@ -67,7 +67,7 @@ afterEach(() => {
 describe("buildJourneyUtilityMenuViewModel", () => {
   it("constructs typed root actions without presentation data", () => {
     const model = buildJourneyUtilityMenuViewModel({
-      actions: [{ kind: "action", id: "deck", label: localizationTodo("View Deck"), glyph: GLYPHS.affiliationRow, onCommand: vi.fn() }],
+      actions: [{ kind: "action", id: "deck", label: assertLocalized("View Deck"), glyph: GLYPHS.affiliationRow, onCommand: vi.fn() }],
       builtIns: ["saveJourney", "loadJourney", "buildSha", "downloadLog"],
       canLoadJourney: true,
       status: { kind: "raw", value: "Saved journey." },

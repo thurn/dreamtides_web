@@ -99,8 +99,8 @@ reference shape. Newly serialized application and coop state uses version 25.
 1. Author or edit inline Trox messages.
 2. Run `node scripts/trox.mjs extract`.
 3. For a target locale, run `node scripts/trox.mjs extract --locale <locale>`.
-4. Review source, description, conditions, placeholders, status, source
-   locations, and every expanded row in the CSV.
+4. Review source, description and its `Conditions:` context, placeholders,
+   status, source locations, and every expanded row in the CSV.
 5. Edit the target `translation` cells without changing identities or source
    signatures.
 6. Run `node scripts/trox.mjs check --deny warnings`.

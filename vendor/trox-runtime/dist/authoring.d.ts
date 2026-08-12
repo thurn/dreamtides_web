@@ -177,8 +177,12 @@ export declare class LocalizedString {
 }
 export declare function tx(pattern: PatternInput, description: string): LocalizedString;
 export declare function txa(pattern: PatternInput, inputs: Readonly<Record<string, ArgumentInput>>, description: string): LocalizedString;
-/** Wraps unlocalized runtime text without making it extractable or translatable. */
-export declare function localizationTodo(rawString: string): LocalizedString;
+/**
+ * Asserts that runtime text is appropriate to display without translation.
+ * Intended for migrations, verbatim user input, tests, and developer surfaces.
+ * Calls are ignored by source extraction.
+ */
+export declare function assertLocalized(rawString: string): LocalizedString;
 export declare function validateArgumentMap(pattern: Pattern, argumentsValue: Readonly<Record<string, Argument>>): void;
 export declare function validateIdentity(identity: IdentityDescriptor): void;
 export declare function parsePlaceholders(text: string): string[];

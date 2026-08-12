@@ -16,7 +16,7 @@ slice.
 
 **Audited quest commit:** `ee2b487b8` (`master` on 2026-08-10)
 
-**Audited Trox commit:** `d8428631e1a3f6c4d9d66c80737172c9941c14c7`
+**Audited Trox commit:** `7273c252e904752945833911ef82bc2e1ad67c60`
 
 **Trox source:** `~/trox`
 
@@ -69,7 +69,7 @@ The implementing Luna agent must do this before editing:
    `docs/journey_prototype/firebase_multiplayer.md`.
 2. Read `~/trox/README.md` completely and verify `~/trox` is at the audited
    revision. This revision includes the exported
-   `localizationTodo(sourceText): LocalizedString` migration constructor. The
+   `assertLocalized(sourceText): LocalizedString` migration constructor. The
    authoritative contract is the consolidated README, implementation, and
    tests; the design/evolution/syntax paths named by the localization skill are
    absent from the repository.
@@ -213,7 +213,7 @@ adapter. Do not add `string | LocalizedString`, an implicit coercion, a generic
 `TextLike`, or a `resolveForProps` compatibility helper.
 
 The pinned Trox runtime supplies the migration bridge for code-authored strings:
-`localizationTodo(sourceText)` constructor which returns `LocalizedString` and
+`assertLocalized(sourceText)` constructor which returns `LocalizedString` and
 preserves the supplied source text until that callsite receives a proper
 `tx`/`txa` authoring pass. Its name and source location make the debt searchable;
 the quest audit reports every production call, and the final cutover requires
@@ -556,7 +556,7 @@ parity, typechecking, lint, focused browser QA, and generated-metadata review.
 
 **Depends on:** the completed Trox runtime and Pool Viewer slice. This task
 first pins and vendors the Trox revision which ships
-`localizationTodo(sourceText)`, then performs the blocking architecture
+`assertLocalized(sourceText)`, then performs the blocking architecture
 correction for every later migration task.
 
 **Objective:** Make early resolution structurally difficult. Production
@@ -580,15 +580,15 @@ layers forward it unchanged, and only leaf browser sinks may call the resolver.
 
 **Implementation:**
 
-1. Pin Trox commit `d8428631e1a3f6c4d9d66c80737172c9941c14c7`,
+1. Pin Trox commit `7273c252e904752945833911ef82bc2e1ad67c60`,
    which exports
-   `localizationTodo(sourceText: string): LocalizedString` as an explicitly
+   `assertLocalized(sourceText: string): LocalizedString` as an explicitly
    temporary, source-preserving migration constructor. Verify its runtime,
    declaration, extraction-ignore, arbitrary-source-text, and documentation
    tests through `scripts/sync-trox-runtime.mjs`; regenerate the vendored
    package only through that script. Its values remain unresolved through
    application layers and resolve only at the ordinary final sink.
-2. Teach the quest audit to report every production `localizationTodo(...)`
+2. Teach the quest audit to report every production `assertLocalized(...)`
    call with its source location. Permit these calls only as migration debt for
    code-authored player copy and ratchet their count downward by task; require
    zero at final cutover. Reject aliases, wrappers around the helper, use on raw
@@ -1109,8 +1109,9 @@ Fluent removal.
 **Semantic and translator review:**
 
 1. Run `trox extract`, then inspect every affected source and QA row. Review
-   `conditions`, English, description, placeholders, source locations, status,
-   and row expansion. Trace each condition back to application state.
+   English, description and its `Conditions:` context, placeholders, source
+   locations, status, and row expansion. Trace each condition back to
+   application state.
 2. Confirm every placeholder union is intentional and every target omission
    warning is investigated. Confirm shared identities have the same semantic
    argument kinds at every callsite.
@@ -1210,7 +1211,7 @@ generated CSV or bundle rows.
 
 ## Suggested Commit Boundaries
 
-1. Pin the shipped Trox `localizationTodo` runtime, `LocalizedString` component
+1. Pin the shipped Trox `assertLocalized` runtime, `LocalizedString` component
    contracts, Pool Viewer boundary correction, Cumulus metadata, and
    resolver/text-prop enforcement.
 2. Application/coop/main-menu migration.
@@ -1251,7 +1252,7 @@ promotion happens only after user approval.
   count, or facet operation; fixed vocabulary remains in complete messages.
 - Every `tx`/`txa` call has an actionable literal translator description and an
   intentional meaning identity.
-- No production `localizationTodo(...)` call remains at final cutover; each
+- No production `assertLocalized(...)` call remains at final cutover; each
   temporary call was replaced by a semantically audited `tx`/`txa` family.
 - Every production component prop for code-authored player-facing text,
   including nested option/accessory/accessibility models, uses
