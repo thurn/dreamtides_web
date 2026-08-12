@@ -1,5 +1,8 @@
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
+use trox::LocalizedString;
+
+use super::localization::source_text;
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -13,7 +16,7 @@ pub struct DraftDocument {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DraftPresentation {
-    pub progress: String,
+    pub progress: LocalizedString,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -64,16 +67,20 @@ impl Rarity {
 }
 
 pub fn lower(source: DraftDocument) -> anyhow::Result<toml::Value> {
+    let progress = source_text(&source.presentation.progress)?;
     anyhow::ensure!(
-        source.presentation.progress.matches("{pickNumber}").count() == 1
-            && source.presentation.progress.matches("{pickTotal}").count() == 1,
+        progress.matches("{pickNumber}").count() == 1
+            && progress.matches("{pickTotal}").count() == 1,
         "draft progress must contain {{pickNumber}} and {{pickTotal}} exactly once"
     );
     let mut root = toml::map::Map::new();
     root.insert("schema-version".into(), 1_i64.into());
     root.insert(
         "presentation".into(),
-        toml::Value::try_from(source.presentation)?,
+        toml::Value::Table(toml::map::Map::from_iter([(
+            "progress".into(),
+            progress.into(),
+        )])),
     );
     root.insert(
         "offers".into(),
@@ -126,10 +133,14 @@ pub fn lower(source: DraftDocument) -> anyhow::Result<toml::Value> {
 mod tests {
     use super::*;
 
+    fn ls(text: impl Into<String>) -> LocalizedString {
+        super::super::localization::localized_source(text.into()).unwrap()
+    }
+
     fn document() -> DraftDocument {
         DraftDocument {
             presentation: DraftPresentation {
-                progress: "Draft ({pickNumber}/{pickTotal})".into(),
+                progress: ls("Draft ({pickNumber}/{pickTotal})"),
             },
             offers: Offers {
                 cards_per_offer: 4,
@@ -166,7 +177,7 @@ mod tests {
     #[test]
     fn rejects_invalid_progress_placeholders() {
         let mut source = document();
-        source.presentation.progress = "Draft ({pickNumber})".into();
+        source.presentation.progress = ls("Draft ({pickNumber})");
         assert!(lower(source).unwrap_err().to_string().contains("pickTotal"));
     }
 }

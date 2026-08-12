@@ -60,8 +60,8 @@ TransfigurationCatalog(
       id: Empowered,
       // Each `glossary_uuid` links the form to its canonical Glossary entry.
       glossary_uuid: "a66c513e-500b-4891-8c09-9641ae300ba4",
-      name: "Empowered",
-      description: "Halve its ● cost, rounded down",
+      name: Tx("Empowered"),
+      description: Tx("Halve its ● cost, rounded down"),
       // `glyph` selects the Cumulus icon rendered on form controls and
       // transformed cards; any supported Transfiguration glyph may be assigned
       // to any form.
@@ -88,8 +88,8 @@ TransfigurationCatalog(
     TransfigurationFormDefinition(
       id: Amplified,
       glossary_uuid: "a2c070ca-eacd-4cca-b69d-3d48f0787a16",
-      name: "Amplified",
-      description: "Replace its ability with its authored stronger form",
+      name: Tx("Amplified"),
+      description: Tx("Replace its ability with its authored stronger form"),
       glyph: Amplified,
       accent_color: "#f59e0b",
       tint_color: "#fcd34d",
@@ -102,8 +102,8 @@ TransfigurationCatalog(
     TransfigurationFormDefinition(
       id: Kindled,
       glossary_uuid: "f40df441-0e44-4122-b4d4-cdc4085a9ffb",
-      name: "Kindled",
-      description: "Double its ✦, or set it to 1 if it is 0",
+      name: Tx("Kindled"),
+      description: Tx("Double its ✦, or set it to 1 if it is 0"),
       glyph: Kindled,
       accent_color: "#ef4444",
       tint_color: "#fca5a5",
@@ -115,8 +115,8 @@ TransfigurationCatalog(
     TransfigurationFormDefinition(
       id: Inspired,
       glossary_uuid: "f0ff63b4-424b-4ae9-81d5-a4f6546afa3f",
-      name: "Inspired",
-      description: "Add \"Draw a card\" to its rules text",
+      name: Tx("Inspired"),
+      description: Tx("Add \"Draw a card\" to its rules text"),
       glyph: Inspired,
       accent_color: "#3b82f6",
       tint_color: "#93c5fd",
@@ -128,8 +128,8 @@ TransfigurationCatalog(
     TransfigurationFormDefinition(
       id: Enduring,
       glossary_uuid: "eb4cfc5f-237a-47cd-9215-7cce3f15583f",
-      name: "Enduring",
-      description: "Add \"Reclaim\" to its rules text",
+      name: Tx("Enduring"),
+      description: Tx("Add \"Reclaim\" to its rules text"),
       glyph: Enduring,
       accent_color: "#6366f1",
       tint_color: "#a5b4fc",
@@ -141,8 +141,8 @@ TransfigurationCatalog(
     TransfigurationFormDefinition(
       id: Hastened,
       glossary_uuid: "19f6c2c9-dd6b-4d65-9f95-f6a3486772cc",
-      name: "Hastened",
-      description: "Make it Fast",
+      name: Tx("Hastened"),
+      description: Tx("Make it Fast"),
       glyph: Hastened,
       accent_color: "#06b6d4",
       tint_color: "#67e8f9",
@@ -156,8 +156,8 @@ TransfigurationCatalog(
     TransfigurationFormDefinition(
       id: Resonant,
       glossary_uuid: "c3fa83af-ee3b-47cd-8112-5e5cc38821de",
-      name: "Resonant",
-      description: "Widen a named trigger to fire more often",
+      name: Tx("Resonant"),
+      description: Tx("Widen a named trigger to fire more often"),
       glyph: Resonant,
       accent_color: "#d946ef",
       tint_color: "#f0abfc",
@@ -170,8 +170,8 @@ TransfigurationCatalog(
     TransfigurationFormDefinition(
       id: Attuned,
       glossary_uuid: "980d283a-9558-4b66-84a0-fcb91fdf4ceb",
-      name: "Attuned",
-      description: "Reduce an activated ability's cost by 1●",
+      name: Tx("Attuned"),
+      description: Tx("Reduce an activated ability's cost by 1●"),
       glyph: Attuned,
       accent_color: "#f43f5e",
       tint_color: "#fda4af",
@@ -184,8 +184,8 @@ TransfigurationCatalog(
     TransfigurationFormDefinition(
       id: Perfected,
       glossary_uuid: "22adf539-d2c9-4f33-9416-159d03a220ad",
-      name: "Perfected",
-      description: "Apply every available transfiguration",
+      name: Tx("Perfected"),
+      description: Tx("Apply every available transfiguration"),
       glyph: Perfected,
       accent_color: "#a855f7",
       tint_color: "#d8b4fe",

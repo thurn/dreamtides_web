@@ -1,5 +1,6 @@
 use std::collections::{BTreeSet, HashMap};
 use std::fmt;
+use trox::LocalizedString;
 
 use anyhow::{Result, bail, ensure};
 use regex::{Regex, RegexBuilder};
@@ -7,13 +8,15 @@ use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
+use super::localization::source_text;
+
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct GlossaryDefinition {
     pub id: GlossaryId,
     pub category: GlossaryCategory,
-    pub term: String,
-    pub definition: String,
+    pub term: LocalizedString,
+    pub definition: LocalizedString,
     pub priority: i64,
     #[serde(default, skip_serializing_if = "is_false")]
     pub matches_term_in_rules_text: bool,
@@ -34,7 +37,7 @@ pub struct GlossaryDefinition {
 pub struct RulesSymbol {
     pub token: RulesSymbolToken,
     pub glyph: RulesSymbolGlyph,
-    pub accessible_label: String,
+    pub accessible_label: LocalizedString,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub semantic_color_role: Option<RulesSymbolColorRole>,
 }
@@ -155,9 +158,9 @@ pub struct GlossaryProjection {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub pattern: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub term: Option<String>,
+    pub term: Option<LocalizedString>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub definition: Option<String>,
+    pub definition: Option<LocalizedString>,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Hash, Ord, PartialOrd)]
@@ -304,40 +307,53 @@ pub fn lower(source: Vec<GlossaryDefinition>) -> Result<toml::Value> {
     validate(&source)?;
     let entries = source
         .into_iter()
-        .map(|entry| CompatibilityEntry {
-            id: entry.id.to_string(),
-            category: entry.category.compatibility_name(),
-            term: entry.term,
-            definition: entry.definition,
-            priority: entry.priority,
-            matches_term_in_rules_text: entry.matches_term_in_rules_text,
-            variants: entry.variants,
-            definition_symbol: entry
-                .definition_symbol
-                .map(DefinitionSymbol::compatibility_name),
-            term_presentation: entry
-                .term_presentation
-                .map(TermPresentation::compatibility_name),
-            projections: entry
-                .projections
-                .into_iter()
-                .map(|projection| CompatibilityProjection {
-                    owner: projection.owner.map(ProjectionOwner::compatibility_name),
-                    pattern: projection.pattern,
-                    term: projection.term,
-                    definition: projection.definition,
-                })
-                .collect(),
-            rules_symbol: entry.rules_symbol.map(|symbol| CompatibilityRulesSymbol {
-                token: symbol.token.compatibility_name(),
-                glyph: symbol.glyph.compatibility_name(),
-                accessible_label: symbol.accessible_label,
-                semantic_color_role: symbol
-                    .semantic_color_role
-                    .map(RulesSymbolColorRole::compatibility_name),
-            }),
+        .map(|entry| {
+            Ok(CompatibilityEntry {
+                id: entry.id.to_string(),
+                category: entry.category.compatibility_name(),
+                term: source_text(&entry.term)?,
+                definition: source_text(&entry.definition)?,
+                priority: entry.priority,
+                matches_term_in_rules_text: entry.matches_term_in_rules_text,
+                variants: entry.variants,
+                definition_symbol: entry
+                    .definition_symbol
+                    .map(DefinitionSymbol::compatibility_name),
+                term_presentation: entry
+                    .term_presentation
+                    .map(TermPresentation::compatibility_name),
+                projections: entry
+                    .projections
+                    .into_iter()
+                    .map(|projection| {
+                        Ok(CompatibilityProjection {
+                            owner: projection.owner.map(ProjectionOwner::compatibility_name),
+                            pattern: projection.pattern,
+                            term: projection.term.as_ref().map(source_text).transpose()?,
+                            definition: projection
+                                .definition
+                                .as_ref()
+                                .map(source_text)
+                                .transpose()?,
+                        })
+                    })
+                    .collect::<Result<Vec<_>>>()?,
+                rules_symbol: entry
+                    .rules_symbol
+                    .map(|symbol| {
+                        Ok::<CompatibilityRulesSymbol, anyhow::Error>(CompatibilityRulesSymbol {
+                            token: symbol.token.compatibility_name(),
+                            glyph: symbol.glyph.compatibility_name(),
+                            accessible_label: source_text(&symbol.accessible_label)?,
+                            semantic_color_role: symbol
+                                .semantic_color_role
+                                .map(RulesSymbolColorRole::compatibility_name),
+                        })
+                    })
+                    .transpose()?,
+            })
         })
-        .collect();
+        .collect::<Result<Vec<_>>>()?;
     Ok(toml::Value::try_from(CompatibilityCatalog { entries })?)
 }
 
@@ -350,14 +366,16 @@ pub(crate) fn validate(source: &[GlossaryDefinition]) -> Result<()> {
         if !ids.insert(entry.id) {
             bail!("duplicate Glossary id: {}", entry.id);
         }
-        require_non_blank(&entry.term, entry.id, "term")?;
-        require_non_blank(&entry.definition, entry.id, "definition")?;
+        let term = source_text(&entry.term)?;
+        let definition = source_text(&entry.definition)?;
+        require_non_blank(&term, entry.id, "term")?;
+        require_non_blank(&definition, entry.id, "definition")?;
         for variant in &entry.variants {
             require_non_blank(variant, entry.id, "variant")?;
         }
         let forms: Vec<&str> = entry
             .matches_term_in_rules_text
-            .then_some(entry.term.as_str())
+            .then_some(term.as_str())
             .into_iter()
             .chain(entry.variants.iter().map(String::as_str))
             .collect();
@@ -394,17 +412,24 @@ pub(crate) fn validate(source: &[GlossaryDefinition]) -> Result<()> {
                 None
             };
             if let Some(term) = &projection.term {
-                require_non_blank(term, entry.id, "projection term")?;
-                validate_template_captures(term, capture_count, &template_capture, entry.id)?;
+                let term = source_text(term)?;
+                require_non_blank(&term, entry.id, "projection term")?;
+                validate_template_captures(&term, capture_count, &template_capture, entry.id)?;
             }
             if let Some(definition) = &projection.definition {
-                require_non_blank(definition, entry.id, "projection definition")?;
-                validate_template_captures(definition, capture_count, &template_capture, entry.id)?;
+                let definition = source_text(definition)?;
+                require_non_blank(&definition, entry.id, "projection definition")?;
+                validate_template_captures(
+                    &definition,
+                    capture_count,
+                    &template_capture,
+                    entry.id,
+                )?;
             }
         }
         if let Some(symbol) = &entry.rules_symbol {
             ensure!(
-                !symbol.accessible_label.trim().is_empty(),
+                !source_text(&symbol.accessible_label)?.trim().is_empty(),
                 "Glossary {} rules_symbol.accessible_label must not be blank",
                 entry.id
             );
@@ -485,8 +510,8 @@ mod tests {
   GlossaryDefinition(
     id: "00000000-0000-4000-8000-000000000001",
     category: CardTypes,
-    term: "Echo",
-    definition: "Create an echo ✦.",
+    term: Tx("Echo"),
+    definition: Tx("Create an echo ✦."),
     priority: 17,
     matches_term_in_rules_text: true,
     variants: ["echoes"],
@@ -495,59 +520,59 @@ mod tests {
     rules_symbol: RulesSymbol(
       token: spark,
       glyph: Spark,
-      accessible_label: "spark",
+      accessible_label: Tx("spark"),
       semantic_color_role: Spark,
     ),
     projections: [
       GlossaryProjection(
         owner: Card,
         pattern: r"\becho\s+(\d+)\b",
-        term: "{term} {1}",
-        definition: "Create {1} echoes.",
+        term: Tx("{{term}} {{1}}"),
+        definition: Tx("Create {{1}} echoes."),
       ),
     ],
   ),
   GlossaryDefinition(
     id: "00000000-0000-4000-8000-000000000002",
     category: Actions,
-    term: "Moon",
-    definition: "A multiline\nUnicode definition.",
+    term: Tx("Moon"),
+    definition: Tx("A multiline\nUnicode definition."),
     priority: -3,
     variants: ["☾"],
-    rules_symbol: RulesSymbol(token: lunar, glyph: Exhaust, accessible_label: "lunar"),
-    projections: [GlossaryProjection(owner: DreamAvatar, definition: "Avatar moon." )],
+    rules_symbol: RulesSymbol(token: lunar, glyph: Exhaust, accessible_label: Tx("lunar")),
+    projections: [GlossaryProjection(owner: DreamAvatar, definition: Tx("Avatar moon.") )],
   ),
   GlossaryDefinition(
     id: "00000000-0000-4000-8000-000000000003",
     category: Resources,
-    term: "Essence",
-    definition: "Essence.",
+    term: Tx("Essence"),
+    definition: Tx("Essence."),
     priority: 0,
-    rules_symbol: RulesSymbol(token: essence, glyph: Essence, accessible_label: "essence"),
+    rules_symbol: RulesSymbol(token: essence, glyph: Essence, accessible_label: Tx("essence")),
   ),
   GlossaryDefinition(
     id: "00000000-0000-4000-8000-000000000004",
     category: Resources,
-    term: "Points",
-    definition: "Points.",
+    term: Tx("Points"),
+    definition: Tx("Points."),
     priority: 0,
-    rules_symbol: RulesSymbol(token: points, glyph: Points, accessible_label: "points"),
+    rules_symbol: RulesSymbol(token: points, glyph: Points, accessible_label: Tx("points")),
   ),
   GlossaryDefinition(
     id: "00000000-0000-4000-8000-000000000005",
     category: Resources,
-    term: "Memory",
-    definition: "Memory.",
+    term: Tx("Memory"),
+    definition: Tx("Memory."),
     priority: 0,
-    rules_symbol: RulesSymbol(token: store, glyph: Memory, accessible_label: "memory"),
+    rules_symbol: RulesSymbol(token: store, glyph: Memory, accessible_label: Tx("memory")),
   ),
   GlossaryDefinition(
     id: "00000000-0000-4000-8000-000000000006",
     category: Resources,
-    term: "Energy",
-    definition: "Energy.",
+    term: Tx("Energy"),
+    definition: Tx("Energy."),
     priority: 0,
-    rules_symbol: RulesSymbol(token: energy, glyph: Energy, accessible_label: "energy"),
+    rules_symbol: RulesSymbol(token: energy, glyph: Energy, accessible_label: Tx("energy")),
   ),
 ]
 "##
@@ -656,8 +681,8 @@ mod tests {
 
     #[test]
     fn rejects_unknown_fields_and_noncanonical_identifiers() {
-        let unknown =
-            synthetic_source().replace("term: \"Echo\",", "term: \"Echo\", surprise: true,");
+        let unknown = synthetic_source()
+            .replace("term: Tx(\"Echo\"),", "term: Tx(\"Echo\"), surprise: true,");
         assert!(ron::from_str::<Vec<GlossaryDefinition>>(&unknown).is_err());
 
         for invalid in [
@@ -681,7 +706,7 @@ mod tests {
             "duplicate Glossary id",
         );
         assert_error_contains(
-            &synthetic_source().replace("term: \"Echo\"", "term: \" \""),
+            &synthetic_source().replace("term: Tx(\"Echo\")", "term: Tx(\" \")"),
             "blank term",
         );
         assert_error_contains(
@@ -693,27 +718,30 @@ mod tests {
             "invalid projection pattern",
         );
         assert_error_contains(
-            &synthetic_source().replace("term: \"{term} {1}\"", "term: \"{term} {2}\""),
+            &synthetic_source().replace(
+                "term: Tx(\"{{term}} {{1}}\")",
+                "term: Tx(\"{{term}} {{2}}\")",
+            ),
             "template capture 2 exceeds",
         );
         assert_error_contains(
             &synthetic_source().replace(
-                "definition: \"Avatar moon.\"",
-                "definition: \"Avatar {1}.\"",
+                "definition: Tx(\"Avatar moon.\")",
+                "definition: Tx(\"Avatar {{1}}.\")",
             ),
             "template capture reference without a projection pattern",
         );
         assert_error_contains(
             &synthetic_source().replace(
-                "owner: DreamAvatar, definition: \"Avatar moon.\"",
+                "owner: DreamAvatar, definition: Tx(\"Avatar moon.\")",
                 "owner: DreamAvatar",
             ),
             "without a term or definition",
         );
         assert_error_contains(
             &synthetic_source().replace(
-                "token: lunar, glyph: Exhaust, accessible_label: \"lunar\"",
-                "token: spark, glyph: Spark, accessible_label: \"spark\"",
+                "token: lunar, glyph: Exhaust, accessible_label: Tx(\"lunar\")",
+                "token: spark, glyph: Spark, accessible_label: Tx(\"spark\")",
             ),
             "more than one Glossary owner",
         );
@@ -723,7 +751,7 @@ mod tests {
         );
         assert_error_contains(
             &synthetic_source().replace(
-                "rules_symbol: RulesSymbol(token: energy, glyph: Energy, accessible_label: \"energy\"),",
+                "rules_symbol: RulesSymbol(token: energy, glyph: Energy, accessible_label: Tx(\"energy\")),",
                 "",
             ),
             "cover every supported token exactly once",

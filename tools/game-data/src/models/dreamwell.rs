@@ -1,11 +1,14 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
+use trox::LocalizedString;
 
 use anyhow::{Result, bail, ensure};
 use regex::Regex;
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
+
+use super::localization::{joined_source_text, source_text};
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -26,9 +29,9 @@ pub struct DreamwellRules {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DreamwellCardDefinition {
-    pub name: String,
+    pub name: LocalizedString,
     pub id: DreamwellCardId,
-    pub ability_text: Vec<String>,
+    pub ability_text: Vec<LocalizedString>,
     pub energy_added: u32,
     pub deck_tier: DeckTier,
     pub art: Art,
@@ -40,9 +43,9 @@ pub struct DreamwellCardDefinition {
 #[serde(deny_unknown_fields)]
 pub struct AutomationPrompt {
     pub key: String,
-    pub title: String,
-    pub subtitle: String,
-    pub instructions: String,
+    pub title: LocalizedString,
+    pub subtitle: LocalizedString,
+    pub instructions: LocalizedString,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub choices: Vec<PromptChoice>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
@@ -53,7 +56,7 @@ pub struct AutomationPrompt {
 #[serde(deny_unknown_fields)]
 pub struct PromptChoice {
     pub key: String,
-    pub label: String,
+    pub label: LocalizedString,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -192,7 +195,25 @@ struct CompatibilityCard {
     #[serde(skip_serializing_if = "Option::is_none")]
     art: Option<CompatibilityArtCrop>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    automation: Vec<AutomationPrompt>,
+    automation: Vec<CompatibilityAutomationPrompt>,
+}
+
+#[derive(Serialize)]
+struct CompatibilityAutomationPrompt {
+    key: String,
+    title: String,
+    subtitle: String,
+    instructions: String,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    choices: Vec<CompatibilityPromptChoice>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    arguments: Vec<PromptArgument>,
+}
+
+#[derive(Serialize)]
+struct CompatibilityPromptChoice {
+    key: String,
+    label: String,
 }
 
 #[derive(Serialize)]
@@ -233,9 +254,9 @@ pub fn lower(
                 anyhow::anyhow!("missing metadata for Dreamwell card {}", card.id)
             })?;
             Ok(CompatibilityCard {
-                name: card.name,
+                name: source_text(&card.name)?,
                 id: card.id.to_string(),
-                rendered_text: card.ability_text.join("\n\n"),
+                rendered_text: joined_source_text(card.ability_text, "\n\n")?,
                 order: card.deck_tier.compatibility_order(),
                 energy_added: card.energy_added,
                 card_type: "Dreamwell",
@@ -247,7 +268,11 @@ pub fn lower(
                     y: number(crop.y),
                     scale: number(crop.scale),
                 }),
-                automation: card.automation,
+                automation: card
+                    .automation
+                    .into_iter()
+                    .map(lower_automation_prompt)
+                    .collect::<Result<Vec<_>>>()?,
             })
         })
         .collect::<Result<Vec<_>>>()?;
@@ -269,6 +294,26 @@ fn number(value: f64) -> toml::Value {
     } else {
         toml::Value::Float(value)
     }
+}
+
+fn lower_automation_prompt(prompt: AutomationPrompt) -> Result<CompatibilityAutomationPrompt> {
+    Ok(CompatibilityAutomationPrompt {
+        key: prompt.key,
+        title: source_text(&prompt.title)?,
+        subtitle: source_text(&prompt.subtitle)?,
+        instructions: source_text(&prompt.instructions)?,
+        choices: prompt
+            .choices
+            .into_iter()
+            .map(|choice| {
+                Ok(CompatibilityPromptChoice {
+                    key: choice.key,
+                    label: source_text(&choice.label)?,
+                })
+            })
+            .collect::<Result<Vec<_>>>()?,
+        arguments: prompt.arguments,
+    })
 }
 
 pub(crate) fn validate(source: &DreamwellCatalog) -> Result<()> {
@@ -330,7 +375,7 @@ fn validate_cards(source: &[DreamwellCardDefinition]) -> Result<()> {
             card.id
         );
         ensure!(
-            !card.name.trim().is_empty(),
+            !source_text(&card.name)?.trim().is_empty(),
             "Dreamwell card {} has an empty name",
             card.id
         );
@@ -366,12 +411,15 @@ fn validate_automation(card: &DreamwellCardDefinition, placeholder: &Regex) -> R
             ("subtitle", &prompt.subtitle),
             ("instructions", &prompt.instructions),
         ] {
-            ensure!(!value.trim().is_empty(), "{path}.{field} must not be blank");
+            ensure!(
+                !source_text(value)?.trim().is_empty(),
+                "{path}.{field} must not be blank"
+            );
         }
         let mut choice_keys = BTreeSet::new();
         for choice in &prompt.choices {
             ensure!(
-                is_key(&choice.key) && !choice.label.trim().is_empty(),
+                is_key(&choice.key) && !source_text(&choice.label)?.trim().is_empty(),
                 "{path}.choices require kebab-case keys and non-blank labels"
             );
             ensure!(
@@ -393,13 +441,22 @@ fn validate_automation(card: &DreamwellCardDefinition, placeholder: &Regex) -> R
             );
         }
         let mut used = BTreeSet::new();
-        for text in std::iter::once(prompt.title.as_str())
-            .chain([prompt.subtitle.as_str(), prompt.instructions.as_str()])
-            .chain(prompt.choices.iter().map(|choice| choice.label.as_str()))
-        {
+        let mut texts = vec![
+            source_text(&prompt.title)?,
+            source_text(&prompt.subtitle)?,
+            source_text(&prompt.instructions)?,
+        ];
+        texts.extend(
+            prompt
+                .choices
+                .iter()
+                .map(|choice| source_text(&choice.label))
+                .collect::<Result<Vec<_>>>()?,
+        );
+        for text in texts {
             used.extend(
                 placeholder
-                    .captures_iter(text)
+                    .captures_iter(&text)
                     .map(|capture| capture[1].to_owned()),
             );
         }
@@ -446,9 +503,9 @@ DreamwellCatalog(
   ),
   cards: [
     DreamwellCardDefinition(
-    name: "Première lumière",
+    name: Tx("Première lumière"),
     id: "00000000-0000-4000-8000-000000000001",
-    ability_text: ["Draw a card.", "Then gain 1●."],
+    ability_text: [Tx("Draw a card."), Tx("Then gain 1●.")],
     energy_added: 2,
     deck_tier: Starting,
     art: (
@@ -459,7 +516,7 @@ DreamwellCatalog(
   ),
 
     DreamwellCardDefinition(
-    name: "Second",
+    name: Tx("Second"),
     id: "00000000-0000-4000-8000-000000000002",
     ability_text: [],
     energy_added: 0,
@@ -549,10 +606,10 @@ DreamwellCatalog(
     fn validates_and_lowers_semantic_automation_prompts() {
         let prompt = r#"automation: [AutomationPrompt(
       key: "choose-card",
-      title: "Choose up to {count}",
-      subtitle: "Cards cost at most {maximumCost}",
-      instructions: "Choose cards.",
-      choices: [PromptChoice(key: "confirm", label: "Choose {count}")],
+      title: Tx("Choose up to {{count}}"),
+      subtitle: Tx("Cards cost at most {{maximumCost}}"),
+      instructions: Tx("Choose cards."),
+      choices: [PromptChoice(key: "confirm", label: Tx("Choose {{count}}"))],
       arguments: [
         PromptArgument(name: "count", kind: Count),
         PromptArgument(name: "maximumCost", kind: MaximumCost),
@@ -577,16 +634,16 @@ DreamwellCatalog(
         );
         assert!(
             ron::from_str::<DreamwellCatalog>(
-                &source.replace("instructions: \"Choose cards.\",", "")
+                &source.replace("instructions: Tx(\"Choose cards.\"),", "")
             )
             .is_err()
         );
         let duplicate = source.replace(
             "automation: [AutomationPrompt(",
-            "automation: [AutomationPrompt(key: \"choose-card\", title: \"Title\", subtitle: \"Subtitle\", instructions: \"Instructions\"), AutomationPrompt(",
+            "automation: [AutomationPrompt(key: \"choose-card\", title: Tx(\"Title\"), subtitle: Tx(\"Subtitle\"), instructions: Tx(\"Instructions\")), AutomationPrompt(",
         );
         assert_lower_error(&duplicate, synthetic_metadata(), "duplicates choose-card");
-        let unknown = source.replace("Choose cards.", "Choose {amount}.");
+        let unknown = source.replace("Choose cards.", "Choose {{amount}}.");
         assert_lower_error(
             &unknown,
             synthetic_metadata(),
@@ -597,8 +654,8 @@ DreamwellCatalog(
     #[test]
     fn rejects_unknown_fields_and_noncanonical_identifiers() {
         let unknown = synthetic_source().replace(
-            "ability_text: [\"Draw a card.\", \"Then gain 1●.\"],",
-            "ability_text: [\"Draw a card.\", \"Then gain 1●.\"], surprise: true,",
+            "ability_text: [Tx(\"Draw a card.\"), Tx(\"Then gain 1●.\")],",
+            "ability_text: [Tx(\"Draw a card.\"), Tx(\"Then gain 1●.\")], surprise: true,",
         );
         assert!(ron::from_str::<DreamwellCatalog>(&unknown).is_err());
         let unknown_metadata =
@@ -638,7 +695,7 @@ DreamwellCatalog(
             "compatibility number must be greater than zero",
         );
         assert_lower_error(
-            &synthetic_source().replace("name: \"Première lumière\"", "name: \"   \""),
+            &synthetic_source().replace("name: Tx(\"Première lumière\")", "name: Tx(\"   \")"),
             synthetic_metadata(),
             "empty name",
         );

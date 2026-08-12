@@ -1,7 +1,10 @@
 use std::collections::BTreeSet;
+use trox::LocalizedString;
 
 use anyhow::{Result, ensure};
 use serde::{Deserialize, Serialize};
+
+use super::localization::source_text;
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -16,11 +19,11 @@ pub struct ResonanceCatalog {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct ResonancePresentation {
-    pub display_name: String,
+    pub display_name: LocalizedString,
     pub accent_color: String,
     pub chip_background: String,
     pub chip_border: String,
-    pub accessibility_name: String,
+    pub accessibility_name: LocalizedString,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Ord, PartialOrd)]
@@ -98,16 +101,18 @@ pub fn lower(source: ResonanceCatalog) -> Result<toml::Value> {
     Ok(toml::Value::try_from(CompatibilityCatalog {
         resonances: resonances
             .into_iter()
-            .map(|(id, glyph, presentation)| CompatibilityResonance {
-                id: id.as_compat(),
-                display_name: presentation.display_name,
-                glyph: glyph.as_compat(),
-                accent_color: presentation.accent_color,
-                chip_background: presentation.chip_background,
-                chip_border: presentation.chip_border,
-                accessibility_name: presentation.accessibility_name,
+            .map(|(id, glyph, presentation)| {
+                Ok(CompatibilityResonance {
+                    id: id.as_compat(),
+                    display_name: source_text(&presentation.display_name)?,
+                    glyph: glyph.as_compat(),
+                    accent_color: presentation.accent_color,
+                    chip_background: presentation.chip_background,
+                    chip_border: presentation.chip_border,
+                    accessibility_name: source_text(&presentation.accessibility_name)?,
+                })
             })
-            .collect(),
+            .collect::<Result<Vec<_>>>()?,
     })?)
 }
 
@@ -121,16 +126,19 @@ pub(crate) fn validate(source: &ResonanceCatalog) -> Result<()> {
         ("shadow", &source.shadow),
     ] {
         let path = format!("{id}");
+        let display_name = source_text(&resonance.display_name)?;
         ensure!(
-            !resonance.display_name.trim().is_empty(),
+            !display_name.trim().is_empty(),
             "{path}.display_name must not be blank"
         );
         ensure!(
-            !resonance.accessibility_name.trim().is_empty(),
+            !source_text(&resonance.accessibility_name)?
+                .trim()
+                .is_empty(),
             "{path}.accessibility_name must not be blank"
         );
         ensure!(
-            names.insert(resonance.display_name.to_lowercase()),
+            names.insert(display_name.to_lowercase()),
             "{path}.display_name duplicates another resonance"
         );
         validate_color(&path, &resonance.accent_color)?;
@@ -156,13 +164,17 @@ fn validate_color(path: &str, color: &str) -> Result<()> {
 mod tests {
     use super::*;
 
+    fn ls(text: impl Into<String>) -> LocalizedString {
+        super::super::localization::localized_source(text.into()).unwrap()
+    }
+
     fn presentation(name: &str, color: &str) -> ResonancePresentation {
         ResonancePresentation {
-            display_name: name.into(),
+            display_name: ls(name),
             accent_color: color.into(),
             chip_background: "#111111".into(),
             chip_border: "rgba(1, 2, 3, 0.5)".into(),
-            accessibility_name: format!("{name} resonance"),
+            accessibility_name: ls(format!("{name} resonance")),
         }
     }
 

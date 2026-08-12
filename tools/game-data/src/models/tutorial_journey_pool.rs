@@ -1,11 +1,14 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
+use trox::LocalizedString;
 
 use anyhow::{Result, ensure};
 use indexmap::IndexMap;
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
+
+use super::localization::source_text;
 
 const LEGACY_TIDE_ID_MAP: [(&str, &str); 3] = [
     (
@@ -45,8 +48,8 @@ pub struct OpeningOffer {
 #[serde(deny_unknown_fields)]
 pub struct TideDefinition {
     pub id: TideId,
-    pub name: String,
-    pub description: String,
+    pub name: LocalizedString,
+    pub description: LocalizedString,
     #[serde(deserialize_with = "super::card_counts::deserialize")]
     pub cards: IndexMap<CardId, u32>,
 }
@@ -151,8 +154,8 @@ fn lower_with_tide_map(
                 .unwrap_or_else(|| tide.id.to_string());
             Ok(CompatibilityTide {
                 id,
-                name: tide.name,
-                description: tide.description,
+                name: source_text(&tide.name)?,
+                description: source_text(&tide.description)?,
                 kind: "valor",
                 cards: tide
                     .cards
@@ -271,18 +274,19 @@ pub(crate) fn validate(source: &TutorialJourneyDraftPool) -> Result<()> {
             "duplicate Tide identifier: {}",
             tide.id
         );
+        let name = source_text(&tide.name)?;
         ensure!(
-            !tide.name.trim().is_empty(),
+            !name.trim().is_empty(),
             "Tide {} has an empty name",
             tide.id
         );
         ensure!(
-            tide_names.insert(tide.name.to_lowercase()),
+            tide_names.insert(name.to_lowercase()),
             "Tide names must be unique: {}",
-            tide.name
+            name
         );
         ensure!(
-            !tide.description.trim().is_empty(),
+            !source_text(&tide.description)?.trim().is_empty(),
             "Tide {} has an empty description",
             tide.id
         );
@@ -379,8 +383,8 @@ mod tests {
                 tutorial_tides: [
                     (
                         id: "10000000-0000-4000-8000-000000000001",
-                        name: "First Tide",
-                        description: "First description.",
+                        name: Tx("First Tide"),
+                        description: Tx("First description."),
                         cards: {{
                             "{}": 2,
                             "{}": 1,
@@ -389,8 +393,8 @@ mod tests {
                     ),
                     (
                         id: "10000000-0000-4000-8000-000000000002",
-                        name: "Second Tide",
-                        description: "A Unicode wave: 海.",
+                        name: Tx("Second Tide"),
+                        description: Tx("A Unicode wave: 海."),
                         cards: {{
                             "{}": 1,
                             "{}": 1,
@@ -399,8 +403,8 @@ mod tests {
                     ),
                     (
                         id: "10000000-0000-4000-8000-000000000003",
-                        name: "Third Tide",
-                        description: "Third description.",
+                        name: Tx("Third Tide"),
+                        description: Tx("Third description."),
                         cards: {{
                             "{}": 1,
                             "{}": 1,
@@ -511,8 +515,8 @@ mod tests {
                 "copies must be one or two",
             ),
             (
-                "name: \"Second Tide\"",
-                "name: \"First Tide\"",
+                "name: Tx(\"Second Tide\")",
+                "name: Tx(\"First Tide\")",
                 "Tide names must be unique",
             ),
         ] {

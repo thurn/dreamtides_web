@@ -53,6 +53,7 @@ export function checkGeneratedTroxBundles(options = {}) {
   const cleanRoot = mkdtempSync(join(tmpdir(), "quest-clean-trox-bundles-"));
   try {
     cpSync(join(root, "src"), join(cleanRoot, "src"), { recursive: true });
+    cpSync(join(root, "data"), join(cleanRoot, "data"), { recursive: true });
     cpSync(join(root, "localization"), join(cleanRoot, "localization"), { recursive: true });
     cpSync(join(root, "trox.ron"), join(cleanRoot, "trox.ron"));
     rmSync(join(cleanRoot, GENERATED_PATH), { recursive: true, force: true });

@@ -1,11 +1,14 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
+use trox::LocalizedString;
 
 use anyhow::{Result, bail};
 use indexmap::IndexMap;
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
+
+use super::localization::source_text;
 
 use super::resonance::Resonance;
 
@@ -15,8 +18,8 @@ pub type TidesCatalog = Vec<TideDefinition>;
 #[serde(deny_unknown_fields)]
 pub struct TideDefinition {
     pub id: TideId,
-    pub display_name: String,
-    pub display_description: String,
+    pub display_name: LocalizedString,
+    pub display_description: LocalizedString,
     pub resonance: Resonance,
     pub kind: TideKind,
     #[serde(deserialize_with = "super::card_counts::deserialize")]
@@ -150,10 +153,13 @@ pub fn lower(catalog: TidesCatalog) -> Result<toml::Value> {
                 .map(|tide| {
                     let mut table = toml::map::Map::new();
                     table.insert("id".into(), tide.id.to_string().into());
-                    table.insert("display-name".into(), tide.display_name.into());
+                    table.insert(
+                        "display-name".into(),
+                        source_text(&tide.display_name)?.into(),
+                    );
                     table.insert(
                         "display-description".into(),
-                        tide.display_description.into(),
+                        source_text(&tide.display_description)?.into(),
                     );
                     table.insert("resonance".into(), tide.resonance.as_compat().into());
                     table.insert("role".into(), tide.kind.as_compat().into());
@@ -171,9 +177,9 @@ pub fn lower(catalog: TidesCatalog) -> Result<toml::Value> {
                                 .collect(),
                         ),
                     );
-                    toml::Value::Table(table)
+                    Ok(toml::Value::Table(table))
                 })
-                .collect(),
+                .collect::<Result<Vec<_>>>()?,
         ),
     );
     Ok(toml::Value::Table(root))
@@ -182,6 +188,10 @@ pub fn lower(catalog: TidesCatalog) -> Result<toml::Value> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn ls(text: impl Into<String>) -> LocalizedString {
+        super::super::localization::localized_source(text.into()).unwrap()
+    }
 
     const TIDE_IDS: [&str; 3] = [
         "00000000-0000-4000-8000-000000000001",
@@ -204,8 +214,8 @@ mod tests {
             .zip(resonances)
             .map(|(((tide_id, card_id), kind), resonance)| TideDefinition {
                 id: TideId::parse(tide_id).unwrap(),
-                display_name: format!("Display {tide_id}"),
-                display_description: "Unicode tide — exact copy".into(),
+                display_name: ls(format!("Display {tide_id}")),
+                display_description: ls("Unicode tide — exact copy"),
                 resonance,
                 kind,
                 cards: IndexMap::from_iter([(CardId::parse(card_id).unwrap(), 2)]),

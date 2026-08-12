@@ -1,16 +1,19 @@
 use std::collections::BTreeSet;
 use std::fmt;
+use trox::LocalizedString;
 
 use anyhow::{Result, bail};
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
+use super::localization::source_text;
+
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct FigmentDefinition {
     pub id: FigmentId,
-    pub name: String,
+    pub name: LocalizedString,
     pub character_type: CharacterType,
     pub base_spark: u32,
     pub behavior: FigmentBehavior,
@@ -163,22 +166,24 @@ pub fn lower(source: Vec<FigmentDefinition>) -> Result<toml::Value> {
     validate(&source)?;
     let figments = source
         .into_iter()
-        .map(|figment| CompatibilityFigment {
-            name: figment.name,
-            id: figment.id.to_string(),
-            subtype: figment.character_type.compatibility_name(),
-            spark: figment.base_spark,
-            keyword: figment.behavior.compatibility_keyword(),
-            rendered_text: figment.behavior.compatibility_rules_text(),
-            image_number: figment.image_number,
-            art_owned: figment.art_owned,
-            art: figment.art.map(|crop| CompatibilityArtCrop {
-                x: compatibility_number(crop.x),
-                y: compatibility_number(crop.y),
-                scale: compatibility_number(crop.scale),
-            }),
+        .map(|figment| {
+            Ok(CompatibilityFigment {
+                name: source_text(&figment.name)?,
+                id: figment.id.to_string(),
+                subtype: figment.character_type.compatibility_name(),
+                spark: figment.base_spark,
+                keyword: figment.behavior.compatibility_keyword(),
+                rendered_text: figment.behavior.compatibility_rules_text(),
+                image_number: figment.image_number,
+                art_owned: figment.art_owned,
+                art: figment.art.map(|crop| CompatibilityArtCrop {
+                    x: compatibility_number(crop.x),
+                    y: compatibility_number(crop.y),
+                    scale: compatibility_number(crop.scale),
+                }),
+            })
         })
-        .collect();
+        .collect::<Result<Vec<_>>>()?;
     Ok(toml::Value::try_from(CompatibilityCatalog { figments })?)
 }
 
@@ -196,7 +201,7 @@ fn validate(source: &[FigmentDefinition]) -> Result<()> {
         if !ids.insert(figment.id) {
             bail!("duplicate Figment id: {}", figment.id);
         }
-        if figment.name.trim().is_empty() {
+        if source_text(&figment.name)?.trim().is_empty() {
             bail!("Figment {} has an empty name", figment.id);
         }
         if let Some(art) = figment.art {
@@ -227,7 +232,7 @@ mod tests {
 [
   FigmentDefinition(
     id: "00000000-0000-4000-8000-000000000001",
-    name: "Plain",
+    name: Tx("Plain"),
     character_type: Warrior,
     base_spark: 1,
     behavior: Vanilla,
@@ -235,7 +240,7 @@ mod tests {
   ),
   FigmentDefinition(
     id: "00000000-0000-4000-8000-000000000002",
-    name: "Vengeful",
+    name: Tx("Vengeful"),
     character_type: Wraith,
     base_spark: 0,
     behavior: Vengeful,
@@ -245,7 +250,7 @@ mod tests {
   ),
   FigmentDefinition(
     id: "00000000-0000-4000-8000-000000000003",
-    name: "Awakened ✦",
+    name: Tx("Awakened ✦"),
     character_type: Ember,
     base_spark: 2,
     behavior: Awakened,
@@ -253,7 +258,7 @@ mod tests {
   ),
   FigmentDefinition(
     id: "00000000-0000-4000-8000-000000000004",
-    name: "Legionnaire",
+    name: Tx("Legionnaire"),
     character_type: Warrior,
     base_spark: 1,
     behavior: Legionnaire,
@@ -333,8 +338,10 @@ mod tests {
 
     #[test]
     fn rejects_unknown_fields_and_noncanonical_identifiers() {
-        let unknown =
-            synthetic_source().replace("name: \"Plain\",", "name: \"Plain\", surprise: true,");
+        let unknown = synthetic_source().replace(
+            "name: Tx(\"Plain\"),",
+            "name: Tx(\"Plain\"), surprise: true,",
+        );
         assert!(ron::from_str::<Vec<FigmentDefinition>>(&unknown).is_err());
 
         for invalid in [
@@ -358,7 +365,7 @@ mod tests {
             "duplicate Figment id",
         );
         assert_error_contains(
-            &synthetic_source().replace("name: \"Plain\"", "name: \"  \""),
+            &synthetic_source().replace("name: Tx(\"Plain\")", "name: Tx(\"  \")"),
             "empty name",
         );
         assert_error_contains(

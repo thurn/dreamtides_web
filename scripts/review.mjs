@@ -261,7 +261,17 @@ async function runStep(step, extraArgs = []) {
   const [command, args] = commandFor(step, extraArgs);
   console.log(`\n[review] ${step}`);
   const startedAt = Date.now();
-  child = spawn(command, args, { cwd: root, env: process.env, stdio: "inherit" });
+  const env = {
+    ...process.env,
+    DREAMTIDES_LOCAL_ASSET_HOME: join(
+      root,
+      "node_modules",
+      ".cache",
+      "journey-review",
+      "local-assets",
+    ),
+  };
+  child = spawn(command, args, { cwd: root, env, stdio: "inherit" });
   writeOwner({ childPid: child.pid, step });
   const exitCode = await new Promise((resolveExit, reject) => {
     child.once("error", reject);

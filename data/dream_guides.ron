@@ -4,125 +4,143 @@
 [
   GuideDefinition(
     id: "4e5067ec-265d-4dba-8fa8-2afbd4fde9ab",
-    name: "Tobias Tanglefur",
+    name: Tx("Tobias Tanglefur"),
     home_dreamscape_id: "08e11635-9f04-48fd-a9c8-5a9f68c80958",
     portrait_source: "tobias.png",
-    site_dialogue: ["Welcome, friend! Browse a while.", "I've set aside something just for you."],
-    specialty: Shop(description: "Tobias offers strong cards at a steep discount."),
+    site_dialogue: [
+      Tx("Welcome, friend! Browse a while."),
+      Tx("I've set aside something just for you."),
+    ],
+    specialty: Shop(description: Tx("Tobias offers strong cards at a steep discount.")),
   ),
 
   GuideDefinition(
     id: "113cb023-12df-4b9c-982c-f0c8bba30377",
-    name: "Amunet, the Tomb-Keeper",
+    name: Tx("Amunet, the Tomb-Keeper"),
     home_dreamscape_id: "b25b9906-8380-45bf-9435-678ce18316ea",
     portrait_source: "amunet.png",
-    site_dialogue: ["The sands remember all dreams.", "Choose, and I shall show you another."],
+    site_dialogue: [
+      Tx("The sands remember all dreams."),
+      Tx("Choose, and I shall show you another."),
+    ],
     specialty: DreamsignBazaar(
-      description: "Amunet will restock the dreamsign choices once at no cost.",
+      description: Tx("Amunet will restock the dreamsign choices once at no cost."),
     ),
   ),
 
   GuideDefinition(
     id: "706a4443-2826-4459-8127-040632cb93fd",
-    name: "Sigrún",
+    name: Tx("Sigrún"),
     home_dreamscape_id: "7d793d30-8a0f-4f84-a446-cdde502710e8",
     portrait_source: "sigrun.png",
     site_dialogue: [
-      "The frost reveals what is hidden. Pick one sign to claim.",
-      "Your path is clearer than most. Pick one sign to claim.",
+      Tx("The frost reveals what is hidden. Pick one sign to claim."),
+      Tx("Your path is clearer than most. Pick one sign to claim."),
     ],
     specialty: DreamsignRevelation(
-      description: "Sigrún offers several dreamsign choices, tailored to your deck.",
+      description: Tx("Sigrún offers several dreamsign choices, tailored to your deck."),
     ),
   ),
 
   GuideDefinition(
     id: "9890b3c2-74f7-4b4a-bb39-61c2c6d53cbb",
-    name: "Durgan Forgehammer",
+    name: Tx("Durgan Forgehammer"),
     home_dreamscape_id: "8e7d0818-ba6a-4dc9-8b3d-a12c62aefa44",
     portrait_source: "durgan.png",
-    site_dialogue: ["Stoke the forge — let's reshape it.", "Any card, any temper you like."],
-    specialty: Transfiguration(description: "Durgan can transfigure any card in your deck."),
+    site_dialogue: [
+      Tx("Stoke the forge — let's reshape it."),
+      Tx("Any card, any temper you like."),
+    ],
+    specialty: Transfiguration(description: Tx("Durgan can transfigure any card in your deck.")),
   ),
 
   GuideDefinition(
     id: "e0aaa9a6-9038-48b9-8847-63681426190e",
-    name: "Deacon Holt",
+    name: Tx("Deacon Holt"),
     home_dreamscape_id: "562f9d1f-5bbf-4dc5-9edd-7e8d538a1651",
     portrait_source: "holt.png",
-    site_dialogue: ["We endure together, don't we?", "Pick one, and I'll make another."],
-    specialty: Duplication(description: "Deacon Holt can pick any card to duplicate."),
+    site_dialogue: [Tx("We endure together, don't we?"), Tx("Pick one, and I'll make another.")],
+    specialty: Duplication(description: Tx("Deacon Holt can pick any card to duplicate.")),
   ),
 
   GuideDefinition(
     id: "87e9ae46-57c6-407a-af96-bd5f5323dabc",
-    name: "Master Takeshi",
+    name: Tx("Master Takeshi"),
     home_dreamscape_id: "823dc726-db0f-4367-8442-70600a20ad2e",
     portrait_source: "takeshi.png",
-    site_dialogue: ["Let go of what weighs you down.", "A cleaner blade cuts truer."],
-    specialty: Purge(description: "Master Takeshi will purge cards from your deck at no cost."),
+    site_dialogue: [Tx("Let go of what weighs you down."), Tx("A cleaner blade cuts truer.")],
+    specialty: Purge(description: Tx("Master Takeshi will purge cards from your deck at no cost.")),
   ),
 
   GuideDefinition(
     id: "232e7de1-b7b9-4631-b6a3-1ab178c7ff9a",
-    name: "Aldric, the Seer",
+    name: Tx("Aldric, the Seer"),
     home_dreamscape_id: "f52bdeb1-0db6-44ee-80ea-b99bd18dff7d",
     portrait_source: "aldric.png",
     site_dialogue: [
-      "Two paths unfold before you. Choose one to shape your dream.",
-      "Weigh both visions, then pick one path for your dream.",
-      "The dream divides here. Choose one vision and make it yours.",
-      "Two futures call to you. You may follow only one.",
-      "Look closely at each path, then choose the one your dream will take.",
+      Tx("Two paths unfold before you. Choose one to shape your dream."),
+      Tx("Weigh both visions, then pick one path for your dream."),
+      Tx("The dream divides here. Choose one vision and make it yours."),
+      Tx("Two futures call to you. You may follow only one."),
+      Tx("Look closely at each path, then choose the one your dream will take."),
     ],
-    specialty: Augury(description: "Aldric offers curated visions of the future."),
+    specialty: Augury(description: Tx("Aldric offers curated visions of the future.")),
   ),
 
   GuideDefinition(
     id: "869a07ae-5532-4a65-abfa-26a89713a82b",
-    name: "Maddox",
+    name: Tx("Maddox"),
     home_dreamscape_id: "6f16a1c9-c2fa-494d-9d9d-4da00e011491",
     portrait_source: "maddox.png",
-    site_dialogue: ["Let’s see where this road takes us."],
+    site_dialogue: [Tx("Let’s see where this road takes us.")],
     specialty: RandomSite(
-      description: "Maddox presents three random enhanced sites and lets you choose one.",
-      dialogue: ["Three roads. Pick your poison."],
+      description: Tx("Maddox presents three random enhanced sites and lets you choose one."),
+      dialogue: [Tx("Three roads. Pick your poison.")],
     ),
   ),
 
   GuideDefinition(
     id: "579eaf53-0643-4cba-9c0c-da04b9c52822",
-    name: "Gravok",
+    name: Tx("Gravok"),
     home_dreamscape_id: "138eff95-3301-4f76-aeb1-31bf0dc8963d",
     portrait_source: "gravok.png",
-    site_dialogue: ["Fortune favors the bold, traveler.", "No fee tonight. Big stakes, though."],
+    site_dialogue: [
+      Tx("Fortune favors the bold, traveler."),
+      Tx("No fee tonight. Big stakes, though."),
+    ],
     specialty: Gamble(
-      description: "Gravok offers you his highest rewards and best odds.",
+      description: Tx("Gravok offers you his highest rewards and best odds."),
       dialogue: GambleDialogue(
-        three_gate: ["The game's called Three Gates. Place your bet on the next card drawn!"],
+        three_gate: [Tx("The game's called Three Gates. Place your bet on the next card drawn!")],
         ladder_climb: [
-          "The game's Ladder Climb. Match or beat the target to win {win-essence} Essence and a Dreamsign. Try again with better odds if you miss!",
+          Tx(
+            "The game's Ladder Climb. Match or beat the target to win {{win-essence}} Essence and a Dreamsign. Try again with better odds if you miss!"
+          ),
         ],
-        starway_stairs: ["Starway Stairs is the game. Keep betting to see how high you can go!"],
+        starway_stairs: [
+          Tx("Starway Stairs is the game. Keep betting to see how high you can go!"),
+        ],
         four_suit_reprise: [
-          "Four-Suit Reprise is the game. Choose one card; the suit decides what becomes of it.",
+          Tx(
+            "Four-Suit Reprise is the game. Choose one card; the suit decides what becomes of it."
+          ),
         ],
-        blackjack: ["Blackjack is the game. Beat my hand without going over 21!"],
+        blackjack: [Tx("Blackjack is the game. Beat my hand without going over 21!")],
       ),
     ),
   ),
 
   GuideDefinition(
     id: "078e102a-f235-4794-9bb5-a5c42262782a",
-    name: "\"Layaway\"",
+    name: Tx("\"Layaway\""),
     home_dreamscape_id: "6c03e9d1-21fe-4c13-b940-2325d308cb14",
     portrait_source: "layaway.png",
     site_dialogue: [
-      "Every card dreams, friend. Draw one, and we'll step inside.",
-      "Pick a direction. The dream will make the path.",
+      Tx("Every card dreams, friend. Draw one, and we'll step inside."),
+      Tx("Pick a direction. The dream will make the path."),
     ],
     specialty: Exploration(
-      description: "Layaway guides you deeper into the dream within the drawn card.",
+      description: Tx("Layaway guides you deeper into the dream within the drawn card."),
     ),
   ),
 ]

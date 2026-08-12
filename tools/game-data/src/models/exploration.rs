@@ -1,10 +1,13 @@
 use std::collections::BTreeSet;
 use std::fmt;
+use trox::LocalizedString;
 
 use anyhow::{Result, bail};
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
+
+use super::localization::source_text;
 
 macro_rules! string_enum {
     ($name:ident { $($variant:ident => $value:literal),+ $(,)? }) => {
@@ -455,14 +458,14 @@ impl<'de> Deserialize<'de> for ActionId {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct Followup {
-    pub title: String,
-    pub subtitle: String,
+    pub title: LocalizedString,
+    pub subtitle: LocalizedString,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct ActionPresentation {
-    pub effect_text: String,
+    pub effect_text: LocalizedString,
     #[serde(default)]
     pub followup: Option<Followup>,
 }
@@ -471,14 +474,14 @@ pub struct ActionPresentation {
 #[serde(deny_unknown_fields)]
 pub struct EncounterDefinition {
     pub card_id: String,
-    pub prose: String,
+    pub prose: LocalizedString,
     pub actions: Vec<ActionDefinition>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct ActionDefinition {
-    pub label: String,
+    pub label: LocalizedString,
     pub id: ActionId,
     pub presentation: ActionPresentation,
     pub effect: ActionEffect,
@@ -894,12 +897,12 @@ pub fn lower(catalog: ExplorationCatalog) -> Result<toml::Value> {
                         }
                         _ => {}
                     }
-                    Ok(toml::Value::Table(lower_action(action)))
+                    Ok(toml::Value::Table(lower_action(action)?))
                 })
                 .collect::<Result<Vec<_>>>()?;
             Ok(toml::Value::Table(toml::map::Map::from_iter([
                 ("card-id".into(), encounter.card_id.into()),
-                ("prose".into(), encounter.prose.into()),
+                ("prose".into(), source_text(&encounter.prose)?.into()),
                 ("action".into(), toml::Value::Array(actions)),
             ])))
         })
@@ -920,14 +923,23 @@ pub fn lower(catalog: ExplorationCatalog) -> Result<toml::Value> {
     ])))
 }
 
-fn lower_action(action: ActionDefinition) -> toml::map::Map<String, toml::Value> {
+fn lower_action(action: ActionDefinition) -> Result<toml::map::Map<String, toml::Value>> {
     let mut output = toml::map::Map::new();
     output.insert("id".into(), action.id.to_string().into());
-    output.insert("label".into(), action.label.into());
-    output.insert("effect-text".into(), action.presentation.effect_text.into());
+    output.insert("label".into(), source_text(&action.label)?.into());
+    output.insert(
+        "effect-text".into(),
+        source_text(&action.presentation.effect_text)?.into(),
+    );
     if let Some(followup) = action.presentation.followup {
-        output.insert("followup-title".into(), followup.title.into());
-        output.insert("followup-subtitle".into(), followup.subtitle.into());
+        output.insert(
+            "followup-title".into(),
+            source_text(&followup.title)?.into(),
+        );
+        output.insert(
+            "followup-subtitle".into(),
+            source_text(&followup.subtitle)?.into(),
+        );
     }
     let kind = action.effect.kind();
     output.insert(
@@ -938,7 +950,7 @@ fn lower_action(action: ActionDefinition) -> toml::map::Map<String, toml::Value>
         output.insert("selection-policy-id".into(), policy.as_compat().into());
     }
     lower_action_effect(action.effect, &mut output);
-    output
+    Ok(output)
 }
 
 fn lower_action_effect(effect: ActionEffect, output: &mut toml::map::Map<String, toml::Value>) {
@@ -1375,30 +1387,30 @@ mod tests {
 [
   EncounterDefinition(
     card_id: "11111111-1111-4111-8111-111111111111",
-    prose: "A synthetic encounter.",
+    prose: Tx("A synthetic encounter."),
     actions: [
       ActionDefinition(
-        label: "Take the named card",
+        label: Tx("Take the named card"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: "Gain {fixed_card}", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Gain {{fixed_card}}"), followup: None),
         effect: GainNamedCard(card_id: "22222222-2222-4222-8222-222222222222"),
       ),
       ActionDefinition(
-        label: "Take the generated card",
+        label: Tx("Take the generated card"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: "Gain {offered_card}", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Gain {{offered_card}}"), followup: None),
         effect: GainGeneratedCard(predicate: Character, count: None),
       ),
       ActionDefinition(
-        label: "Swear a synthetic oath",
+        label: Tx("Swear a synthetic oath"),
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-        presentation: ActionPresentation(effect_text: "Purge a random Warrior and strengthen the rest.", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Purge a random Warrior and strengthen the rest."), followup: None),
         effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
       ),
       ActionDefinition(
-        label: "Enter synthetic light",
+        label: Tx("Enter synthetic light"),
         id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
-        presentation: ActionPresentation(effect_text: "Spend essence to transfigure Events.", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Spend essence to transfigure Events."), followup: None),
         effect: TransfigureAllForEssence(essence: 100, predicate: Event, transfiguration: "Inspired"),
       ),
     ],
@@ -1410,16 +1422,16 @@ mod tests {
 [
   EncounterDefinition(
     card_id: "11111111-1111-4111-8111-111111111111",
-    prose: "A synthetic escort waits in the rain.",
+    prose: Tx("A synthetic escort waits in the rain."),
     actions: [
       ActionDefinition(
-        label: "Stand Down the Escort",
+        label: Tx("Stand Down the Escort"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
         presentation: ActionPresentation(
-          effect_text: "Purge up to 2 chosen Warrior cards",
+          effect_text: Tx("Purge up to 2 chosen Warrior cards"),
           followup: Followup(
-            title: "{action-label}",
-            subtitle: "Choose up to two Warrior cards to purge.",
+            title: Tx("{{action-label}}"),
+            subtitle: Tx("Choose up to two Warrior cards to purge."),
           ),
         ),
         effect: PurgeSelected(predicate: Warrior, count: 2),
@@ -1433,24 +1445,24 @@ mod tests {
 [
   EncounterDefinition(
     card_id: "11111111-1111-4111-8111-111111111111",
-    prose: "Synthetic essence refracts through three mirrors.",
+    prose: Tx("Synthetic essence refracts through three mirrors."),
     actions: [
       ActionDefinition(
-        label: "Gather the Light",
+        label: Tx("Gather the Light"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: "Gain 100 essence", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Gain 100 essence"), followup: None),
         effect: GainEssence(essence: 100),
       ),
       ActionDefinition(
-        label: "Chance the Light",
+        label: Tx("Chance the Light"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: "Gain 50 to 150 essence", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Gain 50 to 150 essence"), followup: None),
         effect: GainRandomEssence(minimum_essence: 50, maximum_essence: 150),
       ),
       ActionDefinition(
-        label: "Reflect the Light",
+        label: Tx("Reflect the Light"),
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-        presentation: ActionPresentation(effect_text: "Double your essence", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Double your essence"), followup: None),
         effect: DoubleEssence,
       ),
     ],
@@ -1462,30 +1474,30 @@ mod tests {
 [
   EncounterDefinition(
     card_id: "11111111-1111-4111-8111-111111111111",
-    prose: "Four synthetic Dreamsign offers wait in the mist.",
+    prose: Tx("Four synthetic Dreamsign offers wait in the mist."),
     actions: [
       ActionDefinition(
-        label: "Accept an Offered Sign",
+        label: Tx("Accept an Offered Sign"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: "Gain an offered Dreamsign", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Gain an offered Dreamsign"), followup: None),
         effect: GainOfferedDreamsign(offer_count: 3),
       ),
       ActionDefinition(
-        label: "Replace a Chosen Sign",
+        label: Tx("Replace a Chosen Sign"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: "Replace a chosen Dreamsign", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Replace a chosen Dreamsign"), followup: None),
         effect: ReplaceSelectedDreamsignWithOffered(offer_count: 4),
       ),
       ActionDefinition(
-        label: "Replace Every Sign",
+        label: Tx("Replace Every Sign"),
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-        presentation: ActionPresentation(effect_text: "Replace all Dreamsigns", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Replace all Dreamsigns"), followup: None),
         effect: ReplaceAllDreamsignsRandom,
       ),
       ActionDefinition(
-        label: "Purge and Replace a Sign",
+        label: Tx("Purge and Replace a Sign"),
         id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
-        presentation: ActionPresentation(effect_text: "Purge and replace a Dreamsign", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Purge and replace a Dreamsign"), followup: None),
         effect: PurgeSelectedDreamsignAndGainRandom(count: 2),
       ),
     ],
@@ -1497,21 +1509,21 @@ mod tests {
 [
   EncounterDefinition(
     card_id: "11111111-1111-4111-8111-111111111111",
-    prose: "Two synthetic bargains gather in the dark.",
+    prose: Tx("Two synthetic bargains gather in the dark."),
     actions: [
       ActionDefinition(
-        label: "Accept the Marked Sign",
+        label: Tx("Accept the Marked Sign"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: "Gain a Dreamsign and a Nightmare", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Gain a Dreamsign and a Nightmare"), followup: None),
         effect: GainNightmareAndDreamsign(
           dreamsign_id: "00000000-0000-4000-8000-000000000002",
           nightmare_count: 1,
         ),
       ),
       ActionDefinition(
-        label: "Choose Among Dark Signs",
+        label: Tx("Choose Among Dark Signs"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: "Choose a Dreamsign and gain two Nightmares", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Choose a Dreamsign and gain two Nightmares"), followup: None),
         effect: GainNightmareAndOfferedDreamsign(
           offer_count: 3,
           nightmare_count: 2,
@@ -1526,30 +1538,30 @@ mod tests {
 [
   EncounterDefinition(
     card_id: "11111111-1111-4111-8111-111111111111",
-    prose: "Four synthetic paths lead away from familiar beginnings.",
+    prose: Tx("Four synthetic paths lead away from familiar beginnings."),
     actions: [
       ActionDefinition(
-        label: "Release the Disclosed Beginning",
+        label: Tx("Release the Disclosed Beginning"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: "Purge {starter_card}", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Purge {{starter_card}}"), followup: None),
         effect: PurgeStarterCard,
       ),
       ActionDefinition(
-        label: "Release a Hidden Beginning",
+        label: Tx("Release a Hidden Beginning"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: "Purge a random starter card", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Purge a random starter card"), followup: None),
         effect: PurgeRandomStarterCard,
       ),
       ActionDefinition(
-        label: "Trade One Beginning",
+        label: Tx("Trade One Beginning"),
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-        presentation: ActionPresentation(effect_text: "Purge a random starter card and gain a Character", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Purge a random starter card and gain a Character"), followup: None),
         effect: PurgeRandomStarterAndGainCard(predicate: Character),
       ),
       ActionDefinition(
-        label: "Trade Every Beginning",
+        label: Tx("Trade Every Beginning"),
         id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
-        presentation: ActionPresentation(effect_text: "Replace all starter cards with Events", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Replace all starter cards with Events"), followup: None),
         effect: ReplaceAllStarterCards(predicate: Event),
       ),
     ],
@@ -1561,18 +1573,18 @@ mod tests {
 [
   EncounterDefinition(
     card_id: "11111111-1111-4111-8111-111111111111",
-    prose: "Two synthetic paths reshape familiar beginnings.",
+    prose: Tx("Two synthetic paths reshape familiar beginnings."),
     actions: [
       ActionDefinition(
-        label: "Reshape Two Beginnings",
+        label: Tx("Reshape Two Beginnings"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: "Transfigure 2 random starter cards", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Transfigure 2 random starter cards"), followup: None),
         effect: TransfigureRandomStarterCards(count: 2),
       ),
       ActionDefinition(
-        label: "Reshape Every Beginning",
+        label: Tx("Reshape Every Beginning"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: "Transfigure all starter cards", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Transfigure all starter cards"), followup: None),
         effect: TransfigureAllStarterCards,
       ),
     ],
@@ -1584,30 +1596,30 @@ mod tests {
 [
   EncounterDefinition(
     card_id: "11111111-1111-4111-8111-111111111111",
-    prose: "Four synthetic paths reshape a deck.",
+    prose: Tx("Four synthetic paths reshape a deck."),
     actions: [
       ActionDefinition(
-        label: "Reshape One Chosen Card",
+        label: Tx("Reshape One Chosen Card"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: "Transfigure a chosen card", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Transfigure a chosen card"), followup: None),
         effect: TransfigureSelected(count: 1),
       ),
       ActionDefinition(
-        label: "Reshape Two Chosen Events",
+        label: Tx("Reshape Two Chosen Events"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: "Transfigure 2 chosen Events", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Transfigure 2 chosen Events"), followup: None),
         effect: TransfigureSelected(predicate: Event, count: 2),
       ),
       ActionDefinition(
-        label: "Reshape Two Random Events",
+        label: Tx("Reshape Two Random Events"),
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-        presentation: ActionPresentation(effect_text: "Transfigure 2 random Events", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Transfigure 2 random Events"), followup: None),
         effect: TransfigureRandomCards(predicate: Event, count: 2),
       ),
       ActionDefinition(
-        label: "Kindle Two Random Events",
+        label: Tx("Kindle Two Random Events"),
         id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
-        presentation: ActionPresentation(effect_text: "Kindle 2 random Events", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Kindle 2 random Events"), followup: None),
         effect: TransfigureFixedRandomCards(
           predicate: Event,
           count: 2,
@@ -1623,18 +1635,18 @@ mod tests {
 [
   EncounterDefinition(
     card_id: "11111111-1111-4111-8111-111111111111",
-    prose: "Four synthetic paths alter multiple deck entries.",
+    prose: Tx("Four synthetic paths alter multiple deck entries."),
     actions: [
       ActionDefinition(
-        label: "Replace Two Events",
+        label: Tx("Replace Two Events"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: "Replace up to 2 Events", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Replace up to 2 Events"), followup: None),
         effect: ReplaceSelected(predicate: Event, count: 2),
       ),
       ActionDefinition(
-        label: "Kindle Two Events",
+        label: Tx("Kindle Two Events"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: "Kindle 2 chosen Events", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Kindle 2 chosen Events"), followup: None),
         effect: TransfigureFixedSelected(
           predicate: Event,
           transfiguration: "Kindled",
@@ -1643,15 +1655,15 @@ mod tests {
         ),
       ),
       ActionDefinition(
-        label: "Copy Two Events",
+        label: Tx("Copy Two Events"),
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-        presentation: ActionPresentation(effect_text: "Copy 2 random Events", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Copy 2 random Events"), followup: None),
         effect: CopyRandomCards(predicate: Event, count: 2),
       ),
       ActionDefinition(
-        label: "Make Two Characters",
+        label: Tx("Make Two Characters"),
         id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
-        presentation: ActionPresentation(effect_text: "Make 2 random cards Characters", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Make 2 random cards Characters"), followup: None),
         effect: ChangeRandomCardType(count: 2, card_type: Character),
       ),
     ],
@@ -1663,27 +1675,27 @@ mod tests {
 [
   EncounterDefinition(
     card_id: "11111111-1111-4111-8111-111111111111",
-    prose: "Three synthetic paths alter individual deck entries.",
+    prose: Tx("Three synthetic paths alter individual deck entries."),
     actions: [
       ActionDefinition(
-        label: "Replace a Legend",
+        label: Tx("Replace a Legend"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: "Replace a random legendary card", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Replace a random legendary card"), followup: None),
         effect: ReplaceRandomWithCard(
           predicate: Legendary,
           card_id: "00000000-0000-4000-8000-000000000001",
         ),
       ),
       ActionDefinition(
-        label: "Change an Offered Card",
+        label: Tx("Change an Offered Card"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: "Change {deck_card} into an Event", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Change {{deck_card}} into an Event"), followup: None),
         effect: ChangeCardTypeSelected(card_type: Event, target: Offered),
       ),
       ActionDefinition(
-        label: "Change a Chosen Card",
+        label: Tx("Change a Chosen Card"),
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-        presentation: ActionPresentation(effect_text: "Change a chosen card into a Character", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Change a chosen card into a Character"), followup: None),
         effect: ChangeCardTypeSelected(card_type: Character, target: Chosen),
       ),
     ],
@@ -1695,12 +1707,12 @@ mod tests {
 [
   EncounterDefinition(
     card_id: "11111111-1111-4111-8111-111111111111",
-    prose: "A synthetic passage opens toward a disclosed destination.",
+    prose: Tx("A synthetic passage opens toward a disclosed destination."),
     actions: [
       ActionDefinition(
-        label: "Open a Duplication Site",
+        label: Tx("Open a Duplication Site"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: "Add a duplication site", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Add a duplication site"), followup: None),
         effect: AddFixedSite(site_type: Duplication),
       ),
     ],
@@ -1712,12 +1724,12 @@ mod tests {
 [
   EncounterDefinition(
     card_id: "11111111-1111-4111-8111-111111111111",
-    prose: "A synthetic passage offers several disclosed destinations.",
+    prose: Tx("A synthetic passage offers several disclosed destinations."),
     actions: [
       ActionDefinition(
-        label: "Choose a Site",
+        label: Tx("Choose a Site"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: "Choose 1 of 3 sites to add", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Choose 1 of 3 sites to add"), followup: None),
         effect: ChooseSiteType(offer_count: 3),
       ),
     ],
@@ -1729,18 +1741,18 @@ mod tests {
 [
   EncounterDefinition(
     card_id: "11111111-1111-4111-8111-111111111111",
-    prose: "A synthetic merchant writes two promises in silver ink.",
+    prose: Tx("A synthetic merchant writes two promises in silver ink."),
     actions: [
       ActionDefinition(
-        label: "Claim the Open Market",
+        label: Tx("Claim the Open Market"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: "The next shop is free", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("The next shop is free"), followup: None),
         effect: FreeNextShop,
       ),
       ActionDefinition(
-        label: "Pay Half the Price",
+        label: Tx("Pay Half the Price"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: "Lose half your essence; the next 3 purchases are free", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Lose half your essence; the next 3 purchases are free"), followup: None),
         effect: LoseHalfEssenceAndFreePurchases(count: 3),
       ),
     ],
@@ -1752,36 +1764,36 @@ mod tests {
 [
   EncounterDefinition(
     card_id: "11111111-1111-4111-8111-111111111111",
-    prose: "Synthetic compound deck transformations.",
+    prose: Tx("Synthetic compound deck transformations."),
     actions: [
       ActionDefinition(
-        label: "Transfigure all",
+        label: Tx("Transfigure all"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: "Transfigure all cards", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Transfigure all cards"), followup: None),
         effect: TransfigureAllCards,
       ),
       ActionDefinition(
-        label: "Purge the disclosed card",
+        label: Tx("Purge the disclosed card"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: "Purge and transfigure its peers", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Purge and transfigure its peers"), followup: None),
         effect: PurgeDisclosedAndTransfigureSameType(transfiguration: "Inspired"),
       ),
       ActionDefinition(
-        label: "Hasten events",
+        label: Tx("Hasten events"),
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-        presentation: ActionPresentation(effect_text: "Make events fast and gain 2 Nightmares", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Make events fast and gain 2 Nightmares"), followup: None),
         effect: MakePredicateFastAndGainNightmares(predicate: Event, nightmare_count: 2),
       ),
     ],
   ),
   EncounterDefinition(
     card_id: "22222222-2222-4222-8222-222222222222",
-    prose: "Synthetic offered-card transformations.",
+    prose: Tx("Synthetic offered-card transformations."),
     actions: [
       ActionDefinition(
-        label: "Take transformed cards",
+        label: Tx("Take transformed cards"),
         id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
-        presentation: ActionPresentation(effect_text: "Take transformed cards and gain a Nightmare", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Take transformed cards and gain a Nightmare"), followup: None),
         effect: TakeTransfiguredCardsAndGainNightmares(
           predicate: Character,
           offer_count: 4,
@@ -1790,9 +1802,9 @@ mod tests {
         ),
       ),
       ActionDefinition(
-        label: "Choose one to purge",
+        label: Tx("Choose one to purge"),
         id: "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee",
-        presentation: ActionPresentation(effect_text: "Purge one, transfigure and copy the others", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Purge one, transfigure and copy the others"), followup: None),
         effect: PurgeOneTransfigureAndCopyOthers(
           offer_count: 4,
           transfiguration: "DoubledSpark",

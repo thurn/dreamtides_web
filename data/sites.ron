@@ -8,9 +8,9 @@ SitesCatalog(
       icon: "bxf bx-sword-alt",
       glossary_id: "85ffab8d-f972-4340-9b45-99f6aff6ccec",
       presentation: Battle(
-        label: "Battle",
-        final_boss_label: "Final Boss",
-        locked_guidance: "You must visit the other sites in this dreamscape first.",
+        label: Tx("Battle"),
+        final_boss_label: Tx("Final Boss"),
+        locked_guidance: Tx("You must visit the other sites in this dreamscape first."),
       ),
     ),
 
@@ -18,7 +18,7 @@ SitesCatalog(
       site: Draft,
       icon: "bxf bx-rectangle-vertical",
       glossary_id: "1ee13681-1ff5-431c-94a1-3390d45e1717",
-      presentation: Draft(label: "Draft {pickCount}x"),
+      presentation: Draft(label: Tx("Draft {{pickCount}}x")),
     ),
 
     SiteMetadata(
@@ -26,11 +26,11 @@ SitesCatalog(
       icon: "bxf bx-store-alt-2",
       glossary_id: "25f28ed1-5729-4240-a352-80f92fce530c",
       presentation: Shop(
-        title: "Dream Market",
-        restocked: "Restocked",
-        restock_offers_action: "Restock Offers",
-        restock_action: "Restock",
-        free_price: "Free",
+        title: Tx("Dream Market"),
+        restocked: Tx("Restocked"),
+        restock_offers_action: Tx("Restock Offers"),
+        restock_action: Tx("Restock"),
+        free_price: Tx("Free"),
       ),
     ),
 
@@ -39,9 +39,9 @@ SitesCatalog(
       icon: "bxf bx-hot",
       glossary_id: "4873bddf-7bf5-41e8-979e-36eb193db5a6",
       presentation: Purge(
-        title: "Purge Cards",
-        instruction: "Choose any number of cards to remove from your deck for an essence cost",
-        purge_action: "Purge {count}",
+        title: Tx("Purge Cards"),
+        instruction: Tx("Choose any number of cards to remove from your deck for an essence cost"),
+        purge_action: Tx("Purge {{count}}"),
       ),
     ),
 
@@ -85,12 +85,12 @@ SitesCatalog(
       icon: "bxf bx-pyramid",
       glossary_id: "5b5b47d6-c858-4b42-af96-a520c84666eb",
       presentation: DreamsignBazaar(
-        title: "Dreamsign Bazaar",
-        restocked: "Restocked",
-        restock_offers_action: "Restock Offers",
-        restock_action: "Restock",
-        free_price: "Free",
-        replacement_title: "Choose a Dreamsign to Replace",
+        title: Tx("Dreamsign Bazaar"),
+        restocked: Tx("Restocked"),
+        restock_offers_action: Tx("Restock Offers"),
+        restock_action: Tx("Restock"),
+        free_price: Tx("Free"),
+        replacement_title: Tx("Choose a Dreamsign to Replace"),
       ),
     ),
 
@@ -99,8 +99,8 @@ SitesCatalog(
       icon: "bxf bx-meteor",
       glossary_id: "ac70fd6b-a91a-407f-b7b7-255668cd6bec",
       presentation: DreamsignRevelation(
-        loading: "Revealing Dreamsigns...",
-        exhausted: "The Dreamsign pool is exhausted.",
+        loading: Tx("Revealing Dreamsigns..."),
+        exhausted: Tx("The Dreamsign pool is exhausted."),
       ),
     ),
 
@@ -108,7 +108,7 @@ SitesCatalog(
       site: RandomSite,
       icon: "fa-solid fa-question",
       glossary_id: "1aeb05bc-53e1-4ea4-9e73-9239160799dc",
-      presentation: RandomSite(title: "Choose a Site"),
+      presentation: RandomSite(title: Tx("Choose a Site")),
     ),
 
     SiteMetadata(

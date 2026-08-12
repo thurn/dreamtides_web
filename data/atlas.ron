@@ -154,13 +154,15 @@ AtlasCatalog(
     // Compatibility identity emitted for runtime consumers of atlas.toml.
     compatibility_dreamscape_id: "limbo",
     // Place label stored on and displayed for the boss node.
-    place: "Limbo",
+    place: Tx("Limbo"),
     // Base character name used when no per-run Apollyon incarnation supplies a
     // more specific title.
-    name: "Apollyon",
+    name: Tx("Apollyon"),
     // Card title and body used only when the run has no resolvable incarnation.
-    fallback_title: "Apollyon, the Doom of Humanity",
-    fallback_introduction: "An avatar of annihilating power — his own deck, dreamsigns, and abilities bend the dream toward ruin.",
+    fallback_title: Tx("Apollyon, the Doom of Humanity"),
+    fallback_introduction: Tx(
+      "An avatar of annihilating power — his own deck, dreamsigns, and abilities bend the dream toward ruin."
+    ),
     // Each asset pairs an authoring filename (`source`) with the stable runtime
     // lookup identity (`key`) under which the asset build publishes it.
     art: (
@@ -177,20 +179,22 @@ AtlasCatalog(
     // Text-card copy and node-face artwork used before a dreamscape is revealed
     // (and for dreamscapes that are no longer reachable).
     unrevealed: (
-      title: "An Unseen Dream",
-      body: "This dreamscape is revealed only as you draw near. Travel onward to learn what waits here.",
+      title: Tx("An Unseen Dream"),
+      body: Tx(
+        "This dreamscape is revealed only as you draw near. Travel onward to learn what waits here."
+      ),
       // As with boss art, `source` is the build input and `key` is the runtime
       // asset name used by the Atlas node component.
       frame: (key: "Round_frame_main.png", source: "Round_frame_main.png"),
     ),
     // Fallback body for the guideless starter node's reveal card.
-    starter_body: "A quiet place where every dream journey begins.",
+    starter_body: Tx("A quiet place where every dream journey begins."),
     // Templates for a revealed dreamscape's affiliation card. `{name}` is the
     // affiliation name; `{card-theme}` comes from that affiliation's
     // `atlas_card_theme`. The compiler requires exactly these placeholders.
     affiliation: (
-      title_template: "Affiliation: {name}",
-      body_template: "{card-theme} cards are more likely here.",
+      title_template: Tx("Affiliation: {{name}}"),
+      body_template: Tx("{{card-theme}} cards are more likely here."),
     ),
   ),
 )

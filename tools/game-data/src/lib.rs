@@ -1,2 +1,3 @@
-#[path = "models/affiliations.rs"]
-pub mod affiliations;
+pub mod models;
+
+pub use models::affiliations;

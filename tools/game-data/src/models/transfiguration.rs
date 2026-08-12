@@ -1,8 +1,11 @@
 use std::collections::BTreeSet;
+use trox::LocalizedString;
 
 use anyhow::{Result, ensure};
 use serde::{Deserialize, Serialize};
 use uuid::{Uuid, Variant, Version};
+
+use super::localization::source_text;
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -55,8 +58,8 @@ pub struct TransfigurationCostBand {
 pub struct TransfigurationFormDefinition {
     pub id: TransfigurationFormId,
     pub glossary_uuid: String,
-    pub name: String,
-    pub description: String,
+    pub name: LocalizedString,
+    pub description: LocalizedString,
     pub glyph: TransfigurationGlyph,
     pub accent_color: String,
     pub tint_color: String,
@@ -120,7 +123,23 @@ pub enum TransfigurationRewardScore {
 
 pub fn lower(source: TransfigurationCatalog) -> Result<toml::Value> {
     validate(&source)?;
-    Ok(toml::Value::try_from(source)?)
+    let localized_forms = source
+        .forms
+        .iter()
+        .map(|form| Ok((source_text(&form.name)?, source_text(&form.description)?)))
+        .collect::<Result<Vec<_>>>()?;
+    let mut value = toml::Value::try_from(source)?;
+    for (form, (name, description)) in value["forms"]
+        .as_array_mut()
+        .expect("serialized forms are an array")
+        .iter_mut()
+        .zip(localized_forms)
+    {
+        let form = form.as_table_mut().expect("serialized form is a table");
+        form.insert("name".into(), name.into());
+        form.insert("description".into(), description.into());
+    }
+    Ok(value)
 }
 
 #[cfg(test)]
@@ -170,7 +189,10 @@ pub(crate) fn validate(source: &TransfigurationCatalog) -> Result<()> {
             "{path}.glossary_uuid duplicates another form"
         );
         for (field, value) in [("name", &form.name), ("description", &form.description)] {
-            ensure!(!value.trim().is_empty(), "{path}.{field} must not be blank");
+            ensure!(
+                !source_text(value)?.trim().is_empty(),
+                "{path}.{field} must not be blank"
+            );
         }
         validate_color(&path, "accent_color", &form.accent_color)?;
         validate_color(&path, "tint_color", &form.tint_color)?;
@@ -320,6 +342,10 @@ fn validate_color(path: &str, field: &str, color: &str) -> Result<()> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn ls(text: impl Into<String>) -> LocalizedString {
+        super::super::localization::localized_source(text.into()).unwrap()
+    }
     const IDS: [&str; 9] = [
         "a66c513e-500b-4891-8c09-9641ae300ba4",
         "a2c070ca-eacd-4cca-b69d-3d48f0787a16",
@@ -364,8 +390,8 @@ mod tests {
         TransfigurationFormDefinition {
             id,
             glossary_uuid: IDS[index].into(),
-            name: format!("{id:?}"),
-            description: "Effect".into(),
+            name: ls(format!("{id:?}")),
+            description: ls("Effect"),
             glyph: fixture_glyph(id),
             accent_color: "#123456".into(),
             tint_color: "#abcdef".into(),

@@ -80,58 +80,61 @@ const ROOT = resolve(
   process.env.DREAMTIDES_DATA_ROOT ?? resolve(import.meta.dirname, ".."),
 );
 const DATA_DIR = join(ROOT, "data");
+const LOCAL_ASSET_HOME = resolve(
+  process.env.DREAMTIDES_LOCAL_ASSET_HOME ?? homedir(),
+);
 export const IMAGE_CACHE_DIR = join(
-  homedir(),
+  LOCAL_ASSET_HOME,
   "Library",
   "Caches",
   "io.github.dreamtides.tv",
   "image_cache",
 );
 const DREAM_AVATAR_ART_DIR_CANDIDATES = [
-  join(homedir(), "Documents", "synty", "dream-avatars"),
-  join(homedir(), "Documents", "sytny", "dream-avatars"),
-  join(homedir(), "Documents", "synty", "dream" + "callers"),
-  join(homedir(), "Documents", "sytny", "dream" + "callers"),
+  join(LOCAL_ASSET_HOME, "Documents", "synty", "dream-avatars"),
+  join(LOCAL_ASSET_HOME, "Documents", "sytny", "dream-avatars"),
+  join(LOCAL_ASSET_HOME, "Documents", "synty", "dream" + "callers"),
+  join(LOCAL_ASSET_HOME, "Documents", "sytny", "dream" + "callers"),
 ];
 // Dreamsign art is sourced exclusively from the `outlined` variants — every
 // sign carries its own glyph outline for on-scene legibility. The shared
 // `alt_text.txt` metadata lives one level up in `filtered`, so the alt-text
 // reader falls back to the parent directory.
 const DREAMSIGN_ART_DIR = join(
-  homedir(),
+  LOCAL_ASSET_HOME,
   "Documents",
   "dreamsigns",
   "filtered",
   "outlined",
 );
 const JOURNEY_ART_DIR = join(
-  homedir(),
+  LOCAL_ASSET_HOME,
   "Documents",
   "shutterstock",
   "images_journeys",
 );
 const MAIN_MENU_BACKGROUND_ART_PATH = join(
-  homedir(),
+  LOCAL_ASSET_HOME,
   "Documents",
   "shutterstock",
   "quest_prototype_assets",
   "main-menu-background.jpg",
 );
 const EXPLORATION_HIGH_RES_ART_DIR = join(
-  homedir(),
+  LOCAL_ASSET_HOME,
   "Documents",
   "shutterstock",
   "quest_prototype_assets",
   "exploration",
 );
 const EXPLORATION_SOURCE_ART_DIR = join(
-  homedir(),
+  LOCAL_ASSET_HOME,
   "Documents",
   "shutterstock",
   "images",
 );
 const TUTORIAL_DIALOGUE_FRAME_ART_PATH = join(
-  homedir(),
+  LOCAL_ASSET_HOME,
   "Documents",
   "UI",
   "ClassicFantasyRPG_UI",
@@ -145,26 +148,26 @@ const TUTORIAL_DIALOGUE_FRAME_ART_PATH = join(
 // Dream-guide character renders (one per guide, plus the boss `apollyon.png`)
 // and the ornate round frame used for unrevealed nodes round out the set.
 export const DREAMSCAPE_SCENE_ART_DIR = join(
-  homedir(),
+  LOCAL_ASSET_HOME,
   "Documents",
   "synty",
   "dreamscape_images",
 );
 export const DREAMSCAPE_ICON_ART_DIR = join(
-  homedir(),
+  LOCAL_ASSET_HOME,
   "Documents",
   "synty",
   "dreamscape_icons",
 );
 export const DREAM_GUIDE_ART_DIR = join(
-  homedir(),
+  LOCAL_ASSET_HOME,
   "Documents",
   "synty",
   "dream_guides",
 );
 
 const CARD_FRAME_ART_DIR = join(
-  homedir(),
+  LOCAL_ASSET_HOME,
   "dreamtides",
   "client",
   "Assets",

@@ -1,10 +1,13 @@
 use std::collections::BTreeSet;
 use std::fmt;
+use trox::LocalizedString;
 
 use anyhow::{Result, bail};
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
+
+use super::localization::source_text;
 
 const PRESENTATION_SLOTS: [&str; 8] = [
     "cardName",
@@ -56,20 +59,20 @@ pub enum PresentationArt {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub enum PresentationText {
-    Text(String),
+    Text(LocalizedString),
     Count {
-        one: String,
-        other: String,
+        one: LocalizedString,
+        other: LocalizedString,
     },
     Category {
-        character: String,
-        event: String,
-        cheap: String,
-        mid_cost: String,
-        expensive: String,
-        fast: String,
-        subtype: String,
-        package: String,
+        character: LocalizedString,
+        event: LocalizedString,
+        cheap: LocalizedString,
+        mid_cost: LocalizedString,
+        expensive: LocalizedString,
+        fast: LocalizedString,
+        subtype: LocalizedString,
+        package: LocalizedString,
     },
 }
 
@@ -463,12 +466,18 @@ pub fn lower(source: AuguryCatalog) -> Result<toml::Value> {
     );
     root.insert(
         "archetype".into(),
-        toml::Value::Array(source.archetypes.into_iter().map(lower_archetype).collect()),
+        toml::Value::Array(
+            source
+                .archetypes
+                .into_iter()
+                .map(lower_archetype)
+                .collect::<Result<Vec<_>>>()?,
+        ),
     );
     Ok(toml::Value::Table(root))
 }
 
-fn lower_archetype(source: ArchetypeDefinition) -> toml::Value {
+fn lower_archetype(source: ArchetypeDefinition) -> Result<toml::Value> {
     let kind = source.ability.kind();
     let mut output = toml::map::Map::new();
     output.insert("id".into(), kind.as_compat().into());
@@ -476,11 +485,11 @@ fn lower_archetype(source: ArchetypeDefinition) -> toml::Value {
     let mut presentation = toml::map::Map::from_iter([
         (
             "headline".into(),
-            lower_presentation_text(source.presentation.headline),
+            lower_presentation_text(source.presentation.headline)?,
         ),
         (
             "subtitle".into(),
-            lower_presentation_text(source.presentation.subtitle),
+            lower_presentation_text(source.presentation.subtitle)?,
         ),
     ]);
     if let Some(PresentationArt::CardImage(image_number)) = source.presentation.background_art {
@@ -498,20 +507,20 @@ fn lower_archetype(source: ArchetypeDefinition) -> toml::Value {
         "quantities".into(),
         toml::Value::Table(source.ability.quantities()),
     );
-    toml::Value::Table(output)
+    Ok(toml::Value::Table(output))
 }
 
-fn lower_presentation_text(source: PresentationText) -> toml::Value {
+fn lower_presentation_text(source: PresentationText) -> Result<toml::Value> {
     let mut output = toml::map::Map::new();
     match source {
         PresentationText::Text(text) => {
             output.insert("kind".into(), "text".into());
-            output.insert("text".into(), text.into());
+            output.insert("text".into(), source_text(&text)?.into());
         }
         PresentationText::Count { one, other } => {
             output.insert("kind".into(), "count".into());
-            output.insert("one".into(), one.into());
-            output.insert("other".into(), other.into());
+            output.insert("one".into(), source_text(&one)?.into());
+            output.insert("other".into(), source_text(&other)?.into());
         }
         PresentationText::Category {
             character,
@@ -524,17 +533,17 @@ fn lower_presentation_text(source: PresentationText) -> toml::Value {
             package,
         } => {
             output.insert("kind".into(), "category".into());
-            output.insert("character".into(), character.into());
-            output.insert("event".into(), event.into());
-            output.insert("cheap".into(), cheap.into());
-            output.insert("mid-cost".into(), mid_cost.into());
-            output.insert("expensive".into(), expensive.into());
-            output.insert("fast".into(), fast.into());
-            output.insert("subtype".into(), subtype.into());
-            output.insert("package".into(), package.into());
+            output.insert("character".into(), source_text(&character)?.into());
+            output.insert("event".into(), source_text(&event)?.into());
+            output.insert("cheap".into(), source_text(&cheap)?.into());
+            output.insert("mid-cost".into(), source_text(&mid_cost)?.into());
+            output.insert("expensive".into(), source_text(&expensive)?.into());
+            output.insert("fast".into(), source_text(&fast)?.into());
+            output.insert("subtype".into(), source_text(&subtype)?.into());
+            output.insert("package".into(), source_text(&package)?.into());
         }
     }
-    toml::Value::Table(output)
+    Ok(toml::Value::Table(output))
 }
 
 fn validate(source: &AuguryCatalog) -> Result<()> {
@@ -601,9 +610,9 @@ fn validate_presentation(
 }
 
 fn validate_presentation_text(path: &str, text: &PresentationText) -> Result<()> {
-    let values: Vec<&str> = match text {
-        PresentationText::Text(value) => vec![value],
-        PresentationText::Count { one, other } => vec![one, other],
+    let values = match text {
+        PresentationText::Text(value) => vec![source_text(value)?],
+        PresentationText::Count { one, other } => vec![source_text(one)?, source_text(other)?],
         PresentationText::Category {
             character,
             event,
@@ -613,15 +622,18 @@ fn validate_presentation_text(path: &str, text: &PresentationText) -> Result<()>
             fast,
             subtype,
             package,
-        } => vec![
+        } => [
             character, event, cheap, mid_cost, expensive, fast, subtype, package,
-        ],
+        ]
+        .into_iter()
+        .map(source_text)
+        .collect::<Result<Vec<_>>>()?,
     };
     for value in values {
         if value.trim().is_empty() {
             bail!("{path} strings must be non-empty");
         }
-        validate_template_slots(path, value)?;
+        validate_template_slots(path, &value)?;
     }
     Ok(())
 }
@@ -715,14 +727,18 @@ mod tests {
 
     use super::*;
 
+    fn ls(text: impl Into<String>) -> LocalizedString {
+        super::super::localization::localized_source(text.into()).unwrap()
+    }
+
     fn definition(ability: ArchetypeAbility) -> ArchetypeDefinition {
         let id = AuguryId::parse(ability.kind().canonical_id()).unwrap();
         ArchetypeDefinition {
             id,
             name: format!("Synthetic {}", ability.kind().as_compat()),
             presentation: ArchetypePresentation {
-                headline: PresentationText::Text("Synthetic headline".into()),
-                subtitle: PresentationText::Text("Synthetic subtitle".into()),
+                headline: PresentationText::Text(ls("Synthetic headline")),
+                subtitle: PresentationText::Text(ls("Synthetic subtitle")),
                 background_art: match ability.kind() {
                     ArchetypeKind::Dreamsign | ArchetypeKind::AddSite => {
                         Some(PresentationArt::CardImage(42))
@@ -834,22 +850,24 @@ mod tests {
     #[test]
     fn lowers_every_presentation_variant() {
         let count = lower_presentation_text(PresentationText::Count {
-            one: "One {count}".into(),
-            other: "Other {count}".into(),
-        });
+            one: ls("One {count}"),
+            other: ls("Other {count}"),
+        })
+        .unwrap();
         assert_eq!(count["kind"].as_str(), Some("count"));
         assert_eq!(count["one"].as_str(), Some("One {count}"));
 
         let category = lower_presentation_text(PresentationText::Category {
-            character: "Character".into(),
-            event: "Event".into(),
-            cheap: "Cheap".into(),
-            mid_cost: "Mid-cost".into(),
-            expensive: "Expensive".into(),
-            fast: "Fast".into(),
-            subtype: "Subtype {categoryName}".into(),
-            package: "Package {categoryName}".into(),
-        });
+            character: ls("Character"),
+            event: ls("Event"),
+            cheap: ls("Cheap"),
+            mid_cost: ls("Mid-cost"),
+            expensive: ls("Expensive"),
+            fast: ls("Fast"),
+            subtype: ls("Subtype {categoryName}"),
+            package: ls("Package {categoryName}"),
+        })
+        .unwrap();
         assert_eq!(category["kind"].as_str(), Some("category"));
         assert_eq!(category["mid-cost"].as_str(), Some("Mid-cost"));
         assert_eq!(category["package"].as_str(), Some("Package {categoryName}"));
@@ -990,7 +1008,7 @@ mod tests {
         );
 
         let mut empty_subtitle = catalog();
-        empty_subtitle.archetypes[0].presentation.subtitle = PresentationText::Text(String::new());
+        empty_subtitle.archetypes[0].presentation.subtitle = PresentationText::Text(ls(""));
         assert!(
             lower(empty_subtitle)
                 .unwrap_err()
@@ -1000,7 +1018,7 @@ mod tests {
 
         let mut unknown_slot = catalog();
         unknown_slot.archetypes[0].presentation.subtitle =
-            PresentationText::Text("Unknown {mystery}".into());
+            PresentationText::Text(ls("Unknown {mystery}"));
         assert!(
             lower(unknown_slot)
                 .unwrap_err()

@@ -7,7 +7,9 @@ import { checkGeneratedTroxBundles } from "./trox-generated-check.mjs";
 function fixture() {
   const root = mkdtempSync(resolve(tmpdir(), "trox-generated-check-test-"));
   mkdirSync(resolve(root, "src/generated/localization"), { recursive: true });
+  mkdirSync(resolve(root, "data"), { recursive: true });
   mkdirSync(resolve(root, "localization"), { recursive: true });
+  writeFileSync(resolve(root, "data/catalog.ron"), "[Tx(\"Catalog text\")]\n");
   writeFileSync(resolve(root, "src/slice.ts"), "export {};\n");
   writeFileSync(resolve(root, "src/generated/localization/en-US.trox.json"), "expected\n");
   writeFileSync(resolve(root, "localization/terms.ron"), "{}\n");
@@ -22,6 +24,8 @@ describe("clean Trox bundle generation", () => {
       checkGeneratedTroxBundles({
         root,
         generate: (stagingRoot) => {
+          expect(readFileSync(resolve(stagingRoot, "data/catalog.ron"), "utf8"))
+            .toBe("[Tx(\"Catalog text\")]\n");
           writeFileSync(
             resolve(stagingRoot, "src/generated/localization/en-US.trox.json"),
             "expected\n",

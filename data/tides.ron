@@ -5,9 +5,11 @@
   TideDefinition(
     id: "f7072be7-f12b-482a-b9e1-4d3925622eb2",
     // Player-facing label used by pool previews and provenance surfaces.
-    display_name: "Harvest of the Fallen",
+    display_name: Tx("Harvest of the Fallen"),
     // Player-facing explanation of the tide’s mechanical identity.
-    display_description: "Abandons its own followers for a steady stream of cards and resources.",
+    display_description: Tx(
+      "Abandons its own followers for a steady stream of cards and resources."
+    ),
     resonance: Shadow,
     kind: Signature,
     cards: {
@@ -100,8 +102,10 @@
 
   TideDefinition(
     id: "0ac06270-f783-4c4f-bfd9-4109d22316e0",
-    display_name: "Blood for Glory",
-    display_description: "Feeds on its own losses, growing strength and clearing threats with every sacrifice.",
+    display_name: Tx("Blood for Glory"),
+    display_description: Tx(
+      "Feeds on its own losses, growing strength and clearing threats with every sacrifice."
+    ),
     resonance: Ember,
     kind: Signature,
     cards: {
@@ -189,8 +193,10 @@
 
   TideDefinition(
     id: "ee5e7dd2-0c11-4349-94e1-ec1ae35b20af",
-    display_name: "Rite of the Swarm",
-    display_description: "Sacrifices a sprawling host to empower its champions and drain the enemy's resolve.",
+    display_name: Tx("Rite of the Swarm"),
+    display_description: Tx(
+      "Sacrifices a sprawling host to empower its champions and drain the enemy's resolve."
+    ),
     resonance: Ember,
     kind: Signature,
     cards: {
@@ -303,8 +309,10 @@
 
   TideDefinition(
     id: "1a075e25-0344-4103-997c-dd8f8a57c84e",
-    display_name: "The Ashbroker's Bargain",
-    display_description: "Trades cards away, turning every discard into fresh draws and reclaimed events.",
+    display_name: Tx("The Ashbroker's Bargain"),
+    display_description: Tx(
+      "Trades cards away, turning every discard into fresh draws and reclaimed events."
+    ),
     resonance: Shadow,
     kind: Signature,
     cards: {
@@ -408,8 +416,10 @@
 
   TideDefinition(
     id: "a182f025-8a15-44e1-be26-74766a3b0b85",
-    display_name: "Hunger of the Deep",
-    display_description: "Floods the void with the discarded and fallen, then unleashes a high-spark finisher.",
+    display_name: Tx("Hunger of the Deep"),
+    display_description: Tx(
+      "Floods the void with the discarded and fallen, then unleashes a high-spark finisher."
+    ),
     resonance: Shadow,
     kind: Signature,
     cards: {
@@ -517,8 +527,10 @@
 
   TideDefinition(
     id: "77765ea3-16fb-4ab7-9f4f-4610f2f04d9f",
-    display_name: "Echoes in the Abyss",
-    display_description: "Churns cards into the void, then replays threats and powers finishers from that depth.",
+    display_name: Tx("Echoes in the Abyss"),
+    display_description: Tx(
+      "Churns cards into the void, then replays threats and powers finishers from that depth."
+    ),
     resonance: Shadow,
     kind: Signature,
     cards: {
@@ -617,8 +629,10 @@
 
   TideDefinition(
     id: "c78a2ce1-80fe-48b9-9400-98f4965e17a4",
-    display_name: "The Unending Host",
-    display_description: "Endlessly replaces the fallen and reclaims its characters to mass an overwhelming board.",
+    display_name: Tx("The Unending Host"),
+    display_description: Tx(
+      "Endlessly replaces the fallen and reclaims its characters to mass an overwhelming board."
+    ),
     resonance: Shadow,
     kind: Signature,
     cards: {
@@ -720,8 +734,10 @@
 
   TideDefinition(
     id: "9ca5a839-cdcb-497d-9b76-2de4c6874cf0",
-    display_name: "Embers into Flame",
-    display_description: "Burns cheap Survivors as fuel for surging power and pulls threats back from the void.",
+    display_name: Tx("Embers into Flame"),
+    display_description: Tx(
+      "Burns cheap Survivors as fuel for surging power and pulls threats back from the void."
+    ),
     resonance: Shadow,
     kind: Signature,
     cards: {
@@ -815,8 +831,10 @@
 
   TideDefinition(
     id: "4fcd40ac-b03f-405f-9236-a00139cbdcc8",
-    display_name: "The Unseen Procession",
-    display_description: "Slips phasing Outsiders past every blocker, using removal and disruption to stop the opponent's plans.",
+    display_name: Tx("The Unseen Procession"),
+    display_description: Tx(
+      "Slips phasing Outsiders past every blocker, using removal and disruption to stop the opponent's plans."
+    ),
     resonance: Vision,
     kind: Signature,
     cards: {
@@ -924,8 +942,8 @@
 
   TideDefinition(
     id: "09b9b56c-6356-40aa-bcd8-77b0c80d3835",
-    display_name: "Singular Storm",
-    display_description: "Chains and duplicates events across one explosive turn.",
+    display_name: Tx("Singular Storm"),
+    display_description: Tx("Chains and duplicates events across one explosive turn."),
     resonance: Vision,
     kind: Signature,
     cards: {
@@ -1036,8 +1054,10 @@
 
   TideDefinition(
     id: "1ad97f42-6157-45b3-8290-e27219c7888a",
-    display_name: "The Doubling Current",
-    display_description: "Ramps power into doubling effects, sustaining vast multi-event turns through deep recursion.",
+    display_name: Tx("The Doubling Current"),
+    display_description: Tx(
+      "Ramps power into doubling effects, sustaining vast multi-event turns through deep recursion."
+    ),
     resonance: Vision,
     kind: Signature,
     cards: {
@@ -1130,8 +1150,10 @@
 
   TideDefinition(
     id: "ab89d262-45d4-438d-8670-79d91f6e944f",
-    display_name: "Manifold Incantation",
-    display_description: "Multiplies the force of each event, feeding its engine on cards cast into the void.",
+    display_name: Tx("Manifold Incantation"),
+    display_description: Tx(
+      "Multiplies the force of each event, feeding its engine on cards cast into the void."
+    ),
     resonance: Vision,
     kind: Signature,
     cards: {
@@ -1235,8 +1257,10 @@
 
   TideDefinition(
     id: "e6863f55-50e7-4c7b-b118-609b5fc5c005",
-    display_name: "Gathering Tempest",
-    display_description: "Spins cheap events into surging power, then detonates them through copied, amplified effects.",
+    display_name: Tx("Gathering Tempest"),
+    display_description: Tx(
+      "Spins cheap events into surging power, then detonates them through copied, amplified effects."
+    ),
     resonance: Vision,
     kind: Signature,
     cards: {
@@ -1340,8 +1364,8 @@
 
   TideDefinition(
     id: "fc729d2b-bf04-4b69-8050-00b30b296330",
-    display_name: "Call of the Wild",
-    display_description: "Builds wide ranks of Spirit Animals to fuel sudden bursts of force.",
+    display_name: Tx("Call of the Wild"),
+    display_description: Tx("Builds wide ranks of Spirit Animals to fuel sudden bursts of force."),
     resonance: Wild,
     kind: Signature,
     cards: {
@@ -1431,8 +1455,10 @@
 
   TideDefinition(
     id: "e03f4d87-bc6c-46f9-9c08-bef7b59a9f70",
-    display_name: "Stampede Unbound",
-    display_description: "Floods the field with cheap Spirit Animals and converts the horde into one crushing finish.",
+    display_name: Tx("Stampede Unbound"),
+    display_description: Tx(
+      "Floods the field with cheap Spirit Animals and converts the horde into one crushing finish."
+    ),
     resonance: Wild,
     kind: Signature,
     cards: {
@@ -1513,8 +1539,10 @@
 
   TideDefinition(
     id: "eb397537-8a0b-4969-924b-baee5137094c",
-    display_name: "Honed Instincts",
-    display_description: "Masses cheap Spirit Animals and sculpts its hand to strike with a burst or a lone champion.",
+    display_name: Tx("Honed Instincts"),
+    display_description: Tx(
+      "Masses cheap Spirit Animals and sculpts its hand to strike with a burst or a lone champion."
+    ),
     resonance: Wild,
     kind: Signature,
     cards: {
@@ -1591,8 +1619,10 @@
 
   TideDefinition(
     id: "80e3d33f-6b21-4739-9050-be8d28de28a6",
-    display_name: "Dawn's Charge",
-    display_description: "Swarms with tiny Spirit Anmials and cascades Dawn's energy into ever-mounting force.",
+    display_name: Tx("Dawn's Charge"),
+    display_description: Tx(
+      "Swarms with tiny Spirit Anmials and cascades Dawn's energy into ever-mounting force."
+    ),
     resonance: Wild,
     kind: Signature,
     cards: {
@@ -1677,8 +1707,8 @@
 
   TideDefinition(
     id: "4b01b6c1-ccca-4e19-848a-d799d46088b2",
-    display_name: "Drums of War",
-    display_description: "Abandons its own Warriors to power up into mightier threats.",
+    display_name: Tx("Drums of War"),
+    display_description: Tx("Abandons its own Warriors to power up into mightier threats."),
     resonance: Valor,
     kind: Signature,
     cards: {
@@ -1774,8 +1804,10 @@
 
   TideDefinition(
     id: "254054e3-1a7c-4bf4-8c30-491fdeeab40c",
-    display_name: "The Returning Legion",
-    display_description: "Cycles Warriors back from the void, turning every fall into renewed, relentless pressure.",
+    display_name: Tx("The Returning Legion"),
+    display_description: Tx(
+      "Cycles Warriors back from the void, turning every fall into renewed, relentless pressure."
+    ),
     resonance: Valor,
     kind: Signature,
     cards: {
@@ -1867,8 +1899,10 @@
 
   TideDefinition(
     id: "833ba3dd-498a-42ce-9a03-32f6636acea1",
-    display_name: "Soul Furnace",
-    display_description: "Abandons its Warriors for power and climbs through sacrifice, recalling the fallen to fight again.",
+    display_name: Tx("Soul Furnace"),
+    display_description: Tx(
+      "Abandons its Warriors for power and climbs through sacrifice, recalling the fallen to fight again."
+    ),
     resonance: Valor,
     kind: Signature,
     cards: {
@@ -1956,8 +1990,10 @@
 
   TideDefinition(
     id: "788c5f98-b45a-4651-bbf2-67a1da68b3ce",
-    display_name: "The Mounting Tithe",
-    display_description: "Channels each sacrifice into growing power and stored charges that strike down foes.",
+    display_name: Tx("The Mounting Tithe"),
+    display_description: Tx(
+      "Channels each sacrifice into growing power and stored charges that strike down foes."
+    ),
     resonance: Ember,
     kind: Facet,
     cards: {
@@ -2007,8 +2043,10 @@
 
   TideDefinition(
     id: "e1620ab4-7e68-4a57-a6eb-d7a3380c4dc5",
-    display_name: "Offerings of Worth",
-    display_description: "Converts sacrificed allies into points, power, and cards, recycling its best pieces.",
+    display_name: Tx("Offerings of Worth"),
+    display_description: Tx(
+      "Converts sacrificed allies into points, power, and cards, recycling its best pieces."
+    ),
     resonance: Ember,
     kind: Facet,
     cards: {
@@ -2054,8 +2092,10 @@
 
   TideDefinition(
     id: "87d5e3fa-192e-482b-a75c-a0921e5699e2",
-    display_name: "The Worldbreaker",
-    display_description: "Builds toward one explosive turn, detonating stored power into copied, chained events.",
+    display_name: Tx("The Worldbreaker"),
+    display_description: Tx(
+      "Builds toward one explosive turn, detonating stored power into copied, chained events."
+    ),
     resonance: Vision,
     kind: Facet,
     cards: {
@@ -2100,8 +2140,10 @@
 
   TideDefinition(
     id: "f32bd479-615a-45f0-8c59-0dc793899f7b",
-    display_name: "The Open Gate",
-    display_description: "Makes its small Spirit Animals free to play, flooding the field and pumping the swarm.",
+    display_name: Tx("The Open Gate"),
+    display_description: Tx(
+      "Makes its small Spirit Animals free to play, flooding the field and pumping the swarm."
+    ),
     resonance: Wild,
     kind: Facet,
     cards: {
@@ -2148,8 +2190,10 @@
 
   TideDefinition(
     id: "1d341e34-6f81-4ddd-8582-cb2e06db4803",
-    display_name: "Teeming Thicket",
-    display_description: "Turns a dense pack of cheap Spirit Animals into surging power and a board-wide burst.",
+    display_name: Tx("Teeming Thicket"),
+    display_description: Tx(
+      "Turns a dense pack of cheap Spirit Animals into surging power and a board-wide burst."
+    ),
     resonance: Wild,
     kind: Facet,
     cards: {
@@ -2195,8 +2239,10 @@
 
   TideDefinition(
     id: "1864823a-8d44-4bad-8bc0-bf2360eac68a",
-    display_name: "The Shifting Tide",
-    display_description: "Outmaneuvers foes with disruption, sculpting, and a relentless return-to-hand control engine.",
+    display_name: Tx("The Shifting Tide"),
+    display_description: Tx(
+      "Outmaneuvers foes with disruption, sculpting, and a relentless return-to-hand control engine."
+    ),
     resonance: Vision,
     kind: Facet,
     cards: {
@@ -2249,8 +2295,10 @@
 
   TideDefinition(
     id: "69d696b6-c7aa-460a-8868-a5fa70930c45",
-    display_name: "The Untamed Flood",
-    display_description: "Floods the board with Spirit Animals and figments, turning sheer width into power and a bursting finish.",
+    display_name: Tx("The Untamed Flood"),
+    display_description: Tx(
+      "Floods the board with Spirit Animals and figments, turning sheer width into power and a bursting finish."
+    ),
     resonance: Vision,
     kind: Facet,
     cards: {
@@ -2303,8 +2351,10 @@
 
   TideDefinition(
     id: "d5cf7078-48ae-402d-837e-dde02b1a7153",
-    display_name: "Risen from the Depths",
-    display_description: "Mills and discards to flood the void, then loops cheap Survivors back and closes with high-spark threats.",
+    display_name: Tx("Risen from the Depths"),
+    display_description: Tx(
+      "Mills and discards to flood the void, then loops cheap Survivors back and closes with high-spark threats."
+    ),
     resonance: Wild,
     kind: Facet,
     cards: {
@@ -2351,8 +2401,8 @@
 
   TideDefinition(
     id: "cf1f7e7c-f9e9-4f83-9ff5-6edc8a916277",
-    display_name: "The Reclaimed Colossus",
-    display_description: "Floods the void to unlock cheap recursion and high-spark giants.",
+    display_name: Tx("The Reclaimed Colossus"),
+    display_description: Tx("Floods the void to unlock cheap recursion and high-spark giants."),
     resonance: Shadow,
     kind: Facet,
     cards: {
@@ -2401,8 +2451,10 @@
 
   TideDefinition(
     id: "5bf0efa1-1024-47ed-bd4a-a5dc13ca2ba0",
-    display_name: "Fuel from the Forgotten",
-    display_description: "Turns discarded cards into draw and power, then erupts in burst removal and copied events.",
+    display_name: Tx("Fuel from the Forgotten"),
+    display_description: Tx(
+      "Turns discarded cards into draw and power, then erupts in burst removal and copied events."
+    ),
     resonance: Valor,
     kind: Facet,
     cards: {
@@ -2455,8 +2507,10 @@
 
   TideDefinition(
     id: "b71ddbd3-59ed-463a-a7f8-9701d4b0861e",
-    display_name: "The Deathless Warband",
-    display_description: "Refuels the hand and board from the void itself, looping fallen Warriors endlessly back.",
+    display_name: Tx("The Deathless Warband"),
+    display_description: Tx(
+      "Refuels the hand and board from the void itself, looping fallen Warriors endlessly back."
+    ),
     resonance: Wild,
     kind: Facet,
     cards: {
@@ -2509,8 +2563,10 @@
 
   TideDefinition(
     id: "93314ceb-4c33-45e0-8ee3-c53d6e6ea21e",
-    display_name: "One Pack, One Strike",
-    display_description: "Races to unify a board of cheap Spirit Animals into towering threats.",
+    display_name: Tx("One Pack, One Strike"),
+    display_description: Tx(
+      "Races to unify a board of cheap Spirit Animals into towering threats."
+    ),
     resonance: Valor,
     kind: Facet,
     cards: {
@@ -2556,8 +2612,10 @@
 
   TideDefinition(
     id: "0ab905a2-4c1c-410e-bbbb-4460c85f95e5",
-    display_name: "Glutton's Hoard",
-    display_description: "Turns abandoned Survivors into power and points, building toward a vast late game reclamation.",
+    display_name: Tx("Glutton's Hoard"),
+    display_description: Tx(
+      "Turns abandoned Survivors into power and points, building toward a vast late game reclamation."
+    ),
     resonance: Wild,
     kind: Facet,
     cards: {
@@ -2610,8 +2668,10 @@
 
   TideDefinition(
     id: "856c3ff0-1868-4a48-a553-0aaf7aefb8d1",
-    display_name: "Bloodforged Vanguard",
-    display_description: "Sacrifices Warriors for energy, then rebuilds through figments, recursion, and scaling commanders.",
+    display_name: Tx("Bloodforged Vanguard"),
+    display_description: Tx(
+      "Sacrifices Warriors for energy, then rebuilds through figments, recursion, and scaling commanders."
+    ),
     resonance: Valor,
     kind: Facet,
     cards: {
@@ -2662,8 +2722,10 @@
 
   TideDefinition(
     id: "fdc44130-0c51-4b42-ab09-e5150b11c96c",
-    display_name: "Conjured Fodder",
-    display_description: "Mass-produces figments, then spends them for power, cards, and stronger Warriors.",
+    display_name: Tx("Conjured Fodder"),
+    display_description: Tx(
+      "Mass-produces figments, then spends them for power, cards, and stronger Warriors."
+    ),
     resonance: Valor,
     kind: Facet,
     cards: {
@@ -2713,8 +2775,10 @@
 
   TideDefinition(
     id: "3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3",
-    display_name: "The Gathering Horde",
-    display_description: "Swells the field with Warrior figments, then turns the massed ranks into mounting power and pressure.",
+    display_name: Tx("The Gathering Horde"),
+    display_description: Tx(
+      "Swells the field with Warrior figments, then turns the massed ranks into mounting power and pressure."
+    ),
     resonance: Valor,
     kind: Facet,
     cards: {
@@ -2767,8 +2831,8 @@
 
   TideDefinition(
     id: "5b1199a2-d9c2-48f8-84b4-c111fba6aa64",
-    display_name: "Fleeting Mirage",
-    display_description: "Conjures event copies and cashes them in for high-spark advantage.",
+    display_name: Tx("Fleeting Mirage"),
+    display_description: Tx("Conjures event copies and cashes them in for high-spark advantage."),
     resonance: Valor,
     kind: Facet,
     cards: {
@@ -2820,8 +2884,10 @@
 
   TideDefinition(
     id: "f3f6da0b-f83f-4e66-a4e1-8e35a8d27488",
-    display_name: "The Long Attrition",
-    display_description: "Grinds the game out by sacrificing its own Survivors for points, power, and a steady stream of figments.",
+    display_name: Tx("The Long Attrition"),
+    display_description: Tx(
+      "Grinds the game out by sacrificing its own Survivors for points, power, and a steady stream of figments."
+    ),
     resonance: Vision,
     kind: Facet,
     cards: {
@@ -2873,8 +2939,10 @@
 
   TideDefinition(
     id: "e5bac3ec-b64f-4303-8f9d-047e57ef6cf3",
-    display_name: "The Quickening Chain",
-    display_description: "Spins a high-velocity run of events, cashing in the played card count for victory.",
+    display_name: Tx("The Quickening Chain"),
+    display_description: Tx(
+      "Spins a high-velocity run of events, cashing in the played card count for victory."
+    ),
     resonance: Vision,
     kind: Facet,
     cards: {
@@ -2920,8 +2988,10 @@
 
   TideDefinition(
     id: "568c305c-6884-4dff-b1ec-c08f387a6527",
-    display_name: "Feral Surge",
-    display_description: "Scales a pack of Spirit Animals through blessings and a unifying surge to a crushing finish.",
+    display_name: Tx("Feral Surge"),
+    display_description: Tx(
+      "Scales a pack of Spirit Animals through blessings and a unifying surge to a crushing finish."
+    ),
     resonance: Wild,
     kind: Facet,
     cards: {
@@ -2969,8 +3039,10 @@
 
   TideDefinition(
     id: "b2b1b0da-6d48-40cb-9d44-f0a94f0615f5",
-    display_name: "The Roaring Throng",
-    display_description: "Floods with cheap Spirit Animals, then stacks blessings into a board-wide, high-spark charge.",
+    display_name: Tx("The Roaring Throng"),
+    display_description: Tx(
+      "Floods with cheap Spirit Animals, then stacks blessings into a board-wide, high-spark charge."
+    ),
     resonance: Wild,
     kind: Facet,
     cards: {
@@ -3018,8 +3090,10 @@
 
   TideDefinition(
     id: "0b873395-ad12-4a9f-ab50-5820fc92dd19",
-    display_name: "Wardens of the Threshold",
-    display_description: "Prevents the opponent's cards, while scoring Outsiders chain into draw and mounting points.",
+    display_name: Tx("Wardens of the Threshold"),
+    display_description: Tx(
+      "Prevents the opponent's cards, while scoring Outsiders chain into draw and mounting points."
+    ),
     resonance: Vision,
     kind: Facet,
     cards: {
@@ -3070,8 +3144,10 @@
 
   TideDefinition(
     id: "cf9ddb4c-02fe-4353-ba1c-a21aaf5b5c6f",
-    display_name: "The Vigilant Ward",
-    display_description: "Answers the opponent at every turn while Outsiders fuel a steady draw-and-score engine.",
+    display_name: Tx("The Vigilant Ward"),
+    display_description: Tx(
+      "Answers the opponent at every turn while Outsiders fuel a steady draw-and-score engine."
+    ),
     resonance: Shadow,
     kind: Facet,
     cards: {
@@ -3121,8 +3197,10 @@
 
   TideDefinition(
     id: "bdf90a73-3615-440e-92aa-fe0e150d8186",
-    display_name: "Relentless Erosion",
-    display_description: "Wears foes down with cheap Survivors and sacrifice, reclaiming threats to sustain the siege.",
+    display_name: Tx("Relentless Erosion"),
+    display_description: Tx(
+      "Wears foes down with cheap Survivors and sacrifice, reclaiming threats to sustain the siege."
+    ),
     resonance: Shadow,
     kind: Facet,
     cards: {
@@ -3172,8 +3250,10 @@
 
   TideDefinition(
     id: "5354646a-9811-4f7e-85ea-cf8fec8f8f15",
-    display_name: "Strength from Loss",
-    display_description: "Pours each Survivor sacrifice into lasting power on its champions, refilling its hand.",
+    display_name: Tx("Strength from Loss"),
+    display_description: Tx(
+      "Pours each Survivor sacrifice into lasting power on its champions, refilling its hand."
+    ),
     resonance: Shadow,
     kind: Facet,
     cards: {
@@ -3223,8 +3303,10 @@
 
   TideDefinition(
     id: "7fdc1244-d4a6-4ab2-9e23-00246243337e",
-    display_name: "Parting Gifts",
-    display_description: "Turns the abandoned into cards and lasting power, refilling its hand as it grows.",
+    display_name: Tx("Parting Gifts"),
+    display_description: Tx(
+      "Turns the abandoned into cards and lasting power, refilling its hand as it grows."
+    ),
     resonance: Ember,
     kind: Facet,
     cards: {
@@ -3278,8 +3360,10 @@
 
   TideDefinition(
     id: "e4d7c1fe-cae0-4cec-8254-2656eff4359b",
-    display_name: "The Drowned Archive",
-    display_description: "Discards and erodes to flood the void, then replays those cards from reclaim for a tide of card advantage.",
+    display_name: Tx("The Drowned Archive"),
+    display_description: Tx(
+      "Discards and erodes to flood the void, then replays those cards from reclaim for a tide of card advantage."
+    ),
     resonance: Vision,
     kind: Facet,
     cards: {
@@ -3330,8 +3414,10 @@
 
   TideDefinition(
     id: "9a48fa73-7c55-4158-9fb7-fbd6941b9f59",
-    display_name: "Twice-Cast Power",
-    display_description: "Ramps fast, then copies its most powerful events for devastating effect.",
+    display_name: Tx("Twice-Cast Power"),
+    display_description: Tx(
+      "Ramps fast, then copies its most powerful events for devastating effect."
+    ),
     resonance: Valor,
     kind: Facet,
     cards: {
@@ -3384,8 +3470,10 @@
 
   TideDefinition(
     id: "b7aaeba4-7526-4301-93fc-326a3e5a1c7a",
-    display_name: "Harbor's Returning Blades",
-    display_description: "Draws through Warrior pressure, sacrificing and recurring the warband to keep challenges flowing.",
+    display_name: Tx("Harbor's Returning Blades"),
+    display_description: Tx(
+      "Draws through Warrior pressure, sacrificing and recurring the warband to keep challenges flowing."
+    ),
     resonance: Ember,
     kind: Facet,
     cards: {
@@ -3437,8 +3525,10 @@
 
   TideDefinition(
     id: "157bf4fe-b3d9-4919-9bf2-948002bc3742",
-    display_name: "Primal Bond",
-    display_description: "Layers blessings across its Spirit Animals and amplifies every beast into an overwhelming force.",
+    display_name: Tx("Primal Bond"),
+    display_description: Tx(
+      "Layers blessings across its Spirit Animals and amplifies every beast into an overwhelming force."
+    ),
     resonance: Ember,
     kind: Facet,
     cards: {
@@ -3485,8 +3575,10 @@
 
   TideDefinition(
     id: "14f8ed05-e684-407c-be32-1dc970d69f36",
-    display_name: "The Endless Muster",
-    display_description: "Churns dissolved Survivors into figment tokens, then feeds them back into sacrifice for relentless value.",
+    display_name: Tx("The Endless Muster"),
+    display_description: Tx(
+      "Churns dissolved Survivors into figment tokens, then feeds them back into sacrifice for relentless value."
+    ),
     resonance: Valor,
     kind: Facet,
     cards: {
@@ -3535,8 +3627,10 @@
 
   TideDefinition(
     id: "e95b00e1-dbff-453d-bdd6-f92034988107",
-    display_name: "Torchlight Descent",
-    display_description: "Turns every discard into cards and energy, then spends the stocked void on finishers.",
+    display_name: Tx("Torchlight Descent"),
+    display_description: Tx(
+      "Turns every discard into cards and energy, then spends the stocked void on finishers."
+    ),
     resonance: Shadow,
     kind: Facet,
     cards: {
@@ -3586,8 +3680,10 @@
 
   TideDefinition(
     id: "22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e",
-    display_name: "The Undertow",
-    display_description: "A flexible event pool blending reactive denial with cheap copying and resourceful draw.",
+    display_name: Tx("The Undertow"),
+    display_description: Tx(
+      "A flexible event pool blending reactive denial with cheap copying and resourceful draw."
+    ),
     resonance: Vision,
     kind: Neutral,
     cards: {
@@ -3626,8 +3722,10 @@
 
   TideDefinition(
     id: "1f36ff28-d760-49ce-b4da-b4b97145f794",
-    display_name: "The Migration",
-    display_description: "Builds a wide pack of Spirit Animals fueled by drawing, then crushes with a single unified strike.",
+    display_name: Tx("The Migration"),
+    display_description: Tx(
+      "Builds a wide pack of Spirit Animals fueled by drawing, then crushes with a single unified strike."
+    ),
     resonance: Wild,
     kind: Neutral,
     cards: {
@@ -3665,8 +3763,10 @@
 
   TideDefinition(
     id: "d923b6e9-8572-4b27-b456-e70e69e80b31",
-    display_name: "Rising Power",
-    display_description: "Burns sacrifices into vast stores of power for discoveries and towering threats.",
+    display_name: Tx("Rising Power"),
+    display_description: Tx(
+      "Burns sacrifices into vast stores of power for discoveries and towering threats."
+    ),
     resonance: Ember,
     kind: Neutral,
     cards: {
@@ -3705,8 +3805,8 @@
 
   TideDefinition(
     id: "f32a2ee8-1e2b-4be1-801c-1b8fef6200a8",
-    display_name: "March of the Mighty",
-    display_description: "Sacrifices weak warriors to deploy and empower a host of champions.",
+    display_name: Tx("March of the Mighty"),
+    display_description: Tx("Sacrifices weak warriors to deploy and empower a host of champions."),
     resonance: Valor,
     kind: Neutral,
     cards: {
@@ -3744,8 +3844,10 @@
 
   TideDefinition(
     id: "0c536368-3612-4884-8a69-c9867e193590",
-    display_name: "The Sharpened Blade",
-    display_description: "Stacks power through sacrifice, then uses it for points and precise kills.",
+    display_name: Tx("The Sharpened Blade"),
+    display_description: Tx(
+      "Stacks power through sacrifice, then uses it for points and precise kills."
+    ),
     resonance: Ember,
     kind: Neutral,
     cards: {
@@ -3777,8 +3879,10 @@
 
   TideDefinition(
     id: "51903b9a-825b-4d9a-8a6d-071670c3caaa",
-    display_name: "The Sunken Vault",
-    display_description: "A broad discard engine that buries cards in the void and turns that depth into scaling threats.",
+    display_name: Tx("The Sunken Vault"),
+    display_description: Tx(
+      "A broad discard engine that buries cards in the void and turns that depth into scaling threats."
+    ),
     resonance: Shadow,
     kind: Neutral,
     cards: {
@@ -3814,8 +3918,10 @@
 
   TideDefinition(
     id: "1694633b-f5a7-4fe8-a685-993be7e1a13c",
-    display_name: "Stored Vengeance",
-    display_description: "Banks sacrifice into charges, then spends them to strike down opponents.",
+    display_name: Tx("Stored Vengeance"),
+    display_description: Tx(
+      "Banks sacrifice into charges, then spends them to strike down opponents."
+    ),
     resonance: Ember,
     kind: Neutral,
     cards: {
@@ -3851,8 +3957,10 @@
 
   TideDefinition(
     id: "7dfa6a52-04ce-42fc-9ef6-4e6571435510",
-    display_name: "The Eternal Cycle",
-    display_description: "Cycles cheap bodies through the void for bonuses and draw, reclaiming them again and again.",
+    display_name: Tx("The Eternal Cycle"),
+    display_description: Tx(
+      "Cycles cheap bodies through the void for bonuses and draw, reclaiming them again and again."
+    ),
     resonance: Shadow,
     kind: Neutral,
     cards: {
@@ -3887,8 +3995,10 @@
 
   TideDefinition(
     id: "f93cefb1-3a37-4075-98f0-c006571edd09",
-    display_name: "The Sampler's Gambit",
-    display_description: "A broad abandon engine touching power, points, tokens, cards, and removal alike.",
+    display_name: Tx("The Sampler's Gambit"),
+    display_description: Tx(
+      "A broad abandon engine touching power, points, tokens, cards, and removal alike."
+    ),
     resonance: Ember,
     kind: Neutral,
     cards: {
@@ -3927,8 +4037,10 @@
 
   TideDefinition(
     id: "d7f92542-c7f6-4ae3-a97e-fc8d8681699a",
-    display_name: "Death's Return",
-    display_description: "Builds value from fallen warriors that pull themselves and others back from death.",
+    display_name: Tx("Death's Return"),
+    display_description: Tx(
+      "Builds value from fallen warriors that pull themselves and others back from death."
+    ),
     resonance: Valor,
     kind: Neutral,
     cards: {
@@ -3966,8 +4078,10 @@
 
   TideDefinition(
     id: "ebb877b5-7f18-413b-8509-3d1e452e0df2",
-    display_name: "The Cull's Bounty",
-    display_description: "Converts abandons allies into power and points behind an efficient, resilient chain.",
+    display_name: Tx("The Cull's Bounty"),
+    display_description: Tx(
+      "Converts abandons allies into power and points behind an efficient, resilient chain."
+    ),
     resonance: Shadow,
     kind: Neutral,
     cards: {
@@ -4002,8 +4116,10 @@
 
   TideDefinition(
     id: "7343b376-88d2-45fe-8b5e-79763480ee7e",
-    display_name: "The Sundering Vanguard",
-    display_description: "Grinds out wins with enemy banishment and power that scales with its Warrior army.",
+    display_name: Tx("The Sundering Vanguard"),
+    display_description: Tx(
+      "Grinds out wins with enemy banishment and power that scales with its Warrior army."
+    ),
     resonance: Valor,
     kind: Neutral,
     cards: {

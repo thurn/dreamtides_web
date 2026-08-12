@@ -1,10 +1,13 @@
 use std::collections::BTreeSet;
 use std::fmt;
+use trox::LocalizedString;
 
 use anyhow::{Result, bail};
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
+
+use super::localization::source_text;
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -18,8 +21,8 @@ pub struct AffiliationCatalog {
 #[serde(deny_unknown_fields)]
 pub struct AffiliationDefinition {
     pub id: CanonicalUuid,
-    pub name: String,
-    pub atlas_card_theme: String,
+    pub name: LocalizedString,
+    pub atlas_card_theme: LocalizedString,
     pub signature_card_ids: Vec<CanonicalUuid>,
 }
 
@@ -92,19 +95,21 @@ pub fn lower(source: AffiliationCatalog) -> Result<toml::Value> {
     let affiliations = source
         .affiliations
         .into_iter()
-        .map(|affiliation| CompatibilityAffiliation {
-            id: affiliation.id.as_hyphenated(),
-            name: affiliation.name,
-            atlas_card_theme: affiliation.atlas_card_theme,
-            signature_cards: affiliation
-                .signature_card_ids
-                .into_iter()
-                .map(CanonicalUuid::as_hyphenated)
-                .collect(),
-            weight_strength: source.default_random_draw_max_multiplier,
-            opponent_bias_strength: source.default_opponent_deck_max_multiplier,
+        .map(|affiliation| {
+            Ok(CompatibilityAffiliation {
+                id: affiliation.id.as_hyphenated(),
+                name: source_text(&affiliation.name)?,
+                atlas_card_theme: source_text(&affiliation.atlas_card_theme)?,
+                signature_cards: affiliation
+                    .signature_card_ids
+                    .into_iter()
+                    .map(CanonicalUuid::as_hyphenated)
+                    .collect(),
+                weight_strength: source.default_random_draw_max_multiplier,
+                opponent_bias_strength: source.default_opponent_deck_max_multiplier,
+            })
         })
-        .collect();
+        .collect::<Result<Vec<_>>>()?;
     Ok(toml::Value::try_from(CompatibilityCatalog {
         affiliations,
     })?)
@@ -125,10 +130,13 @@ pub fn validate(source: &AffiliationCatalog) -> Result<()> {
         if !ids.insert(affiliation.id) {
             bail!("duplicate affiliation id: {}", affiliation.id);
         }
-        if affiliation.name.trim().is_empty() {
+        if source_text(&affiliation.name)?.trim().is_empty() {
             bail!("affiliation {} has an empty name", affiliation.id);
         }
-        if affiliation.atlas_card_theme.trim().is_empty() {
+        if source_text(&affiliation.atlas_card_theme)?
+            .trim()
+            .is_empty()
+        {
             bail!(
                 "affiliation {} has an empty atlas card theme",
                 affiliation.id
@@ -177,8 +185,8 @@ AffiliationCatalog(
   affiliations: [
     AffiliationDefinition(
       id: "00000000-0000-4000-8000-000000000001",
-      name: "First",
-      atlas_card_theme: "One",
+      name: Tx("First"),
+      atlas_card_theme: Tx("One"),
       signature_card_ids: [
         "00000000-0000-4000-8000-000000000101",
         "00000000-0000-4000-8000-000000000102",
@@ -186,8 +194,8 @@ AffiliationCatalog(
     ),
     AffiliationDefinition(
       id: "00000000-0000-4000-8000-000000000002",
-      name: "Second",
-      atlas_card_theme: "Two",
+      name: Tx("Second"),
+      atlas_card_theme: Tx("Two"),
       signature_card_ids: ["00000000-0000-4000-8000-000000000102"],
     ),
   ],
@@ -218,8 +226,10 @@ AffiliationCatalog(
 
     #[test]
     fn rejects_unknown_fields_and_noncanonical_identifiers() {
-        let unknown =
-            synthetic_source().replace("name: \"First\",", "name: \"First\", surprise: true,");
+        let unknown = synthetic_source().replace(
+            "name: Tx(\"First\"),",
+            "name: Tx(\"First\"), surprise: true,",
+        );
         assert!(ron::from_str::<AffiliationCatalog>(&unknown).is_err());
         for invalid in [
             "legacy_slug",
@@ -261,7 +271,7 @@ AffiliationCatalog(
                 .contains("greater than or equal to 1.0")
         );
 
-        let empty_name = synthetic_source().replace("name: \"First\"", "name: \"  \"");
+        let empty_name = synthetic_source().replace("name: Tx(\"First\")", "name: Tx(\"  \")");
         assert!(
             lower(ron::from_str(&empty_name).unwrap())
                 .unwrap_err()

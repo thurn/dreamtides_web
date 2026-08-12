@@ -1,10 +1,13 @@
 use std::collections::BTreeSet;
 use std::fmt;
+use trox::LocalizedString;
 
 use anyhow::{Context, Result, ensure};
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
+
+use super::localization::source_text;
 
 use super::atlas::SiteType;
 
@@ -104,39 +107,39 @@ pub struct SiteMetadata {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub enum SitePresentation {
     Battle {
-        label: String,
-        final_boss_label: String,
-        locked_guidance: String,
+        label: LocalizedString,
+        final_boss_label: LocalizedString,
+        locked_guidance: LocalizedString,
     },
     Draft {
-        label: String,
+        label: LocalizedString,
     },
     Shop {
-        title: String,
-        restocked: String,
-        restock_offers_action: String,
-        restock_action: String,
-        free_price: String,
+        title: LocalizedString,
+        restocked: LocalizedString,
+        restock_offers_action: LocalizedString,
+        restock_action: LocalizedString,
+        free_price: LocalizedString,
     },
     Purge {
-        title: String,
-        instruction: String,
-        purge_action: String,
+        title: LocalizedString,
+        instruction: LocalizedString,
+        purge_action: LocalizedString,
     },
     DreamsignBazaar {
-        title: String,
-        restocked: String,
-        restock_offers_action: String,
-        restock_action: String,
-        free_price: String,
-        replacement_title: String,
+        title: LocalizedString,
+        restocked: LocalizedString,
+        restock_offers_action: LocalizedString,
+        restock_action: LocalizedString,
+        free_price: LocalizedString,
+        replacement_title: LocalizedString,
     },
     DreamsignRevelation {
-        loading: String,
-        exhausted: String,
+        loading: LocalizedString,
+        exhausted: LocalizedString,
     },
     RandomSite {
-        title: String,
+        title: LocalizedString,
     },
 }
 
@@ -270,7 +273,7 @@ fn lower_with_glossary_map(
                 site_type: metadata.site.as_compat(),
                 icon: metadata.icon,
                 glossary_id: compatibility_glossary_id(glossary_ids, metadata.glossary_id)?,
-                presentation: metadata.presentation.map(lower_presentation),
+                presentation: metadata.presentation.map(lower_presentation).transpose()?,
                 rules: metadata.rules.map(lower_rules).transpose()?,
             })
         })
@@ -306,7 +309,7 @@ fn lower_rules(source: SiteRules) -> Result<toml::Value> {
     }
 }
 
-fn lower_presentation(source: SitePresentation) -> toml::Value {
+fn lower_presentation(source: SitePresentation) -> Result<toml::Value> {
     let mut table = toml::map::Map::new();
     let mut put = |key: &str, value: String| {
         table.insert(key.into(), value.into());
@@ -318,13 +321,13 @@ fn lower_presentation(source: SitePresentation) -> toml::Value {
             locked_guidance,
         } => {
             put("kind", "battle".into());
-            put("label", label);
-            put("final-boss-label", final_boss_label);
-            put("locked-guidance", locked_guidance);
+            put("label", source_text(&label)?);
+            put("final-boss-label", source_text(&final_boss_label)?);
+            put("locked-guidance", source_text(&locked_guidance)?);
         }
         SitePresentation::Draft { label } => {
             put("kind", "draft".into());
-            put("label", label);
+            put("label", source_text(&label)?);
         }
         SitePresentation::Shop {
             title,
@@ -334,11 +337,14 @@ fn lower_presentation(source: SitePresentation) -> toml::Value {
             free_price,
         } => {
             put("kind", "shop".into());
-            put("title", title);
-            put("restocked", restocked);
-            put("restock-offers-action", restock_offers_action);
-            put("restock-action", restock_action);
-            put("free-price", free_price);
+            put("title", source_text(&title)?);
+            put("restocked", source_text(&restocked)?);
+            put(
+                "restock-offers-action",
+                source_text(&restock_offers_action)?,
+            );
+            put("restock-action", source_text(&restock_action)?);
+            put("free-price", source_text(&free_price)?);
         }
         SitePresentation::Purge {
             title,
@@ -346,9 +352,9 @@ fn lower_presentation(source: SitePresentation) -> toml::Value {
             purge_action,
         } => {
             put("kind", "purge".into());
-            put("title", title);
-            put("instruction", instruction);
-            put("purge-action", purge_action);
+            put("title", source_text(&title)?);
+            put("instruction", source_text(&instruction)?);
+            put("purge-action", source_text(&purge_action)?);
         }
         SitePresentation::DreamsignBazaar {
             title,
@@ -359,24 +365,27 @@ fn lower_presentation(source: SitePresentation) -> toml::Value {
             replacement_title,
         } => {
             put("kind", "dreamsign-bazaar".into());
-            put("title", title);
-            put("restocked", restocked);
-            put("restock-offers-action", restock_offers_action);
-            put("restock-action", restock_action);
-            put("free-price", free_price);
-            put("replacement-title", replacement_title);
+            put("title", source_text(&title)?);
+            put("restocked", source_text(&restocked)?);
+            put(
+                "restock-offers-action",
+                source_text(&restock_offers_action)?,
+            );
+            put("restock-action", source_text(&restock_action)?);
+            put("free-price", source_text(&free_price)?);
+            put("replacement-title", source_text(&replacement_title)?);
         }
         SitePresentation::DreamsignRevelation { loading, exhausted } => {
             put("kind", "dreamsign-revelation".into());
-            put("loading", loading);
-            put("exhausted", exhausted);
+            put("loading", source_text(&loading)?);
+            put("exhausted", source_text(&exhausted)?);
         }
         SitePresentation::RandomSite { title } => {
             put("kind", "random-site".into());
-            put("title", title);
+            put("title", source_text(&title)?);
         }
     }
-    toml::Value::Table(table)
+    Ok(toml::Value::Table(table))
 }
 
 fn lower_choice_limits(source: CardChoiceLimits) -> CompatibilityCardChoiceLimits {
@@ -505,14 +514,19 @@ fn validate_presentation(metadata: &SiteMetadata) -> Result<()> {
         metadata.site.as_compat()
     );
     if let Some(presentation) = &metadata.presentation {
-        let values: Vec<&str> = match presentation {
+        let values = match presentation {
             SitePresentation::Battle {
                 label,
                 final_boss_label,
                 locked_guidance,
-            } => vec![label, final_boss_label, locked_guidance],
+            } => vec![
+                source_text(label)?,
+                source_text(final_boss_label)?,
+                source_text(locked_guidance)?,
+            ],
             SitePresentation::Draft { label } => {
-                validate_slots("Draft label", label, &["pickCount"])?;
+                let label = source_text(label)?;
+                validate_slots("Draft label", &label, &["pickCount"])?;
                 vec![label]
             }
             SitePresentation::Shop {
@@ -521,20 +535,24 @@ fn validate_presentation(metadata: &SiteMetadata) -> Result<()> {
                 restock_offers_action,
                 restock_action,
                 free_price,
-            } => vec![
+            } => [
                 title,
                 restocked,
                 restock_offers_action,
                 restock_action,
                 free_price,
-            ],
+            ]
+            .into_iter()
+            .map(source_text)
+            .collect::<Result<Vec<_>>>()?,
             SitePresentation::Purge {
                 title,
                 instruction,
                 purge_action,
             } => {
-                validate_slots("Purge action", purge_action, &["count"])?;
-                vec![title, instruction, purge_action]
+                let purge_action = source_text(purge_action)?;
+                validate_slots("Purge action", &purge_action, &["count"])?;
+                vec![source_text(title)?, source_text(instruction)?, purge_action]
             }
             SitePresentation::DreamsignBazaar {
                 title,
@@ -543,21 +561,24 @@ fn validate_presentation(metadata: &SiteMetadata) -> Result<()> {
                 restock_action,
                 free_price,
                 replacement_title,
-            } => vec![
+            } => [
                 title,
                 restocked,
                 restock_offers_action,
                 restock_action,
                 free_price,
                 replacement_title,
-            ],
+            ]
+            .into_iter()
+            .map(source_text)
+            .collect::<Result<Vec<_>>>()?,
             SitePresentation::DreamsignRevelation { loading, exhausted } => {
-                vec![loading, exhausted]
+                vec![source_text(loading)?, source_text(exhausted)?]
             }
-            SitePresentation::RandomSite { title } => vec![title],
+            SitePresentation::RandomSite { title } => vec![source_text(title)?],
         };
         for value in values {
-            validate_text("site presentation text", value)?;
+            validate_text("site presentation text", &value)?;
         }
     }
     Ok(())
@@ -599,6 +620,10 @@ mod tests {
     use pretty_assertions::assert_eq;
 
     use super::*;
+
+    fn ls(text: impl Into<String>) -> LocalizedString {
+        super::super::localization::localized_source(text.into()).unwrap()
+    }
 
     const SYNTHETIC_GLOSSARY_ID_MAP: [(&str, &str); 14] = [
         ("glossary-battle", "00000000-0000-4000-8000-000000000001"),
@@ -681,39 +706,39 @@ mod tests {
     fn synthetic_presentation(site: SiteType) -> Option<SitePresentation> {
         match site {
             SiteType::Battle => Some(SitePresentation::Battle {
-                label: "Battle".into(),
-                final_boss_label: "Boss".into(),
-                locked_guidance: "Locked".into(),
+                label: ls("Battle"),
+                final_boss_label: ls("Boss"),
+                locked_guidance: ls("Locked"),
             }),
             SiteType::Draft => Some(SitePresentation::Draft {
-                label: "Draft {pickCount}x".into(),
+                label: ls("Draft {pickCount}x"),
             }),
             SiteType::Shop => Some(SitePresentation::Shop {
-                title: "Shop".into(),
-                restocked: "Restocked".into(),
-                restock_offers_action: "Offers".into(),
-                restock_action: "Restock".into(),
-                free_price: "Free".into(),
+                title: ls("Shop"),
+                restocked: ls("Restocked"),
+                restock_offers_action: ls("Offers"),
+                restock_action: ls("Restock"),
+                free_price: ls("Free"),
             }),
             SiteType::Purge => Some(SitePresentation::Purge {
-                title: "Purge".into(),
-                instruction: "Choose".into(),
-                purge_action: "Purge {count}".into(),
+                title: ls("Purge"),
+                instruction: ls("Choose"),
+                purge_action: ls("Purge {count}"),
             }),
             SiteType::DreamsignBazaar => Some(SitePresentation::DreamsignBazaar {
-                title: "Bazaar".into(),
-                restocked: "Restocked".into(),
-                restock_offers_action: "Offers".into(),
-                restock_action: "Restock".into(),
-                free_price: "Free".into(),
-                replacement_title: "Replace".into(),
+                title: ls("Bazaar"),
+                restocked: ls("Restocked"),
+                restock_offers_action: ls("Offers"),
+                restock_action: ls("Restock"),
+                free_price: ls("Free"),
+                replacement_title: ls("Replace"),
             }),
             SiteType::DreamsignRevelation => Some(SitePresentation::DreamsignRevelation {
-                loading: "Loading".into(),
-                exhausted: "Exhausted".into(),
+                loading: ls("Loading"),
+                exhausted: ls("Exhausted"),
             }),
             SiteType::RandomSite => Some(SitePresentation::RandomSite {
-                title: "Choose".into(),
+                title: ls("Choose"),
             }),
             _ => None,
         }

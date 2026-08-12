@@ -1,18 +1,21 @@
 use std::collections::BTreeSet;
 use std::fmt;
+use trox::LocalizedString;
 
 use anyhow::{Result, bail};
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
+use super::localization::source_text;
+
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct ApollyonIncarnation {
     pub id: IncarnationId,
-    pub title: String,
-    pub description: String,
-    pub deck_archetype: String,
+    pub title: LocalizedString,
+    pub description: LocalizedString,
+    pub deck_archetype: LocalizedString,
 }
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -74,13 +77,15 @@ pub fn lower(source: Vec<ApollyonIncarnation>) -> Result<toml::Value> {
     validate(&source)?;
     let incarnations = source
         .into_iter()
-        .map(|incarnation| CompatibilityIncarnation {
-            id: incarnation.id.to_string(),
-            title: incarnation.title,
-            description: incarnation.description,
-            deck_type: incarnation.deck_archetype,
+        .map(|incarnation| {
+            Ok(CompatibilityIncarnation {
+                id: incarnation.id.to_string(),
+                title: source_text(&incarnation.title)?,
+                description: source_text(&incarnation.description)?,
+                deck_type: source_text(&incarnation.deck_archetype)?,
+            })
         })
-        .collect();
+        .collect::<Result<Vec<_>>>()?;
     Ok(toml::Value::try_from(CompatibilityCatalog {
         incarnations,
     })?)
@@ -97,7 +102,7 @@ fn validate(source: &[ApollyonIncarnation]) -> Result<()> {
             ("description", &incarnation.description),
             ("deck_archetype", &incarnation.deck_archetype),
         ] {
-            if value.trim().is_empty() {
+            if source_text(value)?.trim().is_empty() {
                 bail!(
                     "Apollyon incarnation {} has an empty {field}",
                     incarnation.id
@@ -122,15 +127,15 @@ mod tests {
 [
   ApollyonIncarnation(
     id: "00000000-0000-4000-8000-000000000001",
-    title: "First title",
-    description: "First description",
-    deck_archetype: "First archetype",
+    title: Tx("First title"),
+    description: Tx("First description"),
+    deck_archetype: Tx("First archetype"),
   ),
   ApollyonIncarnation(
     id: "00000000-0000-4000-8000-000000000002",
-    title: "Second title",
-    description: "Second description",
-    deck_archetype: "Second archetype",
+    title: Tx("Second title"),
+    description: Tx("Second description"),
+    deck_archetype: Tx("Second archetype"),
   ),
 ]
 "##
@@ -155,8 +160,8 @@ mod tests {
     #[test]
     fn rejects_unknown_fields_and_noncanonical_identifiers() {
         let unknown = synthetic_source().replace(
-            "title: \"First title\",",
-            "title: \"First title\", surprise: true,",
+            "title: Tx(\"First title\"),",
+            "title: Tx(\"First title\"), surprise: true,",
         );
         assert!(ron::from_str::<Vec<ApollyonIncarnation>>(&unknown).is_err());
 

@@ -20,6 +20,7 @@ pub mod figments;
 pub mod gamble;
 pub mod glossary;
 pub mod internal_card_metadata;
+pub mod localization;
 pub mod opponents;
 pub mod resonance;
 pub mod reward_selection;

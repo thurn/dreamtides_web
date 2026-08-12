@@ -1,10 +1,13 @@
 use std::collections::BTreeSet;
 use std::fmt;
+use trox::LocalizedString;
 
 use anyhow::{Context, Result, ensure};
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
+
+use super::localization::source_text;
 
 use super::atlas::SiteType;
 
@@ -27,7 +30,7 @@ const LEGACY_ID_MAP: [(&str, &str); 12] = [
 #[serde(deny_unknown_fields)]
 pub struct DreamscapeDefinition {
     pub id: DreamscapeId,
-    pub name: String,
+    pub name: LocalizedString,
     pub art: DreamscapeArt,
     pub kind: DreamscapeKind,
 }
@@ -171,7 +174,7 @@ pub fn lower(source: Vec<DreamscapeDefinition>) -> Result<toml::Value> {
                 };
             Ok(Some(CompatibilityDreamscape {
                 id,
-                name: dreamscape.name,
+                name: source_text(&dreamscape.name)?,
                 signature_site,
                 is_starter,
                 fixed_sites,
@@ -205,7 +208,7 @@ pub(crate) fn validate(source: &[DreamscapeDefinition]) -> Result<()> {
             dreamscape.id
         );
         ensure!(
-            !dreamscape.name.trim().is_empty(),
+            !source_text(&dreamscape.name)?.trim().is_empty(),
             "Dreamscape {} has an empty name",
             dreamscape.id
         );
@@ -364,7 +367,7 @@ mod tests {
 [
   DreamscapeDefinition(
     id: "{STARTER_ID}",
-    name: "Opening",
+    name: Tx("Opening"),
     art: (
       scene: (key: "firstlight_meadow", source: "opening.png"),
       atlas_node: (key: "firstlight_meadow", source: "opening_icon.png"),
@@ -376,7 +379,7 @@ mod tests {
   ),
   DreamscapeDefinition(
     id: "{REGION_ID}",
-    name: "Région",
+    name: Tx("Région"),
     art: (
       scene: (key: "tumbleleaf_village", source: "region.png"),
       atlas_node: (key: "tumbleleaf_village", source: "region_icon.png"),
@@ -388,7 +391,7 @@ mod tests {
   ),
   DreamscapeDefinition(
     id: "{BOSS_ID}",
-    name: "Final Dream",
+    name: Tx("Final Dream"),
     art: (
       scene: (key: "limbo", source: "final.png"),
       atlas_node: (key: "limbo", source: "final_icon.png"),
@@ -468,8 +471,8 @@ mod tests {
 
     #[test]
     fn rejects_unknown_fields_and_noncanonical_identifiers() {
-        let unknown =
-            synthetic_source().replace("name: \"Opening\",", "name: \"Opening\", extra: 1,");
+        let unknown = synthetic_source()
+            .replace("name: Tx(\"Opening\"),", "name: Tx(\"Opening\"), extra: 1,");
         assert!(ron::from_str::<Vec<DreamscapeDefinition>>(&unknown).is_err());
 
         for invalid in [
@@ -500,7 +503,7 @@ mod tests {
 
         let no_boss = synthetic_source().replace(
             &format!(
-                "  DreamscapeDefinition(\n    id: \"{BOSS_ID}\",\n    name: \"Final Dream\",\n    art: (\n      scene: (key: \"limbo\", source: \"final.png\"),\n      atlas_node: (key: \"limbo\", source: \"final_icon.png\"),\n    ),\n    kind: Boss,\n  ),\n"
+                "  DreamscapeDefinition(\n    id: \"{BOSS_ID}\",\n    name: Tx(\"Final Dream\"),\n    art: (\n      scene: (key: \"limbo\", source: \"final.png\"),\n      atlas_node: (key: \"limbo\", source: \"final_icon.png\"),\n    ),\n    kind: Boss,\n  ),\n"
             ),
             "",
         );
@@ -521,7 +524,7 @@ mod tests {
         let duplicate_opponent = synthetic_source().replace(AVATAR_THREE, AVATAR_ONE);
         assert_error_contains(&duplicate_opponent, "repeats opponent DreamAvatar");
 
-        let empty_name = synthetic_source().replace("name: \"Opening\"", "name: \"  \"");
+        let empty_name = synthetic_source().replace("name: Tx(\"Opening\")", "name: Tx(\"  \")");
         assert_error_contains(&empty_name, "empty name");
 
         let wrong_art_key = synthetic_source().replace(

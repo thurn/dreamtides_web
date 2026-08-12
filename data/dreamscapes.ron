@@ -4,7 +4,7 @@
 [
   DreamscapeDefinition(
     id: "0217b10e-bf48-4e27-95f0-846fd802b730",
-    name: "Firstlight Meadow",
+    name: Tx("Firstlight Meadow"),
     // Each asset pairs its stable runtime lookup key with its authoring filename.
     art: (
       scene: (key: "firstlight_meadow", source: "firstlight_meadow.png"),
@@ -20,7 +20,7 @@
 
   DreamscapeDefinition(
     id: "08e11635-9f04-48fd-a9c8-5a9f68c80958",
-    name: "Tumbleleaf Village",
+    name: Tx("Tumbleleaf Village"),
     art: (
       scene: (key: "tumbleleaf_village", source: "tumbleleaf_village.png"),
       atlas_node: (key: "tumbleleaf_village", source: "tumbleleaf_village_icon.png"),
@@ -39,7 +39,7 @@
 
   DreamscapeDefinition(
     id: "b25b9906-8380-45bf-9435-678ce18316ea",
-    name: "Pharaoh's Gate",
+    name: Tx("Pharaoh's Gate"),
     art: (
       scene: (key: "pharaohs_gate", source: "pharaohs_gate.png"),
       atlas_node: (key: "pharaohs_gate", source: "pharaohs_gate_icon.png"),
@@ -57,7 +57,7 @@
 
   DreamscapeDefinition(
     id: "7d793d30-8a0f-4f84-a446-cdde502710e8",
-    name: "Winterwake Fjords",
+    name: Tx("Winterwake Fjords"),
     art: (
       scene: (key: "winterwake_fjords", source: "winterwake_fjords.png"),
       atlas_node: (key: "winterwake_fjords", source: "winterwake_fjords_icon.png"),
@@ -74,7 +74,7 @@
 
   DreamscapeDefinition(
     id: "8e7d0818-ba6a-4dc9-8b3d-a12c62aefa44",
-    name: "Frostforge",
+    name: Tx("Frostforge"),
     art: (
       scene: (key: "frostforge", source: "frostforge.png"),
       atlas_node: (key: "frostforge", source: "frostforge_icon.png"),
@@ -91,7 +91,7 @@
 
   DreamscapeDefinition(
     id: "562f9d1f-5bbf-4dc5-9edd-7e8d538a1651",
-    name: "Hope's End",
+    name: Tx("Hope's End"),
     art: (
       scene: (key: "hopes_end", source: "hopes_end.png"),
       atlas_node: (key: "hopes_end", source: "hopes_end_icon.png"),
@@ -108,7 +108,7 @@
 
   DreamscapeDefinition(
     id: "823dc726-db0f-4367-8442-70600a20ad2e",
-    name: "Tsukiren",
+    name: Tx("Tsukiren"),
     art: (
       scene: (key: "tsukiren", source: "tsukiren.png"),
       atlas_node: (key: "tsukiren", source: "tsukiren_icon.png"),
@@ -125,7 +125,7 @@
 
   DreamscapeDefinition(
     id: "f52bdeb1-0db6-44ee-80ea-b99bd18dff7d",
-    name: "Wilderveil",
+    name: Tx("Wilderveil"),
     art: (
       scene: (key: "wilderveil", source: "wilderveil.png"),
       atlas_node: (key: "wilderveil", source: "wilderveil_icon.png"),
@@ -142,7 +142,7 @@
 
   DreamscapeDefinition(
     id: "6f16a1c9-c2fa-494d-9d9d-4da00e011491",
-    name: "The Rust Expanse",
+    name: Tx("The Rust Expanse"),
     art: (
       scene: (key: "rust_expanse", source: "rust_expanse.png"),
       atlas_node: (key: "rust_expanse", source: "rust_expanse_icon.png"),
@@ -159,7 +159,7 @@
 
   DreamscapeDefinition(
     id: "138eff95-3301-4f76-aeb1-31bf0dc8963d",
-    name: "Farpoint Station",
+    name: Tx("Farpoint Station"),
     art: (
       scene: (key: "farpoint_station", source: "farpoint_station.png"),
       atlas_node: (key: "farpoint_station", source: "farpoint_station_icon.png"),
@@ -176,7 +176,7 @@
 
   DreamscapeDefinition(
     id: "6c03e9d1-21fe-4c13-b940-2325d308cb14",
-    name: "Grid City",
+    name: Tx("Grid City"),
     art: (
       scene: (key: "grid_city", source: "grid_city.png"),
       atlas_node: (key: "grid_city", source: "grid_city_icon.png"),
@@ -194,7 +194,7 @@
 
   DreamscapeDefinition(
     id: "f31e1199-70bc-4110-85f9-505afebb02c4",
-    name: "Limbo",
+    name: Tx("Limbo"),
     art: (
       scene: (key: "limbo", source: "limbo.png"),
       atlas_node: (key: "limbo", source: "limbo_icon.png"),

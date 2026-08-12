@@ -22,6 +22,7 @@
         "src/cumulus/docs/**",
       ],
     ),
+    (language: Ron, include: ["data/**/*.ron"], exclude: ["data/internal/**/*.ron"]),
   ],
 
   locales: {
@@ -52,6 +53,10 @@
   lint: (
     default_warning: Deny,
     rules: {
+      "trox.missing-ron-description": (
+        level: Allow,
+        reason: "Canonical RON catalogs intentionally use concise Tx(\"source text\") values without inline translator descriptions.",
+      ),
       "trox.formula-injection": (
         level: Allow,
         reason: "Reviewed source-English delta labels intentionally begin with +; localization CSV files are data inputs and must not be executed as spreadsheet formulas.",

@@ -1,10 +1,13 @@
 use std::collections::BTreeSet;
 use std::fmt;
+use trox::LocalizedString;
 
 use anyhow::{Context, Result, bail};
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
+
+use super::localization::{source_text, source_texts};
 
 const LEGACY_GUIDE_ID_MAP: [(&str, &str); 10] = [
     ("tobias_tanglefur", "4e5067ec-265d-4dba-8fa8-2afbd4fde9ab"),
@@ -39,10 +42,10 @@ const LEGACY_DREAMSCAPE_ID_MAP: [(&str, &str); 10] = [
 #[serde(deny_unknown_fields)]
 pub struct GuideDefinition {
     pub id: GuideId,
-    pub name: String,
+    pub name: LocalizedString,
     pub home_dreamscape_id: DreamscapeId,
     pub portrait_source: String,
-    pub site_dialogue: Vec<String>,
+    pub site_dialogue: Vec<LocalizedString>,
     pub specialty: GuideSpecialty,
 }
 
@@ -50,47 +53,47 @@ pub struct GuideDefinition {
 #[serde(deny_unknown_fields)]
 pub enum GuideSpecialty {
     Shop {
-        description: String,
+        description: LocalizedString,
     },
     DreamsignBazaar {
-        description: String,
+        description: LocalizedString,
     },
     DreamsignRevelation {
-        description: String,
+        description: LocalizedString,
     },
     Transfiguration {
-        description: String,
+        description: LocalizedString,
     },
     Duplication {
-        description: String,
+        description: LocalizedString,
     },
     Purge {
-        description: String,
+        description: LocalizedString,
     },
     Augury {
-        description: String,
+        description: LocalizedString,
     },
     RandomSite {
-        description: String,
-        dialogue: Vec<String>,
+        description: LocalizedString,
+        dialogue: Vec<LocalizedString>,
     },
     Gamble {
-        description: String,
+        description: LocalizedString,
         dialogue: GambleDialogue,
     },
     Exploration {
-        description: String,
+        description: LocalizedString,
     },
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct GambleDialogue {
-    pub three_gate: Vec<String>,
-    pub ladder_climb: Vec<String>,
-    pub starway_stairs: Vec<String>,
-    pub four_suit_reprise: Vec<String>,
-    pub blackjack: Vec<String>,
+    pub three_gate: Vec<LocalizedString>,
+    pub ladder_climb: Vec<LocalizedString>,
+    pub starway_stairs: Vec<LocalizedString>,
+    pub four_suit_reprise: Vec<LocalizedString>,
+    pub blackjack: Vec<LocalizedString>,
 }
 
 macro_rules! canonical_uuid {
@@ -205,7 +208,7 @@ impl GuideSpecialty {
         }
     }
 
-    fn description(&self) -> &str {
+    fn description(&self) -> &LocalizedString {
         match self {
             Self::Shop { description }
             | Self::DreamsignBazaar { description }
@@ -295,24 +298,24 @@ fn lower_guide(
     dreamscape_ids: &[(&str, &str)],
 ) -> Result<CompatibilityGuide> {
     let kind = source.specialty.kind();
-    let description = source.specialty.description().to_owned();
+    let description = source_text(source.specialty.description())?;
     let mut dialogue = CompatibilityDialogue {
-        site: source.site_dialogue,
+        site: source_texts(source.site_dialogue)?,
         ..CompatibilityDialogue::default()
     };
     match source.specialty {
         GuideSpecialty::RandomSite {
             dialogue: random_site,
             ..
-        } => dialogue.random_site = Some(random_site),
+        } => dialogue.random_site = Some(source_texts(random_site)?),
         GuideSpecialty::Gamble {
             dialogue: gamble, ..
         } => {
-            dialogue.gamble_three_gate = Some(gamble.three_gate);
-            dialogue.gamble_ladder_climb = Some(gamble.ladder_climb);
-            dialogue.gamble_starway_stairs = Some(gamble.starway_stairs);
-            dialogue.gamble_four_suit_reprise = Some(gamble.four_suit_reprise);
-            dialogue.gamble_blackjack = Some(gamble.blackjack);
+            dialogue.gamble_three_gate = Some(source_texts(gamble.three_gate)?);
+            dialogue.gamble_ladder_climb = Some(source_texts(gamble.ladder_climb)?);
+            dialogue.gamble_starway_stairs = Some(source_texts(gamble.starway_stairs)?);
+            dialogue.gamble_four_suit_reprise = Some(source_texts(gamble.four_suit_reprise)?);
+            dialogue.gamble_blackjack = Some(source_texts(gamble.blackjack)?);
         }
         GuideSpecialty::Shop { .. }
         | GuideSpecialty::DreamsignBazaar { .. }
@@ -325,7 +328,7 @@ fn lower_guide(
     }
     Ok(CompatibilityGuide {
         id: compatibility_id(guide_ids, &source.id.to_string(), "Dream guide")?.to_owned(),
-        name: source.name,
+        name: source_text(&source.name)?,
         home_dreamscape_id: compatibility_id(
             dreamscape_ids,
             &source.home_dreamscape_id.to_string(),
@@ -381,9 +384,9 @@ pub(crate) fn validate(source: &[GuideDefinition]) -> Result<()> {
                 guide.specialty.kind().compatibility_name()
             );
         }
-        validate_text(&format!("{path}.name"), &guide.name)?;
+        validate_localized_text(&format!("{path}.name"), &guide.name)?;
         validate_text(&format!("{path}.portrait_source"), &guide.portrait_source)?;
-        validate_text(
+        validate_localized_text(
             &format!("{path}.specialty.description"),
             guide.specialty.description(),
         )?;
@@ -460,9 +463,13 @@ fn validate_text(path: &str, value: &str) -> Result<()> {
     Ok(())
 }
 
+fn validate_localized_text(path: &str, value: &LocalizedString) -> Result<()> {
+    validate_text(path, &source_text(value)?)
+}
+
 fn validate_dialogue(
     path: &str,
-    lines: &[String],
+    lines: &[LocalizedString],
     allowed_placeholders: &[&str],
     required_placeholders: &[&str],
 ) -> Result<()> {
@@ -471,16 +478,17 @@ fn validate_dialogue(
     }
     let mut found = BTreeSet::new();
     for (index, line) in lines.iter().enumerate() {
-        validate_text(&format!("{path}[{index}]"), line)?;
-        for placeholder in placeholders(line) {
+        let line = source_text(line)?;
+        validate_text(&format!("{path}[{index}]"), &line)?;
+        for placeholder in placeholders(&line) {
             if !allowed_placeholders.contains(&placeholder) {
                 bail!("{path}[{index}] contains unsupported placeholder {{{placeholder}}}");
             }
-            found.insert(placeholder);
+            found.insert(placeholder.to_owned());
         }
     }
     for required in required_placeholders {
-        if !found.contains(required) {
+        if !found.contains(*required) {
             bail!("{path} is missing placeholder {{{required}}}");
         }
     }
@@ -506,6 +514,10 @@ pub(crate) mod tests {
     use pretty_assertions::assert_eq;
 
     use super::*;
+
+    fn ls(text: impl Into<String>) -> LocalizedString {
+        super::super::localization::localized_source(text.into()).unwrap()
+    }
 
     const SYNTHETIC_GUIDE_ID_MAP: [(&str, &str); 10] = [
         ("guide_1", "00000000-0000-4000-8000-000000000001"),
@@ -537,16 +549,16 @@ pub(crate) mod tests {
 
 #![enable(implicit_some)]
 [
-  GuideDefinition(id: "00000000-0000-4000-8000-000000000001", name: "Guide 1", home_dreamscape_id: "00000000-0000-4000-8000-000000000101", portrait_source: "one.png", site_dialogue: [r#"Site 1"#], specialty: Shop(description: "Shop copy")),
-  GuideDefinition(id: "00000000-0000-4000-8000-000000000002", name: "Guide 2", home_dreamscape_id: "00000000-0000-4000-8000-000000000102", portrait_source: "two.png", site_dialogue: ["Site 2"], specialty: DreamsignBazaar(description: "Bazaar copy")),
-  GuideDefinition(id: "00000000-0000-4000-8000-000000000003", name: "Guide 3", home_dreamscape_id: "00000000-0000-4000-8000-000000000103", portrait_source: "three.png", site_dialogue: ["Site 3"], specialty: DreamsignRevelation(description: "Revelation copy")),
-  GuideDefinition(id: "00000000-0000-4000-8000-000000000004", name: "Guide 4", home_dreamscape_id: "00000000-0000-4000-8000-000000000104", portrait_source: "four.png", site_dialogue: ["Site 4"], specialty: Transfiguration(description: "Transfiguration copy")),
-  GuideDefinition(id: "00000000-0000-4000-8000-000000000005", name: "Guide 5", home_dreamscape_id: "00000000-0000-4000-8000-000000000105", portrait_source: "five.png", site_dialogue: ["Site 5"], specialty: Duplication(description: "Duplication copy")),
-  GuideDefinition(id: "00000000-0000-4000-8000-000000000006", name: "Guide 6", home_dreamscape_id: "00000000-0000-4000-8000-000000000106", portrait_source: "six.png", site_dialogue: ["Site 6"], specialty: Purge(description: "Purge copy")),
-  GuideDefinition(id: "00000000-0000-4000-8000-000000000007", name: "Guide 7", home_dreamscape_id: "00000000-0000-4000-8000-000000000107", portrait_source: "seven.png", site_dialogue: ["Site 7"], specialty: Augury(description: "Augury copy")),
-  GuideDefinition(id: "00000000-0000-4000-8000-000000000008", name: "Guide 8", home_dreamscape_id: "00000000-0000-4000-8000-000000000108", portrait_source: "eight.png", site_dialogue: ["Site 8"], specialty: RandomSite(description: "Random copy", dialogue: ["Random line"])),
-  GuideDefinition(id: "00000000-0000-4000-8000-000000000009", name: "Guide 9", home_dreamscape_id: "00000000-0000-4000-8000-000000000109", portrait_source: "nine.png", site_dialogue: ["Site 9"], specialty: Gamble(description: "Gamble copy", dialogue: GambleDialogue(three_gate: ["Three Gate"], ladder_climb: ["Win {win-essence}"], starway_stairs: ["Stairs"], four_suit_reprise: ["Reprise"], blackjack: ["Blackjack"]))),
-  GuideDefinition(id: "00000000-0000-4000-8000-000000000010", name: "Guïde 10", home_dreamscape_id: "00000000-0000-4000-8000-000000000110", portrait_source: "ten.png", site_dialogue: ["Site 10\ncontinues"], specialty: Exploration(description: "Exploration copy")),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000001", name: Tx("Guide 1"), home_dreamscape_id: "00000000-0000-4000-8000-000000000101", portrait_source: "one.png", site_dialogue: [Tx(r#"Site 1"#)], specialty: Shop(description: Tx("Shop copy"))),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000002", name: Tx("Guide 2"), home_dreamscape_id: "00000000-0000-4000-8000-000000000102", portrait_source: "two.png", site_dialogue: [Tx("Site 2")], specialty: DreamsignBazaar(description: Tx("Bazaar copy"))),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000003", name: Tx("Guide 3"), home_dreamscape_id: "00000000-0000-4000-8000-000000000103", portrait_source: "three.png", site_dialogue: [Tx("Site 3")], specialty: DreamsignRevelation(description: Tx("Revelation copy"))),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000004", name: Tx("Guide 4"), home_dreamscape_id: "00000000-0000-4000-8000-000000000104", portrait_source: "four.png", site_dialogue: [Tx("Site 4")], specialty: Transfiguration(description: Tx("Transfiguration copy"))),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000005", name: Tx("Guide 5"), home_dreamscape_id: "00000000-0000-4000-8000-000000000105", portrait_source: "five.png", site_dialogue: [Tx("Site 5")], specialty: Duplication(description: Tx("Duplication copy"))),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000006", name: Tx("Guide 6"), home_dreamscape_id: "00000000-0000-4000-8000-000000000106", portrait_source: "six.png", site_dialogue: [Tx("Site 6")], specialty: Purge(description: Tx("Purge copy"))),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000007", name: Tx("Guide 7"), home_dreamscape_id: "00000000-0000-4000-8000-000000000107", portrait_source: "seven.png", site_dialogue: [Tx("Site 7")], specialty: Augury(description: Tx("Augury copy"))),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000008", name: Tx("Guide 8"), home_dreamscape_id: "00000000-0000-4000-8000-000000000108", portrait_source: "eight.png", site_dialogue: [Tx("Site 8")], specialty: RandomSite(description: Tx("Random copy"), dialogue: [Tx("Random line")])),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000009", name: Tx("Guide 9"), home_dreamscape_id: "00000000-0000-4000-8000-000000000109", portrait_source: "nine.png", site_dialogue: [Tx("Site 9")], specialty: Gamble(description: Tx("Gamble copy"), dialogue: GambleDialogue(three_gate: [Tx("Three Gate")], ladder_climb: [Tx("Win {{win-essence}}")], starway_stairs: [Tx("Stairs")], four_suit_reprise: [Tx("Reprise")], blackjack: [Tx("Blackjack")]))),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000010", name: Tx("Guïde 10"), home_dreamscape_id: "00000000-0000-4000-8000-000000000110", portrait_source: "ten.png", site_dialogue: [Tx("Site 10\ncontinues")], specialty: Exploration(description: Tx("Exploration copy"))),
 ]
 "##
     }
@@ -610,12 +622,14 @@ pub(crate) mod tests {
 
     #[test]
     fn rejects_unknown_fields_and_noncanonical_uuid_identities() {
-        let unknown =
-            synthetic_source().replace("name: \"Guide 1\",", "name: \"Guide 1\", surprise: true,");
+        let unknown = synthetic_source().replace(
+            "name: Tx(\"Guide 1\"),",
+            "name: Tx(\"Guide 1\"), surprise: true,",
+        );
         assert!(ron::from_str::<Vec<GuideDefinition>>(&unknown).is_err());
         let unknown_dialogue = synthetic_source().replace(
-            "three_gate: [\"Three Gate\"],",
-            "three_gate: [\"Three Gate\"], surprise: [\"No\"],",
+            "three_gate: [Tx(\"Three Gate\")],",
+            "three_gate: [Tx(\"Three Gate\")], surprise: [Tx(\"No\")],",
         );
         assert!(ron::from_str::<Vec<GuideDefinition>>(&unknown_dialogue).is_err());
 
@@ -662,7 +676,7 @@ pub(crate) mod tests {
         );
 
         let mut empty_name = source.clone();
-        empty_name[0].name = "  ".into();
+        empty_name[0].name = ls("  ");
         assert!(
             lower(empty_name)
                 .unwrap_err()
@@ -694,7 +708,7 @@ pub(crate) mod tests {
     #[test]
     fn rejects_unsupported_and_missing_dialogue_placeholders() {
         let mut unsupported = catalog();
-        unsupported[0].site_dialogue[0] = "Unexpected {slot}".into();
+        unsupported[0].site_dialogue[0] = ls("Unexpected {slot}");
         assert!(
             lower(unsupported)
                 .unwrap_err()
@@ -706,7 +720,7 @@ pub(crate) mod tests {
         let GuideSpecialty::Gamble { dialogue, .. } = &mut missing[8].specialty else {
             panic!("synthetic Gamble guide")
         };
-        dialogue.ladder_climb[0] = "No reward slot".into();
+        dialogue.ladder_climb[0] = ls("No reward slot");
         assert!(
             lower(missing)
                 .unwrap_err()

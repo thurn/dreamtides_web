@@ -43,6 +43,7 @@ use crate::models::glossary::{self, GlossaryDefinition, GlossaryId, TermPresenta
 use crate::models::internal_card_metadata::{
     self, CardMetadataCatalog, CardMetadataDefinition, FacetDefinition,
 };
+use crate::models::localization::localized_source;
 use crate::models::resonance::Resonance;
 use crate::models::tides::{self, TideDefinition, TideId, TidesCatalog};
 use crate::models::tutorial::{self, TutorialActionDefinition, TutorialCatalog};
@@ -350,9 +351,11 @@ fn unique_tide_pool_index(catalog: &DreamAvatarTidePoolsCatalog, id: &str) -> Re
 
 fn set_tide_field(tide: &mut TideDefinition, field: &str, value: JsonValue) -> Result<()> {
     match field {
-        "display_name" | "displayName" => tide.display_name = json_string(value, field)?,
+        "display_name" | "displayName" => {
+            tide.display_name = localized_source(json_string(value, field)?)?
+        }
         "display_description" | "displayDescription" => {
-            tide.display_description = json_string(value, field)?
+            tide.display_description = localized_source(json_string(value, field)?)?
         }
         "resonance" => {
             tide.resonance = match json_string(value, field)?.as_str() {
@@ -641,8 +644,10 @@ fn edit_affiliations(
                     bail!("INVALID_EDIT: affiliation {field} must not be blank");
                 }
                 match field.as_str() {
-                    "name" => catalog.affiliations[index].name = text,
-                    "atlas_card_theme" => catalog.affiliations[index].atlas_card_theme = text,
+                    "name" => catalog.affiliations[index].name = localized_source(text)?,
+                    "atlas_card_theme" => {
+                        catalog.affiliations[index].atlas_card_theme = localized_source(text)?
+                    }
                     _ => bail!("INVALID_EDIT: unsupported affiliation field {field}"),
                 }
                 source = patch_affiliation_field(&source, &catalog.affiliations[index], &field)?;
@@ -923,7 +928,7 @@ fn set_dreamscape_field(
             if name.trim().is_empty() {
                 bail!("INVALID_EDIT: Dreamscape name must not be blank");
             }
-            dreamscape.name = name;
+            dreamscape.name = localized_source(name)?;
         }
         "affiliation-id" | "affiliation_id" => {
             let value = json_string(value, field)?;
@@ -1096,11 +1101,14 @@ fn set_dreamwell_field(
             if name.trim().is_empty() {
                 bail!("INVALID_EDIT: Dreamwell card name must not be blank");
             }
-            card.name = name;
+            card.name = localized_source(name)?;
         }
         "rendered-text" | "ability_text" => {
             let text = json_string(value, field)?;
-            card.ability_text = text.split("\n\n").map(str::to_owned).collect();
+            card.ability_text = text
+                .split("\n\n")
+                .map(|paragraph| localized_source(paragraph.to_owned()))
+                .collect::<Result<_>>()?;
         }
         "energy-added" | "energy_added" => card.energy_added = json_u32(value, field)?,
         "order" | "deck_tier" => {
@@ -1403,7 +1411,7 @@ fn set_dreamsign_definition_field(
             if value.is_empty() {
                 bail!("INVALID_EDIT: Dreamsign name cannot be blank");
             }
-            definition.name = value;
+            definition.name = localized_source(value)?;
         }
         "rendered-text" | "ability_text" => {
             let value = json_string(value, field)?;
@@ -1415,7 +1423,10 @@ fn set_dreamsign_definition_field(
             {
                 bail!("INVALID_EDIT: Dreamsign ability text must contain non-empty paragraphs");
             }
-            definition.ability_text = paragraphs;
+            definition.ability_text = paragraphs
+                .into_iter()
+                .map(localized_source)
+                .collect::<Result<_>>()?;
         }
         _ => bail!("INVALID_EDIT: unsupported Dreamsign field {field}"),
     }
@@ -1694,7 +1705,7 @@ fn unique_figment_index(figments: &[FigmentDefinition], id: &str) -> Result<usiz
 
 fn set_figment_field(figment: &mut FigmentDefinition, field: &str, value: JsonValue) -> Result<()> {
     match field {
-        "name" => figment.name = json_string(value, field)?,
+        "name" => figment.name = localized_source(json_string(value, field)?)?,
         "subtype" => {
             figment.character_type = match json_string(value, field)?.as_str() {
                 "Warrior" => FigmentCharacterType::Warrior,
@@ -1939,14 +1950,14 @@ fn set_glossary_field(
             if value.is_empty() {
                 bail!("INVALID_EDIT: Glossary term cannot be blank");
             }
-            definition.term = value;
+            definition.term = localized_source(value)?;
         }
         "definition" => {
             let value = json_string(value, field)?.trim().to_owned();
             if value.is_empty() {
                 bail!("INVALID_EDIT: Glossary definition cannot be blank");
             }
-            definition.definition = value;
+            definition.definition = localized_source(value)?;
         }
         "priority" => {
             definition.priority = value
@@ -2261,14 +2272,14 @@ fn set_dream_avatar_field(
             if value.is_empty() {
                 bail!("INVALID_EDIT: DreamAvatar name cannot be blank");
             }
-            avatar.name = value;
+            avatar.name = localized_source(value)?;
         }
         "title" => {
             let value = json_string(value, field)?.trim().to_owned();
             if value.is_empty() {
                 bail!("INVALID_EDIT: DreamAvatar title cannot be blank");
             }
-            avatar.title = value;
+            avatar.title = localized_source(value)?;
         }
         "rendered-text" | "ability_text" => {
             let value = json_string(value, field)?;
@@ -2280,7 +2291,10 @@ fn set_dream_avatar_field(
             {
                 bail!("INVALID_EDIT: DreamAvatar ability text must contain non-empty paragraphs");
             }
-            avatar.ability_text = paragraphs;
+            avatar.ability_text = paragraphs
+                .into_iter()
+                .map(localized_source)
+                .collect::<Result<_>>()?;
         }
         "image-number" | "image_number" => {
             let image = json_u32(value, field)?;
@@ -2405,7 +2419,8 @@ fn edit_exploration(
                 if prose.trim().is_empty() {
                     bail!("INVALID_EDIT: encounter prose must not be blank");
                 }
-                unique_encounter_mut(&mut catalog, &card_id)?.prose = prose.clone();
+                unique_encounter_mut(&mut catalog, &card_id)?.prose =
+                    localized_source(prose.clone())?;
                 source_text = patch_exploration_prose(&source_text, &card_id, &prose)?;
             }
             EditOperation::ReplaceAction {
@@ -2910,14 +2925,20 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
         bail!("INVALID_EDIT: followupTitle and followupSubtitle must be provided together");
     }
     Ok(ActionDefinition {
-        label: required_json_string(object, "label")?,
+        label: localized_source(required_json_string(object, "label")?)?,
         id: ActionId::parse(&required_json_string(object, "id")?)
             .map_err(|error| anyhow::anyhow!("INVALID_EDIT: {error}"))?,
         presentation: ActionPresentation {
-            effect_text: required_json_string(object, "effectText")?,
+            effect_text: localized_source(required_json_string(object, "effectText")?)?,
             followup: followup_title
                 .zip(followup_subtitle)
-                .map(|(title, subtitle)| Followup { title, subtitle }),
+                .map(|(title, subtitle)| {
+                    Ok::<Followup, anyhow::Error>(Followup {
+                        title: localized_source(title)?,
+                        subtitle: localized_source(subtitle)?,
+                    })
+                })
+                .transpose()?,
         },
         effect,
     })
@@ -3530,13 +3551,16 @@ fn reject_duplicate_cards(cards: &[CardDefinition]) -> Result<()> {
 
 fn set_card_field(card: &mut CardDefinition, field: &str, value: JsonValue) -> Result<()> {
     match field {
-        "name" => card.name = json_string(value, field)?,
+        "name" => card.name = localized_source(json_string(value, field)?)?,
         "ability_text" | "rules" | "rendered-text" => {
             let rendered_text = json_string(value, field)?;
             card.ability_text = if rendered_text.is_empty() {
                 Vec::new()
             } else {
-                rendered_text.split("\n\n").map(str::to_owned).collect()
+                rendered_text
+                    .split("\n\n")
+                    .map(|paragraph| localized_source(paragraph.to_owned()))
+                    .collect::<Result<_>>()?
             };
         }
         "amplified_text" | "amplified-text" => {
@@ -3544,7 +3568,12 @@ fn set_card_field(card: &mut CardDefinition, field: &str, value: JsonValue) -> R
             card.amplified_text = if rendered_text.is_empty() {
                 None
             } else {
-                Some(rendered_text.split("\n\n").map(str::to_owned).collect())
+                Some(
+                    rendered_text
+                        .split("\n\n")
+                        .map(|paragraph| localized_source(paragraph.to_owned()))
+                        .collect::<Result<_>>()?,
+                )
             };
         }
         "energy_cost" | "energy-cost" => card.energy_cost = parse_orb(value, false)?,
@@ -3964,6 +3993,10 @@ mod tests {
     use super::*;
     use serde_json::{Map, json};
 
+    fn ls(text: impl Into<String>) -> trox::LocalizedString {
+        localized_source(text.into()).unwrap()
+    }
+
     const CARD_ID: &str = "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5";
     const AVATAR_ID: &str = "00000000-0000-4000-8000-000000000011";
     const GLOSSARY_ID: &str = "00000000-0000-4000-8000-000000000021";
@@ -3977,8 +4010,8 @@ mod tests {
   // Edited tide comment.
   TideDefinition(
     id: "00000000-0000-4000-8000-000000000041",
-    display_name: r#"Raw Tide"#,
-    display_description: "First description",
+    display_name: Tx(r#"Raw Tide"#),
+    display_description: Tx("First description"),
     resonance: Shadow,
     kind: Signature,
     cards: {"00000000-0000-4000-8000-000000000051": 2},
@@ -3987,8 +4020,8 @@ mod tests {
   /* Unrelated tide comment. */
   TideDefinition(
     id: "00000000-0000-4000-8000-000000000042",
-    display_name: "Facet Tide",
-    display_description: "Second description",
+    display_name: Tx("Facet Tide"),
+    display_description: Tx("Second description"),
     resonance: Wild,
     kind: Facet,
     cards: {"00000000-0000-4000-8000-000000000052": 1},
@@ -3996,8 +4029,8 @@ mod tests {
 
   TideDefinition(
     id: "00000000-0000-4000-8000-000000000043",
-    display_name: "Neutral Tide",
-    display_description: "Third description",
+    display_name: Tx("Neutral Tide"),
+    display_description: Tx("Third description"),
     resonance: Vision,
     kind: Neutral,
     cards: {"00000000-0000-4000-8000-000000000053": 1},
@@ -4024,19 +4057,19 @@ mod tests {
 [
   EncounterDefinition(
     card_id: "00000000-0000-4000-8000-000000000031",
-    prose: "First scene",
+    prose: Tx("First scene"),
     actions: [
       // Edited action comment.
       ActionDefinition(
-        label: "First",
+        label: Tx("First"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: "First effect", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("First effect"), followup: None),
         effect: MakeFastAll,
       ),
       ActionDefinition(
-        label: "Second",
+        label: Tx("Second"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: "Second effect", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Second effect"), followup: None),
         effect: AddSite,
       ),
     ],
@@ -4044,18 +4077,18 @@ mod tests {
   /* Unrelated encounter comment. */
   EncounterDefinition(
     card_id: "00000000-0000-4000-8000-000000000032",
-    prose: "Unrelated scene",
+    prose: Tx("Unrelated scene"),
     actions: [
       ActionDefinition(
-        label: "Third",
+        label: Tx("Third"),
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-        presentation: ActionPresentation(effect_text: "Third effect", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Third effect"), followup: None),
         effect: MakeFastAll,
       ),
       ActionDefinition(
-        label: "Fourth",
+        label: Tx("Fourth"),
         id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
-        presentation: ActionPresentation(effect_text: "Fourth effect", followup: None),
+        presentation: ActionPresentation(effect_text: Tx("Fourth effect"), followup: None),
         effect: AddSite,
       ),
     ],
@@ -4067,17 +4100,17 @@ mod tests {
 #![enable(implicit_some)]
 [
   CardDefinition(
-    name: "Lone Arrival",
+    name: Tx("Lone Arrival"),
     id: "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5",
-    ability_text: ["Offering", "    tags: [\"inside rules\"],\n▸Materialized: Dissolve an enemy."],
+    ability_text: [Tx("Offering"), Tx("    tags: [\"inside rules\"],\n▸Materialized: Dissolve an enemy.")],
     energy_cost: Fixed(5),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
     art: (image: 2033720048, crop: (x: 0.0, y: 0.595, scale: 1.17)),
   ),
   CardDefinition(
-    name: "Unrelated Card",
+    name: Tx("Unrelated Card"),
     id: "00000000-0000-4000-8000-000000000002",
-    ability_text: ["Draw a card."],
+    ability_text: [Tx("Draw a card.")],
     energy_cost: Variable,
     kind: Event,
     art: (image: 2),
@@ -4120,20 +4153,20 @@ CardMetadataCatalog(
 [
   // Edited record comment.
   AvatarDefinition(
-    name: r#"Raw Name"#,
+    name: Tx(r#"Raw Name"#),
     id: "00000000-0000-4000-8000-000000000011",
-    ability_text: ["First paragraph", "Second paragraph"],
-    title: "First Title",
+    ability_text: [Tx("First paragraph"), Tx("Second paragraph")],
+    title: Tx("First Title"),
     portrait: (image: 7, focus: (x: 0.25, y: 0.75)),
     signature_card_ids: ["00000000-0000-4000-8000-000000000101"],
   ),
 
   /* Unrelated record comment. */
   AvatarDefinition(
-    name: "Unrelated Avatar",
+    name: Tx("Unrelated Avatar"),
     id: "00000000-0000-4000-8000-000000000012",
-    ability_text: ["Unrelated ability."],
-    title: "Unrelated Title",
+    ability_text: [Tx("Unrelated ability.")],
+    title: Tx("Unrelated Title"),
     portrait: (image: 8, focus: (x: 0.5, y: 0.5)),
   ),
 ]
@@ -4146,22 +4179,22 @@ CardMetadataCatalog(
   GlossaryDefinition(
     id: "00000000-0000-4000-8000-000000000021",
     category: Keywords,
-    term: r#"Echo"#,
-    definition: "Create an echo.",
+    term: Tx(r#"Echo"#),
+    definition: Tx("Create an echo."),
     priority: 17,
     matches_term_in_rules_text: true,
     variants: ["echoes"],
     rules_symbol: RulesSymbol(
       token: spark,
       glyph: Spark,
-      accessible_label: "spark",
+      accessible_label: Tx("spark"),
       semantic_color_role: Spark,
     ),
     projections: [
       GlossaryProjection(
         pattern: r#"\becho\s+(\d+)\b"#,
-        term: "{term} {1}",
-        definition: "Create {1} echoes.",
+        term: Tx("{{term}} {{1}}"),
+        definition: Tx("Create {{1}} echoes."),
       ),
     ],
   ),
@@ -4169,44 +4202,44 @@ CardMetadataCatalog(
   GlossaryDefinition(
     id: "00000000-0000-4000-8000-000000000022",
     category: Actions,
-    term: "Moon",
-    definition: "Unrelated definition.",
+    term: Tx("Moon"),
+    definition: Tx("Unrelated definition."),
     priority: -3,
     variants: [],
     term_presentation: SymbolOnly,
-    rules_symbol: RulesSymbol(token: lunar, glyph: Exhaust, accessible_label: "lunar"),
+    rules_symbol: RulesSymbol(token: lunar, glyph: Exhaust, accessible_label: Tx("lunar")),
   ),
   GlossaryDefinition(
     id: "00000000-0000-4000-8000-000000000023",
     category: Resources,
-    term: "Essence",
-    definition: "Currency.",
+    term: Tx("Essence"),
+    definition: Tx("Currency."),
     priority: 0,
-    rules_symbol: RulesSymbol(token: essence, glyph: Essence, accessible_label: "essence"),
+    rules_symbol: RulesSymbol(token: essence, glyph: Essence, accessible_label: Tx("essence")),
   ),
   GlossaryDefinition(
     id: "00000000-0000-4000-8000-000000000024",
     category: Resources,
-    term: "Points",
-    definition: "Score.",
+    term: Tx("Points"),
+    definition: Tx("Score."),
     priority: 0,
-    rules_symbol: RulesSymbol(token: points, glyph: Points, accessible_label: "points"),
+    rules_symbol: RulesSymbol(token: points, glyph: Points, accessible_label: Tx("points")),
   ),
   GlossaryDefinition(
     id: "00000000-0000-4000-8000-000000000025",
     category: Resources,
-    term: "Memory",
-    definition: "Stored counters.",
+    term: Tx("Memory"),
+    definition: Tx("Stored counters."),
     priority: 0,
-    rules_symbol: RulesSymbol(token: store, glyph: Memory, accessible_label: "memory"),
+    rules_symbol: RulesSymbol(token: store, glyph: Memory, accessible_label: Tx("memory")),
   ),
   GlossaryDefinition(
     id: "00000000-0000-4000-8000-000000000026",
     category: Resources,
-    term: "Energy",
-    definition: "Play resource.",
+    term: Tx("Energy"),
+    definition: Tx("Play resource."),
     priority: 0,
-    rules_symbol: RulesSymbol(token: energy, glyph: Energy, accessible_label: "energy"),
+    rules_symbol: RulesSymbol(token: energy, glyph: Energy, accessible_label: Tx("energy")),
   ),
 ]
 "###;
@@ -4218,38 +4251,38 @@ CardMetadataCatalog(
   // First guide comment.
   GuideDefinition(
     id: "00000000-0000-4000-8000-000000000001",
-    name: r#"Raw Guide"#,
+    name: Tx(r#"Raw Guide"#),
     home_dreamscape_id: "00000000-0000-4000-8000-000000000101",
     portrait_source: "one.png",
-    site_dialogue: [r#"Raw dialogue"#],
-    specialty: Shop(description: "Shop copy"),
+    site_dialogue: [Tx(r#"Raw dialogue"#)],
+    specialty: Shop(description: Tx("Shop copy")),
   ),
   GuideDefinition(
     id: "00000000-0000-4000-8000-000000000002",
-    name: "Nested Guide",
+    name: Tx("Nested Guide"),
     home_dreamscape_id: "00000000-0000-4000-8000-000000000102",
     portrait_source: "two.png",
-    site_dialogue: ["Nested dialogue"],
+    site_dialogue: [Tx("Nested dialogue")],
     specialty: RandomSite(
-      description: "Random copy",
-      dialogue: ["Random line"],
+      description: Tx("Random copy"),
+      dialogue: [Tx("Random line")],
     ),
   ),
   /* Unrelated guide comment. */
   GuideDefinition(
     id: "00000000-0000-4000-8000-000000000003",
-    name: "Unrelated Guide",
+    name: Tx("Unrelated Guide"),
     home_dreamscape_id: "00000000-0000-4000-8000-000000000103",
     portrait_source: "three.png",
-    site_dialogue: ["Unrelated dialogue"],
+    site_dialogue: [Tx("Unrelated dialogue")],
     specialty: Gamble(
-      description: "Gamble copy",
+      description: Tx("Gamble copy"),
       dialogue: GambleDialogue(
-        three_gate: ["Three Gate"],
-        ladder_climb: ["Win {win-essence}"],
-        starway_stairs: ["Stairs"],
-        four_suit_reprise: ["Reprise"],
-        blackjack: ["Blackjack"],
+        three_gate: [Tx("Three Gate")],
+        ladder_climb: [Tx("Win {{win-essence}}")],
+        starway_stairs: [Tx("Stairs")],
+        four_suit_reprise: [Tx("Reprise")],
+        blackjack: [Tx("Blackjack")],
       ),
     ),
   ),
@@ -4262,7 +4295,7 @@ CardMetadataCatalog(
 [
   DreamscapeDefinition(
     id: "0217b10e-bf48-4e27-95f0-846fd802b730",
-    name: r#"Raw Starter"#,
+    name: Tx(r#"Raw Starter"#),
     art: (
       scene: (key: "firstlight_meadow", source: "firstlight_meadow.png"),
       atlas_node: (key: "firstlight_meadow", source: "firstlight_meadow_icon.png"),
@@ -4272,7 +4305,7 @@ CardMetadataCatalog(
   // Editable nested fields.
   DreamscapeDefinition(
     id: "08e11635-9f04-48fd-a9c8-5a9f68c80958",
-    name: "Region",
+    name: Tx("Region"),
     art: (
       scene: (key: "tumbleleaf_village", source: "tumbleleaf_village.png"),
       atlas_node: (key: "tumbleleaf_village", source: "tumbleleaf_village_icon.png"),
@@ -4289,7 +4322,7 @@ CardMetadataCatalog(
   /* Unrelated record comment. */
   DreamscapeDefinition(
     id: "f31e1199-70bc-4110-85f9-505afebb02c4",
-    name: "Final Dream",
+    name: Tx("Final Dream"),
     art: (
       scene: (key: "limbo", source: "limbo.png"),
       atlas_node: (key: "limbo", source: "limbo_icon.png"),
@@ -4313,9 +4346,9 @@ DreamwellCatalog(
   cards: [
     // Edited record comment.
     DreamwellCardDefinition(
-      name: r#"Raw Horizon"#,
+      name: Tx(r#"Raw Horizon"#),
       id: "00000000-0000-4000-8000-000000000021",
-      ability_text: ["First paragraph", "Second paragraph"],
+      ability_text: [Tx("First paragraph"), Tx("Second paragraph")],
       energy_added: 2,
       deck_tier: Starting,
       art: (
@@ -4327,9 +4360,9 @@ DreamwellCatalog(
 
     /* Unrelated record comment. */
     DreamwellCardDefinition(
-      name: "Unrelated Dreamwell",
+      name: Tx("Unrelated Dreamwell"),
       id: "00000000-0000-4000-8000-000000000022",
-      ability_text: ["Unrelated ability."],
+      ability_text: [Tx("Unrelated ability.")],
       energy_added: 1,
       deck_tier: Two,
       art: (image: 8, crop: (x: 0.25, y: -0.5, scale: 1.5)),
@@ -4438,17 +4471,17 @@ DreamwellCatalog(
 [
   // Edited record comment.
   DreamsignDefinition(
-    name: r#"Raw Sign"#,
+    name: Tx(r#"Raw Sign"#),
     id: "00000000-0000-4000-8000-000000000021",
-    ability_text: ["First paragraph", "Nested text: tags: [\"not metadata\"]"],
+    ability_text: [Tx("First paragraph"), Tx("Nested text: tags: [\"not metadata\"]")],
     art: (image: "first.png"),
   ),
 
   /* Unrelated record comment. */
   DreamsignDefinition(
-    name: "Unrelated Sign",
+    name: Tx("Unrelated Sign"),
     id: "00000000-0000-4000-8000-000000000022",
-    ability_text: ["Unrelated ability."],
+    ability_text: [Tx("Unrelated ability.")],
     art: (image: "second.png"),
   ),
 ]
@@ -4488,7 +4521,7 @@ DreamwellCatalog(
   // Edited record comment.
   FigmentDefinition(
     id: "00000000-0000-4000-8000-000000000031",
-    name: r#"Raw Figment"#,
+    name: Tx(r#"Raw Figment"#),
     character_type: Warrior,
     base_spark: 1,
     behavior: Vanilla,
@@ -4498,7 +4531,7 @@ DreamwellCatalog(
   /* Unrelated record comment. */
   FigmentDefinition(
     id: "00000000-0000-4000-8000-000000000032",
-    name: "Unrelated Figment",
+    name: Tx("Unrelated Figment"),
     character_type: Shadow,
     base_spark: 2,
     behavior: Vengeful,
@@ -4536,7 +4569,7 @@ DreamwellCatalog(
         )
         .unwrap();
         assert_eq!(&FIGMENT_SOURCE[unrelated_before], &patched[unrelated_after]);
-        assert!(patched.contains("name: r#\"Raw Figment\"#"));
+        assert!(patched.contains("name: Tx(r#\"Raw Figment\"#)"));
         assert_eq!(
             ron::from_str::<Vec<FigmentDefinition>>(&patched).unwrap(),
             figments
@@ -4596,7 +4629,7 @@ DreamwellCatalog(
             .count();
         assert_eq!(changed_lines, 1);
         assert!(patched.contains("/* Unrelated record comment. */"));
-        assert!(patched.contains("name: \"Unrelated Sign\""));
+        assert!(patched.contains("name: Tx(\"Unrelated Sign\")"));
         assert!(patched.contains("Nested text: tags:"));
         assert_eq!(
             ron::from_str::<Vec<DreamsignDefinition>>(&patched).unwrap(),
@@ -4694,7 +4727,7 @@ DreamwellCatalog(
         assert_eq!(changed_lines, 1);
         assert!(patched.contains("// Edited record comment."));
         assert!(patched.contains("/* Unrelated record comment. */"));
-        assert!(patched.contains("name: \"Unrelated Avatar\""));
+        assert!(patched.contains("name: Tx(\"Unrelated Avatar\")"));
         assert_eq!(
             ron::from_str::<Vec<AvatarDefinition>>(&patched).unwrap(),
             avatars
@@ -4730,7 +4763,7 @@ DreamwellCatalog(
                 .count(),
             1
         );
-        assert!(patched.contains("term: r#\"Echo\"#"));
+        assert!(patched.contains("term: Tx(r#\"Echo\"#)"));
         assert!(patched.contains("/* Unrelated record comment. */"));
         let unrelated_after = typed_record_range(
             &patched,
@@ -4842,7 +4875,7 @@ DreamwellCatalog(
             .filter(|(before, after)| before != after)
             .count();
         assert_eq!(changed_lines, 2);
-        assert!(patched.contains("site_dialogue: [r#\"Raw dialogue\"#]"));
+        assert!(patched.contains("site_dialogue: [Tx(r#\"Raw dialogue\"#)]"));
         assert!(patched.starts_with("// Stable Dream guide guidance.\n"));
         let unrelated_after = typed_record_range(
             &patched,
@@ -4869,9 +4902,9 @@ DreamwellCatalog(
         let patched =
             swap_dream_guide_source_field(source, &mut guides, 0, 1, "specialty").unwrap();
         assert!(patched.contains("specialty: RandomSite("));
-        assert!(patched.contains("description: \"Random copy\""));
-        assert!(patched.contains("dialogue: [\"Random line\"]"));
-        assert!(patched.contains("specialty: Shop(description: \"Shop copy\")"));
+        assert!(patched.contains("description: Tx(\"Random copy\")"));
+        assert!(patched.contains("dialogue: [Tx(\"Random line\")]"));
+        assert!(patched.contains("specialty: Shop(description: Tx(\"Shop copy\"))"));
         assert_eq!(
             guides.iter().map(|guide| guide.id).collect::<Vec<_>>(),
             ids_before
@@ -5018,7 +5051,7 @@ DreamwellCatalog(
 
         assert!(source.contains("portrait: (image: 99, focus: (x: 0.25, y: 0.75))"));
         assert_eq!(source.matches("starting_essence:").count(), 1);
-        assert!(source.contains("name: \"Unrelated Avatar\""));
+        assert!(source.contains("name: Tx(\"Unrelated Avatar\")"));
         let ids = ron::from_str::<Vec<AvatarDefinition>>(&source)
             .unwrap()
             .into_iter()
@@ -5075,7 +5108,7 @@ DreamwellCatalog(
             1
         );
         assert!(patched.contains("/* Unrelated tide comment. */"));
-        assert!(patched.contains("display_name: \"Facet Tide\""));
+        assert!(patched.contains("display_name: Tx(\"Facet Tide\")"));
     }
 
     #[test]
@@ -5087,7 +5120,7 @@ DreamwellCatalog(
 
         assert_eq!(ron::from_str::<TidesCatalog>(&patched).unwrap(), catalog);
         assert!(patched.contains("resonance: Ember"));
-        assert!(patched.contains("display_name: \"Facet Tide\""));
+        assert!(patched.contains("display_name: Tx(\"Facet Tide\")"));
     }
 
     #[test]
@@ -6585,7 +6618,7 @@ DreamwellCatalog(
     #[test]
     fn exploration_presentation_edit_preserves_unrelated_source() {
         let mut catalog: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
-        catalog[0].actions[0].presentation.effect_text = "Edited effect".into();
+        catalog[0].actions[0].presentation.effect_text = ls("Edited effect");
         let patched = patch_exploration_action(EXPLORATION_SOURCE, &catalog[0].actions[0]).unwrap();
 
         assert!(patched.starts_with("// Stable Exploration guidance."));
@@ -6727,8 +6760,8 @@ DreamwellCatalog(
         assert_eq!(
             changed_lines,
             vec![(
-                "    ability_text: [\"Offering\", \"    tags: [\\\"inside rules\\\"],\\n▸Materialized: Dissolve an enemy.\"],",
-                "    ability_text: [\"Offering, Veil\", \"    tags: [\\\"inside rules\\\"],\\n▸Materialized: Dissolve an enemy.\"],"
+                "    ability_text: [Tx(\"Offering\"), Tx(\"    tags: [\\\"inside rules\\\"],\\n▸Materialized: Dissolve an enemy.\")],",
+                "    ability_text: [Tx(\"Offering, Veil\"), Tx(\"    tags: [\\\"inside rules\\\"],\\n▸Materialized: Dissolve an enemy.\")],"
             )]
         );
         assert!(patched.starts_with("// Stable catalog guidance.\n"));
@@ -6752,7 +6785,7 @@ DreamwellCatalog(
         let inserted =
             patch_card_source_field(CARD_SOURCE, &cards[index], "amplified-text").unwrap();
         assert!(inserted.contains(
-            "amplified_text: [\"Offering\", \"▸Materialized: Dissolve up to two enemies.\"],"
+            "amplified_text: [Tx(\"Offering\"), Tx(\"▸Materialized: Dissolve up to two enemies.\")],"
         ));
         assert_eq!(
             ron::from_str::<Vec<CardDefinition>>(&inserted).unwrap(),
@@ -6803,7 +6836,7 @@ DreamwellCatalog(
                 patched.starts_with("// Stable catalog guidance.\n"),
                 "{field}"
             );
-            assert!(patched.contains("name: \"Unrelated Card\""), "{field}");
+            assert!(patched.contains("name: Tx(\"Unrelated Card\")"), "{field}");
             assert_eq!(
                 ron::from_str::<Vec<CardDefinition>>(&patched).unwrap(),
                 cards,
@@ -6815,7 +6848,7 @@ DreamwellCatalog(
     #[test]
     fn card_edit_variants_enforce_applicability() {
         let mut event = CardDefinition {
-            name: "Fixture".into(),
+            name: ls("Fixture"),
             id: "00000000-0000-4000-8000-000000000001".into(),
             ability_text: Vec::new(),
             amplified_text: None,
@@ -6944,7 +6977,7 @@ TutorialCatalog(
       behavior: DisplaySpeechBubble(
         speech_bubble: TutorialSpeechBubble(
           duration_seconds: 3,
-          text: r#"Raw tutorial text"#,
+          text: Tx(r#"Raw tutorial text"#),
         ),
       ),
     ),
@@ -7014,7 +7047,7 @@ TutorialCatalog(
         assert_eq!(changed_lines, 1);
         assert!(patched.starts_with("// Preserve catalog guidance.\n"));
         assert!(patched.contains("/* Preserve the unrelated action comment. */"));
-        assert!(patched.contains("text: r#\"Raw tutorial text\"#"));
+        assert!(patched.contains("text: Tx(r#\"Raw tutorial text\"#)"));
         assert!(!patched.contains("\n          maximum_width_pixels:"));
         assert_eq!(parse_tutorial_actions(&patched), after);
     }
@@ -7067,15 +7100,15 @@ AffiliationCatalog(
     AffiliationDefinition (
       // AffiliationDefinition(id: "comment-only")
       id : "00000000-0000-4000-8000-000000000031",
-      name: r#"First Affiliation"#,
-      atlas_card_theme: "Dawn",
+      name: Tx(r#"First Affiliation"#),
+      atlas_card_theme: Tx("Dawn"),
       signature_card_ids: ["00000000-0000-4000-8000-000000000101"],
     ),
     // Unrelated record comment.
     AffiliationDefinition(
       id: "00000000-0000-4000-8000-000000000032",
-      name: "Unrelated",
-      atlas_card_theme: "Dusk",
+      name: Tx("Unrelated"),
+      atlas_card_theme: Tx("Dusk"),
       signature_card_ids: ["00000000-0000-4000-8000-000000000102"],
     ),
   ],
@@ -7095,10 +7128,10 @@ AffiliationCatalog(
         assert!(global.contains("default_random_draw_max_multiplier: 2.0,"));
         assert!(global.contains("// Unrelated record comment."));
 
-        catalog.affiliations[0].name = "Renamed".into();
+        catalog.affiliations[0].name = ls("Renamed");
         let patched = patch_affiliation_field(&global, &catalog.affiliations[0], "name").unwrap();
-        assert!(patched.contains("name: \"Renamed\","));
-        assert!(patched.contains("name: \"Unrelated\","));
+        assert!(patched.contains("name: Tx(\"Renamed\"),"));
+        assert!(patched.contains("name: Tx(\"Unrelated\"),"));
         verify_round_trip::<AffiliationCatalog>(&patched, &catalog).unwrap();
     }
 

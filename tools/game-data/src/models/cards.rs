@@ -1,10 +1,13 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
+use trox::LocalizedString;
 
 use anyhow::{Context, Result, bail};
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
+
+use super::localization::{joined_source_text, source_text};
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct CardId(Uuid);
@@ -50,11 +53,11 @@ impl<'de> Deserialize<'de> for CardId {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct CardDefinition {
-    pub name: String,
+    pub name: LocalizedString,
     pub id: String,
-    pub ability_text: Vec<String>,
+    pub ability_text: Vec<LocalizedString>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub amplified_text: Option<Vec<String>>,
+    pub amplified_text: Option<Vec<LocalizedString>>,
     pub energy_cost: OrbValue,
     pub kind: CardKind,
     #[serde(default, skip_serializing_if = "speed_is_normal")]
@@ -226,15 +229,18 @@ pub fn lower(
             Speed::Interrupt => (true, true),
         };
         let mut record = toml::map::Map::new();
-        record.insert("name".into(), card.name.into());
+        record.insert("name".into(), source_text(&card.name)?.into());
         record.insert("mtg-name".into(), metadata.mtg_origin.into());
         record.insert("id".into(), card.id.clone().into());
         record.insert(
             "rendered-text".into(),
-            card.ability_text.join("\n\n").into(),
+            joined_source_text(card.ability_text, "\n\n")?.into(),
         );
         if let Some(amplified_text) = card.amplified_text {
-            record.insert("amplified-text".into(), amplified_text.join("\n\n").into());
+            record.insert(
+                "amplified-text".into(),
+                joined_source_text(amplified_text, "\n\n")?.into(),
+            );
         }
         record.insert("energy-cost".into(), card.energy_cost.compatibility_value());
         record.insert("card-type".into(), card_type.into());
@@ -292,14 +298,18 @@ pub fn lower(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn ls(text: impl Into<String>) -> LocalizedString {
+        super::super::localization::localized_source(text.into()).unwrap()
+    }
     use proptest::prelude::*;
 
     fn card(energy_cost: OrbValue, kind: CardKind) -> CardDefinition {
         CardDefinition {
-            name: "Unicode ✦ card".into(),
+            name: ls("Unicode ✦ card"),
             id: "00000000-0000-4000-8000-000000000001".into(),
-            ability_text: vec!["quoted \"text\"".into(), "multiline {value}".into()],
-            amplified_text: Some(vec!["stronger quoted \"text\"".into()]),
+            ability_text: vec![ls("quoted \"text\""), ls("multiline {value}")],
+            amplified_text: Some(vec![ls("stronger quoted \"text\"")]),
             energy_cost,
             kind,
             speed: Speed::Interrupt,

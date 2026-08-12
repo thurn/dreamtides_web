@@ -1,11 +1,14 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
+use trox::LocalizedString;
 
 use anyhow::{Context, Result, ensure};
 use indexmap::IndexMap;
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
+
+use super::localization::{localized_source, source_text};
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -45,7 +48,7 @@ pub struct TutorialSpeechBubble {
     pub vertical_offset_pixels: Scalar,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub maximum_width_pixels: Option<u32>,
-    pub text: String,
+    pub text: LocalizedString,
 }
 
 #[derive(Clone, Copy, Debug, Default, Deserialize, Serialize, PartialEq, Eq)]
@@ -273,7 +276,7 @@ pub enum TutorialAction {
         companion: Option<TutorialHowToPlayCompanion>,
         #[serde(default, skip_serializing_if = "Option::is_none")]
         card_width_pixels: Option<u32>,
-        text: String,
+        text: LocalizedString,
     },
     AnimateDreamAvatarPortrait {
         owner: TutorialSide,
@@ -347,7 +350,7 @@ pub struct TutorialTriggerDefinition {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub maximum_width_pixels: Option<u32>,
     pub matcher: TutorialTriggerMatcher,
-    pub text: String,
+    pub text: LocalizedString,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Hash)]
@@ -412,7 +415,7 @@ pub(crate) fn validate(source: &TutorialCatalog) -> Result<()> {
                 .maximum_width_pixels
                 .unwrap_or(source.default_maximum_width_pixels),
         )?;
-        validate_text(&trigger.text, "trigger text")?;
+        validate_text(&source_text(&trigger.text)?, "trigger text")?;
         let events: BTreeSet<_> = trigger.on.iter().map(|event| *event as u8).collect();
         ensure!(
             events.len() == trigger.on.len(),
@@ -494,7 +497,7 @@ fn validate_guidance(
                 .maximum_width_pixels
                 .unwrap_or(default_maximum_width_pixels),
         )?;
-        validate_text(&bubble.text, "persistent bubble text")?;
+        validate_text(&source_text(&bubble.text)?, "persistent bubble text")?;
     }
     Ok(())
 }
@@ -518,7 +521,7 @@ fn validate_action(
                     "How to Play width must be at least 300 pixels"
                 );
             }
-            validate_text(text, "How to Play text")
+            validate_text(&source_text(text)?, "How to Play text")
         }
         TutorialAction::AnimateDreamAvatarPortrait {
             pause_seconds,
@@ -602,7 +605,7 @@ fn validate_timed_speech_bubble(
             .maximum_width_pixels
             .unwrap_or(default_maximum_width_pixels),
     )?;
-    validate_text(&bubble.text, "speech bubble text")
+    validate_text(&source_text(&bubble.text)?, "speech bubble text")
 }
 
 fn validate_battle(battle: &TutorialBattleConfiguration) -> Result<()> {
@@ -965,15 +968,15 @@ impl TryFrom<TutorialCatalog> for CompatibilityCatalog {
             second_battle,
         } = source.journey_guidance;
         Ok(Self {
-            journey_start: guidance(journey_start, default_maximum_width_pixels),
-            dreamscape: guidance(dreamscape, default_maximum_width_pixels),
-            atlas: guidance(atlas, default_maximum_width_pixels),
-            draft: guidance(draft, default_maximum_width_pixels),
-            purge: guidance(purge, default_maximum_width_pixels),
-            dreamsign_revelation: guidance(dreamsign_revelation, default_maximum_width_pixels),
+            journey_start: guidance(journey_start, default_maximum_width_pixels)?,
+            dreamscape: guidance(dreamscape, default_maximum_width_pixels)?,
+            atlas: guidance(atlas, default_maximum_width_pixels)?,
+            draft: guidance(draft, default_maximum_width_pixels)?,
+            purge: guidance(purge, default_maximum_width_pixels)?,
+            dreamsign_revelation: guidance(dreamsign_revelation, default_maximum_width_pixels)?,
             battle_start: CompatibilityBattleStart {
-                first_battle: guidance(first_battle, default_maximum_width_pixels),
-                second_battle: guidance(second_battle, default_maximum_width_pixels),
+                first_battle: guidance(first_battle, default_maximum_width_pixels)?,
+                second_battle: guidance(second_battle, default_maximum_width_pixels)?,
             },
             battle: lower_battle(source.battle)?,
             actions: source
@@ -993,8 +996,8 @@ impl TryFrom<TutorialCatalog> for CompatibilityCatalog {
 fn guidance(
     value: TutorialSpeechBubble,
     default_maximum_width_pixels: u32,
-) -> CompatibilityGuidance {
-    CompatibilityGuidance {
+) -> Result<CompatibilityGuidance> {
+    Ok(CompatibilityGuidance {
         speech_bubble: CompatibilityPersistentSpeechBubble {
             speaker: "mira",
             delay: value.delay_seconds,
@@ -1003,9 +1006,9 @@ fn guidance(
             bubble_width: value
                 .maximum_width_pixels
                 .unwrap_or(default_maximum_width_pixels),
-            text: value.text,
+            text: source_text(&value.text)?,
         },
-    }
+    })
 }
 
 fn lower_battle(value: TutorialBattleConfiguration) -> Result<CompatibilityBattle> {
@@ -1155,7 +1158,7 @@ fn lower_action(
             trigger: how_to_play_trigger(trigger).into(),
             companion: companion.map(|_| "dreamwell-card".into()),
             card_width: card_width_pixels,
-            text,
+            text: source_text(&text)?,
         },
         TutorialAction::AnimateDreamAvatarPortrait {
             owner,
@@ -1247,7 +1250,7 @@ fn lower_speech_bubble(
         bubble_width: value
             .maximum_width_pixels
             .unwrap_or(default_maximum_width_pixels),
-        text: value.text,
+        text: source_text(&value.text)?,
     })
 }
 
@@ -1279,7 +1282,7 @@ fn lower_trigger(
             .maximum_width_pixels
             .unwrap_or(default_maximum_width_pixels),
         matcher,
-        text: value.text,
+        text: source_text(&value.text)?,
     })
 }
 
@@ -1489,7 +1492,7 @@ impl TryFrom<CompatibilityAction> for TutorialActionDefinition {
                     Some(other) => anyhow::bail!("unsupported How to Play companion {other}"),
                 },
                 card_width_pixels: card_width,
-                text,
+                text: localized_source(text)?,
             },
             CompatibilityActionBehavior::AnimateDreamAvatarPortrait {
                 owner,
@@ -1586,7 +1589,7 @@ impl TryFrom<CompatibilitySpeechBubble> for TutorialSpeechBubble {
             horizontal_offset_pixels: value.horizontal_offset,
             vertical_offset_pixels: value.vertical_offset,
             maximum_width_pixels: Some(value.bubble_width),
-            text: value.text,
+            text: localized_source(value.text)?,
         })
     }
 }
@@ -1742,6 +1745,10 @@ mod tests {
 
     use super::*;
 
+    fn ls(text: impl Into<String>) -> LocalizedString {
+        super::super::localization::localized_source(text.into()).unwrap()
+    }
+
     fn entity(value: &str) -> EntityId {
         EntityId::parse(value).unwrap()
     }
@@ -1758,7 +1765,7 @@ mod tests {
             horizontal_offset_pixels: Scalar::Integer(0),
             vertical_offset_pixels: Scalar::Integer(-7),
             maximum_width_pixels: Some(444),
-            text: text.into(),
+            text: ls(text),
         }
     }
 
@@ -1770,7 +1777,7 @@ mod tests {
             horizontal_offset_pixels: Scalar::Integer(-12),
             vertical_offset_pixels: Scalar::Integer(8),
             maximum_width_pixels: Some(456),
-            text: "Persistent Unicode ✦".into(),
+            text: ls("Persistent Unicode ✦"),
         };
         let actions = vec![
             TutorialAction::DisplaySpeechBubble {
@@ -1780,7 +1787,7 @@ mod tests {
                 trigger: TutorialHowToPlayTrigger::EnemyTurnAnnouncementComplete,
                 companion: Some(TutorialHowToPlayCompanion::DreamwellCard),
                 card_width_pixels: Some(480),
-                text: "How to play".into(),
+                text: ls("How to play"),
             },
             TutorialAction::AnimateDreamAvatarPortrait {
                 owner: TutorialSide::Enemy,
@@ -1933,7 +1940,7 @@ mod tests {
                     matcher: TutorialTriggerMatcher::Glossary {
                         glossary_id: mapped_id(GLOSSARY_IDS, 0),
                     },
-                    text: "Glossary".into(),
+                    text: ls("Glossary"),
                 },
                 TutorialTriggerDefinition {
                     id: mapped_id(TRIGGER_IDS, 1),
@@ -1943,7 +1950,7 @@ mod tests {
                     duration_seconds: Scalar::Integer(4),
                     maximum_width_pixels: Some(501),
                     matcher: TutorialTriggerMatcher::EventCard,
-                    text: "Card type".into(),
+                    text: ls("Card type"),
                 },
                 TutorialTriggerDefinition {
                     id: mapped_id(TRIGGER_IDS, 2),
@@ -1955,7 +1962,7 @@ mod tests {
                     matcher: TutorialTriggerMatcher::Card {
                         card_id: entity("00000000-0000-4000-8000-000000000101"),
                     },
-                    text: "Card".into(),
+                    text: ls("Card"),
                 },
                 TutorialTriggerDefinition {
                     id: mapped_id(TRIGGER_IDS, 3),
@@ -1965,7 +1972,7 @@ mod tests {
                     duration_seconds: Scalar::Integer(6),
                     maximum_width_pixels: Some(503),
                     matcher: TutorialTriggerMatcher::Any,
-                    text: "Any".into(),
+                    text: ls("Any"),
                 },
             ],
         }

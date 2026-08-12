@@ -1,9 +1,12 @@
 use std::collections::HashSet;
+use trox::LocalizedString;
 
 use anyhow::{Result, bail, ensure};
 use indexmap::IndexMap;
 use serde::{Deserialize, Deserializer, Serialize, Serializer, de::Error as _};
 use uuid::{Uuid, Variant, Version};
+
+use super::localization::source_text;
 
 macro_rules! uuid_id {
     ($name:ident) => {
@@ -229,10 +232,10 @@ pub struct KnownDreamsignRules {
 pub struct BossDefinition {
     pub dreamscape_id: DreamscapeId,
     pub compatibility_dreamscape_id: String,
-    pub place: String,
-    pub name: String,
-    pub fallback_title: String,
-    pub fallback_introduction: String,
+    pub place: LocalizedString,
+    pub name: LocalizedString,
+    pub fallback_title: LocalizedString,
+    pub fallback_introduction: LocalizedString,
     pub art: BossArt,
 }
 
@@ -255,23 +258,23 @@ pub struct AssetReference {
 #[serde(deny_unknown_fields)]
 pub struct Presentation {
     pub unrevealed: UnrevealedPresentation,
-    pub starter_body: String,
+    pub starter_body: LocalizedString,
     pub affiliation: AffiliationPresentation,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct UnrevealedPresentation {
-    pub title: String,
-    pub body: String,
+    pub title: LocalizedString,
+    pub body: LocalizedString,
     pub frame: AssetReference,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct AffiliationPresentation {
-    pub title_template: String,
-    pub body_template: String,
+    pub title_template: LocalizedString,
+    pub body_template: LocalizedString,
 }
 
 pub fn lower(source: AtlasCatalog) -> Result<toml::Value> {
@@ -317,10 +320,10 @@ pub fn lower(source: AtlasCatalog) -> Result<toml::Value> {
         toml::Value::Table(lower_known_dreamsign(source.known_dreamsign)),
     );
     let assets = lower_assets(&source.presentation, &source.boss.art);
-    root.insert("boss".into(), toml::Value::Table(lower_boss(source.boss)));
+    root.insert("boss".into(), toml::Value::Table(lower_boss(source.boss)?));
     root.insert(
         "presentation".into(),
-        toml::Value::Table(lower_presentation(&source.presentation)),
+        toml::Value::Table(lower_presentation(&source.presentation)?),
     );
     root.insert("assets".into(), toml::Value::Table(assets));
     Ok(toml::Value::Table(root))
@@ -427,19 +430,11 @@ fn validate(source: &AtlasCatalog) -> Result<()> {
         "early_reveal_bias must be finite and nonnegative"
     );
     ensure!(
-        source
-            .presentation
-            .affiliation
-            .title_template
-            .contains("{name}"),
+        source_text(&source.presentation.affiliation.title_template)?.contains("{name}"),
         "affiliation title template must contain {{name}}"
     );
     ensure!(
-        source
-            .presentation
-            .affiliation
-            .body_template
-            .contains("{card-theme}"),
+        source_text(&source.presentation.affiliation.body_template)?.contains("{card-theme}"),
         "affiliation body template must contain {{card-theme}}"
     );
     ensure!(
@@ -638,39 +633,51 @@ fn lower_known_dreamsign(value: KnownDreamsignRules) -> toml::map::Map<String, t
     ])
 }
 
-fn lower_boss(value: BossDefinition) -> toml::map::Map<String, toml::Value> {
-    toml::map::Map::from_iter([
+fn lower_boss(value: BossDefinition) -> Result<toml::map::Map<String, toml::Value>> {
+    Ok(toml::map::Map::from_iter([
         (
             "dreamscape-id".into(),
             value.compatibility_dreamscape_id.into(),
         ),
-        ("place".into(), value.place.into()),
-        ("name".into(), value.name.into()),
-        ("fallback-title".into(), value.fallback_title.into()),
+        ("place".into(), source_text(&value.place)?.into()),
+        ("name".into(), source_text(&value.name)?.into()),
+        (
+            "fallback-title".into(),
+            source_text(&value.fallback_title)?.into(),
+        ),
         (
             "fallback-introduction".into(),
-            value.fallback_introduction.into(),
+            source_text(&value.fallback_introduction)?.into(),
         ),
         ("scene-art-id".into(), value.art.scene.key.into()),
         ("icon-art-id".into(), value.art.icon.key.into()),
         ("figure-art-id".into(), value.art.figure.key.into()),
-    ])
+    ]))
 }
 
-fn lower_presentation(value: &Presentation) -> toml::map::Map<String, toml::Value> {
-    toml::map::Map::from_iter([
-        ("unseen-title".into(), value.unrevealed.title.clone().into()),
-        ("unseen-body".into(), value.unrevealed.body.clone().into()),
-        ("starter-body".into(), value.starter_body.clone().into()),
+fn lower_presentation(value: &Presentation) -> Result<toml::map::Map<String, toml::Value>> {
+    Ok(toml::map::Map::from_iter([
+        (
+            "unseen-title".into(),
+            source_text(&value.unrevealed.title)?.into(),
+        ),
+        (
+            "unseen-body".into(),
+            source_text(&value.unrevealed.body)?.into(),
+        ),
+        (
+            "starter-body".into(),
+            source_text(&value.starter_body)?.into(),
+        ),
         (
             "affiliation-title-template".into(),
-            value.affiliation.title_template.clone().into(),
+            source_text(&value.affiliation.title_template)?.into(),
         ),
         (
             "affiliation-body-template".into(),
-            value.affiliation.body_template.clone().into(),
+            source_text(&value.affiliation.body_template)?.into(),
         ),
-    ])
+    ]))
 }
 
 fn lower_assets(
@@ -698,6 +705,10 @@ fn lower_assets(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn ls(text: impl Into<String>) -> LocalizedString {
+        super::super::localization::localized_source(text.into()).unwrap()
+    }
 
     fn catalog() -> AtlasCatalog {
         let layers = LayerPosition::ALL
@@ -780,10 +791,10 @@ mod tests {
             boss: BossDefinition {
                 dreamscape_id: DreamscapeId::parse("00000000-0000-4000-8000-000000000001").unwrap(),
                 compatibility_dreamscape_id: "boss-dreamscape".into(),
-                place: "Límbø".into(),
-                name: "Apollyon".into(),
-                fallback_title: "Doom".into(),
-                fallback_introduction: "First line\nSecond line".into(),
+                place: ls("Límbø"),
+                name: ls("Apollyon"),
+                fallback_title: ls("Doom"),
+                fallback_introduction: ls("First line\nSecond line"),
                 art: BossArt {
                     scene: AssetReference {
                         key: "scene".into(),
@@ -801,17 +812,17 @@ mod tests {
             },
             presentation: Presentation {
                 unrevealed: UnrevealedPresentation {
-                    title: "Unknown".into(),
-                    body: "Hidden".into(),
+                    title: ls("Unknown"),
+                    body: ls("Hidden"),
                     frame: AssetReference {
                         key: "frame-key".into(),
                         source: "frame.png".into(),
                     },
                 },
-                starter_body: "Start".into(),
+                starter_body: ls("Start"),
                 affiliation: AffiliationPresentation {
-                    title_template: "Affiliation: {name}".into(),
-                    body_template: "{card-theme} affinity".into(),
+                    title_template: ls("Affiliation: {name}"),
+                    body_template: ls("{card-theme} affinity"),
                 },
             },
         }

@@ -1,7 +1,7 @@
 // Configures Draft-site offers, run-wide rarity limits, and draft-pool generation.
 
 DraftDocument(
-  presentation: DraftPresentation(progress: "Draft ({pickNumber}/{pickTotal})"),
+  presentation: DraftPresentation(progress: Tx("Draft ({{pickNumber}}/{{pickTotal}})")),
 
   offers: (
     // Number of cards shown to the player in each draft offer.

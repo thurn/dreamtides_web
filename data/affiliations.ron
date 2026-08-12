@@ -20,8 +20,8 @@ AffiliationCatalog(
   affiliations: [
     AffiliationDefinition(
       id: "4b715cd0-8b41-4b82-9cef-c47b15e8992b",
-      name: "Spirit Animals",
-      atlas_card_theme: "Spirit Animal",
+      name: Tx("Spirit Animals"),
+      atlas_card_theme: Tx("Spirit Animal"),
       signature_card_ids: [
         "9b9c2743-75b3-499d-b5fb-c3429c92d420",
         "401bb341-8385-41e9-8f6f-7b48e9ce174d",
@@ -33,8 +33,8 @@ AffiliationCatalog(
 
     AffiliationDefinition(
       id: "c3815562-e80d-4afc-8ba6-91bd60ad323e",
-      name: "The Void",
-      atlas_card_theme: "Void",
+      name: Tx("The Void"),
+      atlas_card_theme: Tx("Void"),
       signature_card_ids: [
         "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1",
         "25d00336-5ad7-433b-8ced-71720a9f074a",
@@ -46,8 +46,8 @@ AffiliationCatalog(
 
     AffiliationDefinition(
       id: "a544314c-2e90-42b1-ba04-06c7f2f0a6f9",
-      name: "Tempo",
-      atlas_card_theme: "Tempo",
+      name: Tx("Tempo"),
+      atlas_card_theme: Tx("Tempo"),
       signature_card_ids: [
         "954e8d50-d494-4fb2-b4c7-74979083b774",
         "4f29a241-9265-4669-a189-5a2a91923e12",
@@ -61,8 +61,8 @@ AffiliationCatalog(
 
     AffiliationDefinition(
       id: "04103386-ca4e-42a0-9a90-150297a20e91",
-      name: "Events",
-      atlas_card_theme: "Event",
+      name: Tx("Events"),
+      atlas_card_theme: Tx("Event"),
       signature_card_ids: [
         "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
         "967c714f-40c5-4a77-8e22-40691a2755d4",
@@ -74,8 +74,8 @@ AffiliationCatalog(
 
     AffiliationDefinition(
       id: "8b30f0bf-6b9d-47c0-92ba-80f62ae8899d",
-      name: "Characters",
-      atlas_card_theme: "Character",
+      name: Tx("Characters"),
+      atlas_card_theme: Tx("Character"),
       signature_card_ids: [
         "9b9c2743-75b3-499d-b5fb-c3429c92d420",
         "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49",
@@ -87,8 +87,8 @@ AffiliationCatalog(
 
     AffiliationDefinition(
       id: "33dee3b4-19d2-4788-9cef-b69057385844",
-      name: "Warriors",
-      atlas_card_theme: "Warrior",
+      name: Tx("Warriors"),
+      atlas_card_theme: Tx("Warrior"),
       signature_card_ids: [
         "724a1362-3f0f-4b77-b14e-22c0b877349a",
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08",
@@ -100,8 +100,8 @@ AffiliationCatalog(
 
     AffiliationDefinition(
       id: "c674a92f-3860-4851-8357-dd4f3e469674",
-      name: "Abandon",
-      atlas_card_theme: "Abandon",
+      name: Tx("Abandon"),
+      atlas_card_theme: Tx("Abandon"),
       signature_card_ids: [
         "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005",
         "a9b5afaa-e149-4bf4-9007-077e8e9f12e6",
@@ -113,8 +113,8 @@ AffiliationCatalog(
 
     AffiliationDefinition(
       id: "d1a8f46d-0efe-4ae6-bda3-0866d5d20633",
-      name: "Survivors",
-      atlas_card_theme: "Survivor",
+      name: Tx("Survivors"),
+      atlas_card_theme: Tx("Survivor"),
       signature_card_ids: [
         "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1",
         "f3985df4-0867-4fd6-8312-6b358dc26883",
@@ -125,8 +125,8 @@ AffiliationCatalog(
 
     AffiliationDefinition(
       id: "96258dfd-33c9-44a7-96a5-6747eb42cc60",
-      name: "Figments",
-      atlas_card_theme: "Figment",
+      name: Tx("Figments"),
+      atlas_card_theme: Tx("Figment"),
       signature_card_ids: [
         "f4082c01-fdc8-4583-afdb-76bac980b3bf",
         "89c0d03c-2199-415a-bc66-89e451034328",
@@ -137,8 +137,8 @@ AffiliationCatalog(
 
     AffiliationDefinition(
       id: "0f09352d-3a1d-44db-a58e-229ab834cdc3",
-      name: "Discard",
-      atlas_card_theme: "Discard",
+      name: Tx("Discard"),
+      atlas_card_theme: Tx("Discard"),
       signature_card_ids: [
         "68978d92-aa8b-4873-bb0b-6e52f12b0849",
         "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4",

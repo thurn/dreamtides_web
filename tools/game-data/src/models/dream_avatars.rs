@@ -1,18 +1,21 @@
 use std::collections::BTreeSet;
 use std::fmt;
+use trox::LocalizedString;
 
 use anyhow::{Result, bail};
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
+use super::localization::{joined_source_text, source_text};
+
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct AvatarDefinition {
-    pub name: String,
+    pub name: LocalizedString,
     pub id: DreamAvatarId,
-    pub ability_text: Vec<String>,
-    pub title: String,
+    pub ability_text: Vec<LocalizedString>,
+    pub title: LocalizedString,
     pub portrait: Portrait,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub starting_essence: Option<u32>,
@@ -162,21 +165,21 @@ pub fn lower(source: Vec<AvatarDefinition>) -> Result<toml::Value> {
                     .map(|id| id.to_string())
                     .collect()
             });
-            CompatibilityDreamAvatar {
-                name: avatar.name,
-                title: avatar.title,
+            Ok(CompatibilityDreamAvatar {
+                name: source_text(&avatar.name)?,
+                title: source_text(&avatar.title)?,
                 id: avatar.id.to_string(),
                 image_number: format!("{:04}", avatar.portrait.image),
                 portrait_focus: CompatibilityPortraitFocus {
                     x: avatar.portrait.focus.x,
                     y: avatar.portrait.focus.y,
                 },
-                rendered_text: avatar.ability_text.join("\n\n"),
+                rendered_text: joined_source_text(avatar.ability_text, "\n\n")?,
                 starting_essence: avatar.starting_essence,
                 signature_cards,
-            }
+            })
         })
-        .collect();
+        .collect::<Result<Vec<_>>>()?;
     Ok(toml::Value::try_from(CompatibilityCatalog {
         dream_avatars,
         metadata: compatibility_metadata(),
@@ -252,7 +255,7 @@ pub(crate) fn validate(source: &[AvatarDefinition]) -> Result<()> {
             );
         }
         for (field, value) in [("name", &avatar.name), ("title", &avatar.title)] {
-            if value.trim().is_empty() {
+            if source_text(value)?.trim().is_empty() {
                 bail!("DreamAvatar {} has an empty {field}", avatar.id);
             }
         }
@@ -260,7 +263,7 @@ pub(crate) fn validate(source: &[AvatarDefinition]) -> Result<()> {
             bail!("DreamAvatar {} has no ability text", avatar.id);
         }
         for (index, paragraph) in avatar.ability_text.iter().enumerate() {
-            if paragraph.trim().is_empty() {
+            if source_text(paragraph)?.trim().is_empty() {
                 bail!(
                     "DreamAvatar {} ability_text[{index}] must be non-empty",
                     avatar.id
@@ -368,6 +371,10 @@ mod tests {
 
     use super::*;
 
+    fn ls(text: impl Into<String>) -> LocalizedString {
+        super::super::localization::localized_source(text.into()).unwrap()
+    }
+
     const FIRST_ID: &str = "00000000-0000-4000-8000-000000000001";
     const SECOND_ID: &str = "00000000-0000-4000-8000-000000000002";
     const CARD_ONE: &str = "00000000-0000-4000-8000-000000000101";
@@ -379,10 +386,10 @@ mod tests {
 #![enable(implicit_some)]
 [
   AvatarDefinition(
-    name: "Límbø",
+    name: Tx("Límbø"),
     id: "00000000-0000-4000-8000-000000000001",
-    ability_text: ["First line", "Second line"],
-    title: "First",
+    ability_text: [Tx("First line"), Tx("Second line")],
+    title: Tx("First"),
     portrait: (image: 7, focus: (x: 0.25, y: 0.75)),
     starting_essence: 137,
     signature_card_ids: [
@@ -391,10 +398,10 @@ mod tests {
     ],
   ),
   AvatarDefinition(
-    name: "Second",
+    name: Tx("Second"),
     id: "00000000-0000-4000-8000-000000000002",
-    ability_text: ["Ability"],
-    title: "Without signatures",
+    ability_text: [Tx("Ability")],
+    title: Tx("Without signatures"),
     portrait: (image: 42, focus: (x: 0.5, y: 0.4)),
   ),
 ]
@@ -487,8 +494,10 @@ mod tests {
 
     #[test]
     fn rejects_unknown_fields_and_noncanonical_ids() {
-        let unknown =
-            synthetic_source().replace("name: \"Límbø\",", "name: \"Límbø\", surprise: true,");
+        let unknown = synthetic_source().replace(
+            "name: Tx(\"Límbø\"),",
+            "name: Tx(\"Límbø\"), surprise: true,",
+        );
         assert!(ron::from_str::<Vec<AvatarDefinition>>(&unknown).is_err());
         let unknown_metadata = synthetic_metadata().replace(
             "mtg_archetype: \"An Archetype\",",
@@ -540,7 +549,7 @@ mod tests {
         );
 
         let mut empty_name = source.clone();
-        empty_name[0].name = "  ".into();
+        empty_name[0].name = ls("  ");
         assert!(
             lower(empty_name)
                 .unwrap_err()
@@ -558,7 +567,7 @@ mod tests {
         );
 
         let mut empty_paragraph = source.clone();
-        empty_paragraph[0].ability_text[0] = "  ".into();
+        empty_paragraph[0].ability_text[0] = ls("  ");
         assert!(
             lower(empty_paragraph)
                 .unwrap_err()

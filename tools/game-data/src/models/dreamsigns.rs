@@ -1,5 +1,6 @@
 use std::collections::BTreeSet;
 use std::fmt;
+use trox::LocalizedString;
 
 use anyhow::{Context, Result, bail};
 use indexmap::IndexMap;
@@ -7,12 +8,14 @@ use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
+use super::localization::{joined_source_text, source_text};
+
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DreamsignDefinition {
-    pub name: String,
+    pub name: LocalizedString,
     pub id: DreamsignId,
-    pub ability_text: Vec<String>,
+    pub ability_text: Vec<LocalizedString>,
     pub art: DreamsignArt,
 }
 
@@ -111,7 +114,7 @@ pub fn lower(
 
         let mut record = toml::map::Map::new();
         record.insert("id".into(), definition.id.to_string().into());
-        record.insert("name".into(), definition.name.into());
+        record.insert("name".into(), source_text(&definition.name)?.into());
         record.insert("image_name".into(), definition.art.image.into());
         if let Some(tides) = internal.tides {
             record.insert(
@@ -121,7 +124,7 @@ pub fn lower(
         }
         record.insert(
             "rendered-text".into(),
-            definition.ability_text.join("\n\n").into(),
+            joined_source_text(definition.ability_text, "\n\n")?.into(),
         );
         record.insert(
             "tags".into(),
@@ -156,16 +159,14 @@ pub fn validate_definitions(definitions: &[DreamsignDefinition]) -> Result<()> {
         if !ids.insert(definition.id) {
             bail!("duplicate Dreamsign id: {}", definition.id);
         }
-        for (field, value) in [
-            ("name", &definition.name),
-            ("art.image", &definition.art.image),
-        ] {
-            if value.trim().is_empty() {
-                bail!("Dreamsign {} has an empty {field}", definition.id);
-            }
+        if source_text(&definition.name)?.trim().is_empty() {
+            bail!("Dreamsign {} has an empty name", definition.id);
+        }
+        if definition.art.image.trim().is_empty() {
+            bail!("Dreamsign {} has an empty art.image", definition.id);
         }
         for (index, ability) in definition.ability_text.iter().enumerate() {
-            if ability.trim().is_empty() {
+            if source_text(ability)?.trim().is_empty() {
                 bail!(
                     "Dreamsign {} ability_text[{index}] must be non-empty",
                     definition.id
@@ -229,13 +230,13 @@ mod tests {
         r##"#![enable(implicit_some)]
 [
   DreamsignDefinition(
-    name: "Límbø Sign",
+    name: Tx("Límbø Sign"),
     id: "00000000-0000-4000-8000-000000000001",
-    ability_text: ["First paragraph with ✦.", "Second paragraph."],
+    ability_text: [Tx("First paragraph with ✦."), Tx("Second paragraph.")],
     art: (image: "first.png"),
   ),
   DreamsignDefinition(
-    name: "Blank Sign",
+    name: Tx("Blank Sign"),
     id: "00000000-0000-4000-8000-000000000002",
     ability_text: [],
     art: (image: "blank.png"),
@@ -302,8 +303,8 @@ mod tests {
     #[test]
     fn rejects_unknown_fields_and_noncanonical_ids() {
         let unknown = synthetic_definitions().replace(
-            "name: \"Límbø Sign\",",
-            "name: \"Límbø Sign\", surprise: true,",
+            "name: Tx(\"Límbø Sign\"),",
+            "name: Tx(\"Límbø Sign\"), surprise: true,",
         );
         assert!(ron::from_str::<Vec<DreamsignDefinition>>(&unknown).is_err());
         let unknown_metadata = synthetic_metadata().replace(

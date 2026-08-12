@@ -1,41 +1,41 @@
 ResonanceCatalog(
   ember: ResonancePresentation(
-    display_name: "Ember",
+    display_name: Tx("Ember"),
     accent_color: "#fb923c",
     chip_background: "#5c2c0f",
     chip_border: "rgba(251, 146, 60, 0.55)",
-    accessibility_name: "Ember resonance",
+    accessibility_name: Tx("Ember resonance"),
   ),
 
   valor: ResonancePresentation(
-    display_name: "Valor",
+    display_name: Tx("Valor"),
     accent_color: "#facc15",
     chip_background: "#4a3a00",
     chip_border: "rgba(250, 204, 21, 0.55)",
-    accessibility_name: "Valor resonance",
+    accessibility_name: Tx("Valor resonance"),
   ),
 
   vision: ResonancePresentation(
-    display_name: "Vision",
+    display_name: Tx("Vision"),
     accent_color: "#60a5fa",
     chip_background: "#13315c",
     chip_border: "rgba(96, 165, 250, 0.55)",
-    accessibility_name: "Vision resonance",
+    accessibility_name: Tx("Vision resonance"),
   ),
 
   wild: ResonancePresentation(
-    display_name: "Wild",
+    display_name: Tx("Wild"),
     accent_color: "#4ade80",
     chip_background: "#0f3d22",
     chip_border: "rgba(74, 222, 128, 0.55)",
-    accessibility_name: "Wild resonance",
+    accessibility_name: Tx("Wild resonance"),
   ),
 
   shadow: ResonancePresentation(
-    display_name: "Shadow",
+    display_name: Tx("Shadow"),
     accent_color: "#c084fc",
     chip_background: "#3b1259",
     chip_border: "rgba(192, 132, 252, 0.55)",
-    accessibility_name: "Shadow resonance",
+    accessibility_name: Tx("Shadow resonance"),
   ),
 )
