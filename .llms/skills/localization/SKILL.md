@@ -125,8 +125,18 @@ boolean, or suspicious preformatted phrase.
 > the alternatives as one message family to preserve a grammatical or semantic
 > relationship that cannot be represented by independent complete messages.
 > If ordinary application control flow can choose the message before it is
-> constructed, use that control flow and return a separate `tx(...)` or
-> `txa(...)` value for each branch.
+> constructed, use that control flow to return the appropriate complete
+> `tx(...)` or `txa(...)` value. Branches that intentionally present the same
+> message may reuse one call.
+
+> [!WARNING]
+> Treat `meaning(...)` as an exceptional translation disambiguator, not as a
+> semantic tag, message ID, product-state label, or way to silence a catalog
+> warning. Use it only when identical source English appears in translator-
+> visible contexts that may legitimately require different translations in at
+> least one target language. Before adding a meaning key, name the target
+> language and the plausible translations that must differ. If no such example
+> exists, reuse one message identity.
 
 - Make every message and every selector leaf a complete semantic utterance or
   complete UI label. Keep articles, verbs, nouns, pronouns, punctuation, and
@@ -139,14 +149,26 @@ boolean, or suspicious preformatted phrase.
 - Use `txa(pattern, inline_arguments, description)` whenever any leaf contains
   a visible placeholder. The argument keys must exactly equal the union of
   placeholders across all leaves.
-- Use `meaning(...)` only to disambiguate identical English with distinct
-  semantics, such as noun and verb senses. A meaning key never replaces a
-  translator description.
+- Use `meaning(...)` only to disambiguate identical English whose
+  translator-visible sense or grammar may require different target text, such
+  as noun and verb senses. Hidden enum cases, application states, destinations,
+  analytics categories, implementation provenance, or different click outcomes
+  do not justify separate meanings when the visible phrase has the same sense,
+  role, and grammatical context. A meaning key never replaces a translator
+  description.
+- When multiple controls or enum cases intentionally display the same label,
+  share one message identity. If the shared label is misleading for some cases,
+  propose a source-copy change separately; do not use `meaning(...)` to let
+  target translations silently repair or diverge from the immutable source
+  English.
 - Use ordinary host-language control flow for enum-to-label mappings,
   independent actions, tabs, filters, sort choices, screens, outcomes,
-  permissions, and game decisions. Give each branch its own complete Trox call
-  and translator description. Do not use `select()` merely to consolidate
-  related labels, avoid a switch, share a fallback, or reduce call-site code.
+  permissions, and game decisions. Give branches separate complete Trox calls
+  when their player-facing messages differ. Reuse one Trox message when
+  multiple branches intentionally show the same phrase with the same
+  translator-visible meaning and context. Do not use `select()` merely to
+  consolidate related labels, avoid a switch, share a fallback, or reduce
+  call-site code.
 - Before authoring `select()`, state what unresolved selector input the locale
   needs and what translator-visible relationship would be lost if host-language
   control flow returned independent messages. If there is no concrete answer,
@@ -193,7 +215,8 @@ as `name`, `item`, `text`, `thing`, `data`, or `value`. Escape literal braces as
 Placeholder spelling is message identity. Renaming an existing placeholder
 creates a different entry and can obsolete translator history even when the
 rendered English is unchanged. Improve a vague name only after reviewing that
-impact; use `meaning(...)` when distinct semantics need distinct identities.
+impact. Use `meaning(...)` only when a translation-relevant difference requires
+distinct identities, not merely because application semantics differ.
 
 For each placeholder, document and verify:
 
@@ -224,8 +247,9 @@ The extractor classifies every bare binding as the same coarse `scalar` schema;
 it does not infer whether host code supplies text, a number, or a boolean. Two
 call sites sharing one message identity can therefore pass schema compatibility
 while giving the same placeholder different runtime kinds or meanings. Find and
-audit every call site that shares the extracted message, or add a stable
-`meaning(...)` discriminator when the uses are semantically distinct.
+audit every call site that shares the extracted message. Add a stable
+`meaning(...)` discriminator only when the uses may legitimately translate
+differently; otherwise align their placeholder contract and description.
 
 ## Use terms and opaque values narrowly
 
@@ -269,7 +293,11 @@ explains the applicable parts of this contract:
 Do not merely repeat the English or name an implementation component. Do not
 prescribe English word order, literal translation, or English capitalization.
 Descriptions affect source revision; changing one deliberately stales rows for
-translator reapproval.
+translator reapproval. When identical messages share one translation identity,
+write one accurate description of their shared translator-visible role. Do not
+invent meaning keys merely to retain call-site-specific descriptions or silence
+`trox.multiple-descriptions`; first determine whether translators actually need
+different target text.
 
 ## Integrate at the presentation boundary
 
@@ -357,6 +385,8 @@ Before finishing, confirm that:
 - every dynamic input was traced and its assumptions were verified;
 - every `select()` has a concrete, documented need for unresolved localization
   input that independent complete messages cannot preserve;
+- every `meaning(...)` has a concrete target-language example where identical
+  source English may legitimately require different translated text;
 - selector, visible placeholder, and term-form values are semantically aligned;
 - every leaf is a complete translation unit;
 - every description lets a translator understand meaning, variables,

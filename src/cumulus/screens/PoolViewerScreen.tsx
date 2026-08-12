@@ -8,7 +8,6 @@
 import type { CSSProperties, DragEvent, ReactElement } from "react";
 import { useEffect, useState } from "react";
 import {
-  meaning,
   one,
   other,
   plural,
@@ -360,29 +359,14 @@ function sortDirectionLabel(direction: PoolViewerSortDirection): LocalizedString
 
 function costFilterLabel(cost: PoolViewerCostFilter): LocalizedString {
   switch (cost) {
-    case "all": return tx(
-      meaning("pool-cost-filter-all", "All costs"),
-      "Compact visible Pool Viewer Energy-cost filter option that disables the cost filter.",
-    );
-    case "0": return tx(
-      meaning("pool-cost-filter-zero", "All costs"),
-      "Compact visible Pool Viewer Energy-cost filter option that selects cards with an exact printed cost of zero. The displayed source label is All costs.",
-    );
-    case "1": return tx(
-      meaning("pool-cost-filter-one", "All costs"),
-      "Compact visible Pool Viewer Energy-cost filter option that selects cards with an exact printed cost of one. The displayed source label is All costs.",
-    );
-    case "2": return tx(
-      meaning("pool-cost-filter-two", "All costs"),
-      "Compact visible Pool Viewer Energy-cost filter option that selects cards with an exact printed cost of two. The displayed source label is All costs.",
-    );
-    case "3": return tx(
-      meaning("pool-cost-filter-three", "All costs"),
-      "Compact visible Pool Viewer Energy-cost filter option that selects cards with an exact printed cost of three. The displayed source label is All costs.",
-    );
+    case "all":
+    case "0":
+    case "1":
+    case "2":
+    case "3":
     case "4": return tx(
-      meaning("pool-cost-filter-four", "All costs"),
-      "Compact visible Pool Viewer Energy-cost filter option that selects cards with an exact printed cost of four. The displayed source label is All costs.",
+      "All costs",
+      "Compact visible Pool Viewer Energy-cost filter option. The same source label is used for the no-filter option and the exact-cost zero-through-four options.",
     );
     case "5plus": return tx(
       "Cost 5+",
