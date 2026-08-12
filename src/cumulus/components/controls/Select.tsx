@@ -104,8 +104,12 @@ export interface SelectProps {
   align?: "start" | "end";
   /** Accessible label for the trigger. */
   ariaLabel?: LocalizedString;
+  /** Accessible label supplied by canonical authored or developer-only copy. */
+  authoredAriaLabel?: string;
   /** Text shown when `value` does not match an option, for action-picker controls. */
   placeholder?: LocalizedString;
+  /** Placeholder supplied by canonical authored or developer-only copy. */
+  authoredPlaceholder?: string;
 }
 
 interface SizeSpec {
@@ -149,12 +153,20 @@ export function Select({
   full = false,
   align = "start",
   ariaLabel,
+  authoredAriaLabel,
   placeholder,
+  authoredPlaceholder,
 }: SelectProps): ReactElement {
   const spec = SIZES[size];
   const chrome = controlChrome();
   const { pressed, hovered, bind } = usePress();
   const resolve = useLocalizer();
+  if (ariaLabel !== undefined && authoredAriaLabel !== undefined) {
+    throw new Error("Select accepts ariaLabel or authoredAriaLabel, not both.");
+  }
+  if (placeholder !== undefined && authoredPlaceholder !== undefined) {
+    throw new Error("Select accepts placeholder or authoredPlaceholder, not both.");
+  }
 
   const [open, setOpen] = useState(false);
   const [anchor, setAnchor] = useState<MenuAnchor | null>(null);
@@ -245,7 +257,7 @@ export function Select({
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label={ariaLabel === undefined ? undefined : resolve(ariaLabel)}
+        aria-label={authoredAriaLabel ?? (ariaLabel === undefined ? undefined : resolve(ariaLabel))}
         onClick={() => (open ? close() : openMenu())}
         {...bind}
         style={{
@@ -295,7 +307,7 @@ export function Select({
             justifyItems: "start",
           }}
         >
-          {placeholder === undefined ? null : (
+          {placeholder === undefined && authoredPlaceholder === undefined ? null : (
             <span
               aria-hidden={hasSelection ? true : undefined}
               style={{
@@ -306,7 +318,7 @@ export function Select({
                 color: token("--text-primary"),
               }}
             >
-              {resolve(placeholder)}
+              {authoredPlaceholder ?? resolve(placeholder!)}
             </span>
           )}
           {options.map((option) => (

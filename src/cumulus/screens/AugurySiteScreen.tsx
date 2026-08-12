@@ -1,4 +1,4 @@
-import { localizationTodo } from "@trox/runtime";
+import { meaning, tx, type LocalizedString } from "@trox/runtime";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   useCallback,
@@ -31,14 +31,12 @@ import {
 } from "../components/dreamscape/SiteNode";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { GlassPanel } from "../components/overlay/GlassPanel";
-import { useMessages } from "../hooks/use-messages";
 import type { ArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
-import type { FluentMessageDescriptor } from "../../data/localization-messages";
 import type { AuguryArchetypeData } from "../../types/augury-data";
-import { formatMessageDescriptor } from "../hooks/use-messages";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 import { GuideGallerySiteLayout } from "./GuideGallerySiteLayout";
 import { debugRerollCornerStyle } from "./chrome-geometry";
 import { useIsDesktop } from "./use-is-desktop";
@@ -62,14 +60,29 @@ export interface AuguryCardChoiceView {
 
 export type AuguryOfferVisualView =
   | { kind: "cards"; cards: readonly AuguryCardView[] }
-  | { kind: "cardChoices"; choices: readonly AuguryCardChoiceView[]; doubled: boolean }
-  | { kind: "beforeAfter"; pairs: readonly { id: string; before: AuguryCardView; after: AuguryCardView }[] }
+  | {
+      kind: "cardChoices";
+      choices: readonly AuguryCardChoiceView[];
+      doubled: boolean;
+    }
+  | {
+      kind: "beforeAfter";
+      pairs: readonly {
+        id: string;
+        before: AuguryCardView;
+        after: AuguryCardView;
+      }[];
+    }
   | { kind: "purge"; card: AuguryCardView }
   | { kind: "duplicate"; card: AuguryCardView }
   | { kind: "duplicateChoices"; choices: readonly AuguryCardChoiceView[] }
   | { kind: "dreamsigns"; dreamsigns: readonly DreamsignData[] }
   | { kind: "site"; model: DreamscapeSiteModel }
-  | { kind: "mixed"; cards: readonly AuguryCardView[]; dreamsigns: readonly DreamsignData[] };
+  | {
+      kind: "mixed";
+      cards: readonly AuguryCardView[];
+      dreamsigns: readonly DreamsignData[];
+    };
 
 export interface AuguryOfferView {
   id: string;
@@ -90,7 +103,8 @@ export interface AugurySiteView {
   allowDecline?: boolean;
 }
 
-export type AuguryChoiceResult = { ok: true } | { ok: false; message: FluentMessageDescriptor };
+export type AuguryChoiceResult =
+  { ok: true } | { ok: false; message: LocalizedString };
 
 export interface AugurySiteScreenProps {
   view: AugurySiteView;
@@ -101,9 +115,7 @@ export interface AugurySiteScreenProps {
   onClose: () => void;
 }
 
-function requiresWideDesktopDetail(
-  visual: AuguryOfferVisualView,
-): boolean {
+function requiresWideDesktopDetail(visual: AuguryOfferVisualView): boolean {
   switch (visual.kind) {
     case "cards":
       return visual.cards.length > 2;
@@ -132,20 +144,33 @@ export function AugurySiteScreen({
 }: AugurySiteScreenProps) {
   const reduceMotion = useReducedMotion();
   const isDesktop = useIsDesktop();
-  const t = useMessages();
-  const [selectedChoices, setSelectedChoices] = useState<ReadonlyMap<string, string>>(new Map());
+  const [selectedChoices, setSelectedChoices] = useState<
+    ReadonlyMap<string, string>
+  >(new Map());
   const [inspectedOfferId, setInspectedOfferId] = useState<string | null>(null);
-  const [committingOfferId, setCommittingOfferId] = useState<string | null>(null);
-  const [errorMessage, setErrorMessage] = useState<FluentMessageDescriptor | null>(null);
-  const inspectedOffer = view.offers.find((offer) => offer.id === inspectedOfferId) ?? null;
-  const wideDesktopDetail = inspectedOffer !== null
-    && requiresWideDesktopDetail(inspectedOffer.visual);
+  const [committingOfferId, setCommittingOfferId] = useState<string | null>(
+    null,
+  );
+  const [errorMessage, setErrorMessage] =
+    useState<LocalizedString | null>(null);
+  const inspectedOffer =
+    view.offers.find((offer) => offer.id === inspectedOfferId) ?? null;
+  const wideDesktopDetail =
+    inspectedOffer !== null && requiresWideDesktopDetail(inspectedOffer.visual);
   const available = view.offers.length === 2;
   const guide = available
     ? view.guide
     : {
         ...view.guide,
-        line: view.unavailableMessage ?? t("augury-unavailable-guide-line"),
+        ...(view.unavailableMessage === null
+          ? {
+              lineMessage: tx(
+            "The visions are clouded. Walk on for now.",
+            "Player-facing message for the augury unavailable guide line interface state.",
+              ),
+              line: undefined,
+            }
+          : { line: view.unavailableMessage, lineMessage: undefined }),
       };
 
   const selectChoice = useCallback((offerId: string, choiceId: string) => {
@@ -153,11 +178,14 @@ export function AugurySiteScreen({
     setSelectedChoices((current) => new Map(current).set(offerId, choiceId));
   }, []);
 
-  const inspectOffer = useCallback((offer: AuguryOfferView) => {
-    setErrorMessage(null);
-    setInspectedOfferId(offer.id);
-    onInspectOffer?.(offer.id);
-  }, [onInspectOffer]);
+  const inspectOffer = useCallback(
+    (offer: AuguryOfferView) => {
+      setErrorMessage(null);
+      setInspectedOfferId(offer.id);
+      onInspectOffer?.(offer.id);
+    },
+    [onInspectOffer],
+  );
 
   const chooseAgain = useCallback(() => {
     if (inspectedOfferId === null || committingOfferId !== null) return;
@@ -170,14 +198,17 @@ export function AugurySiteScreen({
     setInspectedOfferId(null);
   }, [committingOfferId, inspectedOfferId]);
 
-  const confirmOffer = useCallback((offer: AuguryOfferView) => {
-    const result = onChoose(offer.id, selectedChoices.get(offer.id) ?? null);
-    if (!result.ok) {
-      setErrorMessage(result.message);
-      return;
-    }
-    setCommittingOfferId(offer.id);
-  }, [onChoose, selectedChoices]);
+  const confirmOffer = useCallback(
+    (offer: AuguryOfferView) => {
+      const result = onChoose(offer.id, selectedChoices.get(offer.id) ?? null);
+      if (!result.ok) {
+        setErrorMessage(result.message);
+        return;
+      }
+      setCommittingOfferId(offer.id);
+    },
+    [onChoose, selectedChoices],
+  );
 
   const transition = {
     duration: reduceMotion === true ? 0 : 0.24,
@@ -208,11 +239,7 @@ export function AugurySiteScreen({
           style={{
             width: "100%",
             maxWidth:
-              layout === "desktop"
-                ? wideDesktopDetail
-                  ? 1120
-                  : 820
-                : "100%",
+              layout === "desktop" ? (wideDesktopDetail ? 1120 : 820) : "100%",
             justifySelf:
               layout === "desktop" && inspectedOffer !== null
                 ? "center"
@@ -221,90 +248,124 @@ export function AugurySiteScreen({
             minHeight: 0,
             display: "grid",
             placeItems: "center",
-            padding: layout === "desktop" ? token("--space-l") : token("--space-xs"),
+            padding:
+              layout === "desktop" ? token("--space-l") : token("--space-xs"),
             boxSizing: "border-box",
             pointerEvents: "none",
           }}
         >
           {inspectedOffer !== null ? (
-              <motion.div
-                key={`detail:${inspectedOffer.id}`}
-                initial={{ opacity: 0, y: reduceMotion === true ? 0 : 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: reduceMotion === true ? 0 : 8 }}
-                transition={transition}
-                style={{ width: "100%", height: "100%", minHeight: 0, pointerEvents: "auto" }}
+            <motion.div
+              key={`detail:${inspectedOffer.id}`}
+              initial={{ opacity: 0, y: reduceMotion === true ? 0 : 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: reduceMotion === true ? 0 : 8 }}
+              transition={transition}
+              style={{
+                width: "100%",
+                height: "100%",
+                minHeight: 0,
+                pointerEvents: "auto",
+              }}
+            >
+              <OfferDetailPanel
+                offer={inspectedOffer}
+                layout={layout}
+                selectedChoiceId={selectedChoices.get(inspectedOffer.id)}
+                disabled={committingOfferId !== null}
+                errorMessage={errorMessage}
+                onSelect={selectChoice}
+                onChooseAgain={chooseAgain}
+                onConfirm={confirmOffer}
+              />
+            </motion.div>
+          ) : available ? (
+            <motion.div
+              key="offers"
+              initial={{ opacity: 0, y: reduceMotion === true ? 0 : -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: reduceMotion === true ? 0 : -8 }}
+              transition={transition}
+              style={{
+                display: "grid",
+                justifyItems: "center",
+                gap: token("--space-m"),
+                pointerEvents: "auto",
+              }}
+            >
+              <div
+                data-augury-offer-row=""
+                style={{
+                  display: "flex",
+                  width: layout === "mobile" ? "100%" : undefined,
+                  maxWidth: "100%",
+                  alignItems: "center",
+                  justifyContent:
+                    layout === "desktop" ? "center" : "flex-start",
+                  gap:
+                    layout === "desktop"
+                      ? token("--space-3xl")
+                      : token("--space-s"),
+                  overflowX: layout === "mobile" ? "auto" : undefined,
+                  paddingInline:
+                    layout === "mobile"
+                      ? `calc((100% - ${String(OFFER_TILE_COMPACT_SIZE)}px) / 2)`
+                      : undefined,
+                  boxSizing: "border-box",
+                  scrollSnapType:
+                    layout === "mobile" ? "x mandatory" : undefined,
+                }}
               >
-                <OfferDetailPanel
-                  offer={inspectedOffer}
-                  layout={layout}
-                  selectedChoiceId={selectedChoices.get(inspectedOffer.id)}
+                {view.offers.map((offer) => (
+                  <div
+                    key={offer.id}
+                    style={{
+                      flex: "0 0 auto",
+                      scrollSnapAlign:
+                        layout === "mobile" ? "center" : undefined,
+                    }}
+                  >
+                    <OfferTile
+                      model={offer.tile}
+                      presentation={offer.presentation}
+                      size={layout === "desktop" ? "standard" : "compact"}
+                      onPress={() => inspectOffer(offer)}
+                      testId={`cumulus-augury-offer-${offer.id}`}
+                    />
+                  </div>
+                ))}
+              </div>
+              {view.allowDecline !== false ? (
+                <GlassButton
+                  label={tx(
+                    "Decline Offer",
+                    "Command that declines the current site offer and leaves without taking its reward.",
+                  )}
                   disabled={committingOfferId !== null}
-                  errorMessage={errorMessage}
-                  onSelect={selectChoice}
-                  onChooseAgain={chooseAgain}
-                  onConfirm={confirmOffer}
+                  onPress={onClose}
+                  testId="cumulus-augury-decline"
                 />
-              </motion.div>
-            ) : available ? (
-              <motion.div
-                key="offers"
-                initial={{ opacity: 0, y: reduceMotion === true ? 0 : -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: reduceMotion === true ? 0 : -8 }}
-                transition={transition}
-                style={{ display: "grid", justifyItems: "center", gap: token("--space-m"), pointerEvents: "auto" }}
-              >
-                <div
-                  data-augury-offer-row=""
-                  style={{
-                    display: "flex",
-                    width: layout === "mobile" ? "100%" : undefined,
-                    maxWidth: "100%",
-                    alignItems: "center",
-                    justifyContent: layout === "desktop" ? "center" : "flex-start",
-                    gap: layout === "desktop" ? token("--space-3xl") : token("--space-s"),
-                    overflowX: layout === "mobile" ? "auto" : undefined,
-                    paddingInline:
-                      layout === "mobile"
-                        ? `calc((100% - ${String(OFFER_TILE_COMPACT_SIZE)}px) / 2)`
-                        : undefined,
-                    boxSizing: "border-box",
-                    scrollSnapType: layout === "mobile" ? "x mandatory" : undefined,
-                  }}
-                >
-                  {view.offers.map((offer) => (
-                    <div
-                      key={offer.id}
-                      style={{
-                        flex: "0 0 auto",
-                        scrollSnapAlign: layout === "mobile" ? "center" : undefined,
-                      }}
-                    >
-                      <OfferTile
-                        model={offer.tile}
-                        presentation={offer.presentation}
-                        size={layout === "desktop" ? "standard" : "compact"}
-                        onPress={() => inspectOffer(offer)}
-                        testId={`cumulus-augury-offer-${offer.id}`}
-                      />
-                    </div>
-                  ))}
-                </div>
-                {view.allowDecline !== false ? (
-                  <GlassButton
-                    label={t("site-decline-offer")}
-                    disabled={committingOfferId !== null}
-                    onPress={onClose}
-                    testId="cumulus-augury-decline"
-                  />
-                ) : null}
-              </motion.div>
-            ) : (
-              <motion.div key="unavailable" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={transition} style={{ pointerEvents: "auto" }}>
-                <GlassButton label={t("site-walk-on")} onPress={onClose} testId="cumulus-augury-unavailable-exit" />
-              </motion.div>
-            )}
+              ) : null}
+            </motion.div>
+          ) : (
+            <motion.div
+              key="unavailable"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={transition}
+              style={{ pointerEvents: "auto" }}
+            >
+              <GlassButton
+                label={tx(
+                  "Walk On",
+                  "Player-facing message for the site walk on interface state.",
+                )}
+                onPress={onClose}
+                testId="cumulus-augury-unavailable-exit"
+              />
+            </motion.div>
+          )}
         </section>
       )}
     >
@@ -323,7 +384,10 @@ export function AugurySiteScreen({
           <IconButton
             glyph={GLYPHS.refresh}
             overlayGlyph={GLYPHS.bug}
-            label={localizationTodo(t("augury-reroll-offers"))}
+            label={tx(
+                "Reroll Augury offers",
+                "Player-facing message for the augury reroll offers interface state.",
+              )}
             onPress={onReroll}
             testId="reroll-augury-offers"
           />
@@ -347,22 +411,29 @@ function OfferDetailPanel({
   layout: "mobile" | "desktop";
   selectedChoiceId?: string;
   disabled: boolean;
-  errorMessage: FluentMessageDescriptor | null;
+  errorMessage: LocalizedString | null;
   onSelect: (offerId: string, choiceId: string) => void;
   onChooseAgain: () => void;
   onConfirm: (offer: AuguryOfferView) => void;
 }) {
-  const t = useMessages();
-  const confirmDisabled = disabled || (offer.requiresSelection && selectedChoiceId === undefined);
+  const resolve = useLocalizer();
+  const confirmDisabled =
+    disabled || (offer.requiresSelection && selectedChoiceId === undefined);
   return (
     <article
       data-testid="cumulus-augury-detail"
       data-offer-id={offer.id}
-      style={{ width: "100%", height: "100%", minWidth: 0, minHeight: 0, pointerEvents: "auto" }}
+      style={{
+        width: "100%",
+        height: "100%",
+        minWidth: 0,
+        minHeight: 0,
+        pointerEvents: "auto",
+      }}
     >
       <GlassPanel
-        title={localizationTodo(auguryOfferHeadline(offer.tile, offer.presentation))}
-        subtitle={localizationTodo(offerTileDescription(offer.tile, offer.presentation))}
+        authoredTitle={auguryOfferHeadline(offer.tile, offer.presentation)}
+        authoredSubtitle={offerTileDescription(offer.tile, offer.presentation)}
         headerSpacing="medium"
         footer={
           <div
@@ -372,13 +443,33 @@ function OfferDetailPanel({
               justifyContent: layout === "mobile" ? "center" : "flex-end",
               alignItems: "center",
               gap: token("--space-s"),
-              padding: layout === "mobile"
-                ? `0 ${token("--space-s")} ${token("--space-s")}`
-                : `0 ${token("--space-2xl")} ${token("--space-l")}`,
+              padding:
+                layout === "mobile"
+                  ? `0 ${token("--space-s")} ${token("--space-s")}`
+                  : `0 ${token("--space-2xl")} ${token("--space-l")}`,
             }}
           >
-            <GlassButton label={t("site-choose-again")} placement="onGlass" disabled={disabled} onPress={onChooseAgain} testId="cumulus-augury-choose-again" />
-            <GlassButton label={t("site-confirm")} variant="accent" placement="onGlass" disabled={confirmDisabled} onPress={() => onConfirm(offer)} testId={`cumulus-augury-confirm-${offer.id}`} />
+            <GlassButton
+              label={tx(
+                meaning("augury-reselect-action", "Choose Again"),
+                "Player-facing message for the site choose again interface state.",
+              )}
+              placement="onGlass"
+              disabled={disabled}
+              onPress={onChooseAgain}
+              testId="cumulus-augury-choose-again"
+            />
+            <GlassButton
+              label={tx(
+                "Confirm",
+                "Player-facing message for the site confirm interface state.",
+              )}
+              variant="accent"
+              placement="onGlass"
+              disabled={confirmDisabled}
+              onPress={() => onConfirm(offer)}
+              testId={`cumulus-augury-confirm-${offer.id}`}
+            />
           </div>
         }
       >
@@ -396,14 +487,30 @@ function OfferDetailPanel({
             display: "grid",
             placeItems: "center",
             gap: token("--space-s"),
-            padding: layout === "desktop" ? token("--space-xl") : token("--space-s"),
+            padding:
+              layout === "desktop" ? token("--space-xl") : token("--space-s"),
             boxSizing: "border-box",
           }}
         >
-          <OfferDetailVisual offerId={offer.id} visual={offer.visual} layout={layout} selectedChoiceId={selectedChoiceId} onSelect={onSelect} />
+          <OfferDetailVisual
+            offerId={offer.id}
+            visual={offer.visual}
+            layout={layout}
+            selectedChoiceId={selectedChoiceId}
+            onSelect={onSelect}
+          />
           {errorMessage !== null && (
-            <p role="status" data-testid="cumulus-augury-error" style={{ margin: 0, color: token("--danger"), font: token("--t-body"), textAlign: "center" }}>
-              {formatMessageDescriptor(t, errorMessage)}
+            <p
+              role="status"
+              data-testid="cumulus-augury-error"
+              style={{
+                margin: 0,
+                color: token("--danger"),
+                font: token("--t-body"),
+                textAlign: "center",
+              }}
+            >
+              {resolve(errorMessage)}
             </p>
           )}
         </div>
@@ -447,7 +554,12 @@ function OfferDetailVisual({
       return (
         <div style={{ display: "grid", gap: token("--space-s") }}>
           {visual.pairs.map((pair) => (
-            <Transition key={pair.id} before={pair.before} after={pair.after} layout={layout} />
+            <Transition
+              key={pair.id}
+              before={pair.before}
+              after={pair.after}
+              layout={layout}
+            />
           ))}
         </div>
       );
@@ -463,12 +575,14 @@ function OfferDetailVisual({
       return <SiteRewardVisual model={visual.model} />;
     case "mixed":
       return (
-        <div style={{ display: "grid", justifyItems: "center", gap: token("--space-m") }}>
-          <CardRow
-            cards={visual.cards}
-            layout={layout}
-            fit="mixed-reward"
-          />
+        <div
+          style={{
+            display: "grid",
+            justifyItems: "center",
+            gap: token("--space-m"),
+          }}
+        >
+          <CardRow cards={visual.cards} layout={layout} fit="mixed-reward" />
           <DreamsignRow dreamsigns={visual.dreamsigns} layout={layout} />
         </div>
       );
@@ -481,7 +595,8 @@ function cardGridColumns(
   count: number,
   layout: "mobile" | "desktop",
 ): CardChoiceGridColumns {
-  const columns = layout === "desktop" ? Math.max(1, count) : Math.min(2, Math.max(1, count));
+  const columns =
+    layout === "desktop" ? Math.max(1, count) : Math.min(2, Math.max(1, count));
   if (columns <= 1) return "one";
   if (columns === 2) return "two";
   if (columns === 3) return "three";
@@ -489,14 +604,31 @@ function cardGridColumns(
   return "five";
 }
 
-function CardChoices({ offerId, choices, layout, fit = "choice", columns = cardGridColumns(choices.length, layout), selectedChoiceId, selectedCopyCount, onSelect }: { offerId: string; choices: readonly AuguryCardChoiceView[]; layout: "mobile" | "desktop"; fit?: CardChoiceGridSiteFit; columns?: CardChoiceGridColumns; selectedChoiceId?: string; selectedCopyCount?: number; onSelect: (offerId: string, choiceId: string) => void }) {
+function CardChoices({
+  offerId,
+  choices,
+  layout,
+  fit = "choice",
+  columns = cardGridColumns(choices.length, layout),
+  selectedChoiceId,
+  selectedCopyCount,
+  onSelect,
+}: {
+  offerId: string;
+  choices: readonly AuguryCardChoiceView[];
+  layout: "mobile" | "desktop";
+  fit?: CardChoiceGridSiteFit;
+  columns?: CardChoiceGridColumns;
+  selectedChoiceId?: string;
+  selectedCopyCount?: number;
+  onSelect: (offerId: string, choiceId: string) => void;
+}) {
   return (
     <CardChoiceGrid
       cards={choices.map((choice) => ({
         entryId: choice.id,
         model: choice.card.model,
-        selection:
-          selectedChoiceId === choice.id ? "highlighted" : undefined,
+        selection: selectedChoiceId === choice.id ? "highlighted" : undefined,
         quantityBadge:
           selectedChoiceId === choice.id && selectedCopyCount !== undefined
             ? { count: selectedCopyCount }
@@ -510,7 +642,17 @@ function CardChoices({ offerId, choices, layout, fit = "choice", columns = cardG
   );
 }
 
-function CardRow({ cards, layout, fit = "choice", tone = "default" }: { cards: readonly AuguryCardView[]; layout: "mobile" | "desktop"; fit?: CardChoiceGridSiteFit; tone?: "default" | "danger" }) {
+function CardRow({
+  cards,
+  layout,
+  fit = "choice",
+  tone = "default",
+}: {
+  cards: readonly AuguryCardView[];
+  layout: "mobile" | "desktop";
+  fit?: CardChoiceGridSiteFit;
+  tone?: "default" | "danger";
+}) {
   return (
     <CardChoiceGrid
       cards={cards.map((card) => ({
@@ -524,26 +666,105 @@ function CardRow({ cards, layout, fit = "choice", tone = "default" }: { cards: r
   );
 }
 
-function CardTile({ card, width, selected = false, muted = false, danger = false, onPress, testId }: { card: AuguryCardView; width: CardTileWidth; selected?: boolean; muted?: boolean; danger?: boolean; onPress?: () => void; testId?: string }) {
+function CardTile({
+  card,
+  width,
+  selected = false,
+  muted = false,
+  danger = false,
+  onPress,
+  testId,
+}: {
+  card: AuguryCardView;
+  width: CardTileWidth;
+  selected?: boolean;
+  muted?: boolean;
+  danger?: boolean;
+  onPress?: () => void;
+  testId?: string;
+}) {
   return (
     <div style={{ position: "relative", width }}>
-      <GameCard model={card.model} onPress={onPress} unavailable={muted} selection={danger ? "danger" : selected ? "highlighted" : undefined} testId={testId} />
+      <GameCard
+        model={card.model}
+        onPress={onPress}
+        unavailable={muted}
+        selection={danger ? "danger" : selected ? "highlighted" : undefined}
+        testId={testId}
+      />
     </div>
   );
 }
 
 function TransitionArrow({ layout }: { layout: "mobile" | "desktop" }) {
-  return <span data-augury-transition-arrow="" style={{ display: "grid", placeItems: "center", flexShrink: 0, fontSize: layout === "desktop" ? 32 : 24 }}><StandaloneGlyph glyph={GLYPHS.arrowRightFilled} color="white" /></span>;
+  return (
+    <span
+      data-augury-transition-arrow=""
+      style={{
+        display: "grid",
+        placeItems: "center",
+        flexShrink: 0,
+        fontSize: layout === "desktop" ? 32 : 24,
+      }}
+    >
+      <StandaloneGlyph glyph={GLYPHS.arrowRightFilled} color="white" />
+    </span>
+  );
 }
 
-function Transition({ before, after, layout }: { before: AuguryCardView; after: AuguryCardView; layout: "mobile" | "desktop" }) {
-  const width = layout === "desktop" ? "min(240px, 40cqw, 64cqh)" : "min(124px, 38cqw, 58cqh)";
-  return <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: token("--space-s") }}><CardTile card={before} width={width} muted /><TransitionArrow layout={layout} /><CardTile card={after} width={width} selected /></div>;
+function Transition({
+  before,
+  after,
+  layout,
+}: {
+  before: AuguryCardView;
+  after: AuguryCardView;
+  layout: "mobile" | "desktop";
+}) {
+  const width =
+    layout === "desktop"
+      ? "min(240px, 40cqw, 64cqh)"
+      : "min(124px, 38cqw, 58cqh)";
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: token("--space-s"),
+      }}
+    >
+      <CardTile card={before} width={width} muted />
+      <TransitionArrow layout={layout} />
+      <CardTile card={after} width={width} selected />
+    </div>
+  );
 }
 
-function DuplicateCards({ card, layout }: { card: AuguryCardView; layout: "mobile" | "desktop" }) {
-  const width = layout === "desktop" ? "min(300px, 72cqw, 62cqh)" : "min(210px, 72cqw, 56cqh)";
-  return <div style={{ position: "relative", width, aspectRatio: "4 / 5" }}><div aria-hidden="true" style={{ position: "absolute", top: 0, right: 0, width: "80%" }}><GameCard model={card.model} /></div><div style={{ position: "absolute", bottom: 0, left: 0, width: "80%" }}><GameCard model={card.model} /></div></div>;
+function DuplicateCards({
+  card,
+  layout,
+}: {
+  card: AuguryCardView;
+  layout: "mobile" | "desktop";
+}) {
+  const width =
+    layout === "desktop"
+      ? "min(300px, 72cqw, 62cqh)"
+      : "min(210px, 72cqw, 56cqh)";
+  return (
+    <div style={{ position: "relative", width, aspectRatio: "4 / 5" }}>
+      <div
+        aria-hidden="true"
+        style={{ position: "absolute", top: 0, right: 0, width: "80%" }}
+      >
+        <GameCard model={card.model} />
+      </div>
+      <div style={{ position: "absolute", bottom: 0, left: 0, width: "80%" }}>
+        <GameCard model={card.model} />
+      </div>
+    </div>
+  );
 }
 
 function dreamsignSize(count: number, layout: "mobile" | "desktop"): number {
@@ -551,16 +772,66 @@ function dreamsignSize(count: number, layout: "mobile" | "desktop"): number {
   return count === 1 ? 128 : 88;
 }
 
-function DreamsignChoiceGrid({ count, layout, children }: { count: number; layout: "mobile" | "desktop"; children: ReactNode }) {
-  const columns = layout === "desktop" ? Math.max(1, count) : Math.min(2, Math.max(1, count));
-  return <div style={{ display: "grid", gridTemplateColumns: `repeat(${String(columns)}, auto)`, alignItems: "center", justifyContent: "center", gap: token("--space-s") }}>{children}</div>;
+function DreamsignChoiceGrid({
+  count,
+  layout,
+  children,
+}: {
+  count: number;
+  layout: "mobile" | "desktop";
+  children: ReactNode;
+}) {
+  const columns =
+    layout === "desktop" ? Math.max(1, count) : Math.min(2, Math.max(1, count));
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: `repeat(${String(columns)}, auto)`,
+        alignItems: "center",
+        justifyContent: "center",
+        gap: token("--space-s"),
+      }}
+    >
+      {children}
+    </div>
+  );
 }
 
-function DreamsignRow({ dreamsigns, layout }: { dreamsigns: readonly DreamsignData[]; layout: "mobile" | "desktop" }) {
+function DreamsignRow({
+  dreamsigns,
+  layout,
+}: {
+  dreamsigns: readonly DreamsignData[];
+  layout: "mobile" | "desktop";
+}) {
   const size = dreamsignSize(dreamsigns.length, layout);
-  return <DreamsignChoiceGrid count={dreamsigns.length} layout={layout}>{dreamsigns.map((dreamsign) => <div key={dreamsign.id} style={{ width: size, height: size }}><Dreamsign dreamsign={dreamsign} testid={`cumulus-augury-dreamsign-${dreamsign.id}`} /></div>)}</DreamsignChoiceGrid>;
+  return (
+    <DreamsignChoiceGrid count={dreamsigns.length} layout={layout}>
+      {dreamsigns.map((dreamsign) => (
+        <div key={dreamsign.id} style={{ width: size, height: size }}>
+          <Dreamsign
+            dreamsign={dreamsign}
+            testid={`cumulus-augury-dreamsign-${dreamsign.id}`}
+          />
+        </div>
+      ))}
+    </DreamsignChoiceGrid>
+  );
 }
 
 function SiteRewardVisual({ model }: { model: DreamscapeSiteModel }) {
-  return <div data-augury-site-preview="" style={{ position: "relative", width: 220, height: 220 }}><SiteNode model={model} motion={false} presentation="reward" onSelect={() => undefined} /></div>;
+  return (
+    <div
+      data-augury-site-preview=""
+      style={{ position: "relative", width: 220, height: 220 }}
+    >
+      <SiteNode
+        model={model}
+        motion={false}
+        presentation="reward"
+        onSelect={() => undefined}
+      />
+    </div>
+  );
 }

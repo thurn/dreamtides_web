@@ -6,7 +6,7 @@
 // source; `JourneyStartScreen` picks between the two by viewport.
 // PURE: renders from a view-model and reports the chosen DreamAvatar via `onPick`.
 
-import { localizationTodo } from "@trox/runtime";
+import { tx, type LocalizedString } from "@trox/runtime";
 import { useRef, useState } from "react";
 import { Motes } from "../components/hud/Motes";
 import { GlassButton } from "../components/controls/GlassButton";
@@ -25,7 +25,6 @@ import {
   type DreamAvatarOfferView,
   type JourneyStartScreenProps,
 } from "./journey-start-shared";
-import { useMessages } from "../hooks/use-messages";
 
 /** Invisible touch slop padded around each mobile tide disc so it is easier to
  * press; the disc row reabsorbs it with negative margins so the visual layout
@@ -40,7 +39,7 @@ function DreamAvatarConsole({
   onChoose,
 }: {
   dreamAvatar: DreamAvatarOfferView;
-  chooseLabel: string;
+  chooseLabel: LocalizedString;
   onChoose: () => void;
 }) {
   return (
@@ -131,7 +130,7 @@ function DreamAvatarTitle({
 
 /** The screen's uppercase eyebrow, painted on the portrait at top-center. It
  * does not swipe on mobile and spans the full width on desktop. */
-function ScreenHeader({ title }: { readonly title: string }) {
+function ScreenHeader({ title }: { readonly title: LocalizedString }) {
   return (
     <div
       style={{
@@ -158,7 +157,6 @@ function EdgeChevron({
   dir: "left" | "right";
   onClick: () => void;
 }) {
-  const t = useMessages();
   return (
     <div
       onPointerDown={(event: React.PointerEvent) => {
@@ -174,9 +172,11 @@ function EdgeChevron({
       <IconButton
         size="sm"
         glyph={dir === "left" ? GLYPHS.chevronLeft : GLYPHS.chevronRight}
-        label={localizationTodo(t("journey-start-carousel-navigation-action", {
-          direction: dir === "left" ? "previous" : "next",
-        }))}
+        label={
+          dir === "left"
+            ? tx("Previous", "Command that moves to the previous Dream Avatar offer.")
+            : tx("Next", "Command that moves to the next Dream Avatar offer.")
+        }
         onPress={onClick}
       />
     </div>
@@ -222,7 +222,6 @@ export function CarouselSelect({
   onReroll,
   onGuideDialogueShown,
 }: JourneyStartScreenProps) {
-  const t = useMessages();
   const [index, setIndex] = useState(0);
   const [dx, setDx] = useState(0);
   const drag = useRef<{ active: boolean; x0: number }>({
@@ -269,7 +268,12 @@ export function CarouselSelect({
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
     >
-      <ScreenHeader title={t("journey-start-title")} />
+      <ScreenHeader
+        title={tx(
+          "Choose Your Avatar",
+          "Title and actions on the Dream Avatar selection screen.",
+        )}
+      />
       {guideDialogue !== undefined && (
         <JourneyStartGuideDialogue
           dialogue={guideDialogue}
@@ -280,7 +284,10 @@ export function CarouselSelect({
       {onReroll !== undefined && (
         <JourneyStartRerollControl
           onReroll={onReroll}
-          label={t("journey-start-reroll-action")}
+          label={tx(
+            "Reroll Avatars",
+            "Player-facing message for the journey start reroll action interface state.",
+          )}
         />
       )}
 
@@ -324,7 +331,10 @@ export function CarouselSelect({
         >
           <DreamAvatarConsole
             dreamAvatar={activeDreamAvatar}
-            chooseLabel={t("journey-start-choose-action")}
+            chooseLabel={tx(
+              "Choose",
+              "Command that chooses the currently selected Dream Avatar or starting-deck option.",
+            )}
             onChoose={() => {
               onPick(activeDreamAvatar.id);
             }}

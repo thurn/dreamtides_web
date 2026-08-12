@@ -29,7 +29,7 @@ function mountOrb(
           numberSizeVar="45px"
           numberCapPx={45}
           changeBadge={changeBadge}
-          ariaLabel={ariaLabel}
+          authoredAriaLabel={ariaLabel}
         />
       </CumulusRoot>,
     );
@@ -63,8 +63,9 @@ describe("CardStatOrb transfiguration badge", () => {
       );
       const badgeFace = badge?.querySelector<HTMLElement>(":scope > span");
 
-      expect(orb?.getAttribute("aria-label")).not.toBe("");
-      expect(orb?.getAttribute("aria-label")).not.toMatch(/^card-stat-/);
+      const labelledBy = orb?.getAttribute("aria-labelledby")?.split(" ") ?? [];
+      expect(labelledBy).toHaveLength(2);
+      expect(labelledBy.every((id) => document.getElementById(id) !== null)).toBe(true);
       expect(orb?.querySelector<HTMLElement>(":scope > div")?.style.color).toBe(
         "rgb(255, 255, 255)",
       );
@@ -100,20 +101,18 @@ describe("CardStatOrb transfiguration badge", () => {
     const unchanged = mountOrb("2", undefined, "Custom stat context");
     const unchangedLabel = unchanged.container
       .querySelector<HTMLElement>("[data-card-stat]")
-      ?.getAttribute("aria-label");
+      ?.getAttribute("aria-labelledby")?.split(" ") ?? [];
     act(() => unchanged.root.unmount());
     unchanged.container.remove();
 
     const changed = mountOrb("2", "empowered", "Custom stat context");
     const changedLabel = changed.container
       .querySelector<HTMLElement>("[data-card-stat]")
-      ?.getAttribute("aria-label");
+      ?.getAttribute("aria-labelledby")?.split(" ") ?? [];
 
-    expect(unchangedLabel).not.toBe("");
-    expect(changedLabel).not.toBe("");
-    expect(changedLabel).not.toBe(unchangedLabel);
-    expect(changedLabel).not.toMatch(/^card-stat-/);
-    expect(changedLabel).toContain("Synthetic form");
+    expect(unchangedLabel).toHaveLength(1);
+    expect(changedLabel).toHaveLength(2);
+    expect(changedLabel.every((id) => document.getElementById(id) !== null)).toBe(true);
 
     act(() => changed.root.unmount());
     changed.container.remove();

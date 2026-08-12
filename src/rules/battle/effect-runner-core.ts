@@ -1,6 +1,7 @@
 import type { BattleDebugEdit } from "../../battle/debug/commands";
 import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
 import type { BattlePromptText } from "../../data/dreamwell-prompts";
+import { builtInBattlePromptRef } from "../../data/dreamwell-prompts";
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -110,8 +111,8 @@ function buildActivePrompt(
         kind: "choice",
         label: prompt.label,
         options: [
-          { label: { id: "battle-prompt-confirm-yes" } },
-          { label: { id: "battle-prompt-confirm-skip" } },
+          { label: builtInBattlePromptRef("confirm-yes") },
+          { label: builtInBattlePromptRef("confirm-skip") },
         ],
       };
     case "foresee":

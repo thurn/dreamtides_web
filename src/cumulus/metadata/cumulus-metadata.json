@@ -241,7 +241,7 @@
   "CardBack": [
     {
       "name": "label",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -350,9 +350,17 @@
       "name": "title",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": true,
+      "required": false,
       "defaultValue": null,
       "description": "Header title, rendered as an `<h2>`."
+    },
+    {
+      "name": "authoredTitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Header title supplied by canonical authored content."
     },
     {
       "name": "subtitle",
@@ -361,6 +369,14 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional intro line under the title."
+    },
+    {
+      "name": "authoredSubtitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Intro line supplied by canonical authored content."
     },
     {
       "name": "rightAccessory",
@@ -424,6 +440,14 @@
       "required": false,
       "defaultValue": null,
       "description": "Empty-state copy shown when `cards` is empty."
+    },
+    {
+      "name": "authoredEmptyLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Empty-state copy supplied by canonical authored or developer-only content."
     },
     {
       "name": "testId",
@@ -500,9 +524,15 @@
           },
           {
             "name": "label",
-            "tsType": "string",
-            "optional": false,
+            "tsType": "LocalizedString",
+            "optional": true,
             "description": "Accessible action label."
+          },
+          {
+            "name": "authoredLabel",
+            "tsType": "string",
+            "optional": true,
+            "description": "Canonical authored label when this action is data-defined."
           },
           {
             "name": "caption",
@@ -577,7 +607,7 @@
     },
     {
       "name": "label",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -655,9 +685,15 @@
           },
           {
             "name": "label",
-            "tsType": "string",
-            "optional": false,
+            "tsType": "LocalizedString",
+            "optional": true,
             "description": "Accessible action label."
+          },
+          {
+            "name": "authoredLabel",
+            "tsType": "string",
+            "optional": true,
+            "description": "Canonical authored label when this action is data-defined."
           },
           {
             "name": "caption",
@@ -692,9 +728,17 @@
       "name": "title",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": true,
+      "required": false,
       "defaultValue": null,
       "description": "Header title, rendered as an `<h2>`."
+    },
+    {
+      "name": "authoredTitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Header title supplied by canonical authored content."
     },
     {
       "name": "subtitle",
@@ -703,6 +747,14 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional intro line under the title."
+    },
+    {
+      "name": "authoredSubtitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Intro line supplied by canonical authored content."
     },
     {
       "name": "rightAccessory",
@@ -768,6 +820,14 @@
       "description": "Empty-state copy shown when `cards` is empty."
     },
     {
+      "name": "authoredEmptyLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Empty-state copy supplied by canonical authored or developer-only content."
+    },
+    {
       "name": "testId",
       "tsType": "string",
       "unionMembers": [],
@@ -787,7 +847,7 @@
     },
     {
       "name": "label",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -806,7 +866,7 @@
     },
     {
       "name": "emptyLabel",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -876,11 +936,19 @@
     },
     {
       "name": "ariaLabel",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": ""
+    },
+    {
+      "name": "authoredAriaLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Accessible name supplied by canonical authored or developer-only copy."
     },
     {
       "name": "changeBadge",
@@ -1259,13 +1327,13 @@
                 "description": ""
               },
               {
-                "name": "title",
+                "name": "authoredTitle",
                 "tsType": "string",
                 "optional": false,
                 "description": "Describes the card/pointer subject in the menu's header."
               },
               {
-                "name": "subtitle",
+                "name": "authoredSubtitle",
                 "tsType": "string",
                 "optional": true,
                 "description": "Optional structured secondary location/context copy."
@@ -1331,9 +1399,17 @@
       "name": "title",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": true,
+      "required": false,
       "defaultValue": null,
       "description": "Developer tool name shown in the rail header."
+    },
+    {
+      "name": "authoredTitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
     },
     {
       "name": "subtitle",
@@ -1342,6 +1418,14 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional concise tool context."
+    },
+    {
+      "name": "authoredSubtitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
     },
     {
       "name": "side",
@@ -1366,9 +1450,17 @@
       "name": "closeLabel",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": true,
+      "required": false,
       "defaultValue": null,
       "description": "Accessible name for the close action."
+    },
+    {
+      "name": "authoredCloseLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
     },
     {
       "name": "headerAction",
@@ -1408,9 +1500,17 @@
       "name": "title",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": true,
+      "required": false,
       "defaultValue": null,
       "description": "Localized heading shown in the disclosure trigger."
+    },
+    {
+      "name": "authoredTitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Heading supplied by canonical authored or developer-only copy."
     },
     {
       "name": "summary",
@@ -1419,6 +1519,14 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional localized context shown beside the heading."
+    },
+    {
+      "name": "authoredSummary",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Context supplied by canonical authored or developer-only copy."
     },
     {
       "name": "expanded",
@@ -1755,7 +1863,7 @@
     },
     {
       "name": "closeLabel",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -2037,7 +2145,7 @@
   "GalleryActionCard": [
     {
       "name": "action",
-      "tsType": "{ readonly glyph: Glyph; readonly label: string; }",
+      "tsType": "{ readonly glyph: Glyph; readonly label?: LocalizedString | undefined; readonly authoredLabel?: string | undefined; }",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -2168,11 +2276,19 @@
   "GlassButton": [
     {
       "name": "label",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": true,
+      "required": false,
       "defaultValue": null,
       "description": "The button's text, centered by the component at every rendered width."
+    },
+    {
+      "name": "authoredLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Button text supplied by canonical authored or developer-only content."
     },
     {
       "name": "onPress",
@@ -2275,11 +2391,19 @@
     },
     {
       "name": "accessibilityLabel",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Accessible name when the visible label alone does not distinguish siblings."
+    },
+    {
+      "name": "authoredAccessibilityLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Accessible name supplied by canonical authored or developer-only copy."
     }
   ],
   "GlassDialog": [
@@ -2287,9 +2411,17 @@
       "name": "title",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": true,
+      "required": false,
       "defaultValue": null,
       "description": "The dialog's heading, rendered as an `<h2>`."
+    },
+    {
+      "name": "authoredTitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Canonical authored or user-provided heading outside code-authored localization."
     },
     {
       "name": "subtitle",
@@ -2298,6 +2430,14 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional intro line under the title."
+    },
+    {
+      "name": "authoredSubtitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Canonical authored or user-provided intro line outside code-authored localization."
     },
     {
       "name": "onClose",
@@ -2312,8 +2452,16 @@
       "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
-      "defaultValue": "localizationTodo(\"Close\")",
+      "defaultValue": null,
       "description": "Accessible name for the close disc. Defaults to `\"Close\"`."
+    },
+    {
+      "name": "authoredCloseLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Close action name supplied by canonical authored or developer-only copy."
     },
     {
       "name": "cutoutAwareClose",
@@ -2391,6 +2539,14 @@
       "description": "Optional uppercase context line rendered above the title."
     },
     {
+      "name": "authoredEyebrow",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Context line supplied by canonical authored or developer-only copy."
+    },
+    {
       "name": "title",
       "tsType": "LocalizedString",
       "unionMembers": [],
@@ -2399,12 +2555,28 @@
       "description": "Optional plain panel title."
     },
     {
+      "name": "authoredTitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional title supplied by canonical authored content."
+    },
+    {
       "name": "subtitle",
       "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Optional supporting line rendered beneath the title."
+    },
+    {
+      "name": "authoredSubtitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional supporting line supplied by canonical authored content."
     },
     {
       "name": "structuredSubtitle",
@@ -2746,9 +2918,17 @@
       "name": "label",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": true,
+      "required": false,
       "defaultValue": null,
       "description": "Localized accessible name forwarded unresolved to the final button."
+    },
+    {
+      "name": "authoredLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Canonical authored or developer-only accessible name."
     }
   ],
   "InfoCard": [
@@ -2784,29 +2964,12 @@
       "description": "The card's headline. Resolve names before display; canonical rules symbols\nrender as their inline icons."
     },
     {
-      "name": "titleDescriptor",
-      "tsType": "FluentMessageDescriptor",
+      "name": "titleMessage",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Complete localized fallback headline selected by a non-React builder.",
-      "nested": {
-        "name": "FluentMessageDescriptor",
-        "fields": [
-          {
-            "name": "id",
-            "tsType": "\"application-loading-saved-journey-message\" | \"coop-joining-game-message\" | \"coop-loading-game-message\" | \"coop-game-not-found-message\" | \"coop-presence-connected-count\" | \"journey-menu-save-downloaded\" | \"journey-menu-save-error\" | \"journey-menu-load-loaded\" | \"journey-menu-load-error\" | \"journey-menu-build-sha-status\" | \"journey-complete-stat-battles\" | \"journey-complete-stat-dreamscapes\" | \"journey-complete-stat-dreamsigns\" | \"dreamsign-replacement-capacity\" | \"journey-failed-title\" | \"journey-failed-message\" | \"journey-failed-reason\" | \"journey-failed-stat-label\" | \"dreamscape-reward-status\" | \"dreamscape-reward-dreamsign-label\" | \"tutorial-drag-to-block\" | \"deck-browser-card-count\" | \"card-pool-browser-count\" | \"card-pool-viewer-title\" | \"card-pool-source-option\" | \"card-pool-empty-state\" | \"card-pool-sort-option\" | \"card-pool-type-filter-option\" | \"card-pool-cost-filter-option\" | \"card-pool-tide-provenance-summary\" | \"card-pool-tide-provenance-description\" | \"card-pool-construction-summary\" | \"card-rules-transfiguration-changed\" | \"card-transfiguration-badge\" | \"card-type-line\" | \"exploration-deck-modification-spark\" | \"exploration-deck-modification-energy-cost\" | \"exploration-deck-modification-subtype\" | \"exploration-deck-modification-transfiguration\" | \"augury-card-choice-copy-count\" | \"gamble-wager-prize-title\" | \"gamble-wager-prize-description\" | \"exploration-pack-title\" | \"exploration-battle-modifier-announcement\" | \"exploration-essence-current-total\" | \"exploration-free-purchases-title\" | \"exploration-free-purchases-detail\" | \"exploration-purge-essence-calculation\" | \"exploration-spirit-animal-essence-calculation\" | \"exploration-opening-hand-change-announcement\" | \"exploration-next-battle-card-cost-reduction\" | \"gamble-essence-outcome\" | \"transfiguration-picker-instruction\" | \"transfiguration-reforged-card-caption\" | \"transfiguration-picker-empty-state\" | \"transfiguration-decline-action\" | \"transfiguration-confirm-action\" | \"duplication-picker-instruction\" | \"duplication-picker-empty-state\" | \"duplication-decline-action\" | \"duplication-confirm-action\" | \"shop-free-purchases-status\" | \"shop-overlapping-free-purchase-status\" | \"dreamsign-bazaar-replacement-full\" | \"exploration-effect-missing-deck-card\" | \"exploration-effect-missing-starter-card\" | \"exploration-offered-site-disclosure\" | \"battle-zone-browser-viewer-title\" | \"battle-zone-browser-opponent-title\" | \"battle-zone-browser-total-count\" | \"battle-zone-browser-filtered-count\" | \"battle-zone-browser-viewer-option\" | \"battle-zone-browser-opponent-option\" | \"battle-figment-create-action\" | \"battle-victory-summary\" | \"battle-figment-merge-confirmation-title\" | \"battle-foresee-title\" | \"battle-card-note-title\" | \"battle-log-turn-title\" | \"battle-result-title\" | \"battle-result-reopen-action\" | \"battle-turn-announcement\" | \"battle-card-picker-zone-caption\" | \"battle-card-picker-submit-action\" | \"battle-card-picker-selected-count\" | \"battle-card-picker-progress\" | \"battle-flow-action\" | \"battle-figment-merge-target\" | \"battle-figment-merge-spark-detail\" | \"battle-figment-merge-legionnaire-warning\" | \"battle-tutorial-movement-error\" | \"battle-start-title\" | \"battle-card-note-character-count\" | \"battle-deck-order-title\" | \"battle-deck-order-label\" | \"battle-card-order-spark-summary\" | \"battle-prompt-switch-side\" | \"deck-browser-filter-accessible-name\" | \"deck-browser-sort-accessible-name\" | \"journey-status-deck-open\" | \"journey-status-dreamsigns-open\" | \"battle-zone-browser-close\" | \"exploration-outcome-rewards-gained\" | \"exploration-outcome-cards-purging\" | \"exploration-outcome-purge-and-gain\" | \"exploration-next-battle-modifier\" | \"exploration-card-purge-for-essence\" | \"exploration-spirit-animal-essence-summary\" | \"exploration-free-purchases-accessible-name\" | \"exploration-card-copies-gained\" | \"exploration-purge-and-copy-complete\" | \"exploration-card-transfiguring\" | \"exploration-bulk-transfiguration-complete\" | \"exploration-purge-before-copy\" | \"exploration-dream-avatar-changed\" | \"exploration-dreamsign-purging\" | \"exploration-dreamsign-selection-progress\" | \"exploration-dreamsign-mutation-accessible-name\" | \"exploration-dreamsign-replacement-pair-accessible-name\" | \"exploration-nightmare-dreamsign-bundle-accessible-name\" | \"exploration-nightmare-stack-accessible-name\" | \"exploration-starter-card-mutation-accessible-name\" | \"exploration-starter-card-replacement-accessible-name\" | \"exploration-starter-card-transfiguration-accessible-name\" | \"exploration-starter-card-transfiguration-pair-accessible-name\" | \"exploration-card-transfiguration-accessible-name\" | \"exploration-card-transfiguration-pair-accessible-name\" | \"exploration-compound-same-type-accessible-name\" | \"exploration-compound-fast-nightmares-accessible-name\" | \"exploration-compound-take-transfigured-accessible-name\" | \"exploration-compound-purge-copy-accessible-name\" | \"exploration-compound-review-accessible-name\" | \"exploration-compound-fast-pair-accessible-name\" | \"exploration-compound-copy-pair-accessible-name\" | \"exploration-card-replacements-accessible-name\" | \"exploration-card-replacement-accessible-name\" | \"exploration-card-type-changes-accessible-name\" | \"exploration-card-type-change-pair-accessible-name\" | \"exploration-multi-transfiguration-progress-accessible-name\" | \"battle-card-memory-counter-count\" | \"battle-banished-cards-open\" | \"battle-figment-merge-announcement\" | \"battle-phase-indicator\" | \"battle-victory-essence-gained\" | \"battle-participant-status\" | \"battle-dreamwell-card-description\" | \"battle-dreamwell-energy-added\" | \"battle-card-pile-face-down-position\" | \"battle-point-count\" | \"battle-card-pile-label\" | \"battle-challenger-label\" | \"card-pool-sort-direction\" | \"tutorial-battle-challenge-outcome\" | \"dreamsign-object-accessible-name\" | \"tide-object-accessible-name\" | \"character-dialogue-accessible-name\" | \"card-order-reorder-action\" | \"transfiguration-form-choice\" | \"gamble-wager-prize-accessible-name\" | \"gamble-gate-bet-accessible-name\" | \"gamble-draw-attempt-accessible-name\" | \"gamble-tier-action-accessible-name\" | \"gamble-cash-out-accessible-name\" | \"gamble-draw-accessible-name\" | \"dream-avatar-art-accessible-name\" | \"atlas-node-accessible-name\" | \"card-stat-accessible-name\" | \"card-stat-custom-accessible-name\" | \"exploration-pack-choose-accessible-name\" | \"gamble-suit-outcome-accessible-name\" | \"battle-tutorial-dismiss-action\" | \"rules-text-bolt-accessible-name\" | \"card-identicon-alt\" | \"rules-text-source-accessible-name\" | \"battle-dreamwell-reveal-description\" | \"playing-card-accessible-name\" | \"exploration-smaller-hand-cost-accessible-name\" | \"exploration-site-insertion-accessible-name\" | \"gamble-playing-card-hand-accessible-name\" | \"journey-start-carousel-navigation-action\" | \"reveal-description-join\" | \"reveal-definition-entry\" | \"reveal-list-and\" | \"reveal-card-energy\" | \"reveal-card-energy-alternatives\" | \"reveal-card-spark\" | \"reveal-card-reclaim\" | \"card-editor-field-accessible-name\" | \"radial-hand-total-accessible-name\" | \"localization-invalid-message-fallback\" | \"application-eyebrow-dreamtides\" | \"application-eyebrow-journey-status\" | \"application-eyebrow-configuration\" | \"application-eyebrow-game-version\" | \"application-eyebrow-game-settings\" | \"application-eyebrow-game-data\" | \"application-eyebrow-game-connection\" | \"application-opening-qa-scene-title\" | \"application-opening-qa-scene-message\" | \"application-loading-saved-journey-title\" | \"application-loading-saved-journey-error-title\" | \"application-loading-saved-journey-error-message\" | \"application-loading-journey-content-title\" | \"application-loading-journey-content-message\" | \"application-content-load-error-title\" | \"application-content-load-error-message\" | \"application-retry-action\" | \"application-copy-details-action\" | \"application-firebase-setup-title\" | \"application-firebase-setup-emulator-message\" | \"application-firebase-setup-production-message\" | \"application-battle-preview-error-title\" | \"application-battle-preview-error-message\" | \"error-boundary-title\" | \"error-boundary-message\" | \"error-boundary-retry-action\" | \"error-boundary-close-action\" | \"main-menu-title\" | \"main-menu-new-journey-action\" | \"main-menu-dream-codex-action\" | \"main-menu-settings-action\" | \"main-menu-about-action\" | \"main-menu-quit-action\" | \"main-menu-github-action\" | \"main-menu-discord-action\" | \"main-menu-reddit-action\" | \"loading-card-types-title\" | \"loading-card-anatomy-label\" | \"loading-card-character-label\" | \"loading-card-event-label\" | \"loading-begin-action\" | \"loading-progress-label\" | \"command-menu-close-actions\" | \"command-menu-back-action\" | \"command-menu-empty-state\" | \"command-menu-invalid-integer\" | \"transient-status-dismiss-action\" | \"application-connecting-game-service-title\" | \"application-connecting-game-service-message\" | \"coop-joining-game-title\" | \"coop-joining-game-busy\" | \"coop-creating-game-title\" | \"coop-creating-game-message\" | \"coop-creating-game-busy\" | \"coop-game-not-found-title\" | \"coop-create-new-game-action\" | \"coop-room-setup-error-title\" | \"coop-room-setup-error-message\" | \"coop-try-again-action\" | \"coop-version-gate-title\" | \"coop-version-gate-message\" | \"coop-unreadable-room-title\" | \"coop-unreadable-room-message\" | \"coop-starting-new-game-action\" | \"coop-bounce-partner-conflict\" | \"coop-bounce-invalid-action\" | \"coop-bounce-append-failed\" | \"coop-bounce-pending-dropped\" | \"coop-bounce-prompt-pending\" | \"coop-bounce-unknown-conflict\" | \"coop-bounce-observer-read-only\" | \"coop-bounce-internal-error\" | \"coop-presence-connecting\" | \"coop-create-game-error\" | \"coop-presence-write-error\" | \"coop-content-settings-title\" | \"coop-content-settings-message\" | \"coop-unadoptable-settings-detail\" | \"coop-player-disconnected-title\" | \"coop-playtest-paused-message\" | \"coop-take-control-action\" | \"application-comparison-this-game\" | \"application-comparison-yours\" | \"coop-config-atlas-rules-label\" | \"coop-config-site-rules-label\" | \"coop-config-draft-rules-label\" | \"coop-config-economy-rules-label\" | \"coop-config-gamble-rules-label\" | \"coop-config-transfiguration-rules-label\" | \"coop-config-opponent-rules-label\" | \"coop-config-tutorial-rules-label\" | \"coop-config-unavailable\" | \"journey-start-title\" | \"journey-start-choose-action\" | \"journey-start-reroll-action\" | \"starting-deck-title\" | \"starting-deck-subtitle\" | \"starting-deck-empty-state\" | \"starting-deck-begin-action\" | \"dreamsign-replacement-title\" | \"dreamsign-replacement-new-label\" | \"dreamsign-replacement-replace-action\" | \"dreamsign-replacement-keep-current-action\" | \"tutorial-feature-cost\" | \"tutorial-feature-spark\" | \"tutorial-feature-ability\" | \"tutorial-feature-card-type\" | \"journey-status-dreamsigns-title\" | \"journey-status-close-action\" | \"journey-status-no-avatar\" | \"journey-menu-view-deck-action\" | \"journey-menu-pool-viewer-action\" | \"journey-menu-package-debug-action\" | \"journey-menu-card-sources-action\" | \"journey-menu-edit-state-action\" | \"journey-menu-regenerate-atlas-action\" | \"journey-menu-open-action\" | \"journey-menu-save-action\" | \"journey-menu-load-action\" | \"journey-menu-download-log-action\" | \"journey-menu-build-sha-action\" | \"journey-menu-save-prompt\" | \"journey-menu-save-cancelled\" | \"journey-menu-save-generic-error\" | \"journey-menu-load-unavailable\" | \"journey-menu-load-generic-error\" | \"journey-complete-title\" | \"journey-complete-new-journey\" | \"journey-complete-stat-cards\" | \"journey-complete-stat-essence\" | \"journey-failed-summary-missing\" | \"journey-failed-new-journey-action\" | \"atlas-final-boss-title\" | \"atlas-known-dreamsign-title\" | \"dreamsign-replacement-pending-label\" | \"dreamsign-replacement-collection-label\" | \"dreamsign-replacement-decline-reward-action\" | \"dreamsign-revelation-cancel-action\" | \"dreamsign-revelation-cancel-replacement-action\" | \"draft-reroll-offer\" | \"tutorial-how-to-play-title\" | \"tutorial-how-to-play-close\" | \"tutorial-battle-complete\" | \"tutorial-new-journey-action\" | \"tutorial-opponent-card-flipping\" | \"tides-information-label\" | \"deck-filter-all\" | \"deck-filter-characters\" | \"deck-filter-events\" | \"deck-filter-all-subtypes\" | \"deck-sort-name\" | \"deck-sort-acquired\" | \"deck-sort-cost\" | \"deck-sort-spark\" | \"deck-sort-subtype\" | \"deck-size-small\" | \"deck-size-medium\" | \"deck-size-large\" | \"deck-browser-title\" | \"deck-browser-empty\" | \"deck-browser-no-filter-matches\" | \"card-pool-all-subtypes-option\" | \"card-pool-search-label\" | \"card-pool-tide-provenance-title\" | \"card-pool-construction-title\" | \"card-pool-construction-description\" | \"card-gallery-empty-default\" | \"card-choice-purge-operation\" | \"card-choice-copy-operation\" | \"card-choice-transfigure-operation\" | \"card-choice-change-operation\" | \"deck-viewer-avatar-label\" | \"deck-viewer-dreamsigns-label\" | \"deck-viewer-no-dreamsigns\" | \"deck-viewer-tides-label\" | \"glossary-definition-unavailable-title\" | \"glossary-definition-unavailable-body\" | \"exploration-deck-modification-fast\" | \"exploration-deck-modification-subtype-unavailable\" | \"exploration-deck-modification-reclaim\" | \"exploration-pack-choose-action\" | \"exploration-next-battle-label\" | \"exploration-essence-gained-title\" | \"exploration-free-next-shop-title\" | \"exploration-free-next-shop-detail\" | \"exploration-delve-action\" | \"exploration-card-face-down\" | \"exploration-card-returning-face-down\" | \"exploration-confirm-choice-action\" | \"exploration-dreamsign-offered-group-title\" | \"exploration-dreamsign-purge-group-title\" | \"exploration-dreamsign-replacement-group-title\" | \"exploration-dreamsigns-changed-title\" | \"exploration-nightmare-dreamsign-bundle-title\" | \"exploration-starter-card-mutation-title\" | \"exploration-starter-card-transfiguration-title\" | \"exploration-card-transfiguration-title\" | \"exploration-card-replacements-title\" | \"exploration-card-type-changes-title\" | \"exploration-compound-same-type-title\" | \"exploration-compound-fast-nightmares-title\" | \"exploration-compound-take-transfigured-title\" | \"exploration-compound-purge-copy-title\" | \"exploration-compound-purged-section\" | \"exploration-compound-transfigured-section\" | \"exploration-compound-fast-section\" | \"exploration-compound-nightmares-section\" | \"exploration-compound-copies-section\" | \"exploration-followup-choice-purge\" | \"exploration-followup-choice-copy\" | \"exploration-empty-card-state\" | \"exploration-site-eyebrow\" | \"exploration-site-offer-modifier-title\" | \"exploration-site-offer-modifier-detail\" | \"exploration-site-insertion-title\" | \"gamble-card-picker-empty-state\" | \"gamble-play-again-action\" | \"gamble-leave-action\" | \"gamble-choose-replacement-action\" | \"gamble-replacement-not-yet-action\" | \"gamble-gravok-title\" | \"gamble-gravok-rules\" | \"gamble-gravok-accessibility-description\" | \"gamble-gravok-six-gate\" | \"gamble-gravok-nine-gate\" | \"gamble-gravok-jack-gate\" | \"gamble-ladder-title\" | \"gamble-ladder-rules\" | \"gamble-ladder-accessibility-description\" | \"gamble-starway-title\" | \"gamble-starway-rules\" | \"gamble-starway-accessibility-description\" | \"gamble-four-suit-title\" | \"gamble-four-suit-rules\" | \"gamble-four-suit-accessibility-description\" | \"gamble-blackjack-title\" | \"gamble-blackjack-rules\" | \"gamble-blackjack-accessibility-description\" | \"gamble-bet-action\" | \"gamble-draw-action\" | \"gamble-climb-action\" | \"gamble-take-action\" | \"gamble-choose-another-card-action\" | \"gamble-deal-action\" | \"gamble-hit-action\" | \"gamble-stand-action\" | \"gamble-gravok-won-outcome\" | \"gamble-ladder-won-outcome\" | \"gamble-miss-outcome\" | \"gamble-safe-outcome\" | \"gamble-bust-outcome\" | \"gamble-prize-at-stake-outcome\" | \"gamble-transfigure-outcome\" | \"gamble-gained-outcome\" | \"gamble-duplicated-outcome\" | \"gamble-purged-outcome\" | \"gamble-player-win-outcome\" | \"gamble-dealer-win-outcome\" | \"gamble-push-outcome\" | \"gamble-wager-returned-outcome\" | \"gamble-wins-outcome\" | \"transfiguration-picker-title\" | \"transfiguration-form-picker-title\" | \"transfiguration-choose-again-action\" | \"duplication-picker-title\" | \"site-decline-offer\" | \"site-walk-on\" | \"site-choose-again\" | \"site-confirm\" | \"augury-reroll-offers\" | \"augury-unavailable-guide-line\" | \"augury-error-clouded\" | \"augury-error-choose-vision\" | \"augury-error-visions-shifted\" | \"augury-error-path-closed\" | \"card-shop-leave-action\" | \"dreamsign-bazaar-leave-action\" | \"shop-free-next-shop-status\" | \"purge-site-decline-action\" | \"dreamsign-bazaar-replacement-cancel\" | \"exploration-effect-resolved-fallback\" | \"battle-zone-browser-shared-banished-title\" | \"battle-zone-browser-empty\" | \"battle-zone-browser-no-filter-matches\" | \"battle-result-essence-earned-label\" | \"battle-continue-action\" | \"battle-result-keep-inspecting-action\" | \"battle-result-reset-run-action\" | \"battle-card-picker-empty-state\" | \"battle-previous-phase-action\" | \"battle-card-picker-skip-action\" | \"battle-figment-merge-blocked-title\" | \"battle-figment-merge-blocked-exhaustion\" | \"battle-figment-merge-confirm-action\" | \"battle-figment-merge-cancel-action\" | \"battle-tutorial-target-selection-title\" | \"battle-tutorial-target-selection-instruction\" | \"battle-tutorial-target-selection-cancel-action\" | \"battle-zone-browser-search-label\" | \"battle-zone-browser-search-placeholder\" | \"battle-status-avatar-loading\" | \"battle-start-ability-label\" | \"battle-start-inactive-ability\" | \"battle-start-signature-cards-and-dreamsigns-label\" | \"battle-start-signature-cards-label\" | \"battle-start-dreamsigns-label\" | \"battle-start-to-win-label\" | \"battle-start-reward-label\" | \"battle-start-action\" | \"battle-foresee-less-action\" | \"battle-foresee-more-action\" | \"battle-foresee-triggered-by\" | \"battle-foresee-deck-destination\" | \"battle-foresee-void-destination\" | \"battle-card-note-subtitle\" | \"battle-card-note-cancel\" | \"battle-card-note-text-label\" | \"battle-card-note-placeholder\" | \"battle-card-note-error\" | \"battle-card-note-expiry-label\" | \"battle-card-note-expiry-next-turn\" | \"battle-card-note-expiry-this-turn\" | \"battle-card-note-expiry-numbered\" | \"battle-card-note-expiry-manual\" | \"battle-card-note-turns-label\" | \"battle-card-note-fewer-turn\" | \"battle-card-note-more-turn\" | \"battle-card-note-cancel-action\" | \"battle-card-note-add-action\" | \"battle-deck-order-subtitle\" | \"battle-deck-order-close-action\" | \"battle-deck-order-cancel-action\" | \"battle-deck-order-confirm-action\" | \"battle-missing-card-instance\" | \"battle-dreamwell-history-title\" | \"battle-dreamwell-history-subtitle\" | \"battle-dreamwell-history-close-action\" | \"battle-dreamwell-history-empty\" | \"battle-victory-headline\" | \"battle-ai-reject-action\" | \"battle-prompt-discover-character\" | \"battle-prompt-confirm-yes\" | \"battle-prompt-confirm-skip\" | \"battle-prompt-generic\" | \"battle-prompt-generic-subtitle\" | \"battle-prompt-generic-option\" | \"main-menu-navigation-label\" | \"main-menu-community-label\" | \"tides-information-accessible-name\" | \"tutorial-feature-energy-glyph\" | \"tutorial-feature-spark-glyph\" | \"journey-status-avatar-accessible-name\" | \"journey-status-essence-accessible-name\" | \"tutorial-region-battle\" | \"tutorial-region-card\" | \"tutorial-region-site\" | \"deck-filter-subtype-accessible-name\" | \"deck-sort-accessible-name\" | \"deck-sort-ascending-accessible-name\" | \"deck-sort-descending-accessible-name\" | \"deck-browser-close\" | \"exploration-free-next-shop-accessible-name\" | \"card-pool-subtype-filter-label\" | \"card-pool-cost-filter-label\" | \"card-pool-close-action\" | \"card-pool-sort-label\" | \"battle-control-group-accessible-name\" | \"card-attribute-interrupt-accessible-name\" | \"card-attribute-fast-accessible-name\" | \"exploration-choices-accessible-name\" | \"exploration-return-action\" | \"exploration-site-offer-modifier-accessible-name\" | \"exploration-site-type-choices-accessible-name\" | \"exploration-no-cards-taken\" | \"exploration-no-cards-purged\" | \"gamble-replacement-close-action\" | \"battle-card-exhausted-accessible-name\" | \"battle-targeting-card-accessible-name\" | \"reveal-card-energy-variable\" | \"reveal-card-spark-variable\" | \"reveal-card-fast\" | \"reveal-card-interrupt\" | \"battle-zone-browser-sort-accessible-name\" | \"battle-zone-browser-filter-accessible-name\" | \"transfiguration-options-accessible-name\" | \"battle-card-note-expiry-accessible-name\" | \"battle-opponent-card-accessible-name\"",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "variables",
-            "tsType": "FluentMessageVariables<\"application-loading-saved-journey-message\"> | FluentMessageVariables<\"coop-joining-game-message\"> | FluentMessageVariables<\"coop-loading-game-message\"> | FluentMessageVariables<\"coop-game-not-found-message\"> | FluentMessageVariables<\"coop-presence-connected-count\"> | FluentMessageVariables<\"journey-menu-save-downloaded\"> | FluentMessageVariables<\"journey-menu-save-error\"> | FluentMessageVariables<\"journey-menu-load-loaded\"> | FluentMessageVariables<\"journey-menu-load-error\"> | FluentMessageVariables<\"journey-menu-build-sha-status\"> | FluentMessageVariables<\"journey-complete-stat-battles\"> | FluentMessageVariables<\"journey-complete-stat-dreamscapes\"> | FluentMessageVariables<\"journey-complete-stat-dreamsigns\"> | FluentMessageVariables<\"dreamsign-replacement-capacity\"> | FluentMessageVariables<\"journey-failed-title\"> | FluentMessageVariables<\"journey-failed-message\"> | FluentMessageVariables<\"journey-failed-reason\"> | FluentMessageVariables<\"journey-failed-stat-label\"> | FluentMessageVariables<\"dreamscape-reward-status\"> | FluentMessageVariables<\"dreamscape-reward-dreamsign-label\"> | FluentMessageVariables<\"tutorial-drag-to-block\"> | FluentMessageVariables<\"deck-browser-card-count\"> | FluentMessageVariables<\"card-pool-browser-count\"> | FluentMessageVariables<\"card-pool-viewer-title\"> | FluentMessageVariables<\"card-pool-source-option\"> | FluentMessageVariables<\"card-pool-empty-state\"> | FluentMessageVariables<\"card-pool-sort-option\"> | FluentMessageVariables<\"card-pool-type-filter-option\"> | FluentMessageVariables<\"card-pool-cost-filter-option\"> | FluentMessageVariables<\"card-pool-tide-provenance-summary\"> | FluentMessageVariables<\"card-pool-tide-provenance-description\"> | FluentMessageVariables<\"card-pool-construction-summary\"> | FluentMessageVariables<\"card-rules-transfiguration-changed\"> | FluentMessageVariables<\"card-transfiguration-badge\"> | FluentMessageVariables<\"card-type-line\"> | FluentMessageVariables<\"exploration-deck-modification-spark\"> | FluentMessageVariables<\"exploration-deck-modification-energy-cost\"> | FluentMessageVariables<\"exploration-deck-modification-subtype\"> | FluentMessageVariables<\"exploration-deck-modification-transfiguration\"> | FluentMessageVariables<\"augury-card-choice-copy-count\"> | FluentMessageVariables<\"gamble-wager-prize-title\"> | FluentMessageVariables<\"gamble-wager-prize-description\"> | FluentMessageVariables<\"exploration-pack-title\"> | FluentMessageVariables<\"exploration-battle-modifier-announcement\"> | FluentMessageVariables<\"exploration-essence-current-total\"> | FluentMessageVariables<\"exploration-free-purchases-title\"> | FluentMessageVariables<\"exploration-free-purchases-detail\"> | FluentMessageVariables<\"exploration-purge-essence-calculation\"> | FluentMessageVariables<\"exploration-spirit-animal-essence-calculation\"> | FluentMessageVariables<\"exploration-opening-hand-change-announcement\"> | FluentMessageVariables<\"exploration-next-battle-card-cost-reduction\"> | FluentMessageVariables<\"gamble-essence-outcome\"> | FluentMessageVariables<\"transfiguration-picker-instruction\"> | FluentMessageVariables<\"transfiguration-reforged-card-caption\"> | FluentMessageVariables<\"transfiguration-picker-empty-state\"> | FluentMessageVariables<\"transfiguration-decline-action\"> | FluentMessageVariables<\"transfiguration-confirm-action\"> | FluentMessageVariables<\"duplication-picker-instruction\"> | FluentMessageVariables<\"duplication-picker-empty-state\"> | FluentMessageVariables<\"duplication-decline-action\"> | FluentMessageVariables<\"duplication-confirm-action\"> | FluentMessageVariables<\"shop-free-purchases-status\"> | FluentMessageVariables<\"shop-overlapping-free-purchase-status\"> | FluentMessageVariables<\"dreamsign-bazaar-replacement-full\"> | FluentMessageVariables<\"exploration-effect-missing-deck-card\"> | FluentMessageVariables<\"exploration-effect-missing-starter-card\"> | FluentMessageVariables<\"exploration-offered-site-disclosure\"> | FluentMessageVariables<\"battle-zone-browser-viewer-title\"> | FluentMessageVariables<\"battle-zone-browser-opponent-title\"> | FluentMessageVariables<\"battle-zone-browser-total-count\"> | FluentMessageVariables<\"battle-zone-browser-filtered-count\"> | FluentMessageVariables<\"battle-zone-browser-viewer-option\"> | FluentMessageVariables<\"battle-zone-browser-opponent-option\"> | FluentMessageVariables<\"battle-figment-create-action\"> | FluentMessageVariables<\"battle-victory-summary\"> | FluentMessageVariables<\"battle-figment-merge-confirmation-title\"> | FluentMessageVariables<\"battle-foresee-title\"> | FluentMessageVariables<\"battle-card-note-title\"> | FluentMessageVariables<\"battle-log-turn-title\"> | FluentMessageVariables<\"battle-result-title\"> | FluentMessageVariables<\"battle-result-reopen-action\"> | FluentMessageVariables<\"battle-turn-announcement\"> | FluentMessageVariables<\"battle-card-picker-zone-caption\"> | FluentMessageVariables<\"battle-card-picker-submit-action\"> | FluentMessageVariables<\"battle-card-picker-selected-count\"> | FluentMessageVariables<\"battle-card-picker-progress\"> | FluentMessageVariables<\"battle-flow-action\"> | FluentMessageVariables<\"battle-figment-merge-target\"> | FluentMessageVariables<\"battle-figment-merge-spark-detail\"> | FluentMessageVariables<\"battle-figment-merge-legionnaire-warning\"> | FluentMessageVariables<\"battle-tutorial-movement-error\"> | FluentMessageVariables<\"battle-start-title\"> | FluentMessageVariables<\"battle-card-note-character-count\"> | FluentMessageVariables<\"battle-deck-order-title\"> | FluentMessageVariables<\"battle-deck-order-label\"> | FluentMessageVariables<\"battle-card-order-spark-summary\"> | FluentMessageVariables<\"battle-prompt-switch-side\"> | FluentMessageVariables<\"deck-browser-filter-accessible-name\"> | FluentMessageVariables<\"deck-browser-sort-accessible-name\"> | FluentMessageVariables<\"journey-status-deck-open\"> | FluentMessageVariables<\"journey-status-dreamsigns-open\"> | FluentMessageVariables<\"battle-zone-browser-close\"> | FluentMessageVariables<\"exploration-outcome-rewards-gained\"> | FluentMessageVariables<\"exploration-outcome-cards-purging\"> | FluentMessageVariables<\"exploration-outcome-purge-and-gain\"> | FluentMessageVariables<\"exploration-next-battle-modifier\"> | FluentMessageVariables<\"exploration-card-purge-for-essence\"> | FluentMessageVariables<\"exploration-spirit-animal-essence-summary\"> | FluentMessageVariables<\"exploration-free-purchases-accessible-name\"> | FluentMessageVariables<\"exploration-card-copies-gained\"> | FluentMessageVariables<\"exploration-purge-and-copy-complete\"> | FluentMessageVariables<\"exploration-card-transfiguring\"> | FluentMessageVariables<\"exploration-bulk-transfiguration-complete\"> | FluentMessageVariables<\"exploration-purge-before-copy\"> | FluentMessageVariables<\"exploration-dream-avatar-changed\"> | FluentMessageVariables<\"exploration-dreamsign-purging\"> | FluentMessageVariables<\"exploration-dreamsign-selection-progress\"> | FluentMessageVariables<\"exploration-dreamsign-mutation-accessible-name\"> | FluentMessageVariables<\"exploration-dreamsign-replacement-pair-accessible-name\"> | FluentMessageVariables<\"exploration-nightmare-dreamsign-bundle-accessible-name\"> | FluentMessageVariables<\"exploration-nightmare-stack-accessible-name\"> | FluentMessageVariables<\"exploration-starter-card-mutation-accessible-name\"> | FluentMessageVariables<\"exploration-starter-card-replacement-accessible-name\"> | FluentMessageVariables<\"exploration-starter-card-transfiguration-accessible-name\"> | FluentMessageVariables<\"exploration-starter-card-transfiguration-pair-accessible-name\"> | FluentMessageVariables<\"exploration-card-transfiguration-accessible-name\"> | FluentMessageVariables<\"exploration-card-transfiguration-pair-accessible-name\"> | FluentMessageVariables<\"exploration-compound-same-type-accessible-name\"> | FluentMessageVariables<\"exploration-compound-fast-nightmares-accessible-name\"> | FluentMessageVariables<\"exploration-compound-take-transfigured-accessible-name\"> | FluentMessageVariables<\"exploration-compound-purge-copy-accessible-name\"> | FluentMessageVariables<\"exploration-compound-review-accessible-name\"> | FluentMessageVariables<\"exploration-compound-fast-pair-accessible-name\"> | FluentMessageVariables<\"exploration-compound-copy-pair-accessible-name\"> | FluentMessageVariables<\"exploration-card-replacements-accessible-name\"> | FluentMessageVariables<\"exploration-card-replacement-accessible-name\"> | FluentMessageVariables<\"exploration-card-type-changes-accessible-name\"> | FluentMessageVariables<\"exploration-card-type-change-pair-accessible-name\"> | FluentMessageVariables<\"exploration-multi-transfiguration-progress-accessible-name\"> | FluentMessageVariables<\"battle-card-memory-counter-count\"> | FluentMessageVariables<\"battle-banished-cards-open\"> | FluentMessageVariables<\"battle-figment-merge-announcement\"> | FluentMessageVariables<\"battle-phase-indicator\"> | FluentMessageVariables<\"battle-victory-essence-gained\"> | FluentMessageVariables<\"battle-participant-status\"> | FluentMessageVariables<\"battle-dreamwell-card-description\"> | FluentMessageVariables<\"battle-dreamwell-energy-added\"> | FluentMessageVariables<\"battle-card-pile-face-down-position\"> | FluentMessageVariables<\"battle-point-count\"> | FluentMessageVariables<\"battle-card-pile-label\"> | FluentMessageVariables<\"battle-challenger-label\"> | FluentMessageVariables<\"card-pool-sort-direction\"> | FluentMessageVariables<\"tutorial-battle-challenge-outcome\"> | FluentMessageVariables<\"dreamsign-object-accessible-name\"> | FluentMessageVariables<\"tide-object-accessible-name\"> | FluentMessageVariables<\"character-dialogue-accessible-name\"> | FluentMessageVariables<\"card-order-reorder-action\"> | FluentMessageVariables<\"transfiguration-form-choice\"> | FluentMessageVariables<\"gamble-wager-prize-accessible-name\"> | FluentMessageVariables<\"gamble-gate-bet-accessible-name\"> | FluentMessageVariables<\"gamble-draw-attempt-accessible-name\"> | FluentMessageVariables<\"gamble-tier-action-accessible-name\"> | FluentMessageVariables<\"gamble-cash-out-accessible-name\"> | FluentMessageVariables<\"gamble-draw-accessible-name\"> | FluentMessageVariables<\"dream-avatar-art-accessible-name\"> | FluentMessageVariables<\"atlas-node-accessible-name\"> | FluentMessageVariables<\"card-stat-accessible-name\"> | FluentMessageVariables<\"card-stat-custom-accessible-name\"> | FluentMessageVariables<\"exploration-pack-choose-accessible-name\"> | FluentMessageVariables<\"gamble-suit-outcome-accessible-name\"> | FluentMessageVariables<\"battle-tutorial-dismiss-action\"> | FluentMessageVariables<\"rules-text-bolt-accessible-name\"> | FluentMessageVariables<\"card-identicon-alt\"> | FluentMessageVariables<\"rules-text-source-accessible-name\"> | FluentMessageVariables<\"battle-dreamwell-reveal-description\"> | FluentMessageVariables<\"playing-card-accessible-name\"> | FluentMessageVariables<\"exploration-smaller-hand-cost-accessible-name\"> | FluentMessageVariables<\"exploration-site-insertion-accessible-name\"> | FluentMessageVariables<\"gamble-playing-card-hand-accessible-name\"> | FluentMessageVariables<\"journey-start-carousel-navigation-action\"> | FluentMessageVariables<\"reveal-description-join\"> | FluentMessageVariables<\"reveal-definition-entry\"> | FluentMessageVariables<\"reveal-list-and\"> | FluentMessageVariables<\"reveal-card-energy\"> | FluentMessageVariables<\"reveal-card-energy-alternatives\"> | FluentMessageVariables<\"reveal-card-spark\"> | FluentMessageVariables<\"reveal-card-reclaim\"> | FluentMessageVariables<\"card-editor-field-accessible-name\"> | FluentMessageVariables<\"radial-hand-total-accessible-name\">",
-            "optional": true,
-            "description": ""
-          }
-        ]
-      }
+      "description": "Complete localized fallback headline selected by a non-React builder."
     },
     {
       "name": "body",
@@ -2828,29 +2991,12 @@
       }
     },
     {
-      "name": "bodyDescriptor",
-      "tsType": "FluentMessageDescriptor",
+      "name": "bodyMessage",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Complete localized fallback body selected by a non-React builder.",
-      "nested": {
-        "name": "FluentMessageDescriptor",
-        "fields": [
-          {
-            "name": "id",
-            "tsType": "\"application-loading-saved-journey-message\" | \"coop-joining-game-message\" | \"coop-loading-game-message\" | \"coop-game-not-found-message\" | \"coop-presence-connected-count\" | \"journey-menu-save-downloaded\" | \"journey-menu-save-error\" | \"journey-menu-load-loaded\" | \"journey-menu-load-error\" | \"journey-menu-build-sha-status\" | \"journey-complete-stat-battles\" | \"journey-complete-stat-dreamscapes\" | \"journey-complete-stat-dreamsigns\" | \"dreamsign-replacement-capacity\" | \"journey-failed-title\" | \"journey-failed-message\" | \"journey-failed-reason\" | \"journey-failed-stat-label\" | \"dreamscape-reward-status\" | \"dreamscape-reward-dreamsign-label\" | \"tutorial-drag-to-block\" | \"deck-browser-card-count\" | \"card-pool-browser-count\" | \"card-pool-viewer-title\" | \"card-pool-source-option\" | \"card-pool-empty-state\" | \"card-pool-sort-option\" | \"card-pool-type-filter-option\" | \"card-pool-cost-filter-option\" | \"card-pool-tide-provenance-summary\" | \"card-pool-tide-provenance-description\" | \"card-pool-construction-summary\" | \"card-rules-transfiguration-changed\" | \"card-transfiguration-badge\" | \"card-type-line\" | \"exploration-deck-modification-spark\" | \"exploration-deck-modification-energy-cost\" | \"exploration-deck-modification-subtype\" | \"exploration-deck-modification-transfiguration\" | \"augury-card-choice-copy-count\" | \"gamble-wager-prize-title\" | \"gamble-wager-prize-description\" | \"exploration-pack-title\" | \"exploration-battle-modifier-announcement\" | \"exploration-essence-current-total\" | \"exploration-free-purchases-title\" | \"exploration-free-purchases-detail\" | \"exploration-purge-essence-calculation\" | \"exploration-spirit-animal-essence-calculation\" | \"exploration-opening-hand-change-announcement\" | \"exploration-next-battle-card-cost-reduction\" | \"gamble-essence-outcome\" | \"transfiguration-picker-instruction\" | \"transfiguration-reforged-card-caption\" | \"transfiguration-picker-empty-state\" | \"transfiguration-decline-action\" | \"transfiguration-confirm-action\" | \"duplication-picker-instruction\" | \"duplication-picker-empty-state\" | \"duplication-decline-action\" | \"duplication-confirm-action\" | \"shop-free-purchases-status\" | \"shop-overlapping-free-purchase-status\" | \"dreamsign-bazaar-replacement-full\" | \"exploration-effect-missing-deck-card\" | \"exploration-effect-missing-starter-card\" | \"exploration-offered-site-disclosure\" | \"battle-zone-browser-viewer-title\" | \"battle-zone-browser-opponent-title\" | \"battle-zone-browser-total-count\" | \"battle-zone-browser-filtered-count\" | \"battle-zone-browser-viewer-option\" | \"battle-zone-browser-opponent-option\" | \"battle-figment-create-action\" | \"battle-victory-summary\" | \"battle-figment-merge-confirmation-title\" | \"battle-foresee-title\" | \"battle-card-note-title\" | \"battle-log-turn-title\" | \"battle-result-title\" | \"battle-result-reopen-action\" | \"battle-turn-announcement\" | \"battle-card-picker-zone-caption\" | \"battle-card-picker-submit-action\" | \"battle-card-picker-selected-count\" | \"battle-card-picker-progress\" | \"battle-flow-action\" | \"battle-figment-merge-target\" | \"battle-figment-merge-spark-detail\" | \"battle-figment-merge-legionnaire-warning\" | \"battle-tutorial-movement-error\" | \"battle-start-title\" | \"battle-card-note-character-count\" | \"battle-deck-order-title\" | \"battle-deck-order-label\" | \"battle-card-order-spark-summary\" | \"battle-prompt-switch-side\" | \"deck-browser-filter-accessible-name\" | \"deck-browser-sort-accessible-name\" | \"journey-status-deck-open\" | \"journey-status-dreamsigns-open\" | \"battle-zone-browser-close\" | \"exploration-outcome-rewards-gained\" | \"exploration-outcome-cards-purging\" | \"exploration-outcome-purge-and-gain\" | \"exploration-next-battle-modifier\" | \"exploration-card-purge-for-essence\" | \"exploration-spirit-animal-essence-summary\" | \"exploration-free-purchases-accessible-name\" | \"exploration-card-copies-gained\" | \"exploration-purge-and-copy-complete\" | \"exploration-card-transfiguring\" | \"exploration-bulk-transfiguration-complete\" | \"exploration-purge-before-copy\" | \"exploration-dream-avatar-changed\" | \"exploration-dreamsign-purging\" | \"exploration-dreamsign-selection-progress\" | \"exploration-dreamsign-mutation-accessible-name\" | \"exploration-dreamsign-replacement-pair-accessible-name\" | \"exploration-nightmare-dreamsign-bundle-accessible-name\" | \"exploration-nightmare-stack-accessible-name\" | \"exploration-starter-card-mutation-accessible-name\" | \"exploration-starter-card-replacement-accessible-name\" | \"exploration-starter-card-transfiguration-accessible-name\" | \"exploration-starter-card-transfiguration-pair-accessible-name\" | \"exploration-card-transfiguration-accessible-name\" | \"exploration-card-transfiguration-pair-accessible-name\" | \"exploration-compound-same-type-accessible-name\" | \"exploration-compound-fast-nightmares-accessible-name\" | \"exploration-compound-take-transfigured-accessible-name\" | \"exploration-compound-purge-copy-accessible-name\" | \"exploration-compound-review-accessible-name\" | \"exploration-compound-fast-pair-accessible-name\" | \"exploration-compound-copy-pair-accessible-name\" | \"exploration-card-replacements-accessible-name\" | \"exploration-card-replacement-accessible-name\" | \"exploration-card-type-changes-accessible-name\" | \"exploration-card-type-change-pair-accessible-name\" | \"exploration-multi-transfiguration-progress-accessible-name\" | \"battle-card-memory-counter-count\" | \"battle-banished-cards-open\" | \"battle-figment-merge-announcement\" | \"battle-phase-indicator\" | \"battle-victory-essence-gained\" | \"battle-participant-status\" | \"battle-dreamwell-card-description\" | \"battle-dreamwell-energy-added\" | \"battle-card-pile-face-down-position\" | \"battle-point-count\" | \"battle-card-pile-label\" | \"battle-challenger-label\" | \"card-pool-sort-direction\" | \"tutorial-battle-challenge-outcome\" | \"dreamsign-object-accessible-name\" | \"tide-object-accessible-name\" | \"character-dialogue-accessible-name\" | \"card-order-reorder-action\" | \"transfiguration-form-choice\" | \"gamble-wager-prize-accessible-name\" | \"gamble-gate-bet-accessible-name\" | \"gamble-draw-attempt-accessible-name\" | \"gamble-tier-action-accessible-name\" | \"gamble-cash-out-accessible-name\" | \"gamble-draw-accessible-name\" | \"dream-avatar-art-accessible-name\" | \"atlas-node-accessible-name\" | \"card-stat-accessible-name\" | \"card-stat-custom-accessible-name\" | \"exploration-pack-choose-accessible-name\" | \"gamble-suit-outcome-accessible-name\" | \"battle-tutorial-dismiss-action\" | \"rules-text-bolt-accessible-name\" | \"card-identicon-alt\" | \"rules-text-source-accessible-name\" | \"battle-dreamwell-reveal-description\" | \"playing-card-accessible-name\" | \"exploration-smaller-hand-cost-accessible-name\" | \"exploration-site-insertion-accessible-name\" | \"gamble-playing-card-hand-accessible-name\" | \"journey-start-carousel-navigation-action\" | \"reveal-description-join\" | \"reveal-definition-entry\" | \"reveal-list-and\" | \"reveal-card-energy\" | \"reveal-card-energy-alternatives\" | \"reveal-card-spark\" | \"reveal-card-reclaim\" | \"card-editor-field-accessible-name\" | \"radial-hand-total-accessible-name\" | \"localization-invalid-message-fallback\" | \"application-eyebrow-dreamtides\" | \"application-eyebrow-journey-status\" | \"application-eyebrow-configuration\" | \"application-eyebrow-game-version\" | \"application-eyebrow-game-settings\" | \"application-eyebrow-game-data\" | \"application-eyebrow-game-connection\" | \"application-opening-qa-scene-title\" | \"application-opening-qa-scene-message\" | \"application-loading-saved-journey-title\" | \"application-loading-saved-journey-error-title\" | \"application-loading-saved-journey-error-message\" | \"application-loading-journey-content-title\" | \"application-loading-journey-content-message\" | \"application-content-load-error-title\" | \"application-content-load-error-message\" | \"application-retry-action\" | \"application-copy-details-action\" | \"application-firebase-setup-title\" | \"application-firebase-setup-emulator-message\" | \"application-firebase-setup-production-message\" | \"application-battle-preview-error-title\" | \"application-battle-preview-error-message\" | \"error-boundary-title\" | \"error-boundary-message\" | \"error-boundary-retry-action\" | \"error-boundary-close-action\" | \"main-menu-title\" | \"main-menu-new-journey-action\" | \"main-menu-dream-codex-action\" | \"main-menu-settings-action\" | \"main-menu-about-action\" | \"main-menu-quit-action\" | \"main-menu-github-action\" | \"main-menu-discord-action\" | \"main-menu-reddit-action\" | \"loading-card-types-title\" | \"loading-card-anatomy-label\" | \"loading-card-character-label\" | \"loading-card-event-label\" | \"loading-begin-action\" | \"loading-progress-label\" | \"command-menu-close-actions\" | \"command-menu-back-action\" | \"command-menu-empty-state\" | \"command-menu-invalid-integer\" | \"transient-status-dismiss-action\" | \"application-connecting-game-service-title\" | \"application-connecting-game-service-message\" | \"coop-joining-game-title\" | \"coop-joining-game-busy\" | \"coop-creating-game-title\" | \"coop-creating-game-message\" | \"coop-creating-game-busy\" | \"coop-game-not-found-title\" | \"coop-create-new-game-action\" | \"coop-room-setup-error-title\" | \"coop-room-setup-error-message\" | \"coop-try-again-action\" | \"coop-version-gate-title\" | \"coop-version-gate-message\" | \"coop-unreadable-room-title\" | \"coop-unreadable-room-message\" | \"coop-starting-new-game-action\" | \"coop-bounce-partner-conflict\" | \"coop-bounce-invalid-action\" | \"coop-bounce-append-failed\" | \"coop-bounce-pending-dropped\" | \"coop-bounce-prompt-pending\" | \"coop-bounce-unknown-conflict\" | \"coop-bounce-observer-read-only\" | \"coop-bounce-internal-error\" | \"coop-presence-connecting\" | \"coop-create-game-error\" | \"coop-presence-write-error\" | \"coop-content-settings-title\" | \"coop-content-settings-message\" | \"coop-unadoptable-settings-detail\" | \"coop-player-disconnected-title\" | \"coop-playtest-paused-message\" | \"coop-take-control-action\" | \"application-comparison-this-game\" | \"application-comparison-yours\" | \"coop-config-atlas-rules-label\" | \"coop-config-site-rules-label\" | \"coop-config-draft-rules-label\" | \"coop-config-economy-rules-label\" | \"coop-config-gamble-rules-label\" | \"coop-config-transfiguration-rules-label\" | \"coop-config-opponent-rules-label\" | \"coop-config-tutorial-rules-label\" | \"coop-config-unavailable\" | \"journey-start-title\" | \"journey-start-choose-action\" | \"journey-start-reroll-action\" | \"starting-deck-title\" | \"starting-deck-subtitle\" | \"starting-deck-empty-state\" | \"starting-deck-begin-action\" | \"dreamsign-replacement-title\" | \"dreamsign-replacement-new-label\" | \"dreamsign-replacement-replace-action\" | \"dreamsign-replacement-keep-current-action\" | \"tutorial-feature-cost\" | \"tutorial-feature-spark\" | \"tutorial-feature-ability\" | \"tutorial-feature-card-type\" | \"journey-status-dreamsigns-title\" | \"journey-status-close-action\" | \"journey-status-no-avatar\" | \"journey-menu-view-deck-action\" | \"journey-menu-pool-viewer-action\" | \"journey-menu-package-debug-action\" | \"journey-menu-card-sources-action\" | \"journey-menu-edit-state-action\" | \"journey-menu-regenerate-atlas-action\" | \"journey-menu-open-action\" | \"journey-menu-save-action\" | \"journey-menu-load-action\" | \"journey-menu-download-log-action\" | \"journey-menu-build-sha-action\" | \"journey-menu-save-prompt\" | \"journey-menu-save-cancelled\" | \"journey-menu-save-generic-error\" | \"journey-menu-load-unavailable\" | \"journey-menu-load-generic-error\" | \"journey-complete-title\" | \"journey-complete-new-journey\" | \"journey-complete-stat-cards\" | \"journey-complete-stat-essence\" | \"journey-failed-summary-missing\" | \"journey-failed-new-journey-action\" | \"atlas-final-boss-title\" | \"atlas-known-dreamsign-title\" | \"dreamsign-replacement-pending-label\" | \"dreamsign-replacement-collection-label\" | \"dreamsign-replacement-decline-reward-action\" | \"dreamsign-revelation-cancel-action\" | \"dreamsign-revelation-cancel-replacement-action\" | \"draft-reroll-offer\" | \"tutorial-how-to-play-title\" | \"tutorial-how-to-play-close\" | \"tutorial-battle-complete\" | \"tutorial-new-journey-action\" | \"tutorial-opponent-card-flipping\" | \"tides-information-label\" | \"deck-filter-all\" | \"deck-filter-characters\" | \"deck-filter-events\" | \"deck-filter-all-subtypes\" | \"deck-sort-name\" | \"deck-sort-acquired\" | \"deck-sort-cost\" | \"deck-sort-spark\" | \"deck-sort-subtype\" | \"deck-size-small\" | \"deck-size-medium\" | \"deck-size-large\" | \"deck-browser-title\" | \"deck-browser-empty\" | \"deck-browser-no-filter-matches\" | \"card-pool-all-subtypes-option\" | \"card-pool-search-label\" | \"card-pool-tide-provenance-title\" | \"card-pool-construction-title\" | \"card-pool-construction-description\" | \"card-gallery-empty-default\" | \"card-choice-purge-operation\" | \"card-choice-copy-operation\" | \"card-choice-transfigure-operation\" | \"card-choice-change-operation\" | \"deck-viewer-avatar-label\" | \"deck-viewer-dreamsigns-label\" | \"deck-viewer-no-dreamsigns\" | \"deck-viewer-tides-label\" | \"glossary-definition-unavailable-title\" | \"glossary-definition-unavailable-body\" | \"exploration-deck-modification-fast\" | \"exploration-deck-modification-subtype-unavailable\" | \"exploration-deck-modification-reclaim\" | \"exploration-pack-choose-action\" | \"exploration-next-battle-label\" | \"exploration-essence-gained-title\" | \"exploration-free-next-shop-title\" | \"exploration-free-next-shop-detail\" | \"exploration-delve-action\" | \"exploration-card-face-down\" | \"exploration-card-returning-face-down\" | \"exploration-confirm-choice-action\" | \"exploration-dreamsign-offered-group-title\" | \"exploration-dreamsign-purge-group-title\" | \"exploration-dreamsign-replacement-group-title\" | \"exploration-dreamsigns-changed-title\" | \"exploration-nightmare-dreamsign-bundle-title\" | \"exploration-starter-card-mutation-title\" | \"exploration-starter-card-transfiguration-title\" | \"exploration-card-transfiguration-title\" | \"exploration-card-replacements-title\" | \"exploration-card-type-changes-title\" | \"exploration-compound-same-type-title\" | \"exploration-compound-fast-nightmares-title\" | \"exploration-compound-take-transfigured-title\" | \"exploration-compound-purge-copy-title\" | \"exploration-compound-purged-section\" | \"exploration-compound-transfigured-section\" | \"exploration-compound-fast-section\" | \"exploration-compound-nightmares-section\" | \"exploration-compound-copies-section\" | \"exploration-followup-choice-purge\" | \"exploration-followup-choice-copy\" | \"exploration-empty-card-state\" | \"exploration-site-eyebrow\" | \"exploration-site-offer-modifier-title\" | \"exploration-site-offer-modifier-detail\" | \"exploration-site-insertion-title\" | \"gamble-card-picker-empty-state\" | \"gamble-play-again-action\" | \"gamble-leave-action\" | \"gamble-choose-replacement-action\" | \"gamble-replacement-not-yet-action\" | \"gamble-gravok-title\" | \"gamble-gravok-rules\" | \"gamble-gravok-accessibility-description\" | \"gamble-gravok-six-gate\" | \"gamble-gravok-nine-gate\" | \"gamble-gravok-jack-gate\" | \"gamble-ladder-title\" | \"gamble-ladder-rules\" | \"gamble-ladder-accessibility-description\" | \"gamble-starway-title\" | \"gamble-starway-rules\" | \"gamble-starway-accessibility-description\" | \"gamble-four-suit-title\" | \"gamble-four-suit-rules\" | \"gamble-four-suit-accessibility-description\" | \"gamble-blackjack-title\" | \"gamble-blackjack-rules\" | \"gamble-blackjack-accessibility-description\" | \"gamble-bet-action\" | \"gamble-draw-action\" | \"gamble-climb-action\" | \"gamble-take-action\" | \"gamble-choose-another-card-action\" | \"gamble-deal-action\" | \"gamble-hit-action\" | \"gamble-stand-action\" | \"gamble-gravok-won-outcome\" | \"gamble-ladder-won-outcome\" | \"gamble-miss-outcome\" | \"gamble-safe-outcome\" | \"gamble-bust-outcome\" | \"gamble-prize-at-stake-outcome\" | \"gamble-transfigure-outcome\" | \"gamble-gained-outcome\" | \"gamble-duplicated-outcome\" | \"gamble-purged-outcome\" | \"gamble-player-win-outcome\" | \"gamble-dealer-win-outcome\" | \"gamble-push-outcome\" | \"gamble-wager-returned-outcome\" | \"gamble-wins-outcome\" | \"transfiguration-picker-title\" | \"transfiguration-form-picker-title\" | \"transfiguration-choose-again-action\" | \"duplication-picker-title\" | \"site-decline-offer\" | \"site-walk-on\" | \"site-choose-again\" | \"site-confirm\" | \"augury-reroll-offers\" | \"augury-unavailable-guide-line\" | \"augury-error-clouded\" | \"augury-error-choose-vision\" | \"augury-error-visions-shifted\" | \"augury-error-path-closed\" | \"card-shop-leave-action\" | \"dreamsign-bazaar-leave-action\" | \"shop-free-next-shop-status\" | \"purge-site-decline-action\" | \"dreamsign-bazaar-replacement-cancel\" | \"exploration-effect-resolved-fallback\" | \"battle-zone-browser-shared-banished-title\" | \"battle-zone-browser-empty\" | \"battle-zone-browser-no-filter-matches\" | \"battle-result-essence-earned-label\" | \"battle-continue-action\" | \"battle-result-keep-inspecting-action\" | \"battle-result-reset-run-action\" | \"battle-card-picker-empty-state\" | \"battle-previous-phase-action\" | \"battle-card-picker-skip-action\" | \"battle-figment-merge-blocked-title\" | \"battle-figment-merge-blocked-exhaustion\" | \"battle-figment-merge-confirm-action\" | \"battle-figment-merge-cancel-action\" | \"battle-tutorial-target-selection-title\" | \"battle-tutorial-target-selection-instruction\" | \"battle-tutorial-target-selection-cancel-action\" | \"battle-zone-browser-search-label\" | \"battle-zone-browser-search-placeholder\" | \"battle-status-avatar-loading\" | \"battle-start-ability-label\" | \"battle-start-inactive-ability\" | \"battle-start-signature-cards-and-dreamsigns-label\" | \"battle-start-signature-cards-label\" | \"battle-start-dreamsigns-label\" | \"battle-start-to-win-label\" | \"battle-start-reward-label\" | \"battle-start-action\" | \"battle-foresee-less-action\" | \"battle-foresee-more-action\" | \"battle-foresee-triggered-by\" | \"battle-foresee-deck-destination\" | \"battle-foresee-void-destination\" | \"battle-card-note-subtitle\" | \"battle-card-note-cancel\" | \"battle-card-note-text-label\" | \"battle-card-note-placeholder\" | \"battle-card-note-error\" | \"battle-card-note-expiry-label\" | \"battle-card-note-expiry-next-turn\" | \"battle-card-note-expiry-this-turn\" | \"battle-card-note-expiry-numbered\" | \"battle-card-note-expiry-manual\" | \"battle-card-note-turns-label\" | \"battle-card-note-fewer-turn\" | \"battle-card-note-more-turn\" | \"battle-card-note-cancel-action\" | \"battle-card-note-add-action\" | \"battle-deck-order-subtitle\" | \"battle-deck-order-close-action\" | \"battle-deck-order-cancel-action\" | \"battle-deck-order-confirm-action\" | \"battle-missing-card-instance\" | \"battle-dreamwell-history-title\" | \"battle-dreamwell-history-subtitle\" | \"battle-dreamwell-history-close-action\" | \"battle-dreamwell-history-empty\" | \"battle-victory-headline\" | \"battle-ai-reject-action\" | \"battle-prompt-discover-character\" | \"battle-prompt-confirm-yes\" | \"battle-prompt-confirm-skip\" | \"battle-prompt-generic\" | \"battle-prompt-generic-subtitle\" | \"battle-prompt-generic-option\" | \"main-menu-navigation-label\" | \"main-menu-community-label\" | \"tides-information-accessible-name\" | \"tutorial-feature-energy-glyph\" | \"tutorial-feature-spark-glyph\" | \"journey-status-avatar-accessible-name\" | \"journey-status-essence-accessible-name\" | \"tutorial-region-battle\" | \"tutorial-region-card\" | \"tutorial-region-site\" | \"deck-filter-subtype-accessible-name\" | \"deck-sort-accessible-name\" | \"deck-sort-ascending-accessible-name\" | \"deck-sort-descending-accessible-name\" | \"deck-browser-close\" | \"exploration-free-next-shop-accessible-name\" | \"card-pool-subtype-filter-label\" | \"card-pool-cost-filter-label\" | \"card-pool-close-action\" | \"card-pool-sort-label\" | \"battle-control-group-accessible-name\" | \"card-attribute-interrupt-accessible-name\" | \"card-attribute-fast-accessible-name\" | \"exploration-choices-accessible-name\" | \"exploration-return-action\" | \"exploration-site-offer-modifier-accessible-name\" | \"exploration-site-type-choices-accessible-name\" | \"exploration-no-cards-taken\" | \"exploration-no-cards-purged\" | \"gamble-replacement-close-action\" | \"battle-card-exhausted-accessible-name\" | \"battle-targeting-card-accessible-name\" | \"reveal-card-energy-variable\" | \"reveal-card-spark-variable\" | \"reveal-card-fast\" | \"reveal-card-interrupt\" | \"battle-zone-browser-sort-accessible-name\" | \"battle-zone-browser-filter-accessible-name\" | \"transfiguration-options-accessible-name\" | \"battle-card-note-expiry-accessible-name\" | \"battle-opponent-card-accessible-name\"",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "variables",
-            "tsType": "FluentMessageVariables<\"application-loading-saved-journey-message\"> | FluentMessageVariables<\"coop-joining-game-message\"> | FluentMessageVariables<\"coop-loading-game-message\"> | FluentMessageVariables<\"coop-game-not-found-message\"> | FluentMessageVariables<\"coop-presence-connected-count\"> | FluentMessageVariables<\"journey-menu-save-downloaded\"> | FluentMessageVariables<\"journey-menu-save-error\"> | FluentMessageVariables<\"journey-menu-load-loaded\"> | FluentMessageVariables<\"journey-menu-load-error\"> | FluentMessageVariables<\"journey-menu-build-sha-status\"> | FluentMessageVariables<\"journey-complete-stat-battles\"> | FluentMessageVariables<\"journey-complete-stat-dreamscapes\"> | FluentMessageVariables<\"journey-complete-stat-dreamsigns\"> | FluentMessageVariables<\"dreamsign-replacement-capacity\"> | FluentMessageVariables<\"journey-failed-title\"> | FluentMessageVariables<\"journey-failed-message\"> | FluentMessageVariables<\"journey-failed-reason\"> | FluentMessageVariables<\"journey-failed-stat-label\"> | FluentMessageVariables<\"dreamscape-reward-status\"> | FluentMessageVariables<\"dreamscape-reward-dreamsign-label\"> | FluentMessageVariables<\"tutorial-drag-to-block\"> | FluentMessageVariables<\"deck-browser-card-count\"> | FluentMessageVariables<\"card-pool-browser-count\"> | FluentMessageVariables<\"card-pool-viewer-title\"> | FluentMessageVariables<\"card-pool-source-option\"> | FluentMessageVariables<\"card-pool-empty-state\"> | FluentMessageVariables<\"card-pool-sort-option\"> | FluentMessageVariables<\"card-pool-type-filter-option\"> | FluentMessageVariables<\"card-pool-cost-filter-option\"> | FluentMessageVariables<\"card-pool-tide-provenance-summary\"> | FluentMessageVariables<\"card-pool-tide-provenance-description\"> | FluentMessageVariables<\"card-pool-construction-summary\"> | FluentMessageVariables<\"card-rules-transfiguration-changed\"> | FluentMessageVariables<\"card-transfiguration-badge\"> | FluentMessageVariables<\"card-type-line\"> | FluentMessageVariables<\"exploration-deck-modification-spark\"> | FluentMessageVariables<\"exploration-deck-modification-energy-cost\"> | FluentMessageVariables<\"exploration-deck-modification-subtype\"> | FluentMessageVariables<\"exploration-deck-modification-transfiguration\"> | FluentMessageVariables<\"augury-card-choice-copy-count\"> | FluentMessageVariables<\"gamble-wager-prize-title\"> | FluentMessageVariables<\"gamble-wager-prize-description\"> | FluentMessageVariables<\"exploration-pack-title\"> | FluentMessageVariables<\"exploration-battle-modifier-announcement\"> | FluentMessageVariables<\"exploration-essence-current-total\"> | FluentMessageVariables<\"exploration-free-purchases-title\"> | FluentMessageVariables<\"exploration-free-purchases-detail\"> | FluentMessageVariables<\"exploration-purge-essence-calculation\"> | FluentMessageVariables<\"exploration-spirit-animal-essence-calculation\"> | FluentMessageVariables<\"exploration-opening-hand-change-announcement\"> | FluentMessageVariables<\"exploration-next-battle-card-cost-reduction\"> | FluentMessageVariables<\"gamble-essence-outcome\"> | FluentMessageVariables<\"transfiguration-picker-instruction\"> | FluentMessageVariables<\"transfiguration-reforged-card-caption\"> | FluentMessageVariables<\"transfiguration-picker-empty-state\"> | FluentMessageVariables<\"transfiguration-decline-action\"> | FluentMessageVariables<\"transfiguration-confirm-action\"> | FluentMessageVariables<\"duplication-picker-instruction\"> | FluentMessageVariables<\"duplication-picker-empty-state\"> | FluentMessageVariables<\"duplication-decline-action\"> | FluentMessageVariables<\"duplication-confirm-action\"> | FluentMessageVariables<\"shop-free-purchases-status\"> | FluentMessageVariables<\"shop-overlapping-free-purchase-status\"> | FluentMessageVariables<\"dreamsign-bazaar-replacement-full\"> | FluentMessageVariables<\"exploration-effect-missing-deck-card\"> | FluentMessageVariables<\"exploration-effect-missing-starter-card\"> | FluentMessageVariables<\"exploration-offered-site-disclosure\"> | FluentMessageVariables<\"battle-zone-browser-viewer-title\"> | FluentMessageVariables<\"battle-zone-browser-opponent-title\"> | FluentMessageVariables<\"battle-zone-browser-total-count\"> | FluentMessageVariables<\"battle-zone-browser-filtered-count\"> | FluentMessageVariables<\"battle-zone-browser-viewer-option\"> | FluentMessageVariables<\"battle-zone-browser-opponent-option\"> | FluentMessageVariables<\"battle-figment-create-action\"> | FluentMessageVariables<\"battle-victory-summary\"> | FluentMessageVariables<\"battle-figment-merge-confirmation-title\"> | FluentMessageVariables<\"battle-foresee-title\"> | FluentMessageVariables<\"battle-card-note-title\"> | FluentMessageVariables<\"battle-log-turn-title\"> | FluentMessageVariables<\"battle-result-title\"> | FluentMessageVariables<\"battle-result-reopen-action\"> | FluentMessageVariables<\"battle-turn-announcement\"> | FluentMessageVariables<\"battle-card-picker-zone-caption\"> | FluentMessageVariables<\"battle-card-picker-submit-action\"> | FluentMessageVariables<\"battle-card-picker-selected-count\"> | FluentMessageVariables<\"battle-card-picker-progress\"> | FluentMessageVariables<\"battle-flow-action\"> | FluentMessageVariables<\"battle-figment-merge-target\"> | FluentMessageVariables<\"battle-figment-merge-spark-detail\"> | FluentMessageVariables<\"battle-figment-merge-legionnaire-warning\"> | FluentMessageVariables<\"battle-tutorial-movement-error\"> | FluentMessageVariables<\"battle-start-title\"> | FluentMessageVariables<\"battle-card-note-character-count\"> | FluentMessageVariables<\"battle-deck-order-title\"> | FluentMessageVariables<\"battle-deck-order-label\"> | FluentMessageVariables<\"battle-card-order-spark-summary\"> | FluentMessageVariables<\"battle-prompt-switch-side\"> | FluentMessageVariables<\"deck-browser-filter-accessible-name\"> | FluentMessageVariables<\"deck-browser-sort-accessible-name\"> | FluentMessageVariables<\"journey-status-deck-open\"> | FluentMessageVariables<\"journey-status-dreamsigns-open\"> | FluentMessageVariables<\"battle-zone-browser-close\"> | FluentMessageVariables<\"exploration-outcome-rewards-gained\"> | FluentMessageVariables<\"exploration-outcome-cards-purging\"> | FluentMessageVariables<\"exploration-outcome-purge-and-gain\"> | FluentMessageVariables<\"exploration-next-battle-modifier\"> | FluentMessageVariables<\"exploration-card-purge-for-essence\"> | FluentMessageVariables<\"exploration-spirit-animal-essence-summary\"> | FluentMessageVariables<\"exploration-free-purchases-accessible-name\"> | FluentMessageVariables<\"exploration-card-copies-gained\"> | FluentMessageVariables<\"exploration-purge-and-copy-complete\"> | FluentMessageVariables<\"exploration-card-transfiguring\"> | FluentMessageVariables<\"exploration-bulk-transfiguration-complete\"> | FluentMessageVariables<\"exploration-purge-before-copy\"> | FluentMessageVariables<\"exploration-dream-avatar-changed\"> | FluentMessageVariables<\"exploration-dreamsign-purging\"> | FluentMessageVariables<\"exploration-dreamsign-selection-progress\"> | FluentMessageVariables<\"exploration-dreamsign-mutation-accessible-name\"> | FluentMessageVariables<\"exploration-dreamsign-replacement-pair-accessible-name\"> | FluentMessageVariables<\"exploration-nightmare-dreamsign-bundle-accessible-name\"> | FluentMessageVariables<\"exploration-nightmare-stack-accessible-name\"> | FluentMessageVariables<\"exploration-starter-card-mutation-accessible-name\"> | FluentMessageVariables<\"exploration-starter-card-replacement-accessible-name\"> | FluentMessageVariables<\"exploration-starter-card-transfiguration-accessible-name\"> | FluentMessageVariables<\"exploration-starter-card-transfiguration-pair-accessible-name\"> | FluentMessageVariables<\"exploration-card-transfiguration-accessible-name\"> | FluentMessageVariables<\"exploration-card-transfiguration-pair-accessible-name\"> | FluentMessageVariables<\"exploration-compound-same-type-accessible-name\"> | FluentMessageVariables<\"exploration-compound-fast-nightmares-accessible-name\"> | FluentMessageVariables<\"exploration-compound-take-transfigured-accessible-name\"> | FluentMessageVariables<\"exploration-compound-purge-copy-accessible-name\"> | FluentMessageVariables<\"exploration-compound-review-accessible-name\"> | FluentMessageVariables<\"exploration-compound-fast-pair-accessible-name\"> | FluentMessageVariables<\"exploration-compound-copy-pair-accessible-name\"> | FluentMessageVariables<\"exploration-card-replacements-accessible-name\"> | FluentMessageVariables<\"exploration-card-replacement-accessible-name\"> | FluentMessageVariables<\"exploration-card-type-changes-accessible-name\"> | FluentMessageVariables<\"exploration-card-type-change-pair-accessible-name\"> | FluentMessageVariables<\"exploration-multi-transfiguration-progress-accessible-name\"> | FluentMessageVariables<\"battle-card-memory-counter-count\"> | FluentMessageVariables<\"battle-banished-cards-open\"> | FluentMessageVariables<\"battle-figment-merge-announcement\"> | FluentMessageVariables<\"battle-phase-indicator\"> | FluentMessageVariables<\"battle-victory-essence-gained\"> | FluentMessageVariables<\"battle-participant-status\"> | FluentMessageVariables<\"battle-dreamwell-card-description\"> | FluentMessageVariables<\"battle-dreamwell-energy-added\"> | FluentMessageVariables<\"battle-card-pile-face-down-position\"> | FluentMessageVariables<\"battle-point-count\"> | FluentMessageVariables<\"battle-card-pile-label\"> | FluentMessageVariables<\"battle-challenger-label\"> | FluentMessageVariables<\"card-pool-sort-direction\"> | FluentMessageVariables<\"tutorial-battle-challenge-outcome\"> | FluentMessageVariables<\"dreamsign-object-accessible-name\"> | FluentMessageVariables<\"tide-object-accessible-name\"> | FluentMessageVariables<\"character-dialogue-accessible-name\"> | FluentMessageVariables<\"card-order-reorder-action\"> | FluentMessageVariables<\"transfiguration-form-choice\"> | FluentMessageVariables<\"gamble-wager-prize-accessible-name\"> | FluentMessageVariables<\"gamble-gate-bet-accessible-name\"> | FluentMessageVariables<\"gamble-draw-attempt-accessible-name\"> | FluentMessageVariables<\"gamble-tier-action-accessible-name\"> | FluentMessageVariables<\"gamble-cash-out-accessible-name\"> | FluentMessageVariables<\"gamble-draw-accessible-name\"> | FluentMessageVariables<\"dream-avatar-art-accessible-name\"> | FluentMessageVariables<\"atlas-node-accessible-name\"> | FluentMessageVariables<\"card-stat-accessible-name\"> | FluentMessageVariables<\"card-stat-custom-accessible-name\"> | FluentMessageVariables<\"exploration-pack-choose-accessible-name\"> | FluentMessageVariables<\"gamble-suit-outcome-accessible-name\"> | FluentMessageVariables<\"battle-tutorial-dismiss-action\"> | FluentMessageVariables<\"rules-text-bolt-accessible-name\"> | FluentMessageVariables<\"card-identicon-alt\"> | FluentMessageVariables<\"rules-text-source-accessible-name\"> | FluentMessageVariables<\"battle-dreamwell-reveal-description\"> | FluentMessageVariables<\"playing-card-accessible-name\"> | FluentMessageVariables<\"exploration-smaller-hand-cost-accessible-name\"> | FluentMessageVariables<\"exploration-site-insertion-accessible-name\"> | FluentMessageVariables<\"gamble-playing-card-hand-accessible-name\"> | FluentMessageVariables<\"journey-start-carousel-navigation-action\"> | FluentMessageVariables<\"reveal-description-join\"> | FluentMessageVariables<\"reveal-definition-entry\"> | FluentMessageVariables<\"reveal-list-and\"> | FluentMessageVariables<\"reveal-card-energy\"> | FluentMessageVariables<\"reveal-card-energy-alternatives\"> | FluentMessageVariables<\"reveal-card-spark\"> | FluentMessageVariables<\"reveal-card-reclaim\"> | FluentMessageVariables<\"card-editor-field-accessible-name\"> | FluentMessageVariables<\"radial-hand-total-accessible-name\">",
-            "optional": true,
-            "description": ""
-          }
-        ]
-      }
+      "description": "Complete localized fallback body selected by a non-React builder."
     },
     {
       "name": "imageCrop",
@@ -2934,11 +3080,19 @@
     },
     {
       "name": "label",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Accessible meaning. Omit only when surrounding copy already names the glyph."
+    },
+    {
+      "name": "authoredLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Accessible meaning supplied by canonical authored content."
     }
   ],
   "JourneyStatusBar": [
@@ -3092,7 +3246,7 @@
   "MainMenuButton": [
     {
       "name": "label",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -3165,9 +3319,17 @@
       "name": "label",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": true,
+      "required": false,
       "defaultValue": null,
       "description": "Visible label for the numeric value."
+    },
+    {
+      "name": "authoredLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
     },
     {
       "name": "value",
@@ -3186,6 +3348,14 @@
       "description": "Optional formatted value while `value` remains the numeric state contract."
     },
     {
+      "name": "authoredDisplayValue",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
       "name": "resource",
       "tsType": "NumberStepperResource",
       "unionMembers": [
@@ -3202,17 +3372,33 @@
       "name": "decrementLabel",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": true,
+      "required": false,
       "defaultValue": null,
       "description": "Accessible label for the decrement action."
+    },
+    {
+      "name": "authoredDecrementLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
     },
     {
       "name": "incrementLabel",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": true,
+      "required": false,
       "defaultValue": null,
       "description": "Accessible label for the increment action."
+    },
+    {
+      "name": "authoredIncrementLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
     },
     {
       "name": "onDecrement",
@@ -3468,7 +3654,6 @@
         "image",
         "center",
         "figure",
-        "form",
         "slot",
         "style",
         "title",
@@ -3508,6 +3693,7 @@
         "fieldset",
         "figcaption",
         "footer",
+        "form",
         "h3",
         "h4",
         "h5",
@@ -3680,6 +3866,14 @@
       "description": "Localized accessible name resolved onto the final intrinsic element."
     },
     {
+      "name": "authoredAriaLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Accessible name supplied by canonical authored or developer-only copy."
+    },
+    {
       "name": "children",
       "tsType": "ReactNode",
       "unionMembers": [],
@@ -3705,7 +3899,7 @@
     },
     {
       "name": "headline",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -3721,11 +3915,19 @@
     },
     {
       "name": "detail",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Optional supporting copy beneath the headline."
+    },
+    {
+      "name": "authoredDetail",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional supporting copy supplied by canonical authored content."
     },
     {
       "name": "essenceGained",
@@ -4061,12 +4263,28 @@
       "description": "Accessible label for the trigger."
     },
     {
+      "name": "authoredAriaLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Accessible label supplied by canonical authored or developer-only copy."
+    },
+    {
       "name": "placeholder",
       "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Text shown when `value` does not match an option, for action-picker controls."
+    },
+    {
+      "name": "authoredPlaceholder",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Placeholder supplied by canonical authored or developer-only copy."
     }
   ],
   "SiteNode": [
@@ -4185,9 +4403,17 @@
       "name": "text",
       "tsType": "string",
       "unionMembers": [],
-      "required": true,
+      "required": false,
       "defaultValue": null,
       "description": "The spoken line. Uses tutorial instruction formatting for yellow and\nbold high-contrast purple highlights plus canonical inline rules glyphs."
+    },
+    {
+      "name": "textMessage",
+      "tsType": "LocalizedString",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Complete localized spoken line supplied by code-authored fallback UI."
     },
     {
       "name": "size",
@@ -4275,11 +4501,19 @@
   "TextArea": [
     {
       "name": "label",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": true,
+      "required": false,
       "defaultValue": null,
       "description": "Visible field label."
+    },
+    {
+      "name": "authoredLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Visible label supplied by canonical authored or developer-only copy."
     },
     {
       "name": "value",
@@ -4307,27 +4541,51 @@
     },
     {
       "name": "placeholder",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Optional placeholder shown while empty."
     },
     {
-      "name": "supportingText",
+      "name": "authoredPlaceholder",
       "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "supportingText",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Supporting copy beneath the control."
     },
     {
-      "name": "error",
+      "name": "authoredSupportingText",
       "tsType": "string",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "error",
+      "tsType": "LocalizedString",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
       "description": "Validation copy; also marks the textarea invalid."
+    },
+    {
+      "name": "authoredError",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
     },
     {
       "name": "testId",
@@ -4351,9 +4609,17 @@
       "name": "label",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": true,
+      "required": false,
       "defaultValue": null,
       "description": "Localized field label."
+    },
+    {
+      "name": "authoredLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Label supplied by canonical authored or developer-only copy."
     },
     {
       "name": "value",
@@ -4399,6 +4665,14 @@
       "description": "Optional placeholder."
     },
     {
+      "name": "authoredPlaceholder",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
       "name": "supportingText",
       "tsType": "LocalizedString",
       "unionMembers": [],
@@ -4407,12 +4681,28 @@
       "description": "Optional supporting copy beneath the control."
     },
     {
+      "name": "authoredSupportingText",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
       "name": "error",
       "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Validation copy; also marks the input invalid."
+    },
+    {
+      "name": "authoredError",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
     },
     {
       "name": "disabled",
@@ -4587,13 +4877,13 @@
         "fields": [
           {
             "name": "title",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": true,
             "description": ""
           },
           {
             "name": "message",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": false,
             "description": ""
           }
@@ -4616,8 +4906,8 @@
       "unionMembers": [
         "spark",
         "cost",
-        "cardType",
-        "ability"
+        "ability",
+        "cardType"
       ],
       "required": true,
       "defaultValue": null,

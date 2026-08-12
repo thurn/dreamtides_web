@@ -70,10 +70,16 @@ export type GlassPanelTextSegment =
 export interface GlassPanelProps {
   /** Optional uppercase context line rendered above the title. */
   eyebrow?: LocalizedString;
+  /** Context line supplied by canonical authored or developer-only copy. */
+  authoredEyebrow?: string;
   /** Optional plain panel title. */
   title?: LocalizedString;
+  /** Optional title supplied by canonical authored content. */
+  authoredTitle?: string;
   /** Optional supporting line rendered beneath the title. */
   subtitle?: LocalizedString;
+  /** Optional supporting line supplied by canonical authored content. */
+  authoredSubtitle?: string;
   /** Optional structured subtitle whose entity runs receive the canonical underline. */
   structuredSubtitle?: readonly GlassPanelTextSegment[];
   /** Semantic heading element for the title. Defaults to `h2`. */
@@ -166,8 +172,11 @@ function structuredTextNode(text: readonly GlassPanelTextSegment[]): ReactNode {
  */
 export function GlassPanel({
   eyebrow,
+  authoredEyebrow,
   title,
+  authoredTitle,
   subtitle,
+  authoredSubtitle,
   structuredSubtitle,
   headingLevel = "h2",
   titleVoice = "standard",
@@ -184,6 +193,17 @@ export function GlassPanel({
   testId,
 }: GlassPanelProps): ReactElement {
   const resolve = useLocalizer();
+  if (eyebrow !== undefined && authoredEyebrow !== undefined) {
+    throw new Error("GlassPanel accepts either eyebrow or authoredEyebrow, not both.");
+  }
+  if (title !== undefined && authoredTitle !== undefined) {
+    throw new Error("GlassPanel accepts either title or authoredTitle, not both.");
+  }
+  if (subtitle !== undefined && authoredSubtitle !== undefined) {
+    throw new Error(
+      "GlassPanel accepts either subtitle or authoredSubtitle, not both.",
+    );
+  }
   const [besideCutout, setBesideCutout] = useState(false);
   useEffect(() => {
     setBesideCutout(cutoutAwareAccessory && hasInjectedDisplayCutout());
@@ -192,8 +212,11 @@ export function GlassPanel({
   const Heading = headingLevel;
   const hasHeader =
     eyebrow !== undefined ||
+    authoredEyebrow !== undefined ||
     title !== undefined ||
+    authoredTitle !== undefined ||
     subtitle !== undefined ||
+    authoredSubtitle !== undefined ||
     structuredSubtitle !== undefined ||
     rightAccessory !== undefined;
   const accessory =
@@ -286,7 +309,7 @@ export function GlassPanel({
               minWidth: 0,
             }}
           >
-            {eyebrow !== undefined && (
+            {(eyebrow !== undefined || authoredEyebrow !== undefined) && (
               <span
                 style={{
                   font: token("--t-eyebrow"),
@@ -295,10 +318,10 @@ export function GlassPanel({
                   textTransform: "uppercase",
                 }}
               >
-                {resolve(eyebrow)}
+                {authoredEyebrow ?? resolve(eyebrow!)}
               </span>
             )}
-            {title !== undefined && (
+            {title !== undefined || authoredTitle !== undefined ? (
               <Heading
                 style={{
                   margin: 0,
@@ -310,10 +333,12 @@ export function GlassPanel({
                   letterSpacing: 0,
                 }}
               >
-                {resolve(title)}
+                {title === undefined ? authoredTitle : resolve(title)}
               </Heading>
-            )}
-            {(subtitle !== undefined || structuredSubtitle !== undefined) && (
+            ) : null}
+            {(subtitle !== undefined ||
+              authoredSubtitle !== undefined ||
+              structuredSubtitle !== undefined) && (
               <p
                 style={{
                   margin: 0,
@@ -327,7 +352,7 @@ export function GlassPanel({
               >
                 {structuredSubtitle === undefined
                   ? subtitle === undefined
-                    ? null
+                    ? authoredSubtitle ?? null
                     : resolve(subtitle)
                   : structuredTextNode(structuredSubtitle)}
               </p>

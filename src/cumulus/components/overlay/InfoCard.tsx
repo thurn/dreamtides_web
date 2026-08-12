@@ -29,8 +29,11 @@ import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { controlChrome } from "../../internal/control-treatment";
 import { applySymbolReplacements } from "../../primitives/symbol-replacements";
 import { tideResonanceLabel, tideVisual, type Tide } from "../hud/tide-spec";
-import { formatMessageDescriptor, useMessages } from "../../hooks/use-messages";
-import type { FluentMessageDescriptor } from "../../../data/localization-messages";
+import { txa, type LocalizedString } from "@trox/runtime";
+import {
+  useLocalizer,
+  useOptionalLocalizer,
+} from "../../../runtime/localization/use-localizer";
 
 /* ---- authored component geometry ---- */
 const CARD_W = 248; // every info card is this wide
@@ -238,14 +241,14 @@ interface InfoCardCommonProps {
    */
   title?: string;
   /** Complete localized fallback headline selected by a non-React builder. */
-  titleDescriptor?: FluentMessageDescriptor;
+  titleMessage?: LocalizedString;
   /**
    * The reveal copy, as a structured {@link RichText} value. Canonical rules
    * symbols and explicit glyph parts render as cap-height-aligned inline icons.
    */
   body?: RichText;
   /** Complete localized fallback body selected by a non-React builder. */
-  bodyDescriptor?: FluentMessageDescriptor;
+  bodyMessage?: LocalizedString;
 }
 
 /**
@@ -396,34 +399,30 @@ function InfoCardBody(
   contentOverride?: InfoCardContentOverride,
 ): React.ReactElement {
   const { title, body } = props;
-  const t = useMessages();
+  const resolve = useOptionalLocalizer() ?? missingInfoCardLocalizer;
   // `variant` is optional only on the text member; resolve the default once for
   // the shared body/title styling. The per-variant branches below narrow on the
   // discriminant directly so each reads only the media its interface carries.
   const variant: InfoCardVariant = props.variant ?? "text";
-  const renderedTitle =
-    props.titleDescriptor !== undefined
-      ? formatMessageDescriptor(t, props.titleDescriptor)
-      : title === undefined
-        ? undefined
-        : renderRulesSymbolsInline(title);
-  const titleContent = contentOverride?.title ?? renderedTitle;
+  const titleContent =
+    contentOverride?.title ??
+    (title === undefined ? undefined : renderRulesSymbolsInline(title));
   const bodyContent =
-    props.bodyDescriptor !== undefined
-      ? formatMessageDescriptor(t, props.bodyDescriptor)
-      : body == null
-        ? null
-        : (contentOverride?.body ??
-          renderRichText(body, 0, { substituteRulesSymbols: true }));
+    body == null
+      ? null
+      : (contentOverride?.body ??
+        renderRichText(body, 0, { substituteRulesSymbols: true }));
   const Body =
-    body == null && props.bodyDescriptor === undefined ? null : (
+    body == null && props.bodyMessage === undefined ? null : (
       <div
         style={{
           ...tBody,
           textAlign: variant === "object" ? "center" : "left",
         }}
       >
-        {bodyContent}
+        {props.bodyMessage === undefined
+          ? bodyContent
+          : resolve(props.bodyMessage)}
       </div>
     );
 
@@ -458,7 +457,11 @@ function InfoCardBody(
         }}
       >
         {media}
-        <div style={{ ...tHeadline, textAlign: "center" }}>{titleContent}</div>
+        <div style={{ ...tHeadline, textAlign: "center" }}>
+          {props.titleMessage === undefined
+            ? titleContent
+            : resolve(props.titleMessage)}
+        </div>
         {Body}
       </div>
     );
@@ -566,7 +569,9 @@ function InfoCardBody(
                   : 0,
             }}
           >
-            {titleContent}
+            {props.titleMessage === undefined
+              ? titleContent
+              : resolve(props.titleMessage)}
           </div>
           {subtitle !== undefined && subtitle !== "" && (
             <div
@@ -578,7 +583,13 @@ function InfoCardBody(
               {renderRulesSymbolsInline(subtitle)}
             </div>
           )}
-          {body != null && <div style={{ ...tBody }}>{bodyContent}</div>}
+          {(body != null || props.bodyMessage !== undefined) && (
+            <div style={{ ...tBody }}>
+              {props.bodyMessage === undefined
+                ? bodyContent
+                : resolve(props.bodyMessage)}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -683,14 +694,24 @@ function InfoCardBody(
                 gap: geometrySpace("--space-xxs"),
               }}
             >
-              <div style={tAtlasHeadline}>{titleContent}</div>
+              <div style={tAtlasHeadline}>
+                {props.titleMessage === undefined
+                  ? titleContent
+                  : resolve(props.titleMessage)}
+              </div>
               {subtitle !== undefined && subtitle !== "" && (
                 <div style={tAtlasSubtitle}>
                   {renderRulesSymbolsInline(subtitle)}
                 </div>
               )}
             </div>
-            {body != null && <div style={tAtlasBody}>{bodyContent}</div>}
+            {(body != null || props.bodyMessage !== undefined) && (
+              <div style={tAtlasBody}>
+                {props.bodyMessage === undefined
+                  ? bodyContent
+                  : resolve(props.bodyMessage)}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -734,11 +755,17 @@ function InfoCardBody(
               }}
             />
           </span>
-          <div style={tHeadline}>{titleContent}</div>
+          <div style={tHeadline}>
+            {props.titleMessage === undefined
+              ? titleContent
+              : resolve(props.titleMessage)}
+          </div>
         </div>
         {body != null && (
           <div style={{ ...tBody, marginTop: token("--space-m") }}>
-            {bodyContent}
+            {props.bodyMessage === undefined
+              ? bodyContent
+              : resolve(props.bodyMessage)}
           </div>
         )}
       </div>
@@ -786,7 +813,11 @@ function InfoCardBody(
             />
           </span>
           <div>
-            <div style={tHeadline}>{titleContent}</div>
+            <div style={tHeadline}>
+              {props.titleMessage === undefined
+                ? titleContent
+                : resolve(props.titleMessage)}
+            </div>
             <div
               style={{ ...tMeta, color: v.fg, marginTop: token("--space-xs") }}
             >
@@ -796,7 +827,9 @@ function InfoCardBody(
         </div>
         {body != null && (
           <div style={{ ...tBody, marginTop: token("--space-m") }}>
-            {bodyContent}
+            {props.bodyMessage === undefined
+              ? bodyContent
+              : resolve(props.bodyMessage)}
           </div>
         )}
       </div>
@@ -826,7 +859,11 @@ function InfoCardBody(
                 : 0,
           }}
         >
-          <div style={tHeadline}>{titleContent}</div>
+          <div style={tHeadline}>
+            {props.titleMessage === undefined
+              ? titleContent
+              : resolve(props.titleMessage)}
+          </div>
         </div>
       )}
       {subtitle !== undefined && subtitle !== "" && (
@@ -838,6 +875,12 @@ function InfoCardBody(
       )}
       {Body}
     </div>
+  );
+}
+
+function missingInfoCardLocalizer(): never {
+  throw new Error(
+    "Localized InfoCard copy requires a mounted TroxLocalizationProvider.",
   );
 }
 
@@ -926,7 +969,7 @@ function EditableInfoCardCopy({
   readonly children: React.ReactNode;
   readonly value: EditableInfoCardField;
 }): React.ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const editorRef = React.useRef<HTMLInputElement | HTMLTextAreaElement | null>(
     null,
   );
@@ -1002,7 +1045,13 @@ function EditableInfoCardCopy({
         ref={(element) => {
           editorRef.current = element;
         }}
-        aria-label={t("card-editor-field-accessible-name", { field })}
+        aria-label={resolve(
+          txa(
+            "{field} editor",
+            { field },
+            "Accessible name for a developer Info Card editor field; field is the raw editor field kind.",
+          ),
+        )}
         aria-invalid={value.error === undefined ? undefined : true}
         data-editor-input-field={field}
         rows={4}
@@ -1017,7 +1066,13 @@ function EditableInfoCardCopy({
         ref={(element) => {
           editorRef.current = element;
         }}
-        aria-label={t("card-editor-field-accessible-name", { field })}
+        aria-label={resolve(
+          txa(
+            "{field} editor",
+            { field },
+            "Accessible name for a developer Info Card editor field; field is the raw editor field kind.",
+          ),
+        )}
         aria-invalid={value.error === undefined ? undefined : true}
         data-editor-input-field={field}
         type="text"

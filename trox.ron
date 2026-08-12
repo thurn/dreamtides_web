@@ -48,4 +48,22 @@
   },
 
   max_expanded_rows_per_entry: 256,
+
+  lint: (
+    default_warning: Deny,
+    rules: {
+      "trox.formula-injection": (
+        level: Allow,
+        reason: "Reviewed source-English delta labels intentionally begin with +; localization CSV files are data inputs and must not be executed as spreadsheet formulas.",
+      ),
+      "trox.omitted-placeholder": (
+        level: Allow,
+        reason: "Reviewed complete selector branches intentionally omit values that are absent or lexically unnecessary: untitled artwork, cards without rules, free costs, singular fixed labels, and single-object actions.",
+      ),
+      "trox.human-row-expansion": (
+        level: Allow,
+        reason: "Reviewed 12-row battle participant summary jointly selects viewer relationship and locale-specific Points grammar so translators receive complete accessible sentences.",
+      ),
+    },
+  ),
 )

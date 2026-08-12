@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
-import { useMessages } from "../cumulus/hooks/use-messages";
+import { meaning, tx } from "@trox/runtime";
+import { useLocalizer } from "../runtime/localization/use-localizer";
 
 export function LocalizedErrorBoundaryFallback({
   scope,
@@ -10,7 +11,7 @@ export function LocalizedErrorBoundaryFallback({
   readonly onRetry: () => void;
   readonly onClose?: () => void;
 }): ReactNode {
-  const t = useMessages();
+  const resolve = useLocalizer();
   return (
     <div
       data-testid="error-boundary-fallback"
@@ -37,10 +38,20 @@ export function LocalizedErrorBoundaryFallback({
           color: "#fecaca",
         }}
       >
-        {t("error-boundary-title")}
+        {resolve(
+          tx(
+            "Something went wrong",
+            "Heading for an unexpected render failure caught by an application error boundary.",
+          ),
+        )}
       </h2>
       <p style={{ margin: 0, marginBottom: "1rem", opacity: 0.85 }}>
-        {t("error-boundary-message")}
+        {resolve(
+          tx(
+            "This part of the screen hit an unexpected error. The rest of the app is still working. Try again, or close this and return to where you were.",
+            "Explanation for an unexpected render failure; technical details appear separately when available.",
+          ),
+        )}
       </p>
       <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
         <button
@@ -57,7 +68,12 @@ export function LocalizedErrorBoundaryFallback({
             cursor: "pointer",
           }}
         >
-          {t("error-boundary-retry-action")}
+          {resolve(
+            tx(
+              "Retry",
+              "Command that retries the failed application operation represented by the current error surface.",
+            ),
+          )}
         </button>
         {onClose !== undefined && (
           <button
@@ -74,7 +90,12 @@ export function LocalizedErrorBoundaryFallback({
               cursor: "pointer",
             }}
           >
-            {t("error-boundary-close-action")}
+            {resolve(
+              tx(
+                meaning("error-boundary-close", "Close"),
+                "Action that closes an application error boundary and returns to the previous surface.",
+              ),
+            )}
           </button>
         )}
       </div>

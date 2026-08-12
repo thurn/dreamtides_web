@@ -10,7 +10,6 @@ import { revealEntityId } from "../../internal/reveal/identity";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
-import { useMessages } from "../../hooks/use-messages";
 import { StandaloneGlyph } from "../controls/StandaloneGlyph";
 import { EssenceValue } from "../hud/EssenceValue";
 import {
@@ -21,43 +20,55 @@ import {
 } from "./CardView";
 import { GalleryActionCard } from "./GalleryActionCard";
 import { CARD_CORNER_RADIUS } from "./card-aspect";
+import { one, other, plural, tx, txa, type LocalizedString } from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** A small line rendered directly below a card-choice tile. */
 export type CardChoiceGridCaption =
-  { kind: "essence"; amount: number } | { kind: "text"; text: string };
+  | { kind: "essence"; amount: number }
+  | { kind: "text"; message: LocalizedString }
+  | { kind: "authoredText"; text: string };
 
 /** The pending operation identified on a selected card-choice tile. */
 export type CardChoiceOperation = "purge" | "copy" | "transfigure" | "change";
 
 const OPERATION_PRESENTATION = {
   purge: {
-    messageId: "card-choice-purge-operation",
+    message: tx(
+      "This card will be purged",
+      "Accessible status on a selected card marked for a pending purge operation.",
+    ),
     glyph: GLYPHS.trash,
     tone: "danger",
   },
   copy: {
-    messageId: "card-choice-copy-operation",
+    message: tx(
+      "This card will be copied",
+      "Accessible status on a selected card marked for a pending copy operation.",
+    ),
     glyph: GLYPHS.copy,
     tone: "selected",
   },
   transfigure: {
-    messageId: "card-choice-transfigure-operation",
+    message: tx(
+      "This card will be transfigured",
+      "Accessible status on a selected card marked for a pending Transfiguration operation.",
+    ),
     glyph: GLYPHS.transfigurationSite,
     tone: "selected",
   },
   change: {
-    messageId: "card-choice-change-operation",
+    message: tx(
+      "This card will be changed",
+      "Accessible status on a selected card marked for another pending card-change operation.",
+    ),
     glyph: GLYPHS.refreshCcw,
     tone: "selected",
   },
 } as const satisfies Record<
   CardChoiceOperation,
   {
-    readonly messageId:
-      | "card-choice-purge-operation"
-      | "card-choice-copy-operation"
-      | "card-choice-transfigure-operation"
-      | "card-choice-change-operation";
+    readonly message: LocalizedString;
     readonly glyph: Glyph;
     readonly tone: "danger" | "selected";
   }
@@ -110,7 +121,9 @@ export interface CardChoiceGridActionView {
   /** Large glyph that carries the action's visual identity. */
   glyph: Glyph;
   /** Accessible action label. */
-  label: string;
+  label?: LocalizedString;
+  /** Canonical authored label when this action is data-defined. */
+  authoredLabel?: string;
   /** Small uncontained line rendered below the glyph. */
   caption: CardChoiceGridCaption;
   /** Detach interaction and visually recede the action. */
@@ -202,7 +215,12 @@ function siteCardWidth(
   return `min(${String(maxWidth)}px, ${String(widthShare)}cqw, ${String(heightShare)}cqh)`;
 }
 
-function captionNode(caption: CardChoiceGridCaption): ReactElement {
+function CaptionNode({
+  caption,
+}: {
+  readonly caption: CardChoiceGridCaption;
+}): ReactElement {
+  const resolve = useLocalizer();
   return (
     <p
       data-gallery-caption={caption.kind}
@@ -218,8 +236,10 @@ function captionNode(caption: CardChoiceGridCaption): ReactElement {
     >
       {caption.kind === "essence" ? (
         <EssenceValue amount={caption.amount} tone="inherit" />
-      ) : (
+      ) : caption.kind === "authoredText" ? (
         caption.text
+      ) : (
+        resolve(caption.message)
       )}
     </p>
   );
@@ -243,7 +263,12 @@ function CardChoiceAction({
     spec: {
       primary: {
         kind: "galleryAction",
-        action: { glyph: action.glyph, label: action.label },
+        action: {
+          glyph: action.glyph,
+          ...(action.label === undefined
+            ? { authoredLabel: action.authoredLabel }
+            : { label: action.label }),
+        },
       },
       secondaries: [],
     },
@@ -255,7 +280,7 @@ function CardChoiceAction({
       as="button"
       ref={binding.ref}
       {...binding.sourceProps}
-      aria-label={action.label}
+      ariaLabelMessage={action.label}
       aria-disabled={action.disabled || undefined}
       disabled={action.disabled}
       pressFeedback="stationary"
@@ -282,7 +307,12 @@ function CardChoiceAction({
       }}
     >
       <GalleryActionCard
-        action={{ glyph: action.glyph, label: action.label }}
+        action={{
+          glyph: action.glyph,
+          ...(action.label === undefined
+            ? { authoredLabel: action.authoredLabel }
+            : { label: action.label }),
+        }}
         width={cardWidth}
       />
     </Pressable>
@@ -314,7 +344,7 @@ function CardChoiceGridItem({
   onCardDragEnd,
   onCardContextMenu,
 }: CardChoiceGridItemProps): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const reserved = card.reserved === true;
   const disabled = card.disabled === true || reserved;
   const draggable = !disabled && card.draggable === true;
@@ -408,7 +438,7 @@ function CardChoiceGridItem({
           )}
           {operationPresentation !== null && (
             <span
-              aria-label={t(operationPresentation.messageId)}
+              aria-label={resolve(operationPresentation.message)}
               data-card-choice-operation={card.operation}
               style={{
                 position: "absolute",
@@ -441,7 +471,7 @@ function CardChoiceGridItem({
           )}
         </div>
       </div>
-      {card.caption !== undefined && captionNode(card.caption)}
+      {card.caption !== undefined && <CaptionNode caption={card.caption} />}
     </div>
   );
 }
@@ -453,10 +483,14 @@ function CardChoiceQuantityBadge({
   readonly count: number;
   readonly operationPresent: boolean;
 }): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   return (
     <span
-      aria-label={t("augury-card-choice-copy-count", { count })}
+      aria-label={resolve(txa(
+        plural(count, [one("{count} copy"), other("{count} copies")]),
+        { count },
+        "Accessible label on a selected Augury card showing how many copies the offer grants. count is a positive integer; the numeral is visible in the badge and is repeated here because this message is exposed only to assistive technology.",
+      ))}
       data-card-choice-quantity-badge=""
       style={{
         position: "absolute",
@@ -543,7 +577,7 @@ export function CardChoiceGrid({
             cardWidth={cardWidth}
             onActivate={() => onEndActionPress?.(endAction.entryId)}
           />
-          {captionNode(endAction.caption)}
+          <CaptionNode caption={endAction.caption} />
         </div>
       )}
     </div>

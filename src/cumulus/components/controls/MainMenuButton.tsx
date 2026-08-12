@@ -1,11 +1,13 @@
+import type { LocalizedString } from "@trox/runtime";
 import type { ReactElement } from "react";
 import { controlChrome } from "../../internal/control-treatment";
 import { Pressable } from "../../primitives/Pressable";
 import "./main-menu-button.css";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export interface MainMenuButtonProps {
   /** Player-facing action label. */
-  label: string;
+  label: LocalizedString;
   /** Reports activation to the route adapter. */
   onPress: () => void;
   /** A `data-testid` for selecting the action in tests. */
@@ -21,6 +23,7 @@ export function MainMenuButton({
   onPress,
   testId,
 }: MainMenuButtonProps): ReactElement {
+  const resolve = useLocalizer();
   const glassChrome = controlChrome("onMedia").trigger;
 
   return (
@@ -36,7 +39,7 @@ export function MainMenuButton({
         data-main-menu-button-glass
         style={glassChrome}
       />
-      <span className="main-menu-button__label">{label}</span>
+      <span className="main-menu-button__label">{resolve(label)}</span>
     </Pressable>
   );
 }

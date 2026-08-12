@@ -71,7 +71,7 @@ describe("inspector Cumulus controls", () => {
 
   it("returns card instance ids from CardOrderEditor keyboard reordering", () => {
     const onOrderChange = vi.fn();
-    const { container, root } = mount(<CardOrderEditor label="Deck order" items={[{ id: "instance-a", label: "A" }, { id: "instance-b", label: "B" }]} onOrderChange={onOrderChange} />);
+    const { container, root } = mount(<CardOrderEditor label={localizationTodo("Deck order")} items={[{ id: "instance-a", authoredLabel: "A" }, { id: "instance-b", authoredLabel: "B" }]} onOrderChange={onOrderChange} />);
     const handle = container.querySelector<HTMLButtonElement>('[data-card-order-drag-handle="instance-b"]');
     expect(handle?.querySelector("i.fa-grip-vertical")).not.toBeNull();
     act(() => {
@@ -82,7 +82,7 @@ describe("inspector Cumulus controls", () => {
   });
 
   it("owns standalone CardOrderEditor surface chrome by default", () => {
-    const { container, root } = mount(<CardOrderEditor label="Deck order" items={[{ id: "instance-a", label: "A" }]} onOrderChange={vi.fn()} />);
+    const { container, root } = mount(<CardOrderEditor label={localizationTodo("Deck order")} items={[{ id: "instance-a", authoredLabel: "A" }]} onOrderChange={vi.fn()} />);
     const editor = container.querySelector<HTMLElement>('[role="list"]');
     expect(editor?.dataset.glassPlacement).toBe("onMedia");
     expect(editor?.style.background).toContain("var(--glass-fill)");

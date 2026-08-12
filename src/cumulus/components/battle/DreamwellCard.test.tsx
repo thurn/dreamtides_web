@@ -57,8 +57,8 @@ describe("DreamwellCard", () => {
     ).toContain("Look at the top 2 cards");
     expect(
       card?.querySelector<HTMLElement>('[data-card-stat="dreamwellEnergy"]')
-        ?.getAttribute("aria-label"),
-    ).toContain("2");
+        ?.querySelector("[data-card-stat-value]")?.textContent,
+    ).toBe("2");
     expect(card?.querySelector("img")?.getAttribute("src")).toContain(
       "/cards/42.webp",
     );

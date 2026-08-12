@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import { CardPile } from "../../components/battle/CardPile";
 import type { GameCardModel } from "../../components/card/CardView";
@@ -40,7 +41,7 @@ function CardPileDemo() {
             { face: "down", id: "demo-deck-middle" },
             { face: "down", id: "demo-deck-bottom" },
           ]}
-          label="Face-down deck"
+          label={localizationTodo("Face-down deck")}
         />
       </div>
       <div style={{ width }}>
@@ -50,16 +51,16 @@ function CardPileDemo() {
             { face: "up", id: "demo-void-middle", model: DEMO_CARD },
             { face: "up", id: "demo-void-bottom", model: DEMO_CARD },
           ]}
-          label="Face-up void"
+          label={localizationTodo("Face-up void")}
           onPress={() => undefined}
         />
       </div>
       <div style={{ width }}>
         <CardPile
           cards={[]}
-          label="Empty void"
+          label={localizationTodo("Empty void")}
           emptyState="outlined"
-          emptyLabel="Void"
+          emptyLabel={localizationTodo("Void")}
           onPress={() => undefined}
         />
       </div>

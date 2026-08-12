@@ -17,8 +17,9 @@ import { opponentsFixture } from "../testing/opponents-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import { CARD_ROLE_DATA } from "../data/card-roles";
+import { CumulusRoot } from "../cumulus/CumulusRoot";
 
-const REDUCER_VERSION = "dreamtides-coop-v24";
+const REDUCER_VERSION = "dreamtides-coop-v25";
 const ATLAS_FOLD_HASH = "fixture-atlas-fold-hash";
 const SITES_FOLD_HASH = "fixture-sites-fold-hash";
 const DRAFT_DATA = draftDataFixture();
@@ -127,7 +128,7 @@ function mount(config: RuntimeConfig): void {
   root = createRoot(container);
   act(() => {
     root?.render(
-      <RoomGate
+      <CumulusRoot><RoomGate
         db={{} as never}
         gameId={config.gameId}
         runtimeConfig={config}
@@ -144,7 +145,7 @@ function mount(config: RuntimeConfig): void {
         tutorialFoldHash="fixture-tutorial-fold-hash"
       >
         {() => <div data-room-children="true">room children</div>}
-      </RoomGate>,
+      </RoomGate></CumulusRoot>,
     );
   });
 }

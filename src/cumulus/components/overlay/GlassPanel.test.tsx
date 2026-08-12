@@ -160,12 +160,12 @@ describe("GlassPanel", () => {
             rightAccessory={{
               kind: "glassButton",
               button: {
-                label: "Action",
+                authoredLabel: "Action",
                 onPress: () => undefined,
                 essenceValue: 7,
                 size: "compact",
                 pressed: true,
-                accessibilityLabel: "Accessible action",
+                authoredAccessibilityLabel: "Accessible action",
                 testId: "panel-action",
               },
             }}

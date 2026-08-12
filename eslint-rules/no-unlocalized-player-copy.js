@@ -76,11 +76,7 @@ function isLocalizationCall(node) {
     if (
       current.type === "CallExpression" &&
       ((current.callee.type === "Identifier" &&
-        (current.callee.name === "t" ||
-          current.callee.name === "createMessageDescriptor")) ||
-        (current.callee.type === "MemberExpression" &&
-          current.callee.property.type === "Identifier" &&
-          current.callee.property.name === "getString"))
+        (current.callee.name === "tx" || current.callee.name === "txa")))
     ) {
       return true;
     }
@@ -100,7 +96,7 @@ function isLocalizedExpression(node) {
   if (node?.type === "CallExpression") {
     return (
       node.callee.type === "Identifier" &&
-      (node.callee.name === "t" || node.callee.name === "createMessageDescriptor")
+      (node.callee.name === "tx" || node.callee.name === "txa")
     );
   }
   if (node?.type === "ConditionalExpression") {
@@ -182,12 +178,12 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Require player-facing runtime copy to cross the Fluent localization boundary.",
+        "Require player-facing runtime copy to cross the Trox localization boundary.",
     },
     schema: [],
     messages: {
       unlocalized:
-        "Player-facing copy must be a Fluent message or descriptor; preserve authored data and add a localization-ignore reason for an intentional developer-only value.",
+        "Player-facing copy must be a Trox message; preserve authored data and add a localization-ignore reason for an intentional developer-only value.",
     },
   },
 

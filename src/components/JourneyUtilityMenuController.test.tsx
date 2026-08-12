@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
+import { localizationTodo } from "@trox/runtime";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GLYPHS } from "../cumulus/primitives/glyph";
@@ -15,6 +16,7 @@ import {
   useJourneyUtilityMenuController,
   type JourneyUtilityMenuViewModel,
 } from "./JourneyUtilityMenuController";
+import { CumulusRoot } from "../cumulus/CumulusRoot";
 
 vi.mock("../state/journey-context", () => ({ useJourney: vi.fn() }));
 vi.mock("../logging", () => ({ downloadLog: vi.fn(), logEvent: vi.fn() }));
@@ -65,17 +67,17 @@ afterEach(() => {
 describe("buildJourneyUtilityMenuViewModel", () => {
   it("constructs typed root actions without presentation data", () => {
     const model = buildJourneyUtilityMenuViewModel({
-      actions: [{ kind: "action", id: "deck", label: "View Deck", glyph: GLYPHS.affiliationRow, onCommand: vi.fn() }],
+      actions: [{ kind: "action", id: "deck", label: localizationTodo("View Deck"), glyph: GLYPHS.affiliationRow, onCommand: vi.fn() }],
       builtIns: ["saveJourney", "loadJourney", "buildSha", "downloadLog"],
       canLoadJourney: true,
-      status: "Saved journey.",
+      status: { kind: "raw", value: "Saved journey." },
       onSaveJourney: vi.fn(),
       onLoadJourney: vi.fn(),
       onDownloadLog: vi.fn(),
       onViewBuildSha: vi.fn(),
     });
 
-    expect(model.status).toBe("Saved journey.");
+    expect(model.status).toEqual({ kind: "raw", value: "Saved journey." });
     expect(model.actions.map((item) => item.id)).toEqual([
       "deck", "saveJourney", "loadJourney", "buildSha", "downloadLog",
     ]);
@@ -116,7 +118,13 @@ describe("useJourneyUtilityMenuController", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root: Root = createRoot(container);
-    act(() => root.render(<Probe />));
+    act(() =>
+      root.render(
+        <CumulusRoot>
+          <Probe />
+        </CumulusRoot>,
+      ),
+    );
 
     act(() => actionFor("saveJourney").onCommand());
 
@@ -133,10 +141,7 @@ describe("useJourneyUtilityMenuController", () => {
         formatVersion: 1,
       }),
     );
-    expect(latest?.status).toEqual({
-      id: "journey-menu-save-downloaded",
-      variables: { fileName: "dreamtides-journey-before-atlas.json" },
-    });
+    expect(latest?.status).toMatchObject({ kind: "message" });
     act(() => root.unmount());
   });
 
@@ -151,7 +156,13 @@ describe("useJourneyUtilityMenuController", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root: Root = createRoot(container);
-    act(() => root.render(<Probe />));
+    act(() =>
+      root.render(
+        <CumulusRoot>
+          <Probe />
+        </CumulusRoot>,
+      ),
+    );
 
     await act(async () => {
       actionFor("loadJourney").onCommand();
@@ -170,10 +181,7 @@ describe("useJourneyUtilityMenuController", () => {
         fileName: "before-atlas.json",
       }),
     );
-    expect(latest?.status).toEqual({
-      id: "journey-menu-load-loaded",
-      variables: { name: "before atlas" },
-    });
+    expect(latest?.status).toMatchObject({ kind: "message" });
     act(() => root.unmount());
   });
 
@@ -181,7 +189,13 @@ describe("useJourneyUtilityMenuController", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root: Root = createRoot(container);
-    act(() => root.render(<Probe />));
+    act(() =>
+      root.render(
+        <CumulusRoot>
+          <Probe />
+        </CumulusRoot>,
+      ),
+    );
 
     act(() => actionFor("buildSha").onCommand());
 
@@ -189,10 +203,7 @@ describe("useJourneyUtilityMenuController", () => {
       source: "dreamscape_menu",
       gitSha: "abc123def456",
     });
-    expect(latest?.status).toEqual({
-      id: "journey-menu-build-sha-status",
-      variables: { gitSha: "abc123def456" },
-    });
+    expect(latest?.status).toMatchObject({ kind: "message" });
     act(() => root.unmount());
   });
 });

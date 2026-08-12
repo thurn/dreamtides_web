@@ -25,11 +25,14 @@ The optional stacked-copy card model reserves its complete fanned footprint befo
 | `onCardPress` | `((entryId: string) => void)` | no | — | Fires when an enabled card tile is activated. |
 | `endAction` | `CardChoiceGridActionView` | no | — | Optional card-sized action appended after the cards. |
 | `onEndActionPress` | `((entryId: string) => void)` | no | — | Fires with the appended action's stable id when it is activated. |
-| `title` | `LocalizedString` | yes | — | Header title, rendered as an `<h2>`. |
+| `title` | `LocalizedString` | no | — | Header title, rendered as an `<h2>`. |
+| `authoredTitle` | `string` | no | — | Header title supplied by canonical authored content. |
 | `subtitle` | `LocalizedString` | no | — | Optional intro line under the title. |
+| `authoredSubtitle` | `string` | no | — | Intro line supplied by canonical authored content. |
 | `rightAccessory` | `CardPanelAccessory` | no | — | Optional trailing header action. |
 | `cards` | `readonly CardChoiceGridCardView[]` | yes | — | Resolved cards rendered in order. |
 | `emptyLabel` | `LocalizedString` | no | — | Empty-state copy shown when `cards` is empty. |
+| `authoredEmptyLabel` | `string` | no | — | Empty-state copy supplied by canonical authored or developer-only content. |
 | `testId` | `string` | no | — | Test id for the panel root. |
 
 ### `endAction`: the `CardChoiceGridActionView` model
@@ -38,7 +41,8 @@ The optional stacked-copy card model reserves its complete fanned footprint befo
 | --- | --- | --- | --- |
 | `entryId` | `string` | no | Stable action id reported through the action callback. |
 | `glyph` | `Glyph` | no | Large glyph that carries the action's visual identity. |
-| `label` | `string` | no | Accessible action label. |
+| `label` | `LocalizedString` | yes | Accessible action label. |
+| `authoredLabel` | `string` | yes | Canonical authored label when this action is data-defined. |
 | `caption` | `CardChoiceGridCaption` | no | Small uncontained line rendered below the glyph. |
 | `disabled` | `boolean` | yes | Detach interaction and visually recede the action. |
 | `testId` | `string` | yes | Optional stable test id on the action button. |

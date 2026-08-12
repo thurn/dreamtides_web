@@ -12,6 +12,7 @@ import {
 } from "./__test-helpers__/atlas-fixtures";
 import type { ReactElement, ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { CumulusRoot } from "./cumulus/CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { JourneyContent } from "./data/journey-content";
 import { loadJourneyContent } from "./data/journey-content";
@@ -458,7 +459,7 @@ function mount(element: ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(element);
+    root.render(<CumulusRoot>{element}</CumulusRoot>);
   });
   return { container, root };
 }

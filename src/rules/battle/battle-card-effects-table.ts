@@ -11,7 +11,7 @@ import type { StepContext } from "./effect-step";
 import type { EffectStep } from "./effect-step";
 import type { BattleScriptTrigger } from "./fold";
 import { fnv1aHex } from "./rules-text-hash";
-import { createMessageDescriptor } from "../../data/localization-descriptors";
+import { builtInBattlePromptRef } from "../../data/dreamwell-prompts";
 
 /** Describes the static spark a supporter grants to supported front-rank allies. */
 export interface SupportScript {
@@ -97,7 +97,7 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<string, BattleTriggeredEffectScrip
   "910b4cf9-dec7-4e03-af4f-7d5ae342eeba": {
     id: "910b4cf9-dec7-4e03-af4f-7d5ae342eeba", textHash: "469120a4",
     triggers: { played: [{ kind: "prompt", prompt: {
-      kind: "pick-cards", label: createMessageDescriptor("battle-prompt-discover-character"), count: 1, optional: false,
+      kind: "pick-cards", label: builtInBattlePromptRef("discover-character"), count: 1, optional: false,
       candidates: (ctx) => sampleDiscoverCharacters(ctx),
       resolve: (chosenIds, ctx) => resolveDiscoverChoice(chosenIds, ctx),
     } }] },
@@ -134,7 +134,7 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<string, BattleTriggeredEffectScrip
         kind: "prompt",
         prompt: {
           kind: "confirm",
-          label: createMessageDescriptor("battle-prompt-generic"),
+          label: builtInBattlePromptRef("generic"),
           onYes: FIXTURE_TRIGGER_STEPS as EffectStep[],
         },
       }],
@@ -142,7 +142,7 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<string, BattleTriggeredEffectScrip
         kind: "prompt",
         prompt: {
           kind: "confirm",
-          label: createMessageDescriptor("battle-prompt-generic"),
+          label: builtInBattlePromptRef("generic"),
           onYes: FIXTURE_TRIGGER_STEPS as EffectStep[],
         },
       }],

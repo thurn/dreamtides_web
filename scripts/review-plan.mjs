@@ -12,7 +12,6 @@ const TEST_INPUT_EXTENSIONS = new Set([
   ".ts",
   ".tsx",
   ".css",
-  ".ftl",
   ".json",
   ".jsonc",
   ".ron",
@@ -25,26 +24,24 @@ const SOURCE_TREE_CONTRACT_TESTS = [
 ];
 
 const LOCALIZATION_CONTRACT_INPUTS = new Set([
-  "scripts/fluent-format.mjs",
-  "scripts/format-fluent.mjs",
-  "scripts/generate-localization-types.mjs",
-  "scripts/localization-catalog.mjs",
-  "src/data/localization-messages.ts",
+  ".trox-revision",
+  "trox.ron",
+  "scripts/trox.mjs",
+  "scripts/sync-trox-runtime.mjs",
+  "scripts/trox-generated-check.mjs",
 ]);
 const LOCALIZATION_CONTRACT_TESTS = [
-  "scripts/format-fluent.test.mjs",
-  "scripts/generate-localization-types.test.mjs",
-  "scripts/localization-catalog.test.mjs",
+  "scripts/trox.test.mjs",
+  "scripts/trox-csv-sync.test.mjs",
+  "scripts/trox-generated-check.test.mjs",
 ];
-const LOCALIZATION_LINT_INPUTS = new Set([
-  "scripts/validate-localization-source.mjs",
-  "scripts/lint-localization-source.mjs",
-]);
 
 function isLocalizationCatalogInput(file) {
   return (
-    file.startsWith("data/locales/") &&
-    [".ftl", ".json"].includes(extname(file))
+    file.startsWith("localization/") ||
+    file.startsWith("src/generated/localization/") ||
+    file.startsWith("src/runtime/localization/") ||
+    file.startsWith("vendor/trox-runtime/")
   );
 }
 
@@ -104,14 +101,6 @@ function isRonFormattingInput(file) {
   );
 }
 
-function isFluentFormattingInput(file) {
-  return (
-    extname(file) === ".ftl" ||
-    file === "scripts/fluent-format.mjs" ||
-    file === "scripts/format-fluent.mjs"
-  );
-}
-
 export function buildReviewPlan(files, fileExists = () => true) {
   const changedFiles = [...new Set(files)].sort();
   const existingFiles = changedFiles.filter(fileExists);
@@ -135,10 +124,12 @@ export function buildReviewPlan(files, fileExists = () => true) {
       (file) =>
         file.startsWith("src/") && LINTABLE_EXTENSIONS.has(extname(file)),
     ),
-    shouldCheckFluentFormatting: changedFiles.some(isFluentFormattingInput),
-    shouldLintLocalization: changedFiles.some(
+    shouldCheckTrox: changedFiles.some(
       (file) =>
-        isLocalizationCatalogInput(file) || LOCALIZATION_LINT_INPUTS.has(file),
+        isLocalizationCatalogInput(file) ||
+        LOCALIZATION_CONTRACT_INPUTS.has(file) ||
+        ((file.endsWith(".ts") || file.endsWith(".tsx")) &&
+          file.startsWith("src/")),
     ),
     shouldTypecheck: changedFiles.some(isTypecheckInput),
     shouldValidate: changedFiles.some(isValidationInput),

@@ -85,14 +85,15 @@ opens the configuration gate. Draft URL settings can be adopted when the Atlas,
 Sites, economy, and opponent hashes agree. A catalog hash mismatch offers a new
 room using the local content. Room genesis documents without a Sites hash are
 readable and enter this configuration gate. The current reducer protocol is
-`dreamtides-coop-v24`; rooms with an incompatible protocol, including
+`dreamtides-coop-v25`; rooms with an incompatible protocol, including
 `dreamtides-coop-v22`, open the Version Gate before folding or appending. The
 compatible legacy-version set is empty.
 
-Battle pending prompts are JSON-safe Fluent descriptors. The room fold stores
-message IDs and finite semantic variables; clients format prompt labels,
-subtitles, and options at the Cumulus presentation boundary. Prompt resolution
-continues to use the option index and persisted prompt cursor, so locale output
+Battle pending prompts are JSON-safe semantic references. Built-in prompts
+store a closed prompt kind and Dreamwell prompts store the Dreamwell card UUID.
+Clients construct `LocalizedString` labels, subtitles, and options in the
+Cumulus adapter and resolve them at browser presentation boundaries. Prompt
+resolution uses the option index and persisted prompt cursor, so locale output
 does not affect deterministic folding.
 
 ### Event log

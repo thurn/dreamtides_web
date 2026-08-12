@@ -16,7 +16,8 @@ import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { dreamsignRevealSpec } from "../hud/Dreamsign";
-import { useMessages } from "../../hooks/use-messages";
+import { tx, txa, type LocalizedString } from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 type WagerRevealSourceBinding = ReturnType<typeof useRevealSource>;
 
@@ -229,13 +230,12 @@ function PlayingCardRim({
 function frontAriaLabel(
   rank: PlayingCardRank,
   suit: PlayingCardSuit,
-  t: ReturnType<typeof useMessages>,
-): string {
-  return t("playing-card-accessible-name", {
-    state: "visible",
-    rank,
-    suit,
-  });
+): LocalizedString {
+  return txa(
+    "{rank} of {suit}",
+    { rank, suit },
+    "Accessible name for a revealed standard playing card. rank and suit are its canonical authored display values.",
+  );
 }
 
 export interface PlayingCardSuitMarkProps {
@@ -309,10 +309,9 @@ function PlayingCardIndex({
   const foreground = isRedSuit
     ? PLAYING_CARD_DESIGN.colors.red
     : PLAYING_CARD_DESIGN.colors.black;
-  const characterOutlineWidth =
-    isRedSuit
-      ? sizeSpec.redCharacterOutlineWidth
-      : sizeSpec.blackCharacterOutlineWidth;
+  const characterOutlineWidth = isRedSuit
+    ? sizeSpec.redCharacterOutlineWidth
+    : sizeSpec.blackCharacterOutlineWidth;
 
   return (
     <span
@@ -408,7 +407,7 @@ export type PlayingCardProps =
  * Reprise uses its concealed suit-grid variant and built-in result flip.
  */
 export function PlayingCard(props: PlayingCardProps): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
   const size = props.size ?? "wager";
   const emphasis = props.emphasis ?? "standard";
@@ -417,24 +416,25 @@ export function PlayingCard(props: PlayingCardProps): ReactElement {
     props.variant !== "rankSuit" &&
     props.revealDrawnCard === true &&
     props.drawnCard !== null;
-  const visibleCard = props.variant === "rankSuit"
-    ? { rank: props.rank, suit: props.suit }
-    : showingDrawnCard
-      ? props.drawnCard
-      : null;
+  const visibleCard =
+    props.variant === "rankSuit"
+      ? { rank: props.rank, suit: props.suit }
+      : showingDrawnCard
+        ? props.drawnCard
+        : null;
   const label =
     visibleCard === null
-      ? t("playing-card-accessible-name", {
-          state: "concealed",
-          rank: "",
-          suit: "",
-        })
-      : frontAriaLabel(visibleCard.rank, visibleCard.suit, t);
-  const state = props.variant === "rankSuit"
-    ? "visible"
-    : showingDrawnCard
-      ? "drawn"
-      : "concealed";
+      ? tx(
+          "Face-down four-suit playing card",
+          "Accessible name for a concealed Four-Suit Reprise playing card.",
+        )
+      : frontAriaLabel(visibleCard.rank, visibleCard.suit);
+  const state =
+    props.variant === "rankSuit"
+      ? "visible"
+      : showingDrawnCard
+        ? "drawn"
+        : "concealed";
   const surfaceStyle: CSSProperties = {
     ...CARD_FACE_STYLE,
     ...(emphasis === "current"
@@ -444,23 +444,26 @@ export function PlayingCard(props: PlayingCardProps): ReactElement {
     placeItems: "center",
   };
 
-  const rankSuitContent = visibleCard === null ? null : (
-    <PlayingCardIndex
-      rank={visibleCard.rank}
-      suit={visibleCard.suit}
-      size={size}
-    />
-  );
+  const rankSuitContent =
+    visibleCard === null ? null : (
+      <PlayingCardIndex
+        rank={visibleCard.rank}
+        suit={visibleCard.suit}
+        size={size}
+      />
+    );
 
   return (
     <div
       role="img"
-      aria-label={label}
-      data-playing-card={visibleCard === null
-        ? props.variant === "faceDown"
-          ? "face-down"
-          : "four-suit"
-        : `${visibleCard.rank}-${visibleCard.suit}`}
+      aria-label={resolve(label)}
+      data-playing-card={
+        visibleCard === null
+          ? props.variant === "faceDown"
+            ? "face-down"
+            : "four-suit"
+          : `${visibleCard.rank}-${visibleCard.suit}`
+      }
       data-playing-card-variant={props.variant}
       data-playing-card-state={state}
       data-playing-card-face={visibleCard === null ? "reverse" : "front"}
@@ -576,9 +579,7 @@ export interface WagerPrizeCardProps {
  * sentence, and an assigned result flips into the standard rank-and-suit face
  * without changing the object's footprint.
  */
-export function WagerPrizeCard(
-  props: WagerPrizeCardProps,
-): ReactElement {
+export function WagerPrizeCard(props: WagerPrizeCardProps): ReactElement {
   if (props.rewardDreamsign !== null) {
     return (
       <DreamsignWagerPrizeCard
@@ -626,23 +627,45 @@ function WagerPrizeCardObject({
 }: WagerPrizeCardProps & {
   revealBinding?: WagerRevealSourceBinding;
 }): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const showingDrawnCard = revealDrawnCard && drawnCard !== null;
-  const rewardVariables = {
-    essenceAmount: essenceReward,
-    hasDreamsign: rewardDreamsign === null ? "no" : "yes",
-    dreamsignName: rewardDreamsign?.name ?? "",
-  } as const;
-  const prizeLabel = t("gamble-wager-prize-accessible-name", {
-    targetLabel,
-    ...rewardVariables,
-  });
+  const prizeLabel =
+    rewardDreamsign === null
+      ? txa(
+          "Draw {target_label}. Win {essence_amount} Essence.",
+          { target_label: targetLabel, essence_amount: essenceReward },
+          "Complete accessible name for a wager prize without a Dreamsign. target_label is the authored winning rank or range, and essence_amount is the positive Essence payout.",
+        )
+      : txa(
+          "Draw {target_label}. Win {essence_amount} Essence and {dreamsign_name}.",
+          {
+            target_label: targetLabel,
+            essence_amount: essenceReward,
+            dreamsign_name: rewardDreamsign.name,
+          },
+          "Complete accessible name for a wager prize that includes a Dreamsign. target_label is the authored winning rank or range, essence_amount is the positive Essence payout, and dreamsign_name is the canonical authored Dreamsign name.",
+        );
   const drawnCardLabel =
     drawnCard === null
       ? prizeLabel
-      : frontAriaLabel(drawnCard.rank, drawnCard.suit, t);
+      : frontAriaLabel(drawnCard.rank, drawnCard.suit);
+  const prizeDescription =
+    rewardDreamsign === null
+      ? txa(
+          "Win {essence_amount} Essence.",
+          { essence_amount: essenceReward },
+          "Reward sentence on a wager prize without a Dreamsign. essence_amount is the positive Essence payout.",
+        )
+      : txa(
+          "Win {essence_amount} Essence and {dreamsign_name}.",
+          {
+            essence_amount: essenceReward,
+            dreamsign_name: rewardDreamsign.name,
+          },
+          "Reward sentence on a wager prize that includes a Dreamsign. essence_amount is the positive Essence payout and dreamsign_name is the canonical authored Dreamsign name.",
+        );
   const prizeFaceContent = (
     <>
       <div
@@ -651,15 +674,13 @@ function WagerPrizeCardObject({
           position: "relative",
           zIndex: 1,
           width: "100%",
-          padding:
-            size === "wager" ? token("--space-s") : token("--space-xs"),
+          padding: size === "wager" ? token("--space-s") : token("--space-xs"),
           boxSizing: "border-box",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap:
-            size === "wager" ? token("--space-s") : token("--space-xs"),
+          gap: size === "wager" ? token("--space-s") : token("--space-xs"),
           textAlign: "center",
           color:
             emphasis === "muted"
@@ -677,14 +698,19 @@ function WagerPrizeCardObject({
             font: size === "wager" ? token("--t-title") : token("--t-title-sm"),
           }}
         >
-          {t("gamble-wager-prize-title", { targetLabel })}
+          {resolve(
+            txa(
+              "Draw {target_label}",
+              { target_label: targetLabel },
+              "Title printed on a wager prize card before its concealed playing card is revealed. target_label is the authored rank or rank range the current player must draw.",
+            ),
+          )}
         </h2>
         <p
           data-wager-prize-description=""
           style={{
             margin: 0,
-            font:
-              size === "wager" ? token("--t-body") : token("--t-body-sm"),
+            font: size === "wager" ? token("--t-body") : token("--t-body-sm"),
           }}
         >
           <span
@@ -693,7 +719,7 @@ function WagerPrizeCardObject({
               rewardDreamsign === null ? undefined : ""
             }
           >
-            {t("gamble-wager-prize-description", rewardVariables)}
+            {resolve(prizeDescription)}
           </span>
         </p>
       </div>
@@ -716,7 +742,7 @@ function WagerPrizeCardObject({
   return (
     <div
       role={showingDrawnCard ? "img" : "group"}
-      aria-label={showingDrawnCard ? drawnCardLabel : prizeLabel}
+      aria-label={resolve(showingDrawnCard ? drawnCardLabel : prizeLabel)}
       data-wager-prize-card={prizeId}
       data-wager-prize-card-state={showingDrawnCard ? "drawn" : "prize"}
       data-wager-prize-card-size={size}
@@ -774,9 +800,11 @@ function WagerPrizeCardObject({
             {...revealBinding.sourceProps}
             role="button"
             tabIndex={showingDrawnCard ? -1 : 0}
-            aria-label={t("dreamsign-object-accessible-name", {
-              dreamsignName: rewardDreamsign?.name ?? "",
-            })}
+            ariaLabelMessage={txa(
+              "Dreamsign: {dreamsign_name}",
+              { dreamsign_name: rewardDreamsign?.name ?? "" },
+              "Accessible name for an interactive Dreamsign object. dreamsign_name is its canonical authored display name and has unknown grammatical gender.",
+            )}
             aria-hidden={showingDrawnCard || undefined}
             pressFeedback="stationary"
             hoverFeedback="stationary"

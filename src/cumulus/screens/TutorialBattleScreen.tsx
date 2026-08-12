@@ -1,4 +1,4 @@
-import { localizationTodo } from "@trox/runtime";
+import { meaning, tx } from "@trox/runtime";
 import {
   useCallback,
   useEffect,
@@ -35,14 +35,12 @@ import {
   BattleTutorialGuidance,
   type BattleTutorialGuidanceView,
 } from "./BattleTutorialGuidance";
-import { useMessages } from "../hooks/use-messages";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 export type TutorialBattleOwnership =
   "driver" | "observer" | "paused-driver-absent" | "terminal";
 export type TutorialBattleMovementStatus =
-  | "send-failed"
-  | "exhausted-front-rank"
-  | "no-legal-cell";
+  "send-failed" | "exhausted-front-rank" | "no-legal-cell";
 export const TUTORIAL_CHALLENGE_TRAVEL_SECONDS =
   motionTimeSeconds("--dur-slow");
 
@@ -135,7 +133,6 @@ export function TutorialBattleScreen({
   onGuidanceDurationComplete,
   onPresentationVisible,
 }: TutorialBattleScreenProps): ReactElement {
-  const t = useMessages();
   const reduceMotion = useReducedMotion();
   const turnAnnouncementKey = `${view.battle.battleId}:${view.battle.inspector.turn}:${view.battle.activeSide}`;
   const [completedTurnAnnouncementKey, setCompletedTurnAnnouncementKey] =
@@ -380,15 +377,24 @@ export function TutorialBattleScreen({
           }}
         >
           <GlassPanel
-            title={localizationTodo(t("battle-tutorial-target-selection-title"))}
-            subtitle={localizationTodo(t("battle-tutorial-target-selection-instruction"))}
+            title={tx(
+                "Choose a Target",
+                "Title above the tutorial battle prompt shown after the current player plays a card that requires a battlefield target.",
+              )}
+            subtitle={tx(
+                "Select a highlighted legal target.",
+                "Instruction beneath that title; the current player must activate one of the visually highlighted legal targets.",
+              )}
             headerSpacing="compact"
             headerDivider={false}
             radius="control"
             rightAccessory={{
               kind: "glassButton",
               button: {
-                label: t("battle-tutorial-target-selection-cancel-action"),
+                label: tx(
+                  meaning("tutorial-target-cancel", "Cancel"),
+                  "Visible command that cancels the tutorial card's pending target selection.",
+                ),
                 testId: "tutorial-target-cancel",
                 onPress: () => interactions.onTargetSelectionCancel?.(),
               },
@@ -401,14 +407,12 @@ export function TutorialBattleScreen({
       {movementStatusMessage !== null ? (
         <TransientStatusToast
           copy={{
-            message: t("battle-tutorial-movement-error", {
-              reason:
-                movementStatusMessage === "send-failed"
-                  ? "sendFailed"
-                  : movementStatusMessage === "exhausted-front-rank"
-                    ? "exhaustedFrontRank"
-                    : "noLegalCell",
-            }),
+            message:
+              movementStatusMessage === "send-failed"
+                ? tx("Movement failed to send. Try again.", "Error when a tutorial movement intent could not be submitted.")
+                : movementStatusMessage === "exhausted-front-rank"
+                  ? tx("This character is exhausted and cannot move to the front rank.", "Error when an exhausted Character cannot enter the front rank during the opponent's Dusk.")
+                  : tx("No legal battlefield cell is available for this movement.", "Error when a tutorial movement has no legal destination."),
           }}
           onDismiss={onMovementStatusDismiss}
         />
@@ -480,13 +484,16 @@ function TutorialVictorySurface({
 }: {
   readonly onNewJourney: () => void;
 }): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const [actionSettled, setActionSettled] = useState(false);
   return (
     <section
       role="dialog"
       aria-modal="true"
-      aria-label={t("tutorial-battle-complete")}
+      aria-label={resolve(tx(
+        "Tutorial complete",
+        "Player-facing message for the tutorial battle complete interface state.",
+      ))}
       data-tutorial-victory-screen=""
       style={{
         position: "fixed",
@@ -514,7 +521,10 @@ function TutorialVictorySurface({
       <Motes on tint="warm" count={12} seed={243} zIndex={1} />
       <RadialAnnouncement
         variant="victory"
-        headline={t("battle-victory-headline")}
+        headline={tx(
+          "Victory",
+          "Player-facing message for the battle victory headline interface state.",
+        )}
         announcementId="tutorial-victory"
       />
       <div
@@ -539,7 +549,10 @@ function TutorialVictorySurface({
         }}
       >
         <GlassButton
-          label={t("tutorial-new-journey-action")}
+          label={tx(
+            "New Journey",
+            "Command that starts a fresh Journey from a menu or terminal Journey result.",
+          )}
           variant="accent"
           testId="tutorial-battle-new-journey"
           onPress={onNewJourney}

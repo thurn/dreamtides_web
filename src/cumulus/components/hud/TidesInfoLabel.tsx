@@ -13,7 +13,8 @@ import { Pressable } from "../../primitives/Pressable";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { InlineGlyph } from "../typography/InlineGlyph";
-import { useMessages } from "../../hooks/use-messages";
+import { tx } from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 const TIDES_INFO_CARD = glossaryInfoCard(GLOSSARY_IDS.tides);
 
@@ -24,7 +25,7 @@ const TIDES_INFO_CARD = glossaryInfoCard(GLOSSARY_IDS.tides);
  * Hover, keyboard focus, and touch-hold reveal the canonical Tides InfoCard.
  */
 export function TidesInfoLabel() {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const binding = useRevealSource({
     identity: {
       entityType: "glossary-term",
@@ -45,7 +46,10 @@ export function TidesInfoLabel() {
       pressFeedback="stationary"
       hoverFeedback="stationary"
       tabIndex={0}
-      aria-label={t("tides-information-accessible-name")}
+      ariaLabelMessage={tx(
+        "Tides information",
+        "Accessible name for the reveal trigger that explains Tides.",
+      )}
       data-tides-info-label=""
       style={{
         ...binding.sourceProps.style,
@@ -65,7 +69,10 @@ export function TidesInfoLabel() {
       >
         <InlineGlyph glyph={GLYPHS.infoFilled} />
       </span>
-      {t("tides-information-label")}
+      {resolve(tx(
+        "Tides:",
+        "Visible eyebrow labeling the list of a Dream Avatar's Tides.",
+      ))}
     </Pressable>
   );
 }

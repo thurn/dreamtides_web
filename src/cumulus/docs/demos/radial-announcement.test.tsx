@@ -4,6 +4,7 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { describe, expect, it } from "vitest";
 import { radialAnnouncementDemo } from "./radial-announcement";
+import { CumulusRoot } from "../../CumulusRoot";
 
 describe("RadialAnnouncement documentation demo", () => {
   it("keeps the transient announcement visible as a frozen specimen", () => {
@@ -12,7 +13,13 @@ describe("RadialAnnouncement documentation demo", () => {
     const root = createRoot(container);
     const Demo = radialAnnouncementDemo.Component;
 
-    act(() => root.render(<Demo tone="reward" />));
+    act(() =>
+      root.render(
+        <CumulusRoot>
+          <Demo tone="reward" />
+        </CumulusRoot>,
+      ),
+    );
 
     const frozenDemo = container.querySelector(
       "[data-radial-announcement-demo-frozen]",

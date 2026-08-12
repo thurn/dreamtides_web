@@ -1,4 +1,4 @@
-import { localizationTodo } from "@trox/runtime";
+import { tx } from "@trox/runtime";
 import type { ReactElement } from "react";
 import {
   DreamwellCard,
@@ -6,7 +6,7 @@ import {
 } from "../../components/battle/DreamwellCard";
 import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { token } from "../../primitives/tokens";
-import { useMessages } from "../../hooks/use-messages";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export interface BattleDreamwellHistoryEntryView {
   readonly entryId: string;
@@ -24,12 +24,21 @@ export function BattleDreamwellHistoryOverlay({
   entries,
   onClose,
 }: BattleDreamwellHistoryOverlayProps): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   return (
     <GlassDialog
-      title={localizationTodo(t("battle-dreamwell-history-title"))}
-      subtitle={localizationTodo(t("battle-dreamwell-history-subtitle"))}
-      closeLabel={localizationTodo(t("battle-dreamwell-history-close-action"))}
+      title={tx(
+          "Dreamwell History",
+          "Player-facing message for the battle dreamwell history title interface state.",
+        )}
+      subtitle={tx(
+          "Shared draws, most recent first.",
+          "Player-facing message for the battle dreamwell history subtitle interface state.",
+        )}
+      closeLabel={tx(
+          "Close Dreamwell history",
+          "Player-facing message for the battle dreamwell history close action interface state.",
+        )}
       onClose={onClose}
       desktopCenterTarget="battlefield"
     >
@@ -51,7 +60,10 @@ export function BattleDreamwellHistoryOverlay({
               font: token("--t-body"),
             }}
           >
-            {t("battle-dreamwell-history-empty")}
+            {resolve(tx(
+              "No Dreamwell cards drawn yet.",
+              "Player-facing message for the battle dreamwell history empty interface state.",
+            ))}
           </p>
         ) : (
           entries.map((entry) => (

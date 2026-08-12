@@ -60,7 +60,7 @@ export function GlossaryTerm({
           : undefined,
       }}
     >
-      {glyph === undefined ? text : <InlineGlyph glyph={glyph} label={text} />}
+      {glyph === undefined ? text : <InlineGlyph glyph={glyph} authoredLabel={text} />}
     </Pressable>
   );
 }

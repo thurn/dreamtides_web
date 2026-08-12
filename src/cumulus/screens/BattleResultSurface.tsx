@@ -1,12 +1,19 @@
-import { useEffect, useState, type ReactElement } from "react";
+import {useEffect, useState, type ReactElement } from "react";
 import { GlassButton } from "../components/controls/GlassButton";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { Motes } from "../components/hud/Motes";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { token } from "../primitives/tokens";
-import { useMessages } from "../hooks/use-messages";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 import { MOBILE_BATTLE_INSPECTOR_RAIL_TRACK } from "./mobile-battle-layout";
 import { JOURNEY_RESULT_CONTENT_MAX_WIDTH_PX } from "./journey-result-layout";
+import { meaning,
+  tx,
+  txa,
+  plural,
+  one,
+  other,
+} from "@trox/runtime";
 
 export type MobileBattleResultOutcome = "victory" | "defeat" | "draw";
 
@@ -87,7 +94,6 @@ function ReopenControl({
   readonly outcome: "defeat" | "draw";
   readonly onAction?: (action: MobileBattleResultAction) => void;
 }): ReactElement {
-  const t = useMessages();
   return (
     <div
       className="cumulus"
@@ -101,7 +107,11 @@ function ReopenControl({
       }}
     >
       <GlassButton
-        label={t("battle-result-reopen-action", { outcome })}
+        label={
+          outcome === "defeat"
+            ? tx("Defeat — Reopen", "Command that reopens a dismissed defeat result.")
+            : tx("Draw — Reopen", "Command that reopens a dismissed draw result.")
+        }
         disabled={onAction === undefined}
         testId="battle-result-reopen"
         onPress={() => onAction?.("reopen")}
@@ -119,7 +129,7 @@ function VictoryReward({
   readonly onAction?: (action: MobileBattleResultAction) => void;
   readonly centerOnBattlefield: boolean;
 }): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const [committing, setCommitting] = useState(false);
   const { value, complete } = useEssenceCountUp(view.essenceReward);
 
@@ -187,7 +197,7 @@ function VictoryReward({
               color: token("--reward"),
             }}
           >
-            {t("battle-result-title", { outcome: "victory" })}
+            {resolve(tx("Victory!", "Title for a victorious terminal battle result."))}
           </h1>
           <p
             data-battle-reward-summary=""
@@ -198,12 +208,23 @@ function VictoryReward({
               textShadow: token("--text-outline-media"),
             }}
           >
-            {t("battle-victory-summary", {
-              opponentName: view.opponentName,
-              playerScore: view.playerScore,
-              opponentScore: view.opponentScore,
-              turnCount: view.turnCount,
-            })}
+            {resolve(txa(
+              plural(view.turnCount, [
+                one(
+                  "Defeated {opponent_name} · {player_score}–{opponent_score} · {turn_count} Turn",
+                ),
+                other(
+                  "Defeated {opponent_name} · {player_score}–{opponent_score} · {turn_count} Turns",
+                ),
+              ]),
+              {
+                turn_count: view.turnCount,
+                opponent_name: view.opponentName,
+                player_score: view.playerScore,
+                opponent_score: view.opponentScore,
+              },
+              "Victory summary after a battle. opponent_name is the authored display name of the defeated opponent and has unknown grammatical gender; player_score and opponent_score are non-negative point totals; turn_count is a positive count of completed battle turns.",
+            ))}
           </p>
         </header>
 
@@ -229,12 +250,17 @@ function VictoryReward({
                   textTransform: "uppercase",
                 }}
               >
-                {t("battle-result-essence-earned-label")}
+                {resolve(tx(
+                  "Essence Earned",
+                  "Eyebrow above the animated Essence payout on a victorious battle result.",
+                ))}
               </span>
               <span
-                aria-label={t("battle-victory-essence-gained", {
-                  amount: view.essenceReward,
-                })}
+                aria-label={resolve(txa(
+                  "Gained {amount} Essence",
+                  { amount: view.essenceReward },
+                  "Accessible name for the Essence reward value on the battle victory screen. amount is the non-negative amount already earned by the local player.",
+                ))}
                 data-battle-reward-essence-value=""
                 style={{ font: token("--t-display") }}
               >
@@ -245,7 +271,10 @@ function VictoryReward({
         </div>
 
         <GlassButton
-          label={t("battle-continue-action")}
+          label={tx(
+            meaning("battle-result-continue", "Continue"),
+            "Command that accepts a completed result or advances a resolved interaction.",
+          )}
           variant="accent"
           disabled={continueDisabled}
           testId="battle-reward-continue"
@@ -272,7 +301,7 @@ function DefeatOrDrawResult({
   readonly onAction?: (action: MobileBattleResultAction) => void;
   readonly centerOnBattlefield: boolean;
 }): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   if (view.dismissed) {
     return <ReopenControl outcome={view.outcome} onAction={onAction} />;
   }
@@ -335,7 +364,11 @@ function DefeatOrDrawResult({
                 color: token("--text-primary"),
               }}
             >
-              {t("battle-result-title", { outcome: view.outcome })}
+              {resolve(
+                view.outcome === "defeat"
+                  ? tx("Defeat.", "Title for a defeated terminal battle result.")
+                  : tx("Draw.", "Title for a drawn terminal battle result."),
+              )}
             </h1>
             <div
               style={{
@@ -346,14 +379,20 @@ function DefeatOrDrawResult({
               }}
             >
               <GlassButton
-                label={t("battle-result-keep-inspecting-action")}
+                label={tx(
+                  "Keep Inspecting",
+                  "Command that dismisses a defeat or draw overlay while leaving the battlefield visible for inspection.",
+                )}
                 variant="accent"
                 disabled={onAction === undefined}
                 testId="battle-result-inspect"
                 onPress={() => onAction?.("dismiss")}
               />
               <GlassButton
-                label={t("battle-result-reset-run-action")}
+                label={tx(
+                  "Reset Run…",
+                  "Destructive command that opens the run-reset confirmation from a battle result.",
+                )}
                 variant="danger"
                 disabled={onAction === undefined}
                 testId="battle-result-reset"

@@ -147,7 +147,7 @@ describe("Cumulus BattleStartScreen", () => {
     expect(container.textContent).toContain("12");
     expect(container.textContent).toContain("80");
     const pointsValue = container.querySelector(
-      '[data-battle-start-stake="To Win"] > div',
+      '[data-battle-start-stake="points"] > div',
     );
     expect((pointsValue as HTMLElement | null)?.style.gap).toBe(
       "var(--space-s)",
@@ -349,12 +349,12 @@ describe("Cumulus BattleStartScreen", () => {
     ).toBe("100%");
     expect(
       panel?.querySelector<HTMLElement>(
-        '[data-battle-start-panel-section="Ability"]',
+        '[data-battle-start-panel-section="ability"]',
       )?.style.paddingTop,
     ).toBe("var(--space-m)");
     expect(
       panel?.querySelector<HTMLElement>(
-        '[data-battle-start-panel-section="Ability"]',
+        '[data-battle-start-panel-section="ability"]',
       )?.style.gap,
     ).toBe("var(--space-s)");
     expect(panel?.querySelector<HTMLElement>("footer")?.style.paddingTop).toBe(
@@ -369,7 +369,7 @@ describe("Cumulus BattleStartScreen", () => {
     expect(panel?.textContent).toContain("Reward");
     expect(
       panel?.querySelector<HTMLElement>(
-        '[data-battle-start-stake="To Win"] > div',
+        '[data-battle-start-stake="points"] > div',
       )?.style.gap,
     ).toBe("var(--space-xs)");
     expect(

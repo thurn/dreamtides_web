@@ -1,9 +1,7 @@
 import { useMemo } from "react";
-import { useMessages } from "../../cumulus/hooks/use-messages";
-import { createMessageDescriptor } from "../../data/localization-descriptors";
 import { BattleDeckOrderOverlay } from "../../cumulus/screens/battle-overlays/BattleDeckOrderOverlay";
 import type { BattleMutableState, BattleSide } from "../types";
-import { formatSideLabel } from "../ui/format";
+import { tx, txa } from "@trox/runtime";
 
 export type BattleDeckOrderPickerScope = "top-N" | "full";
 
@@ -22,33 +20,75 @@ export function BattleDeckOrderPicker({
   side: BattleSide;
   state: BattleMutableState;
 }) {
-  const t = useMessages();
   const itemsById = useMemo(
-    () => Object.fromEntries(initialOrder.map((id) => {
-      const instance = state.cardInstances[id];
-      return [id, {
-        id,
-        label: instance?.definition.name ?? t("battle-missing-card-instance"),
-        summary: instance === undefined
-          ? id
-          : t("battle-card-order-spark-summary", {
-              subtype: instance.definition.subtype,
-              spark: instance.definition.printedSpark ?? 0,
-            }),
-      }] as const;
-    })),
+    () =>
+      Object.fromEntries(
+        initialOrder.map((id) => {
+          const instance = state.cardInstances[id];
+          return [
+            id,
+            {
+              id,
+              ...(instance === undefined
+                ? {
+                    labelMessage: tx(
+                      "Missing card instance",
+                      "Fallback label in the battle deck-order list when a persisted battle card instance cannot be found.",
+                    ),
+                    authoredSummary: id,
+                  }
+                : {
+                    authoredLabel: instance.definition.name,
+                    summaryMessage: txa(
+                      "{subtype} · Spark {spark}",
+                      {
+                        subtype: instance.definition.subtype,
+                        spark: instance.definition.printedSpark ?? 0,
+                      },
+                      "Secondary detail beneath one card in the battle deck-order list. subtype is the card's authored subtype and remains grammatically opaque; spark is its non-negative printed Spark value.",
+                    ),
+                  }),
+            },
+          ] as const;
+        }),
+      ),
     [initialOrder, state.cardInstances],
   );
 
   return (
     <BattleDeckOrderOverlay
-      title={createMessageDescriptor("battle-deck-order-title", {
-        scope: scopeLabel === "full" ? "full" : "top",
-        side: formatSideLabel(side),
-      })}
-      label={createMessageDescriptor("battle-deck-order-label", {
-        side: formatSideLabel(side),
-      })}
+      title={
+        scopeLabel === "full"
+          ? side === "player"
+            ? tx(
+                "Reorder Player Deck",
+                "Title of the full-deck ordering dialog for the Player side in a locally controlled battle.",
+              )
+            : tx(
+                "Reorder Opponent Deck",
+                "Title of the full-deck ordering dialog for the Opponent side in a locally controlled battle.",
+              )
+          : side === "player"
+            ? tx(
+                "Reorder Revealed Cards of Player Deck",
+                "Title of the partial deck-ordering dialog for revealed cards from the Player side's deck.",
+              )
+            : tx(
+                "Reorder Revealed Cards of Opponent Deck",
+                "Title of the partial deck-ordering dialog for revealed cards from the Opponent side's deck.",
+              )
+      }
+      label={
+        side === "player"
+          ? tx(
+              "Player deck order",
+              "Accessible name for the ordered Player deck card list.",
+            )
+          : tx(
+              "Opponent deck order",
+              "Accessible name for the ordered Opponent deck card list.",
+            )
+      }
       scope={scopeLabel}
       side={side}
       initialOrder={initialOrder}

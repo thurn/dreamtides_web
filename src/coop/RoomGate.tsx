@@ -1,5 +1,4 @@
-import {
-  useCallback,
+import {useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -50,8 +49,7 @@ import { ConfigGateScreen } from "./ConfigGateScreen";
 import { UnreadableRoomScreen } from "./UnreadableRoomScreen";
 import { VersionGateScreen } from "./VersionGateScreen";
 import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScreen";
-import { createMessageDescriptor } from "../data/localization-descriptors";
-import { useMessages } from "../cumulus/hooks/use-messages";
+import { meaning, tx, txa, type LocalizedString } from "@trox/runtime";
 
 // How long to wait for the first log snapshot before treating the room as
 // unreachable/missing. Firebase emits its initial value within a couple of
@@ -135,7 +133,11 @@ type GateState =
   | { status: "versionGate"; roomId: string; genesis: Genesis }
   | { status: "configGate"; roomId: string; genesis: Genesis }
   | { status: "unreadable"; roomId: string }
-  | { status: "error"; message: string };
+  | {
+      status: "error";
+      technicalDetail?: string;
+      detailMessage?: LocalizedString;
+    };
 
 /** Fresh random seed for a new room's genesis. */
 function freshSeed(): string {
@@ -288,7 +290,6 @@ export function RoomGate({
   frontDoorEntry,
   children,
 }: RoomGateProps): ReactNode {
-  const t = useMessages();
   const clientId = useMemo(() => roomScopedClientId(gameId), [gameId]);
   const localContentConfig = useMemo(
     () =>
@@ -370,10 +371,14 @@ export function RoomGate({
     } catch (error) {
       setGateState({
         status: "error",
-        message:
-          error instanceof Error
-            ? /* localization-ignore: raw room diagnostic is rendered in the dedicated technical detail region. */ error.message
-            : t("coop-create-game-error"),
+        ...(error instanceof Error
+          ? { technicalDetail: error.message }
+          : {
+              detailMessage: tx(
+                "Failed to create game.",
+                "Failure detail shown when creating a shared room fails without a technical error message.",
+              ),
+            }),
       });
     }
   }, [db, frontDoorEntry, localContentConfig]);
@@ -460,10 +465,14 @@ export function RoomGate({
     const handleError = (error: unknown): void => {
       setGateState({
         status: "error",
-        message:
-          error instanceof Error
-            ? /* localization-ignore: raw room diagnostic is rendered in the dedicated technical detail region. */ error.message
-            : t("coop-presence-write-error"),
+        ...(error instanceof Error
+          ? { technicalDetail: error.message }
+          : {
+              detailMessage: tx(
+                "Failed to write presence.",
+                "Failure detail shown when the client's shared-room presence cannot be recorded without a technical error message.",
+              ),
+            }),
       });
     };
     try {
@@ -557,11 +566,19 @@ export function RoomGate({
         <ApplicationStateScreen
           view={{
             kind: "loading",
-            title: createMessageDescriptor("coop-joining-game-title"),
-            message: createMessageDescriptor("coop-joining-game-message", {
-              roomId: gateState.roomId,
-            }),
-            busyLabel: createMessageDescriptor("coop-joining-game-busy"),
+            title: tx(
+              meaning("room-joining-title", "Joining Game"),
+              "Loading title while a client joins an existing shared room.",
+            ),
+            message: txa(
+              "Preparing {room_id}.",
+              { room_id: gateState.roomId },
+              "Loading status containing the opaque room identifier of the shared game being prepared.",
+            ),
+            busyLabel: tx(
+              meaning("room-joining-status", "Joining Game"),
+              "Busy status while a client joins an existing shared room.",
+            ),
           }}
         />
       );
@@ -580,9 +597,18 @@ export function RoomGate({
       <ApplicationStateScreen
         view={{
           kind: "roomCreation",
-          title: createMessageDescriptor("coop-creating-game-title"),
-          message: createMessageDescriptor("coop-creating-game-message"),
-          busyLabel: createMessageDescriptor("coop-creating-game-busy"),
+          title: tx(
+            meaning("room-creating-title", "Creating Game"),
+            "Title while a new shared room is being created.",
+          ),
+          message: tx(
+            "We are preparing a shared dream.",
+            "Status while a new shared room is being created.",
+          ),
+          busyLabel: tx(
+            meaning("room-creating-status", "Creating Game"),
+            "Busy status while a new shared room is being created.",
+          ),
         }}
       />
     );
@@ -593,11 +619,19 @@ export function RoomGate({
       <ApplicationStateScreen
         view={{
           kind: "loading",
-          title: createMessageDescriptor("coop-joining-game-title"),
-          message: createMessageDescriptor("coop-loading-game-message", {
-            roomId: gateState.roomId,
-          }),
-          busyLabel: createMessageDescriptor("coop-joining-game-busy"),
+          title: tx(
+            meaning("room-joining-title", "Joining Game"),
+            "Loading title while a client joins an existing shared room.",
+          ),
+          message: txa(
+            "Loading {room_id}.",
+            { room_id: gateState.roomId },
+            "Loading status containing the opaque room identifier of the shared room record being fetched.",
+          ),
+          busyLabel: tx(
+            meaning("room-joining-status", "Joining Game"),
+            "Busy status while a client joins an existing shared room.",
+          ),
         }}
       />
     );
@@ -608,14 +642,22 @@ export function RoomGate({
       <ApplicationStateScreen
         view={{
           kind: "unreachableRoom",
-          title: createMessageDescriptor("coop-game-not-found-title"),
-          message: createMessageDescriptor("coop-game-not-found-message", {
-            roomId: gateState.roomId,
-          }),
+          title: tx(
+            "Game Not Found",
+            "Title when a requested shared room is missing or unreachable.",
+          ),
+          message: txa(
+            "Could not load {room_id}. The game may not exist, or the database is unreachable.",
+            { room_id: gateState.roomId },
+            "Explanation containing the opaque room identifier of a shared game that is missing or unreachable.",
+          ),
           actions: [
             {
               id: "primary",
-              label: createMessageDescriptor("coop-create-new-game-action"),
+              label: tx(
+                "Create New Game",
+                "Action that leaves an unavailable or incompatible room and creates a fresh shared game.",
+              ),
               onPress: () => void handleCreateGame(),
             },
           ],
@@ -628,13 +670,27 @@ export function RoomGate({
     <ApplicationStateScreen
       view={{
         kind: "recoverableError",
-        title: createMessageDescriptor("coop-room-setup-error-title"),
-        message: createMessageDescriptor("coop-room-setup-error-message"),
-        detail: gateState.message,
+        title: tx(
+          "Something Went Wrong",
+          "Title for a generic failure while setting up a shared room.",
+        ),
+        message: tx(
+          "The game could not finish its room setup.",
+          "Explanation for a generic failure while setting up a shared room.",
+        ),
+        ...(gateState.technicalDetail === undefined
+          ? {}
+          : { detail: gateState.technicalDetail }),
+        ...(gateState.detailMessage === undefined
+          ? {}
+          : { detailMessage: gateState.detailMessage }),
         actions: [
           {
             id: "primary",
-            label: createMessageDescriptor("coop-try-again-action"),
+            label: tx(
+              "Try Again",
+              "Action that retries shared-room creation or setup.",
+            ),
             onPress: () => void handleCreateGame(),
           },
         ],

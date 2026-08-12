@@ -15,7 +15,7 @@ function CardStatOrbDemo(args: Record<string, unknown>) {
         typeof args.numberSizeVar === "string" ? args.numberSizeVar : "22px"
       }
       numberCapPx={typeof args.numberCapPx === "number" ? args.numberCapPx : 22}
-      ariaLabel={
+      authoredAriaLabel={
         typeof args.ariaLabel === "string" ? args.ariaLabel : undefined
       }
       changeBadge={

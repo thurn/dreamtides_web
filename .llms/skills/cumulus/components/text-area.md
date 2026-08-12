@@ -14,13 +14,17 @@ The reusable multiline authoring field on Cumulus control chrome, with explicit 
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `label` | `string` | yes | — | Visible field label. |
+| `label` | `LocalizedString` | no | — | Visible field label. |
+| `authoredLabel` | `string` | no | — | Visible label supplied by canonical authored or developer-only copy. |
 | `value` | `string` | yes | — | Controlled multiline text. |
 | `onChange` | `(value: string) => void` | yes | — | Reports each local text edit. |
 | `onCommit` | `((value: string) => void)` | no | — | Commits the draft on blur or Command/Ctrl+Enter. |
-| `placeholder` | `string` | no | — | Optional placeholder shown while empty. |
-| `supportingText` | `string` | no | — | Supporting copy beneath the control. |
-| `error` | `string` | no | — | Validation copy; also marks the textarea invalid. |
+| `placeholder` | `LocalizedString` | no | — | Optional placeholder shown while empty. |
+| `authoredPlaceholder` | `string` | no | — |  |
+| `supportingText` | `LocalizedString` | no | — | Supporting copy beneath the control. |
+| `authoredSupportingText` | `string` | no | — |  |
+| `error` | `LocalizedString` | no | — | Validation copy; also marks the textarea invalid. |
+| `authoredError` | `string` | no | — |  |
 | `testId` | `string` | no | — | Stable test id for product QA. |
 | `inputRef` | `Ref<HTMLTextAreaElement>` | no | — | Optional ref to the native textarea. |
 

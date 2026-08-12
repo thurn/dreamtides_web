@@ -14,7 +14,6 @@ import { useRef, useState, type CSSProperties } from "react";
 import { assetUrl } from "../../../runtime/asset-url";
 import type { DreamAvatarPortraitFocus } from "../../../types/content";
 import { token } from "../../primitives/tokens";
-import { useMessages } from "../../hooks/use-messages";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
@@ -22,6 +21,8 @@ import { artRef, type ArtRef } from "../../primitives/art";
 import { richText } from "../card/rich-text";
 import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
 import type { RevealSpec } from "../../internal/reveal/model";
+import { select, when, otherwise, txa } from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** The minimal dreamAvatar shape a portrait needs: which art to load and the
  * name/title that back the alt text and the fallback monogram. */
@@ -43,7 +44,8 @@ export const DEFAULT_DREAM_AVATAR_PORTRAIT_FOCUS: DreamAvatarPortraitFocus = {
 export function dreamAvatarPortraitFocus(
   dreamAvatar: DreamAvatarVisual,
 ): DreamAvatarPortraitFocus {
-  const focus = dreamAvatar.portraitFocus ?? DEFAULT_DREAM_AVATAR_PORTRAIT_FOCUS;
+  const focus =
+    dreamAvatar.portraitFocus ?? DEFAULT_DREAM_AVATAR_PORTRAIT_FOCUS;
   return {
     x: Math.max(0, Math.min(1, focus.x)),
     y: Math.max(0, Math.min(1, focus.y)),
@@ -73,10 +75,24 @@ export interface DreamAvatarPortraitProps {
 }
 
 /** One reveal contract shared by every DreamAvatar surface. */
-export function dreamAvatarRevealSpec(dreamAvatar: DreamAvatarVisual, abilityText: string, image: ArtRef = artRef.dreamAvatar(dreamAvatar.imageNumber)): RevealSpec {
+export function dreamAvatarRevealSpec(
+  dreamAvatar: DreamAvatarVisual,
+  abilityText: string,
+  image: ArtRef = artRef.dreamAvatar(dreamAvatar.imageNumber),
+): RevealSpec {
   const ability = abilityText.trim();
   return {
-    primary: { kind: "infoCard", card: { variant: "fullBleed", image, imageCrop: "top", title: dreamAvatar.name, subtitle: dreamAvatar.title, body: ability ? richText.rules(ability) : undefined } },
+    primary: {
+      kind: "infoCard",
+      card: {
+        variant: "fullBleed",
+        image,
+        imageCrop: "top",
+        title: dreamAvatar.name,
+        subtitle: dreamAvatar.title,
+        body: ability ? richText.rules(ability) : undefined,
+      },
+    },
     secondaries: rulesTextDefinitionCards(ability, "dreamAvatar"),
   };
 }
@@ -176,13 +192,16 @@ function DreamAvatarPortraitSurface({
   dreamAvatar,
   variant = "panel",
 }: Omit<DreamAvatarPortraitProps, "profile" | "onPress" | "unavailable">) {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const [broken, setBroken] = useState(false);
-  const alt = t("dream-avatar-art-accessible-name", {
-    avatarName: dreamAvatar.name,
-    avatarTitle: dreamAvatar.title,
-    hasTitle: dreamAvatar.title === "" ? "no" : "yes",
-  });
+  const alt = txa(
+    select(dreamAvatar.title === "" ? "no" : "yes", [
+      when("yes", "{avatar_name}, {avatar_title}"),
+      otherwise("{avatar_name}"),
+    ]),
+    { avatar_name: dreamAvatar.name, avatar_title: dreamAvatar.title },
+    'Accessible name for Dream Avatar artwork. avatar_name is the canonical avatar display name and avatar_title is its authored epithet; neither has modeled grammatical gender. has_title is "yes" when the epithet is present and "no" when the artwork should be identified by the name alone.',
+  );
   const focus = dreamAvatarPortraitFocus(dreamAvatar);
 
   return (
@@ -202,7 +221,7 @@ function DreamAvatarPortraitSurface({
       ) : (
         <img
           src={dreamAvatarCutoutSrc(dreamAvatar.imageNumber)}
-          alt={alt}
+          alt={resolve(alt)}
           style={imageStyle(variant, focus)}
           onError={() => {
             setBroken(true);
@@ -214,26 +233,72 @@ function DreamAvatarPortraitSurface({
 }
 
 /** DreamAvatar art, optionally promoted to a self-revealing semantic profile. */
-export function DreamAvatarPortrait({ profile, onPress, unavailable = false, ...visual }: DreamAvatarPortraitProps) {
+export function DreamAvatarPortrait({
+  profile,
+  onPress,
+  unavailable = false,
+  ...visual
+}: DreamAvatarPortraitProps) {
   if (profile === undefined) return <DreamAvatarPortraitSurface {...visual} />;
-  return <DreamAvatarProfilePortrait visual={visual} profile={profile} onPress={onPress} unavailable={unavailable} />;
+  return (
+    <DreamAvatarProfilePortrait
+      visual={visual}
+      profile={profile}
+      onPress={onPress}
+      unavailable={unavailable}
+    />
+  );
 }
 
-function DreamAvatarProfilePortrait({ visual, profile, onPress, unavailable }: {
+function DreamAvatarProfilePortrait({
+  visual,
+  profile,
+  onPress,
+  unavailable,
+}: {
   visual: Omit<DreamAvatarPortraitProps, "profile" | "onPress" | "unavailable">;
   profile: NonNullable<DreamAvatarPortraitProps["profile"]>;
   onPress?: () => void;
   unavailable: boolean;
 }) {
   const binding = useRevealSource({
-    identity: { entityType: "dreamAvatar", entityId: revealEntityId("dreamAvatar", profile.id) },
+    identity: {
+      entityType: "dreamAvatar",
+      entityId: revealEntityId("dreamAvatar", profile.id),
+    },
     spec: dreamAvatarRevealSpec(visual.dreamAvatar, profile.ability),
     onActivate: unavailable ? undefined : onPress,
   });
   const lastPointerType = useRef<string | null>(null);
   const pointerDown = binding.sourceProps.onPointerDown;
   return (
-    <Pressable as="span" ref={binding.ref} {...binding.sourceProps} role={onPress === undefined ? undefined : "button"} tabIndex={0} aria-disabled={unavailable || undefined} data-dream-avatar-source={profile.id} onPointerDown={(event) => { lastPointerType.current = event.pointerType; pointerDown?.(event); }} onClick={() => { if (!unavailable && lastPointerType.current !== "touch") onPress?.(); }} onKeyDown={(event) => { if (!unavailable && onPress !== undefined && (event.key === "Enter" || event.key === " ")) { event.preventDefault(); onPress(); } }} style={{ ...binding.sourceProps.style, display: "flex", width: "100%" }}>
+    <Pressable
+      as="span"
+      ref={binding.ref}
+      {...binding.sourceProps}
+      role={onPress === undefined ? undefined : "button"}
+      tabIndex={0}
+      aria-disabled={unavailable || undefined}
+      data-dream-avatar-source={profile.id}
+      onPointerDown={(event) => {
+        lastPointerType.current = event.pointerType;
+        pointerDown?.(event);
+      }}
+      onClick={() => {
+        if (!unavailable && lastPointerType.current !== "touch") onPress?.();
+      }}
+      onKeyDown={(event) => {
+        if (
+          !unavailable &&
+          onPress !== undefined &&
+          (event.key === "Enter" || event.key === " ")
+        ) {
+          event.preventDefault();
+          onPress();
+        }
+      }}
+      style={{ ...binding.sourceProps.style, display: "flex", width: "100%" }}
+    >
       <DreamAvatarPortraitSurface {...visual} />
     </Pressable>
   );

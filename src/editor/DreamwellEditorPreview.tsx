@@ -532,7 +532,7 @@ export function DreamwellEditorPreview({
                 sizeVar="9cqw"
                 numberSizeVar="6.4cqw"
                 numberCapPx={energyOrbCapPx}
-                ariaLabel={`${String(card.energyAdded)} energy added`}
+                authoredAriaLabel={`${String(card.energyAdded)} energy added`}
               />
             );
             return slots?.energy ? slots.energy(energyNode) : energyNode;

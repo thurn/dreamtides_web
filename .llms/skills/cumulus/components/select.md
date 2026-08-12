@@ -28,7 +28,9 @@ The menu opens above or below according to the available viewport space and scro
 | `full` | `boolean` | no | `false` | Stretch the trigger to fill the container width. |
 | `align` | `"start" \| "end"` | no | `start` | Which trigger edge the menu aligns to. 'start' (default) opens flush to the leading edge; 'end' opens flush to the trailing edge — use it when the Select sits against the right side of a bar so the menu stays on-screen. |
 | `ariaLabel` | `LocalizedString` | no | — | Accessible label for the trigger. |
+| `authoredAriaLabel` | `string` | no | — | Accessible label supplied by canonical authored or developer-only copy. |
 | `placeholder` | `LocalizedString` | no | — | Text shown when `value` does not match an option, for action-picker controls. |
+| `authoredPlaceholder` | `string` | no | — | Placeholder supplied by canonical authored or developer-only copy. |
 
 ### `options`: the `SelectOption` model
 

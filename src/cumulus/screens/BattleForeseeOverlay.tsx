@@ -1,4 +1,4 @@
-import { localizationTodo } from "@trox/runtime";
+import { meaning, txa, tx } from "@trox/runtime";
 import {
   useRef,
   useState,
@@ -17,7 +17,7 @@ import { GLYPHS } from "../primitives/glyph";
 import { POINTER_MOVEMENT_SLOP_PX } from "../primitives/pointer-gesture";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "./use-is-desktop";
-import { useMessages } from "../hooks/use-messages";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 /** Card width and the minimum empty travel lane before the Void indicator. */
 const FORESEE_CARD_WIDTH_DESKTOP_PX = 180;
@@ -86,7 +86,7 @@ export function BattleForeseeOverlay({
   view,
   onConfirm,
 }: BattleForeseeOverlayProps): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const isDesktop = useIsDesktop();
   const cardWidthPx = isDesktop
     ? FORESEE_CARD_WIDTH_DESKTOP_PX
@@ -126,16 +126,18 @@ export function BattleForeseeOverlay({
     if (count <= minimumCount) return;
     const removedCardId = allCardIds[count - 1];
     if (removedCardId === undefined) return;
-    setOrderedCardIds((current) => current.filter((id) => id !== removedCardId));
+    setOrderedCardIds((current) =>
+      current.filter((id) => id !== removedCardId),
+    );
     setVoidCardIds((current) => current.filter((id) => id !== removedCardId));
     setCount((current) => current - 1);
   };
 
   const moveToVoid = (battleCardId: string): void => {
     setOrderedCardIds((current) => current.filter((id) => id !== battleCardId));
-    setVoidCardIds((current) => current.includes(battleCardId)
-      ? current
-      : [...current, battleCardId]);
+    setVoidCardIds((current) =>
+      current.includes(battleCardId) ? current : [...current, battleCardId],
+    );
   };
 
   const moveToDeck = (battleCardId: string, beforeCardId?: string): void => {
@@ -301,8 +303,7 @@ export function BattleForeseeOverlay({
             event.currentTarget.style.cursor = "grabbing";
             window.dispatchEvent(new Event("dragstart"));
           }
-          event.currentTarget.style.transform =
-            `translate3d(${String(x)}px, ${String(y)}px, 0)`;
+          event.currentTarget.style.transform = `translate3d(${String(x)}px, ${String(y)}px, 0)`;
         }}
         onPointerUpCapture={(event) => {
           finishPointerDrag(event, true);
@@ -345,7 +346,11 @@ export function BattleForeseeOverlay({
 
   return (
     <GlassDialog
-      title={localizationTodo(t("battle-foresee-title", { count }))}
+      title={txa(
+          "Foresee {count}",
+          { count },
+          "Title of the Foresee overlay. count is the positive number of cards the player may inspect and reorder.",
+        )}
       desktopCenterTarget="battlefield"
     >
       <div
@@ -369,7 +374,10 @@ export function BattleForeseeOverlay({
                 textTransform: "uppercase",
               }}
             >
-              {t("battle-foresee-triggered-by")}
+              {resolve(tx(
+                "Triggered By",
+                "Player-facing message for the battle foresee triggered by interface state.",
+              ))}
             </span>
             <div style={{ width: sourceCardWidthPx, maxWidth: "100%" }}>
               <DreamwellCard model={view.sourceDreamwellCard} />
@@ -388,7 +396,10 @@ export function BattleForeseeOverlay({
           <IconButton
             glyph={GLYPHS.minus}
             size="sm"
-            label={localizationTodo(t("battle-foresee-less-action"))}
+            label={tx(
+                "Foresee 1 fewer",
+                "Player-facing message for the battle foresee less action interface state.",
+              )}
             placement="onGlass"
             disabled={count <= minimumCount}
             onPress={decrementCount}
@@ -396,7 +407,10 @@ export function BattleForeseeOverlay({
           <IconButton
             glyph={GLYPHS.plus}
             size="sm"
-            label={localizationTodo(t("battle-foresee-more-action"))}
+            label={tx(
+                "Foresee 1 more",
+                "Player-facing message for the battle foresee more action interface state.",
+              )}
             placement="onGlass"
             disabled={count >= allCardIds.length}
             onPress={incrementCount}
@@ -415,20 +429,24 @@ export function BattleForeseeOverlay({
               minWidth: "max-content",
             }}
           >
-            <div
-              data-foresee-indicator="deck"
-              style={indicatorStyle}
-            >
-              {t("battle-foresee-deck-destination")}
+            <div data-foresee-indicator="deck" style={indicatorStyle}>
+              {resolve(tx(
+                "Deck",
+                "Player-facing message for the battle foresee deck destination interface state.",
+              ))}
             </div>
 
             <div
               data-foresee-deck-stack=""
-              style={{ display: "flex", alignItems: "center", flex: "0 0 auto" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flex: "0 0 auto",
+              }}
             >
-              {orderedCardIds.map((battleCardId, index) => (
-                renderCard(battleCardId, "deck", index, orderedCardIds.length)
-              ))}
+              {orderedCardIds.map((battleCardId, index) =>
+                renderCard(battleCardId, "deck", index, orderedCardIds.length),
+              )}
             </div>
 
             <div
@@ -443,11 +461,15 @@ export function BattleForeseeOverlay({
 
             <div
               data-foresee-void-stack=""
-              style={{ display: "flex", alignItems: "center", flex: "0 0 auto" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flex: "0 0 auto",
+              }}
             >
-              {voidCardIds.map((battleCardId, index) => (
-                renderCard(battleCardId, "void", index, voidCardIds.length)
-              ))}
+              {voidCardIds.map((battleCardId, index) =>
+                renderCard(battleCardId, "void", index, voidCardIds.length),
+              )}
             </div>
 
             <div
@@ -455,22 +477,30 @@ export function BattleForeseeOverlay({
               data-foresee-zone="void"
               style={indicatorStyle}
             >
-              {t("battle-foresee-void-destination")}
+              {resolve(tx(
+                meaning("foresee-void-destination", "Void"),
+                "Player-facing message for the battle foresee void destination interface state.",
+              ))}
             </div>
           </div>
         </div>
 
         <div style={{ display: "flex", justifyContent: "center" }}>
           <GlassButton
-            label={t("site-confirm")}
+            label={tx(
+              "Confirm",
+              "Player-facing message for the site confirm interface state.",
+            )}
             placement="onGlass"
             variant="accent"
             testId="battle-foresee-confirm"
-            onPress={() => onConfirm({
-              viewedCardIds: allCardIds.slice(0, count),
-              orderedCardIds,
-              voidCardIds,
-            })}
+            onPress={() =>
+              onConfirm({
+                viewedCardIds: allCardIds.slice(0, count),
+                orderedCardIds,
+                voidCardIds,
+              })
+            }
           />
         </div>
       </div>
@@ -478,21 +508,11 @@ export function BattleForeseeOverlay({
   );
 }
 
-function distanceSquaredToRect(
-  x: number,
-  y: number,
-  bounds: DOMRect,
-): number {
-  const deltaX = x < bounds.left
-    ? bounds.left - x
-    : x > bounds.right
-      ? x - bounds.right
-      : 0;
-  const deltaY = y < bounds.top
-    ? bounds.top - y
-    : y > bounds.bottom
-      ? y - bounds.bottom
-      : 0;
+function distanceSquaredToRect(x: number, y: number, bounds: DOMRect): number {
+  const deltaX =
+    x < bounds.left ? bounds.left - x : x > bounds.right ? x - bounds.right : 0;
+  const deltaY =
+    y < bounds.top ? bounds.top - y : y > bounds.bottom ? y - bounds.bottom : 0;
   return deltaX * deltaX + deltaY * deltaY;
 }
 

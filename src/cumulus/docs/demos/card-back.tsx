@@ -1,3 +1,4 @@
+import { localizationTodo } from "@trox/runtime";
 import { CardBack } from "../../components/battle/CardBack";
 import type { CumulusComponent } from "../registry";
 
@@ -5,7 +6,7 @@ function CardBackDemo(args: Record<string, unknown>) {
   const label = typeof args.label === "string" ? args.label : "Face-down card";
   return (
     <div style={{ width: 112 }}>
-      <CardBack label={label} />
+      <CardBack label={localizationTodo(label)} />
     </div>
   );
 }

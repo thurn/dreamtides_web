@@ -28,7 +28,8 @@ import {
 } from "./DreamsignReplacementDialog";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
-import { useMessages } from "../hooks/use-messages";
+import { tx, txa } from "@trox/runtime";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 /** A generated site reward ready to animate and grant on the dreamscape. */
 export type InlineRewardView =
@@ -91,7 +92,7 @@ export function DreamscapeScreen({
   onDeclineReward,
   onGuideDialogueShown,
 }: DreamscapeScreenProps) {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const [collectingSiteId, setCollectingSiteId] = useState<string | null>(null);
   const guideDialogueVisible = useDelayedTutorialSpeechBubbleVisibility(
@@ -291,23 +292,25 @@ export function DreamscapeScreen({
           key={collectingModel.site.id}
           role="status"
           aria-live="polite"
-          aria-label={
+          aria-label={resolve(
             collectingReward.kind === "dreamsign"
-              ? t("dreamscape-reward-status", {
-                  kind: "dreamsign",
-                  state: collectingReward.requiresReplacement
-                    ? "found"
-                    : "gained",
-                  dreamsignName: collectingReward.dreamsign.name,
-                  amount: 0,
-                })
-              : t("dreamscape-reward-status", {
-                  kind: "essence",
-                  state: "gained",
-                  dreamsignName: "",
-                  amount: collectingReward.amount,
-                })
-          }
+              ? collectingReward.requiresReplacement
+                ? txa(
+                    "Found dreamsign: {dreamsign_name}",
+                    { dreamsign_name: collectingReward.dreamsign.name },
+                    "Accessible reward status when an authored Dreamsign is found and requires replacement. dreamsign_name is canonical authored content.",
+                  )
+                : txa(
+                    "Gained dreamsign: {dreamsign_name}",
+                    { dreamsign_name: collectingReward.dreamsign.name },
+                    "Accessible reward status when an authored Dreamsign is gained. dreamsign_name is canonical authored content.",
+                  )
+              : txa(
+                  "Gained {amount} essence",
+                  { amount: collectingReward.amount },
+                  "Accessible reward status when Essence is gained. amount is the non-negative Essence quantity.",
+                ),
+          )}
           data-essence-collection={
             collectingModel.site.type === "Essence"
               ? collectingModel.site.id
@@ -394,11 +397,11 @@ export function DreamscapeScreen({
                   whiteSpace: "nowrap",
                 }}
               >
-                {t("dreamscape-reward-dreamsign-label", {
-                  state: collectingReward.requiresReplacement
-                    ? "found"
-                    : "gained",
-                })}
+                {resolve(
+                  collectingReward.requiresReplacement
+                    ? tx("Dreamsign found", "Visible status when a Dreamsign reward requires replacement.")
+                    : tx("Dreamsign gained", "Visible status when a Dreamsign reward is collected."),
+                )}
               </motion.div>
             </>
           ) : (
@@ -425,8 +428,14 @@ export function DreamscapeScreen({
           view={view.replacement}
           onReplace={onReplaceDreamsign}
           onCancel={onDeclineReward}
-          cancelLabel={t("dreamsign-replacement-keep-current-action")}
-          closeLabel={t("dreamsign-replacement-decline-reward-action")}
+          cancelLabel={tx(
+            "Keep Current Dreamsigns",
+            "Player-facing message for the dreamsign replacement keep current action interface state.",
+          )}
+          closeLabel={tx(
+            "Decline Dreamsign reward",
+            "Player-facing message for the dreamsign replacement decline reward action interface state.",
+          )}
         />
       )}
     </div>

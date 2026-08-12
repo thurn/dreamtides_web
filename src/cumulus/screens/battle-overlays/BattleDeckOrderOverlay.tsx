@@ -1,4 +1,4 @@
-import { localizationTodo } from "@trox/runtime";
+import { meaning, tx, type LocalizedString } from "@trox/runtime";
 import { useEffect, useRef, useState, type ReactElement } from "react";
 import {
   CardOrderEditor,
@@ -7,13 +7,10 @@ import {
 import { GlassButton } from "../../components/controls/GlassButton";
 import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { token } from "../../primitives/tokens";
-import { useMessages } from "../../hooks/use-messages";
-import type { FluentMessageDescriptor } from "../../../data/localization-messages";
-import { formatMessageDescriptor } from "../../hooks/use-messages";
 
 export interface BattleDeckOrderOverlayProps {
-  readonly title: string | FluentMessageDescriptor;
-  readonly label: string | FluentMessageDescriptor;
+  readonly title: LocalizedString;
+  readonly label: LocalizedString;
   readonly scope: "top-N" | "full";
   readonly side: string;
   readonly initialOrder: readonly string[];
@@ -33,12 +30,9 @@ export function BattleDeckOrderOverlay({
   onCancel,
   onConfirm,
 }: BattleDeckOrderOverlayProps): ReactElement {
-  const t = useMessages();
   const [draftOrder, setDraftOrder] = useState<readonly string[]>(() => [
     ...initialOrder,
   ]);
-  const titleText = typeof title === "string" ? title : formatMessageDescriptor(t, title);
-  const labelText = typeof label === "string" ? label : formatMessageDescriptor(t, label);
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const items = draftOrder.flatMap((id) => {
     const item = itemsById[id];
@@ -66,9 +60,15 @@ export function BattleDeckOrderOverlay({
 
   return (
     <GlassDialog
-      title={localizationTodo(titleText)}
-      subtitle={localizationTodo(t("battle-deck-order-subtitle"))}
-      closeLabel={localizationTodo(t("battle-deck-order-close-action"))}
+      title={title}
+      subtitle={tx(
+        "Top to bottom. Confirm commits one battle command.",
+        "Instruction beneath the battle deck-order title. The player arranges cards from the top of the deck to the bottom before committing one battle command.",
+      )}
+      closeLabel={tx(
+        "Cancel deck ordering",
+        "Accessible name for the command that closes battle deck ordering without committing it.",
+      )}
       onClose={onCancel}
     >
       <div
@@ -78,7 +78,7 @@ export function BattleDeckOrderOverlay({
         style={{ display: "grid", gap: token("--space-m") }}
       >
         <CardOrderEditor
-          label={labelText}
+          label={label}
           items={items}
           placement="onGlass"
           onOrderChange={setDraftOrder}
@@ -91,13 +91,19 @@ export function BattleDeckOrderOverlay({
           }}
         >
           <GlassButton
-            label={t("battle-deck-order-cancel-action")}
+            label={tx(
+              meaning("deck-order-cancel", "Cancel"),
+              "Player-facing message for the battle deck order cancel action interface state.",
+            )}
             placement="onGlass"
             testId="battle-deck-order-cancel"
             onPress={onCancel}
           />
           <GlassButton
-            label={t("battle-deck-order-confirm-action")}
+            label={tx(
+              "Confirm Order",
+              "Player-facing message for the battle deck order confirm action interface state.",
+            )}
             placement="onGlass"
             variant="accent"
             testId="battle-deck-order-confirm"

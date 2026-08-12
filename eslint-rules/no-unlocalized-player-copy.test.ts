@@ -27,7 +27,7 @@ tester.run("no-unlocalized-player-copy", rule, {
     },
     {
       filename: "src/cumulus/screens/FixtureScreen.tsx",
-      code: `<Button label={t("fixture-action")} title={createMessageDescriptor("fixture-title")} />`,
+      code: `<Button label={tx("Fixture action")} title={tx("Fixture title")} />`,
     },
     {
       filename: "src/cumulus/screens/FixtureScreen.tsx",

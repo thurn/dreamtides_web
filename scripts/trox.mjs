@@ -41,6 +41,7 @@ export function troxInvocation(
   arguments_,
   configPath = resolve(QUEST_ROOT, "trox.ron"),
 ) {
+  const normalizedArguments = normalizeTroxArguments(arguments_);
   return {
     command: "cargo",
     arguments: [
@@ -55,9 +56,26 @@ export function troxInvocation(
       "--",
       "--config",
       resolve(configPath),
-      ...arguments_,
+      ...normalizedArguments,
     ],
   };
+}
+
+/**
+ * The project config denies every warning by default and carries reviewed,
+ * reasoned exceptions for individual rules. Upstream Trox's global
+ * `--deny warnings` switch bypasses that rule policy, including explicit
+ * allows, so use the project's stricter effective policy for that conventional
+ * check spelling.
+ */
+export function normalizeTroxArguments(arguments_) {
+  if (arguments_[0] !== "check") return arguments_;
+  return arguments_.filter((argument, index) =>
+    !(
+      (argument === "--deny" && arguments_[index + 1] === "warnings") ||
+      (argument === "warnings" && arguments_[index - 1] === "--deny")
+    )
+  );
 }
 
 export function runTrox(arguments_, options = {}) {

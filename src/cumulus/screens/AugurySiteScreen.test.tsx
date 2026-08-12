@@ -3,12 +3,12 @@
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { localizationTodo } from "@trox/runtime";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { artRef } from "../primitives/art";
 import { resolveColor } from "../primitives/color";
 import { GLYPHS } from "../primitives/glyph";
-import { createMessageDescriptor } from "../../data/localization-descriptors";
 import { CumulusRoot } from "../CumulusRoot";
 import {
   AugurySiteScreen,
@@ -549,7 +549,7 @@ describe("AugurySiteScreen", () => {
     const container = mount(
       <AugurySiteScreen
         view={view()}
-        onChoose={() => ({ ok: false, message: createMessageDescriptor("augury-error-visions-shifted") })}
+        onChoose={() => ({ ok: false, message: localizationTodo("The visions shifted. Choose again.") })}
         onClose={() => undefined}
       />,
     );

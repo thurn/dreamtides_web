@@ -4,6 +4,7 @@ import type { CardTransfigurationDisplay } from "../../../runtime/transfiguratio
 import type { InfoCardProps, InfoCardVariant } from "../../components/overlay/InfoCard";
 import type { GameCardSelection } from "../../components/card/CardView";
 import type { Glyph } from "../../primitives/glyph";
+import type { LocalizedString } from "@trox/runtime";
 
 export interface RevealSourceIdentity {
   readonly entityType: string;
@@ -20,8 +21,13 @@ export type RevealInfoCardModel = Readonly<InfoCardProps>;
 
 export interface RevealGalleryActionModel {
   readonly glyph: Glyph;
-  readonly label: string;
+  readonly label?: LocalizedString;
+  readonly authoredLabel?: string;
 }
+
+export type RevealDescriptionUnit =
+  | { readonly kind: "message"; readonly message: LocalizedString }
+  | { readonly kind: "authored"; readonly text: string };
 
 export interface RevealGameCard {
   readonly kind: "gameCard";
@@ -44,7 +50,8 @@ export type RevealCard =
   | {
       /** The mounted source already contains the complete primary content. */
       readonly kind: "source";
-      readonly description: string;
+      readonly authoredDescription?: string;
+      readonly descriptionMessage?: LocalizedString;
     }
   | RevealGameCard
   | { readonly kind: "galleryAction"; readonly action: RevealGalleryActionModel }

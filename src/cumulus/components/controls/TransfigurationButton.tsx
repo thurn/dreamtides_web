@@ -8,9 +8,9 @@ import { GLYPHS } from "../../primitives/glyph";
 import type { TransfigurationFormDefinition } from "../../../types/transfiguration-data";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
-import { useMessages } from "../../hooks/use-messages";
 import { EssenceValue } from "../hud/EssenceValue";
 import { StandaloneGlyph } from "./StandaloneGlyph";
+import { exact, one, other, plural, txa } from "@trox/runtime";
 
 /** Player-facing data for one offered transfiguration form. */
 export interface TransfigurationButtonModel {
@@ -61,7 +61,6 @@ export function TransfigurationButton({
   onPress,
   testId,
 }: TransfigurationButtonProps) {
-  const t = useMessages();
   const canSelect = form.affordable && !disabled;
   const glyph = GLYPHS[form.presentation.glyph];
   const accent = form.presentation.accentColor;
@@ -75,10 +74,18 @@ export function TransfigurationButton({
       role="radio"
       aria-checked={selected}
       aria-description={form.presentation.description}
-      aria-label={t("transfiguration-form-choice", {
-        formName: form.presentation.name,
-        essenceCost: form.essenceCost,
-      })}
+      ariaLabelMessage={txa(
+        plural(form.essenceCost, [
+          exact(0, "{form_name}, free"),
+          one("{form_name}, {essence_cost} Essence"),
+          other("{form_name}, {essence_cost} Essence"),
+        ]),
+        {
+          form_name: form.presentation.name,
+          essence_cost: form.essenceCost,
+        },
+        "Accessible name for a selectable Transfiguration form and its price. form_name is the authored catalog name; essence_cost is a non-negative integer. Exact zero describes a free choice; positive values share the same wording because Essence is a game-resource name rather than a count noun here.",
+      )}
       disabled={!canSelect}
       data-testid={testId}
       onClick={canSelect ? () => onPress(form.type) : undefined}

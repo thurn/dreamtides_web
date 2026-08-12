@@ -1,7 +1,7 @@
 // InfoCard's public surface is visual content only.
 
 import * as React from "react";
-import { renderToStaticMarkup } from "react-dom/server";
+import { renderToStaticMarkup as renderReactToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { artRef } from "../../primitives/art";
 import { GLYPHS } from "../../primitives/glyph";
@@ -16,6 +16,13 @@ import {
   infoCardTextScale,
   infoCardWidth,
 } from "./InfoCard";
+import { TroxLocalizationProvider } from "../../../runtime/localization/context";
+
+function renderToStaticMarkup(node: React.ReactNode): string {
+  return renderReactToStaticMarkup(
+    React.createElement(TroxLocalizationProvider, null, node),
+  );
+}
 
 const SUBSTITUTED_RULES_SYMBOL_PATTERN = /[●✦⍏⍟☾⧗❖]/u;
 

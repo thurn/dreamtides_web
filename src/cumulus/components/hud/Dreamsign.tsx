@@ -19,7 +19,7 @@ import { Pressable } from "../../primitives/Pressable";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
 import { token } from "../../primitives/tokens";
-import { useMessages } from "../../hooks/use-messages";
+import { txa } from "@trox/runtime";
 
 /** The dreamsign object's own drop-shadow + violet glow (its material, not a
  * legibility overlay) — a faithfully-copied literal with no token equivalent.
@@ -99,7 +99,6 @@ export function Dreamsign({
   unavailable = false,
   variant = "flat",
 }: DreamsignProps): React.ReactElement {
-  const t = useMessages();
   const [imageBroken, setImageBroken] = React.useState(false);
   const showImage = Boolean(dreamsign.imageName) && !imageBroken;
   const imgAlt = dreamsign.imageAlt ?? dreamsign.name;
@@ -153,9 +152,11 @@ export function Dreamsign({
       aria-disabled={unavailable || undefined}
       data-testid={testid}
       data-dreamsign-id={dreamsignId}
-      aria-label={t("dreamsign-object-accessible-name", {
-        dreamsignName: dreamsign.name,
-      })}
+      ariaLabelMessage={txa(
+        "Dreamsign: {dreamsign_name}",
+        { dreamsign_name: dreamsign.name },
+        "Accessible name for an interactive Dreamsign object. dreamsign_name is its canonical authored display name and has unknown grammatical gender.",
+      )}
       onPointerDown={(event) => {
         lastPointerType.current = event.pointerType;
         pointerDown?.(event);

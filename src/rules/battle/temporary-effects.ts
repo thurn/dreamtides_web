@@ -8,4 +8,3 @@ export function hasTemporaryReclaimEligibility(
   const grant = instance.status.temporaryReclaimUntilEnding;
   return grant?.activeSide === state.activeSide && grant.turnNumber === state.turnNumber;
 }
-

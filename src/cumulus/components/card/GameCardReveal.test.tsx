@@ -593,7 +593,9 @@ describe("GameCard reveal contract", () => {
     expect(surface?.style.aspectRatio).toBe("1 / 1");
     expect(surface?.style.borderRadius).toBe("var(--cv-radius)");
     expect(surface?.style.getPropertyValue("--cv-radius")).toBe("3.6%");
-    expect(surface?.textContent).toBe("3");
+    expect(
+      surface?.querySelector("[data-card-stat-value]")?.textContent,
+    ).toBe("3");
     expect(surface?.querySelector('[data-card-energy-anchor]')).toBeNull();
     expect(surface?.querySelector('[data-testid="card-type-line"]')).toBeNull();
     expect(spark?.style.width).toBe(

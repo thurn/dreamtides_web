@@ -23,8 +23,8 @@ The fixed, safe-area-aware short-lived warning surface for structured player-fac
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `title` | `string` | yes |  |
-| `message` | `string` | no |  |
+| `title` | `LocalizedString` | yes |  |
+| `message` | `LocalizedString` | no |  |
 
 ## Usage
 

@@ -3,13 +3,13 @@
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { localizationTodo } from "@trox/runtime";
 import {
   ApplicationStateScreen,
   type ApplicationStateView,
 } from "./ApplicationStateScreen";
-import { createMessageDescriptor } from "../../data/localization-descriptors";
-
-const COPY = createMessageDescriptor("application-retry-action");
+import { CumulusRoot } from "../CumulusRoot";
+const COPY = localizationTodo("Synthetic application-state copy");
 
 let container: HTMLDivElement;
 let root: Root;
@@ -18,7 +18,13 @@ function mount(view: ApplicationStateView): void {
   container = document.createElement("div");
   document.body.append(container);
   root = createRoot(container);
-  act(() => root.render(<ApplicationStateScreen view={view} />));
+  act(() =>
+    root.render(
+      <CumulusRoot>
+        <ApplicationStateScreen view={view} />
+      </CumulusRoot>,
+    ),
+  );
 }
 
 beforeEach(() => {
@@ -57,7 +63,13 @@ describe("ApplicationStateScreen", () => {
       kind: "contentConfigGate",
       title: COPY,
       message: COPY,
-      comparison: [{ label: COPY, expected: "Room", actual: "Local", differs: true }],
+      comparison: [{
+        id: "fixture",
+        label: COPY,
+        expected: { kind: "raw", value: "Room" },
+        actual: { kind: "raw", value: "Local" },
+        differs: true,
+      }],
       actions: [{ id: "primary", label: COPY, onPress }],
     });
     expect(container.querySelector("[data-application-state-comparison]")?.textContent).not.toBe("");

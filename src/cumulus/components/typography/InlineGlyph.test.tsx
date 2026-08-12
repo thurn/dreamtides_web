@@ -6,7 +6,7 @@ import { InlineGlyph } from "./InlineGlyph";
 describe("InlineGlyph", () => {
   it("centers a square em box on the surrounding font's capital height", () => {
     const markup = renderToStaticMarkup(
-      <InlineGlyph glyph={GLYPHS.points} color="text-primary" label="points" />,
+      <InlineGlyph glyph={GLYPHS.points} color="text-primary" authoredLabel="points" />,
     );
 
     expect(markup).toMatch(/^<span /);
@@ -32,7 +32,7 @@ describe("InlineGlyph", () => {
 
   it("constrains the memory mark to the one-em metric box", () => {
     const markup = renderToStaticMarkup(
-      <InlineGlyph glyph={GLYPHS.memory} label="memory" />,
+      <InlineGlyph glyph={GLYPHS.memory} authoredLabel="memory" />,
     );
 
     expect(markup).toContain('class="bxf bx-brain"');

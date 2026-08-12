@@ -113,7 +113,7 @@ describe("RevealOverlay", () => {
             spec: {
               primary: {
                 kind: "galleryAction",
-                action: { glyph: GLYPHS.spark, label: "Inspect" },
+                action: { glyph: GLYPHS.spark, authoredLabel: "Inspect" },
               },
               secondaries: [],
             },
@@ -334,7 +334,7 @@ describe("RevealOverlay", () => {
 
   it("keeps complete source content in place and stacks all definition cards in one column", () => {
     const spec: RevealSpec = {
-      primary: { kind: "source", description: "Complete ability text" },
+      primary: { kind: "source", authoredDescription: "Complete ability text" },
       secondaries: [
         { variant: "text", title: "First", body: { kind: "plain", text: "First definition" } },
         { variant: "text", title: "Second", body: { kind: "plain", text: "Second definition" } },

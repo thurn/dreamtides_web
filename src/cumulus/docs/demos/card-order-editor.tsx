@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { localizationTodo } from "@trox/runtime";
 import {
   CardOrderEditor,
   type CardOrderEditorItem,
@@ -7,8 +8,8 @@ import type { GlassControlPlacement } from "../../primitives/control-placement";
 import type { CumulusComponent } from "../registry";
 
 const INITIAL: CardOrderEditorItem[] = [
-  { id: "instance-1", label: "First card" },
-  { id: "instance-2", label: "Second card" },
+  { id: "instance-1", authoredLabel: "First card" },
+  { id: "instance-2", authoredLabel: "Second card" },
 ];
 function Demo({
   label = "Deck order",
@@ -20,7 +21,7 @@ function Demo({
   const [items, setItems] = useState(INITIAL);
   return (
     <CardOrderEditor
-      label={label}
+      label={localizationTodo(label)}
       items={items}
       placement={placement}
       onOrderChange={(ids) =>

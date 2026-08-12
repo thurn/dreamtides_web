@@ -1,6 +1,6 @@
 // DuplicationSiteScreen — Deacon Holt's Cumulus card-copying site.
 
-import { localizationTodo } from "@trox/runtime";
+import { tx } from "@trox/runtime";
 import { useCallback, useState } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { CardPickerPanel } from "../components/card/CardPickerPanel";
@@ -10,7 +10,6 @@ import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
-import { useMessages } from "../hooks/use-messages";
 
 export type DuplicationGuideView = GuideGalleryGuideView;
 
@@ -52,7 +51,6 @@ export function DuplicationSiteScreen({
   onClose,
   onDuplicate,
 }: DuplicationSiteScreenProps) {
-  const t = useMessages();
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
   const [confirming, setConfirming] = useState(false);
   const locked = confirming || view.alreadyAccepted;
@@ -107,27 +105,30 @@ export function DuplicationSiteScreen({
             }}
           >
             <CardPickerPanel
-              title={localizationTodo(t("duplication-picker-title"))}
-              subtitle={localizationTodo(t("duplication-picker-instruction", {
-                state: view.ready
-                  ? view.isEnhanced
-                    ? "enhanced"
-                    : "standard"
-                  : "loading",
-              }))}
+              title={tx(
+                  "Duplication",
+                  "Title of the card picker at a Duplication site.",
+                )}
+              subtitle={
+                !view.ready
+                  ? tx("Gathering possibilities…", "Loading status while Duplication choices are prepared.")
+                  : view.isEnhanced
+                    ? tx("Choose any card to copy", "Instruction when any owned card may be duplicated.")
+                    : tx("Choose a card to copy", "Instruction for choosing one concrete card to copy into the player’s deck.")
+              }
               footerActions={[
                 {
-                  label: t("duplication-decline-action", {
-                    presentation: desktop ? "full" : "compact",
-                  }),
+                  label: desktop
+                    ? tx("Decline Offer", "Command that declines the current site offer and leaves without taking its reward.")
+                    : tx("Decline", "Compact command that declines the current site interaction without applying it."),
                   disabled: locked,
                   onPress: onClose,
                   testId: "cumulus-duplication-decline",
                 },
                 {
-                  label: t("duplication-confirm-action", {
-                    state: confirming ? "pending" : "ready",
-                  }),
+                  label: confirming
+                    ? tx("Duplicating…", "Pending status while a duplicated card is saved.")
+                    : tx("Duplicate", "Command that duplicates the selected card."),
                   variant: "accent",
                   disabled: selectedEntryId === null || locked,
                   onPress: commitDuplicate,
@@ -142,14 +143,15 @@ export function DuplicationSiteScreen({
                   selectedEntryId === card.entryId ? "copied" : undefined,
                 stackedCopy: {
                   shown: selectedEntryId === card.entryId,
-                  direction:
-                    (index + 1) % columnCount === 0 ? "left" : "right",
+                  direction: (index + 1) % columnCount === 0 ? "left" : "right",
                 },
                 disabled: locked,
               }))}
-              emptyLabel={localizationTodo(t("duplication-picker-empty-state", {
-                state: view.ready ? "empty" : "loading",
-              }))}
+              emptyLabel={
+                view.ready
+                  ? tx("No cards available to copy.", "Empty state when no card can be duplicated.")
+                  : tx("Gathering possibilities…", "Loading status while Duplication choices are prepared.")
+              }
               testId="cumulus-duplication-card-gallery"
               onCardPress={toggleSelection}
             />

@@ -22,10 +22,13 @@ Close placement is internal: it sits on the header row by default, and `cutoutAw
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `title` | `LocalizedString` | yes | — | The dialog's heading, rendered as an `<h2>`. |
+| `title` | `LocalizedString` | no | — | The dialog's heading, rendered as an `<h2>`. |
+| `authoredTitle` | `string` | no | — | Canonical authored or user-provided heading outside code-authored localization. |
 | `subtitle` | `LocalizedString` | no | — | Optional intro line under the title. |
+| `authoredSubtitle` | `string` | no | — | Canonical authored or user-provided intro line outside code-authored localization. |
 | `onClose` | `(() => void)` | no | — | Dismisses the dialog from its close disc. Omit for a commit-gated dialog that intentionally exposes no dismissal control. |
-| `closeLabel` | `LocalizedString` | no | `localizationTodo("Close")` | Accessible name for the close disc. Defaults to `"Close"`. |
+| `closeLabel` | `LocalizedString` | no | — | Accessible name for the close disc. Defaults to `"Close"`. |
+| `authoredCloseLabel` | `string` | no | — | Close action name supplied by canonical authored or developer-only copy. |
 | `cutoutAwareClose` | `boolean` | no | `false` | When true, on a full-bleed mobile overlay whose screen-cutout box is known (a device-screenshot mock-up) the close disc floats up beside the device island instead of sitting on the header row, so the header title clears the safe area below it. No effect on desktop or on real hardware (where the island geometry is not exposed). Defaults to `false`. |
 | `fullScreen` | `boolean` | no | `false` | Force the edge-to-edge takeover treatment at any viewport width. |
 | `presentation` | `"responsive" \| "popup"` | no | `responsive` | Responsive behavior for the dialog surface. `"responsive"` uses the standard bounded desktop panel and full-bleed mobile takeover. `"popup"` keeps a centered, content-sized glass panel at every viewport width. `fullScreen` takes precedence. Defaults to `"responsive"`. |

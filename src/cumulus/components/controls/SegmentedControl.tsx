@@ -34,6 +34,13 @@ export interface SegmentedOption {
   ariaLabel?: LocalizedString;
 }
 
+/** A canonical authored segment outside code-authored localization. */
+export interface AuthoredSegmentedOption {
+  value: string;
+  authoredLabel: string;
+  authoredAriaLabel?: string;
+}
+
 /** A language-neutral symbol with a localized accessible name. */
 export interface SymbolSegmentedOption {
   value: string;
@@ -41,7 +48,7 @@ export interface SymbolSegmentedOption {
   ariaLabel: LocalizedString;
 }
 
-type RenderedSegmentedOption = SegmentedOption | SymbolSegmentedOption;
+type RenderedSegmentedOption = SegmentedOption | SymbolSegmentedOption | AuthoredSegmentedOption;
 
 export interface SegmentedControlProps {
   /** Localized labels or language-neutral symbols represented by stable values. */
@@ -97,7 +104,9 @@ function Segment({
     <button
       type="button"
       role="tab"
-      aria-label={option.ariaLabel === undefined ? undefined : resolve(option.ariaLabel)}
+      aria-label={"authoredLabel" in option
+        ? option.authoredAriaLabel
+        : option.ariaLabel === undefined ? undefined : resolve(option.ariaLabel)}
       aria-selected={active}
       onClick={() => onSelect(option.value)}
       {...bind}
@@ -126,7 +135,9 @@ function Segment({
         ...(active ? chrome.segmentActive : chrome.segmentInactive),
       }}
     >
-      {"symbol" in option ? option.symbol : resolve(option.label)}
+      {"symbol" in option
+        ? option.symbol
+        : "authoredLabel" in option ? option.authoredLabel : resolve(option.label)}
     </button>
   );
 }

@@ -20,7 +20,8 @@ It adds no surrounding whitespace: callers include an explicit JSX space when pr
 | --- | --- | --- | --- | --- |
 | `glyph` | `Glyph` | yes | — | Named Boxicons glyph from the shared Cumulus glyph vocabulary. |
 | `color` | `CumulusColor` = `"accent" \| "accent-bright" \| "essence" \| "energy" \| "spark" \| "danger" \| "positive" \| "selected" \| "text-primary" \| "text-secondary" \| "text-on-accent" \| "white"` | no | — | Optional semantic fill color. Omit to inherit the surrounding text color. |
-| `label` | `string` | no | — | Accessible meaning. Omit only when surrounding copy already names the glyph. |
+| `label` | `LocalizedString` | no | — | Accessible meaning. Omit only when surrounding copy already names the glyph. |
+| `authoredLabel` | `string` | no | — | Accessible meaning supplied by canonical authored content. |
 
 ## Usage
 

@@ -1,4 +1,14 @@
-import { localizationTodo } from "@trox/runtime";
+import { meaning,
+  txa,
+  tx,
+  select,
+  when,
+  otherwise,
+  plural,
+  one,
+  other,
+  type LocalizedString,
+} from "@trox/runtime";
 import {
   useCallback,
   useEffect,
@@ -45,6 +55,8 @@ import { GlassBackdrop, GlassDialog } from "../components/overlay/GlassDialog";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { DeveloperRail } from "../components/overlay/DeveloperRail";
 import { TransientStatusToast } from "../components/status/TransientStatusToast";
+import { builtInBattlePromptMessage } from "../../runtime/localization/battle-prompt-messages";
+import { builtInBattlePromptRef } from "../../data/dreamwell-prompts";
 import {
   RADIAL_ANNOUNCEMENT_DURATION_MS,
   RadialAnnouncement,
@@ -74,9 +86,7 @@ import {
   MOBILE_BATTLE_MIN_FRONT_RANK_SLOTS,
 } from "./mobile-battle-layout";
 import { useIsDesktop } from "./use-is-desktop";
-import { useMessages } from "../hooks/use-messages";
-import { formatMessageDescriptor } from "../hooks/use-messages";
-import type { FluentMessageDescriptor } from "../../data/localization-messages";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 import {
   BattleResultSurface,
   type MobileBattleResultAction,
@@ -189,11 +199,15 @@ export interface MobileBattleView {
   readonly revealedHandCard?: MobileBattleCardView | null;
 }
 
+export type MobileBattlePromptCopy =
+  | { readonly kind: "message"; readonly message: LocalizedString }
+  | { readonly kind: "authored"; readonly text: string };
+
 /** A UUID-safe card decision owned by the authoritative battle prompt. */
 export interface MobileBattleCardPickerView {
   readonly key: string;
-  readonly label: string | FluentMessageDescriptor;
-  readonly subtitle?: string | FluentMessageDescriptor;
+  readonly label: MobileBattlePromptCopy;
+  readonly subtitle?: MobileBattlePromptCopy;
   readonly side: MobileBattleOwner;
   readonly candidateOwner?: MobileBattleOwner | null;
   readonly candidates: readonly MobileBattleCardPickerCandidateView[];
@@ -218,9 +232,9 @@ export interface MobileBattleCardPickerCandidateView {
 /** An in-place option decision owned by the authoritative battle prompt. */
 export interface MobileBattleChoicePromptView {
   readonly key: string;
-  readonly label: string | FluentMessageDescriptor;
+  readonly label: MobileBattlePromptCopy;
   readonly options: readonly {
-    readonly label: string | FluentMessageDescriptor;
+    readonly label: MobileBattlePromptCopy;
   }[];
   readonly canResolve: boolean;
 }
@@ -240,7 +254,7 @@ export interface MobileBattleScreenProps {
     readonly owner: MobileBattleOwner;
     readonly rank: MobileBattleRank;
     readonly slotId: string;
-    readonly label: string;
+    readonly label: LocalizedString;
   };
   /** Keep dotted slot shells beneath occupied cards during an occupant transition. */
   readonly preserveOccupiedSlotOutlines?: boolean;
@@ -737,7 +751,6 @@ function BattleTurnAnnouncement({
   readonly onComplete?: (side: MobileBattleOwner) => void;
   readonly playbackSpeed: number;
 }) {
-  const t = useMessages();
   const sequence = useRef(1);
   const previousSide = useRef(activeSide);
   const onCompleteRef = useRef(onComplete);
@@ -770,9 +783,16 @@ function BattleTurnAnnouncement({
 
   if (announcement === null) return null;
 
-  const label = t("battle-turn-announcement", {
-    owner: announcement.side === perspective ? "viewer" : "opponent",
-  });
+  const label =
+    announcement.side === perspective
+      ? tx(
+          "Your Turn",
+          "Radial announcement when battle control passes to the local player's side.",
+        )
+      : tx(
+          "Opponent Turn",
+          "Radial announcement when battle control passes to the opposing side.",
+        );
   return (
     <RadialAnnouncement
       key={announcement.key}
@@ -819,7 +839,7 @@ function FigmentMergeAnimation({
 }: {
   readonly animation: FigmentMergeAnimationState;
 }) {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const reduceMotion = useReducedMotion();
   const deltaX = animation.targetRect.left - animation.sourceRect.left;
   const deltaY = animation.targetRect.top - animation.sourceRect.top;
@@ -827,10 +847,14 @@ function FigmentMergeAnimation({
     <div
       role="status"
       aria-live="polite"
-      aria-label={t("battle-figment-merge-announcement", {
-        figmentName: animation.target.figmentLabel,
-        sparkCount: animation.target.addedSpark,
-      })}
+      aria-label={resolve(txa(
+        "{figment_name} merged and gained {spark_count} Spark",
+        {
+          figment_name: animation.target.figmentLabel,
+          spark_count: animation.target.addedSpark,
+        },
+        "Accessible live announcement after one Figment merges into another. figment_name is the displayed name of the surviving Figment and has unknown grammatical gender; spark_count is the non-negative Spark increase.",
+      ))}
       data-battle-figment-merge-animation=""
       data-battle-figment-merge-source={animation.target.sourceBattleCardId}
       data-battle-figment-merge-destination={
@@ -958,7 +982,6 @@ function FarHand({
   readonly selectedPickerCardIds: readonly string[];
   readonly onPickerCardToggle: (cardId: string) => void;
 }) {
-  const t = useMessages();
   const farHandCandidates =
     cardPicker?.candidates.filter(
       (candidate) => candidate.owner === owner && candidate.zone === "hand",
@@ -1067,7 +1090,12 @@ function FarHand({
                 data-battle-card-motion=""
                 style={{ width: "100%", height: "100%" }}
               >
-                <CardBack label={t("battle-opponent-card-accessible-name")} />
+                <CardBack
+                  label={tx(
+                    "Opponent card",
+                    "Player-facing message for the battle opponent card accessible name interface state.",
+                  )}
+                />
               </motion.div>
             )}
           </div>
@@ -1114,7 +1142,6 @@ function SideZones({
   readonly zoneLabels: "none" | "voids";
   readonly interactions?: MobileBattleInteractions;
 }) {
-  const t = useMessages();
   const deck = toDeckPile(side.deckCardIds);
   const voidPile = toVoidPile(side.voidCards);
   const ownsVisibleDreamwell = dreamwell?.side === owner;
@@ -1147,16 +1174,16 @@ function SideZones({
           ? isDesktop
             ? {
                 alignSelf: "stretch",
-                transform: `translateY(${DESKTOP_SIDE_ZONE_SHIFT})`,
+                transform: `translateY(${DESKTOP_SIDE_ZONE_SHIFT})`
               }
             : {
                 alignSelf: "start",
                 height: token("--space-6xl"),
-                transform: `translateY(calc(-1 * ${token("--space-xl")}))`,
+                transform: `translateY(calc(-1 * ${token("--space-xl")}))`
               }
           : isDesktop
             ? {
-                transform: `translateY(calc(-1 * ${DESKTOP_SIDE_ZONE_SHIFT}))`,
+                transform: `translateY(calc(-1 * ${DESKTOP_SIDE_ZONE_SHIFT}))`
               }
             : null),
         zIndex: ownsVisibleDreamwell
@@ -1203,10 +1230,25 @@ function SideZones({
         >
           <CardPile
             cards={deck}
-            label={t("battle-card-pile-label", {
-              owner: position === "near" ? "viewer" : "opponent",
-              zone: "deck",
-            })}
+            label={txa(
+              select(position === "near" ? "viewer" : "opponent", [
+                when(
+                  "viewer",
+                  select("deck", [
+                    when("deck", "Your deck"),
+                    otherwise("Your void"),
+                  ]),
+                ),
+                otherwise(
+                  select("deck", [
+                    when("deck", "Opponent’s deck"),
+                    otherwise("Opponent’s void"),
+                  ]),
+                ),
+              ]),
+              {},
+              'Accessible label for a battle card pile. owner is "viewer" for the near, local-perspective side or "opponent" for the far side; zone is "deck" or "void" and identifies the inspected pile.',
+            )}
             onPress={
               interactions?.onZoneOpen === undefined
                 ? undefined
@@ -1305,12 +1347,31 @@ function SideZones({
         >
           <CardPile
             cards={voidPile}
-            label={t("battle-card-pile-label", {
-              owner: position === "near" ? "viewer" : "opponent",
-              zone: "void",
-            })}
+            label={txa(
+              select(position === "near" ? "viewer" : "opponent", [
+                when(
+                  "viewer",
+                  select("void", [
+                    when("deck", "Your deck"),
+                    otherwise("Your void"),
+                  ]),
+                ),
+                otherwise(
+                  select("void", [
+                    when("deck", "Opponent’s deck"),
+                    otherwise("Opponent’s void"),
+                  ]),
+                ),
+              ]),
+              {},
+              'Accessible label for a battle card pile. owner is "viewer" for the near, local-perspective side or "opponent" for the far side; zone is "deck" or "void" and identifies the inspected pile.',
+            )}
             emptyState="outlined"
-            emptyLabel={zoneLabels === "voids" ? "Void" : undefined}
+            emptyLabel={
+              zoneLabels === "voids"
+                ? tx(meaning("void-pile-label", "Void"), "Visible label inside an empty battle Void pile.")
+                : undefined
+            }
             onPress={
               interactions?.onZoneOpen === undefined
                 ? undefined
@@ -1333,14 +1394,31 @@ function PhaseIndicator({
   readonly position: BattleBoardPosition;
   readonly phase: MobileBattlePhase;
 }) {
-  const t = useMessages();
+  const resolve = useLocalizer();
+  const phaseLabel =
+    position === "near"
+      ? phase === "dawn"
+        ? tx("Your turn, Dawn phase", "Accessible battle phase for the local side during Dawn.")
+        : phase === "day"
+          ? tx("Your turn, Day phase", "Accessible battle phase for the local side during Day.")
+          : phase === "dusk"
+            ? tx("Your turn, Dusk phase", "Accessible battle phase for the local side during Dusk.")
+            : phase === "night"
+              ? tx("Your turn, Night phase", "Accessible battle phase for the local side during Night.")
+              : tx("Your turn, Challenge phase", "Accessible battle phase for the local side during the Challenge.")
+      : phase === "dawn"
+        ? tx("Opponent’s turn, Dawn phase", "Accessible battle phase for the opposing side during Dawn.")
+        : phase === "day"
+          ? tx("Opponent’s turn, Day phase", "Accessible battle phase for the opposing side during Day.")
+          : phase === "dusk"
+            ? tx("Opponent’s turn, Dusk phase", "Accessible battle phase for the opposing side during Dusk.")
+            : phase === "night"
+              ? tx("Opponent’s turn, Night phase", "Accessible battle phase for the opposing side during Night.")
+              : tx("Opponent’s turn, Challenge phase", "Accessible battle phase for the opposing side during the Challenge.");
   return (
     <div
       role="img"
-      aria-label={t("battle-phase-indicator", {
-        owner: position === "near" ? "viewer" : "opponent",
-        phase,
-      })}
+      aria-label={resolve(phaseLabel)}
       data-battle-phase-indicator={owner}
       data-battle-mobile-phase={phase}
       style={{
@@ -1370,7 +1448,7 @@ function PhaseIndicator({
             position === "near"
               ? "translate(-50%, -100%)"
               : "translate(-50%, 0%)",
-          transition: `left ${token("--motion-object-travel")}`,
+          transition: `left ${token("--motion-object-travel")}`
         }}
       >
         <span
@@ -1388,7 +1466,7 @@ function PhaseIndicator({
             backgroundColor: token("--accent-bright"),
             boxShadow: token("--glow-accent-soft"),
             opacity: 0.28,
-            animation: `battle-phase-comet-tail ${token("--dur-slow")} ${token("--ease-out")}`,
+            animation: `battle-phase-comet-tail ${token("--dur-slow")} ${token("--ease-out")}`
           }}
         />
         <span
@@ -1490,14 +1568,16 @@ function ChallengerChevron({
   readonly owner: MobileBattleOwner;
   readonly position: BattleBoardPosition;
 }) {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const direction = position === "far" ? "down" : "up";
   return (
     <div
       role="img"
-      aria-label={t("battle-challenger-label", {
-        owner: owner === "enemy" ? "opponent" : "player",
-      })}
+      aria-label={resolve(
+        owner === "enemy"
+          ? tx("Opponent challenger", "Accessible name for the opposing challenger card in a battle challenge.")
+          : tx("Player challenger", "Accessible name for the local player's challenger card in a battle challenge."),
+      )}
       data-battle-challenger-chevron={owner}
       data-battle-challenger-chevron-direction={direction}
       data-battle-challenger-chevron-style="circle-badge"
@@ -1957,7 +2037,7 @@ function BattleCardStatusIndicators({
 }: {
   readonly card: MobileBattleCardView;
 }) {
-  const t = useMessages();
+  const resolve = useLocalizer();
   return (
     <div
       data-battle-card-status-indicators=""
@@ -1965,7 +2045,10 @@ function BattleCardStatusIndicators({
     >
       {card.exhausted ? (
         <div
-          aria-label={t("battle-card-exhausted-accessible-name")}
+          aria-label={resolve(tx(
+            "Exhausted",
+            "Accessible status on a battle card whose actions are unavailable until it is readied by the game rules.",
+          ))}
           data-battle-card-status="exhausted"
           style={{
             ...BATTLE_CARD_STATUS_BADGE_STYLE,
@@ -1986,9 +2069,14 @@ function BattleCardStatusIndicators({
       ) : null}
       {card.storedTime > 0 ? (
         <div
-          aria-label={t("battle-card-memory-counter-count", {
-            count: card.storedTime,
-          })}
+          aria-label={resolve(txa(
+            plural(card.storedTime, [
+              one("{count} memory counter"),
+              other("{count} memory counters"),
+            ]),
+            { count: card.storedTime },
+            "Accessible name for the Memory status badge on a battle card. count is the positive integer number of Memory counters currently stored on that card.",
+          ))}
           data-battle-card-status="stored-time"
           style={{
             ...BATTLE_CARD_STATUS_BADGE_STYLE,
@@ -2415,6 +2503,7 @@ function Rank({
   readonly cardOverlay?: MobileBattleCardOverlayView | null;
   readonly interactions?: MobileBattleInteractions;
 }) {
+  const resolve = useLocalizer();
   const canDropOnOwner =
     interactions?.canInteract === true &&
     interactions.pendingCardId !== null &&
@@ -2590,7 +2679,7 @@ function Rank({
               guidedSlotHighlight.slotId === slot.id ? (
                 <div
                   role="img"
-                  aria-label={guidedSlotHighlight.label}
+                  aria-label={resolve(guidedSlotHighlight.label)}
                   data-battle-guided-slot-highlight=""
                   data-battle-guided-slot-id={slot.id}
                   style={{
@@ -2602,7 +2691,7 @@ function Rank({
                     borderRadius: BATTLEFIELD_CARD_CORNER_RADIUS,
                     outline: `${token("--space-xxs")} solid ${token("--positive")}`,
                     outlineOffset: `calc(-1 * ${token("--space-xxs")})`,
-                    boxShadow: `0 0 ${token("--space-xl")} ${token("--positive")}`,
+                    boxShadow: `0 0 ${token("--space-xl")} ${token("--positive")}`
                   }}
                 />
               ) : null}
@@ -3078,12 +3167,15 @@ function TargetingCardStage({
   readonly card: MobileBattleCardView;
   readonly isDesktop: boolean;
 }) {
-  const t = useMessages();
+  const resolve = useLocalizer();
   return (
     <div
       data-battle-targeting-card-stage=""
       role="group"
-      aria-label={t("battle-targeting-card-accessible-name")}
+      aria-label={resolve(tx(
+        "Card awaiting a target",
+        "Accessible name for the staged battle card that the current player has played and must now assign a legal target to.",
+      ))}
       style={{
         gridColumn: 1,
         gridRow: 5,
@@ -3432,20 +3524,69 @@ function closestOpenBackRankSlot(
 function pickerZoneCaption(
   candidate: MobileBattleCardPickerCandidateView,
   perspective: BattlePerspectiveSide,
-  t: ReturnType<typeof useMessages>,
-): string {
-  return t("battle-card-picker-zone-caption", {
-    highlighted: candidate.highlighted ? "yes" : "no",
-    owner: candidate.owner === perspective ? "viewer" : "opponent",
-    zone: candidate.zone,
-  });
-}
-
-function formatBattlePromptText(
-  t: ReturnType<typeof useMessages>,
-  text: string | FluentMessageDescriptor,
-): string {
-  return typeof text === "string" ? text : formatMessageDescriptor(t, text);
+): LocalizedString {
+  if (candidate.highlighted) {
+    return tx(
+      "Just Drawn",
+      "Caption below a battle card-picker candidate that was just drawn.",
+    );
+  }
+  const viewerOwned = candidate.owner === perspective;
+  if (candidate.zone === "hand") {
+    return viewerOwned
+      ? tx("Your Hand", "Caption for a card candidate in the viewer's hand.")
+      : tx(
+          "Opponent Hand",
+          "Caption for a card candidate in the opponent's hand.",
+        );
+  }
+  if (candidate.zone === "deck") {
+    return viewerOwned
+      ? tx(meaning("battle-deck-candidate-caption", "Your Deck"), "Caption for a card candidate in the viewer's deck.")
+      : tx(
+          "Opponent Deck",
+          "Caption for a card candidate in the opponent's deck.",
+        );
+  }
+  if (candidate.zone === "backRank") {
+    return viewerOwned
+      ? tx(
+          "Your Back Rank",
+          "Caption for a card candidate in the viewer's back rank.",
+        )
+      : tx(
+          "Opponent Back Rank",
+          "Caption for a card candidate in the opponent's back rank.",
+        );
+  }
+  if (candidate.zone === "frontRank") {
+    return viewerOwned
+      ? tx(
+          "Your Front Rank",
+          "Caption for a card candidate in the viewer's front rank.",
+        )
+      : tx(
+          "Opponent Front Rank",
+          "Caption for a card candidate in the opponent's front rank.",
+        );
+  }
+  if (candidate.zone === "void") {
+    return viewerOwned
+      ? tx(meaning("battle-void-candidate-caption", "Your Void"), "Caption for a card candidate in the viewer's Void.")
+      : tx(
+          "Opponent Void",
+          "Caption for a card candidate in the opponent's Void.",
+        );
+  }
+  return viewerOwned
+    ? tx(
+        "Your Banished",
+        "Caption for a card candidate in the viewer's banished zone.",
+      )
+    : tx(
+        "Opponent Banished",
+        "Caption for a card candidate in the opponent's banished zone.",
+      );
 }
 
 function CardPickerGallery({
@@ -3463,34 +3604,41 @@ function CardPickerGallery({
   readonly interactions?: MobileBattleInteractions;
   readonly perspective: BattlePerspectiveSide;
 }) {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const requiredCount = Math.min(
     cardPicker.count,
     cardPicker.candidates.length,
   );
-  const promptLabel = formatBattlePromptText(t, cardPicker.label);
-  const promptSubtitle =
+  const promptSubtitle: MobileBattlePromptCopy =
     cardPicker.subtitle === undefined
-      ? t("battle-card-picker-selected-count", {
-          selectedCount: selectedPickerCardIds.length,
-          requiredCount,
-        })
-      : formatBattlePromptText(t, cardPicker.subtitle);
+      ? {
+          kind: "message",
+          message: txa(
+            "{selected_count}/{required_count} selected",
+            {
+              selected_count: selectedPickerCardIds.length,
+              required_count: requiredCount,
+            },
+            "Compact progress shown in the full-screen card picker when no authored subtitle is available. selected_count and required_count are non-negative card counts; the slash notation is intentionally compact for the panel header.",
+          ),
+        }
+      : cardPicker.subtitle;
   const canSubmit =
     cardPicker.canResolve &&
     selectedPickerCardIds.length === requiredCount &&
     interactions?.onCardPickerSubmit !== undefined;
   const submitAction = {
-    label: t("battle-card-picker-submit-action", {
-      hasRequiredSelection: requiredCount === 0 ? "no" : "yes",
-    }),
+    label:
+      requiredCount === 0
+        ? tx(meaning("battle-picker-continue", "Continue"), "Primary command that resolves a battle card picker with no required selection.")
+        : tx("Submit", "Primary command that submits the required battle card selection."),
     variant: "accent" as const,
     disabled: !canSubmit,
     testId: "battle-card-picker-submit",
     onPress: () => interactions?.onCardPickerSubmit?.(selectedPickerCardIds),
   };
   const skipAction = {
-    label: t("battle-card-picker-skip-action"),
+    label: tx(meaning("battle-picker-skip", "Skip"), "Command that declines an optional battle card picker."),
     disabled:
       !cardPicker.canResolve || interactions?.onCardPickerSkip === undefined,
     testId: "battle-card-picker-skip",
@@ -3502,7 +3650,11 @@ function CardPickerGallery({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={promptLabel}
+      aria-label={
+        cardPicker.label.kind === "authored"
+          ? cardPicker.label.text
+          : resolve(cardPicker.label.message)
+      }
       data-battle-card-picker-gallery=""
       style={{
         position: "fixed",
@@ -3526,8 +3678,12 @@ function CardPickerGallery({
         }}
       >
         <CardPickerPanel
-          title={localizationTodo(promptLabel)}
-          subtitle={localizationTodo(promptSubtitle)}
+          {...(cardPicker.label.kind === "authored"
+            ? { authoredTitle: cardPicker.label.text }
+            : { title: cardPicker.label.message })}
+          {...(promptSubtitle.kind === "authored"
+            ? { authoredSubtitle: promptSubtitle.text }
+            : { subtitle: promptSubtitle.message })}
           cards={cardPicker.candidates.map((candidate) => {
             const selected = selectedPickerCardIds.includes(
               candidate.instanceId,
@@ -3542,12 +3698,15 @@ function CardPickerGallery({
                   : undefined,
               caption: {
                 kind: "text" as const,
-                text: pickerZoneCaption(candidate, perspective, t),
+                message: pickerZoneCaption(candidate, perspective),
               },
-              testId: `battle-card-picker-candidate-${candidate.instanceId}`,
+              testId: `battle-card-picker-candidate-${candidate.instanceId}`
             };
           })}
-          emptyLabel={localizationTodo(t("battle-card-picker-empty-state"))}
+          emptyLabel={tx(
+            "No valid targets.",
+            "Empty state in a battle card picker whose current prompt has no legal cards.",
+          )}
           presentation="overlay"
           testId="battle-card-picker-gallery-panel"
           footerActions={
@@ -3587,11 +3746,7 @@ function ControlRow({
   readonly perspective: BattlePerspectiveSide;
   readonly tutorialNextAction: "endTurn" | "startChallenge";
 }) {
-  const t = useMessages();
-  const choiceLabel =
-    choicePrompt === null
-      ? undefined
-      : formatBattlePromptText(t, choicePrompt.label);
+  const resolve = useLocalizer();
   const disabled = interactions?.canInteract !== true;
   const hasAlternateNextControls = aiApproval !== null || choicePrompt !== null;
   const requiredPickerCount =
@@ -3605,7 +3760,12 @@ function ControlRow({
   return (
     <div
       data-battle-mobile-row="control-row"
-      aria-label={t("battle-control-group-accessible-name")}
+      aria-label={resolve(
+        tx(
+          "Battle controls",
+          "Accessible label for the group of battle navigation and choice controls.",
+        ),
+      )}
       style={{
         ...ROW_STYLE,
         gridColumn: 1,
@@ -3658,28 +3818,50 @@ function ControlRow({
               whiteSpace: "nowrap",
             }}
           >
-            {t("battle-card-picker-progress", {
-              promptLabel: formatBattlePromptText(t, cardPicker.label),
-              owner:
+            <span data-battle-card-picker-prompt-copy="">
+              {cardPicker.label.kind === "authored"
+                ? cardPicker.label.text
+                : resolve(cardPicker.label.message)}
+            </span>{" "}
+            <span data-battle-card-picker-progress-copy="">
+              {resolve(
                 (cardPicker.candidateOwner ?? cardPicker.side) === perspective
-                  ? "viewer"
-                  : "opponent",
-              selectedCount: selectedPickerCardIds.length,
-              requiredCount: requiredPickerCount,
-            })}
+                  ? txa(
+                      "from your hand · {selected_count}/{required_count}",
+                      {
+                        selected_count: selectedPickerCardIds.length,
+                        required_count: requiredPickerCount,
+                      },
+                      "Battle card-picker progress for candidates in the current perspective's hand. selected_count and required_count are non-negative card counts.",
+                    )
+                  : txa(
+                      "from the opponent hand · {selected_count}/{required_count}",
+                      {
+                        selected_count: selectedPickerCardIds.length,
+                        required_count: requiredPickerCount,
+                      },
+                      "Battle card-picker progress for candidates in the opposing hand. selected_count and required_count are non-negative card counts.",
+                    ),
+              )}
+            </span>
           </span>
           {cardPicker.optional ? (
             <GlassButton
-              label={t("battle-card-picker-skip-action")}
+              label={tx(
+                meaning("battle-picker-skip", "Skip"),
+                "Command that declines an optional battle card picker.",
+              )}
               disabled={!cardPicker.canResolve}
               testId="battle-card-picker-skip"
               onPress={() => interactions?.onCardPickerSkip?.()}
             />
           ) : null}
           <GlassButton
-            label={t("battle-card-picker-submit-action", {
-              hasRequiredSelection: requiredPickerCount === 0 ? "no" : "yes",
-            })}
+            label={
+              requiredPickerCount === 0
+                ? tx(meaning("battle-picker-continue", "Continue"), "Primary command that resolves a battle card picker with no required selection.")
+                : tx("Submit", "Primary command that submits the required battle card selection.")
+            }
             variant="accent"
             disabled={
               !canSubmitPicker || interactions?.onCardPickerSubmit === undefined
@@ -3716,7 +3898,10 @@ function ControlRow({
               <IconButton
                 glyph={GLYPHS.arrowLeft}
                 size="sm"
-                label={localizationTodo(t("battle-previous-phase-action"))}
+                label={tx(
+                  meaning("battle-phase-back", "Back"),
+                  "Command that moves the developer-enabled phase control to the previous phase.",
+                )}
                 disabled={disabled}
                 onPress={() => interactions?.onPreviousPhase()}
               />
@@ -3730,7 +3915,13 @@ function ControlRow({
             data-battle-choice-prompt-controls={
               choicePrompt === null ? undefined : ""
             }
-            aria-label={choiceLabel}
+            aria-label={
+              choicePrompt === null
+                ? undefined
+                : choicePrompt.label.kind === "authored"
+                  ? choicePrompt.label.text
+                  : resolve(choicePrompt.label.message)
+            }
             style={{
               width: hasAlternateNextControls ? undefined : "max-content",
               minWidth: hasAlternateNextControls
@@ -3746,7 +3937,9 @@ function ControlRow({
               choicePrompt.options.map((option, index) => (
                 <GlassButton
                   key={`${choicePrompt.key}:${String(index)}`}
-                  label={formatBattlePromptText(t, option.label)}
+                  {...(option.label.kind === "authored"
+                    ? { authoredLabel: option.label.text }
+                    : { label: option.label.message })}
                   variant={index === 0 ? "accent" : "default"}
                   disabled={
                     !choicePrompt.canResolve ||
@@ -3758,14 +3951,16 @@ function ControlRow({
               ))
             ) : aiApproval === null ? (
               <GlassButton
-                label={t("battle-flow-action", {
-                  action:
-                    phaseNavigation === "end-turn"
-                      ? "endTurn"
-                      : phaseNavigation === "tutorial"
-                        ? tutorialNextAction
-                        : nextPhaseAction,
-                })}
+                label={
+                  phaseNavigation === "end-turn" ||
+                  (phaseNavigation === "tutorial" && tutorialNextAction === "endTurn")
+                    ? tx("End Turn", "Primary command that ends the current battle turn.")
+                    : phaseNavigation === "tutorial"
+                      ? tx("Start Challenge", "Primary command that starts the battle Challenge phase.")
+                      : nextPhaseAction === "nextPhase"
+                        ? tx("Next Phase", "Primary command that advances to the next battle phase.")
+                        : tx(meaning("battle-flow-continue", "Continue"), "Primary command that advances the current battle flow.")
+                }
                 variant="accent"
                 disabled={disabled}
                 testId={
@@ -3782,13 +3977,19 @@ function ControlRow({
                   <IconButton
                     glyph={GLYPHS.close}
                     size="sm"
-                    label={localizationTodo(t("battle-ai-reject-action"))}
+                    label={tx(
+                      "Reject AI action",
+                      "Command that rejects the proposed opposing AI battle action.",
+                    )}
                     disabled={interactions?.onRejectAiProposal === undefined}
                     onPress={() => interactions?.onRejectAiProposal?.()}
                   />
                 ) : null}
                 <GlassButton
-                  label={t("battle-continue-action")}
+                  label={tx(
+                    meaning("battle-result-continue", "Continue"),
+                    "Command that accepts a completed result or advances a resolved interaction.",
+                  )}
                   variant="accent"
                   disabled={interactions?.onApproveAiProposal === undefined}
                   onPress={() => interactions?.onApproveAiProposal?.()}
@@ -3811,18 +4012,21 @@ function BattleControlMessage({
   readonly choicePrompt: MobileBattleChoicePromptView | null;
   readonly promptNotice: MobileBattlePromptNoticeView | null;
 }) {
-  const t = useMessages();
-  const choiceLabel =
-    choicePrompt === null
-      ? undefined
-      : formatBattlePromptText(t, choicePrompt.label);
-  const message =
-    (promptNotice === null
-      ? undefined
-      : t("battle-prompt-switch-side", { side: promptNotice.promptSide })) ??
-    choiceLabel ??
-    aiApproval?.description;
-  if (message === undefined) return null;
+  const resolve = useLocalizer();
+  const message: MobileBattlePromptCopy | null =
+    promptNotice !== null
+      ? {
+          kind: "message",
+          message: builtInBattlePromptMessage(
+            builtInBattlePromptRef("switch-side", promptNotice.promptSide),
+          ),
+        }
+      : choicePrompt !== null
+        ? choicePrompt.label
+        : aiApproval === null
+          ? null
+          : { kind: "authored", text: aiApproval.description };
+  if (message === null) return null;
   return (
     <div
       aria-live="polite"
@@ -3842,7 +4046,7 @@ function BattleControlMessage({
         pointerEvents: "none",
       }}
     >
-      {message}
+      {message.kind === "authored" ? message.text : resolve(message.message)}
     </div>
   );
 }
@@ -3870,7 +4074,7 @@ function BattleDebugMenu({
       <IconButton
         glyph={GLYPHS.bug}
         size="sm"
-        label={localizationTodo("Battle debug menu")}
+        authoredLabel="Battle debug menu"
         ariaExpanded={isOpen}
         testId="battle-debug-menu-trigger"
         onPress={() => setIsOpen((open) => !open)}
@@ -3897,7 +4101,7 @@ function BattleDebugMenu({
               }}
             >
               <GlassButton
-                label="Fill Battlefield + Voids"
+                authoredLabel="Fill Battlefield + Voids"
                 placement="onGlass"
                 disabled={onFillBattlefieldPreview === undefined}
                 testId="battle-debug-fill-grid"
@@ -3907,7 +4111,7 @@ function BattleDebugMenu({
                 }}
               />
               <GlassButton
-                label="Fill 19 vs 9 + Voids"
+                authoredLabel="Fill 19 vs 9 + Voids"
                 placement="onGlass"
                 disabled={onFillAsymmetricBattlefieldPreview === undefined}
                 testId="battle-debug-fill-asymmetric"
@@ -3980,7 +4184,7 @@ function InspectorButton({
   return (
     <div style={{ minWidth: 0 }}>
       <GlassButton
-        label={label}
+        authoredLabel={label}
         placement="onGlass"
         variant={variant}
         disabled={disabled}
@@ -3998,7 +4202,7 @@ function InspectorSection({ children }: { readonly children: ReactNode }) {
       data-battle-inspector-section=""
       style={{
         paddingBlock: token("--space-m"),
-        borderTop: `1px solid ${token("--border-soft")}`,
+        borderTop: `1px solid ${token("--border-soft")}`
       }}
     >
       {children}
@@ -4050,14 +4254,14 @@ function BattleInspectorContent({
         style={{ minWidth: 0, paddingBottom: token("--space-m") }}
       >
         <GlassButton
-          label={
+          authoredLabel={
             perspective === "player"
               ? "Control Opponent"
               : "Return to Your Side"
           }
           widthReservations={[
-            { label: "Control Opponent" },
-            { label: "Return to Your Side" },
+            { authoredLabel: "Control Opponent" },
+            { authoredLabel: "Return to Your Side" },
           ]}
           placement="onGlass"
           variant={perspective === "enemy" ? "accent" : "default"}
@@ -4138,8 +4342,8 @@ function BattleInspectorContent({
           <SegmentedControl
             full
             options={[
-              { value: "player", label: localizationTodo("You") },
-              { value: "enemy", label: localizationTodo("Enemy") },
+              { value: "player", authoredLabel: "You" },
+              { value: "enemy", authoredLabel: "Enemy" },
             ]}
             value={selectedSide}
             onChange={(value) => onSelectSide(value as MobileBattleOwner)}
@@ -4159,11 +4363,15 @@ function BattleInspectorContent({
             {side.heading} Resources
           </h3>
           <NumberStepper
-            label={localizationTodo("Points")}
+            authoredLabel={"Points"}
             value={side.points}
             resource="points"
-            decrementLabel={localizationTodo(`Decrease ${side.heading.toLowerCase()} points`)}
-            incrementLabel={localizationTodo(`Increase ${side.heading.toLowerCase()} points`)}
+            authoredDecrementLabel={
+              `Decrease ${side.heading.toLowerCase()} points`
+            }
+            authoredIncrementLabel={
+              `Increase ${side.heading.toLowerCase()} points`
+            }
             decrementDisabled={side.points <= 0 || onAction === undefined}
             incrementDisabled={onAction === undefined}
             onDecrement={() =>
@@ -4184,11 +4392,15 @@ function BattleInspectorContent({
             }
           />
           <NumberStepper
-            label={localizationTodo("Current energy")}
+            authoredLabel={"Current energy"}
             value={side.currentEnergy}
             resource="energy"
-            decrementLabel={localizationTodo(`Decrease ${side.heading.toLowerCase()} current energy`)}
-            incrementLabel={localizationTodo(`Increase ${side.heading.toLowerCase()} current energy`)}
+            authoredDecrementLabel={
+              `Decrease ${side.heading.toLowerCase()} current energy`
+            }
+            authoredIncrementLabel={
+              `Increase ${side.heading.toLowerCase()} current energy`
+            }
             decrementDisabled={
               side.currentEnergy <= 0 || onAction === undefined
             }
@@ -4211,11 +4423,15 @@ function BattleInspectorContent({
             }
           />
           <NumberStepper
-            label={localizationTodo("Maximum energy")}
+            authoredLabel={"Maximum energy"}
             value={side.maxEnergy}
             resource="energy"
-            decrementLabel={localizationTodo(`Decrease ${side.heading.toLowerCase()} maximum energy`)}
-            incrementLabel={localizationTodo(`Increase ${side.heading.toLowerCase()} maximum energy`)}
+            authoredDecrementLabel={
+              `Decrease ${side.heading.toLowerCase()} maximum energy`
+            }
+            authoredIncrementLabel={
+              `Increase ${side.heading.toLowerCase()} maximum energy`
+            }
             decrementDisabled={side.maxEnergy <= 0 || onAction === undefined}
             incrementDisabled={onAction === undefined}
             onDecrement={() =>
@@ -4236,12 +4452,18 @@ function BattleInspectorContent({
             }
           />
           <NumberStepper
-            label={localizationTodo("Current + maximum")}
+            authoredLabel={"Current + maximum"}
             value={side.currentEnergy}
-            displayValue={localizationTodo(`${String(side.currentEnergy)}/${String(side.maxEnergy)}`)}
+            authoredDisplayValue={
+              `${String(side.currentEnergy)}/${String(side.maxEnergy)}`
+            }
             resource="energy"
-            decrementLabel={localizationTodo(`Decrease ${side.heading.toLowerCase()} current and maximum energy`)}
-            incrementLabel={localizationTodo(`Increase ${side.heading.toLowerCase()} current and maximum energy`)}
+            authoredDecrementLabel={
+              `Decrease ${side.heading.toLowerCase()} current and maximum energy`
+            }
+            authoredIncrementLabel={
+              `Increase ${side.heading.toLowerCase()} current and maximum energy`
+            }
             decrementDisabled={
               side.currentEnergy <= 0 ||
               side.maxEnergy <= 0 ||
@@ -4404,10 +4626,14 @@ function BattleInspectorContent({
             />
           </div>
           <NumberStepper
-            label={localizationTodo("Erode count")}
+            authoredLabel={"Erode count"}
             value={erodeCount}
-            decrementLabel={localizationTodo(`Decrease erode count for ${side.heading.toLowerCase()}`)}
-            incrementLabel={localizationTodo(`Increase erode count for ${side.heading.toLowerCase()}`)}
+            authoredDecrementLabel={
+              `Decrease erode count for ${side.heading.toLowerCase()}`
+            }
+            authoredIncrementLabel={
+              `Increase erode count for ${side.heading.toLowerCase()}`
+            }
             decrementDisabled={erodeCount <= 1}
             onDecrement={() =>
               setErodeCount((current) => Math.max(1, current - 1))
@@ -4438,8 +4664,8 @@ function BattleInspectorContent({
       </InspectorSection>
 
       <DisclosureSection
-        title={localizationTodo("View & Visibility")}
-        summary={localizationTodo("Pool and hidden hands")}
+        authoredTitle={"View & Visibility"}
+        authoredSummary={"Pool and hidden hands"}
         expanded={visibilityOpen}
         placement="onGlass"
         onExpandedChange={setVisibilityOpen}
@@ -4469,8 +4695,8 @@ function BattleInspectorContent({
 
       {inspector.ai !== null ? (
         <DisclosureSection
-          title={localizationTodo("AI Analysis")}
-          summary={localizationTodo(inspector.ai.kind)}
+          authoredTitle={"AI Analysis"}
+          authoredSummary={inspector.ai.kind}
           expanded={aiOpen}
           placement="onGlass"
           onExpandedChange={setAiOpen}
@@ -4499,8 +4725,8 @@ function BattleInspectorContent({
       ) : null}
 
       <DisclosureSection
-        title={localizationTodo("End Battle")}
-        summary={localizationTodo("Outcomes and local reset")}
+        authoredTitle={"End Battle"}
+        authoredSummary={"Outcomes and local reset"}
         expanded={endBattleOpen}
         placement="onGlass"
         onExpandedChange={setEndBattleOpen}
@@ -4561,9 +4787,11 @@ function BattleInspectorRail({
       <DeveloperRail
         id={INSPECTOR_ID}
         side="right"
-        title={localizationTodo("Battle Inspector")}
-        subtitle={localizationTodo(`Opponent: ${inspector.opponentName} · Perspective: ${inspector.perspective}`)}
-        closeLabel={localizationTodo("Close battle inspector")}
+        authoredTitle={"Battle Inspector"}
+        authoredSubtitle={
+          `Opponent: ${inspector.opponentName} · Perspective: ${inspector.perspective}`
+        }
+        authoredCloseLabel={"Close battle inspector"}
         onClose={onClose}
       >
         <BattleInspectorContent
@@ -4597,7 +4825,7 @@ export function MobileBattleScreen({
   inspectorVisibility = "available",
   cardLayoutGroup = "owned",
 }: MobileBattleScreenProps) {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const isDesktop = useIsDesktop();
   const isDockLayout = useIsDesktop(INSPECTOR_DOCK_MIN_WIDTH);
   const inspectorStartsOpen = inspectorDefault === "responsive" && isDockLayout;
@@ -5210,9 +5438,14 @@ export function MobileBattleScreen({
             <IconButton
               glyph={GLYPHS.block}
               size="sm"
-              label={localizationTodo(t("battle-banished-cards-open", {
-                count: banishedCardCount,
-              }))}
+              label={txa(
+                  plural(banishedCardCount, [
+                    one("Open {count} banished Card"),
+                    other("Open {count} banished Cards"),
+                  ]),
+                  { count: banishedCardCount },
+                  "Accessible name for the icon-only control that opens all banished battle cards. count is the positive number of banished cards across both players.",
+                )}
               testId="near-battle-banished"
               onPress={() =>
                 interactions.onZoneOpen?.({
@@ -5257,11 +5490,10 @@ export function MobileBattleScreen({
             <IconButton
               glyph={GLYPHS.sidebarRight}
               size="sm"
-              label={
-                /* localization-ignore: developer-only battle inspector control. */
-                localizationTodo(isInspectorOpen
+              authoredLabel={
+                isInspectorOpen
                   ? "Close battle inspector"
-                  : "Open battle inspector")
+                  : "Open battle inspector"
               }
               ariaExpanded={isInspectorOpen}
               ariaControls={INSPECTOR_ID}
@@ -5339,22 +5571,32 @@ export function MobileBattleScreen({
       {mergeNotice !== null ? (
         <TransientStatusToast
           copy={{
-            title: t("battle-figment-merge-blocked-title"),
-            message: t("battle-figment-merge-blocked-exhaustion"),
+            title: tx(
+              "Merge Blocked",
+              "Title of the transient notice shown when a Figment merge is rejected before the current player's intent is sent.",
+            ),
+            message: tx(
+              "An exhausted Figment cannot be merged with one that is not exhausted.",
+              "Explanation in that notice when exhaustion states make the two Figments incompatible. Both referenced Figments are visible on the battlefield.",
+            ),
           }}
           onDismiss={() => setMergeNotice(null)}
         />
       ) : null}
-      {/* localization-ignore: developer-only battle inspector controls are outside the player path. */}
       {mergeConfirmation !== null ? (
         <GlassDialog
-          title={localizationTodo(t("battle-figment-merge-confirmation-title", {
-            figmentName: mergeConfirmation.figmentLabel,
-          }))}
+          title={txa(
+              "Merge {figment_name}?",
+              { figment_name: mergeConfirmation.figmentLabel },
+              "Confirmation-dialog title for merging one Figment into another. figment_name is the canonical display name of the target Figment and has unknown grammatical gender; activating the confirmation performs the merge.",
+            )}
           presentation="popup"
           desktopCenterTarget="battlefield"
           onClose={() => setMergeConfirmation(null)}
-          closeLabel={localizationTodo(t("battle-figment-merge-cancel-action"))}
+          closeLabel={tx(
+              meaning("figment-merge-cancel", "Cancel"),
+              "Visible command and accessible close name that cancels a pending Figment merge.",
+            )}
         >
           <div
             data-battle-figment-merge-confirmation=""
@@ -5372,9 +5614,11 @@ export function MobileBattleScreen({
               }}
             >
               {renderRulesSymbolsInline(
-                t("battle-figment-merge-legionnaire-warning", {
-                  sparkCount: mergeConfirmation.addedSpark,
-                }),
+                resolve(txa(
+                  "Only {spark_count} ✦ from this Legionnaire will be added. Its Warrior-count bonus does not transfer. This merge cannot be undone.",
+                  { spark_count: mergeConfirmation.addedSpark },
+                  "Complete warning in the confirmation dialog for a Legionnaire Figment merge. spark_count is the non-negative Spark added to the destination Figment. The ✦ is the canonical Spark symbol and becomes an accessible glyph. The Legionnaire's Warrior-count bonus is excluded, and the action is irreversible.",
+                )),
               )}
             </p>
             <div
@@ -5385,12 +5629,18 @@ export function MobileBattleScreen({
               }}
             >
               <GlassButton
-                label={t("battle-figment-merge-cancel-action")}
+                label={tx(
+                  meaning("figment-merge-cancel", "Cancel"),
+                  "Visible command and accessible close name that cancels a pending Figment merge.",
+                )}
                 placement="onGlass"
                 onPress={() => setMergeConfirmation(null)}
               />
               <GlassButton
-                label={t("battle-figment-merge-confirm-action")}
+                label={tx(
+                  meaning("figment-merge-action", "Merge"),
+                  "Visible command that confirms the pending Figment merge.",
+                )}
                 variant="accent"
                 placement="onGlass"
                 testId="battle-figment-merge-confirm"
@@ -5405,15 +5655,9 @@ export function MobileBattleScreen({
       !isDockLayout &&
       isInspectorOpen ? (
         <GlassDialog
-          title={
-            /* localization-ignore: developer-only battle inspector control. */ localizationTodo("Battle Inspector")
-          }
-          subtitle={
-            /* localization-ignore: developer-only battle inspector control. */ localizationTodo(`Developer Tools · Opponent: ${view.inspector.opponentName}`)
-          }
-          closeLabel={
-            /* localization-ignore: developer-only battle inspector control. */ localizationTodo("Close battle inspector")
-          }
+          authoredTitle="Battle Inspector"
+          authoredSubtitle={`Developer Tools · Opponent: ${view.inspector.opponentName}`}
+          authoredCloseLabel="Close battle inspector"
           cutoutAwareClose
           fullScreen
           onClose={closeInspector}

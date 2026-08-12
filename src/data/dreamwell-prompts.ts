@@ -2,7 +2,6 @@ import type {
   DreamwellCard,
   DreamwellPromptArgumentKind,
 } from "./dreamwell-database";
-import type { FluentMessageDescriptor } from "./localization-messages";
 
 export type DreamwellPromptArgumentValue = string | number;
 
@@ -22,8 +21,157 @@ export interface LegacyPromptText {
   readonly text: string;
 }
 
+/** Stable semantic identity for application-owned battle prompt copy. */
+export const BUILT_IN_BATTLE_PROMPT_KINDS = [
+  "discover-character",
+  "confirm-yes",
+  "confirm-skip",
+  "generic",
+  "generic-subtitle",
+  "generic-option",
+  "switch-side",
+] as const;
+
+export type BuiltInBattlePromptRef =
+  | {
+      readonly kind: "built-in-battle-prompt";
+      readonly prompt: "discover-character";
+    }
+  | {
+      readonly kind: "built-in-battle-prompt";
+      readonly prompt: "confirm-yes";
+    }
+  | {
+      readonly kind: "built-in-battle-prompt";
+      readonly prompt: "confirm-skip";
+    }
+  | {
+      readonly kind: "built-in-battle-prompt";
+      readonly prompt: "generic";
+    }
+  | {
+      readonly kind: "built-in-battle-prompt";
+      readonly prompt: "generic-subtitle";
+    }
+  | {
+      readonly kind: "built-in-battle-prompt";
+      readonly prompt: "generic-option";
+    }
+  | {
+      readonly kind: "built-in-battle-prompt";
+      readonly prompt: "switch-side";
+      readonly side: "player" | "enemy";
+    };
+
 export type BattlePromptText =
-  FluentMessageDescriptor | DreamwellPromptRef | LegacyPromptText;
+  | BuiltInBattlePromptRef
+  | DreamwellPromptRef
+  | LegacyPromptText;
+
+export function builtInBattlePromptRef(
+  prompt: Exclude<BuiltInBattlePromptRef["prompt"], "switch-side">,
+): BuiltInBattlePromptRef;
+export function builtInBattlePromptRef(
+  prompt: "switch-side",
+  side: "player" | "enemy",
+): BuiltInBattlePromptRef;
+export function builtInBattlePromptRef(
+  prompt: BuiltInBattlePromptRef["prompt"],
+  side?: "player" | "enemy",
+): BuiltInBattlePromptRef {
+  if (prompt === "switch-side") {
+    if (side !== "player" && side !== "enemy") {
+      throw new TypeError("A switch-side battle prompt requires a valid side");
+    }
+    return { kind: "built-in-battle-prompt", prompt, side };
+  }
+  if (side !== undefined) {
+    throw new TypeError("Only a switch-side battle prompt accepts a side");
+  }
+  return { kind: "built-in-battle-prompt", prompt };
+}
+
+function isExactRecord(
+  value: unknown,
+  expectedKeys: readonly string[],
+): value is Record<string, unknown> {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    return false;
+  }
+  return (
+    Object.keys(value).sort().join("\u0000") ===
+    [...expectedKeys].sort().join("\u0000")
+  );
+}
+
+export function isBuiltInBattlePromptRef(
+  value: unknown,
+): value is BuiltInBattlePromptRef {
+  if (
+    value === null ||
+    typeof value !== "object" ||
+    Array.isArray(value) ||
+    (value as { kind?: unknown }).kind !== "built-in-battle-prompt"
+  ) {
+    return false;
+  }
+  const candidate = value as Record<string, unknown>;
+  if (candidate.prompt === "switch-side") {
+    return (
+      isExactRecord(value, ["kind", "prompt", "side"]) &&
+      (candidate.side === "player" || candidate.side === "enemy")
+    );
+  }
+  return (
+    isExactRecord(value, ["kind", "prompt"]) &&
+    (candidate.prompt === "discover-character" ||
+      candidate.prompt === "confirm-yes" ||
+      candidate.prompt === "confirm-skip" ||
+      candidate.prompt === "generic" ||
+      candidate.prompt === "generic-subtitle" ||
+      candidate.prompt === "generic-option")
+  );
+}
+
+/** Normalize the exact built-in descriptor shapes persisted by v24 imports. */
+export function builtInBattlePromptRefFromV24Descriptor(
+  value: unknown,
+): BuiltInBattlePromptRef | null {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    return null;
+  }
+  const descriptor = value as Record<string, unknown>;
+  const withoutVariables: Readonly<
+    Record<
+      string,
+      Exclude<BuiltInBattlePromptRef["prompt"], "switch-side">
+    >
+  > = {
+    "battle-prompt-discover-character": "discover-character",
+    "battle-prompt-confirm-yes": "confirm-yes",
+    "battle-prompt-confirm-skip": "confirm-skip",
+    "battle-prompt-generic": "generic",
+    "battle-prompt-generic-subtitle": "generic-subtitle",
+    "battle-prompt-generic-option": "generic-option",
+  };
+  if (
+    typeof descriptor.id === "string" &&
+    Object.prototype.hasOwnProperty.call(withoutVariables, descriptor.id) &&
+    isExactRecord(value, ["id"])
+  ) {
+    return builtInBattlePromptRef(withoutVariables[descriptor.id]);
+  }
+  if (
+    descriptor.id === "battle-prompt-switch-side" &&
+    isExactRecord(value, ["id", "variables"]) &&
+    isExactRecord(descriptor.variables, ["side"]) &&
+    (descriptor.variables.side === "player" ||
+      descriptor.variables.side === "enemy")
+  ) {
+    return builtInBattlePromptRef("switch-side", descriptor.variables.side);
+  }
+  return null;
+}
 
 export function dreamwellPromptRef(
   cardId: string,

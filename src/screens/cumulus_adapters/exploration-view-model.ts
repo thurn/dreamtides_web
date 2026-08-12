@@ -1,7 +1,6 @@
 // Pure view-model construction for the Exploration encounter.
 
 import { resolveDeckEntryCard } from "../../card-type-change";
-import { createMessageDescriptor } from "../../data/localization-descriptors";
 import type { GameCardModel } from "../../cumulus/components/card/CardView";
 import type { DreamscapeSiteModel } from "../../cumulus/components/dreamscape/SiteNode";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
@@ -57,6 +56,7 @@ import {
 import { MERCHANT_TUNING } from "../../journey_v2/tuning";
 import { projectGuideView } from "./guide-view-model";
 import { transfigurationForm } from "../../data/transfiguration-data";
+import { tx } from "@trox/runtime";
 
 /** Resolve Layaway, the resident guide for Exploration. */
 export function resolveExplorationGuide(
@@ -3742,10 +3742,16 @@ function rewardForResolution(
   );
   const resolvedEffectText =
     resolvedActionView?.effectText ?? resolvedAction?.effectText ?? "";
-  const resolvedEffectDescriptor =
+  const resolvedEffectAnnouncement =
     resolvedActionView === undefined && resolvedAction === undefined
-      ? createMessageDescriptor("exploration-effect-resolved-fallback")
-      : undefined;
+      ? {
+          kind: "message" as const,
+          message: tx(
+            "Exploration effect resolved",
+            "Generic player-safe Exploration outcome fallback when the resolved action is unavailable to the presentation model.",
+          ),
+        }
+      : { kind: "authored" as const, text: resolvedEffectText };
   if (
     resolvedAction?.effectKind === "add-fixed-site" ||
     resolvedAction?.effectKind === "choose-site-type"
@@ -4298,29 +4304,20 @@ function rewardForResolution(
         return {
           kind: "spark" as const,
           amount: resolvedAction.sparkBonus ?? 1,
-          announcement: resolvedEffectText,
-          ...(resolvedEffectDescriptor === undefined
-            ? {}
-            : { announcementDescriptor: resolvedEffectDescriptor }),
+          announcement: resolvedEffectAnnouncement,
           cards,
         };
       case "make-fast-all":
         return {
           kind: "fast" as const,
-          announcement: resolvedEffectText,
-          ...(resolvedEffectDescriptor === undefined
-            ? {}
-            : { announcementDescriptor: resolvedEffectDescriptor }),
+          announcement: resolvedEffectAnnouncement,
           cards,
         };
       case "reduce-cost-all-and-gain-nightmares":
         return {
           kind: "energy-cost" as const,
           amount: resolvedAction.energyCostReduction ?? 0,
-          announcement: resolvedEffectText,
-          ...(resolvedEffectDescriptor === undefined
-            ? {}
-            : { announcementDescriptor: resolvedEffectDescriptor }),
+          announcement: resolvedEffectAnnouncement,
           cards,
         };
       case "change-subtype-all":
@@ -4328,19 +4325,13 @@ function rewardForResolution(
         return {
           kind: "subtype" as const,
           subtype: resolution.chosenSubtype ?? null,
-          announcement: resolvedEffectText,
-          ...(resolvedEffectDescriptor === undefined
-            ? {}
-            : { announcementDescriptor: resolvedEffectDescriptor }),
+          announcement: resolvedEffectAnnouncement,
           cards,
         };
       case "purge-duplicates-and-grant-reclaim":
         return {
           kind: "reclaim" as const,
-          announcement: resolvedEffectText,
-          ...(resolvedEffectDescriptor === undefined
-            ? {}
-            : { announcementDescriptor: resolvedEffectDescriptor }),
+          announcement: resolvedEffectAnnouncement,
           cards,
           reclaimCostByEntryId: resolution.reclaimCostByEntryId ?? {},
         };
@@ -4356,10 +4347,7 @@ function rewardForResolution(
             transfiguration,
           ).name,
           essenceSpent: resolution.essenceSpent ?? 0,
-          announcement: resolvedEffectText,
-          ...(resolvedEffectDescriptor === undefined
-            ? {}
-            : { announcementDescriptor: resolvedEffectDescriptor }),
+          announcement: resolvedEffectAnnouncement,
           cards,
         };
       }

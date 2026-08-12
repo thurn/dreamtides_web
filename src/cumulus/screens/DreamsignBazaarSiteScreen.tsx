@@ -1,7 +1,7 @@
 // DreamsignBazaarSiteScreen — Amunet's Cumulus Dreamsign bazaar. It uses the
 // Dream Market's guide/gallery stage with Dreamsign entities in the glass shelf.
 
-import { motion } from "framer-motion";
+import {motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
 import { DreamsignGalleryPanel } from "../components/card/DreamsignGalleryPanel";
@@ -15,11 +15,12 @@ import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
-import { useMessages } from "../hooks/use-messages";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 import {
   ShopFreePurchaseStatus,
   type ShopFreePurchaseStatusView,
 } from "./ShopFreePurchaseStatus";
+import { meaning, tx, txa } from "@trox/runtime";
 
 // Four 126px items, three 16px gaps, and the panel's 64px horizontal padding
 // occupy 616px; this cap keeps a deliberate 32px breathing edge per side.
@@ -156,7 +157,6 @@ function DreamsignBazaarGallery({
   readonly onClose: () => void;
 }) {
   const desktop = layout === "desktop";
-  const t = useMessages();
   const [locallyPurchasedEntryIds, setLocallyPurchasedEntryIds] = useState(
     () => new Set<string>(),
   );
@@ -275,7 +275,10 @@ function DreamsignBazaarGallery({
           disabled: restock.state !== "available",
         }}
         size={desktop ? "standard" : "compact"}
-        closeLabel={t("dreamsign-bazaar-leave-action")}
+        closeLabel={tx(
+          "Leave Dreamsign Bazaar",
+          "Player-facing message for the dreamsign bazaar leave action interface state.",
+        )}
         testId="cumulus-dreamsign-bazaar-gallery"
         onClose={onClose}
         onEntryPress={buyOffer}
@@ -360,7 +363,7 @@ function DreamsignReplacementDialog({
   readonly onPurge: (index: number) => void;
   readonly onCancel: () => void;
 }) {
-  const t = useMessages();
+  const resolve = useLocalizer();
   return (
     <div
       role="dialog"
@@ -403,9 +406,11 @@ function DreamsignReplacementDialog({
         <p
           style={{ font: token("--t-body"), color: token("--text-secondary") }}
         >
-          {t("dreamsign-bazaar-replacement-full", {
-            count: purge.maxDreamsigns,
-          })}
+          {resolve(txa(
+            "Your collection is full at {count} Dreamsigns.",
+            { count: purge.maxDreamsigns },
+            "Player-facing message for the dreamsign bazaar replacement full interface state.",
+          ))}
         </p>
         <div
           style={{
@@ -436,7 +441,10 @@ function DreamsignReplacementDialog({
               color: token("--text-secondary"),
             }}
           >
-            {t("dreamsign-bazaar-replacement-cancel")}
+            {resolve(tx(
+              meaning("dreamsign-replacement-cancel", "Cancel"),
+              "Player-facing message for the dreamsign bazaar replacement cancel interface state.",
+            ))}
           </Pressable>
         </div>
       </div>

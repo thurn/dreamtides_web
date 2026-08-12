@@ -18,6 +18,7 @@
 // press, up on hover); `disabled` dims the full control, marks it
 // `aria-disabled`, and detaches its click and press feedback.
 
+import type { LocalizedString } from "@trox/runtime";
 import type { ReactElement } from "react";
 import { StandaloneGlyph } from "./StandaloneGlyph";
 import { EssenceValue } from "../hud/EssenceValue";
@@ -29,6 +30,7 @@ import {
   controlChrome,
   glassAccentChrome,
 } from "../../internal/control-treatment";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** Named control heights (px): standard aligns with the control cluster while
  * prominent supplies the larger primary-action target. */
@@ -46,14 +48,17 @@ export type GlassButtonSize = "prominent" | "standard" | "compact";
 
 /** One possible label/essence-cost state whose intrinsic width is reserved. */
 export interface GlassButtonWidthReservation {
-  label: string;
+  label?: LocalizedString;
+  authoredLabel?: string;
   essenceCost?: number | null;
 }
 
 /** Core GlassButton props shared by structured action models. */
 export interface GlassButtonAction {
   /** The button's text, centered by the component at every rendered width. */
-  label: string;
+  label?: LocalizedString;
+  /** Button text supplied by canonical authored or developer-only content. */
+  authoredLabel?: string;
   /** Fires when the button is activated (no-op while disabled). */
   onPress: () => void;
   /** Optional leading glyph painted as a `StandaloneGlyph` before the label. */
@@ -117,12 +122,13 @@ interface GlassButtonOptions {
   /** Toggle state for controls whose action switches a persistent local mode. */
   pressed?: boolean;
   /** Accessible name when the visible label alone does not distinguish siblings. */
-  accessibilityLabel?: string;
+  accessibilityLabel?: LocalizedString;
+  /** Accessible name supplied by canonical authored or developer-only copy. */
+  authoredAccessibilityLabel?: string;
 }
 
 export interface GlassButtonProps
-  extends GlassButtonAction,
-    GlassButtonOptions {}
+  extends GlassButtonAction, GlassButtonOptions {}
 
 /**
  * GlassButton — a `controlChrome().trigger` glass surface carrying a text
@@ -132,6 +138,7 @@ export interface GlassButtonProps
  */
 export function GlassButton({
   label,
+  authoredLabel,
   onPress,
   glyph,
   essenceCost = null,
@@ -143,8 +150,18 @@ export function GlassButton({
   disabled = false,
   pressed,
   accessibilityLabel,
+  authoredAccessibilityLabel,
   testId,
 }: GlassButtonProps): ReactElement {
+  const resolve = useLocalizer();
+  if ((label === undefined) === (authoredLabel === undefined)) {
+    throw new Error(
+      "GlassButton requires exactly one of label or authoredLabel.",
+    );
+  }
+  if (accessibilityLabel !== undefined && authoredAccessibilityLabel !== undefined) {
+    throw new Error("GlassButton accepts accessibilityLabel or authoredAccessibilityLabel, not both.");
+  }
   const chrome = controlChrome(placement);
   const variantChrome = resolveVariantChrome(variant, placement);
   return (
@@ -153,7 +170,11 @@ export function GlassButton({
       data-glass-placement={placement}
       data-glass-variant={variant}
       data-testid={testId}
-      aria-label={accessibilityLabel}
+      aria-label={
+        authoredAccessibilityLabel ?? (accessibilityLabel === undefined
+          ? undefined
+          : resolve(accessibilityLabel))
+      }
       aria-pressed={pressed}
       data-pressed={pressed === undefined ? undefined : String(pressed)}
       disabled={disabled}
@@ -199,12 +220,13 @@ export function GlassButton({
       >
         <GlassButtonContent
           label={label}
+          authoredLabel={authoredLabel}
           essenceCost={essenceCost}
           essenceValue={essenceValue}
         />
         {widthReservations.map((reservation, index) => (
           <span
-            key={`${reservation.label}-${String(reservation.essenceCost)}-${String(index)}`}
+            key={`${String(reservation.essenceCost)}-${String(index)}`}
             aria-hidden="true"
             data-glass-button-width-reservation=""
             style={{
@@ -217,6 +239,7 @@ export function GlassButton({
           >
             <GlassButtonContent
               label={reservation.label}
+              authoredLabel={reservation.authoredLabel}
               essenceCost={reservation.essenceCost ?? null}
               essenceValue={null}
             />
@@ -240,13 +263,21 @@ function resolveVariantChrome(
 
 function GlassButtonContent({
   label,
+  authoredLabel,
   essenceCost,
   essenceValue,
 }: {
-  readonly label: string;
+  readonly label?: LocalizedString;
+  readonly authoredLabel?: string;
   readonly essenceCost: number | null;
   readonly essenceValue: number | null;
 }): ReactElement {
+  const resolve = useLocalizer();
+  if ((label === undefined) === (authoredLabel === undefined)) {
+    throw new Error(
+      "GlassButton content requires exactly one localized or authored label.",
+    );
+  }
   return (
     <span
       data-glass-button-content=""
@@ -258,7 +289,7 @@ function GlassButtonContent({
         gap: 0,
       }}
     >
-      <span>{label}</span>
+      <span>{label === undefined ? authoredLabel : resolve(label)}</span>
       {essenceCost !== null && (
         <span
           data-glass-button-essence-cost=""

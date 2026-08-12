@@ -8,6 +8,7 @@ import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { StartingDeckOverlay } from "./StartingDeckOverlay";
 import type { StartingDeckView } from "./StartingDeckOverlay";
+import { CumulusRoot } from "../CumulusRoot";
 
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
@@ -99,7 +100,7 @@ function mount(element: ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(element);
+    root.render(<CumulusRoot>{element}</CumulusRoot>);
   });
   return { container, root };
 }

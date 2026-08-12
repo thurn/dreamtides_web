@@ -348,8 +348,7 @@ describe("exploration-view-model", () => {
       deckModification: {
         kind: "spark",
         amount: 1,
-        announcement:
-          "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
+        announcement: { kind: "authored" },
         cards: [
           {
             entryId: "entry-character",
@@ -900,7 +899,7 @@ describe("exploration-view-model", () => {
     });
     expect(resolvedView?.reward).toMatchObject({
       deckModification: {
-        announcement: `Change ${target.name} to become a Survivor`,
+        announcement: { kind: "authored" },
       },
     });
   });

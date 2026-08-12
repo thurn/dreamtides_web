@@ -1,45 +1,57 @@
 import type { ReactElement } from "react";
-import { glassSurfaceStyle } from "../../internal/glass-surface";
+import {glassSurfaceStyle } from "../../internal/glass-surface";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import type { CumulusColor } from "../../primitives/color";
 import { token } from "../../primitives/tokens";
 import { InlineGlyph } from "../typography/InlineGlyph";
-import { createMessageDescriptor } from "../../../data/localization-descriptors";
-import type { FluentMessageDescriptor } from "../../../data/localization-messages";
-import { formatMessageDescriptor, useMessages } from "../../hooks/use-messages";
+import { meaning, tx, type LocalizedString } from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** The four authored card regions taught by the loading-screen anatomy scene. */
 export type TutorialFeatureCalloutKind =
-  | "cost"
-  | "spark"
-  | "ability"
-  | "cardType";
+  "cost" | "spark" | "ability" | "cardType";
 
 interface CardFeatureSpec {
-  readonly label: FluentMessageDescriptor;
+  readonly label: LocalizedString;
   readonly glyph?: Glyph;
   readonly color?: CumulusColor;
-  readonly glyphLabel?: FluentMessageDescriptor;
+  readonly glyphLabel?: LocalizedString;
 }
 
 const CARD_FEATURES: Readonly<
   Record<TutorialFeatureCalloutKind, CardFeatureSpec>
 > = {
-    cost: {
-      label: createMessageDescriptor("tutorial-feature-cost"),
-      glyph: GLYPHS.energy,
-      color: "energy",
-      glyphLabel: createMessageDescriptor("tutorial-feature-energy-glyph"),
-    },
-    spark: {
-      label: createMessageDescriptor("tutorial-feature-spark"),
-      glyph: GLYPHS.sparkInline,
-      color: "spark",
-      glyphLabel: createMessageDescriptor("tutorial-feature-spark-glyph"),
-    },
-    ability: { label: createMessageDescriptor("tutorial-feature-ability") },
-    cardType: { label: createMessageDescriptor("tutorial-feature-card-type") },
-  };
+  cost: {
+    label: tx(meaning("tutorial-cost-feature-label", "Cost"), "Loading-screen card feature labels."),
+    glyph: GLYPHS.energy,
+    color: "energy",
+    glyphLabel: tx("energy", "Loading-screen resource glyph accessible names."),
+  },
+  spark: {
+    label: tx(
+      meaning("tutorial-spark-feature-label", "Spark"),
+      "Player-facing message for the tutorial feature spark interface state.",
+    ),
+    glyph: GLYPHS.sparkInline,
+    color: "spark",
+    glyphLabel: tx(
+      "spark",
+      "Player-facing message for the tutorial feature spark glyph interface state.",
+    ),
+  },
+  ability: {
+    label: tx(
+      meaning("tutorial-ability-feature-label", "Ability"),
+      "Player-facing message for the tutorial feature ability interface state.",
+    ),
+  },
+  cardType: {
+    label: tx(
+      "Card Type",
+      "Player-facing message for the tutorial feature card type interface state.",
+    ),
+  },
+};
 
 export interface TutorialFeatureCalloutProps {
   /** Semantic card region named by this callout. */
@@ -58,7 +70,7 @@ export function TutorialFeatureCallout({
   testId,
 }: TutorialFeatureCalloutProps): ReactElement {
   const spec = CARD_FEATURES[feature];
-  const t = useMessages();
+  const resolve = useLocalizer();
 
   return (
     <aside
@@ -83,14 +95,10 @@ export function TutorialFeatureCallout({
         <InlineGlyph
           glyph={spec.glyph}
           color={spec.color}
-          label={
-            spec.glyphLabel === undefined
-              ? undefined
-              : formatMessageDescriptor(t, spec.glyphLabel)
-          }
+          label={spec.glyphLabel}
         />
       )}
-      <span>{formatMessageDescriptor(t, spec.label)}</span>
+      <span>{resolve(spec.label)}</span>
     </aside>
   );
 }

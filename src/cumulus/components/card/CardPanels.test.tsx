@@ -172,7 +172,7 @@ describe("CardPickerPanel", () => {
     const close = vi.fn(); const restock = vi.fn();
     const container = document.createElement("div"); document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CumulusRoot><CardPickerPanel title={localizationTodo("Card Shop")} cards={[]} rightAccessory={{ kind: "iconButton", button: { glyph: GLYPHS.close, label: localizationTodo("Close"), onPress: close, testId: "close" } }} endAction={{ entryId: "restock", glyph: GLYPHS.refresh, label: "Restock", caption: { kind: "essence", amount: 50 }, testId: "restock" }} onEndActionPress={restock} /></CumulusRoot>));
+    act(() => root.render(<CumulusRoot><CardPickerPanel title={localizationTodo("Card Shop")} cards={[]} rightAccessory={{ kind: "iconButton", button: { glyph: GLYPHS.close, label: localizationTodo("Close"), onPress: close, testId: "close" } }} endAction={{ entryId: "restock", glyph: GLYPHS.refresh, label: localizationTodo("Restock"), caption: { kind: "essence", amount: 50 }, testId: "restock" }} onEndActionPress={restock} /></CumulusRoot>));
     act(() => (container.querySelector('[data-testid="close"]') as HTMLButtonElement).click());
     act(() => (container.querySelector('[data-testid="restock"]') as HTMLButtonElement).click());
     expect(close).toHaveBeenCalledOnce(); expect(restock).toHaveBeenCalledWith("restock");
@@ -189,7 +189,7 @@ describe("CardPickerPanel", () => {
       title={localizationTodo("Transfiguration")}
       cards={[]}
       footerActions={[
-        { label: "Decline Offer", onPress: decline, testId: "decline" },
+        { label: localizationTodo("Decline Offer"), onPress: decline, testId: "decline" },
       ]}
     /></CumulusRoot>));
     expect(container.querySelector("[data-gallery-footer-actions]")).toBeNull();
@@ -206,8 +206,8 @@ describe("CardPickerPanel", () => {
     const render = (shown: boolean) => <CumulusRoot><CardPickerPanel title={localizationTodo("Duplication")} cards={[
       { entryId: "selected", model: model("Selected"), stackedCopy: { shown, direction: "left" } },
     ]} footerActions={[
-      { label: "Decline Offer", onPress: decline, testId: "decline" },
-      { label: "Duplicate", onPress: confirm, variant: "accent", testId: "confirm" },
+      { label: localizationTodo("Decline Offer"), onPress: decline, testId: "decline" },
+      { label: localizationTodo("Duplicate"), onPress: confirm, variant: "accent", testId: "confirm" },
     ]} /></CumulusRoot>;
     act(() => root.render(render(false)));
     expect(container.querySelector<HTMLElement>("[data-gallery-role=picker]")?.dataset.galleryReservesStackedCopy).toBe("true");

@@ -179,7 +179,7 @@ function DefinitionSymbol({
             marginLeft: index === 0 ? undefined : "-0.35em",
           }}
         >
-          <InlineGlyph glyph={glyph} color="text-primary" label={title} />
+          <InlineGlyph glyph={glyph} color="text-primary" authoredLabel={title} />
         </span>
       ))}
     </span>

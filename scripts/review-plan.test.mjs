@@ -8,8 +8,7 @@ describe("fast review plan", () => {
     expect(buildReviewPlan(["docs/notes.md"])).toEqual({
       changedFiles: ["docs/notes.md"],
       lintFiles: [],
-      shouldCheckFluentFormatting: false,
-      shouldLintLocalization: false,
+      shouldCheckTrox: false,
       shouldCheckRonFormatting: false,
       shouldTypecheck: false,
       shouldTestGameData: false,
@@ -33,8 +32,7 @@ describe("fast review plan", () => {
         "src/state/journey-state-actions.test.ts",
         "src/state/journey-state-actions.ts",
       ],
-      shouldCheckFluentFormatting: false,
-      shouldLintLocalization: false,
+      shouldCheckTrox: true,
       shouldCheckRonFormatting: false,
       shouldTypecheck: true,
       shouldTestGameData: false,
@@ -66,54 +64,43 @@ describe("fast review plan", () => {
     });
   });
 
-  it("selects localization contract checks for Fluent source changes", () => {
+  it("selects localization contract checks for the Trox project config", () => {
     expect(
-      buildReviewPlan(["data/locales/en-US/battle-prompts.ftl"]),
+      buildReviewPlan(["trox.ron"]),
     ).toMatchObject({
-      shouldLintLocalization: true,
+      shouldCheckTrox: true,
       shouldTypecheck: false,
-      shouldValidate: true,
       testInputs: [
-        "data/locales/en-US/battle-prompts.ftl",
-        "scripts/format-fluent.test.mjs",
-        "scripts/generate-localization-types.test.mjs",
-        "scripts/localization-catalog.test.mjs",
+        "scripts/trox-csv-sync.test.mjs",
+        "scripts/trox-generated-check.test.mjs",
+        "scripts/trox.test.mjs",
       ],
-      shouldCheckFluentFormatting: true,
     });
   });
 
-  it("selects localization contract checks for the locale manifest", () => {
-    expect(buildReviewPlan(["data/locales/en-US/manifest.json"])).toMatchObject(
+  it("selects localization contract checks for a locale report", () => {
+    expect(buildReviewPlan(["localization/qa/es.csv"])).toMatchObject(
       {
-        shouldLintLocalization: true,
-        shouldValidate: true,
+        shouldCheckTrox: true,
         testInputs: [
-          "data/locales/en-US/manifest.json",
-          "scripts/format-fluent.test.mjs",
-          "scripts/generate-localization-types.test.mjs",
-          "scripts/localization-catalog.test.mjs",
+          "scripts/trox-csv-sync.test.mjs",
+          "scripts/trox-generated-check.test.mjs",
+          "scripts/trox.test.mjs",
         ],
       },
     );
   });
 
-  it("selects the Fluent formatting gate for formatter changes", () => {
-    expect(buildReviewPlan(["scripts/fluent-format.mjs"])).toMatchObject({
-      shouldCheckFluentFormatting: true,
+  it("selects Trox checks and wrapper tests for wrapper changes", () => {
+    expect(buildReviewPlan(["scripts/trox.mjs"])).toMatchObject({
+      shouldCheckTrox: true,
       testInputs: [
-        "scripts/fluent-format.mjs",
-        "scripts/format-fluent.test.mjs",
-        "scripts/generate-localization-types.test.mjs",
-        "scripts/localization-catalog.test.mjs",
+        "scripts/trox-csv-sync.test.mjs",
+        "scripts/trox-generated-check.test.mjs",
+        "scripts/trox.mjs",
+        "scripts/trox.test.mjs",
       ],
     });
-  });
-
-  it("selects localization lint when its validator changes", () => {
-    expect(
-      buildReviewPlan(["scripts/validate-localization-source.mjs"]),
-    ).toMatchObject({ shouldLintLocalization: true });
   });
 
   it("routes repository scripts to related tests without typed source lint", () => {

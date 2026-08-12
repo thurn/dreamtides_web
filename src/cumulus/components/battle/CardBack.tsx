@@ -1,10 +1,12 @@
 import cardBackUrl from "../../assets/card_back.png";
 import { CARD_ASPECT_RATIO, CARD_CORNER_RADIUS } from "../card/card-aspect";
 import { token } from "../../primitives/tokens";
+import type { LocalizedString } from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export interface CardBackProps {
   /** Accessible description of this face-down card in its current zone. */
-  readonly label: string;
+  readonly label: LocalizedString;
   /** Optional stable test id for the face-down card object. */
   readonly testId?: string;
 }
@@ -15,10 +17,11 @@ export interface CardBackProps {
  * place it through a wrapper.
  */
 export function CardBack({ label, testId }: CardBackProps) {
+  const resolve = useLocalizer();
   return (
     <img
       src={cardBackUrl}
-      alt={label}
+      alt={resolve(label)}
       data-card-back=""
       data-testid={testId}
       draggable={false}

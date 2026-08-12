@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, RefObject } from "react";
 import "./CardView.css";
 import type { CardData, FrozenCardData, Rarity } from "../../../types/cards";
@@ -32,13 +32,14 @@ import type { CardTransfigurationDisplay } from "../../../runtime/transfiguratio
 import { TRANSFIGURE_MARK_START } from "../../../runtime/transfigure-markers";
 import { renderRulesText } from "./RulesText";
 import { useFitText } from "../controls/useFitText";
-import { useMessages } from "../../hooks/use-messages";
 import { DESKTOP_MIN_WIDTH } from "../../screens/use-is-desktop";
 import { Pressable } from "../../primitives/Pressable";
 import { useRevealSource } from "../../internal/reveal/context";
 import { DEFAULT_ART_CROP, resolveCardArtImageStyle } from "./card-art-crop";
 import { rulesTextDefinitionCards } from "./rules-text-reveal";
 import { glossaryInfoCard } from "./glossary-info-card";
+import { meaning, tx, txa, type LocalizedString } from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export {
   DEFAULT_ART_CROP,
@@ -562,9 +563,7 @@ function rarityStyleFor(card: { rarity?: Rarity }): RarityStyle | null {
 interface AttributeChip {
   key: string;
   boltCount: number;
-  ariaLabelId:
-    | "card-attribute-interrupt-accessible-name"
-    | "card-attribute-fast-accessible-name";
+  ariaLabel: LocalizedString;
 }
 
 /**
@@ -580,7 +579,10 @@ function buildAttributeChips(
       {
         key: "interrupt",
         boltCount: 2,
-        ariaLabelId: "card-attribute-interrupt-accessible-name",
+        ariaLabel: tx(
+          meaning("card-interrupt-attribute-name", "Interrupt"),
+          "Accessible name for the double-bolt Interrupt attribute shown before a card name.",
+        ),
       },
     ];
   }
@@ -589,7 +591,10 @@ function buildAttributeChips(
       {
         key: "fast",
         boltCount: 1,
-        ariaLabelId: "card-attribute-fast-accessible-name",
+        ariaLabel: tx(
+          meaning("card-fast-attribute-name", "Fast"),
+          "Accessible name for the single-bolt Fast attribute shown before a card name.",
+        ),
       },
     ];
   }
@@ -660,7 +665,7 @@ export interface CardViewSlotContext {
   card: CardData | FrozenCardData;
   large: boolean;
   textScale: number;
-  typeLine: string;
+  typeLine: LocalizedString | null;
 }
 
 export interface CardViewSlots {
@@ -770,7 +775,7 @@ interface GameCardSurfaceProps extends CardViewProps {
 }
 
 function GameCardSurface(props: GameCardSurfaceProps) {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const {
     card: sourceCard,
     onPress,
@@ -858,12 +863,26 @@ function GameCardSurface(props: GameCardSurfaceProps) {
     ? null
     : cardIdenticonUri(card.id !== "" ? card.id : card.name);
 
-  const typeLine = t("card-type-line", {
-    presentation: card.cardType === "Character" ? "character" : "other",
-    hasSubtype: card.subtype === "" ? "no" : "yes",
-    cardType: card.cardType,
-    subtype: card.subtype,
-  });
+  const typeLine: LocalizedString | null =
+    card.cardType === "Character"
+      ? card.subtype === ""
+        ? null
+        : txa(
+            meaning("card-subtype-line", "{subtype}"),
+            { subtype: card.subtype },
+            "Type line for a Character card. subtype is the card's canonical authored subtype.",
+          )
+      : card.subtype === ""
+        ? txa(
+            "{card_type}",
+            { card_type: card.cardType },
+            "Type line for a non-Character card without a subtype. card_type is its canonical authored card type.",
+          )
+        : txa(
+            "{card_type} — {subtype}",
+            { card_type: card.cardType, subtype: card.subtype },
+            "Type line for a non-Character card with a subtype. card_type and subtype are canonical authored taxonomy labels.",
+          );
   const rarityStyle = rarityStyleFor(card);
   const attributeChips = buildAttributeChips(card);
 
@@ -980,7 +999,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
     <span
       key={chip.key}
       data-attribute-chip={chip.key}
-      aria-label={t(chip.ariaLabelId)}
+      aria-label={resolve(chip.ariaLabel)}
       style={{
         color:
           transfiguration?.fastChanged === true
@@ -1050,12 +1069,20 @@ function GameCardSurface(props: GameCardSurfaceProps) {
       {transfiguration !== undefined ? (
         <i
           className={GLYPHS[transfiguration.form.glyph]}
-          aria-label={t("card-transfiguration-badge", {
-            formName: transfiguration.form.name,
-          })}
-          title={t("card-transfiguration-badge", {
-            formName: transfiguration.form.name,
-          })}
+          aria-label={resolve(
+            txa(
+              "{form_name} Transfiguration",
+              { form_name: transfiguration.form.name },
+              "Accessible description and tooltip for a card's Transfiguration badge. form_name is the authored Transfiguration form name.",
+            ),
+          )}
+          title={resolve(
+            txa(
+              "{form_name} Transfiguration",
+              { form_name: transfiguration.form.name },
+              "Accessible description and tooltip for a card's Transfiguration badge. form_name is the authored Transfiguration form name.",
+            ),
+          )}
           style={{
             flex: "0 0 auto",
             marginLeft: "0.35em",
@@ -1072,7 +1099,8 @@ function GameCardSurface(props: GameCardSurfaceProps) {
     </div>
   );
 
-  const typeLineContentNode = typeLine !== "" ? <span>{typeLine}</span> : null;
+  const typeLineContentNode =
+    typeLine === null ? null : <span>{resolve(typeLine)}</span>;
   const renderedTypeLineContent =
     slots.typeLineContent?.(slotContext, typeLineContentNode) ??
     typeLineContentNode;
@@ -1329,7 +1357,13 @@ function GameCardSurface(props: GameCardSurfaceProps) {
       {identiconUri !== null ? (
         <img
           src={identiconUri}
-          alt={t("card-identicon-alt", { cardName: card.name })}
+          alt={resolve(
+            txa(
+              "{card_name} identicon",
+              { card_name: card.name },
+              "Alternative text for a generated card identicon. card_name is the card's canonical authored name.",
+            ),
+          )}
           className="absolute inset-0 h-full w-full object-contain"
           draggable={false}
           loading="lazy"
@@ -1459,9 +1493,13 @@ function GameCardSurface(props: GameCardSurfaceProps) {
           {rulesTextChanged && transfiguration !== undefined ? (
             <span
               data-card-rules-text-change={transfiguration?.type}
-              title={t("card-rules-transfiguration-changed", {
-                formName: transfiguration.form.name,
-              })}
+              title={resolve(
+                txa(
+                  "Rules text changed by {form_name} Transfiguration",
+                  { form_name: transfiguration.form.name },
+                  "Tooltip explaining why a card's rules text differs from its base rules. form_name is the authored Transfiguration form name.",
+                ),
+              )}
               style={{
                 position: "absolute",
                 right:
@@ -1475,9 +1513,11 @@ function GameCardSurface(props: GameCardSurfaceProps) {
             >
               {renderCardChangeBadge({
                 sizeVar: "var(--cv-transfiguration-change-badge-size)",
-                ariaLabel: t("card-rules-transfiguration-changed", {
-                  formName: transfiguration.form.name,
-                }),
+                ariaLabel: txa(
+                  "Rules text changed by {form_name} Transfiguration",
+                  { form_name: transfiguration.form.name },
+                  "Tooltip explaining why a card's rules text differs from its base rules. form_name is the authored Transfiguration form name.",
+                ),
               })}
             </span>
           ) : null}

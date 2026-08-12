@@ -197,36 +197,13 @@
       "rationale": "Event validation retains the closed persisted form identity vocabulary."
     }
   ],
-  "legacyFluentMessages": {
-    "gamble": [
-      "gamble-blackjack-accessibility-description",
-      "gamble-blackjack-rules",
-      "gamble-blackjack-title",
-      "gamble-four-suit-accessibility-description",
-      "gamble-four-suit-rules",
-      "gamble-four-suit-title",
-      "gamble-gravok-accessibility-description",
-      "gamble-gravok-jack-gate",
-      "gamble-gravok-nine-gate",
-      "gamble-gravok-rules",
-      "gamble-gravok-six-gate",
-      "gamble-gravok-title",
-      "gamble-gravok-won-outcome",
-      "gamble-starway-accessibility-description",
-      "gamble-starway-rules",
-      "gamble-starway-title"
-    ],
-    "transfiguration": [],
-    "dreamwellPrompts": [
-      "battle-prompt-discover-character",
-      "battle-prompt-confirm-skip",
-      "battle-prompt-confirm-yes",
-      "battle-prompt-generic",
-      "battle-prompt-generic-option",
-      "battle-prompt-generic-subtitle",
-      "battle-prompt-switch-side"
-    ],
-    "tides": [],
-    "rulesSymbols": []
-  }
+  "builtInBattlePromptRefs": [
+    "confirm-skip",
+    "confirm-yes",
+    "discover-character",
+    "generic",
+    "generic-option",
+    "generic-subtitle",
+    "switch-side"
+  ]
 }

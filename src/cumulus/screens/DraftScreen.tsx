@@ -16,7 +16,7 @@
 // view types, and holds only the local pick latch that plays the pick-out
 // animation.
 
-import { localizationTodo } from "@trox/runtime";
+import { tx } from "@trox/runtime";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
@@ -34,7 +34,6 @@ import {
   MENU_EDGE_INSET_MOBILE_PX,
 } from "./chrome-geometry";
 import { useIsDesktop } from "./use-is-desktop";
-import { useMessages } from "../hooks/use-messages";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
@@ -134,7 +133,6 @@ export function DraftScreen({
   onReroll = NOOP,
   onTutorialShown,
 }: DraftScreenProps) {
-  const t = useMessages();
   const isDesktop = useIsDesktop();
   const wideDraftRow = useIsDesktop(DRAFT_ROW_MIN_WIDTH_PX);
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
@@ -240,7 +238,10 @@ export function DraftScreen({
       >
         <IconButton
           glyph={GLYPHS.refresh}
-          label={localizationTodo(t("draft-reroll-offer"))}
+          label={tx(
+              "Reroll draft offer",
+              "Player-facing message for the draft reroll offer interface state.",
+            )}
           onPress={onReroll}
           testId="reroll-draft-offer"
         />

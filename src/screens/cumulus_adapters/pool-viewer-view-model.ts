@@ -118,7 +118,7 @@ function compareEntry(left: CardData, right: CardData, sort: PoolViewerSortId, d
   return direction === "asc" ? result : -result;
 }
 
-function cardView(entry: PoolEntry): CardGalleryCardView { return { entryId: entry.entryId, model: { cardId: entry.card.id, displaySnapshot: entry.card }, caption: entry.copies === null ? undefined : { kind: "text", text: `×${String(entry.copies)}` }, testId: `pool-card-${entry.entryId}` }; }
+function cardView(entry: PoolEntry): CardGalleryCardView { return { entryId: entry.entryId, model: { cardId: entry.card.id, displaySnapshot: entry.card }, caption: entry.copies === null ? undefined : { kind: "authoredText", text: `×${String(entry.copies)}` }, testId: `pool-card-${entry.entryId}` }; }
 function subtypeOptions(entries: readonly PoolEntry[]) { return [...new Set(entries.filter(({ card }) => card.cardType === "Character" && card.subtype.trim() !== "").map(({ card }) => card.subtype))].sort((a, b) => a.localeCompare(b, undefined, { numeric: true })).map((value) => ({ value, label: value })); }
 
 function buildDisclosures(tides: Tides4ProvenanceSummary | null, variant: PoolVariant | null) {

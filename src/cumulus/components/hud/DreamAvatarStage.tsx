@@ -4,12 +4,13 @@
 
 import { useState } from "react";
 import { token } from "../../primitives/tokens";
-import { useMessages } from "../../hooks/use-messages";
 import {
   dreamAvatarCutoutSrc,
   dreamAvatarPortraitFocus,
   type DreamAvatarVisual,
 } from "./DreamAvatarPortrait";
+import { select, when, otherwise, txa } from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** The visual treatment applied to the full-body stage art. */
 export type DreamAvatarStageVariant = "standing" | "cutout" | "fullBleed";
@@ -37,13 +38,16 @@ export function DreamAvatarStage({
   dreamAvatar,
   variant,
 }: DreamAvatarStageProps) {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const [broken, setBroken] = useState(false);
-  const alt = t("dream-avatar-art-accessible-name", {
-    avatarName: dreamAvatar.name,
-    avatarTitle: dreamAvatar.title,
-    hasTitle: dreamAvatar.title === "" ? "no" : "yes",
-  });
+  const alt = txa(
+    select(dreamAvatar.title === "" ? "no" : "yes", [
+      when("yes", "{avatar_name}, {avatar_title}"),
+      otherwise("{avatar_name}"),
+    ]),
+    { avatar_name: dreamAvatar.name, avatar_title: dreamAvatar.title },
+    'Accessible name for Dream Avatar artwork. avatar_name is the canonical avatar display name and avatar_title is its authored epithet; neither has modeled grammatical gender. has_title is "yes" when the epithet is present and "no" when the artwork should be identified by the name alone.',
+  );
   const focus = dreamAvatarPortraitFocus(dreamAvatar);
   const focusPercentX = Math.round(focus.x * 1000) / 10;
   const focusPercentY = Math.round(focus.y * 1000) / 10;
@@ -100,7 +104,7 @@ export function DreamAvatarStage({
         <img
           data-dream-avatar-stage-art="standing"
           src={dreamAvatarCutoutSrc(dreamAvatar.imageNumber)}
-          alt={alt}
+          alt={resolve(alt)}
           draggable={false}
           fetchPriority="high"
           loading="eager"
@@ -148,7 +152,7 @@ export function DreamAvatarStage({
       <img
         data-dream-avatar-stage-art="cutout"
         src={dreamAvatarCutoutSrc(dreamAvatar.imageNumber)}
-        alt={alt}
+        alt={resolve(alt)}
         draggable={false}
         fetchPriority="high"
         loading="eager"
@@ -208,7 +212,7 @@ export function DreamAvatarStage({
       <img
         data-dream-avatar-stage-art="fullBleed"
         src={dreamAvatarCutoutSrc(dreamAvatar.imageNumber)}
-        alt={alt}
+        alt={resolve(alt)}
         draggable={false}
         fetchPriority="high"
         loading="eager"

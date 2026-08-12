@@ -1,7 +1,7 @@
 // CardShopSiteScreen — Tobias Tanglefur's Cumulus card shop. Five direct-buy
 // cards and one restock action share a two-row glass gallery.
 
-import { localizationTodo } from "@trox/runtime";
+import { tx } from "@trox/runtime";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import type { GameCardModel } from "../components/card/CardView";
@@ -15,7 +15,6 @@ import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
-import { useMessages } from "../hooks/use-messages";
 import {
   ShopFreePurchaseStatus,
   type ShopFreePurchaseStatusView,
@@ -124,7 +123,6 @@ function CardShopGallery({
   readonly onClose: () => void;
 }) {
   const desktop = layout === "desktop";
-  const t = useMessages();
   const [locallyPurchasedEntryIds, setLocallyPurchasedEntryIds] = useState(
     () => new Set<string>(),
   );
@@ -221,12 +219,15 @@ function CardShopGallery({
     >
       <ShopFreePurchaseStatus status={freePurchaseStatus} />
       <CardPickerPanel
-        title={localizationTodo(presentation.title)}
+        authoredTitle={presentation.title}
         rightAccessory={{
           kind: "iconButton",
           button: {
             glyph: GLYPHS.close,
-            label: localizationTodo(t("card-shop-leave-action")),
+            label: tx(
+                "Leave card shop",
+                "Player-facing message for the card shop leave action interface state.",
+              ),
             onPress: onClose,
             testId: "cumulus-card-shop-leave",
           },
@@ -251,7 +252,7 @@ function CardShopGallery({
         endAction={{
           entryId: restock.entryId,
           glyph: GLYPHS.refresh,
-          label:
+          authoredLabel:
             restock.state === "used"
               ? presentation.restocked
               : desktop
@@ -259,9 +260,9 @@ function CardShopGallery({
                 : presentation.restockAction,
           caption:
             restock.state === "used"
-              ? { kind: "text", text: presentation.restocked }
+              ? { kind: "authoredText", text: presentation.restocked }
               : restock.price === 0
-                ? { kind: "text", text: presentation.freePrice }
+                ? { kind: "authoredText", text: presentation.freePrice }
                 : { kind: "essence", amount: restock.price },
           disabled: restock.state !== "available",
           testId: "cumulus-card-shop-restock",

@@ -2,7 +2,7 @@
 // share one complete opponent dossier; only its placement and object scale
 // respond to the viewport.
 
-import { useEffect, useRef, type ReactNode } from "react";
+import {useEffect, useRef, type ReactNode } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
 import { RulesText } from "../components/card/RulesText";
@@ -28,7 +28,8 @@ import {
 import { useIsDesktop } from "./use-is-desktop";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
-import { useMessages } from "../hooks/use-messages";
+import { meaning, txa, tx, type LocalizedString } from "@trox/runtime";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 export interface BattleStartDreamAvatarView {
   id: string;
@@ -238,7 +239,7 @@ function BattleStartPanel({
   onBegin,
   density,
 }: BattleStartScreenProps & { readonly density: PanelDensity }) {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const compact = density === "compact";
   const cardWidth = compact
     ? COMPACT_SIGNATURE_CARD_WIDTH
@@ -314,7 +315,11 @@ function BattleStartPanel({
                 font: compact ? token("--t-title-sm") : token("--t-hero"),
               }}
             >
-              {t("battle-start-title", { avatarName: view.dreamAvatar.name })}
+              {resolve(txa(
+                "Battle vs. {avatar_name}",
+                { avatar_name: view.dreamAvatar.name },
+                "Player-facing message for the battle start title interface state.",
+              ))}
             </h1>
             {view.dreamAvatar.title !== "" && (
               <p
@@ -331,7 +336,14 @@ function BattleStartPanel({
           </header>
 
           {view.dreamAvatar.ability !== "" && (
-            <PanelSection label={t("battle-start-ability-label")} density={density}>
+            <PanelSection
+              section="ability"
+              label={tx(
+                meaning("battle-avatar-ability-label", "Ability"),
+                "Player-facing message for the battle start ability label interface state.",
+              )}
+              density={density}
+            >
               <div style={{ font: token("--t-rules") }}>
                 {view.dreamAvatar.abilityActive ? (
                   <RulesText
@@ -340,7 +352,10 @@ function BattleStartPanel({
                   />
                 ) : (
                   <span style={{ color: token("--text-on-glass-muted") }}>
-                    {t("battle-start-inactive-ability")}
+                    {resolve(tx(
+                      "Opponent avatar ability is not active.",
+                      "Player-facing message for the battle start inactive ability interface state.",
+                    ))}
                   </span>
                 )}
               </div>
@@ -350,10 +365,17 @@ function BattleStartPanel({
           {compact &&
             (view.signatureCards.length > 0 || view.dreamsigns.length > 0) && (
               <PanelSection
+                section="signature-objects"
                 label={
                   view.dreamsigns.length > 0
-                    ? t("battle-start-signature-cards-and-dreamsigns-label")
-                    : t("battle-start-signature-cards-label")
+                    ? tx(
+                        "Signature Cards & Dreamsigns",
+                        "Player-facing message for the battle start signature cards and dreamsigns label interface state.",
+                      )
+                    : tx(
+                        "Signature Cards",
+                        "Visible collection label for the active Dream Avatar's authored signature cards.",
+                      )
                 }
                 density={density}
               >
@@ -372,7 +394,14 @@ function BattleStartPanel({
             )}
 
           {!compact && view.signatureCards.length > 0 && (
-            <PanelSection label={t("battle-start-signature-cards-label")} density={density}>
+            <PanelSection
+              section="signature-cards"
+              label={tx(
+                "Signature Cards",
+                "Visible collection label for the active Dream Avatar's authored signature cards.",
+              )}
+              density={density}
+            >
               <div
                 data-battle-start-signature-cards=""
                 style={{
@@ -387,7 +416,14 @@ function BattleStartPanel({
           )}
 
           {!compact && view.dreamsigns.length > 0 && (
-            <PanelSection label={t("battle-start-dreamsigns-label")} density={density}>
+            <PanelSection
+              section="dreamsigns"
+              label={tx(
+                "Dreamsigns",
+                "Section label for the player’s collected Dreamsigns.",
+              )}
+              density={density}
+            >
               <div
                 style={{
                   display: "flex",
@@ -417,16 +453,33 @@ function BattleStartPanel({
                 gap: compact ? token("--space-m") : token("--space-2xl"),
               }}
             >
-              <Stake label={t("battle-start-to-win-label")} density={density}>
+              <Stake
+                stake="points"
+                label={tx(
+                  "To Win",
+                  "Player-facing message for the battle start to win label interface state.",
+                )}
+                density={density}
+              >
                 <span>{view.pointsToWin}</span>
                 <InlineGlyph glyph={GLYPHS.points} color="white" />
               </Stake>
-              <Stake label={t("battle-start-reward-label")} density={density}>
+              <Stake
+                stake="reward"
+                label={tx(
+                  "Reward",
+                  "Player-facing message for the battle start reward label interface state.",
+                )}
+                density={density}
+              >
                 <EssenceValue amount={view.essenceReward} tone="inherit" />
               </Stake>
             </div>
             <GlassButton
-              label={t("battle-start-action")}
+              label={tx(
+                "Begin Battle",
+                "Player-facing message for the battle start action interface state.",
+              )}
               variant="accent"
               placement="onGlass"
               onPress={onBegin}
@@ -440,18 +493,25 @@ function BattleStartPanel({
 }
 
 function PanelSection({
+  section,
   label,
   density,
   children,
 }: {
-  readonly label: string;
+  readonly section:
+    | "ability"
+    | "signature-objects"
+    | "signature-cards"
+    | "dreamsigns";
+  readonly label: LocalizedString;
   readonly density: PanelDensity;
   readonly children: ReactNode;
 }) {
   const compact = density === "compact";
+  const resolve = useLocalizer();
   return (
     <section
-      data-battle-start-panel-section={label}
+      data-battle-start-panel-section={section}
       style={{
         paddingTop: compact ? token("--space-m") : token("--space-l"),
         borderTop: `1px solid ${token("--glass-rim")}`,
@@ -468,7 +528,7 @@ function PanelSection({
           color: token("--text-on-glass-muted"),
         }}
       >
-        {label}
+        {resolve(label)}
       </h2>
       {children}
     </section>
@@ -476,18 +536,21 @@ function PanelSection({
 }
 
 function Stake({
+  stake,
   label,
   density,
   children,
 }: {
-  readonly label: string;
+  readonly stake: "points" | "reward";
+  readonly label: LocalizedString;
   readonly density: PanelDensity;
   readonly children: ReactNode;
 }) {
   const compact = density === "compact";
+  const resolve = useLocalizer();
   return (
     <div
-      data-battle-start-stake={label}
+      data-battle-start-stake={stake}
       style={{ display: "grid", gap: compact ? 0 : token("--space-xs") }}
     >
       <div
@@ -509,7 +572,7 @@ function Stake({
           color: token("--text-on-glass-muted"),
         }}
       >
-        {label}
+        {resolve(label)}
       </span>
     </div>
   );

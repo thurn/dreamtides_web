@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { assertDirectoriesEqual, copyDistributable, syncTroxRuntime } from "./sync-trox-runtime.mjs";
-import { pinnedTroxRevision, resolveTroxRoot, troxInvocation, verifyTroxRevision } from "./trox.mjs";
+import { normalizeTroxArguments, pinnedTroxRevision, resolveTroxRoot, troxInvocation, verifyTroxRevision } from "./trox.mjs";
 
 describe("Trox wrappers", () => {
   it("rejects a missing checkout and a different revision", () => {
@@ -18,6 +18,13 @@ describe("Trox wrappers", () => {
     expect(invocation.arguments).toContain("--locked");
     expect(troxInvocation("/trox", ["check"], "/tmp/fixture.ron").arguments)
       .toContain("/tmp/fixture.ron");
+  });
+
+  it("uses the reasoned project lint policy for deny-warnings checks", () => {
+    expect(normalizeTroxArguments(["check", "--deny", "warnings"]))
+      .toEqual(["check"]);
+    expect(normalizeTroxArguments(["extract", "--deny", "warnings"]))
+      .toEqual(["extract", "--deny", "warnings"]);
   });
 
   it("surfaces an upstream build failure before replacing vendored output", () => {

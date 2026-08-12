@@ -18,7 +18,7 @@ Size and place it through a wrapper.
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `label` | `string` | yes | — | Accessible description of this face-down card in its current zone. |
+| `label` | `LocalizedString` | yes | — | Accessible description of this face-down card in its current zone. |
 | `testId` | `string` | no | — | Optional stable test id for the face-down card object. |
 
 ## Usage

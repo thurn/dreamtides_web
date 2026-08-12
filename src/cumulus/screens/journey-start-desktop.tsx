@@ -24,7 +24,8 @@ import {
   type DreamAvatarOfferView,
   type JourneyStartScreenProps,
 } from "./journey-start-shared";
-import { useMessages } from "../hooks/use-messages";
+import { tx, type LocalizedString } from "@trox/runtime";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 /** Desktop column metrics. Box measures are content-driven layout, so these are
  * caller numbers. Each column is a fixed-width figure stage with a narrower,
@@ -93,7 +94,8 @@ function AlignedAbilityBox({ children }: { readonly children: ReactNode }) {
 
 /** The desktop screen's small purple eyebrow title, pinned near the top of the
  * screen — the mobile ScreenHeader's uppercase accent treatment, in flow. */
-function DesktopTitle({ title }: { readonly title: string }) {
+function DesktopTitle({ title }: { readonly title: LocalizedString }) {
+  const resolve = useLocalizer();
   return (
     <div
       style={{
@@ -107,7 +109,7 @@ function DesktopTitle({ title }: { readonly title: string }) {
         textAlign: "center",
       }}
     >
-      {title}
+      {resolve(title)}
     </div>
   );
 }
@@ -164,7 +166,7 @@ function DreamAvatarCard({
   onChoose,
 }: {
   dreamAvatar: DreamAvatarOfferView;
-  chooseLabel: string;
+  chooseLabel: LocalizedString;
   onChoose: () => void;
 }) {
   return (
@@ -230,7 +232,7 @@ function DreamAvatarColumn({
   onChoose,
 }: {
   dreamAvatar: DreamAvatarOfferView;
-  chooseLabel: string;
+  chooseLabel: LocalizedString;
   onChoose: () => void;
 }) {
   return (
@@ -271,7 +273,6 @@ export function DesktopSelect({
   onReroll,
   onGuideDialogueShown,
 }: JourneyStartScreenProps) {
-  const t = useMessages();
   return (
     <div
       className="cumulus"
@@ -309,7 +310,10 @@ export function DesktopSelect({
       {onReroll !== undefined && (
         <JourneyStartRerollControl
           onReroll={onReroll}
-          label={t("journey-start-reroll-action")}
+          label={tx(
+            "Reroll Avatars",
+            "Player-facing message for the journey start reroll action interface state.",
+          )}
         />
       )}
 
@@ -321,7 +325,12 @@ export function DesktopSelect({
           padding: `calc(${token("--safe-top")} + ${token("--space-l")}) ${token("--gutter")} 0`,
         }}
       >
-        <DesktopTitle title={t("journey-start-title")} />
+        <DesktopTitle
+          title={tx(
+            "Choose Your Avatar",
+            "Title and actions on the Dream Avatar selection screen.",
+          )}
+        />
       </div>
 
       {/* The offered DreamAvatars, centered in the remaining space. The inner
@@ -352,7 +361,10 @@ export function DesktopSelect({
             <DreamAvatarColumn
               key={dreamAvatar.id}
               dreamAvatar={dreamAvatar}
-              chooseLabel={t("journey-start-choose-action")}
+              chooseLabel={tx(
+                "Choose",
+                "Command that chooses the currently selected Dream Avatar or starting-deck option.",
+              )}
               onChoose={() => {
                 onPick(dreamAvatar.id);
               }}

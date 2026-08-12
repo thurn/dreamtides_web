@@ -16,7 +16,7 @@ The text-first action for the Dreamtides main menu: outlined white at rest, show
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `label` | `string` | yes | — | Player-facing action label. |
+| `label` | `LocalizedString` | yes | — | Player-facing action label. |
 | `onPress` | `() => void` | yes | — | Reports activation to the route adapter. |
 | `testId` | `string` | no | — | A `data-testid` for selecting the action in tests. |
 

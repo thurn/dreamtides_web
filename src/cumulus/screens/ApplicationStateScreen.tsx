@@ -1,32 +1,36 @@
-import { localizationTodo } from "@trox/runtime";
+import { meaning, tx, type LocalizedString } from "@trox/runtime";
 import type { ReactElement } from "react";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
-import { useMessages, formatMessageDescriptor } from "../hooks/use-messages";
-import type { FluentMessageDescriptor } from "../../data/localization-messages";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
+
+export type ApplicationStateComparisonValue =
+  | { readonly kind: "raw"; readonly value: string }
+  | { readonly kind: "message"; readonly message: LocalizedString };
 
 /** One labelled value in an application-state comparison. */
 export interface ApplicationStateComparisonRow {
-  readonly label: FluentMessageDescriptor;
-  readonly expected: string | FluentMessageDescriptor;
-  readonly actual: string | FluentMessageDescriptor;
+  readonly id: string;
+  readonly label: LocalizedString;
+  readonly expected: ApplicationStateComparisonValue;
+  readonly actual: ApplicationStateComparisonValue;
   readonly differs: boolean;
 }
 
 /** One explicit action offered by an application-state screen. */
 export interface ApplicationStateAction {
   readonly id: "primary" | "secondary";
-  readonly label: FluentMessageDescriptor;
+  readonly label: LocalizedString;
   readonly onPress: () => void;
   readonly disabled?: boolean;
 }
 
 interface ApplicationStateBase {
-  readonly title: FluentMessageDescriptor;
-  readonly message: FluentMessageDescriptor;
-  readonly detailMessage?: FluentMessageDescriptor;
+  readonly title: LocalizedString;
+  readonly message: LocalizedString;
+  readonly detailMessage?: LocalizedString;
   readonly detail?: string;
   readonly actions?: readonly ApplicationStateAction[];
 }
@@ -39,11 +43,11 @@ interface ApplicationStateBase {
 export type ApplicationStateView =
   | (ApplicationStateBase & {
       readonly kind: "loading";
-      readonly busyLabel: FluentMessageDescriptor;
+      readonly busyLabel: LocalizedString;
     })
   | (ApplicationStateBase & {
       readonly kind: "roomCreation";
-      readonly busyLabel: FluentMessageDescriptor;
+      readonly busyLabel: LocalizedString;
     })
   | (ApplicationStateBase & { readonly kind: "recoverableError" })
   | (ApplicationStateBase & { readonly kind: "fatalConfiguration" })
@@ -60,25 +64,52 @@ export interface ApplicationStateScreenProps {
   readonly view: ApplicationStateView;
 }
 
-const EYEBROW_FOR_KIND: Record<
-  ApplicationStateView["kind"],
-  FluentMessageDescriptor
-> = {
-  loading: { id: "application-eyebrow-dreamtides" },
-  roomCreation: { id: "application-eyebrow-dreamtides" },
-  recoverableError: { id: "application-eyebrow-journey-status" },
-  fatalConfiguration: { id: "application-eyebrow-configuration" },
-  versionGate: { id: "application-eyebrow-game-version" },
-  contentConfigGate: { id: "application-eyebrow-game-settings" },
-  unreadableRoom: { id: "application-eyebrow-game-data" },
-  unreachableRoom: { id: "application-eyebrow-game-connection" },
-};
+function eyebrowForKind(kind: ApplicationStateView["kind"]): LocalizedString {
+  switch (kind) {
+    case "loading":
+    case "roomCreation":
+      return tx(
+        meaning("product-eyebrow", "Dreamtides"),
+        "Product eyebrow above application loading and shared-room creation states.",
+      );
+    case "recoverableError":
+      return tx(
+        "Journey Status",
+        "Eyebrow above a recoverable Journey state failure.",
+      );
+    case "fatalConfiguration":
+      return tx(
+        "Configuration",
+        "Eyebrow above a fatal application configuration problem.",
+      );
+    case "versionGate":
+      return tx(
+        "Game Version",
+        "Eyebrow above a shared room reducer-version compatibility gate.",
+      );
+    case "contentConfigGate":
+      return tx(
+        "Game Settings",
+        "Eyebrow above a shared room content-settings comparison gate.",
+      );
+    case "unreadableRoom":
+      return tx(
+        "Game Data",
+        "Eyebrow above a shared room whose persisted data cannot be decoded.",
+      );
+    case "unreachableRoom":
+      return tx(
+        "Game Connection",
+        "Eyebrow above a shared room connection failure.",
+      );
+  }
+}
 
 /** Pure Cumulus presentation for bootstrap, room, and compatibility states. */
 export function ApplicationStateScreen({
   view,
 }: ApplicationStateScreenProps): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const busy = view.kind === "loading" || view.kind === "roomCreation";
   return (
     <main
@@ -102,9 +133,9 @@ export function ApplicationStateScreen({
     >
       <div style={{ width: "min(100%, 640px)" }}>
         <GlassPanel
-          eyebrow={localizationTodo(formatMessageDescriptor(t, EYEBROW_FOR_KIND[view.kind]))}
-          title={localizationTodo(formatMessageDescriptor(t, view.title))}
-          subtitle={localizationTodo(formatMessageDescriptor(t, view.message))}
+          eyebrow={eyebrowForKind(view.kind)}
+          title={view.title}
+          subtitle={view.message}
           headingLevel="h1"
           titleVoice="hero"
           headerSpacing="spacious"
@@ -119,13 +150,19 @@ export function ApplicationStateScreen({
               font: token("--t-body"),
             }}
           >
-            {busy && <BusyIndicator label={formatMessageDescriptor(t, view.busyLabel)} />}
+            {busy && <BusyIndicator label={view.busyLabel} />}
             {view.kind === "contentConfigGate" && (
               <ComparisonTable rows={view.comparison} />
             )}
-            {(view.detailMessage !== undefined || view.detail !== undefined) && (
+            {(view.detailMessage !== undefined ||
+              view.detail !== undefined) && (
               <p
-                role={view.kind === "recoverableError" || view.kind === "fatalConfiguration" ? "alert" : undefined}
+                role={
+                  view.kind === "recoverableError" ||
+                  view.kind === "fatalConfiguration"
+                    ? "alert"
+                    : undefined
+                }
                 data-application-state-detail
                 style={{
                   margin: 0,
@@ -136,7 +173,7 @@ export function ApplicationStateScreen({
               >
                 {view.detailMessage === undefined
                   ? view.detail
-                  : formatMessageDescriptor(t, view.detailMessage)}
+                  : resolve(view.detailMessage)}
               </p>
             )}
             {view.actions !== undefined && view.actions.length > 0 && (
@@ -151,7 +188,7 @@ export function ApplicationStateScreen({
                 {view.actions.map((action) => (
                   <GlassButton
                     key={action.id}
-                    label={formatMessageDescriptor(t, action.label)}
+                    label={action.label}
                     onPress={action.onPress}
                     disabled={action.disabled}
                     variant={action.id === "primary" ? "accent" : "default"}
@@ -168,7 +205,12 @@ export function ApplicationStateScreen({
   );
 }
 
-function BusyIndicator({ label }: { readonly label: string }): ReactElement {
+function BusyIndicator({
+  label,
+}: {
+  readonly label: LocalizedString;
+}): ReactElement {
+  const resolve = useLocalizer();
   return (
     <p
       role="status"
@@ -180,7 +222,7 @@ function BusyIndicator({ label }: { readonly label: string }): ReactElement {
         textAlign: "center",
       }}
     >
-      {label}
+      {resolve(label)}
     </p>
   );
 }
@@ -190,7 +232,7 @@ function ComparisonTable({
 }: {
   readonly rows: readonly ApplicationStateComparisonRow[];
 }): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   return (
     <dl
       data-application-state-comparison
@@ -204,13 +246,23 @@ function ComparisonTable({
     >
       <span aria-hidden="true" />
       <dt style={{ color: token("--text-on-glass-muted") }}>
-        {formatMessageDescriptor(t, { id: "application-comparison-this-game" })}
+        {resolve(
+          tx(
+            "This Game",
+            "Comparison-table heading for the shared room's expected content configuration.",
+          ),
+        )}
       </dt>
       <dt style={{ color: token("--text-on-glass-muted") }}>
-        {formatMessageDescriptor(t, { id: "application-comparison-yours" })}
+        {resolve(
+          tx(
+            "Yours",
+            "Comparison-table heading for the local client's content configuration.",
+          ),
+        )}
       </dt>
       {rows.map((row) => (
-        <ComparisonRow key={row.label.id} row={row} />
+        <ComparisonRow key={row.id} row={row} />
       ))}
     </dl>
   );
@@ -221,22 +273,22 @@ function ComparisonRow({
 }: {
   readonly row: ApplicationStateComparisonRow;
 }): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const valueColor = row.differs ? token("--danger") : token("--text-on-glass");
   return (
     <>
       <dt style={{ color: token("--text-on-glass-muted") }}>
-        {formatMessageDescriptor(t, row.label)}
+        {resolve(row.label)}
       </dt>
       <dd style={{ margin: 0, color: valueColor }}>
-        {typeof row.expected === "string"
-          ? row.expected
-          : formatMessageDescriptor(t, row.expected)}
+        {row.expected.kind === "raw"
+          ? row.expected.value
+          : resolve(row.expected.message)}
       </dd>
       <dd style={{ margin: 0, color: valueColor }}>
-        {typeof row.actual === "string"
-          ? row.actual
-          : formatMessageDescriptor(t, row.actual)}
+        {row.actual.kind === "raw"
+          ? row.actual.value
+          : resolve(row.actual.message)}
       </dd>
     </>
   );

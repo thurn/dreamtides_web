@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 import { BATTLE_TRIGGERED_EFFECTS } from "./battle-card-effects-table";
 import { DREAMWELL_EFFECTS } from "./dreamwell-effects-table";
 import type { EffectPrompt, EffectStep } from "./effect-step";
-import { isFluentMessageDescriptor } from "../../data/localization-descriptors";
-import { isDreamwellPromptRef } from "../../data/dreamwell-prompts";
+import {
+  isBuiltInBattlePromptRef,
+  isDreamwellPromptRef,
+} from "../../data/dreamwell-prompts";
 
 function visitPrompt(
   prompt: EffectPrompt,
@@ -44,7 +46,7 @@ describe("production battle prompt text", () => {
     expect(references.length).toBeGreaterThan(0);
     for (const reference of references) {
       const isPromptReference = (value: unknown): boolean =>
-        isFluentMessageDescriptor(value) || isDreamwellPromptRef(value);
+        isBuiltInBattlePromptRef(value) || isDreamwellPromptRef(value);
       expect(isPromptReference(reference)).toBe(true);
       expect(isPromptReference(JSON.parse(JSON.stringify(reference)))).toBe(
         true,

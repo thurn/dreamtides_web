@@ -3,12 +3,12 @@ import {
   glossaryEntryDisplayTitle,
   glossaryEntry,
 } from "../../../data/glossary";
-import { createMessageDescriptor } from "../../../data/localization-descriptors";
 import { logEventOnce } from "../../../logging";
 import type { Glyph } from "../../primitives/glyph";
 import type { Tide } from "../hud/tide-spec";
 import type { InfoCardProps } from "../overlay/InfoCard";
 import { richText, richTextDefinitionSymbolText } from "./rich-text";
+import { tx } from "@trox/runtime";
 
 type GlossaryCardPresentation =
   | { readonly variant?: "text" }
@@ -44,11 +44,13 @@ export function glossaryInfoCard(
       glyph: presentation.glyph,
       ...(entry === undefined
         ? {
-            titleDescriptor: createMessageDescriptor(
-              "glossary-definition-unavailable-title",
+            titleMessage: tx(
+              "Rule definition unavailable",
+              "Missing glossary copy shown in the player reveal card when a requested authored glossary entry cannot be resolved. This visible fallback contains no variables and must not expose the glossary id.",
             ),
-            bodyDescriptor: createMessageDescriptor(
-              "glossary-definition-unavailable-body",
+            bodyMessage: tx(
+              "This rule's definition is temporarily unavailable.",
+              "Player-facing message for the glossary definition unavailable body interface state.",
             ),
           }
         : { title, body }),
@@ -60,11 +62,13 @@ export function glossaryInfoCard(
       tide: presentation.tide,
       ...(entry === undefined
         ? {
-            titleDescriptor: createMessageDescriptor(
-              "glossary-definition-unavailable-title",
+            titleMessage: tx(
+              "Rule definition unavailable",
+              "Missing glossary copy shown in the player reveal card when a requested authored glossary entry cannot be resolved. This visible fallback contains no variables and must not expose the glossary id.",
             ),
-            bodyDescriptor: createMessageDescriptor(
-              "glossary-definition-unavailable-body",
+            bodyMessage: tx(
+              "This rule's definition is temporarily unavailable.",
+              "Player-facing message for the glossary definition unavailable body interface state.",
             ),
           }
         : { title, body }),
@@ -74,11 +78,13 @@ export function glossaryInfoCard(
     variant: "text",
     ...(entry === undefined
       ? {
-          titleDescriptor: createMessageDescriptor(
-            "glossary-definition-unavailable-title",
+          titleMessage: tx(
+            "Rule definition unavailable",
+            "Missing glossary copy shown in the player reveal card when a requested authored glossary entry cannot be resolved. This visible fallback contains no variables and must not expose the glossary id.",
           ),
-          bodyDescriptor: createMessageDescriptor(
-            "glossary-definition-unavailable-body",
+          bodyMessage: tx(
+            "This rule's definition is temporarily unavailable.",
+            "Player-facing message for the glossary definition unavailable body interface state.",
           ),
         }
       : { title, body }),

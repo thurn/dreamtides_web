@@ -1,4 +1,3 @@
-import { localizationTodo } from "@trox/runtime";
 import type { CSSProperties, ReactElement } from "react";
 import { GlassButton } from "../components/controls/GlassButton";
 import { TextField } from "../components/controls/TextField";
@@ -56,22 +55,22 @@ export function PackageDebugDialog(props: PackageDebugDialogProps): ReactElement
   if (!props.isOpen) return null;
   return (
     <div className="cumulus" data-package-debug-dialog="" style={{ minHeight: "100vh" }}>
-      <GlassDialog title={localizationTodo("Debug: Package State")} subtitle={localizationTodo("Inspect the active run and manage a portable journey save.")} onClose={props.onClose} fullScreen>
+      <GlassDialog authoredTitle={"Debug: Package State"} authoredSubtitle={"Inspect the active run and manage a portable journey save."} onClose={props.onClose} fullScreen>
         <div style={stackStyle}>
           <section data-package-debug-values="" style={{ display: "flex", flexWrap: "wrap", gap: token("--space-s") }}>
             {props.view.values.map((value) => <p key={value.id} style={{ ...mutedStyle, display: "grid", gap: token("--space-xxs") }}><span style={{ font: token("--t-eyebrow") }}>{value.label}</span><strong style={{ font: token("--t-lead"), color: token("--text-on-glass") }}>{value.value}</strong></p>)}
           </section>
           <section style={stackStyle} data-package-debug-save-file="">
             <h3 style={{ margin: 0, font: token("--t-title-sm"), color: token("--text-on-glass") }}>Journey Save File</h3>
-            <TextField label={localizationTodo("Save name")} value={props.saveName} onChange={props.onSaveNameChange} placeholder={localizationTodo("e.g. warriors draft")} disabled={props.busy || !props.canSave} testId="debug-save-journey-name" error={props.saveError === null ? undefined : localizationTodo(props.saveError)} supportingText={localizationTodo(props.saveStatus ?? "Download the active run as JSON, or load a journey file.")} />
-            <div style={{ display: "flex", flexWrap: "wrap", gap: token("--space-xs") }}><GlassButton label="Save Journey" onPress={props.onSave} disabled={props.busy || !props.canSave} placement="onGlass" variant="accent" testId="debug-save-journey" /><GlassButton label="Load Journey" onPress={props.onLoad} disabled={props.busy || !props.canLoad} placement="onGlass" testId="debug-load-journey" /></div>
+            <TextField authoredLabel="Save name" value={props.saveName} onChange={props.onSaveNameChange} authoredPlaceholder="e.g. warriors draft" disabled={props.busy || !props.canSave} testId="debug-save-journey-name" authoredError={props.saveError ?? undefined} authoredSupportingText={props.saveStatus ?? "Download the active run as JSON, or load a journey file."} />
+            <div style={{ display: "flex", flexWrap: "wrap", gap: token("--space-xs") }}><GlassButton authoredLabel="Save Journey" onPress={props.onSave} disabled={props.busy || !props.canSave} placement="onGlass" variant="accent" testId="debug-save-journey" /><GlassButton authoredLabel="Load Journey" onPress={props.onLoad} disabled={props.busy || !props.canLoad} placement="onGlass" testId="debug-load-journey" /></div>
           </section>
           <DiagnosticSection title="Avatar" entries={props.view.dreamAvatar === null ? [] : [{ id: "dreamAvatar", label: props.view.dreamAvatar }]} emptyLabel="No package data available yet." />
           <DiagnosticSection title="Package Validation" entries={props.view.validation.map((value) => ({ id: value.id, label: `${value.label}: ${value.value}` }))} emptyLabel="No package data available yet." />
           <DiagnosticSection title="Dreamsign Pool" entries={props.view.remainingDreamsigns} emptyLabel="Dreamsign pool exhausted." />
           <DiagnosticSection title="Spent Dreamsigns" entries={props.view.spentDreamsigns} emptyLabel="No Dreamsigns have been spent yet." />
           <DiagnosticSection title="Current Offer" entries={props.view.currentOffer} emptyLabel="No offer is currently active." />
-          {props.canForceLegendaryOffer ? <div><GlassButton label="Force Legendary Offer (QA)" onPress={props.onForceLegendaryOffer} placement="onGlass" variant="accent" testId="debug-force-legendary-offer" /></div> : null}
+          {props.canForceLegendaryOffer ? <div><GlassButton authoredLabel="Force Legendary Offer (QA)" onPress={props.onForceLegendaryOffer} placement="onGlass" variant="accent" testId="debug-force-legendary-offer" /></div> : null}
           <DiagnosticSection title="Top Remaining Draft Cards" entries={props.view.topRemainingCards} emptyLabel="No cards remain in the draft pool." />
         </div>
       </GlassDialog>

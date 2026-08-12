@@ -39,6 +39,7 @@ const beginBattleSpy = vi.fn(() => Promise.resolve(0));
 
 vi.mock("../coop/hooks", () => ({
   useGameState: () => mockGameState,
+  useConfirmedGameState: () => mockGameState,
   useActions: () => mockActions,
 }));
 
@@ -467,16 +468,18 @@ describe("BattleSiteRoute", () => {
     mockGameState = makeFoldStateWithBattle();
     act(() => {
       root.render(
-        <BattleSiteRoute
-          site={makeSite()}
-          cardDatabase={makeBattleTestCardDatabase()}
-          runtimeConfig={{
-            seedOverride: null,
-            aiMode: false,
-            gameId: null,
-            databaseMode: "emulator",
-          }}
-        />,
+        <CumulusRoot>
+          <BattleSiteRoute
+            site={makeSite()}
+            cardDatabase={makeBattleTestCardDatabase()}
+            runtimeConfig={{
+              seedOverride: null,
+              aiMode: false,
+              gameId: null,
+              databaseMode: "emulator",
+            }}
+          />
+        </CumulusRoot>,
       );
     });
 
@@ -516,16 +519,18 @@ describe("BattleSiteRoute", () => {
     setJourneyState({ completionLevel: 4 });
     act(() => {
       root.render(
-        <BattleSiteRoute
-          site={makeSite()}
-          cardDatabase={makeBattleTestCardDatabase()}
-          runtimeConfig={{
-            seedOverride: null,
-            aiMode: false,
-            gameId: null,
-            databaseMode: "emulator",
-          }}
-        />,
+        <CumulusRoot>
+          <BattleSiteRoute
+            site={makeSite()}
+            cardDatabase={makeBattleTestCardDatabase()}
+            runtimeConfig={{
+              seedOverride: null,
+              aiMode: false,
+              gameId: null,
+              databaseMode: "emulator",
+            }}
+          />
+        </CumulusRoot>,
       );
     });
 
@@ -571,16 +576,18 @@ describe("BattleSiteRoute", () => {
     });
     act(() => {
       root.render(
-        <BattleSiteRoute
-          site={makeSite()}
-          cardDatabase={makeBattleTestCardDatabase()}
-          runtimeConfig={{
-            seedOverride: null,
-            aiMode: false,
-            gameId: "9a9qfv",
-            databaseMode: "emulator",
-          }}
-        />,
+        <CumulusRoot>
+          <BattleSiteRoute
+            site={makeSite()}
+            cardDatabase={makeBattleTestCardDatabase()}
+            runtimeConfig={{
+              seedOverride: null,
+              aiMode: false,
+              gameId: "9a9qfv",
+              databaseMode: "emulator",
+            }}
+          />
+        </CumulusRoot>,
       );
     });
 

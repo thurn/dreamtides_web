@@ -9,23 +9,26 @@ import type { GlassControlPlacement } from "../../primitives/control-placement";
 import { Pressable } from "../../primitives/Pressable";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import { useMessages } from "../../hooks/use-messages";
 import { StandaloneGlyph } from "./StandaloneGlyph";
+import { tx, txa, type LocalizedString } from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export interface CardOrderEditorItem {
   /** Card UUID or battle-instance id returned unchanged by callbacks. */
   id: string;
   /** Presentation-only card label. */
-  label: string;
+  authoredLabel?: string;
+  labelMessage?: LocalizedString;
   /** Optional secondary identifying detail. */
-  summary?: string;
+  authoredSummary?: string;
+  summaryMessage?: LocalizedString;
 }
 
 export interface CardOrderEditorProps {
   /** Ordered cards, from top to bottom. */
   items: readonly CardOrderEditorItem[];
   /** Accessible name for the ordered collection. */
-  label: string;
+  label: LocalizedString;
   /** Returns the complete top-to-bottom sequence of card ids after a move. */
   onOrderChange: (orderedIds: readonly string[]) => void;
   /**
@@ -43,6 +46,7 @@ export function CardOrderEditor({
   onOrderChange,
   placement = "onMedia",
 }: CardOrderEditorProps): ReactElement {
+  const resolve = useLocalizer();
   const move = (from: number, to: number): void => {
     const ids = items.map((item) => item.id);
     const [moved] = ids.splice(from, 1);
@@ -57,7 +61,7 @@ export function CardOrderEditor({
       values={items.map((item) => item.id)}
       onReorder={onOrderChange}
       role="list"
-      aria-label={label}
+      aria-label={resolve(label)}
       data-glass-placement={placement}
       style={{
         ...glassContentControlSurface(placement),
@@ -90,8 +94,14 @@ function CardOrderEditorRow({
   readonly itemCount: number;
   readonly onMove: (from: number, to: number) => void;
 }): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const controls = useDragControls();
+  const hasAuthoredLabel = item.authoredLabel !== undefined;
+  if (hasAuthoredLabel === (item.labelMessage !== undefined)) {
+    throw new Error(
+      "CardOrderEditorItem requires exactly one authoredLabel or labelMessage.",
+    );
+  }
 
   const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>): void => {
     if (event.key === "ArrowUp" && index > 0) {
@@ -131,9 +141,7 @@ function CardOrderEditorRow({
       >
         {String(index + 1)}
       </span>
-      <span
-        style={{ display: "flex", flexDirection: "column", minWidth: 0 }}
-      >
+      <span style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
         <span
           style={{
             color: token("--text-on-glass"),
@@ -143,24 +151,34 @@ function CardOrderEditorRow({
             whiteSpace: "nowrap",
           }}
         >
-          {item.label}
+          {item.authoredLabel ?? resolve(item.labelMessage!)}
         </span>
-        {item.summary === undefined ? null : (
+        {item.authoredSummary === undefined &&
+        item.summaryMessage === undefined ? null : (
           <span
             style={{
               color: token("--text-on-glass-muted"),
               font: token("--t-caption"),
             }}
           >
-            {item.summary}
+            {item.authoredSummary ?? resolve(item.summaryMessage!)}
           </span>
         )}
       </span>
       <Pressable
         as="button"
-        aria-label={t("card-order-reorder-action", {
-          itemLabel: item.label,
-        })}
+        ariaLabelMessage={
+          item.authoredLabel === undefined
+            ? tx(
+                "Reorder missing card instance",
+                "Accessible command on a drag handle for a missing battle card instance. Arrow-key commands move that physical entry.",
+              )
+            : txa(
+                "Reorder {card_name}",
+                { card_name: item.authoredLabel },
+                "Accessible command on a drag handle that reorders one battle card. card_name is the UUID-resolved authored card name with unknown grammatical gender; arrow-key commands move that physical entry.",
+              )
+        }
         aria-keyshortcuts="ArrowUp ArrowDown"
         data-card-order-drag-handle={item.id}
         onPointerDown={(event: PointerEvent<HTMLButtonElement>) =>

@@ -1,4 +1,4 @@
-import { type CSSProperties, type ReactNode } from "react";
+import {type CSSProperties, type ReactNode } from "react";
 import {
   tokenizeRulesSymbols,
   tokenizeRulesText,
@@ -25,11 +25,8 @@ import { rulesTextDefinitionCards } from "./rules-text-reveal";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
-import { appLocalization } from "../../../data/localization";
-import type { MessageFormatter } from "../../hooks/use-messages";
-
-const formatRulesTextMessage = ((id, variables) =>
-  appLocalization.getString(id, variables)) as MessageFormatter;
+import { meaning, txa } from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /**
  * Renders rules text with:
@@ -284,7 +281,7 @@ function renderSegment(
     return (
       <span key={key} style={{ color: symbol.color, whiteSpace: "nowrap" }}>
         {segment.amount !== null ? segment.amount : null}
-        <InlineGlyph glyph={symbol.glyph} label={symbol.label} />
+        <InlineGlyph glyph={symbol.glyph} authoredLabel={symbol.label} />
       </span>
     );
   }
@@ -321,28 +318,7 @@ function renderSegment(
     // one bolt; an interrupt draws two bolts pulled together so they almost
     // touch (matching the title-bar treatment). The whole group stays on one
     // line.
-    return (
-      <span
-        key={key}
-        aria-label={formatRulesTextMessage("rules-text-bolt-accessible-name", {
-          kind: segment.count >= 2 ? "interrupt" : "fast",
-        })}
-        style={{ color: BOLT_ICON_COLOR, whiteSpace: "nowrap" }}
-      >
-        {Array.from({ length: segment.count }, (_, index) => (
-          <span
-            key={index}
-            style={{
-              // Pull each bolt after the first inward so an interrupt's two
-              // bolts almost touch.
-              marginLeft: index === 0 ? undefined : "-0.35em",
-            }}
-          >
-            <InlineGlyph glyph={BOLT_ICON_CLASS} />
-          </span>
-        ))}
-      </span>
-    );
+    return <RulesTextBolt key={key} count={segment.count} />;
   }
   if (segment.symbol === "trigger") {
     return <span key={key}>{segment.char}</span>;
@@ -366,7 +342,7 @@ function renderSegment(
           color: `var(--cv-rules-energy-color, ${symbol.color})`,
         }}
       >
-        <InlineGlyph glyph={symbol.glyph} label={symbol.label} />
+        <InlineGlyph glyph={symbol.glyph} authoredLabel={symbol.label} />
       </span>
     );
   }
@@ -389,7 +365,7 @@ function renderSegment(
           color: `var(--cv-rules-spark-color, ${symbol.color})`,
         }}
       >
-        <InlineGlyph glyph={symbol.glyph} label={symbol.label} />
+        <InlineGlyph glyph={symbol.glyph} authoredLabel={symbol.label} />
       </span>
     );
   }
@@ -405,13 +381,36 @@ function renderSegment(
     );
     return (
       <span key={key} style={{ color: symbol.color }}>
-        <InlineGlyph glyph={symbol.glyph} label={symbol.label} />
+        <InlineGlyph glyph={symbol.glyph} authoredLabel={symbol.label} />
       </span>
     );
   }
   return (
     <span key={key} className="font-bold">
       {segment.char}
+    </span>
+  );
+}
+
+function RulesTextBolt({ count }: { readonly count: number }) {
+  const resolve = useLocalizer();
+  const label =
+    count >= 2
+      ? txa(meaning("rules-interrupt-marker-name", "Interrupt"), {}, "Accessible name for the paired rules-text bolt marker.")
+      : txa(meaning("rules-fast-marker-name", "Fast"), {}, "Accessible name for the single rules-text bolt marker.");
+  return (
+    <span
+      aria-label={resolve(label)}
+      style={{ color: BOLT_ICON_COLOR, whiteSpace: "nowrap" }}
+    >
+      {Array.from({ length: count }, (_, index) => (
+        <span
+          key={index}
+          style={{ marginLeft: index === 0 ? undefined : "-0.35em" }}
+        >
+          <InlineGlyph glyph={BOLT_ICON_CLASS} />
+        </span>
+      ))}
     </span>
   );
 }
@@ -549,11 +548,26 @@ function rulesTextEntityType(owner: RulesTextOwner): string {
   }
 }
 
-function rulesTextAriaLabel(owner: RulesTextOwner, text: string): string {
-  return formatRulesTextMessage("rules-text-source-accessible-name", {
-    owner: owner.kind,
-    rulesText: text,
-  });
+function rulesTextAriaLabel(owner: RulesTextOwner, text: string) {
+  if (owner.kind === "card") {
+    return txa(
+      "Card rules: {rules_text}",
+      { rules_text: text },
+      "Accessible name for interactive authored card rules text.",
+    );
+  }
+  if (owner.kind === "dreamAvatar") {
+    return txa(
+      "Avatar ability: {rules_text}",
+      { rules_text: text },
+      "Accessible name for interactive authored Dream Avatar rules text.",
+    );
+  }
+  return txa(
+    "Dreamsign ability: {rules_text}",
+    { rules_text: text },
+    "Accessible name for interactive authored Dreamsign rules text.",
+  );
 }
 
 function RulesTextSource({
@@ -572,7 +586,7 @@ function RulesTextSource({
       entityId: revealEntityId(entityType, owner.id),
     },
     spec: {
-      primary: { kind: "source", description: text },
+      primary: { kind: "source", authoredDescription: text },
       secondaries: rulesTextDefinitionCards(text, owner.kind),
     },
     feedback: "stationary",
@@ -585,7 +599,7 @@ function RulesTextSource({
       hoverFeedback="stationary"
       pressFeedback="stationary"
       tabIndex={0}
-      aria-label={rulesTextAriaLabel(owner, text)}
+      ariaLabelMessage={rulesTextAriaLabel(owner, text)}
       data-rules-text-source={owner.id}
       data-rules-text-owner={owner.kind}
       style={{

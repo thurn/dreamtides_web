@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
+import { localizationTodo } from "@trox/runtime";
 import { createRoot } from "react-dom/client";
 import { describe, expect, it } from "vitest";
 import {
@@ -21,15 +22,17 @@ describe("RadialAnnouncement", () => {
     const root = createRoot(container);
     act(() => {
       root.render(
-        <RadialAnnouncement
-          headline="Won!"
-          detail="A locked Dreamsign"
-          essenceGained={200}
-          tone="reward"
-          size="compact"
-          duration="extended"
-          announcementId="fixture-win"
-        />,
+        <CumulusRoot>
+          <RadialAnnouncement
+            headline={localizationTodo("Won!")}
+            detail={localizationTodo("A locked Dreamsign")}
+            essenceGained={200}
+            tone="reward"
+            size="compact"
+            duration="extended"
+            announcementId="fixture-win"
+          />
+        </CumulusRoot>,
       );
     });
 
@@ -59,7 +62,14 @@ describe("RadialAnnouncement", () => {
     document.body.append(container);
     const root = createRoot(container);
     act(() => {
-      root.render(<RadialAnnouncement headline="Bust!" size="mini" />);
+      root.render(
+        <CumulusRoot>
+          <RadialAnnouncement
+            headline={localizationTodo("Bust!")}
+            size="mini"
+          />
+        </CumulusRoot>,
+      );
     });
 
     expect(
@@ -189,11 +199,13 @@ describe("RadialAnnouncement", () => {
     const root = createRoot(container);
     act(() => {
       root.render(
-        <RadialAnnouncement
-          variant="victory"
-          headline="Victory"
-          announcementId="fixture-victory"
-        />,
+        <CumulusRoot>
+          <RadialAnnouncement
+            variant="victory"
+            headline={localizationTodo("Victory")}
+            announcementId="fixture-victory"
+          />
+        </CumulusRoot>,
       );
     });
 
@@ -232,12 +244,14 @@ describe("RadialAnnouncement", () => {
     const root = createRoot(container);
     act(() => {
       root.render(
-        <RadialAnnouncement
-          variant="hand-total"
-          owner="dealer"
-          total={17}
-          size="mini"
-        />,
+        <CumulusRoot>
+          <RadialAnnouncement
+            variant="hand-total"
+            owner="dealer"
+            total={17}
+            size="mini"
+          />
+        </CumulusRoot>,
       );
     });
 
@@ -261,7 +275,12 @@ describe("RadialAnnouncement", () => {
     const root = createRoot(container);
     act(() => {
       root.render(
-        <RadialAnnouncement headline="Fast" headlineGlyph={GLYPHS.bolt} />,
+        <CumulusRoot>
+          <RadialAnnouncement
+            headline={localizationTodo("Fast")}
+            headlineGlyph={GLYPHS.bolt}
+          />
+        </CumulusRoot>,
       );
     });
 
@@ -288,10 +307,12 @@ describe("RadialAnnouncement", () => {
     const root = createRoot(container);
     act(() => {
       root.render(
-        <RadialAnnouncement
-          headline="−1 ●"
-          detail="All characters gain +1 ✦"
-        />,
+        <CumulusRoot>
+          <RadialAnnouncement
+            headline={localizationTodo("−1 ●")}
+            detail={localizationTodo("All characters gain +1 ✦")}
+          />
+        </CumulusRoot>,
       );
     });
 

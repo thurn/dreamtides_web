@@ -192,22 +192,16 @@ function commandFor(step, extraArgs = []) {
   if (step === "lint") {
     return [process.execPath, [join(root, "scripts", "run-eslint.mjs"), ...extraArgs]];
   }
-  if (step === "lint-localization") {
-    return [
-      process.execPath,
-      [join(root, "scripts", "lint-localization-source.mjs")],
-    ];
-  }
   if (step === "ron-format-check") {
     return [
       process.execPath,
       [join(root, "scripts", "format-ron.mjs"), "--check"],
     ];
   }
-  if (step === "fluent-format-check") {
+  if (step === "trox-check") {
     return [
       process.execPath,
-      [join(root, "scripts", "format-fluent.mjs"), "--check"],
+      [join(root, "scripts", "trox.mjs"), "check", "--deny", "warnings"],
     ];
   }
   if (step === "typecheck") {
@@ -287,12 +281,11 @@ function executionPlan() {
   if (task === "full") {
     return [
       { step: "validate", args: [] },
-      { step: "fluent-format-check", args: [] },
+      { step: "trox-check", args: [] },
       { step: "ron-format-check", args: [] },
       { step: "rust-test", args: [] },
       { step: "clean-game-data", args: [] },
       { step: "trox-generated-check", args: [] },
-      { step: "lint-localization", args: [] },
       { step: "lint", args: [] },
       { step: "typecheck", args: [] },
       { step: "test", args: [] },
@@ -300,9 +293,8 @@ function executionPlan() {
   }
   if (task === "lint-full") {
     return [
-      { step: "fluent-format-check", args: [] },
+      { step: "trox-check", args: [] },
       { step: "ron-format-check", args: [] },
-      { step: "lint-localization", args: [] },
       { step: "lint", args: passthrough },
     ];
   }
@@ -314,14 +306,11 @@ function executionPlan() {
   }
   if (task === "lint") {
     const steps = [];
-    if (reviewPlan.shouldCheckFluentFormatting) {
-      steps.push({ step: "fluent-format-check", args: [] });
+    if (reviewPlan.shouldCheckTrox) {
+      steps.push({ step: "trox-check", args: [] });
     }
     if (reviewPlan.shouldCheckRonFormatting) {
       steps.push({ step: "ron-format-check", args: [] });
-    }
-    if (reviewPlan.shouldLintLocalization) {
-      steps.push({ step: "lint-localization", args: [] });
     }
     if (reviewPlan.lintFiles.length > 0 || passthrough.length > 0) {
       steps.push({
@@ -348,14 +337,11 @@ function executionPlan() {
   if (task === "quick") {
     const steps = [];
     if (reviewPlan.shouldValidate) steps.push({ step: "validate", args: [] });
-    if (reviewPlan.shouldCheckFluentFormatting) {
-      steps.push({ step: "fluent-format-check", args: [] });
+    if (reviewPlan.shouldCheckTrox) {
+      steps.push({ step: "trox-check", args: [] });
     }
     if (reviewPlan.shouldCheckRonFormatting) {
       steps.push({ step: "ron-format-check", args: [] });
-    }
-    if (reviewPlan.shouldLintLocalization) {
-      steps.push({ step: "lint-localization", args: [] });
     }
     if (reviewPlan.shouldTestGameData) steps.push({ step: "rust-test", args: [] });
     if (reviewPlan.lintFiles.length > 0) {

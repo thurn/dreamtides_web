@@ -1,15 +1,14 @@
-import type {
-  ChangeEvent,
-  KeyboardEvent,
-  ReactElement,
-  Ref,
-} from "react";
+import type { ChangeEvent, KeyboardEvent, ReactElement, Ref } from "react";
+import type { LocalizedString } from "@trox/runtime";
 import { controlChrome } from "../../internal/control-treatment";
 import { token } from "../../primitives/tokens";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export interface TextAreaProps {
   /** Visible field label. */
-  readonly label: string;
+  readonly label?: LocalizedString;
+  /** Visible label supplied by canonical authored or developer-only copy. */
+  readonly authoredLabel?: string;
   /** Controlled multiline text. */
   readonly value: string;
   /** Reports each local text edit. */
@@ -17,11 +16,14 @@ export interface TextAreaProps {
   /** Commits the draft on blur or Command/Ctrl+Enter. */
   readonly onCommit?: (value: string) => void;
   /** Optional placeholder shown while empty. */
-  readonly placeholder?: string;
+  readonly placeholder?: LocalizedString;
+  readonly authoredPlaceholder?: string;
   /** Supporting copy beneath the control. */
-  readonly supportingText?: string;
+  readonly supportingText?: LocalizedString;
+  readonly authoredSupportingText?: string;
   /** Validation copy; also marks the textarea invalid. */
-  readonly error?: string;
+  readonly error?: LocalizedString;
+  readonly authoredError?: string;
   /** Stable test id for product QA. */
   readonly testId?: string;
   /** Optional ref to the native textarea. */
@@ -31,17 +33,36 @@ export interface TextAreaProps {
 /** A labeled multiline authoring field on shared glass control chrome. */
 export function TextArea({
   label,
+  authoredLabel,
   value,
   onChange,
   onCommit,
   placeholder,
+  authoredPlaceholder,
   supportingText,
+  authoredSupportingText,
   error,
+  authoredError,
   testId,
   inputRef,
 }: TextAreaProps): ReactElement {
+  const resolve = useLocalizer();
+  if ((label === undefined) === (authoredLabel === undefined)) {
+    throw new Error("TextArea requires exactly one of label or authoredLabel.");
+  }
+  if (placeholder !== undefined && authoredPlaceholder !== undefined) {
+    throw new Error("TextArea accepts placeholder or authoredPlaceholder, not both.");
+  }
+  if (supportingText !== undefined && authoredSupportingText !== undefined) {
+    throw new Error("TextArea accepts supportingText or authoredSupportingText, not both.");
+  }
+  if (error !== undefined && authoredError !== undefined) {
+    throw new Error("TextArea accepts error or authoredError, not both.");
+  }
   const chrome = controlChrome("onGlass");
-  const message = error ?? supportingText;
+  const message = authoredError ?? (error === undefined ? authoredSupportingText : resolve(error)) ??
+    (supportingText === undefined ? undefined : resolve(supportingText));
+  const invalid = error !== undefined || authoredError !== undefined;
   const commit = (): void => onCommit?.(value);
   return (
     <label style={{ display: "grid", gap: token("--space-xs") }}>
@@ -52,14 +73,16 @@ export function TextArea({
           textTransform: "uppercase",
         }}
       >
-        {label}
+        {authoredLabel ?? resolve(label!)}
       </span>
       <textarea
         ref={inputRef}
         rows={3}
         value={value}
-        placeholder={placeholder}
-        aria-invalid={error === undefined ? undefined : true}
+        placeholder={
+          authoredPlaceholder ?? (placeholder === undefined ? undefined : resolve(placeholder))
+        }
+        aria-invalid={invalid ? true : undefined}
         data-testid={testId}
         onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
           onChange(event.target.value)
@@ -85,10 +108,10 @@ export function TextArea({
       />
       {message === undefined ? null : (
         <span
-          role={error === undefined ? undefined : "alert"}
+          role={invalid ? "alert" : undefined}
           style={{
             color:
-              error === undefined
+              !invalid
                 ? token("--text-on-glass-muted")
                 : token("--danger"),
             font: token("--t-caption"),

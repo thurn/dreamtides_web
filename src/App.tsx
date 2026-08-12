@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { tx, txa, type LocalizedString } from "@trox/runtime";
 // Cumulus base interaction reset — disables native mobile long-press behaviour
 // (selection magnifier, iOS callout, Android context menu) across the `.cumulus`
 // subtree so it never fights Cumulus's own long-press-to-reveal gesture. Loaded
@@ -50,8 +51,6 @@ import {
 } from "./runtime/qa-scenes";
 import { useJourneyUrlSync } from "./runtime/use-journey-url-sync";
 import type { JourneyState, SiteState } from "./types/journey";
-import { createMessageDescriptor } from "./data/localization-descriptors";
-import type { FluentMessageDescriptor } from "./data/localization-messages";
 
 /** Inner component that renders the gameplay router and retained app overlays. */
 export function JourneyApp({
@@ -333,9 +332,18 @@ export function JourneyApp({
       <ApplicationStateScreen
         view={{
           kind: "loading",
-          title: createMessageDescriptor("application-opening-qa-scene-title"),
-          message: createMessageDescriptor("application-opening-qa-scene-message"),
-          busyLabel: createMessageDescriptor("application-opening-qa-scene-title"),
+          title: tx(
+            "Opening QA Scene",
+            "Loading title while a requested QA scene is prepared.",
+          ),
+          message: tx(
+            "Preparing this journey state.",
+            "Loading status while a requested QA scene is prepared.",
+          ),
+          busyLabel: tx(
+            "Opening QA Scene",
+            "Loading title while a requested QA scene is prepared.",
+          ),
         }}
       />
     );
@@ -349,11 +357,19 @@ export function JourneyApp({
       <ApplicationStateScreen
         view={{
           kind: "loading",
-          title: createMessageDescriptor("application-loading-saved-journey-title"),
-          message: createMessageDescriptor("application-loading-saved-journey-message", {
-            journeyName: loadJourneyName ?? "saved journey",
-          }),
-          busyLabel: createMessageDescriptor("application-loading-saved-journey-title"),
+          title: tx(
+            "Loading Saved Journey",
+            "Loading title while a requested saved Journey is fetched.",
+          ),
+          message: txa(
+            "Loading {journey_name}.",
+            { journey_name: loadJourneyName ?? "saved journey" },
+            "Loading status containing the requested saved-run name, or the player-safe fallback ‘saved journey’.",
+          ),
+          busyLabel: tx(
+            "Loading Saved Journey",
+            "Loading title while a requested saved Journey is fetched.",
+          ),
         }}
       />
     );
@@ -364,8 +380,14 @@ export function JourneyApp({
       <ApplicationStateScreen
         view={{
           kind: "recoverableError",
-          title: createMessageDescriptor("application-loading-saved-journey-error-title"),
-          message: createMessageDescriptor("application-loading-saved-journey-error-message"),
+          title: tx(
+            "Could Not Load Saved Journey",
+            "Recoverable error title when a saved Journey cannot be opened.",
+          ),
+          message: tx(
+            "The saved journey could not be opened.",
+            "Recoverable error explanation when a saved Journey cannot be opened.",
+          ),
           detail: loadJourneyError ?? "Failed to load saved journey.",
         }}
       />
@@ -613,18 +635,30 @@ export default function App({
       <ApplicationStateScreen
         view={{
           kind: "recoverableError",
-          title: createMessageDescriptor("application-content-load-error-title"),
-          message: createMessageDescriptor("application-content-load-error-message"),
+          title: tx(
+            "Journey Content Failed to Load",
+            "Recoverable error title when Journey content fails to load.",
+          ),
+          message: tx(
+            "The journey content could not be prepared.",
+            "Recoverable error explanation when Journey content fails to load.",
+          ),
           detail: loadError,
           actions: [
             {
               id: "primary",
-              label: createMessageDescriptor("application-retry-action"),
+              label: tx(
+                "Retry",
+                "Command that retries the failed application operation represented by the current error surface.",
+              ),
               onPress: () => window.location.reload(),
             },
             {
               id: "secondary",
-              label: createMessageDescriptor("application-copy-details-action"),
+              label: tx(
+                "Copy Details",
+                "Secondary action that copies technical failure details for support or debugging.",
+              ),
               onPress: () => void navigator.clipboard?.writeText(loadError),
             },
           ],
@@ -638,9 +672,18 @@ export default function App({
       <ApplicationStateScreen
         view={{
           kind: "loading",
-          title: createMessageDescriptor("application-loading-journey-content-title"),
-          message: createMessageDescriptor("application-loading-journey-content-message"),
-          busyLabel: createMessageDescriptor("application-loading-journey-content-title"),
+          title: tx(
+            "Loading Journey Content",
+            "Loading title while Journey content is fetched.",
+          ),
+          message: tx(
+            "Gathering the dream’s cards and paths.",
+            "Loading status while Journey content is fetched.",
+          ),
+          busyLabel: tx(
+            "Loading Journey Content",
+            "Loading title while Journey content is fetched.",
+          ),
         }}
       />
     );
@@ -655,7 +698,10 @@ export default function App({
       <ApplicationStateScreen
         view={{
           kind: "fatalConfiguration",
-          title: createMessageDescriptor("application-firebase-setup-title"),
+          title: tx(
+            "Firebase Setup Issue",
+            "Configuration-error title when the shared-game Firebase service cannot initialize.",
+          ),
           message: firebaseSetupHelp(runtimeConfig.databaseMode),
           detail: firebaseError,
         }}
@@ -668,9 +714,18 @@ export default function App({
       <ApplicationStateScreen
         view={{
           kind: "loading",
-          title: createMessageDescriptor("application-connecting-game-service-title"),
-          message: createMessageDescriptor("application-connecting-game-service-message"),
-          busyLabel: createMessageDescriptor("application-connecting-game-service-title"),
+          title: tx(
+            "Connecting to Game Service",
+            "Loading title while the shared game service connects.",
+          ),
+          message: tx(
+            "Preparing your shared game.",
+            "Loading status while the shared game service connects.",
+          ),
+          busyLabel: tx(
+            "Connecting to Game Service",
+            "Loading title while the shared game service connects.",
+          ),
         }}
       />
     );
@@ -734,10 +789,16 @@ export default function App({
 
 function firebaseSetupHelp(
   databaseMode: RuntimeConfig["databaseMode"],
-): FluentMessageDescriptor {
+): LocalizedString {
   if (databaseMode === "emulator") {
-    return createMessageDescriptor("application-firebase-setup-emulator-message");
+    return tx(
+      "Run npm start to launch the Firebase Realtime Database emulator with Vite.",
+      "Configuration instructions shown when local Firebase emulator mode cannot initialize.",
+    );
   }
 
-  return createMessageDescriptor("application-firebase-setup-production-message");
+  return tx(
+    "Required env: VITE_FIREBASE_API_KEY, VITE_FIREBASE_AUTH_DOMAIN, VITE_FIREBASE_DATABASE_URL, VITE_FIREBASE_PROJECT_ID, VITE_FIREBASE_APP_ID.",
+    "Configuration instructions listing the required environment variables for deployed Firebase mode.",
+  );
 }

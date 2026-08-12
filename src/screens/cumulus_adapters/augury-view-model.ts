@@ -31,8 +31,7 @@ import type {
 } from "../../journey_v2";
 import type { MerchantDeckSnapshot } from "../../journey_v2/trace/deckSnapshot";
 import type { CardData } from "../../types/cards";
-import type { FluentMessageDescriptor } from "../../data/localization-messages";
-import { createMessageDescriptor } from "../../data/localization-descriptors";
+import type { LocalizedString } from "@trox/runtime";
 import { asCardId } from "../../types/card-identity";
 import type { DreamGuideContent } from "../../types/content";
 import type { SitesData } from "../../types/sites-data";
@@ -66,6 +65,7 @@ import type {
 } from "../../cumulus/screens/AugurySiteScreen";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
+import { tx } from "@trox/runtime";
 
 type CardObject = MerchantCatalogCard | MerchantDeckCard;
 
@@ -790,14 +790,58 @@ export function buildAuguryLogEntries(
 
 export function auguryChoiceResult(
   result: MerchantOfferActionResult | void,
-): { ok: true } | { ok: false; message: FluentMessageDescriptor } {
+): { ok: true } | { ok: false; message: LocalizedString } {
   if (result?.ok !== false) return { ok: true };
   if (
     result.reason === "stale_encounter" ||
     result.reason === "archetype_mismatch" ||
     result.reason === "offer_not_found"
   ) {
-    return { ok: false, message: createMessageDescriptor("augury-error-visions-shifted") };
+    return {
+      ok: false,
+      message: tx(
+        "The visions shifted. Choose again.",
+        "Player-facing message for the augury error visions shifted interface state.",
+      ),
+    };
   }
-  return { ok: false, message: createMessageDescriptor("augury-error-path-closed") };
+  return {
+    ok: false,
+    message: tx(
+      "That path is closed. Choose again.",
+      "Player-facing message for the augury error path closed interface state.",
+    ),
+  };
+}
+
+export function chooseAuguryOffer(
+  site: SiteState | null,
+  result: AuguryBuildResult | null,
+  acceptOffer: (
+    siteId: string,
+    request: MerchantAcceptRequest,
+  ) => MerchantOfferActionResult | void,
+  offerId: string,
+  choiceId: string | null,
+): { ok: true } | { ok: false; message: LocalizedString } {
+  if (site === null || result?.encounter === null || result?.encounter === undefined) {
+    return {
+      ok: false,
+      message: tx(
+        "The augury is clouded.",
+        "Player-facing message for the augury error clouded interface state.",
+      ),
+    };
+  }
+  const request = buildAuguryAcceptRequest(result.encounter, offerId, choiceId);
+  if (request === null) {
+    return {
+      ok: false,
+      message: tx(
+        "Choose a vision first.",
+        "Player-facing message for the augury error choose vision interface state.",
+      ),
+    };
+  }
+  return auguryChoiceResult(acceptOffer(site.id, request));
 }

@@ -1,4 +1,4 @@
-import { localizationTodo } from "@trox/runtime";
+import { tx, type LocalizedString } from "@trox/runtime";
 import { motion, useReducedMotion } from "framer-motion";
 import type { ReactElement } from "react";
 import { IconButton } from "../components/controls/IconButton";
@@ -10,31 +10,26 @@ import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
 import { useIsDesktop } from "./use-is-desktop";
 import "../primitives/cumulus-base.css";
-import { useMessages, formatMessageDescriptor } from "../hooks/use-messages";
-import type { FluentMessageDescriptor } from "../../data/localization-messages";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 export type MainMenuActionId =
-  | "new-journey"
-  | "dream-codex"
-  | "settings"
-  | "about"
-  | "quit";
+  "new-journey" | "dream-codex" | "settings" | "about" | "quit";
 
 export type MainMenuSocialId = "github" | "discord" | "reddit";
 
 export interface MainMenuActionView {
   readonly id: MainMenuActionId;
-  readonly label: FluentMessageDescriptor;
+  readonly label: LocalizedString;
 }
 
 export interface MainMenuSocialView {
   readonly id: MainMenuSocialId;
-  readonly label: FluentMessageDescriptor;
+  readonly label: LocalizedString;
   readonly glyph: Glyph;
 }
 
 export interface MainMenuView {
-  readonly title: FluentMessageDescriptor;
+  readonly title: LocalizedString;
   readonly background: ArtRef;
   readonly actions: readonly MainMenuActionView[];
   readonly socials: readonly MainMenuSocialView[];
@@ -68,7 +63,7 @@ export function MainMenuScreen({
   onExitComplete,
   playbackSpeed = 1,
 }: MainMenuScreenProps): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const isDesktop = useIsDesktop();
   const reduceMotion = useReducedMotion() === true;
   const mobileEdgeInline = `max(${token(SAFE_AREA_INSET_PROPERTIES.left)}, ${token("--space-l")})`;
@@ -122,11 +117,16 @@ export function MainMenuScreen({
           whiteSpace: "nowrap",
         }}
       >
-        {formatMessageDescriptor(t, view.title)}
+        {resolve(view.title)}
       </h1>
 
       <nav
-        aria-label={t("main-menu-navigation-label")}
+        aria-label={resolve(
+          tx(
+            "Main menu",
+            "Accessible name for the primary front-door navigation landmark.",
+          ),
+        )}
         data-main-menu-actions
         style={{
           position: "absolute",
@@ -158,7 +158,7 @@ export function MainMenuScreen({
               }}
             >
               <MainMenuButton
-                label={formatMessageDescriptor(t, action.label)}
+                label={action.label}
                 testId={`main-menu-action-${action.id}`}
                 onPress={() => onAction(action.id)}
               />
@@ -169,7 +169,12 @@ export function MainMenuScreen({
 
       <div
         role="group"
-        aria-label={t("main-menu-community-label")}
+        aria-label={resolve(
+          tx(
+            "Dreamtides community",
+            "Accessible group name for external Dreamtides community links.",
+          ),
+        )}
         data-main-menu-socials
         style={{
           position: "absolute",
@@ -184,7 +189,7 @@ export function MainMenuScreen({
           <IconButton
             key={social.id}
             glyph={social.glyph}
-            label={localizationTodo(formatMessageDescriptor(t, social.label))}
+            label={social.label}
             testId={`main-menu-social-${social.id}`}
             onPress={() => onSocial(social.id)}
           />

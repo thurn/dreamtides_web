@@ -7,7 +7,6 @@ import {
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { Motes } from "../components/hud/Motes";
 import { GlassPanel } from "../components/overlay/GlassPanel";
-import { useMessages } from "../hooks/use-messages";
 import { token } from "../primitives/tokens";
 import {
   JOURNEY_RESULT_BOTTOM_SAFE_PADDING,
@@ -15,6 +14,8 @@ import {
   JOURNEY_RESULT_CONTENT_MAX_WIDTH_PX,
   JOURNEY_RESULT_TOP_CHROME_CLEARANCE,
 } from "./journey-result-layout";
+import { tx, txa, plural, one, other, type LocalizedString } from "@trox/runtime";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 export interface JourneyCompleteStatView {
   id: "battles" | "dreamscapes" | "cards" | "dreamsigns" | "essence";
@@ -42,7 +43,21 @@ export function JourneyCompleteScreen({
   view,
   onNewJourney,
 }: JourneyCompleteScreenProps): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
+  const statLabel = (stat: JourneyCompleteStatView): LocalizedString => {
+    switch (stat.id) {
+      case "battles":
+        return txa(plural(stat.value, [one("Battle Won"), other("Battles Won")]), {}, "Label beneath the completed Journey's number of battles won. The number is rendered separately above.");
+      case "dreamscapes":
+        return txa(plural(stat.value, [one("Dreamscape"), other("Dreamscapes")]), {}, "Label beneath the number of Dreamscapes in a completed Journey. The number is rendered separately above.");
+      case "cards":
+        return tx("Final Deck", "Label beneath the number of cards in the completed Journey's final deck.");
+      case "dreamsigns":
+        return txa(plural(stat.value, [one("Dreamsign"), other("Dreamsigns")]), {}, "Label beneath the number of Dreamsigns in a completed Journey. The number is rendered separately above.");
+      case "essence":
+        return tx("Essence Remaining", "Label beneath the remaining Essence at the end of a Journey.");
+    }
+  };
 
   return (
     <div
@@ -112,7 +127,10 @@ export function JourneyCompleteScreen({
                   color: token("--text-primary"),
                 }}
               >
-                {t("journey-complete-title")}
+                {resolve(tx(
+                  "Journey Complete",
+                  "Player-facing message for the journey complete title interface state.",
+                ))}
               </h1>
             </header>
 
@@ -165,9 +183,7 @@ export function JourneyCompleteScreen({
                       <SummaryStat
                         key={stat.id}
                         stat={stat}
-                        label={t(`journey-complete-stat-${stat.id}`, {
-                          count: stat.value,
-                        })}
+                        label={statLabel(stat)}
                       />
                     ))}
                   </dl>
@@ -185,7 +201,10 @@ export function JourneyCompleteScreen({
             }}
           >
             <GlassButton
-              label={t("journey-complete-new-journey")}
+              label={tx(
+                "New Journey",
+                "Command that starts a fresh Journey from a menu or terminal Journey result.",
+              )}
               variant="accent"
               onPress={onNewJourney}
               testId="journey-complete-new-journey"
@@ -202,8 +221,9 @@ function SummaryStat({
   label,
 }: {
   readonly stat: JourneyCompleteStatView;
-  readonly label: string;
+  readonly label: LocalizedString;
 }) {
+  const resolve = useLocalizer();
   return (
     <div
       data-journey-complete-stat={stat.id}
@@ -240,7 +260,7 @@ function SummaryStat({
           color: token("--text-on-glass-muted"),
         }}
       >
-        {label}
+        {resolve(label)}
       </dt>
     </div>
   );

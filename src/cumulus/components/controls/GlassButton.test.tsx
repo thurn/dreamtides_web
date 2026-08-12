@@ -6,6 +6,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GlassButton } from "./GlassButton";
 import { GLYPHS } from "../../primitives/glyph";
+import { CumulusRoot } from "../../CumulusRoot";
 
 function mount(element: ReactElement): {
   container: HTMLDivElement;
@@ -15,7 +16,7 @@ function mount(element: ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(element);
+    root.render(<CumulusRoot>{element}</CumulusRoot>);
   });
   return { container, root };
 }
@@ -48,7 +49,7 @@ afterEach(() => {
 describe("GlassButton", () => {
   it("exposes semantic pressed state for persistent toggles", () => {
     const { container, root } = mount(
-      <GlassButton label="Return to Your Side" pressed onPress={() => {}} />,
+      <GlassButton authoredLabel="Return to Your Side" pressed onPress={() => {}} />,
     );
     const button = container.querySelector("button");
     expect(button?.getAttribute("aria-pressed")).toBe("true");
@@ -58,7 +59,7 @@ describe("GlassButton", () => {
   it("renders its text label inside a button", () => {
     const { container, root } = mount(
       <GlassButton
-        label="Apply Filters"
+        authoredLabel="Apply Filters"
         testId="glass-apply"
         onPress={() => {}}
       />,
@@ -75,7 +76,7 @@ describe("GlassButton", () => {
 
   it("renders an optional leading glyph before the label", () => {
     const { container, root } = mount(
-      <GlassButton label="Filter" glyph={GLYPHS.filter} onPress={() => {}} />,
+      <GlassButton authoredLabel="Filter" glyph={GLYPHS.filter} onPress={() => {}} />,
     );
 
     // The leading glyph is a StandaloneGlyph <i> carrying the glyph class.
@@ -88,7 +89,7 @@ describe("GlassButton", () => {
 
   it("renders an optional inline essence cost after a centered dot", () => {
     const { container, root } = mount(
-      <GlassButton label="Transfigure" essenceCost={20} onPress={() => {}} />,
+      <GlassButton authoredLabel="Transfigure" essenceCost={20} onPress={() => {}} />,
     );
 
     const button = container.querySelector("button");
@@ -118,11 +119,11 @@ describe("GlassButton", () => {
     ).toBe("var(--space-xs)");
     act(() => {
       root.render(
-        <GlassButton
-          label="Transfigure"
+        <CumulusRoot><GlassButton
+          authoredLabel="Transfigure"
           essenceCost={null}
           onPress={() => {}}
-        />,
+        /></CumulusRoot>,
       );
     });
     expect(
@@ -136,9 +137,9 @@ describe("GlassButton", () => {
   it("supports a distinct accessible name for a priced action", () => {
     const { container, root } = mount(
       <GlassButton
-        label="Choose"
+        authoredLabel="Choose"
         essenceCost={50}
-        accessibilityLabel="Choose the Six Gate for 50 Essence"
+        authoredAccessibilityLabel="Choose the Six Gate for 50 Essence"
         onPress={() => {}}
       />,
     );
@@ -153,7 +154,7 @@ describe("GlassButton", () => {
 
   it("renders a non-cost Essence value without punctuation", () => {
     const { container, root } = mount(
-      <GlassButton label="Take" essenceValue={60} onPress={() => {}} />,
+      <GlassButton authoredLabel="Take" essenceValue={60} onPress={() => {}} />,
     );
 
     expect(
@@ -170,13 +171,13 @@ describe("GlassButton", () => {
 
   it("keeps every dynamic width reservation in one hidden sizing grid", () => {
     const reservations = [
-      { label: "Decline", essenceCost: null },
-      { label: "Purge 1", essenceCost: 40 },
-      { label: "Purge 2", essenceCost: 100 },
+      { authoredLabel: "Decline", essenceCost: null },
+      { authoredLabel: "Purge 1", essenceCost: 40 },
+      { authoredLabel: "Purge 2", essenceCost: 100 },
     ] as const;
     const { container, root } = mount(
       <GlassButton
-        label="Decline"
+        authoredLabel="Decline"
         widthReservations={reservations}
         onPress={() => {}}
       />,
@@ -194,12 +195,12 @@ describe("GlassButton", () => {
 
     act(() => {
       root.render(
-        <GlassButton
-          label="Purge 2"
+        <CumulusRoot><GlassButton
+          authoredLabel="Purge 2"
           essenceCost={100}
           widthReservations={reservations}
           onPress={() => {}}
-        />,
+        /></CumulusRoot>,
       );
     });
     expect(
@@ -217,10 +218,10 @@ describe("GlassButton", () => {
   it("owns centered content at the control root and within reserved dynamic width", () => {
     const { container, root } = mount(
       <GlassButton
-        label="Transfigure"
+        authoredLabel="Transfigure"
         widthReservations={[
-          { label: "Transfigure", essenceCost: null },
-          { label: "Reforging…", essenceCost: 80 },
+          { authoredLabel: "Transfigure", essenceCost: null },
+          { authoredLabel: "Reforging…", essenceCost: 80 },
         ]}
         onPress={() => {}}
       />,
@@ -240,7 +241,7 @@ describe("GlassButton", () => {
 
   it("keeps the canonical target height with compact label spacing", () => {
     const { container, root } = mount(
-      <GlassButton label="Choose" size="compact" onPress={() => {}} />,
+      <GlassButton authoredLabel="Choose" size="compact" onPress={() => {}} />,
     );
 
     const button = container.querySelector<HTMLButtonElement>("button");
@@ -253,7 +254,7 @@ describe("GlassButton", () => {
 
   it("offers a prominent primary-action size", () => {
     const { container, root } = mount(
-      <GlassButton label="Begin" size="prominent" onPress={() => {}} />,
+      <GlassButton authoredLabel="Begin" size="prominent" onPress={() => {}} />,
     );
 
     const button = container.querySelector<HTMLButtonElement>("button");
@@ -266,7 +267,7 @@ describe("GlassButton", () => {
 
   it("omits the `<i>` when no glyph is given", () => {
     const { container, root } = mount(
-      <GlassButton label="Filter" onPress={() => {}} />,
+      <GlassButton authoredLabel="Filter" onPress={() => {}} />,
     );
 
     expect(container.querySelector("i")).toBeNull();
@@ -278,7 +279,7 @@ describe("GlassButton", () => {
 
   it("defaults to the neutral glass treatment", () => {
     const { container, root } = mount(
-      <GlassButton label="Cancel" onPress={() => {}} />,
+      <GlassButton authoredLabel="Cancel" onPress={() => {}} />,
     );
 
     const button = container.querySelector("button");
@@ -291,7 +292,7 @@ describe("GlassButton", () => {
 
   it("uses the lighter tonal-lens treatment when placed on glass", () => {
     const { container, root } = mount(
-      <GlassButton label="Cancel" placement="onGlass" onPress={() => {}} />,
+      <GlassButton authoredLabel="Cancel" placement="onGlass" onPress={() => {}} />,
     );
 
     const button = container.querySelector("button");
@@ -306,7 +307,7 @@ describe("GlassButton", () => {
 
   it("can render the danger glass treatment", () => {
     const { container, root } = mount(
-      <GlassButton label="Cancel" variant="danger" onPress={() => {}} />,
+      <GlassButton authoredLabel="Cancel" variant="danger" onPress={() => {}} />,
     );
 
     const button = container.querySelector("button");
@@ -323,7 +324,7 @@ describe("GlassButton", () => {
   it("renders the purple soft-wash accent without dropping the glass blur", () => {
     const { container, root } = mount(
       <GlassButton
-        label="Transfigure"
+        authoredLabel="Transfigure"
         variant="accent"
         onPress={() => {}}
       />,
@@ -340,7 +341,7 @@ describe("GlassButton", () => {
 
   it("restores the neutral glass border after leaving the danger state", () => {
     const { container, root } = mount(
-      <GlassButton label="Decline" onPress={() => {}} />,
+      <GlassButton authoredLabel="Decline" onPress={() => {}} />,
     );
     const button = container.querySelector<HTMLButtonElement>("button");
     const neutralBorder = button?.style.border;
@@ -348,13 +349,13 @@ describe("GlassButton", () => {
 
     act(() => {
       root.render(
-        <GlassButton label="Purge 1" variant="danger" onPress={() => {}} />,
+        <CumulusRoot><GlassButton authoredLabel="Purge 1" variant="danger" onPress={() => {}} /></CumulusRoot>,
       );
     });
     expect(button?.style.border).not.toBe(neutralBorder);
 
     act(() => {
-      root.render(<GlassButton label="Decline" onPress={() => {}} />);
+      root.render(<CumulusRoot><GlassButton authoredLabel="Decline" onPress={() => {}} /></CumulusRoot>);
     });
     expect(button?.style.border).toBe(neutralBorder);
 
@@ -366,7 +367,7 @@ describe("GlassButton", () => {
   it("balances the danger treatment for placement on glass", () => {
     const { container, root } = mount(
       <GlassButton
-        label="Cancel"
+        authoredLabel="Cancel"
         variant="danger"
         placement="onGlass"
         onPress={() => {}}
@@ -387,7 +388,7 @@ describe("GlassButton", () => {
 
   it("restores the neutral on-glass border after leaving the danger state", () => {
     const { container, root } = mount(
-      <GlassButton label="Decline" placement="onGlass" onPress={() => {}} />,
+      <GlassButton authoredLabel="Decline" placement="onGlass" onPress={() => {}} />,
     );
     const button = container.querySelector<HTMLButtonElement>("button");
     const neutralBorder = button?.style.border;
@@ -395,19 +396,19 @@ describe("GlassButton", () => {
 
     act(() => {
       root.render(
-        <GlassButton
-          label="Purge 1"
+        <CumulusRoot><GlassButton
+          authoredLabel="Purge 1"
           variant="danger"
           placement="onGlass"
           onPress={() => {}}
-        />,
+        /></CumulusRoot>,
       );
     });
     expect(button?.style.border).not.toBe(neutralBorder);
 
     act(() => {
       root.render(
-        <GlassButton label="Decline" placement="onGlass" onPress={() => {}} />,
+        <CumulusRoot><GlassButton authoredLabel="Decline" placement="onGlass" onPress={() => {}} /></CumulusRoot>,
       );
     });
     expect(button?.style.border).toBe(neutralBorder);
@@ -420,7 +421,7 @@ describe("GlassButton", () => {
   it("fires `onPress` on click", () => {
     const onPress = vi.fn();
     const { container, root } = mount(
-      <GlassButton label="Apply" onPress={onPress} />,
+      <GlassButton authoredLabel="Apply" onPress={onPress} />,
     );
 
     act(() => {
@@ -436,7 +437,7 @@ describe("GlassButton", () => {
   it('while disabled dims, sets aria-disabled="true", and does not fire onPress', () => {
     const onPress = vi.fn();
     const { container, root } = mount(
-      <GlassButton label="Apply" onPress={onPress} disabled />,
+      <GlassButton authoredLabel="Apply" onPress={onPress} disabled />,
     );
 
     const button = container.querySelector("button");
@@ -449,7 +450,7 @@ describe("GlassButton", () => {
     expect(onPress).not.toHaveBeenCalled();
 
     act(() => {
-      root.render(<GlassButton label="Apply" onPress={onPress} />);
+      root.render(<CumulusRoot><GlassButton authoredLabel="Apply" onPress={onPress} /></CumulusRoot>);
     });
     expect(button?.getAttribute("aria-disabled")).toBeNull();
     expect(button?.getAttribute("style")).toContain("opacity: 1");

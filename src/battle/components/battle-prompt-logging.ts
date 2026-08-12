@@ -1,8 +1,8 @@
 import type { BattleMutableState } from "../types";
 import type { PromptResolution } from "../../rules/battle/effect-runner-core";
 import type { PendingPrompt } from "../../rules/battle/fold";
-import type { FluentMessageDescriptor } from "../../data/localization-messages";
 import {
+  isBuiltInBattlePromptRef,
   isDreamwellPromptRef,
   isLegacyPromptText,
   type BattlePromptText,
@@ -25,11 +25,14 @@ export function promptTextLogFields(
   if (isLegacyPromptText(descriptor)) {
     return { [`${prefix}LegacyText`]: descriptor.text };
   }
-  return {
-    [`${prefix}MessageId`]: descriptor.id,
-    [`${prefix}MessageArguments`]:
-      "variables" in descriptor ? descriptor.variables : null,
-  };
+  if (isBuiltInBattlePromptRef(descriptor)) {
+    return {
+      [`${prefix}BuiltInPrompt`]: descriptor.prompt,
+      [`${prefix}Arguments`]:
+        descriptor.prompt === "switch-side" ? { side: descriptor.side } : null,
+    };
+  }
+  return descriptor satisfies never;
 }
 
 function backingCardUuid(
@@ -50,13 +53,6 @@ export function createBattlePromptOpenedLogFields(
       : pendingPrompt.options.kind === "foresee"
         ? pendingPrompt.options.cardIds
         : [];
-  const promptDescriptor =
-    pendingPrompt.options.kind === "foresee"
-      ? ({
-          id: "battle-foresee-title",
-          variables: { count: pendingPrompt.options.count },
-        } satisfies FluentMessageDescriptor)
-      : pendingPrompt.options.label;
   return {
     dreamwellCardUuid:
       pendingPrompt.run.scriptRef.table === "dreamwell"
@@ -64,7 +60,9 @@ export function createBattlePromptOpenedLogFields(
         : null,
     promptId: pendingPrompt.promptId,
     promptKind: pendingPrompt.kind,
-    ...promptTextLogFields("prompt", promptDescriptor),
+    ...(pendingPrompt.options.kind === "foresee"
+      ? { promptForeseeCount: pendingPrompt.options.count }
+      : promptTextLogFields("prompt", pendingPrompt.options.label)),
     candidateBattleCardInstanceIds: candidateInstanceIds,
     candidateBackingCardUuids: candidateInstanceIds.map((instanceId) =>
       backingCardUuid(board, instanceId),

@@ -1,4 +1,4 @@
-import { type CSSProperties } from "react";
+import { useId, type CSSProperties } from "react";
 import {
   ENERGY_ICON_CLASS,
   ENERGY_ICON_COLOR,
@@ -10,7 +10,20 @@ import { useFitText } from "../controls/useFitText";
 import { type Glyph } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
 import { renderCardChangeBadge } from "./card-change-badge";
-import { useMessages } from "../../hooks/use-messages";
+import { meaning, tx, txa, type LocalizedString } from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
+
+const VISUALLY_HIDDEN_STYLE: CSSProperties = {
+  position: "absolute",
+  width: 1,
+  height: 1,
+  padding: 0,
+  margin: 0,
+  overflow: "hidden",
+  clip: "rect(0, 0, 0, 0)",
+  whiteSpace: "nowrap",
+  border: 0,
+};
 
 export type CardStatOrbVariant = "energy" | "spark" | "dreamwellEnergy";
 export interface CardStatChangeBadge {
@@ -98,7 +111,9 @@ interface CardStatOrbProps {
    * needs to sit at or above the rendered digit size.
    */
   numberCapPx: number;
-  ariaLabel?: string;
+  ariaLabel?: LocalizedString;
+  /** Accessible name supplied by canonical authored or developer-only copy. */
+  authoredAriaLabel?: string;
   /**
    * Monochrome hammer marker for a transfiguration-changed stat, shared with
    * the Transfiguration site's atlas icon.
@@ -128,21 +143,30 @@ export function CardStatOrb({
   numberSizeVar,
   numberCapPx,
   ariaLabel,
+  authoredAriaLabel,
   changeBadge,
 }: CardStatOrbProps) {
-  const t = useMessages();
-  const label =
-    ariaLabel === undefined
-      ? t("card-stat-accessible-name", {
-          stat: variant,
-          change: changeBadge?.kind ?? "none",
-          changeName: changeBadge?.accessibleName ?? "",
-        })
-      : t("card-stat-custom-accessible-name", {
-          baseName: ariaLabel,
-          change: changeBadge?.kind ?? "none",
-          changeName: changeBadge?.accessibleName ?? "",
-        });
+  const resolve = useLocalizer();
+  const accessibleId = useId();
+  if (ariaLabel !== undefined && authoredAriaLabel !== undefined) {
+    throw new Error("CardStatOrb accepts ariaLabel or authoredAriaLabel, not both.");
+  }
+  const baseMessage = ariaLabel ?? (authoredAriaLabel === undefined
+    ? (variant === "energy"
+      ? tx(
+          "Energy cost",
+          "Accessible name for the numeric Energy-cost orb on a card. The visible numeral is inside the same labeled element.",
+        )
+      : variant === "spark"
+        ? tx(
+            meaning("card-spark-stat-name", "Spark"),
+            "Accessible name for the numeric Spark orb on a card. The visible numeral is inside the same labeled element.",
+          )
+        : tx(
+            "Energy added",
+            "Accessible name for the numeric Energy-added orb on a Dreamwell card. The visible numeral is inside the same labeled element.",
+          ))
+    : undefined);
   const icon = ICON_BY_VARIANT[variant];
   // The digit box edge equals the CSS digit size; the digit sits over the
   // glyph's body so it reads over the fullest region rather than the edges.
@@ -176,7 +200,7 @@ export function CardStatOrb({
   const orb = (
     <span
       data-card-stat={variant}
-      aria-label={label}
+      aria-labelledby={`${accessibleId}-base${changeBadge === undefined ? "" : ` ${accessibleId}-change`}`}
       role="img"
       style={{
         position: "relative",
@@ -188,6 +212,20 @@ export function CardStatOrb({
         flex: "0 0 auto",
       }}
     >
+      <span id={`${accessibleId}-base`} style={VISUALLY_HIDDEN_STYLE}>
+        {authoredAriaLabel ?? resolve(baseMessage!)}
+      </span>
+      {changeBadge === undefined ? null : (
+        <span id={`${accessibleId}-change`} style={VISUALLY_HIDDEN_STYLE}>
+          {resolve(
+            txa(
+              "Changed by {form_name}",
+              { form_name: changeBadge.accessibleName },
+              "Accessible sentence naming the Transfiguration form that changed this card stat. form_name is the authored form name and has no grammatical-gender metadata.",
+            ),
+          )}
+        </span>
+      )}
       {/* The glowing mark sits below the digit. Each Boxicons glyph leaves
           padding inside its 24×24 viewBox, so it is overscaled past the box
           (centered) to reach the stat's footprint. The wrapper owns the
@@ -209,6 +247,7 @@ export function CardStatOrb({
         />
       </span>
       <div
+        data-card-stat-value=""
         ref={ref}
         style={{
           ...numberStyle,

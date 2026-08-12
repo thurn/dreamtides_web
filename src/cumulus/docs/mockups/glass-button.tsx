@@ -52,7 +52,7 @@ function ControlPair({ placement }: { placement: GlassControlPlacement }) {
       }}
     >
       <GlassButton
-        label="Decline"
+        authoredLabel="Decline"
         placement={placement}
         onPress={() => {}}
       />

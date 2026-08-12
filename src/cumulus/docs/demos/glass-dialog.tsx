@@ -23,7 +23,7 @@ function GlassDialogDemo() {
   const [open, setOpen] = useState(true);
   return (
     <>
-      <GlassButton label="Open dialog" onPress={() => setOpen(true)} />
+      <GlassButton authoredLabel="Open dialog" onPress={() => setOpen(true)} />
       {open && (
         <GlassDialog
           title={localizationTodo("Choose a Dreamsign to Replace")}

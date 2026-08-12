@@ -25,7 +25,8 @@ The compact glyph-only glass disc, with placement-aware recipes for scene media 
 | `ariaExpanded` | `boolean` | no | — | When the disc is a disclosure trigger, its `aria-expanded` state (whether the surface it controls is open). Omitted for a plain action button. |
 | `ariaControls` | `string` | no | — | Id of the disclosure surface controlled by this button. |
 | `testId` | `string` | no | — | A `data-testid` for selecting the disc in tests. |
-| `label` | `LocalizedString` | yes | — | Localized accessible name forwarded unresolved to the final button. |
+| `label` | `LocalizedString` | no | — | Localized accessible name forwarded unresolved to the final button. |
+| `authoredLabel` | `string` | no | — | Canonical authored or developer-only accessible name. |
 
 ## Usage
 

@@ -2,6 +2,7 @@ import {
   Localizer,
   bundleFromCanonicalJSON,
   plural,
+  meaning,
   one,
   other,
   tx,
@@ -43,12 +44,12 @@ function algorithmMessage(algorithm_id: string) {
 
 function countMessage(visible_count: number, total_count: number) {
   return txa(
-    plural(total_count, [
+    meaning("pool-filtered-count-subtitle", plural(total_count, [
       one("{visible_count} of {total_count} Card"),
       other("{visible_count} of {total_count} Cards"),
-    ]),
+    ])),
     { visible_count, total_count },
-    "Visible Pool Viewer result-count subtitle. visible_count is the nonnegative safe-integer number remaining after filters and may be smaller than total_count. total_count is the nonnegative safe-integer size of the selected source before filters and governs Card number grammar; both numbers are visible.",
+    "Filtered card-browser subtitle. visible_count is the non-negative number matching the active filters; total_count is the non-negative collection size before filtering and governs Card grammar.",
   );
 }
 

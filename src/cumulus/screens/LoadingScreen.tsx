@@ -22,7 +22,8 @@ import {
   type LoadingCalloutLeaderLine,
 } from "./loading-callout-geometry";
 import { useIsDesktop } from "./use-is-desktop";
-import { useMessages } from "../hooks/use-messages";
+import { tx } from "@trox/runtime";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 export interface LoadingView {
   readonly loadingCharacter: GameCardModel;
@@ -191,7 +192,7 @@ function AnnotatedLoadingCard({
   readonly annotations: readonly AnnotationSpec[];
   readonly isDesktop: boolean;
 }): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const groupRef = useRef<HTMLDivElement | null>(null);
   const calloutRefs = useRef<
     Partial<Record<TutorialFeatureCalloutKind, HTMLDivElement | null>>
@@ -307,10 +308,10 @@ function AnnotatedLoadingCard({
           pointerEvents: "none",
         }}
       >
-        {t(
+        {resolve(
           cardType === "character"
-            ? "loading-card-character-label"
-            : "loading-card-event-label",
+            ? tx("Character", "Card-type label above the Character example on the loading screen.")
+            : tx("Event", "Card-type label above the Event example on the loading screen."),
         )}
       </p>
 
@@ -367,7 +368,7 @@ export function LoadingScreen({
   playbackSpeed = 1,
   onBegin,
 }: LoadingScreenProps): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const isDesktop = useIsDesktop();
   const reduceMotion = useReducedMotion() === true;
   const [ready, setReady] = useState(false);
@@ -483,10 +484,13 @@ export function LoadingScreen({
           textAlign: "center",
         }}
       >
-        {t("loading-card-types-title")}
+        {resolve(tx("Dreamtides Cards:", "Card-anatomy loading title and labels."))}
       </h1>
       <section
-        aria-label={t("loading-card-anatomy-label")}
+        aria-label={resolve(tx(
+          "Card anatomy",
+          "Player-facing message for the loading card anatomy label interface state.",
+        ))}
         data-loading-card-stage
         style={{
           width: "100%",
@@ -550,7 +554,10 @@ export function LoadingScreen({
             }}
           >
             <GlassButton
-              label={t("loading-begin-action")}
+              label={tx(
+                "Begin",
+                "Player-facing message for the loading begin action interface state.",
+              )}
               onPress={onBegin}
               size="prominent"
               variant="accent"
@@ -573,7 +580,12 @@ export function LoadingScreen({
               playbackSpeed={playbackSpeed}
               reduceMotion={reduceMotion}
             />
-            <span>{t("loading-progress-label")}</span>
+            <span>
+              {resolve(tx(
+                "Loading",
+                "Player-facing message for the loading progress label interface state.",
+              ))}
+            </span>
           </div>
         )}
       </footer>

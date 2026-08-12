@@ -1,6 +1,9 @@
 // TransfigurationSiteScreen — Durgan Forgehammer's standard desktop forge.
 
-import { localizationTodo } from "@trox/runtime";
+import { meaning,
+  tx,
+  txa,
+} from "@trox/runtime";
 import { motion } from "framer-motion";
 import { useCallback, useState } from "react";
 import type { GameCardModel } from "../components/card/CardView";
@@ -20,7 +23,7 @@ import {
   GuideGallerySiteLayout,
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
-import { useMessages } from "../hooks/use-messages";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 export type TransfigurationGuideView = GuideGalleryGuideView;
 
@@ -364,23 +367,26 @@ export function TransfigurationPickerPanel({
   readonly onClose: () => void;
   readonly onPick: (entryId: string) => void;
 }) {
-  const t = useMessages();
-  const desktop = layout === "desktop";
   const enhanced = isEnhanced;
+  const subtitle = !ready
+    ? tx("Heating the forge…", "Loading status while Transfiguration choices are prepared.")
+    : enhanced
+      ? tx("Pick any card to reforge", "Instruction when any eligible card may be reforged.")
+      : tx("Choose a card to reforge", "Instruction for choosing the offered card to reforge.");
+  const desktop = layout === "desktop";
   return (
     <CardPickerPanel
-      title={localizationTodo(t("transfiguration-picker-title"))}
-      subtitle={localizationTodo(t("transfiguration-picker-instruction", {
-        state: ready ? (enhanced ? "enhanced" : "standard") : "loading",
-      }))}
+      title={tx(
+          "Transfiguration",
+          "Title of the card picker at a Transfiguration site.",
+        )}
+      subtitle={subtitle}
       rightAccessory={
         enhanced || !desktop
           ? {
               kind: "glassButton",
               button: {
-                label: t("transfiguration-decline-action", {
-                  presentation: "compact",
-                }),
+                label: tx("Decline", "Compact command that declines the current site interaction without applying it."),
                 onPress: onClose,
                 testId: "cumulus-transfiguration-decline",
               },
@@ -391,9 +397,7 @@ export function TransfigurationPickerPanel({
         desktop && !enhanced
           ? [
               {
-                label: t("transfiguration-decline-action", {
-                  presentation: "full",
-                }),
+                label: tx("Decline Offer", "Command that declines the current site offer and leaves without taking its reward."),
                 onPress: onClose,
                 testId: "cumulus-transfiguration-decline",
               },
@@ -410,14 +414,18 @@ export function TransfigurationPickerPanel({
             ? undefined
             : {
                 kind: "text" as const,
-                text: t("transfiguration-reforged-card-caption", {
-                  form: candidate.reforgedType,
-                }),
+                message: txa(
+                  "{form} · Reforged",
+                  { form: candidate.reforgedType },
+                  "Caption beneath a card that has already been reforged. form is its canonical Transfiguration form name and is one of the forms defined by game data.",
+                ),
               },
       }))}
-      emptyLabel={localizationTodo(t("transfiguration-picker-empty-state", {
-        state: ready ? "empty" : "loading",
-      }))}
+      emptyLabel={
+        ready
+          ? tx("No eligible cards to reforge.", "Empty state when no card can be reforged.")
+          : tx("Heating the forge…", "Loading status while Transfiguration choices are prepared.")
+      }
       testId="cumulus-transfiguration-picker"
       onCardPress={onPick}
     />
@@ -446,7 +454,7 @@ export function TransfigurationDetailPanel({
   readonly onSelectForm: (type: TransfigurationType) => void;
   readonly onConfirm: (form: TransfigurationFormView) => void;
 }) {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const mobile = layout === "mobile";
   const activeForm =
     candidate.forms.find((form) => form.type === selectedFormType) ?? null;
@@ -473,7 +481,10 @@ export function TransfigurationDetailPanel({
       }}
     >
       <GlassPanel
-        title={localizationTodo(t("transfiguration-form-picker-title"))}
+        title={tx(
+            "Choose Its New Form",
+            'Title above the form choices for the currently selected card. "Its" refers to that card and avoids assuming grammatical gender for its display name.',
+          )}
         headerSpacing={mobile ? "compact" : "medium"}
         footer={
           <div
@@ -491,7 +502,10 @@ export function TransfigurationDetailPanel({
             {onBack !== undefined && (
               <GlassButton
                 placement="onGlass"
-                label={t("transfiguration-choose-again-action")}
+                label={tx(
+                  meaning("transfiguration-reselect-action", "Choose Again"),
+                  "Visible command that returns to the Transfiguration card picker.",
+                )}
                 disabled={confirming}
                 onPress={onBack}
                 testId="cumulus-transfiguration-choose-again"
@@ -500,47 +514,45 @@ export function TransfigurationDetailPanel({
             <GlassButton
               placement="onGlass"
               variant="accent"
-              label={t("transfiguration-confirm-action", {
-                state: confirming ? "pending" : "ready",
-              })}
+              label={
+                confirming
+                  ? tx("Reforging…", "Pending status while a Transfiguration is being saved.")
+                  : tx(meaning("transfiguration-commit-action", "Transfigure"), "Command that commits the selected Transfiguration form.")
+              }
               essenceCost={
                 showConfirmEssenceCost
-                  ? activeForm?.essenceCost ?? null
+                  ? (activeForm?.essenceCost ?? null)
                   : null
               }
-              widthReservations={showConfirmEssenceCost
-                ? [
-                    {
-                      label: t("transfiguration-confirm-action", {
-                        state: "ready",
-                      }),
-                      essenceCost: null,
-                    },
-                    ...candidate.forms.flatMap((form) => [
+              widthReservations={
+                showConfirmEssenceCost
+                  ? [
                       {
-                        label: t("transfiguration-confirm-action", {
-                          state: "ready",
-                        }),
-                        essenceCost: form.essenceCost,
+                        label: tx(meaning("transfiguration-commit-action", "Transfigure"), "Command that commits the selected Transfiguration form."),
+                        essenceCost: null,
+                      },
+                      ...candidate.forms.flatMap((form) => [
+                        {
+                          label: tx(meaning("transfiguration-commit-action", "Transfigure"), "Command that commits the selected Transfiguration form."),
+                          essenceCost: form.essenceCost,
+                        },
+                        {
+                          label: tx("Reforging…", "Pending status while a Transfiguration is being saved."),
+                          essenceCost: form.essenceCost,
+                        },
+                      ]),
+                    ]
+                  : [
+                      {
+                        label: tx(meaning("transfiguration-commit-action", "Transfigure"), "Command that commits the selected Transfiguration form."),
+                        essenceCost: null,
                       },
                       {
-                        label: t("transfiguration-confirm-action", {
-                          state: "pending",
-                        }),
-                        essenceCost: form.essenceCost,
+                        label: tx("Reforging…", "Pending status while a Transfiguration is being saved."),
+                        essenceCost: null,
                       },
-                    ]),
-                  ]
-                : [
-                    {
-                      label: t("transfiguration-confirm-action", { state: "ready" }),
-                      essenceCost: null,
-                    },
-                    {
-                      label: t("transfiguration-confirm-action", { state: "pending" }),
-                      essenceCost: null,
-                    },
-                  ]}
+                    ]
+              }
               disabled={disabled}
               onPress={() => {
                 if (activeForm !== null) onConfirm(activeForm);
@@ -603,7 +615,10 @@ export function TransfigurationDetailPanel({
           >
             <div
               role="radiogroup"
-              aria-label={t("transfiguration-options-accessible-name")}
+              aria-label={resolve(tx(
+                "Transfiguration options",
+                "Player-facing message for the transfiguration options accessible name interface state.",
+              ))}
               data-transfiguration-options=""
               data-transfiguration-option-layout={mobile ? "compact" : "priced"}
               style={{

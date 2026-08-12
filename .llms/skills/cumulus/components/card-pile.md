@@ -19,9 +19,9 @@ Face-up entries can reveal their card or remain inactive beneath one pile-level 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `cards` | `readonly BattlePileCard[]` | yes | — | Cards ordered topmost-first. At most three physical layers are rendered. |
-| `label` | `string` | yes | — | Accessible name for the card zone represented by this pile. |
+| `label` | `LocalizedString` | yes | — | Accessible name for the card zone represented by this pile. |
 | `emptyState` | `CardPileEmptyState` = `"hidden" \| "outlined"` | no | `hidden` | Treatment shown when the pile has no cards. Defaults to `hidden`. |
-| `emptyLabel` | `string` | no | — | Visible copy centered inside an empty outlined pile. |
+| `emptyLabel` | `LocalizedString` | no | — | Visible copy centered inside an empty outlined pile. |
 | `onPress` | `(() => void)` | no | — | Primary press action for the pile as one zone control. |
 | `testId` | `string` | no | — | Optional stable test id for the pile as a whole. |
 

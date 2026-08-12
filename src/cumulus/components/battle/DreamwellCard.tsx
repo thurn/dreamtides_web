@@ -7,13 +7,13 @@ import {
 import type { CardId } from "../../../types/card-identity";
 import type { ArtCrop } from "../../../types/cards";
 import { token } from "../../primitives/tokens";
-import { useMessages } from "../../hooks/use-messages";
 import { CardStatOrb } from "../card/CardStatOrb";
 import { RulesText } from "../card/RulesText";
 import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
 import { useRevealSource } from "../../internal/reveal/context";
 import { Pressable } from "../../primitives/Pressable";
 import "./dreamwell-card.css";
+import { txa, select, when, otherwise } from "@trox/runtime";
 
 /** The complete resolved display data for one Dreamwell card. */
 export interface DreamwellCardDisplaySnapshot {
@@ -75,7 +75,6 @@ function artStyle(art: ArtCrop): CSSProperties {
  * idle animation.
  */
 export function DreamwellCard({ model, testId }: DreamwellCardProps) {
-  const t = useMessages();
   const card = model.displaySnapshot;
   const [artErrored, setArtErrored] = useState(false);
 
@@ -94,11 +93,14 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
     spec: {
       primary: {
         kind: "source",
-        description: t("battle-dreamwell-reveal-description", {
-          cardName: card.name,
-          hasRules: rules === "" ? "no" : "yes",
-          rulesText: rules,
-        }),
+        descriptionMessage: txa(
+          select(rules === "" ? "no" : "yes", [
+            when("yes", "{card_name}. {rules_text}"),
+            otherwise("{card_name}"),
+          ]),
+          { card_name: card.name, rules_text: rules },
+          'Accessible reveal description for a Dreamwell card. card_name is the canonical card display name with unknown grammatical gender. has_rules is "yes" when authored rules text follows; rules_text is that complete text or an empty string when has_rules is "no".',
+        ),
       },
       secondaries: definitions,
     },
@@ -115,10 +117,11 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
       pressFeedback="stationary"
       role="group"
       tabIndex={hasDefinitions ? 0 : undefined}
-      aria-label={t("battle-dreamwell-card-description", {
-        cardName: card.name,
-        energyAmount: card.energyAdded,
-      })}
+      ariaLabelMessage={txa(
+        "{card_name}: adds {energy_amount} Energy",
+        { card_name: card.name, energy_amount: card.energyAdded },
+        "Accessible name for a Dreamwell card. card_name is its canonical display name with unknown grammatical gender; energy_amount is the non-negative Energy the card adds when drawn.",
+      )}
       data-cumulus-dreamwell-card=""
       data-dreamwell-card={model.cardId}
       data-testid={testId}
@@ -168,9 +171,11 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
           sizeVar="14cqw"
           numberSizeVar="8cqw"
           numberCapPx={72}
-          ariaLabel={t("battle-dreamwell-energy-added", {
-            energyAmount: card.energyAdded,
-          })}
+          ariaLabel={txa(
+            "{energy_amount} Energy added",
+            { energy_amount: card.energyAdded },
+            "Accessible description of the Energy amount added by a Dreamwell card. energy_amount is a non-negative integer.",
+          )}
         />
       </div>
       <div

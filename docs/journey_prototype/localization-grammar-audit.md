@@ -1,139 +1,115 @@
-# Player-facing grammar audit
+# Localization grammar audit
 
-This audit covers production React/Cumulus surfaces, their adapters and view
-models, accessibility copy, and the Journey content producers that feed those
-surfaces. Searches included conditional count tests, plural suffixes, pronoun
-and article selection, clause-building template literals, joined fragments,
-preformatted view-model strings, accessibility attributes, and English text
-transformations.
+This audit records the semantic review applied to the Trox source catalog. The
+source report contains 666 messages extracted from 577 TypeScript and TSX
+files. Every row has source text, translator context, stable identity,
+conditions, placeholder metadata, and source locations.
 
-## Migrated production surfaces
+## Identity and meaning review
 
-- Deck browsing uses complete Fluent messages for titles, deck counts, filter
-  results, empty states, filter and sort controls, and Journey HUD deck and
-  Dreamsign counts. The affected code is
-  `src/cumulus/screens/MobileDeckViewer.tsx`,
-  `src/cumulus/screens/DesktopDeckViewer.tsx`,
-  `src/cumulus/screens/mobile-deck-filter.ts`, and
-  `src/cumulus/components/hud/JourneyStatusBar.tsx`. Card subtype labels use the
-  canonical authored subtype at the display boundary; the UI does not fabricate
-  an English plural suffix.
-- Battle zone browsing uses semantic owner and zone values plus numeric total
-  and filtered counts. Fluent owns the titles, count grammar, owner switches,
-  empty states, and accessibility labels in
-  `src/cumulus/screens/CardZoneBrowserOverlay.tsx` and
-  `src/battle/components/CumulusBattleZoneBrowser.tsx`.
-- Exploration uses complete messages for compound reward-and-purge outcomes,
-  copy counts, purge rewards, Dreamsign capacity, Dream Avatar changes,
-  Transfiguration variants, Spirit Animal gains, future-site and next-battle
-  modifiers, empty acquisitions, and relevant choice accessibility in
-  `src/cumulus/screens/ExplorationSiteScreen.tsx`.
-- Augury offer models carry semantic card, Dreamsign, site, category, copy-count,
-  and candidate-count data. Titles and descriptions are formatted at the React
-  boundary by `src/cumulus/components/controls/offer-tile-descriptions.ts` and
-  `src/cumulus/screens/AugurySiteScreen.tsx`. The adapter
-  `src/screens/cumulus_adapters/augury-view-model.ts` carries no formatted offer
-  headline or subtitle. Copy and quantity badges receive numeric counts.
-- Battle messages use Fluent for phase and participant state, memory and pile
-  counts, Figment actions, merge status, Dreamwell values, victory summaries,
-  Essence rewards, card-zone and pile accessibility, Foresee and note titles,
-  tutorial challenge outcomes, and pool counts. The migrated display code is in
-  `src/cumulus/screens/MobileBattleScreen.tsx`,
-  `src/cumulus/screens/BattleResultSurface.tsx`, the battle overlay components,
-  and the supporting battle status, pile, and Dreamwell components. The mobile
-  battle adapter returns semantic score and turn data. Tutorial targeting and
-  movement failures cross the controller boundary as semantic states, and
-  Figment merge warnings are complete Fluent messages with numeric Spark data.
-- The pool browser adapter carries semantic source ids, sort ids, pick numbers,
-  selected card names, and structured provenance records. The Cumulus screen
-  formats source labels, empty states, replay summaries, locale-aware card-name
-  lists, and count-bearing provenance at render time.
-- Reusable Cumulus objects use complete accessibility messages for Dreamsigns,
-  Tides, character dialogue, Dream Avatar art, Atlas nodes, card ordering,
-  Transfiguration choices and badges, and card stat orbs. Wager prize cards and
-  Gamble commands and outcome states use complete Fluent messages. The
-  Transfiguration and Duplication pickers use semantic ready, enhanced, and
-  pending states; narrow Journey-start navigation passes a direction selector.
-- Draft progress, Journey-failure summaries, playing-card names, and game-card
-  type lines are formatted at their Cumulus display boundaries.
-- `src/journey_v2/ui/offerPresentation.ts` contains the semantic visual
-  presentation model used by the rendering boundary.
+Duplicate English text shares an identity only when its UI meaning and argument
+contract match. Shared contracts include deck filtering and sorting, New
+Journey, Retry, Signature Cards, and Dreamsign names. Context-sensitive words
+use explicit meaning keys, including Ability, Avatar, Back, Cancel, Close,
+Continue, Fast, Interrupt, Pool Viewer, and battle-versus-Journey deck captions.
 
-All migrated counts cross the display boundary as numbers. Stable semantic
-selectors carry owner, phase, form, state, role, outcome, and action-stage
-values. Fluent output is used only for rendering and accessibility; it does not
-enter Journey state, battle state, cooperative events, identifiers, logging
-dimensions, equality checks, or parsers. Cards continue to use UUID identity.
+The catalog has no identity with multiple translator descriptions. Meaning keys
+represent real semantic distinctions rather than callsite or component names.
 
-## Justified exclusions
+## Complete-message ownership
 
-- `src/battle/debug/**`, `src/debug/**`, `src/editor/**`, Cumulus documentation
-  demos, `JourneyDebugEditorScreen.tsx`, `TutorialEditorRail.tsx`, package and
-  card-source diagnostics, and battle inspector/context-menu commands are
-  developer or editor surfaces. Their English strings cannot appear in the
-  normal player workflow.
-- `src/battle/components/BattleLogDrawer.tsx` and the battle flow stepping
-  controls in `src/battle/components/PlayableBattleScreen.tsx` belong to the
-  developer inspector and diagnostic event log.
-- `src/screens/cumulus_adapters/card-source-view-model.ts` describes diagnostic
-  draft provenance published through the explicitly debug-labeled
-  `cardSourceDebug` state and Card Sources developer overlay.
-- Count comparisons that select game objects, candidate eligibility, animation
-  geometry, arrays, or persisted actions do not produce language. CSS joins,
-  SVG paths, stable keys, log text, thrown developer errors, and test fixtures
-  are outside player-facing grammar.
-- CSS uppercase styling is retained for intentional visual typography. It does
-  not slice or mutate localized strings in application code.
+- Application, coop, and Journey gates pass state facts into complete messages.
+- Deck and pool browsing own complete titles, total and filtered counts, owner
+  switches, filter choices, sort choices, and accessible action names.
+- Exploration outcomes own the complete result sentence. Cards, Dreamsigns,
+  subtypes, form names, and authored disclosures are opaque arguments.
+- Gamble owns complete wager, attempt, prize, cash-out, and outcome messages.
+- Battle owns phase, participant, memory, pile, picker, merge, Dreamwell,
+  victory, and tutorial grammar.
+- Accessibility messages are complete descriptions, including hidden joins and
+  entity summaries. Visible and hidden copy use separate messages when their
+  communicative purpose differs.
 
-## Current authored-data boundaries
+RON-authored prose, user input, names, and developer diagnostics remain opaque
+authored strings and use explicitly authored component props.
 
-### Exploration authored prose
+## Numeric families
 
-`data/exploration.toml` stores authored action labels, effects, follow-up
-titles, and follow-up subtitles. `configuredFollowupCopy()` in
-`src/screens/cumulus_adapters/exploration-view-model.ts` substitutes semantic
-values into those templates. Authored action prose remains opaque at the React
-boundary; code-authored disclosures use typed Fluent messages from
-the English catalog under `data/locales/en-US`.
-`src/cumulus/screens/ExplorationSiteScreen.tsx` renders
-the resulting authored values and semantic disclosures without parsing card or
-site names.
+Each numeric family was reviewed at 0, 1, 2, and 5, plus applicable exact
+boundaries and product limits. This covers deck and pool counts, connected
+players, reward and purchase counts, wager attempts, card copies, prompt
+selection progress, memory counters, points, energy, Spark, reclaim, card-order
+positions, and Journey completion statistics.
 
-This catalog is a mixed content-and-structure interface: effect behavior is
-modeled by `effectKind`, while a variable set and authored template define each
-presentation. Structural behavior consumes `effectKind` and UUIDs; localized
-messages are formatted after that work. The authored narrative catalog remains
-the source for follow-up and effect prose.
+The selected number always represents the grammatical head of the sentence.
+Values displayed as fixed notation, such as a source-English leading-plus
+delta, remain semantic numeric arguments inside a complete message. Exact
+branches are used only when product wording differs at that exact value.
 
-### Augury generated catalog data
+## Enum and presence selectors
 
-`src/journey_v2/archetypes/grant.ts`,
-`src/journey_v2/archetypes/duplicate.ts`, and
-`src/journey_v2/archetypes/improve.ts` populate semantic reward objects. The
-generator in `src/journey_v2/encounter/generateMerchantEncounter.ts` assembles
-those objects into deterministic encounter data. The production Cumulus Augury
-adapter formats titles, summaries, prompts, and details at the React boundary.
-Locale output does not enter replayable Journey data.
+Owner, side, entity kind, speaker, form, and presence selectors were traced to
+their application-state sources. Branches are complete sentences or complete
+labels. Boolean selectors describe semantic presence, such as whether a card
+has rules text or artwork has a title.
 
-### English rules-text and glossary parsing
+Card names, form names, Dreamsign names, and RON prose provide no grammatical
+gender or case metadata. Messages place these values in constructions where
+the target locale can treat them as opaque proper names or quoted content.
+Locale work that requires inflecting those values must first add the relevant
+facets to the canonical data model.
 
-`src/data/glossary-terms.ts` tokenizes ASCII English rules text, matches English
-word forms, evaluates English regular-expression contexts, and renders catalog
-templates from `data/glossary.toml`. Card, Dream Avatar, and Dreamsign
-rules text is also authored English. The parser's consumers build glossary
-reveal cards from those matches. `src/cumulus/internal/reveal/context.tsx`
-carries semantic entity variants and formats complete hidden accessibility
-messages after glossary and rules-text resolution. Authored card rules, names,
-and glossary definitions remain opaque variables; locale rendering does not
-change the English tokenization used to recognize terms.
+## Placeholder review
 
-## Prevention
+Placeholder unions are intentional. A branch may omit a value when the product
+state makes it absent or when the complete branch has fixed wording. Reviewed
+examples include untitled artwork, cards without rules text, free costs, and a
+single-object action whose English label does not print the numeric value.
 
-`eslint-rules/no-unlocalized-player-copy.js` is enabled for the protected
-player-runtime files. It rejects static player grammar, accessible copy, and
-English assembled branches unless they cross `t()`/`createMessageDescriptor()`
-or carry a documented developer-only suppression. Its tests cover literals,
-attributes, conditionals, concatenation, descriptors, authored variables, and
-suppression comments. `scripts/audit-player-localization.mjs` provides the
-repository-wide classified inventory, and `npm run review` runs the focused
-diff-aware enforcement.
+Arguments use semantic names and stable kinds. Shared identities have the same
+argument kinds at every callsite. Opaque authored values are never parsed from
+resolved output.
+
+## Row expansion and lint policy
+
+The battle participant accessible summary expands relationship and
+locale-specific Points grammar into 12 rows. This cost is intentional because
+each row is a complete accessible sentence. Other selectors remain below the
+configured 256-row ceiling.
+
+The project lint policy denies warnings and records three reviewed exceptions:
+
+- `trox.formula-injection`: source-English delta labels intentionally begin
+  with `+`; translator CSV files are treated as data.
+- `trox.omitted-placeholder`: complete branches intentionally omit values that
+  are absent or lexically unnecessary.
+- `trox.human-row-expansion`: the 12-row participant summary gives translators
+  complete sentences for relationship and Points grammar.
+
+Each exception is scoped to one rule with a nonempty rationale in `trox.ron`.
+
+## Resolution boundary audit
+
+`LocalizedString` is carried through state, controllers, adapters, and Cumulus
+props. Resolver calls directly feed intrinsic text nodes, accessibility
+attributes, placeholders, alternative text, or document metadata. Authored
+content uses a separate prop and reaches the same browser sink without being
+registered as a translation unit.
+
+Persisted prompts carry semantic built-in or Dreamwell references. Prompt
+messages are constructed after loading and resolved only by the presentation
+boundary. Deterministic fold state and logging use IDs, indexes, UUIDs, and
+semantic values.
+
+## Review commands
+
+- `node scripts/trox.mjs extract`
+- `node scripts/trox.mjs check --deny warnings`
+- `node scripts/trox.mjs bundle --allow-missing`
+- `node scripts/trox-generated-check.mjs`
+- `npm run audit:player-localization`
+- `npm run review`
+- `npm run review:full`
+
+The source report and all QA CSVs are checked after extraction. A second
+extraction and bundle build must produce byte-identical tracked artifacts.

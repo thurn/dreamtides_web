@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { isPlayerLocalizationFile } from "../eslint-rules/ui-boundary-roles.js";
@@ -73,10 +73,11 @@ export function classify(file, line) {
 export function auditPlayerLocalization(files = sourceFiles()) {
   const results = [];
   for (const file of files) {
+    if (!existsSync(resolve(ROOT, file))) continue;
     if (isPlayerLocalizationFile(file)) continue;
     const lines = readFileSync(resolve(ROOT, file), "utf8").split("\n");
     lines.forEach((line, index) => {
-      if (!COPY_SHAPE.test(line) || /\bt\s*\(|createMessageDescriptor\s*\(/u.test(line)) return;
+      if (!COPY_SHAPE.test(line) || /\btxa?\s*\(/u.test(line)) return;
       results.push({ file, line: index + 1, text: line.trim(), classification: classify(file, line) });
     });
   }

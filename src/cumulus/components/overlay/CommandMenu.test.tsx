@@ -1,18 +1,20 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
+import { localizationTodo } from "@trox/runtime";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CommandMenu, type CommandMenuItem } from "./CommandMenu";
 import { GLYPHS } from "../../primitives/glyph";
+import { CumulusRoot } from "../../CumulusRoot";
 
 (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
 const actions: readonly CommandMenuItem[] = [
-  { kind: "action", id: "save", label: "Save", glyph: GLYPHS.check, onCommand: () => undefined },
+  { kind: "action", id: "save", label: localizationTodo("Save"), glyph: GLYPHS.check, onCommand: () => undefined },
   { kind: "divider", id: "divider" },
-  { kind: "group", id: "more", label: "More", glyph: GLYPHS.chevronRight, actions: [
-    { kind: "action", id: "load", label: "Load", glyph: GLYPHS.arrowRight, onCommand: () => undefined },
+  { kind: "group", id: "more", label: localizationTodo("More"), glyph: GLYPHS.chevronRight, actions: [
+    { kind: "action", id: "load", label: localizationTodo("Load"), glyph: GLYPHS.arrowRight, onCommand: () => undefined },
   ] },
 ];
 
@@ -20,7 +22,7 @@ function mount(node: React.ReactNode): { root: Root; container: HTMLDivElement }
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
-  act(() => root.render(node));
+  act(() => root.render(<CumulusRoot>{node}</CumulusRoot>));
   return { root, container };
 }
 
@@ -45,10 +47,10 @@ describe("CommandMenu app-chrome model", () => {
     const opened = vi.fn();
     const { root } = mount(<CommandMenu model={{
       kind: "appChrome",
-      trigger: { glyph: GLYPHS.menu, label: "Open utilities", corner: "topStart" },
+      trigger: { glyph: GLYPHS.menu, label: localizationTodo("Open utilities"), corner: "topStart" },
       actions: [
         ...actions.slice(0, 2),
-        { kind: "group", id: "more", label: "More", glyph: GLYPHS.chevronRight, onOpen: opened, actions: [{ kind: "action", id: "load", label: "Load", glyph: GLYPHS.arrowRight, onCommand: command }] },
+        { kind: "group", id: "more", label: localizationTodo("More"), glyph: GLYPHS.chevronRight, onOpen: opened, actions: [{ kind: "action", id: "load", label: localizationTodo("Load"), glyph: GLYPHS.arrowRight, onCommand: command }] },
       ],
     }} />);
     act(() => document.querySelector<HTMLButtonElement>('[aria-label="Open utilities"]')?.click());
@@ -64,7 +66,7 @@ describe("CommandMenu app-chrome model", () => {
   it("dismisses on Escape", async () => {
     const { root } = mount(<CommandMenu model={{
       kind: "appChrome",
-      trigger: { glyph: GLYPHS.menu, label: "Open utilities", corner: "topEnd" },
+      trigger: { glyph: GLYPHS.menu, label: localizationTodo("Open utilities"), corner: "topEnd" },
       actions,
     }} />);
     act(() => document.querySelector<HTMLButtonElement>('[aria-label="Open utilities"]')?.click());
@@ -75,6 +77,28 @@ describe("CommandMenu app-chrome model", () => {
 });
 
 describe("CommandMenu context model", () => {
+  it("rejects a command row without exactly one copy source", () => {
+    const invalid = {
+      kind: "action",
+      id: "invalid",
+      glyph: GLYPHS.check,
+      onCommand: () => undefined,
+    } as unknown as CommandMenuItem;
+    expect(() =>
+      mount(
+        <CommandMenu
+          model={{
+            kind: "context",
+            authoredTitle: "Fixture",
+            actions: [invalid],
+            anchor: { x: 12, y: 12 },
+            onDismiss: () => undefined,
+          }}
+        />,
+      ),
+    ).toThrow(/exactly one of label or authoredLabel/u);
+  });
+
   it("presents narrow context commands in a root-level dialog", () => {
     window.matchMedia = (media: string) => ({
       matches: false,
@@ -88,7 +112,7 @@ describe("CommandMenu context model", () => {
     });
     const { root } = mount(<CommandMenu model={{
       kind: "context",
-      title: "Card",
+      authoredTitle: "Card",
       actions,
       anchor: { x: 12, y: 12 },
       onDismiss: () => undefined,
@@ -102,8 +126,8 @@ describe("CommandMenu context model", () => {
     const onDismiss = vi.fn();
     const { root } = mount(<CommandMenu model={{
       kind: "context",
-      title: "Card",
-      subtitle: "Player · Hand",
+      authoredTitle: "Card",
+      authoredSubtitle: "Player · Hand",
       actions,
       anchor: { x: 12, y: 12 },
       onDismiss,
@@ -125,20 +149,20 @@ describe("CommandMenu context model", () => {
     const integerActions: readonly CommandMenuItem[] = [{
       kind: "group",
       id: "spark",
-      label: "Add Spark",
+      label: localizationTodo("Add Spark"),
       glyph: GLYPHS.edit,
       actions: [{
         kind: "signed-integer",
         id: "spark-amount",
-        label: "Amount",
-        placeholder: "+3 or -2",
-        commitLabel: "Apply",
+        label: localizationTodo("Amount"),
+        placeholder: localizationTodo("+3 or -2"),
+        commitLabel: localizationTodo("Apply"),
         onCommand,
       }],
     }];
     const { root } = mount(<CommandMenu model={{
       kind: "context",
-      title: "Card",
+      authoredTitle: "Card",
       actions: integerActions,
       anchor: { x: 12, y: 12 },
       onDismiss,

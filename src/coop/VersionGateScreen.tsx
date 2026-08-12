@@ -3,7 +3,7 @@ import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScree
 import type { Database } from "firebase/database";
 import type { PinnedContentConfig } from "../eventlog/types";
 import { createAndNavigateToRoom } from "./RoomGate";
-import { createMessageDescriptor } from "../data/localization-descriptors";
+import { tx } from "@trox/runtime";
 
 interface VersionGateScreenProps {
   db: Database;
@@ -26,7 +26,11 @@ export function VersionGateScreen({
       .then(() => window.location.reload())
       .catch((error: unknown) => {
         setStatus("error");
-        setMessage(error instanceof Error ? error.message : "Failed to create a new game.");
+        setMessage(
+          error instanceof Error
+            ? error.message
+            : "Failed to create a new game.",
+        );
       });
   }, [db, contentConfig]);
 
@@ -34,18 +38,32 @@ export function VersionGateScreen({
     <ApplicationStateScreen
       view={{
         kind: "versionGate",
-        title: createMessageDescriptor("coop-version-gate-title"),
-        message: createMessageDescriptor("coop-version-gate-message"),
+        title: tx(
+          "A New Version Was Deployed",
+          "Title for a shared-room gate when the room uses an incompatible reducer version.",
+        ),
+        message: tx(
+          "This game was started on an earlier build. Start a fresh game on the current version.",
+          "Explanation that an incompatible shared room must be replaced with a fresh game on the current build.",
+        ),
         ...(message === null ? {} : { detail: message }),
-        actions: [{
-          id: "primary",
-          label:
-            status === "creating"
-              ? createMessageDescriptor("coop-starting-new-game-action")
-              : createMessageDescriptor("coop-create-new-game-action"),
-          disabled: status === "creating",
-          onPress: handleStartNewGame,
-        }],
+        actions: [
+          {
+            id: "primary",
+            label:
+              status === "creating"
+                ? tx(
+                    "Starting…",
+                    "Disabled action label while a replacement shared room is being created.",
+                  )
+                : tx(
+                    "Create New Game",
+                    "Action that leaves an unavailable or incompatible room and creates a fresh shared game.",
+                  ),
+            disabled: status === "creating",
+            onPress: handleStartNewGame,
+          },
+        ],
       }}
     />
   );

@@ -839,10 +839,10 @@ function deckModificationRewardView(
     },
   };
   const common = {
-    announcement:
+    announcement: { kind: "authored" as const, text:
       kind === "spark"
         ? "All characters in your deck gain +1✦"
-        : "All cards in your deck become ❖ (fast)",
+        : "All cards in your deck become ❖ (fast)" },
     cards: [
       { entryId: "deck-entry-a", model: first, isBane: false },
       { entryId: "deck-entry-b", model: second, isBane: false },
@@ -884,7 +884,7 @@ function bulkTransfigurationRewardView(): ExplorationSiteView {
         transfiguration: "Inspired",
         formName: "Fixture Inspired",
         essenceSpent: 100,
-        announcement: "Authored bulk transfiguration outcome.",
+        announcement: { kind: "authored", text: "Authored bulk transfiguration outcome." },
         cards:
           base.reward.deckModification?.cards.map((card) => ({
             ...card,
@@ -4969,8 +4969,8 @@ describe("ExplorationSiteScreen", () => {
         },
         deckModification: {
           kind: "reclaim",
-          announcement:
-            "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          announcement: { kind: "authored", text:
+            "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim." },
           cards: survivorCards,
           reclaimCostByEntryId: {
             "deck-entry-a": 2,
@@ -5050,8 +5050,8 @@ describe("ExplorationSiteScreen", () => {
         },
         deckModification: {
           kind: "spark",
-          announcement:
-            "Purge a random Warrior. Every other Warrior in your deck gains +1 spark.",
+          announcement: { kind: "authored", text:
+            "Purge a random Warrior. Every other Warrior in your deck gains +1 spark." },
           cards: survivorCards,
           amount: 1,
         },

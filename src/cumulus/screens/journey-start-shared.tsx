@@ -4,7 +4,7 @@
 // console hairline, while both compose the canonical RulesText source.
 // PURE: no state ownership; the adapter owns the offer, the seed, and startJourney.
 
-import { localizationTodo } from "@trox/runtime";
+import type { LocalizedString } from "@trox/runtime";
 import { useEffect } from "react";
 import { RulesText } from "../components/card/RulesText";
 import { EssenceValue } from "../components/hud/EssenceValue";
@@ -20,6 +20,7 @@ import { GLOSSARY_IDS } from "../../data/glossary";
 import { DEBUG_REROLL_TOP } from "./chrome-geometry";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 /** Canonical rules copy in the Journey Start console's inherited type voice. */
 export function JourneyStartAbilityCopy({
@@ -257,7 +258,7 @@ export function JourneyStartRerollControl({
   label,
 }: {
   readonly onReroll: () => void;
-  readonly label: string;
+  readonly label: LocalizedString;
 }) {
   return (
     <div
@@ -274,7 +275,7 @@ export function JourneyStartRerollControl({
     >
       <IconButton
         glyph={GLYPHS.refresh}
-        label={localizationTodo(label)}
+        label={label}
         onPress={onReroll}
         testId="reroll-dream-avatars"
       />
@@ -283,7 +284,8 @@ export function JourneyStartRerollControl({
 }
 
 /** The small purple uppercase context label painted directly over scene art. */
-export function OnMediaEyebrow({ label }: { readonly label: string }) {
+export function OnMediaEyebrow({ label }: { readonly label: LocalizedString }) {
+  const resolve = useLocalizer();
   return (
     <span
       style={{
@@ -295,7 +297,7 @@ export function OnMediaEyebrow({ label }: { readonly label: string }) {
         textShadow: token("--text-outline-media"),
       }}
     >
-      {label}
+      {resolve(label)}
     </span>
   );
 }

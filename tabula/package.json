@@ -12,8 +12,6 @@
     "tauri": "tauri"
   },
   "dependencies": {
-    "@fluent/bundle": "^0.19.1",
-    "@fluent/react": "^0.15.2",
     "@fortawesome/fontawesome-free": "^7.2.0",
     "@tauri-apps/api": "^2.8.0",
     "@tauri-apps/plugin-dialog": "^2.4.0",

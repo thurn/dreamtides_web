@@ -19,7 +19,7 @@ import { Pressable } from "../../primitives/Pressable";
 import { richText } from "../card/rich-text";
 import { glossaryInfoCard } from "../card/glossary-info-card";
 import { GLOSSARY_IDS } from "../../../data/glossary";
-import { useMessages } from "../../hooks/use-messages";
+import { txa } from "@trox/runtime";
 
 /** The tide disc's touch-friendly diameter, in px. */
 export const TIDE_DISC_LG_PX = 40;
@@ -41,19 +41,21 @@ export interface TideDiscProps {
  * The atom both DreamAvatar-select layouts render their tide discs from, so the
  * treatment is identical everywhere a tide disc appears.
  */
-export function TideDisc({
-  tide,
-  id,
-  label,
-  description,
-}: TideDiscProps) {
-  const t = useMessages();
+export function TideDisc({ tide, id, label, description }: TideDiscProps) {
   const v = tideVisual(tide);
   const diameter = TIDE_DISC_LG_PX;
   const binding = useRevealSource({
     identity: { entityType: "tide", entityId: revealEntityId("tide", id) },
     spec: {
-      primary: { kind: "infoCard", card: { variant: "tide", tide, title: label, body: richText.plain(description) } },
+      primary: {
+        kind: "infoCard",
+        card: {
+          variant: "tide",
+          tide,
+          title: label,
+          body: richText.plain(description),
+        },
+      },
       secondaries: [glossaryInfoCard(GLOSSARY_IDS.tides)],
     },
   });
@@ -63,7 +65,11 @@ export function TideDisc({
       ref={binding.ref}
       {...binding.sourceProps}
       data-tide-disc={id}
-      aria-label={t("tide-object-accessible-name", { tideName: label })}
+      ariaLabelMessage={txa(
+        "Tide: {tide_name}",
+        { tide_name: label },
+        "Accessible name for an interactive Tide object. tide_name is its canonical authored display name and has unknown grammatical gender.",
+      )}
       tabIndex={0}
       style={{
         ...binding.sourceProps.style,

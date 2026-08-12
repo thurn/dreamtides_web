@@ -1,4 +1,3 @@
-import { localizationTodo } from "@trox/runtime";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   glossaryDefinitionUsesRulesText,
@@ -341,7 +340,7 @@ export default function GlossaryEditorApp({
         <section className="glossary-editor-load-error" role="alert">
           <h2>Unable to load the glossary</h2>
           <p>{loadState.message}</p>
-          <GlassButton label="Retry" variant="accent" onPress={() => setLoadAttempt((value) => value + 1)} />
+          <GlassButton authoredLabel="Retry" variant="accent" onPress={() => setLoadAttempt((value) => value + 1)} />
         </section>
       ) : null}
 
@@ -349,19 +348,19 @@ export default function GlossaryEditorApp({
         <div className="glossary-editor-layout">
           <aside className="glossary-editor-catalog">
             <GlassPanel
-              eyebrow={localizationTodo(`${String(filteredEntries.length)} of ${String(loadState.entries.length)}`)}
-              title={localizationTodo("Definitions")}
-              subtitle={localizationTodo("Select a term to edit")}
+              authoredEyebrow={`${String(filteredEntries.length)} of ${String(loadState.entries.length)}`}
+              authoredTitle={"Definitions"}
+              authoredSubtitle={"Select a term to edit"}
               frame="floating"
               testId="glossary-editor-catalog"
             >
               <div className="glossary-editor-catalog-body">
                 <TextField
-                  label={localizationTodo("Search")}
+                  authoredLabel={"Search"}
                   kind="search"
                   value={search}
                   onChange={setSearch}
-                  placeholder={localizationTodo("Term, category, or copy")}
+                  authoredPlaceholder={"Term, category, or copy"}
                   testId="glossary-search"
                 />
                 <div className="glossary-editor-term-list">
@@ -464,9 +463,9 @@ export default function GlossaryEditorApp({
 
               <div className="glossary-editor-details">
                 <GlassPanel
-                  eyebrow={localizationTodo(selectedEntry.category)}
-                  title={localizationTodo("Definition Details")}
-                  subtitle={localizationTodo(`Stable id: ${selectedEntry.id}`)}
+                  authoredEyebrow={selectedEntry.category}
+                  authoredTitle={"Definition Details"}
+                  authoredSubtitle={`Stable id: ${selectedEntry.id}`}
                   frame="floating"
                   testId="glossary-editor-details"
                 >
@@ -475,10 +474,10 @@ export default function GlossaryEditorApp({
                       <p>Term Presentation</p>
                       <Select
                         full
-                        options={TERM_PRESENTATION_OPTIONS.map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
+                        options={TERM_PRESENTATION_OPTIONS.map((option) => ({ ...option, authoredLabel: option.label, ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { authoredTriggerLabel: option.triggerLabel } : {}) }))}
                         value={presentationDraft}
                         onChange={selectTermPresentation}
-                        ariaLabel={localizationTodo("Term Presentation")}
+                        authoredAriaLabel={"Term Presentation"}
                       />
                       <span>
                         Definition Only hides the term heading while keeping its
@@ -487,13 +486,13 @@ export default function GlossaryEditorApp({
                     </div>
                     {presentationDraft === "definitionOnly" ? (
                       <TextField
-                        label={localizationTodo("Catalog Term")}
+                        authoredLabel={"Catalog Term"}
                         value={termDraft}
                         onChange={(value) => {
                           setTermDraft(value);
                           setSaveState({ kind: "idle" });
                         }}
-                        supportingText={localizationTodo("Used for matching and catalog search; hidden from the Info Card.")}
+                        authoredSupportingText={"Used for matching and catalog search; hidden from the Info Card."}
                         testId="glossary-term-input"
                       />
                     ) : null}
@@ -502,13 +501,13 @@ export default function GlossaryEditorApp({
                         onBlur={() => persistDraft("variants", variantsDraft)}
                       >
                         <TextField
-                          label={localizationTodo("Additional Rules-Text Forms")}
+                          authoredLabel={"Additional Rules-Text Forms"}
                           value={variantsDraft}
                           onChange={(value) => {
                             setVariantsDraft(value);
                             setSaveState({ kind: "idle" });
                           }}
-                          supportingText={localizationTodo("Comma-separated plurals, tenses, or trigger forms.")}
+                          authoredSupportingText={"Comma-separated plurals, tenses, or trigger forms."}
                           testId="glossary-variants-input"
                         />
                       </div>

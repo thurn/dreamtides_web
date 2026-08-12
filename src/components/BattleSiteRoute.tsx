@@ -12,7 +12,7 @@ import {
   type CumulusJourneyChromeHandlers,
 } from "./CumulusJourneyChrome";
 import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScreen";
-import { createMessageDescriptor } from "../data/localization-descriptors";
+import { tx } from "@trox/runtime";
 
 /**
  * Drives the coop event-sourced battle fold. A null folded battle renders the
@@ -77,8 +77,14 @@ export function BattleSiteRoute({
         <ApplicationStateScreen
           view={{
             kind: "recoverableError",
-            title: createMessageDescriptor("application-battle-preview-error-title"),
-            message: createMessageDescriptor("application-battle-preview-error-message"),
+            title: tx(
+              "Unable to Prepare Battle",
+              "Recoverable error title when a battle preview cannot be prepared.",
+            ),
+            message: tx(
+              "The battle preview could not be prepared from this game state.",
+              "Recoverable error explanation when a battle preview cannot be prepared from the current game state.",
+            ),
           }}
         />
       );

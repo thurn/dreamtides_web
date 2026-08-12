@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { act } from "react";
+import { act, type ComponentProps } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { BattleCommand } from "../debug/commands";
@@ -8,7 +8,18 @@ import { createTestBattleInit } from "../../testing/create-battle-init";
 import { createInitialBattleState } from "../state/create-initial-state";
 import { makeBattleTestCardDatabase, makeBattleTestDreamAvatars, makeBattleTestSite, makeBattleTestState } from "../test-support";
 import type { BattleMutableState } from "../types";
-import { BattleContextMenu } from "./BattleContextMenu";
+import { BattleContextMenu as RealBattleContextMenu } from "./BattleContextMenu";
+import { CumulusRoot } from "../../cumulus/CumulusRoot";
+
+function BattleContextMenu(
+  props: ComponentProps<typeof RealBattleContextMenu>,
+) {
+  return (
+    <CumulusRoot>
+      <RealBattleContextMenu {...props} />
+    </CumulusRoot>
+  );
+}
 
 function state(): BattleMutableState {
   return createInitialBattleState(createTestBattleInit({ battleEntryKey: "test", site: makeBattleTestSite(), state: makeBattleTestState(), cardDatabase: makeBattleTestCardDatabase(), dreamAvatars: makeBattleTestDreamAvatars() }));

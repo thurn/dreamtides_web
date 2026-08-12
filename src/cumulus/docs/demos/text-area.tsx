@@ -4,7 +4,7 @@ import type { CumulusComponent } from "../registry";
 
 function Demo({ label = "Dialogue", placeholder = "Write a line…" }: { label?: string; placeholder?: string }) {
   const [value, setValue] = useState("Welcome, Dreamer.");
-  return <TextArea label={label} value={value} placeholder={placeholder} onChange={setValue} />;
+  return <TextArea authoredLabel={label} value={value} authoredPlaceholder={placeholder} onChange={setValue} />;
 }
 
 export const textAreaDemo: CumulusComponent = {

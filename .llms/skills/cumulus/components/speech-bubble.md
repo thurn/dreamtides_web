@@ -19,7 +19,8 @@ The component owns its glass material, path-following glass rim, white on-glass 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `speakerName` | `string` | yes | — | The speaking character's display name. |
-| `text` | `string` | yes | — | The spoken line. Uses tutorial instruction formatting for yellow and bold high-contrast purple highlights plus canonical inline rules glyphs. |
+| `text` | `string` | no | — | The spoken line. Uses tutorial instruction formatting for yellow and bold high-contrast purple highlights plus canonical inline rules glyphs. |
+| `textMessage` | `LocalizedString` | no | — | Complete localized spoken line supplied by code-authored fallback UI. |
 | `size` | `SpeechBubbleSize` = `"standard" \| "prominent"` | no | `standard` | Authored display scale for compact or prominent character dialogue. |
 | `pointerPlacement` | `SpeechBubblePointerPlacement` = `"left-lower" \| "left-center" \| "top-left" \| "bottom-left"` | no | `left-lower` | Edge and alignment of the pointer toward the speaking character. |
 | `testId` | `string` | no | — | Optional stable test id for product-screen QA. |

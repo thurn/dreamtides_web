@@ -44,7 +44,7 @@ function GlassButtonDemo({
 }: GlassButtonDemoArgs) {
   return (
     <GlassButton
-      label={label}
+      authoredLabel={label}
       essenceCost={essenceCost}
       glyph={withGlyph ? GLYPHS.sort : undefined}
       variant={variant}

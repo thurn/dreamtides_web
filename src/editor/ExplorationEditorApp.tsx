@@ -1,4 +1,3 @@
-import { localizationTodo } from "@trox/runtime";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CardBrowserPanel } from "../cumulus/components/card/CardBrowserPanel";
 import { RulesText } from "../cumulus/components/card/RulesText";
@@ -199,20 +198,20 @@ function ExplorationCardPicker({
   return (
     <div className="exploration-editor-card-picker" role="dialog" aria-modal="true" aria-label="Choose a card">
       <CardBrowserPanel
-        title={localizationTodo("Choose a card")}
-        subtitle={localizationTodo(`${String(shown.length)} shown · ${String(visible.length)} matches · ${String(cards.length)} total · UUID-safe selection`)}
+        authoredTitle={"Choose a card"}
+        authoredSubtitle={`${String(shown.length)} shown · ${String(visible.length)} matches · ${String(cards.length)} total · UUID-safe selection`}
         rightAccessory={{
           kind: "iconButton",
           button: {
             glyph: GLYPHS.close,
-            label: localizationTodo("Close card picker"),
+            authoredLabel: "Close card picker",
             onPress: onClose,
             testId: "exploration-card-picker-close",
           },
         }}
         toolbar={{
           search: {
-            label: localizationTodo("Search cards by name or UUID"),
+            authoredLabel: "Search cards by name or UUID",
             value: query,
             onChange: onQueryChange,
             testId: "exploration-card-picker-search",
@@ -222,10 +221,10 @@ function ExplorationCardPicker({
           entryId: card.id,
           model: { cardId: card.id, displaySnapshot: card },
           selected: card.id.toLowerCase() === selectedCardId?.toLowerCase(),
-          caption: { kind: "text", text: card.id.slice(0, 8) },
+          caption: { kind: "authoredText", text: card.id.slice(0, 8) },
           testId: `exploration-card-option-${card.id}`,
         }))}
-        emptyLabel={localizationTodo("No cards match this search.")}
+        authoredEmptyLabel="No cards match this search."
         presentation="fullScreen"
         testId="exploration-card-picker"
         onCardPress={onSelect}
@@ -452,12 +451,12 @@ function ExplorationEditorRow({
       return (
         <NumberStepper
           key={key}
-          label={localizationTodo(field.label)}
+          authoredLabel={field.label}
           value={value}
           resource={field.resource}
           size="sm"
-          decrementLabel={localizationTodo(`Decrease ${field.label}`)}
-          incrementLabel={localizationTodo(`Increase ${field.label}`)}
+          authoredDecrementLabel={`Decrease ${field.label}`}
+          authoredIncrementLabel={`Increase ${field.label}`}
           decrementDisabled={value - step < (field.min ?? 1)}
           incrementDisabled={field.max !== undefined && value + step > field.max}
           testId={`exploration-${field.key}-${encounter.cardId}-${String(slot)}`}
@@ -473,13 +472,13 @@ function ExplorationEditorRow({
           <Select
             full
             size="sm"
-            ariaLabel={localizationTodo(field.label)}
+            authoredAriaLabel={field.label}
             options={(field.optional
               ? data.predicates
               : data.predicates.filter((entry) => entry.value !== "")
             ).map((option) => ({
               ...option,
-              label: localizationTodo(option.label),
+              authoredLabel: option.label,
             }))}
             value={typeof action.predicate === "string" ? action.predicate : ""}
             onChange={(value) => updateField(slot, field.key, value)}
@@ -494,8 +493,8 @@ function ExplorationEditorRow({
           <Select
             full
             size="sm"
-            ariaLabel={localizationTodo(field.label)}
-            options={data.transfigurations.map((value) => ({ value, label: value })).map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
+            authoredAriaLabel={field.label}
+            options={data.transfigurations.map((value) => ({ value, label: value })).map((option) => ({ ...option, authoredLabel: option.label, ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { authoredTriggerLabel: option.triggerLabel } : {}) }))}
             value={String(action.transfiguration ?? "")}
             onChange={(value) => updateField(slot, field.key, value)}
           />
@@ -513,10 +512,10 @@ function ExplorationEditorRow({
           <Select
             full
             size="sm"
-            ariaLabel={localizationTodo(field.label)}
+            authoredAriaLabel={field.label}
             options={[
-              { value: "Character", label: localizationTodo("Character") },
-              { value: "Event", label: localizationTodo("Event") },
+              { value: "Character", authoredLabel: "Character" },
+              { value: "Event", authoredLabel: "Event" },
             ]}
             value={String(action.cardType ?? "Character")}
             onChange={(value) => updateField(slot, field.key, value)}
@@ -535,10 +534,10 @@ function ExplorationEditorRow({
           <Select
             full
             size="sm"
-            ariaLabel={localizationTodo(field.label)}
+            authoredAriaLabel={field.label}
             options={(field.options ?? []).map((option) => ({
               ...option,
-              label: localizationTodo(option.label),
+              authoredLabel: option.label,
             }))}
             value={String(action.siteType ?? field.defaultValue ?? "Shop")}
             onChange={(value) => updateField(slot, field.key, value)}
@@ -553,8 +552,8 @@ function ExplorationEditorRow({
           <Select
             full
             size="sm"
-            ariaLabel={localizationTodo(field.label)}
-            options={data.subtypes.map((value) => ({ value, label: value })).map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
+            authoredAriaLabel={field.label}
+            options={data.subtypes.map((value) => ({ value, label: value })).map((option) => ({ ...option, authoredLabel: option.label, ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { authoredTriggerLabel: option.triggerLabel } : {}) }))}
             value={String(action.subtype ?? "")}
             onChange={(value) => updateField(slot, field.key, value)}
           />
@@ -570,7 +569,7 @@ function ExplorationEditorRow({
             {data.subtypes.map((subtype) => (
               <GlassButton
                 key={subtype}
-                label={subtype}
+                authoredLabel={subtype}
                 placement="onGlass"
                 size="compact"
                 pressed={selected.has(subtype)}
@@ -593,10 +592,10 @@ function ExplorationEditorRow({
           <Select
             full
             size="sm"
-            ariaLabel={localizationTodo(field.label)}
+            authoredAriaLabel={field.label}
             options={[
-              { value: "chosen", label: localizationTodo("Player chooses") },
-              { value: "offered", label: localizationTodo("Offered automatically") },
+              { value: "chosen", authoredLabel: "Player chooses" },
+              { value: "offered", authoredLabel: "Offered automatically" },
             ]}
             value={action.deckTarget ?? "chosen"}
             onChange={(value) => updateField(slot, field.key, value)}
@@ -614,7 +613,7 @@ function ExplorationEditorRow({
           <div>
             {card === undefined ? <span>Unknown card</span> : <u>{card.name}</u>}
             <GlassButton
-              label="Choose card"
+              authoredLabel="Choose card"
               placement="onGlass"
               size="compact"
               onPress={() => onPickCard({ cardId: encounter.cardId, slot })}
@@ -642,11 +641,11 @@ function ExplorationEditorRow({
         <Select
           full
           size="sm"
-          ariaLabel={localizationTodo(field.label)}
+          authoredAriaLabel={field.label}
           options={dreamsignOptions.map((option) => ({
             value: option.value,
-            label: localizationTodo(option.label),
-            triggerLabel: localizationTodo(option.triggerLabel),
+            authoredLabel: option.label,
+            authoredTriggerLabel: option.triggerLabel,
           }))}
           value={String(action.dreamsignId ?? "")}
           onChange={(value) => updateField(slot, field.key, value)}
@@ -682,8 +681,8 @@ function ExplorationEditorRow({
             <Select
               full
               size="sm"
-              ariaLabel={localizationTodo(`Effect for ${action.label}`)}
-              options={effectOptions.map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
+              authoredAriaLabel={`Effect for ${action.label}`}
+              options={effectOptions.map((option) => ({ ...option, authoredLabel: option.label, ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { authoredTriggerLabel: option.triggerLabel } : {}) }))}
               value={action.effectKind}
               onChange={(value) => {
                 const nextDefinition = definitions.get(
@@ -982,10 +981,10 @@ export default function ExplorationEditorApp({
         )}
         {loadState === "error" && (
           <div className="exploration-editor-error">
-            <GlassPanel title={localizationTodo("Exploration encounters could not be loaded")} subtitle={localizationTodo(loadMessage)}>
+            <GlassPanel authoredTitle="Exploration encounters could not be loaded" authoredSubtitle={loadMessage}>
               <div className="exploration-editor-error-action">
                 <GlassButton
-                  label="Retry"
+                  authoredLabel="Retry"
                   placement="onGlass"
                   variant="accent"
                   onPress={() => setLoadRevision((revision) => revision + 1)}

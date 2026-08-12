@@ -1,4 +1,10 @@
-import { localizationTodo } from "@trox/runtime";
+import { meaning,
+  tx,
+  plural,
+  one,
+  other,
+  txa,
+} from "@trox/runtime";
 import {
   useEffect,
   useLayoutEffect,
@@ -15,7 +21,7 @@ import { CardBrowserPanel } from "../components/card/CardBrowserPanel";
 import type { CardChoiceGridCardView as CardGalleryCardView } from "../components/card/CardChoiceGrid";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import { useMessages } from "../hooks/use-messages";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 import { useIsDesktop } from "./use-is-desktop";
 
 export type CardZoneBrowserZone = "deck" | "void" | "banished";
@@ -136,7 +142,7 @@ export function CardZoneBrowserOverlay({
   onCardContextMenu,
   onCardDoubleTap,
 }: CardZoneBrowserOverlayProps): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const isDesktop = useIsDesktop();
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<CardZoneBrowserSort>("current");
@@ -149,25 +155,41 @@ export function CardZoneBrowserOverlay({
   );
   const sortOptions = SORT_OPTIONS.map((option) => ({
     value: option.value,
-    label: localizationTodo(
+    label:
       option.value === "current"
-        ? t("deck-sort-acquired")
+        ? tx(
+            "Acquired",
+            "Player-facing message for the deck sort acquired interface state.",
+          )
         : option.value === "cost"
-          ? t("deck-sort-cost")
+          ? tx(
+              "Cost",
+              "Visible card-browser sort-field option for printed Energy cost.",
+            )
           : option.value === "spark"
-            ? t("deck-sort-spark")
-            : t("deck-sort-name"),
-    ),
+            ? tx(
+                "Spark",
+                "Visible card-browser sort-field option for printed Spark.",
+              )
+            : tx(
+                "Name",
+                "Visible card-browser sort-field option for canonical authored card names.",
+              ),
   }));
   const filterOptions = FILTER_OPTIONS.map((option) => ({
     value: option.value,
-    label: localizationTodo(
+    label:
       option.value === "all"
-        ? t("deck-filter-all")
+        ? tx("All", "Visible card-browser type filter option that keeps every card type.")
         : option.value === "character"
-          ? t("deck-filter-characters")
-          : t("deck-filter-events"),
-    ),
+          ? tx(
+              "Characters",
+              "Visible card-browser type filter option that keeps Character cards.",
+            )
+          : tx(
+              "Events",
+              "Visible card-browser type filter option that keeps Event cards.",
+            ),
   }));
 
   useEffect(() => {
@@ -195,9 +217,10 @@ export function CardZoneBrowserOverlay({
     };
     measure();
     window.addEventListener("resize", measure);
-    const observer = typeof ResizeObserver === "undefined"
-      ? null
-      : new ResizeObserver(measure);
+    const observer =
+      typeof ResizeObserver === "undefined"
+        ? null
+        : new ResizeObserver(measure);
     observer?.observe(battlefield);
     return () => {
       observer?.disconnect();
@@ -205,12 +228,27 @@ export function CardZoneBrowserOverlay({
     };
   }, [isDesktop]);
 
-  const subtitle = visibleCards.length === cards.length
-    ? t("battle-zone-browser-total-count", { count: cards.length })
-    : t("battle-zone-browser-filtered-count", {
-        visibleCount: visibleCards.length,
-        totalCount: cards.length,
-      });
+  const subtitle =
+    visibleCards.length === cards.length
+      ? txa(
+          meaning(
+            "battle-zone-count-subtitle",
+            plural(cards.length, [one("{count} Card"), other("{count} Cards")]),
+          ),
+          { count: cards.length },
+          "Subtitle reporting the non-negative number of physical cards visible in the current card browser. count can be zero.",
+        )
+      : txa(
+          meaning(
+            "battle-zone-filtered-count-subtitle",
+            plural(cards.length, [
+              one("{visible_count} of {total_count} Card"),
+              other("{visible_count} of {total_count} Cards"),
+            ]),
+          ),
+          { total_count: cards.length, visible_count: visibleCards.length },
+          "Subtitle when filters show only part of a battle zone. visible_count and total_count are non-negative card-entry counts; either can be zero.",
+        );
   const galleryCards = visibleCards.map((card, index) => ({
     ...card,
     // A mobile hold is reserved for the GameCard reading reveal. Leaving the
@@ -218,74 +256,122 @@ export function CardZoneBrowserOverlay({
     // promote a sustained press into a drag, which dismisses that reveal.
     draggable: isDesktop && card.draggable === true,
     ...(zone === "deck"
-      ? { caption: { kind: "text" as const, text: `#${String(index + 1)}` } }
+      ? {
+          caption: {
+            kind: "text" as const,
+            message: txa(
+              "#{position}",
+              { position: index + 1 },
+              "Compact one-based position beneath a card in the current battle deck order.",
+            ),
+          },
+        }
       : {}),
   }));
-  const segmented = ownerSwitch === undefined
-    ? undefined
-    : {
-        options: [
-          {
-            value: "viewer",
-            label: localizationTodo(t("battle-zone-browser-viewer-option", {
-              count: ownerSwitch.viewerCount,
-            })),
+  const segmented =
+    ownerSwitch === undefined
+      ? undefined
+      : {
+          options: [
+            {
+              value: "viewer",
+              label: txa(
+                  plural(ownerSwitch.viewerCount, [
+                    one("Your Card · {count}"),
+                    other("Your Cards · {count}"),
+                  ]),
+                  { count: ownerSwitch.viewerCount },
+                  "Label for the local-player option in a battle zone owner switch. count is the non-negative number of that player's banished cards and can be zero.",
+                ),
+            },
+            {
+              value: "opponent",
+              label: txa(
+                  plural(ownerSwitch.opponentCount, [
+                    one("Opponent Card · {count}"),
+                    other("Opponent Cards · {count}"),
+                  ]),
+                  { count: ownerSwitch.opponentCount },
+                  "Label for the opposing-player option in a battle zone owner switch. count is the non-negative number of that player's banished cards and can be zero.",
+                ),
+            },
+          ],
+          value: ownerSwitch.value,
+          onChange: (value: string) =>
+            ownerSwitch.onChange(value as CardZoneBrowserOwner),
+        };
+  const toolbar: CardBrowserToolbar =
+    zone === "void"
+      ? {
+          segmented,
+          sort: {
+            ariaLabel: tx(
+                "Sort zone cards",
+                "Player-facing message for the battle zone browser sort accessible name interface state.",
+              ),
+            options: sortOptions,
+            value: sort,
+            onChange: (value) => setSort(value as CardZoneBrowserSort),
           },
-          {
-            value: "opponent",
-            label: localizationTodo(t("battle-zone-browser-opponent-option", {
-              count: ownerSwitch.opponentCount,
-            })),
+        }
+      : {
+          segmented,
+          search: {
+            label: tx(
+                "Search Cards",
+                "Player-facing message for the battle zone browser search label interface state.",
+              ),
+            value: query,
+            onChange: setQuery,
+            placeholder: tx(
+                "Search by name…",
+                "Player-facing message for the battle zone browser search placeholder interface state.",
+              ),
+            testId: "card-zone-browser-search",
+            inputRef: searchInputRef,
           },
-        ],
-        value: ownerSwitch.value,
-        onChange: (value: string) =>
-          ownerSwitch.onChange(value as CardZoneBrowserOwner),
-      };
-  const toolbar: CardBrowserToolbar = zone === "void"
-    ? {
-        segmented,
-        sort: {
-          ariaLabel: localizationTodo(t("battle-zone-browser-sort-accessible-name")),
-          options: sortOptions,
-          value: sort,
-          onChange: (value) => setSort(value as CardZoneBrowserSort),
-        },
-      }
-    : {
-        segmented,
-        search: {
-          label: localizationTodo(t("battle-zone-browser-search-label")),
-          value: query,
-          onChange: setQuery,
-          placeholder: localizationTodo(t("battle-zone-browser-search-placeholder")),
-          testId: "card-zone-browser-search",
-          inputRef: searchInputRef,
-        },
-        sort: {
-          ariaLabel: localizationTodo(t("battle-zone-browser-sort-accessible-name")),
-          options: sortOptions,
-          value: sort,
-          onChange: (value) => setSort(value as CardZoneBrowserSort),
-        },
-        filter: {
-          ariaLabel: localizationTodo(t("battle-zone-browser-filter-accessible-name")),
-          options: filterOptions,
-          value: filter,
-          onChange: (value) => setFilter(value as CardZoneBrowserFilter),
-        },
-      };
-  const title = ownerSwitch === undefined
-    ? owner === "viewer"
-      ? t("battle-zone-browser-viewer-title", { zone })
-      : t("battle-zone-browser-opponent-title", { zone })
-    : t("battle-zone-browser-shared-banished-title");
+          sort: {
+            ariaLabel: tx(
+                "Sort zone cards",
+                "Player-facing message for the battle zone browser sort accessible name interface state.",
+              ),
+            options: sortOptions,
+            value: sort,
+            onChange: (value) => setSort(value as CardZoneBrowserSort),
+          },
+          filter: {
+            ariaLabel: tx(
+                "Filter zone cards by type",
+                "Player-facing message for the battle zone browser filter accessible name interface state.",
+              ),
+            options: filterOptions,
+            value: filter,
+            onChange: (value) => setFilter(value as CardZoneBrowserFilter),
+          },
+        };
+  const title =
+    ownerSwitch === undefined
+      ? owner === "viewer"
+        ? zone === "deck"
+          ? tx(meaning("battle-deck-browser-title", "Your Deck"), "Title for the local player's battle draw-pile browser.")
+          : zone === "void"
+            ? tx(meaning("battle-void-browser-title", "Your Void"), "Title for the local player's battle Void browser.")
+            : tx("Your Banished Cards", "Title for the local player's banished-card browser.")
+        : zone === "deck"
+          ? tx("Opponent’s Deck", "Title for the opposing player's battle draw-pile browser.")
+          : zone === "void"
+            ? tx("Opponent’s Void", "Title for the opposing player's battle Void browser.")
+            : tx("Opponent’s Banished Cards", "Title for the opposing player's banished-card browser.")
+      : tx(
+          "Banished Cards",
+          "Shared title for the browser that can switch between both players' banished cards during a battle.",
+        );
 
   return (
     <motion.div
       role="dialog"
       aria-modal="true"
-      aria-label={title}
+      aria-label={resolve(title)}
       className="cumulus"
       data-card-zone-browser={`${owner}:${zone}`}
       data-card-zone-browser-owner={ownerSwitch?.value}
@@ -326,22 +412,33 @@ export function CardZoneBrowserOverlay({
         }}
       >
         <CardBrowserPanel
-          title={localizationTodo(title)}
-          subtitle={localizationTodo(subtitle)}
+          title={title}
+          subtitle={subtitle}
           rightAccessory={{
             kind: "iconButton",
             button: {
               glyph: GLYPHS.close,
-              label: localizationTodo(t("battle-zone-browser-close", { zone })),
+              label:
+                zone === "deck"
+                  ? tx(meaning("battle-deck-browser-close", "Close deck browser"), "Accessible name for dismissing a battle deck browser.")
+                  : zone === "void"
+                    ? tx("Close void browser", "Accessible name for dismissing a battle Void browser.")
+                    : tx("Close banished-cards browser", "Accessible name for dismissing a banished-card browser."),
               onPress: onClose,
             },
           }}
           toolbar={toolbar}
           cards={galleryCards}
           emptyLabel={
-            localizationTodo(cards.length === 0
-              ? t("battle-zone-browser-empty")
-              : t("battle-zone-browser-no-filter-matches"))
+            cards.length === 0
+              ? tx(
+                  "No Cards.",
+                  "Empty state when the selected battle zone itself contains zero cards.",
+                )
+              : tx(
+                  "No Matching Cards.",
+                  "Empty state when a non-empty battle zone has no cards matching the active search or type filter.",
+                )
           }
           presentation="overlay"
           onCardDragStart={onCardDragStart}

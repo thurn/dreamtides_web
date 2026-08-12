@@ -422,8 +422,8 @@ export function BattleContextMenu({
     <CommandMenu
       model={{
         kind: "context",
-        title: card.definition.name,
-        subtitle: locationLabel,
+        authoredTitle: card.definition.name,
+        authoredSubtitle: locationLabel,
         actions: toCommandMenuItems(items, battleCardId),
         anchor: { x, y },
         onDismiss: onClose,
@@ -502,9 +502,11 @@ function toCommandMenuItems(
       return {
         kind: "signed-integer",
         id,
-        label: item.label,
-        placeholder: item.placeholder,
-        commitLabel: item.commitLabel,
+        authoredLabel: item.label,
+        ...(item.placeholder === undefined
+          ? {}
+          : { authoredPlaceholder: item.placeholder }),
+        authoredCommitLabel: item.commitLabel,
         onCommand: item.action,
       };
     }
@@ -512,7 +514,7 @@ function toCommandMenuItems(
       return {
         kind: "group",
         id,
-        label: item.label,
+        authoredLabel: item.label,
         glyph: item.glyph ?? GLYPHS.list,
         actions: toCommandMenuItems(item.submenu, battleCardId, id),
       };
@@ -520,7 +522,7 @@ function toCommandMenuItems(
     return {
       kind: "action",
       id,
-      label: item.label,
+      authoredLabel: item.label,
       glyph: item.glyph ?? (item.label.includes("Note") ? GLYPHS.pencilSquare : GLYPHS.edit),
       onCommand: item.action,
     };

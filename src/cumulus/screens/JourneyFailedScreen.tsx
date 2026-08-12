@@ -17,7 +17,8 @@ import {
   JOURNEY_RESULT_CONTENT_MAX_WIDTH_PX,
   JOURNEY_RESULT_TOP_CHROME_CLEARANCE,
 } from "./journey-result-layout";
-import { useMessages } from "../hooks/use-messages";
+import { tx } from "@trox/runtime";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 export interface JourneyFailedStatView {
   id: "battles" | "round" | "playerScore" | "enemyScore";
@@ -46,7 +47,7 @@ export function JourneyFailedScreen({
   view,
   onNewJourney,
 }: JourneyFailedScreenProps): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   return (
     <div
       className="cumulus"
@@ -103,7 +104,10 @@ export function JourneyFailedScreen({
               textAlign: "center",
             }}
           >
-            {t("journey-failed-summary-missing")}
+            {resolve(tx(
+              "Journey failure summary not found. Return to the journey menu to begin again.",
+              "Error shown when the Journey-failure route has no persisted failure summary.",
+            ))}
           </p>
         ) : (
           <div
@@ -135,7 +139,11 @@ export function JourneyFailedScreen({
                     color: token("--text-primary"),
                   }}
                 >
-                  {t("journey-failed-title", { result: view.result })}
+                  {resolve(
+                    view.result === "defeat"
+                      ? tx("Journey Ended", "Title when the Journey ends in defeat.")
+                      : tx("Stalemate", "Title when the Journey ends in a draw."),
+                  )}
                 </h1>
                 <p
                   style={{
@@ -144,7 +152,11 @@ export function JourneyFailedScreen({
                     color: token("--text-muted"),
                   }}
                 >
-                  {t("journey-failed-message", { result: view.result })}
+                  {resolve(
+                    view.result === "defeat"
+                      ? tx("Your journey ends here.", "Explanation beneath a Journey defeat title.")
+                      : tx("Neither side could claim the dream.", "Explanation beneath a drawn Journey title."),
+                  )}
                 </p>
               </header>
 
@@ -195,7 +207,13 @@ export function JourneyFailedScreen({
                         color: token("--danger"),
                       }}
                     >
-                      {t("journey-failed-reason", { reason: view.reason })}
+                      {resolve(
+                        view.reason === "score_target_reached"
+                          ? tx("Score Threshold Reached", "Cause shown when a Journey battle ended at its score threshold.")
+                          : view.reason === "turn_limit_reached"
+                            ? tx("Turn Limit Reached", "Cause shown when a Journey battle ended at its turn limit.")
+                            : tx("Forced Result", "Cause shown when a Journey battle ended with a forced result."),
+                      )}
                     </p>
                     <dl
                       data-journey-failed-summary=""
@@ -224,7 +242,10 @@ export function JourneyFailedScreen({
               }}
             >
               <GlassButton
-                label={t("journey-failed-new-journey-action")}
+                label={tx(
+                  "New Journey",
+                  "Command that starts a fresh Journey from a menu or terminal Journey result.",
+                )}
                 variant="accent"
                 onPress={onNewJourney}
                 testId="journey-failed-start-new-run"
@@ -238,7 +259,7 @@ export function JourneyFailedScreen({
 }
 
 function SummaryStat({ stat }: { readonly stat: JourneyFailedStatView }) {
-  const t = useMessages();
+  const resolve = useLocalizer();
   return (
     <div
       data-journey-failed-stat={stat.id}
@@ -267,7 +288,15 @@ function SummaryStat({ stat }: { readonly stat: JourneyFailedStatView }) {
           color: token("--text-on-glass-muted"),
         }}
       >
-        {t("journey-failed-stat-label", { stat: stat.id })}
+        {resolve(
+          stat.id === "battles"
+            ? tx("Battles Won", "Label beneath the count of battles won in a failed Journey.")
+            : stat.id === "round"
+              ? tx("Final Round", "Label beneath the final round number in a failed Journey.")
+              : stat.id === "playerScore"
+                ? tx("Your Score", "Label beneath the local player's final score in a failed Journey.")
+                : tx("Opponent Score", "Label beneath the opponent's final score in a failed Journey."),
+        )}
       </dt>
     </div>
   );

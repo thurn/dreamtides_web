@@ -25,14 +25,14 @@
 // delegates finger-clearing placement and press recognition to the shared
 // reveal coordinator.
 
-import { localizationTodo } from "@trox/runtime";
+import { meaning, tx, txa, plural, one, other, type LocalizedString } from "@trox/runtime";
 import { useEffect, useMemo, useState } from "react";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { IconButton } from "../components/controls/IconButton";
 import { Select } from "../components/controls/Select";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import { useMessages } from "../hooks/use-messages";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 import {
   type DeckControlOption,
   type DeckFilterSort,
@@ -41,7 +41,6 @@ import {
   DECK_SORT_OPTIONS,
   DEFAULT_DECK_FILTER_SORT,
   buildDeckTypeFilterOptions,
-  deckSortLabel,
   deckTypeFilterLabel,
   filterAndSortDeckCards,
 } from "./mobile-deck-filter";
@@ -162,7 +161,6 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
           </div>
         )}
       </div>
-
     </div>
   );
 }
@@ -192,7 +190,7 @@ function TopBand({
   count: number;
   controls: React.ReactNode;
 }) {
-  const t = useMessages();
+  const resolve = useLocalizer();
   return (
     <div
       style={{
@@ -239,7 +237,10 @@ function TopBand({
               color: token("--text-primary"),
             }}
           >
-            {t("deck-browser-title")}
+            {resolve(tx(
+              "Your Deck",
+              "Title of the full-screen browser for the current player's deck. “Your” addresses the local player, including one participant in a cooperative room.",
+            ))}
           </div>
           {/* Card-count eyebrow: the whole deck's size, styled with the shared
               eyebrow tokens and pluralized exactly as the desktop header's count
@@ -252,7 +253,14 @@ function TopBand({
               color: token("--text-secondary"),
             }}
           >
-            {t("deck-browser-card-count", { count })}
+            {resolve(txa(
+              meaning(
+                "journey-deck-count-subtitle",
+                plural(count, [one("{count} Card"), other("{count} Cards")]),
+              ),
+              { count },
+              "Count beneath the deck-browser title. count is the number of cards currently in the player's deck, is a non-negative integer, and can be zero.",
+            ))}
           </div>
         </div>
         <div style={{ position: "absolute", top: 0, right: 0 }}>
@@ -260,7 +268,10 @@ function TopBand({
             placement="onGlass"
             glyph={GLYPHS.close}
             size="md"
-            label={localizationTodo(t("deck-browser-close"))}
+            label={tx(
+                "Close deck browser",
+                "Accessible name for the icon-only control that dismisses the player's deck browser and returns focus to the Journey screen beneath it.",
+              )}
             testId="mobile-deck-close"
             onPress={onClose}
           />
@@ -289,41 +300,87 @@ function DeckControls({
   typeFilterOptions: DeckControlOption<DeckTypeFilter>[];
   onFilterSortChange: (next: DeckFilterSort) => void;
 }) {
-  const t = useMessages();
-  const optionLabel = (option: DeckControlOption<DeckTypeFilter>): string => {
-    if (option.authoredLabel !== undefined) return option.authoredLabel;
+  const optionLabel = (
+    option: DeckControlOption<DeckTypeFilter>,
+  ): LocalizedString => {
     switch (option.value) {
       case "all":
-        return t("deck-filter-all");
+        return tx("All", "Visible card-browser type filter option that keeps every card type.");
       case "type:Character":
-        return t("deck-filter-characters");
+        return tx(
+          "Characters",
+          "Visible card-browser type filter option that keeps Character cards.",
+        );
       case "type:Event":
-        return t("deck-filter-events");
+        return tx(
+          "Events",
+          "Visible card-browser type filter option that keeps Event cards.",
+        );
       default:
-        return option.value;
+        throw new Error(`Subtype filter ${option.value} requires authored copy.`);
     }
   };
-  const sortOptionLabel = (sort: DeckSortId): string => {
+  const sortOptionLabel = (sort: DeckSortId): LocalizedString => {
     switch (sort) {
       case "name":
-        return t("deck-sort-name");
+        return tx(
+          "Name",
+          "Visible card-browser sort-field option for canonical authored card names.",
+        );
       case "drafted":
-        return t("deck-sort-acquired");
+        return tx(
+          "Acquired",
+          "Player-facing message for the deck sort acquired interface state.",
+        );
       case "cost":
-        return t("deck-sort-cost");
+        return tx(
+          "Cost",
+          "Visible card-browser sort-field option for printed Energy cost.",
+        );
       case "spark":
-        return t("deck-sort-spark");
+        return tx(
+          "Spark",
+          "Visible card-browser sort-field option for printed Spark.",
+        );
       case "subtype":
-        return t("deck-sort-subtype");
+        return tx(
+          "Subtype",
+          "Visible card-browser sort-field option for canonical authored subtype.",
+        );
     }
   };
-  const selectedFilter = deckTypeFilterLabel(
-    filterSort.typeFilter,
-    typeFilterOptions,
-  );
-  const selectedFilterLabel = selectedFilter.startsWith("subtype:")
-    ? selectedFilter.slice("subtype:".length)
-    : optionLabel({ value: selectedFilter as DeckTypeFilter });
+  const filterAriaLabel = (): LocalizedString => {
+    switch (filterSort.typeFilter) {
+      case "all":
+        return tx("Filter deck by All", "Accessible name for the deck filter when every card is included.");
+      case "type:Character":
+        return tx("Filter deck by Characters", "Accessible name for the deck filter when only Character cards are included.");
+      case "type:Event":
+        return tx("Filter deck by Events", "Accessible name for the deck filter when only Event cards are included.");
+      default: {
+        const subtype = deckTypeFilterLabel(filterSort.typeFilter, typeFilterOptions);
+        return txa(
+          "Filter deck by {subtype}",
+          { subtype: subtype.startsWith("subtype:") ? subtype.slice("subtype:".length) : subtype },
+          "Accessible name for the deck filter when one canonical card subtype is selected. subtype is authored card vocabulary and has unknown grammatical gender.",
+        );
+      }
+    }
+  };
+  const sortAriaLabel = (): LocalizedString => {
+    switch (filterSort.sort) {
+      case "name":
+        return tx("Sort deck by Name", "Accessible name for sorting the deck by card name.");
+      case "drafted":
+        return tx("Sort deck by Acquired", "Accessible name for sorting the deck by acquisition order.");
+      case "cost":
+        return tx("Sort deck by Cost", "Accessible name for sorting the deck by energy cost.");
+      case "spark":
+        return tx("Sort deck by Spark", "Accessible name for sorting the deck by Spark.");
+      case "subtype":
+        return tx("Sort deck by Subtype", "Accessible name for sorting the deck by card subtype.");
+    }
+  };
   return (
     <div
       style={{
@@ -338,13 +395,12 @@ function DeckControls({
         size="sm"
         leadingGlyph={GLYPHS.filter}
         align="start"
-        ariaLabel={localizationTodo(t("deck-browser-filter-accessible-name", {
-          selection: selectedFilterLabel,
-        }))}
-        options={typeFilterOptions.map((option) => ({
-          value: option.value,
-          label: optionLabel(option),
-        })).map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
+        ariaLabel={filterAriaLabel()}
+        options={typeFilterOptions.map((option) =>
+          option.authoredLabel === undefined
+            ? { value: option.value, label: optionLabel(option) }
+            : { value: option.value, authoredLabel: option.authoredLabel },
+        )}
         value={filterSort.typeFilter}
         onChange={(value) =>
           onFilterSortChange({
@@ -357,13 +413,11 @@ function DeckControls({
         size="sm"
         leadingGlyph={GLYPHS.sort}
         align="end"
-        ariaLabel={localizationTodo(t("deck-browser-sort-accessible-name", {
-          selection: sortOptionLabel(deckSortLabel(filterSort.sort)),
-        }))}
+        ariaLabel={sortAriaLabel()}
         options={DECK_SORT_OPTIONS.map((option) => ({
           value: option.value,
           label: sortOptionLabel(option.value),
-        })).map((option) => ({ ...option, label: localizationTodo(option.label), ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { triggerLabel: localizationTodo(option.triggerLabel) } : {}) }))}
+        }))}
         value={filterSort.sort}
         onChange={(value) =>
           onFilterSortChange({ ...filterSort, sort: value as DeckSortId })
@@ -374,11 +428,7 @@ function DeckControls({
 }
 
 /** One grid tile: a stationary hold reveals a comfortably legible zoom. */
-function DeckTile({
-  cardView,
-}: {
-  cardView: DeckCardView;
-}) {
+function DeckTile({ cardView }: { cardView: DeckCardView }) {
   return (
     <div
       aria-label={cardView.model.displaySnapshot.name}
@@ -405,12 +455,24 @@ function DeckTile({
 
 /** Shown when the deck has no cards. */
 function EmptyDeck() {
-  const t = useMessages();
-  return <GridPlaceholder message={t("deck-browser-empty")} />;
+  return (
+    <GridPlaceholder
+      message={tx(
+        "Your deck is empty.",
+        "Empty state in the deck browser when the player's deck contains zero cards.",
+      )}
+    />
+  );
 }
 
 /** Shown when a filter hides every card in a non-empty deck. */
 function NoMatches() {
-  const t = useMessages();
-  return <GridPlaceholder message={t("deck-browser-no-filter-matches")} />;
+  return (
+    <GridPlaceholder
+      message={tx(
+        "No cards match this filter.",
+        "Empty state when the player's non-empty deck has no cards matching the active filter. The player can change or clear that filter to see cards again.",
+      )}
+    />
+  );
 }

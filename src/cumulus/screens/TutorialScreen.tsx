@@ -1,4 +1,4 @@
-import { localizationTodo } from "@trox/runtime";
+import { tx, txa } from "@trox/runtime";
 import { MotionConfig, motion, useReducedMotion } from "framer-motion";
 import {
   useCallback,
@@ -15,7 +15,7 @@ import { token } from "../primitives/tokens";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { GLYPHS } from "../primitives/glyph";
 import { IconButton } from "../components/controls/IconButton";
-import { useMessages } from "../hooks/use-messages";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 import type { BattleStatusDreamAvatarProfile } from "../components/battle/BattleStatusDisplay";
 import { CardBack } from "../components/battle/CardBack";
 import {
@@ -378,7 +378,6 @@ function TutorialHowToPlayDialog({
   readonly onClose: () => void;
 }): ReactElement {
   const desktop = useIsDesktop();
-  const t = useMessages();
   const paragraphStyle = {
     margin: 0,
     color: token("--text-on-glass"),
@@ -394,8 +393,14 @@ function TutorialHowToPlayDialog({
       style={{ visibility: staged ? "hidden" : "visible" }}
     >
       <GlassDialog
-        title={localizationTodo(t("tutorial-how-to-play-title"))}
-        closeLabel={localizationTodo(t("tutorial-how-to-play-close"))}
+        title={tx(
+            "How to Play",
+            "Player-facing message for the tutorial how to play title interface state.",
+          )}
+        closeLabel={tx(
+            "Close how to play",
+            "Player-facing message for the tutorial how to play close interface state.",
+          )}
         presentation="popup"
         chrome="flowing-close"
         companion={
@@ -918,7 +923,6 @@ function TutorialOpponentCardPlay({
   readonly playbackSpeed: number;
   readonly onComplete: () => void;
 }): ReactElement | null {
-  const t = useMessages();
   const [trajectory, setTrajectory] = useState<TutorialCardTrajectory | null>(
     null,
   );
@@ -1137,7 +1141,12 @@ function TutorialOpponentCardPlay({
                   backfaceVisibility: "hidden",
                 }}
               >
-                <CardBack label={t("tutorial-opponent-card-flipping")} />
+                <CardBack
+                  label={tx(
+                    "Opponent card flipping face up",
+                    "Player-facing message for the tutorial opponent card flipping interface state.",
+                  )}
+                />
               </div>
               <div
                 style={{
@@ -1289,7 +1298,7 @@ function TutorialChallengeAnimation({
   readonly playbackSpeed: number;
   readonly onComplete: () => void;
 }): ReactElement | null {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const [started, setStarted] = useState(false);
   const [geometry, setGeometry] = useState<TutorialChallengeGeometry | null>(
     null,
@@ -1431,11 +1440,25 @@ function TutorialChallengeAnimation({
   return (
     <div
       role="status"
-      aria-label={t("tutorial-battle-challenge-outcome", {
-        winnerName: winner.card.model.displaySnapshot.name,
-        loserName: loser.card.model.displaySnapshot.name,
-        loserOwner: loser.owner === "enemy" ? "opponent" : "player",
-      })}
+      aria-label={resolve(
+        loser.owner === "enemy"
+          ? txa(
+              "{winner_name} wins the challenge. {loser_name} dissolves into the opponent void.",
+              {
+                winner_name: winner.card.model.displaySnapshot.name,
+                loser_name: loser.card.model.displaySnapshot.name,
+              },
+              "Accessible narration after a tutorial challenge whose losing card enters the opponent's Void. winner_name and loser_name are canonical card display names with unknown grammatical gender.",
+            )
+          : txa(
+              "{winner_name} wins the challenge. {loser_name} dissolves into the player void.",
+              {
+                winner_name: winner.card.model.displaySnapshot.name,
+                loser_name: loser.card.model.displaySnapshot.name,
+              },
+              "Accessible narration after a tutorial challenge whose losing card enters the local player's Void. winner_name and loser_name are canonical card display names with unknown grammatical gender.",
+            ),
+      )}
       data-tutorial-challenge-animation=""
       data-tutorial-challenge-winner-card-id={winner.card.model.cardId}
       data-tutorial-challenge-loser-card-id={loser.card.model.cardId}
@@ -1667,7 +1690,6 @@ export function TutorialScreen({
   onReplay,
   onPlayFromAction,
 }: TutorialScreenProps): ReactElement {
-  const t = useMessages();
   const desktop = useIsDesktop();
   const dockEditor = useIsDesktop(TUTORIAL_EDITOR_DOCK_MIN_WIDTH);
   const reduceMotion = useReducedMotion() === true;
@@ -2955,10 +2977,16 @@ export function TutorialScreen({
                       owner: "player",
                       rank: "front",
                       slotId: repositionTargetSlotId,
-                      label: t("tutorial-drag-to-block", {
-                        sourceCardName: repositionSourceCard.model.displaySnapshot.name,
-                        opposingCardName: repositionOpposingCard.model.displaySnapshot.name,
-                      }),
+                      label: txa(
+                        "Drag {source_card_name} to block {opposing_card_name}.",
+                        {
+                          source_card_name:
+                            repositionSourceCard.model.displaySnapshot.name,
+                          opposing_card_name:
+                            repositionOpposingCard.model.displaySnapshot.name,
+                        },
+                        "Player-facing message for the tutorial drag to block interface state.",
+                      ),
                     }
               }
               viewport="contained"
@@ -3065,7 +3093,7 @@ export function TutorialScreen({
             <IconButton
               glyph={GLYPHS.sidebarLeft}
               size="sm"
-              label={/* localization-ignore: developer-only tutorial editor control. */ localizationTodo("Open tutorial editor")}
+              authoredLabel="Open tutorial editor"
               ariaExpanded={false}
               ariaControls="cumulus-tutorial-editor"
               testId="tutorial-editor-trigger"

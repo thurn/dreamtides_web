@@ -1,136 +1,130 @@
-# Localization Catalog
+# Localization
 
-The English Fluent catalog is stored in `data/locales/en-US`. Its
-`manifest.json` lists every resource in bundle order. Each locale mirrors this
-directory structure and supplies the same set of resource files.
+Dreamtides uses Trox for code-authored player text. Authors create immutable
+`LocalizedString` values inline with `tx`, `txa`, selectors, and semantic
+arguments from `@trox/runtime`. Trox extracts those values into translator CSVs
+and deterministic runtime bundles.
 
-The catalog is organized by player-facing responsibility:
+## Project layout
 
-- `terms.ftl` contains shared vocabulary and localization diagnostics;
-- `app-shell.ftl` contains loading, errors, menus, and application chrome;
-- `coop.ftl` contains cooperative rooms, presence, conflicts, and shared
-  settings;
-- `journey.ftl` contains Journey progression and navigation;
-- `cards.ftl` contains cards, decks, collections, and rules presentation;
-- `sites.ftl` contains Journey sites and their outcomes;
-- `battle.ftl` contains battle presentation and controls;
-- `battle-prompts.ftl` contains battle choices and pending prompts;
-- `accessibility.ftl` contains accessibility-only names, descriptions, and
-  narration.
+- `trox.ron` defines source discovery, locale outputs, profiles, and lint policy.
+- `.trox-revision` pins the exact Trox checkout used by the repository wrapper.
+- `scripts/trox.mjs` verifies that revision before invoking the CLI.
+- `localization/reports/en-US.csv` is the source-English review report.
+- `localization/qa/<locale>.csv` is editable translator data for development QA.
+- `localization/qa/<locale>.ron` defines locale direction, isolation, fallback,
+  and grammatical facets.
+- `localization/terms.ron` owns reusable lexical terms and their forms.
+- `src/generated/localization/*.trox.json` contains canonical runtime bundles.
+- `src/runtime/localization/` owns bundle loading, diagnostics, React context,
+  source fallback, and development QA locale selection.
 
-Visible messages remain with their feature even when the same value is also
-used as an accessible label. Messages belong in `accessibility.ftl` when their
-purpose is exclusively assistive output.
+## The internal contract
 
-The shared vocabulary follows the canonical terms used by
-`data/glossary.toml` and the player-facing Cumulus surfaces.
+Code-authored player copy travels through application state, view models,
+component props, and persisted semantic references as `LocalizedString`.
+Components resolve a message only where its resulting `string` is passed to an
+intrinsic browser boundary such as a text node, `aria-label`, `alt`,
+`placeholder`, or document metadata.
 
-Fluent terms begin with `-` and are private to the localization resource. React
-code requests complete message IDs through `useMessages()`; messages reference
-terms when they need canonical game vocabulary.
+`useLocalizer()` is the React boundary API. `resolveChecked()` exists for
+non-React browser sinks and tests that intentionally inspect final output.
+Domain code, reducers, persistence, and view-model builders do not resolve
+messages.
 
-## Typed runtime contract
+Canonical RON text, user input, card names, and developer diagnostics are
+authored content. Components that display either ownership class expose
+distinct props such as `title`/`authoredTitle` or
+`placeholder`/`authoredPlaceholder`. This keeps authored strings opaque and
+prevents them from being mistaken for code-authored translation units.
 
-`scripts/generate-localization-types.mjs` generates
-`src/data/localization-messages.ts` from every resource listed by the English
-locale manifest. The generated
-module contains the message-ID union, exact variable contracts, and the
-JSON-safe `FluentMessageDescriptor` union. Descriptors contain a known message
-ID and finite string/number variables, so they can cross view-model, replay,
-and cooperative state boundaries without carrying locale output.
+## Authoring messages
 
-`createMessageDescriptor()` in
-`src/data/localization-descriptors.ts` constructs descriptors with exact
-variable keys. `isFluentMessageDescriptor()` validates data arriving from a
-serialized boundary. `formatMessageDescriptor()` in
-`src/cumulus/hooks/use-messages.ts` is the presentation formatter and returns
-the localized invalid-descriptor fallback for malformed data. Run
-`npm run localization-types` after changing the catalog.
+Use `tx(source, description)` for a complete message without arguments. Use
+`txa(pattern, arguments, description)` when the message contains semantic
+arguments or selectors. Descriptions explain the UI situation, the complete
+meaning, and every argument whose role is not self-evident.
 
-Battle pending prompts persist these descriptors rather than rendered labels.
-Transfiguration offers carry a discriminated `TransfigurationChange`, and
-Exploration view models preserve authored content as opaque values while
-React formats code-authored connective messages.
+Source text is the source-English product contract. Keep a complete grammatical
+unit in one message. Pass semantic facts such as `count`, `owner`, `side`,
+`entity_kind`, or `has_title`; do not preformat fragments which a target locale
+may need to reorder or inflect.
 
-The player-runtime ownership inventory is shared by
-`eslint-rules/ui-boundary-roles.js`, the `cumulus/no-unlocalized-player-copy`
-rule, and `scripts/audit-player-localization.mjs`. Use
-`npm run audit:player-localization` to inspect the classified source inventory;
-the check mode requires every candidate to be a protected player file, an
-authored-data source, a machine/diagnostic value, or an explicit developer or
-fixture surface.
+Use `meaning(key, source)` when identical English text has genuinely different
+translator meaning, such as a Back navigation action versus a card's back
+face. Reuse the same message identity only when meaning, argument kinds, and
+translator description agree at every callsite.
 
-## Term Groups
+Numeric grammar uses Trox cardinal or ordinal selectors. Review exact branches
+and locale plural categories independently. Boolean and enum selectors should
+describe product state rather than English words. Prefer complete selector
+branches when a placeholder is absent in one state.
 
-The vocabulary covers:
+Terms belong in `localization/terms.ron` when a reusable lexical concept needs
+locale-specific forms or facets. A term is not a shortcut for sharing a whole
+UI sentence.
 
-- product and named world concepts: `-dreamtides`, `-dreamwell`, and
-  `-dream-atlas`;
-- world entities: `-journey`, `-dream-avatar`, `-dream-guide`, `-dreamscape`,
-  `-dreamsign`, `-tide`, `-site`, and `-reward`;
-- cards and zones: `-card`, `-character`, `-event-card`, `-deck`, `-hand`,
-  `-void`, and `-figment`;
-- battle language: `-battle`, `-player`, `-opponent`, `-turn`, `-round`, and
-  `-point`;
-- resource names that are count-invariant in English: `-essence`, `-energy`,
-  and `-spark`.
+## Runtime behavior
 
-Site action verbs and keywords stay out of the shared term set. Their form can
-depend on tense, mood, subject, object, and the surrounding sentence. Complete
-messages give a translator enough context to conjugate or replace them.
+`TroxLocalizationProvider` loads the checked `en-US` bundle synchronously. The
+source runtime uses source patterns without directional isolation so source
+output remains byte-stable. Target runtimes use strict resolution, source
+fallback, and the isolation policy in their locale profile.
 
-## Grammatical Number
+Development builds accept `?qaLocale=ar`, `es`, `ja`, or `ru`. The provider
+dynamically loads the matching QA bundle and updates the document `lang` and
+`dir` attributes. Missing target rows fall back to the source bundle and emit a
+deduplicated `trox_resolution_diagnostic` journey-log event. Bundle load outcome,
+locale, direction, and source-catalog fingerprint are logged as
+`trox_bundle_loaded`.
 
-Every countable term exposes a locale-private `$number` facet whose default is
-`one`. The current Fluent syntax accepts literal term arguments, so the complete
-message selects on its runtime count and passes the matching CLDR category to
-the term:
+A catastrophic source-bundle failure renders the fixed bootstrap sentence
+`Unable to display localized content.` because localization is unavailable at
+that boundary.
 
-```ftl
--card =
-    { $number ->
-       *[one] Card
-        [other] Cards
-    }
+## Persistence and multiplayer
 
-deck-card-count =
-    { $count ->
-        [one] { $count } { -card(number: "one") }
-       *[other] { $count } { -card(number: "other") }
-    }
-deck-heading = { -deck }
-```
+Persisted battle prompts use semantic JSON-safe references. Built-in prompts
+store a closed `kind`; Dreamwell prompts store their Dreamwell card UUID.
+Reducers and replay code retain these references and finite semantic values.
+The Cumulus adapter constructs `LocalizedString` values at presentation time,
+and the browser boundary resolves them for the active locale. Option indexes,
+prompt cursors, hashes, and fold behavior are language-independent.
 
-Numeric selectors use the locale's CLDR rules. A translation may add `zero`,
-`two`, `few`, or `many` message variants and matching term facets. A singular
-label can reference the term without arguments because `one` is its default.
+Version-24 snapshots are normalized while loading into the version-25 prompt
+reference shape. Newly serialized application and coop state uses version 25.
 
-The term does not render the numeral because its position, spacing, and role
-are locale-specific. A Chinese translation can put the appropriate classifier
-in the term and place the numeral next to it in the complete message. A message
-whose layout renders the numeral separately can use the same grammatical-number
-facet as its adjacent label.
+## Translator workflow
 
-## Complete Messages Own Grammar
+1. Author or edit inline Trox messages.
+2. Run `node scripts/trox.mjs extract`.
+3. For a target locale, run `node scripts/trox.mjs extract --locale <locale>`.
+4. Review source, description, conditions, placeholders, status, source
+   locations, and every expanded row in the CSV.
+5. Edit the target `translation` cells without changing identities or source
+   signatures.
+6. Run `node scripts/trox.mjs check --deny warnings`.
+7. Run `node scripts/trox.mjs bundle --allow-missing` for development QA
+   bundles.
 
-Messages own articles, possessives, adjectives, verbs, punctuation, and word
-order. This keeps English `a` versus `an` out of a context-free article term
-and lets translations express agreement across the whole phrase.
+`trox.ron` denies warnings by default. Each allowed diagnostic names one narrow
+rule and carries a nonempty review reason. The current exceptions cover
+intentional leading-plus delta labels, complete selector branches which omit an
+inapplicable placeholder, and the reviewed 12-row accessible battle participant
+summary.
 
-Fluent permits locale-specific grammar that is absent from the English source.
-A locale can parameterize a term by grammatical case and pass that parameter
-from its translated message. It can also add private attributes such as
-`.gender` or `.starts-with` and use them as selectors for adjective, article,
-or verb agreement. These details stay inside the locale's Fluent resource and
-do not become application variables.
+Use `node scripts/trox.mjs prune` when obsolete translator rows have been
+reviewed and should be deleted. Locale-specific pruning accepts `--locale`.
 
-Term values use the canonical title-style game vocabulary. A complete message
-may use a contextual lexical form when sentence casing, compounding, or idiom
-requires one.
+## Verification
 
-## Formatting
+`scripts/regenerate-assets.sh` runs extraction, validation, and bundle
+generation after the other repository generators. `npm run review` selects the
+Trox check for configured source, runtime, catalog, profile, wrapper, or vendored
+runtime changes. `npm run review:full` includes Trox validation, deterministic
+generated-bundle checking, lint, typecheck, and the complete test suite.
 
-Run `npm run format:fluent` to format the English Fluent resources with the
-canonical `@fluent/syntax` serializer. Run `npm run format:fluent:check` to
-verify formatting without modifying the file. The formatter rejects invalid
-syntax and confirms that its output parses to the same Fluent syntax tree.
+Localization tests use real Trox bundles. Synthetic target translations are
+added with `withSyntheticTranslations()` against stable message identities;
+tests assert behavior and structure rather than message IDs or specific UI
+wording.

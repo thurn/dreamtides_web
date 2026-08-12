@@ -180,6 +180,8 @@ export interface PressableProps extends React.HTMLAttributes<HTMLElement> {
   snapFeedbackExit?: boolean;
   /** Localized accessible name resolved onto the final intrinsic element. */
   ariaLabelMessage?: LocalizedString;
+  /** Accessible name supplied by canonical authored or developer-only copy. */
+  authoredAriaLabel?: string;
   /** Content rendered inside the pressable element. */
   children?: React.ReactNode;
 }
@@ -204,6 +206,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
       hoverFeedback = "scale",
       snapFeedbackExit = false,
       ariaLabelMessage,
+      authoredAriaLabel,
       style,
       onPointerEnter,
       onPointerDown,
@@ -251,7 +254,8 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
       },
     });
     const reducedMotion = usePrefersReducedMotion();
-    const measuredRevealFeedback = (rest as Record<string, unknown>)["data-reveal-feedback"] === "measured";
+    const measuredRevealFeedback =
+      (rest as Record<string, unknown>)["data-reveal-feedback"] === "measured";
     const pressScale = measuredRevealFeedback
       ? "var(--reveal-press-scale)"
       : String(measuredFeedback.pressScale);
@@ -274,7 +278,14 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
     >;
     const typeProp = as === "button" ? { type: "button" } : {};
     if (ariaLabelMessage !== undefined && typeof as !== "string") {
-      throw new Error("Pressable can resolve ariaLabelMessage only onto an intrinsic element.");
+      throw new Error(
+        "Pressable can resolve ariaLabelMessage only onto an intrinsic element.",
+      );
+    }
+    if (ariaLabelMessage !== undefined && authoredAriaLabel !== undefined) {
+      throw new Error(
+        "Pressable accepts ariaLabelMessage or authoredAriaLabel, not both.",
+      );
     }
 
     return (
@@ -284,11 +295,14 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
         {...(disabled ? {} : bind)}
         {...rest}
         {...(ariaLabelMessage === undefined
-          ? {}
+          ? authoredAriaLabel === undefined
+            ? {}
+            : { "aria-label": authoredAriaLabel }
           : {
-              "aria-label": resolve === null
-                ? missingLocalizationProvider()
-                : resolve(ariaLabelMessage),
+              "aria-label":
+                resolve === null
+                  ? missingLocalizationProvider()
+                  : resolve(ariaLabelMessage),
             })}
         // `disabled` must make the element genuinely inert to interaction, not
         // just visually. Pressable is polymorphic via `as`, so forwarding a
@@ -311,9 +325,10 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
           WebkitTouchCallout: "none",
           touchAction: "manipulation",
           transformOrigin: "center",
-          transition: reducedMotion || resetFeedback
-            ? "none"
-            : `transform var(--dur-fast) var(--ease-out)`,
+          transition:
+            reducedMotion || resetFeedback
+              ? "none"
+              : `transform var(--dur-fast) var(--ease-out)`,
           // Scale down on press, up on hover — the one Dreamtides rule, applied
           // to every pressable. Press wins over hover (a hovered-then-pressed
           // control compresses); disabled suppresses both.
@@ -339,5 +354,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
 );
 
 function missingLocalizationProvider(): never {
-  throw new Error("Localized Pressable copy requires a mounted TroxLocalizationProvider.");
+  throw new Error(
+    "Localized Pressable copy requires a mounted TroxLocalizationProvider.",
+  );
 }

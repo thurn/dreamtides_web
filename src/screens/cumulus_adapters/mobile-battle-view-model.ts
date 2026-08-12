@@ -24,6 +24,7 @@ import {
   type MobileBattleCardPickerView,
   type MobileBattleChoicePromptView,
   type MobileBattlePhase,
+  type MobileBattlePromptCopy,
   type MobileBattleSideView,
   type MobileBattleSlotView,
   type MobileBattleStatusView,
@@ -42,7 +43,7 @@ import {
   resolveDreamwellPromptRef,
   type BattlePromptText,
 } from "../../data/dreamwell-prompts";
-import type { FluentMessageDescriptor } from "../../data/localization-messages";
+import { builtInBattlePromptMessage } from "../../runtime/localization/battle-prompt-messages";
 
 const FALLBACK_PLAYER_DREAM_AVATAR = {
   imageNumber: "001",
@@ -73,7 +74,7 @@ export interface MobileBattleViewOptions {
   /** Synthetic seam for deterministic prompt-presentation tests. */
   readonly promptTextResolver?: (
     text: BattlePromptText,
-  ) => string | FluentMessageDescriptor;
+  ) => MobileBattlePromptCopy;
 }
 
 export function buildMobileBattleView(
@@ -316,13 +317,16 @@ function resolvePromptText(
   text: BattlePromptText,
   init: BattleInit,
   resolver?: MobileBattleViewOptions["promptTextResolver"],
-): string | FluentMessageDescriptor {
+): MobileBattlePromptCopy {
   if (resolver !== undefined) return resolver(text);
   if (isDreamwellPromptRef(text)) {
-    return resolveDreamwellPromptRef(text, init.dreamwellDeck);
+    return {
+      kind: "authored",
+      text: resolveDreamwellPromptRef(text, init.dreamwellDeck),
+    };
   }
-  if (isLegacyPromptText(text)) return text.text;
-  return text;
+  if (isLegacyPromptText(text)) return { kind: "authored", text: text.text };
+  return { kind: "message", message: builtInBattlePromptMessage(text) };
 }
 
 function buildDreamwellView(

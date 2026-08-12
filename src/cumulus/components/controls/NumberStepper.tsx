@@ -17,17 +17,21 @@ export type NumberStepperResource =
 
 export interface NumberStepperProps {
   /** Visible label for the numeric value. */
-  label: LocalizedString;
+  label?: LocalizedString;
+  authoredLabel?: string;
   /** Current numeric value. */
   value: number;
   /** Optional formatted value while `value` remains the numeric state contract. */
   displayValue?: LocalizedString;
+  authoredDisplayValue?: string;
   /** Optional economy mark paired with the value. */
   resource?: NumberStepperResource;
   /** Accessible label for the decrement action. */
-  decrementLabel: LocalizedString;
+  decrementLabel?: LocalizedString;
+  authoredDecrementLabel?: string;
   /** Accessible label for the increment action. */
-  incrementLabel: LocalizedString;
+  incrementLabel?: LocalizedString;
+  authoredIncrementLabel?: string;
   /** Fires when the decrement disc is pressed. */
   onDecrement: () => void;
   /** Fires when the increment disc is pressed. */
@@ -48,11 +52,15 @@ export interface NumberStepperProps {
  */
 export function NumberStepper({
   label,
+  authoredLabel,
   value,
   displayValue,
+  authoredDisplayValue,
   resource,
   decrementLabel,
+  authoredDecrementLabel,
   incrementLabel,
+  authoredIncrementLabel,
   onDecrement,
   onIncrement,
   decrementDisabled = false,
@@ -62,10 +70,19 @@ export function NumberStepper({
 }: NumberStepperProps): ReactElement {
   const compact = size === "sm";
   const resolve = useLocalizer();
+  if ((label === undefined) === (authoredLabel === undefined) ||
+      (decrementLabel === undefined) === (authoredDecrementLabel === undefined) ||
+      (incrementLabel === undefined) === (authoredIncrementLabel === undefined)) {
+    throw new Error("NumberStepper copy must use exactly one localized or authored prop per field.");
+  }
+  if (displayValue !== undefined && authoredDisplayValue !== undefined) {
+    throw new Error("NumberStepper accepts displayValue or authoredDisplayValue, not both.");
+  }
+  const visibleLabel = authoredLabel ?? resolve(label!);
   return (
     <div
       role="group"
-      aria-label={resolve(label)}
+      aria-label={visibleLabel}
       data-testid={testId}
       style={{
         display: "grid",
@@ -82,12 +99,13 @@ export function NumberStepper({
           font: token(compact ? "--t-caption" : "--t-body-sm"),
         }}
       >
-        {resolve(label)}
+        {visibleLabel}
       </span>
       <IconButton
         glyph={GLYPHS.minus}
         size="sm"
         label={decrementLabel}
+        authoredLabel={authoredDecrementLabel}
         placement="onGlass"
         disabled={decrementDisabled}
         onPress={onDecrement}
@@ -103,7 +121,7 @@ export function NumberStepper({
           fontVariantNumeric: "tabular-nums",
         }}
       >
-        <span>{displayValue === undefined ? String(value) : resolve(displayValue)}</span>
+        <span>{authoredDisplayValue ?? (displayValue === undefined ? String(value) : resolve(displayValue))}</span>
         {resource === undefined ? null : (
           <InlineGlyph glyph={GLYPHS[resource]} />
         )}
@@ -112,6 +130,7 @@ export function NumberStepper({
         glyph={GLYPHS.plus}
         size="sm"
         label={incrementLabel}
+        authoredLabel={authoredIncrementLabel}
         placement="onGlass"
         disabled={incrementDisabled}
         onPress={onIncrement}

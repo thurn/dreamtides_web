@@ -3,29 +3,29 @@
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { localizationTodo } from "@trox/runtime";
 import { CumulusRoot } from "../CumulusRoot";
 import { artRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
-import { createMessageDescriptor } from "../../data/localization-descriptors";
 import {
   MainMenuScreen,
   type MainMenuView,
 } from "./MainMenuScreen";
 
 const VIEW: MainMenuView = {
-  title: createMessageDescriptor("main-menu-title"),
+  title: localizationTodo("Dreamtides"),
   background: artRef.mainMenuBackground(),
   actions: [
-    { id: "new-journey", label: createMessageDescriptor("main-menu-new-journey-action") },
-    { id: "dream-codex", label: createMessageDescriptor("main-menu-dream-codex-action") },
-    { id: "settings", label: createMessageDescriptor("main-menu-settings-action") },
-    { id: "about", label: createMessageDescriptor("main-menu-about-action") },
-    { id: "quit", label: createMessageDescriptor("main-menu-quit-action") },
+    { id: "new-journey", label: localizationTodo("New Journey") },
+    { id: "dream-codex", label: localizationTodo("Dream Codex") },
+    { id: "settings", label: localizationTodo("Settings") },
+    { id: "about", label: localizationTodo("About") },
+    { id: "quit", label: localizationTodo("Quit") },
   ],
   socials: [
-    { id: "github", label: createMessageDescriptor("main-menu-github-action"), glyph: GLYPHS.github },
-    { id: "discord", label: createMessageDescriptor("main-menu-discord-action"), glyph: GLYPHS.discord },
-    { id: "reddit", label: createMessageDescriptor("main-menu-reddit-action"), glyph: GLYPHS.reddit },
+    { id: "github", label: localizationTodo("GitHub"), glyph: GLYPHS.github },
+    { id: "discord", label: localizationTodo("Discord"), glyph: GLYPHS.discord },
+    { id: "reddit", label: localizationTodo("Reddit"), glyph: GLYPHS.reddit },
   ],
 };
 

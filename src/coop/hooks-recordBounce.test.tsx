@@ -11,6 +11,7 @@
 import { useEffect } from "react";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
+import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { BounceReason } from "../eventlog/types";
 import type { AppendFn } from "./actions";
@@ -202,9 +203,11 @@ describe("hooks.ts bounce diagnostics", () => {
     const holder: { append: AppendFn | null } = { append: null };
     await act(async () => {
       root.render(
-        <CoopProvider context={makeContext()}>
-          <CaptureAppend onReady={(fn) => (holder.append = fn)} />
-        </CoopProvider>,
+        <CumulusRoot>
+          <CoopProvider context={makeContext()}>
+            <CaptureAppend onReady={(fn) => (holder.append = fn)} />
+          </CoopProvider>
+        </CumulusRoot>,
       );
       await Promise.resolve();
     });
@@ -247,9 +250,11 @@ describe("hooks.ts bounce diagnostics", () => {
     const holder: { append: AppendFn | null } = { append: null };
     await act(async () => {
       root.render(
-        <CoopProvider context={makeContext()}>
-          <CaptureAppend onReady={(fn) => (holder.append = fn)} />
-        </CoopProvider>,
+        <CumulusRoot>
+          <CoopProvider context={makeContext()}>
+            <CaptureAppend onReady={(fn) => (holder.append = fn)} />
+          </CoopProvider>
+        </CumulusRoot>,
       );
       await Promise.resolve();
     });

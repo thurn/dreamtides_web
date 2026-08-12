@@ -1,4 +1,4 @@
-import { localizationTodo } from "@trox/runtime";
+import { meaning, txa, tx } from "@trox/runtime";
 import type { ReactElement } from "react";
 import { GlassButton } from "../../components/controls/GlassButton";
 import { NumberStepper } from "../../components/controls/NumberStepper";
@@ -7,13 +7,10 @@ import { TextField } from "../../components/controls/TextField";
 import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import { useMessages } from "../../hooks/use-messages";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export type BattleCardNoteExpiryOption =
-  | "end-of-this-turn"
-  | "end-of-next-turn"
-  | "after-n-turns"
-  | "manual";
+  "end-of-this-turn" | "end-of-next-turn" | "after-n-turns" | "manual";
 
 export interface BattleCardNoteOverlayProps {
   readonly cardId: string;
@@ -45,14 +42,24 @@ export function BattleCardNoteOverlay({
   onCancel,
   onSubmit,
 }: BattleCardNoteOverlayProps): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const hasText = text.trim().length > 0;
 
   return (
     <GlassDialog
-      title={localizationTodo(t("battle-card-note-title", { cardName }))}
-      subtitle={localizationTodo(t("battle-card-note-subtitle"))}
-      closeLabel={localizationTodo(t("battle-card-note-cancel"))}
+      title={txa(
+          "Annotate {card_name}",
+          { card_name: cardName },
+          "Title of the optional player note editor for a battle card. card_name is the canonical display name and has unknown grammatical gender.",
+        )}
+      subtitle={tx(
+          "Notes appear on the card and in the inspector.",
+          "Player-facing message for the battle card note subtitle interface state.",
+        )}
+      closeLabel={tx(
+          "Cancel note",
+          "Player-facing message for the battle card note cancel interface state.",
+        )}
       onClose={onCancel}
       desktopCenterTarget="battlefield"
     >
@@ -64,12 +71,29 @@ export function BattleCardNoteOverlay({
       >
         <div data-battle-note-field="text">
           <TextField
-            label={localizationTodo(t("battle-card-note-text-label"))}
+            label={tx(
+                "Note Text",
+                "Player-facing message for the battle card note text label interface state.",
+              )}
             value={text}
             onChange={(value) => onTextChange(value.slice(0, 200))}
-            placeholder={localizationTodo(t("battle-card-note-placeholder"))}
-            supportingText={localizationTodo(t("battle-card-note-character-count", { count: text.length }))}
-            error={hasText ? undefined : localizationTodo(t("battle-card-note-error"))}
+            placeholder={tx(
+                "Short reminder",
+                "Player-facing message for the battle card note placeholder interface state.",
+              )}
+            supportingText={txa(
+                "{count}/200 characters",
+                { count: text.length },
+                "Player-facing message for the battle card note character count interface state.",
+              )}
+            error={
+              hasText
+                ? undefined
+                : tx(
+                      "A note needs text.",
+                      "Player-facing message for the battle card note error interface state.",
+                    )
+            }
           />
         </div>
         <div
@@ -82,17 +106,47 @@ export function BattleCardNoteOverlay({
               font: token("--t-caption"),
             }}
           >
-            {t("battle-card-note-expiry-label")}
+            {resolve(tx(
+              "Expiry",
+              "Player-facing message for the battle card note expiry label interface state.",
+            ))}
           </span>
           <Select
-            ariaLabel={localizationTodo(t("battle-card-note-expiry-accessible-name"))}
+            ariaLabel={tx(
+                "Note expiry",
+                "Player-facing message for the battle card note expiry accessible name interface state.",
+              )}
             leadingGlyph={GLYPHS.duration}
             full
             options={[
-              { value: "end-of-next-turn", label: localizationTodo(t("battle-card-note-expiry-next-turn")) },
-              { value: "end-of-this-turn", label: localizationTodo(t("battle-card-note-expiry-this-turn")) },
-              { value: "after-n-turns", label: localizationTodo(t("battle-card-note-expiry-numbered")) },
-              { value: "manual", label: localizationTodo(t("battle-card-note-expiry-manual")) },
+              {
+                value: "end-of-next-turn",
+                label: tx(
+                    "End of Next Turn",
+                    "Player-facing message for the battle card note expiry next turn interface state.",
+                  ),
+              },
+              {
+                value: "end-of-this-turn",
+                label: tx(
+                    "End of This Turn",
+                    "Player-facing message for the battle card note expiry this turn interface state.",
+                  ),
+              },
+              {
+                value: "after-n-turns",
+                label: tx(
+                    "After a Number of Turns",
+                    "Player-facing message for the battle card note expiry numbered interface state.",
+                  ),
+              },
+              {
+                value: "manual",
+                label: tx(
+                    "Manual Dismissal",
+                    "Player-facing message for the battle card note expiry manual interface state.",
+                  ),
+              },
             ]}
             value={expiryOption}
             onChange={(value) =>
@@ -103,10 +157,19 @@ export function BattleCardNoteOverlay({
         {expiryOption === "after-n-turns" ? (
           <div data-battle-note-field="after-n-turns">
             <NumberStepper
-              label={localizationTodo(t("battle-card-note-turns-label"))}
+              label={tx(
+                  "Turns Before Expiry",
+                  "Player-facing message for the battle card note turns label interface state.",
+                )}
               value={afterNTurns}
-              decrementLabel={localizationTodo(t("battle-card-note-fewer-turn"))}
-              incrementLabel={localizationTodo(t("battle-card-note-more-turn"))}
+              decrementLabel={tx(
+                  "Use one fewer turn",
+                  "Player-facing message for the battle card note fewer turn interface state.",
+                )}
+              incrementLabel={tx(
+                  "Use one more turn",
+                  "Player-facing message for the battle card note more turn interface state.",
+                )}
               decrementDisabled={afterNTurns <= minimumTurns}
               incrementDisabled={afterNTurns >= maximumTurns}
               onDecrement={() =>
@@ -126,13 +189,19 @@ export function BattleCardNoteOverlay({
           }}
         >
           <GlassButton
-            label={t("battle-card-note-cancel-action")}
+            label={tx(
+              meaning("card-note-cancel", "Cancel"),
+              "Player-facing message for the battle card note cancel action interface state.",
+            )}
             placement="onGlass"
             testId="battle-note-cancel"
             onPress={onCancel}
           />
           <GlassButton
-            label={t("battle-card-note-add-action")}
+            label={tx(
+              "Add Note",
+              "Player-facing message for the battle card note add action interface state.",
+            )}
             placement="onGlass"
             variant="accent"
             disabled={!hasText}

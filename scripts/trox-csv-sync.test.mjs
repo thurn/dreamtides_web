@@ -1,21 +1,32 @@
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdtempSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { resolveTroxRoot, verifyTroxRevision } from "./trox.mjs";
 
 function runExtract(root, troxRoot = resolveTroxRoot()) {
-  execFileSync("cargo", [
-    "run",
-    "--locked",
-    "--manifest-path",
-    resolve(troxRoot, "Cargo.toml"),
-    "-p",
-    "trox-cli",
-    "--bin",
-    "trox",
-    "--",
+  const executable = resolve(troxRoot, "target/debug/trox");
+  if (!existsSync(executable)) {
+    execFileSync("cargo", [
+      "build",
+      "--locked",
+      "--manifest-path",
+      resolve(troxRoot, "Cargo.toml"),
+      "-p",
+      "trox-cli",
+      "--bin",
+      "trox",
+    ], { cwd: troxRoot, stdio: "pipe" });
+  }
+  execFileSync(executable, [
     "--config",
     resolve(root, "trox.ron"),
     "extract",

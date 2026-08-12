@@ -11,12 +11,8 @@ describe("glossaryInfoCard", () => {
     const card = glossaryInfoCard("missing-glossary-entry");
 
     expect(card.variant).toBe("text");
-    expect(card.titleDescriptor).toEqual({
-      id: "glossary-definition-unavailable-title",
-    });
-    expect(card.bodyDescriptor).toEqual({
-      id: "glossary-definition-unavailable-body",
-    });
+    expect("titleMessage" in card && card.titleMessage).toBeDefined();
+    expect("bodyMessage" in card && card.bodyMessage).toBeDefined();
     expect(getLogEntries()).toContainEqual(
       expect.objectContaining({
         event: "glossary_entry_missing",

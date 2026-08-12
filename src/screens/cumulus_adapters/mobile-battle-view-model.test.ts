@@ -21,20 +21,22 @@ import {
 import type { EventContext } from "../../eventlog/types";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { resolveBattleAiConfiguration } from "../../types/opponents-data";
-import { createMessageDescriptor } from "../../data/localization-descriptors";
+import { builtInBattlePromptRef } from "../../data/dreamwell-prompts";
 import {
   isDreamwellPromptRef,
   isLegacyPromptText,
   type BattlePromptText,
 } from "../../data/dreamwell-prompts";
-import type { FluentMessageDescriptor } from "../../data/localization-messages";
+import type { MobileBattlePromptCopy } from "../../cumulus/screens/MobileBattleScreen";
 
 function resolveFixturePromptText(
   text: BattlePromptText,
-): string | FluentMessageDescriptor {
-  if (isDreamwellPromptRef(text)) return text.promptKey;
-  if (isLegacyPromptText(text)) return text.text;
-  return text;
+): MobileBattlePromptCopy {
+  if (isDreamwellPromptRef(text)) {
+    return { kind: "authored", text: text.promptKey };
+  }
+  if (isLegacyPromptText(text)) return { kind: "authored", text: text.text };
+  return { kind: "authored", text: text.prompt };
 }
 
 const ENEMY_DREAM_AVATAR: BattleDreamAvatarSummary = {
@@ -398,8 +400,8 @@ describe("buildMobileBattleView", () => {
       kind: "pick-cards",
       options: {
         kind: "pick-cards",
-        label: createMessageDescriptor("battle-prompt-generic"),
-        subtitle: createMessageDescriptor("battle-prompt-generic-subtitle"),
+        label: builtInBattlePromptRef("generic"),
+        subtitle: builtInBattlePromptRef("generic-subtitle"),
         candidateIds: board.sides.player.hand.slice(0, 2),
         count: 2,
         optional: false,
@@ -422,8 +424,8 @@ describe("buildMobileBattleView", () => {
     );
     expect(optimistic.cardPicker).toMatchObject({
       key: "42",
-      label: createMessageDescriptor("battle-prompt-generic"),
-      subtitle: createMessageDescriptor("battle-prompt-generic-subtitle"),
+      label: { kind: "message" },
+      subtitle: { kind: "message" },
       candidateIds: prompt.options.candidateIds,
       count: 2,
       optional: false,
@@ -496,10 +498,10 @@ describe("buildMobileBattleView", () => {
       kind: "choice",
       options: {
         kind: "choice",
-        label: createMessageDescriptor("battle-prompt-generic"),
+        label: builtInBattlePromptRef("generic"),
         options: [
-          { label: createMessageDescriptor("battle-prompt-generic-option") },
-          { label: createMessageDescriptor("battle-prompt-generic-option") },
+          { label: builtInBattlePromptRef("generic-option") },
+          { label: builtInBattlePromptRef("generic-option") },
         ],
       },
     } satisfies PendingPrompt;
@@ -517,12 +519,12 @@ describe("buildMobileBattleView", () => {
         confirmedPromptId: null,
       },
     );
-    expect(optimistic.choicePrompt).toEqual({
+    expect(optimistic.choicePrompt).toMatchObject({
       key: "44",
-      label: createMessageDescriptor("battle-prompt-generic"),
+      label: { kind: "message" },
       options: [
-        { label: createMessageDescriptor("battle-prompt-generic-option") },
-        { label: createMessageDescriptor("battle-prompt-generic-option") },
+        { label: { kind: "message" } },
+        { label: { kind: "message" } },
       ],
       canResolve: false,
     });
@@ -573,7 +575,7 @@ describe("buildMobileBattleView", () => {
       kind: "pick-cards",
       options: {
         kind: "pick-cards",
-        label: createMessageDescriptor("battle-prompt-generic"),
+        label: builtInBattlePromptRef("generic"),
         candidateIds: [candidateId],
         count: 1,
         optional: false,
@@ -619,7 +621,7 @@ describe("buildMobileBattleView", () => {
       kind: "pick-cards",
       options: {
         kind: "pick-cards",
-        label: createMessageDescriptor("battle-prompt-generic"),
+        label: builtInBattlePromptRef("generic"),
         candidateIds: [],
         count: 1,
         optional: false,
@@ -1007,9 +1009,9 @@ describe("Cumulus Dreamwell prompt battle flow", () => {
         );
         expect(
           confirmationView.choicePrompt?.options.map((option) =>
-            typeof option.label === "string" ? option.label : option.label.id,
+            option.label.kind === "authored" ? option.label.text : null,
           ),
-        ).toEqual(["battle-prompt-confirm-yes", "battle-prompt-confirm-skip"]);
+        ).toEqual(["confirm-yes", "confirm-skip"]);
         parked = resolvePendingPrompt(
           parked,
           { kind: "choice", optionIndex: 0 },

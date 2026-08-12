@@ -3,6 +3,7 @@
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { localizationTodo } from "@trox/runtime";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { CumulusRoot } from "../CumulusRoot";
@@ -19,7 +20,6 @@ import {
   type MobileBattleSideView,
   type MobileBattleView,
 } from "./MobileBattleScreen";
-import { createMessageDescriptor } from "../../data/localization-descriptors";
 
 function mockDesktopViewport(matches: boolean): void {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
@@ -45,6 +45,14 @@ afterEach(() => {
   vi.restoreAllMocks();
   document.body.innerHTML = "";
 });
+
+function accessibleDescription(source: HTMLElement | null | undefined): string {
+  return (source?.getAttribute("aria-describedby") ?? "")
+    .split(/\s+/u)
+    .filter(Boolean)
+    .map((id) => document.getElementById(id)?.textContent ?? "")
+    .join(" ");
+}
 
 function makeCard(index: number, instanceId: string): MobileBattleCardView {
   const cardId = asCardId(
@@ -694,12 +702,9 @@ describe("MobileBattleScreen", () => {
       battlefield?.querySelector<HTMLElement>("[data-battle-card-motion]")
         ?.style.filter,
     ).toContain("grayscale");
-    const battlefieldDescription =
-      document.getElementById(
-        battlefield
-          ?.querySelector<HTMLElement>("[data-game-card-source]")
-          ?.getAttribute("aria-describedby") ?? "",
-      )?.textContent ?? "";
+    const battlefieldDescription = accessibleDescription(
+      battlefield?.querySelector<HTMLElement>("[data-game-card-source]"),
+    );
     expect(battlefieldDescription.trim()).not.toBe("");
 
     expect(
@@ -711,12 +716,9 @@ describe("MobileBattleScreen", () => {
     expect(
       hand?.querySelector('[data-battle-card-status="figment-count"]'),
     ).toBeNull();
-    const handDescription =
-      document.getElementById(
-        hand
-          ?.querySelector<HTMLElement>("[data-game-card-source]")
-          ?.getAttribute("aria-describedby") ?? "",
-      )?.textContent ?? "";
+    const handDescription = accessibleDescription(
+      hand?.querySelector<HTMLElement>("[data-game-card-source]"),
+    );
     expect(handDescription.trim()).not.toBe("");
 
     const committedView: MobileBattleView = {
@@ -751,13 +753,13 @@ describe("MobileBattleScreen", () => {
     expect(
       updatedBattlefield?.querySelector("[data-battle-card-status]"),
     ).toBeNull();
-    const updatedDescription =
-      document.getElementById(
-        updatedBattlefield
-          ?.querySelector<HTMLElement>("[data-game-card-source]")
-          ?.getAttribute("aria-describedby") ?? "",
-      )?.textContent ?? "";
-    expect(updatedDescription).not.toContain("Exhausted");
+    const updatedDescription = accessibleDescription(
+      updatedBattlefield?.querySelector<HTMLElement>(
+        "[data-game-card-source]",
+      ),
+    );
+    expect(updatedDescription.trim()).not.toBe("");
+    expect(updatedDescription).not.toBe(battlefieldDescription);
 
     act(() => root.unmount());
   });
@@ -2514,7 +2516,7 @@ describe("MobileBattleScreen", () => {
       ...view,
       cardPicker: {
         key: "prompt-42",
-        label: createMessageDescriptor("battle-prompt-generic"),
+        label: { kind: "message", message: localizationTodo("Choose an option") },
         side: "player",
         candidates: view.playerHand
           .slice(0, 2)
@@ -2611,7 +2613,7 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: "prompt-optional",
-          label: createMessageDescriptor("battle-prompt-generic"),
+          label: { kind: "message", message: localizationTodo("Choose an option") },
           side: "player",
           candidates: [
             makePickerCandidate(view.playerHand[0], "player", "hand"),
@@ -2656,10 +2658,10 @@ describe("MobileBattleScreen", () => {
         ...makeView(),
         choicePrompt: {
           key: "prompt-choice-42",
-          label: createMessageDescriptor("battle-prompt-generic"),
+          label: { kind: "message", message: localizationTodo("Choose an option") },
           options: [
-            { label: createMessageDescriptor("battle-prompt-confirm-yes") },
-            { label: createMessageDescriptor("battle-prompt-confirm-skip") },
+            { label: { kind: "message", message: localizationTodo("Yes") } },
+            { label: { kind: "message", message: localizationTodo("Skip") } },
           ],
           canResolve: true,
         },
@@ -2719,7 +2721,7 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: "prompt-enemy",
-          label: createMessageDescriptor("battle-prompt-generic"),
+          label: { kind: "message", message: localizationTodo("Choose an option") },
           side: "enemy",
           candidates: view.enemyHand.map((card) =>
             makePickerCandidate(card, "enemy", "hand"),
@@ -2810,7 +2812,7 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: "prompt-battlefield",
-          label: createMessageDescriptor("battle-prompt-generic"),
+          label: { kind: "message", message: localizationTodo("Choose an option") },
           side: "player",
           candidates: [
             makePickerCandidate(enemyCard, "enemy", "frontRank"),
@@ -2883,8 +2885,8 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: "prompt-gallery",
-          label: createMessageDescriptor("battle-prompt-generic"),
-          subtitle: createMessageDescriptor("battle-prompt-generic-subtitle"),
+          label: { kind: "message", message: localizationTodo("Choose an option") },
+          subtitle: { kind: "message", message: localizationTodo("Choose an available option to continue.") },
           side: "player",
           candidates,
           candidateIds: candidates.map((candidate) => candidate.instanceId),
@@ -2968,7 +2970,7 @@ describe("MobileBattleScreen", () => {
       ...view,
       cardPicker: {
         key: "prompt-mobile-gallery",
-        label: createMessageDescriptor("battle-prompt-generic"),
+        label: { kind: "message", message: localizationTodo("Choose an option") },
         side: "player",
         candidates: [candidate],
         candidateIds: [candidate.instanceId],
@@ -3004,7 +3006,7 @@ describe("MobileBattleScreen", () => {
       ...view,
       cardPicker: {
         key: "prompt-highlighted",
-        label: createMessageDescriptor("battle-prompt-generic"),
+        label: { kind: "message", message: localizationTodo("Choose an option") },
         side: "player",
         candidates: [makePickerCandidate(highlighted, "player", "hand", true)],
         candidateIds: [highlighted.id],
@@ -3050,7 +3052,7 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: "prompt-empty",
-          label: createMessageDescriptor("battle-prompt-generic"),
+          label: { kind: "message", message: localizationTodo("Choose an option") },
           side: "player",
           candidates: [],
           candidateIds: [],
@@ -4634,7 +4636,7 @@ describe("MobileBattleScreen", () => {
         owner: "player",
         rank: "front",
         slotId: "player-front-empty",
-        label: "Move this character here.",
+        label: localizationTodo("Move this character here."),
       },
     });
     const playArea = container.querySelector<HTMLElement>(

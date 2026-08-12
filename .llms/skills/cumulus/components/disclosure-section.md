@@ -18,8 +18,10 @@ Set placement to onGlass inside GlassPanel, GlassDialog, or DeveloperRail so the
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `title` | `LocalizedString` | yes | — | Localized heading shown in the disclosure trigger. |
+| `title` | `LocalizedString` | no | — | Localized heading shown in the disclosure trigger. |
+| `authoredTitle` | `string` | no | — | Heading supplied by canonical authored or developer-only copy. |
 | `summary` | `LocalizedString` | no | — | Optional localized context shown beside the heading. |
+| `authoredSummary` | `string` | no | — | Context supplied by canonical authored or developer-only copy. |
 | `expanded` | `boolean` | yes | — | Controlled open state. |
 | `onExpandedChange` | `(expanded: boolean) => void` | yes | — | Reports the requested open state. |
 | `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the section. `onMedia` gives the section its own liquid glass boundary; `onGlass` uses a lighter tonal lens inside an existing glass panel or dialog. Defaults to `onMedia`. |

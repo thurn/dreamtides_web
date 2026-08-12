@@ -22,7 +22,7 @@ The panel preserves the chrome-free Dreamsign material and shared InfoCard revea
 | `entries` | `readonly DreamsignGalleryEntryView[]` | yes | — | Dreamsign offers in persistent slot order. |
 | `endAction` | `DreamsignGalleryActionView` | yes | — | Bare-glyph action shown after the offers. |
 | `size` | `"compact" \| "standard"` | no | `standard` | Compact uses the two-column phone shelf; standard uses the four-column desktop shelf. |
-| `closeLabel` | `string` | yes | — | Accessible label for the close control. |
+| `closeLabel` | `LocalizedString` | yes | — | Accessible label for the close control. |
 | `onClose` | `() => void` | yes | — | Fires when the close disc is activated. |
 | `onEntryPress` | `(entryId: string) => void` | yes | — | Fires with the UUID-derived entry id when an available Dreamsign is activated. |
 | `onEndActionPress` | `() => void` | yes | — | Fires when the appended action is activated. |

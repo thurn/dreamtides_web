@@ -8,6 +8,7 @@ import { ErrorBoundary } from "./ErrorBoundary";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { logEvent, resetLog, getLogEntries } from "../logging";
+import { CumulusRoot } from "../cumulus/CumulusRoot";
 
 vi.mock("../logging", async () => {
   const actual = await vi.importActual<typeof import("../logging")>(
@@ -32,7 +33,7 @@ function mount(element: ReactElement): {
   document.body.append(container);
   const root = createRoot(container);
   act(() => {
-    root.render(element);
+    root.render(<CumulusRoot>{element}</CumulusRoot>);
   });
   return { container, root };
 }
@@ -171,9 +172,11 @@ describe("ErrorBoundary", () => {
     shouldThrow = false;
     act(() => {
       root.render(
-        <ErrorBoundary scope="per-screen" resetKey="key-B">
-          <ConditionallyBomb />
-        </ErrorBoundary>,
+        <CumulusRoot>
+          <ErrorBoundary scope="per-screen" resetKey="key-B">
+            <ConditionallyBomb />
+          </ErrorBoundary>
+        </CumulusRoot>,
       );
     });
 

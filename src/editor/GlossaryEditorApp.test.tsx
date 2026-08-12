@@ -5,6 +5,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { GlossaryCatalogEntry } from "../data/glossary";
 import GlossaryEditorApp from "./GlossaryEditorApp";
+import { CumulusRoot } from "../cumulus/CumulusRoot";
 
 const ENTRIES: readonly GlossaryCatalogEntry[] = [
   {
@@ -81,10 +82,12 @@ describe("GlossaryEditorApp", () => {
 
     await act(async () => {
       root.render(
-        <GlossaryEditorApp
-          loadEntries={loadEntries}
-          saveEntry={saveEntry}
-        />,
+        <CumulusRoot>
+          <GlossaryEditorApp
+            loadEntries={loadEntries}
+            saveEntry={saveEntry}
+          />
+        </CumulusRoot>,
       );
       await Promise.resolve();
     });
@@ -145,10 +148,12 @@ describe("GlossaryEditorApp", () => {
 
     await act(async () => {
       root.render(
-        <GlossaryEditorApp
-          loadEntries={loadEntries}
-          saveEntry={saveEntry}
-        />,
+        <CumulusRoot>
+          <GlossaryEditorApp
+            loadEntries={loadEntries}
+            saveEntry={saveEntry}
+          />
+        </CumulusRoot>,
       );
       await Promise.resolve();
     });
@@ -187,10 +192,12 @@ describe("GlossaryEditorApp", () => {
 
     await act(async () => {
       root.render(
-        <GlossaryEditorApp
-          loadEntries={vi.fn().mockResolvedValue([definitionOnlyEntry])}
-          saveEntry={vi.fn()}
-        />,
+        <CumulusRoot>
+          <GlossaryEditorApp
+            loadEntries={vi.fn().mockResolvedValue([definitionOnlyEntry])}
+            saveEntry={vi.fn()}
+          />
+        </CumulusRoot>,
       );
       await Promise.resolve();
     });
@@ -223,10 +230,12 @@ describe("GlossaryEditorApp", () => {
 
     await act(async () => {
       root.render(
-        <GlossaryEditorApp
-          loadEntries={vi.fn().mockResolvedValue(ENTRIES)}
-          saveEntry={saveEntry}
-        />,
+        <CumulusRoot>
+          <GlossaryEditorApp
+            loadEntries={vi.fn().mockResolvedValue(ENTRIES)}
+            saveEntry={saveEntry}
+          />
+        </CumulusRoot>,
       );
       await Promise.resolve();
     });

@@ -2,7 +2,7 @@
 // Dreamsigns. It keeps the Dream Market's header and captions while rendering
 // both the collectible art and the restock glyph without object backgrounds.
 
-import { localizationTodo } from "@trox/runtime";
+import type { LocalizedString } from "@trox/runtime";
 import { useRef, type ReactElement } from "react";
 import type { Dreamsign as DreamsignData } from "../../../types/journey";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
@@ -57,7 +57,7 @@ export interface DreamsignGalleryPanelProps {
   /** Compact uses the two-column phone shelf; standard uses the four-column desktop shelf. */
   size?: "compact" | "standard";
   /** Accessible label for the close control. */
-  closeLabel: string;
+  closeLabel: LocalizedString;
   /** Fires when the close disc is activated. */
   onClose: () => void;
   /** Fires with the UUID-derived entry id when an available Dreamsign is activated. */
@@ -230,7 +230,7 @@ export function DreamsignGalleryPanel({
         </h2>
         <IconButton
           glyph={GLYPHS.close}
-          label={localizationTodo(closeLabel)}
+          label={closeLabel}
           placement="onGlass"
           onPress={onClose}
           testId="cumulus-dreamsign-bazaar-leave"

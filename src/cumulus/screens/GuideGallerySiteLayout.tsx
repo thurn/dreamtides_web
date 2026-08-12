@@ -19,6 +19,7 @@ import {
   GUIDE_GALLERY_MOBILE_GUIDE_WIDTH,
 } from "./guide-gallery-geometry";
 import { useIsDesktop } from "./use-is-desktop";
+import type { LocalizedString } from "@trox/runtime";
 
 /** The resident guide displayed by a character-led site. */
 export interface GuideGalleryGuideView {
@@ -27,7 +28,9 @@ export interface GuideGalleryGuideView {
   /** Display name shown in the speech bubble. */
   name: string;
   /** Dialog line shown in the speech bubble. */
-  line: string;
+  line?: string;
+  /** Complete localized fallback line supplied by application code. */
+  lineMessage?: LocalizedString;
   /** Transparent character render. */
   art: ArtRef;
 }
@@ -422,7 +425,9 @@ function DesktopGuideScene({
         >
           <SpeechBubble
             speakerName={guide.name}
-            text={guide.line}
+            {...(guide.lineMessage === undefined
+              ? { text: guide.line }
+              : { textMessage: guide.lineMessage })}
             testId={speechBubbleTestId}
           />
         </div>
@@ -510,7 +515,9 @@ function MobileGuideBand({
         >
           <SpeechBubble
             speakerName={guide.name}
-            text={guide.line}
+            {...(guide.lineMessage === undefined
+              ? { text: guide.line }
+              : { textMessage: guide.lineMessage })}
             testId={speechBubbleTestId}
           />
         </div>

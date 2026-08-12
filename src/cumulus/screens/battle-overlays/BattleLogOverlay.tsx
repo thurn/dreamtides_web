@@ -1,4 +1,3 @@
-import { localizationTodo } from "@trox/runtime";
 import { useEffect, useMemo, useRef, useState, type ReactElement } from "react";
 import { GlassButton } from "../../components/controls/GlassButton";
 import { DisclosureSection } from "../../components/controls/DisclosureSection";
@@ -87,9 +86,9 @@ export function BattleLogOverlay({
 
   return (
     <GlassDialog
-      title={localizationTodo("Battle Log")}
-      subtitle={localizationTodo("Folded battle history and raw diagnostic events.")}
-      closeLabel={localizationTodo("Close battle log")}
+      authoredTitle={"Battle Log"}
+      authoredSubtitle={"Folded battle history and raw diagnostic events."}
+      authoredCloseLabel={"Close battle log"}
       onClose={onClose}
       desktopCenterTarget="battlefield"
     >
@@ -109,7 +108,7 @@ export function BattleLogOverlay({
           {HISTORY_KINDS.map((kind) => (
             <GlassButton
               key={kind}
-              label={kind}
+              authoredLabel={kind}
               placement="onGlass"
               variant={enabledKinds.has(kind) ? "accent" : "default"}
               testId={`battle-log-filter-${kind}`}
@@ -142,8 +141,8 @@ export function BattleLogOverlay({
               return (
                 <DisclosureSection
                   key={turnKey}
-                  title={localizationTodo(`Turn ${turnKey}`)}
-                  summary={localizationTodo(`${String(turn.entries.length)} entries`)}
+                  authoredTitle={`Turn ${turnKey}`}
+                  authoredSummary={`${String(turn.entries.length)} entries`}
                   expanded={isTurnExpanded}
                   placement="onGlass"
                   onExpandedChange={(expanded) =>
@@ -166,8 +165,8 @@ export function BattleLogOverlay({
                       return (
                         <DisclosureSection
                           key={entry.id}
-                          title={localizationTodo(entry.title)}
-                          summary={localizationTodo(entry.kind)}
+                          authoredTitle={entry.title}
+                          authoredSummary={entry.kind}
                           expanded={isExpanded}
                           placement="onGlass"
                           onExpandedChange={(expanded) =>
@@ -217,8 +216,8 @@ export function BattleLogOverlay({
             })
           )}
           <DisclosureSection
-            title={localizationTodo("Raw Events")}
-            summary={localizationTodo(`${String(rawEntries.length)} captured`)}
+            authoredTitle={"Raw Events"}
+            authoredSummary={`${String(rawEntries.length)} captured`}
             expanded={expandedRaw}
             placement="onGlass"
             onExpandedChange={setExpandedRaw}

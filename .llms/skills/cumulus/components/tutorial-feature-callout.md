@@ -18,7 +18,7 @@ CardFeatureCallout provides the card-language labels, resource colors, and popov
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `feature` | `TutorialFeatureCalloutKind` = `"spark" \| "cost" \| "cardType" \| "ability"` | yes | — | Semantic card region named by this callout. |
+| `feature` | `TutorialFeatureCalloutKind` = `"spark" \| "cost" \| "ability" \| "cardType"` | yes | — | Semantic card region named by this callout. |
 | `testId` | `string` | no | — | Optional stable test id for product-screen QA. |
 
 ## Usage

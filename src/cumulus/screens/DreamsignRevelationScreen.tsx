@@ -3,7 +3,7 @@
 // side on desktop, and the dreamsign choices sit opposite. Persistent journey
 // chrome is supplied by the router-owned wrapper.
 
-import { useEffect } from "react";
+import {useEffect } from "react";
 import { motion } from "framer-motion";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
@@ -22,7 +22,7 @@ import {
 } from "./DreamsignReplacementDialog";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
-import { useMessages } from "../hooks/use-messages";
+import { meaning, tx } from "@trox/runtime";
 
 /** The guide who speaks over the Revelation offer. */
 export interface DreamsignRevelationGuideView {
@@ -96,7 +96,6 @@ export function DreamsignRevelationScreen({
   claimedIndex,
   onTutorialShown,
 }: DreamsignRevelationScreenProps) {
-  const t = useMessages();
   const isDesktop = useIsDesktop();
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const guideUrl = resolveArtRef(view.guide.art);
@@ -170,8 +169,14 @@ export function DreamsignRevelationScreen({
           view={view.purge}
           onReplace={onPurge}
           onCancel={onCancelPurge}
-          cancelLabel={t("dreamsign-revelation-cancel-action")}
-          closeLabel={t("dreamsign-revelation-cancel-replacement-action")}
+          cancelLabel={tx(
+            meaning("dreamsign-revelation-cancel", "Cancel"),
+            "Player-facing message for the dreamsign revelation cancel action interface state.",
+          )}
+          closeLabel={tx(
+            "Cancel replacement",
+            "Player-facing message for the dreamsign revelation cancel replacement action interface state.",
+          )}
         />
       )}
     </div>
@@ -418,7 +423,6 @@ function OfferStack({
   readonly onSkip: () => void;
   readonly desktop?: boolean;
 }) {
-  const t = useMessages();
   if (!view.offerReady) {
     return <StatusLine text={view.presentation.loading} />;
   }
@@ -494,7 +498,10 @@ function OfferStack({
         }
       >
         <GlassButton
-          label={t("site-decline-offer")}
+          label={tx(
+            "Decline Offer",
+            "Command that declines the current site offer and leaves without taking its reward.",
+          )}
           onPress={onSkip}
           disabled={disabled}
         />

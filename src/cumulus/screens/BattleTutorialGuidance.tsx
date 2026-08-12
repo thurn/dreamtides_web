@@ -18,7 +18,8 @@ import { token } from "../primitives/tokens";
 import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
 import { useIsDesktop } from "./use-is-desktop";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
-import { useMessages } from "../hooks/use-messages";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
+import { tx, txa } from "@trox/runtime";
 
 export type BattleTutorialGuidanceSourceView =
   | {
@@ -64,19 +65,18 @@ export interface BattleTutorialGuidanceProps {
   readonly onDurationComplete: () => void;
 }
 
-const GUIDANCE_OBJECT_TRAVEL_MS =
-  motionTimeSeconds("--dur-slow") * 1_000;
+const GUIDANCE_OBJECT_TRAVEL_MS = motionTimeSeconds("--dur-slow") * 1_000;
 function battleCardSurface(
   battleCardId: string,
   journey: HTMLElement,
 ): HTMLElement | null {
-  return [
-    ...document.querySelectorAll<HTMLElement>("[data-battle-card-id]"),
-  ].find(
-    (candidate) =>
-      candidate.dataset.battleCardId === battleCardId &&
-      !journey.contains(candidate),
-  ) ?? null;
+  return (
+    [...document.querySelectorAll<HTMLElement>("[data-battle-card-id]")].find(
+      (candidate) =>
+        candidate.dataset.battleCardId === battleCardId &&
+        !journey.contains(candidate),
+    ) ?? null
+  );
 }
 
 function journeyCardSurface(
@@ -85,7 +85,7 @@ function journeyCardSurface(
 ): HTMLElement | null {
   const candidates = [
     ...document.querySelectorAll<HTMLElement>(
-      '[data-game-card-source][data-card-id]',
+      "[data-game-card-source][data-card-id]",
     ),
   ].filter(
     (candidate) =>
@@ -109,13 +109,15 @@ function dreamwellSurface(
   const selector = destination
     ? "[data-battle-dreamwell-layer]"
     : "[data-battle-zone]";
-  return [...document.querySelectorAll<HTMLElement>(selector)].find(
-    (candidate) =>
-      !journey.contains(candidate) &&
-      (destination
-        ? candidate.dataset.battleDreamwellSide === side
-        : candidate.dataset.battleZone === `${side}-status`),
-  ) ?? null;
+  return (
+    [...document.querySelectorAll<HTMLElement>(selector)].find(
+      (candidate) =>
+        !journey.contains(candidate) &&
+        (destination
+          ? candidate.dataset.battleDreamwellSide === side
+          : candidate.dataset.battleZone === `${side}-status`),
+    ) ?? null
+  );
 }
 
 function sourceSurface(
@@ -157,10 +159,7 @@ function destinationSurface(
   }
 }
 
-function transformBetween(
-  from: DOMRect,
-  to: DOMRect,
-): string | null {
+function transformBetween(from: DOMRect, to: DOMRect): string | null {
   if (
     from.width === 0 ||
     from.height === 0 ||
@@ -184,7 +183,7 @@ export function BattleTutorialGuidance({
   onDismiss,
   onDurationComplete,
 }: BattleTutorialGuidanceProps): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const desktop = useIsDesktop();
   const reduceMotion = useReducedMotion() ?? false;
   const [retainedView, setRetainedView] =
@@ -212,10 +211,7 @@ export function BattleTutorialGuidance({
   );
 
   useEffect(() => {
-    if (
-      duration === null ||
-      view?.source.kind === "journey-card"
-    ) {
+    if (duration === null || view?.source.kind === "journey-card") {
       return undefined;
     }
     const timeout = window.setTimeout(
@@ -291,8 +287,7 @@ export function BattleTutorialGuidance({
       ? sourceSurface(journeyView, journey)
       : destinationSurface(journeyView, journey);
     const hideSurface =
-      surface !== null &&
-      (journeyView.source.kind !== "dreamwell" || !active);
+      surface !== null && (journeyView.source.kind !== "dreamwell" || !active);
     if (hideSurface) {
       hiddenSurfaceRef.current = {
         element: surface,
@@ -314,9 +309,7 @@ export function BattleTutorialGuidance({
     const objectBox = object.getBoundingClientRect();
     const surfaceBox = surface?.getBoundingClientRect();
     const transform =
-      surfaceBox === undefined
-        ? null
-        : transformBetween(surfaceBox, objectBox);
+      surfaceBox === undefined ? null : transformBetween(surfaceBox, objectBox);
     const finish = (): void => {
       if (active) {
         journey.dataset.tutorialGuidanceJourney = "dwelling";
@@ -382,11 +375,7 @@ export function BattleTutorialGuidance({
       destinationAnimationRef.current = null;
       if (animationRef.current === animation) animationRef.current = null;
     };
-  }, [
-    active,
-    presentationId,
-    reduceMotion,
-  ]);
+  }, [active, presentationId, reduceMotion]);
 
   useLayoutEffect(
     () => () => {
@@ -435,7 +424,7 @@ export function BattleTutorialGuidance({
   return (
     <section
       ref={journeyRef}
-      aria-label={t("tutorial-region-battle")}
+      aria-label={resolve(tx("Battle tutorial", "Tutorial region accessible names."))}
       aria-live={active ? "polite" : "off"}
       aria-hidden={active ? undefined : "true"}
       data-battle-tutorial-guidance=""
@@ -474,12 +463,11 @@ export function BattleTutorialGuidance({
               : desktop
                 ? "min(240px, 45vw)"
                 : "min(45vw, 34dvh)",
-          maxHeight:
-            desktop
-              ? undefined
-              : renderedView.source.kind === "dreamwell"
-                ? "40dvh"
-                : "48dvh",
+          maxHeight: desktop
+            ? undefined
+            : renderedView.source.kind === "dreamwell"
+              ? "40dvh"
+              : "48dvh",
           flex: "0 1 auto",
           transformOrigin: "50% 50%",
         }}
@@ -515,9 +503,11 @@ export function BattleTutorialGuidance({
           role="button"
           tabIndex={active ? 0 : -1}
           disabled={!active}
-          aria-label={t("battle-tutorial-dismiss-action", {
-            speakerName: renderedView.dialogue.speakerName,
-          })}
+          ariaLabelMessage={txa(
+            "Dismiss {speaker_name} tutorial",
+            { speaker_name: renderedView.dialogue.speakerName },
+            "Accessible command that dismisses one tutorial dialogue. speaker_name is the displayed name of the character speaking and has unknown grammatical gender.",
+          )}
           data-testid="battle-tutorial-dismiss"
           hoverFeedback="stationary"
           pressFeedback="stationary"

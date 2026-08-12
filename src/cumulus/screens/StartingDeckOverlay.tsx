@@ -21,7 +21,7 @@
 import type { ReactElement } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { DeckGalleryOverlay } from "./DeckGalleryOverlay";
-import { useMessages } from "../hooks/use-messages";
+import { tx } from "@trox/runtime";
 
 /**
  * One starting-deck card, resolved to the card the player actually holds
@@ -62,15 +62,26 @@ export function StartingDeckOverlay({
   view,
   onClose,
 }: StartingDeckOverlayProps): ReactElement {
-  const t = useMessages();
   return (
     <DeckGalleryOverlay
       isOpen={isOpen}
-      title={t("starting-deck-title")}
-      subtitle={t("starting-deck-subtitle")}
+      title={tx(
+        "Starting Deck",
+        "Copy for the modal that introduces the player's initial deck.",
+      )}
+      subtitle={tx(
+        "These are the cards you begin the journey with.",
+        "Player-facing message for the starting deck subtitle interface state.",
+      )}
       cards={view.cards}
-      emptyLabel={t("starting-deck-empty-state")}
-      actionLabel={t("starting-deck-begin-action")}
+      emptyLabel={tx(
+        "No cards in starting deck.",
+        "Player-facing message for the starting deck empty state interface state.",
+      )}
+      actionLabel={tx(
+        "Begin Journey",
+        "Player-facing message for the starting deck begin action interface state.",
+      )}
       onClose={onClose}
     />
   );

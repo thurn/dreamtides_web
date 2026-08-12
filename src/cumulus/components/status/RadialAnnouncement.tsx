@@ -2,7 +2,7 @@
 // scene announcements, card scoring, merge targets, hand totals, and victory
 // moments.
 
-import { useState, type ReactElement } from "react";
+import {useState, type ReactElement } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { renderRulesSymbolsInline } from "../card/RulesText";
 import { StandaloneGlyph } from "../controls/StandaloneGlyph";
@@ -11,7 +11,15 @@ import { InlineGlyph } from "../typography/InlineGlyph";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { motionTimeSeconds } from "../../primitives/motion-time";
 import { token } from "../../primitives/tokens";
-import { useMessages } from "../../hooks/use-messages";
+import { meaning,
+  txa,
+  plural,
+  one,
+  other,
+  tx,
+  type LocalizedString,
+} from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export const RADIAL_ANNOUNCEMENT_DURATION_MS = 2_100;
 export const RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS = 3_360;
@@ -55,12 +63,10 @@ const VICTORY_STAR_HIGH_SCALE = 1.08;
 const VICTORY_INTRO_DURATION = `calc(${token("--dur-slow")} * 5)`;
 const VICTORY_TITLE_HOLD_DURATION = "3s";
 const VICTORY_TITLE_MOVE_DURATION = `calc(${token("--dur-slow")} * 3)`;
-export const RADIAL_ANNOUNCEMENT_VICTORY_ACTION_DELAY =
-  `calc(${VICTORY_TITLE_HOLD_DURATION} + ${token("--dur-slow")} * 3)`;
+export const RADIAL_ANNOUNCEMENT_VICTORY_ACTION_DELAY = `calc(${VICTORY_TITLE_HOLD_DURATION} + ${token("--dur-slow")} * 3)`;
 const VICTORY_TITLE_FADE_DURATION = `calc(${token("--dur-slow")} * 0.7)`;
 
-const RADIAL_DISC_BACKGROUND =
-  `radial-gradient(circle at 38% 28%, ${token("--surface-raised")} 0%, ${token("--surface-card")} 56%, ${token("--bg-sunken")} 100%)`;
+const RADIAL_DISC_BACKGROUND = `radial-gradient(circle at 38% 28%, ${token("--surface-raised")} 0%, ${token("--surface-card")} 56%, ${token("--bg-sunken")} 100%)`;
 
 const RADIAL_ANNOUNCEMENT_CSS = `
   @keyframes radial-announcement-disc {
@@ -194,16 +200,17 @@ interface RadialAnnouncementCommonProps {
 }
 
 /** A transient whole-scene announcement. */
-export interface RadialAnnouncementSceneProps
-  extends RadialAnnouncementCommonProps {
+export interface RadialAnnouncementSceneProps extends RadialAnnouncementCommonProps {
   /** Named radial presentation. Omit for the ordinary scene announcement. */
   variant?: "announcement";
   /** Primary announcement copy. */
-  headline: string;
+  headline: LocalizedString;
   /** Optional canonical glyph rendered in place of the headline copy. */
   headlineGlyph?: Glyph;
   /** Optional supporting copy beneath the headline. */
-  detail?: string;
+  detail?: LocalizedString;
+  /** Optional supporting copy supplied by canonical authored content. */
+  authoredDetail?: string;
   /** Optional gained Essence amount, rendered with the canonical currency glyph. */
   essenceGained?: number;
   /** Semantic orbit and ripple color. Defaults to accent. */
@@ -215,8 +222,7 @@ export interface RadialAnnouncementSceneProps
 }
 
 /** A transient points announcement attached to its scoring card. */
-export interface RadialAnnouncementCardScoreProps
-  extends RadialAnnouncementCommonProps {
+export interface RadialAnnouncementCardScoreProps extends RadialAnnouncementCommonProps {
   /** Selects the card-attached scoring presentation. */
   variant: "card-score";
   /** Points scored by the attached card. */
@@ -224,8 +230,7 @@ export interface RadialAnnouncementCardScoreProps
 }
 
 /** A continuously animated available merge target. */
-export interface RadialAnnouncementAvailableTargetProps
-  extends RadialAnnouncementCommonProps {
+export interface RadialAnnouncementAvailableTargetProps extends RadialAnnouncementCommonProps {
   /** Selects the card-attached merge-target presentation. */
   variant: "merge-target";
   /** Available targets use the accent treatment. */
@@ -235,8 +240,7 @@ export interface RadialAnnouncementAvailableTargetProps
 }
 
 /** A continuously animated blocked merge target. */
-export interface RadialAnnouncementBlockedTargetProps
-  extends RadialAnnouncementCommonProps {
+export interface RadialAnnouncementBlockedTargetProps extends RadialAnnouncementCommonProps {
   /** Selects the card-attached merge-target presentation. */
   variant: "merge-target";
   /** Blocked targets use the danger treatment. */
@@ -246,17 +250,15 @@ export interface RadialAnnouncementBlockedTargetProps
 }
 
 /** A persistent terminal victory presentation. */
-export interface RadialAnnouncementVictoryProps
-  extends RadialAnnouncementCommonProps {
+export interface RadialAnnouncementVictoryProps extends RadialAnnouncementCommonProps {
   /** Selects the persistent victory presentation. */
   variant: "victory";
   /** Victory heading moved above the radial core after its opening hold. */
-  headline: string;
+  headline: LocalizedString;
 }
 
 /** A persistent playing-hand total with a continuously orbiting rim. */
-export interface RadialAnnouncementHandTotalProps
-  extends RadialAnnouncementCommonProps {
+export interface RadialAnnouncementHandTotalProps extends RadialAnnouncementCommonProps {
   /** Selects the compact playing-hand total presentation. */
   variant: "hand-total";
   /** Numeric value shown at the end of the hand. */
@@ -294,7 +296,9 @@ function toneColor(tone: RadialAnnouncementTone): string {
  * scene announcements, card scoring, merge targets, hand totals, and terminal
  * victory.
  */
-export function RadialAnnouncement(props: RadialAnnouncementProps): ReactElement;
+export function RadialAnnouncement(
+  props: RadialAnnouncementProps,
+): ReactElement;
 export function RadialAnnouncement({
   variant = "announcement",
   tone = "accent",
@@ -379,16 +383,25 @@ function HandTotalAnnouncement({
   announcementId,
 }: RadialAnnouncementHandTotalProps): ReactElement {
   const reduceMotion = useReducedMotion() === true;
-  const t = useMessages();
+  const resolve = useLocalizer();
   const diameter = size === "mini" ? 52 : 60;
   return (
     <motion.div
       role="status"
       aria-live="polite"
-      aria-label={t("radial-hand-total-accessible-name", {
-        owner: owner === "dealer" ? "Dealer" : "Player",
-        total,
-      })}
+      aria-label={resolve(
+        owner === "dealer"
+          ? txa(
+              "Dealer total {total}",
+              { total },
+              "Accessible name for a Gamble dealer's final hand total. total is the non-negative numeric hand value.",
+            )
+          : txa(
+              "Player total {total}",
+              { total },
+              "Accessible name for the local player's final Gamble hand total. total is the non-negative numeric hand value.",
+            ),
+      )}
       data-radial-announcement={announcementId ?? ""}
       data-radial-announcement-variant="hand-total"
       data-radial-announcement-owner={owner}
@@ -444,6 +457,7 @@ function SceneAnnouncement({
   headline,
   headlineGlyph,
   detail,
+  authoredDetail,
   essenceGained,
   tone = "accent",
   size = "standard",
@@ -456,6 +470,7 @@ function SceneAnnouncement({
       headline={headline}
       headlineGlyph={headlineGlyph}
       detail={detail}
+      authoredDetail={authoredDetail}
       essenceGained={essenceGained}
       tone={tone}
       size={size}
@@ -468,14 +483,18 @@ function CardScoreAnnouncement({
   points,
   announcementId,
 }: RadialAnnouncementCardScoreProps): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const reduceMotion = useReducedMotion();
   const animationDuration = reduceMotion ? 0 : CARD_SCORE_ANIMATION_SECONDS;
   return (
     <div
       role="status"
       aria-live="polite"
-      aria-label={t("battle-point-count", { count: points })}
+      aria-label={resolve(txa(
+        plural(points, [one("{count} Point"), other("{count} Points")]),
+        { count: points },
+        "Accessible label for a battle score announcement. count is the non-negative number of points shown by the announcement and can be zero.",
+      ))}
       data-radial-announcement={announcementId ?? ""}
       data-radial-announcement-variant="card-score"
       data-radial-announcement-tone="accent"
@@ -575,20 +594,28 @@ function TransientAnnouncement({
   headline,
   headlineGlyph,
   detail,
+  authoredDetail,
   essenceGained,
   tone,
   size,
   duration,
 }: {
   readonly announcementId?: string;
-  readonly headline: string;
+  readonly headline: LocalizedString;
   readonly headlineGlyph?: Glyph;
-  readonly detail?: string;
+  readonly detail?: LocalizedString;
+  readonly authoredDetail?: string;
   readonly essenceGained?: number;
   readonly tone: RadialAnnouncementTone;
   readonly size: RadialAnnouncementSize;
   readonly duration: RadialAnnouncementDuration;
 }): ReactElement {
+  const resolve = useLocalizer();
+  if (detail !== undefined && authoredDetail !== undefined) {
+    throw new Error(
+      "RadialAnnouncement accepts either detail or authoredDetail, not both.",
+    );
+  }
   const accent = toneColor(tone);
   const animationDuration = `calc(${token("--dur-slow")} * ${duration === "extended" ? "8" : "5"})`;
   const rippleAnimation =
@@ -656,9 +683,7 @@ function TransientAnnouncement({
           style={{
             position: "absolute",
             inset: `calc(-1 * ${token(
-              size === "mini" || size === "wager"
-                ? "--space-xxs"
-                : "--space-s",
+              size === "mini" || size === "wager" ? "--space-xxs" : "--space-s",
             )})`,
             border: `${token("--space-xxs")} solid ${accent}`,
             borderRadius: token("--radius-pill"),
@@ -685,17 +710,17 @@ function TransientAnnouncement({
             style={{
               font: token(
                 headlineGlyph === undefined
-                    ? size === "mini"
-                      ? "--t-title-sm"
-                      : "--t-title"
-                    : size === "mini"
-                      ? "--t-title"
-                      : "--t-display",
+                  ? size === "mini"
+                    ? "--t-title-sm"
+                    : "--t-title"
+                  : size === "mini"
+                    ? "--t-title"
+                    : "--t-display",
               ),
             }}
           >
             {headlineGlyph === undefined ? (
-              renderRulesSymbolsInline(headline)
+              renderRulesSymbolsInline(resolve(headline))
             ) : (
               <InlineGlyph glyph={headlineGlyph} label={headline} />
             )}
@@ -710,7 +735,7 @@ function TransientAnnouncement({
               +<EssenceValue amount={essenceGained} tone="inherit" />
             </span>
           )}
-          {detail !== undefined && (
+          {detail !== undefined || authoredDetail !== undefined ? (
             <span
               data-radial-announcement-detail=""
               style={{
@@ -719,9 +744,11 @@ function TransientAnnouncement({
                 color: token("--text-secondary"),
               }}
             >
-              {renderRulesSymbolsInline(detail)}
+              {renderRulesSymbolsInline(
+                detail === undefined ? authoredDetail ?? "" : resolve(detail),
+              )}
             </span>
-          )}
+          ) : null}
         </div>
       </div>
     </div>
@@ -733,7 +760,7 @@ function MergeTargetAnnouncement(
     | RadialAnnouncementAvailableTargetProps
     | RadialAnnouncementBlockedTargetProps,
 ): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const blocked = props.status === "blocked";
   const tone: RadialAnnouncementTone = blocked ? "danger" : "accent";
   const orbitColor = blocked ? token("--danger") : token("--border-accent");
@@ -800,16 +827,26 @@ function MergeTargetAnnouncement(
           }}
         >
           <span data-radial-announcement-headline="">
-            {t("battle-figment-merge-target", {
-              status: blocked ? "blocked" : "available",
-            })}
+            {resolve(
+              blocked
+                ? tx(
+                    "Cannot Merge",
+                    "Headline inside a blocked Figment merge target when exhaustion prevents the merge.",
+                  )
+                : tx(
+                    meaning("figment-merge-headline", "Merge"),
+                    "Headline inside an available Figment merge target.",
+                  ),
+            )}
           </span>
           {!blocked ? (
             <span data-radial-announcement-detail="">
               {renderRulesSymbolsInline(
-                t("battle-figment-merge-spark-detail", {
-                  sparkCount: props.addedSpark,
-                }),
+                resolve(txa(
+                  "+{spark_count} ✦",
+                  { spark_count: props.addedSpark },
+                  "Compact Spark detail inside an available Figment merge target. spark_count is the non-negative Spark that the destination Figment will gain; the star is the canonical Spark symbol and is converted to the shared accessible glyph.",
+                )),
               )}
             </span>
           ) : null}
@@ -824,6 +861,7 @@ function VictoryAnnouncement({
   announcementId,
 }: RadialAnnouncementVictoryProps): ReactElement {
   const [titleSettled, setTitleSettled] = useState(false);
+  const resolve = useLocalizer();
   return (
     <div
       data-radial-announcement={announcementId ?? ""}
@@ -871,7 +909,7 @@ function VictoryAnnouncement({
             animation: `radial-announcement-victory-title-fade ${VICTORY_TITLE_FADE_DURATION} ${token("--ease-out")} both`,
           }}
         >
-          {headline}
+          {resolve(headline)}
         </span>
       </h1>
       {[0, 1].map((index) => (

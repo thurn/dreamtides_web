@@ -30,7 +30,7 @@
 // exactly one close owner — the disc simply moves — so this is a non-breaking,
 // additive extension.
 
-import { localizationTodo } from "@trox/runtime";
+import { meaning, tx } from "@trox/runtime";
 import type { LocalizedString } from "@trox/runtime";
 import { useEffect, useLayoutEffect, useState } from "react";
 import type { CSSProperties, ReactElement, ReactNode } from "react";
@@ -84,9 +84,13 @@ export function GlassBackdrop(): ReactElement {
 /** Props for {@link GlassDialog}. */
 export interface GlassDialogProps {
   /** The dialog's heading, rendered as an `<h2>`. */
-  title: LocalizedString;
+  title?: LocalizedString;
+  /** Canonical authored or user-provided heading outside code-authored localization. */
+  authoredTitle?: string;
   /** Optional intro line under the title. */
   subtitle?: LocalizedString;
+  /** Canonical authored or user-provided intro line outside code-authored localization. */
+  authoredSubtitle?: string;
   /**
    * Dismisses the dialog from its close disc. Omit for a commit-gated dialog
    * that intentionally exposes no dismissal control.
@@ -94,6 +98,8 @@ export interface GlassDialogProps {
   onClose?: () => void;
   /** Accessible name for the close disc. Defaults to `"Close"`. */
   closeLabel?: LocalizedString;
+  /** Close action name supplied by canonical authored or developer-only copy. */
+  authoredCloseLabel?: string;
   /**
    * When true, on a full-bleed mobile overlay whose screen-cutout box is known
    * (a device-screenshot mock-up) the close disc floats up beside the device
@@ -155,9 +161,12 @@ export interface GlassDialogProps {
  */
 export function GlassDialog({
   title,
+  authoredTitle,
   subtitle,
+  authoredSubtitle,
   onClose,
-  closeLabel = localizationTodo("Close"),
+  closeLabel,
+  authoredCloseLabel,
   cutoutAwareClose = false,
   fullScreen = false,
   presentation = "responsive",
@@ -166,6 +175,17 @@ export function GlassDialog({
   companion,
   children,
 }: GlassDialogProps): ReactElement {
+  if ((title === undefined) === (authoredTitle === undefined)) {
+    throw new Error(
+      "GlassDialog requires exactly one of title or authoredTitle",
+    );
+  }
+  if (subtitle !== undefined && authoredSubtitle !== undefined) {
+    throw new Error("GlassDialog accepts only one subtitle ownership path");
+  }
+  if (closeLabel !== undefined && authoredCloseLabel !== undefined) {
+    throw new Error("GlassDialog accepts only one close-label ownership path");
+  }
   const resolve = useLocalizer();
   const isDesktop = useIsDesktop();
   const glass = glassSurfaceStyle();
@@ -276,14 +296,18 @@ export function GlassDialog({
         placement="onGlass"
         glyph={GLYPHS.close}
         size="md"
-        label={closeLabel}
+        label={authoredCloseLabel === undefined
+          ? closeLabel ?? tx(
+              meaning("dialog-close", "Close"),
+              "Accessible action name for the control that dismisses a dialog.",
+            )
+          : undefined}
+        authoredLabel={authoredCloseLabel}
         onPress={onClose}
       />
     );
   const boundedPadding =
-    popup && !isDesktop
-      ? token("--gutter")
-      : token("--space-xl");
+    popup && !isDesktop ? token("--gutter") : token("--space-xl");
 
   const panel = (
     <div data-glass-dialog-panel="" style={panelStyle}>
@@ -320,9 +344,9 @@ export function GlassDialog({
                 color: token("--text-primary"),
               }}
             >
-              {resolve(title)}
+              {title === undefined ? authoredTitle : resolve(title)}
             </h2>
-            {subtitle !== undefined && (
+            {(subtitle !== undefined || authoredSubtitle !== undefined) && (
               <p
                 style={{
                   margin: 0,
@@ -330,7 +354,7 @@ export function GlassDialog({
                   color: token("--text-on-glass-muted"),
                 }}
               >
-                {resolve(subtitle)}
+                {subtitle === undefined ? authoredSubtitle : resolve(subtitle)}
               </p>
             )}
           </div>
@@ -370,7 +394,7 @@ export function GlassDialog({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={resolve(title)}
+      aria-label={title === undefined ? authoredTitle : resolve(title)}
       className="cumulus"
       data-glass-dialog-desktop-center-target={desktopCenterTarget}
       data-glass-dialog-presentation={presentation}

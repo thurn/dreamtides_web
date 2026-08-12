@@ -35,14 +35,13 @@
 // embedded as a data URI (150×233, rendered at 63px tall) so there is no
 // separate asset to load.
 
-import { localizationTodo } from "@trox/runtime";
+import { meaning, tx, plural, one, other, txa } from "@trox/runtime";
 import * as React from "react";
 import type { CSSProperties, ReactElement } from "react";
-import { richText } from "../card/rich-text";
 import { glossaryInfoCard } from "../card/glossary-info-card";
 import { GLOSSARY_IDS } from "../../../data/glossary";
 import { token } from "../../primitives/tokens";
-import { useMessages } from "../../hooks/use-messages";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
 import { IconButton } from "../controls/IconButton";
 import { StandaloneGlyph } from "../controls/StandaloneGlyph";
@@ -51,7 +50,10 @@ import { Dreamsign, dreamsignArtUrl, DS_SHADOW } from "./Dreamsign";
 import type { Dreamsign as DreamsignData } from "../../../types/journey";
 import { requireDreamsignId } from "../../../data/dreamsigns";
 import type { DreamAvatarPortraitFocus } from "../../../types/content";
-import { DEFAULT_DREAM_AVATAR_PORTRAIT_FOCUS, dreamAvatarRevealSpec } from "./DreamAvatarPortrait";
+import {
+  DEFAULT_DREAM_AVATAR_PORTRAIT_FOCUS,
+  dreamAvatarRevealSpec,
+} from "./DreamAvatarPortrait";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
@@ -89,8 +91,7 @@ export const JOURNEY_STATUS_BAR_BOTTOM_INSET =
   "calc(var(--safe-area-inset-bottom) + var(--space-xs))";
 
 /** Total fixed viewport height occupied by the component. */
-export const JOURNEY_STATUS_BAR_TOTAL_HEIGHT =
-  `calc(max(${token("--hud-h")}, var(--qsb-dc-size, 66px)) + ${JOURNEY_STATUS_BAR_BOTTOM_INSET})`;
+export const JOURNEY_STATUS_BAR_TOTAL_HEIGHT = `calc(max(${token("--hud-h")}, var(--qsb-dc-size, 66px)) + ${JOURNEY_STATUS_BAR_BOTTOM_INSET})`;
 
 /** Operation screens use when reserving content above the fixed component. */
 export const JOURNEY_STATUS_BAR_CLEARANCE_OP =
@@ -101,12 +102,10 @@ export const JOURNEY_STATUS_BAR_CLEARANCE_OP =
  * additional space matches the Purge composition and keeps the panel visually
  * separate from the transparent status-bar objects.
  */
-export const JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP =
-  `${JOURNEY_STATUS_BAR_CLEARANCE_OP} + ${token("--space-2xl")}`;
+export const JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP = `${JOURNEY_STATUS_BAR_CLEARANCE_OP} + ${token("--space-2xl")}`;
 
 /** Ready-to-use CSS length for mobile floating glass panel positioning. */
-export const JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE =
-  `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP})`;
+export const JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE = `calc(${JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP})`;
 
 /** One docked dreamsign, as the domain dreamsign shape the shared
  * {@link Dreamsign} object consumes (art resolved from `imageName`, never by
@@ -161,15 +160,19 @@ function QsbOverflowStack({
   scale?: number;
   onOpenWindow: () => void;
 }): ReactElement {
-  const t = useMessages();
   const size = Math.round(36 * scale);
   return (
     <Pressable
       as="button"
       onClick={onOpenWindow}
-      aria-label={t("journey-status-dreamsigns-open", {
-        count: signs.length,
-      })}
+      ariaLabelMessage={txa(
+        plural(signs.length, [
+          one("View {count} Dreamsign"),
+          other("View {count} Dreamsigns"),
+        ]),
+        { count: signs.length },
+        "Accessible name for the Journey status-bar control that opens the player's Dreamsign gallery. count is the positive number of collected Dreamsigns.",
+      )}
       style={{
         display: "flex",
         alignItems: "center",
@@ -314,7 +317,7 @@ function QsbDreamsignWindow({
   signs: QsbDreamsign[];
   onClose: () => void;
 }): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   return (
     <div
       onClick={onClose}
@@ -356,12 +359,18 @@ function QsbDreamsignWindow({
               color: token("--text-primary"),
             }}
           >
-            {t("journey-status-dreamsigns-title")}
+            {resolve(tx(
+              "Dreamsigns",
+              "Section label for the player’s collected Dreamsigns.",
+            ))}
           </h2>
           <IconButton
             glyph={GLYPHS.close}
             size="sm"
-            label={localizationTodo(t("journey-status-close-action"))}
+            label={tx(
+              meaning("dreamsign-window-close", "Close"),
+              "Command that closes the Journey status-bar Dreamsign window.",
+            )}
             onPress={onClose}
           />
         </div>
@@ -394,22 +403,39 @@ function QsbDreamAvatarBust({
   /** The docked DreamAvatar, or undefined for the empty placeholder frame. */
   dreamAvatar?: QsbDreamAvatar;
 }): ReactElement {
-  const t = useMessages();
   const binding = useRevealSource({
-    identity: { entityType: "dreamAvatar", entityId: revealEntityId("dreamAvatar", dreamAvatar?.id ?? "empty") },
-    spec: dreamAvatar === undefined
-      ? {
-          primary: {
-            kind: "infoCard",
-            card: {
-              variant: "text",
-              title: t("journey-status-avatar-accessible-name"),
-              body: richText.plain(t("journey-status-no-avatar")),
+    identity: {
+      entityType: "dreamAvatar",
+      entityId: revealEntityId("dreamAvatar", dreamAvatar?.id ?? "empty"),
+    },
+    spec:
+      dreamAvatar === undefined
+        ? {
+            primary: {
+              kind: "infoCard",
+              card: {
+                variant: "text",
+                titleMessage: tx(
+                  meaning("journey-avatar-label", "Avatar"),
+                  "Shared journey-status labels and controls.",
+                ),
+                bodyMessage: tx(
+                  "No avatar is active.",
+                  "Player-facing message for the journey status no avatar interface state.",
+                ),
+              },
             },
-          },
-          secondaries: [],
-        }
-      : dreamAvatarRevealSpec({ imageNumber: "", name: dreamAvatar.name, title: dreamAvatar.epithet ?? "" }, dreamAvatar.ability ?? "", dreamAvatar.portrait),
+            secondaries: [],
+          }
+        : dreamAvatarRevealSpec(
+            {
+              imageNumber: "",
+              name: dreamAvatar.name,
+              title: dreamAvatar.epithet ?? "",
+            },
+            dreamAvatar.ability ?? "",
+            dreamAvatar.portrait,
+          ),
   });
   const focus =
     dreamAvatar?.portraitFocus ?? DEFAULT_DREAM_AVATAR_PORTRAIT_FOCUS;
@@ -424,7 +450,10 @@ function QsbDreamAvatarBust({
       as="button"
       ref={binding.ref}
       {...binding.sourceProps}
-      aria-label={t("journey-status-avatar-accessible-name")}
+      ariaLabelMessage={tx(
+        meaning("journey-avatar-control", "Avatar"),
+        "Accessible name for the active Dream Avatar control in the Journey status bar.",
+      )}
       tabIndex={0}
       style={{
         // width/height are fixed by journey-status-bar.css (var(--qsb-dc-size),
@@ -476,10 +505,21 @@ function QsbEssence({
   essence?: number;
   scale?: number;
 }): ReactElement {
-  const t = useMessages();
   const binding = useRevealSource({
-    identity: { entityType: "resource-essence", entityId: revealEntityId("resource-essence", "journey-total") },
-    spec: { primary: { kind: "infoCard", card: glossaryInfoCard(GLOSSARY_IDS.essence, { variant: "icon", glyph: GLYPHS.essence }) }, secondaries: [] },
+    identity: {
+      entityType: "resource-essence",
+      entityId: revealEntityId("resource-essence", "journey-total"),
+    },
+    spec: {
+      primary: {
+        kind: "infoCard",
+        card: glossaryInfoCard(GLOSSARY_IDS.essence, {
+          variant: "icon",
+          glyph: GLYPHS.essence,
+        }),
+      },
+      secondaries: [],
+    },
   });
   return (
     <Pressable
@@ -488,7 +528,10 @@ function QsbEssence({
       {...binding.sourceProps}
       role="button"
       tabIndex={0}
-      aria-label={t("journey-status-essence-accessible-name")}
+      ariaLabelMessage={tx(
+        "Essence Total",
+        "Player-facing message for the journey status essence accessible name interface state.",
+      )}
       style={{
         ...binding.sourceProps.style,
         display: "inline-flex",
@@ -535,7 +578,6 @@ function QsbHudBar({
   dreamAvatar?: QsbDreamAvatar;
   scale?: number;
 }): ReactElement {
-  const t = useMessages();
   return (
     <div
       style={{
@@ -565,7 +607,14 @@ function QsbHudBar({
         as="button"
         className="qsbDeck"
         data-journey-deck-target=""
-        aria-label={t("journey-status-deck-open", { count: deck })}
+        ariaLabelMessage={txa(
+          plural(deck, [
+            one("View deck containing {count} Card"),
+            other("View deck containing {count} Cards"),
+          ]),
+          { count: deck },
+          "Accessible name for the Journey status-bar control that opens the current player's deck. count is the non-negative current deck size and can be zero.",
+        )}
         onClick={onViewDeck}
         style={{
           height: Math.round(66 * scale),

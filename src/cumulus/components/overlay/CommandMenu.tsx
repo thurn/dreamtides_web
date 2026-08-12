@@ -2,7 +2,7 @@
 // These are interactive overlays, deliberately separate from InfoCard's
 // pointer-transparent entity-reveal contract.
 
-import { localizationTodo } from "@trox/runtime";
+import { meaning, tx, type LocalizedString } from "@trox/runtime";
 import {
   type CSSProperties,
   type KeyboardEvent as ReactKeyboardEvent,
@@ -29,35 +29,36 @@ import {
   MENU_EDGE_INSET_DESKTOP_PX,
   MENU_EDGE_INSET_MOBILE_PX,
 } from "../../screens/chrome-geometry";
-import {
-  formatMessageDescriptor,
-  useMessages,
-} from "../../hooks/use-messages";
-import type { FluentMessageDescriptor } from "../../../data/localization-messages";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
-export type CommandMenuCopy = string | FluentMessageDescriptor;
+export type CommandMenuCopy = LocalizedString;
+export type CommandMenuStatusCopy =
+  | { readonly kind: "message"; readonly message: LocalizedString }
+  | { readonly kind: "raw"; readonly value: string };
+
+type CommandMenuLabelChoice =
+  | { readonly label: CommandMenuCopy; readonly authoredLabel?: never }
+  | { readonly label?: never; readonly authoredLabel: string };
 
 /** A single command row. `id` is stable domain identity, never display copy. */
-export interface CommandMenuAction {
+export type CommandMenuAction = {
   kind: "action";
   id: string;
-  label: CommandMenuCopy;
   glyph: Glyph;
   active?: boolean;
   onCommand: () => void;
-}
+} & CommandMenuLabelChoice;
 
 /** A named, nested group of command rows. */
-export interface CommandMenuGroup {
+export type CommandMenuGroup = {
   kind: "group";
   id: string;
-  label: CommandMenuCopy;
   glyph: Glyph;
   active?: boolean;
   /** Runs when Cumulus opens this group, before its nested commands are shown. */
   onOpen?: () => void;
   actions: readonly CommandMenuItem[];
-}
+} & CommandMenuLabelChoice;
 
 /** A structural separator with stable identity. */
 export interface CommandMenuDivider {
@@ -71,11 +72,14 @@ export interface CommandMenuSignedInteger {
   /** Stable domain identity for the field command. */
   id: string;
   /** Visible label above the field. */
-  label: string;
+  label?: LocalizedString;
+  authoredLabel?: string;
   /** Optional example value shown while the field is empty. */
-  placeholder?: string;
+  placeholder?: LocalizedString;
+  authoredPlaceholder?: string;
   /** Label for the commit action beneath the field. */
-  commitLabel: string;
+  commitLabel?: LocalizedString;
+  authoredCommitLabel?: string;
   /** Receives the validated signed, non-zero whole number. */
   onCommand: (value: number) => void;
 }
@@ -99,7 +103,7 @@ export interface CommandMenuTriggerModel {
 /** A short command result presented beneath an app-chrome trigger. */
 export interface CommandMenuStatusModel {
   /** Player-facing status copy. */
-  text: CommandMenuCopy;
+  text: CommandMenuStatusCopy;
   /** Optional test selector for the status announcement. */
   testId?: string;
 }
@@ -129,9 +133,9 @@ export interface CommandMenuAnchor {
 export interface CommandMenuContextModel {
   kind: "context";
   /** Describes the card/pointer subject in the menu's header. */
-  title: string;
+  authoredTitle: string;
   /** Optional structured secondary location/context copy. */
-  subtitle?: string;
+  authoredSubtitle?: string;
   /** Commands available for the activated card or pointer target. */
   actions: readonly CommandMenuItem[];
   /** Semantic location used to anchor the desktop pointer menu. */
@@ -143,7 +147,8 @@ export interface CommandMenuContextModel {
 }
 
 /** Complete data for either supported command-menu presentation. */
-export type CommandMenuModel = CommandMenuAppChromeModel | CommandMenuContextModel;
+export type CommandMenuModel =
+  CommandMenuAppChromeModel | CommandMenuContextModel;
 
 /** Props for {@link CommandMenu}. */
 export interface CommandMenuProps {
@@ -156,30 +161,23 @@ export interface CommandMenuProps {
  * an activated card/pointer context while preserving one typed action model.
  */
 export function CommandMenu({ model }: CommandMenuProps): ReactElement {
-  return model.kind === "appChrome"
-    ? <AppChromeCommandMenu model={model} />
-    : <ContextCommandMenu model={model} />;
+  return model.kind === "appChrome" ? (
+    <AppChromeCommandMenu model={model} />
+  ) : (
+    <ContextCommandMenu model={model} />
+  );
 }
 
-function formatCommandMenuCopy(
-  t: ReturnType<typeof useMessages>,
-  copy: CommandMenuCopy,
-): string {
-  return typeof copy === "string" ? copy : formatMessageDescriptor(t, copy);
-}
-
-function AppChromeCommandMenu({ model }: { model: CommandMenuAppChromeModel }): ReactElement {
-  const {
-    trigger,
-    actions,
-    status,
-    elevated = false,
-    testId,
-  } = model;
+function AppChromeCommandMenu({
+  model,
+}: {
+  model: CommandMenuAppChromeModel;
+}): ReactElement {
+  const { trigger, actions, status, elevated = false, testId } = model;
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const hostRef = useRef<HTMLDivElement>(null);
-  const t = useMessages();
+  const resolve = useLocalizer();
   const isDesktop = useIsDesktop();
   const edgeInset = isDesktop
     ? MENU_EDGE_INSET_DESKTOP_PX
@@ -216,7 +214,7 @@ function AppChromeCommandMenu({ model }: { model: CommandMenuAppChromeModel }): 
     >
       <IconButton
         glyph={trigger.glyph}
-        label={localizationTodo(formatCommandMenuCopy(t, trigger.label))}
+        label={trigger.label}
         ariaExpanded={open}
         ariaControls={menuId}
         testId={testId}
@@ -246,7 +244,9 @@ function AppChromeCommandMenu({ model }: { model: CommandMenuAppChromeModel }): 
             font: token("--t-caption"),
           }}
         >
-          {formatCommandMenuCopy(t, status.text)}
+          {status.text.kind === "message"
+            ? resolve(status.text.message)
+            : status.text.value}
         </div>
       )}
     </div>
@@ -257,12 +257,25 @@ function AppChromeCommandMenu({ model }: { model: CommandMenuAppChromeModel }): 
   return elevated ? createPortal(menu, document.body) : menu;
 }
 
-function ContextCommandMenu({ model }: { model: CommandMenuContextModel }): ReactElement {
-  const { title, subtitle, actions, anchor, onDismiss, testId } = model;
-  const t = useMessages();
+function ContextCommandMenu({
+  model,
+}: {
+  model: CommandMenuContextModel;
+}): ReactElement {
+  const {
+    authoredTitle,
+    authoredSubtitle,
+    actions,
+    anchor,
+    onDismiss,
+    testId,
+  } = model;
   const isDesktop = useIsDesktop();
   const menuRef = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState<{ left: number; top: number } | null>(null);
+  const [position, setPosition] = useState<{
+    left: number;
+    top: number;
+  } | null>(null);
   const origin = anchor;
 
   useLayoutEffect(() => {
@@ -270,8 +283,14 @@ function ContextCommandMenu({ model }: { model: CommandMenuContextModel }): Reac
     const rect = menuRef.current.getBoundingClientRect();
     const margin = 8;
     setPosition({
-      left: Math.max(margin, Math.min(origin.x, window.innerWidth - rect.width - margin)),
-      top: Math.max(margin, Math.min(origin.y, window.innerHeight - rect.height - margin)),
+      left: Math.max(
+        margin,
+        Math.min(origin.x, window.innerWidth - rect.width - margin),
+      ),
+      top: Math.max(
+        margin,
+        Math.min(origin.y, window.innerHeight - rect.height - margin),
+      ),
     });
   }, [actions, isDesktop, origin.x, origin.y]);
 
@@ -298,9 +317,12 @@ function ContextCommandMenu({ model }: { model: CommandMenuContextModel }): Reac
   if (!isDesktop) {
     return createPortal(
       <GlassDialog
-        title={localizationTodo(title)}
-        subtitle={(subtitle) === undefined ? undefined : localizationTodo(subtitle)}
-        closeLabel={localizationTodo(t("command-menu-close-actions"))}
+        authoredTitle={authoredTitle}
+        authoredSubtitle={authoredSubtitle}
+        closeLabel={tx(
+          "Close actions",
+          "Accessible action name that closes a command menu.",
+        )}
         onClose={onDismiss}
       >
         <HierarchicalMenu items={actions} mobile onDismiss={onDismiss} />
@@ -324,8 +346,21 @@ function ContextCommandMenu({ model }: { model: CommandMenuContextModel }): Reac
       }}
     >
       <div style={headerStyle}>
-        <span style={{ font: token("--t-body"), color: token("--text-on-glass") }}>{title}</span>
-        {subtitle !== undefined && <span style={{ font: token("--t-caption"), color: token("--text-on-glass-muted") }}>{subtitle}</span>}
+        <span
+          style={{ font: token("--t-body"), color: token("--text-on-glass") }}
+        >
+          {authoredTitle}
+        </span>
+        {authoredSubtitle !== undefined && (
+          <span
+            style={{
+              font: token("--t-caption"),
+              color: token("--text-on-glass-muted"),
+            }}
+          >
+            {authoredSubtitle}
+          </span>
+        )}
       </div>
       <HierarchicalMenu items={actions} onDismiss={onDismiss} />
     </div>,
@@ -346,7 +381,7 @@ function HierarchicalMenu({
   onDismiss: () => void;
   mobile?: boolean;
 }): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const [path, setPath] = useState<readonly string[]>([]);
   const menuRef = useRef<HTMLDivElement>(null);
   const leafItems = items.filter((item) => item.kind !== "divider");
@@ -387,11 +422,18 @@ function HierarchicalMenu({
       event.preventDefault();
       if (interactive.length === 0) return;
       const direction = event.key === "ArrowDown" ? 1 : -1;
-      setActiveIndex((previous) => (previous + direction + interactive.length) % interactive.length);
+      setActiveIndex(
+        (previous) =>
+          (previous + direction + interactive.length) % interactive.length,
+      );
       return;
     }
     const active = interactive[activeIndex];
-    if (event.key === "ArrowRight" || event.key === "Enter" || event.key === " ") {
+    if (
+      event.key === "ArrowRight" ||
+      event.key === "Enter" ||
+      event.key === " "
+    ) {
       if (active !== undefined) {
         event.preventDefault();
         choose(active);
@@ -409,8 +451,13 @@ function HierarchicalMenu({
     : {
         ...glassSurfaceStyle(),
         position: id === undefined ? "relative" : "absolute",
-        top: id === undefined ? undefined : `calc(100% + ${token("--space-xs")})`,
-        ...(id === undefined ? {} : align === "end" ? { right: 0 } : { left: 0 }),
+        top:
+          id === undefined ? undefined : `calc(100% + ${token("--space-xs")})`,
+        ...(id === undefined
+          ? {}
+          : align === "end"
+            ? { right: 0 }
+            : { left: 0 }),
         width: 240,
         maxHeight: "calc(100vh - 16px)",
         overflowY: "auto",
@@ -432,18 +479,25 @@ function HierarchicalMenu({
           item={{
             kind: "group",
             id: "back",
-            label: t("command-menu-back-action"),
+            label: tx(
+              meaning("command-menu-back", "Back"),
+              "Command-menu action that returns from a nested group to its parent command list.",
+            ),
             glyph: GLYPHS.arrowLeft,
             actions: [],
           }}
-          label={t("command-menu-back-action")}
+          label={tx(
+            meaning("command-menu-back", "Back"),
+            "Command-menu action that returns from a nested group to its parent command list.",
+          )}
           active
           mobile={mobile}
           onActivate={() => setPath((previous) => previous.slice(0, -1))}
         />
       )}
       {currentItems.map((item) => {
-        if (item.kind === "divider") return <div key={item.id} role="separator" style={dividerStyle} />;
+        if (item.kind === "divider")
+          return <div key={item.id} role="separator" style={dividerStyle} />;
         if (item.kind === "signed-integer") {
           return (
             <SignedIntegerCommand
@@ -458,7 +512,8 @@ function HierarchicalMenu({
           <CommandRow
             key={item.id}
             item={item}
-            label={formatCommandMenuCopy(t, item.label)}
+            label={item.label}
+            authoredLabel={item.authoredLabel}
             active={index === activeIndex}
             mobile={mobile}
             onActivate={() => choose(item)}
@@ -466,8 +521,18 @@ function HierarchicalMenu({
         );
       })}
       {leafItems.length === 0 && (
-        <span style={{ font: token("--t-body-sm"), color: token("--text-on-glass-muted") }}>
-          {t("command-menu-empty-state")}
+        <span
+          style={{
+            font: token("--t-body-sm"),
+            color: token("--text-on-glass-muted"),
+          }}
+        >
+          {resolve(
+            tx(
+              "No actions available.",
+              "Empty-state message shown when a command menu has no available actions.",
+            ),
+          )}
         </span>
       )}
     </div>
@@ -481,19 +546,28 @@ function SignedIntegerCommand({
   item: CommandMenuSignedInteger;
   onDismiss: () => void;
 }): ReactElement {
-  const t = useMessages();
   const [draft, setDraft] = useState("");
-  const [error, setError] = useState<string>();
+  const [error, setError] = useState<LocalizedString>();
 
   function commit(): void {
     const trimmed = draft.trim();
     if (!/^[+-]?\d+$/.test(trimmed)) {
-      setError(t("command-menu-invalid-integer"));
+      setError(
+        tx(
+          "Enter a non-zero whole number.",
+          "Validation message for a command-menu field that requires a signed, nonzero whole number.",
+        ),
+      );
       return;
     }
     const value = Number(trimmed);
     if (!Number.isSafeInteger(value) || value === 0) {
-      setError(t("command-menu-invalid-integer"));
+      setError(
+        tx(
+          "Enter a non-zero whole number.",
+          "Validation message for a command-menu field that requires a signed, nonzero whole number.",
+        ),
+      );
       return;
     }
     item.onCommand(value);
@@ -517,19 +591,22 @@ function SignedIntegerCommand({
       }}
     >
       <TextField
-        label={localizationTodo(item.label)}
+        label={item.label}
+        authoredLabel={item.authoredLabel}
         value={draft}
         onChange={(value) => {
           setDraft(value);
           setError(undefined);
         }}
-        placeholder={(item.placeholder) === undefined ? undefined : localizationTodo(item.placeholder)}
-        error={(error) === undefined ? undefined : localizationTodo(error)}
+        placeholder={item.placeholder}
+        authoredPlaceholder={item.authoredPlaceholder}
+        error={error}
         testId="command-menu-signed-integer-input"
       />
       <div style={{ display: "grid" }}>
         <GlassButton
           label={item.commitLabel}
+          authoredLabel={item.authoredCommitLabel}
           variant="accent"
           placement="onGlass"
           onPress={commit}
@@ -542,19 +619,28 @@ function SignedIntegerCommand({
 function CommandRow({
   item,
   label,
+  authoredLabel,
   active,
   mobile,
   onActivate,
 }: {
   item: CommandMenuInteractiveItem;
-  label: string;
+  label?: LocalizedString;
+  authoredLabel?: string;
   active: boolean;
   mobile: boolean;
   onActivate: () => void;
 }): ReactElement {
-  const color = item.active === true
-    ? token("--accent-bright")
-    : token("--text-on-glass");
+  const resolve = useLocalizer();
+  if ((label === undefined) === (authoredLabel === undefined)) {
+    throw new Error(
+      "CommandMenu rows require exactly one of label or authoredLabel.",
+    );
+  }
+  const visibleLabel =
+    authoredLabel ?? (label === undefined ? "" : resolve(label));
+  const color =
+    item.active === true ? token("--accent-bright") : token("--text-on-glass");
   return (
     <Pressable
       as="button"
@@ -564,7 +650,9 @@ function CommandRow({
       onClick={onActivate}
       style={{
         appearance: "none",
-        border: active ? `1px solid ${token("--border-accent")}` : "1px solid transparent",
+        border: active
+          ? `1px solid ${token("--border-accent")}`
+          : "1px solid transparent",
         background: active ? token("--accent-tint") : "transparent",
         borderRadius: token("--radius-compact"),
         minHeight: token("--touch-min"),
@@ -580,16 +668,24 @@ function CommandRow({
       }}
     >
       <StandaloneGlyph glyph={item.glyph} color="text-primary" />
-      <span>{label}</span>
-      {item.kind === "group" && <StandaloneGlyph glyph={GLYPHS.chevronRight} color="text-primary" />}
+      <span>{visibleLabel}</span>
+      {item.kind === "group" && (
+        <StandaloneGlyph glyph={GLYPHS.chevronRight} color="text-primary" />
+      )}
     </Pressable>
   );
 }
 
-function menuItemsAtPath(items: readonly CommandMenuItem[], path: readonly string[]): readonly CommandMenuItem[] {
+function menuItemsAtPath(
+  items: readonly CommandMenuItem[],
+  path: readonly string[],
+): readonly CommandMenuItem[] {
   let current = items;
   for (const id of path) {
-    const group = current.find((item): item is CommandMenuGroup => item.kind === "group" && item.id === id);
+    const group = current.find(
+      (item): item is CommandMenuGroup =>
+        item.kind === "group" && item.id === id,
+    );
     if (group === undefined) return items;
     current = group.actions;
   }

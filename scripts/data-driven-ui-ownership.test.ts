@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import ts from "typescript";
 import inventory from "./data-driven-ui-ownership.json";
+import { BUILT_IN_BATTLE_PROMPT_KINDS } from "../src/data/dreamwell-prompts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const SRC_ROOT = resolve(ROOT, "src");
@@ -102,60 +103,6 @@ function productionIdentityTables(): string[] {
     .sort();
 }
 
-function fluentMessageIds(): Set<string> {
-  const ids = new Set<string>();
-  for (const path of collectFiles(
-    resolve(ROOT, "data/locales/en-US"),
-    /\.ftl$/,
-  )) {
-    for (const match of readFileSync(path, "utf8").matchAll(
-      /^([a-z][a-z0-9-]*)\s*=/gm,
-    )) {
-      ids.add(match[1]);
-    }
-  }
-  return ids;
-}
-
-function actualLegacyMessages(
-  family: FamilyName,
-  allIds: ReadonlySet<string>,
-): string[] {
-  const expected = inventory.legacyFluentMessages[family];
-  const prefixes = [
-    ...new Set(
-      expected.map((id) =>
-        id.replace(/(?:blackjack|four-suit|gravok|starway).*/, ""),
-      ),
-    ),
-  ].filter(Boolean);
-  if (family === "gamble")
-    return [...allIds]
-      .filter((id) => /^gamble-(?:blackjack|four-suit|gravok|starway)/.test(id))
-      .sort();
-  if (family === "transfiguration")
-    return [...allIds]
-      .filter(
-        (id) =>
-          id === "transfiguration-form-name" ||
-          id.startsWith("transfiguration-change-"),
-      )
-      .sort();
-  if (family === "dreamwellPrompts")
-    return [...allIds].filter((id) => id.startsWith("battle-prompt-")).sort();
-  if (family === "tides")
-    return [...allIds]
-      .filter(
-        (id) => id === "resonance-name" || id === "reveal-resonance",
-      )
-      .sort();
-  if (family === "rulesSymbols")
-    return [...allIds]
-      .filter((id) => id.startsWith("rules-text-symbol-"))
-      .sort();
-  return prefixes;
-}
-
 describe("data-driven UI ownership", () => {
   it("detects an unlisted identity-keyed authored table", () => {
     expect(
@@ -199,14 +146,9 @@ describe("data-driven UI ownership", () => {
     }
   });
 
-  it("allows only inventoried legacy Fluent message families", () => {
-    const ids = fluentMessageIds();
-    for (const family of Object.keys(
-      inventory.legacyFluentMessages,
-    ) as FamilyName[]) {
-      expect(actualLegacyMessages(family, ids), family).toEqual(
-        [...inventory.legacyFluentMessages[family]].sort(),
-      );
-    }
+  it("keeps the built-in battle prompt identity set closed and inventoried", () => {
+    expect([...BUILT_IN_BATTLE_PROMPT_KINDS].sort()).toEqual(
+      [...inventory.builtInBattlePromptRefs].sort(),
+    );
   });
 });

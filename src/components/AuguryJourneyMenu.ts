@@ -59,14 +59,14 @@ export function useAuguryJourneyMenuActions(
         id: "forceJourneyCategory",
         kind: "group",
         glyph: GLYPHS.bug,
-        label: "Force Category",
+        authoredLabel: "Force Category",
         active: forcedArchetypeId !== null,
         actions: [
           {
             id: "forceJourneyCategory:clear",
             kind: "action" as const,
             glyph: GLYPHS.refresh,
-            label: "Random (clear force)",
+            authoredLabel: "Random (clear force)",
             active: forcedArchetypeId === null,
             onCommand: () => forceCategory(site.id, null),
           },
@@ -74,7 +74,7 @@ export function useAuguryJourneyMenuActions(
             id: `forceJourneyCategory:${archetypeId}`,
             kind: "action" as const,
             glyph: GLYPHS.check,
-            label: archetypeName(archetypeId),
+            authoredLabel: archetypeName(archetypeId),
             active: forcedArchetypeId === archetypeId,
             onCommand: () => forceCategory(site.id, archetypeId),
           })),
@@ -87,7 +87,7 @@ export function useAuguryJourneyMenuActions(
         id: "rerollJourney",
         kind: "action",
         glyph: GLYPHS.refresh,
-        label: "Reroll Journey",
+        authoredLabel: "Reroll Journey",
         onCommand: () => rerollJourney(site.id),
       });
     }

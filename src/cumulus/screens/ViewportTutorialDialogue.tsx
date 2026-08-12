@@ -1,9 +1,4 @@
-import {
-  useLayoutEffect,
-  useRef,
-  useState,
-  type ReactElement,
-} from "react";
+import { useLayoutEffect, useRef, useState, type ReactElement } from "react";
 import {
   CharacterDialogue,
   type CharacterDialogueModel,
@@ -14,7 +9,8 @@ import {
   placeTutorialDialogueAboveAnchor,
 } from "./card-tutorial-dialogue-placement";
 import { useIsDesktop } from "./use-is-desktop";
-import { useMessages } from "../hooks/use-messages";
+import { tx } from "@trox/runtime";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 export interface ViewportTutorialDialogueView {
   readonly id: string;
@@ -53,7 +49,7 @@ export function ViewportTutorialDialogue({
   triggerId,
   messageIndex,
 }: ViewportTutorialDialogueProps): ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const desktop = useIsDesktop();
   const layoutRef = useRef<HTMLDivElement | null>(null);
   const [position, setPosition] = useState<{
@@ -71,16 +67,14 @@ export function ViewportTutorialDialogue({
       if (dialogueRect.width <= 0 || dialogueRect.height <= 0) return;
       const cardRects = [
         ...document.querySelectorAll<HTMLElement>(
-          '[data-game-card-source][data-card-id]',
+          "[data-game-card-source][data-card-id]",
         ),
       ]
         .filter((card) => !layout.contains(card))
         .map((card) => card.getBoundingClientRect())
         .filter((rect) => rect.width > 0 && rect.height > 0);
       const obstacleRects = [
-        ...document.querySelectorAll<HTMLElement>(
-          TUTORIAL_CLEARANCE_SELECTOR,
-        ),
+        ...document.querySelectorAll<HTMLElement>(TUTORIAL_CLEARANCE_SELECTOR),
       ]
         .filter((obstacle) => !layout.contains(obstacle))
         .map((obstacle) => obstacle.getBoundingClientRect())
@@ -137,9 +131,7 @@ export function ViewportTutorialDialogue({
         horizontalOffset: view.horizontalOffset,
         verticalOffset: view.verticalOffset,
       });
-      setPosition(
-        { ...floatingPosition, bottom: null },
-      );
+      setPosition({ ...floatingPosition, bottom: null });
     };
 
     updatePosition();
@@ -166,13 +158,19 @@ export function ViewportTutorialDialogue({
 
   return (
     <section
-      aria-label={
+      aria-label={resolve(
         kind === "battle"
-          ? t("tutorial-region-battle")
+          ? tx("Battle tutorial", "Tutorial region accessible names.")
           : kind === "card"
-            ? t("tutorial-region-card")
-            : t("tutorial-region-site")
-      }
+            ? tx(
+                "Card tutorial",
+                "Player-facing message for the tutorial region card interface state.",
+              )
+            : tx(
+                "Site tutorial",
+                "Player-facing message for the tutorial region site interface state.",
+              ),
+      )}
       aria-live={visible ? "polite" : "off"}
       aria-hidden={visible ? undefined : "true"}
       data-card-tutorial-guidance={kind === "card" ? "" : undefined}

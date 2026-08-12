@@ -16,7 +16,8 @@ The labeled glass action — a bold text label with optional Essence cost or non
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `label` | `string` | yes | — | The button's text, centered by the component at every rendered width. |
+| `label` | `LocalizedString` | no | — | The button's text, centered by the component at every rendered width. |
+| `authoredLabel` | `string` | no | — | Button text supplied by canonical authored or developer-only content. |
 | `onPress` | `() => void` | yes | — | Fires when the button is activated (no-op while disabled). |
 | `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `StandaloneGlyph` before the label. |
 | `essenceCost` | `number \| null` | no | `null` | Optional numerical essence cost rendered after a centered dot. |
@@ -28,7 +29,8 @@ The labeled glass action — a bold text label with optional Essence cost or non
 | `widthReservations` | `readonly GlassButtonWidthReservation[]` | no | `[]` | Possible dynamic label/essence-cost states. The button reserves the widest state while rendering only the current one, preventing surrounding layout shift. |
 | `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the control. `onMedia` uses the full liquid-glass recipe; `onGlass` uses a lighter tonal lens so an existing glass tint is not compounded. Defaults to `onMedia`. |
 | `pressed` | `boolean` | no | — | Toggle state for controls whose action switches a persistent local mode. |
-| `accessibilityLabel` | `string` | no | — | Accessible name when the visible label alone does not distinguish siblings. |
+| `accessibilityLabel` | `LocalizedString` | no | — | Accessible name when the visible label alone does not distinguish siblings. |
+| `authoredAccessibilityLabel` | `string` | no | — | Accessible name supplied by canonical authored or developer-only copy. |
 
 ## Usage
 

@@ -1,9 +1,11 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
+import { localizationTodo } from "@trox/runtime";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { TransientStatusToast } from "./TransientStatusToast";
+import { CumulusRoot } from "../../CumulusRoot";
 
 let container: HTMLDivElement;
 let root: Root;
@@ -30,10 +32,15 @@ describe("TransientStatusToast", () => {
     const onDismiss = vi.fn();
     act(() => {
       root.render(
-        <TransientStatusToast
-          copy={{ title: "Action Not Applied", message: "Try again." }}
-          onDismiss={onDismiss}
-        />,
+        <CumulusRoot>
+          <TransientStatusToast
+            copy={{
+              title: localizationTodo("Action Not Applied"),
+              message: localizationTodo("Try again."),
+            }}
+            onDismiss={onDismiss}
+          />
+        </CumulusRoot>,
       );
     });
     expect(container.querySelector("[data-transient-status-toast=warning]")?.textContent).toContain("Action Not Applied");

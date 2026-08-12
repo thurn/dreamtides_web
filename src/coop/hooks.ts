@@ -62,7 +62,7 @@ import {
 } from "./BounceToast";
 import { UnreadableRoomScreen } from "./UnreadableRoomScreen";
 import { CURRENT_REDUCER_VERSION } from "./reducer-version";
-import type { FluentMessageDescriptor } from "../data/localization-messages";
+import type { LocalizedString } from "@trox/runtime";
 
 /** A confirmed event's outcome, delivered to `useEventOutcomes` subscribers. */
 export type OutcomeListener = (
@@ -133,14 +133,16 @@ export function CoopProvider({
     GAME_ENGINE_CONFIG.genesisState(genesis),
   );
   const [connectedCount, setConnectedCount] = useState<number | null>(null);
-  const [connectedClientIds, setConnectedClientIds] = useState<readonly string[] | null>(null);
+  const [connectedClientIds, setConnectedClientIds] = useState<
+    readonly string[] | null
+  >(null);
   const [confirmedHead, setConfirmedHead] = useState<number | null>(null);
   const [corruptLog, setCorruptLog] = useState(false);
   const [bounceToken, setBounceToken] = useState(0);
   // The copy for the toast the next `bounceToken` bump shows. Set by whichever
   // callback triggers it (own bounce / append failure / pending drop); read at
   // render time. A ref (not state) because the token bump already re-renders.
-  const bounceMessageRef = useRef<FluentMessageDescriptor>(INVALID_ACTION_MESSAGE);
+  const bounceMessageRef = useRef<LocalizedString>(INVALID_ACTION_MESSAGE);
 
   const confirmedSeqRef = useRef(0);
   const clientRef = useRef<LogClient | null>(null);
@@ -243,14 +245,14 @@ export function CoopProvider({
               const before = detail.stateBefore;
               const after = detail.stateAfter;
               const init = before.battle!.init;
-              const completedNode = before.journey.atlas.nodes[
-                init.dreamscapeId ?? ""
-              ];
-              const availableForwardIds = (completedNode?.forwardIds ?? [])
-                .filter(
-                  (nodeId) =>
-                    after.journey.atlas.nodes[nodeId]?.state === "available",
-                );
+              const completedNode =
+                before.journey.atlas.nodes[init.dreamscapeId ?? ""];
+              const availableForwardIds = (
+                completedNode?.forwardIds ?? []
+              ).filter(
+                (nodeId) =>
+                  after.journey.atlas.nodes[nodeId]?.state === "available",
+              );
               logEvent("battle_victory_committed", {
                 coopSeq: seq,
                 battleId: init.battleId,
@@ -347,7 +349,9 @@ export function CoopProvider({
       const stranded = pendingAppendsRef.current;
       pendingAppendsRef.current = [];
       for (const { reject } of stranded) {
-        reject(new Error("CoopProvider: room closed before LogClient was ready"));
+        reject(
+          new Error("CoopProvider: room closed before LogClient was ready"),
+        );
       }
     };
   }, [db, roomId, clientId]);
@@ -359,7 +363,9 @@ export function CoopProvider({
       const presence = decodePresence(snapshot.val());
       setConnectedCount(connectedClientCount(presence));
       setConnectedClientIds(
-        Object.keys(presence ?? {}).filter((clientId) => presence?.[clientId]?.connected === true).sort(),
+        Object.keys(presence ?? {})
+          .filter((clientId) => presence?.[clientId]?.connected === true)
+          .sort(),
       );
     });
   }, [db, roomId]);
@@ -436,7 +442,17 @@ export function CoopProvider({
       confirmedSeqRef,
       registerOutcomeListener,
     }),
-    [clientId, gameState, confirmedGameState, append, actions, connectedCount, connectedClientIds, confirmedHead, registerOutcomeListener],
+    [
+      clientId,
+      gameState,
+      confirmedGameState,
+      append,
+      actions,
+      connectedCount,
+      connectedClientIds,
+      confirmedHead,
+      registerOutcomeListener,
+    ],
   );
 
   if (corruptLog) {
@@ -512,7 +528,10 @@ export function useEventOutcomes(listener: OutcomeListener): void {
   const listenerRef = useRef(listener);
   listenerRef.current = listener;
   useEffect(
-    () => registerOutcomeListener((event, seq, outcome) => listenerRef.current(event, seq, outcome)),
+    () =>
+      registerOutcomeListener((event, seq, outcome) =>
+        listenerRef.current(event, seq, outcome),
+      ),
     [registerOutcomeListener],
   );
 }

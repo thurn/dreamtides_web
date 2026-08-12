@@ -56,14 +56,14 @@ function CardPickerPanelDemo() {
         rightAccessory={{
           kind: "glassButton",
           button: {
-            label: selected === null ? "Decline" : "Purge 1",
+            label: localizationTodo(selected === null ? "Decline" : "Purge 1"),
             variant: selected === null ? "default" : "danger",
             onPress: () => setSelected(null),
           },
         }}
         footerActions={[
           {
-            label: "Confirm Choice",
+            label: localizationTodo("Confirm Choice"),
             variant: "accent",
             disabled: selected === null,
             onPress: () => undefined,
@@ -73,7 +73,7 @@ function CardPickerPanelDemo() {
         endAction={{
           entryId: "restock",
           glyph: GLYPHS.refresh,
-          label: "Restock",
+          label: localizationTodo("Restock"),
           caption: { kind: "essence", amount: 50 },
         }}
       />

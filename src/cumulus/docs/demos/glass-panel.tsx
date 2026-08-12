@@ -13,7 +13,7 @@ function GlassPanelDemo() {
         rightAccessory={{
           kind: "glassButton",
           button: {
-            label: "Leave",
+            authoredLabel: "Leave",
             onPress: () => undefined,
           },
         }}

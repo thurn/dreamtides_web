@@ -18,7 +18,7 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import type { Genesis } from "../../eventlog/types";
 import { NIGHTMARE_CARD_NUMBER } from "../../data/nightmare";
-import { createMessageDescriptor } from "../../data/localization-descriptors";
+import { builtInBattlePromptRef } from "../../data/dreamwell-prompts";
 import type { FoldState } from "../fold-state";
 import { GAME_ENGINE_CONFIG, replayLog, type SeqEvent } from "./replay";
 import {
@@ -65,8 +65,8 @@ describe("replay fixtures", () => {
         kind: "pick-cards",
         options: {
           kind: "pick-cards",
-          label: createMessageDescriptor("battle-prompt-generic"),
-          subtitle: createMessageDescriptor("battle-prompt-generic-subtitle"),
+          label: builtInBattlePromptRef("generic"),
+          subtitle: builtInBattlePromptRef("generic-subtitle"),
           candidateIds: ["card-a", "card-b", "card-c"],
           count: 2,
           optional: true,
@@ -86,10 +86,10 @@ describe("replay fixtures", () => {
         kind: "choice",
         options: {
           kind: "choice",
-          label: createMessageDescriptor("battle-prompt-generic"),
+          label: builtInBattlePromptRef("generic"),
           options: [
-            { label: createMessageDescriptor("battle-prompt-generic-option") },
-            { label: createMessageDescriptor("battle-prompt-generic-option") },
+            { label: builtInBattlePromptRef("generic-option") },
+            { label: builtInBattlePromptRef("generic-option") },
           ],
         },
       },
@@ -106,10 +106,10 @@ describe("replay fixtures", () => {
         kind: "confirm",
         options: {
           kind: "choice",
-          label: createMessageDescriptor("battle-prompt-generic"),
+          label: builtInBattlePromptRef("generic"),
           options: [
-            { label: createMessageDescriptor("battle-prompt-confirm-yes") },
-            { label: createMessageDescriptor("battle-prompt-confirm-skip") },
+            { label: builtInBattlePromptRef("confirm-yes") },
+            { label: builtInBattlePromptRef("confirm-skip") },
           ],
         },
       },

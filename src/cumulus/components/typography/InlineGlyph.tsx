@@ -1,9 +1,11 @@
 import type { ReactElement } from "react";
+import type { LocalizedString } from "@trox/runtime";
 import {
   type CumulusColor,
   resolveColor,
 } from "../../primitives/color";
 import type { Glyph } from "../../primitives/glyph";
+import { useOptionalLocalizer } from "../../../runtime/localization/use-localizer";
 
 export interface InlineGlyphProps {
   /** Named Boxicons glyph from the shared Cumulus glyph vocabulary. */
@@ -11,7 +13,9 @@ export interface InlineGlyphProps {
   /** Optional semantic fill color. Omit to inherit the surrounding text color. */
   color?: CumulusColor;
   /** Accessible meaning. Omit only when surrounding copy already names the glyph. */
-  label?: string;
+  label?: LocalizedString;
+  /** Accessible meaning supplied by canonical authored content. */
+  authoredLabel?: string;
 }
 
 /**
@@ -30,13 +34,24 @@ export function InlineGlyph({
   glyph,
   color,
   label,
+  authoredLabel,
 }: InlineGlyphProps): ReactElement {
+  const resolve = useOptionalLocalizer();
+  if (label !== undefined && authoredLabel !== undefined) {
+    throw new Error("InlineGlyph accepts either label or authoredLabel, not both.");
+  }
+  const accessibleLabel =
+    label === undefined
+      ? authoredLabel
+      : resolve === null
+        ? missingLocalizationProvider()
+        : resolve(label);
   return (
     <span
       data-inline-glyph=""
-      role={label === undefined ? undefined : "img"}
-      aria-label={label}
-      aria-hidden={label === undefined ? true : undefined}
+      role={accessibleLabel === undefined ? undefined : "img"}
+      aria-label={accessibleLabel}
+      aria-hidden={accessibleLabel === undefined ? true : undefined}
       style={{
         color: color === undefined ? undefined : resolveColor(color),
       }}
@@ -69,5 +84,11 @@ export function InlineGlyph({
         />
       </span>
     </span>
+  );
+}
+
+function missingLocalizationProvider(): never {
+  throw new Error(
+    "Localized InlineGlyph copy requires a mounted TroxLocalizationProvider.",
   );
 }

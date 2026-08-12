@@ -24,7 +24,7 @@
 #    4. generate-cumulus-tokens    src/cumulus/primitives/tokens.ts
 #    5. generate-cumulus-metadata  src/cumulus/metadata/cumulus-metadata.json
 #    6. generate-cumulus-docs   .llms/skills/cumulus/ component reference + index
-#    7. generate-localization-types  src/data/localization-messages.ts
+#    7. trox extract/check/bundle   reports, locale rows, and runtime bundles
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -62,8 +62,10 @@ if [[ "$FAST" == true ]]; then
   step "1/2  setup-assets — refresh runtime bundles from RON content"
   node scripts/setup-assets.mjs
 
-  step "2/2  generate-localization-types — refresh typed message contracts"
-  node scripts/generate-localization-types.mjs
+  step "2/2  Trox — extract, validate, and bundle localization"
+  node scripts/trox.mjs extract
+  node scripts/trox.mjs check --deny warnings
+  node scripts/trox.mjs bundle --allow-missing
 
   step "Done — fast content regeneration complete"
   git status --short -- data || true
@@ -95,11 +97,13 @@ node scripts/generate-cumulus-metadata.mjs
 step "6/7  generate-cumulus-docs — .llms/skills/cumulus component reference"
 node scripts/generate-cumulus-docs.mjs
 
-step "7/7  generate-localization-types — src/data/localization-messages.ts"
-node scripts/generate-localization-types.mjs
+step "7/7  Trox — extract, validate, and bundle localization"
+node scripts/trox.mjs extract
+node scripts/trox.mjs check --deny warnings
+node scripts/trox.mjs bundle --allow-missing
 
 step "Done — git-tracked files changed by this run"
-git status --short -- data docs src/cumulus/primitives/tokens.ts src/cumulus/metadata/cumulus-metadata.json .llms/skills/cumulus || true
+git status --short -- data docs localization src/generated/localization src/cumulus/primitives/tokens.ts src/cumulus/metadata/cumulus-metadata.json .llms/skills/cumulus || true
 
 cat <<'EOF'
 

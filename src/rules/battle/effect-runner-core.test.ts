@@ -5,7 +5,7 @@ import {
   applyPromptResolution,
   planNextEffectStep,
 } from "./effect-runner-core";
-import { createMessageDescriptor } from "../../data/localization-descriptors";
+import { builtInBattlePromptRef } from "../../data/dreamwell-prompts";
 
 // ---------------------------------------------------------------------------
 // Minimal fixture helpers
@@ -13,7 +13,7 @@ import { createMessageDescriptor } from "../../data/localization-descriptors";
 
 const SENTINEL_EDIT = { kind: "DRAW_CARD" as const, side: "player" as const };
 const SENTINEL_EDIT_2 = { kind: "ADJUST_SCORE" as const, side: "player" as const, amount: 1 };
-const FIXTURE_PROMPT = createMessageDescriptor("battle-prompt-generic");
+const FIXTURE_PROMPT = builtInBattlePromptRef("generic");
 
 function makeCtx(): StepContext {
   return {
@@ -203,8 +203,12 @@ describe("planNextEffectStep — confirm prompt head", () => {
     if (result.active.kind !== "choice") throw new Error();
     expect(result.active.label).toEqual(FIXTURE_PROMPT);
     expect(result.active.options).toHaveLength(2);
-    expect(result.active.options[0]?.label).toEqual({ id: "battle-prompt-confirm-yes" });
-    expect(result.active.options[1]?.label).toEqual({ id: "battle-prompt-confirm-skip" });
+    expect(result.active.options[0]?.label).toEqual(
+      builtInBattlePromptRef("confirm-yes"),
+    );
+    expect(result.active.options[1]?.label).toEqual(
+      builtInBattlePromptRef("confirm-skip"),
+    );
     expect(result.prompt).toBe(confirmPrompt);
   });
 });

@@ -3,8 +3,6 @@
 // Cumulus owns every rendered menu surface and interaction detail.
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useMessages } from "../cumulus/hooks/use-messages";
-import type { FluentMessageDescriptor } from "../data/localization-messages";
 import { downloadLog, logEvent } from "../logging";
 import { BUILD_GIT_SHA } from "../runtime/build-info";
 import {
@@ -14,28 +12,27 @@ import {
 import { useJourney } from "../state/journey-context";
 import type {
   CommandMenuAction,
-  CommandMenuCopy,
   CommandMenuGroup,
   CommandMenuItem,
+  CommandMenuStatusCopy,
 } from "../cumulus/components/overlay/CommandMenu";
 import { GLYPHS } from "../cumulus/primitives/glyph";
 import type { JourneyState } from "../types/journey";
+import { tx, txa } from "@trox/runtime";
+import { useLocalizer } from "../runtime/localization/use-localizer";
 
 /** A route-supplied command that the journey utility menu may render. */
 export type JourneyUtilityMenuAction = CommandMenuAction | CommandMenuGroup;
 
 export type JourneyUtilityMenuBuiltIn =
-  | "saveJourney"
-  | "loadJourney"
-  | "downloadLog"
-  | "buildSha";
+  "saveJourney" | "loadJourney" | "downloadLog" | "buildSha";
 
 /** Plain command data supplied to the Cumulus corner utility-menu offering. */
 export interface JourneyUtilityMenuViewModel {
   /** Root commands and groups, with named glyphs and semantic callbacks. */
   actions: readonly CommandMenuItem[];
   /** A transient result Cumulus presents beneath the trigger. */
-  status: CommandMenuCopy | null;
+  status: CommandMenuStatusCopy | null;
 }
 
 /** Inputs that wire journey-specific effects into the pure utility-menu model. */
@@ -43,7 +40,7 @@ export interface BuildJourneyUtilityMenuViewModelInput {
   actions: readonly JourneyUtilityMenuAction[];
   builtIns: readonly JourneyUtilityMenuBuiltIn[];
   canLoadJourney: boolean;
-  status: CommandMenuCopy | null;
+  status: CommandMenuStatusCopy | null;
   onSaveJourney: () => void;
   onLoadJourney: () => void;
   onDownloadLog: () => void;
@@ -64,20 +61,66 @@ export function buildJourneyUtilityMenuViewModel({
   onDownloadLog,
   onViewBuildSha,
 }: BuildJourneyUtilityMenuViewModelInput): JourneyUtilityMenuViewModel {
-  const builtInActions = builtIns.flatMap((builtIn): readonly CommandMenuItem[] => {
-    switch (builtIn) {
-      case "saveJourney":
-        return [{ kind: "action", id: "saveJourney", label: { id: "journey-menu-save-action" }, glyph: GLYPHS.save, onCommand: onSaveJourney }];
-      case "loadJourney":
-        return canLoadJourney
-          ? [{ kind: "action", id: "loadJourney", label: { id: "journey-menu-load-action" }, glyph: GLYPHS.folderOpen, onCommand: onLoadJourney }]
-          : [];
-      case "downloadLog":
-        return [{ kind: "action", id: "downloadLog", label: { id: "journey-menu-download-log-action" }, glyph: GLYPHS.download, onCommand: onDownloadLog }];
-      case "buildSha":
-        return [{ kind: "action", id: "buildSha", label: { id: "journey-menu-build-sha-action" }, glyph: GLYPHS.code, onCommand: onViewBuildSha }];
-    }
-  });
+  const builtInActions = builtIns.flatMap(
+    (builtIn): readonly CommandMenuItem[] => {
+      switch (builtIn) {
+        case "saveJourney":
+          return [
+            {
+              kind: "action",
+              id: "saveJourney",
+              label: tx(
+                "Save Journey",
+                "Command in the Journey utility menu that downloads the current journey as a save file.",
+              ),
+              glyph: GLYPHS.save,
+              onCommand: onSaveJourney,
+            },
+          ];
+        case "loadJourney":
+          return canLoadJourney
+            ? [
+                {
+                  kind: "action",
+                  id: "loadJourney",
+                  label: tx(
+                    "Load Journey",
+                    "Command in the Journey utility menu that imports a Journey save file.",
+                  ),
+                  glyph: GLYPHS.folderOpen,
+                  onCommand: onLoadJourney,
+                },
+              ]
+            : [];
+        case "downloadLog":
+          return [
+            {
+              kind: "action",
+              id: "downloadLog",
+              label: tx(
+                "Download Log",
+                "Command in the Journey utility menu that downloads the diagnostic Journey log.",
+              ),
+              glyph: GLYPHS.download,
+              onCommand: onDownloadLog,
+            },
+          ];
+        case "buildSha":
+          return [
+            {
+              kind: "action",
+              id: "buildSha",
+              label: tx(
+                "Build SHA",
+                "Command in the Journey utility menu that displays the current build identifier.",
+              ),
+              glyph: GLYPHS.code,
+              onCommand: onViewBuildSha,
+            },
+          ];
+      }
+    },
+  );
 
   return { actions: [...actions, ...builtInActions], status };
 }
@@ -104,16 +147,19 @@ export function useJourneyUtilityMenuController({
   loadSource,
 }: JourneyUtilityMenuControllerOptions): JourneyUtilityMenuViewModel {
   const { state } = useJourney();
-  const t = useMessages();
-  const [status, setStatus] = useState<FluentMessageDescriptor | null>(null);
+  const resolve = useLocalizer();
+  const [status, setStatus] = useState<CommandMenuStatusCopy | null>(null);
   const statusTimerRef = useRef<number | null>(null);
 
-  useEffect(() => () => {
-    if (statusTimerRef.current !== null) clearTimeout(statusTimerRef.current);
-  }, []);
+  useEffect(
+    () => () => {
+      if (statusTimerRef.current !== null) clearTimeout(statusTimerRef.current);
+    },
+    [],
+  );
 
-  function flashStatus(descriptor: FluentMessageDescriptor): void {
-    setStatus(descriptor);
+  function flashStatus(copy: CommandMenuStatusCopy): void {
+    setStatus(copy);
     if (statusTimerRef.current !== null) clearTimeout(statusTimerRef.current);
     statusTimerRef.current = window.setTimeout(() => {
       setStatus(null);
@@ -122,11 +168,24 @@ export function useJourneyUtilityMenuController({
   }
 
   function handleSaveJourney(): void {
-    const entered = window.prompt(t("journey-menu-save-prompt"));
+    const entered = window.prompt(
+      resolve(
+        tx(
+          "Save current journey as:",
+          "Native browser prompt text for naming a downloaded Journey save. The prompt is visible before the file is created and asks for the player's authored name.",
+        ),
+      ),
+    );
     if (entered === null) return;
     const trimmed = entered.trim();
     if (trimmed === "") {
-      flashStatus({ id: "journey-menu-save-cancelled" });
+      flashStatus({
+        kind: "message",
+        message: tx(
+          "Save cancelled: a name is required.",
+          "Transient status after the player submits an empty Journey save name.",
+        ),
+      });
       return;
     }
     try {
@@ -138,22 +197,38 @@ export function useJourneyUtilityMenuController({
         fileName,
         formatVersion: save.version,
       });
-      flashStatus({ id: "journey-menu-save-downloaded", variables: { fileName } });
-    } catch (error) {
       flashStatus({
-        id: "journey-menu-save-error",
-        variables: {
-          detail: error instanceof Error && error.message !== ""
-            ? error.message
-            : t("journey-menu-save-generic-error"),
-        },
+        kind: "message",
+        message: txa(
+          'Downloaded "{file_name}".',
+          { file_name: fileName },
+          "Transient status after a Journey save download. file_name is a generated filename and remains an opaque technical value.",
+        ),
       });
+    } catch (error) {
+      flashStatus(
+        error instanceof Error && error.message !== ""
+          ? { kind: "raw", value: error.message }
+          : {
+              kind: "message",
+              message: tx(
+                "Failed to save journey.",
+                "Fallback status when a Journey save failure does not provide technical detail.",
+              ),
+            },
+      );
     }
   }
 
   async function handleLoadJourney(): Promise<void> {
     if (onLoadJourneyState === undefined) {
-      flashStatus({ id: "journey-menu-load-unavailable" });
+      flashStatus({
+        kind: "message",
+        message: tx(
+          "Loading is unavailable in this context.",
+          "Transient status when Journey loading is unavailable in the current route context.",
+        ),
+      });
       return;
     }
     try {
@@ -167,30 +242,54 @@ export function useJourneyUtilityMenuController({
         buildGitSha: loaded.buildGitSha,
       });
       onLoadJourneyState(loaded.journeyState, loadSource);
-      flashStatus({ id: "journey-menu-load-loaded", variables: { name: loaded.name } });
-    } catch (error) {
       flashStatus({
-        id: "journey-menu-load-error",
-        variables: {
-          detail: error instanceof Error && error.message !== ""
-            ? error.message
-            : t("journey-menu-load-generic-error"),
-        },
+        kind: "message",
+        message: txa(
+          'Loaded "{save_name}".',
+          { save_name: loaded.name },
+          "Transient status after a Journey save is imported. save_name is the player's authored save name and remains grammatically opaque.",
+        ),
       });
+    } catch (error) {
+      flashStatus(
+        error instanceof Error && error.message !== ""
+          ? { kind: "raw", value: error.message }
+          : {
+              kind: "message",
+              message: tx(
+                "Failed to load journey.",
+                "Fallback status when a Journey load failure does not provide technical detail.",
+              ),
+            },
+      );
     }
   }
 
-  return useMemo(() => buildJourneyUtilityMenuViewModel({
-    actions,
-    builtIns,
-    canLoadJourney: onLoadJourneyState !== undefined,
-    status,
-    onSaveJourney: handleSaveJourney,
-    onLoadJourney: () => void handleLoadJourney(),
-    onDownloadLog: downloadLog,
-    onViewBuildSha: () => {
-      logEvent("build_sha_viewed", { source: "dreamscape_menu", gitSha: BUILD_GIT_SHA });
-      flashStatus({ id: "journey-menu-build-sha-status", variables: { gitSha: BUILD_GIT_SHA } });
-    },
-  }), [actions, builtIns, onLoadJourneyState, status, t]);
+  return useMemo(
+    () =>
+      buildJourneyUtilityMenuViewModel({
+        actions,
+        builtIns,
+        canLoadJourney: onLoadJourneyState !== undefined,
+        status,
+        onSaveJourney: handleSaveJourney,
+        onLoadJourney: () => void handleLoadJourney(),
+        onDownloadLog: downloadLog,
+        onViewBuildSha: () => {
+          logEvent("build_sha_viewed", {
+            source: "dreamscape_menu",
+            gitSha: BUILD_GIT_SHA,
+          });
+          flashStatus({
+            kind: "message",
+            message: txa(
+              "Build Git SHA: {git_sha}",
+              { git_sha: BUILD_GIT_SHA },
+              "Transient status after the player requests the current build identifier. git_sha is an opaque technical build identifier.",
+            ),
+          });
+        },
+      }),
+    [actions, builtIns, onLoadJourneyState, status, resolve],
+  );
 }

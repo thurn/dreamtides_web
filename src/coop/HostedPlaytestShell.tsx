@@ -1,4 +1,4 @@
-import { localizationTodo } from "@trox/runtime";
+import { tx } from "@trox/runtime";
 import { useEffect, useRef, type ReactNode } from "react";
 import { GlassButton } from "../cumulus/components/controls/GlassButton";
 import { GlassPanel } from "../cumulus/components/overlay/GlassPanel";
@@ -10,7 +10,7 @@ import {
   useGameState,
 } from "./hooks";
 import "./hosted-playtest-shell.css";
-import { useMessages } from "../cumulus/hooks/use-messages";
+import { useLocalizer } from "../runtime/localization/use-localizer";
 
 /** Applies the hosted-room controller policy without hiding shared content. */
 export function HostedPlaytestShell({
@@ -25,7 +25,7 @@ export function HostedPlaytestShell({
   const clientId = useClientId();
   const connectedClientIds = useConnectedClientIds();
   const control = state.playtestControl;
-  const t = useMessages();
+  const resolve = useLocalizer();
   const claimRequestedRef = useRef(false);
 
   useEffect(() => {
@@ -86,21 +86,23 @@ export function HostedPlaytestShell({
 
   return (
     <div className="hosted-playtest-shell">
-      <div
-        className="hosted-playtest-shell__content"
-        inert
-        aria-hidden="true"
-      >
+      <div className="hosted-playtest-shell__content" inert aria-hidden="true">
         {children}
       </div>
       {canTakeControl ? (
         <div className="cumulus hosted-playtest-shell__status">
           <GlassPanel
-            title={localizationTodo(t("coop-player-disconnected-title"))}
+            title={tx(
+              "Player Disconnected",
+              "Title shown when the controller of a hosted playtest disconnects.",
+            )}
             headerSpacing="compact"
             footer={
               <GlassButton
-                label={t("coop-take-control-action")}
+                label={tx(
+                  "Take Control",
+                  "Action that claims control of a paused hosted playtest.",
+                )}
                 variant="accent"
                 placement="onGlass"
                 onPress={takeControl}
@@ -109,7 +111,12 @@ export function HostedPlaytestShell({
             testId="hosted-playtest-status"
           >
             <p className="hosted-playtest-shell__message">
-              {t("coop-playtest-paused-message")}
+              {resolve(
+                tx(
+                  "The playtest is paused. Take control when you are ready to continue.",
+                  "Status explaining that a hosted playtest paused after its controller disconnected.",
+                ),
+              )}
             </p>
           </GlassPanel>
         </div>

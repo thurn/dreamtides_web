@@ -1,11 +1,18 @@
-import { localizationTodo } from "@trox/runtime";
+import {
+  tx,
+  plural,
+  one,
+  other,
+  txa,
+  type LocalizedString,
+} from "@trox/runtime";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import type { Dreamsign as DreamsignData } from "../../types/journey";
 import { GlassButton } from "../components/controls/GlassButton";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { GlassDialog } from "../components/overlay/GlassDialog";
 import { token } from "../primitives/tokens";
-import { useMessages } from "../hooks/use-messages";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 /** The pending and currently held Dreamsigns shown by a replacement choice. */
 export interface DreamsignReplacementView {
@@ -18,8 +25,8 @@ export interface DreamsignReplacementDialogProps {
   view: DreamsignReplacementView;
   onReplace: (dreamsignId: string) => void;
   onCancel: () => void;
-  cancelLabel: string;
-  closeLabel: string;
+  cancelLabel: LocalizedString;
+  closeLabel: LocalizedString;
 }
 
 /** Shared UUID-backed replacement choice for every Dreamsign acquisition flow. */
@@ -30,21 +37,29 @@ export function DreamsignReplacementDialog({
   cancelLabel,
   closeLabel,
 }: DreamsignReplacementDialogProps) {
-  const t = useMessages();
+  const resolve = useLocalizer();
   return (
     <GlassDialog
-      title={localizationTodo(t("dreamsign-replacement-title"))}
-      subtitle={localizationTodo(t("dreamsign-replacement-capacity", {
-        count: view.maxDreamsigns,
-      }))}
+      title={tx(
+        "Choose a Dreamsign to Replace",
+        "Heading for choosing which held Dreamsign to replace after gaining one while at capacity.",
+      )}
+      subtitle={txa(
+        plural(view.maxDreamsigns, [
+          one("You can hold {count} Dreamsign."),
+          other("You can hold {count} Dreamsigns."),
+        ]),
+        { count: view.maxDreamsigns },
+        "Subtitle in the Dreamsign replacement dialog. count is the positive maximum number of Dreamsigns the current player may hold at once.",
+      )}
       onClose={onCancel}
-      closeLabel={localizationTodo(closeLabel)}
+      closeLabel={closeLabel}
     >
       <div
         data-dreamsign-replacement-dialog=""
         data-pending-dreamsign-id={requireDreamsignId(
           view.pendingDreamsign,
-          t("dreamsign-replacement-pending-label"),
+          "Cumulus Dreamsign replacement pending reward",
         )}
         style={{
           width: "min(100%, 420px)",
@@ -67,7 +82,12 @@ export function DreamsignReplacementDialog({
               color: token("--text-on-glass-muted"),
             }}
           >
-            {t("dreamsign-replacement-new-label")}
+            {resolve(
+              tx(
+                "New Dreamsign",
+                "Eyebrow above the newly gained Dreamsign in the replacement dialog.",
+              ),
+            )}
           </p>
           <div style={{ width: 88, height: 88 }}>
             <Dreamsign
@@ -88,7 +108,7 @@ export function DreamsignReplacementDialog({
           {view.currentDreamsigns.map((dreamsign) => {
             const dreamsignId = requireDreamsignId(
               dreamsign,
-              t("dreamsign-replacement-collection-label"),
+              "Cumulus Dreamsign replacement collection",
             );
             return (
               <div
@@ -109,7 +129,10 @@ export function DreamsignReplacementDialog({
                   />
                 </div>
                 <GlassButton
-                  label={t("dreamsign-replacement-replace-action")}
+                  label={tx(
+                    "Replace",
+                    "Player-facing message for the dreamsign replacement replace action interface state.",
+                  )}
                   variant="accent"
                   placement="onGlass"
                   testId={`replace-dreamsign-${dreamsignId}`}

@@ -3,8 +3,7 @@
 // renders its root actions here as app-shell corner chrome.
 
 import type { JourneyState } from "../types/journey";
-import { createMessageDescriptor } from "../data/localization-descriptors";
-import { GLYPHS } from "../cumulus/primitives/glyph";
+import {GLYPHS } from "../cumulus/primitives/glyph";
 import { useIsDesktop } from "../cumulus/screens/use-is-desktop";
 import { MENU_BUTTON_PX } from "../cumulus/screens/chrome-geometry";
 import { CommandMenu } from "../cumulus/components/overlay/CommandMenu";
@@ -12,6 +11,7 @@ import {
   useJourneyUtilityMenuController,
   type JourneyUtilityMenuAction,
 } from "./JourneyUtilityMenuController";
+import { meaning, tx } from "@trox/runtime";
 
 /** The App-shell overlay handlers the menu triggers. */
 interface DreamscapeJourneyMenuProps {
@@ -78,14 +78,20 @@ export function DreamscapeJourneyMenu({
       id: "deck",
       kind: "action",
       glyph: GLYPHS.affiliationRow,
-      label: createMessageDescriptor("journey-menu-view-deck-action"),
+      label: tx(
+        "View Deck",
+        "Normal Journey utility-menu actions. These labels are visible in the shared app chrome; debug-labelled actions remain in the same menu only when their route supplies the corresponding developer capability.",
+      ),
       onCommand: onOpenDeckViewer,
     },
     {
       id: "pool",
       kind: "action",
       glyph: GLYPHS.grid,
-      label: createMessageDescriptor("journey-menu-pool-viewer-action"),
+      label: tx(
+        meaning("pool-viewer-action", "Pool Viewer"),
+        "Player-facing message for the journey menu pool viewer action interface state.",
+      ),
       onCommand: onOpenPoolViewer,
     },
     ...(hasDraftData
@@ -94,7 +100,10 @@ export function DreamscapeJourneyMenu({
             id: "package",
             kind: "action" as const,
             glyph: GLYPHS.package,
-            label: createMessageDescriptor("journey-menu-package-debug-action"),
+            label: tx(
+              "Package Debug",
+              "Player-facing message for the journey menu package debug action interface state.",
+            ),
             onCommand: onOpenDebugScreen,
           },
         ]
@@ -105,7 +114,10 @@ export function DreamscapeJourneyMenu({
             id: "cardSource",
             kind: "action" as const,
             glyph: GLYPHS.list,
-            label: createMessageDescriptor("journey-menu-card-sources-action"),
+            label: tx(
+              "Card Sources",
+              "Player-facing message for the journey menu card sources action interface state.",
+            ),
             active: isCardSourceOverlayOpen,
             onCommand: onToggleCardSourceOverlay,
           },
@@ -116,7 +128,10 @@ export function DreamscapeJourneyMenu({
       id: "editor",
       kind: "action",
       glyph: GLYPHS.edit,
-      label: createMessageDescriptor("journey-menu-edit-state-action"),
+      label: tx(
+        "Edit Journey State",
+        "Player-facing message for the journey menu edit state action interface state.",
+      ),
       onCommand: onOpenJourneyEditor,
     },
     ...(onRegenerateAtlas !== undefined
@@ -125,7 +140,10 @@ export function DreamscapeJourneyMenu({
             id: "regenerateAtlas",
             kind: "action" as const,
             glyph: GLYPHS.refresh,
-            label: createMessageDescriptor("journey-menu-regenerate-atlas-action"),
+            label: tx(
+              "Regenerate Atlas",
+              "Player-facing message for the journey menu regenerate atlas action interface state.",
+            ),
             onCommand: onRegenerateAtlas,
           },
         ]
@@ -146,7 +164,10 @@ export function DreamscapeJourneyMenu({
         kind: "appChrome",
         trigger: {
           glyph: isDesktop ? GLYPHS.gear : GLYPHS.menu,
-          label: createMessageDescriptor("journey-menu-open-action"),
+          label: tx(
+            "Open menu",
+            "Player-facing message for the journey menu open action interface state.",
+          ),
           corner: isDesktop ? "topEnd" : "topStart",
         },
         actions: model.actions,

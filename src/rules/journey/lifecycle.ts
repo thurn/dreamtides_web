@@ -34,8 +34,9 @@ import {
   materializeRandomSite,
 } from "../../random-site/random-site";
 import { SITE_TYPES } from "../../types/site-type";
-import { isFluentMessageDescriptor } from "../../data/localization-descriptors";
 import {
+  builtInBattlePromptRefFromV24Descriptor,
+  isBuiltInBattlePromptRef,
   isDreamwellPromptRef,
   isLegacyPromptText,
   type BattlePromptText,
@@ -694,6 +695,13 @@ function legacyPromptText(value: string): BattlePromptText {
   return { kind: "legacy-prompt-text", text: value };
 }
 
+function normalizeImportedPromptText(value: unknown): unknown {
+  if (isPromptText(value)) return value;
+  const builtIn = builtInBattlePromptRefFromV24Descriptor(value);
+  if (builtIn !== null) return builtIn;
+  return typeof value === "string" ? legacyPromptText(value) : value;
+}
+
 export function normalizeLegacyPendingPrompt(
   value: Record<string, unknown>,
 ): Record<string, unknown> {
@@ -702,20 +710,18 @@ export function normalizeLegacyPendingPrompt(
   }
   if (!isRecord(value.pendingPrompt.options)) return value;
   const options = { ...value.pendingPrompt.options };
-  if (typeof options.label === "string") {
-    options.label = legacyPromptText(options.label);
-  }
-  if (typeof options.subtitle === "string") {
-    options.subtitle = legacyPromptText(options.subtitle);
+  options.label = normalizeImportedPromptText(options.label);
+  if (options.subtitle !== undefined) {
+    options.subtitle = normalizeImportedPromptText(options.subtitle);
   }
   if (Array.isArray(options.options)) {
     const legacyOptions: unknown[] = options.options;
     options.options = legacyOptions.map((option: unknown) => {
       if (!isRecord(option)) return option;
-      if (isPromptText(option.label)) return option;
-      return typeof option.label === "string"
-        ? { ...option, label: legacyPromptText(option.label) }
-        : option;
+      return {
+        ...option,
+        label: normalizeImportedPromptText(option.label),
+      };
     });
   }
   return {
@@ -726,7 +732,7 @@ export function normalizeLegacyPendingPrompt(
 
 function isPromptText(value: unknown): value is BattlePromptText {
   return (
-    isFluentMessageDescriptor(value) ||
+    isBuiltInBattlePromptRef(value) ||
     isDreamwellPromptRef(value) ||
     isLegacyPromptText(value)
   );

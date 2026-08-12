@@ -1,6 +1,6 @@
 // PurgeSiteScreen — the Cumulus rendering of Master Takeshi's purge site.
 
-import { localizationTodo } from "@trox/runtime";
+import { tx } from "@trox/runtime";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { DeckCardView } from "./MobileDeckViewer";
 import { CardPickerPanel } from "../components/card/CardPickerPanel";
@@ -14,7 +14,6 @@ import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
-import { useMessages } from "../hooks/use-messages";
 import { formatAuthoredTemplate } from "../../data/authored-template";
 
 export type PurgeGuideView = GuideGalleryGuideView;
@@ -71,7 +70,6 @@ export function PurgeSiteScreen({
   onPurge,
   onTutorialShown,
 }: PurgeSiteScreenProps) {
-  const t = useMessages();
   const [selectedEntryIds, setSelectedEntryIds] = useState<readonly string[]>(
     [],
   );
@@ -97,17 +95,18 @@ export function PurgeSiteScreen({
         view.maxPaidSelections,
         view.visitCosts,
       ).map((reservation) => ({
-        label:
-          reservation.label.kind === "decline"
-            ? t("purge-site-decline-action")
-            : formatAuthoredTemplate(view.presentation.purgeAction, {
+        ...(reservation.label.kind === "decline"
+          ? { label: tx(
+                "Decline",
+                "Compact command that declines the current site interaction without applying it.",
+              ) }
+          : { authoredLabel: formatAuthoredTemplate(view.presentation.purgeAction, {
                 count: reservation.label.count,
-              }),
+              }) }),
         essenceCost: reservation.essenceCost,
       })),
     [
       freeEntryIds,
-      t,
       view.maxPaidSelections,
       view.presentation.purgeAction,
       view.visitCosts,
@@ -212,7 +211,6 @@ function PurgeGallery({
   readonly onToggle: (entryId: string) => void;
 }) {
   const desktop = layout === "desktop";
-  const t = useMessages();
   return (
     <section
       data-purge-card-grid=""
@@ -233,17 +231,19 @@ function PurgeGallery({
       }}
     >
       <CardPickerPanel
-        title={localizationTodo(presentation.title)}
-        subtitle={localizationTodo(presentation.instruction)}
+        authoredTitle={presentation.title}
+        authoredSubtitle={presentation.instruction}
         rightAccessory={{
           kind: "glassButton",
           button: {
-            label:
-              selectedCount === 0
-                ? t("purge-site-decline-action")
-                : formatAuthoredTemplate(presentation.purgeAction, {
+            ...(selectedCount === 0
+              ? { label: tx(
+                    "Decline",
+                    "Compact command that declines the current site interaction without applying it.",
+                  ) }
+              : { authoredLabel: formatAuthoredTemplate(presentation.purgeAction, {
                     count: selectedCount,
-                  }),
+                  }) }),
             essenceCost: selectedCount === 0 ? null : totalCost,
             widthReservations: actionWidthReservations,
             variant: selectedCount === 0 ? "default" : "danger",

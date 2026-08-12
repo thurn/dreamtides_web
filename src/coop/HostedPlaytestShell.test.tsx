@@ -1,9 +1,12 @@
 // @vitest-environment jsdom
 
-import { act, type ReactNode } from "react";
+import { act, type ComponentProps, type ReactNode } from "react";
+import type { LocalizedString } from "@trox/runtime";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { FoldState } from "../rules/fold-state";
+import { CumulusRoot } from "../cumulus/CumulusRoot";
+import { useLocalizer } from "../runtime/localization/use-localizer";
 
 const mocks = vi.hoisted(() => ({
   clientId: "viewer",
@@ -25,16 +28,20 @@ vi.mock("../cumulus/components/overlay/GlassPanel", () => ({
     children,
     footer,
   }: {
-    title?: string;
+    title?: LocalizedString;
+    authoredTitle?: string;
     children: ReactNode;
     footer?: ReactNode;
-  }) => (
-    <aside>
-      <h2>{title}</h2>
-      {children}
-      {footer}
-    </aside>
-  ),
+  }) => {
+    const resolve = useLocalizer();
+    return (
+      <aside>
+        <h2>{title === undefined ? null : resolve(title)}</h2>
+        {children}
+        {footer}
+      </aside>
+    );
+  },
 }));
 
 vi.mock("../cumulus/components/controls/GlassButton", () => ({
@@ -42,12 +49,32 @@ vi.mock("../cumulus/components/controls/GlassButton", () => ({
     label,
     onPress,
   }: {
-    label: string;
+    label?: LocalizedString;
+    authoredLabel?: string;
     onPress: () => void;
-  }) => <button onClick={onPress}>{label}</button>,
+  }) => {
+    const resolve = useLocalizer();
+    return (
+      <button onClick={onPress}>
+        {label === undefined ? null : resolve(label)}
+      </button>
+    );
+  },
 }));
 
-const { HostedPlaytestShell } = await import("./HostedPlaytestShell");
+const { HostedPlaytestShell: RealHostedPlaytestShell } = await import(
+  "./HostedPlaytestShell"
+);
+
+function HostedPlaytestShell(
+  props: ComponentProps<typeof RealHostedPlaytestShell>,
+) {
+  return (
+    <CumulusRoot>
+      <RealHostedPlaytestShell {...props} />
+    </CumulusRoot>
+  );
+}
 
 function state(controllerClientId: string | null): FoldState {
   return {

@@ -12,9 +12,22 @@ import { revealEntityId } from "../../internal/reveal/identity";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
 import { type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
-import { useMessages } from "../../hooks/use-messages";
 import type { InfoCardProps } from "../overlay/InfoCard";
 import "./atlas.css";
+import { tx } from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
+
+const VISUALLY_HIDDEN_STYLE: CSSProperties = {
+  position: "absolute",
+  width: 1,
+  height: 1,
+  padding: 0,
+  margin: 0,
+  overflow: "hidden",
+  clip: "rect(0, 0, 0, 0)",
+  whiteSpace: "nowrap",
+  border: 0,
+};
 
 /** Atlas-primary display data. The component selects the strict InfoCard variant. */
 export interface AtlasNodePrimary {
@@ -147,7 +160,7 @@ export function AtlasNode({
   model,
   onPress,
 }: AtlasNodeProps): React.ReactElement {
-  const t = useMessages();
+  const resolve = useLocalizer();
   const { node, role } = model;
   const isStarter = role === "starter";
   const isBoss = role === "boss";
@@ -171,7 +184,7 @@ export function AtlasNode({
       <img
         className="cumulus-atlas-frame-img"
         src={resolveArtRef(model.iconRef)}
-        alt={node.biomeName}
+        alt=""
         draggable={false}
       />
     ) : (
@@ -190,13 +203,55 @@ export function AtlasNode({
     (model.isReachable === false ? " cumulus-atlas-node-unreachable" : "") +
     (isBoss ? " cumulus-atlas-node-boss" : "") +
     (isStarter ? " cumulus-atlas-node-start" : "");
-  const ariaLabel = t("atlas-node-accessible-name", {
-    hasBiomeName: node.biomeName === "" ? "no" : "yes",
-    biomeName: node.biomeName,
-    state: node.state,
-    role,
-    hasKnownDreamsign: model.knownDreamsignRef === null ? "no" : "yes",
-  });
+  const accessibleStateMessage = (() => {
+    switch (node.state) {
+      case "unrevealed":
+        return tx(
+          "This dreamscape is unrevealed.",
+          "Accessible state sentence for a Dream Atlas node whose contents have not been revealed.",
+        );
+      case "revealedLocked":
+        return tx(
+          "This dreamscape is revealed and locked.",
+          "Accessible state sentence for a revealed Dream Atlas node that cannot currently be entered.",
+        );
+      case "available":
+        return tx(
+          "This dreamscape is available.",
+          "Accessible state sentence for a Dream Atlas node the player can enter now.",
+        );
+      case "completed":
+        return tx(
+          "This dreamscape is completed.",
+          "Accessible state sentence for a Dream Atlas node the player has completed.",
+        );
+      case "forgone":
+        return tx(
+          "This dreamscape is unreachable.",
+          "Accessible state sentence for a Dream Atlas node that cannot be entered on this journey.",
+        );
+    }
+  })();
+  const accessibleRoleMessage =
+    role === "starter"
+      ? tx(
+          "This is the starting dreamscape.",
+          "Accessible role sentence for the starting node on the Dream Atlas.",
+        )
+      : role === "boss"
+        ? tx(
+            "This is the final boss.",
+            "Accessible role sentence for the final boss node on the Dream Atlas.",
+          )
+        : null;
+  const accessibleDreamsignMessage =
+    model.knownDreamsignRef === null
+      ? null
+      : tx(
+          "A known Dreamsign is here.",
+          "Accessible sentence for a Dream Atlas node that visibly promises a known Dreamsign.",
+        );
+  const accessibleNameId = React.useId();
   const nodeStyle = {
     width: "100%",
     height: "100%",
@@ -218,7 +273,7 @@ export function AtlasNode({
       pressFeedback={isAvailable ? "scale" : "stationary"}
       className={className}
       style={nodeStyle}
-      aria-label={ariaLabel}
+      aria-labelledby={`${accessibleNameId}-name ${accessibleNameId}-state${accessibleRoleMessage === null ? "" : ` ${accessibleNameId}-role`}${accessibleDreamsignMessage === null ? "" : ` ${accessibleNameId}-dreamsign`}`}
       aria-disabled={!isAvailable}
       data-atlas-node-id={node.id}
       data-node-state={node.state}
@@ -245,6 +300,32 @@ export function AtlasNode({
         onPress(node.id);
       }}
     >
+      <span
+        id={`${accessibleNameId}-name`}
+        style={VISUALLY_HIDDEN_STYLE}
+      >
+        {node.biomeName === ""
+          ? resolve(
+              tx(
+                "Unrevealed dreamscape",
+                "Accessible name used for a Dream Atlas node before its authored dreamscape name is known.",
+              ),
+            )
+          : node.biomeName}
+      </span>
+      <span id={`${accessibleNameId}-state`} style={VISUALLY_HIDDEN_STYLE}>
+        {resolve(accessibleStateMessage)}
+      </span>
+      {accessibleRoleMessage === null ? null : (
+        <span id={`${accessibleNameId}-role`} style={VISUALLY_HIDDEN_STYLE}>
+          {resolve(accessibleRoleMessage)}
+        </span>
+      )}
+      {accessibleDreamsignMessage === null ? null : (
+        <span id={`${accessibleNameId}-dreamsign`} style={VISUALLY_HIDDEN_STYLE}>
+          {resolve(accessibleDreamsignMessage)}
+        </span>
+      )}
       {isAvailable && (
         <div
           className="cumulus-atlas-node-selectable-highlight"
@@ -279,13 +360,29 @@ export function AtlasNode({
       )}
 
       {isBoss && (
-        <div className="cumulus-atlas-boss-badge" title={t("atlas-final-boss-title")}>
+        <div
+          className="cumulus-atlas-boss-badge"
+          title={resolve(
+            tx(
+              "Final boss",
+              "Tooltip identifying the final boss badge on a Dream Atlas node.",
+            ),
+          )}
+        >
           <i className="fa-solid fa-skull" aria-hidden="true" />
         </div>
       )}
 
       {model.knownDreamsignRef !== null && (
-        <div className="cumulus-atlas-known-badge" title={t("atlas-known-dreamsign-title")}>
+        <div
+          className="cumulus-atlas-known-badge"
+          title={resolve(
+            tx(
+              "Known dreamsign",
+              "Tooltip identifying the known Dreamsign reward badge on a Dream Atlas node.",
+            ),
+          )}
+        >
           <img
             src={resolveArtRef(model.knownDreamsignRef)}
             alt=""

@@ -716,7 +716,7 @@ describe("LOAD_STATE", () => {
     ]);
   });
 
-  it("keeps an old Fluent prompt descriptor readable", () => {
+  it("keeps a legacy prompt descriptor readable", () => {
     const descriptor = { id: "battle-prompt-generic" } as const;
     const normalized = normalizeLegacyPendingPrompt({
       pendingPrompt: {
@@ -737,7 +737,7 @@ describe("LOAD_STATE", () => {
     expect(
       (normalized.pendingPrompt as { options: { label: unknown } }).options
         .label,
-    ).toEqual(descriptor);
+    ).toEqual({ kind: "built-in-battle-prompt", prompt: "generic" });
   });
 
   it("preserves legacy Dreamwell prompt text when importing a battle through LOAD_STATE", () => {

@@ -31,7 +31,7 @@ import {
   planSupportRecompute,
 } from "./battle-card-effects-table";
 import { DREAMWELL_EFFECTS } from "./dreamwell-effects-table";
-import { createMessageDescriptor } from "../../data/localization-descriptors";
+import { builtInBattlePromptRef } from "../../data/dreamwell-prompts";
 import type { StepContext } from "./effect-step";
 import type {
   BattleModifier,
@@ -3245,7 +3245,7 @@ describe("RESOLVE_PROMPT pick-cards candidate validation", () => {
         kind: "pick-cards",
         options: {
           kind: "pick-cards",
-          label: createMessageDescriptor("battle-prompt-generic"),
+          label: builtInBattlePromptRef("generic"),
           candidateIds: ["card-a", "card-b"],
           count: 1,
           optional: false,
@@ -3310,10 +3310,10 @@ describe("RESOLVE_PROMPT choice validation", () => {
           kind: "choice",
           options: {
             kind: "choice",
-            label: createMessageDescriptor("battle-prompt-generic"),
+            label: builtInBattlePromptRef("generic"),
             options: [
-              { label: createMessageDescriptor("battle-prompt-generic-option") },
-              { label: createMessageDescriptor("battle-prompt-generic-option") },
+              { label: builtInBattlePromptRef("generic-option") },
+              { label: builtInBattlePromptRef("generic-option") },
             ],
           },
         },
@@ -3350,10 +3350,10 @@ describe("RESOLVE_PROMPT confirm validation", () => {
           kind: "confirm",
           options: {
             kind: "choice",
-            label: createMessageDescriptor("battle-prompt-generic"),
+            label: builtInBattlePromptRef("generic"),
             options: [
-              { label: createMessageDescriptor("battle-prompt-confirm-yes") },
-              { label: createMessageDescriptor("battle-prompt-confirm-skip") },
+              { label: builtInBattlePromptRef("confirm-yes") },
+              { label: builtInBattlePromptRef("confirm-skip") },
             ],
           },
         },

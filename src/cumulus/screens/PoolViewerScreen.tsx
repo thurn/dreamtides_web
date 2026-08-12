@@ -6,8 +6,8 @@
 // reports stable entry ids through callbacks.
 
 import type { CSSProperties, DragEvent, ReactElement } from "react";
-import { useEffect, useState } from "react";
-import {
+import {useEffect, useState } from "react";
+import { meaning,
   one,
   other,
   plural,
@@ -252,12 +252,15 @@ export function PoolViewerScreen({
       <CardBrowserPanel
           title={viewerTitle(view.title)}
           subtitle={txa(
-            plural(view.totalCount, [
-              one("{visible_count} of {total_count} Card"),
-              other("{visible_count} of {total_count} Cards"),
-            ]),
+            meaning(
+              "pool-filtered-count-subtitle",
+              plural(view.totalCount, [
+                one("{visible_count} of {total_count} Card"),
+                other("{visible_count} of {total_count} Cards"),
+              ]),
+            ),
             { visible_count: view.visibleCount, total_count: view.totalCount },
-            "Visible Pool Viewer result-count subtitle. visible_count is the nonnegative safe-integer number remaining after filters and may be smaller than total_count. total_count is the nonnegative safe-integer size of the selected source before filters and governs Card number grammar; both numbers are visible.",
+            "Filtered card-browser subtitle. visible_count is the non-negative number matching the active filters; total_count is the non-negative collection size before filtering and governs Card grammar.",
           )}
           rightAccessory={{ kind: "iconButton", button: { glyph: GLYPHS.close, label: tx(
             "Close pool viewer",
@@ -303,7 +306,7 @@ function sourceOptionLabel(source: PoolViewerSourceId): LocalizedString {
     );
     case "signature": return tx(
       "Signature Cards",
-      "Visible Pool Viewer source-tab label for the Dream Avatar's authored signature cards.",
+      "Visible collection label for the active Dream Avatar's authored signature cards.",
     );
   }
 }
@@ -333,15 +336,15 @@ function typeFilterLabel(cardType: PoolViewerTypeFilter): LocalizedString {
   switch (cardType) {
     case "all": return tx(
       "All",
-      "Compact visible Pool Viewer card-type filter label that keeps Character and Event cards.",
+      "Visible card-browser type filter option that keeps every card type.",
     );
     case "character": return tx(
       "Characters",
-      "Compact visible Pool Viewer card-type filter label that keeps Character cards.",
+      "Visible card-browser type filter option that keeps Character cards.",
     );
     case "event": return tx(
       "Events",
-      "Compact visible Pool Viewer card-type filter label that keeps Event cards.",
+      "Visible card-browser type filter option that keeps Event cards.",
     );
   }
 }
@@ -350,11 +353,11 @@ function sortDirectionLabel(direction: PoolViewerSortDirection): LocalizedString
   switch (direction) {
     case "asc": return tx(
       "Sort ascending",
-      "Accessible command name for the compact Pool Viewer control that sorts in ascending order.",
+      "Accessible command name for sorting the visible card collection in ascending order.",
     );
     case "desc": return tx(
       "Sort descending",
-      "Accessible command name for the compact Pool Viewer control that sorts in descending order.",
+      "Accessible command name for sorting the visible card collection in descending order.",
     );
   }
 }
@@ -384,7 +387,7 @@ function costFilterLabel(cost: PoolViewerCostFilter): LocalizedString {
 function viewerTitle(title: PoolViewerTitleKind): LocalizedString {
   switch (title) {
     case "pool": return tx(
-      "Pool Viewer",
+      meaning("pool-viewer-heading", "Pool Viewer"),
       "Visible Pool Viewer heading for the Journey utility overlay.",
     );
     case "battle": return tx(
@@ -398,7 +401,7 @@ function sortFieldLabel(sort: PoolViewerSortId): LocalizedString {
   switch (sort) {
     case "name": return tx(
       "Name",
-      "Compact visible Pool Viewer sort-field option for authored card names.",
+      "Visible card-browser sort-field option for canonical authored card names.",
     );
     case "cardNumber": return tx(
       "Number",
@@ -406,7 +409,7 @@ function sortFieldLabel(sort: PoolViewerSortId): LocalizedString {
     );
     case "cost": return tx(
       "Cost",
-      "Compact visible Pool Viewer sort-field option for Energy cost.",
+      "Visible card-browser sort-field option for printed Energy cost.",
     );
     case "type": return tx(
       "Type",
@@ -414,11 +417,11 @@ function sortFieldLabel(sort: PoolViewerSortId): LocalizedString {
     );
     case "subtype": return tx(
       "Subtype",
-      "Compact visible Pool Viewer sort-field option for authored subtype.",
+      "Visible card-browser sort-field option for canonical authored subtype.",
     );
     case "spark": return tx(
       "Spark",
-      "Compact visible Pool Viewer sort-field option for Spark.",
+      "Visible card-browser sort-field option for printed Spark.",
     );
   }
 }
