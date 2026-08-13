@@ -2,3 +2,8 @@
 during `npm run review:full` under sustained repository-wide test load. The
 test passes unchanged when run in isolation; its synchronous CLI subprocess
 coverage is load-sensitive and unrelated to the localization migration.
+
+`cargo check --locked --manifest-path tabula/src-tauri/Cargo.toml` fails before
+compilation because `tabula/src-tauri/Cargo.lock` needs an update for the
+current `tools/game-data` dependency graph. The stale Tabula lockfile predates
+and is unrelated to the GitHub Actions repair.
