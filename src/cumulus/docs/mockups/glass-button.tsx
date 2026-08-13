@@ -52,7 +52,7 @@ function ControlPair({ placement }: { placement: GlassControlPlacement }) {
       }}
     >
       <GlassButton
-        authoredLabel="Decline"
+        label={assertLocalized("Decline")}
         placement={placement}
         onPress={() => {}}
       />

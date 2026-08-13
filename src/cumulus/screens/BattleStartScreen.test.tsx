@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -10,6 +11,7 @@ import { artRef } from "../primitives/art";
 import { CumulusRoot } from "../CumulusRoot";
 import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
 import { BattleStartScreen, type BattleStartView } from "./BattleStartScreen";
+import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
 
 class ResizeObserverStub {
   constructor(_callback: ResizeObserverCallback) {}
@@ -65,19 +67,19 @@ function makeView(): BattleStartView {
     scene: artRef.dreamscapeScene("test_dreamscape"),
     dreamAvatar: {
       id: "opponent-uuid",
-      name: "Aeris, the Prism Guide",
-      title: "Storm Archivist",
+      name: assertLocalized("Aeris, the Prism Guide"),
+      title: assertLocalized("Storm Archivist"),
       imageNumber: "001",
-      ability: "Whenever an event resolves, gain momentum.",
+      ability: assertLocalized("Whenever an event resolves, gain momentum."),
       abilityActive: true,
     },
     dreamsigns: [
-      {
+      localizedDreamsignFixture({
         id: "battle-test:dreamsign:0",
         name: "Sign of Quiet Thunder",
         effectDescription: "The first event each turn costs 1 less.",
         imageName: "quiet-thunder.webp",
-      },
+      }),
     ],
     signatureCards: cards.map((card) => ({
       cardId: card.id,
@@ -196,9 +198,9 @@ describe("Cumulus BattleStartScreen", () => {
         id: "first-battle-guidance",
         model: {
           portrait: { kind: "character-portrait", characterId: "mira" },
-          portraitAlt: "Mira",
-          speakerName: "Mira",
-          text: "Before each dream battle, you can view cards from your opponent's deck and see the ⍟ required to win",
+          portraitAlt: assertLocalized("Mira"),
+          speakerName: assertLocalized("Mira"),
+          text: assertLocalized("Before each dream battle, you can view cards from your opponent's deck and see the ⍟ required to win"),
         },
         delaySeconds: 1,
         horizontalOffset: 0,

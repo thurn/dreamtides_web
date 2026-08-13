@@ -32,7 +32,11 @@ function makeCard(overrides: Partial<CardData> = {}): CardData {
 /** A minimal deck-card view around a card, keyed by its entryId. */
 function view(entryId: string, card: Partial<CardData>): DeckCardView {
   const displaySnapshot = makeCard(card);
-  return { entryId, model: { cardId: displaySnapshot.id, displaySnapshot }, isBane: false };
+  return {
+    entryId,
+    model: { cardId: displaySnapshot.id, displaySnapshot },
+    isBane: false,
+  };
 }
 
 /** N Character views of one subtype, keyed `<subtype>-0`, `<subtype>-1`, … */
@@ -112,7 +116,7 @@ describe("buildDeckTypeFilterOptions — smart subtype options", () => {
     const options = buildDeckTypeFilterOptions(deck);
     expect(values(options)).toContain("subtype:Warrior");
     const warrior = options.find((o) => o.value === "subtype:Warrior");
-    expect(warrior?.authoredLabel).toBeTruthy();
+    expect(warrior?.label).toBeTruthy();
   });
 
   it("orders subtype options by count, most-represented first", () => {
@@ -127,7 +131,10 @@ describe("buildDeckTypeFilterOptions — smart subtype options", () => {
   });
 
   it("ignores cards with no subtype", () => {
-    const deck = subtypeViews("", SUBTYPE_FILTER_MIN_COUNT + 3);
+    const deck = [
+      ...subtypeViews("", SUBTYPE_FILTER_MIN_COUNT + 3),
+      ...subtypeViews("*", SUBTYPE_FILTER_MIN_COUNT + 3),
+    ];
     expect(values(buildDeckTypeFilterOptions(deck))).toEqual(
       values(BASE_DECK_TYPE_FILTER_OPTIONS),
     );
@@ -214,10 +221,7 @@ describe("filterAndSortDeckCards — sorting", () => {
   });
 
   it("does not mutate the input array", () => {
-    const deck = [
-      view("c", { energyCost: 3 }),
-      view("a", { energyCost: 1 }),
-    ];
+    const deck = [view("c", { energyCost: 3 }), view("a", { energyCost: 1 })];
     const before = ids(deck);
     filterAndSortDeckCards(deck, { typeFilter: "all", sort: "cost" });
     expect(ids(deck)).toEqual(before);

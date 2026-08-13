@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 import { LayerName } from "../../types/layer-name";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";

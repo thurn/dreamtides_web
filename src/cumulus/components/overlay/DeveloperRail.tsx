@@ -1,4 +1,4 @@
-import type { LocalizedString } from "@trox/runtime";
+import { assertLocalized, type LocalizedString } from "@trox/runtime";
 import type { ReactElement, ReactNode } from "react";
 import { GLYPHS } from "../../primitives/glyph";
 import type { Glyph } from "../../primitives/glyph";
@@ -9,18 +9,15 @@ export interface DeveloperRailProps {
   /** DOM id targeted by the rail disclosure trigger. */
   readonly id: string;
   /** Developer tool name shown in the rail header. */
-  readonly title?: LocalizedString;
-  readonly authoredTitle?: string;
+  readonly title: LocalizedString;
   /** Optional concise tool context. */
   readonly subtitle?: LocalizedString;
-  readonly authoredSubtitle?: string;
   /** Physical screen edge occupied by the docked rail. */
   readonly side: "left" | "right";
   /** Accessible close action. */
   readonly onClose: () => void;
   /** Accessible name for the close action. */
-  readonly closeLabel?: LocalizedString;
-  readonly authoredCloseLabel?: string;
+  readonly closeLabel: LocalizedString;
   /** Optional tool action placed before the close disc. */
   readonly headerAction?: {
     readonly glyph: Glyph;
@@ -41,25 +38,15 @@ export interface DeveloperRailProps {
 export function DeveloperRail({
   id,
   title,
-  authoredTitle,
   subtitle,
-  authoredSubtitle,
   side,
   onClose,
   closeLabel,
-  authoredCloseLabel,
   headerAction,
   children,
   footer,
   testId,
 }: DeveloperRailProps): ReactElement {
-  if ((title === undefined) === (authoredTitle === undefined) ||
-      (closeLabel === undefined) === (authoredCloseLabel === undefined)) {
-    throw new Error("DeveloperRail title and close label require exactly one localized or authored ownership path.");
-  }
-  if (subtitle !== undefined && authoredSubtitle !== undefined) {
-    throw new Error("DeveloperRail accepts subtitle or authoredSubtitle, not both.");
-  }
   return (
     <aside
       id={id}
@@ -74,11 +61,9 @@ export function DeveloperRail({
     >
       <GlassPanel
         frame="edgeRail"
-        authoredEyebrow="Developer Tools"
+        eyebrow={assertLocalized("Developer Tools")}
         title={title}
-        authoredTitle={authoredTitle}
         subtitle={subtitle}
-        authoredSubtitle={authoredSubtitle}
         headerSpacing="compact"
         rightAccessory={
           headerAction === undefined
@@ -87,7 +72,6 @@ export function DeveloperRail({
                 button: {
                   glyph: GLYPHS.close,
                   label: closeLabel,
-                  authoredLabel: authoredCloseLabel,
                   onPress: onClose,
                   size: "sm",
                 },
@@ -99,7 +83,6 @@ export function DeveloperRail({
                   {
                     glyph: GLYPHS.close,
                     label: closeLabel,
-                    authoredLabel: authoredCloseLabel,
                     onPress: onClose,
                     size: "sm",
                   },

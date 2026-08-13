@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 import { useRef } from "react";
 import type { CSSProperties } from "react";
 import { RulesText } from "../cumulus/components/card/RulesText";
@@ -46,7 +47,10 @@ export interface EditableDreamsignProps {
     value: EditableFieldValue,
   ) => void;
   onAddDreamsignTag: (dreamsign: EditorDreamsignRecord, name: string) => void;
-  onRemoveDreamsignTag: (dreamsign: EditorDreamsignRecord, name: string) => void;
+  onRemoveDreamsignTag: (
+    dreamsign: EditorDreamsignRecord,
+    name: string,
+  ) => void;
   onOpenManageTags: () => void;
 }
 
@@ -195,7 +199,8 @@ export default function EditableDreamsign({
 }: EditableDreamsignProps) {
   const tileRef = useRef<HTMLElement | null>(null);
   const checkboxActive = checkboxTag !== "";
-  const checkboxChecked = checkboxActive && dreamsign.tags.includes(checkboxTag);
+  const checkboxChecked =
+    checkboxActive && dreamsign.tags.includes(checkboxTag);
   const checkboxColor = tagColor(checkboxTag, availableTags);
 
   const toggleCheckboxTag = () => {
@@ -250,7 +255,9 @@ export default function EditableDreamsign({
           saveEntry={nameSaveEntry}
           cardAnchorRef={tileRef}
           onBeginEdit={(value) => onFieldBeginEdit(dreamsign, "name", value)}
-          onDraftChange={(value) => onFieldDraftChange(dreamsign, "name", value)}
+          onDraftChange={(value) =>
+            onFieldDraftChange(dreamsign, "name", value)
+          }
           onCancel={() => onFieldCancel(dreamsign, "name")}
           onSave={(value) => onFieldSave(dreamsign, "name", value)}
           onCommit={(value) => onFieldCommit(dreamsign, "name", value)}
@@ -276,7 +283,7 @@ export default function EditableDreamsign({
         >
           <div style={effectStyle}>
             <RulesText
-              text={dreamsign["rendered-text"]}
+              text={assertLocalized(dreamsign["rendered-text"])}
               owner={{ kind: "dreamsign", id: dreamsign.id }}
             />
           </div>

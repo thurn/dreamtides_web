@@ -19,7 +19,7 @@ import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
 import { useIsDesktop } from "./use-is-desktop";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
-import { tx, txa } from "@trox/runtime";
+import { opaque, tx, txa } from "@trox/runtime";
 
 export type BattleTutorialGuidanceSourceView =
   | {
@@ -505,7 +505,7 @@ export function BattleTutorialGuidance({
           disabled={!active}
           ariaLabelMessage={txa(
             "Dismiss {speaker_name} tutorial",
-            { speaker_name: renderedView.dialogue.speakerName },
+            { speaker_name: opaque(renderedView.dialogue.speakerName) },
             "Accessible command that dismisses one tutorial dialogue. speaker_name is the displayed name of the character speaking and has unknown grammatical gender.",
           )}
           data-testid="battle-tutorial-dismiss"

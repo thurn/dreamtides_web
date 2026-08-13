@@ -1,3 +1,4 @@
+import { assertLocalized, type LocalizedString } from "@trox/runtime";
 import { Reorder, motion, useDragControls } from "framer-motion";
 import {
   type KeyboardEvent,
@@ -28,11 +29,12 @@ import type {
   TutorialCardConstants,
 } from "../../types/tutorial";
 import { isCardId } from "../../types/card-identity";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 export interface TutorialEditorRailProps {
   readonly actions: readonly TutorialAction[];
   readonly saveStatus: TutorialEditorSaveStatus;
-  readonly saveError: string | null;
+  readonly saveError: LocalizedString | null;
   readonly tutorialCardConstants: TutorialCardConstants;
   readonly onActionsChange: (
     actions: readonly TutorialAction[],
@@ -476,7 +478,7 @@ function SpeechBubbleEditor({
     return (
       <GlassButton
         glyph={GLYPHS.plus}
-        authoredLabel="Add Speech Bubble"
+        label={assertLocalized("Add Speech Bubble")}
         placement="onGlass"
         onPress={() => onChange(DEFAULT_SPEECH_BUBBLE, true)}
       />
@@ -494,8 +496,17 @@ function SpeechBubbleEditor({
       <Select
         full
         size="sm"
-        authoredAriaLabel={`Speech bubble speaker for action ${String(actionNumber)}`}
-        options={[...SPEECH_BUBBLE_SPEAKER_OPTIONS].map((option) => ({ ...option, authoredLabel: option.label, ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { authoredTriggerLabel: option.triggerLabel } : {}) }))}
+        ariaLabel={assertLocalized(
+          `Speech bubble speaker for action ${String(actionNumber)}`,
+        )}
+        options={[...SPEECH_BUBBLE_SPEAKER_OPTIONS].map((option) => ({
+          ...option,
+          label: assertLocalized(option.label),
+          ...("triggerLabel" in option &&
+          typeof option.triggerLabel === "string"
+            ? { triggerLabel: assertLocalized(option.triggerLabel) }
+            : {}),
+        }))}
         value={speechBubble.speaker}
         onChange={(speaker) => {
           if (
@@ -509,12 +520,14 @@ function SpeechBubbleEditor({
         }}
       />
       <TextArea
-        authoredLabel={"Speech Bubble Text"}
+        label={assertLocalized("Speech Bubble Text")}
         value={speechBubble.text}
-        authoredSupportingText={"[yellow]copy[/yellow] uses yellow; [purple]copy[purple] uses bold high-contrast purple."}
-        authoredError={
+        supportingText={assertLocalized(
+          "[yellow]copy[/yellow] uses yellow; [purple]copy[purple] uses bold high-contrast purple.",
+        )}
+        error={
           speechBubble.text.trim().length === 0
-            ? "Text cannot be blank."
+            ? assertLocalized("Text cannot be blank.")
             : undefined
         }
         testId={`tutorial-action-speech-bubble-text-${actionId}`}
@@ -522,12 +535,16 @@ function SpeechBubbleEditor({
         onCommit={(text) => onChange({ ...speechBubble, text }, true)}
       />
       <NumberStepper
-        authoredLabel={"Appearance Delay"}
+        label={assertLocalized("Appearance Delay")}
         value={appearanceDelay}
-        authoredDisplayValue={`${waitLabel(appearanceDelay)}s`}
+        displayValue={assertLocalized(`${waitLabel(appearanceDelay)}s`)}
         size="sm"
-        authoredDecrementLabel={`Decrease speech bubble delay for action ${String(actionNumber)}`}
-        authoredIncrementLabel={`Increase speech bubble delay for action ${String(actionNumber)}`}
+        decrementLabel={assertLocalized(
+          `Decrease speech bubble delay for action ${String(actionNumber)}`,
+        )}
+        incrementLabel={assertLocalized(
+          `Increase speech bubble delay for action ${String(actionNumber)}`,
+        )}
         decrementDisabled={appearanceDelay <= 0}
         onDecrement={() =>
           onChange(
@@ -549,12 +566,16 @@ function SpeechBubbleEditor({
         }
       />
       <NumberStepper
-        authoredLabel={"Visible Duration"}
+        label={assertLocalized("Visible Duration")}
         value={visibleDuration}
-        authoredDisplayValue={`${waitLabel(visibleDuration)}s`}
+        displayValue={assertLocalized(`${waitLabel(visibleDuration)}s`)}
         size="sm"
-        authoredDecrementLabel={`Decrease speech bubble duration for action ${String(actionNumber)}`}
-        authoredIncrementLabel={`Increase speech bubble duration for action ${String(actionNumber)}`}
+        decrementLabel={assertLocalized(
+          `Decrease speech bubble duration for action ${String(actionNumber)}`,
+        )}
+        incrementLabel={assertLocalized(
+          `Increase speech bubble duration for action ${String(actionNumber)}`,
+        )}
         decrementDisabled={visibleDuration <= 0}
         onDecrement={() =>
           onChange(
@@ -579,12 +600,16 @@ function SpeechBubbleEditor({
         }
       />
       <NumberStepper
-        authoredLabel={"Bubble Width"}
+        label={assertLocalized("Bubble Width")}
         value={speechBubble.bubbleWidth}
-        authoredDisplayValue={`${String(speechBubble.bubbleWidth)}px`}
+        displayValue={assertLocalized(`${String(speechBubble.bubbleWidth)}px`)}
         size="sm"
-        authoredDecrementLabel={`Narrow speech bubble for action ${String(actionNumber)}`}
-        authoredIncrementLabel={`Widen speech bubble for action ${String(actionNumber)}`}
+        decrementLabel={assertLocalized(
+          `Narrow speech bubble for action ${String(actionNumber)}`,
+        )}
+        incrementLabel={assertLocalized(
+          `Widen speech bubble for action ${String(actionNumber)}`,
+        )}
         decrementDisabled={
           speechBubble.bubbleWidth <= MINIMUM_SPEECH_BUBBLE_WIDTH
         }
@@ -617,12 +642,18 @@ function SpeechBubbleEditor({
         }
       />
       <NumberStepper
-        authoredLabel={"Horizontal Offset"}
+        label={assertLocalized("Horizontal Offset")}
         value={speechBubble.horizontalOffset}
-        authoredDisplayValue={`${waitLabel(speechBubble.horizontalOffset)}px`}
+        displayValue={assertLocalized(
+          `${waitLabel(speechBubble.horizontalOffset)}px`,
+        )}
         size="sm"
-        authoredDecrementLabel={`Move speech bubble left for action ${String(actionNumber)}`}
-        authoredIncrementLabel={`Move speech bubble right for action ${String(actionNumber)}`}
+        decrementLabel={assertLocalized(
+          `Move speech bubble left for action ${String(actionNumber)}`,
+        )}
+        incrementLabel={assertLocalized(
+          `Move speech bubble right for action ${String(actionNumber)}`,
+        )}
         onDecrement={() =>
           onChange(
             {
@@ -643,12 +674,18 @@ function SpeechBubbleEditor({
         }
       />
       <NumberStepper
-        authoredLabel={"Vertical Offset"}
+        label={assertLocalized("Vertical Offset")}
         value={speechBubble.verticalOffset}
-        authoredDisplayValue={`${waitLabel(speechBubble.verticalOffset)}px`}
+        displayValue={assertLocalized(
+          `${waitLabel(speechBubble.verticalOffset)}px`,
+        )}
         size="sm"
-        authoredDecrementLabel={`Move speech bubble up for action ${String(actionNumber)}`}
-        authoredIncrementLabel={`Move speech bubble down for action ${String(actionNumber)}`}
+        decrementLabel={assertLocalized(
+          `Move speech bubble up for action ${String(actionNumber)}`,
+        )}
+        incrementLabel={assertLocalized(
+          `Move speech bubble down for action ${String(actionNumber)}`,
+        )}
         onDecrement={() =>
           onChange(
             {
@@ -671,7 +708,7 @@ function SpeechBubbleEditor({
       {optional ? (
         <GlassButton
           glyph={GLYPHS.trash}
-          authoredLabel="Remove Speech Bubble"
+          label={assertLocalized("Remove Speech Bubble")}
           placement="onGlass"
           variant="danger"
           onPress={() => onChange(undefined, true)}
@@ -771,8 +808,15 @@ function TutorialActionRow({
             <Select
               full
               size="sm"
-              authoredAriaLabel={`Action ${String(index + 1)} type`}
-              options={[...ACTION_OPTIONS].map((option) => ({ ...option, authoredLabel: option.label, ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { authoredTriggerLabel: option.triggerLabel } : {}) }))}
+              ariaLabel={assertLocalized(`Action ${String(index + 1)} type`)}
+              options={[...ACTION_OPTIONS].map((option) => ({
+                ...option,
+                label: assertLocalized(option.label),
+                ...("triggerLabel" in option &&
+                typeof option.triggerLabel === "string"
+                  ? { triggerLabel: assertLocalized(option.triggerLabel) }
+                  : {}),
+              }))}
               value={action.action}
               onChange={(value) => {
                 if (
@@ -790,7 +834,10 @@ function TutorialActionRow({
                 ) {
                   return;
                 }
-                update(changedActionType(action, value, tutorialCardConstants), true);
+                update(
+                  changedActionType(action, value, tutorialCardConstants),
+                  true,
+                );
               }}
             />
           </div>
@@ -798,7 +845,9 @@ function TutorialActionRow({
             glyph={GLYPHS.play}
             size="sm"
             placement="onGlass"
-            authoredLabel={`Play tutorial from action ${String(index + 1)}`}
+            label={assertLocalized(
+              `Play tutorial from action ${String(index + 1)}`,
+            )}
             testId={`tutorial-action-play-${action.id}`}
             onPress={() => onPlayFromAction(action.id)}
           />
@@ -806,7 +855,7 @@ function TutorialActionRow({
             glyph={GLYPHS.trash}
             size="sm"
             placement="onGlass"
-            authoredLabel={`Delete action ${String(index + 1)}`}
+            label={assertLocalized(`Delete action ${String(index + 1)}`)}
             onPress={() =>
               onActionsChange(
                 actions.filter((candidate) => candidate.id !== action.id),
@@ -833,8 +882,17 @@ function TutorialActionRow({
             <Select
               full
               size="sm"
-              authoredAriaLabel={`How to Play trigger for action ${String(index + 1)}`}
-              options={[...HOW_TO_PLAY_TRIGGER_OPTIONS].map((option) => ({ ...option, authoredLabel: option.label, ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { authoredTriggerLabel: option.triggerLabel } : {}) }))}
+              ariaLabel={assertLocalized(
+                `How to Play trigger for action ${String(index + 1)}`,
+              )}
+              options={[...HOW_TO_PLAY_TRIGGER_OPTIONS].map((option) => ({
+                ...option,
+                label: assertLocalized(option.label),
+                ...("triggerLabel" in option &&
+                typeof option.triggerLabel === "string"
+                  ? { triggerLabel: assertLocalized(option.triggerLabel) }
+                  : {}),
+              }))}
               value={action.trigger ?? "player-turn-announcement-complete"}
               onChange={(trigger) => {
                 if (
@@ -850,8 +908,17 @@ function TutorialActionRow({
             <Select
               full
               size="sm"
-              authoredAriaLabel={`How to Play companion for action ${String(index + 1)}`}
-              options={[...HOW_TO_PLAY_COMPANION_OPTIONS].map((option) => ({ ...option, authoredLabel: option.label, ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { authoredTriggerLabel: option.triggerLabel } : {}) }))}
+              ariaLabel={assertLocalized(
+                `How to Play companion for action ${String(index + 1)}`,
+              )}
+              options={[...HOW_TO_PLAY_COMPANION_OPTIONS].map((option) => ({
+                ...option,
+                label: assertLocalized(option.label),
+                ...("triggerLabel" in option &&
+                typeof option.triggerLabel === "string"
+                  ? { triggerLabel: assertLocalized(option.triggerLabel) }
+                  : {}),
+              }))}
               value={action.companion ?? "none"}
               onChange={(companion) => {
                 if (companion === "dreamwell-card") {
@@ -875,12 +942,18 @@ function TutorialActionRow({
               }}
             />
             <NumberStepper
-              authoredLabel={"Card Width"}
+              label={assertLocalized("Card Width")}
               value={action.cardWidth ?? DEFAULT_HOW_TO_PLAY_CARD_WIDTH}
-              authoredDisplayValue={`${String(action.cardWidth ?? DEFAULT_HOW_TO_PLAY_CARD_WIDTH)}px`}
+              displayValue={assertLocalized(
+                `${String(action.cardWidth ?? DEFAULT_HOW_TO_PLAY_CARD_WIDTH)}px`,
+              )}
               size="sm"
-              authoredDecrementLabel={`Narrow How to Play card for action ${String(index + 1)}`}
-              authoredIncrementLabel={`Widen How to Play card for action ${String(index + 1)}`}
+              decrementLabel={assertLocalized(
+                `Narrow How to Play card for action ${String(index + 1)}`,
+              )}
+              incrementLabel={assertLocalized(
+                `Widen How to Play card for action ${String(index + 1)}`,
+              )}
               decrementDisabled={
                 (action.cardWidth ?? DEFAULT_HOW_TO_PLAY_CARD_WIDTH) <=
                 MINIMUM_HOW_TO_PLAY_CARD_WIDTH
@@ -911,12 +984,14 @@ function TutorialActionRow({
               }
             />
             <TextArea
-              authoredLabel={"Instruction Text"}
+              label={assertLocalized("Instruction Text")}
               value={action.text}
-              authoredSupportingText={"Use blank lines between paragraphs. [yellow]copy[/yellow] uses yellow; [purple]copy[purple] uses bold high-contrast purple; ⍟ renders points; ✦ renders spark."}
-              authoredError={
+              supportingText={assertLocalized(
+                "Use blank lines between paragraphs. [yellow]copy[/yellow] uses yellow; [purple]copy[purple] uses bold high-contrast purple; ⍟ renders points; ✦ renders spark.",
+              )}
+              error={
                 action.text.trim().length === 0
-                  ? "Text cannot be blank."
+                  ? assertLocalized("Text cannot be blank.")
                   : undefined
               }
               testId={`tutorial-action-text-${action.id}`}
@@ -931,8 +1006,17 @@ function TutorialActionRow({
             <Select
               full
               size="sm"
-              authoredAriaLabel={`DreamAvatar owner for action ${String(index + 1)}`}
-              options={[...DREAM_AVATAR_OWNER_OPTIONS].map((option) => ({ ...option, authoredLabel: option.label, ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { authoredTriggerLabel: option.triggerLabel } : {}) }))}
+              ariaLabel={assertLocalized(
+                `DreamAvatar owner for action ${String(index + 1)}`,
+              )}
+              options={[...DREAM_AVATAR_OWNER_OPTIONS].map((option) => ({
+                ...option,
+                label: assertLocalized(option.label),
+                ...("triggerLabel" in option &&
+                typeof option.triggerLabel === "string"
+                  ? { triggerLabel: assertLocalized(option.triggerLabel) }
+                  : {}),
+              }))}
               value={action.owner}
               onChange={(owner) => {
                 if (owner !== "player" && owner !== "enemy") return;
@@ -940,12 +1024,16 @@ function TutorialActionRow({
               }}
             />
             <NumberStepper
-              authoredLabel={"Large Portrait Pause"}
+              label={assertLocalized("Large Portrait Pause")}
               value={action.pause}
-              authoredDisplayValue={`${waitLabel(action.pause)}s`}
+              displayValue={assertLocalized(`${waitLabel(action.pause)}s`)}
               size="sm"
-              authoredDecrementLabel={`Decrease large portrait pause for action ${String(index + 1)}`}
-              authoredIncrementLabel={`Increase large portrait pause for action ${String(index + 1)}`}
+              decrementLabel={assertLocalized(
+                `Decrease large portrait pause for action ${String(index + 1)}`,
+              )}
+              incrementLabel={assertLocalized(
+                `Increase large portrait pause for action ${String(index + 1)}`,
+              )}
               decrementDisabled={action.pause <= 0}
               onDecrement={() =>
                 update(
@@ -970,12 +1058,16 @@ function TutorialActionRow({
               }
             />
             <NumberStepper
-              authoredLabel={"Scale & Travel Duration"}
+              label={assertLocalized("Scale & Travel Duration")}
               value={action.duration}
-              authoredDisplayValue={`${waitLabel(action.duration)}s`}
+              displayValue={assertLocalized(`${waitLabel(action.duration)}s`)}
               size="sm"
-              authoredDecrementLabel={`Decrease scale and travel duration for action ${String(index + 1)}`}
-              authoredIncrementLabel={`Increase scale and travel duration for action ${String(index + 1)}`}
+              decrementLabel={assertLocalized(
+                `Decrease scale and travel duration for action ${String(index + 1)}`,
+              )}
+              incrementLabel={assertLocalized(
+                `Increase scale and travel duration for action ${String(index + 1)}`,
+              )}
               decrementDisabled={action.duration <= 0}
               onDecrement={() =>
                 update(
@@ -1004,10 +1096,12 @@ function TutorialActionRow({
 
         {action.action === "draw-opponent-card" ? (
           <TextField
-            authoredLabel={"Drawn Opponent Card UUID"}
+            label={assertLocalized("Drawn Opponent Card UUID")}
             value={action.cardId}
-            authoredError={
-              isCardId(action.cardId) ? undefined : "Enter an opponent card UUID."
+            error={
+              isCardId(action.cardId)
+                ? undefined
+                : assertLocalized("Enter an opponent card UUID.")
             }
             testId={`tutorial-action-card-id-${action.id}`}
             onChange={(cardId) =>
@@ -1021,8 +1115,17 @@ function TutorialActionRow({
             <Select
               full
               size="sm"
-              authoredAriaLabel={`Card owner for action ${String(index + 1)}`}
-              options={[...DREAM_AVATAR_OWNER_OPTIONS].map((option) => ({ ...option, authoredLabel: option.label, ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { authoredTriggerLabel: option.triggerLabel } : {}) }))}
+              ariaLabel={assertLocalized(
+                `Card owner for action ${String(index + 1)}`,
+              )}
+              options={[...DREAM_AVATAR_OWNER_OPTIONS].map((option) => ({
+                ...option,
+                label: assertLocalized(option.label),
+                ...("triggerLabel" in option &&
+                typeof option.triggerLabel === "string"
+                  ? { triggerLabel: assertLocalized(option.triggerLabel) }
+                  : {}),
+              }))}
               value={action.owner}
               onChange={(owner) => {
                 if (owner !== "player" && owner !== "enemy") return;
@@ -1032,10 +1135,15 @@ function TutorialActionRow({
             <Select
               full
               size="sm"
-              authoredAriaLabel={`Draw reason for action ${String(index + 1)}`}
+              ariaLabel={assertLocalized(
+                `Draw reason for action ${String(index + 1)}`,
+              )}
               options={[
-                { value: "dreamwell-effect", authoredLabel: "Dreamwell Effect" },
-                { value: "turn-draw", authoredLabel: "Turn Draw" },
+                {
+                  value: "dreamwell-effect",
+                  label: assertLocalized("Dreamwell Effect"),
+                },
+                { value: "turn-draw", label: assertLocalized("Turn Draw") },
               ]}
               value={action.reason}
               onChange={(reason) => {
@@ -1046,9 +1154,13 @@ function TutorialActionRow({
               }}
             />
             <TextField
-              authoredLabel={"Drawn Card UUID"}
+              label={assertLocalized("Drawn Card UUID")}
               value={action.cardId}
-              authoredError={isCardId(action.cardId) ? undefined : "Enter a card UUID."}
+              error={
+                isCardId(action.cardId)
+                  ? undefined
+                  : assertLocalized("Enter a card UUID.")
+              }
               testId={`tutorial-action-card-id-${action.id}`}
               onChange={(cardId) =>
                 update({ ...action, cardId }, isCardId(cardId))
@@ -1060,10 +1172,12 @@ function TutorialActionRow({
         {action.action === "reveal-and-play-opponent-card" ? (
           <>
             <TextField
-              authoredLabel={"Revealed Opponent Card UUID"}
+              label={assertLocalized("Revealed Opponent Card UUID")}
               value={action.cardId}
-              authoredError={
-                isCardId(action.cardId) ? undefined : "Enter an opponent card UUID."
+              error={
+                isCardId(action.cardId)
+                  ? undefined
+                  : assertLocalized("Enter an opponent card UUID.")
               }
               testId={`tutorial-action-card-id-${action.id}`}
               onChange={(cardId) =>
@@ -1080,12 +1194,18 @@ function TutorialActionRow({
               }
             />
             <NumberStepper
-              authoredLabel={"Face-Up Reading Time"}
+              label={assertLocalized("Face-Up Reading Time")}
               value={action.revealDuration}
-              authoredDisplayValue={`${waitLabel(action.revealDuration)}s`}
+              displayValue={assertLocalized(
+                `${waitLabel(action.revealDuration)}s`,
+              )}
               size="sm"
-              authoredDecrementLabel={`Decrease face-up reading time for action ${String(index + 1)}`}
-              authoredIncrementLabel={`Increase face-up reading time for action ${String(index + 1)}`}
+              decrementLabel={assertLocalized(
+                `Decrease face-up reading time for action ${String(index + 1)}`,
+              )}
+              incrementLabel={assertLocalized(
+                `Increase face-up reading time for action ${String(index + 1)}`,
+              )}
               decrementDisabled={action.revealDuration <= 0}
               onDecrement={() =>
                 update(
@@ -1118,8 +1238,17 @@ function TutorialActionRow({
             <Select
               full
               size="sm"
-              authoredAriaLabel={`Dreamwell owner for action ${String(index + 1)}`}
-              options={[...DREAM_AVATAR_OWNER_OPTIONS].map((option) => ({ ...option, authoredLabel: option.label, ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { authoredTriggerLabel: option.triggerLabel } : {}) }))}
+              ariaLabel={assertLocalized(
+                `Dreamwell owner for action ${String(index + 1)}`,
+              )}
+              options={[...DREAM_AVATAR_OWNER_OPTIONS].map((option) => ({
+                ...option,
+                label: assertLocalized(option.label),
+                ...("triggerLabel" in option &&
+                typeof option.triggerLabel === "string"
+                  ? { triggerLabel: assertLocalized(option.triggerLabel) }
+                  : {}),
+              }))}
               value={action.owner}
               onChange={(owner) => {
                 if (owner !== "player" && owner !== "enemy") return;
@@ -1127,10 +1256,12 @@ function TutorialActionRow({
               }}
             />
             <TextField
-              authoredLabel={"Dreamwell Card UUID"}
+              label={assertLocalized("Dreamwell Card UUID")}
               value={action.cardId}
-              authoredError={
-                isCardId(action.cardId) ? undefined : "Enter a Dreamwell card UUID."
+              error={
+                isCardId(action.cardId)
+                  ? undefined
+                  : assertLocalized("Enter a Dreamwell card UUID.")
               }
               testId={`tutorial-action-card-id-${action.id}`}
               onChange={(cardId) =>
@@ -1138,12 +1269,18 @@ function TutorialActionRow({
               }
             />
             <NumberStepper
-              authoredLabel={"Face-Up Reading Time"}
+              label={assertLocalized("Face-Up Reading Time")}
               value={action.revealDuration ?? 0}
-              authoredDisplayValue={`${waitLabel(action.revealDuration ?? 0)}s`}
+              displayValue={assertLocalized(
+                `${waitLabel(action.revealDuration ?? 0)}s`,
+              )}
               size="sm"
-              authoredDecrementLabel={`Decrease Dreamwell reading time for action ${String(index + 1)}`}
-              authoredIncrementLabel={`Increase Dreamwell reading time for action ${String(index + 1)}`}
+              decrementLabel={assertLocalized(
+                `Decrease Dreamwell reading time for action ${String(index + 1)}`,
+              )}
+              incrementLabel={assertLocalized(
+                `Increase Dreamwell reading time for action ${String(index + 1)}`,
+              )}
               decrementDisabled={(action.revealDuration ?? 0) <= 0}
               onDecrement={() => {
                 const revealDuration = Math.max(
@@ -1163,10 +1300,12 @@ function TutorialActionRow({
 
         {action.action === "reposition-opponent-character" ? (
           <TextField
-            authoredLabel={"Opponent Character UUID"}
+            label={assertLocalized("Opponent Character UUID")}
             value={action.cardId}
-            authoredError={
-              isCardId(action.cardId) ? undefined : "Enter an opponent character UUID."
+            error={
+              isCardId(action.cardId)
+                ? undefined
+                : assertLocalized("Enter an opponent character UUID.")
             }
             testId={`tutorial-action-card-id-${action.id}`}
             onChange={(cardId) =>
@@ -1178,10 +1317,12 @@ function TutorialActionRow({
         {action.action === "reposition-player-character" ? (
           <>
             <TextField
-              authoredLabel={"Player Character UUID"}
+              label={assertLocalized("Player Character UUID")}
               value={action.cardId}
-              authoredError={
-                isCardId(action.cardId) ? undefined : "Enter a player character UUID."
+              error={
+                isCardId(action.cardId)
+                  ? undefined
+                  : assertLocalized("Enter a player character UUID.")
               }
               testId={`tutorial-action-card-id-${action.id}`}
               onChange={(cardId) =>
@@ -1189,10 +1330,12 @@ function TutorialActionRow({
               }
             />
             <TextField
-              authoredLabel={"Opposing Character UUID"}
+              label={assertLocalized("Opposing Character UUID")}
               value={action.opposingCardId}
-              authoredError={
-                isCardId(action.opposingCardId) ? undefined : "Enter an opposing character UUID."
+              error={
+                isCardId(action.opposingCardId)
+                  ? undefined
+                  : assertLocalized("Enter an opposing character UUID.")
               }
               testId={`tutorial-action-opposing-card-id-${action.id}`}
               onChange={(opposingCardId) =>
@@ -1205,10 +1348,12 @@ function TutorialActionRow({
         {action.action === "resolve-challenge" ? (
           <>
             <TextField
-              authoredLabel={"Challenger UUID"}
+              label={assertLocalized("Challenger UUID")}
               value={action.challengerCardId}
-              authoredError={
-                isCardId(action.challengerCardId) ? undefined : "Enter a challenger UUID."
+              error={
+                isCardId(action.challengerCardId)
+                  ? undefined
+                  : assertLocalized("Enter a challenger UUID.")
               }
               testId={`tutorial-action-challenger-card-id-${action.id}`}
               onChange={(challengerCardId) =>
@@ -1220,10 +1365,12 @@ function TutorialActionRow({
               }
             />
             <TextField
-              authoredLabel={"Blocker UUID"}
+              label={assertLocalized("Blocker UUID")}
               value={action.blockerCardId}
-              authoredError={
-                isCardId(action.blockerCardId) ? undefined : "Enter a blocker UUID."
+              error={
+                isCardId(action.blockerCardId)
+                  ? undefined
+                  : assertLocalized("Enter a blocker UUID.")
               }
               testId={`tutorial-action-blocker-card-id-${action.id}`}
               onChange={(blockerCardId) =>
@@ -1250,12 +1397,16 @@ function TutorialActionRow({
         ) : null}
 
         <NumberStepper
-          authoredLabel={"Wait"}
+          label={assertLocalized("Wait")}
           value={action.wait}
-          authoredDisplayValue={`${waitLabel(action.wait)}s`}
+          displayValue={assertLocalized(`${waitLabel(action.wait)}s`)}
           size="sm"
-          authoredDecrementLabel={`Decrease wait for action ${String(index + 1)}`}
-          authoredIncrementLabel={`Increase wait for action ${String(index + 1)}`}
+          decrementLabel={assertLocalized(
+            `Decrease wait for action ${String(index + 1)}`,
+          )}
+          incrementLabel={assertLocalized(
+            `Increase wait for action ${String(index + 1)}`,
+          )}
           decrementDisabled={action.wait <= 0}
           onDecrement={() =>
             update(
@@ -1283,8 +1434,9 @@ function SaveStatus({
   error,
 }: {
   readonly status: TutorialEditorSaveStatus;
-  readonly error: string | null;
+  readonly error: LocalizedString | null;
 }): ReactElement | null {
+  const resolve = useLocalizer();
   if (status === "idle") return null;
   const label =
     status === "saving"
@@ -1292,7 +1444,7 @@ function SaveStatus({
       : status === "saved"
         ? "Tutorial saved"
         : status === "error"
-          ? `Tutorial save failed${error === null ? "" : `: ${error}`}`
+          ? `Tutorial save failed${error === null ? "" : `: ${resolve(error)}`}`
           : "Tutorial changes are saved";
   const glyph =
     status === "error"
@@ -1349,7 +1501,7 @@ function TutorialEditorContent({
       >
         <GlassButton
           glyph={GLYPHS.play}
-          authoredLabel="Replay All"
+          label={assertLocalized("Replay All")}
           placement="onGlass"
           disabled={actions.length === 0}
           testId="tutorial-editor-replay-all"
@@ -1357,7 +1509,7 @@ function TutorialEditorContent({
         />
         <GlassButton
           glyph={GLYPHS.play}
-          authoredLabel={`Replay Last ${String(tailActionCount)}`}
+          label={assertLocalized(`Replay Last ${String(tailActionCount)}`)}
           placement="onGlass"
           variant="accent"
           disabled={tailStartAction === undefined}
@@ -1398,9 +1550,16 @@ function TutorialEditorContent({
       </Reorder.Group>
       <Select
         full
-        authoredAriaLabel={"Add an action"}
-        authoredPlaceholder={"Add an Action"}
-        options={[...ACTION_OPTIONS].map((option) => ({ ...option, authoredLabel: option.label, ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { authoredTriggerLabel: option.triggerLabel } : {}) }))}
+        ariaLabel={assertLocalized("Add an action")}
+        placeholder={assertLocalized("Add an Action")}
+        options={[...ACTION_OPTIONS].map((option) => ({
+          ...option,
+          label: assertLocalized(option.label),
+          ...("triggerLabel" in option &&
+          typeof option.triggerLabel === "string"
+            ? { triggerLabel: assertLocalized(option.triggerLabel) }
+            : {}),
+        }))}
         value=""
         onChange={(value) => {
           if (
@@ -1462,9 +1621,11 @@ export function TutorialEditorRail({
     <DeveloperRail
       id="cumulus-tutorial-editor"
       side="left"
-      authoredTitle={"Tutorial Editor"}
-      authoredSubtitle={`${String(actions.length)} ${actions.length === 1 ? "action" : "actions"}`}
-      authoredCloseLabel={"Close tutorial editor"}
+      title={assertLocalized("Tutorial Editor")}
+      subtitle={assertLocalized(
+        `${String(actions.length)} ${actions.length === 1 ? "action" : "actions"}`,
+      )}
+      closeLabel={assertLocalized("Close tutorial editor")}
       onClose={onClose}
       footer={
         <TutorialEditorSaveFooter
@@ -1497,9 +1658,11 @@ export function TutorialEditorTakeover({
 }: TutorialEditorRailProps): ReactElement {
   return (
     <GlassDialog
-      authoredTitle={"Tutorial Editor"}
-      authoredSubtitle={`Developer Tools · ${String(actions.length)} ${actions.length === 1 ? "action" : "actions"}`}
-      authoredCloseLabel={"Close tutorial editor"}
+      title={assertLocalized("Tutorial Editor")}
+      subtitle={assertLocalized(
+        `Developer Tools · ${String(actions.length)} ${actions.length === 1 ? "action" : "actions"}`,
+      )}
+      closeLabel={assertLocalized("Close tutorial editor")}
       cutoutAwareClose
       fullScreen
       onClose={onClose}

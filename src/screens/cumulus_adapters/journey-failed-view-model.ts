@@ -1,5 +1,6 @@
 import type { JourneyState } from "../../types/journey";
 import type { JourneyFailedView } from "../../cumulus/screens/JourneyFailedScreen";
+import { localizedSourceText } from "../../runtime/localization/runtime";
 
 /** Build the player-facing terminal summary for a failed journey. */
 export function buildJourneyFailedView(
@@ -16,9 +17,9 @@ export function buildJourneyFailedView(
         ? null
         : {
             id: state.dreamAvatar.id,
-            name: state.dreamAvatar.name,
-            title: state.dreamAvatar.title,
-            ability: state.dreamAvatar.renderedText,
+            name: localizedSourceText(state.dreamAvatar.name),
+            title: localizedSourceText(state.dreamAvatar.title),
+            ability: localizedSourceText(state.dreamAvatar.renderedText),
             imageNumber: state.dreamAvatar.imageNumber,
             ...(state.dreamAvatar.portraitFocus === undefined
               ? {}

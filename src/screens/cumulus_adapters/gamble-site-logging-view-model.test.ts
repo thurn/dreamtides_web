@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { artRef } from "../../cumulus/primitives/art";
 import type {
@@ -19,12 +20,14 @@ import {
   logGambleResolved,
   logGambleSettled,
 } from "./gamble-site-logging-view-model";
+import { localizedDreamsignFixture } from "../../cumulus/test-helpers/dreamsign-fixture";
 
 const REWARD_DREAMSIGN = {
   id: "00000000-0000-4000-8000-000000000025",
   name: "Fixture Sign",
   effectDescription: "Fixture effect.",
 };
+const LOCALIZED_REWARD_DREAMSIGN = localizedDreamsignFixture(REWARD_DREAMSIGN);
 
 const RUNTIME: TidemarkLadderClimbSiteRuntime = {
   kind: "gamble",
@@ -62,12 +65,12 @@ const VIEW: LadderClimbSiteView = {
   isFarpoint: false,
   runtimeReady: true,
   essenceReward: 25,
-  rewardDreamsign: REWARD_DREAMSIGN,
+  rewardDreamsign: LOCALIZED_REWARD_DREAMSIGN,
   nextDraw: null,
   guide: {
     id: "fixture-guide",
-    name: "Fixture Guide",
-    line: "Fixture line.",
+    name: assertLocalized("Fixture Guide"),
+    line: assertLocalized("Fixture line."),
     art: artRef.dreamGuide("fixture-guide"),
   },
   result: null,

@@ -21,15 +21,22 @@ import { artRef, type ArtRef } from "../../primitives/art";
 import { richText } from "../card/rich-text";
 import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
 import type { RevealSpec } from "../../internal/reveal/model";
-import { select, when, otherwise, txa } from "@trox/runtime";
+import {
+  opaque,
+  select,
+  when,
+  otherwise,
+  txa,
+  type LocalizedString,
+} from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** The minimal dreamAvatar shape a portrait needs: which art to load and the
  * name/title that back the alt text and the fallback monogram. */
 export interface DreamAvatarVisual {
   imageNumber: string;
-  name: string;
-  title: string;
+  name: LocalizedString;
+  title?: LocalizedString;
   /** Normalized head position used to center subject-aware crops. */
   portraitFocus?: DreamAvatarPortraitFocus;
 }
@@ -67,7 +74,7 @@ export interface DreamAvatarPortraitProps {
   /** Square framing: `panel` for profile surfaces or `thumb` for compact rows. Default `panel`. */
   variant?: DreamAvatarPortraitVariant;
   /** Semantic DreamAvatar profile represented by this portrait. Omit for decorative art. */
-  profile?: { id: string; ability: string };
+  profile?: { id: string; ability: LocalizedString };
   /** Optional primary press action for selectable profile portraits. */
   onPress?: () => void;
   /** Keeps the profile readable while suppressing activation. */
@@ -77,10 +84,9 @@ export interface DreamAvatarPortraitProps {
 /** One reveal contract shared by every DreamAvatar surface. */
 export function dreamAvatarRevealSpec(
   dreamAvatar: DreamAvatarVisual,
-  abilityText: string,
+  ability: LocalizedString | undefined,
   image: ArtRef = artRef.dreamAvatar(dreamAvatar.imageNumber),
 ): RevealSpec {
-  const ability = abilityText.trim();
   return {
     primary: {
       kind: "infoCard",
@@ -90,10 +96,13 @@ export function dreamAvatarRevealSpec(
         imageCrop: "top",
         title: dreamAvatar.name,
         subtitle: dreamAvatar.title,
-        body: ability ? richText.rules(ability) : undefined,
+        body: ability === undefined ? undefined : richText.rules(ability),
       },
     },
-    secondaries: rulesTextDefinitionCards(ability, "dreamAvatar"),
+    secondaries:
+      ability === undefined
+        ? []
+        : rulesTextDefinitionCards(ability, "dreamAvatar"),
   };
 }
 
@@ -195,11 +204,14 @@ function DreamAvatarPortraitSurface({
   const resolve = useLocalizer();
   const [broken, setBroken] = useState(false);
   const alt = txa(
-    select(dreamAvatar.title === "" ? "no" : "yes", [
+    select(dreamAvatar.title === undefined ? "no" : "yes", [
       when("yes", "{avatar_name}, {avatar_title}"),
       otherwise("{avatar_name}"),
     ]),
-    { avatar_name: dreamAvatar.name, avatar_title: dreamAvatar.title },
+    {
+      avatar_name: opaque(dreamAvatar.name),
+      avatar_title: opaque(dreamAvatar.title ?? dreamAvatar.name),
+    },
     'Accessible name for Dream Avatar artwork. avatar_name is the canonical avatar display name and avatar_title is its authored epithet; neither has modeled grammatical gender. has_title is "yes" when the epithet is present and "no" when the artwork should be identified by the name alone.',
   );
   const focus = dreamAvatarPortraitFocus(dreamAvatar);
@@ -215,7 +227,7 @@ function DreamAvatarPortraitSurface({
               fontSize: variant === "thumb" ? 12 : 22,
             }}
           >
-            {dreamAvatar.name.charAt(0)}
+            {resolve(dreamAvatar.name).charAt(0)}
           </span>
         </div>
       ) : (

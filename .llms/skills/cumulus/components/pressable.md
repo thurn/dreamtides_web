@@ -24,7 +24,6 @@ Pressable is a low-level building block — before wrapping raw markup in it, lo
 | `hoverFeedback` | `"scale" \| "stationary"` | no | `scale` | Hover motion. `stationary` keeps a source fixed while a separate reading copy is shown. Default `scale`. |
 | `snapFeedbackExit` | `boolean` | no | `false` | Whether ending hover or press immediately restores the original scale. Physical cards use this to avoid a stale transformed hit target. |
 | `ariaLabelMessage` | `LocalizedString` | no | — | Localized accessible name resolved onto the final intrinsic element. |
-| `authoredAriaLabel` | `string` | no | — | Accessible name supplied by canonical authored or developer-only copy. |
 | `children` | `ReactNode` | no | — | Content rendered inside the pressable element. |
 
 ## Usage

@@ -21,7 +21,7 @@ Content-protection depth is reserved for marks painted over card or scene media.
 | `glyph` | `Glyph` | yes | — | The standalone {@link Glyph} to render. |
 | `color` | `CumulusColor` = `"accent" \| "accent-bright" \| "essence" \| "energy" \| "spark" \| "danger" \| "positive" \| "selected" \| "text-primary" \| "text-secondary" \| "text-on-accent" \| "white"` | yes | — | Fill {@link CumulusColor} — Boxicons paints via the element's text color. |
 | `depth` | `StandaloneGlyphDepth` = `"flat" \| "content-protection"` | no | `flat` | Flat by default; use content protection when the glyph sits over media. |
-| `label` | `string` | no | — | Accessible meaning; the glyph is hidden from assistive tech when unset. |
+| `label` | `LocalizedString` | no | — | Accessible meaning; the glyph is hidden from assistive tech when unset. |
 
 ## Usage
 
@@ -37,7 +37,7 @@ import { StandaloneGlyph, SPARK_ICON_CLASS, SPARK_ICON_COLOR } from "src/cumulus
     glyph={SPARK_ICON_CLASS}
     color={SPARK_ICON_COLOR}
     depth="content-protection"
-    label="Spark"
+    label={assertLocalized("Spark")}
   />
 </span>
 ```

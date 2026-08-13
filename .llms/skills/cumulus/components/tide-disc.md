@@ -22,8 +22,8 @@ Selection-provenance controls use role colors instead. tide-spec has no renderab
 | --- | --- | --- | --- | --- |
 | `tide` | `Resonance` = `"shadow" \| "ember" \| "valor" \| "vision" \| "wild"` | yes | — | Which of the five tides. Fixes the disc's color and glyph. |
 | `id` | `string` | yes | — | Stable id (a tide deck id) for the `data-tide-disc` QA hook. |
-| `label` | `string` | yes | — | Display name used by the source and its tide card. |
-| `description` | `string` | yes | — | Semantic description revealed by this tide source. |
+| `label` | `LocalizedString` | yes | — | Display name used by the source and its tide card. |
+| `description` | `LocalizedString` | yes | — | Semantic description revealed by this tide source. |
 
 ## Usage
 
@@ -34,7 +34,7 @@ The color and glyph come from the named tide (never a raw value). The component 
 ```tsx
 import { TideDisc } from "src/cumulus/components/hud/TideDisc";
 
-<TideDisc tide="valor" id={tideDeckId} label="Rising Valor" description={tide.description} />
+<TideDisc tide="valor" id={tideDeckId} label={assertLocalized("Rising Valor")} description={tide.description} />
 ```
 
 ### Self-revealing tide
@@ -44,5 +44,5 @@ The named component derives its tide primary and general Tides secondary interna
 ```tsx
 import { TideDisc } from "src/cumulus/components/hud/TideDisc";
 
-<TideDisc tide="valor" id={tideDeckId} label="Rising Valor" description={tide.description} />
+<TideDisc tide="valor" id={tideDeckId} label={assertLocalized("Rising Valor")} description={tide.description} />
 ```

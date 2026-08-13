@@ -7,7 +7,6 @@ import type {
   StandardPlayingCardRank,
   StandardPlayingCardSuit,
 } from "../../../types/gamble";
-import type { Dreamsign as DreamsignData } from "../../../types/journey";
 import { requireDreamsignId } from "../../../data/dreamsigns";
 import { glassAccentChrome } from "../../internal/control-treatment";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
@@ -15,8 +14,11 @@ import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
-import { dreamsignRevealSpec } from "../hud/Dreamsign";
-import { tx, txa, type LocalizedString } from "@trox/runtime";
+import {
+  dreamsignRevealSpec,
+  type LocalizedDreamsign,
+} from "../hud/Dreamsign";
+import { opaque, tx, txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 type WagerRevealSourceBinding = ReturnType<typeof useRevealSource>;
@@ -554,7 +556,7 @@ export interface WagerPrizeCardProps {
   /** Stable Gamble choice represented by this prize object. */
   prizeId: WagerPrizeCardId;
   /** Draw condition shown as authored compact notation. */
-  targetLabel: string;
+  targetLabel: LocalizedString;
   /** Named desktop or mobile square size. Defaults to `wager`. */
   size?: WagerPrizeCardSize;
   /** Committed card shown on the reverse face after a bet. */
@@ -571,7 +573,7 @@ export interface WagerPrizeCardProps {
   /** Essence awarded on a win. */
   essenceReward: number;
   /** Dreamsign appended to the Essence reward, when present. */
-  rewardDreamsign: DreamsignData | null;
+  rewardDreamsign: LocalizedDreamsign | null;
 }
 
 /**
@@ -592,7 +594,7 @@ export function WagerPrizeCard(props: WagerPrizeCardProps): ReactElement {
 }
 
 function DreamsignWagerPrizeCard(
-  props: WagerPrizeCardProps & { rewardDreamsign: DreamsignData },
+  props: WagerPrizeCardProps & { rewardDreamsign: LocalizedDreamsign },
 ): ReactElement {
   const dreamsignId = requireDreamsignId(
     props.rewardDreamsign,
@@ -628,6 +630,7 @@ function WagerPrizeCardObject({
   revealBinding?: WagerRevealSourceBinding;
 }): ReactElement {
   const resolve = useLocalizer();
+  const resolvedTargetLabel = resolve(targetLabel);
   const reduceMotion = useReducedMotion() === true;
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const showingDrawnCard = revealDrawnCard && drawnCard !== null;
@@ -635,15 +638,15 @@ function WagerPrizeCardObject({
     rewardDreamsign === null
       ? txa(
           "Draw {target_label}. Win {essence_amount} Essence.",
-          { target_label: targetLabel, essence_amount: essenceReward },
+          { target_label: resolve(targetLabel), essence_amount: essenceReward },
           "Complete accessible name for a wager prize without a Dreamsign. target_label is the authored winning rank or range, and essence_amount is the positive Essence payout.",
         )
       : txa(
           "Draw {target_label}. Win {essence_amount} Essence and {dreamsign_name}.",
           {
-            target_label: targetLabel,
+            target_label: resolve(targetLabel),
             essence_amount: essenceReward,
-            dreamsign_name: rewardDreamsign.name,
+            dreamsign_name: opaque(rewardDreamsign.name),
           },
           "Complete accessible name for a wager prize that includes a Dreamsign. target_label is the authored winning rank or range, essence_amount is the positive Essence payout, and dreamsign_name is the canonical authored Dreamsign name.",
         );
@@ -662,7 +665,7 @@ function WagerPrizeCardObject({
           "Win {essence_amount} Essence and {dreamsign_name}.",
           {
             essence_amount: essenceReward,
-            dreamsign_name: rewardDreamsign.name,
+            dreamsign_name: opaque(rewardDreamsign.name),
           },
           "Reward sentence on a wager prize that includes a Dreamsign. essence_amount is the positive Essence payout and dreamsign_name is the canonical authored Dreamsign name.",
         );
@@ -701,7 +704,7 @@ function WagerPrizeCardObject({
           {resolve(
             txa(
               "Draw {target_label}",
-              { target_label: targetLabel },
+              { target_label: resolvedTargetLabel },
               "Title printed on a wager prize card before its concealed playing card is revealed. target_label is the authored rank or rank range the current player must draw.",
             ),
           )}
@@ -747,7 +750,7 @@ function WagerPrizeCardObject({
       data-wager-prize-card-state={showingDrawnCard ? "drawn" : "prize"}
       data-wager-prize-card-size={size}
       data-wager-prize-card-emphasis={emphasis}
-      data-wager-prize-target={targetLabel}
+      data-wager-prize-target={resolvedTargetLabel}
       data-wager-prize-essence-reward={essenceReward}
       data-wager-prize-drawn-card={
         drawnCard === null ? undefined : `${drawnCard.rank}-${drawnCard.suit}`
@@ -785,7 +788,7 @@ function WagerPrizeCardObject({
           transformStyle: "preserve-3d",
         }}
       >
-        {revealBinding === undefined ? (
+        {revealBinding === undefined || rewardDreamsign === null ? (
           <div
             aria-hidden={showingDrawnCard || undefined}
             data-wager-prize-face=""
@@ -802,7 +805,7 @@ function WagerPrizeCardObject({
             tabIndex={showingDrawnCard ? -1 : 0}
             ariaLabelMessage={txa(
               "Dreamsign: {dreamsign_name}",
-              { dreamsign_name: rewardDreamsign?.name ?? "" },
+              { dreamsign_name: opaque(rewardDreamsign.name) },
               "Accessible name for an interactive Dreamsign object. dreamsign_name is its canonical authored display name and has unknown grammatical gender.",
             )}
             aria-hidden={showingDrawnCard || undefined}

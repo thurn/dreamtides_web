@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -36,8 +37,8 @@ function view(cardCount = 3, isEnhanced = false): DuplicationSiteView {
     scene: null,
     guide: {
       id: "deacon_holt",
-      name: "Deacon Holt",
-      line: "Pick one, and I'll make another.",
+      name: assertLocalized("Deacon Holt"),
+      line: assertLocalized("Pick one, and I'll make another."),
       art: artRef.dreamGuide("deacon_holt"),
     },
     ready: true,

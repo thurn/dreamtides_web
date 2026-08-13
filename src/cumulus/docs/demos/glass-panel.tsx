@@ -13,7 +13,7 @@ function GlassPanelDemo() {
         rightAccessory={{
           kind: "glassButton",
           button: {
-            authoredLabel: "Leave",
+            label: assertLocalized("Leave"),
             onPress: () => undefined,
           },
         }}
@@ -58,8 +58,8 @@ export const glassPanelDemo: CumulusComponent = {
 
 <GlassPanel
   eyebrow="Shop"
-  title="Dream Market"
-  subtitle="Spend Essence to add cards to your deck."
+  title={assertLocalized("Dream Market")}
+  subtitle={assertLocalized("Spend Essence to add cards to your deck.")}
   rightAccessory={{
     kind: "glassButton",
     button: {

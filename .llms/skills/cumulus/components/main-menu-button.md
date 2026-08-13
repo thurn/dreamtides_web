@@ -28,7 +28,7 @@ Use this hierarchy for full-bleed main-menu actions.
 
 ```tsx
 <MainMenuButton
-  label="New Journey"
+  label={assertLocalized("New Journey")}
   onPress={startJourney}
 />
 ```

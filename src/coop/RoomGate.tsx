@@ -678,12 +678,9 @@ export function RoomGate({
           "The game could not finish its room setup.",
           "Explanation for a generic failure while setting up a shared room.",
         ),
-        ...(gateState.technicalDetail === undefined
-          ? {}
-          : { detail: gateState.technicalDetail }),
         ...(gateState.detailMessage === undefined
           ? {}
-          : { detailMessage: gateState.detailMessage }),
+          : { detail: gateState.detailMessage }),
         actions: [
           {
             id: "primary",

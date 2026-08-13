@@ -7,6 +7,8 @@ import type { BattleDebugEdit } from "../debug/commands";
 import { nextStartOfTurnPair } from "../state/turn-utils";
 import { createNextTurnExpiry } from "../state/notes-utils";
 import type { BattleCardNoteExpiry, BattleMutableState } from "../types";
+import { tx } from "@trox/runtime";
+import { localizedSourceText } from "../../runtime/localization/runtime";
 
 const MIN_AFTER_N_TURNS = 1;
 const MAX_AFTER_N_TURNS = 10;
@@ -32,7 +34,14 @@ export function BattleCardNoteEditor({
     useState<BattleCardNoteExpiryOption>("end-of-next-turn");
   const [afterNTurns, setAfterNTurns] = useState(DEFAULT_AFTER_N_TURNS);
   // bug-099: resolve the card name so the heading reads as a human label.
-  const cardName = state.cardInstances[battleCardId]?.definition.name ?? battleCardId;
+  const cardDefinition = state.cardInstances[battleCardId]?.definition;
+  const cardName =
+    cardDefinition === undefined
+      ? tx(
+          "Card",
+          "Fallback name in the battle card-note editor when the referenced card is unavailable.",
+        )
+      : localizedSourceText(cardDefinition.name);
 
   function handleSubmit(): void {
     if (text.trim().length === 0) {

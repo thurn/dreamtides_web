@@ -4,6 +4,8 @@ import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
 import { dreamwellCardModel } from "../../battle/ui/dreamwell-card-model";
 import type { TutorialGuidanceMessage } from "../../rules/battle/fold";
 import { tutorialGuidanceMessageDurationSeconds } from "../../battle/tutorial-presentation-timing";
+import { tx } from "@trox/runtime";
+import { localizedSourceText } from "../../runtime/localization/runtime";
 
 function guidanceDialogue(
   battle: BattleFoldState,
@@ -16,9 +18,15 @@ function guidanceDialogue(
         kind: "dreamAvatar",
         imageNumber: dreamAvatar?.imageNumber ?? "001",
       },
-      portraitAlt: dreamAvatar?.name ?? "Player DreamAvatar",
-      speakerName: dreamAvatar?.name ?? "Dreamer",
-      text: message.text,
+      portraitAlt:
+        dreamAvatar === null || dreamAvatar === undefined
+          ? tx("Player Avatar", "Fallback name for the player's Dream Avatar.")
+          : localizedSourceText(dreamAvatar.name),
+      speakerName:
+        dreamAvatar === null || dreamAvatar === undefined
+          ? tx("Dreamer", "Fallback speaker name for the player.")
+          : localizedSourceText(dreamAvatar.name),
+      text: localizedSourceText(message.text),
     };
   }
   if (message.speaker === "enemy") {
@@ -28,16 +36,16 @@ function guidanceDialogue(
         kind: "dreamAvatar",
         imageNumber: enemy.imageNumber ?? "001",
       },
-      portraitAlt: enemy.name,
-      speakerName: enemy.name,
-      text: message.text,
+      portraitAlt: localizedSourceText(enemy.name),
+      speakerName: localizedSourceText(enemy.name),
+      text: localizedSourceText(message.text),
     };
   }
   return {
     portrait: { kind: "character-portrait", characterId: "mira" },
-    portraitAlt: "Mira",
-    speakerName: "Mira",
-    text: message.text,
+    portraitAlt: tx("Mira", "Name of the tutorial guide."),
+    speakerName: tx("Mira", "Name of the tutorial guide."),
+    text: localizedSourceText(message.text),
   };
 }
 

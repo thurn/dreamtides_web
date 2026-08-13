@@ -1,11 +1,11 @@
 import { assertLocalized } from "@trox/runtime";
-import type { Dreamsign as DreamsignData } from "../../../types/journey";
+import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
 import { DreamsignGalleryPanel } from "../../components/card/DreamsignGalleryPanel";
 import { GLYPHS } from "../../primitives/glyph";
 import type { CumulusComponent } from "../registry";
 import { GLOSSARY_IDS } from "../../../data/glossary";
 
-const DEMO_DREAMSIGNS: DreamsignData[] = [
+const DEMO_DREAMSIGNS = [
   {
     id: "c706d0ba-2f41-4b14-95d8-db168ac6246c",
     name: "Amplified Acorn",
@@ -29,13 +29,13 @@ const DEMO_DREAMSIGNS: DreamsignData[] = [
     effectDescription:
       "Once per turn, when an ally leaves play, your next character this turn costs 2● less.",
   },
-];
+].map(localizedDreamsignFixture);
 
 function DreamsignGalleryPanelDemo() {
   return (
     <div style={{ width: "min(720px, 100%)" }}>
       <DreamsignGalleryPanel
-        title="Dreamsign Bazaar"
+        title={assertLocalized("Dreamsign Bazaar")}
         entries={DEMO_DREAMSIGNS.map((dreamsign, index) => ({
           entryId: `demo-${dreamsign.id}`,
           dreamsign,
@@ -50,10 +50,10 @@ function DreamsignGalleryPanelDemo() {
         endAction={{
           entryId: "restock",
           glyph: GLYPHS.refresh,
-          label: "Restock Offers",
+          label: assertLocalized("Restock Offers"),
           glossaryId: GLOSSARY_IDS.dreamsignRestock,
           price: null,
-          text: "Restocked",
+          text: assertLocalized("Restocked"),
           disabled: true,
         }}
         closeLabel={assertLocalized("Leave bazaar")}
@@ -83,10 +83,10 @@ export const dreamsignGalleryPanelDemo: CumulusComponent = {
       code: `import { DreamsignGalleryPanel } from "src/cumulus/components/card/DreamsignGalleryPanel";
 
 <DreamsignGalleryPanel
-  title="Dreamsign Bazaar"
+  title={assertLocalized("Dreamsign Bazaar")}
   entries={offers}
   endAction={restock}
-  closeLabel="Leave bazaar"
+  closeLabel={assertLocalized("Leave bazaar")}
   onClose={leave}
   onEntryPress={buy}
   onEndActionPress={restockOffers}

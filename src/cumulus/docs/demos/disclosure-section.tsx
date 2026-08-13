@@ -42,10 +42,10 @@ export const disclosureSectionDemo: CumulusComponent = {
   Component: Demo,
   usage: [
     {
-      code: `<DisclosureSection title="AI Analysis" expanded={open} onExpandedChange={setOpen}>…</DisclosureSection>`,
+      code: `<DisclosureSection title={assertLocalized("AI Analysis")} expanded={open} onExpandedChange={setOpen}>…</DisclosureSection>`,
     },
     {
-      code: `<DisclosureSection title="AI Analysis" expanded={open} onExpandedChange={setOpen} placement="onGlass">…</DisclosureSection>`,
+      code: `<DisclosureSection title={assertLocalized("AI Analysis")} expanded={open} onExpandedChange={setOpen} placement="onGlass">…</DisclosureSection>`,
     },
   ],
   demo: {

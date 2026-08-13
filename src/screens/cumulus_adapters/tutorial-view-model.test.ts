@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { resolveSource } from "../../runtime/localization/runtime";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { DreamwellCard } from "../../data/dreamwell-database";
@@ -16,6 +18,8 @@ import {
   makeTutorialBattleConfiguration,
   TEST_TUTORIAL_CARD_CONSTANTS,
 } from "../../test/tutorial-configuration-fixture";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 
 const TUTORIAL_BATTLE_CONFIGURATION = makeTutorialBattleConfiguration();
 const TUTORIAL_OPPONENT_CARD_ID = TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId;
@@ -869,7 +873,9 @@ describe("buildTutorialView", () => {
 
     expect(tutorial.currentAction?.id).toBe("nightmare-call");
     expect(
-      tutorial.dialogue?.kind === "guide" ? tutorial.dialogue.model.text : null,
+      tutorial.dialogue?.kind === "guide"
+        ? resolveSource(tutorial.dialogue.model.text)
+        : null,
     ).toContain("Nightmare");
     expect(
       tutorial.dialogue?.kind === "guide"
@@ -920,7 +926,7 @@ describe("buildTutorialView", () => {
     }).dialogue;
 
     expect(overlapping).toBeNull();
-    expect(next?.kind === "guide" ? next.model.text : null).toBe(
+    expect(next?.kind === "guide" ? resolveSource(next.model.text) : null).toBe(
       "The next line.",
     );
   });

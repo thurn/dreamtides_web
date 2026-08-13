@@ -10,7 +10,6 @@ import type {
   ExplorationActionView,
   ExplorationCardSelectionOperation,
   ExplorationCardChoiceView,
-  ExplorationEffectDisclosure,
   ExplorationFollowupView,
   ExplorationEntityView,
   ExplorationKeywordChangeView,
@@ -30,6 +29,7 @@ import { toJourneyDreamAvatar } from "../../data/dream-avatar-selection";
 import type { JourneyContent } from "../../data/journey-content";
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
+import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
 import {
   siteTypeDescription,
   siteTypeIcon,
@@ -48,6 +48,8 @@ import type {
   TransfigurationType,
 } from "../../types/journey";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
+import type { LocalizedString } from "@trox/runtime";
+import { localizedSourceText } from "../../runtime/localization/runtime";
 import {
   buildTransfigurationDisplay,
   offeredTransfigurationForms,
@@ -56,7 +58,8 @@ import {
 import { MERCHANT_TUNING } from "../../journey_v2/tuning";
 import { projectGuideView } from "./guide-view-model";
 import { transfigurationForm } from "../../data/transfiguration-data";
-import { tx } from "@trox/runtime";
+import { tx, txa } from "@trox/runtime";
+import { localizedTransfigurationPresentation } from "../../cumulus/components/controls/transfiguration-presentation";
 
 /** Resolve Layaway, the resident guide for Exploration. */
 export function resolveExplorationGuide(
@@ -213,9 +216,8 @@ function freeTransfigurationCandidates(
       );
       return {
         type: offer.type,
-        presentation: transfigurationForm(
-          content.transfigurationData,
-          offer.type,
+        presentation: localizedTransfigurationPresentation(
+          transfigurationForm(content.transfigurationData, offer.type),
         ),
         change: offer.change,
         effectDetails: transfigurationEffectDetails(offer, card),
@@ -353,20 +355,21 @@ function offeredDeckCards(
 }
 
 function heldDreamsignChoices(state: JourneyState) {
-  return state.dreamsigns.filter(
-    (dreamsign): dreamsign is typeof dreamsign & { readonly id: string } =>
-      dreamsign.id !== undefined,
+  return state.dreamsigns.flatMap((dreamsign) =>
+    dreamsign.id === undefined
+      ? []
+      : [localizedDreamsign(dreamsign, "Exploration held Dreamsign")],
   );
 }
 
 function dreamsignChoices(
   ids: readonly string[],
   content: JourneyContent,
-): readonly (ReturnType<typeof createDreamsign> & { readonly id: string })[] {
+): readonly ReturnType<typeof localizedDreamsign>[] {
   return ids.flatMap((id) => {
     const dreamsign = dreamsignById(content, id);
     if (dreamsign?.id === undefined) return [];
-    return [dreamsign as typeof dreamsign & { readonly id: string }];
+    return [localizedDreamsign(dreamsign, "Exploration Dreamsign choice")];
   });
 }
 
@@ -422,8 +425,8 @@ function dreamsignFlowFollowup(
 }
 
 function deckFollowup(
-  title: string,
-  subtitle: string,
+  title: LocalizedString,
+  subtitle: LocalizedString,
   cards: readonly ExplorationCardChoiceView[],
   mode: "single" | "exact" | "purge-and-copy",
   selectionOperation: ExplorationCardSelectionOperation | undefined,
@@ -448,24 +451,23 @@ function configuredFollowupCopy(
   content: JourneyContent,
   key: "followupTitle" | "followupSubtitle",
   fallback: string,
-): string {
+): LocalizedString {
   const template = action[key];
-  if (template === undefined || template === "") return fallback;
-  const values: Readonly<Record<string, string | number>> = {
-    "action-label": action.label,
+  if (template === undefined || template === "") {
+    return localizedSourceText(fallback);
+  }
+  const values: Readonly<Record<string, number | LocalizedString>> = {
+    "action-label": localizedSourceText(action.label),
     count: action.count ?? 1,
-    subtype: action.subtype ?? "Outsider",
-    transfiguration: action.transfiguration ?? "Kindled",
+    subtype: localizedSourceText(action.subtype ?? "Outsider"),
+    transfiguration: localizedSourceText(
+      action.transfiguration ?? "Kindled",
+    ),
     "essence-per-spark":
       action.essencePerSpark ??
       content.economyData.exploration.defaultEssencePerSpark,
   };
-  return template.replace(/\{([^{}]+)\}/gu, (slot, name: string) => {
-    const value = values[name];
-    if (value === undefined)
-      throw new Error(`Exploration copy is missing ${slot}`);
-    return String(value);
-  });
+  return localizedSourceText(template, values);
 }
 
 function siteTypeChoiceFollowup(
@@ -495,9 +497,12 @@ function siteTypeChoiceFollowup(
             isBattle: false,
             isLocked: false,
             isInteractive: true,
-            label: siteTypeName(content.sitesData, choice.siteType),
-            lockedGuidance: "",
-            blurb: siteTypeDescription(content.sitesData, choice.siteType),
+            label: localizedSourceText(
+              siteTypeName(content.sitesData, choice.siteType),
+            ),
+            blurb: localizedSourceText(
+              siteTypeDescription(content.sitesData, choice.siteType),
+            ),
             icon: glyph(siteTypeIcon(content.sitesData, choice.siteType)),
           },
         },
@@ -1151,7 +1156,7 @@ function starterCardVariableTarget(
 function fixedTransfigurationDisclosure(
   action: ExplorationActionContent,
   content: JourneyContent,
-): ExplorationEffectDisclosure | undefined {
+): LocalizedString | undefined {
   if (
     (action.effectKind !== "transfigure-fixed-selected" &&
       action.effectKind !== "transfigure-all-for-essence" &&
@@ -1162,14 +1167,16 @@ function fixedTransfigurationDisclosure(
   ) {
     return undefined;
   }
-  return {
-    kind: "fixed-transfiguration",
-    transfiguration: action.transfiguration,
-    effectDisclosure: transfigurationForm(
-      content.transfigurationData,
-      action.transfiguration,
-    ).description,
-  };
+  return txa(
+    "({description})",
+    {
+      description: transfigurationForm(
+        content.transfigurationData,
+        action.transfiguration,
+      ).description,
+    },
+    "Parenthetical disclosure describing the fixed Transfiguration applied by an Exploration action. description is the canonical authored form description.",
+  );
 }
 
 function deckCardVariableTarget(
@@ -1307,7 +1314,16 @@ function effectReferencesForAction(
     if (dreamsign !== null) {
       references.push({
         needle: dreamsign.name,
-        part: { kind: "entity", entity: { kind: "dreamsign", dreamsign } },
+        part: {
+          kind: "entity",
+          entity: {
+            kind: "dreamsign",
+            dreamsign: localizedDreamsign(
+              dreamsign,
+              "Exploration effect reference",
+            ),
+          },
+        },
       });
     }
   }
@@ -1332,89 +1348,78 @@ export function buildExplorationActionEffect(
     deckCardEntity,
     starterCardEntity,
   );
-  const cardTypeFallback =
-    action.effectText.includes("{card_type}") && action.cardType !== undefined
-      ? { cardType: action.cardType }
-      : {};
+  const localizedEffect = (
+    concealedTargets: Readonly<Record<string, LocalizedString>> = {},
+  ): LocalizedString => {
+    const values: Record<string, LocalizedString> = Object.fromEntries(
+      [...action.effectText.matchAll(/\{([a-z_]+)\}/g)].map(
+        (match): [string, LocalizedString] => {
+          const argumentName = match[1] ?? "";
+          const concealedTarget = concealedTargets[argumentName];
+          if (concealedTarget !== undefined) {
+            return [argumentName, concealedTarget];
+          }
+          const reference = references.find(
+            (candidate) => candidate.needle === `{${argumentName}}`,
+          );
+          if (reference === undefined) {
+            throw new Error(
+              `Missing localized Exploration effect argument {${argumentName}}.`,
+            );
+          }
+          if (reference.part.kind === "card-type") {
+            return [
+              argumentName,
+              localizedSourceText(reference.part.cardType),
+            ];
+          }
+          const entity = reference.part.entity;
+          return [
+            argumentName,
+            entity.kind === "card"
+              ? localizedSourceText(entity.card.name)
+              : entity.dreamsign.name,
+          ];
+        },
+      ),
+    );
+    return localizedSourceText(action.effectText, values);
+  };
   if (
     action.effectText.includes("{deck_card}") &&
     !references.some((reference) => reference.needle === "{deck_card}")
   ) {
-    const deckCardIndex = action.effectText.indexOf("{deck_card}");
+    const message = localizedEffect({
+      deck_card: tx(
+        "an eligible card",
+        "Generic Exploration effect target shown while its exact eligible deck card is intentionally concealed.",
+      ),
+    });
     return {
-      effectText: action.effectText
-        .split("{card_type}")
-        .join(action.cardType ?? ""),
-      effectFallback: {
-        kind: "missing-deck-card",
-        before: action.effectText.slice(0, deckCardIndex),
-        after: action.effectText.slice(deckCardIndex + "{deck_card}".length),
-        ...cardTypeFallback,
-      },
+      effectText: message,
+      effectFallback: { message },
     };
   }
   if (
     action.effectText.includes("{starter_card}") &&
     !references.some((reference) => reference.needle === "{starter_card}")
   ) {
-    const starterCardIndex = action.effectText.indexOf("{starter_card}");
+    const message = localizedEffect({
+      starter_card: tx(
+        "a Starter card",
+        "Generic Exploration effect target shown while its exact Starter card is intentionally concealed.",
+      ),
+    });
     return {
-      effectText: action.effectText
-        .split("{card_type}")
-        .join(action.cardType ?? ""),
-      effectFallback: {
-        kind: "missing-starter-card",
-        before: action.effectText.slice(0, starterCardIndex),
-        after: action.effectText.slice(
-          starterCardIndex + "{starter_card}".length,
-        ),
-        ...cardTypeFallback,
-      },
+      effectText: message,
+      effectFallback: { message },
     };
-  }
-  const parts: ExplorationActionEffectPart[] = [];
-  let cursor = 0;
-  while (cursor < action.effectText.length) {
-    const next = references
-      .map((reference) => ({
-        reference,
-        index: action.effectText
-          .toLowerCase()
-          .indexOf(reference.needle.toLowerCase(), cursor),
-      }))
-      .filter((candidate) => candidate.index >= cursor)
-      .sort((left, right) => left.index - right.index)[0];
-    if (next === undefined) break;
-    if (next.index > cursor) {
-      parts.push({
-        kind: "text",
-        text: action.effectText.slice(cursor, next.index),
-      });
-    }
-    parts.push(next.reference.part);
-    cursor = next.index + next.reference.needle.length;
-  }
-  if (parts.length === 0) {
-    return {
-      effectText: action.effectText,
-    };
-  }
-  if (cursor < action.effectText.length) {
-    parts.push({ kind: "text", text: action.effectText.slice(cursor) });
   }
   return {
-    effectText: parts
-      .map((part) =>
-        part.kind === "text"
-          ? part.text
-          : part.kind === "card-type"
-            ? part.cardType
-            : part.entity.kind === "card"
-              ? part.entity.card.name
-              : part.entity.dreamsign.name,
-      )
-      .join(""),
-    effectParts: parts,
+    effectText: localizedEffect(),
+    ...(references.length === 0
+      ? {}
+      : { effectParts: references.map((reference) => reference.part) }),
   };
 }
 
@@ -2435,7 +2440,11 @@ function actionView(
   const effectDisclosure =
     fixedTransfigurationDisclosure(action, content) ??
     (action.effectKind === "add-site" && offer.offeredSiteType !== undefined
-      ? { kind: "offered-site" as const, siteType: offer.offeredSiteType }
+      ? txa(
+          "{site_type}.",
+          { site_type: offer.offeredSiteType },
+          "Parenthetical disclosure naming the authored site type offered by an Exploration action.",
+        )
       : undefined);
   return {
     id: action.id,
@@ -2492,7 +2501,7 @@ function actionView(
       ...(action.cardType === undefined ? {} : { cardType: action.cardType }),
       ...(action.siteType === undefined ? {} : { siteType: action.siteType }),
     },
-    label: action.label,
+    label: localizedSourceText(action.label),
     ...effect,
     ...(effectDisclosure === undefined ? {} : { effectDisclosure }),
     followup,
@@ -3740,18 +3749,14 @@ function rewardForResolution(
   const resolvedActionView = actionViews.find(
     (action) => action.id === resolution.actionId,
   );
-  const resolvedEffectText =
-    resolvedActionView?.effectText ?? resolvedAction?.effectText ?? "";
   const resolvedEffectAnnouncement =
     resolvedActionView === undefined && resolvedAction === undefined
-      ? {
-          kind: "message" as const,
-          message: tx(
-            "Exploration effect resolved",
-            "Generic player-safe Exploration outcome fallback when the resolved action is unavailable to the presentation model.",
-          ),
-        }
-      : { kind: "authored" as const, text: resolvedEffectText };
+      ? tx(
+          "Exploration effect resolved",
+          "Generic player-safe Exploration outcome fallback when the resolved action is unavailable to the presentation model.",
+        )
+      : (resolvedActionView?.effectText ??
+        localizedSourceText(resolvedAction?.effectText ?? ""));
   if (
     resolvedAction?.effectKind === "add-fixed-site" ||
     resolvedAction?.effectKind === "choose-site-type"
@@ -3812,9 +3817,12 @@ function rewardForResolution(
       isBattle: false,
       isLocked: false,
       isInteractive: false,
-      label: siteTypeName(content.sitesData, insertedSite.type),
-      lockedGuidance: "",
-      blurb: siteTypeDescription(content.sitesData, insertedSite.type),
+      label: localizedSourceText(
+        siteTypeName(content.sitesData, insertedSite.type),
+      ),
+      blurb: localizedSourceText(
+        siteTypeDescription(content.sitesData, insertedSite.type),
+      ),
       icon: glyph(siteTypeIcon(content.sitesData, insertedSite.type)),
     };
     return {
@@ -3941,8 +3949,14 @@ function rewardForResolution(
       }
       return [
         {
-          removed: removed as typeof removed & { readonly id: string },
-          gained: gained as typeof gained & { readonly id: string },
+          removed: localizedDreamsign(
+            removed,
+            "Exploration removed Dreamsign",
+          ),
+          gained: localizedDreamsign(
+            gained,
+            "Exploration gained Dreamsign",
+          ),
         },
       ];
     });
@@ -4250,7 +4264,10 @@ function rewardForResolution(
     if (purgedDreamsign !== null) {
       return {
         kind: "purged-dreamsign-essence",
-        dreamsign: purgedDreamsign,
+        dreamsign: localizedDreamsign(
+          purgedDreamsign,
+          "Exploration purged Dreamsign",
+        ),
         totalEssence: resolution.essenceGained,
       };
     }
@@ -4342,10 +4359,10 @@ function rewardForResolution(
         return {
           kind: "transfiguration" as const,
           transfiguration,
-          formName: transfigurationForm(
-            content.transfigurationData,
-            transfiguration,
-          ).name,
+          formName: localizedSourceText(
+            transfigurationForm(content.transfigurationData, transfiguration)
+              .name,
+          ),
           essenceSpent: resolution.essenceSpent ?? 0,
           announcement: resolvedEffectAnnouncement,
           cards,
@@ -4389,7 +4406,9 @@ function rewardForResolution(
     const dreamsign = state.dreamsigns.find(
       (candidate) => candidate.id?.toLowerCase() === normalized,
     );
-    return dreamsign === undefined ? [] : [dreamsign];
+    return dreamsign === undefined
+      ? []
+      : [localizedDreamsign(dreamsign, "Exploration gained Dreamsign")];
   });
   const semanticKind =
     resolvedAction?.effectKind === "purge-selected"
@@ -4421,7 +4440,7 @@ export function buildExplorationSiteView(params: {
   sceneNode: DreamscapeNode | null;
   site: SiteState & { type: "Exploration" };
   guide: DreamGuideContent;
-  guideLine: string;
+  guideLine: LocalizedString;
   runtime: ExplorationSiteRuntime;
   state: JourneyState;
   content: JourneyContent;
@@ -4473,7 +4492,7 @@ export function buildExplorationSiteView(params: {
     fullArt: artRef.explorationCard(sourceCard.imageNumber),
     guide: projectGuideView(params.guide, params.guideLine),
     card: { cardId: asCardId(sourceCard.id), displaySnapshot: sourceCard },
-    narrative: encounter.prose,
+    narrative: localizedSourceText(encounter.prose),
     actions,
     resolvedActionId: params.runtime.resolution?.actionId ?? null,
     reward,

@@ -20,6 +20,8 @@ import type {
   JourneyStartGuideDialogueView,
 } from "../../cumulus/screens/JourneyStartScreen";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
+import { localizedSourceText } from "../../runtime/localization/runtime";
+import { tx } from "@trox/runtime";
 
 /** The select screen shows at most this many tides per DreamAvatar. */
 const MAX_TIDES_SHOWN = 4;
@@ -60,9 +62,9 @@ export function buildJourneyStartGuideDialogue(
     id: `journey-start-guidance:${tutorialDreamAvatarId}`,
     model: {
       portrait: { kind: "character-portrait", characterId: "mira" },
-      portraitAlt: "Mira",
-      speakerName: "Mira",
-      text: speechBubble.text,
+      portraitAlt: tx("Mira", "Name of the tutorial guide."),
+      speakerName: tx("Mira", "Name of the tutorial guide."),
+      text: localizedSourceText(speechBubble.text),
     },
     delaySeconds: tutorialSpeechBubbleDelaySeconds(speechBubble),
     horizontalOffset: speechBubble.horizontalOffset,
@@ -94,8 +96,10 @@ export function largestTides(tides: Tides4DeckJson[]): Tides4DeckJson[] {
 function toTideView(tide: Tides4DeckJson): DreamAvatarTideView {
   return {
     id: tide.id,
-    label: tide.displayName !== "" ? tide.displayName : tide.id,
-    description: tide.displayDescription,
+    label: localizedSourceText(
+      tide.displayName !== "" ? tide.displayName : tide.id,
+    ),
+    description: localizedSourceText(tide.displayDescription),
     tide: tide.resonance,
   };
 }
@@ -103,8 +107,8 @@ function toTideView(tide: Tides4DeckJson): DreamAvatarTideView {
 function toTutorialTideView(tide: TutorialJourneyTide): DreamAvatarTideView {
   return {
     id: tide.id,
-    label: tide.name,
-    description: tide.description,
+    label: localizedSourceText(tide.name),
+    description: localizedSourceText(tide.description),
     tide: tide.type,
   };
 }
@@ -143,15 +147,15 @@ export function toDreamAvatarOfferView(
       ? []
       : (dreamAvatar.signatureCards ?? []).map((name, index) => ({
           id: signatureCardIds[index] ?? `${name}-${String(index)}`,
-          name,
+          name: localizedSourceText(name),
         }));
   return {
     id: dreamAvatar.id,
-    name: dreamAvatar.name,
-    title: dreamAvatar.title,
+    name: localizedSourceText(dreamAvatar.name),
+    title: localizedSourceText(dreamAvatar.title),
     imageNumber: dreamAvatar.imageNumber,
     portraitFocus: dreamAvatar.portraitFocus,
-    renderedText: dreamAvatar.renderedText,
+    renderedText: localizedSourceText(dreamAvatar.renderedText),
     startingEssence: dreamAvatar.startingEssence,
     signatureCards,
     tides: largestTides(tides).map(toTideView),

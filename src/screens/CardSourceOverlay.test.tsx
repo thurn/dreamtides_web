@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { resolveSource } from "../runtime/localization/runtime";
 
 import type { Tides4ProvenanceSummary } from "../types/content";
 import type { CardSourceDebugState } from "../types/journey";
@@ -37,12 +38,14 @@ const PROVENANCE: Tides4ProvenanceSummary = {
 describe("card source view", () => {
   it("explains cards using tides4 provenance", () => {
     const view = buildCardSourceView(DEBUG, PROVENANCE, new Map());
-    expect(view?.construction?.lines.map((line) => line.text)).toContain("Signature A");
-    expect(view?.cards.lines[0]?.text).toContain("signature tide Signature A");
+    if (view === null) throw new Error("Expected card source view.");
+    expect(view?.construction?.lines.map((line) => resolveSource(line.text))).toContain("Signature A");
+    expect(resolveSource(view.cards.lines[0].text)).toContain("signature tide Signature A");
   });
 
   it("falls back to pool-copy provenance while tides are loading", () => {
     const view = buildCardSourceView(DEBUG, null, new Map());
-    expect(view?.cards.lines[0]?.text).toContain("2 copies in the pool");
+    if (view === null) throw new Error("Expected card source view.");
+    expect(resolveSource(view.cards.lines[0].text)).toContain("2 copies in the pool");
   });
 });

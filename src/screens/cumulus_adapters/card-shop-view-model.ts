@@ -1,5 +1,6 @@
 // Pure view-model builder for Tobias Tanglefur's Cumulus Card Shop.
 
+import type { LocalizedString } from "@trox/runtime";
 import { buildCardSourceDebugState } from "../../debug/card-source-debug";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import {
@@ -11,6 +12,7 @@ import type { CardData } from "../../types/cards";
 import type { EconomyData } from "../../types/economy-data";
 import type { TransfigurationData } from "../../types/transfiguration-data";
 import type { SitesData } from "../../types/sites-data";
+import { localizedSitePresentation } from "../../cumulus/screens/localized-site-presentation";
 import type {
   DreamGuideContent,
   ResolvedDreamAvatarPackage,
@@ -47,7 +49,7 @@ export function resolveCardShopGuide(
 /** Build Tobias's guide slice for the shared character-gallery layout. */
 export function buildCardShopGuideView(
   guide: DreamGuideContent,
-  guideLine: string,
+  guideLine: LocalizedString,
 ) {
   return projectGuideView(guide, guideLine);
 }
@@ -161,7 +163,7 @@ export function buildCardShopSiteView(params: {
   runtime: ShopSiteRuntime;
   cardDatabase: ReadonlyMap<number, CardData>;
   guide: DreamGuideContent;
-  guideLine: string;
+  guideLine: LocalizedString;
   economyData: EconomyData;
   transfigurationData: TransfigurationData;
   sitesData: SitesData;
@@ -173,10 +175,12 @@ export function buildCardShopSiteView(params: {
   const scene: ArtRef | null =
     params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
   return {
-    presentation: params.sitesData.siteTypes.Shop.presentation as Extract<
-      import("../../types/sites-data").SitePresentation,
-      { kind: "shop" }
-    >,
+    presentation: localizedSitePresentation(
+      params.sitesData.siteTypes.Shop.presentation as Extract<
+        import("../../types/sites-data").SitePresentation,
+        { kind: "shop" }
+      >,
+    ),
     siteId: params.site.id,
     scene,
     guide: buildCardShopGuideView(params.guide, params.guideLine),

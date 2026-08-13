@@ -1,14 +1,23 @@
+import { assertLocalized } from "@trox/runtime";
 import { renderToStaticMarkup } from "react-dom/server";
+import type { ReactNode } from "react";
 import { describe, expect, it } from "vitest";
+import { TroxLocalizationProvider } from "../../../runtime/localization/context";
 import { GLYPHS } from "../../primitives/glyph";
 import {
   GLYPH_CONTENT_PROTECTION_FILTER,
   StandaloneGlyph,
 } from "./StandaloneGlyph";
 
+function renderLocalizedToStaticMarkup(node: ReactNode): string {
+  return renderToStaticMarkup(
+    <TroxLocalizationProvider>{node}</TroxLocalizationProvider>,
+  );
+}
+
 describe("StandaloneGlyph", () => {
   it("fills a centered one-em square owned by the surrounding layout", () => {
-    const markup = renderToStaticMarkup(
+    const markup = renderLocalizedToStaticMarkup(
       <StandaloneGlyph glyph={GLYPHS.points} color="text-primary" />,
     );
 
@@ -21,7 +30,7 @@ describe("StandaloneGlyph", () => {
   });
 
   it("applies content-protection depth without exposing a general glow", () => {
-    const markup = renderToStaticMarkup(
+    const markup = renderLocalizedToStaticMarkup(
       <StandaloneGlyph
         glyph={GLYPHS.spark}
         color="spark"
@@ -33,10 +42,10 @@ describe("StandaloneGlyph", () => {
   });
 
   it("uses an explicit label or hides a decorative mark", () => {
-    const labeled = renderToStaticMarkup(
-      <StandaloneGlyph glyph={GLYPHS.bolt} color="text-primary" label="Fast" />,
+    const labeled = renderLocalizedToStaticMarkup(
+      <StandaloneGlyph glyph={GLYPHS.bolt} color="text-primary" label={assertLocalized("Fast")} />,
     );
-    const decorative = renderToStaticMarkup(
+    const decorative = renderLocalizedToStaticMarkup(
       <StandaloneGlyph glyph={GLYPHS.bolt} color="text-primary" />,
     );
 

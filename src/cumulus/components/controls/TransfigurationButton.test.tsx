@@ -5,7 +5,7 @@ import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { TransfigurationButton } from "./TransfigurationButton";
 import { CumulusRoot } from "../../CumulusRoot";
-import { transfigurationFormFixture } from "../../test-helpers/transfiguration-fixture";
+import { localizedTransfigurationFormFixture } from "../../test-helpers/transfiguration-fixture";
 
 function LocalizedTransfigurationButton(
   props: ComponentProps<typeof TransfigurationButton>,
@@ -19,9 +19,8 @@ function LocalizedTransfigurationButton(
 
 const empowered = {
   type: "Empowered" as const,
-  presentation: transfigurationFormFixture("Empowered"),
+  presentation: localizedTransfigurationFormFixture("Empowered"),
   change: { kind: "energy-delta" as const, from: 2, to: 1 },
-  description: "Reduce this card's energy cost.",
   essenceCost: 40,
   affordable: true,
 };

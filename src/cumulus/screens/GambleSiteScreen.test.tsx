@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -17,14 +18,18 @@ import {
   type StarwayStairsSiteView,
   type BlackjackSiteView,
 } from "./GambleSiteScreen";
-import { transfigurationFormFixture } from "../test-helpers/transfiguration-fixture";
+import {
+  localizedTransfigurationFormFixture,
+  transfigurationFormFixture,
+} from "../test-helpers/transfiguration-fixture";
+import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
 
-const JACKPOT_DREAMSIGN = {
+const JACKPOT_DREAMSIGN = localizedDreamsignFixture({
   id: "00000000-0000-4000-8000-000000000041",
   name: "Fixture Jackpot",
   imageName: "fixture-jackpot.png",
   effectDescription: "Foresee 1.",
-};
+});
 
 const VIEW: GravokWagerSiteView = {
   gameId: "gravok-three-gate-wager",
@@ -39,8 +44,8 @@ const VIEW: GravokWagerSiteView = {
   gates: [
     {
       id: "six",
-      targetLabel: "6-A",
-      chanceLabel: "69.23%",
+      targetLabel: assertLocalized("6-A"),
+      chanceLabel: assertLocalized("69.23%"),
       oddsNumerator: 36,
       oddsDenominator: 52,
       essenceReward: 100,
@@ -49,8 +54,8 @@ const VIEW: GravokWagerSiteView = {
     },
     {
       id: "nine",
-      targetLabel: "9-A",
-      chanceLabel: "46.15%",
+      targetLabel: assertLocalized("9-A"),
+      chanceLabel: assertLocalized("46.15%"),
       oddsNumerator: 24,
       oddsDenominator: 52,
       essenceReward: 150,
@@ -59,8 +64,8 @@ const VIEW: GravokWagerSiteView = {
     },
     {
       id: "jack",
-      targetLabel: "J-A",
-      chanceLabel: "30.77%",
+      targetLabel: assertLocalized("J-A"),
+      chanceLabel: assertLocalized("30.77%"),
       oddsNumerator: 16,
       oddsDenominator: 52,
       essenceReward: 200,
@@ -70,8 +75,8 @@ const VIEW: GravokWagerSiteView = {
   ],
   guide: {
     id: "fixture-guide",
-    name: "Fixture Guide",
-    line: "A fixture gamble.",
+    name: assertLocalized("Fixture Guide"),
+    line: assertLocalized("A fixture gamble."),
     art: artRef.dreamGuide("fixture-guide"),
   },
   result: null,
@@ -90,21 +95,21 @@ const STARWAY_VIEW: StarwayStairsSiteView = {
   tiers: [
     {
       tierNumber: 1,
-      drawTargetLabel: "3-A",
+      drawTargetLabel: assertLocalized("3-A"),
       essenceReward: 60,
       state: "current",
       card: null,
     },
     {
       tierNumber: 2,
-      drawTargetLabel: "5-A",
+      drawTargetLabel: assertLocalized("5-A"),
       essenceReward: 140,
       state: "future",
       card: null,
     },
     {
       tierNumber: 3,
-      drawTargetLabel: "8-A",
+      drawTargetLabel: assertLocalized("8-A"),
       essenceReward: 300,
       state: "future",
       card: null,
@@ -113,8 +118,8 @@ const STARWAY_VIEW: StarwayStairsSiteView = {
   currentTierNumber: 1,
   guide: {
     id: "gravok",
-    name: "Gravok",
-    line: "Starway Stairs is the game. Keep betting to see how high you can go!",
+    name: assertLocalized("Gravok"),
+    line: assertLocalized("Starway Stairs is the game. Keep betting to see how high you can go!"),
     art: artRef.dreamGuide("gravok"),
   },
   result: null,
@@ -170,8 +175,8 @@ const FOUR_SUIT_VIEW: FourSuitRepriseSiteView = {
   cards: [fourSuitCardView(1), fourSuitCardView(2)],
   guide: {
     id: "gravok",
-    name: "Gravok",
-    line: "A fixture gamble.",
+    name: assertLocalized("Gravok"),
+    line: assertLocalized("A fixture gamble."),
     art: artRef.dreamGuide("gravok"),
   },
   result: null,
@@ -203,8 +208,8 @@ const BLACKJACK_VIEW: BlackjackSiteView = {
   canPlayAgain: false,
   guide: {
     id: "gravok",
-    name: "Gravok",
-    line: "A fixture gamble.",
+    name: assertLocalized("Gravok"),
+    line: assertLocalized("A fixture gamble."),
     art: artRef.dreamGuide("gravok"),
   },
 };
@@ -235,8 +240,8 @@ function fourSuitResultView(
         forms: [
           {
             type: "Empowered",
-            presentation: transfigurationFormFixture("Empowered"),
-            description: "Fixture form.",
+            presentation: localizedTransfigurationFormFixture("Empowered"),
+            change: { kind: "energy-delta", from: 2, to: 1 },
             effectDetails: { fixture: true },
             essenceCost: 0,
             affordable: true,
@@ -612,11 +617,11 @@ describe("GambleSiteScreen", () => {
       replacement: {
         pendingDreamsign: JACKPOT_DREAMSIGN,
         currentDreamsigns: [
-          {
+          localizedDreamsignFixture({
             id: "held-sign",
             name: "Held Sign",
             effectDescription: "A held effect.",
-          },
+          }),
         ],
         maxDreamsigns: 1,
       },

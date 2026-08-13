@@ -1,9 +1,9 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { Dreamsign } from "../../types/journey";
 import { CumulusRoot } from "../CumulusRoot";
 import { artRef } from "../primitives/art";
 import {
@@ -11,15 +11,20 @@ import {
   type DreamsignBazaarSiteView,
 } from "./DreamsignBazaarSiteScreen";
 import { DREAMSIGN_MARKET_PRESENTATION } from "../test-helpers/presentation-fixtures";
+import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
+import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
+import { DreamsignGalleryPanel } from "../components/card/DreamsignGalleryPanel";
+import { GLYPHS } from "../primitives/glyph";
+import { GLOSSARY_IDS } from "../../data/glossary";
 
-function sign(index: number): Dreamsign {
-  return {
+function sign(index: number): LocalizedDreamsign {
+  return localizedDreamsignFixture({
     id: `dreamsign-uuid-${String(index)}`,
     name: `Dreamsign Fixture ${String(index)}`,
     imageName: `fixture-${String(index)}.png`,
     imageAlt: `Dreamsign fixture ${String(index)}`,
     effectDescription: index === 1 ? "Foresee 1." : "Draw a card.",
-  };
+  });
 }
 
 function view(): DreamsignBazaarSiteView {
@@ -29,8 +34,8 @@ function view(): DreamsignBazaarSiteView {
     scene: null,
     guide: {
       id: "amunet_the_tomb_keeper",
-      name: "Amunet, the Tomb-Keeper",
-      line: "The sands remember all dreams.",
+      name: assertLocalized("Amunet, the Tomb-Keeper"),
+      line: assertLocalized("The sands remember all dreams."),
       art: artRef.dreamGuide("amunet_the_tomb_keeper"),
     },
     offers: Array.from({ length: 3 }, (_, index) => ({
@@ -150,6 +155,37 @@ describe("DreamsignBazaarSiteScreen", () => {
     expect(restockGlyph?.style.color).toBe("var(--text-on-accent)");
     expect(restockGlyph?.style.textShadow).toBe("var(--text-outline-media)");
     expect(restockGlyph?.parentElement?.style.background).toBe("");
+
+    act(() => root.unmount());
+  });
+
+  it("keeps an action caption empty when it has neither price nor text", () => {
+    const { container, root } = mount(
+      <DreamsignGalleryPanel
+        title={assertLocalized("Fixture gallery")}
+        entries={[]}
+        endAction={{
+          entryId: "fixture-action",
+          glyph: GLYPHS.refresh,
+          label: assertLocalized("Fixture action"),
+          glossaryId: GLOSSARY_IDS.dreamsignRestock,
+          price: null,
+          text: null,
+          disabled: true,
+        }}
+        closeLabel={assertLocalized("Close fixture gallery")}
+        onClose={vi.fn()}
+        onEntryPress={vi.fn()}
+        onEndActionPress={vi.fn()}
+      />,
+    );
+
+    const captions = container.querySelectorAll<HTMLElement>(
+      '[data-dreamsign-gallery-caption="text"]',
+    );
+    expect(captions).toHaveLength(1);
+    expect(captions[0]?.textContent).toBe("");
+    expect(captions[0]?.querySelector("[data-essence-value]")).toBeNull();
 
     act(() => root.unmount());
   });

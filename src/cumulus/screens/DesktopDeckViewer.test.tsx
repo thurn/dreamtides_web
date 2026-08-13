@@ -9,6 +9,7 @@ import { asCardId, asCardName } from "../../types/card-identity";
 import { CumulusRoot } from "../CumulusRoot";
 import type { DeckCardView } from "./MobileDeckViewer";
 import { DesktopDeckViewer } from "./DesktopDeckViewer";
+import { assertLocalized } from "@trox/runtime";
 
 function deckCard(index: number): DeckCardView {
   const card: CardData = {
@@ -139,20 +140,20 @@ describe("DesktopDeckViewer", () => {
           tides: [
             {
               id: "tide-a",
-              label: "First Tide",
-              description: "First path.",
+              label: assertLocalized("First Tide"),
+              description: assertLocalized("First path."),
               tide: "ember",
             },
             {
               id: "tide-b",
-              label: "Second Tide",
-              description: "Second path.",
+              label: assertLocalized("Second Tide"),
+              description: assertLocalized("Second path."),
               tide: "vision",
             },
             {
               id: "tide-c",
-              label: "Third Tide",
-              description: "Third path.",
+              label: assertLocalized("Third Tide"),
+              description: assertLocalized("Third path."),
               tide: "wild",
             },
           ],

@@ -29,6 +29,6 @@ A face-down card in a named zone. The label is available to assistive technology
 import { CardBack } from "src/cumulus/components/battle/CardBack";
 
 <div style={{ width: 96 }}>
-  <CardBack label="Face-down enemy card" />
+  <CardBack label={assertLocalized("Face-down enemy card")} />
 </div>
 ```

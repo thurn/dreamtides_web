@@ -16,8 +16,7 @@ The labeled glass action — a bold text label with optional Essence cost or non
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `label` | `LocalizedString` | no | — | The button's text, centered by the component at every rendered width. |
-| `authoredLabel` | `string` | no | — | Button text supplied by canonical authored or developer-only content. |
+| `label` | `LocalizedString` | yes | — | The button's text, centered by the component at every rendered width. |
 | `onPress` | `() => void` | yes | — | Fires when the button is activated (no-op while disabled). |
 | `glyph` | `Glyph` | no | — | Optional leading glyph painted as a `StandaloneGlyph` before the label. |
 | `essenceCost` | `number \| null` | no | `null` | Optional numerical essence cost rendered after a centered dot. |
@@ -30,7 +29,6 @@ The labeled glass action — a bold text label with optional Essence cost or non
 | `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the control. `onMedia` uses the full liquid-glass recipe; `onGlass` uses a lighter tonal lens so an existing glass tint is not compounded. Defaults to `onMedia`. |
 | `pressed` | `boolean` | no | — | Toggle state for controls whose action switches a persistent local mode. |
 | `accessibilityLabel` | `LocalizedString` | no | — | Accessible name when the visible label alone does not distinguish siblings. |
-| `authoredAccessibilityLabel` | `string` | no | — | Accessible name supplied by canonical authored or developer-only copy. |
 
 ## Usage
 
@@ -40,7 +38,7 @@ Use `pressed` only when the action represents a persistent toggle state; the com
 
 ```tsx
 <GlassButton
-  label={controllingOpponent ? "Return to Your Side" : "Control Opponent"}
+  label={assertLocalized(controllingOpponent ? "Return to Your Side" : "Control Opponent")}
   pressed={controllingOpponent}
   onPress={togglePerspective}
 />
@@ -48,12 +46,12 @@ Use `pressed` only when the action represents a persistent toggle state; the com
 
 ### Variant 2
 
-A plain text label on the glass surface. `label` is a resolved string; `onPress` fires on activation.
+A localized text label on the glass surface; `onPress` fires on activation.
 
 ```tsx
 import { GlassButton } from "src/cumulus/components/controls/GlassButton";
 
-<GlassButton label="Reset filters" onPress={resetFilters} />
+<GlassButton label={assertLocalized("Reset filters")} onPress={resetFilters} />
 ```
 
 ### Leading glyph
@@ -66,7 +64,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 <GlassButton
   glyph={GLYPHS.filter}
-  label="Filter"
+  label={assertLocalized("Filter")}
   onPress={openFilters}
 />
 ```
@@ -77,7 +75,7 @@ Use `placement="onGlass"` when the control rests inside a glass panel. Its light
 
 ```tsx
 <GlassButton
-  label="Decline"
+  label={assertLocalized("Decline")}
   placement="onGlass"
   onPress={decline}
 />
@@ -89,7 +87,7 @@ A disabled GlassButton dims the complete control and detaches activation and pre
 
 ```tsx
 <GlassButton
-  label="Transfigure"
+  label={assertLocalized("Transfigure")}
   variant="accent"
   disabled
   onPress={transfigure}
@@ -105,7 +103,7 @@ import { GlassButton } from "src/cumulus/components/controls/GlassButton";
 import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 <GlassButton
-  label="Purge 1"
+  label={assertLocalized("Purge 1")}
   variant="danger"
   onPress={purgeCard}
 />
@@ -117,7 +115,7 @@ Use the purple soft-wash accent for primary and commit actions. A numerical esse
 
 ```tsx
 <GlassButton
-  label="Transfigure"
+  label={assertLocalized("Transfigure")}
   essenceCost={20}
   variant="accent"
   placement="onGlass"
@@ -131,8 +129,8 @@ Every numerical Essence cost uses the centered-dot treatment.
 
 ```tsx
 <GlassButton
-  label="Choose"
-  accessibilityLabel="Choose the Six Gate for 50 Essence"
+  label={assertLocalized("Choose")}
+  accessibilityLabel={assertLocalized("Choose the Six Gate for 50 Essence")}
   essenceCost={50}
   variant="accent"
   onPress={chooseGate}
@@ -145,7 +143,7 @@ Use the plain Essence value treatment when the amount describes the action rathe
 
 ```tsx
 <GlassButton
-  label="Take"
+  label={assertLocalized("Take")}
   essenceValue={60}
   onPress={takePrize}
 />
@@ -157,7 +155,7 @@ Use the prominent size for a singular primary action that anchors a spacious scr
 
 ```tsx
 <GlassButton
-  label="Begin"
+  label={assertLocalized("Begin")}
   size="prominent"
   variant="accent"
   onPress={begin}
@@ -170,7 +168,7 @@ Use the compact label scale and horizontal spacing when several actions must rem
 
 ```tsx
 <GlassButton
-  label="Choose"
+  label={assertLocalized("Choose")}
   essenceCost={50}
   size="compact"
   onPress={chooseGate}
@@ -183,7 +181,7 @@ Pass every reachable label/essence-cost state through `widthReservations` when o
 
 ```tsx
 <GlassButton
-  label={selectedCount === 0 ? "Decline" : `Purge ${selectedCount}`}
+  label={assertLocalized(selectedCount === 0 ? "Decline" : `Purge ${selectedCount}`)}
   essenceCost={selectedCount === 0 ? null : totalCost}
   widthReservations={possibleActions}
   onPress={commit}

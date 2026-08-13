@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -10,6 +11,7 @@ import { glyph } from "../primitives/glyph";
 import { artRef } from "../primitives/art";
 import type { SiteState } from "../../types/journey";
 import { CumulusRoot } from "../CumulusRoot";
+import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
 
 vi.mock("framer-motion", () => ({
   motion: {
@@ -60,8 +62,8 @@ function siteModel(
     isBattle: site.type === "Battle",
     isLocked: false,
     isInteractive: !site.isVisited,
-    label: site.type,
-    blurb: "Remove cards from your deck.",
+    label: assertLocalized(site.type),
+    blurb: assertLocalized("Remove cards from your deck."),
     icon: glyph("bxf bx-hot"),
     ...overrides,
   };
@@ -79,12 +81,14 @@ function siteState(id: string, overrides: Partial<SiteState> = {}): SiteState {
 
 const VIEW: DreamscapeView = {
   scene: artRef.dreamscapeScene("ember_wood"),
-  title: "Ember Wood",
+  title: assertLocalized("Ember Wood"),
   inlineRewards: {},
   replacement: null,
   sites: [
     siteModel(siteState("s-purge")),
-    siteModel(siteState("s-draft", { type: "Draft" }), { label: "Draft 5x" }),
+    siteModel(siteState("s-draft", { type: "Draft" }), {
+      label: assertLocalized("Draft 5x"),
+    }),
     siteModel(siteState("s-visited", { type: "Shop", isVisited: true })),
   ],
 };
@@ -132,11 +136,12 @@ describe("DreamscapeScreen", () => {
     const tutorialView: DreamscapeView = {
       ...VIEW,
       guideDialogue: {
+        id: "dreamscape-guide-dialogue",
         model: {
           portrait: { kind: "character-portrait", characterId: "mira" },
-          portraitAlt: "Mira",
-          speakerName: "Mira",
-          text: "Visit [purple]Dream Sites[/purple].",
+          portraitAlt: assertLocalized("Mira"),
+          speakerName: assertLocalized("Mira"),
+          text: assertLocalized("Visit [purple]Dream Sites[/purple]."),
         },
         delaySeconds: 2,
         horizontalOffset: 0,
@@ -321,12 +326,12 @@ describe("DreamscapeScreen", () => {
         "s-reward": {
           kind: "dreamsign",
           requiresReplacement: false,
-          dreamsign: {
+          dreamsign: localizedDreamsignFixture({
             id: "dreamsign-uuid",
             name: "Lantern in the Rain",
             effectDescription: "Your first dream each dawn costs 1 less.",
             imageName: "lantern-in-the-rain.webp",
-          },
+          }),
         },
       },
     };
@@ -399,18 +404,18 @@ describe("DreamscapeScreen", () => {
     vi.useFakeTimers();
     const onReplaceDreamsign = vi.fn();
     const onDeclineReward = vi.fn();
-    const pendingDreamsign = {
+    const pendingDreamsign = localizedDreamsignFixture({
       id: "pending-dreamsign",
       name: "Lantern in the Rain",
       effectDescription: "Your first dream each dawn costs 1 less.",
       imageName: "lantern-in-the-rain.webp",
-    };
-    const heldDreamsign = {
+    });
+    const heldDreamsign = localizedDreamsignFixture({
       id: "held-dreamsign",
       name: "Held Sign",
       effectDescription: "A held effect.",
       imageName: "held.webp",
-    };
+    });
     const rewardView: DreamscapeView = {
       ...VIEW,
       sites: [siteModel(siteState("s-reward", { type: "Reward" }))],

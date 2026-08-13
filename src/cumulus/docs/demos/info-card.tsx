@@ -21,6 +21,7 @@
 // keyed under so the props table reports InfoCard's real API.
 
 import { InfoCard } from "../../components/overlay/InfoCard";
+import { assertLocalized } from "@trox/runtime";
 import { richText } from "../../components/card/rich-text";
 import { artRef } from "../../primitives/art";
 import { glyph } from "../../primitives/glyph";
@@ -51,8 +52,8 @@ import { richText } from "src/cumulus/components/card/rich-text";
 
 <InfoCard
   variant="text"
-  title="Singular Storm"
-  body={richText.plain("A rising tide that floods the board with essence.")}
+  title={assertLocalized("Singular Storm")}
+  body={richText.plain(assertLocalized("A rising tide that floods the board with essence."))}
 />`,
     },
     {
@@ -60,9 +61,9 @@ import { richText } from "src/cumulus/components/card/rich-text";
       note: "Pass a `subtitle` to render an epithet under the name — a smaller serif line in white, mirroring the Dream Avatar-select name/epithet pairing. Used for the Dream Avatar profile reveal.",
       code: `<InfoCard
   variant="text"
-  title="Kragg"
-  subtitle="Spent-Blood Chieftain"
-  body={richText.rules("At the start of your first turn, gain 1 essence.")}
+  title={assertLocalized("Kragg")}
+  subtitle={assertLocalized("Spent-Blood Chieftain")}
+  body={richText.rules(assertLocalized("At the start of your first turn, gain 1 essence."))}
 />`,
     },
     {
@@ -72,8 +73,8 @@ import { richText } from "src/cumulus/components/card/rich-text";
   variant="object"
   image={artRef.dreamAvatar("0025")}
   frame
-  title="Seld Rakor"
-  body={richText.rules("Whenever you Reclaim a card, deal 1 damage.")}
+  title={assertLocalized("Seld Rakor")}
+  body={richText.rules(assertLocalized("Whenever you Reclaim a card, deal 1 damage."))}
 />`,
     },
     {
@@ -83,8 +84,8 @@ import { richText } from "src/cumulus/components/card/rich-text";
   variant="fullBleed"
   image={artRef.dreamscapeScene("firstlight_meadow")}
   figure={artRef.dreamGuide("tobias_tanglefur")}
-  title="Tobias Tanglefur"
-  body={richText.rules("Enhances the Garden site at his home dreamscape.")}
+  title={assertLocalized("Tobias Tanglefur")}
+  body={richText.rules(assertLocalized("Enhances the Garden site at his home dreamscape."))}
 />`,
     },
     {
@@ -94,9 +95,9 @@ import { richText } from "src/cumulus/components/card/rich-text";
   variant="atlasReveal"
   image={artRef.dreamscapeScene("wilderveil")}
   figure={artRef.dreamGuide("aldric")}
-  title="Wilderveil"
-  subtitle="Aldric, the Seer"
-  body={richText.plain("Aldric offers curated visions of the future.")}
+  title={assertLocalized("Wilderveil")}
+  subtitle={assertLocalized("Aldric, the Seer")}
+  body={richText.plain(assertLocalized("Aldric offers curated visions of the future."))}
 />`,
     },
     {
@@ -105,8 +106,8 @@ import { richText } from "src/cumulus/components/card/rich-text";
       code: `<InfoCard
   variant="icon"
   glyph={glyph("bxf bx-store-alt-2")}
-  title="Merchant"
-  body={richText.plain("Spend essence on cards, dreamsigns, and services.")}
+  title={assertLocalized("Merchant")}
+  body={richText.plain(assertLocalized("Spend essence on cards, dreamsigns, and services."))}
 />`,
     },
     {
@@ -115,8 +116,8 @@ import { richText } from "src/cumulus/components/card/rich-text";
       code: `<InfoCard
   variant="tide"
   tide="valor"
-  title="Rising Valor"
-  body={richText.plain("A tide of steadfast courage that rewards holding the line.")}
+  title={assertLocalized("Rising Valor")}
+  body={richText.plain(assertLocalized("A tide of steadfast courage that rewards holding the line."))}
 />`,
     },
     {
@@ -131,7 +132,6 @@ const scale = infoCardTextScale(window.innerWidth); // 0.86 below ~551px; otherw
   demo: {
     defaultArgs: {
       variant: "text",
-      title: "Singular Storm",
       // Real media so switching `variant` to object / fullBleed / icon renders
       // genuine art rather than an empty frame. `image` is a real Dream Avatar
       // portrait, `figure` gives image-led variants a real foreground subject,
@@ -146,8 +146,11 @@ const scale = infoCardTextScale(window.innerWidth); // 0.86 below ~551px; otherw
       tide: "valor",
     },
     sampleContent: {
+      title: assertLocalized("Singular Storm"),
       body: richText.plain(
-        "A rising tide that floods the board with essence, drowning weaker dreams beneath it.",
+        assertLocalized(
+          "A rising tide that floods the board with essence, drowning weaker dreams beneath it.",
+        ),
       ),
     },
   },

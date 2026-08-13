@@ -1,3 +1,4 @@
+import { localizedSourceText } from "../../runtime/localization/runtime";
 import {
   selectBattleCardLocation,
   selectSidePlayAreaSize,
@@ -44,6 +45,7 @@ import {
   type BattlePromptText,
 } from "../../data/dreamwell-prompts";
 import { builtInBattlePromptMessage } from "../../runtime/localization/battle-prompt-messages";
+import { tx } from "@trox/runtime";
 
 const FALLBACK_PLAYER_DREAM_AVATAR = {
   imageNumber: "001",
@@ -51,8 +53,10 @@ const FALLBACK_PLAYER_DREAM_AVATAR = {
   title: "",
 } as const;
 
-const INACTIVE_OPPONENT_AVATAR_ABILITY =
-  "Opponent avatar ability is not active.";
+const INACTIVE_OPPONENT_AVATAR_ABILITY = tx(
+  "Opponent avatar ability is not active.",
+  "Unavailable-state description for an opponent Dream Avatar whose ability is disabled during a tutorial battle.",
+);
 
 export type MobileBattleInit = BattleInit;
 export type MobileBattleBoard = BattleMutableState;
@@ -161,7 +165,7 @@ export function buildMobileBattleView(
       aiProposal === null
         ? null
         : {
-            description: aiProposal.description,
+            description: localizedSourceText(aiProposal.description),
             canReject: aiProposal.kind === "action",
           },
     cardPicker: buildCardPickerView(
@@ -230,7 +234,7 @@ export function buildMobileBattleResultView(
   return {
     outcome: "victory",
     essenceReward: init.essenceReward,
-    opponentName: init.enemyDescriptor.name,
+    opponentName: localizedSourceText(init.enemyDescriptor.name),
     playerScore: board.sides.player.score,
     opponentScore: board.sides.enemy.score,
     turnCount: board.turnNumber,
@@ -320,13 +324,12 @@ function resolvePromptText(
 ): MobileBattlePromptCopy {
   if (resolver !== undefined) return resolver(text);
   if (isDreamwellPromptRef(text)) {
-    return {
-      kind: "authored",
-      text: resolveDreamwellPromptRef(text, init.dreamwellDeck),
-    };
+    return localizedSourceText(
+      resolveDreamwellPromptRef(text, init.dreamwellDeck),
+    );
   }
-  if (isLegacyPromptText(text)) return { kind: "authored", text: text.text };
-  return { kind: "message", message: builtInBattlePromptMessage(text) };
+  if (isLegacyPromptText(text)) return localizedSourceText(text.text);
+  return builtInBattlePromptMessage(text);
 }
 
 function buildDreamwellView(
@@ -553,8 +556,17 @@ function buildStatusView(
   return {
     dreamAvatar: {
       imageNumber: dreamAvatar.imageNumber,
-      name: dreamAvatar.name,
-      title: dreamAvatar.title,
+      name:
+        "id" in dreamAvatar
+          ? localizedSourceText(dreamAvatar.name)
+          : tx(
+              "Avatar",
+              "Fallback Dream Avatar name while battle identity data is unavailable.",
+            ),
+      title:
+        dreamAvatar.title === ""
+          ? undefined
+          : localizedSourceText(dreamAvatar.title),
       ...("portraitFocus" in dreamAvatar &&
       dreamAvatar.portraitFocus !== undefined
         ? { portraitFocus: dreamAvatar.portraitFocus }
@@ -566,7 +578,7 @@ function buildStatusView(
             id: dreamAvatar.id,
             ability: abilityUnavailable
               ? INACTIVE_OPPONENT_AVATAR_ABILITY
-              : dreamAvatar.renderedText,
+              : localizedSourceText(dreamAvatar.renderedText),
             ...(abilityUnavailable ? { unavailable: true } : {}),
           },
         }

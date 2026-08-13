@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -28,7 +29,7 @@ function card(cardNumber: number): CardData {
 
 function view(offer: number[]): DraftView {
   return {
-    progressLabel: "Draft (1/5)",
+    progressLabel: assertLocalized("Draft (1/5)"),
     scene: null,
     offer: offer.map((cardNumber) => {
       const displaySnapshot = card(cardNumber);
@@ -105,9 +106,9 @@ describe("Cumulus DraftScreen", () => {
         id: "run-a:first-visit:draft-a:Draft",
         model: {
           portrait: { kind: "character-portrait", characterId: "mira" },
-          portraitAlt: "Mira",
-          speakerName: "Mira",
-          text: "At a [purple]Draft[/purple] site you choose cards.",
+          portraitAlt: assertLocalized("Mira"),
+          speakerName: assertLocalized("Mira"),
+          text: assertLocalized("At a [purple]Draft[/purple] site you choose cards."),
         },
         delaySeconds: 1,
         horizontalOffset: 0,

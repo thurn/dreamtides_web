@@ -1,21 +1,22 @@
-import type { Dreamsign as DreamsignData } from "../../../types/journey";
+import { assertLocalized } from "@trox/runtime";
+import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
 import { WagerPrizeCard } from "../../components/card/PlayingCard";
 import type { CumulusComponent } from "../registry";
 
-const SAMPLE_DREAMSIGN: DreamsignData = {
+const SAMPLE_DREAMSIGN = localizedDreamsignFixture({
   id: "c706d0ba-2f41-4b14-95d8-db168ac6246c",
   name: "Amplified Acorn",
   imageName: "acorn_gold.png",
   imageAlt: "Golden fruit-like charm with a mesh-patterned orb.",
   effectDescription:
     "Once per turn, when you discard a card, your next card this turn costs 2● less.",
-};
+});
 
 function WagerPrizeCardDemo({ revealed = false }: { revealed?: boolean }) {
   return (
     <WagerPrizeCard
       prizeId="jack"
-      targetLabel="J-A"
+      targetLabel={assertLocalized("J-A")}
       essenceReward={200}
       rewardDreamsign={SAMPLE_DREAMSIGN}
       drawnCard={{ rank: "Q", suit: "hearts" }}
@@ -42,7 +43,7 @@ export const wagerPrizeCardDemo: CumulusComponent = {
       label: "Prize",
       code: `<WagerPrizeCard
   prizeId="jack"
-  targetLabel="J-A"
+  targetLabel={assertLocalized("J-A")}
   essenceReward={200}
   rewardDreamsign={dreamsign}
   drawnCard={null}
@@ -63,7 +64,7 @@ export const wagerPrizeCardDemo: CumulusComponent = {
       label: "Drawn reverse",
       code: `<WagerPrizeCard
   prizeId="jack"
-  targetLabel="J-A"
+  targetLabel={assertLocalized("J-A")}
   essenceReward={200}
   rewardDreamsign={dreamsign}
   drawnCard={{ rank: "Q", suit: "hearts" }}

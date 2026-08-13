@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act, type ReactElement } from "react";
@@ -14,9 +15,9 @@ const VIEW: JourneyFailedView = {
   reason: "score_target_reached",
   dreamAvatar: {
     id: "00000000-0000-4000-8000-000000000061",
-    name: "The Wayfinder",
-    title: "Bearer of the Last Light",
-    ability: "Whenever you map a dream, gain 1 essence.",
+    name: assertLocalized("The Wayfinder"),
+    title: assertLocalized("Bearer of the Last Light"),
+    ability: assertLocalized("Whenever you map a dream, gain 1 essence."),
     imageNumber: "001",
     portraitFocus: { x: 0.42, y: 0.18 },
   },
@@ -85,8 +86,9 @@ describe("Cumulus JourneyFailedScreen", () => {
         ?.textContent,
     ).not.toBe("");
     expect(
-      container.querySelector('[data-journey-failed-reason="score_target_reached"]')
-        ?.textContent,
+      container.querySelector(
+        '[data-journey-failed-reason="score_target_reached"]',
+      )?.textContent,
     ).not.toBe("");
     expect(container.querySelector("h1")?.style.color).toBe(
       "var(--text-primary)",

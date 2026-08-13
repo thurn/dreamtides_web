@@ -86,6 +86,7 @@ describe("buildSubtypeFilterOptions", () => {
       view("b", { subtype: "Beast" }),
       view("c", { subtype: "Beast" }),
       view("d", { subtype: "" }),
+      view("e", { subtype: "*" }),
     ];
     expect(values(buildSubtypeFilterOptions(deck))).toEqual([
       "all",

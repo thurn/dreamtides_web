@@ -80,7 +80,7 @@ export function AtlasScreen({
   onGuideDialogueShown,
 }: AtlasScreenProps) {
   const guideDialogueVisible = useDelayedTutorialSpeechBubbleVisibility(
-    view.guideDialogue?.id ?? view.guideDialogue?.model.text,
+    view.guideDialogue?.id,
     view.guideDialogue === undefined
       ? undefined
       : (view.guideDialogue.delaySeconds ?? 0),

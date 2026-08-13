@@ -1,5 +1,6 @@
 // Pure view-model builder for the Cumulus Duplication site.
 
+import type { LocalizedString } from "@trox/runtime";
 import type { ArtRef } from "../../cumulus/primitives/art";
 import type {
   DuplicationCardView,
@@ -31,7 +32,7 @@ export function resolveDuplicationGuide(
 /** Build the guide art and stable greeting used by the shared site layout. */
 export function buildDuplicationGuideView(
   guide: DreamGuideContent,
-  guideLine: string,
+  guideLine: LocalizedString,
 ): DuplicationGuideView {
   return projectGuideView(guide, guideLine);
 }
@@ -84,7 +85,7 @@ export function buildDuplicationSiteView(params: {
   runtime: CardChoiceSiteRuntime | null;
   cardDatabase: Map<number, CardData>;
   guide: DreamGuideContent;
-  guideLine: string;
+  guideLine: LocalizedString;
   transfigurationData: TransfigurationData;
 }): DuplicationSiteView {
   const scene: ArtRef | null =

@@ -1,6 +1,6 @@
 // PurgeSiteScreen — the Cumulus rendering of Master Takeshi's purge site.
 
-import { tx } from "@trox/runtime";
+import { tx, type LocalizedString } from "@trox/runtime";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { DeckCardView } from "./MobileDeckViewer";
 import { CardPickerPanel } from "../components/card/CardPickerPanel";
@@ -14,7 +14,6 @@ import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
-import { formatAuthoredTemplate } from "../../data/authored-template";
 
 export type PurgeGuideView = GuideGalleryGuideView;
 
@@ -33,10 +32,12 @@ export interface PurgeCardView extends DeckCardView {
 }
 
 export interface PurgeSiteView {
-  presentation: Extract<
-    import("../../types/sites-data").SitePresentation,
-    { kind: "purge" }
-  >;
+  presentation: {
+    readonly kind: "purge";
+    readonly title: LocalizedString;
+    readonly instruction: LocalizedString;
+    readonly purgeAction: (count: number) => LocalizedString;
+  };
   /** Stable site id used by the shared character-gallery layout. */
   siteId: string;
   /** Current dreamscape scene art behind the site, if resolved. */
@@ -96,13 +97,15 @@ export function PurgeSiteScreen({
         view.visitCosts,
       ).map((reservation) => ({
         ...(reservation.label.kind === "decline"
-          ? { label: tx(
+          ? {
+              label: tx(
                 "Decline",
                 "Compact command that declines the current site interaction without applying it.",
-              ) }
-          : { authoredLabel: formatAuthoredTemplate(view.presentation.purgeAction, {
-                count: reservation.label.count,
-              }) }),
+              ),
+            }
+          : {
+              label: view.presentation.purgeAction(reservation.label.count),
+            }),
         essenceCost: reservation.essenceCost,
       })),
     [
@@ -113,7 +116,7 @@ export function PurgeSiteScreen({
     ],
   );
   const tutorialVisible = useDelayedTutorialSpeechBubbleVisibility(
-    view.tutorial?.id ?? view.tutorial?.model.text,
+    view.tutorial?.id,
     view.tutorial === undefined ? undefined : (view.tutorial.delaySeconds ?? 0),
   );
   useEffect(() => {
@@ -171,7 +174,7 @@ export function PurgeSiteScreen({
       {tutorialVisible && view.tutorial !== undefined && (
         <ViewportTutorialDialogue
           view={{
-            id: view.tutorial.id ?? view.tutorial.model.text,
+            id: view.tutorial.id,
             dialogue: view.tutorial.model,
             horizontalOffset: view.tutorial.horizontalOffset,
             verticalOffset: view.tutorial.verticalOffset,
@@ -231,19 +234,21 @@ function PurgeGallery({
       }}
     >
       <CardPickerPanel
-        authoredTitle={presentation.title}
-        authoredSubtitle={presentation.instruction}
+        title={presentation.title}
+        subtitle={presentation.instruction}
         rightAccessory={{
           kind: "glassButton",
           button: {
             ...(selectedCount === 0
-              ? { label: tx(
+              ? {
+                  label: tx(
                     "Decline",
                     "Compact command that declines the current site interaction without applying it.",
-                  ) }
-              : { authoredLabel: formatAuthoredTemplate(presentation.purgeAction, {
-                    count: selectedCount,
-                  }) }),
+                  ),
+                }
+              : {
+                  label: presentation.purgeAction(selectedCount),
+                }),
             essenceCost: selectedCount === 0 ? null : totalCost,
             widthReservations: actionWidthReservations,
             variant: selectedCount === 0 ? "default" : "danger",

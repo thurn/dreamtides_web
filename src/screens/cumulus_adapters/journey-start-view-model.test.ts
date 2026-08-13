@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 import type { DreamAvatarContent } from "../../types/content";
 import type { Tides4DeckJson } from "../../draft/pool/tides4-io";
 import type { TutorialJourneyPool } from "../../data/tutorial-journey-pool";

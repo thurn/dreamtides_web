@@ -29,6 +29,7 @@ import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import "./site-node.css";
+import type { LocalizedString } from "@trox/runtime";
 
 /** Compact diameter for site nodes placed over a dreamscape scene. */
 const SCENE_NODE_SIZE = 60;
@@ -56,10 +57,10 @@ export interface DreamscapeSiteModel {
   /** Clickable: not visited and not locked. */
   isInteractive: boolean;
   /** Display label (battle tier / `Draft Nx` / site type name). */
-  label: string;
-  lockedGuidance?: string;
+  label: LocalizedString;
+  lockedGuidance?: LocalizedString;
   /** One-line mechanic blurb shown in the reveal. */
-  blurb: string;
+  blurb: LocalizedString;
   /** The site {@link Glyph}. */
   icon: Glyph;
 }
@@ -67,10 +68,10 @@ export interface DreamscapeSiteModel {
 /** The status note (the lock note) shown under the blurb in the reveal. */
 function siteRevealNote(
   model: DreamscapeSiteModel,
-  lockedGuidance: string,
-): string | null {
+  lockedGuidance: LocalizedString | undefined,
+): LocalizedString | null {
   if (model.isLocked) {
-    return lockedGuidance;
+    return lockedGuidance ?? null;
   }
   return null;
 }
@@ -79,7 +80,7 @@ function siteRevealNote(
  * muted lock note under it. */
 function siteRevealBody(
   model: DreamscapeSiteModel,
-  lockedGuidance: string,
+  lockedGuidance: LocalizedString | undefined,
 ): RichText {
   const note = siteRevealNote(model, lockedGuidance);
   const blurb = richText.plain(model.blurb);
@@ -118,7 +119,7 @@ export function SiteNode({
           variant: "icon",
           glyph: model.icon,
           title: model.label,
-          body: siteRevealBody(model, model.lockedGuidance ?? ""),
+          body: siteRevealBody(model, model.lockedGuidance),
         },
       },
       secondaries: [],
@@ -184,7 +185,7 @@ export function SiteNode({
           onSelect(site.id);
         }
       }}
-      aria-label={model.label}
+      ariaLabelMessage={model.label}
       aria-disabled={!isInteractive}
       data-site-id={site.id}
       data-site-type={site.type}

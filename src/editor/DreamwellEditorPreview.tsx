@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 import {
   type CSSProperties,
   type ReactNode,
@@ -320,8 +321,7 @@ export function DreamwellEditorPreview({
   // The editor (which supplies a `rulesText` slot) always shows the frosted box
   // so an empty-rules card still offers a target to start an inline edit; the
   // in-battle card shows it only when there is text.
-  const showRulesText =
-    renderedText.trim() !== "" || slots?.rulesText != null;
+  const showRulesText = renderedText.trim() !== "" || slots?.rulesText != null;
 
   // Resolve the band geometry from the measured box top. The crisp art holds
   // down to a seam set below the measured box top; from the seam the blur and
@@ -410,23 +410,21 @@ export function DreamwellEditorPreview({
     <div
       ref={rootRef}
       data-dreamwell-card={card.id}
-      style={
-        {
-          position: "relative",
-          width: "100%",
-          aspectRatio: "3 / 2",
-          containerType: "inline-size",
-          // Circular corner of 3.6% of the card width, matching the regular card.
-          // Set in `%` (not `cqw`) so it resolves against the card's own box; the
-          // vertical 5.4% of height equals 3.6% of width on the 3:2 frame.
-          borderRadius: "3.6% / 5.4%",
-          overflow: "hidden",
-          // Plain drop shadow, matching the regular card's default (no colored
-          // outer ring); the card edge reads from the soft inner rim below.
-          boxShadow: "0 4px 14px rgba(0, 0, 0, 0.55)",
-          userSelect: "none",
-        }
-      }
+      style={{
+        position: "relative",
+        width: "100%",
+        aspectRatio: "3 / 2",
+        containerType: "inline-size",
+        // Circular corner of 3.6% of the card width, matching the regular card.
+        // Set in `%` (not `cqw`) so it resolves against the card's own box; the
+        // vertical 5.4% of height equals 3.6% of width on the 3:2 frame.
+        borderRadius: "3.6% / 5.4%",
+        overflow: "hidden",
+        // Plain drop shadow, matching the regular card's default (no colored
+        // outer ring); the card edge reads from the soft inner rim below.
+        boxShadow: "0 4px 14px rgba(0, 0, 0, 0.55)",
+        userSelect: "none",
+      }}
     >
       {/* Dark base behind the band, so any sliver the extended art does not
           reach matches the band rather than going neutral. */}
@@ -532,7 +530,9 @@ export function DreamwellEditorPreview({
                 sizeVar="9cqw"
                 numberSizeVar="6.4cqw"
                 numberCapPx={energyOrbCapPx}
-                authoredAriaLabel={`${String(card.energyAdded)} energy added`}
+                ariaLabel={assertLocalized(
+                  `${String(card.energyAdded)} energy added`,
+                )}
               />
             );
             return slots?.energy ? slots.energy(energyNode) : energyNode;
@@ -584,14 +584,12 @@ export function DreamwellEditorPreview({
         {showRulesText
           ? (() => {
               const rulesNode =
-                renderedText.trim() !== ""
-                  ? (
-                      <RulesText
-                        text={renderedText}
-                        owner={{ kind: "card", id: card.id }}
-                      />
-                    )
-                  : null;
+                renderedText.trim() !== "" ? (
+                  <RulesText
+                    text={assertLocalized(renderedText)}
+                    owner={{ kind: "card", id: card.id }}
+                  />
+                ) : null;
               return slots?.rulesText ? slots.rulesText(rulesNode) : rulesNode;
             })()
           : null}

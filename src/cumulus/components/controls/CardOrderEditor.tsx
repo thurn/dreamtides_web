@@ -10,18 +10,16 @@ import { Pressable } from "../../primitives/Pressable";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { StandaloneGlyph } from "./StandaloneGlyph";
-import { tx, txa, type LocalizedString } from "@trox/runtime";
+import { opaque, txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export interface CardOrderEditorItem {
   /** Card UUID or battle-instance id returned unchanged by callbacks. */
   id: string;
   /** Presentation-only card label. */
-  authoredLabel?: string;
-  labelMessage?: LocalizedString;
+  label: LocalizedString;
   /** Optional secondary identifying detail. */
-  authoredSummary?: string;
-  summaryMessage?: LocalizedString;
+  summary?: LocalizedString;
 }
 
 export interface CardOrderEditorProps {
@@ -96,12 +94,6 @@ function CardOrderEditorRow({
 }): ReactElement {
   const resolve = useLocalizer();
   const controls = useDragControls();
-  const hasAuthoredLabel = item.authoredLabel !== undefined;
-  if (hasAuthoredLabel === (item.labelMessage !== undefined)) {
-    throw new Error(
-      "CardOrderEditorItem requires exactly one authoredLabel or labelMessage.",
-    );
-  }
 
   const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>): void => {
     if (event.key === "ArrowUp" && index > 0) {
@@ -151,34 +143,26 @@ function CardOrderEditorRow({
             whiteSpace: "nowrap",
           }}
         >
-          {item.authoredLabel ?? resolve(item.labelMessage!)}
+          {resolve(item.label)}
         </span>
-        {item.authoredSummary === undefined &&
-        item.summaryMessage === undefined ? null : (
+        {item.summary === undefined ? null : (
           <span
             style={{
               color: token("--text-on-glass-muted"),
               font: token("--t-caption"),
             }}
           >
-            {item.authoredSummary ?? resolve(item.summaryMessage!)}
+            {resolve(item.summary)}
           </span>
         )}
       </span>
       <Pressable
         as="button"
-        ariaLabelMessage={
-          item.authoredLabel === undefined
-            ? tx(
-                "Reorder missing card instance",
-                "Accessible command on a drag handle for a missing battle card instance. Arrow-key commands move that physical entry.",
-              )
-            : txa(
-                "Reorder {card_name}",
-                { card_name: item.authoredLabel },
-                "Accessible command on a drag handle that reorders one battle card. card_name is the UUID-resolved authored card name with unknown grammatical gender; arrow-key commands move that physical entry.",
-              )
-        }
+        ariaLabelMessage={txa(
+          "Reorder {card_name}",
+          { card_name: opaque(item.label) },
+          "Accessible command on a drag handle that reorders one battle card. card_name is the independently localized UUID-resolved card name and is grammatically invariant here; arrow-key commands move that physical entry.",
+        )}
         aria-keyshortcuts="ArrowUp ArrowDown"
         data-card-order-drag-handle={item.id}
         onPointerDown={(event: PointerEvent<HTMLButtonElement>) =>

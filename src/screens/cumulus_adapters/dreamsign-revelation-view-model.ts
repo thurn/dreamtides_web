@@ -1,5 +1,6 @@
 // Pure view-model builder for the Cumulus Dreamsign Revelation screen.
 
+import type { LocalizedString } from "@trox/runtime";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
 import type {
@@ -17,6 +18,8 @@ import type {
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 import { projectGuideView } from "./guide-view-model";
+import { localizedSitePresentation } from "../../cumulus/screens/localized-site-presentation";
+import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
 
 /** Resolve Sigrun, the resident guide for Dreamsign Revelation. */
 export function resolveDreamsignRevelationGuide(
@@ -33,7 +36,7 @@ export function resolveDreamsignRevelationGuide(
 /** Build the guide slice shown beside the offer. */
 export function buildDreamsignRevelationGuideView(
   guide: DreamGuideContent,
-  guideLine: string,
+  guideLine: LocalizedString,
 ): DreamsignRevelationGuideView {
   return projectGuideView(guide, guideLine);
 }
@@ -43,7 +46,7 @@ export function buildDreamsignRevelationView(params: {
   state: JourneyState;
   sceneNode: DreamscapeNode | null;
   guide: DreamGuideContent;
-  guideLine: string;
+  guideLine: LocalizedString;
   offeredDreamsigns: readonly Dreamsign[] | null;
   pendingPurgeDreamsign: Dreamsign | null;
   tutorialConfiguration?: TutorialSiteConfiguration;
@@ -52,14 +55,17 @@ export function buildDreamsignRevelationView(params: {
   const scene: ArtRef | null =
     params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
   return {
-    presentation: params.sitesData.siteTypes.DreamsignRevelation
-      .presentation as Extract<
-      import("../../types/sites-data").SitePresentation,
-      { kind: "dreamsign-revelation" }
-    >,
+    presentation: localizedSitePresentation(
+      params.sitesData.siteTypes.DreamsignRevelation.presentation as Extract<
+        import("../../types/sites-data").SitePresentation,
+        { kind: "dreamsign-revelation" }
+      >,
+    ),
     scene,
     guide: buildDreamsignRevelationGuideView(params.guide, params.guideLine),
-    offer: params.offeredDreamsigns ?? [],
+    offer: (params.offeredDreamsigns ?? []).map((dreamsign) =>
+      localizedDreamsign(dreamsign, "Dreamsign Revelation offer"),
+    ),
     offerReady: params.offeredDreamsigns !== null,
     tutorial: buildFirstVisitSiteTutorialView(
       params.state,
@@ -70,8 +76,16 @@ export function buildDreamsignRevelationView(params: {
       params.pendingPurgeDreamsign === null
         ? null
         : {
-            pendingDreamsign: params.pendingPurgeDreamsign,
-            currentDreamsigns: params.state.dreamsigns,
+            pendingDreamsign: localizedDreamsign(
+              params.pendingPurgeDreamsign,
+              "Dreamsign Revelation pending reward",
+            ),
+            currentDreamsigns: params.state.dreamsigns.map((dreamsign) =>
+              localizedDreamsign(
+                dreamsign,
+                "Dreamsign Revelation held collection",
+              ),
+            ),
             maxDreamsigns: params.state.maxDreamsigns,
           },
   };

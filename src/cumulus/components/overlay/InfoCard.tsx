@@ -29,7 +29,7 @@ import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { controlChrome } from "../../internal/control-treatment";
 import { applySymbolReplacements } from "../../primitives/symbol-replacements";
 import { tideResonanceLabel, tideVisual, type Tide } from "../hud/tide-spec";
-import { txa, type LocalizedString } from "@trox/runtime";
+import { assertLocalized, txa, type LocalizedString } from "@trox/runtime";
 import {
   useLocalizer,
   useOptionalLocalizer,
@@ -239,16 +239,12 @@ interface InfoCardCommonProps {
    * The card's headline. Resolve names before display; canonical rules symbols
    * render as their inline icons.
    */
-  title?: string;
-  /** Complete localized fallback headline selected by a non-React builder. */
-  titleMessage?: LocalizedString;
+  title?: LocalizedString;
   /**
    * The reveal copy, as a structured {@link RichText} value. Canonical rules
    * symbols and explicit glyph parts render as cap-height-aligned inline icons.
    */
   body?: RichText;
-  /** Complete localized fallback body selected by a non-React builder. */
-  bodyMessage?: LocalizedString;
 }
 
 /**
@@ -288,7 +284,7 @@ export interface InfoCardFullBleedProps extends InfoCardCommonProps {
    * Dream Avatar-select name/epithet pairing. Resolve before display; rules
    * symbols render as icons.
    */
-  subtitle?: string;
+  subtitle?: LocalizedString;
 }
 
 /**
@@ -306,7 +302,7 @@ export interface InfoCardAtlasRevealProps extends InfoCardCommonProps {
   /** Optional transparent full-body figure standing on the card's right side. */
   figure?: ArtRef;
   /** The resident guide / boss title; rules symbols render as icons. */
-  subtitle?: string;
+  subtitle?: LocalizedString;
 }
 
 /**
@@ -344,7 +340,7 @@ export interface InfoCardTextProps extends InfoCardCommonProps {
    * the Dream Avatar-select name/epithet pairing. Resolve before display;
    * rules symbols render as icons.
    */
-  subtitle?: string;
+  subtitle?: LocalizedString;
 }
 
 /**
@@ -406,23 +402,23 @@ function InfoCardBody(
   const variant: InfoCardVariant = props.variant ?? "text";
   const titleContent =
     contentOverride?.title ??
-    (title === undefined ? undefined : renderRulesSymbolsInline(title));
+    (title === undefined
+      ? undefined
+      : renderRulesSymbolsInline(resolve(title)));
   const bodyContent =
     body == null
       ? null
       : (contentOverride?.body ??
-        renderRichText(body, 0, { substituteRulesSymbols: true }));
+        renderRichText(body, resolve, 0, { substituteRulesSymbols: true }));
   const Body =
-    body == null && props.bodyMessage === undefined ? null : (
+    body == null ? null : (
       <div
         style={{
           ...tBody,
           textAlign: variant === "object" ? "center" : "left",
         }}
       >
-        {props.bodyMessage === undefined
-          ? bodyContent
-          : resolve(props.bodyMessage)}
+        {bodyContent}
       </div>
     );
 
@@ -457,11 +453,7 @@ function InfoCardBody(
         }}
       >
         {media}
-        <div style={{ ...tHeadline, textAlign: "center" }}>
-          {props.titleMessage === undefined
-            ? titleContent
-            : resolve(props.titleMessage)}
-        </div>
+        <div style={{ ...tHeadline, textAlign: "center" }}>{titleContent}</div>
         {Body}
       </div>
     );
@@ -569,27 +561,19 @@ function InfoCardBody(
                   : 0,
             }}
           >
-            {props.titleMessage === undefined
-              ? titleContent
-              : resolve(props.titleMessage)}
+            {titleContent}
           </div>
-          {subtitle !== undefined && subtitle !== "" && (
+          {subtitle !== undefined && (
             <div
               style={{
                 ...tEpithet,
                 marginBottom: body ? token("--space-s") : 0,
               }}
             >
-              {renderRulesSymbolsInline(subtitle)}
+              {renderRulesSymbolsInline(resolve(subtitle))}
             </div>
           )}
-          {(body != null || props.bodyMessage !== undefined) && (
-            <div style={{ ...tBody }}>
-              {props.bodyMessage === undefined
-                ? bodyContent
-                : resolve(props.bodyMessage)}
-            </div>
-          )}
+          {body != null && <div style={{ ...tBody }}>{bodyContent}</div>}
         </div>
       </div>
     );
@@ -694,24 +678,14 @@ function InfoCardBody(
                 gap: geometrySpace("--space-xxs"),
               }}
             >
-              <div style={tAtlasHeadline}>
-                {props.titleMessage === undefined
-                  ? titleContent
-                  : resolve(props.titleMessage)}
-              </div>
-              {subtitle !== undefined && subtitle !== "" && (
+              <div style={tAtlasHeadline}>{titleContent}</div>
+              {subtitle !== undefined && (
                 <div style={tAtlasSubtitle}>
-                  {renderRulesSymbolsInline(subtitle)}
+                  {renderRulesSymbolsInline(resolve(subtitle))}
                 </div>
               )}
             </div>
-            {(body != null || props.bodyMessage !== undefined) && (
-              <div style={tAtlasBody}>
-                {props.bodyMessage === undefined
-                  ? bodyContent
-                  : resolve(props.bodyMessage)}
-              </div>
-            )}
+            {body != null && <div style={tAtlasBody}>{bodyContent}</div>}
           </div>
         </div>
       </div>
@@ -755,17 +729,11 @@ function InfoCardBody(
               }}
             />
           </span>
-          <div style={tHeadline}>
-            {props.titleMessage === undefined
-              ? titleContent
-              : resolve(props.titleMessage)}
-          </div>
+          <div style={tHeadline}>{titleContent}</div>
         </div>
         {body != null && (
           <div style={{ ...tBody, marginTop: token("--space-m") }}>
-            {props.bodyMessage === undefined
-              ? bodyContent
-              : resolve(props.bodyMessage)}
+            {bodyContent}
           </div>
         )}
       </div>
@@ -813,11 +781,7 @@ function InfoCardBody(
             />
           </span>
           <div>
-            <div style={tHeadline}>
-              {props.titleMessage === undefined
-                ? titleContent
-                : resolve(props.titleMessage)}
-            </div>
+            <div style={tHeadline}>{titleContent}</div>
             <div
               style={{ ...tMeta, color: v.fg, marginTop: token("--space-xs") }}
             >
@@ -827,9 +791,7 @@ function InfoCardBody(
         </div>
         {body != null && (
           <div style={{ ...tBody, marginTop: token("--space-m") }}>
-            {props.bodyMessage === undefined
-              ? bodyContent
-              : resolve(props.bodyMessage)}
+            {bodyContent}
           </div>
         )}
       </div>
@@ -859,18 +821,14 @@ function InfoCardBody(
                 : 0,
           }}
         >
-          <div style={tHeadline}>
-            {props.titleMessage === undefined
-              ? titleContent
-              : resolve(props.titleMessage)}
-          </div>
+          <div style={tHeadline}>{titleContent}</div>
         </div>
       )}
-      {subtitle !== undefined && subtitle !== "" && (
+      {subtitle !== undefined && (
         <div
           style={{ ...tEpithet, marginBottom: body ? token("--space-s") : 0 }}
         >
-          {renderRulesSymbolsInline(subtitle)}
+          {renderRulesSymbolsInline(resolve(subtitle))}
         </div>
       )}
       {Body}
@@ -939,7 +897,7 @@ export interface EditableInfoCardField {
   /** Whether the card is currently showing this field's editor. */
   readonly isEditing: boolean;
   /** Validation message shown beneath the native editor. */
-  readonly error?: string;
+  readonly error?: LocalizedString;
   readonly onBeginEdit: () => void;
   readonly onDraftChange: (value: string) => void;
   readonly onCancel: () => void;
@@ -1102,7 +1060,7 @@ function EditableInfoCardCopy({
             font: token("--t-caption"),
           }}
         >
-          {value.error}
+          {resolve(value.error)}
         </span>
       ) : null}
     </span>
@@ -1119,13 +1077,14 @@ export function EditableInfoCard({
   body,
   bodyFormat,
 }: EditableInfoCardProps): React.ReactElement {
+  const resolve = useOptionalLocalizer() ?? missingInfoCardLocalizer;
   const bodyModel: RichText =
     bodyFormat === "rules"
-      ? { kind: "rules", text: body.value }
-      : { kind: "plain", text: body.value };
+      ? { kind: "rules", text: assertLocalized(body.value) }
+      : { kind: "plain", text: assertLocalized(body.value) };
   const props: InfoCardTextProps = {
     variant: "text",
-    title: title?.value,
+    title: title === undefined ? undefined : assertLocalized(title.value),
     body: bodyModel,
   };
   const titleContent =
@@ -1136,7 +1095,7 @@ export function EditableInfoCard({
     );
   const bodyContent = (
     <EditableInfoCardCopy field="description" mode="multiline" value={body}>
-      {renderRichText(bodyModel, 0, { substituteRulesSymbols: true })}
+      {renderRichText(bodyModel, resolve, 0, { substituteRulesSymbols: true })}
     </EditableInfoCardCopy>
   );
   const style = useInfoCardFrameStyle(CARD_W);

@@ -36,7 +36,7 @@ import { CardPile } from "src/cumulus/components/battle/CardPile";
 
 <CardPile
   cards={deck.map((card) => ({ face: "down", id: card.instanceId }))}
-  label="Player deck"
+  label={assertLocalized("Player deck")}
 />
 ```
 
@@ -51,7 +51,7 @@ Inactive face-up layers keep the pile clickable as one zone control without reve
     id: card.instanceId,
     model: card.gameCard,
   }))}
-  label="Enemy void"
+  label={assertLocalized("Enemy void")}
   onPress={openEnemyVoid}
 />
 ```
@@ -63,8 +63,8 @@ An empty void retains its physical card footprint with a dotted outline and can 
 ```tsx
 <CardPile
   cards={[]}
-  label="Player void"
+  label={assertLocalized("Player void")}
   emptyState="outlined"
-  emptyLabel="Void"
+  emptyLabel={assertLocalized("Void")}
 />
 ```

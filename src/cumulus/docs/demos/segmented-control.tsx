@@ -81,14 +81,18 @@ export const segmentedControlDemo: CumulusComponent = {
   Component: SegmentedControlDemo,
   usage: [
     {
-      note: "A controlled toggle: own the selected value and update it from `onChange`. `options` accepts plain strings or `{ value, label }` pairs.",
+      note: "A controlled toggle: own the selected stable value and give every option a localized label.",
       code: `import { useState } from "react";
 import { SegmentedControl } from "src/cumulus/components/controls/SegmentedControl";
 
-const [filter, setFilter] = useState("All");
+const [filter, setFilter] = useState("all");
 
 <SegmentedControl
-  options={["All", "Characters", "Events"]}
+  options={[
+    { value: "all", label: assertLocalized("All") },
+    { value: "characters", label: assertLocalized("Characters") },
+    { value: "events", label: assertLocalized("Events") },
+  ]}
   value={filter}
   onChange={setFilter}
 />`,
@@ -98,7 +102,7 @@ const [filter, setFilter] = useState("All");
       note: "Set `full` to stretch the track to its container, each segment sharing the width equally.",
       code: `<SegmentedControl
   full
-  options={["All", "Characters", "Events"]}
+  options={filterOptions}
   value={filter}
   onChange={setFilter}
 />`,

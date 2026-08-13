@@ -8,12 +8,12 @@
 
 import { useRef } from "react";
 import { Dreamsign } from "../../components/hud/Dreamsign";
-import type { Dreamsign as DreamsignData } from "../../../types/journey";
+import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 
 /** A gallery of real dreamsign art assets (by id), with authored-style effects. */
-const GALLERY: DreamsignData[] = [
+const GALLERY = [
   {
     id: "c706d0ba-2f41-4b14-95d8-db168ac6246c",
     name: "Amplified Acorn",
@@ -60,7 +60,7 @@ const GALLERY: DreamsignData[] = [
     effectDescription:
       "Once per turn, when an ally leaves play, your next character this turn costs 2● less.",
   },
-];
+].map(localizedDreamsignFixture);
 
 export function DreamsignMockup() {
   const stageRef = useRef<HTMLDivElement>(null);

@@ -25,7 +25,7 @@ export const mainMenuButtonDemo: CumulusComponent = {
       label: "Main-menu action",
       note: "Use this hierarchy for full-bleed main-menu actions.",
       code: `<MainMenuButton
-  label="New Journey"
+  label={assertLocalized("New Journey")}
   onPress={startJourney}
 />`,
     },

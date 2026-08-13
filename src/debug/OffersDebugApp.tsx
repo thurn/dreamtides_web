@@ -1,4 +1,6 @@
+import { assertLocalized } from "@trox/runtime";
 import { useEffect, useState, type ReactElement } from "react";
+import { resolveChecked } from "../runtime/localization/runtime";
 import { loadCardDatabase } from "../data/card-database";
 import { loadSitesData, siteTypeIcon } from "../data/sites-data";
 import {
@@ -77,7 +79,7 @@ const STARTER_TARGETS = [
 
 const DREAMSIGN = {
   id: "1a524712-ef7e-43d9-bd79-5dea5250bf08",
-  name: "Rainbow Horn",
+  name: assertLocalized("Rainbow Horn"),
   art: artRef.dreamsign("horn_rainbow .png"),
 } as const;
 
@@ -110,7 +112,7 @@ export function buildOfferTileDebugModels(
     category_draft_known: {
       id: "debug:category_draft_known",
       kind: "category-draft",
-      category: { kind: "subtype", name: "Spirit Animal" },
+      category: { kind: "subtype", name: assertLocalized("Spirit Animal") },
       cards: CATEGORY_DRAFT,
     },
     card_bundle: {
@@ -154,7 +156,7 @@ export function buildOfferTileDebugModels(
       kind: "add-site",
       site: {
         id: "Duplication",
-        name: "Duplication",
+        name: assertLocalized("Duplication"),
         glyph: glyph(siteTypeIcon(sitesData, "Duplication")),
       },
     },
@@ -372,10 +374,15 @@ export default function OffersDebugApp(): ReactElement {
           >
             {selected === null || selectedArchetypeId === null
               ? ""
-              : offerTileDescription(
-                  selected,
-                  auguryArchetype(AUGURY_DATA, selectedArchetypeId).presentation,
-                )}
+                : resolveChecked(
+                    offerTileDescription(
+                      selected,
+                      auguryArchetype(
+                        AUGURY_DATA,
+                        selectedArchetypeId,
+                      ).presentation,
+                    ),
+                  )}
           </p>
         </header>
 

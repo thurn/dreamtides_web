@@ -9,6 +9,8 @@
 // `InfoCard.body`) take a `RichText`, never a `ReactNode`.
 
 import { Fragment, type ReactElement, type ReactNode } from "react";
+import type { LocalizedString } from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import { token } from "../../primitives/tokens";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { InlineGlyph } from "../typography/InlineGlyph";
@@ -39,9 +41,9 @@ export function richTextDefinitionSymbolText(
 
 export interface RichTextDefinition {
   /** Canonical glossary term used as the compact row label. */
-  readonly term: string;
+  readonly term: LocalizedString;
   /** Rules-aware explanatory copy shown after the label. */
-  readonly definition: string;
+  readonly definition: LocalizedString;
   /** Optional rules symbol rendered directly before the glossary term. */
   readonly symbol?: RichTextDefinitionSymbol;
   /** Whether the row uses its term, its rules symbol, or definition copy alone. */
@@ -64,10 +66,10 @@ export interface RichTextDefinition {
  *    authored sentences may omit the label and colon.
  */
 export type RichText =
-  | { readonly kind: "plain"; readonly text: string }
-  | { readonly kind: "rules"; readonly text: string }
-  | { readonly kind: "underline"; readonly text: string }
-  | { readonly kind: "note"; readonly text: string }
+  | { readonly kind: "plain"; readonly text: LocalizedString }
+  | { readonly kind: "rules"; readonly text: LocalizedString }
+  | { readonly kind: "underline"; readonly text: LocalizedString }
+  | { readonly kind: "note"; readonly text: LocalizedString }
   | { readonly kind: "stack"; readonly parts: readonly RichText[] }
   | {
       readonly kind: "definitions";
@@ -76,10 +78,10 @@ export type RichText =
 
 /** Ergonomic constructors for {@link RichText} values. */
 export const richText = {
-  plain: (text: string): RichText => ({ kind: "plain", text }),
-  rules: (text: string): RichText => ({ kind: "rules", text }),
-  underline: (text: string): RichText => ({ kind: "underline", text }),
-  note: (text: string): RichText => ({ kind: "note", text }),
+  plain: (text: LocalizedString): RichText => ({ kind: "plain", text }),
+  rules: (text: LocalizedString): RichText => ({ kind: "rules", text }),
+  underline: (text: LocalizedString): RichText => ({ kind: "underline", text }),
+  note: (text: LocalizedString): RichText => ({ kind: "note", text }),
   stack: (...parts: RichText[]): RichText => ({ kind: "stack", parts }),
   definitions: (entries: readonly RichTextDefinition[]): RichText => ({
     kind: "definitions",
@@ -111,21 +113,25 @@ const GLOSSARY_DEFINITION_DIVIDER_STYLE = {
 } as const;
 
 function renderDefinitionText(
-  definition: string,
+  definition: LocalizedString,
+  resolve: (message: LocalizedString) => string,
   options: RichTextRenderOptions,
 ): ReactNode {
+  const text = resolve(definition);
   return options.substituteRulesSymbols === true ||
-    INLINE_RULE_SYMBOL_RE.test(definition)
+    INLINE_RULE_SYMBOL_RE.test(text)
     ? options.substituteRulesSymbols === true
-      ? renderRulesSymbolsInline(definition)
-      : renderRulesTextInline(definition)
-    : definition;
+      ? renderRulesSymbolsInline(text)
+      : renderRulesTextInline(text)
+    : text;
 }
 
 function renderInlineText(
-  text: string,
+  message: LocalizedString,
+  resolve: (message: LocalizedString) => string,
   options: RichTextRenderOptions,
 ): ReactNode {
+  const text = resolve(message);
   return options.substituteRulesSymbols === true
     ? renderRulesSymbolsInline(text)
     : text;
@@ -153,7 +159,7 @@ function DefinitionSymbol({
   trailingGap,
 }: {
   readonly symbol: RichTextDefinitionSymbol;
-  readonly title?: string;
+  readonly title?: LocalizedString;
   readonly trailingGap: boolean;
 }) {
   if (symbol === "trigger") {
@@ -179,7 +185,7 @@ function DefinitionSymbol({
             marginLeft: index === 0 ? undefined : "-0.35em",
           }}
         >
-          <InlineGlyph glyph={glyph} color="text-primary" authoredLabel={title} />
+          <InlineGlyph glyph={glyph} color="text-primary" label={title} />
         </span>
       ))}
     </span>
@@ -192,18 +198,23 @@ function DefinitionSymbol({
  */
 export function renderRichText(
   value: RichText,
+  resolve: (message: LocalizedString) => string,
   key: string | number = 0,
   options: RichTextRenderOptions = {},
 ): ReactNode {
   switch (value.kind) {
     case "plain":
-      return <span key={key}>{renderInlineText(value.text, options)}</span>;
+      return (
+        <span key={key}>{renderInlineText(value.text, resolve, options)}</span>
+      );
     case "rules":
-      return <Fragment key={key}>{renderRulesText(value.text)}</Fragment>;
+      return (
+        <Fragment key={key}>{renderRulesText(resolve(value.text))}</Fragment>
+      );
     case "underline":
       return (
         <span key={key} style={{ textDecoration: "underline" }}>
-          {renderInlineText(value.text, options)}
+          {renderInlineText(value.text, resolve, options)}
         </span>
       );
     case "note":
@@ -212,7 +223,7 @@ export function renderRichText(
           key={key}
           style={{ color: token("--text-muted"), fontStyle: "italic" }}
         >
-          {renderInlineText(value.text, options)}
+          {renderInlineText(value.text, resolve, options)}
         </div>
       );
     case "stack":
@@ -221,7 +232,9 @@ export function renderRichText(
           key={key}
           style={{ display: "flex", flexDirection: "column", gap: STACK_GAP }}
         >
-          {value.parts.map((part, i) => renderRichText(part, i, options))}
+          {value.parts.map((part, i) =>
+            renderRichText(part, resolve, i, options),
+          )}
         </div>
       );
     case "definitions":
@@ -237,10 +250,7 @@ export function renderRichText(
           }}
         >
           {value.entries.map((entry, index) => (
-            <div
-              key={`${entry.term}-${String(index)}`}
-              data-definition-row={index}
-            >
+            <div key={index} data-definition-row={index}>
               {index === 0 ? null : (
                 <span
                   aria-hidden="true"
@@ -250,7 +260,7 @@ export function renderRichText(
               )}
               {entry.termPresentation === "definitionOnly" ? (
                 <dd style={{ display: "inline", margin: 0 }}>
-                  {renderDefinitionText(entry.definition, options)}
+                  {renderDefinitionText(entry.definition, resolve, options)}
                 </dd>
               ) : (
                 <>
@@ -273,11 +283,11 @@ export function renderRichText(
                     )}
                     {entry.termPresentation === "symbolOnly"
                       ? null
-                      : renderInlineText(entry.term, options)}
+                      : renderInlineText(entry.term, resolve, options)}
                   </dt>
                   <dd style={{ display: "inline", margin: 0 }}>
                     {": "}
-                    {renderDefinitionText(entry.definition, options)}
+                    {renderDefinitionText(entry.definition, resolve, options)}
                   </dd>
                 </>
               )}
@@ -290,5 +300,6 @@ export function renderRichText(
 
 /** Renders a {@link RichText} value inline. */
 export function RichTextView({ value }: { value: RichText }): ReactElement {
-  return <>{renderRichText(value)}</>;
+  const resolve = useLocalizer();
+  return <>{renderRichText(value, resolve)}</>;
 }

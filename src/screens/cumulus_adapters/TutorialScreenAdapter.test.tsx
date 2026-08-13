@@ -3,6 +3,7 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
 import { CumulusRoot } from "../../cumulus/CumulusRoot";
 import { getLogEntries, resetLog } from "../../logging";
 import { TutorialScreenAdapter } from "./TutorialScreenAdapter";
@@ -11,6 +12,8 @@ import type { DreamAvatarContent } from "../../types/content";
 import { makeTutorialConfiguration } from "../../test/tutorial-configuration-fixture";
 
 const TUTORIAL_CONFIGURATION = makeTutorialConfiguration();
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 
 const DREAM_AVATARS: readonly DreamAvatarContent[] = [
   {

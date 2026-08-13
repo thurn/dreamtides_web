@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 import { InlineGlyph } from "../../components/typography/InlineGlyph";
 import type { CumulusColor } from "../../primitives/color";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
@@ -18,8 +19,12 @@ function InlineGlyphDemo(args: Record<string, unknown>) {
       }}
     >
       A capital X
-      <InlineGlyph glyph={glyph} color={color} authoredLabel={label} /> and its inline
-      glyph share one exact visual center.
+      <InlineGlyph
+        glyph={glyph}
+        color={color}
+        label={assertLocalized(label)}
+      />{" "}
+      and its inline glyph share one exact visual center.
     </p>
   );
 }
@@ -44,7 +49,7 @@ export const inlineGlyphDemo: CumulusComponent = {
 import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 <span>
-  Gain 10<InlineGlyph glyph={GLYPHS.points} color="text-primary" label="points" />{" "}before nightfall.
+  Gain 10<InlineGlyph glyph={GLYPHS.points} color="text-primary" label={assertLocalized("points")} />{" "}before nightfall.
 </span>`,
     },
   ],

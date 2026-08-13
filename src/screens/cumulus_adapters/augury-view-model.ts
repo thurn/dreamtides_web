@@ -32,13 +32,13 @@ import type {
 import type { MerchantDeckSnapshot } from "../../journey_v2/trace/deckSnapshot";
 import type { CardData } from "../../types/cards";
 import type { LocalizedString } from "@trox/runtime";
+import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
 import { asCardId } from "../../types/card-identity";
 import type { DreamGuideContent } from "../../types/content";
 import type { SitesData } from "../../types/sites-data";
 import type {
   CardSourceDebugState,
   DreamscapeNode,
-  Dreamsign,
   JourneyState,
   SiteState,
 } from "../../types/journey";
@@ -55,6 +55,7 @@ import type {
   OfferTileStarterCards,
 } from "../../cumulus/components/controls/OfferTile";
 import type { DreamscapeSiteModel } from "../../cumulus/components/dreamscape/SiteNode";
+import { localizedSourceText } from "../../runtime/localization/runtime";
 import type {
   AuguryCardChoiceView,
   AuguryCardView,
@@ -94,7 +95,7 @@ export function resolveAuguryGuide(
 
 export function buildAuguryGuideView(
   guide: DreamGuideContent,
-  line: string,
+  line: LocalizedString,
 ): AuguryGuideView {
   return projectGuideView(guide, line);
 }
@@ -133,8 +134,8 @@ function sitePreviewModel(
     isBattle: siteType === "Battle",
     isLocked: false,
     isInteractive: false,
-    label: siteTypeName(sitesData, siteType),
-    blurb: siteTypeDescription(sitesData, siteType),
+    label: localizedSourceText(siteTypeName(sitesData, siteType)),
+    blurb: localizedSourceText(siteTypeDescription(sitesData, siteType)),
     icon: glyph(siteTypeIcon(sitesData, siteType)),
   };
 }
@@ -157,14 +158,14 @@ function allCards(objects: readonly MerchantGameObject[]): CardObject[] {
 
 function toDreamsign(
   object: Extract<MerchantGameObject, { objectType: "dreamsign" }>,
-): Dreamsign {
-  return {
+): ReturnType<typeof localizedDreamsign> {
+  return localizedDreamsign({
     id: object.dreamsignId,
     name: object.dreamsignTemplate.name,
     effectDescription: object.dreamsignTemplate.effectDescription,
     imageName: object.dreamsignTemplate.imageName,
     imageAlt: object.dreamsignTemplate.imageAlt,
-  };
+  }, "Augury offer");
 }
 
 function unavailable(message: string): never {
@@ -249,7 +250,7 @@ function tileDreamsign(
     object.dreamsignTemplate.imageName ?? `${object.dreamsignId}.png`;
   return {
     id: object.dreamsignId,
-    name: object.dreamsignTemplate.name,
+    name: localizedSourceText(object.dreamsignTemplate.name),
     art: artRef.dreamsign(imageName),
   };
 }
@@ -312,10 +313,10 @@ export function projectOfferTileCategory(
       return { kind: "fast" };
     default:
       if (category.id.startsWith("subtype:")) {
-        return { kind: "subtype", name: category.label };
+        return { kind: "subtype", name: localizedSourceText(category.label) };
       }
       if (category.id.startsWith("cluster:")) {
-        return { kind: "package", name: category.label };
+        return { kind: "package", name: localizedSourceText(category.label) };
       }
       return unavailable("category_draft_known has an unsupported category id");
   }
@@ -421,7 +422,9 @@ export function buildAuguryOfferTileModel(
         kind: "add-site",
         site: {
           id: payload.siteType,
-          name: siteTypeName(context.sitesData, payload.siteType),
+          name: localizedSourceText(
+            siteTypeName(context.sitesData, payload.siteType),
+          ),
           glyph: glyph(siteTypeIcon(context.sitesData, payload.siteType)),
         },
       };
@@ -593,7 +596,7 @@ export function buildAugurySiteModel(params: {
   site: SiteState;
   journeyContent: JourneyContent;
   guide: DreamGuideContent;
-  guideLine: string;
+  guideLine: LocalizedString;
 }): AuguryBuildResult {
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
@@ -645,8 +648,10 @@ export function buildAugurySiteModel(params: {
         ...baseView,
         encounterSignature: null,
         offers: [],
-        unavailableMessage:
+        unavailableMessage: tx(
           "The visions are clouded. I cannot read these paths; walk on for now.",
+          "Augury unavailable guidance after its offer model cannot be constructed.",
+        ),
       },
       context: null,
       encounter: null,
@@ -824,7 +829,11 @@ export function chooseAuguryOffer(
   offerId: string,
   choiceId: string | null,
 ): { ok: true } | { ok: false; message: LocalizedString } {
-  if (site === null || result?.encounter === null || result?.encounter === undefined) {
+  if (
+    site === null ||
+    result?.encounter === null ||
+    result?.encounter === undefined
+  ) {
     return {
       ok: false,
       message: tx(

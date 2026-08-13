@@ -3,12 +3,14 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { assertLocalized } from "@trox/runtime";
 import { CumulusRoot } from "../../CumulusRoot";
 import {
   PLAYING_CARD_DESIGN,
   PlayingCard,
   WagerPrizeCard,
 } from "./PlayingCard";
+import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
 
 beforeEach(() => {
   (
@@ -25,19 +27,19 @@ describe("WagerPrizeCard", () => {
     const host = document.createElement("div");
     document.body.append(host);
     const root = createRoot(host);
-    const dreamsign = {
+    const dreamsign = localizedDreamsignFixture({
       id: "00000000-0000-4000-8000-000000000051",
       name: "Bezoar",
       imageName: "bezoar.png",
       effectDescription: "Foresee 1.",
-    };
+    });
 
     act(() => {
       root.render(
         <CumulusRoot>
           <WagerPrizeCard
             prizeId="jack"
-            targetLabel="J-A"
+            targetLabel={assertLocalized("J-A")}
             essenceReward={200}
             rewardDreamsign={dreamsign}
             size="wagerCompact"
@@ -80,7 +82,7 @@ describe("WagerPrizeCard", () => {
         <CumulusRoot>
           <WagerPrizeCard
             prizeId="jack"
-            targetLabel="J-A"
+            targetLabel={assertLocalized("J-A")}
             essenceReward={200}
             rewardDreamsign={dreamsign}
             size="wagerCompact"
@@ -202,7 +204,7 @@ describe("WagerPrizeCard", () => {
         <CumulusRoot>
           <WagerPrizeCard
             prizeId="starway-1"
-            targetLabel="3+"
+            targetLabel={assertLocalized("3+")}
             essenceReward={60}
             rewardDreamsign={null}
             drawnCard={null}
@@ -229,7 +231,7 @@ describe("WagerPrizeCard", () => {
         <CumulusRoot>
           <WagerPrizeCard
             prizeId="starway-1"
-            targetLabel="3+"
+            targetLabel={assertLocalized("3+")}
             essenceReward={60}
             rewardDreamsign={null}
             drawnCard={{ rank: "3", suit: "clubs" }}

@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act, type ComponentProps } from "react";
@@ -61,8 +62,8 @@ describe("BattleStatusDisplay", () => {
           relationship="far"
           dreamAvatar={{
             imageNumber: "0042",
-            name: "Astra",
-            title: "The Dawnbound",
+            name: assertLocalized("Astra"),
+            title: assertLocalized("The Dawnbound"),
           }}
           currentEnergy={2}
           maxEnergy={3}
@@ -170,12 +171,12 @@ describe("BattleStatusDisplay", () => {
           relationship="near"
           dreamAvatar={{
             imageNumber: "0029",
-            name: "Tensho",
-            title: "Daimyo of Lacquered Fury",
+            name: assertLocalized("Tensho"),
+            title: assertLocalized("Daimyo of Lacquered Fury"),
           }}
           dreamAvatarProfile={{
             id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
-            ability: "Avatar ability is not active",
+            ability: assertLocalized("Avatar ability is not active"),
             unavailable: true,
           }}
           currentEnergy={0}
@@ -196,9 +197,7 @@ describe("BattleStatusDisplay", () => {
     const description = document.getElementById(
       source?.getAttribute("aria-describedby") ?? "",
     );
-    expect(description?.textContent).toContain(
-      "Avatar ability is not active",
-    );
+    expect(description?.textContent).toContain("Avatar ability is not active");
 
     act(() => root.unmount());
     container.remove();

@@ -42,8 +42,7 @@ Choose a named site fit and column count; use Card Gallery Panel when the collec
 | --- | --- | --- | --- |
 | `entryId` | `string` | no | Stable action id reported through the action callback. |
 | `glyph` | `Glyph` | no | Large glyph that carries the action's visual identity. |
-| `label` | `LocalizedString` | yes | Accessible action label. |
-| `authoredLabel` | `string` | yes | Canonical authored label when this action is data-defined. |
+| `label` | `LocalizedString` | no | Accessible action label. |
 | `caption` | `CardChoiceGridCaption` | no | Small uncontained line rendered below the glyph. |
 | `disabled` | `boolean` | yes | Detach interaction and visually recede the action. |
 | `testId` | `string` | yes | Optional stable test id on the action button. |

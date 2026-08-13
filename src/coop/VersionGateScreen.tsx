@@ -17,20 +17,13 @@ export function VersionGateScreen({
   contentConfig,
 }: VersionGateScreenProps): ReactNode {
   const [status, setStatus] = useState<"idle" | "creating" | "error">("idle");
-  const [message, setMessage] = useState<string | null>(null);
 
   const handleStartNewGame = useCallback(() => {
     setStatus("creating");
-    setMessage(null);
     void createAndNavigateToRoom(db, contentConfig)
       .then(() => window.location.reload())
-      .catch((error: unknown) => {
+      .catch(() => {
         setStatus("error");
-        setMessage(
-          error instanceof Error
-            ? error.message
-            : "Failed to create a new game.",
-        );
       });
   }, [db, contentConfig]);
 
@@ -46,7 +39,6 @@ export function VersionGateScreen({
           "This game was started on an earlier build. Start a fresh game on the current version.",
           "Explanation that an incompatible shared room must be replaced with a fresh game on the current build.",
         ),
-        ...(message === null ? {} : { detail: message }),
         actions: [
           {
             id: "primary",

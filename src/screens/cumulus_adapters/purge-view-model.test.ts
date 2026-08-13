@@ -1,4 +1,8 @@
+import { assertLocalized } from "@trox/runtime";
 import { describe, expect, it } from "vitest";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
@@ -113,7 +117,7 @@ describe("buildPurgeGuideView", () => {
         dialogue: { site: ["First line."] },
         homeSpecialty: "Purge cards.",
       },
-      "Chosen line.",
+      assertLocalized("Chosen line."),
     );
 
     expect(view).toMatchObject({
@@ -148,7 +152,7 @@ describe("buildPurgeSiteView", () => {
         makeCard({ cardNumber: 10002 }),
       ),
       guide: GUIDE,
-      guideLine: "Fixture line.",
+      guideLine: assertLocalized("Fixture line."),
       economyData: economyFixture(),
     });
 

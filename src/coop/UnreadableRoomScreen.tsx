@@ -17,20 +17,13 @@ export function UnreadableRoomScreen({
   contentConfig,
 }: UnreadableRoomScreenProps): ReactNode {
   const [status, setStatus] = useState<"idle" | "creating" | "error">("idle");
-  const [message, setMessage] = useState<string | null>(null);
 
   const handleStartNewGame = useCallback(() => {
     setStatus("creating");
-    setMessage(null);
     void createAndNavigateToRoom(db, contentConfig)
       .then(() => window.location.reload())
-      .catch((error: unknown) => {
+      .catch(() => {
         setStatus("error");
-        setMessage(
-          error instanceof Error
-            ? error.message
-            : "Failed to create a new game.",
-        );
       });
   }, [db, contentConfig]);
 
@@ -46,7 +39,6 @@ export function UnreadableRoomScreen({
           "This game’s data cannot be loaded safely. Start a fresh game to keep playing.",
           "Explanation that an unreadable shared room must be replaced to continue playing.",
         ),
-        ...(message === null ? {} : { detail: message }),
         actions: [
           {
             id: "primary",

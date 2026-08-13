@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // Full-screen mockup for SiteNode — a dreamscape screen: the wayside site discs
 // scattered across real scene art, each revealing its InfoCard `icon` card on
 // hover / press through the shared reveal engine. The node positions come from
@@ -8,7 +9,10 @@
 // dreamscape screen builds real ones from its site list and seeded scatter.
 
 import { useRef } from "react";
-import { SiteNode, type DreamscapeSiteModel } from "../../components/dreamscape/SiteNode";
+import {
+  SiteNode,
+  type DreamscapeSiteModel,
+} from "../../components/dreamscape/SiteNode";
 import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
 import { GLYPHS, glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
@@ -23,19 +27,24 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     isBattle: false,
     isLocked: false,
     isInteractive: true,
-    label: "Merchant",
-    blurb: "Spend essence on cards, dreamsigns, and services.",
+    label: assertLocalized("Merchant"),
+    blurb: assertLocalized("Spend essence on cards, dreamsigns, and services."),
     icon: glyph("bxf bx-store-alt-2"),
   },
   {
-    site: { id: "s-reward", type: "Reward", isEnhanced: false, isVisited: false },
+    site: {
+      id: "s-reward",
+      type: "Reward",
+      isEnhanced: false,
+      isVisited: false,
+    },
     pos: { x: 40, y: 22 },
     index: 1,
     isBattle: false,
     isLocked: false,
     isInteractive: true,
-    label: "Treasure",
-    blurb: "Claim a reward carried by this site.",
+    label: assertLocalized("Treasure"),
+    blurb: assertLocalized("Claim a reward carried by this site."),
     icon: glyph("bxf bx-treasure-chest"),
   },
   {
@@ -45,19 +54,26 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     isBattle: false,
     isLocked: false,
     isInteractive: true,
-    label: "Wellspring",
-    blurb: "An enhanced site — rest and recover before the road ahead.",
+    label: assertLocalized("Wellspring"),
+    blurb: assertLocalized(
+      "An enhanced site — rest and recover before the road ahead.",
+    ),
     icon: GLYPHS.exhaust,
   },
   {
-    site: { id: "s-battle", type: "Battle", isEnhanced: false, isVisited: false },
+    site: {
+      id: "s-battle",
+      type: "Battle",
+      isEnhanced: false,
+      isVisited: false,
+    },
     pos: { x: 34, y: 66 },
     index: 4,
     isBattle: true,
     isLocked: false,
     isInteractive: true,
-    label: "Battle",
-    blurb: "The dreamscape's guardian awaits.",
+    label: assertLocalized("Battle"),
+    blurb: assertLocalized("The dreamscape's guardian awaits."),
     icon: glyph("bxf bx-sword-alt"),
   },
   {
@@ -67,8 +83,8 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     isBattle: true,
     isLocked: true,
     isInteractive: false,
-    label: "Final Boss",
-    blurb: "Visit the other sites in this dreamscape first.",
+    label: assertLocalized("Final Boss"),
+    blurb: assertLocalized("Visit the other sites in this dreamscape first."),
     icon: glyph("bxf bx-meteor"),
   },
 ];
@@ -105,14 +121,21 @@ export function SiteNodeMockup() {
           pointerEvents: "none",
         }}
       >
-        <div style={{ font: token("--t-title"), color: token("--text-primary") }}>
+        <div
+          style={{ font: token("--t-title"), color: token("--text-primary") }}
+        >
           Wilderveil
         </div>
-        <div style={{ font: token("--t-caption"), color: token("--text-secondary"), marginTop: token("--space-xs") }}>
+        <div
+          style={{
+            font: token("--t-caption"),
+            color: token("--text-secondary"),
+            marginTop: token("--space-xs"),
+          }}
+        >
           Choose a site — press and hold any disc to read it.
         </div>
       </div>
-
     </div>
   );
 }

@@ -34,19 +34,17 @@ import { GlassPanel } from "../components/overlay/GlassPanel";
 import type { ArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import type { Dreamsign as DreamsignData } from "../../types/journey";
+import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
 import type { AuguryArchetypeData } from "../../types/augury-data";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
-import { GuideGallerySiteLayout } from "./GuideGallerySiteLayout";
+import {
+  GuideGallerySiteLayout,
+  type GuideGalleryGuideView,
+} from "./GuideGallerySiteLayout";
 import { debugRerollCornerStyle } from "./chrome-geometry";
 import { useIsDesktop } from "./use-is-desktop";
 
-export interface AuguryGuideView {
-  id: string;
-  name: string;
-  line: string;
-  art: ArtRef;
-}
+export type AuguryGuideView = GuideGalleryGuideView;
 
 export interface AuguryCardView {
   id: string;
@@ -76,12 +74,12 @@ export type AuguryOfferVisualView =
   | { kind: "purge"; card: AuguryCardView }
   | { kind: "duplicate"; card: AuguryCardView }
   | { kind: "duplicateChoices"; choices: readonly AuguryCardChoiceView[] }
-  | { kind: "dreamsigns"; dreamsigns: readonly DreamsignData[] }
+  | { kind: "dreamsigns"; dreamsigns: readonly LocalizedDreamsign[] }
   | { kind: "site"; model: DreamscapeSiteModel }
   | {
       kind: "mixed";
       cards: readonly AuguryCardView[];
-      dreamsigns: readonly DreamsignData[];
+      dreamsigns: readonly LocalizedDreamsign[];
     };
 
 export interface AuguryOfferView {
@@ -98,7 +96,7 @@ export interface AugurySiteView {
   encounterSignature: string | null;
   guide: AuguryGuideView;
   offers: readonly AuguryOfferView[];
-  unavailableMessage: string | null;
+  unavailableMessage: LocalizedString | null;
   /** TOML-authored encounter rule; absent synthetic fixtures default to allowed. */
   allowDecline?: boolean;
 }
@@ -151,8 +149,9 @@ export function AugurySiteScreen({
   const [committingOfferId, setCommittingOfferId] = useState<string | null>(
     null,
   );
-  const [errorMessage, setErrorMessage] =
-    useState<LocalizedString | null>(null);
+  const [errorMessage, setErrorMessage] = useState<LocalizedString | null>(
+    null,
+  );
   const inspectedOffer =
     view.offers.find((offer) => offer.id === inspectedOfferId) ?? null;
   const wideDesktopDetail =
@@ -162,15 +161,12 @@ export function AugurySiteScreen({
     ? view.guide
     : {
         ...view.guide,
-        ...(view.unavailableMessage === null
-          ? {
-              lineMessage: tx(
+        line:
+          view.unavailableMessage ??
+          tx(
             "The visions are clouded. Walk on for now.",
             "Player-facing message for the augury unavailable guide line interface state.",
-              ),
-              line: undefined,
-            }
-          : { line: view.unavailableMessage, lineMessage: undefined }),
+          ),
       };
 
   const selectChoice = useCallback((offerId: string, choiceId: string) => {
@@ -385,9 +381,9 @@ export function AugurySiteScreen({
             glyph={GLYPHS.refresh}
             overlayGlyph={GLYPHS.bug}
             label={tx(
-                "Reroll Augury offers",
-                "Player-facing message for the augury reroll offers interface state.",
-              )}
+              "Reroll Augury offers",
+              "Player-facing message for the augury reroll offers interface state.",
+            )}
             onPress={onReroll}
             testId="reroll-augury-offers"
           />
@@ -432,8 +428,8 @@ function OfferDetailPanel({
       }}
     >
       <GlassPanel
-        authoredTitle={auguryOfferHeadline(offer.tile, offer.presentation)}
-        authoredSubtitle={offerTileDescription(offer.tile, offer.presentation)}
+        title={auguryOfferHeadline(offer.tile, offer.presentation)}
+        subtitle={offerTileDescription(offer.tile, offer.presentation)}
         headerSpacing="medium"
         footer={
           <div
@@ -802,7 +798,7 @@ function DreamsignRow({
   dreamsigns,
   layout,
 }: {
-  dreamsigns: readonly DreamsignData[];
+  dreamsigns: readonly LocalizedDreamsign[];
   layout: "mobile" | "desktop";
 }) {
   const size = dreamsignSize(dreamsigns.length, layout);

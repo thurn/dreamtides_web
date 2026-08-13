@@ -1,4 +1,8 @@
+import { assertLocalized } from "@trox/runtime";
 import { describe, expect, it } from "vitest";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
@@ -13,6 +17,7 @@ import {
   buildCardShopSiteView,
   buildCardShopTransfiguredOfferLog,
 } from "./card-shop-view-model";
+import { localizedSitePresentation } from "../../cumulus/screens/localized-site-presentation";
 
 function makeCard(cardNumber: number, id: string): CardData {
   return {
@@ -141,17 +146,18 @@ describe("buildCardShopOffers", () => {
     expect(
       buildCardShopTransfiguredOfferLog(
         {
-          presentation: MINIMAL_SITES_DATA.siteTypes.Shop
-            .presentation as Extract<
-            import("../../types/sites-data").SitePresentation,
-            { kind: "shop" }
-          >,
+          presentation: localizedSitePresentation(
+            MINIMAL_SITES_DATA.siteTypes.Shop.presentation as Extract<
+              import("../../types/sites-data").SitePresentation,
+              { kind: "shop" }
+            >,
+          ),
           siteId: "shop-site",
           scene: null,
           guide: {
             id: "guide",
-            name: "Guide",
-            line: "Line",
+            name: assertLocalized("Guide"),
+            line: assertLocalized("Line"),
             art: artRef.dreamGuide("guide"),
           },
           offers,
@@ -233,7 +239,7 @@ describe("buildCardShopSiteView", () => {
         dialogue: { site: ["Browse a while."] },
         homeSpecialty: "Fixture specialty.",
       },
-      guideLine: "A chosen greeting.",
+      guideLine: assertLocalized("A chosen greeting."),
       economyData: economyFixture(),
       transfigurationData: transfigurationFixture(),
       sitesData: MINIMAL_SITES_DATA,
@@ -286,7 +292,7 @@ describe("buildCardShopSiteView", () => {
         dialogue: { site: ["Browse a while."] },
         homeSpecialty: "Fixture specialty.",
       },
-      guideLine: "A chosen greeting.",
+      guideLine: assertLocalized("A chosen greeting."),
       economyData: economyFixture(),
       transfigurationData: transfigurationFixture(),
       sitesData: MINIMAL_SITES_DATA,

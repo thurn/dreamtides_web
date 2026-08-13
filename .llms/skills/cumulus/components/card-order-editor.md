@@ -28,11 +28,11 @@ Set placement to onGlass inside GlassPanel, GlassDialog, or DeveloperRail so the
 ### Variant 1
 
 ```tsx
-<CardOrderEditor label="Deck order" items={cards} onOrderChange={setOrderedCardIds} />
+<CardOrderEditor label={assertLocalized("Deck order")} items={cards} onOrderChange={setOrderedCardIds} />
 ```
 
 ### Variant 2
 
 ```tsx
-<CardOrderEditor label="Deck order" items={cards} onOrderChange={setOrderedCardIds} placement="onGlass" />
+<CardOrderEditor label={assertLocalized("Deck order")} items={cards} onOrderChange={setOrderedCardIds} placement="onGlass" />
 ```

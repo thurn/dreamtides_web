@@ -10,7 +10,6 @@
 import * as React from "react";
 import type { CSSProperties } from "react";
 import { richText } from "../card/rich-text";
-import type { Dreamsign as DreamsignData } from "../../../types/journey";
 import { assetUrl } from "../../../runtime/asset-url";
 import { artRef } from "../../primitives/art";
 import { requireDreamsignId } from "../../../data/dreamsigns";
@@ -19,7 +18,8 @@ import { Pressable } from "../../primitives/Pressable";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
 import { token } from "../../primitives/tokens";
-import { txa } from "@trox/runtime";
+import { opaque, txa, type LocalizedString } from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** The dreamsign object's own drop-shadow + violet glow (its material, not a
  * legibility overlay) — a faithfully-copied literal with no token equivalent.
@@ -42,10 +42,10 @@ export function dreamsignArtUrl(imageName: string): string {
 
 /** Build the shared Dreamsign detail card and ordered glossary definitions. */
 export function dreamsignRevealSpec(
-  dreamsign: DreamsignData,
+  dreamsign: LocalizedDreamsign,
   showImage: boolean,
 ) {
-  const effect = dreamsign.effectDescription ?? "";
+  const effect = dreamsign.effectDescription;
   return {
     primary: {
       kind: "infoCard" as const,
@@ -54,21 +54,36 @@ export function dreamsignRevealSpec(
             variant: "object" as const,
             image: artRef.dreamsign(String(dreamsign.imageName)),
             title: dreamsign.name,
-            body: effect ? richText.rules(effect) : undefined,
+            body: effect === null ? undefined : richText.rules(effect),
           }
         : {
             variant: "text" as const,
             title: dreamsign.name,
-            body: effect ? richText.rules(effect) : undefined,
+            body: effect === null ? undefined : richText.rules(effect),
           },
     },
-    secondaries: rulesTextDefinitionCards(effect, "dreamsign"),
+    secondaries:
+      effect === null ? [] : rulesTextDefinitionCards(effect, "dreamsign"),
   };
+}
+
+/** UUID-backed Dreamsign presentation data resolved before it reaches Cumulus. */
+export interface LocalizedDreamsign {
+  /** Stable Dreamsign UUID. */
+  readonly id: string;
+  /** Canonical localized display name. */
+  readonly name: LocalizedString;
+  /** Canonical localized effect copy, or null when the object has no rules. */
+  readonly effectDescription: LocalizedString | null;
+  /** Hosted art key. */
+  readonly imageName?: string;
+  /** Localized alternative text for the art. */
+  readonly imageAlt: LocalizedString;
 }
 
 export interface DreamsignProps {
   /** The dreamsign to show. Identified by `id` (never by name). */
-  dreamsign: DreamsignData;
+  dreamsign: LocalizedDreamsign;
   /**
    * Override the tile's `data-testid`. Defaults to `"dreamsign-art-tile"` so the
    * shipped shop / reward / deck-viewer selectors keep working.
@@ -99,9 +114,10 @@ export function Dreamsign({
   unavailable = false,
   variant = "flat",
 }: DreamsignProps): React.ReactElement {
+  const resolve = useLocalizer();
   const [imageBroken, setImageBroken] = React.useState(false);
   const showImage = Boolean(dreamsign.imageName) && !imageBroken;
-  const imgAlt = dreamsign.imageAlt ?? dreamsign.name;
+  const imgAlt = resolve(dreamsign.imageAlt);
   const dreamsignId = requireDreamsignId(dreamsign, "Dreamsign tile");
   const binding = useRevealSource({
     identity: {
@@ -154,7 +170,7 @@ export function Dreamsign({
       data-dreamsign-id={dreamsignId}
       ariaLabelMessage={txa(
         "Dreamsign: {dreamsign_name}",
-        { dreamsign_name: dreamsign.name },
+        { dreamsign_name: opaque(dreamsign.name) },
         "Accessible name for an interactive Dreamsign object. dreamsign_name is its canonical authored display name and has unknown grammatical gender.",
       )}
       onPointerDown={(event) => {

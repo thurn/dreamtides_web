@@ -9,7 +9,7 @@ import {
   dreamAvatarPortraitFocus,
   type DreamAvatarVisual,
 } from "./DreamAvatarPortrait";
-import { select, when, otherwise, txa } from "@trox/runtime";
+import { opaque, select, when, otherwise, txa } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** The visual treatment applied to the full-body stage art. */
@@ -41,11 +41,14 @@ export function DreamAvatarStage({
   const resolve = useLocalizer();
   const [broken, setBroken] = useState(false);
   const alt = txa(
-    select(dreamAvatar.title === "" ? "no" : "yes", [
+    select(dreamAvatar.title === undefined ? "no" : "yes", [
       when("yes", "{avatar_name}, {avatar_title}"),
       otherwise("{avatar_name}"),
     ]),
-    { avatar_name: dreamAvatar.name, avatar_title: dreamAvatar.title },
+    {
+      avatar_name: opaque(dreamAvatar.name),
+      avatar_title: opaque(dreamAvatar.title ?? dreamAvatar.name),
+    },
     'Accessible name for Dream Avatar artwork. avatar_name is the canonical avatar display name and avatar_title is its authored epithet; neither has modeled grammatical gender. has_title is "yes" when the epithet is present and "no" when the artwork should be identified by the name alone.',
   );
   const focus = dreamAvatarPortraitFocus(dreamAvatar);
@@ -92,7 +95,7 @@ export function DreamAvatarStage({
                 letterSpacing: "0.08em",
               }}
             >
-              {dreamAvatar.name.charAt(0)}
+              {resolve(dreamAvatar.name).charAt(0)}
             </div>
           </div>
         </>
@@ -144,7 +147,7 @@ export function DreamAvatarStage({
             font: token("--t-display"),
           }}
         >
-          {dreamAvatar.name.charAt(0)}
+          {resolve(dreamAvatar.name).charAt(0)}
         </div>
       );
     }
@@ -201,7 +204,7 @@ export function DreamAvatarStage({
             letterSpacing: "0.08em",
           }}
         >
-          {dreamAvatar.name.charAt(0)}
+          {resolve(dreamAvatar.name).charAt(0)}
         </div>
       </>
     );

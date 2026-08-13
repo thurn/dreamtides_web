@@ -11,10 +11,8 @@ import { requireDreamsignId } from "../../data/dreamsigns";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { CardPickerPanel } from "../components/card/CardPickerPanel";
 import type { GravokGateId, StarwayStairsTierNumber } from "../../types/gamble";
-import type {
-  Dreamsign as DreamsignData,
-  TransfigurationType,
-} from "../../types/journey";
+import type { TransfigurationType } from "../../types/journey";
+import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
 import type { FourSuitRepriseOutcome } from "../../data/four-suit-reprise";
 import { blackjackHandTotal } from "../../data/blackjack";
 import type { FourSuitRepriseGame } from "../../types/gamble-data";
@@ -57,9 +55,9 @@ export interface GambleGateView {
   /** Stable gate id used by the wager intent. */
   id: GravokGateId;
   /** Inclusive winning rank range shown as compact card notation. */
-  targetLabel: string;
+  targetLabel: LocalizedString;
   /** Exact winning probability. */
-  chanceLabel: string;
+  chanceLabel: LocalizedString;
   /** Winning cards in the standard deck. */
   oddsNumerator: number;
   /** Cards in the standard deck. */
@@ -67,7 +65,7 @@ export interface GambleGateView {
   /** Essence paid on a win. */
   essenceReward: number;
   /** Locked jackpot Dreamsign, only present on the Jack Gate. */
-  rewardDreamsign: DreamsignData | null;
+  rewardDreamsign: LocalizedDreamsign | null;
   /** Whether the gate has every reward it needs. */
   available: boolean;
 }
@@ -86,7 +84,7 @@ export interface GambleResultView {
   /** Whether the shared wager event has applied its payout. */
   essenceSettled: boolean;
   /** Jackpot Dreamsign shown in the reward announcement. */
-  rewardDreamsign: DreamsignData | null;
+  rewardDreamsign: LocalizedDreamsign | null;
   /** Whether a held Dreamsign must be replaced before leaving. */
   pendingDreamsignReplacement: boolean;
 }
@@ -148,7 +146,7 @@ export interface LadderClimbSiteView {
   /** Essence awarded alongside the locked Dreamsign on a win. */
   essenceReward: number;
   /** Locked Dreamsign shown as the prize from the opening state. */
-  rewardDreamsign: DreamsignData;
+  rewardDreamsign: LocalizedDreamsign;
   /** Only the currently unlocked attempt; future attempts stay undisclosed. */
   nextDraw: {
     attemptNumber: number;
@@ -164,7 +162,7 @@ export interface LadderClimbSiteView {
 
 export interface StarwayStairsTierView {
   tierNumber: StarwayStairsTierNumber;
-  drawTargetLabel: string;
+  drawTargetLabel: LocalizedString;
   essenceReward: number;
   state: "future" | "current" | "safe" | "bust";
   card: { rank: PlayingCardRank; suit: PlayingCardSuit } | null;
@@ -910,7 +908,7 @@ function LadderDreamsignReward({
   reduceMotion,
 }: {
   readonly active: boolean;
-  readonly dreamsign: DreamsignData;
+  readonly dreamsign: LocalizedDreamsign;
   readonly layout: "mobile" | "desktop";
   readonly reduceMotion: boolean;
 }) {
@@ -1246,7 +1244,11 @@ function GambleOutcome({
     <RadialAnnouncement
       announcementId={result.id}
       headline={gambleOutcomeLabel(view, result.won ? "won" : "bust")}
-      authoredDetail={result.won ? result.rewardDreamsign?.name : undefined}
+      detail={
+        result.won && result.rewardDreamsign != null
+          ? result.rewardDreamsign.name
+          : undefined
+      }
       essenceGained={result.won ? result.essenceGained : undefined}
       tone={result.won ? "reward" : "danger"}
       size={layout === "mobile" ? "mini" : "wager"}
@@ -1880,7 +1882,11 @@ function LadderClimbScreen({
               >
                 <WagerPrizeCard
                   prizeId="ladder-climb"
-                  targetLabel={`${targetRank}-A`}
+                  targetLabel={txa(
+                    "{minimum_rank}-A",
+                    { minimum_rank: targetRank },
+                    "Compact inclusive winning-rank notation on a Gamble prize card. minimum_rank is the lowest standard playing-card rank that wins; A is the ace at the top of the range.",
+                  )}
                   essenceReward={view.essenceReward}
                   rewardDreamsign={view.rewardDreamsign}
                   drawnCard={result?.card ?? null}
@@ -3502,7 +3508,9 @@ function FourSuitRepriseScreen({
                         />
                         <span>
                           {outcome.outcome === "transfiguration"
-                            ? resolve(gambleOutcomeLabel(view, "transfiguration"))
+                            ? resolve(
+                                gambleOutcomeLabel(view, "transfiguration"),
+                              )
                             : outcome.outcome === "essence"
                               ? resolve(
                                   txa(
@@ -3511,7 +3519,9 @@ function FourSuitRepriseScreen({
                                     "Complete visible Four-Suit Reprise reward row when the selected suit grants Essence. essence_amount is the positive integer Essence gained by the current player.",
                                   ),
                                 )
-                              : resolve(gambleOutcomeLabel(view, outcome.outcome))}
+                              : resolve(
+                                  gambleOutcomeLabel(view, outcome.outcome),
+                                )}
                         </span>
                       </div>
                     ))}

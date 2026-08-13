@@ -95,6 +95,7 @@ export function TransfigurationSiteScreen({
   onClose,
   onTransfigure,
 }: TransfigurationSiteScreenProps) {
+  const resolve = useLocalizer();
   const reduceMotion =
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -279,7 +280,7 @@ export function TransfigurationSiteScreen({
                   onTransfigure(
                     picked.entryId,
                     form.type,
-                    form.presentation.description,
+                    resolve(form.presentation.description),
                     form.effectDetails,
                     form.essenceCost,
                   );

@@ -21,24 +21,20 @@ import type { ReactElement } from "react";
 import type { LocalizedString } from "@trox/runtime";
 import { HOVER_SCALE, PRESS_SCALE, usePress } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
-import { type ControlChrome, controlChrome } from "../../internal/control-treatment";
+import {
+  type ControlChrome,
+  controlChrome,
+} from "../../internal/control-treatment";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** Height/scale variants. */
 type SegmentedControlSize = "sm" | "md";
 
-/** One code-authored segment whose player-facing copy stays localized. */
+/** One segment whose player-facing copy stays localized. */
 export interface SegmentedOption {
   value: string;
   label: LocalizedString;
   ariaLabel?: LocalizedString;
-}
-
-/** A canonical authored segment outside code-authored localization. */
-export interface AuthoredSegmentedOption {
-  value: string;
-  authoredLabel: string;
-  authoredAriaLabel?: string;
 }
 
 /** A language-neutral symbol with a localized accessible name. */
@@ -48,7 +44,7 @@ export interface SymbolSegmentedOption {
   ariaLabel: LocalizedString;
 }
 
-type RenderedSegmentedOption = SegmentedOption | SymbolSegmentedOption | AuthoredSegmentedOption;
+type RenderedSegmentedOption = SegmentedOption | SymbolSegmentedOption;
 
 export interface SegmentedControlProps {
   /** Localized labels or language-neutral symbols represented by stable values. */
@@ -104,9 +100,9 @@ function Segment({
     <button
       type="button"
       role="tab"
-      aria-label={"authoredLabel" in option
-        ? option.authoredAriaLabel
-        : option.ariaLabel === undefined ? undefined : resolve(option.ariaLabel)}
+      aria-label={
+        option.ariaLabel === undefined ? undefined : resolve(option.ariaLabel)
+      }
       aria-selected={active}
       onClick={() => onSelect(option.value)}
       {...bind}
@@ -135,9 +131,7 @@ function Segment({
         ...(active ? chrome.segmentActive : chrome.segmentInactive),
       }}
     >
-      {"symbol" in option
-        ? option.symbol
-        : "authoredLabel" in option ? option.authoredLabel : resolve(option.label)}
+      {"symbol" in option ? option.symbol : resolve(option.label)}
     </button>
   );
 }

@@ -1,8 +1,13 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { localizedStringSourceEquality } from "../../../runtime/localization/testing";
+import { resolveSource } from "../../../runtime/localization/runtime";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 import { LayerName } from "../../../types/layer-name";
 import { CumulusRoot } from "../../CumulusRoot";
 import { artRef } from "../../primitives/art";
@@ -24,10 +29,10 @@ describe("atlasPrimaryInfoCard", () => {
       atlasPrimaryInfoCard({
         sceneArt: artRef.dreamscapeScene("wilderveil"),
         figureArt: artRef.dreamGuide("aldric"),
-        placeName: "Wilderveil",
-        guideName: "Aldric, the Seer",
-        title: "Aldric, the Seer",
-        body: "A curated vision.",
+        placeName: assertLocalized("Wilderveil"),
+        guideName: assertLocalized("Aldric, the Seer"),
+        title: assertLocalized("Aldric, the Seer"),
+        body: assertLocalized("A curated vision."),
       }),
     ).toMatchObject({
       variant: "atlasReveal",
@@ -40,8 +45,8 @@ describe("atlasPrimaryInfoCard", () => {
         figureArt: null,
         placeName: null,
         guideName: null,
-        title: "An Unseen Dream",
-        body: "Travel onward.",
+        title: assertLocalized("An Unseen Dream"),
+        body: assertLocalized("Travel onward."),
       }),
     ).toMatchObject({ variant: "text", title: "An Unseen Dream" });
   });
@@ -75,27 +80,27 @@ function model(
     primary: {
       sceneArt: artRef.dreamscapeScene("wilderveil"),
       figureArt: artRef.dreamGuide("aldric"),
-      placeName: "Wilderveil",
-      guideName: "Aldric, the Seer",
-      title: "Aldric, the Seer",
-      body: "Aldric offers curated visions of the future.",
+      placeName: assertLocalized("Wilderveil"),
+      guideName: assertLocalized("Aldric, the Seer"),
+      title: assertLocalized("Aldric, the Seer"),
+      body: assertLocalized("Aldric offers curated visions of the future."),
     },
     dreamsign: {
       id: DREAMSIGN_ID,
-      name: "Known Sign",
+      name: assertLocalized("Known Sign"),
       art: artRef.dreamsign("known.png"),
-      rulesText: "Your first vision costs less.",
+      rulesText: assertLocalized("Your first vision costs less."),
     },
     site: {
       id: SITE_ID,
-      name: "Augury",
-      blurb: "Study a curated vision of what waits ahead.",
+      name: assertLocalized("Augury"),
+      blurb: assertLocalized("Study a curated vision of what waits ahead."),
       icon: GLYPHS.water,
     },
     affiliation: {
       id: AFFILIATION_ID,
-      title: "Fixture affiliation",
-      body: "Fixture cards are more likely here.",
+      title: assertLocalized("Fixture affiliation"),
+      body: assertLocalized("Fixture cards are more likely here."),
     },
     ...overrides,
   };
@@ -184,7 +189,7 @@ describe("AtlasNode semantic reveal contract", () => {
     expect(source.dataset.revealSecondaryTitles?.split("\u001f")).toEqual([
       "Known Sign",
       "Augury",
-      value.affiliation?.title,
+      resolveSource(value.affiliation!.title),
     ]);
     expect(source.dataset.revealFeedback).toBe("measured");
     const description = document.getElementById(
@@ -193,7 +198,9 @@ describe("AtlasNode semantic reveal contract", () => {
     expect(description?.textContent).toContain("Wilderveil");
     expect(description?.textContent).toContain("Known Sign");
     expect(description?.textContent).toContain("Augury");
-    expect(description?.textContent).toContain(value.affiliation?.title);
+    expect(description?.textContent).toContain(
+      resolveSource(value.affiliation!.title),
+    );
   });
 
   it("keeps reveal protocol derivation private to the named component", async () => {
@@ -209,37 +216,36 @@ describe("AtlasNode semantic reveal contract", () => {
     ["unrevealed", "regular"],
     ["completed", "starter"],
     ["revealedLocked", "boss"],
-  ] as const)(
-    "keeps %s role=%s focusable and descriptive",
-    (state, role) => {
-      const value = model(state, {
-        role,
-        primary:
-          state === "unrevealed"
-            ? {
-                sceneArt: null,
-                figureArt: null,
-                placeName: null,
-                guideName: null,
-                title: "An Unseen Dream",
-                body: "Travel onward to learn what waits here.",
-              }
-            : model(state).primary,
-      });
-      const { source } = renderNode(value);
+  ] as const)("keeps %s role=%s focusable and descriptive", (state, role) => {
+    const value = model(state, {
+      role,
+      primary:
+        state === "unrevealed"
+          ? {
+              sceneArt: null,
+              figureArt: null,
+              placeName: null,
+              guideName: null,
+              title: assertLocalized("An Unseen Dream"),
+              body: assertLocalized("Travel onward to learn what waits here."),
+            }
+          : model(state).primary,
+    });
+    const { source } = renderNode(value);
 
-      expect(source.tabIndex).toBe(0);
-      expect(source.style.touchAction).toBe("pan-x pan-y");
-      expect(source.getAttribute("aria-describedby")).toMatch(
-        /^cumulus-reveal-description-/,
-      );
-      expect(source.dataset.revealPrimaryVariant).toBe(
-        state === "unrevealed" ? "text" : "atlasReveal",
-      );
-      expect(source.dataset.nodeStarting).toBe(role === "starter" ? "true" : undefined);
-      expect(source.dataset.nodeBoss).toBe(role === "boss" ? "true" : undefined);
-    },
-  );
+    expect(source.tabIndex).toBe(0);
+    expect(source.style.touchAction).toBe("pan-x pan-y");
+    expect(source.getAttribute("aria-describedby")).toMatch(
+      /^cumulus-reveal-description-/,
+    );
+    expect(source.dataset.revealPrimaryVariant).toBe(
+      state === "unrevealed" ? "text" : "atlasReveal",
+    );
+    expect(source.dataset.nodeStarting).toBe(
+      role === "starter" ? "true" : undefined,
+    );
+    expect(source.dataset.nodeBoss).toBe(role === "boss" ? "true" : undefined);
+  });
 
   it("fills the caller-owned layout box without positioning itself", () => {
     const { source } = renderNode(model("available"));

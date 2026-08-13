@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, RefObject } from "react";
 import "./CardView.css";
 import type { CardData, FrozenCardData, Rarity } from "../../../types/cards";
@@ -12,6 +12,7 @@ import { GLOSSARY_IDS } from "../../../data/glossary";
 import { extractMaterializedFigmentPreviews } from "../../../data/materialized-figments";
 import { figmentCardDisplayName } from "../../../data/figment-card-display";
 import { identiconsForced } from "../../../runtime/identicon-mode";
+import { localizedSourceText } from "../../../runtime/localization/runtime";
 import {
   ART_EXTENSION_FRACTION,
   ART_REGION_ASPECT_RATIO_VALUE,
@@ -38,7 +39,7 @@ import { useRevealSource } from "../../internal/reveal/context";
 import { DEFAULT_ART_CROP, resolveCardArtImageStyle } from "./card-art-crop";
 import { rulesTextDefinitionCards } from "./rules-text-reveal";
 import { glossaryInfoCard } from "./glossary-info-card";
-import { meaning, tx, txa, type LocalizedString } from "@trox/runtime";
+import { meaning, opaque, tx, txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export {
@@ -117,12 +118,16 @@ function cardRulesTextDefinitionCards(
   card: Pick<CardData, "isFast" | "isInterrupt" | "renderedText">,
   extraExcludedIds: readonly string[] = [],
 ) {
-  return rulesTextDefinitionCards(card.renderedText, "card", [
-    ...(card.isFast || card.isInterrupt === true
-      ? CARD_TIMING_GLOSSARY_IDS
-      : []),
-    ...extraExcludedIds,
-  ]);
+  return rulesTextDefinitionCards(
+    localizedSourceText(card.renderedText),
+    "card",
+    [
+      ...(card.isFast || card.isInterrupt === true
+        ? CARD_TIMING_GLOSSARY_IDS
+        : []),
+      ...extraExcludedIds,
+    ],
+  );
 }
 
 /**
@@ -250,7 +255,7 @@ function ArtLayers({
   onError,
 }: {
   imageUrl: string;
-  alt: string;
+  alt: LocalizedString;
   artCrop: { x: number; y: number; scale: number };
   imageAspect: number | null;
   safeAreaTarget: number;
@@ -271,6 +276,7 @@ function ArtLayers({
   onLoad: (event: React.SyntheticEvent<HTMLImageElement>) => void;
   onError: () => void;
 }) {
+  const resolve = useLocalizer();
   const extendedStyle = resolveCardArtImageStyle(
     artCrop,
     imageAspect,
@@ -334,7 +340,7 @@ function ArtLayers({
           masks it from the band down. */}
       <img
         src={imageUrl}
-        alt={alt}
+        alt={resolve(alt)}
         style={extendedStyle}
         draggable={false}
         onLoad={onLoad}
@@ -955,7 +961,9 @@ function GameCardSurface(props: GameCardSurfaceProps) {
         transfiguration.energyChangeName !== null
           ? {
               kind: "empowered",
-              accessibleName: transfiguration.energyChangeName,
+              accessibleName: localizedSourceText(
+                transfiguration.energyChangeName,
+              ),
             }
           : undefined
       }
@@ -1197,7 +1205,9 @@ function GameCardSurface(props: GameCardSurfaceProps) {
           transfiguration.sparkChangeName !== null
             ? {
                 kind: "kindled",
-                accessibleName: transfiguration.sparkChangeName,
+                accessibleName: localizedSourceText(
+                  transfiguration.sparkChangeName,
+                ),
               }
             : undefined
         }
@@ -1360,7 +1370,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
           alt={resolve(
             txa(
               "{card_name} identicon",
-              { card_name: card.name },
+              { card_name: opaque(localizedSourceText(card.name)) },
               "Alternative text for a generated card identicon. card_name is the card's canonical authored name.",
             ),
           )}
@@ -1371,7 +1381,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
       ) : !imageError ? (
         <ArtLayers
           imageUrl={cardImageUrl(card.imageNumber)}
-          alt={card.name}
+          alt={localizedSourceText(card.name)}
           artCrop={renderedArtCrop}
           imageAspect={imageAspect}
           safeAreaTarget={safeAreaTarget}
@@ -1788,6 +1798,7 @@ export function GameCard({
   figment = false,
   testId,
 }: GameCardProps) {
+  const resolve = useLocalizer();
   const lastPointerType = useRef<string | null>(null);
   const displaySnapshot = figment
     ? {
@@ -1819,7 +1830,7 @@ export function GameCard({
       role={interactive ? "button" : undefined}
       tabIndex={0}
       aria-disabled={unavailable || undefined}
-      aria-label={displaySnapshot.name}
+      aria-label={resolve(localizedSourceText(displaySnapshot.name))}
       data-testid={testId}
       data-game-card-source=""
       data-game-card-presentation={presentation}

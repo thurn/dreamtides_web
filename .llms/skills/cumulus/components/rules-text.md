@@ -14,7 +14,7 @@ The canonical Dreamtides rules-copy source: resource symbols and keywords render
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `text` | `string` | yes | — | The rules text to render. |
+| `text` | `LocalizedString` | yes | — | The rules text to render. |
 | `owner` | `RulesTextOwner` | yes | — | Semantic owner required for context-sensitive glossary definitions. |
 | `glossaryInteraction` | `"source" \| "delegated"` | no | `source` | `source` makes the complete text block one glossary reveal target. `delegated` renders passive copy inside an entity that owns the reveal. |
 

@@ -19,14 +19,11 @@ Place it in a rail track that defines its position and responsive takeover behav
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `id` | `string` | yes | — | DOM id targeted by the rail disclosure trigger. |
-| `title` | `LocalizedString` | no | — | Developer tool name shown in the rail header. |
-| `authoredTitle` | `string` | no | — |  |
+| `title` | `LocalizedString` | yes | — | Developer tool name shown in the rail header. |
 | `subtitle` | `LocalizedString` | no | — | Optional concise tool context. |
-| `authoredSubtitle` | `string` | no | — |  |
 | `side` | `"left" \| "right"` | yes | — | Physical screen edge occupied by the docked rail. |
 | `onClose` | `() => void` | yes | — | Accessible close action. |
-| `closeLabel` | `LocalizedString` | no | — | Accessible name for the close action. |
-| `authoredCloseLabel` | `string` | no | — |  |
+| `closeLabel` | `LocalizedString` | yes | — | Accessible name for the close action. |
 | `headerAction` | `{ readonly glyph: Glyph; readonly label: LocalizedString; readonly onPress: () => void; readonly disabled?: boolean \| undefined; readonly testId?: string \| undefined; }` | no | — | Optional tool action placed before the close disc. |
 | `children` | `ReactNode` | yes | — | Scrollable tool content. |
 | `footer` | `ReactNode` | no | — | Optional fixed rail footer. |
@@ -35,7 +32,7 @@ Place it in a rail track that defines its position and responsive takeover behav
 ## Usage
 
 ```tsx
-<DeveloperRail id="tutorial-editor" title="Tutorial Editor" side="left" onClose={close}>
+<DeveloperRail id="tutorial-editor" title={assertLocalized("Tutorial Editor")} closeLabel={assertLocalized("Close tutorial editor")} side="left" onClose={close}>
   <TutorialEditorContent />
 </DeveloperRail>
 ```

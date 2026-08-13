@@ -41,6 +41,7 @@ import { RevealOverlay, type RevealOverlayActive } from "./RevealOverlay";
 import { feedbackForRect, type RevealFeedback } from "./feedback";
 import { txa, tx } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import { localizedSourceText } from "../../../runtime/localization/runtime";
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -57,10 +58,12 @@ function sameSource(
   );
 }
 
-function authoredDescription(text: string | undefined): RevealDescriptionUnit[] {
+function canonicalDescription(
+  text: string | undefined,
+): RevealDescriptionUnit[] {
   return text === undefined || text.trim() === ""
     ? []
-    : [{ kind: "authored", text }];
+    : [{ kind: "message", message: localizedSourceText(text) }];
 }
 
 function richTextDescriptionUnits(
@@ -69,32 +72,31 @@ function richTextDescriptionUnits(
   if (value === undefined) return [];
   if (value.kind === "definitions") {
     return value.entries.flatMap((entry) => [
-      ...authoredDescription(entry.term),
-      ...authoredDescription(entry.definition),
+      { kind: "message", message: entry.term },
+      { kind: "message", message: entry.definition },
     ]);
   }
   if (value.kind === "stack") {
     return value.parts.flatMap(richTextDescriptionUnits);
   }
-  return authoredDescription(value.text);
+  return [{ kind: "message", message: value.text }];
 }
 
 function infoCardDescriptionUnits(
   card: RevealInfoCardModel,
 ): RevealDescriptionUnit[] {
   const titleUnits =
-    card.titleMessage === undefined
-      ? authoredDescription(card.title)
-      : [{ kind: "message", message: card.titleMessage } as const];
-  const bodyUnits =
-    card.bodyMessage === undefined
-      ? richTextDescriptionUnits(card.body)
-      : [{ kind: "message", message: card.bodyMessage } as const];
+    card.title === undefined
+      ? []
+      : [{ kind: "message", message: card.title } as const];
+  const bodyUnits = richTextDescriptionUnits(card.body);
   return [
     ...titleUnits,
-    ...("subtitle" in card ? authoredDescription(card.subtitle) : []),
+    ...(!("subtitle" in card) || card.subtitle === undefined
+      ? []
+      : [{ kind: "message", message: card.subtitle } as const]),
     ...(card.variant === "tide"
-      ? authoredDescription(tideAccessibilityName(card.tide))
+      ? canonicalDescription(tideAccessibilityName(card.tide))
       : []),
     ...bodyUnits,
   ];
@@ -160,16 +162,14 @@ function gameCardDescriptionUnits(
         "Complete accessible card-type sentence for a revealed game card. card_type is the authored Character or Event display label.",
       ),
     },
-    ...authoredDescription(card.subtype).map(
-      (): RevealDescriptionUnit => ({
-        kind: "message",
-        message: txa(
-          "Subtype: {card_subtype}.",
-          { card_subtype: card.subtype },
-          "Complete accessible subtype sentence for a revealed game card. card_subtype is the authored catalog subtype and remains grammatically opaque.",
-        ),
-      }),
-    ),
+    ...canonicalDescription(card.subtype).map((): RevealDescriptionUnit => ({
+      kind: "message",
+      message: txa(
+        "Subtype: {card_subtype}.",
+        { card_subtype: card.subtype },
+        "Complete accessible subtype sentence for a revealed game card. card_subtype is the authored catalog subtype and remains grammatically opaque.",
+      ),
+    })),
     ...energyUnits,
     ...(card.sparkVariable === true
       ? [
@@ -227,27 +227,20 @@ function gameCardDescriptionUnits(
             ),
           },
         ]),
-    ...authoredDescription(card.renderedText),
+    ...canonicalDescription(card.renderedText),
   ];
 }
 
 function revealDescriptionUnits(spec: RevealSpec): RevealDescriptionUnit[] {
   const primary =
     spec.primary.kind === "source"
-      ? spec.primary.descriptionMessage !== undefined
-        ? [{ kind: "message", message: spec.primary.descriptionMessage } as const]
-        : authoredDescription(spec.primary.authoredDescription)
+      ? [{ kind: "message", message: spec.primary.description } as const]
       : spec.primary.kind === "infoCard"
         ? infoCardDescriptionUnits(spec.primary.card)
         : spec.primary.kind === "galleryAction"
-          ? spec.primary.action.label === undefined
-            ? authoredDescription(spec.primary.action.authoredLabel)
-            : [{ kind: "message", message: spec.primary.action.label } as const]
+          ? [{ kind: "message", message: spec.primary.action.label } as const]
           : gameCardDescriptionUnits(spec.primary.displaySnapshot);
-  return [
-    ...primary,
-    ...spec.secondaries.flatMap(infoCardDescriptionUnits),
-  ];
+  return [...primary, ...spec.secondaries.flatMap(infoCardDescriptionUnits)];
 }
 function isValidGameCard(card: RevealGameCard): boolean {
   return (
@@ -269,11 +262,6 @@ function isValidRegistration(
   if (spec.primary.kind === "gameCard" && !isValidGameCard(spec.primary))
     return false;
   if (!(spec.adjacentCards ?? []).every(isValidGameCard)) return false;
-  if (spec.primary.kind === "source") {
-    const hasAuthored = spec.primary.authoredDescription !== undefined;
-    const hasMessage = spec.primary.descriptionMessage !== undefined;
-    if (hasAuthored === hasMessage) return false;
-  }
   return revealDescriptionUnits(spec).length > 0;
 }
 
@@ -286,6 +274,7 @@ interface SourceRegistration {
   readonly element: HTMLElement | null;
 }
 interface RevealCoordinatorValue {
+  readonly resolve: ReturnType<typeof useLocalizer>;
   readonly state: ReturnType<typeof reduceRevealState>;
   readonly dispatch: Dispatch<Parameters<typeof reduceRevealState>[1]>;
   readonly registerSource: (
@@ -560,6 +549,7 @@ export function RevealCoordinatorProvider({
   );
   const value = useMemo(
     () => ({
+      resolve,
       state,
       dispatch,
       registerSource,
@@ -569,6 +559,7 @@ export function RevealCoordinatorProvider({
       isKeyboardFocusEligible,
     }),
     [
+      resolve,
       state,
       registerSource,
       updateSourceElement,
@@ -712,9 +703,7 @@ export function RevealCoordinatorProvider({
         {[...sourcesRef.current.entries()].map(([key, source]) => (
           <span id={source.descriptionId} key={key}>
             {source.descriptionUnits.map((unit, index) => (
-              <span key={String(index)}>
-                {unit.kind === "message" ? resolve(unit.message) : unit.text}
-              </span>
+              <span key={String(index)}>{resolve(unit.message)}</span>
             ))}
           </span>
         ))}
@@ -770,6 +759,7 @@ export function useRevealSource(
     throw new Error(
       "Semantic Cumulus reveal sources require one mounted CumulusRoot.",
     );
+  const resolve = coordinator.resolve;
   const reactId = useId();
   const descriptionId = `cumulus-reveal-description-${reactId.replace(/:/g, "")}`;
   const valid = isValidRegistration(registration.identity, registration.spec);
@@ -782,11 +772,7 @@ export function useRevealSource(
   const spec = registration.spec;
   const descriptionUnits = valid ? revealDescriptionUnits(spec) : [];
   const descriptionFingerprint = descriptionUnits
-    .map((unit) =>
-      unit.kind === "message"
-        ? `message:${unit.message.toCanonicalJSON()}`
-        : `authored:${unit.text}`,
-    )
+    .map((unit) => `message:${unit.message.toCanonicalJSON()}`)
     .join("\u001e");
   const specFingerprint = [
     spec.primary.kind,
@@ -873,7 +859,7 @@ export function useRevealSource(
               : (spec.primary.card.variant ?? "text"),
       "data-reveal-placement-exception": placementException,
       "data-reveal-secondary-titles": spec.secondaries
-        .map((card) => card.title ?? card.titleMessage?.entryId ?? "")
+        .map((card) => card.title === undefined ? "" : resolve(card.title))
         .join("\u001f"),
       style: {
         "--reveal-press-scale": String(feedback.pressScale),

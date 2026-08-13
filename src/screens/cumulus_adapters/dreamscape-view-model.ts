@@ -9,7 +9,6 @@ import {
   siteTypeIcon,
   siteTypeName,
 } from "../../data/sites-data";
-import { requireDreamsignId } from "../../data/dreamsigns";
 import { draftSitePickCount } from "../../draft/draft-site-config";
 import {
   scatterSites,
@@ -22,6 +21,9 @@ import type {
 } from "../../cumulus/components/hud/JourneyStatusBar";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
+import { localizedSourceText } from "../../runtime/localization/runtime";
+import { tx, type LocalizedString } from "@trox/runtime";
+import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
 import type {
   DreamscapeGuideDialogueView,
   DreamscapeView,
@@ -37,7 +39,6 @@ import type {
 import type { SitesData } from "../../types/sites-data";
 import type { TutorialDreamscapeConfiguration } from "../../types/tutorial";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
-import { formatAuthoredTemplate } from "../../data/authored-template";
 
 /** The completion level at which the guardian battle is the final boss. */
 const FINAL_BOSS_COMPLETION_LEVEL = 6;
@@ -106,14 +107,16 @@ export function resolveDreamscapeSiteSelection(
 export function battleLabel(
   completionLevel: number,
   sitesData: SitesData,
-): string {
+): LocalizedString {
   const presentation = sitesData.siteTypes.Battle.presentation as Extract<
     import("../../types/sites-data").SitePresentation,
     { kind: "battle" }
   >;
-  return completionLevel === FINAL_BOSS_COMPLETION_LEVEL
-    ? presentation.finalBossLabel
-    : presentation.label;
+  return localizedSourceText(
+    completionLevel === FINAL_BOSS_COMPLETION_LEVEL
+      ? presentation.finalBossLabel
+      : presentation.label,
+  );
 }
 
 /**
@@ -147,10 +150,10 @@ export function buildSiteModels(
     const label = isBattle
       ? battleLabel(completionLevel, sitesData)
       : site.type === "Draft"
-        ? formatAuthoredTemplate(draftPresentation.label, {
+        ? localizedSourceText(draftPresentation.label, {
             pickCount: draftSitePickCount(site, defaultDraftPickCount),
           })
-        : siteTypeName(sitesData, site.type);
+        : localizedSourceText(siteTypeName(sitesData, site.type));
     return {
       site,
       pos: positions[index] ?? FALLBACK_POS,
@@ -159,8 +162,8 @@ export function buildSiteModels(
       isLocked,
       isInteractive,
       label,
-      lockedGuidance: battlePresentation.lockedGuidance,
-      blurb: siteTypeDescription(sitesData, site.type),
+      lockedGuidance: localizedSourceText(battlePresentation.lockedGuidance),
+      blurb: localizedSourceText(siteTypeDescription(sitesData, site.type)),
       icon: glyph(siteTypeIcon(sitesData, site.type)),
     };
   });
@@ -175,11 +178,11 @@ export function toQsbDreamAvatar(
   }
   return {
     id: dreamAvatar.id,
-    name: dreamAvatar.name,
-    epithet: dreamAvatar.title,
+    name: localizedSourceText(dreamAvatar.name),
+    epithet: localizedSourceText(dreamAvatar.title),
     portrait: artRef.dreamAvatar(dreamAvatar.imageNumber),
     portraitFocus: dreamAvatar.portraitFocus,
-    ability: dreamAvatar.renderedText,
+    ability: localizedSourceText(dreamAvatar.renderedText),
   };
 }
 
@@ -196,13 +199,7 @@ export function toQsbDreamsigns(
     if (sign.imageName === undefined) {
       return;
     }
-    docked.push({
-      id: requireDreamsignId(sign, "JourneyStatusBar docked"),
-      name: sign.name,
-      imageName: sign.imageName,
-      imageAlt: sign.imageAlt,
-      effectDescription: sign.effectDescription,
-    });
+    docked.push(localizedDreamsign(sign, "JourneyStatusBar docked"));
   });
   return docked;
 }
@@ -264,7 +261,10 @@ export function buildDreamscapeView(
     if (runtime.reward.rewardType === "dreamsign") {
       inlineRewards[site.id] = {
         kind: "dreamsign",
-        dreamsign: runtime.reward.dreamsign,
+        dreamsign: localizedDreamsign(
+          runtime.reward.dreamsign,
+          "Dreamscape inline reward",
+        ),
         requiresReplacement: state.dreamsigns.length >= state.maxDreamsigns,
       };
       return;
@@ -276,7 +276,7 @@ export function buildDreamscapeView(
   });
   return {
     scene: dreamscapeSceneRef(node),
-    title: dreamscapeTitle(node),
+    title: localizedSourceText(dreamscapeTitle(node)),
     sites: buildSiteModels(
       node,
       state.completionLevel,
@@ -284,10 +284,7 @@ export function buildDreamscapeView(
       defaultDraftPickCount,
     ),
     inlineRewards,
-    replacement: buildDreamsignReplacementView(
-      state,
-      replacementSiteId,
-    ),
+    replacement: buildDreamsignReplacementView(state, replacementSiteId),
     guideDialogue: buildDreamscapeGuideDialogue(
       node,
       state,
@@ -320,9 +317,9 @@ export function buildDreamscapeGuideDialogue(
     id: `${state.runId ?? state.seed}:dreamscape-guidance`,
     model: {
       portrait: { kind: "character-portrait", characterId: "mira" },
-      portraitAlt: "Mira",
-      speakerName: "Mira",
-      text: speechBubble.text,
+      portraitAlt: tx("Mira", "Name of the tutorial guide."),
+      speakerName: tx("Mira", "Name of the tutorial guide."),
+      text: localizedSourceText(speechBubble.text),
     },
     delaySeconds: tutorialSpeechBubbleDelaySeconds(speechBubble),
     horizontalOffset: speechBubble.horizontalOffset,
@@ -370,8 +367,13 @@ export function buildDreamsignReplacementView(
     return null;
   }
   return {
-    pendingDreamsign: runtime.reward.dreamsign,
-    currentDreamsigns: state.dreamsigns,
+    pendingDreamsign: localizedDreamsign(
+      runtime.reward.dreamsign,
+      "Dreamscape pending reward",
+    ),
+    currentDreamsigns: state.dreamsigns.map((dreamsign) =>
+      localizedDreamsign(dreamsign, "Dreamscape held reward"),
+    ),
     maxDreamsigns: state.maxDreamsigns,
   };
 }

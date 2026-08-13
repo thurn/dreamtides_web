@@ -10,6 +10,7 @@ import {
   type BattleForeseeView,
 } from "./BattleForeseeOverlay";
 import { CumulusRoot } from "../CumulusRoot";
+import { assertLocalized } from "@trox/runtime";
 
 vi.mock("../components/card/CardView", () => ({
   GameCard: ({ model }: { model: { displaySnapshot: CardData } }) => (
@@ -51,8 +52,8 @@ const SOURCE_DREAMWELL_CARD = {
   cardId: asCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15"),
   displaySnapshot: {
     id: asCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15"),
-    name: "Skypath",
-    renderedText: "Foresee 1.",
+    name: assertLocalized("Skypath"),
+    renderedText: assertLocalized("Foresee 1."),
     energyAdded: 1,
     imageNumber: 1897537165,
   },

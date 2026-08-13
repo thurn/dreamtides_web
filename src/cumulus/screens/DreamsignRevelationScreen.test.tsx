@@ -1,10 +1,10 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
 import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { Dreamsign } from "../../types/journey";
 import { artRef } from "../primitives/art";
 import {
   DreamsignRevelationScreen,
@@ -15,15 +15,17 @@ import { CumulusRoot } from "../CumulusRoot";
 import {
   DREAMSIGN_REVELATION_PRESENTATION,
 } from "../test-helpers/presentation-fixtures";
+import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
+import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
 
-function dreamsign(id: string, imageName: string): Dreamsign {
-  return {
+function dreamsign(id: string, imageName: string): LocalizedDreamsign {
+  return localizedDreamsignFixture({
     id,
     name: `Dreamsign ${id}`,
     effectDescription: "A test effect.",
     imageName,
     imageAlt: `Art for ${id}`,
-  };
+  });
 }
 
 function view(): DreamsignRevelationView {
@@ -32,8 +34,8 @@ function view(): DreamsignRevelationView {
     scene: null,
     guide: {
       id: "sigrun",
-      name: "Sigrun",
-      line: "Choose one sign.",
+      name: assertLocalized("Sigrun"),
+      line: assertLocalized("Choose one sign."),
       art: artRef.dreamGuide("sigrun"),
     },
     offer: [
@@ -102,9 +104,9 @@ describe("DreamsignRevelationScreen", () => {
         id: "run-a:first-visit:revelation-a:DreamsignRevelation",
         model: {
           portrait: { kind: "character-portrait", characterId: "mira" },
-          portraitAlt: "Mira",
-          speakerName: "Mira",
-          text: "A [purple]Dreamsign[/purple] gives ongoing benefits.",
+          portraitAlt: assertLocalized("Mira"),
+          speakerName: assertLocalized("Mira"),
+          text: assertLocalized("A [purple]Dreamsign[/purple] gives ongoing benefits."),
         },
         delaySeconds: 1,
         horizontalOffset: 0,

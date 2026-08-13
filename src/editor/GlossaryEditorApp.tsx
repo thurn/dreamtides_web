@@ -9,6 +9,7 @@ import { Select } from "../cumulus/components/controls/Select";
 import { TextField } from "../cumulus/components/controls/TextField";
 import { GlassPanel } from "../cumulus/components/overlay/GlassPanel";
 import { EditableInfoCard } from "../cumulus/components/overlay/InfoCard";
+import { assertLocalized } from "@trox/runtime";
 import { Pressable } from "../cumulus/primitives/Pressable";
 import { logEvent } from "../logging";
 import type { EditableFieldValue } from "./save-state";
@@ -22,7 +23,10 @@ import "./glossary-editor.css";
 type LoadState =
   | { readonly kind: "loading" }
   | { readonly kind: "error"; readonly message: string }
-  | { readonly kind: "loaded"; readonly entries: readonly GlossaryCatalogEntry[] };
+  | {
+      readonly kind: "loaded";
+      readonly entries: readonly GlossaryCatalogEntry[];
+    };
 
 type SaveState =
   | { readonly kind: "idle" }
@@ -33,9 +37,7 @@ type SaveState =
 type InlineGlossaryField = "title" | "description";
 type GlossaryDraftField = InlineGlossaryField | "variants";
 type TermPresentationDraft =
-  | "titleAndDefinition"
-  | "symbolOnly"
-  | "definitionOnly";
+  "titleAndDefinition" | "symbolOnly" | "definitionOnly";
 
 const TERM_PRESENTATION_OPTIONS = [
   { value: "titleAndDefinition", label: "Title + Definition" },
@@ -44,7 +46,9 @@ const TERM_PRESENTATION_OPTIONS = [
 ];
 
 function messageFor(error: unknown): string {
-  return error instanceof Error ? error.message : "The glossary request failed.";
+  return error instanceof Error
+    ? error.message
+    : "The glossary request failed.";
 }
 
 function variantsFromDraft(value: string): string[] {
@@ -54,8 +58,14 @@ function variantsFromDraft(value: string): string[] {
     .filter((variant) => variant !== "");
 }
 
-function sameStrings(left: readonly string[], right: readonly string[]): boolean {
-  return left.length === right.length && left.every((value, index) => value === right[index]);
+function sameStrings(
+  left: readonly string[],
+  right: readonly string[],
+): boolean {
+  return (
+    left.length === right.length &&
+    left.every((value, index) => value === right[index])
+  );
 }
 
 function termPresentationDraft(
@@ -64,7 +74,9 @@ function termPresentationDraft(
   return entry.termPresentation ?? "titleAndDefinition";
 }
 
-function isTermPresentationDraft(value: string): value is TermPresentationDraft {
+function isTermPresentationDraft(
+  value: string,
+): value is TermPresentationDraft {
   return (
     value === "titleAndDefinition" ||
     value === "definitionOnly" ||
@@ -92,7 +104,9 @@ export default function GlossaryEditorApp({
   const [presentationDraft, setPresentationDraft] =
     useState<TermPresentationDraft>("titleAndDefinition");
   const [saveState, setSaveState] = useState<SaveState>({ kind: "idle" });
-  const [editingField, setEditingField] = useState<InlineGlossaryField | null>(null);
+  const [editingField, setEditingField] = useState<InlineGlossaryField | null>(
+    null,
+  );
   const [editingError, setEditingError] = useState<string | null>(null);
   const hydratedEntryId = useRef<string | null>(null);
   const editingStartValue = useRef("");
@@ -109,7 +123,8 @@ export default function GlossaryEditorApp({
         logEvent("glossary_editor_loaded", { entryCount: entries.length });
       })
       .catch((error: unknown) => {
-        if (error instanceof DOMException && error.name === "AbortError") return;
+        if (error instanceof DOMException && error.name === "AbortError")
+          return;
         const message = messageFor(error);
         setLoadState({ kind: "error", message });
         logEvent("glossary_editor_load_failed", { message });
@@ -119,7 +134,7 @@ export default function GlossaryEditorApp({
 
   const selectedEntry =
     loadState.kind === "loaded"
-      ? loadState.entries.find((entry) => entry.id === selectedId) ?? null
+      ? (loadState.entries.find((entry) => entry.id === selectedId) ?? null)
       : null;
 
   useEffect(() => {
@@ -219,9 +234,7 @@ export default function GlossaryEditorApp({
         ? changedValue.trim()
         : definitionDraft.trim();
     const nextVariants =
-      changedField === "variants"
-        ? variantsFromDraft(changedValue)
-        : variants;
+      changedField === "variants" ? variantsFromDraft(changedValue) : variants;
 
     if (nextTerm === "" || nextDefinition === "") return;
     if (
@@ -322,25 +335,36 @@ export default function GlossaryEditorApp({
   };
 
   return (
-    <main className="cumulus glossary-editor-shell" data-testid="glossary-editor">
+    <main
+      className="cumulus glossary-editor-shell"
+      data-testid="glossary-editor"
+    >
       <header className="glossary-editor-header">
         <div>
           <p className="glossary-editor-eyebrow">Helper Tool</p>
           <h1>Info Card Glossary</h1>
-          <p>Author the reusable explanations players discover on hover or press.</p>
+          <p>
+            Author the reusable explanations players discover on hover or press.
+          </p>
         </div>
         <span data-glossary-file="">data/glossary.ron</span>
       </header>
 
       {loadState.kind === "loading" ? (
-        <p className="glossary-editor-status" role="status">Loading glossary…</p>
+        <p className="glossary-editor-status" role="status">
+          Loading glossary…
+        </p>
       ) : null}
 
       {loadState.kind === "error" ? (
         <section className="glossary-editor-load-error" role="alert">
           <h2>Unable to load the glossary</h2>
           <p>{loadState.message}</p>
-          <GlassButton authoredLabel="Retry" variant="accent" onPress={() => setLoadAttempt((value) => value + 1)} />
+          <GlassButton
+            label={assertLocalized("Retry")}
+            variant="accent"
+            onPress={() => setLoadAttempt((value) => value + 1)}
+          />
         </section>
       ) : null}
 
@@ -348,19 +372,21 @@ export default function GlossaryEditorApp({
         <div className="glossary-editor-layout">
           <aside className="glossary-editor-catalog">
             <GlassPanel
-              authoredEyebrow={`${String(filteredEntries.length)} of ${String(loadState.entries.length)}`}
-              authoredTitle={"Definitions"}
-              authoredSubtitle={"Select a term to edit"}
+              eyebrow={assertLocalized(
+                `${String(filteredEntries.length)} of ${String(loadState.entries.length)}`,
+              )}
+              title={assertLocalized("Definitions")}
+              subtitle={assertLocalized("Select a term to edit")}
               frame="floating"
               testId="glossary-editor-catalog"
             >
               <div className="glossary-editor-catalog-body">
                 <TextField
-                  authoredLabel={"Search"}
+                  label={assertLocalized("Search")}
                   kind="search"
                   value={search}
                   onChange={setSearch}
-                  authoredPlaceholder={"Term, category, or copy"}
+                  placeholder={assertLocalized("Term, category, or copy")}
                   testId="glossary-search"
                 />
                 <div className="glossary-editor-term-list">
@@ -378,14 +404,20 @@ export default function GlossaryEditorApp({
                             onClick={() => setSelectedId(entry.id)}
                           >
                             <span>{entry.term}</span>
-                            <small>{entry.matchesTermInRulesText ? "Rules term" : "Info Card"}</small>
+                            <small>
+                              {entry.matchesTermInRulesText
+                                ? "Rules term"
+                                : "Info Card"}
+                            </small>
                           </Pressable>
                         ))}
                       </div>
                     </section>
                   ))}
                   {filteredEntries.length === 0 ? (
-                    <p className="glossary-editor-empty" role="status">No definitions match.</p>
+                    <p className="glossary-editor-empty" role="status">
+                      No definitions match.
+                    </p>
                   ) : null}
                 </div>
               </div>
@@ -393,11 +425,16 @@ export default function GlossaryEditorApp({
           </aside>
 
           {selectedEntry === null ? null : (
-            <section className="glossary-editor-workspace" aria-label="Interactive Info Card editor">
+            <section
+              className="glossary-editor-workspace"
+              aria-label="Interactive Info Card editor"
+            >
               <div className="glossary-editor-preview-heading">
                 <div>
                   <p>Interactive Info Card</p>
-                  <span>Click the title or description to edit it in place.</span>
+                  <span>
+                    Click the title or description to edit it in place.
+                  </span>
                 </div>
                 <span>
                   {glossaryDefinitionUsesRulesText(selectedEntry)
@@ -405,7 +442,10 @@ export default function GlossaryEditorApp({
                     : "Plain text"}
                 </span>
               </div>
-              <div className="glossary-editor-preview-stage" data-testid="glossary-preview">
+              <div
+                className="glossary-editor-preview-stage"
+                data-testid="glossary-preview"
+              >
                 <div className="glossary-editor-interactive-card">
                   <EditableInfoCard
                     title={
@@ -426,13 +466,17 @@ export default function GlossaryEditorApp({
                               }) ?? "Untitled Term",
                             draftValue: termDraft,
                             isEditing: editingField === "title",
-                            ...(editingField === "title" && editingError !== null
-                              ? { error: editingError }
+                            ...(editingField === "title" &&
+                            editingError !== null
+                              ? { error: assertLocalized(editingError) }
                               : {}),
-                            onBeginEdit: () => beginInlineEdit("title", termDraft),
-                            onDraftChange: (value) => setInlineDraft("title", value),
+                            onBeginEdit: () =>
+                              beginInlineEdit("title", termDraft),
+                            onDraftChange: (value) =>
+                              setInlineDraft("title", value),
                             onCancel: () => cancelInlineEdit("title"),
-                            onSubmit: (value) => finishInlineEdit("title", value),
+                            onSubmit: (value) =>
+                              finishInlineEdit("title", value),
                             onBlur: (value) => blurInlineEdit("title", value),
                           }
                     }
@@ -440,8 +484,9 @@ export default function GlossaryEditorApp({
                       value: definitionDraft,
                       draftValue: definitionDraft,
                       isEditing: editingField === "description",
-                      ...(editingField === "description" && editingError !== null
-                        ? { error: editingError }
+                      ...(editingField === "description" &&
+                      editingError !== null
+                        ? { error: assertLocalized(editingError) }
                         : {}),
                       onBeginEdit: () =>
                         beginInlineEdit("description", definitionDraft),
@@ -463,9 +508,9 @@ export default function GlossaryEditorApp({
 
               <div className="glossary-editor-details">
                 <GlassPanel
-                  authoredEyebrow={selectedEntry.category}
-                  authoredTitle={"Definition Details"}
-                  authoredSubtitle={`Stable id: ${selectedEntry.id}`}
+                  eyebrow={assertLocalized(selectedEntry.category)}
+                  title={assertLocalized("Definition Details")}
+                  subtitle={assertLocalized(`Stable id: ${selectedEntry.id}`)}
                   frame="floating"
                   testId="glossary-editor-details"
                 >
@@ -474,10 +519,21 @@ export default function GlossaryEditorApp({
                       <p>Term Presentation</p>
                       <Select
                         full
-                        options={TERM_PRESENTATION_OPTIONS.map((option) => ({ ...option, authoredLabel: option.label, ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { authoredTriggerLabel: option.triggerLabel } : {}) }))}
+                        options={TERM_PRESENTATION_OPTIONS.map((option) => ({
+                          ...option,
+                          label: assertLocalized(option.label),
+                          ...("triggerLabel" in option &&
+                          typeof option.triggerLabel === "string"
+                            ? {
+                                triggerLabel: assertLocalized(
+                                  option.triggerLabel,
+                                ),
+                              }
+                            : {}),
+                        }))}
                         value={presentationDraft}
                         onChange={selectTermPresentation}
-                        authoredAriaLabel={"Term Presentation"}
+                        ariaLabel={assertLocalized("Term Presentation")}
                       />
                       <span>
                         Definition Only hides the term heading while keeping its
@@ -486,13 +542,15 @@ export default function GlossaryEditorApp({
                     </div>
                     {presentationDraft === "definitionOnly" ? (
                       <TextField
-                        authoredLabel={"Catalog Term"}
+                        label={assertLocalized("Catalog Term")}
                         value={termDraft}
                         onChange={(value) => {
                           setTermDraft(value);
                           setSaveState({ kind: "idle" });
                         }}
-                        authoredSupportingText={"Used for matching and catalog search; hidden from the Info Card."}
+                        supportingText={assertLocalized(
+                          "Used for matching and catalog search; hidden from the Info Card.",
+                        )}
                         testId="glossary-term-input"
                       />
                     ) : null}
@@ -501,19 +559,22 @@ export default function GlossaryEditorApp({
                         onBlur={() => persistDraft("variants", variantsDraft)}
                       >
                         <TextField
-                          authoredLabel={"Additional Rules-Text Forms"}
+                          label={assertLocalized("Additional Rules-Text Forms")}
                           value={variantsDraft}
                           onChange={(value) => {
                             setVariantsDraft(value);
                             setSaveState({ kind: "idle" });
                           }}
-                          authoredSupportingText={"Comma-separated plurals, tenses, or trigger forms."}
+                          supportingText={assertLocalized(
+                            "Comma-separated plurals, tenses, or trigger forms.",
+                          )}
                           testId="glossary-variants-input"
                         />
                       </div>
                     ) : (
                       <p className="glossary-editor-entry-kind">
-                        This explanation appears as an Info Card and is not matched in rules text.
+                        This explanation appears as an Info Card and is not
+                        matched in rules text.
                       </p>
                     )}
                     <div className="glossary-editor-save-status">
@@ -521,12 +582,12 @@ export default function GlossaryEditorApp({
                         {saveState.kind === "saving"
                           ? "Saving to glossary.ron…"
                           : saveState.kind === "saved"
-                          ? "Saved to glossary.ron"
-                          : saveState.kind === "error"
-                            ? saveState.message
-                            : dirty
-                              ? "Changes save when the field loses focus"
-                              : "Up to date"}
+                            ? "Saved to glossary.ron"
+                            : saveState.kind === "error"
+                              ? saveState.message
+                              : dirty
+                                ? "Changes save when the field loses focus"
+                                : "Up to date"}
                       </p>
                     </div>
                   </div>

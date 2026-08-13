@@ -1,19 +1,32 @@
+import { assertLocalized } from "@trox/runtime";
 import { renderToStaticMarkup } from "react-dom/server";
+import type { ReactNode } from "react";
 import { describe, expect, it } from "vitest";
+import { TroxLocalizationProvider } from "../../../runtime/localization/context";
 import { RichTextView, richText } from "./rich-text";
+
+function renderLocalizedToStaticMarkup(node: ReactNode): string {
+  return renderToStaticMarkup(
+    <TroxLocalizationProvider>{node}</TroxLocalizationProvider>,
+  );
+}
 
 describe("RichText", () => {
   it("keeps glossary labels and definitions in compact monochrome rows", () => {
-    const markup = renderToStaticMarkup(
+    const markup = renderLocalizedToStaticMarkup(
       <RichTextView
         value={richText.definitions([
           {
-            term: "Bane",
-            definition: "The Nightmare card, a penalty card forced into your deck.",
+            term: assertLocalized("Bane"),
+            definition: assertLocalized(
+              "The Nightmare card, a penalty card forced into your deck.",
+            ),
           },
           {
-            term: "Discover",
-            definition: "Reveal three matching cards and choose one to draw.",
+            term: assertLocalized("Discover"),
+            definition: assertLocalized(
+              "Reveal three matching cards and choose one to draw.",
+            ),
           },
         ])}
       />,
@@ -29,7 +42,9 @@ describe("RichText", () => {
     expect(markup).toContain(
       '<dt style="display:inline;font-weight:700">Discover</dt>',
     );
-    expect(markup).toContain(": The Nightmare card, a penalty card forced into your deck.");
+    expect(markup).toContain(
+      ": The Nightmare card, a penalty card forced into your deck.",
+    );
     expect(markup.match(/data-definition-divider=""/g)).toHaveLength(1);
     expect(markup).toContain(
       "margin:var(--space-s) auto;background:var(--border-strong)",
@@ -39,24 +54,28 @@ describe("RichText", () => {
   });
 
   it("renders the defined timing and cost symbols beside their glossary labels", () => {
-    const markup = renderToStaticMarkup(
+    const markup = renderLocalizedToStaticMarkup(
       <RichTextView
         value={richText.definitions([
-          { term: "Fast", definition: "Fast definition.", symbol: "fast" },
           {
-            term: "Interrupt",
-            definition: "Interrupt definition.",
+            term: assertLocalized("Fast"),
+            definition: assertLocalized("Fast definition."),
+            symbol: "fast",
+          },
+          {
+            term: assertLocalized("Interrupt"),
+            definition: assertLocalized("Interrupt definition."),
             symbol: "interrupt",
           },
           {
-            term: "Exhaust Cost",
-            definition: "Exhaust definition.",
+            term: assertLocalized("Exhaust Cost"),
+            definition: assertLocalized("Exhaust definition."),
             symbol: "exhaust",
             termPresentation: "symbolOnly",
           },
           {
-            term: "Night",
-            definition: "Night definition.",
+            term: assertLocalized("Night"),
+            definition: assertLocalized("Night definition."),
             symbol: "trigger",
           },
         ])}
@@ -78,13 +97,14 @@ describe("RichText", () => {
   });
 
   it("renders rules symbols inside glossary definitions as Boxicons", () => {
-    const markup = renderToStaticMarkup(
+    const markup = renderLocalizedToStaticMarkup(
       <RichTextView
         value={richText.definitions([
           {
-            term: "Exhaust Cost",
-            definition:
+            term: assertLocalized("Exhaust Cost"),
+            definition: assertLocalized(
               "You may exhaust (☾) this character to activate this ability.",
+            ),
             symbol: "exhaust",
             termPresentation: "symbolOnly",
           },
@@ -96,12 +116,12 @@ describe("RichText", () => {
     expect(markup).not.toContain("☾");
   });
   it("renders the points symbol inside glossary definitions as a Boxicon", () => {
-    const markup = renderToStaticMarkup(
+    const markup = renderLocalizedToStaticMarkup(
       <RichTextView
         value={richText.definitions([
           {
-            term: "Points",
-            definition: "The ⍟ symbol represents points.",
+            term: assertLocalized("Points"),
+            definition: assertLocalized("The ⍟ symbol represents points."),
           },
         ])}
       />,
@@ -112,13 +132,14 @@ describe("RichText", () => {
   });
 
   it("renders definition-only rows without a label or colon", () => {
-    const markup = renderToStaticMarkup(
+    const markup = renderLocalizedToStaticMarkup(
       <RichTextView
         value={richText.definitions([
           {
-            term: "Points",
-            definition:
+            term: assertLocalized("Points"),
+            definition: assertLocalized(
               "Characters score points (⍟) when they challenge and are not blocked.",
+            ),
             termPresentation: "definitionOnly",
           },
         ])}

@@ -28,7 +28,7 @@ export const cardBackDemo: CumulusComponent = {
       code: `import { CardBack } from "src/cumulus/components/battle/CardBack";
 
 <div style={{ width: 96 }}>
-  <CardBack label="Face-down enemy card" />
+  <CardBack label={assertLocalized("Face-down enemy card")} />
 </div>`,
     },
   ],

@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // Registry demo for SiteNode — the dreamscape site disc whose hover / press
 // reveal routes through InfoCard's `icon` variant. SiteNode positions itself
 // from `model.pos` inside a `position: relative` stage and anchors its reveal to
@@ -9,7 +10,10 @@
 // the dreamscape screen builds real ones from its site list + seeded scatter.
 
 import { useRef } from "react";
-import { SiteNode, type DreamscapeSiteModel } from "../../components/dreamscape/SiteNode";
+import {
+  SiteNode,
+  type DreamscapeSiteModel,
+} from "../../components/dreamscape/SiteNode";
 import { glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
@@ -23,41 +27,58 @@ const DEMO_MODELS: DreamscapeSiteModel[] = [
     isBattle: false,
     isLocked: false,
     isInteractive: true,
-    label: "Merchant",
-    blurb: "Spend essence on cards, dreamsigns, and services.",
+    label: assertLocalized("Merchant"),
+    blurb: assertLocalized("Spend essence on cards, dreamsigns, and services."),
     icon: glyph("bxf bx-store-alt-2"),
   },
   {
-    site: { id: "s-reward", type: "Reward", isEnhanced: false, isVisited: false },
+    site: {
+      id: "s-reward",
+      type: "Reward",
+      isEnhanced: false,
+      isVisited: false,
+    },
     pos: { x: 50, y: 26 },
     index: 1,
     isBattle: false,
     isLocked: false,
     isInteractive: true,
-    label: "Treasure",
-    blurb: "Claim a reward carried by this site.",
+    label: assertLocalized("Treasure"),
+    blurb: assertLocalized("Claim a reward carried by this site."),
     icon: glyph("bxf bx-treasure-chest"),
   },
   {
-    site: { id: "s-battle", type: "Battle", isEnhanced: false, isVisited: false },
+    site: {
+      id: "s-battle",
+      type: "Battle",
+      isEnhanced: false,
+      isVisited: false,
+    },
     pos: { x: 38, y: 74 },
     index: 3,
     isBattle: true,
     isLocked: false,
     isInteractive: true,
-    label: "Battle",
-    blurb: "The dreamscape's guardian awaits.",
+    label: assertLocalized("Battle"),
+    blurb: assertLocalized("The dreamscape's guardian awaits."),
     icon: glyph("bxf bx-sword-alt"),
   },
   {
-    site: { id: "s-locked", type: "Battle", isEnhanced: false, isVisited: false },
+    site: {
+      id: "s-locked",
+      type: "Battle",
+      isEnhanced: false,
+      isVisited: false,
+    },
     pos: { x: 66, y: 74 },
     index: 4,
     isBattle: true,
     isLocked: true,
     isInteractive: false,
-    label: "Final Boss",
-    blurb: "The dreamscape's final guardian — defeat it to complete the dreamscape.",
+    label: assertLocalized("Final Boss"),
+    blurb: assertLocalized(
+      "The dreamscape's final guardian — defeat it to complete the dreamscape.",
+    ),
     icon: glyph("bxf bx-meteor"),
   },
 ];

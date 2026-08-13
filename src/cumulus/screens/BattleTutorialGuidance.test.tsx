@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -32,9 +33,9 @@ function guidanceFields(
         kind: "character-portrait" as const,
         characterId: "mira" as const,
       },
-      portraitAlt: "Mira",
-      speakerName: "Mira",
-      text,
+      portraitAlt: assertLocalized("Mira"),
+      speakerName: assertLocalized("Mira"),
+      text: assertLocalized(text),
     },
     horizontalOffset: options.horizontalOffset ?? 0,
     verticalOffset: options.verticalOffset ?? 0,
@@ -96,8 +97,8 @@ describe("BattleTutorialGuidance", () => {
                   cardId: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
                   displaySnapshot: {
                     id: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
-                    name: "Shadow Passage",
-                    renderedText: "Erode 3.",
+                    name: assertLocalized("Shadow Passage"),
+                    renderedText: assertLocalized("Erode 3."),
                     energyAdded: 1,
                     imageNumber: 3,
                   },
@@ -170,8 +171,8 @@ describe("BattleTutorialGuidance", () => {
                   cardId: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
                   displaySnapshot: {
                     id: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
-                    name: "Shadow Passage",
-                    renderedText: "Erode 3.",
+                    name: assertLocalized("Shadow Passage"),
+                    renderedText: assertLocalized("Erode 3."),
                     energyAdded: 1,
                     imageNumber: 3,
                   },
@@ -372,7 +373,7 @@ describe("BattleTutorialGuidance", () => {
               messageCount: 2,
               dialogue: {
                 ...view.dialogue,
-                text: "The same card stays here for the next explanation.",
+                text: assertLocalized("The same card stays here for the next explanation."),
               },
             }}
             onDismiss={() => undefined}

@@ -15,6 +15,7 @@ import { GlassPanel } from "../components/overlay/GlassPanel";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { DreamAvatarStage } from "../components/hud/DreamAvatarStage";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 import {
   ConsoleDivider,
   JourneyStartAbilityCopy,
@@ -89,6 +90,7 @@ function DreamAvatarTitle({
 }: {
   dreamAvatar: DreamAvatarOfferView;
 }) {
+  const resolve = useLocalizer();
   return (
     <div
       style={{
@@ -110,7 +112,7 @@ function DreamAvatarTitle({
             textShadow: token("--text-outline-media"),
           }}
         >
-          {dreamAvatar.name}
+          {resolve(dreamAvatar.name)}
         </span>
         <span
           style={{
@@ -121,7 +123,7 @@ function DreamAvatarTitle({
             textShadow: token("--text-outline-media"),
           }}
         >
-          {dreamAvatar.title}
+          {resolve(dreamAvatar.title)}
         </span>
       </h1>
     </div>

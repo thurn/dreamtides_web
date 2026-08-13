@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // Registry demo entry for GlassButton — see icon-button.tsx for the
 // controlled-wrapper recipe this follows. GlassButton takes an `onPress`
 // callback and an optional `glyph` that a generated control panel can't model,
@@ -44,7 +45,7 @@ function GlassButtonDemo({
 }: GlassButtonDemoArgs) {
   return (
     <GlassButton
-      authoredLabel={label}
+      label={assertLocalized(label)}
       essenceCost={essenceCost}
       glyph={withGlyph ? GLYPHS.sort : undefined}
       variant={variant}
@@ -72,16 +73,16 @@ export const glassButtonDemo: CumulusComponent = {
       label: "Pressed toggle",
       note: "Use `pressed` only when the action represents a persistent toggle state; the component exposes the state through `aria-pressed`.",
       code: `<GlassButton
-  label={controllingOpponent ? "Return to Your Side" : "Control Opponent"}
+  label={assertLocalized(controllingOpponent ? "Return to Your Side" : "Control Opponent")}
   pressed={controllingOpponent}
   onPress={togglePerspective}
 />`,
     },
     {
-      note: "A plain text label on the glass surface. `label` is a resolved string; `onPress` fires on activation.",
+      note: "A localized text label on the glass surface; `onPress` fires on activation.",
       code: `import { GlassButton } from "src/cumulus/components/controls/GlassButton";
 
-<GlassButton label="Reset filters" onPress={resetFilters} />`,
+<GlassButton label={assertLocalized("Reset filters")} onPress={resetFilters} />`,
     },
     {
       label: "Leading glyph",
@@ -91,7 +92,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 <GlassButton
   glyph={GLYPHS.filter}
-  label="Filter"
+  label={assertLocalized("Filter")}
   onPress={openFilters}
 />`,
     },
@@ -99,7 +100,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
       label: "On glass",
       note: 'Use `placement="onGlass"` when the control rests inside a glass panel. Its lighter tonal lens preserves the panel\'s inherited scene color instead of compounding the full media-level tint.',
       code: `<GlassButton
-  label="Decline"
+  label={assertLocalized("Decline")}
   placement="onGlass"
   onPress={decline}
 />`,
@@ -108,7 +109,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
       label: "Disabled",
       note: "A disabled GlassButton dims the complete control and detaches activation and press feedback.",
       code: `<GlassButton
-  label="Transfigure"
+  label={assertLocalized("Transfigure")}
   variant="accent"
   disabled
   onPress={transfigure}
@@ -121,7 +122,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
 import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 <GlassButton
-  label="Purge 1"
+  label={assertLocalized("Purge 1")}
   variant="danger"
   onPress={purgeCard}
 />`,
@@ -130,7 +131,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
       label: "Purple accent",
       note: "Use the purple soft-wash accent for primary and commit actions. A numerical essence cost follows the label after a centered dot.",
       code: `<GlassButton
-  label="Transfigure"
+  label={assertLocalized("Transfigure")}
   essenceCost={20}
   variant="accent"
   placement="onGlass"
@@ -141,8 +142,8 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
       label: "Essence cost",
       note: "Every numerical Essence cost uses the centered-dot treatment.",
       code: `<GlassButton
-  label="Choose"
-  accessibilityLabel="Choose the Six Gate for 50 Essence"
+  label={assertLocalized("Choose")}
+  accessibilityLabel={assertLocalized("Choose the Six Gate for 50 Essence")}
   essenceCost={50}
   variant="accent"
   onPress={chooseGate}
@@ -152,7 +153,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
       label: "Essence value",
       note: "Use the plain Essence value treatment when the amount describes the action rather than a cost; it carries no punctuation.",
       code: `<GlassButton
-  label="Take"
+  label={assertLocalized("Take")}
   essenceValue={60}
   onPress={takePrize}
 />`,
@@ -161,7 +162,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
       label: "Prominent primary action",
       note: "Use the prominent size for a singular primary action that anchors a spacious screen.",
       code: `<GlassButton
-  label="Begin"
+  label={assertLocalized("Begin")}
   size="prominent"
   variant="accent"
   onPress={begin}
@@ -171,7 +172,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
       label: "Compact parallel action",
       note: "Use the compact label scale and horizontal spacing when several actions must remain separate in a narrow row. The touch target stays 42px tall.",
       code: `<GlassButton
-  label="Choose"
+  label={assertLocalized("Choose")}
   essenceCost={50}
   size="compact"
   onPress={chooseGate}
@@ -181,7 +182,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
       label: "Stable dynamic width",
       note: "Pass every reachable label/essence-cost state through `widthReservations` when one action changes copy. The hidden sizing grid holds the widest intrinsic footprint while only the current state remains visible.",
       code: `<GlassButton
-  label={selectedCount === 0 ? "Decline" : \`Purge \${selectedCount}\`}
+  label={assertLocalized(selectedCount === 0 ? "Decline" : \`Purge \${selectedCount}\`)}
   essenceCost={selectedCount === 0 ? null : totalCost}
   widthReservations={possibleActions}
   onPress={commit}

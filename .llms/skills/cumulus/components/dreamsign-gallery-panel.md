@@ -18,7 +18,7 @@ The panel preserves the chrome-free Dreamsign material and shared InfoCard revea
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `title` | `string` | yes | — | Header title. |
+| `title` | `LocalizedString` | yes | — | Header title. |
 | `entries` | `readonly DreamsignGalleryEntryView[]` | yes | — | Dreamsign offers in persistent slot order. |
 | `endAction` | `DreamsignGalleryActionView` | yes | — | Bare-glyph action shown after the offers. |
 | `size` | `"compact" \| "standard"` | no | `standard` | Compact uses the two-column phone shelf; standard uses the four-column desktop shelf. |
@@ -34,10 +34,10 @@ The panel preserves the chrome-free Dreamsign material and shared InfoCard revea
 | --- | --- | --- | --- |
 | `entryId` | `string` | no | Stable action id. |
 | `glyph` | `Glyph` | no | Glyph that identifies the action. |
-| `label` | `string` | no | Visible and accessible action label. |
+| `label` | `LocalizedString` | no | Visible and accessible action label. |
 | `glossaryId` | `string` | no | Stable Glossary UUID for the action's explanatory Info Card. |
 | `price` | `number \| null` | no | Essence price, or null for a free/spent text caption. |
-| `text` | `string \| null` | no | Caption used when the action is free or already spent. |
+| `text` | `LocalizedString \| null` | no | Caption used when the action is free or already spent. |
 | `disabled` | `boolean` | no | Whether the action can currently be triggered. |
 
 ## Usage
@@ -48,10 +48,10 @@ Resolve each Dreamsign by UUID before building the entry. Purchased entries rese
 import { DreamsignGalleryPanel } from "src/cumulus/components/card/DreamsignGalleryPanel";
 
 <DreamsignGalleryPanel
-  title="Dreamsign Bazaar"
+  title={assertLocalized("Dreamsign Bazaar")}
   entries={offers}
   endAction={restock}
-  closeLabel="Leave bazaar"
+  closeLabel={assertLocalized("Leave bazaar")}
   onClose={leave}
   onEntryPress={buy}
   onEndActionPress={restockOffers}

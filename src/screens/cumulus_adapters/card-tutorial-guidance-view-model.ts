@@ -1,6 +1,8 @@
 import type { BattleTutorialGuidanceView } from "../../cumulus/screens/BattleTutorialGuidance";
 import type { CardTutorialGuidancePresentation } from "../../rules/card-tutorial-guidance";
 import type { CardData } from "../../types/cards";
+import { tx } from "@trox/runtime";
+import { localizedSourceText } from "../../runtime/localization/runtime";
 
 /** Map one shared site-card tutorial to stationary inline Mira guidance. */
 export function buildCardTutorialGuidanceView(
@@ -23,9 +25,9 @@ export function buildCardTutorialGuidanceView(
     duration: presentation.duration,
     dialogue: {
       portrait: { kind: "character-portrait", characterId: "mira" },
-      portraitAlt: "Mira",
-      speakerName: "Mira",
-      text: presentation.text,
+      portraitAlt: tx("Mira", "Name of the tutorial guide."),
+      speakerName: tx("Mira", "Name of the tutorial guide."),
+      text: localizedSourceText(presentation.text),
     },
     horizontalOffset: presentation.horizontalOffset,
     verticalOffset: presentation.verticalOffset,

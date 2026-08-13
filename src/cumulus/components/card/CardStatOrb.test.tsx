@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -15,7 +16,10 @@ function mountOrb(
   const changeBadge: CardStatChangeBadge | undefined =
     changeBadgeKind === undefined
       ? undefined
-      : { kind: changeBadgeKind, accessibleName: "Synthetic form" };
+      : {
+          kind: changeBadgeKind,
+          accessibleName: assertLocalized("Synthetic form"),
+        };
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -29,7 +33,9 @@ function mountOrb(
           numberSizeVar="45px"
           numberCapPx={45}
           changeBadge={changeBadge}
-          authoredAriaLabel={ariaLabel}
+          ariaLabel={
+            ariaLabel === undefined ? undefined : assertLocalized(ariaLabel)
+          }
         />
       </CumulusRoot>,
     );
@@ -65,7 +71,9 @@ describe("CardStatOrb transfiguration badge", () => {
 
       const labelledBy = orb?.getAttribute("aria-labelledby")?.split(" ") ?? [];
       expect(labelledBy).toHaveLength(2);
-      expect(labelledBy.every((id) => document.getElementById(id) !== null)).toBe(true);
+      expect(
+        labelledBy.every((id) => document.getElementById(id) !== null),
+      ).toBe(true);
       expect(orb?.querySelector<HTMLElement>(":scope > div")?.style.color).toBe(
         "rgb(255, 255, 255)",
       );
@@ -99,20 +107,26 @@ describe("CardStatOrb transfiguration badge", () => {
 
   it("keeps a custom accessible name while announcing its change badge", () => {
     const unchanged = mountOrb("2", undefined, "Custom stat context");
-    const unchangedLabel = unchanged.container
-      .querySelector<HTMLElement>("[data-card-stat]")
-      ?.getAttribute("aria-labelledby")?.split(" ") ?? [];
+    const unchangedLabel =
+      unchanged.container
+        .querySelector<HTMLElement>("[data-card-stat]")
+        ?.getAttribute("aria-labelledby")
+        ?.split(" ") ?? [];
     act(() => unchanged.root.unmount());
     unchanged.container.remove();
 
     const changed = mountOrb("2", "empowered", "Custom stat context");
-    const changedLabel = changed.container
-      .querySelector<HTMLElement>("[data-card-stat]")
-      ?.getAttribute("aria-labelledby")?.split(" ") ?? [];
+    const changedLabel =
+      changed.container
+        .querySelector<HTMLElement>("[data-card-stat]")
+        ?.getAttribute("aria-labelledby")
+        ?.split(" ") ?? [];
 
     expect(unchangedLabel).toHaveLength(1);
     expect(changedLabel).toHaveLength(2);
-    expect(changedLabel.every((id) => document.getElementById(id) !== null)).toBe(true);
+    expect(
+      changedLabel.every((id) => document.getElementById(id) !== null),
+    ).toBe(true);
 
     act(() => changed.root.unmount());
     changed.container.remove();

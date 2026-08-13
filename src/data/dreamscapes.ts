@@ -1,3 +1,4 @@
+import type { LocalizedString } from "@trox/runtime";
 import type {
   AffiliationContent,
   ApollyonIncarnationContent,
@@ -6,6 +7,8 @@ import type {
 } from "../types/content";
 import type { SiteState, SiteType } from "../types/journey";
 import { SITE_TYPES } from "../types/site-type";
+import { localizedSourceText } from "../runtime/localization/runtime";
+import { localizedGuideDialogue } from "../runtime/localization/runtime-templates.generated";
 
 // Re-export the content types so callers can import dreamscape/guide/affiliation
 // shapes alongside their loaders from one module.
@@ -262,23 +265,16 @@ export function requireGuideForSiteType(
 export function guideDialogueLines(
   guide: DreamGuideContent,
   context: string,
-  values: Readonly<Record<string, string | number>> = {},
-): readonly string[] {
+  values: Readonly<Record<string, LocalizedString | number>> = {},
+): readonly LocalizedString[] {
   const lines = guide.dialogue[context];
   if (lines === undefined || lines.length === 0) {
     throw new Error(`Dream Guide ${guide.id} has no ${context} dialogue.`);
   }
-  return lines.map((line) =>
-    line.replace(/\{([^{}]+)\}/gu, (_match, key: string) => {
-      const value = values[key];
-      if (value === undefined) {
-        throw new Error(
-          `Dream Guide ${guide.id} dialogue ${context} requires {${key}}.`,
-        );
-      }
-      return String(value);
-    }),
-  );
+  return lines.map((line) => {
+    const staticDialogue = localizedGuideDialogue(line);
+    return staticDialogue ?? localizedSourceText(line, values);
+  });
 }
 
 /** Resolve the guide for a concrete site, honoring Random Site hosting. */

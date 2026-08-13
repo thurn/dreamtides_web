@@ -117,6 +117,7 @@ function DesktopTitle({ title }: { readonly title: LocalizedString }) {
 /** The DreamAvatar's name + epithet, floating on the portrait above the head.
  * On-media, so it earns legibility from the outline dilation, not a plate. */
 function PortraitName({ dreamAvatar }: { dreamAvatar: DreamAvatarOfferView }) {
+  const resolve = useLocalizer();
   return (
     <div
       style={{
@@ -137,7 +138,7 @@ function PortraitName({ dreamAvatar }: { dreamAvatar: DreamAvatarOfferView }) {
           lineHeight: 1.05,
         }}
       >
-        {dreamAvatar.name}
+        {resolve(dreamAvatar.name)}
       </div>
       <div
         style={{
@@ -147,7 +148,7 @@ function PortraitName({ dreamAvatar }: { dreamAvatar: DreamAvatarOfferView }) {
           textShadow: token("--text-outline-media"),
         }}
       >
-        {dreamAvatar.title}
+        {resolve(dreamAvatar.title)}
       </div>
     </div>
   );

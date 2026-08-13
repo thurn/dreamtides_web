@@ -17,12 +17,15 @@ import {
   type RichText,
 } from "../../components/card/rich-text";
 import type { CumulusComponent } from "../registry";
+import { assertLocalized } from "@trox/runtime";
 
 // The seeded rules value: a two-ability card body that exercises keyword
 // emphasis (Support / Reclaim / Banish), a `+2✦` spark pip, and a
 // `3●` energy cost in one string.
 const SAMPLE_VALUE: RichText = richText.rules(
-  "Support – Supported allies have +2✦.\n\nReclaim – 3●, Banish 3 cards from your void.",
+  assertLocalized(
+    "Support – Supported allies have +2✦.\n\nReclaim – 3●, Banish 3 cards from your void.",
+  ),
 );
 
 // RichTextView's `value` prop is required, which the registry's
@@ -56,8 +59,8 @@ import { richText } from "src/cumulus/components/card/rich-text";
 
 <InfoCard
   variant="text"
-  title="Woodland Apparition"
-  body={richText.rules("Support - Supported allies have +2.")}
+  title={assertLocalized("Woodland Apparition")}
+  body={richText.rules(assertLocalized("Support - Supported allies have +2."))}
 />`,
     },
     {
@@ -66,8 +69,8 @@ import { richText } from "src/cumulus/components/card/rich-text";
       code: `import { richText } from "src/cumulus/components/card/rich-text";
 
 const pointsDefinition = richText.definitions([{
-  term: "Score",
-  definition: "Characters score points (⍟) when they challenge and are not blocked.",
+  term: assertLocalized("Score"),
+  definition: assertLocalized("Characters score points (⍟) when they challenge and are not blocked."),
   termPresentation: "definitionOnly",
 }]);`,
     },
@@ -76,7 +79,7 @@ const pointsDefinition = richText.definitions([{
       note: "Use a strict underlined subject run when a card or dreamsign name must be called out.",
       code: `import { richText } from "src/cumulus/components/card/rich-text";
 
-const subject = richText.underline("Rainbow Horn");`,
+const subject = richText.underline(assertLocalized("Rainbow Horn"));`,
     },
     {
       label: "Blurb with a status note",
@@ -84,8 +87,8 @@ const subject = richText.underline("Rainbow Horn");`,
       code: `import { richText } from "src/cumulus/components/card/rich-text";
 
 const blurb = richText.stack(
-  richText.plain("Spend essence on cards, dreamsigns, and services."),
-  richText.note("Visited"),
+  richText.plain(assertLocalized("Spend essence on cards, dreamsigns, and services.")),
+  richText.note(assertLocalized("Visited")),
 );`,
     },
     {
@@ -93,7 +96,7 @@ const blurb = richText.stack(
       note: "When copy is not already flowing through a slot, RichTextView renders a RichText value inline.",
       code: `import { RichTextView, richText } from "src/cumulus/components/card/rich-text";
 
-<RichTextView value={richText.plain("A rising tide floods the board.")} />`,
+<RichTextView value={richText.plain(assertLocalized("A rising tide floods the board."))} />`,
     },
   ],
   demo: {

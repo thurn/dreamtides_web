@@ -1,4 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { resolveSource } from "../../runtime/localization/runtime";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
@@ -368,7 +372,9 @@ describe("buildAtlasMapNodes", () => {
     expect(items).toHaveLength(3);
     const boss = items.find((item) => item.model.node.id === "boss");
     expect(boss?.model.role).toBe("boss");
-    expect(boss?.model.primary.placeName).toBe("Synthetic boss place");
+    expect(resolveSource(boss!.model.primary.placeName!)).toBe(
+      "Synthetic boss place",
+    );
     expect(boss?.model.primary.sceneArt).toEqual({
       kind: "dreamscape-scene",
       dreamscapeId: "synthetic-boss-scene",
@@ -466,16 +472,16 @@ describe("buildAtlasMapNodes", () => {
     const items = buildAtlasMapNodes(atlas, content);
     const middle = items.find((item) => item.model.node.id === "middle");
 
-    expect(middle?.model.site).toMatchObject({
-      name: "Augury",
-    });
-    expect(middle?.model.site?.blurb.length).toBeGreaterThan(0);
+    expect(resolveSource(middle!.model.site!.name)).toBe("Augury");
+    expect(resolveSource(middle!.model.site!.blurb).length).toBeGreaterThan(0);
     expect(middle?.model.site?.icon).toBe("fixture-atlas-icon");
-    expect(middle?.model.affiliation).toEqual({
-      id: "figments",
-      title: "Fixture title Figments",
-      body: "Fixture body Figment",
-    });
+    expect(middle?.model.affiliation?.id).toBe("figments");
+    expect(resolveSource(middle!.model.affiliation!.title)).toBe(
+      "Fixture title Figments",
+    );
+    expect(resolveSource(middle!.model.affiliation!.body)).toBe(
+      "Fixture body Figment",
+    );
   });
 });
 

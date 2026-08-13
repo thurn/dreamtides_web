@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -6,6 +7,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { CumulusRoot } from "../CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { LayerName } from "../../types/layer-name";
+import { resolveSource } from "../../runtime/localization/runtime";
 import type { DreamscapeNode } from "../../types/journey";
 import type {
   AtlasNodeModel,
@@ -206,8 +208,8 @@ function emptyPrimary(): AtlasNodePrimary {
   return {
     sceneArt: null,
     figureArt: null,
-    title: "An Unseen Dream",
-    body: "An unseen dream.",
+    title: assertLocalized("An Unseen Dream"),
+    body: assertLocalized("An unseen dream."),
     placeName: null,
     guideName: null,
   };
@@ -221,22 +223,22 @@ function residentModel(): Pick<
     primary: {
       sceneArt: artRef.dreamscapeScene("wilderveil"),
       figureArt: artRef.dreamGuide("aldric"),
-      title: "Aldric, the Seer",
-      body: "Aldric offers curated visions of the future.",
-      placeName: "The Glass Orchard",
-      guideName: "Aldric, the Seer",
+      title: assertLocalized("Aldric, the Seer"),
+      body: assertLocalized("Aldric offers curated visions of the future."),
+      placeName: assertLocalized("The Glass Orchard"),
+      guideName: assertLocalized("Aldric, the Seer"),
     },
     dreamsign: null,
     site: {
       id: "00000000-0000-4000-8000-000000000072",
-      name: "Augury",
-      blurb: "Study a curated vision of what waits ahead.",
+      name: assertLocalized("Augury"),
+      blurb: assertLocalized("Study a curated vision of what waits ahead."),
       icon: GLYPHS.water,
     },
     affiliation: {
       id: "00000000-0000-4000-8000-000000000073",
-      title: "Fixture affiliation",
-      body: "Fixture cards are more likely here.",
+      title: assertLocalized("Fixture affiliation"),
+      body: assertLocalized("Fixture cards are more likely here."),
     },
   };
 }
@@ -300,9 +302,9 @@ describe("Cumulus AtlasScreen", () => {
         id: "tutorial-run:atlas-guidance",
         model: {
           portrait: { kind: "character-portrait", characterId: "mira" },
-          portraitAlt: "Mira",
-          speakerName: "Mira",
-          text: "On the [purple]Atlas[/purple] screen, choose a dream.",
+          portraitAlt: assertLocalized("Mira"),
+          speakerName: assertLocalized("Mira"),
+          text: assertLocalized("On the [purple]Atlas[/purple] screen, choose a dream."),
         },
         delaySeconds: 1,
         horizontalOffset: 0,
@@ -539,12 +541,20 @@ describe("Cumulus AtlasScreen", () => {
       );
     });
 
-    expect(document.body.textContent).toContain(resident.primary.guideName);
-    expect(document.body.textContent).toContain(resident.site?.name);
-    expect(document.body.textContent).toContain(resident.site?.blurb);
-    expect(document.body.textContent).toContain(resident.affiliation?.title);
-    expect(document.body.textContent).toContain(resident.affiliation?.body);
-    expect(document.body.textContent).toContain(resident.primary.placeName);
+    expect(document.body.textContent).toContain(
+      resolveSource(resident.primary.guideName!),
+    );
+    expect(document.body.textContent).toContain(resolveSource(resident.site!.name));
+    expect(document.body.textContent).toContain(resolveSource(resident.site!.blurb));
+    expect(document.body.textContent).toContain(
+      resolveSource(resident.affiliation!.title),
+    );
+    expect(document.body.textContent).toContain(
+      resolveSource(resident.affiliation!.body),
+    );
+    expect(document.body.textContent).toContain(
+      resolveSource(resident.primary.placeName!),
+    );
 
     act(() => {
       root.unmount();

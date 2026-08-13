@@ -61,6 +61,10 @@ describe("regenerate-assets.sh", () => {
       "node scripts/trox.mjs extract",
       "node scripts/trox.mjs check --deny warnings",
       "node scripts/trox.mjs bundle --allow-missing",
+      "node scripts/generate-localized-runtime-templates.mjs",
+      "node scripts/trox.mjs extract",
+      "node scripts/trox.mjs check --deny warnings",
+      "node scripts/trox.mjs bundle --allow-missing",
       "git status --short -- data",
     ]);
     expect(result.stdout).toContain("1/2  setup-assets");
@@ -80,6 +84,10 @@ describe("regenerate-assets.sh", () => {
       "node scripts/generate-cumulus-tokens.mjs",
       "node scripts/generate-cumulus-metadata.mjs",
       "node scripts/generate-cumulus-docs.mjs",
+      "node scripts/trox.mjs extract",
+      "node scripts/trox.mjs check --deny warnings",
+      "node scripts/trox.mjs bundle --allow-missing",
+      "node scripts/generate-localized-runtime-templates.mjs",
       "node scripts/trox.mjs extract",
       "node scripts/trox.mjs check --deny warnings",
       "node scripts/trox.mjs bundle --allow-missing",

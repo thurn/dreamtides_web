@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // Registry demo entry for the framed DreamAvatarPortrait component.
 
 import type { ReactNode } from "react";
@@ -11,11 +12,15 @@ import type { CumulusComponent } from "../registry";
 /** Curated real DreamAvatar with shipped cutout art. */
 const sampleDreamAvatar: DreamAvatarVisual = {
   imageNumber: "0025",
-  name: "Threxan",
-  title: "the Resounding Wrath",
+  name: assertLocalized("Threxan"),
+  title: assertLocalized("the Resounding Wrath"),
 };
 
-function Cell({ label, width, children }: {
+function Cell({
+  label,
+  width,
+  children,
+}: {
   label: string;
   width: number;
   children: ReactNode;

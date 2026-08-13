@@ -1,8 +1,12 @@
 // Pure view-model builder for Durgan Forgehammer's standard Cumulus
 // Transfiguration site.
 
+import type { LocalizedString } from "@trox/runtime";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
-import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
+import {
+  buildTransfigurationDisplay,
+  describeTransfiguration,
+} from "../../transfiguration/transfiguration-logic";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
 import type {
@@ -21,6 +25,7 @@ import type {
 } from "../../cumulus/screens/TransfigurationSiteScreen";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
+import { localizedTransfigurationPresentation } from "../../cumulus/components/controls/transfiguration-presentation";
 const STANDARD_CANDIDATE_COUNT = 3;
 
 /** Resolve Durgan, the resident guide for Transfiguration. */
@@ -34,7 +39,7 @@ export function resolveTransfigurationGuide(
 /** Build the guide art and one stable greeting for the site layout. */
 export function buildTransfigurationGuideView(
   guide: DreamGuideContent,
-  guideLine: string,
+  guideLine: LocalizedString,
 ): TransfigurationGuideView {
   return projectGuideView(guide, guideLine);
 }
@@ -80,8 +85,12 @@ export function buildTransfigurationCandidates(
     );
     candidate.forms.push({
       type: offer.type,
-      presentation: transfigurationForm(transfigurationData, offer.type),
-      change: offer.change,
+      presentation: localizedTransfigurationPresentation(
+        transfigurationForm(transfigurationData, offer.type),
+      ),
+      change:
+        offer.change ??
+        describeTransfiguration(transfigurationData, card, offer.type),
       effectDetails: offer.effectDetails,
       essenceCost: offer.essenceCost,
       affordable: offer.essenceCost <= state.essence,
@@ -139,7 +148,7 @@ export function buildTransfigurationSiteView(params: {
   runtime: CardChoiceSiteRuntime | null;
   cardDatabase: ReadonlyMap<number, CardData>;
   guide: DreamGuideContent;
-  guideLine: string;
+  guideLine: LocalizedString;
   transfigurationData: TransfigurationData;
 }): TransfigurationSiteView {
   const scene: ArtRef | null =

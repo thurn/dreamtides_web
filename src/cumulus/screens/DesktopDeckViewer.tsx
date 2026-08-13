@@ -30,11 +30,19 @@
 // from "the whole deck + that state" to "the visible grid" lives in the pure,
 // tested `desktop-deck-filter` module.
 
-import { meaning, tx, plural, one, other, txa, type LocalizedString } from "@trox/runtime";
+import {
+  meaning,
+  tx,
+  plural,
+  one,
+  other,
+  txa,
+  type LocalizedString,
+} from "@trox/runtime";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { requireDreamsignId } from "../../data/dreamsigns";
-import type { Dreamsign as DreamsignData } from "../../types/journey";
+import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
 import { GameCard } from "../components/card/CardView";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
 import {
@@ -72,7 +80,7 @@ export interface DeckDreamAvatarView extends DreamAvatarVisual {
   /** Stable DreamAvatar UUID. */
   id: string;
   /** The DreamAvatar's ability text, revealed through the shared InfoCard. */
-  renderedText: string;
+  renderedText: LocalizedString;
 }
 
 /** The full view-model the desktop viewer renders. */
@@ -82,7 +90,7 @@ export interface DesktopDeckView {
   /** The run's DreamAvatar, or null before one is chosen. */
   dreamAvatar: DeckDreamAvatarView | null;
   /** The dreamsigns collected so far, in collection order. */
-  dreamsigns: DreamsignData[];
+  dreamsigns: LocalizedDreamsign[];
   /** The exact tide set selected for this run, matching the journey-start preview. */
   tides: DreamAvatarTideView[];
 }
@@ -175,10 +183,12 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
       <div
         role="dialog"
         aria-modal="true"
-        aria-label={resolve(tx(
-          "Your Deck",
-          "Title of the full-screen browser for the current player's deck. “Your” addresses the local player, including one participant in a cooperative room.",
-        ))}
+        aria-label={resolve(
+          tx(
+            "Your Deck",
+            "Title of the full-screen browser for the current player's deck. “Your” addresses the local player, including one participant in a cooperative room.",
+          ),
+        )}
         // Presses inside the content never reach the surface, so only an outside
         // press closes.
         onPointerDown={(e) => {
@@ -295,20 +305,24 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
             color: token("--text-primary"),
           }}
         >
-          {resolve(tx(
-            "Your Deck",
-            "Title of the full-screen browser for the current player's deck. “Your” addresses the local player, including one participant in a cooperative room.",
-          ))}
+          {resolve(
+            tx(
+              "Your Deck",
+              "Title of the full-screen browser for the current player's deck. “Your” addresses the local player, including one participant in a cooperative room.",
+            ),
+          )}
         </h2>
         <Eyebrow>
-          {resolve(txa(
-            meaning(
-              "journey-deck-count-subtitle",
-              plural(count, [one("{count} Card"), other("{count} Cards")]),
+          {resolve(
+            txa(
+              meaning(
+                "journey-deck-count-subtitle",
+                plural(count, [one("{count} Card"), other("{count} Cards")]),
+              ),
+              { count },
+              "Count beneath the deck-browser title. count is the number of cards currently in the player's deck, is a non-negative integer, and can be zero.",
             ),
-            { count },
-            "Count beneath the deck-browser title. count is the number of cards currently in the player's deck, is a non-negative integer, and can be zero.",
-          ))}
+          )}
         </Eyebrow>
       </div>
       <IconButton
@@ -316,9 +330,9 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
         glyph={GLYPHS.close}
         size="sm"
         label={tx(
-            "Close deck browser",
-            "Accessible name for the icon-only control that dismisses the player's deck browser and returns focus to the Journey screen beneath it.",
-          )}
+          "Close deck browser",
+          "Accessible name for the icon-only control that dismisses the player's deck browser and returns focus to the Journey screen beneath it.",
+        )}
         onPress={onClose}
       />
     </header>
@@ -335,7 +349,7 @@ function Sidebar({
   tides,
 }: {
   dreamAvatar: DeckDreamAvatarView | null;
-  dreamsigns: DreamsignData[];
+  dreamsigns: LocalizedDreamsign[];
   tides: DreamAvatarTideView[];
 }) {
   return (
@@ -407,7 +421,10 @@ function DreamAvatarBlock({
           <DreamAvatarPortrait
             dreamAvatar={dreamAvatar}
             variant="panel"
-            profile={{ id: dreamAvatar.id, ability: dreamAvatar.renderedText }}
+            profile={{
+              id: dreamAvatar.id,
+              ability: dreamAvatar.renderedText,
+            }}
           />
         </div>
       </div>
@@ -416,7 +433,7 @@ function DreamAvatarBlock({
 }
 
 /** The collected dreamsigns as hoverable art tiles. */
-function DreamsignsBlock({ dreamsigns }: { dreamsigns: DreamsignData[] }) {
+function DreamsignsBlock({ dreamsigns }: { dreamsigns: LocalizedDreamsign[] }) {
   const resolve = useLocalizer();
   return (
     <section
@@ -436,10 +453,12 @@ function DreamsignsBlock({ dreamsigns }: { dreamsigns: DreamsignData[] }) {
         <div
           style={{ font: token("--t-body-sm"), color: token("--text-muted") }}
         >
-          {resolve(tx(
-            "None collected yet.",
-            "Player-facing message for the deck viewer no dreamsigns interface state.",
-          ))}
+          {resolve(
+            tx(
+              "None collected yet.",
+              "Player-facing message for the deck viewer no dreamsigns interface state.",
+            ),
+          )}
         </div>
       ) : (
         <div
@@ -522,7 +541,10 @@ function ControlBar({
   const typeLabel = (value: DesktopDeckFilterSort["type"]): LocalizedString => {
     switch (value) {
       case "all":
-        return tx("All", "Visible card-browser type filter option that keeps every card type.");
+        return tx(
+          "All",
+          "Visible card-browser type filter option that keeps every card type.",
+        );
       case "Character":
         return tx(
           "Characters",
@@ -618,11 +640,11 @@ function ControlBar({
           leadingGlyph={GLYPHS.filter}
           align="start"
           ariaLabel={tx(
-              "Filter by subtype",
-              "Player-facing message for the deck filter subtype accessible name interface state.",
-            )}
+            "Filter by subtype",
+            "Player-facing message for the deck filter subtype accessible name interface state.",
+          )}
           options={subtypeOptions.map((option) =>
-            option.authoredLabel === undefined
+            option.label === undefined
               ? {
                   value: option.value,
                   label: tx(
@@ -630,7 +652,7 @@ function ControlBar({
                     "Deck filter option that includes every character subtype.",
                   ),
                 }
-              : { value: option.value, authoredLabel: option.authoredLabel },
+              : { value: option.value, label: option.label },
           )}
           value={filterSort.subtype}
           onChange={(value) => onChange({ subtype: value })}
@@ -641,9 +663,9 @@ function ControlBar({
         leadingGlyph={GLYPHS.sort}
         align="start"
         ariaLabel={tx(
-            "Sort order",
-            "Player-facing message for the deck sort accessible name interface state.",
-          )}
+          "Sort order",
+          "Player-facing message for the deck sort accessible name interface state.",
+        )}
         options={DECK_SORT_OPTIONS.map((option) => ({
           value: option.value,
           label: sortLabel(option.value),
@@ -660,17 +682,17 @@ function ControlBar({
             value: "asc",
             symbol: "↑",
             ariaLabel: tx(
-                "Sort ascending",
-                "Accessible command name for sorting the visible card collection in ascending order.",
-              ),
+              "Sort ascending",
+              "Accessible command name for sorting the visible card collection in ascending order.",
+            ),
           },
           {
             value: "desc",
             symbol: "↓",
             ariaLabel: tx(
-                "Sort descending",
-                "Accessible command name for sorting the visible card collection in descending order.",
-              ),
+              "Sort descending",
+              "Accessible command name for sorting the visible card collection in descending order.",
+            ),
           },
         ]}
         value={filterSort.direction}

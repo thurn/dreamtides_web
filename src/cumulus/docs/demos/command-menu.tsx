@@ -68,22 +68,24 @@ function CommandMenuDemo() {
           kind: "appChrome",
           trigger: {
             glyph: GLYPHS.gear,
-            label: assertLocalized(`Open app-chrome commands (${String(count)} selected)`),
+            label: assertLocalized(
+              `Open app-chrome commands (${String(count)} selected)`,
+            ),
             corner: "topEnd",
           },
           actions,
         }}
       />
       <GlassButton
-        authoredLabel="Open context commands"
+        label={assertLocalized("Open context commands")}
         onPress={() => setContextOpen(true)}
       />
       {contextOpen && (
         <CommandMenu
           model={{
             kind: "context",
-            authoredTitle: "Demo Card",
-            authoredSubtitle: "Player · Hand",
+            title: assertLocalized("Demo Card"),
+            subtitle: assertLocalized("Player · Hand"),
             actions: contextDemoActions,
             anchor: { x: 160, y: 160 },
             onDismiss: () => setContextOpen(false),

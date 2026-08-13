@@ -2,7 +2,7 @@ import type { CharacterDialogueModel } from "../components/overlay/CharacterDial
 
 /** Shared presentation contract for delayed tutorial speech bubbles. */
 export interface TutorialSpeechBubbleView {
-  readonly id?: string;
+  readonly id: string;
   readonly model: CharacterDialogueModel;
   readonly delaySeconds?: number;
   readonly horizontalOffset: number;

@@ -70,9 +70,7 @@ export interface IconButtonProps {
   /** A `data-testid` for selecting the disc in tests. */
   testId?: string;
   /** Localized accessible name forwarded unresolved to the final button. */
-  label?: LocalizedString;
-  /** Canonical authored or developer-only accessible name. */
-  authoredLabel?: string;
+  label: LocalizedString;
 }
 
 /**
@@ -86,7 +84,6 @@ export function IconButton({
   overlayGlyph,
   size = "md",
   label,
-  authoredLabel,
   onPress,
   disabled = false,
   placement = "onMedia",
@@ -94,16 +91,11 @@ export function IconButton({
   ariaControls,
   testId,
 }: IconButtonProps): ReactElement {
-  if ((label === undefined) === (authoredLabel === undefined)) {
-    throw new Error("IconButton requires exactly one of label or authoredLabel.");
-  }
   const spec = ICON_BUTTON_SIZES[size];
   return (
     <Pressable
       as="button"
-      {...(label === undefined
-        ? { authoredAriaLabel: authoredLabel }
-        : { ariaLabelMessage: label })}
+      ariaLabelMessage={label}
       aria-expanded={ariaExpanded}
       aria-controls={ariaControls}
       data-glass-placement={placement}
@@ -125,7 +117,9 @@ export function IconButton({
       }}
     >
       <span
-        data-icon-button-glyph-stack={overlayGlyph === undefined ? undefined : ""}
+        data-icon-button-glyph-stack={
+          overlayGlyph === undefined ? undefined : ""
+        }
         style={{
           position: "relative",
           display: "grid",

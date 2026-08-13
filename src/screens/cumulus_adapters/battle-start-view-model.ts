@@ -4,6 +4,9 @@ import type { TutorialBattleStartConfiguration } from "../../types/tutorial";
 import { artRef } from "../../cumulus/primitives/art";
 import type { BattleStartView } from "../../cumulus/screens/BattleStartScreen";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
+import { localizedSourceText } from "../../runtime/localization/runtime";
+import { tx } from "@trox/runtime";
+import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
 
 export type BattleStartInit = BattleInit;
 
@@ -44,14 +47,16 @@ export function buildBattleStartView(
         : null,
     dreamAvatar: {
       id: enemy.id,
-      name: enemy.name,
-      title: enemy.subtitle,
+      name: localizedSourceText(enemy.name),
+      title: localizedSourceText(enemy.subtitle),
       imageNumber: enemy.imageNumber ?? "001",
-      ability: enemy.abilityText.trim(),
+      ability: localizedSourceText(enemy.abilityText.trim()),
       abilityActive: init.opponentAbilityActive,
     },
     dreamsigns: (enemy.dreamsigns ?? []).flatMap((dreamsign) =>
-      dreamsign.id === undefined ? [] : [{ ...dreamsign, id: dreamsign.id }],
+      dreamsign.id === undefined
+        ? []
+        : [localizedDreamsign(dreamsign, "Battle start")],
     ),
     signatureCards: (enemy.signatureCards ?? []).flatMap((summary) => {
       const card = cardDatabase.get(summary.cardNumber);
@@ -75,9 +80,11 @@ export function buildBattleStartView(
                 kind: "character-portrait" as const,
                 characterId: "mira",
               },
-              portraitAlt: "Mira",
-              speakerName: "Mira",
-              text: battleStartGuidance.speechBubble.text,
+              portraitAlt: tx("Mira", "Name of the tutorial guide."),
+              speakerName: tx("Mira", "Name of the tutorial guide."),
+              text: localizedSourceText(
+                battleStartGuidance.speechBubble.text,
+              ),
             },
             delaySeconds: tutorialSpeechBubbleDelaySeconds(
               battleStartGuidance.speechBubble,

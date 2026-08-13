@@ -1,5 +1,6 @@
 // Pure view-model builder for the Cumulus Purge site.
 
+import type { LocalizedString } from "@trox/runtime";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import {
   maxAffordablePurgeCount,
@@ -28,6 +29,7 @@ import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 import { projectGuideView } from "./guide-view-model";
 import type { TransfigurationData } from "../../types/transfiguration-data";
 import type { SitesData } from "../../types/sites-data";
+import { localizedSourceText } from "../../runtime/localization/runtime";
 
 /** Resolve Master Takeshi, the resident guide for Purge. */
 export function resolvePurgeGuide(
@@ -40,7 +42,7 @@ export function resolvePurgeGuide(
 /** Build the guide slice shown at the top of the purge screen. */
 export function buildPurgeGuideView(
   guide: DreamGuideContent,
-  guideLine: string,
+  guideLine: LocalizedString,
 ): PurgeGuideView {
   return projectGuideView(guide, guideLine);
 }
@@ -83,7 +85,7 @@ export function buildPurgeSiteView(params: {
   cardDatabase: Map<number, CardData>;
   transfigurationData: TransfigurationData;
   guide: DreamGuideContent;
-  guideLine: string;
+  guideLine: LocalizedString;
   tutorialConfiguration?: TutorialSiteConfiguration;
   economyData: EconomyData;
   sitesData: SitesData;
@@ -108,10 +110,19 @@ export function buildPurgeSiteView(params: {
     params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
 
   return {
-    presentation: params.sitesData.siteTypes.Purge.presentation as Extract<
+    presentation: (() => {
+      const presentation = params.sitesData.siteTypes.Purge.presentation as Extract<
       import("../../types/sites-data").SitePresentation,
       { kind: "purge" }
-    >,
+      >;
+      return {
+        kind: presentation.kind,
+        title: localizedSourceText(presentation.title),
+        instruction: localizedSourceText(presentation.instruction),
+        purgeAction: (count: number) =>
+          localizedSourceText(presentation.purgeAction, { count }),
+      };
+    })(),
     siteId: params.site.id,
     scene,
     guide: buildPurgeGuideView(params.guide, params.guideLine),

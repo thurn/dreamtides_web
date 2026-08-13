@@ -14,7 +14,14 @@ import {
   JOURNEY_RESULT_CONTENT_MAX_WIDTH_PX,
   JOURNEY_RESULT_TOP_CHROME_CLEARANCE,
 } from "./journey-result-layout";
-import { tx, txa, plural, one, other, type LocalizedString } from "@trox/runtime";
+import {
+  tx,
+  txa,
+  plural,
+  one,
+  other,
+  type LocalizedString,
+} from "@trox/runtime";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 export interface JourneyCompleteStatView {
@@ -25,7 +32,7 @@ export interface JourneyCompleteStatView {
 
 export interface JourneyCompleteDreamAvatarView extends DreamAvatarVisual {
   id: string;
-  ability: string;
+  ability: LocalizedString;
 }
 
 export interface JourneyCompleteView {
@@ -47,15 +54,33 @@ export function JourneyCompleteScreen({
   const statLabel = (stat: JourneyCompleteStatView): LocalizedString => {
     switch (stat.id) {
       case "battles":
-        return txa(plural(stat.value, [one("Battle Won"), other("Battles Won")]), {}, "Label beneath the completed Journey's number of battles won. The number is rendered separately above.");
+        return txa(
+          plural(stat.value, [one("Battle Won"), other("Battles Won")]),
+          {},
+          "Label beneath the completed Journey's number of battles won. The number is rendered separately above.",
+        );
       case "dreamscapes":
-        return txa(plural(stat.value, [one("Dreamscape"), other("Dreamscapes")]), {}, "Label beneath the number of Dreamscapes in a completed Journey. The number is rendered separately above.");
+        return txa(
+          plural(stat.value, [one("Dreamscape"), other("Dreamscapes")]),
+          {},
+          "Label beneath the number of Dreamscapes in a completed Journey. The number is rendered separately above.",
+        );
       case "cards":
-        return tx("Final Deck", "Label beneath the number of cards in the completed Journey's final deck.");
+        return tx(
+          "Final Deck",
+          "Label beneath the number of cards in the completed Journey's final deck.",
+        );
       case "dreamsigns":
-        return txa(plural(stat.value, [one("Dreamsign"), other("Dreamsigns")]), {}, "Label beneath the number of Dreamsigns in a completed Journey. The number is rendered separately above.");
+        return txa(
+          plural(stat.value, [one("Dreamsign"), other("Dreamsigns")]),
+          {},
+          "Label beneath the number of Dreamsigns in a completed Journey. The number is rendered separately above.",
+        );
       case "essence":
-        return tx("Essence Remaining", "Label beneath the remaining Essence at the end of a Journey.");
+        return tx(
+          "Essence Remaining",
+          "Label beneath the remaining Essence at the end of a Journey.",
+        );
     }
   };
 
@@ -127,10 +152,12 @@ export function JourneyCompleteScreen({
                   color: token("--text-primary"),
                 }}
               >
-                {resolve(tx(
-                  "Journey Complete",
-                  "Player-facing message for the journey complete title interface state.",
-                ))}
+                {resolve(
+                  tx(
+                    "Journey Complete",
+                    "Player-facing message for the journey complete title interface state.",
+                  ),
+                )}
               </h1>
             </header>
 

@@ -1,4 +1,9 @@
-import { tx, txa } from "@trox/runtime";
+import {
+  assertLocalized,
+  tx,
+  txa,
+  type LocalizedString,
+} from "@trox/runtime";
 import { MotionConfig, motion, useReducedMotion } from "framer-motion";
 import {
   useCallback,
@@ -99,8 +104,8 @@ export type TutorialDialogueView =
       readonly horizontalOffset?: number;
       readonly verticalOffset?: number;
       readonly bubbleWidth?: number;
-      readonly speakerName: string;
-      readonly text: string;
+      readonly speakerName: LocalizedString;
+      readonly text: LocalizedString;
     };
 
 export interface TutorialChallengeParticipantView {
@@ -134,7 +139,7 @@ export interface TutorialView {
   readonly currentAction: TutorialAction | null;
   readonly howToPlay: {
     readonly actionId: string;
-    readonly text: string;
+    readonly text: LocalizedString;
     readonly wait: number;
     readonly trigger: TutorialHowToPlayTrigger;
     readonly companion?: DreamwellCardModel | null;
@@ -158,7 +163,7 @@ export interface TutorialEditorView {
   readonly actions: readonly TutorialAction[];
   readonly tutorialCardConstants: TutorialCardConstants;
   readonly saveStatus: TutorialEditorSaveStatus;
-  readonly saveError: string | null;
+  readonly saveError: LocalizedString | null;
 }
 
 export interface TutorialScreenProps {
@@ -371,12 +376,13 @@ function TutorialHowToPlayDialog({
   staged,
   onClose,
 }: {
-  readonly text: string;
+  readonly text: LocalizedString;
   readonly companion: DreamwellCardModel | null;
   readonly cardWidth: number;
   readonly staged: boolean;
   readonly onClose: () => void;
 }): ReactElement {
+  const resolve = useLocalizer();
   const desktop = useIsDesktop();
   const paragraphStyle = {
     margin: 0,
@@ -384,7 +390,7 @@ function TutorialHowToPlayDialog({
     font: desktop ? token("--t-tutorial-instruction") : token("--t-lead"),
     whiteSpace: "pre-line",
   } as const;
-  const paragraphs = parseTutorialInstructionMarkup(text);
+  const paragraphs = parseTutorialInstructionMarkup(resolve(text));
 
   return (
     <div
@@ -394,13 +400,13 @@ function TutorialHowToPlayDialog({
     >
       <GlassDialog
         title={tx(
-            "How to Play",
-            "Player-facing message for the tutorial how to play title interface state.",
-          )}
+          "How to Play",
+          "Player-facing message for the tutorial how to play title interface state.",
+        )}
         closeLabel={tx(
-            "Close how to play",
-            "Player-facing message for the tutorial how to play close interface state.",
-          )}
+          "Close how to play",
+          "Player-facing message for the tutorial how to play close interface state.",
+        )}
         presentation="popup"
         chrome="flowing-close"
         companion={
@@ -1690,6 +1696,7 @@ export function TutorialScreen({
   onReplay,
   onPlayFromAction,
 }: TutorialScreenProps): ReactElement {
+  const resolve = useLocalizer();
   const desktop = useIsDesktop();
   const dockEditor = useIsDesktop(TUTORIAL_EDITOR_DOCK_MIN_WIDTH);
   const reduceMotion = useReducedMotion() === true;
@@ -1970,7 +1977,7 @@ export function TutorialScreen({
             },
             inspector: {
               ...sourceBattle.inspector,
-              opponentName: view.dreamAvatars.enemy.visual.name,
+              opponentName: resolve(view.dreamAvatars.enemy.visual.name),
             },
           }
         : {}),
@@ -2000,7 +2007,9 @@ export function TutorialScreen({
             inspector: {
               ...sourceBattle.inspector,
               ...(enemySettled
-                ? { opponentName: view.dreamAvatars.enemy.visual.name }
+                ? {
+                    opponentName: resolve(view.dreamAvatars.enemy.visual.name),
+                  }
                 : {}),
               sides: {
                 ...sourceBattle.inspector.sides,
@@ -3093,7 +3102,7 @@ export function TutorialScreen({
             <IconButton
               glyph={GLYPHS.sidebarLeft}
               size="sm"
-              authoredLabel="Open tutorial editor"
+              label={assertLocalized("Open tutorial editor")}
               ariaExpanded={false}
               ariaControls="cumulus-tutorial-editor"
               testId="tutorial-editor-trigger"

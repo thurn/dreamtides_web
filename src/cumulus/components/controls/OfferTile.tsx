@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactElement } from "react";
+import type { LocalizedString } from "@trox/runtime";
 import {
   cardIdenticonUri,
   cardImageUrl,
@@ -53,7 +54,7 @@ export interface OfferTileDreamsign {
   /** Canonical dreamsign UUID. */
   id: string;
   /** Resolved display name retained with the surfaced object model. */
-  name: string;
+  name: LocalizedString;
   /** Dreamsign artwork as a named Cumulus art reference. */
   art: ArtRef;
 }
@@ -63,7 +64,7 @@ export interface OfferTileSite {
   /** Stable site type or fixture id. */
   id: string;
   /** Resolved display name retained with the surfaced object model. */
-  name: string;
+  name: LocalizedString;
   /** The site's named design-system glyph. */
   glyph: Glyph;
 }
@@ -114,7 +115,7 @@ export type OfferTileCategory =
       /** Category whose canonical subtype or package name is data-defined. */
       kind: "subtype" | "package";
       /** Canonical display name inserted into the category-specific phrase. */
-      name: string;
+      name: LocalizedString;
     };
 
 /**
@@ -223,7 +224,7 @@ export function OfferTile({
       as="button"
       ref={binding.ref}
       {...binding.sourceProps}
-      aria-label={description}
+      ariaLabelMessage={description}
       data-testid={testId}
       data-offer-tile=""
       data-offer-tile-kind={model.kind}

@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 import type { CardData } from "../../types/cards";
 import type { DreamAvatarContent } from "../../types/content";
 import type { DeckEntry, DreamAvatar, Dreamsign } from "../../types/journey";
@@ -140,7 +143,7 @@ describe("buildDesktopDeckView", () => {
     const signs = [dreamsign];
     const view = buildDesktopDeckView(transfigurationData, [], database(), null, signs);
 
-    expect(view.dreamsigns).toEqual(signs);
+    expect(view.dreamsigns).toMatchObject(signs);
     // A copy, not the caller's array, so the view cannot alias live state.
     expect(view.dreamsigns).not.toBe(signs);
   });

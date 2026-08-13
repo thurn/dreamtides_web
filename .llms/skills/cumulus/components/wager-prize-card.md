@@ -19,14 +19,14 @@ When a Dreamsign is present, the entire prize face is its hover and press reveal
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `prizeId` | `WagerPrizeCardId` = `"six" \| "nine" \| "jack" \| "ladder-climb" \| "starway-1" \| "starway-2" \| "starway-3" \| "blackjack"` | yes | — | Stable Gamble choice represented by this prize object. |
-| `targetLabel` | `string` | yes | — | Draw condition shown as authored compact notation. |
+| `targetLabel` | `LocalizedString` | yes | — | Draw condition shown as authored compact notation. |
 | `size` | `WagerPrizeCardSize` = `"wagerCompact" \| "wager"` | no | — | Named desktop or mobile square size. Defaults to `wager`. |
 | `drawnCard` | `{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } \| null` | yes | — | Committed card shown on the reverse face after a bet. |
 | `revealDrawnCard` | `boolean` | no | — | Turn the prize face over to its committed card. |
 | `dreamsignTestId` | `string` | no | — | Optional stable selector for the prize Dreamsign name. |
 | `emphasis` | `WagerPrizeCardEmphasis` = `"standard" \| "current" \| "muted"` | no | — | Accent current tier, foreground-muted alternative, or standard priority. |
 | `essenceReward` | `number` | yes | — | Essence awarded on a win. |
-| `rewardDreamsign` | `Dreamsign \| null` | yes | — | Dreamsign appended to the Essence reward, when present. |
+| `rewardDreamsign` | `LocalizedDreamsign \| null` | yes | — | Dreamsign appended to the Essence reward, when present. |
 
 ## Usage
 
@@ -35,7 +35,7 @@ When a Dreamsign is present, the entire prize face is its hover and press reveal
 ```tsx
 <WagerPrizeCard
   prizeId="jack"
-  targetLabel="J-A"
+  targetLabel={assertLocalized("J-A")}
   essenceReward={200}
   rewardDreamsign={dreamsign}
   drawnCard={null}
@@ -60,7 +60,7 @@ When a Dreamsign is present, the entire prize face is its hover and press reveal
 ```tsx
 <WagerPrizeCard
   prizeId="jack"
-  targetLabel="J-A"
+  targetLabel={assertLocalized("J-A")}
   essenceReward={200}
   rewardDreamsign={dreamsign}
   drawnCard={{ rank: "Q", suit: "hearts" }}

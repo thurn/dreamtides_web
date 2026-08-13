@@ -29,9 +29,9 @@ The component owns its named portrait and bubble scales, centered pointer with c
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `portrait` | `CharacterDialoguePortraitArt` | no | Typed portrait art shown inside the circular frame. |
-| `portraitAlt` | `string` | no | Accessible description of the portrait art. |
-| `speakerName` | `string` | no | Character name shown by the speech bubble. |
-| `text` | `string` | no | Spoken line shown with tutorial highlights and canonical inline rules glyphs. |
+| `portraitAlt` | `LocalizedString` | no | Accessible description of the portrait art. |
+| `speakerName` | `LocalizedString` | no | Character name shown by the speech bubble. |
+| `text` | `LocalizedString` | no | Spoken line shown with tutorial highlights and canonical inline rules glyphs. |
 
 ## Usage
 

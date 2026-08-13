@@ -31,7 +31,7 @@ The glass status card for one battle participant: centered current and maximum e
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `id` | `string` | no |  |
-| `ability` | `string` | no |  |
+| `ability` | `LocalizedString` | no |  |
 | `unavailable` | `boolean` | yes |  |
 
 ## Usage

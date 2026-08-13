@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CardBrowserPanel } from "../cumulus/components/card/CardBrowserPanel";
 import { RulesText } from "../cumulus/components/card/RulesText";
@@ -94,14 +95,20 @@ function renderedEffect(
         </span>
       );
     }
-    const dreamsign = references.dreamsignsById.get(part.dreamsignId.toLowerCase());
+    const dreamsign = references.dreamsignsById.get(
+      part.dreamsignId.toLowerCase(),
+    );
     return (
       <span
         data-runtime-dreamsign-id={part.dreamsignId}
         data-runtime-dreamsign-placeholder={part.placeholder}
         key={`${part.placeholder}-${part.dreamsignId}-${String(index)}`}
       >
-        <u data-entity-unresolved={dreamsign === undefined ? "dreamsign" : undefined}>
+        <u
+          data-entity-unresolved={
+            dreamsign === undefined ? "dreamsign" : undefined
+          }
+        >
           {dreamsign?.name ?? part.dreamsignName}
         </u>
       </span>
@@ -113,7 +120,9 @@ function messageFor(error: unknown): string {
   return error instanceof Error ? error.message : "The request failed.";
 }
 
-function serverData(loaded: ExplorationEditorLoadResult): ExplorationEditorServerData {
+function serverData(
+  loaded: ExplorationEditorLoadResult,
+): ExplorationEditorServerData {
   const { cards: _cards, dreamsigns: _dreamsigns, ...data } = loaded;
   return data;
 }
@@ -126,12 +135,16 @@ function replaceAction(
 ): ExplorationEditorServerData {
   return {
     ...data,
-    encounters: data.encounters.map((encounter) => encounter.cardId !== cardId
-      ? encounter
-      : {
-          ...encounter,
-          actions: encounter.actions.map((entry, index) => index === slot ? action : entry),
-        }),
+    encounters: data.encounters.map((encounter) =>
+      encounter.cardId !== cardId
+        ? encounter
+        : {
+            ...encounter,
+            actions: encounter.actions.map((entry, index) =>
+              index === slot ? action : entry,
+            ),
+          },
+    ),
   };
 }
 
@@ -142,9 +155,9 @@ function replaceProse(
 ): ExplorationEditorServerData {
   return {
     ...data,
-    encounters: data.encounters.map((encounter) => encounter.cardId === cardId
-      ? { ...encounter, prose }
-      : encounter),
+    encounters: data.encounters.map((encounter) =>
+      encounter.cardId === cardId ? { ...encounter, prose } : encounter,
+    ),
   };
 }
 
@@ -153,25 +166,60 @@ function actionTarget(cardId: string, slot: number): string {
 }
 
 const EFFECT_FIELD_KEYS = [
-  "predicate", "count", "cardId", "dreamsignId", "packCount", "packSize",
-  "offerCount", "essencePerSpark", "essencePerCard", "sparkBonus", "essence",
-  "energyCostReduction", "subtype", "subtypeOptions", "nightmareCount",
-  "transfiguration", "deckTarget", "cardType", "siteType",
+  "predicate",
+  "count",
+  "cardId",
+  "dreamsignId",
+  "packCount",
+  "packSize",
+  "offerCount",
+  "essencePerSpark",
+  "essencePerCard",
+  "sparkBonus",
+  "essence",
+  "energyCostReduction",
+  "subtype",
+  "subtypeOptions",
+  "nightmareCount",
+  "transfiguration",
+  "deckTarget",
+  "cardType",
+  "siteType",
 ] as const;
 
-const FOLLOWUP_EFFECT_KINDS: ReadonlySet<ExplorationEditorAction["effectKind"]> =
-  new Set([
-    "purge-and-copy", "transfigure-selected", "purge-selected", "purge-for-essence",
-    "change-subtype-selected", "change-card-type-selected", "copy-selected-card", "copy-selected-cards",
-    "copy-offered-deck-card", "replace-selected", "replace-selected-with-card",
-    "transfigure-fixed-selected", "draft-card", "transfigured-card-draft", "take-cards",
-    "choose-pack", "change-subtype-all", "gain-dreamsign", "gain-random-dreamsign",
-    "gain-offered-dreamsign", "gain-nightmare-and-offered-dreamsign",
-    "replace-selected-dreamsign-with-offered", "purge-selected-dreamsign-and-gain-random",
-    "gain-nightmare-and-dreamsign", "purge-dreamsign-for-essence", "choose-dream-avatar",
-    "choose-site-type", "take-transfigured-cards-and-gain-nightmares",
-    "purge-one-transfigure-and-copy-others",
-  ]);
+const FOLLOWUP_EFFECT_KINDS: ReadonlySet<
+  ExplorationEditorAction["effectKind"]
+> = new Set([
+  "purge-and-copy",
+  "transfigure-selected",
+  "purge-selected",
+  "purge-for-essence",
+  "change-subtype-selected",
+  "change-card-type-selected",
+  "copy-selected-card",
+  "copy-selected-cards",
+  "copy-offered-deck-card",
+  "replace-selected",
+  "replace-selected-with-card",
+  "transfigure-fixed-selected",
+  "draft-card",
+  "transfigured-card-draft",
+  "take-cards",
+  "choose-pack",
+  "change-subtype-all",
+  "gain-dreamsign",
+  "gain-random-dreamsign",
+  "gain-offered-dreamsign",
+  "gain-nightmare-and-offered-dreamsign",
+  "replace-selected-dreamsign-with-offered",
+  "purge-selected-dreamsign-and-gain-random",
+  "gain-nightmare-and-dreamsign",
+  "purge-dreamsign-for-essence",
+  "choose-dream-avatar",
+  "choose-site-type",
+  "take-transfigured-cards-and-gain-nightmares",
+  "purge-one-transfigure-and-copy-others",
+]);
 
 function ExplorationCardPicker({
   cards,
@@ -190,28 +238,41 @@ function ExplorationCardPicker({
 }) {
   const normalizedQuery = query.trim().toLocaleLowerCase();
   const visible = cards
-    .filter((card) => normalizedQuery === "" ||
-      card.name.toLocaleLowerCase().includes(normalizedQuery) ||
-      card.id.toLowerCase().includes(normalizedQuery))
-    .sort((left, right) => left.name.localeCompare(right.name) || left.id.localeCompare(right.id));
+    .filter(
+      (card) =>
+        normalizedQuery === "" ||
+        card.name.toLocaleLowerCase().includes(normalizedQuery) ||
+        card.id.toLowerCase().includes(normalizedQuery),
+    )
+    .sort(
+      (left, right) =>
+        left.name.localeCompare(right.name) || left.id.localeCompare(right.id),
+    );
   const shown = visible.slice(0, 60);
   return (
-    <div className="exploration-editor-card-picker" role="dialog" aria-modal="true" aria-label="Choose a card">
+    <div
+      className="exploration-editor-card-picker"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Choose a card"
+    >
       <CardBrowserPanel
-        authoredTitle={"Choose a card"}
-        authoredSubtitle={`${String(shown.length)} shown · ${String(visible.length)} matches · ${String(cards.length)} total · UUID-safe selection`}
+        title={assertLocalized("Choose a card")}
+        subtitle={assertLocalized(
+          `${String(shown.length)} shown · ${String(visible.length)} matches · ${String(cards.length)} total · UUID-safe selection`,
+        )}
         rightAccessory={{
           kind: "iconButton",
           button: {
             glyph: GLYPHS.close,
-            authoredLabel: "Close card picker",
+            label: assertLocalized("Close card picker"),
             onPress: onClose,
             testId: "exploration-card-picker-close",
           },
         }}
         toolbar={{
           search: {
-            authoredLabel: "Search cards by name or UUID",
+            label: assertLocalized("Search cards by name or UUID"),
             value: query,
             onChange: onQueryChange,
             testId: "exploration-card-picker-search",
@@ -221,10 +282,13 @@ function ExplorationCardPicker({
           entryId: card.id,
           model: { cardId: card.id, displaySnapshot: card },
           selected: card.id.toLowerCase() === selectedCardId?.toLowerCase(),
-          caption: { kind: "authoredText", text: card.id.slice(0, 8) },
+          caption: {
+            kind: "text",
+            message: assertLocalized(card.id.slice(0, 8)),
+          },
           testId: `exploration-card-option-${card.id}`,
         }))}
-        authoredEmptyLabel="No cards match this search."
+        emptyLabel={assertLocalized("No cards match this search.")}
         presentation="fullScreen"
         testId="exploration-card-picker"
         onCardPress={onSelect}
@@ -251,74 +315,108 @@ function ExplorationEditorRow({
   data: ExplorationEditorServerData;
   catalog: ReferenceCatalog;
   saveState: EditableSaveState;
-  setSaveState: (update: (state: EditableSaveState) => EditableSaveState) => void;
+  setSaveState: (
+    update: (state: EditableSaveState) => EditableSaveState,
+  ) => void;
   onServerData: (data: ExplorationEditorServerData) => void;
-  onOptimisticData: (update: (data: ExplorationEditorServerData) => ExplorationEditorServerData) => void;
+  onOptimisticData: (
+    update: (data: ExplorationEditorServerData) => ExplorationEditorServerData,
+  ) => void;
   onPickCard: (target: CardPickerTarget) => void;
 }) {
   const rowRef = useRef<HTMLElement | null>(null);
   const actionRevisionRef = useRef<Record<string, number>>({});
-  const [actionStatuses, setActionStatuses] = useState<Record<string, {
-    status: ActionSaveStatus;
-    message: string;
-    revision: number;
-  }>>({});
+  const [actionStatuses, setActionStatuses] = useState<
+    Record<
+      string,
+      {
+        status: ActionSaveStatus;
+        message: string;
+        revision: number;
+      }
+    >
+  >({});
   const definitions = useMemo(
     () => new Map(data.effectSchemas.map((schema) => [schema.kind, schema])),
     [data.effectSchemas],
   );
-  const effectOptions = useMemo(() => data.effectSchemas.map((schema) => ({
-    value: schema.kind,
-    label: schema.label,
-  })), [data.effectSchemas]);
+  const effectOptions = useMemo(
+    () =>
+      data.effectSchemas.map((schema) => ({
+        value: schema.kind,
+        label: schema.label,
+      })),
+    [data.effectSchemas],
+  );
 
-  const saveAction = useCallback(async (
-    slot: number,
-    nextAction: ExplorationEditorAction,
-    eventName: string,
-    eventData: Record<string, unknown>,
-  ) => {
-    const key = actionTarget(encounter.cardId, slot);
-    const previous = encounter.actions[slot];
-    const revision = (actionRevisionRef.current[key] ?? 0) + 1;
-    actionRevisionRef.current[key] = revision;
-    setActionStatuses((current) => ({
-      ...current,
-      [key]: { status: "saving", message: "", revision },
-    }));
-    onOptimisticData((current) => replaceAction(current, encounter.cardId, slot, nextAction));
-    try {
-      const response = await client.saveAction({
-        cardId: encounter.cardId,
-        slot,
-        action: nextAction,
-        clientRevision: revision,
-      });
-      if (response.clientRevision !== revision) {
-        throw new Error("The server returned a mismatched action confirmation.");
+  const saveAction = useCallback(
+    async (
+      slot: number,
+      nextAction: ExplorationEditorAction,
+      eventName: string,
+      eventData: Record<string, unknown>,
+    ) => {
+      const key = actionTarget(encounter.cardId, slot);
+      const previous = encounter.actions[slot];
+      const revision = (actionRevisionRef.current[key] ?? 0) + 1;
+      actionRevisionRef.current[key] = revision;
+      setActionStatuses((current) => ({
+        ...current,
+        [key]: { status: "saving", message: "", revision },
+      }));
+      onOptimisticData((current) =>
+        replaceAction(current, encounter.cardId, slot, nextAction),
+      );
+      try {
+        const response = await client.saveAction({
+          cardId: encounter.cardId,
+          slot,
+          action: nextAction,
+          clientRevision: revision,
+        });
+        if (response.clientRevision !== revision) {
+          throw new Error(
+            "The server returned a mismatched action confirmation.",
+          );
+        }
+        if (actionRevisionRef.current[key] !== revision) return;
+        onServerData(response.data);
+        setActionStatuses((current) =>
+          current[key]?.revision !== revision
+            ? current
+            : {
+                ...current,
+                [key]: { status: "saved", message: "", revision },
+              },
+        );
+        logEvent(eventName, { cardId: encounter.cardId, slot, ...eventData });
+      } catch (error) {
+        if (actionRevisionRef.current[key] !== revision) return;
+        onOptimisticData((current) =>
+          replaceAction(current, encounter.cardId, slot, previous),
+        );
+        setActionStatuses((current) =>
+          current[key]?.revision !== revision
+            ? current
+            : {
+                ...current,
+                [key]: {
+                  status: "error",
+                  message: messageFor(error),
+                  revision,
+                },
+              },
+        );
+        logEvent("exploration_editor_action_save_failed", {
+          cardId: encounter.cardId,
+          slot,
+          eventName,
+          message: messageFor(error),
+        });
       }
-      if (actionRevisionRef.current[key] !== revision) return;
-      onServerData(response.data);
-      setActionStatuses((current) => current[key]?.revision !== revision ? current : {
-        ...current,
-        [key]: { status: "saved", message: "", revision },
-      });
-      logEvent(eventName, { cardId: encounter.cardId, slot, ...eventData });
-    } catch (error) {
-      if (actionRevisionRef.current[key] !== revision) return;
-      onOptimisticData((current) => replaceAction(current, encounter.cardId, slot, previous));
-      setActionStatuses((current) => current[key]?.revision !== revision ? current : {
-        ...current,
-        [key]: { status: "error", message: messageFor(error), revision },
-      });
-      logEvent("exploration_editor_action_save_failed", {
-        cardId: encounter.cardId,
-        slot,
-        eventName,
-        message: messageFor(error),
-      });
-    }
-  }, [client, encounter, onOptimisticData, onServerData]);
+    },
+    [client, encounter, onOptimisticData, onServerData],
+  );
 
   function editable(
     target: FieldTarget,
@@ -328,12 +426,23 @@ function ExplorationEditorRow({
     mode: "single-line" | "multiline" = "multiline",
   ) {
     const entry = fieldSaveEntry(saveState, target);
-    const commit = async (rawValue: string | number, keepInvalidDraft: boolean) => {
+    const commit = async (
+      rawValue: string | number,
+      keepInvalidDraft: boolean,
+    ) => {
       const nextValue = String(rawValue);
       if (nextValue.trim() === "") {
-        setSaveState((state) => keepInvalidDraft
-          ? rejectFieldEdit(state, target, nextValue, value, "Text cannot be blank.")
-          : cancelFieldEdit(state, target, value));
+        setSaveState((state) =>
+          keepInvalidDraft
+            ? rejectFieldEdit(
+                state,
+                target,
+                nextValue,
+                value,
+                "Text cannot be blank.",
+              )
+            : cancelFieldEdit(state, target, value),
+        );
         return;
       }
       if (nextValue === value) {
@@ -348,18 +457,29 @@ function ExplorationEditorRow({
       });
       try {
         await save(nextValue, revision);
-        setSaveState((state) => completeFieldSave(state, target, revision, nextValue));
+        setSaveState((state) =>
+          completeFieldSave(state, target, revision, nextValue),
+        );
       } catch (error) {
-        const rejected = error instanceof EditorApiRequestError && error.status < 500;
+        const rejected =
+          error instanceof EditorApiRequestError && error.status < 500;
         logEvent("exploration_editor_inline_save_failed", {
           cardId: target.cardId,
           field: target.field,
           validationFailure: rejected,
           message: messageFor(error),
         });
-        setSaveState((state) => rejected
-          ? rejectSubmittedFieldSave(state, target, revision, value, messageFor(error))
-          : failFieldSave(state, target, revision, value, messageFor(error)));
+        setSaveState((state) =>
+          rejected
+            ? rejectSubmittedFieldSave(
+                state,
+                target,
+                revision,
+                value,
+                messageFor(error),
+              )
+            : failFieldSave(state, target, revision, value, messageFor(error)),
+        );
       }
     };
     return (
@@ -371,9 +491,15 @@ function ExplorationEditorRow({
         multilineSize={target.field === "prose" ? "expanded" : "compact"}
         saveEntry={entry}
         value={value}
-        onBeginEdit={(draft) => setSaveState((state) => beginFieldEdit(state, target, draft))}
-        onDraftChange={(draft) => setSaveState((state) => updateFieldDraft(state, target, draft, value))}
-        onCancel={() => setSaveState((state) => cancelFieldEdit(state, target, value))}
+        onBeginEdit={(draft) =>
+          setSaveState((state) => beginFieldEdit(state, target, draft))
+        }
+        onDraftChange={(draft) =>
+          setSaveState((state) => updateFieldDraft(state, target, draft, value))
+        }
+        onCancel={() =>
+          setSaveState((state) => cancelFieldEdit(state, target, value))
+        }
         onSave={(draft) => void commit(draft, true)}
         onCommit={(draft) => void commit(draft, false)}
       >
@@ -383,14 +509,23 @@ function ExplorationEditorRow({
   }
 
   async function saveProse(value: string, revision: number) {
-    onOptimisticData((current) => replaceProse(current, encounter.cardId, value));
+    onOptimisticData((current) =>
+      replaceProse(current, encounter.cardId, value),
+    );
     try {
-      const response = await client.saveProse({ cardId: encounter.cardId, value, clientRevision: revision });
-      if (response.clientRevision !== revision) throw new Error("Mismatched prose confirmation.");
+      const response = await client.saveProse({
+        cardId: encounter.cardId,
+        value,
+        clientRevision: revision,
+      });
+      if (response.clientRevision !== revision)
+        throw new Error("Mismatched prose confirmation.");
       onServerData(response.data);
       logEvent("exploration_editor_prose_saved", { cardId: encounter.cardId });
     } catch (error) {
-      onOptimisticData((current) => replaceProse(current, encounter.cardId, encounter.prose));
+      onOptimisticData((current) =>
+        replaceProse(current, encounter.cardId, encounter.prose),
+      );
       logEvent("exploration_editor_prose_save_failed", {
         cardId: encounter.cardId,
         message: messageFor(error),
@@ -412,15 +547,21 @@ function ExplorationEditorRow({
       action,
       clientRevision: revision,
     });
-    if (response.clientRevision !== revision) throw new Error("Mismatched label confirmation.");
+    if (response.clientRevision !== revision)
+      throw new Error("Mismatched label confirmation.");
     onServerData(response.data);
-    logEvent(field === "label"
-      ? "exploration_editor_label_saved"
-      : field === "effectText"
-        ? "exploration_editor_effect_text_saved"
-        : "exploration_editor_followup_text_saved", {
-      cardId: encounter.cardId, slot, field,
-    });
+    logEvent(
+      field === "label"
+        ? "exploration_editor_label_saved"
+        : field === "effectText"
+          ? "exploration_editor_effect_text_saved"
+          : "exploration_editor_followup_text_saved",
+      {
+        cardId: encounter.cardId,
+        slot,
+        field,
+      },
+    );
   }
 
   function updateField(
@@ -444,21 +585,26 @@ function ExplorationEditorRow({
   ) {
     const key = `${action.id}:${field.key}`;
     if (field.control === "number") {
-      const value = typeof action[field.key] === "number"
-        ? action[field.key] as number
-        : typeof field.defaultValue === "number" ? field.defaultValue : 0;
+      const value =
+        typeof action[field.key] === "number"
+          ? (action[field.key] as number)
+          : typeof field.defaultValue === "number"
+            ? field.defaultValue
+            : 0;
       const step = field.step ?? 1;
       return (
         <NumberStepper
           key={key}
-          authoredLabel={field.label}
+          label={assertLocalized(field.label)}
           value={value}
           resource={field.resource}
           size="sm"
-          authoredDecrementLabel={`Decrease ${field.label}`}
-          authoredIncrementLabel={`Increase ${field.label}`}
+          decrementLabel={assertLocalized(`Decrease ${field.label}`)}
+          incrementLabel={assertLocalized(`Increase ${field.label}`)}
           decrementDisabled={value - step < (field.min ?? 1)}
-          incrementDisabled={field.max !== undefined && value + step > field.max}
+          incrementDisabled={
+            field.max !== undefined && value + step > field.max
+          }
           testId={`exploration-${field.key}-${encounter.cardId}-${String(slot)}`}
           onDecrement={() => updateField(slot, field.key, value - step)}
           onIncrement={() => updateField(slot, field.key, value + step)}
@@ -472,13 +618,13 @@ function ExplorationEditorRow({
           <Select
             full
             size="sm"
-            authoredAriaLabel={field.label}
+            ariaLabel={assertLocalized(field.label)}
             options={(field.optional
               ? data.predicates
               : data.predicates.filter((entry) => entry.value !== "")
             ).map((option) => ({
               ...option,
-              authoredLabel: option.label,
+              label: assertLocalized(option.label),
             }))}
             value={typeof action.predicate === "string" ? action.predicate : ""}
             onChange={(value) => updateField(slot, field.key, value)}
@@ -493,8 +639,17 @@ function ExplorationEditorRow({
           <Select
             full
             size="sm"
-            authoredAriaLabel={field.label}
-            options={data.transfigurations.map((value) => ({ value, label: value })).map((option) => ({ ...option, authoredLabel: option.label, ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { authoredTriggerLabel: option.triggerLabel } : {}) }))}
+            ariaLabel={assertLocalized(field.label)}
+            options={data.transfigurations
+              .map((value) => ({ value, label: value }))
+              .map((option) => ({
+                ...option,
+                label: assertLocalized(option.label),
+                ...("triggerLabel" in option &&
+                typeof option.triggerLabel === "string"
+                  ? { triggerLabel: assertLocalized(option.triggerLabel) }
+                  : {}),
+              }))}
             value={String(action.transfiguration ?? "")}
             onChange={(value) => updateField(slot, field.key, value)}
           />
@@ -512,10 +667,10 @@ function ExplorationEditorRow({
           <Select
             full
             size="sm"
-            authoredAriaLabel={field.label}
+            ariaLabel={assertLocalized(field.label)}
             options={[
-              { value: "Character", authoredLabel: "Character" },
-              { value: "Event", authoredLabel: "Event" },
+              { value: "Character", label: assertLocalized("Character") },
+              { value: "Event", label: assertLocalized("Event") },
             ]}
             value={String(action.cardType ?? "Character")}
             onChange={(value) => updateField(slot, field.key, value)}
@@ -534,10 +689,10 @@ function ExplorationEditorRow({
           <Select
             full
             size="sm"
-            authoredAriaLabel={field.label}
+            ariaLabel={assertLocalized(field.label)}
             options={(field.options ?? []).map((option) => ({
               ...option,
-              authoredLabel: option.label,
+              label: assertLocalized(option.label),
             }))}
             value={String(action.siteType ?? field.defaultValue ?? "Shop")}
             onChange={(value) => updateField(slot, field.key, value)}
@@ -552,8 +707,17 @@ function ExplorationEditorRow({
           <Select
             full
             size="sm"
-            authoredAriaLabel={field.label}
-            options={data.subtypes.map((value) => ({ value, label: value })).map((option) => ({ ...option, authoredLabel: option.label, ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { authoredTriggerLabel: option.triggerLabel } : {}) }))}
+            ariaLabel={assertLocalized(field.label)}
+            options={data.subtypes
+              .map((value) => ({ value, label: value }))
+              .map((option) => ({
+                ...option,
+                label: assertLocalized(option.label),
+                ...("triggerLabel" in option &&
+                typeof option.triggerLabel === "string"
+                  ? { triggerLabel: assertLocalized(option.triggerLabel) }
+                  : {}),
+              }))}
             value={String(action.subtype ?? "")}
             onChange={(value) => updateField(slot, field.key, value)}
           />
@@ -569,7 +733,7 @@ function ExplorationEditorRow({
             {data.subtypes.map((subtype) => (
               <GlassButton
                 key={subtype}
-                authoredLabel={subtype}
+                label={assertLocalized(subtype)}
                 placement="onGlass"
                 size="compact"
                 pressed={selected.has(subtype)}
@@ -592,10 +756,13 @@ function ExplorationEditorRow({
           <Select
             full
             size="sm"
-            authoredAriaLabel={field.label}
+            ariaLabel={assertLocalized(field.label)}
             options={[
-              { value: "chosen", authoredLabel: "Player chooses" },
-              { value: "offered", authoredLabel: "Offered automatically" },
+              { value: "chosen", label: assertLocalized("Player chooses") },
+              {
+                value: "offered",
+                label: assertLocalized("Offered automatically"),
+              },
             ]}
             value={action.deckTarget ?? "chosen"}
             onChange={(value) => updateField(slot, field.key, value)}
@@ -604,16 +771,21 @@ function ExplorationEditorRow({
       );
     }
     if (field.control === "card") {
-      const card = typeof action.cardId === "string"
-        ? catalog.cardsById.get(action.cardId.toLowerCase())
-        : undefined;
+      const card =
+        typeof action.cardId === "string"
+          ? catalog.cardsById.get(action.cardId.toLowerCase())
+          : undefined;
       return (
         <div className="exploration-editor-reference-field" key={key}>
           <span>{field.label}</span>
           <div>
-            {card === undefined ? <span>Unknown card</span> : <u>{card.name}</u>}
+            {card === undefined ? (
+              <span>Unknown card</span>
+            ) : (
+              <u>{card.name}</u>
+            )}
             <GlassButton
-              authoredLabel="Choose card"
+              label={assertLocalized("Choose card")}
               placement="onGlass"
               size="compact"
               onPress={() => onPickCard({ cardId: encounter.cardId, slot })}
@@ -622,13 +794,17 @@ function ExplorationEditorRow({
         </div>
       );
     }
-    const dreamsign = typeof action.dreamsignId === "string"
-      ? catalog.dreamsignsById.get(action.dreamsignId.toLowerCase())
-      : undefined;
+    const dreamsign =
+      typeof action.dreamsignId === "string"
+        ? catalog.dreamsignsById.get(action.dreamsignId.toLowerCase())
+        : undefined;
     const dreamsignOptions = catalog.dreamsigns
       .filter((entry) => entry.id !== undefined)
-      .sort((left, right) => left.name.localeCompare(right.name) ||
-        (left.id ?? "").localeCompare(right.id ?? ""))
+      .sort(
+        (left, right) =>
+          left.name.localeCompare(right.name) ||
+          (left.id ?? "").localeCompare(right.id ?? ""),
+      )
       .map((entry) => ({
         value: entry.id ?? "",
         label: `${entry.name} · ${(entry.id ?? "").slice(0, 8)}`,
@@ -641,11 +817,11 @@ function ExplorationEditorRow({
         <Select
           full
           size="sm"
-          authoredAriaLabel={field.label}
+          ariaLabel={assertLocalized(field.label)}
           options={dreamsignOptions.map((option) => ({
             value: option.value,
-            authoredLabel: option.label,
-            authoredTriggerLabel: option.triggerLabel,
+            label: assertLocalized(option.label),
+            triggerLabel: assertLocalized(option.triggerLabel),
           }))}
           value={String(action.dreamsignId ?? "")}
           onChange={(value) => updateField(slot, field.key, value)}
@@ -655,7 +831,9 @@ function ExplorationEditorRow({
   }
 
   function actionPanel(action: ExplorationEditorAction, slot: number) {
-    const definition = definitions.get(action.effectKind) as ExplorationEditorEffectSchema;
+    const definition = definitions.get(
+      action.effectKind,
+    ) as ExplorationEditorEffectSchema;
     const status = actionStatuses[actionTarget(encounter.cardId, slot)];
     return (
       <section className="exploration-editor-action" key={action.id}>
@@ -667,10 +845,14 @@ function ExplorationEditorRow({
           "single-line",
         )}
         {editable(
-          { cardId: `${encounter.cardId}:${String(slot)}`, field: "effectText" },
+          {
+            cardId: `${encounter.cardId}:${String(slot)}`,
+            field: "effectText",
+          },
           action.effectText,
           <p>{renderedEffect(action.renderedEffectParts, catalog)}</p>,
-          (value, revision) => saveActionText(slot, "effectText", value, revision),
+          (value, revision) =>
+            saveActionText(slot, "effectText", value, revision),
         )}
         <div className="exploration-editor-action-selects">
           <label
@@ -681,8 +863,15 @@ function ExplorationEditorRow({
             <Select
               full
               size="sm"
-              authoredAriaLabel={`Effect for ${action.label}`}
-              options={effectOptions.map((option) => ({ ...option, authoredLabel: option.label, ...("triggerLabel" in option && typeof option.triggerLabel === "string" ? { authoredTriggerLabel: option.triggerLabel } : {}) }))}
+              ariaLabel={assertLocalized(`Effect for ${action.label}`)}
+              options={effectOptions.map((option) => ({
+                ...option,
+                label: assertLocalized(option.label),
+                ...("triggerLabel" in option &&
+                typeof option.triggerLabel === "string"
+                  ? { triggerLabel: assertLocalized(option.triggerLabel) }
+                  : {}),
+              }))}
               value={action.effectKind}
               onChange={(value) => {
                 const nextDefinition = definitions.get(
@@ -691,7 +880,9 @@ function ExplorationEditorRow({
                 if (nextDefinition === undefined) return;
                 const nextAction = { ...action };
                 const currentFieldKeys = new Set(
-                  definitions.get(action.effectKind)?.fields.map((field) => field.key) ?? [],
+                  definitions
+                    .get(action.effectKind)
+                    ?.fields.map((field) => field.key) ?? [],
                 );
                 for (const key of EFFECT_FIELD_KEYS) delete nextAction[key];
                 for (const field of nextDefinition.fields) {
@@ -709,26 +900,32 @@ function ExplorationEditorRow({
                           field.optional !== true
                         ? undefined
                         : candidate;
-                  const fallback = field.key === "cardId"
-                    ? encounter.cardId
-                    : field.key === "dreamsignId"
-                      ? catalog.dreamsigns.find((entry) => entry.id !== undefined)?.id
-                      : field.key === "subtype"
-                        ? data.subtypes[0]
-                        : field.key === "subtypeOptions"
-                          ? data.subtypes
-                          : field.key === "siteType"
-                            ? field.defaultValue ?? "Shop"
-                            : field.defaultValue ??
-                              (field.control === "predicate"
-                                ? data.predicates.find(({ value }) => value !== "")?.value
-                                : field.control === "transfiguration"
-                                  ? data.transfigurations[0]
-                                  : field.control === "number"
-                                    ? field.min
-                                    : undefined);
+                  const fallback =
+                    field.key === "cardId"
+                      ? encounter.cardId
+                      : field.key === "dreamsignId"
+                        ? catalog.dreamsigns.find(
+                            (entry) => entry.id !== undefined,
+                          )?.id
+                        : field.key === "subtype"
+                          ? data.subtypes[0]
+                          : field.key === "subtypeOptions"
+                            ? data.subtypes
+                            : field.key === "siteType"
+                              ? (field.defaultValue ?? "Shop")
+                              : (field.defaultValue ??
+                                (field.control === "predicate"
+                                  ? data.predicates.find(
+                                      ({ value }) => value !== "",
+                                    )?.value
+                                  : field.control === "transfiguration"
+                                    ? data.transfigurations[0]
+                                    : field.control === "number"
+                                      ? field.min
+                                      : undefined));
                   const fieldValue = retained ?? fallback;
-                  if (fieldValue !== undefined) nextAction[field.key] = fieldValue;
+                  if (fieldValue !== undefined)
+                    nextAction[field.key] = fieldValue;
                 }
                 const hasPairedFollowup =
                   typeof action.followupTitle === "string" &&
@@ -771,17 +968,25 @@ function ExplorationEditorRow({
             data-exploration-field-control="siteTypeFollowup"
           >
             {editable(
-              { cardId: `${encounter.cardId}:${String(slot)}`, field: "followupTitle" },
+              {
+                cardId: `${encounter.cardId}:${String(slot)}`,
+                field: "followupTitle",
+              },
               action.followupTitle ?? action.label,
               <span>{action.followupTitle ?? action.label}</span>,
-              (value, revision) => saveActionText(slot, "followupTitle", value, revision),
+              (value, revision) =>
+                saveActionText(slot, "followupTitle", value, revision),
               "single-line",
             )}
             {editable(
-              { cardId: `${encounter.cardId}:${String(slot)}`, field: "followupSubtitle" },
+              {
+                cardId: `${encounter.cardId}:${String(slot)}`,
+                field: "followupSubtitle",
+              },
               action.followupSubtitle ?? action.effectText,
               <span>{action.followupSubtitle ?? action.effectText}</span>,
-              (value, revision) => saveActionText(slot, "followupSubtitle", value, revision),
+              (value, revision) =>
+                saveActionText(slot, "followupSubtitle", value, revision),
             )}
           </div>
         )}
@@ -790,9 +995,13 @@ function ExplorationEditorRow({
           className="exploration-editor-action-status"
           data-status={status?.status ?? "idle"}
         >
-          {status?.status === "saving" ? "Saving…" :
-            status?.status === "saved" ? "Saved" :
-              status?.status === "error" ? status.message : ""}
+          {status?.status === "saving"
+            ? "Saving…"
+            : status?.status === "saved"
+              ? "Saved"
+              : status?.status === "error"
+                ? status.message
+                : ""}
         </span>
       </section>
     );
@@ -805,7 +1014,10 @@ function ExplorationEditorRow({
       data-exploration-card-id={encounter.cardId}
       id={`exploration-${encounter.cardId}`}
     >
-      <GlassPanel overflow="hidden" testId={`exploration-row-${encounter.cardId}`}>
+      <GlassPanel
+        overflow="hidden"
+        testId={`exploration-row-${encounter.cardId}`}
+      >
         <div className="exploration-editor-row-grid">
           <div className="exploration-editor-art-frame">
             <img
@@ -831,7 +1043,7 @@ function ExplorationEditorRow({
               </div>
               <div className="exploration-editor-card-ability">
                 <RulesText
-                  text={encounter.cardAbilityText}
+                  text={assertLocalized(encounter.cardAbilityText)}
                   owner={{ kind: "card", id: encounter.cardId }}
                 />
               </div>
@@ -859,87 +1071,136 @@ export default function ExplorationEditorApp({
 }: {
   client?: ExplorationEditorClient;
 }) {
-  const [data, setDataValue] = useState<ExplorationEditorServerData | null>(null);
+  const [data, setDataValue] = useState<ExplorationEditorServerData | null>(
+    null,
+  );
   const dataRef = useRef(data);
   const [catalog, setCatalog] = useState<ReferenceCatalog>(EMPTY_CATALOG);
   const [loadState, setLoadState] = useState<LoadState>("loading");
   const [loadMessage, setLoadMessage] = useState("");
   const [loadRevision, setLoadRevision] = useState(0);
-  const [saveStateValue, setSaveStateValue] = useState<EditableSaveState>(EMPTY_EDITOR_SAVE_STATE);
+  const [saveStateValue, setSaveStateValue] = useState<EditableSaveState>(
+    EMPTY_EDITOR_SAVE_STATE,
+  );
   const saveStateRef = useRef(saveStateValue);
-  const [cardPickerTarget, setCardPickerTarget] = useState<CardPickerTarget | null>(null);
+  const [cardPickerTarget, setCardPickerTarget] =
+    useState<CardPickerTarget | null>(null);
   const [cardPickerQuery, setCardPickerQuery] = useState("");
 
   const setData = useCallback((next: ExplorationEditorServerData) => {
     dataRef.current = next;
     setDataValue(next);
   }, []);
-  const updateData = useCallback((update: (data: ExplorationEditorServerData) => ExplorationEditorServerData) => {
-    if (dataRef.current === null) return;
-    setData(update(dataRef.current));
-  }, [setData]);
-  const setSaveState = useCallback((update: (state: EditableSaveState) => EditableSaveState) => {
-    const next = update(saveStateRef.current);
-    saveStateRef.current = next;
-    setSaveStateValue(next);
-  }, []);
+  const updateData = useCallback(
+    (
+      update: (
+        data: ExplorationEditorServerData,
+      ) => ExplorationEditorServerData,
+    ) => {
+      if (dataRef.current === null) return;
+      setData(update(dataRef.current));
+    },
+    [setData],
+  );
+  const setSaveState = useCallback(
+    (update: (state: EditableSaveState) => EditableSaveState) => {
+      const next = update(saveStateRef.current);
+      saveStateRef.current = next;
+      setSaveStateValue(next);
+    },
+    [],
+  );
 
   useEffect(() => {
     const controller = new AbortController();
     setLoadState("loading");
-    client.load(controller.signal).then((loaded) => {
-      setData(serverData(loaded));
-      setCatalog({
-        cards: loaded.cards,
-        cardsById: new Map(loaded.cards.map((card) => [card.id.toLowerCase(), card])),
-        dreamsigns: loaded.dreamsigns,
-        dreamsignsById: new Map(loaded.dreamsigns.flatMap((dreamsign) =>
-          dreamsign.id === undefined ? [] : [[dreamsign.id.toLowerCase(), dreamsign]])),
+    client
+      .load(controller.signal)
+      .then((loaded) => {
+        setData(serverData(loaded));
+        setCatalog({
+          cards: loaded.cards,
+          cardsById: new Map(
+            loaded.cards.map((card) => [card.id.toLowerCase(), card]),
+          ),
+          dreamsigns: loaded.dreamsigns,
+          dreamsignsById: new Map(
+            loaded.dreamsigns.flatMap((dreamsign) =>
+              dreamsign.id === undefined
+                ? []
+                : [[dreamsign.id.toLowerCase(), dreamsign]],
+            ),
+          ),
+        });
+        setLoadState("ready");
+        logEvent("exploration_editor_loaded", {
+          encounterCount: loaded.encounters.length,
+          effectKindCount: loaded.effectSchemas.length,
+          runtimeCardSelections: loaded.encounters.flatMap((encounter) =>
+            encounter.actions.flatMap((action, slot) =>
+              action.runtimeCardSelections.map((selection) => ({
+                encounterCardId: encounter.cardId,
+                actionId: action.id,
+                actionSlot: slot,
+                deckTarget: action.deckTarget,
+                ...selection,
+              })),
+            ),
+          ),
+        });
+      })
+      .catch((error: unknown) => {
+        if (controller.signal.aborted) return;
+        setLoadMessage(messageFor(error));
+        setLoadState("error");
+        logEvent("exploration_editor_load_failed", {
+          message: messageFor(error),
+        });
       });
-      setLoadState("ready");
-      logEvent("exploration_editor_loaded", {
-        encounterCount: loaded.encounters.length,
-        effectKindCount: loaded.effectSchemas.length,
-        runtimeCardSelections: loaded.encounters.flatMap((encounter) =>
-          encounter.actions.flatMap((action, slot) =>
-            action.runtimeCardSelections.map((selection) => ({
-              encounterCardId: encounter.cardId,
-              actionId: action.id,
-              actionSlot: slot,
-              deckTarget: action.deckTarget,
-              ...selection,
-            })))),
-      });
-    }).catch((error: unknown) => {
-      if (controller.signal.aborted) return;
-      setLoadMessage(messageFor(error));
-      setLoadState("error");
-      logEvent("exploration_editor_load_failed", { message: messageFor(error) });
-    });
     return () => controller.abort();
   }, [client, loadRevision, setData]);
 
   useEffect(() => {
-    const reloadConfirmedData = () => setLoadRevision((revision) => revision + 1);
-    window.addEventListener("exploration-editor:save-failed", reloadConfirmedData);
-    return () => window.removeEventListener("exploration-editor:save-failed", reloadConfirmedData);
+    const reloadConfirmedData = () =>
+      setLoadRevision((revision) => revision + 1);
+    window.addEventListener(
+      "exploration-editor:save-failed",
+      reloadConfirmedData,
+    );
+    return () =>
+      window.removeEventListener(
+        "exploration-editor:save-failed",
+        reloadConfirmedData,
+      );
   }, []);
 
   useEffect(() => {
-    if (loadState !== "ready" || !window.location.hash.startsWith("#exploration-")) return;
-    document.getElementById(decodeURIComponent(window.location.hash.slice(1)))
+    if (
+      loadState !== "ready" ||
+      !window.location.hash.startsWith("#exploration-")
+    )
+      return;
+    document
+      .getElementById(decodeURIComponent(window.location.hash.slice(1)))
       ?.scrollIntoView({ block: "start" });
   }, [loadState]);
 
   async function chooseCard(cardId: string) {
     if (cardPickerTarget === null || dataRef.current === null) return;
-    const encounter = dataRef.current.encounters.find((entry) => entry.cardId === cardPickerTarget.cardId);
+    const encounter = dataRef.current.encounters.find(
+      (entry) => entry.cardId === cardPickerTarget.cardId,
+    );
     if (encounter === undefined) return;
     const action = { ...encounter.actions[cardPickerTarget.slot], cardId };
     const revision = Date.now();
     try {
-      const response = await client.saveAction({ ...cardPickerTarget, action, clientRevision: revision });
-      if (response.clientRevision !== revision) throw new Error("Mismatched card confirmation.");
+      const response = await client.saveAction({
+        ...cardPickerTarget,
+        action,
+        clientRevision: revision,
+      });
+      if (response.clientRevision !== revision)
+        throw new Error("Mismatched card confirmation.");
       setData(response.data);
       setCardPickerTarget(null);
       setCardPickerQuery("");
@@ -959,10 +1220,12 @@ export default function ExplorationEditorApp({
     }
   }
 
-  const pickerAction = cardPickerTarget === null || data === null
-    ? undefined
-    : data.encounters.find((entry) => entry.cardId === cardPickerTarget.cardId)
-      ?.actions[cardPickerTarget.slot];
+  const pickerAction =
+    cardPickerTarget === null || data === null
+      ? undefined
+      : data.encounters.find(
+          (entry) => entry.cardId === cardPickerTarget.cardId,
+        )?.actions[cardPickerTarget.slot];
 
   return (
     <div className="cumulus exploration-editor-layout">
@@ -973,18 +1236,28 @@ export default function ExplorationEditorApp({
             <h1>Production encounters</h1>
           </div>
           {loadState === "ready" && data !== null && (
-            <span>{data.encounters.length} encounters · edits write directly to exploration.ron</span>
+            <span>
+              {data.encounters.length} encounters · edits write directly to
+              exploration.ron
+            </span>
           )}
         </header>
         {loadState === "loading" && (
-          <div className="exploration-editor-notice">Loading production encounters…</div>
+          <div className="exploration-editor-notice">
+            Loading production encounters…
+          </div>
         )}
         {loadState === "error" && (
           <div className="exploration-editor-error">
-            <GlassPanel authoredTitle="Exploration encounters could not be loaded" authoredSubtitle={loadMessage}>
+            <GlassPanel
+              title={assertLocalized(
+                "Exploration encounters could not be loaded",
+              )}
+              subtitle={assertLocalized(loadMessage)}
+            >
               <div className="exploration-editor-error-action">
                 <GlassButton
-                  authoredLabel="Retry"
+                  label={assertLocalized("Retry")}
                   placement="onGlass"
                   variant="accent"
                   onPress={() => setLoadRevision((revision) => revision + 1)}

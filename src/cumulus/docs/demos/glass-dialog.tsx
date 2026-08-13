@@ -23,7 +23,10 @@ function GlassDialogDemo() {
   const [open, setOpen] = useState(true);
   return (
     <>
-      <GlassButton authoredLabel="Open dialog" onPress={() => setOpen(true)} />
+      <GlassButton
+        label={assertLocalized("Open dialog")}
+        onPress={() => setOpen(true)}
+      />
       {open && (
         <GlassDialog
           title={assertLocalized("Choose a Dreamsign to Replace")}
@@ -68,8 +71,8 @@ export const glassDialogDemo: CumulusComponent = {
       code: `import { GlassDialog } from "src/cumulus/components/overlay/GlassDialog";
 
 <GlassDialog
-  title="Starting Deck"
-  subtitle="These are the cards you begin the journey with."
+  title={assertLocalized("Starting Deck")}
+  subtitle={assertLocalized("These are the cards you begin the journey with.")}
   onClose={closeModal}
 >
   <DeckGrid entries={entries} />
@@ -78,22 +81,22 @@ export const glassDialogDemo: CumulusComponent = {
     {
       label: "Commit gated",
       note: "Omit `onClose` when the dialog must expose only its explicit commit action. The header remains and no dismissal control is rendered.",
-      code: `<GlassDialog title="Foresee 2" desktopCenterTarget="battlefield">
+      code: `<GlassDialog title={assertLocalized("Foresee 2")} desktopCenterTarget="battlefield">
   <ForeseeOrder />
-  <GlassButton label="Confirm" variant="accent" placement="onGlass" onPress={confirm} />
+  <GlassButton label={assertLocalized("Confirm")} variant="accent" placement="onGlass" onPress={confirm} />
 </GlassDialog>`,
     },
     {
       label: "Content-sized popup",
       note: "Use the popup presentation for compact guidance or confirmation copy that should remain a centered glass window on mobile as well as desktop.",
-      code: `<GlassDialog title="How to Play" presentation="popup" onClose={closeGuide}>
+      code: `<GlassDialog title={assertLocalized("How to Play")} presentation="popup" onClose={closeGuide}>
   <HowToPlayCopy />
 </GlassDialog>`,
     },
     {
       label: "Flowing prose close",
       note: "Use flowing-close chrome for titleless prose whose opening lines should wrap around the close disc and then regain the full content measure.",
-      code: `<GlassDialog title="How to Play" presentation="popup" chrome="flowing-close" onClose={closeGuide}>
+      code: `<GlassDialog title={assertLocalized("How to Play")} presentation="popup" chrome="flowing-close" onClose={closeGuide}>
   <HowToPlayCopy />
 </GlassDialog>`,
     },
@@ -101,7 +104,7 @@ export const glassDialogDemo: CumulusComponent = {
       label: "Companion popup",
       note: "Pair one tangible object with a prose popup. The complete pair is centered horizontally on desktop and stacks object-first on mobile.",
       code: `<GlassDialog
-  title="How to Play"
+  title={assertLocalized("How to Play")}
   presentation="popup"
   companion={<DreamwellCard model={dreamwell} />}
   onClose={closeGuide}

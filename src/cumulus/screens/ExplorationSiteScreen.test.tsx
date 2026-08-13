@@ -1,3 +1,5 @@
+import { assertLocalized } from "@trox/runtime";
+import { resolveChecked } from "../../runtime/localization/runtime";
 // @vitest-environment jsdom
 
 import { act, type ReactElement } from "react";
@@ -22,7 +24,11 @@ import {
   type ExplorationDeckModificationView,
   type ExplorationSiteView,
 } from "./ExplorationSiteScreen";
-import { transfigurationFormFixture } from "../test-helpers/transfiguration-fixture";
+import {
+  localizedTransfigurationFormFixture,
+  transfigurationFormFixture,
+} from "../test-helpers/transfiguration-fixture";
+import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
 
 const reducedMotionPreference = vi.hoisted(() => ({ value: true }));
 
@@ -92,8 +98,8 @@ function view(resolved = false): ExplorationSiteView {
     scene: null,
     guide: {
       id: "layaway",
-      name: '"Layaway"',
-      line: "Every card dreams, friend. Draw one, and we'll step inside.",
+      name: assertLocalized('"Layaway"'),
+      line: assertLocalized("Every card dreams, friend. Draw one, and we'll step inside."),
       art: artRef.dreamGuide("layaway"),
     },
     card: {
@@ -101,14 +107,14 @@ function view(resolved = false): ExplorationSiteView {
       displaySnapshot: selected,
     },
     fullArt: artRef.explorationCard(selected.imageNumber),
-    narrative: "A synthetic encounter waits in the dark.",
+    narrative: assertLocalized("A synthetic encounter waits in the dark."),
     actions: [
       {
         id: "choice-a",
         effectKind: "gain-card",
         mechanics: { effectKind: "gain-card" },
-        label: "Choose A",
-        effectText: "Gain the fixture.",
+        label: assertLocalized("Choose A"),
+        effectText: assertLocalized("Gain the fixture."),
         followup: { kind: "none" },
         available: true,
       },
@@ -116,8 +122,8 @@ function view(resolved = false): ExplorationSiteView {
         id: "choice-b",
         effectKind: "change-subtype-selected",
         mechanics: { effectKind: "change-subtype-selected" },
-        label: "Choose B",
-        effectText: "Change the fixture.",
+        label: assertLocalized("Choose B"),
+        effectText: assertLocalized("Change the fixture."),
         followup: { kind: "none" },
         available: true,
       },
@@ -151,9 +157,9 @@ function siteInsertionRewardView(): ExplorationSiteView {
         isBattle: false,
         isLocked: false,
         isInteractive: false,
-        label: "Synthetic Duplication Site",
-        lockedGuidance: "",
-        blurb: "A synthetic site reward.",
+        label: assertLocalized("Synthetic Duplication Site"),
+        lockedGuidance: assertLocalized(""),
+        blurb: assertLocalized("A synthetic site reward."),
         icon: GLYPHS.copy,
       },
     },
@@ -161,13 +167,13 @@ function siteInsertionRewardView(): ExplorationSiteView {
 }
 
 function fixtureDreamsign(id: string, label: string) {
-  return {
+  return localizedDreamsignFixture({
     id,
     name: label,
     effectDescription: `Synthetic effect for ${label}.`,
     imageName: `${label.toLowerCase().replace(/ /gu, "-")}.webp`,
     imageAlt: `${label} art`,
-  };
+  });
 }
 
 function dreamsignMutationRewardView(
@@ -660,7 +666,11 @@ function multiTransfigurationFollowupView(): ExplorationSiteView {
     reforgedType: null,
     forms: types.map((type) => ({
       type,
-      presentation: transfigurationFormFixture(type),
+      presentation: localizedTransfigurationFormFixture(type),
+      change:
+        type === "Empowered"
+          ? ({ kind: "energy-delta", from: 2, to: 1 } as const)
+          : ({ kind: "spark-delta", from: 2, to: 4 } as const),
       effectDetails: { entryId, type },
       essenceCost: 0,
       affordable: true,
@@ -692,8 +702,8 @@ function multiTransfigurationFollowupView(): ExplorationSiteView {
         },
         followup: {
           kind: "multi-card-transfiguration",
-          title: "Fixture multi-card choice",
-          subtitle: "Fixture exact selection",
+          title: assertLocalized("Fixture multi-card choice"),
+          subtitle: assertLocalized("Fixture exact selection"),
           count: 2,
           candidates: [
             candidate("multi-entry-a", base.card, ["Empowered", "Kindled"]),
@@ -771,13 +781,13 @@ function dreamsignRewardView(): ExplorationSiteView {
         cards: [],
         purgedCards: [],
         dreamsigns: [
-          {
+          localizedDreamsignFixture({
             id: "reward-dreamsign-id",
             name: "Reward Dreamsign",
             effectDescription: "A synthetic reward sign.",
             imageName: "reward-dreamsign.webp",
             imageAlt: "Reward Dreamsign art",
-          },
+          }),
         ],
       },
       deckModification: null,
@@ -839,10 +849,11 @@ function deckModificationRewardView(
     },
   };
   const common = {
-    announcement: { kind: "authored" as const, text:
-      kind === "spark"
-        ? "All characters in your deck gain +1✦"
-        : "All cards in your deck become ❖ (fast)" },
+    announcement: assertLocalized(
+        kind === "spark"
+          ? "All characters in your deck gain +1✦"
+          : "All cards in your deck become ❖ (fast)",
+      ),
     cards: [
       { entryId: "deck-entry-a", model: first, isBane: false },
       { entryId: "deck-entry-b", model: second, isBane: false },
@@ -882,9 +893,11 @@ function bulkTransfigurationRewardView(): ExplorationSiteView {
       deckModification: {
         kind: "transfiguration",
         transfiguration: "Inspired",
-        formName: "Fixture Inspired",
+        formName: assertLocalized("Fixture Inspired"),
         essenceSpent: 100,
-        announcement: { kind: "authored", text: "Authored bulk transfiguration outcome." },
+        announcement: assertLocalized(
+          "Authored bulk transfiguration outcome.",
+        ),
         cards:
           base.reward.deckModification?.cards.map((card) => ({
             ...card,
@@ -964,13 +977,13 @@ function purgedDreamsignEssenceRewardView(): ExplorationSiteView {
     ...view(true),
     reward: {
       kind: "purged-dreamsign-essence",
-      dreamsign: {
+      dreamsign: localizedDreamsignFixture({
         id: "purged-dreamsign-id",
         name: "Purged Dreamsign",
         effectDescription: "A synthetic purged sign.",
         imageName: "purged-dreamsign.webp",
         imageAlt: "Purged Dreamsign art",
-      },
+      }),
       totalEssence: 50,
     },
   };
@@ -1489,8 +1502,10 @@ describe("ExplorationSiteScreen", () => {
           ...base.actions[0],
           effectKind: "purge-starter-card",
           mechanics: { effectKind: "purge-starter-card" },
+          effectText: assertLocalized(
+            `Purge ${base.card.displaySnapshot.name}.`,
+          ),
           effectParts: [
-            { kind: "text", text: "Purge " },
             {
               kind: "entity",
               entity: {
@@ -1545,11 +1560,11 @@ describe("ExplorationSiteScreen", () => {
       actions: [
         {
           ...view().actions[0],
-          effectText: "Spend 1● to gain +1✦ and Exploration Fixture.",
+          effectText: assertLocalized(
+            "Spend 1● to gain +1✦ and Exploration Fixture.",
+          ),
           effectParts: [
-            { kind: "text", text: "Spend 1● to gain +1✦ and " },
             { kind: "entity", entity: { kind: "card", card: makeCard() } },
-            { kind: "text", text: "." },
           ],
         },
         view().actions[1],
@@ -1591,6 +1606,60 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
+  it("keeps repeated entity labels independently interactive", () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(100, 100, 240, 336),
+    );
+    const first = makeCard();
+    const second = {
+      ...makeCard(),
+      id: asCardId("00000000-0000-4000-8000-000000000018"),
+      cardNumber: 18,
+    };
+    const base = view();
+    const repeatedEntityView: ExplorationSiteView = {
+      ...base,
+      actions: [
+        {
+          ...base.actions[0],
+          effectText: assertLocalized(
+            "Abandon Exploration Fixture, then copy Exploration Fixture.",
+          ),
+          effectParts: [
+            { kind: "entity", entity: { kind: "card", card: first } },
+            { kind: "entity", entity: { kind: "card", card: second } },
+          ],
+        },
+        base.actions[1],
+      ],
+    };
+    const { container, root } = mount(
+      <ExplorationSiteScreen
+        view={repeatedEntityView}
+        onChannel={vi.fn()}
+        onResolve={vi.fn()}
+        onExit={vi.fn()}
+      />,
+    );
+
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>(
+          '[data-testid="cumulus-exploration-channel"]',
+        )
+        ?.click(),
+    );
+    const labels = container.querySelectorAll(
+      "#exploration-effect-0 [data-exploration-entity-label]",
+    );
+    expect(labels).toHaveLength(2);
+    expect(
+      Array.from(labels, (label) => label.getAttribute("data-entity-id")),
+    ).toEqual([first.id, second.id]);
+
+    act(() => root.unmount());
+  });
+
   it("renders a structured card-type variable without exposing its authored token", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),
@@ -1601,11 +1670,9 @@ describe("ExplorationSiteScreen", () => {
       actions: [
         {
           ...base.actions[0],
-          effectText: "Resolved card-type fixture",
+          effectText: assertLocalized("Resolved Character fixture"),
           effectParts: [
-            { kind: "text", text: "Change " },
             { kind: "entity", entity: { kind: "card", card: makeCard() } },
-            { kind: "text", text: " to become a " },
             { kind: "card-type", cardType: "Character" },
           ],
         },
@@ -1703,9 +1770,9 @@ describe("ExplorationSiteScreen", () => {
       narrative?.dataset.explorationVisibleCharacterCount,
     );
     expect(halfwayCount).toBeGreaterThan(0);
-    expect(halfwayCount).toBeLessThan(view().narrative.length);
+    expect(halfwayCount).toBeLessThan(resolveChecked(view().narrative).length);
     expect(narrative?.textContent).toBe(
-      view().narrative.slice(0, halfwayCount),
+      resolveChecked(view().narrative).slice(0, halfwayCount),
     );
     expect(
       container.querySelector("[data-exploration-choices-state='revealed']"),
@@ -1720,7 +1787,7 @@ describe("ExplorationSiteScreen", () => {
     act(() => {
       vi.advanceTimersByTime(1);
     });
-    expect(narrative?.textContent).toBe(view().narrative);
+    expect(narrative?.textContent).toBe(resolveChecked(view().narrative));
     expect(narrative?.dataset.explorationTypewriterState).toBe("complete");
     expect(
       container.querySelector<HTMLElement>(
@@ -1759,9 +1826,8 @@ describe("ExplorationSiteScreen", () => {
       actions: [
         {
           ...base.actions[0],
-          effectText: `Gain 3 ${referencedCard.name} cards.`,
+          effectText: assertLocalized(`Gain 3 ${referencedCard.name} cards.`),
           effectParts: [
-            { kind: "text", text: "Gain 3 " },
             {
               kind: "entity",
               entity: {
@@ -1783,7 +1849,6 @@ describe("ExplorationSiteScreen", () => {
                 copies: 3,
               },
             },
-            { kind: "text", text: " cards." },
           ],
         },
         base.actions[1],
@@ -1851,14 +1916,12 @@ describe("ExplorationSiteScreen", () => {
       actions: [
         {
           ...base.actions[0],
-          effectText: `Gain ${referencedCard.name}.`,
+          effectText: assertLocalized(`Gain ${referencedCard.name}.`),
           effectParts: [
-            { kind: "text", text: "Gain " },
             {
               kind: "entity",
               entity: { kind: "card", card: referencedCard },
             },
-            { kind: "text", text: "." },
           ],
         },
         base.actions[1],
@@ -1936,8 +1999,8 @@ describe("ExplorationSiteScreen", () => {
           ...base.actions[0],
           followup: {
             kind: "cards",
-            title: "Choose a Fixture",
-            subtitle: "Choose one card.",
+            title: assertLocalized("Choose a Fixture"),
+            subtitle: assertLocalized("Choose one card."),
             cards: [
               { entryId: "entry-fixture", model: base.card, isBane: false },
             ],
@@ -2148,17 +2211,17 @@ describe("ExplorationSiteScreen", () => {
           ...base.actions[0],
           followup: {
             kind: "dreamsigns",
-            title: "Break the suspended pattern",
-            subtitle: "Choose a Dreamsign to purge.",
+            title: assertLocalized("Break the suspended pattern"),
+            subtitle: assertLocalized("Choose a Dreamsign to purge."),
             selectionKey: "dreamsignId",
             dreamsigns: [
-              {
+              localizedDreamsignFixture({
                 id: dreamsignId,
                 name: "Amplified Acorn",
                 effectDescription: "A synthetic Dreamsign effect.",
                 imageName: "amplified-acorn.webp",
                 imageAlt: "Amplified Acorn art",
-              },
+              }),
             ],
           },
         },
@@ -2236,8 +2299,10 @@ describe("ExplorationSiteScreen", () => {
           effectKind: "gain-nightmare-and-offered-dreamsign",
           followup: {
             kind: "dreamsign-flow",
-            title: "Read the offered patterns",
-            subtitle: "Choose one sign, then make room for it.",
+            title: assertLocalized("Read the offered patterns"),
+            subtitle: assertLocalized(
+              "Choose one sign, then make room for it.",
+            ),
             mode: "gain-offered",
             offered: [offered],
             held: [held],
@@ -2428,8 +2493,8 @@ describe("ExplorationSiteScreen", () => {
               effectKind: "gain-nightmare-and-dreamsign",
               followup: {
                 kind: "dreamsigns",
-                title: "Make room",
-                subtitle: "Choose one held Dreamsign.",
+                title: assertLocalized("Make room"),
+                subtitle: assertLocalized("Choose one held Dreamsign."),
                 selectionKey: "replacedDreamsignId",
                 dreamsigns: [held],
               },
@@ -2493,8 +2558,10 @@ describe("ExplorationSiteScreen", () => {
               effectKind: "replace-selected-dreamsign-with-offered",
               followup: {
                 kind: "dreamsign-flow",
-                title: "Exchange the pattern",
-                subtitle: "Choose one held sign and one offered sign.",
+                title: assertLocalized("Exchange the pattern"),
+                subtitle: assertLocalized(
+                  "Choose one held sign and one offered sign.",
+                ),
                 mode: "replace-with-offered",
                 offered: [offered],
                 held: [held],
@@ -2577,11 +2644,15 @@ describe("ExplorationSiteScreen", () => {
             {
               ...base.actions[0],
               effectKind: "purge-selected-dreamsign-and-gain-random",
-              effectText: "Purge one sign and gain three at random.",
+              effectText: assertLocalized(
+                "Purge one sign and gain three at random.",
+              ),
               followup: {
                 kind: "dreamsign-flow",
-                title: "Break the pattern",
-                subtitle: "Choose the signs that leave your collection.",
+                title: assertLocalized("Break the pattern"),
+                subtitle: assertLocalized(
+                  "Choose the signs that leave your collection.",
+                ),
                 mode: "purge-and-gain-random",
                 offered: [],
                 held,
@@ -3539,8 +3610,9 @@ describe("ExplorationSiteScreen", () => {
                 forms: [
                   {
                     type: "Empowered",
-                    presentation: transfigurationFormFixture("Empowered"),
-                    description: "Energy cost: 2 → 1",
+                    presentation:
+                      localizedTransfigurationFormFixture("Empowered"),
+                    change: { kind: "energy-delta", from: 2, to: 1 },
                     effectDetails: { energyCost: { before: 2, after: 1 } },
                     essenceCost: 0,
                     affordable: true,
@@ -3637,8 +3709,8 @@ describe("ExplorationSiteScreen", () => {
           ...base.actions[0],
           followup: {
             kind: "packs",
-            title: "Answer Their Muster",
-            subtitle: "Choose one pack to add to your deck.",
+            title: assertLocalized("Answer Their Muster"),
+            subtitle: assertLocalized("Choose one pack to add to your deck."),
             packs: [0, 1].map((index) => ({
               index,
               cards: [0, 1, 2].map((cardIndex) => ({
@@ -3719,11 +3791,11 @@ describe("ExplorationSiteScreen", () => {
       actions: [
         {
           ...base.actions[0],
-          label: "Choose a Guide",
+          label: assertLocalized("Choose a Guide"),
           followup: {
             kind: "cards",
-            title: "Choose a Guide",
-            subtitle: "Choose one offered card.",
+            title: assertLocalized("Choose a Guide"),
+            subtitle: assertLocalized("Choose one offered card."),
             cards: offeredCards,
             mode: "single",
             selectionKey: "cardIds",
@@ -3815,8 +3887,10 @@ describe("ExplorationSiteScreen", () => {
           ...base.actions[0],
           followup: {
             kind: "cards",
-            title: "Exchange Familiar Forms",
-            subtitle: "Choose a card to purge, then a card to copy.",
+            title: assertLocalized("Exchange Familiar Forms"),
+            subtitle: assertLocalized(
+              "Choose a card to purge, then a card to copy.",
+            ),
             cards: [
               { entryId: "entry-a", model: base.card, isBane: false },
               { entryId: "entry-b", model: base.card, isBane: false },
@@ -3908,8 +3982,8 @@ describe("ExplorationSiteScreen", () => {
           effectKind: "copy-selected-cards",
           followup: {
             kind: "cards",
-            title: "Copy two",
-            subtitle: "Choose two cards to copy.",
+            title: assertLocalized("Copy two"),
+            subtitle: assertLocalized("Choose two cards to copy."),
             cards: ["entry-a", "entry-b", "entry-c"].map((entryId) => ({
               entryId,
               model: base.card,
@@ -3988,8 +4062,10 @@ describe("ExplorationSiteScreen", () => {
           effectKind: "purge-selected",
           followup: {
             kind: "cards",
-            title: "Stand Down the Escort",
-            subtitle: "Choose up to two Warrior cards to purge.",
+            title: assertLocalized("Stand Down the Escort"),
+            subtitle: assertLocalized(
+              "Choose up to two Warrior cards to purge.",
+            ),
             cards: ["entry-a", "entry-b", "entry-c"].map((entryId) => ({
               entryId,
               model: base.card,
@@ -4095,8 +4171,8 @@ describe("ExplorationSiteScreen", () => {
           },
           followup: {
             kind: "cards",
-            title: "Choose echoes",
-            subtitle: "Choose one or two Events.",
+            title: assertLocalized("Choose echoes"),
+            subtitle: assertLocalized("Choose one or two Events."),
             cards: ["replacement-source-a", "replacement-source-b"].map(
               (entryId) => ({ entryId, model: base.card, isBane: false }),
             ),
@@ -4175,15 +4251,13 @@ describe("ExplorationSiteScreen", () => {
             transfiguration: "Kindled",
             count: 2,
           },
-          effectDisclosure: {
-            kind: "fixed-transfiguration",
-            transfiguration: "Kindled",
-            effectDisclosure: "Fixture fixed form disclosure.",
-          },
+          effectDisclosure: assertLocalized(
+            "Fixture fixed form disclosure.",
+          ),
           followup: {
             kind: "cards",
-            title: "Share the fire",
-            subtitle: "Choose exactly two Warriors.",
+            title: assertLocalized("Share the fire"),
+            subtitle: assertLocalized("Choose exactly two Warriors."),
             cards: ["fixed-source-a", "fixed-source-b"].map((entryId) => ({
               entryId,
               model: base.card,
@@ -4814,7 +4888,9 @@ describe("ExplorationSiteScreen", () => {
       actions: [
         {
           ...fastView.actions[0],
-          effectText: "All cards in your deck become ❖ (fast)",
+          effectText: assertLocalized(
+            "All cards in your deck become ❖ (fast)",
+          ),
         },
         fastView.actions[1],
       ],
@@ -4969,8 +5045,9 @@ describe("ExplorationSiteScreen", () => {
         },
         deckModification: {
           kind: "reclaim",
-          announcement: { kind: "authored", text:
-            "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim." },
+          announcement: assertLocalized(
+            "Purge all copies of every duplicated card from your deck. Every card remaining in your deck gains reclaim.",
+          ),
           cards: survivorCards,
           reclaimCostByEntryId: {
             "deck-entry-a": 2,
@@ -5050,8 +5127,9 @@ describe("ExplorationSiteScreen", () => {
         },
         deckModification: {
           kind: "spark",
-          announcement: { kind: "authored", text:
-            "Purge a random Warrior. Every other Warrior in your deck gains +1 spark." },
+          announcement: assertLocalized(
+            "Purge a random Warrior. Every other Warrior in your deck gains +1 spark.",
+          ),
           cards: survivorCards,
           amount: 1,
         },
@@ -5927,7 +6005,7 @@ describe("ExplorationSiteScreen", () => {
       const siteTypes = ["Shop", "Purge", "Transfiguration"] as const;
       const choiceView: ExplorationSiteView = {
         ...base,
-        narrative: "",
+        narrative: assertLocalized(""),
         actions: [
           {
             ...base.actions[0],
@@ -5935,8 +6013,8 @@ describe("ExplorationSiteScreen", () => {
             mechanics: { effectKind: "choose-site-type", offerCount: 3 },
             followup: {
               kind: "site-types",
-              title: "Synthetic Site Choice",
-              subtitle: "Choose one synthetic site.",
+              title: assertLocalized("Synthetic Site Choice"),
+              subtitle: assertLocalized("Choose one synthetic site."),
               choices: siteTypes.map((siteType, index) => ({
                 siteType,
                 model: {
@@ -5951,9 +6029,11 @@ describe("ExplorationSiteScreen", () => {
                   isBattle: false,
                   isLocked: false,
                   isInteractive: true,
-                  label: `Synthetic site ${String(index)}`,
-                  lockedGuidance: "",
-                  blurb: `Synthetic description ${String(index)}`,
+                  label: assertLocalized(`Synthetic site ${String(index)}`),
+                  lockedGuidance: assertLocalized(""),
+                  blurb: assertLocalized(
+                    `Synthetic description ${String(index)}`,
+                  ),
                   icon: GLYPHS.copy,
                 },
               })),

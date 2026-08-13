@@ -98,7 +98,7 @@ export const cardBrowserPanelDemo: CumulusComponent = {
       code: `import { CardBrowserPanel } from "src/cumulus/components/card/CardBrowserPanel";
 
 <CardBrowserPanel
-  title="Your Deck"
+  title={assertLocalized("Your Deck")}
   cards={cards}
   toolbar={toolbar}
   presentation="overlay"

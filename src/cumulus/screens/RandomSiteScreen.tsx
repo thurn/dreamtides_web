@@ -14,16 +14,17 @@ import {
   type GuideGalleryGuideView,
 } from "./GuideGallerySiteLayout";
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
+import type { LocalizedString } from "@trox/runtime";
 
 export interface RandomSiteChoiceView {
   siteType: RandomSiteDestinationType;
-  label: string;
-  blurb: string;
+  label: LocalizedString;
+  blurb: LocalizedString;
   icon: Glyph;
 }
 
 export interface RandomSiteView {
-  title: string;
+  title: LocalizedString;
   siteId: string;
   scene: ArtRef | null;
   guide: GuideGalleryGuideView;
@@ -89,7 +90,7 @@ export function RandomSiteScreen({
           }}
         >
           <GlassPanel
-            authoredTitle={view.title}
+            title={view.title}
             headerDivider={false}
             testId="cumulus-random-site-panel"
           >
@@ -120,7 +121,6 @@ export function RandomSiteScreen({
                   isLocked: false,
                   isInteractive: selected === null,
                   label: choice.label,
-                  lockedGuidance: "",
                   blurb: choice.blurb,
                   icon: choice.icon,
                 };

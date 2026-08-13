@@ -20,17 +20,16 @@ import {
 } from "./guide-gallery-geometry";
 import { useIsDesktop } from "./use-is-desktop";
 import type { LocalizedString } from "@trox/runtime";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 /** The resident guide displayed by a character-led site. */
 export interface GuideGalleryGuideView {
   /** Stable Dream Guide id. */
   id: string;
   /** Display name shown in the speech bubble. */
-  name: string;
+  name: LocalizedString;
   /** Dialog line shown in the speech bubble. */
-  line?: string;
-  /** Complete localized fallback line supplied by application code. */
-  lineMessage?: LocalizedString;
+  line: LocalizedString;
   /** Transparent character render. */
   art: ArtRef;
 }
@@ -378,6 +377,7 @@ function DesktopGuideScene({
   readonly speechAnchorTestId?: string;
   readonly speechBubbleTestId?: string;
 }) {
+  const resolve = useLocalizer();
   const guideUrl = resolveArtRef(guide.art);
   return (
     <div
@@ -393,7 +393,7 @@ function DesktopGuideScene({
     >
       <img
         src={guideUrl}
-        alt={guide.name}
+        alt={resolve(guide.name)}
         draggable={false}
         data-testid={guideArtTestId}
         style={{
@@ -425,9 +425,7 @@ function DesktopGuideScene({
         >
           <SpeechBubble
             speakerName={guide.name}
-            {...(guide.lineMessage === undefined
-              ? { text: guide.line }
-              : { textMessage: guide.lineMessage })}
+            text={guide.line}
             testId={speechBubbleTestId}
           />
         </div>
@@ -453,6 +451,7 @@ function MobileGuideBand({
   readonly speechAnchorTestId?: string;
   readonly speechBubbleTestId?: string;
 }) {
+  const resolve = useLocalizer();
   const guideUrl = resolveArtRef(guide.art);
   return (
     <header
@@ -472,7 +471,7 @@ function MobileGuideBand({
     >
       <img
         src={guideUrl}
-        alt={guide.name}
+        alt={resolve(guide.name)}
         draggable={false}
         data-testid={guideArtTestId}
         style={{
@@ -515,9 +514,7 @@ function MobileGuideBand({
         >
           <SpeechBubble
             speakerName={guide.name}
-            {...(guide.lineMessage === undefined
-              ? { text: guide.line }
-              : { textMessage: guide.lineMessage })}
+            text={guide.line}
             testId={speechBubbleTestId}
           />
         </div>

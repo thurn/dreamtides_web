@@ -24,7 +24,6 @@ The hammer matches the Transfiguration site's atlas icon; the 30px design-size b
 | `numberSizeVar` | `string` | yes | — | CSS length for the digit size — the single-digit ceiling, which doubles as the digit box edge (e.g. `var(--cv-energy-orb-font-size)`). Multi-digit values auto-shrink below this to fit. |
 | `numberCapPx` | `number` | yes | — | Upper bound (px) for the digit auto-shrink search. The displayed size is the smaller of the CSS digit ceiling and the fitted size, so this only needs to sit at or above the rendered digit size. |
 | `ariaLabel` | `LocalizedString` | no | — |  |
-| `authoredAriaLabel` | `string` | no | — | Accessible name supplied by canonical authored or developer-only copy. |
 | `changeBadge` | `CardStatChangeBadge` | no | — | Monochrome hammer marker for a transfiguration-changed stat, shared with the Transfiguration site's atlas icon. |
 
 ### `changeBadge`: the `CardStatChangeBadge` model
@@ -32,7 +31,7 @@ The hammer matches the Transfiguration site's atlas icon; the 30px design-size b
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `kind` | `"empowered" \| "kindled"` | no |  |
-| `accessibleName` | `string` | no | Source-English form name supplied by the Transfiguration catalog. |
+| `accessibleName` | `LocalizedString` | no | Localized form name supplied by the Transfiguration catalog. |
 
 ## Usage
 

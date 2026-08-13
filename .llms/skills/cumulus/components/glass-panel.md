@@ -23,11 +23,8 @@ Width and placement belong to the caller's wrapper. Edge-rail and full-bleed fra
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `eyebrow` | `LocalizedString` | no | — | Optional uppercase context line rendered above the title. |
-| `authoredEyebrow` | `string` | no | — | Context line supplied by canonical authored or developer-only copy. |
 | `title` | `LocalizedString` | no | — | Optional plain panel title. |
-| `authoredTitle` | `string` | no | — | Optional title supplied by canonical authored content. |
 | `subtitle` | `LocalizedString` | no | — | Optional supporting line rendered beneath the title. |
-| `authoredSubtitle` | `string` | no | — | Optional supporting line supplied by canonical authored content. |
 | `structuredSubtitle` | `readonly GlassPanelTextSegment[]` | no | — | Optional structured subtitle whose entity runs receive the canonical underline. |
 | `headingLevel` | `"h1" \| "h2"` | no | `h2` | Semantic heading element for the title. Defaults to `h2`. |
 | `titleVoice` | `GlassPanelTitleVoice` = `"standard" \| "hero"` | no | `standard` | Title and subtitle typography. Defaults to `standard`. |
@@ -75,8 +72,8 @@ import { GlassPanel } from "src/cumulus/components/overlay/GlassPanel";
 
 <GlassPanel
   eyebrow="Shop"
-  title="Dream Market"
-  subtitle="Spend Essence to add cards to your deck."
+  title={assertLocalized("Dream Market")}
+  subtitle={assertLocalized("Spend Essence to add cards to your deck.")}
   rightAccessory={{
     kind: "glassButton",
     button: {

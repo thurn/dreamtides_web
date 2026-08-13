@@ -1,45 +1,52 @@
 import { useState } from "react";
-import type { TransfigurationType } from "../../../types/journey";
+import { assertLocalized } from "@trox/runtime";
+import type {
+  TransfigurationChange,
+  TransfigurationType,
+} from "../../../types/journey";
 import {
   TransfigurationButton,
   type TransfigurationButtonVariant,
 } from "../../components/controls/TransfigurationButton";
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
-import type { TransfigurationFormDefinition } from "../../../types/transfiguration-data";
+import type { LocalizedTransfigurationPresentation } from "../../components/controls/transfiguration-presentation";
 
 function demoPresentation(
   id: TransfigurationType,
-): TransfigurationFormDefinition {
+): LocalizedTransfigurationPresentation {
   return {
-    id,
-    glossaryUuid: "00000000-0000-4000-8000-000000000001",
-    name: id,
-    description: `${id} demo effect`,
+    name: assertLocalized(id),
+    description: assertLocalized(`${id} demo effect`),
     glyph: `transfiguration${id}`,
     accentColor: "#9b8afb",
-    tintColor: "#c9c1ff",
-    pricing: { kind: "free" },
-    rewardScore: { kind: "flat", value: 1 },
   };
 }
 
 const DEMO_FORMS = [
   {
     type: "Inspired" as const,
-    description: "Give this event Fleeting.",
+    change: { kind: "added-fast" } satisfies TransfigurationChange,
     essenceCost: 0,
     affordable: true,
   },
   {
     type: "Empowered" as const,
-    description: "Reduce this card's energy cost.",
+    change: {
+      kind: "energy-delta",
+      from: 2,
+      to: 1,
+    } satisfies TransfigurationChange,
     essenceCost: 40,
     affordable: true,
   },
   {
     type: "Kindled" as const,
-    description: "Double this character's spark.",
+    change: {
+      kind: "spark-delta",
+      from: 2,
+      to: 4,
+    } satisfies TransfigurationChange,
     essenceCost: 80,
     affordable: false,
   },

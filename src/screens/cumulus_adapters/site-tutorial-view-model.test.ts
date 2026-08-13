@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 import type { JourneyState, SiteState } from "../../types/journey";
 import type { TutorialSiteConfiguration } from "../../types/tutorial";
 import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";

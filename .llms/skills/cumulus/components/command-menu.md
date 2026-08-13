@@ -38,8 +38,8 @@ Use Select for value choice, DisclosureSection for reading flow, and InfoCard fo
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `kind` | `"context"` | no |  |
-| `authoredTitle` | `string` | no | Describes the card/pointer subject in the menu's header. |
-| `authoredSubtitle` | `string` | yes | Optional structured secondary location/context copy. |
+| `title` | `LocalizedString` | no | Describes the card/pointer subject in the menu's header. |
+| `subtitle` | `LocalizedString` | yes | Optional structured secondary location/context copy. |
 | `actions` | `readonly CommandMenuItem[]` | no | Commands available for the activated card or pointer target. |
 | `anchor` | `CommandMenuAnchor` | no | Semantic location used to anchor the desktop pointer menu. |
 | `onDismiss` | `() => void` | no | Called after a leaf command, outside dismissal, or Escape. |

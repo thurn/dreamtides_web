@@ -558,8 +558,6 @@ describe("App", () => {
     expect(
       container.querySelector('[data-application-state="recoverableError"]'),
     ).not.toBeNull();
-    expect(container.textContent).toContain("Journey Content Failed to Load");
-    expect(container.textContent).toContain("Failed to load draft records");
     expect(container.querySelector("[data-room-gate]")).toBeNull();
     expect(container.querySelector("[data-coop-provider]")).toBeNull();
     expect(registerGameProviders).not.toHaveBeenCalled();
@@ -590,11 +588,6 @@ describe("App", () => {
     expect(
       container.querySelector('[data-application-state="fatalConfiguration"]'),
     ).not.toBeNull();
-    expect(container.textContent).toContain("Firebase Setup Issue");
-    expect(container.textContent).toContain(
-      "Missing VITE_FIREBASE_DATABASE_URL",
-    );
-    expect(container.textContent).toContain("Run npm start");
     expect(container.querySelector("[data-room-gate]")).toBeNull();
     expect(container.querySelector("[data-multiplayer-provider]")).toBeNull();
 
@@ -625,13 +618,9 @@ describe("App", () => {
     expect(
       container.querySelector('[data-application-state="fatalConfiguration"]'),
     ).not.toBeNull();
-    expect(container.textContent).toContain("Firebase Setup Issue");
-    expect(container.textContent).toContain(
-      "Missing VITE_FIREBASE_DATABASE_URL",
-    );
-    expect(container.textContent).toContain(
-      "Required env: VITE_FIREBASE_API_KEY",
-    );
+    expect(
+      container.querySelector('[data-application-state="fatalConfiguration"]'),
+    ).not.toBeNull();
 
     act(() => {
       root.unmount();

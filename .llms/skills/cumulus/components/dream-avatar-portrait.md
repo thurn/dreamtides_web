@@ -20,7 +20,7 @@ Put width, flex behavior, and placement on that wrapper; the component owns only
 | --- | --- | --- | --- | --- |
 | `dreamAvatar` | `DreamAvatarVisual` | yes | — | The dreamAvatar whose art and identity the portrait shows. |
 | `variant` | `DreamAvatarPortraitVariant` = `"panel" \| "thumb"` | no | — | Square framing: `panel` for profile surfaces or `thumb` for compact rows. Default `panel`. |
-| `profile` | `{ id: string; ability: string; }` | no | — | Semantic DreamAvatar profile represented by this portrait. Omit for decorative art. |
+| `profile` | `{ id: string; ability: LocalizedString; }` | no | — | Semantic DreamAvatar profile represented by this portrait. Omit for decorative art. |
 | `onPress` | `(() => void)` | no | — | Optional primary press action for selectable profile portraits. |
 | `unavailable` | `boolean` | no | `false` | Keeps the profile readable while suppressing activation. |
 
@@ -29,8 +29,8 @@ Put width, flex behavior, and placement on that wrapper; the component owns only
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `imageNumber` | `string` | no |  |
-| `name` | `string` | no |  |
-| `title` | `string` | no |  |
+| `name` | `LocalizedString` | no |  |
+| `title` | `LocalizedString` | yes |  |
 | `portraitFocus` | `DreamAvatarPortraitFocus` | yes | Normalized head position used to center subject-aware crops. |
 
 ## Usage

@@ -25,7 +25,16 @@
 // delegates finger-clearing placement and press recognition to the shared
 // reveal coordinator.
 
-import { meaning, tx, txa, plural, one, other, type LocalizedString } from "@trox/runtime";
+
+import {
+  meaning,
+  tx,
+  txa,
+  plural,
+  one,
+  other,
+  type LocalizedString,
+} from "@trox/runtime";
 import { useEffect, useMemo, useState } from "react";
 import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { IconButton } from "../components/controls/IconButton";
@@ -237,10 +246,12 @@ function TopBand({
               color: token("--text-primary"),
             }}
           >
-            {resolve(tx(
-              "Your Deck",
-              "Title of the full-screen browser for the current player's deck. “Your” addresses the local player, including one participant in a cooperative room.",
-            ))}
+            {resolve(
+              tx(
+                "Your Deck",
+                "Title of the full-screen browser for the current player's deck. “Your” addresses the local player, including one participant in a cooperative room.",
+              ),
+            )}
           </div>
           {/* Card-count eyebrow: the whole deck's size, styled with the shared
               eyebrow tokens and pluralized exactly as the desktop header's count
@@ -253,14 +264,16 @@ function TopBand({
               color: token("--text-secondary"),
             }}
           >
-            {resolve(txa(
-              meaning(
-                "journey-deck-count-subtitle",
-                plural(count, [one("{count} Card"), other("{count} Cards")]),
+            {resolve(
+              txa(
+                meaning(
+                  "journey-deck-count-subtitle",
+                  plural(count, [one("{count} Card"), other("{count} Cards")]),
+                ),
+                { count },
+                "Count beneath the deck-browser title. count is the number of cards currently in the player's deck, is a non-negative integer, and can be zero.",
               ),
-              { count },
-              "Count beneath the deck-browser title. count is the number of cards currently in the player's deck, is a non-negative integer, and can be zero.",
-            ))}
+            )}
           </div>
         </div>
         <div style={{ position: "absolute", top: 0, right: 0 }}>
@@ -269,9 +282,9 @@ function TopBand({
             glyph={GLYPHS.close}
             size="md"
             label={tx(
-                "Close deck browser",
-                "Accessible name for the icon-only control that dismisses the player's deck browser and returns focus to the Journey screen beneath it.",
-              )}
+              "Close deck browser",
+              "Accessible name for the icon-only control that dismisses the player's deck browser and returns focus to the Journey screen beneath it.",
+            )}
             testId="mobile-deck-close"
             onPress={onClose}
           />
@@ -300,12 +313,16 @@ function DeckControls({
   typeFilterOptions: DeckControlOption<DeckTypeFilter>[];
   onFilterSortChange: (next: DeckFilterSort) => void;
 }) {
+  const resolve = useLocalizer();
   const optionLabel = (
     option: DeckControlOption<DeckTypeFilter>,
   ): LocalizedString => {
     switch (option.value) {
       case "all":
-        return tx("All", "Visible card-browser type filter option that keeps every card type.");
+        return tx(
+          "All",
+          "Visible card-browser type filter option that keeps every card type.",
+        );
       case "type:Character":
         return tx(
           "Characters",
@@ -317,7 +334,9 @@ function DeckControls({
           "Visible card-browser type filter option that keeps Event cards.",
         );
       default:
-        throw new Error(`Subtype filter ${option.value} requires authored copy.`);
+        throw new Error(
+          `Subtype filter ${option.value} requires authored copy.`,
+        );
     }
   };
   const sortOptionLabel = (sort: DeckSortId): LocalizedString => {
@@ -352,16 +371,32 @@ function DeckControls({
   const filterAriaLabel = (): LocalizedString => {
     switch (filterSort.typeFilter) {
       case "all":
-        return tx("Filter deck by All", "Accessible name for the deck filter when every card is included.");
+        return tx(
+          "Filter deck by All",
+          "Accessible name for the deck filter when every card is included.",
+        );
       case "type:Character":
-        return tx("Filter deck by Characters", "Accessible name for the deck filter when only Character cards are included.");
+        return tx(
+          "Filter deck by Characters",
+          "Accessible name for the deck filter when only Character cards are included.",
+        );
       case "type:Event":
-        return tx("Filter deck by Events", "Accessible name for the deck filter when only Event cards are included.");
+        return tx(
+          "Filter deck by Events",
+          "Accessible name for the deck filter when only Event cards are included.",
+        );
       default: {
-        const subtype = deckTypeFilterLabel(filterSort.typeFilter, typeFilterOptions);
+        const subtype = resolve(deckTypeFilterLabel(
+          filterSort.typeFilter,
+          typeFilterOptions,
+        ));
         return txa(
           "Filter deck by {subtype}",
-          { subtype: subtype.startsWith("subtype:") ? subtype.slice("subtype:".length) : subtype },
+          {
+            subtype: subtype.startsWith("subtype:")
+              ? subtype.slice("subtype:".length)
+              : subtype,
+          },
           "Accessible name for the deck filter when one canonical card subtype is selected. subtype is authored card vocabulary and has unknown grammatical gender.",
         );
       }
@@ -370,15 +405,30 @@ function DeckControls({
   const sortAriaLabel = (): LocalizedString => {
     switch (filterSort.sort) {
       case "name":
-        return tx("Sort deck by Name", "Accessible name for sorting the deck by card name.");
+        return tx(
+          "Sort deck by Name",
+          "Accessible name for sorting the deck by card name.",
+        );
       case "drafted":
-        return tx("Sort deck by Acquired", "Accessible name for sorting the deck by acquisition order.");
+        return tx(
+          "Sort deck by Acquired",
+          "Accessible name for sorting the deck by acquisition order.",
+        );
       case "cost":
-        return tx("Sort deck by Cost", "Accessible name for sorting the deck by energy cost.");
+        return tx(
+          "Sort deck by Cost",
+          "Accessible name for sorting the deck by energy cost.",
+        );
       case "spark":
-        return tx("Sort deck by Spark", "Accessible name for sorting the deck by Spark.");
+        return tx(
+          "Sort deck by Spark",
+          "Accessible name for sorting the deck by Spark.",
+        );
       case "subtype":
-        return tx("Sort deck by Subtype", "Accessible name for sorting the deck by card subtype.");
+        return tx(
+          "Sort deck by Subtype",
+          "Accessible name for sorting the deck by card subtype.",
+        );
     }
   };
   return (
@@ -397,9 +447,9 @@ function DeckControls({
         align="start"
         ariaLabel={filterAriaLabel()}
         options={typeFilterOptions.map((option) =>
-          option.authoredLabel === undefined
+          option.label === undefined
             ? { value: option.value, label: optionLabel(option) }
-            : { value: option.value, authoredLabel: option.authoredLabel },
+              : { value: option.value, label: option.label },
         )}
         value={filterSort.typeFilter}
         onChange={(value) =>

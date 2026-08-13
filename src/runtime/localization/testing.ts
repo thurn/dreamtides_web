@@ -1,11 +1,26 @@
 import { blake3 } from "@noble/hashes/blake3.js";
 import {
   canonicalJson,
+  LocalizedString,
   type Bundle,
-  type LocalizedString,
   type Pattern,
   type SelectorRecord,
 } from "@trox/runtime";
+import { resolveSource } from "./runtime";
+
+/** Vitest equality hook for source-copy assertions against localized values. */
+export function localizedStringSourceEquality(
+  left: unknown,
+  right: unknown,
+): boolean | undefined {
+  if (left instanceof LocalizedString && typeof right === "string") {
+    return resolveSource(left) === right;
+  }
+  if (typeof left === "string" && right instanceof LocalizedString) {
+    return left === resolveSource(right);
+  }
+  return undefined;
+}
 
 export interface SyntheticTranslation {
   readonly message: LocalizedString;

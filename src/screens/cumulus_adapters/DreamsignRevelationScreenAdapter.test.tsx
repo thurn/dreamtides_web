@@ -33,6 +33,7 @@ const loggingMock = vi.hoisted(() => {
   return {
     emitted,
     keys,
+    logEvent: vi.fn(),
     logEventOnce: vi.fn(
       (key: string, event: string, fields: Record<string, unknown>) => {
         if (keys.has(key)) {
@@ -51,6 +52,7 @@ vi.mock("../../state/journey-context", () => ({
 }));
 
 vi.mock("../../logging", () => ({
+  logEvent: loggingMock.logEvent,
   logEventOnce: loggingMock.logEventOnce,
 }));
 

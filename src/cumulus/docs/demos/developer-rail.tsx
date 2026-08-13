@@ -48,7 +48,7 @@ export const developerRailDemo: CumulusComponent = {
   Component: Demo,
   usage: [
     {
-      code: `<DeveloperRail id="tutorial-editor" title="Tutorial Editor" side="left" onClose={close}>\n  <TutorialEditorContent />\n</DeveloperRail>`,
+      code: `<DeveloperRail id="tutorial-editor" title={assertLocalized("Tutorial Editor")} closeLabel={assertLocalized("Close tutorial editor")} side="left" onClose={close}>\n  <TutorialEditorContent />\n</DeveloperRail>`,
     },
   ],
   demo: { defaultArgs: { title: "Tutorial Editor", subtitle: "1 action" } },

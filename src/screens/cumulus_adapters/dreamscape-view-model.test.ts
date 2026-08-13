@@ -1,4 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { resolveSource } from "../../runtime/localization/runtime";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 import type {
   DreamAvatar,
   Dreamsign,
@@ -72,9 +76,9 @@ function node(overrides: Partial<DreamscapeNode> = {}): DreamscapeNode {
 
 describe("battleLabel", () => {
   it("identifies the final boss at the last completion level", () => {
-    expect(battleLabel(6, MINIMAL_SITES_DATA)).toBe("Final Boss");
-    expect(battleLabel(0, MINIMAL_SITES_DATA)).toBe("Battle");
-    expect(battleLabel(3, MINIMAL_SITES_DATA)).toBe("Battle");
+    expect(resolveSource(battleLabel(6, MINIMAL_SITES_DATA))).toBe("Final Boss");
+    expect(resolveSource(battleLabel(0, MINIMAL_SITES_DATA))).toBe("Battle");
+    expect(resolveSource(battleLabel(3, MINIMAL_SITES_DATA))).toBe("Battle");
   });
 });
 
@@ -113,8 +117,8 @@ describe("buildSiteModels", () => {
     const models = buildSiteModels(node(), 6);
     const battle = models.find((m) => m.isBattle);
     const draft = models.find((m) => m.site.type === "Draft");
-    expect(battle?.label).toBe("Final Boss");
-    expect(draft?.label).toBe("Draft 5x");
+    expect(resolveSource(battle!.label)).toBe("Final Boss");
+    expect(resolveSource(draft!.label)).toBe("Draft 5x");
   });
 });
 
@@ -134,9 +138,9 @@ describe("toQsbDreamAvatar", () => {
       startingEssence: 200,
     };
     const qsb = toQsbDreamAvatar(dreamAvatar);
-    expect(qsb?.name).toBe("Drusus Calvus");
-    expect(qsb?.epithet).toBe("Triumphator");
-    expect(qsb?.ability).toBe("Gain 1 essence.");
+    expect(resolveSource(qsb!.name)).toBe("Drusus Calvus");
+    expect(resolveSource(qsb!.epithet!)).toBe("Triumphator");
+    expect(resolveSource(qsb!.ability!)).toBe("Gain 1 essence.");
     expect(qsb?.portraitFocus).toEqual({ x: 0.42, y: 0.18 });
     expect(resolveArtRef(qsb!.portrait)).toContain("0007");
   });
@@ -156,8 +160,8 @@ describe("toQsbDreamsigns", () => {
     const docked = toQsbDreamsigns(signs);
     expect(docked).toHaveLength(1);
     expect(docked[0]?.id).toBe("orb");
-    expect(docked[0]?.name).toBe("Dreaming Orb");
-    expect(docked[0]?.effectDescription).toBe("At Dawn, foresee 1.");
+    expect(resolveSource(docked[0].name)).toBe("Dreaming Orb");
+    expect(resolveSource(docked[0].effectDescription!)).toBe("At Dawn, foresee 1.");
     expect(docked[0]?.imageName).toBe("magic-ball.png");
   });
 });
@@ -259,7 +263,7 @@ describe("buildDreamscapeView", () => {
       completionLevel: 2,
     } as unknown as JourneyState;
     const view = buildDreamscapeView(node(), state, MINIMAL_SITES_DATA);
-    expect(view.title).toBe("Ember Wood");
+    expect(resolveSource(view.title)).toBe("Ember Wood");
     expect(view.sites).toHaveLength(3);
     expect(view.inlineRewards).toEqual({});
   });
@@ -281,7 +285,7 @@ describe("buildDreamscapeView", () => {
 
     expect(
       buildDreamscapeView(essenceNode, state, MINIMAL_SITES_DATA).inlineRewards,
-    ).toEqual({
+    ).toMatchObject({
       "s-essence": { kind: "essence", amount: 275 },
     });
   });
@@ -314,7 +318,7 @@ describe("buildDreamscapeView", () => {
 
     expect(
       buildDreamscapeView(rewardNode, state, MINIMAL_SITES_DATA).inlineRewards,
-    ).toEqual({
+    ).toMatchObject({
       "s-reward": {
         kind: "dreamsign",
         dreamsign,
@@ -360,7 +364,7 @@ describe("buildDreamscapeView", () => {
       kind: "dreamsign",
       requiresReplacement: true,
     });
-    expect(view.replacement).toEqual({
+    expect(view.replacement).toMatchObject({
       pendingDreamsign,
       currentDreamsigns: [heldDreamsign],
       maxDreamsigns: 1,

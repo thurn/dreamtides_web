@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { LocalizedString } from "@trox/runtime";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
 import { createInitialBattleState } from "../../battle/state/create-initial-state";
 import { makeBattleTestState } from "../../battle/test-support";
 import type {
@@ -28,15 +30,19 @@ import {
   type BattlePromptText,
 } from "../../data/dreamwell-prompts";
 import type { MobileBattlePromptCopy } from "../../cumulus/screens/MobileBattleScreen";
+import { assertLocalized } from "@trox/runtime";
+import { resolveChecked } from "../../runtime/localization/runtime";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 
 function resolveFixturePromptText(
   text: BattlePromptText,
 ): MobileBattlePromptCopy {
   if (isDreamwellPromptRef(text)) {
-    return { kind: "authored", text: text.promptKey };
+    return assertLocalized(text.promptKey);
   }
-  if (isLegacyPromptText(text)) return { kind: "authored", text: text.text };
-  return { kind: "authored", text: text.prompt };
+  if (isLegacyPromptText(text)) return assertLocalized(text.text);
+  return assertLocalized(text.prompt);
 }
 
 const ENEMY_DREAM_AVATAR: BattleDreamAvatarSummary = {
@@ -422,10 +428,10 @@ describe("buildMobileBattleView", () => {
         confirmedPromptId: null,
       },
     );
+    expect(optimistic.cardPicker?.label).toBeInstanceOf(LocalizedString);
+    expect(optimistic.cardPicker?.subtitle).toBeInstanceOf(LocalizedString);
     expect(optimistic.cardPicker).toMatchObject({
       key: "42",
-      label: { kind: "message" },
-      subtitle: { kind: "message" },
       candidateIds: prompt.options.candidateIds,
       count: 2,
       optional: false,
@@ -519,13 +525,15 @@ describe("buildMobileBattleView", () => {
         confirmedPromptId: null,
       },
     );
+    expect(optimistic.choicePrompt?.label).toBeInstanceOf(LocalizedString);
+    expect(optimistic.choicePrompt?.options[0]?.label).toBeInstanceOf(
+      LocalizedString,
+    );
+    expect(optimistic.choicePrompt?.options[1]?.label).toBeInstanceOf(
+      LocalizedString,
+    );
     expect(optimistic.choicePrompt).toMatchObject({
       key: "44",
-      label: { kind: "message" },
-      options: [
-        { label: { kind: "message" } },
-        { label: { kind: "message" } },
-      ],
       canResolve: false,
     });
 
@@ -919,7 +927,7 @@ describe("buildMobileBattleView", () => {
     expect(fallback.player.status.dreamAvatar).toEqual({
       imageNumber: "001",
       name: "Avatar",
-      title: "",
+      title: undefined,
     });
   });
 
@@ -1009,7 +1017,7 @@ describe("Cumulus Dreamwell prompt battle flow", () => {
         );
         expect(
           confirmationView.choicePrompt?.options.map((option) =>
-            option.label.kind === "authored" ? option.label.text : null,
+            resolveChecked(option.label),
           ),
         ).toEqual(["confirm-yes", "confirm-skip"]);
         parked = resolvePendingPrompt(

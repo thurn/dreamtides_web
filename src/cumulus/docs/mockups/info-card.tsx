@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // Full-screen mockup for InfoCard — a mock HUD where several pressable objects
 // each reveal one of InfoCard's media variants through the shared press /
 // reveal engine and the variants on one shell.
@@ -25,7 +26,14 @@ interface TriggerProps {
 /** One pressable HUD object that reveals its InfoCard on hover / press. */
 function Trigger({ label, variant, glyph, card }: TriggerProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: token("--space-s") }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: token("--space-s"),
+      }}
+    >
       <span
         style={{
           display: "inline-flex",
@@ -57,7 +65,12 @@ function Trigger({ label, variant, glyph, card }: TriggerProps) {
             style={{ fontSize: 24, color: token("--text-on-accent") }}
           />
         </span>
-        <span style={{ font: token("--t-button-sm"), color: token("--text-primary") }}>
+        <span
+          style={{
+            font: token("--t-button-sm"),
+            color: token("--text-primary"),
+          }}
+        >
           {label}
         </span>
         <span
@@ -106,7 +119,13 @@ export function InfoCardMockup() {
         >
           One shell, many media variants
         </p>
-        <h1 style={{ font: token("--t-display"), margin: `${token("--space-xs")} 0 0`, color: token("--text-primary") }}>
+        <h1
+          style={{
+            font: token("--t-display"),
+            margin: `${token("--space-xs")} 0 0`,
+            color: token("--text-primary"),
+          }}
+        >
           Press to reveal
         </h1>
       </div>
@@ -128,9 +147,13 @@ export function InfoCardMockup() {
             <InfoCard
               variant="fullBleed"
               image={artRef.dreamAvatar("0025")}
-              title="Threxan"
-              subtitle="the Resounding Wrath"
-              body={richText.rules("At the start of your first turn, draw a card.")}
+              title={assertLocalized("Threxan")}
+              subtitle={assertLocalized("the Resounding Wrath")}
+              body={richText.rules(
+                assertLocalized(
+                  "At the start of your first turn, draw a card.",
+                ),
+              )}
             />
           }
         />
@@ -142,8 +165,12 @@ export function InfoCardMockup() {
             <InfoCard
               variant="object"
               image={artRef.dreamAvatar("0025")}
-              title="Seld Rakor"
-              body={richText.rules("Whenever you Reclaim a card, deal 1 damage.")}
+              title={assertLocalized("Seld Rakor")}
+              body={richText.rules(
+                assertLocalized(
+                  "Whenever you Reclaim a card, deal 1 damage.",
+                ),
+              )}
             />
           }
         />
@@ -154,10 +181,12 @@ export function InfoCardMockup() {
           card={
             <InfoCard
               variant="text"
-              title="Kragg"
-              subtitle="Spent-Blood Chieftain"
+              title={assertLocalized("Kragg")}
+              subtitle={assertLocalized("Spent-Blood Chieftain")}
               body={richText.rules(
-                "At the start of your first turn, gain 1 essence.",
+                assertLocalized(
+                  "At the start of your first turn, gain 1 essence.",
+                ),
               )}
             />
           }
@@ -170,9 +199,11 @@ export function InfoCardMockup() {
             <InfoCard
               variant="icon"
               glyph={glyph("bxf bx-store-alt-2")}
-              title="Merchant"
+              title={assertLocalized("Merchant")}
               body={richText.plain(
-                "Spend essence on cards, dreamsigns, and services.",
+                assertLocalized(
+                  "Spend essence on cards, dreamsigns, and services.",
+                ),
               )}
             />
           }
@@ -184,15 +215,16 @@ export function InfoCardMockup() {
           card={
             <InfoCard
               variant="text"
-              title="Essence"
+              title={assertLocalized("Essence")}
               body={richText.plain(
-                "The dream's currency — spent to draft cards and buy from merchants.",
+                assertLocalized(
+                  "The dream's currency — spent to draft cards and buy from merchants.",
+                ),
               )}
             />
           }
         />
       </div>
-
     </div>
   );
 }

@@ -12,11 +12,14 @@ import { GlassPanel } from "./GlassPanel";
 function createRoot(container: Element) {
   const root = createReactRoot(container);
   return {
-    render: (node: ReactNode) => root.render(
-      isValidElement(node) && node.type === CumulusRoot
-        ? node
-        : <CumulusRoot>{node}</CumulusRoot>,
-    ),
+    render: (node: ReactNode) =>
+      root.render(
+        isValidElement(node) && node.type === CumulusRoot ? (
+          node
+        ) : (
+          <CumulusRoot>{node}</CumulusRoot>
+        ),
+      ),
     unmount: () => root.unmount(),
   };
 }
@@ -53,8 +56,8 @@ describe("GlassPanel", () => {
             eyebrow={assertLocalized("Vision I")}
             title={assertLocalized("Transfigure Your Starters")}
             structuredSubtitle={[
-              { kind: "text", text: "Transfigure " },
-              { kind: "entity", text: "A Thread Rewoven" },
+              { kind: "text", text: assertLocalized("Transfigure ") },
+              { kind: "entity", text: assertLocalized("A Thread Rewoven") },
             ]}
             rightAccessory={{
               kind: "iconButton",
@@ -104,7 +107,9 @@ describe("GlassPanel", () => {
     );
     expect(closeButton?.getAttribute("aria-expanded")).toBe("true");
     expect(closeButton?.getAttribute("aria-controls")).toBe("controlled-panel");
-    expect(closeButton?.querySelector("[data-icon-button-glyph-stack]")).not.toBeNull();
+    expect(
+      closeButton?.querySelector("[data-icon-button-glyph-stack]"),
+    ).not.toBeNull();
 
     act(() => {
       closeButton?.click();
@@ -160,12 +165,12 @@ describe("GlassPanel", () => {
             rightAccessory={{
               kind: "glassButton",
               button: {
-                authoredLabel: "Action",
+                label: assertLocalized("Action"),
                 onPress: () => undefined,
                 essenceValue: 7,
                 size: "compact",
                 pressed: true,
-                authoredAccessibilityLabel: "Accessible action",
+                accessibilityLabel: assertLocalized("Accessible action"),
                 testId: "panel-action",
               },
             }}

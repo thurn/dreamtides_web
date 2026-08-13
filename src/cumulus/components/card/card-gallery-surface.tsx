@@ -73,16 +73,13 @@ export interface CardPickerFooterAction extends Omit<
 /** Controlled search field shown in the gallery's browser toolbar. */
 export interface CardBrowserSearchControl {
   /** Localized visible label for the search field. */
-  label?: LocalizedString;
-  /** Label supplied by canonical authored or developer-only copy. */
-  authoredLabel?: string;
+  label: LocalizedString;
   /** Current search text. */
   value: string;
   /** Reports search edits. */
   onChange: (value: string) => void;
   /** Optional empty-field hint. */
   placeholder?: LocalizedString;
-  authoredPlaceholder?: string;
   /** Optional stable test id for the native input. */
   testId?: string;
   /** Optional ref used by an overlay to focus search on open. */
@@ -131,21 +128,15 @@ export type CardPickerPresentation = "embedded" | "overlay";
 
 interface CardPanelBaseProps {
   /** Header title, rendered as an `<h2>`. */
-  title?: LocalizedString;
-  /** Header title supplied by canonical authored content. */
-  authoredTitle?: string;
+  title: LocalizedString;
   /** Optional intro line under the title. */
   subtitle?: LocalizedString;
-  /** Intro line supplied by canonical authored content. */
-  authoredSubtitle?: string;
   /** Optional trailing header action. */
   rightAccessory?: CardPanelAccessory;
   /** Resolved cards rendered in order. */
   cards: readonly CardGalleryCardView[];
   /** Empty-state copy shown when `cards` is empty. */
   emptyLabel?: LocalizedString;
-  /** Empty-state copy supplied by canonical authored or developer-only content. */
-  authoredEmptyLabel?: string;
   /** Test id for the panel root. */
   testId?: string;
 }
@@ -510,15 +501,12 @@ function cardPickerFooterButton(
 /** Private fitted card-gallery surface shared by the two public product roles. */
 function CardGallerySurface({
   title,
-  authoredTitle,
   subtitle,
-  authoredSubtitle,
   rightAccessory,
   footerActions,
   toolbar,
   cards,
   emptyLabel,
-  authoredEmptyLabel,
   columns,
   cardSize,
   frame,
@@ -534,16 +522,6 @@ function CardGallerySurface({
   endAction,
   onEndActionPress,
 }: CardGallerySurfaceProps): ReactElement {
-  if (title !== undefined && authoredTitle !== undefined) {
-    throw new Error(
-      "Card gallery accepts either title or authoredTitle, not both.",
-    );
-  }
-  if (subtitle !== undefined && authoredSubtitle !== undefined) {
-    throw new Error(
-      "Card gallery accepts either subtitle or authoredSubtitle, not both.",
-    );
-  }
   const resolve = useLocalizer();
   const pendingCardTapsRef = useRef(new Map<string, number>());
   const cancelPendingCardTap = (entryId: string): void => {
@@ -644,11 +622,7 @@ function CardGallerySurface({
             }}
           >
             {footerActions.map((action) =>
-              cardPickerFooterButton(
-                action,
-                accessoryPlacement,
-                action.testId,
-              ),
+              cardPickerFooterButton(action, accessoryPlacement, action.testId),
             )}
           </div>
         ) : (
@@ -691,12 +665,10 @@ function CardGallerySurface({
           <div style={{ flex: "1 1 280px", minWidth: 0 }}>
             <TextField
               label={toolbar.search.label}
-              authoredLabel={toolbar.search.authoredLabel}
               value={toolbar.search.value}
               onChange={toolbar.search.onChange}
               kind="search"
               placeholder={toolbar.search.placeholder}
-              authoredPlaceholder={toolbar.search.authoredPlaceholder}
               testId={toolbar.search.testId}
               inputRef={toolbar.search.inputRef}
             />
@@ -767,9 +739,7 @@ function CardGallerySurface({
     >
       <GlassPanel
         title={title}
-        authoredTitle={authoredTitle}
         subtitle={subtitle}
-        authoredSubtitle={authoredSubtitle}
         rightAccessory={rightAccessory}
         cutoutAwareAccessory={frame === "fullBleed"}
         frame={frame}
@@ -807,11 +777,12 @@ function CardGallerySurface({
                   color: token("--text-on-glass"),
                 }}
               >
-                {authoredEmptyLabel ?? resolve(
-                  emptyLabel ?? tx(
-                    "No cards.",
-                    "Empty state shared by card galleries and battle-zone browsers.",
-                  ),
+                {resolve(
+                  emptyLabel ??
+                    tx(
+                      "No cards.",
+                      "Empty state shared by card galleries and battle-zone browsers.",
+                    ),
                 )}
               </p>
             </div>

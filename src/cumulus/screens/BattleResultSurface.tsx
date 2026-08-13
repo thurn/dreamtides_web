@@ -13,14 +13,16 @@ import { meaning,
   plural,
   one,
   other,
+  opaque,
 } from "@trox/runtime";
+import type { LocalizedString } from "@trox/runtime";
 
 export type MobileBattleResultOutcome = "victory" | "defeat" | "draw";
 
 export type MobileBattleResultView =
   | {
       readonly outcome: "victory";
-      readonly opponentName: string;
+      readonly opponentName: LocalizedString;
       readonly playerScore: number;
       readonly opponentScore: number;
       readonly turnCount: number;
@@ -219,7 +221,7 @@ function VictoryReward({
               ]),
               {
                 turn_count: view.turnCount,
-                opponent_name: view.opponentName,
+                opponent_name: opaque(view.opponentName),
                 player_score: view.playerScore,
                 opponent_score: view.opponentScore,
               },

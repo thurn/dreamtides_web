@@ -5,12 +5,12 @@
 // at the real Dreamsign so the props table reports its actual API.
 
 import { Dreamsign } from "../../components/hud/Dreamsign";
-import type { Dreamsign as DreamsignData } from "../../../types/journey";
+import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
 
 /** Three real dreamsigns, identified by UUID. */
-const DEMO_DREAMSIGNS: DreamsignData[] = [
+const DEMO_DREAMSIGNS = [
   {
     id: "c706d0ba-2f41-4b14-95d8-db168ac6246c",
     name: "Amplified Acorn",
@@ -34,7 +34,7 @@ const DEMO_DREAMSIGNS: DreamsignData[] = [
     effectDescription:
       "Once per turn, when an ally leaves play, your next character this turn costs 2● less.",
   },
-];
+].map(localizedDreamsignFixture);
 
 interface DreamsignDemoArgs {
   /** Tile material: `flat` (chrome-free) or `hud` (drop-shadow + violet glow). */

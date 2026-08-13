@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import { CardView } from "../cumulus/components/card/CardView";
@@ -7,7 +8,10 @@ import { SIZE_PRESETS } from "./card-size";
 import type { CardData } from "../types/cards";
 import type { JourneyContent } from "../data/journey-content";
 import type { Tides4DeckJson, Tides4DecksJson } from "../draft/pool/tides4-io";
-import { resolveTideDeck, type TideDeckResolution } from "./tide-deck-resolution";
+import {
+  resolveTideDeck,
+  type TideDeckResolution,
+} from "./tide-deck-resolution";
 import { tideDotColor } from "./TidePoolModal";
 import type {
   EditorDreamAvatarRecord,
@@ -224,7 +228,12 @@ function TideCardPanel({
       }}
     >
       <div
-        style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          marginBottom: 12,
+        }}
       >
         <span
           aria-hidden="true"
@@ -238,13 +247,21 @@ function TideCardPanel({
           }}
         />
         <h3
-          style={{ margin: 0, fontSize: "0.95rem", fontWeight: 800, color: "#fff7e0" }}
+          style={{
+            margin: 0,
+            fontSize: "0.95rem",
+            fontWeight: 800,
+            color: "#fff7e0",
+          }}
         >
           {label}
         </h3>
         {resolution !== null && resolution.found ? (
-          <span style={{ color: "#94a3b8", fontSize: "0.78rem", fontWeight: 600 }}>
-            {resolution.cards.length} card{resolution.cards.length === 1 ? "" : "s"}
+          <span
+            style={{ color: "#94a3b8", fontSize: "0.78rem", fontWeight: 600 }}
+          >
+            {resolution.cards.length} card
+            {resolution.cards.length === 1 ? "" : "s"}
             {resolution.totalCopies !== resolution.cards.length
               ? ` · ${String(resolution.totalCopies)} copies`
               : ""}
@@ -271,7 +288,9 @@ function TideCardPanel({
       </div>
 
       {error !== null ? (
-        <p style={{ margin: 0, color: "#fecaca", fontSize: "0.85rem" }}>{error}</p>
+        <p style={{ margin: 0, color: "#fecaca", fontSize: "0.85rem" }}>
+          {error}
+        </p>
       ) : loading ? (
         <p style={{ margin: 0, color: "#94a3b8", fontSize: "0.85rem" }}>
           Loading tide cards…
@@ -280,7 +299,8 @@ function TideCardPanel({
         <p style={{ margin: 0, color: "#94a3b8", fontSize: "0.85rem" }}>
           No decklist found for this tide.
         </p>
-      ) : resolution.cards.length === 0 && resolution.unresolved.length === 0 ? (
+      ) : resolution.cards.length === 0 &&
+        resolution.unresolved.length === 0 ? (
         <p style={{ margin: 0, color: "#94a3b8", fontSize: "0.85rem" }}>
           This tide has no cards.
         </p>
@@ -327,7 +347,13 @@ function TideCardPanel({
             </div>
           </div>
           {resolution.unresolved.length > 0 ? (
-            <p style={{ margin: "12px 0 0", color: "#64748b", fontSize: "0.78rem" }}>
+            <p
+              style={{
+                margin: "12px 0 0",
+                color: "#64748b",
+                fontSize: "0.78rem",
+              }}
+            >
               No card found for: {resolution.unresolved.join(", ")}
             </p>
           ) : null}
@@ -418,9 +444,7 @@ export default function DreamAvatarDetailView({
     for (let i = 0; i < resolveCount; i++) {
       const uuid = ids[i];
       const card =
-        uuid !== undefined
-          ? cardsByUuid.get(uuid.toLowerCase())
-          : undefined;
+        uuid !== undefined ? cardsByUuid.get(uuid.toLowerCase()) : undefined;
       if (card !== undefined) {
         cards.push(card);
       } else {
@@ -462,7 +486,9 @@ export default function DreamAvatarDetailView({
   const selectedTideMeta =
     selectedTideId === null ? null : (tideById.get(selectedTideId) ?? null);
   const selectedTideLabel =
-    selectedTideMeta !== null ? tideOptionLabel(selectedTideMeta) : (selectedTideId ?? "");
+    selectedTideMeta !== null
+      ? tideOptionLabel(selectedTideMeta)
+      : (selectedTideId ?? "");
   const selectedTideColor =
     selectedTideMeta !== null
       ? tideDotColor(selectedTideMeta.resonance)
@@ -493,14 +519,16 @@ export default function DreamAvatarDetailView({
           <DreamAvatarPortrait
             dreamAvatar={{
               imageNumber: dreamAvatar.imageNumber,
-              name: dreamAvatar.name,
-              title: dreamAvatar.title,
+              name: assertLocalized(dreamAvatar.name),
+              title: assertLocalized(dreamAvatar.title),
             }}
             variant="panel"
           />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: "1.4rem", fontWeight: 850, color: "#fff7e0" }}>
+          <div
+            style={{ fontSize: "1.4rem", fontWeight: 850, color: "#fff7e0" }}
+          >
             {dreamAvatar.name}
           </div>
           <div
@@ -522,7 +550,7 @@ export default function DreamAvatarDetailView({
             }}
           >
             <RulesText
-              text={dreamAvatar["rendered-text"]}
+              text={assertLocalized(dreamAvatar["rendered-text"])}
               owner={{ kind: "dreamAvatar", id: dreamAvatar.id }}
             />
           </div>
@@ -576,7 +604,8 @@ export default function DreamAvatarDetailView({
             <p style={{ margin: 0, color: "#94a3b8", fontSize: "0.85rem" }}>
               Loading card database…
             </p>
-          ) : signature.cards.length === 0 && signature.unresolved.length === 0 ? (
+          ) : signature.cards.length === 0 &&
+            signature.unresolved.length === 0 ? (
             <p style={{ margin: 0, color: "#94a3b8", fontSize: "0.85rem" }}>
               This avatar has no signature cards.
             </p>
@@ -596,7 +625,11 @@ export default function DreamAvatarDetailView({
                   }}
                 >
                   {signature.cards.map((card, index) => (
-                    <CardView key={`${card.id}:${String(index)}`} card={card} large />
+                    <CardView
+                      key={`${card.id}:${String(index)}`}
+                      card={card}
+                      large
+                    />
                   ))}
                 </div>
               </div>

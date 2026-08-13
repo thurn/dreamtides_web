@@ -1,4 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { resolveSource } from "../../runtime/localization/runtime";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 import { asCardId, asCardName } from "../../types/card-identity";
 import {
   MINIMAL_ATLAS_DATA,
@@ -496,8 +500,9 @@ describe("augury view model", () => {
       auguryArchetype(CONFIG_DATA_FIXTURE.auguryData, "purge").presentation,
     );
 
-    expect(formatted).not.toBe("");
-    expect(formatted).toContain(deckObject.displayName);
+    const source = resolveSource(formatted);
+    expect(source).not.toBe("");
+    expect(source).toContain(deckObject.displayName);
   });
 
   it("rejects malformed fixed counts and resolves structured category and copy data", () => {

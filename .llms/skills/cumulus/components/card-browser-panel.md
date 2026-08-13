@@ -27,14 +27,11 @@ Toolbar controls and drag, context-menu, and mobile double-tap gestures belong t
 | `onCardDragEnd` | `((entryId: string, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when a draggable card entry's native drag ends. |
 | `onCardContextMenu` | `((entryId: string, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)` | no | — | Fires when a card entry requests its contextual actions. |
 | `onCardDoubleTap` | `((entryId: string) => void)` | no | — | Fires when a card receives two quick activations. While present, a primary card press waits briefly so a second tap can take precedence. |
-| `title` | `LocalizedString` | no | — | Header title, rendered as an `<h2>`. |
-| `authoredTitle` | `string` | no | — | Header title supplied by canonical authored content. |
+| `title` | `LocalizedString` | yes | — | Header title, rendered as an `<h2>`. |
 | `subtitle` | `LocalizedString` | no | — | Optional intro line under the title. |
-| `authoredSubtitle` | `string` | no | — | Intro line supplied by canonical authored content. |
 | `rightAccessory` | `CardPanelAccessory` | no | — | Optional trailing header action. |
 | `cards` | `readonly CardChoiceGridCardView[]` | yes | — | Resolved cards rendered in order. |
 | `emptyLabel` | `LocalizedString` | no | — | Empty-state copy shown when `cards` is empty. |
-| `authoredEmptyLabel` | `string` | no | — | Empty-state copy supplied by canonical authored or developer-only content. |
 | `testId` | `string` | no | — | Test id for the panel root. |
 
 ### `toolbar`: the `CardBrowserToolbar` model
@@ -70,7 +67,7 @@ A searchable overlay browser with UUID-backed card entries.
 import { CardBrowserPanel } from "src/cumulus/components/card/CardBrowserPanel";
 
 <CardBrowserPanel
-  title="Your Deck"
+  title={assertLocalized("Your Deck")}
   cards={cards}
   toolbar={toolbar}
   presentation="overlay"

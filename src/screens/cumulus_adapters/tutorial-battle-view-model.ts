@@ -11,8 +11,12 @@ import {
   buildMobileBattleView,
 } from "./mobile-battle-view-model";
 import { rankSlotIds } from "../../battle/types";
+import { tx } from "@trox/runtime";
 
-const INACTIVE_TUTORIAL_AVATAR_ABILITY = "Avatar ability is not active";
+const INACTIVE_TUTORIAL_AVATAR_ABILITY = tx(
+  "Avatar ability is not active",
+  "Unavailable-state description for a Dream Avatar whose ability is disabled during the tutorial battle.",
+);
 
 function withInactiveTutorialAvatarAbility(
   side: MobileBattleSideView,
@@ -149,7 +153,8 @@ export function buildTutorialBattleView(
     presentation,
   );
   const prompt = battle.pendingPrompt;
-  const confirmedHumanPrompt = controller.status === "driver" &&
+  const confirmedHumanPrompt =
+    controller.status === "driver" &&
     controller.isCurrentClientDriver &&
     controller.requiresHumanDecision &&
     prompt !== null &&
@@ -160,9 +165,13 @@ export function buildTutorialBattleView(
       challengeOriginBoard === null
         ? null
         : buildBattleView(challengeOriginBoard),
-    ownership: controller.status === "not-tutorial" ? "observer" : controller.status,
+    ownership:
+      controller.status === "not-tutorial" ? "observer" : controller.status,
     driverClientId: controller.driverClientId,
-    manualControls: controller.status === "driver" && controller.isCurrentClientDriver && controller.requiresHumanDecision,
+    manualControls:
+      controller.status === "driver" &&
+      controller.isCurrentClientDriver &&
+      controller.requiresHumanDecision,
     foresee:
       confirmedHumanPrompt && prompt.options.kind === "foresee"
         ? {
@@ -180,9 +189,7 @@ export function buildTutorialBattleView(
         ? null
         : presentation.id,
     presentation: tutorialPresentationView(presentation, battle),
-    victoryVisible:
-      previewVictory ||
-      battle.board.result === "victory",
+    victoryVisible: previewVictory || battle.board.result === "victory",
   };
 }
 

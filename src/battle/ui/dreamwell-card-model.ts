@@ -1,6 +1,7 @@
 import type { DreamwellCardModel } from "../../cumulus/components/battle/DreamwellCard";
 import { asCardId } from "../../types/card-identity";
 import type { DreamwellCardDefinition } from "../types";
+import { localizedSourceText } from "../../runtime/localization/runtime";
 
 /**
  * Map the shared battle definition to the complete canonical Dreamwell card
@@ -15,8 +16,8 @@ export function dreamwellCardModel(
     cardId,
     displaySnapshot: {
       id: cardId,
-      name: definition.name,
-      renderedText: definition.renderedText,
+      name: localizedSourceText(definition.name),
+      renderedText: localizedSourceText(definition.renderedText),
       energyAdded: definition.energyAdded,
       imageNumber: definition.imageNumber,
       ...(definition.art === undefined ? {} : { art: definition.art }),

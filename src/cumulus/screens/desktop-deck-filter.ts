@@ -14,6 +14,7 @@
 
 import type { CardType } from "../../types/cards";
 import type { DeckCardView } from "./MobileDeckViewer";
+import { localizedSourceText } from "../../runtime/localization/runtime";
 import {
   type DeckControlOption,
   type DeckSortId,
@@ -62,19 +63,11 @@ export const DEFAULT_DESKTOP_DECK_FILTER_SORT: DesktopDeckFilterSort = {
 
 /** The card-type toggle segments, in display order. */
 export const DECK_TYPE_TOGGLE_OPTIONS: readonly DeckControlOption<DeckTypeToggle>[] =
-  [
-    { value: "all" },
-    { value: "Character" },
-    { value: "Event" },
-  ] as const;
+  [{ value: "all" }, { value: "Character" }, { value: "Event" }] as const;
 
 /** The card-size segments — the S / M / L display-size control. */
 export const DECK_CARD_SIZE_OPTIONS: readonly DeckControlOption<DeckCardSize>[] =
-  [
-    { value: "small" },
-    { value: "medium" },
-    { value: "large" },
-  ] as const;
+  [{ value: "small" }, { value: "medium" }, { value: "large" }] as const;
 
 /**
  * On-screen tile width (px) for each display-size preset. Box measures —
@@ -101,16 +94,14 @@ export function buildSubtypeFilterOptions(
   const subtypes = new Set<string>();
   for (const view of cards) {
     const subtype = view.model.displaySnapshot.subtype.trim();
-    if (subtype !== "") subtypes.add(subtype);
+    if (subtype !== "" && subtype !== "*") subtypes.add(subtype);
   }
   const options = [...subtypes]
     .sort((a, b) => a.localeCompare(b))
-    .map(
-      (subtype): DeckControlOption<SubtypeFilter> => ({
-        value: subtype,
-        authoredLabel: subtype,
-      }),
-    );
+    .map((subtype): DeckControlOption<SubtypeFilter> => ({
+      value: subtype,
+      label: localizedSourceText(subtype),
+    }));
   return [{ value: "all" }, ...options];
 }
 

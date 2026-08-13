@@ -1,4 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { assertLocalized } from "@trox/runtime";
+import { localizedStringSourceEquality } from "../../../runtime/localization/testing";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 import type { GlossaryCatalogEntry } from "../../../data/glossary";
 import {
   glossaryDefinitionsCardModel,
@@ -28,12 +32,16 @@ function entry(
 describe("glossaryDefinitionsCardModel", () => {
   it("omits ordinary Materialize and Void definitions from rules-text reveals", () => {
     expect(
-      rulesTextDefinitionCards("Materialize a character from your void."),
+      rulesTextDefinitionCards(
+        assertLocalized("Materialize a character from your void."),
+      ),
     ).toEqual([]);
   });
 
   it("builds the Challenge trigger's hover definition card", () => {
-    expect(rulesTextDefinitionCards("▸Challenge: Draw a card.")).toEqual([
+    expect(
+      rulesTextDefinitionCards(assertLocalized("▸Challenge: Draw a card.")),
+    ).toEqual([
       {
         variant: "text",
         body: {

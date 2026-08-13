@@ -1,9 +1,6 @@
 import type { ReactElement } from "react";
 import type { LocalizedString } from "@trox/runtime";
-import {
-  type CumulusColor,
-  resolveColor,
-} from "../../primitives/color";
+import { type CumulusColor, resolveColor } from "../../primitives/color";
 import type { Glyph } from "../../primitives/glyph";
 import { useOptionalLocalizer } from "../../../runtime/localization/use-localizer";
 
@@ -14,8 +11,6 @@ export interface InlineGlyphProps {
   color?: CumulusColor;
   /** Accessible meaning. Omit only when surrounding copy already names the glyph. */
   label?: LocalizedString;
-  /** Accessible meaning supplied by canonical authored content. */
-  authoredLabel?: string;
 }
 
 /**
@@ -34,15 +29,11 @@ export function InlineGlyph({
   glyph,
   color,
   label,
-  authoredLabel,
 }: InlineGlyphProps): ReactElement {
   const resolve = useOptionalLocalizer();
-  if (label !== undefined && authoredLabel !== undefined) {
-    throw new Error("InlineGlyph accepts either label or authoredLabel, not both.");
-  }
   const accessibleLabel =
     label === undefined
-      ? authoredLabel
+      ? undefined
       : resolve === null
         ? missingLocalizationProvider()
         : resolve(label);

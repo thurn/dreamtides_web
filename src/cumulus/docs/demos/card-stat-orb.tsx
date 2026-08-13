@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 import { CardStatOrb } from "../../components/card/CardStatOrb";
 import type { CumulusComponent } from "../registry";
 
@@ -15,17 +16,20 @@ function CardStatOrbDemo(args: Record<string, unknown>) {
         typeof args.numberSizeVar === "string" ? args.numberSizeVar : "22px"
       }
       numberCapPx={typeof args.numberCapPx === "number" ? args.numberCapPx : 22}
-      authoredAriaLabel={
-        typeof args.ariaLabel === "string" ? args.ariaLabel : undefined
+      ariaLabel={
+        typeof args.ariaLabel === "string"
+          ? assertLocalized(args.ariaLabel)
+          : undefined
       }
       changeBadge={
         args.changeBadge === "empowered" || args.changeBadge === "kindled"
           ? {
               kind: args.changeBadge,
-              accessibleName:
+              accessibleName: assertLocalized(
                 typeof args.changeBadgeName === "string"
                   ? args.changeBadgeName
                   : "Transfiguration",
+              ),
             }
           : undefined
       }

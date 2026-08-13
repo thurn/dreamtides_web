@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 
+import { assertLocalized } from "@trox/runtime";
 import { act, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -689,9 +690,9 @@ describe("TutorialBattleScreen", () => {
           kind: "character-portrait" as const,
           characterId: "mira" as const,
         },
-        portraitAlt: "Mira",
-        speakerName: "Mira",
-        text: "Erode sends cards to the void.",
+        portraitAlt: assertLocalized("Mira"),
+        speakerName: assertLocalized("Mira"),
+        text: assertLocalized("Erode sends cards to the void."),
       },
       horizontalOffset: 0,
       verticalOffset: 0,
@@ -703,8 +704,8 @@ describe("TutorialBattleScreen", () => {
           cardId: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
           displaySnapshot: {
             id: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
-            name: "Shadow Passage",
-            renderedText: "Erode 3.",
+            name: assertLocalized("Shadow Passage"),
+            renderedText: assertLocalized("Erode 3."),
             energyAdded: 1,
             imageNumber: 3,
           },

@@ -37,10 +37,12 @@ import { useIsDesktop } from "./use-is-desktop";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
+import type { LocalizedString } from "@trox/runtime";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 /** Everything the draft screen renders, mapped from live journey state. */
 export interface DraftView {
-  progressLabel: string;
+  progressLabel: LocalizedString;
   /** The dreamscape's scene art, or null while the dreamscape is unrevealed. */
   scene: ArtRef | null;
   /** The offered pack, resolved to cards (by UUID) and sorted for display. */
@@ -133,6 +135,7 @@ export function DraftScreen({
   onReroll = NOOP,
   onTutorialShown,
 }: DraftScreenProps) {
+  const resolve = useLocalizer();
   const isDesktop = useIsDesktop();
   const wideDraftRow = useIsDesktop(DRAFT_ROW_MIN_WIDTH_PX);
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
@@ -160,7 +163,7 @@ export function DraftScreen({
   }, [view.offerKey]);
   const availableTutorial = pendingPick === null ? view.tutorial : undefined;
   const tutorialVisible = useDelayedTutorialSpeechBubbleVisibility(
-    availableTutorial?.id ?? availableTutorial?.model.text,
+    availableTutorial?.id,
     availableTutorial === undefined
       ? undefined
       : (availableTutorial.delaySeconds ?? 0),
@@ -213,7 +216,7 @@ export function DraftScreen({
       {tutorialVisible && availableTutorial !== undefined && (
         <ViewportTutorialDialogue
           view={{
-            id: availableTutorial.id ?? availableTutorial.model.text,
+            id: availableTutorial.id,
             dialogue: availableTutorial.model,
             horizontalOffset: availableTutorial.horizontalOffset,
             verticalOffset: availableTutorial.verticalOffset,
@@ -335,7 +338,7 @@ export function DraftScreen({
             textShadow: token("--text-outline-media"),
           }}
         >
-          {view.progressLabel}
+          {resolve(view.progressLabel)}
         </div>
       </div>
 

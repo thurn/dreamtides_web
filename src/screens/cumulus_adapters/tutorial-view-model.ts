@@ -1,3 +1,5 @@
+import { localizedSourceText } from "../../runtime/localization/runtime";
+import { tx } from "@trox/runtime";
 import type {
   MobileBattleCardView,
   MobileBattleInspectorSideView,
@@ -259,8 +261,8 @@ function tutorialDreamwellModel(card: DreamwellCard) {
     cardId,
     displaySnapshot: {
       id: cardId,
-      name: card.name,
-      renderedText: card.renderedText,
+      name: localizedSourceText(card.name),
+      renderedText: localizedSourceText(card.renderedText),
       energyAdded: card.energyAdded,
       imageNumber: card.imageNumber ?? 0,
       ...(card.art === undefined ? {} : { art: card.art }),
@@ -382,7 +384,9 @@ export function buildTutorialView(
     battleConfiguration.enemyDreamAvatarId,
   );
   const playerCard =
-    cards?.find((card) => card.id === tutorialCardConstants.tutorialPlayerCharacterCardId) ?? null;
+    cards?.find(
+      (card) => card.id === tutorialCardConstants.tutorialPlayerCharacterCardId,
+    ) ?? null;
   const currentAction =
     playback?.currentActionIndex === null ||
     playback?.currentActionIndex === undefined
@@ -584,7 +588,9 @@ export function buildTutorialView(
   }
   const primaryOpponentRecord =
     opponentPlayedRecords.find(
-      (record) => record.card.id === tutorialCardConstants.tutorialOpponentCharacterCardId,
+      (record) =>
+        record.card.id ===
+        tutorialCardConstants.tutorialOpponentCharacterCardId,
     ) ?? null;
   const primaryOpponentCard = primaryOpponentRecord?.card ?? null;
   const tutorialCard = primaryOpponentRecord?.view ?? null;
@@ -749,7 +755,8 @@ export function buildTutorialView(
   const revealedDreamwellApplied =
     revealedDreamwellActionIndex >= 0 &&
     completedActionCount > revealedDreamwellActionIndex &&
-    (revealedDreamwellCard?.id !== tutorialCardConstants.tutorialDreamwellCardId ||
+    (revealedDreamwellCard?.id !==
+      tutorialCardConstants.tutorialDreamwellCardId ||
       dreamwellExplanationCompleted);
   const enemyDreamwellApplied = enemyDreamwellDrawn && revealedDreamwellApplied;
   const dreamwellScoreGain =
@@ -851,15 +858,18 @@ export function buildTutorialView(
       player: {
         visual: {
           imageNumber: playerDreamAvatar.imageNumber,
-          name: playerDreamAvatar.name,
-          title: playerDreamAvatar.title,
+          name: localizedSourceText(playerDreamAvatar.name),
+          title: localizedSourceText(playerDreamAvatar.title),
           ...(playerDreamAvatar.portraitFocus === undefined
             ? {}
             : { portraitFocus: playerDreamAvatar.portraitFocus }),
         },
         profile: {
           id: battleConfiguration.playerDreamAvatarId,
-          ability: "Avatar ability is not active",
+          ability: tx(
+            "Avatar ability is not active",
+            "Unavailable-state description for a Dream Avatar whose ability is disabled during the tutorial battle.",
+          ),
           unavailable: true,
         },
         settled: dreamAvatarSettled("player"),
@@ -867,15 +877,18 @@ export function buildTutorialView(
       enemy: {
         visual: {
           imageNumber: opponentDreamAvatar.imageNumber,
-          name: opponentDreamAvatar.name,
-          title: opponentDreamAvatar.title,
+          name: localizedSourceText(opponentDreamAvatar.name),
+          title: localizedSourceText(opponentDreamAvatar.title),
           ...(opponentDreamAvatar.portraitFocus === undefined
             ? {}
             : { portraitFocus: opponentDreamAvatar.portraitFocus }),
         },
         profile: {
           id: battleConfiguration.enemyDreamAvatarId,
-          ability: "Avatar ability is not active",
+          ability: tx(
+            "Avatar ability is not active",
+            "Unavailable-state description for a Dream Avatar whose ability is disabled during the tutorial battle.",
+          ),
           unavailable: true,
         },
         settled: dreamAvatarSettled("enemy"),
@@ -906,9 +919,9 @@ export function buildTutorialView(
               bubbleWidth: dialogue.speechBubble.bubbleWidth,
               speakerName:
                 dialogue.speechBubble.speaker === "player"
-                  ? playerDreamAvatar.name
-                  : opponentDreamAvatar.name,
-              text: dialogue.speechBubble.text,
+                  ? localizedSourceText(playerDreamAvatar.name)
+                  : localizedSourceText(opponentDreamAvatar.name),
+              text: localizedSourceText(dialogue.speechBubble.text),
             }
           : {
               actionId: dialogue.actionId,
@@ -927,9 +940,9 @@ export function buildTutorialView(
               bubbleWidth: dialogue.speechBubble.bubbleWidth,
               model: {
                 portrait: { kind: "character-portrait", characterId: "mira" },
-                portraitAlt: "Mira",
-                speakerName: "Mira",
-                text: dialogue.speechBubble.text,
+                portraitAlt: tx("Mira", "Name of the tutorial guide."),
+                speakerName: tx("Mira", "Name of the tutorial guide."),
+                text: localizedSourceText(dialogue.speechBubble.text),
               },
             },
     playbackRunId: playback?.runId ?? null,
@@ -939,7 +952,7 @@ export function buildTutorialView(
         ? null
         : {
             actionId: currentAction.id,
-            text: currentAction.text,
+            text: localizedSourceText(currentAction.text),
             wait: currentAction.wait,
             trigger:
               currentAction.trigger ?? "player-turn-announcement-complete",

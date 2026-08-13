@@ -3,7 +3,7 @@
 
 import {motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import type { Dreamsign as DreamsignData } from "../../types/journey";
+import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
 import { DreamsignGalleryPanel } from "../components/card/DreamsignGalleryPanel";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import type { ArtRef } from "../primitives/art";
@@ -20,7 +20,7 @@ import {
   ShopFreePurchaseStatus,
   type ShopFreePurchaseStatusView,
 } from "./ShopFreePurchaseStatus";
-import { meaning, tx, txa } from "@trox/runtime";
+import { meaning, tx, txa, type LocalizedString } from "@trox/runtime";
 
 // Four 126px items, three 16px gaps, and the panel's 64px horizontal padding
 // occupy 616px; this cap keeps a deliberate 32px breathing edge per side.
@@ -32,7 +32,7 @@ export interface DreamsignBazaarOfferView {
   /** Persistent runtime slot index used to purchase the ware. */
   slotIndex: number;
   /** Dreamsign rendered by the shared semantic entity component. */
-  dreamsign: DreamsignData;
+  dreamsign: LocalizedDreamsign;
   /** Effective essence price after discounts. */
   price: number;
   /** Whether the offer is available, unaffordable, or acquired. */
@@ -52,17 +52,19 @@ export interface DreamsignBazaarRestockView {
 
 export interface DreamsignBazaarPurgeView {
   /** Dreamsign the player is trying to purchase. */
-  pendingDreamsign: DreamsignData;
+  pendingDreamsign: LocalizedDreamsign;
   /** Current Dreamsigns, one of which must be replaced. */
-  currentDreamsigns: readonly DreamsignData[];
+  currentDreamsigns: readonly LocalizedDreamsign[];
   /** Maximum number of Dreamsigns the run may hold. */
   maxDreamsigns: number;
 }
 
 export interface DreamsignBazaarSiteView {
-  presentation: Extract<
-    import("../../types/sites-data").SitePresentation,
-    { kind: "dreamsign-bazaar" }
+  presentation: import("./localized-site-presentation").LocalizedSitePresentation<
+    Extract<
+      import("../../types/sites-data").SitePresentation,
+      { kind: "dreamsign-bazaar" }
+    >
   >;
   /** Stable site id. */
   siteId: string;
@@ -338,7 +340,7 @@ interface RectSnapshot {
 
 interface PurchaseTravel {
   readonly key: string;
-  readonly dreamsign: DreamsignData;
+  readonly dreamsign: LocalizedDreamsign;
   readonly sourceRect: RectSnapshot;
   readonly targetRect: RectSnapshot;
 }
@@ -359,7 +361,7 @@ function DreamsignReplacementDialog({
   onCancel,
 }: {
   readonly purge: DreamsignBazaarPurgeView;
-  readonly title: string;
+  readonly title: LocalizedString;
   readonly onPurge: (index: number) => void;
   readonly onCancel: () => void;
 }) {
@@ -401,7 +403,7 @@ function DreamsignReplacementDialog({
             color: token("--text-primary"),
           }}
         >
-          {title}
+          {resolve(title)}
         </h2>
         <p
           style={{ font: token("--t-body"), color: token("--text-secondary") }}

@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 import type { CSSProperties, ReactNode } from "react";
 import { TideDisc } from "../../components/hud/TideDisc";
 import { TidesInfoLabel } from "../../components/hud/TidesInfoLabel";
@@ -72,7 +73,7 @@ const revealComponents = [
     name: "RulesText",
     use: "Standalone rules copy whose terms need contextual definitions.",
     api: "text, owner; glossaryInteraction defaults to source",
-    note: "Use glossaryInteraction=\"delegated\" when a containing entity, such as GameCard, already owns the reveal.",
+    note: 'Use glossaryInteraction="delegated" when a containing entity, such as GameCard, already owns the reveal.',
   },
   {
     id: "essence-value",
@@ -142,7 +143,11 @@ function Section({
   return (
     <section
       id={id}
-      style={{ display: "flex", flexDirection: "column", gap: token("--space-l") }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: token("--space-l"),
+      }}
     >
       <h2 style={sectionHeadingStyle}>{title}</h2>
       {children}
@@ -247,14 +252,18 @@ function LiveRevealStage() {
             gap: token("--space-s"),
           }}
         >
-          <span style={{ color: token("--text-muted"), font: token("--t-caption") }}>
+          <span
+            style={{ color: token("--text-muted"), font: token("--t-caption") }}
+          >
             Valor
           </span>
           <TideDisc
             tide="valor"
             id="cumulus-docs-entity-reveal-valor"
-            label="Rising Valor"
-            description="A steadfast tide that rewards holding the line."
+            label={assertLocalized("Rising Valor")}
+            description={assertLocalized(
+              "A steadfast tide that rewards holding the line.",
+            )}
           />
         </div>
 
@@ -283,14 +292,18 @@ function LiveRevealStage() {
             gap: token("--space-s"),
           }}
         >
-          <span style={{ color: token("--text-muted"), font: token("--t-caption") }}>
+          <span
+            style={{ color: token("--text-muted"), font: token("--t-caption") }}
+          >
             Vision
           </span>
           <TideDisc
             tide="vision"
             id="cumulus-docs-entity-reveal-vision"
-            label="Rising Vision"
-            description="A lucid tide that rewards seeing the next possibility."
+            label={assertLocalized("Rising Vision")}
+            description={assertLocalized(
+              "A lucid tide that rewards seeing the next possibility.",
+            )}
           />
         </div>
       </div>
@@ -366,7 +379,10 @@ export function EntityRevealCoordinatorDocs() {
         paddingBottom: token("--space-4xl"),
       }}
     >
-      <Section id="entity-reveal-introduction" title="What Is An Entity Reveal?">
+      <Section
+        id="entity-reveal-introduction"
+        title="What Is An Entity Reveal?"
+      >
         <p style={bodyStyle}>
           An entity reveal is the temporary detail view that appears when a
           player asks to inspect a game object. It lets a small card, icon,
@@ -414,16 +430,21 @@ export function EntityRevealCoordinatorDocs() {
 />`}</CodeExample>
         <div style={surfaceStyle}>
           <p style={{ ...bodyStyle, maxWidth: "none" }}>
-            <strong style={{ color: token("--text-primary") }}>What happens:</strong>{" "}
+            <strong style={{ color: token("--text-primary") }}>
+              What happens:
+            </strong>{" "}
             GameCard derives a complete reading copy and the relevant status,
-            timing, glossary, and Figment details from its model. TideDisc builds
-            a tide InfoCard from its label and description. Both register with
-            the CumulusRoot already mounted by the application.
+            timing, glossary, and Figment details from its model. TideDisc
+            builds a tide InfoCard from its label and description. Both register
+            with the CumulusRoot already mounted by the application.
           </p>
         </div>
       </Section>
 
-      <Section id="entity-reveal-components" title="Choose A Reveal-Enabled Component">
+      <Section
+        id="entity-reveal-components"
+        title="Choose A Reveal-Enabled Component"
+      >
         <p style={bodyStyle}>
           The component is the public API. Its normal props contain everything
           the reveal needs; follow the component link for the complete prop
@@ -456,7 +477,9 @@ export function EntityRevealCoordinatorDocs() {
                   font: token("--t-caption"),
                 }}
               >
-                <strong style={{ color: token("--text-primary") }}>Reveal API:</strong>{" "}
+                <strong style={{ color: token("--text-primary") }}>
+                  Reveal API:
+                </strong>{" "}
                 <code style={inlineCodeStyle}>{component.api}</code>
               </p>
               <p
@@ -529,15 +552,17 @@ export function EntityRevealCoordinatorDocs() {
         <ContractList>
           <li>
             Pass stable domain identity and resolved display data. Cards use
-            UUIDs, and the <code style={inlineCodeStyle}>displaySnapshot.id</code>{" "}
-            must match <code style={inlineCodeStyle}>cardId</code>. Never use a
-            display name as identity.
+            UUIDs, and the{" "}
+            <code style={inlineCodeStyle}>displaySnapshot.id</code> must match{" "}
+            <code style={inlineCodeStyle}>cardId</code>. Never use a display
+            name as identity.
           </li>
           <li>
-            Supply <code style={inlineCodeStyle}>onPress</code> or the component's
-            named action callback only when the source is actionable. Use
-            <code style={inlineCodeStyle}> unavailable</code> when it should stay
-            readable without responding to selection.
+            Supply <code style={inlineCodeStyle}>onPress</code> or the
+            component's named action callback only when the source is
+            actionable. Use
+            <code style={inlineCodeStyle}> unavailable</code> when it should
+            stay readable without responding to selection.
           </li>
           <li>
             Let a layout wrapper size and position the source component. Reveal
@@ -551,9 +576,9 @@ export function EntityRevealCoordinatorDocs() {
             component decides when and where InfoCard appears.
           </li>
           <li>
-            The application entry mounts one <code style={inlineCodeStyle}>CumulusRoot</code>.
-            Product screens beneath it do not mount another root or keep reveal
-            state in React.
+            The application entry mounts one{" "}
+            <code style={inlineCodeStyle}>CumulusRoot</code>. Product screens
+            beneath it do not mount another root or keep reveal state in React.
           </li>
         </ContractList>
       </Section>
@@ -581,8 +606,8 @@ export function EntityRevealCoordinatorDocs() {
           First check whether an existing reveal-enabled component already
           represents the object. If the object is genuinely new, add a named
           semantic component inside Cumulus. That component owns the mapping
-          from domain data to its primary and secondary detail cards and uses the
-          private reveal-source binding internally.
+          from domain data to its primary and secondary detail cards and uses
+          the private reveal-source binding internally.
         </p>
         <CodeExample>{`const binding = useRevealSource({
   identity: { entityType, entityId },
@@ -597,32 +622,43 @@ return (
 );`}</CodeExample>
         <p style={bodyStyle}>
           This is a contributor extension point, not a screen API. Product
-          screens consume the finished named component and its typed props.
-          Keep component actions named <code style={inlineCodeStyle}>onPress</code>{" "}
-          (or a specific name such as <code style={inlineCodeStyle}>onNodePress</code>),
-          and keep placement, timing, and controlled open state out of the
-          public props.
+          screens consume the finished named component and its typed props. Keep
+          component actions named <code style={inlineCodeStyle}>onPress</code>{" "}
+          (or a specific name such as{" "}
+          <code style={inlineCodeStyle}>onNodePress</code>), and keep placement,
+          timing, and controlled open state out of the public props.
         </p>
       </Section>
 
       <Section id="entity-reveal-related" title="Related References">
-        <div style={{ display: "flex", gap: token("--space-s"), flexWrap: "wrap" }}>
+        <div
+          style={{ display: "flex", gap: token("--space-s"), flexWrap: "wrap" }}
+        >
           <a
             data-system-related-component="info-card"
             href="#/info-card"
-            style={{ color: token("--accent-bright"), font: token("--t-body-sm") }}
+            style={{
+              color: token("--accent-bright"),
+              font: token("--t-body-sm"),
+            }}
           >
             InfoCard component →
           </a>
           <a
             href="#/game-card"
-            style={{ color: token("--accent-bright"), font: token("--t-body-sm") }}
+            style={{
+              color: token("--accent-bright"),
+              font: token("--t-body-sm"),
+            }}
           >
             GameCard component →
           </a>
           <a
             href="/?demo=entity-reveals"
-            style={{ color: token("--accent-bright"), font: token("--t-body-sm") }}
+            style={{
+              color: token("--accent-bright"),
+              font: token("--t-body-sm"),
+            }}
           >
             Open the deterministic interaction harness ↗
           </a>

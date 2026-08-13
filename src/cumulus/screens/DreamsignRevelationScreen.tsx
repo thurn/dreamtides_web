@@ -6,7 +6,7 @@
 import {useEffect } from "react";
 import { motion } from "framer-motion";
 import { requireDreamsignId } from "../../data/dreamsigns";
-import type { Dreamsign as DreamsignData } from "../../types/journey";
+import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
 import { GlassButton } from "../components/controls/GlassButton";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { Motes } from "../components/hud/Motes";
@@ -22,32 +22,34 @@ import {
 } from "./DreamsignReplacementDialog";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
-import { meaning, tx } from "@trox/runtime";
+import { meaning, tx, type LocalizedString } from "@trox/runtime";
+import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 /** The guide who speaks over the Revelation offer. */
 export interface DreamsignRevelationGuideView {
   /** Stable guide id, used for QA data attributes. */
   id: string;
   /** Display name shown in the speech bubble. */
-  name: string;
+  name: LocalizedString;
   /** The dialog line shown in the speech bubble. */
-  line: string;
+  line: LocalizedString;
   /** Transparent character render. */
   art: ArtRef;
 }
 
 /** Everything rendered by the pure Revelation screen. */
 export interface DreamsignRevelationView {
-  presentation: Extract<
-    import("../../types/sites-data").SitePresentation,
-    { kind: "dreamsign-revelation" }
-  >;
+  presentation: {
+    readonly kind: "dreamsign-revelation";
+    readonly loading: LocalizedString;
+    readonly exhausted: LocalizedString;
+  };
   /** The current dreamscape scene art. */
   scene: ArtRef | null;
   /** Sigrun's character art and dialog. */
   guide: DreamsignRevelationGuideView;
   /** Offered dreamsigns; empty while the pool is exhausted. */
-  offer: readonly DreamsignData[];
+  offer: readonly LocalizedDreamsign[];
   /** Null while loading, otherwise the offer is ready to display. */
   offerReady: boolean;
   /** Persistent Mira guidance throughout the first Revelation visit. */
@@ -101,7 +103,7 @@ export function DreamsignRevelationScreen({
   const guideUrl = resolveArtRef(view.guide.art);
   const disabled = claimedIndex !== null || view.purge !== null;
   const tutorialVisible = useDelayedTutorialSpeechBubbleVisibility(
-    view.tutorial?.id ?? view.tutorial?.model.text,
+    view.tutorial?.id,
     view.tutorial === undefined ? undefined : (view.tutorial.delaySeconds ?? 0),
   );
   useEffect(() => {
@@ -318,6 +320,7 @@ function GuideScene({
   readonly tutorialVisible: boolean;
   readonly desktop?: boolean;
 }) {
+  const resolve = useLocalizer();
   const hasTutorial = view.tutorial !== undefined;
   return (
     <div
@@ -333,7 +336,7 @@ function GuideScene({
     >
       <img
         src={guideUrl}
-        alt={view.guide.name}
+        alt={resolve(view.guide.name)}
         data-testid="revelation-guide-art"
         draggable={false}
         style={{
@@ -510,7 +513,8 @@ function OfferStack({
   );
 }
 
-function StatusLine({ text }: { readonly text: string }) {
+function StatusLine({ text }: { readonly text: LocalizedString }) {
+  const resolve = useLocalizer();
   return (
     <p
       style={{
@@ -520,7 +524,7 @@ function StatusLine({ text }: { readonly text: string }) {
         textShadow: token("--text-outline-media"),
       }}
     >
-      {text}
+      {resolve(text)}
     </p>
   );
 }
@@ -535,7 +539,7 @@ function RevelationOption({
   desktop,
   onClaim,
 }: {
-  readonly dreamsign: DreamsignData;
+  readonly dreamsign: LocalizedDreamsign;
   readonly index: number;
   readonly disabled: boolean;
   readonly claimed: boolean;

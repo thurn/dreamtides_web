@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 import { useMemo } from "react";
 import type { MerchantArchetypeId } from "../journey_v2";
 import {
@@ -53,20 +54,20 @@ export function useAuguryJourneyMenuActions(
       const eligibleArchetypes = [
         ...(result.debug?.eligibleArchetypeIds ?? []),
       ].sort((left, right) =>
-        archetypeName(left).localeCompare(archetypeName(right))
+        archetypeName(left).localeCompare(archetypeName(right)),
       );
       actions.push({
         id: "forceJourneyCategory",
         kind: "group",
         glyph: GLYPHS.bug,
-        authoredLabel: "Force Category",
+        label: assertLocalized("Force Category"),
         active: forcedArchetypeId !== null,
         actions: [
           {
             id: "forceJourneyCategory:clear",
             kind: "action" as const,
             glyph: GLYPHS.refresh,
-            authoredLabel: "Random (clear force)",
+            label: assertLocalized("Random (clear force)"),
             active: forcedArchetypeId === null,
             onCommand: () => forceCategory(site.id, null),
           },
@@ -74,7 +75,7 @@ export function useAuguryJourneyMenuActions(
             id: `forceJourneyCategory:${archetypeId}`,
             kind: "action" as const,
             glyph: GLYPHS.check,
-            authoredLabel: archetypeName(archetypeId),
+            label: assertLocalized(archetypeName(archetypeId)),
             active: forcedArchetypeId === archetypeId,
             onCommand: () => forceCategory(site.id, archetypeId),
           })),
@@ -87,7 +88,7 @@ export function useAuguryJourneyMenuActions(
         id: "rerollJourney",
         kind: "action",
         glyph: GLYPHS.refresh,
-        authoredLabel: "Reroll Journey",
+        label: assertLocalized("Reroll Journey"),
         onCommand: () => rerollJourney(site.id),
       });
     }

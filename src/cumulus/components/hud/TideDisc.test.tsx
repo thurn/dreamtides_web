@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -8,10 +9,24 @@ import { TideDisc } from "./TideDisc";
 
 describe("TideDisc", () => {
   it("derives its tide primary and definition secondary internally", () => {
-    (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
-    const container = document.createElement("div"); document.body.append(container);
+    (
+      globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
+    ).IS_REACT_ACT_ENVIRONMENT = true;
+    const container = document.createElement("div");
+    document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CumulusRoot><TideDisc tide="valor" id="tide-valor" label="Rising Valor" description="Stand firm." /></CumulusRoot>));
+    act(() =>
+      root.render(
+        <CumulusRoot>
+          <TideDisc
+            tide="valor"
+            id="tide-valor"
+            label={assertLocalized("Rising Valor")}
+            description={assertLocalized("Stand firm.")}
+          />
+        </CumulusRoot>,
+      ),
+    );
     const source = container.querySelector<HTMLElement>("[data-tide-disc]")!;
     expect(source.dataset.revealFeedback).toBe("measured");
     expect(source.dataset.revealEntityType).toBe("tide");
@@ -19,10 +34,13 @@ describe("TideDisc", () => {
     expect(source.dataset.revealPrimaryVariant).toBe("tide");
     expect(source.dataset.revealSecondaryTitles).toBe("Tides");
     expect(source.tabIndex).toBe(0);
-    const description = document.getElementById(source.getAttribute("aria-describedby") ?? "");
+    const description = document.getElementById(
+      source.getAttribute("aria-describedby") ?? "",
+    );
     expect(description?.textContent).toContain("Rising Valor");
     expect(description?.textContent).toContain("Stand firm.");
     expect(description?.textContent).toContain("Pools of cards");
-    act(() => root.unmount()); container.remove();
+    act(() => root.unmount());
+    container.remove();
   });
 });

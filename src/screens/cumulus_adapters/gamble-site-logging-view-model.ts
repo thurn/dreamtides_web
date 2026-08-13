@@ -9,6 +9,7 @@ import { gambleGame, gambleGameByRulesKind } from "../../data/gamble-data";
 import { logEventOnce } from "../../logging";
 import type { GambleSiteRuntime, SiteState } from "../../types/journey";
 import type { GambleData } from "../../types/gamble-data";
+import { resolveSource } from "../../runtime/localization/runtime";
 
 function gambleCatalogLogFields(
   runtime: GambleSiteRuntime,
@@ -133,7 +134,7 @@ export function logGamblePrepared(
         selectedDreamsignId: runtime.rewardDreamsign?.id ?? null,
         gates: view.gates.map((gate) => ({
           gateId: gate.id,
-          chance: gate.chanceLabel,
+          chance: resolveSource(gate.chanceLabel),
           oddsNumerator: gate.oddsNumerator,
           oddsDenominator: gate.oddsDenominator,
           rewardEssence: gate.essenceReward,
@@ -295,7 +296,8 @@ export function logGambleResolved(
         siteId,
         ...gambleCatalogLogFields(runtime, gambleData),
         gateId: runtime.result.gateId,
-        odds: gate?.chanceLabel ?? null,
+        odds:
+          gate === undefined ? null : resolveSource(gate.chanceLabel),
         oddsNumerator: gate?.oddsNumerator ?? null,
         oddsDenominator: gate?.oddsDenominator ?? null,
         payment: runtime.wagerCost,

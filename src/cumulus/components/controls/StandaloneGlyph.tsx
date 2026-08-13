@@ -1,5 +1,7 @@
 import { type Glyph, GLYPHS } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
+import type { LocalizedString } from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /**
  * A Boxicons glyph in a standalone one-em square. The surrounding layout owns
@@ -60,7 +62,7 @@ export interface StandaloneGlyphProps {
   /** Flat by default; use content protection when the glyph sits over media. */
   depth?: StandaloneGlyphDepth;
   /** Accessible meaning; the glyph is hidden from assistive tech when unset. */
-  label?: string;
+  label?: LocalizedString;
 }
 
 export function StandaloneGlyph({
@@ -69,11 +71,12 @@ export function StandaloneGlyph({
   depth = "flat",
   label,
 }: StandaloneGlyphProps) {
+  const resolve = useLocalizer();
   return (
     <i
       className={glyph}
       role={label !== undefined ? "img" : undefined}
-      aria-label={label}
+      aria-label={label === undefined ? undefined : resolve(label)}
       aria-hidden={label === undefined ? true : undefined}
       style={{
         // The caller controls font-size on its layout wrapper. This primitive

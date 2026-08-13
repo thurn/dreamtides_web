@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act, type ReactElement } from "react";
@@ -33,7 +34,8 @@ describe("GlossaryTerm", () => {
     const entry = FIXTURE;
     const { container } = mount(
       <p>
-        Before <GlossaryTerm entry={entry} text="figments" /> after.
+        Before <GlossaryTerm entry={entry} text={assertLocalized("figments")} />{" "}
+        after.
       </p>,
     );
     const source = container.querySelector<HTMLElement>("[data-glossary-term]");
@@ -59,7 +61,7 @@ describe("GlossaryTerm", () => {
   it("becomes the active semantic source through focus", () => {
     const entry = FIXTURE;
     const { container } = mount(
-      <GlossaryTerm entry={entry} text={entry.term} />,
+      <GlossaryTerm entry={entry} text={assertLocalized(entry.term)} />,
     );
     const source = container.querySelector<HTMLElement>("[data-glossary-term]");
     act(() => source?.focus());
@@ -74,7 +76,7 @@ describe("GlossaryTerm", () => {
     const entry = FIXTURE;
     const { container } = mount(
       <RulesText
-        text={`${entry.term} 2● and 3✦.`}
+        text={assertLocalized(`${entry.term} 2● and 3✦.`)}
         owner={{ kind: "card", id: "11111111-1111-4111-8111-111111111111" }}
       />,
     );
@@ -102,7 +104,7 @@ describe("GlossaryTerm", () => {
   it("renders passive RulesText copy when glossary interaction belongs to an outer entity", () => {
     const { container } = mount(
       <RulesText
-        text={`${FIXTURE.term} 2●.`}
+        text={assertLocalized(`${FIXTURE.term} 2●.`)}
         owner={{ kind: "card", id: "11111111-1111-4111-8111-111111111111" }}
         glossaryInteraction="delegated"
       />,

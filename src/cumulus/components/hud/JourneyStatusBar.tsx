@@ -1,3 +1,4 @@
+import { richText } from "../card/rich-text";
 // JourneyStatusBar — the persistent, TRANSPARENT bottom HUD for journey screens
 // (dreamscape, atlas, site views).
 //
@@ -35,7 +36,15 @@
 // embedded as a data URI (150×233, rendered at 63px tall) so there is no
 // separate asset to load.
 
-import { meaning, tx, plural, one, other, txa } from "@trox/runtime";
+import {
+  meaning,
+  tx,
+  plural,
+  one,
+  other,
+  txa,
+  type LocalizedString,
+} from "@trox/runtime";
 import * as React from "react";
 import type { CSSProperties, ReactElement } from "react";
 import { glossaryInfoCard } from "../card/glossary-info-card";
@@ -46,8 +55,12 @@ import { type ArtRef, resolveArtRef } from "../../primitives/art";
 import { IconButton } from "../controls/IconButton";
 import { StandaloneGlyph } from "../controls/StandaloneGlyph";
 import { GLYPHS } from "../../primitives/glyph";
-import { Dreamsign, dreamsignArtUrl, DS_SHADOW } from "./Dreamsign";
-import type { Dreamsign as DreamsignData } from "../../../types/journey";
+import {
+  Dreamsign,
+  dreamsignArtUrl,
+  DS_SHADOW,
+  type LocalizedDreamsign,
+} from "./Dreamsign";
 import { requireDreamsignId } from "../../../data/dreamsigns";
 import type { DreamAvatarPortraitFocus } from "../../../types/content";
 import {
@@ -110,19 +123,19 @@ export const JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE = `calc(${JOURNEY_STATU
 /** One docked dreamsign, as the domain dreamsign shape the shared
  * {@link Dreamsign} object consumes (art resolved from `imageName`, never by
  * name). The HUD renders each through `<Dreamsign variant="hud">`. */
-export type QsbDreamsign = DreamsignData;
+export type QsbDreamsign = LocalizedDreamsign;
 
 /** The active DreamAvatar shown as a bust in the HUD. */
 export interface QsbDreamAvatar {
   /** Stable DreamAvatar UUID. */
   id: string;
-  name: string;
-  epithet?: string;
+  name: LocalizedString;
+  epithet?: LocalizedString;
   /** The portrait art as an {@link ArtRef}. Required — a docked DreamAvatar always has art. */
   portrait: ArtRef;
   /** Normalized head position used to center the square HUD crop. */
   portraitFocus?: DreamAvatarPortraitFocus;
-  ability?: string;
+  ability?: LocalizedString;
 }
 
 export interface JourneyStatusBarProps {
@@ -359,10 +372,12 @@ function QsbDreamsignWindow({
               color: token("--text-primary"),
             }}
           >
-            {resolve(tx(
-              "Dreamsigns",
-              "Section label for the player’s collected Dreamsigns.",
-            ))}
+            {resolve(
+              tx(
+                "Dreamsigns",
+                "Section label for the player’s collected Dreamsigns.",
+              ),
+            )}
           </h2>
           <IconButton
             glyph={GLYPHS.close}
@@ -403,6 +418,7 @@ function QsbDreamAvatarBust({
   /** The docked DreamAvatar, or undefined for the empty placeholder frame. */
   dreamAvatar?: QsbDreamAvatar;
 }): ReactElement {
+  const resolve = useLocalizer();
   const binding = useRevealSource({
     identity: {
       entityType: "dreamAvatar",
@@ -415,13 +431,15 @@ function QsbDreamAvatarBust({
               kind: "infoCard",
               card: {
                 variant: "text",
-                titleMessage: tx(
+                title: tx(
                   meaning("journey-avatar-label", "Avatar"),
                   "Shared journey-status labels and controls.",
                 ),
-                bodyMessage: tx(
-                  "No avatar is active.",
-                  "Player-facing message for the journey status no avatar interface state.",
+                body: richText.plain(
+                  tx(
+                    "No avatar is active.",
+                    "Player-facing message for the journey status no avatar interface state.",
+                  ),
                 ),
               },
             },
@@ -431,9 +449,9 @@ function QsbDreamAvatarBust({
             {
               imageNumber: "",
               name: dreamAvatar.name,
-              title: dreamAvatar.epithet ?? "",
+              title: dreamAvatar.epithet,
             },
-            dreamAvatar.ability ?? "",
+            dreamAvatar.ability,
             dreamAvatar.portrait,
           ),
   });
@@ -479,7 +497,7 @@ function QsbDreamAvatarBust({
       {dreamAvatar && (
         <img
           src={resolveArtRef(dreamAvatar.portrait)}
-          alt={dreamAvatar.name}
+          alt={resolve(dreamAvatar.name)}
           style={{
             position: "relative",
             left: `${String((0.5 - focusX) * 100)}%`,

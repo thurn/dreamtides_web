@@ -20,14 +20,20 @@ import {
 } from "./CardView";
 import { GalleryActionCard } from "./GalleryActionCard";
 import { CARD_CORNER_RADIUS } from "./card-aspect";
-import { one, other, plural, tx, txa, type LocalizedString } from "@trox/runtime";
+import {
+  one,
+  other,
+  plural,
+  tx,
+  txa,
+  type LocalizedString,
+} from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** A small line rendered directly below a card-choice tile. */
 export type CardChoiceGridCaption =
   | { kind: "essence"; amount: number }
-  | { kind: "text"; message: LocalizedString }
-  | { kind: "authoredText"; text: string };
+  | { kind: "text"; message: LocalizedString };
 
 /** The pending operation identified on a selected card-choice tile. */
 export type CardChoiceOperation = "purge" | "copy" | "transfigure" | "change";
@@ -121,9 +127,7 @@ export interface CardChoiceGridActionView {
   /** Large glyph that carries the action's visual identity. */
   glyph: Glyph;
   /** Accessible action label. */
-  label?: LocalizedString;
-  /** Canonical authored label when this action is data-defined. */
-  authoredLabel?: string;
+  label: LocalizedString;
   /** Small uncontained line rendered below the glyph. */
   caption: CardChoiceGridCaption;
   /** Detach interaction and visually recede the action. */
@@ -236,8 +240,6 @@ function CaptionNode({
     >
       {caption.kind === "essence" ? (
         <EssenceValue amount={caption.amount} tone="inherit" />
-      ) : caption.kind === "authoredText" ? (
-        caption.text
       ) : (
         resolve(caption.message)
       )}
@@ -265,9 +267,7 @@ function CardChoiceAction({
         kind: "galleryAction",
         action: {
           glyph: action.glyph,
-          ...(action.label === undefined
-            ? { authoredLabel: action.authoredLabel }
-            : { label: action.label }),
+          label: action.label,
         },
       },
       secondaries: [],
@@ -309,9 +309,7 @@ function CardChoiceAction({
       <GalleryActionCard
         action={{
           glyph: action.glyph,
-          ...(action.label === undefined
-            ? { authoredLabel: action.authoredLabel }
-            : { label: action.label }),
+          label: action.label,
         }}
         width={cardWidth}
       />
@@ -486,11 +484,13 @@ function CardChoiceQuantityBadge({
   const resolve = useLocalizer();
   return (
     <span
-      aria-label={resolve(txa(
-        plural(count, [one("{count} copy"), other("{count} copies")]),
-        { count },
-        "Accessible label on a selected Augury card showing how many copies the offer grants. count is a positive integer; the numeral is visible in the badge and is repeated here because this message is exposed only to assistive technology.",
-      ))}
+      aria-label={resolve(
+        txa(
+          plural(count, [one("{count} copy"), other("{count} copies")]),
+          { count },
+          "Accessible label on a selected Augury card showing how many copies the offer grants. count is a positive integer; the numeral is visible in the badge and is repeated here because this message is exposed only to assistive technology.",
+        ),
+      )}
       data-card-choice-quantity-badge=""
       style={{
         position: "absolute",

@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { BattleDeckOrderOverlay } from "../../cumulus/screens/battle-overlays/BattleDeckOrderOverlay";
 import type { BattleMutableState, BattleSide } from "../types";
 import { tx, txa } from "@trox/runtime";
+import { localizedSourceText } from "../../runtime/localization/runtime";
 
 export type BattleDeckOrderPickerScope = "top-N" | "full";
 
@@ -31,15 +32,19 @@ export function BattleDeckOrderPicker({
               id,
               ...(instance === undefined
                 ? {
-                    labelMessage: tx(
+                    label: tx(
                       "Missing card instance",
                       "Fallback label in the battle deck-order list when a persisted battle card instance cannot be found.",
                     ),
-                    authoredSummary: id,
+                    summary: txa(
+                      "{card_instance_id}",
+                      { card_instance_id: id },
+                      "Technical battle card-instance UUID shown as the complete secondary row detail when the corresponding persisted card object is unavailable.",
+                    ),
                   }
                 : {
-                    authoredLabel: instance.definition.name,
-                    summaryMessage: txa(
+                    label: localizedSourceText(instance.definition.name),
+                    summary: txa(
                       "{subtype} · Spark {spark}",
                       {
                         subtype: instance.definition.subtype,

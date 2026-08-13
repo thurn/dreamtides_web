@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // Registry demo entry for RulesText — see stat-tile.tsx for the wrapper recipe
 // this follows. RulesText takes a plain `text` string and renders the authored
 // rules-text markup: energy/spark glyphs become inline pips, `▸` remains
@@ -34,7 +35,10 @@ interface RulesTextDemoArgs {
 
 function RulesTextDemo({ text = SAMPLE_RULES_TEXT }: RulesTextDemoArgs) {
   return (
-    <RulesText text={text} owner={{ kind: "card", id: SAMPLE_CARD_ID }} />
+    <RulesText
+      text={assertLocalized(text)}
+      owner={{ kind: "card", id: SAMPLE_CARD_ID }}
+    />
   );
 }
 

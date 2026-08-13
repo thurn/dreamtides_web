@@ -43,9 +43,8 @@ export interface CardShopRestockView {
 }
 
 export interface CardShopSiteView {
-  presentation: Extract<
-    import("../../types/sites-data").SitePresentation,
-    { kind: "shop" }
+  presentation: import("./localized-site-presentation").LocalizedSitePresentation<
+    Extract<import("../../types/sites-data").SitePresentation, { kind: "shop" }>
   >;
   /** Stable site id used by the shared character-gallery layout. */
   siteId: string;
@@ -219,15 +218,15 @@ function CardShopGallery({
     >
       <ShopFreePurchaseStatus status={freePurchaseStatus} />
       <CardPickerPanel
-        authoredTitle={presentation.title}
+        title={presentation.title}
         rightAccessory={{
           kind: "iconButton",
           button: {
             glyph: GLYPHS.close,
             label: tx(
-                "Leave card shop",
-                "Player-facing message for the card shop leave action interface state.",
-              ),
+              "Leave card shop",
+              "Player-facing message for the card shop leave action interface state.",
+            ),
             onPress: onClose,
             testId: "cumulus-card-shop-leave",
           },
@@ -252,7 +251,7 @@ function CardShopGallery({
         endAction={{
           entryId: restock.entryId,
           glyph: GLYPHS.refresh,
-          authoredLabel:
+          label:
             restock.state === "used"
               ? presentation.restocked
               : desktop
@@ -260,9 +259,15 @@ function CardShopGallery({
                 : presentation.restockAction,
           caption:
             restock.state === "used"
-              ? { kind: "authoredText", text: presentation.restocked }
+              ? {
+                  kind: "text",
+                  message: presentation.restocked,
+                }
               : restock.price === 0
-                ? { kind: "authoredText", text: presentation.freePrice }
+                ? {
+                    kind: "text",
+                    message: presentation.freePrice,
+                  }
                 : { kind: "essence", amount: restock.price },
           disabled: restock.state !== "available",
           testId: "cumulus-card-shop-restock",

@@ -10,13 +10,9 @@ import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export interface DisclosureSectionProps {
   /** Localized heading shown in the disclosure trigger. */
-  title?: LocalizedString;
-  /** Heading supplied by canonical authored or developer-only copy. */
-  authoredTitle?: string;
+  title: LocalizedString;
   /** Optional localized context shown beside the heading. */
   summary?: LocalizedString;
-  /** Context supplied by canonical authored or developer-only copy. */
-  authoredSummary?: string;
   /** Controlled open state. */
   expanded: boolean;
   /** Reports the requested open state. */
@@ -36,9 +32,7 @@ export interface DisclosureSectionProps {
 /** A dense information section with a Cumulus-owned disclosure trigger. */
 export function DisclosureSection({
   title,
-  authoredTitle,
   summary,
-  authoredSummary,
   expanded,
   onExpandedChange,
   children,
@@ -46,12 +40,6 @@ export function DisclosureSection({
   testId,
 }: DisclosureSectionProps): ReactElement {
   const resolve = useLocalizer();
-  if ((title === undefined) === (authoredTitle === undefined)) {
-    throw new Error("DisclosureSection requires exactly one of title or authoredTitle.");
-  }
-  if (summary !== undefined && authoredSummary !== undefined) {
-    throw new Error("DisclosureSection accepts summary or authoredSummary, not both.");
-  }
   return (
     <section
       data-testid={testId}
@@ -82,9 +70,9 @@ export function DisclosureSection({
       >
         <span style={{ minWidth: 0 }}>
           <span style={{ display: "block", font: token("--t-button-sm") }}>
-            {authoredTitle ?? resolve(title!)}
+            {resolve(title)}
           </span>
-          {summary === undefined && authoredSummary === undefined ? null : (
+          {summary === undefined ? null : (
             <span
               style={{
                 display: "block",
@@ -93,7 +81,7 @@ export function DisclosureSection({
                 font: token("--t-caption"),
               }}
             >
-              {authoredSummary ?? resolve(summary!)}
+              {resolve(summary)}
             </span>
           )}
         </span>

@@ -3,7 +3,7 @@ import {
   siteTypeIcon,
   siteTypeName,
 } from "../../data/sites-data";
-import { artRef, type ArtRef } from "../../cumulus/primitives/art";
+import type { ArtRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
 import type { RandomSiteView } from "../../cumulus/screens/RandomSiteScreen";
 import type { DreamGuideContent } from "../../types/content";
@@ -14,6 +14,8 @@ import type {
   SiteState,
 } from "../../types/journey";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
+import { projectGuideView } from "./guide-view-model";
+import { localizedSourceText } from "../../runtime/localization/runtime";
 
 export function buildRandomSiteView(params: {
   sceneNode: DreamscapeNode | null;
@@ -21,31 +23,30 @@ export function buildRandomSiteView(params: {
   runtime: RandomSiteRuntime;
   guide: DreamGuideContent;
   sitesData: SitesData;
-  guideLine: string;
+  guideLine: LocalizedString;
 }): RandomSiteView {
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
-  const guideId = params.guide.id;
   return {
-    title: (
-      params.sitesData.siteTypes.RandomSite.presentation as Extract<
-        import("../../types/sites-data").SitePresentation,
-        { kind: "random-site" }
-      >
-    ).title,
+    title: localizedSourceText(
+      (
+        params.sitesData.siteTypes.RandomSite.presentation as Extract<
+          import("../../types/sites-data").SitePresentation,
+          { kind: "random-site" }
+        >
+      ).title,
+    ),
     siteId: params.site.id,
     scene,
-    guide: {
-      id: guideId,
-      name: params.guide.name,
-      line: params.guideLine,
-      art: artRef.dreamGuide(guideId),
-    },
+    guide: projectGuideView(params.guide, params.guideLine),
     choices: params.runtime.offeredSiteTypes.map((siteType) => ({
       siteType,
-      label: siteTypeName(params.sitesData, siteType),
-      blurb: siteTypeDescription(params.sitesData, siteType),
+      label: localizedSourceText(siteTypeName(params.sitesData, siteType)),
+      blurb: localizedSourceText(
+        siteTypeDescription(params.sitesData, siteType),
+      ),
       icon: glyph(siteTypeIcon(params.sitesData, siteType)),
     })),
   };
 }
+import type { LocalizedString } from "@trox/runtime";

@@ -8,8 +8,8 @@ import type { GlassControlPlacement } from "../../primitives/control-placement";
 import type { CumulusComponent } from "../registry";
 
 const INITIAL: CardOrderEditorItem[] = [
-  { id: "instance-1", authoredLabel: "First card" },
-  { id: "instance-2", authoredLabel: "Second card" },
+  { id: "instance-1", label: assertLocalized("First card") },
+  { id: "instance-2", label: assertLocalized("Second card") },
 ];
 function Demo({
   label = "Deck order",
@@ -46,10 +46,10 @@ export const cardOrderEditorDemo: CumulusComponent = {
   Component: Demo,
   usage: [
     {
-      code: `<CardOrderEditor label="Deck order" items={cards} onOrderChange={setOrderedCardIds} />`,
+      code: `<CardOrderEditor label={assertLocalized("Deck order")} items={cards} onOrderChange={setOrderedCardIds} />`,
     },
     {
-      code: `<CardOrderEditor label="Deck order" items={cards} onOrderChange={setOrderedCardIds} placement="onGlass" />`,
+      code: `<CardOrderEditor label={assertLocalized("Deck order")} items={cards} onOrderChange={setOrderedCardIds} placement="onGlass" />`,
     },
   ],
   demo: { defaultArgs: { label: "Deck order", placement: "onMedia" } },

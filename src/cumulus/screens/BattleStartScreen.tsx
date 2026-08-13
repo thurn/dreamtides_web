@@ -2,7 +2,7 @@
 // share one complete opponent dossier; only its placement and object scale
 // respond to the viewport.
 
-import {useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
 import { RulesText } from "../components/card/RulesText";
@@ -18,7 +18,7 @@ import type { ArtRef } from "../primitives/art";
 import { resolveArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import type { Dreamsign as DreamsignData } from "../../types/journey";
+import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
 import {
   GUIDE_GALLERY_MOBILE_GUIDE_HEIGHT,
   GUIDE_GALLERY_MOBILE_GUIDE_LEFT,
@@ -28,15 +28,15 @@ import {
 import { useIsDesktop } from "./use-is-desktop";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
-import { meaning, txa, tx, type LocalizedString } from "@trox/runtime";
+import { meaning, opaque, txa, tx, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 export interface BattleStartDreamAvatarView {
   id: string;
-  name: string;
-  title: string;
+  name: LocalizedString;
+  title: LocalizedString;
   imageNumber: string;
-  ability: string;
+  ability: LocalizedString;
   abilityActive: boolean;
 }
 
@@ -49,7 +49,7 @@ export interface BattleStartView {
   battleId: string;
   scene: ArtRef | null;
   dreamAvatar: BattleStartDreamAvatarView;
-  dreamsigns: readonly DreamsignData[];
+  dreamsigns: readonly LocalizedDreamsign[];
   signatureCards: readonly BattleStartSignatureCardView[];
   pointsToWin: number;
   essenceReward: number;
@@ -84,7 +84,7 @@ export function BattleStartScreen({
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const isDesktop = useIsDesktop();
   const guideDialogueVisible = useDelayedTutorialSpeechBubbleVisibility(
-    view.guideDialogue?.id ?? view.guideDialogue?.model.text,
+    view.guideDialogue?.id,
     view.guideDialogue?.delaySeconds ?? 0,
   );
   useEffect(() => {
@@ -315,13 +315,15 @@ function BattleStartPanel({
                 font: compact ? token("--t-title-sm") : token("--t-hero"),
               }}
             >
-              {resolve(txa(
-                "Battle vs. {avatar_name}",
-                { avatar_name: view.dreamAvatar.name },
-                "Player-facing message for the battle start title interface state.",
-              ))}
+              {resolve(
+                txa(
+                  "Battle vs. {avatar_name}",
+                  { avatar_name: opaque(view.dreamAvatar.name) },
+                  "Player-facing message for the battle start title interface state.",
+                ),
+              )}
             </h1>
-            {view.dreamAvatar.title !== "" && (
+            {resolve(view.dreamAvatar.title) !== "" && (
               <p
                 style={{
                   margin: 0,
@@ -330,12 +332,12 @@ function BattleStartPanel({
                   color: token("--text-on-glass-muted"),
                 }}
               >
-                {view.dreamAvatar.title}
+                {resolve(view.dreamAvatar.title)}
               </p>
             )}
           </header>
 
-          {view.dreamAvatar.ability !== "" && (
+          {resolve(view.dreamAvatar.ability) !== "" && (
             <PanelSection
               section="ability"
               label={tx(
@@ -352,10 +354,12 @@ function BattleStartPanel({
                   />
                 ) : (
                   <span style={{ color: token("--text-on-glass-muted") }}>
-                    {resolve(tx(
-                      "Opponent avatar ability is not active.",
-                      "Player-facing message for the battle start inactive ability interface state.",
-                    ))}
+                    {resolve(
+                      tx(
+                        "Opponent avatar ability is not active.",
+                        "Unavailable-state description for an opponent Dream Avatar whose ability is disabled during a tutorial battle.",
+                      ),
+                    )}
                   </span>
                 )}
               </div>
@@ -499,10 +503,7 @@ function PanelSection({
   children,
 }: {
   readonly section:
-    | "ability"
-    | "signature-objects"
-    | "signature-cards"
-    | "dreamsigns";
+    "ability" | "signature-objects" | "signature-cards" | "dreamsigns";
   readonly label: LocalizedString;
   readonly density: PanelDensity;
   readonly children: ReactNode;

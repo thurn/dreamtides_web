@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act, type ReactElement } from "react";
@@ -12,7 +13,10 @@ import {
   type TransfigurationCandidateView,
   type TransfigurationSiteView,
 } from "./TransfigurationSiteScreen";
-import { transfigurationFormFixture } from "../test-helpers/transfiguration-fixture";
+import {
+  localizedTransfigurationFormFixture,
+  transfigurationFormFixture,
+} from "../test-helpers/transfiguration-fixture";
 
 function makeCard(index: number): CardData {
   return {
@@ -41,9 +45,8 @@ function candidate(index: number): TransfigurationCandidateView {
     forms: [
       {
         type: "Empowered",
-        presentation: transfigurationFormFixture("Empowered"),
+        presentation: localizedTransfigurationFormFixture("Empowered"),
         change: { kind: "energy-delta", from: 2, to: 1 },
-        description: "Reduce this card's energy cost.",
         effectDetails: { fixture: true },
         essenceCost: 40,
         affordable: true,
@@ -64,9 +67,8 @@ function candidate(index: number): TransfigurationCandidateView {
       },
       {
         type: "Kindled",
-        presentation: transfigurationFormFixture("Kindled"),
+        presentation: localizedTransfigurationFormFixture("Kindled"),
         change: { kind: "spark-delta", from: 2, to: 4 },
-        description: "Double this character's spark.",
         effectDetails: { fixture: true },
         essenceCost: 80,
         affordable: false,
@@ -95,8 +97,8 @@ function view(): TransfigurationSiteView {
     scene: null,
     guide: {
       id: "durgan_forgehammer",
-      name: "Durgan Forgehammer",
-      line: "Any card, any temper you like.",
+      name: assertLocalized("Durgan Forgehammer"),
+      line: assertLocalized("Any card, any temper you like."),
       art: artRef.dreamGuide("durgan_forgehammer"),
     },
     ready: true,

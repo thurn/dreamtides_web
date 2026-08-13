@@ -7,7 +7,7 @@ import {
   type LocalizedString,
 } from "@trox/runtime";
 import { requireDreamsignId } from "../../data/dreamsigns";
-import type { Dreamsign as DreamsignData } from "../../types/journey";
+import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
 import { GlassButton } from "../components/controls/GlassButton";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { GlassDialog } from "../components/overlay/GlassDialog";
@@ -16,8 +16,8 @@ import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 /** The pending and currently held Dreamsigns shown by a replacement choice. */
 export interface DreamsignReplacementView {
-  pendingDreamsign: DreamsignData;
-  currentDreamsigns: readonly DreamsignData[];
+  pendingDreamsign: LocalizedDreamsign;
+  currentDreamsigns: readonly LocalizedDreamsign[];
   maxDreamsigns: number;
 }
 

@@ -1,3 +1,4 @@
+import { localizedSourceText } from "../../runtime/localization/runtime";
 // Pure view-model builder for the desktop deck viewer. Resolves the deck to the
 // cards the player actually holds (reusing the shared mobile resolution so both
 // viewers show a card identically), and pairs them with the run profile the
@@ -18,6 +19,7 @@ import type {
 import { buildMobileDeckView } from "./mobile-deck-view-model";
 import { buildDreamAvatarTideViews } from "./journey-start-view-model";
 import type { TransfigurationData } from "../../types/transfiguration-data";
+import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
 
 /** Map the run's DreamAvatar to the sidebar view (portrait visual + rules text). */
 function toDreamAvatarView(
@@ -27,9 +29,9 @@ function toDreamAvatarView(
   return {
     id: dreamAvatar.id,
     imageNumber: dreamAvatar.imageNumber,
-    name: dreamAvatar.name,
-    title: dreamAvatar.title,
-    renderedText: dreamAvatar.renderedText,
+    name: localizedSourceText(dreamAvatar.name),
+    title: localizedSourceText(dreamAvatar.title),
+    renderedText: localizedSourceText(dreamAvatar.renderedText),
   };
 }
 
@@ -55,10 +57,16 @@ export function buildDesktopDeckView(
   return {
     cards: buildMobileDeckView(transfigurationData, deck, cardDatabase).cards,
     dreamAvatar: toDreamAvatarView(dreamAvatar),
-    dreamsigns: [...dreamsigns],
+    dreamsigns: dreamsigns.map((dreamsign) =>
+      localizedDreamsign(dreamsign, "Desktop deck viewer"),
+    ),
     tides:
       dreamAvatarContent === undefined
         ? []
-        : buildDreamAvatarTideViews(poolContext, dreamAvatarContent, journeySeed),
+        : buildDreamAvatarTideViews(
+            poolContext,
+            dreamAvatarContent,
+            journeySeed,
+          ),
   };
 }

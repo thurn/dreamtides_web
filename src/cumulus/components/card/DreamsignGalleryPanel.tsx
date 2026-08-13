@@ -3,8 +3,8 @@
 // both the collectible art and the restock glyph without object backgrounds.
 
 import type { LocalizedString } from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import { useRef, type ReactElement } from "react";
-import type { Dreamsign as DreamsignData } from "../../../types/journey";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
@@ -12,7 +12,7 @@ import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { IconButton } from "../controls/IconButton";
-import { Dreamsign } from "../hud/Dreamsign";
+import { Dreamsign, type LocalizedDreamsign } from "../hud/Dreamsign";
 import { EssenceValue } from "../hud/EssenceValue";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import { glossaryInfoCard } from "./glossary-info-card";
@@ -22,7 +22,7 @@ export interface DreamsignGalleryEntryView {
   /** Stable gallery entry id derived from the persistent slot and Dreamsign UUID. */
   entryId: string;
   /** The Dreamsign domain object rendered by the shared Dreamsign component. */
-  dreamsign: DreamsignData;
+  dreamsign: LocalizedDreamsign;
   /** Essence price shown beneath the offer. */
   price: number;
   /** Whether interaction is available, unaffordable, or already acquired. */
@@ -36,20 +36,20 @@ export interface DreamsignGalleryActionView {
   /** Glyph that identifies the action. */
   glyph: Glyph;
   /** Visible and accessible action label. */
-  label: string;
+  label: LocalizedString;
   /** Stable Glossary UUID for the action's explanatory Info Card. */
   glossaryId: string;
   /** Essence price, or null for a free/spent text caption. */
   price: number | null;
   /** Caption used when the action is free or already spent. */
-  text: string | null;
+  text: LocalizedString | null;
   /** Whether the action can currently be triggered. */
   disabled: boolean;
 }
 
 export interface DreamsignGalleryPanelProps {
   /** Header title. */
-  title: string;
+  title: LocalizedString;
   /** Dreamsign offers in persistent slot order. */
   entries: readonly DreamsignGalleryEntryView[];
   /** Bare-glyph action shown after the offers. */
@@ -72,7 +72,14 @@ const COMPACT_ITEM_WIDTH = 92;
 const STANDARD_ITEM_WIDTH = 126;
 const END_ACTION_GLYPH_SCALE = 0.82;
 
-function captionNode(price: number | null, text: string | null): ReactElement {
+function DreamsignGalleryCaption({
+  price,
+  text,
+}: {
+  readonly price: number | null;
+  readonly text: LocalizedString | null;
+}): ReactElement {
+  const resolve = useLocalizer();
   return (
     <p
       data-dreamsign-gallery-caption={price === null ? "text" : "essence"}
@@ -86,7 +93,13 @@ function captionNode(price: number | null, text: string | null): ReactElement {
         textAlign: "center",
       }}
     >
-      {price === null ? text : <EssenceValue amount={price} tone="inherit" />}
+      {price === null ? (
+        text === null ? null : (
+          resolve(text)
+        )
+      ) : (
+        <EssenceValue amount={price} tone="inherit" />
+      )}
     </p>
   );
 }
@@ -128,7 +141,7 @@ function DreamsignGalleryEndAction({
       as="button"
       ref={binding.ref}
       {...binding.sourceProps}
-      aria-label={action.label}
+      ariaLabelMessage={action.label}
       aria-disabled={action.disabled || undefined}
       data-testid="cumulus-dreamsign-bazaar-restock"
       data-reveal-complete-game-card="false"
@@ -186,6 +199,7 @@ export function DreamsignGalleryPanel({
   onEndActionPress,
   testId,
 }: DreamsignGalleryPanelProps): ReactElement {
+  const resolve = useLocalizer();
   const compact = size === "compact";
   const itemWidth = compact ? COMPACT_ITEM_WIDTH : STANDARD_ITEM_WIDTH;
   const itemHeight = itemWidth / CARD_ASPECT_RATIO_VALUE;
@@ -226,7 +240,7 @@ export function DreamsignGalleryPanel({
             letterSpacing: 0,
           }}
         >
-          {title}
+          {resolve(title)}
         </h2>
         <IconButton
           glyph={GLYPHS.close}
@@ -283,7 +297,7 @@ export function DreamsignGalleryPanel({
                   />
                 </div>
               </div>
-              {captionNode(entry.price, null)}
+              <DreamsignGalleryCaption price={entry.price} text={null} />
             </div>
           );
         })}
@@ -302,7 +316,10 @@ export function DreamsignGalleryPanel({
             size={size}
             onActivate={onEndActionPress}
           />
-          {captionNode(endAction.price, endAction.text)}
+          <DreamsignGalleryCaption
+            price={endAction.price}
+            text={endAction.text}
+          />
         </div>
       </div>
     </section>

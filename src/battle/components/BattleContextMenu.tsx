@@ -1,3 +1,5 @@
+import { assertLocalized } from "@trox/runtime";
+import { localizedSourceText } from "../../runtime/localization/runtime";
 import { useMemo } from "react";
 import {
   CommandMenu,
@@ -8,9 +10,7 @@ import type {
   BattleCommand,
   BattleDebugZoneDestination,
 } from "../debug/commands";
-import {
-  selectBattleCardLocation,
-} from "../state/selectors";
+import { selectBattleCardLocation } from "../state/selectors";
 import type {
   BattleCardStatus,
   BattleCommandSourceSurface,
@@ -59,20 +59,33 @@ export function BattleContextMenu({
       if (state.revealedHandCardId !== battleCardId) {
         result.push({
           label: "Reveal",
-          action: () => onCommand({
-            id: "DEBUG_EDIT",
-            edit: {
-              kind: "REVEAL_HAND_CARD",
-              battleCardId,
-            },
-            sourceSurface,
-          }),
+          action: () =>
+            onCommand({
+              id: "DEBUG_EDIT",
+              edit: {
+                kind: "REVEAL_HAND_CARD",
+                battleCardId,
+              },
+              sourceSurface,
+            }),
         });
       }
-      const playDestination = card.definition.battleCardKind === "character" ? "backRank" : "void";
-      const playCommand = card.definition.battleCardKind === "character"
-        ? createMoveCardToBattlefieldCommand(state, battleCardId, location.side, sourceSurface)
-        : createMoveCardToZoneCommand(battleCardId, location.side, "void", sourceSurface);
+      const playDestination =
+        card.definition.battleCardKind === "character" ? "backRank" : "void";
+      const playCommand =
+        card.definition.battleCardKind === "character"
+          ? createMoveCardToBattlefieldCommand(
+              state,
+              battleCardId,
+              location.side,
+              sourceSurface,
+            )
+          : createMoveCardToZoneCommand(
+              battleCardId,
+              location.side,
+              "void",
+              sourceSurface,
+            );
       if (playCommand !== null) {
         result.push({
           label: `Play to ${formatZoneLabel(playDestination)}`,
@@ -102,9 +115,20 @@ export function BattleContextMenu({
       location.side === "player" &&
       card.definition.reclaimCost !== null
     ) {
-      const reclaimCommand = card.definition.battleCardKind === "character"
-        ? createMoveCardToBattlefieldCommand(state, battleCardId, location.side, sourceSurface)
-        : createMoveCardToZoneCommand(battleCardId, location.side, "banished", sourceSurface);
+      const reclaimCommand =
+        card.definition.battleCardKind === "character"
+          ? createMoveCardToBattlefieldCommand(
+              state,
+              battleCardId,
+              location.side,
+              sourceSurface,
+            )
+          : createMoveCardToZoneCommand(
+              battleCardId,
+              location.side,
+              "banished",
+              sourceSurface,
+            );
       if (reclaimCommand !== null) {
         result.push({
           label: "Reclaim",
@@ -132,66 +156,109 @@ export function BattleContextMenu({
             label: "Amount",
             placeholder: "+3 or -2",
             commitLabel: "Apply",
-            action: (amount: number) => onCommand({
-              id: "DEBUG_EDIT",
-              edit: {
-                kind: "KINDLE",
-                amount,
-                preferredBattleCardId: battleCardId,
-                side: card.controller,
-              },
-              sourceSurface,
-            }),
+            action: (amount: number) =>
+              onCommand({
+                id: "DEBUG_EDIT",
+                edit: {
+                  kind: "KINDLE",
+                  amount,
+                  preferredBattleCardId: battleCardId,
+                  side: card.controller,
+                },
+                sourceSurface,
+              }),
           },
         ],
       });
       result.push({ divider: true });
     }
 
-    appendIfPresent(result, "→ Hand", createMoveCardToZoneCommand(
-      battleCardId,
-      location.side,
-      "hand",
-      sourceSurface,
-    ), location.zone !== "hand", onCommand);
-    appendIfPresent(result, "→ Back Rank", createMoveCardToRowCommand(
-      state,
-      battleCardId,
-      location.side,
-      "backRank",
-      sourceSurface,
-    ), location.zone !== "backRank", onCommand);
-    appendIfPresent(result, "→ Front Rank", createMoveCardToRowCommand(
-      state,
-      battleCardId,
-      location.side,
-      "frontRank",
-      sourceSurface,
-    ), location.zone !== "frontRank", onCommand);
-    appendIfPresent(result, "→ Void", createMoveCardToZoneCommand(
-      battleCardId,
-      location.side,
-      "void",
-      sourceSurface,
-    ), location.zone !== "void", onCommand);
-    appendIfPresent(result, "→ Banished", createMoveCardToZoneCommand(
-      battleCardId,
-      location.side,
-      "banished",
-      sourceSurface,
-    ), location.zone !== "banished", onCommand);
-    appendIfPresent(result, "→ Deck top", createMoveCardToDeckCommand(
-      battleCardId,
-      location.side,
-      "top",
-      sourceSurface,
-    ), location.zone !== "deck", onCommand);
-    appendIfPresent(result, "→ Deck bottom", createMoveCardToDeckCommand(
-      battleCardId,
-      location.side,
-      "bottom",
-      sourceSurface,
-    ), location.zone !== "deck", onCommand);
+    appendIfPresent(
+      result,
+      "→ Hand",
+      createMoveCardToZoneCommand(
+        battleCardId,
+        location.side,
+        "hand",
+        sourceSurface,
+      ),
+      location.zone !== "hand",
+      onCommand,
+    );
+    appendIfPresent(
+      result,
+      "→ Back Rank",
+      createMoveCardToRowCommand(
+        state,
+        battleCardId,
+        location.side,
+        "backRank",
+        sourceSurface,
+      ),
+      location.zone !== "backRank",
+      onCommand,
+    );
+    appendIfPresent(
+      result,
+      "→ Front Rank",
+      createMoveCardToRowCommand(
+        state,
+        battleCardId,
+        location.side,
+        "frontRank",
+        sourceSurface,
+      ),
+      location.zone !== "frontRank",
+      onCommand,
+    );
+    appendIfPresent(
+      result,
+      "→ Void",
+      createMoveCardToZoneCommand(
+        battleCardId,
+        location.side,
+        "void",
+        sourceSurface,
+      ),
+      location.zone !== "void",
+      onCommand,
+    );
+    appendIfPresent(
+      result,
+      "→ Banished",
+      createMoveCardToZoneCommand(
+        battleCardId,
+        location.side,
+        "banished",
+        sourceSurface,
+      ),
+      location.zone !== "banished",
+      onCommand,
+    );
+    appendIfPresent(
+      result,
+      "→ Deck top",
+      createMoveCardToDeckCommand(
+        battleCardId,
+        location.side,
+        "top",
+        sourceSurface,
+      ),
+      location.zone !== "deck",
+      onCommand,
+    );
+    appendIfPresent(
+      result,
+      "→ Deck bottom",
+      createMoveCardToDeckCommand(
+        battleCardId,
+        location.side,
+        "bottom",
+        sourceSurface,
+      ),
+      location.zone !== "deck",
+      onCommand,
+    );
 
     result.push({ divider: true });
 
@@ -203,34 +270,38 @@ export function BattleContextMenu({
       label: "Markers",
       submenu: [
         {
-          label: card.markers.isPrevented ? "Clear Prevented" : "Mark Prevented",
-          action: () => onCommand({
-            id: "DEBUG_EDIT",
-            edit: {
-              kind: "SET_CARD_MARKERS",
-              battleCardId,
-              markers: {
-                ...card.markers,
-                isPrevented: !card.markers.isPrevented,
+          label: card.markers.isPrevented
+            ? "Clear Prevented"
+            : "Mark Prevented",
+          action: () =>
+            onCommand({
+              id: "DEBUG_EDIT",
+              edit: {
+                kind: "SET_CARD_MARKERS",
+                battleCardId,
+                markers: {
+                  ...card.markers,
+                  isPrevented: !card.markers.isPrevented,
+                },
               },
-            },
-            sourceSurface,
-          }),
+              sourceSurface,
+            }),
         },
         {
           label: card.markers.isCopied ? "Clear Copied" : "Mark Copied",
-          action: () => onCommand({
-            id: "DEBUG_EDIT",
-            edit: {
-              kind: "SET_CARD_MARKERS",
-              battleCardId,
-              markers: {
-                ...card.markers,
-                isCopied: !card.markers.isCopied,
+          action: () =>
+            onCommand({
+              id: "DEBUG_EDIT",
+              edit: {
+                kind: "SET_CARD_MARKERS",
+                battleCardId,
+                markers: {
+                  ...card.markers,
+                  isCopied: !card.markers.isCopied,
+                },
               },
-            },
-            sourceSurface,
-          }),
+              sourceSurface,
+            }),
         },
       ],
     });
@@ -252,19 +323,21 @@ export function BattleContextMenu({
         result.push({ divider: true });
         result.push({
           label: "Abandon",
-          action: () => onCommand({
-            id: "DEBUG_EDIT",
-            edit: { kind: "ABANDON", battleCardId },
-            sourceSurface,
-          }),
+          action: () =>
+            onCommand({
+              id: "DEBUG_EDIT",
+              edit: { kind: "ABANDON", battleCardId },
+              sourceSurface,
+            }),
         });
         result.push({
           label: "Rematerialize",
-          action: () => onCommand({
-            id: "DEBUG_EDIT",
-            edit: { kind: "REMATERIALIZE", battleCardId },
-            sourceSurface,
-          }),
+          action: () =>
+            onCommand({
+              id: "DEBUG_EDIT",
+              edit: { kind: "REMATERIALIZE", battleCardId },
+              sourceSurface,
+            }),
         });
       }
     }
@@ -278,27 +351,29 @@ export function BattleContextMenu({
         submenu: [
           ...card.notes.map((note) => ({
             label: `Dismiss: ${truncateNoteLabel(note.text)}`,
-            action: () => onCommand({
-              id: "DEBUG_EDIT",
-              edit: {
-                kind: "DISMISS_CARD_NOTE",
-                battleCardId,
-                noteId: note.noteId,
-              },
-              sourceSurface,
-            }),
+            action: () =>
+              onCommand({
+                id: "DEBUG_EDIT",
+                edit: {
+                  kind: "DISMISS_CARD_NOTE",
+                  battleCardId,
+                  noteId: note.noteId,
+                },
+                sourceSurface,
+              }),
           })),
           { divider: true },
           {
             label: "Clear All",
-            action: () => onCommand({
-              id: "DEBUG_EDIT",
-              edit: {
-                kind: "CLEAR_CARD_NOTES",
-                battleCardId,
-              },
-              sourceSurface,
-            }),
+            action: () =>
+              onCommand({
+                id: "DEBUG_EDIT",
+                edit: {
+                  kind: "CLEAR_CARD_NOTES",
+                  battleCardId,
+                },
+                sourceSurface,
+              }),
           },
         ],
       });
@@ -351,8 +426,20 @@ export function BattleContextMenu({
       });
       items.push({ divider: true });
 
-      items.push(grantedKeywordItem("Vengeful", "grantedVengeful", status.grantedVengeful));
-      items.push(grantedKeywordItem("Awakened", "grantedAwakened", status.grantedAwakened));
+      items.push(
+        grantedKeywordItem(
+          "Vengeful",
+          "grantedVengeful",
+          status.grantedVengeful,
+        ),
+      );
+      items.push(
+        grantedKeywordItem(
+          "Awakened",
+          "grantedAwakened",
+          status.grantedAwakened,
+        ),
+      );
 
       return items;
     }
@@ -409,21 +496,30 @@ export function BattleContextMenu({
       });
       return items;
     }
-  }, [battleCardId, card, location, onCommand, onOpenNoteEditor, sourceSurface, state]);
+  }, [
+    battleCardId,
+    card,
+    location,
+    onCommand,
+    onOpenNoteEditor,
+    sourceSurface,
+    state,
+  ]);
 
   if (card === undefined || location === null) {
     return null;
   }
 
-  const locationLabel = location.zone === "backRank" || location.zone === "frontRank"
-    ? `${formatSideLabel(location.side)} · ${formatZoneLabel(location.zone)} ${location.slotId}`
-    : `${formatSideLabel(location.side)} · ${formatZoneLabel(location.zone)}`;
+  const locationLabel =
+    location.zone === "backRank" || location.zone === "frontRank"
+      ? `${formatSideLabel(location.side)} · ${formatZoneLabel(location.zone)} ${location.slotId}`
+      : `${formatSideLabel(location.side)} · ${formatZoneLabel(location.zone)}`;
   return (
     <CommandMenu
       model={{
         kind: "context",
-        authoredTitle: card.definition.name,
-        authoredSubtitle: locationLabel,
+        title: localizedSourceText(card.definition.name),
+        subtitle: assertLocalized(locationLabel),
         actions: toCommandMenuItems(items, battleCardId),
         anchor: { x, y },
         onDismiss: onClose,
@@ -432,7 +528,9 @@ export function BattleContextMenu({
     />
   );
 
-  function createCopySubmenu(side: BattleFieldSlotAddress["side"]): ContextMenuItem[] {
+  function createCopySubmenu(
+    side: BattleFieldSlotAddress["side"],
+  ): ContextMenuItem[] {
     const items: ContextMenuItem[] = [];
     const appendCreateCopy = (
       label: string,
@@ -440,32 +538,49 @@ export function BattleContextMenu({
     ) => {
       items.push({
         label,
-        action: () => onCommand({
-          id: "DEBUG_EDIT",
-          edit: {
-            kind: "CREATE_CARD_COPY",
-            sourceBattleCardId: battleCardId,
-            destination,
-            createdAtMs: Date.now(),
-          },
-          sourceSurface,
-        }),
+        action: () =>
+          onCommand({
+            id: "DEBUG_EDIT",
+            edit: {
+              kind: "CREATE_CARD_COPY",
+              sourceBattleCardId: battleCardId,
+              destination,
+              createdAtMs: Date.now(),
+            },
+            sourceSurface,
+          }),
       });
     };
 
     appendCreateCopy("→ Hand", { side, zone: "hand" });
-    const reserveTarget = createMoveCardToRowCommand(state, battleCardId, side, "backRank", sourceSurface);
+    const reserveTarget = createMoveCardToRowCommand(
+      state,
+      battleCardId,
+      side,
+      "backRank",
+      sourceSurface,
+    );
     if (reserveTarget !== null) {
       appendCreateCopy("→ Back Rank", reserveTarget.edit.destination);
     }
-    const deployedTarget = createMoveCardToRowCommand(state, battleCardId, side, "frontRank", sourceSurface);
+    const deployedTarget = createMoveCardToRowCommand(
+      state,
+      battleCardId,
+      side,
+      "frontRank",
+      sourceSurface,
+    );
     if (deployedTarget !== null) {
       appendCreateCopy("→ Front Rank", deployedTarget.edit.destination);
     }
     appendCreateCopy("→ Void", { side, zone: "void" });
     appendCreateCopy("→ Banished", { side, zone: "banished" });
     appendCreateCopy("→ Deck top", { side, zone: "deck", position: "top" });
-    appendCreateCopy("→ Deck bottom", { side, zone: "deck", position: "bottom" });
+    appendCreateCopy("→ Deck bottom", {
+      side,
+      zone: "deck",
+      position: "bottom",
+    });
     return items;
   }
 }
@@ -473,22 +588,22 @@ export function BattleContextMenu({
 type ContextMenuItem =
   | { divider: true }
   | {
-    signedInteger: true;
-    label: string;
-    placeholder?: string;
-    commitLabel: string;
-    action: (value: number) => void;
-  }
+      signedInteger: true;
+      label: string;
+      placeholder?: string;
+      commitLabel: string;
+      action: (value: number) => void;
+    }
   | {
-    label: string;
-    glyph?: Glyph;
-    action: () => void;
-  }
+      label: string;
+      glyph?: Glyph;
+      action: () => void;
+    }
   | {
-    label: string;
-    glyph?: Glyph;
-    submenu: Array<ContextMenuItem>;
-  };
+      label: string;
+      glyph?: Glyph;
+      submenu: Array<ContextMenuItem>;
+    };
 
 function toCommandMenuItems(
   items: readonly ContextMenuItem[],
@@ -502,11 +617,11 @@ function toCommandMenuItems(
       return {
         kind: "signed-integer",
         id,
-        authoredLabel: item.label,
+        label: assertLocalized(item.label),
         ...(item.placeholder === undefined
           ? {}
-          : { authoredPlaceholder: item.placeholder }),
-        authoredCommitLabel: item.commitLabel,
+          : { placeholder: assertLocalized(item.placeholder) }),
+        commitLabel: assertLocalized(item.commitLabel),
         onCommand: item.action,
       };
     }
@@ -514,7 +629,7 @@ function toCommandMenuItems(
       return {
         kind: "group",
         id,
-        authoredLabel: item.label,
+        label: assertLocalized(item.label),
         glyph: item.glyph ?? GLYPHS.list,
         actions: toCommandMenuItems(item.submenu, battleCardId, id),
       };
@@ -522,8 +637,10 @@ function toCommandMenuItems(
     return {
       kind: "action",
       id,
-      authoredLabel: item.label,
-      glyph: item.glyph ?? (item.label.includes("Note") ? GLYPHS.pencilSquare : GLYPHS.edit),
+      label: assertLocalized(item.label),
+      glyph:
+        item.glyph ??
+        (item.label.includes("Note") ? GLYPHS.pencilSquare : GLYPHS.edit),
       onCommand: item.action,
     };
   });

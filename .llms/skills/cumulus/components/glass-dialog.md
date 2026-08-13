@@ -22,13 +22,10 @@ Close placement is internal: it sits on the header row by default, and `cutoutAw
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `title` | `LocalizedString` | no | — | The dialog's heading, rendered as an `<h2>`. |
-| `authoredTitle` | `string` | no | — | Canonical authored or user-provided heading outside code-authored localization. |
+| `title` | `LocalizedString` | yes | — | The dialog's heading, rendered as an `<h2>`. |
 | `subtitle` | `LocalizedString` | no | — | Optional intro line under the title. |
-| `authoredSubtitle` | `string` | no | — | Canonical authored or user-provided intro line outside code-authored localization. |
 | `onClose` | `(() => void)` | no | — | Dismisses the dialog from its close disc. Omit for a commit-gated dialog that intentionally exposes no dismissal control. |
 | `closeLabel` | `LocalizedString` | no | — | Accessible name for the close disc. Defaults to `"Close"`. |
-| `authoredCloseLabel` | `string` | no | — | Close action name supplied by canonical authored or developer-only copy. |
 | `cutoutAwareClose` | `boolean` | no | `false` | When true, on a full-bleed mobile overlay whose screen-cutout box is known (a device-screenshot mock-up) the close disc floats up beside the device island instead of sitting on the header row, so the header title clears the safe area below it. No effect on desktop or on real hardware (where the island geometry is not exposed). Defaults to `false`. |
 | `fullScreen` | `boolean` | no | `false` | Force the edge-to-edge takeover treatment at any viewport width. |
 | `presentation` | `"responsive" \| "popup"` | no | `responsive` | Responsive behavior for the dialog surface. `"responsive"` uses the standard bounded desktop panel and full-bleed mobile takeover. `"popup"` keeps a centered, content-sized glass panel at every viewport width. `fullScreen` takes precedence. Defaults to `"responsive"`. |
@@ -47,8 +44,8 @@ A modal dialog with a bounded desktop panel and a full-bleed frosted mobile over
 import { GlassDialog } from "src/cumulus/components/overlay/GlassDialog";
 
 <GlassDialog
-  title="Starting Deck"
-  subtitle="These are the cards you begin the journey with."
+  title={assertLocalized("Starting Deck")}
+  subtitle={assertLocalized("These are the cards you begin the journey with.")}
   onClose={closeModal}
 >
   <DeckGrid entries={entries} />
@@ -60,9 +57,9 @@ import { GlassDialog } from "src/cumulus/components/overlay/GlassDialog";
 Omit `onClose` when the dialog must expose only its explicit commit action. The header remains and no dismissal control is rendered.
 
 ```tsx
-<GlassDialog title="Foresee 2" desktopCenterTarget="battlefield">
+<GlassDialog title={assertLocalized("Foresee 2")} desktopCenterTarget="battlefield">
   <ForeseeOrder />
-  <GlassButton label="Confirm" variant="accent" placement="onGlass" onPress={confirm} />
+  <GlassButton label={assertLocalized("Confirm")} variant="accent" placement="onGlass" onPress={confirm} />
 </GlassDialog>
 ```
 
@@ -71,7 +68,7 @@ Omit `onClose` when the dialog must expose only its explicit commit action. The 
 Use the popup presentation for compact guidance or confirmation copy that should remain a centered glass window on mobile as well as desktop.
 
 ```tsx
-<GlassDialog title="How to Play" presentation="popup" onClose={closeGuide}>
+<GlassDialog title={assertLocalized("How to Play")} presentation="popup" onClose={closeGuide}>
   <HowToPlayCopy />
 </GlassDialog>
 ```
@@ -81,7 +78,7 @@ Use the popup presentation for compact guidance or confirmation copy that should
 Use flowing-close chrome for titleless prose whose opening lines should wrap around the close disc and then regain the full content measure.
 
 ```tsx
-<GlassDialog title="How to Play" presentation="popup" chrome="flowing-close" onClose={closeGuide}>
+<GlassDialog title={assertLocalized("How to Play")} presentation="popup" chrome="flowing-close" onClose={closeGuide}>
   <HowToPlayCopy />
 </GlassDialog>
 ```
@@ -92,7 +89,7 @@ Pair one tangible object with a prose popup. The complete pair is centered horiz
 
 ```tsx
 <GlassDialog
-  title="How to Play"
+  title={assertLocalized("How to Play")}
   presentation="popup"
   companion={<DreamwellCard model={dreamwell} />}
   onClose={closeGuide}

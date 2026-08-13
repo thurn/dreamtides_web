@@ -16,33 +16,33 @@ The persistent, transparent bottom HUD for journey screens. Its journey variant 
 | --- | --- | --- | --- | --- |
 | `stageRef` | `RefObject<HTMLElement \| null>` | yes | — | Ref to the screen root (position:absolute inset:0 in the scaled frame). Required. |
 | `essence` | `number` | no | — | Essence total shown in the HUD. |
-| `dreamsigns` | `Dreamsign[]` | no | `[]` | The Dreamsigns to dock. Journey overflow opens a viewer; battle Dreamsigns flow bottom-up and right-to-left in two-high columns. |
+| `dreamsigns` | `LocalizedDreamsign[]` | no | `[]` | The Dreamsigns to dock. Journey overflow opens a viewer; battle Dreamsigns flow bottom-up and right-to-left in two-high columns. |
 | `deck` | `number` | no | `0` | Deck size (used in the deck button's aria-label). |
 | `onViewDeck` | `(() => void)` | no | — | Open the deck viewer — fired on a tap / click of the deck sprite. |
 | `dreamAvatar` | `QsbDreamAvatar` | no | — |  |
 | `size` | `"compact" \| "grand"` | no | `compact` | HUD size. `compact` (default) is the mobile / touch size; `grand` is the larger desktop size the dreamscape screen picks above the wide-viewport breakpoint. |
 | `variant` | `"journey" \| "battle"` | no | `journey` | Content arrangement. `journey` shows the complete run inventory; `battle` keeps only essence at the lower start edge and bottom-up, right-to-left Dreamsign columns at the lower end edge of the playable battle board. |
 
-### `dreamsigns`: the `Dreamsign` model
+### `dreamsigns`: the `LocalizedDreamsign` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `id` | `string` | yes |  |
-| `name` | `string` | no |  |
-| `effectDescription` | `string` | no |  |
-| `imageName` | `string` | yes |  |
-| `imageAlt` | `string` | yes |  |
+| `id` | `string` | no | Stable Dreamsign UUID. |
+| `name` | `LocalizedString` | no | Canonical localized display name. |
+| `effectDescription` | `LocalizedString \| null` | no | Canonical localized effect copy, or null when the object has no rules. |
+| `imageName` | `string` | yes | Hosted art key. |
+| `imageAlt` | `LocalizedString` | no | Localized alternative text for the art. |
 
 ### `dreamAvatar`: the `QsbDreamAvatar` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `id` | `string` | no | Stable DreamAvatar UUID. |
-| `name` | `string` | no |  |
-| `epithet` | `string` | yes |  |
+| `name` | `LocalizedString` | no |  |
+| `epithet` | `LocalizedString` | yes |  |
 | `portrait` | `ArtRef` | no | The portrait art as an {@link ArtRef}. Required — a docked DreamAvatar always has art. |
 | `portraitFocus` | `DreamAvatarPortraitFocus` | yes | Normalized head position used to center the square HUD crop. |
-| `ability` | `string` | yes |  |
+| `ability` | `LocalizedString` | yes |  |
 
 ## Usage
 

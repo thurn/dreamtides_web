@@ -101,11 +101,11 @@ export const cardPickerPanelDemo: CumulusComponent = {
       code: `import { CardPickerPanel } from "src/cumulus/components/card/CardPickerPanel";
 
 <CardPickerPanel
-  title="Purge Cards"
+  title={assertLocalized("Purge Cards")}
   cards={cards}
   footerActions={[
     {
-      label: "Confirm Choice",
+      label: assertLocalized("Confirm Choice"),
       disabled: selectedEntryId === null,
       onPress: confirm,
     },

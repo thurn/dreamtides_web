@@ -44,7 +44,8 @@ import type {
   AtlasView,
 } from "../../cumulus/screens/AtlasScreen";
 import type { JourneyContent } from "../../data/journey-content";
-import { atlasTemplate } from "../../data/atlas-data";
+import { localizedSourceText } from "../../runtime/localization/runtime";
+import { tx } from "@trox/runtime";
 import {
   siteTypeDescription,
   siteTypeIcon,
@@ -344,12 +345,12 @@ function buildDreamsignCard(
   }
   return {
     id: dreamsign.id,
-    name: dreamsign.name,
+    name: localizedSourceText(dreamsign.name),
     art:
       dreamsign.imageName != null
         ? artRef.dreamsign(dreamsign.imageName)
         : null,
-    rulesText: dreamsign.effectDescription,
+    rulesText: localizedSourceText(dreamsign.effectDescription),
   };
 }
 
@@ -361,10 +362,11 @@ function buildSignatureSiteCard(
 ): AtlasNodeSite {
   return {
     id: siteId,
-    name: siteTypeName(journeyContent.sitesData, dreamscape.signatureSite),
-    blurb: siteTypeDescription(
-      journeyContent.sitesData,
-      dreamscape.signatureSite,
+    name: localizedSourceText(
+      siteTypeName(journeyContent.sitesData, dreamscape.signatureSite),
+    ),
+    blurb: localizedSourceText(
+      siteTypeDescription(journeyContent.sitesData, dreamscape.signatureSite),
     ),
     icon: glyph(
       siteTypeIcon(journeyContent.sitesData, dreamscape.signatureSite),
@@ -380,13 +382,19 @@ function buildAffiliationCard(
   return affiliation !== null
     ? {
         id: affiliation.id,
-        title: atlasTemplate(
+        title: localizedSourceText(
           journeyContent.atlasData.presentation.affiliationTitleTemplate,
-          { name: affiliation.name, "card-theme": affiliation.atlasCardTheme },
+          {
+            name: localizedSourceText(affiliation.name),
+            "card-theme": localizedSourceText(affiliation.atlasCardTheme),
+          },
         ),
-        body: atlasTemplate(
+        body: localizedSourceText(
           journeyContent.atlasData.presentation.affiliationBodyTemplate,
-          { name: affiliation.name, "card-theme": affiliation.atlasCardTheme },
+          {
+            name: localizedSourceText(affiliation.name),
+            "card-theme": localizedSourceText(affiliation.atlasCardTheme),
+          },
         ),
       }
     : null;
@@ -435,12 +443,16 @@ function buildNodeCard(
         // Title with the run's chosen Apollyon incarnation (its full name, e.g.
         // "Apollyon, the World's End"), falling back to the default epithet when
         // no incarnation was assigned.
-        title: bossIncarnation?.title ?? boss.fallbackTitle,
-        body: bossIncarnation?.description ?? boss.fallbackIntroduction,
+        title: localizedSourceText(
+          bossIncarnation?.title ?? boss.fallbackTitle,
+        ),
+        body: localizedSourceText(
+          bossIncarnation?.description ?? boss.fallbackIntroduction,
+        ),
         // The desktop hover card presents Limbo as the place with the chosen
         // incarnation as the guide-line; the boss has no site or affiliation.
-        placeName: boss.place,
-        guideName: bossIncarnation?.title ?? boss.name,
+        placeName: localizedSourceText(boss.place),
+        guideName: localizedSourceText(bossIncarnation?.title ?? boss.name),
       },
       dreamsign,
       site: null,
@@ -461,8 +473,12 @@ function buildNodeCard(
       primary: {
         sceneArt: null,
         figureArt: null,
-        title: journeyContent.atlasData.presentation.unseenTitle,
-        body: journeyContent.atlasData.presentation.unseenBody,
+        title: localizedSourceText(
+          journeyContent.atlasData.presentation.unseenTitle,
+        ),
+        body: localizedSourceText(
+          journeyContent.atlasData.presentation.unseenBody,
+        ),
         // A still-unseen dream can carry a pre-revealed known dreamsign (its badge
         // already shows on the node); pressing it reveals that dreamsign's own
         // companion card beneath the "unseen dream" text. Unreachable nodes hide
@@ -504,14 +520,15 @@ function buildNodeCard(
     primary: {
       sceneArt: artRef.dreamscapeScene(dreamscape.id),
       figureArt: guide != null ? artRef.dreamGuide(guide.id) : null,
-      title: guide?.name ?? dreamscape.name,
-      body:
+      title: localizedSourceText(guide?.name ?? dreamscape.name),
+      body: localizedSourceText(
         guide?.homeSpecialty ??
-        journeyContent.atlasData.presentation.starterBody,
+          journeyContent.atlasData.presentation.starterBody,
+      ),
       // The large desktop hover card presents the place, its resident guide, the
       // signature site, and the dreamscape's affiliation as distinct fields.
-      placeName: dreamscape.name,
-      guideName: guide?.name ?? null,
+      placeName: localizedSourceText(dreamscape.name),
+      guideName: guide === null ? null : localizedSourceText(guide.name),
     },
     dreamsign,
     site,
@@ -550,11 +567,12 @@ export function buildAtlasMapNodes(
 
     // The node face: the boss is always the icon; a revealed dreamscape shows
     // its circular icon; an unrevealed node shows the empty round frame.
-    const iconRef = geo.role === "boss"
-      ? artRef.dreamscapeIcon(journeyContent.atlasData.boss.iconArtId)
-      : dreamscape === null
-        ? null
-        : artRef.dreamscapeIcon(dreamscape.id);
+    const iconRef =
+      geo.role === "boss"
+        ? artRef.dreamscapeIcon(journeyContent.atlasData.boss.iconArtId)
+        : dreamscape === null
+          ? null
+          : artRef.dreamscapeIcon(dreamscape.id);
 
     // The signature-site badge is shown only for non-starter, non-boss revealed
     // dreamscapes.
@@ -643,9 +661,9 @@ export function buildAtlasGuideDialogue(
     id: `${state.runId ?? state.seed}:atlas-guidance`,
     model: {
       portrait: { kind: "character-portrait", characterId: "mira" },
-      portraitAlt: "Mira",
-      speakerName: "Mira",
-      text: speechBubble.text,
+      portraitAlt: tx("Mira", "Name of the tutorial guide."),
+      speakerName: tx("Mira", "Name of the tutorial guide."),
+      text: localizedSourceText(speechBubble.text),
     },
     delaySeconds: tutorialSpeechBubbleDelaySeconds(speechBubble),
     horizontalOffset: speechBubble.horizontalOffset,

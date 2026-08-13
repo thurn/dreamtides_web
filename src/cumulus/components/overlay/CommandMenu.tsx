@@ -32,33 +32,29 @@ import {
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export type CommandMenuCopy = LocalizedString;
-export type CommandMenuStatusCopy =
-  | { readonly kind: "message"; readonly message: LocalizedString }
-  | { readonly kind: "raw"; readonly value: string };
-
-type CommandMenuLabelChoice =
-  | { readonly label: CommandMenuCopy; readonly authoredLabel?: never }
-  | { readonly label?: never; readonly authoredLabel: string };
+export type CommandMenuStatusCopy = LocalizedString;
 
 /** A single command row. `id` is stable domain identity, never display copy. */
-export type CommandMenuAction = {
+export interface CommandMenuAction {
   kind: "action";
   id: string;
   glyph: Glyph;
+  label: CommandMenuCopy;
   active?: boolean;
   onCommand: () => void;
-} & CommandMenuLabelChoice;
+}
 
 /** A named, nested group of command rows. */
-export type CommandMenuGroup = {
+export interface CommandMenuGroup {
   kind: "group";
   id: string;
   glyph: Glyph;
+  label: CommandMenuCopy;
   active?: boolean;
   /** Runs when Cumulus opens this group, before its nested commands are shown. */
   onOpen?: () => void;
   actions: readonly CommandMenuItem[];
-} & CommandMenuLabelChoice;
+}
 
 /** A structural separator with stable identity. */
 export interface CommandMenuDivider {
@@ -72,14 +68,11 @@ export interface CommandMenuSignedInteger {
   /** Stable domain identity for the field command. */
   id: string;
   /** Visible label above the field. */
-  label?: LocalizedString;
-  authoredLabel?: string;
+  label: LocalizedString;
   /** Optional example value shown while the field is empty. */
   placeholder?: LocalizedString;
-  authoredPlaceholder?: string;
   /** Label for the commit action beneath the field. */
-  commitLabel?: LocalizedString;
-  authoredCommitLabel?: string;
+  commitLabel: LocalizedString;
   /** Receives the validated signed, non-zero whole number. */
   onCommand: (value: number) => void;
 }
@@ -133,9 +126,9 @@ export interface CommandMenuAnchor {
 export interface CommandMenuContextModel {
   kind: "context";
   /** Describes the card/pointer subject in the menu's header. */
-  authoredTitle: string;
+  title: LocalizedString;
   /** Optional structured secondary location/context copy. */
-  authoredSubtitle?: string;
+  subtitle?: LocalizedString;
   /** Commands available for the activated card or pointer target. */
   actions: readonly CommandMenuItem[];
   /** Semantic location used to anchor the desktop pointer menu. */
@@ -244,9 +237,7 @@ function AppChromeCommandMenu({
             font: token("--t-caption"),
           }}
         >
-          {status.text.kind === "message"
-            ? resolve(status.text.message)
-            : status.text.value}
+          {resolve(status.text)}
         </div>
       )}
     </div>
@@ -262,15 +253,9 @@ function ContextCommandMenu({
 }: {
   model: CommandMenuContextModel;
 }): ReactElement {
-  const {
-    authoredTitle,
-    authoredSubtitle,
-    actions,
-    anchor,
-    onDismiss,
-    testId,
-  } = model;
+  const { title, subtitle, actions, anchor, onDismiss, testId } = model;
   const isDesktop = useIsDesktop();
+  const resolve = useLocalizer();
   const menuRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState<{
     left: number;
@@ -317,8 +302,8 @@ function ContextCommandMenu({
   if (!isDesktop) {
     return createPortal(
       <GlassDialog
-        authoredTitle={authoredTitle}
-        authoredSubtitle={authoredSubtitle}
+        title={title}
+        subtitle={subtitle}
         closeLabel={tx(
           "Close actions",
           "Accessible action name that closes a command menu.",
@@ -349,16 +334,16 @@ function ContextCommandMenu({
         <span
           style={{ font: token("--t-body"), color: token("--text-on-glass") }}
         >
-          {authoredTitle}
+          {resolve(title)}
         </span>
-        {authoredSubtitle !== undefined && (
+        {subtitle !== undefined && (
           <span
             style={{
               font: token("--t-caption"),
               color: token("--text-on-glass-muted"),
             }}
           >
-            {authoredSubtitle}
+            {resolve(subtitle)}
           </span>
         )}
       </div>
@@ -513,7 +498,6 @@ function HierarchicalMenu({
             key={item.id}
             item={item}
             label={item.label}
-            authoredLabel={item.authoredLabel}
             active={index === activeIndex}
             mobile={mobile}
             onActivate={() => choose(item)}
@@ -592,21 +576,18 @@ function SignedIntegerCommand({
     >
       <TextField
         label={item.label}
-        authoredLabel={item.authoredLabel}
         value={draft}
         onChange={(value) => {
           setDraft(value);
           setError(undefined);
         }}
         placeholder={item.placeholder}
-        authoredPlaceholder={item.authoredPlaceholder}
         error={error}
         testId="command-menu-signed-integer-input"
       />
       <div style={{ display: "grid" }}>
         <GlassButton
           label={item.commitLabel}
-          authoredLabel={item.authoredCommitLabel}
           variant="accent"
           placement="onGlass"
           onPress={commit}
@@ -619,26 +600,17 @@ function SignedIntegerCommand({
 function CommandRow({
   item,
   label,
-  authoredLabel,
   active,
   mobile,
   onActivate,
 }: {
   item: CommandMenuInteractiveItem;
-  label?: LocalizedString;
-  authoredLabel?: string;
+  label: LocalizedString;
   active: boolean;
   mobile: boolean;
   onActivate: () => void;
 }): ReactElement {
   const resolve = useLocalizer();
-  if ((label === undefined) === (authoredLabel === undefined)) {
-    throw new Error(
-      "CommandMenu rows require exactly one of label or authoredLabel.",
-    );
-  }
-  const visibleLabel =
-    authoredLabel ?? (label === undefined ? "" : resolve(label));
   const color =
     item.active === true ? token("--accent-bright") : token("--text-on-glass");
   return (
@@ -668,7 +640,7 @@ function CommandRow({
       }}
     >
       <StandaloneGlyph glyph={item.glyph} color="text-primary" />
-      <span>{visibleLabel}</span>
+      <span>{resolve(label)}</span>
       {item.kind === "group" && (
         <StandaloneGlyph glyph={GLYPHS.chevronRight} color="text-primary" />
       )}

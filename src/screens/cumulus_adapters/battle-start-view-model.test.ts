@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 import { createTestBattleInit } from "../../testing/create-battle-init";
 import {
   makeBattleTestCardDatabase,

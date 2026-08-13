@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act, type ReactElement } from "react";
@@ -12,9 +13,9 @@ import {
 const VIEW: JourneyCompleteView = {
   dreamAvatar: {
     id: "00000000-0000-4000-8000-000000000061",
-    name: "The Wayfinder",
-    title: "Bearer of the Last Light",
-    ability: "Whenever you map a dream, gain 1 essence.",
+    name: assertLocalized("The Wayfinder"),
+    title: assertLocalized("Bearer of the Last Light"),
+    ability: assertLocalized("Whenever you map a dream, gain 1 essence."),
     imageNumber: "001",
     portraitFocus: { x: 0.42, y: 0.18 },
   },

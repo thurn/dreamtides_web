@@ -10,7 +10,10 @@ import { NumberStepper } from "./NumberStepper";
 import { TextField } from "./TextField";
 import { CumulusRoot } from "../../CumulusRoot";
 
-function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
+function mount(element: ReactElement): {
+  container: HTMLDivElement;
+  root: Root;
+} {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -19,27 +22,76 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
 }
 
 beforeEach(() => {
-  (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
-  window.matchMedia = vi.fn().mockImplementation((query: string) => ({ matches: false, media: query, onchange: null, addEventListener: vi.fn(), removeEventListener: vi.fn(), addListener: vi.fn(), removeListener: vi.fn(), dispatchEvent: vi.fn() }));
+  (
+    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
+  ).IS_REACT_ACT_ENVIRONMENT = true;
+  window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }));
 });
 
-afterEach(() => { document.body.innerHTML = ""; vi.restoreAllMocks(); });
+afterEach(() => {
+  document.body.innerHTML = "";
+  vi.restoreAllMocks();
+});
 
 describe("inspector Cumulus controls", () => {
   it("exposes labeled NumberStepper actions and formatted output", () => {
     const decrement = vi.fn();
     const increment = vi.fn();
-    const { container, root } = mount(<NumberStepper label={assertLocalized("Energy")} value={2} displayValue={assertLocalized("2/4")} resource="energy" decrementLabel={assertLocalized("Decrease energy")} incrementLabel={assertLocalized("Increase energy")} onDecrement={decrement} onIncrement={increment} />);
-    expect(container.querySelector('[role="group"]')?.getAttribute("aria-label")).toBe("Energy");
+    const { container, root } = mount(
+      <NumberStepper
+        label={assertLocalized("Energy")}
+        value={2}
+        displayValue={assertLocalized("2/4")}
+        resource="energy"
+        decrementLabel={assertLocalized("Decrease energy")}
+        incrementLabel={assertLocalized("Increase energy")}
+        onDecrement={decrement}
+        onIncrement={increment}
+      />,
+    );
+    expect(
+      container.querySelector('[role="group"]')?.getAttribute("aria-label"),
+    ).toBe("Energy");
     expect(container.querySelector("i.bxf.bx-fire-alt")).not.toBeNull();
-    act(() => { (container.querySelector('button[aria-label="Decrease energy"]') as HTMLButtonElement).click(); (container.querySelector('button[aria-label="Increase energy"]') as HTMLButtonElement).click(); });
+    act(() => {
+      (
+        container.querySelector(
+          'button[aria-label="Decrease energy"]',
+        ) as HTMLButtonElement
+      ).click();
+      (
+        container.querySelector(
+          'button[aria-label="Increase energy"]',
+        ) as HTMLButtonElement
+      ).click();
+    });
     expect(decrement).toHaveBeenCalledOnce();
     expect(increment).toHaveBeenCalledOnce();
     act(() => root.unmount());
   });
 
   it("keeps DisclosureSection controlled", () => {
-    function Fixture(): ReactElement { const [open, setOpen] = useState(false); return <DisclosureSection title={assertLocalized("Details")} expanded={open} onExpandedChange={setOpen}><span>Hidden body</span></DisclosureSection>; }
+    function Fixture(): ReactElement {
+      const [open, setOpen] = useState(false);
+      return (
+        <DisclosureSection
+          title={assertLocalized("Details")}
+          expanded={open}
+          onExpandedChange={setOpen}
+        >
+          <span>Hidden body</span>
+        </DisclosureSection>
+      );
+    }
     const { container, root } = mount(<Fixture />);
     expect(container.textContent).not.toContain("Hidden body");
     act(() => (container.querySelector("button") as HTMLButtonElement).click());
@@ -48,7 +100,16 @@ describe("inspector Cumulus controls", () => {
   });
 
   it("owns placement-aware DisclosureSection surface chrome", () => {
-    const { container, root } = mount(<DisclosureSection title={assertLocalized("Details")} expanded={false} onExpandedChange={vi.fn()} placement="onGlass"><span>Hidden body</span></DisclosureSection>);
+    const { container, root } = mount(
+      <DisclosureSection
+        title={assertLocalized("Details")}
+        expanded={false}
+        onExpandedChange={vi.fn()}
+        placement="onGlass"
+      >
+        <span>Hidden body</span>
+      </DisclosureSection>,
+    );
     const section = container.querySelector<HTMLElement>("section");
     expect(section?.dataset.glassPlacement).toBe("onGlass");
     expect(section?.style.background).toContain("var(--glass-on-glass-fill)");
@@ -58,11 +119,21 @@ describe("inspector Cumulus controls", () => {
 
   it("labels TextField and reports changes", () => {
     const onChange = vi.fn();
-    const { container, root } = mount(<TextField label={assertLocalized("Search cards")} kind="search" value="moth" onChange={onChange} />);
+    const { container, root } = mount(
+      <TextField
+        label={assertLocalized("Search cards")}
+        kind="search"
+        value="moth"
+        onChange={onChange}
+      />,
+    );
     const input = container.querySelector("input") as HTMLInputElement;
     expect(input.type).toBe("search");
     act(() => {
-      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set?.call(input, "moon");
+      Object.getOwnPropertyDescriptor(
+        HTMLInputElement.prototype,
+        "value",
+      )?.set?.call(input, "moon");
       input.dispatchEvent(new Event("input", { bubbles: true }));
     });
     expect(onChange).toHaveBeenCalledWith("moon");
@@ -71,18 +142,37 @@ describe("inspector Cumulus controls", () => {
 
   it("returns card instance ids from CardOrderEditor keyboard reordering", () => {
     const onOrderChange = vi.fn();
-    const { container, root } = mount(<CardOrderEditor label={assertLocalized("Deck order")} items={[{ id: "instance-a", authoredLabel: "A" }, { id: "instance-b", authoredLabel: "B" }]} onOrderChange={onOrderChange} />);
-    const handle = container.querySelector<HTMLButtonElement>('[data-card-order-drag-handle="instance-b"]');
+    const { container, root } = mount(
+      <CardOrderEditor
+        label={assertLocalized("Deck order")}
+        items={[
+          { id: "instance-a", label: assertLocalized("A") },
+          { id: "instance-b", label: assertLocalized("B") },
+        ]}
+        onOrderChange={onOrderChange}
+      />,
+    );
+    const handle = container.querySelector<HTMLButtonElement>(
+      '[data-card-order-drag-handle="instance-b"]',
+    );
     expect(handle?.querySelector("i.fa-grip-vertical")).not.toBeNull();
     act(() => {
-      handle?.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true }));
+      handle?.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true }),
+      );
     });
     expect(onOrderChange).toHaveBeenCalledWith(["instance-b", "instance-a"]);
     act(() => root.unmount());
   });
 
   it("owns standalone CardOrderEditor surface chrome by default", () => {
-    const { container, root } = mount(<CardOrderEditor label={assertLocalized("Deck order")} items={[{ id: "instance-a", authoredLabel: "A" }]} onOrderChange={vi.fn()} />);
+    const { container, root } = mount(
+      <CardOrderEditor
+        label={assertLocalized("Deck order")}
+        items={[{ id: "instance-a", label: assertLocalized("A") }]}
+        onOrderChange={vi.fn()}
+      />,
+    );
     const editor = container.querySelector<HTMLElement>('[role="list"]');
     expect(editor?.dataset.glassPlacement).toBe("onMedia");
     expect(editor?.style.background).toContain("var(--glass-fill)");

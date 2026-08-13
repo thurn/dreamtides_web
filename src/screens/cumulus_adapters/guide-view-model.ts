@@ -1,11 +1,16 @@
 import { artRef } from "../../cumulus/primitives/art";
+import type { LocalizedString } from "@trox/runtime";
 import type { DreamGuideContent } from "../../types/content";
+import { localizedSourceText } from "../../runtime/localization/runtime";
 
 /** Shared Dream Guide projection used by every guide-bearing site view. */
-export function projectGuideView(guide: DreamGuideContent, line: string) {
+export function projectGuideView(
+  guide: DreamGuideContent,
+  line: LocalizedString,
+) {
   return {
     id: guide.id,
-    name: guide.name,
+    name: localizedSourceText(guide.name),
     line,
     art: artRef.dreamGuide(guide.id),
   };

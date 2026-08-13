@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 import { useRef } from "react";
 import type { CSSProperties } from "react";
 import { DreamAvatarPortrait } from "../cumulus/components/hud/DreamAvatarPortrait";
@@ -141,7 +142,11 @@ export default function EditableDreamAvatar({
   }
 
   return (
-    <article ref={tileRef} data-editor-dream-avatar-id={dreamAvatar.id} style={tileStyle}>
+    <article
+      ref={tileRef}
+      data-editor-dream-avatar-id={dreamAvatar.id}
+      style={tileStyle}
+    >
       <div style={{ padding: "10px 10px 0" }}>
         <button
           type="button"
@@ -161,8 +166,8 @@ export default function EditableDreamAvatar({
           <DreamAvatarPortrait
             dreamAvatar={{
               imageNumber: dreamAvatar.imageNumber,
-              name: dreamAvatar.name,
-              title: dreamAvatar.title,
+              name: assertLocalized(dreamAvatar.name),
+              title: assertLocalized(dreamAvatar.title),
             }}
             variant="panel"
           />
@@ -176,7 +181,9 @@ export default function EditableDreamAvatar({
           saveEntry={nameSaveEntry}
           cardAnchorRef={tileRef}
           onBeginEdit={(value) => onFieldBeginEdit(dreamAvatar, "name", value)}
-          onDraftChange={(value) => onFieldDraftChange(dreamAvatar, "name", value)}
+          onDraftChange={(value) =>
+            onFieldDraftChange(dreamAvatar, "name", value)
+          }
           onCancel={() => onFieldCancel(dreamAvatar, "name")}
           onSave={(value) => onFieldSave(dreamAvatar, "name", value)}
           onCommit={(value) => onFieldCommit(dreamAvatar, "name", value)}
@@ -190,7 +197,9 @@ export default function EditableDreamAvatar({
           saveEntry={titleSaveEntry}
           cardAnchorRef={tileRef}
           onBeginEdit={(value) => onFieldBeginEdit(dreamAvatar, "title", value)}
-          onDraftChange={(value) => onFieldDraftChange(dreamAvatar, "title", value)}
+          onDraftChange={(value) =>
+            onFieldDraftChange(dreamAvatar, "title", value)
+          }
           onCancel={() => onFieldCancel(dreamAvatar, "title")}
           onSave={(value) => onFieldSave(dreamAvatar, "title", value)}
           onCommit={(value) => onFieldCommit(dreamAvatar, "title", value)}
@@ -204,15 +213,21 @@ export default function EditableDreamAvatar({
           mode="multiline"
           saveEntry={abilitySaveEntry}
           cardAnchorRef={tileRef}
-          onBeginEdit={(value) => onFieldBeginEdit(dreamAvatar, "rendered-text", value)}
-          onDraftChange={(value) => onFieldDraftChange(dreamAvatar, "rendered-text", value)}
+          onBeginEdit={(value) =>
+            onFieldBeginEdit(dreamAvatar, "rendered-text", value)
+          }
+          onDraftChange={(value) =>
+            onFieldDraftChange(dreamAvatar, "rendered-text", value)
+          }
           onCancel={() => onFieldCancel(dreamAvatar, "rendered-text")}
           onSave={(value) => onFieldSave(dreamAvatar, "rendered-text", value)}
-          onCommit={(value) => onFieldCommit(dreamAvatar, "rendered-text", value)}
+          onCommit={(value) =>
+            onFieldCommit(dreamAvatar, "rendered-text", value)
+          }
         >
           <div style={abilityStyle}>
             <RulesText
-              text={dreamAvatar["rendered-text"]}
+              text={assertLocalized(dreamAvatar["rendered-text"])}
               owner={{ kind: "dreamAvatar", id: dreamAvatar.id }}
             />
           </div>
@@ -226,14 +241,26 @@ export default function EditableDreamAvatar({
             layout="inline"
             saveEntry={essenceSaveEntry}
             cardAnchorRef={tileRef}
-            onBeginEdit={(value) => onFieldBeginEdit(dreamAvatar, "starting-essence", value)}
-            onDraftChange={(value) => onFieldDraftChange(dreamAvatar, "starting-essence", value)}
+            onBeginEdit={(value) =>
+              onFieldBeginEdit(dreamAvatar, "starting-essence", value)
+            }
+            onDraftChange={(value) =>
+              onFieldDraftChange(dreamAvatar, "starting-essence", value)
+            }
             onCancel={() => onFieldCancel(dreamAvatar, "starting-essence")}
-            onSave={(value) => onFieldSave(dreamAvatar, "starting-essence", value)}
-            onCommit={(value) => onFieldCommit(dreamAvatar, "starting-essence", value)}
+            onSave={(value) =>
+              onFieldSave(dreamAvatar, "starting-essence", value)
+            }
+            onCommit={(value) =>
+              onFieldCommit(dreamAvatar, "starting-essence", value)
+            }
           >
             <span
-              style={{ color: "#fbbf24", fontWeight: 800, fontVariantNumeric: "tabular-nums" }}
+              style={{
+                color: "#fbbf24",
+                fontWeight: 800,
+                fontVariantNumeric: "tabular-nums",
+              }}
             >
               {String(dreamAvatar.startingEssence)}
             </span>
@@ -248,11 +275,17 @@ export default function EditableDreamAvatar({
             layout="inline"
             saveEntry={imageNumberSaveEntry}
             cardAnchorRef={tileRef}
-            onBeginEdit={(value) => onFieldBeginEdit(dreamAvatar, "image-number", value)}
-            onDraftChange={(value) => onFieldDraftChange(dreamAvatar, "image-number", value)}
+            onBeginEdit={(value) =>
+              onFieldBeginEdit(dreamAvatar, "image-number", value)
+            }
+            onDraftChange={(value) =>
+              onFieldDraftChange(dreamAvatar, "image-number", value)
+            }
             onCancel={() => onFieldCancel(dreamAvatar, "image-number")}
             onSave={(value) => onFieldSave(dreamAvatar, "image-number", value)}
-            onCommit={(value) => onFieldCommit(dreamAvatar, "image-number", value)}
+            onCommit={(value) =>
+              onFieldCommit(dreamAvatar, "image-number", value)
+            }
           >
             <span style={{ color: "#e7efec", fontWeight: 700 }}>
               {dreamAvatar.imageNumber === "" ? "—" : dreamAvatar.imageNumber}
@@ -292,7 +325,12 @@ export default function EditableDreamAvatar({
             </button>
           </div>
           <div
-            style={{ display: "flex", flexWrap: "wrap", gap: "5px", alignItems: "center" }}
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "5px",
+              alignItems: "center",
+            }}
             data-dream-avatar-tide-summary={dreamAvatar.id}
           >
             {starterTide !== undefined ? (
@@ -322,9 +360,11 @@ export default function EditableDreamAvatar({
                 {tideLabel(starterTide.id)}
               </span>
             ) : null}
-            <span style={{ fontSize: "0.72rem", color: "#9fb0ab", fontWeight: 600 }}>
-              {dreamAvatar.tidePool.facets.length} facets · {dreamAvatar.tidePool.neutral.length}{" "}
-              neutral
+            <span
+              style={{ fontSize: "0.72rem", color: "#9fb0ab", fontWeight: 600 }}
+            >
+              {dreamAvatar.tidePool.facets.length} facets ·{" "}
+              {dreamAvatar.tidePool.neutral.length} neutral
             </span>
           </div>
         </div>

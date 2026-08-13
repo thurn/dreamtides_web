@@ -33,14 +33,12 @@ const SPEECH_BUBBLE_ZOOM: Record<SpeechBubbleSize, number> = {
 
 export interface SpeechBubbleProps {
   /** The speaking character's display name. */
-  speakerName: string;
+  speakerName: LocalizedString;
   /**
    * The spoken line. Uses tutorial instruction formatting for yellow and
    * bold high-contrast purple highlights plus canonical inline rules glyphs.
    */
-  text?: string;
-  /** Complete localized spoken line supplied by code-authored fallback UI. */
-  textMessage?: LocalizedString;
+  text: LocalizedString;
   /** Authored display scale for compact or prominent character dialogue. */
   size?: SpeechBubbleSize;
   /** Edge and alignment of the pointer toward the speaking character. */
@@ -57,16 +55,12 @@ export interface SpeechBubbleProps {
 export function SpeechBubble({
   speakerName,
   text,
-  textMessage,
   size = "standard",
   pointerPlacement = "left-lower",
   testId,
 }: SpeechBubbleProps): ReactElement {
-  if ((text === undefined) === (textMessage === undefined)) {
-    throw new Error("SpeechBubble requires exactly one spoken-line source.");
-  }
   const resolve = useLocalizer();
-  const renderedText = textMessage === undefined ? (text ?? "") : resolve(textMessage);
+  const renderedText = resolve(text);
   const bubbleRef = useRef<HTMLElement | null>(null);
   const [bubbleSize, setBubbleSize] = useState({ width: 0, height: 0 });
   const tail = `${String(speechBubblePointerDepth())}px`;
@@ -191,7 +185,7 @@ export function SpeechBubble({
           color: token("--text-on-glass"),
         }}
       >
-        {speakerName}
+        {resolve(speakerName)}
       </div>
       <p
         style={{

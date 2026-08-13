@@ -1,4 +1,4 @@
-import {type CSSProperties, type ReactNode } from "react";
+import { type CSSProperties, type ReactNode } from "react";
 import {
   tokenizeRulesSymbols,
   tokenizeRulesText,
@@ -25,8 +25,9 @@ import { rulesTextDefinitionCards } from "./rules-text-reveal";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
-import { meaning, txa } from "@trox/runtime";
+import { meaning, opaque, txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import { localizedSourceText } from "../../../runtime/localization/runtime";
 
 /**
  * Renders rules text with:
@@ -189,7 +190,7 @@ export interface RulesTextOwner {
 
 export interface RulesTextProps {
   /** The rules text to render. */
-  readonly text: string;
+  readonly text: LocalizedString;
   /** Semantic owner required for context-sensitive glossary definitions. */
   readonly owner: RulesTextOwner;
   /**
@@ -281,7 +282,10 @@ function renderSegment(
     return (
       <span key={key} style={{ color: symbol.color, whiteSpace: "nowrap" }}>
         {segment.amount !== null ? segment.amount : null}
-        <InlineGlyph glyph={symbol.glyph} authoredLabel={symbol.label} />
+        <InlineGlyph
+          glyph={symbol.glyph}
+          label={localizedSourceText(symbol.label)}
+        />
       </span>
     );
   }
@@ -342,7 +346,10 @@ function renderSegment(
           color: `var(--cv-rules-energy-color, ${symbol.color})`,
         }}
       >
-        <InlineGlyph glyph={symbol.glyph} authoredLabel={symbol.label} />
+        <InlineGlyph
+          glyph={symbol.glyph}
+          label={localizedSourceText(symbol.label)}
+        />
       </span>
     );
   }
@@ -365,7 +372,10 @@ function renderSegment(
           color: `var(--cv-rules-spark-color, ${symbol.color})`,
         }}
       >
-        <InlineGlyph glyph={symbol.glyph} authoredLabel={symbol.label} />
+        <InlineGlyph
+          glyph={symbol.glyph}
+          label={localizedSourceText(symbol.label)}
+        />
       </span>
     );
   }
@@ -381,7 +391,10 @@ function renderSegment(
     );
     return (
       <span key={key} style={{ color: symbol.color }}>
-        <InlineGlyph glyph={symbol.glyph} authoredLabel={symbol.label} />
+        <InlineGlyph
+          glyph={symbol.glyph}
+          label={localizedSourceText(symbol.label)}
+        />
       </span>
     );
   }
@@ -396,8 +409,16 @@ function RulesTextBolt({ count }: { readonly count: number }) {
   const resolve = useLocalizer();
   const label =
     count >= 2
-      ? txa(meaning("rules-interrupt-marker-name", "Interrupt"), {}, "Accessible name for the paired rules-text bolt marker.")
-      : txa(meaning("rules-fast-marker-name", "Fast"), {}, "Accessible name for the single rules-text bolt marker.");
+      ? txa(
+          meaning("rules-interrupt-marker-name", "Interrupt"),
+          {},
+          "Accessible name for the paired rules-text bolt marker.",
+        )
+      : txa(
+          meaning("rules-fast-marker-name", "Fast"),
+          {},
+          "Accessible name for the single rules-text bolt marker.",
+        );
   return (
     <span
       aria-label={resolve(label)}
@@ -548,24 +569,24 @@ function rulesTextEntityType(owner: RulesTextOwner): string {
   }
 }
 
-function rulesTextAriaLabel(owner: RulesTextOwner, text: string) {
+function rulesTextAriaLabel(owner: RulesTextOwner, text: LocalizedString) {
   if (owner.kind === "card") {
     return txa(
       "Card rules: {rules_text}",
-      { rules_text: text },
+      { rules_text: opaque(text) },
       "Accessible name for interactive authored card rules text.",
     );
   }
   if (owner.kind === "dreamAvatar") {
     return txa(
       "Avatar ability: {rules_text}",
-      { rules_text: text },
+      { rules_text: opaque(text) },
       "Accessible name for interactive authored Dream Avatar rules text.",
     );
   }
   return txa(
     "Dreamsign ability: {rules_text}",
-    { rules_text: text },
+    { rules_text: opaque(text) },
     "Accessible name for interactive authored Dreamsign rules text.",
   );
 }
@@ -575,7 +596,7 @@ function RulesTextSource({
   owner,
   content,
 }: {
-  readonly text: string;
+  readonly text: LocalizedString;
   readonly owner: RulesTextOwner;
   readonly content: ReactNode;
 }) {
@@ -586,7 +607,7 @@ function RulesTextSource({
       entityId: revealEntityId(entityType, owner.id),
     },
     spec: {
-      primary: { kind: "source", authoredDescription: text },
+      primary: { kind: "source", description: text },
       secondaries: rulesTextDefinitionCards(text, owner.kind),
     },
     feedback: "stationary",
@@ -626,7 +647,8 @@ export function RulesText({
   owner,
   glossaryInteraction = "source",
 }: RulesTextProps) {
-  const content = renderRulesText(text);
+  const resolve = useLocalizer();
+  const content = renderRulesText(resolve(text));
   const hasDefinitions = rulesTextDefinitionCards(text, owner.kind).length > 0;
   if (glossaryInteraction === "delegated" || !hasDefinitions) {
     return <>{content}</>;

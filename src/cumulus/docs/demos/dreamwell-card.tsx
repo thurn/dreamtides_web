@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 import { asCardId } from "../../../types/card-identity";
 import {
   DreamwellCard,
@@ -11,9 +12,9 @@ const MODEL: DreamwellCardModel = {
   cardId: CARD_ID,
   displaySnapshot: {
     id: CARD_ID,
-    name: "Shining Beacon",
+    name: assertLocalized("Shining Beacon"),
     renderedText:
-      "Look at the top 2 cards of your deck. Put one into your hand and the other on the bottom of your deck.",
+      assertLocalized("Look at the top 2 cards of your deck. Put one into your hand and the other on the bottom of your deck."),
     energyAdded: 2,
     imageNumber: 1252796548,
   },

@@ -19,7 +19,7 @@ import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import type { TransfigurationData } from "../../types/transfiguration-data";
 import type { DraftData } from "../../types/draft-data";
-import { formatAuthoredTemplate } from "../../data/authored-template";
+import { localizedSourceText } from "../../runtime/localization/runtime";
 
 /**
  * Sort an offered pack for display: cheapest first, then alphabetically as a
@@ -102,7 +102,7 @@ export function buildDraftView(params: {
     // Clamp so the last pack never reads past the total (e.g. "(6/5)").
     pickNumber,
     pickTotal,
-    progressLabel: formatAuthoredTemplate(params.presentation.progress, {
+    progressLabel: localizedSourceText(params.presentation.progress, {
       pickNumber,
       pickTotal,
     }),

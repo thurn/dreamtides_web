@@ -1,4 +1,4 @@
-import { meaning, txa, tx } from "@trox/runtime";
+import { meaning, opaque, txa, tx, type LocalizedString } from "@trox/runtime";
 import type { ReactElement } from "react";
 import { GlassButton } from "../../components/controls/GlassButton";
 import { NumberStepper } from "../../components/controls/NumberStepper";
@@ -14,7 +14,7 @@ export type BattleCardNoteExpiryOption =
 
 export interface BattleCardNoteOverlayProps {
   readonly cardId: string;
-  readonly cardName: string;
+  readonly cardName: LocalizedString;
   readonly text: string;
   readonly expiryOption: BattleCardNoteExpiryOption;
   readonly afterNTurns: number;
@@ -49,7 +49,7 @@ export function BattleCardNoteOverlay({
     <GlassDialog
       title={txa(
           "Annotate {card_name}",
-          { card_name: cardName },
+          { card_name: opaque(cardName) },
           "Title of the optional player note editor for a battle card. card_name is the canonical display name and has unknown grammatical gender.",
         )}
       subtitle={tx(

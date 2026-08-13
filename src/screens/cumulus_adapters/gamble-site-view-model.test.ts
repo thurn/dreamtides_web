@@ -1,4 +1,7 @@
+import { assertLocalized } from "@trox/runtime";
 import { describe, expect, it } from "vitest";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { resolveSource } from "../../runtime/localization/runtime";
 import { createDefaultState } from "../../state/journey-context";
 import { gambleGameByRulesKind } from "../../data/gamble-data";
 import { gambleFixture } from "../../testing/gamble-fixture";
@@ -27,6 +30,8 @@ import {
   resolveGambleGuide,
 } from "./gamble-site-view-model";
 
+expect.addEqualityTesters([localizedStringSourceEquality]);
+
 const buildGambleSiteView = (
   params: Omit<
     Parameters<typeof buildGambleSiteViewImpl>[0],
@@ -39,14 +44,15 @@ const buildGambleSiteView = (
     transfigurationData: transfigurationFixture(),
   });
 
-const GUIDE_LINE = "Fixture game line.";
+const GUIDE_LINE_SOURCE = "Fixture game line.";
+const GUIDE_LINE = assertLocalized(GUIDE_LINE_SOURCE);
 const GUIDE = {
   id: "fixture-gamble-guide",
   name: "Fixture Gamble Guide",
   homeDreamscapeId: "fixture-home",
   siteType: "Gamble",
   portraitSource: "fixture-guide.png",
-  dialogue: { site: [GUIDE_LINE] },
+  dialogue: { site: [GUIDE_LINE_SOURCE] },
   homeSpecialty: "Fixture specialty.",
 } satisfies DreamGuideContent;
 
@@ -145,7 +151,7 @@ describe("gamble-site-view-model", () => {
     expect(view.canAfford).toBe(true);
     expect(view.canPlayAgain).toBe(false);
     expect(view.card).toEqual({ rank: "A", suit: "spades" });
-    expect(view.guide.line).toBe(GUIDE_LINE);
+    expect(resolveSource(view.guide.line)).toBe(GUIDE_LINE_SOURCE);
     expect(view.result).toBeNull();
   });
 
@@ -537,7 +543,7 @@ describe("gamble-site-view-model — Starway Stairs", () => {
     if (view?.gameId !== "starway-stairs") {
       throw new Error("expected Starway Stairs view");
     }
-    expect(view.guide.line).toBe(GUIDE_LINE);
+    expect(resolveSource(view.guide.line)).toBe(GUIDE_LINE_SOURCE);
     expect(view.currentTierNumber).toBe(1);
     expect(view.tiers).toMatchObject([
       {

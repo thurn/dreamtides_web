@@ -14,7 +14,7 @@ import { type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import type { InfoCardProps } from "../overlay/InfoCard";
 import "./atlas.css";
-import { tx } from "@trox/runtime";
+import { tx, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 const VISUALLY_HIDDEN_STYLE: CSSProperties = {
@@ -33,10 +33,10 @@ const VISUALLY_HIDDEN_STYLE: CSSProperties = {
 export interface AtlasNodePrimary {
   sceneArt: ArtRef | null;
   figureArt: ArtRef | null;
-  placeName: string | null;
-  guideName: string | null;
-  title: string;
-  body: string;
+  placeName: LocalizedString | null;
+  guideName: LocalizedString | null;
+  title: LocalizedString;
+  body: LocalizedString;
 }
 
 /** Selects the strict Atlas primary variant from semantic node content. */
@@ -62,24 +62,24 @@ export function atlasPrimaryInfoCard(content: AtlasNodePrimary): InfoCardProps {
 /** A UUID-backed known Dreamsign related to an Atlas node. */
 export interface AtlasNodeDreamsign {
   id: string;
-  name: string;
+  name: LocalizedString;
   art: ArtRef | null;
-  rulesText: string;
+  rulesText: LocalizedString;
 }
 
 /** A UUID-backed signature site related to an Atlas node. */
 export interface AtlasNodeSite {
   id: string;
-  name: string;
-  blurb: string;
+  name: LocalizedString;
+  blurb: LocalizedString;
   icon: Glyph;
 }
 
 /** A UUID-backed affiliation related to an Atlas node. */
 export interface AtlasNodeAffiliation {
   id: string;
-  title: string;
-  body: string;
+  title: LocalizedString;
+  body: LocalizedString;
 }
 
 /**
@@ -300,10 +300,7 @@ export function AtlasNode({
         onPress(node.id);
       }}
     >
-      <span
-        id={`${accessibleNameId}-name`}
-        style={VISUALLY_HIDDEN_STYLE}
-      >
+      <span id={`${accessibleNameId}-name`} style={VISUALLY_HIDDEN_STYLE}>
         {node.biomeName === ""
           ? resolve(
               tx(
@@ -322,7 +319,10 @@ export function AtlasNode({
         </span>
       )}
       {accessibleDreamsignMessage === null ? null : (
-        <span id={`${accessibleNameId}-dreamsign`} style={VISUALLY_HIDDEN_STYLE}>
+        <span
+          id={`${accessibleNameId}-dreamsign`}
+          style={VISUALLY_HIDDEN_STYLE}
+        >
           {resolve(accessibleDreamsignMessage)}
         </span>
       )}

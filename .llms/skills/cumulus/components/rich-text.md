@@ -38,8 +38,8 @@ import { richText } from "src/cumulus/components/card/rich-text";
 
 <InfoCard
   variant="text"
-  title="Woodland Apparition"
-  body={richText.rules("Support - Supported allies have +2.")}
+  title={assertLocalized("Woodland Apparition")}
+  body={richText.rules(assertLocalized("Support - Supported allies have +2."))}
 />
 ```
 
@@ -51,8 +51,8 @@ Use the closed `definitionOnly` presentation for an authored explanation that re
 import { richText } from "src/cumulus/components/card/rich-text";
 
 const pointsDefinition = richText.definitions([{
-  term: "Score",
-  definition: "Characters score points (⍟) when they challenge and are not blocked.",
+  term: assertLocalized("Score"),
+  definition: assertLocalized("Characters score points (⍟) when they challenge and are not blocked."),
   termPresentation: "definitionOnly",
 }]);
 ```
@@ -64,7 +64,7 @@ Use a strict underlined subject run when a card or dreamsign name must be called
 ```tsx
 import { richText } from "src/cumulus/components/card/rich-text";
 
-const subject = richText.underline("Rainbow Horn");
+const subject = richText.underline(assertLocalized("Rainbow Horn"));
 ```
 
 ### Blurb with a status note
@@ -75,8 +75,8 @@ Stack a plain blurb over a muted italic `note` so a site description and its sta
 import { richText } from "src/cumulus/components/card/rich-text";
 
 const blurb = richText.stack(
-  richText.plain("Spend essence on cards, dreamsigns, and services."),
-  richText.note("Visited"),
+  richText.plain(assertLocalized("Spend essence on cards, dreamsigns, and services.")),
+  richText.note(assertLocalized("Visited")),
 );
 ```
 
@@ -87,5 +87,5 @@ When copy is not already flowing through a slot, RichTextView renders a RichText
 ```tsx
 import { RichTextView, richText } from "src/cumulus/components/card/rich-text";
 
-<RichTextView value={richText.plain("A rising tide floods the board.")} />
+<RichTextView value={richText.plain(assertLocalized("A rising tide floods the board."))} />
 ```

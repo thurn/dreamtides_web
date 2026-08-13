@@ -10,6 +10,7 @@ import type {
   BattleInit,
   BattleReducerTransition,
 } from "../types";
+import { assertLocalized } from "@trox/runtime";
 
 const EMPTY_ENTRIES: ReadonlyArray<Readonly<import("../../logging").LogEntry>> = [];
 export function BattleLogDrawer({
@@ -45,7 +46,7 @@ export function BattleLogDrawer({
       return {
         id: `${entry.seq}-${entry.event}`,
         kind: classifyLogKind(entry.event),
-        text: `${turnNumber} · ${phase} · ${label}`,
+        text: assertLocalized(`${turnNumber} · ${phase} · ${label}`),
       };
     }),
     [filteredRawEntries],
@@ -69,15 +70,15 @@ function buildTurnViews(history: BattleHistory): BattleLogTurnView[] {
     );
     const view = {
       id: entry.metadata.commandId,
-      title: entry.metadata.label,
+      title: assertLocalized(entry.metadata.label),
       kind: entry.metadata.kind,
-      surface: entry.metadata.sourceSurface,
-      targets: entry.metadata.targets.map((target) => target.ref).join(", ") || "none",
+      surface: assertLocalized(entry.metadata.sourceSurface),
+      targets: assertLocalized(entry.metadata.targets.map((target) => target.ref).join(", ") || "none"),
       payloadText: entry.metadata.payload === undefined
         ? null
-        : JSON.stringify(entry.metadata.payload, null, 2),
-      eventLabels: (entry.after.lastTransition?.logEvents ?? []).map((event) => event.event),
-      aiChoiceLabels: choiceLabels,
+        : assertLocalized(JSON.stringify(entry.metadata.payload, null, 2)),
+      eventLabels: (entry.after.lastTransition?.logEvents ?? []).map((event) => assertLocalized(event.event)),
+      aiChoiceLabels: choiceLabels.map((label) => assertLocalized(label)),
     };
     grouped.set(turnNumber, [...(grouped.get(turnNumber) ?? []), view]);
   }

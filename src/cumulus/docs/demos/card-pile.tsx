@@ -89,7 +89,7 @@ export const cardPileDemo: CumulusComponent = {
 
 <CardPile
   cards={deck.map((card) => ({ face: "down", id: card.instanceId }))}
-  label="Player deck"
+  label={assertLocalized("Player deck")}
 />`,
     },
     {
@@ -101,7 +101,7 @@ export const cardPileDemo: CumulusComponent = {
     id: card.instanceId,
     model: card.gameCard,
   }))}
-  label="Enemy void"
+  label={assertLocalized("Enemy void")}
   onPress={openEnemyVoid}
 />`,
     },
@@ -110,9 +110,9 @@ export const cardPileDemo: CumulusComponent = {
       note: "An empty void retains its physical card footprint with a dotted outline and can carry a centered teaching label.",
       code: `<CardPile
   cards={[]}
-  label="Player void"
+  label={assertLocalized("Player void")}
   emptyState="outlined"
-  emptyLabel="Void"
+  emptyLabel={assertLocalized("Void")}
 />`,
     },
   ],

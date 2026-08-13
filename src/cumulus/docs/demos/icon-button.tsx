@@ -60,14 +60,14 @@ export const iconButtonDemo: CumulusComponent = {
       code: `import { IconButton } from "src/cumulus/components/controls/IconButton";
 import { GLYPHS } from "src/cumulus/primitives/glyph";
 
-<IconButton glyph={GLYPHS.close} label="Close deck" onPress={closeViewer} />`,
+<IconButton glyph={GLYPHS.close} label={assertLocalized("Close deck")} onPress={closeViewer} />`,
     },
     {
       label: "On glass",
       note: 'Use `placement="onGlass"` for a disc nested inside a glass panel.',
       code: `<IconButton
   glyph={GLYPHS.close}
-  label="Close deck"
+  label={assertLocalized("Close deck")}
   placement="onGlass"
   onPress={closeViewer}
 />`,
@@ -78,7 +78,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
       code: `<IconButton
   size="sm"
   glyph={GLYPHS.close}
-  label="Close deck"
+  label={assertLocalized("Close deck")}
   onPress={closeViewer}
 />`,
     },
@@ -88,7 +88,7 @@ import { GLYPHS } from "src/cumulus/primitives/glyph";
       code: `<IconButton
   glyph={GLYPHS.refresh}
   overlayGlyph={GLYPHS.bug}
-  label="Reroll offers"
+  label={assertLocalized("Reroll offers")}
   onPress={rerollOffers}
 />`,
     },

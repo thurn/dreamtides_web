@@ -1,5 +1,6 @@
 /* eslint-disable max-lines -- tutorial orchestration is intentionally centralized here. */
 import { useCallback, useEffect, useMemo, useRef } from "react";
+import { assertLocalized } from "@trox/runtime";
 import { TutorialScreen } from "../../cumulus/screens/TutorialScreen";
 import { logEvent } from "../../logging";
 import { useFrontDoor } from "../../state/front-door-context";
@@ -133,7 +134,8 @@ export function TutorialScreenAdapter({
               actions: authoredActions,
               tutorialCardConstants: battleConfiguration.tutorialCardConstants,
               saveStatus,
-              saveError,
+              saveError:
+                saveError === null ? null : assertLocalized(saveError),
             }
           : undefined
       }

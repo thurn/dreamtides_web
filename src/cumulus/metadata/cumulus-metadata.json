@@ -184,7 +184,7 @@
           },
           {
             "name": "ability",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": false,
             "description": ""
           },
@@ -350,17 +350,9 @@
       "name": "title",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
       "description": "Header title, rendered as an `<h2>`."
-    },
-    {
-      "name": "authoredTitle",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Header title supplied by canonical authored content."
     },
     {
       "name": "subtitle",
@@ -369,14 +361,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional intro line under the title."
-    },
-    {
-      "name": "authoredSubtitle",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Intro line supplied by canonical authored content."
     },
     {
       "name": "rightAccessory",
@@ -440,14 +424,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Empty-state copy shown when `cards` is empty."
-    },
-    {
-      "name": "authoredEmptyLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Empty-state copy supplied by canonical authored or developer-only content."
     },
     {
       "name": "testId",
@@ -525,14 +501,8 @@
           {
             "name": "label",
             "tsType": "LocalizedString",
-            "optional": true,
+            "optional": false,
             "description": "Accessible action label."
-          },
-          {
-            "name": "authoredLabel",
-            "tsType": "string",
-            "optional": true,
-            "description": "Canonical authored label when this action is data-defined."
           },
           {
             "name": "caption",
@@ -686,14 +656,8 @@
           {
             "name": "label",
             "tsType": "LocalizedString",
-            "optional": true,
+            "optional": false,
             "description": "Accessible action label."
-          },
-          {
-            "name": "authoredLabel",
-            "tsType": "string",
-            "optional": true,
-            "description": "Canonical authored label when this action is data-defined."
           },
           {
             "name": "caption",
@@ -728,17 +692,9 @@
       "name": "title",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
       "description": "Header title, rendered as an `<h2>`."
-    },
-    {
-      "name": "authoredTitle",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Header title supplied by canonical authored content."
     },
     {
       "name": "subtitle",
@@ -747,14 +703,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional intro line under the title."
-    },
-    {
-      "name": "authoredSubtitle",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Intro line supplied by canonical authored content."
     },
     {
       "name": "rightAccessory",
@@ -818,14 +766,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Empty-state copy shown when `cards` is empty."
-    },
-    {
-      "name": "authoredEmptyLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Empty-state copy supplied by canonical authored or developer-only content."
     },
     {
       "name": "testId",
@@ -943,14 +883,6 @@
       "description": ""
     },
     {
-      "name": "authoredAriaLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Accessible name supplied by canonical authored or developer-only copy."
-    },
-    {
       "name": "changeBadge",
       "tsType": "CardStatChangeBadge",
       "unionMembers": [],
@@ -968,9 +900,9 @@
           },
           {
             "name": "accessibleName",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": false,
-            "description": "Source-English form name supplied by the Transfiguration catalog."
+            "description": "Localized form name supplied by the Transfiguration catalog."
           }
         ]
       }
@@ -1209,19 +1141,19 @@
           },
           {
             "name": "portraitAlt",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": false,
             "description": "Accessible description of the portrait art."
           },
           {
             "name": "speakerName",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": false,
             "description": "Character name shown by the speech bubble."
           },
           {
             "name": "text",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": false,
             "description": "Spoken line shown with tutorial highlights and canonical inline rules glyphs."
           }
@@ -1327,14 +1259,14 @@
                 "description": ""
               },
               {
-                "name": "authoredTitle",
-                "tsType": "string",
+                "name": "title",
+                "tsType": "LocalizedString",
                 "optional": false,
                 "description": "Describes the card/pointer subject in the menu's header."
               },
               {
-                "name": "authoredSubtitle",
-                "tsType": "string",
+                "name": "subtitle",
+                "tsType": "LocalizedString",
                 "optional": true,
                 "description": "Optional structured secondary location/context copy."
               },
@@ -1399,17 +1331,9 @@
       "name": "title",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
       "description": "Developer tool name shown in the rail header."
-    },
-    {
-      "name": "authoredTitle",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
     },
     {
       "name": "subtitle",
@@ -1418,14 +1342,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional concise tool context."
-    },
-    {
-      "name": "authoredSubtitle",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
     },
     {
       "name": "side",
@@ -1450,17 +1366,9 @@
       "name": "closeLabel",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
       "description": "Accessible name for the close action."
-    },
-    {
-      "name": "authoredCloseLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
     },
     {
       "name": "headerAction",
@@ -1500,17 +1408,9 @@
       "name": "title",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
       "description": "Localized heading shown in the disclosure trigger."
-    },
-    {
-      "name": "authoredTitle",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Heading supplied by canonical authored or developer-only copy."
     },
     {
       "name": "summary",
@@ -1519,14 +1419,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional localized context shown beside the heading."
-    },
-    {
-      "name": "authoredSummary",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Context supplied by canonical authored or developer-only copy."
     },
     {
       "name": "expanded",
@@ -1591,14 +1483,14 @@
           },
           {
             "name": "name",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": false,
             "description": ""
           },
           {
             "name": "title",
-            "tsType": "string",
-            "optional": false,
+            "tsType": "LocalizedString",
+            "optional": true,
             "description": ""
           },
           {
@@ -1623,7 +1515,7 @@
     },
     {
       "name": "profile",
-      "tsType": "{ id: string; ability: string; }",
+      "tsType": "{ id: string; ability: LocalizedString; }",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -1665,14 +1557,14 @@
           },
           {
             "name": "name",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": false,
             "description": ""
           },
           {
             "name": "title",
-            "tsType": "string",
-            "optional": false,
+            "tsType": "LocalizedString",
+            "optional": true,
             "description": ""
           },
           {
@@ -1700,43 +1592,43 @@
   "Dreamsign": [
     {
       "name": "dreamsign",
-      "tsType": "Dreamsign",
+      "tsType": "LocalizedDreamsign",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
       "description": "The dreamsign to show. Identified by `id` (never by name).",
       "nested": {
-        "name": "Dreamsign",
+        "name": "LocalizedDreamsign",
         "fields": [
           {
             "name": "id",
             "tsType": "string",
-            "optional": true,
-            "description": ""
+            "optional": false,
+            "description": "Stable Dreamsign UUID."
           },
           {
             "name": "name",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": false,
-            "description": ""
+            "description": "Canonical localized display name."
           },
           {
             "name": "effectDescription",
-            "tsType": "string",
+            "tsType": "LocalizedString | null",
             "optional": false,
-            "description": ""
+            "description": "Canonical localized effect copy, or null when the object has no rules."
           },
           {
             "name": "imageName",
             "tsType": "string",
             "optional": true,
-            "description": ""
+            "description": "Hosted art key."
           },
           {
             "name": "imageAlt",
-            "tsType": "string",
-            "optional": true,
-            "description": ""
+            "tsType": "LocalizedString",
+            "optional": false,
+            "description": "Localized alternative text for the art."
           }
         ]
       }
@@ -1781,7 +1673,7 @@
   "DreamsignGalleryPanel": [
     {
       "name": "title",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -1819,7 +1711,7 @@
           },
           {
             "name": "label",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": false,
             "description": "Visible and accessible action label."
           },
@@ -1837,7 +1729,7 @@
           },
           {
             "name": "text",
-            "tsType": "string | null",
+            "tsType": "LocalizedString | null",
             "optional": false,
             "description": "Caption used when the action is free or already spent."
           },
@@ -1968,7 +1860,7 @@
           },
           {
             "name": "error",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": true,
             "description": "Validation message shown beneath the native editor."
           },
@@ -2035,7 +1927,7 @@
           },
           {
             "name": "error",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": true,
             "description": "Validation message shown beneath the native editor."
           },
@@ -2145,7 +2037,7 @@
   "GalleryActionCard": [
     {
       "name": "action",
-      "tsType": "{ readonly glyph: Glyph; readonly label?: LocalizedString | undefined; readonly authoredLabel?: string | undefined; }",
+      "tsType": "{ readonly glyph: Glyph; readonly label: LocalizedString; }",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -2278,17 +2170,9 @@
       "name": "label",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
       "description": "The button's text, centered by the component at every rendered width."
-    },
-    {
-      "name": "authoredLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Button text supplied by canonical authored or developer-only content."
     },
     {
       "name": "onPress",
@@ -2396,14 +2280,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Accessible name when the visible label alone does not distinguish siblings."
-    },
-    {
-      "name": "authoredAccessibilityLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Accessible name supplied by canonical authored or developer-only copy."
     }
   ],
   "GlassDialog": [
@@ -2411,17 +2287,9 @@
       "name": "title",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
       "description": "The dialog's heading, rendered as an `<h2>`."
-    },
-    {
-      "name": "authoredTitle",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Canonical authored or user-provided heading outside code-authored localization."
     },
     {
       "name": "subtitle",
@@ -2430,14 +2298,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional intro line under the title."
-    },
-    {
-      "name": "authoredSubtitle",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Canonical authored or user-provided intro line outside code-authored localization."
     },
     {
       "name": "onClose",
@@ -2454,14 +2314,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Accessible name for the close disc. Defaults to `\"Close\"`."
-    },
-    {
-      "name": "authoredCloseLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Close action name supplied by canonical authored or developer-only copy."
     },
     {
       "name": "cutoutAwareClose",
@@ -2539,14 +2391,6 @@
       "description": "Optional uppercase context line rendered above the title."
     },
     {
-      "name": "authoredEyebrow",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Context line supplied by canonical authored or developer-only copy."
-    },
-    {
       "name": "title",
       "tsType": "LocalizedString",
       "unionMembers": [],
@@ -2555,28 +2399,12 @@
       "description": "Optional plain panel title."
     },
     {
-      "name": "authoredTitle",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional title supplied by canonical authored content."
-    },
-    {
       "name": "subtitle",
       "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Optional supporting line rendered beneath the title."
-    },
-    {
-      "name": "authoredSubtitle",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional supporting line supplied by canonical authored content."
     },
     {
       "name": "structuredSubtitle",
@@ -2812,7 +2640,7 @@
     },
     {
       "name": "text",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -2918,17 +2746,9 @@
       "name": "label",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
       "description": "Localized accessible name forwarded unresolved to the final button."
-    },
-    {
-      "name": "authoredLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Canonical authored or developer-only accessible name."
     }
   ],
   "InfoCard": [
@@ -2957,19 +2777,11 @@
     },
     {
       "name": "title",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "The card's headline. Resolve names before display; canonical rules symbols\nrender as their inline icons."
-    },
-    {
-      "name": "titleMessage",
       "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Complete localized fallback headline selected by a non-React builder."
+      "description": "The card's headline. Resolve names before display; canonical rules symbols\nrender as their inline icons."
     },
     {
       "name": "body",
@@ -2989,14 +2801,6 @@
           }
         ]
       }
-    },
-    {
-      "name": "bodyMessage",
-      "tsType": "LocalizedString",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Complete localized fallback body selected by a non-React builder."
     },
     {
       "name": "imageCrop",
@@ -3019,7 +2823,7 @@
     },
     {
       "name": "subtitle",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -3085,14 +2889,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Accessible meaning. Omit only when surrounding copy already names the glyph."
-    },
-    {
-      "name": "authoredLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Accessible meaning supplied by canonical authored content."
     }
   ],
   "JourneyStatusBar": [
@@ -3114,43 +2910,43 @@
     },
     {
       "name": "dreamsigns",
-      "tsType": "Dreamsign[]",
+      "tsType": "LocalizedDreamsign[]",
       "unionMembers": [],
       "required": false,
       "defaultValue": "[]",
       "description": "The Dreamsigns to dock. Journey overflow opens a viewer; battle Dreamsigns\nflow bottom-up and right-to-left in two-high columns.",
       "nested": {
-        "name": "Dreamsign",
+        "name": "LocalizedDreamsign",
         "fields": [
           {
             "name": "id",
             "tsType": "string",
-            "optional": true,
-            "description": ""
+            "optional": false,
+            "description": "Stable Dreamsign UUID."
           },
           {
             "name": "name",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": false,
-            "description": ""
+            "description": "Canonical localized display name."
           },
           {
             "name": "effectDescription",
-            "tsType": "string",
+            "tsType": "LocalizedString | null",
             "optional": false,
-            "description": ""
+            "description": "Canonical localized effect copy, or null when the object has no rules."
           },
           {
             "name": "imageName",
             "tsType": "string",
             "optional": true,
-            "description": ""
+            "description": "Hosted art key."
           },
           {
             "name": "imageAlt",
-            "tsType": "string",
-            "optional": true,
-            "description": ""
+            "tsType": "LocalizedString",
+            "optional": false,
+            "description": "Localized alternative text for the art."
           }
         ]
       }
@@ -3189,13 +2985,13 @@
           },
           {
             "name": "name",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": false,
             "description": ""
           },
           {
             "name": "epithet",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": true,
             "description": ""
           },
@@ -3213,7 +3009,7 @@
           },
           {
             "name": "ability",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": true,
             "description": ""
           }
@@ -3319,17 +3115,9 @@
       "name": "label",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
       "description": "Visible label for the numeric value."
-    },
-    {
-      "name": "authoredLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
     },
     {
       "name": "value",
@@ -3348,14 +3136,6 @@
       "description": "Optional formatted value while `value` remains the numeric state contract."
     },
     {
-      "name": "authoredDisplayValue",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
       "name": "resource",
       "tsType": "NumberStepperResource",
       "unionMembers": [
@@ -3372,33 +3152,17 @@
       "name": "decrementLabel",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
       "description": "Accessible label for the decrement action."
-    },
-    {
-      "name": "authoredDecrementLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
     },
     {
       "name": "incrementLabel",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
       "description": "Accessible label for the increment action."
-    },
-    {
-      "name": "authoredIncrementLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
     },
     {
       "name": "onDecrement",
@@ -3866,14 +3630,6 @@
       "description": "Localized accessible name resolved onto the final intrinsic element."
     },
     {
-      "name": "authoredAriaLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Accessible name supplied by canonical authored or developer-only copy."
-    },
-    {
       "name": "children",
       "tsType": "ReactNode",
       "unionMembers": [],
@@ -3920,14 +3676,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional supporting copy beneath the headline."
-    },
-    {
-      "name": "authoredDetail",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional supporting copy supplied by canonical authored content."
     },
     {
       "name": "essenceGained",
@@ -4052,7 +3800,7 @@
   "RulesText": [
     {
       "name": "text",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -4150,52 +3898,24 @@
       "description": "The choices shown in the menu.",
       "nested": {
         "name": "SelectOption",
-        "variants": [
+        "fields": [
           {
-            "name": "LocalizedSelectOption",
-            "fields": [
-              {
-                "name": "value",
-                "tsType": "string",
-                "optional": false,
-                "description": ""
-              },
-              {
-                "name": "label",
-                "tsType": "LocalizedString",
-                "optional": false,
-                "description": ""
-              },
-              {
-                "name": "triggerLabel",
-                "tsType": "LocalizedString",
-                "optional": true,
-                "description": ""
-              }
-            ]
+            "name": "value",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
           },
           {
-            "name": "AuthoredSelectOption",
-            "fields": [
-              {
-                "name": "value",
-                "tsType": "string",
-                "optional": false,
-                "description": ""
-              },
-              {
-                "name": "authoredLabel",
-                "tsType": "string",
-                "optional": false,
-                "description": ""
-              },
-              {
-                "name": "authoredTriggerLabel",
-                "tsType": "string",
-                "optional": true,
-                "description": ""
-              }
-            ]
+            "name": "label",
+            "tsType": "LocalizedString",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "triggerLabel",
+            "tsType": "LocalizedString",
+            "optional": true,
+            "description": ""
           }
         ]
       }
@@ -4263,28 +3983,12 @@
       "description": "Accessible label for the trigger."
     },
     {
-      "name": "authoredAriaLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Accessible label supplied by canonical authored or developer-only copy."
-    },
-    {
       "name": "placeholder",
       "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Text shown when `value` does not match an option, for action-picker controls."
-    },
-    {
-      "name": "authoredPlaceholder",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Placeholder supplied by canonical authored or developer-only copy."
     }
   ],
   "SiteNode": [
@@ -4336,19 +4040,19 @@
           },
           {
             "name": "label",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": false,
             "description": "Display label (battle tier / `Draft Nx` / site type name)."
           },
           {
             "name": "lockedGuidance",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": true,
             "description": ""
           },
           {
             "name": "blurb",
-            "tsType": "string",
+            "tsType": "LocalizedString",
             "optional": false,
             "description": "One-line mechanic blurb shown in the reveal."
           },
@@ -4393,7 +4097,7 @@
   "SpeechBubble": [
     {
       "name": "speakerName",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -4401,19 +4105,11 @@
     },
     {
       "name": "text",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "The spoken line. Uses tutorial instruction formatting for yellow and\nbold high-contrast purple highlights plus canonical inline rules glyphs."
-    },
-    {
-      "name": "textMessage",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
-      "description": "Complete localized spoken line supplied by code-authored fallback UI."
+      "description": "The spoken line. Uses tutorial instruction formatting for yellow and\nbold high-contrast purple highlights plus canonical inline rules glyphs."
     },
     {
       "name": "size",
@@ -4491,7 +4187,7 @@
     },
     {
       "name": "label",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -4503,17 +4199,9 @@
       "name": "label",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
       "description": "Visible field label."
-    },
-    {
-      "name": "authoredLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Visible label supplied by canonical authored or developer-only copy."
     },
     {
       "name": "value",
@@ -4548,14 +4236,6 @@
       "description": "Optional placeholder shown while empty."
     },
     {
-      "name": "authoredPlaceholder",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
       "name": "supportingText",
       "tsType": "LocalizedString",
       "unionMembers": [],
@@ -4564,28 +4244,12 @@
       "description": "Supporting copy beneath the control."
     },
     {
-      "name": "authoredSupportingText",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
       "name": "error",
       "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Validation copy; also marks the textarea invalid."
-    },
-    {
-      "name": "authoredError",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
     },
     {
       "name": "testId",
@@ -4609,17 +4273,9 @@
       "name": "label",
       "tsType": "LocalizedString",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
       "description": "Localized field label."
-    },
-    {
-      "name": "authoredLabel",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Label supplied by canonical authored or developer-only copy."
     },
     {
       "name": "value",
@@ -4665,14 +4321,6 @@
       "description": "Optional placeholder."
     },
     {
-      "name": "authoredPlaceholder",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
       "name": "supportingText",
       "tsType": "LocalizedString",
       "unionMembers": [],
@@ -4681,28 +4329,12 @@
       "description": "Optional supporting copy beneath the control."
     },
     {
-      "name": "authoredSupportingText",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
       "name": "error",
       "tsType": "LocalizedString",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Validation copy; also marks the input invalid."
-    },
-    {
-      "name": "authoredError",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
     },
     {
       "name": "disabled",
@@ -4754,7 +4386,7 @@
     },
     {
       "name": "label",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -4762,7 +4394,7 @@
     },
     {
       "name": "description",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -4789,21 +4421,15 @@
           },
           {
             "name": "presentation",
-            "tsType": "Pick<TransfigurationFormDefinition, \"glyph\" | \"name\" | \"description\" | \"accentColor\">",
+            "tsType": "LocalizedTransfigurationPresentation",
             "optional": false,
             "description": "Authored presentation resolved from the injected catalog."
           },
           {
             "name": "change",
             "tsType": "TransfigurationChange",
-            "optional": true,
+            "optional": false,
             "description": "Locale-neutral rules change announced as the option's accessible description."
-          },
-          {
-            "name": "description",
-            "tsType": "string",
-            "optional": true,
-            "description": "Compatibility fixture field; production views provide `change`."
           },
           {
             "name": "essenceCost",
@@ -4942,7 +4568,7 @@
     },
     {
       "name": "targetLabel",
-      "tsType": "string",
+      "tsType": "LocalizedString",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -5005,7 +4631,7 @@
     },
     {
       "name": "rewardDreamsign",
-      "tsType": "Dreamsign | null",
+      "tsType": "LocalizedDreamsign | null",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,

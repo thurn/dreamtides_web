@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 import {
   useCallback,
   useEffect,
@@ -9,7 +10,10 @@ import {
 import { createPortal } from "react-dom";
 import type { CardData } from "../types/cards";
 import type { DreamAvatarContent } from "../types/content";
-import { loadJourneyContent, type JourneyContent } from "../data/journey-content";
+import {
+  loadJourneyContent,
+  type JourneyContent,
+} from "../data/journey-content";
 import { GameCard } from "../cumulus/components/card/CardView";
 import {
   DreamAvatarPortrait,
@@ -263,9 +267,14 @@ export function computeSignatureDecks(
       for (const x of candidates) {
         let centrality = 0;
         for (const y of candidates) {
-          centrality += y.fit * idfCosine(corpus.decks[x.deckIdx], corpus.decks[y.deckIdx], idfOf);
+          centrality +=
+            y.fit *
+            idfCosine(corpus.decks[x.deckIdx], corpus.decks[y.deckIdx], idfOf);
         }
-        if (centrality > bestScore || (centrality === bestScore && x.fit > best.fit)) {
+        if (
+          centrality > bestScore ||
+          (centrality === bestScore && x.fit > best.fit)
+        ) {
           bestScore = centrality;
           best = x;
         }
@@ -277,7 +286,10 @@ export function computeSignatureDecks(
     let neighbors = 0;
     for (let i = 0; i < recordSets.length; i++) {
       if (recordSets[i].idSet === best.idSet) continue;
-      if (idfCosine(corpus.decks[best.deckIdx], corpus.decks[i], idfOf) >= SIMILAR_THRESHOLD) {
+      if (
+        idfCosine(corpus.decks[best.deckIdx], corpus.decks[i], idfOf) >=
+        SIMILAR_THRESHOLD
+      ) {
         neighbors++;
       }
     }
@@ -441,8 +453,12 @@ function CardLightbox({
             >
               <InfoCard
                 variant="text"
-                title={glossaryEntryDisplayTitle(entry)}
-                body={richText.rules(entry.definition)}
+                title={
+                  glossaryEntryDisplayTitle(entry) === undefined
+                    ? undefined
+                    : assertLocalized(glossaryEntryDisplayTitle(entry)!)
+                }
+                body={richText.rules(assertLocalized(entry.definition))}
               />
             </div>
           ))}
@@ -497,31 +513,34 @@ function DeckSection({
               cursor: "help",
             }}
           >
-          <div style={{ width: 64, height: 64, flexShrink: 0 }}>
-            <DreamAvatarPortrait
-              dreamAvatar={{
-                imageNumber: dc.imageNumber,
-                name: dc.name,
-                title: dc.title,
-              }}
-              variant="thumb"
-              profile={{ id: dc.id, ability: dc.renderedText }}
-            />
-          </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 19, fontWeight: 600, color: "#f8fafc" }}>
-              {dc.name}
+            <div style={{ width: 64, height: 64, flexShrink: 0 }}>
+              <DreamAvatarPortrait
+                dreamAvatar={{
+                  imageNumber: dc.imageNumber,
+                  name: assertLocalized(dc.name),
+                  title: assertLocalized(dc.title),
+                }}
+                variant="thumb"
+                profile={{
+                  id: dc.id,
+                  ability: assertLocalized(dc.renderedText),
+                }}
+              />
             </div>
-            <div style={{ fontSize: 13, color: ACCENT, marginBottom: 4 }}>
-              {dc.title}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: 19, fontWeight: 600, color: "#f8fafc" }}>
+                {dc.name}
+              </div>
+              <div style={{ fontSize: 13, color: ACCENT, marginBottom: 4 }}>
+                {dc.title}
+              </div>
+              <div style={{ fontSize: 12, color: MUTED }}>
+                {deck.cards.length}-card mainboard · matched {matched.size}/
+                {deck.signatureCards.length} signature cards · cosine{" "}
+                {deck.cosine.toFixed(3)} · {deck.neighbors} similar
+                {deck.neighbors === 1 ? " deck" : " decks"} in pool
+              </div>
             </div>
-            <div style={{ fontSize: 12, color: MUTED }}>
-              {deck.cards.length}-card mainboard · matched {matched.size}/
-              {deck.signatureCards.length} signature cards · cosine{" "}
-              {deck.cosine.toFixed(3)} · {deck.neighbors} similar
-              {deck.neighbors === 1 ? " deck" : " decks"} in pool
-            </div>
-          </div>
           </div>
         </div>
         <div

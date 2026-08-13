@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // Full-screen mockup for RulesText — a card-detail / rules-reference panel. The
 // featured card (a curated real card, resolved by UUID) is shown large beside a
 // panel that renders its authored rules text through RulesText: energy/spark
@@ -96,22 +97,49 @@ export function RulesTextMockup() {
         }}
       >
         {error !== null ? (
-          <div style={{ margin: "auto", color: token("--text-secondary"), font: token("--t-lead") }}>
+          <div
+            style={{
+              margin: "auto",
+              color: token("--text-secondary"),
+              font: token("--t-lead"),
+            }}
+          >
             Failed to load card data: {error}
           </div>
         ) : resolved === null ? (
-          <div style={{ margin: "auto", color: token("--text-muted"), font: token("--t-lead") }}>
+          <div
+            style={{
+              margin: "auto",
+              color: token("--text-muted"),
+              font: token("--t-lead"),
+            }}
+          >
             Loading cards…
           </div>
         ) : (
           <>
             {resolved.featured !== null && (
-              <div style={{ width: "clamp(180px, 30vw, 260px)", flex: "0 0 auto" }}>
-                <GameCard model={{ cardId: resolved.featured.id, displaySnapshot: resolved.featured }} />
+              <div
+                style={{ width: "clamp(180px, 30vw, 260px)", flex: "0 0 auto" }}
+              >
+                <GameCard
+                  model={{
+                    cardId: resolved.featured.id,
+                    displaySnapshot: resolved.featured,
+                  }}
+                />
               </div>
             )}
 
-            <div style={{ flex: "1 1 340px", maxWidth: 560, display: "flex", flexDirection: "column", gap: token("--space-l") }}>
+            <div
+              style={{
+                flex: "1 1 340px",
+                maxWidth: 560,
+                display: "flex",
+                flexDirection: "column",
+                gap: token("--space-l"),
+              }}
+            >
               {resolved.featured !== null && (
                 <div style={panelStyle}>
                   <p
@@ -126,12 +154,17 @@ export function RulesTextMockup() {
                     Rules Text
                   </p>
                   {/* Card name resolved here, at the display boundary only. */}
-                  <h2 style={{ font: token("--t-title-sm"), margin: `${token("--space-xs")} 0 ${token("--space-m")}` }}>
+                  <h2
+                    style={{
+                      font: token("--t-title-sm"),
+                      margin: `${token("--space-xs")} 0 ${token("--space-m")}`,
+                    }}
+                  >
                     {resolved.featured.name}
                   </h2>
                   <div style={{ font: token("--t-rules") }}>
                     <RulesText
-                      text={resolved.featured.renderedText}
+                      text={assertLocalized(resolved.featured.renderedText)}
                       owner={{ kind: "card", id: resolved.featured.id }}
                     />
                   </div>
@@ -150,15 +183,27 @@ export function RulesTextMockup() {
                 >
                   Keyword reference
                 </p>
-                <div style={{ display: "flex", flexDirection: "column", gap: token("--space-m") }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: token("--space-m"),
+                  }}
+                >
                   {resolved.reference.map((card) => (
                     <div key={card.id}>
-                      <div style={{ font: token("--t-caption"), color: token("--text-muted"), marginBottom: token("--space-xs") }}>
+                      <div
+                        style={{
+                          font: token("--t-caption"),
+                          color: token("--text-muted"),
+                          marginBottom: token("--space-xs"),
+                        }}
+                      >
                         {card.name}
                       </div>
                       <div style={{ font: token("--t-rules") }}>
                         <RulesText
-                          text={card.renderedText}
+                          text={assertLocalized(card.renderedText)}
                           owner={{ kind: "card", id: card.id }}
                         />
                       </div>
@@ -170,7 +215,6 @@ export function RulesTextMockup() {
           </>
         )}
       </div>
-
     </div>
   );
 }

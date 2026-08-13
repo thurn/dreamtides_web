@@ -17,7 +17,9 @@ import ruBundleJSON from "../../generated/localization/ru.trox.json?raw";
 import {
   createTargetLocalizationRuntime,
   loadCanonicalBundle,
+  localizedSourceText,
   requireSourceRuntime,
+  resolveSource,
 } from "./runtime";
 import { withSyntheticTranslations } from "./testing";
 
@@ -44,10 +46,13 @@ function algorithmMessage(algorithm_id: string) {
 
 function countMessage(visible_count: number, total_count: number) {
   return txa(
-    meaning("pool-filtered-count-subtitle", plural(total_count, [
-      one("{visible_count} of {total_count} Card"),
-      other("{visible_count} of {total_count} Cards"),
-    ])),
+    meaning(
+      "pool-filtered-count-subtitle",
+      plural(total_count, [
+        one("{visible_count} of {total_count} Card"),
+        other("{visible_count} of {total_count} Cards"),
+      ]),
+    ),
     { visible_count, total_count },
     "Filtered card-browser subtitle. visible_count is the non-negative number matching the active filters; total_count is the non-negative collection size before filtering and governs Card grammar.",
   );
@@ -55,36 +60,48 @@ function countMessage(visible_count: number, total_count: number) {
 
 describe("Trox localization runtime", () => {
   it("loads the committed canonical source bundle and resolves source values", () => {
-    expect(loadCanonicalBundle(enUSBundleJSON, "source").source_catalog_fingerprint).toBe(
-      source.source_catalog_fingerprint,
+    expect(
+      loadCanonicalBundle(enUSBundleJSON, "source").source_catalog_fingerprint,
+    ).toBe(source.source_catalog_fingerprint);
+    expect(requireSourceRuntime().localizer.resolve(searchMessage())).not.toBe(
+      "",
     );
-    expect(requireSourceRuntime().localizer.resolve(searchMessage())).not.toBe("");
   });
 
   it("supports target placeholder reordering, repetition, and omission", () => {
     const message = algorithmMessage("tides4");
-    const repeated = withSyntheticTranslations(esTemplate, [{
-      message,
-      translation: "{algorithm_id} / {algorithm_id}",
-    }]);
+    const repeated = withSyntheticTranslations(esTemplate, [
+      {
+        message,
+        translation: "{algorithm_id} / {algorithm_id}",
+      },
+    ]);
     const repeatedRuntime = createTargetLocalizationRuntime(repeated, source);
     const repeatedText = repeatedRuntime.localizer.resolveChecked(message);
     expect(repeatedText.match(/\u2068/gu)).toHaveLength(2);
     expect(repeatedText.match(/\u2069/gu)).toHaveLength(2);
 
-    const omitted = withSyntheticTranslations(esTemplate, [{
-      message,
-      translation: "Algoritmo",
-    }]);
-    expect(createTargetLocalizationRuntime(omitted, source).localizer.resolveChecked(message)).not.toBe("");
+    const omitted = withSyntheticTranslations(esTemplate, [
+      {
+        message,
+        translation: "Algoritmo",
+      },
+    ]);
+    expect(
+      createTargetLocalizationRuntime(omitted, source).localizer.resolveChecked(
+        message,
+      ),
+    ).not.toBe("");
   });
 
   it("uses target number formatting and RTL placeholder isolation", () => {
     const message = countMessage(12, 1234);
-    const target = withSyntheticTranslations(arTemplate, [{
-      message,
-      translation: "{visible_count}/{total_count}",
-    }]);
+    const target = withSyntheticTranslations(arTemplate, [
+      {
+        message,
+        translation: "{visible_count}/{total_count}",
+      },
+    ]);
     const runtime = createTargetLocalizationRuntime(target, source);
     const text = runtime.localizer.resolveChecked(message);
     expect(runtime.direction).toBe("rtl");
@@ -96,18 +113,30 @@ describe("Trox localization runtime", () => {
 
   it("selects Russian plural rows and supports long Japanese reordering", () => {
     const count = countMessage(2, 2);
-    const russian = withSyntheticTranslations(ruTemplate, [{
-      message: count,
-      translation: "{total_count}: {visible_count}",
-    }]);
-    expect(createTargetLocalizationRuntime(russian, source).localizer.resolveChecked(count)).not.toContain("{total_count}");
+    const russian = withSyntheticTranslations(ruTemplate, [
+      {
+        message: count,
+        translation: "{total_count}: {visible_count}",
+      },
+    ]);
+    expect(
+      createTargetLocalizationRuntime(russian, source).localizer.resolveChecked(
+        count,
+      ),
+    ).not.toContain("{total_count}");
 
     const algorithm = algorithmMessage("tides4");
-    const japanese = withSyntheticTranslations(jaTemplate, [{
-      message: algorithm,
-      translation: "非常に長い翻訳コンテキスト — {algorithm_id} — 非常に長い翻訳コンテキスト",
-    }]);
-    const resolved = createTargetLocalizationRuntime(japanese, source).localizer.resolveChecked(algorithm);
+    const japanese = withSyntheticTranslations(jaTemplate, [
+      {
+        message: algorithm,
+        translation:
+          "非常に長い翻訳コンテキスト — {algorithm_id} — 非常に長い翻訳コンテキスト",
+      },
+    ]);
+    const resolved = createTargetLocalizationRuntime(
+      japanese,
+      source,
+    ).localizer.resolveChecked(algorithm);
     expect(resolved.length).toBeGreaterThan(20);
     expect(resolved).not.toContain("{algorithm_id}");
   });
@@ -128,9 +157,13 @@ describe("Trox localization runtime", () => {
 
   it("deduplicates repeated runtime diagnostics by code and entry", () => {
     const diagnostics: string[] = [];
-    const runtime = createTargetLocalizationRuntime(esTemplate, source, (diagnostic) => {
-      diagnostics.push(`${diagnostic.code}:${diagnostic.entry_id ?? ""}`);
-    });
+    const runtime = createTargetLocalizationRuntime(
+      esTemplate,
+      source,
+      (diagnostic) => {
+        diagnostics.push(`${diagnostic.code}:${diagnostic.entry_id ?? ""}`);
+      },
+    );
     const message = algorithmMessage("tides4");
     runtime.localizer.resolve(message);
     runtime.localizer.resolve(message);
@@ -144,14 +177,59 @@ describe("Trox localization runtime", () => {
       },
     });
     expect(localizer.resolve(searchMessage())).not.toContain("tx1_");
-    expect(() => loadCanonicalBundle(JSON.stringify(JSON.parse(enUSBundleJSON), null, 2), "source")).toThrow();
+    expect(() =>
+      loadCanonicalBundle(
+        JSON.stringify(JSON.parse(enUSBundleJSON), null, 2),
+        "source",
+      ),
+    ).toThrow();
   });
 
   it("requires explicit resolution and canonical serialization", () => {
     const message = searchMessage();
     expect(() => String(message)).toThrow(/must be resolved/);
     expect(JSON.stringify(message)).toBe("{}");
-    expect(requireSourceRuntime().sourceCatalog.localizedStringFromJSON(message.toCanonicalJSON()).entryId)
-      .toBe(message.entryId);
+    expect(
+      requireSourceRuntime().sourceCatalog.localizedStringFromJSON(
+        message.toCanonicalJSON(),
+      ).entryId,
+    ).toBe(message.entryId);
+  });
+
+  it("authorizes static canonical source text without asserting it untranslated", () => {
+    const staticEntry = Object.values(source.entries).find(
+      (entry) =>
+        entry.identity?.meaning === null &&
+        entry.identity.pattern.kind === "text" &&
+        Object.keys(entry.arguments ?? {}).length === 0,
+    );
+    expect(staticEntry?.identity?.pattern.kind).toBe("text");
+    if (staticEntry?.identity?.pattern.kind !== "text")
+      throw new Error("Static fixture missing");
+    const sourceText = staticEntry.identity.pattern.text
+      .split("{{")
+      .join("{")
+      .split("}}")
+      .join("}");
+    const message = localizedSourceText(sourceText);
+    expect(message.entryId).not.toBe("");
+    expect(message.identity.meaning).toBeNull();
+    expect(requireSourceRuntime().localizer.resolve(message)).toBe(sourceText);
+  });
+
+  it("re-authors canonical compatibility templates as argument-aware messages", () => {
+    const message = localizedSourceText("Affiliation: {name}", {
+      name: tx(
+        "Figments",
+        "Synthetic affiliation name used by the localization runtime test.",
+      ),
+    });
+    expect(requireSourceRuntime().localizer.resolve(message)).toBe(
+      "Affiliation: Figments",
+    );
+  });
+
+  it("authorizes the generated canonical card-subtype vocabulary", () => {
+    expect(resolveSource(localizedSourceText("Ancient"))).toBe("Ancient");
   });
 });

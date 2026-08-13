@@ -180,8 +180,6 @@ export interface PressableProps extends React.HTMLAttributes<HTMLElement> {
   snapFeedbackExit?: boolean;
   /** Localized accessible name resolved onto the final intrinsic element. */
   ariaLabelMessage?: LocalizedString;
-  /** Accessible name supplied by canonical authored or developer-only copy. */
-  authoredAriaLabel?: string;
   /** Content rendered inside the pressable element. */
   children?: React.ReactNode;
 }
@@ -206,7 +204,6 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
       hoverFeedback = "scale",
       snapFeedbackExit = false,
       ariaLabelMessage,
-      authoredAriaLabel,
       style,
       onPointerEnter,
       onPointerDown,
@@ -282,12 +279,6 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
         "Pressable can resolve ariaLabelMessage only onto an intrinsic element.",
       );
     }
-    if (ariaLabelMessage !== undefined && authoredAriaLabel !== undefined) {
-      throw new Error(
-        "Pressable accepts ariaLabelMessage or authoredAriaLabel, not both.",
-      );
-    }
-
     return (
       <Element
         ref={ref}
@@ -295,9 +286,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
         {...(disabled ? {} : bind)}
         {...rest}
         {...(ariaLabelMessage === undefined
-          ? authoredAriaLabel === undefined
-            ? {}
-            : { "aria-label": authoredAriaLabel }
+          ? {}
           : {
               "aria-label":
                 resolve === null

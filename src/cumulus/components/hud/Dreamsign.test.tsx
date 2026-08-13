@@ -3,8 +3,7 @@
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { Dreamsign } from "./Dreamsign";
-import type { Dreamsign as DreamsignData } from "../../../types/journey";
+import { Dreamsign, type LocalizedDreamsign } from "./Dreamsign";
 import {
   GLOSSARY,
   GLOSSARY_IDS,
@@ -13,6 +12,7 @@ import {
 } from "../../../data/glossary";
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
 import { CumulusRoot } from "../../CumulusRoot";
+import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
 
 /**
  * The unified dreamsign entity (formerly `DreamsignArtTile` +
@@ -27,16 +27,21 @@ import { CumulusRoot } from "../../CumulusRoot";
  */
 
 function makeDreamsign(
-  overrides: Partial<DreamsignData> & { name: string },
-): DreamsignData {
-  return {
+  overrides: { name: string } & Partial<{
+    id: string;
+    effectDescription: string | null;
+    imageName: string;
+    imageAlt: string;
+  }>,
+): LocalizedDreamsign {
+  return localizedDreamsignFixture({
     name: overrides.name,
     effectDescription:
       overrides.effectDescription ?? `${overrides.name} effect.`,
     imageName: overrides.imageName,
     imageAlt: overrides.imageAlt,
     id: overrides.id ?? "00000000-0000-4000-8000-000000000031",
-  };
+  });
 }
 
 function mountInto(node: React.ReactElement): {
@@ -87,7 +92,7 @@ describe("Dreamsign", () => {
     const description = document.getElementById(
       tile?.getAttribute("aria-describedby") ?? "",
     );
-    expect(description?.textContent).toContain(sign.name);
+    expect(description?.textContent).toContain("Semantic sign");
     expect(description?.textContent).toContain(effect);
     expect(description?.textContent).toContain(entry.definition);
   });
@@ -155,11 +160,10 @@ describe("Dreamsign", () => {
   );
 
   it("requires a stable dreamsign id for render data attributes", () => {
-    const sign = makeDreamsign({ name: "Nameless Id", id: undefined });
-    delete sign.id;
+    const { id: _id, ...sign } = makeDreamsign({ name: "Nameless Id" });
 
     expect(() => {
-      mountInto(<Dreamsign dreamsign={sign} />);
+      mountInto(<Dreamsign dreamsign={sign as LocalizedDreamsign} />);
     }).toThrow(/Dreamsign tile dreamsign is missing a stable id/);
   });
 

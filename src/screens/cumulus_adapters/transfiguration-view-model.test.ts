@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
@@ -205,7 +208,7 @@ describe("buildTransfigurationSiteView", () => {
       runtime: null,
       cardDatabase: new Map(),
       guide: GUIDE,
-      guideLine: "Fixture line.",
+      guideLine: assertLocalized("Fixture line."),
     });
 
     expect(view.siteId).toBe(site.id);
@@ -218,3 +221,4 @@ describe("buildTransfigurationSiteView", () => {
     expect(view.candidates).toEqual([]);
   });
 });
+import { assertLocalized } from "@trox/runtime";

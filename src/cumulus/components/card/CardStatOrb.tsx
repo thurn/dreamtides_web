@@ -10,7 +10,7 @@ import { useFitText } from "../controls/useFitText";
 import { type Glyph } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
 import { renderCardChangeBadge } from "./card-change-badge";
-import { meaning, tx, txa, type LocalizedString } from "@trox/runtime";
+import { meaning, opaque, tx, txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 const VISUALLY_HIDDEN_STYLE: CSSProperties = {
@@ -28,8 +28,8 @@ const VISUALLY_HIDDEN_STYLE: CSSProperties = {
 export type CardStatOrbVariant = "energy" | "spark" | "dreamwellEnergy";
 export interface CardStatChangeBadge {
   kind: "empowered" | "kindled";
-  /** Source-English form name supplied by the Transfiguration catalog. */
-  accessibleName: string;
+  /** Localized form name supplied by the Transfiguration catalog. */
+  accessibleName: LocalizedString;
 }
 
 /** Purple fill for the Dreamwell energy mark; the number stays white. */
@@ -112,8 +112,6 @@ interface CardStatOrbProps {
    */
   numberCapPx: number;
   ariaLabel?: LocalizedString;
-  /** Accessible name supplied by canonical authored or developer-only copy. */
-  authoredAriaLabel?: string;
   /**
    * Monochrome hammer marker for a transfiguration-changed stat, shared with
    * the Transfiguration site's atlas icon.
@@ -143,16 +141,13 @@ export function CardStatOrb({
   numberSizeVar,
   numberCapPx,
   ariaLabel,
-  authoredAriaLabel,
   changeBadge,
 }: CardStatOrbProps) {
   const resolve = useLocalizer();
   const accessibleId = useId();
-  if (ariaLabel !== undefined && authoredAriaLabel !== undefined) {
-    throw new Error("CardStatOrb accepts ariaLabel or authoredAriaLabel, not both.");
-  }
-  const baseMessage = ariaLabel ?? (authoredAriaLabel === undefined
-    ? (variant === "energy"
+  const baseMessage =
+    ariaLabel ??
+    (variant === "energy"
       ? tx(
           "Energy cost",
           "Accessible name for the numeric Energy-cost orb on a card. The visible numeral is inside the same labeled element.",
@@ -165,8 +160,7 @@ export function CardStatOrb({
         : tx(
             "Energy added",
             "Accessible name for the numeric Energy-added orb on a Dreamwell card. The visible numeral is inside the same labeled element.",
-          ))
-    : undefined);
+          ));
   const icon = ICON_BY_VARIANT[variant];
   // The digit box edge equals the CSS digit size; the digit sits over the
   // glyph's body so it reads over the fullest region rather than the edges.
@@ -213,15 +207,15 @@ export function CardStatOrb({
       }}
     >
       <span id={`${accessibleId}-base`} style={VISUALLY_HIDDEN_STYLE}>
-        {authoredAriaLabel ?? resolve(baseMessage!)}
+        {resolve(baseMessage)}
       </span>
       {changeBadge === undefined ? null : (
         <span id={`${accessibleId}-change`} style={VISUALLY_HIDDEN_STYLE}>
           {resolve(
             txa(
               "Changed by {form_name}",
-              { form_name: changeBadge.accessibleName },
-              "Accessible sentence naming the Transfiguration form that changed this card stat. form_name is the authored form name and has no grammatical-gender metadata.",
+              { form_name: opaque(changeBadge.accessibleName) },
+              "Accessible sentence naming the Transfiguration form that changed this card stat. form_name is the independently localized proper name of the form and is grammatically invariant here.",
             ),
           )}
         </span>

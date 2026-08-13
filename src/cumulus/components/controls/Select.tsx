@@ -61,23 +61,12 @@ type SelectSize = "sm" | "md";
  * (High to Low)" → trigger "Cost ↓"), so a long menu entry stays readable while
  * the button stays narrow enough to share a line.
  */
-/** Code-authored option copy which remains localized until its DOM text node. */
-export interface LocalizedSelectOption {
+/** One option whose copy remains localized until its DOM text node. */
+export interface SelectOption {
   value: string;
   label: LocalizedString;
   triggerLabel?: LocalizedString;
 }
-
-/** Canonical authored content which is intentionally outside localization. */
-export interface AuthoredSelectOption {
-  value: string;
-  authoredLabel: string;
-  authoredTriggerLabel?: string;
-}
-
-export type SelectOption =
-  | LocalizedSelectOption
-  | AuthoredSelectOption;
 
 export interface SelectProps {
   /** The choices shown in the menu. */
@@ -104,12 +93,8 @@ export interface SelectProps {
   align?: "start" | "end";
   /** Accessible label for the trigger. */
   ariaLabel?: LocalizedString;
-  /** Accessible label supplied by canonical authored or developer-only copy. */
-  authoredAriaLabel?: string;
   /** Text shown when `value` does not match an option, for action-picker controls. */
   placeholder?: LocalizedString;
-  /** Placeholder supplied by canonical authored or developer-only copy. */
-  authoredPlaceholder?: string;
 }
 
 interface SizeSpec {
@@ -119,8 +104,16 @@ interface SizeSpec {
 }
 
 const SIZES: Record<SelectSize, SizeSpec> = {
-  sm: { height: 34, font: token("--t-body-sm"), padding: `0 ${token("--space-m")}` },
-  md: { height: 42, font: token("--t-body"), padding: `0 ${token("--space-l")}` },
+  sm: {
+    height: 34,
+    font: token("--t-body-sm"),
+    padding: `0 ${token("--space-m")}`,
+  },
+  md: {
+    height: 42,
+    font: token("--t-body"),
+    padding: `0 ${token("--space-l")}`,
+  },
 };
 
 /** Gap (px) between the trigger and the menu it drops. */
@@ -153,20 +146,12 @@ export function Select({
   full = false,
   align = "start",
   ariaLabel,
-  authoredAriaLabel,
   placeholder,
-  authoredPlaceholder,
 }: SelectProps): ReactElement {
   const spec = SIZES[size];
   const chrome = controlChrome();
   const { pressed, hovered, bind } = usePress();
   const resolve = useLocalizer();
-  if (ariaLabel !== undefined && authoredAriaLabel !== undefined) {
-    throw new Error("Select accepts ariaLabel or authoredAriaLabel, not both.");
-  }
-  if (placeholder !== undefined && authoredPlaceholder !== undefined) {
-    throw new Error("Select accepts placeholder or authoredPlaceholder, not both.");
-  }
 
   const [open, setOpen] = useState(false);
   const [anchor, setAnchor] = useState<MenuAnchor | null>(null);
@@ -219,7 +204,8 @@ export function Select({
     }
     function onScroll(e: Event): void {
       const target = e.target;
-      if (target instanceof Node && menuRef.current?.contains(target) === true) return;
+      if (target instanceof Node && menuRef.current?.contains(target) === true)
+        return;
       close();
     }
     window.addEventListener("keydown", onKey);
@@ -242,22 +228,27 @@ export function Select({
     anchor?.side === "above"
       ? { bottom: anchor.verticalOffset }
       : { top: anchor?.verticalOffset };
-  const menuMaxWidth = anchor === null
-    ? undefined
-    : Math.max(
-        anchor.width,
-        window.innerWidth - (align === "end" ? anchor.right : anchor.left) - 12,
-      );
+  const menuMaxWidth =
+    anchor === null
+      ? undefined
+      : Math.max(
+          anchor.width,
+          window.innerWidth -
+            (align === "end" ? anchor.right : anchor.left) -
+            12,
+        );
   const hasSelection = options.some((option) => option.value === value);
 
   return (
-    <div style={{ position: "relative", display: full ? "block" : "inline-block" }}>
+    <div
+      style={{ position: "relative", display: full ? "block" : "inline-block" }}
+    >
       <button
         ref={triggerRef}
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label={authoredAriaLabel ?? (ariaLabel === undefined ? undefined : resolve(ariaLabel))}
+        aria-label={ariaLabel === undefined ? undefined : resolve(ariaLabel)}
         onClick={() => (open ? close() : openMenu())}
         {...bind}
         style={{
@@ -307,7 +298,7 @@ export function Select({
             justifyItems: "start",
           }}
         >
-          {placeholder === undefined && authoredPlaceholder === undefined ? null : (
+          {placeholder === undefined ? null : (
             <span
               aria-hidden={hasSelection ? true : undefined}
               style={{
@@ -318,7 +309,7 @@ export function Select({
                 color: token("--text-primary"),
               }}
             >
-              {authoredPlaceholder ?? resolve(placeholder!)}
+              {resolve(placeholder)}
             </span>
           )}
           {options.map((option) => (
@@ -333,9 +324,7 @@ export function Select({
                 color: token("--text-primary"),
               }}
             >
-              {"authoredLabel" in option
-                  ? option.authoredTriggerLabel ?? option.authoredLabel
-                  : resolve(option.triggerLabel ?? option.label)}
+              {resolve(option.triggerLabel ?? option.label)}
             </span>
           ))}
         </span>
@@ -448,9 +437,7 @@ function MenuItem({ option, active, onPick }: MenuItemProps): ReactElement {
           <StandaloneGlyph glyph={GLYPHS.check} color="text-primary" />
         </span>
       </span>
-      {"authoredLabel" in option
-          ? option.authoredLabel
-          : resolve(option.label)}
+      {resolve(option.label)}
     </button>
   );
 }

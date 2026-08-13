@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 import { SpeechBubble } from "../../components/overlay/SpeechBubble";
 import type { CumulusComponent } from "../registry";
 
@@ -19,8 +20,8 @@ function SpeechBubbleDemo(args: Record<string, unknown>) {
     <SpeechBubble
       pointerPlacement={pointerPlacement}
       size={size}
-      speakerName={speakerName}
-      text={text}
+      speakerName={assertLocalized(speakerName)}
+      text={assertLocalized(text)}
     />
   );
 }
@@ -45,7 +46,7 @@ export const speechBubbleDemo: CumulusComponent = {
 
 <SpeechBubble
   speakerName="Mira"
-  text="Visit [purple]Dream Sites[/purple] to build your deck."
+  text={assertLocalized("Visit [purple]Dream Sites[/purple] to build your deck.")}
 />`,
     },
   ],

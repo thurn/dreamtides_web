@@ -1,15 +1,17 @@
-import type { AuguryArchetypeData, AuguryPresentationText } from "../../../types/augury-data";
+import type {
+  AuguryArchetypeData,
+  AuguryPresentationText,
+} from "../../../types/augury-data";
+import type { LocalizedString } from "@trox/runtime";
+import { localizedSourceText } from "../../../runtime/localization/runtime";
 import { richText, type RichText } from "../card/rich-text";
 import type { OfferTileModel } from "./OfferTile";
 
 type Presentation = AuguryArchetypeData["presentation"];
-const FIRST_STRONG_ISOLATE = "\u2068";
-const POP_DIRECTIONAL_ISOLATE = "\u2069";
-
 function cardName(model: {
   readonly displaySnapshot: { readonly name: string };
-}): string {
-  return model.displaySnapshot.name;
+}): LocalizedString {
+  return localizedSourceText(model.displaySnapshot.name);
 }
 
 function countFor(model: OfferTileModel): number | null {
@@ -25,14 +27,21 @@ function countFor(model: OfferTileModel): number | null {
   }
 }
 
-function variablesFor(model: OfferTileModel): Readonly<Record<string, string | number>> {
+function variablesFor(
+  model: OfferTileModel,
+): Readonly<Record<string, LocalizedString | number>> {
   switch (model.kind) {
     case "card-gift":
     case "transfigure-card":
     case "purge-card":
       return { cardName: cardName(model.card) };
     case "category-draft":
-      return { categoryName: "name" in model.category ? model.category.name : "" };
+      return {
+        ...(model.category.kind === "subtype" ||
+        model.category.kind === "package"
+          ? { categoryName: model.category.name }
+          : {}),
+      };
     case "copies-draft":
       return { count: model.copyCount };
     case "card-bundle":
@@ -62,7 +71,9 @@ function categoryTemplate(
   model: OfferTileModel,
 ): string {
   if (model.kind !== "category-draft") {
-    throw new Error("Augury category presentation requires a category-draft offer");
+    throw new Error(
+      "Augury category presentation requires a category-draft offer",
+    );
   }
   switch (model.category.kind) {
     case "character":
@@ -84,7 +95,10 @@ function categoryTemplate(
   }
 }
 
-function selectedTemplate(text: AuguryPresentationText, model: OfferTileModel): string {
+function selectedTemplate(
+  text: AuguryPresentationText,
+  model: OfferTileModel,
+): string {
   if (text.kind === "text") return text.text;
   if (text.kind === "category") return categoryTemplate(text, model);
   const count = countFor(model);
@@ -94,34 +108,28 @@ function selectedTemplate(text: AuguryPresentationText, model: OfferTileModel): 
   return count === 1 ? text.one : text.other;
 }
 
-function formatPresentationText(
+function localizedPresentationText(
   text: AuguryPresentationText,
   model: OfferTileModel,
-): string {
+): LocalizedString {
   const variables = variablesFor(model);
-  return selectedTemplate(text, model).replace(/\{([^{}]+)\}/gu, (_match, slot: string) => {
-    const value = variables[slot];
-    if (value === undefined) {
-      throw new Error(`Augury presentation is missing value for {${slot}}`);
-    }
-    return `${FIRST_STRONG_ISOLATE}${String(value)}${POP_DIRECTIONAL_ISOLATE}`;
-  });
+  return localizedSourceText(selectedTemplate(text, model), variables);
 }
 
 /** Complete authored detail title for an Augury offer's semantic model. */
 export function auguryOfferHeadline(
   model: OfferTileModel,
   presentation: Presentation,
-): string {
-  return formatPresentationText(presentation.headline, model);
+): LocalizedString {
+  return localizedPresentationText(presentation.headline, model);
 }
 
 /** Complete authored description for an Augury offer's semantic model. */
 export function offerTileDescription(
   model: OfferTileModel,
   presentation: Presentation,
-): string {
-  return formatPresentationText(presentation.subtitle, model);
+): LocalizedString {
+  return localizedPresentationText(presentation.subtitle, model);
 }
 
 /** InfoCard copy derived from the authored Augury presentation. */

@@ -1,4 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 import { createDefaultState } from "../../state/journey-context";
 import { economyFixture } from "../../testing/economy-fixture";
 import type {
@@ -183,7 +186,7 @@ describe("buildDreamsignBazaarSiteView", () => {
         dialogue: { site: ["Choose carefully."] },
         homeSpecialty: "Fixture specialty.",
       },
-      guideLine: "A chosen greeting.",
+      guideLine: assertLocalized("A chosen greeting."),
       pendingDreamsign,
       economyData: economyFixture(),
       sitesData: MINIMAL_SITES_DATA,
@@ -230,7 +233,7 @@ describe("buildDreamsignBazaarSiteView", () => {
         dialogue: { site: ["Choose carefully."] },
         homeSpecialty: "Fixture specialty.",
       },
-      guideLine: "A chosen greeting.",
+      guideLine: assertLocalized("A chosen greeting."),
       pendingDreamsign: null,
       economyData: economyFixture(),
       sitesData: MINIMAL_SITES_DATA,
@@ -244,3 +247,4 @@ describe("buildDreamsignBazaarSiteView", () => {
     expect(view.restock.price).toBeGreaterThan(0);
   });
 });
+import { assertLocalized } from "@trox/runtime";

@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // Registry demo entry for TideDisc — see site-node.tsx for the stageRef recipe.
 // Each TideDisc is its own named reveal source, so the live demo exercises the
 // same press-or-hover interaction production uses. The disc rows
@@ -26,8 +27,8 @@ function TideDiscDemo() {
             key={resonance.id}
             tide={resonance.id}
             id={`demo-sm-${resonance.id}`}
-            label={resonance.displayName}
-            description={resonance.accessibilityName}
+            label={assertLocalized(resonance.displayName)}
+            description={assertLocalized(resonance.accessibilityName)}
           />
         ))}
       </div>
@@ -35,8 +36,10 @@ function TideDiscDemo() {
         <TideDisc
           tide="valor"
           id="demo-reveal-valor"
-          label="Rising Valor"
-          description="A tide of steadfast courage that rewards holding the line."
+          label={assertLocalized("Rising Valor")}
+          description={assertLocalized(
+            "A tide of steadfast courage that rewards holding the line.",
+          )}
         />
       </div>
     </div>
@@ -63,14 +66,14 @@ export const tideDiscDemo: CumulusComponent = {
       note: "The color and glyph come from the named tide (never a raw value). The component owns its strict tide reveal on hover, focus, and touch.",
       code: `import { TideDisc } from "src/cumulus/components/hud/TideDisc";
 
-<TideDisc tide="valor" id={tideDeckId} label="Rising Valor" description={tide.description} />`,
+<TideDisc tide="valor" id={tideDeckId} label={assertLocalized("Rising Valor")} description={tide.description} />`,
     },
     {
       label: "Self-revealing tide",
       note: "The named component derives its tide primary and general Tides secondary internally from semantic data.",
       code: `import { TideDisc } from "src/cumulus/components/hud/TideDisc";
 
-<TideDisc tide="valor" id={tideDeckId} label="Rising Valor" description={tide.description} />`,
+<TideDisc tide="valor" id={tideDeckId} label={assertLocalized("Rising Valor")} description={tide.description} />`,
     },
   ],
   demo: {

@@ -19,6 +19,8 @@
 
 import type { CardType } from "../../types/cards";
 import type { DeckCardView } from "./MobileDeckViewer";
+import type { LocalizedString } from "@trox/runtime";
+import { localizedSourceText } from "../../runtime/localization/runtime";
 
 /**
  * Which cards the grid is filtered to. `"all"` shows everything; `"type:<T>"`
@@ -55,7 +57,7 @@ export const DEFAULT_DECK_FILTER_SORT: DeckFilterSort = {
 export interface DeckControlOption<T extends string> {
   value: T;
   /** Authored subtype text, present only for subtype options. */
-  authoredLabel?: string;
+  label?: LocalizedString;
 }
 
 /**
@@ -88,20 +90,18 @@ export function buildDeckTypeFilterOptions(
   const counts = new Map<string, number>();
   for (const view of cards) {
     const subtype = view.model.displaySnapshot.subtype.trim();
-    if (subtype === "") continue;
+    if (subtype === "" || subtype === "*") continue;
     counts.set(subtype, (counts.get(subtype) ?? 0) + 1);
   }
   const subtypeOptions = [...counts.entries()]
     .filter(([, count]) => count > SUBTYPE_FILTER_MIN_COUNT - 1)
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-    .map(
-      ([subtype]): DeckControlOption<DeckTypeFilter> => ({
-        value: `subtype:${subtype}`,
-        // Subtype names are authored display values. Keep the semantic name
-        // intact; English suffix rules cannot safely produce localized labels.
-        authoredLabel: subtype,
-      }),
-    );
+    .map(([subtype]): DeckControlOption<DeckTypeFilter> => ({
+      value: `subtype:${subtype}`,
+      // Subtype names are authored display values. Keep the semantic name
+      // intact; English suffix rules cannot safely produce localized labels.
+      label: localizedSourceText(subtype),
+    }));
   return [...BASE_DECK_TYPE_FILTER_OPTIONS, ...subtypeOptions];
 }
 
@@ -126,8 +126,11 @@ export function deckSortLabel(sort: DeckSortId): DeckSortId {
 export function deckTypeFilterLabel(
   filter: DeckTypeFilter,
   options: readonly DeckControlOption<DeckTypeFilter>[],
-): string {
-  return options.find((option) => option.value === filter)?.authoredLabel ?? filter;
+): LocalizedString {
+  return (
+    options.find((option) => option.value === filter)?.label ??
+    localizedSourceText(filter.replace(/^subtype:/, ""))
+  );
 }
 
 /**
@@ -159,24 +162,37 @@ export function compareBySort(
     case "drafted":
       return 0;
     case "name":
-      return a.model.displaySnapshot.name.localeCompare(b.model.displaySnapshot.name);
+      return a.model.displaySnapshot.name.localeCompare(
+        b.model.displaySnapshot.name,
+      );
     case "cost":
-      return costKey(a.model.displaySnapshot) - costKey(b.model.displaySnapshot);
+      return (
+        costKey(a.model.displaySnapshot) - costKey(b.model.displaySnapshot)
+      );
     case "spark":
-      return sparkKey(a.model.displaySnapshot) - sparkKey(b.model.displaySnapshot);
+      return (
+        sparkKey(a.model.displaySnapshot) - sparkKey(b.model.displaySnapshot)
+      );
     case "subtype":
-      return a.model.displaySnapshot.subtype.localeCompare(b.model.displaySnapshot.subtype);
+      return a.model.displaySnapshot.subtype.localeCompare(
+        b.model.displaySnapshot.subtype,
+      );
   }
 }
 
 /** Whether a card passes the active type filter. */
-function matchesTypeFilter(view: DeckCardView, filter: DeckTypeFilter): boolean {
+function matchesTypeFilter(
+  view: DeckCardView,
+  filter: DeckTypeFilter,
+): boolean {
   if (filter === "all") return true;
   if (filter.startsWith("type:")) {
     return view.model.displaySnapshot.cardType === filter.slice("type:".length);
   }
   if (filter.startsWith("subtype:")) {
-    return view.model.displaySnapshot.subtype === filter.slice("subtype:".length);
+    return (
+      view.model.displaySnapshot.subtype === filter.slice("subtype:".length)
+    );
   }
   return true;
 }

@@ -1,5 +1,6 @@
 // Pure view-model builder for Amunet's Cumulus Dreamsign Bazaar.
 
+import type { LocalizedString } from "@trox/runtime";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import {
@@ -24,8 +25,10 @@ import type {
   DreamsignBazaarRestockView,
   DreamsignBazaarSiteView,
 } from "../../cumulus/screens/DreamsignBazaarSiteScreen";
+import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
+import { localizedSitePresentation } from "../../cumulus/screens/localized-site-presentation";
 import {
   buildShopFreePurchaseStatus,
   hasFreePurchase,
@@ -42,7 +45,7 @@ export function resolveDreamsignBazaarGuide(
 /** Build Amunet's guide slice for the shared character-gallery layout. */
 export function buildDreamsignBazaarGuideView(
   guide: DreamGuideContent,
-  guideLine: string,
+  guideLine: LocalizedString,
 ) {
   return projectGuideView(guide, guideLine);
 }
@@ -64,7 +67,10 @@ export function buildDreamsignBazaarOffers(
     offers.push({
       entryId: `shop-slot-${String(slotIndex)}-${dreamsignId}`,
       slotIndex,
-      dreamsign: slot.dreamsign,
+      dreamsign: localizedDreamsign(
+        slot.dreamsign,
+        "Dreamsign Bazaar offer",
+      ),
       price,
       state: slot.purchased
         ? "purchased"
@@ -106,8 +112,13 @@ export function buildDreamsignBazaarPurgeView(
   return pendingDreamsign === null
     ? null
     : {
-        pendingDreamsign,
-        currentDreamsigns: state.dreamsigns,
+        pendingDreamsign: localizedDreamsign(
+          pendingDreamsign,
+          "Dreamsign Bazaar pending purchase",
+        ),
+        currentDreamsigns: state.dreamsigns.map((dreamsign) =>
+          localizedDreamsign(dreamsign, "Dreamsign Bazaar held collection"),
+        ),
         maxDreamsigns: state.maxDreamsigns,
       };
 }
@@ -119,7 +130,7 @@ export function buildDreamsignBazaarSiteView(params: {
   site: SiteState;
   runtime: ShopSiteRuntime;
   guide: DreamGuideContent;
-  guideLine: string;
+  guideLine: LocalizedString;
   pendingDreamsign: Dreamsign | null;
   economyData: EconomyData;
   sitesData: SitesData;
@@ -131,11 +142,12 @@ export function buildDreamsignBazaarSiteView(params: {
   const scene: ArtRef | null =
     params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
   return {
-    presentation: params.sitesData.siteTypes.DreamsignBazaar
-      .presentation as Extract<
-      import("../../types/sites-data").SitePresentation,
-      { kind: "dreamsign-bazaar" }
-    >,
+    presentation: localizedSitePresentation(
+      params.sitesData.siteTypes.DreamsignBazaar.presentation as Extract<
+        import("../../types/sites-data").SitePresentation,
+        { kind: "dreamsign-bazaar" }
+      >,
+    ),
     siteId: params.site.id,
     scene,
     guide: buildDreamsignBazaarGuideView(params.guide, params.guideLine),

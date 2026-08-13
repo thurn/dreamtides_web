@@ -5,26 +5,29 @@ import type {
   TransfigurationType,
 } from "../../../types/journey";
 import { GLYPHS } from "../../primitives/glyph";
-import type { TransfigurationFormDefinition } from "../../../types/transfiguration-data";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { EssenceValue } from "../hud/EssenceValue";
 import { StandaloneGlyph } from "./StandaloneGlyph";
-import { exact, one, other, plural, txa } from "@trox/runtime";
+import {
+  exact,
+  one,
+  other,
+  opaque,
+  plural,
+  txa,
+} from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import type { LocalizedTransfigurationPresentation } from "./transfiguration-presentation";
 
 /** Player-facing data for one offered transfiguration form. */
 export interface TransfigurationButtonModel {
   /** Named transfiguration form, which determines the canonical glyph. */
   type: TransfigurationType;
   /** Authored presentation resolved from the injected catalog. */
-  presentation: Pick<
-    TransfigurationFormDefinition,
-    "name" | "description" | "glyph" | "accentColor"
-  >;
+  presentation: LocalizedTransfigurationPresentation;
   /** Locale-neutral rules change announced as the option's accessible description. */
-  change?: TransfigurationChange;
-  /** Compatibility fixture field; production views provide `change`. */
-  description?: string;
+  change: TransfigurationChange;
   /** Quoted essence cost announced in the accessible label. */
   essenceCost: number;
   /** Whether the player can currently pay the quoted cost. */
@@ -61,6 +64,7 @@ export function TransfigurationButton({
   onPress,
   testId,
 }: TransfigurationButtonProps) {
+  const resolve = useLocalizer();
   const canSelect = form.affordable && !disabled;
   const glyph = GLYPHS[form.presentation.glyph];
   const accent = form.presentation.accentColor;
@@ -73,7 +77,11 @@ export function TransfigurationButton({
       data-transfiguration-button-variant={variant}
       role="radio"
       aria-checked={selected}
-      aria-description={form.presentation.description}
+      aria-description={resolve(txa(
+        "{description}",
+        { description: opaque(form.presentation.description) },
+        "Description of a Transfiguration form sourced from the authored catalog.",
+      ))}
       ariaLabelMessage={txa(
         plural(form.essenceCost, [
           exact(0, "{form_name}, free"),
@@ -81,7 +89,7 @@ export function TransfigurationButton({
           other("{form_name}, {essence_cost} Essence"),
         ]),
         {
-          form_name: form.presentation.name,
+          form_name: opaque(form.presentation.name),
           essence_cost: form.essenceCost,
         },
         "Accessible name for a selectable Transfiguration form and its price. form_name is the authored catalog name; essence_cost is a non-negative integer. Exact zero describes a free choice; positive values share the same wording because Essence is a game-resource name rather than a count noun here.",
@@ -139,7 +147,7 @@ export function TransfigurationButton({
           whiteSpace: "nowrap",
         }}
       >
-        {form.presentation.name}
+        {resolve(form.presentation.name)}
       </strong>
       {showPrice && (
         <span

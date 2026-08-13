@@ -5,6 +5,10 @@ import type { TutorialBattleControllerPlan } from "../../battle/tutorial-battle-
 import type { BattleCardInstance } from "../../battle/types";
 import { buildMobileBattleView } from "./mobile-battle-view-model";
 import { buildTutorialBattleView } from "./tutorial-battle-view-model";
+import { assertLocalized } from "@trox/runtime";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 
 vi.mock("./mobile-battle-view-model", async (importOriginal) => {
   const actual =
@@ -22,7 +26,7 @@ const player = {
     dreamAvatar: null,
     dreamAvatarProfile: {
       id: "player-avatar-uuid",
-      ability: "Player printed ability.",
+      ability: assertLocalized("Player printed ability."),
     },
     currentEnergy: 4,
     maxEnergy: 4,
@@ -37,7 +41,7 @@ const enemy = {
     dreamAvatar: null,
     dreamAvatarProfile: {
       id: "enemy-avatar-uuid",
-      ability: "Enemy printed ability.",
+      ability: assertLocalized("Enemy printed ability."),
     },
     currentEnergy: 4,
     maxEnergy: 4,

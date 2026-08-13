@@ -1,11 +1,12 @@
+import { assertLocalized } from "@trox/runtime";
 import { BattleStatusDisplay } from "../../components/battle/BattleStatusDisplay";
 import type { DreamAvatarVisual } from "../../components/hud/DreamAvatarPortrait";
 import type { CumulusComponent } from "../registry";
 
 const DREAM_AVATAR: DreamAvatarVisual = {
   imageNumber: "0025",
-  name: "Threxan",
-  title: "the Resounding Wrath",
+  name: assertLocalized("Threxan"),
+  title: assertLocalized("the Resounding Wrath"),
 };
 
 function BattleStatusDisplayDemo(args: Record<string, unknown>) {

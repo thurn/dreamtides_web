@@ -41,7 +41,9 @@ function Probe(): null {
 }
 
 function actionFor(id: string) {
-  const action = latest?.actions.find((item) => item.kind === "action" && item.id === id);
+  const action = latest?.actions.find(
+    (item) => item.kind === "action" && item.id === id,
+  );
   if (action?.kind !== "action") throw new Error(`Missing action ${id}`);
   return action;
 }
@@ -67,19 +69,31 @@ afterEach(() => {
 describe("buildJourneyUtilityMenuViewModel", () => {
   it("constructs typed root actions without presentation data", () => {
     const model = buildJourneyUtilityMenuViewModel({
-      actions: [{ kind: "action", id: "deck", label: assertLocalized("View Deck"), glyph: GLYPHS.affiliationRow, onCommand: vi.fn() }],
+      actions: [
+        {
+          kind: "action",
+          id: "deck",
+          label: assertLocalized("View Deck"),
+          glyph: GLYPHS.affiliationRow,
+          onCommand: vi.fn(),
+        },
+      ],
       builtIns: ["saveJourney", "loadJourney", "buildSha", "downloadLog"],
       canLoadJourney: true,
-      status: { kind: "raw", value: "Saved journey." },
+      status: assertLocalized("Saved journey."),
       onSaveJourney: vi.fn(),
       onLoadJourney: vi.fn(),
       onDownloadLog: vi.fn(),
       onViewBuildSha: vi.fn(),
     });
 
-    expect(model.status).toEqual({ kind: "raw", value: "Saved journey." });
+    expect(model.status?.entryId).not.toBe("");
     expect(model.actions.map((item) => item.id)).toEqual([
-      "deck", "saveJourney", "loadJourney", "buildSha", "downloadLog",
+      "deck",
+      "saveJourney",
+      "loadJourney",
+      "buildSha",
+      "downloadLog",
     ]);
     const load = model.actions.find((item) => item.id === "loadJourney");
     expect(load).toMatchObject({ kind: "action", glyph: GLYPHS.folderOpen });
@@ -141,7 +155,7 @@ describe("useJourneyUtilityMenuController", () => {
         formatVersion: 1,
       }),
     );
-    expect(latest?.status).toMatchObject({ kind: "message" });
+    expect(latest?.status?.entryId).not.toBe("");
     act(() => root.unmount());
   });
 
@@ -181,7 +195,63 @@ describe("useJourneyUtilityMenuController", () => {
         fileName: "before-atlas.json",
       }),
     );
-    expect(latest?.status).toMatchObject({ kind: "message" });
+    expect(latest?.status?.entryId).not.toBe("");
+    act(() => root.unmount());
+  });
+
+  it("logs save failure diagnostics while presenting localized fallback copy", () => {
+    vi.spyOn(window, "prompt").mockReturnValue("before atlas");
+    vi.mocked(downloadJourneySaveFile).mockImplementation(() => {
+      throw new Error("storage quota exhausted");
+    });
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root: Root = createRoot(container);
+    act(() =>
+      root.render(
+        <CumulusRoot>
+          <Probe />
+        </CumulusRoot>,
+      ),
+    );
+
+    act(() => actionFor("saveJourney").onCommand());
+
+    expect(logEvent).toHaveBeenCalledWith("debug_journey_save_failed", {
+      source: "menu-save",
+      errorKind: "Error",
+      message: "storage quota exhausted",
+    });
+    expect(latest?.status?.entryId).not.toBe("");
+    act(() => root.unmount());
+  });
+
+  it("logs load failure diagnostics while presenting localized fallback copy", async () => {
+    vi.mocked(chooseJourneySaveFile).mockRejectedValue(
+      new Error("save file is corrupt"),
+    );
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root: Root = createRoot(container);
+    act(() =>
+      root.render(
+        <CumulusRoot>
+          <Probe />
+        </CumulusRoot>,
+      ),
+    );
+
+    await act(async () => {
+      actionFor("loadJourney").onCommand();
+      await Promise.resolve();
+    });
+
+    expect(logEvent).toHaveBeenCalledWith("debug_journey_load_failed", {
+      source: "menu-load",
+      errorKind: "Error",
+      message: "save file is corrupt",
+    });
+    expect(latest?.status?.entryId).not.toBe("");
     act(() => root.unmount());
   });
 
@@ -203,7 +273,7 @@ describe("useJourneyUtilityMenuController", () => {
       source: "dreamscape_menu",
       gitSha: "abc123def456",
     });
-    expect(latest?.status).toMatchObject({ kind: "message" });
+    expect(latest?.status?.entryId).not.toBe("");
     act(() => root.unmount());
   });
 });

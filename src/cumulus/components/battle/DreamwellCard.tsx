@@ -13,16 +13,21 @@ import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
 import { useRevealSource } from "../../internal/reveal/context";
 import { Pressable } from "../../primitives/Pressable";
 import "./dreamwell-card.css";
-import { txa, select, when, otherwise } from "@trox/runtime";
+import {
+  txa,
+  opaque,
+  type LocalizedString,
+} from "@trox/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** The complete resolved display data for one Dreamwell card. */
 export interface DreamwellCardDisplaySnapshot {
   /** Stable Dreamwell card UUID. */
   readonly id: CardId;
   /** Display name resolved at the final render boundary. */
-  readonly name: string;
+  readonly name: LocalizedString;
   /** Rules copy with the shared Dreamtides symbol markup. */
-  readonly renderedText: string;
+  readonly renderedText: LocalizedString;
   /** Maximum energy this Dreamwell card adds. */
   readonly energyAdded: number;
   /** Hosted card-art key. */
@@ -75,6 +80,7 @@ function artStyle(art: ArtCrop): CSSProperties {
  * idle animation.
  */
 export function DreamwellCard({ model, testId }: DreamwellCardProps) {
+  const resolve = useLocalizer();
   const card = model.displaySnapshot;
   const [artErrored, setArtErrored] = useState(false);
 
@@ -86,20 +92,19 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
   const artUrl = hasArt
     ? cardImageUrl(card.imageNumber)
     : cardIdenticonUri(model.cardId);
-  const rules = card.renderedText.trim();
-  const definitions = rulesTextDefinitionCards(rules, "card");
+  const definitions = rulesTextDefinitionCards(card.renderedText, "card");
   const binding = useRevealSource({
     identity: { entityType: "dreamwell-card", entityId: model.cardId },
     spec: {
       primary: {
         kind: "source",
-        descriptionMessage: txa(
-          select(rules === "" ? "no" : "yes", [
-            when("yes", "{card_name}. {rules_text}"),
-            otherwise("{card_name}"),
-          ]),
-          { card_name: card.name, rules_text: rules },
-          'Accessible reveal description for a Dreamwell card. card_name is the canonical card display name with unknown grammatical gender. has_rules is "yes" when authored rules text follows; rules_text is that complete text or an empty string when has_rules is "no".',
+        description: txa(
+          "{card_name}. {rules_text}",
+          {
+            card_name: opaque(card.name),
+            rules_text: opaque(card.renderedText),
+          },
+          "Accessible reveal description for a Dreamwell card. card_name is the canonical card display name with unknown grammatical gender; rules_text is its complete authored rules text.",
         ),
       },
       secondaries: definitions,
@@ -119,7 +124,7 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
       tabIndex={hasDefinitions ? 0 : undefined}
       ariaLabelMessage={txa(
         "{card_name}: adds {energy_amount} Energy",
-        { card_name: card.name, energy_amount: card.energyAdded },
+        { card_name: opaque(card.name), energy_amount: card.energyAdded },
         "Accessible name for a Dreamwell card. card_name is its canonical display name with unknown grammatical gender; energy_amount is the non-negative Energy the card adds when drawn.",
       )}
       data-cumulus-dreamwell-card=""
@@ -203,23 +208,21 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
             textShadow: token("--text-outline-media"),
           }}
         >
-          {card.name}
+          {resolve(card.name)}
         </strong>
-        {rules === "" ? null : (
-          <div
-            data-dreamwell-card-rules=""
-            style={{
-              color: token("--text-on-card"),
-              font: token("--t-rules"),
-            }}
-          >
-            <RulesText
-              text={rules}
-              owner={{ kind: "card", id: model.cardId }}
-              glossaryInteraction="delegated"
-            />
-          </div>
-        )}
+        <div
+          data-dreamwell-card-rules=""
+          style={{
+            color: token("--text-on-card"),
+            font: token("--t-rules"),
+          }}
+        >
+          <RulesText
+            text={card.renderedText}
+            owner={{ kind: "card", id: model.cardId }}
+            glossaryInteraction="delegated"
+          />
+        </div>
       </div>
     </Pressable>
   );

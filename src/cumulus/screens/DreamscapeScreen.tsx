@@ -21,14 +21,14 @@ import { Motes } from "../components/hud/Motes";
 import { CharacterDialogue } from "../components/overlay/CharacterDialogue";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
-import type { Dreamsign as DreamsignData } from "../../types/journey";
+import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
 import {
   DreamsignReplacementDialog,
   type DreamsignReplacementView,
 } from "./DreamsignReplacementDialog";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
-import { tx, txa } from "@trox/runtime";
+import { opaque, tx, txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 /** A generated site reward ready to animate and grant on the dreamscape. */
@@ -36,7 +36,7 @@ export type InlineRewardView =
   | { kind: "essence"; amount: number }
   | {
       kind: "dreamsign";
-      dreamsign: DreamsignData;
+      dreamsign: LocalizedDreamsign;
       requiresReplacement: boolean;
     };
 
@@ -48,7 +48,7 @@ export interface DreamscapeView {
   /** The dreamscape's scene art, or null while the dreamscape is unrevealed. */
   scene: ArtRef | null;
   /** Display title (used as the scene's alt text). */
-  title: string;
+  title: LocalizedString;
   /** The placed, seeded, labelled site nodes. */
   sites: DreamscapeSiteModel[];
   /** Generated Essence and Reward results, keyed by the site's stable id. */
@@ -96,7 +96,7 @@ export function DreamscapeScreen({
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
   const [collectingSiteId, setCollectingSiteId] = useState<string | null>(null);
   const guideDialogueVisible = useDelayedTutorialSpeechBubbleVisibility(
-    view.guideDialogue?.id ?? view.guideDialogue?.model.text,
+    view.guideDialogue?.id,
     view.guideDialogue === undefined
       ? undefined
       : (view.guideDialogue.delaySeconds ?? 0),
@@ -155,7 +155,7 @@ export function DreamscapeScreen({
     <div
       className="cumulus"
       data-cumulus-dreamscape=""
-      data-dreamscape-title={view.title}
+      data-dreamscape-title={resolve(view.title)}
       style={{
         position: "fixed",
         inset: 0,
@@ -168,7 +168,7 @@ export function DreamscapeScreen({
       {sceneUrl !== null && (
         <img
           src={sceneUrl}
-          alt={view.title}
+          alt={resolve(view.title)}
           draggable={false}
           style={{
             position: "absolute",
@@ -297,12 +297,20 @@ export function DreamscapeScreen({
               ? collectingReward.requiresReplacement
                 ? txa(
                     "Found dreamsign: {dreamsign_name}",
-                    { dreamsign_name: collectingReward.dreamsign.name },
+                    {
+                      dreamsign_name: opaque(
+                        collectingReward.dreamsign.name,
+                      ),
+                    },
                     "Accessible reward status when an authored Dreamsign is found and requires replacement. dreamsign_name is canonical authored content.",
                   )
                 : txa(
                     "Gained dreamsign: {dreamsign_name}",
-                    { dreamsign_name: collectingReward.dreamsign.name },
+                    {
+                      dreamsign_name: opaque(
+                        collectingReward.dreamsign.name,
+                      ),
+                    },
                     "Accessible reward status when an authored Dreamsign is gained. dreamsign_name is canonical authored content.",
                   )
               : txa(

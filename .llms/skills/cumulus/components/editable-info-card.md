@@ -27,7 +27,7 @@ The constrained authoring form of InfoCard. It owns its text inputs, editing sta
 | `value` | `string` | no | Confirmed copy rendered when the field is idle. |
 | `draftValue` | `string` | no | Controlled draft rendered by the native editor. |
 | `isEditing` | `boolean` | no | Whether the card is currently showing this field's editor. |
-| `error` | `string` | yes | Validation message shown beneath the native editor. |
+| `error` | `LocalizedString` | yes | Validation message shown beneath the native editor. |
 | `onBeginEdit` | `() => void` | no |  |
 | `onDraftChange` | `(value: string) => void` | no |  |
 | `onCancel` | `() => void` | no |  |
@@ -41,7 +41,7 @@ The constrained authoring form of InfoCard. It owns its text inputs, editing sta
 | `value` | `string` | no | Confirmed copy rendered when the field is idle. |
 | `draftValue` | `string` | no | Controlled draft rendered by the native editor. |
 | `isEditing` | `boolean` | no | Whether the card is currently showing this field's editor. |
-| `error` | `string` | yes | Validation message shown beneath the native editor. |
+| `error` | `LocalizedString` | yes | Validation message shown beneath the native editor. |
 | `onBeginEdit` | `() => void` | no |  |
 | `onDraftChange` | `(value: string) => void` | no |  |
 | `onCancel` | `() => void` | no |  |

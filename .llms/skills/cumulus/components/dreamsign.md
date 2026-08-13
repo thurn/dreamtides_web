@@ -14,21 +14,21 @@ A dreamsign — a minor passive collectible — shown as its art floating on the
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `dreamsign` | `Dreamsign` | yes | — | The dreamsign to show. Identified by `id` (never by name). |
+| `dreamsign` | `LocalizedDreamsign` | yes | — | The dreamsign to show. Identified by `id` (never by name). |
 | `testid` | `string` | no | `dreamsign-art-tile` | Override the tile's `data-testid`. Defaults to `"dreamsign-art-tile"` so the shipped shop / reward / deck-viewer selectors keep working. |
 | `onPress` | `(() => void)` | no | — | Fired on a tap / click that was not a deliberate hold-to-read. |
 | `unavailable` | `boolean` | no | `false` | Keeps details readable while suppressing selection. |
 | `variant` | `"flat" \| "hud" \| "revelation"` | no | `flat` | The tile's material. `"flat"` (default) is the chrome-free collectible tile used in lists over a solid surface; `"hud"` composes {@link DS_SHADOW} — a drop-shadow + violet glow — into the tile filter so the object lifts off busy scene art in the transparent journey HUD. `"revelation"` uses a stronger path-following shadow for large choices over bright Revelation site art. |
 
-### `dreamsign`: the `Dreamsign` model
+### `dreamsign`: the `LocalizedDreamsign` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `id` | `string` | yes |  |
-| `name` | `string` | no |  |
-| `effectDescription` | `string` | no |  |
-| `imageName` | `string` | yes |  |
-| `imageAlt` | `string` | yes |  |
+| `id` | `string` | no | Stable Dreamsign UUID. |
+| `name` | `LocalizedString` | no | Canonical localized display name. |
+| `effectDescription` | `LocalizedString \| null` | no | Canonical localized effect copy, or null when the object has no rules. |
+| `imageName` | `string` | yes | Hosted art key. |
+| `imageAlt` | `LocalizedString` | no | Localized alternative text for the art. |
 
 ## Usage
 

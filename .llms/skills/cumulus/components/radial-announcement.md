@@ -22,7 +22,6 @@ Each enum branch owns its established production choreography—including card-a
 | `headline` | `LocalizedString` | yes | — | Primary announcement copy. Victory heading moved above the radial core after its opening hold. |
 | `headlineGlyph` | `Glyph` | no | — | Optional canonical glyph rendered in place of the headline copy. |
 | `detail` | `LocalizedString` | no | — | Optional supporting copy beneath the headline. |
-| `authoredDetail` | `string` | no | — | Optional supporting copy supplied by canonical authored content. |
 | `essenceGained` | `number` | no | — | Optional gained Essence amount, rendered with the canonical currency glyph. |
 | `tone` | `RadialAnnouncementTone` = `"accent" \| "danger" \| "reward"` | no | `accent` | Semantic orbit and ripple color. Defaults to accent. |
 | `size` | `"compact" \| "standard" \| "wager" \| "mini"` | no | `standard` | Named disc diameter. Defaults to standard. Named compact disc diameter. Defaults to compact. |

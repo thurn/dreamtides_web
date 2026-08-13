@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 import { CharacterDialogue } from "../../components/overlay/CharacterDialogue";
 import { artRef } from "../../primitives/art";
 import type { CumulusComponent } from "../registry";
@@ -18,9 +19,9 @@ function CharacterDialogueDemo(args: Record<string, unknown>) {
     <CharacterDialogue
       dialogue={{
         portrait: artRef.characterPortrait("mira"),
-        portraitAlt: "Mira",
-        speakerName,
-        text,
+        portraitAlt: assertLocalized("Mira"),
+        speakerName: assertLocalized(speakerName),
+        text: assertLocalized(text),
       }}
       size={size}
       visible={visible}

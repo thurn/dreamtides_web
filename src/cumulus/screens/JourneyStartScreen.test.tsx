@@ -10,6 +10,7 @@ import {
 } from "./JourneyStartScreen";
 import { CumulusRoot } from "../CumulusRoot";
 import { lookupGlossaryTerm } from "../../data/glossary";
+import { assertLocalized } from "@trox/runtime";
 
 class ResizeObserverStub {
   constructor(_callback: ResizeObserverCallback) {}
@@ -21,33 +22,35 @@ class ResizeObserverStub {
 const OFFERED: DreamAvatarOfferView[] = [
   {
     id: "caller-1",
-    name: "Mira of Lanterns",
-    title: "Keeper of the Threshold Flame",
+    name: assertLocalized("Mira of Lanterns"),
+    title: assertLocalized("Keeper of the Threshold Flame"),
     imageNumber: "0009",
-    renderedText: "First dreamAvatar.",
+    renderedText: assertLocalized("First dreamAvatar."),
     startingEssence: 230,
-    signatureCards: [{ id: "sig-1-0", name: "Lantern Seer" }],
+    signatureCards: [
+      { id: "sig-1-0", name: assertLocalized("Lantern Seer") },
+    ],
     tides: [],
   },
   {
     id: "caller-2",
-    name: "Vey of Embers",
-    title: "The Ashen Cartographer",
+    name: assertLocalized("Vey of Embers"),
+    title: assertLocalized("The Ashen Cartographer"),
     imageNumber: "0010",
-    renderedText: "Second dreamAvatar.",
+    renderedText: assertLocalized("Second dreamAvatar."),
     startingEssence: 250,
     signatureCards: [],
     tides: [
       {
         id: "tide-01",
-        label: "Ember Rush",
-        description: "Aggressive early pressure.",
+        label: assertLocalized("Ember Rush"),
+        description: assertLocalized("Aggressive early pressure."),
         tide: "ember",
       },
       {
         id: "tide-02",
-        label: "Verdant Growth",
-        description: "Ramps into large threats.",
+        label: assertLocalized("Verdant Growth"),
+        description: assertLocalized("Ramps into large threats."),
         tide: "wild",
       },
     ],
@@ -271,11 +274,12 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
       <JourneyStartScreen
         dreamAvatars={[OFFERED[0]]}
         guideDialogue={{
+          id: "journey-start-guide-dialogue",
           model: {
             portrait: { kind: "character-portrait", characterId: "mira" },
-            portraitAlt: "Mira",
-            speakerName: "Mira",
-            text: "Choose a [purple]Dream Avatar[/purple].",
+            portraitAlt: assertLocalized("Mira"),
+            speakerName: assertLocalized("Mira"),
+            text: assertLocalized("Choose a [purple]Dream Avatar[/purple]."),
           },
           horizontalOffset: 30,
           verticalOffset: 10,
@@ -322,7 +326,10 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
       throw new Error("Expected representative glossary fixtures");
     }
     const ability = `Reclaim Nightmare, the Bane card, then ${reclaim.variants?.[0] ?? "reclaim"} it.`;
-    const dreamAvatar = { ...OFFERED[0], renderedText: ability };
+    const dreamAvatar = {
+      ...OFFERED[0],
+      renderedText: assertLocalized(ability),
+    };
     const { container, root } = mount(
       <JourneyStartScreen
         dreamAvatars={[dreamAvatar]}
@@ -447,11 +454,12 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
       <JourneyStartScreen
         dreamAvatars={[OFFERED[0]]}
         guideDialogue={{
+          id: "journey-start-guide-dialogue-desktop",
           model: {
             portrait: { kind: "character-portrait", characterId: "mira" },
-            portraitAlt: "Mira",
-            speakerName: "Mira",
-            text: "Choose a [purple]Dream Avatar[/purple].",
+            portraitAlt: assertLocalized("Mira"),
+            speakerName: assertLocalized("Mira"),
+            text: assertLocalized("Choose a [purple]Dream Avatar[/purple]."),
           },
           horizontalOffset: 30,
           verticalOffset: 10,

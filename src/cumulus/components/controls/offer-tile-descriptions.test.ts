@@ -1,4 +1,7 @@
+import { assertLocalized } from "@trox/runtime";
 import { describe, expect, it } from "vitest";
+import { localizedStringSourceEquality } from "../../../runtime/localization/testing";
+import { resolveSource } from "../../../runtime/localization/runtime";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import type { AuguryArchetypeData } from "../../../types/augury-data";
 import type { OfferTileCard, OfferTileModel } from "./OfferTile";
@@ -7,6 +10,8 @@ import {
   offerTileDescription,
   offerTileRichDescription,
 } from "./offer-tile-descriptions";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 
 const CARD: OfferTileCard = {
   cardId: asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"),
@@ -39,8 +44,8 @@ describe("offer tile descriptions", () => {
     const model: OfferTileModel = { id: "gift", kind: "card-gift", card: CARD };
     const presentation = textPresentation("Fixture headline", "Target {cardName}");
 
-    expect(auguryOfferHeadline(model, presentation)).toBe("Fixture headline");
-    expect(offerTileDescription(model, presentation)).toBe("Target \u2068Fixture Card\u2069");
+    expect(resolveSource(auguryOfferHeadline(model, presentation))).toBe("Fixture headline");
+    expect(resolveSource(offerTileDescription(model, presentation))).toBe("Target Fixture Card");
   });
 
   it("selects authored count branches from the surfaced offer", () => {
@@ -63,8 +68,8 @@ describe("offer tile descriptions", () => {
       cards: [CARD, CARD],
     };
 
-    expect(offerTileDescription(one, presentation)).toBe("Fixture singular \u20681\u2069");
-    expect(offerTileDescription(two, presentation)).toBe("Fixture plural \u20682\u2069");
+    expect(resolveSource(offerTileDescription(one, presentation))).toBe("Fixture singular 1");
+    expect(resolveSource(offerTileDescription(two, presentation))).toBe("Fixture plural 2");
   });
 
   it("selects authored category branches and interpolates named categories", () => {
@@ -86,11 +91,11 @@ describe("offer tile descriptions", () => {
       id: "category",
       kind: "category-draft",
       cards: [CARD, CARD],
-      category: { kind: "subtype", name: "Spirit Animal" },
+      category: { kind: "subtype", name: assertLocalized("Spirit Animal") },
     };
 
-    expect(offerTileDescription(model, presentation)).toBe(
-      "Fixture subtype \u2068Spirit Animal\u2069",
+    expect(resolveSource(offerTileDescription(model, presentation))).toBe(
+      "Fixture subtype Spirit Animal",
     );
   });
 
@@ -98,7 +103,7 @@ describe("offer tile descriptions", () => {
     const model: OfferTileModel = { id: "draft", kind: "card-draft", cards: [CARD, CARD] };
     const presentation = textPresentation("Fixture headline", "Missing {cardName}");
 
-    expect(() => offerTileDescription(model, presentation)).toThrow(
+    expect(() => resolveSource(offerTileDescription(model, presentation))).toThrow(
       /missing value for \{cardName\}/u,
     );
   });

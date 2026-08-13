@@ -8,7 +8,7 @@ import { motionTimeSeconds } from "../../primitives/motion-time";
 import { resolveArtRef, type ArtRef } from "../../primitives/art";
 import { token } from "../../primitives/tokens";
 import { SpeechBubble } from "./SpeechBubble";
-import { txa } from "@trox/runtime";
+import { opaque, txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 const DIALOGUE_FRAME_URL = assetUrl("/atlas/Round_frame.png");
@@ -52,11 +52,11 @@ export interface CharacterDialogueModel {
   /** Typed portrait art shown inside the circular frame. */
   readonly portrait: CharacterDialoguePortraitArt;
   /** Accessible description of the portrait art. */
-  readonly portraitAlt: string;
+  readonly portraitAlt: LocalizedString;
   /** Character name shown by the speech bubble. */
-  readonly speakerName: string;
+  readonly speakerName: LocalizedString;
   /** Spoken line shown with tutorial highlights and canonical inline rules glyphs. */
-  readonly text: string;
+  readonly text: LocalizedString;
 }
 
 export interface CharacterDialogueProps {
@@ -94,7 +94,7 @@ export function CharacterDialogue({
       aria-hidden={!visible}
       aria-label={resolve(txa(
         "{speaker_name} speaks",
-        { speaker_name: dialogue.speakerName },
+        { speaker_name: opaque(dialogue.speakerName) },
         "Accessible name for character dialogue. speaker_name is the displayed name of the character currently speaking and has unknown grammatical gender.",
       ))}
       data-character-dialogue=""
@@ -136,7 +136,7 @@ export function CharacterDialogue({
           }}
         >
           <img
-            alt={dialogue.portraitAlt}
+            alt={resolve(dialogue.portraitAlt)}
             data-character-dialogue-portrait=""
             draggable={false}
             src={resolveArtRef(dialogue.portrait)}

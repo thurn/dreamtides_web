@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 import {
   BOLT_ICON_CLASS,
   ENERGY_ICON_CLASS,
@@ -48,7 +49,7 @@ function StandaloneGlyphDemo(args: Record<string, unknown>) {
           glyph={glyph}
           color={color}
           depth={depth}
-          label={coerceString(args.label, "Spark")}
+          label={assertLocalized(coerceString(args.label, "Spark"))}
         />
       </span>
       <div
@@ -81,7 +82,7 @@ function StandaloneGlyphDemo(args: Record<string, unknown>) {
                 <StandaloneGlyph
                   glyph={mark.glyph}
                   color={mark.color}
-                  label={`${mark.label} mark, small`}
+                  label={assertLocalized(`${mark.label} mark, small`)}
                 />
               </span>
               <span style={{ display: "inline-flex", fontSize: 48 }}>
@@ -89,7 +90,7 @@ function StandaloneGlyphDemo(args: Record<string, unknown>) {
                   glyph={mark.glyph}
                   color={mark.color}
                   depth="content-protection"
-                  label={`${mark.label} mark`}
+                  label={assertLocalized(`${mark.label} mark`)}
                 />
               </span>
             </div>
@@ -132,7 +133,7 @@ export const standaloneGlyphDemo: CumulusComponent = {
     glyph={SPARK_ICON_CLASS}
     color={SPARK_ICON_COLOR}
     depth="content-protection"
-    label="Spark"
+    label={assertLocalized("Spark")}
   />
 </span>`,
     },

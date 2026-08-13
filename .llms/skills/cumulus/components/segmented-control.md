@@ -28,16 +28,20 @@ The shared liquid-glass track and neutral frosted selection pair cleanly with ad
 
 ### Variant 1
 
-A controlled toggle: own the selected value and update it from `onChange`. `options` accepts plain strings or `{ value, label }` pairs.
+A controlled toggle: own the selected stable value and give every option a localized label.
 
 ```tsx
 import { useState } from "react";
 import { SegmentedControl } from "src/cumulus/components/controls/SegmentedControl";
 
-const [filter, setFilter] = useState("All");
+const [filter, setFilter] = useState("all");
 
 <SegmentedControl
-  options={["All", "Characters", "Events"]}
+  options={[
+    { value: "all", label: assertLocalized("All") },
+    { value: "characters", label: assertLocalized("Characters") },
+    { value: "events", label: assertLocalized("Events") },
+  ]}
   value={filter}
   onChange={setFilter}
 />
@@ -50,7 +54,7 @@ Set `full` to stretch the track to its container, each segment sharing the width
 ```tsx
 <SegmentedControl
   full
-  options={["All", "Characters", "Events"]}
+  options={filterOptions}
   value={filter}
   onChange={setFilter}
 />

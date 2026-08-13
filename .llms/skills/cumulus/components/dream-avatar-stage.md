@@ -26,8 +26,8 @@ Use DreamAvatar Portrait for framed profile crops and semantic profile reveals.
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `imageNumber` | `string` | no |  |
-| `name` | `string` | no |  |
-| `title` | `string` | no |  |
+| `name` | `LocalizedString` | no |  |
+| `title` | `LocalizedString` | yes |  |
 | `portraitFocus` | `DreamAvatarPortraitFocus` | yes | Normalized head position used to center subject-aware crops. |
 
 ## Usage

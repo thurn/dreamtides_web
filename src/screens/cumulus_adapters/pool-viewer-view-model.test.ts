@@ -62,4 +62,19 @@ describe("buildPoolViewerView", () => {
       destination: { side: "player", zone: "deck", position: "top" },
     });
   });
+
+  it("omits structural wildcard subtypes from player filter options", () => {
+    const wildcard = {
+      ...alpha,
+      id: asCardId("wildcard-card"),
+      cardNumber: 3,
+      subtype: "*",
+    };
+    const view = build({
+      cardDatabase: new Map([[1, alpha], [2, beta], [3, wildcard]]),
+    });
+    expect(view.subtypeOptions.map((option) => option.value)).toEqual([
+      "Fixture",
+    ]);
+  });
 });

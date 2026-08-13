@@ -36,7 +36,7 @@ export function ConfigGateScreen({
           "Explanation that all participants in a shared room must use matching content settings.",
         ),
         comparison: configComparisonRows(roomContentConfig, localContentConfig),
-        detailMessage: tx(
+        detail: tx(
           "This game needs settings this build cannot adopt.",
           "Detail explaining that this client cannot adopt the shared room's content settings.",
         ),

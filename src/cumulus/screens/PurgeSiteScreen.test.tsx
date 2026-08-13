@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -42,8 +43,8 @@ function view(cardCount = 2): PurgeSiteView {
     scene: null,
     guide: {
       id: "takeshi",
-      name: "Master Takeshi",
-      line: "Cut only what the dream can spare.",
+      name: assertLocalized("Master Takeshi"),
+      line: assertLocalized("Cut only what the dream can spare."),
       art: artRef.dreamGuide("takeshi"),
     },
     cards: Array.from({ length: cardCount }, (_, index) => {
@@ -229,9 +230,11 @@ describe("PurgeSiteScreen", () => {
       id: "run-a:first-visit:purge-site:Purge",
       model: {
         portrait: artRef.characterPortrait("mira"),
-        portraitAlt: "Mira",
-        speakerName: "Mira",
-        text: "You can [yellow]purge[/yellow] cards here for an ◆ essence cost.",
+        portraitAlt: assertLocalized("Mira"),
+        speakerName: assertLocalized("Mira"),
+        text: assertLocalized(
+          "You can [yellow]purge[/yellow] cards here for an ◆ essence cost.",
+        ),
       },
       delaySeconds: 0,
       horizontalOffset: 0,

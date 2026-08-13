@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -9,8 +10,8 @@ import { CumulusRoot } from "../../CumulusRoot";
 
 const DREAM_AVATAR: DreamAvatarVisual = {
   imageNumber: "0042",
-  name: "Astra",
-  title: "The Dawnbound",
+  name: assertLocalized("Astra"),
+  title: assertLocalized("The Dawnbound"),
 };
 
 function mountInto(node: React.ReactElement): {

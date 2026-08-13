@@ -21,7 +21,6 @@ It adds no surrounding whitespace: callers include an explicit JSX space when pr
 | `glyph` | `Glyph` | yes | — | Named Boxicons glyph from the shared Cumulus glyph vocabulary. |
 | `color` | `CumulusColor` = `"accent" \| "accent-bright" \| "essence" \| "energy" \| "spark" \| "danger" \| "positive" \| "selected" \| "text-primary" \| "text-secondary" \| "text-on-accent" \| "white"` | no | — | Optional semantic fill color. Omit to inherit the surrounding text color. |
 | `label` | `LocalizedString` | no | — | Accessible meaning. Omit only when surrounding copy already names the glyph. |
-| `authoredLabel` | `string` | no | — | Accessible meaning supplied by canonical authored content. |
 
 ## Usage
 
@@ -32,6 +31,6 @@ import { InlineGlyph } from "src/cumulus/components/typography/InlineGlyph";
 import { GLYPHS } from "src/cumulus/primitives/glyph";
 
 <span>
-  Gain 10<InlineGlyph glyph={GLYPHS.points} color="text-primary" label="points" />{" "}before nightfall.
+  Gain 10<InlineGlyph glyph={GLYPHS.points} color="text-primary" label={assertLocalized("points")} />{" "}before nightfall.
 </span>
 ```

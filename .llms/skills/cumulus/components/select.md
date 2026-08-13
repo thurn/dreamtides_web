@@ -28,27 +28,15 @@ The menu opens above or below according to the available viewport space and scro
 | `full` | `boolean` | no | `false` | Stretch the trigger to fill the container width. |
 | `align` | `"start" \| "end"` | no | `start` | Which trigger edge the menu aligns to. 'start' (default) opens flush to the leading edge; 'end' opens flush to the trailing edge — use it when the Select sits against the right side of a bar so the menu stays on-screen. |
 | `ariaLabel` | `LocalizedString` | no | — | Accessible label for the trigger. |
-| `authoredAriaLabel` | `string` | no | — | Accessible label supplied by canonical authored or developer-only copy. |
 | `placeholder` | `LocalizedString` | no | — | Text shown when `value` does not match an option, for action-picker controls. |
-| `authoredPlaceholder` | `string` | no | — | Placeholder supplied by canonical authored or developer-only copy. |
 
 ### `options`: the `SelectOption` model
-
-#### `LocalizedSelectOption`
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `value` | `string` | no |  |
 | `label` | `LocalizedString` | no |  |
 | `triggerLabel` | `LocalizedString` | yes |  |
-
-#### `AuthoredSelectOption`
-
-| Field | Type | Optional | Description |
-| --- | --- | --- | --- |
-| `value` | `string` | no |  |
-| `authoredLabel` | `string` | no |  |
-| `authoredTriggerLabel` | `string` | yes |  |
 
 ## Usage
 
@@ -66,9 +54,9 @@ const [sort, setSort] = useState("name");
 <Select
   leadingGlyph={GLYPHS.sort}
   options={[
-    { value: "name", label: "Name" },
-    { value: "drafted", label: "Drafted" },
-    { value: "cost", label: "Cost" },
+    { value: "name", label: assertLocalized("Name") },
+    { value: "drafted", label: assertLocalized("Drafted") },
+    { value: "cost", label: assertLocalized("Cost") },
   ]}
   value={sort}
   onChange={setSort}
@@ -80,7 +68,7 @@ const [sort, setSort] = useState("name");
 Use placeholder with an unmatched controlled value when choosing an item performs an action and resets the trigger.
 
 ```tsx
-<Select placeholder="Add an Action" options={actionOptions} value="" onChange={addAction} />
+<Select placeholder={assertLocalized("Add an Action")} options={actionOptions} value="" onChange={addAction} />
 ```
 
 ### Right-aligned in a bar

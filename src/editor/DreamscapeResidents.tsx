@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 import type { CSSProperties } from "react";
 import { DreamAvatarPortrait } from "../cumulus/components/hud/DreamAvatarPortrait";
 import type {
@@ -72,7 +73,12 @@ function candidateOptions(
     .filter((dreamAvatar) => !residentIds.has(dreamAvatar.id.toLowerCase()))
     .map((dreamAvatar) => {
       const region = regionNameByDreamAvatar.get(dreamAvatar.id.toLowerCase());
-      const where = region === undefined ? "unassigned" : region === selfName ? "here" : region;
+      const where =
+        region === undefined
+          ? "unassigned"
+          : region === selfName
+            ? "here"
+            : region;
       return { id: dreamAvatar.id, label: `${dreamAvatar.name} — ${where}` };
     })
     .sort((left, right) => left.label.localeCompare(right.label));
@@ -86,8 +92,15 @@ export default function DreamscapeResidents({
   status,
   onAssign,
 }: DreamscapeResidentsProps) {
-  const byId = new Map(dreamAvatars.map((dreamAvatar) => [dreamAvatar.id.toLowerCase(), dreamAvatar]));
-  const residentIds = new Set(record.dreamAvatarIds.map((id) => id.toLowerCase()));
+  const byId = new Map(
+    dreamAvatars.map((dreamAvatar) => [
+      dreamAvatar.id.toLowerCase(),
+      dreamAvatar,
+    ]),
+  );
+  const residentIds = new Set(
+    record.dreamAvatarIds.map((id) => id.toLowerCase()),
+  );
   const residents = record.dreamAvatarIds.map((id) => ({
     id,
     option: byId.get(id.toLowerCase()) ?? null,
@@ -135,11 +148,18 @@ export default function DreamscapeResidents({
                 }}
               >
                 <DreamAvatarPortrait
-                  dreamAvatar={resident.option}
+                  dreamAvatar={{
+                    ...resident.option,
+                    name: assertLocalized(resident.option.name),
+                    title:
+                      resident.option.title === undefined
+                        ? undefined
+                        : assertLocalized(resident.option.title),
+                  }}
                   variant="thumb"
                   profile={{
                     id: resident.option.id,
-                    ability: resident.option.renderedText,
+                    ability: assertLocalized(resident.option.renderedText),
                   }}
                 />
               </div>
@@ -183,7 +203,14 @@ export default function DreamscapeResidents({
                 </div>
               ) : null}
 
-              <div style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "4px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  marginTop: "4px",
+                }}
+              >
                 <select
                   aria-label={`Replace ${resident.option?.name ?? resident.id}`}
                   value=""
@@ -221,7 +248,8 @@ export default function DreamscapeResidents({
                     flex: "0 0 auto",
                     padding: "4px 9px",
                     opacity: canRemove && !status.pending ? 1 : 0.4,
-                    cursor: canRemove && !status.pending ? "pointer" : "not-allowed",
+                    cursor:
+                      canRemove && !status.pending ? "pointer" : "not-allowed",
                     color: "#f7c9bd",
                     borderColor: "rgba(247, 201, 189, 0.4)",
                   }}
@@ -253,7 +281,9 @@ export default function DreamscapeResidents({
           }}
         >
           <option value="" disabled>
-            {canAdd ? "+ Add resident…" : `Region is full (${String(MAX_RESIDENTS)})`}
+            {canAdd
+              ? "+ Add resident…"
+              : `Region is full (${String(MAX_RESIDENTS)})`}
           </option>
           {candidates.map((candidate) => (
             <option key={candidate.id} value={candidate.id}>
@@ -264,10 +294,14 @@ export default function DreamscapeResidents({
       </div>
 
       {status.pending ? (
-        <p style={{ margin: "6px 0 0", fontSize: "0.72rem", color: "#8edbd1" }}>Saving…</p>
+        <p style={{ margin: "6px 0 0", fontSize: "0.72rem", color: "#8edbd1" }}>
+          Saving…
+        </p>
       ) : null}
       {status.message !== null ? (
-        <p style={{ margin: "6px 0 0", fontSize: "0.72rem", color: "#f7c9bd" }}>{status.message}</p>
+        <p style={{ margin: "6px 0 0", fontSize: "0.72rem", color: "#f7c9bd" }}>
+          {status.message}
+        </p>
       ) : null}
     </div>
   );

@@ -89,9 +89,9 @@ const [sort, setSort] = useState("name");
 <Select
   leadingGlyph={GLYPHS.sort}
   options={[
-    { value: "name", label: "Name" },
-    { value: "drafted", label: "Drafted" },
-    { value: "cost", label: "Cost" },
+    { value: "name", label: assertLocalized("Name") },
+    { value: "drafted", label: assertLocalized("Drafted") },
+    { value: "cost", label: assertLocalized("Cost") },
   ]}
   value={sort}
   onChange={setSort}
@@ -100,7 +100,7 @@ const [sort, setSort] = useState("name");
     {
       label: "Action picker",
       note: "Use placeholder with an unmatched controlled value when choosing an item performs an action and resets the trigger.",
-      code: `<Select placeholder="Add an Action" options={actionOptions} value="" onChange={addAction} />`,
+      code: `<Select placeholder={assertLocalized("Add an Action")} options={actionOptions} value="" onChange={addAction} />`,
     },
     {
       label: "Right-aligned in a bar",

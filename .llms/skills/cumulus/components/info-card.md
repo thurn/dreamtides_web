@@ -22,13 +22,11 @@ InfoCardProps is a discriminated union. The flattened table combines every varia
 | --- | --- | --- | --- | --- |
 | `variant` | `"object" \| "fullBleed" \| "text" \| "atlasReveal" \| "icon" \| "tide"` | no | — | Which media treatment. Omit — or pass 'text' — for the text variant. |
 | `image` | `ArtRef` | yes | — | The media the card is built around, as an {@link ArtRef}. Required. The square hero image the card is built on, as an {@link ArtRef}. Required. The scene hero image the card is built on, as an {@link ArtRef}. Required. |
-| `title` | `string` | no | — | The card's headline. Resolve names before display; canonical rules symbols render as their inline icons. |
-| `titleMessage` | `LocalizedString` | no | — | Complete localized fallback headline selected by a non-React builder. |
+| `title` | `LocalizedString` | no | — | The card's headline. Resolve names before display; canonical rules symbols render as their inline icons. |
 | `body` | `RichText` | no | — | The reveal copy, as a structured {@link RichText} value. Canonical rules symbols and explicit glyph parts render as cap-height-aligned inline icons. |
-| `bodyMessage` | `LocalizedString` | no | — | Complete localized fallback body selected by a non-React builder. |
 | `imageCrop` | `ImageCrop` = `"top" \| "center"` | no | — | How the hero image is cropped. Default `"center"`. |
 | `figure` | `ArtRef` | no | — | An optional foreground character render (a transparent full-body cutout — a Dream Guide, the boss) laid centered and prominent OVER the hero image, standing above the glass text card. Its own subject of the card; omit for a scene-only hero. An {@link ArtRef}, resolved by the component. Optional transparent full-body figure standing on the card's right side. |
-| `subtitle` | `string` | no | — | An epithet under the name — a smaller serif line in white, mirroring the Dream Avatar-select name/epithet pairing. Resolve before display; rules symbols render as icons. The resident guide / boss title; rules symbols render as icons. An epithet under the name — a smaller serif subtitle in white, mirroring the Dream Avatar-select name/epithet pairing. Resolve before display; rules symbols render as icons. |
+| `subtitle` | `LocalizedString` | no | — | An epithet under the name — a smaller serif line in white, mirroring the Dream Avatar-select name/epithet pairing. Resolve before display; rules symbols render as icons. The resident guide / boss title; rules symbols render as icons. An epithet under the name — a smaller serif subtitle in white, mirroring the Dream Avatar-select name/epithet pairing. Resolve before display; rules symbols render as icons. |
 | `glyph` | `Glyph` | yes | — | The {@link Glyph} the disc renders. Required. |
 | `tide` | `Resonance` = `"shadow" \| "ember" \| "valor" \| "vision" \| "wild"` | yes | — | Which of the five tides. Fixes the disc color/mark and the resonance label. |
 
@@ -50,8 +48,8 @@ import { richText } from "src/cumulus/components/card/rich-text";
 
 <InfoCard
   variant="text"
-  title="Singular Storm"
-  body={richText.plain("A rising tide that floods the board with essence.")}
+  title={assertLocalized("Singular Storm")}
+  body={richText.plain(assertLocalized("A rising tide that floods the board with essence."))}
 />
 ```
 
@@ -62,9 +60,9 @@ Pass a `subtitle` to render an epithet under the name — a smaller serif line i
 ```tsx
 <InfoCard
   variant="text"
-  title="Kragg"
-  subtitle="Spent-Blood Chieftain"
-  body={richText.rules("At the start of your first turn, gain 1 essence.")}
+  title={assertLocalized("Kragg")}
+  subtitle={assertLocalized("Spent-Blood Chieftain")}
+  body={richText.rules(assertLocalized("At the start of your first turn, gain 1 essence."))}
 />
 ```
 
@@ -77,8 +75,8 @@ A media object with `image` (an `ArtRef`); set `frame` for a framed portrait, om
   variant="object"
   image={artRef.dreamAvatar("0025")}
   frame
-  title="Seld Rakor"
-  body={richText.rules("Whenever you Reclaim a card, deal 1 damage.")}
+  title={assertLocalized("Seld Rakor")}
+  body={richText.rules(assertLocalized("Whenever you Reclaim a card, deal 1 damage."))}
 />
 ```
 
@@ -91,8 +89,8 @@ A square hero `image` filling the whole card, with the shared glass text card la
   variant="fullBleed"
   image={artRef.dreamscapeScene("firstlight_meadow")}
   figure={artRef.dreamGuide("tobias_tanglefur")}
-  title="Tobias Tanglefur"
-  body={richText.rules("Enhances the Garden site at his home dreamscape.")}
+  title={assertLocalized("Tobias Tanglefur")}
+  body={richText.rules(assertLocalized("Enhances the Garden site at his home dreamscape."))}
 />
 ```
 
@@ -105,9 +103,9 @@ The large desktop Dream Atlas reveal: a scene hero, an optional right-side figur
   variant="atlasReveal"
   image={artRef.dreamscapeScene("wilderveil")}
   figure={artRef.dreamGuide("aldric")}
-  title="Wilderveil"
-  subtitle="Aldric, the Seer"
-  body={richText.plain("Aldric offers curated visions of the future.")}
+  title={assertLocalized("Wilderveil")}
+  subtitle={assertLocalized("Aldric, the Seer")}
+  body={richText.plain(assertLocalized("Aldric offers curated visions of the future."))}
 />
 ```
 
@@ -119,8 +117,8 @@ A `glyph` on a disc — used for site / place descriptions.
 <InfoCard
   variant="icon"
   glyph={glyph("bxf bx-store-alt-2")}
-  title="Merchant"
-  body={richText.plain("Spend essence on cards, dreamsigns, and services.")}
+  title={assertLocalized("Merchant")}
+  body={richText.plain(assertLocalized("Spend essence on cards, dreamsigns, and services."))}
 />
 ```
 
@@ -132,8 +130,8 @@ A named `tide` on its OWN colored disc, with the tide's resonance name (Valor, S
 <InfoCard
   variant="tide"
   tide="valor"
-  title="Rising Valor"
-  body={richText.plain("A tide of steadfast courage that rewards holding the line.")}
+  title={assertLocalized("Rising Valor")}
+  body={richText.plain(assertLocalized("A tide of steadfast courage that rewards holding the line."))}
 />
 ```
 

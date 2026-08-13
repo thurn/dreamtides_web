@@ -179,13 +179,12 @@ export function useJourneyUtilityMenuController({
     if (entered === null) return;
     const trimmed = entered.trim();
     if (trimmed === "") {
-      flashStatus({
-        kind: "message",
-        message: tx(
+      flashStatus(
+        tx(
           "Save cancelled: a name is required.",
           "Transient status after the player submits an empty Journey save name.",
         ),
-      });
+      );
       return;
     }
     try {
@@ -197,38 +196,36 @@ export function useJourneyUtilityMenuController({
         fileName,
         formatVersion: save.version,
       });
-      flashStatus({
-        kind: "message",
-        message: txa(
+      flashStatus(
+        txa(
           'Downloaded "{file_name}".',
           { file_name: fileName },
           "Transient status after a Journey save download. file_name is a generated filename and remains an opaque technical value.",
         ),
-      });
+      );
     } catch (error) {
+      logEvent("debug_journey_save_failed", {
+        source: saveSource,
+        errorKind: error instanceof Error ? error.name : "unknown",
+        message: error instanceof Error ? error.message : null,
+      });
       flashStatus(
-        error instanceof Error && error.message !== ""
-          ? { kind: "raw", value: error.message }
-          : {
-              kind: "message",
-              message: tx(
-                "Failed to save journey.",
-                "Fallback status when a Journey save failure does not provide technical detail.",
-              ),
-            },
+        tx(
+          "Failed to save journey.",
+          "Transient status when a Journey save fails.",
+        ),
       );
     }
   }
 
   async function handleLoadJourney(): Promise<void> {
     if (onLoadJourneyState === undefined) {
-      flashStatus({
-        kind: "message",
-        message: tx(
+      flashStatus(
+        tx(
           "Loading is unavailable in this context.",
           "Transient status when Journey loading is unavailable in the current route context.",
         ),
-      });
+      );
       return;
     }
     try {
@@ -242,25 +239,24 @@ export function useJourneyUtilityMenuController({
         buildGitSha: loaded.buildGitSha,
       });
       onLoadJourneyState(loaded.journeyState, loadSource);
-      flashStatus({
-        kind: "message",
-        message: txa(
+      flashStatus(
+        txa(
           'Loaded "{save_name}".',
           { save_name: loaded.name },
           "Transient status after a Journey save is imported. save_name is the player's authored save name and remains grammatically opaque.",
         ),
-      });
+      );
     } catch (error) {
+      logEvent("debug_journey_load_failed", {
+        source: loadSource,
+        errorKind: error instanceof Error ? error.name : "unknown",
+        message: error instanceof Error ? error.message : null,
+      });
       flashStatus(
-        error instanceof Error && error.message !== ""
-          ? { kind: "raw", value: error.message }
-          : {
-              kind: "message",
-              message: tx(
-                "Failed to load journey.",
-                "Fallback status when a Journey load failure does not provide technical detail.",
-              ),
-            },
+        tx(
+          "Failed to load journey.",
+          "Transient status when a Journey load fails.",
+        ),
       );
     }
   }
@@ -280,14 +276,13 @@ export function useJourneyUtilityMenuController({
             source: "dreamscape_menu",
             gitSha: BUILD_GIT_SHA,
           });
-          flashStatus({
-            kind: "message",
-            message: txa(
+          flashStatus(
+            txa(
               "Build Git SHA: {git_sha}",
               { git_sha: BUILD_GIT_SHA },
               "Transient status after the player requests the current build identifier. git_sha is an opaque technical build identifier.",
             ),
-          });
+          );
         },
       }),
     [actions, builtIns, onLoadJourneyState, status, resolve],

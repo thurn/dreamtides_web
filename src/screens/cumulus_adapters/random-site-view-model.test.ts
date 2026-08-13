@@ -1,4 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { resolveSource } from "../../runtime/localization/runtime";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
 import { LayerName } from "../../types/layer-name";
 import type { DreamscapeNode, SiteState } from "../../types/journey";
@@ -55,10 +59,11 @@ describe("buildRandomSiteView", () => {
         homeSpecialty: "Fixture specialty",
       },
       sitesData,
-      guideLine: "Synthetic TOML guide copy",
+      guideLine: assertLocalized("Synthetic TOML guide copy"),
     });
 
-    expect(view.guide.line).toBe("Synthetic TOML guide copy");
+    expect(resolveSource(view.guide.line)).toBe("Synthetic TOML guide copy");
     expect(view.choices[0].icon).toBe(sitesData.siteTypes.Shop.icon);
   });
 });
+import { assertLocalized } from "@trox/runtime";

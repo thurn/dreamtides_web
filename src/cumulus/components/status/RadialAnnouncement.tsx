@@ -2,7 +2,7 @@
 // scene announcements, card scoring, merge targets, hand totals, and victory
 // moments.
 
-import {useState, type ReactElement } from "react";
+import { useState, type ReactElement } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { renderRulesSymbolsInline } from "../card/RulesText";
 import { StandaloneGlyph } from "../controls/StandaloneGlyph";
@@ -11,7 +11,8 @@ import { InlineGlyph } from "../typography/InlineGlyph";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { motionTimeSeconds } from "../../primitives/motion-time";
 import { token } from "../../primitives/tokens";
-import { meaning,
+import {
+  meaning,
   txa,
   plural,
   one,
@@ -209,8 +210,6 @@ export interface RadialAnnouncementSceneProps extends RadialAnnouncementCommonPr
   headlineGlyph?: Glyph;
   /** Optional supporting copy beneath the headline. */
   detail?: LocalizedString;
-  /** Optional supporting copy supplied by canonical authored content. */
-  authoredDetail?: string;
   /** Optional gained Essence amount, rendered with the canonical currency glyph. */
   essenceGained?: number;
   /** Semantic orbit and ripple color. Defaults to accent. */
@@ -457,7 +456,6 @@ function SceneAnnouncement({
   headline,
   headlineGlyph,
   detail,
-  authoredDetail,
   essenceGained,
   tone = "accent",
   size = "standard",
@@ -470,7 +468,6 @@ function SceneAnnouncement({
       headline={headline}
       headlineGlyph={headlineGlyph}
       detail={detail}
-      authoredDetail={authoredDetail}
       essenceGained={essenceGained}
       tone={tone}
       size={size}
@@ -490,11 +487,13 @@ function CardScoreAnnouncement({
     <div
       role="status"
       aria-live="polite"
-      aria-label={resolve(txa(
-        plural(points, [one("{count} Point"), other("{count} Points")]),
-        { count: points },
-        "Accessible label for a battle score announcement. count is the non-negative number of points shown by the announcement and can be zero.",
-      ))}
+      aria-label={resolve(
+        txa(
+          plural(points, [one("{count} Point"), other("{count} Points")]),
+          { count: points },
+          "Accessible label for a battle score announcement. count is the non-negative number of points shown by the announcement and can be zero.",
+        ),
+      )}
       data-radial-announcement={announcementId ?? ""}
       data-radial-announcement-variant="card-score"
       data-radial-announcement-tone="accent"
@@ -594,7 +593,6 @@ function TransientAnnouncement({
   headline,
   headlineGlyph,
   detail,
-  authoredDetail,
   essenceGained,
   tone,
   size,
@@ -604,18 +602,12 @@ function TransientAnnouncement({
   readonly headline: LocalizedString;
   readonly headlineGlyph?: Glyph;
   readonly detail?: LocalizedString;
-  readonly authoredDetail?: string;
   readonly essenceGained?: number;
   readonly tone: RadialAnnouncementTone;
   readonly size: RadialAnnouncementSize;
   readonly duration: RadialAnnouncementDuration;
 }): ReactElement {
   const resolve = useLocalizer();
-  if (detail !== undefined && authoredDetail !== undefined) {
-    throw new Error(
-      "RadialAnnouncement accepts either detail or authoredDetail, not both.",
-    );
-  }
   const accent = toneColor(tone);
   const animationDuration = `calc(${token("--dur-slow")} * ${duration === "extended" ? "8" : "5"})`;
   const rippleAnimation =
@@ -735,7 +727,7 @@ function TransientAnnouncement({
               +<EssenceValue amount={essenceGained} tone="inherit" />
             </span>
           )}
-          {detail !== undefined || authoredDetail !== undefined ? (
+          {detail !== undefined ? (
             <span
               data-radial-announcement-detail=""
               style={{
@@ -744,9 +736,7 @@ function TransientAnnouncement({
                 color: token("--text-secondary"),
               }}
             >
-              {renderRulesSymbolsInline(
-                detail === undefined ? authoredDetail ?? "" : resolve(detail),
-              )}
+              {renderRulesSymbolsInline(resolve(detail))}
             </span>
           ) : null}
         </div>
@@ -842,11 +832,13 @@ function MergeTargetAnnouncement(
           {!blocked ? (
             <span data-radial-announcement-detail="">
               {renderRulesSymbolsInline(
-                resolve(txa(
-                  "+{spark_count} ✦",
-                  { spark_count: props.addedSpark },
-                  "Compact Spark detail inside an available Figment merge target. spark_count is the non-negative Spark that the destination Figment will gain; the star is the canonical Spark symbol and is converted to the shared accessible glyph.",
-                )),
+                resolve(
+                  txa(
+                    "+{spark_count} ✦",
+                    { spark_count: props.addedSpark },
+                    "Compact Spark detail inside an available Figment merge target. spark_count is the non-negative Spark that the destination Figment will gain; the star is the canonical Spark symbol and is converted to the shared accessible glyph.",
+                  ),
+                ),
               )}
             </span>
           ) : null}

@@ -1,3 +1,6 @@
+import { assertLocalized } from "@trox/runtime";
+import { resolveChecked } from "../../runtime/localization/runtime";
+import { localizedStringSourceEquality } from "../../runtime/localization/testing";
 // @vitest-environment jsdom
 
 import { act, type CSSProperties, type ReactNode, type Ref } from "react";
@@ -12,6 +15,8 @@ import type {
   MobileBattleView,
 } from "./MobileBattleScreen";
 import { asCardId, asCardName } from "../../types/card-identity";
+
+expect.addEqualityTesters([localizedStringSourceEquality]);
 
 interface ScreenMockState {
   props: MobileBattleScreenProps | null;
@@ -161,7 +166,9 @@ vi.mock("../components/overlay/CharacterDialogue", () => ({
   CharacterDialogue: (props: CharacterDialogueProps) => {
     screenMocks.dialogueProps = props;
     return (
-      <section data-character-dialogue={props.dialogue.speakerName}>
+      <section
+        data-character-dialogue={resolveChecked(props.dialogue.speakerName)}
+      >
         <div data-character-dialogue-portrait-frame="" />
         <div>
           <aside />
@@ -314,13 +321,13 @@ const TUTORIAL_DREAM_AVATARS: TutorialView["dreamAvatars"] = {
   player: {
     visual: {
       imageNumber: "0029",
-      name: "Tensho",
-      title: "Daimyo of Lacquered Fury",
+      name: assertLocalized("Tensho"),
+      title: assertLocalized("Daimyo of Lacquered Fury"),
       portraitFocus: { x: 0.5, y: 0.22 },
     },
     profile: {
       id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
-      ability: "Avatar ability is not active",
+      ability: assertLocalized("Avatar ability is not active"),
       unavailable: true,
     },
     settled: false,
@@ -328,13 +335,13 @@ const TUTORIAL_DREAM_AVATARS: TutorialView["dreamAvatars"] = {
   enemy: {
     visual: {
       imageNumber: "0025",
-      name: "Threxan",
-      title: "the Resounding Wrath",
+      name: assertLocalized("Threxan"),
+      title: assertLocalized("the Resounding Wrath"),
       portraitFocus: { x: 0.5, y: 0.2 },
     },
     profile: {
       id: "b99936ca-97f9-4930-af5a-fa9ef92557ef",
-      ability: "Avatar ability is not active",
+      ability: assertLocalized("Avatar ability is not active"),
       unavailable: true,
     },
     settled: false,
@@ -389,8 +396,8 @@ const TUTORIAL_DREAMWELL_CARD: NonNullable<
   cardId: asCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
   displaySnapshot: {
     id: asCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
-    name: "Autumn Glade",
-    renderedText: "Gain 2⍟.",
+    name: assertLocalized("Autumn Glade"),
+    renderedText: assertLocalized("Gain 2⍟."),
     energyAdded: 1,
     imageNumber: 1789989917,
   },
@@ -491,9 +498,9 @@ describe("TutorialScreen", () => {
                     kind: "character-portrait",
                     characterId: "mira",
                   },
-                  portraitAlt: "Mira",
-                  speakerName: "Mira",
-                  text: "A custom greeting.",
+                  portraitAlt: assertLocalized("Mira"),
+                  speakerName: assertLocalized("Mira"),
+                  text: assertLocalized("A custom greeting."),
                 },
               },
               playbackRunId: "event:width",
@@ -554,9 +561,9 @@ describe("TutorialScreen", () => {
                 verticalOffset: 0,
                 model: {
                   portrait: { kind: "character-portrait", characterId: "mira" },
-                  portraitAlt: "Mira",
-                  speakerName: "Mira",
-                  text: "Welcome, Dreamer.",
+                  portraitAlt: assertLocalized("Mira"),
+                  speakerName: assertLocalized("Mira"),
+                  text: assertLocalized("Welcome, Dreamer."),
                 },
               },
               playbackRunId: "event:1",
@@ -630,9 +637,9 @@ describe("TutorialScreen", () => {
                     kind: "character-portrait",
                     characterId: "mira",
                   },
-                  portraitAlt: "Mira",
-                  speakerName: "Mira",
-                  text: "Welcome, Dreamer.",
+                  portraitAlt: assertLocalized("Mira"),
+                  speakerName: assertLocalized("Mira"),
+                  text: assertLocalized("Welcome, Dreamer."),
                 },
               },
               playbackRunId: "event:1",
@@ -735,9 +742,9 @@ describe("TutorialScreen", () => {
                     kind: "character-portrait",
                     characterId: "mira",
                   },
-                  portraitAlt: "Mira",
-                  speakerName: "Mira",
-                  text: "This card has a ▸Dawn ability.",
+                  portraitAlt: assertLocalized("Mira"),
+                  speakerName: assertLocalized("Mira"),
+                  text: assertLocalized("This card has a ▸Dawn ability."),
                 },
               },
               playbackRunId: "event:reveal-dialogue",
@@ -806,9 +813,9 @@ describe("TutorialScreen", () => {
                     kind: "character-portrait",
                     characterId: "mira",
                   },
-                  portraitAlt: "Mira",
-                  speakerName: "Mira",
-                  text: "Welcome, Dreamer.",
+                  portraitAlt: assertLocalized("Mira"),
+                  speakerName: assertLocalized("Mira"),
+                  text: assertLocalized("Welcome, Dreamer."),
                 },
               },
               playbackRunId: "event:2",
@@ -1035,8 +1042,8 @@ describe("TutorialScreen", () => {
                 kind: "dreamAvatar",
                 owner: "enemy",
                 bubbleWidth: 450,
-                speakerName: "Threxan",
-                text: "For the Abyss!",
+                speakerName: assertLocalized("Threxan"),
+                text: assertLocalized("For the Abyss!"),
               },
               playbackRunId: "event:draw",
               endTurn: null,
@@ -1198,9 +1205,9 @@ describe("TutorialScreen", () => {
                     kind: "character-portrait",
                     characterId: "mira",
                   },
-                  portraitAlt: "Mira",
-                  speakerName: "Mira",
-                  text: "This card has a ▸Dawn ability.",
+                  portraitAlt: assertLocalized("Mira"),
+                  speakerName: assertLocalized("Mira"),
+                  text: assertLocalized("This card has a ▸Dawn ability."),
                 },
               },
               playbackRunId: "event:play",
@@ -1606,7 +1613,7 @@ describe("TutorialScreen", () => {
               },
               howToPlay: {
                 actionId: "how-to-play",
-                text: howToPlayText,
+                text: assertLocalized(howToPlayText),
                 wait: 0,
                 trigger: "player-turn-announcement-complete",
               },
@@ -1686,9 +1693,7 @@ describe("TutorialScreen", () => {
       '[data-tutorial-instruction-highlight="purple"]',
     );
     expect(purpleHighlight?.textContent).toBe("event");
-    expect(purpleHighlight?.style.color).toBe(
-      "var(--text-tutorial-highlight)",
-    );
+    expect(purpleHighlight?.style.color).toBe("var(--text-tutorial-highlight)");
     expect(dialog?.querySelectorAll('[aria-label="points"]')).toHaveLength(2);
     expect(
       dialog?.querySelector('[aria-label="points"] i')?.className,
@@ -1721,9 +1726,9 @@ describe("TutorialScreen", () => {
         "[data-tutorial-how-to-play-spark-term]",
       )?.style.display,
     ).toBe("");
-    expect(
-      paragraphs[0]?.querySelectorAll("[data-inline-glyph]"),
-    ).toHaveLength(2);
+    expect(paragraphs[0]?.querySelectorAll("[data-inline-glyph]")).toHaveLength(
+      2,
+    );
     expect(
       paragraphs[0]?.querySelector<HTMLElement>(
         "[data-tutorial-how-to-play-spark-term] [data-inline-glyph-metric]",
@@ -1816,7 +1821,7 @@ describe("TutorialScreen", () => {
               },
               howToPlay: {
                 actionId: "dreamwell-how-to-play",
-                text: "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
+                text: assertLocalized("From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects."),
                 wait: 0,
                 trigger: "enemy-turn-announcement-complete",
               },
@@ -1890,7 +1895,7 @@ describe("TutorialScreen", () => {
               },
               howToPlay: {
                 actionId: "dreamwell-how-to-play",
-                text: "From turn 2, players draw [yellow]dreamwell[/yellow] cards that increase their energy (●) production and have other effects.",
+                text: assertLocalized("From turn 2, players draw [yellow]dreamwell[/yellow] cards that increase their energy (●) production and have other effects."),
                 wait: 0,
                 trigger: "immediate",
                 cardWidth: 650,
@@ -1984,9 +1989,7 @@ describe("TutorialScreen", () => {
     expect(energyIcon?.parentElement?.style.color).toContain(
       "--cv-rules-energy-color",
     );
-    expect(energyIcon?.parentElement?.style.color).toContain(
-      ENERGY_ICON_COLOR,
-    );
+    expect(energyIcon?.parentElement?.style.color).toContain(ENERGY_ICON_COLOR);
     expect(energyIcon?.dataset.inlineGlyph).toBe("");
     const energyMetric = energyIcon?.querySelector<HTMLElement>(
       "[data-inline-glyph-metric]",
@@ -2045,7 +2048,7 @@ describe("TutorialScreen", () => {
               },
               howToPlay: {
                 actionId: "dreamwell-how-to-play",
-                text: "Dreamwell guidance.",
+                text: assertLocalized("Dreamwell guidance."),
                 wait: 0,
                 trigger: "immediate",
                 cardWidth: 500,
@@ -2107,8 +2110,7 @@ describe("TutorialScreen", () => {
     expect(keyframes).toEqual([
       { transform: "translate(-50%, -70%) scale(0.72)" },
       {
-        transform:
-          "translateX(-50%) translate(400px, 150px) scale(1)",
+        transform: "translateX(-50%) translate(400px, 150px) scale(1)",
       },
     ]);
     expect(options).toMatchObject({ duration: 1_000, fill: "forwards" });
@@ -2780,8 +2782,8 @@ describe("TutorialScreen", () => {
               dialogue: {
                 kind: "dreamAvatar",
                 owner: "enemy",
-                speakerName: "Threxan",
-                text: "For the Abyss!",
+                speakerName: assertLocalized("Threxan"),
+                text: assertLocalized("For the Abyss!"),
               },
               playbackRunId: "event:4",
               endTurn: null,
@@ -2888,9 +2890,9 @@ describe("TutorialScreen", () => {
                     kind: "character-portrait",
                     characterId: "mira",
                   },
-                  portraitAlt: "Mira",
-                  speakerName: "Mira",
-                  text: "Welcome, Dreamer.",
+                  portraitAlt: assertLocalized("Mira"),
+                  speakerName: assertLocalized("Mira"),
+                  text: assertLocalized("Welcome, Dreamer."),
                 },
               },
               playbackRunId: "event:1",

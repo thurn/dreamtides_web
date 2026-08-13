@@ -1,9 +1,22 @@
 import type { PoolVariant } from "../../draft/pool/types";
 import type { CardData } from "../../types/cards";
-import type { ResolvedDreamAvatarPackage, Tides4ProvenanceSummary } from "../../types/content";
+import type {
+  ResolvedDreamAvatarPackage,
+  Tides4ProvenanceSummary,
+} from "../../types/content";
 import type { DraftState } from "../../types/draft";
 import type { CardChoiceGridCardView as CardGalleryCardView } from "../../cumulus/components/card/CardChoiceGrid";
-import type { PoolViewerCostFilter, PoolViewerDisclosureView, PoolViewerFilterView, PoolViewerSortId, PoolViewerSourceId, PoolViewerTitleKind, PoolViewerView } from "../../cumulus/screens/PoolViewerScreen";
+import type {
+  PoolViewerCostFilter,
+  PoolViewerDisclosureView,
+  PoolViewerFilterView,
+  PoolViewerSortId,
+  PoolViewerSourceId,
+  PoolViewerTitleKind,
+  PoolViewerView,
+} from "../../cumulus/screens/PoolViewerScreen";
+import { txa } from "@trox/runtime";
+import { localizedSourceText } from "../../runtime/localization/runtime";
 
 export const DEFAULT_POOL_VIEWER_FILTERS: PoolViewerFilterView = {
   query: "",
@@ -48,14 +61,21 @@ export interface PoolViewerAdapterInput {
 }
 
 /** Maps complete domain inputs into deterministic screen data with UUID-based identity. */
-export function buildPoolViewerView(input: BuildPoolViewerViewInput): PoolViewerView {
+export function buildPoolViewerView(
+  input: BuildPoolViewerViewInput,
+): PoolViewerView {
   const byId = cardsById(input.cardDatabase);
   const sources = sourceOptions(input.resolvedPackage, input.tides4Provenance);
-  const source = sources.includes(input.source) ? input.source : sources[0] ?? "run";
+  const source = sources.includes(input.source)
+    ? input.source
+    : (sources[0] ?? "run");
   const entries = entriesFor(source, input, byId);
   const filtered = filterEntries(entries, input.filters);
   const cards = filtered.map((entry) => cardView(entry));
-  const disclosures = buildDisclosures(input.tides4Provenance, input.poolVariant);
+  const disclosures = buildDisclosures(
+    input.tides4Provenance,
+    input.poolVariant,
+  );
   return {
     title: input.title,
     frame: input.frame,
@@ -71,59 +91,221 @@ export function buildPoolViewerView(input: BuildPoolViewerViewInput): PoolViewer
   };
 }
 
-function cardsById(database: ReadonlyMap<number, CardData>): ReadonlyMap<string, CardData> {
-  return new Map([...database.values()].map((card) => [card.id.toLowerCase(), card]));
+function cardsById(
+  database: ReadonlyMap<number, CardData>,
+): ReadonlyMap<string, CardData> {
+  return new Map(
+    [...database.values()].map((card) => [card.id.toLowerCase(), card]),
+  );
 }
 
-function sourceOptions(pkg: ResolvedDreamAvatarPackage | null, tides: Tides4ProvenanceSummary | null) {
-  const ids: PoolViewerSourceId[] = ["run", ...(tides?.tides.length ? ["tides" as const] : []), "catalog"];
-  if ((pkg?.dreamAvatar.signatureCardIds?.length ?? 0) > 0) ids.push("signature");
+function sourceOptions(
+  pkg: ResolvedDreamAvatarPackage | null,
+  tides: Tides4ProvenanceSummary | null,
+) {
+  const ids: PoolViewerSourceId[] = [
+    "run",
+    ...(tides?.tides.length ? ["tides" as const] : []),
+    "catalog",
+  ];
+  if ((pkg?.dreamAvatar.signatureCardIds?.length ?? 0) > 0)
+    ids.push("signature");
   return ids;
 }
 
-function entriesFor(source: PoolViewerSourceId, input: BuildPoolViewerViewInput, byId: ReadonlyMap<string, CardData>): PoolEntry[] {
-  if (source === "catalog") return [...input.cardDatabase.values()].map((card) => entry("catalog", card, null));
-  if (source === "run") return input.draftState === null ? [] : Object.entries(input.draftState.remainingCopiesByCard).flatMap(([number, copies]) => {
-    const card = input.cardDatabase.get(Number(number));
-    return card === undefined || copies <= 0 ? [] : [entry("run", card, copies)];
-  });
-  if (source === "signature") return (input.resolvedPackage?.dreamAvatar.signatureCardIds ?? []).flatMap((id, index) => {
-    const card = byId.get(id.toLowerCase()); return card === undefined ? [] : [{ ...entry("signature", card, null), entryId: `signature:${String(index)}:${card.id}` }];
-  });
-  if (source === "tides") return tideEntries(input.tides4Provenance, input.cardDatabase);
+function entriesFor(
+  source: PoolViewerSourceId,
+  input: BuildPoolViewerViewInput,
+  byId: ReadonlyMap<string, CardData>,
+): PoolEntry[] {
+  if (source === "catalog")
+    return [...input.cardDatabase.values()].map((card) =>
+      entry("catalog", card, null),
+    );
+  if (source === "run")
+    return input.draftState === null
+      ? []
+      : Object.entries(input.draftState.remainingCopiesByCard).flatMap(
+          ([number, copies]) => {
+            const card = input.cardDatabase.get(Number(number));
+            return card === undefined || copies <= 0
+              ? []
+              : [entry("run", card, copies)];
+          },
+        );
+  if (source === "signature")
+    return (input.resolvedPackage?.dreamAvatar.signatureCardIds ?? []).flatMap(
+      (id, index) => {
+        const card = byId.get(id.toLowerCase());
+        return card === undefined
+          ? []
+          : [
+              {
+                ...entry("signature", card, null),
+                entryId: `signature:${String(index)}:${card.id}`,
+              },
+            ];
+      },
+    );
+  if (source === "tides")
+    return tideEntries(input.tides4Provenance, input.cardDatabase);
   return [];
 }
 
-function entry(source: string, card: CardData, copies: number | null): PoolEntry { return { entryId: `${source}:${card.id}`, card, copies }; }
+function entry(
+  source: string,
+  card: CardData,
+  copies: number | null,
+): PoolEntry {
+  return { entryId: `${source}:${card.id}`, card, copies };
+}
 
-function tideEntries(provenance: Tides4ProvenanceSummary | null, database: ReadonlyMap<number, CardData>): PoolEntry[] {
+function tideEntries(
+  provenance: Tides4ProvenanceSummary | null,
+  database: ReadonlyMap<number, CardData>,
+): PoolEntry[] {
   if (provenance === null) return [];
-  return provenance.tides.flatMap((tide) => tide.cardNumbers.flatMap((number, index) => { const card = database.get(number); const copies = provenance.cardProvenanceByNumber[String(number)]?.copies ?? null; return card === undefined ? [] : [{ ...entry("tides", card, copies), entryId: `tides:${tide.id}:${String(index)}:${card.id}` }]; }));
+  return provenance.tides.flatMap((tide) =>
+    tide.cardNumbers.flatMap((number, index) => {
+      const card = database.get(number);
+      const copies =
+        provenance.cardProvenanceByNumber[String(number)]?.copies ?? null;
+      return card === undefined
+        ? []
+        : [
+            {
+              ...entry("tides", card, copies),
+              entryId: `tides:${tide.id}:${String(index)}:${card.id}`,
+            },
+          ];
+    }),
+  );
 }
 
-function filterEntries(entries: readonly PoolEntry[], filters: PoolViewerFilterView): PoolEntry[] {
+function filterEntries(
+  entries: readonly PoolEntry[],
+  filters: PoolViewerFilterView,
+): PoolEntry[] {
   const query = filters.query.trim().toLocaleLowerCase();
-  return entries.map((entry, index) => ({ entry, index })).filter(({ entry }) => {
-    const card = entry.card;
-    return (query === "" || card.name.toLocaleLowerCase().includes(query) || card.renderedText.toLocaleLowerCase().includes(query)) &&
-      (filters.type === "all" || card.cardType.toLocaleLowerCase() === filters.type) &&
-      (filters.subtype === "" || card.subtype === filters.subtype) && matchesCost(card.energyCost, filters.cost);
-  }).sort((a, b) => compareEntry(a.entry.card, b.entry.card, filters.sort, filters.direction) || a.index - b.index).map(({ entry }) => entry);
+  return entries
+    .map((entry, index) => ({ entry, index }))
+    .filter(({ entry }) => {
+      const card = entry.card;
+      return (
+        (query === "" ||
+          card.name.toLocaleLowerCase().includes(query) ||
+          card.renderedText.toLocaleLowerCase().includes(query)) &&
+        (filters.type === "all" ||
+          card.cardType.toLocaleLowerCase() === filters.type) &&
+        (filters.subtype === "" || card.subtype === filters.subtype) &&
+        matchesCost(card.energyCost, filters.cost)
+      );
+    })
+    .sort(
+      (a, b) =>
+        compareEntry(
+          a.entry.card,
+          b.entry.card,
+          filters.sort,
+          filters.direction,
+        ) || a.index - b.index,
+    )
+    .map(({ entry }) => entry);
 }
 
-function matchesCost(cost: number | null, filter: PoolViewerCostFilter): boolean { return filter === "all" || (filter === "x" ? cost === null : filter === "5plus" ? cost !== null && cost >= 5 : cost === Number(filter)); }
-function compareEntry(left: CardData, right: CardData, sort: PoolViewerSortId, direction: PoolViewerFilterView["direction"]): number {
-  const value = (card: CardData): string | number => sort === "cardNumber" ? card.cardNumber : sort === "cost" ? card.energyCost ?? Number.POSITIVE_INFINITY : sort === "type" ? card.cardType : sort === "subtype" ? card.subtype : sort === "spark" ? card.spark ?? Number.POSITIVE_INFINITY : card.name;
-  const a = value(left); const b = value(right); const result = typeof a === "number" && typeof b === "number" ? a - b : String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" });
+function matchesCost(
+  cost: number | null,
+  filter: PoolViewerCostFilter,
+): boolean {
+  return (
+    filter === "all" ||
+    (filter === "x"
+      ? cost === null
+      : filter === "5plus"
+        ? cost !== null && cost >= 5
+        : cost === Number(filter))
+  );
+}
+function compareEntry(
+  left: CardData,
+  right: CardData,
+  sort: PoolViewerSortId,
+  direction: PoolViewerFilterView["direction"],
+): number {
+  const value = (card: CardData): string | number =>
+    sort === "cardNumber"
+      ? card.cardNumber
+      : sort === "cost"
+        ? (card.energyCost ?? Number.POSITIVE_INFINITY)
+        : sort === "type"
+          ? card.cardType
+          : sort === "subtype"
+            ? card.subtype
+            : sort === "spark"
+              ? (card.spark ?? Number.POSITIVE_INFINITY)
+              : card.name;
+  const a = value(left);
+  const b = value(right);
+  const result =
+    typeof a === "number" && typeof b === "number"
+      ? a - b
+      : String(a).localeCompare(String(b), undefined, {
+          numeric: true,
+          sensitivity: "base",
+        });
   return direction === "asc" ? result : -result;
 }
 
-function cardView(entry: PoolEntry): CardGalleryCardView { return { entryId: entry.entryId, model: { cardId: entry.card.id, displaySnapshot: entry.card }, caption: entry.copies === null ? undefined : { kind: "authoredText", text: `×${String(entry.copies)}` }, testId: `pool-card-${entry.entryId}` }; }
-function subtypeOptions(entries: readonly PoolEntry[]) { return [...new Set(entries.filter(({ card }) => card.cardType === "Character" && card.subtype.trim() !== "").map(({ card }) => card.subtype))].sort((a, b) => a.localeCompare(b, undefined, { numeric: true })).map((value) => ({ value, label: value })); }
+function cardView(entry: PoolEntry): CardGalleryCardView {
+  return {
+    entryId: entry.entryId,
+    model: { cardId: entry.card.id, displaySnapshot: entry.card },
+    caption:
+      entry.copies === null
+        ? undefined
+        : {
+            kind: "text",
+            message: txa(
+              "×{copies}",
+              { copies: entry.copies },
+              "Compact Pool Viewer caption showing how many copies of one card are present. copies is a positive whole-number count.",
+            ),
+          },
+    testId: `pool-card-${entry.entryId}`,
+  };
+}
+function subtypeOptions(entries: readonly PoolEntry[]) {
+  return [
+    ...new Set(
+      entries
+        .filter(
+          ({ card }) =>
+            card.cardType === "Character" &&
+            card.subtype.trim() !== "" &&
+            card.subtype !== "*",
+        )
+        .map(({ card }) => card.subtype),
+    ),
+  ]
+    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+    .map((value) => ({ value, label: localizedSourceText(value) }));
+}
 
-function buildDisclosures(tides: Tides4ProvenanceSummary | null, variant: PoolVariant | null) {
+function buildDisclosures(
+  tides: Tides4ProvenanceSummary | null,
+  variant: PoolVariant | null,
+) {
   const rows: PoolViewerDisclosureView[] = [];
-  if (tides !== null) rows.push({ id: "tides", tideCount: tides.tides.length, dealSize: tides.dealSize, copyCap: tides.cap, facetDrawnCount: tides.facetDrawnCount, facetAvailableCount: tides.facetAvailableCount });
-  if (tides === null && variant !== null) rows.push({ id: "algorithm", variant });
+  if (tides !== null)
+    rows.push({
+      id: "tides",
+      tideCount: tides.tides.length,
+      dealSize: tides.dealSize,
+      copyCap: tides.cap,
+      facetDrawnCount: tides.facetDrawnCount,
+      facetAvailableCount: tides.facetAvailableCount,
+    });
+  if (tides === null && variant !== null)
+    rows.push({ id: "algorithm", variant });
   return rows;
 }

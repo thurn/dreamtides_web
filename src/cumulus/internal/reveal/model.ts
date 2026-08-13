@@ -1,7 +1,10 @@
 import type { FrozenCardData } from "../../../types/cards";
 import type { CardId } from "../../../types/card-identity";
 import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
-import type { InfoCardProps, InfoCardVariant } from "../../components/overlay/InfoCard";
+import type {
+  InfoCardProps,
+  InfoCardVariant,
+} from "../../components/overlay/InfoCard";
 import type { GameCardSelection } from "../../components/card/CardView";
 import type { Glyph } from "../../primitives/glyph";
 import type { LocalizedString } from "@trox/runtime";
@@ -21,13 +24,13 @@ export type RevealInfoCardModel = Readonly<InfoCardProps>;
 
 export interface RevealGalleryActionModel {
   readonly glyph: Glyph;
-  readonly label?: LocalizedString;
-  readonly authoredLabel?: string;
+  readonly label: LocalizedString;
 }
 
-export type RevealDescriptionUnit =
-  | { readonly kind: "message"; readonly message: LocalizedString }
-  | { readonly kind: "authored"; readonly text: string };
+export type RevealDescriptionUnit = {
+  readonly kind: "message";
+  readonly message: LocalizedString;
+};
 
 export interface RevealGameCard {
   readonly kind: "gameCard";
@@ -50,11 +53,13 @@ export type RevealCard =
   | {
       /** The mounted source already contains the complete primary content. */
       readonly kind: "source";
-      readonly authoredDescription?: string;
-      readonly descriptionMessage?: LocalizedString;
+      readonly description: LocalizedString;
     }
   | RevealGameCard
-  | { readonly kind: "galleryAction"; readonly action: RevealGalleryActionModel }
+  | {
+      readonly kind: "galleryAction";
+      readonly action: RevealGalleryActionModel;
+    }
   | { readonly kind: "infoCard"; readonly card: RevealInfoCardModel };
 
 export interface RevealSpec {
@@ -77,14 +82,31 @@ export type RevealReason = "hover" | "focus" | "press";
  */
 export type RevealPlacementException = "augury-offer-above-source";
 export type RevealDismissalReason =
-  | "pointer-leave" | "pointer-cancel" | "movement" | "scroll" | "drag"
-  | "resize" | "orientation-change" | "window-blur" | "route-change"
-  | "source-unmount" | "release" | "escape" | "blur" | "replaced";
+  | "pointer-leave"
+  | "pointer-cancel"
+  | "movement"
+  | "scroll"
+  | "drag"
+  | "resize"
+  | "orientation-change"
+  | "window-blur"
+  | "route-change"
+  | "source-unmount"
+  | "release"
+  | "escape"
+  | "blur"
+  | "replaced";
 export type RevealActivationOutcome =
-  | "none" | "fired" | "suppressed-hold" | "suppressed-no-action"
+  | "none"
+  | "fired"
+  | "suppressed-hold"
+  | "suppressed-no-action"
   | "suppressed-cancelled";
 
-export interface RevealPoint { readonly x: number; readonly y: number }
+export interface RevealPoint {
+  readonly x: number;
+  readonly y: number;
+}
 
 export interface RevealTouchState {
   readonly source: RevealCoordinatorSource;
@@ -113,17 +135,65 @@ export interface RevealCoordinatorState {
 
 type Timestamped = { readonly timestamp: number };
 export type RevealCoordinatorEvent =
-  | (Timestamped & { readonly type: "pointer-enter"; readonly source: RevealCoordinatorSource; readonly pointerType: RevealPointerType; readonly hoverCapable: boolean })
-  | (Timestamped & { readonly type: "pointer-down"; readonly source: RevealCoordinatorSource; readonly pointerType: RevealPointerType; readonly pointerId: number; readonly point: RevealPoint; readonly hasAction: boolean })
-  | (Timestamped & { readonly type: "pointer-move"; readonly pointerId: number; readonly point: RevealPoint })
-  | (Timestamped & { readonly type: "pointer-up" | "pointer-cancel"; readonly pointerId: number })
-  | (Timestamped & { readonly type: "pointer-leave"; readonly pointerId: number; readonly source?: RevealCoordinatorSource })
-  | (Timestamped & { readonly type: "intent-elapsed"; readonly pointerId: number })
-  | (Timestamped & { readonly type: "focus" | "blur" | "source-unmount"; readonly source: RevealCoordinatorSource })
-  | (Timestamped & { readonly type: "escape" | "scroll" | "drag" | "resize" | "orientation-change" | "window-blur" | "route-change" });
+  | (Timestamped & {
+      readonly type: "pointer-enter";
+      readonly source: RevealCoordinatorSource;
+      readonly pointerType: RevealPointerType;
+      readonly hoverCapable: boolean;
+    })
+  | (Timestamped & {
+      readonly type: "pointer-down";
+      readonly source: RevealCoordinatorSource;
+      readonly pointerType: RevealPointerType;
+      readonly pointerId: number;
+      readonly point: RevealPoint;
+      readonly hasAction: boolean;
+    })
+  | (Timestamped & {
+      readonly type: "pointer-move";
+      readonly pointerId: number;
+      readonly point: RevealPoint;
+    })
+  | (Timestamped & {
+      readonly type: "pointer-up" | "pointer-cancel";
+      readonly pointerId: number;
+    })
+  | (Timestamped & {
+      readonly type: "pointer-leave";
+      readonly pointerId: number;
+      readonly source?: RevealCoordinatorSource;
+    })
+  | (Timestamped & {
+      readonly type: "intent-elapsed";
+      readonly pointerId: number;
+    })
+  | (Timestamped & {
+      readonly type: "focus" | "blur" | "source-unmount";
+      readonly source: RevealCoordinatorSource;
+    })
+  | (Timestamped & {
+      readonly type:
+        | "escape"
+        | "scroll"
+        | "drag"
+        | "resize"
+        | "orientation-change"
+        | "window-blur"
+        | "route-change";
+    });
 
-export interface RevealRect { readonly x: number; readonly y: number; readonly width: number; readonly height: number }
-export interface RevealSafeArea { readonly top: number; readonly right: number; readonly bottom: number; readonly left: number }
+export interface RevealRect {
+  readonly x: number;
+  readonly y: number;
+  readonly width: number;
+  readonly height: number;
+}
+export interface RevealSafeArea {
+  readonly top: number;
+  readonly right: number;
+  readonly bottom: number;
+  readonly left: number;
+}
 export interface RevealGeometrySnapshot {
   readonly viewport: {
     readonly layout: "mobile" | "desktop";

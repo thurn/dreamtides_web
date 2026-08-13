@@ -52,9 +52,9 @@ export interface DreamAvatarTideView {
   /** Stable id (a tide deck id) for the React key / QA hook. */
   id: string;
   /** Display name shown on the tide's reveal card. */
-  label: string;
+  label: LocalizedString;
   /** Description revealed through the disc's InfoCard reveal. */
-  description: string;
+  description: LocalizedString;
   /** Which of the five tides fixes the disc's icon + color. */
   tide: Tide;
 }
@@ -166,17 +166,17 @@ export function TidesEssenceBlock({
 /** One signature card (kept for the shared view type; unused by the carousel). */
 export interface DreamAvatarSignatureCardView {
   id: string;
-  name: string;
+  name: LocalizedString;
 }
 
 /** A single DreamAvatar offered on the select screen, as display data. */
 export interface DreamAvatarOfferView {
   id: string;
-  name: string;
-  title: string;
+  name: LocalizedString;
+  title: LocalizedString;
   imageNumber: string;
   portraitFocus?: DreamAvatarPortraitFocus;
-  renderedText: string;
+  renderedText: LocalizedString;
   startingEssence: number;
   signatureCards: DreamAvatarSignatureCardView[];
   tides: DreamAvatarTideView[];
@@ -209,7 +209,7 @@ export function JourneyStartGuideDialogue({
   readonly onShown?: () => void;
 }) {
   const visible = useDelayedTutorialSpeechBubbleVisibility(
-    dialogue.id ?? dialogue.model.text,
+    dialogue.id,
     dialogue.delaySeconds ?? 0,
   );
   useEffect(() => {

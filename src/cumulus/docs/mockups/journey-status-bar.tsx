@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // Full-screen mockup for JourneyStatusBar — the transparent journey HUD docked over
 // a real dreamscape backdrop. JourneyStatusBar positions itself against `stageRef`
 // (the screen root) and reveals its essence / DreamAvatar / dreamsign info cards
@@ -12,6 +13,7 @@ import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
 import { artRef } from "../../primitives/art";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
+import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
 
 export function JourneyStatusBarMockup() {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -51,10 +53,10 @@ export function JourneyStatusBarMockup() {
         deck={23}
         dreamAvatar={{
           id: "00000000-0000-4000-8000-000000000051",
-          name: "Threxan",
-          epithet: "the Resounding Wrath",
+          name: assertLocalized("Threxan"),
+          epithet: assertLocalized("the Resounding Wrath"),
           portrait: artRef.dreamAvatar("0025"),
-          ability: "At the start of your first turn, draw a card.",
+          ability: assertLocalized("At the start of your first turn, draw a card."),
         }}
         dreamsigns={[
           {
@@ -78,7 +80,7 @@ export function JourneyStatusBarMockup() {
             effectDescription:
               "When you play a character from your void, rematerialize it.",
           },
-        ]}
+        ].map(localizedDreamsignFixture)}
       />
 
     </div>

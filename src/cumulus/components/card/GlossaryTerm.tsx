@@ -7,12 +7,15 @@ import { Pressable } from "../../primitives/Pressable";
 import { revealEntityId } from "../../internal/reveal/identity";
 import type { Glyph } from "../../primitives/glyph";
 import { InlineGlyph } from "../typography/InlineGlyph";
+import type { LocalizedString } from "@trox/runtime";
+import { localizedSourceText } from "../../../runtime/localization/runtime";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export interface GlossaryTermProps {
   /** Canonical glossary meaning owned by this inline source. */
   entry: GlossaryEntry;
   /** Authored word form preserved in the surrounding sentence. */
-  text: string;
+  text: LocalizedString;
   /** Optional named glyph used in place of the authored text. */
   glyph?: Glyph;
   /** Optional emphasis inherited from the rules-text renderer. */
@@ -26,6 +29,7 @@ export function GlossaryTerm({
   glyph,
   emphasized = false,
 }: GlossaryTermProps) {
+  const resolve = useLocalizer();
   const binding = useRevealSource({
     identity: {
       entityType: "glossary-term",
@@ -36,8 +40,11 @@ export function GlossaryTerm({
         kind: "infoCard",
         card: {
           variant: "text",
-          title: glossaryEntryDisplayTitle(entry),
-          body: { kind: "rules", text: entry.definition },
+          title:
+            glossaryEntryDisplayTitle(entry) === undefined
+              ? undefined
+              : localizedSourceText(glossaryEntryDisplayTitle(entry)!),
+          body: { kind: "rules", text: localizedSourceText(entry.definition) },
         },
       },
       secondaries: [],
@@ -60,7 +67,11 @@ export function GlossaryTerm({
           : undefined,
       }}
     >
-      {glyph === undefined ? text : <InlineGlyph glyph={glyph} authoredLabel={text} />}
+      {glyph === undefined ? (
+        resolve(text)
+      ) : (
+        <InlineGlyph glyph={glyph} label={text} />
+      )}
     </Pressable>
   );
 }

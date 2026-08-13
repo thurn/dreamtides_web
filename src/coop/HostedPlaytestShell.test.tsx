@@ -29,7 +29,6 @@ vi.mock("../cumulus/components/overlay/GlassPanel", () => ({
     footer,
   }: {
     title?: LocalizedString;
-    authoredTitle?: string;
     children: ReactNode;
     footer?: ReactNode;
   }) => {
@@ -49,22 +48,16 @@ vi.mock("../cumulus/components/controls/GlassButton", () => ({
     label,
     onPress,
   }: {
-    label?: LocalizedString;
-    authoredLabel?: string;
+    label: LocalizedString;
     onPress: () => void;
   }) => {
     const resolve = useLocalizer();
-    return (
-      <button onClick={onPress}>
-        {label === undefined ? null : resolve(label)}
-      </button>
-    );
+    return <button onClick={onPress}>{resolve(label)}</button>;
   },
 }));
 
-const { HostedPlaytestShell: RealHostedPlaytestShell } = await import(
-  "./HostedPlaytestShell"
-);
+const { HostedPlaytestShell: RealHostedPlaytestShell } =
+  await import("./HostedPlaytestShell");
 
 function HostedPlaytestShell(
   props: ComponentProps<typeof RealHostedPlaytestShell>,

@@ -103,7 +103,7 @@ export function JourneyApp({
   const [loadJourneyStatus, setLoadJourneyStatus] = useState<
     "idle" | "pending" | "done" | "error"
   >(loadJourneyName === null ? "idle" : "pending");
-  const [loadJourneyError, setLoadJourneyError] = useState<string | null>(null);
+  const [, setLoadJourneyError] = useState<string | null>(null);
 
   // `?goto=<scene>`: replace the freshly created room's empty journey state with
   // one parked on a developer QA scene (e.g. `?goto=atlas`), letting browser QA
@@ -388,7 +388,10 @@ export function JourneyApp({
             "The saved journey could not be opened.",
             "Recoverable error explanation when a saved Journey cannot be opened.",
           ),
-          detail: loadJourneyError ?? "Failed to load saved journey.",
+          detail: tx(
+            "Try again, or choose another saved journey.",
+            "Recovery guidance after a saved Journey fails to load.",
+          ),
         }}
       />
     );
@@ -643,7 +646,10 @@ export default function App({
             "The journey content could not be prepared.",
             "Recoverable error explanation when Journey content fails to load.",
           ),
-          detail: loadError,
+          detail: tx(
+            "Reload the app to try preparing Journey content again.",
+            "Recovery guidance after Journey content fails to load.",
+          ),
           actions: [
             {
               id: "primary",
@@ -703,7 +709,10 @@ export default function App({
             "Configuration-error title when the shared-game Firebase service cannot initialize.",
           ),
           message: firebaseSetupHelp(runtimeConfig.databaseMode),
-          detail: firebaseError,
+          detail: tx(
+            "Check this build’s Firebase configuration before trying again.",
+            "Recovery guidance after Firebase initialization fails.",
+          ),
         }}
       />
     );

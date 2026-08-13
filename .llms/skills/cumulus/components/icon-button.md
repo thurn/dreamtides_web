@@ -25,8 +25,7 @@ The compact glyph-only glass disc, with placement-aware recipes for scene media 
 | `ariaExpanded` | `boolean` | no | — | When the disc is a disclosure trigger, its `aria-expanded` state (whether the surface it controls is open). Omitted for a plain action button. |
 | `ariaControls` | `string` | no | — | Id of the disclosure surface controlled by this button. |
 | `testId` | `string` | no | — | A `data-testid` for selecting the disc in tests. |
-| `label` | `LocalizedString` | no | — | Localized accessible name forwarded unresolved to the final button. |
-| `authoredLabel` | `string` | no | — | Canonical authored or developer-only accessible name. |
+| `label` | `LocalizedString` | yes | — | Localized accessible name forwarded unresolved to the final button. |
 
 ## Usage
 
@@ -38,7 +37,7 @@ The default disc: `md` (48px) with a centered glyph. `label` is its accessible n
 import { IconButton } from "src/cumulus/components/controls/IconButton";
 import { GLYPHS } from "src/cumulus/primitives/glyph";
 
-<IconButton glyph={GLYPHS.close} label="Close deck" onPress={closeViewer} />
+<IconButton glyph={GLYPHS.close} label={assertLocalized("Close deck")} onPress={closeViewer} />
 ```
 
 ### On glass
@@ -48,7 +47,7 @@ Use `placement="onGlass"` for a disc nested inside a glass panel.
 ```tsx
 <IconButton
   glyph={GLYPHS.close}
-  label="Close deck"
+  label={assertLocalized("Close deck")}
   placement="onGlass"
   onPress={closeViewer}
 />
@@ -62,7 +61,7 @@ Use `placement="onGlass"` for a disc nested inside a glass panel.
 <IconButton
   size="sm"
   glyph={GLYPHS.close}
-  label="Close deck"
+  label={assertLocalized("Close deck")}
   onPress={closeViewer}
 />
 ```
@@ -75,7 +74,7 @@ Use `overlayGlyph` for one smaller semantic mark superimposed within the primary
 <IconButton
   glyph={GLYPHS.refresh}
   overlayGlyph={GLYPHS.bug}
-  label="Reroll offers"
+  label={assertLocalized("Reroll offers")}
   onPress={rerollOffers}
 />
 ```

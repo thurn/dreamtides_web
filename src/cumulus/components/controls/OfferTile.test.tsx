@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -375,14 +376,14 @@ describe("OfferTile", () => {
       kind: "dreamsign-gift",
       dreamsign: {
         id: "c706d0ba-2f41-4b14-95d8-db168ac6246c",
-        name: "Amplified Acorn",
+        name: assertLocalized("Amplified Acorn"),
         art: { kind: "dreamsign", imageName: "acorn_gold.png" },
       },
     };
     const addSite: OfferTileModel = {
       id: "add-site",
       kind: "add-site",
-      site: { id: "Duplication", name: "Duplication", glyph: GLYPHS.copy },
+      site: { id: "Duplication", name: assertLocalized("Duplication"), glyph: GLYPHS.copy },
     };
     const container = document.createElement("div");
     document.body.append(container);

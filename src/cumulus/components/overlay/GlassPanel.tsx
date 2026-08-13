@@ -64,22 +64,16 @@ export type GlassPanelTitleVoice = "standard" | "hero";
 
 /** One text run in structured panel copy. */
 export type GlassPanelTextSegment =
-  | { kind: "text"; text: string }
-  | { kind: "entity"; text: string };
+  | { kind: "text"; text: LocalizedString }
+  | { kind: "entity"; text: LocalizedString };
 
 export interface GlassPanelProps {
   /** Optional uppercase context line rendered above the title. */
   eyebrow?: LocalizedString;
-  /** Context line supplied by canonical authored or developer-only copy. */
-  authoredEyebrow?: string;
   /** Optional plain panel title. */
   title?: LocalizedString;
-  /** Optional title supplied by canonical authored content. */
-  authoredTitle?: string;
   /** Optional supporting line rendered beneath the title. */
   subtitle?: LocalizedString;
-  /** Optional supporting line supplied by canonical authored content. */
-  authoredSubtitle?: string;
   /** Optional structured subtitle whose entity runs receive the canonical underline. */
   structuredSubtitle?: readonly GlassPanelTextSegment[];
   /** Semantic heading element for the title. Defaults to `h2`. */
@@ -138,7 +132,13 @@ function accessoryNode(
   }
   if (accessory.kind === "iconButtonGroup") {
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: token("--space-xs") }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: token("--space-xs"),
+        }}
+      >
         {accessory.buttons.map((button, index) => (
           <IconButton
             {...button}
@@ -152,14 +152,22 @@ function accessoryNode(
   return <IconButton {...accessory.button} placement={placement} />;
 }
 
-function structuredTextNode(text: readonly GlassPanelTextSegment[]): ReactNode {
+function structuredTextNode(
+  text: readonly GlassPanelTextSegment[],
+  resolve: (message: LocalizedString) => string,
+): ReactNode {
   return text.map((segment, index) =>
     segment.kind === "entity" ? (
-      <u key={`${String(index)}:${segment.text}`} data-glass-panel-subtitle-entity="">
-        {segment.text}
+      <u
+        key={`${String(index)}:${segment.kind}`}
+        data-glass-panel-subtitle-entity=""
+      >
+        {resolve(segment.text)}
       </u>
     ) : (
-      segment.text
+      <span key={`${String(index)}:${segment.kind}`}>
+        {resolve(segment.text)}
+      </span>
     ),
   );
 }
@@ -172,11 +180,8 @@ function structuredTextNode(text: readonly GlassPanelTextSegment[]): ReactNode {
  */
 export function GlassPanel({
   eyebrow,
-  authoredEyebrow,
   title,
-  authoredTitle,
   subtitle,
-  authoredSubtitle,
   structuredSubtitle,
   headingLevel = "h2",
   titleVoice = "standard",
@@ -193,17 +198,6 @@ export function GlassPanel({
   testId,
 }: GlassPanelProps): ReactElement {
   const resolve = useLocalizer();
-  if (eyebrow !== undefined && authoredEyebrow !== undefined) {
-    throw new Error("GlassPanel accepts either eyebrow or authoredEyebrow, not both.");
-  }
-  if (title !== undefined && authoredTitle !== undefined) {
-    throw new Error("GlassPanel accepts either title or authoredTitle, not both.");
-  }
-  if (subtitle !== undefined && authoredSubtitle !== undefined) {
-    throw new Error(
-      "GlassPanel accepts either subtitle or authoredSubtitle, not both.",
-    );
-  }
   const [besideCutout, setBesideCutout] = useState(false);
   useEffect(() => {
     setBesideCutout(cutoutAwareAccessory && hasInjectedDisplayCutout());
@@ -212,11 +206,8 @@ export function GlassPanel({
   const Heading = headingLevel;
   const hasHeader =
     eyebrow !== undefined ||
-    authoredEyebrow !== undefined ||
     title !== undefined ||
-    authoredTitle !== undefined ||
     subtitle !== undefined ||
-    authoredSubtitle !== undefined ||
     structuredSubtitle !== undefined ||
     rightAccessory !== undefined;
   const accessory =
@@ -305,11 +296,13 @@ export function GlassPanel({
               display: "flex",
               flexDirection: "column",
               gap:
-                titleVoice === "hero" ? token("--space-xs") : token("--space-xxs"),
+                titleVoice === "hero"
+                  ? token("--space-xs")
+                  : token("--space-xxs"),
               minWidth: 0,
             }}
           >
-            {(eyebrow !== undefined || authoredEyebrow !== undefined) && (
+            {eyebrow !== undefined && (
               <span
                 style={{
                   font: token("--t-eyebrow"),
@@ -318,10 +311,10 @@ export function GlassPanel({
                   textTransform: "uppercase",
                 }}
               >
-                {authoredEyebrow ?? resolve(eyebrow!)}
+                {resolve(eyebrow)}
               </span>
             )}
-            {title !== undefined || authoredTitle !== undefined ? (
+            {title !== undefined ? (
               <Heading
                 style={{
                   margin: 0,
@@ -333,12 +326,10 @@ export function GlassPanel({
                   letterSpacing: 0,
                 }}
               >
-                {title === undefined ? authoredTitle : resolve(title)}
+                {resolve(title)}
               </Heading>
             ) : null}
-            {(subtitle !== undefined ||
-              authoredSubtitle !== undefined ||
-              structuredSubtitle !== undefined) && (
+            {(subtitle !== undefined || structuredSubtitle !== undefined) && (
               <p
                 style={{
                   margin: 0,
@@ -352,9 +343,9 @@ export function GlassPanel({
               >
                 {structuredSubtitle === undefined
                   ? subtitle === undefined
-                    ? authoredSubtitle ?? null
+                    ? null
                     : resolve(subtitle)
-                  : structuredTextNode(structuredSubtitle)}
+                  : structuredTextNode(structuredSubtitle, resolve)}
               </p>
             )}
           </div>

@@ -3,17 +3,13 @@ import type { LocalizedString } from "@trox/runtime";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import type { Glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import {
-  CARD_ASPECT_RATIO,
-  CARD_CORNER_RADIUS,
-} from "./card-aspect";
+import { CARD_ASPECT_RATIO, CARD_CORNER_RADIUS } from "./card-aspect";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export interface GalleryActionCardProps {
   readonly action: {
     readonly glyph: Glyph;
-    readonly label?: LocalizedString;
-    readonly authoredLabel?: string;
+    readonly label: LocalizedString;
   };
   readonly width: string | number;
 }
@@ -23,11 +19,9 @@ export function GalleryActionCard({
   action,
   width,
 }: GalleryActionCardProps): ReactElement {
-  if ((action.label === undefined) === (action.authoredLabel === undefined)) {
-    throw new Error("GalleryActionCard requires exactly one label source.");
-  }
   const resolve = useLocalizer();
-  const resolvedWidth = typeof width === "number" ? `${String(width)}px` : width;
+  const resolvedWidth =
+    typeof width === "number" ? `${String(width)}px` : width;
   return (
     <div
       style={{
@@ -77,7 +71,7 @@ export function GalleryActionCard({
             textAlign: "center",
           }}
         >
-          {action.label === undefined ? action.authoredLabel : resolve(action.label)}
+          {resolve(action.label)}
         </span>
       </div>
     </div>

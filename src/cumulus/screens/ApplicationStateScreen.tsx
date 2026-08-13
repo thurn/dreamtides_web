@@ -30,8 +30,7 @@ export interface ApplicationStateAction {
 interface ApplicationStateBase {
   readonly title: LocalizedString;
   readonly message: LocalizedString;
-  readonly detailMessage?: LocalizedString;
-  readonly detail?: string;
+  readonly detail?: LocalizedString;
   readonly actions?: readonly ApplicationStateAction[];
 }
 
@@ -154,8 +153,7 @@ export function ApplicationStateScreen({
             {view.kind === "contentConfigGate" && (
               <ComparisonTable rows={view.comparison} />
             )}
-            {(view.detailMessage !== undefined ||
-              view.detail !== undefined) && (
+            {view.detail !== undefined && (
               <p
                 role={
                   view.kind === "recoverableError" ||
@@ -171,9 +169,7 @@ export function ApplicationStateScreen({
                   overflowWrap: "anywhere",
                 }}
               >
-                {view.detailMessage === undefined
-                  ? view.detail
-                  : resolve(view.detailMessage)}
+                {resolve(view.detail)}
               </p>
             )}
             {view.actions !== undefined && view.actions.length > 0 && (

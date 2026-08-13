@@ -116,8 +116,10 @@ function makeSide(
     status: {
       dreamAvatar: {
         imageNumber: owner === "enemy" ? "0042" : "0007",
-        name: owner === "enemy" ? "Enemy Avatar" : "Player Avatar",
-        title: "Fixture",
+        name: assertLocalized(
+          owner === "enemy" ? "Enemy Avatar" : "Player Avatar",
+        ),
+        title: assertLocalized("Fixture"),
       },
       currentEnergy: owner === "enemy" ? 2 : 3,
       maxEnergy: owner === "enemy" ? 4 : 3,
@@ -754,9 +756,7 @@ describe("MobileBattleScreen", () => {
       updatedBattlefield?.querySelector("[data-battle-card-status]"),
     ).toBeNull();
     const updatedDescription = accessibleDescription(
-      updatedBattlefield?.querySelector<HTMLElement>(
-        "[data-game-card-source]",
-      ),
+      updatedBattlefield?.querySelector<HTMLElement>("[data-game-card-source]"),
     );
     expect(updatedDescription.trim()).not.toBe("");
     expect(updatedDescription).not.toBe(battlefieldDescription);
@@ -974,8 +974,8 @@ describe("MobileBattleScreen", () => {
           cardId,
           displaySnapshot: {
             id: cardId,
-            name: "Fixture Beacon",
-            renderedText: "Draw a card.",
+            name: assertLocalized("Fixture Beacon"),
+            renderedText: assertLocalized("Draw a card."),
             energyAdded: 2,
             imageNumber: 42,
           },
@@ -1045,8 +1045,8 @@ describe("MobileBattleScreen", () => {
           cardId,
           displaySnapshot: {
             id: cardId,
-            name: "Fixture Beacon",
-            renderedText: "Draw a card.",
+            name: assertLocalized("Fixture Beacon"),
+            renderedText: assertLocalized("Draw a card."),
             energyAdded: 2,
             imageNumber: 42,
           },
@@ -2516,7 +2516,7 @@ describe("MobileBattleScreen", () => {
       ...view,
       cardPicker: {
         key: "prompt-42",
-        label: { kind: "message", message: assertLocalized("Choose an option") },
+        label: assertLocalized("Choose an option"),
         side: "player",
         candidates: view.playerHand
           .slice(0, 2)
@@ -2613,7 +2613,7 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: "prompt-optional",
-          label: { kind: "message", message: assertLocalized("Choose an option") },
+          label: assertLocalized("Choose an option"),
           side: "player",
           candidates: [
             makePickerCandidate(view.playerHand[0], "player", "hand"),
@@ -2658,10 +2658,10 @@ describe("MobileBattleScreen", () => {
         ...makeView(),
         choicePrompt: {
           key: "prompt-choice-42",
-          label: { kind: "message", message: assertLocalized("Choose an option") },
+          label: assertLocalized("Choose an option"),
           options: [
-            { label: { kind: "message", message: assertLocalized("Yes") } },
-            { label: { kind: "message", message: assertLocalized("Skip") } },
+            { label: assertLocalized("Yes") },
+            { label: assertLocalized("Skip") },
           ],
           canResolve: true,
         },
@@ -2721,7 +2721,7 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: "prompt-enemy",
-          label: { kind: "message", message: assertLocalized("Choose an option") },
+          label: assertLocalized("Choose an option"),
           side: "enemy",
           candidates: view.enemyHand.map((card) =>
             makePickerCandidate(card, "enemy", "hand"),
@@ -2812,7 +2812,7 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: "prompt-battlefield",
-          label: { kind: "message", message: assertLocalized("Choose an option") },
+          label: assertLocalized("Choose an option"),
           side: "player",
           candidates: [
             makePickerCandidate(enemyCard, "enemy", "frontRank"),
@@ -2885,8 +2885,10 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: "prompt-gallery",
-          label: { kind: "message", message: assertLocalized("Choose an option") },
-          subtitle: { kind: "message", message: assertLocalized("Choose an available option to continue.") },
+          label: assertLocalized("Choose an option"),
+          subtitle: assertLocalized(
+            "Choose an available option to continue.",
+          ),
           side: "player",
           candidates,
           candidateIds: candidates.map((candidate) => candidate.instanceId),
@@ -2970,7 +2972,7 @@ describe("MobileBattleScreen", () => {
       ...view,
       cardPicker: {
         key: "prompt-mobile-gallery",
-        label: { kind: "message", message: assertLocalized("Choose an option") },
+        label: assertLocalized("Choose an option"),
         side: "player",
         candidates: [candidate],
         candidateIds: [candidate.instanceId],
@@ -3006,7 +3008,7 @@ describe("MobileBattleScreen", () => {
       ...view,
       cardPicker: {
         key: "prompt-highlighted",
-        label: { kind: "message", message: assertLocalized("Choose an option") },
+        label: assertLocalized("Choose an option"),
         side: "player",
         candidates: [makePickerCandidate(highlighted, "player", "hand", true)],
         candidateIds: [highlighted.id],
@@ -3052,7 +3054,7 @@ describe("MobileBattleScreen", () => {
         ...view,
         cardPicker: {
           key: "prompt-empty",
-          label: { kind: "message", message: assertLocalized("Choose an option") },
+          label: assertLocalized("Choose an option"),
           side: "player",
           candidates: [],
           candidateIds: [],
@@ -3514,8 +3516,8 @@ describe("MobileBattleScreen", () => {
           cardId,
           displaySnapshot: {
             id: cardId,
-            name: "Fixture Beacon",
-            renderedText: "Draw a card.",
+            name: assertLocalized("Fixture Beacon"),
+            renderedText: assertLocalized("Draw a card."),
             energyAdded: 2,
             imageNumber: 42,
           },
@@ -3551,7 +3553,7 @@ describe("MobileBattleScreen", () => {
     const view: MobileBattleView = {
       ...makeView(),
       aiApproval: {
-        description: "Play a fixture card to B2.",
+        description: assertLocalized("Play a fixture card to B2."),
         canReject: true,
       },
     };
@@ -3609,7 +3611,7 @@ describe("MobileBattleScreen", () => {
     const view: MobileBattleView = {
       ...makeView(),
       aiApproval: {
-        description: "Pass from Day to Dusk.",
+        description: assertLocalized("Pass from Day to Dusk."),
         canReject: false,
       },
     };
@@ -3943,7 +3945,7 @@ describe("MobileBattleScreen", () => {
             rank: "back",
             slotId: "player-back-filled",
           },
-          figmentLabel: "Shadow",
+          figmentLabel: assertLocalized("Shadow"),
           status: "eligible",
           addedSpark: 2,
           requiresConfirmation: false,
@@ -4022,7 +4024,7 @@ describe("MobileBattleScreen", () => {
             rank: "back",
             slotId: "player-back-filled",
           },
-          figmentLabel: "Shadow",
+          figmentLabel: assertLocalized("Shadow"),
           status: "blocked-exhaustion",
           addedSpark: 0,
           requiresConfirmation: false,
@@ -4086,7 +4088,7 @@ describe("MobileBattleScreen", () => {
             rank: "back",
             slotId: "player-back-filled",
           },
-          figmentLabel: "Legionnaire",
+          figmentLabel: assertLocalized("Legionnaire"),
           status: "eligible",
           addedSpark: 1,
           requiresConfirmation: true,

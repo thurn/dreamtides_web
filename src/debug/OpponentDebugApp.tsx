@@ -1,3 +1,4 @@
+import { assertLocalized } from "@trox/runtime";
 import { useEffect, useMemo, useState } from "react";
 import type { CardData } from "../types/cards";
 import type {
@@ -536,8 +537,8 @@ export default function OpponentDebugApp() {
                       <DreamAvatarPortrait
                         dreamAvatar={{
                           imageNumber: generation.dreamAvatar.imageNumber,
-                          name: generation.dreamAvatar.name,
-                          title: generation.dreamAvatar.title,
+                          name: assertLocalized(generation.dreamAvatar.name),
+                          title: assertLocalized(generation.dreamAvatar.title),
                         }}
                         variant="panel"
                       />

@@ -1,12 +1,25 @@
+import { assertLocalized } from "@trox/runtime";
 import { renderToStaticMarkup } from "react-dom/server";
+import type { ReactNode } from "react";
 import { describe, expect, it } from "vitest";
+import { TroxLocalizationProvider } from "../../../runtime/localization/context";
 import { GLYPHS } from "../../primitives/glyph";
 import { InlineGlyph } from "./InlineGlyph";
 
+function renderLocalizedToStaticMarkup(node: ReactNode): string {
+  return renderToStaticMarkup(
+    <TroxLocalizationProvider>{node}</TroxLocalizationProvider>,
+  );
+}
+
 describe("InlineGlyph", () => {
   it("centers a square em box on the surrounding font's capital height", () => {
-    const markup = renderToStaticMarkup(
-      <InlineGlyph glyph={GLYPHS.points} color="text-primary" authoredLabel="points" />,
+    const markup = renderLocalizedToStaticMarkup(
+      <InlineGlyph
+        glyph={GLYPHS.points}
+        color="text-primary"
+        label={assertLocalized("points")}
+      />,
     );
 
     expect(markup).toMatch(/^<span /);
@@ -22,7 +35,7 @@ describe("InlineGlyph", () => {
   });
 
   it("inherits color and hides a glyph already named by surrounding copy", () => {
-    const markup = renderToStaticMarkup(
+    const markup = renderLocalizedToStaticMarkup(
       <InlineGlyph glyph={GLYPHS.sparkInline} />,
     );
 
@@ -31,8 +44,8 @@ describe("InlineGlyph", () => {
   });
 
   it("constrains the memory mark to the one-em metric box", () => {
-    const markup = renderToStaticMarkup(
-      <InlineGlyph glyph={GLYPHS.memory} authoredLabel="memory" />,
+    const markup = renderLocalizedToStaticMarkup(
+      <InlineGlyph glyph={GLYPHS.memory} label={assertLocalized("memory")} />,
     );
 
     expect(markup).toContain('class="bxf bx-brain"');
