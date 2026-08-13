@@ -176,8 +176,8 @@ function EdgeChevron({
         glyph={dir === "left" ? GLYPHS.chevronLeft : GLYPHS.chevronRight}
         label={
           dir === "left"
-            ? tx("Previous", "Command that moves to the previous Dream Avatar offer.")
-            : tx("Next", "Command that moves to the next Dream Avatar offer.")
+            ? tx("Previous", "[dream-avatar] [journey] Command that moves to the previous Dream Avatar offer.")
+            : tx("Next", "[dream-avatar] [journey] Command that moves to the next Dream Avatar offer.")
         }
         onPress={onClick}
       />
@@ -273,7 +273,7 @@ export function CarouselSelect({
       <ScreenHeader
         title={tx(
           "Choose Your Avatar",
-          "Title and actions on the Dream Avatar selection screen.",
+          "[dream-avatar] [journey] Title and actions on the Dream Avatar selection screen.",
         )}
       />
       {guideDialogue !== undefined && (
@@ -288,7 +288,7 @@ export function CarouselSelect({
           onReroll={onReroll}
           label={tx(
             "Reroll Avatars",
-            "Player-facing message for the journey start reroll action interface state.",
+            "[journey] Start reroll action.",
           )}
         />
       )}
@@ -335,7 +335,7 @@ export function CarouselSelect({
             dreamAvatar={activeDreamAvatar}
             chooseLabel={tx(
               "Choose",
-              "Command that chooses the currently selected Dream Avatar or starting-deck option.",
+              "[dream-avatar] [journey] Command that chooses the currently selected Dream Avatar or starting-deck option.",
             )}
             onChoose={() => {
               onPick(activeDreamAvatar.id);

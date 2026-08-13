@@ -150,16 +150,16 @@ export function CardStatOrb({
     (variant === "energy"
       ? tx(
           "Energy cost",
-          "Accessible name for the numeric Energy-cost orb on a card. The visible numeral is inside the same labeled element.",
+          "[accessibility] Name for the numeric Energy-cost orb on a card. The visible numeral is inside the same labeled element.",
         )
       : variant === "spark"
         ? tx(
             meaning("card-spark-stat-name", "Spark"),
-            "Accessible name for the numeric Spark orb on a card. The visible numeral is inside the same labeled element.",
+            "[accessibility] Name for the numeric Spark orb on a card. The visible numeral is inside the same labeled element.",
           )
         : tx(
             "Energy added",
-            "Accessible name for the numeric Energy-added orb on a Dreamwell card. The visible numeral is inside the same labeled element.",
+            "[accessibility] Name for the numeric Energy-added orb on a Dreamwell card. The visible numeral is inside the same labeled element.",
           ));
   const icon = ICON_BY_VARIANT[variant];
   // The digit box edge equals the CSS digit size; the digit sits over the
@@ -215,7 +215,7 @@ export function CardStatOrb({
             txa(
               "Changed by {form_name}",
               { form_name: opaque(changeBadge.accessibleName) },
-              "Accessible sentence naming the Transfiguration form that changed this card stat. form_name is the independently localized proper name of the form and is grammatically invariant here.",
+              "[accessibility] [transfiguration] Sentence naming the Transfiguration form that changed this card stat. form_name is the independently localized proper name of the form and is grammatically invariant here.",
             ),
           )}
         </span>

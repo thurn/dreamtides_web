@@ -69,37 +69,37 @@ function eyebrowForKind(kind: ApplicationStateView["kind"]): LocalizedString {
     case "roomCreation":
       return tx(
         meaning("product-eyebrow", "Dreamtides"),
-        "Product eyebrow above application loading and shared-room creation states.",
+        "[loading] Product eyebrow above application loading and shared-room creation states.",
       );
     case "recoverableError":
       return tx(
         "Journey Status",
-        "Eyebrow above a recoverable Journey state failure.",
+        "[journey] Eyebrow above a recoverable Journey state failure.",
       );
     case "fatalConfiguration":
       return tx(
         "Configuration",
-        "Eyebrow above a fatal application configuration problem.",
+        "[ui] Eyebrow above a fatal application configuration problem.",
       );
     case "versionGate":
       return tx(
         "Game Version",
-        "Eyebrow above a shared room reducer-version compatibility gate.",
+        "[coop] Eyebrow above a shared room reducer-version compatibility gate.",
       );
     case "contentConfigGate":
       return tx(
         "Game Settings",
-        "Eyebrow above a shared room content-settings comparison gate.",
+        "[coop] Eyebrow above a shared room content-settings comparison gate.",
       );
     case "unreadableRoom":
       return tx(
         "Game Data",
-        "Eyebrow above a shared room whose persisted data cannot be decoded.",
+        "[coop] Eyebrow above a shared room whose persisted data cannot be decoded.",
       );
     case "unreachableRoom":
       return tx(
         "Game Connection",
-        "Eyebrow above a shared room connection failure.",
+        "[coop] Eyebrow above a shared room connection failure.",
       );
   }
 }
@@ -245,7 +245,7 @@ function ComparisonTable({
         {resolve(
           tx(
             "This Game",
-            "Comparison-table heading for the shared room's expected content configuration.",
+            "[coop] Comparison-table heading for the shared room's expected content configuration.",
           ),
         )}
       </dt>
@@ -253,7 +253,7 @@ function ComparisonTable({
         {resolve(
           tx(
             "Yours",
-            "Comparison-table heading for the local client's content configuration.",
+            "[ui] Comparison-table heading for the local client's content configuration.",
           ),
         )}
       </dt>

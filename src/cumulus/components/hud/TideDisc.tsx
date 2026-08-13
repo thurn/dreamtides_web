@@ -68,7 +68,7 @@ export function TideDisc({ tide, id, label, description }: TideDiscProps) {
       ariaLabelMessage={txa(
         "Tide: {tide_name}",
         { tide_name: opaque(label) },
-        "Accessible name for an interactive Tide object. tide_name is its canonical authored display name and has unknown grammatical gender.",
+        "[accessibility] Name for an interactive Tide object. tide_name is its canonical authored display name and has unknown grammatical gender.",
       )}
       tabIndex={0}
       style={{

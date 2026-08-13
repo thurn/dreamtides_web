@@ -33,11 +33,11 @@ export function VersionGateScreen({
         kind: "versionGate",
         title: tx(
           "A New Version Was Deployed",
-          "Title for a shared-room gate when the room uses an incompatible reducer version.",
+          "[coop] Title for a shared-room gate when the room uses an incompatible reducer version.",
         ),
         message: tx(
           "This game was started on an earlier build. Start a fresh game on the current version.",
-          "Explanation that an incompatible shared room must be replaced with a fresh game on the current build.",
+          "[coop] Explanation that an incompatible shared room must be replaced with a fresh game on the current build.",
         ),
         actions: [
           {
@@ -46,11 +46,11 @@ export function VersionGateScreen({
               status === "creating"
                 ? tx(
                     "Starting…",
-                    "Disabled action label while a replacement shared room is being created.",
+                    "[coop] Disabled action label while a replacement shared room is being created.",
                   )
                 : tx(
                     "Create New Game",
-                    "Action that leaves an unavailable or incompatible room and creates a fresh shared game.",
+                    "[coop] Action that leaves an unavailable or incompatible room and creates a fresh shared game.",
                   ),
             disabled: status === "creating",
             onPress: handleStartNewGame,

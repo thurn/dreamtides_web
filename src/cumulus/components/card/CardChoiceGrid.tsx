@@ -42,7 +42,7 @@ const OPERATION_PRESENTATION = {
   purge: {
     message: tx(
       "This card will be purged",
-      "Accessible status on a selected card marked for a pending purge operation.",
+      "[accessibility] Status on a selected card marked for a pending purge operation.",
     ),
     glyph: GLYPHS.trash,
     tone: "danger",
@@ -50,7 +50,7 @@ const OPERATION_PRESENTATION = {
   copy: {
     message: tx(
       "This card will be copied",
-      "Accessible status on a selected card marked for a pending copy operation.",
+      "[accessibility] Status on a selected card marked for a pending copy operation.",
     ),
     glyph: GLYPHS.copy,
     tone: "selected",
@@ -58,7 +58,7 @@ const OPERATION_PRESENTATION = {
   transfigure: {
     message: tx(
       "This card will be transfigured",
-      "Accessible status on a selected card marked for a pending Transfiguration operation.",
+      "[accessibility] [transfiguration] Status on a selected card marked for a pending Transfiguration operation.",
     ),
     glyph: GLYPHS.transfigurationSite,
     tone: "selected",
@@ -66,7 +66,7 @@ const OPERATION_PRESENTATION = {
   change: {
     message: tx(
       "This card will be changed",
-      "Accessible status on a selected card marked for another pending card-change operation.",
+      "[accessibility] Status on a selected card marked for another pending card-change operation.",
     ),
     glyph: GLYPHS.refreshCcw,
     tone: "selected",
@@ -488,7 +488,7 @@ function CardChoiceQuantityBadge({
         txa(
           plural(count, [one("{count} copy"), other("{count} copies")]),
           { count },
-          "Accessible label on a selected Augury card showing how many copies the offer grants. count is a positive integer; the numeral is visible in the badge and is repeated here because this message is exposed only to assistive technology.",
+          "[accessibility] [augury] Label on a selected Augury card showing how many copies the offer grants. count is a positive integer; the numeral is visible in the badge and is repeated here because this message is exposed only to assistive technology.",
         ),
       )}
       data-card-choice-quantity-badge=""

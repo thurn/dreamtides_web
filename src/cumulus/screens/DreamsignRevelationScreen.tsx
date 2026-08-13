@@ -173,11 +173,11 @@ export function DreamsignRevelationScreen({
           onCancel={onCancelPurge}
           cancelLabel={tx(
             meaning("dreamsign-revelation-cancel", "Cancel"),
-            "Player-facing message for the dreamsign revelation cancel action interface state.",
+            "[dreamsign] Revelation cancel action.",
           )}
           closeLabel={tx(
             "Cancel replacement",
-            "Player-facing message for the dreamsign revelation cancel replacement action interface state.",
+            "[dreamsign] Revelation cancel replacement action.",
           )}
         />
       )}
@@ -503,7 +503,7 @@ function OfferStack({
         <GlassButton
           label={tx(
             "Decline Offer",
-            "Command that declines the current site offer and leaves without taking its reward.",
+            "[ui] Action declining the current site offer and leaving without its reward.",
           )}
           onPress={onSkip}
           disabled={disabled}

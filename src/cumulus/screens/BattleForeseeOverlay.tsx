@@ -349,7 +349,7 @@ export function BattleForeseeOverlay({
       title={txa(
           "Foresee {count}",
           { count },
-          "Title of the Foresee overlay. count is the positive number of cards the player may inspect and reorder.",
+          "[battle] Title of the Foresee overlay. count is the positive number of cards the player may inspect and reorder.",
         )}
       desktopCenterTarget="battlefield"
     >
@@ -376,7 +376,7 @@ export function BattleForeseeOverlay({
             >
               {resolve(tx(
                 "Triggered By",
-                "Player-facing message for the battle foresee triggered by interface state.",
+                "[battle] Foresee triggered by.",
               ))}
             </span>
             <div style={{ width: sourceCardWidthPx, maxWidth: "100%" }}>
@@ -398,7 +398,7 @@ export function BattleForeseeOverlay({
             size="sm"
             label={tx(
                 "Foresee 1 fewer",
-                "Player-facing message for the battle foresee less action interface state.",
+                "[battle] Foresee less action.",
               )}
             placement="onGlass"
             disabled={count <= minimumCount}
@@ -409,7 +409,7 @@ export function BattleForeseeOverlay({
             size="sm"
             label={tx(
                 "Foresee 1 more",
-                "Player-facing message for the battle foresee more action interface state.",
+                "[battle] Foresee more action.",
               )}
             placement="onGlass"
             disabled={count >= allCardIds.length}
@@ -432,7 +432,7 @@ export function BattleForeseeOverlay({
             <div data-foresee-indicator="deck" style={indicatorStyle}>
               {resolve(tx(
                 "Deck",
-                "Player-facing message for the battle foresee deck destination interface state.",
+                "[battle] Foresee deck destination.",
               ))}
             </div>
 
@@ -479,7 +479,7 @@ export function BattleForeseeOverlay({
             >
               {resolve(tx(
                 meaning("foresee-void-destination", "Void"),
-                "Player-facing message for the battle foresee void destination interface state.",
+                "[battle] Foresee void destination.",
               ))}
             </div>
           </div>
@@ -489,7 +489,7 @@ export function BattleForeseeOverlay({
           <GlassButton
             label={tx(
               "Confirm",
-              "Player-facing message for the site confirm interface state.",
+              "[ui] Action confirming the current selection.",
             )}
             placement="onGlass"
             variant="accent"

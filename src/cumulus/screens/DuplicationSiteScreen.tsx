@@ -107,28 +107,28 @@ export function DuplicationSiteScreen({
             <CardPickerPanel
               title={tx(
                   "Duplication",
-                  "Title of the card picker at a Duplication site.",
+                  "[ui] Title of the card picker at a Duplication site.",
                 )}
               subtitle={
                 !view.ready
-                  ? tx("Gathering possibilities…", "Loading status while Duplication choices are prepared.")
+                  ? tx("Gathering possibilities…", "[loading] Loading status while Duplication choices are prepared.")
                   : view.isEnhanced
-                    ? tx("Choose any card to copy", "Instruction when any owned card may be duplicated.")
-                    : tx("Choose a card to copy", "Instruction for choosing one concrete card to copy into the player’s deck.")
+                    ? tx("Choose any card to copy", "[ui] Instruction when any owned card may be duplicated.")
+                    : tx("Choose a card to copy", "[card] Instruction for choosing one concrete card to copy into the player's deck.")
               }
               footerActions={[
                 {
                   label: desktop
-                    ? tx("Decline Offer", "Command that declines the current site offer and leaves without taking its reward.")
-                    : tx("Decline", "Compact command that declines the current site interaction without applying it."),
+                    ? tx("Decline Offer", "[ui] Action declining the current site offer and leaving without its reward.")
+                    : tx("Decline", "[ui] Compact action declining the current interaction without applying it."),
                   disabled: locked,
                   onPress: onClose,
                   testId: "cumulus-duplication-decline",
                 },
                 {
                   label: confirming
-                    ? tx("Duplicating…", "Pending status while a duplicated card is saved.")
-                    : tx("Duplicate", "Command that duplicates the selected card."),
+                    ? tx("Duplicating…", "[ui] Pending status while a duplicated card is saved.")
+                    : tx("Duplicate", "[ui] Command that duplicates the selected card."),
                   variant: "accent",
                   disabled: selectedEntryId === null || locked,
                   onPress: commitDuplicate,
@@ -149,8 +149,8 @@ export function DuplicationSiteScreen({
               }))}
               emptyLabel={
                 view.ready
-                  ? tx("No cards available to copy.", "Empty state when no card can be duplicated.")
-                  : tx("Gathering possibilities…", "Loading status while Duplication choices are prepared.")
+                  ? tx("No cards available to copy.", "[ui] Empty state when no card can be duplicated.")
+                  : tx("Gathering possibilities…", "[loading] Loading status while Duplication choices are prepared.")
               }
               testId="cumulus-duplication-card-gallery"
               onCardPress={toggleSelection}

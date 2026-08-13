@@ -33,11 +33,11 @@ export function UnreadableRoomScreen({
         kind: "unreadableRoom",
         title: tx(
           "This Game Could Not Be Read",
-          "Title for a shared room whose persisted data cannot be decoded safely.",
+          "[coop] Title for a shared room whose persisted data cannot be decoded safely.",
         ),
         message: tx(
           "This game’s data cannot be loaded safely. Start a fresh game to keep playing.",
-          "Explanation that an unreadable shared room must be replaced to continue playing.",
+          "[coop] Explanation that an unreadable shared room must be replaced to continue playing.",
         ),
         actions: [
           {
@@ -46,11 +46,11 @@ export function UnreadableRoomScreen({
               status === "creating"
                 ? tx(
                     "Starting…",
-                    "Disabled action label while a replacement shared room is being created.",
+                    "[coop] Disabled action label while a replacement shared room is being created.",
                   )
                 : tx(
                     "Create New Game",
-                    "Action that leaves an unavailable or incompatible room and creates a fresh shared game.",
+                    "[coop] Action that leaves an unavailable or incompatible room and creates a fresh shared game.",
                   ),
             disabled: status === "creating",
             onPress: handleStartNewGame,

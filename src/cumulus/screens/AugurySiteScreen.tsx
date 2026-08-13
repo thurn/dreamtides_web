@@ -165,7 +165,7 @@ export function AugurySiteScreen({
           view.unavailableMessage ??
           tx(
             "The visions are clouded. Walk on for now.",
-            "Player-facing message for the augury unavailable guide line interface state.",
+            "[augury] Unavailable guide line.",
           ),
       };
 
@@ -335,7 +335,7 @@ export function AugurySiteScreen({
                 <GlassButton
                   label={tx(
                     "Decline Offer",
-                    "Command that declines the current site offer and leaves without taking its reward.",
+                    "[ui] Action declining the current site offer and leaving without its reward.",
                   )}
                   disabled={committingOfferId !== null}
                   onPress={onClose}
@@ -355,7 +355,7 @@ export function AugurySiteScreen({
               <GlassButton
                 label={tx(
                   "Walk On",
-                  "Player-facing message for the site walk on interface state.",
+                  "[augury] Site walk on.",
                 )}
                 onPress={onClose}
                 testId="cumulus-augury-unavailable-exit"
@@ -382,7 +382,7 @@ export function AugurySiteScreen({
             overlayGlyph={GLYPHS.bug}
             label={tx(
               "Reroll Augury offers",
-              "Player-facing message for the augury reroll offers interface state.",
+              "[augury] Reroll offers.",
             )}
             onPress={onReroll}
             testId="reroll-augury-offers"
@@ -448,7 +448,7 @@ function OfferDetailPanel({
             <GlassButton
               label={tx(
                 meaning("augury-reselect-action", "Choose Again"),
-                "Player-facing message for the site choose again interface state.",
+                "[augury] Site choose again.",
               )}
               placement="onGlass"
               disabled={disabled}
@@ -458,7 +458,7 @@ function OfferDetailPanel({
             <GlassButton
               label={tx(
                 "Confirm",
-                "Player-facing message for the site confirm interface state.",
+                "[ui] Action confirming the current selection.",
               )}
               variant="accent"
               placement="onGlass"

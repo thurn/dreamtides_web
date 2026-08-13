@@ -249,7 +249,7 @@ function TopBand({
             {resolve(
               tx(
                 "Your Deck",
-                "Title of the full-screen browser for the current player's deck. “Your” addresses the local player, including one participant in a cooperative room.",
+                "[card-browser] [coop] Title of the full-screen browser for the current player's deck. “Your” addresses the local player, including one participant in a cooperative room.",
               ),
             )}
           </div>
@@ -271,7 +271,7 @@ function TopBand({
                   plural(count, [one("{count} Card"), other("{count} Cards")]),
                 ),
                 { count },
-                "Count beneath the deck-browser title. count is the number of cards currently in the player's deck, is a non-negative integer, and can be zero.",
+                "[card-browser] Count beneath the deck-browser title. count is the number of cards currently in the player's deck, is a non-negative integer, and can be zero.",
               ),
             )}
           </div>
@@ -283,7 +283,7 @@ function TopBand({
             size="md"
             label={tx(
               "Close deck browser",
-              "Accessible name for the icon-only control that dismisses the player's deck browser and returns focus to the Journey screen beneath it.",
+              "[accessibility] [card-browser] [journey] Name for the icon-only control that dismisses the player's deck browser and returns focus to the Journey screen beneath it.",
             )}
             testId="mobile-deck-close"
             onPress={onClose}
@@ -320,17 +320,17 @@ function DeckControls({
       case "all":
         return tx(
           "All",
-          "Visible card-browser type filter option that keeps every card type.",
+          "[card-browser] Type filter option that keeps every card type.",
         );
       case "type:Character":
         return tx(
           "Characters",
-          "Visible card-browser type filter option that keeps Character cards.",
+          "[card-browser] Type filter option that keeps Character cards.",
         );
       case "type:Event":
         return tx(
           "Events",
-          "Visible card-browser type filter option that keeps Event cards.",
+          "[card-browser] Type filter option that keeps Event cards.",
         );
       default:
         throw new Error(
@@ -343,27 +343,27 @@ function DeckControls({
       case "name":
         return tx(
           "Name",
-          "Visible card-browser sort-field option for canonical authored card names.",
+          "[card-browser] Sort-field option for canonical authored card names.",
         );
       case "drafted":
         return tx(
           "Acquired",
-          "Player-facing message for the deck sort acquired interface state.",
+          "[card-browser] Deck sort acquired.",
         );
       case "cost":
         return tx(
           "Cost",
-          "Visible card-browser sort-field option for printed Energy cost.",
+          "[card-browser] Sort-field option for printed Energy cost.",
         );
       case "spark":
         return tx(
           "Spark",
-          "Visible card-browser sort-field option for printed Spark.",
+          "[card-browser] Sort-field option for printed Spark.",
         );
       case "subtype":
         return tx(
           "Subtype",
-          "Visible card-browser sort-field option for canonical authored subtype.",
+          "[card-browser] Sort-field option for canonical authored subtypes.",
         );
     }
   };
@@ -372,17 +372,17 @@ function DeckControls({
       case "all":
         return tx(
           "Filter deck by All",
-          "Accessible name for the deck filter when every card is included.",
+          "[accessibility] [card-browser] Name for the deck filter when every card is included.",
         );
       case "type:Character":
         return tx(
           "Filter deck by Characters",
-          "Accessible name for the deck filter when only Character cards are included.",
+          "[accessibility] [card-browser] Name for the deck filter when only Character cards are included.",
         );
       case "type:Event":
         return tx(
           "Filter deck by Events",
-          "Accessible name for the deck filter when only Event cards are included.",
+          "[accessibility] [card-browser] Name for the deck filter when only Event cards are included.",
         );
       default: {
         return txa(
@@ -392,7 +392,7 @@ function DeckControls({
               deckTypeFilterLabel(filterSort.typeFilter, typeFilterOptions),
             ),
           },
-          "Accessible name for the deck filter when one canonical card subtype is selected. subtype is authored card vocabulary and has unknown grammatical gender.",
+          "[accessibility] [card-browser] Name for the deck filter when one canonical card subtype is selected. subtype is authored card vocabulary and has unknown grammatical gender.",
         );
       }
     }
@@ -402,27 +402,27 @@ function DeckControls({
       case "name":
         return tx(
           "Sort deck by Name",
-          "Accessible name for sorting the deck by card name.",
+          "[accessibility] [card-browser] Name for sorting the deck by card name.",
         );
       case "drafted":
         return tx(
           "Sort deck by Acquired",
-          "Accessible name for sorting the deck by acquisition order.",
+          "[accessibility] [card-browser] Name for sorting the deck by acquisition order.",
         );
       case "cost":
         return tx(
           "Sort deck by Cost",
-          "Accessible name for sorting the deck by energy cost.",
+          "[accessibility] [card-browser] Name for sorting the deck by energy cost.",
         );
       case "spark":
         return tx(
           "Sort deck by Spark",
-          "Accessible name for sorting the deck by Spark.",
+          "[accessibility] [card-browser] Name for sorting the deck by Spark.",
         );
       case "subtype":
         return tx(
           "Sort deck by Subtype",
-          "Accessible name for sorting the deck by card subtype.",
+          "[accessibility] [card-browser] Name for sorting the deck by card subtype.",
         );
     }
   };
@@ -504,7 +504,7 @@ function EmptyDeck() {
     <GridPlaceholder
       message={tx(
         "Your deck is empty.",
-        "Empty state in the deck browser when the player's deck contains zero cards.",
+        "[card-browser] Empty state in the deck browser when the player's deck contains zero cards.",
       )}
     />
   );
@@ -516,7 +516,7 @@ function NoMatches() {
     <GridPlaceholder
       message={tx(
         "No cards match this filter.",
-        "Empty state when the player's non-empty deck has no cards matching the active filter. The player can change or clear that filter to see cards again.",
+        "[card-browser] Empty state when the player's non-empty deck has no cards matching the active filter. The player can change or clear that filter to see cards again.",
       )}
     />
   );

@@ -319,7 +319,7 @@ function BattleStartPanel({
                 txa(
                   "Battle vs. {avatar_name}",
                   { avatar_name: opaque(view.dreamAvatar.name) },
-                  "Player-facing message for the battle start title interface state.",
+                  "[battle] Start title.",
                 ),
               )}
             </h1>
@@ -342,7 +342,7 @@ function BattleStartPanel({
               section="ability"
               label={tx(
                 meaning("battle-avatar-ability-label", "Ability"),
-                "Player-facing message for the battle start ability label interface state.",
+                "[battle] Start ability label.",
               )}
               density={density}
             >
@@ -357,7 +357,7 @@ function BattleStartPanel({
                     {resolve(
                       tx(
                         "Opponent avatar ability is not active.",
-                        "Unavailable-state description for an opponent Dream Avatar whose ability is disabled during a tutorial battle.",
+                        "[battle] [tutorial] [dream-avatar] Unavailable-state description for an opponent Dream Avatar whose ability is disabled during a tutorial battle.",
                       ),
                     )}
                   </span>
@@ -374,11 +374,11 @@ function BattleStartPanel({
                   view.dreamsigns.length > 0
                     ? tx(
                         "Signature Cards & Dreamsigns",
-                        "Player-facing message for the battle start signature cards and dreamsigns label interface state.",
+                        "[battle] [dreamsign] Start signature cards and dreamsigns label.",
                       )
                     : tx(
                         "Signature Cards",
-                        "Visible collection label for the active Dream Avatar's authored signature cards.",
+                        "[dream-avatar] Collection label for the active Dream Avatar's authored signature cards.",
                       )
                 }
                 density={density}
@@ -402,7 +402,7 @@ function BattleStartPanel({
               section="signature-cards"
               label={tx(
                 "Signature Cards",
-                "Visible collection label for the active Dream Avatar's authored signature cards.",
+                "[dream-avatar] Collection label for the active Dream Avatar's authored signature cards.",
               )}
               density={density}
             >
@@ -424,7 +424,7 @@ function BattleStartPanel({
               section="dreamsigns"
               label={tx(
                 "Dreamsigns",
-                "Section label for the player’s collected Dreamsigns.",
+                "[dreamsign] Section label for the player's collected Dreamsigns.",
               )}
               density={density}
             >
@@ -461,7 +461,7 @@ function BattleStartPanel({
                 stake="points"
                 label={tx(
                   "To Win",
-                  "Player-facing message for the battle start to win label interface state.",
+                  "[battle] Start to win label.",
                 )}
                 density={density}
               >
@@ -472,7 +472,7 @@ function BattleStartPanel({
                 stake="reward"
                 label={tx(
                   "Reward",
-                  "Player-facing message for the battle start reward label interface state.",
+                  "[battle] Start reward label.",
                 )}
                 density={density}
               >
@@ -482,7 +482,7 @@ function BattleStartPanel({
             <GlassButton
               label={tx(
                 "Begin Battle",
-                "Player-facing message for the battle start action interface state.",
+                "[battle] Start action.",
               )}
               variant="accent"
               placement="onGlass"

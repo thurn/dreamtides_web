@@ -80,7 +80,7 @@ export function DreamscapeJourneyMenu({
       glyph: GLYPHS.affiliationRow,
       label: tx(
         "View Deck",
-        "Normal Journey utility-menu actions. These labels are visible in the shared app chrome; debug-labelled actions remain in the same menu only when their route supplies the corresponding developer capability.",
+        "[journey] [developer] Normal Journey utility-menu actions. These labels are visible in the shared app chrome; debug-labelled actions remain in the same menu only when their route supplies the corresponding developer capability.",
       ),
       onCommand: onOpenDeckViewer,
     },
@@ -90,7 +90,7 @@ export function DreamscapeJourneyMenu({
       glyph: GLYPHS.grid,
       label: tx(
         meaning("pool-viewer-action", "Pool Viewer"),
-        "Player-facing message for the journey menu pool viewer action interface state.",
+        "[pool-viewer] [journey] Menu pool viewer action.",
       ),
       onCommand: onOpenPoolViewer,
     },
@@ -102,7 +102,7 @@ export function DreamscapeJourneyMenu({
             glyph: GLYPHS.package,
             label: tx(
               "Package Debug",
-              "Player-facing message for the journey menu package debug action interface state.",
+              "[journey] Menu package debug action.",
             ),
             onCommand: onOpenDebugScreen,
           },
@@ -116,7 +116,7 @@ export function DreamscapeJourneyMenu({
             glyph: GLYPHS.list,
             label: tx(
               "Card Sources",
-              "Player-facing message for the journey menu card sources action interface state.",
+              "[journey] Menu card sources action.",
             ),
             active: isCardSourceOverlayOpen,
             onCommand: onToggleCardSourceOverlay,
@@ -130,7 +130,7 @@ export function DreamscapeJourneyMenu({
       glyph: GLYPHS.edit,
       label: tx(
         "Edit Journey State",
-        "Player-facing message for the journey menu edit state action interface state.",
+        "[journey] Menu edit state action.",
       ),
       onCommand: onOpenJourneyEditor,
     },
@@ -142,7 +142,7 @@ export function DreamscapeJourneyMenu({
             glyph: GLYPHS.refresh,
             label: tx(
               "Regenerate Atlas",
-              "Player-facing message for the journey menu regenerate atlas action interface state.",
+              "[journey] Menu regenerate atlas action.",
             ),
             onCommand: onRegenerateAtlas,
           },
@@ -166,7 +166,7 @@ export function DreamscapeJourneyMenu({
           glyph: isDesktop ? GLYPHS.gear : GLYPHS.menu,
           label: tx(
             "Open menu",
-            "Player-facing message for the journey menu open action interface state.",
+            "[journey] Menu open action.",
           ),
           corner: isDesktop ? "topEnd" : "topStart",
         },

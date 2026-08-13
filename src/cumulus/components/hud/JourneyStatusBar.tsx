@@ -184,7 +184,7 @@ function QsbOverflowStack({
           other("View {count} Dreamsigns"),
         ]),
         { count: signs.length },
-        "Accessible name for the Journey status-bar control that opens the player's Dreamsign gallery. count is the positive number of collected Dreamsigns.",
+        "[accessibility] [dreamsign] [journey] Name for the Journey status-bar control that opens the player's Dreamsign gallery. count is the positive number of collected Dreamsigns.",
       )}
       style={{
         display: "flex",
@@ -375,7 +375,7 @@ function QsbDreamsignWindow({
             {resolve(
               tx(
                 "Dreamsigns",
-                "Section label for the player’s collected Dreamsigns.",
+                "[dreamsign] Section label for the player's collected Dreamsigns.",
               ),
             )}
           </h2>
@@ -384,7 +384,7 @@ function QsbDreamsignWindow({
             size="sm"
             label={tx(
               meaning("dreamsign-window-close", "Close"),
-              "Command that closes the Journey status-bar Dreamsign window.",
+              "[dreamsign] [journey] Command that closes the Journey status-bar Dreamsign window.",
             )}
             onPress={onClose}
           />
@@ -433,12 +433,12 @@ function QsbDreamAvatarBust({
                 variant: "text",
                 title: tx(
                   meaning("journey-avatar-label", "Avatar"),
-                  "Shared journey-status labels and controls.",
+                  "[journey] Shared journey-status labels and controls.",
                 ),
                 body: richText.plain(
                   tx(
                     "No avatar is active.",
-                    "Player-facing message for the journey status no avatar interface state.",
+                    "[journey] Status no avatar.",
                   ),
                 ),
               },
@@ -470,7 +470,7 @@ function QsbDreamAvatarBust({
       {...binding.sourceProps}
       ariaLabelMessage={tx(
         meaning("journey-avatar-control", "Avatar"),
-        "Accessible name for the active Dream Avatar control in the Journey status bar.",
+        "[accessibility] [dream-avatar] [journey] Name for the active Dream Avatar control in the Journey status bar.",
       )}
       tabIndex={0}
       style={{
@@ -548,7 +548,7 @@ function QsbEssence({
       tabIndex={0}
       ariaLabelMessage={tx(
         "Essence Total",
-        "Player-facing message for the journey status essence accessible name interface state.",
+        "[accessibility] [journey] Status essence name.",
       )}
       style={{
         ...binding.sourceProps.style,
@@ -631,7 +631,7 @@ function QsbHudBar({
             other("View deck containing {count} Cards"),
           ]),
           { count: deck },
-          "Accessible name for the Journey status-bar control that opens the current player's deck. count is the non-negative current deck size and can be zero.",
+          "[accessibility] [journey] Name for the Journey status-bar control that opens the current player's deck. count is the non-negative current deck size and can be zero.",
         )}
         onClick={onViewDeck}
         style={{

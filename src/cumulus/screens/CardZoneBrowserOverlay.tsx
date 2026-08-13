@@ -159,36 +159,36 @@ export function CardZoneBrowserOverlay({
       option.value === "current"
         ? tx(
             "Acquired",
-            "Player-facing message for the deck sort acquired interface state.",
+            "[card-browser] Deck sort acquired.",
           )
         : option.value === "cost"
           ? tx(
               "Cost",
-              "Visible card-browser sort-field option for printed Energy cost.",
+              "[card-browser] Sort-field option for printed Energy cost.",
             )
           : option.value === "spark"
             ? tx(
                 "Spark",
-                "Visible card-browser sort-field option for printed Spark.",
+                "[card-browser] Sort-field option for printed Spark.",
               )
             : tx(
                 "Name",
-                "Visible card-browser sort-field option for canonical authored card names.",
+                "[card-browser] Sort-field option for canonical authored card names.",
               ),
   }));
   const filterOptions = FILTER_OPTIONS.map((option) => ({
     value: option.value,
     label:
       option.value === "all"
-        ? tx("All", "Visible card-browser type filter option that keeps every card type.")
+        ? tx("All", "[card-browser] Type filter option that keeps every card type.")
         : option.value === "character"
           ? tx(
               "Characters",
-              "Visible card-browser type filter option that keeps Character cards.",
+              "[card-browser] Type filter option that keeps Character cards.",
             )
           : tx(
               "Events",
-              "Visible card-browser type filter option that keeps Event cards.",
+              "[card-browser] Type filter option that keeps Event cards.",
             ),
   }));
 
@@ -236,7 +236,7 @@ export function CardZoneBrowserOverlay({
             plural(cards.length, [one("{count} Card"), other("{count} Cards")]),
           ),
           { count: cards.length },
-          "Subtitle reporting the non-negative number of physical cards visible in the current card browser. count can be zero.",
+          "[card-browser] Subtitle reporting the non-negative number of physical cards visible in the current card browser. count can be zero.",
         )
       : txa(
           meaning(
@@ -247,7 +247,7 @@ export function CardZoneBrowserOverlay({
             ]),
           ),
           { total_count: cards.length, visible_count: visibleCards.length },
-          "Subtitle when filters show only part of a battle zone. visible_count and total_count are non-negative card-entry counts; either can be zero.",
+          "[battle] [card-browser] Subtitle when filters show only part of a battle zone. visible_count and total_count are non-negative card-entry counts; either can be zero.",
         );
   const galleryCards = visibleCards.map((card, index) => ({
     ...card,
@@ -262,7 +262,7 @@ export function CardZoneBrowserOverlay({
             message: txa(
               "#{position}",
               { position: index + 1 },
-              "Compact one-based position beneath a card in the current battle deck order.",
+              "[battle] [card-browser] Compact one-based position beneath a card in the current battle deck order.",
             ),
           },
         }
@@ -281,7 +281,7 @@ export function CardZoneBrowserOverlay({
                     other("Your Cards · {count}"),
                   ]),
                   { count: ownerSwitch.viewerCount },
-                  "Label for the local-player option in a battle zone owner switch. count is the non-negative number of that player's banished cards and can be zero.",
+                  "[battle] [card-browser] Label for the local-player option in a battle zone owner switch. count is the non-negative number of that player's banished cards and can be zero.",
                 ),
             },
             {
@@ -292,7 +292,7 @@ export function CardZoneBrowserOverlay({
                     other("Opponent Cards · {count}"),
                   ]),
                   { count: ownerSwitch.opponentCount },
-                  "Label for the opposing-player option in a battle zone owner switch. count is the non-negative number of that player's banished cards and can be zero.",
+                  "[battle] [card-browser] Label for the opposing-player option in a battle zone owner switch. count is the non-negative number of that player's banished cards and can be zero.",
                 ),
             },
           ],
@@ -307,7 +307,7 @@ export function CardZoneBrowserOverlay({
           sort: {
             ariaLabel: tx(
                 "Sort zone cards",
-                "Player-facing message for the battle zone browser sort accessible name interface state.",
+                "[accessibility] [battle] [card-browser] Zone browser sort name.",
               ),
             options: sortOptions,
             value: sort,
@@ -319,13 +319,13 @@ export function CardZoneBrowserOverlay({
           search: {
             label: tx(
                 "Search Cards",
-                "Player-facing message for the battle zone browser search label interface state.",
+                "[battle] [card-browser] Zone browser search label.",
               ),
             value: query,
             onChange: setQuery,
             placeholder: tx(
                 "Search by name…",
-                "Player-facing message for the battle zone browser search placeholder interface state.",
+                "[battle] [card-browser] Zone browser search placeholder.",
               ),
             testId: "card-zone-browser-search",
             inputRef: searchInputRef,
@@ -333,7 +333,7 @@ export function CardZoneBrowserOverlay({
           sort: {
             ariaLabel: tx(
                 "Sort zone cards",
-                "Player-facing message for the battle zone browser sort accessible name interface state.",
+                "[accessibility] [battle] [card-browser] Zone browser sort name.",
               ),
             options: sortOptions,
             value: sort,
@@ -342,7 +342,7 @@ export function CardZoneBrowserOverlay({
           filter: {
             ariaLabel: tx(
                 "Filter zone cards by type",
-                "Player-facing message for the battle zone browser filter accessible name interface state.",
+                "[accessibility] [battle] [card-browser] Zone browser filter name.",
               ),
             options: filterOptions,
             value: filter,
@@ -353,18 +353,18 @@ export function CardZoneBrowserOverlay({
     ownerSwitch === undefined
       ? owner === "viewer"
         ? zone === "deck"
-          ? tx(meaning("battle-deck-browser-title", "Your Deck"), "Title for the local player's battle draw-pile browser.")
+          ? tx(meaning("battle-deck-browser-title", "Your Deck"), "[battle] [card-browser] Title for the local player's battle draw-pile browser.")
           : zone === "void"
-            ? tx(meaning("battle-void-browser-title", "Your Void"), "Title for the local player's battle Void browser.")
-            : tx("Your Banished Cards", "Title for the local player's banished-card browser.")
+            ? tx(meaning("battle-void-browser-title", "Your Void"), "[battle] [card-browser] Title for the local player's battle Void browser.")
+            : tx("Your Banished Cards", "[card-browser] Title for the local player's banished-card browser.")
         : zone === "deck"
-          ? tx("Opponent’s Deck", "Title for the opposing player's battle draw-pile browser.")
+          ? tx("Opponent’s Deck", "[battle] [card-browser] Title for the opposing player's battle draw-pile browser.")
           : zone === "void"
-            ? tx("Opponent’s Void", "Title for the opposing player's battle Void browser.")
-            : tx("Opponent’s Banished Cards", "Title for the opposing player's banished-card browser.")
+            ? tx("Opponent’s Void", "[battle] [card-browser] Title for the opposing player's battle Void browser.")
+            : tx("Opponent’s Banished Cards", "[card-browser] Title for the opposing player's banished-card browser.")
       : tx(
           "Banished Cards",
-          "Shared title for the browser that can switch between both players' banished cards during a battle.",
+          "[battle] [card-browser] Shared title for the browser that can switch between both players' banished cards during a battle.",
         );
 
   return (
@@ -420,10 +420,10 @@ export function CardZoneBrowserOverlay({
               glyph: GLYPHS.close,
               label:
                 zone === "deck"
-                  ? tx(meaning("battle-deck-browser-close", "Close deck browser"), "Accessible name for dismissing a battle deck browser.")
+                  ? tx(meaning("battle-deck-browser-close", "Close deck browser"), "[accessibility] [battle] [card-browser] Name for dismissing a battle deck browser.")
                   : zone === "void"
-                    ? tx("Close void browser", "Accessible name for dismissing a battle Void browser.")
-                    : tx("Close banished-cards browser", "Accessible name for dismissing a banished-card browser."),
+                    ? tx("Close void browser", "[accessibility] [battle] [card-browser] Name for dismissing a battle Void browser.")
+                    : tx("Close banished-cards browser", "[accessibility] [card-browser] Name for dismissing a banished-card browser."),
               onPress: onClose,
             },
           }}
@@ -433,11 +433,11 @@ export function CardZoneBrowserOverlay({
             cards.length === 0
               ? tx(
                   "No Cards.",
-                  "Empty state when the selected battle zone itself contains zero cards.",
+                  "[battle] [card-browser] Empty state when the selected battle zone itself contains zero cards.",
                 )
               : tx(
                   "No Matching Cards.",
-                  "Empty state when a non-empty battle zone has no cards matching the active search or type filter.",
+                  "[battle] [card-browser] Empty state when a non-empty battle zone has no cards matching the active search or type filter.",
                 )
           }
           presentation="overlay"

@@ -95,7 +95,7 @@ export function CharacterDialogue({
       aria-label={resolve(txa(
         "{speaker_name} speaks",
         { speaker_name: opaque(dialogue.speakerName) },
-        "Accessible name for character dialogue. speaker_name is the displayed name of the character currently speaking and has unknown grammatical gender.",
+        "[accessibility] Name for character dialogue. speaker_name is the displayed name of the character currently speaking and has unknown grammatical gender.",
       ))}
       data-character-dialogue=""
       data-character-dialogue-size={size}

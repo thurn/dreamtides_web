@@ -310,8 +310,8 @@ function AnnotatedLoadingCard({
       >
         {resolve(
           cardType === "character"
-            ? tx("Character", "Card-type label above the Character example on the loading screen.")
-            : tx("Event", "Card-type label above the Event example on the loading screen."),
+            ? tx("Character", "[loading] Card-type label above the Character example on the loading screen.")
+            : tx("Event", "[loading] Card-type label above the Event example on the loading screen."),
         )}
       </p>
 
@@ -484,12 +484,12 @@ export function LoadingScreen({
           textAlign: "center",
         }}
       >
-        {resolve(tx("Dreamtides Cards:", "Card-anatomy loading title and labels."))}
+        {resolve(tx("Dreamtides Cards:", "[loading] Card-anatomy loading title and labels."))}
       </h1>
       <section
         aria-label={resolve(tx(
           "Card anatomy",
-          "Player-facing message for the loading card anatomy label interface state.",
+          "[loading] Card anatomy label.",
         ))}
         data-loading-card-stage
         style={{
@@ -556,7 +556,7 @@ export function LoadingScreen({
             <GlassButton
               label={tx(
                 "Begin",
-                "Player-facing message for the loading begin action interface state.",
+                "[loading] Begin action.",
               )}
               onPress={onBegin}
               size="prominent"
@@ -583,7 +583,7 @@ export function LoadingScreen({
             <span>
               {resolve(tx(
                 "Loading",
-                "Player-facing message for the loading progress label interface state.",
+                "[loading] Progress label.",
               ))}
             </span>
           </div>

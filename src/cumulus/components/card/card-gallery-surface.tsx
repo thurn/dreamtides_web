@@ -781,7 +781,7 @@ function CardGallerySurface({
                   emptyLabel ??
                     tx(
                       "No cards.",
-                      "Empty state shared by card galleries and battle-zone browsers.",
+                      "[battle] Empty state shared by card galleries and battle-zone browsers.",
                     ),
                 )}
               </p>

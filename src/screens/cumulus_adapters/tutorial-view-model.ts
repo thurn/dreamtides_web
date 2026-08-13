@@ -868,7 +868,7 @@ export function buildTutorialView(
           id: battleConfiguration.playerDreamAvatarId,
           ability: tx(
             "Avatar ability is not active",
-            "Unavailable-state description for a Dream Avatar whose ability is disabled during the tutorial battle.",
+            "[battle] [tutorial] [dream-avatar] Unavailable-state description for a Dream Avatar whose ability is disabled during the tutorial battle.",
           ),
           unavailable: true,
         },
@@ -887,7 +887,7 @@ export function buildTutorialView(
           id: battleConfiguration.enemyDreamAvatarId,
           ability: tx(
             "Avatar ability is not active",
-            "Unavailable-state description for a Dream Avatar whose ability is disabled during the tutorial battle.",
+            "[battle] [tutorial] [dream-avatar] Unavailable-state description for a Dream Avatar whose ability is disabled during the tutorial battle.",
           ),
           unavailable: true,
         },
@@ -940,8 +940,8 @@ export function buildTutorialView(
               bubbleWidth: dialogue.speechBubble.bubbleWidth,
               model: {
                 portrait: { kind: "character-portrait", characterId: "mira" },
-                portraitAlt: tx("Mira", "Name of the tutorial guide."),
-                speakerName: tx("Mira", "Name of the tutorial guide."),
+                portraitAlt: tx("Mira", "[tutorial] Name of the tutorial guide."),
+                speakerName: tx("Mira", "[tutorial] Name of the tutorial guide."),
                 text: localizedSourceText(dialogue.speechBubble.text),
               },
             },

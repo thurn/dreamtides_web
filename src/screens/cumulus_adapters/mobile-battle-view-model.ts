@@ -55,7 +55,7 @@ const FALLBACK_PLAYER_DREAM_AVATAR = {
 
 const INACTIVE_OPPONENT_AVATAR_ABILITY = tx(
   "Opponent avatar ability is not active.",
-  "Unavailable-state description for an opponent Dream Avatar whose ability is disabled during a tutorial battle.",
+  "[battle] [tutorial] [dream-avatar] Unavailable-state description for an opponent Dream Avatar whose ability is disabled during a tutorial battle.",
 );
 
 export type MobileBattleInit = BattleInit;
@@ -561,7 +561,7 @@ function buildStatusView(
           ? localizedSourceText(dreamAvatar.name)
           : tx(
               "Avatar",
-              "Fallback Dream Avatar name while battle identity data is unavailable.",
+              "[battle] [dream-avatar] Fallback Dream Avatar name while battle identity data is unavailable.",
             ),
       title:
         dreamAvatar.title === ""

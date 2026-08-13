@@ -41,14 +41,14 @@ export function CoopPresenceStatus({
         ? resolve(
             tx(
               "Connecting…",
-              "Presence status while the shared room connection is unresolved.",
+              "[coop] Presence status while the shared room connection is unresolved.",
             ),
           )
         : resolve(
             txa(
               plural(count, [one("1 Connected"), other("{count} Connected")]),
               { count },
-              "Compact presence status showing the nonnegative number of connected clients; zero is possible.",
+              "[coop] Compact presence status showing the nonnegative number of connected clients; zero is possible.",
             ),
           )}
     </output>

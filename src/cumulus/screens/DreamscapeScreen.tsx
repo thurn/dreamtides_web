@@ -302,7 +302,7 @@ export function DreamscapeScreen({
                         collectingReward.dreamsign.name,
                       ),
                     },
-                    "Accessible reward status when an authored Dreamsign is found and requires replacement. dreamsign_name is canonical authored content.",
+                    "[accessibility] [dreamsign] [journey] Reward status when an authored Dreamsign is found and requires replacement. dreamsign_name is canonical authored content.",
                   )
                 : txa(
                     "Gained dreamsign: {dreamsign_name}",
@@ -311,12 +311,12 @@ export function DreamscapeScreen({
                         collectingReward.dreamsign.name,
                       ),
                     },
-                    "Accessible reward status when an authored Dreamsign is gained. dreamsign_name is canonical authored content.",
+                    "[accessibility] [dreamsign] [journey] Reward status when an authored Dreamsign is gained. dreamsign_name is canonical authored content.",
                   )
               : txa(
                   "Gained {amount} essence",
                   { amount: collectingReward.amount },
-                  "Accessible reward status when Essence is gained. amount is the non-negative Essence quantity.",
+                  "[accessibility] [journey] Reward status when Essence is gained. amount is the non-negative Essence quantity.",
                 ),
           )}
           data-essence-collection={
@@ -407,8 +407,8 @@ export function DreamscapeScreen({
               >
                 {resolve(
                   collectingReward.requiresReplacement
-                    ? tx("Dreamsign found", "Visible status when a Dreamsign reward requires replacement.")
-                    : tx("Dreamsign gained", "Visible status when a Dreamsign reward is collected."),
+                    ? tx("Dreamsign found", "[dreamsign] [journey] Visible status when a Dreamsign reward requires replacement.")
+                    : tx("Dreamsign gained", "[dreamsign] [journey] Visible status when a Dreamsign reward is collected."),
                 )}
               </motion.div>
             </>
@@ -438,11 +438,11 @@ export function DreamscapeScreen({
           onCancel={onDeclineReward}
           cancelLabel={tx(
             "Keep Current Dreamsigns",
-            "Player-facing message for the dreamsign replacement keep current action interface state.",
+            "[dreamsign] [journey] Replacement keep current action.",
           )}
           closeLabel={tx(
             "Decline Dreamsign reward",
-            "Player-facing message for the dreamsign replacement decline reward action interface state.",
+            "[dreamsign] [journey] Replacement decline reward action.",
           )}
         />
       )}

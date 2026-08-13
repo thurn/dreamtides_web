@@ -67,20 +67,20 @@ export function StartingDeckOverlay({
       isOpen={isOpen}
       title={tx(
         "Starting Deck",
-        "Copy for the modal that introduces the player's initial deck.",
+        "[ui] Copy for the modal that introduces the player's initial deck.",
       )}
       subtitle={tx(
         "These are the cards you begin the journey with.",
-        "Player-facing message for the starting deck subtitle interface state.",
+        "[ui] Starting deck subtitle.",
       )}
       cards={view.cards}
       emptyLabel={tx(
         "No cards in starting deck.",
-        "Player-facing message for the starting deck empty state interface state.",
+        "[ui] Starting deck empty state.",
       )}
       actionLabel={tx(
         "Begin Journey",
-        "Player-facing message for the starting deck begin action interface state.",
+        "[ui] Starting deck begin action.",
       )}
       onClose={onClose}
     />

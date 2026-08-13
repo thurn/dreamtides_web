@@ -1007,7 +1007,7 @@ function EditableInfoCardCopy({
           txa(
             "{field} editor",
             { field },
-            "Accessible name for a developer Info Card editor field; field is the raw editor field kind.",
+            "[accessibility] [developer] Name for a developer Info Card editor field; field is the raw editor field kind.",
           ),
         )}
         aria-invalid={value.error === undefined ? undefined : true}
@@ -1028,7 +1028,7 @@ function EditableInfoCardCopy({
           txa(
             "{field} editor",
             { field },
-            "Accessible name for a developer Info Card editor field; field is the raw editor field kind.",
+            "[accessibility] [developer] Name for a developer Info Card editor field; field is the raw editor field kind.",
           ),
         )}
         aria-invalid={value.error === undefined ? undefined : true}

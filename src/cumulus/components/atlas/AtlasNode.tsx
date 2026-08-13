@@ -208,27 +208,27 @@ export function AtlasNode({
       case "unrevealed":
         return tx(
           "This dreamscape is unrevealed.",
-          "Accessible state sentence for a Dream Atlas node whose contents have not been revealed.",
+          "[accessibility] State sentence for a Dream Atlas node whose contents have not been revealed.",
         );
       case "revealedLocked":
         return tx(
           "This dreamscape is revealed and locked.",
-          "Accessible state sentence for a revealed Dream Atlas node that cannot currently be entered.",
+          "[accessibility] State sentence for a revealed Dream Atlas node that cannot currently be entered.",
         );
       case "available":
         return tx(
           "This dreamscape is available.",
-          "Accessible state sentence for a Dream Atlas node the player can enter now.",
+          "[accessibility] State sentence for a Dream Atlas node the player can enter now.",
         );
       case "completed":
         return tx(
           "This dreamscape is completed.",
-          "Accessible state sentence for a Dream Atlas node the player has completed.",
+          "[accessibility] State sentence for a Dream Atlas node the player has completed.",
         );
       case "forgone":
         return tx(
           "This dreamscape is unreachable.",
-          "Accessible state sentence for a Dream Atlas node that cannot be entered on this journey.",
+          "[accessibility] [journey] State sentence for a Dream Atlas node that cannot be entered on this journey.",
         );
     }
   })();
@@ -236,12 +236,12 @@ export function AtlasNode({
     role === "starter"
       ? tx(
           "This is the starting dreamscape.",
-          "Accessible role sentence for the starting node on the Dream Atlas.",
+          "[accessibility] Role sentence for the starting node on the Dream Atlas.",
         )
       : role === "boss"
         ? tx(
             "This is the final boss.",
-            "Accessible role sentence for the final boss node on the Dream Atlas.",
+            "[accessibility] Role sentence for the final boss node on the Dream Atlas.",
           )
         : null;
   const accessibleDreamsignMessage =
@@ -249,7 +249,7 @@ export function AtlasNode({
       ? null
       : tx(
           "A known Dreamsign is here.",
-          "Accessible sentence for a Dream Atlas node that visibly promises a known Dreamsign.",
+          "[accessibility] [dreamsign] Sentence for a Dream Atlas node that visibly promises a known Dreamsign.",
         );
   const accessibleNameId = React.useId();
   const nodeStyle = {
@@ -305,7 +305,7 @@ export function AtlasNode({
           ? resolve(
               tx(
                 "Unrevealed dreamscape",
-                "Accessible name used for a Dream Atlas node before its authored dreamscape name is known.",
+                "[accessibility] Name used for a Dream Atlas node before its authored dreamscape name is known.",
               ),
             )
           : node.biomeName}
@@ -365,7 +365,7 @@ export function AtlasNode({
           title={resolve(
             tx(
               "Final boss",
-              "Tooltip identifying the final boss badge on a Dream Atlas node.",
+              "[ui] Tooltip identifying the final boss badge on a Dream Atlas node.",
             ),
           )}
         >
@@ -379,7 +379,7 @@ export function AtlasNode({
           title={resolve(
             tx(
               "Known dreamsign",
-              "Tooltip identifying the known Dreamsign reward badge on a Dream Atlas node.",
+              "[dreamsign] Tooltip identifying the known Dreamsign reward badge on a Dream Atlas node.",
             ),
           )}
         >

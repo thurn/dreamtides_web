@@ -279,7 +279,7 @@ function DreamsignBazaarGallery({
         size={desktop ? "standard" : "compact"}
         closeLabel={tx(
           "Leave Dreamsign Bazaar",
-          "Player-facing message for the dreamsign bazaar leave action interface state.",
+          "[dreamsign] Bazaar leave action.",
         )}
         testId="cumulus-dreamsign-bazaar-gallery"
         onClose={onClose}
@@ -411,7 +411,7 @@ function DreamsignReplacementDialog({
           {resolve(txa(
             "Your collection is full at {count} Dreamsigns.",
             { count: purge.maxDreamsigns },
-            "Player-facing message for the dreamsign bazaar replacement full interface state.",
+            "[dreamsign] Bazaar replacement full.",
           ))}
         </p>
         <div
@@ -445,7 +445,7 @@ function DreamsignReplacementDialog({
           >
             {resolve(tx(
               meaning("dreamsign-replacement-cancel", "Cancel"),
-              "Player-facing message for the dreamsign bazaar replacement cancel interface state.",
+              "[dreamsign] Bazaar replacement cancel.",
             ))}
           </Pressable>
         </div>

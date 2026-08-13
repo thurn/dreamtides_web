@@ -41,7 +41,7 @@ export function TransientStatusToast({
           : resolve(
               tx(
                 "Dismiss status",
-                "Accessible action name for dismissing a transient player status message.",
+                "[accessibility] Action name for dismissing a transient player status message.",
               ),
             )
       }

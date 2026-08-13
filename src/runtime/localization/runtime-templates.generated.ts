@@ -19,65 +19,65 @@ export type RuntimeTemplateValue = number | boolean | LocalizedString;
 export function localizedCardSubtype(sourceText: string): LocalizedString | null {
   switch (sourceText) {
     case "Agent":
-      return tx("Agent", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Agent", "[card] Character subtype name.");
     case "Ancient":
-      return tx("Ancient", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Ancient", "[card] Character subtype name.");
     case "Child":
-      return tx("Child", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Child", "[card] Character subtype name.");
     case "Companions":
-      return tx("Companions", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Companions", "[card] Character subtype name.");
     case "Detective":
-      return tx("Detective", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Detective", "[card] Character subtype name.");
     case "Elemental":
-      return tx("Elemental", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Elemental", "[card] Character subtype name.");
     case "Emissary":
-      return tx("Emissary", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Emissary", "[card] Character subtype name.");
     case "Entity":
-      return tx("Entity", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Entity", "[card] Character subtype name.");
     case "Explorer":
-      return tx("Explorer", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Explorer", "[card] Character subtype name.");
     case "Guide":
-      return tx("Guide", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Guide", "[card] Character subtype name.");
     case "Hacker":
-      return tx("Hacker", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Hacker", "[card] Character subtype name.");
     case "Mage":
-      return tx("Mage", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Mage", "[card] Character subtype name.");
     case "Monster":
-      return tx("Monster", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Monster", "[card] Character subtype name.");
     case "Musician":
-      return tx("Musician", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Musician", "[card] Character subtype name.");
     case "Noble":
-      return tx("Noble", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Noble", "[card] Character subtype name.");
     case "Outsider":
-      return tx("Outsider", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Outsider", "[card] Character subtype name.");
     case "Renegade":
-      return tx("Renegade", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Renegade", "[card] Character subtype name.");
     case "Spirit Animal":
-      return tx("Spirit Animal", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Spirit Animal", "[card] Character subtype name.");
     case "Squad":
-      return tx("Squad", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Squad", "[card] Character subtype name.");
     case "Super":
-      return tx("Super", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Super", "[card] Character subtype name.");
     case "Survivor":
-      return tx("Survivor", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Survivor", "[card] Character subtype name.");
     case "Synth":
-      return tx("Synth", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Synth", "[card] Character subtype name.");
     case "Thopter":
-      return tx("Thopter", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Thopter", "[card] Character subtype name.");
     case "Tinkerer":
-      return tx("Tinkerer", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Tinkerer", "[card] Character subtype name.");
     case "Universal":
-      return tx("Universal", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Universal", "[card] Character subtype name.");
     case "Vehicle":
-      return tx("Vehicle", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Vehicle", "[card] Character subtype name.");
     case "Visionary":
-      return tx("Visionary", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Visionary", "[card] Character subtype name.");
     case "Visitor":
-      return tx("Visitor", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Visitor", "[card] Character subtype name.");
     case "Warrior":
-      return tx("Warrior", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("Warrior", "[card] Character subtype name.");
     case "X":
-      return tx("X", "Player-facing Character subtype name from the canonical card catalog.");
+      return tx("X", "[card] Character subtype name.");
     default:
       return null;
   }
@@ -88,59 +88,59 @@ export function localizedCardSubtype(sourceText: string): LocalizedString | null
 export function localizedGuideDialogue(sourceText: string): LocalizedString | null {
   switch (sourceText) {
     case "A cleaner blade cuts truer.":
-      return tx("A cleaner blade cuts truer.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("A cleaner blade cuts truer.", "[dream-guide] Dream Guide dialogue.");
     case "Any card, any temper you like.":
-      return tx("Any card, any temper you like.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Any card, any temper you like.", "[dream-guide] Dream Guide dialogue.");
     case "Blackjack is the game. Beat my hand without going over 21!":
-      return tx("Blackjack is the game. Beat my hand without going over 21!", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Blackjack is the game. Beat my hand without going over 21!", "[dream-guide] Dream Guide dialogue.");
     case "Choose, and I shall show you another.":
-      return tx("Choose, and I shall show you another.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Choose, and I shall show you another.", "[dream-guide] Dream Guide dialogue.");
     case "Every card dreams, friend. Draw one, and we'll step inside.":
-      return tx("Every card dreams, friend. Draw one, and we'll step inside.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Every card dreams, friend. Draw one, and we'll step inside.", "[dream-guide] Dream Guide dialogue.");
     case "Fortune favors the bold, traveler.":
-      return tx("Fortune favors the bold, traveler.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Fortune favors the bold, traveler.", "[dream-guide] Dream Guide dialogue.");
     case "Four-Suit Reprise is the game. Choose one card; the suit decides what becomes of it.":
-      return tx("Four-Suit Reprise is the game. Choose one card; the suit decides what becomes of it.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Four-Suit Reprise is the game. Choose one card; the suit decides what becomes of it.", "[dream-guide] Dream Guide dialogue.");
     case "I've set aside something just for you.":
-      return tx("I've set aside something just for you.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("I've set aside something just for you.", "[dream-guide] Dream Guide dialogue.");
     case "Let go of what weighs you down.":
-      return tx("Let go of what weighs you down.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Let go of what weighs you down.", "[dream-guide] Dream Guide dialogue.");
     case "Let’s see where this road takes us.":
-      return tx("Let’s see where this road takes us.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Let’s see where this road takes us.", "[dream-guide] Dream Guide dialogue.");
     case "Look closely at each path, then choose the one your dream will take.":
-      return tx("Look closely at each path, then choose the one your dream will take.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Look closely at each path, then choose the one your dream will take.", "[dream-guide] Dream Guide dialogue.");
     case "No fee tonight. Big stakes, though.":
-      return tx("No fee tonight. Big stakes, though.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("No fee tonight. Big stakes, though.", "[dream-guide] Dream Guide dialogue.");
     case "Pick a direction. The dream will make the path.":
-      return tx("Pick a direction. The dream will make the path.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Pick a direction. The dream will make the path.", "[dream-guide] Dream Guide dialogue.");
     case "Pick one, and I'll make another.":
-      return tx("Pick one, and I'll make another.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Pick one, and I'll make another.", "[dream-guide] Dream Guide dialogue.");
     case "Starway Stairs is the game. Keep betting to see how high you can go!":
-      return tx("Starway Stairs is the game. Keep betting to see how high you can go!", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Starway Stairs is the game. Keep betting to see how high you can go!", "[dream-guide] Dream Guide dialogue.");
     case "Stoke the forge — let's reshape it.":
-      return tx("Stoke the forge — let's reshape it.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Stoke the forge — let's reshape it.", "[dream-guide] Dream Guide dialogue.");
     case "The dream divides here. Choose one vision and make it yours.":
-      return tx("The dream divides here. Choose one vision and make it yours.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("The dream divides here. Choose one vision and make it yours.", "[dream-guide] Dream Guide dialogue.");
     case "The frost reveals what is hidden. Pick one sign to claim.":
-      return tx("The frost reveals what is hidden. Pick one sign to claim.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("The frost reveals what is hidden. Pick one sign to claim.", "[dream-guide] Dream Guide dialogue.");
     case "The game's called Three Gates. Place your bet on the next card drawn!":
-      return tx("The game's called Three Gates. Place your bet on the next card drawn!", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("The game's called Three Gates. Place your bet on the next card drawn!", "[dream-guide] Dream Guide dialogue.");
     case "The sands remember all dreams.":
-      return tx("The sands remember all dreams.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("The sands remember all dreams.", "[dream-guide] Dream Guide dialogue.");
     case "Three roads. Pick your poison.":
-      return tx("Three roads. Pick your poison.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Three roads. Pick your poison.", "[dream-guide] Dream Guide dialogue.");
     case "Two futures call to you. You may follow only one.":
-      return tx("Two futures call to you. You may follow only one.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Two futures call to you. You may follow only one.", "[dream-guide] Dream Guide dialogue.");
     case "Two paths unfold before you. Choose one to shape your dream.":
-      return tx("Two paths unfold before you. Choose one to shape your dream.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Two paths unfold before you. Choose one to shape your dream.", "[dream-guide] Dream Guide dialogue.");
     case "We endure together, don't we?":
-      return tx("We endure together, don't we?", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("We endure together, don't we?", "[dream-guide] Dream Guide dialogue.");
     case "Weigh both visions, then pick one path for your dream.":
-      return tx("Weigh both visions, then pick one path for your dream.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Weigh both visions, then pick one path for your dream.", "[dream-guide] Dream Guide dialogue.");
     case "Welcome, friend! Browse a while.":
-      return tx("Welcome, friend! Browse a while.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Welcome, friend! Browse a while.", "[dream-guide] Dream Guide dialogue.");
     case "Your path is clearer than most. Pick one sign to claim.":
-      return tx("Your path is clearer than most. Pick one sign to claim.", "Player-facing Dream Guide dialogue from the canonical guide catalog.");
+      return tx("Your path is clearer than most. Pick one sign to claim.", "[dream-guide] Dream Guide dialogue.");
     default:
       return null;
   }
@@ -151,311 +151,311 @@ export function localizedGuideDialogue(sourceText: string): LocalizedString | nu
 export function localizedDreamsignImageAlt(sourceText: string): LocalizedString | null {
   switch (sourceText) {
     case "amber acorn with tan cap and warm glowing highlights":
-      return tx("amber acorn with tan cap and warm glowing highlights", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("amber acorn with tan cap and warm glowing highlights", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Antler-like bone branch in beige and brown, branching into smooth curves.":
-      return tx("Antler-like bone branch in beige and brown, branching into smooth curves.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Antler-like bone branch in beige and brown, branching into smooth curves.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Beaded gold necklace with hanging claws, tusks, and colored charms.":
-      return tx("Beaded gold necklace with hanging claws, tusks, and colored charms.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Beaded gold necklace with hanging claws, tusks, and colored charms.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Beige rope doll with flowing strands, tied in loose knots, on orange-brown background.":
-      return tx("Beige rope doll with flowing strands, tied in loose knots, on orange-brown background.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Beige rope doll with flowing strands, tied in loose knots, on orange-brown background.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Beige scroll sealed with red ribbon and gold wax medal.":
-      return tx("Beige scroll sealed with red ribbon and gold wax medal.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Beige scroll sealed with red ribbon and gold wax medal.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "black and gray book with skull emblem and bone corner guards":
-      return tx("black and gray book with skull emblem and bone corner guards", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("black and gray book with skull emblem and bone corner guards", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Black and orange spider with blurred legs and open fangs.":
-      return tx("Black and orange spider with blurred legs and open fangs.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Black and orange spider with blurred legs and open fangs.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "black cat figurine with glowing amber eyes and curled tail":
-      return tx("black cat figurine with glowing amber eyes and curled tail", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("black cat figurine with glowing amber eyes and curled tail", "[accessibility] [dreamsign] Dreamsign image description.");
     case "black cauldron filled with bubbling neon green liquid":
-      return tx("black cauldron filled with bubbling neon green liquid", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("black cauldron filled with bubbling neon green liquid", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Black cauldron filled with bubbling neon green liquid.":
-      return tx("Black cauldron filled with bubbling neon green liquid.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Black cauldron filled with bubbling neon green liquid.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "black raven with glossy feathers and a pale blue eye":
-      return tx("black raven with glossy feathers and a pale blue eye", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("black raven with glossy feathers and a pale blue eye", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Black-and-white swirling feather or seed form against blue background.":
-      return tx("Black-and-white swirling feather or seed form against blue background.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Black-and-white swirling feather or seed form against blue background.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Blue faceted crystal shard with glowing pale center.":
-      return tx("Blue faceted crystal shard with glowing pale center.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Blue faceted crystal shard with glowing pale center.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Blue glass vial containing black smoky liquid, capped with a brown stopper.":
-      return tx("Blue glass vial containing black smoky liquid, capped with a brown stopper.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Blue glass vial containing black smoky liquid, capped with a brown stopper.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Blue metal medallion with purple gem and small orb-like charm.":
-      return tx("Blue metal medallion with purple gem and small orb-like charm.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Blue metal medallion with purple gem and small orb-like charm.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Blue steel wand or dagger with brown wooden handle and glowing tip.":
-      return tx("Blue steel wand or dagger with brown wooden handle and glowing tip.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Blue steel wand or dagger with brown wooden handle and glowing tip.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "blue-gray book featuring a mint-green jellyfish over ocean waves":
-      return tx("blue-gray book featuring a mint-green jellyfish over ocean waves", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("blue-gray book featuring a mint-green jellyfish over ocean waves", "[accessibility] [dreamsign] Dreamsign image description.");
     case "blue-gray rat with red eyes on a brown branch":
-      return tx("blue-gray rat with red eyes on a brown branch", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("blue-gray rat with red eyes on a brown branch", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Blue-gray square panel with bright red-orange branching nodes and lines.":
-      return tx("Blue-gray square panel with bright red-orange branching nodes and lines.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Blue-gray square panel with bright red-orange branching nodes and lines.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Blue-green fish with orange belly, sharp teeth, and speckled scales.":
-      return tx("Blue-green fish with orange belly, sharp teeth, and speckled scales.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Blue-green fish with orange belly, sharp teeth, and speckled scales.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "bluish-gray bat wing with dark shadows and a sleek curved membrane":
-      return tx("bluish-gray bat wing with dark shadows and a sleek curved membrane", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("bluish-gray bat wing with dark shadows and a sleek curved membrane", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Bound bundle of pale green herbs with purple and yellow flowers":
-      return tx("Bound bundle of pale green herbs with purple and yellow flowers", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Bound bundle of pale green herbs with purple and yellow flowers", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Bright blue feather fan with green leaves at the base":
-      return tx("Bright blue feather fan with green leaves at the base", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Bright blue feather fan with green leaves at the base", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Bright golden eye with black slit pupil and glowing amber iris.":
-      return tx("Bright golden eye with black slit pupil and glowing amber iris.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Bright golden eye with black slit pupil and glowing amber iris.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "bright green beetle with yellow highlights and glossy segmented shell":
-      return tx("bright green beetle with yellow highlights and glossy segmented shell", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("bright green beetle with yellow highlights and glossy segmented shell", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Bright green faceted gemstone pendant in a gold setting.":
-      return tx("Bright green faceted gemstone pendant in a gold setting.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Bright green faceted gemstone pendant in a gold setting.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "bright green slime blob covered in multiple blinking eyeballs":
-      return tx("bright green slime blob covered in multiple blinking eyeballs", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("bright green slime blob covered in multiple blinking eyeballs", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Bright red faceted crystal gem with sharp reflective planes.":
-      return tx("Bright red faceted crystal gem with sharp reflective planes.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Bright red faceted crystal gem with sharp reflective planes.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "brown and orange pile of rounded wooden nuts or seeds":
-      return tx("brown and orange pile of rounded wooden nuts or seeds", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("brown and orange pile of rounded wooden nuts or seeds", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Brown banded worm curled in an S shape with glossy segmented rings":
-      return tx("Brown banded worm curled in an S shape with glossy segmented rings", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Brown banded worm curled in an S shape with glossy segmented rings", "[accessibility] [dreamsign] Dreamsign image description.");
     case "brown book embossed with a paw print medallion on the cover":
-      return tx("brown book embossed with a paw print medallion on the cover", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("brown book embossed with a paw print medallion on the cover", "[accessibility] [dreamsign] Dreamsign image description.");
     case "brown broom with red band and glowing yellow-green bristles":
-      return tx("brown broom with red band and glowing yellow-green bristles", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("brown broom with red band and glowing yellow-green bristles", "[accessibility] [dreamsign] Dreamsign image description.");
     case "brown hooded stone or shell with swirling cream streaks and a circular dark opening":
-      return tx("brown hooded stone or shell with swirling cream streaks and a circular dark opening", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("brown hooded stone or shell with swirling cream streaks and a circular dark opening", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Brown human skull with hollow eye sockets and teeth.":
-      return tx("Brown human skull with hollow eye sockets and teeth.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Brown human skull with hollow eye sockets and teeth.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Brown leather satchel with gold buckle, stitching, and flap closure.":
-      return tx("Brown leather satchel with gold buckle, stitching, and flap closure.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Brown leather satchel with gold buckle, stitching, and flap closure.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Brown ringed bracelet with black beads and tan claw-like hanging charms.":
-      return tx("Brown ringed bracelet with black beads and tan claw-like hanging charms.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Brown ringed bracelet with black beads and tan claw-like hanging charms.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "brown strapped book with leaf corners and parchment peeking out":
-      return tx("brown strapped book with leaf corners and parchment peeking out", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("brown strapped book with leaf corners and parchment peeking out", "[accessibility] [dreamsign] Dreamsign image description.");
     case "clear blue jar holding a black spider with red markings":
-      return tx("clear blue jar holding a black spider with red markings", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("clear blue jar holding a black spider with red markings", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Copper-brown scorpion with segmented tail and raised claws.":
-      return tx("Copper-brown scorpion with segmented tail and raised claws.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Copper-brown scorpion with segmented tail and raised claws.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Cream and orange spotted spiral shell with rounded bands.":
-      return tx("Cream and orange spotted spiral shell with rounded bands.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Cream and orange spotted spiral shell with rounded bands.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "cream candle with golden flame and melted wax drips":
-      return tx("cream candle with golden flame and melted wax drips", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("cream candle with golden flame and melted wax drips", "[accessibility] [dreamsign] Dreamsign image description.");
     case "cream theatrical mask with black eye makeup and dark hair backing":
-      return tx("cream theatrical mask with black eye makeup and dark hair backing", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("cream theatrical mask with black eye makeup and dark hair backing", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Cream-colored paired teeth with smooth ivory shading and dark root gaps":
-      return tx("Cream-colored paired teeth with smooth ivory shading and dark root gaps", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Cream-colored paired teeth with smooth ivory shading and dark root gaps", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Cream-colored rolled parchment scroll with softly shaded edges.":
-      return tx("Cream-colored rolled parchment scroll with softly shaded edges.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Cream-colored rolled parchment scroll with softly shaded edges.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "cream-white segmented grub with red head, orange legs, and black mandibles":
-      return tx("cream-white segmented grub with red head, orange legs, and black mandibles", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("cream-white segmented grub with red head, orange legs, and black mandibles", "[accessibility] [dreamsign] Dreamsign image description.");
     case "curved black horn or claw with cream spots and bright green interior":
-      return tx("curved black horn or claw with cream spots and bright green interior", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("curved black horn or claw with cream spots and bright green interior", "[accessibility] [dreamsign] Dreamsign image description.");
     case "curved black staff with copper wrappings, feathers, and dark hanging charms":
-      return tx("curved black staff with copper wrappings, feathers, and dark hanging charms", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("curved black staff with copper wrappings, feathers, and dark hanging charms", "[accessibility] [dreamsign] Dreamsign image description.");
     case "curved silver blade with black grip, tan guard, and cyan glowing background":
-      return tx("curved silver blade with black grip, tan guard, and cyan glowing background", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("curved silver blade with black grip, tan guard, and cyan glowing background", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Dark brown witch hat with a black band and silver buckle.":
-      return tx("Dark brown witch hat with a black band and silver buckle.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Dark brown witch hat with a black band and silver buckle.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "dark gray mortar holding bright yellow-green potion with a gold pestle":
-      return tx("dark gray mortar holding bright yellow-green potion with a gold pestle", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("dark gray mortar holding bright yellow-green potion with a gold pestle", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Dark gray stone with bright cyan rune-like symbol inset.":
-      return tx("Dark gray stone with bright cyan rune-like symbol inset.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Dark gray stone with bright cyan rune-like symbol inset.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Dark magenta flower petals layered into a velvety blossom.":
-      return tx("Dark magenta flower petals layered into a velvety blossom.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Dark magenta flower petals layered into a velvety blossom.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "dark red sealed envelope tied with ribbon and gold wax seal":
-      return tx("dark red sealed envelope tied with ribbon and gold wax seal", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("dark red sealed envelope tied with ribbon and gold wax seal", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Dark red woven orb with olive beads, wrapped in brown cords and gray tassels.":
-      return tx("Dark red woven orb with olive beads, wrapped in brown cords and gray tassels.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Dark red woven orb with olive beads, wrapped in brown cords and gray tassels.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "deep red leather pouch with gold cord, blue beads, and stitched flap":
-      return tx("deep red leather pouch with gold cord, blue beads, and stitched flap", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("deep red leather pouch with gold cord, blue beads, and stitched flap", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Faceted red-orange crystal with bright translucent highlights.":
-      return tx("Faceted red-orange crystal with bright translucent highlights.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Faceted red-orange crystal with bright translucent highlights.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Glass vial of bright purple powder with cork stopper.":
-      return tx("Glass vial of bright purple powder with cork stopper.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Glass vial of bright purple powder with cork stopper.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "glossy pink and purple crystal sphere on a brown pedestal":
-      return tx("glossy pink and purple crystal sphere on a brown pedestal", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("glossy pink and purple crystal sphere on a brown pedestal", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Glossy red lollipop or wand with a tapered silver stick.":
-      return tx("Glossy red lollipop or wand with a tapered silver stick.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Glossy red lollipop or wand with a tapered silver stick.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Glossy red tongue-like organ with raised bumps and wet highlights":
-      return tx("Glossy red tongue-like organ with raised bumps and wet highlights", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Glossy red tongue-like organ with raised bumps and wet highlights", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Glowing blue crystal facets with white highlights and soft purple shadows":
-      return tx("Glowing blue crystal facets with white highlights and soft purple shadows", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Glowing blue crystal facets with white highlights and soft purple shadows", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Glowing red amber egg with fiery yellow core and dark crack lines.":
-      return tx("Glowing red amber egg with fiery yellow core and dark crack lines.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Glowing red amber egg with fiery yellow core and dark crack lines.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Glowing red wedge-shaped gem or cheese-like shard with oval cutouts.":
-      return tx("Glowing red wedge-shaped gem or cheese-like shard with oval cutouts.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Glowing red wedge-shaped gem or cheese-like shard with oval cutouts.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Gold triangular eye amulet with horns and carved sunburst details.":
-      return tx("Gold triangular eye amulet with horns and carved sunburst details.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Gold triangular eye amulet with horns and carved sunburst details.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Gold-rimmed circular lens filled with purple and magenta clouds.":
-      return tx("Gold-rimmed circular lens filled with purple and magenta clouds.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Gold-rimmed circular lens filled with purple and magenta clouds.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Golden autumn leaf with brown veins and glowing amber edges.":
-      return tx("Golden autumn leaf with brown veins and glowing amber edges.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Golden autumn leaf with brown veins and glowing amber edges.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "golden clam shell with a pale pearl-like interior and striped lid":
-      return tx("golden clam shell with a pale pearl-like interior and striped lid", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("golden clam shell with a pale pearl-like interior and striped lid", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Golden feather with brown shaft and warm orange glow.":
-      return tx("Golden feather with brown shaft and warm orange glow.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Golden feather with brown shaft and warm orange glow.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Golden fruit-like charm with a mesh-patterned orb and smooth teardrop front.":
-      return tx("Golden fruit-like charm with a mesh-patterned orb and smooth teardrop front.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Golden fruit-like charm with a mesh-patterned orb and smooth teardrop front.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Golden ginger root with sliced yellow pieces and warm brown shadows.":
-      return tx("Golden ginger root with sliced yellow pieces and warm brown shadows.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Golden ginger root with sliced yellow pieces and warm brown shadows.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "golden ornate key with curled filigree bow and bright polished shaft":
-      return tx("golden ornate key with curled filigree bow and bright polished shaft", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("golden ornate key with curled filigree bow and bright polished shaft", "[accessibility] [dreamsign] Dreamsign image description.");
     case "golden root vegetable with green leaves and twisted trailing tendrils":
-      return tx("golden root vegetable with green leaves and twisted trailing tendrils", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("golden root vegetable with green leaves and twisted trailing tendrils", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Gray cloth pouch tied at the neck, glowing with cyan light.":
-      return tx("Gray cloth pouch tied at the neck, glowing with cyan light.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Gray cloth pouch tied at the neck, glowing with cyan light.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Gray stone bowl with green leaves and pale golden pestle or stem.":
-      return tx("Gray stone bowl with green leaves and pale golden pestle or stem.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Gray stone bowl with green leaves and pale golden pestle or stem.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Gray wolf mask medallion with orange gem and dark beads.":
-      return tx("Gray wolf mask medallion with orange gem and dark beads.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Gray wolf mask medallion with orange gem and dark beads.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "gray wooden book with a bright orange lightning bolt across the cover":
-      return tx("gray wooden book with a bright orange lightning bolt across the cover", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("gray wooden book with a bright orange lightning bolt across the cover", "[accessibility] [dreamsign] Dreamsign image description.");
     case "gray-blue rose blossom with pale green stem and leaves":
-      return tx("gray-blue rose blossom with pale green stem and leaves", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("gray-blue rose blossom with pale green stem and leaves", "[accessibility] [dreamsign] Dreamsign image description.");
     case "green book with a coiled serpent embossed on the cover":
-      return tx("green book with a coiled serpent embossed on the cover", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("green book with a coiled serpent embossed on the cover", "[accessibility] [dreamsign] Dreamsign image description.");
     case "green book with a turquoise swirling gem set in the cover":
-      return tx("green book with a turquoise swirling gem set in the cover", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("green book with a turquoise swirling gem set in the cover", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Green fly with translucent wings, brown legs, and copper eyes.":
-      return tx("Green fly with translucent wings, brown legs, and copper eyes.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Green fly with translucent wings, brown legs, and copper eyes.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Green leafy sprig with pale veins and soft brown stem.":
-      return tx("Green leafy sprig with pale veins and soft brown stem.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Green leafy sprig with pale veins and soft brown stem.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Green potion bottle with black skull emblem and toxic glow.":
-      return tx("Green potion bottle with black skull emblem and toxic glow.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Green potion bottle with black skull emblem and toxic glow.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "green spiky cactus with small offshoots and pale thorns":
-      return tx("green spiky cactus with small offshoots and pale thorns", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("green spiky cactus with small offshoots and pale thorns", "[accessibility] [dreamsign] Dreamsign image description.");
     case "green-and-black berry-like orb surrounded by yellow spotted petals":
-      return tx("green-and-black berry-like orb surrounded by yellow spotted petals", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("green-and-black berry-like orb surrounded by yellow spotted petals", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Hair Lock Dreamsign artwork":
-      return tx("Hair Lock Dreamsign artwork", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Hair Lock Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Iridescent oval gem shimmering orange, yellow, green, and blue.":
-      return tx("Iridescent oval gem shimmering orange, yellow, green, and blue.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Iridescent oval gem shimmering orange, yellow, green, and blue.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "ivory and pink bell with red ribbon tied around the top":
-      return tx("ivory and pink bell with red ribbon tied around the top", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("ivory and pink bell with red ribbon tied around the top", "[accessibility] [dreamsign] Dreamsign image description.");
     case "ivory curved claw or tusk with brown spots":
-      return tx("ivory curved claw or tusk with brown spots", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("ivory curved claw or tusk with brown spots", "[accessibility] [dreamsign] Dreamsign image description.");
     case "large faceted purple crystal on a brown pedestal":
-      return tx("large faceted purple crystal on a brown pedestal", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("large faceted purple crystal on a brown pedestal", "[accessibility] [dreamsign] Dreamsign image description.");
     case "light green plant sprouting many eye-like nodules from a cracked pot":
-      return tx("light green plant sprouting many eye-like nodules from a cracked pot", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("light green plant sprouting many eye-like nodules from a cracked pot", "[accessibility] [dreamsign] Dreamsign image description.");
     case "multiple fantasy item icons on dark background, dominated by varied reds, golds, blues, and greens":
-      return tx("multiple fantasy item icons on dark background, dominated by varied reds, golds, blues, and greens", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("multiple fantasy item icons on dark background, dominated by varied reds, golds, blues, and greens", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Off-white skull with dark eye sockets and long beak-like nasal opening.":
-      return tx("Off-white skull with dark eye sockets and long beak-like nasal opening.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Off-white skull with dark eye sockets and long beak-like nasal opening.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "olive green leafy branch bound with yellow twine":
-      return tx("olive green leafy branch bound with yellow twine", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("olive green leafy branch bound with yellow twine", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Olive green spotted toad with dark limbs and splayed webbed feet":
-      return tx("Olive green spotted toad with dark limbs and splayed webbed feet", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Olive green spotted toad with dark limbs and splayed webbed feet", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Olive-green spiny shell or seed pod dotted with bumps.":
-      return tx("Olive-green spiny shell or seed pod dotted with bumps.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Olive-green spiny shell or seed pod dotted with bumps.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Open blue-gray clam shell holding a glowing pearl.":
-      return tx("Open blue-gray clam shell holding a glowing pearl.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Open blue-gray clam shell holding a glowing pearl.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "orange glowing ember-like disc surrounded by soft pink aura":
-      return tx("orange glowing ember-like disc surrounded by soft pink aura", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("orange glowing ember-like disc surrounded by soft pink aura", "[accessibility] [dreamsign] Dreamsign image description.");
     case "orange poppy-like flower with dark purple center and soft glowing petals":
-      return tx("orange poppy-like flower with dark purple center and soft glowing petals", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("orange poppy-like flower with dark purple center and soft glowing petals", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Orange spiked egg with yellow spots and ember-like glowing highlights":
-      return tx("Orange spiked egg with yellow spots and ember-like glowing highlights", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Orange spiked egg with yellow spots and ember-like glowing highlights", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Orange-brown star anise pod with eight pointed segments.":
-      return tx("Orange-brown star anise pod with eight pointed segments.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Orange-brown star anise pod with eight pointed segments.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Orange-yellow eggs nestled in a woven brown nest.":
-      return tx("Orange-yellow eggs nestled in a woven brown nest.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Orange-yellow eggs nestled in a woven brown nest.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Pale beige conch shell with scattered brown speckles.":
-      return tx("Pale beige conch shell with scattered brown speckles.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Pale beige conch shell with scattered brown speckles.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "pale cyan feather with soft translucent barbs on a white background":
-      return tx("pale cyan feather with soft translucent barbs on a white background", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("pale cyan feather with soft translucent barbs on a white background", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Pale gray feather with curved quill and soft layered barbs.":
-      return tx("Pale gray feather with curved quill and soft layered barbs.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Pale gray feather with curved quill and soft layered barbs.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "pale green clover leaf with white ringed center pattern":
-      return tx("pale green clover leaf with white ringed center pattern", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("pale green clover leaf with white ringed center pattern", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Pale ivory circular shells or coins, layered and glossy, on warm tan background.":
-      return tx("Pale ivory circular shells or coins, layered and glossy, on warm tan background.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Pale ivory circular shells or coins, layered and glossy, on warm tan background.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Pale pink segmented worm curled into a hook shape with soft beige shading":
-      return tx("Pale pink segmented worm curled into a hook shape with soft beige shading", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Pale pink segmented worm curled into a hook shape with soft beige shading", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Pale white mouse with red eyes and pink tail, curled in profile":
-      return tx("Pale white mouse with red eyes and pink tail, curled in profile", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Pale white mouse with red eyes and pink tail, curled in profile", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Pale yellow parchment pages with dark handwritten notes and tiny diagram.":
-      return tx("Pale yellow parchment pages with dark handwritten notes and tiny diagram.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Pale yellow parchment pages with dark handwritten notes and tiny diagram.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Pink speckled mushroom cap with two hollow dark openings.":
-      return tx("Pink speckled mushroom cap with two hollow dark openings.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Pink speckled mushroom cap with two hollow dark openings.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "purple-black orb with branching cracks and a bright white glowing center":
-      return tx("purple-black orb with branching cracks and a bright white glowing center", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("purple-black orb with branching cracks and a bright white glowing center", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Rainbow twisted horn or horn-shaped spiral, fading from green to orange.":
-      return tx("Rainbow twisted horn or horn-shaped spiral, fading from green to orange.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Rainbow twisted horn or horn-shaped spiral, fading from green to orange.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Rainbow-capped mushroom with tan speckled stem and golden underside.":
-      return tx("Rainbow-capped mushroom with tan speckled stem and golden underside.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Rainbow-capped mushroom with tan speckled stem and golden underside.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Red anatomical heart with glossy veins and rounded chambers.":
-      return tx("Red anatomical heart with glossy veins and rounded chambers.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Red anatomical heart with glossy veins and rounded chambers.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "red and black butterfly with white-spotted wing edges":
-      return tx("red and black butterfly with white-spotted wing edges", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("red and black butterfly with white-spotted wing edges", "[accessibility] [dreamsign] Dreamsign image description.");
     case "red fiery eye orb with vertical slit pupil on a brown base":
-      return tx("red fiery eye orb with vertical slit pupil on a brown base", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("red fiery eye orb with vertical slit pupil on a brown base", "[accessibility] [dreamsign] Dreamsign image description.");
     case "red spellbook with turquoise gem, gold corners, and green ribbon":
-      return tx("red spellbook with turquoise gem, gold corners, and green ribbon", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("red spellbook with turquoise gem, gold corners, and green ribbon", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Red spotted goblet filled with yellow liquid and a curled handle":
-      return tx("Red spotted goblet filled with yellow liquid and a curled handle", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Red spotted goblet filled with yellow liquid and a curled handle", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Red spotted mushroom with white flecks and pale stem.":
-      return tx("Red spotted mushroom with white flecks and pale stem.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Red spotted mushroom with white flecks and pale stem.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Red star emblem over a white and gray circular badge.":
-      return tx("Red star emblem over a white and gray circular badge.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Red star emblem over a white and gray circular badge.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Red-orange faceted gem or crystal with rough, glowing, rounded shape.":
-      return tx("Red-orange faceted gem or crystal with rough, glowing, rounded shape.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Red-orange faceted gem or crystal with rough, glowing, rounded shape.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "red-wrapped wand with blue-purple crystal tip and hanging green leaves":
-      return tx("red-wrapped wand with blue-purple crystal tip and hanging green leaves", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("red-wrapped wand with blue-purple crystal tip and hanging green leaves", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Reddish-orange sack spilling pale rune-marked stones or shells.":
-      return tx("Reddish-orange sack spilling pale rune-marked stones or shells.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Reddish-orange sack spilling pale rune-marked stones or shells.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Shallow golden bowl holding sparkling violet powder or liquid.":
-      return tx("Shallow golden bowl holding sparkling violet powder or liquid.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Shallow golden bowl holding sparkling violet powder or liquid.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Shimmering lime-green ribbon or liquid fabric twisting in soft waves.":
-      return tx("Shimmering lime-green ribbon or liquid fabric twisting in soft waves.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Shimmering lime-green ribbon or liquid fabric twisting in soft waves.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Shiny red apple with green segmented stem and curled leaf.":
-      return tx("Shiny red apple with green segmented stem and curled leaf.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Shiny red apple with green segmented stem and curled leaf.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Silver circular emblem with a white shard symbol on lavender and magenta background":
-      return tx("Silver circular emblem with a white shard symbol on lavender and magenta background", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Silver circular emblem with a white shard symbol on lavender and magenta background", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Silver crescent sickle with teal glow and wooden handle.":
-      return tx("Silver crescent sickle with teal glow and wooden handle.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Silver crescent sickle with teal glow and wooden handle.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "silver dagger with a skull hilt and dark handle":
-      return tx("silver dagger with a skull hilt and dark handle", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("silver dagger with a skull hilt and dark handle", "[accessibility] [dreamsign] Dreamsign image description.");
     case "silver metal key with round ornate bow and long cylindrical shaft":
-      return tx("silver metal key with round ornate bow and long cylindrical shaft", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("silver metal key with round ornate bow and long cylindrical shaft", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Silver segmented shell or armored dome, shaded white and gray.":
-      return tx("Silver segmented shell or armored dome, shaded white and gray.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Silver segmented shell or armored dome, shaded white and gray.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "silver-framed mirror with cracked glass, purple jewel, and curled ornamentation":
-      return tx("silver-framed mirror with cracked glass, purple jewel, and curled ornamentation", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("silver-framed mirror with cracked glass, purple jewel, and curled ornamentation", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Single black feather with layered barbs and a thin dark shaft.":
-      return tx("Single black feather with layered barbs and a thin dark shaft.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Single black feather with layered barbs and a thin dark shaft.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Skull pendant with dangling chains, beige bone and dark eye sockets.":
-      return tx("Skull pendant with dangling chains, beige bone and dark eye sockets.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Skull pendant with dangling chains, beige bone and dark eye sockets.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "sleek black-and-silver droplet of liquid or polished metal":
-      return tx("sleek black-and-silver droplet of liquid or polished metal", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("sleek black-and-silver droplet of liquid or polished metal", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Small hanging talisman with beige face, orange beads, and metal tools.":
-      return tx("Small hanging talisman with beige face, orange beads, and metal tools.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Small hanging talisman with beige face, orange beads, and metal tools.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Stitched tan voodoo doll with pins, red button eye, and rough fabric":
-      return tx("Stitched tan voodoo doll with pins, red button eye, and rough fabric", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Stitched tan voodoo doll with pins, red button eye, and rough fabric", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Swirling crimson and pink feather or flower petal form.":
-      return tx("Swirling crimson and pink feather or flower petal form.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Swirling crimson and pink feather or flower petal form.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "tan bone pipe or whistle with rounded joints and hollow end":
-      return tx("tan bone pipe or whistle with rounded joints and hollow end", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("tan bone pipe or whistle with rounded joints and hollow end", "[accessibility] [dreamsign] Dreamsign image description.");
     case "tan book with a glowing red eye and cracked mystical cover":
-      return tx("tan book with a glowing red eye and cracked mystical cover", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("tan book with a glowing red eye and cracked mystical cover", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Tan drum with carved skull lid, brown body, and gold tension cords.":
-      return tx("Tan drum with carved skull lid, brown body, and gold tension cords.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Tan drum with carved skull lid, brown body, and gold tension cords.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "teal tarot card with gold crescent moon and star symbols":
-      return tx("teal tarot card with gold crescent moon and star symbols", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("teal tarot card with gold crescent moon and star symbols", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Three amber gem shards set in pale cream honeycomb frames.":
-      return tx("Three amber gem shards set in pale cream honeycomb frames.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Three amber gem shards set in pale cream honeycomb frames.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Translucent aqua shell with rainbow-dotted cap and flowing ruffled skirt.":
-      return tx("Translucent aqua shell with rainbow-dotted cap and flowing ruffled skirt.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Translucent aqua shell with rainbow-dotted cap and flowing ruffled skirt.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Translucent green slime mound with rounded gelatinous bulges.":
-      return tx("Translucent green slime mound with rounded gelatinous bulges.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Translucent green slime mound with rounded gelatinous bulges.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "two brown star anise blossoms on warm amber background":
-      return tx("two brown star anise blossoms on warm amber background", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("two brown star anise blossoms on warm amber background", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Two turquoise ice crystals with white veins and glossy rounded facets.":
-      return tx("Two turquoise ice crystals with white veins and glossy rounded facets.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Two turquoise ice crystals with white veins and glossy rounded facets.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "White garlic bulb with creamy cloves and faint beige shading.":
-      return tx("White garlic bulb with creamy cloves and faint beige shading.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("White garlic bulb with creamy cloves and faint beige shading.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "White-gold feather glowing softly against a vivid yellow background.":
-      return tx("White-gold feather glowing softly against a vivid yellow background.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("White-gold feather glowing softly against a vivid yellow background.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Wooden hourglass with pale sand, tilted in a warm brown frame.":
-      return tx("Wooden hourglass with pale sand, tilted in a warm brown frame.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Wooden hourglass with pale sand, tilted in a warm brown frame.", "[accessibility] [dreamsign] Dreamsign image description.");
     case "wooden staff topped with glowing green gem and wrapped root-like branches":
-      return tx("wooden staff topped with glowing green gem and wrapped root-like branches", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("wooden staff topped with glowing green gem and wrapped root-like branches", "[accessibility] [dreamsign] Dreamsign image description.");
     case "yellow-gold fish with orange scales and bright fins":
-      return tx("yellow-gold fish with orange scales and bright fins", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("yellow-gold fish with orange scales and bright fins", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Yellow-green spotted egg with large dark blotches and smooth rounded surface.":
-      return tx("Yellow-green spotted egg with large dark blotches and smooth rounded surface.", "Player-facing Dreamsign image description from the canonical Dreamsign catalog.");
+      return tx("Yellow-green spotted egg with large dark blotches and smooth rounded surface.", "[accessibility] [dreamsign] Dreamsign image description.");
     default:
       return null;
   }
@@ -481,7 +481,7 @@ export function localizedRuntimeTemplate(
         {
           action_label: runtimeTemplateArgument(values, "action-label"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "{card-theme} cards are more likely here.":
       return txa(
@@ -489,7 +489,7 @@ export function localizedRuntimeTemplate(
         {
           card_theme: runtimeTemplateArgument(values, "card-theme"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "{term} {1}":
       return txa(
@@ -498,7 +498,7 @@ export function localizedRuntimeTemplate(
           term: runtimeTemplateArgument(values, "term"),
           value_1: runtimeTemplateArgument(values, "1"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "{term} {1}●":
       return txa(
@@ -507,7 +507,7 @@ export function localizedRuntimeTemplate(
           term: runtimeTemplateArgument(values, "term"),
           value_1: runtimeTemplateArgument(values, "1"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Abandon a character to draw {count}?":
       return txa(
@@ -515,7 +515,7 @@ export function localizedRuntimeTemplate(
         {
           count: runtimeTemplateArgument(values, "count"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Add {count} Card to your deck.":
       return txa(
@@ -523,7 +523,7 @@ export function localizedRuntimeTemplate(
         {
           count: runtimeTemplateArgument(values, "count"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Add {count} Cards to your deck.":
       return txa(
@@ -531,7 +531,7 @@ export function localizedRuntimeTemplate(
         {
           count: runtimeTemplateArgument(values, "count"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Add the {siteName} site.":
       return txa(
@@ -539,7 +539,7 @@ export function localizedRuntimeTemplate(
         {
           site_name: runtimeTemplateArgument(values, "siteName"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Affiliation: {name}":
       return txa(
@@ -547,7 +547,7 @@ export function localizedRuntimeTemplate(
         {
           affiliation_name: runtimeTemplateArgument(values, "name"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "All cards in your deck are reduced in cost by 1●. Gain 3 {nightmare_card} cards.":
       return txa(
@@ -555,7 +555,7 @@ export function localizedRuntimeTemplate(
         {
           nightmare_card: runtimeTemplateArgument(values, "nightmare_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "All cards in your deck cost 1● less. Gain 3 {nightmare_card} cards.":
       return txa(
@@ -563,7 +563,7 @@ export function localizedRuntimeTemplate(
         {
           nightmare_card: runtimeTemplateArgument(values, "nightmare_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Apply Inspired to {deck_card}":
       return txa(
@@ -571,7 +571,7 @@ export function localizedRuntimeTemplate(
         {
           deck_card: runtimeTemplateArgument(values, "deck_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Apply Kindled to {deck_card}":
       return txa(
@@ -579,7 +579,7 @@ export function localizedRuntimeTemplate(
         {
           deck_card: runtimeTemplateArgument(values, "deck_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Change {deck_card} to become a {card_type}":
       return txa(
@@ -588,7 +588,7 @@ export function localizedRuntimeTemplate(
           deck_card: runtimeTemplateArgument(values, "deck_card"),
           card_type: runtimeTemplateArgument(values, "card_type"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Change {deck_card} to become a Survivor":
       return txa(
@@ -596,7 +596,7 @@ export function localizedRuntimeTemplate(
         {
           deck_card: runtimeTemplateArgument(values, "deck_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Choose {count} cards to copy.":
       return txa(
@@ -604,7 +604,7 @@ export function localizedRuntimeTemplate(
         {
           count: runtimeTemplateArgument(values, "count"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Choose {count} cards to discard.":
       return txa(
@@ -612,7 +612,7 @@ export function localizedRuntimeTemplate(
         {
           count: runtimeTemplateArgument(values, "count"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Choose a card and add {count} copies of it to your deck.":
       return txa(
@@ -620,7 +620,7 @@ export function localizedRuntimeTemplate(
         {
           count: runtimeTemplateArgument(values, "count"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Choose a card and add {count} copy of it to your deck.":
       return txa(
@@ -628,7 +628,7 @@ export function localizedRuntimeTemplate(
         {
           count: runtimeTemplateArgument(values, "count"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Choose a card costing at most {maximumCost}●.":
       return txa(
@@ -636,7 +636,7 @@ export function localizedRuntimeTemplate(
         {
           maximum_cost: runtimeTemplateArgument(values, "maximumCost"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Choose a card to become {transfiguration}.":
       return txa(
@@ -644,7 +644,7 @@ export function localizedRuntimeTemplate(
         {
           transfiguration: runtimeTemplateArgument(values, "transfiguration"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Choose a card to gain {count} copies of.":
       return txa(
@@ -652,7 +652,7 @@ export function localizedRuntimeTemplate(
         {
           count: runtimeTemplateArgument(values, "count"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Choose a card to purge and replace it with {fixed_card}":
       return txa(
@@ -660,7 +660,7 @@ export function localizedRuntimeTemplate(
         {
           fixed_card: runtimeTemplateArgument(values, "fixed_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Choose a card to purge for {essence-per-spark} essence per ✦.":
       return txa(
@@ -668,7 +668,7 @@ export function localizedRuntimeTemplate(
         {
           essence_per_spark: runtimeTemplateArgument(values, "essence-per-spark"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Choose a Character to become {subtype}.":
       return txa(
@@ -676,7 +676,7 @@ export function localizedRuntimeTemplate(
         {
           subtype: runtimeTemplateArgument(values, "subtype"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Choose one {categoryName} card to add to your deck.":
       return txa(
@@ -684,7 +684,7 @@ export function localizedRuntimeTemplate(
         {
           category_name: runtimeTemplateArgument(values, "categoryName"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Choose one card from the {categoryName} to add to your deck.":
       return txa(
@@ -692,7 +692,7 @@ export function localizedRuntimeTemplate(
         {
           category_name: runtimeTemplateArgument(values, "categoryName"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Choose one of {count} cards in your deck to duplicate.":
       return txa(
@@ -700,7 +700,7 @@ export function localizedRuntimeTemplate(
         {
           count: runtimeTemplateArgument(values, "count"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Choose whether to abandon a character and draw {count} cards.":
       return txa(
@@ -708,7 +708,7 @@ export function localizedRuntimeTemplate(
         {
           count: runtimeTemplateArgument(values, "count"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Discard {count} cards":
       return txa(
@@ -716,7 +716,7 @@ export function localizedRuntimeTemplate(
         {
           count: runtimeTemplateArgument(values, "count"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Discard {count} cards, then draw {count}?":
       return txa(
@@ -724,7 +724,7 @@ export function localizedRuntimeTemplate(
         {
           count: runtimeTemplateArgument(values, "count"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Discover a ≤{maximumCost}● cost card":
       return txa(
@@ -732,7 +732,7 @@ export function localizedRuntimeTemplate(
         {
           maximum_cost: runtimeTemplateArgument(values, "maximumCost"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Draft ({pickNumber}/{pickTotal})":
       return txa(
@@ -741,7 +741,7 @@ export function localizedRuntimeTemplate(
           pick_number: runtimeTemplateArgument(values, "pickNumber"),
           pick_total: runtimeTemplateArgument(values, "pickTotal"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Draft {pickCount}x":
       return txa(
@@ -749,7 +749,7 @@ export function localizedRuntimeTemplate(
         {
           pick_count: runtimeTemplateArgument(values, "pickCount"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Duplicate {cardName}":
       return txa(
@@ -757,7 +757,7 @@ export function localizedRuntimeTemplate(
         {
           card_name: runtimeTemplateArgument(values, "cardName"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Every Event card in your deck becomes ❖ (fast). Gain 2 {nightmare_card} cards.":
       return txa(
@@ -765,7 +765,7 @@ export function localizedRuntimeTemplate(
         {
           nightmare_card: runtimeTemplateArgument(values, "nightmare_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Gain {amount}●":
       return txa(
@@ -773,7 +773,7 @@ export function localizedRuntimeTemplate(
         {
           amount: runtimeTemplateArgument(values, "amount"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Gain {cardName}":
       return txa(
@@ -781,7 +781,7 @@ export function localizedRuntimeTemplate(
         {
           card_name: runtimeTemplateArgument(values, "cardName"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Gain {count} Card":
       return txa(
@@ -789,7 +789,7 @@ export function localizedRuntimeTemplate(
         {
           count: runtimeTemplateArgument(values, "count"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Gain {count} Cards":
       return txa(
@@ -797,7 +797,7 @@ export function localizedRuntimeTemplate(
         {
           count: runtimeTemplateArgument(values, "count"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Gain {dreamsignName}":
       return txa(
@@ -805,7 +805,7 @@ export function localizedRuntimeTemplate(
         {
           dreamsign_name: runtimeTemplateArgument(values, "dreamsignName"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Gain {fixed_card}":
       return txa(
@@ -813,7 +813,7 @@ export function localizedRuntimeTemplate(
         {
           fixed_card: runtimeTemplateArgument(values, "fixed_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Gain {offered_card}":
       return txa(
@@ -821,7 +821,7 @@ export function localizedRuntimeTemplate(
         {
           offered_card: runtimeTemplateArgument(values, "offered_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Gain 2 {nightmare_card} cards. Gain {fixed_card}.":
       return txa(
@@ -830,7 +830,7 @@ export function localizedRuntimeTemplate(
           nightmare_card: runtimeTemplateArgument(values, "nightmare_card"),
           fixed_card: runtimeTemplateArgument(values, "fixed_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Gain 2 {nightmare_card} cards. Gain Candle.":
       return txa(
@@ -838,7 +838,7 @@ export function localizedRuntimeTemplate(
         {
           nightmare_card: runtimeTemplateArgument(values, "nightmare_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Gain 2 {nightmare_card} cards. Gain one of 3 offered Dreamsigns.":
       return txa(
@@ -846,7 +846,7 @@ export function localizedRuntimeTemplate(
         {
           nightmare_card: runtimeTemplateArgument(values, "nightmare_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Gain 2 copies of {deck_card}":
       return txa(
@@ -854,7 +854,7 @@ export function localizedRuntimeTemplate(
         {
           deck_card: runtimeTemplateArgument(values, "deck_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Gain 2 copies of {offered_card}":
       return txa(
@@ -862,7 +862,7 @@ export function localizedRuntimeTemplate(
         {
           offered_card: runtimeTemplateArgument(values, "offered_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Gain 3 copies of {offered_card}":
       return txa(
@@ -870,7 +870,7 @@ export function localizedRuntimeTemplate(
         {
           offered_card: runtimeTemplateArgument(values, "offered_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Gain any number of Event cards from 4 choices. Apply Enduring to each eligible card gained. Gain 2 {nightmare_card} cards.":
       return txa(
@@ -878,7 +878,7 @@ export function localizedRuntimeTemplate(
         {
           nightmare_card: runtimeTemplateArgument(values, "nightmare_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Look at the top {1} cards of your deck, then put any number of them into your void and the rest on top in any order.":
       return txa(
@@ -886,7 +886,7 @@ export function localizedRuntimeTemplate(
         {
           value_1: runtimeTemplateArgument(values, "1"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Purge {cardName}":
       return txa(
@@ -894,7 +894,7 @@ export function localizedRuntimeTemplate(
         {
           card_name: runtimeTemplateArgument(values, "cardName"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Purge {count}":
       return txa(
@@ -902,7 +902,7 @@ export function localizedRuntimeTemplate(
         {
           count: runtimeTemplateArgument(values, "count"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Purge {deck_card}. Apply Resonant to every other eligible card in your deck with the same card type.":
       return txa(
@@ -910,7 +910,7 @@ export function localizedRuntimeTemplate(
         {
           deck_card: runtimeTemplateArgument(values, "deck_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Purge {starter_card}":
       return txa(
@@ -918,7 +918,7 @@ export function localizedRuntimeTemplate(
         {
           starter_card: runtimeTemplateArgument(values, "starter_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Purge a random Character card and replace it with {fixed_card}":
       return txa(
@@ -926,7 +926,7 @@ export function localizedRuntimeTemplate(
         {
           fixed_card: runtimeTemplateArgument(values, "fixed_card"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Put the top {1} cards of a player's deck into their void. If the deck is empty, their opponent scores 3⍟ instead.":
       return txa(
@@ -934,7 +934,7 @@ export function localizedRuntimeTemplate(
         {
           value_1: runtimeTemplateArgument(values, "1"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "The game's Ladder Climb. Match or beat the target to win {win-essence} Essence and a Dreamsign. Try again with better odds if you miss!":
       return txa(
@@ -942,7 +942,7 @@ export function localizedRuntimeTemplate(
         {
           win_essence: runtimeTemplateArgument(values, "win-essence"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Transfigure {cardName}":
       return txa(
@@ -950,7 +950,7 @@ export function localizedRuntimeTemplate(
         {
           card_name: runtimeTemplateArgument(values, "cardName"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "Transfigure {firstCardName} and {secondCardName}":
       return txa(
@@ -959,7 +959,7 @@ export function localizedRuntimeTemplate(
           first_card_name: runtimeTemplateArgument(values, "firstCardName"),
           second_card_name: runtimeTemplateArgument(values, "secondCardName"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "You may play that card from your void for {1}●, then banish it when it leaves play.":
       return txa(
@@ -967,7 +967,7 @@ export function localizedRuntimeTemplate(
         {
           value_1: runtimeTemplateArgument(values, "1"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     case "You may play this card from your void for {1}●, then banish it when it leaves play.":
       return txa(
@@ -975,7 +975,7 @@ export function localizedRuntimeTemplate(
         {
           value_1: runtimeTemplateArgument(values, "1"),
         },
-        "Player-facing canonical game-data template. Runtime arguments are semantic values supplied by the presentation adapter.",
+        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",
       );
     default:
       return null;

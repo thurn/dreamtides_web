@@ -50,15 +50,15 @@ export function BattleCardNoteOverlay({
       title={txa(
           "Annotate {card_name}",
           { card_name: opaque(cardName) },
-          "Title of the optional player note editor for a battle card. card_name is the canonical display name and has unknown grammatical gender.",
+          "[battle] Title of the optional player note editor for a battle card. card_name is the canonical display name and has unknown grammatical gender.",
         )}
       subtitle={tx(
           "Notes appear on the card and in the inspector.",
-          "Player-facing message for the battle card note subtitle interface state.",
+          "[battle] Card note subtitle.",
         )}
       closeLabel={tx(
           "Cancel note",
-          "Player-facing message for the battle card note cancel interface state.",
+          "[battle] Card note cancel.",
         )}
       onClose={onCancel}
       desktopCenterTarget="battlefield"
@@ -73,25 +73,25 @@ export function BattleCardNoteOverlay({
           <TextField
             label={tx(
                 "Note Text",
-                "Player-facing message for the battle card note text label interface state.",
+                "[battle] Card note text label.",
               )}
             value={text}
             onChange={(value) => onTextChange(value.slice(0, 200))}
             placeholder={tx(
                 "Short reminder",
-                "Player-facing message for the battle card note placeholder interface state.",
+                "[battle] Card note placeholder.",
               )}
             supportingText={txa(
                 "{count}/200 characters",
                 { count: text.length },
-                "Player-facing message for the battle card note character count interface state.",
+                "[battle] Card note character count.",
               )}
             error={
               hasText
                 ? undefined
                 : tx(
                       "A note needs text.",
-                      "Player-facing message for the battle card note error interface state.",
+                      "[battle] Card note error.",
                     )
             }
           />
@@ -108,13 +108,13 @@ export function BattleCardNoteOverlay({
           >
             {resolve(tx(
               "Expiry",
-              "Player-facing message for the battle card note expiry label interface state.",
+              "[battle] Card note expiry label.",
             ))}
           </span>
           <Select
             ariaLabel={tx(
                 "Note expiry",
-                "Player-facing message for the battle card note expiry accessible name interface state.",
+                "[accessibility] [battle] Card note expiry name.",
               )}
             leadingGlyph={GLYPHS.duration}
             full
@@ -123,28 +123,28 @@ export function BattleCardNoteOverlay({
                 value: "end-of-next-turn",
                 label: tx(
                     "End of Next Turn",
-                    "Player-facing message for the battle card note expiry next turn interface state.",
+                    "[battle] Card note expiry next turn.",
                   ),
               },
               {
                 value: "end-of-this-turn",
                 label: tx(
                     "End of This Turn",
-                    "Player-facing message for the battle card note expiry this turn interface state.",
+                    "[battle] Card note expiry this turn.",
                   ),
               },
               {
                 value: "after-n-turns",
                 label: tx(
                     "After a Number of Turns",
-                    "Player-facing message for the battle card note expiry numbered interface state.",
+                    "[battle] Card note expiry numbered.",
                   ),
               },
               {
                 value: "manual",
                 label: tx(
                     "Manual Dismissal",
-                    "Player-facing message for the battle card note expiry manual interface state.",
+                    "[battle] Card note expiry manual.",
                   ),
               },
             ]}
@@ -159,16 +159,16 @@ export function BattleCardNoteOverlay({
             <NumberStepper
               label={tx(
                   "Turns Before Expiry",
-                  "Player-facing message for the battle card note turns label interface state.",
+                  "[battle] Card note turns label.",
                 )}
               value={afterNTurns}
               decrementLabel={tx(
                   "Use one fewer turn",
-                  "Player-facing message for the battle card note fewer turn interface state.",
+                  "[battle] Card note fewer turn.",
                 )}
               incrementLabel={tx(
                   "Use one more turn",
-                  "Player-facing message for the battle card note more turn interface state.",
+                  "[battle] Card note more turn.",
                 )}
               decrementDisabled={afterNTurns <= minimumTurns}
               incrementDisabled={afterNTurns >= maximumTurns}
@@ -191,7 +191,7 @@ export function BattleCardNoteOverlay({
           <GlassButton
             label={tx(
               meaning("card-note-cancel", "Cancel"),
-              "Player-facing message for the battle card note cancel action interface state.",
+              "[battle] Card note cancel action.",
             )}
             placement="onGlass"
             testId="battle-note-cancel"
@@ -200,7 +200,7 @@ export function BattleCardNoteOverlay({
           <GlassButton
             label={tx(
               "Add Note",
-              "Player-facing message for the battle card note add action interface state.",
+              "[battle] Card note add action.",
             )}
             placement="onGlass"
             variant="accent"

@@ -328,42 +328,42 @@ function gambleActionLabel(
     case "bet":
       return tx(
         "Bet",
-        "Player-facing message for the gamble bet action interface state.",
+        "[gamble] Bet action.",
       );
     case "draw":
       return tx(
         "Draw",
-        "Player-facing message for the gamble draw action interface state.",
+        "[gamble] Draw action.",
       );
     case "climb":
       return tx(
         "Climb",
-        "Player-facing message for the gamble climb action interface state.",
+        "[gamble] Climb action.",
       );
     case "take":
       return tx(
         "Take",
-        "Player-facing message for the gamble take action interface state.",
+        "[gamble] Take action.",
       );
     case "choose-another":
       return tx(
         "Choose Another Card",
-        "Player-facing message for the gamble choose another card action interface state.",
+        "[gamble] Choose another card action.",
       );
     case "deal":
       return tx(
         "Deal",
-        "Player-facing message for the gamble deal action interface state.",
+        "[gamble] Deal action.",
       );
     case "hit":
       return tx(
         "Hit",
-        "Player-facing message for the gamble hit action interface state.",
+        "[gamble] Hit action.",
       );
     case "stand":
       return tx(
         "Stand",
-        "Player-facing message for the gamble stand action interface state.",
+        "[gamble] Stand action.",
       );
   }
 }
@@ -391,76 +391,76 @@ function gambleOutcomeLabel(
       return view.gameId === "gravok-three-gate-wager"
         ? tx(
             "Won!",
-            "Player-facing message for the gamble gravok won outcome interface state.",
+            "[gamble] Gravok won outcome.",
           )
         : tx(
             "Won",
-            "Player-facing message for the gamble ladder won outcome interface state.",
+            "[gamble] Ladder won outcome.",
           );
     case "miss":
       return tx(
         "Miss",
-        "Player-facing message for the gamble miss outcome interface state.",
+        "[gamble] Miss outcome.",
       );
     case "safe":
       return tx(
         "Safe!",
-        "Player-facing message for the gamble safe outcome interface state.",
+        "[gamble] Safe outcome.",
       );
     case "bust":
       return tx(
         "Bust!",
-        "Player-facing message for the gamble bust outcome interface state.",
+        "[gamble] Bust outcome.",
       );
     case "prize-at-stake":
       return tx(
         "Prize at stake",
-        "Player-facing message for the gamble prize at stake outcome interface state.",
+        "[gamble] Prize at stake outcome.",
       );
     case "transfiguration":
       return tx(
         meaning("gamble-transfigure-result", "Transfigure"),
-        "Player-facing message for the gamble transfigure outcome interface state.",
+        "[gamble] [transfiguration] Transfigure outcome.",
       );
     case "essence":
       return tx(
         "Gained",
-        "Player-facing message for the gamble gained outcome interface state.",
+        "[gamble] Gained outcome.",
       );
     case "duplication":
       return tx(
         "Duplicated",
-        "Player-facing message for the gamble duplicated outcome interface state.",
+        "[gamble] Duplicated outcome.",
       );
     case "purge":
       return tx(
         "Purged",
-        "Past-tense result heading for cards removed from the player’s deck.",
+        "[card] Past-tense result heading for cards removed from the player's deck.",
       );
     case "player-win":
       return tx(
         "You Win!",
-        "Player-facing message for the gamble player win outcome interface state.",
+        "[gamble] Player win outcome.",
       );
     case "dealer-win":
       return tx(
         "Dealer Wins",
-        "Player-facing message for the gamble dealer win outcome interface state.",
+        "[gamble] Dealer win outcome.",
       );
     case "push":
       return tx(
         "Push",
-        "Player-facing message for the gamble push outcome interface state.",
+        "[gamble] Push outcome.",
       );
     case "wager-returned":
       return tx(
         "Wager Returned",
-        "Player-facing message for the gamble wager returned outcome interface state.",
+        "[gamble] Wager returned outcome.",
       );
     case "wins":
       return tx(
         "Wins",
-        "Player-facing message for the gamble wins outcome interface state.",
+        "[gamble] Wins outcome.",
       );
   }
 }
@@ -472,27 +472,27 @@ function gambleRulesDisclosure(
     case "gravok-three-gate-wager":
       return tx(
         "Choose a gate, then draw. Higher gates are harder and pay more.",
-        "Player-facing message for the gamble gravok rules interface state.",
+        "[gamble] Gravok rules.",
       );
     case "tidemark-ladder-climb":
       return tx(
         "Draw against four successively easier targets. Each success gains essence.",
-        "Player-facing message for the gamble ladder rules interface state.",
+        "[gamble] Ladder rules.",
       );
     case "starway-stairs":
       return tx(
         "Climb for a larger prize, but a low draw loses the wager.",
-        "Player-facing message for the gamble starway rules interface state.",
+        "[gamble] Starway rules.",
       );
     case "four-suit-reprise":
       return tx(
         "Choose a card to wager",
-        "Player-facing message for the gamble four suit rules interface state.",
+        "[gamble] Four suit rules.",
       );
     case "blackjack":
       return tx(
         "Closest to 21 Without Going Over",
-        "Player-facing message for the gamble blackjack rules interface state.",
+        "[gamble] Blackjack rules.",
       );
   }
 }
@@ -502,27 +502,27 @@ function gambleTitle(gameId: GambleSiteView["gameId"]): LocalizedString {
     case "gravok-three-gate-wager":
       return tx(
         "Gravok's Three-Gate Wager",
-        "Player-facing message for the gamble gravok title interface state.",
+        "[gamble] Gravok title.",
       );
     case "tidemark-ladder-climb":
       return tx(
         "Tidemark Ladder Climb",
-        "Player-facing message for the gamble ladder title interface state.",
+        "[gamble] Ladder title.",
       );
     case "starway-stairs":
       return tx(
         "Starway Stairs",
-        "Player-facing message for the gamble starway title interface state.",
+        "[gamble] Starway title.",
       );
     case "four-suit-reprise":
       return tx(
         "Four-Suit Reprise",
-        "Player-facing message for the gamble four suit title interface state.",
+        "[gamble] Four suit title.",
       );
     case "blackjack":
       return tx(
         "Blackjack",
-        "Player-facing message for the gamble blackjack title interface state.",
+        "[gamble] Blackjack title.",
       );
   }
 }
@@ -534,27 +534,27 @@ function gambleAccessibilityDescription(
     case "gravok-three-gate-wager":
       return tx(
         "Choose one of three gates and draw a card to resolve the wager.",
-        "Player-facing message for the gamble gravok accessibility description interface state.",
+        "[gamble] Gravok accessibility description.",
       );
     case "tidemark-ladder-climb":
       return tx(
         "Draw a card on each rung of a four-step ladder.",
-        "Player-facing message for the gamble ladder accessibility description interface state.",
+        "[gamble] Ladder accessibility description.",
       );
     case "starway-stairs":
       return tx(
         "Choose whether to climb for a larger prize or take the current prize.",
-        "Player-facing message for the gamble starway accessibility description interface state.",
+        "[gamble] Starway accessibility description.",
       );
     case "four-suit-reprise":
       return tx(
         "Choose a card to wager, then draw one of four suit outcomes.",
-        "Player-facing message for the gamble four suit accessibility description interface state.",
+        "[gamble] Four suit accessibility description.",
       );
     case "blackjack":
       return tx(
         "Deal, hit, or stand against the dealer without going over 21.",
-        "Player-facing message for the gamble blackjack accessibility description interface state.",
+        "[gamble] Blackjack accessibility description.",
       );
   }
 }
@@ -568,19 +568,19 @@ function gravokBetAccessibilityLabel(
       return txa(
         "Bet on Six Gate for {essence_cost} Essence",
         { essence_cost: essenceCost },
-        "Accessible command for betting on the Six Gate. essence_cost is the positive Essence price.",
+        "[accessibility] [gamble] Command for betting on the Six Gate. essence_cost is the positive Essence price.",
       );
     case "nine":
       return txa(
         "Bet on Nine Gate for {essence_cost} Essence",
         { essence_cost: essenceCost },
-        "Accessible command for betting on the Nine Gate. essence_cost is the positive Essence price.",
+        "[accessibility] [gamble] Command for betting on the Nine Gate. essence_cost is the positive Essence price.",
       );
     case "jack":
       return txa(
         "Bet on Jack Gate for {essence_cost} Essence",
         { essence_cost: essenceCost },
-        "Accessible command for betting on the Jack Gate. essence_cost is the positive Essence price.",
+        "[accessibility] [gamble] Command for betting on the Jack Gate. essence_cost is the positive Essence price.",
       );
   }
 }
@@ -594,25 +594,25 @@ function fourSuitOutcomeAccessibilityLabel(
       return txa(
         "{suit}: Transfigure",
         { suit },
-        "Accessible name for a Four-Suit Reprise row granting Transfiguration. suit is the canonical authored playing-card suit.",
+        "[accessibility] [gamble] [transfiguration] Name for a Four-Suit Reprise row granting Transfiguration. suit is the canonical authored playing-card suit.",
       );
     case "essence":
       return txa(
         "{suit}: Gained",
         { suit },
-        "Accessible name for a Four-Suit Reprise row granting Essence. suit is the canonical authored playing-card suit.",
+        "[accessibility] [gamble] Name for a Four-Suit Reprise row granting Essence. suit is the canonical authored playing-card suit.",
       );
     case "duplication":
       return txa(
         "{suit}: Duplicated",
         { suit },
-        "Accessible name for a Four-Suit Reprise row granting card duplication. suit is the canonical authored playing-card suit.",
+        "[accessibility] [gamble] Name for a Four-Suit Reprise row granting card duplication. suit is the canonical authored playing-card suit.",
       );
     case "purge":
       return txa(
         "{suit}: Purged",
         { suit },
-        "Accessible name for a Four-Suit Reprise row granting a purge. suit is the canonical authored playing-card suit.",
+        "[accessibility] [gamble] Name for a Four-Suit Reprise row granting a purge. suit is the canonical authored playing-card suit.",
       );
   }
 }
@@ -1589,7 +1589,7 @@ function GravokWagerScreen({
                     <GlassButton
                       label={tx(
                         "Play Again",
-                        "Visible command that immediately starts another round of the current Gamble game after the previous outcome settles.",
+                        "[gamble] Visible command that immediately starts another round of the current Gamble game after the previous outcome settles.",
                       )}
                       variant="accent"
                       testId="gamble-play-again"
@@ -1599,7 +1599,7 @@ function GravokWagerScreen({
                   <GlassButton
                     label={tx(
                       "Leave",
-                      "Visible command that exits the current Gamble site.",
+                      "[gamble] Visible command that exits the current Gamble site.",
                     )}
                     testId="gamble-leave-after-round"
                     onPress={onLeave}
@@ -1635,7 +1635,7 @@ function GravokWagerScreen({
                 <GlassButton
                   label={tx(
                     "Leave",
-                    "Visible command that exits the current Gamble site.",
+                    "[gamble] Visible command that exits the current Gamble site.",
                   )}
                   testId="gamble-leave"
                   onPress={onLeave}
@@ -1648,7 +1648,7 @@ function GravokWagerScreen({
                 <GlassButton
                   label={tx(
                     "Choose Replacement",
-                    "Visible command that opens the required Dreamsign replacement picker after a Gamble reward would exceed the current player's capacity.",
+                    "[gamble] [dreamsign] Visible command that opens the required Dreamsign replacement picker after a Gamble reward would exceed the current player's capacity.",
                   )}
                   variant="accent"
                   testId="gamble-open-replacement"
@@ -1664,11 +1664,11 @@ function GravokWagerScreen({
           view={view.replacement}
           cancelLabel={tx(
             "Not Yet",
-            "Visible command that postpones choosing a Dreamsign replacement.",
+            "[gamble] [dreamsign] Visible command that postpones choosing a Dreamsign replacement.",
           )}
           closeLabel={tx(
             "Close replacement choice",
-            "Accessible command that closes the Gamble Dreamsign replacement picker.",
+            "[accessibility] [gamble] [dreamsign] Command that closes the Gamble Dreamsign replacement picker.",
           )}
           onCancel={() => setReplacementVisible(false)}
           onReplace={onReplaceDreamsign}
@@ -1948,7 +1948,7 @@ function LadderClimbScreen({
                         attempt_number: view.nextDraw.attemptNumber,
                         essence_cost: view.nextDraw.cost,
                       },
-                      "Accessible command for purchasing the next Tidemark Ladder draw. attempt_number is the one-based attempt number from 1 through 4 and essence_cost is the non-negative Essence price paid by the current player.",
+                      "[accessibility] [gamble] Command for purchasing the next Tidemark Ladder draw. attempt_number is the one-based attempt number from 1 through 4 and essence_cost is the non-negative Essence price paid by the current player.",
                     )}
                     essenceCost={view.nextDraw.cost}
                     variant="accent"
@@ -1968,7 +1968,7 @@ function LadderClimbScreen({
                 <GlassButton
                   label={tx(
                     "Leave",
-                    "Visible command that exits the current Gamble site.",
+                    "[gamble] Visible command that exits the current Gamble site.",
                   )}
                   testId={
                     result === null
@@ -1985,7 +1985,7 @@ function LadderClimbScreen({
                 <GlassButton
                   label={tx(
                     "Choose Replacement",
-                    "Visible command that opens the required Dreamsign replacement picker after a Gamble reward would exceed the current player's capacity.",
+                    "[gamble] [dreamsign] Visible command that opens the required Dreamsign replacement picker after a Gamble reward would exceed the current player's capacity.",
                   )}
                   variant="accent"
                   testId="gamble-ladder-open-replacement"
@@ -2001,11 +2001,11 @@ function LadderClimbScreen({
           view={view.replacement}
           cancelLabel={tx(
             "Not Yet",
-            "Visible command that postpones choosing a Dreamsign replacement.",
+            "[gamble] [dreamsign] Visible command that postpones choosing a Dreamsign replacement.",
           )}
           closeLabel={tx(
             "Close replacement choice",
-            "Accessible command that closes the Gamble Dreamsign replacement picker.",
+            "[accessibility] [gamble] [dreamsign] Command that closes the Gamble Dreamsign replacement picker.",
           )}
           onCancel={() => setReplacementVisible(false)}
           onReplace={onReplaceDreamsign}
@@ -2275,7 +2275,7 @@ function StarwayStairsScreen({
                         ? txa(
                             "Bet {essence_cost} Essence on Starway Stairs",
                             { essence_cost: view.wagerAmount },
-                            "Accessible command for the initial Starway Stairs wager. essence_cost is the non-negative Essence price.",
+                            "[accessibility] [gamble] Command for the initial Starway Stairs wager. essence_cost is the non-negative Essence price.",
                           )
                         : txa(
                             "Climb to tier {tier_number} for {essence_cost} Essence",
@@ -2283,7 +2283,7 @@ function StarwayStairsScreen({
                               tier_number: currentTier.tierNumber,
                               essence_cost: view.wagerAmount,
                             },
-                            "Accessible command for climbing Starway Stairs. tier_number is the one-based destination tier and essence_cost is the non-negative Essence price.",
+                            "[accessibility] [gamble] Command for climbing Starway Stairs. tier_number is the one-based destination tier and essence_cost is the non-negative Essence price.",
                           )
                     }
                     essenceValue={view.wagerAmount}
@@ -2308,7 +2308,7 @@ function StarwayStairsScreen({
                   accessibilityLabel={txa(
                     "Take {essence_amount} Essence",
                     { essence_amount: view.cashOutReward },
-                    "Accessible command for ending a Starway Stairs run and taking the accumulated payout. essence_amount is the positive integer Essence granted to the current player; the same amount is also visible beside the button label.",
+                    "[accessibility] [gamble] Command for ending a Starway Stairs run and taking the accumulated payout. essence_amount is the positive integer Essence granted to the current player; the same amount is also visible beside the button label.",
                   )}
                   essenceValue={view.cashOutReward}
                   size={layout === "mobile" ? "compact" : "standard"}
@@ -2327,7 +2327,7 @@ function StarwayStairsScreen({
                     <GlassButton
                       label={tx(
                         "Play Again",
-                        "Visible command that immediately starts another round of the current Gamble game after the previous outcome settles.",
+                        "[gamble] Visible command that immediately starts another round of the current Gamble game after the previous outcome settles.",
                       )}
                       size={layout === "mobile" ? "compact" : "standard"}
                       variant="accent"
@@ -2342,7 +2342,7 @@ function StarwayStairsScreen({
                   <GlassButton
                     label={tx(
                       "Leave",
-                      "Visible command that exits the current Gamble site.",
+                      "[gamble] Visible command that exits the current Gamble site.",
                     )}
                     size={layout === "mobile" ? "compact" : "standard"}
                     testId="gamble-starway-leave-after-result"
@@ -2353,7 +2353,7 @@ function StarwayStairsScreen({
                 <GlassButton
                   label={tx(
                     "Leave",
-                    "Visible command that exits the current Gamble site.",
+                    "[gamble] Visible command that exits the current Gamble site.",
                   )}
                   size={layout === "mobile" ? "compact" : "standard"}
                   testId="gamble-starway-leave"
@@ -2719,11 +2719,11 @@ function BlackjackScreen({
           owner === "dealer"
             ? tx(
                 "Dealer hand",
-                "Accessible name for the Blackjack dealer's playing-card hand.",
+                "[accessibility] [gamble] Name for the Blackjack dealer's playing-card hand.",
               )
             : tx(
                 "Player hand",
-                "Accessible name for the local player's Blackjack playing-card hand.",
+                "[accessibility] [gamble] Name for the local player's Blackjack playing-card hand.",
               ),
         )}
         data-blackjack-side={owner}
@@ -3039,7 +3039,7 @@ function BlackjackScreen({
                 <GlassButton
                   label={tx(
                     "Leave",
-                    "Visible command that exits the current Gamble site.",
+                    "[gamble] Visible command that exits the current Gamble site.",
                   )}
                   testId="gamble-blackjack-leave"
                   onPress={onLeave}
@@ -3073,7 +3073,7 @@ function BlackjackScreen({
                   <GlassButton
                     label={tx(
                       "Play Again",
-                      "Visible command that immediately starts another round of the current Gamble game after the previous outcome settles.",
+                      "[gamble] Visible command that immediately starts another round of the current Gamble game after the previous outcome settles.",
                     )}
                     variant="accent"
                     disabled={decisionPending || !view.canPlayAgain}
@@ -3084,7 +3084,7 @@ function BlackjackScreen({
                 <GlassButton
                   label={tx(
                     "Leave",
-                    "Visible command that exits the current Gamble site.",
+                    "[gamble] Visible command that exits the current Gamble site.",
                   )}
                   disabled={decisionPending}
                   testId="gamble-blackjack-leave-after-result"
@@ -3277,7 +3277,7 @@ function FourSuitRepriseScreen({
                   {
                     label: tx(
                       "Leave",
-                      "Visible command that exits the current Gamble site.",
+                      "[gamble] Visible command that exits the current Gamble site.",
                     ),
                     onPress: onLeave,
                     testId: "gamble-four-suit-leave",
@@ -3290,7 +3290,7 @@ function FourSuitRepriseScreen({
                 }))}
                 emptyLabel={tx(
                   "No eligible cards remain.",
-                  "Empty state in that picker when the current player owns no cards eligible for the wager.",
+                  "[gamble] Empty state in that picker when the current player owns no cards eligible for the wager.",
                 )}
                 testId="gamble-four-suit-card-gallery"
                 onCardPress={setSelectedEntryId}
@@ -3512,7 +3512,7 @@ function FourSuitRepriseScreen({
                                   txa(
                                     "Gain {essence_amount} Essence",
                                     { essence_amount: view.essenceReward },
-                                    "Complete visible Four-Suit Reprise reward row when the selected suit grants Essence. essence_amount is the positive integer Essence gained by the current player.",
+                                    "[gamble] Complete visible Four-Suit Reprise reward row when the selected suit grants Essence. essence_amount is the positive integer Essence gained by the current player.",
                                   ),
                                 )
                               : resolve(
@@ -3603,7 +3603,7 @@ function FourSuitRepriseScreen({
                       accessibilityLabel={txa(
                         "Draw for {essence_cost} Essence",
                         { essence_cost: view.drawCost },
-                        "Accessible command for paying to draw in Four-Suit Reprise. essence_cost is the non-negative Essence price paid by the current player and is also rendered separately on the button.",
+                        "[accessibility] [gamble] Command for paying to draw in Four-Suit Reprise. essence_cost is the non-negative Essence price paid by the current player and is also rendered separately on the button.",
                       )}
                       essenceCost={view.drawCost}
                       size={layout === "mobile" ? "compact" : "standard"}
@@ -3622,7 +3622,7 @@ function FourSuitRepriseScreen({
                     <GlassButton
                       label={tx(
                         "Leave",
-                        "Visible command that exits the current Gamble site.",
+                        "[gamble] Visible command that exits the current Gamble site.",
                       )}
                       size={layout === "mobile" ? "compact" : "standard"}
                       disabled={decisionPending}
@@ -3636,7 +3636,7 @@ function FourSuitRepriseScreen({
                       <GlassButton
                         label={tx(
                           "Play Again",
-                          "Visible command that immediately starts another round of the current Gamble game after the previous outcome settles.",
+                          "[gamble] Visible command that immediately starts another round of the current Gamble game after the previous outcome settles.",
                         )}
                         size={layout === "mobile" ? "compact" : "standard"}
                         variant="accent"
@@ -3651,7 +3651,7 @@ function FourSuitRepriseScreen({
                     <GlassButton
                       label={tx(
                         "Leave",
-                        "Visible command that exits the current Gamble site.",
+                        "[gamble] Visible command that exits the current Gamble site.",
                       )}
                       size={layout === "mobile" ? "compact" : "standard"}
                       testId="gamble-four-suit-leave-after-result"

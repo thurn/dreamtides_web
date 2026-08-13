@@ -313,7 +313,7 @@ export function DesktopSelect({
           onReroll={onReroll}
           label={tx(
             "Reroll Avatars",
-            "Player-facing message for the journey start reroll action interface state.",
+            "[journey] Start reroll action.",
           )}
         />
       )}
@@ -329,7 +329,7 @@ export function DesktopSelect({
         <DesktopTitle
           title={tx(
             "Choose Your Avatar",
-            "Title and actions on the Dream Avatar selection screen.",
+            "[dream-avatar] [journey] Title and actions on the Dream Avatar selection screen.",
           )}
         />
       </div>
@@ -364,7 +364,7 @@ export function DesktopSelect({
               dreamAvatar={dreamAvatar}
               chooseLabel={tx(
                 "Choose",
-                "Command that chooses the currently selected Dream Avatar or starting-deck option.",
+                "[dream-avatar] [journey] Command that chooses the currently selected Dream Avatar or starting-deck option.",
               )}
               onChoose={() => {
                 onPick(dreamAvatar.id);

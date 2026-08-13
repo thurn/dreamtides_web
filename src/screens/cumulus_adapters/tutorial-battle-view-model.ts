@@ -15,7 +15,7 @@ import { tx } from "@trox/runtime";
 
 const INACTIVE_TUTORIAL_AVATAR_ABILITY = tx(
   "Avatar ability is not active",
-  "Unavailable-state description for a Dream Avatar whose ability is disabled during the tutorial battle.",
+  "[battle] [tutorial] [dream-avatar] Unavailable-state description for a Dream Avatar whose ability is disabled during the tutorial battle.",
 );
 
 function withInactiveTutorialAvatarAbility(

@@ -103,7 +103,7 @@ export function BattleStatusDisplay({
             points,
             points_to_win: pointsToWin,
           },
-          'Accessible summary for one participant\'s battle status card. owner is "viewer" for the side nearest the current local perspective or "opponent" for the opposing side. Energy and point values are non-negative integers; maximums and the points-to-win target are positive integers.',
+          "[accessibility] [battle] Summary for one participant's battle status card. owner is \"viewer\" for the side nearest the current local perspective or \"opponent\" for the opposing side. Energy and point values are non-negative integers; maximums and the points-to-win target are positive integers.",
         ),
       )}
       data-battle-status=""
@@ -146,7 +146,7 @@ export function BattleStatusDisplay({
             aria-label={resolve(
               tx(
                 "Avatar portrait loading",
-                "Player-facing message for the battle status avatar loading interface state.",
+                "[battle] [loading] Status avatar loading.",
               ),
             )}
             data-battle-status-dream-avatar-placeholder=""

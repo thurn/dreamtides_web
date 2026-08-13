@@ -25,8 +25,8 @@ export function buildCardTutorialGuidanceView(
     duration: presentation.duration,
     dialogue: {
       portrait: { kind: "character-portrait", characterId: "mira" },
-      portraitAlt: tx("Mira", "Name of the tutorial guide."),
-      speakerName: tx("Mira", "Name of the tutorial guide."),
+      portraitAlt: tx("Mira", "[tutorial] Name of the tutorial guide."),
+      speakerName: tx("Mira", "[tutorial] Name of the tutorial guide."),
       text: localizedSourceText(presentation.text),
     },
     horizontalOffset: presentation.horizontalOffset,

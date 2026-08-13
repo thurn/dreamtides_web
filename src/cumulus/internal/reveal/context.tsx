@@ -114,7 +114,7 @@ function gameCardDescriptionUnits(
           message: txa(
             "Energy cost: {energy_cost}.",
             { energy_cost: energyCost },
-            "Complete accessible Energy-cost sentence for a card. energy_cost is one non-negative printed or alternative resource amount.",
+            "[accessibility] Complete Energy-cost sentence for a card. energy_cost is one non-negative printed or alternative resource amount.",
           ),
         }))
       : [
@@ -124,12 +124,12 @@ function gameCardDescriptionUnits(
               card.energyCost === null
                 ? tx(
                     "Energy cost: X.",
-                    "Complete accessible Energy-cost sentence for a card whose cost is variable.",
+                    "[accessibility] Complete Energy-cost sentence for a card whose cost is variable.",
                   )
                 : txa(
                     "Energy cost: {energy_cost}.",
                     { energy_cost: card.energyCost },
-                    "Complete accessible Energy-cost sentence for a card. energy_cost is one non-negative printed or alternative resource amount.",
+                    "[accessibility] Complete Energy-cost sentence for a card. energy_cost is one non-negative printed or alternative resource amount.",
                   ),
           },
         ];
@@ -139,7 +139,7 @@ function gameCardDescriptionUnits(
       message: txa(
         "Card name: {card_name}.",
         { card_name: card.name },
-        "Complete accessible identity sentence for a revealed game card. card_name is the canonical UUID-resolved authored name and has no grammatical-gender metadata.",
+        "[accessibility] Complete identity sentence for a revealed game card. card_name is the canonical UUID-resolved authored name and has no grammatical-gender metadata.",
       ),
     },
     ...(card.rarity === undefined
@@ -150,7 +150,7 @@ function gameCardDescriptionUnits(
             message: txa(
               "Rarity: {rarity}.",
               { rarity: card.rarity },
-              "Complete accessible rarity sentence for a revealed game card. rarity is the card catalog's authored rarity label.",
+              "[accessibility] Complete rarity sentence for a revealed game card. rarity is the card catalog's authored rarity label.",
             ),
           },
         ]),
@@ -159,7 +159,7 @@ function gameCardDescriptionUnits(
       message: txa(
         "Card type: {card_type}.",
         { card_type: card.cardType },
-        "Complete accessible card-type sentence for a revealed game card. card_type is the authored Character or Event display label.",
+        "[accessibility] Complete card-type sentence for a revealed game card. card_type is the authored Character or Event display label.",
       ),
     },
     ...canonicalDescription(card.subtype).map((): RevealDescriptionUnit => ({
@@ -167,7 +167,7 @@ function gameCardDescriptionUnits(
       message: txa(
         "Subtype: {card_subtype}.",
         { card_subtype: card.subtype },
-        "Complete accessible subtype sentence for a revealed game card. card_subtype is the authored catalog subtype and remains grammatically opaque.",
+        "[accessibility] Complete subtype sentence for a revealed game card. card_subtype is the authored catalog subtype and remains grammatically opaque.",
       ),
     })),
     ...energyUnits,
@@ -177,7 +177,7 @@ function gameCardDescriptionUnits(
             kind: "message" as const,
             message: tx(
               "Spark: X.",
-              "Complete accessible Spark sentence for a card whose Spark is variable.",
+              "[accessibility] Complete Spark sentence for a card whose Spark is variable.",
             ),
           },
         ]
@@ -189,7 +189,7 @@ function gameCardDescriptionUnits(
               message: txa(
                 "Spark: {spark_amount}.",
                 { spark_amount: card.spark },
-                "Complete accessible Spark sentence for a revealed card. spark_amount is the non-negative printed challenge strength.",
+                "[accessibility] Complete Spark sentence for a revealed card. spark_amount is the non-negative printed challenge strength.",
               ),
             },
           ]),
@@ -199,7 +199,7 @@ function gameCardDescriptionUnits(
             kind: "message" as const,
             message: tx(
               "This card is Fast.",
-              "Complete accessible trait sentence for a Fast game card.",
+              "[accessibility] Complete trait sentence for a Fast game card.",
             ),
           },
         ]
@@ -210,7 +210,7 @@ function gameCardDescriptionUnits(
             kind: "message" as const,
             message: tx(
               "This card has Interrupt.",
-              "Complete accessible trait sentence for a game card with Interrupt.",
+              "[accessibility] Complete trait sentence for a game card with Interrupt.",
             ),
           },
         ]
@@ -223,7 +223,7 @@ function gameCardDescriptionUnits(
             message: txa(
               "Reclaim cost: {reclaim_cost}.",
               { reclaim_cost: card.reclaimCost },
-              "Complete accessible Reclaim-cost sentence for a revealed game card. reclaim_cost is a non-negative resource amount.",
+              "[accessibility] Complete Reclaim-cost sentence for a revealed game card. reclaim_cost is a non-negative resource amount.",
             ),
           },
         ]),

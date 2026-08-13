@@ -9,42 +9,42 @@ export function builtInBattlePromptMessage(
     case "discover-character":
       return tx(
         "Discover a character",
-        "Reusable prompt title for choosing one Character card to discover during battle.",
+        "[battle] Reusable prompt title for choosing one Character card to discover during battle.",
       );
     case "confirm-yes":
       return tx(
         "Yes",
-        "Affirmative option in a battle confirmation prompt.",
+        "[battle] Affirmative option in a battle confirmation prompt.",
       );
     case "confirm-skip":
       return tx(
         meaning("battle-confirm-skip", "Skip"),
-        "Option that declines a battle confirmation prompt.",
+        "[battle] Option that declines a battle confirmation prompt.",
       );
     case "generic":
       return tx(
         "Choose an option",
-        "Safe title for an imported battle prompt whose specific title is unknown.",
+        "[battle] Safe title for an imported battle prompt whose specific title is unknown.",
       );
     case "generic-subtitle":
       return tx(
         "Choose an available option to continue.",
-        "Safe instruction for an imported battle prompt whose specific instructions are unknown.",
+        "[battle] Safe instruction for an imported battle prompt whose specific instructions are unknown.",
       );
     case "generic-option":
       return tx(
         "Choose this option",
-        "Safe option label for an imported battle prompt whose specific option meaning is unknown.",
+        "[battle] Safe option label for an imported battle prompt whose specific option meaning is unknown.",
       );
     case "switch-side":
       return ref.side === "enemy"
         ? tx(
             "Switch to the Opponent side to resolve this choice.",
-            "Polite battle status shown when the pending choice belongs to the opposing side controlled by the local user.",
+            "[battle] Polite battle status shown when the pending choice belongs to the opposing side controlled by the local user.",
           )
         : tx(
             "Switch to the Player side to resolve this choice.",
-            "Polite battle status shown when the pending choice belongs to the player side controlled by the local user.",
+            "[battle] Polite battle status shown when the pending choice belongs to the player side controlled by the local user.",
           );
   }
 }

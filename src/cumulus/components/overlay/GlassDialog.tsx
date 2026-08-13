@@ -280,7 +280,7 @@ export function GlassDialog({
           closeLabel ??
           tx(
             meaning("dialog-close", "Close"),
-            "Accessible action name for the control that dismisses a dialog.",
+            "[accessibility] Action name for the control that dismisses a dialog.",
           )
         }
         onPress={onClose}

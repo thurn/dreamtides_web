@@ -100,7 +100,7 @@ export function PurgeSiteScreen({
           ? {
               label: tx(
                 "Decline",
-                "Compact command that declines the current site interaction without applying it.",
+                "[ui] Compact action declining the current interaction without applying it.",
               ),
             }
           : {
@@ -243,7 +243,7 @@ function PurgeGallery({
               ? {
                   label: tx(
                     "Decline",
-                    "Compact command that declines the current site interaction without applying it.",
+                    "[ui] Compact action declining the current interaction without applying it.",
                   ),
                 }
               : {

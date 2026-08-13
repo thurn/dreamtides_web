@@ -170,7 +170,7 @@ export function Dreamsign({
       ariaLabelMessage={txa(
         "Dreamsign: {dreamsign_name}",
         { dreamsign_name: opaque(dreamsign.name) },
-        "Accessible name for an interactive Dreamsign object. dreamsign_name is its canonical authored display name and has unknown grammatical gender.",
+        "[accessibility] [dreamsign] Name for an interactive Dreamsign object. dreamsign_name is its canonical authored display name and has unknown grammatical gender.",
       )}
       onPointerDown={(event) => {
         lastPointerType.current = event.pointerType;

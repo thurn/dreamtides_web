@@ -80,7 +80,7 @@ export function TransfigurationButton({
       aria-description={resolve(txa(
         "{description}",
         { description: opaque(form.presentation.description) },
-        "Description of a Transfiguration form sourced from the authored catalog.",
+        "[transfiguration] Description of a Transfiguration form sourced from the authored catalog.",
       ))}
       ariaLabelMessage={txa(
         plural(form.essenceCost, [
@@ -92,7 +92,7 @@ export function TransfigurationButton({
           form_name: opaque(form.presentation.name),
           essence_cost: form.essenceCost,
         },
-        "Accessible name for a selectable Transfiguration form and its price. form_name is the authored catalog name; essence_cost is a non-negative integer. Exact zero describes a free choice; positive values share the same wording because Essence is a game-resource name rather than a count noun here.",
+        "[accessibility] [transfiguration] Name for a selectable Transfiguration form and its price. form_name is the authored catalog name; essence_cost is a non-negative integer. Exact zero describes a free choice; positive values share the same wording because Essence is a game-resource name rather than a count noun here.",
       )}
       disabled={!canSelect}
       data-testid={testId}

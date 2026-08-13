@@ -100,7 +100,7 @@ export function buildGambleGateViews(
           gravokGateChanceLabel(game, gate).replace("%", ""),
         ),
       },
-      "Exact winning probability for one wager gate. chance_percent is the percentage from zero through one hundred, rounded to two decimal places before display.",
+      "[gamble] Exact winning probability for one wager gate. chance_percent is the percentage from zero through one hundred, rounded to two decimal places before display.",
     ),
     oddsNumerator: gate.winningCardCount,
     oddsDenominator: game.rules.standardDeckSize,

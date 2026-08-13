@@ -233,7 +233,7 @@ function frontAriaLabel(
   return txa(
     "{rank} of {suit}",
     { rank, suit },
-    "Accessible name for a revealed standard playing card. rank and suit are its canonical authored display values.",
+    "[accessibility] Name for a revealed standard playing card. rank and suit are its canonical authored display values.",
   );
 }
 
@@ -425,7 +425,7 @@ export function PlayingCard(props: PlayingCardProps): ReactElement {
     visibleCard === null
       ? tx(
           "Face-down four-suit playing card",
-          "Accessible name for a concealed Four-Suit Reprise playing card.",
+          "[accessibility] [gamble] Name for a concealed Four-Suit Reprise playing card.",
         )
       : frontAriaLabel(visibleCard.rank, visibleCard.suit);
   const state =
@@ -635,7 +635,7 @@ function WagerPrizeCardObject({
       ? txa(
           "Draw {minimum_rank}-A. Win {essence_amount} Essence.",
           { minimum_rank: minimumWinningRank, essence_amount: essenceReward },
-          "Complete accessible name for a wager prize without a Dreamsign. minimum_rank is the lowest standard playing-card rank in the inclusive winning range through Ace, and essence_amount is the positive Essence payout.",
+          "[accessibility] [dreamsign] Complete name for a wager prize without a Dreamsign. minimum_rank is the lowest standard playing-card rank in the inclusive winning range through Ace, and essence_amount is the positive Essence payout.",
         )
       : txa(
           "Draw {minimum_rank}-A. Win {essence_amount} Essence and {dreamsign_name}.",
@@ -644,7 +644,7 @@ function WagerPrizeCardObject({
             essence_amount: essenceReward,
             dreamsign_name: opaque(rewardDreamsign.name),
           },
-          "Complete accessible name for a wager prize that includes a Dreamsign. minimum_rank is the lowest standard playing-card rank in the inclusive winning range through Ace, essence_amount is the positive Essence payout, and dreamsign_name is the canonical authored Dreamsign name.",
+          "[accessibility] [dreamsign] Complete name for a wager prize that includes a Dreamsign. minimum_rank is the lowest standard playing-card rank in the inclusive winning range through Ace, essence_amount is the positive Essence payout, and dreamsign_name is the canonical authored Dreamsign name.",
         );
   const drawnCardLabel =
     drawnCard === null
@@ -655,7 +655,7 @@ function WagerPrizeCardObject({
       ? txa(
           "Win {essence_amount} Essence.",
           { essence_amount: essenceReward },
-          "Reward sentence on a wager prize without a Dreamsign. essence_amount is the positive Essence payout.",
+          "[dreamsign] Reward sentence on a wager prize without a Dreamsign. essence_amount is the positive Essence payout.",
         )
       : txa(
           "Win {essence_amount} Essence and {dreamsign_name}.",
@@ -663,7 +663,7 @@ function WagerPrizeCardObject({
             essence_amount: essenceReward,
             dreamsign_name: opaque(rewardDreamsign.name),
           },
-          "Reward sentence on a wager prize that includes a Dreamsign. essence_amount is the positive Essence payout and dreamsign_name is the canonical authored Dreamsign name.",
+          "[dreamsign] Reward sentence on a wager prize that includes a Dreamsign. essence_amount is the positive Essence payout and dreamsign_name is the canonical authored Dreamsign name.",
         );
   const prizeFaceContent = (
     <>
@@ -701,7 +701,7 @@ function WagerPrizeCardObject({
             txa(
               "Draw {minimum_rank}-A",
               { minimum_rank: minimumWinningRank },
-              "Title printed on a wager prize card before its concealed playing card is revealed. minimum_rank is the lowest standard playing-card rank in the inclusive winning range through Ace.",
+              "[ui] Title printed on a wager prize card before its concealed playing card is revealed. minimum_rank is the lowest standard playing-card rank in the inclusive winning range through Ace.",
             ),
           )}
         </h2>
@@ -802,7 +802,7 @@ function WagerPrizeCardObject({
             ariaLabelMessage={txa(
               "Dreamsign: {dreamsign_name}",
               { dreamsign_name: opaque(rewardDreamsign.name) },
-              "Accessible name for an interactive Dreamsign object. dreamsign_name is its canonical authored display name and has unknown grammatical gender.",
+              "[accessibility] [dreamsign] Name for an interactive Dreamsign object. dreamsign_name is its canonical authored display name and has unknown grammatical gender.",
             )}
             aria-hidden={showingDrawnCard || undefined}
             pressFeedback="stationary"

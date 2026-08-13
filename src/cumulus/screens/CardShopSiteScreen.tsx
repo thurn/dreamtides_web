@@ -225,7 +225,7 @@ function CardShopGallery({
             glyph: GLYPHS.close,
             label: tx(
               "Leave card shop",
-              "Player-facing message for the card shop leave action interface state.",
+              "[ui] Card shop leave action.",
             ),
             onPress: onClose,
             testId: "cumulus-card-shop-leave",

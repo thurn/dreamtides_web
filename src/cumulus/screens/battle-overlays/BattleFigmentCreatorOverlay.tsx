@@ -269,7 +269,7 @@ export function BattleFigmentCreatorOverlay({
                 other("Create {count} Figments"),
               ]),
               { count },
-              "Primary action that creates one or more configured Figments in the battle developer creation dialog. count is an integer from 1 through the dialog's configured maximum; activating the control creates exactly that many.",
+              "[battle] [developer] Primary action that creates one or more configured Figments in the battle developer creation dialog. count is an integer from 1 through the dialog's configured maximum; activating the control creates exactly that many.",
             )}
             placement="onGlass"
             variant="accent"

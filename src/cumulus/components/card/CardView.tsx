@@ -587,7 +587,7 @@ function buildAttributeChips(
         boltCount: 2,
         ariaLabel: tx(
           meaning("card-interrupt-attribute-name", "Interrupt"),
-          "Accessible name for the double-bolt Interrupt attribute shown before a card name.",
+          "[accessibility] Name for the double-bolt Interrupt attribute shown before a card name.",
         ),
       },
     ];
@@ -599,7 +599,7 @@ function buildAttributeChips(
         boltCount: 1,
         ariaLabel: tx(
           meaning("card-fast-attribute-name", "Fast"),
-          "Accessible name for the single-bolt Fast attribute shown before a card name.",
+          "[accessibility] Name for the single-bolt Fast attribute shown before a card name.",
         ),
       },
     ];
@@ -876,18 +876,18 @@ function GameCardSurface(props: GameCardSurfaceProps) {
         : txa(
             meaning("card-subtype-line", "{subtype}"),
             { subtype: card.subtype },
-            "Type line for a Character card. subtype is the card's canonical authored subtype.",
+            "[ui] Type line for a Character card. subtype is the card's canonical authored subtype.",
           )
       : card.subtype === ""
         ? txa(
             "{card_type}",
             { card_type: card.cardType },
-            "Type line for a non-Character card without a subtype. card_type is its canonical authored card type.",
+            "[ui] Type line for a non-Character card without a subtype. card_type is its canonical authored card type.",
           )
         : txa(
             "{card_type} — {subtype}",
             { card_type: card.cardType, subtype: card.subtype },
-            "Type line for a non-Character card with a subtype. card_type and subtype are canonical authored taxonomy labels.",
+            "[ui] Type line for a non-Character card with a subtype. card_type and subtype are canonical authored taxonomy labels.",
           );
   const rarityStyle = rarityStyleFor(card);
   const attributeChips = buildAttributeChips(card);
@@ -1081,14 +1081,14 @@ function GameCardSurface(props: GameCardSurfaceProps) {
             txa(
               "{form_name} Transfiguration",
               { form_name: transfiguration.form.name },
-              "Accessible description and tooltip for a card's Transfiguration badge. form_name is the authored Transfiguration form name.",
+              "[accessibility] [transfiguration] Description and tooltip for a card's Transfiguration badge. form_name is the authored Transfiguration form name.",
             ),
           )}
           title={resolve(
             txa(
               "{form_name} Transfiguration",
               { form_name: transfiguration.form.name },
-              "Accessible description and tooltip for a card's Transfiguration badge. form_name is the authored Transfiguration form name.",
+              "[accessibility] [transfiguration] Description and tooltip for a card's Transfiguration badge. form_name is the authored Transfiguration form name.",
             ),
           )}
           style={{
@@ -1371,7 +1371,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
             txa(
               "{card_name} identicon",
               { card_name: opaque(localizedSourceText(card.name)) },
-              "Alternative text for a generated card identicon. card_name is the card's canonical authored name.",
+              "[accessibility] Alternative text for a generated card identicon. card_name is the card's canonical authored name.",
             ),
           )}
           className="absolute inset-0 h-full w-full object-contain"
@@ -1507,7 +1507,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
                 txa(
                   "Rules text changed by {form_name} Transfiguration",
                   { form_name: transfiguration.form.name },
-                  "Tooltip explaining why a card's rules text differs from its base rules. form_name is the authored Transfiguration form name.",
+                  "[transfiguration] Tooltip explaining why a card's rules text differs from its base rules. form_name is the authored Transfiguration form name.",
                 ),
               )}
               style={{
@@ -1526,7 +1526,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
                 ariaLabel: txa(
                   "Rules text changed by {form_name} Transfiguration",
                   { form_name: transfiguration.form.name },
-                  "Tooltip explaining why a card's rules text differs from its base rules. form_name is the authored Transfiguration form name.",
+                  "[transfiguration] Tooltip explaining why a card's rules text differs from its base rules. form_name is the authored Transfiguration form name.",
                 ),
               })}
             </span>

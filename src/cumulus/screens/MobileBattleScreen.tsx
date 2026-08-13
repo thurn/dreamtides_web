@@ -788,11 +788,11 @@ function BattleTurnAnnouncement({
     announcement.side === perspective
       ? tx(
           "Your Turn",
-          "Radial announcement when battle control passes to the local player's side.",
+          "[battle] Radial announcement when battle control passes to the local player's side.",
         )
       : tx(
           "Opponent Turn",
-          "Radial announcement when battle control passes to the opposing side.",
+          "[battle] Radial announcement when battle control passes to the opposing side.",
         );
   return (
     <RadialAnnouncement
@@ -855,7 +855,7 @@ function FigmentMergeAnimation({
             figment_name: opaque(animation.target.figmentLabel),
             spark_count: animation.target.addedSpark,
           },
-          "Accessible live announcement after one Figment merges into another. figment_name is the displayed name of the surviving Figment and has unknown grammatical gender; spark_count is the non-negative Spark increase.",
+          "[accessibility] [battle] Live announcement after one Figment merges into another. figment_name is the displayed name of the surviving Figment and has unknown grammatical gender; spark_count is the non-negative Spark increase.",
         ),
       )}
       data-battle-figment-merge-animation=""
@@ -1096,7 +1096,7 @@ function FarHand({
                 <CardBack
                   label={tx(
                     "Opponent card",
-                    "Player-facing message for the battle opponent card accessible name interface state.",
+                    "[accessibility] [battle] Opponent card name.",
                   )}
                 />
               </motion.div>
@@ -1250,7 +1250,7 @@ function SideZones({
                 ),
               ]),
               {},
-              'Accessible label for a battle card pile. owner is "viewer" for the near, local-perspective side or "opponent" for the far side; zone is "deck" or "void" and identifies the inspected pile.',
+              "[accessibility] [battle] Label for a battle card pile. owner is \"viewer\" for the near, local-perspective side or \"opponent\" for the far side; zone is \"deck\" or \"void\" and identifies the inspected pile.",
             )}
             onPress={
               interactions?.onZoneOpen === undefined
@@ -1367,14 +1367,14 @@ function SideZones({
                 ),
               ]),
               {},
-              'Accessible label for a battle card pile. owner is "viewer" for the near, local-perspective side or "opponent" for the far side; zone is "deck" or "void" and identifies the inspected pile.',
+              "[accessibility] [battle] Label for a battle card pile. owner is \"viewer\" for the near, local-perspective side or \"opponent\" for the far side; zone is \"deck\" or \"void\" and identifies the inspected pile.",
             )}
             emptyState="outlined"
             emptyLabel={
               zoneLabels === "voids"
                 ? tx(
                     meaning("void-pile-label", "Void"),
-                    "Visible label inside an empty battle Void pile.",
+                    "[battle] Visible label inside an empty battle Void pile.",
                   )
                 : undefined
             }
@@ -1406,50 +1406,50 @@ function PhaseIndicator({
       ? phase === "dawn"
         ? tx(
             "Your turn, Dawn phase",
-            "Accessible battle phase for the local side during Dawn.",
+            "[accessibility] [battle] Battle phase for the local side during Dawn.",
           )
         : phase === "day"
           ? tx(
               "Your turn, Day phase",
-              "Accessible battle phase for the local side during Day.",
+              "[accessibility] [battle] Battle phase for the local side during Day.",
             )
           : phase === "dusk"
             ? tx(
                 "Your turn, Dusk phase",
-                "Accessible battle phase for the local side during Dusk.",
+                "[accessibility] [battle] Battle phase for the local side during Dusk.",
               )
             : phase === "night"
               ? tx(
                   "Your turn, Night phase",
-                  "Accessible battle phase for the local side during Night.",
+                  "[accessibility] [battle] Battle phase for the local side during Night.",
                 )
               : tx(
                   "Your turn, Challenge phase",
-                  "Accessible battle phase for the local side during the Challenge.",
+                  "[accessibility] [battle] Battle phase for the local side during the Challenge.",
                 )
       : phase === "dawn"
         ? tx(
             "Opponent’s turn, Dawn phase",
-            "Accessible battle phase for the opposing side during Dawn.",
+            "[accessibility] [battle] Battle phase for the opposing side during Dawn.",
           )
         : phase === "day"
           ? tx(
               "Opponent’s turn, Day phase",
-              "Accessible battle phase for the opposing side during Day.",
+              "[accessibility] [battle] Battle phase for the opposing side during Day.",
             )
           : phase === "dusk"
             ? tx(
                 "Opponent’s turn, Dusk phase",
-                "Accessible battle phase for the opposing side during Dusk.",
+                "[accessibility] [battle] Battle phase for the opposing side during Dusk.",
               )
             : phase === "night"
               ? tx(
                   "Opponent’s turn, Night phase",
-                  "Accessible battle phase for the opposing side during Night.",
+                  "[accessibility] [battle] Battle phase for the opposing side during Night.",
                 )
               : tx(
                   "Opponent’s turn, Challenge phase",
-                  "Accessible battle phase for the opposing side during the Challenge.",
+                  "[accessibility] [battle] Battle phase for the opposing side during the Challenge.",
                 );
   return (
     <div
@@ -1613,11 +1613,11 @@ function ChallengerChevron({
         owner === "enemy"
           ? tx(
               "Opponent challenger",
-              "Accessible name for the opposing challenger card in a battle challenge.",
+              "[accessibility] [battle] Name for the opposing challenger card in a battle challenge.",
             )
           : tx(
               "Player challenger",
-              "Accessible name for the local player's challenger card in a battle challenge.",
+              "[accessibility] [battle] Name for the local player's challenger card in a battle challenge.",
             ),
       )}
       data-battle-challenger-chevron={owner}
@@ -2090,7 +2090,7 @@ function BattleCardStatusIndicators({
           aria-label={resolve(
             tx(
               "Exhausted",
-              "Accessible status on a battle card whose actions are unavailable until it is readied by the game rules.",
+              "[accessibility] [battle] Status on a battle card whose actions are unavailable until it is readied by the game rules.",
             ),
           )}
           data-battle-card-status="exhausted"
@@ -2120,7 +2120,7 @@ function BattleCardStatusIndicators({
                 other("{count} memory counters"),
               ]),
               { count: card.storedTime },
-              "Accessible name for the Memory status badge on a battle card. count is the positive integer number of Memory counters currently stored on that card.",
+              "[accessibility] [battle] Name for the Memory status badge on a battle card. count is the positive integer number of Memory counters currently stored on that card.",
             ),
           )}
           data-battle-card-status="stored-time"
@@ -3221,7 +3221,7 @@ function TargetingCardStage({
       aria-label={resolve(
         tx(
           "Card awaiting a target",
-          "Accessible name for the staged battle card that the current player has played and must now assign a legal target to.",
+          "[accessibility] [battle] Name for the staged battle card that the current player has played and must now assign a legal target to.",
         ),
       )}
       style={{
@@ -3576,70 +3576,70 @@ function pickerZoneCaption(
   if (candidate.highlighted) {
     return tx(
       "Just Drawn",
-      "Caption below a battle card-picker candidate that was just drawn.",
+      "[battle] Caption below a battle card-picker candidate that was just drawn.",
     );
   }
   const viewerOwned = candidate.owner === perspective;
   if (candidate.zone === "hand") {
     return viewerOwned
-      ? tx("Your Hand", "Caption for a card candidate in the viewer's hand.")
+      ? tx("Your Hand", "[battle] Caption for a card candidate in the viewer's hand.")
       : tx(
           "Opponent Hand",
-          "Caption for a card candidate in the opponent's hand.",
+          "[battle] Caption for a card candidate in the opponent's hand.",
         );
   }
   if (candidate.zone === "deck") {
     return viewerOwned
       ? tx(
           meaning("battle-deck-candidate-caption", "Your Deck"),
-          "Caption for a card candidate in the viewer's deck.",
+          "[battle] Caption for a card candidate in the viewer's deck.",
         )
       : tx(
           "Opponent Deck",
-          "Caption for a card candidate in the opponent's deck.",
+          "[battle] Caption for a card candidate in the opponent's deck.",
         );
   }
   if (candidate.zone === "backRank") {
     return viewerOwned
       ? tx(
           "Your Back Rank",
-          "Caption for a card candidate in the viewer's back rank.",
+          "[battle] Caption for a card candidate in the viewer's back rank.",
         )
       : tx(
           "Opponent Back Rank",
-          "Caption for a card candidate in the opponent's back rank.",
+          "[battle] Caption for a card candidate in the opponent's back rank.",
         );
   }
   if (candidate.zone === "frontRank") {
     return viewerOwned
       ? tx(
           "Your Front Rank",
-          "Caption for a card candidate in the viewer's front rank.",
+          "[battle] Caption for a card candidate in the viewer's front rank.",
         )
       : tx(
           "Opponent Front Rank",
-          "Caption for a card candidate in the opponent's front rank.",
+          "[battle] Caption for a card candidate in the opponent's front rank.",
         );
   }
   if (candidate.zone === "void") {
     return viewerOwned
       ? tx(
           meaning("battle-void-candidate-caption", "Your Void"),
-          "Caption for a card candidate in the viewer's Void.",
+          "[battle] Caption for a card candidate in the viewer's Void.",
         )
       : tx(
           "Opponent Void",
-          "Caption for a card candidate in the opponent's Void.",
+          "[battle] Caption for a card candidate in the opponent's Void.",
         );
   }
   return viewerOwned
     ? tx(
         "Your Banished",
-        "Caption for a card candidate in the viewer's banished zone.",
+        "[battle] Caption for a card candidate in the viewer's banished zone.",
       )
     : tx(
         "Opponent Banished",
-        "Caption for a card candidate in the opponent's banished zone.",
+        "[battle] Caption for a card candidate in the opponent's banished zone.",
       );
 }
 
@@ -3671,7 +3671,7 @@ function CardPickerGallery({
             selected_count: selectedPickerCardIds.length,
             required_count: requiredCount,
           },
-          "Compact progress shown in the full-screen card picker when no authored subtitle is available. selected_count and required_count are non-negative card counts; the slash notation is intentionally compact for the panel header.",
+          "[battle] Compact progress shown in the full-screen card picker when no authored subtitle is available. selected_count and required_count are non-negative card counts; the slash notation is intentionally compact for the panel header.",
         )
       : cardPicker.subtitle;
   const canSubmit =
@@ -3683,11 +3683,11 @@ function CardPickerGallery({
       requiredCount === 0
         ? tx(
             meaning("battle-picker-continue", "Continue"),
-            "Primary command that resolves a battle card picker with no required selection.",
+            "[battle] Primary command that resolves a battle card picker with no required selection.",
           )
         : tx(
             "Submit",
-            "Primary command that submits the required battle card selection.",
+            "[battle] Primary command that submits the required battle card selection.",
           ),
     variant: "accent" as const,
     disabled: !canSubmit,
@@ -3697,7 +3697,7 @@ function CardPickerGallery({
   const skipAction = {
     label: tx(
       meaning("battle-picker-skip", "Skip"),
-      "Command that declines an optional battle card picker.",
+      "[battle] Command that declines an optional battle card picker.",
     ),
     disabled:
       !cardPicker.canResolve || interactions?.onCardPickerSkip === undefined,
@@ -3757,7 +3757,7 @@ function CardPickerGallery({
           })}
           emptyLabel={tx(
             "No valid targets.",
-            "Empty state in a battle card picker whose current prompt has no legal cards.",
+            "[battle] Empty state in a battle card picker whose current prompt has no legal cards.",
           )}
           presentation="overlay"
           testId="battle-card-picker-gallery-panel"
@@ -3815,7 +3815,7 @@ function ControlRow({
       aria-label={resolve(
         tx(
           "Battle controls",
-          "Accessible label for the group of battle navigation and choice controls.",
+          "[accessibility] [battle] Label for the group of battle navigation and choice controls.",
         ),
       )}
       style={{
@@ -3882,7 +3882,7 @@ function ControlRow({
                         selected_count: selectedPickerCardIds.length,
                         required_count: requiredPickerCount,
                       },
-                      "Battle card-picker progress for candidates in the current perspective's hand. selected_count and required_count are non-negative card counts.",
+                      "[battle] Battle card-picker progress for candidates in the current perspective's hand. selected_count and required_count are non-negative card counts.",
                     )
                   : txa(
                       "from the opponent hand · {selected_count}/{required_count}",
@@ -3890,7 +3890,7 @@ function ControlRow({
                         selected_count: selectedPickerCardIds.length,
                         required_count: requiredPickerCount,
                       },
-                      "Battle card-picker progress for candidates in the opposing hand. selected_count and required_count are non-negative card counts.",
+                      "[battle] Battle card-picker progress for candidates in the opposing hand. selected_count and required_count are non-negative card counts.",
                     ),
               )}
             </span>
@@ -3899,7 +3899,7 @@ function ControlRow({
             <GlassButton
               label={tx(
                 meaning("battle-picker-skip", "Skip"),
-                "Command that declines an optional battle card picker.",
+                "[battle] Command that declines an optional battle card picker.",
               )}
               disabled={!cardPicker.canResolve}
               testId="battle-card-picker-skip"
@@ -3911,11 +3911,11 @@ function ControlRow({
               requiredPickerCount === 0
                 ? tx(
                     meaning("battle-picker-continue", "Continue"),
-                    "Primary command that resolves a battle card picker with no required selection.",
+                    "[battle] Primary command that resolves a battle card picker with no required selection.",
                   )
                 : tx(
                     "Submit",
-                    "Primary command that submits the required battle card selection.",
+                    "[battle] Primary command that submits the required battle card selection.",
                   )
             }
             variant="accent"
@@ -3956,7 +3956,7 @@ function ControlRow({
                 size="sm"
                 label={tx(
                   meaning("battle-phase-back", "Back"),
-                  "Command that moves the developer-enabled phase control to the previous phase.",
+                  "[battle] [developer] Command that moves the developer-enabled phase control to the previous phase.",
                 )}
                 disabled={disabled}
                 onPress={() => interactions?.onPreviousPhase()}
@@ -4007,21 +4007,21 @@ function ControlRow({
                     tutorialNextAction === "endTurn")
                     ? tx(
                         "End Turn",
-                        "Primary command that ends the current battle turn.",
+                        "[battle] Primary command that ends the current battle turn.",
                       )
                     : phaseNavigation === "tutorial"
                       ? tx(
                           "Start Challenge",
-                          "Primary command that starts the battle Challenge phase.",
+                          "[battle] Primary command that starts the battle Challenge phase.",
                         )
                       : nextPhaseAction === "nextPhase"
                         ? tx(
                             "Next Phase",
-                            "Primary command that advances to the next battle phase.",
+                            "[battle] Primary command that advances to the next battle phase.",
                           )
                         : tx(
                             meaning("battle-flow-continue", "Continue"),
-                            "Primary command that advances the current battle flow.",
+                            "[battle] Primary command that advances the current battle flow.",
                           )
                 }
                 variant="accent"
@@ -4042,7 +4042,7 @@ function ControlRow({
                     size="sm"
                     label={tx(
                       "Reject AI action",
-                      "Command that rejects the proposed opposing AI battle action.",
+                      "[battle] Command that rejects the proposed opposing AI battle action.",
                     )}
                     disabled={interactions?.onRejectAiProposal === undefined}
                     onPress={() => interactions?.onRejectAiProposal?.()}
@@ -4051,7 +4051,7 @@ function ControlRow({
                 <GlassButton
                   label={tx(
                     meaning("battle-result-continue", "Continue"),
-                    "Command that accepts a completed result or advances a resolved interaction.",
+                    "[battle] Command that accepts a completed result or advances a resolved interaction.",
                   )}
                   variant="accent"
                   disabled={interactions?.onApproveAiProposal === undefined}
@@ -5507,7 +5507,7 @@ export function MobileBattleScreen({
                   other("Open {count} banished Cards"),
                 ]),
                 { count: banishedCardCount },
-                "Accessible name for the icon-only control that opens all banished battle cards. count is the positive number of banished cards across both players.",
+                "[accessibility] [battle] Name for the icon-only control that opens all banished battle cards. count is the positive number of banished cards across both players.",
               )}
               testId="near-battle-banished"
               onPress={() =>
@@ -5636,11 +5636,11 @@ export function MobileBattleScreen({
           copy={{
             title: tx(
               "Merge Blocked",
-              "Title of the transient notice shown when a Figment merge is rejected before the current player's intent is sent.",
+              "[battle] Title of the transient notice shown when a Figment merge is rejected before the current player's intent is sent.",
             ),
             message: tx(
               "An exhausted Figment cannot be merged with one that is not exhausted.",
-              "Explanation in that notice when exhaustion states make the two Figments incompatible. Both referenced Figments are visible on the battlefield.",
+              "[battle] Explanation in that notice when exhaustion states make the two Figments incompatible. Both referenced Figments are visible on the battlefield.",
             ),
           }}
           onDismiss={() => setMergeNotice(null)}
@@ -5651,14 +5651,14 @@ export function MobileBattleScreen({
           title={txa(
             "Merge {figment_name}?",
             { figment_name: opaque(mergeConfirmation.figmentLabel) },
-            "Confirmation-dialog title for merging one Figment into another. figment_name is the canonical display name of the target Figment and has unknown grammatical gender; activating the confirmation performs the merge.",
+            "[battle] Confirmation-dialog title for merging one Figment into another. figment_name is the canonical display name of the target Figment and has unknown grammatical gender; activating the confirmation performs the merge.",
           )}
           presentation="popup"
           desktopCenterTarget="battlefield"
           onClose={() => setMergeConfirmation(null)}
           closeLabel={tx(
             meaning("figment-merge-cancel", "Cancel"),
-            "Visible command and accessible close name that cancels a pending Figment merge.",
+            "[accessibility] [battle] Visible command and close name that cancels a pending Figment merge.",
           )}
         >
           <div
@@ -5681,7 +5681,7 @@ export function MobileBattleScreen({
                   txa(
                     "Only {spark_count} ✦ from this Legionnaire will be added. Its Warrior-count bonus does not transfer. This merge cannot be undone.",
                     { spark_count: mergeConfirmation.addedSpark },
-                    "Complete warning in the confirmation dialog for a Legionnaire Figment merge. spark_count is the non-negative Spark added to the destination Figment. The ✦ is the canonical Spark symbol and becomes an accessible glyph. The Legionnaire's Warrior-count bonus is excluded, and the action is irreversible.",
+                    "[accessibility] [battle] Complete warning in the confirmation dialog for a Legionnaire Figment merge. spark_count is the non-negative Spark added to the destination Figment. The ✦ is the canonical Spark symbol and becomes a labeled glyph. The Legionnaire's Warrior-count bonus is excluded, and the action is irreversible.",
                   ),
                 ),
               )}
@@ -5696,7 +5696,7 @@ export function MobileBattleScreen({
               <GlassButton
                 label={tx(
                   meaning("figment-merge-cancel", "Cancel"),
-                  "Visible command and accessible close name that cancels a pending Figment merge.",
+                  "[accessibility] [battle] Visible command and close name that cancels a pending Figment merge.",
                 )}
                 placement="onGlass"
                 onPress={() => setMergeConfirmation(null)}
@@ -5704,7 +5704,7 @@ export function MobileBattleScreen({
               <GlassButton
                 label={tx(
                   meaning("figment-merge-action", "Merge"),
-                  "Visible command that confirms the pending Figment merge.",
+                  "[battle] Visible command that confirms the pending Figment merge.",
                 )}
                 variant="accent"
                 placement="onGlass"

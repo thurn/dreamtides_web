@@ -183,14 +183,14 @@ export function PoolViewerScreen({
           leadingGlyph={GLYPHS.filter}
           ariaLabel={tx(
             "Filter card subtype",
-            "Accessible name for the Pool Viewer selector that filters Character cards by their authored subtype.",
+            "[accessibility] [pool-viewer] Name for the Pool Viewer selector that filters Character cards by their authored subtype.",
           )}
           options={[
             {
               value: "",
               label: tx(
                 "All subtypes",
-                "Visible Pool Viewer subtype option that clears the authored Character-subtype filter.",
+                "[pool-viewer] Visible Pool Viewer subtype option that clears the authored Character-subtype filter.",
               ),
             },
             ...view.subtypeOptions.map((option) => ({
@@ -206,7 +206,7 @@ export function PoolViewerScreen({
           leadingGlyph={GLYPHS.energy}
           ariaLabel={tx(
             "Filter card cost",
-            "Accessible name for the Pool Viewer selector that filters cards by their Energy-cost category.",
+            "[accessibility] [pool-viewer] Name for the Pool Viewer selector that filters cards by their Energy-cost category.",
           )}
           options={(
             ["all", "0", "1", "2", "3", "4", "5plus", "x"] as const
@@ -229,11 +229,11 @@ export function PoolViewerScreen({
             disclosure.id === "tides"
               ? tx(
                   "Tide provenance",
-                  "Visible title of the Pool Viewer disclosure explaining which Tides constructed the run pool.",
+                  "[pool-viewer] Visible title of the Pool Viewer disclosure explaining which Tides constructed the run pool.",
                 )
               : tx(
                   "Pool construction",
-                  "Visible title of the Pool Viewer disclosure identifying the active pool-construction algorithm.",
+                  "[pool-viewer] Visible title of the Pool Viewer disclosure identifying the active pool-construction algorithm.",
                 )
           }
           summary={
@@ -244,12 +244,12 @@ export function PoolViewerScreen({
                     other("{tide_count} Tides"),
                   ]),
                   { tide_count: disclosure.tideCount },
-                  "Visible Pool Viewer disclosure summary showing the number of Tides used to construct the pool. tide_count is a visible nonnegative safe integer, can be zero in synthetic or incomplete data, and governs Tide number grammar.",
+                  "[pool-viewer] Visible Pool Viewer disclosure summary showing the number of Tides used to construct the pool. tide_count is a visible nonnegative safe integer, can be zero in synthetic or incomplete data, and governs Tide number grammar.",
                 )
               : txa(
                   "Algorithm: {algorithm_id}",
                   { algorithm_id: disclosure.variant },
-                  "Visible Pool Viewer diagnostic summary naming the pool-construction algorithm. algorithm_id is a stable raw internal identifier such as tides4; translators may reorder it but the identifier itself remains unchanged.",
+                  "[pool-viewer] [developer] Visible Pool Viewer diagnostic summary naming the pool-construction algorithm. algorithm_id is a stable raw internal identifier such as tides4; translators may reorder it but the identifier itself remains unchanged.",
                 )
           }
           expanded={expandedDisclosures[disclosure.id] ?? true}
@@ -285,13 +285,13 @@ export function PoolViewerScreen({
                       facet_drawn_count: disclosure.facetDrawnCount,
                       facet_available_count: disclosure.facetAvailableCount,
                     },
-                    "Visible Pool Viewer diagnostic sentence describing a Tides-built pool. deal_size is the visible nonnegative safe-integer target pool size and governs Card number grammar. copy_cap is the visible nonnegative per-card maximum. facet_drawn_count and facet_available_count are separate visible nonnegative counts showing selected and available theme Tides; drawn can be zero and cannot exceed available.",
+                    "[pool-viewer] [developer] Visible Pool Viewer diagnostic sentence describing a Tides-built pool. deal_size is the visible nonnegative safe-integer target pool size and governs Card number grammar. copy_cap is the visible nonnegative per-card maximum. facet_drawn_count and facet_available_count are separate visible nonnegative counts showing selected and available theme Tides; drawn can be zero and cannot exceed available.",
                   ),
                 )
               : resolve(
                   tx(
                     "The active run pool is shown with its remaining copies.",
-                    "Visible Pool Viewer disclosure sentence explaining that card quantities are the current remaining copies in the active run pool.",
+                    "[pool-viewer] Visible Pool Viewer disclosure sentence explaining that card quantities are the current remaining copies in the active run pool.",
                   ),
                 )}
           </p>
@@ -308,7 +308,7 @@ export function PoolViewerScreen({
             ]),
           ),
           { visible_count: view.visibleCount, total_count: view.totalCount },
-          "Filtered card-browser subtitle. visible_count is the non-negative number matching the active filters; total_count is the non-negative collection size before filtering and governs Card grammar.",
+          "[pool-viewer] Filtered card-browser subtitle. visible_count is the non-negative number matching the active filters; total_count is the non-negative collection size before filtering and governs Card grammar.",
         )}
         rightAccessory={{
           kind: "iconButton",
@@ -316,7 +316,7 @@ export function PoolViewerScreen({
             glyph: GLYPHS.close,
             label: tx(
               "Close pool viewer",
-              "Accessible command name for the button that closes the Pool Viewer overlay or floating panel.",
+              "[accessibility] [pool-viewer] Command name for the button that closes the Pool Viewer overlay or floating panel.",
             ),
             onPress: onClose,
             testId: "pool-viewer-close",
@@ -326,7 +326,7 @@ export function PoolViewerScreen({
           search: {
             label: tx(
               "Search cards",
-              "Visible label for the Pool Viewer field that searches authored card names and rules text.",
+              "[pool-viewer] Visible label for the Pool Viewer field that searches authored card names and rules text.",
             ),
             value: view.filters.query,
             onChange: (query) => onFiltersChange({ query }),
@@ -335,7 +335,7 @@ export function PoolViewerScreen({
           sort: {
             ariaLabel: tx(
               "Sort cards",
-              "Accessible name for the Pool Viewer selector that chooses the card property used for sorting.",
+              "[accessibility] [pool-viewer] Name for the Pool Viewer selector that chooses the card property used for sorting.",
             ),
             value: view.filters.sort,
             options: view.sortOptions.map((sort) => {
@@ -362,22 +362,22 @@ function sourceOptionLabel(source: PoolViewerSourceId): LocalizedString {
     case "run":
       return tx(
         "Run Pool",
-        "Visible Pool Viewer source-tab label for the current remaining draft pool.",
+        "[pool-viewer] Visible Pool Viewer source-tab label for the current remaining draft pool.",
       );
     case "tides":
       return tx(
         "Tide Decks",
-        "Visible Pool Viewer source-tab label for the Tide construction input.",
+        "[pool-viewer] Visible Pool Viewer source-tab label for the Tide construction input.",
       );
     case "catalog":
       return tx(
         "All Cards",
-        "Visible Pool Viewer source-tab label for the full card catalog.",
+        "[pool-viewer] Visible Pool Viewer source-tab label for the full card catalog.",
       );
     case "signature":
       return tx(
         "Signature Cards",
-        "Visible collection label for the active Dream Avatar's authored signature cards.",
+        "[dream-avatar] Collection label for the active Dream Avatar's authored signature cards.",
       );
   }
 }
@@ -387,22 +387,22 @@ function emptySourceLabel(source: PoolViewerSourceId): LocalizedString {
     case "run":
       return tx(
         "No run pool cards are available.",
-        "Visible Pool Viewer empty-state sentence for an empty current run pool.",
+        "[pool-viewer] Visible Pool Viewer empty-state sentence for an empty current run pool.",
       );
     case "tides":
       return tx(
         "This run has no Tide decks.",
-        "Visible Pool Viewer empty-state sentence when the run has no Tide construction inputs.",
+        "[pool-viewer] Visible Pool Viewer empty-state sentence when the run has no Tide construction inputs.",
       );
     case "catalog":
       return tx(
         "No cards match the current filters.",
-        "Visible Pool Viewer empty-state sentence when filters hide every card in the full catalog.",
+        "[pool-viewer] Visible Pool Viewer empty-state sentence when filters hide every card in the full catalog.",
       );
     case "signature":
       return tx(
         "This avatar has no signature cards.",
-        "Visible Pool Viewer empty-state sentence when the Dream Avatar has no authored signature cards.",
+        "[dream-avatar] [pool-viewer] Visible Pool Viewer empty-state sentence when the Dream Avatar has no authored signature cards.",
       );
   }
 }
@@ -412,17 +412,17 @@ function typeFilterLabel(cardType: PoolViewerTypeFilter): LocalizedString {
     case "all":
       return tx(
         "All",
-        "Visible card-browser type filter option that keeps every card type.",
+        "[card-browser] Type filter option that keeps every card type.",
       );
     case "character":
       return tx(
         "Characters",
-        "Visible card-browser type filter option that keeps Character cards.",
+        "[card-browser] Type filter option that keeps Character cards.",
       );
     case "event":
       return tx(
         "Events",
-        "Visible card-browser type filter option that keeps Event cards.",
+        "[card-browser] Type filter option that keeps Event cards.",
       );
   }
 }
@@ -434,12 +434,12 @@ function sortDirectionLabel(
     case "asc":
       return tx(
         "Sort ascending",
-        "Accessible command name for sorting the visible card collection in ascending order.",
+        "[accessibility] [card-browser] Action sorting the visible card collection in ascending order.",
       );
     case "desc":
       return tx(
         "Sort descending",
-        "Accessible command name for sorting the visible card collection in descending order.",
+        "[accessibility] [card-browser] Action sorting the visible card collection in descending order.",
       );
   }
 }
@@ -454,17 +454,17 @@ function costFilterLabel(cost: PoolViewerCostFilter): LocalizedString {
     case "4":
       return tx(
         "All costs",
-        "Compact visible Pool Viewer Energy-cost filter option. The same source label is used for the no-filter option and the exact-cost zero-through-four options.",
+        "[pool-viewer] Compact visible Pool Viewer Energy-cost filter option. The same source label is used for the no-filter option and the exact-cost zero-through-four options.",
       );
     case "5plus":
       return tx(
         "Cost 5+",
-        "Compact visible Pool Viewer Energy-cost filter option that selects cards with a printed cost of five or more.",
+        "[pool-viewer] Compact visible Pool Viewer Energy-cost filter option that selects cards with a printed cost of five or more.",
       );
     case "x":
       return tx(
         "Cost X",
-        "Compact visible Pool Viewer Energy-cost filter option that selects cards with a variable printed cost.",
+        "[pool-viewer] Compact visible Pool Viewer Energy-cost filter option that selects cards with a variable printed cost.",
       );
   }
 }
@@ -474,12 +474,12 @@ function viewerTitle(title: PoolViewerTitleKind): LocalizedString {
     case "pool":
       return tx(
         meaning("pool-viewer-heading", "Pool Viewer"),
-        "Visible Pool Viewer heading for the Journey utility overlay.",
+        "[pool-viewer] [journey] Visible Pool Viewer heading for the Journey utility overlay.",
       );
     case "battle":
       return tx(
         "Battle Pool Viewer",
-        "Visible Pool Viewer heading for the floating Battle inspector.",
+        "[battle] [pool-viewer] Visible Pool Viewer heading for the floating Battle inspector.",
       );
   }
 }
@@ -489,32 +489,32 @@ function sortFieldLabel(sort: PoolViewerSortId): LocalizedString {
     case "name":
       return tx(
         "Name",
-        "Visible card-browser sort-field option for canonical authored card names.",
+        "[card-browser] Sort-field option for canonical authored card names.",
       );
     case "cardNumber":
       return tx(
         "Number",
-        "Compact visible Pool Viewer sort-field option for authored card numbers.",
+        "[pool-viewer] Compact visible Pool Viewer sort-field option for authored card numbers.",
       );
     case "cost":
       return tx(
         "Cost",
-        "Visible card-browser sort-field option for printed Energy cost.",
+        "[card-browser] Sort-field option for printed Energy cost.",
       );
     case "type":
       return tx(
         "Type",
-        "Compact visible Pool Viewer sort-field option for card type.",
+        "[pool-viewer] Compact visible Pool Viewer sort-field option for card type.",
       );
     case "subtype":
       return tx(
         "Subtype",
-        "Visible card-browser sort-field option for canonical authored subtype.",
+        "[card-browser] Sort-field option for canonical authored subtypes.",
       );
     case "spark":
       return tx(
         "Spark",
-        "Visible card-browser sort-field option for printed Spark.",
+        "[card-browser] Sort-field option for printed Spark.",
       );
   }
 }

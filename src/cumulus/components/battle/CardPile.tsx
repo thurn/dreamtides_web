@@ -177,7 +177,7 @@ export function CardPile({
                 label={txa(
                   "Face-down card {position}",
                   { position: depth + 1 },
-                  "Accessible name for one unidentified card back within a separately labeled battle pile. position is its positive one-based depth from the top of that pile.",
+                  "[accessibility] [battle] Name for one unidentified card back within a separately labeled battle pile. position is its positive one-based depth from the top of that pile.",
                 )}
               />
             ) : (

@@ -186,7 +186,7 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
         aria-label={resolve(
           tx(
             "Your Deck",
-            "Title of the full-screen browser for the current player's deck. “Your” addresses the local player, including one participant in a cooperative room.",
+            "[card-browser] [coop] Title of the full-screen browser for the current player's deck. “Your” addresses the local player, including one participant in a cooperative room.",
           ),
         )}
         // Presses inside the content never reach the surface, so only an outside
@@ -308,7 +308,7 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
           {resolve(
             tx(
               "Your Deck",
-              "Title of the full-screen browser for the current player's deck. “Your” addresses the local player, including one participant in a cooperative room.",
+              "[card-browser] [coop] Title of the full-screen browser for the current player's deck. “Your” addresses the local player, including one participant in a cooperative room.",
             ),
           )}
         </h2>
@@ -320,7 +320,7 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
                 plural(count, [one("{count} Card"), other("{count} Cards")]),
               ),
               { count },
-              "Count beneath the deck-browser title. count is the number of cards currently in the player's deck, is a non-negative integer, and can be zero.",
+              "[card-browser] Count beneath the deck-browser title. count is the number of cards currently in the player's deck, is a non-negative integer, and can be zero.",
             ),
           )}
         </Eyebrow>
@@ -331,7 +331,7 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
         size="sm"
         label={tx(
           "Close deck browser",
-          "Accessible name for the icon-only control that dismisses the player's deck browser and returns focus to the Journey screen beneath it.",
+          "[accessibility] [card-browser] [journey] Name for the icon-only control that dismisses the player's deck browser and returns focus to the Journey screen beneath it.",
         )}
         onPress={onClose}
       />
@@ -395,7 +395,7 @@ function DreamAvatarBlock({
       <SidebarSectionHeader
         label={tx(
           meaning("deck-avatar-label", "Avatar"),
-          "Player-facing message for the deck viewer avatar label interface state.",
+          "[card-browser] Deck viewer avatar label.",
         )}
       />
       <div style={{ display: "flex", justifyContent: "flex-start" }}>
@@ -446,7 +446,7 @@ function DreamsignsBlock({ dreamsigns }: { dreamsigns: LocalizedDreamsign[] }) {
       <SidebarSectionHeader
         label={tx(
           "Dreamsigns",
-          "Section label for the player’s collected Dreamsigns.",
+          "[dreamsign] Section label for the player's collected Dreamsigns.",
         )}
       />
       {dreamsigns.length === 0 ? (
@@ -456,7 +456,7 @@ function DreamsignsBlock({ dreamsigns }: { dreamsigns: LocalizedDreamsign[] }) {
           {resolve(
             tx(
               "None collected yet.",
-              "Player-facing message for the deck viewer no dreamsigns interface state.",
+              "[dreamsign] [card-browser] Deck viewer no dreamsigns.",
             ),
           )}
         </div>
@@ -499,7 +499,7 @@ function TidesBlock({ tides }: { tides: DreamAvatarTideView[] }) {
       <SidebarSectionHeader
         label={tx(
           "Tides",
-          "Player-facing message for the deck viewer tides label interface state.",
+          "[card-browser] Deck viewer tides label.",
         )}
       />
       <div
@@ -543,17 +543,17 @@ function ControlBar({
       case "all":
         return tx(
           "All",
-          "Visible card-browser type filter option that keeps every card type.",
+          "[card-browser] Type filter option that keeps every card type.",
         );
       case "Character":
         return tx(
           "Characters",
-          "Visible card-browser type filter option that keeps Character cards.",
+          "[card-browser] Type filter option that keeps Character cards.",
         );
       case "Event":
         return tx(
           "Events",
-          "Visible card-browser type filter option that keeps Event cards.",
+          "[card-browser] Type filter option that keeps Event cards.",
         );
     }
   };
@@ -562,27 +562,27 @@ function ControlBar({
       case "name":
         return tx(
           "Name",
-          "Visible card-browser sort-field option for canonical authored card names.",
+          "[card-browser] Sort-field option for canonical authored card names.",
         );
       case "drafted":
         return tx(
           "Acquired",
-          "Player-facing message for the deck sort acquired interface state.",
+          "[card-browser] Deck sort acquired.",
         );
       case "cost":
         return tx(
           "Cost",
-          "Visible card-browser sort-field option for printed Energy cost.",
+          "[card-browser] Sort-field option for printed Energy cost.",
         );
       case "spark":
         return tx(
           "Spark",
-          "Visible card-browser sort-field option for printed Spark.",
+          "[card-browser] Sort-field option for printed Spark.",
         );
       case "subtype":
         return tx(
           "Subtype",
-          "Visible card-browser sort-field option for canonical authored subtype.",
+          "[card-browser] Sort-field option for canonical authored subtypes.",
         );
     }
   };
@@ -591,17 +591,17 @@ function ControlBar({
       case "small":
         return tx(
           "S",
-          "Player-facing message for the deck size small interface state.",
+          "[card-browser] Deck size small.",
         );
       case "medium":
         return tx(
           "M",
-          "Player-facing message for the deck size medium interface state.",
+          "[card-browser] Deck size medium.",
         );
       case "large":
         return tx(
           "L",
-          "Player-facing message for the deck size large interface state.",
+          "[card-browser] Deck size large.",
         );
     }
   };
@@ -641,7 +641,7 @@ function ControlBar({
           align="start"
           ariaLabel={tx(
             "Filter by subtype",
-            "Player-facing message for the deck filter subtype accessible name interface state.",
+            "[accessibility] [card-browser] Deck filter subtype name.",
           )}
           options={subtypeOptions.map((option) =>
             option.label === undefined
@@ -649,7 +649,7 @@ function ControlBar({
                   value: option.value,
                   label: tx(
                     "All Subtypes",
-                    "Deck filter option that includes every character subtype.",
+                    "[card-browser] Deck filter option that includes every character subtype.",
                   ),
                 }
               : { value: option.value, label: option.label },
@@ -664,7 +664,7 @@ function ControlBar({
         align="start"
         ariaLabel={tx(
           "Sort order",
-          "Player-facing message for the deck sort accessible name interface state.",
+          "[accessibility] [card-browser] Deck sort name.",
         )}
         options={DECK_SORT_OPTIONS.map((option) => ({
           value: option.value,
@@ -683,7 +683,7 @@ function ControlBar({
             symbol: "↑",
             ariaLabel: tx(
               "Sort ascending",
-              "Accessible command name for sorting the visible card collection in ascending order.",
+              "[accessibility] [card-browser] Action sorting the visible card collection in ascending order.",
             ),
           },
           {
@@ -691,7 +691,7 @@ function ControlBar({
             symbol: "↓",
             ariaLabel: tx(
               "Sort descending",
-              "Accessible command name for sorting the visible card collection in descending order.",
+              "[accessibility] [card-browser] Action sorting the visible card collection in descending order.",
             ),
           },
         ]}
@@ -743,14 +743,14 @@ function DeckGrid({
         <GridPlaceholder
           message={tx(
             "Your deck is empty.",
-            "Empty state in the deck browser when the player's deck contains zero cards.",
+            "[card-browser] Empty state in the deck browser when the player's deck contains zero cards.",
           )}
         />
       ) : visible.length === 0 ? (
         <GridPlaceholder
           message={tx(
             "No cards match this filter.",
-            "Empty state when the player's non-empty deck has no cards matching the active filter. The player can change or clear that filter to see cards again.",
+            "[card-browser] Empty state when the player's non-empty deck has no cards matching the active filter. The player can change or clear that filter to see cards again.",
           )}
         />
       ) : (

@@ -370,16 +370,16 @@ export function TransfigurationPickerPanel({
 }) {
   const enhanced = isEnhanced;
   const subtitle = !ready
-    ? tx("Heating the forge…", "Loading status while Transfiguration choices are prepared.")
+    ? tx("Heating the forge…", "[transfiguration] [loading] Loading status while Transfiguration choices are prepared.")
     : enhanced
-      ? tx("Pick any card to reforge", "Instruction when any eligible card may be reforged.")
-      : tx("Choose a card to reforge", "Instruction for choosing the offered card to reforge.");
+      ? tx("Pick any card to reforge", "[transfiguration] Instruction when any eligible card may be reforged.")
+      : tx("Choose a card to reforge", "[transfiguration] Instruction for choosing the offered card to reforge.");
   const desktop = layout === "desktop";
   return (
     <CardPickerPanel
       title={tx(
           "Transfiguration",
-          "Title of the card picker at a Transfiguration site.",
+          "[transfiguration] Title of the card picker at a Transfiguration site.",
         )}
       subtitle={subtitle}
       rightAccessory={
@@ -387,7 +387,7 @@ export function TransfigurationPickerPanel({
           ? {
               kind: "glassButton",
               button: {
-                label: tx("Decline", "Compact command that declines the current site interaction without applying it."),
+                label: tx("Decline", "[ui] Compact action declining the current interaction without applying it."),
                 onPress: onClose,
                 testId: "cumulus-transfiguration-decline",
               },
@@ -398,7 +398,7 @@ export function TransfigurationPickerPanel({
         desktop && !enhanced
           ? [
               {
-                label: tx("Decline Offer", "Command that declines the current site offer and leaves without taking its reward."),
+                label: tx("Decline Offer", "[ui] Action declining the current site offer and leaving without its reward."),
                 onPress: onClose,
                 testId: "cumulus-transfiguration-decline",
               },
@@ -418,14 +418,14 @@ export function TransfigurationPickerPanel({
                 message: txa(
                   "{form} · Reforged",
                   { form: candidate.reforgedType },
-                  "Caption beneath a card that has already been reforged. form is its canonical Transfiguration form name and is one of the forms defined by game data.",
+                  "[transfiguration] Caption beneath a card that has already been reforged. form is its canonical Transfiguration form name and is one of the forms defined by game data.",
                 ),
               },
       }))}
       emptyLabel={
         ready
-          ? tx("No eligible cards to reforge.", "Empty state when no card can be reforged.")
-          : tx("Heating the forge…", "Loading status while Transfiguration choices are prepared.")
+          ? tx("No eligible cards to reforge.", "[transfiguration] Empty state when no card can be reforged.")
+          : tx("Heating the forge…", "[transfiguration] [loading] Loading status while Transfiguration choices are prepared.")
       }
       testId="cumulus-transfiguration-picker"
       onCardPress={onPick}
@@ -484,7 +484,7 @@ export function TransfigurationDetailPanel({
       <GlassPanel
         title={tx(
             "Choose Its New Form",
-            'Title above the form choices for the currently selected card. "Its" refers to that card and avoids assuming grammatical gender for its display name.',
+            "[transfiguration] Title above the form choices for the currently selected card. \"Its\" refers to that card and avoids assuming grammatical gender for its display name.",
           )}
         headerSpacing={mobile ? "compact" : "medium"}
         footer={
@@ -505,7 +505,7 @@ export function TransfigurationDetailPanel({
                 placement="onGlass"
                 label={tx(
                   meaning("transfiguration-reselect-action", "Choose Again"),
-                  "Visible command that returns to the Transfiguration card picker.",
+                  "[transfiguration] Visible command that returns to the Transfiguration card picker.",
                 )}
                 disabled={confirming}
                 onPress={onBack}
@@ -517,8 +517,8 @@ export function TransfigurationDetailPanel({
               variant="accent"
               label={
                 confirming
-                  ? tx("Reforging…", "Pending status while a Transfiguration is being saved.")
-                  : tx(meaning("transfiguration-commit-action", "Transfigure"), "Command that commits the selected Transfiguration form.")
+                  ? tx("Reforging…", "[transfiguration] Pending status while a Transfiguration is being saved.")
+                  : tx(meaning("transfiguration-commit-action", "Transfigure"), "[transfiguration] Command that commits the selected Transfiguration form.")
               }
               essenceCost={
                 showConfirmEssenceCost
@@ -529,27 +529,27 @@ export function TransfigurationDetailPanel({
                 showConfirmEssenceCost
                   ? [
                       {
-                        label: tx(meaning("transfiguration-commit-action", "Transfigure"), "Command that commits the selected Transfiguration form."),
+                        label: tx(meaning("transfiguration-commit-action", "Transfigure"), "[transfiguration] Command that commits the selected Transfiguration form."),
                         essenceCost: null,
                       },
                       ...candidate.forms.flatMap((form) => [
                         {
-                          label: tx(meaning("transfiguration-commit-action", "Transfigure"), "Command that commits the selected Transfiguration form."),
+                          label: tx(meaning("transfiguration-commit-action", "Transfigure"), "[transfiguration] Command that commits the selected Transfiguration form."),
                           essenceCost: form.essenceCost,
                         },
                         {
-                          label: tx("Reforging…", "Pending status while a Transfiguration is being saved."),
+                          label: tx("Reforging…", "[transfiguration] Pending status while a Transfiguration is being saved."),
                           essenceCost: form.essenceCost,
                         },
                       ]),
                     ]
                   : [
                       {
-                        label: tx(meaning("transfiguration-commit-action", "Transfigure"), "Command that commits the selected Transfiguration form."),
+                        label: tx(meaning("transfiguration-commit-action", "Transfigure"), "[transfiguration] Command that commits the selected Transfiguration form."),
                         essenceCost: null,
                       },
                       {
-                        label: tx("Reforging…", "Pending status while a Transfiguration is being saved."),
+                        label: tx("Reforging…", "[transfiguration] Pending status while a Transfiguration is being saved."),
                         essenceCost: null,
                       },
                     ]
@@ -618,7 +618,7 @@ export function TransfigurationDetailPanel({
               role="radiogroup"
               aria-label={resolve(tx(
                 "Transfiguration options",
-                "Player-facing message for the transfiguration options accessible name interface state.",
+                "[accessibility] [transfiguration] Options name.",
               ))}
               data-transfiguration-options=""
               data-transfiguration-option-layout={mobile ? "compact" : "priced"}

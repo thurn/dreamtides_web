@@ -22,33 +22,33 @@ const CARD_FEATURES: Readonly<
   Record<TutorialFeatureCalloutKind, CardFeatureSpec>
 > = {
   cost: {
-    label: tx(meaning("tutorial-cost-feature-label", "Cost"), "Loading-screen card feature labels."),
+    label: tx(meaning("tutorial-cost-feature-label", "Cost"), "[loading] Loading-screen card feature labels."),
     glyph: GLYPHS.energy,
     color: "energy",
-    glyphLabel: tx("energy", "Loading-screen resource glyph accessible names."),
+    glyphLabel: tx("energy", "[accessibility] [loading] Loading-screen resource glyph names."),
   },
   spark: {
     label: tx(
       meaning("tutorial-spark-feature-label", "Spark"),
-      "Player-facing message for the tutorial feature spark interface state.",
+      "[tutorial] Feature spark.",
     ),
     glyph: GLYPHS.sparkInline,
     color: "spark",
     glyphLabel: tx(
       "spark",
-      "Player-facing message for the tutorial feature spark glyph interface state.",
+      "[tutorial] Feature spark glyph.",
     ),
   },
   ability: {
     label: tx(
       meaning("tutorial-ability-feature-label", "Ability"),
-      "Player-facing message for the tutorial feature ability interface state.",
+      "[tutorial] Feature ability.",
     ),
   },
   cardType: {
     label: tx(
       "Card Type",
-      "Player-facing message for the tutorial feature card type interface state.",
+      "[tutorial] Feature card type.",
     ),
   },
 };

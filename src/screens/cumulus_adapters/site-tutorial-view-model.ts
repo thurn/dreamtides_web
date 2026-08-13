@@ -25,8 +25,8 @@ export function buildFirstVisitSiteTutorialView(
     id: `${state.runId ?? state.seed}:first-visit:${activeSite.siteId}:${siteType}`,
     model: {
       portrait: { kind: "character-portrait", characterId: "mira" },
-      portraitAlt: tx("Mira", "Name of the tutorial guide."),
-      speakerName: tx("Mira", "Name of the tutorial guide."),
+      portraitAlt: tx("Mira", "[tutorial] Name of the tutorial guide."),
+      speakerName: tx("Mira", "[tutorial] Name of the tutorial guide."),
       text: localizedSourceText(speechBubble.text),
     },
     delaySeconds: tutorialSpeechBubbleDelaySeconds(speechBubble),

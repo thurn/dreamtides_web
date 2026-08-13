@@ -650,7 +650,7 @@ export function buildAugurySiteModel(params: {
         offers: [],
         unavailableMessage: tx(
           "The visions are clouded. I cannot read these paths; walk on for now.",
-          "Augury unavailable guidance after its offer model cannot be constructed.",
+          "[augury] Augury unavailable guidance after its offer model cannot be constructed.",
         ),
       },
       context: null,
@@ -806,7 +806,7 @@ export function auguryChoiceResult(
       ok: false,
       message: tx(
         "The visions shifted. Choose again.",
-        "Player-facing message for the augury error visions shifted interface state.",
+        "[augury] Error visions shifted.",
       ),
     };
   }
@@ -814,7 +814,7 @@ export function auguryChoiceResult(
     ok: false,
     message: tx(
       "That path is closed. Choose again.",
-      "Player-facing message for the augury error path closed interface state.",
+      "[augury] Error path closed.",
     ),
   };
 }
@@ -838,7 +838,7 @@ export function chooseAuguryOffer(
       ok: false,
       message: tx(
         "The augury is clouded.",
-        "Player-facing message for the augury error clouded interface state.",
+        "[augury] Error clouded.",
       ),
     };
   }
@@ -848,7 +848,7 @@ export function chooseAuguryOffer(
       ok: false,
       message: tx(
         "Choose a vision first.",
-        "Player-facing message for the augury error choose vision interface state.",
+        "[augury] Error choose vision.",
       ),
     };
   }

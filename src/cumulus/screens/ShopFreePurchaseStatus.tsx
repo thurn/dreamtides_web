@@ -33,7 +33,7 @@ export function ShopFreePurchaseStatus({
     kind === "next-shop"
       ? tx(
           "Exploration boon: every item in this shop is free.",
-          "Persistent live status above a Card Shop shelf when its T56 visit-wide Exploration benefit is bound to this exact visit.",
+          "[exploration] Persistent live status above a Card Shop shelf when its T56 visit-wide Exploration benefit is bound to this exact visit.",
         )
       : kind === "free-purchases"
         ? txa(
@@ -44,7 +44,7 @@ export function ShopFreePurchaseStatus({
               ),
             ]),
             { remaining_count: status.freePurchasesRemaining },
-            "Persistent live status above a Shop or Dreamsign Bazaar shelf when T82 free purchases are queued. remaining_count is the positive total across all FIFO counters.",
+            "[dreamsign] Persistent live status above a Shop or Dreamsign Bazaar shelf when T82 free purchases are queued. remaining_count is the positive total across all FIFO counters.",
           )
         : txa(
             plural(status.freePurchasesRemaining, [
@@ -56,7 +56,7 @@ export function ShopFreePurchaseStatus({
               ),
             ]),
             { remaining_count: status.freePurchasesRemaining },
-            "Persistent live status above a Card Shop shelf when T56 and T82 overlap. remaining_count is the positive total of successful T82 purchases remaining; those counters are consumed even while T56 also makes the visit free.",
+            "[ui] Persistent live status above a Card Shop shelf when T56 and T82 overlap. remaining_count is the positive total of successful T82 purchases remaining; those counters are consumed even while T56 also makes the visit free.",
           );
 
   return (

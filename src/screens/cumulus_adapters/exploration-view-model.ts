@@ -1175,7 +1175,7 @@ function fixedTransfigurationDisclosure(
         action.transfiguration,
       ).description,
     },
-    "Parenthetical disclosure describing the fixed Transfiguration applied by an Exploration action. description is the canonical authored form description.",
+    "[exploration] [transfiguration] Parenthetical disclosure describing the fixed Transfiguration applied by an Exploration action. description is the canonical authored form description.",
   );
 }
 
@@ -1392,7 +1392,7 @@ export function buildExplorationActionEffect(
     const message = localizedEffect({
       deck_card: tx(
         "an eligible card",
-        "Generic Exploration effect target shown while its exact eligible deck card is intentionally concealed.",
+        "[exploration] Generic Exploration effect target shown while its exact eligible deck card is intentionally concealed.",
       ),
     });
     return {
@@ -1407,7 +1407,7 @@ export function buildExplorationActionEffect(
     const message = localizedEffect({
       starter_card: tx(
         "a Starter card",
-        "Generic Exploration effect target shown while its exact Starter card is intentionally concealed.",
+        "[exploration] Generic Exploration effect target shown while its exact Starter card is intentionally concealed.",
       ),
     });
     return {
@@ -2443,7 +2443,7 @@ function actionView(
       ? txa(
           "{site_type}.",
           { site_type: offer.offeredSiteType },
-          "Parenthetical disclosure naming the authored site type offered by an Exploration action.",
+          "[exploration] Parenthetical disclosure naming the authored site type offered by an Exploration action.",
         )
       : undefined);
   return {
@@ -3753,7 +3753,7 @@ function rewardForResolution(
     resolvedActionView === undefined && resolvedAction === undefined
       ? tx(
           "Exploration effect resolved",
-          "Generic player-safe Exploration outcome fallback when the resolved action is unavailable to the presentation model.",
+          "[exploration] Generic player-safe Exploration outcome fallback when the resolved action is unavailable to the presentation model.",
         )
       : (resolvedActionView?.effectText ??
         localizedSourceText(resolvedAction?.effectText ?? ""));

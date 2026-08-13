@@ -41,7 +41,7 @@ export function LocalizedErrorBoundaryFallback({
         {resolve(
           tx(
             "Something went wrong",
-            "Heading for an unexpected render failure caught by an application error boundary.",
+            "[ui] Heading for an unexpected render failure caught by an application error boundary.",
           ),
         )}
       </h2>
@@ -49,7 +49,7 @@ export function LocalizedErrorBoundaryFallback({
         {resolve(
           tx(
             "This part of the screen hit an unexpected error. The rest of the app is still working. Try again, or close this and return to where you were.",
-            "Explanation for an unexpected render failure; technical details appear separately when available.",
+            "[ui] Explanation for an unexpected render failure; technical details appear separately when available.",
           ),
         )}
       </p>
@@ -71,7 +71,7 @@ export function LocalizedErrorBoundaryFallback({
           {resolve(
             tx(
               "Retry",
-              "Command that retries the failed application operation represented by the current error surface.",
+              "[ui] Command that retries the failed application operation represented by the current error surface.",
             ),
           )}
         </button>
@@ -93,7 +93,7 @@ export function LocalizedErrorBoundaryFallback({
             {resolve(
               tx(
                 meaning("error-boundary-close", "Close"),
-                "Action that closes an application error boundary and returns to the previous surface.",
+                "[ui] Action that closes an application error boundary and returns to the previous surface.",
               ),
             )}
           </button>

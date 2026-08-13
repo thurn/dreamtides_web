@@ -376,7 +376,7 @@ export function RoomGate({
           : {
               detailMessage: tx(
                 "Failed to create game.",
-                "Failure detail shown when creating a shared room fails without a technical error message.",
+                "[coop] Failure detail shown when creating a shared room fails without a technical error message.",
               ),
             }),
       });
@@ -470,7 +470,7 @@ export function RoomGate({
           : {
               detailMessage: tx(
                 "Failed to write presence.",
-                "Failure detail shown when the client's shared-room presence cannot be recorded without a technical error message.",
+                "[coop] Failure detail shown when the client's shared-room presence cannot be recorded without a technical error message.",
               ),
             }),
       });
@@ -568,16 +568,16 @@ export function RoomGate({
             kind: "loading",
             title: tx(
               meaning("room-joining-title", "Joining Game"),
-              "Loading title while a client joins an existing shared room.",
+              "[coop] [loading] Loading title while a client joins an existing shared room.",
             ),
             message: txa(
               "Preparing {room_id}.",
               { room_id: gateState.roomId },
-              "Loading status containing the opaque room identifier of the shared game being prepared.",
+              "[coop] [loading] Loading status containing the opaque room identifier of the shared game being prepared.",
             ),
             busyLabel: tx(
               meaning("room-joining-status", "Joining Game"),
-              "Busy status while a client joins an existing shared room.",
+              "[coop] Busy status while a client joins an existing shared room.",
             ),
           }}
         />
@@ -599,15 +599,15 @@ export function RoomGate({
           kind: "roomCreation",
           title: tx(
             meaning("room-creating-title", "Creating Game"),
-            "Title while a new shared room is being created.",
+            "[coop] Title while a new shared room is being created.",
           ),
           message: tx(
             "We are preparing a shared dream.",
-            "Status while a new shared room is being created.",
+            "[coop] Status while a new shared room is being created.",
           ),
           busyLabel: tx(
             meaning("room-creating-status", "Creating Game"),
-            "Busy status while a new shared room is being created.",
+            "[coop] Busy status while a new shared room is being created.",
           ),
         }}
       />
@@ -621,16 +621,16 @@ export function RoomGate({
           kind: "loading",
           title: tx(
             meaning("room-joining-title", "Joining Game"),
-            "Loading title while a client joins an existing shared room.",
+            "[coop] [loading] Loading title while a client joins an existing shared room.",
           ),
           message: txa(
             "Loading {room_id}.",
             { room_id: gateState.roomId },
-            "Loading status containing the opaque room identifier of the shared room record being fetched.",
+            "[coop] [loading] Loading status containing the opaque room identifier of the shared room record being fetched.",
           ),
           busyLabel: tx(
             meaning("room-joining-status", "Joining Game"),
-            "Busy status while a client joins an existing shared room.",
+            "[coop] Busy status while a client joins an existing shared room.",
           ),
         }}
       />
@@ -644,19 +644,19 @@ export function RoomGate({
           kind: "unreachableRoom",
           title: tx(
             "Game Not Found",
-            "Title when a requested shared room is missing or unreachable.",
+            "[coop] Title when a requested shared room is missing or unreachable.",
           ),
           message: txa(
             "Could not load {room_id}. The game may not exist, or the database is unreachable.",
             { room_id: gateState.roomId },
-            "Explanation containing the opaque room identifier of a shared game that is missing or unreachable.",
+            "[coop] Explanation containing the opaque room identifier of a shared game that is missing or unreachable.",
           ),
           actions: [
             {
               id: "primary",
               label: tx(
                 "Create New Game",
-                "Action that leaves an unavailable or incompatible room and creates a fresh shared game.",
+                "[coop] Action that leaves an unavailable or incompatible room and creates a fresh shared game.",
               ),
               onPress: () => void handleCreateGame(),
             },
@@ -672,11 +672,11 @@ export function RoomGate({
         kind: "recoverableError",
         title: tx(
           "Something Went Wrong",
-          "Title for a generic failure while setting up a shared room.",
+          "[coop] Title for a generic failure while setting up a shared room.",
         ),
         message: tx(
           "The game could not finish its room setup.",
-          "Explanation for a generic failure while setting up a shared room.",
+          "[coop] Explanation for a generic failure while setting up a shared room.",
         ),
         ...(gateState.detailMessage === undefined
           ? {}
@@ -686,7 +686,7 @@ export function RoomGate({
             id: "primary",
             label: tx(
               "Try Again",
-              "Action that retries shared-room creation or setup.",
+              "[coop] Action that retries shared-room creation or setup.",
             ),
             onPress: () => void handleCreateGame(),
           },

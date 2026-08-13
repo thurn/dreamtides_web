@@ -306,7 +306,7 @@ function ContextCommandMenu({
         subtitle={subtitle}
         closeLabel={tx(
           "Close actions",
-          "Accessible action name that closes a command menu.",
+          "[accessibility] [ui] Action name that closes a command menu.",
         )}
         onClose={onDismiss}
       >
@@ -466,14 +466,14 @@ function HierarchicalMenu({
             id: "back",
             label: tx(
               meaning("command-menu-back", "Back"),
-              "Command-menu action that returns from a nested group to its parent command list.",
+              "[ui] Command-menu action that returns from a nested group to its parent command list.",
             ),
             glyph: GLYPHS.arrowLeft,
             actions: [],
           }}
           label={tx(
             meaning("command-menu-back", "Back"),
-            "Command-menu action that returns from a nested group to its parent command list.",
+            "[ui] Command-menu action that returns from a nested group to its parent command list.",
           )}
           active
           mobile={mobile}
@@ -514,7 +514,7 @@ function HierarchicalMenu({
           {resolve(
             tx(
               "No actions available.",
-              "Empty-state message shown when a command menu has no available actions.",
+              "[ui] Empty-state message shown when a command menu has no available actions.",
             ),
           )}
         </span>
@@ -539,7 +539,7 @@ function SignedIntegerCommand({
       setError(
         tx(
           "Enter a non-zero whole number.",
-          "Validation message for a command-menu field that requires a signed, nonzero whole number.",
+          "[developer] Validation message for a command-menu field that requires a signed, nonzero whole number.",
         ),
       );
       return;
@@ -549,7 +549,7 @@ function SignedIntegerCommand({
       setError(
         tx(
           "Enter a non-zero whole number.",
-          "Validation message for a command-menu field that requires a signed, nonzero whole number.",
+          "[developer] Validation message for a command-menu field that requires a signed, nonzero whole number.",
         ),
       );
       return;

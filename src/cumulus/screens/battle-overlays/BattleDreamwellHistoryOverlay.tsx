@@ -29,15 +29,15 @@ export function BattleDreamwellHistoryOverlay({
     <GlassDialog
       title={tx(
           "Dreamwell History",
-          "Player-facing message for the battle dreamwell history title interface state.",
+          "[battle] Dreamwell history title.",
         )}
       subtitle={tx(
           "Shared draws, most recent first.",
-          "Player-facing message for the battle dreamwell history subtitle interface state.",
+          "[battle] Dreamwell history subtitle.",
         )}
       closeLabel={tx(
           "Close Dreamwell history",
-          "Player-facing message for the battle dreamwell history close action interface state.",
+          "[battle] Dreamwell history close action.",
         )}
       onClose={onClose}
       desktopCenterTarget="battlefield"
@@ -62,7 +62,7 @@ export function BattleDreamwellHistoryOverlay({
           >
             {resolve(tx(
               "No Dreamwell cards drawn yet.",
-              "Player-facing message for the battle dreamwell history empty interface state.",
+              "[battle] Dreamwell history empty.",
             ))}
           </p>
         ) : (

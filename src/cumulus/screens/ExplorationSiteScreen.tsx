@@ -752,34 +752,34 @@ function explorationDeckModificationHeadline(
       return txa(
         "+{amount} ✦",
         { amount: modification.amount },
-        "Compact headline in the radial announcement for an Exploration deck-wide Spark increase. amount is a finite positive integer displayed with the Spark glyph; the sign and glyph stay part of this complete visible message.",
+        "[exploration] Compact headline in the radial announcement for an Exploration deck-wide Spark increase. amount is a finite positive integer displayed with the Spark glyph; the sign and glyph stay part of this complete visible message.",
       );
     case "fast":
       return tx(
         meaning("exploration-fast-result", "Fast"),
-        "Compact headline in the radial announcement for an Exploration deck-wide Fast keyword grant. This visible message is paired with the bolt glyph.",
+        "[exploration] Compact headline in the radial announcement for an Exploration deck-wide Fast keyword grant. This visible message is paired with the bolt glyph.",
       );
     case "energy-cost":
       return txa(
         "−{amount} ●",
         { amount: modification.amount },
-        "Compact headline in the radial announcement for an Exploration deck-wide Energy-cost reduction. amount is a finite non-negative integer displayed with the Energy glyph and a genuine minus sign.",
+        "[exploration] Compact headline in the radial announcement for an Exploration deck-wide Energy-cost reduction. amount is a finite non-negative integer displayed with the Energy glyph and a genuine minus sign.",
       );
     case "subtype":
       return modification.subtype === null
         ? tx(
             meaning("exploration-subtype-fallback", "Subtype"),
-            "Compact fallback headline when an imported Exploration subtype result has no authored subtype value.",
+            "[exploration] Compact fallback headline when an imported Exploration subtype result has no authored subtype value.",
           )
         : txa(
             meaning("exploration-subtype-result", "{subtype}"),
             { subtype: modification.subtype },
-            "Compact headline for an Exploration deck subtype change. subtype is an opaque authored subtype name and is shown exactly as supplied.",
+            "[exploration] Compact headline for an Exploration deck subtype change. subtype is an opaque authored subtype name and is shown exactly as supplied.",
           );
     case "reclaim":
       return tx(
         "Reclaim",
-        "Compact headline in the radial announcement for an Exploration Reclaim grant.",
+        "[exploration] Compact headline in the radial announcement for an Exploration Reclaim grant.",
       );
     case "transfiguration":
       return txa(
@@ -788,7 +788,7 @@ function explorationDeckModificationHeadline(
           form_name: opaque(modification.formName),
           essence_amount: modification.essenceSpent,
         },
-        "Compact radial headline after a paid Exploration effect applies one fixed Transfiguration form to every eligible deck card. form_name is the canonical source display name of that form; essence_amount is the positive integer Essence cost already paid, and the genuine minus sign communicates the loss.",
+        "[exploration] [transfiguration] Compact radial headline after a paid Exploration effect applies one fixed Transfiguration form to every eligible deck card. form_name is the canonical source display name of that form; essence_amount is the positive integer Essence cost already paid, and the genuine minus sign communicates the loss.",
       );
   }
 }
@@ -1234,7 +1234,7 @@ function ExplorationNarrativeChoices({
         aria-label={resolve(
           tx(
             "Exploration choices",
-            "Accessible name for the group containing the available choices beneath an Exploration site's authored narrative. The current player activates one choice to resolve the site.",
+            "[accessibility] [exploration] Name for the group containing the available choices beneath an Exploration site's authored narrative. The current player activates one choice to resolve the site.",
           ),
         )}
         aria-hidden={revealedChoiceCount === 0}
@@ -1901,7 +1901,7 @@ function CardReplacementPresentation({
                 purged_card_name: pair.purged.model.displaySnapshot.name,
                 gained_card_name: pair.gained.model.displaySnapshot.name,
               },
-              "Accessible name for one persisted starter-card replacement. Both names are canonical UUID-resolved authored card names.",
+              "[accessibility] [exploration] Name for one persisted starter-card replacement. Both names are canonical UUID-resolved authored card names.",
             )
           : txa(
               "{purged_card_name} replaced by {gained_card_name}",
@@ -1909,7 +1909,7 @@ function CardReplacementPresentation({
                 purged_card_name: pair.purged.model.displaySnapshot.name,
                 gained_card_name: pair.gained.model.displaySnapshot.name,
               },
-              "Accessible name for one persisted card replacement. Both names are canonical UUID-resolved authored card names.",
+              "[accessibility] [exploration] Name for one persisted card replacement. Both names are canonical UUID-resolved authored card names.",
             ),
       )}
       initial={{
@@ -2043,7 +2043,7 @@ function CardTransfigurationPairPresentation({
                 card_name: mapping.before.model.displaySnapshot.name,
                 form_name: mapping.after.model.transfiguration.form.name,
               },
-              "Accessible name for one persisted starter-card Transfiguration mapping. card_name and form_name are canonical UUID-resolved authored names.",
+              "[accessibility] [exploration] [transfiguration] Name for one persisted starter-card Transfiguration mapping. card_name and form_name are canonical UUID-resolved authored names.",
             )
           : txa(
               "{card_name} transfigured into its {form_name} form",
@@ -2051,7 +2051,7 @@ function CardTransfigurationPairPresentation({
                 card_name: mapping.before.model.displaySnapshot.name,
                 form_name: mapping.after.model.transfiguration.form.name,
               },
-              "Accessible name for one persisted card Transfiguration mapping. card_name and form_name are canonical UUID-resolved authored names.",
+              "[accessibility] [exploration] [transfiguration] Name for one persisted card Transfiguration mapping. card_name and form_name are canonical UUID-resolved authored names.",
             ),
       )}
       initial={{
@@ -2147,7 +2147,7 @@ function CardTransfigurationPairPresentation({
               <CardBack
                 label={tx(
                   "Exploration card, face down",
-                  "Player-facing message for the exploration card face down interface state.",
+                  "[exploration] Card face down.",
                 )}
                 testId={`cumulus-exploration-${scope}-card-concealed-${mapping.entryId}`}
               />
@@ -2212,7 +2212,7 @@ function CompoundCardPairPresentation({
                 source_card_name: before.model.displaySnapshot.name,
                 result_card_name: after.model.displaySnapshot.name,
               },
-              "Accessible name for one persisted Fast keyword mutation. Both values are UUID-resolved authored card names and may match.",
+              "[accessibility] [exploration] Name for one persisted Fast keyword mutation. Both values are UUID-resolved authored card names and may match.",
             )
           : txa(
               "{source_card_name} copied as {result_card_name}",
@@ -2220,7 +2220,7 @@ function CompoundCardPairPresentation({
                 source_card_name: before.model.displaySnapshot.name,
                 result_card_name: after.model.displaySnapshot.name,
               },
-              "Accessible name for one persisted source-to-copy mapping. Both values are UUID-resolved authored card names and may match.",
+              "[accessibility] [exploration] Name for one persisted source-to-copy mapping. Both values are UUID-resolved authored card names and may match.",
             ),
       )}
       initial={{
@@ -2325,7 +2325,7 @@ function CardTypeChangePairPresentation({
             before_card_type: change.beforeCardType,
             after_card_type: change.afterCardType,
           },
-          "Accessible name for one persisted card-type mapping. card_name is the canonical UUID-resolved display name; before_card_type and after_card_type are the closed Character or Event card-type values.",
+          "[accessibility] [exploration] Name for one persisted card-type mapping. card_name is the canonical UUID-resolved display name; before_card_type and after_card_type are the closed Character or Event card-type values.",
         ),
       )}
       initial={{
@@ -2409,7 +2409,7 @@ function CardTypeChangePairPresentation({
               <CardBack
                 label={tx(
                   "Exploration card, face down",
-                  "Player-facing message for the exploration card face down interface state.",
+                  "[exploration] Card face down.",
                 )}
                 testId={`cumulus-exploration-card-type-concealed-${change.entryId}`}
               />
@@ -2466,7 +2466,7 @@ function DreamsignReplacementPresentation({
             removed_dreamsign_name: opaque(removed.name),
             gained_dreamsign_name: opaque(gained.name),
           },
-          "Accessible name for one persisted Exploration Dreamsign replacement pair. removed_dreamsign_name and gained_dreamsign_name are canonical display names with unknown grammatical gender.",
+          "[accessibility] [exploration] [dreamsign] Name for one persisted Exploration Dreamsign replacement pair. removed_dreamsign_name and gained_dreamsign_name are canonical display names with unknown grammatical gender.",
         ),
       )}
       initial={{
@@ -2944,11 +2944,11 @@ export function ExplorationSiteScreen({
     resolvedReward?.semanticKind === "card-purge"
       ? tx(
           "No cards were purged",
-          "Completed Exploration outcome when a purge effect removed no cards.",
+          "[exploration] Completed Exploration outcome when a purge effect removed no cards.",
         )
       : tx(
           "No cards were taken",
-          "Completed Exploration outcome when a card-acquisition effect added no cards.",
+          "[exploration] Completed Exploration outcome when a card-acquisition effect added no cards.",
         );
   const rewardStageAnnouncement =
     purgedRewardCards.length === 0
@@ -2958,7 +2958,7 @@ export function ExplorationSiteScreen({
             other("Gained {reward_count} Rewards"),
           ]),
           { reward_count: rewardItems.length },
-          "Accessible announcement after an Exploration choice grants reward objects and purges no cards. reward_count is a non-negative count and can be zero.",
+          "[accessibility] [exploration] Announcement after an Exploration choice grants reward objects and purges no cards. reward_count is a non-negative count and can be zero.",
         )
       : rewardItems.length === 0
         ? txa(
@@ -2967,7 +2967,7 @@ export function ExplorationSiteScreen({
               other("Purging {purged_card_count} Cards"),
             ]),
             { purged_card_count: purgedRewardCards.length },
-            "Accessible announcement while an Exploration outcome purges cards and grants no reward objects. purged_card_count is a positive count of cards being removed from the player's current deck.",
+            "[accessibility] [exploration] Announcement while an Exploration outcome purges cards and grants no reward objects. purged_card_count is a positive count of cards being removed from the player's current deck.",
           )
         : txa(
             "Cards being purged: {purged_card_count}. Rewards being gained: {reward_count}.",
@@ -2975,7 +2975,7 @@ export function ExplorationSiteScreen({
               purged_card_count: purgedRewardCards.length,
               reward_count: rewardItems.length,
             },
-            "Accessible announcement while one Exploration outcome both purges cards and grants rewards. The label-and-count sentences avoid coupling two independent plural systems. purged_card_count and reward_count are positive exact counts; both actions belong to the same resolved outcome.",
+            "[accessibility] [exploration] Announcement while one Exploration outcome both purges cards and grants rewards. The label-and-count sentences avoid coupling two independent plural systems. purged_card_count and reward_count are positive exact counts; both actions belong to the same resolved outcome.",
           );
   const rewardIdentity = explorationRewardIdentity(
     view.resolvedActionId,
@@ -4246,7 +4246,7 @@ export function ExplorationSiteScreen({
                   <GlassButton
                     label={tx(
                       "Delve",
-                      "Player-facing message for the exploration delve action interface state.",
+                      "[exploration] Delve action.",
                     )}
                     variant="accent"
                     placement="onMedia"
@@ -4320,7 +4320,7 @@ export function ExplorationSiteScreen({
                 <CardBack
                   label={tx(
                     "Exploration card, face down",
-                    "Player-facing message for the exploration card face down interface state.",
+                    "[exploration] Card face down.",
                   )}
                 />
               </div>
@@ -4394,7 +4394,7 @@ export function ExplorationSiteScreen({
               <CardBack
                 label={tx(
                   "Exploration card returning face down",
-                  "Player-facing message for the exploration card returning face down interface state.",
+                  "[exploration] Card returning face down.",
                 )}
               />
             </div>
@@ -4507,7 +4507,7 @@ export function ExplorationSiteScreen({
           <Pressable
             ariaLabelMessage={tx(
               "Return to Exploration",
-              "Accessible command on the full-screen Exploration artwork that collapses the expanded site and returns the current player to its choice view.",
+              "[accessibility] [exploration] Command on the full-screen Exploration artwork that collapses the expanded site and returns the current player to its choice view.",
             )}
             pressFeedback="stationary"
             hoverFeedback="stationary"
@@ -4663,7 +4663,7 @@ export function ExplorationSiteScreen({
                   form_name:
                     transfigurationReward.after.transfiguration.form.name,
                 },
-                "Accessible announcement while an Exploration outcome transfigures one card. card_name is the canonical display name with unknown grammatical gender; form_name is the source-English name supplied by the Transfiguration catalog.",
+                "[accessibility] [exploration] [transfiguration] Announcement while an Exploration outcome transfigures one card. card_name is the canonical display name with unknown grammatical gender; form_name is the source-English name supplied by the Transfiguration catalog.",
               ),
             )}
             initial={{ opacity: 0 }}
@@ -4801,7 +4801,7 @@ export function ExplorationSiteScreen({
                   source_card_name:
                     purgeAndCopyReward.source.model.displaySnapshot.name,
                 },
-                "Accessible announcement during the first phase of a compound Exploration outcome. purged_card_name is removed before a copy of source_card_name is made; both are canonical card display names with unknown grammatical gender.",
+                "[accessibility] [exploration] Announcement during the first phase of a compound Exploration outcome. purged_card_name is removed before a copy of source_card_name is made; both are canonical card display names with unknown grammatical gender.",
               ),
             )}
             initial={{ opacity: 0 }}
@@ -4869,7 +4869,7 @@ export function ExplorationSiteScreen({
                       other("Gained {copy_count} copies"),
                     ]),
                     { copy_count: cardCopiesReward.count },
-                    "Accessible announcement after Exploration duplicates one or more selected cards without purging another card. copy_count is a positive integer count of newly added physical deck entries.",
+                    "[accessibility] [exploration] Announcement after Exploration duplicates one or more selected cards without purging another card. copy_count is a positive integer count of newly added physical deck entries.",
                   )
                 : txa(
                     plural(cardCopiesReward.count, [
@@ -4888,7 +4888,7 @@ export function ExplorationSiteScreen({
                       source_card_name:
                         purgeAndCopyReward.source.model.displaySnapshot.name,
                     },
-                    "Accessible announcement after one Exploration outcome purges a card and adds copies of a different source card. purged_card_name and source_card_name are canonical display names with unknown grammatical gender; copy_count is the positive number of new physical deck entries.",
+                    "[accessibility] [exploration] Announcement after one Exploration outcome purges a card and adds copies of a different source card. purged_card_name and source_card_name are canonical display names with unknown grammatical gender; copy_count is the positive number of new physical deck entries.",
                   ),
             )}
             initial={{ opacity: 0, scale: reduceMotion ? 1 : 0.92 }}
@@ -5064,12 +5064,12 @@ export function ExplorationSiteScreen({
                       ),
                     ]),
                     { amount: battleModifierReward.amount },
-                    "Accessible announcement for an Exploration reward adding opening-hand cards in the next battle. amount is a positive card count.",
+                    "[accessibility] [exploration] [battle] Announcement for an Exploration reward adding opening-hand cards in the next battle. amount is a positive card count.",
                   )
                 : txa(
                     "{amount} additional starting Energy in the next battle",
                     { amount: battleModifierReward.amount },
-                    "Accessible announcement for an Exploration reward adding starting Energy in the next battle. amount is positive.",
+                    "[accessibility] [exploration] [battle] Announcement for an Exploration reward adding starting Energy in the next battle. amount is positive.",
                   ),
             )}
             style={{
@@ -5090,17 +5090,17 @@ export function ExplorationSiteScreen({
                         other("+{amount} Cards"),
                       ]),
                       { amount: battleModifierReward.amount },
-                      "Compact headline for an Exploration opening-hand reward. amount is a positive card count.",
+                      "[exploration] Compact headline for an Exploration opening-hand reward. amount is a positive card count.",
                     )
                   : txa(
                       "+{amount} ●",
                       { amount: battleModifierReward.amount },
-                      "Compact headline for an Exploration starting-Energy reward. amount is positive and the dot is the canonical Energy symbol.",
+                      "[exploration] Compact headline for an Exploration starting-Energy reward. amount is positive and the dot is the canonical Energy symbol.",
                     )
               }
               detail={tx(
                 "Next Battle",
-                "Detail below the Exploration battle-modifier reward headline.",
+                "[exploration] [battle] Detail below the Exploration battle-modifier reward headline.",
               )}
               tone="reward"
               size={isDesktop ? "compact" : "mini"}
@@ -5134,7 +5134,7 @@ export function ExplorationSiteScreen({
                   energy_cost_reduction:
                     smallerHandDiscountReward.energyCostReduction,
                 },
-                "Complete accessible summary for the Exploration reward that reduces both the current player's next opening hand and card Energy costs. opening_hand_delta is a negative integer card-count change, energy_cost_reduction is a positive integer Energy reduction, and both changes apply for the next battle.",
+                "[accessibility] [exploration] [battle] Complete summary for the Exploration reward that reduces both the current player's next opening hand and card Energy costs. opening_hand_delta is a negative integer card-count change, energy_cost_reduction is a positive integer Energy reduction, and both changes apply for the next battle.",
               ),
             )}
             style={{
@@ -5153,7 +5153,7 @@ export function ExplorationSiteScreen({
                   opening_hand_delta:
                     smallerHandDiscountReward.openingHandDelta,
                 },
-                "Compact headline for that reward. opening_hand_delta is the negative integer change in the current player's next opening-hand card count.",
+                "[exploration] Compact headline for that reward. opening_hand_delta is the negative integer change in the current player's next opening-hand card count.",
               )}
               detail={txa(
                 "Next Battle · Cards cost {energy_cost_reduction} less Energy",
@@ -5161,7 +5161,7 @@ export function ExplorationSiteScreen({
                   energy_cost_reduction:
                     smallerHandDiscountReward.energyCostReduction,
                 },
-                "Compact detail below the opening-hand headline. energy_cost_reduction is the positive integer Energy reduction applied to every card in the next battle.",
+                "[exploration] [battle] Compact detail below the opening-hand headline. energy_cost_reduction is the positive integer Energy reduction applied to every card in the next battle.",
               )}
               tone="reward"
               size={isDesktop ? "compact" : "mini"}
@@ -5185,7 +5185,7 @@ export function ExplorationSiteScreen({
               txa(
                 "{dream_avatar_name} is now your Dream Avatar",
                 { dream_avatar_name: dreamAvatarReward.current.name },
-                "Accessible announcement after an Exploration outcome changes the player's Dream Avatar. dream_avatar_name is the canonical display name with unknown grammatical gender; “your” addresses the current local player.",
+                "[accessibility] [exploration] [dream-avatar] Announcement after an Exploration outcome changes the player's Dream Avatar. dream_avatar_name is the canonical display name with unknown grammatical gender; “your” addresses the current local player.",
               ),
             )}
             initial={{ opacity: 0, scale: reduceMotion ? 1 : 0.9 }}
@@ -5254,7 +5254,7 @@ export function ExplorationSiteScreen({
               shopModifierReward.modifier === "free-next-shop"
                 ? tx(
                     "Every item in your next Card Shop will be free.",
-                    "Accessible announcement after Exploration queues the T56 visit-wide future Card Shop benefit.",
+                    "[accessibility] [exploration] Announcement after Exploration queues the T56 visit-wide future Card Shop benefit.",
                   )
                 : txa(
                     plural(shopModifierReward.freePurchaseCount ?? 0, [
@@ -5272,7 +5272,7 @@ export function ExplorationSiteScreen({
                       essence_before: shopModifierReward.essenceBefore ?? 0,
                       essence_after: shopModifierReward.essenceAfter ?? 0,
                     },
-                    "Accessible announcement after Exploration grants a T82 purchase counter. free_purchase_count is the positive initial grant; essence_before, essence_spent, and essence_after are the exact non-negative values persisted by the same atomic resolution.",
+                    "[accessibility] [exploration] Announcement after Exploration grants a T82 purchase counter. free_purchase_count is the positive initial grant; essence_before, essence_spent, and essence_after are the exact non-negative values persisted by the same atomic resolution.",
                   ),
             )}
             style={{
@@ -5289,7 +5289,7 @@ export function ExplorationSiteScreen({
                 shopModifierReward.modifier === "free-next-shop"
                   ? tx(
                       "Next Shop Free",
-                      "Compact outcome headline after Exploration queues a visit-wide free Card Shop.",
+                      "[exploration] Compact outcome headline after Exploration queues a visit-wide free Card Shop.",
                     )
                   : txa(
                       plural(shopModifierReward.freePurchaseCount ?? 0, [
@@ -5300,14 +5300,14 @@ export function ExplorationSiteScreen({
                         free_purchase_count:
                           shopModifierReward.freePurchaseCount ?? 0,
                       },
-                      "Compact outcome headline after Exploration grants counted free purchases. free_purchase_count is the positive initial count persisted by the action.",
+                      "[exploration] Compact outcome headline after Exploration grants counted free purchases. free_purchase_count is the positive initial count persisted by the action.",
                     )
               }
               detail={
                 shopModifierReward.modifier === "free-next-shop"
                   ? tx(
                       "Every item in your next Card Shop is free.",
-                      "Detail beneath the queued free-shop outcome headline. The benefit applies to successful item purchases during one future Card Shop visit.",
+                      "[exploration] Detail beneath the queued free-shop outcome headline. The benefit applies to successful item purchases during one future Card Shop visit.",
                     )
                   : txa(
                       "{essence_before} → {essence_after} Essence · {essence_spent} spent",
@@ -5316,7 +5316,7 @@ export function ExplorationSiteScreen({
                         essence_after: shopModifierReward.essenceAfter ?? 0,
                         essence_spent: shopModifierReward.essenceSpent ?? 0,
                       },
-                      "Detail beneath the counted free-purchase outcome. The three values are the exact non-negative shared Essence balances and amount spent by the same atomic resolution; the arrows expose the persisted before/after transition directly.",
+                      "[exploration] Detail beneath the counted free-purchase outcome. The three values are the exact non-negative shared Essence balances and amount spent by the same atomic resolution; the arrows expose the persisted before/after transition directly.",
                     )
               }
               tone="reward"
@@ -5345,7 +5345,7 @@ export function ExplorationSiteScreen({
             aria-label={resolve(
               tx(
                 "Your next Draft or Shop will contain transfigured cards",
-                "Accessible completed-event summary for an Exploration reward that causes the next Draft or Shop offered to the current player to contain transfigured cards.",
+                "[accessibility] [exploration] [transfiguration] Completed-event summary for an Exploration reward that causes the next Draft or Shop offered to the current player to contain transfigured cards.",
               ),
             )}
             style={{
@@ -5360,11 +5360,11 @@ export function ExplorationSiteScreen({
             <RadialAnnouncement
               headline={tx(
                 "Transfigured Cards",
-                "Headline for the same completed Exploration reward.",
+                "[exploration] Headline for the same completed Exploration reward.",
               )}
               detail={tx(
                 "Next Draft or Shop",
-                "Compact detail naming where that reward takes effect.",
+                "[exploration] Compact detail naming where that reward takes effect.",
               )}
               tone="reward"
               size={isDesktop ? "compact" : "mini"}
@@ -5397,7 +5397,7 @@ export function ExplorationSiteScreen({
               txa(
                 "{site_type} added to this Dreamscape",
                 { site_type: opaque(siteInsertionReward.model.label) },
-                "Accessible completed-event summary after an Exploration action adds a site to the current Dreamscape. site_type is the configured display name of the exact persisted site type and has unknown grammatical gender.",
+                "[accessibility] [exploration] Completed-event summary after an Exploration action adds a site to the current Dreamscape. site_type is the configured display name of the exact persisted site type and has unknown grammatical gender.",
               ),
             )}
             initial={
@@ -5424,7 +5424,7 @@ export function ExplorationSiteScreen({
             <RadialAnnouncement
               headline={tx(
                 "Site Added",
-                "Visible reward announcement after an Exploration action adds one persisted site to the current Dreamscape.",
+                "[exploration] Visible reward announcement after an Exploration action adds one persisted site to the current Dreamscape.",
               )}
               detail={siteInsertionReward.model.label}
               tone="reward"
@@ -5615,7 +5615,7 @@ export function ExplorationSiteScreen({
                         form_name: opaque(deckModification.formName),
                         essence_amount: deckModification.essenceSpent,
                       },
-                      "Accessible completed-state announcement after one paid Exploration effect applies the same Transfiguration form to all eligible deck cards. card_count is the positive number of concrete deck entries changed; form_name is the form's canonical source display name; essence_amount is the positive integer Essence cost already deducted from the current player.",
+                      "[accessibility] [exploration] [transfiguration] Completed-state announcement after one paid Exploration effect applies the same Transfiguration form to all eligible deck cards. card_count is the positive number of concrete deck entries changed; form_name is the form's canonical source display name; essence_amount is the positive integer Essence cost already deducted from the current player.",
                     ),
                   )
                 : resolve(deckModification.announcement)
@@ -5758,12 +5758,12 @@ export function ExplorationSiteScreen({
               announcementId={`exploration:${view.siteId}:${view.resolvedActionId ?? "direct-essence"}`}
               headline={tx(
                 "Essence Gained",
-                "Headline on an Exploration reward announcement that grants Essence.",
+                "[exploration] Headline on an Exploration reward announcement that grants Essence.",
               )}
               detail={txa(
                 "{essence_after} Essence total",
                 { essence_after: directEssenceReward.essenceAfter },
-                "Detail below a direct Exploration Essence reward. essence_after is the non-negative shared Essence balance persisted after the reward resolves.",
+                "[exploration] Detail below a direct Exploration Essence reward. essence_after is the non-negative shared Essence balance persisted after the reward resolves.",
               )}
               essenceGained={directEssenceReward.essenceGained}
               tone="reward"
@@ -5793,7 +5793,7 @@ export function ExplorationSiteScreen({
                   card_name: cardPurgeReward.card.model.displaySnapshot.name,
                   essence_amount: cardPurgeReward.totalEssence,
                 },
-                "Accessible announcement while an Exploration outcome purges one named card in exchange for Essence. card_name is the canonical card display name with unknown grammatical gender; essence_amount is the non-negative reward total.",
+                "[accessibility] [exploration] Announcement while an Exploration outcome purges one named card in exchange for Essence. card_name is the canonical card display name with unknown grammatical gender; essence_amount is the non-negative reward total.",
               ),
             )}
             style={{
@@ -5863,7 +5863,7 @@ export function ExplorationSiteScreen({
               announcementId={`exploration:${view.siteId}:${view.resolvedActionId ?? "purged-card-essence"}`}
               headline={tx(
                 "Essence Gained",
-                "Headline on an Exploration reward announcement that grants Essence.",
+                "[exploration] Headline on an Exploration reward announcement that grants Essence.",
               )}
               detail={txa(
                 "{essence_per_spark} × {spark} ✦",
@@ -5871,7 +5871,7 @@ export function ExplorationSiteScreen({
                   essence_per_spark: cardPurgeReward.essencePerSpark,
                   spark: cardPurgeReward.spark,
                 },
-                "Calculation detail for Essence gained by purging a card. essence_per_spark is a non-negative Essence rate and spark is the purged card's non-negative Spark value; the total Essence payout is rendered separately.",
+                "[exploration] Calculation detail for Essence gained by purging a card. essence_per_spark is a non-negative Essence rate and spark is the purged card's non-negative Spark value; the total Essence payout is rendered separately.",
               )}
               essenceGained={cardPurgeReward.totalEssence}
               tone="reward"
@@ -5894,7 +5894,7 @@ export function ExplorationSiteScreen({
                 {
                   dreamsign_name: opaque(dreamsignPurgeReward.dreamsign.name),
                 },
-                "Accessible announcement while an Exploration outcome purges a Dreamsign. dreamsign_name is its canonical display name with unknown grammatical gender.",
+                "[accessibility] [exploration] [dreamsign] Announcement while an Exploration outcome purges a Dreamsign. dreamsign_name is its canonical display name with unknown grammatical gender.",
               ),
             )}
             style={{
@@ -5961,7 +5961,7 @@ export function ExplorationSiteScreen({
               announcementId={`exploration:${view.siteId}:${view.resolvedActionId ?? "purged-dreamsign-essence"}`}
               headline={tx(
                 "Essence Gained",
-                "Headline on an Exploration reward announcement that grants Essence.",
+                "[exploration] Headline on an Exploration reward announcement that grants Essence.",
               )}
               essenceGained={dreamsignPurgeReward.totalEssence}
               tone="reward"
@@ -6050,7 +6050,7 @@ export function ExplorationSiteScreen({
                       card_count:
                         compoundTransfigurationReward.transfigurations.length,
                     },
-                    "Accessible completed-event summary for an Exploration action transfiguring ordinary UUID-backed deck entries. card_count is the positive number of visible card results.",
+                    "[accessibility] [exploration] Completed-event summary for an Exploration action transfiguring ordinary UUID-backed deck entries. card_count is the positive number of visible card results.",
                   )
                 : txa(
                     meaning(
@@ -6067,7 +6067,7 @@ export function ExplorationSiteScreen({
                       card_count:
                         compoundTransfigurationReward.transfigurations.length,
                     },
-                    "Accessible completed-event summary for an Exploration action transfiguring starter-card UUID-backed deck entries. card_count is the positive number of visible starter-card results.",
+                    "[accessibility] [exploration] Completed-event summary for an Exploration action transfiguring starter-card UUID-backed deck entries. card_count is the positive number of visible starter-card results.",
                   ),
             )}
             initial={{ opacity: reduceMotion ? 1 : 0 }}
@@ -6097,11 +6097,11 @@ export function ExplorationSiteScreen({
                 starterCardTransfigurationReward === null
                   ? tx(
                       "Cards Transfigured",
-                      "Headline for an Exploration result containing ordinary card Transfiguration mappings.",
+                      "[exploration] [transfiguration] Headline for an Exploration result containing ordinary card Transfiguration mappings.",
                     )
                   : tx(
                       "Starter Cards Transfigured",
-                      "Headline for an Exploration result containing starter-card Transfiguration mappings.",
+                      "[exploration] [transfiguration] Headline for an Exploration result containing starter-card Transfiguration mappings.",
                     )
               }
               tone="reward"
@@ -6140,7 +6140,7 @@ export function ExplorationSiteScreen({
                         card_count:
                           compoundTransfigurationReward.transfigurations.length,
                       },
-                      "Accessible name for the review region containing ordinary card Transfiguration mappings. card_count is the positive number of UUID-backed entries.",
+                      "[accessibility] [exploration] [transfiguration] Name for the review region containing ordinary card Transfiguration mappings. card_count is the positive number of UUID-backed entries.",
                     )
                   : txa(
                       meaning(
@@ -6157,7 +6157,7 @@ export function ExplorationSiteScreen({
                         card_count:
                           compoundTransfigurationReward.transfigurations.length,
                       },
-                      "Accessible name for the review region containing starter-card Transfiguration mappings. card_count is the positive number of UUID-backed entries.",
+                      "[accessibility] [exploration] [transfiguration] Name for the review region containing starter-card Transfiguration mappings. card_count is the positive number of UUID-backed entries.",
                     )
               }
               onScroll={(event) => {
@@ -6255,7 +6255,7 @@ export function ExplorationSiteScreen({
                   nightmare_count: compoundCardMutationReward.nightmares.length,
                   copy_count: compoundCardMutationReward.copies.length,
                 },
-                "Complete accessible inventory for a compound Exploration card mutation. Every field is an independent non-negative persisted deck-entry count and zero is valid.",
+                "[accessibility] [exploration] Complete inventory for a compound Exploration card mutation. Every field is an independent non-negative persisted deck-entry count and zero is valid.",
               ),
             )}
             initial={{ opacity: reduceMotion ? 1 : 0 }}
@@ -6286,23 +6286,23 @@ export function ExplorationSiteScreen({
                 "purge-disclosed-and-transfigure-same-type"
                   ? tx(
                       "Kindred Forms Recast",
-                      "Headline for the compound Exploration result that purges a disclosed card and transfigures eligible cards of its type.",
+                      "[exploration] Headline for the compound Exploration result that purges a disclosed card and transfigures eligible cards of its type.",
                     )
                   : compoundCardMutationReward.sourceKind ===
                       "make-predicate-fast-and-gain-nightmares"
                     ? tx(
                         "Swiftness at a Price",
-                        "Headline for the compound Exploration result granting Fast and adding Nightmares.",
+                        "[exploration] Headline for the compound Exploration result granting Fast and adding Nightmares.",
                       )
                     : compoundCardMutationReward.sourceKind ===
                         "take-transfigured-cards-and-gain-nightmares"
                       ? tx(
                           "Chosen Forms Awakened",
-                          "Headline for the compound Exploration result gaining chosen Transfigured cards and Nightmares.",
+                          "[exploration] [transfiguration] Headline for the compound Exploration result gaining chosen Transfigured cards and Nightmares.",
                         )
                       : tx(
                           "Three Reflections Remain",
-                          "Headline for the compound Exploration result that purges, transfigures, and copies prepared cards.",
+                          "[exploration] Headline for the compound Exploration result that purges, transfigures, and copies prepared cards.",
                         )
               }
               tone="reward"
@@ -6324,7 +6324,7 @@ export function ExplorationSiteScreen({
                   other("Review {card_count} card changes"),
                 ]),
                 { card_count: compoundCardChangeCount },
-                "Accessible name for the bounded focusable scroll region containing every persisted card object or pair in a compound Exploration outcome.",
+                "[accessibility] [exploration] Name for the bounded focusable scroll region containing every persisted card object or pair in a compound Exploration outcome.",
               )}
               onScroll={(event) => {
                 const review = event.currentTarget;
@@ -6369,7 +6369,7 @@ export function ExplorationSiteScreen({
                     {resolve(
                       tx(
                         "Purged",
-                        "Past-tense result heading for cards removed from the player’s deck.",
+                        "[card] Past-tense result heading for cards removed from the player's deck.",
                       ),
                     )}
                   </h2>
@@ -6413,7 +6413,7 @@ export function ExplorationSiteScreen({
                     {resolve(
                       tx(
                         "Transfigured",
-                        "Section heading for transfigured cards in a compound Exploration outcome review.",
+                        "[exploration] [transfiguration] Section heading for transfigured cards in a compound Exploration outcome review.",
                       ),
                     )}
                   </h2>
@@ -6454,7 +6454,7 @@ export function ExplorationSiteScreen({
                     {resolve(
                       tx(
                         "Made Fast",
-                        "Section heading for cards granted Fast in a compound Exploration outcome review.",
+                        "[exploration] Section heading for cards granted Fast in a compound Exploration outcome review.",
                       ),
                     )}
                   </h2>
@@ -6495,7 +6495,7 @@ export function ExplorationSiteScreen({
                     {resolve(
                       tx(
                         "Nightmares Gained",
-                        "Section heading for Nightmare cards gained in a compound Exploration outcome review.",
+                        "[exploration] Section heading for Nightmare cards gained in a compound Exploration outcome review.",
                       ),
                     )}
                   </h2>
@@ -6539,7 +6539,7 @@ export function ExplorationSiteScreen({
                     {resolve(
                       tx(
                         "Copies Gained",
-                        "Section heading for card copies gained in a compound Exploration outcome review.",
+                        "[exploration] Section heading for card copies gained in a compound Exploration outcome review.",
                       ),
                     )}
                   </h2>
@@ -6601,7 +6601,7 @@ export function ExplorationSiteScreen({
                   ]),
                 ),
                 { card_count: cardTypeChangesReward.changes.length },
-                "Accessible completed-event summary for an Exploration action that atomically changes effective card types. card_count is the positive exact number of UUID-backed entries in the committed mapping.",
+                "[accessibility] [exploration] Completed-event summary for an Exploration action that atomically changes effective card types. card_count is the positive exact number of UUID-backed entries in the committed mapping.",
               ),
             )}
             initial={{ opacity: reduceMotion ? 1 : 0 }}
@@ -6629,7 +6629,7 @@ export function ExplorationSiteScreen({
             <RadialAnnouncement
               headline={tx(
                 "Card Types Changed",
-                "Headline shown with exact persisted before-to-after mappings after one Exploration action changes the effective card type of multiple deck entries.",
+                "[exploration] Headline shown with exact persisted before-to-after mappings after one Exploration action changes the effective card type of multiple deck entries.",
               )}
               tone="reward"
               size={isDesktop ? "compact" : "mini"}
@@ -6653,7 +6653,7 @@ export function ExplorationSiteScreen({
                   ]),
                 ),
                 { card_count: cardTypeChangesReward.changes.length },
-                "Accessible completed-event summary for an Exploration action that atomically changes effective card types. card_count is the positive exact number of UUID-backed entries in the committed mapping.",
+                "[accessibility] [exploration] Completed-event summary for an Exploration action that atomically changes effective card types. card_count is the positive exact number of UUID-backed entries in the committed mapping.",
               )}
               onScroll={(event) => {
                 const pairs = event.currentTarget;
@@ -6735,7 +6735,7 @@ export function ExplorationSiteScreen({
                 {
                   replacement_count: cardReplacementReward.replacements.length,
                 },
-                "Accessible completed-event summary for an Exploration action that atomically replaces ordinary deck entries. replacement_count is the positive exact number of source-to-minted mappings in the committed resolution.",
+                "[accessibility] [exploration] Completed-event summary for an Exploration action that atomically replaces ordinary deck entries. replacement_count is the positive exact number of source-to-minted mappings in the committed resolution.",
               ),
             )}
             initial={{ opacity: reduceMotion ? 1 : 0 }}
@@ -6763,7 +6763,7 @@ export function ExplorationSiteScreen({
             <RadialAnnouncement
               headline={tx(
                 "Cards Replaced",
-                "Headline shown with exact persisted source-to-replacement mappings after one Exploration action atomically replaces multiple ordinary deck entries.",
+                "[exploration] Headline shown with exact persisted source-to-replacement mappings after one Exploration action atomically replaces multiple ordinary deck entries.",
               )}
               tone="reward"
               size={isDesktop ? "compact" : "mini"}
@@ -6789,7 +6789,7 @@ export function ExplorationSiteScreen({
                 {
                   replacement_count: cardReplacementReward.replacements.length,
                 },
-                "Accessible completed-event summary for an Exploration action that atomically replaces ordinary deck entries. replacement_count is the positive exact number of source-to-minted mappings in the committed resolution.",
+                "[accessibility] [exploration] Completed-event summary for an Exploration action that atomically replaces ordinary deck entries. replacement_count is the positive exact number of source-to-minted mappings in the committed resolution.",
               )}
               onScroll={(event) => {
                 const pairs = event.currentTarget;
@@ -6867,7 +6867,7 @@ export function ExplorationSiteScreen({
                   replacement_count:
                     starterCardMutationReward.replacements.length,
                 },
-                "Accessible completed-event summary for a persisted Exploration starter-card mutation. The label-and-count structure deliberately avoids inflecting three independent count nouns. purged_card_count, gained_card_count, and replacement_count are exact non-negative deck-entry counts reconstructed from the committed resolution.",
+                "[accessibility] [exploration] Completed-event summary for a persisted Exploration starter-card mutation. The label-and-count structure deliberately avoids inflecting three independent count nouns. purged_card_count, gained_card_count, and replacement_count are exact non-negative deck-entry counts reconstructed from the committed resolution.",
               ),
             )}
             initial={{ opacity: reduceMotion ? 1 : 0 }}
@@ -6893,7 +6893,7 @@ export function ExplorationSiteScreen({
             <RadialAnnouncement
               headline={tx(
                 "Starter Cards Changed",
-                "Headline shown with the exact persisted purge or replacement of starter deck entries after an Exploration action resolves.",
+                "[exploration] Headline shown with the exact persisted purge or replacement of starter deck entries after an Exploration action resolves.",
               )}
               tone={
                 starterCardMutationReward.mode === "purge" ? "danger" : "reward"
@@ -6922,7 +6922,7 @@ export function ExplorationSiteScreen({
                   replacement_count:
                     starterCardMutationReward.replacements.length,
                 },
-                "Accessible completed-event summary for an Exploration action that atomically replaces ordinary deck entries. replacement_count is the positive exact number of source-to-minted mappings in the committed resolution.",
+                "[accessibility] [exploration] Completed-event summary for an Exploration action that atomically replaces ordinary deck entries. replacement_count is the positive exact number of source-to-minted mappings in the committed resolution.",
               )}
               onScroll={(event) => {
                 const pairs = event.currentTarget;
@@ -7019,7 +7019,7 @@ export function ExplorationSiteScreen({
                   replacement_count:
                     nightmareDreamsignBundleReward.replacements.length,
                 },
-                "Accessible completed-event summary for one persisted compound Exploration reward. The label-and-count structure deliberately avoids inflecting three independent count nouns. nightmare_count is the positive number of concrete Nightmare deck entries minted by the resolution; dreamsign_count is the positive number of Dreamsigns gained; replacement_count is the non-negative number of held Dreamsign slots replaced by those gains.",
+                "[accessibility] [exploration] [dreamsign] Completed-event summary for one persisted compound Exploration reward. The label-and-count structure deliberately avoids inflecting three independent count nouns. nightmare_count is the positive number of concrete Nightmare deck entries minted by the resolution; dreamsign_count is the positive number of Dreamsigns gained; replacement_count is the non-negative number of held Dreamsign slots replaced by those gains.",
               ),
             )}
             initial={{ opacity: reduceMotion ? 1 : 0 }}
@@ -7045,7 +7045,7 @@ export function ExplorationSiteScreen({
             <RadialAnnouncement
               headline={tx(
                 "Nightmares and Dreamsign Gained",
-                "Headline shown while an Exploration compound outcome presents the exact persisted Nightmare cards together with its Dreamsign gain or replacement.",
+                "[exploration] [dreamsign] Headline shown while an Exploration compound outcome presents the exact persisted Nightmare cards together with its Dreamsign gain or replacement.",
               )}
               tone="reward"
               size={isDesktop ? "compact" : "mini"}
@@ -7078,7 +7078,7 @@ export function ExplorationSiteScreen({
                       nightmare_count:
                         nightmareDreamsignBundleReward.nightmares.length,
                     },
-                    "Accessible name for the complete UUID-backed Nightmare card group in one compound Exploration outcome. nightmare_count is a positive exact count.",
+                    "[accessibility] [exploration] Name for the complete UUID-backed Nightmare card group in one compound Exploration outcome. nightmare_count is a positive exact count.",
                   ),
                 )}
                 style={{
@@ -7225,7 +7225,7 @@ export function ExplorationSiteScreen({
                   replacement_count:
                     dreamsignMutationReward.replacements.length,
                 },
-                "Accessible completed-event summary for a persisted Exploration Dreamsign mutation. The label-and-count structure deliberately avoids inflecting three independent count nouns. purged_count, gained_count, and replacement_count are non-negative exact counts; random identities have already been committed before this message is presented.",
+                "[accessibility] [exploration] [dreamsign] Completed-event summary for a persisted Exploration Dreamsign mutation. The label-and-count structure deliberately avoids inflecting three independent count nouns. purged_count, gained_count, and replacement_count are non-negative exact counts; random identities have already been committed before this message is presented.",
               ),
             )}
             initial={{ opacity: 0 }}
@@ -7251,7 +7251,7 @@ export function ExplorationSiteScreen({
             <RadialAnnouncement
               headline={tx(
                 "Dreamsigns Changed",
-                "Headline shown with the persisted before/after result of an Exploration Dreamsign mutation, after any random identities are committed.",
+                "[exploration] [dreamsign] Headline shown with the persisted before/after result of an Exploration Dreamsign mutation, after any random identities are committed.",
               )}
               tone="reward"
               size={isDesktop ? "compact" : "mini"}
@@ -7364,7 +7364,7 @@ export function ExplorationSiteScreen({
                   total_essence: essenceReward.totalEssence,
                   essence_per_card: essenceReward.essencePerCard,
                 },
-                "Accessible summary of an Exploration outcome that converts Spirit Animal cards into Essence. card_count is the positive number of affected cards; total_essence and essence_per_card are non-negative Essence amounts.",
+                "[accessibility] [exploration] Summary of an Exploration outcome that converts Spirit Animal cards into Essence. card_count is the positive number of affected cards; total_essence and essence_per_card are non-negative Essence amounts.",
               ),
             )}
             initial={{ opacity: 0 }}
@@ -7470,7 +7470,7 @@ export function ExplorationSiteScreen({
               announcementId={`exploration:${view.siteId}:${view.resolvedActionId ?? "essence"}`}
               headline={tx(
                 "Essence Gained",
-                "Headline on an Exploration reward announcement that grants Essence.",
+                "[exploration] Headline on an Exploration reward announcement that grants Essence.",
               )}
               detail={txa(
                 plural(essenceReward.cards.length, [
@@ -7481,7 +7481,7 @@ export function ExplorationSiteScreen({
                   essence_per_card: essenceReward.essencePerCard,
                   card_count: essenceReward.cards.length,
                 },
-                "Calculation detail for Essence gained from Spirit Animal cards. essence_per_card is a non-negative Essence rate and card_count is the positive number of Spirit Animal cards involved; the total payout is rendered separately.",
+                "[exploration] Calculation detail for Essence gained from Spirit Animal cards. essence_per_card is a non-negative Essence rate and card_count is the positive number of Spirit Animal cards involved; the total payout is rendered separately.",
               )}
               essenceGained={essenceReward.totalEssence}
               tone="reward"
@@ -7713,7 +7713,7 @@ export function ExplorationSiteScreen({
                           {
                             label: tx(
                               "Confirm Choice",
-                              "Player-facing message for the exploration confirm choice action interface state.",
+                              "[exploration] Confirm choice action.",
                             ),
                             onPress: commitFollowup,
                             disabled: !canCommitFollowup,
@@ -7735,7 +7735,7 @@ export function ExplorationSiteScreen({
                         }))}
                         emptyLabel={tx(
                           "No eligible cards are available.",
-                          "Empty state for an Exploration card choice with no eligible deck entries.",
+                          "[exploration] Empty state for an Exploration card choice with no eligible deck entries.",
                         )}
                         testId="cumulus-exploration-multi-transfiguration-card-picker"
                         onCardPress={toggleCard}
@@ -7783,7 +7783,7 @@ export function ExplorationSiteScreen({
                           card_count: followup.count,
                           card_name: candidate.model.displaySnapshot.name,
                         },
-                        "Accessible progress for the sequential form chooser after the player has selected an exact multi-card set. current_card_number is the positive one-based position, card_count is the positive exact total, and card_name is the canonical UUID-resolved display name of the current deck entry.",
+                        "[accessibility] [exploration] Progress for the sequential form chooser after the player has selected an exact multi-card set. current_card_number is the positive one-based position, card_count is the positive exact total, and card_name is the canonical UUID-resolved display name of the current deck entry.",
                       ),
                     )}
                     style={{ width: "100%", minHeight: 0 }}
@@ -7867,7 +7867,7 @@ export function ExplorationSiteScreen({
                         <GlassButton
                           label={tx(
                             "Confirm Choice",
-                            "Player-facing message for the exploration confirm choice action interface state.",
+                            "[exploration] Confirm choice action.",
                           )}
                           variant="accent"
                           placement="onGlass"
@@ -7932,17 +7932,17 @@ export function ExplorationSiteScreen({
                         purgeEntryId === null
                           ? tx(
                               "Choose a card to purge",
-                              "Player-facing message for the exploration followup choice purge interface state.",
+                              "[exploration] Followup choice purge.",
                             )
                           : activeAction.followup.mode === "purge-and-copy" &&
                               selectedIds.length === 0
                             ? tx(
                                 "Choose a card to copy",
-                                "Instruction for choosing one concrete card to copy into the player’s deck.",
+                                "[card] Instruction for choosing one concrete card to copy into the player's deck.",
                               )
                             : tx(
                                 "Confirm Choice",
-                                "Player-facing message for the exploration confirm choice action interface state.",
+                                "[exploration] Confirm choice action.",
                               ),
                       onPress: commitFollowup,
                       disabled: !canCommitFollowup,
@@ -7970,7 +7970,7 @@ export function ExplorationSiteScreen({
                   }))}
                   emptyLabel={tx(
                     "No eligible cards are available.",
-                    "Empty state for an Exploration card choice with no eligible deck entries.",
+                    "[exploration] Empty state for an Exploration card choice with no eligible deck entries.",
                   )}
                   testId="cumulus-exploration-card-followup"
                   onCardPress={toggleCard}
@@ -7984,7 +7984,7 @@ export function ExplorationSiteScreen({
                 <GlassPanel
                   eyebrow={tx(
                     "Exploration",
-                    "Eyebrow above an Exploration follow-up choice.",
+                    "[exploration] Eyebrow above an Exploration follow-up choice.",
                   )}
                   title={activeAction.followup.title}
                   subtitle={activeAction.followup.subtitle}
@@ -8030,7 +8030,7 @@ export function ExplorationSiteScreen({
                             txa(
                               "Pack {pack_number}",
                               { pack_number: pack.index + 1 },
-                              "Title above one numbered Exploration card pack. pack_number is a positive one-based display number.",
+                              "[exploration] Title above one numbered Exploration card pack. pack_number is a positive one-based display number.",
                             ),
                           )}
                         </strong>
@@ -8059,12 +8059,12 @@ export function ExplorationSiteScreen({
                           <GlassButton
                             label={tx(
                               meaning("exploration-pack-choose", "Choose"),
-                              "Visible command that chooses the Exploration pack shown above the button.",
+                              "[exploration] Visible command that chooses the Exploration pack shown above the button.",
                             )}
                             accessibilityLabel={txa(
                               "Choose Pack {pack_number}",
                               { pack_number: pack.index + 1 },
-                              "Accessible command that chooses one Exploration card pack. pack_number is the same positive one-based display number; the visible button says only Choose.",
+                              "[accessibility] [exploration] Command that chooses one Exploration card pack. pack_number is the same positive one-based display number; the visible button says only Choose.",
                             )}
                             variant="accent"
                             placement="onGlass"
@@ -8086,7 +8086,7 @@ export function ExplorationSiteScreen({
               <GlassPanel
                 eyebrow={tx(
                   "Exploration",
-                  "Eyebrow above an Exploration follow-up choice.",
+                  "[exploration] Eyebrow above an Exploration follow-up choice.",
                 )}
                 title={activeAction.followup.title}
                 subtitle={activeAction.followup.subtitle}
@@ -8102,7 +8102,7 @@ export function ExplorationSiteScreen({
                     <GlassButton
                       label={tx(
                         "Confirm Choice",
-                        "Player-facing message for the exploration confirm choice action interface state.",
+                        "[exploration] Confirm choice action.",
                       )}
                       variant="accent"
                       placement="onGlass"
@@ -8149,7 +8149,7 @@ export function ExplorationSiteScreen({
               <GlassPanel
                 eyebrow={tx(
                   "Exploration",
-                  "Eyebrow above an Exploration follow-up choice.",
+                  "[exploration] Eyebrow above an Exploration follow-up choice.",
                 )}
                 title={activeAction.followup.title}
                 subtitle={activeAction.followup.subtitle}
@@ -8161,7 +8161,7 @@ export function ExplorationSiteScreen({
                   aria-label={resolve(
                     tx(
                       "Choose a site to add to this Dreamscape",
-                      "Accessible name for the available Exploration site-type choices.",
+                      "[accessibility] [exploration] Name for the available Exploration site-type choices.",
                     ),
                   )}
                   style={{
@@ -8267,7 +8267,7 @@ export function ExplorationSiteScreen({
                     <GlassPanel
                       eyebrow={tx(
                         "Exploration",
-                        "Eyebrow above an Exploration follow-up choice.",
+                        "[exploration] Eyebrow above an Exploration follow-up choice.",
                       )}
                       title={followup.title}
                       subtitle={followup.subtitle}
@@ -8284,7 +8284,7 @@ export function ExplorationSiteScreen({
                             <GlassButton
                               label={tx(
                                 "Confirm Choice",
-                                "Player-facing message for the exploration confirm choice action interface state.",
+                                "[exploration] Confirm choice action.",
                               )}
                               variant="accent"
                               placement="onGlass"
@@ -8306,7 +8306,7 @@ export function ExplorationSiteScreen({
                               selected_count: selectedSelections,
                               required_count: requiredSelections,
                             },
-                            "Polite status for a compound Exploration Dreamsign picker. selected_count is the non-negative number of UUID-backed choices currently selected and required_count is the positive exact total required before confirmation.",
+                            "[exploration] [dreamsign] Polite status for a compound Exploration Dreamsign picker. selected_count is the non-negative number of UUID-backed choices currently selected and required_count is the positive exact total required before confirmation.",
                           ),
                         )}
                       />
@@ -8332,7 +8332,7 @@ export function ExplorationSiteScreen({
                           <ExplorationDreamsignChoiceGroup
                             heading={tx(
                               "Offered Dreamsigns",
-                              "Visible heading above Dreamsigns prepared as player-selectable Exploration offers. Each item is a complete UUID-backed Dreamsign object.",
+                              "[exploration] [dreamsign] Visible heading above Dreamsigns prepared as player-selectable Exploration offers. Each item is a complete UUID-backed Dreamsign object.",
                             )}
                             role="offered"
                             dreamsigns={followup.offered}
@@ -8351,11 +8351,11 @@ export function ExplorationSiteScreen({
                               choosingPurge
                                 ? tx(
                                     "Choose a Dreamsign to Purge",
-                                    "Heading above held Dreamsigns when an Exploration follow-up requires a purge.",
+                                    "[exploration] [dreamsign] Heading above held Dreamsigns when an Exploration follow-up requires a purge.",
                                   )
                                 : tx(
                                     "Choose a Dreamsign to Replace",
-                                    "Heading for choosing which held Dreamsign to replace after gaining one while at capacity.",
+                                    "[dreamsign] Heading for choosing which held Dreamsign to replace after gaining one while at capacity.",
                                   )
                             }
                             role={
@@ -8386,7 +8386,7 @@ export function ExplorationSiteScreen({
               <GlassPanel
                 eyebrow={tx(
                   "Exploration",
-                  "Eyebrow above an Exploration follow-up choice.",
+                  "[exploration] Eyebrow above an Exploration follow-up choice.",
                 )}
                 title={activeAction.followup.title}
                 subtitle={activeAction.followup.subtitle}
@@ -8435,7 +8435,7 @@ export function ExplorationSiteScreen({
               <GlassPanel
                 eyebrow={tx(
                   "Exploration",
-                  "Eyebrow above an Exploration follow-up choice.",
+                  "[exploration] Eyebrow above an Exploration follow-up choice.",
                 )}
                 title={activeAction.followup.title}
                 subtitle={activeAction.followup.subtitle}
@@ -8540,7 +8540,7 @@ export function ExplorationSiteScreen({
               glyph={GLYPHS.close}
               label={tx(
                 "Return to Exploration",
-                "Accessible command on the full-screen Exploration artwork that collapses the expanded site and returns the current player to its choice view.",
+                "[accessibility] [exploration] Command on the full-screen Exploration artwork that collapses the expanded site and returns the current player to its choice view.",
               )}
               onPress={collapseFrameBreak}
               testId="cumulus-exploration-exit"

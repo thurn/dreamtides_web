@@ -334,15 +334,15 @@ export function JourneyApp({
           kind: "loading",
           title: tx(
             "Opening QA Scene",
-            "Loading title while a requested QA scene is prepared.",
+            "[loading] Loading title while a requested QA scene is prepared.",
           ),
           message: tx(
             "Preparing this journey state.",
-            "Loading status while a requested QA scene is prepared.",
+            "[loading] Loading status while a requested QA scene is prepared.",
           ),
           busyLabel: tx(
             "Opening QA Scene",
-            "Loading title while a requested QA scene is prepared.",
+            "[loading] Loading title while a requested QA scene is prepared.",
           ),
         }}
       />
@@ -359,16 +359,16 @@ export function JourneyApp({
           kind: "loading",
           title: tx(
             "Loading Saved Journey",
-            "Loading title while a requested saved Journey is fetched.",
+            "[journey] [loading] Loading title while a requested saved Journey is fetched.",
           ),
           message: txa(
             "Loading {journey_name}.",
             { journey_name: loadJourneyName ?? "saved journey" },
-            "Loading status containing the requested saved-run name, or the player-safe fallback ‘saved journey’.",
+            "[journey] [loading] Loading status containing the requested saved-run name, or the player-safe fallback ‘saved journey’.",
           ),
           busyLabel: tx(
             "Loading Saved Journey",
-            "Loading title while a requested saved Journey is fetched.",
+            "[journey] [loading] Loading title while a requested saved Journey is fetched.",
           ),
         }}
       />
@@ -382,15 +382,15 @@ export function JourneyApp({
           kind: "recoverableError",
           title: tx(
             "Could Not Load Saved Journey",
-            "Recoverable error title when a saved Journey cannot be opened.",
+            "[journey] Recoverable error title when a saved Journey cannot be opened.",
           ),
           message: tx(
             "The saved journey could not be opened.",
-            "Recoverable error explanation when a saved Journey cannot be opened.",
+            "[journey] Recoverable error explanation when a saved Journey cannot be opened.",
           ),
           detail: tx(
             "Try again, or choose another saved journey.",
-            "Recovery guidance after a saved Journey fails to load.",
+            "[journey] Recovery guidance after a saved Journey fails to load.",
           ),
         }}
       />
@@ -640,22 +640,22 @@ export default function App({
           kind: "recoverableError",
           title: tx(
             "Journey Content Failed to Load",
-            "Recoverable error title when Journey content fails to load.",
+            "[journey] Recoverable error title when Journey content fails to load.",
           ),
           message: tx(
             "The journey content could not be prepared.",
-            "Recoverable error explanation when Journey content fails to load.",
+            "[journey] Recoverable error explanation when Journey content fails to load.",
           ),
           detail: tx(
             "Reload the app to try preparing Journey content again.",
-            "Recovery guidance after Journey content fails to load.",
+            "[journey] Recovery guidance after Journey content fails to load.",
           ),
           actions: [
             {
               id: "primary",
               label: tx(
                 "Retry",
-                "Command that retries the failed application operation represented by the current error surface.",
+                "[ui] Command that retries the failed application operation represented by the current error surface.",
               ),
               onPress: () => window.location.reload(),
             },
@@ -663,7 +663,7 @@ export default function App({
               id: "secondary",
               label: tx(
                 "Copy Details",
-                "Secondary action that copies technical failure details for support or debugging.",
+                "[ui] Secondary action that copies technical failure details for support or debugging.",
               ),
               onPress: () => void navigator.clipboard?.writeText(loadError),
             },
@@ -680,15 +680,15 @@ export default function App({
           kind: "loading",
           title: tx(
             "Loading Journey Content",
-            "Loading title while Journey content is fetched.",
+            "[journey] [loading] Loading title while Journey content is fetched.",
           ),
           message: tx(
             "Gathering the dream’s cards and paths.",
-            "Loading status while Journey content is fetched.",
+            "[journey] [loading] Loading status while Journey content is fetched.",
           ),
           busyLabel: tx(
             "Loading Journey Content",
-            "Loading title while Journey content is fetched.",
+            "[journey] [loading] Loading title while Journey content is fetched.",
           ),
         }}
       />
@@ -706,12 +706,12 @@ export default function App({
           kind: "fatalConfiguration",
           title: tx(
             "Firebase Setup Issue",
-            "Configuration-error title when the shared-game Firebase service cannot initialize.",
+            "[coop] Configuration-error title when the shared-game Firebase service cannot initialize.",
           ),
           message: firebaseSetupHelp(runtimeConfig.databaseMode),
           detail: tx(
             "Check this build’s Firebase configuration before trying again.",
-            "Recovery guidance after Firebase initialization fails.",
+            "[ui] Recovery guidance after Firebase initialization fails.",
           ),
         }}
       />
@@ -725,15 +725,15 @@ export default function App({
           kind: "loading",
           title: tx(
             "Connecting to Game Service",
-            "Loading title while the shared game service connects.",
+            "[loading] Loading title while the shared game service connects.",
           ),
           message: tx(
             "Preparing your shared game.",
-            "Loading status while the shared game service connects.",
+            "[loading] Loading status while the shared game service connects.",
           ),
           busyLabel: tx(
             "Connecting to Game Service",
-            "Loading title while the shared game service connects.",
+            "[loading] Loading title while the shared game service connects.",
           ),
         }}
       />
@@ -802,12 +802,12 @@ function firebaseSetupHelp(
   if (databaseMode === "emulator") {
     return tx(
       "Run npm start to launch the Firebase Realtime Database emulator with Vite.",
-      "Configuration instructions shown when local Firebase emulator mode cannot initialize.",
+      "[ui] Configuration instructions shown when local Firebase emulator mode cannot initialize.",
     );
   }
 
   return tx(
     "Required env: VITE_FIREBASE_API_KEY, VITE_FIREBASE_AUTH_DOMAIN, VITE_FIREBASE_DATABASE_URL, VITE_FIREBASE_PROJECT_ID, VITE_FIREBASE_APP_ID.",
-    "Configuration instructions listing the required environment variables for deployed Firebase mode.",
+    "[ui] Configuration instructions listing the required environment variables for deployed Firebase mode.",
   );
 }

@@ -243,7 +243,7 @@ export function DraftScreen({
           glyph={GLYPHS.refresh}
           label={tx(
               "Reroll draft offer",
-              "Player-facing message for the draft reroll offer interface state.",
+              "[ui] Draft reroll offer.",
             )}
           onPress={onReroll}
           testId="reroll-draft-offer"

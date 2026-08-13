@@ -124,7 +124,7 @@ export function MainMenuScreen({
         aria-label={resolve(
           tx(
             "Main menu",
-            "Accessible name for the primary front-door navigation landmark.",
+            "[accessibility] Name for the primary front-door navigation landmark.",
           ),
         )}
         data-main-menu-actions
@@ -172,7 +172,7 @@ export function MainMenuScreen({
         aria-label={resolve(
           tx(
             "Dreamtides community",
-            "Accessible group name for external Dreamtides community links.",
+            "[accessibility] Group name for external Dreamtides community links.",
           ),
         )}
         data-main-menu-socials

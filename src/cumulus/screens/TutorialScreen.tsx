@@ -401,11 +401,11 @@ function TutorialHowToPlayDialog({
       <GlassDialog
         title={tx(
           "How to Play",
-          "Player-facing message for the tutorial how to play title interface state.",
+          "[tutorial] How to play title.",
         )}
         closeLabel={tx(
           "Close how to play",
-          "Player-facing message for the tutorial how to play close interface state.",
+          "[tutorial] How to play close.",
         )}
         presentation="popup"
         chrome="flowing-close"
@@ -1150,7 +1150,7 @@ function TutorialOpponentCardPlay({
                 <CardBack
                   label={tx(
                     "Opponent card flipping face up",
-                    "Player-facing message for the tutorial opponent card flipping interface state.",
+                    "[tutorial] Opponent card flipping.",
                   )}
                 />
               </div>
@@ -1454,7 +1454,7 @@ function TutorialChallengeAnimation({
                 winner_name: winner.card.model.displaySnapshot.name,
                 loser_name: loser.card.model.displaySnapshot.name,
               },
-              "Accessible narration after a tutorial challenge whose losing card enters the opponent's Void. winner_name and loser_name are canonical card display names with unknown grammatical gender.",
+              "[accessibility] [tutorial] Narration after a tutorial challenge whose losing card enters the opponent's Void. winner_name and loser_name are canonical card display names with unknown grammatical gender.",
             )
           : txa(
               "{winner_name} wins the challenge. {loser_name} dissolves into the player void.",
@@ -1462,7 +1462,7 @@ function TutorialChallengeAnimation({
                 winner_name: winner.card.model.displaySnapshot.name,
                 loser_name: loser.card.model.displaySnapshot.name,
               },
-              "Accessible narration after a tutorial challenge whose losing card enters the local player's Void. winner_name and loser_name are canonical card display names with unknown grammatical gender.",
+              "[accessibility] [tutorial] Narration after a tutorial challenge whose losing card enters the local player's Void. winner_name and loser_name are canonical card display names with unknown grammatical gender.",
             ),
       )}
       data-tutorial-challenge-animation=""
@@ -2994,7 +2994,7 @@ export function TutorialScreen({
                           opposing_card_name:
                             repositionOpposingCard.model.displaySnapshot.name,
                         },
-                        "Player-facing message for the tutorial drag to block interface state.",
+                        "[tutorial] Drag to block.",
                       ),
                     }
               }

@@ -160,15 +160,15 @@ export function ViewportTutorialDialogue({
     <section
       aria-label={resolve(
         kind === "battle"
-          ? tx("Battle tutorial", "Tutorial region accessible names.")
+          ? tx("Battle tutorial", "[accessibility] [tutorial] Tutorial region names.")
           : kind === "card"
             ? tx(
                 "Card tutorial",
-                "Player-facing message for the tutorial region card interface state.",
+                "[tutorial] Region card.",
               )
             : tx(
                 "Site tutorial",
-                "Player-facing message for the tutorial region site interface state.",
+                "[tutorial] Region site.",
               ),
       )}
       aria-live={visible ? "polite" : "off"}

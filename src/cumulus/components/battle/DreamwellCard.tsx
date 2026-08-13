@@ -104,7 +104,7 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
             card_name: opaque(card.name),
             rules_text: opaque(card.renderedText),
           },
-          "Accessible reveal description for a Dreamwell card. card_name is the canonical card display name with unknown grammatical gender; rules_text is its complete authored rules text.",
+          "[accessibility] [battle] Reveal description for a Dreamwell card. card_name is the canonical card display name with unknown grammatical gender; rules_text is its complete authored rules text.",
         ),
       },
       secondaries: definitions,
@@ -125,7 +125,7 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
       ariaLabelMessage={txa(
         "{card_name}: adds {energy_amount} Energy",
         { card_name: opaque(card.name), energy_amount: card.energyAdded },
-        "Accessible name for a Dreamwell card. card_name is its canonical display name with unknown grammatical gender; energy_amount is the non-negative Energy the card adds when drawn.",
+        "[accessibility] [battle] Name for a Dreamwell card. card_name is its canonical display name with unknown grammatical gender; energy_amount is the non-negative Energy the card adds when drawn.",
       )}
       data-cumulus-dreamwell-card=""
       data-dreamwell-card={model.cardId}
@@ -179,7 +179,7 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
           ariaLabel={txa(
             "{energy_amount} Energy added",
             { energy_amount: card.energyAdded },
-            "Accessible description of the Energy amount added by a Dreamwell card. energy_amount is a non-negative integer.",
+            "[accessibility] [battle] Description of the Energy amount added by a Dreamwell card. energy_amount is a non-negative integer.",
           )}
         />
       </div>

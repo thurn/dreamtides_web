@@ -288,6 +288,13 @@ RON descriptions may be explicit or inherit a configured path default, but
 ambiguous or dynamic content needs specific context. A useful description
 explains the applicable parts of this contract:
 
+Begin every explicit project description with one or more lowercase
+square-bracket tags that identify broad translator context, such as
+`[accessibility]`, `[exploration]`, `[gamble]`, `[battle]`, or `[dreamsign]`.
+Combine tags when a message spans contexts. Let the tags carry generic
+qualifiers such as “accessible” and “player-facing”; begin the prose with the
+specific role, meaning, or consequence instead of repeating those qualifiers.
+
 - **Placement and role:** surface and whether the unit is a title, action,
   status, narration, tooltip, live announcement, or accessibility label.
 - **Meaning and consequence:** what the player sees, does, gains, loses, or

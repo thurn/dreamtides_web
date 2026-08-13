@@ -48,7 +48,7 @@ export function glossaryInfoCard(
             ),
             definition_title: opaque(baseTitle),
           },
-          "Glossary reveal title prefixed by its canonical rules symbol. definition_symbol is an untranslated single glyph or compact glyph sequence; definition_title is the complete localized glossary title.",
+          "[ui] Glossary reveal title prefixed by its canonical rules symbol. definition_symbol is an untranslated single glyph or compact glyph sequence; definition_title is the complete localized glossary title.",
         );
   if (presentation.variant === "icon") {
     return {
@@ -58,12 +58,12 @@ export function glossaryInfoCard(
         ? {
             title: tx(
               "Rule definition unavailable",
-              "Missing glossary copy shown in the player reveal card when a requested authored glossary entry cannot be resolved. This visible fallback contains no variables and must not expose the glossary id.",
+              "[ui] Missing glossary copy shown in the player reveal card when a requested authored glossary entry cannot be resolved. This visible fallback contains no variables and must not expose the glossary id.",
             ),
             body: richText.plain(
               tx(
                 "This rule's definition is temporarily unavailable.",
-                "Player-facing message for the glossary definition unavailable body interface state.",
+                "[ui] Glossary definition unavailable body.",
               ),
             ),
           }
@@ -78,12 +78,12 @@ export function glossaryInfoCard(
         ? {
             title: tx(
               "Rule definition unavailable",
-              "Missing glossary copy shown in the player reveal card when a requested authored glossary entry cannot be resolved. This visible fallback contains no variables and must not expose the glossary id.",
+              "[ui] Missing glossary copy shown in the player reveal card when a requested authored glossary entry cannot be resolved. This visible fallback contains no variables and must not expose the glossary id.",
             ),
             body: richText.plain(
               tx(
                 "This rule's definition is temporarily unavailable.",
-                "Player-facing message for the glossary definition unavailable body interface state.",
+                "[ui] Glossary definition unavailable body.",
               ),
             ),
           }
@@ -96,12 +96,12 @@ export function glossaryInfoCard(
       ? {
           title: tx(
             "Rule definition unavailable",
-            "Missing glossary copy shown in the player reveal card when a requested authored glossary entry cannot be resolved. This visible fallback contains no variables and must not expose the glossary id.",
+            "[ui] Missing glossary copy shown in the player reveal card when a requested authored glossary entry cannot be resolved. This visible fallback contains no variables and must not expose the glossary id.",
           ),
           body: richText.plain(
             tx(
               "This rule's definition is temporarily unavailable.",
-              "Player-facing message for the glossary definition unavailable body interface state.",
+              "[ui] Glossary definition unavailable body.",
             ),
           ),
         }

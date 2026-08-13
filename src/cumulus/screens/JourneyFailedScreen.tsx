@@ -108,7 +108,7 @@ export function JourneyFailedScreen({
             {resolve(
               tx(
                 "Journey failure summary not found. Return to the journey menu to begin again.",
-                "Error shown when the Journey-failure route has no persisted failure summary.",
+                "[journey] Error shown when the Journey-failure route has no persisted failure summary.",
               ),
             )}
           </p>
@@ -146,11 +146,11 @@ export function JourneyFailedScreen({
                     view.result === "defeat"
                       ? tx(
                           "Journey Ended",
-                          "Title when the Journey ends in defeat.",
+                          "[journey] Title when the Journey ends in defeat.",
                         )
                       : tx(
                           "Stalemate",
-                          "Title when the Journey ends in a draw.",
+                          "[journey] Title when the Journey ends in a draw.",
                         ),
                   )}
                 </h1>
@@ -165,11 +165,11 @@ export function JourneyFailedScreen({
                     view.result === "defeat"
                       ? tx(
                           "Your journey ends here.",
-                          "Explanation beneath a Journey defeat title.",
+                          "[journey] Explanation beneath a Journey defeat title.",
                         )
                       : tx(
                           "Neither side could claim the dream.",
-                          "Explanation beneath a drawn Journey title.",
+                          "[journey] Explanation beneath a drawn Journey title.",
                         ),
                   )}
                 </p>
@@ -226,16 +226,16 @@ export function JourneyFailedScreen({
                         view.reason === "score_target_reached"
                           ? tx(
                               "Score Threshold Reached",
-                              "Cause shown when a Journey battle ended at its score threshold.",
+                              "[battle] [journey] Cause shown when a Journey battle ended at its score threshold.",
                             )
                           : view.reason === "turn_limit_reached"
                             ? tx(
                                 "Turn Limit Reached",
-                                "Cause shown when a Journey battle ended at its turn limit.",
+                                "[battle] [journey] Cause shown when a Journey battle ended at its turn limit.",
                               )
                             : tx(
                                 "Forced Result",
-                                "Cause shown when a Journey battle ended with a forced result.",
+                                "[battle] [journey] Cause shown when a Journey battle ended with a forced result.",
                               ),
                       )}
                     </p>
@@ -268,7 +268,7 @@ export function JourneyFailedScreen({
               <GlassButton
                 label={tx(
                   "New Journey",
-                  "Command that starts a fresh Journey from a menu or terminal Journey result.",
+                  "[journey] Command that starts a fresh Journey from a menu or terminal Journey result.",
                 )}
                 variant="accent"
                 onPress={onNewJourney}
@@ -316,21 +316,21 @@ function SummaryStat({ stat }: { readonly stat: JourneyFailedStatView }) {
           stat.id === "battles"
             ? tx(
                 "Battles Won",
-                "Label beneath the count of battles won in a failed Journey.",
+                "[journey] Label beneath the count of battles won in a failed Journey.",
               )
             : stat.id === "round"
               ? tx(
                   "Final Round",
-                  "Label beneath the final round number in a failed Journey.",
+                  "[journey] Label beneath the final round number in a failed Journey.",
                 )
               : stat.id === "playerScore"
                 ? tx(
                     "Your Score",
-                    "Label beneath the local player's final score in a failed Journey.",
+                    "[journey] Label beneath the local player's final score in a failed Journey.",
                   )
                 : tx(
                     "Opponent Score",
-                    "Label beneath the opponent's final score in a failed Journey.",
+                    "[journey] Label beneath the opponent's final score in a failed Journey.",
                   ),
         )}
       </dt>

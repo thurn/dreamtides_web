@@ -20,11 +20,11 @@ function guidanceDialogue(
       },
       portraitAlt:
         dreamAvatar === null || dreamAvatar === undefined
-          ? tx("Player Avatar", "Fallback name for the player's Dream Avatar.")
+          ? tx("Player Avatar", "[battle] [tutorial] [dream-avatar] Fallback name for the player's Dream Avatar.")
           : localizedSourceText(dreamAvatar.name),
       speakerName:
         dreamAvatar === null || dreamAvatar === undefined
-          ? tx("Dreamer", "Fallback speaker name for the player.")
+          ? tx("Dreamer", "[battle] [tutorial] Fallback speaker name for the player.")
           : localizedSourceText(dreamAvatar.name),
       text: localizedSourceText(message.text),
     };
@@ -43,8 +43,8 @@ function guidanceDialogue(
   }
   return {
     portrait: { kind: "character-portrait", characterId: "mira" },
-    portraitAlt: tx("Mira", "Name of the tutorial guide."),
-    speakerName: tx("Mira", "Name of the tutorial guide."),
+    portraitAlt: tx("Mira", "[tutorial] Name of the tutorial guide."),
+    speakerName: tx("Mira", "[tutorial] Name of the tutorial guide."),
     text: localizedSourceText(message.text),
   };
 }

@@ -57,29 +57,29 @@ export function JourneyCompleteScreen({
         return txa(
           plural(stat.value, [one("Battle Won"), other("Battles Won")]),
           {},
-          "Label beneath the completed Journey's number of battles won. The number is rendered separately above.",
+          "[journey] Label beneath the completed Journey's number of battles won. The number is rendered separately above.",
         );
       case "dreamscapes":
         return txa(
           plural(stat.value, [one("Dreamscape"), other("Dreamscapes")]),
           {},
-          "Label beneath the number of Dreamscapes in a completed Journey. The number is rendered separately above.",
+          "[journey] Label beneath the number of Dreamscapes in a completed Journey. The number is rendered separately above.",
         );
       case "cards":
         return tx(
           "Final Deck",
-          "Label beneath the number of cards in the completed Journey's final deck.",
+          "[journey] Label beneath the number of cards in the completed Journey's final deck.",
         );
       case "dreamsigns":
         return txa(
           plural(stat.value, [one("Dreamsign"), other("Dreamsigns")]),
           {},
-          "Label beneath the number of Dreamsigns in a completed Journey. The number is rendered separately above.",
+          "[dreamsign] [journey] Label beneath the number of Dreamsigns in a completed Journey. The number is rendered separately above.",
         );
       case "essence":
         return tx(
           "Essence Remaining",
-          "Label beneath the remaining Essence at the end of a Journey.",
+          "[journey] Label beneath the remaining Essence at the end of a Journey.",
         );
     }
   };
@@ -155,7 +155,7 @@ export function JourneyCompleteScreen({
                 {resolve(
                   tx(
                     "Journey Complete",
-                    "Player-facing message for the journey complete title interface state.",
+                    "[journey] Complete title.",
                   ),
                 )}
               </h1>
@@ -230,7 +230,7 @@ export function JourneyCompleteScreen({
             <GlassButton
               label={tx(
                 "New Journey",
-                "Command that starts a fresh Journey from a menu or terminal Journey result.",
+                "[journey] Command that starts a fresh Journey from a menu or terminal Journey result.",
               )}
               variant="accent"
               onPress={onNewJourney}

@@ -63,11 +63,11 @@ export function BattleDeckOrderOverlay({
       title={title}
       subtitle={tx(
         "Top to bottom. Confirm commits one battle command.",
-        "Instruction beneath the battle deck-order title. The player arranges cards from the top of the deck to the bottom before committing one battle command.",
+        "[battle] Instruction beneath the battle deck-order title. The player arranges cards from the top of the deck to the bottom before committing one battle command.",
       )}
       closeLabel={tx(
         "Cancel deck ordering",
-        "Accessible name for the command that closes battle deck ordering without committing it.",
+        "[accessibility] [battle] Name for the command that closes battle deck ordering without committing it.",
       )}
       onClose={onCancel}
     >
@@ -93,7 +93,7 @@ export function BattleDeckOrderOverlay({
           <GlassButton
             label={tx(
               meaning("deck-order-cancel", "Cancel"),
-              "Player-facing message for the battle deck order cancel action interface state.",
+              "[battle] Deck order cancel action.",
             )}
             placement="onGlass"
             testId="battle-deck-order-cancel"
@@ -102,7 +102,7 @@ export function BattleDeckOrderOverlay({
           <GlassButton
             label={tx(
               "Confirm Order",
-              "Player-facing message for the battle deck order confirm action interface state.",
+              "[battle] Deck order confirm action.",
             )}
             placement="onGlass"
             variant="accent"

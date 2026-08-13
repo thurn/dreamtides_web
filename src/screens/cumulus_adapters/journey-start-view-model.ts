@@ -62,8 +62,8 @@ export function buildJourneyStartGuideDialogue(
     id: `journey-start-guidance:${tutorialDreamAvatarId}`,
     model: {
       portrait: { kind: "character-portrait", characterId: "mira" },
-      portraitAlt: tx("Mira", "Name of the tutorial guide."),
-      speakerName: tx("Mira", "Name of the tutorial guide."),
+      portraitAlt: tx("Mira", "[tutorial] Name of the tutorial guide."),
+      speakerName: tx("Mira", "[tutorial] Name of the tutorial guide."),
       text: localizedSourceText(speechBubble.text),
     },
     delaySeconds: tutorialSpeechBubbleDelaySeconds(speechBubble),

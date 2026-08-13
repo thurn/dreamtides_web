@@ -412,12 +412,12 @@ function RulesTextBolt({ count }: { readonly count: number }) {
       ? txa(
           meaning("rules-interrupt-marker-name", "Interrupt"),
           {},
-          "Accessible name for the paired rules-text bolt marker.",
+          "[accessibility] Name for the paired rules-text bolt marker.",
         )
       : txa(
           meaning("rules-fast-marker-name", "Fast"),
           {},
-          "Accessible name for the single rules-text bolt marker.",
+          "[accessibility] Name for the single rules-text bolt marker.",
         );
   return (
     <span
@@ -574,20 +574,20 @@ function rulesTextAriaLabel(owner: RulesTextOwner, text: LocalizedString) {
     return txa(
       "Card rules: {rules_text}",
       { rules_text: opaque(text) },
-      "Accessible name for interactive authored card rules text.",
+      "[accessibility] Name for interactive authored card rules text.",
     );
   }
   if (owner.kind === "dreamAvatar") {
     return txa(
       "Avatar ability: {rules_text}",
       { rules_text: opaque(text) },
-      "Accessible name for interactive authored Dream Avatar rules text.",
+      "[accessibility] [dream-avatar] Name for interactive authored Dream Avatar rules text.",
     );
   }
   return txa(
     "Dreamsign ability: {rules_text}",
     { rules_text: opaque(text) },
-    "Accessible name for interactive authored Dreamsign rules text.",
+    "[accessibility] [dreamsign] Name for interactive authored Dreamsign rules text.",
   );
 }
 

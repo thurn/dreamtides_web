@@ -424,7 +424,7 @@ export function BattleTutorialGuidance({
   return (
     <section
       ref={journeyRef}
-      aria-label={resolve(tx("Battle tutorial", "Tutorial region accessible names."))}
+      aria-label={resolve(tx("Battle tutorial", "[accessibility] [tutorial] Tutorial region names."))}
       aria-live={active ? "polite" : "off"}
       aria-hidden={active ? undefined : "true"}
       data-battle-tutorial-guidance=""
@@ -506,7 +506,7 @@ export function BattleTutorialGuidance({
           ariaLabelMessage={txa(
             "Dismiss {speaker_name} tutorial",
             { speaker_name: opaque(renderedView.dialogue.speakerName) },
-            "Accessible command that dismisses one tutorial dialogue. speaker_name is the displayed name of the character speaking and has unknown grammatical gender.",
+            "[accessibility] [tutorial] Command that dismisses one tutorial dialogue. speaker_name is the displayed name of the character speaking and has unknown grammatical gender.",
           )}
           data-testid="battle-tutorial-dismiss"
           hoverFeedback="stationary"

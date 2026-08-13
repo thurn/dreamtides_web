@@ -42,7 +42,7 @@ export function DreamsignReplacementDialog({
     <GlassDialog
       title={tx(
         "Choose a Dreamsign to Replace",
-        "Heading for choosing which held Dreamsign to replace after gaining one while at capacity.",
+        "[dreamsign] Heading for choosing which held Dreamsign to replace after gaining one while at capacity.",
       )}
       subtitle={txa(
         plural(view.maxDreamsigns, [
@@ -50,7 +50,7 @@ export function DreamsignReplacementDialog({
           other("You can hold {count} Dreamsigns."),
         ]),
         { count: view.maxDreamsigns },
-        "Subtitle in the Dreamsign replacement dialog. count is the positive maximum number of Dreamsigns the current player may hold at once.",
+        "[dreamsign] Subtitle in the Dreamsign replacement dialog. count is the positive maximum number of Dreamsigns the current player may hold at once.",
       )}
       onClose={onCancel}
       closeLabel={closeLabel}
@@ -85,7 +85,7 @@ export function DreamsignReplacementDialog({
             {resolve(
               tx(
                 "New Dreamsign",
-                "Eyebrow above the newly gained Dreamsign in the replacement dialog.",
+                "[dreamsign] Eyebrow above the newly gained Dreamsign in the replacement dialog.",
               ),
             )}
           </p>
@@ -131,7 +131,7 @@ export function DreamsignReplacementDialog({
                 <GlassButton
                   label={tx(
                     "Replace",
-                    "Player-facing message for the dreamsign replacement replace action interface state.",
+                    "[dreamsign] Replacement replace action.",
                   )}
                   variant="accent"
                   placement="onGlass"

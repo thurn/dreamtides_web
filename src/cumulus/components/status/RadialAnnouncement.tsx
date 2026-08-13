@@ -393,12 +393,12 @@ function HandTotalAnnouncement({
           ? txa(
               "Dealer total {total}",
               { total },
-              "Accessible name for a Gamble dealer's final hand total. total is the non-negative numeric hand value.",
+              "[accessibility] [gamble] Name for a Gamble dealer's final hand total. total is the non-negative numeric hand value.",
             )
           : txa(
               "Player total {total}",
               { total },
-              "Accessible name for the local player's final Gamble hand total. total is the non-negative numeric hand value.",
+              "[accessibility] [gamble] Name for the local player's final Gamble hand total. total is the non-negative numeric hand value.",
             ),
       )}
       data-radial-announcement={announcementId ?? ""}
@@ -491,7 +491,7 @@ function CardScoreAnnouncement({
         txa(
           plural(points, [one("{count} Point"), other("{count} Points")]),
           { count: points },
-          "Accessible label for a battle score announcement. count is the non-negative number of points shown by the announcement and can be zero.",
+          "[accessibility] [battle] Label for a battle score announcement. count is the non-negative number of points shown by the announcement and can be zero.",
         ),
       )}
       data-radial-announcement={announcementId ?? ""}
@@ -821,11 +821,11 @@ function MergeTargetAnnouncement(
               blocked
                 ? tx(
                     "Cannot Merge",
-                    "Headline inside a blocked Figment merge target when exhaustion prevents the merge.",
+                    "[battle] Headline inside a blocked Figment merge target when exhaustion prevents the merge.",
                   )
                 : tx(
                     meaning("figment-merge-headline", "Merge"),
-                    "Headline inside an available Figment merge target.",
+                    "[battle] Headline inside an available Figment merge target.",
                   ),
             )}
           </span>
@@ -836,7 +836,7 @@ function MergeTargetAnnouncement(
                   txa(
                     "+{spark_count} ✦",
                     { spark_count: props.addedSpark },
-                    "Compact Spark detail inside an available Figment merge target. spark_count is the non-negative Spark that the destination Figment will gain; the star is the canonical Spark symbol and is converted to the shared accessible glyph.",
+                    "[accessibility] [battle] Compact Spark detail inside an available Figment merge target. spark_count is the non-negative Spark that the destination Figment will gain; the star is the canonical Spark symbol and is converted to the shared labeled glyph.",
                   ),
                 ),
               )}

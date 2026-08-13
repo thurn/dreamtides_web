@@ -379,11 +379,11 @@ export function TutorialBattleScreen({
           <GlassPanel
             title={tx(
                 "Choose a Target",
-                "Title above the tutorial battle prompt shown after the current player plays a card that requires a battlefield target.",
+                "[battle] [tutorial] Title above the tutorial battle prompt shown after the current player plays a card that requires a battlefield target.",
               )}
             subtitle={tx(
                 "Select a highlighted legal target.",
-                "Instruction beneath that title; the current player must activate one of the visually highlighted legal targets.",
+                "[ui] Instruction beneath that title; the current player must activate one of the visually highlighted legal targets.",
               )}
             headerSpacing="compact"
             headerDivider={false}
@@ -393,7 +393,7 @@ export function TutorialBattleScreen({
               button: {
                 label: tx(
                   meaning("tutorial-target-cancel", "Cancel"),
-                  "Visible command that cancels the tutorial card's pending target selection.",
+                  "[tutorial] Visible command that cancels the tutorial card's pending target selection.",
                 ),
                 testId: "tutorial-target-cancel",
                 onPress: () => interactions.onTargetSelectionCancel?.(),
@@ -409,10 +409,10 @@ export function TutorialBattleScreen({
           copy={{
             message:
               movementStatusMessage === "send-failed"
-                ? tx("Movement failed to send. Try again.", "Error when a tutorial movement intent could not be submitted.")
+                ? tx("Movement failed to send. Try again.", "[tutorial] Error when a tutorial movement intent could not be submitted.")
                 : movementStatusMessage === "exhausted-front-rank"
-                  ? tx("This character is exhausted and cannot move to the front rank.", "Error when an exhausted Character cannot enter the front rank during the opponent's Dusk.")
-                  : tx("No legal battlefield cell is available for this movement.", "Error when a tutorial movement has no legal destination."),
+                  ? tx("This character is exhausted and cannot move to the front rank.", "[ui] Error when an exhausted Character cannot enter the front rank during the opponent's Dusk.")
+                  : tx("No legal battlefield cell is available for this movement.", "[tutorial] Error when a tutorial movement has no legal destination."),
           }}
           onDismiss={onMovementStatusDismiss}
         />
@@ -492,7 +492,7 @@ function TutorialVictorySurface({
       aria-modal="true"
       aria-label={resolve(tx(
         "Tutorial complete",
-        "Player-facing message for the tutorial battle complete interface state.",
+        "[battle] [tutorial] Battle complete.",
       ))}
       data-tutorial-victory-screen=""
       style={{
@@ -523,7 +523,7 @@ function TutorialVictorySurface({
         variant="victory"
         headline={tx(
           "Victory",
-          "Player-facing message for the battle victory headline interface state.",
+          "[battle] Victory headline.",
         )}
         announcementId="tutorial-victory"
       />
@@ -551,7 +551,7 @@ function TutorialVictorySurface({
         <GlassButton
           label={tx(
             "New Journey",
-            "Command that starts a fresh Journey from a menu or terminal Journey result.",
+            "[journey] Command that starts a fresh Journey from a menu or terminal Journey result.",
           )}
           variant="accent"
           testId="tutorial-battle-new-journey"

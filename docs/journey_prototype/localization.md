@@ -52,6 +52,13 @@ Use `tx(source, description)` for a complete message without arguments. Use
 arguments or selectors. Descriptions explain the UI situation, the complete
 meaning, and every argument whose role is not self-evident.
 
+Begin every explicit description with one or more lowercase square-bracket
+tags. Tags identify broad translator context such as `[accessibility]`,
+`[exploration]`, `[gamble]`, `[battle]`, or `[dreamsign]`; combine them when a
+message spans contexts. The prose after the tags starts with the specific role
+or meaning, so the tags carry generic qualifiers such as “accessible” and
+“player-facing.”
+
 Source text is the source-English product contract. Keep a complete grammatical
 unit in one message. Pass semantic facts such as `count`, `owner`, `side`,
 `entity_kind`, or `has_title`; do not preformat fragments which a target locale

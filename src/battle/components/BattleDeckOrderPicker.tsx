@@ -34,12 +34,12 @@ export function BattleDeckOrderPicker({
                 ? {
                     label: tx(
                       "Missing card instance",
-                      "Fallback label in the battle deck-order list when a persisted battle card instance cannot be found.",
+                      "[battle] Fallback label in the battle deck-order list when a persisted battle card instance cannot be found.",
                     ),
                     summary: txa(
                       "{card_instance_id}",
                       { card_instance_id: id },
-                      "Technical battle card-instance UUID shown as the complete secondary row detail when the corresponding persisted card object is unavailable.",
+                      "[battle] Technical battle card-instance UUID shown as the complete secondary row detail when the corresponding persisted card object is unavailable.",
                     ),
                   }
                 : {
@@ -50,7 +50,7 @@ export function BattleDeckOrderPicker({
                         subtype: instance.definition.subtype,
                         spark: instance.definition.printedSpark ?? 0,
                       },
-                      "Secondary detail beneath one card in the battle deck-order list. subtype is the card's authored subtype and remains grammatically opaque; spark is its non-negative printed Spark value.",
+                      "[battle] Secondary detail beneath one card in the battle deck-order list. subtype is the card's authored subtype and remains grammatically opaque; spark is its non-negative printed Spark value.",
                     ),
                   }),
             },
@@ -67,31 +67,31 @@ export function BattleDeckOrderPicker({
           ? side === "player"
             ? tx(
                 "Reorder Player Deck",
-                "Title of the full-deck ordering dialog for the Player side in a locally controlled battle.",
+                "[battle] Title of the full-deck ordering dialog for the Player side in a locally controlled battle.",
               )
             : tx(
                 "Reorder Opponent Deck",
-                "Title of the full-deck ordering dialog for the Opponent side in a locally controlled battle.",
+                "[battle] Title of the full-deck ordering dialog for the Opponent side in a locally controlled battle.",
               )
           : side === "player"
             ? tx(
                 "Reorder Revealed Cards of Player Deck",
-                "Title of the partial deck-ordering dialog for revealed cards from the Player side's deck.",
+                "[battle] Title of the partial deck-ordering dialog for revealed cards from the Player side's deck.",
               )
             : tx(
                 "Reorder Revealed Cards of Opponent Deck",
-                "Title of the partial deck-ordering dialog for revealed cards from the Opponent side's deck.",
+                "[battle] Title of the partial deck-ordering dialog for revealed cards from the Opponent side's deck.",
               )
       }
       label={
         side === "player"
           ? tx(
               "Player deck order",
-              "Accessible name for the ordered Player deck card list.",
+              "[accessibility] [battle] Name for the ordered Player deck card list.",
             )
           : tx(
               "Opponent deck order",
-              "Accessible name for the ordered Opponent deck card list.",
+              "[accessibility] [battle] Name for the ordered Opponent deck card list.",
             )
       }
       scope={scopeLabel}

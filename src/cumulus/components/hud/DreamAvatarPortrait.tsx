@@ -212,7 +212,7 @@ function DreamAvatarPortraitSurface({
       avatar_name: opaque(dreamAvatar.name),
       avatar_title: opaque(dreamAvatar.title ?? dreamAvatar.name),
     },
-    'Accessible name for Dream Avatar artwork. avatar_name is the canonical avatar display name and avatar_title is its authored epithet; neither has modeled grammatical gender. has_title is "yes" when the epithet is present and "no" when the artwork should be identified by the name alone.',
+    "[accessibility] [dream-avatar] Name for Dream Avatar artwork. avatar_name is the canonical avatar display name and avatar_title is its authored epithet; neither has modeled grammatical gender. has_title is \"yes\" when the epithet is present and \"no\" when the artwork should be identified by the name alone.",
   );
   const focus = dreamAvatarPortraitFocus(dreamAvatar);
 

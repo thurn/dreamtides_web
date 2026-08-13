@@ -94,14 +94,14 @@ export function HostedPlaytestShell({
           <GlassPanel
             title={tx(
               "Player Disconnected",
-              "Title shown when the controller of a hosted playtest disconnects.",
+              "[coop] Title shown when the controller of a hosted playtest disconnects.",
             )}
             headerSpacing="compact"
             footer={
               <GlassButton
                 label={tx(
                   "Take Control",
-                  "Action that claims control of a paused hosted playtest.",
+                  "[coop] Action that claims control of a paused hosted playtest.",
                 )}
                 variant="accent"
                 placement="onGlass"
@@ -114,7 +114,7 @@ export function HostedPlaytestShell({
               {resolve(
                 tx(
                   "The playtest is paused. Take control when you are ready to continue.",
-                  "Status explaining that a hosted playtest paused after its controller disconnected.",
+                  "[coop] Status explaining that a hosted playtest paused after its controller disconnected.",
                 ),
               )}
             </p>

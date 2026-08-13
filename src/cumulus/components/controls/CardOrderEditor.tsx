@@ -161,7 +161,7 @@ function CardOrderEditorRow({
         ariaLabelMessage={txa(
           "Reorder {card_name}",
           { card_name: opaque(item.label) },
-          "Accessible command on a drag handle that reorders one battle card. card_name is the independently localized UUID-resolved card name and is grammatically invariant here; arrow-key commands move that physical entry.",
+          "[accessibility] [battle] Command on a drag handle that reorders one battle card. card_name is the independently localized UUID-resolved card name and is grammatically invariant here; arrow-key commands move that physical entry.",
         )}
         aria-keyshortcuts="ArrowUp ArrowDown"
         data-card-order-drag-handle={item.id}

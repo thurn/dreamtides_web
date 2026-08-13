@@ -79,11 +79,11 @@ export function BattleSiteRoute({
             kind: "recoverableError",
             title: tx(
               "Unable to Prepare Battle",
-              "Recoverable error title when a battle preview cannot be prepared.",
+              "[battle] Recoverable error title when a battle preview cannot be prepared.",
             ),
             message: tx(
               "The battle preview could not be prepared from this game state.",
-              "Recoverable error explanation when a battle preview cannot be prepared from the current game state.",
+              "[battle] Recoverable error explanation when a battle preview cannot be prepared from the current game state.",
             ),
           }}
         />

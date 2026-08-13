@@ -469,7 +469,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
             undefined
               ? tx(
                   "Figment",
-                  "Fallback name for a generated battle Figment whose card definition is unavailable.",
+                  "[battle] Fallback name for a generated battle Figment whose card definition is unavailable.",
                 )
               : localizedSourceText(
                   board.cardInstances[pendingDrag.battleCardId].definition.name,

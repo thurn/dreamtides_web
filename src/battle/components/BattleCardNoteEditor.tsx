@@ -39,7 +39,7 @@ export function BattleCardNoteEditor({
     cardDefinition === undefined
       ? tx(
           "Card",
-          "Fallback name in the battle card-note editor when the referenced card is unavailable.",
+          "[battle] Fallback name in the battle card-note editor when the referenced card is unavailable.",
         )
       : localizedSourceText(cardDefinition.name);
 

@@ -71,7 +71,7 @@ export function buildJourneyUtilityMenuViewModel({
               id: "saveJourney",
               label: tx(
                 "Save Journey",
-                "Command in the Journey utility menu that downloads the current journey as a save file.",
+                "[journey] Command in the Journey utility menu that downloads the current journey as a save file.",
               ),
               glyph: GLYPHS.save,
               onCommand: onSaveJourney,
@@ -85,7 +85,7 @@ export function buildJourneyUtilityMenuViewModel({
                   id: "loadJourney",
                   label: tx(
                     "Load Journey",
-                    "Command in the Journey utility menu that imports a Journey save file.",
+                    "[journey] Command in the Journey utility menu that imports a Journey save file.",
                   ),
                   glyph: GLYPHS.folderOpen,
                   onCommand: onLoadJourney,
@@ -99,7 +99,7 @@ export function buildJourneyUtilityMenuViewModel({
               id: "downloadLog",
               label: tx(
                 "Download Log",
-                "Command in the Journey utility menu that downloads the diagnostic Journey log.",
+                "[journey] [developer] Command in the Journey utility menu that downloads the diagnostic Journey log.",
               ),
               glyph: GLYPHS.download,
               onCommand: onDownloadLog,
@@ -112,7 +112,7 @@ export function buildJourneyUtilityMenuViewModel({
               id: "buildSha",
               label: tx(
                 "Build SHA",
-                "Command in the Journey utility menu that displays the current build identifier.",
+                "[journey] Command in the Journey utility menu that displays the current build identifier.",
               ),
               glyph: GLYPHS.code,
               onCommand: onViewBuildSha,
@@ -172,7 +172,7 @@ export function useJourneyUtilityMenuController({
       resolve(
         tx(
           "Save current journey as:",
-          "Native browser prompt text for naming a downloaded Journey save. The prompt is visible before the file is created and asks for the player's authored name.",
+          "[journey] Native browser prompt text for naming a downloaded Journey save. The prompt is visible before the file is created and asks for the player's authored name.",
         ),
       ),
     );
@@ -182,7 +182,7 @@ export function useJourneyUtilityMenuController({
       flashStatus(
         tx(
           "Save cancelled: a name is required.",
-          "Transient status after the player submits an empty Journey save name.",
+          "[journey] Transient status after the player submits an empty Journey save name.",
         ),
       );
       return;
@@ -200,7 +200,7 @@ export function useJourneyUtilityMenuController({
         txa(
           'Downloaded "{file_name}".',
           { file_name: fileName },
-          "Transient status after a Journey save download. file_name is a generated filename and remains an opaque technical value.",
+          "[journey] Transient status after a Journey save download. file_name is a generated filename and remains an opaque technical value.",
         ),
       );
     } catch (error) {
@@ -212,7 +212,7 @@ export function useJourneyUtilityMenuController({
       flashStatus(
         tx(
           "Failed to save journey.",
-          "Transient status when a Journey save fails.",
+          "[journey] Transient status when a Journey save fails.",
         ),
       );
     }
@@ -223,7 +223,7 @@ export function useJourneyUtilityMenuController({
       flashStatus(
         tx(
           "Loading is unavailable in this context.",
-          "Transient status when Journey loading is unavailable in the current route context.",
+          "[journey] [loading] Transient status when Journey loading is unavailable in the current route context.",
         ),
       );
       return;
@@ -243,7 +243,7 @@ export function useJourneyUtilityMenuController({
         txa(
           'Loaded "{save_name}".',
           { save_name: loaded.name },
-          "Transient status after a Journey save is imported. save_name is the player's authored save name and remains grammatically opaque.",
+          "[journey] Transient status after a Journey save is imported. save_name is the player's authored save name and remains grammatically opaque.",
         ),
       );
     } catch (error) {
@@ -255,7 +255,7 @@ export function useJourneyUtilityMenuController({
       flashStatus(
         tx(
           "Failed to load journey.",
-          "Transient status when a Journey load fails.",
+          "[journey] Transient status when a Journey load fails.",
         ),
       );
     }
@@ -280,7 +280,7 @@ export function useJourneyUtilityMenuController({
             txa(
               "Build Git SHA: {git_sha}",
               { git_sha: BUILD_GIT_SHA },
-              "Transient status after the player requests the current build identifier. git_sha is an opaque technical build identifier.",
+              "[ui] Transient status after the player requests the current build identifier. git_sha is an opaque technical build identifier.",
             ),
           );
         },

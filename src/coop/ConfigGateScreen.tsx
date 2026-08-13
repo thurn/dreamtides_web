@@ -29,23 +29,23 @@ export function ConfigGateScreen({
         kind: "contentConfigGate",
         title: tx(
           "This Game Uses Different Settings",
-          "Title for a shared-room gate whose content settings differ from this client.",
+          "[coop] Title for a shared-room gate whose content settings differ from this client.",
         ),
         message: tx(
           "Both players use the same content settings to play together.",
-          "Explanation that all participants in a shared room must use matching content settings.",
+          "[coop] Explanation that all participants in a shared room must use matching content settings.",
         ),
         comparison: configComparisonRows(roomContentConfig, localContentConfig),
         detail: tx(
           "This game needs settings this build cannot adopt.",
-          "Detail explaining that this client cannot adopt the shared room's content settings.",
+          "[coop] Detail explaining that this client cannot adopt the shared room's content settings.",
         ),
         actions: [
           {
             id: "primary",
             label: tx(
               "Create New Game",
-              "Action that leaves an unavailable or incompatible room and creates a fresh shared game.",
+              "[coop] Action that leaves an unavailable or incompatible room and creates a fresh shared game.",
             ),
             onPress: onStartNewGame,
           },
@@ -86,42 +86,42 @@ function configLabel(kind: ConfigKind): LocalizedString {
     case "atlas":
       return tx(
         "Atlas Rules",
-        "Comparison-row label for the shared room's Atlas rules fingerprint.",
+        "[coop] Comparison-row label for the shared room's Atlas rules fingerprint.",
       );
     case "site":
       return tx(
         "Site Rules",
-        "Comparison-row label for the shared room's Site rules fingerprint.",
+        "[coop] Comparison-row label for the shared room's Site rules fingerprint.",
       );
     case "draft-rules":
       return tx(
         "Draft Rules",
-        "Comparison-row label for the shared room's Draft rules fingerprint.",
+        "[coop] Comparison-row label for the shared room's Draft rules fingerprint.",
       );
     case "economy":
       return tx(
         "Economy Rules",
-        "Comparison-row label for the shared room's economy rules fingerprint.",
+        "[coop] Comparison-row label for the shared room's economy rules fingerprint.",
       );
     case "gamble":
       return tx(
         "Gamble Rules",
-        "Comparison-row label for the shared room's Gamble rules fingerprint.",
+        "[gamble] [coop] Comparison-row label for the shared room's Gamble rules fingerprint.",
       );
     case "transfiguration":
       return tx(
         "Transfiguration Rules",
-        "Comparison-row label for the shared room's Transfiguration rules fingerprint.",
+        "[transfiguration] [coop] Comparison-row label for the shared room's Transfiguration rules fingerprint.",
       );
     case "opponent":
       return tx(
         "Opponent Rules",
-        "Comparison-row label for the shared room's opponent rules fingerprint.",
+        "[coop] Comparison-row label for the shared room's opponent rules fingerprint.",
       );
     case "tutorial":
       return tx(
         "Tutorial Rules",
-        "Comparison-row label for the shared room's tutorial rules fingerprint.",
+        "[tutorial] [coop] Comparison-row label for the shared room's tutorial rules fingerprint.",
       );
   }
 }
@@ -134,7 +134,7 @@ function rawConfigValue(
         kind: "message",
         message: tx(
           "Unavailable",
-          "Comparison-table value for content settings unavailable in a shared room.",
+          "[coop] Comparison-table value for content settings unavailable in a shared room.",
         ),
       }
     : { kind: "raw", value };

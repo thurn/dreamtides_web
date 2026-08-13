@@ -48,7 +48,7 @@ export function TidesInfoLabel() {
       tabIndex={0}
       ariaLabelMessage={tx(
         "Tides information",
-        "Accessible name for the reveal trigger that explains Tides.",
+        "[accessibility] Name for the reveal trigger that explains Tides.",
       )}
       data-tides-info-label=""
       style={{
@@ -71,7 +71,7 @@ export function TidesInfoLabel() {
       </span>
       {resolve(tx(
         "Tides:",
-        "Visible eyebrow labeling the list of a Dream Avatar's Tides.",
+        "[dream-avatar] Visible eyebrow labeling the list of a Dream Avatar's Tides.",
       ))}
     </Pressable>
   );

@@ -268,7 +268,7 @@ function cardView(entry: PoolEntry): CardGalleryCardView {
             message: txa(
               "×{copies}",
               { copies: entry.copies },
-              "Compact Pool Viewer caption showing how many copies of one card are present. copies is a positive whole-number count.",
+              "[pool-viewer] Compact Pool Viewer caption showing how many copies of one card are present. copies is a positive whole-number count.",
             ),
           },
     testId: `pool-card-${entry.entryId}`,
