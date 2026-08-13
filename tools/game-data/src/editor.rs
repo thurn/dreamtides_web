@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
 use std::io::Write;
 use std::ops::Range;
@@ -9,6 +9,7 @@ use ron::extensions::Extensions;
 use ron::ser::PrettyConfig;
 use serde::Deserialize;
 use serde_json::Value as JsonValue;
+use trox::RonPlaceholder;
 
 use crate::compiler::{EditReport, sha256};
 use crate::manifest::Manifest;
@@ -39,7 +40,7 @@ use crate::models::glossary::{self, GlossaryDefinition, GlossaryId, TermPresenta
 use crate::models::internal_card_metadata::{
     self, CardMetadataCatalog, CardMetadataDefinition, FacetDefinition,
 };
-use crate::models::localization::localized_source;
+use crate::models::localization::{localized_source, localized_template_source};
 use crate::models::resonance::Resonance;
 use crate::models::tides::{self, TideDefinition, TideId, TidesCatalog};
 use crate::models::tutorial::{self, TutorialActionDefinition, TutorialCatalog};
@@ -2278,7 +2279,7 @@ fn patch_exploration_prose(source: &str, card_id: &str, prose: &str) -> Result<S
     Ok(format!(
         "{}{}{}",
         &source[..value.start],
-        ron::to_string(prose)?,
+        ron::to_string(&localized_source(prose.to_owned())?)?,
         &source[value.end..],
     ))
 }
@@ -2421,6 +2422,24 @@ fn parse_dreamsign_reference(value: &str) -> Result<DreamsignId> {
     ron::from_str(&literal).with_context(|| {
         format!("INVALID_EDIT: Dreamsign reference {value} must be a canonical UUIDv4")
     })
+}
+
+fn exploration_template_source(text: String) -> Result<trox::LocalizedString> {
+    let contract = BTreeMap::from([
+        ("action_label", RonPlaceholder::Opaque),
+        ("card_type", RonPlaceholder::Opaque),
+        ("deck_card", RonPlaceholder::Opaque),
+        ("fixed_card", RonPlaceholder::Opaque),
+        ("nightmare_card", RonPlaceholder::Opaque),
+        ("offered_card", RonPlaceholder::Opaque),
+        ("starter_card", RonPlaceholder::Opaque),
+        ("subtype", RonPlaceholder::Opaque),
+        ("transfiguration", RonPlaceholder::Opaque),
+        ("count", RonPlaceholder::Scalar),
+        ("essence_per_spark", RonPlaceholder::Scalar),
+    ]);
+    localized_template_source(text, &contract)
+        .context("INVALID_EDIT: Exploration presentation template is invalid")
 }
 
 fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
@@ -2724,13 +2743,13 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
         id: ActionId::parse(&required_json_string(object, "id")?)
             .map_err(|error| anyhow::anyhow!("INVALID_EDIT: {error}"))?,
         presentation: ActionPresentation {
-            effect_text: localized_source(required_json_string(object, "effectText")?)?,
+            effect_text: exploration_template_source(required_json_string(object, "effectText")?)?,
             followup: followup_title
                 .zip(followup_subtitle)
                 .map(|(title, subtitle)| {
                     Ok::<Followup, anyhow::Error>(Followup {
-                        title: localized_source(title)?,
-                        subtitle: localized_source(subtitle)?,
+                        title: exploration_template_source(title)?,
+                        subtitle: exploration_template_source(subtitle)?,
                     })
                 })
                 .transpose()?,
@@ -3990,8 +4009,8 @@ CardMetadataCatalog(
     projections: [
       GlossaryProjection(
         pattern: r#"\becho\s+(\d+)\b"#,
-        term: Tx("{{term}} {{1}}"),
-        definition: Tx("Create {{1}} echoes."),
+        term: Tx(text: "{term} {amount}", placeholders: {"term": Opaque, "amount": Scalar}),
+        definition: Tx(text: "Create {amount} echoes.", placeholders: {"amount": Scalar}),
       ),
     ],
   ),
@@ -4076,7 +4095,7 @@ CardMetadataCatalog(
       description: Tx("Gamble copy"),
       dialogue: GambleDialogue(
         three_gate: [Tx("Three Gate")],
-        ladder_climb: [Tx("Win {{win-essence}}")],
+        ladder_climb: [Tx(text: "Win {win_essence}", placeholders: {"win_essence": Scalar})],
         starway_stairs: [Tx("Stairs")],
         four_suit_reprise: [Tx("Reprise")],
         blackjack: [Tx("Blackjack")],
@@ -6405,6 +6424,23 @@ DreamwellCatalog(
         );
         let reparsed: ExplorationCatalog = ron::from_str(&patched).unwrap();
         assert_eq!(reparsed, catalog);
+    }
+
+    #[test]
+    fn exploration_editor_preserves_typed_presentation_placeholders() {
+        let mut value = action(EffectKind::GainDreamsign);
+        value.as_object_mut().unwrap().insert(
+            "effectText".into(),
+            json!("Gain {nightmare_card}"),
+        );
+        let action = action_from_compat(value).unwrap();
+        let arguments = action
+            .presentation
+            .effect_text
+            .ron_template_arguments()
+            .expect("placeholder-bearing editor copy must remain a RON template");
+        assert_eq!(arguments.get("nightmare_card"), Some(&trox::ArgumentSchema::Opaque));
+        assert_eq!(arguments.len(), 1);
     }
 
     #[test]

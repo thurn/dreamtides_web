@@ -1,5 +1,7 @@
 import glossarySource from "../../data/glossary.toml?raw";
 import { parseGlossarySource } from "../../scripts/glossary-source.mjs";
+import type { SourceTransport } from "../runtime/localization/runtime";
+import { hydrateSourceTransport } from "../runtime/localization/runtime";
 
 /** A RON-authored explanatory Info Card entry. */
 export interface GlossaryEntry {
@@ -20,9 +22,9 @@ export interface GlossaryProjection {
   /** Case-insensitive regular expression which the source sentence must match. */
   readonly pattern?: string;
   /** Display-term template; `{term}` and numbered captures such as `{1}` expand. */
-  readonly term?: string;
+  readonly term?: SourceTransport;
   /** Definition template; `{term}` and numbered captures such as `{1}` expand. */
-  readonly definition?: string;
+  readonly definition?: SourceTransport;
 }
 
 /** Fully identified record compiled to glossary.toml and shown in the editor. */
@@ -53,7 +55,28 @@ export interface GlossaryCatalogEntry extends GlossaryEntry {
 
 /** Every editable Info Card definition, in canonical RON source order. */
 export const INFO_CARD_GLOSSARY: readonly GlossaryCatalogEntry[] =
-  parseGlossarySource(glossarySource);
+  parseGlossarySource(glossarySource).map((entry: GlossaryCatalogEntry) => ({
+    ...entry,
+    projections: entry.projections?.map((projection) => ({
+      ...projection,
+      ...(projection.term === undefined
+        ? {}
+        : {
+            term: hydrateSourceTransport(
+              projection.term,
+              `Glossary ${entry.id} projection term`,
+            ),
+          }),
+      ...(projection.definition === undefined
+        ? {}
+        : {
+            definition: hydrateSourceTransport(
+              projection.definition,
+              `Glossary ${entry.id} projection definition`,
+            ),
+          }),
+    })),
+  }));
 
 /** Rules-text entries used by the card keyword tokenizer. */
 export const GLOSSARY: readonly GlossaryCatalogEntry[] =

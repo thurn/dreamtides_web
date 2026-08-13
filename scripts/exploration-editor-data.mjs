@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
+import { SourceCatalog } from "../vendor/trox-runtime/dist/runtime.js";
 import {
   buildSimulatedPlayerDeck,
   renderActionPresentation,
@@ -85,6 +86,69 @@ function requiredString(value, label) {
     throw editorError("INVALID_EXPLORATION", `${label} must be nonblank text.`);
   }
   return value;
+}
+
+const sourceCatalogs = new Map();
+
+function sourceAuthoringText(value, label, rootDir) {
+  if (typeof value === "string") return requiredString(value, label);
+  let cached = sourceCatalogs.get(rootDir);
+  if (cached === undefined) {
+    const bundle = JSON.parse(
+      readFileSync(
+        join(rootDir, "src", "generated", "localization", "en-US.trox.json"),
+        "utf8",
+      ),
+    );
+    cached = { bundle, catalog: new SourceCatalog(bundle) };
+    sourceCatalogs.set(rootDir, cached);
+  }
+  try {
+    cached.catalog.sourceMessageFromValue(value);
+  } catch (error) {
+    throw editorError(
+      "INVALID_EXPLORATION",
+      `${label} has an invalid Trox source reference: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+  const pattern = cached.bundle.entries[value.entry_id]?.identity?.pattern;
+  if (pattern?.kind !== "text" || typeof pattern.text !== "string") {
+    throw editorError(
+      "INVALID_EXPLORATION",
+      `${label} must reference a Trox text message.`,
+    );
+  }
+  return requiredString(pattern.text, label);
+}
+
+function authoringAction(raw, rootDir) {
+  return {
+    ...raw,
+    label: sourceAuthoringText(raw.label, "action label", rootDir),
+    "effect-text": sourceAuthoringText(
+      raw["effect-text"],
+      "action effect text",
+      rootDir,
+    ),
+    ...(raw["followup-title"] === undefined
+      ? {}
+      : {
+          "followup-title": sourceAuthoringText(
+            raw["followup-title"],
+            "action followup title",
+            rootDir,
+          ),
+        }),
+    ...(raw["followup-subtitle"] === undefined
+      ? {}
+      : {
+          "followup-subtitle": sourceAuthoringText(
+            raw["followup-subtitle"],
+            "action followup subtitle",
+            rootDir,
+          ),
+        }),
+  };
 }
 
 function canonicalUuid(value, label) {
@@ -339,13 +403,13 @@ export function readExplorationEditorData(options = {}) {
       );
     return {
       cardId,
-      prose: requiredString(encounter.prose, "encounter prose"),
+      prose: sourceAuthoringText(encounter.prose, "encounter prose", rootDir),
       cardName: card.name,
       cardAbilityText: card.renderedText,
       imageNumber: card.imageNumber,
       actions: (encounter.action ?? []).map((rawAction) => {
         const action = normalizeExplorationAction(
-          camelAction(rawAction),
+          camelAction(authoringAction(rawAction, rootDir)),
           references,
         );
         return {

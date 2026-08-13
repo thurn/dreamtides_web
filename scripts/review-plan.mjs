@@ -33,6 +33,7 @@ const LOCALIZATION_CONTRACT_INPUTS = new Set([
 ]);
 const LOCALIZATION_CONTRACT_TESTS = [
   "scripts/bump-trox.test.mjs",
+  "scripts/canonical-localization-audit.test.mjs",
   "scripts/trox.test.mjs",
   "scripts/trox-csv-sync.test.mjs",
   "scripts/trox-generated-check.test.mjs",

@@ -7,7 +7,7 @@ use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
-use super::localization::source_text;
+use super::localization::source_value;
 
 macro_rules! string_enum {
     ($name:ident { $($variant:ident => $value:literal),+ $(,)? }) => {
@@ -902,7 +902,7 @@ pub fn lower(catalog: ExplorationCatalog) -> Result<toml::Value> {
                 .collect::<Result<Vec<_>>>()?;
             Ok(toml::Value::Table(toml::map::Map::from_iter([
                 ("card-id".into(), encounter.card_id.into()),
-                ("prose".into(), source_text(&encounter.prose)?.into()),
+                ("prose".into(), source_value(&encounter.prose)?),
                 ("action".into(), toml::Value::Array(actions)),
             ])))
         })
@@ -926,19 +926,19 @@ pub fn lower(catalog: ExplorationCatalog) -> Result<toml::Value> {
 fn lower_action(action: ActionDefinition) -> Result<toml::map::Map<String, toml::Value>> {
     let mut output = toml::map::Map::new();
     output.insert("id".into(), action.id.to_string().into());
-    output.insert("label".into(), source_text(&action.label)?.into());
+    output.insert("label".into(), source_value(&action.label)?);
     output.insert(
         "effect-text".into(),
-        source_text(&action.presentation.effect_text)?.into(),
+        source_value(&action.presentation.effect_text)?,
     );
     if let Some(followup) = action.presentation.followup {
         output.insert(
             "followup-title".into(),
-            source_text(&followup.title)?.into(),
+            source_value(&followup.title)?,
         );
         output.insert(
             "followup-subtitle".into(),
-            source_text(&followup.subtitle)?.into(),
+            source_value(&followup.subtitle)?,
         );
     }
     let kind = action.effect.kind();
@@ -1430,7 +1430,7 @@ mod tests {
         presentation: ActionPresentation(
           effect_text: Tx("Purge up to 2 chosen Warrior cards"),
           followup: Followup(
-            title: Tx("{{action-label}}"),
+            title: Tx(text: "{action_label}", placeholders: {"action_label": Opaque}),
             subtitle: Tx("Choose up to two Warrior cards to purge."),
           ),
         ),

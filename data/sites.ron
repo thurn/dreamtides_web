@@ -20,7 +20,9 @@ SitesCatalog(
       site: Draft,
       icon: "bxf bx-rectangle-vertical",
       glossary_id: "1ee13681-1ff5-431c-94a1-3390d45e1717",
-      presentation: Draft(label: Tx("Draft {{pickCount}}x")),
+      presentation: Draft(
+        label: Tx(text: "Draft {pick_count}x", placeholders: {"pick_count": Scalar}),
+      ),
     ),
 
     SiteMetadata(
@@ -43,7 +45,7 @@ SitesCatalog(
       presentation: Purge(
         title: Tx("Purge Cards"),
         instruction: Tx("Choose any number of cards to remove from your deck for an essence cost"),
-        purge_action: Tx("Purge {{count}}"),
+        purge_action: Tx(text: "Purge {count}", placeholders: {"count": Scalar}),
       ),
     ),
 

@@ -207,7 +207,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: prompt(DISCOVER_CARD_ID, "discover-card", { maximumCost: 2 }),
+          label: prompt(DISCOVER_CARD_ID, "discover-card", { maximum_cost: 2 }),
           count: 1,
           optional: false,
           candidates: (ctx) =>

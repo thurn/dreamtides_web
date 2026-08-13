@@ -1,13 +1,17 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { parse } from "smol-toml";
+import {
+  collectRuntimeTemplateSources,
+  runtimeTemplateArgumentName,
+  runtimeTemplateContract,
+} from "./localized-runtime-template-contract.mjs";
 
 const root = process.cwd();
-const bundlePath = resolve(root, "src/generated/localization/en-US.trox.json");
 const outputPath = resolve(
   root,
   "src/runtime/localization/runtime-templates.generated.ts",
 );
-const bundle = JSON.parse(readFileSync(bundlePath, "utf8"));
 const cardData = JSON.parse(
   readFileSync(resolve(root, "public/card-data.json"), "utf8"),
 );
@@ -28,24 +32,34 @@ const cardSubtypes = [
 const guideDialogue = dreamGuideData.guides.flatMap((guide) =>
   Object.values(guide.dialogue).flat(),
 );
-const templates = [
-  ...new Set(
-    [
-      ...Object.values(bundle.entries)
-        .map((entry) => entry.identity?.pattern)
-        .filter(
-          (pattern) =>
-            pattern?.kind === "text" && pattern.text.includes("{{"),
-        )
-        .map((pattern) =>
-          pattern.text.replace(/\{\{([^{}]+)\}\}/gu, "{$1}"),
-        ),
-      ...guideDialogue.filter((line) => line.includes("{")),
-    ],
-  ),
-].sort((left, right) => left.localeCompare(right));
+
+const runtimeTemplates = new Map();
+for (const file of readdirSync(resolve(root, "public"))
+  .filter((name) => name.endsWith("-data.json"))
+  .sort()) {
+  collectRuntimeTemplateSources(
+    JSON.parse(readFileSync(resolve(root, "public", file), "utf8")),
+    `public/${file}`,
+    runtimeTemplates,
+  );
+}
+const glossary = parse(
+  readFileSync(resolve(root, "data/glossary.toml"), "utf8"),
+);
+collectRuntimeTemplateSources(
+  glossary.entries ?? [],
+  "data/glossary.toml.entries",
+  runtimeTemplates,
+);
+const templates = [...runtimeTemplates.keys()].sort((left, right) =>
+  left.localeCompare(right),
+);
 const staticGuideDialogue = [
-  ...new Set(guideDialogue.filter((line) => !line.includes("{"))),
+  ...new Set(
+    guideDialogue.filter(
+      (line) => typeof line === "string" && !line.includes("{"),
+    ),
+  ),
 ].sort((left, right) => left.localeCompare(right));
 const dreamsignImageAlts = [
   ...new Set(
@@ -55,47 +69,49 @@ const dreamsignImageAlts = [
   ),
 ].sort((left, right) => left.localeCompare(right));
 
-function argumentName(sourceName) {
-  const normalized =
-    sourceName === "name"
-      ? "affiliation_name"
-      : /^[0-9]+$/u.test(sourceName)
-        ? `value_${sourceName}`
-        : sourceName
-            .replace(/([a-z0-9])([A-Z])/gu, "$1_$2")
-            .replaceAll("-", "_")
-            .toLowerCase();
-  if (!/^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/u.test(normalized)) {
-    throw new Error(
-      `Cannot normalize runtime-template argument ${JSON.stringify(sourceName)}.`,
-    );
-  }
-  return normalized;
+function templateCase(template) {
+  const contract = runtimeTemplateContract(template);
+  const inputs = contract.sourceNames
+    .map((name, index) => {
+      const value = `runtimeTemplate${contract.argumentKinds[index] === "localized" ? "Localized" : "Scalar"}Argument(values, ${JSON.stringify(name)})`;
+      const input =
+        contract.argumentKinds[index] === "localized"
+          ? `opaque(${value})`
+          : value;
+      return `          ${runtimeTemplateArgumentName(name)}: ${input},`;
+    })
+    .join("\n");
+  return `    case ${JSON.stringify(template)}:\n      return txa(\n        ${JSON.stringify(contract.pattern)},\n        {\n${inputs}\n        },\n        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",\n      );`;
 }
 
-function templateCase(template) {
-  const sourceNames = [...template.matchAll(/\{([^{}]+)\}/gu)].map(
-    (match) => match[1],
-  );
-  const uniqueSourceNames = [...new Set(sourceNames)];
-  const normalizedNames = uniqueSourceNames.map(argumentName);
-  if (new Set(normalizedNames).size !== normalizedNames.length) {
-    throw new Error(
-      `Runtime-template arguments collide after normalization: ${template}`,
-    );
+const templateImports = templates.length === 0 ? "" : ", opaque, txa";
+const templateHelpers = templates.length === 0
+  ? ""
+  : `function runtimeTemplateLocalizedArgument(
+  values: Readonly<Record<string, RuntimeTemplateValue>>,
+  name: string,
+): LocalizedString {
+  const value = values[name];
+  if (value === undefined) throw new Error(\`missing value for {\${name}}\`);
+  if (!(value instanceof LocalizedString)) {
+    throw new Error(\`expected localized value for {\${name}}\`);
   }
-  const pattern = template.replace(
-    /\{([^{}]+)\}/gu,
-    (_match, name) => `{${argumentName(name)}}`,
-  );
-  const inputs = uniqueSourceNames
-    .map(
-      (name) =>
-        `          ${argumentName(name)}: runtimeTemplateArgument(values, ${JSON.stringify(name)}),`,
-    )
-    .join("\n");
-  return `    case ${JSON.stringify(template)}:\n      return txa(\n        ${JSON.stringify(pattern)},\n        {\n${inputs}\n        },\n        "[game-data] Template whose runtime arguments are semantic values supplied by the presentation adapter.",\n      );`;
+  return value;
 }
+
+function runtimeTemplateScalarArgument(
+  values: Readonly<Record<string, RuntimeTemplateValue>>,
+  name: string,
+): number | boolean {
+  const value = values[name];
+  if (value === undefined) throw new Error(\`missing value for {\${name}}\`);
+  if (value instanceof LocalizedString) {
+    throw new Error(\`expected scalar value for {\${name}}\`);
+  }
+  return value;
+}
+`;
+const unusedValues = templates.length === 0 ? "  void values;\n" : "";
 
 const source = `// Generated by scripts/generate-localized-runtime-templates.mjs. Do not edit.
 //
@@ -103,13 +119,7 @@ const source = `// Generated by scripts/generate-localized-runtime-templates.mjs
 // finite compatibility templates as statically extractable Trox messages so
 // runtime adapters can supply arguments without returning plain strings.
 
-import {
-  LocalizedString,
-  opaque,
-  tx,
-  txa,
-  type ArgumentInput,
-} from "@trox/runtime";
+import { LocalizedString, tx${templateImports} } from "@trox/runtime";
 
 export type RuntimeTemplateValue = number | boolean | LocalizedString;
 
@@ -143,20 +153,13 @@ ${dreamsignImageAlts.map((line) => `    case ${JSON.stringify(line)}:\n      ret
   }
 }
 
-function runtimeTemplateArgument(
-  values: Readonly<Record<string, RuntimeTemplateValue>>,
-  name: string,
-): ArgumentInput {
-  const value = values[name];
-  if (value === undefined) throw new Error(\`missing value for {\${name}}\`);
-  return value instanceof LocalizedString ? opaque(value) : value;
-}
+${templateHelpers}
 
 export function localizedRuntimeTemplate(
   sourceText: string,
   values: Readonly<Record<string, RuntimeTemplateValue>>,
 ): LocalizedString | null {
-  switch (sourceText) {
+${unusedValues}  switch (sourceText) {
 ${templates.map(templateCase).join("\n")}
     default:
       return null;

@@ -7,7 +7,7 @@ import type {
 } from "../types/content";
 import type { SiteState, SiteType } from "../types/journey";
 import { SITE_TYPES } from "../types/site-type";
-import { localizedSourceText } from "../runtime/localization/runtime";
+import { bindSourceTransport, hydrateSourceTransport, localizedSourceText } from "../runtime/localization/runtime";
 import { localizedGuideDialogue } from "../runtime/localization/runtime-templates.generated";
 
 // Re-export the content types so callers can import dreamscape/guide/affiliation
@@ -87,7 +87,18 @@ export async function loadDreamGuides(): Promise<DreamGuideContent[]> {
       "Failed to load dream guide data: malformed dream-guides-data.json",
     );
   }
-  return [...catalog.guides];
+  return catalog.guides.map((guide) => ({
+    ...guide,
+    dialogue: Object.fromEntries(Object.entries(guide.dialogue).map(
+      ([context, lines]) => [
+        context,
+        lines.map((line, index) => hydrateSourceTransport(
+          line,
+          `Dream Guide ${guide.id} ${context}[${String(index)}]`,
+        )),
+      ],
+    )),
+  }));
 }
 
 function isDreamGuideContent(value: unknown): value is DreamGuideContent {
@@ -139,22 +150,27 @@ function isDreamGuideContent(value: unknown): value is DreamGuideContent {
     if (
       !Array.isArray(lines) ||
       lines.length === 0 ||
-      lines.some(
-        (line: unknown) => typeof line !== "string" || line.trim() === "",
-      )
+      lines.some((line: unknown) =>
+        (typeof line !== "string" || line.trim() === "") &&
+        !(typeof line === "object" && line !== null &&
+          "format" in line && line.format === "trox-source-message-ref"))
     ) {
       return false;
     }
-    for (const line of lines as string[]) {
+    for (const line of lines) {
+      if (typeof line !== "string") {
+        if (context === "gamble-ladder-climb") hasWinEssenceSlot = true;
+        continue;
+      }
       const slots = [...line.matchAll(TEMPLATE_SLOT)].map((match) => match[1]);
       if (
         slots.some(
-          (slot) => context !== "gamble-ladder-climb" || slot !== "win-essence",
+          (slot) => context !== "gamble-ladder-climb" || slot !== "win_essence",
         )
       ) {
         return false;
       }
-      if (context === "gamble-ladder-climb" && slots.includes("win-essence")) {
+      if (context === "gamble-ladder-climb" && slots.includes("win_essence")) {
         hasWinEssenceSlot = true;
       }
     }
@@ -272,6 +288,7 @@ export function guideDialogueLines(
     throw new Error(`Dream Guide ${guide.id} has no ${context} dialogue.`);
   }
   return lines.map((line) => {
+    if (typeof line !== "string") return bindSourceTransport(line, values);
     const staticDialogue = localizedGuideDialogue(line);
     return staticDialogue ?? localizedSourceText(line, values);
   });

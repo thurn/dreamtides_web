@@ -114,7 +114,8 @@
         three_gate: [Tx("The game's called Three Gates. Place your bet on the next card drawn!")],
         ladder_climb: [
           Tx(
-            "The game's Ladder Climb. Match or beat the target to win {{win-essence}} Essence and a Dreamsign. Try again with better odds if you miss!"
+            text: "The game's Ladder Climb. Match or beat the target to win {win_essence} Essence and a Dreamsign. Try again with better odds if you miss!",
+            placeholders: {"win_essence": Scalar},
           ),
         ],
         starway_stairs: [

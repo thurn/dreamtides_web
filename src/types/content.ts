@@ -85,7 +85,7 @@ export interface DreamGuideContent {
   homeDreamscapeId: string;
   siteType: SiteType;
   portraitSource: string;
-  dialogue: Readonly<Record<string, readonly string[]>>;
+  dialogue: Readonly<Record<string, readonly import("../runtime/localization/runtime").SourceTransport[]>>;
   homeSpecialty: string;
 }
 

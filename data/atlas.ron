@@ -189,12 +189,18 @@ AtlasCatalog(
     ),
     // Fallback body for the guideless starter node's reveal card.
     starter_body: Tx("A quiet place where every dream journey begins."),
-    // Templates for a revealed dreamscape's affiliation card. `{name}` is the
-    // affiliation name; `{card-theme}` comes from that affiliation's
+    // Templates for a revealed dreamscape's affiliation card. `{affiliation_name}` is the
+    // affiliation name; `{card_theme}` comes from that affiliation's
     // `atlas_card_theme`. The compiler requires exactly these placeholders.
     affiliation: (
-      title_template: Tx("Affiliation: {{name}}"),
-      body_template: Tx("{{card-theme}} cards are more likely here."),
+      title_template: Tx(
+        text: "Affiliation: {affiliation_name}",
+        placeholders: {"affiliation_name": Opaque},
+      ),
+      body_template: Tx(
+        text: "{card_theme} cards are more likely here.",
+        placeholders: {"card_theme": Opaque},
+      ),
     ),
   ),
 )

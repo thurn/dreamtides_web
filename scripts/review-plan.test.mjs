@@ -72,6 +72,7 @@ describe("fast review plan", () => {
       shouldTypecheck: false,
       testInputs: [
         "scripts/bump-trox.test.mjs",
+        "scripts/canonical-localization-audit.test.mjs",
         "scripts/trox-csv-sync.test.mjs",
         "scripts/trox-generated-check.test.mjs",
         "scripts/trox.test.mjs",
@@ -85,6 +86,7 @@ describe("fast review plan", () => {
         shouldCheckTrox: true,
         testInputs: [
           "scripts/bump-trox.test.mjs",
+          "scripts/canonical-localization-audit.test.mjs",
           "scripts/trox-csv-sync.test.mjs",
           "scripts/trox-generated-check.test.mjs",
           "scripts/trox.test.mjs",
@@ -98,6 +100,7 @@ describe("fast review plan", () => {
       shouldCheckTrox: true,
       testInputs: [
         "scripts/bump-trox.test.mjs",
+        "scripts/canonical-localization-audit.test.mjs",
         "scripts/trox-csv-sync.test.mjs",
         "scripts/trox-generated-check.test.mjs",
         "scripts/trox.mjs",

@@ -15,7 +15,7 @@ import type {
 } from "../../types/journey";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
-import { localizedSourceText } from "../../runtime/localization/runtime";
+import { bindSourceTransport, localizedSourceText } from "../../runtime/localization/runtime";
 
 export function buildRandomSiteView(params: {
   sceneNode: DreamscapeNode | null;
@@ -28,7 +28,7 @@ export function buildRandomSiteView(params: {
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
   return {
-    title: localizedSourceText(
+    title: bindSourceTransport(
       (
         params.sitesData.siteTypes.RandomSite.presentation as Extract<
           import("../../types/sites-data").SitePresentation,

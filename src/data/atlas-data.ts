@@ -1,4 +1,5 @@
 import type { AtlasData } from "../types/atlas-data";
+import { hydrateSourceTransport } from "../runtime/localization/runtime";
 
 export type { AtlasData } from "../types/atlas-data";
 
@@ -24,7 +25,33 @@ export async function loadAtlasData(): Promise<AtlasData> {
   ) {
     throw new Error("Failed to load Atlas data: malformed atlas-data.json");
   }
-  return value as AtlasData;
+  const raw = value as AtlasData;
+  return {
+    ...raw,
+    presentation: {
+      ...raw.presentation,
+      unseenTitle: hydrateSourceTransport(
+        raw.presentation.unseenTitle,
+        "Atlas unseen title",
+      ),
+      unseenBody: hydrateSourceTransport(
+        raw.presentation.unseenBody,
+        "Atlas unseen body",
+      ),
+      starterBody: hydrateSourceTransport(
+        raw.presentation.starterBody,
+        "Atlas starter body",
+      ),
+      affiliationTitleTemplate: hydrateSourceTransport(
+        raw.presentation.affiliationTitleTemplate,
+        "Atlas affiliation title template",
+      ),
+      affiliationBodyTemplate: hydrateSourceTransport(
+        raw.presentation.affiliationBodyTemplate,
+        "Atlas affiliation body template",
+      ),
+    },
+  };
 }
 
 /** Expands one validated Atlas presentation template. */

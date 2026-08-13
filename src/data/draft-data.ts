@@ -1,6 +1,8 @@
 import type { DraftData } from "../types/draft-data";
 import { CARD_RARITIES } from "../types/cards";
 import generatedDraftData from "../generated/config/draft-data.json";
+import { SourceMessage } from "@trox/runtime";
+import { hydrateSourceTransport } from "../runtime/localization/runtime";
 
 export type {
   DraftData,
@@ -51,12 +53,6 @@ export function parseDraftData(value: unknown): DraftData {
     !SHA256_HEX.test(value.foldHash) ||
     !isRecord(value.presentation) ||
     !hasExactKeys(value.presentation, ["progress"]) ||
-    typeof value.presentation.progress !== "string" ||
-    value.presentation.progress.trim().length === 0 ||
-    [...value.presentation.progress.matchAll(/\{([^{}]+)\}/gu)]
-      .map((match) => match[1])
-      .sort()
-      .join(",") !== "pickNumber,pickTotal" ||
     !isRecord(value.offers) ||
     !hasExactKeys(value.offers, ["cardsPerOffer", "picksPerSite"]) ||
     !isPositiveInteger(value.offers.cardsPerOffer) ||
@@ -70,6 +66,32 @@ export function parseDraftData(value: unknown): DraftData {
     !isPositiveInteger(value.pool.tides4.dealSize) ||
     !isPositiveInteger(value.pool.tides4.copyCap) ||
     !isPositiveInteger(value.pool.tides4.maxFacets)
+  ) {
+    throw new Error("Failed to load draft data: malformed draft-data.json");
+  }
+  let progress;
+  try {
+    progress = hydrateSourceTransport(
+      value.presentation.progress,
+      "Draft progress presentation",
+    );
+  } catch {
+    throw new Error("Failed to load draft data: malformed draft-data.json");
+  }
+  if (progress instanceof SourceMessage) {
+    const schemas = progress.argumentSchemas;
+    if (
+      Object.keys(schemas).sort().join(",") !== "pick_number,pick_total" ||
+      Object.values(schemas).some((schema) => schema.kind !== "scalar")
+    ) {
+      throw new Error("Failed to load draft data: malformed draft-data.json");
+    }
+  } else if (
+    typeof progress === "string" &&
+    [...progress.matchAll(/\{([^{}]+)\}/gu)]
+      .map((match) => match[1])
+      .sort()
+      .join(",") !== "pick_number,pick_total"
   ) {
     throw new Error("Failed to load draft data: malformed draft-data.json");
   }
@@ -97,7 +119,10 @@ export function parseDraftData(value: unknown): DraftData {
   ) {
     throw new Error("Failed to load draft data: malformed draft-data.json");
   }
-  return value as unknown as DraftData;
+  return {
+    ...(value as unknown as DraftData),
+    presentation: { progress },
+  };
 }
 
 /** Generated compatibility view for code paths that need RON-owned defaults. */

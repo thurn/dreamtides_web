@@ -5,9 +5,21 @@ import {
   type GlossaryCatalogEntry,
   type GlossaryProjection,
 } from "./glossary";
+import { LocalizedString, SourceMessage } from "@trox/runtime";
+import {
+  bindSourceTransport,
+  localizedSourceText,
+  resolveSource,
+  type SourceTransport,
+} from "../runtime/localization/runtime";
 
 /** The semantic owner whose rules text is being explained. */
 export type RulesTextGlossaryOwner = "card" | "dreamAvatar" | "dreamsign";
+
+export interface ProjectedGlossaryCatalogEntry extends GlossaryCatalogEntry {
+  readonly localizedTerm: LocalizedString;
+  readonly localizedDefinition: LocalizedString;
+}
 
 /**
  * Reusable utility that scans a string for glossary terms and returns the
@@ -75,15 +87,25 @@ function projectionMatches(
   return new RegExp(projection.pattern, "iu").exec(text) ?? undefined;
 }
 
-function renderProjectionTemplate(
-  template: string,
+function projectionValues(
+  template: SourceTransport,
   entry: GlossaryCatalogEntry,
   match: readonly string[],
-): string {
-  return template.replace(/\{(term|\d+)\}/gu, (_, key: string) => {
-    if (key === "term") return entry.term;
-    return match[Number.parseInt(key, 10)] ?? "";
-  });
+): Readonly<Record<string, number | LocalizedString>> {
+  const values: Record<string, number | LocalizedString> = {};
+  const names = typeof template === "string"
+    ? [...template.matchAll(/\{([a-z][a-z0-9_]*|\d+)\}/gu)].map((value) => value[1] ?? "")
+    : template instanceof SourceMessage
+      ? Object.keys(template.argumentSchemas)
+      : [];
+  for (const name of names) {
+    if (name === "term") values.term = localizedSourceText(entry.term);
+    else if (name === "amount" || name === "1") {
+      values[name] = Number(match[1] ?? 0);
+    }
+    else throw new Error(`Unsupported glossary projection argument {${name}}.`);
+  }
+  return values;
 }
 
 /**
@@ -97,23 +119,37 @@ export function projectGlossaryEntry(
   entry: GlossaryCatalogEntry,
   text: string,
   owner: RulesTextGlossaryOwner = "card",
-): GlossaryCatalogEntry {
+): ProjectedGlossaryCatalogEntry {
   for (const projection of entry.projections ?? []) {
     const match = projectionMatches(projection, text, owner);
     if (match === undefined) continue;
+    const localizedTerm =
+        projection.term === undefined
+          ? localizedSourceText(entry.term)
+          : bindSourceTransport(
+              projection.term,
+              projectionValues(projection.term, entry, match),
+            );
+    const localizedDefinition =
+        projection.definition === undefined
+          ? localizedSourceText(entry.definition)
+          : bindSourceTransport(
+              projection.definition,
+              projectionValues(projection.definition, entry, match),
+            );
     return {
       ...entry,
-      term:
-        projection.term === undefined
-          ? entry.term
-          : renderProjectionTemplate(projection.term, entry, match),
-      definition:
-        projection.definition === undefined
-          ? entry.definition
-          : renderProjectionTemplate(projection.definition, entry, match),
+      term: resolveSource(localizedTerm),
+      definition: resolveSource(localizedDefinition),
+      localizedTerm,
+      localizedDefinition,
     };
   }
-  return entry;
+  return {
+    ...entry,
+    localizedTerm: localizedSourceText(entry.term),
+    localizedDefinition: localizedSourceText(entry.definition),
+  };
 }
 
 /**
@@ -147,7 +183,7 @@ export function extractGlossaryTerms(text: string): GlossaryCatalogEntry[] {
 export function extractProjectedGlossaryTerms(
   text: string,
   owner: RulesTextGlossaryOwner = "card",
-): GlossaryCatalogEntry[] {
+): ProjectedGlossaryCatalogEntry[] {
   return extractGlossaryTerms(text).map((entry) =>
     projectGlossaryEntry(entry, text, owner),
   );

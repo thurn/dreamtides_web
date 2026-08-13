@@ -8,7 +8,7 @@ use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
-use super::localization::{joined_source_text, source_text};
+use super::localization::{joined_source_text, source_text, source_transport_value};
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -201,9 +201,9 @@ struct CompatibilityCard {
 #[derive(Serialize)]
 struct CompatibilityAutomationPrompt {
     key: String,
-    title: String,
-    subtitle: String,
-    instructions: String,
+    title: toml::Value,
+    subtitle: toml::Value,
+    instructions: toml::Value,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     choices: Vec<CompatibilityPromptChoice>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
@@ -213,7 +213,7 @@ struct CompatibilityAutomationPrompt {
 #[derive(Serialize)]
 struct CompatibilityPromptChoice {
     key: String,
-    label: String,
+    label: toml::Value,
 }
 
 #[derive(Serialize)]
@@ -299,16 +299,16 @@ fn number(value: f64) -> toml::Value {
 fn lower_automation_prompt(prompt: AutomationPrompt) -> Result<CompatibilityAutomationPrompt> {
     Ok(CompatibilityAutomationPrompt {
         key: prompt.key,
-        title: source_text(&prompt.title)?,
-        subtitle: source_text(&prompt.subtitle)?,
-        instructions: source_text(&prompt.instructions)?,
+        title: source_transport_value(&prompt.title)?,
+        subtitle: source_transport_value(&prompt.subtitle)?,
+        instructions: source_transport_value(&prompt.instructions)?,
         choices: prompt
             .choices
             .into_iter()
             .map(|choice| {
                 Ok(CompatibilityPromptChoice {
                     key: choice.key,
-                    label: source_text(&choice.label)?,
+                    label: source_transport_value(&choice.label)?,
                 })
             })
             .collect::<Result<Vec<_>>>()?,
@@ -365,8 +365,8 @@ pub(crate) fn validate_rules(source: &DreamwellRules) -> Result<()> {
 fn validate_cards(source: &[DreamwellCardDefinition]) -> Result<()> {
     ensure!(!source.is_empty(), "Dreamwell catalog must not be empty");
     let mut ids = BTreeSet::new();
-    let placeholder =
-        Regex::new(r"\{([a-z][a-zA-Z0-9]*)\}").expect("static prompt placeholder regex");
+    let placeholder = Regex::new(r"\{([a-z][a-z0-9]*(?:_[a-z0-9]+)*)\}")
+        .expect("static prompt placeholder regex");
 
     for card in source {
         ensure!(
@@ -432,7 +432,7 @@ fn validate_automation(card: &DreamwellCardDefinition, placeholder: &Regex) -> R
         for argument in &prompt.arguments {
             ensure!(
                 is_argument_name(&argument.name),
-                "{path}.arguments name must use lower camelCase"
+                "{path}.arguments name must use lower snake_case"
             );
             ensure!(
                 argument_names.insert(argument.name.clone()),
@@ -479,8 +479,13 @@ fn is_key(value: &str) -> bool {
 }
 
 fn is_argument_name(value: &str) -> bool {
-    value.as_bytes().first().is_some_and(u8::is_ascii_lowercase)
-        && value.bytes().all(|byte| byte.is_ascii_alphanumeric())
+    !value.is_empty()
+        && value.split('_').all(|part| {
+            !part.is_empty()
+                && part
+                    .bytes()
+                    .all(|byte| byte.is_ascii_lowercase() || byte.is_ascii_digit())
+        })
 }
 
 #[cfg(test)]
@@ -607,12 +612,12 @@ DreamwellCatalog(
         let prompt = r#"automation: [AutomationPrompt(
       key: "choose-card",
       title: Tx("Choose up to {{count}}"),
-      subtitle: Tx("Cards cost at most {{maximumCost}}"),
+      subtitle: Tx(text: "Cards cost at most {maximum_cost}", placeholders: {"maximum_cost": Scalar}),
       instructions: Tx("Choose cards."),
       choices: [PromptChoice(key: "confirm", label: Tx("Choose {{count}}"))],
       arguments: [
         PromptArgument(name: "count", kind: Count),
-        PromptArgument(name: "maximumCost", kind: MaximumCost),
+        PromptArgument(name: "maximum_cost", kind: MaximumCost),
       ],
     )],
     art: ("#;

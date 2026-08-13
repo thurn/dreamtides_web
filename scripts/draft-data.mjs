@@ -37,6 +37,16 @@ function positiveInteger(value, path) {
   return value;
 }
 
+function isSourceMessageRef(value) {
+  return value !== null &&
+    typeof value === "object" &&
+    !Array.isArray(value) &&
+    value.format === "trox-source-message-ref" &&
+    typeof value.entry_id === "string" &&
+    typeof value.source_signature === "string" &&
+    typeof value.contract_signature === "string";
+}
+
 function stable(value) {
   if (Array.isArray(value)) return value.map(stable);
   if (typeof value !== "object" || value === null) return value;
@@ -69,17 +79,24 @@ export function compileDraftData(sourceValue) {
     "progress",
   ]);
   const progress = presentationSource.progress;
+  const progressSlots = typeof progress === "string"
+    ? [...progress.matchAll(/\{([^{}]+)\}/gu)]
+      .map((match) => match[1]
+        .replace(/([a-z0-9])([A-Z])/gu, "$1_$2")
+        .replaceAll("-", "_")
+        .toLowerCase())
+      .sort()
+      .join(",")
+    : "";
   if (
+    !isSourceMessageRef(progress) && (
     typeof progress !== "string" ||
     progress.trim() === "" ||
-    [...progress.matchAll(/\{([^{}]+)\}/gu)]
-      .map((match) => match[1])
-      .sort()
-      .join(",") !== "pickNumber,pickTotal"
+    progressSlots !== "pick_number,pick_total")
   ) {
     fail(
       "presentation.progress",
-      "expected exactly {pickNumber} and {pickTotal}",
+      "expected exactly {pick_number} and {pick_total}",
     );
   }
 

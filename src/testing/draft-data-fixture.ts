@@ -7,7 +7,7 @@ export function draftDataFixture(
     schemaVersion: 1,
     contentHash: "a".repeat(64),
     foldHash: "b".repeat(64),
-    presentation: { progress: "Draft ({pickNumber}/{pickTotal})" },
+    presentation: { progress: "Draft ({pick_number}/{pick_total})" },
     offers: {
       cardsPerOffer: 4,
       picksPerSite: 5,

@@ -1,5 +1,7 @@
 import type { AuguryArchetypeData, AuguryData } from "../types/augury-data";
 import type { MerchantArchetypeId } from "../journey_v2/archetypes/types";
+import { hydrateSourceTransport } from "../runtime/localization/runtime";
+import { LocalizedString, SourceMessage } from "@trox/runtime";
 
 export type { AuguryArchetypeData, AuguryData } from "../types/augury-data";
 
@@ -42,20 +44,44 @@ export function parseAuguryData(value: unknown): AuguryData {
     value.archetypes.filter((entry) => isRecord(entry) && entry.enabled === true).length < 2 ||
     families.size < 2
   ) throw new Error("Failed to load Augury data: malformed augury-data.json");
-  return value as unknown as AuguryData;
+  const raw = value as unknown as AuguryData;
+  return {
+    ...raw,
+    archetypes: raw.archetypes.map((entry) => ({
+      ...entry,
+      presentation: {
+        ...entry.presentation,
+        headline: hydratePresentationText(entry.presentation.headline),
+        subtitle: hydratePresentationText(entry.presentation.subtitle),
+      },
+    })),
+  };
 }
 
 function isNonemptyString(value: unknown): value is string {
   return typeof value === "string" && value.trim() !== "";
 }
 
+function isSourceMessageRef(value: unknown): boolean {
+  return isRecord(value) &&
+    value.format === "trox-source-message-ref" &&
+    typeof value.entry_id === "string" &&
+    typeof value.source_signature === "string" &&
+    typeof value.contract_signature === "string";
+}
+
+function isLocalizedTransport(value: unknown): boolean {
+  return isNonemptyString(value) || isSourceMessageRef(value) ||
+    value instanceof LocalizedString || value instanceof SourceMessage;
+}
+
 function isPresentationText(value: unknown): boolean {
   if (!isRecord(value)) return false;
-  if (value.kind === "text") return isNonemptyString(value.text);
-  if (value.kind === "count") return isNonemptyString(value.one) && isNonemptyString(value.other);
+  if (value.kind === "text") return isLocalizedTransport(value.text);
+  if (value.kind === "count") return isLocalizedTransport(value.one) && isLocalizedTransport(value.other);
   return value.kind === "category" &&
     ["character", "event", "cheap", "midCost", "expensive", "fast", "subtype", "package"]
-      .every((key) => isNonemptyString(value[key]));
+      .every((key) => isLocalizedTransport(value[key]));
 }
 
 function isPresentation(value: unknown): boolean {
@@ -64,6 +90,17 @@ function isPresentation(value: unknown): boolean {
       (isRecord(value.backgroundArt) && value.backgroundArt.source === "card" &&
         typeof value.backgroundArt.imageNumber === "number" &&
         Number.isInteger(value.backgroundArt.imageNumber) && value.backgroundArt.imageNumber > 0));
+}
+
+function hydratePresentationText(
+  value: AuguryArchetypeData["presentation"]["headline"],
+): AuguryArchetypeData["presentation"]["headline"] {
+  return Object.fromEntries(Object.entries(value).map(([key, field]) => [
+    key,
+    key === "kind"
+      ? field
+      : hydrateSourceTransport(field, `Augury presentation ${key}`),
+  ])) as AuguryArchetypeData["presentation"]["headline"];
 }
 
 export async function loadAuguryData(): Promise<AuguryData> {

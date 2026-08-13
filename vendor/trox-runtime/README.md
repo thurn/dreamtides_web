@@ -39,7 +39,7 @@ Trox provides:
 - Inline complete English messages.
 - Named placeholders in Rust and TypeScript.
 - Exact, cardinal, ordinal, and semantic selection.
-- Static RON message extraction.
+- RON message and typed-template extraction.
 - Locale-specific row expansion.
 - Non-destructive CSV synchronization.
 - Deterministic JSON bundles.
@@ -619,7 +619,8 @@ scanner handles `.ts` and `.tsx` without module resolution.
 
 ## RON source extraction
 
-RON is limited to flat static messages:
+RON supports flat static messages and text templates with explicitly typed
+placeholders:
 
 ```ron
 (
@@ -634,6 +635,14 @@ RON is limited to flat static messages:
         meaning: "open-state",
         description: "Status for a room accepting players.",
     ),
+    deck_summary: Tx(
+        text: "Deck: {deck_name} ({count})",
+        description: "Deck label followed by its card count.",
+        placeholders: {
+            "deck_name": Opaque,
+            "count": Scalar,
+        },
+    ),
 )
 ```
 
@@ -643,10 +652,18 @@ Rules:
 - Use the short `Tx("text")` form for plain static text.
 - Use the named form when supplying `description` or `meaning`; `text` is
   required.
-- `description` and `meaning` are optional named fields.
+- `description`, `meaning`, and `placeholders` are optional named fields.
+- Every placeholder in `text` must have exactly one declaration. Use `Scalar`
+  for text, finite numbers, or booleans; `Opaque` for an atomic localized
+  value; and `Term(form: "counted", number: true)` for a term with an exact
+  form and number-presence contract.
+- Generated descriptions include the structural RON field path, such as
+  `Path: CardDefinition.ability_text`. Array indexes are omitted so every value
+  in the same field shares a stable path.
 - Unwrapped strings are ignored.
-- Placeholders and selectors are rejected.
-- Argument maps, terms, and opaque values are rejected.
+- Selectors are rejected. RON templates are text patterns only.
+- Runtime argument values are not embedded in RON; only their schemas are
+  declared.
 - `{{` and `}}` render visible braces.
 
 Rejected by source extraction:
@@ -654,7 +671,8 @@ Rejected by source extraction:
 ```ron
 (
     ignored: "Close deck browser",
-    placeholder: Tx(text: "Deck: {deck_name}"),
+    undeclared: Tx(text: "Deck: {deck_name}"),
+    extra: Tx(text: "Deck", placeholders: { "deck_name": Opaque }),
 )
 ```
 
@@ -667,7 +685,9 @@ ron_description_defaults: {
 },
 ```
 
-An explicit description overrides a matching path default.
+An explicit description overrides a matching path default. The structural RON
+field path is appended to either description; when neither is present, the path
+itself supplies the description.
 
 ### Serde round-tripping
 
@@ -691,10 +711,60 @@ assert_eq!(decoded, record);
 ```
 
 This application-data representation uses the same `Tx` forms as source
-extraction. It supports only flat static values. A value without a meaning
-serializes as `Tx("Foo")`; a value with a meaning uses the named form
-`Tx(text: "Open", meaning: "open-state")` so the meaning survives the round
-trip. Dynamic patterns, arguments, and selectors return a serialization error.
+extraction. A value without a meaning serializes as `Tx("Foo")`; a value with
+a meaning uses the named form `Tx(text: "Open", meaning: "open-state")` so the
+meaning survives the round trip. Selectors and already-bound dynamic values
+return a RON serialization error.
+
+A placeholder-bearing `Tx` deserializes as an unbound template. Bind its
+runtime values before canonical serialization or localization:
+
+```rust
+let template: LocalizedString = ron::from_str(
+    r#"Tx(
+        text: "Deck: {deck_name} ({count})",
+        placeholders: { "deck_name": Opaque, "count": Scalar },
+    )"#,
+)?;
+let value = template.bind_ron_template(tx_args![
+    deck_name => opaque(tx("Night Garden", "Deck name.")),
+    count => 40_u32,
+])?;
+let rendered = localizer.resolve_checked(&value)?;
+```
+
+### Transporting RON messages without text lowering
+
+Use a `SourceMessageRef` when application data must cross a Rust-to-TypeScript
+boundary before runtime arguments are available. The reference contains only
+stable entry, identity, and contract signatures. It contains neither English
+source text nor runtime argument values.
+
+```rust
+let template: LocalizedString = ron::from_str(
+    r#"Tx(text: "Erode {count}", placeholders: { "count": Scalar })"#,
+)?;
+let source_ref = template.source_message_ref()?;
+let json = source_ref.to_canonical_json()?;
+```
+
+Authorize the parsed reference with the deployed source bundle, then bind its
+exact typed argument contract:
+
+```ts
+const message = sourceCatalog.sourceMessageFromJSON(json);
+const localized = message.bind({ count: 3 });
+const rendered = localizer.resolve(localized);
+```
+
+`sourceMessageFromValue` accepts an already-parsed JSON value. A
+`SourceMessage` exposes an immutable `argumentSchemas` record and rejects
+missing, extra, wrong-kind, unauthorized term-form, and non-atomic opaque
+bindings. Static references bind with an empty record. Rust provides the same
+catalog authorization and `SourceMessage::bind` contract.
+
+The bound argument names and kinds must exactly match their declarations. Term
+bindings must also match the declared form and whether a number is present.
 
 Descriptions do not round-trip through `LocalizedString`. They are authoring
 metadata and are not retained in the runtime value or message identity. For
@@ -861,6 +931,10 @@ trox bundle --allow-missing
 
 # Remove reviewed obsolete rows.
 trox prune --locale es
+
+# Create and merge a curated translator workbook.
+trox handoff export --locale es --output localization/handoff/es.xlsx
+trox handoff import --locale es --input localization/handoff/es.xlsx
 ```
 
 Extraction is transactional:
@@ -870,6 +944,9 @@ Extraction is transactional:
 - Successful replacements are atomic.
 - Repeated extraction without changes is byte-identical.
 - Parallel scanning does not change output order.
+- Message rows follow source path, then numeric line and column. When the same
+  message appears more than once, its earliest occurrence determines its
+  position.
 
 Extraction preserves:
 
@@ -898,6 +975,21 @@ english,description,translation
 Managed IDs are tool-owned. Selector conditions are included in the description
 so translators can read all source context in one column; translators edit
 surface text and notes, not selectors.
+
+For an external translator, use `trox handoff export` instead of sending the
+canonical CSV. The `.xlsx` handoff contains active rows only; obsolete rows and
+unknown workflow columns remain in the canonical CSV as translation memory.
+Only the Translation and Translator note columns are editable. Managed metadata
+is hidden and protected, and every cell is written as spreadsheet text so source
+strings beginning with `=`, `+`, `-`, or `@` cannot become formulas.
+
+`trox handoff import` rejects formulas, added or removed rows and columns,
+modified IDs, source metadata, or placeholder declarations, a changed source
+catalog, and canonical CSV edits made after export. Imported translations also
+run the project's normal placeholder and localization lint policy. A hidden
+manifest binds the workbook to the locale, source locale, active row set, and
+catalog fingerprint. Worksheet protection is for editing guidance; import
+validation is the integrity boundary.
 
 Condition examples:
 
@@ -999,15 +1091,17 @@ Bundles are canonical JSON containing:
 - Validated term forms and facet metadata.
 
 The source bundle authorizes message identities, full signatures, visible
-argument schemas, terms, and forms. Target bundles contain translated rows and
-compatibility data.
+argument schemas, terms, and forms. Version 1.1 bundles also carry a contract
+signature derived from the identity and argument schemas. Target bundles
+contain translated rows and compatibility data.
 
 Loading rejects unknown major versions, unsupported features, noncanonical
 JSON, duplicate IDs, irreproducible IDs, invalid paths, and invalid signatures.
 
 A catalog mismatch can preserve entry-level compatibility in normal mode.
-Entries with matching IDs and full signatures remain usable; incompatible
-entries use source fallback. Strict construction rejects any mismatch.
+Version 1.1 entries require matching contract signatures; version 1.0 entries
+use their stable source signatures. Incompatible entries use source fallback.
+Strict construction rejects any catalog-fingerprint mismatch.
 
 Runtime responsibilities:
 
@@ -1072,7 +1166,8 @@ Runtime loading validates:
 - Expansion row IDs.
 
 Shared fixtures cover static and dynamic identities, canonical wire bytes,
-argument authorization, nested selectors, lookup, and fallback.
+source-message references, argument authorization, nested selectors, lookup,
+legacy version upgrades, and fallback.
 
 Before changing identity, bundle, or wire behavior, run:
 

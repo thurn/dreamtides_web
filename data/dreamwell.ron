@@ -203,7 +203,10 @@ DreamwellCatalog(
       automation: [
         AutomationPrompt(
           key: "discard-and-draw",
-          title: Tx("Discard {{count}} cards, then draw {{count}}?"),
+          title: Tx(
+            text: "Discard {count} cards, then draw {count}?",
+            placeholders: {"count": Scalar},
+          ),
           subtitle: Tx("Choose whether to exchange cards from your hand."),
           instructions: Tx("Choose whether to discard and draw the same number of cards."),
           arguments: [PromptArgument(name: "count", kind: Count)],
@@ -211,9 +214,12 @@ DreamwellCatalog(
 
         AutomationPrompt(
           key: "choose-discards",
-          title: Tx("Discard {{count}} cards"),
+          title: Tx(text: "Discard {count} cards", placeholders: {"count": Scalar}),
           subtitle: Tx("Choose cards from your hand."),
-          instructions: Tx("Choose {{count}} cards to discard."),
+          instructions: Tx(
+            text: "Choose {count} cards to discard.",
+            placeholders: {"count": Scalar},
+          ),
           arguments: [PromptArgument(name: "count", kind: Count)],
         ),
       ],
@@ -326,9 +332,12 @@ DreamwellCatalog(
       automation: [
         AutomationPrompt(
           key: "confirm-abandon-and-draw",
-          title: Tx("Abandon a character to draw {{count}}?"),
+          title: Tx(text: "Abandon a character to draw {count}?", placeholders: {"count": Scalar}),
           subtitle: Tx("Choose whether to abandon a character you control."),
-          instructions: Tx("Choose whether to abandon a character and draw {{count}} cards."),
+          instructions: Tx(
+            text: "Choose whether to abandon a character and draw {count} cards.",
+            placeholders: {"count": Scalar},
+          ),
           arguments: [PromptArgument(name: "count", kind: Count)],
         ),
 
@@ -360,10 +369,16 @@ DreamwellCatalog(
       automation: [
         AutomationPrompt(
           key: "discover-card",
-          title: Tx("Discover a ≤{{maximumCost}}● cost card"),
+          title: Tx(
+            text: "Discover a ≤{maximum_cost}● cost card",
+            placeholders: {"maximum_cost": Scalar},
+          ),
           subtitle: Tx("Choose one of the sampled cards."),
-          instructions: Tx("Choose a card costing at most {{maximumCost}}●."),
-          arguments: [PromptArgument(name: "maximumCost", kind: MaximumCost)],
+          instructions: Tx(
+            text: "Choose a card costing at most {maximum_cost}●.",
+            placeholders: {"maximum_cost": Scalar},
+          ),
+          arguments: [PromptArgument(name: "maximum_cost", kind: MaximumCost)],
         ),
       ],
       art: (image: 2622590199),
@@ -427,7 +442,11 @@ DreamwellCatalog(
           instructions: Tx("Choose whether to draw a card or gain energy."),
           choices: [
             PromptChoice(key: "draw-card", label: Tx("Draw a card")),
-            PromptChoice(key: "gain-energy", label: Tx("Gain {{amount}}●")),
+
+            PromptChoice(
+              key: "gain-energy",
+              label: Tx(text: "Gain {amount}●", placeholders: {"amount": Scalar}),
+            ),
           ],
           arguments: [PromptArgument(name: "amount", kind: Amount)],
         ),

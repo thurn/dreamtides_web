@@ -55,7 +55,7 @@ export function GambleSiteScreenAdapter({
               ? "gamble-blackjack"
               : "gamble-three-gate";
   const guideLine = useGuideDialogue(guide, dialogueContext, {
-    "win-essence": ladderGame.economy.winEssence,
+    win_essence: ladderGame.economy.winEssence,
   });
   const view = useMemo(
     () =>

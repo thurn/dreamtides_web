@@ -30,6 +30,7 @@
     "trox:bump": "node scripts/bump-trox.mjs",
     "trox:check-runtime": "node scripts/sync-trox-runtime.mjs --check",
     "trox:check-generated": "node scripts/trox-generated-check.mjs",
+    "trox:audit-canonical": "node scripts/canonical-localization-audit.mjs",
     "trox:check": "node scripts/trox.mjs check",
     "trox:extract": "node scripts/trox.mjs extract",
     "trox:bundle": "node scripts/trox.mjs bundle",

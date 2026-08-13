@@ -1,8 +1,9 @@
 import { type NumberFormat } from "./number-format.js";
-import { LocalizedString, type IdentityDescriptor, type PluralCategory } from "./authoring.js";
+import { LocalizedString, type ArgumentInput, type ArgumentSchema, type IdentityDescriptor, type PluralCategory } from "./authoring.js";
 export { TroxDeserializeError, TroxResolveError, TroxValueError } from "./errors.js";
 export { formatNumber, type NumberFormat } from "./number-format.js";
 export { canonicalJson } from "./canonical-json.js";
+export type { ArgumentSchema } from "./authoring.js";
 export interface BundleTermSurface {
     readonly origin_locale: string;
     readonly text: string;
@@ -28,17 +29,9 @@ export interface BundleRow {
     readonly origin_locale: string;
     readonly translation: string;
 }
-export type ArgumentSchema = {
-    readonly kind: "scalar";
-} | {
-    readonly kind: "opaque";
-} | {
-    readonly kind: "term";
-    readonly form?: string;
-    readonly number: boolean;
-};
 export interface BundleEntry {
     readonly arguments?: Readonly<Record<string, ArgumentSchema>>;
+    readonly contract_signature?: string;
     readonly source_signature: string;
     readonly rows: Readonly<Record<string, BundleRow>>;
     readonly identity?: IdentityDescriptor;
@@ -63,6 +56,16 @@ export interface Bundle {
     readonly terms: Readonly<Record<string, BundleTerm>>;
     readonly version: {
         readonly major: 1;
+        readonly minor: 0 | 1;
+    };
+}
+export interface SourceMessageRef {
+    readonly contract_signature: string;
+    readonly entry_id: string;
+    readonly format: "trox-source-message-ref";
+    readonly source_signature: string;
+    readonly version: {
+        readonly major: 1;
         readonly minor: 0;
     };
 }
@@ -76,7 +79,14 @@ export declare class SourceCatalog {
     readonly fingerprint: string;
     constructor(source: Bundle);
     localizedStringFromJSON(input: string): LocalizedString;
-    private authorizeTerm;
+    sourceMessageFromValue(input: unknown): SourceMessage;
+    sourceMessageFromJSON(input: string): SourceMessage;
+}
+export declare class SourceMessage {
+    #private;
+    get argumentSchemas(): Readonly<Record<string, ArgumentSchema>>;
+    get sourceRef(): SourceMessageRef;
+    bind(inputs: Readonly<Record<string, ArgumentInput>>): LocalizedString;
 }
 export declare class Localizer {
     #private;

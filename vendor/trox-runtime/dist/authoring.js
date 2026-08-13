@@ -194,6 +194,7 @@ export class LocalizedString {
     }
     get entryId() { return this.#wire.entry_id; }
     get sourceSignature() { return this.#wire.source_signature; }
+    get contractSignature() { return contractSignature(this.#wire.identity, schemasFromArguments(this.#wire.arguments)); }
     get identity() { return this.#wire.identity; }
     get arguments() { return this.#wire.arguments; }
     get selectors() { return this.#wire.selectors; }
@@ -231,7 +232,8 @@ export function assertLocalized(rawString) {
     const text = normalized.replaceAll("{", "{{").replaceAll("}", "}}");
     return constructValidated({ pattern: { kind: "text", text }, selectors: [], meaning: ASSERT_LOCALIZED_MEANING }, {});
 }
-function argumentFrom(value) {
+/** @internal */
+export function argumentFrom(value) {
     if (typeof value === "string") {
         assertNfc(value, "argument text");
         return { kind: "text", value };
@@ -266,15 +268,42 @@ function constructValidated(value, args) {
     };
     const wire = {
         arguments: sortRecord(args),
+        get contract_signature() { return contractSignature(identity, schemasFromArguments(args)); },
         get entry_id() { return `tx1_${base32(identityDigest().slice(0, 16))}`; },
         format: "trox-localized-string",
         identity,
         selectors: [...value.selectors].sort((a, b) => comparePaths(a.path, b.path)),
         get source_signature() { return hex(identityDigest()); },
-        version: { major: 1, minor: 0 },
+        version: { major: 1, minor: 1 },
     };
     validateSelectorRecords(wire.identity.pattern, wire.selectors);
     return LocalizedString.fromValidatedWire(wire, CONSTRUCTION_TOKEN);
+}
+/** @internal */
+export function schemasFromArguments(argumentsValue) {
+    return sortRecord(Object.fromEntries(Object.entries(argumentsValue).map(([name, argument]) => [name,
+        argument.kind === "term"
+            ? { kind: "term", ...(argument.form === undefined ? {} : { form: argument.form }), number: argument.number !== undefined }
+            : { kind: argument.kind === "opaque" ? "opaque" : "scalar" },
+    ])));
+}
+/** @internal */
+export function contractSignature(identity, argumentsValue) {
+    return hex(blake3(new TextEncoder().encode(canonicalJson({ arguments: sortRecord(argumentsValue), identity }))));
+}
+/** @internal */
+export function localizedFromSource(identity, argumentsValue, ids) {
+    validateArgumentMap(identity.pattern, argumentsValue);
+    return LocalizedString.fromValidatedWire({
+        arguments: sortRecord(argumentsValue),
+        contract_signature: ids.contractSignature,
+        entry_id: ids.entryId,
+        format: "trox-localized-string",
+        identity,
+        selectors: [],
+        source_signature: ids.sourceSignature,
+        version: { major: 1, minor: 1 },
+    }, CONSTRUCTION_TOKEN);
 }
 /** @internal */
 export function assertedLocalizedPattern(value) {
@@ -326,7 +355,7 @@ function validateArgument(argument) {
             const nested = argument.value;
             if (nested === null || typeof nested !== "object" || Array.isArray(nested)
                 || nested.format !== "trox-localized-string"
-                || nested.version?.major !== 1 || nested.version.minor !== 0
+                || nested.version?.major !== 1 || (nested.version.minor !== 0 && nested.version.minor !== 1)
                 || nested.identity?.pattern?.kind !== "text"
                 || nested.arguments === null || typeof nested.arguments !== "object"
                 || Object.keys(nested.arguments).length !== 0
@@ -337,6 +366,10 @@ function validateArgument(argument) {
             const nestedDigest = blake3(new TextEncoder().encode(canonicalJson(nested.identity)));
             if (nested.entry_id !== `tx1_${base32(nestedDigest.slice(0, 16))}` || nested.source_signature !== hex(nestedDigest)) {
                 throw new TroxValueError("trox.identity-mismatch", "opaque value identity hash mismatch");
+            }
+            const nestedContract = contractSignature(nested.identity, schemasFromArguments(nested.arguments));
+            if ((nested.contract_signature !== undefined && nested.contract_signature !== nestedContract) || (nested.version.minor === 1 && nested.contract_signature === undefined)) {
+                throw new TroxValueError("trox.contract-mismatch", "opaque value contract signature mismatch");
             }
             return;
         }

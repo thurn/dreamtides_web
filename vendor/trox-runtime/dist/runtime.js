@@ -1,10 +1,10 @@
 import { blake3 } from "@noble/hashes/blake3.js";
 import { TroxDeserializeError, TroxResolveError, TroxValueError } from "./errors.js";
 import { formatNumber } from "./number-format.js";
-import { base32, canonicalJson, deepFreeze, hex } from "./canonical-json.js";
+import { base32, canonicalJson, deepFreeze, hex, sortRecord } from "./canonical-json.js";
 import { CompiledPluralRules, compilePluralCondition } from "./plural-evaluation.js";
 import { assertDictionary, assertObjectKeys, deserializeBoundary, ownValue, parseCanonicalJson } from "./deserialization.js";
-import { CATEGORIES, CONSTRUCTION_TOKEN, ASSERT_LOCALIZED_MEANING, LocalizedString, assertedLocalizedPattern, PLACEHOLDER, assertNfc, assertSelectorInteger, assertStableId, collectPatternPlaceholders, parsePlaceholders, validateArgumentMap, validateIdentity, validateSelectorRecords, } from "./authoring.js";
+import { CATEGORIES, CONSTRUCTION_TOKEN, ASSERT_LOCALIZED_MEANING, LocalizedString, argumentFrom, assertedLocalizedPattern, contractSignature, localizedFromSource, schemasFromArguments, PLACEHOLDER, assertNfc, assertSelectorInteger, assertStableId, collectPatternPlaceholders, parsePlaceholders, validateArgumentMap, validateIdentity, validateSelectorRecords, } from "./authoring.js";
 export { TroxDeserializeError, TroxResolveError, TroxValueError } from "./errors.js";
 export { formatNumber } from "./number-format.js";
 export { canonicalJson } from "./canonical-json.js";
@@ -55,6 +55,7 @@ export class SourceCatalog {
             entryId,
             {
                 arguments: entry.arguments,
+                contract_signature: entry.contract_signature ?? contractSignature(entry.identity, entry.arguments),
                 identity: entry.identity,
                 source_signature: entry.source_signature,
             },
@@ -70,13 +71,13 @@ export class SourceCatalog {
     localizedStringFromJSON(input) {
         return deserializeBoundary(() => {
             const parsed = parseCanonicalJson(input, "localized value");
-            assertObjectKeys(parsed, ["arguments", "entry_id", "format", "identity", "selectors", "source_signature", "version"], [], "localized string");
+            assertObjectKeys(parsed, ["arguments", "entry_id", "format", "identity", "selectors", "source_signature", "version"], ["contract_signature"], "localized string");
             assertObjectKeys(parsed.identity, ["identity_version", "meaning", "pattern"], [], "identity");
             assertObjectKeys(parsed.version, ["major", "minor"], [], "localized string version");
             assertDictionary(parsed.arguments, "localized string arguments");
             if (!Array.isArray(parsed.selectors))
                 throw new TroxDeserializeError("trox.wire-shape", "selectors must be an array");
-            if (parsed.format !== "trox-localized-string" || parsed.version.major !== 1 || parsed.version.minor !== 0) {
+            if (parsed.format !== "trox-localized-string" || parsed.version.major !== 1 || (parsed.version.minor !== 0 && parsed.version.minor !== 1)) {
                 throw new TroxDeserializeError("trox.wire-version", "unsupported localized string version");
             }
             const wire = parsed;
@@ -90,14 +91,18 @@ export class SourceCatalog {
             if (entryId !== wire.entry_id || signature !== wire.source_signature) {
                 throw new TroxDeserializeError("trox.identity-mismatch", "wire identity hash mismatch");
             }
+            const computedContract = contractSignature(wire.identity, schemasFromArguments(wire.arguments));
+            if ((wire.contract_signature !== undefined && wire.contract_signature !== computedContract) || (wire.version.minor === 1 && wire.contract_signature === undefined)) {
+                throw new TroxDeserializeError("trox.contract-mismatch", "wire contract signature mismatch");
+            }
             if (wire.identity.meaning === ASSERT_LOCALIZED_MEANING) {
-                const asserted = LocalizedString.fromValidatedWire(wire, CONSTRUCTION_TOKEN);
+                const asserted = LocalizedString.fromValidatedWire(upgradeLocalizedWire(wire, computedContract), CONSTRUCTION_TOKEN);
                 if (assertedLocalizedPattern(asserted) !== undefined)
                     return asserted;
                 throw new TroxDeserializeError("trox.unauthorized-entry", "invalid asserted-localized value");
             }
             const authorized = ownValue(this.#entries, entryId);
-            if (authorized?.source_signature !== signature || canonicalJson(authorized.identity) !== canonicalJson(wire.identity)) {
+            if (authorized?.source_signature !== signature || authorized.contract_signature !== computedContract || canonicalJson(authorized.identity) !== canonicalJson(wire.identity)) {
                 throw new TroxDeserializeError("trox.unauthorized-entry", `entry ${entryId} is not authorized`);
             }
             authorizeArgumentSchemas(authorized.arguments, wire.arguments);
@@ -107,9 +112,30 @@ export class SourceCatalog {
                 if (argument.kind === "opaque")
                     this.localizedStringFromJSON(canonicalJson(argument.value));
             }
-            return LocalizedString.fromValidatedWire(wire, CONSTRUCTION_TOKEN);
+            return LocalizedString.fromValidatedWire(upgradeLocalizedWire(wire, computedContract), CONSTRUCTION_TOKEN);
         });
     }
+    sourceMessageFromValue(input) {
+        return deserializeBoundary(() => {
+            if (input === null || typeof input !== "object" || Array.isArray(input))
+                throw new TroxDeserializeError("trox.wire-shape", "source message reference must be an object");
+            const value = input;
+            assertObjectKeys(value, ["contract_signature", "entry_id", "format", "source_signature", "version"], [], "source message reference");
+            assertObjectKeys(value.version, ["major", "minor"], [], "source message reference version");
+            const version = value.version;
+            if (value.format !== "trox-source-message-ref" || version.major !== 1 || version.minor !== 0)
+                throw new TroxDeserializeError("trox.wire-version", "unsupported source message reference version");
+            const reference = value;
+            const entry = ownValue(this.#entries, reference.entry_id);
+            if (entry === undefined || entry.source_signature !== reference.source_signature || entry.contract_signature !== reference.contract_signature)
+                throw new TroxDeserializeError("trox.unauthorized-entry", `entry ${reference.entry_id} is not authorized`);
+            return new SourceMessage(this, entry, deepFreeze(structuredClone(reference)), VALIDATED_SOURCE_TOKEN);
+        });
+    }
+    sourceMessageFromJSON(input) {
+        return this.sourceMessageFromValue(parseCanonicalJson(input, "source message reference"));
+    }
+    /** @internal */
     authorizeTerm(argument) {
         const termValue = ownValue(this.#terms, argument.term_id);
         if (termValue === undefined) {
@@ -123,6 +149,43 @@ export class SourceCatalog {
         if ((form.kind === "scalar") !== (argument.number === undefined)) {
             throw new TroxDeserializeError("trox.term-number-contract", `term form number contract mismatch for ${argument.term_id}.${formId}`);
         }
+    }
+}
+function upgradeLocalizedWire(wire, contract) {
+    return { ...wire, contract_signature: contract, version: { major: 1, minor: 1 } };
+}
+export class SourceMessage {
+    #catalog;
+    #entry;
+    #reference;
+    /** @internal */
+    constructor(catalog, entry, reference, token) {
+        if (token !== VALIDATED_SOURCE_TOKEN)
+            throw new TroxValueError("trox.constructor", "SourceMessage values must be created by SourceCatalog");
+        this.#catalog = catalog;
+        this.#entry = entry;
+        this.#reference = reference;
+        Object.freeze(this);
+    }
+    get argumentSchemas() { return this.#entry.arguments; }
+    get sourceRef() { return this.#reference; }
+    bind(inputs) {
+        if (inputs === null || typeof inputs !== "object" || Array.isArray(inputs)) {
+            throw new TroxValueError("trox.invalid-arguments", "argument bindings must be an object");
+        }
+        const argumentsValue = sortRecord(Object.fromEntries(Object.entries(inputs).map(([name, value]) => [name, argumentFrom(value)])));
+        authorizeArgumentSchemas(this.#entry.arguments, argumentsValue);
+        for (const argument of Object.values(argumentsValue)) {
+            if (argument.kind === "term")
+                this.#catalog.authorizeTerm(argument);
+            if (argument.kind === "opaque")
+                this.#catalog.localizedStringFromJSON(canonicalJson(argument.value));
+        }
+        return localizedFromSource(this.#entry.identity, argumentsValue, {
+            contractSignature: this.#reference.contract_signature,
+            entryId: this.#reference.entry_id,
+            sourceSignature: this.#reference.source_signature,
+        });
     }
 }
 function authorizeArgumentSchemas(schemas, argumentsValue) {
@@ -198,7 +261,7 @@ export class Localizer {
     }
     targetRow(value) {
         const entry = ownValue(this.#target.wire.entries, value.entryId);
-        if (entry?.source_signature !== value.sourceSignature)
+        if (entry?.source_signature !== value.sourceSignature || (entry.contract_signature !== undefined && entry.contract_signature !== value.contractSignature))
             throw new TroxResolveError("trox.missing-message", `message ${value.entryId} is unavailable`);
         const selected = selectPattern(this.#target, value);
         const row = this.#target.row(value.entryId, selected.pathKey);
@@ -347,7 +410,7 @@ function validateBundle(bundle) {
         "message_facets", "number_format", "plural_rules", "source_catalog_fingerprint", "source_locale", "terms", "version",
     ], [], "bundle");
     assertObjectKeys(bundle.version, ["major", "minor"], [], "bundle version");
-    if (bundle.format !== "trox-bundle" || bundle.version?.major !== 1 || bundle.version.minor !== 0 || bundle.fallbacks_flattened !== true)
+    if (bundle.format !== "trox-bundle" || bundle.version?.major !== 1 || (bundle.version.minor !== 0 && bundle.version.minor !== 1) || bundle.fallbacks_flattened !== true)
         throw new TroxDeserializeError("trox.bundle-version", "unsupported or malformed bundle");
     if (bundle.cldr_version !== "48")
         throw new TroxDeserializeError("trox.cldr-version", `unsupported CLDR version ${String(bundle.cldr_version)}`);
@@ -397,10 +460,12 @@ function validateBundle(bundle) {
     assertDictionary(bundle.entries, "bundle entries");
     assertDictionary(bundle.terms, "bundle terms");
     for (const [entryId, entry] of Object.entries(bundle.entries)) {
-        assertObjectKeys(entry, ["rows", "source_signature"], ["arguments", "identity"], `entry ${entryId}`);
+        assertObjectKeys(entry, ["rows", "source_signature"], ["arguments", "contract_signature", "identity"], `entry ${entryId}`);
         assertDictionary(entry.rows, `entry ${entryId} rows`);
         if (!isCanonicalShortId(entryId, "tx1_") || !/^[0-9a-f]{64}$/.test(entry.source_signature))
             throw new TroxDeserializeError("trox.bundle-entry", `malformed entry ID or signature for ${entryId}`);
+        if ((entry.contract_signature !== undefined && !/^[0-9a-f]{64}$/.test(entry.contract_signature)) || (bundle.version.minor === 1 && entry.contract_signature === undefined))
+            throw new TroxDeserializeError("trox.bundle-entry", `entry ${entryId} requires a valid contract signature`);
         if (sourceBundle && (entry.arguments === undefined || entry.identity === undefined || Object.keys(entry.rows).length !== 0))
             throw new TroxDeserializeError("trox.bundle-entry", `source entry ${entryId} requires arguments, identity, and empty rows`);
         if (!sourceBundle && (entry.arguments !== undefined || entry.identity !== undefined))
@@ -413,6 +478,8 @@ function validateBundle(bundle) {
             if (`tx1_${base32(digest.slice(0, 16))}` !== entryId || hex(digest) !== entry.source_signature)
                 throw new TroxDeserializeError("trox.bundle-entry", `identity mismatch for ${entryId}`);
             validateArgumentSchemas(entry.arguments, entry.identity.pattern, entryId);
+            if (entry.contract_signature !== undefined && entry.contract_signature !== contractSignature(entry.identity, entry.arguments))
+                throw new TroxDeserializeError("trox.bundle-entry", `contract mismatch for ${entryId}`);
         }
         for (const [rowId, row] of Object.entries(entry.rows)) {
             assertObjectKeys(row, ["expansion", "origin_locale", "translation"], [], `row ${rowId}`);
@@ -627,6 +694,9 @@ function validateEntryCompatibility(target, source) {
     for (const [entryId, targetEntry] of Object.entries(target.entries)) {
         const sourceEntry = source.entries[entryId];
         if (sourceEntry?.identity === undefined || sourceEntry.source_signature !== targetEntry.source_signature)
+            continue;
+        const sourceContract = sourceEntry.contract_signature ?? contractSignature(sourceEntry.identity, sourceEntry.arguments);
+        if (targetEntry.contract_signature !== undefined && targetEntry.contract_signature !== sourceContract)
             continue;
         const declared = new Set(collectPatternPlaceholders(sourceEntry.identity.pattern));
         for (const row of Object.values(targetEntry.rows)) {

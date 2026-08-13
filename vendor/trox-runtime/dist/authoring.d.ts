@@ -136,6 +136,15 @@ export interface OpaqueArgument {
 }
 export type Argument = TextArgument | NumberArgument | BooleanArgument | TermArgument | OpaqueArgument;
 export type ArgumentInput = string | number | boolean | TermArgument | OpaqueArgument;
+export type ArgumentSchema = {
+    readonly kind: "scalar";
+} | {
+    readonly kind: "opaque";
+} | {
+    readonly kind: "term";
+    readonly form?: string;
+    readonly number: boolean;
+};
 declare class TermBuilder {
     readonly id: TermId;
     readonly formId: string | undefined;
@@ -151,6 +160,7 @@ export declare function counted(id: TermId, number: number): TermArgument;
 export declare function opaque(value: LocalizedString): OpaqueArgument;
 export interface LocalizedStringWire {
     readonly arguments: Readonly<Record<string, Argument>>;
+    readonly contract_signature?: string;
     readonly entry_id: string;
     readonly format: "trox-localized-string";
     readonly identity: IdentityDescriptor;
@@ -158,7 +168,7 @@ export interface LocalizedStringWire {
     readonly source_signature: string;
     readonly version: {
         readonly major: 1;
-        readonly minor: 0;
+        readonly minor: 0 | 1;
     };
 }
 export declare class LocalizedString {
@@ -166,6 +176,7 @@ export declare class LocalizedString {
     private constructor();
     get entryId(): string;
     get sourceSignature(): string;
+    get contractSignature(): string;
     get identity(): IdentityDescriptor;
     get arguments(): Readonly<Record<string, Argument>>;
     get selectors(): readonly SelectorRecord[];

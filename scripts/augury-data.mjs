@@ -7,27 +7,27 @@ const count = (one, other) => ({ kind: "count", one, other });
 const category = {
   kind: "category",
   character: [], event: [], cheap: [], "mid-cost": [], expensive: [], fast: [],
-  subtype: ["categoryName"], package: ["categoryName"],
+  subtype: ["category_name"], package: ["category_name"],
 };
 const presentation = (headline, subtitle) => ({ headline, subtitle });
 const ARCHETYPE_CONTRACTS = new Map(Object.entries({
-  fit_card_grant: { family: "grant", mechanicId: "gain-card", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "granted-copies": quantity(1, 4) }, presentation: presentation(text(), text("cardName")) },
+  fit_card_grant: { family: "grant", mechanicId: "gain-card", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "granted-copies": quantity(1, 4) }, presentation: presentation(text(), text("card_name")) },
   fit_card_draft: { family: "grant", mechanicId: "catalog-card-chooser", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "chooser-size": quantity(2, 4), "granted-copies": quantity(1, 4) }, presentation: presentation(text(), text()) },
   copies_draft: { family: "grant", mechanicId: "catalog-card-chooser", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "chooser-size": quantity(2, 4), "granted-copies": quantity(1, 4) }, presentation: presentation(text(), count(["count"], ["count"])) },
-  strong_card: { family: "grant", mechanicId: "gain-card", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "granted-copies": quantity(1, 4) }, presentation: presentation(text(), text("cardName")) },
+  strong_card: { family: "grant", mechanicId: "gain-card", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "granted-copies": quantity(1, 4) }, presentation: presentation(text(), text("card_name")) },
   category_draft_known: { family: "grant", mechanicId: "catalog-card-chooser", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "chooser-size": quantity(2, 4), "granted-copies": quantity(1, 4) }, presentation: presentation(text(), category) },
   card_bundle: { family: "grant", mechanicId: "gain-card", policies: ["card-bundle"], quantities: { "bundle-size": quantity(2, 3), "minimum-bundle-size": quantity(2, 3) }, presentation: presentation(count(["count"], ["count"]), count(["count"], ["count"])) },
   transfigured_draft: { family: "grant", mechanicId: "transfigured-card-chooser", policies: ["uniform", "card-fit", "card-fit-quality"], quantities: { "chooser-size": quantity(2, 4), "granted-copies": quantity(1, 4) }, presentation: presentation(text(), text()) },
-  transfigure: { family: "improve", mechanicId: "transfigure-deck-entry", policies: ["uniform", "transfiguration-value"], quantities: {}, presentation: presentation(text(), text("cardName")) },
-  starter_transfigure: { family: "improve", mechanicId: "transfigure-deck-entry", policies: ["uniform", "transfiguration-value"], quantities: { "maximum-targets": quantity(1, 2) }, presentation: presentation(text(), count(["count", "cardName"], ["count", "firstCardName", "secondCardName"])) },
-  purge: { family: "remove", mechanicId: "purge-deck-entry", policies: ["uniform", "purge-misfit"], quantities: {}, presentation: presentation(text(), text("cardName")) },
-  duplicate: { family: "duplicate", mechanicId: "duplicate-deck-entry", policies: ["uniform", "duplicate-value"], quantities: { "chooser-size": quantity(1, 3), "granted-copies": quantity(1, 4) }, presentation: presentation(count(["count"], ["count"]), count(["count", "cardName"], ["count", "cardName"])) },
-  dreamsign: { family: "dreamsign", mechanicId: "gain-dreamsign", policies: ["uniform", "dreamsign-match"], quantities: {}, presentation: presentation(text(), text("dreamsignName")) },
-  add_site: { family: "site", mechanicId: "add-site", policies: ["site-uniform"], quantities: {}, presentation: presentation(text(), text("siteName")) },
+  transfigure: { family: "improve", mechanicId: "transfigure-deck-entry", policies: ["uniform", "transfiguration-value"], quantities: {}, presentation: presentation(text(), text("card_name")) },
+  starter_transfigure: { family: "improve", mechanicId: "transfigure-deck-entry", policies: ["uniform", "transfiguration-value"], quantities: { "maximum-targets": quantity(1, 2) }, presentation: presentation(text(), count(["count", "card_name"], ["count", "first_card_name", "second_card_name"])) },
+  purge: { family: "remove", mechanicId: "purge-deck-entry", policies: ["uniform", "purge-misfit"], quantities: {}, presentation: presentation(text(), text("card_name")) },
+  duplicate: { family: "duplicate", mechanicId: "duplicate-deck-entry", policies: ["uniform", "duplicate-value"], quantities: { "chooser-size": quantity(1, 3), "granted-copies": quantity(1, 4) }, presentation: presentation(count(["count"], ["count"]), count(["count", "card_name"], ["count", "card_name"])) },
+  dreamsign: { family: "dreamsign", mechanicId: "gain-dreamsign", policies: ["uniform", "dreamsign-match"], quantities: {}, presentation: presentation(text(), text("dreamsign_name")) },
+  add_site: { family: "site", mechanicId: "add-site", policies: ["site-uniform"], quantities: {}, presentation: presentation(text(), text("site_name")) },
 }));
 const PRESENTATION_SLOTS = new Set([
-  "cardName", "categoryName", "count", "dreamsignName", "firstCardName",
-  "secondCardName", "siteName", "subtypeName",
+  "card_name", "category_name", "count", "dreamsign_name", "first_card_name",
+  "second_card_name", "site_name", "subtype_name",
 ]);
 function fail(path, message) {
   throw new Error(`augury.toml ${path}: ${message}`);
@@ -48,6 +48,16 @@ function exact(value, path, expected) {
 function nonempty(value, path) {
   if (typeof value !== "string" || value.trim() === "") fail(path, "expected a non-empty string");
   return value;
+}
+
+function isSourceMessageRef(value) {
+  return value !== null &&
+    typeof value === "object" &&
+    !Array.isArray(value) &&
+    value.format === "trox-source-message-ref" &&
+    typeof value.entry_id === "string" &&
+    typeof value.source_signature === "string" &&
+    typeof value.contract_signature === "string";
 }
 
 function positive(value, path) {
@@ -78,10 +88,15 @@ function camel(key) {
 }
 
 function template(value, path, availableSlots) {
+  if (isSourceMessageRef(value)) return value;
   const result = nonempty(value, path);
   for (const match of result.matchAll(/\{([^{}]+)\}/gu)) {
-    if (!PRESENTATION_SLOTS.has(match[1])) fail(path, `unknown presentation slot {${match[1]}}`);
-    if (!availableSlots.includes(match[1])) fail(path, `presentation slot {${match[1]}} is unavailable for this archetype`);
+    const slot = match[1]
+      .replace(/([a-z0-9])([A-Z])/gu, "$1_$2")
+      .replaceAll("-", "_")
+      .toLowerCase();
+    if (!PRESENTATION_SLOTS.has(slot)) fail(path, `unknown presentation slot {${match[1]}}`);
+    if (!availableSlots.includes(slot)) fail(path, `presentation slot {${match[1]}} is unavailable for this archetype`);
   }
   return result;
 }

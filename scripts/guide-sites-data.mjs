@@ -54,6 +54,20 @@ function string(value, file, path) {
   return value;
 }
 
+function isSourceMessageRef(value) {
+  return value !== null &&
+    typeof value === "object" &&
+    !Array.isArray(value) &&
+    value.format === "trox-source-message-ref" &&
+    typeof value.entry_id === "string" &&
+    typeof value.source_signature === "string" &&
+    typeof value.contract_signature === "string";
+}
+
+function localized(value, file, path) {
+  return isSourceMessageRef(value) ? value : string(value, file, path);
+}
+
 function boolean(value, file, path) {
   if (typeof value !== "boolean") fail(file, path, "expected a boolean");
   return value;
@@ -116,17 +130,22 @@ function dialogueLines(
   requiredSlots = [],
 ) {
   const lines = array(value, file, path).map((entry, index) =>
-    string(entry, file, `${path}[${String(index)}]`),
+    localized(entry, file, `${path}[${String(index)}]`),
   );
   if (lines.length === 0) fail(file, path, "must not be empty");
-  const allowed = new Set(allowedSlots);
-  const found = lines.flatMap(placeholders);
+  if (lines.some(isSourceMessageRef)) return lines;
+  const canonical = (slot) => slot
+    .replace(/([a-z0-9])([A-Z])/gu, "$1_$2")
+    .replaceAll("-", "_")
+    .toLowerCase();
+  const allowed = new Set(allowedSlots.map(canonical));
+  const found = lines.flatMap(placeholders).map(canonical);
   for (const slot of found) {
     if (!allowed.has(slot))
       fail(file, path, `unsupported placeholder {${slot}}`);
   }
   for (const slot of requiredSlots) {
-    if (!found.includes(slot))
+    if (!found.includes(canonical(slot)))
       fail(file, path, `missing placeholder {${slot}}`);
   }
   return lines;
@@ -381,8 +400,13 @@ const PRESENTATION_KIND_BY_SITE = {
 };
 
 function presentationTemplate(value, file, path, slots) {
+  if (isSourceMessageRef(value)) return value;
   const result = string(value, file, path);
-  const found = placeholders(result).sort();
+  const canonical = (slot) => slot
+    .replace(/([a-z0-9])([A-Z])/gu, "$1_$2")
+    .replaceAll("-", "_")
+    .toLowerCase();
+  const found = placeholders(result).map(canonical).sort();
   if (found.join(",") !== [...slots].sort().join(",")) {
     fail(
       file,
@@ -403,7 +427,7 @@ function compileSitePresentation(value, type, file, path) {
   const source = table(value, file, path);
   const kind = exactIdentity(source.kind, expectedKind, file, `${path}.kind`);
   keys(source, file, path, PRESENTATION_KEYS[kind]);
-  const text = (key) => string(source[key], file, `${path}.${key}`);
+  const text = (key) => localized(source[key], file, `${path}.${key}`);
   switch (kind) {
     case "battle":
       return {
@@ -416,7 +440,7 @@ function compileSitePresentation(value, type, file, path) {
       return {
         kind,
         label: presentationTemplate(source.label, file, `${path}.label`, [
-          "pickCount",
+          "pick_count",
         ]),
       };
     case "shop":

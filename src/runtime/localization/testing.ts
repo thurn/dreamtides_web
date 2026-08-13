@@ -44,6 +44,7 @@ export function withSyntheticTranslations(
     const prior = entries[message.entryId];
     if (prior === undefined) throw new Error("Synthetic message is absent from the configured source catalog.");
     entries[message.entryId] = {
+      ...prior,
       source_signature: message.sourceSignature,
       rows: {
         ...prior.rows,

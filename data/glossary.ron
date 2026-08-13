@@ -150,17 +150,19 @@
         // Case-insensitive Unicode regular expression evaluated against the complete source text.
         pattern: r"\b(?:gain|gains|gained)\s+reclaim\s+(\d+)\s*●",
         // Templates may expand {term} and numbered regular-expression captures.
-        term: Tx("{{term}} {{1}}●"),
+        term: Tx(text: "{term} {amount}●", placeholders: {"term": Opaque, "amount": Scalar}),
         definition: Tx(
-          "You may play that card from your void for {{1}}●, then banish it when it leaves play."
+          text: "You may play that card from your void for {amount}●, then banish it when it leaves play.",
+          placeholders: {"amount": Scalar},
         ),
       ),
 
       GlossaryProjection(
         pattern: r"\breclaim\s+(\d+)\s*●",
-        term: Tx("{{term}} {{1}}●"),
+        term: Tx(text: "{term} {amount}●", placeholders: {"term": Opaque, "amount": Scalar}),
         definition: Tx(
-          "You may play this card from your void for {{1}}●, then banish it when it leaves play."
+          text: "You may play this card from your void for {amount}●, then banish it when it leaves play.",
+          placeholders: {"amount": Scalar},
         ),
       ),
 
@@ -185,15 +187,16 @@
     projections: [
       GlossaryProjection(
         pattern: r"\bforesee\s+(1)\b",
-        term: Tx("{{term}} {{1}}"),
+        term: Tx(text: "{term} {amount}", placeholders: {"term": Opaque, "amount": Scalar}),
         definition: Tx("Look at the top card of your deck. You may put it into your void."),
       ),
 
       GlossaryProjection(
         pattern: r"\bforesee\s+(\d+)\b",
-        term: Tx("{{term}} {{1}}"),
+        term: Tx(text: "{term} {amount}", placeholders: {"term": Opaque, "amount": Scalar}),
         definition: Tx(
-          "Look at the top {{1}} cards of your deck, then put any number of them into your void and the rest on top in any order."
+          text: "Look at the top {amount} cards of your deck, then put any number of them into your void and the rest on top in any order.",
+          placeholders: {"amount": Scalar},
         ),
       ),
     ],
@@ -221,7 +224,7 @@
     projections: [
       GlossaryProjection(
         pattern: r"\berode\s+(1)\b",
-        term: Tx("{{term}} {{1}}"),
+        term: Tx(text: "{term} {amount}", placeholders: {"term": Opaque, "amount": Scalar}),
         definition: Tx(
           "Put the top card of a player's deck into their void. If the deck is empty, their opponent scores 3⍟ instead."
         ),
@@ -229,9 +232,10 @@
 
       GlossaryProjection(
         pattern: r"\berode\s+(\d+)\b",
-        term: Tx("{{term}} {{1}}"),
+        term: Tx(text: "{term} {amount}", placeholders: {"term": Opaque, "amount": Scalar}),
         definition: Tx(
-          "Put the top {{1}} cards of a player's deck into their void. If the deck is empty, their opponent scores 3⍟ instead."
+          text: "Put the top {amount} cards of a player's deck into their void. If the deck is empty, their opponent scores 3⍟ instead.",
+          placeholders: {"amount": Scalar},
         ),
       ),
     ],

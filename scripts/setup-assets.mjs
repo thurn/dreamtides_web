@@ -511,6 +511,16 @@ function transformTomlRecord(record) {
   return result;
 }
 
+function isSourceMessageRef(value) {
+  return value !== null &&
+    typeof value === "object" &&
+    !Array.isArray(value) &&
+    value.format === "trox-source-message-ref" &&
+    typeof value.entry_id === "string" &&
+    typeof value.source_signature === "string" &&
+    typeof value.contract_signature === "string";
+}
+
 /** Convert and validate the authored Exploration encounter catalog. */
 export function transformExplorationData(source) {
   if (source["schema-version"] !== 2) {
@@ -673,13 +683,16 @@ export function transformExplorationData(source) {
         );
       }
       for (const key of ["label", "effectText"]) {
-        if (typeof action[key] !== "string" || action[key].trim() === "") {
+        if (
+          !isSourceMessageRef(action[key]) &&
+          (typeof action[key] !== "string" || action[key].trim() === "")
+        ) {
           throw new Error(
             `exploration.toml: action ${action.id} requires ${key}`,
           );
         }
       }
-      validateExplorationEffectAction(action, {
+      if (typeof action.effectText === "string") validateExplorationEffectAction(action, {
         predicates: new Set(
           REWARD_CARD_PREDICATES.filter((predicate) => predicate !== "any"),
         ),
@@ -980,14 +993,17 @@ export function transformExplorationData(source) {
             `exploration.toml: action ${action.id} requires both followup fields`,
           );
         }
-        if (/\$[A-Z][A-Z0-9_]*/u.test(action.effectText)) {
+        if (
+          typeof action.effectText === "string" &&
+          /\$[A-Z][A-Z0-9_]*/u.test(action.effectText)
+        ) {
           throw new Error(
             `exploration.toml: action ${action.id} uses an untyped presentation token`,
           );
         }
-        const presentationSlots = [
+        const presentationSlots = typeof action.effectText === "string" ? [
           ...new Set(action.effectText.match(/\{([a-z][a-z0-9_]*)\}/gu) ?? []),
-        ];
+        ] : null;
         const allowedSlots = new Set([
           ...(action.effectKind === "gain-offered-card"
             ? ["{offered_card}"]
@@ -1003,7 +1019,7 @@ export function transformExplorationData(source) {
             ? ["{nightmare_card}"]
             : []),
         ]);
-        for (const slot of presentationSlots) {
+        for (const slot of presentationSlots ?? []) {
           if (!allowedSlots.has(slot)) {
             throw new Error(
               `exploration.toml: action ${action.id} has unsupported presentation slot ${slot}`,
@@ -1012,6 +1028,7 @@ export function transformExplorationData(source) {
         }
         if (
           action.effectKind === "gain-offered-card" &&
+          presentationSlots !== null &&
           !presentationSlots.includes("{offered_card}")
         ) {
           throw new Error(
@@ -1020,6 +1037,7 @@ export function transformExplorationData(source) {
         }
         if (
           action.deckTarget === "offered" &&
+          presentationSlots !== null &&
           !presentationSlots.includes("{deck_card}")
         ) {
           throw new Error(
@@ -1028,6 +1046,7 @@ export function transformExplorationData(source) {
         }
         if (
           action.cardId !== undefined &&
+          presentationSlots !== null &&
           !presentationSlots.includes("{fixed_card}")
         ) {
           throw new Error(
@@ -1041,6 +1060,7 @@ export function transformExplorationData(source) {
             "gain-nightmare-and-card",
             "reduce-cost-all-and-gain-nightmares",
           ].includes(action.effectKind) &&
+          presentationSlots !== null &&
           !presentationSlots.includes("{nightmare_card}")
         ) {
           throw new Error(
@@ -1048,19 +1068,22 @@ export function transformExplorationData(source) {
           );
         }
       }
+      const followupText =
+        typeof action.followupTitle === "string" &&
+        typeof action.followupSubtitle === "string"
+          ? `${action.followupTitle}\n${action.followupSubtitle}`
+          : "";
       const followupSlots = [
         ...new Set(
-          `${action.followupTitle ?? ""}\n${action.followupSubtitle ?? ""}`.match(
-            /\{([a-z][a-z0-9-]*)\}/gu,
-          ) ?? [],
+          followupText.match(/\{([a-z][a-z0-9_]*)\}/gu) ?? [],
         ),
       ];
       const allowedFollowupSlots = new Set([
-        "{action-label}",
+        "{action_label}",
         "{count}",
         "{subtype}",
         "{transfiguration}",
-        "{essence-per-spark}",
+        "{essence_per_spark}",
       ]);
       for (const slot of followupSlots) {
         if (!allowedFollowupSlots.has(slot)) {

@@ -44,7 +44,7 @@ import type {
   AtlasView,
 } from "../../cumulus/screens/AtlasScreen";
 import type { JourneyContent } from "../../data/journey-content";
-import { localizedSourceText } from "../../runtime/localization/runtime";
+import { bindSourceTransport, localizedSourceText } from "../../runtime/localization/runtime";
 import { tx } from "@trox/runtime";
 import {
   siteTypeDescription,
@@ -382,18 +382,18 @@ function buildAffiliationCard(
   return affiliation !== null
     ? {
         id: affiliation.id,
-        title: localizedSourceText(
+        title: bindSourceTransport(
           journeyContent.atlasData.presentation.affiliationTitleTemplate,
           {
-            name: localizedSourceText(affiliation.name),
-            "card-theme": localizedSourceText(affiliation.atlasCardTheme),
+            affiliation_name: localizedSourceText(affiliation.name),
+            card_theme: localizedSourceText(affiliation.atlasCardTheme),
           },
         ),
-        body: localizedSourceText(
+        body: bindSourceTransport(
           journeyContent.atlasData.presentation.affiliationBodyTemplate,
           {
-            name: localizedSourceText(affiliation.name),
-            "card-theme": localizedSourceText(affiliation.atlasCardTheme),
+            affiliation_name: localizedSourceText(affiliation.name),
+            card_theme: localizedSourceText(affiliation.atlasCardTheme),
           },
         ),
       }
@@ -443,10 +443,10 @@ function buildNodeCard(
         // Title with the run's chosen Apollyon incarnation (its full name, e.g.
         // "Apollyon, the World's End"), falling back to the default epithet when
         // no incarnation was assigned.
-        title: localizedSourceText(
+        title: bindSourceTransport(
           bossIncarnation?.title ?? boss.fallbackTitle,
         ),
-        body: localizedSourceText(
+        body: bindSourceTransport(
           bossIncarnation?.description ?? boss.fallbackIntroduction,
         ),
         // The desktop hover card presents Limbo as the place with the chosen
@@ -473,10 +473,10 @@ function buildNodeCard(
       primary: {
         sceneArt: null,
         figureArt: null,
-        title: localizedSourceText(
+        title: bindSourceTransport(
           journeyContent.atlasData.presentation.unseenTitle,
         ),
-        body: localizedSourceText(
+        body: bindSourceTransport(
           journeyContent.atlasData.presentation.unseenBody,
         ),
         // A still-unseen dream can carry a pre-revealed known dreamsign (its badge
@@ -521,10 +521,12 @@ function buildNodeCard(
       sceneArt: artRef.dreamscapeScene(dreamscape.id),
       figureArt: guide != null ? artRef.dreamGuide(guide.id) : null,
       title: localizedSourceText(guide?.name ?? dreamscape.name),
-      body: localizedSourceText(
-        guide?.homeSpecialty ??
-          journeyContent.atlasData.presentation.starterBody,
-      ),
+      body:
+        guide?.homeSpecialty !== undefined
+          ? localizedSourceText(guide.homeSpecialty)
+          : bindSourceTransport(
+              journeyContent.atlasData.presentation.starterBody,
+            ),
       // The large desktop hover card presents the place, its resident guide, the
       // signature site, and the dreamscape's affiliation as distinct fields.
       placeName: localizedSourceText(dreamscape.name),

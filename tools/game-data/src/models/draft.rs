@@ -2,7 +2,7 @@ use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 use trox::LocalizedString;
 
-use super::localization::source_text;
+use super::localization::{source_text, source_transport_value};
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -69,9 +69,9 @@ impl Rarity {
 pub fn lower(source: DraftDocument) -> anyhow::Result<toml::Value> {
     let progress = source_text(&source.presentation.progress)?;
     anyhow::ensure!(
-        progress.matches("{pickNumber}").count() == 1
-            && progress.matches("{pickTotal}").count() == 1,
-        "draft progress must contain {{pickNumber}} and {{pickTotal}} exactly once"
+        progress.matches("{pick_number}").count() == 1
+            && progress.matches("{pick_total}").count() == 1,
+        "draft progress must contain {{pick_number}} and {{pick_total}} exactly once"
     );
     let mut root = toml::map::Map::new();
     root.insert("schema-version".into(), 1_i64.into());
@@ -79,7 +79,7 @@ pub fn lower(source: DraftDocument) -> anyhow::Result<toml::Value> {
         "presentation".into(),
         toml::Value::Table(toml::map::Map::from_iter([(
             "progress".into(),
-            progress.into(),
+            source_transport_value(&source.presentation.progress)?,
         )])),
     );
     root.insert(
@@ -140,7 +140,7 @@ mod tests {
     fn document() -> DraftDocument {
         DraftDocument {
             presentation: DraftPresentation {
-                progress: ls("Draft ({pickNumber}/{pickTotal})"),
+                progress: ls("Draft ({pick_number}/{pick_total})"),
             },
             offers: Offers {
                 cards_per_offer: 4,
@@ -177,7 +177,7 @@ mod tests {
     #[test]
     fn rejects_invalid_progress_placeholders() {
         let mut source = document();
-        source.presentation.progress = ls("Draft ({pickNumber})");
-        assert!(lower(source).unwrap_err().to_string().contains("pickTotal"));
+        source.presentation.progress = ls("Draft ({pick_number})");
+        assert!(lower(source).unwrap_err().to_string().contains("pick_total"));
     }
 }

@@ -1,9 +1,6 @@
 import { describe, it, expect } from "vitest";
 
-import {
-  projectGlossaryEntry,
-  extractGlossaryTerms,
-} from "./glossary-terms";
+import { projectGlossaryEntry, extractGlossaryTerms } from "./glossary-terms";
 import { GLOSSARY, glossaryRulesTextForms } from "./glossary";
 import type { GlossaryCatalogEntry } from "./glossary";
 
@@ -188,6 +185,22 @@ describe("projected glossary definitions", () => {
     });
   });
 
+  it("binds captured projection arguments into localized values", () => {
+    const projection = {
+      pattern: String.raw`\bforesee\s+(\d+)\b`,
+      term: "{term} {1}",
+      definition: "Look at the top {1} cards.",
+    };
+    const foresee = fixture("foresee", "Foresee", "Generic definition.", 0, [
+      projection,
+    ]);
+
+    const projected = projectGlossaryEntry(foresee, "Foresee 3.");
+
+    expect(projected.term).toBe("Foresee 3");
+    expect(projected.definition).toBe("Look at the top 3 cards.");
+  });
+
   it("refers to a granted reclaim target as that card", () => {
     const reclaim = fixture(
       "reclaim",
@@ -204,10 +217,8 @@ describe("projected glossary definitions", () => {
     );
 
     expect(
-      projectGlossaryEntry(
-        reclaim,
-        "An event in your void gains reclaim.",
-      ).definition,
+      projectGlossaryEntry(reclaim, "An event in your void gains reclaim.")
+        .definition,
     ).toBe(
       "You may play that card from your void, then banish it when it leaves play.",
     );
@@ -338,10 +349,7 @@ describe("numeric keyword glossary projections", () => {
 
   it("keeps granted Reclaim without a cost contextual but non-numeric", () => {
     expect(
-      projectGlossaryEntry(
-        reclaim,
-        "An event in your void gains reclaim.",
-      ),
+      projectGlossaryEntry(reclaim, "An event in your void gains reclaim."),
     ).toMatchObject({
       term: "Reclaim",
       definition: "Play that card from your void.",

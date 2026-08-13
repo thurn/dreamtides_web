@@ -324,9 +324,7 @@ function resolvePromptText(
 ): MobileBattlePromptCopy {
   if (resolver !== undefined) return resolver(text);
   if (isDreamwellPromptRef(text)) {
-    return localizedSourceText(
-      resolveDreamwellPromptRef(text, init.dreamwellDeck),
-    );
+    return resolveDreamwellPromptRef(text, init.dreamwellDeck);
   }
   if (isLegacyPromptText(text)) return localizedSourceText(text.text);
   return builtInBattlePromptMessage(text);

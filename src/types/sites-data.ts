@@ -1,33 +1,34 @@
 import type { RandomSiteDestinationType, SiteType } from "./site-type";
+import type { SourceTransport } from "../runtime/localization/runtime";
 
 export type SitePresentation =
   | {
       kind: "battle";
-      label: string;
-      finalBossLabel: string;
-      lockedGuidance: string;
+      label: SourceTransport;
+      finalBossLabel: SourceTransport;
+      lockedGuidance: SourceTransport;
     }
-  | { kind: "draft"; label: string }
+  | { kind: "draft"; label: SourceTransport }
   | {
       kind: "shop";
-      title: string;
-      restocked: string;
-      restockOffersAction: string;
-      restockAction: string;
-      freePrice: string;
+      title: SourceTransport;
+      restocked: SourceTransport;
+      restockOffersAction: SourceTransport;
+      restockAction: SourceTransport;
+      freePrice: SourceTransport;
     }
-  | { kind: "purge"; title: string; instruction: string; purgeAction: string }
+  | { kind: "purge"; title: SourceTransport; instruction: SourceTransport; purgeAction: SourceTransport }
   | {
       kind: "dreamsign-bazaar";
-      title: string;
-      restocked: string;
-      restockOffersAction: string;
-      restockAction: string;
-      freePrice: string;
-      replacementTitle: string;
+      title: SourceTransport;
+      restocked: SourceTransport;
+      restockOffersAction: SourceTransport;
+      restockAction: SourceTransport;
+      freePrice: SourceTransport;
+      replacementTitle: SourceTransport;
     }
-  | { kind: "dreamsign-revelation"; loading: string; exhausted: string }
-  | { kind: "random-site"; title: string };
+  | { kind: "dreamsign-revelation"; loading: SourceTransport; exhausted: SourceTransport }
+  | { kind: "random-site"; title: SourceTransport };
 
 export interface DuplicationSiteRules {
   kind: "duplication";

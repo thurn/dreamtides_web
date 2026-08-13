@@ -1,5 +1,5 @@
-import type { LocalizedString } from "@trox/runtime";
-import { localizedSourceText } from "../../runtime/localization/runtime";
+import type { LocalizedString, SourceMessage } from "@trox/runtime";
+import { bindSourceTransport } from "../../runtime/localization/runtime";
 
 /** Convert every player-facing string field while preserving the discriminant. */
 export type LocalizedSitePresentation<
@@ -7,7 +7,7 @@ export type LocalizedSitePresentation<
 > = {
   readonly [K in keyof T]: K extends "kind"
     ? T[K]
-    : T[K] extends string
+    : T[K] extends string | LocalizedString | SourceMessage
       ? LocalizedString
       : T[K];
 };
@@ -18,9 +18,9 @@ export function localizedSitePresentation<
   return Object.fromEntries(
     Object.entries(presentation).map(([key, value]) => [
       key,
-      key === "kind" || typeof value !== "string"
+      key === "kind"
         ? value
-        : localizedSourceText(value),
+        : bindSourceTransport(value),
     ]),
   ) as LocalizedSitePresentation<T>;
 }

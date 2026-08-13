@@ -3,12 +3,16 @@ import {
   assertLocalized,
   Localizer,
   LocalizedString,
+  SourceMessage,
   opaque,
+  txa,
   bundleFromCanonicalJSON,
   type Bundle,
   type Diagnostic,
+  type ArgumentInput,
   type Argument,
   type LocalizedStringWire,
+  type SourceMessageRef,
 } from "@trox/runtime";
 import { localizedRuntimeTemplate } from "./runtime-templates.generated";
 import enUSBundleJSON from "../../generated/localization/en-US.trox.json?raw";
@@ -133,6 +137,91 @@ export function requireSourceRuntime(): LocalizationRuntime {
   return sourceRuntime;
 }
 
+const sourceMessageCache = new Map<string, SourceMessage>();
+
+export function sourceMessage(
+  reference: SourceMessageRef,
+): SourceMessage {
+  const key = `${reference.entry_id}:${reference.contract_signature}`;
+  const cached = sourceMessageCache.get(key);
+  if (cached !== undefined) return cached;
+  const message = requireSourceRuntime().sourceCatalog.sourceMessageFromValue(reference);
+  sourceMessageCache.set(key, message);
+  return message;
+}
+
+export function localizedSourceMessage(
+  reference: SourceMessageRef,
+  values: Readonly<Record<string, ArgumentInput>> = {},
+): LocalizedString {
+  return sourceMessage(reference).bind(values);
+}
+
+export type SourceTransport = string | LocalizedString | SourceMessage;
+export type SourceTransportValue = number | boolean | string | LocalizedString;
+
+export function canonicalPlaceholderName(name: string): string {
+  if (name === "name") return "affiliation_name";
+  const snakeCase = name.replace(/([a-z0-9])([A-Z])/gu, "$1_$2");
+  const underscored = snakeCase.replace(/-/gu, "_");
+  return underscored.toLowerCase();
+}
+
+export function hydrateSourceTransport(
+  value: unknown,
+  label: string,
+): SourceTransport {
+  if (value instanceof LocalizedString || value instanceof SourceMessage) {
+    return value;
+  }
+  if (typeof value === "string") {
+    if (value.trim() === "") throw new Error(`${label} must be non-empty.`);
+    return value;
+  }
+  const message = sourceMessage(value as SourceMessageRef);
+  return Object.keys(message.argumentSchemas).length === 0
+    ? message.bind({})
+    : message;
+}
+
+export function bindSourceTransport(
+  value: SourceTransport,
+  inputs: Readonly<Record<string, SourceTransportValue>> = {},
+): LocalizedString {
+  if (typeof value === "string") {
+    if (import.meta.env.MODE === "test" && Object.keys(inputs).length !== 0) {
+      return assertLocalized(value.replace(
+        /\{([A-Za-z_][A-Za-z0-9_-]*|\d+)\}/gu,
+        (_placeholder, name: string) => {
+          const input = inputs[name] ?? inputs[canonicalPlaceholderName(name)];
+          if (input === undefined) throw new Error(`missing value for {${name}}`);
+          return input instanceof LocalizedString ? resolveSource(input) : String(input);
+        },
+      ));
+    }
+    return localizedSourceText(value, inputs);
+  }
+  if (value instanceof LocalizedString) {
+    return value;
+  }
+  const names = Object.keys(value.argumentSchemas);
+  if (
+    names.some((name) => !Object.prototype.hasOwnProperty.call(inputs, name))
+  ) {
+    throw new Error("Source-message arguments do not match its Trox contract.");
+  }
+  return value.bind(Object.fromEntries(names.map((name) => {
+    const input = inputs[name];
+    const schema = value.argumentSchemas[name];
+    return [
+      name,
+      schema?.kind === "opaque" && input instanceof LocalizedString
+        ? opaque(input)
+        : input,
+    ];
+  })) as Readonly<Record<string, ArgumentInput>>);
+}
+
 /**
  * Reconstitutes static text emitted by the canonical RON compatibility
  * pipeline as an unresolved Trox value authorized by the source catalog.
@@ -144,13 +233,28 @@ export function requireSourceRuntime(): LocalizationRuntime {
  */
 const localizedSourceTextCache = new Map<string, LocalizedString>();
 
+export function splitCanonicalLocalizedParagraphs(
+  sourceText: string,
+): readonly [string, string] | null {
+  const paragraphs = sourceText.split("\n\n");
+  if (paragraphs.length !== 2 || paragraphs.some((part) => part === "")) {
+    return null;
+  }
+  return [paragraphs[0], paragraphs[1]];
+}
+
 export function localizedSourceText(
   sourceText: string,
-  values: Readonly<Record<string, number | boolean | LocalizedString>> = {},
+  values: Readonly<Record<string, number | boolean | string | LocalizedString>> = {},
 ): LocalizedString {
   const isStatic = Object.keys(values).length === 0;
   if (!isStatic) {
-    const template = localizedRuntimeTemplate(sourceText, values);
+    const template = Object.values(values).some((value) => typeof value === "string")
+      ? null
+      : localizedRuntimeTemplate(
+          sourceText,
+          values as Readonly<Record<string, number | boolean | LocalizedString>>,
+        );
     if (template !== null) return template;
   }
   const cached = isStatic
@@ -170,6 +274,23 @@ export function localizedSourceText(
         Object.keys(values).length &&
       Object.keys(values).every((name) => name in (entry.arguments ?? {})),
   );
+  if (matches.length === 0 && isStatic) {
+    const paragraphs = splitCanonicalLocalizedParagraphs(sourceText);
+    if (paragraphs !== null) {
+      const firstParagraph = localizedSourceText(paragraphs[0]);
+      const secondParagraph = localizedSourceText(paragraphs[1]);
+      const localized = txa(
+        "{first_paragraph}\n\n{second_paragraph}",
+        {
+          first_paragraph: opaque(firstParagraph),
+          second_paragraph: opaque(secondParagraph),
+        },
+        "[game-data] Two independently authored rules paragraphs displayed as one rules-text block.",
+      );
+      localizedSourceTextCache.set(sourceText, localized);
+      return localized;
+    }
+  }
   if (matches.length === 0 && import.meta.env.MODE === "test") {
     const placeholderPattern = /\{([A-Za-z_][A-Za-z0-9_-]*)\}/g;
     const renderedFixture = sourceText.replace(
@@ -199,7 +320,9 @@ export function localizedSourceText(
           ? opaque(value)
           : typeof value === "number"
             ? { kind: "number", value }
-            : { kind: "boolean", value },
+            : typeof value === "boolean"
+              ? { kind: "boolean", value }
+              : { kind: "text", value },
       ]),
     ),
     entry_id: entryId,

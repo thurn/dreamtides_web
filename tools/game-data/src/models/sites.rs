@@ -7,7 +7,7 @@ use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
-use super::localization::source_text;
+use super::localization::{source_text, source_transport_value};
 
 use super::atlas::SiteType;
 
@@ -338,8 +338,8 @@ fn lower_rules(source: SiteRules) -> Result<toml::Value> {
 
 fn lower_presentation(source: SitePresentation) -> Result<toml::Value> {
     let mut table = toml::map::Map::new();
-    let mut put = |key: &str, value: String| {
-        table.insert(key.into(), value.into());
+    let mut put = |key: &str, value: toml::Value| {
+        table.insert(key.into(), value);
     };
     match source {
         SitePresentation::Battle {
@@ -348,13 +348,13 @@ fn lower_presentation(source: SitePresentation) -> Result<toml::Value> {
             locked_guidance,
         } => {
             put("kind", "battle".into());
-            put("label", source_text(&label)?);
-            put("final-boss-label", source_text(&final_boss_label)?);
-            put("locked-guidance", source_text(&locked_guidance)?);
+            put("label", source_transport_value(&label)?);
+            put("final-boss-label", source_transport_value(&final_boss_label)?);
+            put("locked-guidance", source_transport_value(&locked_guidance)?);
         }
         SitePresentation::Draft { label } => {
             put("kind", "draft".into());
-            put("label", source_text(&label)?);
+            put("label", source_transport_value(&label)?);
         }
         SitePresentation::Shop {
             title,
@@ -364,14 +364,14 @@ fn lower_presentation(source: SitePresentation) -> Result<toml::Value> {
             free_price,
         } => {
             put("kind", "shop".into());
-            put("title", source_text(&title)?);
-            put("restocked", source_text(&restocked)?);
+            put("title", source_transport_value(&title)?);
+            put("restocked", source_transport_value(&restocked)?);
             put(
                 "restock-offers-action",
-                source_text(&restock_offers_action)?,
+                source_transport_value(&restock_offers_action)?,
             );
-            put("restock-action", source_text(&restock_action)?);
-            put("free-price", source_text(&free_price)?);
+            put("restock-action", source_transport_value(&restock_action)?);
+            put("free-price", source_transport_value(&free_price)?);
         }
         SitePresentation::Purge {
             title,
@@ -379,9 +379,9 @@ fn lower_presentation(source: SitePresentation) -> Result<toml::Value> {
             purge_action,
         } => {
             put("kind", "purge".into());
-            put("title", source_text(&title)?);
-            put("instruction", source_text(&instruction)?);
-            put("purge-action", source_text(&purge_action)?);
+            put("title", source_transport_value(&title)?);
+            put("instruction", source_transport_value(&instruction)?);
+            put("purge-action", source_transport_value(&purge_action)?);
         }
         SitePresentation::DreamsignBazaar {
             title,
@@ -392,24 +392,24 @@ fn lower_presentation(source: SitePresentation) -> Result<toml::Value> {
             replacement_title,
         } => {
             put("kind", "dreamsign-bazaar".into());
-            put("title", source_text(&title)?);
-            put("restocked", source_text(&restocked)?);
+            put("title", source_transport_value(&title)?);
+            put("restocked", source_transport_value(&restocked)?);
             put(
                 "restock-offers-action",
-                source_text(&restock_offers_action)?,
+                source_transport_value(&restock_offers_action)?,
             );
-            put("restock-action", source_text(&restock_action)?);
-            put("free-price", source_text(&free_price)?);
-            put("replacement-title", source_text(&replacement_title)?);
+            put("restock-action", source_transport_value(&restock_action)?);
+            put("free-price", source_transport_value(&free_price)?);
+            put("replacement-title", source_transport_value(&replacement_title)?);
         }
         SitePresentation::DreamsignRevelation { loading, exhausted } => {
             put("kind", "dreamsign-revelation".into());
-            put("loading", source_text(&loading)?);
-            put("exhausted", source_text(&exhausted)?);
+            put("loading", source_transport_value(&loading)?);
+            put("exhausted", source_transport_value(&exhausted)?);
         }
         SitePresentation::RandomSite { title } => {
             put("kind", "random-site".into());
-            put("title", source_text(&title)?);
+            put("title", source_transport_value(&title)?);
         }
     }
     Ok(toml::Value::Table(table))
@@ -577,7 +577,7 @@ fn validate_presentation(metadata: &SiteMetadata) -> Result<()> {
             ],
             SitePresentation::Draft { label } => {
                 let label = source_text(label)?;
-                validate_slots("Draft label", &label, &["pickCount"])?;
+                validate_slots("Draft label", &label, &["pick_count"])?;
                 vec![label]
             }
             SitePresentation::Shop {
@@ -771,7 +771,7 @@ mod tests {
                 locked_guidance: ls("Locked"),
             }),
             SiteType::Draft => Some(SitePresentation::Draft {
-                label: ls("Draft {pickCount}x"),
+                label: ls("Draft {pick_count}x"),
             }),
             SiteType::Shop => Some(SitePresentation::Shop {
                 title: ls("Shop"),

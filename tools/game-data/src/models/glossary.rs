@@ -8,7 +8,7 @@ use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
-use super::localization::source_text;
+use super::localization::{source_text, source_transport_value};
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -298,9 +298,9 @@ struct CompatibilityProjection {
     #[serde(skip_serializing_if = "Option::is_none")]
     pattern: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    term: Option<String>,
+    term: Option<toml::Value>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    definition: Option<String>,
+    definition: Option<toml::Value>,
 }
 
 pub fn lower(source: Vec<GlossaryDefinition>) -> Result<toml::Value> {
@@ -329,11 +329,15 @@ pub fn lower(source: Vec<GlossaryDefinition>) -> Result<toml::Value> {
                         Ok(CompatibilityProjection {
                             owner: projection.owner.map(ProjectionOwner::compatibility_name),
                             pattern: projection.pattern,
-                            term: projection.term.as_ref().map(source_text).transpose()?,
+                            term: projection
+                                .term
+                                .as_ref()
+                                .map(source_transport_value)
+                                .transpose()?,
                             definition: projection
                                 .definition
                                 .as_ref()
-                                .map(source_text)
+                                .map(source_transport_value)
                                 .transpose()?,
                         })
                     })

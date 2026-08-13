@@ -27,7 +27,7 @@ import {
   selectDreamwellEffectScript,
 } from "./dreamwell-effects-table";
 import dreamwellCatalog from "../../../public/dreamwell-data.json";
-import type { DreamwellCard } from "../../data/dreamwell-database";
+import { parseDreamwellCards } from "../../data/dreamwell-database";
 import {
   isDreamwellPromptRef,
   resolveDreamwellPromptRef,
@@ -72,7 +72,7 @@ describe("Dreamwell prompt catalog coverage", () => {
       expect(() =>
         resolveDreamwellPromptRef(
           ref,
-          dreamwellCatalog as unknown as readonly DreamwellCard[],
+          parseDreamwellCards(dreamwellCatalog),
         ),
       ).not.toThrow();
     }

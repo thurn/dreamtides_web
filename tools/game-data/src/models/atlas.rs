@@ -6,7 +6,7 @@ use indexmap::IndexMap;
 use serde::{Deserialize, Deserializer, Serialize, Serializer, de::Error as _};
 use uuid::{Uuid, Variant, Version};
 
-use super::localization::source_text;
+use super::localization::{source_text, source_transport_value};
 
 macro_rules! uuid_id {
     ($name:ident) => {
@@ -430,12 +430,13 @@ fn validate(source: &AtlasCatalog) -> Result<()> {
         "early_reveal_bias must be finite and nonnegative"
     );
     ensure!(
-        source_text(&source.presentation.affiliation.title_template)?.contains("{name}"),
-        "affiliation title template must contain {{name}}"
+        source_text(&source.presentation.affiliation.title_template)?
+            .contains("{affiliation_name}"),
+        "affiliation title template must contain {{affiliation_name}}"
     );
     ensure!(
-        source_text(&source.presentation.affiliation.body_template)?.contains("{card-theme}"),
-        "affiliation body template must contain {{card-theme}}"
+        source_text(&source.presentation.affiliation.body_template)?.contains("{card_theme}"),
+        "affiliation body template must contain {{card_theme}}"
     );
     ensure!(
         !source.boss.compatibility_dreamscape_id.trim().is_empty(),
@@ -659,23 +660,23 @@ fn lower_presentation(value: &Presentation) -> Result<toml::map::Map<String, tom
     Ok(toml::map::Map::from_iter([
         (
             "unseen-title".into(),
-            source_text(&value.unrevealed.title)?.into(),
+            source_transport_value(&value.unrevealed.title)?,
         ),
         (
             "unseen-body".into(),
-            source_text(&value.unrevealed.body)?.into(),
+            source_transport_value(&value.unrevealed.body)?,
         ),
         (
             "starter-body".into(),
-            source_text(&value.starter_body)?.into(),
+            source_transport_value(&value.starter_body)?,
         ),
         (
             "affiliation-title-template".into(),
-            source_text(&value.affiliation.title_template)?.into(),
+            source_transport_value(&value.affiliation.title_template)?,
         ),
         (
             "affiliation-body-template".into(),
-            source_text(&value.affiliation.body_template)?.into(),
+            source_transport_value(&value.affiliation.body_template)?,
         ),
     ]))
 }
@@ -821,8 +822,8 @@ mod tests {
                 },
                 starter_body: ls("Start"),
                 affiliation: AffiliationPresentation {
-                    title_template: ls("Affiliation: {name}"),
-                    body_template: ls("{card-theme} affinity"),
+                    title_template: ls("Affiliation: {affiliation_name}"),
+                    body_template: ls("{card_theme} affinity"),
                 },
             },
         }

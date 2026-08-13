@@ -24,7 +24,10 @@ AuguryCatalog(
       // Internal label used by debugging and authoring tools.
       name: "Grant: Fit card (gift)",
       // Player-facing offer copy. Placeholders resolve from the surfaced reward.
-      presentation: (headline: Text(Tx("Gain a Card")), subtitle: Text(Tx("Gain {{cardName}}"))),
+      presentation: (
+        headline: Text(Tx("Gain a Card")),
+        subtitle: Text(Tx(text: "Gain {card_name}", placeholders: {"card_name": Opaque})),
+      ),
       // Effect of this reward offer. A `selection_policy` ranks eligible
       // targets for the ability.
       ability: FitCardGrant(selection_policy: CardFit, granted_copies: 1),
@@ -49,8 +52,14 @@ AuguryCatalog(
       presentation: (
         headline: Text(Tx("Choose a Card")),
         subtitle: Count(
-          one: Tx("Choose a card and add {{count}} copy of it to your deck."),
-          other: Tx("Choose a card and add {{count}} copies of it to your deck."),
+          one: Tx(
+            text: "Choose a card and add {count} copy of it to your deck.",
+            placeholders: {"count": Scalar},
+          ),
+          other: Tx(
+            text: "Choose a card and add {count} copies of it to your deck.",
+            placeholders: {"count": Scalar},
+          ),
         ),
       ),
       ability: CopiesDraft(selection_policy: CardFitQuality, chooser_size: 4, granted_copies: 2),
@@ -60,7 +69,10 @@ AuguryCatalog(
     ArchetypeDefinition(
       id: "c4ac3d68-e814-43ea-9be3-ced3fd1bbe89",
       name: "Grant: Strong card",
-      presentation: (headline: Text(Tx("Gain a Card")), subtitle: Text(Tx("Gain {{cardName}}"))),
+      presentation: (
+        headline: Text(Tx("Gain a Card")),
+        subtitle: Text(Tx(text: "Gain {card_name}", placeholders: {"card_name": Opaque})),
+      ),
       ability: StrongCard(selection_policy: CardFitQuality, granted_copies: 1),
       weight: 8,
     ),
@@ -77,8 +89,14 @@ AuguryCatalog(
           mid_cost: Tx("Choose a mid-cost card to add to your deck."),
           expensive: Tx("Choose an expensive card to add to your deck."),
           fast: Tx("Choose a fast card to add to your deck."),
-          subtype: Tx("Choose one {{categoryName}} card to add to your deck."),
-          package: Tx("Choose one card from the {{categoryName}} to add to your deck."),
+          subtype: Tx(
+            text: "Choose one {category_name} card to add to your deck.",
+            placeholders: {"category_name": Opaque},
+          ),
+          package: Tx(
+            text: "Choose one card from the {category_name} to add to your deck.",
+            placeholders: {"category_name": Opaque},
+          ),
         ),
       ),
       ability: CategoryDraftKnown(selection_policy: CardFit, chooser_size: 4, granted_copies: 1),
@@ -89,10 +107,13 @@ AuguryCatalog(
       id: "dfd3976a-b1dc-44fe-9aab-c13bd2c195e4",
       name: "Grant: Card bundle",
       presentation: (
-        headline: Count(one: Tx("Gain {{count}} Card"), other: Tx("Gain {{count}} Cards")),
+        headline: Count(
+          one: Tx(text: "Gain {count} Card", placeholders: {"count": Scalar}),
+          other: Tx(text: "Gain {count} Cards", placeholders: {"count": Scalar}),
+        ),
         subtitle: Count(
-          one: Tx("Add {{count}} Card to your deck."),
-          other: Tx("Add {{count}} Cards to your deck."),
+          one: Tx(text: "Add {count} Card to your deck.", placeholders: {"count": Scalar}),
+          other: Tx(text: "Add {count} Cards to your deck.", placeholders: {"count": Scalar}),
         ),
       ),
       ability: CardBundle(bundle_size: 3, minimum_bundle_size: 2),
@@ -115,7 +136,7 @@ AuguryCatalog(
       name: "Improve: Transfigure",
       presentation: (
         headline: Text(Tx("Transfigure a Card")),
-        subtitle: Text(Tx("Transfigure {{cardName}}")),
+        subtitle: Text(Tx(text: "Transfigure {card_name}", placeholders: {"card_name": Opaque})),
       ),
       ability: Transfigure(selection_policy: TransfigurationValue),
       weight: 10,
@@ -127,8 +148,11 @@ AuguryCatalog(
       presentation: (
         headline: Text(Tx("Transfigure Your Starters")),
         subtitle: Count(
-          one: Tx("Transfigure {{cardName}}"),
-          other: Tx("Transfigure {{firstCardName}} and {{secondCardName}}"),
+          one: Tx(text: "Transfigure {card_name}", placeholders: {"card_name": Opaque}),
+          other: Tx(
+            text: "Transfigure {first_card_name} and {second_card_name}",
+            placeholders: {"first_card_name": Opaque, "second_card_name": Opaque},
+          ),
         ),
       ),
       ability: StarterTransfigure(selection_policy: TransfigurationValue, maximum_targets: 2),
@@ -138,7 +162,10 @@ AuguryCatalog(
     ArchetypeDefinition(
       id: "df34c427-5e27-42d1-b903-c1d6d6dddd78",
       name: "Remove: Purge",
-      presentation: (headline: Text(Tx("Purge a Card")), subtitle: Text(Tx("Purge {{cardName}}"))),
+      presentation: (
+        headline: Text(Tx("Purge a Card")),
+        subtitle: Text(Tx(text: "Purge {card_name}", placeholders: {"card_name": Opaque})),
+      ),
       ability: Purge(selection_policy: PurgeMisfit),
       weight: 8,
     ),
@@ -149,8 +176,11 @@ AuguryCatalog(
       presentation: (
         headline: Count(one: Tx("Duplicate a Card"), other: Tx("Choose a Card")),
         subtitle: Count(
-          one: Tx("Duplicate {{cardName}}"),
-          other: Tx("Choose one of {{count}} cards in your deck to duplicate."),
+          one: Tx(text: "Duplicate {card_name}", placeholders: {"card_name": Opaque}),
+          other: Tx(
+            text: "Choose one of {count} cards in your deck to duplicate.",
+            placeholders: {"count": Scalar},
+          ),
         ),
       ),
       ability: Duplicate(selection_policy: DuplicateValue, chooser_size: 3, granted_copies: 1),
@@ -162,7 +192,7 @@ AuguryCatalog(
       name: "Dreamsign: Grant dreamsign",
       presentation: (
         headline: Text(Tx("Gain a Dreamsign")),
-        subtitle: Text(Tx("Gain {{dreamsignName}}")),
+        subtitle: Text(Tx(text: "Gain {dreamsign_name}", placeholders: {"dreamsign_name": Opaque})),
         background_art: CardImage(386654065),
       ),
       ability: Dreamsign(selection_policy: DreamsignMatch),
@@ -174,7 +204,7 @@ AuguryCatalog(
       name: "Site: Add a site",
       presentation: (
         headline: Text(Tx("Add a Site")),
-        subtitle: Text(Tx("Add the {{siteName}} site.")),
+        subtitle: Text(Tx(text: "Add the {site_name} site.", placeholders: {"site_name": Opaque})),
         background_art: CardImage(334049261),
       ),
       ability: AddSite,

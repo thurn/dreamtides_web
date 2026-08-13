@@ -1,5 +1,6 @@
 import type { Rarity } from "./cards";
 import type { PoolVariant } from "../draft/pool/types";
+import type { SourceTransport } from "../runtime/localization/runtime";
 
 export interface DraftRarityCap {
   rarity: Rarity;
@@ -19,7 +20,7 @@ export interface DraftData {
   contentHash: string;
   foldHash: string;
   presentation: {
-    progress: string;
+    progress: SourceTransport;
   };
   offers: {
     cardsPerOffer: number;

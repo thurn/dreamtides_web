@@ -21,7 +21,7 @@ import type {
 } from "../../cumulus/components/hud/JourneyStatusBar";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
-import { localizedSourceText } from "../../runtime/localization/runtime";
+import { bindSourceTransport, localizedSourceText } from "../../runtime/localization/runtime";
 import { tx, type LocalizedString } from "@trox/runtime";
 import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
 import type {
@@ -112,7 +112,7 @@ export function battleLabel(
     import("../../types/sites-data").SitePresentation,
     { kind: "battle" }
   >;
-  return localizedSourceText(
+  return bindSourceTransport(
     completionLevel === FINAL_BOSS_COMPLETION_LEVEL
       ? presentation.finalBossLabel
       : presentation.label,
@@ -150,8 +150,8 @@ export function buildSiteModels(
     const label = isBattle
       ? battleLabel(completionLevel, sitesData)
       : site.type === "Draft"
-        ? localizedSourceText(draftPresentation.label, {
-            pickCount: draftSitePickCount(site, defaultDraftPickCount),
+        ? bindSourceTransport(draftPresentation.label, {
+            pick_count: draftSitePickCount(site, defaultDraftPickCount),
           })
         : localizedSourceText(siteTypeName(sitesData, site.type));
     return {
@@ -162,7 +162,7 @@ export function buildSiteModels(
       isLocked,
       isInteractive,
       label,
-      lockedGuidance: localizedSourceText(battlePresentation.lockedGuidance),
+      lockedGuidance: bindSourceTransport(battlePresentation.lockedGuidance),
       blurb: localizedSourceText(siteTypeDescription(sitesData, site.type)),
       icon: glyph(siteTypeIcon(sitesData, site.type)),
     };

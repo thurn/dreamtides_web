@@ -7,17 +7,17 @@ use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
-use super::localization::source_text;
+use super::localization::{source_text, source_transport_value};
 
 const PRESENTATION_SLOTS: [&str; 8] = [
-    "cardName",
-    "categoryName",
+    "card_name",
+    "category_name",
     "count",
-    "dreamsignName",
-    "firstCardName",
-    "secondCardName",
-    "siteName",
-    "subtypeName",
+    "dreamsign_name",
+    "first_card_name",
+    "second_card_name",
+    "site_name",
+    "subtype_name",
 ];
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -556,12 +556,12 @@ fn lower_presentation_text(source: PresentationText) -> Result<toml::Value> {
     match source {
         PresentationText::Text(text) => {
             output.insert("kind".into(), "text".into());
-            output.insert("text".into(), source_text(&text)?.into());
+            output.insert("text".into(), source_transport_value(&text)?);
         }
         PresentationText::Count { one, other } => {
             output.insert("kind".into(), "count".into());
-            output.insert("one".into(), source_text(&one)?.into());
-            output.insert("other".into(), source_text(&other)?.into());
+            output.insert("one".into(), source_transport_value(&one)?);
+            output.insert("other".into(), source_transport_value(&other)?);
         }
         PresentationText::Category {
             character,
@@ -574,14 +574,14 @@ fn lower_presentation_text(source: PresentationText) -> Result<toml::Value> {
             package,
         } => {
             output.insert("kind".into(), "category".into());
-            output.insert("character".into(), source_text(&character)?.into());
-            output.insert("event".into(), source_text(&event)?.into());
-            output.insert("cheap".into(), source_text(&cheap)?.into());
-            output.insert("mid-cost".into(), source_text(&mid_cost)?.into());
-            output.insert("expensive".into(), source_text(&expensive)?.into());
-            output.insert("fast".into(), source_text(&fast)?.into());
-            output.insert("subtype".into(), source_text(&subtype)?.into());
-            output.insert("package".into(), source_text(&package)?.into());
+            output.insert("character".into(), source_transport_value(&character)?);
+            output.insert("event".into(), source_transport_value(&event)?);
+            output.insert("cheap".into(), source_transport_value(&cheap)?);
+            output.insert("mid-cost".into(), source_transport_value(&mid_cost)?);
+            output.insert("expensive".into(), source_transport_value(&expensive)?);
+            output.insert("fast".into(), source_transport_value(&fast)?);
+            output.insert("subtype".into(), source_transport_value(&subtype)?);
+            output.insert("package".into(), source_transport_value(&package)?);
         }
     }
     Ok(toml::Value::Table(output))
@@ -916,7 +916,16 @@ mod tests {
         })
         .unwrap();
         assert_eq!(count["kind"].as_str(), Some("count"));
-        assert_eq!(count["one"].as_str(), Some("One {count}"));
+        assert_eq!(
+            count["one"]["format"].as_str(),
+            Some("trox-source-message-ref")
+        );
+        assert_eq!(
+            count["one"]["source_signature"]
+                .as_str()
+                .map(str::len),
+            Some(64)
+        );
 
         let category = lower_presentation_text(PresentationText::Category {
             character: ls("Character"),
@@ -925,13 +934,19 @@ mod tests {
             mid_cost: ls("Mid-cost"),
             expensive: ls("Expensive"),
             fast: ls("Fast"),
-            subtype: ls("Subtype {categoryName}"),
-            package: ls("Package {categoryName}"),
+            subtype: ls("Subtype {category_name}"),
+            package: ls("Package {category_name}"),
         })
         .unwrap();
         assert_eq!(category["kind"].as_str(), Some("category"));
-        assert_eq!(category["mid-cost"].as_str(), Some("Mid-cost"));
-        assert_eq!(category["package"].as_str(), Some("Package {categoryName}"));
+        assert_eq!(
+            category["mid-cost"]["format"].as_str(),
+            Some("trox-source-message-ref")
+        );
+        assert_eq!(
+            category["package"]["format"].as_str(),
+            Some("trox-source-message-ref")
+        );
     }
 
     #[test]

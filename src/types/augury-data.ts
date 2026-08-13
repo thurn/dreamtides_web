@@ -3,6 +3,7 @@ import type {
   MerchantOfferFamily,
 } from "../journey_v2/archetypes/types";
 import type { RewardSelectionPolicyId } from "../reward-selection/types";
+import type { SourceTransport } from "../runtime/localization/runtime";
 
 export interface AuguryArchetypeData {
   id: MerchantArchetypeId;
@@ -23,18 +24,18 @@ export interface AuguryArchetypeData {
 }
 
 export type AuguryPresentationText =
-  | Readonly<{ kind: "text"; text: string }>
-  | Readonly<{ kind: "count"; one: string; other: string }>
+  | Readonly<{ kind: "text"; text: SourceTransport }>
+  | Readonly<{ kind: "count"; one: SourceTransport; other: SourceTransport }>
   | Readonly<{
       kind: "category";
-      character: string;
-      event: string;
-      cheap: string;
-      midCost: string;
-      expensive: string;
-      fast: string;
-      subtype: string;
-      package: string;
+      character: SourceTransport;
+      event: SourceTransport;
+      cheap: SourceTransport;
+      midCost: SourceTransport;
+      expensive: SourceTransport;
+      fast: SourceTransport;
+      subtype: SourceTransport;
+      package: SourceTransport;
     }>;
 
 /** Validated browser data compiled from data/augury.toml. */

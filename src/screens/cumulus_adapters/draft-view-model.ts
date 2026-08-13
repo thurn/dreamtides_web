@@ -19,7 +19,7 @@ import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import type { TransfigurationData } from "../../types/transfiguration-data";
 import type { DraftData } from "../../types/draft-data";
-import { localizedSourceText } from "../../runtime/localization/runtime";
+import { bindSourceTransport } from "../../runtime/localization/runtime";
 
 /**
  * Sort an offered pack for display: cheapest first, then alphabetically as a
@@ -102,9 +102,9 @@ export function buildDraftView(params: {
     // Clamp so the last pack never reads past the total (e.g. "(6/5)").
     pickNumber,
     pickTotal,
-    progressLabel: localizedSourceText(params.presentation.progress, {
-      pickNumber,
-      pickTotal,
+    progressLabel: bindSourceTransport(params.presentation.progress, {
+      pick_number: pickNumber,
+      pick_total: pickTotal,
     }),
     tutorial:
       params.journeyState === undefined

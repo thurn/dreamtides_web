@@ -15,11 +15,14 @@ import esBundleJSON from "../../generated/localization/es.trox.json?raw";
 import jaBundleJSON from "../../generated/localization/ja.trox.json?raw";
 import ruBundleJSON from "../../generated/localization/ru.trox.json?raw";
 import {
+  bindSourceTransport,
   createTargetLocalizationRuntime,
   loadCanonicalBundle,
   localizedSourceText,
   requireSourceRuntime,
   resolveSource,
+  sourceMessage,
+  splitCanonicalLocalizedParagraphs,
 } from "./runtime";
 import { withSyntheticTranslations } from "./testing";
 
@@ -59,6 +62,27 @@ function countMessage(visible_count: number, total_count: number) {
 }
 
 describe("Trox localization runtime", () => {
+  it("authorizes typed source references and enforces their semantic argument contract", () => {
+    const [entryId, entry] = Object.entries(source.entries).find(
+      ([, candidate]) => Object.keys(candidate.arguments ?? {}).length > 0,
+    ) ?? [];
+    if (entryId === undefined || entry === undefined) {
+      throw new Error("Source-message contract fixture missing");
+    }
+    const reference = {
+      contract_signature: entry.contract_signature ?? "",
+      entry_id: entryId,
+      format: "trox-source-message-ref" as const,
+      source_signature: entry.source_signature,
+      version: { major: 1 as const, minor: 0 as const },
+    };
+    expect(Object.keys(sourceMessage(reference).argumentSchemas)).toEqual(
+      Object.keys(entry.arguments ?? {}),
+    );
+    expect(() => sourceMessage({ ...reference, contract_signature: "0".repeat(64) }))
+      .toThrow(/unauthorized-entry/u);
+  });
+
   it("loads the committed canonical source bundle and resolves source values", () => {
     expect(
       loadCanonicalBundle(enUSBundleJSON, "source").source_catalog_fingerprint,
@@ -217,6 +241,17 @@ describe("Trox localization runtime", () => {
     expect(requireSourceRuntime().localizer.resolve(message)).toBe(sourceText);
   });
 
+  it("composes independently authorized canonical rules paragraphs", () => {
+    expect(
+      splitCanonicalLocalizedParagraphs(
+        "Synthetic first paragraph.\n\nSynthetic second paragraph.",
+      ),
+    ).toEqual(["Synthetic first paragraph.", "Synthetic second paragraph."]);
+    expect(
+      splitCanonicalLocalizedParagraphs("One.\n\nTwo.\n\nThree."),
+    ).toBeNull();
+  });
+
   it("re-authors canonical compatibility templates as argument-aware messages", () => {
     const message = localizedSourceText("Affiliation: {name}", {
       name: tx(
@@ -227,6 +262,12 @@ describe("Trox localization runtime", () => {
     expect(requireSourceRuntime().localizer.resolve(message)).toBe(
       "Affiliation: Figments",
     );
+  });
+
+  it("binds generic legacy placeholder names through canonical arguments", () => {
+    expect(resolveSource(bindSourceTransport("Choose {thirdCardName}", {
+      third_card_name: 3,
+    }))).toBe("Choose 3");
   });
 
   it("authorizes the generated canonical card-subtype vocabulary", () => {

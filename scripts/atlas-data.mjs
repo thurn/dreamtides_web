@@ -34,6 +34,16 @@ function string(value, path) {
   return value;
 }
 
+function isSourceMessageRef(value) {
+  return value !== null &&
+    typeof value === "object" &&
+    !Array.isArray(value) &&
+    value.format === "trox-source-message-ref" &&
+    typeof value.entry_id === "string" &&
+    typeof value.source_signature === "string" &&
+    typeof value.contract_signature === "string";
+}
+
 function boolean(value, path) {
   if (typeof value !== "boolean") fail(path, "expected a boolean");
   return value;
@@ -109,8 +119,16 @@ function placeholders(template) {
 }
 
 function template(value, path, allowed) {
+  if (isSourceMessageRef(value)) return value;
   const result = string(value, path);
-  const found = placeholders(result);
+  const found = placeholders(result).map((entry) =>
+    entry === "name"
+      ? "affiliation_name"
+      : entry
+          .replace(/([a-z0-9])([A-Z])/gu, "$1_$2")
+          .replaceAll("-", "_")
+          .toLowerCase(),
+  );
   const unknown = found.filter((entry) => !allowed.has(entry));
   if (unknown.length > 0) fail(path, `unsupported placeholder {${unknown[0]}}`);
   for (const required of allowed) {
@@ -118,6 +136,10 @@ function template(value, path, allowed) {
       fail(path, `missing placeholder {${required}}`);
   }
   return result;
+}
+
+function localized(value, path) {
+  return isSourceMessageRef(value) ? value : string(value, path);
 }
 
 function stableValue(value) {
@@ -547,27 +569,27 @@ export function compileAtlasData(sourceValue, catalogs = {}) {
 
   const presentationSource = record(source.presentation, "presentation");
   const presentation = {
-    unseenTitle: string(
+    unseenTitle: localized(
       presentationSource["unseen-title"],
       "presentation.unseen-title",
     ),
-    unseenBody: string(
+    unseenBody: localized(
       presentationSource["unseen-body"],
       "presentation.unseen-body",
     ),
-    starterBody: string(
+    starterBody: localized(
       presentationSource["starter-body"],
       "presentation.starter-body",
     ),
     affiliationTitleTemplate: template(
       presentationSource["affiliation-title-template"],
       "presentation.affiliation-title-template",
-      new Set(["name"]),
+      new Set(["affiliation_name"]),
     ),
     affiliationBodyTemplate: template(
       presentationSource["affiliation-body-template"],
       "presentation.affiliation-body-template",
-      new Set(["card-theme"]),
+      new Set(["card_theme"]),
     ),
   };
 

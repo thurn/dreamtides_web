@@ -4,6 +4,7 @@ import {
   dreamwellPromptRef,
   resolveDreamwellPromptRef,
 } from "./dreamwell-prompts";
+import { resolveSource } from "../runtime/localization/runtime";
 
 const CARD_ID = "11111111-1111-4111-8111-111111111111";
 const CATALOG: readonly DreamwellCard[] = [
@@ -18,12 +19,12 @@ const CATALOG: readonly DreamwellCard[] = [
       {
         key: "choose-value",
         title: "Choose {count}",
-        subtitle: "Up to {maximumCost}",
+        subtitle: "Up to {maximum_cost}",
         instructions: "Choose {count} value.",
         choices: [{ key: "confirm", label: "Confirm {count}" }],
         arguments: [
           { name: "count", kind: "Count" },
-          { name: "maximumCost", kind: "MaximumCost" },
+          { name: "maximum_cost", kind: "MaximumCost" },
         ],
       },
     ],
@@ -32,15 +33,15 @@ const CATALOG: readonly DreamwellCard[] = [
 
 describe("Dreamwell prompt references", () => {
   it("resolves semantic prompt parts through an injected catalog", () => {
-    const arguments_ = { count: 2, maximumCost: 3 };
+    const arguments_ = { count: 2, maximum_cost: 3 };
     expect(
-      resolveDreamwellPromptRef(
+      resolveSource(resolveDreamwellPromptRef(
         dreamwellPromptRef(CARD_ID, "choose-value", "title", arguments_),
         CATALOG,
-      ),
+      )),
     ).toBe("Choose 2");
     expect(
-      resolveDreamwellPromptRef(
+      resolveSource(resolveDreamwellPromptRef(
         dreamwellPromptRef(
           CARD_ID,
           "choose-value",
@@ -49,7 +50,7 @@ describe("Dreamwell prompt references", () => {
           "confirm",
         ),
         CATALOG,
-      ),
+      )),
     ).toBe("Confirm 2");
   });
 
@@ -64,7 +65,7 @@ describe("Dreamwell prompt references", () => {
       resolveDreamwellPromptRef(
         dreamwellPromptRef(CARD_ID, "choose-value", "title", {
           count: "two",
-          maximumCost: 3,
+          maximum_cost: 3,
         }),
         CATALOG,
       ),

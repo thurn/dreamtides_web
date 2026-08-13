@@ -5,6 +5,7 @@ import {
   type SiteType,
 } from "../types/site-type";
 import { requireGlossaryEntry } from "./glossary";
+import { hydrateSourceTransport } from "../runtime/localization/runtime";
 
 const SITES_DATA_JSON_PATH = "/sites-data.json";
 const SHA256_HEX = /^[0-9a-f]{64}$/u;
@@ -33,6 +34,14 @@ function hasExactKeys(
 
 function isNonEmptyString(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
+}
+
+function isSourceMessageRef(value: unknown): boolean {
+  return isRecord(value) &&
+    value.format === "trox-source-message-ref" &&
+    typeof value.entry_id === "string" &&
+    typeof value.source_signature === "string" &&
+    typeof value.contract_signature === "string";
 }
 
 function isInteger(
@@ -95,7 +104,7 @@ function isSitePresentation(value: unknown, siteType: SiteType): boolean {
   )
     return false;
   return Object.entries(value).every(
-    ([key, field]) => key === "kind" || isNonEmptyString(field),
+    ([key, field]) => key === "kind" || isNonEmptyString(field) || isSourceMessageRef(field),
   );
 }
 
@@ -221,15 +230,7 @@ function isSitesData(value: unknown): value is SitesData {
   return true;
 }
 
-/** Fetches the validated site registry emitted by the asset pipeline. */
-export async function loadSitesData(): Promise<SitesData> {
-  const response = await fetch(SITES_DATA_JSON_PATH);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to load Sites data: ${String(response.status)} ${response.statusText}`,
-    );
-  }
-  const value: unknown = await response.json();
+export function parseSitesData(value: unknown): SitesData {
   if (!isSitesData(value)) {
     throw new Error("Failed to load Sites data: malformed sites-data.json");
   }
@@ -240,7 +241,35 @@ export async function loadSitesData(): Promise<SitesData> {
   } catch {
     throw new Error("Failed to load Sites data: malformed sites-data.json");
   }
-  return value;
+  return {
+    ...value,
+    siteTypes: Object.fromEntries(SITE_TYPES.map((siteType) => {
+      const metadata = value.siteTypes[siteType];
+      const presentation = metadata.presentation;
+      return [siteType, {
+        ...metadata,
+        presentation: presentation === null ? null : Object.fromEntries(
+          Object.entries(presentation).map(([key, field]) => [
+            key,
+            key === "kind"
+              ? field
+              : hydrateSourceTransport(field, `${siteType} presentation ${key}`),
+          ]),
+        ),
+      }];
+    })) as SitesData["siteTypes"],
+  };
+}
+
+/** Fetches the validated site registry emitted by the asset pipeline. */
+export async function loadSitesData(): Promise<SitesData> {
+  const response = await fetch(SITES_DATA_JSON_PATH);
+  if (!response.ok) {
+    throw new Error(
+      `Failed to load Sites data: ${String(response.status)} ${response.statusText}`,
+    );
+  }
+  return parseSitesData(await response.json());
 }
 
 function requireSiteTypeData(sitesData: SitesData, siteType: SiteType) {

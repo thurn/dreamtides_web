@@ -78,15 +78,14 @@ describe("transformExplorationData", () => {
       actions.length,
     );
     expect(
-      actions
-        .filter((action) => action.effectText.includes("{deck_card}"))
-        .every((action) => action.deckTarget === "offered" ||
-          action.effectKind === "purge-disclosed-and-transfigure-same-type"),
+      actions.every((action) =>
+        action.effectText?.format === "trox-source-message-ref" &&
+        action.label?.format === "trox-source-message-ref"),
     ).toBe(true);
     expect(
       actions
         .filter((action) => action.cardId !== undefined)
-        .every((action) => action.effectText.includes("{fixed_card}")),
+        .every((action) => typeof action.cardId === "string"),
     ).toBe(true);
     expect(
       actions
@@ -94,7 +93,7 @@ describe("transformExplorationData", () => {
           "make-predicate-fast-and-gain-nightmares",
           "take-transfigured-cards-and-gain-nightmares",
         ].includes(action.effectKind))
-        .every((action) => action.effectText.includes("{nightmare_card}")),
+        .every((action) => action.nightmareCount > 0),
     ).toBe(true);
     expect(actions.map((action) => action.effectKind)).toEqual(
       expect.arrayContaining([

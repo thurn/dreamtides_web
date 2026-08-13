@@ -29,7 +29,7 @@ import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 import { projectGuideView } from "./guide-view-model";
 import type { TransfigurationData } from "../../types/transfiguration-data";
 import type { SitesData } from "../../types/sites-data";
-import { localizedSourceText } from "../../runtime/localization/runtime";
+import { bindSourceTransport } from "../../runtime/localization/runtime";
 
 /** Resolve Master Takeshi, the resident guide for Purge. */
 export function resolvePurgeGuide(
@@ -117,10 +117,10 @@ export function buildPurgeSiteView(params: {
       >;
       return {
         kind: presentation.kind,
-        title: localizedSourceText(presentation.title),
-        instruction: localizedSourceText(presentation.instruction),
+        title: bindSourceTransport(presentation.title),
+        instruction: bindSourceTransport(presentation.instruction),
         purgeAction: (count: number) =>
-          localizedSourceText(presentation.purgeAction, { count }),
+          bindSourceTransport(presentation.purgeAction, { count }),
       };
     })(),
     siteId: params.site.id,

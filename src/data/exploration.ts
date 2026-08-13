@@ -6,6 +6,15 @@ import type {
   RewardSelectionPolicyId,
 } from "../reward-selection/types";
 import { EXPLORATION_EFFECT_KINDS } from "../../scripts/exploration-effect-kinds.mjs";
+import {
+  LocalizedString,
+  SourceMessage,
+  type SourceMessageRef,
+} from "@trox/runtime";
+import {
+  localizedSourceMessage,
+  sourceMessage,
+} from "../runtime/localization/runtime";
 
 const EXPLORATION_DATA_PATH = "/exploration-data.json";
 
@@ -66,10 +75,11 @@ export function isTransfigurationExplorationEffect(
 
 export interface ExplorationActionContent {
   id: string;
-  label: string;
-  effectText: string;
-  followupTitle?: string;
-  followupSubtitle?: string;
+  /** Strings are accepted only by synthetic fixtures; loaded content is typed. */
+  label: string | LocalizedString;
+  effectText: string | LocalizedString | SourceMessage;
+  followupTitle?: string | LocalizedString | SourceMessage;
+  followupSubtitle?: string | LocalizedString | SourceMessage;
   effectKind: ExplorationEffectKind;
   /** Compiled site-neutral mechanic and its non-player-facing selection policy. */
   canonicalMechanicId?: RewardMechanicId;
@@ -108,7 +118,8 @@ export function explorationActionUsesOfferedDeckTarget(
 
 export interface ExplorationEncounterContent {
   cardId: CardId;
-  prose: string;
+  /** Strings are accepted only by synthetic fixtures; loaded content is typed. */
+  prose: string | LocalizedString;
   actions: readonly ExplorationActionContent[];
 }
 
@@ -142,6 +153,31 @@ function requiredString(value: unknown, label: string): string {
     );
   }
   return value;
+}
+
+function hydrateStaticMessage(value: unknown, label: string): string | LocalizedString {
+  if (typeof value === "string") return requiredString(value, label);
+  const message = sourceMessage(value as SourceMessageRef);
+  if (Object.keys(message.argumentSchemas).length !== 0) {
+    throw new Error(`Invalid Exploration data: ${label} must be static`);
+  }
+  return message.bind({});
+}
+
+function hydrateEffectMessage(value: unknown): string | LocalizedString | SourceMessage {
+  if (typeof value === "string") return requiredString(value, "action effect text");
+  const message = sourceMessage(value as SourceMessageRef);
+  return Object.keys(message.argumentSchemas).length === 0
+    ? localizedSourceMessage(value as SourceMessageRef)
+    : message;
+}
+
+function messageArgumentNames(value: ExplorationActionContent["effectText"]): readonly string[] {
+  if (value instanceof SourceMessage) return Object.keys(value.argumentSchemas);
+  if (typeof value === "string") {
+    return [...value.matchAll(/\{([a-z][a-z0-9_]*)\}/gu)].map((match) => match[1] ?? "");
+  }
+  return [];
 }
 
 const DREAMSIGN_ID_EFFECT_KINDS: ReadonlySet<ExplorationEffectKind> = new Set([
@@ -317,8 +353,7 @@ function validateWave8CompoundFields(raw: ExplorationActionContent): void {
     raw.effectKind === "take-transfigured-cards-and-gain-nightmares" ||
     raw.effectKind === "purge-one-transfigure-and-copy-others";
   if (requiresFollowup) {
-    if (typeof raw.followupTitle !== "string" || raw.followupTitle.trim() === "" ||
-        typeof raw.followupSubtitle !== "string" || raw.followupSubtitle.trim() === "") {
+    if (raw.followupTitle === undefined || raw.followupSubtitle === undefined) {
       throw new Error(
         `Invalid Exploration data: ${raw.effectKind} requires a paired nonblank followup`,
       );
@@ -326,14 +361,9 @@ function validateWave8CompoundFields(raw: ExplorationActionContent): void {
   } else if (raw.followupTitle !== undefined || raw.followupSubtitle !== undefined) {
     throw new Error(`Invalid Exploration data: ${raw.effectKind} does not support a followup`);
   }
-  const tokens: string[] = raw.effectText.match(/\{[a-z][a-z0-9_]*\}/gu) ?? [];
-  if (/\$[A-Z][A-Z0-9_]*/u.test(raw.effectText)) {
-    throw new Error(
-      `Invalid Exploration data: ${raw.effectKind} has an unsupported presentation token`,
-    );
-  }
+  const tokens = messageArgumentNames(raw.effectText);
   if (raw.effectKind === "purge-disclosed-and-transfigure-same-type") {
-    if (tokens.length !== 1 || tokens[0] !== "{deck_card}") {
+    if (tokens.length !== 1 || tokens[0] !== "deck_card") {
       throw new Error(
         "Invalid Exploration data: purge-disclosed-and-transfigure-same-type requires exactly the deck-card presentation token",
       );
@@ -342,7 +372,7 @@ function validateWave8CompoundFields(raw: ExplorationActionContent): void {
     const allowedTokens = new Set<string>(
       raw.effectKind === "make-predicate-fast-and-gain-nightmares" ||
         raw.effectKind === "take-transfigured-cards-and-gain-nightmares"
-        ? ["{nightmare_card}"] : [],
+        ? ["nightmare_card"] : [],
     );
     if (tokens.some((token) => !allowedTokens.has(token))) {
       throw new Error(
@@ -388,7 +418,7 @@ function validateShopPurchaseModifierFields(
       `Invalid Exploration data: ${raw.effectKind} does not support a followup`,
     );
   }
-  if (/\$[A-Z][A-Z0-9_]*|\{[^{}]+\}/u.test(raw.effectText)) {
+  if (messageArgumentNames(raw.effectText).length !== 0) {
     throw new Error(
       `Invalid Exploration data: ${raw.effectKind} does not support presentation tokens`,
     );
@@ -418,7 +448,7 @@ function validateFixedSiteFields(raw: ExplorationActionContent): void {
       "Invalid Exploration data: add-fixed-site does not support a followup",
     );
   }
-  if (/\$[A-Z][A-Z0-9_]*|\{[^{}]+\}/u.test(raw.effectText)) {
+  if (messageArgumentNames(raw.effectText).length !== 0) {
     throw new Error(
       "Invalid Exploration data: add-fixed-site does not support presentation tokens",
     );
@@ -471,16 +501,14 @@ function validateSiteTypeChoiceFields(raw: ExplorationActionContent): void {
     );
   }
   if (
-    typeof raw.followupTitle !== "string" ||
-    raw.followupTitle.trim() === "" ||
-    typeof raw.followupSubtitle !== "string" ||
-    raw.followupSubtitle.trim() === ""
+    raw.followupTitle === undefined ||
+    raw.followupSubtitle === undefined
   ) {
     throw new Error(
       "Invalid Exploration data: choose-site-type requires a paired followup",
     );
   }
-  if (/\$[A-Z][A-Z0-9_]*|\{[^{}]+\}/u.test(raw.effectText)) {
+  if (messageArgumentNames(raw.effectText).length !== 0) {
     throw new Error(
       "Invalid Exploration data: choose-site-type does not support presentation tokens",
     );
@@ -634,8 +662,7 @@ function validateStarterEffectFields(raw: ExplorationActionContent): void {
   }
   if (
     isStarterTransfigure &&
-    typeof raw.effectText === "string" &&
-    /\$[A-Z][A-Z0-9_]*|\{[^{}]+\}/u.test(raw.effectText)
+    messageArgumentNames(raw.effectText).length !== 0
   ) {
     throw new Error(
       `Invalid Exploration data: ${raw.effectKind} does not support presentation tokens`,
@@ -718,7 +745,7 @@ function validateMultiCardTransfigurationFields(
         `Invalid Exploration data: ${raw.effectKind} does not support a followup`,
       );
     }
-    if (/\$[A-Z][A-Z0-9_]*|\{[^{}]+\}/u.test(raw.effectText)) {
+    if (messageArgumentNames(raw.effectText).length !== 0) {
       throw new Error(
         `Invalid Exploration data: ${raw.effectKind} does not support presentation tokens`,
       );
@@ -869,14 +896,10 @@ function validateWave4bFields(raw: ExplorationActionContent): void {
     }
     const allowedTokens =
       raw.effectKind === "change-random-card-type"
-        ? new Set(["{card_type}"])
+        ? new Set(["card_type"])
         : new Set<string>();
-    const tokens: string[] =
-      raw.effectText.match(/\{[a-z][a-z0-9_]*\}/gu) ?? [];
-    if (
-      /\$[A-Z][A-Z0-9_]*/u.test(raw.effectText) ||
-      tokens.some((token) => !allowedTokens.has(token))
-    ) {
+    const tokens = messageArgumentNames(raw.effectText);
+    if (tokens.some((token) => !allowedTokens.has(token))) {
       throw new Error(
         `Invalid Exploration data: ${raw.effectKind} does not support target-disclosing presentation tokens`,
       );
@@ -966,12 +989,10 @@ function validateWave7DeckMutationFields(raw: ExplorationActionContent): void {
         "Invalid Exploration data: replace-random-with-card does not support a followup",
       );
     }
-    const tokens: string[] =
-      raw.effectText.match(/\{[a-z][a-z0-9_]*\}/gu) ?? [];
+    const tokens = messageArgumentNames(raw.effectText);
     if (
-      !tokens.includes("{fixed_card}") ||
-      tokens.some((token) => token !== "{fixed_card}") ||
-      /\$[A-Z][A-Z0-9_]*/u.test(raw.effectText)
+      !tokens.includes("fixed_card") ||
+      tokens.some((token) => token !== "fixed_card")
     ) {
       throw new Error(
         "Invalid Exploration data: replace-random-with-card requires only the fixed-card presentation token",
@@ -988,20 +1009,16 @@ function validateWave7DeckMutationFields(raw: ExplorationActionContent): void {
         "Invalid Exploration data: change-card-type-selected does not support predicate or cardId",
       );
     }
-    const tokens: string[] =
-      raw.effectText.match(/\{[a-z][a-z0-9_]*\}/gu) ?? [];
-    const allowedTokens = new Set<string>(["{deck_card}", "{card_type}"]);
-    if (
-      /\$[A-Z][A-Z0-9_]*/u.test(raw.effectText) ||
-      tokens.some((token) => !allowedTokens.has(token))
-    ) {
+    const tokens = messageArgumentNames(raw.effectText);
+    const allowedTokens = new Set<string>(["deck_card", "card_type"]);
+    if (tokens.some((token) => !allowedTokens.has(token))) {
       throw new Error(
         "Invalid Exploration data: change-card-type-selected has unsupported presentation tokens",
       );
     }
     if (raw.deckTarget === "offered") {
       if (
-        !tokens.includes("{deck_card}") ||
+        !tokens.includes("deck_card") ||
         raw.followupTitle !== undefined ||
         raw.followupSubtitle !== undefined
       ) {
@@ -1036,6 +1053,25 @@ function validateWave7DeckMutationFields(raw: ExplorationActionContent): void {
 function validateAction(
   raw: ExplorationActionContent,
 ): ExplorationActionContent {
+  if (
+    typeof raw.effectText === "string" &&
+    /\$[A-Z][A-Z0-9_]*/u.test(raw.effectText)
+  ) {
+    throw new Error(
+      "Invalid Exploration data: action effect text uses an untyped presentation token",
+    );
+  }
+  raw = {
+    ...raw,
+    label: hydrateStaticMessage(raw.label, "action label"),
+    effectText: hydrateEffectMessage(raw.effectText),
+    ...(raw.followupTitle === undefined
+      ? {}
+      : { followupTitle: hydrateEffectMessage(raw.followupTitle) }),
+    ...(raw.followupSubtitle === undefined
+      ? {}
+      : { followupSubtitle: hydrateEffectMessage(raw.followupSubtitle) }),
+  };
   validateWave8CompoundFields(raw);
   validateShopPurchaseModifierFields(raw);
   validateFixedSiteFields(raw);
@@ -1142,8 +1178,6 @@ function validateAction(
   return {
     ...raw,
     id: requiredString(raw.id, "action id"),
-    label: requiredString(raw.label, "action label"),
-    effectText: requiredString(raw.effectText, "action effect text"),
     ...(raw.cardId === undefined ? {} : { cardId: asCardId(raw.cardId) }),
   };
 }
@@ -1183,7 +1217,7 @@ export async function loadExplorationContent(): Promise<ExplorationContent> {
     }
     return {
       cardId: asCardId(requiredString(encounter.cardId, "encounter card id")),
-      prose: requiredString(encounter.prose, "encounter prose"),
+      prose: hydrateStaticMessage(encounter.prose, "encounter prose"),
       actions: actions.map(validateAction),
     } satisfies ExplorationEncounterContent;
   });

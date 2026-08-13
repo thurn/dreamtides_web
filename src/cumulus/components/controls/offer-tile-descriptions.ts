@@ -3,7 +3,12 @@ import type {
   AuguryPresentationText,
 } from "../../../types/augury-data";
 import type { LocalizedString } from "@trox/runtime";
-import { localizedSourceText } from "../../../runtime/localization/runtime";
+import {
+  bindSourceTransport,
+  canonicalPlaceholderName,
+  localizedSourceText,
+} from "../../../runtime/localization/runtime";
+import type { SourceTransport } from "../../../runtime/localization/runtime";
 import { richText, type RichText } from "../card/rich-text";
 import type { OfferTileModel } from "./OfferTile";
 
@@ -34,12 +39,12 @@ function variablesFor(
     case "card-gift":
     case "transfigure-card":
     case "purge-card":
-      return { cardName: cardName(model.card) };
+      return { card_name: cardName(model.card) };
     case "category-draft":
       return {
         ...(model.category.kind === "subtype" ||
         model.category.kind === "package"
-          ? { categoryName: model.category.name }
+          ? { category_name: model.category.name }
           : {}),
       };
     case "copies-draft":
@@ -48,18 +53,18 @@ function variablesFor(
       return { count: model.cards.length };
     case "transfigure-starters":
       return model.cards.length === 1
-        ? { count: 1, cardName: cardName(model.cards[0]) }
+        ? { count: 1, card_name: cardName(model.cards[0]) }
         : {
             count: 2,
-            firstCardName: cardName(model.cards[0]),
-            secondCardName: cardName(model.cards[1]),
+            first_card_name: cardName(model.cards[0]),
+            second_card_name: cardName(model.cards[1]),
           };
     case "duplicate-card":
-      return { count: model.cards.length, cardName: cardName(model.cards[0]) };
+      return { count: model.cards.length, card_name: cardName(model.cards[0]) };
     case "dreamsign-gift":
-      return { dreamsignName: model.dreamsign.name };
+      return { dreamsign_name: model.dreamsign.name };
     case "add-site":
-      return { siteName: model.site.name };
+      return { site_name: model.site.name };
     case "card-draft":
     case "transfigured-draft":
       return {};
@@ -69,7 +74,7 @@ function variablesFor(
 function categoryTemplate(
   text: Extract<AuguryPresentationText, { kind: "category" }>,
   model: OfferTileModel,
-): string {
+): SourceTransport {
   if (model.kind !== "category-draft") {
     throw new Error(
       "Augury category presentation requires a category-draft offer",
@@ -98,7 +103,7 @@ function categoryTemplate(
 function selectedTemplate(
   text: AuguryPresentationText,
   model: OfferTileModel,
-): string {
+): SourceTransport {
   if (text.kind === "text") return text.text;
   if (text.kind === "category") return categoryTemplate(text, model);
   const count = countFor(model);
@@ -113,7 +118,18 @@ function localizedPresentationText(
   model: OfferTileModel,
 ): LocalizedString {
   const variables = variablesFor(model);
-  return localizedSourceText(selectedTemplate(text, model), variables);
+  const selected = selectedTemplate(text, model);
+  if (typeof selected !== "string") {
+    return bindSourceTransport(selected, variables);
+  }
+  const names = [...selected.matchAll(/\{([a-z][a-zA-Z0-9_]*)\}/gu)]
+    .map((match) => match[1] ?? "");
+  const compatibleVariables = Object.fromEntries(names.map((name) => {
+    const value = variables[name] ?? variables[canonicalPlaceholderName(name)];
+    if (value === undefined) throw new Error(`missing value for {${name}}`);
+    return [name, value];
+  }));
+  return bindSourceTransport(selected, compatibleVariables);
 }
 
 /** Complete authored detail title for an Augury offer's semantic model. */

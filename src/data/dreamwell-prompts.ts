@@ -1,7 +1,10 @@
 import type {
   DreamwellCard,
+  DreamwellAutomationPrompt,
   DreamwellPromptArgumentKind,
 } from "./dreamwell-database";
+import type { LocalizedString } from "@trox/runtime";
+import { bindSourceTransport } from "../runtime/localization/runtime";
 
 export type DreamwellPromptArgumentValue = string | number;
 
@@ -251,20 +254,11 @@ function validArgument(
   }
 }
 
-function interpolate(
-  text: string,
-  arguments_: DreamwellPromptRef["arguments"],
-): string {
-  return text.replace(/\{([a-z][a-zA-Z0-9]*)\}/gu, (_match, name: string) =>
-    String(arguments_[name]),
-  );
-}
-
 /** Resolve through the battle's pinned Dreamwell catalog at the presentation seam. */
 export function resolveDreamwellPromptRef(
   ref: DreamwellPromptRef,
   cards: readonly DreamwellCard[],
-): string {
+): LocalizedString {
   const card = cards.find((candidate) => candidate.id === ref.cardId);
   if (card === undefined)
     throw new Error(`Unknown Dreamwell prompt card ${ref.cardId}`);
@@ -292,7 +286,7 @@ export function resolveDreamwellPromptRef(
       throw new Error(`Invalid Dreamwell prompt argument ${name}`);
     }
   }
-  let text: string;
+  let text: DreamwellAutomationPrompt["title"];
   switch (ref.part) {
     case "title":
       text = prompt.title;
@@ -315,5 +309,5 @@ export function resolveDreamwellPromptRef(
       break;
     }
   }
-  return interpolate(text, ref.arguments);
+  return bindSourceTransport(text, ref.arguments);
 }

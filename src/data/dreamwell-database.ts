@@ -1,4 +1,7 @@
 import type { ArtCrop } from "../types/cards";
+import type { SourceTransport } from "../runtime/localization/runtime";
+import { hydrateSourceTransport } from "../runtime/localization/runtime";
+import { SourceMessage } from "@trox/runtime";
 
 /**
  * The shared Dreamwell cards drawn one per turn during the Dreamwell phase
@@ -36,12 +39,12 @@ export type DreamwellPromptArgumentKind =
 
 export interface DreamwellAutomationPrompt {
   readonly key: string;
-  readonly title: string;
-  readonly subtitle: string;
-  readonly instructions: string;
+  readonly title: SourceTransport;
+  readonly subtitle: SourceTransport;
+  readonly instructions: SourceTransport;
   readonly choices?: readonly {
     readonly key: string;
-    readonly label: string;
+    readonly label: SourceTransport;
   }[];
   readonly arguments?: readonly {
     readonly name: string;
@@ -67,7 +70,7 @@ export async function loadDreamwellCards(): Promise<DreamwellCard[]> {
 }
 
 const PROMPT_KEY = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
-const ARGUMENT_NAME = /^[a-z][a-zA-Z0-9]*$/u;
+const ARGUMENT_NAME = /^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/u;
 const ARGUMENT_KINDS: readonly DreamwellPromptArgumentKind[] = [
   "Count",
   "Amount",
@@ -86,6 +89,11 @@ function isPromptArgumentKind(
 
 function record(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+function localizedTransport(value: unknown): boolean {
+  return (typeof value === "string" && value.trim() !== "") ||
+    (record(value) && value.format === "trox-source-message-ref");
 }
 
 /** Validate the generated Dreamwell payload before it enters journey content. */
@@ -114,12 +122,9 @@ export function parseDreamwellCards(value: unknown): DreamwellCard[] {
           !record(prompt) ||
           typeof prompt.key !== "string" ||
           !PROMPT_KEY.test(prompt.key) ||
-          typeof prompt.title !== "string" ||
-          prompt.title.trim() === "" ||
-          typeof prompt.subtitle !== "string" ||
-          prompt.subtitle.trim() === "" ||
-          typeof prompt.instructions !== "string" ||
-          prompt.instructions.trim() === ""
+          !localizedTransport(prompt.title) ||
+          !localizedTransport(prompt.subtitle) ||
+          !localizedTransport(prompt.instructions)
         ) {
           throw new Error(
             `Dreamwell card ${cardId} prompt ${String(promptIndex + 1)} is malformed`,
@@ -144,8 +149,7 @@ export function parseDreamwellCards(value: unknown): DreamwellCard[] {
             !record(choice) ||
             typeof choice.key !== "string" ||
             !PROMPT_KEY.test(choice.key) ||
-            typeof choice.label !== "string" ||
-            choice.label.trim() === "" ||
+            !localizedTransport(choice.label) ||
             choiceKeys.has(choice.key)
           ) {
             throw new Error(
@@ -153,7 +157,13 @@ export function parseDreamwellCards(value: unknown): DreamwellCard[] {
             );
           }
           choiceKeys.add(choice.key);
-          return { key: choice.key, label: choice.label };
+          return {
+            key: choice.key,
+            label: hydrateSourceTransport(
+              choice.label,
+              `Dreamwell ${cardId} ${promptKey} choice ${choice.key}`,
+            ),
+          };
         });
         const argumentNames = new Set<string>();
         const normalizedArguments = arguments_.map((argument) => {
@@ -174,17 +184,19 @@ export function parseDreamwellCards(value: unknown): DreamwellCard[] {
             kind: argument.kind,
           };
         });
+        const hydratedTexts = [
+          hydrateSourceTransport(prompt.title, `Dreamwell ${cardId} ${promptKey} title`),
+          hydrateSourceTransport(prompt.subtitle, `Dreamwell ${cardId} ${promptKey} subtitle`),
+          hydrateSourceTransport(prompt.instructions, `Dreamwell ${cardId} ${promptKey} instructions`),
+          ...normalizedChoices.map((choice) => choice.label),
+        ];
         const placeholders = new Set(
-          [
-            prompt.title,
-            prompt.subtitle,
-            prompt.instructions,
-            ...normalizedChoices.map((choice) => choice.label),
-          ].flatMap((text) =>
-            [...text.matchAll(/\{([a-z][a-zA-Z0-9]*)\}/gu)].map(
-              (match) => match[1],
-            ),
-          ),
+          hydratedTexts.flatMap((text) => text instanceof SourceMessage
+            ? Object.keys(text.argumentSchemas)
+            : typeof text === "string"
+              ? [...text.matchAll(/\{([a-z][a-z0-9]*(?:_[a-z0-9]+)*)\}/gu)]
+                  .map((match) => match[1] ?? "")
+              : []),
         );
         if (
           [...placeholders].some((name) => !argumentNames.has(name)) ||
@@ -196,9 +208,9 @@ export function parseDreamwellCards(value: unknown): DreamwellCard[] {
         }
         return {
           key: promptKey,
-          title: prompt.title,
-          subtitle: prompt.subtitle,
-          instructions: prompt.instructions,
+          title: hydratedTexts[0],
+          subtitle: hydratedTexts[1],
+          instructions: hydratedTexts[2],
           choices: normalizedChoices,
           arguments: normalizedArguments,
         };

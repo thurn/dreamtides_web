@@ -1,6 +1,6 @@
-import type { GlossaryCatalogEntry } from "../../../data/glossary";
 import {
   extractProjectedGlossaryTerms,
+  type ProjectedGlossaryCatalogEntry,
   type RulesTextGlossaryOwner,
 } from "../../../data/glossary-terms";
 import type { InfoCardProps, InfoCardTextProps } from "../overlay/InfoCard";
@@ -18,7 +18,7 @@ import {
  * without competing with the source card's semantic rules-text colors.
  */
 export function glossaryDefinitionsCardModel(
-  entries: readonly GlossaryCatalogEntry[],
+  entries: readonly (ProjectedGlossaryCatalogEntry | import("../../../data/glossary").GlossaryCatalogEntry)[],
   excludedIds: readonly string[] = [],
 ): InfoCardTextProps | null {
   const excluded = new Set(excludedIds);
@@ -31,8 +31,12 @@ export function glossaryDefinitionsCardModel(
     body: {
       kind: "definitions",
       entries: visibleEntries.map((entry) => ({
-        term: localizedSourceText(entry.term),
-        definition: localizedSourceText(entry.definition),
+        term: "localizedTerm" in entry
+          ? entry.localizedTerm
+          : localizedSourceText(entry.term),
+        definition: "localizedDefinition" in entry
+          ? entry.localizedDefinition
+          : localizedSourceText(entry.definition),
         symbol: entry.definitionSymbol,
         termPresentation: entry.termPresentation,
       })),

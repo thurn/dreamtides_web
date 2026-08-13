@@ -48,7 +48,7 @@ import type {
   TransfigurationType,
 } from "../../types/journey";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
-import type { LocalizedString } from "@trox/runtime";
+import { LocalizedString, SourceMessage, opaque } from "@trox/runtime";
 import { localizedSourceText } from "../../runtime/localization/runtime";
 import {
   buildTransfigurationDisplay,
@@ -450,24 +450,46 @@ function configuredFollowupCopy(
   action: ExplorationActionContent,
   content: JourneyContent,
   key: "followupTitle" | "followupSubtitle",
-  fallback: string,
+  fallback: string | LocalizedString | SourceMessage,
 ): LocalizedString {
   const template = action[key];
-  if (template === undefined || template === "") {
-    return localizedSourceText(fallback);
-  }
-  const values: Readonly<Record<string, number | LocalizedString>> = {
-    "action-label": localizedSourceText(action.label),
-    count: action.count ?? 1,
-    subtype: localizedSourceText(action.subtype ?? "Outsider"),
-    transfiguration: localizedSourceText(
-      action.transfiguration ?? "Kindled",
-    ),
-    "essence-per-spark":
-      action.essencePerSpark ??
-      content.economyData.exploration.defaultEssencePerSpark,
+  const selected = template === undefined || template === "" ? fallback : template;
+  const valueFor = (name: string): number | LocalizedString => {
+    switch (name) {
+      case "action_label":
+        return localizedAuthoredMessage(action.label);
+      case "count":
+        return action.count ?? 1;
+      case "subtype":
+        return localizedSourceText(action.subtype ?? "Outsider");
+      case "transfiguration":
+        return localizedSourceText(action.transfiguration ?? "Kindled");
+      case "essence_per_spark":
+        if (action.essencePerSpark !== undefined) return action.essencePerSpark;
+        if (content.economyData === undefined) {
+          throw new Error("Missing Exploration economy data for {essence_per_spark}.");
+        }
+        return content.economyData.exploration.defaultEssencePerSpark;
+      default:
+        throw new Error(`Missing configured Exploration followup argument {${name}}.`);
+    }
   };
-  return localizedSourceText(template, values);
+  if (selected instanceof LocalizedString) return selected;
+  const names = selected instanceof SourceMessage
+    ? Object.keys(selected.argumentSchemas)
+    : [...selected.matchAll(/\{([a-z][a-z0-9_]*)\}/gu)].map(
+        (match) => match[1] ?? "",
+      );
+  const values = Object.fromEntries(names.map((name) => [name, valueFor(name)]));
+  if (selected instanceof SourceMessage) {
+    return selected.bind(Object.fromEntries(
+      names.map((name) => {
+        const value = values[name];
+        return [name, value instanceof LocalizedString ? opaque(value) : value];
+      }),
+    ));
+  }
+  return localizedSourceText(selected, values);
 }
 
 function siteTypeChoiceFollowup(
@@ -1237,7 +1259,8 @@ function effectReferencesForAction(
   starterCardEntity?: DeckCardVariableTarget["entity"],
 ): readonly ExplorationEffectReference[] {
   const references: ExplorationEffectReference[] = [];
-  if (action.effectText.includes("{offered_card}")) {
+  const argumentNames = explorationEffectArgumentNames(action.effectText);
+  if (argumentNames.includes("offered_card")) {
     const offeredCardId = offer.offeredCardIds[0];
     const offeredCard =
       offeredCardId === undefined ? null : cardById(content, offeredCardId);
@@ -1249,7 +1272,7 @@ function effectReferencesForAction(
     }
   }
   if (
-    action.effectText.includes("{deck_card}") &&
+    argumentNames.includes("deck_card") &&
     deckCardEntity !== undefined
   ) {
     references.push({
@@ -1258,7 +1281,7 @@ function effectReferencesForAction(
     });
   }
   if (
-    action.effectText.includes("{starter_card}") &&
+    argumentNames.includes("starter_card") &&
     starterCardEntity !== undefined
   ) {
     references.push({
@@ -1267,7 +1290,7 @@ function effectReferencesForAction(
     });
   }
   if (
-    action.effectText.includes("{fixed_card}") &&
+    argumentNames.includes("fixed_card") &&
     action.cardId !== undefined
   ) {
     const card = cardById(content, action.cardId);
@@ -1278,7 +1301,7 @@ function effectReferencesForAction(
       });
     }
   }
-  if (action.effectText.includes("{nightmare_card}")) {
+  if (argumentNames.includes("nightmare_card")) {
     const card = cardById(content, NIGHTMARE_CARD_ID);
     if (card !== null) {
       const copies =
@@ -1301,7 +1324,7 @@ function effectReferencesForAction(
     }
   }
   if (
-    action.effectText.includes("{card_type}") &&
+    argumentNames.includes("card_type") &&
     action.cardType !== undefined
   ) {
     references.push({
@@ -1330,6 +1353,38 @@ function effectReferencesForAction(
   return references;
 }
 
+function explorationEffectArgumentNames(
+  message: ExplorationActionContent["effectText"],
+): readonly string[] {
+  if (message instanceof SourceMessage) return Object.keys(message.argumentSchemas);
+  if (typeof message === "string") {
+    return [...message.matchAll(/\{([a-z_]+)\}/g)].map((match) => match[1] ?? "");
+  }
+  return [];
+}
+
+function localizedAuthoredMessage(
+  message: string | LocalizedString,
+): LocalizedString {
+  return message instanceof LocalizedString
+    ? message
+    : localizedSourceText(message);
+}
+
+function localizedUnpreparedEffect(
+  message: ExplorationActionContent["effectText"],
+): LocalizedString {
+  if (message instanceof LocalizedString) return message;
+  if (message instanceof SourceMessage) {
+    if (Object.keys(message.argumentSchemas).length === 0) return message.bind({});
+    return tx(
+      "Exploration effect resolved",
+      "[exploration] Generic player-safe Exploration outcome used when a resolved typed effect requires presentation arguments that are unavailable.",
+    );
+  }
+  return localizedSourceText(message);
+}
+
 /** Build UUID-backed inline entity parts for an Exploration option's effect. */
 export function buildExplorationActionEffect(
   action: ExplorationActionContent,
@@ -1351,10 +1406,10 @@ export function buildExplorationActionEffect(
   const localizedEffect = (
     concealedTargets: Readonly<Record<string, LocalizedString>> = {},
   ): LocalizedString => {
-    const values: Record<string, LocalizedString> = Object.fromEntries(
-      [...action.effectText.matchAll(/\{([a-z_]+)\}/g)].map(
-        (match): [string, LocalizedString] => {
-          const argumentName = match[1] ?? "";
+    const argumentNames = explorationEffectArgumentNames(action.effectText);
+    const localizedValues: Record<string, LocalizedString> = Object.fromEntries(
+      argumentNames.map(
+        (argumentName) => {
           const concealedTarget = concealedTargets[argumentName];
           if (concealedTarget !== undefined) {
             return [argumentName, concealedTarget];
@@ -1383,10 +1438,17 @@ export function buildExplorationActionEffect(
         },
       ),
     );
-    return localizedSourceText(action.effectText, values);
+    if (action.effectText instanceof SourceMessage) {
+      return action.effectText.bind(Object.fromEntries(
+        Object.entries(localizedValues).map(([name, value]) => [name, opaque(value)]),
+      ));
+    }
+    if (action.effectText instanceof LocalizedString) return action.effectText;
+    return localizedSourceText(action.effectText, localizedValues);
   };
+  const argumentNames = explorationEffectArgumentNames(action.effectText);
   if (
-    action.effectText.includes("{deck_card}") &&
+    argumentNames.includes("deck_card") &&
     !references.some((reference) => reference.needle === "{deck_card}")
   ) {
     const message = localizedEffect({
@@ -1401,7 +1463,7 @@ export function buildExplorationActionEffect(
     };
   }
   if (
-    action.effectText.includes("{starter_card}") &&
+    argumentNames.includes("starter_card") &&
     !references.some((reference) => reference.needle === "{starter_card}")
   ) {
     const message = localizedEffect({
@@ -2501,7 +2563,7 @@ function actionView(
       ...(action.cardType === undefined ? {} : { cardType: action.cardType }),
       ...(action.siteType === undefined ? {} : { siteType: action.siteType }),
     },
-    label: localizedSourceText(action.label),
+    label: localizedAuthoredMessage(action.label),
     ...effect,
     ...(effectDisclosure === undefined ? {} : { effectDisclosure }),
     followup,
@@ -3753,10 +3815,10 @@ function rewardForResolution(
     resolvedActionView === undefined && resolvedAction === undefined
       ? tx(
           "Exploration effect resolved",
-          "[exploration] Generic player-safe Exploration outcome fallback when the resolved action is unavailable to the presentation model.",
+          "[exploration] Generic player-safe Exploration outcome used when a resolved typed effect requires presentation arguments that are unavailable.",
         )
       : (resolvedActionView?.effectText ??
-        localizedSourceText(resolvedAction?.effectText ?? ""));
+        localizedUnpreparedEffect(resolvedAction?.effectText ?? ""));
   if (
     resolvedAction?.effectKind === "add-fixed-site" ||
     resolvedAction?.effectKind === "choose-site-type"
@@ -4492,7 +4554,7 @@ export function buildExplorationSiteView(params: {
     fullArt: artRef.explorationCard(sourceCard.imageNumber),
     guide: projectGuideView(params.guide, params.guideLine),
     card: { cardId: asCardId(sourceCard.id), displaySnapshot: sourceCard },
-    narrative: localizedSourceText(encounter.prose),
+    narrative: localizedAuthoredMessage(encounter.prose),
     actions,
     resolvedActionId: params.runtime.resolution?.actionId ?? null,
     reward,

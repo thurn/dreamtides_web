@@ -7,7 +7,7 @@ use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
-use super::localization::{source_text, source_texts};
+use super::localization::{source_text, source_transport_values};
 
 const LEGACY_GUIDE_ID_MAP: [(&str, &str); 10] = [
     ("tobias_tanglefur", "4e5067ec-265d-4dba-8fa8-2afbd4fde9ab"),
@@ -248,28 +248,28 @@ struct CompatibilityGuide {
 
 #[derive(Default, Serialize)]
 struct CompatibilityDialogue {
-    site: Vec<String>,
+    site: Vec<toml::Value>,
     #[serde(rename = "random-site", skip_serializing_if = "Option::is_none")]
-    random_site: Option<Vec<String>>,
+    random_site: Option<Vec<toml::Value>>,
     #[serde(rename = "gamble-three-gate", skip_serializing_if = "Option::is_none")]
-    gamble_three_gate: Option<Vec<String>>,
+    gamble_three_gate: Option<Vec<toml::Value>>,
     #[serde(
         rename = "gamble-ladder-climb",
         skip_serializing_if = "Option::is_none"
     )]
-    gamble_ladder_climb: Option<Vec<String>>,
+    gamble_ladder_climb: Option<Vec<toml::Value>>,
     #[serde(
         rename = "gamble-starway-stairs",
         skip_serializing_if = "Option::is_none"
     )]
-    gamble_starway_stairs: Option<Vec<String>>,
+    gamble_starway_stairs: Option<Vec<toml::Value>>,
     #[serde(
         rename = "gamble-four-suit-reprise",
         skip_serializing_if = "Option::is_none"
     )]
-    gamble_four_suit_reprise: Option<Vec<String>>,
+    gamble_four_suit_reprise: Option<Vec<toml::Value>>,
     #[serde(rename = "gamble-blackjack", skip_serializing_if = "Option::is_none")]
-    gamble_blackjack: Option<Vec<String>>,
+    gamble_blackjack: Option<Vec<toml::Value>>,
 }
 
 pub fn lower(source: Vec<GuideDefinition>) -> Result<toml::Value> {
@@ -300,22 +300,22 @@ fn lower_guide(
     let kind = source.specialty.kind();
     let description = source_text(source.specialty.description())?;
     let mut dialogue = CompatibilityDialogue {
-        site: source_texts(source.site_dialogue)?,
+        site: source_transport_values(source.site_dialogue)?,
         ..CompatibilityDialogue::default()
     };
     match source.specialty {
         GuideSpecialty::RandomSite {
             dialogue: random_site,
             ..
-        } => dialogue.random_site = Some(source_texts(random_site)?),
+        } => dialogue.random_site = Some(source_transport_values(random_site)?),
         GuideSpecialty::Gamble {
             dialogue: gamble, ..
         } => {
-            dialogue.gamble_three_gate = Some(source_texts(gamble.three_gate)?);
-            dialogue.gamble_ladder_climb = Some(source_texts(gamble.ladder_climb)?);
-            dialogue.gamble_starway_stairs = Some(source_texts(gamble.starway_stairs)?);
-            dialogue.gamble_four_suit_reprise = Some(source_texts(gamble.four_suit_reprise)?);
-            dialogue.gamble_blackjack = Some(source_texts(gamble.blackjack)?);
+            dialogue.gamble_three_gate = Some(source_transport_values(gamble.three_gate)?);
+            dialogue.gamble_ladder_climb = Some(source_transport_values(gamble.ladder_climb)?);
+            dialogue.gamble_starway_stairs = Some(source_transport_values(gamble.starway_stairs)?);
+            dialogue.gamble_four_suit_reprise = Some(source_transport_values(gamble.four_suit_reprise)?);
+            dialogue.gamble_blackjack = Some(source_transport_values(gamble.blackjack)?);
         }
         GuideSpecialty::Shop { .. }
         | GuideSpecialty::DreamsignBazaar { .. }
@@ -410,8 +410,8 @@ pub(crate) fn validate(source: &[GuideDefinition]) -> Result<()> {
                 validate_dialogue(
                     &format!("{path}.specialty.dialogue.ladder_climb"),
                     &dialogue.ladder_climb,
-                    &["win-essence"],
-                    &["win-essence"],
+                    &["win_essence"],
+                    &["win_essence"],
                 )?;
                 validate_dialogue(
                     &format!("{path}.specialty.dialogue.starway_stairs"),
@@ -557,7 +557,7 @@ pub(crate) mod tests {
   GuideDefinition(id: "00000000-0000-4000-8000-000000000006", name: Tx("Guide 6"), home_dreamscape_id: "00000000-0000-4000-8000-000000000106", portrait_source: "six.png", site_dialogue: [Tx("Site 6")], specialty: Purge(description: Tx("Purge copy"))),
   GuideDefinition(id: "00000000-0000-4000-8000-000000000007", name: Tx("Guide 7"), home_dreamscape_id: "00000000-0000-4000-8000-000000000107", portrait_source: "seven.png", site_dialogue: [Tx("Site 7")], specialty: Augury(description: Tx("Augury copy"))),
   GuideDefinition(id: "00000000-0000-4000-8000-000000000008", name: Tx("Guide 8"), home_dreamscape_id: "00000000-0000-4000-8000-000000000108", portrait_source: "eight.png", site_dialogue: [Tx("Site 8")], specialty: RandomSite(description: Tx("Random copy"), dialogue: [Tx("Random line")])),
-  GuideDefinition(id: "00000000-0000-4000-8000-000000000009", name: Tx("Guide 9"), home_dreamscape_id: "00000000-0000-4000-8000-000000000109", portrait_source: "nine.png", site_dialogue: [Tx("Site 9")], specialty: Gamble(description: Tx("Gamble copy"), dialogue: GambleDialogue(three_gate: [Tx("Three Gate")], ladder_climb: [Tx("Win {{win-essence}}")], starway_stairs: [Tx("Stairs")], four_suit_reprise: [Tx("Reprise")], blackjack: [Tx("Blackjack")]))),
+  GuideDefinition(id: "00000000-0000-4000-8000-000000000009", name: Tx("Guide 9"), home_dreamscape_id: "00000000-0000-4000-8000-000000000109", portrait_source: "nine.png", site_dialogue: [Tx("Site 9")], specialty: Gamble(description: Tx("Gamble copy"), dialogue: GambleDialogue(three_gate: [Tx("Three Gate")], ladder_climb: [Tx(text: "Win {win_essence}", placeholders: {"win_essence": Scalar})], starway_stairs: [Tx("Stairs")], four_suit_reprise: [Tx("Reprise")], blackjack: [Tx("Blackjack")]))),
   GuideDefinition(id: "00000000-0000-4000-8000-000000000010", name: Tx("Guïde 10"), home_dreamscape_id: "00000000-0000-4000-8000-000000000110", portrait_source: "ten.png", site_dialogue: [Tx("Site 10\ncontinues")], specialty: Exploration(description: Tx("Exploration copy"))),
 ]
 "##
@@ -585,8 +585,8 @@ pub(crate) mod tests {
         );
         assert_eq!(guides[9]["name"].as_str(), Some("Guïde 10"));
         assert_eq!(
-            guides[9]["dialogue"]["site"][0].as_str(),
-            Some("Site 10\ncontinues")
+            guides[9]["dialogue"]["site"][0]["format"].as_str(),
+            Some("trox-source-message-ref")
         );
 
         let site_types = guides
@@ -609,12 +609,12 @@ pub(crate) mod tests {
             ]
         );
         assert_eq!(
-            guides[7]["dialogue"]["random-site"][0].as_str(),
-            Some("Random line")
+            guides[7]["dialogue"]["random-site"][0]["format"].as_str(),
+            Some("trox-source-message-ref")
         );
         assert_eq!(
-            guides[8]["dialogue"]["gamble-ladder-climb"][0].as_str(),
-            Some("Win {win-essence}")
+            guides[8]["dialogue"]["gamble-ladder-climb"][0]["format"].as_str(),
+            Some("trox-source-message-ref")
         );
         assert!(guides[0]["dialogue"].get("random-site").is_none());
         assert!(guides[7]["dialogue"].get("gamble-blackjack").is_none());
@@ -725,7 +725,7 @@ pub(crate) mod tests {
             lower(missing)
                 .unwrap_err()
                 .to_string()
-                .contains("missing placeholder {win-essence}")
+                .contains("missing placeholder {win_essence}")
         );
     }
 }

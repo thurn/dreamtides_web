@@ -1,5 +1,6 @@
 import type { LayerName } from "./layer-name";
 import type { SiteType } from "./site-type";
+import type { SourceTransport } from "../runtime/localization/runtime";
 
 export interface AtlasIntegerRange {
   min: number;
@@ -69,11 +70,11 @@ export interface AtlasData {
     figureArtId: string;
   };
   presentation: {
-    unseenTitle: string;
-    unseenBody: string;
-    starterBody: string;
-    affiliationTitleTemplate: string;
-    affiliationBodyTemplate: string;
+    unseenTitle: SourceTransport;
+    unseenBody: SourceTransport;
+    starterBody: SourceTransport;
+    affiliationTitleTemplate: SourceTransport;
+    affiliationBodyTemplate: SourceTransport;
   };
   assets: {
     unrevealedFrameSource: string;
