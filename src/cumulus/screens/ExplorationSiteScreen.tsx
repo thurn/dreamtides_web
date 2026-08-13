@@ -801,23 +801,17 @@ function ExplorationChoiceContents({
   readonly index: number;
 }) {
   const resolve = useLocalizer();
-  const resolvedEffect =
-    action.effectFallback === undefined
-      ? resolve(action.effectText)
-      : resolve(action.effectFallback.message);
   const effectDescription =
     action.effectFallback === undefined && action.effectParts !== undefined
       ? renderExplorationEffectDescription(
-          resolvedEffect,
+          action.effectText,
           action.effectParts,
           index,
           resolve,
         )
-      : renderRulesSymbolsInline(resolvedEffect);
-  const disclosure =
-    action.effectDisclosure === undefined
-      ? null
-      : resolve(action.effectDisclosure);
+      : renderRulesSymbolsInline(
+          resolve(action.effectFallback?.message ?? action.effectText),
+        );
   return (
     <>
       <span style={{ minWidth: 0, display: "grid", gap: token("--space-xxs") }}>
@@ -829,7 +823,9 @@ function ExplorationChoiceContents({
           style={{ font: token("--t-caption"), color: token("--text-muted") }}
         >
           {effectDescription}
-          {disclosure === null ? null : <span> {disclosure}</span>}
+          {action.effectDisclosure === undefined ? null : (
+            <span> {resolve(action.effectDisclosure)}</span>
+          )}
         </span>
       </span>
       <span aria-hidden="true" style={{ font: token("--t-title") }}>
@@ -847,11 +843,12 @@ interface ExplorationEffectToken {
 }
 
 function renderExplorationEffectDescription(
-  text: string,
+  message: LocalizedString,
   parts: readonly ExplorationActionEffectPart[],
   choiceIndex: number,
   resolve: (message: LocalizedString) => string,
 ): readonly ReactNode[] {
+  const text = resolve(message);
   const nextStartByLabel = new Map<string, number>();
   const candidates = parts
     .flatMap((part, partIndex): ExplorationEffectToken[] => {
@@ -5895,9 +5892,7 @@ export function ExplorationSiteScreen({
               txa(
                 "Purging {dreamsign_name}",
                 {
-                  dreamsign_name: opaque(
-                    dreamsignPurgeReward.dreamsign.name,
-                  ),
+                  dreamsign_name: opaque(dreamsignPurgeReward.dreamsign.name),
                 },
                 "Accessible announcement while an Exploration outcome purges a Dreamsign. dreamsign_name is its canonical display name with unknown grammatical gender.",
               ),

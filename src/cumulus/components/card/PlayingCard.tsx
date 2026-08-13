@@ -14,10 +14,7 @@ import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
-import {
-  dreamsignRevealSpec,
-  type LocalizedDreamsign,
-} from "../hud/Dreamsign";
+import { dreamsignRevealSpec, type LocalizedDreamsign } from "../hud/Dreamsign";
 import { opaque, tx, txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
@@ -555,8 +552,8 @@ export function PlayingCard(props: PlayingCardProps): ReactElement {
 export interface WagerPrizeCardProps {
   /** Stable Gamble choice represented by this prize object. */
   prizeId: WagerPrizeCardId;
-  /** Draw condition shown as authored compact notation. */
-  targetLabel: LocalizedString;
+  /** Lowest rank in the inclusive winning range through Ace. */
+  minimumWinningRank: PlayingCardRank;
   /** Named desktop or mobile square size. Defaults to `wager`. */
   size?: WagerPrizeCardSize;
   /** Committed card shown on the reverse face after a bet. */
@@ -617,7 +614,7 @@ function DreamsignWagerPrizeCard(
 
 function WagerPrizeCardObject({
   prizeId,
-  targetLabel,
+  minimumWinningRank,
   size = "wager",
   drawnCard,
   revealDrawnCard = false,
@@ -630,25 +627,24 @@ function WagerPrizeCardObject({
   revealBinding?: WagerRevealSourceBinding;
 }): ReactElement {
   const resolve = useLocalizer();
-  const resolvedTargetLabel = resolve(targetLabel);
   const reduceMotion = useReducedMotion() === true;
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const showingDrawnCard = revealDrawnCard && drawnCard !== null;
   const prizeLabel =
     rewardDreamsign === null
       ? txa(
-          "Draw {target_label}. Win {essence_amount} Essence.",
-          { target_label: resolve(targetLabel), essence_amount: essenceReward },
-          "Complete accessible name for a wager prize without a Dreamsign. target_label is the authored winning rank or range, and essence_amount is the positive Essence payout.",
+          "Draw {minimum_rank}-A. Win {essence_amount} Essence.",
+          { minimum_rank: minimumWinningRank, essence_amount: essenceReward },
+          "Complete accessible name for a wager prize without a Dreamsign. minimum_rank is the lowest standard playing-card rank in the inclusive winning range through Ace, and essence_amount is the positive Essence payout.",
         )
       : txa(
-          "Draw {target_label}. Win {essence_amount} Essence and {dreamsign_name}.",
+          "Draw {minimum_rank}-A. Win {essence_amount} Essence and {dreamsign_name}.",
           {
-            target_label: resolve(targetLabel),
+            minimum_rank: minimumWinningRank,
             essence_amount: essenceReward,
             dreamsign_name: opaque(rewardDreamsign.name),
           },
-          "Complete accessible name for a wager prize that includes a Dreamsign. target_label is the authored winning rank or range, essence_amount is the positive Essence payout, and dreamsign_name is the canonical authored Dreamsign name.",
+          "Complete accessible name for a wager prize that includes a Dreamsign. minimum_rank is the lowest standard playing-card rank in the inclusive winning range through Ace, essence_amount is the positive Essence payout, and dreamsign_name is the canonical authored Dreamsign name.",
         );
   const drawnCardLabel =
     drawnCard === null
@@ -703,9 +699,9 @@ function WagerPrizeCardObject({
         >
           {resolve(
             txa(
-              "Draw {target_label}",
-              { target_label: resolvedTargetLabel },
-              "Title printed on a wager prize card before its concealed playing card is revealed. target_label is the authored rank or rank range the current player must draw.",
+              "Draw {minimum_rank}-A",
+              { minimum_rank: minimumWinningRank },
+              "Title printed on a wager prize card before its concealed playing card is revealed. minimum_rank is the lowest standard playing-card rank in the inclusive winning range through Ace.",
             ),
           )}
         </h2>
@@ -750,7 +746,7 @@ function WagerPrizeCardObject({
       data-wager-prize-card-state={showingDrawnCard ? "drawn" : "prize"}
       data-wager-prize-card-size={size}
       data-wager-prize-card-emphasis={emphasis}
-      data-wager-prize-target={resolvedTargetLabel}
+      data-wager-prize-target={`${minimumWinningRank}-A`}
       data-wager-prize-essence-reward={essenceReward}
       data-wager-prize-drawn-card={
         drawnCard === null ? undefined : `${drawnCard.rank}-${drawnCard.suit}`

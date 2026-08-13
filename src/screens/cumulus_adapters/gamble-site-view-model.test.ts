@@ -107,7 +107,7 @@ describe("gamble-site-view-model", () => {
     expect(gates).toMatchObject([
       {
         id: "six",
-        targetLabel: "6-A",
+        minimumWinningRank: "6",
         chanceLabel: "69.23%",
         essenceReward: 100,
         rewardDreamsign: null,
@@ -115,7 +115,7 @@ describe("gamble-site-view-model", () => {
       },
       {
         id: "nine",
-        targetLabel: "9-A",
+        minimumWinningRank: "9",
         chanceLabel: "46.15%",
         essenceReward: 150,
         rewardDreamsign: null,
@@ -123,7 +123,7 @@ describe("gamble-site-view-model", () => {
       },
       {
         id: "jack",
-        targetLabel: "J-A",
+        minimumWinningRank: "J",
         chanceLabel: "30.77%",
         essenceReward: 200,
         rewardDreamsign: { id: "fixture-sign" },
@@ -548,19 +548,19 @@ describe("gamble-site-view-model — Starway Stairs", () => {
     expect(view.tiers).toMatchObject([
       {
         tierNumber: 1,
-        drawTargetLabel: "3-A",
+        minimumWinningRank: "3",
         essenceReward: 60,
         state: "current",
       },
       {
         tierNumber: 2,
-        drawTargetLabel: "5-A",
+        minimumWinningRank: "5",
         essenceReward: 140,
         state: "future",
       },
       {
         tierNumber: 3,
-        drawTargetLabel: "8-A",
+        minimumWinningRank: "8",
         essenceReward: 300,
         state: "future",
       },

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   rankBustsStarwayStairsTier,
   starwayStairsBustRangeLabel,
-  starwayStairsDrawTargetLabel,
+  starwayStairsMinimumSafeRank,
   starwayStairsEssenceReward,
   starwayStairsWagerAmount,
 } from "./starway-stairs";
@@ -28,14 +28,14 @@ describe("Starway Stairs rules", () => {
         (tier) => ({
           tierNumber: tier.tier,
           bustRange: starwayStairsBustRangeLabel(tier),
-          drawTarget: starwayStairsDrawTargetLabel(tier),
+          minimumSafeRank: starwayStairsMinimumSafeRank(tier),
           reward: starwayStairsEssenceReward(economy, tier.tier),
         }),
       ),
     ).toEqual([
-      { tierNumber: 1, bustRange: "2", drawTarget: "3-A", reward: 67 },
-      { tierNumber: 2, bustRange: "2-4", drawTarget: "5-A", reward: 149 },
-      { tierNumber: 3, bustRange: "2-7", drawTarget: "8-A", reward: 313 },
+      { tierNumber: 1, bustRange: "2", minimumSafeRank: "3", reward: 67 },
+      { tierNumber: 2, bustRange: "2-4", minimumSafeRank: "5", reward: 149 },
+      { tierNumber: 3, bustRange: "2-7", minimumSafeRank: "8", reward: 313 },
     ]);
   });
 

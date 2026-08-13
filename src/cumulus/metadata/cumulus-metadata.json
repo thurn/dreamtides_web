@@ -4567,12 +4567,26 @@
       "description": "Stable Gamble choice represented by this prize object."
     },
     {
-      "name": "targetLabel",
-      "tsType": "LocalizedString",
-      "unionMembers": [],
+      "name": "minimumWinningRank",
+      "tsType": "StandardPlayingCardRank",
+      "unionMembers": [
+        "A",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "J",
+        "Q",
+        "K"
+      ],
       "required": true,
       "defaultValue": null,
-      "description": "Draw condition shown as authored compact notation."
+      "description": "Lowest rank in the inclusive winning range through Ace."
     },
     {
       "name": "size",

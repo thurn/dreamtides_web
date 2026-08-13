@@ -39,16 +39,16 @@ export function starwayStairsBustRangeLabel(
   return tier.highestBustRank === "2" ? "2" : `2-${tier.highestBustRank}`;
 }
 
-/** Inclusive safe-draw range shown on a Starway tier prize. */
-export function starwayStairsDrawTargetLabel(
+/** Lowest rank in the inclusive safe-draw range through Ace. */
+export function starwayStairsMinimumSafeRank(
   tier: StarwayStairsTierRule,
-): string {
+): StandardPlayingCardRank {
   const bustIndex = STANDARD_PLAYING_CARD_RANKS.indexOf(tier.highestBustRank);
   const minimumSafeRank = STANDARD_PLAYING_CARD_RANKS[bustIndex + 1];
   if (minimumSafeRank === undefined) {
     throw new Error(`Starway tier ${String(tier.tier)} has no safe rank`);
   }
-  return `${minimumSafeRank}-A`;
+  return minimumSafeRank;
 }
 
 /** Whether the drawn rank busts the specified tier. */

@@ -23,7 +23,7 @@ import {
 } from "../../data/tidemark-ladder-climb";
 import {
   nextStarwayStairsTierNumber,
-  starwayStairsDrawTargetLabel,
+  starwayStairsMinimumSafeRank,
   starwayStairsEssenceReward,
 } from "../../data/starway-stairs";
 import { eligibleFourSuitRepriseTargets } from "../../data/four-suit-reprise";
@@ -92,11 +92,7 @@ export function buildGambleGateViews(
 ): readonly GambleGateView[] {
   return game.rules.gates.map((gate) => ({
     id: gate.gate,
-    targetLabel: txa(
-      "{minimum_rank}-A",
-      { minimum_rank: gate.threshold },
-      "Compact inclusive winning-rank notation on a Gamble prize card. minimum_rank is the lowest standard playing-card rank that wins; A is the ace at the top of the range.",
-    ),
+    minimumWinningRank: gate.threshold,
     chanceLabel: txa(
       "{chance_percent}%",
       {
@@ -342,11 +338,7 @@ function buildStarwayStairsSiteView(params: {
       );
       return {
         tierNumber: tier.tier,
-        drawTargetLabel: txa(
-          "{winning_range}",
-          { winning_range: starwayStairsDrawTargetLabel(tier) },
-          "Compact inclusive winning-rank notation on a Starway prize card. winning_range contains two standard playing-card ranks separated by a hyphen.",
-        ),
+        minimumWinningRank: starwayStairsMinimumSafeRank(tier),
         essenceReward: starwayStairsEssenceReward(
           params.game.economy,
           tier.tier,

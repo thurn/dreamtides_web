@@ -54,8 +54,8 @@ import {
 export interface GambleGateView {
   /** Stable gate id used by the wager intent. */
   id: GravokGateId;
-  /** Inclusive winning rank range shown as compact card notation. */
-  targetLabel: LocalizedString;
+  /** Lowest rank in the inclusive winning range through Ace. */
+  minimumWinningRank: PlayingCardRank;
   /** Exact winning probability. */
   chanceLabel: LocalizedString;
   /** Winning cards in the standard deck. */
@@ -162,7 +162,7 @@ export interface LadderClimbSiteView {
 
 export interface StarwayStairsTierView {
   tierNumber: StarwayStairsTierNumber;
-  drawTargetLabel: LocalizedString;
+  minimumWinningRank: PlayingCardRank;
   essenceReward: number;
   state: "future" | "current" | "safe" | "bust";
   card: { rank: PlayingCardRank; suit: PlayingCardSuit } | null;
@@ -1126,7 +1126,7 @@ function GambleGateCard({
   const prizeCard = (
     <WagerPrizeCard
       prizeId={gate.id}
-      targetLabel={gate.targetLabel}
+      minimumWinningRank={gate.minimumWinningRank}
       essenceReward={gate.essenceReward}
       rewardDreamsign={gate.rewardDreamsign}
       size={layout === "desktop" ? "wager" : "wagerCompact"}
@@ -1882,11 +1882,7 @@ function LadderClimbScreen({
               >
                 <WagerPrizeCard
                   prizeId="ladder-climb"
-                  targetLabel={txa(
-                    "{minimum_rank}-A",
-                    { minimum_rank: targetRank },
-                    "Compact inclusive winning-rank notation on a Gamble prize card. minimum_rank is the lowest standard playing-card rank that wins; A is the ace at the top of the range.",
-                  )}
+                  minimumWinningRank={targetRank}
                   essenceReward={view.essenceReward}
                   rewardDreamsign={view.rewardDreamsign}
                   drawnCard={result?.card ?? null}
@@ -2200,7 +2196,7 @@ function StarwayStairsScreen({
                         `starway-${String(tier.tierNumber)}` as
                           "starway-1" | "starway-2" | "starway-3"
                       }
-                      targetLabel={tier.drawTargetLabel}
+                      minimumWinningRank={tier.minimumWinningRank}
                       essenceReward={tier.essenceReward}
                       rewardDreamsign={null}
                       size={layout === "desktop" ? "wager" : "wagerCompact"}

@@ -199,7 +199,6 @@ export function CardPile({
     overflow: "visible",
   };
   const sharedProps = {
-    "aria-label": resolve(label),
     "data-card-pile": "",
     "data-pile-orientation": "landscape",
     "data-pile-count": String(cards.length),
@@ -212,6 +211,7 @@ export function CardPile({
     return (
       <Pressable
         as="button"
+        ariaLabelMessage={label}
         {...sharedProps}
         onClick={onPress}
         style={{
@@ -232,7 +232,12 @@ export function CardPile({
   }
 
   return (
-    <div role="group" {...sharedProps} style={rootStyle}>
+    <div
+      role="group"
+      aria-label={resolve(label)}
+      {...sharedProps}
+      style={rootStyle}
+    >
       {layers}
       {visibleCards.length === 0 && emptyState === "outlined" ? (
         <EmptyPileOutline label={emptyLabel} />

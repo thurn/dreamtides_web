@@ -1,4 +1,5 @@
 import { Fragment, type ReactElement, type ReactNode } from "react";
+import type { LocalizedString } from "@trox/runtime";
 import {
   parseTutorialInstructionMarkup,
   type TutorialInstructionParagraph,
@@ -18,8 +19,7 @@ function renderInstructionText(instruction: string): ReactElement {
   return (
     <>
       {parts.map((part, index) => {
-        const resourceTerm =
-          /^(points|spark)\s+\(\s*([⍟✦])\s*\)$/iu.exec(part);
+        const resourceTerm = /^(points|spark)\s+\(\s*([⍟✦])\s*\)$/iu.exec(part);
         if (resourceTerm !== null) {
           const points = resourceTerm[2] === "⍟";
           return (
@@ -98,11 +98,16 @@ export function renderTutorialInstructionParagraph(
   );
 }
 
-export function renderTutorialInstructionText(text: string): ReactNode {
-  return parseTutorialInstructionMarkup(text).map((paragraph, index) => (
-    <Fragment key={index}>
-      {index === 0 ? null : "\n\n"}
-      {renderTutorialInstructionParagraph(paragraph)}
-    </Fragment>
-  ));
+export function renderTutorialInstructionText(
+  text: LocalizedString,
+  resolve: (message: LocalizedString) => string,
+): ReactNode {
+  return parseTutorialInstructionMarkup(resolve(text)).map(
+    (paragraph, index) => (
+      <Fragment key={index}>
+        {index === 0 ? null : "\n\n"}
+        {renderTutorialInstructionParagraph(paragraph)}
+      </Fragment>
+    ),
+  );
 }

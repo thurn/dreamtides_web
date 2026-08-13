@@ -117,7 +117,6 @@ export function Dreamsign({
   const resolve = useLocalizer();
   const [imageBroken, setImageBroken] = React.useState(false);
   const showImage = Boolean(dreamsign.imageName) && !imageBroken;
-  const imgAlt = resolve(dreamsign.imageAlt);
   const dreamsignId = requireDreamsignId(dreamsign, "Dreamsign tile");
   const binding = useRevealSource({
     identity: {
@@ -195,7 +194,7 @@ export function Dreamsign({
       {showImage ? (
         <img
           src={dreamsignArtUrl(String(dreamsign.imageName))}
-          alt={imgAlt}
+          alt={resolve(dreamsign.imageAlt)}
           draggable={false}
           style={{ height: "100%", width: "100%", objectFit: "cover" }}
           onError={() => {

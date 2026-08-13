@@ -44,7 +44,7 @@ const VIEW: GravokWagerSiteView = {
   gates: [
     {
       id: "six",
-      targetLabel: assertLocalized("6-A"),
+      minimumWinningRank: "6",
       chanceLabel: assertLocalized("69.23%"),
       oddsNumerator: 36,
       oddsDenominator: 52,
@@ -54,7 +54,7 @@ const VIEW: GravokWagerSiteView = {
     },
     {
       id: "nine",
-      targetLabel: assertLocalized("9-A"),
+      minimumWinningRank: "9",
       chanceLabel: assertLocalized("46.15%"),
       oddsNumerator: 24,
       oddsDenominator: 52,
@@ -64,7 +64,7 @@ const VIEW: GravokWagerSiteView = {
     },
     {
       id: "jack",
-      targetLabel: assertLocalized("J-A"),
+      minimumWinningRank: "J",
       chanceLabel: assertLocalized("30.77%"),
       oddsNumerator: 16,
       oddsDenominator: 52,
@@ -95,21 +95,21 @@ const STARWAY_VIEW: StarwayStairsSiteView = {
   tiers: [
     {
       tierNumber: 1,
-      drawTargetLabel: assertLocalized("3-A"),
+      minimumWinningRank: "3",
       essenceReward: 60,
       state: "current",
       card: null,
     },
     {
       tierNumber: 2,
-      drawTargetLabel: assertLocalized("5-A"),
+      minimumWinningRank: "5",
       essenceReward: 140,
       state: "future",
       card: null,
     },
     {
       tierNumber: 3,
-      drawTargetLabel: assertLocalized("8-A"),
+      minimumWinningRank: "8",
       essenceReward: 300,
       state: "future",
       card: null,
@@ -119,7 +119,9 @@ const STARWAY_VIEW: StarwayStairsSiteView = {
   guide: {
     id: "gravok",
     name: assertLocalized("Gravok"),
-    line: assertLocalized("Starway Stairs is the game. Keep betting to see how high you can go!"),
+    line: assertLocalized(
+      "Starway Stairs is the game. Keep betting to see how high you can go!",
+    ),
     art: artRef.dreamGuide("gravok"),
   },
   result: null,

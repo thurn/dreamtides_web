@@ -60,7 +60,6 @@ export function SpeechBubble({
   testId,
 }: SpeechBubbleProps): ReactElement {
   const resolve = useLocalizer();
-  const renderedText = resolve(text);
   const bubbleRef = useRef<HTMLElement | null>(null);
   const [bubbleSize, setBubbleSize] = useState({ width: 0, height: 0 });
   const tail = `${String(speechBubblePointerDepth())}px`;
@@ -197,7 +196,7 @@ export function SpeechBubble({
           whiteSpace: "pre-line",
         }}
       >
-          {renderTutorialInstructionText(renderedText)}
+        {renderTutorialInstructionText(text, resolve)}
       </p>
     </aside>
   );

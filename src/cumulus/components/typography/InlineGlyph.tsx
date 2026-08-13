@@ -31,18 +31,19 @@ export function InlineGlyph({
   label,
 }: InlineGlyphProps): ReactElement {
   const resolve = useOptionalLocalizer();
-  const accessibleLabel =
-    label === undefined
-      ? undefined
-      : resolve === null
-        ? missingLocalizationProvider()
-        : resolve(label);
+  const isAccessible = label !== undefined;
   return (
     <span
       data-inline-glyph=""
-      role={accessibleLabel === undefined ? undefined : "img"}
-      aria-label={accessibleLabel}
-      aria-hidden={accessibleLabel === undefined ? true : undefined}
+      role={isAccessible ? "img" : undefined}
+      aria-label={
+        label === undefined
+          ? undefined
+          : resolve === null
+            ? missingLocalizationProvider()
+            : resolve(label)
+      }
+      aria-hidden={isAccessible ? undefined : true}
       style={{
         color: color === undefined ? undefined : resolveColor(color),
       }}

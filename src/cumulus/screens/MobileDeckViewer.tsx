@@ -25,9 +25,9 @@
 // delegates finger-clearing placement and press recognition to the shared
 // reveal coordinator.
 
-
 import {
   meaning,
+  opaque,
   tx,
   txa,
   plural,
@@ -313,7 +313,6 @@ function DeckControls({
   typeFilterOptions: DeckControlOption<DeckTypeFilter>[];
   onFilterSortChange: (next: DeckFilterSort) => void;
 }) {
-  const resolve = useLocalizer();
   const optionLabel = (
     option: DeckControlOption<DeckTypeFilter>,
   ): LocalizedString => {
@@ -386,16 +385,12 @@ function DeckControls({
           "Accessible name for the deck filter when only Event cards are included.",
         );
       default: {
-        const subtype = resolve(deckTypeFilterLabel(
-          filterSort.typeFilter,
-          typeFilterOptions,
-        ));
         return txa(
           "Filter deck by {subtype}",
           {
-            subtype: subtype.startsWith("subtype:")
-              ? subtype.slice("subtype:".length)
-              : subtype,
+            subtype: opaque(
+              deckTypeFilterLabel(filterSort.typeFilter, typeFilterOptions),
+            ),
           },
           "Accessible name for the deck filter when one canonical card subtype is selected. subtype is authored card vocabulary and has unknown grammatical gender.",
         );
@@ -449,7 +444,7 @@ function DeckControls({
         options={typeFilterOptions.map((option) =>
           option.label === undefined
             ? { value: option.value, label: optionLabel(option) }
-              : { value: option.value, label: option.label },
+            : { value: option.value, label: option.label },
         )}
         value={filterSort.typeFilter}
         onChange={(value) =>
