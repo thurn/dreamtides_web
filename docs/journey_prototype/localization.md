@@ -8,8 +8,15 @@ and deterministic runtime bundles.
 ## Project layout
 
 - `trox.ron` defines source discovery, locale outputs, profiles, and lint policy.
-- `.trox-revision` pins the exact Trox checkout used by the repository wrapper.
-- `scripts/trox.mjs` verifies that revision before invoking the CLI.
+- `.trox-revision` pins the exact Trox checkout used by CI and vendored runtime
+  updates.
+- `scripts/trox.mjs` invokes the current `TROX_ROOT` checkout, defaulting to
+  `~/trox`, so local development follows that checkout's current branch.
+- `TROX_VERIFY_REVISION=1` requires the checkout to match `.trox-revision` and
+  is enabled in CI. Runtime updates require the pinned revision as well.
+- `npm run trox:bump` pins the current clean `TROX_ROOT` commit, updates the
+  Rust dependency and lockfile, rebuilds the vendored TypeScript runtime, and
+  regenerates the localization reports and bundles.
 - `localization/reports/en-US.csv` is the source-English review report.
 - `localization/qa/<locale>.csv` is editable translator data for development QA.
 - `localization/qa/<locale>.ron` defines locale direction, isolation, fallback,

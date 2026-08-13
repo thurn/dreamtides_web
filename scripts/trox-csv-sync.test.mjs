@@ -10,7 +10,7 @@ import {
 import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { resolveTroxRoot, verifyTroxRevision } from "./trox.mjs";
+import { resolveTroxRoot } from "./trox.mjs";
 
 function runExtract(root, troxRoot = resolveTroxRoot()) {
   const executable = resolve(troxRoot, "target/debug/trox");
@@ -68,7 +68,6 @@ function encodeCSV(rows) {
 describe("Trox CSV synchronization", () => {
   it("preserves translator cells, records stale work, retains obsolete rows, and is deterministic", () => {
     const troxRoot = resolveTroxRoot();
-    verifyTroxRevision(troxRoot);
     const root = mkdtempSync(resolve(tmpdir(), "quest-trox-csv-"));
     try {
       mkdirSync(resolve(root, "src"), { recursive: true });

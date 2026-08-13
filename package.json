@@ -27,6 +27,7 @@
     "format:ron": "node scripts/format-ron.mjs",
     "format:ron:check": "node scripts/format-ron.mjs --check",
     "trox:sync-runtime": "node scripts/sync-trox-runtime.mjs",
+    "trox:bump": "node scripts/bump-trox.mjs",
     "trox:check-runtime": "node scripts/sync-trox-runtime.mjs --check",
     "trox:check-generated": "node scripts/trox-generated-check.mjs",
     "trox:check": "node scripts/trox.mjs check",

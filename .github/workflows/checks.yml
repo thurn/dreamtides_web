@@ -47,10 +47,13 @@ jobs:
       - run: npm run trox:check -- --deny warnings
         env:
           TROX_ROOT: ${{ runner.temp }}/trox
+          TROX_VERIFY_REVISION: "1"
       - run: npm run trox:check-runtime
         env:
           TROX_ROOT: ${{ runner.temp }}/trox
+          TROX_VERIFY_REVISION: "1"
       - run: npm run review:full
         env:
           JOURNEY_TEST_WORKERS: "4"
           TROX_ROOT: ${{ runner.temp }}/trox
+          TROX_VERIFY_REVISION: "1"

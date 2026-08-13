@@ -71,6 +71,7 @@ describe("fast review plan", () => {
       shouldCheckTrox: true,
       shouldTypecheck: false,
       testInputs: [
+        "scripts/bump-trox.test.mjs",
         "scripts/trox-csv-sync.test.mjs",
         "scripts/trox-generated-check.test.mjs",
         "scripts/trox.test.mjs",
@@ -83,6 +84,7 @@ describe("fast review plan", () => {
       {
         shouldCheckTrox: true,
         testInputs: [
+          "scripts/bump-trox.test.mjs",
           "scripts/trox-csv-sync.test.mjs",
           "scripts/trox-generated-check.test.mjs",
           "scripts/trox.test.mjs",
@@ -95,11 +97,16 @@ describe("fast review plan", () => {
     expect(buildReviewPlan(["scripts/trox.mjs"])).toMatchObject({
       shouldCheckTrox: true,
       testInputs: [
+        "scripts/bump-trox.test.mjs",
         "scripts/trox-csv-sync.test.mjs",
         "scripts/trox-generated-check.test.mjs",
         "scripts/trox.mjs",
         "scripts/trox.test.mjs",
       ],
+    });
+    expect(buildReviewPlan(["scripts/bump-trox.mjs"])).toMatchObject({
+      shouldCheckTrox: true,
+      testInputs: expect.arrayContaining(["scripts/bump-trox.test.mjs"]),
     });
   });
 

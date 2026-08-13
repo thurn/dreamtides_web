@@ -17,6 +17,10 @@ export function resolveTroxRoot(environment = process.env) {
   return resolve(environment.TROX_ROOT ?? resolve(homedir(), "trox"));
 }
 
+export function requiresPinnedTroxRevision(environment = process.env) {
+  return environment.TROX_VERIFY_REVISION === "1";
+}
+
 export function verifyTroxRevision(troxRoot, run = execFileSync) {
   let actual;
   try {
@@ -81,7 +85,8 @@ export function normalizeTroxArguments(arguments_) {
 export function runTrox(arguments_, options = {}) {
   const troxRoot = options.troxRoot ?? resolveTroxRoot(options.environment);
   const run = options.run ?? execFileSync;
-  verifyTroxRevision(troxRoot, run);
+  const verifyRevision = options.verifyRevision ?? requiresPinnedTroxRevision(options.environment);
+  if (verifyRevision) verifyTroxRevision(troxRoot, run);
   const invocation = troxInvocation(troxRoot, arguments_, options.configPath);
   run(invocation.command, invocation.arguments, {
     cwd: options.cwd ?? QUEST_ROOT,

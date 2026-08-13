@@ -5,7 +5,12 @@ import { cpSync, mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, stat
 import { tmpdir } from "node:os";
 import { basename, dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { pinnedTroxRevision, resolveTroxRoot, verifyTroxRevision } from "./trox.mjs";
+import {
+  pinnedTroxRevision,
+  requiresPinnedTroxRevision,
+  resolveTroxRoot,
+  verifyTroxRevision,
+} from "./trox.mjs";
 
 const QUEST_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export const DESTINATION = resolve(QUEST_ROOT, "vendor/trox-runtime");
@@ -59,7 +64,10 @@ export function copyDistributable(troxRoot, destination) {
 export function syncTroxRuntime(options = {}) {
   const troxRoot = options.troxRoot ?? resolveTroxRoot(options.environment);
   const destination = options.destination ?? DESTINATION;
-  verifyTroxRevision(troxRoot);
+  const verifyRevision = options.verifyRevision ?? (
+    options.checkOnly !== true || requiresPinnedTroxRevision(options.environment)
+  );
+  if (verifyRevision) verifyTroxRevision(troxRoot);
   const commands = options.commands ?? [
     ["npm", ["ci"]],
     ["npm", ["run", "typecheck"]],

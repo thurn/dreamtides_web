@@ -26,11 +26,13 @@ const SOURCE_TREE_CONTRACT_TESTS = [
 const LOCALIZATION_CONTRACT_INPUTS = new Set([
   ".trox-revision",
   "trox.ron",
+  "scripts/bump-trox.mjs",
   "scripts/trox.mjs",
   "scripts/sync-trox-runtime.mjs",
   "scripts/trox-generated-check.mjs",
 ]);
 const LOCALIZATION_CONTRACT_TESTS = [
+  "scripts/bump-trox.test.mjs",
   "scripts/trox.test.mjs",
   "scripts/trox-csv-sync.test.mjs",
   "scripts/trox-generated-check.test.mjs",

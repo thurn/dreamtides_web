@@ -3,12 +3,44 @@ import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { assertDirectoriesEqual, copyDistributable, syncTroxRuntime } from "./sync-trox-runtime.mjs";
-import { normalizeTroxArguments, pinnedTroxRevision, resolveTroxRoot, troxInvocation, verifyTroxRevision } from "./trox.mjs";
+import {
+  normalizeTroxArguments,
+  pinnedTroxRevision,
+  requiresPinnedTroxRevision,
+  resolveTroxRoot,
+  runTrox,
+  troxInvocation,
+  verifyTroxRevision,
+} from "./trox.mjs";
 
 describe("Trox wrappers", () => {
   it("rejects a missing checkout and a different revision", () => {
     expect(() => verifyTroxRevision("/missing", () => { throw new Error("missing"); })).toThrow(/Unable to read/);
     expect(() => verifyTroxRevision("/fixture", () => `${"0".repeat(40)}\n`)).toThrow(/revision mismatch/);
+  });
+
+  it("uses the current local checkout unless exact revision verification is requested", () => {
+    expect(requiresPinnedTroxRevision({})).toBe(false);
+    expect(requiresPinnedTroxRevision({ TROX_VERIFY_REVISION: "1" })).toBe(true);
+
+    const localCalls = [];
+    runTrox(["check"], {
+      environment: {},
+      run: (command, arguments_) => localCalls.push([command, arguments_]),
+      troxRoot: "/trox",
+    });
+    expect(localCalls.map(([command]) => command)).toEqual(["cargo"]);
+
+    const verifiedCalls = [];
+    runTrox(["check"], {
+      environment: { TROX_VERIFY_REVISION: "1" },
+      run: (command, arguments_) => {
+        verifiedCalls.push([command, arguments_]);
+        return command === "git" ? `${pinnedTroxRevision()}\n` : undefined;
+      },
+      troxRoot: "/trox",
+    });
+    expect(verifiedCalls.map(([command]) => command)).toEqual(["git", "cargo"]);
   });
 
   it("forwards CLI arguments after the pinned config", () => {
@@ -31,6 +63,7 @@ describe("Trox wrappers", () => {
     expect(() => syncTroxRuntime({
       troxRoot: resolveTroxRoot(),
       commands: [[process.execPath, ["-e", "process.exit(7)"]]],
+      verifyRevision: false,
     })).toThrow();
   });
 
