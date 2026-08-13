@@ -2,18 +2,11 @@ import { asCardName } from "../../types/card-identity";
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
-import type { FitModel } from "../../draft/fit-model";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_DREAMSCAPES,
   MINIMAL_SITES_DATA,
 } from "../../__test-helpers__/atlas-fixtures";
-import type {
-  MerchantCorpus,
-  MerchantCorpusCard,
-  MerchantCluster,
-} from "../../data/merchant-corpus";
-import type { DreamsignProfile } from "../../data/dreamsign-profiles";
 import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
 import type {
@@ -149,15 +142,12 @@ export function makeMerchantTestResolvedPackage(
 export function makeMerchantTestContent({
   cards,
   dreamsignTemplates = [],
-  fitModel,
-  merchantCorpus,
-  dreamsignProfiles,
 }: {
   cards: readonly CardData[];
   dreamsignTemplates?: readonly DreamsignTemplate[];
-  fitModel?: FitModel;
-  merchantCorpus?: MerchantCorpus;
-  dreamsignProfiles?: ReadonlyMap<string, DreamsignProfile>;
+  fitModel?: unknown;
+  merchantCorpus?: unknown;
+  dreamsignProfiles?: unknown;
 }): JourneyContent {
   return {
     ...CONFIG_DATA_FIXTURE,
@@ -173,65 +163,5 @@ export function makeMerchantTestContent({
     sitesData: MINIMAL_SITES_DATA,
     economyData: economyFixture(),
     opponentsData: opponentsFixture(),
-    fitModel,
-    merchantCorpus,
-    dreamsignProfiles,
-  };
-}
-
-/**
- * Builds a synthetic merchant corpus. `qualityByUuid` assigns a quality score
- * to each card UUID; cards absent from the map get no corpus record.
- */
-export function makeMerchantTestCorpus(input: {
-  cards?: Record<string, Partial<MerchantCorpusCard> & { quality: number }>;
-  clusters?: readonly MerchantCluster[];
-}): MerchantCorpus {
-  const cards = new Map<string, MerchantCorpusCard>();
-  for (const [uuid, entry] of Object.entries(input.cards ?? {})) {
-    cards.set(uuid, {
-      quality: entry.quality,
-      multiplicity: entry.multiplicity ?? 0,
-      df: entry.df ?? 50,
-      ...(entry.cluster === undefined ? {} : { cluster: entry.cluster }),
-    });
-  }
-  return { cards, clusters: input.clusters ?? [] };
-}
-
-export function makeMerchantTestDreamsignProfile(
-  overrides: Partial<DreamsignProfile> & Pick<DreamsignProfile, "id">,
-): DreamsignProfile {
-  const { id, ...rest } = overrides;
-  return {
-    id,
-    subtypes: [],
-    cardTypes: [],
-    costBands: [],
-    keywords: [],
-    quality: 2,
-    ...rest,
-  };
-}
-
-export function makeMerchantTestFitModel(): FitModel {
-  return {
-    decks: [],
-    idf: new Map(),
-    prior: new Map(),
-    coocNorm: new Map(),
-    numberToId: new Map(),
-    idIndex: new Map(),
-    tuning: {
-      alpha: 1,
-      beta: 1,
-      gamma: 1,
-      K: 1,
-      idfPower: 1,
-      minDf: 1,
-      maxDfFrac: 1,
-      minDeckSize: 1,
-      maxDeckSize: 99,
-    },
   };
 }

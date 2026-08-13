@@ -4,10 +4,7 @@
 // UUID from
 // `cards.toml`. These tests fail if any reference points at a UUID that is not
 // a real card, so renaming a card can never silently desynchronize one of these
-// files. (The adapted draft records in
-// `docs/draft_records_adapted` are imported data, not a maintained reference: the
-// asset build resolves them tolerantly and drops tokens for cards no longer in
-// the catalog, so they are not guarded here.)
+// files.
 
 import { readFileSync } from "node:fs";
 import { join } from "node:path";

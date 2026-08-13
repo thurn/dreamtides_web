@@ -11,9 +11,8 @@ use sha2::{Digest, Sha256};
 use crate::manifest::{Dataset, Manifest, MigrationState};
 use crate::models::{
     affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft,
-    dream_avatar_tide_pools, dream_avatars, dream_guides, dreamscapes, dreamsign_profiles,
-    dreamsign_signatures, dreamsigns, dreamwell, economy, exploration, figments, gamble, glossary,
-    internal_card_metadata, opponents, resonance, reward_selection, sites, tides, transfiguration,
+    dream_avatars, dream_guides, dreamscapes, dreamsigns, dreamwell, economy, exploration, figments,
+    gamble, glossary, internal_card_metadata, opponents, resonance, sites, tides, transfiguration,
     tutorial, tutorial_journey_pool,
 };
 
@@ -129,7 +128,24 @@ fn adapt(
 ) -> Result<toml::Value> {
     let source = std::str::from_utf8(source).context("RON source is not UTF-8")?;
     match dataset.adapter.as_str() {
-        "affiliations_v1" => affiliations::lower(parse_ron(source, dataset)?),
+        "affiliations_v1" => {
+            let catalog: affiliations::AffiliationCatalog = parse_ron(source, dataset)?;
+            let tides_dataset = manifest.dataset("tides")?;
+            let tides_catalog: tides::TidesCatalog = parse_ron(
+                &fs::read_to_string(root.join(&tides_dataset.source))
+                    .with_context(|| format!("read tides source {}", tides_dataset.source))?,
+                tides_dataset,
+            )?;
+            affiliations::validate_tide_references(
+                &catalog,
+                &tides_catalog
+                    .tides
+                    .iter()
+                    .map(|tide| tide.id.to_string())
+                    .collect(),
+            )?;
+            affiliations::lower(catalog)
+        }
         "apollyon_incarnations_v1" => apollyon_incarnations::lower(parse_ron(source, dataset)?),
         "atlas_v1" => atlas::lower(parse_ron(source, dataset)?),
         "augury_v1" => augury::lower(parse_ron(source, dataset)?),
@@ -138,6 +154,16 @@ fn adapt(
         "dream_avatar_metadata_v1" => dream_avatars::lower_metadata(parse_ron(source, dataset)?),
         "dream_avatars_v1" => {
             let avatars: Vec<dream_avatars::AvatarDefinition> = parse_ron(source, dataset)?;
+            let tides_dataset = manifest.dataset("tides")?;
+            let tides_catalog: tides::TidesCatalog = parse_ron(
+                &fs::read_to_string(root.join(&tides_dataset.source))
+                    .with_context(|| format!("read tides source {}", tides_dataset.source))?,
+                tides_dataset,
+            )?;
+            dream_avatars::validate_tide_references(
+                &avatars,
+                &tides::tide_kinds(&tides_catalog)?,
+            )?;
             let metadata_dataset = manifest.dataset("internal-card-metadata")?;
             let metadata_source = fs::read_to_string(root.join(&metadata_dataset.source))
                 .with_context(|| {
@@ -171,24 +197,24 @@ fn adapt(
         }
         "dream_guides_v1" => dream_guides::lower(parse_ron(source, dataset)?),
         "dreamscapes_v1" => dreamscapes::lower(parse_ron(source, dataset)?),
-        "dreamsign_profiles_v1" => dreamsign_profiles::lower(parse_ron(source, dataset)?),
-        "dreamsign_signatures_v1" => dreamsign_signatures::lower(parse_ron(source, dataset)?),
-        "dreamsign_metadata_v1" => dreamsigns::lower_metadata(parse_ron(source, dataset)?),
         "dreamsign_tags_v1" => dreamsigns::lower_tags(parse_ron(source, dataset)?),
         "dreamsigns_v1" => {
             let definitions: Vec<dreamsigns::DreamsignDefinition> = parse_ron(source, dataset)?;
-            let metadata_dataset = manifest.dataset("internal-dreamsign-metadata")?;
-            let metadata_path = root.join(&metadata_dataset.source);
-            let metadata: dreamsigns::DreamsignMetadataCatalog = parse_ron(
-                &fs::read_to_string(&metadata_path).with_context(|| {
-                    format!(
-                        "read internal Dreamsign metadata source {}",
-                        metadata_path.display()
-                    )
-                })?,
-                metadata_dataset,
+            let tides_dataset = manifest.dataset("tides")?;
+            let tides_catalog: tides::TidesCatalog = parse_ron(
+                &fs::read_to_string(root.join(&tides_dataset.source))
+                    .with_context(|| format!("read tides source {}", tides_dataset.source))?,
+                tides_dataset,
             )?;
-            dreamsigns::lower(definitions, metadata)
+            dreamsigns::validate_tide_references(
+                &definitions,
+                &tides_catalog
+                    .tides
+                    .iter()
+                    .map(|tide| tide.id.to_string())
+                    .collect(),
+            )?;
+            dreamsigns::lower(definitions)
         }
         "dreamwell_metadata_v1" => dreamwell::lower_metadata(parse_ron(source, dataset)?),
         "dreamwell_v2" => {
@@ -251,7 +277,6 @@ fn adapt(
             opponents::validate_card_references(&internal_ai, &known_card_ids)?;
             opponents::lower(catalog, battle, dreamwell.rules, internal_ai)
         }
-        "reward_selection_v1" => reward_selection::lower(parse_ron(source, dataset)?),
         "figments_v1" => figments::lower(parse_ron(source, dataset)?),
         "gamble_v1" => gamble::lower(parse_ron(source, dataset)?),
         "glossary_v1" => glossary::lower(parse_ron(source, dataset)?),
@@ -305,32 +330,6 @@ fn adapt(
             )?;
             tides::validate_references(&catalog, &cards.into_iter().map(|card| card.id).collect())?;
             tides::lower(catalog)
-        }
-        "dream_avatar_tide_pools_v1" => {
-            let catalog: dream_avatar_tide_pools::DreamAvatarTidePoolsCatalog =
-                parse_ron(source, dataset)?;
-            let tides_dataset = manifest.dataset("tides")?;
-            let tides_catalog: tides::TidesCatalog = parse_ron(
-                &fs::read_to_string(root.join(&tides_dataset.source))
-                    .with_context(|| format!("read tides source {}", tides_dataset.source))?,
-                tides_dataset,
-            )?;
-            let avatars_dataset = manifest.dataset("dream-avatars")?;
-            let avatars: Vec<dream_avatars::AvatarDefinition> = parse_ron(
-                &fs::read_to_string(root.join(&avatars_dataset.source)).with_context(|| {
-                    format!("read Dream Avatar source {}", avatars_dataset.source)
-                })?,
-                avatars_dataset,
-            )?;
-            dream_avatar_tide_pools::validate_references(
-                &catalog,
-                &tides::tide_kinds(&tides_catalog)?,
-                &avatars
-                    .into_iter()
-                    .map(|avatar| avatar.id.to_string())
-                    .collect(),
-            )?;
-            dream_avatar_tide_pools::lower(catalog)
         }
         "transfiguration_v1" => transfiguration::lower(parse_ron(source, dataset)?),
         "compat_v1" => {
@@ -625,17 +624,6 @@ mod tests {
                 "dreamscapes_v1" => {
                     canonical::<Vec<dreamscapes::DreamscapeDefinition>>(&source, true);
                 }
-                "dreamsign_profiles_v1" => {
-                    canonical::<Vec<dreamsign_profiles::DreamsignProfileDefinition>>(&source, true);
-                }
-                "dreamsign_signatures_v1" => {
-                    canonical::<Vec<dreamsign_signatures::DreamsignSignatureDefinition>>(
-                        &source, true,
-                    );
-                }
-                "dreamsign_metadata_v1" => {
-                    canonical::<dreamsigns::DreamsignMetadataCatalog>(&source, true);
-                }
                 "dreamsign_tags_v1" => {
                     canonical::<dreamsigns::DreamsignTagCatalog>(&source, true);
                 }
@@ -663,9 +651,6 @@ mod tests {
                 "opponents_v1" => {
                     canonical::<opponents::OpponentsCatalog>(&source, true);
                 }
-                "reward_selection_v1" => {
-                    canonical::<reward_selection::RewardSelectionCatalog>(&source, true);
-                }
                 "figments_v1" => {
                     canonical::<Vec<figments::FigmentDefinition>>(&source, true);
                 }
@@ -689,11 +674,6 @@ mod tests {
                 }
                 "tides_v1" => {
                     canonical::<tides::TidesCatalog>(&source, true);
-                }
-                "dream_avatar_tide_pools_v1" => {
-                    canonical::<dream_avatar_tide_pools::DreamAvatarTidePoolsCatalog>(
-                        &source, true,
-                    );
                 }
                 "transfiguration_v1" => {
                     canonical::<transfiguration::TransfigurationCatalog>(&source, true);

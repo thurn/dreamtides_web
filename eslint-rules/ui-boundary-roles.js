@@ -65,9 +65,6 @@ const fileRoles = {
   "src/coop/VersionGateScreen.tsx": OUTER_UI_ROLES.APP_SHELL,
 
   "src/debug/OffersDebugApp.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
-  "src/debug/OpponentDebugApp.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
-  "src/debug/SignatureDecksApp.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
-  "src/debug/opponent-algorithms.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
 
   "src/image_viewer/ImageGrid.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,
   "src/image_viewer/ImageViewerApp.tsx": OUTER_UI_ROLES.OPERATOR_TOOL,

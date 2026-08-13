@@ -47,13 +47,6 @@ export interface EditorCardRecord {
    * where card-browsing surfaces such as the Pool Viewer show the same tooltip.
    */
   mtgName: string;
-  /**
-   * How many mainboard slots across the adapted draft record corpus
-   * (`docs/draft_records_adapted`) this card fills, matched by UUID. A higher
-   * value means players run the card in more of their finished decks; a card no
-   * deck has drafted is 0. Surfaced through the editor's "Popularity" sort.
-   */
-  popularity: number;
   source: Record<string, unknown>;
   preview: CardData;
 }
@@ -85,8 +78,7 @@ export type EditorSortField =
   | "rulesTextFontSize"
   | "nameLength"
   | "nameSubstring"
-  | "tideCount"
-  | "popularity";
+  | "tideCount";
 export type EditorSortDirection = "asc" | "desc";
 export type EditorCardSize = "small" | "medium" | "large";
 /**

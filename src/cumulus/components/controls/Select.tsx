@@ -66,6 +66,7 @@ export interface SelectOption {
   value: string;
   label: LocalizedString;
   triggerLabel?: LocalizedString;
+  disabled?: boolean;
 }
 
 export interface SelectProps {
@@ -157,6 +158,8 @@ export function Select({
   const [anchor, setAnchor] = useState<MenuAnchor | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const typeaheadRef = useRef("");
+  const typeaheadResetRef = useRef<number | undefined>(undefined);
 
   const close = useCallback(() => setOpen(false), []);
 
@@ -220,6 +223,29 @@ export function Select({
     };
   }, [open, close]);
 
+  useEffect(() => {
+    if (!open) return;
+    const buttons = [
+      ...(menuRef.current?.querySelectorAll<HTMLButtonElement>(
+        '[role="option"]',
+      ) ?? []),
+    ];
+    const active = buttons.find(
+      (button) => button.dataset.value === value && !button.disabled,
+    );
+    const firstEnabled = buttons.find((button) => !button.disabled);
+    (active ?? firstEnabled)?.focus();
+  }, [open, value]);
+
+  useEffect(
+    () => () => {
+      if (typeaheadResetRef.current !== undefined) {
+        window.clearTimeout(typeaheadResetRef.current);
+      }
+    },
+    [],
+  );
+
   const menuPosition: CSSProperties =
     align === "end" && anchor !== null
       ? { right: anchor.right }
@@ -250,6 +276,12 @@ export function Select({
         aria-expanded={open}
         aria-label={ariaLabel === undefined ? undefined : resolve(ariaLabel)}
         onClick={() => (open ? close() : openMenu())}
+        onKeyDown={(event) => {
+          if (!open && (event.key === "ArrowDown" || event.key === "ArrowUp")) {
+            event.preventDefault();
+            openMenu();
+          }
+        }}
         {...bind}
         style={{
           display: "inline-flex",
@@ -343,6 +375,70 @@ export function Select({
             ref={menuRef}
             className="cumulus"
             role="listbox"
+            onKeyDown={(event) => {
+              const buttons = [
+                ...(menuRef.current?.querySelectorAll<HTMLButtonElement>(
+                  '[role="option"]',
+                ) ?? []),
+              ];
+              if (buttons.length === 0) return;
+              const focusedIndex = Math.max(
+                0,
+                buttons.indexOf(document.activeElement as HTMLButtonElement),
+              );
+              const focusAt = (start: number, direction: 1 | -1) => {
+                for (let step = 0; step < buttons.length; step += 1) {
+                  const index =
+                    (start + step * direction + buttons.length) %
+                    buttons.length;
+                  const candidate = buttons[index];
+                  if (!candidate.disabled) {
+                    candidate.focus();
+                    candidate.scrollIntoView?.({ block: "nearest" });
+                    return;
+                  }
+                }
+              };
+              if (event.key === "ArrowDown") {
+                event.preventDefault();
+                focusAt(focusedIndex + 1, 1);
+              } else if (event.key === "ArrowUp") {
+                event.preventDefault();
+                focusAt(focusedIndex - 1, -1);
+              } else if (event.key === "Home") {
+                event.preventDefault();
+                focusAt(0, 1);
+              } else if (event.key === "End") {
+                event.preventDefault();
+                focusAt(buttons.length - 1, -1);
+              } else if (
+                event.key.length === 1 &&
+                !event.ctrlKey &&
+                !event.metaKey &&
+                !event.altKey
+              ) {
+                typeaheadRef.current += event.key.toLocaleLowerCase();
+                if (typeaheadResetRef.current !== undefined) {
+                  window.clearTimeout(typeaheadResetRef.current);
+                }
+                typeaheadResetRef.current = window.setTimeout(() => {
+                  typeaheadRef.current = "";
+                }, 700);
+                const match = buttons.find(
+                  (button) =>
+                    !button.disabled &&
+                    (button.textContent ?? "")
+                      .trim()
+                      .toLocaleLowerCase()
+                      .startsWith(typeaheadRef.current),
+                );
+                if (match) {
+                  event.preventDefault();
+                  match.focus();
+                  match.scrollIntoView?.({ block: "nearest" });
+                }
+              }
+            }}
             style={{
               position: "fixed",
               ...menuVerticalPosition,
@@ -368,6 +464,7 @@ export function Select({
                 key={option.value}
                 option={option}
                 active={option.value === value}
+                disabled={option.disabled === true}
                 onPick={(picked) => {
                   onChange?.(picked);
                   close();
@@ -384,12 +481,18 @@ export function Select({
 interface MenuItemProps {
   option: SelectOption;
   active: boolean;
+  disabled: boolean;
   onPick: (value: string) => void;
 }
 
 /** One option row in the dropdown menu — a pressable line with a check on the
  *  selected value. */
-function MenuItem({ option, active, onPick }: MenuItemProps): ReactElement {
+function MenuItem({
+  option,
+  active,
+  disabled,
+  onPick,
+}: MenuItemProps): ReactElement {
   const { pressed, hovered, bind } = usePress();
   const resolve = useLocalizer();
   const lit = active || hovered || pressed;
@@ -398,6 +501,9 @@ function MenuItem({ option, active, onPick }: MenuItemProps): ReactElement {
       type="button"
       role="option"
       aria-selected={active}
+      aria-disabled={disabled || undefined}
+      disabled={disabled}
+      data-value={option.value}
       onClick={() => onPick(option.value)}
       {...bind}
       style={{
@@ -415,9 +521,14 @@ function MenuItem({ option, active, onPick }: MenuItemProps): ReactElement {
         borderRadius: 0,
         background: lit ? token("--surface-hover") : "transparent",
         font: token("--t-body-sm"),
-        color: active ? token("--text-on-accent") : CONTROL_INACTIVE_COLOR,
+        color: disabled
+          ? token("--text-on-glass-muted")
+          : active
+            ? token("--text-on-accent")
+            : CONTROL_INACTIVE_COLOR,
         textAlign: "left",
-        cursor: "pointer",
+        cursor: disabled ? "not-allowed" : "pointer",
+        opacity: disabled ? 0.55 : 1,
         whiteSpace: "normal",
         WebkitTapHighlightColor: "transparent",
         transition: `background ${token("--dur-fast")}`,

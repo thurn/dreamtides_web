@@ -90,8 +90,16 @@ const GLOSSARY_ID_MAP: [(&str, &str); 14] = [
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct SitesCatalog {
+    pub selection: SiteSelectionRules,
     pub site_types: Vec<SiteMetadata>,
     pub random_site: RandomSiteRules,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct SiteSelectionRules {
+    pub min_deck_for_purge: u32,
+    pub placeable_types: Vec<SiteType>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -213,10 +221,19 @@ impl<'de> Deserialize<'de> for GlossaryId {
 struct CompatibilityCatalog {
     #[serde(rename = "schema-version")]
     schema_version: u32,
+    selection: CompatibilitySiteSelectionRules,
     #[serde(rename = "site-types")]
     site_types: Vec<CompatibilitySiteMetadata>,
     #[serde(rename = "random-site")]
     random_site: CompatibilityRandomSiteRules,
+}
+
+#[derive(Serialize)]
+struct CompatibilitySiteSelectionRules {
+    #[serde(rename = "min-deck-for-purge")]
+    min_deck_for_purge: u32,
+    #[serde(rename = "placeable-types")]
+    placeable_types: Vec<&'static str>,
 }
 
 #[derive(Serialize)]
@@ -265,6 +282,15 @@ fn lower_with_glossary_map(
     glossary_ids: &[(&'static str, &'static str)],
 ) -> Result<toml::Value> {
     validate(&source)?;
+    let selection = CompatibilitySiteSelectionRules {
+        min_deck_for_purge: source.selection.min_deck_for_purge,
+        placeable_types: source
+            .selection
+            .placeable_types
+            .into_iter()
+            .map(SiteType::as_compat)
+            .collect(),
+    };
     let site_types = source
         .site_types
         .into_iter()
@@ -290,6 +316,7 @@ fn lower_with_glossary_map(
     };
     Ok(toml::Value::try_from(CompatibilityCatalog {
         schema_version: 1,
+        selection,
         site_types,
         random_site,
     })?)
@@ -414,6 +441,30 @@ fn compatibility_glossary_id(
 }
 
 fn validate(source: &SitesCatalog) -> Result<()> {
+    ensure!(
+        source.selection.min_deck_for_purge > 0,
+        "selection min_deck_for_purge must be positive"
+    );
+    let allowed_placeable = BTreeSet::from([
+        "Shop",
+        "Purge",
+        "Transfiguration",
+        "Duplication",
+    ]);
+    let placeable = source
+        .selection
+        .placeable_types
+        .iter()
+        .map(|site| site.as_compat())
+        .collect::<BTreeSet<_>>();
+    ensure!(
+        !placeable.is_empty() && placeable.len() == source.selection.placeable_types.len(),
+        "selection placeable_types must be non-empty and unique"
+    );
+    ensure!(
+        placeable.is_subset(&allowed_placeable),
+        "selection placeable_types contains an unsupported site"
+    );
     let mut sites = BTreeSet::new();
     let mut glossary_ids = BTreeSet::new();
     for metadata in &source.site_types {
@@ -673,6 +724,15 @@ mod tests {
             })
             .collect();
         SitesCatalog {
+            selection: SiteSelectionRules {
+                min_deck_for_purge: 8,
+                placeable_types: vec![
+                    SiteType::Shop,
+                    SiteType::Purge,
+                    SiteType::Transfiguration,
+                    SiteType::Duplication,
+                ],
+            },
             site_types,
             random_site: RandomSiteRules {
                 destinations: vec![
@@ -771,11 +831,11 @@ mod tests {
     #[test]
     fn rejects_unknown_fields_and_noncanonical_glossary_identifiers() {
         let serialized = ron::to_string(&synthetic_catalog()).unwrap();
-        let unknown = serialized.replacen("(site_types:", "(surprise:true,site_types:", 1);
+        let unknown = serialized.replacen("(selection:", "(surprise:true,selection:", 1);
         assert!(ron::from_str::<SitesCatalog>(&unknown).is_err());
         let nested_unknown = serialized.replacen("(site:", "(surprise:true,site:", 1);
         assert!(ron::from_str::<SitesCatalog>(&nested_unknown).is_err());
-        let obsolete_gamble = serialized.replacen("(site_types:", "(gamble:(),site_types:", 1);
+        let obsolete_gamble = serialized.replacen("(selection:", "(gamble:(),selection:", 1);
         assert!(ron::from_str::<SitesCatalog>(&obsolete_gamble).is_err());
 
         for invalid in [

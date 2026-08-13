@@ -122,16 +122,15 @@ describe("dreamscape content referential integrity", () => {
     }
   });
 
-  it("every affiliation's signature cards are non-empty and exist in the card database", async () => {
+  it("every affiliation defines exactly three known tides", async () => {
     const affiliations = await loadAffiliations();
-    const cards = readPublicJson("cards_v2-data.json") as { id: string }[];
-    const cardIds = new Set(cards.map((c) => c.id));
+    const artifact = readPublicJson("tides4-data.json") as { tides: { id: string }[] };
+    const tideIds = new Set(artifact.tides.map((tide) => tide.id));
     expect(affiliations.length).toBeGreaterThan(0);
     for (const a of affiliations) {
-      expect(a.signatureCards.length).toBeGreaterThan(0);
-      for (const uuid of a.signatureCards) {
-        expect(cardIds.has(uuid)).toBe(true);
-      }
+      expect(a.tideIds).toHaveLength(3);
+      expect(new Set(a.tideIds).size).toBe(3);
+      for (const tideId of a.tideIds) expect(tideIds.has(tideId)).toBe(true);
     }
   });
 

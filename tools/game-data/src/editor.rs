@@ -15,18 +15,14 @@ use crate::manifest::Manifest;
 use crate::models::affiliations::{self, AffiliationCatalog, CanonicalUuid};
 use crate::models::cards::{CardDefinition, CardKind, Crop, OrbValue};
 use crate::models::compat::CompatDocument;
-use crate::models::dream_avatar_tide_pools::{
-    self, DreamAvatarId as TidePoolDreamAvatarId, DreamAvatarPool, DreamAvatarTidePoolsCatalog,
-};
-use crate::models::dream_avatars::{self, AvatarDefinition, DreamAvatarId};
+use crate::models::dream_avatars::{self, AvatarDefinition, DreamAvatarId, TidePool};
 use crate::models::dream_guides::{self, GuideDefinition, GuideId};
 use crate::models::dreamscapes::{
     self, AffiliationId, DreamAvatarId as DreamscapeAvatarId, DreamscapeDefinition, DreamscapeId,
     DreamscapeKind,
 };
 use crate::models::dreamsigns::{
-    self, DreamsignDefinition, DreamsignId, DreamsignMetadataCatalog, DreamsignTag,
-    DreamsignTagCatalog,
+    self, DreamsignDefinition, DreamsignId, DreamsignTag, DreamsignTagCatalog,
 };
 use crate::models::dreamwell::{
     self, ArtCrop, DeckTier, DreamwellCardDefinition, DreamwellCatalog,
@@ -58,18 +54,14 @@ struct EditRequest {
 #[derive(Debug, Deserialize)]
 #[serde(tag = "operation", rename_all = "snake_case", deny_unknown_fields)]
 enum EditOperation {
-    SetAffiliationCatalogField {
-        field: String,
-        value: JsonValue,
-    },
     SetAffiliationField {
         affiliation_id: String,
         field: String,
         value: JsonValue,
     },
-    ReplaceAffiliationSignatureCards {
+    ReplaceAffiliationTides {
         affiliation_id: String,
-        card_ids: Vec<String>,
+        tide_ids: Vec<String>,
     },
     SetCardField {
         card_id: String,
@@ -188,9 +180,6 @@ pub fn stage_edit(
         "glossary" => edit_glossary(manifest, staging_root, request.operations),
         "tutorial" => edit_tutorial(manifest, staging_root, request.operations),
         "tides" => edit_tides(manifest, staging_root, request.operations),
-        "dream-avatar-tide-pools" => {
-            edit_dream_avatar_tide_pools(manifest, staging_root, request.operations)
-        }
         dataset => edit_compat(manifest, staging_root, dataset, request.operations),
     }
 }
@@ -223,8 +212,8 @@ fn edit_tides(
                 value,
             } => {
                 let index = unique_tide_index(&catalog, &tide_id)?;
-                set_tide_field(&mut catalog[index], &field, value)?;
-                source = patch_tide_field(&source, &catalog[index], &field)?;
+                set_tide_field(&mut catalog.tides[index], &field, value)?;
+                source = patch_tide_field(&source, &catalog.tides[index], &field)?;
             }
             _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to tides"),
         }
@@ -245,81 +234,11 @@ fn edit_tides(
     })
 }
 
-fn edit_dream_avatar_tide_pools(
-    manifest: &Manifest,
-    staging_root: &Path,
-    operations: Vec<EditOperation>,
-) -> Result<EditReport> {
-    let dataset = manifest.dataset("dream-avatar-tide-pools")?;
-    if dataset.adapter != "dream_avatar_tide_pools_v1"
-        || dataset.editor != crate::manifest::EditorCapability::Semantic
-    {
-        bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for Dream Avatar tide pools");
-    }
-    let tides_dataset = manifest.dataset("tides")?;
-    let tides: TidesCatalog = ron::from_str(&fs::read_to_string(
-        staging_root.join(&tides_dataset.source),
-    )?)
-    .context("MALFORMED_SOURCE: staged tides RON is invalid")?;
-    let tide_kinds =
-        tides::tide_kinds(&tides).context("MALFORMED_SOURCE: staged tides catalog is invalid")?;
-    let source_path = staging_root.join(&dataset.source);
-    let original_text = fs::read_to_string(&source_path).with_context(|| {
-        format!(
-            "read staged Dream Avatar tide-pool source {}",
-            source_path.display()
-        )
-    })?;
-    let original: DreamAvatarTidePoolsCatalog = ron::from_str(&original_text)
-        .context("MALFORMED_SOURCE: staged Dream Avatar tide-pool RON is invalid")?;
-    dream_avatar_tide_pools::validate(&original, &tide_kinds)
-        .context("MALFORMED_SOURCE: staged Dream Avatar tide-pool catalog is invalid")?;
-    let mut catalog = original.clone();
-    let mut source = original_text;
-
-    for operation in operations {
-        match operation {
-            EditOperation::SetDreamAvatarTidePool {
-                dream_avatar_id,
-                starter,
-                facets,
-                neutral,
-            } => {
-                let index = unique_tide_pool_index(&catalog, &dream_avatar_id)?;
-                let replacement = DreamAvatarPool {
-                    dream_avatar_id: TidePoolDreamAvatarId::parse(&dream_avatar_id).map_err(
-                        |error| anyhow::anyhow!("INVALID_EDIT: Dream Avatar identity: {error}"),
-                    )?,
-                    starter: parse_optional_tide_id(starter.as_deref())?,
-                    facets: parse_tide_ids(&facets)?,
-                    neutral: parse_tide_ids(&neutral)?,
-                };
-                source = patch_tide_pool(&source, &catalog[index], &replacement)?;
-                catalog[index] = replacement;
-            }
-            _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to Dream Avatar tide pools"),
-        }
-        dream_avatar_tide_pools::validate(&catalog, &tide_kinds)
-            .context("INVALID_EDIT: tide-pool edit violates the catalog contract")?;
-    }
-
-    verify_round_trip::<DreamAvatarTidePoolsCatalog>(&source, &catalog)?;
-    let changed = catalog != original;
-    if changed {
-        atomic_write(&source_path, source.as_bytes())?;
-    }
-    Ok(EditReport {
-        ok: true,
-        changed,
-        dataset_id: "dream-avatar-tide-pools".into(),
-        source_revision: revision(staging_root, manifest, &["dream-avatar-tide-pools"])?,
-    })
-}
-
 fn unique_tide_index(catalog: &TidesCatalog, id: &str) -> Result<usize> {
     let requested = TideId::parse(id)
         .map_err(|error| anyhow::anyhow!("INVALID_EDIT: Tide identity {id}: {error}"))?;
     let matches = catalog
+        .tides
         .iter()
         .enumerate()
         .filter(|(_, tide)| tide.id == requested)
@@ -329,23 +248,6 @@ fn unique_tide_index(catalog: &TidesCatalog, id: &str) -> Result<usize> {
         [] => bail!("RECORD_NOT_FOUND: Tide identity {id}"),
         [index] => Ok(*index),
         _ => bail!("MALFORMED_SOURCE: duplicate Tide identity {id}"),
-    }
-}
-
-fn unique_tide_pool_index(catalog: &DreamAvatarTidePoolsCatalog, id: &str) -> Result<usize> {
-    let requested = TidePoolDreamAvatarId::parse(id).map_err(|error| {
-        anyhow::anyhow!("INVALID_EDIT: Tide-pool Dream Avatar identity {id}: {error}")
-    })?;
-    let matches = catalog
-        .iter()
-        .enumerate()
-        .filter(|(_, pool)| pool.dream_avatar_id == requested)
-        .map(|(index, _)| index)
-        .collect::<Vec<_>>();
-    match matches.as_slice() {
-        [] => bail!("RECORD_NOT_FOUND: Tide-pool Dream Avatar identity {id}"),
-        [index] => Ok(*index),
-        _ => bail!("MALFORMED_SOURCE: duplicate Tide-pool Dream Avatar identity {id}"),
     }
 }
 
@@ -407,47 +309,6 @@ fn parse_tide_ids(values: &[String]) -> Result<Vec<TideId>> {
                 .map_err(|error| anyhow::anyhow!("INVALID_EDIT: Tide identity {id}: {error}"))
         })
         .collect()
-}
-
-fn patch_tide_pool(
-    source: &str,
-    before: &DreamAvatarPool,
-    after: &DreamAvatarPool,
-) -> Result<String> {
-    let mut patched = source.to_owned();
-    for (field, replacement) in [
-        (
-            "starter",
-            (before.starter != after.starter)
-                .then(|| render_ron_value(&after.starter, true))
-                .transpose()?,
-        ),
-        (
-            "facets",
-            (before.facets != after.facets)
-                .then(|| ron::to_string(&after.facets))
-                .transpose()?,
-        ),
-        (
-            "neutral",
-            (before.neutral != after.neutral)
-                .then(|| ron::to_string(&after.neutral))
-                .transpose()?,
-        ),
-    ] {
-        let Some(replacement) = replacement else {
-            continue;
-        };
-        let record = typed_record_range_at_indent(
-            &patched,
-            "DreamAvatarPool",
-            "dream_avatar_id",
-            &after.dream_avatar_id.to_string(),
-            2,
-        )?;
-        patched = patch_field_value(&patched, record, field, &replacement)?;
-    }
-    Ok(patched)
 }
 
 fn edit_tutorial(
@@ -605,34 +466,20 @@ fn edit_affiliations(
         .context("MALFORMED_SOURCE: staged affiliation RON is invalid")?;
     affiliations::validate(&original)
         .context("MALFORMED_SOURCE: staged affiliation catalog is invalid")?;
-    let cards_dataset = manifest.dataset("cards")?;
-    let cards_text = fs::read_to_string(staging_root.join(&cards_dataset.source))?;
-    let cards: Vec<CardDefinition> =
-        ron::from_str(&cards_text).context("MALFORMED_SOURCE: staged card RON is invalid")?;
-    let card_ids = cards
+    let tides_dataset = manifest.dataset("tides")?;
+    let tides_text = fs::read_to_string(staging_root.join(&tides_dataset.source))?;
+    let tides: TidesCatalog =
+        ron::from_str(&tides_text).context("MALFORMED_SOURCE: staged tide RON is invalid")?;
+    let tide_ids = tides
+        .tides
         .iter()
-        .map(|card| card.id.as_str())
+        .map(|tide| tide.id.to_string())
         .collect::<BTreeSet<_>>();
     let mut catalog = original.clone();
     let mut source = original_text;
 
     for operation in operations {
         match operation {
-            EditOperation::SetAffiliationCatalogField { field, value } => {
-                let number = value.as_f64().with_context(|| {
-                    format!("INVALID_EDIT: affiliation catalog field {field} must be a number")
-                })?;
-                match field.as_str() {
-                    "default_random_draw_max_multiplier" => {
-                        catalog.default_random_draw_max_multiplier = number
-                    }
-                    "default_opponent_deck_max_multiplier" => {
-                        catalog.default_opponent_deck_max_multiplier = number
-                    }
-                    _ => bail!("INVALID_EDIT: unsupported affiliation catalog field {field}"),
-                }
-                source = patch_affiliation_catalog_field(&source, &catalog, &field)?;
-            }
             EditOperation::SetAffiliationField {
                 affiliation_id,
                 field,
@@ -652,34 +499,34 @@ fn edit_affiliations(
                 }
                 source = patch_affiliation_field(&source, &catalog.affiliations[index], &field)?;
             }
-            EditOperation::ReplaceAffiliationSignatureCards {
+            EditOperation::ReplaceAffiliationTides {
                 affiliation_id,
-                card_ids: requested,
+                tide_ids: requested,
             } => {
                 let index = unique_affiliation_index(&catalog, &affiliation_id)?;
                 let parsed = requested
                     .iter()
                     .map(|id| {
-                        if !card_ids.contains(id.as_str()) {
-                            bail!("RECORD_NOT_FOUND: signature card UUID {id}");
+                        if !tide_ids.contains(id) {
+                            bail!("RECORD_NOT_FOUND: Tide UUID {id}");
                         }
                         CanonicalUuid::parse(id).map_err(|error| {
-                            anyhow::anyhow!("INVALID_EDIT: signature card identity {id}: {error}")
+                            anyhow::anyhow!("INVALID_EDIT: Tide identity {id}: {error}")
                         })
                     })
                     .collect::<Result<Vec<_>>>()?;
-                catalog.affiliations[index].signature_card_ids = parsed;
+                catalog.affiliations[index].tide_ids = parsed;
                 source = patch_affiliation_field(
                     &source,
                     &catalog.affiliations[index],
-                    "signature_card_ids",
+                    "tide_ids",
                 )?;
             }
             _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to affiliations"),
         }
     }
 
-    affiliations::validate(&catalog)
+    affiliations::validate_tide_references(&catalog, &tide_ids)
         .context("INVALID_EDIT: affiliation edit violates the catalog contract")?;
     verify_round_trip::<AffiliationCatalog>(&source, &catalog)?;
     let changed = catalog != original;
@@ -711,37 +558,6 @@ fn unique_affiliation_index(catalog: &AffiliationCatalog, id: &str) -> Result<us
     }
 }
 
-fn affiliation_catalog_range(source: &str) -> Result<Range<usize>> {
-    let matches = named_struct_ranges(source, "AffiliationCatalog")?;
-    match matches.as_slice() {
-        [] => bail!("MALFORMED_SOURCE: missing AffiliationCatalog boundary"),
-        [range] => Ok(range.clone()),
-        _ => bail!("MALFORMED_SOURCE: duplicate AffiliationCatalog boundary"),
-    }
-}
-
-fn patch_affiliation_catalog_field(
-    source: &str,
-    catalog: &AffiliationCatalog,
-    field: &str,
-) -> Result<String> {
-    let replacement = match field {
-        "default_random_draw_max_multiplier" => {
-            ron::to_string(&catalog.default_random_draw_max_multiplier)?
-        }
-        "default_opponent_deck_max_multiplier" => {
-            ron::to_string(&catalog.default_opponent_deck_max_multiplier)?
-        }
-        _ => bail!("INVALID_EDIT: unsupported affiliation catalog field {field}"),
-    };
-    patch_field_value(
-        source,
-        affiliation_catalog_range(source)?,
-        field,
-        &replacement,
-    )
-}
-
 fn patch_affiliation_field(
     source: &str,
     affiliation: &crate::models::affiliations::AffiliationDefinition,
@@ -751,9 +567,9 @@ fn patch_affiliation_field(
     let replacement = match field {
         "name" => ron::to_string(&affiliation.name)?,
         "atlas_card_theme" => ron::to_string(&affiliation.atlas_card_theme)?,
-        "signature_card_ids" => ron::to_string(
+        "tide_ids" => ron::to_string(
             &affiliation
-                .signature_card_ids
+                .tide_ids
                 .iter()
                 .map(ToString::to_string)
                 .collect::<Vec<_>>(),
@@ -1246,29 +1062,21 @@ fn edit_dreamsigns(
         bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for dreamsigns");
     }
     let source_path = staging_root.join(&dataset.source);
-    let metadata_dataset = manifest.dataset("internal-dreamsign-metadata")?;
-    let metadata_path = staging_root.join(&metadata_dataset.source);
     let tags_dataset = manifest.dataset("dreamsign-tags")?;
     let tags_path = staging_root.join(&tags_dataset.source);
 
     let original_source_text = fs::read_to_string(&source_path)?;
-    let original_metadata_text = fs::read_to_string(&metadata_path)?;
     let original_tags_text = fs::read_to_string(&tags_path)?;
     let original: Vec<DreamsignDefinition> = ron::from_str(&original_source_text)
         .context("MALFORMED_SOURCE: staged Dreamsign RON is invalid")?;
-    let original_metadata: DreamsignMetadataCatalog = ron::from_str(&original_metadata_text)
-        .context("MALFORMED_SOURCE: staged internal Dreamsign metadata RON is invalid")?;
     let original_tags: DreamsignTagCatalog = ron::from_str(&original_tags_text)
         .context("MALFORMED_SOURCE: staged Dreamsign tag registry RON is invalid")?;
     dreamsigns::validate_definitions(&original)?;
-    dreamsigns::validate_metadata(&original_metadata)?;
     dreamsigns::validate_tags(&original_tags)?;
 
     let mut definitions = original.clone();
-    let mut metadata = original_metadata.clone();
     let mut tags = original_tags.clone();
     let mut source_text = original_source_text;
-    let mut metadata_text = original_metadata_text;
     let mut tags_text = original_tags_text;
 
     for operation in operations {
@@ -1305,23 +1113,14 @@ fn edit_dreamsigns(
                         if values.iter().any(|value| !known.contains(value.as_str())) {
                             bail!("INVALID_EDIT: Dreamsign tags must use the canonical registry");
                         }
-                        let id = definitions[index].id;
-                        let replacement = {
-                            let entry = metadata
-                                .dreamsigns
-                                .get_mut(&id)
-                                .context("MALFORMED_SOURCE: Dreamsign metadata entry is missing")?;
-                            if entry.tags == values {
-                                None
-                            } else {
-                                entry.tags = values;
-                                Some(entry.tags.clone())
-                            }
-                        };
-                        if let Some(replacement) = replacement {
-                            dreamsigns::validate_metadata(&metadata)?;
-                            metadata_text =
-                                patch_dreamsign_metadata_tags(&metadata_text, id, &replacement)?;
+                        if definitions[index].tags != values {
+                            definitions[index].tags = values;
+                            dreamsigns::validate_definitions(&definitions)?;
+                            source_text = patch_dreamsign_definition_field(
+                                &source_text,
+                                &definitions[index],
+                                "tags",
+                            )?;
                         }
                     }
                     _ => bail!("INVALID_EDIT: unsupported Dreamsign field {field}"),
@@ -1336,17 +1135,20 @@ fn edit_dreamsigns(
                     .iter()
                     .map(|tag| tag.name.as_str())
                     .collect::<BTreeSet<_>>();
-                for (id, entry) in &mut metadata.dreamsigns {
-                    let retained = entry
+                for definition in &mut definitions {
+                    let retained = definition
                         .tags
                         .iter()
                         .filter(|tag| known.contains(tag.as_str()))
                         .cloned()
                         .collect::<Vec<_>>();
-                    if retained != entry.tags {
-                        entry.tags = retained;
-                        metadata_text =
-                            patch_dreamsign_metadata_tags(&metadata_text, *id, &entry.tags)?;
+                    if retained != definition.tags {
+                        definition.tags = retained;
+                        source_text = patch_dreamsign_definition_field(
+                            &source_text,
+                            definition,
+                            "tags",
+                        )?;
                     }
                 }
                 if replacement != tags {
@@ -1359,17 +1161,12 @@ fn edit_dreamsigns(
     }
 
     dreamsigns::validate_definitions(&definitions)?;
-    dreamsigns::validate_metadata(&metadata)?;
     dreamsigns::validate_tags(&tags)?;
     verify_round_trip::<Vec<DreamsignDefinition>>(&source_text, &definitions)?;
-    verify_round_trip::<DreamsignMetadataCatalog>(&metadata_text, &metadata)?;
     verify_round_trip::<DreamsignTagCatalog>(&tags_text, &tags)?;
-    let changed = definitions != original || metadata != original_metadata || tags != original_tags;
+    let changed = definitions != original || tags != original_tags;
     if definitions != original {
         atomic_write(&source_path, source_text.as_bytes())?;
-    }
-    if metadata != original_metadata {
-        atomic_write(&metadata_path, metadata_text.as_bytes())?;
     }
     if tags != original_tags {
         atomic_write(&tags_path, tags_text.as_bytes())?;
@@ -1378,15 +1175,7 @@ fn edit_dreamsigns(
         ok: true,
         changed,
         dataset_id: "dreamsigns".into(),
-        source_revision: revision(
-            staging_root,
-            manifest,
-            &[
-                "dreamsigns",
-                "internal-dreamsign-metadata",
-                "dreamsign-tags",
-            ],
-        )?,
+        source_revision: revision(staging_root, manifest, &["dreamsigns", "dreamsign-tags"])?
     })
 }
 
@@ -1441,6 +1230,7 @@ fn patch_dreamsign_definition_field(
     let source_field = match field {
         "name" => "name",
         "rendered-text" | "ability_text" => "ability_text",
+        "tags" => "tags",
         _ => bail!("INVALID_EDIT: unsupported Dreamsign field {field}"),
     };
     let record = typed_record_range(
@@ -1454,34 +1244,10 @@ fn patch_dreamsign_definition_field(
     let replacement = match source_field {
         "name" => ron::to_string(&definition.name)?,
         "ability_text" => ron::to_string(&definition.ability_text)?,
+        "tags" => ron::to_string(&definition.tags)?,
         _ => unreachable!(),
     };
     replace_source_ranges(source, vec![(range, replacement)])
-}
-
-fn dreamsign_metadata_record_range(source: &str, id: DreamsignId) -> Result<Range<usize>> {
-    let marker = format!("\n    {}: ", ron::to_string(&id.to_string())?);
-    let matches = source.match_indices(&marker).collect::<Vec<_>>();
-    if matches.is_empty() {
-        bail!("RECORD_NOT_FOUND: internal Dreamsign metadata UUID {id}");
-    }
-    if matches.len() > 1 {
-        bail!("MALFORMED_SOURCE: duplicate internal Dreamsign metadata UUID {id}");
-    }
-    let value_start = matches[0].0 + marker.len();
-    let opening = source[value_start..]
-        .find('(')
-        .map(|offset| value_start + offset)
-        .context("MALFORMED_SOURCE: Dreamsign metadata entry is not a record")?;
-    let closing = matching_delimiter(source, opening)?;
-    Ok(opening..closing + 1)
-}
-
-fn patch_dreamsign_metadata_tags(source: &str, id: DreamsignId, tags: &[String]) -> Result<String> {
-    let record = dreamsign_metadata_record_range(source, id)?;
-    let range = top_level_field_value_range(source, record.clone(), "tags")?
-        .context("MALFORMED_SOURCE: Dreamsign metadata entry is missing tags")?;
-    replace_source_ranges(source, vec![(range, ron::to_string(tags)?)])
 }
 
 fn patch_dreamsign_tag_catalog(source: &str, catalog: &DreamsignTagCatalog) -> Result<String> {
@@ -2203,7 +1969,14 @@ fn edit_dream_avatars(
         .with_context(|| format!("read staged DreamAvatar source {}", source_path.display()))?;
     let original: Vec<AvatarDefinition> = ron::from_str(&original_text)
         .context("MALFORMED_SOURCE: staged DreamAvatar RON is invalid")?;
-    dream_avatars::validate(&original)
+    let tides_dataset = manifest.dataset("tides")?;
+    let tides: TidesCatalog = ron::from_str(&fs::read_to_string(
+        staging_root.join(&tides_dataset.source),
+    )?)
+    .context("MALFORMED_SOURCE: staged tides RON is invalid")?;
+    let tide_kinds =
+        tides::tide_kinds(&tides).context("MALFORMED_SOURCE: staged tides catalog is invalid")?;
+    dream_avatars::validate_tide_references(&original, &tide_kinds)
         .context("MALFORMED_SOURCE: staged DreamAvatar catalog is invalid")?;
     let mut avatars = original.clone();
     let mut source_text = original_text;
@@ -2224,6 +1997,26 @@ fn edit_dream_avatars(
                     source_text =
                         patch_dream_avatar_source_field(&source_text, &avatars[index], &field)?;
                 }
+            }
+            EditOperation::SetDreamAvatarTidePool {
+                dream_avatar_id,
+                starter,
+                facets,
+                neutral,
+            } => {
+                let index = unique_dream_avatar_index(&avatars, &dream_avatar_id)?;
+                avatars[index].tide_pool = TidePool {
+                    starter: parse_optional_tide_id(starter.as_deref())?,
+                    facets: parse_tide_ids(&facets)?,
+                    neutral: parse_tide_ids(&neutral)?,
+                };
+                dream_avatars::validate_tide_references(&avatars, &tide_kinds)
+                    .context("INVALID_EDIT: DreamAvatar tide-pool edit violates the catalog contract")?;
+                source_text = patch_dream_avatar_source_field(
+                    &source_text,
+                    &avatars[index],
+                    "tide-pool",
+                )?;
             }
             _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to DreamAvatars"),
         }
@@ -2334,6 +2127,7 @@ fn patch_dream_avatar_source_field(
         "rendered-text" | "ability_text" => "ability_text",
         "image-number" | "image_number" => "portrait.image",
         "starting-essence" | "starting_essence" => "starting_essence",
+        "tide-pool" | "tide_pool" => "tide_pool",
         _ => bail!("INVALID_EDIT: unsupported DreamAvatar field {field}"),
     };
     let record = typed_record_range(source, "AvatarDefinition", "id", &avatar.id.to_string())?;
@@ -2384,6 +2178,7 @@ fn render_dream_avatar_source_field(avatar: &AvatarDefinition, field: &str) -> R
             .starting_essence
             .context("starting_essence must be present when rendering")?
             .to_string()),
+        "tide_pool" => render_ron_value(&avatar.tide_pool, true),
         _ => bail!("INVALID_EDIT: unsupported DreamAvatar source field {field}"),
     }
 }
@@ -4006,7 +3801,9 @@ mod tests {
 
 #![enable(implicit_some)]
 
-[
+TidesCatalog(
+  selection: (band_fraction: 0.25, band_minimum: 5),
+  tides: [
   // Edited tide comment.
   TideDefinition(
     id: "00000000-0000-4000-8000-000000000041",
@@ -4035,22 +3832,10 @@ mod tests {
     kind: Neutral,
     cards: {"00000000-0000-4000-8000-000000000053": 1},
   ),
-]
+  ],
+)
 "###;
 
-    const TIDE_POOLS_SOURCE: &str = r###"// Stable Dream Avatar tide-pool guidance.
-
-#![enable(implicit_some)]
-
-[
-  DreamAvatarPool(
-    dream_avatar_id: "00000000-0000-4000-8000-000000000061",
-    starter: "00000000-0000-4000-8000-000000000041",
-    facets: ["00000000-0000-4000-8000-000000000042"],
-    neutral: ["00000000-0000-4000-8000-000000000043"],
-  ),
-]
-"###;
 
     const EXPLORATION_SOURCE: &str = r###"// Stable Exploration guidance.
 #![enable(implicit_some)]
@@ -4104,6 +3889,7 @@ mod tests {
     id: "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5",
     ability_text: [Tx("Offering"), Tx("    tags: [\"inside rules\"],\n▸Materialized: Dissolve an enemy.")],
     energy_cost: Fixed(5),
+    rarity: Common,
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
     art: (image: 2033720048, crop: (x: 0.0, y: 0.595, scale: 1.17)),
   ),
@@ -4112,6 +3898,7 @@ mod tests {
     id: "00000000-0000-4000-8000-000000000002",
     ability_text: [Tx("Draw a card.")],
     energy_cost: Variable,
+    rarity: Uncommon,
     kind: Event,
     art: (image: 2),
   ),
@@ -4159,6 +3946,11 @@ CardMetadataCatalog(
     title: Tx("First Title"),
     portrait: (image: 7, focus: (x: 0.25, y: 0.75)),
     signature_card_ids: ["00000000-0000-4000-8000-000000000101"],
+    tide_pool: (
+      starter: Some("00000000-0000-4000-8000-000000000041"),
+      facets: ["00000000-0000-4000-8000-000000000042"],
+      neutral: ["00000000-0000-4000-8000-000000000043"],
+    ),
   ),
 
   /* Unrelated record comment. */
@@ -4168,6 +3960,11 @@ CardMetadataCatalog(
     ability_text: [Tx("Unrelated ability.")],
     title: Tx("Unrelated Title"),
     portrait: (image: 8, focus: (x: 0.5, y: 0.5)),
+    tide_pool: (
+      starter: None,
+      facets: ["00000000-0000-4000-8000-000000000042"],
+      neutral: [],
+    ),
   ),
 ]
 "###;
@@ -4474,6 +4271,9 @@ DreamwellCatalog(
     name: Tx(r#"Raw Sign"#),
     id: "00000000-0000-4000-8000-000000000021",
     ability_text: [Tx("First paragraph"), Tx("Nested text: tags: [\"not metadata\"]")],
+    rarity: Rare,
+    tide_ids: ["00000000-0000-4000-8000-000000000041"],
+    tags: ["first", "second"],
     art: (image: "first.png"),
   ),
 
@@ -4482,24 +4282,12 @@ DreamwellCatalog(
     name: Tx("Unrelated Sign"),
     id: "00000000-0000-4000-8000-000000000022",
     ability_text: [Tx("Unrelated ability.")],
+    rarity: Common,
+    tide_ids: ["00000000-0000-4000-8000-000000000042"],
+    tags: ["unrelated"],
     art: (image: "second.png"),
   ),
 ]
-"###;
-
-    const DREAMSIGN_METADATA_SOURCE: &str = r###"// Internal labels.
-
-#![enable(implicit_some)]
-(
-  dreamsigns: {
-    "00000000-0000-4000-8000-000000000021": (
-      tides: ["one"],
-      // Preserve this field comment.
-      tags: ["first", "second"],
-    ),
-    "00000000-0000-4000-8000-000000000022": (tags: ["unrelated"]),
-  },
-)
 "###;
 
     const DREAMSIGN_TAG_SOURCE: &str = r###"// Registry guidance.
@@ -4638,7 +4426,7 @@ DreamwellCatalog(
     }
 
     #[test]
-    fn dreamsign_editor_patches_ability_and_metadata_tags_as_typed_values() {
+    fn dreamsign_editor_patches_ability_and_inline_tags_as_typed_values() {
         let mut definitions: Vec<DreamsignDefinition> = ron::from_str(DREAMSIGN_SOURCE).unwrap();
         let index = unique_dreamsign_index(&definitions, DREAMSIGN_ID).unwrap();
         set_dreamsign_definition_field(
@@ -4658,19 +4446,14 @@ DreamwellCatalog(
             definitions
         );
 
-        let metadata: DreamsignMetadataCatalog = ron::from_str(DREAMSIGN_METADATA_SOURCE).unwrap();
-        let id = definitions[index].id;
-        let patched_metadata =
-            patch_dreamsign_metadata_tags(DREAMSIGN_METADATA_SOURCE, id, &["second".into()])
+        definitions[index].tags = vec!["second".into()];
+        let patched_tags =
+            patch_dreamsign_definition_field(DREAMSIGN_SOURCE, &definitions[index], "tags")
                 .unwrap();
-        let parsed: DreamsignMetadataCatalog = ron::from_str(&patched_metadata).unwrap();
-        assert_eq!(parsed.dreamsigns[&id].tags, ["second"]);
-        assert!(patched_metadata.contains("// Preserve this field comment."));
-        assert!(patched_metadata.contains("(tags: [\"unrelated\"])"));
-        assert_eq!(
-            metadata.dreamsigns.keys().collect::<Vec<_>>(),
-            parsed.dreamsigns.keys().collect::<Vec<_>>()
-        );
+        let parsed: Vec<DreamsignDefinition> = ron::from_str(&patched_tags).unwrap();
+        assert_eq!(parsed[index].tags, ["second"]);
+        assert_eq!(parsed[1].tags, ["unrelated"]);
+        assert!(patched_tags.contains("/* Unrelated record comment. */"));
     }
 
     #[test]
@@ -5092,8 +4875,14 @@ DreamwellCatalog(
     fn tide_scalar_edit_is_operation_sized_and_preserves_unrelated_source() {
         let mut catalog: TidesCatalog = ron::from_str(TIDES_SOURCE).unwrap();
         let index = unique_tide_index(&catalog, TIDE_ID).unwrap();
-        set_tide_field(&mut catalog[index], "displayName", json!("Edited Tide")).unwrap();
-        let patched = patch_tide_field(TIDES_SOURCE, &catalog[index], "displayName").unwrap();
+        set_tide_field(
+            &mut catalog.tides[index],
+            "displayName",
+            json!("Edited Tide"),
+        )
+        .unwrap();
+        let patched =
+            patch_tide_field(TIDES_SOURCE, &catalog.tides[index], "displayName").unwrap();
 
         assert_eq!(ron::from_str::<TidesCatalog>(&patched).unwrap(), catalog);
         let before = TIDES_SOURCE.lines().collect::<Vec<_>>();
@@ -5115,34 +4904,13 @@ DreamwellCatalog(
     fn tide_editor_round_trips_resonance() {
         let mut catalog: TidesCatalog = ron::from_str(TIDES_SOURCE).unwrap();
         let index = unique_tide_index(&catalog, TIDE_ID).unwrap();
-        set_tide_field(&mut catalog[index], "resonance", json!("ember")).unwrap();
-        let patched = patch_tide_field(TIDES_SOURCE, &catalog[index], "resonance").unwrap();
+        set_tide_field(&mut catalog.tides[index], "resonance", json!("ember")).unwrap();
+        let patched =
+            patch_tide_field(TIDES_SOURCE, &catalog.tides[index], "resonance").unwrap();
 
         assert_eq!(ron::from_str::<TidesCatalog>(&patched).unwrap(), catalog);
         assert!(patched.contains("resonance: Ember"));
         assert!(patched.contains("display_name: Tx(\"Facet Tide\")"));
-    }
-
-    #[test]
-    fn tide_pool_editor_round_trips_optional_and_list_shapes() {
-        let mut catalog: DreamAvatarTidePoolsCatalog = ron::from_str(TIDE_POOLS_SOURCE).unwrap();
-
-        let before = catalog[0].clone();
-        let after = DreamAvatarPool {
-            dream_avatar_id: before.dream_avatar_id,
-            starter: None,
-            facets: vec![TideId::parse("00000000-0000-4000-8000-000000000042").unwrap()],
-            neutral: vec![],
-        };
-        let patched = patch_tide_pool(TIDE_POOLS_SOURCE, &before, &after).unwrap();
-        catalog[0] = after;
-
-        assert_eq!(
-            ron::from_str::<DreamAvatarTidePoolsCatalog>(&patched).unwrap(),
-            catalog
-        );
-        assert!(patched.contains("starter: None"));
-        assert!(patched.contains("neutral: []"));
     }
 
     #[test]
@@ -5151,13 +4919,15 @@ DreamwellCatalog(
         assert!(unique_tide_index(&catalog, "not-a-uuid").is_err());
         assert!(unique_tide_index(&catalog, "00000000-0000-4000-8000-000000000099").is_err());
         let index = unique_tide_index(&catalog, TIDE_ID).unwrap();
-        assert!(set_tide_field(&mut catalog[index], "resonance", json!("harmony")).is_err());
-        assert!(set_tide_field(&mut catalog[index], "kind", json!("neutral")).is_err());
-
-        let mut pools: DreamAvatarTidePoolsCatalog = ron::from_str(TIDE_POOLS_SOURCE).unwrap();
-        pools[0].facets = vec![TideId::parse(TIDE_ID).unwrap()];
         assert!(
-            dream_avatar_tide_pools::validate(&pools, &tides::tide_kinds(&catalog).unwrap())
+            set_tide_field(&mut catalog.tides[index], "resonance", json!("harmony")).is_err()
+        );
+        assert!(set_tide_field(&mut catalog.tides[index], "kind", json!("neutral")).is_err());
+
+        let mut avatars: Vec<AvatarDefinition> = ron::from_str(DREAM_AVATAR_SOURCE).unwrap();
+        avatars[0].tide_pool.facets = vec![TideId::parse(TIDE_ID).unwrap()];
+        assert!(
+            dream_avatars::validate_tide_references(&avatars, &tides::tide_kinds(&catalog).unwrap())
                 .unwrap_err()
                 .to_string()
                 .contains("facet reference")
@@ -6855,7 +6625,7 @@ DreamwellCatalog(
             energy_cost: OrbValue::Fixed(1),
             kind: CardKind::Event,
             speed: crate::models::cards::Speed::Normal,
-            rarity: None,
+            rarity: crate::models::cards::Rarity::Common,
             roles: Vec::new(),
             art: crate::models::cards::Art {
                 image: 1,
@@ -7094,22 +6864,28 @@ TutorialCatalog(
     const AFFILIATION_SOURCE: &str = r###"// Catalog guidance stays byte-stable; AffiliationCatalog(fake: true).
 #![enable(implicit_some)]
 AffiliationCatalog(
-  default_random_draw_max_multiplier: 1.25,
-  default_opponent_deck_max_multiplier: 3.5,
   affiliations: [
     AffiliationDefinition (
       // AffiliationDefinition(id: "comment-only")
       id : "00000000-0000-4000-8000-000000000031",
       name: Tx(r#"First Affiliation"#),
       atlas_card_theme: Tx("Dawn"),
-      signature_card_ids: ["00000000-0000-4000-8000-000000000101"],
+      tide_ids: [
+        "00000000-0000-4000-8000-000000000101",
+        "00000000-0000-4000-8000-000000000102",
+        "00000000-0000-4000-8000-000000000103",
+      ],
     ),
     // Unrelated record comment.
     AffiliationDefinition(
       id: "00000000-0000-4000-8000-000000000032",
       name: Tx("Unrelated"),
       atlas_card_theme: Tx("Dusk"),
-      signature_card_ids: ["00000000-0000-4000-8000-000000000102"],
+      tide_ids: [
+        "00000000-0000-4000-8000-000000000104",
+        "00000000-0000-4000-8000-000000000105",
+        "00000000-0000-4000-8000-000000000106",
+      ],
     ),
   ],
 )
@@ -7118,47 +6894,39 @@ AffiliationCatalog(
     #[test]
     fn affiliation_scalar_edits_change_only_the_target_values() {
         let mut catalog: AffiliationCatalog = ron::from_str(AFFILIATION_SOURCE).unwrap();
-        catalog.default_random_draw_max_multiplier = 2.0;
-        let global = patch_affiliation_catalog_field(
-            AFFILIATION_SOURCE,
-            &catalog,
-            "default_random_draw_max_multiplier",
-        )
-        .unwrap();
-        assert!(global.contains("default_random_draw_max_multiplier: 2.0,"));
-        assert!(global.contains("// Unrelated record comment."));
-
         catalog.affiliations[0].name = ls("Renamed");
-        let patched = patch_affiliation_field(&global, &catalog.affiliations[0], "name").unwrap();
+        let patched =
+            patch_affiliation_field(AFFILIATION_SOURCE, &catalog.affiliations[0], "name").unwrap();
         assert!(patched.contains("name: Tx(\"Renamed\"),"));
         assert!(patched.contains("name: Tx(\"Unrelated\"),"));
         verify_round_trip::<AffiliationCatalog>(&patched, &catalog).unwrap();
     }
 
     #[test]
-    fn affiliation_signature_replacement_preserves_order_and_unrelated_source() {
+    fn affiliation_tide_replacement_preserves_order_and_unrelated_source() {
         let mut catalog: AffiliationCatalog = ron::from_str(AFFILIATION_SOURCE).unwrap();
-        catalog.affiliations[0].signature_card_ids = vec![
+        catalog.affiliations[0].tide_ids = vec![
+            CanonicalUuid::parse("00000000-0000-4000-8000-000000000103").unwrap(),
             CanonicalUuid::parse("00000000-0000-4000-8000-000000000102").unwrap(),
             CanonicalUuid::parse("00000000-0000-4000-8000-000000000101").unwrap(),
         ];
         let patched = patch_affiliation_field(
             AFFILIATION_SOURCE,
             &catalog.affiliations[0],
-            "signature_card_ids",
+            "tide_ids",
         )
         .unwrap();
         assert!(patched.contains(
-            "[\"00000000-0000-4000-8000-000000000102\",\"00000000-0000-4000-8000-000000000101\"]"
+            "[\"00000000-0000-4000-8000-000000000103\",\"00000000-0000-4000-8000-000000000102\",\"00000000-0000-4000-8000-000000000101\"]"
         ));
         assert!(patched.contains("// Unrelated record comment."));
         verify_round_trip::<AffiliationCatalog>(&patched, &catalog).unwrap();
-        catalog.affiliations[0].signature_card_ids.clear();
+        catalog.affiliations[0].tide_ids.clear();
         assert!(
             affiliations::validate(&catalog)
                 .unwrap_err()
                 .to_string()
-                .contains("no signature cards")
+                .contains("exactly three tides")
         );
     }
 }

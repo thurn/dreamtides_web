@@ -2,17 +2,13 @@ import { describe, expect, it } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
-import type { MerchantCorpusCard } from "../../data/merchant-corpus";
-import type { DreamsignProfile } from "../../data/dreamsign-profiles";
 import type { JourneyState, SiteState } from "../../types/journey";
 import { LayerName } from "../../types/layer-name";
 import { buildMerchantContext } from "../context/buildMerchantContext";
 import {
   makeMerchantTestCard,
   makeMerchantTestContent,
-  makeMerchantTestCorpus,
   makeMerchantTestDeckEntry,
-  makeMerchantTestDreamsignProfile,
   makeMerchantTestDreamsignTemplate,
   makeMerchantTestJourneyState,
   makeMerchantTestSite,
@@ -25,12 +21,8 @@ import {
   resolveMerchantOffer,
 } from "./resolveMerchantOffer";
 
-function poolCards(count: number): {
-  cards: CardData[];
-  corpus: Record<string, Partial<MerchantCorpusCard> & { quality: number }>;
-} {
+function poolCards(count: number): CardData[] {
   const cards: CardData[] = [];
-  const corpus: Record<string, Partial<MerchantCorpusCard> & { quality: number }> = {};
   for (let i = 0; i < count; i += 1) {
     const cardNumber = 1000 + i;
     const id = `aaaa0000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`;
@@ -41,20 +33,17 @@ function poolCards(count: number): {
         name: asCardName(`Pool ${String(cardNumber)}`),
       }),
     );
-    corpus[id] = { quality: (i % 20) / 20 + 0.01 * i };
   }
-  return { cards, corpus };
+  return cards;
 }
 
 function dreamsignFixture(count: number) {
   const templates = [];
-  const profiles: Record<string, DreamsignProfile> = {};
   for (let i = 0; i < count; i += 1) {
     const id = `dsign-${String(i)}`;
     templates.push(makeMerchantTestDreamsignTemplate({ id, name: `Sign ${String(i)}` }));
-    profiles[id] = makeMerchantTestDreamsignProfile({ id });
   }
-  return { templates, profiles };
+  return templates;
 }
 
 function makeFixture(overrides: { seed?: string } = {}): {
@@ -66,13 +55,11 @@ function makeFixture(overrides: { seed?: string } = {}): {
     id: "site-merchant-resolve",
     type: "Augury",
   });
-  const { cards, corpus } = poolCards(30);
-  const { templates, profiles } = dreamsignFixture(10);
+  const cards = poolCards(30);
+  const templates = dreamsignFixture(10);
   const journeyContent = makeMerchantTestContent({
     cards,
     dreamsignTemplates: templates,
-    merchantCorpus: makeMerchantTestCorpus({ cards: corpus }),
-    dreamsignProfiles: new Map(Object.entries(profiles)),
   });
   const state = makeMerchantTestJourneyState({
     seed: overrides.seed ?? "merchant-resolve-seed",
@@ -182,9 +169,16 @@ describe("resolveMerchantOffer", () => {
     );
     expect(directOffer).toBeDefined();
     if (directOffer === undefined) return;
-    const beforeDeckSize = fixture.state.deck.length;
-    const beforeDreamsigns = fixture.state.dreamsigns.length;
-    const beforeDeckJson = JSON.stringify(fixture.state.deck);
+    const directPayload = directOffer.applyPayload;
+    expect(directPayload).toBeDefined();
+    if (directPayload === undefined) return;
+    const expectedRewardState = applyMerchantPayloadToState({
+      state: fixture.state,
+      journeyContent: fixture.journeyContent,
+      payload: directPayload,
+    });
+    expect(expectedRewardState).not.toBeNull();
+    if (expectedRewardState === null) return;
     const result = resolveMerchantOffer({
       state: fixture.state,
       journeyContent: fixture.journeyContent,
@@ -195,16 +189,19 @@ describe("resolveMerchantOffer", () => {
     if (!result.ok) return;
     expect(result.state.screen).toEqual({ type: "dreamscape" });
     expect(result.state.atlas.nodes["dreamscape-a"]?.sites[0]?.isVisited).toBe(true);
-    const kind = directOffer.applyPayload?.kind;
-    if (kind === "add_dreamsign") {
-      expect(result.state.dreamsigns.length).toBe(beforeDreamsigns + 1);
-    } else if (kind === "add_catalog_card") {
-      expect(result.state.deck.length).toBeGreaterThan(beforeDeckSize);
-    } else {
-      // In-place deck modifications (transfigure/keyword/type) keep the deck
-      // size but mutate an entry; assert the deck content changed.
-      expect(JSON.stringify(result.state.deck)).not.toBe(beforeDeckJson);
-    }
+    expect(result.appliedPayload).toEqual(directPayload);
+    expect(result.state.deck).toEqual(expectedRewardState.deck);
+    expect(result.state.dreamsigns).toEqual(expectedRewardState.dreamsigns);
+    expect(result.state.essence).toBe(expectedRewardState.essence);
+    expect(
+      Object.values(result.state.atlas.nodes).map((node) =>
+        node.sites.map(({ isVisited: _isVisited, ...candidateSite }) => candidateSite),
+      ),
+    ).toEqual(
+      Object.values(expectedRewardState.atlas.nodes).map((node) =>
+        node.sites.map(({ isVisited: _isVisited, ...candidateSite }) => candidateSite),
+      ),
+    );
   });
 
   it("declines without mutating deck or dreamsigns and completes the site", () => {

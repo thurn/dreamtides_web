@@ -2,14 +2,10 @@ import { describe, expect, it } from "vitest";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { JourneyContent } from "../../data/journey-content";
-import type { MerchantCorpusCard } from "../../data/merchant-corpus";
-import type { DreamsignProfile } from "../../data/dreamsign-profiles";
 import type { JourneyState } from "../../types/journey";
 import {
   makeMerchantTestCard,
   makeMerchantTestContent,
-  makeMerchantTestCorpus,
-  makeMerchantTestDreamsignProfile,
   makeMerchantTestDreamsignTemplate,
   makeMerchantTestJourneyState,
   makeMerchantTestSite,
@@ -21,12 +17,8 @@ import {
   generateMerchantEncounterWithDebug,
 } from "./generateMerchantEncounter";
 
-function poolCards(count: number): {
-  cards: CardData[];
-  corpus: Record<string, Partial<MerchantCorpusCard> & { quality: number }>;
-} {
+function poolCards(count: number): CardData[] {
   const cards: CardData[] = [];
-  const corpus: Record<string, Partial<MerchantCorpusCard> & { quality: number }> = {};
   for (let i = 0; i < count; i += 1) {
     const cardNumber = 1000 + i;
     const id = `aaaa0000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`;
@@ -37,37 +29,28 @@ function poolCards(count: number): {
         name: asCardName(`Pool ${String(cardNumber)}`),
       }),
     );
-    // Quality varies so the strong band has multiple distinct members.
-    corpus[id] = { quality: (i % 20) / 20 + 0.01 * i };
   }
-  return { cards, corpus };
+  return cards;
 }
 
 function dreamsignTemplates(count: number) {
   const templates = [];
-  const profiles: Record<string, DreamsignProfile> = {};
   for (let i = 0; i < count; i += 1) {
     const id = `dsign-${String(i)}`;
     templates.push(makeMerchantTestDreamsignTemplate({ id, name: `Sign ${String(i)}` }));
-    profiles[id] = makeMerchantTestDreamsignProfile({
-      id,
-      quality: ((i % 3) + 1) as 1 | 2 | 3,
-    });
   }
-  return { templates, profiles };
+  return templates;
 }
 
 function fixtureContent(input: {
   poolCount?: number;
   dreamsignCount?: number;
 }): JourneyContent {
-  const { cards, corpus } = poolCards(input.poolCount ?? 30);
-  const { templates, profiles } = dreamsignTemplates(input.dreamsignCount ?? 10);
+  const cards = poolCards(input.poolCount ?? 30);
+  const templates = dreamsignTemplates(input.dreamsignCount ?? 10);
   return makeMerchantTestContent({
     cards,
     dreamsignTemplates: templates,
-    merchantCorpus: makeMerchantTestCorpus({ cards: corpus }),
-    dreamsignProfiles: new Map(Object.entries(profiles)),
   });
 }
 

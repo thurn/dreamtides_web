@@ -3916,6 +3916,12 @@
             "tsType": "LocalizedString",
             "optional": true,
             "description": ""
+          },
+          {
+            "name": "disabled",
+            "tsType": "boolean",
+            "optional": true,
+            "description": ""
           }
         ]
       }

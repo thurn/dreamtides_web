@@ -9,6 +9,9 @@ interface RawDreamsign {
   imageName: string;
   imageAlt: string;
   effectDescription: string;
+  rarity: DreamsignTemplate["rarity"];
+  tideIds: string[];
+  tags?: string[];
 }
 
 /** Fetches canonical Dreamsign data from the asset pipeline output. */
@@ -26,6 +29,9 @@ export async function loadDreamsignTemplates(): Promise<DreamsignTemplate[]> {
     effectDescription: entry.effectDescription,
     imageName: entry.imageName,
     imageAlt: entry.imageAlt,
+    rarity: entry.rarity,
+    tideIds: entry.tideIds,
+    tags: entry.tags,
   }));
 }
 

@@ -32,7 +32,7 @@ describe("native affiliation editing", () => {
 
     const after = readFileSync(sourcePath, "utf8");
     expect(after).not.toBe(before);
-    expect(after).toContain(`name: "${editedName}",`);
+    expect(after).toContain(`name: Tx("${editedName}"),`);
     const changedLines = before
       .split("\n")
       .filter((line, index) => line !== after.split("\n")[index]);

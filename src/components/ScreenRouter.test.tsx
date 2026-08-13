@@ -30,7 +30,6 @@ import { LayerName } from "../types/layer-name";
 import {
   makeMerchantTestCard,
   makeMerchantTestContent,
-  makeMerchantTestCorpus,
   makeMerchantTestDeckEntry,
   makeMerchantTestDreamsignTemplate,
   makeMerchantTestJourneyState,
@@ -178,10 +177,6 @@ function fixtureCards(): CardData[] {
 
 function merchantContent() {
   const cards = fixtureCards();
-  const corpus: Record<string, { quality: number }> = {};
-  for (const [index, c] of cards.entries()) {
-    corpus[c.id] = { quality: 0.1 + (index % 10) / 10 };
-  }
   const content = makeMerchantTestContent({
     cards,
     dreamsignTemplates: [
@@ -194,8 +189,6 @@ function merchantContent() {
         name: "Router Sign B",
       }),
     ],
-    merchantCorpus: makeMerchantTestCorpus({ cards: corpus }),
-    dreamsignProfiles: new Map(),
   });
   return withFixtureGuides(content);
 }
@@ -684,22 +677,14 @@ describe("ScreenRouter Augury routing", () => {
   });
 
   it("sets card source debug for visible merchant grant cards", () => {
-    // Use a fixture with a strong corpus quality signal so at least one
-    // grant offer (strong_card or similar) appears in the encounter.
     const site = makeSite("Augury");
     // Build content with no dreamsigns so the generator uses families that
     // yield cards.
     const cards = fixtureCards();
-    const corpus: Record<string, { quality: number }> = {};
-    for (const [index, c] of cards.entries()) {
-      corpus[c.id] = { quality: 0.1 + (index % 10) / 10 };
-    }
     const contentWithoutDreamsigns = withFixtureGuides(
       makeMerchantTestContent({
         cards,
         dreamsignTemplates: [],
-        merchantCorpus: makeMerchantTestCorpus({ cards: corpus }),
-        dreamsignProfiles: new Map(),
       }),
     );
     // An empty deck keeps the deck-targeting families (duplicate / purge) and

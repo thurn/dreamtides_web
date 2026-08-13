@@ -733,13 +733,6 @@ export function buildAuguryLogEntries(
       },
     });
   }
-  if (result.context?.fitModel === undefined) {
-    entries.push({
-      key: `augury:${site.id}:fit-model-missing`,
-      event: "merchant_fit_model_missing",
-      payload: { siteId: site.id },
-    });
-  }
   if (result.encounter === null) {
     if (result.errorMessage !== null) {
       entries.push({

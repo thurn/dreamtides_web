@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
   makeMerchantTestCard,
-  makeMerchantTestDreamsignProfile,
   makeMerchantTestDreamsignTemplate,
 } from "../journey_v2/testing/fixtures";
 import { asCardId } from "../types/card-identity";
@@ -13,6 +12,10 @@ import {
 } from "./tidemark-ladder-climb";
 import { gambleGameByRulesKind } from "./gamble-data";
 import { gambleFixture } from "../testing/gamble-fixture";
+import {
+  buildAffinityContext,
+  buildTideAffinityIndex,
+} from "../selection/tide-affinity";
 
 describe("Tidemark Ladder Climb rules", () => {
   const economy = {
@@ -101,7 +104,7 @@ describe("Tidemark Ladder Climb rules", () => {
     ).toBeNull();
   });
 
-  it("sorts eligible Dreamsigns by deck match score and UUID tiebreaker", () => {
+  it("sorts eligible Dreamsigns by tide affinity, rarity, and UUID", () => {
     const deckCards = [
       makeMerchantTestCard({
         id: asCardId("00000000-0000-4000-8000-000000000001"),
@@ -120,46 +123,65 @@ describe("Tidemark Ladder Climb rules", () => {
       }),
     ];
     const templates = [
-      makeMerchantTestDreamsignTemplate({ id: "sign-z-matched" }),
-      makeMerchantTestDreamsignTemplate({ id: "sign-b-generic" }),
-      makeMerchantTestDreamsignTemplate({ id: "sign-a-generic" }),
-      makeMerchantTestDreamsignTemplate({ id: "sign-off-deck" }),
+      makeMerchantTestDreamsignTemplate({
+        id: "sign-z-matched",
+        rarity: "Common",
+        tideIds: ["wolf-tide"],
+      }),
+      makeMerchantTestDreamsignTemplate({
+        id: "sign-b-generic",
+        rarity: "Uncommon",
+        tideIds: [],
+      }),
+      makeMerchantTestDreamsignTemplate({
+        id: "sign-a-generic",
+        rarity: "Uncommon",
+        tideIds: [],
+      }),
+      makeMerchantTestDreamsignTemplate({
+        id: "sign-off-deck",
+        rarity: "Common",
+        tideIds: ["dragon-tide"],
+      }),
     ];
-    const profiles = new Map([
-      [
-        "sign-z-matched",
-        makeMerchantTestDreamsignProfile({
-          id: "sign-z-matched",
-          subtypes: ["Wolf"],
-        }),
+    const affinityIndex = buildTideAffinityIndex({
+      version: 2,
+      selection: { bandFraction: 0.25, bandMinimum: 5 },
+      tidePoolByDreamAvatar: {},
+      tides: [
+        {
+          id: "wolf-tide",
+          displayName: "Wolf Tide",
+          displayDescription: "",
+          resonance: "ember",
+          role: "neutral",
+          cards: deckCards.map((card) => ({ id: card.id, copies: 1 as const })),
+        },
+        {
+          id: "dragon-tide",
+          displayName: "Dragon Tide",
+          displayDescription: "",
+          resonance: "ember",
+          role: "neutral",
+          cards: [],
+        },
       ],
-      [
-        "sign-b-generic",
-        makeMerchantTestDreamsignProfile({ id: "sign-b-generic" }),
-      ],
-      [
-        "sign-a-generic",
-        makeMerchantTestDreamsignProfile({ id: "sign-a-generic" }),
-      ],
-      [
-        "sign-off-deck",
-        makeMerchantTestDreamsignProfile({
-          id: "sign-off-deck",
-          subtypes: ["Dragon"],
-        }),
-      ],
-    ]);
+    });
+    const affinityContext = buildAffinityContext({
+      index: affinityIndex,
+      deckCardUuids: deckCards.map((card) => card.id),
+    });
 
     expect(
       scoreTidemarkLadderClimbDreamsignCandidates({
         templates,
-        profiles,
-        deckCards,
+        affinityIndex,
+        affinityContext,
       }),
     ).toEqual([
       { dreamsignId: "sign-z-matched", score: 1 },
-      { dreamsignId: "sign-a-generic", score: 0.4 },
-      { dreamsignId: "sign-b-generic", score: 0.4 },
+      { dreamsignId: "sign-a-generic", score: 0 },
+      { dreamsignId: "sign-b-generic", score: 0 },
       { dreamsignId: "sign-off-deck", score: 0 },
     ]);
   });

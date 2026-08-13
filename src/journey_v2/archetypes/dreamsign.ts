@@ -20,10 +20,7 @@ function dreamsignGameObject(template: DreamsignTemplate): MerchantGameObject {
 /**
  * `dreamsign` — *Gain a dreamsign suited to your deck.*
  *
- * Candidates: unheld dreamsigns (`candidateDreamsigns`). Signal: profile match
- * score against the deck. Band-sample 1 with the loose `dreamsignBandFraction`
- * (the population is small). Face-up. Eligible while >= 1 unheld dreamsign
- * exists.
+ * Candidates: unheld Dreamsigns. Ordinary affinity leads; rarity breaks ties.
  */
 export const dreamsignBuilder: MerchantArchetypeBuilder = {
   archetypeId: "dreamsign",

@@ -492,12 +492,45 @@ export function compileSitesData(sourceValue, catalogs = {}) {
   const file = "sites.toml";
   const root = keys(sourceValue, file, "root", [
     "schema-version",
+    "selection",
     "site-types",
     "random-site",
   ]);
   if (number(root["schema-version"], file, "schema-version") !== 1) {
     fail(file, "schema-version", "only schema version 1 is supported");
   }
+  const rawSelection = keys(root.selection, file, "selection", [
+    "min-deck-for-purge",
+    "placeable-types",
+  ]);
+  const placeableTypes = unique(
+    array(rawSelection["placeable-types"], file, "selection.placeable-types")
+      .map((entry, index) => siteType(
+        entry,
+        file,
+        `selection.placeable-types[${String(index)}]`,
+      )),
+    file,
+    "selection.placeable-types",
+  );
+  const allowedPlaceableTypes = new Set([
+    "Shop", "Purge", "Transfiguration", "Duplication",
+  ]);
+  if (
+    placeableTypes.length === 0 ||
+    placeableTypes.some((type) => !allowedPlaceableTypes.has(type))
+  ) {
+    fail(file, "selection.placeable-types", "contains an unsupported site type");
+  }
+  const selection = {
+    minDeckForPurge: number(
+      rawSelection["min-deck-for-purge"],
+      file,
+      "selection.min-deck-for-purge",
+      { min: 1 },
+    ),
+    placeableTypes,
+  };
   const siteTypes = {};
   for (const [index, rawMetadata] of array(
     root["site-types"],
@@ -603,12 +636,14 @@ export function compileSitesData(sourceValue, catalogs = {}) {
     fail(file, "gamble", "requires exactly one Gamble guide");
   const normalized = {
     schemaVersion: 1,
+    selection,
     siteTypes,
     randomSite: { ...randomSite, guideId: randomSiteGuideId },
     guideAssignments,
   };
   const behavior = {
     schemaVersion: 1,
+    selection,
     randomSite: normalized.randomSite,
     rulesBySiteType: Object.fromEntries(
       Object.entries(siteTypes).flatMap(([type, metadata]) =>

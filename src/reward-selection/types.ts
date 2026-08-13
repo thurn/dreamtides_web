@@ -7,13 +7,14 @@ import type {
 } from "../types/journey";
 import type { JourneyContent } from "../data/journey-content";
 import type { RewardSelectionTuning } from "../types/reward-selection-data";
+import type { TideAffinityIndex, TideVector } from "../selection/tide-affinity";
 import type {
   REWARD_CARD_PREDICATES,
   REWARD_MECHANIC_IDS,
   REWARD_SELECTION_POLICY_IDS,
 } from "../../scripts/reward-selection-contracts.mjs";
 
-export const SELECTION_RULES_VERSION = "1" as const;
+export const SELECTION_RULES_VERSION = "2" as const;
 
 export type SelectionRulesVersion = typeof SELECTION_RULES_VERSION;
 
@@ -53,6 +54,8 @@ export interface RewardSelectionContext {
   draftPoolCardUuids: ReadonlySet<string>;
   heldDreamsignIds: ReadonlySet<string>;
   remainingDreamsignIds: ReadonlySet<string>;
+  affinityIndex: TideAffinityIndex;
+  affinityContext: TideVector;
   selectionContentRevision: string;
 }
 
@@ -89,8 +92,6 @@ export interface RewardSelectionRequest {
   upTo?: boolean;
   /** Cards per pack for pack choosers. */
   packSize?: number;
-  /** Fit/quality weights for the copies-draft variation. */
-  cardFitQualityBlend?: Readonly<{ fit: number; quality: number }>;
 }
 
 export interface RewardSelectionCandidateTrace {

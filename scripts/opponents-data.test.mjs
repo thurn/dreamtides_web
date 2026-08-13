@@ -6,6 +6,7 @@ const CARD_ID = "00000000-0000-4000-8000-000000000001";
 function fixture() {
   return {
     "schema-version": 1,
+    "opponent-deck-size": 30,
     battle: {
       "minimum-deck-size": 9,
       "player-opening-hand-size": 3,
@@ -29,10 +30,6 @@ function fixture() {
       "dreamsigns-from-layer": 4,
       "legendaries-from-layer": 6,
       "starter-dilution": [7, 3, 1],
-    },
-    "corpus-selection": {
-      "affiliation-weight": 0.4,
-      "top-ranked-sampling-window": 5,
     },
     "journey-ai-deck": [{ "card-id": CARD_ID, count: 2 }],
     ai: {
@@ -98,7 +95,7 @@ describe("compileOpponentsData", () => {
         x.progression["ability-active-from-layer"] += 1;
       },
       (x) => {
-        x["corpus-selection"]["affiliation-weight"] = 0.5;
+        x["opponent-deck-size"] += 1;
       },
       (x) => {
         x["journey-ai-deck"][0].count += 1;

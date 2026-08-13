@@ -516,10 +516,14 @@ function preparePurgeSameType(
   }));
   const eligible = purgeable.filter(({ entry, effectiveCard }) =>
     cards.some(
-      ({ entry: companionEntry, effectiveCard: companionCard }) =>
+      ({
+        entry: companionEntry,
+        baseCard: companionCard,
+        effectiveCard: companionEffectiveCard,
+      }) =>
         companionEntry.entryId !== entry.entryId &&
         companionEntry.transfiguration === null &&
-        companionCard.cardType === effectiveCard.cardType &&
+        companionEffectiveCard.cardType === effectiveCard.cardType &&
         supportsFixedForm(input.content, companionCard, input.transfiguration),
     ),
   );
@@ -563,11 +567,11 @@ function preparePurgeSameType(
   if (selected === undefined) return unavailable("no-purge-target");
 
   const companionCandidates = cards.filter(
-    ({ entry, effectiveCard }) =>
+    ({ entry, baseCard, effectiveCard }) =>
       entry.entryId !== selected.entry.entryId &&
       entry.transfiguration === null &&
       effectiveCard.cardType === selected.effectiveCard.cardType &&
-      supportsFixedForm(input.content, effectiveCard, input.transfiguration),
+      supportsFixedForm(input.content, baseCard, input.transfiguration),
   );
   if (companionCandidates.length === 0) {
     return unavailable("no-same-type-companion", [targetSelection]);

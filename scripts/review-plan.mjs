@@ -73,7 +73,6 @@ function isValidationInput(file) {
     file.startsWith("data/") ||
     file.startsWith("tools/game-data/") ||
     file === "rust-toolchain.toml" ||
-    file.startsWith("docs/draft_records_adapted/") ||
     file === "scripts/setup-assets.mjs" ||
     file.startsWith("scripts/generate-") ||
     file.startsWith("scripts/parse-")

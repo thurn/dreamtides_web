@@ -92,8 +92,8 @@ Catalog(value: 1)
   it("separates named records in nested lists without separating atom entries", () => {
     const source = `Catalog(
       entries: [
-        AffiliationDefinition(id: "one", signature_card_ids: ["alpha", "beta"]),
-        AffiliationDefinition(id: "two", signature_card_ids: ["gamma", "delta"]),
+        AffiliationDefinition(id: "one", tide_ids: ["alpha", "beta", "gamma"]),
+        AffiliationDefinition(id: "two", tide_ids: ["delta", "epsilon", "zeta"]),
       ],
     )`;
 
@@ -101,12 +101,12 @@ Catalog(value: 1)
   entries: [
     AffiliationDefinition(
       id: "one",
-      signature_card_ids: ["alpha", "beta"],
+      tide_ids: ["alpha", "beta", "gamma"],
     ),
 
     AffiliationDefinition(
       id: "two",
-      signature_card_ids: ["gamma", "delta"],
+      tide_ids: ["delta", "epsilon", "zeta"],
     ),
   ],
 )

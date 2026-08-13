@@ -1,5 +1,14 @@
 {
   "schemaVersion": 1,
+  "selection": {
+    "minDeckForPurge": 8,
+    "placeableTypes": [
+      "Shop",
+      "Purge",
+      "Transfiguration",
+      "Duplication"
+    ]
+  },
   "siteTypes": {
     "Battle": {
       "icon": "bxf bx-sword-alt",
@@ -185,6 +194,6 @@
       "homeDreamscapeId": "grid_city"
     }
   },
-  "contentHash": "05ba3a4c6c0c13a588449fc6ed6fdfeb4660e85c43dd92d3b40449cf3eeb75dc",
-  "foldHash": "52cc400d01c3eb768c2e38dde5165b0ee90345cd9cd05ea365e84ab909d366b4"
+  "contentHash": "14d361c00961b34c50ea565c68d8cdb314df698f9cb0991ffe2ecf0cf0b8247c",
+  "foldHash": "c08cfad0a6b5a1675bb482e0833783effbc44abe7886a50c5726d197044183ec"
 }

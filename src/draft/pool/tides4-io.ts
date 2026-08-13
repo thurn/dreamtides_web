@@ -1,5 +1,5 @@
-// Schema and validation for the browser projection of `data/tides.ron` and
-// `data/dream_avatar_tide_pools.ron`, served as `/tides4-data.json`. The tides4
+// Schema and validation for the browser projection of `data/tides.ron` and the
+// embedded tide pools in `data/dream_avatars.ron`, served as `/tides4-data.json`. The tides4
 // pool algorithm recombines these manually curated decks into a seeded draft pool.
 //
 // The artifact carries both halves of the algorithm so it is self-contained:
@@ -72,7 +72,12 @@ export interface Tides4DreamAvatarPool {
 
 /** Browser projection compiled from the canonical tide catalog. */
 export interface Tides4DecksJson {
-  version: number;
+  version: 2;
+  /** Universal seeded variety band used by affinity selection. */
+  selection: {
+    bandFraction: number;
+    bandMinimum: number;
+  };
   /** All tide decks (signature floors, directional facets, broad neutrals). */
   tides: Tides4DeckJson[];
   /**
@@ -96,7 +101,15 @@ function fail(detail: string): never {
 export function validateTides4Decks(json: unknown): Tides4DecksJson {
   if (typeof json !== "object" || json === null) fail("not an object");
   const data = json as Partial<Tides4DecksJson>;
-  if (typeof data.version !== "number") fail("missing numeric `version`");
+  if (data.version !== 2) fail("unsupported `version`");
+  if (
+    typeof data.selection?.bandFraction !== "number" ||
+    !Number.isFinite(data.selection.bandFraction) ||
+    data.selection.bandFraction <= 0 ||
+    data.selection.bandFraction > 1 ||
+    !Number.isInteger(data.selection.bandMinimum) ||
+    data.selection.bandMinimum <= 0
+  ) fail("invalid unified `selection` tuning");
   if (!Array.isArray(data.tides) || data.tides.length === 0) {
     fail("missing non-empty `tides` array");
   }

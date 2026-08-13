@@ -13,8 +13,8 @@ use super::dreamwell::{self, DreamwellRules};
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct OpponentsCatalog {
+    pub opponent_deck_size: u32,
     pub progression: ProgressionRules,
-    pub corpus_selection: CorpusSelectionRules,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -25,10 +25,10 @@ pub struct InternalAiCatalog {
 }
 
 struct CombinedCatalog {
+    opponent_deck_size: u32,
     battle: BattleRules,
     dreamwell: DreamwellRules,
     progression: ProgressionRules,
-    corpus_selection: CorpusSelectionRules,
     journey_ai_deck: Vec<DeckEntry>,
     ai: AiRules,
 }
@@ -63,12 +63,6 @@ pub struct ProgressionRules {
     pub starter_dilution: Vec<u32>,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct CorpusSelectionRules {
-    pub affiliation_weight: f64,
-    pub top_ranked_sampling_window: u32,
-}
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -220,11 +214,11 @@ impl OpponentMode {
 struct CompatibilityCatalog {
     #[serde(rename = "schema-version")]
     schema_version: u32,
+    #[serde(rename = "opponent-deck-size")]
+    opponent_deck_size: u32,
     battle: CompatibilityBattleRules,
     dreamwell: CompatibilityDreamwellRules,
     progression: CompatibilityProgressionRules,
-    #[serde(rename = "corpus-selection")]
-    corpus_selection: CompatibilityCorpusSelectionRules,
     #[serde(rename = "journey-ai-deck")]
     journey_ai_deck: Vec<CompatibilityDeckEntry>,
     ai: CompatibilityAiRules,
@@ -292,14 +286,6 @@ struct CompatibilityProgressionRules {
     legendaries_from_layer: u32,
     #[serde(rename = "starter-dilution")]
     starter_dilution: Vec<u32>,
-}
-
-#[derive(Serialize)]
-struct CompatibilityCorpusSelectionRules {
-    #[serde(rename = "affiliation-weight")]
-    affiliation_weight: toml::Value,
-    #[serde(rename = "top-ranked-sampling-window")]
-    top_ranked_sampling_window: u32,
 }
 
 #[derive(Serialize)]
@@ -383,10 +369,10 @@ pub fn lower(
     internal_ai: InternalAiCatalog,
 ) -> Result<toml::Value> {
     let source = CombinedCatalog {
+        opponent_deck_size: opponents.opponent_deck_size,
         battle,
         dreamwell,
         progression: opponents.progression,
-        corpus_selection: opponents.corpus_selection,
         journey_ai_deck: internal_ai.journey_ai_deck,
         ai: internal_ai.ai,
     };
@@ -394,6 +380,7 @@ pub fn lower(
 
     let compatibility = CompatibilityCatalog {
         schema_version: 1,
+        opponent_deck_size: source.opponent_deck_size,
         battle: compatibility_battle(&source.battle),
         dreamwell: CompatibilityDreamwellRules {
             opening_orders: source.dreamwell.opening_orders,
@@ -406,10 +393,6 @@ pub fn lower(
             dreamsigns_from_layer: source.progression.dreamsigns_from_layer,
             legendaries_from_layer: source.progression.legendaries_from_layer,
             starter_dilution: source.progression.starter_dilution,
-        },
-        corpus_selection: CompatibilityCorpusSelectionRules {
-            affiliation_weight: compatibility_number(source.corpus_selection.affiliation_weight),
-            top_ranked_sampling_window: source.corpus_selection.top_ranked_sampling_window,
         },
         journey_ai_deck: compatibility_deck(&source.journey_ai_deck),
         ai: compatibility_ai(&source.ai),
@@ -540,15 +523,7 @@ fn validate(source: &CombinedCatalog) -> Result<()> {
         "progression.starter_dilution",
         &source.progression.starter_dilution,
     )?;
-
-    require_unit_interval(
-        "corpus_selection.affiliation_weight",
-        source.corpus_selection.affiliation_weight,
-    )?;
-    require_positive(
-        "corpus_selection.top_ranked_sampling_window",
-        source.corpus_selection.top_ranked_sampling_window,
-    )?;
+    require_positive("opponent_deck_size", source.opponent_deck_size)?;
     validate_deck(&source.journey_ai_deck)?;
     validate_ai(&source.ai)?;
     Ok(())
@@ -727,15 +702,12 @@ mod tests {
 
     fn catalog() -> OpponentsCatalog {
         OpponentsCatalog {
+            opponent_deck_size: 30,
             progression: ProgressionRules {
                 ability_active_from_layer: 0,
                 dreamsigns_from_layer: 2,
                 legendaries_from_layer: 4,
                 starter_dilution: vec![6, 3],
-            },
-            corpus_selection: CorpusSelectionRules {
-                affiliation_weight: 0.75,
-                top_ranked_sampling_window: 5,
             },
         }
     }

@@ -26,8 +26,8 @@ function copyFixture() {
   }
   mkdirSync(join(fixtureRoot, "public"), { recursive: true });
   copyFileSync(
-    join(repositoryRoot, "public", "cards_v2-data.json"),
-    join(fixtureRoot, "public", "cards_v2-data.json"),
+    join(repositoryRoot, "public", "tides4-data.json"),
+    join(fixtureRoot, "public", "tides4-data.json"),
   );
   for (const directory of ["docs", "tools", "node_modules"]) {
     const source = join(repositoryRoot, directory);

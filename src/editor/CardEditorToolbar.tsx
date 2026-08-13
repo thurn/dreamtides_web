@@ -33,7 +33,6 @@ const EDITOR_SORT_OPTIONS: ReadonlyArray<CardBrowserSortOption> = [
   { value: "nameSubstring", label: "Shared Name Substring" },
   { value: "rulesTextFontSize", label: "Rules Text Font Size" },
   { value: "tideCount", label: "Tide Count" },
-  { value: "popularity", label: "Popularity" },
 ];
 
 const inputStyle = {

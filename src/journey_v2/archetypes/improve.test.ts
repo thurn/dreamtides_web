@@ -1,12 +1,10 @@
 import { describe, expect, it } from "vitest";
-import type { FitModel } from "../../draft/fit-model";
 import { applyMerchantPayloadToState } from "../encounter/resolveMerchantOffer";
 import { merchantRng } from "../signals/rng";
 import { buildMerchantContext } from "../context/buildMerchantContext";
 import {
   makeMerchantTestCard,
   makeMerchantTestContent,
-  makeMerchantTestCorpus,
   makeMerchantTestDeckEntry,
   makeMerchantTestJourneyState,
   makeMerchantTestSite,
@@ -37,13 +35,9 @@ function uuid(n: number): CardId {
 function makeContext(input: {
   cards: readonly CardData[];
   deckEntries: readonly DeckEntry[];
-  corpusCards?: Record<string, { quality: number; multiplicity?: number }>;
-  fitModel?: FitModel;
 }): MerchantContext {
   const journeyContent = makeMerchantTestContent({
     cards: input.cards,
-    fitModel: input.fitModel,
-    merchantCorpus: makeMerchantTestCorpus({ cards: input.corpusCards ?? {} }),
   });
   const journeyState = makeMerchantTestJourneyState({ deck: [...input.deckEntries] });
   return buildMerchantContext({

@@ -1,52 +1,26 @@
-import type {
-  RewardSelectionData,
-} from "../types/reward-selection-data";
+import type { AuguryData } from "../types/augury-data";
+import type { SitesData } from "../types/sites-data";
+import type { Tides4DecksJson } from "../draft/pool/tides4-io";
+import { stableDigest } from "../reward-selection/stable";
+import type { RewardSelectionData } from "../types/reward-selection-data";
 
 export type { RewardSelectionData, RewardSelectionTuning } from "../types/reward-selection-data";
 
-const PATH = "/reward-selection-data.json";
-const SHA256_HEX = /^[0-9a-f]{64}$/u;
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
-function finite(value: unknown): value is number {
-  return typeof value === "number" && Number.isFinite(value);
-}
-
-/** Validate the normalized JSON artifact at the runtime trust boundary. */
-export function parseRewardSelectionData(value: unknown): RewardSelectionData {
-  if (
-    !isRecord(value) || value.schemaVersion !== 1 || value.rulesVersion !== "1" ||
-    typeof value.contentHash !== "string" || !SHA256_HEX.test(value.contentHash) ||
-    value.foldHash !== value.contentHash || !isRecord(value.tuning)
-  ) throw new Error("Failed to load reward-selection data: malformed reward-selection-data.json");
-  const tuning = value.tuning;
-  const numericKeys = [
-    "bandFraction", "bandMinimum", "strongBandFraction", "strongBandMinimum",
-    "dreamsignBandFraction", "dreamsignBandMinimum", "minDeckForFit",
-    "minDeckForPurge", "purgeMisfitFraction", "starterPurgeBonus",
-    "subtypeMinPoolCards", "bundleGrowthBandSize", "categoryAffineWeight",
-    "categoryDeckAffineMinimum", "categoryClusterAffineMinimum",
-  ];
-  if (
-    numericKeys.some((key) => !finite(tuning[key])) ||
-    !isRecord(tuning.strongBlend) || !finite(tuning.strongBlend.fit) || !finite(tuning.strongBlend.quality) ||
-    !isRecord(tuning.copiesBlend) || !finite(tuning.copiesBlend.fit) || !finite(tuning.copiesBlend.quality) ||
-    !isRecord(tuning.duplicateBlend) || !finite(tuning.duplicateBlend.quality) || !finite(tuning.duplicateBlend.fitLoo) ||
-    !isRecord(tuning.transfigureBlend) || !finite(tuning.transfigureBlend.benefit) || !finite(tuning.transfigureBlend.centrality) ||
-    !isRecord(tuning.bundleBlend) || !finite(tuning.bundleBlend.seed) || !finite(tuning.bundleBlend.bundle) || !finite(tuning.bundleBlend.fit) ||
-    !isRecord(tuning.centrality) || Object.values(tuning.centrality).some((entry) => !finite(entry)) ||
-    !isRecord(tuning.dreamsign) || !finite(tuning.dreamsign.fullCoverageCount) || !finite(tuning.dreamsign.featurelessCoverage) || !isRecord(tuning.dreamsign.qualityWeight) || Object.values(tuning.dreamsign.qualityWeight).some((entry) => !finite(entry)) ||
-    !isRecord(tuning.costBands) || Object.values(tuning.costBands).some((entry) => !finite(entry)) ||
-    !Array.isArray(tuning.placeableSiteTypes) || tuning.placeableSiteTypes.some((entry) => typeof entry !== "string")
-  ) throw new Error("Failed to load reward-selection data: malformed reward-selection-data.json");
-  return value as unknown as RewardSelectionData;
-}
-
-export async function loadRewardSelectionData(): Promise<RewardSelectionData> {
-  const response = await fetch(PATH);
-  if (!response.ok) throw new Error(`Failed to load reward-selection data: ${String(response.status)} ${response.statusText}`);
-  return parseRewardSelectionData(await response.json());
+/** Assemble the selector's compatibility view from its three owning RON catalogs. */
+export function buildRewardSelectionData(input: {
+  tides: Tides4DecksJson;
+  augury: AuguryData;
+  sites: SitesData;
+}): RewardSelectionData {
+  const tuning = {
+    bandFraction: input.tides.selection.bandFraction,
+    bandMinimum: input.tides.selection.bandMinimum,
+    minDeckForPurge: input.sites.selection.minDeckForPurge,
+    subtypeMinPoolCards: input.augury.selection.subtypeMinPoolCards,
+    costBands: input.augury.selection.costBands,
+    placeableSiteTypes: input.sites.selection.placeableTypes,
+  } as const;
+  const payload = { schemaVersion: 2 as const, rulesVersion: "2" as const, tuning };
+  const contentHash = stableDigest(payload);
+  return { ...payload, contentHash, foldHash: contentHash };
 }

@@ -33,10 +33,6 @@ function fixture() {
     "canonical source\n",
   );
   writeFileSync(join(rootDir, "data", "tides.ron"), "canonical tides source\n");
-  writeFileSync(
-    join(rootDir, "data", "dream_avatar_tide_pools.ron"),
-    "canonical tide pools source\n",
-  );
   const data = {
     dreamAvatars: [
       {
@@ -217,7 +213,7 @@ describe("DreamAvatar canonical RON editor API", () => {
     expect(saved.status).toBe(200);
     expect(publishEdit).toHaveBeenCalledWith(
       expect.objectContaining({
-        dataset: "dream-avatar-tide-pools",
+        dataset: "dream-avatars",
         operations: [
           {
             operation: "set_dream_avatar_tide_pool",
@@ -274,10 +270,6 @@ describe("DreamAvatar canonical RON editor API", () => {
         join(rootDir, "data", "tides.ron"),
         "utf8",
       );
-      const tidePoolsBefore = readFileSync(
-        join(rootDir, "data", "dream_avatar_tide_pools.ron"),
-        "utf8",
-      );
       const failure = Object.assign(new Error(`${code}: fixture failure`), {
         code,
         currentSourceRevision: "revision-current",
@@ -314,12 +306,6 @@ describe("DreamAvatar canonical RON editor API", () => {
       expect(readFileSync(join(rootDir, "data", "tides.ron"), "utf8")).toBe(
         tidesBefore,
       );
-      expect(
-        readFileSync(
-          join(rootDir, "data", "dream_avatar_tide_pools.ron"),
-          "utf8",
-        ),
-      ).toBe(tidePoolsBefore);
     },
   );
 });

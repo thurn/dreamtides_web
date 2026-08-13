@@ -13,12 +13,7 @@ import { homedir } from "node:os";
 import { pathToFileURL } from "node:url";
 import { parse } from "smol-toml";
 import { compileCardRoleData } from "./card-role-data.mjs";
-import {
-  CARD_ID_RE,
-  readAdaptedRecordDecklistIds,
-  resolveToken,
-  stripJsonComments,
-} from "./lib/card-refs.mjs";
+import { resolveToken } from "./lib/card-refs.mjs";
 import {
   readTutorialConfiguration,
   validateTutorialCatalogReferences,
@@ -26,7 +21,6 @@ import {
 import { collectAtlasAssetSources, compileAtlasData } from "./atlas-data.mjs";
 import { compileEconomyData } from "./economy-data.mjs";
 import { compileDraftData } from "./draft-data.mjs";
-import { compileRewardSelectionData } from "./reward-selection-data.mjs";
 import { compileAuguryData } from "./augury-data.mjs";
 import {
   isRewardCardPredicate,
@@ -60,7 +54,6 @@ import { compileTidesData } from "./tides-data.mjs";
 
 // Re-exported for `setup-assets.test.mjs`, which exercises the JSONC comment
 // stripper alongside the asset-build helpers defined here.
-export { stripJsonComments };
 
 /** Compile the authored opponent catalog and write its browser artifact. */
 export function generateOpponentsData({
@@ -352,173 +345,6 @@ export function transformCard(card) {
 }
 
 /**
- * Bundle adapted draft records from `docs/draft_records_adapted` into a flat
- * array of per-human-seat corpus entries.
- *
- * Each file is JSONC (`docs/draft_records_adapted/*.jsonc` carry inline `//`
- * card-name comments written by `add-uuids-to-draft-records.mjs`); the comments
- * are stripped before parsing. Each file must have a `seats` array; files without
- * it (e.g. a name dictionary) are silently skipped. Within each file, a seat is
- * included when:
- *   1. Its `mainboard` array is non-empty.
- *   2. After trimming to the first three packs (each cut to `pickInPack <= 10`),
- *      the seat has exactly 30 trimmed picks (10 per pack). Anything else — an
- *      incomplete record, or a non-standard pack layout — drops the seat.
- *
- * The corpus stores each card as its stable cards_v2 UUID. A token that is not a
- * UUID for a known card is dropped from whichever mainboard/pack/pick array it
- * appears in; the total is logged. Storing the id is what makes the corpus
- * rename-proof: a renamed card keeps its id, so its picks survive and the bundle
- * just refreshes the display name from `idToName`.
- *
- * Returns one entry per surviving seat:
- *   `{ id, draftId, sourceFile, mainboard, mainboardIds, packs, picks, packIds,
- *   pickIds }`. `mainboard` is the seat's kept cards as CURRENT display names and
- *   `mainboardIds` is the matching stable UUIDs, index-for-index (so a consumer
- *   can key on ids and stay correct when two cards share a name). `packs[i]`/
- *   `picks[i]` are the i-th trimmed pick's cards as current display names, and
- *   `packIds[i]`/`pickIds[i]` are the matching stable UUIDs, index-for-index.
- *   With the default options all four pick arrays have length 30.
- *
- */
-export function buildDraftRecords(dir, cardMaps) {
-  const { idToName } = cardMaps;
-  let droppedNames = 0;
-  let skippedIncomplete = 0;
-
-  const records = [];
-
-  for (const filename of readdirSync(dir)
-    .filter((f) => f.endsWith(".jsonc"))
-    .sort()) {
-    const raw = JSON.parse(
-      stripJsonComments(readFileSync(join(dir, filename), "utf8")),
-    );
-    if (!Array.isArray(raw.seats)) continue;
-
-    const { draftId } = raw;
-
-    /**
-     * Resolve an array of card tokens (stable cards_v2 UUIDs) to current names +
-     * ids. A token that is not a UUID for a known card is dropped (incrementing
-     * the global counter), so the returned `names` and `ids` stay index-aligned.
-     */
-    function resolve(tokens) {
-      const outNames = [];
-      const outIds = [];
-      for (const token of tokens) {
-        if (CARD_ID_RE.test(token) && idToName.has(token)) {
-          outNames.push(idToName.get(token));
-          outIds.push(token);
-        } else {
-          droppedNames++;
-        }
-      }
-      return { names: outNames, ids: outIds };
-    }
-
-    for (const seatData of raw.seats) {
-      const { seat, mainboard: rawMainboard, picks: rawPicks } = seatData;
-
-      // Skip seats without a non-empty mainboard or a picks array.
-      if (!Array.isArray(rawMainboard) || rawMainboard.length === 0) continue;
-      if (!Array.isArray(rawPicks)) continue;
-
-      // Trim to the first three packs, each cut to its first ten picks, sorted
-      // by pickNumber ascending. This drops the smallest late-pack offers
-      // (pickInPack 11+) and any packs beyond the third, so a standard 3x15
-      // draft and the first three packs of a 4+ pack draft both yield 30 picks.
-      const trimmed = rawPicks
-        .filter((p) => p.pack >= 1 && p.pack <= 3 && p.pickInPack <= 10)
-        .sort((a, b) => a.pickNumber - b.pickNumber);
-
-      if (trimmed.length !== 30) {
-        skippedIncomplete++;
-        continue;
-      }
-
-      const resolvedMainboard = resolve(rawMainboard);
-      const resolvedPacks = trimmed.map((p) => resolve(p.packCards));
-      const resolvedPicks = trimmed.map((p) => resolve(p.pick));
-
-      records.push({
-        id: `${draftId}#${seat}`,
-        draftId,
-        sourceFile: filename,
-        mainboard: resolvedMainboard.names,
-        mainboardIds: resolvedMainboard.ids,
-        packs: resolvedPacks.map((r) => r.names),
-        picks: resolvedPicks.map((r) => r.names),
-        packIds: resolvedPacks.map((r) => r.ids),
-        pickIds: resolvedPicks.map((r) => r.ids),
-      });
-    }
-  }
-
-  if (skippedIncomplete > 0) {
-    console.log(
-      `Skipped ${skippedIncomplete} draft seats that did not yield exactly 30 trimmed picks`,
-    );
-  }
-  if (droppedNames > 0) {
-    console.log(
-      `Dropped ${droppedNames} unresolved card names from draft records`,
-    );
-  }
-
-  return records;
-}
-
-/**
- * Build the known-good decklists corpus artifact from the manifest at
- * `docs/known_good_decklists.json`. Each entry in the manifest identifies a
- * specific (draftId, seat) pair that has been curated as a high-quality
- * example deck; this function resolves those seats from the adapted draft
- * records and projects them to the slim `{ id, draftId, seat, name,
- * mainboardIds }` shape consumed by the corpus opponent-deck algorithm.
- *
- * `requireFullPicks: false` is intentional — many curated decklists come from
- * drafts that did not use a standard 3×15 pack layout, so the standard 30-pick
- * trim would drop them. The corpus only needs the mainboard, not the pack
- * sequence, so relaxed trimming is correct here.
- *
- * @param {string} manifestPath - path to `docs/known_good_decklists.json`
- * @param {string} draftRecordsAdaptedDir - path to `docs/draft_records_adapted/`
- * @param {{ idToName: Map<string,string> }} cardMaps
- * @returns {Array<{ id: string, draftId: string, seat: number, name: string, mainboardIds: string[] }>}
- */
-export function buildKnownGoodDecklists(
-  manifestPath,
-  draftRecordsAdaptedDir,
-  cardMaps,
-) {
-  const parsed = JSON.parse(readFileSync(manifestPath, "utf8"));
-  const decklists = parsed.decklists;
-
-  const seatFilter = new Set(decklists.map((d) => `${d.draftId}#${d.seat}`));
-  const nameByKey = new Map(
-    decklists.map((d) => [`${d.draftId}#${d.seat}`, d.name]),
-  );
-
-  const records = buildDraftRecords(draftRecordsAdaptedDir, cardMaps, {
-    seatFilter,
-    requireFullPicks: false,
-  });
-
-  return records.map((record) => {
-    const { id } = record;
-    const seat = Number(id.split("#")[1]);
-    return {
-      id,
-      draftId: record.draftId,
-      seat,
-      name: nameByKey.get(id) ?? "",
-      mainboardIds: record.mainboardIds.map((x) => x.toLowerCase()),
-    };
-  });
-}
-
-/**
  * Build the `idToName` lookup map from the parsed cards_v2 records. The `id`
  * UUID is the stable key every card-reference system uses; the map resolves a
  * reference UUID back to the current display name for the render boundary.
@@ -532,23 +358,6 @@ export function buildCardMaps(cardsV2) {
     idToName.set(card.id, card.name);
   }
   return { idToName };
-}
-
-/**
- * Fail the build if any UUID in `keys` is not a real cards_v2 card. `label`
- * names the source file for the error message.
- */
-export function validateCardIds(keys, idToName, label) {
-  const unknown = [];
-  for (const key of keys) {
-    if (!CARD_ID_RE.test(key) || !idToName.has(key)) unknown.push(key);
-  }
-  if (unknown.length > 0) {
-    throw new Error(
-      `${label} references ${String(unknown.length)} unknown card id(s): ` +
-        unknown.slice(0, 5).join(", "),
-    );
-  }
 }
 
 /**
@@ -679,6 +488,9 @@ export function transformDreamsign(dreamsign, altTextByImageName = new Map()) {
       altTextByImageName.get(dreamsign.image_name) ??
       `${dreamsign.name} Dreamsign artwork`,
     effectDescription: dreamsign["rendered-text"] ?? "",
+    rarity: dreamsign.rarity,
+    tideIds: dreamsign["tide-ids"],
+    tags: dreamsign.tags ?? [],
   };
 }
 
@@ -1429,18 +1241,6 @@ function readDreamsignAltText(dreamsignArtDir) {
 }
 
 /**
- * Convert a TOML dreamsign-profiles record to its runtime JSON representation,
- * converting kebab-case keys to camelCase.
- */
-export function transformDreamsignProfile(profile) {
-  const result = {};
-  for (const [key, value] of Object.entries(profile)) {
-    result[kebabToCamel(key)] = value;
-  }
-  return result;
-}
-
-/**
  * Convert a TOML dreamscape record to its runtime JSON representation. Keys are
  * renamed kebab->camel. The starter dreamscape omits `guide-id`/`affiliation-id`
  * in the TOML; those normalize to `null` so the runtime always sees an explicit
@@ -1663,13 +1463,10 @@ export function setupAssets({
   dreamAvatarV2TomlPath = join(DATA_DIR, "dream_avatars.toml"),
   dreamwellTomlPath = join(DATA_DIR, "dreamwell.toml"),
   dreamsignTomlPath = join(DATA_DIR, "dreamsigns.toml"),
-  dreamsignProfilesTomlPath = join(DATA_DIR, "dreamsign_profiles.toml"),
-  dreamsignSignaturesTomlPath = join(DATA_DIR, "dreamsign_signatures.toml"),
   dreamscapesTomlPath = join(DATA_DIR, "dreamscapes.toml"),
   dreamGuidesTomlPath = join(DATA_DIR, "dream_guides.toml"),
   sitesTomlPath = join(DATA_DIR, "sites.toml"),
   explorationTomlPath = join(DATA_DIR, "exploration.toml"),
-  rewardSelectionTomlPath = join(DATA_DIR, "reward_selection.toml"),
   auguryTomlPath = join(DATA_DIR, "augury.toml"),
   affiliationsTomlPath = join(DATA_DIR, "affiliations.toml"),
   atlasTomlPath = join(DATA_DIR, "atlas.toml"),
@@ -1683,7 +1480,6 @@ export function setupAssets({
   apollyonIncarnationsTomlPath = join(DATA_DIR, "apollyon_incarnations.toml"),
   figmentTomlPath = join(DATA_DIR, "figments.toml"),
   tutorialTomlPath = join(DATA_DIR, "tutorial.toml"),
-  merchantCorpusJsonPath = join(DATA_DIR, "merchant_corpus.json"),
   publicDir = PUBLIC_DIR,
   generatedConfigDir = join(ROOT, "src", "generated", "config"),
   imageCacheDir = IMAGE_CACHE_DIR,
@@ -1727,30 +1523,14 @@ export function setupAssets({
   const atlasArtDir = join(publicDir, "atlas");
   const cardJsonPath = join(publicDir, "card-data.json");
   const cardV2JsonPath = join(publicDir, "cards_v2-data.json");
-  const decklistIdsJsonPath = join(publicDir, "decklist-ids-data.json");
-  const draftRecordsAdaptedDir = join(ROOT, "docs", "draft_records_adapted");
-  const draftRecordsJsonPath = join(publicDir, "draft-records-data.json");
   const dreamAvatarV2JsonPath = join(publicDir, "dream-avatars-v2-data.json");
   const dreamwellJsonPath = join(publicDir, "dreamwell-data.json");
   const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
-  const dreamsignProfilesJsonPath = join(
-    publicDir,
-    "dreamsign-profiles-data.json",
-  );
-  const dreamsignSignaturesJsonPath = join(
-    publicDir,
-    "dreamsign-signatures-data.json",
-  );
   const dreamscapesJsonPath = join(publicDir, "dreamscapes-data.json");
   const dreamGuidesJsonPath = join(publicDir, "dream-guides-data.json");
   const sitesJsonPath = join(publicDir, "sites-data.json");
   const explorationJsonPath = join(publicDir, "exploration-data.json");
-  const rewardSelectionJsonPath = join(publicDir, "reward-selection-data.json");
   const auguryJsonPath = join(publicDir, "augury-data.json");
-  const generatedRewardSelectionJsonPath = join(
-    generatedConfigDir,
-    "reward-selection-data.json",
-  );
   const generatedAuguryJsonPath = join(generatedConfigDir, "augury-data.json");
   const generatedDraftJsonPath = join(generatedConfigDir, "draft-data.json");
   const affiliationsJsonPath = join(publicDir, "affiliations-data.json");
@@ -1776,7 +1556,6 @@ export function setupAssets({
   );
   const figmentJsonPath = join(publicDir, "figments-data.json");
   const tutorialJsonPath = join(publicDir, "tutorial-data.json");
-  const merchantCorpusPublicPath = join(publicDir, "merchant-corpus-data.json");
   const journeyExtensionJsonPath = join(journeysDir, "imageId-extension.json");
 
   const { jsonCards, jsonCardsV2, cardMaps } = regenerateCardData({
@@ -1816,57 +1595,20 @@ export function setupAssets({
     `Wrote ${tutorialConfiguration.actions.length} tutorial actions and ${tutorialConfiguration.triggers.length} triggers to tutorial-data.json`,
   );
 
-  // Stable-UUID decklists back affiliation scoring. Each non-empty mainboard in
-  // the adapted draft records contributes one deck.
-  const decklistIds = readAdaptedRecordDecklistIds(
-    draftRecordsAdaptedDir,
-    cardMaps,
-  );
-  writeFileSync(decklistIdsJsonPath, JSON.stringify(decklistIds) + "\n");
-  console.log(
-    `Wrote ${decklistIds.length} id-keyed decklists to decklist-ids-data.json`,
-  );
-
-  // Adapted draft records bundled for corpus-backed scoring. Each JSON file
-  // in `docs/draft_records_adapted` is
-  // one draft event; we extract one entry per seat (trimmed to the first 10 picks
-  // per pack) and write the flat array to the browser bundle.
-  console.log("Bundling adapted draft records from the corpus...");
-  const draftRecords = buildDraftRecords(draftRecordsAdaptedDir, cardMaps);
-  writeFileSync(draftRecordsJsonPath, JSON.stringify(draftRecords) + "\n");
-  console.log(
-    `Wrote ${draftRecords.length} draft-record seats to draft-records-data.json`,
-  );
-
-  console.log("Bundling known-good decklists corpus...");
-  const knownGoodDecklists = buildKnownGoodDecklists(
-    join(ROOT, "docs", "known_good_decklists.json"),
-    draftRecordsAdaptedDir,
-    cardMaps,
-  );
-  writeFileSync(
-    join(publicDir, "known-good-decklists-data.json"),
-    JSON.stringify(knownGoodDecklists) + "\n",
-  );
-  console.log(
-    `Wrote ${knownGoodDecklists.length} known-good decklists to known-good-decklists-data.json`,
-  );
-
   // The compiled projection of the manually curated tide decks and per-avatar
   // pool composition consumed by the tides4 pool variant.
   const tidesSourcePath = join(DATA_DIR, "tides.toml");
-  const tidePoolsSourcePath = join(DATA_DIR, "dream_avatar_tide_pools.toml");
   const tides4JsonPath = join(publicDir, "tides4-data.json");
-  if (existsSync(tidesSourcePath) && existsSync(tidePoolsSourcePath)) {
+  if (existsSync(tidesSourcePath) && existsSync(dreamAvatarV2TomlPath)) {
     const served = compileTidesData(
       parse(readFileSync(tidesSourcePath, "utf8")),
-      parse(readFileSync(tidePoolsSourcePath, "utf8")),
+      parse(readFileSync(dreamAvatarV2TomlPath, "utf8")),
     );
     writeFileSync(tides4JsonPath, `${JSON.stringify(served)}\n`);
     console.log("Compiled tide catalogs to tides4-data.json");
   } else {
     console.log(
-      "No compiled tides or Dream Avatar tide pools found; run `npm run game-data:compile`.",
+      "No compiled tides or Dream Avatars found; run `npm run game-data:compile`.",
     );
   }
 
@@ -2018,67 +1760,6 @@ export function setupAssets({
     `Wrote ${explorationData.encounters.length} Exploration encounters to exploration-data.json`,
   );
 
-  // Dreamsign profiles: parse the curated TOML and write the kebab->camel JSON
-  // the runtime loader fetches.
-  console.log("Parsing dreamsign_profiles.toml...");
-  const dreamsignProfilesTomlContent = readFileSync(
-    dreamsignProfilesTomlPath,
-    "utf8",
-  );
-  const parsedDreamsignProfiles = parse(dreamsignProfilesTomlContent);
-  const allDreamsignProfiles = parsedDreamsignProfiles.dreamsigns;
-
-  if (!Array.isArray(allDreamsignProfiles)) {
-    throw new Error("Expected [[dreamsigns]] array in dreamsign_profiles.toml");
-  }
-
-  const jsonDreamsignProfiles = allDreamsignProfiles.map(
-    transformDreamsignProfile,
-  );
-  writeFileSync(
-    dreamsignProfilesJsonPath,
-    JSON.stringify(jsonDreamsignProfiles, null, 2) + "\n",
-  );
-  console.log(
-    `Wrote ${jsonDreamsignProfiles.length} dreamsign profiles to dreamsign-profiles-data.json`,
-  );
-
-  // Dreamsign signatures: the neutral/tailored classification artifact. Each
-  // dreamsign is either neutral (works in any deck) or tailored (has a curated
-  // set of signature card ids). Validate all signature-card-ids against the card
-  // database so a dangling UUID fails the build loudly.
-  console.log("Parsing dreamsign_signatures.toml...");
-  const dreamsignSignaturesTomlContent = readFileSync(
-    dreamsignSignaturesTomlPath,
-    "utf8",
-  );
-  const parsedDreamsignSignatures = parse(dreamsignSignaturesTomlContent);
-  const allDreamsignSignatures = parsedDreamsignSignatures.dreamsigns;
-
-  if (!Array.isArray(allDreamsignSignatures)) {
-    throw new Error(
-      "Expected [[dreamsigns]] array in dreamsign_signatures.toml",
-    );
-  }
-
-  const jsonDreamsignSignatures = allDreamsignSignatures.map(
-    transformDreamsignProfile,
-  );
-  for (const entry of jsonDreamsignSignatures) {
-    validateCardIds(
-      entry.signatureCardIds ?? [],
-      cardMaps.idToName,
-      `dreamsign_signatures.toml (${entry.id})`,
-    );
-  }
-  writeFileSync(
-    dreamsignSignaturesJsonPath,
-    JSON.stringify(jsonDreamsignSignatures, null, 2) + "\n",
-  );
-  console.log(
-    `Wrote ${jsonDreamsignSignatures.length} dreamsign signatures to dreamsign-signatures-data.json`,
-  );
-
   console.log("Parsing dream_guides.toml...");
   const parsedDreamGuides = parse(readFileSync(dreamGuidesTomlPath, "utf8"));
   const parsedDreamscapes = parse(readFileSync(dreamscapesTomlPath, "utf8"));
@@ -2128,9 +1809,8 @@ export function setupAssets({
     `Wrote ${jsonDreamscapes.length} dreamscapes to dreamscapes-data.json`,
   );
 
-  // Affiliations: the thematic factions backing each dreamscape. Signature
-  // cards are authored as stable cards_v2 UUIDs; validate them against the card
-  // database up front so a dangling UUID fails the build loudly.
+  // Affiliations: the thematic factions backing each dreamscape. Each one is
+  // defined by exactly three canonical tide UUIDs.
   console.log("Parsing affiliations.toml...");
   const affiliationsTomlContent = readFileSync(affiliationsTomlPath, "utf8");
   const parsedAffiliations = parse(affiliationsTomlContent);
@@ -2141,12 +1821,20 @@ export function setupAssets({
   }
 
   const jsonAffiliations = allAffiliations.map(transformAffiliation);
+  const knownTideIds = new Set(
+    (parse(readFileSync(tidesSourcePath, "utf8")).tide ?? []).map(
+      (tide) => tide.id,
+    ),
+  );
   for (const affiliation of jsonAffiliations) {
-    validateCardIds(
-      affiliation.signatureCards ?? [],
-      cardMaps.idToName,
-      `affiliations.toml (${affiliation.id})`,
-    );
+    if (!Array.isArray(affiliation.tideIds) || affiliation.tideIds.length !== 3) {
+      throw new Error(`affiliations.toml (${affiliation.id}) must declare exactly three tides`);
+    }
+    for (const tideId of affiliation.tideIds) {
+      if (!knownTideIds.has(tideId)) {
+        throw new Error(`affiliations.toml (${affiliation.id}) references unknown tide ${tideId}`);
+      }
+    }
   }
   writeFileSync(
     affiliationsJsonPath,
@@ -2250,20 +1938,6 @@ export function setupAssets({
   writeFileSync(generatedDraftJsonPath, serializedDraftData);
   console.log("Wrote Draft data to draft-data.json");
 
-  console.log("Parsing reward_selection.toml...");
-  const jsonRewardSelectionData = compileRewardSelectionData(
-    parse(readFileSync(rewardSelectionTomlPath, "utf8")),
-  );
-  const serializedRewardSelectionData =
-    JSON.stringify(jsonRewardSelectionData, null, 2) + "\n";
-  mkdirSync(generatedConfigDir, { recursive: true });
-  writeFileSync(rewardSelectionJsonPath, serializedRewardSelectionData);
-  writeFileSync(
-    generatedRewardSelectionJsonPath,
-    serializedRewardSelectionData,
-  );
-  console.log("Wrote reward selection data to reward-selection-data.json");
-
   console.log("Parsing augury.toml...");
   const jsonAuguryData = compileAuguryData(
     parse(readFileSync(auguryTomlPath, "utf8")),
@@ -2323,21 +1997,6 @@ export function setupAssets({
   const jsonFigments = allFigments.map(transformFigment);
   writeFileSync(figmentJsonPath, JSON.stringify(jsonFigments, null, 2) + "\n");
   console.log(`Wrote ${jsonFigments.length} figments to figments-data.json`);
-
-  // Merchant corpus: copy the baked artifact as-is to the public directory so
-  // the runtime loader can fetch it as /merchant-corpus-data.json.  If the
-  // file has not been baked yet (`npm run bake-merchant-corpus`), warn and
-  // continue — the merchant will fall back to an empty corpus at runtime.
-  if (existsSync(merchantCorpusJsonPath)) {
-    const corpusJson = readFileSync(merchantCorpusJsonPath, "utf8");
-    writeFileSync(merchantCorpusPublicPath, corpusJson);
-    console.log("Copied merchant_corpus.json to merchant-corpus-data.json");
-  } else {
-    console.warn(
-      "  Warning: no data/merchant_corpus.json found; the dream merchant will " +
-        "have no corpus signals until `npm run bake-merchant-corpus` is run.",
-    );
-  }
 
   // Create card image symlinks
   recreateDir(cardsDir);

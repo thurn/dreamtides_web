@@ -43,7 +43,7 @@ describe("exploration logging view model", () => {
           transfiguration: "Kindled" as const,
         },
       ],
-      selectionRulesVersion: "1" as const,
+      selectionRulesVersion: "2" as const,
       selectionContentRevision: "content-revision",
       selectionKey: actionId,
       selectorSignatures: ["selector-signature"],
@@ -862,7 +862,7 @@ describe("exploration logging view model", () => {
         poolRegenerated: true,
       };
       const selectionTrace = {
-        selectionRulesVersion: "1",
+        selectionRulesVersion: "2",
         selectionContentRevision: "dreamsign-content-revision",
         mechanicId: "gain-dreamsign",
         policyId: "uniform",
@@ -908,7 +908,7 @@ describe("exploration logging view model", () => {
       const runtime = {
         kind: "exploration",
         encounterCardId: "b0000000-0000-4000-8000-000000000007",
-        selectionRulesVersion: "1",
+        selectionRulesVersion: "2",
         selectionContentRevision: "dreamsign-content-revision",
         encounterSignature: "encounter-signature",
         actionOffers: [
@@ -916,7 +916,7 @@ describe("exploration logging view model", () => {
             actionId,
             canonicalMechanicId: "gain-dreamsign",
             selectionPolicyId: "uniform",
-            selectionRulesVersion: "1",
+            selectionRulesVersion: "2",
             selectionContentRevision: "dreamsign-content-revision",
             selectionKey: "dreamsign-selection-key",
             selectionSignature: "selector-signature",
@@ -931,7 +931,7 @@ describe("exploration logging view model", () => {
         ],
         resolution: {
           actionId,
-          selectionRulesVersion: "1",
+          selectionRulesVersion: "2",
           selectionContentRevision: "dreamsign-content-revision",
           encounterSignature: "encounter-signature",
           selectionSignature: "selector-signature",
@@ -2334,7 +2334,7 @@ describe("exploration logging view model", () => {
       cardType: "Character" as const,
       eligibleCards: [target],
       target,
-      selectionRulesVersion: "1" as const,
+      selectionRulesVersion: "2" as const,
       selectionContentRevision: "disclosed-content-revision",
       selectionKey: `${actionId}:disclosed-deck-target`,
       selectorSignature: "disclosed-selector-signature",

@@ -4,7 +4,6 @@ import {
   makeMerchantTestCard,
   makeMerchantTestContent,
   makeMerchantTestDeckEntry,
-  makeMerchantTestFitModel,
   makeMerchantTestJourneyState,
   makeMerchantTestResolvedPackage,
   makeMerchantTestSite,
@@ -111,7 +110,7 @@ describe("shared reward selection", () => {
     if (!forward.ok) return;
     expect(new Set(forward.bindings.cardUuids).size).toBe(4);
     expect(forward.trace.saltParts).toEqual([
-      "1",
+      "2",
       "selection-seed",
       "selection-site",
       "action-a",
@@ -186,19 +185,11 @@ describe("shared reward selection", () => {
     expect(result.ok && result.bindings.dreamsignIds).toEqual([customDreamsignId]);
   });
 
-  it("includes every reward-selection input in the content revision", () => {
+  it("includes authored affinity inputs in the content revision", () => {
     const base = context();
     const cards = [...base.content.cardDatabase.values()];
     const journey = makeMerchantTestJourneyState({ seed: "selection-seed" });
     const site = makeMerchantTestSite({ id: "selection-site", type: "Exploration" });
-    const withFitModel = buildRewardSelectionContext({
-      journeyState: journey,
-      journeyContent: makeMerchantTestContent({
-        cards,
-        fitModel: makeMerchantTestFitModel(),
-      }),
-      site,
-    });
     const withAvatar = buildRewardSelectionContext({
       journeyState: journey,
       journeyContent: {
@@ -216,8 +207,6 @@ describe("shared reward selection", () => {
       site,
     });
 
-    expect(withFitModel.selectionContentRevision)
-      .not.toBe(base.selectionContentRevision);
     expect(withAvatar.selectionContentRevision)
       .not.toBe(base.selectionContentRevision);
   });

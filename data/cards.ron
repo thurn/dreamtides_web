@@ -9,6 +9,7 @@
     amplified_text: [Tx("▸Challenge: Banish an enemy until your next turn.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 454095982, crop: (x: -0.426, y: 1.0, scale: 1.37)),
   ),
 
@@ -20,6 +21,7 @@
     energy_cost: Fixed(2),
     kind: Character(subtype: "Guide", spark: Fixed(2)),
     speed: Fast,
+    rarity: Uncommon,
     art: (image: 2022594419),
   ),
 
@@ -30,6 +32,7 @@
     energy_cost: Fixed(4),
     kind: Event,
     speed: Interrupt,
+    rarity: Uncommon,
     art: (image: 618071684, crop: (x: 0.0, y: 1.0, scale: 1.1)),
   ),
 
@@ -40,6 +43,7 @@
     amplified_text: [Tx("▸Dawn: Gain 2●."), Tx("4●, ☾: This character gains +1✦.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(0)),
+    rarity: Uncommon,
     art: (image: 1196004046, crop: (x: -0.056, y: 1.0, scale: 1.67)),
   ),
 
@@ -49,6 +53,7 @@
     ability_text: [Tx("Rematerialize a character you control."), Tx("Reclaim 1●.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Common,
     art: (image: 2212744813, crop: (x: -0.21, y: 1.0, scale: 1.17)),
   ),
 
@@ -65,6 +70,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2218612335, crop: (x: -0.129, y: 0.897, scale: 1.07)),
   ),
 
@@ -78,6 +84,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Event,
+    rarity: Rare,
     art: (image: 1480584617, crop: (x: 0.21, y: 0.369, scale: 1.17)),
   ),
 
@@ -87,6 +94,7 @@
     ability_text: [Tx("❖ – ☾: Draw a card, then discard a card.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Hacker", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1633431265, owned: true),
   ),
 
@@ -103,6 +111,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 2189428523, crop: (x: -0.042, y: 0.032, scale: 1.17)),
   ),
 
@@ -117,6 +126,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Rare,
     art: (image: 1562815903),
   ),
 
@@ -127,6 +137,7 @@
     amplified_text: [Tx("Gain 5●.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Common,
     art: (image: 1164289066, crop: (x: 0.084, y: 1.0, scale: 1.17)),
   ),
 
@@ -137,6 +148,7 @@
     amplified_text: [Tx("Draw 2 cards. The opponent gains 1⍟.")],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 389999815, owned: true, crop: (x: 0.353, y: 1.0, scale: 1.17)),
   ),
 
@@ -150,6 +162,7 @@
     ],
     energy_cost: Fixed(7),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 1913887486, crop: (x: -0.294, y: -0.102, scale: 1.17)),
   ),
 
@@ -161,6 +174,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 347770439),
   ),
 
@@ -171,6 +185,7 @@
     amplified_text: [Tx("▸Materialized, Dawn: If you control 2 or more warriors, gain 1●.")],
     energy_cost: Fixed(0),
     kind: Character(subtype: "Warrior", spark: Fixed(0)),
+    rarity: Rare,
     art: (image: 1047769090, crop: (x: -0.294, y: 1.0, scale: 1.17)),
   ),
 
@@ -180,6 +195,7 @@
     ability_text: [Tx("When you play an event, draw a card, then discard a card.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Tinkerer", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 686903233, crop: (x: 0.0, y: 0.489, scale: 1.47)),
   ),
 
@@ -189,6 +205,7 @@
     ability_text: [Tx("When you play an event, awaken each character you control.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Musician", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 457875112, crop: (x: 0.0, y: 0.798, scale: 1.17)),
   ),
 
@@ -203,6 +220,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Musician", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1794244540),
   ),
 
@@ -212,6 +230,7 @@
     ability_text: [Tx("▸Materialized: Discover a ≤2✦ character.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 2256745741, crop: (x: 0.0, y: 1.0, scale: 1.16)),
   ),
 
@@ -221,6 +240,7 @@
     ability_text: [Tx("Choose a value of X. Discover an event with cost X.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Rare,
     art: (image: 1798382125, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -233,6 +253,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2287436067, crop: (x: -0.126, y: 0.0, scale: 1.17)),
   ),
 
@@ -242,6 +263,7 @@
     ability_text: [Tx("When you discard a card, you may play that card from your void this turn.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 768349747, crop: (x: 0.147, y: -0.216, scale: 1.47)),
   ),
 
@@ -254,6 +276,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 512756368, crop: (x: 1.0, y: 0.266, scale: 1.27)),
   ),
 
@@ -276,6 +299,7 @@
     ],
     energy_cost: Fixed(0),
     kind: Character(subtype: "Entity", spark: Fixed(0)),
+    rarity: Uncommon,
     art: (image: 443761774, owned: true),
   ),
 
@@ -286,6 +310,7 @@
     amplified_text: [Tx("Abandon another character: Gain 3●.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1450052381, crop: (x: -0.08, y: 0.586, scale: 1.2)),
   ),
 
@@ -295,6 +320,7 @@
     ability_text: [Tx("Events cost you 1● more."), Tx("When you play an event, copy it.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Tinkerer", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2027158298, crop: (x: 0.0, y: 0.0, scale: 1.57)),
   ),
 
@@ -305,6 +331,7 @@
     amplified_text: [Tx("When you play an event, foresee 2.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visionary", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1963305277, crop: (x: 0.546, y: 1.0, scale: 1.17)),
   ),
 
@@ -319,6 +346,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Synth", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 678431950),
   ),
 
@@ -329,6 +357,7 @@
     amplified_text: [Tx("▸Materialized: Dissolve a ≤3✦ enemy.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Monster", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 1450052378, crop: (x: 0.0, y: 1.0, scale: 1.37)),
   ),
 
@@ -340,6 +369,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Interrupt,
+    rarity: Rare,
     art: (image: 674166682, crop: (x: 0.0, y: -0.445, scale: 1.37)),
   ),
 
@@ -350,6 +380,7 @@
     amplified_text: [Tx("When you discard a card, this character gains +2✦.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1791664445, crop: (x: 0.0, y: -0.236, scale: 1.87)),
   ),
 
@@ -359,6 +390,7 @@
     ability_text: [Tx("Veil"), Tx("When you play a ≤2● cost character, gain 1●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
+    rarity: Rare,
     art: (image: 1788833075, owned: true, crop: (x: -0.084, y: 0.242, scale: 1.17)),
   ),
 
@@ -371,6 +403,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2287054239, owned: true, crop: (x: -0.022, y: -0.517, scale: 1.77)),
   ),
 
@@ -383,6 +416,7 @@
     energy_cost: Fixed(1),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
     speed: Fast,
+    rarity: Uncommon,
     art: (image: 2290648805, crop: (x: 0.0, y: -0.522, scale: 2.07)),
   ),
 
@@ -395,6 +429,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 472322395),
   ),
 
@@ -404,6 +439,7 @@
     ability_text: [Tx("When you materialize a figment, store 1⧗."), Tx("1⧗, ☾: Draw a card.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2590831715, crop: (x: 0.0, y: -0.51, scale: 1.47)),
   ),
 
@@ -416,6 +452,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Tinkerer", spark: Fixed(1)),
+    rarity: Rare,
     art: (image: 454095535, crop: (x: 0.0, y: -0.681, scale: 1.77)),
   ),
 
@@ -436,6 +473,7 @@
     amplified_text: [Tx("Once per turn, you may play a ≤3● cost character from your void.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Explorer", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 1084620233, owned: true, crop: (x: 0.0, y: -0.083, scale: 1.27)),
   ),
 
@@ -448,6 +486,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Ancient", spark: Fixed(4)),
+    rarity: Common,
     art: (image: 2320845229),
   ),
 
@@ -458,6 +497,7 @@
     amplified_text: [Tx("When you play an event, store 2⧗."), Tx("3⧗: This character gains +5✦.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Mage", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 533945362, crop: (x: 0.681, y: 0.126, scale: 1.8)),
   ),
 
@@ -471,6 +511,7 @@
     ],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 2275146333, crop: (x: -0.319, y: 0.028, scale: 1.47)),
   ),
 
@@ -480,6 +521,7 @@
     ability_text: [Tx("1●, Abandon this character: Return a character to its controller's hand.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1793552422, crop: (x: 0.375, y: 0.189, scale: 1.37)),
   ),
 
@@ -495,6 +537,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 776481895),
   ),
 
@@ -505,6 +548,7 @@
     amplified_text: [Tx("▸Materialized: Banish up to two cards from the opponent\'s void.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2278837667, crop: (x: -0.336, y: 0.369, scale: 1.17)),
   ),
 
@@ -515,6 +559,7 @@
     energy_cost: Fixed(2),
     kind: Character(subtype: "Vehicle", spark: Fixed(4)),
     speed: Fast,
+    rarity: Common,
     art: (image: 425039824, crop: (x: 0.0, y: -0.399, scale: 1.17)),
   ),
 
@@ -525,6 +570,7 @@
     amplified_text: [Tx("Abandon this character: Gain 2●.")],
     energy_cost: Fixed(0),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(0)),
+    rarity: Rare,
     art: (image: 447372529, crop: (x: -1.0, y: 1.0, scale: 1.3)),
   ),
 
@@ -537,6 +583,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2127752129, crop: (x: 0.084, y: 1.0, scale: 1.17)),
   ),
 
@@ -549,6 +596,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 1543022372, crop: (x: 0.168, y: 1.0, scale: 1.17)),
   ),
 
@@ -565,6 +613,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 410444932, crop: (x: -0.2, y: 0.298, scale: 1.0)),
   ),
 
@@ -577,6 +626,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 1639942843, crop: (x: 0.4, y: 1.0, scale: 1.17)),
   ),
 
@@ -595,6 +645,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 2427491215, owned: true, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -605,6 +656,7 @@
     amplified_text: [Tx("▸Materialized, Dissolved: Draw 2 cards with ephemeral.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1639942837, crop: (x: 0.588, y: 0.608, scale: 1.17)),
   ),
 
@@ -618,6 +670,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 499788403, crop: (x: -0.39, y: -0.308, scale: 1.87)),
   ),
 
@@ -630,6 +683,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1328168246, crop: (x: -0.042, y: 1.0, scale: 1.17)),
   ),
 
@@ -639,6 +693,7 @@
     ability_text: [Tx("Support – Supported characters have +1✦ for each warrior you control.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 1785274670, owned: true, crop: (x: -0.42, y: 0.369, scale: 1.17)),
   ),
 
@@ -651,6 +706,7 @@
     ],
     energy_cost: Fixed(5),
     kind: Character(subtype: "Synth", spark: Fixed(4)),
+    rarity: Common,
     art: (image: 603547823, crop: (x: 0.0, y: 1.0, scale: 1.0)),
   ),
 
@@ -661,6 +717,7 @@
     amplified_text: [Tx("▸Materialized: Discard 3 cards, then draw 3 cards.")],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Detective", spark: Fixed(5)),
+    rarity: Common,
     art: (image: 2127752126, owned: true, crop: (x: -0.046, y: 1.0, scale: 1.11)),
   ),
 
@@ -670,6 +727,7 @@
     ability_text: [Tx("▸Materialized: Draw a warrior.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 2191235669, crop: (x: -0.458, y: 1.0, scale: 1.47)),
   ),
 
@@ -680,6 +738,7 @@
     amplified_text: [Tx("Abandon another character: Foresee 2.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1419437210, crop: (x: 0.642, y: 1.0, scale: 1.87)),
   ),
 
@@ -690,6 +749,7 @@
     amplified_text: [Tx("Abandon this character: Gain 2●."), Tx("Reclaim 0●")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
+    rarity: Rare,
     art: (image: 2251144875, crop: (x: 0.597, y: 1.0, scale: 1.07)),
   ),
 
@@ -699,6 +759,7 @@
     ability_text: [Tx("▸Materialized: Return an event from your void to your hand.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Child", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 700253824, crop: (x: 0.0, y: 1.0, scale: 1.67)),
   ),
 
@@ -709,6 +770,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Fast,
+    rarity: Common,
     art: (image: 539226472, crop: (x: 0.171, y: 1.0, scale: 1.17)),
   ),
 
@@ -723,6 +785,7 @@
     energy_cost: Fixed(3),
     kind: Event,
     speed: Fast,
+    rarity: Uncommon,
     art: (image: 1037215606),
   ),
 
@@ -734,6 +797,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Interrupt,
+    rarity: Uncommon,
     art: (image: 1694993302, crop: (x: 0.0, y: 1.0, scale: 1.37)),
   ),
 
@@ -748,6 +812,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 682942729, owned: true, crop: (x: 0.0, y: 0.7, scale: 1.3)),
   ),
 
@@ -758,6 +823,7 @@
     amplified_text: [Tx("When you abandon a character, gain 2⍟.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Ancient", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 2131591277),
   ),
 
@@ -770,6 +836,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 436090600, crop: (x: -0.228, y: 1.0, scale: 1.17)),
   ),
 
@@ -780,6 +847,7 @@
     energy_cost: Fixed(3),
     kind: Character(subtype: "Monster", spark: Fixed(3)),
     speed: Fast,
+    rarity: Uncommon,
     art: (image: 1037215513, crop: (x: -0.504, y: -0.659, scale: 1.97)),
   ),
 
@@ -789,6 +857,7 @@
     ability_text: [Tx("When a character you control leaves play, gain 1⍟.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2438838893, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -800,6 +869,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Interrupt,
+    rarity: Uncommon,
     art: (image: 1924168811),
   ),
 
@@ -810,6 +880,7 @@
     amplified_text: [Tx("Draw 2 cards, then discard 1 card."), Tx("Reclaim 2●.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 776481901, crop: (x: 0.084, y: 0.31, scale: 1.17)),
   ),
 
@@ -820,6 +891,7 @@
     amplified_text: [Tx("Discard a card: This character gains +3✦ until end of turn.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Synth", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 1570031572, crop: (x: 0.0, y: 0.424, scale: 1.17)),
   ),
 
@@ -834,6 +906,7 @@
     ],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2023111778, crop: (x: 0.0, y: 0.0, scale: 1.47)),
   ),
 
@@ -844,6 +917,7 @@
     energy_cost: Fixed(4),
     kind: Character(subtype: "Outsider", spark: Fixed(2)),
     speed: Fast,
+    rarity: Uncommon,
     art: (image: 2212744819),
   ),
 
@@ -865,6 +939,7 @@
     amplified_text: [Tx("Dissolve a ≤4✦ enemy.")],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Common,
     art: (image: 2182865325, crop: (x: 0.336, y: 1.0, scale: 1.17)),
   ),
 
@@ -875,6 +950,7 @@
     amplified_text: [Tx("Veil"), Tx("Abandon a character: Gain 2⍟.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 515170831, crop: (x: 0.0, y: 1.0, scale: 1.37)),
   ),
 
@@ -884,6 +960,7 @@
     ability_text: [Tx("Abandon a character: Store 1⧗."), Tx("X⧗: Dissolve an enemy with X✦.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1026869440, crop: (x: 0.462, y: 1.0, scale: 1.1)),
   ),
 
@@ -893,6 +970,7 @@
     ability_text: [Tx("Players may only play one card per turn.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 735243058, crop: (x: -0.27, y: 0.416, scale: 1.67)),
   ),
 
@@ -903,6 +981,7 @@
     amplified_text: [Tx("1●, Abandon 2 warriors: Draw 2 cards.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 1219782721, crop: (x: 0.0, y: 1.0, scale: 1.36)),
   ),
 
@@ -913,6 +992,7 @@
     amplified_text: [Tx("When you play a warrior, materialize a 2✦ warrior figment.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Emissary", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 309018608, crop: (x: 0.206, y: -0.374, scale: 2.57)),
   ),
 
@@ -924,6 +1004,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Agent", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2216124455, crop: (x: 0.0, y: -0.533, scale: 1.67)),
   ),
 
@@ -937,6 +1018,7 @@
     ],
     energy_cost: Fixed(5),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 1798514905, crop: (x: 0.546, y: 1.0, scale: 1.17)),
   ),
 
@@ -947,6 +1029,7 @@
     amplified_text: [Tx("When you reclaim this character, it gains +2✦."), Tx("Reclaim 0●")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 2530615371, crop: (x: -0.084, y: -0.025, scale: 1.47)),
   ),
 
@@ -959,6 +1042,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 496761802, owned: true, crop: (x: -0.538, y: 0.897, scale: 1.07)),
   ),
 
@@ -968,6 +1052,7 @@
     ability_text: [Tx("▸Materialized: Choose an event in your void to gain reclaim.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Tinkerer", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2030910782, crop: (x: 0.084, y: -0.028, scale: 1.67)),
   ),
 
@@ -981,6 +1066,7 @@
     energy_cost: Fixed(4),
     kind: Event,
     speed: Fast,
+    rarity: Common,
     art: (image: 2261959341),
   ),
 
@@ -991,6 +1077,7 @@
     amplified_text: [Tx("▸Challenge: Discard your hand, then draw 4 cards.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 2675749427, crop: (x: 0.0, y: 0.15, scale: 1.66)),
   ),
 
@@ -1000,6 +1087,7 @@
     ability_text: [Tx("Dissolve each character with cost X●.")],
     energy_cost: FixedAndVariable(3),
     kind: Event,
+    rarity: Common,
     art: (image: 2269064813, crop: (x: -0.252, y: 1.0, scale: 1.17)),
   ),
 
@@ -1009,6 +1097,7 @@
     ability_text: [Tx("Return a character with cost X● to hand. Draw a card.")],
     energy_cost: Variable,
     kind: Event,
+    rarity: Common,
     art: (image: 1042405690, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -1022,6 +1111,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 1913887483, owned: true),
   ),
 
@@ -1032,6 +1122,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Fast,
+    rarity: Uncommon,
     art: (image: 793083760, crop: (x: 0.168, y: 0.032, scale: 1.17)),
   ),
 
@@ -1044,6 +1135,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 1486924802, owned: true, crop: (x: 0.0, y: -0.585, scale: 1.7)),
   ),
 
@@ -1053,6 +1145,7 @@
     ability_text: [Tx("Once per turn, when you discard one or more cards, draw that many cards.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Tinkerer", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1383318404, crop: (x: 0.0, y: 0.0, scale: 1.77)),
   ),
 
@@ -1067,6 +1160,7 @@
     energy_cost: Fixed(3),
     kind: Event,
     speed: Fast,
+    rarity: Common,
     art: (image: 1149594743, crop: (x: 0.0, y: 0.0, scale: 1.17)),
   ),
 
@@ -1076,6 +1170,7 @@
     ability_text: [Tx("If you have no cards in your deck, you win the game.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Rare,
     art: (image: 450440599, crop: (x: -0.334, y: -0.438, scale: 1.27)),
   ),
 
@@ -1085,6 +1180,7 @@
     ability_text: [Tx("This character has all character types."), Tx("Reclaim 0●")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "*", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 264681587, crop: (x: -0.512, y: -0.074, scale: 1.57)),
   ),
 
@@ -1095,6 +1191,7 @@
     amplified_text: [Tx("Veil"), Tx("▸Dawn: Gain 2●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 432001513, crop: (x: 0.0, y: 0.266, scale: 1.17)),
   ),
 
@@ -1107,6 +1204,7 @@
     energy_cost: Fixed(2),
     kind: Event,
     speed: Fast,
+    rarity: Common,
     art: (image: 2637215373, crop: (x: 0.0, y: 0.161, scale: 1.17)),
   ),
 
@@ -1123,6 +1221,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 712713349, crop: (x: -0.042, y: 0.897, scale: 1.07)),
   ),
 
@@ -1132,6 +1231,7 @@
     ability_text: [Tx("☾: Choose a ≤3● cost event in your void to gain reclaim.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 2251144881, crop: (x: -0.096, y: 0.9, scale: 1.67)),
   ),
 
@@ -1142,6 +1242,7 @@
     amplified_text: [Tx("Abandon this character: Gain 4●.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 1361568698, crop: (x: 0.0, y: 1.0, scale: 1.16)),
   ),
 
@@ -1153,6 +1254,7 @@
     energy_cost: Fixed(2),
     kind: Event,
     speed: Fast,
+    rarity: Common,
     art: (image: 1798514908),
   ),
 
@@ -1163,6 +1265,7 @@
     amplified_text: [Tx("Abandon this character: Draw 2 cards.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 2427491213, crop: (x: -0.294, y: 0.271, scale: 1.47)),
   ),
 
@@ -1178,6 +1281,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 2216124457),
   ),
 
@@ -1191,6 +1295,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Child", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 758082499, crop: (x: 0.0, y: -0.197, scale: 1.87)),
   ),
 
@@ -1201,6 +1306,7 @@
     amplified_text: [Tx("☾: Materialize a 2✦ warrior figment.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1511229275, crop: (x: 0.0, y: -0.346, scale: 1.57)),
   ),
 
@@ -1210,6 +1316,7 @@
     ability_text: [Tx("Warriors cost you 1● less.")],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Warrior", spark: Fixed(4)),
+    rarity: Uncommon,
     art: (image: 2295991865, crop: (x: -0.168, y: 0.839, scale: 1.17)),
   ),
 
@@ -1228,6 +1335,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 436090552, crop: (x: -0.228, y: 1.0, scale: 1.17)),
   ),
 
@@ -1237,6 +1345,7 @@
     ability_text: [Tx("Veil"), Tx("▸Dawn: Gain 1● for each figment you control.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Child", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 658076071, crop: (x: 0.344, y: 0.18, scale: 1.37)),
   ),
 
@@ -1249,6 +1358,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2197688373, crop: (x: -0.16, y: 1.0, scale: 1.11)),
   ),
 
@@ -1259,6 +1369,7 @@
     amplified_text: [Tx("When you materialize a spirit animal, store 2⧗."), Tx("3⧗: Gain 3●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 331258328, crop: (x: 0.0, y: 0.432, scale: 1.87)),
   ),
 
@@ -1268,6 +1379,7 @@
     ability_text: [Tx("Discard a chosen card from the opponent's hand.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Rare,
     art: (image: 2221518875),
   ),
 
@@ -1277,6 +1389,7 @@
     ability_text: [Tx("The first warrior you play each turn costs 3● less.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Rare,
     art: (image: 465449504, crop: (x: 0.353, y: 0.931, scale: 1.17)),
   ),
 
@@ -1289,6 +1402,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 454095508, crop: (x: -0.068, y: 1.0, scale: 1.07)),
   ),
 
@@ -1299,6 +1413,7 @@
     amplified_text: [Tx("Abandon a warrior: Gain 3●.")],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
+    rarity: Rare,
     art: (image: 2667786601, crop: (x: -0.1, y: -0.434, scale: 1.4)),
   ),
 
@@ -1310,6 +1425,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Interrupt,
+    rarity: Uncommon,
     art: (image: 499788430, crop: (x: -0.456, y: 1.0, scale: 1.17)),
   ),
 
@@ -1321,6 +1437,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2155438705, crop: (x: -0.378, y: 1.0, scale: 1.17)),
   ),
 
@@ -1334,6 +1451,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 608687435, crop: (x: -0.544, y: 1.0, scale: 1.07)),
   ),
 
@@ -1346,6 +1464,7 @@
     ],
     energy_cost: Fixed(0),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(0)),
+    rarity: Rare,
     art: (image: 2438838887),
   ),
 
@@ -1362,6 +1481,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2258761879, crop: (x: 0.0, y: 0.0, scale: 1.27)),
   ),
 
@@ -1371,6 +1491,7 @@
     ability_text: [Tx("▸Materialized: Draw a card.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 2218612343, owned: true, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -1380,6 +1501,7 @@
     ability_text: [Tx("Choose a player. That player discard X cards, then draws X cards.")],
     energy_cost: Variable,
     kind: Event,
+    rarity: Common,
     art: (image: 789290998, owned: true, crop: (x: 0.092, y: 1.0, scale: 1.11)),
   ),
 
@@ -1390,6 +1512,7 @@
     amplified_text: [Tx("Once per turn, when you materialize a character, gain 2●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 1104412877, owned: true, crop: (x: 0.042, y: 0.032, scale: 1.17)),
   ),
 
@@ -1402,6 +1525,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Common,
     art: (image: 591626951),
   ),
 
@@ -1419,6 +1543,7 @@
     energy_cost: Fixed(2),
     kind: Character(subtype: "Outsider", spark: Fixed(2)),
     speed: Fast,
+    rarity: Rare,
     art: (image: 1726923523),
   ),
 
@@ -1429,6 +1554,7 @@
     amplified_text: [Tx("Dissolve a ≤3● cost enemy."), Tx("Reclaim 5●.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Common,
     art: (image: 2155438695, crop: (x: 0.294, y: 1.0, scale: 1.17)),
   ),
 
@@ -1439,6 +1565,7 @@
     amplified_text: [Tx("▸Materialized, Dissolved: Draw 2 cards.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1790126246, crop: (x: 0.0, y: -0.485, scale: 1.97)),
   ),
 
@@ -1452,6 +1579,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 2155438703, crop: (x: 0.0, y: 1.0, scale: 1.11)),
   ),
 
@@ -1461,6 +1589,7 @@
     ability_text: [Tx("Choose one: Gain X⍟ or dissolve an enemy with X✦.")],
     energy_cost: Variable,
     kind: Event,
+    rarity: Common,
     art: (image: 2299755789),
   ),
 
@@ -1471,6 +1600,7 @@
     energy_cost: Fixed(4),
     kind: Event,
     speed: Interrupt,
+    rarity: Rare,
     art: (image: 2123360837, owned: true),
   ),
 
@@ -1481,6 +1611,7 @@
     amplified_text: [Tx("Abandon this character: Draw 2 cards with ephemeral.")],
     energy_cost: Fixed(0),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 565499662, owned: true, crop: (x: 0.448, y: 0.25, scale: 1.57)),
   ),
 
@@ -1497,6 +1628,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1639942840, crop: (x: 0.446, y: 1.0, scale: 1.37)),
   ),
 
@@ -1513,6 +1645,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 635276750, crop: (x: 0.0, y: 0.243, scale: 1.37)),
   ),
 
@@ -1523,6 +1656,7 @@
     energy_cost: Fixed(0),
     kind: Character(subtype: "Warrior", spark: Fixed(0)),
     speed: Fast,
+    rarity: Common,
     art: (image: 1739438663, crop: (x: 0.042, y: 0.839, scale: 1.17)),
   ),
 
@@ -1542,6 +1676,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Interrupt,
+    rarity: Uncommon,
     art: (image: 2123360840, owned: true, crop: (x: 0.126, y: 0.0, scale: 1.17)),
   ),
 
@@ -1552,6 +1687,7 @@
     amplified_text: [Tx("When you play a character, erode 2."), Tx("Reclaim 2●")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Mage", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 2025883238, crop: (x: 0.0, y: -0.386, scale: 1.4)),
   ),
 
@@ -1561,6 +1697,7 @@
     ability_text: [Tx("When you materialize another character, gain 1⍟.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Musician", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 1084620026, crop: (x: 0.0, y: 0.1, scale: 1.2)),
   ),
 
@@ -1571,6 +1708,7 @@
     amplified_text: [Tx("▸Night: If you have only one challenger, give that character +4✦.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Musician", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 519475501, crop: (x: 0.057, y: 1.0, scale: 1.11)),
   ),
 
@@ -1581,6 +1719,7 @@
     amplified_text: [Tx("▸Materialized: Foresee 2."), Tx("▸Dawn: Gain 1●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 717263287, crop: (x: 0.136, y: 0.212, scale: 1.37)),
   ),
 
@@ -1591,6 +1730,7 @@
     amplified_text: [Tx("▸Materialized: Gain 4●."), Tx("▸Dawn: The opponent gains 1⍟.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(0)),
+    rarity: Rare,
     art: (image: 1798382134, crop: (x: 0.135, y: 0.351, scale: 1.57)),
   ),
 
@@ -1601,6 +1741,7 @@
     amplified_text: [Tx("▸Materialized: Erode 2."), Tx("Reclaim 0●")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2290648807, owned: true, crop: (x: 0.494, y: -0.356, scale: 1.47)),
   ),
 
@@ -1612,6 +1753,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Interrupt,
+    rarity: Uncommon,
     art: (image: 1463121788, owned: true),
   ),
 
@@ -1624,6 +1766,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 1798514896, crop: (x: 0.0, y: -0.34, scale: 1.37)),
   ),
 
@@ -1642,6 +1785,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 1913887480),
   ),
 
@@ -1652,6 +1796,7 @@
     amplified_text: [Tx("▸Materialized: Return up to two cards from your void to your hand.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2018848973, crop: (x: 0.0, y: -0.617, scale: 1.91)),
   ),
 
@@ -1661,6 +1806,7 @@
     ability_text: [Tx("☾: Gain 1● for each spirit animal you control.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
+    rarity: Rare,
     art: (image: 2293194523, crop: (x: 0.0, y: 1.0, scale: 1.37)),
   ),
 
@@ -1677,6 +1823,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 425039560, crop: (x: 0.068, y: 0.897, scale: 1.07)),
   ),
 
@@ -1687,6 +1834,7 @@
     amplified_text: [Tx("Abandon a ≤2● cost character: Gain 2●.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Monster", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 524175406, crop: (x: 0.0, y: 1.0, scale: 1.0)),
   ),
 
@@ -1698,6 +1846,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 576358339, crop: (x: 0.342, y: 0.816, scale: 1.17)),
   ),
 
@@ -1708,6 +1857,7 @@
     amplified_text: [Tx("Gain 6●.")],
     energy_cost: Fixed(3),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 1063277315, crop: (x: 0.042, y: 1.0, scale: 1.17)),
   ),
 
@@ -1718,6 +1868,7 @@
     amplified_text: [Tx("▸Dawn: Gain 2●."), Tx("☾, Abandon a character: Gain 2●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 393588445, crop: (x: 0.0, y: 1.0, scale: 1.0)),
   ),
 
@@ -1736,6 +1887,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Elemental", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 2018053217, crop: (x: 0.0, y: 1.0, scale: 1.28)),
   ),
 
@@ -1754,6 +1906,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Ancient", spark: Fixed(3)),
+    rarity: Rare,
     art: (image: 2218612339, crop: (x: -0.378, y: 1.0, scale: 1.27)),
   ),
 
@@ -1763,6 +1916,7 @@
     ability_text: [Tx("☾: Choose a ≤2● cost character in your void to gain reclaim.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
+    rarity: Rare,
     art: (image: 1246321003, crop: (x: -0.336, y: -0.398, scale: 1.47)),
   ),
 
@@ -1772,6 +1926,7 @@
     ability_text: [Tx("Discard a chosen event from the opponent's hand.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 2033123270, crop: (x: 0.0, y: 0.48, scale: 1.37)),
   ),
 
@@ -1781,6 +1936,7 @@
     ability_text: [Tx("▸Materialized: Draw a card.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1498497890, crop: (x: 0.084, y: 0.032, scale: 1.17)),
   ),
 
@@ -1791,6 +1947,7 @@
     amplified_text: [Tx("This character has all character types."), Tx("▸Dawn: Gain 2●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Universal", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 2544257347, crop: (x: -0.252, y: 1.0, scale: 1.17)),
   ),
 
@@ -1801,6 +1958,7 @@
     amplified_text: [Tx("▸Materialized: Banish an enemy warrior or monster.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Monster", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 748956895, crop: (x: -0.126, y: 0.976, scale: 1.16)),
   ),
 
@@ -1811,6 +1969,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Fast,
+    rarity: Common,
     art: (image: 1739438660, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -1821,6 +1980,7 @@
     amplified_text: [Tx("Discard a chosen ≤3● cost card from the opponent\'s hand.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 2030910791, owned: true),
   ),
 
@@ -1831,6 +1991,7 @@
     amplified_text: [Tx("If this card is in your void, characters you control have +2✦.")],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Ancient", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 1207264096, crop: (x: 0.0, y: 1.0, scale: 1.37)),
   ),
 
@@ -1840,6 +2001,7 @@
     ability_text: [Tx("When you materialize a character, trigger its \"▸Dawn\" ability.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Musician", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 631097744, crop: (x: 0.122, y: 0.398, scale: 1.27)),
   ),
 
@@ -1849,6 +2011,7 @@
     ability_text: [Tx("Offering"), Tx("Characters you control have awakened.")],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 1109402492),
   ),
 
@@ -1861,6 +2024,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Synth", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 2419795155, crop: (x: -0.042, y: 1.0, scale: 1.17)),
   ),
 
@@ -1871,6 +2035,7 @@
     energy_cost: Fixed(4),
     kind: Event,
     speed: Interrupt,
+    rarity: Common,
     art: (image: 1907487244, crop: (x: 0.0, y: 1.0, scale: 1.1)),
   ),
 
@@ -1883,6 +2048,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2186149275, crop: (x: 0.714, y: 0.31, scale: 1.17)),
   ),
 
@@ -1899,6 +2065,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 695511787, owned: true, crop: (x: -0.189, y: 0.897, scale: 1.07)),
   ),
 
@@ -1915,6 +2082,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Explorer", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 2018053211),
   ),
 
@@ -1933,6 +2101,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 2186149279, crop: (x: 0.084, y: 0.369, scale: 1.17)),
   ),
 
@@ -1945,6 +2114,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1891048570, crop: (x: 0.064, y: 0.0, scale: 1.17)),
   ),
 
@@ -1956,6 +2126,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Fast,
+    rarity: Common,
     art: (image: 379806730),
   ),
 
@@ -1965,6 +2136,7 @@
     ability_text: [Tx("Banish a chosen character from the opponent's hand.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Common,
     art: (image: 1492489850),
   ),
 
@@ -1975,6 +2147,7 @@
     amplified_text: [Tx("To play this event, discard 2 cards. Draw 4 cards.")],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Common,
     art: (image: 2155438713),
   ),
 
@@ -1985,6 +2158,7 @@
     amplified_text: [Tx("When you play an event, materialize a 2✦ ethereal figment.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Mage", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1913887477, crop: (x: 0.0, y: 1.0, scale: 1.27)),
   ),
 
@@ -1995,6 +2169,7 @@
     amplified_text: [Tx("Shuffle your hand and void into your deck. Draw 6 cards. Gain 5●.")],
     energy_cost: Fixed(5),
     kind: Event,
+    rarity: Rare,
     art: (image: 793083757, owned: true, crop: (x: 0.452, y: 1.0, scale: 1.11)),
   ),
 
@@ -2006,6 +2181,7 @@
     ],
     energy_cost: Fixed(0),
     kind: Character(subtype: "Warrior", spark: Fixed(0)),
+    rarity: Uncommon,
     art: (image: 2155438709, crop: (x: -0.294, y: 0.369, scale: 1.17)),
   ),
 
@@ -2022,6 +2198,7 @@
     ],
     energy_cost: Fixed(5),
     kind: Character(subtype: "Ancient", spark: Fixed(8)),
+    rarity: Uncommon,
     art: (image: 700254508, crop: (x: 0.0, y: 1.0, scale: 1.27)),
   ),
 
@@ -2036,6 +2213,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 1723965970, crop: (x: 0.294, y: 1.0, scale: 1.17)),
   ),
 
@@ -2050,6 +2228,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(4)),
+    rarity: Uncommon,
     art: (image: 1727859040, crop: (x: 0.294, y: 1.0, scale: 1.17)),
   ),
 
@@ -2062,6 +2241,7 @@
     energy_cost: Fixed(4),
     kind: Event,
     speed: Interrupt,
+    rarity: Common,
     art: (image: 432001897, crop: (x: 0.0, y: 1.0, scale: 1.11)),
   ),
 
@@ -2071,6 +2251,7 @@
     ability_text: [Tx("Discover a card with cost X●.")],
     energy_cost: Variable,
     kind: Event,
+    rarity: Rare,
     art: (image: 439817032),
   ),
 
@@ -2082,6 +2263,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1149594491),
   ),
 
@@ -2095,6 +2277,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Tinkerer", spark: Fixed(3)),
+    rarity: Rare,
     art: (image: 2269064817),
   ),
 
@@ -2104,6 +2287,7 @@
     ability_text: [Tx("Events cost 1● more.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Mage", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2025883244, owned: true, crop: (x: 0.0, y: -0.29, scale: 1.77)),
   ),
 
@@ -2115,6 +2299,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2287054237, crop: (x: 0.0, y: 0.72, scale: 1.37)),
   ),
 
@@ -2124,6 +2309,7 @@
     ability_text: [Tx("This character has +1✦ for each character in your void.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2182865323, crop: (x: -0.294, y: 1.0, scale: 1.11)),
   ),
 
@@ -2135,6 +2321,7 @@
     energy_cost: Fixed(2),
     kind: Event,
     speed: Interrupt,
+    rarity: Uncommon,
     art: (image: 1058321690, crop: (x: 0.454, y: 1.0, scale: 1.17)),
   ),
 
@@ -2144,6 +2331,7 @@
     ability_text: [Tx("Cards you reclaim are not banished when they leave play.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Synth", spark: Fixed(1)),
+    rarity: Rare,
     art: (image: 1180104211, owned: true),
   ),
 
@@ -2156,6 +2344,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Synth", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 2530614279, crop: (x: 0.256, y: 0.115, scale: 1.77)),
   ),
 
@@ -2166,6 +2355,7 @@
     amplified_text: [Tx("Abandon another character: Gain 2●. The opponent gains 1⍟.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
+    rarity: Rare,
     art: (image: 457875892, crop: (x: -0.414, y: 0.3, scale: 1.17)),
   ),
 
@@ -2176,6 +2366,7 @@
     amplified_text: [Tx("Awakened"), Tx("▸Challenge: This character gains +2✦.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 519475330, crop: (x: 0.903, y: 0.212, scale: 1.37)),
   ),
 
@@ -2189,6 +2380,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 700253806),
   ),
 
@@ -2200,6 +2392,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Interrupt,
+    rarity: Common,
     art: (image: 1164289078, owned: true, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -2210,6 +2403,7 @@
     energy_cost: FixedAndVariable(2),
     kind: Event,
     speed: Interrupt,
+    rarity: Uncommon,
     art: (image: 489056605, owned: true, crop: (x: -0.285, y: 0.032, scale: 1.17)),
   ),
 
@@ -2221,6 +2415,7 @@
     energy_cost: Fixed(2),
     kind: Event,
     speed: Fast,
+    rarity: Uncommon,
     art: (image: 1196004052, crop: (x: 0.294, y: 0.398, scale: 1.17)),
   ),
 
@@ -2233,6 +2428,7 @@
     energy_cost: Fixed(0),
     kind: Event,
     speed: Interrupt,
+    rarity: Common,
     art: (image: 2018053223),
   ),
 
@@ -2243,6 +2439,7 @@
     amplified_text: [Tx("Abandon a ≤2● cost character: Gain 2⍟.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Renegade", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 1626794383, crop: (x: 0.0, y: 1.0, scale: 1.37)),
   ),
 
@@ -2252,6 +2449,7 @@
     ability_text: [Tx("Abandon a character: Return a character from your void to your hand.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Synth", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 2189428525),
   ),
 
@@ -2261,6 +2459,7 @@
     ability_text: [Tx("This character has +1✦ for each warrior you control.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2667786599, crop: (x: 0.0, y: -0.346, scale: 1.57)),
   ),
 
@@ -2277,6 +2476,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 1788833078, owned: true, crop: (x: 0.0, y: -0.345, scale: 1.81)),
   ),
 
@@ -2288,6 +2488,7 @@
     ],
     energy_cost: Fixed(4),
     kind: Event,
+    rarity: Rare,
     art: (image: 2430444889, crop: (x: 0.138, y: 1.0, scale: 1.11)),
   ),
 
@@ -2298,6 +2499,7 @@
     amplified_text: [Tx("1●, Banish a card from the opponent\'s void: This character gains +2✦.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1902130345),
   ),
 
@@ -2307,6 +2509,7 @@
     ability_text: [Tx("When a survivor you control is dissolved, draw a card.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 1044240499, crop: (x: 0.096, y: -0.06, scale: 1.37)),
   ),
 
@@ -2326,6 +2529,7 @@
     energy_cost: FixedAndVariable(1),
     kind: Event,
     speed: Fast,
+    rarity: Uncommon,
     art: (image: 1118816006, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -2344,6 +2548,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 2197688369, crop: (x: 0.0, y: 0.0, scale: 1.77)),
   ),
 
@@ -2353,6 +2558,7 @@
     ability_text: [Tx("▸Materialized: Return an enemy to hand. It costs 2● more.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Squad", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2590831711, crop: (x: 0.0, y: 0.258, scale: 1.47)),
   ),
 
@@ -2362,6 +2568,7 @@
     ability_text: [Tx("Until end of turn, when you play a character, draw a card.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Rare,
     art: (image: 2293194521),
   ),
 
@@ -2375,6 +2582,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Explorer", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 447372526, crop: (x: 0.0, y: -0.587, scale: 1.17)),
   ),
 
@@ -2387,6 +2595,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2281682691, crop: (x: -0.037, y: 1.0, scale: 1.27)),
   ),
 
@@ -2396,6 +2605,7 @@
     ability_text: [Tx("Draw a card."), Tx("Reclaim – Abandon a character.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Common,
     art: (image: 1402715897),
   ),
 
@@ -2405,6 +2615,7 @@
     ability_text: [Tx("Discard a chosen card from the opponent's hand."), Tx("Reclaim 1●.")],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Common,
     art: (image: 1402715894, crop: (x: 0.0, y: 1.0, scale: 1.1)),
   ),
 
@@ -2416,6 +2627,7 @@
     energy_cost: Fixed(2),
     kind: Event,
     speed: Fast,
+    rarity: Common,
     art: (image: 465449525, crop: (x: 0.0, y: -0.104, scale: 1.0)),
   ),
 
@@ -2427,6 +2639,7 @@
     energy_cost: Fixed(2),
     kind: Event,
     speed: Interrupt,
+    rarity: Uncommon,
     art: (image: 461706646, crop: (x: -0.106, y: 0.869, scale: 1.27)),
   ),
 
@@ -2440,6 +2653,7 @@
     ],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Rare,
     art: (image: 1798514914, crop: (x: 0.0, y: 1.0, scale: 1.47)),
   ),
 
@@ -2449,6 +2663,7 @@
     ability_text: [Tx("❖❖ – Abandon a warrior: This character gains +1✦.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Rare,
     art: (image: 1794244543, owned: true, crop: (x: -0.032, y: -0.445, scale: 1.37)),
   ),
 
@@ -2459,6 +2674,7 @@
     amplified_text: [Tx("▸Materialized: Materialize a Legionnaire figment with awakened.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Rare,
     art: (image: 735243049, crop: (x: 0.083, y: 1.0, scale: 1.16)),
   ),
 
@@ -2468,6 +2684,7 @@
     ability_text: [Tx("5●: Erode 1. That card gains reclaim 0●.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Mage", spark: Fixed(3)),
+    rarity: Rare,
     art: (image: 2278837663, owned: true, crop: (x: 0.084, y: 0.839, scale: 1.17)),
   ),
 
@@ -2484,6 +2701,7 @@
     ],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
+    rarity: Rare,
     art: (image: 2544257339, crop: (x: 0.0, y: -0.264, scale: 1.67)),
   ),
 
@@ -2493,6 +2711,7 @@
     ability_text: [Tx("▸Dawn: Each warrior you control gains +1✦.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 1897537156, owned: true, crop: (x: 0.21, y: 1.0, scale: 1.17)),
   ),
 
@@ -2504,6 +2723,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Interrupt,
+    rarity: Common,
     art: (image: 339410639),
   ),
 
@@ -2515,6 +2735,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Fast,
+    rarity: Common,
     art: (image: 1730836234, crop: (x: 0.0, y: 1.0, scale: 1.0)),
   ),
 
@@ -2531,6 +2752,7 @@
     ],
     energy_cost: Fixed(5),
     kind: Character(subtype: "Ancient", spark: Fixed(5)),
+    rarity: Uncommon,
     art: (image: 2521694543, owned: true, crop: (x: 0.16, y: 1.0, scale: 1.47)),
   ),
 
@@ -2542,6 +2764,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Interrupt,
+    rarity: Common,
     art: (image: 2415692459, crop: (x: 0.0, y: 0.5, scale: 1.17)),
   ),
 
@@ -2556,6 +2779,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Ancient", spark: Fixed(4)),
+    rarity: Common,
     art: (image: 2285036629, crop: (x: 0.3, y: 1.0, scale: 1.47)),
   ),
 
@@ -2568,6 +2792,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 403770319, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -2577,6 +2802,7 @@
     ability_text: [Tx("To play this event, discard a card. Draw 2 cards.")],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 670293475, crop: (x: 0.0, y: -0.552, scale: 1.17)),
   ),
 
@@ -2587,6 +2813,7 @@
     amplified_text: [Tx("▸Materialized: Gain 2⍟."), Tx("Reclaim 0●")],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Synth", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 644603722),
   ),
 
@@ -2599,6 +2826,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(0)),
+    rarity: Uncommon,
     art: (image: 529374502, crop: (x: 0.06, y: 0.369, scale: 1.57)),
   ),
 
@@ -2609,6 +2837,7 @@
     amplified_text: [Tx("▸Dissolved: Dissolve a ≤3✦ enemy.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 1798514893, crop: (x: 0.0, y: 0.798, scale: 1.17)),
   ),
 
@@ -2622,6 +2851,7 @@
     ],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 1626794386, crop: (x: 0.168, y: 0.0, scale: 1.17)),
   ),
 
@@ -2632,6 +2862,7 @@
     amplified_text: [Tx("When you play a character, materialize a 2✦ warrior figment.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 2186149271, crop: (x: 0.042, y: 1.0, scale: 1.17)),
   ),
 
@@ -2641,6 +2872,7 @@
     ability_text: [Tx("▸Materialized: Each player abandons a non-figment character.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2025883229, crop: (x: 0.782, y: 1.0, scale: 1.11)),
   ),
 
@@ -2651,6 +2883,7 @@
     amplified_text: [Tx("Discard a ≤2● cost character: Dissolve a ≤3● cost enemy.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1207264102, owned: true, crop: (x: -0.368, y: 1.0, scale: 1.11)),
   ),
 
@@ -2661,6 +2894,7 @@
     amplified_text: [Tx("Foresee 2. Draw a card."), Tx("Reclaim 4●")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 1328168243, owned: true, crop: (x: 0.0, y: 1.0, scale: 1.67)),
   ),
 
@@ -2673,6 +2907,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 1302572584),
   ),
 
@@ -2682,6 +2917,7 @@
     ability_text: [Tx("Materialize all characters in your void which dissolved this turn.")],
     energy_cost: Fixed(3),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 2155438701, crop: (x: 0.0, y: 0.398, scale: 1.17)),
   ),
 
@@ -2692,6 +2928,7 @@
     amplified_text: [Tx("Gain 4⍟. If you reclaimed this card, gain 8⍟ instead."), Tx("Reclaim 4●")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Common,
     art: (image: 2131591273),
   ),
 
@@ -2704,6 +2941,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 695511856, owned: true, crop: (x: -0.084, y: 0.369, scale: 1.17)),
   ),
 
@@ -2720,6 +2958,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 678431947, crop: (x: -0.541, y: 0.18, scale: 1.37)),
   ),
 
@@ -2731,6 +2970,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Fast,
+    rarity: Common,
     art: (image: 2299755783, owned: true, crop: (x: 0.0, y: 0.976, scale: 1.16)),
   ),
 
@@ -2741,6 +2981,7 @@
     amplified_text: [Tx("▸Dawn: Draw a card. The opponent gains 1⍟.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 1074377570, owned: true),
   ),
 
@@ -2765,6 +3006,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 2430444885, owned: true, crop: (x: 0.042, y: 1.0, scale: 1.47)),
   ),
 
@@ -2774,6 +3016,7 @@
     ability_text: [Tx("Until end of turn, when you play an event, copy it.")],
     energy_cost: Fixed(3),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 1739438657, crop: (x: 0.042, y: 1.0, scale: 1.17)),
   ),
 
@@ -2783,6 +3026,7 @@
     ability_text: [Tx("Dissolve each ≤X✦ character.")],
     energy_cost: FixedAndVariable(2),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 703988038, crop: (x: 0.546, y: 0.608, scale: 1.17)),
   ),
 
@@ -2797,6 +3041,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2303852061, crop: (x: -0.071, y: 1.0, scale: 1.16)),
   ),
 
@@ -2806,6 +3051,7 @@
     ability_text: [Tx("When a character you control is dissolved, gain 1⍟.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 2023111793, crop: (x: -0.294, y: 0.032, scale: 1.17)),
   ),
 
@@ -2816,6 +3062,7 @@
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
     speed: Fast,
+    rarity: Uncommon,
     art: (image: 2191235665, crop: (x: 0.11, y: -0.1, scale: 1.67)),
   ),
 
@@ -2829,6 +3076,7 @@
     ],
     energy_cost: Fixed(4),
     kind: Event,
+    rarity: Common,
     art: (image: 1968259702),
   ),
 
@@ -2839,6 +3087,7 @@
     energy_cost: Fixed(5),
     kind: Character(subtype: "Synth", spark: Fixed(3)),
     speed: Interrupt,
+    rarity: Common,
     art: (image: 1794244546),
   ),
 
@@ -2851,6 +3100,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Common,
     art: (image: 2586513021, owned: true, crop: (x: -0.049, y: 1.0, scale: 1.07)),
   ),
 
@@ -2863,6 +3113,7 @@
     ],
     energy_cost: Fixed(4),
     kind: Event,
+    rarity: Common,
     art: (image: 686903113, crop: (x: -0.342, y: 0.608, scale: 1.17)),
   ),
 
@@ -2872,6 +3123,7 @@
     ability_text: [Tx("Offering"), Tx("The next time you play an event this turn, copy it.")],
     energy_cost: Fixed(3),
     kind: Event,
+    rarity: Common,
     art: (image: 608686832, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -2882,6 +3134,7 @@
     amplified_text: [Tx("Once per turn, when you discard a card, draw a card and gain 2●.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
+    rarity: Rare,
     art: (image: 2155438711, owned: true, crop: (x: -0.002, y: 1.0, scale: 1.11)),
   ),
 
@@ -2894,6 +3147,7 @@
     amplified_text: [Tx("When you materialize a character, awaken each character you control.")],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Monster", spark: Fixed(2)),
+    rarity: Rare,
     art: (image: 1790126252, crop: (x: 0.0, y: 1.0, scale: 1.11)),
   ),
 
@@ -2907,6 +3161,7 @@
     ],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Super", spark: Fixed(3)),
+    rarity: Rare,
     art: (image: 1734025934),
   ),
 
@@ -2917,6 +3172,7 @@
     amplified_text: [Tx("When you play an event, materialize a 2✦ warrior figment.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Mage", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2320845233, crop: (x: 0.0, y: -0.266, scale: 2.57)),
   ),
 
@@ -2928,6 +3184,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Synth", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 443761831),
   ),
 
@@ -2941,6 +3198,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 1005938035, crop: (x: 0.0, y: -0.627, scale: 1.57)),
   ),
 
@@ -2951,6 +3209,7 @@
     amplified_text: [Tx("Vengeful"), Tx("▸Dawn: Gain 2●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(0)),
+    rarity: Common,
     art: (image: 519475345, crop: (x: 0.0, y: 1.0, scale: 1.1)),
   ),
 
@@ -2962,6 +3221,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Musician", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 1005938032),
   ),
 
@@ -2972,6 +3232,7 @@
     amplified_text: [Tx("▸Materialized, Dawn: Give a character you control +2✦.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2597662159, crop: (x: -0.21, y: 0.0, scale: 1.57)),
   ),
 
@@ -2981,6 +3242,7 @@
     ability_text: [Tx("☾: Gain 1● for each character you control.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 2123360855),
   ),
 
@@ -2993,6 +3255,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Interrupt,
+    rarity: Rare,
     art: (image: 1239919309),
   ),
 
@@ -3003,6 +3266,7 @@
     amplified_text: [Tx("Gain 3●.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 425039551, crop: (x: 0.057, y: 1.0, scale: 1.17)),
   ),
 
@@ -3017,6 +3281,7 @@
     energy_cost: Fixed(2),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
     speed: Fast,
+    rarity: Uncommon,
     art: (image: 2287054241, crop: (x: 0.0, y: -0.152, scale: 1.87)),
   ),
 
@@ -3029,6 +3294,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 1099575602, crop: (x: 0.0, y: 0.897, scale: 1.07)),
   ),
 
@@ -3038,6 +3304,7 @@
     ability_text: [Tx("Veil"), Tx("The first ≤2● cost character you play each turn costs you 0●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Explorer", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1026869323, crop: (x: 0.0, y: 0.0, scale: 1.97)),
   ),
 
@@ -3054,6 +3321,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2299755785, crop: (x: 0.0, y: 1.0, scale: 1.27)),
   ),
 
@@ -3064,6 +3332,7 @@
     amplified_text: [Tx("▸Dawn: Gain 2●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 410444914, crop: (x: 0.441, y: -0.361, scale: 1.87)),
   ),
 
@@ -3075,6 +3344,7 @@
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     speed: Fast,
+    rarity: Uncommon,
     art: (image: 612667703, crop: (x: 0.833, y: 1.0, scale: 1.37)),
   ),
 
@@ -3085,6 +3355,7 @@
     amplified_text: [Tx("▸Materialized: You may materialize a ≤3● cost character from your hand.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1734998174, crop: (x: 0.0, y: 1.0, scale: 1.11)),
   ),
 
@@ -3104,6 +3375,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Fast,
+    rarity: Common,
     art: (image: 2027158295, owned: true),
   ),
 
@@ -3115,6 +3387,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 1164289051, crop: (x: 0.126, y: 1.0, scale: 1.17)),
   ),
 
@@ -3124,6 +3397,7 @@
     ability_text: [Tx("When a character you control is dissolved, gain 1●.")],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Mage", spark: Fixed(4)),
+    rarity: Uncommon,
     art: (image: 2290648803),
   ),
 
@@ -3134,6 +3408,7 @@
     amplified_text: [Tx("☾, Abandon a character: Materialize a 3✦ shadow figment.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Mage", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 306660617, crop: (x: 0.0, y: 0.644, scale: 1.17)),
   ),
 
@@ -3143,6 +3418,7 @@
     ability_text: [Tx("Cards in your hand have offering.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Explorer", spark: Fixed(1)),
+    rarity: Rare,
     art: (image: 1529898275, crop: (x: -0.313, y: -0.471, scale: 1.77)),
   ),
 
@@ -3153,6 +3429,7 @@
     energy_cost: Fixed(5),
     kind: Event,
     speed: Interrupt,
+    rarity: Rare,
     art: (image: 2258761881, owned: true, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -3163,6 +3440,7 @@
     amplified_text: [Tx("Abandon another character: Gain 2●.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Monster", spark: Fixed(1)),
+    rarity: Rare,
     art: (image: 1633431256, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -3173,6 +3451,7 @@
     amplified_text: [Tx("Dissolve a ≤2✦ enemy."), Tx("Reclaim 1●")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 2521694541, owned: true),
   ),
 
@@ -3188,6 +3467,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 2186149269, crop: (x: 0.168, y: 0.0, scale: 1.17)),
   ),
 
@@ -3199,6 +3479,7 @@
     energy_cost: Fixed(2),
     kind: Character(subtype: "Outsider", spark: Fixed(2)),
     speed: Fast,
+    rarity: Common,
     art: (image: 2433164311, crop: (x: 0.0, y: 1.0, scale: 1.1)),
   ),
 
@@ -3209,6 +3490,7 @@
     amplified_text: [Tx("Gain 3●. Draw a card.")],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Common,
     art: (image: 1084619579, crop: (x: -0.168, y: 0.032, scale: 1.17)),
   ),
 
@@ -3221,6 +3503,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 1991802452),
   ),
 
@@ -3231,6 +3514,7 @@
     amplified_text: [Tx("Materialize X 2✦ ethereal figments.")],
     energy_cost: Variable,
     kind: Event,
+    rarity: Uncommon,
     art: (image: 1785274679),
   ),
 
@@ -3247,6 +3531,7 @@
     ],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
+    rarity: Rare,
     art: (image: 2216124453, crop: (x: 0.0, y: 0.608, scale: 1.17)),
   ),
 
@@ -3267,6 +3552,7 @@
     ability_text: [Tx("This character costs 1● less for each warrior you control.")],
     energy_cost: Fixed(5),
     kind: Character(subtype: "Warrior", spark: Fixed(5)),
+    rarity: Rare,
     art: (image: 432001912, crop: (x: 0.138, y: 1.0, scale: 1.61)),
   ),
 
@@ -3276,6 +3562,7 @@
     ability_text: [Tx("▸Materialized: Erode 4."), Tx("☾: You may play an event from your void.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Tinkerer", spark: Fixed(2)),
+    rarity: Rare,
     art: (image: 1983798665),
   ),
 
@@ -3292,6 +3579,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Rare,
     art: (image: 1726923520, crop: (x: 0.0, y: 0.766, scale: 1.57)),
   ),
 
@@ -3302,6 +3590,7 @@
     amplified_text: [Tx("Discover a character with cost X and materialize it with awakened.")],
     energy_cost: FixedAndVariable(1),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 1907495383),
   ),
 
@@ -3318,6 +3607,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 350514500, crop: (x: 0.0, y: 0.032, scale: 1.17)),
   ),
 
@@ -3327,6 +3617,7 @@
     ability_text: [Tx("▸Materialized: The opponent cannot play events this turn.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 653553988),
   ),
 
@@ -3336,6 +3627,7 @@
     ability_text: [Tx("▸Materialized: Discover a ≤1● cost character and materialize it.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2597662163),
   ),
 
@@ -3349,6 +3641,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Ancient", spark: Fixed(7)),
+    rarity: Rare,
     art: (image: 1577968036, crop: (x: 0.0, y: 1.0, scale: 1.07)),
   ),
 
@@ -3362,6 +3655,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Companions", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 2022594416, crop: (x: 0.029, y: 0.0, scale: 1.47)),
   ),
 
@@ -3371,6 +3665,7 @@
     ability_text: [Tx("☾: Choose a card in your void to gain reclaim.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Child", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 2033123267, owned: true),
   ),
 
@@ -3380,6 +3675,7 @@
     ability_text: [Tx("▸Dawn: Store 1⧗."), Tx("Discard your hand: Draw one card per stored ⧗.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Child", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 2023111790, crop: (x: 0.0, y: -0.142, scale: 1.47)),
   ),
 
@@ -3390,6 +3686,7 @@
     amplified_text: [Tx("▸Materialized: Materialize a 5✦ monstrosity figment.")],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Mage", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 695511784, crop: (x: 0.0, y: 1.0, scale: 1.11)),
   ),
 
@@ -3400,6 +3697,7 @@
     amplified_text: [Tx("When you play a character, materialize a 2✦ ethereal figment.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 2131591279, crop: (x: 0.084, y: 0.032, scale: 1.17)),
   ),
 
@@ -3413,6 +3711,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 2221822105, crop: (x: 0.168, y: 0.032, scale: 1.17)),
   ),
 
@@ -3426,6 +3725,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Tinkerer", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 1621160803, crop: (x: 0.0, y: 1.0, scale: 1.11)),
   ),
 
@@ -3438,6 +3738,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Explorer", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 2127752141, crop: (x: 0.04, y: -0.691, scale: 1.77)),
   ),
 
@@ -3447,6 +3748,7 @@
     ability_text: [Tx("When a character you control is dissolved, draw a card.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 691496698),
   ),
 
@@ -3460,6 +3762,7 @@
     energy_cost: Fixed(1),
     kind: Character(subtype: "Outsider", spark: Fixed(1)),
     speed: Fast,
+    rarity: Common,
     art: (image: 461706976, crop: (x: 0.0, y: 0.665, scale: 1.17)),
   ),
 
@@ -3472,6 +3775,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Fast,
+    rarity: Common,
     art: (image: 1058321645, crop: (x: -0.042, y: 0.032, scale: 1.17)),
   ),
 
@@ -3486,6 +3790,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 762927766, crop: (x: 0.334, y: -0.244, scale: 1.77)),
   ),
 
@@ -3496,6 +3801,7 @@
     amplified_text: [Tx("▸Dissolved: Gain 2 maximum ●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Explorer", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1785274667, crop: (x: -0.33, y: 0.565, scale: 1.97)),
   ),
 
@@ -3506,6 +3812,7 @@
     amplified_text: [Tx("Banish your hand. Draw 5 cards."), Tx("Reclaim 3●")],
     energy_cost: Fixed(5),
     kind: Event,
+    rarity: Rare,
     art: (image: 1213574263, crop: (x: 0.0, y: 0.043, scale: 1.0)),
   ),
 
@@ -3516,6 +3823,7 @@
     energy_cost: Fixed(2),
     kind: Character(subtype: "Thopter", spark: Fixed(2)),
     speed: Fast,
+    rarity: Common,
     art: (image: 511427890, crop: (x: 0.45, y: 1.0, scale: 1.11)),
   ),
 
@@ -3526,6 +3834,7 @@
     amplified_text: [Tx("Abandon a non-figment warrior: Materialize two 1✦ warrior figments.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2424248083),
   ),
 
@@ -3536,6 +3845,7 @@
     amplified_text: [Tx("Awakened, Reclaim 1●"), Tx("☾: Awaken up to two characters you control.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 1180104046, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -3549,6 +3859,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Detective", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 1219782715, crop: (x: 0.0, y: 0.0, scale: 1.57)),
   ),
 
@@ -3560,6 +3871,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Synth", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 1740270995, crop: (x: 0.0, y: -0.321, scale: 1.87)),
   ),
 
@@ -3569,6 +3881,7 @@
     ability_text: [Tx("Once per turn, when the opponent plays an event, draw a card.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1792373854, crop: (x: -0.198, y: -0.71, scale: 2.27)),
   ),
 
@@ -3579,6 +3892,7 @@
     amplified_text: [Tx("☾, Banish 3 cards from your void: Draw 2 cards.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 2025883235, owned: true, crop: (x: 0.0, y: -0.471, scale: 1.77)),
   ),
 
@@ -3590,6 +3904,7 @@
     energy_cost: Fixed(2),
     kind: Event,
     speed: Interrupt,
+    rarity: Uncommon,
     art: (image: 1897537153, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -3602,6 +3917,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Monster", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 581686579, crop: (x: -0.24, y: 0.28, scale: 1.37)),
   ),
 
@@ -3615,6 +3931,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 2586513023),
   ),
 
@@ -3624,6 +3941,7 @@
     ability_text: [Tx("Vengeful"), Tx("▸Materialized: Draw a card.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 789291016, crop: (x: 0.0, y: 0.242, scale: 1.17)),
   ),
 
@@ -3633,6 +3951,7 @@
     ability_text: [Tx("Double your current ●.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Rare,
     art: (image: 1314287447, crop: (x: 0.178, y: 0.212, scale: 1.37)),
   ),
 
@@ -3649,6 +3968,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Noble", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 2415692455, crop: (x: 0.0, y: -0.237, scale: 1.87)),
   ),
 
@@ -3659,6 +3979,7 @@
     amplified_text: [Tx("☾: Awaken up to two characters you control.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1913887474, crop: (x: -0.42, y: 0.839, scale: 1.17)),
   ),
 
@@ -3669,6 +3990,7 @@
     amplified_text: [Tx("Dissolve a ≤2✦ enemy."), Tx("Reclaim – Discard a card")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Common,
     art: (image: 581686492),
   ),
 
@@ -3685,6 +4007,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 1727859046, crop: (x: -0.049, y: 0.897, scale: 1.07)),
   ),
 
@@ -3701,6 +4024,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 1694993299, crop: (x: -0.1, y: -0.348, scale: 1.47)),
   ),
 
@@ -3710,6 +4034,7 @@
     ability_text: [Tx("If you've discarded a card this turn, this character costs 3● less.")],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Synth", spark: Fixed(5)),
+    rarity: Uncommon,
     art: (image: 2424248089, owned: true, crop: (x: 0.882, y: 0.032, scale: 1.17)),
   ),
 
@@ -3726,6 +4051,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 682942723, crop: (x: 0.779, y: 0.574, scale: 1.47)),
   ),
 
@@ -3737,6 +4063,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Common,
     art: (image: 1470059006),
   ),
 
@@ -3751,6 +4078,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 2586513025, crop: (x: 0.21, y: 1.0, scale: 1.17)),
   ),
 
@@ -3761,6 +4089,7 @@
     amplified_text: [Tx("Awakened"), Tx("▸Dawn: Gain 2●.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2131591267, crop: (x: 0.252, y: 0.212, scale: 1.17)),
   ),
 
@@ -3770,6 +4099,7 @@
     ability_text: [Tx("Draw two cards."), Tx("Reclaim 2●")],
     energy_cost: Fixed(4),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 1258823161, crop: (x: -0.504, y: 1.0, scale: 1.17)),
   ),
 
@@ -3781,6 +4111,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Rare,
     art: (image: 1225878706, crop: (x: 0.322, y: 1.0, scale: 1.11)),
   ),
 
@@ -3798,6 +4129,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Interrupt,
+    rarity: Common,
     art: (image: 2303852059, owned: true, crop: (x: -0.294, y: 0.032, scale: 1.17)),
   ),
 
@@ -3807,6 +4139,7 @@
     ability_text: [Tx("▸Materialized: Gain control of a ≤X● cost enemy.")],
     energy_cost: FixedAndVariable(3),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 316023560, crop: (x: 0.522, y: 0.032, scale: 1.17)),
   ),
 
@@ -3824,6 +4157,7 @@
     energy_cost: Fixed(2),
     kind: Character(subtype: "Musician", spark: Fixed(1)),
     speed: Fast,
+    rarity: Common,
     art: (image: 1021646683, crop: (x: -0.084, y: -0.163, scale: 1.27)),
   ),
 
@@ -3834,6 +4168,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Interrupt,
+    rarity: Rare,
     art: (image: 1708315387, owned: true),
   ),
 
@@ -3850,6 +4185,7 @@
     ],
     energy_cost: Fixed(6),
     kind: Character(subtype: "Ancient", spark: Fixed(6)),
+    rarity: Uncommon,
     art: (image: 1716379555, crop: (x: -0.084, y: 1.0, scale: 1.17)),
   ),
 
@@ -3860,6 +4196,7 @@
     amplified_text: [Tx("Draw a card. Foresee 3.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 457875913, crop: (x: 0.0, y: -0.681, scale: 1.57)),
   ),
 
@@ -3876,6 +4213,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 529374478, crop: (x: 0.228, y: 1.0, scale: 1.07)),
   ),
 
@@ -3886,6 +4224,7 @@
     amplified_text: [Tx("When you play a warrior, this character gains +2✦.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 1798382140, owned: true, crop: (x: -0.045, y: 0.64, scale: 1.47)),
   ),
 
@@ -3902,6 +4241,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 626543207, crop: (x: 0.172, y: -0.636, scale: 1.57)),
   ),
 
@@ -3920,6 +4260,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Super", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1246320997, crop: (x: 0.0, y: 0.0, scale: 1.47)),
   ),
 
@@ -3930,6 +4271,7 @@
     amplified_text: [Tx("Foresee 3. Draw a card.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 1042405648),
   ),
 
@@ -3940,6 +4282,7 @@
     amplified_text: [Tx("Discard your hand. Gain 4●.")],
     energy_cost: Fixed(0),
     kind: Event,
+    rarity: Rare,
     art: (image: 708313726, crop: (x: -0.294, y: 1.0, scale: 1.17)),
   ),
 
@@ -3950,6 +4293,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Fast,
+    rarity: Rare,
     art: (image: 2427491217, crop: (x: -0.353, y: 0.805, scale: 1.17)),
   ),
 
@@ -3972,6 +4316,7 @@
     ],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Visitor", spark: Fixed(4)),
+    rarity: Uncommon,
     art: (image: 529374445, crop: (x: -0.105, y: -0.654, scale: 1.57)),
   ),
 
@@ -3988,6 +4333,7 @@
     ],
     energy_cost: Fixed(0),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(0)),
+    rarity: Rare,
     art: (image: 1129012706, crop: (x: -0.042, y: 1.0, scale: 1.1)),
   ),
 
@@ -4000,6 +4346,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 670293463, crop: (x: 0.0, y: -0.352, scale: 1.37)),
   ),
 
@@ -4016,6 +4363,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1721490838, crop: (x: -0.126, y: -0.131, scale: 1.17)),
   ),
 
@@ -4030,6 +4378,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Mage", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 2285036623, crop: (x: 0.0, y: -0.096, scale: 1.37)),
   ),
 
@@ -4040,6 +4389,7 @@
     amplified_text: [Tx("Abandon this character: Erode 2."), Tx("▸Dissolved: Draw a card.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1511229272, crop: (x: 0.0, y: -0.362, scale: 1.37)),
   ),
 
@@ -4052,6 +4402,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Synth", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 539227177),
   ),
 
@@ -4062,6 +4413,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Interrupt,
+    rarity: Common,
     art: (image: 2018848967, crop: (x: -0.046, y: 1.0, scale: 1.16)),
   ),
 
@@ -4078,6 +4430,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Common,
     art: (image: 666342238, owned: true, crop: (x: 0.192, y: 1.0, scale: 1.1)),
   ),
 
@@ -4094,6 +4447,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Explorer", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 316023017, crop: (x: -0.07, y: 0.897, scale: 1.07)),
   ),
 
@@ -4103,6 +4457,7 @@
     ability_text: [Tx("You may play ≤2● cost characters from your void.")],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Ancient", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 695511850, crop: (x: -0.006, y: 1.0, scale: 1.16)),
   ),
 
@@ -4121,6 +4476,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 281111747, crop: (x: 0.054, y: -0.4, scale: 1.97)),
   ),
 
@@ -4135,6 +4491,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2023111781, crop: (x: 0.092, y: 1.0, scale: 1.11)),
   ),
 
@@ -4144,6 +4501,7 @@
     ability_text: [Tx("Reclaim – 2●, Abandon two characters.")],
     energy_cost: Fixed(8),
     kind: Character(subtype: "Ancient", spark: Fixed(7)),
+    rarity: Uncommon,
     art: (image: 2290648801, owned: true, crop: (x: 0.433, y: 1.0, scale: 1.11)),
   ),
 
@@ -4154,6 +4512,7 @@
     amplified_text: [Tx("▸Dawn: Gain 2●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(0)),
+    rarity: Uncommon,
     art: (image: 662452981, owned: true, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -4163,6 +4522,7 @@
     ability_text: [],
     energy_cost: Fixed(0),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 2027158301, owned: true),
   ),
 
@@ -4173,6 +4533,7 @@
     amplified_text: [Tx("▸Materialized: Banish a ≤3● cost enemy.")],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 1383318395),
   ),
 
@@ -4183,6 +4544,7 @@
     amplified_text: [Tx("☾: Draw 3 cards. The opponent draws 2 cards.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Musician", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 744309595, crop: (x: 0.0, y: 1.0, scale: 1.16)),
   ),
 
@@ -4200,6 +4562,7 @@
     energy_cost: Fixed(2),
     kind: Event,
     speed: Fast,
+    rarity: Common,
     art: (image: 1722480805, crop: (x: -0.047, y: 1.0, scale: 1.1)),
   ),
 
@@ -4212,6 +4575,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 337161542, owned: true, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -4223,6 +4587,7 @@
     ],
     energy_cost: FixedAndVariable(1),
     kind: Event,
+    rarity: Common,
     art: (image: 662452591),
   ),
 
@@ -4232,6 +4597,7 @@
     ability_text: [Tx("☾, Discard a character: Discover a character with cost 1● higher.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2027158304, crop: (x: 0.252, y: 1.0, scale: 1.17)),
   ),
 
@@ -4243,6 +4609,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Tinkerer", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 353287676, crop: (x: 0.0, y: 0.328, scale: 1.0)),
   ),
 
@@ -4255,6 +4622,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2364396767, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -4267,6 +4635,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 2295991869, crop: (x: 0.0, y: 1.0, scale: 1.07)),
   ),
 
@@ -4276,6 +4645,7 @@
     ability_text: [Tx("When you discard this card, it gains reclaim 0●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Explorer", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1185684772, owned: true),
   ),
 
@@ -4285,6 +4655,7 @@
     ability_text: [Tx("Put an enemy on top of the opponent's deck.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Common,
     art: (image: 2681394203, crop: (x: 0.0, y: 0.0, scale: 1.47)),
   ),
 
@@ -4295,6 +4666,7 @@
     amplified_text: [Tx("3●: Store 2⧗."), Tx("X⧗: Dissolve a ≤X✦ enemy.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2295991863, owned: true, crop: (x: 0.21, y: 1.0, scale: 1.17)),
   ),
 
@@ -4305,6 +4677,7 @@
     amplified_text: [Tx("4●: Gain 2⍟. This character gains +1✦.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2661986989, crop: (x: 0.159, y: 0.141, scale: 1.47)),
   ),
 
@@ -4314,6 +4687,7 @@
     ability_text: [Tx("This character has all character types.")],
     energy_cost: Variable,
     kind: Character(subtype: "X", spark: Variable),
+    rarity: Uncommon,
     art: (image: 289214153, crop: (x: 0.7, y: 1.0, scale: 1.17)),
   ),
 
@@ -4332,6 +4706,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 2018848979),
   ),
 
@@ -4344,6 +4719,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 2521694539, crop: (x: 0.252, y: 0.0, scale: 1.17)),
   ),
 
@@ -4354,6 +4730,7 @@
     amplified_text: [Tx("▸Materialized: Erode 3."), Tx("▸Dawn: Gain 1●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1047769120, crop: (x: -0.294, y: 0.424, scale: 1.17)),
   ),
 
@@ -4364,6 +4741,7 @@
     amplified_text: [Tx("▸Materialized: Draw a card."), Tx("▸Dawn: Gain 2●.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 1169640025, crop: (x: -0.294, y: 1.0, scale: 1.17)),
   ),
 
@@ -4373,6 +4751,7 @@
     ability_text: [Tx("2●: Choose an event in your void to gain reclaim.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Elemental", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2023111784),
   ),
 
@@ -4383,6 +4762,7 @@
     amplified_text: [Tx("☾, Discard a card: Draw 2 cards.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1047769036, crop: (x: -0.286, y: 0.032, scale: 1.77)),
   ),
 
@@ -4396,6 +4776,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 703988032, crop: (x: -0.042, y: -0.276, scale: 1.37)),
   ),
 
@@ -4414,6 +4795,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Rare,
     art: (image: 2430444883, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -4424,6 +4806,7 @@
     amplified_text: [Tx("Awakened"), Tx("☾: Draw 2 cards, then discard 2 cards.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Rare,
     art: (image: 2269064809, owned: true, crop: (x: 0.42, y: 0.032, scale: 1.17)),
   ),
 
@@ -4442,6 +4825,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 1289324164, owned: true),
   ),
 
@@ -4451,6 +4835,7 @@
     ability_text: [Tx("Veil"), Tx("When you play a character, gain 1●.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Musician", spark: Fixed(2)),
+    rarity: Rare,
     art: (image: 753489184, crop: (x: -0.07, y: -0.231, scale: 1.3)),
   ),
 
@@ -4460,6 +4845,7 @@
     ability_text: [Tx("Gain X⍟."), Tx("Reclaim – Discard X cards.")],
     energy_cost: Variable,
     kind: Event,
+    rarity: Common,
     art: (image: 1053081881, crop: (x: -0.047, y: 1.0, scale: 1.1)),
   ),
 
@@ -4476,6 +4862,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Tinkerer", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 515170852, crop: (x: 0.671, y: 0.032, scale: 1.17)),
   ),
 
@@ -4495,6 +4882,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 1068257321, crop: (x: -0.126, y: 0.897, scale: 1.07)),
   ),
 
@@ -4511,6 +4899,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Common,
     art: (image: 1190830255, crop: (x: 0.0, y: 1.0, scale: 1.1)),
   ),
 
@@ -4520,6 +4909,7 @@
     ability_text: [Tx("2●, Abandon a 1✦ character: Draw 2 cards.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Rare,
     art: (image: 2521694547, crop: (x: 0.0, y: 0.311, scale: 1.47)),
   ),
 
@@ -4533,6 +4923,7 @@
     ],
     energy_cost: Fixed(8),
     kind: Character(subtype: "Ancient", spark: Fixed(8)),
+    rarity: Uncommon,
     art: (image: 2421338073, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -4545,6 +4936,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Ancient", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 2186149281, crop: (x: 0.0, y: 1.0, scale: 1.37)),
   ),
 
@@ -4556,6 +4948,7 @@
     energy_cost: Fixed(2),
     kind: Event,
     speed: Interrupt,
+    rarity: Common,
     art: (image: 2033123279, owned: true),
   ),
 
@@ -4566,6 +4959,7 @@
     amplified_text: [Tx("Abandon this character: Gain 2●."), Tx("▸Dissolved: Draw a card.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 432001921, crop: (x: 0.025, y: 1.0, scale: 1.2)),
   ),
 
@@ -4582,6 +4976,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 485518048),
   ),
 
@@ -4592,6 +4987,7 @@
     energy_cost: Fixed(2),
     kind: Event,
     speed: Fast,
+    rarity: Uncommon,
     art: (image: 1786390157, crop: (x: -0.168, y: 1.0, scale: 1.17)),
   ),
 
@@ -4603,6 +4999,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 2590831717, owned: true, crop: (x: 0.456, y: 0.761, scale: 1.17)),
   ),
 
@@ -4612,6 +5009,7 @@
     ability_text: [Tx("▸Challenge: Draw a card, then discard a card.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 1725212353, crop: (x: 0.0, y: 0.214, scale: 1.57)),
   ),
 
@@ -4621,6 +5019,7 @@
     ability_text: [Tx("▸Dissolved: Return another warrior from your void to your hand.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1790126255, crop: (x: 0.783, y: 1.0, scale: 1.17)),
   ),
 
@@ -4632,6 +5031,7 @@
     ],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Ancient", spark: Fixed(4)),
+    rarity: Uncommon,
     art: (image: 2256745747, crop: (x: 0.216, y: 1.0, scale: 1.57)),
   ),
 
@@ -4642,6 +5042,7 @@
     amplified_text: [Tx("When you challenge with two or more warriors, draw 2 cards.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Musician", spark: Fixed(4)),
+    rarity: Common,
     art: (image: 1074373424),
   ),
 
@@ -4651,6 +5052,7 @@
     ability_text: [Tx("Once per turn, when you materialize a warrior, draw a card.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Mage", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 1289324101, owned: true, crop: (x: 0.252, y: 1.0, scale: 1.17)),
   ),
 
@@ -4661,6 +5063,7 @@
     energy_cost: Fixed(2),
     kind: Event,
     speed: Interrupt,
+    rarity: Rare,
     art: (image: 1042405558, owned: true, crop: (x: 0.0, y: 1.0, scale: 1.11)),
   ),
 
@@ -4671,6 +5074,7 @@
     amplified_text: [Tx("▸Dawn: Gain 1●."), Tx("▸Dissolved: Gain 2●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 425039590, crop: (x: 0.0, y: 0.266, scale: 1.17)),
   ),
 
@@ -4682,6 +5086,7 @@
     energy_cost: Fixed(2),
     kind: Event,
     speed: Interrupt,
+    rarity: Uncommon,
     art: (image: 1200949264, owned: true, crop: (x: 0.126, y: 0.398, scale: 1.17)),
   ),
 
@@ -4692,6 +5097,7 @@
     amplified_text: [Tx("▸Dawn: Gain 2●."), Tx("Reclaim 3●")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
+    rarity: Rare,
     art: (image: 674166508, crop: (x: -0.385, y: 1.0, scale: 1.47)),
   ),
 
@@ -4705,6 +5111,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 2600774401, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -4714,6 +5121,7 @@
     ability_text: [Tx("To play this character, pay 4⍟.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(7)),
+    rarity: Uncommon,
     art: (image: 2022594404, owned: true, crop: (x: -0.012, y: 1.0, scale: 1.1)),
   ),
 
@@ -4726,6 +5134,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 591626954, crop: (x: 0.0, y: 0.936, scale: 1.0)),
   ),
 
@@ -4735,6 +5144,7 @@
     ability_text: [Tx("Materialize two random ≤2● cost characters from your deck.")],
     energy_cost: Fixed(4),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 2285036625, crop: (x: 0.504, y: 0.398, scale: 1.17)),
   ),
 
@@ -4744,6 +5154,7 @@
     ability_text: [Tx("Dissolve all characters.")],
     energy_cost: Fixed(4),
     kind: Event,
+    rarity: Common,
     art: (image: 1200949222, owned: true, crop: (x: 0.084, y: 0.032, scale: 1.17)),
   ),
 
@@ -4754,6 +5165,7 @@
     amplified_text: [Tx("▸Dawn: Gain 1● for each ≤3● cost character you control.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(2)),
+    rarity: Rare,
     art: (image: 507270340, crop: (x: 0.741, y: 1.0, scale: 1.17)),
   ),
 
@@ -4772,6 +5184,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 1114007978, crop: (x: 0.0, y: 1.0, scale: 1.47)),
   ),
 
@@ -4782,6 +5195,7 @@
     amplified_text: [Tx("Abandon a character: Store 2⧗."), Tx("2⧗: Gain 1●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Synth", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 2438838891, crop: (x: -0.353, y: 0.0, scale: 1.17)),
   ),
 
@@ -4794,6 +5208,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 2544257341, crop: (x: 0.954, y: 1.0, scale: 1.11)),
   ),
 
@@ -4810,6 +5225,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1289324113),
   ),
 
@@ -4820,6 +5236,7 @@
     amplified_text: [Tx("Discard a card: Materialize a 2✦ survivor figment.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 1387670426),
   ),
 
@@ -4837,6 +5254,7 @@
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     speed: Interrupt,
+    rarity: Common,
     art: (image: 2657255499, crop: (x: -0.078, y: 0.188, scale: 1.97)),
   ),
 
@@ -4855,6 +5273,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Survivor", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 2258761883, crop: (x: -0.21, y: 0.608, scale: 1.17)),
   ),
 
@@ -4865,6 +5284,7 @@
     amplified_text: [Tx("Veil"), Tx("▸Materialized: Draw 2 cards.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(0)),
+    rarity: Common,
     art: (image: 1470059003, crop: (x: 0.0, y: -0.573, scale: 1.67)),
   ),
 
@@ -4877,6 +5297,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Common,
     art: (image: 2123360849, crop: (x: 0.046, y: 1.0, scale: 1.11)),
   ),
 
@@ -4889,6 +5310,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "*", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 2191235661),
   ),
 
@@ -4898,6 +5320,7 @@
     ability_text: [Tx("X●: The ✦ of each character you control becomes X until end of turn.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1213574257),
   ),
 
@@ -4908,6 +5331,7 @@
     amplified_text: [Tx("Materialize three 1✦ ethereal figments."), Tx("Reclaim 2●")],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Common,
     art: (image: 1687930282, crop: (x: 0.042, y: 1.0, scale: 1.1)),
   ),
 
@@ -4918,6 +5342,7 @@
     amplified_text: [Tx("2●, ☾: Store 2⧗."), Tx("▸Dawn: Gain 1● for each stored ⧗.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 1114007534, crop: (x: -0.084, y: 1.0, scale: 1.17)),
   ),
 
@@ -4928,6 +5353,7 @@
     amplified_text: [Tx("When you materialize a figment, materialize a 2✦ ethereal figment.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 730423177, crop: (x: -0.753, y: 1.0, scale: 1.47)),
   ),
 
@@ -4944,6 +5370,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 1180104511, crop: (x: 0.175, y: 1.0, scale: 2.07)),
   ),
 
@@ -4954,6 +5381,7 @@
     energy_cost: Variable,
     kind: Event,
     speed: Interrupt,
+    rarity: Uncommon,
     art: (image: 323698610, crop: (x: 0.0, y: 0.608, scale: 1.17)),
   ),
 
@@ -4968,6 +5396,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Fast,
+    rarity: Common,
     art: (image: 1790126243, crop: (x: 0.252, y: 1.0, scale: 1.17)),
   ),
 
@@ -4980,6 +5409,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2293194529, owned: true),
   ),
 
@@ -4989,6 +5419,7 @@
     ability_text: [Tx("Discard a card: Draw two cards with ephemeral.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visionary", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 2030910779, crop: (x: 0.0, y: -0.038, scale: 1.36)),
   ),
 
@@ -4999,6 +5430,7 @@
     amplified_text: [Tx("When you play an event, gain 2●.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2221822101),
   ),
 
@@ -5009,6 +5441,7 @@
     amplified_text: [Tx("When you play a character, store 2⧗."), Tx("2⧗: Gain 1●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Child", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 519475348, crop: (x: -0.34, y: 1.0, scale: 1.57)),
   ),
 
@@ -5018,6 +5451,7 @@
     ability_text: [Tx("Each player discards their hand, then draws 6 cards.")],
     energy_cost: Fixed(3),
     kind: Event,
+    rarity: Rare,
     art: (image: 1139536448, crop: (x: 0.0, y: 1.0, scale: 1.11)),
   ),
 
@@ -5032,6 +5466,7 @@
     energy_cost: Fixed(2),
     kind: Event,
     speed: Interrupt,
+    rarity: Uncommon,
     art: (image: 2269064815),
   ),
 
@@ -5041,6 +5476,7 @@
     ability_text: [Tx("Awakened"), Tx("▸Materialized: Return a character you control to hand.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Vehicle", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 539227192, crop: (x: 0.0, y: 1.0, scale: 1.17)),
   ),
 
@@ -5059,6 +5495,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 717263302, crop: (x: -0.353, y: 1.0, scale: 1.17)),
   ),
 
@@ -5069,6 +5506,7 @@
     amplified_text: [Tx("▸Challenge: Each other challenging character gains +2✦.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 450347140, crop: (x: -0.689, y: 1.0, scale: 1.37)),
   ),
 
@@ -5087,6 +5525,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(0)),
+    rarity: Uncommon,
     art: (image: 1200949225, crop: (x: 0.0, y: 0.0, scale: 1.17)),
   ),
 
@@ -5099,6 +5538,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 511427716, crop: (x: -0.285, y: 0.608, scale: 1.17)),
   ),
 
@@ -5110,6 +5550,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 2127752123, crop: (x: -0.084, y: -0.29, scale: 1.37)),
   ),
 
@@ -5120,6 +5561,7 @@
     amplified_text: [Tx("Draw two cards, then discard one card. Gain 3●.")],
     energy_cost: Fixed(3),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 1728839131),
   ),
 
@@ -5129,6 +5571,7 @@
     ability_text: [Tx("▸Materialized: Discover a ≤2● cost character.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor"),
+    rarity: Uncommon,
     art: (image: 1016596177, crop: (x: -0.252, y: 0.869, scale: 1.17)),
   ),
 
@@ -5138,6 +5581,7 @@
     ability_text: [Tx("When a non-figment character you control is dissolved, draw a card.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Survivor", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 1347487814, crop: (x: -0.294, y: 1.0, scale: 1.16)),
   ),
 
@@ -5148,6 +5592,7 @@
     amplified_text: [Tx("▸Dissolved: Choose one: Gain 2●, or gain 1 maximum ●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 658076065, crop: (x: -1.0, y: 0.0, scale: 1.17)),
   ),
 
@@ -5168,6 +5613,7 @@
     ability_text: [Tx("▸Dawn: If this character is in your void, return it to your hand.")],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Synth", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 410445436, crop: (x: 0.0, y: -0.412, scale: 1.37)),
   ),
 
@@ -5177,6 +5623,7 @@
     ability_text: [Tx("Choose up to two ≤X● cost events in your void to gain reclaim 0●.")],
     energy_cost: FixedAndVariable(2),
     kind: Event,
+    rarity: Common,
     art: (image: 644603677, owned: true, crop: (x: 0.0, y: -0.3, scale: 1.27)),
   ),
 
@@ -5193,6 +5640,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Synth"),
+    rarity: Common,
     art: (image: 2216124449, crop: (x: 0.0, y: 0.0, scale: 1.67)),
   ),
 
@@ -5203,6 +5651,7 @@
     amplified_text: [Tx("▸Challenge: You may discard a card to give this character +3✦.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1159163608, crop: (x: -0.318, y: 1.0, scale: 1.37)),
   ),
 
@@ -5212,6 +5661,7 @@
     ability_text: [Tx("When you discard a card, draw a card with ephemeral.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Child", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2415692463, owned: true, crop: (x: 0.042, y: 1.0, scale: 1.17)),
   ),
 
@@ -5223,6 +5673,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 670293472),
   ),
 
@@ -5233,6 +5684,7 @@
     amplified_text: [Tx("Abandon a character: Erode 3.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Mage", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2303852063, crop: (x: 0.42, y: 0.032, scale: 1.17)),
   ),
 
@@ -5249,6 +5701,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2594220423, crop: (x: -0.21, y: 1.0, scale: 1.17)),
   ),
 
@@ -5258,6 +5711,7 @@
     ability_text: [Tx("▸Materialized: Draw a ≤2● cost card. It costs 0●.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Synth", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 1134692546, crop: (x: -0.252, y: 0.869, scale: 1.17)),
   ),
 
@@ -5267,6 +5721,7 @@
     ability_text: [Tx("When a character is dissolved, gain 1⍟.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visionary", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 649133680, crop: (x: 0.0, y: 0.869, scale: 1.17)),
   ),
 
@@ -5279,6 +5734,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 1926604865, crop: (x: -0.086, y: 1.0, scale: 1.1)),
   ),
 
@@ -5288,6 +5744,7 @@
     ability_text: [Tx("▸Challenge: You may pay 2● and discard a card to draw two cards.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Explorer", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 772547359, crop: (x: 0.0, y: -0.478, scale: 1.67)),
   ),
 
@@ -5303,6 +5760,7 @@
     energy_cost: Fixed(3),
     kind: Character(subtype: "Synth", spark: Fixed(3)),
     speed: Interrupt,
+    rarity: Common,
     art: (image: 2586513027),
   ),
 
@@ -5313,6 +5771,7 @@
     amplified_text: [Tx("When you discard this card, materialize it with awakened.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2364396771, owned: true, crop: (x: -0.096, y: 0.6, scale: 1.67)),
   ),
 
@@ -5322,6 +5781,7 @@
     ability_text: [Tx("Other characters you control have 10✦.")],
     energy_cost: Fixed(10),
     kind: Character(subtype: "Ancient", spark: Fixed(4)),
+    rarity: Common,
     art: (image: 2421338071, crop: (x: 0.0, y: 1.0, scale: 1.47)),
   ),
 
@@ -5331,6 +5791,7 @@
     ability_text: [Tx("Choose a value of X. Discover a character with cost X●.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Common,
     art: (image: 1633431262, owned: true),
   ),
 
@@ -5340,6 +5801,7 @@
     ability_text: [Tx("▸Dissolved: Choose a survivor in your void to gain reclaim.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1104412604, crop: (x: 0.0, y: 0.218, scale: 1.47)),
   ),
 
@@ -5349,6 +5811,7 @@
     ability_text: [Tx("▸Dissolved: You may pay 1● to return this character to hand.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 2123360834, crop: (x: 0.504, y: 1.0, scale: 1.11)),
   ),
 
@@ -5359,6 +5822,7 @@
     amplified_text: [Tx("Abandon another character: This character gains +2✦.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
+    rarity: Uncommon,
     art: (image: 2438838889, crop: (x: 0.0, y: -0.496, scale: 1.57)),
   ),
 
@@ -5386,6 +5850,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 515170243, crop: (x: -0.162, y: 1.0, scale: 1.37)),
   ),
 
@@ -5396,6 +5861,7 @@
     amplified_text: [Tx("Gain 4●.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Rare,
     art: (image: 717263497),
   ),
 
@@ -5408,6 +5874,7 @@
     ],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 1794244549, crop: (x: 0.0, y: 0.0, scale: 1.17)),
   ),
 
@@ -5430,6 +5897,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Ancient", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 1557999812, crop: (x: -0.002, y: 1.0, scale: 1.07)),
   ),
 
@@ -5440,6 +5908,7 @@
     energy_cost: Fixed(5),
     kind: Character(subtype: "Visitor", spark: Fixed(4)),
     speed: Fast,
+    rarity: Rare,
     art: (image: 443761822, crop: (x: 0.0, y: 0.4, scale: 1.17)),
   ),
 
@@ -5450,6 +5919,7 @@
     amplified_text: [Tx("▸Materialized, Dissolved: Erode 5.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1971751580, crop: (x: -0.546, y: 1.0, scale: 1.17)),
   ),
 
@@ -5459,6 +5929,7 @@
     ability_text: [],
     energy_cost: Variable,
     kind: Character(subtype: "Warrior", spark: Variable),
+    rarity: Uncommon,
     art: (image: 393588439, owned: true, crop: (x: -0.228, y: 1.0, scale: 1.17)),
   ),
 
@@ -5477,6 +5948,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 478671154, crop: (x: 0.062, y: 0.0, scale: 1.67)),
   ),
 
@@ -5489,6 +5961,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 492981619, crop: (x: 0.353, y: 0.266, scale: 1.17)),
   ),
 
@@ -5505,6 +5978,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Visitor", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 768349750, crop: (x: 0.0, y: -0.668, scale: 1.67)),
   ),
 
@@ -5516,6 +5990,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Survivor", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 789291004),
   ),
 
@@ -5526,6 +6001,7 @@
     energy_cost: Fixed(2),
     kind: Event,
     speed: Interrupt,
+    rarity: Uncommon,
     art: (image: 1282908322, owned: true, crop: (x: 0.084, y: 1.0, scale: 1.17)),
   ),
 
@@ -5535,6 +6011,7 @@
     ability_text: [Tx("▸Materialized: Each player discards a card."), Tx("Reclaim 1●.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Survivor", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 1727859043, crop: (x: 0.0, y: -0.142, scale: 1.47)),
   ),
 
@@ -5545,6 +6022,7 @@
     amplified_text: [Tx("☾, Discard your hand, abandon this character: Gain 4●.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2189428529, crop: (x: -0.024, y: 0.669, scale: 1.67)),
   ),
 
@@ -5564,6 +6042,7 @@
     ability_text: [Tx("Veil"), Tx("When you materialize a character with cost X●, draw a card.")],
     energy_cost: FixedAndVariable(2),
     kind: Character(subtype: "Explorer", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2127752120, owned: true),
   ),
 
@@ -5573,6 +6052,7 @@
     ability_text: [Tx("Abandon a character: A player erodes X, where X is that character's cost.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 2639857441, crop: (x: -0.322, y: 1.0, scale: 1.11)),
   ),
 
@@ -5586,6 +6066,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
+    rarity: Rare,
     art: (image: 2590831713, crop: (x: 0.714, y: 1.0, scale: 1.17)),
   ),
 
@@ -5597,6 +6078,7 @@
     ],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Warrior", spark: Fixed(5)),
+    rarity: Common,
     art: (image: 247705264, crop: (x: 0.0, y: -0.343, scale: 1.5)),
   ),
 
@@ -5610,6 +6092,7 @@
     energy_cost: Fixed(2),
     kind: Character(subtype: "Outsider", spark: Fixed(4)),
     speed: Fast,
+    rarity: Common,
     art: (image: 2127752144, crop: (x: 0.126, y: 0.032, scale: 1.17)),
   ),
 
@@ -5626,6 +6109,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 1740270992, crop: (x: 0.0, y: 1.0, scale: 1.37)),
   ),
 
@@ -5635,6 +6119,7 @@
     ability_text: [Tx("Until end of turn, cards in your void gain reclaim.")],
     energy_cost: Fixed(3),
     kind: Event,
+    rarity: Rare,
     art: (image: 1005938023),
   ),
 
@@ -5645,6 +6130,7 @@
     energy_cost: Fixed(1),
     kind: Event,
     speed: Interrupt,
+    rarity: Uncommon,
     art: (image: 2023111787, crop: (x: -0.622, y: 1.0, scale: 1.17)),
   ),
 
@@ -5654,6 +6140,7 @@
     ability_text: [Tx("▸Dissolved: Return another warrior from your void to your hand.")],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Warrior", spark: Fixed(3)),
+    rarity: Common,
     art: (image: 2421338075, crop: (x: -0.139, y: -0.394, scale: 1.47)),
   ),
 
@@ -5666,6 +6153,7 @@
     ],
     energy_cost: Fixed(5),
     kind: Event,
+    rarity: Common,
     art: (image: 478671142, crop: (x: 0.228, y: 1.0, scale: 1.17)),
   ),
 
@@ -5678,6 +6166,7 @@
     ],
     energy_cost: Fixed(3),
     kind: Character(subtype: "Survivor", spark: Fixed(3)),
+    rarity: Uncommon,
     art: (image: 1252796545, crop: (x: 0.399, y: -0.678, scale: 1.87)),
   ),
 
@@ -5690,6 +6179,7 @@
     ],
     energy_cost: Fixed(5),
     kind: Character(subtype: "Warrior", spark: Fixed(2)),
+    rarity: Uncommon,
     art: (image: 2303852057, crop: (x: -0.064, y: 0.64, scale: 1.37)),
   ),
 
@@ -5699,6 +6189,7 @@
     ability_text: [Tx("▸Materialized: Draw 2 cards.")],
     energy_cost: Fixed(5),
     kind: Character(subtype: "Warrior", spark: Fixed(5)),
+    rarity: Uncommon,
     art: (image: 2212744817, crop: (x: 0.096, y: 0.314, scale: 1.67)),
   ),
 
@@ -5711,6 +6202,7 @@
     energy_cost: Fixed(3),
     kind: Event,
     speed: Interrupt,
+    rarity: Rare,
     art: (image: 2530614283, owned: true, crop: (x: 0.0, y: 0.814, scale: 1.0)),
   ),
 
@@ -5720,6 +6212,7 @@
     ability_text: [Tx("Discard a card: Choose an event in your void to gain reclaim.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Explorer", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 712713373, crop: (x: 0.0, y: 1.0, scale: 1.67)),
   ),
 
@@ -5734,6 +6227,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Spirit Animal", spark: Fixed(2)),
+    rarity: Common,
     art: (image: 1648927918, crop: (x: 0.378, y: 1.0, scale: 1.17)),
   ),
 
@@ -5749,6 +6243,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 2293194527, crop: (x: 0.126, y: 1.0, scale: 1.37)),
   ),
 
@@ -5758,6 +6253,7 @@
     ability_text: [Tx("Look at the opponent's hand. Put a card from it into your hand.")],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Common,
     art: (image: 2033123273),
   ),
 
@@ -5770,6 +6266,7 @@
     ],
     energy_cost: Fixed(2),
     kind: Event,
+    rarity: Uncommon,
     art: (image: 1798514902, crop: (x: -0.21, y: 0.242, scale: 1.17)),
   ),
 
@@ -5780,6 +6277,7 @@
     amplified_text: [Tx("Materialize a 5✦ monstrosity figment."), Tx("Reclaim 4●")],
     energy_cost: Fixed(3),
     kind: Event,
+    rarity: Common,
     art: (image: 2123360843, crop: (x: 0.084, y: 1.0, scale: 1.17)),
   ),
 
@@ -5793,6 +6291,7 @@
     ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
+    rarity: Common,
     art: (image: 1295291155, crop: (x: 0.0, y: 0.331, scale: 1.77)),
   ),
 
@@ -5810,6 +6309,7 @@
     energy_cost: Fixed(2),
     kind: Event,
     speed: Interrupt,
+    rarity: Common,
     art: (image: 450440617, crop: (x: -0.342, y: 0.032, scale: 1.17)),
   ),
 
@@ -5820,6 +6320,7 @@
     amplified_text: [Tx("An enemy loses all abilities until the opponent pays 4●.")],
     energy_cost: Fixed(1),
     kind: Event,
+    rarity: Common,
     art: (image: 2182865341, crop: (x: 0.672, y: 1.0, scale: 1.11)),
   ),
 

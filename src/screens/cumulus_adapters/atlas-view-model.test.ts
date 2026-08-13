@@ -462,9 +462,7 @@ describe("buildAtlasMapNodes", () => {
           id: "figments",
           name: "Figments",
           atlasCardTheme: "Figment",
-          signatureCards: [],
-          weightStrength: 1,
-          opponentBiasStrength: 1,
+          tideIds: ["tide-a", "tide-b", "tide-c"],
         },
       ],
     };

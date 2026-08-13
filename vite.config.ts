@@ -597,7 +597,7 @@ function dreamwellDataHotReloadPlugin(): Plugin {
  * a running battle/journey app when one is edited. The configs covered are the
  * single-TOML-to-single-JSON catalogs registered in scripts/config-data.mjs
  * (`dreamscapes.toml`, `dream_guides.toml`, `sites.toml`, `affiliations.toml`,
- * `atlas.toml`, `apollyon_incarnations.toml`, `dreamsign_profiles.toml`).
+ * `atlas.toml` and `apollyon_incarnations.toml`).
  *
  * The dev watcher ignores generated TOML (see `server.watch.ignored`), so a
  * TOML save normally has no effect on the page. This plugin watches the directory
@@ -1060,9 +1060,7 @@ export default defineConfig({
         // These files are otherwise watched; ignoring them keeps a
         // dream-avatar-editor save from reloading the page mid-edit.
         path.resolve(path.join(__dirname, "data", "tides.ron")),
-        path.resolve(
-          path.join(__dirname, "data", "dream_avatar_tide_pools.ron"),
-        ),
+        path.resolve(path.join(__dirname, "data", "dream_avatars.ron")),
         path.resolve(
           path.join(__dirname, "public", "dream-avatars-v2-data.json"),
         ),
@@ -1073,7 +1071,7 @@ export default defineConfig({
         path.resolve(path.join(__dirname, "public", "dreamwell-data.json")),
         ...generatedCardDataWatchPaths,
         // The Dream Atlas content catalogs (atlas, dreamscapes,
-        // dream_guides, affiliations, apollyon_incarnations, dreamsign_profiles)
+        // dream_guides, affiliations, and apollyon_incarnations)
         // are regenerated under public/ on every matching TOML save by
         // configDataHotReloadPlugin, which sends a targeted config-data:changed
         // event; ignore the outputs so the write does not also trigger Vite's

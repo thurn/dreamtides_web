@@ -62,7 +62,7 @@ describe("generated card data drift Vite integration", () => {
       resolve(join(rootDir, ".worktrees")) + "/**",
       resolve(join(rootDir, ".claude", "worktrees")) + "/**",
       resolve(join(rootDir, "data", "tides.ron")),
-      resolve(join(rootDir, "data", "dream_avatar_tide_pools.ron")),
+      resolve(join(rootDir, "data", "dream_avatars.ron")),
       resolve(join(rootDir, "public", "dream-avatars-v2-data.json")),
       resolve(join(rootDir, "public", "tides4-data.json")),
       resolve(join(rootDir, "public", "dreamwell-data.json")),

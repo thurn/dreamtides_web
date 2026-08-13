@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/cumulus#/dream-avatar-portrait`
 
-Real consumers: **14** (imports outside `src/cumulus/docs/` and tests).
+Real consumers: **12** (imports outside `src/cumulus/docs/` and tests).
 
 The shared framed DreamAvatar profile surface: a square `panel` crop for profile cards and popovers, or a close `thumb` crop for HUD rows and resident lists. Both render the transparent cutout over the canonical opaque portrait field and fall back to a monogram when art is unavailable.
 

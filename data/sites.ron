@@ -2,6 +2,8 @@
 
 #![enable(implicit_some)]
 SitesCatalog(
+  selection: (min_deck_for_purge: 8, placeable_types: [Shop, Purge, Transfiguration, Duplication]),
+
   site_types: [
     SiteMetadata(
       site: Battle,

@@ -1,7 +1,10 @@
 import auguryJson from "../generated/config/augury-data.json";
-import rewardSelectionJson from "../generated/config/reward-selection-data.json";
+import sitesJson from "../../public/sites-data.json";
+import tidesJson from "../../public/tides4-data.json";
 import { parseAuguryData } from "../data/augury-data";
-import { parseRewardSelectionData } from "../data/reward-selection-data";
+import { buildRewardSelectionData } from "../data/reward-selection-data";
+import { validateTides4Decks } from "../draft/pool/tides4-io";
+import type { SitesData } from "../types/sites-data";
 
 /**
  * Generated compatibility view of the RON-authored reward-selection tuning.
@@ -9,7 +12,11 @@ import { parseRewardSelectionData } from "../data/reward-selection-data";
  * this export keeps isolated algorithm tests and analysis scripts concise.
  */
 export const MERCHANT_TUNING = {
-  ...parseRewardSelectionData(rewardSelectionJson).tuning,
+  ...buildRewardSelectionData({
+    tides: validateTides4Decks(tidesJson),
+    augury: parseAuguryData(auguryJson),
+    sites: sitesJson as SitesData,
+  }).tuning,
   categoryDraftSize: parseAuguryData(auguryJson).archetypes.find(
     (entry) => entry.id === "category_draft_known",
   )?.quantities.chooserSize ?? 4,

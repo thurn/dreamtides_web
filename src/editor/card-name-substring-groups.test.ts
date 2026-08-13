@@ -17,7 +17,6 @@ function card(id: string, name: string, cardNumber: number): EditorCardRecord {
     tags: [],
     tides: [],
     mtgName: "",
-    popularity: 0,
     source: {},
     preview: {
       id: asCardId(id),

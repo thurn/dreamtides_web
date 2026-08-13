@@ -12,8 +12,6 @@ use super::localization::source_text;
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct AffiliationCatalog {
-    pub default_random_draw_max_multiplier: f64,
-    pub default_opponent_deck_max_multiplier: f64,
     pub affiliations: Vec<AffiliationDefinition>,
 }
 
@@ -23,7 +21,7 @@ pub struct AffiliationDefinition {
     pub id: CanonicalUuid,
     pub name: LocalizedString,
     pub atlas_card_theme: LocalizedString,
-    pub signature_card_ids: Vec<CanonicalUuid>,
+    pub tide_ids: Vec<CanonicalUuid>,
 }
 
 #[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
@@ -82,12 +80,8 @@ struct CompatibilityAffiliation {
     name: String,
     #[serde(rename = "atlas-card-theme")]
     atlas_card_theme: String,
-    #[serde(rename = "signature-cards")]
-    signature_cards: Vec<String>,
-    #[serde(rename = "weight-strength")]
-    weight_strength: f64,
-    #[serde(rename = "opponent-bias-strength")]
-    opponent_bias_strength: f64,
+    #[serde(rename = "tide-ids")]
+    tide_ids: Vec<String>,
 }
 
 pub fn lower(source: AffiliationCatalog) -> Result<toml::Value> {
@@ -100,13 +94,11 @@ pub fn lower(source: AffiliationCatalog) -> Result<toml::Value> {
                 id: affiliation.id.as_hyphenated(),
                 name: source_text(&affiliation.name)?,
                 atlas_card_theme: source_text(&affiliation.atlas_card_theme)?,
-                signature_cards: affiliation
-                    .signature_card_ids
+                tide_ids: affiliation
+                    .tide_ids
                     .into_iter()
                     .map(CanonicalUuid::as_hyphenated)
                     .collect(),
-                weight_strength: source.default_random_draw_max_multiplier,
-                opponent_bias_strength: source.default_opponent_deck_max_multiplier,
             })
         })
         .collect::<Result<Vec<_>>>()?;
@@ -116,15 +108,6 @@ pub fn lower(source: AffiliationCatalog) -> Result<toml::Value> {
 }
 
 pub fn validate(source: &AffiliationCatalog) -> Result<()> {
-    validate_multiplier(
-        "default_random_draw_max_multiplier",
-        source.default_random_draw_max_multiplier,
-    )?;
-    validate_multiplier(
-        "default_opponent_deck_max_multiplier",
-        source.default_opponent_deck_max_multiplier,
-    )?;
-
     let mut ids = BTreeSet::new();
     for affiliation in &source.affiliations {
         if !ids.insert(affiliation.id) {
@@ -142,16 +125,16 @@ pub fn validate(source: &AffiliationCatalog) -> Result<()> {
                 affiliation.id
             );
         }
-        if affiliation.signature_card_ids.is_empty() {
-            bail!("affiliation {} has no signature cards", affiliation.id);
+        if affiliation.tide_ids.len() != 3 {
+            bail!("affiliation {} must declare exactly three tides", affiliation.id);
         }
-        let mut signature_ids = BTreeSet::new();
-        for signature_id in &affiliation.signature_card_ids {
-            if !signature_ids.insert(*signature_id) {
+        let mut tide_ids = BTreeSet::new();
+        for tide_id in &affiliation.tide_ids {
+            if !tide_ids.insert(*tide_id) {
                 bail!(
-                    "affiliation {} repeats signature card id {}",
+                    "affiliation {} repeats tide id {}",
                     affiliation.id,
-                    signature_id
+                    tide_id
                 );
             }
         }
@@ -159,9 +142,17 @@ pub fn validate(source: &AffiliationCatalog) -> Result<()> {
     Ok(())
 }
 
-fn validate_multiplier(field: &str, value: f64) -> Result<()> {
-    if !value.is_finite() || value < 1.0 {
-        bail!("{field} must be a finite number greater than or equal to 1.0");
+pub fn validate_tide_references(
+    source: &AffiliationCatalog,
+    known_tide_ids: &BTreeSet<String>,
+) -> Result<()> {
+    validate(source)?;
+    for affiliation in &source.affiliations {
+        for tide_id in &affiliation.tide_ids {
+            if !known_tide_ids.contains(&tide_id.to_string()) {
+                bail!("affiliation {} references unknown Tide UUID {tide_id}", affiliation.id);
+            }
+        }
     }
     Ok(())
 }
@@ -174,29 +165,34 @@ mod tests {
 
     const FIRST_ID: &str = "00000000-0000-4000-8000-000000000001";
     const SECOND_ID: &str = "00000000-0000-4000-8000-000000000002";
-    const CARD_ONE: &str = "00000000-0000-4000-8000-000000000101";
-    const CARD_TWO: &str = "00000000-0000-4000-8000-000000000102";
+    const TIDE_ONE: &str = "00000000-0000-4000-8000-000000000101";
+    const TIDE_TWO: &str = "00000000-0000-4000-8000-000000000102";
+    const TIDE_THREE: &str = "00000000-0000-4000-8000-000000000103";
+    const TIDE_FOUR: &str = "00000000-0000-4000-8000-000000000104";
 
     fn synthetic_source() -> &'static str {
         r##"#![enable(implicit_some)]
 AffiliationCatalog(
-  default_random_draw_max_multiplier: 1.25,
-  default_opponent_deck_max_multiplier: 3.5,
   affiliations: [
     AffiliationDefinition(
       id: "00000000-0000-4000-8000-000000000001",
       name: Tx("First"),
       atlas_card_theme: Tx("One"),
-      signature_card_ids: [
+      tide_ids: [
         "00000000-0000-4000-8000-000000000101",
         "00000000-0000-4000-8000-000000000102",
+        "00000000-0000-4000-8000-000000000103",
       ],
     ),
     AffiliationDefinition(
       id: "00000000-0000-4000-8000-000000000002",
       name: Tx("Second"),
       atlas_card_theme: Tx("Two"),
-      signature_card_ids: ["00000000-0000-4000-8000-000000000102"],
+      tide_ids: [
+        "00000000-0000-4000-8000-000000000102",
+        "00000000-0000-4000-8000-000000000103",
+        "00000000-0000-4000-8000-000000000104",
+      ],
     ),
   ],
 )
@@ -204,7 +200,7 @@ AffiliationCatalog(
     }
 
     #[test]
-    fn lowers_ordered_records_and_expands_catalog_defaults() {
+    fn lowers_ordered_records_and_tide_ids() {
         let source: AffiliationCatalog = ron::from_str(synthetic_source()).unwrap();
         let lowered = lower(source).unwrap();
         let affiliations = lowered["affiliations"].as_array().unwrap();
@@ -212,16 +208,14 @@ AffiliationCatalog(
         assert_eq!(affiliations[0]["id"].as_str(), Some(FIRST_ID));
         assert_eq!(affiliations[1]["id"].as_str(), Some(SECOND_ID));
         assert_eq!(
-            affiliations[0]["signature-cards"].as_array().unwrap(),
+            affiliations[0]["tide-ids"].as_array().unwrap(),
             &vec![
-                toml::Value::String(CARD_ONE.into()),
-                toml::Value::String(CARD_TWO.into())
+                toml::Value::String(TIDE_ONE.into()),
+                toml::Value::String(TIDE_TWO.into()),
+                toml::Value::String(TIDE_THREE.into())
             ]
         );
-        for affiliation in affiliations {
-            assert_eq!(affiliation["weight-strength"].as_float(), Some(1.25));
-            assert_eq!(affiliation["opponent-bias-strength"].as_float(), Some(3.5));
-        }
+        assert_eq!(affiliations[1]["tide-ids"][2].as_str(), Some(TIDE_FOUR));
     }
 
     #[test]
@@ -246,7 +240,7 @@ AffiliationCatalog(
     }
 
     #[test]
-    fn rejects_duplicate_ids_invalid_defaults_and_invalid_records() {
+    fn rejects_duplicate_ids_and_invalid_records() {
         let duplicate_id = synthetic_source().replace(SECOND_ID, FIRST_ID);
         assert!(
             lower(ron::from_str(&duplicate_id).unwrap())
@@ -255,20 +249,24 @@ AffiliationCatalog(
                 .contains("duplicate affiliation id")
         );
 
-        let duplicate_signature = synthetic_source().replacen(CARD_TWO, CARD_ONE, 1);
+        let duplicate_tide = synthetic_source().replacen(TIDE_TWO, TIDE_ONE, 1);
         assert!(
-            lower(ron::from_str(&duplicate_signature).unwrap())
+            lower(ron::from_str(&duplicate_tide).unwrap())
                 .unwrap_err()
                 .to_string()
-                .contains("repeats signature card id")
+                .contains("repeats tide id")
         );
 
-        let invalid_multiplier = synthetic_source().replace("1.25", "0.75");
+        let too_few = synthetic_source().replacen(
+            "        \"00000000-0000-4000-8000-000000000103\",\n",
+            "",
+            1,
+        );
         assert!(
-            lower(ron::from_str(&invalid_multiplier).unwrap())
+            lower(ron::from_str(&too_few).unwrap())
                 .unwrap_err()
                 .to_string()
-                .contains("greater than or equal to 1.0")
+                .contains("exactly three tides")
         );
 
         let empty_name = synthetic_source().replace("name: Tx(\"First\")", "name: Tx(\"  \")");

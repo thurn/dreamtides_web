@@ -13,20 +13,11 @@ export const DEFAULT_DREAM_AVATAR_TOML_PATH = join(
 );
 export const TIDES_SOURCE_PATH = join("data", "tides.ron");
 export const TIDES_TOML_PATH = join("data", "tides.toml");
-export const TIDE_POOLS_SOURCE_PATH = join(
-  "data",
-  "dream_avatar_tide_pools.ron",
-);
-export const TIDE_POOLS_TOML_PATH = join(
-  "data",
-  "dream_avatar_tide_pools.toml",
-);
 export const DEFAULT_ECONOMY_TOML_PATH = join("data", "economy.toml");
 const DREAM_AVATAR_JSON_PATH = join("public", "dream-avatars-v2-data.json");
 
-// Generated compatibility TOML supplies editor records. Semantic field saves
-// target canonical `dream_avatars.ron`; tide-pool saves target the dedicated
-// Dream Avatar tide-pool catalog.
+// Generated compatibility TOML supplies editor records. Semantic field and
+// tide-pool saves target canonical `dream_avatars.ron`.
 export const EDITABLE_DREAM_AVATAR_FIELDS = new Set([
   "name",
   "title",
@@ -55,10 +46,10 @@ function readSourceDreamAvatars(rootDir, dreamAvatarTomlPath) {
   return dreamAvatars;
 }
 
-function readTides4(rootDir, tides4Path, tidePoolsPath) {
+function readTides4(rootDir, tides4Path, dreamAvatarTomlPath) {
   return compileTidesData(
     parse(readFileSync(join(rootDir, tides4Path), "utf8")),
-    parse(readFileSync(join(rootDir, tidePoolsPath), "utf8")),
+    parse(readFileSync(join(rootDir, dreamAvatarTomlPath), "utf8")),
   );
 }
 
@@ -70,9 +61,9 @@ function readTides4(rootDir, tides4Path, tidePoolsPath) {
 export function readTideCatalog({
   rootDir = ROOT,
   tides4Path = TIDES_TOML_PATH,
-  tidePoolsPath = TIDE_POOLS_TOML_PATH,
+  dreamAvatarTomlPath = DEFAULT_DREAM_AVATAR_TOML_PATH,
 } = {}) {
-  const tides4 = readTides4(rootDir, tides4Path, tidePoolsPath);
+  const tides4 = readTides4(rootDir, tides4Path, dreamAvatarTomlPath);
   const tides = Array.isArray(tides4.tides) ? tides4.tides : [];
   return tides.map((tide) => ({
     id: tide.id,
@@ -131,10 +122,9 @@ export function readEditorDreamAvatars({
   rootDir = ROOT,
   dreamAvatarTomlPath = DEFAULT_DREAM_AVATAR_TOML_PATH,
   tides4Path = TIDES_TOML_PATH,
-  tidePoolsPath = TIDE_POOLS_TOML_PATH,
   economyTomlPath = DEFAULT_ECONOMY_TOML_PATH,
 } = {}) {
-  const tides4 = readTides4(rootDir, tides4Path, tidePoolsPath);
+  const tides4 = readTides4(rootDir, tides4Path, dreamAvatarTomlPath);
   const economy = compileEconomyData(
     parse(readFileSync(join(rootDir, economyTomlPath), "utf8")),
   );

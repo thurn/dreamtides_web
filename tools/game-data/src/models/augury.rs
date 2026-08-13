@@ -24,7 +24,25 @@ const PRESENTATION_SLOTS: [&str; 8] = [
 #[serde(deny_unknown_fields)]
 pub struct AuguryCatalog {
     pub encounter: EncounterRules,
+    pub selection: AugurySelectionRules,
     pub archetypes: Vec<ArchetypeDefinition>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct AugurySelectionRules {
+    pub subtype_min_pool_cards: u32,
+    pub cost_bands: CostBandRules,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct CostBandRules {
+    pub cheap_maximum: u32,
+    pub mid_minimum: u32,
+    pub mid_maximum: u32,
+    pub big_minimum: u32,
+    pub cheap_character_maximum: u32,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -456,6 +474,29 @@ pub fn lower(source: AuguryCatalog) -> Result<toml::Value> {
 
     let mut root = toml::map::Map::new();
     root.insert("schema-version".into(), 1_i64.into());
+    let selection = source.selection;
+    root.insert(
+        "selection".into(),
+        toml::Value::Table(toml::map::Map::from_iter([
+            (
+                "subtype-min-pool-cards".into(),
+                i64::from(selection.subtype_min_pool_cards).into(),
+            ),
+            (
+                "cost-bands".into(),
+                toml::Value::Table(toml::map::Map::from_iter([
+                    ("cheap-maximum".into(), i64::from(selection.cost_bands.cheap_maximum).into()),
+                    ("mid-minimum".into(), i64::from(selection.cost_bands.mid_minimum).into()),
+                    ("mid-maximum".into(), i64::from(selection.cost_bands.mid_maximum).into()),
+                    ("big-minimum".into(), i64::from(selection.cost_bands.big_minimum).into()),
+                    (
+                        "cheap-character-maximum".into(),
+                        i64::from(selection.cost_bands.cheap_character_maximum).into(),
+                    ),
+                ])),
+            ),
+        ])),
+    );
     let encounter = source.encounter;
     root.insert(
         "encounter".into(),
@@ -547,6 +588,16 @@ fn lower_presentation_text(source: PresentationText) -> Result<toml::Value> {
 }
 
 fn validate(source: &AuguryCatalog) -> Result<()> {
+    if source.selection.subtype_min_pool_cards == 0 {
+        bail!("selection.subtype_min_pool_cards must be positive");
+    }
+    let bands = &source.selection.cost_bands;
+    if bands.cheap_maximum + 1 != bands.mid_minimum
+        || bands.mid_minimum > bands.mid_maximum
+        || bands.mid_maximum + 1 != bands.big_minimum
+    {
+        bail!("selection.cost_bands must be ordered, contiguous, and non-overlapping");
+    }
     let mut kinds = BTreeSet::new();
     let mut ids = BTreeSet::new();
     let mut families = BTreeSet::new();
@@ -756,6 +807,16 @@ mod tests {
         AuguryCatalog {
             encounter: EncounterRules {
                 allow_decline: false,
+            },
+            selection: AugurySelectionRules {
+                subtype_min_pool_cards: 12,
+                cost_bands: CostBandRules {
+                    cheap_maximum: 1,
+                    mid_minimum: 2,
+                    mid_maximum: 3,
+                    big_minimum: 4,
+                    cheap_character_maximum: 2,
+                },
             },
             archetypes: vec![
                 definition(FitCardGrant {

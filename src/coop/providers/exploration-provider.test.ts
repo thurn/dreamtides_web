@@ -397,7 +397,7 @@ describe("Exploration provider", () => {
     });
     expect(legacy).not.toHaveProperty("selectionRulesVersion");
     expect(legacy?.actionOffers[0]).not.toHaveProperty("canonicalMechanicId");
-    expect(current?.selectionRulesVersion).toBe("1");
+    expect(current?.selectionRulesVersion).toBe(SELECTION_RULES_VERSION);
   });
 
   it("routes unversioned opens to legacy replay and current opens to shared selection", () => {
@@ -6162,9 +6162,9 @@ describe("Exploration provider", () => {
 
     const staleContent: JourneyContent = {
       ...content,
-      rewardSelectionData: {
-        ...content.rewardSelectionData,
-        foldHash: `${content.rewardSelectionData.foldHash}-changed`,
+      sitesData: {
+        ...content.sitesData,
+        foldHash: `${content.sitesData.foldHash}-changed`,
       },
     };
     expect(

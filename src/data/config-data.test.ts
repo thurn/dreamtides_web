@@ -1,20 +1,25 @@
 import { describe, expect, it } from "vitest";
 import auguryJson from "../generated/config/augury-data.json";
-import rewardSelectionJson from "../generated/config/reward-selection-data.json";
+import sitesJson from "../../public/sites-data.json";
+import tidesJson from "../../public/tides4-data.json";
 import { parseAuguryData } from "./augury-data";
-import { parseRewardSelectionData } from "./reward-selection-data";
+import { buildRewardSelectionData } from "./reward-selection-data";
+import { validateTides4Decks } from "../draft/pool/tides4-io";
+import type { SitesData } from "../types/sites-data";
 
 describe("generated game configuration trust boundaries", () => {
-  it("accepts the generated Reward Selection and Augury artifacts", () => {
-    expect(parseRewardSelectionData(rewardSelectionJson).schemaVersion).toBe(1);
+  it("assembles selection tuning from the generated Tides, Sites, and Augury artifacts", () => {
+    const augury = parseAuguryData(auguryJson);
+    const selection = buildRewardSelectionData({
+      tides: validateTides4Decks(tidesJson),
+      augury,
+      sites: sitesJson as SitesData,
+    });
+    expect(selection.schemaVersion).toBe(2);
+    expect(selection.tuning.bandFraction).toBe(tidesJson.selection.bandFraction);
+    expect(selection.tuning.minDeckForPurge).toBe(sitesJson.selection.minDeckForPurge);
+    expect(selection.tuning.costBands).toEqual(augury.selection.costBands);
     expect(parseAuguryData(auguryJson).archetypes).toHaveLength(13);
-  });
-
-  it("rejects a mismatched fold hash", () => {
-    expect(() => parseRewardSelectionData({
-      ...rewardSelectionJson,
-      foldHash: "0".repeat(64),
-    })).toThrow(/malformed reward-selection-data/u);
   });
 
   it("keeps Augury authoring metadata and player presentation", () => {

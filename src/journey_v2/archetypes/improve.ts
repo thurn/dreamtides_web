@@ -196,10 +196,9 @@ function transfigurePayload(
  * `transfigure` — *Permanently improve a deck card.*
  *
  * Candidates: every (untransfigured entry, eligible transfiguration) pair with
- * positive benefit (starters excluded while non-starter pairs exist). Signal:
- * `transfigureBlend.benefit * benefit + transfigureBlend.centrality *
- * centrality(card, deck)`. Band-sample one pair. Face-up with a before/after
- * preview. Eligible when >= 1 pair exists.
+ * positive benefit (starters excluded while non-starter pairs exist). Mechanical
+ * benefit leads; leave-one-out affinity breaks ties. Face-up with a before/after
+ * preview. Eligible when at least one pair exists.
  */
 export const transfigureBuilder: MerchantArchetypeBuilder = {
   archetypeId: "transfigure",

@@ -1,5 +1,15 @@
 {
   "schemaVersion": 1,
+  "selection": {
+    "subtypeMinPoolCards": 12,
+    "costBands": {
+      "cheapMaximum": 1,
+      "midMinimum": 2,
+      "midMaximum": 3,
+      "bigMinimum": 4,
+      "cheapCharacterMaximum": 2
+    }
+  },
   "encounter": {
     "allowDecline": true
   },
@@ -297,6 +307,6 @@
       "quantities": {}
     }
   ],
-  "contentHash": "31de560e226b2a50ebb48814794bcacd41129179cc1ef9c0a36775f068f336e9",
-  "foldHash": "31de560e226b2a50ebb48814794bcacd41129179cc1ef9c0a36775f068f336e9"
+  "contentHash": "d5e01df0477f740b5292cbb98d678da735927592dee407b42ac1d7909e71647d",
+  "foldHash": "d5e01df0477f740b5292cbb98d678da735927592dee407b42ac1d7909e71647d"
 }

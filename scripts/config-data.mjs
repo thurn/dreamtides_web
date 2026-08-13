@@ -11,7 +11,6 @@ import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
 import {
   transformAffiliation,
-  transformDreamsignProfile,
   transformIncarnation,
   DREAMSCAPE_SCENE_ART_DIR,
   DREAMSCAPE_ICON_ART_DIR,
@@ -20,7 +19,6 @@ import {
 import { collectAtlasAssetSources, compileAtlasData } from "./atlas-data.mjs";
 import { compileEconomyData } from "./economy-data.mjs";
 import { compileDraftData } from "./draft-data.mjs";
-import { compileRewardSelectionData } from "./reward-selection-data.mjs";
 import { compileAuguryData } from "./augury-data.mjs";
 import {
   compileGambleData,
@@ -202,12 +200,6 @@ export const SIMPLE_CONFIGS = [
     transform: compileDraftData,
   },
   {
-    tomlFile: "reward_selection.toml",
-    jsonFile: "reward-selection-data.json",
-    arrayKey: null,
-    transform: compileRewardSelectionData,
-  },
-  {
     tomlFile: "augury.toml",
     jsonFile: "augury-data.json",
     arrayKey: null,
@@ -218,18 +210,6 @@ export const SIMPLE_CONFIGS = [
     jsonFile: "apollyon-incarnations-data.json",
     arrayKey: "incarnations",
     transform: transformIncarnation,
-  },
-  {
-    tomlFile: "dreamsign_profiles.toml",
-    jsonFile: "dreamsign-profiles-data.json",
-    arrayKey: "dreamsigns",
-    transform: transformDreamsignProfile,
-  },
-  {
-    tomlFile: "dreamsign_signatures.toml",
-    jsonFile: "dreamsign-signatures-data.json",
-    arrayKey: "dreamsigns",
-    transform: transformDreamsignProfile,
   },
 ];
 

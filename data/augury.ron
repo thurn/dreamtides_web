@@ -7,6 +7,17 @@ AuguryCatalog(
     allow_decline: true,
   ),
 
+  selection: (
+    subtype_min_pool_cards: 12,
+    cost_bands: (
+      cheap_maximum: 1,
+      mid_minimum: 2,
+      mid_maximum: 3,
+      big_minimum: 4,
+      cheap_character_maximum: 2,
+    ),
+  ),
+
   archetypes: [
     ArchetypeDefinition(
       id: "77ad1a09-aba0-4875-b462-e6efe94bdc3d",

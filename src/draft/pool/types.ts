@@ -24,7 +24,6 @@ export interface PoolCard {
 /** Shared run inputs used by tides4 and affiliation scoring. */
 export interface PoolData {
   /** Historical decklists keyed by stable card UUID for affiliation scoring. */
-  decklistIds?: readonly (readonly string[])[];
   /** The committed production tide-deck artifact. */
   tides4Decks?: Tides4DecksJson;
   /** Stable card UUID -> current display name. */

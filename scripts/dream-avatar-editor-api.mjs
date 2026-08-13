@@ -2,7 +2,6 @@ import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   DEFAULT_DREAM_AVATAR_TOML_PATH,
-  TIDE_POOLS_SOURCE_PATH,
   TIDES_SOURCE_PATH,
   readEditorDreamAvatars,
   readTideCatalog,
@@ -20,7 +19,6 @@ export const DREAM_AVATAR_SOURCE_PATH = join("data", "dream_avatars.ron");
 export const DREAM_AVATAR_EDITOR_SOURCE_PATHS = [
   DREAM_AVATAR_SOURCE_PATH,
   TIDES_SOURCE_PATH,
-  TIDE_POOLS_SOURCE_PATH,
 ];
 const UUID_V4_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/u;
@@ -269,7 +267,7 @@ async function handlePatch(
       });
       return;
     }
-    dataset = "dream-avatar-tide-pools";
+    dataset = "dream-avatars";
     operations = [
       {
         operation: "set_dream_avatar_tide_pool",

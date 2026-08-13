@@ -203,8 +203,6 @@ function sortValue(
       return card.name;
     case "tideCount":
       return card.tides.length;
-    case "popularity":
-      return card.popularity;
   }
 }
 

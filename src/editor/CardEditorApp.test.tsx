@@ -66,7 +66,6 @@ function makeEditorCard(overrides: Partial<EditorCardRecord> = {}): EditorCardRe
     tags: [],
     tides: [],
     mtgName: "",
-    popularity: 0,
     source: {},
     preview,
     ...overrides,

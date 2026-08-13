@@ -62,8 +62,7 @@ pub struct CardDefinition {
     pub kind: CardKind,
     #[serde(default, skip_serializing_if = "speed_is_normal")]
     pub speed: Speed,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub rarity: Option<Rarity>,
+    pub rarity: Rarity,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub roles: Vec<CardRole>,
     pub art: Art,
@@ -109,7 +108,6 @@ pub enum Rarity {
     Uncommon,
     Rare,
     Legendary,
-    Materialized,
     Starter,
     Tutorial,
     Special,
@@ -154,13 +152,12 @@ fn speed_is_normal(speed: &Speed) -> bool {
 }
 
 impl Rarity {
-    fn as_compat(self) -> &'static str {
+    pub(crate) fn as_compat(self) -> &'static str {
         match self {
             Self::Common => "Common",
             Self::Uncommon => "Uncommon",
             Self::Rare => "Rare",
             Self::Legendary => "Legendary",
-            Self::Materialized => "Materialized",
             Self::Starter => "Starter",
             Self::Tutorial => "Tutorial",
             Self::Special => "Special",
@@ -247,7 +244,7 @@ pub fn lower(
         record.insert("subtype".into(), subtype.into());
         record.insert(
             "rarity".into(),
-            card.rarity.map(Rarity::as_compat).unwrap_or("").into(),
+            card.rarity.as_compat().into(),
         );
         if !card.roles.is_empty() {
             let unique_roles = card.roles.iter().copied().collect::<BTreeSet<_>>();
@@ -313,7 +310,7 @@ mod tests {
             energy_cost,
             kind,
             speed: Speed::Interrupt,
-            rarity: Some(Rarity::Legendary),
+            rarity: Rarity::Legendary,
             roles: Vec::new(),
             art: Art {
                 image: 7,

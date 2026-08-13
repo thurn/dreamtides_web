@@ -547,10 +547,14 @@ interface RarityStyle {
 }
 
 const RARITY_STYLES: Readonly<Record<Rarity, RarityStyle | null>> = {
+  Common: null,
+  Uncommon: null,
+  Rare: null,
   Starter: null,
   Legendary: {
     cssClass: "card-rarity-legendary",
   },
+  Tutorial: null,
   Special: null,
 };
 

@@ -75,7 +75,8 @@ function tidesContext(
   const tideId = "tide-sig-fixture";
   const poolData: PoolData = {
     tides4Decks: {
-      version: 1,
+      version: 2,
+      selection: { bandFraction: 0.25, bandMinimum: 5 },
       tides: [
         {
           id: tideId,

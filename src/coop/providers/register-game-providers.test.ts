@@ -65,15 +65,11 @@ import { generateMerchantEncounter } from "../../journey_v2/encounter/generateMe
 import {
   makeMerchantTestCard,
   makeMerchantTestContent,
-  makeMerchantTestCorpus,
   makeMerchantTestDeckEntry,
-  makeMerchantTestDreamsignProfile,
   makeMerchantTestDreamsignTemplate,
   makeMerchantTestJourneyState,
   makeMerchantTestSite,
 } from "../../journey_v2/testing/fixtures";
-import type { MerchantCorpusCard } from "../../data/merchant-corpus";
-import type { DreamsignProfile } from "../../data/dreamsign-profiles";
 import {
   clearGameProviders,
   registerGameProviders,
@@ -716,10 +712,6 @@ function makeMerchantFixture(): {
   const site = makeMerchantTestSite({ id: MERCHANT_SITE_ID, type: "Augury" });
 
   const cards: CardData[] = [];
-  const corpus: Record<
-    string,
-    Partial<MerchantCorpusCard> & { quality: number }
-  > = {};
   for (let i = 0; i < 30; i += 1) {
     const cardNumber = 1000 + i;
     const id = `aaaa0000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`;
@@ -730,24 +722,19 @@ function makeMerchantFixture(): {
         name: asCardName(`Pool ${String(cardNumber)}`),
       }),
     );
-    corpus[id] = { quality: (i % 20) / 20 + 0.01 * i };
   }
 
   const templates = [];
-  const profiles: Record<string, DreamsignProfile> = {};
   for (let i = 0; i < 10; i += 1) {
     const id = `dsign-${String(i)}`;
     templates.push(
       makeMerchantTestDreamsignTemplate({ id, name: `Sign ${String(i)}` }),
     );
-    profiles[id] = makeMerchantTestDreamsignProfile({ id });
   }
 
   const content = makeMerchantTestContent({
     cards,
     dreamsignTemplates: templates,
-    merchantCorpus: makeMerchantTestCorpus({ cards: corpus }),
-    dreamsignProfiles: new Map(Object.entries(profiles)),
   });
 
   const journey = makeMerchantTestJourneyState({
@@ -1008,7 +995,7 @@ describe("createSiteContentProvider — Gamble", () => {
     }
   });
 
-  it("selects the Ladder Climb reward uniformly from the strongest 50", () => {
+  it("selects the Ladder Climb reward uniformly from its top 50 candidates", () => {
     const fixture = makeMerchantFixture();
     const templates = Array.from({ length: 55 }, (_value, index) => {
       const id = `dsign-${String(index).padStart(3, "0")}`;
@@ -1017,16 +1004,9 @@ describe("createSiteContentProvider — Gamble", () => {
         name: `Sign ${String(index)}`,
       });
     });
-    const profiles = new Map(
-      templates.map((template) => [
-        template.id,
-        makeMerchantTestDreamsignProfile({ id: template.id }),
-      ]),
-    );
     const content = makeMerchantTestContent({
       cards: [...fixture.content.cardDatabase.values()],
       dreamsignTemplates: templates,
-      dreamsignProfiles: profiles,
     });
     const journey = {
       ...fixture.journey,

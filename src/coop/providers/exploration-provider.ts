@@ -1653,7 +1653,6 @@ function buildActionOffer(
       },
       ...(action.effectKind === "gain-offered-card" && (action.count ?? 1) > 1
         ? {
-            cardFitQualityBlend: content.rewardSelectionData.tuning.copiesBlend,
           }
         : {}),
     });

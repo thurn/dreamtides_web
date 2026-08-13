@@ -42,6 +42,16 @@ export interface AuguryData {
   schemaVersion: 1;
   contentHash: string;
   foldHash: string;
+  selection: Readonly<{
+    subtypeMinPoolCards: number;
+    costBands: Readonly<{
+      cheapMaximum: number;
+      midMinimum: number;
+      midMaximum: number;
+      bigMinimum: number;
+      cheapCharacterMaximum: number;
+    }>;
+  }>;
   encounter: Readonly<{
     allowDecline: boolean;
   }>;

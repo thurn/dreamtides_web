@@ -39,6 +39,7 @@ export interface OpponentsData {
   schemaVersion: 1;
   contentHash: string;
   foldHash: string;
+  opponentDeckSize: number;
   battle: {
     minimumDeckSize: number;
     playerOpeningHandSize: number;
@@ -62,10 +63,6 @@ export interface OpponentsData {
     dreamsignsFromLayer: number;
     legendariesFromLayer: number;
     starterDilution: number[];
-  };
-  corpusSelection: {
-    affiliationWeight: number;
-    topRankedSamplingWindow: number;
   };
   journeyAiDeck: Array<{ cardId: string; count: number }>;
   ai: {

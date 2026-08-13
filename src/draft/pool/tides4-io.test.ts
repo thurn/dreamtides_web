@@ -11,7 +11,8 @@ import { validateTides4Decks } from "./tides4-io.ts";
 
 function makeArtifact(): Tides4DecksJson {
   return {
-    version: 1,
+    version: 2,
+    selection: { bandFraction: 0.25, bandMinimum: 5 },
     tides: [
       {
         id: "tide-sig-01",

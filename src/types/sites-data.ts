@@ -52,6 +52,10 @@ export interface SitesData {
   schemaVersion: 1;
   contentHash: string;
   foldHash: string;
+  selection: {
+    minDeckForPurge: number;
+    placeableTypes: readonly SiteType[];
+  };
   siteTypes: Readonly<Record<SiteType, SiteTypeData>>;
   randomSite: {
     destinations: readonly RandomSiteDestinationType[];

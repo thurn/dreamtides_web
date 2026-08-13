@@ -208,14 +208,15 @@ function buildTidemarkLadderClimbRuntime(
     shuffleCommitment: gambleShuffleCommitment(rng),
     card: gambleCommittedCard(rng),
   }));
-  const deckCards = journey.deck.flatMap((entry) => {
-    const card = content.cardDatabase.get(entry.cardNumber);
-    return card === undefined ? [] : [card];
+  const affinity = buildRewardSelectionContext({
+    journeyState: journey,
+    journeyContent: content,
+    site,
   });
   const dreamsignCandidateScores = scoreTidemarkLadderClimbDreamsignCandidates({
     templates,
-    profiles: content.dreamsignProfiles,
-    deckCards,
+    affinityIndex: affinity.affinityIndex,
+    affinityContext: affinity.affinityContext,
   });
   const strongPool = dreamsignCandidateScores.slice(
     0,

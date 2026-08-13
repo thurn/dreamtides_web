@@ -100,19 +100,6 @@ if (pathname === "/editor" || pathname === "/cards") {
   const { default: ImageViewerApp } =
     await import("./image_viewer/ImageViewerApp");
   renderStrict(<ImageViewerApp />);
-} else if (pathname === "/opponent") {
-  // Standalone opponent-generation debugging tool: simulate the pre-battle
-  // opponent build (DreamAvatar, dreamsigns, deck) for any run position and
-  // dreamscape, and re-roll the same parameters. See `src/debug/OpponentDebugApp`.
-  const { default: OpponentDebugApp } =
-    await import("./debug/OpponentDebugApp");
-  renderStrict(<OpponentDebugApp />);
-} else if (pathname === "/sigdecks") {
-  // Temporary visualization: the real draft deck most strongly correlated with
-  // each signature-carrying avatar. See `src/debug/SignatureDecksApp`.
-  const { default: SignatureDecksApp } =
-    await import("./debug/SignatureDecksApp");
-  renderStrict(<SignatureDecksApp />);
 } else if (pathname === "/offers") {
   const { default: OffersDebugApp } = await import("./debug/OffersDebugApp");
   renderStrict(<OffersDebugApp />);

@@ -28,6 +28,7 @@ export function opponentsFixture(): OpponentsData {
     schemaVersion: 1,
     contentHash: "b".repeat(64),
     foldHash: "b".repeat(64),
+    opponentDeckSize: 30,
     battle: {
       minimumDeckSize: 25,
       playerOpeningHandSize: 5,
@@ -52,7 +53,6 @@ export function opponentsFixture(): OpponentsData {
       legendariesFromLayer: 5,
       starterDilution: [10, 5],
     },
-    corpusSelection: { affiliationWeight: 0.25, topRankedSamplingWindow: 8 },
     journeyAiDeck: STARTER_IDS.map((cardId) => ({ cardId, count: 3 })),
     ai: {
       journeyDefaultPreset: "standard",

@@ -63,7 +63,8 @@ function makeTides4(
   const facetIds = tides.filter((t) => t.role === "facet").map((t) => t.id);
   const neutralIds = tides.filter((t) => t.role === "neutral").map((t) => t.id);
   return {
-    version: 1,
+    version: 2,
+    selection: { bandFraction: 0.25, bandMinimum: 5 },
     tides,
     tidePoolByDreamAvatar: {
       "dc-a": { starter: "tide-sig-1", facets: facetIds, neutral: neutralIds },

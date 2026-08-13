@@ -37,6 +37,7 @@ The menu opens above or below according to the available viewport space and scro
 | `value` | `string` | no |  |
 | `label` | `LocalizedString` | no |  |
 | `triggerLabel` | `LocalizedString` | yes |  |
+| `disabled` | `boolean` | yes |  |
 
 ## Usage
 

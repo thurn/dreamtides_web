@@ -10,6 +10,10 @@
 
 #![enable(implicit_some)]
 OpponentsCatalog(
+  // Mature opponent decks contain this many distinct cards before progression
+  // inserts Starter cards at early layers.
+  opponent_deck_size: 30,
+
   // Journey opponent difficulty schedule. Ability and Dreamsign unlocks apply
   // to every opponent; Legendary retention and Starter dilution tune decks.
   progression: ProgressionRules(
@@ -25,17 +29,5 @@ OpponentsCatalog(
     // least-synergistic non-Starters are cut first, preserving deck size.
     // Layers beyond this list insert zero Starters.
     starter_dilution: [10, 5],
-  ),
-
-  // Selects a known-good deck from the adapted corpus, then applies the shared
-  // progression rules above. Candidate ranking is deterministic; seeded
-  // sampling inside the top-ranked window provides variety between battles.
-  corpus_selection: CorpusSelectionRules(
-    // Secondary multiplier for Dreamscape-affiliation fit. DreamAvatar
-    // signature-card fit is the primary unweighted selection signal.
-    affiliation_weight: 0.25,
-    // Number of highest-ranked corpus decks eligible for seeded sampling.
-    // When the corpus is smaller, every ranked deck remains eligible.
-    top_ranked_sampling_window: 8,
   ),
 )

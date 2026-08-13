@@ -7,21 +7,14 @@ This reference preserves field-level authoring guidance for the canonical RON ca
 ### `AffiliationCatalog`
 
 Affiliations: the thematic faction backing each non-starter dreamscape. An
-affiliation's `signature_card_ids` are a curated set of cards that exemplify its
-theme; later draft and battle systems reweight content toward these cards
-(`default_random_draw_max_multiplier`) and bias opponent decks toward them
-(`default_opponent_deck_max_multiplier`). The catalog-level multipliers apply
-to every affiliation and are expanded into the generated TOML compatibility
-fields. These curations are chosen by theme and serve as
-probes for the shared IDF reweighting math.
+affiliation's `tide_ids` are exactly three canonical Tide UUIDs. Their unweighted
+sum is the affiliation vector used to select matching opponents and Dreamsigns.
 
 Fields:
 id UUIDv4 referenced by dreamscapes.
 name Player-facing affiliation name.
 atlas_card_theme Theme label used by Atlas generation.
-signature_card_ids Curated card UUIDs exemplifying the theme.
-default_random_draw_max_multiplier Pull strength for random card content.
-default_opponent_deck_max_multiplier Pull strength for opponent deck bias.
+tide_ids Three distinct Tide UUIDs defining the affiliation.
 
 ## `data/apollyon_incarnations.ron`
 
@@ -69,6 +62,9 @@ asset generation and `OfferTile` rendering consume that authored image number.
 Each card owns its stable UUID, rules text, gameplay shape, rarity, art, and any
 closed gameplay `roles`. `StarterDeck` marks the ordered fixed journey deck and
 must agree with `Starter` rarity. Exactly one `Special` card carries `Nightmare`.
+Cards in ordinary selection pools use `Common`, `Uncommon`, `Rare`, or
+`Legendary`; `Starter`, `Tutorial`, and `Special` are valid catalog rarities for
+cards outside those pools.
 The generated card-role projection resolves these UUIDs through the loaded card
 catalog and supplies a fold hash for multiplayer configuration gating.
 
@@ -143,6 +139,18 @@ A matching [[rarity-caps]] block may lower this limit for a specific rarity.
 
 Maximum number of distinct facets tides4 may draw from when building the pool.
 
+## `data/tides.ron`
+
+The typed `TidesCatalog` owns the shared affinity space and the preconstructed
+decks used by Tides4. Each `TideDefinition` has a UUID, localized presentation,
+resonance, `Signature`, `Facet`, or `Neutral` kind, and a UUID-keyed card-count
+map. A card contributes weight 2 to a Tide when its count is 2 and weight 1 when
+its count is 1.
+
+`selection.band_fraction` and `selection.band_minimum` define the universal
+seeded top-band sampler used after candidates are ranked. The compiler validates
+all Tide and card references and lowers the catalog to `data/tides.toml`.
+
 ## `data/dream_avatars.ron`
 
 The canonical catalog is an ordered RON list of `AvatarDefinition` records.
@@ -152,9 +160,10 @@ image number plus normalized `focus` coordinates. `starting_essence` is an
 optional tuning override.
 
 `signature_card_ids` is an ordered list of card UUIDs describing the avatar's
-deck intent. The compiler validates every reference against the card catalog,
-and the tides4 bake uses these signatures to derive signature and facet tides.
-The associated MTG archetype labels live in the internal
+deck intent. The `tide_pool` record owns the optional signature Tide, the
+available facet Tides, and neutral fill Tides used by Tides4 and opponent deck
+construction. The compiler validates each reference against the Tide's declared
+kind. The associated MTG archetype labels live in the internal
 `data/internal/internal_avatar_metadata.ron` catalog, keyed by Dream Avatar UUID.
 
 The compiler validates unique Dream Avatar IDs and portrait images, canonical
@@ -265,509 +274,18 @@ Discard: turn discarding into advantage. Vrakmoth and Corvath both convert a
 discard into a card or reclaim, Tessa loots (draw-then-discard), and Zeva
 discards to reclaim an event. The second four-avatar region.
 
-## `data/dreamsign_profiles.ron`
+## `data/dreamsigns.ron`
 
-### `DreamsignProfileDefinition`
+### `DreamsignDefinition`
 
-Curated dreamsign profiles for the dream merchant v3 matching system.
+Each Dreamsign record owns its stable UUID, localized name and rules text,
+art key, selection rarity, one to three Tide UUIDs, and editor tags. The
+rarity is `Common`, `Uncommon`, `Rare`, or `Legendary`. Tide references place
+the Dreamsign in the same affinity space used for cards, affiliations, Dream
+Avatars, rewards, and opponent decks.
 
-Each entry maps a dreamsign UUID to the hard deck features its ability
-rewards. The merchant uses these to score how well each dreamsign fits
-the player's current deck.
-
-Fields (all lists default to empty = generically useful):
-`id` — canonical dreamsign UUID; `subtypes` — `SpiritAnimal`, `Survivor`, or
-`Warrior`; `card_types` — `Character` or `Event`; `cost_bands` — `Cheap`, `Mid`,
-or `Big`; `keywords` — `Reclaim` or `Fast`; `quality` — 1 = premium, 2 = solid,
-3 = niche.
-
-The `dreamsign_profiles_v1` adapter generates
-`data/dreamsign_profiles.toml` for merchant and runtime consumers.
-
-Curated 2026-06-14. Should be reviewed by the design owner before shipping.
-Amplified Acorn — once per turn, discarding a card reduces your next card's
-cost by 2●; a discard-velocity payoff that helps any card type, so the
-vocabulary cannot express its trigger. Featureless.
-
-Pyramid Relic — the second character you play each turn costs 1● less;
-rewards decks that flood multiple cheap characters per turn.
-
-Amanita — once per turn, when an ally leaves play, your next character costs
-2● less; rewards character decks that chain cheap follow-ups after turnover.
-
-Algae — the first character you draw each turn costs 1● less this turn;
-rewards character-heavy decks that reliably draw characters.
-
-Worm Apple — first character played each turn costs 2● less and has 0✦;
-rewards go-wide decks of cheap bodies where spark does not matter.
-
-Green Amulet — the second card you draw each turn costs 2● less; a draw-engine
-resource boost that helps any deck and ignores card type. Featureless.
-
-Cloud Lens — the second event you play each turn costs 1● less; rewards
-event-chain decks that play multiple cheap events per turn.
-
-Wolf Sigil — Reclaim abilities cost 1● less; directly rewards any deck
-running cards with Reclaim.
-
-Trinket Necklace — once per turn, when you return an ally to hand, your next
-character costs 1● less; rewards bounce decks that follow up with cheap bodies.
-
-Bead Charm — when you return an ally to hand, it gains +2✦; rewards
-bounce strategies that reset and grow characters.
-
-Eye Amulet — the first ❖ card you play during the opponent's turn costs 1●
-less; rewards decks with multiple Fast cards.
-
-Skull Pendant — characters with ▸Materialized abilities cost 1● less;
-rewards character decks built around Materialized payoffs.
-
-Spider Medallion — first character you materialize each turn has Awakened;
-rewards any character deck that materializes a body each turn.
-
-Leather Satchel — when you abandon an ally, trigger its ▸Materialized and
-▸Dawn abilities; rewards character decks dense in Materialized/Dawn bodies.
-
-Glow Pouch — once per turn, when you abandon an ally, materialize a 0✦
-figment copy of it; rewards abandon decks with plenty of character targets.
-
-Charm Pouch — first time each turn you trigger a ▸Materialized ability,
-trigger it again; rewards character decks dense in Materialized bodies.
-
-Bat Wing — once per turn, when you dissolve or banish an enemy, draw a card;
-a removal payoff that helps any deck and the vocabulary cannot express
-removal density. Featureless.
-
-Bell — when you play a character from your void, rematerialize it; rewards
-void-recursion decks that recast characters from the void.
-
-Belladonna — end of turn, if you materialized 2 allies this turn,
-rematerialize the last one; rewards go-wide decks chaining cheap characters
-into multiple materializes per turn.
-
-Berries — characters in your deck with cost ≤2● have +1✦; rewards
-cheap-character decks to amplify their spark output.
-
-Green Beetle — characters in your deck with cost ≥4● have Awakened; rewards
-big-cost character decks that want Awakened up front.
-
-Bezoar — when you abandon a character, characters you materialize this turn
-have Awakened; rewards abandon + materialize character loop decks.
-
-Brown Acorn — when you add a Warrior to your deck, it gains +1✦; rewards
-Warrior-focused decks still being drafted.
-
-Black Attuned — when you play an event with ≥3 allied warriors, copy it;
-rewards warrior-wide decks that also chain events.
-
-Spider Jar — when you play your second character each turn, materialize a 1✦
-warrior figment; rewards cheap go-wide character decks building warriors.
-
-Blue Feather — if the first card drawn during your turn is a warrior, reduce
-its cost by 1● and it gains +2✦; rewards Warrior-heavy decks.
-
-Skull Drum — when you play an event with ≥3 allied spirit animals, it costs
-1● less; rewards Spirit Animal decks that also chain events.
-
-Ivory Claw — ▸Dawn: with ≥3 allied warriors, draw a card; rewards Warrior-
-wide decks that hold a board into Dawn.
-
-Charm Staff — once per turn, when an allied spirit animal is dissolved, draw
-a card; rewards Spirit Animal decks that trade bodies in combat.
-
-Curved Blade — allied warriors cost 1● less; straightforwardly rewards
-Warrior-heavy decks at any cost band.
-
-Shadow Droplet — survivors in your void have Reclaim; rewards Survivor decks
-that cycle characters through the void.
-
-Theater Mask — on gain, picks a character type and redirects all type-
-referencing text to it; rewards tribal decks built around a single subtype.
-
-Rune Stone — allied figments have +1✦; rewards go-wide decks that produce
-many cheap figment bodies.
-
-Rune Sack — ▸Dawn: with ≥3 allied figments, gain 2●; rewards go-wide decks
-that maintain a large cheap figment board.
-
-Purple Crystal — when you discard a card, materialize a 2✦ radiant figment;
-a discard payoff producing bodies that helps any discard deck regardless of
-card type. Featureless.
-
-Potion Mortar — ▸Dawn: a random card in your hand costs 1● this turn; a
-generic resource discount that helps any deck. Featureless.
-
-Broomstick — ▸Dawn: lose 1●, draw a card; a generic card-draw engine that
-helps any deck. Featureless.
-
-Ice Crystals — ▸Dawn: Erode 1; fuels the void for any deck and rewards
-reclaim/void-recursion shells. Keyword-keyed on reclaim.
-
-Tarot Card — when you challenge with 2 or more characters, draw a card;
-rewards go-wide decks that send multiple cheap challengers.
-
-Mushroom Caps — ▸Dawn: gain 1●, but see 1 fewer draft choice; a generic
-essence trickle with a draft downside. Featureless.
-
-Rainbow Horn — ▸Dawn: add a random ≤2● event from the card pool to your hand;
-rewards cheap-event decks that want extra spells.
-
-Hourglass — if 3+ ▸Dawn abilities trigger during your Dawn phase, draw a card;
-rewards character decks dense in Dawn-ability bodies.
-
-Butterfly Wings — a random ally's ▸Dawn ability triggers an additional time
-each turn; rewards character decks dense in Dawn-ability bodies.
-
-Dreamcatcher — ▸Dawn: add an ethereal copy of the first event you played last
-turn to hand; rewards event decks that play an event every turn.
-
-Carved Relic — ▸Dawn: return a random event from your void to hand; rewards
-event-recursion decks that fill the void with spells.
-
-Rope Doll — ▸Dawn: return a random Survivor from your void to hand; rewards
-Survivor attrition decks that cycle through the void.
-
-Dead Rat — ▸Dawn: you may abandon a character to draw a card; rewards
-character-dense decks willing to sacrifice bodies for cards.
-
-Gem Codex — when you copy an event, copy it an additional time; rewards
-event decks that already run copy effects.
-
-Black Cat — copy the second event you play each turn; rewards event-chain
-decks that play multiple events per turn.
-
-Storm Tome — once per turn, when you play a ≤2● event, copy it; a powerful
-payoff for cheap-event decks.
-
-Clover — once per turn, when you play an event with no allies in play, copy
-it; rewards pure-event decks that hold no characters.
-
-Flaming Button — once per turn, when you copy an event, gain 1●; rewards
-event decks running copy effects, adding resource generation.
-
-Crow — when you play an event, a random character gains +1✦ until end of turn;
-rewards decks mixing events with a character board.
-
-Cauldron — when you play an event, a random void event gains reclaim until
-end of turn; rewards event decks that recur spells from the void.
-
-Skull Dagger — the first event you play from your void each turn costs 0●;
-rewards event-recursion decks that already cast reclaim spells.
-
-Eye Grimoire — once per turn, when you play an event from your void, copy it;
-rewards event-recursion decks that recast spells from the void.
-
-Eyeball Plant — characters in your void with ≥3● cost have reclaim; rewards
-big-cost character decks that cycle through the void.
-
-Skull Codex — Reclaim abilities cost you 0●; rewards any deck running reclaim
-cards by making void recursion free.
-
-Dragon Egg — once per turn, when you play a card from your void, draw a card;
-rewards void-recursion decks running reclaim cards.
-
-Spotted Egg — when you play your second event each turn, it gains Reclaim 0●;
-rewards event-chain decks that build a free reclaim loop.
-
-Flash Powder — you may play ❖ and ❖❖ events for 1●; rewards decks with
-multiple Fast events.
-
-Essence Vial — once per turn, when you abandon an ally or discard a character,
-that card gains reclaim; rewards character decks with abandon/discard loops.
-
-Green Fly — the first card you erode each turn gains reclaim; rewards
-mill/erode decks that want void recursion. Keyword-keyed on reclaim.
-
-Candle — when you play an event, the ally with the highest ✦ gains +1✦;
-rewards decks mixing events with a character board.
-
-Red Heart — when you erode a card, a random ally gains +1✦; a void-fueling
-spark trickle that needs allies but no specific composition. Featureless.
-
-Black Feather — when you abandon an ally, a random ally gains +X✦ where X is
-the abandoned ally's ✦; rewards high-spark abandon character decks.
-
-Gold Feather — when you abandon a character, a random ally gains +1✦; rewards
-character-dense abandon decks for incremental spark.
-
-Gray Feather — when an ally gains ✦, it gains 1 additional ✦; a spark-growth
-multiplier that helps any deck producing ✦ and needs no composition.
-Featureless.
-
-Amber Eye — when you play an event with ≥8 cards in your void, draw a card;
-rewards event-chain decks that keep a full void.
-
-Garlic Bulb — once per turn, when you play an event, foresee 1; rewards
-event-chain decks with topdeck setup.
-
-Ginger Root — once per turn, when you foresee, draw a card; a generic card-
-advantage payoff that helps any foresee deck and the vocabulary cannot
-express foresee density. Featureless.
-
-Hair Lock — at the start of each battle, foresee 3; a generic opening-hand
-smoother that helps any deck. Featureless.
-
-Witch Hat — when you play your second event each turn, draw a card; rewards
-event-chain decks as reliable card draw.
-
-Honeycombs — once per turn, when you discard a card, gain 1●; a discard
-resource engine that helps any discard deck regardless of card type.
-Featureless.
-
-Cactus — if you discarded a card this turn, the first card from your void
-costs 1● less; rewards discard + void-recursion combo decks.
-
-Spice Blossoms — events cost 1● less for each card discarded this turn;
-rewards discard-velocity decks that chain discards then cast events.
-
-Leaf Bundle — once per turn, when you discard a card, draw a card; a discard
-card-cycling engine that helps any discard deck regardless of card type.
-Featureless.
-
-Magic Fish — once per turn, when you play a Spirit Animal, draw a card;
-rewards Spirit Animal-dense decks for card advantage.
-
-Sea Tome — allied characters with ▸Dawn abilities have +1✦; rewards character
-decks dense in Dawn-ability bodies.
-
-Charm Bracelet — allied challengers have +1✦; rewards go-wide character decks
-that field many challengers.
-
-Pig Nose — allied survivors have +2✦; rewards Survivor-focused decks as a
-broad, reliable buff.
-
-Oak Leaf — allied challengers that share a character type with another
-challenger have +2✦; rewards tribal go-wide character decks.
-
-Opal — pay Offering costs by discarding instead of banishing from hand; a
-generic Offering enabler that helps any deck with Offering cards. Featureless.
-
-Crystal Orb — with 3 or more challengers, they have +2✦; rewards go-wide
-character decks that flood cheap challengers.
-
-Egg Nest — when all allied characters are challengers, they have +2✦; rewards
-aggressive all-in character decks.
-
-Eyeball Slime — cards in your hand with ephemeral are not banished at end of
-turn; a niche ephemeral payoff the vocabulary cannot express. Featureless.
-
-Silver Key — first character you play each turn materializes with +1✦; a free
-spark bonus for any character deck.
-
-Larva — when you play a character, it gains +1✦ for each other character
-played this turn; rewards go-wide decks chaining cheap characters per turn.
-
-Phoenix Feather — when you play a character, it gains +1✦ for each ally that
-left play this turn; rewards character decks with leave-play turnover.
-
-Notes — allied spirit animals have +1✦; rewards Spirit Animal-focused decks.
-
-Serpent Manual — when an allied character dissolves an enemy in a challenge,
-it gains +2✦; rewards aggressive character decks that win combat.
-
-Piranha — when an allied character scores ⍟, it scores 1 additional ⍟; a
-generic scoring multiplier for any character deck. Featureless.
-
-Blazing Orb — Featureless.
-
-Black Horn — when you dissolve or banish an enemy character, gain 2●; a
-removal payoff that helps any deck and the vocabulary cannot express removal
-density. Featureless.
-
-Poison Bottle — when you return a character to a player's hand, gain 2●; a
-bounce resource payoff that helps any deck with bounce. Featureless.
-
-Sealed Letter — when you abandon an ally, its ▸Dissolved ability triggers an
-additional time; rewards character decks dense in Dissolved-ability bodies.
-
-Parchment — once per turn, when an ally is dissolved, draw a card; rewards
-character decks that expect allies to die in combat.
-
-Mandrake Root — once per turn, when an ally is dissolved, return a random
-lower-cost character from void to hand; rewards character attrition decks.
-
-Herb Mortar — once per turn, when an ally is dissolved, materialize a random
-lower-cost character from your void; rewards character attrition + recursion.
-
-Flower Petals — at end of turn, materialize a random character you abandoned
-this turn with 0✦; rewards abandon-materialize character loops.
-
-Clam Shell — when you draw your second card each turn, gain 1 maximum ●; a
-generic resource-scaling draw payoff that helps any deck. Featureless.
-
-Philosopher's Stone — unspent ● carries over between turns; rewards big-cost
-decks that bank essence for expensive cards.
-
-Steel Wand — once per turn, when you play a ❖ card, draw a card; rewards
-Fast-heavy decks as a card-draw engine.
-
-Gold Key — when you play your third character each turn, gain 2●; rewards
-go-wide decks that chain three cheap characters per turn.
-
-Powder Bowl — the first character each turn costs 2● less if an ally scored ⍟
-last turn; rewards aggressive scoring character decks.
-
-Purple Potion — 3● cost characters cost you 2●; rewards mid-cost character
-decks built around the 3-drop slot.
-
-Crystal Wand — once per turn, when you play a 2● cost character, draw a card;
-rewards mid-cost character decks that lean on the 2-drop slot.
-
-Red Pin — when one or more allies score ⍟, draw a card; a generic scoring-
-board card-draw payoff that helps any deck with characters. Featureless.
-
-Poppy Flower — ▸Night: if you played no cards this turn, gain 2●; rewards
-controlling decks that hold back, a payoff the vocabulary cannot express.
-Featureless.
-
-Rabbit Tail — ▸Night: if you played no characters this turn, draw a card;
-rewards event-only / pure-control decks that avoid playing characters.
-
-Green Cauldron — first time each turn your hand becomes empty, draw a card;
-rewards hand-emptying discard/aggro decks, a payoff the vocabulary cannot
-express. Featureless.
-
-Root Staff — when 2 or more allies score ⍟, draw then discard; rewards go-wide
-decks that send multiple cheap challengers per turn.
-
-Bestiary — first card purchased at each Shop costs 25% less and gains a random
-transfiguration; a generic shop economy benefit for any deck. Featureless.
-
-Cracked Mirror — first card purchased from each Shop is added to your deck
-twice; a generic deck-building benefit for any deck. Featureless.
-
-Cracked Orb — each Shop site provides 2 additional options; a generic shop
-quality-of-life benefit for any deck. Featureless.
-
-Rainbow Mushroom — cards you purchase from Shops gain a random transfiguration;
-a generic shop buff for any deck. Featureless.
-
-Witch Coin — the first reroll at each Shop costs 0; a generic shop economy
-benefit for any deck. Featureless.
-
-Sealed Scroll — after you buy a card at a Shop, replace it with another card;
-a generic shop economy benefit for any deck. Featureless.
-
-Blue Crystal — if your deck has 35+ cards, cards you add are transfigured;
-a deck-building benefit for thick decks, not expressible by card features.
-Featureless.
-
-Rainbow Jellyfish — on gain, applies a Perfected Transfiguration to each
-starter card; a one-time deck-building benefit for any deck. Featureless.
-
-Star Anise — each dreamscape, the first event you add gains the Amplified
-Transfiguration; rewards event-heavy decks seeking transfiguration.
-
-Spell Tome — at Transfiguration sites, when you transfigure an event, add a
-copy of it to your deck; rewards event-heavy transfiguration decks.
-
-White Rat — when you add a character to your deck, 50% chance it gains a random
-transfiguration; rewards character-heavy decks drafting many characters.
-
-Glowing Crystal — once each dreamscape, the first untransfigured card you add
-gains a transfiguration; a generic deck-building benefit. Featureless.
-
-Attuned Petals — cards added from battle rewards gain a random applicable
-transfiguration; a generic deck-building benefit for any deck. Featureless.
-
-Leaf Ledger — at each Transfiguration site, transfigure 2 cards instead of 1;
-a generic transfiguration-throughput benefit for any deck. Featureless.
-
-Pearl Shell — at each Essence site, you are instead offered a Dreamsign; a
-generic meta-progression benefit for any deck. Featureless.
-
-Star Badge — double the essence you gain from essence sites; a generic economy
-benefit for any deck. Featureless.
-
-Sickle — at each Essence site, forgo essence to purge 2 cards; a generic deck-
-thinning benefit for any deck. Featureless.
-
-Mortal Skull — when you purge a card, gain 50 essence; a generic deck-thinning
-economy benefit for any deck. Featureless.
-
-Banded Worm — entering a new dreamscape gains essence equal to 20% of your
-current essence; a generic economy benefit for any deck. Featureless.
-
-Sea Urchin — while you have ≥300 essence, Draft picks show 1 additional card;
-a generic draft-quality benefit for any deck. Featureless.
-
-Carved Stick — winning a battle gains 10 essence per character of yours
-dissolved; a generic economy payoff for any deck with characters. Featureless.
-
-Wing — when you draft cards, see an additional choice; a generic draft-quality
-benefit for any deck. Featureless.
-
-Tortoise Shell — cards in your deck cannot be purged; Draft sites show 1 more
-card; a generic draft/protection benefit for any deck. Featureless.
-
-Scorpion — before each battle, purge cards down to 30 if you exceed it; a
-generic deck-thinning benefit for bloated decks. Featureless.
-
-Tongue — after your opening hand, you may discard any number and draw that
-many; a generic mulligan benefit for any deck. Featureless.
-
-Paired Teeth — on gain, purge up to 4 starter cards; a one-time deck-thinning
-benefit for any deck. Featureless.
-
-Spotted Mug — on gain, pick an event in your deck that is always in your
-opening hand; rewards event decks with a key setup spell.
-
-Toad — character cards in your deck are Survivors in addition to their other
-subtypes; rewards character decks wanting to unlock Survivor synergies.
-
-Slug — after each battle, you may purge a card; a generic deck-thinning
-benefit for any deck. Featureless.
-
-Spider — after each battle, you may duplicate a card; a generic deck-building
-benefit for any deck. Featureless.
-
-Green Slime — instead of Battle Reward cards, duplicate a card in your deck;
-a generic deck-building benefit for any deck. Featureless.
-
-Spiral Shell — at Duplication sites, add 4 copies of the selected card; a
-generic deck-building benefit for duplication strategies. Featureless.
-
-Red Cheese — after winning a battle, offered a Dreamsign Draft instead of the
-reward pick; a generic meta-progression benefit for any deck. Featureless.
-
-Rosemary — Dreamsign Offering and Draft sites are enhanced; a generic meta-
-progression benefit for any deck. Featureless.
-
-Red Shard — in each dreamscape, 1 additional site is enhanced; a generic meta-
-progression benefit for any deck. Featureless.
-
-Curled Tail — your dream journey effects apply twice, if able; a generic meta-
-progression multiplier for any deck. Featureless.
-
-Voodoo Doll — on gain, becomes a copy of another dreamsign you own; value
-depends entirely on existing dreamsigns, not the deck. Featureless.
-
-Raven Skull — Nightmare cards cannot be added to your deck; a generic protection
-benefit for any deck. Featureless.
-
-Mortal Skull — gain essence when a character dissolves an enemy in a challenge;
-a broad combat reward. Featureless.
-
-Twisted Herbs — on gain, add 5 Nightmare cards; characters have +1✦;
-rewards character decks despite the Nightmare downside.
-
-Antler — draw 2 extra cards each Draw phase, discard your hand at end of turn;
-rewards hand-dumping decks that spend everything each turn, a payoff the
-vocabulary cannot express. Featureless.
-
-## `data/dreamsign_signatures.ron`
-
-### `DreamsignSignatureDefinition`
-
-Dreamsign neutral/tailored classification with diagnostic signature cards.
-Each canonical dreamsign UUID has a `Neutral` classification or a `Tailored`
-classification whose ordered `card_ids` are the most indicative that a deck
-wants it.
-Tailored entries here were produced by a grounded classify+adversarial-verify
-pass over the card catalog; the remainder default to neutral.
-
-The `dreamsign_signatures_v1` adapter generates
-`data/dreamsign_signatures.toml` for deck-construction consumers.
+The `dreamsigns_v1` adapter generates `data/dreamsigns.toml`; setup-assets
+publishes the browser catalog.
 
 ## `data/dreamsigns.tags.ron`
 
@@ -1235,8 +753,8 @@ Number of opponent deck cards highlighted as DreamAvatar signature cards.
 
 ## `data/opponents.ron`
 
-The typed `OpponentsCatalog` document defines opponent progression and corpus
-selection. The compiler composes it with the battle,
+The typed `OpponentsCatalog` document defines opponent progression and unified
+deck construction. The compiler composes it with the battle,
 Dreamwell, and internal AI catalogs for the generated opponent runtime data.
 
 ### `progression.ability_active_from_layer: 1`
@@ -1257,14 +775,10 @@ First layer where Legendary cards remain in opponent decks.
 Starter cards inserted at each layer after cutting weak non-Starters. Missing
 later entries mean that no Starter cards are inserted.
 
-### `corpus_selection.affiliation_weight: 0.25`
+### `opponent_deck_size: 30`
 
-Multiplier for dreamscape-affiliation fit when ranking known-good decks;
-DreamAvatar signature fit supplies the primary score.
-
-### `corpus_selection.top_ranked_sampling_window: 8`
-
-Number of highest-ranked decks eligible for deterministic seeded sampling.
+Number of distinct cards in a mature generated opponent deck. Progression
+replacements preserve this size.
 
 ## `data/internal/internal_ai.ron`
 
@@ -1364,174 +878,15 @@ Wall-clock planning budget for each journey AI decision.
 
 Deterministic state-expansion budget for each tutorial AI decision.
 
-## `data/reward_selection.ron`
-
-Shared reward-selection rules used by Augury, Exploration, and other sites.
-Changing a value here changes deterministic reward generation and therefore
-changes the fold hash pinned into newly created multiplayer rooms.
-The typed `RewardSelectionCatalog` is compiled to `data/reward_selection.toml`;
-scripts/reward-selection-data.mjs validates that compatibility output for the
-browser runtime.
-
-### `rules_version: V1`
-
-Salt contract used by deterministic selection streams. Increment only when
-the selection algorithm itself changes, not for ordinary balance edits.
-
-### `fraction: 0.25`
-
-Fraction of ranked candidates eligible for uniform sampling.
-
-### `minimum: 5`
-
-Minimum candidates retained when the source pool is large enough.
-
-### `fraction: 0.15`
-
-A tighter band keeps unsolicited strong-card gifts near the top of the fit ranking.
-
-### `fraction: 0.40`
-
-Dreamsign populations are small, so their sampling band is deliberately wider.
-
-### `min_deck_for_fit: 6`
-
-Deck cards required before fit-based selection is trusted.
-
-### `min_deck_for_purge: 8`
-
-Deck cards required before purge offers are allowed.
-
-### `purge_misfit_fraction: 0.20`
-
-Bottom share of leave-one-out fit scores eligible for purge.
-
-### `starter_purge_bonus: 0.25`
-
-Extra purge-misfit score applied to starter cards.
-
-### `subtype_min_pool_cards: 12`
-
-Non-starter pool cards required before a subtype becomes a draft category.
-
-### `growth_band_size: 5`
-
-Candidate cards inspected at each bundle-growth step.
-
-### `fit: 0.70`
-
-Normalized deck-fit contribution to strong-card ranking.
-
-### `quality: 0.30`
-
-Normalized historical card-quality contribution.
-
-### `quality: 0.50`
-
-Historical quality contribution to duplicate ranking.
-
-### `fit_leave_one_out: 0.50`
-
-Leave-one-out deck-fit contribution to duplicate ranking.
-
-### `benefit: 0.70`
-
-Mechanical improvement contribution to transfiguration ranking.
-
-### `centrality: 0.30`
-
-Deck-centrality contribution to transfiguration ranking.
-
-### `seed: 0.50`
-
-Affinity to the first card selected for the bundle.
-
-### `bundle: 0.30`
-
-Affinity to every card already selected for the bundle.
-
-### `fit: 0.20`
-
-Fit to the player's current deck.
-
-### `affine_weight: 0.75`
-
-Probability mass assigned to categories already represented in the deck.
-
-### `deck_affine_minimum: 2`
-
-Deck matches required for ordinary categories to count as deck-affine.
-
-### `cluster_affine_minimum: 1`
-
-Deck matches required for a corpus cluster to count as deck-affine.
-
-### `prior_weight: 0.65`
-
-Prior and co-occurrence weights used when the fit model has signal.
-
-### `fallback: 0.25`
-
-Centrality used when the fit model has no signal.
-
-### `spark_threshold: 3`
-
-Spark at or above this value receives the fallback bonus.
-
-### `full_coverage_count: 3`
-
-Matching deck cards required for full coverage of one profile feature.
-
-### `featureless_coverage: 0.40`
-
-Coverage assigned to a Dreamsign with no authored features.
-
-### `(quality: One, weight: 1.20)`
-
-Multipliers for Dreamsign quality tiers 1, 2, and 3.
-
-### `cheap_maximum: 1`
-
-Inclusive maximum energy cost for the cheap band.
-
-### `mid_minimum: 2`
-
-Inclusive bounds for the mid-cost band.
-
-### `big_minimum: 4`
-
-Inclusive minimum energy cost for the big band.
-
-### `cheap_character_maximum: 2`
-
-Inclusive maximum used by the Exploration cheap-character predicate.
-
-### `allowed_forms: [Empowered, Amplified, Kindled, Inspired, Enduring, Hastened, Resonant, Attuned]`
-
-Forms Augury and shared selection may choose without an explicit override.
-
-### `empowered_cost_divisor: 2`
-
-Divisor used to normalize energy-cost reduction from Empowered.
-
-### `kindled_spark_divisor: 4`
-
-Divisor used to normalize Spark growth from Kindled.
-
-### `(form: Amplified, benefit: 0.40)`
-
-Fixed benefit scores for forms whose value is not a direct numeric delta.
-
-### `placeable_types: [Shop, Purge, Transfiguration, Duplication]`
-
-Site types eligible for an add-site reward.
-
 ## `data/sites.ron`
 
 Typed `SitesCatalog` source for cross-site presentation and rules configuration.
 Structural site and Gamble identifiers remain code-owned; this catalog supplies
 the authored metadata and tuning for those fixed identities. The Sites adapter
 emits the `schema-version = 1` compatibility TOML consumed by asset generation.
+`selection.min_deck_for_purge` gates purge targeting, while
+`selection.placeable_types` defines which site kinds unified selection may
+offer for placement.
 
 ## `data/tutorial.ron`
 

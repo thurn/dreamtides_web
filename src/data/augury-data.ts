@@ -14,6 +14,9 @@ export function parseAuguryData(value: unknown): AuguryData {
   if (
     !isRecord(value) || value.schemaVersion !== 1 ||
     typeof value.contentHash !== "string" || !SHA256_HEX.test(value.contentHash) || value.foldHash !== value.contentHash ||
+    !isRecord(value.selection) || !Number.isInteger(value.selection.subtypeMinPoolCards) ||
+    !isRecord(value.selection.costBands) ||
+    Object.values(value.selection.costBands).some((entry) => !Number.isInteger(entry) || Number(entry) < 0) ||
     !isRecord(value.encounter) || typeof value.encounter.allowDecline !== "boolean" ||
     !Array.isArray(value.archetypes) || value.archetypes.length < 2
   ) throw new Error("Failed to load Augury data: malformed augury-data.json");

@@ -245,9 +245,9 @@ The standalone Dream Avatar editor is available at `/dream-avatars`.
 `/avatars` and `/dreamavatars` are aliases that preserve the query string and
 hash while opening the canonical editor URL. Identity edits publish semantic
 operations to `data/dream_avatars.ron`; tide-pool edits publish typed semantic
-operations to `data/dream_avatar_tide_pools.ron` in the same revision-checked
-transaction. Successful saves validate and regenerate the compatibility and
-runtime artifacts.
+operations to the embedded `tide_pool` field in `data/dream_avatars.ron` in the
+same revision-checked transaction. Successful saves validate and regenerate the
+compatibility and runtime artifacts.
 
 ## Image Viewer
 

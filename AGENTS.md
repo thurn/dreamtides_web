@@ -76,16 +76,13 @@ and include its output with your commit.
 
 Unless otherwise specified, assume all draft questions are about the "tides4"
 draft pool construction algorithm and that the source data for drafts lives
-in data/tides.ron and data/dream_avatar_tide_pools.ron
+in data/tides.ron and the embedded tide pools in data/dream_avatars.ron.
 
 
-# Draft Data
+# Selection Data
 
-The directory docs/draft_records_adapted/ has a high quality set of data about real Dreamtides drafts.
-
-There are many other legacy directories with draft data, consumed by some of our algorithms, but this
-data is much lower quality. Assume we want to migrate all code to consume `draft_records_adapted`, and
-only use `draft_records_adapted` going forward.
+Card, Dreamsign, Dream Avatar, and affiliation selection derives from the
+canonical RON catalogs. `data/tides.ron` defines the shared affinity space.
 
 # Verification
 

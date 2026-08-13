@@ -191,9 +191,6 @@ export function buildMerchantContext({
     heldDreamsignFallbackNames,
     candidateGrantCards,
     candidateDreamsigns,
-    fitModel: journeyContent.fitModel,
-    merchantCorpus: journeyContent.merchantCorpus,
-    dreamsignProfiles: journeyContent.dreamsignProfiles,
     cardDatabase: journeyContent.cardDatabase,
     dreamsignTemplates: journeyContent.dreamsignTemplates,
     rewardSelection: buildRewardSelectionContext({

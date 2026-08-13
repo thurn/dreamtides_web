@@ -8,36 +8,8 @@ export interface RewardSelectionBand {
 export interface RewardSelectionTuning {
   bandFraction: number;
   bandMinimum: number;
-  strongBandFraction: number;
-  strongBandMinimum: number;
-  dreamsignBandFraction: number;
-  dreamsignBandMinimum: number;
-  minDeckForFit: number;
   minDeckForPurge: number;
-  purgeMisfitFraction: number;
-  starterPurgeBonus: number;
   subtypeMinPoolCards: number;
-  bundleGrowthBandSize: number;
-  strongBlend: Readonly<{ fit: number; quality: number }>;
-  copiesBlend: Readonly<{ fit: number; quality: number }>;
-  duplicateBlend: Readonly<{ quality: number; fitLoo: number }>;
-  transfigureBlend: Readonly<{ benefit: number; centrality: number }>;
-  bundleBlend: Readonly<{ seed: number; bundle: number; fit: number }>;
-  categoryAffineWeight: number;
-  categoryDeckAffineMinimum: number;
-  categoryClusterAffineMinimum: number;
-  centrality: Readonly<{
-    priorWeight: number;
-    cooccurrenceWeight: number;
-    fallback: number;
-    sparkThreshold: number;
-    sparkBonus: number;
-  }>;
-  dreamsign: Readonly<{
-    fullCoverageCount: number;
-    featurelessCoverage: number;
-    qualityWeight: Readonly<Record<"1" | "2" | "3", number>>;
-  }>;
   costBands: Readonly<{
     cheapMaximum: number;
     midMinimum: number;
@@ -48,10 +20,10 @@ export interface RewardSelectionTuning {
   placeableSiteTypes: readonly SiteType[];
 }
 
-/** Validated browser data compiled from data/reward_selection.toml. */
+/** Runtime selector tuning assembled from its owning RON catalogs. */
 export interface RewardSelectionData {
-  schemaVersion: 1;
-  rulesVersion: "1";
+  schemaVersion: 2;
+  rulesVersion: "2";
   contentHash: string;
   foldHash: string;
   tuning: RewardSelectionTuning;

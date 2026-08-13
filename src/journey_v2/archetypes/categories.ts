@@ -1,15 +1,11 @@
-import { clustersOf } from "../signals/corpus";
 import type { CardData } from "../../types/cards";
-import type { MerchantContext, MerchantCatalogCard } from "../types";
+import type { MerchantContext } from "../types";
 
-/** A draftable category: a labelled set of pool cards plus a deck-affinity flag. */
+/** An Augury-labelled subset of the current journey's card pool. */
 export interface MerchantCategory {
   id: string;
   label: string;
-  /** Non-starter pool card UUIDs that belong to this category. */
   memberUuids: readonly string[];
-  /** True when the deck is committed enough to this category to favour it. */
-  deckAffine: boolean;
 }
 
 type CostBand = "cheap" | "mid" | "big";
@@ -19,9 +15,8 @@ function costBandOf(card: CardData, context: MerchantContext): CostBand | null {
   if (cost === null) return null;
   const bands = context.rewardSelection.tuning.costBands;
   if (cost <= bands.cheapMaximum) return "cheap";
-  if (cost >= bands.midMinimum && cost <= bands.midMaximum) return "mid";
-  if (cost >= bands.bigMinimum) return "big";
-  return null;
+  if (cost <= bands.midMaximum) return "mid";
+  return "big";
 }
 
 const COST_BAND_LABELS: Readonly<Record<CostBand, string>> = {
@@ -31,125 +26,65 @@ const COST_BAND_LABELS: Readonly<Record<CostBand, string>> = {
 };
 
 /**
- * Builds the draftable category universe from hard card data and corpus
- * clusters, per the spec's "Category construction".
- *
- * Sources:
- *  - card types (Character, Event);
- *  - subtypes with >= `subtypeMinPoolCards` non-starter pool cards;
- *  - cost bands cheap (<= 1) / mid (2–3) / big (>= 4);
- *  - fast cards (when >= `subtypeMinPoolCards` exist);
- *  - one category per retained corpus cluster, labelled by its flagship's
- *    display name.
- *
- * A category is **deck-affine** when the deck holds >= 2 cards in it (>= 1 for
- * cluster categories). Membership for type/subtype/cost/fast categories is by
- * hard card property; cluster membership is the cluster's pool members.
+ * Builds categories from card facts and authored tides. Tide packages replace
+ * learned relationship clusters, so every package is inspectable in RON.
  */
 export function buildCategoryUniverse(
   context: MerchantContext,
 ): readonly MerchantCategory[] {
   const pool = context.candidateGrantCards;
-  const deckCards = context.deckCards;
   const categories: MerchantCategory[] = [];
-
-  const addPredicateCategory = (
+  const add = (
     id: string,
     label: string,
     predicate: (card: CardData) => boolean,
-    minMembers: number,
-    affineMin: number,
+    minimum: number,
   ): void => {
     const memberUuids = pool
       .filter((member) => predicate(member.card))
       .map((member) => member.cardUuid);
-    if (memberUuids.length < minMembers) return;
-    const deckMatches = deckCards.filter((deckCard) =>
-      predicate(deckCard.card),
-    ).length;
-    categories.push({
-      id,
-      label,
-      memberUuids,
-      deckAffine: deckMatches >= affineMin,
-    });
+    if (memberUuids.length >= minimum) categories.push({ id, label, memberUuids });
   };
 
-  // Card types.
   for (const cardType of ["Character", "Event"] as const) {
-    addPredicateCategory(
+    add(
       `type:${cardType}`,
-      cardType === "Event" ? "Event" : "Character",
+      cardType,
       (card) => card.cardType === cardType,
       1,
-      context.rewardSelection.tuning.categoryDeckAffineMinimum,
     );
   }
 
-  // Subtypes with enough pool depth.
-  const subtypeCounts = new Map<string, number>();
-  for (const member of pool) {
-    const subtype = member.card.subtype;
-    if (subtype.length === 0) continue;
-    subtypeCounts.set(subtype, (subtypeCounts.get(subtype) ?? 0) + 1);
-  }
-  for (const [subtype, count] of subtypeCounts) {
-    if (count < context.rewardSelection.tuning.subtypeMinPoolCards) continue;
-    addPredicateCategory(
-      `subtype:${subtype}`,
-      subtype,
-      (card) => card.subtype === subtype,
-      context.rewardSelection.tuning.subtypeMinPoolCards,
-      context.rewardSelection.tuning.categoryDeckAffineMinimum,
-    );
+  const subtypeMinimum = context.rewardSelection.tuning.subtypeMinPoolCards;
+  const subtypes = new Set(pool.map((member) => member.card.subtype).filter(Boolean));
+  for (const subtype of [...subtypes].sort()) {
+    add(`subtype:${subtype}`, subtype, (card) => card.subtype === subtype, subtypeMinimum);
   }
 
-  // Cost bands.
   for (const band of ["cheap", "mid", "big"] as const) {
-    addPredicateCategory(
+    add(
       `cost:${band}`,
       COST_BAND_LABELS[band],
       (card) => costBandOf(card, context) === band,
       1,
-      context.rewardSelection.tuning.categoryDeckAffineMinimum,
     );
   }
+  add("fast", "fast card", (card) => card.isFast, subtypeMinimum);
 
-  // Fast cards (only when the pool is deep enough).
-  addPredicateCategory(
-    "fast",
-    "fast card",
-    (card) => card.isFast,
-    context.rewardSelection.tuning.subtypeMinPoolCards,
-    context.rewardSelection.tuning.categoryDeckAffineMinimum,
-  );
-
-  // Corpus clusters, labelled by flagship display name.
-  const corpus = context.merchantCorpus;
-  if (corpus !== undefined) {
-    const poolByUuid = new Map<string, MerchantCatalogCard>();
-    for (const member of pool) poolByUuid.set(member.cardUuid, member);
-    for (const cluster of clustersOf(corpus)) {
-      const memberSet = new Set(cluster.members);
-      const memberUuids = cluster.members.filter((uuid) =>
-        poolByUuid.has(uuid),
-      );
-      if (memberUuids.length === 0) continue;
-      const flagship =
-        context.cardByUuid.get(cluster.flagship)?.name ??
-        poolByUuid.get(memberUuids[0])?.displayName ??
-        "package";
-      const deckMatches = deckCards.filter((deckCard) =>
-        memberSet.has(deckCard.cardUuid),
-      ).length;
-      categories.push({
-        id: `cluster:${String(cluster.id)}`,
-        label: `${flagship} package`,
-        memberUuids,
-        deckAffine:
-          deckMatches >=
-          context.rewardSelection.tuning.categoryClusterAffineMinimum,
-      });
+  const tideData = context.rewardSelection.content.poolContext?.poolData.tides4Decks;
+  if (tideData !== undefined) {
+    const poolUuids = new Set(pool.map((member) => member.cardUuid));
+    for (const tide of tideData.tides) {
+      const memberUuids = tide.cards
+        .map((entry) => entry.id)
+        .filter((id) => poolUuids.has(id));
+      if (memberUuids.length > 0) {
+        categories.push({
+          id: `tide:${tide.id}`,
+          label: `${tide.displayName} package`,
+          memberUuids,
+        });
+      }
     }
   }
 

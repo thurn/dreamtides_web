@@ -29,12 +29,8 @@ import {
   resolveRunLayerCount,
   selectOpponentDreamAvatar,
 } from "./opponent-deck";
-import { buildCorpusOpponentDeck } from "./corpus-opponent-deck";
+import { buildTideOpponentDeck } from "./tide-opponent-deck";
 import { selectSignatureCards } from "./signature-cards";
-import type {
-  KnownGoodDecklist,
-  DreamsignSignature,
-} from "../../data/journey-content";
 import { logEvent } from "../../logging";
 import type {
   BattleDeckCardDefinition,
@@ -55,6 +51,8 @@ import {
   type OpponentsData,
 } from "../../types/opponents-data";
 import { opponentAbilityIsActive } from "./opponent-deck";
+import type { Tides4DecksJson } from "../../draft/pool/tides4-io";
+import type { Tides4Tuning } from "../../types/draft-data";
 
 /**
  * Minimum journey deck size for a battle. A deck below this is padded with
@@ -133,19 +131,10 @@ export interface CreateBattleInitInput {
    * the run's templates.
    */
   dreamsignTemplates?: readonly DreamsignTemplate[];
-  /**
-   * The corpus of known-good human decklists the opponent deck is selected from.
-   * When present, the opponent deck is a known-good decklist chosen for the
-   * opponent DreamAvatar's signature cards and the dreamscape affiliation,
-   * then tuned to the run position.
-   */
-  knownGoodDecklists?: readonly KnownGoodDecklist[];
-  /**
-   * Dreamsign signatures (tailored / neutral) the corpus algorithm scores a
-   * tuned deck against when assigning the opponent's dreamsign. Optional: when
-   * absent the corpus build falls back to a seeded neutral dreamsign.
-   */
-  dreamsignSignatures?: ReadonlyMap<string, DreamsignSignature>;
+  /** Canonical tide catalog used to build the opponent's Tides4 pool. */
+  tides4Decks?: Tides4DecksJson;
+  /** Production Tides4 pool tuning. */
+  tides4Tuning?: Tides4Tuning;
   seedOverride?: number | null;
   /**
    * When true, the enemy deck is built from the configured journey AI deck.
@@ -261,17 +250,16 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   // The opponent is built by emulating its DreamAvatar's journey to the
   // equivalent run depth (journeys doc "Battle"): a deterministic opponent
   // DreamAvatar drawn from the dreamscape's residents, a single dreamsign from
-  // the run midpoint onward, and a deck selected by the corpus algorithm — a
-  // known-good human decklist matching the DreamAvatar's signature cards and the
-  // dreamscape affiliation, tuned to the run position.
+  // the configured layer onward, and a deck selected from that avatar's exact
+  // Tides4 pool using the shared Tide-affinity ranking.
   const completionLevelAtStart = state.completionLevel;
   const layerCount = resolveRunLayerCount(state.atlas.layers);
   const currentNode =
     state.currentDreamscape === null
       ? null
       : (state.atlas.nodes[state.currentDreamscape] ?? null);
-  // The opponent DreamAvatar is one of the dreamscape's RESIDENTS (the corpus
-  // algorithm fields native rivals); a neutral / starter dreamscape, or a
+  // The opponent DreamAvatar is one of the dreamscape's residents. A neutral or
+  // starter dreamscape, or a
   // battle whose dreamscape content is absent, has no residents and the full
   // roster is used. Resolved before selection so it narrows the pick pool.
   const residentDreamAvatarIds = resolveDreamscapeResidentIds(
@@ -284,53 +272,54 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     streams.enemyDescriptor,
     residentDreamAvatarIds,
   );
-  const opponentDreamsigns = buildOpponentDreamsigns(
-    completionLevelAtStart,
-    opponentsData.progression.dreamsignsFromLayer,
-    dreamsignTemplates,
-    streams.enemyDescriptor,
-  );
   const battleAffiliation = resolveBattleAffiliation(
     currentNode,
     input.dreamscapes ?? [],
     input.affiliations ?? [],
   );
+  const poolSeed = deriveEnemyPoolSeed(seed);
+  const aiMode = input.aiMode ?? false;
+
+  // Build the production opponent deck. Its reconstruction log is captured
+  // so it fires with the rest of the opponent reconstruction logs, deferred to
+  // transaction-commit in multiplayer.
+  let emitTideDeckLog: (() => void) | null = null;
+  const tideBuild =
+    aiMode || input.tides4Decks === undefined || input.tides4Tuning === undefined
+      ? null
+      : buildTideOpponentDeck({
+          opponentDreamAvatar,
+          affiliation: battleAffiliation,
+          cardDatabase,
+          dreamsignTemplates,
+          completionLevel: completionLevelAtStart,
+          poolSeed,
+          battleEntryKey,
+          opponentsContentHash: opponentsData.contentHash,
+          progression: opponentsData.progression,
+          deckSize: opponentsData.opponentDeckSize,
+          tides4Decks: input.tides4Decks,
+          tides4Tuning: input.tides4Tuning,
+          deferLog: (emit) => {
+            emitTideDeckLog = emit;
+          },
+        });
+
+  const opponentDreamsigns = tideBuild?.dreamsign === undefined || tideBuild?.dreamsign === null
+    ? buildOpponentDreamsigns(
+        completionLevelAtStart,
+        opponentsData.progression.dreamsignsFromLayer,
+        dreamsignTemplates,
+        streams.enemyDescriptor,
+      )
+    : [tideBuild.dreamsign];
   const enemyDescriptorBase = buildEnemyDescriptor(
     opponentDreamAvatar,
     opponentDreamsigns,
     streams.enemyDescriptor.nextFloat,
   );
-  const poolSeed = deriveEnemyPoolSeed(seed);
-  const aiMode = input.aiMode ?? false;
 
-  // Build the production opponent deck. Its
-  // `corpus_opponent_deck_constructed` log is captured into `emitCorpusDeckLog`
-  // so it fires with the rest of the opponent reconstruction logs, deferred to
-  // transaction-commit in multiplayer.
-  let emitCorpusDeckLog: (() => void) | null = null;
-  const corpusBuild =
-    aiMode || input.knownGoodDecklists === undefined
-      ? null
-      : buildCorpusOpponentDeck({
-          opponentDreamAvatar,
-          knownGoodDecklists: input.knownGoodDecklists,
-          affiliation: battleAffiliation,
-          cardDatabase,
-          dreamsignSignatures: input.dreamsignSignatures,
-          dreamsignTemplates,
-          completionLevel: completionLevelAtStart,
-          layerCount,
-          poolSeed,
-          battleEntryKey,
-          opponentsContentHash: opponentsData.contentHash,
-          progression: opponentsData.progression,
-          selectionConfig: opponentsData.corpusSelection,
-          deferLog: (emit) => {
-            emitCorpusDeckLog = emit;
-          },
-        });
-
-  const chosenCards = corpusBuild?.finalCards ?? null;
+  const chosenCards = tideBuild?.finalCards ?? null;
   const enemyDeckDefinition = finalizeEnemyDeck(
     chosenCards,
     cardDatabase,
@@ -367,7 +356,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
 
   // Assemble the deferred opponent reconstruction logs.
   const emitOpponentLogs = (): void => {
-    // The signature-card pick is independent of which opponent-deck algorithm
+    // The signature-card pick is independent of opponent deck construction
     // ran, so it is recorded for every battle. `matchedTerms` / `score` make the
     // pick reconstructable: each card is chosen for the glossary keywords it
     // shares with the DreamAvatar's ability (idf-weighted across the deck).
@@ -386,8 +375,8 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
         score: selection.score,
       })),
     });
-    if (corpusBuild === null) return;
-    logEvent("corpus_opponent_dream_avatar_selected", {
+    if (tideBuild === null) return;
+    logEvent("tide_opponent_dream_avatar_selected", {
       battleEntryKey,
       dreamscapeId: state.currentDreamscape,
       completionLevel: completionLevelAtStart,
@@ -397,7 +386,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
       selectedDreamAvatarId: opponentDreamAvatar?.id ?? null,
       selectedDreamAvatarName: opponentDreamAvatar?.name ?? null,
     });
-    emitCorpusDeckLog?.();
+    emitTideDeckLog?.();
   };
   // Defer the reconstruction logs to the caller when it wants to gate logging on
   // the committed init (multiplayer ensure path); otherwise emit inline so

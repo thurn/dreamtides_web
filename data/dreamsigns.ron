@@ -8,6 +8,13 @@
     ability_text: [
       Tx("Once per turn, when you discard a card, your next card this turn costs 2● less."),
     ],
+    rarity: Uncommon,
+    tide_ids: [
+      "77765ea3-16fb-4ab7-9f4f-4610f2f04d9f",
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "1a075e25-0344-4103-997c-dd8f8a57c84e",
+    ],
+    tags: ["Tag OK"],
     art: (image: "acorn_gold.png"),
   ),
 
@@ -15,6 +22,13 @@
     name: Tx("Pyramid Relic"),
     id: "278ec1ab-f532-4862-84ae-63df5e49548c",
     ability_text: [Tx("The second character you play each turn costs 1● less.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "80e3d33f-6b21-4739-9050-be8d28de28a6",
+      "e03f4d87-bc6c-46f9-9c08-bef7b59a9f70",
+      "eb397537-8a0b-4969-924b-baee5137094c",
+    ],
+    tags: ["Tag OK"],
     art: (image: "aertfact.png"),
   ),
 
@@ -26,6 +40,13 @@
         "Once per turn, when a character you control leaves play, your next character this turn costs 2● less."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: [
+      "f7072be7-f12b-482a-b9e1-4d3925622eb2",
+      "0ac06270-f783-4c4f-bfd9-4109d22316e0",
+      "1694633b-f5a7-4fe8-a685-993be7e1a13c",
+    ],
+    tags: ["Tag OK", "Ally Audit"],
     art: (image: "amanita.png"),
   ),
 
@@ -35,6 +56,9 @@
     ability_text: [
       Tx("Once per turn, when you draw a character, reduce its cost by 1● until end of turn."),
     ],
+    rarity: Uncommon,
+    tide_ids: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
+    tags: ["Tag OK"],
     art: (image: "algae.png"),
   ),
 
@@ -42,6 +66,13 @@
     name: Tx("Flash Powder"),
     id: "3dd05e97-1af8-4ae9-8e1f-954eaa63e112",
     ability_text: [Tx("The first character you play each turn costs 2● less and has 0✦.")],
+    rarity: Common,
+    tide_ids: [
+      "7dfa6a52-04ce-42fc-9ef6-4e6571435510",
+      "80e3d33f-6b21-4739-9050-be8d28de28a6",
+      "e03f4d87-bc6c-46f9-9c08-bef7b59a9f70",
+    ],
+    tags: ["Tag OK"],
     art: (image: "Alchemical_Powder.png"),
   ),
 
@@ -49,6 +80,9 @@
     name: Tx("Green Amulet"),
     id: "a42c99b2-f480-4f63-91a0-bd556120427d",
     ability_text: [Tx("The second card you draw each turn costs 2● less.")],
+    rarity: Uncommon,
+    tide_ids: ["1a075e25-0344-4103-997c-dd8f8a57c84e"],
+    tags: ["Tag OK"],
     art: (image: "amulet_2.png"),
   ),
 
@@ -56,6 +90,13 @@
     name: Tx("Cloud Lens"),
     id: "3fd8861d-fc4c-4097-9e28-89cc37f5b3f4",
     ability_text: [Tx("The second event you play each turn costs 1● less.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "e6863f55-50e7-4c7b-b118-609b5fc5c005",
+    ],
+    tags: ["Tag OK"],
     art: (image: "amulet_3.png"),
   ),
 
@@ -63,6 +104,13 @@
     name: Tx("Serpent Tome"),
     id: "8778bf17-4e0a-4ce7-b23c-4daf49a782a7",
     ability_text: [Tx("Reclaim abilities cost you 1● less.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "1a075e25-0344-4103-997c-dd8f8a57c84e",
+      "e6863f55-50e7-4c7b-b118-609b5fc5c005",
+    ],
+    tags: ["Tag OK"],
     art: (image: "book_6.png"),
   ),
 
@@ -74,6 +122,13 @@
         "Once per turn, when you return a character you control to hand, your next character this turn costs 1● less."
       ),
     ],
+    rarity: Common,
+    tide_ids: [
+      "80e3d33f-6b21-4739-9050-be8d28de28a6",
+      "eb397537-8a0b-4969-924b-baee5137094c",
+      "e03f4d87-bc6c-46f9-9c08-bef7b59a9f70",
+    ],
+    tags: ["Tag OK", "Ally Audit"],
     art: (image: "necklace.png"),
   ),
 
@@ -81,6 +136,13 @@
     name: Tx("Oak Leaf"),
     id: "95f0f483-9a76-47c6-a839-01a1d9122945",
     ability_text: [Tx("When you return a character you control to hand, it gains +2✦.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "80e3d33f-6b21-4739-9050-be8d28de28a6",
+      "eb397537-8a0b-4969-924b-baee5137094c",
+      "e03f4d87-bc6c-46f9-9c08-bef7b59a9f70",
+    ],
+    tags: ["Tag OK", "Ally Audit"],
     art: (image: "oak_leaf.png"),
   ),
 
@@ -88,6 +150,13 @@
     name: Tx("Egg Nest"),
     id: "553d2317-32f9-47bc-bae0-5018ca26d56a",
     ability_text: [Tx("The first ❖ card you play during the opponent's turn costs 1● less.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "4fcd40ac-b03f-405f-9236-a00139cbdcc8",
+      "09b9b56c-6356-40aa-bcd8-77b0c80d3835",
+      "0b873395-ad12-4a9f-ab50-5820fc92dd19",
+    ],
+    tags: ["Tag OK"],
     art: (image: "nest.png"),
   ),
 
@@ -95,6 +164,13 @@
     name: Tx("Skull Pendant"),
     id: "0d668e16-1729-4289-ad1d-0fb3c1374ee9",
     ability_text: [Tx("Characters with ▸Materialized abilities cost you 1● less.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "77765ea3-16fb-4ab7-9f4f-4610f2f04d9f",
+      "1a075e25-0344-4103-997c-dd8f8a57c84e",
+      "51903b9a-825b-4d9a-8a6d-071670c3caaa",
+    ],
+    tags: ["Tag OK"],
     art: (image: "amulet_8.png"),
   ),
 
@@ -102,6 +178,13 @@
     name: Tx("Crystal Orb"),
     id: "ede46f71-aa77-4b12-9824-0d3706da6a22",
     ability_text: [Tx("The first character you materialize each turn has awakened.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "1a075e25-0344-4103-997c-dd8f8a57c84e",
+      "77765ea3-16fb-4ab7-9f4f-4610f2f04d9f",
+      "eb397537-8a0b-4969-924b-baee5137094c",
+    ],
+    tags: ["Tag OK"],
     art: (image: "magic_ball_2.png"),
   ),
 
@@ -111,6 +194,13 @@
     ability_text: [
       Tx("When you abandon a character, trigger its ▸Materialized and ▸Dawn abilities."),
     ],
+    rarity: Rare,
+    tide_ids: [
+      "80e3d33f-6b21-4739-9050-be8d28de28a6",
+      "e03f4d87-bc6c-46f9-9c08-bef7b59a9f70",
+      "eb397537-8a0b-4969-924b-baee5137094c",
+    ],
+    tags: ["Tag OK", "Ally Audit"],
     art: (image: "bag_2.png"),
   ),
 
@@ -120,6 +210,13 @@
     ability_text: [
       Tx("Once per turn, when you abandon a character, materialize a 0✦ figment copy of it."),
     ],
+    rarity: Uncommon,
+    tide_ids: [
+      "0ac06270-f783-4c4f-bfd9-4109d22316e0",
+      "ee5e7dd2-0c11-4349-94e1-ec1ae35b20af",
+      "9ca5a839-cdcb-497d-9b76-2de4c6874cf0",
+    ],
+    tags: ["Tag OK", "Ally Audit"],
     art: (image: "rose_petals.png"),
   ),
 
@@ -131,6 +228,13 @@
         "The first time each turn you trigger a ▸Materialized ability, trigger that ability again."
       ),
     ],
+    rarity: Rare,
+    tide_ids: [
+      "fc729d2b-bf04-4b69-8050-00b30b296330",
+      "f7072be7-f12b-482a-b9e1-4d3925622eb2",
+      "77765ea3-16fb-4ab7-9f4f-4610f2f04d9f",
+    ],
+    tags: ["Tag OK"],
     art: (image: "bag_4.png"),
   ),
 
@@ -138,6 +242,13 @@
     name: Tx("Bat Wing"),
     id: "a98f468b-5e76-4041-83ee-69c0871a6bf0",
     ability_text: [Tx("Once per turn, when you dissolve or banish an enemy, draw a card.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "fc729d2b-bf04-4b69-8050-00b30b296330",
+      "7343b376-88d2-45fe-8b5e-79763480ee7e",
+      "1a075e25-0344-4103-997c-dd8f8a57c84e",
+    ],
+    tags: ["Tag OK"],
     art: (image: "bat_wings.png"),
   ),
 
@@ -145,6 +256,13 @@
     name: Tx("Bell"),
     id: "d1fdbe21-56f6-43c0-aaac-1e4683964da5",
     ability_text: [Tx("When you play a character from your void, rematerialize it.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "7dfa6a52-04ce-42fc-9ef6-4e6571435510",
+      "80e3d33f-6b21-4739-9050-be8d28de28a6",
+      "e03f4d87-bc6c-46f9-9c08-bef7b59a9f70",
+    ],
+    tags: ["Tag OK"],
     art: (image: "bell.png"),
   ),
 
@@ -156,6 +274,13 @@
         "At the end of your turn, if you materialized 2 characters this turn, rematerialize the last one."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: [
+      "a182f025-8a15-44e1-be26-74766a3b0b85",
+      "e03f4d87-bc6c-46f9-9c08-bef7b59a9f70",
+      "eb397537-8a0b-4969-924b-baee5137094c",
+    ],
+    tags: ["Tag OK", "Ally Audit"],
     art: (image: "belladonna.png"),
   ),
 
@@ -163,6 +288,13 @@
     name: Tx("Berries"),
     id: "00cc7e7f-4245-4447-b9dc-f647dc6241a2",
     ability_text: [Tx("Characters in your deck with cost ≤2● have +1✦.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "7dfa6a52-04ce-42fc-9ef6-4e6571435510",
+      "254054e3-1a7c-4bf4-8c30-491fdeeab40c",
+      "4b01b6c1-ccca-4e19-848a-d799d46088b2",
+    ],
+    tags: ["Tag OK"],
     art: (image: "berries.png"),
   ),
 
@@ -170,6 +302,13 @@
     name: Tx("Green Beetle"),
     id: "47081bde-f35d-4b5c-ba17-53e5dbf5b419",
     ability_text: [Tx("Characters in your deck with cost ≥4● have awakened.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "77765ea3-16fb-4ab7-9f4f-4610f2f04d9f",
+      "c78a2ce1-80fe-48b9-9400-98f4965e17a4",
+      "d5cf7078-48ae-402d-837e-dde02b1a7153",
+    ],
+    tags: ["Tag OK"],
     art: (image: "bettle.png"),
   ),
 
@@ -179,6 +318,13 @@
     ability_text: [
       Tx("When you abandon a character, characters you materialize this turn have awakened."),
     ],
+    rarity: Uncommon,
+    tide_ids: [
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "eb397537-8a0b-4969-924b-baee5137094c",
+      "1a075e25-0344-4103-997c-dd8f8a57c84e",
+    ],
+    tags: ["Tag OK"],
     art: (image: "bezoar.png"),
   ),
 
@@ -186,6 +332,13 @@
     name: Tx("Brown Acorn"),
     id: "9f34b5f6-4766-4a7e-a841-d7b945cad504",
     ability_text: [Tx("When you add a warrior card to your deck, that card gains +1✦.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "254054e3-1a7c-4bf4-8c30-491fdeeab40c",
+      "4b01b6c1-ccca-4e19-848a-d799d46088b2",
+      "833ba3dd-498a-42ce-9a03-32f6636acea1",
+    ],
+    tags: ["Tag OK"],
     art: (image: "black-acorn.png"),
   ),
 
@@ -193,6 +346,13 @@
     name: Tx("Black Attuned"),
     id: "94e5683d-a24c-4f89-8afa-652d7c6c79aa",
     ability_text: [Tx("When you play an event while you control 3 or more warriors, copy it.")],
+    rarity: Rare,
+    tide_ids: [
+      "4b01b6c1-ccca-4e19-848a-d799d46088b2",
+      "254054e3-1a7c-4bf4-8c30-491fdeeab40c",
+      "833ba3dd-498a-42ce-9a03-32f6636acea1",
+    ],
+    tags: ["Tag OK", "Ally Audit"],
     art: (image: "black_rose.png"),
   ),
 
@@ -202,6 +362,13 @@
     ability_text: [
       Tx("When you play your second character each turn, materialize a 1✦ warrior figment."),
     ],
+    rarity: Uncommon,
+    tide_ids: [
+      "833ba3dd-498a-42ce-9a03-32f6636acea1",
+      "254054e3-1a7c-4bf4-8c30-491fdeeab40c",
+      "4b01b6c1-ccca-4e19-848a-d799d46088b2",
+    ],
+    tags: ["Tag OK"],
     art: (image: "black_widow.png"),
   ),
 
@@ -213,6 +380,13 @@
         "If the first card you draw during your turn is a warrior, reduce its cost by 1● and it gains +2✦."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: [
+      "254054e3-1a7c-4bf4-8c30-491fdeeab40c",
+      "4b01b6c1-ccca-4e19-848a-d799d46088b2",
+      "833ba3dd-498a-42ce-9a03-32f6636acea1",
+    ],
+    tags: ["Tag OK"],
     art: (image: "blue_feather.png"),
   ),
 
@@ -222,6 +396,13 @@
     ability_text: [
       Tx("When you play an event while you control 3 or more spirit animals, it costs 1● less."),
     ],
+    rarity: Uncommon,
+    tide_ids: [
+      "80e3d33f-6b21-4739-9050-be8d28de28a6",
+      "e03f4d87-bc6c-46f9-9c08-bef7b59a9f70",
+      "eb397537-8a0b-4969-924b-baee5137094c",
+    ],
+    tags: ["Tag OK", "Ally Audit"],
     art: (image: "drum.png"),
   ),
 
@@ -229,6 +410,13 @@
     name: Tx("Ivory Claw"),
     id: "21ae8473-afa7-4384-b7d4-afbf1d84e691",
     ability_text: [Tx("▸Dawn: If you control 3 or more warriors, draw a card.")],
+    rarity: Rare,
+    tide_ids: [
+      "254054e3-1a7c-4bf4-8c30-491fdeeab40c",
+      "4b01b6c1-ccca-4e19-848a-d799d46088b2",
+      "833ba3dd-498a-42ce-9a03-32f6636acea1",
+    ],
+    tags: ["Tag OK", "Ally Audit"],
     art: (image: "claw.png"),
   ),
 
@@ -238,6 +426,13 @@
     ability_text: [
       Tx("Once per turn, when a spirit animal you control is dissolved, draw a card."),
     ],
+    rarity: Uncommon,
+    tide_ids: [
+      "80e3d33f-6b21-4739-9050-be8d28de28a6",
+      "fc729d2b-bf04-4b69-8050-00b30b296330",
+      "e03f4d87-bc6c-46f9-9c08-bef7b59a9f70",
+    ],
+    tags: ["Tag OK", "Ally Audit"],
     art: (image: "scroll_3.png"),
   ),
 
@@ -245,6 +440,13 @@
     name: Tx("Curved Blade"),
     id: "246ac924-74dd-4387-9fd6-5bc8e563907a",
     ability_text: [Tx("Warriors you control cost 1● less.")],
+    rarity: Rare,
+    tide_ids: [
+      "833ba3dd-498a-42ce-9a03-32f6636acea1",
+      "254054e3-1a7c-4bf4-8c30-491fdeeab40c",
+      "4b01b6c1-ccca-4e19-848a-d799d46088b2",
+    ],
+    tags: ["Tag OK", "Ally Audit"],
     art: (image: "knife.png"),
   ),
 
@@ -252,6 +454,13 @@
     name: Tx("Shadow Droplet"),
     id: "1ece0e16-08de-4c99-8552-2d1d3a2bd517",
     ability_text: [Tx("Survivors in your void have reclaim.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "c78a2ce1-80fe-48b9-9400-98f4965e17a4",
+      "0ac06270-f783-4c4f-bfd9-4109d22316e0",
+      "9ca5a839-cdcb-497d-9b76-2de4c6874cf0",
+    ],
+    tags: ["Tag OK"],
     art: (image: "dark-essense.png"),
   ),
 
@@ -263,6 +472,13 @@
         "When you gain this dreamsign, pick a character type. All cards in your deck that mention character types in their text now refer to that character type."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: [
+      "833ba3dd-498a-42ce-9a03-32f6636acea1",
+      "254054e3-1a7c-4bf4-8c30-491fdeeab40c",
+      "4b01b6c1-ccca-4e19-848a-d799d46088b2",
+    ],
+    tags: ["J10", "Tag OK"],
     art: (image: "mask_2.png"),
   ),
 
@@ -270,6 +486,13 @@
     name: Tx("Rune Stone"),
     id: "dec81fa2-7865-448c-95bc-622b884cea9e",
     ability_text: [Tx("Figments you control have +1✦.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "a182f025-8a15-44e1-be26-74766a3b0b85",
+      "ee5e7dd2-0c11-4349-94e1-ec1ae35b20af",
+      "254054e3-1a7c-4bf4-8c30-491fdeeab40c",
+    ],
+    tags: ["J10", "Tag OK", "Ally Audit"],
     art: (image: "rune.png"),
   ),
 
@@ -277,6 +500,13 @@
     name: Tx("Rune Sack"),
     id: "4dc47625-73bd-4518-a4ef-29dda2171594",
     ability_text: [Tx("▸Dawn: If you control 3 or more figments, gain 2●.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "a182f025-8a15-44e1-be26-74766a3b0b85",
+      "ee5e7dd2-0c11-4349-94e1-ec1ae35b20af",
+      "69d696b6-c7aa-460a-8868-a5fa70930c45",
+    ],
+    tags: ["J10", "Tag OK", "Ally Audit"],
     art: (image: "runes.png"),
   ),
 
@@ -284,6 +514,13 @@
     name: Tx("Bestiary"),
     id: "4a91c56c-d828-482a-a46c-1299d69fa011",
     ability_text: [Tx("When you discard a card, materialize a 2✦ radiant figment.")],
+    rarity: Rare,
+    tide_ids: [
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "1a075e25-0344-4103-997c-dd8f8a57c84e",
+      "77765ea3-16fb-4ab7-9f4f-4610f2f04d9f",
+    ],
+    tags: ["J10", "Tag OK"],
     art: (image: "book_10.png"),
   ),
 
@@ -291,6 +528,9 @@
     name: Tx("Potion Mortar"),
     id: "26786698-fdf2-493d-905b-4273a20586c9",
     ability_text: [Tx("▸Dawn: A random card in your hand costs 1● this turn.")],
+    rarity: Common,
+    tide_ids: ["d923b6e9-8572-4b27-b456-e70e69e80b31"],
+    tags: ["J10", "Tag OK"],
     art: (image: "bowl.png"),
   ),
 
@@ -298,6 +538,9 @@
     name: Tx("Broomstick"),
     id: "b7f8a4ea-c067-47ed-b251-2876b609108c",
     ability_text: [Tx("▸Dawn: Lose 1●. Draw a card.")],
+    rarity: Uncommon,
+    tide_ids: ["1a075e25-0344-4103-997c-dd8f8a57c84e"],
+    tags: ["J10", "Tag OK"],
     art: (image: "broomstick.png"),
   ),
 
@@ -305,6 +548,13 @@
     name: Tx("Ice Crystals"),
     id: "253a106d-f64e-4a60-9471-446a18ee8959",
     ability_text: [Tx("▸Dawn: Erode 1.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "7dfa6a52-04ce-42fc-9ef6-4e6571435510",
+      "a182f025-8a15-44e1-be26-74766a3b0b85",
+      "77765ea3-16fb-4ab7-9f4f-4610f2f04d9f",
+    ],
+    tags: ["J10", "Tag OK"],
     art: (image: "ice.png"),
   ),
 
@@ -312,6 +562,13 @@
     name: Tx("Tarot Card"),
     id: "5a22f358-bc84-44b1-a201-5f9f57940c51",
     ability_text: [Tx("When you challenge with 2 or more characters, draw a card.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "254054e3-1a7c-4bf4-8c30-491fdeeab40c",
+      "4b01b6c1-ccca-4e19-848a-d799d46088b2",
+      "833ba3dd-498a-42ce-9a03-32f6636acea1",
+    ],
+    tags: ["J10", "Tag OK"],
     art: (image: "card.png"),
   ),
 
@@ -319,6 +576,9 @@
     name: Tx("Mushroom Caps"),
     id: "6b95d6bd-c970-4465-9536-4f21e7630d0a",
     ability_text: [Tx("When drafting cards, see 1 fewer choice."), Tx("▸Dawn: Gain 1●.")],
+    rarity: Common,
+    tide_ids: ["d923b6e9-8572-4b27-b456-e70e69e80b31"],
+    tags: ["J10", "Tag OK"],
     art: (image: "Champignon.png"),
   ),
 
@@ -326,6 +586,13 @@
     name: Tx("Rainbow Horn"),
     id: "1a524712-ef7e-43d9-bd79-5dea5250bf08",
     ability_text: [Tx("▸Dawn: Add a random ≤2● cost event from the card pool to your hand.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "cf1f7e7c-f9e9-4f83-9ff5-6edc8a916277",
+    ],
+    tags: ["J10", "Tag OK"],
     art: (image: "horn_rainbow .png"),
   ),
 
@@ -333,6 +600,13 @@
     name: Tx("Hourglass"),
     id: "6f4e2d9f-38a4-4f6a-8fde-7d942977a6df",
     ability_text: [Tx("If 3 or more ▸Dawn abilities trigger during your Dawn phase, draw a card.")],
+    rarity: Rare,
+    tide_ids: [
+      "833ba3dd-498a-42ce-9a03-32f6636acea1",
+      "254054e3-1a7c-4bf4-8c30-491fdeeab40c",
+      "4b01b6c1-ccca-4e19-848a-d799d46088b2",
+    ],
+    tags: ["J10", "Tag OK"],
     art: (image: "hourglass.png"),
   ),
 
@@ -344,6 +618,13 @@
         "The ▸Dawn ability of a random character you control triggers an additional time each turn."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: [
+      "833ba3dd-498a-42ce-9a03-32f6636acea1",
+      "254054e3-1a7c-4bf4-8c30-491fdeeab40c",
+      "4b01b6c1-ccca-4e19-848a-d799d46088b2",
+    ],
+    tags: ["J10", "Tag OK", "Ally Audit"],
     art: (image: "butterfly_wings.png"),
   ),
 
@@ -353,6 +634,13 @@
     ability_text: [
       Tx("▸Dawn: Add an ethereal copy of the first event you played last turn to your hand."),
     ],
+    rarity: Rare,
+    tide_ids: [
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "e6863f55-50e7-4c7b-b118-609b5fc5c005",
+    ],
+    tags: ["J10", "Tag OK"],
     art: (image: "dreamcatcher.png"),
   ),
 
@@ -360,6 +648,13 @@
     name: Tx("Carved Relic"),
     id: "064cfb53-fcb4-4471-80de-27eccd23d3c0",
     ability_text: [Tx("▸Dawn: Return a random event from your void to your hand.")],
+    rarity: Rare,
+    tide_ids: [
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "e6863f55-50e7-4c7b-b118-609b5fc5c005",
+    ],
+    tags: ["J10", "Tag OK"],
     art: (image: "idol.png"),
   ),
 
@@ -367,6 +662,13 @@
     name: Tx("Rope Doll"),
     id: "a7cdc8fd-5827-4d73-ae0c-aa594a69fa8a",
     ability_text: [Tx("▸Dawn: Return a random survivor from your void to your hand.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "0ac06270-f783-4c4f-bfd9-4109d22316e0",
+      "c78a2ce1-80fe-48b9-9400-98f4965e17a4",
+      "9ca5a839-cdcb-497d-9b76-2de4c6874cf0",
+    ],
+    tags: ["J10", "Tag OK"],
     art: (image: "doll.png"),
   ),
 
@@ -374,6 +676,13 @@
     name: Tx("Dead Rat"),
     id: "bfec4f5d-9b0d-4ed2-b470-db73d852448f",
     ability_text: [Tx("▸Dawn: You may abandon a character to draw a card.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "0ac06270-f783-4c4f-bfd9-4109d22316e0",
+      "4b01b6c1-ccca-4e19-848a-d799d46088b2",
+      "7dfa6a52-04ce-42fc-9ef6-4e6571435510",
+    ],
+    tags: ["J10", "Tag OK"],
     art: (image: "dead_rat.png"),
   ),
 
@@ -381,6 +690,13 @@
     name: Tx("Gem Codex"),
     id: "fb7316c9-ef29-42fd-993e-d3337cb06921",
     ability_text: [Tx("When you copy an event, copy it an additional time.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "87d5e3fa-192e-482b-a75c-a0921e5699e2",
+    ],
+    tags: ["J10", "Tag OK"],
     art: (image: "book_9.png"),
   ),
 
@@ -388,6 +704,13 @@
     name: Tx("Black Cat"),
     id: "257c160f-7d70-4ebd-bb0f-f83e61907310",
     ability_text: [Tx("Copy the second event you play each turn.")],
+    rarity: Rare,
+    tide_ids: [
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+      "87d5e3fa-192e-482b-a75c-a0921e5699e2",
+      "e6863f55-50e7-4c7b-b118-609b5fc5c005",
+    ],
+    tags: ["J10", "Tag OK"],
     art: (image: "cat.png"),
   ),
 
@@ -395,6 +718,13 @@
     name: Tx("Storm Tome"),
     id: "49f216a2-0596-4124-bb40-60ac9afe6e0b",
     ability_text: [Tx("Once per turn, when you play a ≤2● cost event, copy it.")],
+    rarity: Rare,
+    tide_ids: [
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+      "09b9b56c-6356-40aa-bcd8-77b0c80d3835",
+      "22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e",
+    ],
+    tags: ["J10", "Tag OK"],
     art: (image: "book_2.png"),
   ),
 
@@ -404,6 +734,13 @@
     ability_text: [
       Tx("Once per turn, when you play an event while you control no characters, copy it."),
     ],
+    rarity: Common,
+    tide_ids: [
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+      "87d5e3fa-192e-482b-a75c-a0921e5699e2",
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+    ],
+    tags: ["J10", "Tag OK", "Ally Audit"],
     art: (image: "clover.png"),
   ),
 
@@ -411,6 +748,13 @@
     name: Tx("Flaming Button"),
     id: "6dac6bff-af3a-4749-8547-01fded1c81c9",
     ability_text: [Tx("Once per turn, when you copy an event, gain 1●.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "87d5e3fa-192e-482b-a75c-a0921e5699e2",
+    ],
+    tags: ["J10", "Tag OK"],
     art: (image: "damned_button.png"),
   ),
 
@@ -418,6 +762,13 @@
     name: Tx("Crow"),
     id: "396da354-9f4d-4ae7-a9dc-02d1330a2678",
     ability_text: [Tx("When you play an event, a random character gains +1✦ until end of turn.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+      "1a075e25-0344-4103-997c-dd8f8a57c84e",
+    ],
+    tags: ["J10", "Tag OK"],
     art: (image: "crow.png"),
   ),
 
@@ -427,6 +778,13 @@
     ability_text: [
       Tx("When you play an event, a random event in your void gains reclaim until end of turn."),
     ],
+    rarity: Rare,
+    tide_ids: [
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+      "e6863f55-50e7-4c7b-b118-609b5fc5c005",
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+    ],
+    tags: ["J10", "Tag OK"],
     art: (image: "cauldron.png"),
   ),
 
@@ -434,6 +792,13 @@
     name: Tx("Skull Dagger"),
     id: "044f856b-c08b-4b82-81e3-5417962bf868",
     ability_text: [Tx("The first event you play from your void each turn costs 0●.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "1a075e25-0344-4103-997c-dd8f8a57c84e",
+    ],
+    tags: ["J10", "Tag OK"],
     art: (image: "dark_knife.png"),
   ),
 
@@ -441,6 +806,13 @@
     name: Tx("Eye Grimoire"),
     id: "b6333eba-5573-441c-b286-1cd7f7cb6916",
     ability_text: [Tx("Once per turn, when you play an event from your void, copy it.")],
+    rarity: Rare,
+    tide_ids: [
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "e6863f55-50e7-4c7b-b118-609b5fc5c005",
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+    ],
+    tags: ["J10", "Tag OK"],
     art: (image: "book_3.png"),
   ),
 
@@ -448,6 +820,13 @@
     name: Tx("Eyeball Plant"),
     id: "b2626645-827c-46ec-8204-017862d1a398",
     ability_text: [Tx("Characters in your void with ≥3● cost have reclaim.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "51903b9a-825b-4d9a-8a6d-071670c3caaa",
+      "d5cf7078-48ae-402d-837e-dde02b1a7153",
+      "e1620ab4-7e68-4a57-a6eb-d7a3380c4dc5",
+    ],
+    tags: ["J11", "Tag OK"],
     art: (image: "creepy_plant.png"),
   ),
 
@@ -455,6 +834,13 @@
     name: Tx("Skull Codex"),
     id: "2059aa74-8897-4c76-833f-ddef7d34346c",
     ability_text: [Tx("Reclaim abilities cost you 0●.")],
+    rarity: Rare,
+    tide_ids: [
+      "e6863f55-50e7-4c7b-b118-609b5fc5c005",
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+    ],
+    tags: ["J11", "Tag OK"],
     art: (image: "book_5.png"),
   ),
 
@@ -462,6 +848,13 @@
     name: Tx("Dragon Egg"),
     id: "8340cce5-8e27-4940-ab79-34e09fdbcae1",
     ability_text: [Tx("Once per turn, when you play a card from your void, draw a card.")],
+    rarity: Rare,
+    tide_ids: [
+      "1a075e25-0344-4103-997c-dd8f8a57c84e",
+      "77765ea3-16fb-4ab7-9f4f-4610f2f04d9f",
+      "7dfa6a52-04ce-42fc-9ef6-4e6571435510",
+    ],
+    tags: ["J11", "Tag OK"],
     art: (image: "egg_dragon.png"),
   ),
 
@@ -469,6 +862,13 @@
     name: Tx("Spotted Egg"),
     id: "2cbcbebb-fb79-4833-a770-2216873147c4",
     ability_text: [Tx("When you play your second event each turn, it gains reclaim 0●.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "e6863f55-50e7-4c7b-b118-609b5fc5c005",
+    ],
+    tags: ["J11", "Tag OK"],
     art: (image: "eggs_2.png"),
   ),
 
@@ -476,6 +876,13 @@
     name: Tx("Worm Apple"),
     id: "d2a916c1-321a-4ae3-9a50-0b7f13c5eff6",
     ability_text: [Tx("You may play ❖ and ❖❖ events for 1●.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "e6863f55-50e7-4c7b-b118-609b5fc5c005",
+    ],
+    tags: ["J11", "Tag OK"],
     art: (image: "apple.png"),
   ),
 
@@ -487,6 +894,13 @@
         "Once per turn, when you abandon a character or discard a character, that card gains reclaim."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: [
+      "80e3d33f-6b21-4739-9050-be8d28de28a6",
+      "fc729d2b-bf04-4b69-8050-00b30b296330",
+      "ee5e7dd2-0c11-4349-94e1-ec1ae35b20af",
+    ],
+    tags: ["J11", "Tag OK", "Ally Audit"],
     art: (image: "essence.png"),
   ),
 
@@ -494,6 +908,13 @@
     name: Tx("Green Fly"),
     id: "946dbb36-0a90-495a-bf0f-17351c93d74b",
     ability_text: [Tx("The first card you erode each turn gains reclaim.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "0ac06270-f783-4c4f-bfd9-4109d22316e0",
+      "a182f025-8a15-44e1-be26-74766a3b0b85",
+      "9ca5a839-cdcb-497d-9b76-2de4c6874cf0",
+    ],
+    tags: ["J11", "Tag OK"],
     art: (image: "fly.png"),
   ),
 
@@ -503,6 +924,13 @@
     ability_text: [
       Tx("When you play an event, the character you control with the highest ✦ gains +1✦."),
     ],
+    rarity: Uncommon,
+    tide_ids: [
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "1a075e25-0344-4103-997c-dd8f8a57c84e",
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+    ],
+    tags: ["J11", "Tag OK", "Ally Audit"],
     art: (image: "candle.png"),
   ),
 
@@ -510,6 +938,9 @@
     name: Tx("Red Heart"),
     id: "8b87b0c7-e7d5-4c53-b99b-b1e2407cb519",
     ability_text: [Tx("When you erode a card, a random character you control gains +1✦.")],
+    rarity: Uncommon,
+    tide_ids: ["e4d7c1fe-cae0-4cec-8254-2656eff4359b"],
+    tags: ["J11", "Tag OK", "Ally Audit"],
     art: (image: "heart.png"),
   ),
 
@@ -521,6 +952,9 @@
         "When you abandon a character, a random character you control gains +X✦ where X is the abandoned character's ✦."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
+    tags: ["J11", "Tag OK", "Ally Audit"],
     art: (image: "feather.png"),
   ),
 
@@ -528,6 +962,13 @@
     name: Tx("Gold Feather"),
     id: "adc23870-55f8-4f23-b973-a358fc257414",
     ability_text: [Tx("When you abandon a character, a random character you control gains +1✦.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "0ac06270-f783-4c4f-bfd9-4109d22316e0",
+      "9ca5a839-cdcb-497d-9b76-2de4c6874cf0",
+      "ee5e7dd2-0c11-4349-94e1-ec1ae35b20af",
+    ],
+    tags: ["J11", "Tag OK", "Ally Audit"],
     art: (image: "feather_gold.png"),
   ),
 
@@ -535,6 +976,9 @@
     name: Tx("Gray Feather"),
     id: "1a21186c-cafd-4e0f-9304-1ac0ef55340a",
     ability_text: [Tx("When a character you control gains ✦, it gains 1 additional ✦.")],
+    rarity: Uncommon,
+    tide_ids: ["5354646a-9811-4f7e-85ea-cf8fec8f8f15"],
+    tags: ["J11", "Tag OK", "Ally Audit"],
     art: (image: "feathers.png"),
   ),
 
@@ -542,6 +986,13 @@
     name: Tx("Amber Eye"),
     id: "ff8d8d4a-fe7b-4511-8192-e6e2e7712daf",
     ability_text: [Tx("When you play an event, if you have ≥8 cards in your void, draw a card.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "e6863f55-50e7-4c7b-b118-609b5fc5c005",
+    ],
+    tags: ["J11", "Tag OK"],
     art: (image: "eye_3.png"),
   ),
 
@@ -549,6 +1000,13 @@
     name: Tx("Garlic Bulb"),
     id: "a92d2b95-c63d-4c1c-831b-902c44deee57",
     ability_text: [Tx("Once per turn, when you play an event, foresee 1.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+      "e6863f55-50e7-4c7b-b118-609b5fc5c005",
+    ],
+    tags: ["J11", "Tag OK"],
     art: (image: "garlic.png"),
   ),
 
@@ -556,6 +1014,13 @@
     name: Tx("Ginger Root"),
     id: "39260dd5-cb43-47d5-a007-effbe13d6417",
     ability_text: [Tx("Once per turn, when you foresee, draw a card.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "09b9b56c-6356-40aa-bcd8-77b0c80d3835",
+      "1ad97f42-6157-45b3-8290-e27219c7888a",
+      "4fcd40ac-b03f-405f-9236-a00139cbdcc8",
+    ],
+    tags: ["J11", "Tag OK"],
     art: (image: "ginger .png"),
   ),
 
@@ -563,6 +1028,9 @@
     name: Tx("Hair Lock"),
     id: "4e51f321-9089-4872-a0e2-ab909e242b33",
     ability_text: [Tx("At the start of each battle, foresee 3.")],
+    rarity: Rare,
+    tide_ids: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
+    tags: ["J11", "Tag OK"],
     art: (image: "hair.png"),
   ),
 
@@ -570,6 +1038,9 @@
     name: Tx("Witch Hat"),
     id: "268341c7-bb5b-49fb-ad8d-a792b7d631a0",
     ability_text: [Tx("When you play your second event each turn, draw a card.")],
+    rarity: Uncommon,
+    tide_ids: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
+    tags: ["J11", "Tag OK"],
     art: (image: "hat.png"),
   ),
 
@@ -577,6 +1048,13 @@
     name: Tx("Honeycombs"),
     id: "9aaed05a-2223-42f2-9b9d-81a53eab811c",
     ability_text: [Tx("Once per turn, when you discard a card, gain 1●.")],
+    rarity: Uncommon,
+    tide_ids: [
+      "77765ea3-16fb-4ab7-9f4f-4610f2f04d9f",
+      "ab89d262-45d4-438d-8670-79d91f6e944f",
+      "e95b00e1-dbff-453d-bdd6-f92034988107",
+    ],
+    tags: ["J11", "Tag OK"],
     art: (image: "honeycombs.png"),
   ),
 
@@ -588,6 +1066,9 @@
         "If you have discarded a card this turn, the first card you play from your void costs 1● less."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: ["51903b9a-825b-4d9a-8a6d-071670c3caaa"],
+    tags: ["J11", "Tag OK"],
     art: (image: "cactus .png"),
   ),
 
@@ -597,6 +1078,9 @@
     ability_text: [
       Tx("When you play an event, it costs 1● less for each card you have discarded this turn."),
     ],
+    rarity: Uncommon,
+    tide_ids: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
+    tags: ["J11", "Tag OK"],
     art: (image: "cinnamon.png"),
   ),
 
@@ -604,6 +1088,9 @@
     name: Tx("Leaf Bundle"),
     id: "9d134dfc-4643-47f3-a7ec-ea770587cea1",
     ability_text: [Tx("Once per turn, when you discard a card, draw a card.")],
+    rarity: Rare,
+    tide_ids: ["1a075e25-0344-4103-997c-dd8f8a57c84e"],
+    tags: ["J11", "Tag OK"],
     art: (image: "bunch_of_leaves.png"),
   ),
 
@@ -611,6 +1098,9 @@
     name: Tx("Magic Fish"),
     id: "3a22a33f-5682-4d00-b0ec-86e43b6ed9df",
     ability_text: [Tx("Once per turn, when you play a spirit animal, draw a card.")],
+    rarity: Rare,
+    tide_ids: ["1f36ff28-d760-49ce-b4da-b4b97145f794", "b2b1b0da-6d48-40cb-9d44-f0a94f0615f5"],
+    tags: ["J11", "Tag OK"],
     art: (image: "magic_fish.png"),
   ),
 
@@ -618,6 +1108,9 @@
     name: Tx("Sea Tome"),
     id: "b3403800-7004-4775-915b-a19840e416b0",
     ability_text: [Tx("Characters you control with ▸Dawn abilities have +1✦.")],
+    rarity: Uncommon,
+    tide_ids: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
+    tags: ["J11", "Tag OK", "Ally Audit"],
     art: (image: "book_11.png"),
   ),
 
@@ -625,6 +1118,9 @@
     name: Tx("Trinket Necklace"),
     id: "989b55bd-139f-40dc-b1fd-eb2f7b1c091a",
     ability_text: [Tx("Challengers you control have +1✦.")],
+    rarity: Uncommon,
+    tide_ids: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
+    tags: ["J11", "Tag OK", "Ally Audit"],
     art: (image: "amulet_5.png"),
   ),
 
@@ -632,6 +1128,9 @@
     name: Tx("Pig Nose"),
     id: "6103508c-4991-4b80-9dc1-f30122957296",
     ability_text: [Tx("Survivors you control have +2✦.")],
+    rarity: Rare,
+    tide_ids: ["7fdc1244-d4a6-4ab2-9e23-00246243337e", "14f8ed05-e684-407c-be32-1dc970d69f36"],
+    tags: ["J11", "Tag OK", "Ally Audit"],
     art: (image: "pig_nouse.png"),
   ),
 
@@ -643,6 +1142,9 @@
         "Challengers you control that share a character type with another challenger you control have +2✦."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
+    tags: ["J12", "Tag OK", "Ally Audit"],
     art: (image: "amulet_6.png"),
   ),
 
@@ -654,6 +1156,9 @@
         "You may pay Offering costs by discarding a card instead of banishing a card from your hand."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: ["1a075e25-0344-4103-997c-dd8f8a57c84e", "e1620ab4-7e68-4a57-a6eb-d7a3380c4dc5"],
+    tags: ["J12", "Tag OK"],
     art: (image: "opal.png"),
   ),
 
@@ -661,6 +1166,9 @@
     name: Tx("Spider Medallion"),
     id: "08a3983a-1b95-4d2e-a445-9d8dc2b8fca7",
     ability_text: [Tx("When you have 3 or more challengers, they have +2✦.")],
+    rarity: Uncommon,
+    tide_ids: ["568c305c-6884-4dff-b1ec-c08f387a6527", "b2b1b0da-6d48-40cb-9d44-f0a94f0615f5"],
+    tags: ["J12", "Tag OK"],
     art: (image: "amulet_9.png"),
   ),
 
@@ -668,6 +1176,9 @@
     name: Tx("Eye Amulet"),
     id: "eb6a5c19-26a6-41ef-ac7a-ce1152557b5c",
     ability_text: [Tx("When all characters you control are challengers, they have +2✦.")],
+    rarity: Common,
+    tide_ids: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
+    tags: ["J12", "Tag OK", "Ally Audit"],
     art: (image: "amulet_7.png"),
   ),
 
@@ -677,6 +1188,9 @@
     ability_text: [
       Tx("Cards in your hand with ephemeral are not banished at the end of your turn."),
     ],
+    rarity: Uncommon,
+    tide_ids: ["5b1199a2-d9c2-48f8-84b4-c111fba6aa64"],
+    tags: ["J12", "Tag OK"],
     art: (image: "monster_jelly.png"),
   ),
 
@@ -684,6 +1198,9 @@
     name: Tx("Silver Key"),
     id: "11018e32-f47e-45fd-a8cf-3a9e3f3be71b",
     ability_text: [Tx("The first character you play each turn materializes with +1✦.")],
+    rarity: Uncommon,
+    tide_ids: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
+    tags: ["J12", "Tag OK"],
     art: (image: "key_2.png"),
   ),
 
@@ -695,6 +1212,9 @@
         "When you play a character, it gains +1✦ for each other character you have played this turn."
       ),
     ],
+    rarity: Rare,
+    tide_ids: ["568c305c-6884-4dff-b1ec-c08f387a6527", "b2b1b0da-6d48-40cb-9d44-f0a94f0615f5"],
+    tags: ["J12", "Tag OK"],
     art: (image: "larva.png"),
   ),
 
@@ -706,6 +1226,9 @@
         "When you play a character, it gains +1✦ for each character you control that left play this turn."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
+    tags: ["J12", "Tag OK", "Ally Audit"],
     art: (image: "phoenix_feather.png"),
   ),
 
@@ -713,6 +1236,9 @@
     name: Tx("Notes"),
     id: "4f5bdcac-64cb-4a45-8121-e37f5e4d3074",
     ability_text: [Tx("Spirit animals you control have +1✦.")],
+    rarity: Uncommon,
+    tide_ids: ["1f36ff28-d760-49ce-b4da-b4b97145f794", "b2b1b0da-6d48-40cb-9d44-f0a94f0615f5"],
+    tags: ["J12", "Tag OK", "Ally Audit"],
     art: (image: "note_2.png"),
   ),
 
@@ -722,6 +1248,9 @@
     ability_text: [
       Tx("When a character you control dissolves an enemy in a challenge, it gains +2✦."),
     ],
+    rarity: Uncommon,
+    tide_ids: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
+    tags: ["J12", "Tag OK", "Ally Audit"],
     art: (image: "amulet_4.png"),
   ),
 
@@ -731,6 +1260,9 @@
     ability_text: [
       Tx("When a character you control scores ⍟ in a challenge, it scores 1 additional ⍟."),
     ],
+    rarity: Uncommon,
+    tide_ids: ["0b873395-ad12-4a9f-ab50-5820fc92dd19"],
+    tags: ["J12", "Tag OK", "Ally Audit"],
     art: (image: "piranha.png"),
   ),
 
@@ -738,6 +1270,9 @@
     name: Tx("Blazing Orb"),
     id: "4d762fae-ae9f-4c35-a03b-051d7ecc3532",
     ability_text: [],
+    rarity: Common,
+    tide_ids: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
+    tags: [],
     art: (image: "magic_ball.png"),
   ),
 
@@ -745,6 +1280,9 @@
     name: Tx("Black Horn"),
     id: "c92438fc-8e1f-4f97-9dcf-8ca0edaa8607",
     ability_text: [Tx("When you dissolve or banish an enemy character, gain 2●.")],
+    rarity: Rare,
+    tide_ids: ["7343b376-88d2-45fe-8b5e-79763480ee7e"],
+    tags: ["J12", "Tag OK"],
     art: (image: "leech.png"),
   ),
 
@@ -752,6 +1290,9 @@
     name: Tx("Poison Bottle"),
     id: "9dd7d53f-d4db-4eec-919d-d701774af359",
     ability_text: [Tx("When you return a character to a player's hand, gain 2●.")],
+    rarity: Uncommon,
+    tide_ids: ["1864823a-8d44-4bad-8bc0-bf2360eac68a"],
+    tags: ["J12", "Tag OK"],
     art: (image: "poison.png"),
   ),
 
@@ -761,6 +1302,9 @@
     ability_text: [
       Tx("When you abandon a character, its ▸Dissolved ability triggers an additional time."),
     ],
+    rarity: Uncommon,
+    tide_ids: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
+    tags: ["J12", "Tag OK", "Ally Audit"],
     art: (image: "letter_2.png"),
   ),
 
@@ -768,6 +1312,9 @@
     name: Tx("Parchment"),
     id: "fdfbd522-c2be-4b77-a63f-e9a64ca3de3b",
     ability_text: [Tx("Once per turn, when a character you control is dissolved, draw a card.")],
+    rarity: Rare,
+    tide_ids: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
+    tags: ["J12", "Tag OK", "Ally Audit"],
     art: (image: "parchment.png"),
   ),
 
@@ -779,6 +1326,9 @@
         "Once per turn, when a character you control is dissolved, return a random character with lower cost from your void to hand."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
+    tags: ["J12", "Tag OK", "Ally Audit"],
     art: (image: "mandragora.png"),
   ),
 
@@ -790,6 +1340,9 @@
         "Once per turn, when a character you control is dissolved, materialize a random character with lower cost from your void."
       ),
     ],
+    rarity: Rare,
+    tide_ids: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
+    tags: ["J12", "Tag OK", "Ally Audit"],
     art: (image: "mortar_pestle.png"),
   ),
 
@@ -801,6 +1354,9 @@
         "At the end of your turn, materialize a random character in your void which you abandoned this turn. It has 0✦."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
+    tags: ["J12", "Tag OK"],
     art: (image: "petals.png"),
   ),
 
@@ -808,6 +1364,9 @@
     name: Tx("Wing"),
     id: "72ef4b11-5366-4798-aab0-09e5ffbb1ed8",
     ability_text: [Tx("When you draw your second card each turn, gain 1 maximum ●.")],
+    rarity: Rare,
+    tide_ids: ["1a075e25-0344-4103-997c-dd8f8a57c84e"],
+    tags: ["J12", "Tag OK"],
     art: (image: "wing.png"),
   ),
 
@@ -815,6 +1374,9 @@
     name: Tx("Philosopher's Stone"),
     id: "05f69d01-f8a3-4044-b7cd-0bfd9ed980cd",
     ability_text: [Tx("Your unspent ● carries over between turns.")],
+    rarity: Rare,
+    tide_ids: ["51903b9a-825b-4d9a-8a6d-071670c3caaa"],
+    tags: ["J12", "Tag OK"],
     art: (image: "philosopher's_Stone.png"),
   ),
 
@@ -822,6 +1384,9 @@
     name: Tx("Steel Wand"),
     id: "64a28f37-54a4-4152-8c72-2ebc61e19aac",
     ability_text: [Tx("Once per turn, when you play a ❖ card, draw a card.")],
+    rarity: Rare,
+    tide_ids: ["1864823a-8d44-4bad-8bc0-bf2360eac68a"],
+    tags: ["J12", "Tag OK"],
     art: (image: "Magicwand.png"),
   ),
 
@@ -829,6 +1394,9 @@
     name: Tx("Gold Key"),
     id: "206049ae-9f28-4a90-9f75-63d9ee5f4a27",
     ability_text: [Tx("When you play your third character each turn, gain 2●.")],
+    rarity: Uncommon,
+    tide_ids: ["568c305c-6884-4dff-b1ec-c08f387a6527", "b2b1b0da-6d48-40cb-9d44-f0a94f0615f5"],
+    tags: ["J12", "Tag OK"],
     art: (image: "key_3.png"),
   ),
 
@@ -840,6 +1408,9 @@
         "The first character you play each turn costs 2● less if a character you control scored ⍟ last turn."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
+    tags: ["J12", "Tag OK", "Ally Audit"],
     art: (image: "powder_magic.png"),
   ),
 
@@ -847,6 +1418,9 @@
     name: Tx("Purple Potion"),
     id: "fb87262c-5bde-409e-92f1-58cc7a4e5491",
     ability_text: [Tx("3● cost characters cost you 2●.")],
+    rarity: Uncommon,
+    tide_ids: ["1694633b-f5a7-4fe8-a685-993be7e1a13c", "e1620ab4-7e68-4a57-a6eb-d7a3380c4dc5"],
+    tags: ["J12", "Tag OK"],
     art: (image: "potion.png"),
   ),
 
@@ -854,6 +1428,9 @@
     name: Tx("Red Pin"),
     id: "62e1a588-f719-415c-9434-80aa08ce2e6a",
     ability_text: [Tx("Once per turn, when you play a 2● cost character, draw a card.")],
+    rarity: Uncommon,
+    tide_ids: ["1694633b-f5a7-4fe8-a685-993be7e1a13c", "e1620ab4-7e68-4a57-a6eb-d7a3380c4dc5"],
+    tags: ["J15", "Tag OK"],
     art: (image: "pin.png"),
   ),
 
@@ -861,6 +1438,9 @@
     name: Tx("Crystal Wand"),
     id: "4bb408a8-7941-42dc-9ff6-dbc1400c99ed",
     ability_text: [Tx("When one or more characters you control score ⍟, draw a card.")],
+    rarity: Uncommon,
+    tide_ids: ["0b873395-ad12-4a9f-ab50-5820fc92dd19"],
+    tags: ["J15", "Tag OK", "Ally Audit"],
     art: (image: "magic_stick_2.png"),
   ),
 
@@ -868,6 +1448,9 @@
     name: Tx("Poppy Flower"),
     id: "fdd2ffe4-40f4-49cf-bc2e-2496e1042f76",
     ability_text: [Tx("▸Night: If you have played no cards this turn, gain 2●.")],
+    rarity: Common,
+    tide_ids: ["d923b6e9-8572-4b27-b456-e70e69e80b31"],
+    tags: ["J15", "Tag OK"],
     art: (image: "maquis.png"),
   ),
 
@@ -875,6 +1458,9 @@
     name: Tx("Rabbit Tail"),
     id: "56caa78b-021d-4b27-acab-c77fb0146ced",
     ability_text: [Tx("▸Night: If you have played no characters this turn, draw a card.")],
+    rarity: Common,
+    tide_ids: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
+    tags: ["J15", "Tag OK"],
     art: (image: "rabbit_tail.png"),
   ),
 
@@ -882,6 +1468,9 @@
     name: Tx("Green Cauldron"),
     id: "ef25fba0-58a0-4b69-be06-3668679fcdc7",
     ability_text: [Tx("The first time each turn your hand becomes empty, draw a card.")],
+    rarity: Uncommon,
+    tide_ids: ["1a075e25-0344-4103-997c-dd8f8a57c84e"],
+    tags: ["J15", "Tag OK"],
     art: (image: "pot.png"),
   ),
 
@@ -891,6 +1480,9 @@
     ability_text: [
       Tx("When 2 or more characters you control score ⍟, draw a card, then discard a card."),
     ],
+    rarity: Uncommon,
+    tide_ids: ["568c305c-6884-4dff-b1ec-c08f387a6527", "b2b1b0da-6d48-40cb-9d44-f0a94f0615f5"],
+    tags: ["J15", "Tag OK", "Ally Audit"],
     art: (image: "magic_stick_3.png"),
   ),
 
@@ -902,6 +1494,9 @@
         "The first card you purchase at each dream bazaar site costs 25% less and gains a random transfiguration."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
+    tags: ["J15", "Tag OK"],
     art: (image: "crystal.png"),
   ),
 
@@ -909,6 +1504,9 @@
     name: Tx("Cracked Mirror"),
     id: "1cf06f9b-d698-434b-8e36-8a47206f4c0c",
     ability_text: [Tx("The first card you purchase from each shop site is duplicated.")],
+    rarity: Uncommon,
+    tide_ids: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
+    tags: ["J15", "Tag OK"],
     art: (image: "mirror.png"),
   ),
 
@@ -916,6 +1514,9 @@
     name: Tx("Cracked Orb"),
     id: "8408b8c2-5a3f-40dd-bac4-98f2736c4176",
     ability_text: [Tx("Each shop site provides 2 additional options.")],
+    rarity: Rare,
+    tide_ids: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
+    tags: ["J15", "Tag OK"],
     art: (image: "magic-ball.png"),
   ),
 
@@ -923,6 +1524,9 @@
     name: Tx("Red Shard"),
     id: "10bd78de-87ec-44e4-9b16-e755da2a9717",
     ability_text: [Tx("Cards you purchase from dream bazaar sites gain a random transfiguration.")],
+    rarity: Uncommon,
+    tide_ids: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
+    tags: ["J15", "Tag OK"],
     art: (image: "stone-red.png"),
   ),
 
@@ -930,6 +1534,9 @@
     name: Tx("Witch Coin"),
     id: "8a2c7b32-26ea-40e2-845a-689da5673b4d",
     ability_text: [Tx("The first Restock at each shop site costs 0.")],
+    rarity: Uncommon,
+    tide_ids: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
+    tags: ["J15", "Tag OK"],
     art: (image: "witch_coin.png"),
   ),
 
@@ -941,6 +1548,9 @@
         "After you buy an item at a shop site, replace it immediately with another item for purchase."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
+    tags: ["J15", "Tag OK"],
     art: (image: "magic_stick_6.png"),
   ),
 
@@ -950,6 +1560,9 @@
     ability_text: [
       Tx("If your deck has 30 or more cards, cards you add to it gain a random transfiguration."),
     ],
+    rarity: Common,
+    tide_ids: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
+    tags: ["J15", "Tag OK"],
     art: (image: "stone.png"),
   ),
 
@@ -961,6 +1574,9 @@
         "When you gain this dreamsign, apply the Perfected Transfiguration to each starter card in your deck."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
+    tags: ["J15", "Tag OK"],
     art: (image: "rainbow_jellyfish.png"),
   ),
 
@@ -972,6 +1588,9 @@
         "At each draft site, the first event card you add to your deck gains the Amplified Transfiguration."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
+    tags: ["J15", "Tag OK"],
     art: (image: "star_anise.png"),
   ),
 
@@ -979,6 +1598,9 @@
     name: Tx("Spell Tome"),
     id: "0c52e8c3-a792-4eea-955f-a0c61463c066",
     ability_text: [Tx("When you transfigure an event, add a copy of it to your deck.")],
+    rarity: Uncommon,
+    tide_ids: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
+    tags: ["J15", "Tag OK"],
     art: (image: "book.png"),
   ),
 
@@ -990,6 +1612,9 @@
         "When you add a character card to your deck, it has a 50% chance to gain a random transfiguration."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: ["3bdfa6f6-b4f5-4a35-b5c0-ea76727eeea3"],
+    tags: ["J15", "Tag OK"],
     art: (image: "stone_2.png"),
   ),
 
@@ -1001,6 +1626,9 @@
         "When you gain this dreamsign, apply random transfigurations to half the cards in your deck."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
+    tags: ["J15", "Tag OK"],
     art: (image: "white_rat.png"),
   ),
 
@@ -1012,6 +1640,9 @@
         "When you apply a transfiguration to a card, apply an additional random transfiguration to it."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
+    tags: ["J15", "Tag OK"],
     art: (image: "bag_3.png"),
   ),
 
@@ -1019,6 +1650,9 @@
     name: Tx("Leaf Ledger"),
     id: "d9f0f7ff-63c0-4247-8831-054d7fed931d",
     ability_text: [Tx("At each transfiguration site you visit, transfigure 2 cards instead of 1.")],
+    rarity: Uncommon,
+    tide_ids: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
+    tags: ["J15", "Tag OK"],
     art: (image: "book_8.png"),
   ),
 
@@ -1026,6 +1660,9 @@
     name: Tx("Pearl Shell"),
     id: "be59c0ba-6286-49e3-a88d-86b0977cc30a",
     ability_text: [Tx("At each essence site you visit, you are instead offered a Dreamsign.")],
+    rarity: Uncommon,
+    tide_ids: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
+    tags: ["J15", "Tag OK"],
     art: (image: "shell.png"),
   ),
 
@@ -1033,6 +1670,9 @@
     name: Tx("Star Badge"),
     id: "af92858a-0c50-4abf-a622-04c024ca32b3",
     ability_text: [Tx("Double the essence you gain from essence sites.")],
+    rarity: Uncommon,
+    tide_ids: ["d923b6e9-8572-4b27-b456-e70e69e80b31"],
+    tags: ["J15", "Tag OK"],
     art: (image: "Ring_2.png"),
   ),
 
@@ -1040,6 +1680,9 @@
     name: Tx("Sickle"),
     id: "488bf436-c6d5-4e38-8a19-e50041f53766",
     ability_text: [Tx("At each essence site, you may forgo the essence to purge 2 cards.")],
+    rarity: Uncommon,
+    tide_ids: ["7dfa6a52-04ce-42fc-9ef6-4e6571435510"],
+    tags: ["J15", "Tag OK"],
     art: (image: "sickle.png"),
   ),
 
@@ -1047,6 +1690,9 @@
     name: Tx("Strange Fruit"),
     id: "f4df5a74-7822-4552-a3ab-f50b00758593",
     ability_text: [Tx("When you purge a card, gain 50 essence.")],
+    rarity: Uncommon,
+    tide_ids: ["7dfa6a52-04ce-42fc-9ef6-4e6571435510"],
+    tags: ["J15", "Tag OK"],
     art: (image: "strange_fruit.png"),
   ),
 
@@ -1056,6 +1702,9 @@
     ability_text: [
       Tx("When you enter a new dreamscape, gain essence equal to 20% of your current essence."),
     ],
+    rarity: Uncommon,
+    tide_ids: ["d923b6e9-8572-4b27-b456-e70e69e80b31"],
+    tags: ["J15", "Tag OK"],
     art: (image: "worm.png"),
   ),
 
@@ -1065,6 +1714,9 @@
     ability_text: [
       Tx("While you have at least 300 essence, draft site choices show an additional card."),
     ],
+    rarity: Uncommon,
+    tide_ids: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
+    tags: ["J16", "Tag OK"],
     art: (image: "sea_urchin.png"),
   ),
 
@@ -1074,6 +1726,9 @@
     ability_text: [
       Tx("When you dissolve or banish an enemy character outside of a challenge, gain 10 essence."),
     ],
+    rarity: Uncommon,
+    tide_ids: ["7343b376-88d2-45fe-8b5e-79763480ee7e"],
+    tags: ["J16", "Tag OK"],
     art: (image: "bone.png"),
   ),
 
@@ -1081,6 +1736,9 @@
     name: Tx("Clam Shell"),
     id: "2dcf92bf-93b3-400c-ab97-69d3098f8868",
     ability_text: [Tx("Draft site choices show an additional card.")],
+    rarity: Rare,
+    tide_ids: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
+    tags: ["J16", "Tag OK"],
     art: (image: "mollusk.png"),
   ),
 
@@ -1091,6 +1749,9 @@
       Tx("Cards in your deck cannot be purged."),
       Tx("Draft site choices show an additional card."),
     ],
+    rarity: Uncommon,
+    tide_ids: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
+    tags: ["J16", "Tag OK"],
     art: (image: "White tortoise shell.png"),
   ),
 
@@ -1102,6 +1763,9 @@
         "Before each battle, if you have more than 30 cards in your deck, you may purge cards of your choice while remaining at or above 30 cards."
       ),
     ],
+    rarity: Uncommon,
+    tide_ids: ["7dfa6a52-04ce-42fc-9ef6-4e6571435510"],
+    tags: ["J16", "Tag OK"],
     art: (image: "scorpion.png"),
   ),
 
@@ -1113,6 +1777,9 @@
         "After you draw your opening hand, you may discard any number of cards, then draw that many cards."
       ),
     ],
+    rarity: Rare,
+    tide_ids: ["1a075e25-0344-4103-997c-dd8f8a57c84e"],
+    tags: ["J16", "Tag OK"],
     art: (image: "tongue.png"),
   ),
 
@@ -1122,6 +1789,9 @@
     ability_text: [
       Tx("When you gain this dreamsign, you may purge up to 4 starter cards from your deck."),
     ],
+    rarity: Uncommon,
+    tide_ids: ["7dfa6a52-04ce-42fc-9ef6-4e6571435510"],
+    tags: ["J16", "Tag OK"],
     art: (image: "teeaths.png"),
   ),
 
@@ -1132,6 +1802,9 @@
       Tx("When you gain this dreamsign, pick an event card in your deck."),
       Tx("That card is always in your opening hand."),
     ],
+    rarity: Uncommon,
+    tide_ids: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
+    tags: ["J16", "Tag OK"],
     art: (image: "tea.png"),
   ),
 
@@ -1142,6 +1815,9 @@
       Tx("When you gain this dreamsign, pick a character type."),
       Tx("Character cards in your deck are that character type."),
     ],
+    rarity: Rare,
+    tide_ids: ["7fdc1244-d4a6-4ab2-9e23-00246243337e", "14f8ed05-e684-407c-be32-1dc970d69f36"],
+    tags: ["J16", "Tag OK"],
     art: (image: "toad.png"),
   ),
 
@@ -1149,6 +1825,9 @@
     name: Tx("Slug"),
     id: "108841ce-4feb-4c73-972e-0277c727c63e",
     ability_text: [Tx("After each battle, you may purge up to 2 cards.")],
+    rarity: Uncommon,
+    tide_ids: ["7dfa6a52-04ce-42fc-9ef6-4e6571435510"],
+    tags: ["J16", "Tag OK"],
     art: (image: "slug.png"),
   ),
 
@@ -1156,6 +1835,9 @@
     name: Tx("Spider"),
     id: "025ce7f1-066b-480a-8a2f-364379890abd",
     ability_text: [Tx("After each battle, you may duplicate a card.")],
+    rarity: Uncommon,
+    tide_ids: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
+    tags: ["J16", "Tag OK"],
     art: (image: "spider.png"),
   ),
 
@@ -1165,6 +1847,9 @@
     ability_text: [
       Tx("After each battle, you may apply random transfigurations to up to 3 cards."),
     ],
+    rarity: Uncommon,
+    tide_ids: ["22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e"],
+    tags: ["J16", "Tag OK"],
     art: (image: "speaces.png"),
   ),
 
@@ -1172,6 +1857,9 @@
     name: Tx("Spiral Shell"),
     id: "da7e4b45-9106-4116-bc1c-3aec8885396b",
     ability_text: [Tx("At duplication sites, you always gain 4 copies of the selected card.")],
+    rarity: Common,
+    tide_ids: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
+    tags: ["J16", "Tag OK"],
     art: (image: "shell 2.png"),
   ),
 
@@ -1179,6 +1867,9 @@
     name: Tx("Red Cheese"),
     id: "7e8c86cc-788f-4648-be84-e0935c40c31e",
     ability_text: [Tx("After each battle, pick 1 of 3 dreamsigns to gain.")],
+    rarity: Common,
+    tide_ids: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
+    tags: ["J16", "Tag OK"],
     art: (image: "red_cheese.png"),
   ),
 
@@ -1186,6 +1877,9 @@
     name: Tx("Rosemary"),
     id: "cd81a49d-df58-4e0e-b1b2-33a82b386052",
     ability_text: [Tx("Dreamsign and dreamsign draft sites are enhanced.")],
+    rarity: Common,
+    tide_ids: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
+    tags: ["J16", "Tag OK"],
     art: (image: "rosemary.png"),
   ),
 
@@ -1193,6 +1887,9 @@
     name: Tx("Rainbow Mushroom"),
     id: "58472ad2-88b1-4dc7-a161-c6dea7d8c43d",
     ability_text: [Tx("In each dreamscape, 1 additional site is enhanced.")],
+    rarity: Uncommon,
+    tide_ids: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
+    tags: ["J16", "Tag OK"],
     art: (image: "rainbow mushroom.png"),
   ),
 
@@ -1200,6 +1897,9 @@
     name: Tx("Curled Tail"),
     id: "3c0ced1a-7a2a-4f18-9ab4-5d6055d1dc59",
     ability_text: [Tx("You may reroll dream journey sites once to present new options.")],
+    rarity: Uncommon,
+    tide_ids: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
+    tags: ["J16", "Tag OK"],
     art: (image: "tall.png"),
   ),
 
@@ -1211,6 +1911,9 @@
         "When you gain this dreamsign, choose another dreamsign you own. This dreamsign becomes a copy of it."
       ),
     ],
+    rarity: Common,
+    tide_ids: ["f93cefb1-3a37-4075-98f0-c006571edd09"],
+    tags: ["J16", "Tag OK"],
     art: (image: "vudu_doll.png"),
   ),
 
@@ -1218,6 +1921,9 @@
     name: Tx("Raven Skull"),
     id: "31df4c62-6ab2-47f2-a4ff-c32b8e554b3b",
     ability_text: [Tx("Nightmare cards cannot be added to your deck.")],
+    rarity: Common,
+    tide_ids: ["51903b9a-825b-4d9a-8a6d-071670c3caaa"],
+    tags: ["J16", "Tag OK"],
     art: (image: "raven_skull.png"),
   ),
 
@@ -1227,6 +1933,9 @@
     ability_text: [
       Tx("When a character you control dissolves an enemy during a challenge, gain 10 essence."),
     ],
+    rarity: Common,
+    tide_ids: ["7343b376-88d2-45fe-8b5e-79763480ee7e"],
+    tags: ["J16", "Tag OK", "Ally Audit"],
     art: (image: "skull_2.png"),
   ),
 
@@ -1237,6 +1946,9 @@
       Tx("When you gain this dreamsign, add 5 Nightmare cards to your deck."),
       Tx("Characters you control have +1✦."),
     ],
+    rarity: Uncommon,
+    tide_ids: ["51903b9a-825b-4d9a-8a6d-071670c3caaa"],
+    tags: ["J16", "Tag OK", "Ally Audit"],
     art: (image: "twisting_herbs.png"),
   ),
 
@@ -1247,6 +1959,9 @@
       Tx("Draw two additional cards during your Draw phase."),
       Tx("At the end of each turn, discard your hand."),
     ],
+    rarity: Uncommon,
+    tide_ids: ["1a075e25-0344-4103-997c-dd8f8a57c84e"],
+    tags: ["J16", "Tag OK"],
     art: (image: "horns.png"),
   ),
 ]

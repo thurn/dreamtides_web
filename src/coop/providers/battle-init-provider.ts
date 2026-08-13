@@ -98,9 +98,9 @@ function buildBattleInit(
     affiliations: content.affiliations,
     dreamwellCards: content.dreamwellCards,
     dreamsignTemplates: content.dreamsignTemplates,
-    knownGoodDecklists: content.knownGoodDecklists,
+    tides4Decks: content.poolContext?.poolData.tides4Decks,
+    tides4Tuning: content.poolContext?.tides4Tuning,
     economyData: content.economyData,
-    dreamsignSignatures: content.dreamsignSignatures,
     deferOpponentLog,
     tutorialTriggers: content.tutorial?.triggers,
   });

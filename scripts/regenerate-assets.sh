@@ -8,23 +8,16 @@
 # Fast mode refreshes the runtime public/ bundles from canonical RON and
 # generated compatibility TOML plus
 # existing committed data. Use it for player-facing copy or balance changes
-# where stable IDs, card names, reference membership, draft records, pool data,
+# where stable IDs, card names, reference membership, pool data,
 # and Cumulus sources are unchanged. glossary.toml is imported directly by the
 # runtime and has no generated bundle.
 #
-# The committed merchant corpus is baked from generated public inputs, while the
-# gitignored public/ bundles are derived from canonical sources and generated
-# TOML by setup-assets. Setup runs before and after that bake so both phases see
-# current inputs.
-#
 # Order:
-#    1. setup-assets         build public/ inputs from canonical RON + records
-#    2. bake-merchant-corpus  data/merchant_corpus.json
-#    3. setup-assets         copy the fresh artifacts into public/
-#    4. generate-cumulus-tokens    src/cumulus/primitives/tokens.ts
-#    5. generate-cumulus-metadata  src/cumulus/metadata/cumulus-metadata.json
-#    6. generate-cumulus-docs   .llms/skills/cumulus/ component reference + index
-#    7. trox extract/check/bundle, generate runtime-template adapters, then
+#    1. setup-assets              build public/ inputs from canonical RON
+#    2. generate-cumulus-tokens   src/cumulus/primitives/tokens.ts
+#    3. generate-cumulus-metadata src/cumulus/metadata/cumulus-metadata.json
+#    4. generate-cumulus-docs     .llms/skills/cumulus/ component reference + index
+#    5. trox extract/check/bundle, generate runtime-template adapters, then
 #       extract/check/bundle the adapters into the final localization outputs
 set -euo pipefail
 
@@ -79,30 +72,24 @@ if [[ "$FAST" == true ]]; then
 
 public/ bundles are gitignored and were refreshed in place.
 Use full regeneration after changes to IDs, card names, reference membership,
-draft records, pool data, or Cumulus sources.
+pool data or Cumulus sources.
 EOF
   exit 0
 fi
 
-step "1/7  setup-assets — build public/ inputs from source"
+step "1/5  setup-assets — build public/ inputs from source"
 node scripts/setup-assets.mjs
 
-step "2/7  bake-merchant-corpus — data/merchant_corpus.json"
-node scripts/bake-merchant-corpus.mjs
-
-step "3/7  setup-assets — copy fresh artifacts into public/"
-node scripts/setup-assets.mjs
-
-step "4/7  generate-cumulus-tokens — src/cumulus/primitives/tokens.ts"
+step "2/5  generate-cumulus-tokens — src/cumulus/primitives/tokens.ts"
 node scripts/generate-cumulus-tokens.mjs
 
-step "5/7  generate-cumulus-metadata — src/cumulus/metadata/cumulus-metadata.json"
+step "3/5  generate-cumulus-metadata — src/cumulus/metadata/cumulus-metadata.json"
 node scripts/generate-cumulus-metadata.mjs
 
-step "6/7  generate-cumulus-docs — .llms/skills/cumulus component reference"
+step "4/5  generate-cumulus-docs — .llms/skills/cumulus component reference"
 node scripts/generate-cumulus-docs.mjs
 
-step "7/7  Trox — extract, validate, and bundle localization"
+step "5/5  Trox — extract, validate, and bundle localization"
 node scripts/trox.mjs extract
 node scripts/trox.mjs check --deny warnings
 node scripts/trox.mjs bundle --allow-missing
@@ -118,7 +105,5 @@ cat <<'EOF'
 
 public/ bundles are gitignored and were refreshed in place.
 Review and commit the data/ + docs/ changes listed above.
-Deeper validation (optional, slower):
-  npm run merchant-corpus-parity
-  npm test
+Deeper validation (optional, slower): npm test
 EOF

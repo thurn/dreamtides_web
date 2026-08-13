@@ -8,15 +8,20 @@ export const CARD_ROLES = ["starter-deck", "nightmare"] as const;
 export type CardRole = (typeof CARD_ROLES)[number];
 
 /** Canonical rarity vocabulary shared by authored-data compilers and loaders. */
-export const CARD_RARITIES = ["Legendary", "Starter", "Special"] as const;
+export const CARD_RARITIES = [
+  "Common",
+  "Uncommon",
+  "Rare",
+  "Legendary",
+  "Starter",
+  "Tutorial",
+  "Special",
+] as const;
 
 /**
- * Card rarity in Dreamtides. Most cards have no rarity; the buckets that
- * exist are `Legendary` (powerful cards that get the gold frame in
- * `GameCard`), `Starter` (cards that seed the fixed starter deck), and
- * `Special` (including Nightmare, the sole Bane card, which journey effects
- * add by canonical UUID). Sourced from `data/cards.toml`
- * and surfaced through the setup-assets transform.
+ * Card rarity in Dreamtides. Common through Legendary express strength for
+ * pool cards. Starter, Tutorial, and Special identify cards that are valid in
+ * authored flows but do not enter a normal draft pool.
  */
 export type Rarity = (typeof CARD_RARITIES)[number];
 
@@ -48,8 +53,7 @@ export interface CardData {
   /** Gameplay roles compiled from the canonical card's RON `roles` field. */
   roles?: CardRole[];
   /**
-   * Rarity bucket sourced from the TOML. Present only on `Legendary` and
-   * `Starter` cards; most cards have no rarity.
+   * Rarity bucket sourced from the canonical card catalog.
    */
   rarity?: Rarity;
   energyCost: number | null;

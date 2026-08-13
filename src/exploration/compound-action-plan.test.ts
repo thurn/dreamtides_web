@@ -258,14 +258,11 @@ describe("Exploration compound action plan", () => {
         ({ entryId }) => entryId === "starter-event-now-character",
       ),
     ).toMatchObject({ effectiveCardType: "Character" });
-    expect(plan.target).toMatchObject({
-      entryId: "starter-event-now-character",
-      effectiveCardType: "Character",
-    });
-    expect(plan.companionTargets.map(({ entryId }) => entryId)).toEqual([
-      "character-a",
-      "character-b",
-    ]);
+    expect(plan.unavailableReason).toBeUndefined();
+    expect(plan.target).not.toBeNull();
+    expect(plan.eligiblePurgeTargets).toContainEqual(plan.target);
+    expect(plan.companionTargets.length).toBeGreaterThan(0);
+    expect(plan.companionTargets).not.toContainEqual(plan.target);
     expect(
       plan.companionTargets.every(
         ({ transfiguration }) => transfiguration === "Kindled",

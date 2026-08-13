@@ -48,6 +48,9 @@ describe("readTidesArtifact", () => {
       join(rootDir, "data", "tides.toml"),
       [
         "schema-version = 1",
+        "[selection]",
+        "band-fraction = 0.25",
+        "band-minimum = 5",
         "[[tide]]",
         'id = "00000000-0000-4000-8000-000000000001"',
         'display-name = "Fixture"',
@@ -61,11 +64,11 @@ describe("readTidesArtifact", () => {
       ].join("\n"),
     );
     writeFileSync(
-      join(rootDir, "data", "dream_avatar_tide_pools.toml"),
+      join(rootDir, "data", "dream_avatars.toml"),
       [
-        "schema-version = 1",
-        "[[dream-avatar-pool]]",
-        'dream-avatar-id = "00000000-0000-4000-8000-000000000021"',
+        "[[dreamAvatar]]",
+        'id = "00000000-0000-4000-8000-000000000021"',
+        "[dreamAvatar.tide-pool]",
         'facets = ["00000000-0000-4000-8000-000000000001"]',
         "neutral = []",
         "",

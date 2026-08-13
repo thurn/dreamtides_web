@@ -103,6 +103,10 @@ function sitesFixture() {
   };
   return {
     "schema-version": 1,
+    selection: {
+      "min-deck-for-purge": 8,
+      "placeable-types": ["Shop", "Purge", "Transfiguration", "Duplication"],
+    },
     "site-types": SITE_TYPES.map((type) => ({
       type,
       icon: `fixture-icon-${type}`,

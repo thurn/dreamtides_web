@@ -79,8 +79,6 @@ describe("regenerate-assets.sh", () => {
       result.commands.filter((command) => command.startsWith("node ")),
     ).toEqual([
       "node scripts/setup-assets.mjs",
-      "node scripts/bake-merchant-corpus.mjs",
-      "node scripts/setup-assets.mjs",
       "node scripts/generate-cumulus-tokens.mjs",
       "node scripts/generate-cumulus-metadata.mjs",
       "node scripts/generate-cumulus-docs.mjs",

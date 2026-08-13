@@ -3,12 +3,13 @@ use std::fmt;
 use trox::LocalizedString;
 
 use anyhow::{Context, Result, bail};
-use indexmap::IndexMap;
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
 use super::localization::{joined_source_text, source_text};
+use super::cards::Rarity;
+use super::tides::TideId;
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -16,6 +17,10 @@ pub struct DreamsignDefinition {
     pub name: LocalizedString,
     pub id: DreamsignId,
     pub ability_text: Vec<LocalizedString>,
+    pub rarity: Rarity,
+    pub tide_ids: Vec<TideId>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub tags: Vec<String>,
     pub art: DreamsignArt,
 }
 
@@ -23,21 +28,6 @@ pub struct DreamsignDefinition {
 #[serde(deny_unknown_fields)]
 pub struct DreamsignArt {
     pub image: String,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct DreamsignMetadataCatalog {
-    pub dreamsigns: IndexMap<DreamsignId, DreamsignMetadata>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct DreamsignMetadata {
-    /// `None` preserves a missing compatibility field; an empty list preserves an explicit empty field.
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub tides: Option<Vec<String>>,
-    pub tags: Vec<String>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -96,56 +86,41 @@ impl<'de> Deserialize<'de> for DreamsignId {
     }
 }
 
-pub fn lower(
-    definitions: Vec<DreamsignDefinition>,
-    mut metadata: DreamsignMetadataCatalog,
-) -> Result<toml::Value> {
+pub fn lower(definitions: Vec<DreamsignDefinition>) -> Result<toml::Value> {
     validate_definitions(&definitions)?;
-    validate_metadata(&metadata)?;
 
     let mut output = Vec::with_capacity(definitions.len());
     for definition in definitions {
-        let internal = metadata
-            .dreamsigns
-            .shift_remove(&definition.id)
-            .with_context(|| {
-                format!("missing internal metadata for Dreamsign {}", definition.id)
-            })?;
-
         let mut record = toml::map::Map::new();
         record.insert("id".into(), definition.id.to_string().into());
         record.insert("name".into(), source_text(&definition.name)?.into());
         record.insert("image_name".into(), definition.art.image.into());
-        if let Some(tides) = internal.tides {
-            record.insert(
-                "tides".into(),
-                toml::Value::Array(tides.into_iter().map(Into::into).collect()),
-            );
-        }
+        record.insert("rarity".into(), definition.rarity.as_compat().into());
+        record.insert(
+            "tide-ids".into(),
+            toml::Value::Array(
+                definition
+                    .tide_ids
+                    .into_iter()
+                    .map(|id| id.to_string().into())
+                    .collect(),
+            ),
+        );
         record.insert(
             "rendered-text".into(),
             joined_source_text(definition.ability_text, "\n\n")?.into(),
         );
         record.insert(
             "tags".into(),
-            toml::Value::Array(internal.tags.into_iter().map(Into::into).collect()),
+            toml::Value::Array(definition.tags.into_iter().map(Into::into).collect()),
         );
         output.push(toml::Value::Table(record));
-    }
-
-    if let Some(id) = metadata.dreamsigns.keys().next() {
-        bail!("internal metadata references unknown Dreamsign {id}");
     }
 
     Ok(toml::Value::Table(toml::map::Map::from_iter([(
         "dreamsign".into(),
         toml::Value::Array(output),
     )])))
-}
-
-pub fn lower_metadata(metadata: DreamsignMetadataCatalog) -> Result<toml::Value> {
-    validate_metadata(&metadata)?;
-    toml::Value::try_from(metadata).context("serialize internal Dreamsign metadata")
 }
 
 pub fn lower_tags(catalog: DreamsignTagCatalog) -> Result<toml::Value> {
@@ -165,6 +140,22 @@ pub fn validate_definitions(definitions: &[DreamsignDefinition]) -> Result<()> {
         if definition.art.image.trim().is_empty() {
             bail!("Dreamsign {} has an empty art.image", definition.id);
         }
+        if !matches!(
+            definition.rarity,
+            Rarity::Common | Rarity::Uncommon | Rarity::Rare | Rarity::Legendary
+        ) {
+            bail!("Dreamsign {} has a non-pool rarity", definition.id);
+        }
+        if definition.tide_ids.is_empty() || definition.tide_ids.len() > 3 {
+            bail!("Dreamsign {} must declare between one and three tides", definition.id);
+        }
+        let mut tide_ids = BTreeSet::new();
+        for tide_id in &definition.tide_ids {
+            if !tide_ids.insert(*tide_id) {
+                bail!("Dreamsign {} repeats Tide UUID {tide_id}", definition.id);
+            }
+        }
+        validate_labels(definition.id, "tags", &definition.tags)?;
         for (index, ability) in definition.ability_text.iter().enumerate() {
             if source_text(ability)?.trim().is_empty() {
                 bail!(
@@ -177,12 +168,17 @@ pub fn validate_definitions(definitions: &[DreamsignDefinition]) -> Result<()> {
     Ok(())
 }
 
-pub fn validate_metadata(metadata: &DreamsignMetadataCatalog) -> Result<()> {
-    for (id, entry) in &metadata.dreamsigns {
-        if let Some(tides) = &entry.tides {
-            validate_labels(*id, "tides", tides)?;
+pub fn validate_tide_references(
+    definitions: &[DreamsignDefinition],
+    known_tide_ids: &BTreeSet<String>,
+) -> Result<()> {
+    validate_definitions(definitions)?;
+    for definition in definitions {
+        for tide_id in &definition.tide_ids {
+            if !known_tide_ids.contains(&tide_id.to_string()) {
+                bail!("Dreamsign {} references unknown Tide UUID {tide_id}", definition.id);
+            }
         }
-        validate_labels(*id, "tags", &entry.tags)?;
     }
     Ok(())
 }
@@ -225,6 +221,8 @@ mod tests {
 
     const FIRST_ID: &str = "00000000-0000-4000-8000-000000000001";
     const SECOND_ID: &str = "00000000-0000-4000-8000-000000000002";
+    const TIDE_ONE: &str = "00000000-0000-4000-8000-000000000101";
+    const TIDE_TWO: &str = "00000000-0000-4000-8000-000000000102";
 
     fn synthetic_definitions() -> &'static str {
         r##"#![enable(implicit_some)]
@@ -233,43 +231,33 @@ mod tests {
     name: Tx("Límbø Sign"),
     id: "00000000-0000-4000-8000-000000000001",
     ability_text: [Tx("First paragraph with ✦."), Tx("Second paragraph.")],
+    rarity: Rare,
+    tide_ids: [
+      "00000000-0000-4000-8000-000000000101",
+      "00000000-0000-4000-8000-000000000102",
+    ],
+    tags: ["first", "second"],
     art: (image: "first.png"),
   ),
   DreamsignDefinition(
     name: Tx("Blank Sign"),
     id: "00000000-0000-4000-8000-000000000002",
     ability_text: [],
+    rarity: Common,
+    tide_ids: ["00000000-0000-4000-8000-000000000102"],
     art: (image: "blank.png"),
   ),
 ]
 "##
     }
 
-    fn synthetic_metadata() -> &'static str {
-        r##"#![enable(implicit_some)]
-(
-  dreamsigns: {
-    "00000000-0000-4000-8000-000000000001": (
-      tides: ["first_tide", "second_tide"],
-      tags: ["first", "second"],
-    ),
-    "00000000-0000-4000-8000-000000000002": (tags: []),
-  },
-)
-"##
-    }
-
-    fn fixture() -> (Vec<DreamsignDefinition>, DreamsignMetadataCatalog) {
-        (
-            ron::from_str(synthetic_definitions()).unwrap(),
-            ron::from_str(synthetic_metadata()).unwrap(),
-        )
+    fn fixture() -> Vec<DreamsignDefinition> {
+        ron::from_str(synthetic_definitions()).unwrap()
     }
 
     #[test]
-    fn lowers_ordered_definitions_abilities_and_internal_metadata() {
-        let (definitions, metadata) = fixture();
-        let output = lower(definitions, metadata).unwrap();
+    fn lowers_ordered_definitions_abilities_rarities_tides_and_tags() {
+        let output = lower(fixture()).unwrap();
         let records = output["dreamsign"].as_array().unwrap();
         assert_eq!(records.len(), 2);
         assert_eq!(records[0]["id"].as_str(), Some(FIRST_ID));
@@ -279,25 +267,36 @@ mod tests {
             Some("First paragraph with ✦.\n\nSecond paragraph.")
         );
         assert_eq!(records[1]["rendered-text"].as_str(), Some(""));
-        assert_eq!(records[0]["tides"][1].as_str(), Some("second_tide"));
-        assert!(records[1].get("tides").is_none());
+        assert_eq!(records[0]["rarity"].as_str(), Some("Rare"));
+        assert_eq!(records[0]["tide-ids"][1].as_str(), Some(TIDE_TWO));
+        assert_eq!(records[1]["tide-ids"][0].as_str(), Some(TIDE_TWO));
         assert_eq!(records[1]["tags"].as_array().unwrap().len(), 0);
         assert_eq!(
             records[0].as_table().unwrap().keys().collect::<Vec<_>>(),
-            vec!["id", "name", "image_name", "tides", "rendered-text", "tags"]
+            vec![
+                "id",
+                "name",
+                "image_name",
+                "rarity",
+                "tide-ids",
+                "rendered-text",
+                "tags"
+            ]
         );
     }
 
     #[test]
-    fn preserves_an_explicit_empty_tides_field() {
-        let (definitions, mut metadata) = fixture();
-        metadata
-            .dreamsigns
-            .get_mut(&definitions[1].id)
-            .unwrap()
-            .tides = Some(vec![]);
-        let output = lower(definitions, metadata).unwrap();
-        assert_eq!(output["dreamsign"][1]["tides"].as_array().unwrap().len(), 0);
+    fn lowers_and_validates_tag_registry() {
+        let catalog = DreamsignTagCatalog {
+            tags: vec![DreamsignTag {
+                name: "tempo".into(),
+                color: "#aabbcc".into(),
+            }],
+        };
+        assert_eq!(
+            lower_tags(catalog).unwrap()["tags"][0]["name"].as_str(),
+            Some("tempo")
+        );
     }
 
     #[test]
@@ -307,11 +306,6 @@ mod tests {
             "name: Tx(\"Límbø Sign\"), surprise: true,",
         );
         assert!(ron::from_str::<Vec<DreamsignDefinition>>(&unknown).is_err());
-        let unknown_metadata = synthetic_metadata().replace(
-            "tags: [\"first\", \"second\"],",
-            "tags: [\"first\", \"second\"], surprise: true,",
-        );
-        assert!(ron::from_str::<DreamsignMetadataCatalog>(&unknown_metadata).is_err());
 
         for invalid in [
             "legacy_slug",
@@ -324,45 +318,56 @@ mod tests {
     }
 
     #[test]
-    fn rejects_duplicate_ids_missing_or_unknown_metadata_and_invalid_labels() {
-        let (mut definitions, metadata) = fixture();
+    fn rejects_duplicate_ids_invalid_rarity_tides_and_labels() {
+        let mut definitions = fixture();
         definitions[1].id = definitions[0].id;
         assert!(
-            lower(definitions, metadata.clone())
+            lower(definitions)
                 .unwrap_err()
                 .to_string()
                 .contains("duplicate Dreamsign id")
         );
 
-        let (definitions, mut missing) = fixture();
-        missing.dreamsigns.shift_remove(&definitions[0].id);
+        let mut definitions = fixture();
+        definitions[0].rarity = Rarity::Special;
         assert!(
-            lower(definitions, missing)
+            lower(definitions)
                 .unwrap_err()
                 .to_string()
-                .contains("missing internal metadata")
+                .contains("non-pool rarity")
         );
 
-        let (mut definitions, metadata) = fixture();
-        definitions.truncate(1);
+        let mut definitions = fixture();
+        definitions[0].tide_ids.clear();
         assert!(
-            lower(definitions, metadata)
+            lower(definitions)
                 .unwrap_err()
                 .to_string()
-                .contains("references unknown Dreamsign")
+                .contains("between one and three tides")
         );
 
-        let (definitions, mut metadata) = fixture();
-        metadata
-            .dreamsigns
-            .get_mut(&definitions[0].id)
-            .unwrap()
-            .tags = vec!["duplicate".into(), "duplicate".into()];
+        let mut definitions = fixture();
+        definitions[0].tide_ids = vec![
+            TideId::parse(TIDE_ONE).unwrap(),
+            TideId::parse(TIDE_ONE).unwrap(),
+        ];
         assert!(
-            lower(definitions, metadata)
+            lower(definitions)
                 .unwrap_err()
                 .to_string()
-                .contains("repeats tags value")
+                .contains("repeats Tide UUID")
+        );
+
+        let mut definitions = fixture();
+        definitions[0].tags = vec!["duplicate".into(), "duplicate".into()];
+        assert!(lower(definitions).unwrap_err().to_string().contains("repeats tags value"));
+
+        let known = BTreeSet::from([TIDE_ONE.to_owned()]);
+        assert!(
+            validate_tide_references(&fixture(), &known)
+                .unwrap_err()
+                .to_string()
+                .contains("unknown Tide UUID")
         );
     }
 }

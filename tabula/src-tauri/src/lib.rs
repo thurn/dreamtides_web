@@ -4,7 +4,8 @@ use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::sync::Mutex;
 
-use dreamtides_game_data::affiliations::{self, AffiliationCatalog, AffiliationDefinition};
+use dreamtides_game_data::affiliations::{self, AffiliationCatalog};
+use dreamtides_game_data::models::localization::source_text;
 use serde::Serialize;
 use serde_json::Value;
 use tauri::State;
@@ -18,12 +19,16 @@ struct EditorSnapshot {
     dataset: &'static str,
     repository_root: String,
     source_revision: String,
-    #[serde(rename = "default_random_draw_max_multiplier")]
-    default_random_draw_max_multiplier: f64,
-    #[serde(rename = "default_opponent_deck_max_multiplier")]
-    default_opponent_deck_max_multiplier: f64,
-    affiliations: Vec<AffiliationDefinition>,
-    cards: Value,
+    affiliations: Vec<SnapshotAffiliation>,
+    tides: Value,
+}
+
+#[derive(Serialize)]
+struct SnapshotAffiliation {
+    id: String,
+    name: String,
+    atlas_card_theme: String,
+    tide_ids: Vec<String>,
 }
 
 fn repository_at(path: &Path) -> Option<PathBuf> {
@@ -80,19 +85,38 @@ fn snapshot(root: &Path) -> Result<EditorSnapshot, String> {
         ron::from_str(&source).map_err(|error| format!("Parse affiliations.ron: {error}"))?;
     affiliations::validate(&catalog)
         .map_err(|error| format!("Validate affiliations.ron: {error:#}"))?;
-    let cards: Value = serde_json::from_slice(
-        &fs::read(root.join("public/cards_v2-data.json"))
-            .map_err(|error| format!("Read card catalog: {error}"))?,
+    let tide_catalog: Value = serde_json::from_slice(
+        &fs::read(root.join("public/tides4-data.json"))
+            .map_err(|error| format!("Read tide catalog: {error}"))?,
     )
-    .map_err(|error| format!("Parse card catalog: {error}"))?;
+    .map_err(|error| format!("Parse tide catalog: {error}"))?;
+    let tides = tide_catalog
+        .get("tides")
+        .cloned()
+        .ok_or_else(|| "Tide catalog is missing tides".to_string())?;
+    let affiliations = catalog
+        .affiliations
+        .into_iter()
+        .map(|affiliation| {
+            Ok(SnapshotAffiliation {
+                id: affiliation.id.to_string(),
+                name: source_text(&affiliation.name).map_err(|error| error.to_string())?,
+                atlas_card_theme: source_text(&affiliation.atlas_card_theme)
+                    .map_err(|error| error.to_string())?,
+                tide_ids: affiliation
+                    .tide_ids
+                    .into_iter()
+                    .map(|id| id.to_string())
+                    .collect(),
+            })
+        })
+        .collect::<Result<Vec<_>, String>>()?;
     Ok(EditorSnapshot {
         dataset: "affiliations",
         repository_root: root.display().to_string(),
         source_revision: source_revision(root)?,
-        default_random_draw_max_multiplier: catalog.default_random_draw_max_multiplier,
-        default_opponent_deck_max_multiplier: catalog.default_opponent_deck_max_multiplier,
-        affiliations: catalog.affiliations,
-        cards,
+        affiliations,
+        tides,
     })
 }
 
@@ -231,20 +255,17 @@ mod tests {
     use super::*;
 
     #[test]
-    fn snapshot_preserves_canonical_catalog_field_names() {
+    fn snapshot_preserves_canonical_affiliation_field_names() {
         let value = serde_json::to_value(EditorSnapshot {
             dataset: "affiliations",
             repository_root: "/fixture".into(),
             source_revision: "revision".into(),
-            default_random_draw_max_multiplier: 1.25,
-            default_opponent_deck_max_multiplier: 3.5,
             affiliations: Vec::new(),
-            cards: Value::Array(Vec::new()),
+            tides: Value::Array(Vec::new()),
         })
         .unwrap();
-        assert_eq!(value["default_random_draw_max_multiplier"], 1.25);
-        assert_eq!(value["default_opponent_deck_max_multiplier"], 3.5);
-        assert!(value.get("defaultRandomDrawMaxMultiplier").is_none());
+        assert!(value["affiliations"].is_array());
+        assert!(value["tides"].is_array());
     }
 
     #[test]

@@ -12,7 +12,19 @@ use super::localization::source_text;
 
 use super::resonance::Resonance;
 
-pub type TidesCatalog = Vec<TideDefinition>;
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct TidesCatalog {
+    pub selection: SelectionRules,
+    pub tides: Vec<TideDefinition>,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct SelectionRules {
+    pub band_fraction: f64,
+    pub band_minimum: u32,
+}
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -96,12 +108,21 @@ canonical_uuid!(TideId, "Tide identifier");
 canonical_uuid!(CardId, "Tide card identifier");
 
 pub fn validate(catalog: &TidesCatalog) -> Result<()> {
-    if catalog.is_empty() {
+    if !catalog.selection.band_fraction.is_finite()
+        || catalog.selection.band_fraction <= 0.0
+        || catalog.selection.band_fraction > 1.0
+    {
+        bail!("selection band_fraction must be finite and in (0, 1]");
+    }
+    if catalog.selection.band_minimum == 0 {
+        bail!("selection band_minimum must be positive");
+    }
+    if catalog.tides.is_empty() {
         bail!("Tides catalog must contain at least one tide");
     }
 
     let mut tide_ids = BTreeSet::new();
-    for tide in catalog {
+    for tide in &catalog.tides {
         if !tide_ids.insert(tide.id) {
             bail!("duplicate Tide UUID {}", tide.id);
         }
@@ -123,7 +144,11 @@ pub fn validate(catalog: &TidesCatalog) -> Result<()> {
 
 pub fn tide_kinds(catalog: &TidesCatalog) -> Result<BTreeMap<TideId, TideKind>> {
     validate(catalog)?;
-    Ok(catalog.iter().map(|tide| (tide.id, tide.kind)).collect())
+    Ok(catalog
+        .tides
+        .iter()
+        .map(|tide| (tide.id, tide.kind))
+        .collect())
 }
 
 pub fn validate_references(
@@ -131,7 +156,7 @@ pub fn validate_references(
     known_card_ids: &BTreeSet<String>,
 ) -> Result<()> {
     validate(catalog)?;
-    for tide in catalog {
+    for tide in &catalog.tides {
         for card_id in tide.cards.keys() {
             if !known_card_ids.contains(&card_id.to_string()) {
                 bail!("Tide {} references unknown card UUID {}", tide.id, card_id);
@@ -146,9 +171,23 @@ pub fn lower(catalog: TidesCatalog) -> Result<toml::Value> {
     let mut root = toml::map::Map::new();
     root.insert("schema-version".into(), 1_i64.into());
     root.insert(
+        "selection".into(),
+        toml::Value::Table(toml::map::Map::from_iter([
+            (
+                "band-fraction".into(),
+                toml::Value::Float(catalog.selection.band_fraction),
+            ),
+            (
+                "band-minimum".into(),
+                i64::from(catalog.selection.band_minimum).into(),
+            ),
+        ])),
+    );
+    root.insert(
         "tide".into(),
         toml::Value::Array(
             catalog
+                .tides
                 .into_iter()
                 .map(|tide| {
                     let mut table = toml::map::Map::new();
@@ -207,20 +246,26 @@ mod tests {
     fn catalog() -> TidesCatalog {
         let kinds = [TideKind::Signature, TideKind::Facet, TideKind::Neutral];
         let resonances = [Resonance::Shadow, Resonance::Vision, Resonance::Ember];
-        TIDE_IDS
-            .into_iter()
-            .zip(CARD_IDS)
-            .zip(kinds)
-            .zip(resonances)
-            .map(|(((tide_id, card_id), kind), resonance)| TideDefinition {
-                id: TideId::parse(tide_id).unwrap(),
-                display_name: ls(format!("Display {tide_id}")),
-                display_description: ls("Unicode tide — exact copy"),
-                resonance,
-                kind,
-                cards: IndexMap::from_iter([(CardId::parse(card_id).unwrap(), 2)]),
-            })
-            .collect()
+        TidesCatalog {
+            selection: SelectionRules {
+                band_fraction: 0.25,
+                band_minimum: 5,
+            },
+            tides: TIDE_IDS
+                .into_iter()
+                .zip(CARD_IDS)
+                .zip(kinds)
+                .zip(resonances)
+                .map(|(((tide_id, card_id), kind), resonance)| TideDefinition {
+                    id: TideId::parse(tide_id).unwrap(),
+                    display_name: ls(format!("Display {tide_id}")),
+                    display_description: ls("Unicode tide — exact copy"),
+                    resonance,
+                    kind,
+                    cards: IndexMap::from_iter([(CardId::parse(card_id).unwrap(), 2)]),
+                })
+                .collect(),
+        }
     }
 
     #[test]
@@ -240,7 +285,7 @@ mod tests {
     #[test]
     fn rejects_duplicate_ids_and_invalid_card_references() {
         let mut duplicate = catalog();
-        duplicate[1].id = duplicate[0].id;
+        duplicate.tides[1].id = duplicate.tides[0].id;
         assert!(
             validate(&duplicate)
                 .unwrap_err()

@@ -1,6 +1,3 @@
-import type { FitModel } from "../draft/fit-model";
-import type { MerchantCorpus } from "../data/merchant-corpus";
-import type { DreamsignProfile } from "../data/dreamsign-profiles";
 import type { JourneyContent } from "../data/journey-content";
 import type { CardTransfigurationDisplay } from "../transfiguration/transfiguration-logic";
 import type { CardData } from "../types/cards";
@@ -100,11 +97,6 @@ export interface MerchantContext {
   candidateGrantCards: readonly MerchantCatalogCard[];
   /** Unheld dreamsign templates. */
   candidateDreamsigns: readonly DreamsignTemplate[];
-  fitModel?: FitModel;
-  /** Baked quality/multiplicity/cluster signals; absent before the bake step. */
-  merchantCorpus?: MerchantCorpus;
-  /** Curated dreamsign profiles keyed by dreamsign UUID. */
-  dreamsignProfiles?: ReadonlyMap<string, DreamsignProfile>;
   cardDatabase: JourneyContent["cardDatabase"];
   dreamsignTemplates: readonly DreamsignTemplate[];
   /** Site-neutral projection consumed by the shared selection core. */

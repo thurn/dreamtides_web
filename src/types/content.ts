@@ -4,6 +4,7 @@
  * this constant so RTDB-stripped rooms render with a sensible value.
  */
 import type { SiteType } from "./journey.ts";
+import type { Rarity } from "./cards.ts";
 
 /** Normalized point locating a DreamAvatar's head in its portrait artwork. */
 export interface DreamAvatarPortraitFocus {
@@ -44,6 +45,11 @@ export interface DreamsignTemplate {
   effectDescription: string;
   imageName?: string;
   imageAlt?: string;
+  /** Canonical catalog entries always provide strength rarity. */
+  rarity?: Extract<Rarity, "Common" | "Uncommon" | "Rare" | "Legendary">;
+  /** Canonical catalog entries provide one to three tide UUIDs. */
+  tideIds?: readonly string[];
+  tags?: readonly string[];
 }
 
 /**
@@ -106,17 +112,13 @@ export interface ApollyonIncarnationContent {
 
 /**
  * A thematic affiliation backing a dreamscape, sourced from affiliations.toml.
- * `signatureCards` are curated cards_v2 UUIDs exemplifying the theme;
- * `weightStrength` and `opponentBiasStrength` tune how strongly later systems
- * pull draft content and opponent decks toward them.
+ * `tideIds` are the three authored tides that define the affiliation's theme.
  */
 export interface AffiliationContent {
   id: string;
   name: string;
   atlasCardTheme: string;
-  signatureCards: string[];
-  weightStrength: number;
-  opponentBiasStrength: number;
+  tideIds: string[];
 }
 
 /** The role a tide plays in `tides4` pool construction. */
@@ -210,6 +212,8 @@ export interface Tides4ProvenanceSummary {
 
 export interface ResolvedDreamAvatarPackage {
   dreamAvatar: DreamAvatarContent;
+  /** Joined tide UUIDs for this run, persisted for reconstructable affinity selection. */
+  joinedTideIds?: string[];
   draftPoolCopiesByCard: Record<string, number>;
   /**
    * Exact early offers keyed by their 1-indexed journey pick. Authored flows

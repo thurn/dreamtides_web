@@ -76,7 +76,7 @@ export function generateTides4(
   const data: Tides4DecksJson | undefined = poolData.tides4Decks;
   if (!data) {
     missingPoolData(
-      "no tide decks are bundled (data/tides.ron and data/dream_avatar_tide_pools.ron, served as /tides4-data.json)",
+      "no tide decks are bundled (data/tides.ron and data/dream_avatars.ron, served as /tides4-data.json)",
     );
   }
   return combineTidesPool(rng, poolData, data, dreamAvatarId, tuning);

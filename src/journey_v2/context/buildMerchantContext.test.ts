@@ -8,7 +8,6 @@ import {
   makeMerchantTestDeckEntry,
   makeMerchantTestDreamsign,
   makeMerchantTestDreamsignTemplate,
-  makeMerchantTestFitModel,
   makeMerchantTestJourneyState,
   makeMerchantTestResolvedPackage,
   makeMerchantTestSite,
@@ -235,15 +234,4 @@ describe("buildMerchantContext", () => {
     expect(context.candidateDreamsigns).toEqual([openTemplate]);
   });
 
-  it("passes through FitModel data when present", () => {
-    const fitModel = makeMerchantTestFitModel();
-
-    const context = buildMerchantContext({
-      journeyState: makeMerchantTestJourneyState(),
-      journeyContent: makeMerchantTestContent({ cards: [], fitModel }),
-      site: makeMerchantTestSite(),
-    });
-
-    expect(context.fitModel).toBe(fitModel);
-  });
 });

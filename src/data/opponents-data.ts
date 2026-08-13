@@ -21,10 +21,11 @@ export async function loadOpponentsData(): Promise<OpponentsData> {
     candidate.schemaVersion !== 1 ||
     !SHA256_HEX.test(candidate.contentHash ?? "") ||
     !SHA256_HEX.test(candidate.foldHash ?? "") ||
+    !Number.isInteger(candidate.opponentDeckSize) ||
+    (candidate.opponentDeckSize ?? 0) <= 0 ||
     candidate.battle === undefined ||
     candidate.dreamwell === undefined ||
     candidate.progression === undefined ||
-    candidate.corpusSelection === undefined ||
     candidate.ai === undefined ||
     !Array.isArray(candidate.journeyAiDeck)
   ) {

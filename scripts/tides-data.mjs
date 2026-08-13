@@ -1,22 +1,19 @@
-/** Compose the generated tide and Dream Avatar pool TOML projections for tides4. */
-export function compileTidesData(tidesSource, poolsSource) {
+/** Compose the generated tide and Dream Avatar TOML projections for tides4. */
+export function compileTidesData(tidesSource, avatarsSource) {
   if (tidesSource?.["schema-version"] !== 1) {
     throw new Error("Expected tides schema-version = 1");
   }
   if (!Array.isArray(tidesSource.tide) || tidesSource.tide.length === 0) {
     throw new Error("Expected a non-empty [[tide]] array in tides.toml");
   }
-  if (poolsSource?.["schema-version"] !== 1) {
-    throw new Error("Expected Dream Avatar tide pools schema-version = 1");
+  if (!Array.isArray(avatarsSource?.dreamAvatar) || avatarsSource.dreamAvatar.length === 0) {
+    throw new Error("Expected a non-empty [[dreamAvatar]] array in dream_avatars.toml");
   }
+  const selection = tidesSource.selection;
   if (
-    !Array.isArray(poolsSource["dream-avatar-pool"]) ||
-    poolsSource["dream-avatar-pool"].length === 0
-  ) {
-    throw new Error(
-      "Expected a non-empty [[dream-avatar-pool]] array in dream_avatar_tide_pools.toml",
-    );
-  }
+    typeof selection?.["band-fraction"] !== "number" ||
+    typeof selection?.["band-minimum"] !== "number"
+  ) throw new Error("Expected unified selection tuning in tides.toml");
 
   const tides = tidesSource.tide.map((tide) => ({
     id: tide.id,
@@ -30,14 +27,22 @@ export function compileTidesData(tidesSource, poolsSource) {
     })),
   }));
   const tidePoolByDreamAvatar = Object.fromEntries(
-    poolsSource["dream-avatar-pool"].map((pool) => [
-      pool["dream-avatar-id"],
+    avatarsSource.dreamAvatar.map((avatar) => [
+      avatar.id,
       {
-        starter: pool.starter ?? null,
-        facets: pool.facets,
-        neutral: pool.neutral,
+        starter: avatar["tide-pool"]?.starter ?? null,
+        facets: avatar["tide-pool"]?.facets,
+        neutral: avatar["tide-pool"]?.neutral,
       },
     ]),
   );
-  return { version: 1, tides, tidePoolByDreamAvatar };
+  return {
+    version: 2,
+    selection: {
+      bandFraction: selection["band-fraction"],
+      bandMinimum: selection["band-minimum"],
+    },
+    tides,
+    tidePoolByDreamAvatar,
+  };
 }

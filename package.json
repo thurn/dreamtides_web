@@ -67,11 +67,7 @@
     "fuzz:demo:built": "node scripts/fuzz-demo.mjs --built --profile smoke --runs 1",
     "fuzz:replay": "node scripts/replay-fuzz.mjs",
     "demo:certify": "npm run fuzz:coop -- --runs 500 && npm run fuzz:demo:built",
-    "generate-selected-encounters": "node scripts/setup-assets.mjs && node scripts/generate-selected-encounters-toml.mjs",
-    "bake-merchant-corpus": "node scripts/setup-assets.mjs && node scripts/bake-merchant-corpus.mjs",
-    "merchant-corpus-parity": "node scripts/setup-assets.mjs && node scripts/merchant-corpus-parity.mjs",
-    "merchant-metric": "node scripts/setup-assets.mjs && vite-node scripts/merchant-experiment.ts",
-    "bake-draft-records": "node scripts/setup-assets.mjs && node scripts/rebuild-adapted-draft-records.mjs"
+    "generate-selected-encounters": "node scripts/setup-assets.mjs && node scripts/generate-selected-encounters-toml.mjs"
   },
   "dependencies": {
     "@dicebear/collection": "^9.4.2",

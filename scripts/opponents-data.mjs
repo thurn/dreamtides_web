@@ -81,10 +81,10 @@ function hash(value) {
 export function compileOpponentsData(sourceValue, { cardIds } = {}) {
   const root = keys(sourceValue, "root", [
     "schema-version",
+    "opponent-deck-size",
     "battle",
     "dreamwell",
     "progression",
-    "corpus-selection",
     "journey-ai-deck",
     "ai",
   ]);
@@ -130,10 +130,6 @@ export function compileOpponentsData(sourceValue, { cardIds } = {}) {
     "dreamsigns-from-layer",
     "legendaries-from-layer",
     "starter-dilution",
-  ]);
-  const corpus = keys(root["corpus-selection"], "corpus-selection", [
-    "affiliation-weight",
-    "top-ranked-sampling-window",
   ]);
   const knownCardIds =
     cardIds === undefined
@@ -260,6 +256,11 @@ export function compileOpponentsData(sourceValue, { cardIds } = {}) {
     fail("ai.tutorial-default-preset", "unknown preset reference");
   const payload = {
     schemaVersion: 1,
+    opponentDeckSize: number(
+      root["opponent-deck-size"],
+      "opponent-deck-size",
+      { min: 1 },
+    ),
     battle: {
       minimumDeckSize: number(
         battle["minimum-deck-size"],
@@ -320,18 +321,6 @@ export function compileOpponentsData(sourceValue, { cardIds } = {}) {
       starterDilution: numbers(
         progression["starter-dilution"],
         "progression.starter-dilution",
-      ),
-    },
-    corpusSelection: {
-      affiliationWeight: number(
-        corpus["affiliation-weight"],
-        "corpus-selection.affiliation-weight",
-        { max: 1, integer: false },
-      ),
-      topRankedSamplingWindow: number(
-        corpus["top-ranked-sampling-window"],
-        "corpus-selection.top-ranked-sampling-window",
-        { min: 1 },
       ),
     },
     journeyAiDeck,

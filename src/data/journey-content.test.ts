@@ -1,26 +1,16 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { CardData } from "../types/cards";
-import { asCardId, asCardName } from "../types/card-identity";
-import {
-  MINIMAL_ATLAS_DATA,
-  MINIMAL_SITES_DATA,
-} from "../__test-helpers__/atlas-fixtures";
+import { MINIMAL_ATLAS_DATA, MINIMAL_SITES_DATA } from "../__test-helpers__/atlas-fixtures";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import { economyFixture } from "../testing/economy-fixture";
 import { gambleFixture } from "../testing/gamble-fixture";
 import { opponentsFixture } from "../testing/opponents-fixture";
 import { transfigurationFixture } from "../testing/transfiguration-fixture";
+import { asCardId, asCardName } from "../types/card-identity";
+import type { CardData } from "../types/cards";
 import explorationJson from "../../public/exploration-data.json";
-import type { DraftRecord, KnownGoodDecklist } from "./cards-v2-database";
 import { loadJourneyContent } from "./journey-content";
-
-const DRAFT_HASH = "d".repeat(64);
-const DRAFT_DATA = draftDataFixture({
-  contentHash: DRAFT_HASH,
-  foldHash: DRAFT_HASH,
-});
 
 function makeCard(cardNumber: number): CardData {
   return {
@@ -31,6 +21,7 @@ function makeCard(cardNumber: number): CardData {
     subtype: "",
     isStarter: cardNumber === 1,
     roles: cardNumber === 1 ? ["starter-deck"] : undefined,
+    rarity: cardNumber === 1 ? "Starter" : "Common",
     energyCost: 2,
     spark: 1,
     isFast: false,
@@ -40,252 +31,137 @@ function makeCard(cardNumber: number): CardData {
   };
 }
 
-function makeCards(count: number): CardData[] {
-  return Array.from({ length: count }, (_value, index) => makeCard(index + 1));
-}
-
-function makeRecord(id: string, packCardIds: string[][]): DraftRecord {
-  return {
-    id,
-    draftId: `draft-${id}`,
-    sourceFile: `draft-${id}-records.json`,
-    mainboard: packCardIds.flat(),
-    mainboardIds: packCardIds.flat(),
-    packs: packCardIds,
-    picks: packCardIds.map(() => []),
-    packIds: packCardIds,
-    pickIds: packCardIds.map(() => []),
-  };
-}
-
-beforeEach(() => {
-  vi.restoreAllMocks();
-});
+beforeEach(() => vi.restoreAllMocks());
 
 describe("loadJourneyContent", () => {
-  function stubFetch({
-    cards,
-    dreamAvatars,
-    decklistIds,
-    draftRecords = [],
-    knownGoodDecklists = [],
-    failingPaths = [],
-    economy = economyFixture(),
-  }: {
+  function stubFetch(input: {
     cards: CardData[];
     dreamAvatars: unknown[];
-    decklistIds: string[][];
-    draftRecords?: DraftRecord[];
-    knownGoodDecklists?: KnownGoodDecklist[];
     failingPaths?: string[];
     economy?: ReturnType<typeof economyFixture>;
   }): void {
-    const explorationData = {
+    const draftData = draftDataFixture();
+    const gambleData = {
+      ...gambleFixture(),
+      contentHash: "e".repeat(64),
+      foldHash: "f".repeat(64),
+    };
+    const tides = {
+      version: 2,
+      selection: { bandFraction: 0.25, bandMinimum: 5 },
+      tides: [{
+        id: "tide-a",
+        displayName: "Tide A",
+        displayDescription: "A synthetic tide.",
+        resonance: "ember",
+        role: "neutral",
+        cards: [{ id: "card-1", copies: 1 }],
+      }],
+      tidePoolByDreamAvatar: {},
+    };
+    const exploration = {
       schemaVersion: explorationJson.schemaVersion,
       contentHash: explorationJson.contentHash,
       foldHash: explorationJson.foldHash,
       customCards: [],
       customDreamsigns: [],
-      encounters: [
-        {
-          cardId: "exploration-fixture",
-          prose: "A synthetic encounter.",
-          action: [
-            {
-              id: "choice-a",
-              label: "Choose A",
-              effectText: "Gain the fixture card.",
-              effectKind: "gain-card",
-              cardId: String(cards[0]?.id ?? "fixture-card"),
-            },
-            {
-              id: "choice-b",
-              label: "Choose B",
-              effectText: "Gain the fixture card.",
-              effectKind: "gain-card",
-              cardId: String(cards[0]?.id ?? "fixture-card"),
-            },
-          ],
-        },
-      ],
+      encounters: [{
+        cardId: "card-1",
+        prose: "A fixture encounter.",
+        action: [{
+          id: "fixture-action",
+          label: "Invite someone through",
+          effectText: "Gain a card",
+          effectKind: "gain-offered-card",
+          canonicalMechanicId: "gain-card",
+          selectionPolicyId: "card-fit-quality",
+          predicate: "cheap-character",
+          count: 1,
+        }],
+      }],
     };
     const assets = new Map<string, unknown>([
-      ["/cards_v2-data.json", cards],
-      ["/exploration-data.json", explorationData],
-      ["/reward-selection-data.json", CONFIG_DATA_FIXTURE.rewardSelectionData],
+      ["/cards_v2-data.json", input.cards],
+      ["/exploration-data.json", exploration],
       ["/augury-data.json", CONFIG_DATA_FIXTURE.auguryData],
-      ["/dream-avatars-v2-data.json", dreamAvatars],
+      ["/dream-avatars-v2-data.json", input.dreamAvatars],
       ["/dreamwell-data.json", []],
       ["/dreamsign-data.json", []],
-      ["/decklist-ids-data.json", decklistIds],
-      ["/draft-records-data.json", draftRecords],
-      ["/known-good-decklists-data.json", knownGoodDecklists],
-      [
-        "/merchant-corpus-data.json",
-        { version: 1, source: "test", cards: {}, clusters: [] },
-      ],
-      ["/dreamsign-profiles-data.json", []],
-      ["/dreamsign-signatures-data.json", []],
+      ["/tides4-data.json", tides],
       ["/dreamscapes-data.json", []],
       ["/affiliations-data.json", []],
-      [
-        "/dream-guides-data.json",
-        {
-          schemaVersion: 1,
-          contentHash: "a".repeat(64),
-          guides: [],
-        },
-      ],
+      ["/dream-guides-data.json", { schemaVersion: 1, contentHash: "a".repeat(64), guides: [] }],
       ["/atlas-data.json", MINIMAL_ATLAS_DATA],
       ["/sites-data.json", MINIMAL_SITES_DATA],
-      ["/economy-data.json", economy],
-      [
-        "/gamble-data.json",
-        {
-          ...gambleFixture(),
-          contentHash: "a".repeat(64),
-          foldHash: "b".repeat(64),
-        },
-      ],
-      ["/draft-data.json", DRAFT_DATA],
+      ["/economy-data.json", input.economy ?? economyFixture()],
+      ["/gamble-data.json", gambleData],
+      ["/draft-data.json", draftData],
       ["/transfiguration-data.json", transfigurationFixture()],
       ["/opponents-data.json", opponentsFixture()],
       ["/apollyon-incarnations-data.json", []],
       ["/figments-data.json", []],
     ]);
-    const failures = new Set(failingPaths);
-
-    vi.stubGlobal(
-      "fetch",
-      vi.fn((input: string | URL | Request) => {
-        const path =
-          typeof input === "string"
-            ? input
-            : input instanceof URL
-              ? input.pathname
-              : new URL(input.url).pathname;
-        if (failures.has(path) || !assets.has(path)) {
-          return Promise.resolve({
-            ok: false,
-            status: failures.has(path) ? 503 : 404,
-            statusText: failures.has(path) ? "Test Failure" : "Not Found",
-            json: () => Promise.resolve(null),
-          } as Response);
-        }
-        return Promise.resolve({
-          ok: true,
-          status: 200,
-          statusText: "OK",
-          json: () => Promise.resolve(assets.get(path)),
-        } as Response);
-      }),
-    );
+    const failures = new Set(input.failingPaths ?? []);
+    vi.stubGlobal("fetch", vi.fn((request: string | URL | Request) => {
+      const path = typeof request === "string"
+        ? request
+        : request instanceof URL ? request.pathname : new URL(request.url).pathname;
+      const ok = !failures.has(path) && assets.has(path);
+      return Promise.resolve({
+        ok,
+        status: ok ? 200 : 503,
+        statusText: ok ? "OK" : "Test Failure",
+        json: () => Promise.resolve(assets.get(path) ?? null),
+      } as Response);
+    }));
   }
 
-  it("loads the current catalog and builds a tides4 pool context", async () => {
-    const cards = [makeCard(1), makeCard(2), makeCard(3)];
-    const avatar = {
-      id: "avatar-1",
-      name: "Test Avatar",
-      title: "Speaker of Tests",
-      renderedText: "Test rules text.",
-      imageNumber: "0001",
-      startingEssence: 235,
-      signatureCards: ["Card 1", "Card 2"],
-      signatureCardIds: ["card-1", "card-2"],
-    };
+  it("loads the current catalogs and assembles selection tuning from their owners", async () => {
     stubFetch({
-      cards,
-      dreamAvatars: [avatar],
-      decklistIds: [["card-1", "card-2", "card-3"]],
+      cards: [makeCard(1), makeCard(2)],
+      dreamAvatars: [{
+        id: "avatar-1",
+        name: "Test Avatar",
+        title: "Speaker of Tests",
+        renderedText: "Test rules text.",
+        imageNumber: "0001",
+        startingEssence: 235,
+        signatureCards: [],
+        signatureCardIds: [],
+      }],
     });
-
     const content = await loadJourneyContent();
-
-    expect(content.cardDatabase.size).toBe(3);
-    expect(content.dreamAvatars[0]).toMatchObject({
-      id: "avatar-1",
-      startingEssence: 235,
-      signatureCardIds: ["card-1", "card-2"],
+    expect(content.cardDatabase.size).toBe(2);
+    expect(content.poolContext?.poolData.tides4Decks?.version).toBe(2);
+    expect(content.rewardSelectionData.tuning).toMatchObject({
+      bandFraction: 0.25,
+      minDeckForPurge: MINIMAL_SITES_DATA.selection.minDeckForPurge,
+      subtypeMinPoolCards: CONFIG_DATA_FIXTURE.auguryData.selection.subtypeMinPoolCards,
     });
-    expect(content.poolContext?.poolVariant).toBe("tides4");
-    expect(content.poolContext?.poolData.decklistIds).toEqual([
-      ["card-1", "card-2", "card-3"],
-    ]);
-    expect(content.poolContext?.tides4Tuning).toEqual(DRAFT_DATA.pool.tides4);
-    expect(content.opponentsData).toEqual(opponentsFixture());
-
-    const fetchedPaths = vi
-      .mocked(fetch)
-      .mock.calls.map(([input]) =>
-        typeof input === "string"
-          ? input
-          : input instanceof URL
-            ? input.pathname
-            : new URL(input.url).pathname,
-      );
-    expect(fetchedPaths).toContain("/tides4-data.json");
   });
 
-  it.each([
-    ["/decklist-ids-data.json", "Failed to load decklist ids"],
-    ["/draft-records-data.json", "Failed to load draft records"],
-    ["/known-good-decklists-data.json", "Failed to load known-good decklists"],
-    ["/merchant-corpus-data.json", "Failed to load merchant corpus"],
-    ["/opponents-data.json", "Failed to load opponent data"],
-  ])("rejects when current content fetch %s fails", async (path, message) => {
-    stubFetch({
-      cards: [makeCard(1)],
-      dreamAvatars: [],
-      decklistIds: [["card-1"]],
-      failingPaths: [path],
-    });
-
-    await expect(loadJourneyContent()).rejects.toThrow(message);
+  it("rejects when the Tides catalog is unavailable", async () => {
+    stubFetch({ cards: [makeCard(1)], dreamAvatars: [], failingPaths: ["/tides4-data.json"] });
+    await expect(loadJourneyContent()).rejects.toThrow("Missing Tides4 catalog");
   });
 
-  it("builds the shared fit model from draft records", async () => {
-    const cards = makeCards(20);
-    const record = makeRecord("record-1", [cards.map((card) => card.id)]);
-    stubFetch({
-      cards,
-      dreamAvatars: [],
-      decklistIds: [cards.map((card) => card.id)],
-      draftRecords: [record],
-    });
-
-    const content = await loadJourneyContent();
-
-    expect(content.draftRecords).toEqual([record]);
-    expect(content.fitModel).toBeDefined();
-  });
-
-  it("defaults an omitted starting essence and retains record scoring inputs", async () => {
+  it("uses the authored economy default when an avatar omits starting essence", async () => {
     const economy = economyFixture();
     economy.journey.defaultStartingEssence = 137;
-    const record = makeRecord("record-1", [["card-1"]]);
     stubFetch({
       cards: [makeCard(1)],
-      dreamAvatars: [
-        {
-          id: "avatar-defaulted",
-          name: "Defaulted",
-          title: "D",
-          renderedText: "",
-          imageNumber: "0001",
-          signatureCards: ["Card 1"],
-          signatureCardIds: ["card-1"],
-        },
-      ],
-      decklistIds: [["card-1"]],
-      draftRecords: [record],
       economy,
+      dreamAvatars: [{
+        id: "avatar-defaulted",
+        name: "Defaulted",
+        title: "D",
+        renderedText: "",
+        imageNumber: "0001",
+        signatureCards: [],
+        signatureCardIds: [],
+      }],
     });
-
     const content = await loadJourneyContent();
-
     expect(content.dreamAvatars[0].startingEssence).toBe(137);
-    expect(content.draftRecords).toEqual([record]);
-    expect(content.fitModel).toBeDefined();
   });
 });

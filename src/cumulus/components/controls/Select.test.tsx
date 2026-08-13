@@ -23,13 +23,7 @@ function mount(element: ReactElement): {
   return { container, root };
 }
 
-function rect({
-  top,
-  bottom,
-}: {
-  top: number;
-  bottom: number;
-}): DOMRect {
+function rect({ top, bottom }: { top: number; bottom: number }): DOMRect {
   return {
     top,
     bottom,
@@ -50,7 +44,7 @@ beforeEach(() => {
     }
   ).IS_REACT_ACT_ENVIRONMENT = true;
   if (typeof window.matchMedia !== "function") {
-    window.matchMedia = ((query: string) => ({
+    window.matchMedia = (query: string) => ({
       matches: false,
       media: query,
       onchange: null,
@@ -59,7 +53,7 @@ beforeEach(() => {
       addListener: () => {},
       removeListener: () => {},
       dispatchEvent: () => false,
-    }));
+    });
   }
 });
 
@@ -75,7 +69,11 @@ describe("Select", () => {
       value: 720,
     });
     const { container, root } = mount(
-      <Select options={OPTIONS} value="" ariaLabel={assertLocalized("Action")} />,
+      <Select
+        options={OPTIONS}
+        value=""
+        ariaLabel={assertLocalized("Action")}
+      />,
     );
     const trigger = container.querySelector<HTMLButtonElement>("button");
     if (trigger === null) throw new Error("Select trigger did not render");
@@ -104,7 +102,11 @@ describe("Select", () => {
       value: 720,
     });
     const { container, root } = mount(
-      <Select options={OPTIONS} value="" ariaLabel={assertLocalized("Action")} />,
+      <Select
+        options={OPTIONS}
+        value=""
+        ariaLabel={assertLocalized("Action")}
+      />,
     );
     const trigger = container.querySelector<HTMLButtonElement>("button");
     if (trigger === null) throw new Error("Select trigger did not render");
@@ -126,7 +128,11 @@ describe("Select", () => {
 
   it("keeps the menu open while its options scroll", () => {
     const { container, root } = mount(
-      <Select options={OPTIONS} value="" ariaLabel={assertLocalized("Action")} />,
+      <Select
+        options={OPTIONS}
+        value=""
+        ariaLabel={assertLocalized("Action")}
+      />,
     );
     const trigger = container.querySelector<HTMLButtonElement>("button");
     if (trigger === null) throw new Error("Select trigger did not render");
@@ -144,6 +150,48 @@ describe("Select", () => {
       window.dispatchEvent(new Event("scroll"));
     });
     expect(document.body.querySelector('[role="listbox"]')).toBeNull();
+
+    act(() => root.unmount());
+  });
+
+  it("navigates enabled options from the keyboard", () => {
+    const options: SelectOption[] = [
+      { value: "first", label: assertLocalized("First tide") },
+      {
+        value: "second",
+        label: assertLocalized("Second tide"),
+        disabled: true,
+      },
+      { value: "third", label: assertLocalized("Third tide") },
+    ];
+    const { container, root } = mount(
+      <Select
+        options={options}
+        value="first"
+        ariaLabel={assertLocalized("Tide")}
+      />,
+    );
+    const trigger = container.querySelector<HTMLButtonElement>("button");
+    if (trigger === null) throw new Error("Select trigger did not render");
+
+    act(() => {
+      trigger.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }),
+      );
+    });
+    const menu = document.body.querySelector<HTMLElement>('[role="listbox"]');
+    const menuOptions = [
+      ...(menu?.querySelectorAll<HTMLButtonElement>('[role="option"]') ?? []),
+    ];
+    expect(menuOptions[0]).toBe(document.activeElement);
+    expect(menuOptions[1]?.disabled).toBe(true);
+
+    act(() => {
+      menuOptions[0]?.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }),
+      );
+    });
+    expect(menuOptions[2]).toBe(document.activeElement);
 
     act(() => root.unmount());
   });

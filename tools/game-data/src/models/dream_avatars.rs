@@ -1,4 +1,4 @@
-use std::collections::BTreeSet;
+use std::collections::{BTreeMap, BTreeSet};
 use std::fmt;
 use trox::LocalizedString;
 
@@ -8,6 +8,7 @@ use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
 use super::localization::{joined_source_text, source_text};
+use super::tides::{TideId, TideKind};
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -21,6 +22,15 @@ pub struct AvatarDefinition {
     pub starting_essence: Option<u32>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub signature_card_ids: Vec<CardId>,
+    pub tide_pool: TidePool,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct TidePool {
+    pub starter: Option<TideId>,
+    pub facets: Vec<TideId>,
+    pub neutral: Vec<TideId>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -124,6 +134,15 @@ struct CompatibilityDreamAvatar {
     starting_essence: Option<u32>,
     #[serde(rename = "signature-cards", skip_serializing_if = "Option::is_none")]
     signature_cards: Option<Vec<String>>,
+    #[serde(rename = "tide-pool")]
+    tide_pool: CompatibilityTidePool,
+}
+
+#[derive(Serialize)]
+struct CompatibilityTidePool {
+    starter: Option<String>,
+    facets: Vec<String>,
+    neutral: Vec<String>,
 }
 
 #[derive(Serialize)]
@@ -177,6 +196,21 @@ pub fn lower(source: Vec<AvatarDefinition>) -> Result<toml::Value> {
                 rendered_text: joined_source_text(avatar.ability_text, "\n\n")?,
                 starting_essence: avatar.starting_essence,
                 signature_cards,
+                tide_pool: CompatibilityTidePool {
+                    starter: avatar.tide_pool.starter.map(|id| id.to_string()),
+                    facets: avatar
+                        .tide_pool
+                        .facets
+                        .into_iter()
+                        .map(|id| id.to_string())
+                        .collect(),
+                    neutral: avatar
+                        .tide_pool
+                        .neutral
+                        .into_iter()
+                        .map(|id| id.to_string())
+                        .collect(),
+                },
             })
         })
         .collect::<Result<Vec<_>>>()?;
@@ -248,6 +282,9 @@ pub(crate) fn validate(source: &[AvatarDefinition]) -> Result<()> {
                 avatar.portrait.image
             );
         }
+        if avatar.tide_pool.facets.is_empty() {
+            bail!("DreamAvatar {} must contain at least one facet tide", avatar.id);
+        }
         if avatar.portrait.image == 0 || avatar.portrait.image > 9_999 {
             bail!(
                 "DreamAvatar {} portrait image must be in [1, 9999]",
@@ -272,6 +309,47 @@ pub(crate) fn validate(source: &[AvatarDefinition]) -> Result<()> {
         }
         validate_focus(avatar)?;
         validate_signature_ids(avatar.id, &avatar.signature_card_ids)?;
+    }
+    Ok(())
+}
+
+pub fn validate_tide_references(
+    source: &[AvatarDefinition],
+    tide_kinds: &BTreeMap<TideId, TideKind>,
+) -> Result<()> {
+    validate(source)?;
+    for avatar in source {
+        let mut referenced = BTreeSet::new();
+        if let Some(starter) = avatar.tide_pool.starter {
+            require_tide_kind(tide_kinds, starter, TideKind::Signature, "starter")?;
+            referenced.insert(starter);
+        }
+        for (ids, expected, label) in [
+            (&avatar.tide_pool.facets, TideKind::Facet, "facet"),
+            (&avatar.tide_pool.neutral, TideKind::Neutral, "neutral"),
+        ] {
+            for id in ids {
+                require_tide_kind(tide_kinds, *id, expected, label)?;
+                if !referenced.insert(*id) {
+                    bail!("DreamAvatar {} repeats Tide UUID {id}", avatar.id);
+                }
+            }
+        }
+    }
+    Ok(())
+}
+
+fn require_tide_kind(
+    tide_kinds: &BTreeMap<TideId, TideKind>,
+    id: TideId,
+    expected: TideKind,
+    label: &str,
+) -> Result<()> {
+    let Some(actual) = tide_kinds.get(&id) else {
+        bail!("{label} reference names unknown Tide UUID {id}");
+    };
+    if *actual != expected {
+        bail!("{label} reference {id} names a {actual:?} tide");
     }
     Ok(())
 }
@@ -396,6 +474,11 @@ mod tests {
       "00000000-0000-4000-8000-000000000101",
       "00000000-0000-4000-8000-000000000102",
     ],
+    tide_pool: (
+      starter: Some("00000000-0000-4000-8000-000000000201"),
+      facets: ["00000000-0000-4000-8000-000000000202"],
+      neutral: ["00000000-0000-4000-8000-000000000203"],
+    ),
   ),
   AvatarDefinition(
     name: Tx("Second"),
@@ -403,6 +486,11 @@ mod tests {
     ability_text: [Tx("Ability")],
     title: Tx("Without signatures"),
     portrait: (image: 42, focus: (x: 0.5, y: 0.4)),
+    tide_pool: (
+      starter: None,
+      facets: ["00000000-0000-4000-8000-000000000204"],
+      neutral: [],
+    ),
   ),
 ]
 "##
@@ -443,6 +531,14 @@ mod tests {
         assert!(avatars[1].get("starting-essence").is_none());
         assert!(avatars[1].get("mtg-name").is_none());
         assert!(avatars[1].get("signature-cards").is_none());
+        assert_eq!(
+            avatars[0]["tide-pool"]["starter"].as_str(),
+            Some("00000000-0000-4000-8000-000000000201")
+        );
+        assert_eq!(
+            avatars[1]["tide-pool"]["facets"][0].as_str(),
+            Some("00000000-0000-4000-8000-000000000204")
+        );
         assert_eq!(output["metadata"]["schema_version"].as_integer(), Some(1));
         assert_eq!(
             output["metadata"]["columns"][5]["key"].as_str(),

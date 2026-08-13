@@ -156,7 +156,6 @@ const mappingContext = {
   deckEntryById: new Map([[deckObject.entryId, deckObject]]),
   cardByUuid: new Map(mappingCards.map((value) => [value.id, value])),
   draftPoolCardUuids: new Set(mappingCards.map((value) => value.id)),
-  merchantCorpus: undefined,
   rewardSelection: {
     tuning: CONFIG_DATA_FIXTURE.rewardSelectionData.tuning,
     content: { auguryData: CONFIG_DATA_FIXTURE.auguryData },
@@ -561,7 +560,6 @@ describe("augury view model", () => {
           id,
           label,
           memberUuids: [],
-          deckAffine: false,
         }),
       ).toEqual(expected);
     }

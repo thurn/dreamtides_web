@@ -98,9 +98,10 @@ export function makeTestPoolContext(
     cards.map((c) => [c.cardNumber, c]),
   );
   const decklistIds = TEST_DECKLISTS.map((deck) => deck.map(idForName));
-  const poolData = buildPoolData(cards, decklistIds);
+  const poolData = buildPoolData(cards);
   poolData.tides4Decks = {
-    version: 1,
+    version: 2,
+    selection: { bandFraction: 0.25, bandMinimum: 5 },
     tides: decklistIds.map((ids, index) => ({
       id: `test-tide-${String(index + 1)}`,
       displayName: `Test Tide ${String(index + 1)}`,

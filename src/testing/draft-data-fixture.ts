@@ -5,8 +5,8 @@ export function draftDataFixture(
 ): DraftData {
   return {
     schemaVersion: 1,
-    contentHash: "draft-content-fixture",
-    foldHash: "draft-fold-fixture",
+    contentHash: "a".repeat(64),
+    foldHash: "b".repeat(64),
     presentation: { progress: "Draft ({pickNumber}/{pickTotal})" },
     offers: {
       cardsPerOffer: 4,

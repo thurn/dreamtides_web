@@ -123,10 +123,29 @@ function presentationText(value, path, contract) {
 
 /** Compile and strictly validate the parsed augury.toml document. */
 export function compileAuguryData(sourceValue) {
-  const root = exact(sourceValue, "root", ["schema-version", "encounter", "archetype"]);
+  const root = exact(sourceValue, "root", ["schema-version", "selection", "encounter", "archetype"]);
   if (positive(root["schema-version"], "schema-version") !== 1) fail("schema-version", "only schema version 1 is supported");
   const encounter = exact(root.encounter, "encounter", ["allow-decline"]);
   if (typeof encounter["allow-decline"] !== "boolean") fail("encounter.allow-decline", "expected a boolean");
+  const rawSelection = exact(root.selection, "selection", ["subtype-min-pool-cards", "cost-bands"]);
+  const rawCostBands = exact(rawSelection["cost-bands"], "selection.cost-bands", [
+    "cheap-maximum", "mid-minimum", "mid-maximum", "big-minimum", "cheap-character-maximum",
+  ]);
+  const selection = {
+    subtypeMinPoolCards: positive(rawSelection["subtype-min-pool-cards"], "selection.subtype-min-pool-cards"),
+    costBands: {
+      cheapMaximum: positive(rawCostBands["cheap-maximum"] + 1, "selection.cost-bands.cheap-maximum") - 1,
+      midMinimum: positive(rawCostBands["mid-minimum"], "selection.cost-bands.mid-minimum"),
+      midMaximum: positive(rawCostBands["mid-maximum"], "selection.cost-bands.mid-maximum"),
+      bigMinimum: positive(rawCostBands["big-minimum"], "selection.cost-bands.big-minimum"),
+      cheapCharacterMaximum: positive(rawCostBands["cheap-character-maximum"], "selection.cost-bands.cheap-character-maximum"),
+    },
+  };
+  if (
+    selection.costBands.cheapMaximum + 1 !== selection.costBands.midMinimum ||
+    selection.costBands.midMinimum > selection.costBands.midMaximum ||
+    selection.costBands.midMaximum + 1 !== selection.costBands.bigMinimum
+  ) fail("selection.cost-bands", "bands must be ordered, contiguous, and non-overlapping");
   if (!Array.isArray(root.archetype)) fail("archetype", "expected an array of tables");
   const seen = new Set();
   const archetypes = root.archetype.map((raw, index) => {
@@ -189,6 +208,7 @@ export function compileAuguryData(sourceValue) {
   }
   const payload = {
     schemaVersion: 1,
+    selection,
     encounter: { allowDecline: encounter["allow-decline"] },
     archetypes,
   };

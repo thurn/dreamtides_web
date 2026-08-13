@@ -1,13 +1,4 @@
 import { loadDreamsignTemplates } from "./dreamsigns";
-import { loadMerchantCorpus, type MerchantCorpus } from "./merchant-corpus";
-import {
-  loadDreamsignProfiles,
-  type DreamsignProfile,
-} from "./dreamsign-profiles";
-import {
-  loadDreamsignSignatures,
-  type DreamsignSignature,
-} from "./dreamsign-signatures";
 import { logEvent } from "../logging";
 import {
   type DreamAvatarContent,
@@ -29,23 +20,16 @@ import { buildPoolData } from "../draft/pool/pool-data";
 import { loadFigmentDatabase } from "./figment-database";
 import { loadExplorationContent, type ExplorationContent } from "./exploration";
 import {
-  loadRewardSelectionData,
+  buildRewardSelectionData,
   type RewardSelectionData,
 } from "./reward-selection-data";
 import { loadAuguryData, type AuguryData } from "./augury-data";
 import {
   buildIdIndex,
   loadCardsV2Database,
-  loadDecklistIds,
-  loadDraftRecords,
-  loadKnownGoodDecklists,
   loadTides4Decks,
   resolvePool,
-  type DraftRecord,
-  type KnownGoodDecklist,
 } from "./cards-v2-database";
-export type { KnownGoodDecklist } from "./cards-v2-database";
-export type { DreamsignSignature } from "./dreamsign-signatures";
 import { loadDreamAvatarsV2 } from "./dream-avatars-v2-database";
 import { loadDreamwellCards, type DreamwellCard } from "./dreamwell-database";
 import {
@@ -75,7 +59,6 @@ import type {
 } from "../types/content";
 import type { AtlasData } from "../types/journey";
 import { resolveCatalogStarterCardNumbers } from "./card-roles";
-import { buildFitModel, type FitModel } from "../draft/fit-model";
 import type { TutorialConfiguration } from "../types/tutorial";
 import {
   TUTORIAL_JOURNEY_POOL,
@@ -86,7 +69,7 @@ export interface JourneyContent {
   cardDatabase: Map<number, CardData>;
   /** Authored Exploration encounters and their site-specific reward content. */
   exploration?: ExplorationContent;
-  /** Shared deterministic reward tuning compiled from reward_selection.toml. */
+  /** Selector tuning assembled from the Tides, Augury, and Sites catalogs. */
   rewardSelectionData: RewardSelectionData;
   /** Augury composition, archetype weights, policies, and quantities. */
   auguryData: AuguryData;
@@ -106,8 +89,7 @@ export interface JourneyContent {
   /**
    * Thematic affiliations backing non-starter dreamscapes, loaded from
    * `public/affiliations-data.json`. Each dreamscape's `affiliationId` resolves to
-   * one of these; affiliated card draws reweight toward its `signatureCards` (see
-   * `src/affiliations/affiliation-weights.ts`).
+   * one of these; its three authored tides contribute to opponent affinity.
    */
   affiliations: readonly AffiliationContent[];
   /**
@@ -140,39 +122,6 @@ export interface JourneyContent {
    */
   apollyonIncarnations?: readonly ApollyonIncarnationContent[];
   poolContext?: RunPoolContext;
-  /** The full adapted draft-record corpus used by record-backed scoring. */
-  draftRecords?: DraftRecord[];
-  /**
-   * The curated known-good decklists corpus loaded from
-   * `public/known-good-decklists-data.json`, used by the corpus opponent-deck
-   * algorithm to select and tune decks for AI opponents. Always fetched before
-   * the provider-backed room flow is allowed to mount.
-   */
-  knownGoodDecklists?: readonly KnownGoodDecklist[];
-  /**
-   * The live deck-fit model built from all record mainboards for record-backed
-   * recommendations and opponent construction.
-   */
-  fitModel?: FitModel;
-  /**
-   * Baked merchant corpus artifact (quality, multiplicity, clusters) loaded
-   * from `public/merchant-corpus-data.json`. Populated unconditionally before
-   * the provider-backed room flow is allowed to mount.
-   */
-  merchantCorpus?: MerchantCorpus;
-  /**
-   * Curated dreamsign profiles keyed by dreamsign UUID, loaded from
-   * `public/dreamsign-profiles-data.json`.  A dreamsign absent from the map
-   * is treated as featureless quality 2 by the merchant signal layer.
-   */
-  dreamsignProfiles?: ReadonlyMap<string, DreamsignProfile>;
-  /**
-   * Dreamsign signature classification keyed by dreamsign UUID, loaded from
-   * `public/dreamsign-signatures-data.json`. Each entry is either neutral
-   * (works in any deck) or tailored (carries a curated set of signature card
-   * ids that characterise a deck wanting that dreamsign).
-   */
-  dreamsignSignatures?: ReadonlyMap<string, DreamsignSignature>;
 }
 
 /**
@@ -326,6 +275,9 @@ export function buildDreamAvatarPackage(
 
   return {
     dreamAvatar,
+    joinedTideIds: pool.tides4Provenance.tides
+      .filter((tide) => tide.joined)
+      .map((tide) => tide.id),
     draftPoolCopiesByCard,
     dreamsignPoolIds: [...ctx.allDreamsignPoolIds],
     mandatoryOnlyPoolSize: draftPoolSize,
@@ -420,26 +372,18 @@ export function buildDreamAvatarTides4Provenance(
 }
 
 /**
- * Loads V2 journey content and the tides4 run-pool context. The draft-record
- * corpus and its fit model remain shared inputs for opponent and reward scoring.
+ * Loads journey content and the Tides4 run-pool context.
  */
 export async function loadJourneyContent(): Promise<JourneyContent> {
   const draftData = await loadDraftData();
   const [
     cardDatabase,
     exploration,
-    rewardSelectionData,
     auguryData,
     draftDreamAvatars,
     dreamwellCards,
     dreamsignTemplates,
-    decklistIds,
-    draftRecords,
-    knownGoodDecklists,
     tides4Decks,
-    merchantCorpus,
-    dreamsignProfiles,
-    dreamsignSignatures,
     dreamscapes,
     affiliations,
     guides,
@@ -454,31 +398,11 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
   ] = await Promise.all([
     loadCardsV2Database(),
     loadExplorationContent(),
-    loadRewardSelectionData(),
     loadAuguryData(),
     loadDreamAvatarsV2(),
     loadDreamwellCards(),
     loadDreamsignTemplates(),
-    // The id-keyed decklist corpus affiliation reweighting scores on. It is
-    // fold-relevant provider input, so malformed data blocks app entry.
-    loadDecklistIds(),
-    // The draft-record corpus supplies record-backed scoring and opponent decks.
-    loadDraftRecords(),
-    // The known-good decklists corpus is always fetched so the corpus opponent-deck
-    // algorithm has curated decks available on every path. It is fold-relevant
-    // provider input, so a missing or malformed artifact blocks app entry before
-    // room events can be folded.
-    loadKnownGoodDecklists(),
     loadTides4Decks(),
-    // The merchant corpus and dreamsign profiles are small and always loaded
-    // unconditionally so Augury has signals on every path.
-    loadMerchantCorpus(),
-    loadDreamsignProfiles().catch(
-      () => undefined as ReadonlyMap<string, DreamsignProfile> | undefined,
-    ),
-    loadDreamsignSignatures().catch(
-      () => undefined as ReadonlyMap<string, DreamsignSignature> | undefined,
-    ),
     // Dreamscape definitions and Atlas generation tuning are small and always
     // loaded so the 7-layer Atlas generator can assign and tune nodes.
     loadDreamscapes(),
@@ -527,8 +451,7 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
     signatureCardIds: [...(dc.signatureCardIds ?? [])],
   }));
 
-  // Build the collision-free id index once; every pool resolves through it, and
-  // the fit model translates card numbers against it too.
+  // Build the collision-free id index once; every pool resolves through it.
   const idIndex = buildIdIndex(cardDatabase);
   const rarityCopyCapByRarity = new Map(
     draftData.rarityCaps.map((cap) => [cap.rarity, cap.poolCopyCap]),
@@ -540,8 +463,14 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
     if (cap !== undefined) poolCopyCapsByCardNumber.set(card.cardNumber, cap);
   }
 
-  const poolData = buildPoolData(draftPoolCards, decklistIds);
-  if (tides4Decks) poolData.tides4Decks = tides4Decks;
+  if (tides4Decks === null) throw new Error("Missing Tides4 catalog");
+  const poolData = buildPoolData(draftPoolCards);
+  poolData.tides4Decks = tides4Decks;
+  const rewardSelectionData = buildRewardSelectionData({
+    tides: tides4Decks,
+    augury: auguryData,
+    sites: sitesData,
+  });
 
   const poolContext: RunPoolContext = {
     poolData,
@@ -553,16 +482,6 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
     poolVariant: draftData.pool.defaultStrategy,
     tides4Tuning: draftData.pool.tides4,
   };
-
-  // Live fit corpus = all record mainboards. The model is built once here and
-  // reused across opponent, reward, and merchant scoring for the session.
-  const fitModel =
-    draftRecords.length > 0
-      ? buildFitModel(
-          draftRecords.map((r) => r.mainboardIds),
-          idIndex,
-        )
-      : undefined;
 
   return {
     cardDatabase,
@@ -585,12 +504,6 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
     opponentsData,
     apollyonIncarnations,
     poolContext,
-    draftRecords,
-    knownGoodDecklists,
-    fitModel,
-    merchantCorpus,
-    dreamsignProfiles,
-    dreamsignSignatures,
   };
 }
 

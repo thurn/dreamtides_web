@@ -3,8 +3,8 @@
 Tides4 builds each Dream Avatar's 150-card draft pool from preconstructed decks
 called tides. Designers curate tide identities, card membership, and Dream
 Avatar pool composition directly in `data/tides.ron` and
-`data/dream_avatar_tide_pools.ron`. Tide, card, and Dream Avatar references use
-UUIDv4 identities.
+`data/dream_avatars.ron`. Tide, card, and Dream Avatar references use UUIDv4
+identities.
 
 ## Tide catalog
 
@@ -14,14 +14,14 @@ The catalog defines three tide roles:
 - Facet tides capture coherent leans sampled for run-to-run variety.
 - Neutral tides provide broad, reusable fill for every pool.
 
-Each tide contains its player-facing display name and description, color, role,
-and an ordered list of card UUIDs with copy counts. `data/tides.ron` is a flat
-top-level list of these definitions. `data/dream_avatar_tide_pools.ron` is a
-flat top-level list of per-avatar signature, facet, and neutral composition.
-The game-data compiler validates UUIDs, role-correct pool references, complete
-Dream Avatar coverage, and card-catalog references, then generates one TOML
-projection for each source. The tides and Dream Avatar editors publish
-revision-checked semantic operations to the owning canonical RON source.
+Each tide contains its player-facing display name and description, resonance,
+kind, and an ordered map of card UUIDs to copy counts. `data/tides.ron` also
+owns the universal top-band selection fraction and minimum. Every Dream Avatar
+owns its signature, facet, and neutral composition in its `tide_pool` field.
+The game-data compiler validates UUIDs, kind-correct pool references, complete
+Dream Avatar coverage, and card-catalog references. The tides and Dream Avatar
+editors publish revision-checked semantic operations to the owning canonical
+RON source.
 
 ## Runtime construction
 
@@ -42,13 +42,6 @@ UUIDs, tuning, per-tide contribution, and each card's primary source tide.
 ## Data flow
 
 `scripts/setup-assets.mjs` composes generated `data/tides.toml` and
-`data/dream_avatar_tide_pools.toml` into `public/tides4-data.json`. Runtime
+`data/dream_avatars.toml` into `public/tides4-data.json`. Runtime
 loading validates that browser projection in `src/draft/pool/tides4-io.ts`
 before pool construction.
-
-## Historical archive
-
-Historical draft-pool implementations and their supporting data, tools, and
-design notes are archived by Git commit
-`0457e320ad07813934f5c4683eb9da7cd28994f1`. Inspect that commit's parent to read
-their final source, or the commit diff to see the complete retirement.

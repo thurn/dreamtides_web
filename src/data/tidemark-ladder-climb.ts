@@ -1,6 +1,10 @@
-import type { DreamsignProfile } from "./dreamsign-profiles";
-import { dreamsignMatchScore } from "../journey_v2/signals/dreamsignMatch";
-import type { CardData } from "../types/cards";
+import {
+  addTideIds,
+  cosineAffinity,
+  rarityStrength,
+  type TideAffinityIndex,
+  type TideVector,
+} from "../selection/tide-affinity";
 import type { DreamsignTemplate } from "../types/content";
 import type {
   StandardPlayingCardRank,
@@ -73,20 +77,24 @@ function compareUuid(left: string, right: string): number {
  */
 export function scoreTidemarkLadderClimbDreamsignCandidates(params: {
   templates: readonly DreamsignTemplate[];
-  profiles: ReadonlyMap<string, DreamsignProfile> | undefined;
-  deckCards: readonly CardData[];
+  affinityIndex: TideAffinityIndex;
+  affinityContext: TideVector;
 }): TidemarkLadderClimbDreamsignCandidateScore[] {
   return params.templates
-    .map((template) => ({
-      dreamsignId: template.id,
-      score: dreamsignMatchScore(
-        params.profiles?.get(template.id),
-        params.deckCards,
-      ),
-    }))
+    .map((template) => {
+      const vector = new Map<string, number>();
+      addTideIds(vector, template.tideIds ?? []);
+      return {
+        dreamsignId: template.id,
+        score: cosineAffinity(vector, params.affinityContext),
+        rarity: rarityStrength(template.rarity),
+      };
+    })
     .sort(
       (left, right) =>
         right.score - left.score ||
+        right.rarity - left.rarity ||
         compareUuid(left.dreamsignId, right.dreamsignId),
-    );
+    )
+    .map(({ dreamsignId, score }) => ({ dreamsignId, score }));
 }
